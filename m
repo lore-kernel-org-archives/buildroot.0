@@ -1,67 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 11 Apr 2014 15:39:31 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-04-10
-In-Reply-To: <20140411141346.49e1251a@skate>
-References: <20140411063008.70B85100F1F@stock.ovh.net>
- <87d2go5oz3.fsf@dell.be.48ers.dk> <20140411093044.07729d79@skate>
- <87y4zc47il.fsf@dell.be.48ers.dk>
- <20140411065158.0a9308de@core2quad.morethan.org>
- <20140411141346.49e1251a@skate>
-Message-ID: <20140411123931.GZ4096@tarshish>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 11 Apr 2014 14:47:35 +0200
+Subject: [Buildroot] [PATCH] barebox: bump to version 2014.04.0
+Message-ID: <1397220455-19617-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/barebox/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, Apr 11, 2014 at 02:13:46PM +0200, Thomas Petazzoni wrote:
-> On Fri, 11 Apr 2014 06:51:58 -0500, Mike Zick wrote:
-> 
-> > >  > This looks weird, and I don't have a good explanation. For now,
-> > >  > I've removed this bogus file, and we'll see if this occurs again
-> > >  > in the future.
-> > > 
-> > > Agreed. Thanks for looking into it!
-> > > 
-> > 
-> > That reads like wget behavior, if interrupted and without the
-> > "continue" option.
-> 
-> Our wget download method normally downloads to a different temporary
-> file, and then moves the temporary file to the final location once the
-> download was successful. Hum, but it doesn't remove the temporary file
-> *before* starting the download:
-> 
-> define DOWNLOAD_WGET
->         test -e $(DL_DIR)/$(2) || \
->         ($(WGET) -O $(DL_DIR)/$(2).tmp '$(call qstrip,$(1))' && \
->          mv $(DL_DIR)/$(2).tmp $(DL_DIR)/$(2)) || \
->         (rm -f $(DL_DIR)/$(2).tmp ; exit 1)
-> endef
-> 
-> So if you have the following sequence:
-> 
->  1/ wget downloads into tarball.tar.gz.tmp
-> 
->  2/ wget is interrupted by Ctrl+C, the .tmp file remains
-> 
->  3/ the build is restarted, so wget runs again, and downloads the file
->     again
-> 
->  4/ the download is successful, and the .tmp file is renamed to the
->     final name
-> 
-> Would this sequence be possible?
-
-That's apparently what happened at 
-http://autobuild.buildroot.net/results/d19/d1967ec1b19211d209b6f476654bb30039da94fa/build-end.log.
-
-baruch
-
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index ef37262..2924a2a 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2014.03.0"
++	bool "2014.04.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2014.03.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.8.3.2
