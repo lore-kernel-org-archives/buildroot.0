@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Apr 2014 00:39:10 +0200
-Subject: [Buildroot] [git commit] libfslcodec: needs a (e)glibc based
-	toolchain
-In-Reply-To: <20140412002045.1534ad93@skate> (Thomas Petazzoni's message of
- "Sat, 12 Apr 2014 00:20:45 +0200")
-References: <20140411151239.48F3A9C717@busybox.osuosl.org>
- <20140412002045.1534ad93@skate>
-Message-ID: <87wqev3301.fsf@dell.be.48ers.dk>
+Date: Sat, 12 Apr 2014 00:39:57 +0200
+Subject: [Buildroot] [git commit] kmod: bump version
+In-Reply-To: <20140412002150.0109b2fd@skate> (Thomas Petazzoni's message of
+ "Sat, 12 Apr 2014 00:21:50 +0200")
+References: <20140411185800.6052A9C6D0@busybox.osuosl.org>
+ <20140412002150.0109b2fd@skate>
+Message-ID: <87sipj32yq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,13 +15,16 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
  > Dear Peter Korsgaard,
- > On Fri, 11 Apr 2014 17:11:43 +0200, Peter Korsgaard wrote:
+ > On Fri, 11 Apr 2014 20:57:27 +0200, Peter Korsgaard wrote:
 
- >> +comment "gst-fsl-plugines needs an (e)glibc toolchain"
+ >> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+ >> +KMOD_DEPENDENCIES += python
+ >> +KMOD_CONF_OPT += --enable-python
+ >> +endif
 
- >                          ^^^^ typo
+ > What about Python 3 compatibility?
 
-Argh, will fix - Thanks.
+I wasn't sure, so I kept it safe for now. I'll do a test build to check.
 
 -- 
 Bye, Peter Korsgaard 
