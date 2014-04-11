@@ -1,41 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Apr 2014 21:10:37 +0200
-Subject: [Buildroot] [git commit] barebox: bump to version 2014.04.0
-Message-ID: <20140411191232.17A4C9C697@busybox.osuosl.org>
+Date: Fri, 11 Apr 2014 21:11:11 +0200
+Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.69
+Message-ID: <20140411191232.207369C697@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=812647df0d1309f5146981cfaa8599525cf05728
+commit: http://git.buildroot.net/buildroot/commit/?id=e913527b94e2e47b4ea6fcf13e281d5969f54fd6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Now with DNSSEC support.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/dnsmasq/Config.in  |    7 +++++++
+ package/dnsmasq/dnsmasq.mk |   17 +++++++++++++----
+ 2 files changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index ef37262..2924a2a 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index 6158b10..40376ad 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -20,6 +20,13 @@ config BR2_PACKAGE_DNSMASQ_DHCP
+ 	help
+ 	  Enable DHCP server support in dnsmasq.
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2014.03.0"
-+	bool "2014.04.0"
++config BR2_PACKAGE_DNSMASQ_DNSSEC
++	bool "DNSSEC support"
++	select BR2_PACKAGE_GMP
++	select BR2_PACKAGE_NETTLE
++	help
++	  Enable DNSSEC validation and caching support.
++
+ config BR2_PACKAGE_DNSMASQ_IDN
+ 	bool "IDN support"
+ 	depends on BR2_USE_WCHAR
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 56d11ee..e5307e4 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
+-DNSMASQ_VERSION = 2.68
++DNSMASQ_VERSION = 2.69
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+ DNSMASQ_MAKE_OPT = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
+ DNSMASQ_MAKE_OPT += DESTDIR=$(TARGET_DIR) LDFLAGS="$(TARGET_LDFLAGS)"
++DNSMASQ_DEPENDENCIES = host-pkgconf
+ DNSMASQ_LICENSE = Dual GPLv2/GPLv3
+ DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
  
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2014.03.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2014.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+@@ -21,6 +22,14 @@ ifneq ($(BR2_PACKAGE_DNSMASQ_DHCP),y)
+ 	DNSMASQ_COPTS += -DNO_DHCP
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DNSMASQ_DNSSEC),y)
++	DNSMASQ_DEPENDENCIES += gmp nettle
++	DNSMASQ_COPTS += -DHAVE_DNSSEC
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++	DNSMASQ_COPTS += -DHAVE_DNSSEC_STATIC
++endif
++endif
++
+ ifneq ($(BR2_PACKAGE_DNSMASQ_TFTP),y)
+ 	DNSMASQ_COPTS += -DNO_TFTP
+ endif
+@@ -34,7 +43,7 @@ ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+-	DNSMASQ_DEPENDENCIES += host-pkgconf libnetfilter_conntrack
++	DNSMASQ_DEPENDENCIES += libnetfilter_conntrack
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_CONNTRACK),y)
+@@ -45,7 +54,7 @@ endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+-	DNSMASQ_DEPENDENCIES += lua host-pkgconf
++	DNSMASQ_DEPENDENCIES += lua
+ 	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
+ 
+ define DNSMASQ_ENABLE_LUA
+@@ -60,7 +69,7 @@ ifneq ($(BR2_LARGEFILE),y)
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+-	DNSMASQ_DEPENDENCIES += host-pkgconf dbus
++	DNSMASQ_DEPENDENCIES += dbus
+ endif
+ 
+ define DNSMASQ_FIX_PKGCONFIG
