@@ -1,36 +1,28 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Apr 2014 16:00:12 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-10
-In-Reply-To: <20140411145923.21a38b08@skate> (Thomas Petazzoni's message of
- "Fri, 11 Apr 2014 14:59:23 +0200")
-References: <20140411063008.70B85100F1F@stock.ovh.net>
- <87d2go5oz3.fsf@dell.be.48ers.dk> <20140411093044.07729d79@skate>
- <87y4zc47il.fsf@dell.be.48ers.dk>
- <20140411065158.0a9308de@core2quad.morethan.org>
- <20140411141346.49e1251a@skate> <20140411123931.GZ4096@tarshish>
- <20140411145923.21a38b08@skate>
-Message-ID: <87r4543r0z.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>
+Date: Fri, 11 Apr 2014 15:05:54 +0100
+Subject: [Buildroot] [PATCH 1/3] package/libatomic: mark as supporting
+	aarch64
+In-Reply-To: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
+References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
+Message-ID: <1397225156-23112-2-git-send-email-alex.bennee@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
 
- > Aah, exactly! Except that the download was not interrupt by doing a
- > Ctrl+C, and it's actually wget which retried the download. And:
-
- > 2014-04-08 04:27:12 (3.70 MB/s) - Connection closed at byte 1057288. Retrying.
-
- > The size at which the download was interrupted matches exactly my
- > findings.
-
- > Is it a bug in wget? Some option we forgot to pass to wget?
-
-Seems like a bug to me. I don't see how this could ever be valid
-behaviour.
-
+diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
+index 3d5d0a8..290d0b0 100644
+--- a/package/libatomic_ops/Config.in
++++ b/package/libatomic_ops/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_LIBATOMIC_OPS
+ 	bool "libatomic_ops"
+-	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
++	depends on BR2_arm || BR2_armeb || BR_aarch64 || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
+ 	help
+ 	  Atomic operations library
 -- 
-Bye, Peter Korsgaard
+1.9.2
