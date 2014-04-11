@@ -1,36 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 11 Apr 2014 09:01:36 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-10
-In-Reply-To: <20140411063008.70B85100F1F@stock.ovh.net> (Thomas Petazzoni's
- message of "Fri, 11 Apr 2014 08:30:08 +0200 (CEST)")
-References: <20140411063008.70B85100F1F@stock.ovh.net>
-Message-ID: <87d2go5oz3.fsf@dell.be.48ers.dk>
+From: Lionel Orry <lionel.orry@gmail.com>
+Date: Fri, 11 Apr 2014 09:03:51 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.1
+In-Reply-To: <20140301232520.4ee4b22b@skate>
+References: <1381509097-5424-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <20140301232520.4ee4b22b@skate>
+Message-ID: <CAKAx1cgQiW5Tsd55RFDgD4nQwvCKeH2dPEz6MoJQjrWJ65XAfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Thomas and Jerzy,
 
- > Build statistics for 2014-04-10
- > ===============================
+On Sat, Mar 1, 2014 at 11:25 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Jerzy Grzegorek,
+>
+> On Fri, 11 Oct 2013 18:31:37 +0200, Jerzy Grzegorek wrote:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+>> ---
+>>  package/zeromq/zeromq.mk |    2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+>> index a624b52..d40bed5 100644
+>> --- a/package/zeromq/zeromq.mk
+>> +++ b/package/zeromq/zeromq.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>
+>> -ZEROMQ_VERSION = 3.2.4
+>> +ZEROMQ_VERSION = 4.0.1
+>>  ZEROMQ_SITE = http://download.zeromq.org/
+>>  ZEROMQ_INSTALL_STAGING = YES
+>>  ZEROMQ_DEPENDENCIES = util-linux
+>
+> I tried to apply this patch, but unfortunately, it apparently breaks
+> the build of mongrel2:
+>
+> src/superpoll.c: In function 'SuperPoll_poll':
+> src/superpoll.c:229:53: error: 'ZMQ_POLL_MSEC' undeclared (first use in this function)
+> src/superpoll.c:229:53: note: each undeclared identifier is reported only once for each function it appears in
+>
+> I've checked the other reverse dependencies of zeromq, and they seem to
+> build fine.
+>
+> Can you find a solution to the mongrel2 problem, and resubmit the
+> appropriate patch?
 
- >         success : 56 
- >        failures : 27 
- >        timeouts : 1  
- >           TOTAL : 84 
+So now that mongrel2 is bumped to v1.9.0 (and tested against zmq
+v4.0.1), can we reconsider this patch please ?
 
- >        arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/e54a3ff5542a11197f3aa6e543350f097647cb02/
- >    powerpc |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/d67269598335db792c0134de76af2db3445cca62/
- >        arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/678cae8ba5deadf599ae541468aedc9e52ce0942/
- >       sh4a |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/e86b40a3f8b8c8f97923bd3f263984dfecb5a032/
- >        arm |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/33ab1c8f1af73cb73022ae2c0652bbbc82d856c4/
- >     x86_64 |                   avahi-0.6.31 | NOK | http://autobuild.buildroot.net/results/71698d593b63dd7817bcd6583a4f75d9adf85e2f/
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-It seems like something happened to the tarball. Thomas, can you take a
-look?
-
--- 
-Bye, Peter Korsgaard
+Best regards,
+Lionel
