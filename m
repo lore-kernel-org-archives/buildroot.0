@@ -1,60 +1,46 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 11 Apr 2014 12:08:02 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-07
-In-Reply-To: <20140411095149.7b9db2b2@skate>
-References: <20140408063009.EA284100CF4@stock.ovh.net>
- <CAMo8BfL7qvw6HgUtB62XJne2i_irrgWCwB4wtkGBvpP-X1M72w@mail.gmail.com>
- <20140408234145.4ed87c17@skate>
- <CAMo8BfLKSdQnr2+a-WDCj9zJAPgXyitcM42fMDYhvDkzPfeR2Q@mail.gmail.com>
- <20140410234114.6c1c72cd@skate>
- <CAMo8BfJrBZ4Z6M5D_F8vS3EL5g4KM8YTHCByC4qQkyFyZuLg4A@mail.gmail.com>
- <20140411095149.7b9db2b2@skate>
-Message-ID: <CAMo8BfLntHkRKv4PHHYTKyHGDi727ftj2XVpHdarK=3eAE7eCg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 11 Apr 2014 09:51:09 +0100
+Subject: [Buildroot] [PATCH 1/2] systemd: Build legacy pc files when
+	liblogging is
+In-Reply-To: <87lhvc6fzf.fsf@dell.be.48ers.dk>
+References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20140410175032.GA24213@pc-eric> <87lhvc6fzf.fsf@dell.be.48ers.dk>
+Message-ID: <5347ACFD.907@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 11, 2014 at 11:51 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->> Apparently this happens when
->>
->> BR2_PACKAGE_PHP_EXT_ICONV = y and
->> BR2_PACKAGE_LIBICONV is unset.
->>
->> In this case buildroot calls
->>
->> configure --with-iconv
->>
->> for php, omitting LIBICONV dir, and php adds system dirs to -I and -L
->> (though I'm not sure it does that correctly).
->>
->> Looks like we need to always select BR2_PACKAGE_LIBICONV when
->> BR2_PACKAGE_PHP_EXT_ICONV is selected, i.e.:
-
-[...]
-
-> I don't think this is correct, because libiconv is only needed for
-> toolchains built without locale support. When the toolchain has locale
-> support (either uClibc with locale support, or glibc/eglibc), the iconv
-> functionality is provided directly by the C library.
+On 04/10/2014 10:18 PM, Peter Korsgaard wrote:
+>>>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
 >
-> And in fact, your change is going to break the build
+> Hi,
+>
+>   > Maybe some other packages depend on these compatibility libraries, so instead
+>   > of referring to BR2_PACKAGE_LIBLOGGING in systemd.mk, it would be best to add
+>   > a generic configuration option to systemd, as done for berkeleydb with
+>   > BR2_PACKAGE_BERKELEYDB_COMPAT185. It could be named BR2_PACKAGE_SYSTEMD_COMPAT.
+>
+>   > Then, in package/liblogging/Config.in, we would have:
+>
+>   >   select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+>
+>   > And this would be removed when liblogging is fixed upstream.
+>
+> Yes, I agree.
+>
+>   > What do think of this?
+>
+> Care to send an updated patch series doing that?
+>
 
-I see. Have run the test build which failed.
+I didn't do that in purpose, because I thought it would be a good idea 
+to catch those packages that still look for legacy systemd files, so we 
+could tell upstream about that, as I did for liblogging.
 
-> I believe what should be
-> investigated instead is how to ensure that the C library iconv
-> functionality is properly detected by the PHP.
-
-Ok, I'll look deeper at that ext/iconv/config.m4 and stuff around...
-
-> I'm also puzzled as to why this doesn't seem to happen for other
-> architecture. I would have to see if I can reproduce it on ARM or x86
-> for example. Maybe it's a weird uClibc bug, or something?
+If we put that option as a generic one, then we will never remove it 
+from there and we will be using the not-default systemd config forever.
 
 -- 
-Thanks.
--- Max
+Vincent
