@@ -1,25 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 00:21:50 +0200
-Subject: [Buildroot] [git commit] kmod: bump version
-In-Reply-To: <20140411185800.6052A9C6D0@busybox.osuosl.org>
-References: <20140411185800.6052A9C6D0@busybox.osuosl.org>
-Message-ID: <20140412002150.0109b2fd@skate>
+Date: Sat, 12 Apr 2014 00:22:55 +0200
+Subject: [Buildroot] [PATCH 2/3] package/libgc: add Boehm-Demers-Weiser
+ gc	library
+In-Reply-To: <d8bb9829-7b7b-4114-b950-979ebd55a3d1@email.android.com>
+References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
+ <1397225156-23112-3-git-send-email-alex.bennee@linaro.org>
+ <d8bb9829-7b7b-4114-b950-979ebd55a3d1@email.android.com>
+Message-ID: <20140412002255.770112ba@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Thomas De Schampheleire,
 
-On Fri, 11 Apr 2014 20:57:27 +0200, Peter Korsgaard wrote:
+On Fri, 11 Apr 2014 22:03:23 +0200, Thomas De Schampheleire wrote:
 
-> +ifeq ($(BR2_PACKAGE_PYTHON),y)
-> +KMOD_DEPENDENCIES += python
-> +KMOD_CONF_OPT += --enable-python
-> +endif
+> >+LIBGC_VERSION = 7.4.0
+> >+LIBGC_SOURCE = gc-${LIBGC_VERSION}.tar.gz
+> >+LIBGC_SITE = http://www.hboehm.info/gc/gc_source/
+> >+LIBGC_DEPENDANCIES += libatomic_ops
+> 
+> This should be: ..._DEPENDENCIES with E.
 
-What about Python 3 compatibility?
+And the += is not needed, a simple = is sufficient here.
 
 Thomas
 -- 
