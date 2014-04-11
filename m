@@ -1,30 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Apr 2014 00:39:57 +0200
-Subject: [Buildroot] [git commit] kmod: bump version
-In-Reply-To: <20140412002150.0109b2fd@skate> (Thomas Petazzoni's message of
- "Sat, 12 Apr 2014 00:21:50 +0200")
-References: <20140411185800.6052A9C6D0@busybox.osuosl.org>
- <20140412002150.0109b2fd@skate>
-Message-ID: <87sipj32yq.fsf@dell.be.48ers.dk>
+Date: Sat, 12 Apr 2014 00:58:01 +0200
+Subject: [Buildroot] [git commit] kmod: python support works with python 3.x
+	as well
+Message-ID: <20140411225827.AD4F99C6D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9f049a8a877ac03365165c8717bbfc807ae158ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Korsgaard,
- > On Fri, 11 Apr 2014 20:57:27 +0200, Peter Korsgaard wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kmod/kmod.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- >> +ifeq ($(BR2_PACKAGE_PYTHON),y)
- >> +KMOD_DEPENDENCIES += python
- >> +KMOD_CONF_OPT += --enable-python
- >> +endif
-
- > What about Python 3 compatibility?
-
-I wasn't sure, so I kept it safe for now. I'll do a test build to check.
-
--- 
-Bye, Peter Korsgaard 
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 3987407..7cc2d65 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -32,8 +32,8 @@ KMOD_DEPENDENCIES += xz
+ KMOD_CONF_OPT += --with-xz
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
+-KMOD_DEPENDENCIES += python
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
+ KMOD_CONF_OPT += --enable-python
+ endif
+ 
