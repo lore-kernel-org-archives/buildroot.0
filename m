@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Apr 2014 10:00:57 +0200
-Subject: [Buildroot] Xenomai support for pre and post patches
-In-Reply-To: <CAEbDrgneiDyjMj6gffx4f5Q7ck=yRNJYBnonng6KXPjhBHvqkg@mail.gmail.com>
-References: <CAEbDrgmqihPwKwxhr-WGQmAShN2Ahr7SsovCXgLgbtDUz+RWgg@mail.gmail.com>
- <CAEbDrgk-oaAJgHv=w02Hdzef9t7zphqWKBuq87eyD=FWHrA=Aw@mail.gmail.com>
- <20140328120909.260739cf@skate>
- <CAEbDrgm2y0LM+Y1zF=976y2AyOUEJZqgHrwqSa9W+cu2WwGKFA@mail.gmail.com>
- <20140328143712.31e3f365@skate>
- <CAEbDrgneiDyjMj6gffx4f5Q7ck=yRNJYBnonng6KXPjhBHvqkg@mail.gmail.com>
-Message-ID: <20140411100057.0f96380f@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 11 Apr 2014 10:04:02 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-04-10
+In-Reply-To: <20140411093044.07729d79@skate> (Thomas Petazzoni's message of
+ "Fri, 11 Apr 2014 09:30:44 +0200")
+References: <20140411063008.70B85100F1F@stock.ovh.net>
+ <87d2go5oz3.fsf@dell.be.48ers.dk> <20140411093044.07729d79@skate>
+Message-ID: <87y4zc47il.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gregory Dymarek,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 31 Mar 2014 22:37:33 +0100, Gregory Dymarek wrote:
+Hi,
 
-> Having reconciled this on Xenomai mailing list, I agree :-)
-> 
-> Attached is a new patch that basically adds support for additional
-> arguments for Xenomail installator. If specified, these will be passed
-> over to the Xenomai when installing.
+ > So the part of the tarball before they start to differ, plus the size
+ > of the normal tarball, adds up to the size of the corrupted tarball. So
+ > it really seems like the corrupted tarball ends up with a copy of the
+ > correct tarball.
 
-Thanks. Can you submit a proper patch, with a description, and sent
-with git send-email, not as an attachment?
+Funky!
 
-Thomas
+ > This looks weird, and I don't have a good explanation. For now, I've
+ > removed this bogus file, and we'll see if this occurs again in the
+ > future.
+
+Agreed. Thanks for looking into it!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
