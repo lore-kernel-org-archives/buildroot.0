@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 16:10:19 +0200
-Subject: [Buildroot] [PATCH] mesa3d: fix khrplatform.h installation.
-In-Reply-To: <1397048061-31767-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1397048061-31767-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140412161019.70e50f23@skate>
+Date: Sat, 12 Apr 2014 16:14:03 +0200
+Subject: [Buildroot] [PATCH 5/5] stress: Patch to fix documentation
+ source
+In-Reply-To: <1396979109-10691-5-git-send-email-paul@crapouillou.net>
+References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
+ <1396979109-10691-5-git-send-email-paul@crapouillou.net>
+Message-ID: <20140412161403.4c1f541f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Dear Paul Cercueil,
 
-On Wed,  9 Apr 2014 14:54:21 +0200, Eric Le Bihan wrote:
-> Mesa3D only installs khrplatform.h if EGL support is enabled, whereas
-> this header file is needed by the headers of OpenGL|ES and OpenVG.
+On Tue,  8 Apr 2014 19:45:09 +0200, Paul Cercueil wrote:
+> From: Maarten ter Huurne <maarten@treewalker.org>
 > 
-> The supplied patch forces Mesa3D to install this header unconditionally.
+> Some versions of "makeinfo" consider @itemx not immediately following
+> @item an error. It is a violation of the texinfo syntax, but silently
+> ignored on most systems, for some reason.
 > 
-> Fixes http://autobuild.buildroot.net/results/e07/e079219d70830a123977c3ee09d3c11b863d0691
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-Off-By: Maarten ter Huurne <maarten@treewalker.org>
 > ---
->  ...atform.h-not-installed-if-EGL-is-disabled.patch | 44 ++++++++++++++++++++++
->  package/mesa3d/mesa3d.mk                           |  1 +
->  2 files changed, 45 insertions(+)
->  create mode 100644 package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+>  package/stress/stress-0002-Fix-doc-itemx.patch | 47 ++++++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+>  create mode 100644 package/stress/stress-0002-Fix-doc-itemx.patch
 
-I've applied the patch. However, I really would like this one to be
-submitted upstream, to also get a confirmation that this is the correct
-fix for the problem.
+I don't think this patch is still necessary. Since commit
+dc7a9bb9f7e0ac096d79c47e9240c2eb7b08dce9 (October 2013), we pass
+MAKEINFO=: to avoid generating the stress documentation. So we should
+not hit such issues.
+
+If you're really interested in having this fixed, please submit the
+patch to the upstream maintainer, apw at debian.org.
 
 Thanks!
 
