@@ -1,78 +1,90 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Apr 2014 18:10:21 +0200
-Subject: [Buildroot] [PATCH 1/1] xbmc: Depend on host-gettext
-Message-ID: <1397319021-20282-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Apr 2014 18:09:33 +0200
+Subject: [Buildroot] [git commit] package/xbmc-pvr-addons: new package
+Message-ID: <20140412161043.ECEF69C6D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes autoreconf error:
+commit: http://git.buildroot.net/buildroot/commit/?id=b6fd76346791e1bdb7321b7fc43f59e98ef5707a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-autoreconf -vif lib/cpluff
-autoreconf: Entering directory `lib/cpluff'
-autoreconf: running: autopoint --force
-Can't exec "autopoint": Datei oder Verzeichnis nicht gefunden at /home/br2/buildroot/output/host/usr/share/autoconf/Autom4te/FileUtils.pm line 345.
-autoreconf: failed to run autopoint: No such file or directory
-autoreconf: autopoint is needed because this package uses Gettext
-make[1]: *** [lib/cpluff/configure] Error 1
+[Thomas: fix minor typo in comments "his own files" -> "its own files"]
 
-[...]
-
-./configure: line 31638: ./configure: No such file or directory
-configure: error: Submodule lib/cpluff failed to configure
-make: *** [/home/br2/buildroot/output/build/xbmc-12.3-Frodo/.stamp_configured] Error 1
-
-Error occured using this minimal defconfig derived from raspberrypi_defconfig:
-
-BR2_arm=y
-BR2_arm1176jzf_s=y
-BR2_DEFCONFIG="configs/raspberrypi_defconfig"
-BR2_KERNEL_HEADERS_VERSION=y
-BR2_DEFAULT_KERNEL_VERSION="3.10.33"
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3bff11d4d4b8dc28cb9ce81449c989466ba27198"
-BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
-BR2_LINUX_KERNEL_ZIMAGE=y
-BR2_PACKAGE_XBMC=y
-BR2_PACKAGE_XBMC_LIBBLURAY=y
-BR2_PACKAGE_XBMC_LIBCEC=y
-BR2_PACKAGE_XBMC_LIBMICROHTTPD=y
-BR2_PACKAGE_XBMC_LIBNFS=y
-BR2_PACKAGE_XBMC_RTMPDUMP=y
-BR2_PACKAGE_XBMC_LIBSHAIRPLAY=y
-BR2_PACKAGE_XBMC_LIBSMBCLIENT=y
-BR2_PACKAGE_XBMC_LIBTHEORA=y
-BR2_PACKAGE_XBMC_LIBUSB=y
-BR2_PACKAGE_XBMC_WAVPACK=y
-BR2_PACKAGE_RPI_FIRMWARE=y
-BR2_PACKAGE_RPI_USERLAND=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xbmc/xbmc.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/xbmc-pvr-addons/Config.in          |    6 +++++
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk |   34 ++++++++++++++++++++++++++++
+ package/xbmc/Config.in                     |    6 ++++-
+ 3 files changed, 45 insertions(+), 1 deletions(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 69bb1ef..021e70a 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -12,7 +12,8 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo \
-+	host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
--- 
-1.7.10.4
+diff --git a/package/xbmc-pvr-addons/Config.in b/package/xbmc-pvr-addons/Config.in
+new file mode 100644
+index 0000000..27f20e3
+--- /dev/null
++++ b/package/xbmc-pvr-addons/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_XBMC_PVR_ADDONS
++	bool "xbmc-pvr-addons"
++	help
++	  A collection of PVR backend addons for XBMC.
++
++	  https://github.com/opdenkamp/xbmc-pvr-addons
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+new file mode 100644
+index 0000000..b6d061b
+--- /dev/null
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# xbmc-pvr-addons
++#
++################################################################################
++
++# This cset is on the branch 'frodo'
++# When XBMC is updated, then this should be updated to the corresponding branch
++XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
++XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
++XBMC_PVR_ADDONS_LICENSE = GPLv3+
++XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
++
++# There's no ./configure in the git tree, we need to generate it
++XBMC_PVR_ADDONS_AUTORECONF = YES
++
++XBMC_PVR_ADDONS_DEPENDENCIES = boost zlib
++# This really is a runtime dependency, but we need XBMC to be installed
++# first, since we'll install files in XBMC's directories _after_ XBMC has
++# installed its own files
++XBMC_PVR_ADDONS_DEPENDENCIES += xbmc
++
++XBMC_PVR_ADDONS_CONF_OPT = \
++	--enable-release \
++	--enable-addons-with-dependencies
++
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++XBMC_PVR_ADDONS_CONF_OPT += --enable-mysql
++XBMC_PVR_ADDONS_DEPENDENCIES += mysql
++else
++XBMC_PVR_ADDONS_CONF_OPT += --disable-mysql
++endif
++
++$(eval $(autotools-package))
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 70faaab..ef9f8bd 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -158,4 +158,8 @@ config BR2_PACKAGE_XBMC_WAVPACK
+ 	  Enable WAV input support.
+ 	  Select this if you want to play back WV files.
+ 
+-endif
++comment "XBMC addons"
++
++source "package/xbmc-pvr-addons/Config.in"
++
++endif # BR2_PACKAGE_XBMC
