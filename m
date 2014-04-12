@@ -1,56 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 17:12:55 +0200
-Subject: [Buildroot] [PATCH] Fixing rshd/rlogind configuration and make
- target
-In-Reply-To: <528A2585.5040402@gmx.de>
-References: <528A2585.5040402@gmx.de>
-Message-ID: <20140412171255.26048534@skate>
+Date: Sat, 12 Apr 2014 17:39:39 +0200
+Subject: [Buildroot] [PATCH 1/1] mesa3d: Force autoreconf to avoid
+ running configure twice
+In-Reply-To: <1397306612-20233-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1397306612-20233-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140412173939.355fc569@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear universe II,
+Dear Bernd Kuhls,
 
-On Mon, 18 Nov 2013 15:34:45 +0100, universe II wrote:
-
-> +config BR2_PACKAGE_RSH_REDONE_RLOGIND
-> +       bool "rlogind"
-> +       depends on BR2_PACKAGE_RSH_REDONE
-
-Dependency on BR2_PACKAGE_LINUX_PAM was missing here.
-
+On Sat, 12 Apr 2014 14:43:32 +0200, Bernd Kuhls wrote:
 > 
->   config BR2_PACKAGE_RSH_REDONE_RSH
->          bool "rsh"
->          depends on BR2_PACKAGE_RSH_REDONE
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/mesa3d.mk |    1 +
+>  1 file changed, 1 insertion(+)
 > 
->   # requires PAM
-> -#config BR2_PACKAGE_RSH_REDONE_RSHD
-> -#      bool "rshd"
-> -#      depends on BR2_PACKAGE_RSH_REDONE
-> +config BR2_PACKAGE_RSH_REDONE_RSHD
-> +       bool "rshd"
-> +       depends on BR2_PACKAGE_RSH_REDONE
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index f40b2ee..1e2cc53 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -9,6 +9,7 @@ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+>  MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+>  MESA3D_LICENSE = MIT, SGI, Khronos
+>  MESA3D_LICENSE_FILES = docs/license.html
+> +MESA3D_AUTORECONF = YES
 
-and here.
-
-> diff -Naur rsh-redone_org/rsh-redone.mk rsh-redone/rsh-redone.mk
-> --- rsh-redone_org/rsh-redone.mk        2013-09-17 13:42:07.000000000 +0200
-> +++ rsh-redone/rsh-redone.mk    2013-10-24 08:23:00.643065545 +0200
-> @@ -13,8 +13,8 @@
->   rsh-redone-bin-$(BR2_PACKAGE_RSH_REDONE_RLOGIN) += rlogin
->   rsh-redone-bin-$(BR2_PACKAGE_RSH_REDONE_RSH) += rsh
->   rsh-redone-sbin-y =
-> -rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RLOGIND) += rlogind
-> -rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RSHD) += rshd
-> +rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RLOGIND) += in.rlogind
-> +rsh-redone-sbin-$(BR2_PACKAGE_RSH_REDONE_RSHD) += in.rshd
-
-and here as well.
-
-I've fixed that up and committed.
+Following the merge of
+http://git.buildroot.net/buildroot/commit/?id=36ed6bec0900b1f2afa305318569435283b25d16,
+your patch is no longer necessary.
 
 Thanks!
 
