@@ -1,32 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 23:17:35 +0200
-Subject: [Buildroot] [git commit] libatomic_ops: mark as supporting aarch64
-Message-ID: <20140412211803.64CDF9C742@busybox.osuosl.org>
+Date: Sat, 12 Apr 2014 23:19:14 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libatomic: mark as supporting
+ aarch64
+In-Reply-To: <1397225156-23112-2-git-send-email-alex.bennee@linaro.org>
+References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
+ <1397225156-23112-2-git-send-email-alex.bennee@linaro.org>
+Message-ID: <20140412231914.215578bc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=515527a9bdb55525c349f76355622270bf490956
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Alex Benn?e,
 
-[Thomas: fix typo in the patch: BR2_aarch64 -> BR2_aarch64.]
+On Fri, 11 Apr 2014 15:05:54 +0100, Alex Benn?e wrote:
+> Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
+> 
+> diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
+> index 3d5d0a8..290d0b0 100644
+> --- a/package/libatomic_ops/Config.in
+> +++ b/package/libatomic_ops/Config.in
+> @@ -1,5 +1,5 @@
+>  config BR2_PACKAGE_LIBATOMIC_OPS
+>  	bool "libatomic_ops"
+> -	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
+> +	depends on BR2_arm || BR2_armeb || BR_aarch64 || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
 
-Signed-off-by: Alex Benn??e <alex.bennee@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libatomic_ops/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+                                           ^^^^ how could this even
+                                                work ?
 
-diff --git a/package/libatomic_ops/Config.in b/package/libatomic_ops/Config.in
-index 3d5d0a8..0d05eea 100644
---- a/package/libatomic_ops/Config.in
-+++ b/package/libatomic_ops/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_LIBATOMIC_OPS
- 	bool "libatomic_ops"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
-+	depends on BR2_arm || BR2_armeb || BR2_aarch64 || BR2_i386 || BR2_sparc || BR2_powerpc || BR2_x86_64
- 	help
- 	  Atomic operations library
+Anyway, I've committed your patch with this fixed to BR2_aarch64.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
