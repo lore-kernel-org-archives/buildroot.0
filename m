@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 12 Apr 2014 18:24:57 +0000 (UTC)
+Date: Sat, 12 Apr 2014 19:10:13 +0000 (UTC)
 Subject: [Buildroot] [Bug 5708] Blow this product away
 In-Reply-To: <bug-5708-163@https.bugs.busybox.net/>
 References: <bug-5708-163@https.bugs.busybox.net/>
-Message-ID: <20140412182457.0E9E99C745@busybox.osuosl.org>
+Message-ID: <20140412191013.369899C488@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,15 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=5708
 
-darth vader <johnsmith122913@gmail.com> changed:
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |buildroot at uclibc.org
-          Component|TestComponent               |Other
-         AssignedTo|root at osuosl.org             |unassigned at buildroot.uclibc
-                   |                            |.org
-            Product|TestProduct                 |buildroot
+             Status|NEW                         |RESOLVED
+         Resolution|                            |INVALID
+
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-04-12 19:10:13 UTC ---
+Bogus bug
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
