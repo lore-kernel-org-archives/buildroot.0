@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 15:58:54 +0200
-Subject: [Buildroot] [git commit] package/pkg-python.mk: Fix typo
-Message-ID: <20140412140108.0AC0F9C749@busybox.osuosl.org>
+Date: Sat, 12 Apr 2014 16:02:09 +0200
+Subject: [Buildroot] [PATCH v2] openpgm: needs host python2
+In-Reply-To: <CAHXCMMJF0K+CjZ=gM+quvbAEJyqAfvP3i9bfz_DovzVfQLH+6A@mail.gmail.com>
+References: <783d7d9db0c782c2317fcfc6160b6802b095164d.1397117772.git.baruch@tkos.co.il>
+ <CAHXCMMJF0K+CjZ=gM+quvbAEJyqAfvP3i9bfz_DovzVfQLH+6A@mail.gmail.com>
+Message-ID: <20140412160209.2f1c2e55@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=017f53d3658176097c10250263bd54e5edd5c980
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-python.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Fri, 11 Apr 2014 09:09:12 +0200, Samuel Martin wrote:
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index c78915e..d6786a3 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -183,7 +183,7 @@ endif
- 
- # Python interpreter to use for building the package.
- #
--# We may want to specify the python interpreter toi be used for building a
-+# We may want to specify the python interpreter to be used for building a
- # package, especially for host-packages (target packages must be built using
- # the same version of the interpreter as the one installed on the target).
- #
+> This works fine, but maybe a patch like [1] is simple enough to avoid
+> a hard dependency on host-python.
+
+[...]
+
+> [1] http://pastebin.com/JJerR2uu
+
+Can you submit a proper patch for this, and also submit it upstream?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
