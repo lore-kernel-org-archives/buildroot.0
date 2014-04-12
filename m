@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Apr 2014 13:57:15 +0200
+Date: Sat, 12 Apr 2014 14:42:09 +0200
 Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: Fix typo
-Message-ID: <1397303835-10901-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1397306529-20187-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
