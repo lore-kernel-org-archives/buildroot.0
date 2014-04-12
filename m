@@ -1,36 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 16:00:57 +0200
-Subject: [Buildroot] [PATCH] libglib2: fix compilation for aarch64 and
- arc
-In-Reply-To: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
-References: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140412160057.38777048@skate>
+Date: Sat, 12 Apr 2014 15:58:54 +0200
+Subject: [Buildroot] [git commit] package/pkg-python.mk: Fix typo
+Message-ID: <20140412140108.0AC0F9C749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+commit: http://git.buildroot.net/buildroot/commit/?id=017f53d3658176097c10250263bd54e5edd5c980
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 Apr 2014 18:46:36 +0400, Alexey Brodkin wrote:
-> Copied from here - https://github.com/openembedded/oe-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
-> 
-> Initially posted here - http://lists.openembedded.org/pipermail/openembedded-core/2013-October/085174.html
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  ...ror-format-string-errors-from-mismatched-.patch | 56 ++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-python.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks. Is this fixing an issue reported by the autobuilders? If not,
-under what conditions are you seeing the problem?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index c78915e..d6786a3 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -183,7 +183,7 @@ endif
+ 
+ # Python interpreter to use for building the package.
+ #
+-# We may want to specify the python interpreter toi be used for building a
++# We may want to specify the python interpreter to be used for building a
+ # package, especially for host-packages (target packages must be built using
+ # the same version of the interpreter as the one installed on the target).
+ #
