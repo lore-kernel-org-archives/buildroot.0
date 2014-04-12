@@ -1,31 +1,81 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Apr 2014 14:43:32 +0200
-Subject: [Buildroot] [PATCH 1/1] mesa3d: Force autoreconf to avoid running
-	configure twice
-Message-ID: <1397306612-20233-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 12 Apr 2014 15:08:51 +0200
+Subject: [Buildroot] [PATCH 1/1] host-libxml2: Prefer python2 when python3
+	is also installed
+Message-ID: <1397308131-2066-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes mesa3d build error:
+http://autobuild.buildroot.net/results/d10/d105a0b3ca11fad34f9a2dae0dae9bd041d918a6/
+
+checking for python2... python2
+checking python2 module: libxml2... no
+configure: error: failed to find required module libxml2
+make: *** [/home/test/test/1/output/build/mesa3d-10.0.4/.stamp_configured] Error 1
+
+mesa3d needs python2 bindings installed by libxml2. To enforce their build
+option BR2_PACKAGE_HOST_LIBXML2_PYTHON is used exclusively by mesa3d so this
+patch does not affect other packages.
+
+Without this patch host-libxml2 installs the python bindings in
+$(HOST_DIR)/usr/lib/$(PYTHON3_VERSION_MAJOR) using this defconfig:
+
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_PYTHON3=y
+
+because $(HOST_DIR)/usr/bin/python points to $(HOST_DIR)/usr/bin/python3:
+
+Quote from host-libxml2 configure log:
+Found python in /home/fli4l/br2/buildroot/output/host/usr/bin/python
+Found Python version 3.4
+
+HOST_$(PACKAGE)_NEEDS_HOST_PYTHON does not work here because libxml2 does
+not use the python-package infrastructure.
+
+libxml2-python2.patch extends the python detection code in host-libxml2 to
+first look for python2, to keep the patch small I did not update the indentions:
+
+Found python2 in /home/fli4l/br2/buildroot/output/host/usr/bin/python2
+Found Python version 2.7
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/mesa3d.mk |    1 +
- 1 file changed, 1 insertion(+)
+ package/libxml2/libxml2-python2.patch |   23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/libxml2/libxml2-python2.patch
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f40b2ee..1e2cc53 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -9,6 +9,7 @@ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.html
-+MESA3D_AUTORECONF = YES
- 
- MESA3D_INSTALL_STAGING = YES
- 
+diff --git a/package/libxml2/libxml2-python2.patch b/package/libxml2/libxml2-python2.patch
+new file mode 100644
+index 0000000..85c5577
+--- /dev/null
++++ b/package/libxml2/libxml2-python2.patch
+@@ -0,0 +1,23 @@
++diff -uNr libxml2-2.9.1.org/configure.in libxml2-2.9.1/configure.in
++--- libxml2-2.9.1.org/configure.in	2013-04-19 09:25:20.000000000 +0200
+++++ libxml2-2.9.1/configure.in	2014-04-12 14:16:26.579361068 +0200
++@@ -748,6 +748,11 @@
++ PYTHON_TESTS=
++ pythondir=
++ if test "$with_python" != "no" ; then
+++    if test -x "$with_python/bin/python2"
+++    then
+++        echo Found python2 in $with_python/bin/python2
+++        PYTHON="$with_python/bin/python2"
+++    else
++     if test -x "$with_python/bin/python"
++     then
++         echo Found python in $with_python/bin/python
++@@ -773,6 +778,7 @@
++ 	    fi
++ 	fi
++     fi
+++    fi
++     if test "$PYTHON" != ""
++     then
++         PYTHON_VERSION=`$PYTHON -c "from distutils import sysconfig; print(sysconfig.get_python_version())"`
 -- 
 1.7.10.4
