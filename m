@@ -1,25 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 15:59:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: Fix typo
-In-Reply-To: <1397303835-10901-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1397303835-10901-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140412155913.3b151d23@skate>
+Date: Sat, 12 Apr 2014 16:00:57 +0200
+Subject: [Buildroot] [PATCH] libglib2: fix compilation for aarch64 and
+ arc
+In-Reply-To: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
+References: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20140412160057.38777048@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Alexey Brodkin,
 
-On Sat, 12 Apr 2014 13:57:15 +0200, Bernd Kuhls wrote:
+On Thu, 10 Apr 2014 18:46:36 +0400, Alexey Brodkin wrote:
+> Copied from here - https://github.com/openembedded/oe-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Initially posted here - http://lists.openembedded.org/pipermail/openembedded-core/2013-October/085174.html
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 > ---
->  package/pkg-python.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...ror-format-string-errors-from-mismatched-.patch | 56 ++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
 
-Applied, thanks.
+Thanks. Is this fixing an issue reported by the autobuilders? If not,
+under what conditions are you seeing the problem?
+
+Thanks,
 
 Thomas
 -- 
