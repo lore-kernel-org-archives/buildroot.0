@@ -1,7 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 12 Apr 2014 14:42:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: Fix typo
-Message-ID: <1397306529-20187-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 12 Apr 2014 14:43:32 +0200
+Subject: [Buildroot] [PATCH 1/1] mesa3d: Force autoreconf to avoid running
+	configure twice
+Message-ID: <1397306612-20233-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,21 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pkg-python.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mesa3d/mesa3d.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/pkg-python.mk b/package/pkg-python.mk
-index c78915e..d6786a3 100644
---- a/package/pkg-python.mk
-+++ b/package/pkg-python.mk
-@@ -183,7 +183,7 @@ endif
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f40b2ee..1e2cc53 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -9,6 +9,7 @@ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
++MESA3D_AUTORECONF = YES
  
- # Python interpreter to use for building the package.
- #
--# We may want to specify the python interpreter toi be used for building a
-+# We may want to specify the python interpreter to be used for building a
- # package, especially for host-packages (target packages must be built using
- # the same version of the interpreter as the one installed on the target).
- #
+ MESA3D_INSTALL_STAGING = YES
+ 
 -- 
 1.7.10.4
