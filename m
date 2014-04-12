@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 17:39:39 +0200
-Subject: [Buildroot] [PATCH 1/1] mesa3d: Force autoreconf to avoid
- running configure twice
-In-Reply-To: <1397306612-20233-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1397306612-20233-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140412173939.355fc569@skate>
+Date: Sat, 12 Apr 2014 17:41:15 +0200
+Subject: [Buildroot] [git commit] linphone: arc: Undefine __arc__ when
+	building for ARC processors
+Message-ID: <20140412154131.49A279C73E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=baf637df7c0508e4fc1ee2482669abe79d0c475e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Apr 2014 14:43:32 +0200, Bernd Kuhls wrote:
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/mesa3d.mk |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index f40b2ee..1e2cc53 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -9,6 +9,7 @@ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
->  MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
->  MESA3D_LICENSE = MIT, SGI, Khronos
->  MESA3D_LICENSE_FILES = docs/license.html
-> +MESA3D_AUTORECONF = YES
+This patch is similar to 821a6d63. Libexosip2 defines symbol __arc__, which
+gets in contradiction with same symbol defined by the GCC for the Synopsys
+DesignWare ARC cores. Previous patch undefined __arc__ for libosip2 and
+libexosip2, however linphone includes headers from libexosip2, which causes
+build failure unless same patch is applied to it.
 
-Following the merge of
-http://git.buildroot.net/buildroot/commit/?id=36ed6bec0900b1f2afa305318569435283b25d16,
-your patch is no longer necessary.
+This patch fixes
+http://autobuild.buildroot.net/results/0d2e19d40d6d0df4048e6ebae5f77022f89ca7cb/
 
-Thanks!
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linphone/linphone.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
+index 91830ae..5e960a0 100644
+--- a/package/linphone/linphone.mk
++++ b/package/linphone/linphone.mk
+@@ -17,6 +17,11 @@ LINPHONE_DEPENDENCIES = host-pkgconf ortp mediastreamer libeXosip2 speex
+ LINPHONE_LICENSE = GPLv2+
+ LINPHONE_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_arc),y)
++# toolchain __arc__ define conflicts with libosip2 source
++LINPHONE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBGTK2)$(BR2_PACKAGE_XORG7),yy)
+ LINPHONE_CONF_OPT += --enable-gtk_ui
+ LINPHONE_DEPENDENCIES += libgtk2
