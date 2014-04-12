@@ -1,107 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 23:00:24 +0200
-Subject: [Buildroot] [git commit] pciutils: allow installation of static
-	library when BR2_PREFER_STATIC_LIB
-Message-ID: <20140412210107.4B2F09C749@busybox.osuosl.org>
+Date: Sat, 12 Apr 2014 23:03:10 +0200
+Subject: [Buildroot] [git commit] python3: correctly fix PYTHON3_PATH
+Message-ID: <20140412210411.9C49C9C749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=811ea79e3b6a3fd2d85bef6014aa7860915ed36c
+commit: http://git.buildroot.net/buildroot/commit/?id=97fba4cd24db0824997cb6685eae875effd76395
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: rework according to Arnout comments.]
+Commit 6251ccf03254f832c6e6ba0203ad46c18f217ca9 ('python3: fix the
+value of PYTHON3_PATH') tried to fix the value of PYTHON3_PATH, but
+did it incorrectly: it changed PYTHON_VERSION_MAJOR to
+PYTHON_VERSION3_MAJOR, while it should have been
+PYTHON3_VERSION_MAJOR.
 
-Signed-off-by: Andy Kennedy <andy.kennedy@adtran.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pciutils/pciutils.mk |   52 +++++++++++++++++++++++------------------
- 1 files changed, 29 insertions(+), 23 deletions(-)
+ package/python3/python3.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index bc88ab3..f9e8695 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -16,13 +16,8 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
- else
- 	PCIUTILS_ZLIB=no
- endif
--PCIUTILS_DNS=no
--PCIUTILS_SHARED=yes
- 
--# Build after busybox since it's got a lightweight lspci
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--	PCIUTILS_DEPENDENCIES += busybox
--endif
-+PCIUTILS_DNS=no
- 
- ifeq ($(BR2_PACKAGE_KMOD),y)
- 	PCIUTILS_DEPENDENCIES += kmod
-@@ -31,6 +26,29 @@ else
- 	PCIUTILS_KMOD = no
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8c5024b..80ad88e 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -169,7 +169,7 @@ HOST_PYTHON3_POST_INSTALL_HOOKS += HOST_PYTHON3_INSTALL_SYMLINK
  endif
  
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	PCIUTILS_SHARED=no
-+else
-+	PCIUTILS_SHARED=yes
-+endif
-+
-+PCIUTILS_MAKE_OPTS = \
-+	CC="$(TARGET_CC)" \
-+	HOST="$(KERNEL_ARCH)-linux" \
-+	OPT="$(TARGET_CFLAGS)" \
-+	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	RANLIB=$(TARGET_RANLIB) \
-+	AR=$(TARGET_AR) \
-+	ZLIB=$(PCIUTILS_ZLIB) \
-+	DNS=$(PCIUTILS_DNS) \
-+	LIBKMOD=$(PCIUTILS_KMOD) \
-+	SHARED=$(PCIUTILS_SHARED)
-+
-+# Build after busybox since it's got a lightweight lspci
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+	PCIUTILS_DEPENDENCIES += busybox
-+endif
-+
- define PCIUTILS_CONFIGURE_CMDS
- 	$(SED) 's/wget --no-timestamping/wget/' $(PCIUTILS_DIR)/update-pciids.sh
- 	$(SED) 's/uname -s/echo Linux/' \
-@@ -40,30 +58,18 @@ define PCIUTILS_CONFIGURE_CMDS
- endef
+ # Provided to other packages
+-PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION3_MAJOR)/site-packages/
++PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/
  
- define PCIUTILS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" \
--		HOST="$(KERNEL_ARCH)-linux" \
--		OPT="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)" \
--		RANLIB=$(TARGET_RANLIB) \
--		AR=$(TARGET_AR) \
--		-C $(PCIUTILS_DIR) \
--		SHARED=$(PCIUTILS_SHARED) \
--		ZLIB=$(PCIUTILS_ZLIB) \
--		DNS=$(PCIUTILS_DNS) \
--		LIBKMOD=$(PCIUTILS_KMOD) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(PCIUTILS_MAKE_OPTS) \
- 		PREFIX=/usr
- endef
- 
--# Ditch install-lib if SHARED is an option in the future
- define PCIUTILS_INSTALL_TARGET_CMDS
--	$(MAKE1) BUILDDIR=$(@D) -C $(@D) PREFIX=$(TARGET_DIR)/usr \
--		SHARED=$(PCIUTILS_SHARED) install install-lib
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(PCIUTILS_MAKE_OPTS) \
-+		PREFIX=$(TARGET_DIR)/usr install install-lib install-pcilib
- endef
- 
- define PCIUTILS_INSTALL_STAGING_CMDS
--	$(MAKE1) BUILDDIR=$(@D) -C $(@D) PREFIX=$(STAGING_DIR)/usr \
--		SHARED=$(PCIUTILS_SHARED) install install-lib
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(PCIUTILS_MAKE_OPTS) \
-+		PREFIX=$(STAGING_DIR)/usr install install-lib install-pcilib
- endef
- 
--
- $(eval $(generic-package))
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
