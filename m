@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Apr 2014 18:42:22 +0200
-Subject: [Buildroot] [PATCH 1/1] xbmc: Depend on host-gettext
-In-Reply-To: <1397319021-20282-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1397319021-20282-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140412184222.6406c780@skate>
+Date: Sat, 12 Apr 2014 18:43:39 +0200
+Subject: [Buildroot] [PATCH 0/2] use host compressor for rootfs
+In-Reply-To: <1396770501-9443-1-git-send-email-tremyfr@yahoo.fr>
+References: <1396770501-9443-1-git-send-email-tremyfr@yahoo.fr>
+Message-ID: <20140412184339.1f87a7da@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Philippe Reynes,
 
-On Sat, 12 Apr 2014 18:10:21 +0200, Bernd Kuhls wrote:
-> Fixes autoreconf error:
+On Sun,  6 Apr 2014 09:48:19 +0200, Philippe Reynes wrote:
+> When the rootfs is compressed with lzma, lzo or xz, we
+> use the binary compiled by buildroot. But with gzip
+> or bzip, we use the tools of the machine. This serie
+> change this behaviour for gzip and bzip2, it add
+> a dependancy on host-<compressor> and use it to
+> compress the rootfs.
 > 
-> autoreconf -vif lib/cpluff
-> autoreconf: Entering directory `lib/cpluff'
-> autoreconf: running: autopoint --force
-> Can't exec "autopoint": Datei oder Verzeichnis nicht gefunden at /home/br2/buildroot/output/host/usr/share/autoconf/Autom4te/FileUtils.pm line 345.
-> autoreconf: failed to run autopoint: No such file or directory
-> autoreconf: autopoint is needed because this package uses Gettext
-> make[1]: *** [lib/cpluff/configure] Error 1
+> Philippe Reynes (2):
+>   rootfs-gzip: use host-gzip instead of local gzip
+>   rootfs-bzip: use host-bzip2 instead of local bzip2
 
-Why is XBMC autoreconf'ed ? It does not have XBMC_AUTORECONF = YES, so
-it should normally not be autoreconfed.
+Since the general reception about these patches has been fairly
+negative, I've marked them as Rejected in patchwork.
 
-If it needs to be be autoreconf'ed, then XBMC_AUTORECONF = YES should
-be used, which passes AUTOPOINT = /bin/true to autoreconf to avoid the
-problem you're having.
+Thanks for your contribution!
 
 Thomas
 -- 
