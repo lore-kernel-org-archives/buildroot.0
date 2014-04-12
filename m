@@ -1,28 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 12 Apr 2014 08:38:00 -0300
-Subject: [Buildroot] [PATCH] php: fix wrong -L and -I paths added by
-	iconv tests
-In-Reply-To: <20140412131421.65746140@skate>
-References: <1397299022-31655-1-git-send-email-jcmvbkbc@gmail.com>
- <20140412131421.65746140@skate>
-Message-ID: <53492598.2080908@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 12 Apr 2014 13:57:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-python.mk: Fix typo
+Message-ID: <1397303835-10901-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/12/2014 08:14 AM, Thomas Petazzoni wrote:
-> I remember trying this possible fix the other day before replying to
-> you, and it didn't work: the iconv detection was failing. I'll
-> reproduce and get back to you with more details.
 
-The fatal combination is basically uclibc with locale support where
-libiconv isn't built and php is built with iconv support but not xmlrpc
-(which has it's own iconv option, yeah, that's php for you).
-I haven't delved too much into a proper fix at the moment but that'll
-probably won't work in all the iconv scenarios around.
-A possibility might be doing AUTORECONF and just fixing PHP_SETUP_ICONV
-in aclocal/acinclude.m4, in the past AUTORECONFing php was broken but
-that might have changed in recent versions.
-Regards.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/pkg-python.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-python.mk b/package/pkg-python.mk
+index c78915e..d6786a3 100644
+--- a/package/pkg-python.mk
++++ b/package/pkg-python.mk
+@@ -183,7 +183,7 @@ endif
+ 
+ # Python interpreter to use for building the package.
+ #
+-# We may want to specify the python interpreter toi be used for building a
++# We may want to specify the python interpreter to be used for building a
+ # package, especially for host-packages (target packages must be built using
+ # the same version of the interpreter as the one installed on the target).
+ #
+-- 
+1.7.10.4
