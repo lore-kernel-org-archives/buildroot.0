@@ -1,60 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Apr 2014 14:00:19 +0200
-Subject: [Buildroot] [PATCH 2/2] mutt: Add options for imap/pop3 support,
- enable optional iconv/OpenSSL support
-In-Reply-To: <1397381763-15489-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1397381763-15489-1-git-send-email-bernd.kuhls@t-online.de>
- <1397381763-15489-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140413140019.6fce5bf2@skate>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 13 Apr 2014 14:14:16 +0200
+Subject: [Buildroot] [PATCH v2 1/2] mutt: Bump version to 1.5.23
+Message-ID: <1397391257-12882-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+removed upstream applied patch mutt-02-automake.patch
+http://dev.mutt.org/trac/changeset/0488deb39a35
 
-On Sun, 13 Apr 2014 11:36:03 +0200, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes
 
-> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> +MUTT_DEPENDENCIES += libiconv
-> +MUTT_CONF_OPT += --enable-iconv
-> +else
-> +MUTT_CONF_OPT += --disable-iconv
-> +endif
+ package/mutt/mutt-02-automake.patch |   16 ----------------
+ package/mutt/mutt.mk                |    4 ++--
+ 2 files changed, 2 insertions(+), 18 deletions(-)
+ delete mode 100644 package/mutt/mutt-02-automake.patch
 
-The libiconv package provides libiconv support for uClibc toolchains
-that don't have locale enabled.
-
-But if you're using an uClibc toolchain with locale support enabled, or
-a glibc toolchain, then iconv support *is* available, without the
-libiconv package enabled. However, with your code, iconv support will
-be disabled in mutt in such cases.
-
-Maybe this is an area we need to improve a bit, by providing a Kconfig
-option or something like that.
-
-> +# SSL support is only used by imap or pop3 module
-> +ifeq ($(findstring xy,x$(BR2_PACKAGE_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3)),xy)
-
-This could maybe be:
-
-ifneq ($(BR2_PACKAGET_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
-
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +MUTT_DEPENDENCIES += openssl
-> +MUTT_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr
-> +else
-> +MUTT_CONF_OPT += --without-ssl
-> +endif
-> +else
-> +MUTT_CONF_OPT += --without-ssl
-> +endif
-> +
->  $(eval $(autotools-package))
-
-Thomas
+diff --git a/package/mutt/mutt-02-automake.patch b/package/mutt/mutt-02-automake.patch
+deleted file mode 100644
+index 19950a9..0000000
+--- a/package/mutt/mutt-02-automake.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Fix for automake 1.12+
+-http://dev.mutt.org/trac/ticket/3579
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura mutt-1.5.21.orig/configure.ac mutt-1.5.21/configure.ac
+---- mutt-1.5.21.orig/configure.ac	2013-09-16 11:07:25.699781892 -0300
+-+++ mutt-1.5.21/configure.ac	2013-09-16 11:07:45.120419960 -0300
+-@@ -27,7 +27,6 @@
+- 
+- AC_PROG_CC
+- AC_ISC_POSIX
+--AM_C_PROTOTYPES
+- if test "x$U" != "x"; then
+-   AC_MSG_ERROR(Compiler not ANSI compliant)
+- fi
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 0c17589..5aa18eb 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 1.5.21
+-MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt-dev
++MUTT_VERSION = 1.5.23
++MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt
+ MUTT_LICENSE = GPLv2+
+ MUTT_LICENSE_FILES = GPL
+ MUTT_DEPENDENCIES = ncurses
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
