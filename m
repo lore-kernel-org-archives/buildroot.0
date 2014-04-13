@@ -1,59 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Apr 2014 11:36:02 +0200
-Subject: [Buildroot] [PATCH 1/2] mutt: Bump version to 1.5.23
-Message-ID: <1397381763-15489-1-git-send-email-bernd.kuhls@t-online.de>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 13 Apr 2014 11:46:57 +0200
+Subject: [Buildroot] [PATCH 0/6] Microblaze fixes
+Message-ID: <1397382423-4939-1-git-send-email-wbx@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-removed upstream applied patch mutt-02-automake.patch
-http://dev.mutt.org/trac/changeset/0488deb39a35
+The microblaze buildoot support is in a bad state. 
+Startup of the resulting image in Qemu is killed by OOM-killer.
+These patches resolves the issues and the resulting images for
+little endian and big endian are working fine. 
+Network support is working now, too.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mutt/mutt-02-automake.patch |   16 ----------------
- package/mutt/mutt.mk                |    4 ++--
- 2 files changed, 2 insertions(+), 18 deletions(-)
- delete mode 100644 package/mutt/mutt-02-automake.patch
+Waldemar Brodkorb (6):
+  use default binutils for microblaze
+  use default gcc 4.8.2 for microblaze
+  upstream glibc 2.18/2.19 works fine with microblaze
+  disable eglibc, no time to test
+  temporary hack to fix linking error
+  update to 3.14
 
-diff --git a/package/mutt/mutt-02-automake.patch b/package/mutt/mutt-02-automake.patch
-deleted file mode 100644
-index 19950a9..0000000
---- a/package/mutt/mutt-02-automake.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Fix for automake 1.12+
--http://dev.mutt.org/trac/ticket/3579
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura mutt-1.5.21.orig/configure.ac mutt-1.5.21/configure.ac
----- mutt-1.5.21.orig/configure.ac	2013-09-16 11:07:25.699781892 -0300
--+++ mutt-1.5.21/configure.ac	2013-09-16 11:07:45.120419960 -0300
--@@ -27,7 +27,6 @@
-- 
-- AC_PROG_CC
-- AC_ISC_POSIX
---AM_C_PROTOTYPES
-- if test "x$U" != "x"; then
--   AC_MSG_ERROR(Compiler not ANSI compliant)
-- fi
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 0c17589..5aa18eb 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MUTT_VERSION = 1.5.21
--MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt-dev
-+MUTT_VERSION = 1.5.23
-+MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt
- MUTT_LICENSE = GPLv2+
- MUTT_LICENSE_FILES = GPL
- MUTT_DEPENDENCIES = ncurses
+ .../{linux-3.13.config => linux-3.14.config}       |    1 +
+ board/qemu/microblazebe-mmu/system.dts             |  367 --------------------
+ .../{linux-3.13.config => linux-3.14.config}       |    1 +
+ board/qemu/microblazeel-mmu/system.dts             |  367 --------------------
+ board/qemu/microblazeel-mmu/xilinx-xemaclite.patch |   11 +
+ configs/qemu_microblazebe_mmu_defconfig            |    8 +-
+ configs/qemu_microblazeel_mmu_defconfig            |    8 +-
+ linux/Config.in                                    |    2 -
+ package/binutils/Config.in.host                    |    3 +-
+ package/binutils/binutils.mk                       |    5 -
+ package/gcc/Config.in.host                         |   12 +-
+ package/gcc/gcc.mk                                 |    4 -
+ package/glibc/2.18/microblaze-libgcc_eh.patch      |   18 +
+ package/glibc/2.19/microblaze-libgcc_eh.patch      |   18 +
+ package/glibc/Config.in                            |    2 +-
+ package/glibc/glibc.mk                             |   12 -
+ toolchain/toolchain-buildroot/Config.in            |    2 +-
+ 17 files changed, 63 insertions(+), 778 deletions(-)
+ rename board/qemu/microblazebe-mmu/{linux-3.13.config => linux-3.14.config} (98%)
+ delete mode 100644 board/qemu/microblazebe-mmu/system.dts
+ rename board/qemu/microblazeel-mmu/{linux-3.13.config => linux-3.14.config} (98%)
+ delete mode 100644 board/qemu/microblazeel-mmu/system.dts
+ create mode 100644 board/qemu/microblazeel-mmu/xilinx-xemaclite.patch
+ create mode 100644 package/glibc/2.18/microblaze-libgcc_eh.patch
+ create mode 100644 package/glibc/2.19/microblaze-libgcc_eh.patch
+
 -- 
 1.7.10.4
