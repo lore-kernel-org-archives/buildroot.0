@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Apr 2014 22:42:38 +0200
-Subject: [Buildroot] [PATCH 2/6] support/graph-depends: use argparse to
-	parse argv[]
+Date: Sun, 13 Apr 2014 22:42:40 +0200
+Subject: [Buildroot] [PATCH 4/6] manual: document BR2_GRAPH_DEPTH
 In-Reply-To: <cover.1397421554.git.yann.morin.1998@free.fr>
 References: <cover.1397421554.git.yann.morin.1998@free.fr>
-Message-ID: <6e53d567f4b2087188a43cb2602b4096972c8c20.1397421554.git.yann.morin.1998@free.fr>
+Message-ID: <53842f4d578cc6d1ab9ca744a954800e95a11316.1397421554.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,87 +12,24 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Currently, we are using a crude, ad-hoc parsing of argv[].
-This is a limiting factor to adding new options.
-
-Use argparse instead, and introduce a single argument for now:
-  --package, -p PACKAGE
-
-In the (near) future, we'll be able to add more option arguments,
-such as depth-limiting for big graphs.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk        |  2 +-
- support/scripts/graph-depends | 23 +++++++++++++----------
- 2 files changed, 14 insertions(+), 11 deletions(-)
+ docs/manual/common-usage.txt | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b3a4c17..080ee56 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -495,7 +495,7 @@ $(1)-show-depends:
- $(1)-graph-depends:
- 			@$(INSTALL) -d $(O)/graphs
- 			@cd "$(CONFIG_DIR)"; \
--			$(TOPDIR)/support/scripts/graph-depends $(1) \
-+			$(TOPDIR)/support/scripts/graph-depends -p $(1) \
- 			|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index d9de598..c9d5eb9 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -96,6 +96,8 @@ to +make+ or set in the environment:
+   build-time graphs
+ * +BR2_GRAPH_OUT+ to set the filetype of generated graphs, either +pdf+ (the
+   default), or +png+.
++* +BR2_GRAPH_DEPTH+ (an integer) to limit the depth of the dependency graph.
++  The default, +0+, is to not limit the depth.
  
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index ac24086..fc3cadd 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -1,13 +1,13 @@
- #!/usr/bin/python
- 
- # Usage (the graphviz package must be installed in your distribution)
--#  ./support/scripts/graph-depends [package-name] > test.dot
-+#  ./support/scripts/graph-depends [-p package-name] > test.dot
- #  dot -Tpdf test.dot -o test.pdf
- #
- # With no arguments, graph-depends will draw a complete graph of
--# dependencies for the current configuration. With an argument,
--# graph-depends will draw a graph of dependencies for the given
--# package name.
-+# dependencies for the current configuration.
-+# If '-p <package-name>' is specified, graph-depends will draw a graph
-+# of dependencies for the given package name.
- #
- # Limitations
- #
-@@ -21,6 +21,7 @@
- 
- import sys
- import subprocess
-+import argparse
- 
- # In FULL_MODE, we draw the full dependency graph for all selected
- # packages
-@@ -31,14 +32,16 @@ PKG_MODE  = 2
- 
- mode = 0
- 
--if len(sys.argv) == 1:
-+parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
-+parser.add_argument("--package", '-p', metavar="PACKAGE",
-+                    help="Graph the dependencies of PACKAGE")
-+args = parser.parse_args()
-+
-+if args.package == None:
-     mode = FULL_MODE
--elif len(sys.argv) == 2:
--    mode = PKG_MODE
--    rootpkg  = sys.argv[1]
- else:
--    print "Usage: graph-depends [package-name]"
--    sys.exit(1)
-+    mode = PKG_MODE
-+    rootpkg = args.package
- 
- allpkgs = []
- 
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
 -- 
 1.8.3.2
