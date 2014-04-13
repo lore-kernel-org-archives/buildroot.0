@@ -1,47 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Apr 2014 21:58:58 +0200
-Subject: [Buildroot] [PATCH 4/4] lttng-tools: mark as affected by gcc bug
-	58595
-In-Reply-To: <1397419138-8776-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1397419138-8776-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1397419138-8776-5-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Apr 2014 22:42:37 +0200
+Subject: [Buildroot] [PATCH 0/6] Misc graphs enhancements (branch yem/graphs)
+Message-ID: <cover.1397421554.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-  http://autobuild.buildroot.org/results/6a6/6a66a389035939af542e172dbe2027ffa671e28a/
+Hello All!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lttng-tools/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Here is a quick series with enhancements to generated graphs:
+  - graph-depends
+    - new option to limit the depth of the graph
+    - toolchain is only shown as a dependency of of 'All', not
+      every packages
+  - build-time
+    - embiggen the graph with lots of packages
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index f0d45d9..cde9baf 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	# liburcu only works on some architectures and requires thread support
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # util-linux
-@@ -32,7 +33,8 @@ comment "lttng-tools needs a toolchain w/ largefile, threads, wchar"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 
--comment "lttng-tools needs a toolchain not affected by GCC bug 58854"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-+comment "lttng-tools needs a toolchain not affected by GCC bug 58854 and 58595"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854 || BR2_TOOLCHAIN_HAS_GCC_BUG_58595
+This should hopefully be a step to present nicer graphs. Not yet
+really perfect, but still.
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit fae7cc33a117d5408019b705d76ebb4549593f88:
+
+  mtd: fix build against uClibc (2014-04-13 21:44:06 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/graphs
+
+for you to fetch changes up to 3f8fcc1e8205eb851227c1b085355089a9368faf:
+
+  graphs: make graphs with lots of packages nicer to look at (2014-04-13 22:37:45 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      Makefile: rename non-user-facing variable
+      support/graph-depends: use argparse to parse argv[]
+      support/graph-depends: add option to limit the depth of the graph
+      manual: document BR2_GRAPH_DEPTH
+      support/graph-depends: don't show toolchain dependency for all packages
+      graphs: make graphs with lots of packages nicer to look at
+
+ Makefile                         | 11 +++---
+ docs/manual/common-usage.txt     |  2 +
+ package/pkg-generic.mk           |  4 +-
+ support/scripts/graph-build-time | 17 ++++++---
+ support/scripts/graph-depends    | 79 ++++++++++++++++++++++++++++------------
+ 5 files changed, 76 insertions(+), 37 deletions(-)
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
