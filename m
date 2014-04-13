@@ -1,57 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Apr 2014 21:42:42 +0200
-Subject: [Buildroot] [git commit] cppcms: needs threads
-Message-ID: <20140413194253.D4BB89C715@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 13 Apr 2014 21:43:20 +0200
+Subject: [Buildroot] Patchwork cleanup #8: triaging proposal
+Message-ID: <CAAXf6LUKOuGpMV0uzR3gDM++pOu9Ldtb=6FfTGHqXjMdpvCfSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=054c162f84ace752261265a715796ac45a4d641e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Fixes:
-http://autobuild.buildroot.net/results/d61/d618de68c8a50a932e85bdefb23c40e86790dc6c/
+This is the first part of patchwork cleanup session #8. This session
+holds a limited number of patches (12) due to time constraints on my
+side. I hope to start a new session soon (which can run in parallel to
+this one).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cppcms/Config.in |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+Quick recap:
+- in this mail, a decision for a number of patches (exact number can
+vary) is already proposed. Buildroot developers should provide
+feedback stating their agreement/disagreement with this proposed
+decision.
 
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index 418146a..bfbb203 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CPPCMS
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_LIBGCRYPT
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  CppCMS is a Free High Performance Web Development Framework
- 	  (not a CMS) aimed for Rapid Web Application Development. It
-@@ -25,18 +26,17 @@ config BR2_PACKAGE_CPPCMS_ICU
- 	depends on !BR2_arc # icu -> atomic builtins
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_USE_WCHAR # icu
--	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
- 
--comment "icu support needs a toolchain w/ wchar, threads"
-+comment "icu support needs a toolchain w/ wchar"
- 	depends on !BR2_arc
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR
- 
- endif
- 
--comment "cppcms needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "cppcms needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+- patches are triaged into four categories:
+    A. We want this patch and someone should refresh and resend it.
+    B. We don't want this patch as it goes against Buildroot principles.
+    C. We're not sure and want to know if the submitter is still
+interested in pursuing this patch.
+    D. We accept the problem that the patch is fixing, but the patch
+can't be integrated in its current state. More work is needed, for
+example on the core buildroot infrastructure. Therefore, the patch
+will be added to the buildroot TODO list.
+
+- after the brief agreement/disagreement phase, patch submitters are
+notified and get two weeks to provide feedback and/or fight the
+decision. Patchwork is already updated at the beginning of these two
+weeks, but closed patches can always be reopened.
+
+- during this two week cool-off period, new cleanup sessions can already start.
+
+
+Triage proposal for this session:
+
+[RFC,5/7] python-linaro-dashboard-bundle: new package
+ludovic.desroches at atmel.com
+http://patchwork.ozlabs.org/patch/282728
+
+[RFC,6/7] lava-tool: new package
+ludovic.desroches at atmel.com
+http://patchwork.ozlabs.org/patch/282729
+
+[RFC,7/7] lava-test: new package
+ludovic.desroches at atmel.com
+http://patchwork.ozlabs.org/patch/282730
+
+Proposal: A, keep (all three patches)
+
+
+package/makedevs: add "l" type for symlinks ownership change
+angelo dureghello <angelo70@gmail.com>
+http://patchwork.ozlabs.org/patch/283015
+
+Proposal: C unsure: what is the reason for this patch?
+
+
+[v9] espeak: new package
+Arnaud Aujon <arnaud.aujon@gmail.com>
+http://patchwork.ozlabs.org/patch/284229
+
+python-sip: new package
+Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
+http://patchwork.ozlabs.org/patch/284873
+
+python-pyqt: new package
+Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
+http://patchwork.ozlabs.org/patch/284874
+
+Proposal: A keep (above three patches)
+
+
+[RFC,1/2] host-xxd: new package
+Ryan Barnett <rjbarnet@rockwellcollins.com>
+http://patchwork.ozlabs.org/patch/285936
+
+[RFC,2/2] uboot: introduce u-boot.pbl format
+Ryan Barnett <rjbarnet@rockwellcollins.com>
+http://patchwork.ozlabs.org/patch/285937
+
+Although the patch on uboot is quite large, my general feeling is to
+triage this in A: keep.
+
+
+[1/3] ccache: change compilercheck to use compiler and toolchain info
+Danomi Manchego <danomimanchego123@gmail.com>
+http://patchwork.ozlabs.org/patch/287383
+
+[2/3] ccache: change default cache directory path to match config setting
+Danomi Manchego <danomimanchego123@gmail.com>
+http://patchwork.ozlabs.org/patch/287384
+
+[3/3] ccache: provide capability to do initial ccache setup
+Danomi Manchego <danomimanchego123@gmail.com>
+http://patchwork.ozlabs.org/patch/287385
+
+Proposal for the above 3: D more work needed. Looking at Arnout's
+comments on the first patch, this needs to be thought through, and a
+final solution is to be implemented. I really think we should improve
+ccache in buildroot, though, so I hope a proper solution can be found.
+
+
+Thanks for your feedback,
+Thomas
