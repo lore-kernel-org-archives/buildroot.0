@@ -1,70 +1,63 @@
-From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 13 Apr 2014 10:19:08 -0300
-Subject: [Buildroot] [PATCH v2] toolchain-external: Introduce kernel
- headers sanitization
-In-Reply-To: <20140413100512.540e6923@skate>
-References: <1397338462-22573-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20140413100512.540e6923@skate>
-Message-ID: <CAAEAJfCWcTpOEvpkTdz1hcv3B93Z9XxuiCr354=NpVwJdc4aCg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 13 Apr 2014 16:16:22 +0200
+Subject: [Buildroot] Patchwork cleanup: proposal
+In-Reply-To: <CAAXf6LW0_C8ynO_sqfZVFj1wZ_AKyM6EwmTUMv=woMP-F7xf2w@mail.gmail.com>
+References: <092927c1-b383-4e46-bc8d-c6ce491b0e98@email.android.com>
+ <20140315215339.GB3396@free.fr>
+ <CAAXf6LWw--N3R-u4H-FxyYn3WF3Wr+p2190tufTUzFt9egmKPg@mail.gmail.com>
+ <20140329141130.GK3227@free.fr> <20140406140715.18d1956c@skate>
+ <CAAXf6LW0_C8ynO_sqfZVFj1wZ_AKyM6EwmTUMv=woMP-F7xf2w@mail.gmail.com>
+Message-ID: <20140413141622.GA3729@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13 April 2014 05:05, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Ezequiel Garcia,
->
-> On Sat, 12 Apr 2014 18:34:22 -0300, Ezequiel Garcia wrote:
->> The Nios-II Sourcery external toolchain (the only Nios-II we currently
->> support) exports broken kernel headers. In particular, these kernels should
->> be exported using the "headers_install" rule which applies a set of fixes
->> on the kernel headers so they are suitable for userspace usage.
->>
->> In order to fix this, let's introduce a compile-time hidden option, to be
->> selected by such broken toolchains, and perform the header fixes ourselves.
->> The result is equivalent to apply the "headers_install" rule.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/c32/c32ad4bac5f651502e551f7733f702afaa0e742a/
->>
->> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->> ---
->> v1 -> v2: Yann asked to replace ${STAGING_DIR} with $(STAGING_DIR)
->>
->>  toolchain/toolchain-external/Config.in             |  7 +++++++
->>  toolchain/toolchain-external/toolchain-external.mk | 15 +++++++++++++++
->>  2 files changed, 22 insertions(+)
->>
->> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
->> index 3990336..9a3ab6f 100644
->> --- a/toolchain/toolchain-external/Config.in
->> +++ b/toolchain/toolchain-external/Config.in
->> @@ -434,6 +434,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
->>       select BR2_INSTALL_LIBSTDCPP
->>       select BR2_HOSTARCH_NEEDS_IA32_LIBS
->>       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
->> +     select BR2_TOOLCHAIN_HEADERS_SANITIZE_NEEDED
->>       help
->>         Sourcery CodeBench toolchain for the Nios-II architecture,
->>         from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
->> @@ -1206,4 +1207,10 @@ config BR2_BFIN_INSTALL_FLAT_SHARED
->>         into a buildroot rootfs image built with binary format that is not
->>         shared FLAT.
->>
->> +# Some toolchains have their headers broken and need to be sanitized.
->> +# Currently, this is only needed on Nios-II external Sourcery toolchain,
->> +# to fix the Linux headers.
->> +config BR2_TOOLCHAIN_HEADERS_SANITIZE_NEEDED
->> +     bool
->
-> I am wondering whether this really warrants an additional hidden
-> Kconfig option, since the matter is purely "internal" to the external
-> toolchain backend. See my proposal below.
->
+Thomas DS, All,
 
-Proposal looks good, thanks!
+On 2014-04-13 08:10 +0200, Thomas De Schampheleire spake thusly:
+> On Sun, Apr 6, 2014 at 2:07 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Dear Yann E. MORIN,
+> >
+> > On Sat, 29 Mar 2014 15:11:30 +0100, Yann E. MORIN wrote:
+> >
+> >> On 2014-03-16 08:29 +0100, Thomas De Schampheleire spake thusly:
+> >> > It would certainly be very useful if some contributors would do
+> >> > triaging of patches they care about. It will help reduce the backlog
+> >> > even faster, so yes please!
+> >> >
+> >> > At the same time, I do think that we need a garbage collector that
+> >> > looks at all remaining patches, even for those he or she does not
+> >> > particularly care about. After all, this is the only way to cleanup
+> >> > the list.
+> >>
+> >> For the records, Maxime Hadjinlian, Samuel MArtin and I will be meeting
+> >> 2014-04-10 (Thursday in two weeks from now) for a Pathwork party.
+> >>
+> >> The goal is to spend the whole evening looking at the PAtchwork, and
+> >> apply the triaging as per your proposal in this thread.
+> >
+> > As we discussed on IRC, I'll try to be online on Thursday evening to
+> > maybe discuss some patchwork entries and take decisions about them.
+> 
+> How did this go?
+
+Well, not that good I'm afraid. We started quite late, I was rather
+pretty tired after a long (and borring) day at work. So we only skimmed
+the patchwork for the low-hanging fruits. I managed to mark one patch as
+Superseded, but Thomas P. alone seems to have fared far better than us...
+
+<sad>So, I'm afraid that initiative fizzled out.</sad>
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
