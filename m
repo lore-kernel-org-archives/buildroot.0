@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Apr 2014 21:56:22 +0200
-Subject: [Buildroot] [PATCH] mtd: fix build against uClibc
-In-Reply-To: <9a5ad873a2de4ff87857be24d5d1a4b4e1383cec.1397392890.git.baruch@tkos.co.il>
-References: <9a5ad873a2de4ff87857be24d5d1a4b4e1383cec.1397392890.git.baruch@tkos.co.il>
-Message-ID: <20140413215622.2ea33612@skate>
+Date: Sun, 13 Apr 2014 21:58:54 +0200
+Subject: [Buildroot] [PATCH 0/4] Fix lttng-tools build issue
+Message-ID: <1397419138-8776-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hello,
 
-On Sun, 13 Apr 2014 15:41:30 +0300, Baruch Siach wrote:
-> Add a rpmatch() implementation when uClibc is missing one.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/171/17187c3c9ba2b9df2bb6ac103e9a54706f07c28b/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...common.h-fix-build-against-current-uClibc.patch | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
+This set of patches fix the lttng-tools build issue with gcc 4.7.x and
+gcc 4.8.x, by:
 
-Applied, thanks.
+ * Adding appropriate patches to gcc 4.7 and gcc 4.8 in the internal
+   toolchain backend.
 
-Thomas
+ * Allowing external toolchains to indicate whether they are affected
+   by the bug. For now, one toolchain known to be affected is marked
+   as such, the other toolchains will have to be tested progressively.
+
+ * Making the lttng-tools depend on toolchains not affected by the
+   bug.
+
+Thomas Petazzoni (4):
+  gcc: add fix for PR 58595 to gcc 4.8.2
+  gcc: add fix for PR 58595 to gcc 4.7.3
+  toolchain: add option to declare toolchains affected by gcc PR 58595
+  lttng-tools: mark as affected by gcc bug 58595
+
+ .../4.7.3/843-gcc-4.7.3-Fix-PR-target-58595.patch  | 102 +++++++++++++++++++++
+ .../4.8.2/843-gcc-4.8.2-Fix-PR-target-58595.patch  | 101 ++++++++++++++++++++
+ package/lttng-tools/Config.in                      |   6 +-
+ toolchain/toolchain-common.in                      |   3 +
+ toolchain/toolchain-external/Config.in             |   1 +
+ 5 files changed, 211 insertions(+), 2 deletions(-)
+ create mode 100644 package/gcc/4.7.3/843-gcc-4.7.3-Fix-PR-target-58595.patch
+ create mode 100644 package/gcc/4.8.2/843-gcc-4.8.2-Fix-PR-target-58595.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
