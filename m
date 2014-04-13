@@ -1,55 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 13 Apr 2014 15:56:09 +0300
-Subject: [Buildroot] [PATCH] cppcms: needs threads
-Message-ID: <2c80a1abb28e32dc06c2756beba597a30f2afc1b.1397393769.git.baruch@tkos.co.il>
+From: =?ISO-8859-1?Q?Ezequiel_Garc=EDa?= <ezequiel@vanguardiasur.com.ar>
+Date: Sun, 13 Apr 2014 10:19:08 -0300
+Subject: [Buildroot] [PATCH v2] toolchain-external: Introduce kernel
+ headers sanitization
+In-Reply-To: <20140413100512.540e6923@skate>
+References: <1397338462-22573-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20140413100512.540e6923@skate>
+Message-ID: <CAAEAJfCWcTpOEvpkTdz1hcv3B93Z9XxuiCr354=NpVwJdc4aCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d61/d618de68c8a50a932e85bdefb23c40e86790dc6c/
+On 13 April 2014 05:05, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Ezequiel Garcia,
+>
+> On Sat, 12 Apr 2014 18:34:22 -0300, Ezequiel Garcia wrote:
+>> The Nios-II Sourcery external toolchain (the only Nios-II we currently
+>> support) exports broken kernel headers. In particular, these kernels should
+>> be exported using the "headers_install" rule which applies a set of fixes
+>> on the kernel headers so they are suitable for userspace usage.
+>>
+>> In order to fix this, let's introduce a compile-time hidden option, to be
+>> selected by such broken toolchains, and perform the header fixes ourselves.
+>> The result is equivalent to apply the "headers_install" rule.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/c32/c32ad4bac5f651502e551f7733f702afaa0e742a/
+>>
+>> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+>> ---
+>> v1 -> v2: Yann asked to replace ${STAGING_DIR} with $(STAGING_DIR)
+>>
+>>  toolchain/toolchain-external/Config.in             |  7 +++++++
+>>  toolchain/toolchain-external/toolchain-external.mk | 15 +++++++++++++++
+>>  2 files changed, 22 insertions(+)
+>>
+>> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+>> index 3990336..9a3ab6f 100644
+>> --- a/toolchain/toolchain-external/Config.in
+>> +++ b/toolchain/toolchain-external/Config.in
+>> @@ -434,6 +434,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+>>       select BR2_INSTALL_LIBSTDCPP
+>>       select BR2_HOSTARCH_NEEDS_IA32_LIBS
+>>       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+>> +     select BR2_TOOLCHAIN_HEADERS_SANITIZE_NEEDED
+>>       help
+>>         Sourcery CodeBench toolchain for the Nios-II architecture,
+>>         from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
+>> @@ -1206,4 +1207,10 @@ config BR2_BFIN_INSTALL_FLAT_SHARED
+>>         into a buildroot rootfs image built with binary format that is not
+>>         shared FLAT.
+>>
+>> +# Some toolchains have their headers broken and need to be sanitized.
+>> +# Currently, this is only needed on Nios-II external Sourcery toolchain,
+>> +# to fix the Linux headers.
+>> +config BR2_TOOLCHAIN_HEADERS_SANITIZE_NEEDED
+>> +     bool
+>
+> I am wondering whether this really warrants an additional hidden
+> Kconfig option, since the matter is purely "internal" to the external
+> toolchain backend. See my proposal below.
+>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/cppcms/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index 418146a7fcf0..bfbb2031f8dc 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CPPCMS
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_LIBGCRYPT
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  CppCMS is a Free High Performance Web Development Framework
- 	  (not a CMS) aimed for Rapid Web Application Development. It
-@@ -25,18 +26,17 @@ config BR2_PACKAGE_CPPCMS_ICU
- 	depends on !BR2_arc # icu -> atomic builtins
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_USE_WCHAR # icu
--	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
- 
--comment "icu support needs a toolchain w/ wchar, threads"
-+comment "icu support needs a toolchain w/ wchar"
- 	depends on !BR2_arc
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR
- 
- endif
- 
--comment "cppcms needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "cppcms needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Proposal looks good, thanks!
 -- 
-1.9.1
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
