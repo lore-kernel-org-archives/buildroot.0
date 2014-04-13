@@ -1,98 +1,74 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Apr 2014 14:14:17 +0200
-Subject: [Buildroot] [PATCH v2 2/2] mutt: Add options for imap/pop3 support,
-	enable optional iconv/OpenSSL support
-In-Reply-To: <1397391257-12882-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1397391257-12882-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1397391257-12882-2-git-send-email-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 13 Apr 2014 15:41:30 +0300
+Subject: [Buildroot] [PATCH] mtd: fix build against uClibc
+Message-ID: <9a5ad873a2de4ff87857be24d5d1a4b4e1383cec.1397392890.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add a rpmatch() implementation when uClibc is missing one.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+http://autobuild.buildroot.net/results/171/17187c3c9ba2b9df2bb6ac103e9a54706f07c28b/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v2: - do not disable iconv support for toolchains with locale support (Thomas)
-    - optimize if-clause for OpenSSL support (Thomas)
+ ...common.h-fix-build-against-current-uClibc.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
 
- package/mutt/Config.in |   16 +++++++++++++++-
- package/mutt/mutt.mk   |   31 ++++++++++++++++++++++++++++++-
- 2 files changed, 45 insertions(+), 2 deletions(-)
-
-diff --git a/package/mutt/Config.in b/package/mutt/Config.in
-index 430eeb8..372c137 100644
---- a/package/mutt/Config.in
-+++ b/package/mutt/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_MUTT
-+menuconfig BR2_PACKAGE_MUTT
- 	bool "mutt"
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
-@@ -8,6 +8,20 @@ config BR2_PACKAGE_MUTT
- 
- 	  http://www.mutt.org/
- 
-+if BR2_PACKAGE_MUTT
+diff --git a/package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch b/package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
+new file mode 100644
+index 000000000000..4f2d72471e3b
+--- /dev/null
++++ b/package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
+@@ -0,0 +1,45 @@
++From 98c2959992086acd792ef9850c90cc9da8a2a063 Mon Sep 17 00:00:00 2001
++Message-Id: <98c2959992086acd792ef9850c90cc9da8a2a063.1397391118.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 13 Apr 2014 14:58:47 +0300
++Subject: [PATCH] include/common.h: fix build against current uClibc
 +
-+config BR2_PACKAGE_MUTT_IMAP
-+	bool "imap"
-+	help
-+	  IMAP support
++Commit dbe0fd17f2 (mtd-utils: new prompt() helper for talking to the user)
++introduced a rpmatch() call. However, uClibc versions older than (not yet
++released) 0.9.34 don't have rpmatch() implementation. Add one.
 +
-+config BR2_PACKAGE_MUTT_POP3
-+	bool "pop3"
-+	help
-+	  POP3 support
++Patch status: sent upstream, http://patchwork.ozlabs.org/patch/338748/
 +
-+endif # BR2_PACKAGE_MUTT
++Cc: Mike Frysinger <vapier@gentoo.org>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ include/common.h | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
 +
- comment "mutt needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 5aa18eb..633b2af 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -9,7 +9,36 @@ MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt
- MUTT_LICENSE = GPLv2+
- MUTT_LICENSE_FILES = GPL
- MUTT_DEPENDENCIES = ncurses
--MUTT_CONF_OPT = --disable-iconv --disable-smtp
-+MUTT_CONF_OPT = --disable-smtp
- MUTT_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+MUTT_DEPENDENCIES += libiconv
-+MUTT_CONF_OPT += --enable-iconv
-+endif
++diff --git a/include/common.h b/include/common.h
++index 4ffccea17213..3b1366e927c4 100644
++--- a/include/common.h
+++++ b/include/common.h
++@@ -102,6 +102,19 @@ extern "C" {
++ 	fprintf(stderr, "%s: warning!: " fmt "\n", PROGRAM_NAME, ##__VA_ARGS__); \
++ } while(0)
++ 
+++#if defined(__UCLIBC__)
+++/* uClibc versions before 0.9.34 don't have rpmatch() */
+++#if __UCLIBC_MAJOR__ == 0 && \
+++		(__UCLIBC_MINOR__ < 9 || \
+++		(__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ < 34))
+++static inline int rpmatch(const char *resp)
+++{
+++    return (resp[0] == 'y' || resp[0] == 'Y') ? 1 :
+++	(resp[0] == 'n' || resp[0] == 'N') ? 0 : -1;
+++}
+++#endif
+++#endif
+++
++ /**
++  * prompt the user for confirmation
++  */
++-- 
++1.9.1
 +
-+ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
-+MUTT_CONF_OPT += --enable-imap
-+else
-+MUTT_CONF_OPT += --disable-imap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MUTT_POP3),y)
-+MUTT_CONF_OPT += --enable-pop
-+else
-+MUTT_CONF_OPT += --disable-pop
-+endif
-+
-+# SSL support is only used by imap or pop3 module
-+ifneq ($(BR2_PACKAGET_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MUTT_DEPENDENCIES += openssl
-+MUTT_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr
-+else
-+MUTT_CONF_OPT += --without-ssl
-+endif
-+else
-+MUTT_CONF_OPT += --without-ssl
-+endif
-+
- $(eval $(autotools-package))
 -- 
-1.7.10.4
+1.9.1
