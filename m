@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Apr 2014 22:42:41 +0200
-Subject: [Buildroot] [PATCH 5/6] support/graph-depends: don't show toolchain
-	dependency for all packages
+Date: Sun, 13 Apr 2014 22:42:42 +0200
+Subject: [Buildroot] [PATCH 6/6] graphs: make graphs with lots of packages
+	nicer to look at
 In-Reply-To: <cover.1397421554.git.yann.morin.1998@free.fr>
 References: <cover.1397421554.git.yann.morin.1998@free.fr>
-Message-ID: <e626cb1d54ac1756750c7ce473dde8d7d5b784b9.1397421554.git.yann.morin.1998@free.fr>
+Message-ID: <3f8fcc1e8205eb851227c1b085355089a9368faf.1397421554.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,42 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Al packages depend on 'toolchain'. Currently, 'graph-depends' graphs this
-dependency. The resulting graph is thus cluttered with less-than-useful
-information.
+Some magic numbers obtained with trial-and-error and successive
+iterations, to eventually get a nice graph.
 
-Instead, do not graph the 'toolchain' dependency for any package, save
-for the fake 'all' package. The graph is now a bit more readable.
-
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ support/scripts/graph-build-time | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index ebf511b..4f532ba 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -162,13 +162,16 @@ def has_redundant_deps(deps, pkg):
- def remove_redundant_deps(deps):
-     newdeps = []
-     for dep in deps:
--        if dep[0] != "all":
-+        if dep[0] == "all" and dep[1] == "toolchain":
-+            newdeps.append(dep)
-+            continue
-+        if dep[0] != "all" and dep[1] != "toolchain":
-             newdeps.append(dep)
-             continue
-         if not has_redundant_deps(deps, dep[1]):
-             newdeps.append(dep)
-             continue
--        sys.stderr.write("Removing redundant dep all -> %s\n" % dep[1])
-+        sys.stderr.write("Removing redundant dep %s -> %s\n" % (dep[0],dep[1]))
-     return newdeps
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index 00c2349..59aec5f 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -126,12 +126,17 @@ def pkg_histogram(data, output, order="build"):
+     # Draw the package names
+     plt.xticks(ind + .6, [ p.name for p in data ], rotation=-60, rotation_mode="anchor", fontsize=8, ha='left')
  
- TARGET_EXCEPTIONS = [
+-    # Adjust size of graph (double the width)
+-    sz = plt.gcf().get_size_inches()
+-    plt.gcf().set_size_inches(sz[0] * 2, sz[1])
+-
+-    # Add more space for the package names at the bottom
+-    plt.gcf().subplots_adjust(bottom=0.2)
++    # Adjust size of graph depending on the number of packages
++    # Ensure a minimal size twice as the default
++    # Magic Numbers do Magic Layout!
++    ratio = max( ( ( n_pkgs + 10 ) / 48 , 2) )
++    borders = 0.1 / ratio
++    sz = plt.gcf().get_figwidth()
++    plt.gcf().set_figwidth(sz * ratio)
++
++    # Adjust space at borders, add more space for the
++    # package names at the bottom
++    plt.gcf().subplots_adjust(bottom=0.2, left=borders, right=1-borders)
+ 
+     # Remove ticks in the graph for each package
+     axes = plt.gcf().gca()
 -- 
 1.8.3.2
