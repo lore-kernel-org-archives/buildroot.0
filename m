@@ -1,103 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Apr 2014 21:48:19 +0200
-Subject: [Buildroot] Patchwork cleanup #8: triaging proposal
-In-Reply-To: <CAAXf6LUKOuGpMV0uzR3gDM++pOu9Ldtb=6FfTGHqXjMdpvCfSA@mail.gmail.com>
-References: <CAAXf6LUKOuGpMV0uzR3gDM++pOu9Ldtb=6FfTGHqXjMdpvCfSA@mail.gmail.com>
-Message-ID: <20140413214819.6c18a47f@skate>
+Date: Sun, 13 Apr 2014 21:44:06 +0200
+Subject: [Buildroot] [git commit] mtd: fix build against uClibc
+Message-ID: <20140413194905.6EF1E9C715@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=fae7cc33a117d5408019b705d76ebb4549593f88
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Apr 2014 21:43:20 +0200, Thomas De Schampheleire wrote:
+Add a rpmatch() implementation when uClibc is missing one.
 
-> Triage proposal for this session:
-> 
-> [RFC,5/7] python-linaro-dashboard-bundle: new package
-> ludovic.desroches at atmel.com
-> http://patchwork.ozlabs.org/patch/282728
-> 
-> [RFC,6/7] lava-tool: new package
-> ludovic.desroches at atmel.com
-> http://patchwork.ozlabs.org/patch/282729
-> 
-> [RFC,7/7] lava-test: new package
-> ludovic.desroches at atmel.com
-> http://patchwork.ozlabs.org/patch/282730
-> 
-> Proposal: A, keep (all three patches)
+Fixes:
+http://autobuild.buildroot.net/results/171/17187c3c9ba2b9df2bb6ac103e9a54706f07c28b/
 
-For these ones, I've seen your e-mail sent to Ludovic. I'd prefer these
-patches to be removed from patchwork, and the original submitter asked
-to rework them using the python-package infrastructure, and also to
-submit them in a form that is not RFC.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...common.h-fix-build-against-current-uClibc.patch |   45 ++++++++++++++++++++
+ 1 files changed, 45 insertions(+), 0 deletions(-)
 
-> package/makedevs: add "l" type for symlinks ownership change
-> angelo dureghello <angelo70@gmail.com>
-> http://patchwork.ozlabs.org/patch/283015
-> 
-> Proposal: C unsure: what is the reason for this patch?
-
-I don't remember. To be asked to the submitter?
-
-> [v9] espeak: new package
-> Arnaud Aujon <arnaud.aujon@gmail.com>
-> http://patchwork.ozlabs.org/patch/284229
-
-Last time I looked, I believe this patch was almost ready. And Arnaud
-Aujon is still around.
-
-> python-sip: new package
-> Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-> http://patchwork.ozlabs.org/patch/284873
-> 
-> python-pyqt: new package
-> Sergey Kostanbaev <sergey.kostanbaev@gmail.com>
-> http://patchwork.ozlabs.org/patch/284874
-> 
-> Proposal: A keep (above three patches)
-
-Yeah, I believe python-pyqt is quite important, so it would be good to
-keep it around. But those patches need some work. Maybe we need someone
-interested in adopting those patches?
-
-> [RFC,1/2] host-xxd: new package
-> Ryan Barnett <rjbarnet@rockwellcollins.com>
-> http://patchwork.ozlabs.org/patch/285936
-> 
-> [RFC,2/2] uboot: introduce u-boot.pbl format
-> Ryan Barnett <rjbarnet@rockwellcollins.com>
-> http://patchwork.ozlabs.org/patch/285937
-> 
-> Although the patch on uboot is quite large, my general feeling is to
-> triage this in A: keep.
-
-I know Ryan is still working on these.
-
-> [1/3] ccache: change compilercheck to use compiler and toolchain info
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287383
-> 
-> [2/3] ccache: change default cache directory path to match config setting
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287384
-> 
-> [3/3] ccache: provide capability to do initial ccache setup
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287385
-> 
-> Proposal for the above 3: D more work needed. Looking at Arnout's
-> comments on the first patch, this needs to be thought through, and a
-> final solution is to be implemented. I really think we should improve
-> ccache in buildroot, though, so I hope a proper solution can be found.
-
-Agreed.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch b/package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
+new file mode 100644
+index 0000000..4f2d724
+--- /dev/null
++++ b/package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
+@@ -0,0 +1,45 @@
++From 98c2959992086acd792ef9850c90cc9da8a2a063 Mon Sep 17 00:00:00 2001
++Message-Id: <98c2959992086acd792ef9850c90cc9da8a2a063.1397391118.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Sun, 13 Apr 2014 14:58:47 +0300
++Subject: [PATCH] include/common.h: fix build against current uClibc
++
++Commit dbe0fd17f2 (mtd-utils: new prompt() helper for talking to the user)
++introduced a rpmatch() call. However, uClibc versions older than (not yet
++released) 0.9.34 don't have rpmatch() implementation. Add one.
++
++Patch status: sent upstream, http://patchwork.ozlabs.org/patch/338748/
++
++Cc: Mike Frysinger <vapier@gentoo.org>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ include/common.h | 13 +++++++++++++
++ 1 file changed, 13 insertions(+)
++
++diff --git a/include/common.h b/include/common.h
++index 4ffccea17213..3b1366e927c4 100644
++--- a/include/common.h
+++++ b/include/common.h
++@@ -102,6 +102,19 @@ extern "C" {
++ 	fprintf(stderr, "%s: warning!: " fmt "\n", PROGRAM_NAME, ##__VA_ARGS__); \
++ } while(0)
++ 
+++#if defined(__UCLIBC__)
+++/* uClibc versions before 0.9.34 don't have rpmatch() */
+++#if __UCLIBC_MAJOR__ == 0 && \
+++		(__UCLIBC_MINOR__ < 9 || \
+++		(__UCLIBC_MINOR__ == 9 && __UCLIBC_SUBLEVEL__ < 34))
+++static inline int rpmatch(const char *resp)
+++{
+++    return (resp[0] == 'y' || resp[0] == 'Y') ? 1 :
+++	(resp[0] == 'n' || resp[0] == 'N') ? 0 : -1;
+++}
+++#endif
+++#endif
+++
++ /**
++  * prompt the user for confirmation
++  */
++-- 
++1.9.1
++
