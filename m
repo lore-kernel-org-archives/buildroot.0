@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Apr 2014 23:24:53 +0200
-Subject: [Buildroot] [PATCH 2/3] package/rpi-firmware: bump revision
+Date: Sun, 13 Apr 2014 23:24:54 +0200
+Subject: [Buildroot] [PATCH 3/3] configs: bump raspberrypi_defconfig to use
+	the latest stable kernel
 In-Reply-To: <cover.1397424240.git.yann.morin.1998@free.fr>
 References: <cover.1397424240.git.yann.morin.1998@free.fr>
-Message-ID: <4cff1d8687bc3c8249984430eda969c455fede6d.1397424240.git.yann.morin.1998@free.fr>
+Message-ID: <973098d2a86e14ab0e39d8388f7ca7b8744c2c96.1397424240.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,35 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Of utmost importance, this bump allows to overclock the RPi to even
-higher frequencies: ARM > 1200MHz, core > 600MHz, RAM > 600MHz. :-)
-To be used with caution, of course! :-)
+Bump raspberrypi_defconfig to use the latest revision from the stable
+rpi-3.10.y branch, which is based on v3.10.36.
 
-Fixes and enhancements for:
-  - clocks : allow higher overclocks
-  - audio  : PCM channel expansion/conversion
-  - video  : stutter on streams without b-frames, choice of scaling /kernel/
-  - camera : padding-removal, new YUV and BGR modes
-  - decoder: timestamps fixes, frames interval tracking
-  - encoder: misc jpeg encoding fixes, save inline motion vectors
-  - display: don't require EDID on HDMI
+Bump the kernel headers used for the toolchain at the same time.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/raspberrypi_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 06fd194..1c85b83 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index a7a38a8..b7fe8c0 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
  
--RPI_FIRMWARE_VERSION = 9c7c2cd698ae24022c7aa74b16436c2966e82624
-+RPI_FIRMWARE_VERSION = 04ba1c03780ae708c9289bce14f56933e55e9c20
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ # Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.33"
++BR2_DEFAULT_KERNEL_VERSION="3.10.36"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3bff11d4d4b8dc28cb9ce81449c989466ba27198"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7193cfe22b63ae92d1f7e955c2276adbdafd28e0"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 1.8.3.2
