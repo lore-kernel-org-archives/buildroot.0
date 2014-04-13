@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 13 Apr 2014 21:56:13 +0200
-Subject: [Buildroot] [PATCH] cppcms: needs threads
-In-Reply-To: <2c80a1abb28e32dc06c2756beba597a30f2afc1b.1397393769.git.baruch@tkos.co.il>
-References: <2c80a1abb28e32dc06c2756beba597a30f2afc1b.1397393769.git.baruch@tkos.co.il>
-Message-ID: <20140413215613.48de76d2@skate>
+Date: Sun, 13 Apr 2014 21:56:22 +0200
+Subject: [Buildroot] [PATCH] mtd: fix build against uClibc
+In-Reply-To: <9a5ad873a2de4ff87857be24d5d1a4b4e1383cec.1397392890.git.baruch@tkos.co.il>
+References: <9a5ad873a2de4ff87857be24d5d1a4b4e1383cec.1397392890.git.baruch@tkos.co.il>
+Message-ID: <20140413215622.2ea33612@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,17 @@ To: buildroot@busybox.net
 
 Dear Baruch Siach,
 
-On Sun, 13 Apr 2014 15:56:09 +0300, Baruch Siach wrote:
+On Sun, 13 Apr 2014 15:41:30 +0300, Baruch Siach wrote:
+> Add a rpmatch() implementation when uClibc is missing one.
+> 
 > Fixes:
-> http://autobuild.buildroot.net/results/d61/d618de68c8a50a932e85bdefb23c40e86790dc6c/
+> http://autobuild.buildroot.net/results/171/17187c3c9ba2b9df2bb6ac103e9a54706f07c28b/
 > 
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/cppcms/Config.in | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  ...common.h-fix-build-against-current-uClibc.patch | 45 ++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 package/mtd/mtd-01-include-common.h-fix-build-against-current-uClibc.patch
 
 Applied, thanks.
 
