@@ -1,89 +1,71 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 13 Apr 2014 11:38:05 +0300
-Subject: [Buildroot] [PATCH v2] ne10: bump version to 1.0.0
-In-Reply-To: <76642160278009c2ccd78c0d6ab5e557fd47e247.1397378036.git.baruch@tkos.co.il>
-References: <76642160278009c2ccd78c0d6ab5e557fd47e247.1397378036.git.baruch@tkos.co.il>
-Message-ID: <20140413083805.GB4149@tarshish>
+Date: Sun, 13 Apr 2014 11:41:41 +0300
+Subject: [Buildroot] [PATCH] ne10: bump version to 1.0.0
+In-Reply-To: <877g6zbl0v.fsf@dell.be.48ers.dk>
+References: <99baf8d8d8d05b5f2de390deef6546acab0199dd.1396965306.git.baruch@tkos.co.il>
+ <877g6zbl0v.fsf@dell.be.48ers.dk>
+Message-ID: <20140413084140.GC4149@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Buildroot list,
+Hi Peter,
 
-On Sun, Apr 13, 2014 at 11:33:56AM +0300, Baruch Siach wrote:
-> Switch to github helper while at it.
+On Tue, Apr 08, 2014 at 10:53:36PM +0200, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/a2c/a2ca3fe245e410a738f4b10631a1414696a0edea/
+>  > Switch to github helper while at it.
+>  > Fixes:
+>  > http://autobuild.buildroot.net/results/a2c/a2ca3fe245e410a738f4b10631a1414696a0edea/
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>  > ---
+> 
+> Hmm, something doesn't work here:
+> 
+> Building C object modules/CMakeFiles/NE10_test.dir/math/NE10_detmat.neon.s.o
+> [ 95%] Building C object modules/CMakeFiles/NE10_test.dir/math/NE10_transmat.neon.s.o
+> Linking C executable NE10_test_static
+> [ 95%] [ 96%] Building C object modules/CMakeFiles/NE10_test.dir/math/NE10_identitymat.neon.s.o
+> Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_cfft.neon.s.o
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crt1.o: No such file or directory
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lm
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lc
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crtn.o: No such file or directory
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [samples/NE10_test_static] Error 1
+> make[3]: Leaving directory `/home/peko/source/buildroot/output/build/ne10-v1.0.0'
+> make[2]: *** [samples/CMakeFiles/NE10_test_static.dir/all] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+> [ 96%] Linking C shared library libNE10.so
+> Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fft_float32.neon.s.o
+> [ 96%] Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fft_int32.neon.s.o
+> [ 97%] [ 97%] Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fir.neon.s.o
+> Building C object modules/CMakeFiles/NE10_test.dir/dsp/NE10_fft_int16.neon.s.o
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crti.o: No such file or directory
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lm
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lc
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find -lgcc_s
+> /home/peko/source/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.8.1/../../../../arm-none-linux-gnueabi/bin/ld: cannot find crtn.o: No such file or directory
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [modules/libNE10.so.10] Error 1
+> 
+> With a clean cortex A8 build (default codesourcery external toolchain).
+> 
+> Any ideas?
 
-I forgot the change log:
-
-v2:
-	* Drop the patch; the toolchain wrapper handles -mfloat-abi and -mfpu
-	* Depend on neon and thumb to match upstream choice
+Thanks for testing. This is caused by the -mthumb that is hard coded in 
+CMakeLists.txt, which is incompatible with the default -marm. I added a 
+dependency on BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2 to fix 
+this.
 
 baruch
-
->  package/ne10/Config.in |  9 ++++++++-
->  oackage/ne10/ne10.mk   | 10 +++++-----
->  2 files changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/ne10/Config.in b/package/ne10/Config.in
-> index d0c4983ed588..fa21cc4f084c 100644
-> --- a/package/ne10/Config.in
-> +++ b/package/ne10/Config.in
-> @@ -1,6 +1,8 @@
->  config BR2_PACKAGE_NE10
->  	bool "ne10"
-> -	depends on BR2_arm && BR2_ARM_CPU_HAS_NEON
-> +	depends on BR2_arm
-> +	depends on BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4
-> +	depends on BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2
->  	help
->  	  The Ne10 project has been set up to provide a set of common,
->  	  useful functions which have been heavily optimized for the
-> @@ -10,3 +12,8 @@ config BR2_PACKAGE_NE10
->  	  and NEON implementations.
->  
->  	  http://projectne10.github.io/Ne10/
-> +
-> +comment "ne10 needs a toolchain w/ neon and thumb"
-> +	depends on BR2_arm
-> +	depends on !(BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4)
-> +	depends on !(BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2)
-> diff --git a/package/ne10/ne10.mk b/package/ne10/ne10.mk
-> index 79b53b809d16..24411482e0a5 100644
-> --- a/package/ne10/ne10.mk
-> +++ b/package/ne10/ne10.mk
-> @@ -4,15 +4,15 @@
->  #
->  ################################################################################
->  
-> -# We use a Git commit ID because the last tagged version is more than
-> -# one year old.
-> -NE10_VERSION = 88c18f02199947b2c8b57796f5a3ca53160aff96
-> -NE10_SITE = http://github.com/projectNe10/Ne10/tarball/$(NE10_VERSION)
-> +NE10_VERSION = v1.0.0
-> +NE10_SITE = $(call github,projectNe10,Ne10,$(NE10_VERSION))
->  NE10_LICENSE = BSD-3c or Apache-2.0
->  NE10_LICENSE_FILES = doc/LICENSE
->  
-> +NE10_CONF_OPT = -DGNULINUX_PLATFORM=ON
-> +
->  ifeq ($(BR2_PREFER_STATIC_LIB),)
-> -NE10_CONF_OPT = \
-> +NE10_CONF_OPT += \
->  	-DNE10_BUILD_SHARED=ON
->  endif
->  
-> -- 
-> 1.9.1
-> 
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
