@@ -1,47 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Apr 2014 23:24:54 +0200
-Subject: [Buildroot] [PATCH 3/3] configs: bump raspberrypi_defconfig to use
-	the latest stable kernel
-In-Reply-To: <cover.1397424240.git.yann.morin.1998@free.fr>
-References: <cover.1397424240.git.yann.morin.1998@free.fr>
-Message-ID: <973098d2a86e14ab0e39d8388f7ca7b8744c2c96.1397424240.git.yann.morin.1998@free.fr>
+Date: Sun, 13 Apr 2014 23:28:51 +0200
+Subject: [Buildroot] Asking a favor
+In-Reply-To: <ea83c79e30b1bba43b6fe3de6096e8e7@paravisioner.com>
+References: <ea83c79e30b1bba43b6fe3de6096e8e7@paravisioner.com>
+Message-ID: <20140413212851.GA6582@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Parsa,
 
-Bump raspberrypi_defconfig to use the latest revision from the stable
-rpi-3.10.y branch, which is based on v3.10.36.
+[resend, forgot to Cc the proper buildroot ML]
 
-Bump the kernel headers used for the toolchain at the same time.
+On 2014-04-14 01:23 +0430, Parsa Panahi spake thusly:
+> I have a problem with buildroot configuration file. when I create the .config file and make it, I face an error in the terminal
+> that :
+> 
+> linux/linux.mk:69: *** No kernel device tree source specified, check your BR2_LINUX_KERNEL_USE_INTREE_DTS /
+> BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings.  Stop.
+> 
+> I searched the whole Internet !!! and found nothing useful ! I don't know what causing this problem !! I've commented these
+> variables ( BR2_LINUX_KERNEL_USE_INTREE_DTS, BR2_LINUX_KERNEL_USE_CUSTOM_DTS) in the .config file but when I make the new file it
+> gives another error for another variable !!
+> 
+> 
+> I don't know how to solve this and whom to seek answer from !!! I
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- configs/raspberrypi_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The proper place to look for support on Buildroot is to look on the
+Buildroot website:
+    http://buildroot.org/
+where you'll find a "Support" button that points to:
+    http://buildroot.org/support.html
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index a7a38a8..b7fe8c0 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
- 
- # Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.33"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.36"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3bff11d4d4b8dc28cb9ce81449c989466ba27198"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7193cfe22b63ae92d1f7e955c2276adbdafd28e0"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
+Forwarding your mail to the list now. Maybe someone there will have an
+idea.
+
+And please, do not post HTML mails, they are forbidden on the list.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
