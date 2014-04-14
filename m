@@ -1,36 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 22:42:40 +0200
-Subject: [Buildroot] [PATCH v4] toolchain-external: Introduce kernel
- headers sanitization
-In-Reply-To: <1397482805-14421-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1397482805-14421-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20140414224240.476d4996@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Apr 2014 22:47:56 +0200
+Subject: [Buildroot] [PATCH] support/graphs: fix comparisons agains None
+Message-ID: <1397508476-22347-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Mon, 14 Apr 2014 10:40:05 -0300, Ezequiel Garcia wrote:
-> The Nios-II Sourcery external toolchain (the only Nios-II we currently
-> support) exports broken kernel headers. In particular, these kernels should
-> be exported using the "headers_install" rule which applies a set of fixes
-> on the kernel headers so they are suitable for userspace usage.
-> 
-> In order to fix this, add a post-install hook to perform the header fixes
-> ourselves. The result is equivalent to apply the "headers_install" rule.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c32/c32ad4bac5f651502e551f7733f702afaa0e742a/
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+As Samuel said:
+    In Python, None is a singleton, and it is recommended to use "is" or
+    "is not" for testing them [1].
 
-Applied, thanks.
+    [1] http://legacy.python.org/dev/peps/pep-0008/#programming-recommendations
 
-Thomas
+Reported-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/graph-build-time | 6 +++---
+ support/scripts/graph-depends    | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+index 45f9435..8ef065f 100755
+--- a/support/scripts/graph-build-time
++++ b/support/scripts/graph-build-time
+@@ -84,7 +84,7 @@ class Package:
+             self.steps_duration[step] = self.steps_end[step] - self.steps_start[step]
+ 
+     def get_duration(self, step=None):
+-        if step == None:
++        if step is None:
+             duration = 0
+             for step in self.steps_duration.keys():
+                 duration += self.steps_duration[step]
+@@ -278,10 +278,10 @@ if args.alternate_colors:
+ else:
+     colors = default_colors
+ 
+-if args.type == "histogram" or args.type == None:
++if args.type == "histogram" or args.type is None:
+     if args.order == "build" or args.order == "duration" or args.order == "name":
+         pkg_histogram(d, args.output, args.order)
+-    elif args.order == None:
++    elif args.order is None:
+         pkg_histogram(d, args.output, "name")
+     else:
+         sys.stderr.write("Unknown ordering: %s\n" % args.order)
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 4f532ba..e2a5e1e 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -42,13 +42,13 @@ parser.add_argument("--depth", '-d', metavar="DEPTH",
+                     help="Limit the dependency graph to DEPTH levels")
+ args = parser.parse_args()
+ 
+-if args.package == None:
++if args.package is None:
+     mode = FULL_MODE
+ else:
+     mode = PKG_MODE
+     rootpkg = args.package
+ 
+-if args.depth != None:
++if args.depth is not None:
+     max_depth = int(args.depth)
+ 
+ allpkgs = []
+@@ -130,7 +130,7 @@ def get_all_depends(pkgs):
+ 
+     if len(deps) != 0:
+         newdeps = get_all_depends(deps)
+-        if newdeps != None:
++        if newdeps is not None:
+             dependencies += newdeps
+ 
+     return dependencies
+@@ -202,7 +202,7 @@ if mode == FULL_MODE:
+         dependencies.append(('all', tg))
+         filtered_targets.append(tg)
+     deps = get_all_depends(filtered_targets)
+-    if deps != None:
++    if deps is not None:
+         dependencies += deps
+     rootpkg = 'all'
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
