@@ -1,54 +1,69 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 14 Apr 2014 11:35:46 +0200
-Subject: [Buildroot] [PATCH 1/2] systemd: Build legacy pc files when
-	liblogging is
-In-Reply-To: <5347ACFD.907@imgtec.com>
-References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140410175032.GA24213@pc-eric> <87lhvc6fzf.fsf@dell.be.48ers.dk>
- <5347ACFD.907@imgtec.com>
-Message-ID: <20140414093546.GB5385@pc-eric>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Apr 2014 11:39:44 +0200
+Subject: [Buildroot] [PATCH 1/2] systemd: add option to enable
+ compatibility libs
+In-Reply-To: <1397467537-22766-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1397467537-22766-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1397467537-22766-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140414093944.GA3199@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 11, 2014 at 09:51:09AM +0100, Vicente Olivert Riera wrote:
-> On 04/10/2014 10:18 PM, Peter Korsgaard wrote:
-> >>>>>>"Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
-> >
-> >Hi,
-> >
-> >  > Maybe some other packages depend on these compatibility libraries, so instead
-> >  > of referring to BR2_PACKAGE_LIBLOGGING in systemd.mk, it would be best to add
-> >  > a generic configuration option to systemd, as done for berkeleydb with
-> >  > BR2_PACKAGE_BERKELEYDB_COMPAT185. It could be named BR2_PACKAGE_SYSTEMD_COMPAT.
-> >
-> >  > Then, in package/liblogging/Config.in, we would have:
-> >
-> >  >   select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
-> >
-> >  > And this would be removed when liblogging is fixed upstream.
-> >
-> >Yes, I agree.
-> >
-> >  > What do think of this?
-> >
-> >Care to send an updated patch series doing that?
-> >
->
-> I didn't do that in purpose, because I thought it would be a good
-> idea to catch those packages that still look for legacy systemd
-> files, so we could tell upstream about that, as I did for
-> liblogging.
-I posted an implementation of BR2_PACKAGE_SYSTEMD_COMPAT. If other packages
-depend on the old libsystemd-*.so, I think this will allow us to catch them
-too, as they will not select this new symbol yet.
->
-> If we put that option as a generic one, then we will never remove it
-> from there and we will be using the not-default systemd config
-> forever.
-As a reminder, I added a comment in the log about this.
+Eric, All,
 
-Best regards,
-ELB
+On 2014-04-14 11:25 +0200, Eric Le Bihan spake thusly:
+> Since systemd 209, some libraries have been merged into libsystemd.so:
+> 
+>  - libsystemd-daemon.so
+>  - libsystemd-id128.so
+>  - libsystemd-journal.so
+>  - libsystemd-login.so
+> 
+> A new configuration menu entry has been added to enable the installation
+> of compatibility pkg-config files, so that programs that depend on them
+> can still be built.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+But see small comment below...
+
+[--SNIP--]
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index ecedfce..4fa0e89 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -46,6 +46,10 @@ SYSTEMD_CONF_OPT += \
+>  	--disable-dbus \
+>  	--without-python
+>  
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+> +SYSTEMD_CONF_OPT += --enable-compat-libs
+> +endif
+
+I guess the default in systemd's ./configure is --disable-compat-libs.
+But I'd prefer we enforce that with an else-block:
+
+    ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+    SYSTEMD_CONF_OPT += --enable-compat-libs
+    else
+    SYSTEMD_CONF_OPT += --disable-compat-libs
+    endif
+
+I know Peter does not really mind in that case, so I won't complain much
+if this goes in as is. ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
