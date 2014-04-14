@@ -1,39 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Apr 2014 18:14:55 -0300
-Subject: [Buildroot] jquery related things
-In-Reply-To: <20140414230650.4ca18edc@skate>
-References: <20140414230650.4ca18edc@skate>
-Message-ID: <534C4FCF.2010701@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 23:15:19 +0200
+Subject: [Buildroot] [PATCH 4/5] host-python-pyrex: use the
+ HOST_*_NEEDS_HOST_PYTHON infrastructure
+In-Reply-To: <1397509552-5278-5-git-send-email-s.martin49@gmail.com>
+References: <1397509552-5278-1-git-send-email-s.martin49@gmail.com>
+ <1397509552-5278-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140414231519.00bd7a70@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/14/2014 06:06 PM, Thomas Petazzoni wrote:
+Dear Samuel Martin,
 
-> Hello Gustavo,
+On Mon, 14 Apr 2014 23:05:51 +0200, Samuel Martin wrote:
+> This will automatically take care of adding the right host-python package
+> to the dependency list and it will avoid trying to build python-pyrex using
+> python3.
 > 
-> Since you have recently bumped jquery-ui, can you look into:
-> 
->   http://autobuild.buildroot.org/results/7d8/7d892f06f431ca51dd711b7aa7e850bebc266ab9/build-end.log
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/python-pyrex/python-pyrex.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi.
-Well hello upstream!
+Did you actually verify the python-pyrex only works with Python 2 ?
+Your commit log doesn't even say that.
 
-This from my stable srcs repo...
-3026247 Jan 17 14:59 jquery-ui-1.10.4.zip
-ain't this...
-2032866 Apr  8 09:16 jquery-ui-1.10.4.zip
-
-I'll try to find out what happened.
-
-> Also, if you could have a quick look at
-> http://patchwork.ozlabs.org/patch/325618/, and especially the comment I
-> made, it would be useful.
-> 
-> Thanks a lot!
-
-I'll take a look into it but i've never used jquery-mobile so it might
-take a little time.
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
