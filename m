@@ -1,107 +1,39 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 15 Apr 2014 00:09:48 +0200
-Subject: [Buildroot] [PATCH v2 2/3] nodejs: force python interpreter
-In-Reply-To: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
-References: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1397513389-16252-2-git-send-email-s.martin49@gmail.com>
+Date: Tue, 15 Apr 2014 00:31:03 +0200
+Subject: [Buildroot] [PATCH v8 0/6] PATH cleanup
+Message-ID: <1397514669-19362-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nodejs build system is based on python, and it does not support python3.
+Hi all,
 
-This patch makes sure python2 is used for the build.
+Just a quick rebase for the 8th round of this series.
 
-Note that, setting PYTHON=... at configure time or in the make
-environment is not enough to override all the hard-coded python call, so
-we have to sed some python scripts to avoid being screwed.
+Yours,
+Samuel
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
-changes v1 -> v2:
-- rebase
----
- package/nodejs/nodejs.mk | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+Samuel Martin (6):
+  Makefile: introduce BR_PATH
+  Makefile: add $(HOST_DIR)/sbin to BR_PATH
+  *.mk: replace (TARGET|HOST)_PATH by BR_PATH
+  infra: remove unused {TARGET, HOST}_PATH definition
+  pkg-cmake.mk: add PATH in the configure command environment
+  Makefile: add PATH to the USER_HOOKS_EXTRA_ENV
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 46b3056..b5973b5 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	NODEJS_DEPENDENCIES += openssl
- endif
- 
-+# nodejs build system is based on python, but only support python-2.6 or
-+# python-2.7. So, we have to enforce PYTHON interpreter to be python2.
-+# However, few build scripts hard-code 'python' as the interpreter to be
-+# invoked; so we have to manually fix them.
- define HOST_NODEJS_CONFIGURE_CMDS
- 	# Build with the static, built-in OpenSSL which is supplied as part of
- 	# the nodejs source distribution.  This is needed on the host because
-@@ -24,20 +28,23 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 	# buildroot.
- 	(cd $(@D); \
- 		$(HOST_CONFIGURE_OPTS) \
--		./configure \
-+		PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(HOST_DIR)/usr/bin/python2 ./configure \
- 		--prefix=$(HOST_DIR)/usr \
- 		--without-snapshot \
- 		--without-dtrace \
- 		--without-etw \
- 	)
-+	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
-+		$(@D)/deps/v8/tools/gyp/v8.gyp
- endef
- 
- define HOST_NODEJS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
- endef
- 
- define HOST_NODEJS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
- endef
- 
- ifeq ($(BR2_i386),y)
-@@ -62,7 +69,8 @@ define NODEJS_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		LD="$(TARGET_CXX)" \
--		./configure \
-+		PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(HOST_DIR)/usr/bin/python2 ./configure \
- 		--prefix=/usr \
- 		--without-snapshot \
- 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
-@@ -73,10 +81,13 @@ define NODEJS_CONFIGURE_CMDS
- 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
- 		--dest-os=linux \
- 	)
-+	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
-+		$(@D)/deps/v8/tools/gyp/v8.gyp
- endef
- 
- define NODEJS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		LD="$(TARGET_CXX)"
- endef
-@@ -110,7 +121,8 @@ endef
- endif
- 
- define NODEJS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
-+	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) install \
- 		DESTDIR=$(TARGET_DIR) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		LD="$(TARGET_CXX)"
--- 
+ Makefile                 |  3 +++
+ fs/ext2/ext2.mk          |  2 +-
+ package/Makefile.in      | 13 +++++--------
+ package/gpm/gpm.mk       |  2 +-
+ package/libhid/libhid.mk |  2 +-
+ package/pkg-cmake.mk     |  2 ++
+ package/pkg-python.mk    |  8 ++++----
+ package/sdl/sdl.mk       |  2 +-
+ package/xbmc/xbmc.mk     |  2 +-
+ package/znc/znc.mk       |  2 +-
+ 10 files changed, 20 insertions(+), 18 deletions(-)
+
+--
 1.9.2
