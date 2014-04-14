@@ -1,104 +1,45 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 14 Apr 2014 23:05:49 +0200
-Subject: [Buildroot] [PATCH 2/5] nodejs: force python interpreter
+Date: Mon, 14 Apr 2014 23:05:50 +0200
+Subject: [Buildroot] [PATCH 3/5] omniorb: force python interperter
 In-Reply-To: <1397509552-5278-1-git-send-email-s.martin49@gmail.com>
 References: <1397509552-5278-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1397509552-5278-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1397509552-5278-4-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nodejs build system is based on python, and it does not support python3.
+Omniorb build-system requires python2 interpreter.
 
-This patch makes sure python2 is used for the build.
+By default, it looks for python program, which may fallback on the system
+python interpreter in case python is disabled and python3 is enabled.
 
-Note that, setting PYTHON=... at configure time or in the make
-environment is not enough to override all the hard-coded python call, so
-we have to sed some python scripts to avoid being screwed.
+So, this patch enforces the python interpreter to python2 built by
+Buildroot.
+
+Fixes:
+  http://autobuild.buildroot.org/results/b4f/b4f3a2602ba0224ac3253c4bf6ed87ec045df772/
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/nodejs/nodejs.mk | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ package/omniorb/omniorb.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 0d84765..0b8e285 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	NODEJS_DEPENDENCIES += openssl
- endif
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index fa2492f..5b58da5 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -14,6 +14,10 @@ OMNIORB_DEPENDENCIES = host-omniorb
+ HOST_OMNIORB_DEPENDENCIES = host-python
+ OMNIORB_INSTALL_TARGET = YES
  
-+# nodejs build system is based on python, but only support python-2.6 or
-+# python-2.7. So, we have to enforce PYTHON interpreter to be python2.
-+# However, few build scripts hard-code 'python' as the interpreter to be
-+# invoked; so we have to manually fix them.
- define HOST_NODEJS_CONFIGURE_CMDS
- 	# Build with the static, built-in OpenSSL which is supplied as part of
- 	# the nodejs source distribution.  This is needed on the host because
-@@ -26,20 +30,23 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 		$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CFLAGS)" \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
--		./configure \
-+		PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(HOST_DIR)/usr/bin/python2 ./configure \
- 		--prefix=$(HOST_DIR)/usr \
- 		--without-snapshot \
- 		--without-dtrace \
- 		--without-etw \
- 	)
-+	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
-+		$(@D)/deps/v8/tools/gyp/v8.gyp
- endef
- 
- define HOST_NODEJS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
- endef
- 
- define HOST_NODEJS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
- endef
- 
- ifeq ($(BR2_i386),y)
-@@ -66,7 +73,8 @@ define NODEJS_CONFIGURE_CMDS
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
- 		LD="$(TARGET_CXX)" \
--		./configure \
-+		PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(HOST_DIR)/usr/bin/python2 ./configure \
- 		--prefix=/usr \
- 		--without-snapshot \
- 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
-@@ -77,10 +85,13 @@ define NODEJS_CONFIGURE_CMDS
- 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
- 		--dest-os=linux \
- 	)
-+	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
-+		$(@D)/deps/v8/tools/gyp/v8.gyp
- endef
- 
- define NODEJS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
- 		LDFLAGS="$(TARGET_LDFLAGS)" \
-@@ -116,7 +127,8 @@ endef
- endif
- 
- define NODEJS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
-+	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) install \
- 		DESTDIR=$(TARGET_DIR) \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
++# omniorb is not python3 friendly, so force the python interpreter
++OMNIORB_CONF_OPT = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
++HOST_OMNIORB_CONF_OPT = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
++
+ # Defaulting long double support to a safe option for the
+ # mix of embedded targets, this could later be automated
+ # based on checking the capability of the cross toolchain
 -- 
 1.9.2
