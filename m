@@ -1,66 +1,55 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Mon, 14 Apr 2014 10:40:05 -0300
-Subject: [Buildroot] [PATCH v4] toolchain-external: Introduce kernel headers
-	sanitization
-Message-ID: <1397482805-14421-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 14 Apr 2014 15:20:07 +0100
+Subject: [Buildroot] [PATCH] vlc: select libvorbis when opus is also selected
+Message-ID: <1397485207-63709-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Nios-II Sourcery external toolchain (the only Nios-II we currently
-support) exports broken kernel headers. In particular, these kernels should
-be exported using the "headers_install" rule which applies a set of fixes
-on the kernel headers so they are suitable for userspace usage.
+If BR2_PACKAGE_OPUS is selected then vlc will be built with support for
+opus passing "--enable-opus" option to the configure script. But when
+the configure script checks for the opus library it also checks for the
+ogg library at the same time, so if only opus has been installed and not
+ogg, then it will fail with an error message like this one:
 
-In order to fix this, add a post-install hook to perform the header fixes
-ourselves. The result is equivalent to apply the "headers_install" rule.
+checking for OPUS... no
+configure: error: Library ogg opus needed for opus was not found
 
 Fixes:
-http://autobuild.buildroot.net/results/c32/c32ad4bac5f651502e551f7733f702afaa0e742a/
+   http://autobuild.buildroot.net/results/4da/4da8e7cfb35c351e5d623835118512248d331d16/
 
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-v3 -> v4: Removed silly leftover in Config.in
+ package/vlc/Config.in |    1 +
+ package/vlc/vlc.mk    |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-v2 -> v3: Re-worked as per Thomas' suggestion.
-
-v1 -> v2: Yann asked to replace ${STAGING_DIR} with $(STAGING_DIR)
-
- toolchain/toolchain-external/toolchain-external.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 547d55d..d443ccc 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -294,6 +294,7 @@ TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_SANITIZE_KERNEL_HEADERS
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
-@@ -630,6 +631,18 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 		-o $(HOST_DIR)/usr/bin/ext-toolchain-wrapper
- endef
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index b7c6088..cdb0d16 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+ 	help
+ 	  VLC is a free and open source cross-platform multimedia player
+ 	  and framework that plays most multimedia files as well as DVD,
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index a9ee620..bcb592c 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -127,7 +127,7 @@ endif
  
-+# This sed magic is taken from Linux headers_install.sh script.
-+define TOOLCHAIN_EXTERNAL_SANITIZE_KERNEL_HEADERS
-+	$(Q)$(call MESSAGE,"Sanitizing kernel headers");
-+	find $(STAGING_DIR)/usr/include/linux/ -name "*.h" | xargs sed -r -i \
-+		-e 's/([ \t(])(__user|__force|__iomem)[ \t]/\1/g' \
-+		-e 's/__attribute_const__([ \t]|$$)/\1/g' \
-+		-e 's@^#include <linux/compiler.h>@@' \
-+		-e 's/(^|[^a-zA-Z0-9])__packed([^a-zA-Z0-9_]|$$)/\1__attribute__((packed))\2/g' \
-+		-e 's/(^|[ \t(])(inline|asm|volatile)([ \t(]|$$)/\1__\2__\3/g' \
-+		-e 's@#(ifndef|define|endif[ \t]*/[*])[ \t]*_UAPI@#\1 @'
-+endef
-+
- # Even though we're installing things in both the staging, the host
- # and the target directory, we do everything within the
- # install-staging step, arbitrarily.
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ VLC_CONF_OPT += --enable-opus
+-VLC_DEPENDENCIES += opus
++VLC_DEPENDENCIES += libvorbis opus
+ else
+ VLC_CONF_OPT += --disable-opus
+ endif
 -- 
-1.9.1
+1.7.1
