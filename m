@@ -1,36 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 09:15:33 +0200
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 14 Apr 2014 10:58:01 +0300
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2014-04-13
-In-Reply-To: <20140414065113.GB9805@tarshish>
+In-Reply-To: <20140414091533.1a0e16e5@skate>
 References: <20140414063009.3F4A6100DD1@stock.ovh.net>
- <20140414065113.GB9805@tarshish>
-Message-ID: <20140414091533.1a0e16e5@skate>
+ <20140414065113.GB9805@tarshish> <20140414091533.1a0e16e5@skate>
+Message-ID: <20140414075801.GC9805@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi Thomas,
 
-On Mon, 14 Apr 2014 09:51:13 +0300, Baruch Siach wrote:
-
-> On Mon, Apr 14, 2014 at 08:30:09AM +0200, Thomas Petazzoni wrote:
-> > Build statistics for 2014-04-13
-> > ===============================
-> > 
-> >       i686 |                      mtd-1.5.1 | NOK | http://autobuild.buildroot.net/results/0d24f506c7603a833ed72a5b0267111b8353f88f/
+On Mon, Apr 14, 2014 at 09:15:33AM +0200, Thomas Petazzoni wrote:
+> On Mon, 14 Apr 2014 09:51:13 +0300, Baruch Siach wrote:
 > 
-> What version of uClibc is used here?
+> > On Mon, Apr 14, 2014 at 08:30:09AM +0200, Thomas Petazzoni wrote:
+> > > Build statistics for 2014-04-13
+> > > ===============================
+> > > 
+> > >       i686 |                      mtd-1.5.1 | NOK | http://autobuild.buildroot.net/results/0d24f506c7603a833ed72a5b0267111b8353f88f/
+> > 
+> > What version of uClibc is used here?
+> 
+> uClibc 0.9.33. So that's weird, your fix should have worked for this
+> build, as this build was made at commit
+> fae7cc33a117d5408019b705d76ebb4549593f88, which is precisely the commit
+> of your mtd fix.
 
-uClibc 0.9.33. So that's weird, your fix should have worked for this
-build, as this build was made at commit
-fae7cc33a117d5408019b705d76ebb4549593f88, which is precisely the commit
-of your mtd fix.
+What's in stdlib.h? As far as I can see, uClibc version 0.9.33 has the 
+rpmatch() declaration under '#if 0'.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
