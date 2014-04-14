@@ -1,54 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 22:13:04 +0200
-Subject: [Buildroot] [git commit] graphs: make graphs with lots of packages
-	nicer to look at
-Message-ID: <20140414201322.7968D9BF11@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 14 Apr 2014 22:14:09 +0200
+Subject: [Buildroot] Asking a favor
+In-Reply-To: <182de9096cb1b88ec1e69efd698351b5@paravisioner.com>
+References: <ea83c79e30b1bba43b6fe3de6096e8e7@paravisioner.com>
+ <20140413212851.GA6582@free.fr> <20140414091249.09b2db65@skate>
+ <db58e085aec8b3d6153effbff253e376@paravisioner.com>
+ <20140414181812.21e12b0c@skate>
+ <182de9096cb1b88ec1e69efd698351b5@paravisioner.com>
+Message-ID: <286d8cd8-bdca-4b35-a113-ce565161b784@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef8b8d950f336f6209addfb1269efbff955ac3d9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Parsa Panahi,
 
-Some magic numbers obtained with trial-and-error and successive
-iterations, to eventually get a nice graph.
+(Please don't top-post, put your reply below the original mail...)
 
-[Thomas: remove excessive spaces in expressions.]
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- support/scripts/graph-build-time |   17 +++++++++++------
- 1 files changed, 11 insertions(+), 6 deletions(-)
+Parsa Panahi <panahi.parsa@paravisioner.com> schreef:
+> 
+>
+>Dear Thomas, I've Selected the "Use a device tree present in the kernel"
+>in the "Kernel -> Device tree support" and I don't know why it shows 
+>
+>BR2_LINUX_KERNEL_INTREE_DTS_NAME="" !!!
+>
+>what are my options in here so I could manually type it in the .config
+>file ?
 
-diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-index 00c2349..45f9435 100755
---- a/support/scripts/graph-build-time
-+++ b/support/scripts/graph-build-time
-@@ -126,12 +126,17 @@ def pkg_histogram(data, output, order="build"):
-     # Draw the package names
-     plt.xticks(ind + .6, [ p.name for p in data ], rotation=-60, rotation_mode="anchor", fontsize=8, ha='left')
- 
--    # Adjust size of graph (double the width)
--    sz = plt.gcf().get_size_inches()
--    plt.gcf().set_size_inches(sz[0] * 2, sz[1])
--
--    # Add more space for the package names at the bottom
--    plt.gcf().subplots_adjust(bottom=0.2)
-+    # Adjust size of graph depending on the number of packages
-+    # Ensure a minimal size twice as the default
-+    # Magic Numbers do Magic Layout!
-+    ratio = max(((n_pkgs + 10) / 48, 2))
-+    borders = 0.1 / ratio
-+    sz = plt.gcf().get_figwidth()
-+    plt.gcf().set_figwidth(sz * ratio)
-+
-+    # Adjust space at borders, add more space for the
-+    # package names at the bottom
-+    plt.gcf().subplots_adjust(bottom=0.2, left=borders, right=1-borders)
- 
-     # Remove ticks in the graph for each package
-     axes = plt.gcf().gca()
+Which board are you targeting? Is this a standard development or reference board, or a custom design?
+
+A device tree is a description of the hardware. If you are using a common board, you may find the right device tree source in directory arch/<arch>/boot/dts of the kernel sources. If you are using a custom board, you will have to create the device tree yourself.
+
+Best regards,
+Thomas
