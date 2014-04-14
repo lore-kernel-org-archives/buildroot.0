@@ -1,32 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Apr 2014 21:48:09 +0200
-Subject: [Buildroot] [PATCH 3/6] support/graph-depends: add option to
- limit the depth of the graph
-In-Reply-To: <CAHXCMMJL-YG5FaRo3hEqrGEORV+_BtZ0y2_ksr2gQRFqJbcf0g@mail.gmail.com>
-References: <cover.1397421554.git.yann.morin.1998@free.fr>
- <388c5a2b6f32ea7e20bfcb968703ef7d5cd3af26.1397421554.git.yann.morin.1998@free.fr>
- <CAHXCMMJL-YG5FaRo3hEqrGEORV+_BtZ0y2_ksr2gQRFqJbcf0g@mail.gmail.com>
-Message-ID: <20140414194809.GB3255@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 20:56:21 +0200
+Subject: [Buildroot] [git commit] manual: document BR2_GRAPH_DEPTH
+Message-ID: <20140414201322.6D31699371@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=bb068823abc8e3ff89776a0d0636ba3800a031b6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-04-14 21:29 +0200, Samuel Martin spake thusly:
-> Same comments as for patch 2/6 ;)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/common-usage.txt |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Same answers! ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index d9de598..c9d5eb9 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -96,6 +96,8 @@ to +make+ or set in the environment:
+   build-time graphs
+ * +BR2_GRAPH_OUT+ to set the filetype of generated graphs, either +pdf+ (the
+   default), or +png+.
++* +BR2_GRAPH_DEPTH+ (an integer) to limit the depth of the dependency graph.
++  The default, +0+, is to not limit the depth.
+ 
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
