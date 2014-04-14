@@ -1,62 +1,113 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 14 Apr 2014 14:56:28 +0000
-Subject: [Buildroot] [PATCH] libglib2: fix compilation for aarch64 and
- arc
-In-Reply-To: <20140412160057.38777048@skate>
-References: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
- <20140412160057.38777048@skate>
-Message-ID: <1397487387.9266.50.camel@abrodkin-8560l.internal.synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Apr 2014 12:46:08 -0300
+Subject: [Buildroot] [PATCH] iproute2: bump to version 3.14.0
+Message-ID: <1397490368-29652-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../iproute2/iproute2-02-vxlan-optional-ipv6.patch | 35 +++++++++++-----------
+ package/iproute2/iproute2.mk                       |  2 +-
+ 2 files changed, 18 insertions(+), 19 deletions(-)
 
-On Sat, 2014-04-12 at 16:00 +0200, Thomas Petazzoni wrote:
-> Dear Alexey Brodkin,
-> 
-> On Thu, 10 Apr 2014 18:46:36 +0400, Alexey Brodkin wrote:
-> > Copied from here - https://github.com/openembedded/oe-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
-> > 
-> > Initially posted here - http://lists.openembedded.org/pipermail/openembedded-core/2013-October/085174.html
-> > 
-> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> > ---
-> >  ...ror-format-string-errors-from-mismatched-.patch | 56 ++++++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> >  create mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
-> 
-> Thanks. Is this fixing an issue reported by the autobuilders? If not,
-> under what conditions are you seeing the problem?
-
-This is definitely not an autobuild reported issue.
-I faced this issue while building "libglib2" for ARC architecture
-myself.
-
-As it turned out I was not able to reproduce the same issue for aarch64
-as it was mentioned on openembedded mailing list.
-
-The issue itself only happens if G_GSIZE_FORMAT differs from
-G_GSSIZE_FORMAT. And this is only the case for ARC because "size_t" for
-ARC is "long unsigned int" while "ssize_t" is "unsigned int" (which is
-the type of "ssize_t" on most 32-bit arches).
-
-Still this issue needs to be fixed for ARC in buildroot and and
-fortunately it was fixed in upstream right after 2.38 version was
-released. Here's the commit in question -
-https://git.gnome.org/browse/glib/commit/?id=0167c3340d8201dca8e9031b61703bbc5ed6ce33
-
-Another good fix of this problem could be in bumping glib version to
-recently released 2.40. And I indeed may send a patch that bumps glib
-version to buildroot mailing list but since I don't really use much
-glib-based apps on ARC I'm not sure if I may make sure this bump doesn't
-break stuff for people.
-
-If you think that something simple like building and execution of
-"gtk-demo" app is good enough test then I may try it and if it work I
-will send a patch - what do you think?
-
-Regards,
-Alexey
+diff --git a/package/iproute2/iproute2-02-vxlan-optional-ipv6.patch b/package/iproute2/iproute2-02-vxlan-optional-ipv6.patch
+index 0d6cf95..80ea97c 100644
+--- a/package/iproute2/iproute2-02-vxlan-optional-ipv6.patch
++++ b/package/iproute2/iproute2-02-vxlan-optional-ipv6.patch
+@@ -3,9 +3,9 @@ IPv6 support.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura iproute2-3.12.0.orig/ip/iplink_vxlan.c iproute2-3.12.0/ip/iplink_vxlan.c
+---- iproute2-3.12.0.orig/ip/iplink_vxlan.c	2013-11-26 14:09:13.804908955 -0300
+-+++ iproute2-3.12.0/ip/iplink_vxlan.c	2013-11-26 14:21:55.561997689 -0300
++diff -Nura iproute2-3.14.0/ip/iplink_vxlan.c iproute2-3.14.0-noipv6/ip/iplink_vxlan.c
++--- iproute2-3.14.0/ip/iplink_vxlan.c	2014-04-11 21:48:41.000000000 -0300
+++++ iproute2-3.14.0-noipv6/ip/iplink_vxlan.c	2014-04-14 08:36:22.638235721 -0300
+ @@ -9,6 +9,11 @@
+   * Authors:     Stephen Hemminger <shemminger@vyatta.com
+   */
+@@ -18,10 +18,10 @@ diff -Nura iproute2-3.12.0.orig/ip/iplink_vxlan.c iproute2-3.12.0/ip/iplink_vxla
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+-@@ -179,26 +184,32 @@
+- 		fprintf(stderr, "vxlan: missing virtual network identifier\n");
++@@ -188,12 +193,14 @@
+  		return -1;
+  	}
++ 
+ +#ifndef NO_IPV6
+  	if ((gaddr && daddr) ||
+  		(memcmp(&gaddr6, &in6addr_any, sizeof(gaddr6)) &&
+@@ -30,8 +30,10 @@ diff -Nura iproute2-3.12.0.orig/ip/iplink_vxlan.c iproute2-3.12.0/ip/iplink_vxla
+  		return -1;
+  	}
+ +#endif
+- 	addattr32(n, 1024, IFLA_VXLAN_ID, vni);
+- 	if (gaddr)
++ 
++ 	if (!dst_port_set) {
++ 		fprintf(stderr, "vxlan: destination port not specified\n"
++@@ -208,15 +215,19 @@
+  		addattr_l(n, 1024, IFLA_VXLAN_GROUP, &gaddr, 4);
+  	else if (daddr)
+  		addattr_l(n, 1024, IFLA_VXLAN_GROUP, &daddr, 4);
+@@ -51,15 +53,15 @@ diff -Nura iproute2-3.12.0.orig/ip/iplink_vxlan.c iproute2-3.12.0/ip/iplink_vxla
+  
+  	if (link)
+  		addattr32(n, 1024, IFLA_VXLAN_LINK, link);
+-@@ -251,6 +262,7 @@
+- 				fprintf(f, "remote %s ",
+- 					format_host(AF_INET, 4, &addr, s1, sizeof(s1)));
+- 		}
+-+#ifndef NO_IPV6
++@@ -275,6 +286,7 @@
+  	} else if (tb[IFLA_VXLAN_GROUP6]) {
+  		struct in6_addr addr;
+  		memcpy(&addr, RTA_DATA(tb[IFLA_VXLAN_GROUP6]), sizeof(struct in6_addr));
+-@@ -262,6 +274,7 @@
+++#ifndef NO_IPV6
++ 		if (memcmp(&addr, &in6addr_any, sizeof(addr)) != 0) {
++ 			if (IN6_IS_ADDR_MULTICAST(&addr))
++ 				fprintf(f, "group %s ",
++@@ -283,6 +295,7 @@
+  				fprintf(f, "remote %s ",
+  					format_host(AF_INET6, sizeof(struct in6_addr), &addr, s1, sizeof(s1)));
+  		}
+@@ -67,14 +69,11 @@ diff -Nura iproute2-3.12.0.orig/ip/iplink_vxlan.c iproute2-3.12.0/ip/iplink_vxla
+  	}
+  
+  	if (tb[IFLA_VXLAN_LOCAL]) {
+-@@ -269,12 +282,14 @@
+- 		if (addr)
+- 			fprintf(f, "local %s ",
+- 				format_host(AF_INET, 4, &addr, s1, sizeof(s1)));
+-+#ifndef NO_IPV6
++@@ -293,9 +306,11 @@
+  	} else if (tb[IFLA_VXLAN_LOCAL6]) {
+  		struct in6_addr addr;
+  		memcpy(&addr, RTA_DATA(tb[IFLA_VXLAN_LOCAL6]), sizeof(struct in6_addr));
+++#ifndef NO_IPV6
+  		if (memcmp(&addr, &in6addr_any, sizeof(addr)) != 0)
+  			fprintf(f, "local %s ",
+  				format_host(AF_INET6, sizeof(struct in6_addr), &addr, s1, sizeof(s1)));
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 2350500..e51c33b 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 3.12.0
++IPROUTE2_VERSION = 3.14.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex
+-- 
+1.8.3.2
