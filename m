@@ -1,66 +1,46 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 15 Apr 2014 00:09:47 +0200
-Subject: [Buildroot] [PATCH v2 1/3] nodejs: use the standard configure/make
-	options
-Message-ID: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
+Date: Tue, 15 Apr 2014 00:09:49 +0200
+Subject: [Buildroot] [PATCH v2 3/3] host-python-pyrex: use the
+	HOST_*_NEEDS_HOST_PYTHON infrastructure
+In-Reply-To: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
+References: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1397513389-16252-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also cleanup leading whitespace.
+python-pyrex does not support python3.
 
-Note that overloading LD in required to avoid linker failures.
+So, using the *_NEEDS_HOST_PYTHON infrastructure will make sure we won't try
+building it for python3. Besides, it will automatically take care of adding the
+right host-python package to the dependency list.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1 -> v2:
 - rebase
-- remove {C,LD}FLAGS, duplicating the ones from
-  {HOST,TARGET}_CONFIGURE_OPTS (ThomasP)
-- update commit log
+- update commit log (ThomasP)
 ---
- package/nodejs/nodejs.mk | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ package/python-pyrex/python-pyrex.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index a44bfbd..46b3056 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -23,7 +23,8 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 	# NPM is non-functional without it, and host-openssl isn't part of
- 	# buildroot.
- 	(cd $(@D); \
--                ./configure \
-+		$(HOST_CONFIGURE_OPTS) \
-+		./configure \
- 		--prefix=$(HOST_DIR)/usr \
- 		--without-snapshot \
- 		--without-dtrace \
-@@ -75,7 +76,9 @@ define NODEJS_CONFIGURE_CMDS
- endef
+diff --git a/package/python-pyrex/python-pyrex.mk b/package/python-pyrex/python-pyrex.mk
+index 73cb163..7f424ad 100644
+--- a/package/python-pyrex/python-pyrex.mk
++++ b/package/python-pyrex/python-pyrex.mk
+@@ -7,9 +7,9 @@
+ PYTHON_PYREX_VERSION = 0.9.9
+ PYTHON_PYREX_SOURCE = Pyrex-$(PYTHON_PYREX_VERSION).tar.gz
+ PYTHON_PYREX_SITE = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
+-PYTHON_PYREX_DEPENDENCIES = host-python
+ PYTHON_PYREX_LICENSE = Apache-v2
+ PYTHON_PYREX_LICENSE_FILES = LICENSE.txt
+ PYTHON_PYREX_SETUP_TYPE = distutils
++HOST_PYTHON_PYREX_NEEDS_HOST_PYTHON = python2
  
- define NODEJS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		LD="$(TARGET_CXX)"
- endef
- 
- #
-@@ -107,7 +110,10 @@ endef
- endif
- 
- define NODEJS_INSTALL_TARGET_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
-+		DESTDIR=$(TARGET_DIR) \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		LD="$(TARGET_CXX)"
- 	$(NODEJS_INSTALL_MODULES)
- endef
- 
+ $(eval $(host-python-package))
 -- 
 1.9.2
