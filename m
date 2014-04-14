@@ -1,41 +1,90 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Apr 2014 18:33:37 -0300
-Subject: [Buildroot] jquery related things
-In-Reply-To: <534C4FCF.2010701@zacarias.com.ar>
-References: <20140414230650.4ca18edc@skate> <534C4FCF.2010701@zacarias.com.ar>
-Message-ID: <534C5431.9010905@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 23:35:47 +0200
+Subject: [Buildroot] [git commit] mutt: Add options for imap/pop3 support,
+	enable optional iconv/OpenSSL support
+Message-ID: <20140414213619.5ADEB9BEAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/14/2014 06:14 PM, Gustavo Zacarias wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=0fcd010a2db771c259224ad1d025fb4c5a9baf3b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> On 04/14/2014 06:06 PM, Thomas Petazzoni wrote:
-> 
->> Hello Gustavo,
->>
->> Since you have recently bumped jquery-ui, can you look into:
->>
->>   http://autobuild.buildroot.org/results/7d8/7d892f06f431ca51dd711b7aa7e850bebc266ab9/build-end.log
-> 
-> Hi.
-> Well hello upstream!
-> 
-> This from my stable srcs repo...
-> 3026247 Jan 17 14:59 jquery-ui-1.10.4.zip
-> ain't this...
-> 2032866 Apr  8 09:16 jquery-ui-1.10.4.zip
-> 
-> I'll try to find out what happened.
+[Thomas: keep a normal 'config' instead of 'menuconfig' for mutt.]
 
-Well there's a third version around, the one in google ajax
-libraries/microsoft ajax cdn, same size as mine (min.js) but differing hash.
-The one from jquery.com at least has a newer timestamp (in the header).
-So basically the directory structure in the zipfiles changed, sizes
-changed and of course hashes with it, but for CDN versions (which are
-basically the bare text files) there were no changes except the hash
-compared to mine/the original.
-No announcements or anything whatsover unfortunately.
-Regards.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mutt/Config.in |   14 ++++++++++++++
+ package/mutt/mutt.mk   |   31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 44 insertions(+), 1 deletions(-)
+
+diff --git a/package/mutt/Config.in b/package/mutt/Config.in
+index 430eeb8..d85c1a7 100644
+--- a/package/mutt/Config.in
++++ b/package/mutt/Config.in
+@@ -8,6 +8,20 @@ config BR2_PACKAGE_MUTT
+ 
+ 	  http://www.mutt.org/
+ 
++if BR2_PACKAGE_MUTT
++
++config BR2_PACKAGE_MUTT_IMAP
++	bool "imap"
++	help
++	  IMAP support
++
++config BR2_PACKAGE_MUTT_POP3
++	bool "pop3"
++	help
++	  POP3 support
++
++endif # BR2_PACKAGE_MUTT
++
+ comment "mutt needs a toolchain w/ wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 5aa18eb..633b2af 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -9,7 +9,36 @@ MUTT_SITE = http://downloads.sourceforge.net/project/mutt/mutt
+ MUTT_LICENSE = GPLv2+
+ MUTT_LICENSE_FILES = GPL
+ MUTT_DEPENDENCIES = ncurses
+-MUTT_CONF_OPT = --disable-iconv --disable-smtp
++MUTT_CONF_OPT = --disable-smtp
+ MUTT_AUTORECONF = YES
+ 
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++MUTT_DEPENDENCIES += libiconv
++MUTT_CONF_OPT += --enable-iconv
++endif
++
++ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
++MUTT_CONF_OPT += --enable-imap
++else
++MUTT_CONF_OPT += --disable-imap
++endif
++
++ifeq ($(BR2_PACKAGE_MUTT_POP3),y)
++MUTT_CONF_OPT += --enable-pop
++else
++MUTT_CONF_OPT += --disable-pop
++endif
++
++# SSL support is only used by imap or pop3 module
++ifneq ($(BR2_PACKAGET_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++MUTT_DEPENDENCIES += openssl
++MUTT_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr
++else
++MUTT_CONF_OPT += --without-ssl
++endif
++else
++MUTT_CONF_OPT += --without-ssl
++endif
++
+ $(eval $(autotools-package))
