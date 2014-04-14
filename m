@@ -1,39 +1,27 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 14 Apr 2014 23:05:51 +0200
-Subject: [Buildroot] [PATCH 4/5] host-python-pyrex: use the
-	HOST_*_NEEDS_HOST_PYTHON infrastructure
-In-Reply-To: <1397509552-5278-1-git-send-email-s.martin49@gmail.com>
-References: <1397509552-5278-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1397509552-5278-5-git-send-email-s.martin49@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 23:06:50 +0200
+Subject: [Buildroot] jquery related things
+Message-ID: <20140414230650.4ca18edc@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will automatically take care of adding the right host-python package
-to the dependency list and it will avoid trying to build python-pyrex using
-python3.
+Hello Gustavo,
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
----
- package/python-pyrex/python-pyrex.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Since you have recently bumped jquery-ui, can you look into:
 
-diff --git a/package/python-pyrex/python-pyrex.mk b/package/python-pyrex/python-pyrex.mk
-index 73cb163..7f424ad 100644
---- a/package/python-pyrex/python-pyrex.mk
-+++ b/package/python-pyrex/python-pyrex.mk
-@@ -7,9 +7,9 @@
- PYTHON_PYREX_VERSION = 0.9.9
- PYTHON_PYREX_SOURCE = Pyrex-$(PYTHON_PYREX_VERSION).tar.gz
- PYTHON_PYREX_SITE = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
--PYTHON_PYREX_DEPENDENCIES = host-python
- PYTHON_PYREX_LICENSE = Apache-v2
- PYTHON_PYREX_LICENSE_FILES = LICENSE.txt
- PYTHON_PYREX_SETUP_TYPE = distutils
-+HOST_PYTHON_PYREX_NEEDS_HOST_PYTHON = python2
- 
- $(eval $(host-python-package))
+  http://autobuild.buildroot.org/results/7d8/7d892f06f431ca51dd711b7aa7e850bebc266ab9/build-end.log
+
+Also, if you could have a quick look at
+http://patchwork.ozlabs.org/patch/325618/, and especially the comment I
+made, it would be useful.
+
+Thanks a lot!
+
+Thomas
 -- 
-1.9.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
