@@ -1,43 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 23:54:55 +0200
-Subject: [Buildroot] [PATCH v4 1/2] flite: new package
-In-Reply-To: <1397410895-2290-1-git-send-email-s.martin49@gmail.com>
-References: <1397410895-2290-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140414235455.210e8db4@skate>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 15 Apr 2014 00:09:47 +0200
+Subject: [Buildroot] [PATCH v2 1/3] nodejs: use the standard configure/make
+	options
+Message-ID: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Also cleanup leading whitespace.
 
-On Sun, 13 Apr 2014 19:41:34 +0200, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Eric Jarrige <eric.jarrige@armadeus.org>
-> Cc: Julien Boibessot <julien.boibessot@armadeus.com>
+Note that overloading LD in required to avoid linker failures.
 
-Applied, after doing two changes. See below.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
+---
+changes v1 -> v2:
+- rebase
+- remove {C,LD}FLAGS, duplicating the ones from
+  {HOST,TARGET}_CONFIGURE_OPTS (ThomasP)
+- update commit log
+---
+ package/nodejs/nodejs.mk | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-> +	  Flite (festival-lite) is a small, fast run-time synthesis engine
-> +	  developed at CMU and primarily designed for small embedded machines
-> +	  and/or large servers. Flite is designed as an alternative synthesis
-> +	  engine to Festival for voices built using the FestVox suite of voice
-> +	  building tools.
-
-I've rewrapped that to use a smaller number of columns.
-
-> +	  http://www.speech.cs.cmu.edu/flite
-> +
-> +comment "flite require a toolchain with WCHAR support"
-
-RTFM: this was not the right format for such comments ;-)
-
-Thanks!
-
-Thomas
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index a44bfbd..46b3056 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -23,7 +23,8 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 	# NPM is non-functional without it, and host-openssl isn't part of
+ 	# buildroot.
+ 	(cd $(@D); \
+-                ./configure \
++		$(HOST_CONFIGURE_OPTS) \
++		./configure \
+ 		--prefix=$(HOST_DIR)/usr \
+ 		--without-snapshot \
+ 		--without-dtrace \
+@@ -75,7 +76,9 @@ define NODEJS_CONFIGURE_CMDS
+ endef
+ 
+ define NODEJS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		$(TARGET_CONFIGURE_OPTS) \
++		LD="$(TARGET_CXX)"
+ endef
+ 
+ #
+@@ -107,7 +110,10 @@ endef
+ endif
+ 
+ define NODEJS_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
++		DESTDIR=$(TARGET_DIR) \
++		$(TARGET_CONFIGURE_OPTS) \
++		LD="$(TARGET_CXX)"
+ 	$(NODEJS_INSTALL_MODULES)
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.2
