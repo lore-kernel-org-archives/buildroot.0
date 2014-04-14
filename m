@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 20:54:36 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: bump revision
-Message-ID: <20140414185513.3D7DF9C03F@busybox.osuosl.org>
+Date: Mon, 14 Apr 2014 20:55:28 +0200
+Subject: [Buildroot] [PATCH 0/3] Raspberry Pi related bumps (branch
+ yem/bumps)
+In-Reply-To: <cover.1397424240.git.yann.morin.1998@free.fr>
+References: <cover.1397424240.git.yann.morin.1998@free.fr>
+Message-ID: <20140414205528.36b5800c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be92f003ba91d2ec7073928a6486261154a727b8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Of utmost importance, this bump allows to overclock the RPi to even
-higher frequencies: ARM > 1200MHz, core > 600MHz, RAM > 600MHz. :-)
-To be used with caution, of course! :-)
+On Sun, 13 Apr 2014 23:24:50 +0200, Yann E. MORIN wrote:
 
-Fixes and enhancements for:
-  - clocks : allow higher overclocks
-  - audio  : PCM channel expansion/conversion
-  - video  : stutter on streams without b-frames, choice of scaling /kernel/
-  - camera : padding-removal, new YUV and BGR modes
-  - decoder: timestamps fixes, frames interval tracking
-  - encoder: misc jpeg encoding fixes, save inline motion vectors
-  - display: don't require EDID on HDMI
+> Yann E. MORIN (3):
+>       package/rpi-userland: bump revision
+>       package/rpi-firmware: bump revision
+>       configs: bump raspberrypi_defconfig to use the latest stable kernel
+> 
+>  configs/raspberrypi_defconfig        | 4 ++--
+>  package/rpi-firmware/rpi-firmware.mk | 2 +-
+>  package/rpi-userland/rpi-userland.mk | 2 +-
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-firmware/rpi-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks!
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 06fd194..1c85b83 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 9c7c2cd698ae24022c7aa74b16436c2966e82624
-+RPI_FIRMWARE_VERSION = 04ba1c03780ae708c9289bce14f56933e55e9c20
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
