@@ -1,46 +1,107 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 15 Apr 2014 00:09:49 +0200
-Subject: [Buildroot] [PATCH v2 3/3] host-python-pyrex: use the
-	HOST_*_NEEDS_HOST_PYTHON infrastructure
+Date: Tue, 15 Apr 2014 00:09:48 +0200
+Subject: [Buildroot] [PATCH v2 2/3] nodejs: force python interpreter
 In-Reply-To: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
 References: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1397513389-16252-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1397513389-16252-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-pyrex does not support python3.
+nodejs build system is based on python, and it does not support python3.
 
-So, using the *_NEEDS_HOST_PYTHON infrastructure will make sure we won't try
-building it for python3. Besides, it will automatically take care of adding the
-right host-python package to the dependency list.
+This patch makes sure python2 is used for the build.
+
+Note that, setting PYTHON=... at configure time or in the make
+environment is not enough to override all the hard-coded python call, so
+we have to sed some python scripts to avoid being screwed.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
 ---
 changes v1 -> v2:
 - rebase
-- update commit log (ThomasP)
 ---
- package/python-pyrex/python-pyrex.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/nodejs/nodejs.mk | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pyrex/python-pyrex.mk b/package/python-pyrex/python-pyrex.mk
-index 73cb163..7f424ad 100644
---- a/package/python-pyrex/python-pyrex.mk
-+++ b/package/python-pyrex/python-pyrex.mk
-@@ -7,9 +7,9 @@
- PYTHON_PYREX_VERSION = 0.9.9
- PYTHON_PYREX_SOURCE = Pyrex-$(PYTHON_PYREX_VERSION).tar.gz
- PYTHON_PYREX_SITE = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/
--PYTHON_PYREX_DEPENDENCIES = host-python
- PYTHON_PYREX_LICENSE = Apache-v2
- PYTHON_PYREX_LICENSE_FILES = LICENSE.txt
- PYTHON_PYREX_SETUP_TYPE = distutils
-+HOST_PYTHON_PYREX_NEEDS_HOST_PYTHON = python2
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 46b3056..b5973b5 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	NODEJS_DEPENDENCIES += openssl
+ endif
  
- $(eval $(host-python-package))
++# nodejs build system is based on python, but only support python-2.6 or
++# python-2.7. So, we have to enforce PYTHON interpreter to be python2.
++# However, few build scripts hard-code 'python' as the interpreter to be
++# invoked; so we have to manually fix them.
+ define HOST_NODEJS_CONFIGURE_CMDS
+ 	# Build with the static, built-in OpenSSL which is supplied as part of
+ 	# the nodejs source distribution.  This is needed on the host because
+@@ -24,20 +28,23 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 	# buildroot.
+ 	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		./configure \
++		PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(HOST_DIR)/usr/bin/python2 ./configure \
+ 		--prefix=$(HOST_DIR)/usr \
+ 		--without-snapshot \
+ 		--without-dtrace \
+ 		--without-etw \
+ 	)
++	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
++		$(@D)/deps/v8/tools/gyp/v8.gyp
+ endef
+ 
+ define HOST_NODEJS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
+ endef
+ 
+ define HOST_NODEJS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
+ endef
+ 
+ ifeq ($(BR2_i386),y)
+@@ -62,7 +69,8 @@ define NODEJS_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)" \
+-		./configure \
++		PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(HOST_DIR)/usr/bin/python2 ./configure \
+ 		--prefix=/usr \
+ 		--without-snapshot \
+ 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
+@@ -73,10 +81,13 @@ define NODEJS_CONFIGURE_CMDS
+ 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
+ 		--dest-os=linux \
+ 	)
++	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
++		$(@D)/deps/v8/tools/gyp/v8.gyp
+ endef
+ 
+ define NODEJS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(MAKE) -C $(@D) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)"
+ endef
+@@ -110,7 +121,8 @@ endef
+ endif
+ 
+ define NODEJS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(MAKE) -C $(@D) install \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)"
 -- 
 1.9.2
