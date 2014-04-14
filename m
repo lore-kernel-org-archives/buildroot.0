@@ -1,40 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 22:42:20 +0200
-Subject: [Buildroot] [PATCH 0/4] Fix lttng-tools build issue
-In-Reply-To: <1397419138-8776-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1397419138-8776-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140414224220.68a5b2fb@skate>
+Date: Mon, 14 Apr 2014 22:42:40 +0200
+Subject: [Buildroot] [PATCH v4] toolchain-external: Introduce kernel
+ headers sanitization
+In-Reply-To: <1397482805-14421-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1397482805-14421-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20140414224240.476d4996@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Dear Ezequiel Garcia,
 
-On Sun, 13 Apr 2014 21:58:54 +0200, Thomas Petazzoni wrote:
-> Hello,
+On Mon, 14 Apr 2014 10:40:05 -0300, Ezequiel Garcia wrote:
+> The Nios-II Sourcery external toolchain (the only Nios-II we currently
+> support) exports broken kernel headers. In particular, these kernels should
+> be exported using the "headers_install" rule which applies a set of fixes
+> on the kernel headers so they are suitable for userspace usage.
 > 
-> This set of patches fix the lttng-tools build issue with gcc 4.7.x and
-> gcc 4.8.x, by:
+> In order to fix this, add a post-install hook to perform the header fixes
+> ourselves. The result is equivalent to apply the "headers_install" rule.
 > 
->  * Adding appropriate patches to gcc 4.7 and gcc 4.8 in the internal
->    toolchain backend.
+> Fixes:
+> http://autobuild.buildroot.net/results/c32/c32ad4bac5f651502e551f7733f702afaa0e742a/
 > 
->  * Allowing external toolchains to indicate whether they are affected
->    by the bug. For now, one toolchain known to be affected is marked
->    as such, the other toolchains will have to be tested progressively.
-> 
->  * Making the lttng-tools depend on toolchains not affected by the
->    bug.
-> 
-> Thomas Petazzoni (4):
->   gcc: add fix for PR 58595 to gcc 4.8.2
->   gcc: add fix for PR 58595 to gcc 4.7.3
->   toolchain: add option to declare toolchains affected by gcc PR 58595
->   lttng-tools: mark as affected by gcc bug 58595
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Applied.
+Applied, thanks.
 
 Thomas
 -- 
