@@ -1,52 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Apr 2014 22:22:21 +0200
-Subject: [Buildroot] [PATCH 0/6] Misc graphs enhancements (branch
- yem/graphs)
-In-Reply-To: <20140414221513.43cf4a37@skate>
-References: <cover.1397421554.git.yann.morin.1998@free.fr>
- <20140414221513.43cf4a37@skate>
-Message-ID: <20140414202221.GC3255@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 22:14:21 +0200
+Subject: [Buildroot] [git commit] linux: bump to version 3.14.1
+Message-ID: <20140414204029.306259BEAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=88f1a6644103920201ddf2b6824e677c35b24966
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-04-14 22:15 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 13 Apr 2014 22:42:37 +0200, Yann E. MORIN wrote:
-> 
-> > Yann E. MORIN (6):
-> >       Makefile: rename non-user-facing variable
-> >       support/graph-depends: use argparse to parse argv[]
-> >       support/graph-depends: add option to limit the depth of the graph
-> >       manual: document BR2_GRAPH_DEPTH
-> >       support/graph-depends: don't show toolchain dependency for all packages
-> >       graphs: make graphs with lots of packages nicer to look at
-> 
-> Applied, thanks. In the last patch, I've removed excessive spaces in
-> the expression:
-> 
-> 	max( ( ( n_pkgs + 10 ) / 48 , 2) )
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Yes, that's my default formatting style, which I use since I find it
-more readable. I forgot to re-hash it to Buildroot's style.
-
-Thanks for fixing.
-
-> If you have other fixes to do (such as things suggested by Samuel),
-> please send followup patches as appropriate.
-
-Yep, doing so right now! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/Config.in b/linux/Config.in
+index c40dcd0..9edafbf 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.14"
++	bool "3.14.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.14.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
