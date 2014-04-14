@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 20:52:44 +0200
-Subject: [Buildroot] [git commit] ruby: bump to 1.9.3-p545
-Message-ID: <20140414185513.0DD739C79B@busybox.osuosl.org>
+Date: Mon, 14 Apr 2014 20:54:24 +0200
+Subject: [Buildroot] [git commit] package/rpi-userland: bump revision
+Message-ID: <20140414185513.344C89C03F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84a179166db768b49c29634ca5e64c90756bb0d5
+commit: http://git.buildroot.net/buildroot/commit/?id=70fada8195876c5088a9af09c207d5c46b2147b8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes and enhancements for:
+  - camera : preview, white balance, padding-removal
+  - encoder: save inline motion vectors
+  - misc   : locking in GPU<->CPU dialog (?), tvservice eye-candy
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ruby/ruby.mk |    2 +-
+ package/rpi-userland/rpi-userland.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index d651e82..0ea352d 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 3c20516..7188dcf 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 1.9
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).3-p484
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3-p545
- RUBY_SITE = ftp://ftp.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_DEPENDENCIES = host-pkgconf host-ruby
- HOST_RUBY_DEPENDENCIES = host-pkgconf
+-RPI_USERLAND_VERSION = 58ab02e820df719440816534f4534ab1dfd66ce6
++RPI_USERLAND_VERSION = a59842a068cbd19e262701f30014499e9070fbf6
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
