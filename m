@@ -1,45 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 20:54:49 +0200
-Subject: [Buildroot] [git commit] configs: bump raspberrypi_defconfig to use
-	the latest stable kernel
-Message-ID: <20140414185513.4CCCC9C03F@busybox.osuosl.org>
+Date: Mon, 14 Apr 2014 20:53:56 +0200
+Subject: [Buildroot] [git commit] vlc: select libvorbis when opus is also
+	selected
+Message-ID: <20140414185513.265AD9C03F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d48eb62608a082be8b7261ab6d8afe490dc88b11
+commit: http://git.buildroot.net/buildroot/commit/?id=34df9c717a0132310e3770a37e70637649ca5847
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump raspberrypi_defconfig to use the latest revision from the stable
-rpi-3.10.y branch, which is based on v3.10.36.
+If BR2_PACKAGE_OPUS is selected then vlc will be built with support for
+opus passing "--enable-opus" option to the configure script. But when
+the configure script checks for the opus library it also checks for the
+ogg library at the same time, so if only opus has been installed and not
+ogg, then it will fail with an error message like this one:
 
-Bump the kernel headers used for the toolchain at the same time.
+checking for OPUS... no
+configure: error: Library ogg opus needed for opus was not found
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
+   http://autobuild.buildroot.net/results/4da/4da8e7cfb35c351e5d623835118512248d331d16/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/raspberrypi_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/Config.in |    1 +
+ package/vlc/vlc.mk    |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index a7a38a8..b7fe8c0 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index b7c6088..cdb0d16 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+ 	help
+ 	  VLC is a free and open source cross-platform multimedia player
+ 	  and framework that plays most multimedia files as well as DVD,
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index a9ee620..bcb592c 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -127,7 +127,7 @@ endif
  
- # Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.10.33"
-+BR2_DEFAULT_KERNEL_VERSION="3.10.36"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3bff11d4d4b8dc28cb9ce81449c989466ba27198"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7193cfe22b63ae92d1f7e955c2276adbdafd28e0"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ VLC_CONF_OPT += --enable-opus
+-VLC_DEPENDENCIES += opus
++VLC_DEPENDENCIES += libvorbis opus
+ else
+ VLC_CONF_OPT += --disable-opus
+ endif
