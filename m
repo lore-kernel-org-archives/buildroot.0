@@ -1,41 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Apr 2014 16:02:59 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.14.1
-In-Reply-To: <1397502179-16471-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1397502179-16471-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1397502179-16471-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 21:03:29 +0200
+Subject: [Buildroot] [PATCH 5/6] support/graph-depends: don't show
+ toolchain dependency for all packages
+In-Reply-To: <20140414210003.2baa485f@skate>
+References: <cover.1397421554.git.yann.morin.1998@free.fr>
+ <e626cb1d54ac1756750c7ce473dde8d7d5b784b9.1397421554.git.yann.morin.1998@free.fr>
+ <20140414210003.2baa485f@skate>
+Message-ID: <20140414210329.350d3f0e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yann,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c40dcd0..9edafbf 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.14"
-+	bool "3.14.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.14.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On Mon, 14 Apr 2014 21:00:03 +0200, Thomas Petazzoni wrote:
+
+> Are you sure this works? I applied your patch series, and I still see
+> all packages having a dependency on the toolchain. The PDF result is
+> http://free-electrons.com/~thomas/pub/bug-toolchain-graph-depends.pdf.
+
+Forget it: I screwed up when applying your patches, and only the first
+four patches were applied, while it's the fifth patch that was
+implementing this feature.
+
+With all your patches applied, it just works.
+
+Thanks!
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
