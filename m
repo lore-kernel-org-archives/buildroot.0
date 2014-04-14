@@ -1,62 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 21:00:03 +0200
-Subject: [Buildroot] [PATCH 5/6] support/graph-depends: don't show
- toolchain dependency for all packages
-In-Reply-To: <e626cb1d54ac1756750c7ce473dde8d7d5b784b9.1397421554.git.yann.morin.1998@free.fr>
-References: <cover.1397421554.git.yann.morin.1998@free.fr>
- <e626cb1d54ac1756750c7ce473dde8d7d5b784b9.1397421554.git.yann.morin.1998@free.fr>
-Message-ID: <20140414210003.2baa485f@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 14 Apr 2014 16:02:58 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 13,
+	14}.x series
+Message-ID: <1397502179-16471-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On Sun, 13 Apr 2014 22:42:41 +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Al packages depend on 'toolchain'. Currently, 'graph-depends' graphs this
-> dependency. The resulting graph is thus cluttered with less-than-useful
-> information.
-> 
-> Instead, do not graph the 'toolchain' dependency for any package, save
-> for the fake 'all' package. The graph is now a bit more readable.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  support/scripts/graph-depends | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-
-Are you sure this works? I applied your patch series, and I still see
-all packages having a dependency on the toolchain. The PDF result is
-http://free-electrons.com/~thomas/pub/bug-toolchain-graph-depends.pdf.
-
-My defconfig is:
-
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.02-rc1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_13=y
-BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_JQUERY_UI=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 005ad1e..1c735b3 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -159,14 +159,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.57"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.86"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.87"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.36"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.37"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.17"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.13.9"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14"		if BR2_KERNEL_HEADERS_3_14
++	default "3.13.10"	if BR2_KERNEL_HEADERS_3_13
++	default "3.14.1"	if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
