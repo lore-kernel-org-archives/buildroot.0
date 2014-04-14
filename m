@@ -1,42 +1,72 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 13 Apr 2014 21:02:51 -0400
-Subject: [Buildroot] Patchwork cleanup #8: triaging proposal
-In-Reply-To: <CAAXf6LUKOuGpMV0uzR3gDM++pOu9Ldtb=6FfTGHqXjMdpvCfSA@mail.gmail.com>
-References: <CAAXf6LUKOuGpMV0uzR3gDM++pOu9Ldtb=6FfTGHqXjMdpvCfSA@mail.gmail.com>
-Message-ID: <CANxTyt64XrOYPar2V-D_uUEWYixHBGep5UNFbijQn+HdB-Pheg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 14 Apr 2014 07:24:25 +0300
+Subject: [Buildroot] [PATCH v2] openpgm: needs host python2
+In-Reply-To: <CAHXCMMJF0K+CjZ=gM+quvbAEJyqAfvP3i9bfz_DovzVfQLH+6A@mail.gmail.com>
+References: <783d7d9db0c782c2317fcfc6160b6802b095164d.1397117772.git.baruch@tkos.co.il>
+ <CAHXCMMJF0K+CjZ=gM+quvbAEJyqAfvP3i9bfz_DovzVfQLH+6A@mail.gmail.com>
+Message-ID: <20140414042425.GA9805@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Samuel,
 
-On Sun, Apr 13, 2014 at 3:43 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> [1/3] ccache: change compilercheck to use compiler and toolchain info
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287383
->
-> [2/3] ccache: change default cache directory path to match config setting
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287384
->
-> [3/3] ccache: provide capability to do initial ccache setup
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287385
->
-> Proposal for the above 3: D more work needed. Looking at Arnout's
-> comments on the first patch, this needs to be thought through, and a
-> final solution is to be implemented. I really think we should improve
-> ccache in buildroot, though, so I hope a proper solution can be found.
+On Fri, Apr 11, 2014 at 09:09:12AM +0200, Samuel Martin wrote:
+> On Thu, Apr 10, 2014 at 10:16 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> > When BR2_PACKAGE_PYTHON3=y host python symlinks to python3. This breaks the
+> > version_generator.py script. Make sure we use the right host python version.
+> >
+> > We can't use the host installed python for ac_cv_path_PYTHON, but host python
+> > might default to python3 in the not so distant future.
+> >
+> > Fixes:
+> > http://autobuild.buildroot.net/results/01f/01f886a073439c0639ed93e596b68bcadf1a5824/
+> >
+> > Cc: Samuel Martin <s.martin49@gmail.com>
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> > Changes v1 -> v2:
+> >         * Depend on host-python unconditionally (Samuel Martin)
+> >         * Explain in the commit log why not to use the host python
+> > ---
+> >  package/openpgm/openpgm.mk | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
+> > index 3ec5c77e28c4..a108afea903b 100644
+> > --- a/package/openpgm/openpgm.mk
+> > +++ b/package/openpgm/openpgm.mk
+> > @@ -12,7 +12,10 @@ OPENPGM_LICENSE_FILES = openpgm/pgm/LICENSE
+> >  OPENPGM_INSTALL_STAGING = YES
+> >  OPENPGM_AUTORECONF = YES
+> >  OPENPGM_SUBDIR = openpgm/pgm/
+> > +# version_generator.py needs python2
+> > +OPENPGM_DEPENDENCIES = host-python
+> >  OPENPGM_CONF_ENV = ac_cv_file__proc_cpuinfo=yes ac_cv_file__dev_rtc=no \
+> > -                   ac_cv_file__dev_hpet=no
+> > +               ac_cv_file__dev_hpet=no \
+> > +               ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
+> >
+> 
+> This works fine, but maybe a patch like [1] is simple enough to avoid
+> a hard dependency on host-python.
 
-I believe that Arnout's comments are in regards to the first patch
-only.  The second and third patches are actually independent of the
-first patch, and each other.  So they can be accepted or rejected on
-their own merits.
+The print_function feature of __future__ is only available since Python 2.6. 
+Should we rely on having such a recent version installed on the host?
 
-Regardless - I've taken the first patch as far as I can, and don't
-really have the bandwidth to rework it again.  So ... TODO list it is.
+baruch
 
-Danomi -
+> >  $(eval $(autotools-package))
+> > --
+> > 1.9.1
+> 
+> Regards,
+> 
+> [1] http://pastebin.com/JJerR2uu
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
