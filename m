@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 23:36:47 +0200
-Subject: [Buildroot] [PATCH v2 1/2] mutt: Bump version to 1.5.23
-In-Reply-To: <1397391257-12882-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 14 Apr 2014 23:37:46 +0200
+Subject: [Buildroot] [PATCH v2 2/2] mutt: Add options for imap/pop3
+ support, enable optional iconv/OpenSSL support
+In-Reply-To: <1397391257-12882-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1397391257-12882-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140414233647.4bb22f3e@skate>
+ <1397391257-12882-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140414233746.26bba605@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +14,16 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 13 Apr 2014 14:14:16 +0200, Bernd Kuhls wrote:
-> removed upstream applied patch mutt-02-automake.patch
-> http://dev.mutt.org/trac/changeset/0488deb39a35
+On Sun, 13 Apr 2014 14:14:17 +0200, Bernd Kuhls wrote:
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> v2: no changes
+> v2: - do not disable iconv support for toolchains with locale support (Thomas)
+>     - optimize if-clause for OpenSSL support (Thomas)
 
-Applied.
+Applied, thanks. However, I've kept a 'config BR2_PACKAGE_MUTT' and not
+switched to a 'menuconfig BR2_PACKAGE_MUTT'. There are not enough
+sub-options for now to warrant a menuconfig for mutt I believe.
 
 Thomas
 -- 
