@@ -1,29 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 14 Apr 2014 09:51:13 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-04-13
-In-Reply-To: <20140414063009.3F4A6100DD1@stock.ovh.net>
-References: <20140414063009.3F4A6100DD1@stock.ovh.net>
-Message-ID: <20140414065113.GB9805@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 09:12:49 +0200
+Subject: [Buildroot] Asking a favor
+In-Reply-To: <20140413212851.GA6582@free.fr>
+References: <ea83c79e30b1bba43b6fe3de6096e8e7@paravisioner.com>
+ <20140413212851.GA6582@free.fr>
+Message-ID: <20140414091249.09b2db65@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter,
+Hello,
 
-On Mon, Apr 14, 2014 at 08:30:09AM +0200, Thomas Petazzoni wrote:
-> Build statistics for 2014-04-13
-> ===============================
-> 
->       i686 |                      mtd-1.5.1 | NOK | http://autobuild.buildroot.net/results/0d24f506c7603a833ed72a5b0267111b8353f88f/
+On Sun, 13 Apr 2014 23:28:51 +0200, Yann E. MORIN wrote:
 
-What version of uClibc is used here?
+> On 2014-04-14 01:23 +0430, Parsa Panahi spake thusly:
+> > I have a problem with buildroot configuration file. when I create the .config file and make it, I face an error in the terminal
+> > that :
+> > 
+> > linux/linux.mk:69: *** No kernel device tree source specified, check your BR2_LINUX_KERNEL_USE_INTREE_DTS /
+> > BR2_LINUX_KERNEL_USE_CUSTOM_DTS settings.  Stop.
+> > 
+> > I searched the whole Internet !!! and found nothing useful ! I don't know what causing this problem !! I've commented these
+> > variables ( BR2_LINUX_KERNEL_USE_INTREE_DTS, BR2_LINUX_KERNEL_USE_CUSTOM_DTS) in the .config file but when I make the new file it
+> > gives another error for another variable !!
 
-baruch
+Well, the message says it all: you have told Buildroot to generate a
+Device Tree blob for you by enabling the BR2_LINUX_KERNEL_DTS_SUPPORT
+option, but you didn't provide any reference to which Device Tree you
+wanted to compile.
 
+Can you share your Buildroot .config file so we can check that this is
+actually what's going on?
+
+Thanks,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
