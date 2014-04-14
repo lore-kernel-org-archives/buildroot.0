@@ -1,41 +1,52 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 14 Apr 2014 10:43:11 +0200
-Subject: [Buildroot] [PATCH] mesa3d: fix khrplatform.h installation.
-In-Reply-To: <20140412161019.70e50f23@skate>
-References: <1397048061-31767-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140412161019.70e50f23@skate>
-Message-ID: <20140414084311.GA5385@pc-eric>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Apr 2014 10:58:16 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-04-13
+In-Reply-To: <20140414084230.GD9805@tarshish>
+References: <20140414063009.3F4A6100DD1@stock.ovh.net>
+ <20140414065113.GB9805@tarshish> <20140414091533.1a0e16e5@skate>
+ <20140414075801.GC9805@tarshish> <20140414103021.0168d7d3@skate>
+ <20140414084230.GD9805@tarshish>
+Message-ID: <20140414105816.322a1761@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Dear Baruch Siach,
 
-On Sat, Apr 12, 2014 at 04:10:19PM +0200, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Wed,  9 Apr 2014 14:54:21 +0200, Eric Le Bihan wrote:
-> > Mesa3D only installs khrplatform.h if EGL support is enabled, whereas
-> > this header file is needed by the headers of OpenGL|ES and OpenVG.
-> >
-> > The supplied patch forces Mesa3D to install this header unconditionally.
-> >
-> > Fixes http://autobuild.buildroot.net/results/e07/e079219d70830a123977c3ee09d3c11b863d0691
-> >
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > ---
-> >  ...atform.h-not-installed-if-EGL-is-disabled.patch | 44 ++++++++++++++++++++++
-> >  package/mesa3d/mesa3d.mk                           |  1 +
-> >  2 files changed, 45 insertions(+)
-> >  create mode 100644 package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
->
-> I've applied the patch. However, I really would like this one to be
-> submitted upstream, to also get a confirmation that this is the correct
-> fix for the problem.
-Me too! I submitted the patch here:
-https://bugs.freedesktop.org/show_bug.cgi?id=77240.
+On Mon, 14 Apr 2014 11:42:30 +0300, Baruch Siach wrote:
 
-Best regards,
-ELB
+> > #ifdef __USE_SVID
+> > /* Determine whether the string value of RESPONSE matches the affirmation
+> >    or negative response expression as specified by the LC_MESSAGES category
+> >    in the program's current locale.  Returns 1 if affirmative, 0 if
+> >    negative, and -1 if not matching.  */
+> > extern int rpmatch (__const char *__response) __THROW __nonnull ((1)) __wur;
+> > #endif
+> 
+> Seems to be a patched uClibc.
+
+Yes, see uclibc-0033-rpmatch-backport-function.patch in Buildroot.
+
+> > See
+> > http://free-electrons.com/~thomas/pub/peko-i686-wchar-toolchain.tar.xz
+> > for a tarball of the full toolchain. But you will most likely not be
+> > able to use it: it's built to run on a PowerPC machine :)
+> 
+> So what is the correct solution for this?
+
+The ideal solution would be to have a configure.ac test for rpmatch,
+but unfortunately, mtd-utils do not use autoconf.
+
+I believe we said that we should not include patches that add
+functionality to uClibc, but it creates a difference between our
+patched uClibc, and other toolchains that don't have the same patches
+for uClibc.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
