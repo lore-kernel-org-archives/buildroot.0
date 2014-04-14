@@ -1,37 +1,54 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 14 Apr 2014 11:25:37 +0200
-Subject: [Buildroot] [PATCH 2/2] liblogging: enable systemd compatibility
-	libs
-In-Reply-To: <1397467537-22766-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1397467537-22766-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1397467537-22766-3-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Mon, 14 Apr 2014 11:35:46 +0200
+Subject: [Buildroot] [PATCH 1/2] systemd: Build legacy pc files when
+	liblogging is
+In-Reply-To: <5347ACFD.907@imgtec.com>
+References: <1397145566-11243-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20140410175032.GA24213@pc-eric> <87lhvc6fzf.fsf@dell.be.48ers.dk>
+ <5347ACFD.907@imgtec.com>
+Message-ID: <20140414093546.GB5385@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If systemd is chosen as init system, liblogging will enable the
-installation of compatibility libraries in systemd.
+On Fri, Apr 11, 2014 at 09:51:09AM +0100, Vicente Olivert Riera wrote:
+> On 04/10/2014 10:18 PM, Peter Korsgaard wrote:
+> >>>>>>"Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+> >
+> >Hi,
+> >
+> >  > Maybe some other packages depend on these compatibility libraries, so instead
+> >  > of referring to BR2_PACKAGE_LIBLOGGING in systemd.mk, it would be best to add
+> >  > a generic configuration option to systemd, as done for berkeleydb with
+> >  > BR2_PACKAGE_BERKELEYDB_COMPAT185. It could be named BR2_PACKAGE_SYSTEMD_COMPAT.
+> >
+> >  > Then, in package/liblogging/Config.in, we would have:
+> >
+> >  >   select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+> >
+> >  > And this would be removed when liblogging is fixed upstream.
+> >
+> >Yes, I agree.
+> >
+> >  > What do think of this?
+> >
+> >Care to send an updated patch series doing that?
+> >
+>
+> I didn't do that in purpose, because I thought it would be a good
+> idea to catch those packages that still look for legacy systemd
+> files, so we could tell upstream about that, as I did for
+> liblogging.
+I posted an implementation of BR2_PACKAGE_SYSTEMD_COMPAT. If other packages
+depend on the old libsystemd-*.so, I think this will allow us to catch them
+too, as they will not select this new symbol yet.
+>
+> If we put that option as a generic one, then we will never remove it
+> from there and we will be using the not-default systemd config
+> forever.
+As a reminder, I added a comment in the log about this.
 
-When liblogging will be updated to depend on libsystemd.so, this
-selection will have to be removed.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/liblogging/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/liblogging/Config.in b/package/liblogging/Config.in
-index 23c3c1a..12ee950 100644
---- a/package/liblogging/Config.in
-+++ b/package/liblogging/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBLOGGING
- 	bool "liblogging"
-+	select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
- 	help
- 	  Liblogging is an easy to use library for
- 	  logging. It offers an enhanced replacement
--- 
-1.9.1
+Best regards,
+ELB
