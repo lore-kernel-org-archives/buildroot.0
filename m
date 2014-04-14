@@ -1,55 +1,62 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 14 Apr 2014 15:20:07 +0100
-Subject: [Buildroot] [PATCH] vlc: select libvorbis when opus is also selected
-Message-ID: <1397485207-63709-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 14 Apr 2014 14:56:28 +0000
+Subject: [Buildroot] [PATCH] libglib2: fix compilation for aarch64 and
+ arc
+In-Reply-To: <20140412160057.38777048@skate>
+References: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
+ <20140412160057.38777048@skate>
+Message-ID: <1397487387.9266.50.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If BR2_PACKAGE_OPUS is selected then vlc will be built with support for
-opus passing "--enable-opus" option to the configure script. But when
-the configure script checks for the opus library it also checks for the
-ogg library at the same time, so if only opus has been installed and not
-ogg, then it will fail with an error message like this one:
+Hi Thomas,
 
-checking for OPUS... no
-configure: error: Library ogg opus needed for opus was not found
+On Sat, 2014-04-12 at 16:00 +0200, Thomas Petazzoni wrote:
+> Dear Alexey Brodkin,
+> 
+> On Thu, 10 Apr 2014 18:46:36 +0400, Alexey Brodkin wrote:
+> > Copied from here - https://github.com/openembedded/oe-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+> > 
+> > Initially posted here - http://lists.openembedded.org/pipermail/openembedded-core/2013-October/085174.html
+> > 
+> > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> > ---
+> >  ...ror-format-string-errors-from-mismatched-.patch | 56 ++++++++++++++++++++++
+> >  1 file changed, 56 insertions(+)
+> >  create mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+> 
+> Thanks. Is this fixing an issue reported by the autobuilders? If not,
+> under what conditions are you seeing the problem?
 
-Fixes:
-   http://autobuild.buildroot.net/results/4da/4da8e7cfb35c351e5d623835118512248d331d16/
+This is definitely not an autobuild reported issue.
+I faced this issue while building "libglib2" for ARC architecture
+myself.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/vlc/Config.in |    1 +
- package/vlc/vlc.mk    |    2 +-
- 2 files changed, 2 insertions(+), 1 deletions(-)
+As it turned out I was not able to reproduce the same issue for aarch64
+as it was mentioned on openembedded mailing list.
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index b7c6088..cdb0d16 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_VLC
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
- 	help
- 	  VLC is a free and open source cross-platform multimedia player
- 	  and framework that plays most multimedia files as well as DVD,
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index a9ee620..bcb592c 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -127,7 +127,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPUS),y)
- VLC_CONF_OPT += --enable-opus
--VLC_DEPENDENCIES += opus
-+VLC_DEPENDENCIES += libvorbis opus
- else
- VLC_CONF_OPT += --disable-opus
- endif
--- 
-1.7.1
+The issue itself only happens if G_GSIZE_FORMAT differs from
+G_GSSIZE_FORMAT. And this is only the case for ARC because "size_t" for
+ARC is "long unsigned int" while "ssize_t" is "unsigned int" (which is
+the type of "ssize_t" on most 32-bit arches).
+
+Still this issue needs to be fixed for ARC in buildroot and and
+fortunately it was fixed in upstream right after 2.38 version was
+released. Here's the commit in question -
+https://git.gnome.org/browse/glib/commit/?id=0167c3340d8201dca8e9031b61703bbc5ed6ce33
+
+Another good fix of this problem could be in bumping glib version to
+recently released 2.40. And I indeed may send a patch that bumps glib
+version to buildroot mailing list but since I don't really use much
+glib-based apps on ARC I'm not sure if I may make sure this bump doesn't
+break stuff for people.
+
+If you think that something simple like building and execution of
+"gtk-demo" app is good enough test then I may try it and if it work I
+will send a patch - what do you think?
+
+Regards,
+Alexey
