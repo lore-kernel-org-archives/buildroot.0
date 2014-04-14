@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 20:54:24 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: bump revision
-Message-ID: <20140414185513.344C89C03F@busybox.osuosl.org>
+Date: Mon, 14 Apr 2014 20:54:49 +0200
+Subject: [Buildroot] [git commit] configs: bump raspberrypi_defconfig to use
+	the latest stable kernel
+Message-ID: <20140414185513.4CCCC9C03F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70fada8195876c5088a9af09c207d5c46b2147b8
+commit: http://git.buildroot.net/buildroot/commit/?id=d48eb62608a082be8b7261ab6d8afe490dc88b11
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes and enhancements for:
-  - camera : preview, white balance, padding-removal
-  - encoder: save inline motion vectors
-  - misc   : locking in GPU<->CPU dialog (?), tvservice eye-candy
+Bump raspberrypi_defconfig to use the latest revision from the stable
+rpi-3.10.y branch, which is based on v3.10.36.
+
+Bump the kernel headers used for the toolchain at the same time.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/raspberrypi_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 3c20516..7188dcf 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index a7a38a8..b7fe8c0 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
  
--RPI_USERLAND_VERSION = 58ab02e820df719440816534f4534ab1dfd66ce6
-+RPI_USERLAND_VERSION = a59842a068cbd19e262701f30014499e9070fbf6
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+ # Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.33"
++BR2_DEFAULT_KERNEL_VERSION="3.10.36"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3bff11d4d4b8dc28cb9ce81449c989466ba27198"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7193cfe22b63ae92d1f7e955c2276adbdafd28e0"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
