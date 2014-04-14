@@ -1,57 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 23:08:22 +0200
-Subject: [Buildroot] [git commit] toolchain-external: remove useless info in
-	help text of Linaro ARM toolchains
-Message-ID: <20140414211059.F1D5E9BF47@busybox.osuosl.org>
+Date: Mon, 14 Apr 2014 23:12:44 +0200
+Subject: [Buildroot] [PATCH 1/5] nodejs: use the standard configure/make
+ options
+In-Reply-To: <1397509552-5278-2-git-send-email-s.martin49@gmail.com>
+References: <1397509552-5278-1-git-send-email-s.martin49@gmail.com>
+ <1397509552-5278-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140414231244.763b0d3d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6283788656a49a2b6d10e2a890be576a23ea8c1a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-The information "To use this toolchain, you must disable soft float
-usage." which was visible in the help text of Linaro toolchains is no
-longer useful, since those toolchains are only visible when the ARM
-EABIhf ABI is selected, which by design is not compatible with
-soft-float.
+On Mon, 14 Apr 2014 23:05:48 +0200, Samuel Martin wrote:
+> Also cleanup leading whitespace.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/nodejs/nodejs.mk | 20 +++++++++++++++++---
+>  1 file changed, 17 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index a44bfbd..0d84765 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -23,7 +23,10 @@ define HOST_NODEJS_CONFIGURE_CMDS
+>  	# NPM is non-functional without it, and host-openssl isn't part of
+>  	# buildroot.
+>  	(cd $(@D); \
+> -                ./configure \
+> +		$(HOST_CONFIGURE_OPTS) \
+> +		CFLAGS="$(HOST_CFLAGS)" \
+> +		LDFLAGS="$(HOST_LDFLAGS)" \
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- toolchain/toolchain-external/Config.in |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+HOST_CONFIGURE_OPTS already contain CFLAGS and LDFLAGS definitions that
+are identical to the explicit ones you're passing. So why are you
+passing explicit CFLAGS and LDFLAGS ?
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2425d63..a36b638 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -28,8 +28,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_02
- 	  with the hard floating point calling convention, and uses
- 	  the VFPv3-D16 FPU instructions.
- 
--	  To use this toolchain, you must disable soft float usage.
--
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_01
- 	bool "Linaro 2014.01"
- 	depends on BR2_arm
-@@ -52,8 +50,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_01
- 	  with the hard floating point calling convention, and uses
- 	  the VFPv3-D16 FPU instructions.
- 
--	  To use this toolchain, you must disable soft float usage.
--
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_12
- 	bool "Linaro 2013.12"
- 	depends on BR2_arm
-@@ -76,8 +72,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_12
- 	  with the hard floating point calling convention, and uses
- 	  the VFPv3-D16 FPU instructions.
- 
--	  To use this toolchain, you must disable soft float usage.
--
- comment "Linaro toolchains available for Cortex-A + EABIhf"
- 	depends on BR2_arm
- 	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
+> +		./configure \
+>  		--prefix=$(HOST_DIR)/usr \
+>  		--without-snapshot \
+>  		--without-dtrace \
+> @@ -60,6 +63,8 @@ endif
+>  define NODEJS_CONFIGURE_CMDS
+>  	(cd $(@D); \
+>  		$(TARGET_CONFIGURE_OPTS) \
+> +		CFLAGS="$(TARGET_CFLAGS)" \
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+
+Same question here.
+
+>  		LD="$(TARGET_CXX)" \
+>  		./configure \
+>  		--prefix=/usr \
+> @@ -75,7 +80,11 @@ define NODEJS_CONFIGURE_CMDS
+>  endef
+>  
+>  define NODEJS_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		CFLAGS="$(TARGET_CFLAGS)" \
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		LD="$(TARGET_CXX)"
+
+Same question here.
+
+>  endef
+>  
+>  #
+> @@ -107,7 +116,12 @@ endef
+>  endif
+>  
+>  define NODEJS_INSTALL_TARGET_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
+> +		DESTDIR=$(TARGET_DIR) \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		CFLAGS="$(TARGET_CFLAGS)" \
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		LD="$(TARGET_CXX)"
+
+And here.
+
+>  	$(NODEJS_INSTALL_MODULES)
+>  endef
+>  
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
