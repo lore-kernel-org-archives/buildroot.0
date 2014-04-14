@@ -1,46 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Apr 2014 22:38:00 +0200
-Subject: [Buildroot] [git commit] lttng-tools: mark as affected by gcc bug
-	58595
-Message-ID: <20140414204029.4E7BB9C786@busybox.osuosl.org>
+Date: Mon, 14 Apr 2014 22:42:06 +0200
+Subject: [Buildroot] [[PATCH v2] 1/1] lttng-libust: Disable
+ liblttng-ust-dl with uClibc.
+In-Reply-To: <1397426422-6193-1-git-send-email-romain.naour@openwide.fr>
+References: <1397426422-6193-1-git-send-email-romain.naour@openwide.fr>
+Message-ID: <20140414224206.078f43a4@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6bf71b7dfa65745b2c95da2801d24a6f73f2630
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Romain Naour,
 
-Fixes:
+On Mon, 14 Apr 2014 00:00:22 +0200, Romain Naour wrote:
+> According to uClibc commit [1], dlinfo is not available in recent uClibc (>0.9.33),
+> but is available in older version of uClibc (<=0.9.33) whith a different prototype
+> than dlinfo() in glibc.
+> 
+> To be able to use LTTng UST with uClibc, we need to disable the Dynamic Linker
+> Tracing functionality [2].
+> 
+> A specific test on dlinfo() prototype is performed to enable or disable this
+> functionality.
+> 
+> This patch supersede the one added in abf58f46cedacace1db53de5cc12a8fe9f7fbd82
+> that wrongly disable liblttng-ust-dl even if dlinfo() comme from glibc.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/a6c/a6c33dd7ec2a36a50c5ea74b989a371d6c85e899/build-end.log
+> 
+> [1] http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
+> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 
-  http://autobuild.buildroot.org/results/6a6/6a66a389035939af542e172dbe2027ffa671e28a/
+Applied, thanks. However, I had to fix up the title of your patch.
+Please don't screw it up like this, and just use:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lttng-tools/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+	git format-patch --subject-prefix="PATCH v2"
 
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index f0d45d9..cde9baf 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	# liburcu only works on some architectures and requires thread support
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_WCHAR # util-linux
-@@ -32,7 +33,8 @@ comment "lttng-tools needs a toolchain w/ largefile, threads, wchar"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_powerpc || BR2_x86_64
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 
--comment "lttng-tools needs a toolchain not affected by GCC bug 58854"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-+comment "lttng-tools needs a toolchain not affected by GCC bug 58854 and 58595"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854 || BR2_TOOLCHAIN_HAS_GCC_BUG_58595
+and no other weird thing. Your patch title should have brackets inside
+brackets, i.e the title should look like:
+
+	[PATCH v2 1/1] lttng-libust...
+
+or even better, for a single patch:
+
+	[PATCH v2] lttng-libust...
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
