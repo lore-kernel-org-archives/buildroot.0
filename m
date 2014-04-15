@@ -1,29 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Apr 2014 14:18:46 -0300
-Subject: [Buildroot] [PATCH] libcurl: drop polarssl support
-In-Reply-To: <20140415183101.514b6ad2@skate>
-References: <1397570346-25849-1-git-send-email-gustavo@zacarias.com.ar>	<20140415181021.5ed849a7@skate>	<534D5CB0.3040301@zacarias.com.ar>
- <20140415183101.514b6ad2@skate>
-Message-ID: <534D69F6.4030301@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Apr 2014 21:06:57 +0200
+Subject: [Buildroot] [git commit] fdk-aac: Disable for MIPS I, II, III and IV
+Message-ID: <20140415190722.3A8C99C7CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/15/2014 01:31 PM, Thomas Petazzoni wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=66e41680868cc5f097ccb3206fe0058c52528b87
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Ok. I guess we can wait for openvpn 2.4 to be released. If that takes
-> too long, I'd say we should kill polarssl support in openvpn, because
-> it's the one lagging behind. It seems more logical to me to kill that
-> one (the one lagging behind) instead of the one being up-to-date (i.e,
-> libcurl).
+This package uses the 'msub' instruction which is available only in
+mips32 and mips64 ISAs.
 
-That's debatable, if you don't like openssl support for libcurl
-(paranoia, security, friends & family, whatever) you still got other
-options, if you do that to openvpn you're stuck since it's the only
-other option.
-That being said a 2.4 release is quite off IMHO and the polarssl backend
-isn't feature-complete compared to openssl, though the paranoia point is
-still valid given the heartbleed fallout.
-Regards.
+[Thomas: replicate the new dependency to the comment.]
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/fdk-aac/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+index 1ec59e1..7922364 100644
+--- a/package/fdk-aac/Config.in
++++ b/package/fdk-aac/Config.in
+@@ -5,6 +5,9 @@ config BR2_PACKAGE_FDK_AAC
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+ 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_powerpc || BR2_sh || BR2_sh64
++	# fdk-aac uses the 'msub' instruction whis is available only in
++	# mips32 and mips64 ISAs
++	depends on !(BR2_mips_1 || BR2_mips_2 || BR2_mips_3 || BR2_mips_4)
+ 
+ 	help
+ 	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
+@@ -18,3 +21,4 @@ comment "fdk-aac needs a toolchain w/ C++"
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+ 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_powerpc || BR2_sh || BR2_sh64
++	depends on !(BR2_mips_1 || BR2_mips_2 || BR2_mips_3 || BR2_mips_4)
