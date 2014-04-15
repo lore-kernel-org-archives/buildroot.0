@@ -1,59 +1,88 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Tue, 15 Apr 2014 22:11:40 +0200
-Subject: [Buildroot] [[PATCH v2] 1/1] lttng-libust: Disable
- liblttng-ust-dl with uClibc.
-In-Reply-To: <20140414224206.078f43a4@skate>
-References: <1397426422-6193-1-git-send-email-romain.naour@openwide.fr>
- <20140414224206.078f43a4@skate>
-Message-ID: <534D927C.5090808@openwide.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 15 Apr 2014 22:15:54 +0200
+Subject: [Buildroot] 2014.05 release cycle: things you can contribute to
+In-Reply-To: <CAAXf6LXdNYg5nd8xEV_SGceu-sxB4TzWpnAN6mQb+n=wCpRxdA@mail.gmail.com>
+References: <CAAXf6LXdNYg5nd8xEV_SGceu-sxB4TzWpnAN6mQb+n=wCpRxdA@mail.gmail.com>
+Message-ID: <b5384ec9-5b12-4091-920a-f5976d5b57aa@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+All,
 
-Le 14/04/2014 22:42, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
+Thomas De Schampheleire <patrickdepinguin@gmail.com> schreef:
+>Hi,
 >
-> On Mon, 14 Apr 2014 00:00:22 +0200, Romain Naour wrote:
->> According to uClibc commit [1], dlinfo is not available in recent uClibc (>0.9.33),
->> but is available in older version of uClibc (<=0.9.33) whith a different prototype
->> than dlinfo() in glibc.
->>
->> To be able to use LTTng UST with uClibc, we need to disable the Dynamic Linker
->> Tracing functionality [2].
->>
->> A specific test on dlinfo() prototype is performed to enable or disable this
->> functionality.
->>
->> This patch supersede the one added in abf58f46cedacace1db53de5cc12a8fe9f7fbd82
->> that wrongly disable liblttng-ust-dl even if dlinfo() comme from glibc.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/a6c/a6c33dd7ec2a36a50c5ea74b989a371d6c85e899/build-end.log
->>
->> [1] http://git.uclibc.org/uClibc/commit/?id=f3c9dc499c5c787ddd8c4320f2d44d2ae6e40c22
->> [2] http://lists.lttng.org/pipermail/lttng-dev/2014-February/022423.html
->>
->> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-> Applied, thanks. However, I had to fix up the title of your patch.
-> Please don't screw it up like this, and just use:
+>Buildroot 2014.02 has been released, so what's next?
+>In this mail I list a number of items you can contribute to, in no
+>particular order. Together, we can make this release a great success,
+>as always!
 >
-> 	git format-patch --subject-prefix="PATCH v2"
 >
-> and no other weird thing. Your patch title should have brackets inside
-> brackets, i.e the title should look like:
+>1. If you attended the Buildroot developer days, you may have some
+>action points assigned to you. Refer to the report [1] for details.
+>There is at least one action that has not yet been assigned, so even
+>if you did not attend, there is something you can work on.
 >
-> 	[PATCH v2 1/1] lttng-libust...
+>2. During the 'patchwork cleanup' sessions and during the buildroot
+>developer days, we identified several patches in the patchwork queue
+>that we would like to integrate in buildroot. However, these patches
+>require some love, ranging from a simple rebase/retest to addressing
+>comments the patch received. These patches can be recognized because
+>they are marked as 'Delegated to pdp', refer to the list at [2]. You
+>are welcome to take one of these patches and resend it to the list
+>after rework.
 >
-> or even better, for a single patch:
+>3. There are a few open bugs in our bug tracker, and it would be great
+>if we could close them all before the release of 2014.05. I _really_
+>believe this is possible. Some of these bugs are package requests that
+>even have a patch attached, so in this case it suffices to refresh and
+>test the patch, and resend it to the list. The list of open bugs is at
+>[3]. Also refer to the latest bug analysis I made [4].
 >
-> 	[PATCH v2] lttng-libust...
+>4. We maintain a TODO list at the eLinux wiki [5], which contains
+>several items. You are welcome to pick an item to work on. Don't
+>hesitate to discuss the item first on the mailing list or IRC. Do edit
+>the wiki to indicate when you start working on an item, so we avoid
+>duplicate efforts.
 >
-> Thomas
-Ok, I'm sorry forthe inconvenience.
+>5. As always, the autobuilders are detecting new problems every day.
+>With new feature patches being integrated now, the amount of failures
+>will surely rise again, so this provides many opportunities for you to
+>contribute. There are daily overview mails sent to the list, and you
+>can always check the current results at [6]. Statistics are available
+>at [7].
+>
+>6. Reviewing and testing patches: with the amount of patches sent to
+>the list each day, the maintainer has a very hard job in judging which
+>patches are ready to apply and which aren't. Contributors can greatly
+>help here by reviewing and testing these patches, and providing the
+>appropriate Tested-by, Reviewed-by, or Acked-by tags.
+>I will soon update the manual to clarify the meaning of these tags.
+>
+>7. Other contributions: obviously you are welcome to contribute with
+>your own patches, as always.
+>
+>Thanks to all contributors for their hard and continued work!
+>
+>Best regards,
+>Thomas
+>
+>
+>[1] http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014
+>[2] http://patchwork.ozlabs.org/project/buildroot/list/?state=1&delegate=7151
+>[3] https://bugs.busybox.net/buglist.cgi?query_format=specific&order=relevance+desc&bug_status=__open__&product=buildroot&content=
+>[4] http://lists.busybox.net/pipermail/buildroot/2014-February/090199.html
+>[5] http://elinux.org/Buildroot#Todo_list
+>[6] http://autobuild.buildroot.org/
+>[7] http://autobuild.buildroot.org/stats.php
 
-Thanks,
-Romain Naour
+
+As May (the stabilization month) is approaching, the above mail is a reminder of what you can do to help the project...
+
+All contribution in these areas is more than welcome!
+
+Best regards,
+Thomas
