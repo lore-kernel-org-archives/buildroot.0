@@ -1,42 +1,109 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Apr 2014 10:39:23 -0300
-Subject: [Buildroot] [PATCHv2] jquery-ui: switch to sources.buildroot.net
-Message-ID: <1397569163-17858-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 15 Apr 2014 10:40:13 -0300
+Subject: [Buildroot] [PATCH] flac: needs wchar
+Message-ID: <1397569213-18072-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to sources.buildroot.net cached zipfile.
-Upstream changed the zipfile and the internal directory structure
-without notifying anyone or changing the filename thus causing breakage.
-And we can't use github release tarballs since they are not minified.
-And we shouldn't reflect this in the install hook since an old cached
-tarball wouldn't work, and we'd break anyone using the old package file
-with the new one too. Thanks upstream! Fixes:
-http://autobuild.buildroot.net/results/43a/43a16a44a26b38f4c6a2f352d8bfe5e07af6b2e3/
+Fixes:
+http://autobuild.buildroot.net/results/873/873a1b3551c5fe04fa477fd682ff91fecdd41606/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/jquery-ui/jquery-ui.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/flac/Config.in                         | 4 ++++
+ package/gstreamer/gst-plugins-good/Config.in   | 4 ++++
+ package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
+ package/minidlna/Config.in                     | 5 +++--
+ package/mpd/Config.in                          | 2 +-
+ 5 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/package/jquery-ui/jquery-ui.mk b/package/jquery-ui/jquery-ui.mk
-index 5eadf53..d40158b 100644
---- a/package/jquery-ui/jquery-ui.mk
-+++ b/package/jquery-ui/jquery-ui.mk
-@@ -5,7 +5,10 @@
- ################################################################################
+diff --git a/package/flac/Config.in b/package/flac/Config.in
+index 06f170b..267acb7 100644
+--- a/package/flac/Config.in
++++ b/package/flac/Config.in
+@@ -1,6 +1,10 @@
+ config BR2_PACKAGE_FLAC
+ 	bool "flac"
++	depends on BR2_USE_WCHAR
+ 	help
+ 	  FLAC is an Open Source lossless audio codec.
  
- JQUERY_UI_VERSION = 1.10.4
--JQUERY_UI_SITE = http://jqueryui.com/resources/download
-+# Use buildroot mirror since upstream switched the zipfile and directory
-+# structure without bumping/renaming.
-+# Remember to switch back to jqueryui.com when bumping!
-+JQUERY_UI_SITE = http://sources.buildroot.net
- JQUERY_UI_SOURCE = jquery-ui-$(JQUERY_UI_VERSION).zip
- JQUERY_UI_LICENSE = MIT
- JQUERY_UI_LICENSE_FILES = MIT-LICENSE.txt
+ 	  http://flac.sourceforge.net/
++
++comment "flac needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
+index 254dbcb..9c2b884 100644
+--- a/package/gstreamer/gst-plugins-good/Config.in
++++ b/package/gstreamer/gst-plugins-good/Config.in
+@@ -183,8 +183,12 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CAIRO
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
+ 	bool "flac (libFLAC)"
++	depends on BR2_USE_WCHAR # flac
+ 	select BR2_PACKAGE_FLAC
+ 
++comment "flac needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
+ 	bool "gdkpixbuf"
+ 	depends on BR2_USE_WCHAR # gdk-pixbuf -> libglib2
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 818412c..9fd6114 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -281,10 +281,14 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
+ 	bool "flac (libFLAC)"
++	depends on BR2_USE_WCHAR # flac
+ 	select BR2_PACKAGE_FLAC
+ 	help
+ 	  The FLAC Lossless compressor Codec
+ 
++comment "flac needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
+ 	bool "gdkpixbuf"
+ 	select BR2_PACKAGE_GDK_PIXBUF
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index 02720e9..4a46b0c 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_MINIDLNA
+ 	bool "minidlna"
+ 	depends on BR2_LARGEFILE # ffmpeg
+ 	depends on BR2_INET_IPV6 # ffmpeg
++	depends on BR2_USE_WCHAR # flac
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_FFMPEG
+@@ -20,6 +21,6 @@ config BR2_PACKAGE_MINIDLNA
+ 
+ 	  http://minidlna.sourceforge.net/
+ 
+-comment "minidlna needs a toolchain w/ largefile, IPv6, threads"
++comment "minidlna needs a toolchain w/ largefile, IPv6, threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 063c65d..7237b89 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -1,7 +1,7 @@
+ menuconfig BR2_PACKAGE_MPD
+ 	bool "mpd"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_WCHAR # libglib2, flac
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	# avr32, sparc & CS powerpc gcc are too old
 -- 
 1.8.3.2
