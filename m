@@ -1,62 +1,34 @@
-From: Rohit Kumar <rohit.kumar@hitechroboticsystemz.com>
-Date: Tue, 15 Apr 2014 18:25:28 +0900
-Subject: [Buildroot] yaffs2 file system
-In-Reply-To: <534CF31A.2020803@carallon.com>
-References: <CABzetm2LegsUVAH0a-3UYWNQcf2inSG4P8r5A6goGKNbJKsVVw@mail.gmail.com>
- <534CF31A.2020803@carallon.com>
-Message-ID: <CABzetm2L+sZMW6-xifANB11GfdQXiw89f=c2h4kiiW5WsJYJZg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Apr 2014 12:05:31 +0100
+Subject: [Buildroot] [PATCH] fdk-aac: Disable for MIPS I, II, III and IV
+Message-ID: <1397559931-35479-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thanks will,
+This package uses the 'msub' instruction which is available only in
+mips32 and mips64 ISAs.
 
-so i just need to update these patches in "patches" folder and update entry
-in "series" file?
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/fdk-aac/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-
-On Tue, Apr 15, 2014 at 5:51 PM, Will Wagner <willw@carallon.com> wrote:
-
-> On 15/04/2014 09:32, Rohit Kumar wrote:
->
->> Hello,
->>
->> i want to create yaffs2 file system with buildroot.
->> i see that buildroot doesnt have this option. so i have created standard
->> uncompressed image.
->> is there a way to convert it to yaffs2 FS?
->> any help is appreciated.
->>
->
-> Hi Rohit,
->
-> I have a couple of patches (attached) that add yaffs2 support for
-> buildroot, that I have never got round to pushing upstream. They are based
-> on buildroot_2013.05.
->
-> Regards
-> Will
->
-> --
-> ------------------------------------------------------------------------
-> Will Wagner                                     will_wagner at carallon.com
-> Development Manager                      Office Tel: +44 (0)20 7471 9224
-> Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
-> ------------------------------------------------------------------------
->
-
-
-
+diff --git a/package/fdk-aac/Config.in b/package/fdk-aac/Config.in
+index 1ec59e1..9cf944e 100644
+--- a/package/fdk-aac/Config.in
++++ b/package/fdk-aac/Config.in
+@@ -5,6 +5,9 @@ config BR2_PACKAGE_FDK_AAC
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_armeb || \
+ 		   BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || \
+ 		   BR2_powerpc || BR2_sh || BR2_sh64
++	# fdk-aac uses the 'msub' instruction whis is available only in
++	# mips32 and mips64 ISAs
++	depends on ! (BR2_mips_1 || BR2_mips_2 || BR2_mips_3 || BR2_mips_4)
+ 
+ 	help
+ 	  The Fraunhofer FDK AAC Codec Library for Android ("FDK AAC Codec")
 -- 
-
-With Regards,
-
-Rohit Kumar
-Sr. Research Developer
-Hitec Robotic systems Ltd.
-+91 9891691967
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140415/adc4af24/attachment.html>
+1.7.1
