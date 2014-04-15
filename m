@@ -1,32 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Apr 2014 23:15:29 +0200
-Subject: [Buildroot] [git commit] xproto_xproto: Bump version to 7.0.26
-Message-ID: <20140415211637.6104B9C7C5@busybox.osuosl.org>
+Date: Tue, 15 Apr 2014 23:18:00 +0200
+Subject: [Buildroot] [git commit] nodejs: force python interpreter
+Message-ID: <20140415211825.8680B9BF84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9989d1f28eb44d73bd7bbccff5c9813e0a38575b
+commit: http://git.buildroot.net/buildroot/commit/?id=40218a16526946f35dab0d05f379f71a01f29530
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+nodejs build system is based on python, and it does not support python3.
+
+This patch makes sure python2 is used for the build.
+
+Note that, setting PYTHON=... at configure time or in the make
+environment is not enough to override all the hard-coded python call, so
+we have to sed some python scripts to avoid being screwed.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xproto_xproto/xproto_xproto.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/nodejs/nodejs.mk |   24 ++++++++++++++++++------
+ 1 files changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xproto_xproto/xproto_xproto.mk b/package/x11r7/xproto_xproto/xproto_xproto.mk
-index 46779f6..13e6eec 100644
---- a/package/x11r7/xproto_xproto/xproto_xproto.mk
-+++ b/package/x11r7/xproto_xproto/xproto_xproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 46b3056..b5973b5 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -17,6 +17,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	NODEJS_DEPENDENCIES += openssl
+ endif
  
--XPROTO_XPROTO_VERSION = 7.0.25
-+XPROTO_XPROTO_VERSION = 7.0.26
- XPROTO_XPROTO_SOURCE = xproto-$(XPROTO_XPROTO_VERSION).tar.bz2
- XPROTO_XPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_XPROTO_LICENSE = MIT
++# nodejs build system is based on python, but only support python-2.6 or
++# python-2.7. So, we have to enforce PYTHON interpreter to be python2.
++# However, few build scripts hard-code 'python' as the interpreter to be
++# invoked; so we have to manually fix them.
+ define HOST_NODEJS_CONFIGURE_CMDS
+ 	# Build with the static, built-in OpenSSL which is supplied as part of
+ 	# the nodejs source distribution.  This is needed on the host because
+@@ -24,20 +28,23 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 	# buildroot.
+ 	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+-		./configure \
++		PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(HOST_DIR)/usr/bin/python2 ./configure \
+ 		--prefix=$(HOST_DIR)/usr \
+ 		--without-snapshot \
+ 		--without-dtrace \
+ 		--without-etw \
+ 	)
++	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
++		$(@D)/deps/v8/tools/gyp/v8.gyp
+ endef
+ 
+ define HOST_NODEJS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
+ endef
+ 
+ define HOST_NODEJS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
+ endef
+ 
+ ifeq ($(BR2_i386),y)
+@@ -62,7 +69,8 @@ define NODEJS_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)" \
+-		./configure \
++		PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(HOST_DIR)/usr/bin/python2 ./configure \
+ 		--prefix=/usr \
+ 		--without-snapshot \
+ 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
+@@ -73,10 +81,13 @@ define NODEJS_CONFIGURE_CMDS
+ 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
+ 		--dest-os=linux \
+ 	)
++	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
++		$(@D)/deps/v8/tools/gyp/v8.gyp
+ endef
+ 
+ define NODEJS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(MAKE) -C $(@D) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)"
+ endef
+@@ -110,7 +121,8 @@ endef
+ endif
+ 
+ define NODEJS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
++		$(MAKE) -C $(@D) install \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		LD="$(TARGET_CXX)"
