@@ -1,27 +1,36 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue, 15 Apr 2014 01:21:19 +0200
-Subject: [Buildroot] Commit mtd: fix build against uClibc reverted.
-Message-ID: <AE1A486A4CE04A45B8F2EDE23B563100@JohanW7>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Mon, 14 Apr 2014 19:08:14 -0500
+Subject: [Buildroot] Patchwork cleanup #8: triaging proposal
+In-Reply-To: <20140413214819.6c18a47f@skate>
+References: <CAAXf6LUKOuGpMV0uzR3gDM++pOu9Ldtb=6FfTGHqXjMdpvCfSA@mail.gmail.com>
+ <20140413214819.6c18a47f@skate>
+Message-ID: <OF2C21F893.E9764E1D-ON86257CBB.00004A09-86257CBB.0000A90B@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Dear ;
+Thomas(es),
 
-Commit mtd: fix build against uClibc
-Add a rpmatch() implementation when uClibc is missing one.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote on 04/13/2014 
+02:48:19 PM:
 
-Fixes:
-http://autobuild.buildroot.net/results/171/17187c3c9ba2b9df2bb6ac103e9a54706f07c28b/
+> > [RFC,1/2] host-xxd: new package
+> > Ryan Barnett <rjbarnet@rockwellcollins.com>
+> > http://patchwork.ozlabs.org/patch/285936
+> > 
+> > [RFC,2/2] uboot: introduce u-boot.pbl format
+> > Ryan Barnett <rjbarnet@rockwellcollins.com>
+> > http://patchwork.ozlabs.org/patch/285937
+> > 
+> > Although the patch on uboot is quite large, my general feeling is to
+> > triage this in A: keep.
+> 
+> I know Ryan is still working on these.
 
+I can confirm this. Hopefully, over the next couple of weeks I can update 
+and finish this work.
 
-Strange
-I had to revert this commit in my build, it yielded the error in mtd it supposed to fix.
-
-This patch seems to be intended for uClibc 0.9.34 but it seems to be applied on my 0.9.33.2
-
-Regards
-Sagaert Johan
+Thanks,
+-Ryan
