@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Apr 2014 21:09:39 +0200
-Subject: [Buildroot] [PATCH] flac: needs wchar
-In-Reply-To: <1397569213-18072-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1397569213-18072-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140415210939.7df65de6@skate>
+Date: Tue, 15 Apr 2014 21:54:09 +0200
+Subject: [Buildroot] [git commit] openvpn: bump to version 2.3.3
+Message-ID: <20140415195414.781E29C7C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b5fa54ecf51294f1e128868e17a2a5bc6a001c5f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Apr 2014 10:40:13 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/873/873a1b3551c5fe04fa477fd682ff91fecdd41606/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/flac/Config.in                         | 4 ++++
->  package/gstreamer/gst-plugins-good/Config.in   | 4 ++++
->  package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
->  package/minidlna/Config.in                     | 5 +++--
->  package/mpd/Config.in                          | 2 +-
->  5 files changed, 16 insertions(+), 3 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openvpn/openvpn.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 5d1add3..a989ffe 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.3.2
++OPENVPN_VERSION = 2.3.3
+ OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
+ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf
