@@ -1,26 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Apr 2014 23:18:39 +0200
-Subject: [Buildroot] [PATCH v2 1/3] nodejs: use the standard
- configure/make options
-In-Reply-To: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
-References: <1397513389-16252-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140415231839.3d9f5538@skate>
+Date: Tue, 15 Apr 2014 23:21:18 +0200
+Subject: [Buildroot] [PATCH 1/1] xbmc: Depend on host-gettext
+In-Reply-To: <qj7o1bx17m.ln2@ID-313208.user.individual.net>
+References: <1397319021-20282-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140412184222.6406c780@skate>
+ <qj7o1bx17m.ln2@ID-313208.user.individual.net>
+Message-ID: <20140415232118.513fa8aa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Bernd Kuhls,
 
-On Tue, 15 Apr 2014 00:09:47 +0200, Samuel Martin wrote:
-> Also cleanup leading whitespace.
+On Sat, 12 Apr 2014 18:52:42 +0200, Bernd Kuhls wrote:
+> Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote
+> in news:20140412184222.6406c780 at skate: 
 > 
-> Note that overloading LD in required to avoid linker failures.
+> > Why is XBMC autoreconf'ed ? It does not have XBMC_AUTORECONF = YES, so
+> > it should normally not be autoreconfed.
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> because the tarball does not include ./configure, only configure.in.
+> Xbmc is autoreconf'ed by calling ./bootstrap using XBMC_PRE_CONFIGURE_HOOKS 
+> which initiates its own magic ;)
 
-Thanks, I've applied your 3 patches.
+Right. But then, to be consistent with what we do for packages that can
+be autoreconf'ed normally, can you instead pass AUTOPOINT=/bin/true
+when calling the ./bootstrap script?
+
+Thanks,
 
 Thomas
 -- 
