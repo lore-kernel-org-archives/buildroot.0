@@ -1,109 +1,34 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Apr 2014 10:40:13 -0300
-Subject: [Buildroot] [PATCH] flac: needs wchar
-Message-ID: <1397569213-18072-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 15 Apr 2014 10:59:06 -0300
+Subject: [Buildroot] [PATCH] libcurl: drop polarssl support
+Message-ID: <1397570346-25849-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/873/873a1b3551c5fe04fa477fd682ff91fecdd41606/
+As of curl 7.36.0 it doesn't support polarssl < 1.3 any longer. Fixes:
+http://autobuild.buildroot.net/results/d82/d82c3618e9dde3da7e36ba2b58545a9a8de5e442/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/flac/Config.in                         | 4 ++++
- package/gstreamer/gst-plugins-good/Config.in   | 4 ++++
- package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
- package/minidlna/Config.in                     | 5 +++--
- package/mpd/Config.in                          | 2 +-
- 5 files changed, 16 insertions(+), 3 deletions(-)
+ package/libcurl/libcurl.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/flac/Config.in b/package/flac/Config.in
-index 06f170b..267acb7 100644
---- a/package/flac/Config.in
-+++ b/package/flac/Config.in
-@@ -1,6 +1,10 @@
- config BR2_PACKAGE_FLAC
- 	bool "flac"
-+	depends on BR2_USE_WCHAR
- 	help
- 	  FLAC is an Open Source lossless audio codec.
- 
- 	  http://flac.sourceforge.net/
-+
-+comment "flac needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index 254dbcb..9c2b884 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -183,8 +183,12 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CAIRO
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
- 	bool "flac (libFLAC)"
-+	depends on BR2_USE_WCHAR # flac
- 	select BR2_PACKAGE_FLAC
- 
-+comment "flac needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
- 	bool "gdkpixbuf"
- 	depends on BR2_USE_WCHAR # gdk-pixbuf -> libglib2
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 818412c..9fd6114 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -281,10 +281,14 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
- 	bool "flac (libFLAC)"
-+	depends on BR2_USE_WCHAR # flac
- 	select BR2_PACKAGE_FLAC
- 	help
- 	  The FLAC Lossless compressor Codec
- 
-+comment "flac needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
- 	bool "gdkpixbuf"
- 	select BR2_PACKAGE_GDK_PIXBUF
-diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
-index 02720e9..4a46b0c 100644
---- a/package/minidlna/Config.in
-+++ b/package/minidlna/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_MINIDLNA
- 	bool "minidlna"
- 	depends on BR2_LARGEFILE # ffmpeg
- 	depends on BR2_INET_IPV6 # ffmpeg
-+	depends on BR2_USE_WCHAR # flac
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_FFMPEG
-@@ -20,6 +21,6 @@ config BR2_PACKAGE_MINIDLNA
- 
- 	  http://minidlna.sourceforge.net/
- 
--comment "minidlna needs a toolchain w/ largefile, IPv6, threads"
-+comment "minidlna needs a toolchain w/ largefile, IPv6, threads, wchar"
- 	depends on BR2_USE_MMU
--	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS)
-+	depends on !(BR2_LARGEFILE && BR2_INET_IPV6 && BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 063c65d..7237b89 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -1,7 +1,7 @@
- menuconfig BR2_PACKAGE_MPD
- 	bool "mpd"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_USE_WCHAR # libglib2, flac
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	# avr32, sparc & CS powerpc gcc are too old
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index ab558fb..2907303 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -36,9 +36,6 @@ LIBCURL_CONF_OPT += --with-ssl=$(STAGING_DIR)/usr \
+ else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LIBCURL_CONF_OPT += --with-gnutls=$(STAGING_DIR)/usr
+ LIBCURL_DEPENDENCIES += gnutls
+-else ifeq ($(BR2_PACKAGE_POLARSSL),y)
+-LIBCURL_CONF_OPT += --with-polarssl=$(STAGING_DIR)/usr
+-LIBCURL_DEPENDENCIES += polarssl
+ else ifeq ($(BR2_PACKAGE_LIBNSS),y)
+ LIBCURL_CONF_OPT += --with-nss=$(STAGING_DIR)/usr
+ LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
 -- 
 1.8.3.2
