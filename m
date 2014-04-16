@@ -1,39 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Apr 2014 23:21:18 +0200
-Subject: [Buildroot] [PATCH 1/1] xbmc: Depend on host-gettext
-In-Reply-To: <qj7o1bx17m.ln2@ID-313208.user.individual.net>
-References: <1397319021-20282-1-git-send-email-bernd.kuhls@t-online.de>
- <20140412184222.6406c780@skate>
- <qj7o1bx17m.ln2@ID-313208.user.individual.net>
-Message-ID: <20140415232118.513fa8aa@skate>
+From: Rohit Kumar <rohit.kumar@hitechroboticsystemz.com>
+Date: Wed, 16 Apr 2014 11:21:25 +0900
+Subject: [Buildroot] buildroot file system: Kernel panic
+Message-ID: <CABzetm2iM9vUAQ4GHfiKv_y3HCq_Jek45Pe16MPSZo=CoV+6Cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello,
 
-On Sat, 12 Apr 2014 18:52:42 +0200, Bernd Kuhls wrote:
-> Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote
-> in news:20140412184222.6406c780 at skate: 
-> 
-> > Why is XBMC autoreconf'ed ? It does not have XBMC_AUTORECONF = YES, so
-> > it should normally not be autoreconfed.
-> 
-> because the tarball does not include ./configure, only configure.in.
-> Xbmc is autoreconf'ed by calling ./bootstrap using XBMC_PRE_CONFIGURE_HOOKS 
-> which initiates its own magic ;)
+i used buildroot to make toolchain and file system.
+i used toolchain to compile the kernel source given by processor
+manufacturer.
+kernel compiled successfully and boots fine but the file system generated
+by buildroot doesnt work.
 
-Right. But then, to be consistent with what we do for packages that can
-be autoreconf'ed normally, can you instead pass AUTOPOINT=/bin/true
-when calling the ./bootstrap script?
+and gives following error:
 
-Thanks,
+VFS: Mounted root (nfs filesystem) on device 0:13.
+devtmpfs: mounted
+Freeing init memory: 480K
+Kernel panic - not syncing: Attempted to kill init!
+[<c0086408>] (unwind_backtrace+0x0/0xcc) from [<c034af6c>]
+(panic+0x54/0x11c)
+[<c034af6c>] (panic+0x54/0x11c) from [<c00b2458>] (do_exit+0x5c/0x684)
+[<c00b2458>] (do_exit+0x5c/0x684) from [<c00b2d98>]
+(do_group_exit+0xac/0xf0)
+[<c00b2d98>] (do_group_exit+0xac/0xf0) from [<c00bc130>]
+(get_signal_to_deliver+0x3b8/0x410)
+[<c00bc130>] (get_signal_to_deliver+0x3b8/0x410) from [<c0083434>]
+(do_signal+0x5c/0x5e0)
+[<c0083434>] (do_signal+0x5c/0x5e0) from [<c0083e98>]
+(do_notify_resume+0x18/0x48)
+[<c0083e98>] (do_notify_resume+0x18/0x48) from [<c0080d8c>]
+(work_pending+0x1c/0x20)
 
-Thomas
+i dont how to solve it.
+file system given by processor manufacturer works fine.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+With Regards,
+
+Rohit Kumar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140416/e9630955/attachment.html>
