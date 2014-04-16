@@ -1,46 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Apr 2014 19:10:52 +0200
-Subject: [Buildroot] [git commit] host-nodejs: use g++ as linker
-Message-ID: <20140416172410.B0C319C506@busybox.osuosl.org>
+Date: Wed, 16 Apr 2014 19:24:57 +0200
+Subject: [Buildroot] [PATCH] mtd: fix build against recent uClibc 0.9.33
+In-Reply-To: <1b34aad19517b03927e0ffd902fe7941ae5eadd3.1397594277.git.baruch@tkos.co.il>
+References: <1b34aad19517b03927e0ffd902fe7941ae5eadd3.1397594277.git.baruch@tkos.co.il>
+Message-ID: <20140416192457.610d3c20@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea737fb100785b3b5756dad320db04062261fd04
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Fixes:
-  http://autobuild.buildroot.net/results/f6b/f6b80ae32acf7f89bb1c12999679ff1be9733d44/
+On Tue, 15 Apr 2014 23:37:57 +0300, Baruch Siach wrote:
+> Commit fae7cc33a1 added a local rpmatch() implementation. However, the
+> rpmatch() implementation was backported to the 0.9.33 branch, thus breaking
+> the Buildroot default toolchain. Rename the local rpmatch() to avoid
+> collision.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/51f/51fe39bd942e4d8d0045ac810708719b9459e21f/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/nodejs/nodejs.mk |   10 ++++++++--
- 1 files changed, 8 insertions(+), 2 deletions(-)
+Thanks, applied.
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index b5973b5..79393e2 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -40,11 +40,17 @@ define HOST_NODEJS_CONFIGURE_CMDS
- endef
- 
- define HOST_NODEJS_BUILD_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) \
-+		$(HOST_CONFIGURE_OPTS) \
-+		LD="$(HOSTCXX)"
- endef
- 
- define HOST_NODEJS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+		$(MAKE) -C $(@D) install \
-+		$(HOST_CONFIGURE_OPTS) \
-+		LD="$(HOSTCXX)"
- endef
- 
- ifeq ($(BR2_i386),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
