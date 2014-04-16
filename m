@@ -1,61 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Apr 2014 19:31:21 +0200
-Subject: [Buildroot] [PATCH v2 1/1] host-libxml2: Prefer python2 when
- python3 is also installed
-In-Reply-To: <1397314396-2489-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1397314396-2489-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140416193121.5bbbf8eb@skate>
+Date: Wed, 16 Apr 2014 19:33:24 +0200
+Subject: [Buildroot] [PATCH] legal-info: Add site to legal info manifest
+In-Reply-To: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <20140416193324.032638ce@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello Luca,
 
-On Sat, 12 Apr 2014 16:53:16 +0200, Bernd Kuhls wrote:
-> Fixes mesa3d build errors:
-> http://autobuild.buildroot.net/results/d10/d105a0b3ca11fad34f9a2dae0dae9bd041d918a6/
-> http://autobuild.buildroot.net/results/d71/d7121443715024d15a66ff1abf1261803c10cd35/
-> http://autobuild.buildroot.net/results/ce6/ce64164d76972f82acab277afc9c95a876c6433e/
-> 
-> checking for python2... python2
-> checking python2 module: libxml2... no
-> configure: error: failed to find required module libxml2
-> make: *** [/home/test/test/1/output/build/mesa3d-10.0.4/.stamp_configured] Error 1
-> 
-> mesa3d needs python2 bindings installed by libxml2. To enforce their build
-> option BR2_PACKAGE_HOST_LIBXML2_PYTHON is used exclusively by mesa3d so this
-> patch does not affect other packages.
-> 
-> Without this patch host-libxml2 installs the python bindings in
-> $(HOST_DIR)/usr/lib/$(PYTHON3_VERSION_MAJOR) using this defconfig:
-> 
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_PYTHON3=y
-> 
-> because $(HOST_DIR)/usr/bin/python points to $(HOST_DIR)/usr/bin/python3:
-> 
-> Quote from host-libxml2 configure log:
-> Found python in /home/fli4l/br2/buildroot/output/host/usr/bin/python
-> Found Python version 3.4
-> 
-> HOST_$(PACKAGE)_NEEDS_HOST_PYTHON does not work here because libxml2 does
-> not use the python-package infrastructure.
-> 
-> libxml2-python2.patch extends the python detection code in host-libxml2 to
-> first look for python2, to keep the patch small I did not update the indentions:
-> 
-> Found python2 in /home/fli4l/br2/buildroot/output/host/usr/bin/python2
-> Found Python version 2.7
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: Add more autobuilder URLs, add s-o-b to patch file
+Could you have a look at this proposal from Clayton regarding the legal
+infrastructure?
 
-Applied, thanks.
+Thanks a lot,
 
 Thomas
+
+On Mon,  7 Apr 2014 15:45:22 -0500, Clayton Shotwell wrote:
+> I would like to propose adding the site to the legal-info manifest
+> files. This gives a little more information on where the sources came
+> from without adding much overhead. Please note that is is only for
+> packages where the source is not local or set with OVERRIDE_SRCDIR.
+> 
+> This patch works for the most part. The only issue I see with it occurs
+> when the SITE for a package uses one of the common url macros such as
+> BR2_GNU_MIRROR. The legal info manifest ends up having an extra set of
+> double quotes in the site string.
+> 
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> ---
+>  Makefile               |    6 +++---
+>  package/pkg-generic.mk |    4 +++-
+>  package/pkg-utils.mk   |    4 ++--
+>  3 files changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 41c51c6..31edf9a 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -638,9 +638,9 @@ legal-info-clean:
+>  legal-info-prepare: $(LEGAL_INFO_DIR)
+>  	@$(call MESSAGE,"Collecting legal info")
+>  	@$(call legal-license-file,buildroot,COPYING,COPYING,HOST)
+> -	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,TARGET)
+> -	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,HOST)
+> -	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,HOST)
+> +	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+> +	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+> +	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPLv2+,COPYING,not saved,not saved,HOST)
+>  	@$(call legal-warning,the Buildroot source code has not been saved)
+>  	@$(call legal-warning,the toolchain has not been saved)
+>  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 339c3eb..eff021b 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -561,10 +561,12 @@ ifneq ($$($(2)_SITE_METHOD),override)
+>  # Packages that have a tarball need it downloaded and extracted beforehand
+>  $(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
+>  $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
+> +$(2)_MANIFEST_SITE = $$($(2)_SITE)
+>  endif
+>  endif
+>  endif
+>  $(2)_MANIFEST_TARBALL ?= not saved
+> +$(2)_MANIFEST_SITE ?= not saved
+>  
+>  # legal-info: produce legally relevant info.
+>  $(1)-legal-info:
+> @@ -599,7 +601,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+>  endif # redistribute
+>  
+>  endif # other packages
+> -	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$(call UPPERCASE,$(4)))
+> +	@$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_MANIFEST_TARBALL),$$($(2)_MANIFEST_SITE),$(call UPPERCASE,$(4)))
+>  endif # ifneq ($(call qstrip,$$($(2)_SOURCE)),)
+>  	$(foreach hook,$($(2)_POST_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+>  
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 91a1981..42d5820 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -109,8 +109,8 @@ define legal-warning-pkg-savednothing # pkg, {local|override}
+>  	$(call legal-warning-pkg,$(1),sources and license files not saved ($(2) packages not handled))
+>  endef
+>  
+> -define legal-manifest # pkg, version, license, license-files, source, {HOST|TARGET}
+> -	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(LEGAL_MANIFEST_CSV_$(6))
+> +define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
+> +	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
+>  endef
+>  
+>  define legal-license-header # pkg, license-file, {HOST|TARGET}
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
