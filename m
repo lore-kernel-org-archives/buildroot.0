@@ -1,68 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Apr 2014 19:37:08 +0200
-Subject: [Buildroot] [git commit] toolchain: add a hidden config option to
-	enable the toolchain package
-Message-ID: <20140416174100.164E59C80D@busybox.osuosl.org>
+Date: Wed, 16 Apr 2014 19:42:15 +0200
+Subject: [Buildroot] [PATCH v4 1/4] Makefile: fix coding style
+In-Reply-To: <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
+ <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140416194215.7d3151fa@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f70a007c8e5a6c1ae6a01739a53c87c0fafbe44
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fabio Porcedda,
 
-The usual way to enable a package using the package infrastructure is to
-use a config option so instead to add the toolchain package to the
-TARGETS variable in the Makefile add a config option like all the other
-toolchain packages.
+On Mon,  7 Apr 2014 11:56:47 +0200, Fabio Porcedda wrote:
+> As stated in the buildroot user manual add just a single space before
+> and after a '=' sign.
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> ---
+>  Makefile | 184 +++++++++++++++++++++++++++++++--------------------------------
+>  1 file changed, 92 insertions(+), 92 deletions(-)
 
-[Thomas: remove comment that no longer made sense in the main
-Makefile, and add a comment above the new hidden Config.in option to
-explain what it is useful for.]
+To be honest, while I definitely value the change to harmonize the
+coding style, such a large patch touching almost every line of the main
+Makefile is a recipe for conflicts with many other patches. So I would
+personally prefer to not apply this patch, and do the coding style
+fixes progressively, as we make other changes to the main Makefile.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile            |    9 +--------
- toolchain/Config.in |    6 ++++++
- 2 files changed, 7 insertions(+), 8 deletions(-)
+Thanks,
 
-diff --git a/Makefile b/Makefile
-index 137921c..0f8ca72 100644
---- a/Makefile
-+++ b/Makefile
-@@ -294,14 +294,7 @@ unexport TERMINFO
- 
- GNU_HOST_NAME:=$(shell support/gnuconfig/config.guess)
- 
--################################################################################
--#
--# The list of stuff to build for the target toolchain
--# along with the packages to build for the target.
--#
--################################################################################
--
--TARGETS:= toolchain
-+TARGETS :=
- 
- # silent mode requested?
- QUIET:=$(if $(findstring s,$(MAKEFLAGS)),-q)
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 44f3ac6..a1065ac 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -1,5 +1,11 @@
- menu "Toolchain"
- 
-+# Invisible option that makes sure the toolchain package always gets
-+# built
-+config BR2_TOOLCHAIN
-+	bool
-+	default y
-+
- # Should be selected for glibc or eglibc
- config BR2_TOOLCHAIN_USES_GLIBC
- 	bool
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
