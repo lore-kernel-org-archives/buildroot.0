@@ -1,43 +1,55 @@
-From: Desroches, Ludovic <Ludovic.Desroches@atmel.com>
-Date: Wed, 16 Apr 2014 10:38:00 +0200
-Subject: [Buildroot] lava-test package in buildroot
-In-Reply-To: <CAAXf6LWYX6SSF7Td=t3oHEmjUgi6Y+DNpC-EpY6KZdn2LC8o=Q@mail.gmail.com>
-References: <CAAXf6LWYX6SSF7Td=t3oHEmjUgi6Y+DNpC-EpY6KZdn2LC8o=Q@mail.gmail.com>
-Message-ID: <20140416083800.GE616@ldesroches-Latitude-E6320>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Apr 2014 10:39:24 +0200
+Subject: [Buildroot] buildroot file system: Kernel panic
+In-Reply-To: <CABzetm2VtaC-B4tv+2N9qpD-1anG7FkcgGnbV+fcimRCnCLzFQ@mail.gmail.com>
+References: <CABzetm2iM9vUAQ4GHfiKv_y3HCq_Jek45Pe16MPSZo=CoV+6Cw@mail.gmail.com>
+ <20140416091611.03ce43f3@skate>
+ <CABzetm3snhCBbvvtZ8Z9btySm0BeRsf2gwG2GxhNn0mXy4d1fA@mail.gmail.com>
+ <20140416095711.430764d9@skate>
+ <CABzetm2VtaC-B4tv+2N9qpD-1anG7FkcgGnbV+fcimRCnCLzFQ@mail.gmail.com>
+Message-ID: <20140416103924.64cdc49f@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Rohit Kumar,
 
-On Sun, Apr 13, 2014 at 08:30:04AM +0200, Thomas De Schampheleire wrote:
-> Hello Ludovic, Yegor,
+On Wed, 16 Apr 2014 17:12:01 +0900, Rohit Kumar wrote:
+
+> > > i am using an ARM11 processor form Nexell (NXP2120)
+> > > 32bit Embedded CPU : 700/800Mhz ARM1176 with
+> > > 16KByte I-Cache, 16Kbyte D-cache with VFP(vector floating-point
+> > processor)
+> >
+> > Ok.
 > 
-> The buildroot patchwork still contains packages proposed by Ludovic:
-> lava-test, lava-tool, python-linaro-dashboard-bundle.
+>  it is weird because when i use arm926t from the processor option, file
+> system works.
+> but as i shift to arm1176 it starts giving panic messages.
+
+Ok, that is interesting. Did you compile your kernel with CONFIG_VFP=y ?
+
+> > However, the kernel part of the configuration looks weird: it refers to
+> > the kernel configuration file
+> > board/atmel/at91sam9260ek/linux-3.9.config. Are you building a kernel
+> > in Buildroot, but not using it for your platform?
 > 
-> In one of the related mail threads, it was mentioned that lava-test
-> didn't properly work on target. I did not delve into the details of
-> this, but my question is: what shall we do about these patches?
+> i am not using kernel from the buildroot rather compiling the source i have
+> with the toolchain generated.
 
-I may have missed this post. On my side it was working well.
+Ok, but Buildroot is still building a kernel for you, so you're
+spending time for nothing :)
 
-> 
-> In the mean time, a python-package infrastructure has been added in
-> buildroot, so if we want to integrate the patches they need to be
-> refreshed first.
+> > Also, please enable CONFIG_DEBUG_USER=y in your kernel, and pass
+> > user_debug=31 on your kernel command line. This should give more
+> > details about the userspace crash.
 
-I will have a look to the python-package infrastructure and update the
-patches.
+Did you try this?
 
-> 
-> Of course, we should only add packages that work...
-> 
-> Thanks,
-> Thomas
-
-Regards
-
-Ludovic
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
