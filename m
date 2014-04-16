@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Apr 2014 19:54:13 +0200
-Subject: [Buildroot] [PATCH v4 4/4] luajit: needs for 32bit
- archictectures a 32bit host gcc
-In-Reply-To: <1396864610-8426-5-git-send-email-fabio.porcedda@gmail.com>
-References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
- <1396864610-8426-5-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140416195413.3c7f7006@skate>
+Date: Wed, 16 Apr 2014 19:56:14 +0200
+Subject: [Buildroot] [git commit] liblogging: enable systemd compatibility
+	libs
+Message-ID: <20140416175620.9A03E9C80F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+commit: http://git.buildroot.net/buildroot/commit/?id=77d6e6ac2a74bc591cdfcadcb1d2f3e79a4469a0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  7 Apr 2014 11:56:50 +0200, Fabio Porcedda wrote:
-> For 32 bit archictectures the luajit package needs a host compiler
-> able to generate 32 bit code using the "-m32" option so check if that
-> option is supported.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Fran?ois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luajit/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+If systemd is chosen as init system, liblogging will enable the
+installation of compatibility libraries in systemd.
 
-Applied, thanks.
+When liblogging will be updated to depend on libsystemd.so, this
+selection will have to be removed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/liblogging/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/liblogging/Config.in b/package/liblogging/Config.in
+index 23c3c1a..12ee950 100644
+--- a/package/liblogging/Config.in
++++ b/package/liblogging/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBLOGGING
+ 	bool "liblogging"
++	select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+ 	help
+ 	  Liblogging is an easy to use library for
+ 	  logging. It offers an enhanced replacement
