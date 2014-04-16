@@ -1,59 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Apr 2014 20:00:50 +0200
-Subject: [Buildroot] [PATCH 03/13] package/mesa3d: fix improper
- dependency of blind option
-In-Reply-To: <84c5268994e965fac056f5de485a99ea8baa4840.1396699629.git.yann.morin.1998@free.fr>
-References: <cover.1396699629.git.yann.morin.1998@free.fr>
- <84c5268994e965fac056f5de485a99ea8baa4840.1396699629.git.yann.morin.1998@free.fr>
-Message-ID: <20140416200050.3a933a5d@skate>
+Date: Wed, 16 Apr 2014 20:59:14 +0200
+Subject: [Buildroot] [git commit] libsigsegv: not available on Microblaze
+Message-ID: <20140416185941.EA6D99C80F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=2b4b0ce9f2a51e8c1d3d467b7360668baa9a4ae8
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Apr 2014 14:10:07 +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Currently, the blind option BR2_PACKAGE_MESA3D_DRI_DRIVER depends
-> on !STATIC.
-> 
-> But this option is also selected by the various DRI drivers, and
-> none of them currently depend on !STATIC (although there is a comment
-> stating DRI drivers need !STATIC, there's nothing to enforce that).
-> 
-> So, we could well end-up with an inconsistent configuration, where some
-> DRI drivers are selected even though STATIC is set.
-> 
-> Enclose all DRI drivers in an 'if !STATIC' condition, remove the
-> dependency from the blind option, move the comment so it is nearer
-> the affected drivers, rephrase the comment to match the rules about
-> dependencies on toolchain features.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-> ---
->  package/mesa3d/Config.in | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+Fixes:
 
-Thanks, applied, with one minor nit, see below.
+  http://autobuild.buildroot.org/results/dd5/dd583e1c11bba814cd0f124eeeffeca5657a0aa9/
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libsigsegv/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-> +comment "DRI drivers need dynamic library"
-> +	depends on BR2_PREFER_STATIC_LIB
-
-This is not the correct wording according to the manual, it should have
-been:
-
-comment "DRI drivers need a toolchain w/ dynamic library"
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libsigsegv/Config.in b/package/libsigsegv/Config.in
+index 4890552..2ca9a28 100644
+--- a/package/libsigsegv/Config.in
++++ b/package/libsigsegv/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBSIGSEGV
+ 	bool "libsigsegv"
+ 	depends on !BR2_xtensa
+ 	depends on !BR2_arc # no ucontext_i.sym file
++	depends on !BR2_microblaze
+ 	help
+ 	  Library for handling page faults in user mode.
+ 
