@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Thu, 17 Apr 2014 20:24:53 +0200
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.9-0
-Message-ID: <1397759093-8979-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Thu, 17 Apr 2014 20:25:32 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: bump to version 4.0.4
+Message-ID: <1397759132-9068-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/imagemagick/imagemagick.mk |    2 +-
+ package/zeromq/zeromq.mk |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 660a455..2b9b0cc 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index d40bed5..833c1d3 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.8.8-10
-+IMAGEMAGICK_VERSION = 6.8.9-0
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
+-ZEROMQ_VERSION = 4.0.1
++ZEROMQ_VERSION = 4.0.4
+ ZEROMQ_SITE = http://download.zeromq.org/
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
 -- 
 1.7.9.5
