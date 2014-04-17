@@ -1,49 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 22:59:59 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: with a DRI driver,
-	is a full OpenGL provider
-Message-ID: <20140417210125.5DEAF9C80A@busybox.osuosl.org>
+Date: Thu, 17 Apr 2014 22:58:04 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: only enable full OpenGL
+	when a DRI driver is enabled
+Message-ID: <20140417210125.4B5099C845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dbc989558c2b43fca84e99f11da2ead7f5bfc7bf
+commit: http://git.buildroot.net/buildroot/commit/?id=c0d7d1c5bb55a173f2b4b7aca898ccd36c33872e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make mesa3d a provider for full OpenGL, as soon as a DRI driver is enabled.
-
-Full OpenGL is only possible when:
+Full OpenGL is only provided when:
   - a DRI driver is enabled,
   - and X.Org is enabled
 
-Since DRI driver in fact depend on X.Org being enabled in the first place,
-we can safely declare mesa3d as a full openGL provider as soon as at least
-one DRI driver is enabled.
+Since DRI driver depend on X.Org being selected, this means that we
+can (have to) enable full OpenGL as soon as a DRI driver is enabled.
+
+On the other hand, Gallium drivers, which currently do enable full
+OpenGL, only really provide OpenGL EGL and GLES, not full OpenGL.
+
+So we exclude Gallium drivers when checking whether to enable full
+OpenGL in mesa3d.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/mesa3d/mesa3d.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bd7a853..0793b48 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -26,8 +26,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 0d41efa..db166f8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -80,9 +80,9 @@ endif
  
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_MESA3D_DRIVER
-+	select BR2_PACKAGE_HAS_LIBGL
- 	bool
+ # APIs
  
-+config BR2_PACKAGE_PROVIDES_LIBGL
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER
-+
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
- 
+-# At least one API is required, for buildroot enable OpenGL API by default.
+-# Other APIs (EGL, EGL_ES) are optional
+-ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
++# Full OpenGL is provided by DRI drivers with X.Org; DRI drivers are only
++# enabled when X.Org is enabled anyway, so no need to check for X.Org here.
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
+ MESA3D_CONF_OPT += --enable-opengl
+ else
+ MESA3D_CONF_OPT += --disable-opengl
