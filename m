@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 23:43:51 +0200
-Subject: [Buildroot] [git commit] dmalloc: disable on Microblaze with
-	debugging symbols
-Message-ID: <20140417214501.431EB9C845@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 17 Apr 2014 23:47:42 +0200
+Subject: [Buildroot] [PATCH] legal-info: Add site to legal info manifest
+In-Reply-To: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
+References: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
+Message-ID: <53504BFE.2040703@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=656cdc367e6f2bfba4316d605a5de27c82880473
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Clayton,
 
-There is a Microblaze compiler issue when debugging symbols are
-enabled, causing assembler errors "Error: operation combines symbols
-in different segments". This commit prevents this situation from
-happening.
+Clayton Shotwell wrote:
+> I would like to propose adding the site to the legal-info manifest
+> files. This gives a little more information on where the sources came
+> from without adding much overhead. Please note that is is only for
+> packages where the source is not local or set with OVERRIDE_SRCDIR.
+>
+> This patch works for the most part. The only issue I see with it occurs
+> when the SITE for a package uses one of the common url macros such as
+> BR2_GNU_MIRROR. The legal info manifest ends up having an extra set of
+> double quotes in the site string.
+>
+> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
 
-Fixes:
+Thanks for the proposal.
 
-  http://autobuild.buildroot.org/results/d97/d9727e453d7c7c982ce32db5efd455496966e211/
+The idea is generally good to me: it provides a useful info with a
+little effort.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dmalloc/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+The project website URL would be nice as well, but that's not easily
+extracted.
 
-diff --git a/package/dmalloc/Config.in b/package/dmalloc/Config.in
-index 315f6ca..03d9f97 100644
---- a/package/dmalloc/Config.in
-+++ b/package/dmalloc/Config.in
-@@ -1,5 +1,9 @@
- config BR2_PACKAGE_DMALLOC
- 	bool "dmalloc"
-+	# On some packages, Microblaze gcc has issues when debugging
-+	# symbols are enabled: "Error: operation combines symbols in
-+	# different segments".
-+	depends on !(BR2_microblaze && BR2_ENABLE_DEBUG)
- 	help
- 	  A debug memory allocation library which is a drop in replacement for
- 	  the system's malloc, realloc, calloc, free and other memory management
+Of course the double-quote issue with some packages needs to be fixed.
+But this is just "implementation details". Note that, besides packages
+from GNU_MIRROR it also affects the kernel from kernel.org, probably
+U-Boot and Busybox, maybe a few others.
+
+Instead, the case of packages downloaded from custom locations deserves
+a little more thought on what we want to do.
+
+When using e.g. BR2_LINUX_KERNEL_CUSTOM_GIT=y, the REPO_URL may point
+either to a public server (github, gitorious, silicon vendors...) or to
+an enterprise server. In the former case the repository URL is
+informative. In the latter case it is not, and some companies may not
+like exposing their server names to the public. You know how netadmins
+are made... :)
+
+So I'm not sure of what is the best policy when using custom (non-wget)
+download methods.
+
+-- 
+Luca
