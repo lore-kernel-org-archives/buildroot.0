@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Apr 2014 18:04:21 +0200
-Subject: [Buildroot] [PATCH 09/14] package/xorg-server: do not force-select
-	xf86driproto for mesa3d
+Date: Thu, 17 Apr 2014 18:04:23 +0200
+Subject: [Buildroot] [PATCH 11/14] package/mesa3d: with a DRI driver,
+	is a full OpenGL provider
 In-Reply-To: <cover.1397750571.git.yann.morin.1998@free.fr>
 References: <cover.1397750571.git.yann.morin.1998@free.fr>
-Message-ID: <238d5391dbd22ff3989472506c1e96f60444e30a.1397750571.git.yann.morin.1998@free.fr>
+Message-ID: <6c6c678af9a7ff235f32d25f3bea03670749f41d.1397750571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,39 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This is already handled by mesa3d itself.
+Make mesa3d a provider for full OpenGL, as soon as a DRI driver is enabled.
+
+Full OpenGL is only possible when:
+  - a DRI driver is enabled,
+  - and X.Org is enabled
+
+Since DRI driver in fact depend on X.Org being enabled in the first place,
+we can safely declare mesa3d as a full openGL provider as soon as at least
+one DRI driver is enabled.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xserver_xorg-server/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/mesa3d/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index dfa7d10..e191dce 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -45,7 +45,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	select BR2_PACKAGE_XPROTO_XEXTPROTO
- 	select BR2_PACKAGE_XPROTO_XF86BIGFONTPROTO
- 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index bd7a853..0793b48 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -26,8 +26,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_MESA3D_DRIVER
++	select BR2_PACKAGE_HAS_LIBGL
+ 	bool
+ 
++config BR2_PACKAGE_PROVIDES_LIBGL
++	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER
++
+ config BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
+ 
 -- 
 1.8.3.2
