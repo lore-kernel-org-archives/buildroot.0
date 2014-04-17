@@ -1,50 +1,44 @@
-From: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-Date: Thu, 17 Apr 2014 12:45:18 +0100
-Subject: [Buildroot] [PATCH 3/3] package/zile: add Zile is Lossy Emacs
-	editor
-In-Reply-To: <20140412002423.3e6bcd0c@skate>
-References: <1397225156-23112-1-git-send-email-alex.bennee@linaro.org>
- <1397225156-23112-4-git-send-email-alex.bennee@linaro.org>
- <20140412002423.3e6bcd0c@skate>
-Message-ID: <877g6ouqlt.fsf@linaro.org>
+From: =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>
+Date: Thu, 17 Apr 2014 13:19:38 +0100
+Subject: [Buildroot] [PATCH v3] package/Zile: add Zile is Lossy Emacs editor
+Message-ID: <1397737179-12262-1-git-send-email-alex.bennee@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Only the final patch left now as the libgc/atomic stuff has already
+been merged.
 
-<snip>
->> +diff --git a/Makefile.am b/Makefile.am
->
-> You're patching Makefile.am here...
->
->
->> +ZILE_VERSION = 2.4.11
->> +ZILE_SITE = http://ftp.gnu.org/gnu/zile/
->> +ZILE_LICENSE = GPLv1+
->> +ZILE_LICENSE_FILES = COPYING
->> +ZILE_CONF_OPT += --without-help2man
->> +ZILE_DEPENDANCIES += libgc
->
-> but you never mark zile as requiring autoreconf using ZILE_AUTORECONF =
-> YES. How can this work?
+Change
 
-I assume the make machinery picked it up, will fix.
+v2
+  - fixup dependancies
+  - add s-o-b tag to patch
+  - fix whitespace
+    
+v3
+  - fix typo for DEPENDENCIES
+  - force AUTORECONF
+  - remove +=
+  - use BR2_GNU_MIRROR
+  - rename patch to zile-0001-remove-help2man.patch
 
->
-> Also, use '=' instead of '+=' above.
->
-> And use $(BR2_GNU_MIRROR) for the download URL.
->
-> Thanks!
 
-Will send v3 once I've re-built and tested.
+Alex Benn?e (1):
+  package/zile: add Zile is Lossy Emacs editor
 
->
-> Thomas
+ package/Config.in                            |  1 +
+ package/zile/Config.in                       | 13 ++++++++++++
+ package/zile/zile-0001-remove-help2man.patch | 30 ++++++++++++++++++++++++++++
+ package/zile/zile.mk                         | 15 ++++++++++++++
+ 4 files changed, 59 insertions(+)
+ create mode 100644 package/zile/Config.in
+ create mode 100644 package/zile/zile-0001-remove-help2man.patch
+ create mode 100644 package/zile/zile.mk
 
 -- 
-Alex Benn?e
+1.9.2
