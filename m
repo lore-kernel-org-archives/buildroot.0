@@ -1,82 +1,95 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Thu, 17 Apr 2014 16:56:27 +0100
-Subject: [Buildroot] [PATCH] qt5script: Check for QtGui before building the
-	examples
-Message-ID: <1397750187-33936-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Apr 2014 18:04:21 +0200
+Subject: [Buildroot] [PATCH 0/14 v3] Add virtual package for full-openGL
+	(branch yem/opengl)
+Message-ID: <cover.1397750571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding an upstream patch to fix an autobuild failure.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-qsdbg and marshal examples need QtGui module. If QtGui is not installed
-they fail to compile.
+Hello All!
 
-Upstream commit:
-   https://github.com/qtproject/qtscript/commit/e4453c92ee41943a3a1d67a725804a44e747f64e
+This series introduces a virtual package for full-openGL providers.
 
-Fixes:
-   http://autobuild.buildroot.net/results/0e6/0e63bc604f3ec422996eb0f5fd92f4437954ca04/
+Changes v2 -> v3:
+  - libdrm does not depend on x86  (Thomas P.)
+  - do not make libdrm a hard-deps of xdriver_xf86-video-ati  (Thomas P.)
+  - convert xapp-xdriinfo over to depend on libgl  (Bernd)
+  - fix comment dependency in xdriver_xf86-video-intel
+  - some typoes fixed in some commit-logs
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...ck-for-QtGui-before-building-the-examples.patch |   46 ++++++++++++++++++++
- 1 files changed, 46 insertions(+), 0 deletions(-)
- create mode 100644 package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch
+Changes v1 -> v2:
+  - almost complete rewrite after comments by Paul and Bernd
 
-diff --git a/package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch b/package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch
-new file mode 100644
-index 0000000..b269740
---- /dev/null
-+++ b/package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch
-@@ -0,0 +1,46 @@
-+qt5script: Check for QtGui before building the examples
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From e4453c92ee41943a3a1d67a725804a44e747f64e Mon Sep 17 00:00:00 2001
-+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Date: Wed, 16 Apr 2014 12:19:17 +0100
-+Subject: [PATCH] qtscript: Check for QtGui before building the examples
-+
-+qsdbg and marshal examples need QtGui module. If QtGui is not installed
-+they fail to compile.
-+
-+Change-Id: I1af6a8b39a0848c8208fe94a26ee57409dfd9b41
-+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@digia.com>
-+---
-+ examples/script/script.pro | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/examples/script/script.pro b/examples/script/script.pro
-+index 3e1eae6..cc97233 100644
-+--- a/examples/script/script.pro
-++++ b/examples/script/script.pro
-+@@ -1,7 +1,7 @@
-+ TEMPLATE = subdirs
-+-SUBDIRS = \
-+-    customclass \
-+-    qsdbg
-++SUBDIRS = customclass
-++
-++qtHaveModule(gui): SUBDIRS += qsdbg
-+ 
-+ qtHaveModule(widgets) {
-+     SUBDIRS += \
-+@@ -22,8 +22,7 @@ qtHaveModule(widgets) {
-+ }
-+ 
-+ !wince {
-+-    SUBDIRS += \
-+-        marshal
-++    qtHaveModule(gui): SUBDIRS += marshal
-+ }
-+ 
-+ maemo5: CONFIG += qt_example
-+-- 
-+1.9.1
-+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2b4b0ce9f2a51e8c1d3d467b7360668baa9a4ae8:
+
+  libsigsegv: not available on Microblaze (2014-04-16 20:59:14 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/opengl
+
+for you to fetch changes up to fe9609b515ce099c8679a377896ea168b201bb39:
+
+  xapp_xdriinfo: depends on the virtual package libgl (2014-04-17 18:01:43 +0200)
+
+----------------------------------------------------------------
+Bernd Kuhls (1):
+      xapp_xdriinfo: depends on the virtual package libgl
+
+Yann E. MORIN (13):
+      package/libdrm: radeon does not depend on x86
+      package/xdriver_xf86-video-ati: only select libdrm if the DRI driver is enabled
+      package/x11-video-drivers: do not select, but depends on mesa3d
+      package/mesa3d: re-arrange menu items
+      package/mesa3d: DRI drivers depend on X.org
+      package/mesa3d: add comment for when OpenGL EGL is not available
+      package/mesa3d: simplify the code enabling full-OpenGL
+      package/mesa3d: only enable full OpenGL when a DRI driver is enabled
+      package/xorg-server: do not force-select xf86driproto for mesa3d
+      package/libgl: introduce as a new virtual package for full-openGL providers
+      package/mesa3d: with a DRI driver, is a full OpenGL provider
+      package/libevas: switch dependency from mesa3d to _HAS_LIBGL
+      package/vlc: depends on the virtual package libgl
+
+ package/efl/libevas/Config.in                      |  2 +-
+ package/libdrm/Config.in                           |  1 -
+ package/mesa3d/Config.in                           | 33 +++++++++++++---------
+ package/mesa3d/mesa3d.mk                           | 18 ++++++------
+ package/opengl/Config.in                           |  1 +
+ package/opengl/libgl/Config.in                     |  6 ++++
+ package/opengl/libgl/libgl.mk                      |  7 +++++
+ package/vlc/vlc.mk                                 |  4 +--
+ package/x11r7/xapp_xdriinfo/Config.in              |  5 +++-
+ package/x11r7/xdriver_xf86-video-ati/Config.in     |  9 ++++--
+ package/x11r7/xdriver_xf86-video-glint/Config.in   |  5 +++-
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |  8 ++++--
+ package/x11r7/xdriver_xf86-video-mach64/Config.in  |  3 ++
+ package/x11r7/xdriver_xf86-video-mga/Config.in     |  5 +++-
+ .../x11r7/xdriver_xf86-video-openchrome/Config.in  |  5 +++-
+ package/x11r7/xdriver_xf86-video-r128/Config.in    |  5 +++-
+ package/x11r7/xdriver_xf86-video-savage/Config.in  |  5 +++-
+ package/x11r7/xdriver_xf86-video-sis/Config.in     |  5 +++-
+ package/x11r7/xdriver_xf86-video-tdfx/Config.in    |  5 +++-
+ package/x11r7/xdriver_xf86-video-vmware/Config.in  |  5 +++-
+ package/x11r7/xserver_xorg-server/Config.in        |  1 -
+ 21 files changed, 96 insertions(+), 42 deletions(-)
+ create mode 100644 package/opengl/libgl/Config.in
+ create mode 100644 package/opengl/libgl/libgl.mk
+
 -- 
-1.7.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
