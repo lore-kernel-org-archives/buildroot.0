@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Apr 2014 18:04:13 +0200
-Subject: [Buildroot] [PATCH 01/14] package/libdrm: radeon does not depend on
-	x86
+Date: Thu, 17 Apr 2014 18:04:17 +0200
+Subject: [Buildroot] [PATCH 05/14] package/mesa3d: DRI drivers depend on
+	X.org
 In-Reply-To: <cover.1397750571.git.yann.morin.1998@free.fr>
 References: <cover.1397750571.git.yann.morin.1998@free.fr>
-Message-ID: <9692179bd203124bf18603d01d50e5b1c5472bb7.1397750571.git.yann.morin.1998@free.fr>
+Message-ID: <d136fff0309f466027a1089f5eeae6f0acd18e2b.1397750571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,49 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thomas reported that the libdrm-radeon dependency on x86 (32- or 64-bit)
-dates back to the time where it also depended on libpciaccess.
+It does not make sense to build DRI drivers without X.org.
 
-Now that the libpciacess dependency has been dropped, Thomas managed to
-build a libdrm-radeon on something else than an x86 (an ARM for example).
-
-Make libdrm-radeon no longer depend on x86
-
-As a side effect, this fixes some potential "unmet direct dependencies"
-from the xdriver_xf86-video-ati package (which was the initial problem
-I was trying to solve.)
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/libdrm/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/mesa3d/Config.in | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
-index 7192e94..72cf5f8 100644
---- a/package/libdrm/Config.in
-+++ b/package/libdrm/Config.in
-@@ -22,7 +22,6 @@ config BR2_PACKAGE_LIBDRM_INTEL
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 801a203..3a2766b 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -56,10 +56,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
  
- config BR2_PACKAGE_LIBDRM_RADEON
- 	bool "radeon"
--	depends on BR2_i386 || BR2_x86_64
+-comment "DRI drivers needs a toolchain w/ dynamic library"
+-	depends on BR2_PREFER_STATIC_LIB
++comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
+ 
+-if !BR2_PREFER_STATIC_LIB
++if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
+ 
+ comment "DRI drivers"
+ 
+@@ -73,7 +73,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+ 	bool "DRI i965 driver"
+ 	depends on BR2_i386 || BR2_x86_64
+-	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
  	help
- 	  install AMD/ATI graphics driver
+@@ -87,7 +86,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
+-endif # !BR2_PREFER_STATIC_LIB
++endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
+ 
+ if BR2_PACKAGE_MESA3D_DRIVER
  
 -- 
 1.8.3.2
