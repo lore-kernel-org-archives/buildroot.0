@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 21:52:28 +0200
-Subject: [Buildroot] [PATCH v2 1/1] xbmc: Fix compile error with missing
- host-gettext
-In-Reply-To: <1397712379-3474-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1397712379-3474-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140417215228.62b122fc@skate>
+Date: Thu, 17 Apr 2014 21:54:11 +0200
+Subject: [Buildroot] [PATCH] kexec: bump to version 2.0.6
+In-Reply-To: <1397718918-6590-1-git-send-email-neumann@teufel.de>
+References: <1397718918-6590-1-git-send-email-neumann@teufel.de>
+Message-ID: <20140417215411.13d116c3@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Sven Neumann,
 
-On Thu, 17 Apr 2014 07:26:19 +0200, Bernd Kuhls wrote:
-> autoreconf -vif lib/cpluff
-> autoreconf: Entering directory `lib/cpluff'
-> autoreconf: running: autopoint --force
-> Can't exec "autopoint": No such file or directory at /home/buildroot/output/host/usr/share/autoconf/Autom4te/FileUtils.pm line 345.
-> autoreconf: failed to run autopoint: No such file or directory
-> autoreconf: autopoint is needed because this package uses Gettext
-> make[1]: *** [lib/cpluff/configure] Error 1
+On Thu, 17 Apr 2014 09:15:18 +0200, Sven Neumann wrote:
+> Remove two patches which have been included upstream.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Sven Neumann <neumann@teufel.de>
+> ---
+>  ...ix-build-failure-bzImage_support_efi_boot.patch | 28 ---------------
+>  ...e-probe-function-return-value-checking-fi.patch | 41 ----------------------
+>  package/kexec/kexec.mk                             |  2 +-
+>  3 files changed, 1 insertion(+), 70 deletions(-)
+>  delete mode 100644 package/kexec/kexec-0002-i386-fix-build-failure-bzImage_support_efi_boot.patch
+>  delete mode 100644 package/kexec/kexec-0003-kernel-image-probe-function-return-value-checking-fi.patch
 
 Applied, thanks.
 
