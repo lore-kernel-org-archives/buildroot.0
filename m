@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 23:00:48 +0200
-Subject: [Buildroot] [git commit] package/vlc: depends on the virtual
-	package libgl
-Message-ID: <20140417210125.6D2A39C846@busybox.osuosl.org>
+Date: Thu, 17 Apr 2014 22:53:17 +0200
+Subject: [Buildroot] [git commit] package/libdrm: radeon does not depend on
+	x86
+Message-ID: <20140417210125.16D239C845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b12f0a059071d60d020b9fc259e8fd3d20b46f96
+commit: http://git.buildroot.net/buildroot/commit/?id=661139f9180f256389fb8b5bab7b6dc94ae50a0f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, vlc depends on mesa3d to provide the openGL support.
+Thomas reported that the libdrm-radeon dependency on x86 (32- or 64-bit)
+dates back to the time where it also depended on libpciaccess.
 
-We now have a virtual package, libgl, which ensures openGL is available.
+Now that the libpciacess dependency has been dropped, Thomas managed to
+build a libdrm-radeon on something else than an x86 (an ARM for example).
 
-This is support for full OpenGL, which is only available when X.Org is
-enabled, which is anyway a dependency of full OpenGL.
+Make libdrm-radeon no longer depend on x86
 
+As a side effect, this fixes some potential "unmet direct dependencies"
+from the xdriver_xf86-video-ati package (which was the initial problem
+I was trying to solve.)
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vlc/vlc.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libdrm/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index bcb592c..e14c9c3 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -118,9 +118,9 @@ else
- VLC_CONF_OPT += --disable-flac
- endif
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 7192e94..72cf5f8 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -22,7 +22,6 @@ config BR2_PACKAGE_LIBDRM_INTEL
  
--ifeq ($(BR2_PACKAGE_MESA3D),y)
-+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
- VLC_CONF_OPT += --enable-glx
--VLC_DEPENDENCIES += mesa3d
-+VLC_DEPENDENCIES += libgl
- else
- VLC_CONF_OPT += --disable-glx
- endif
+ config BR2_PACKAGE_LIBDRM_RADEON
+ 	bool "radeon"
+-	depends on BR2_i386 || BR2_x86_64
+ 	help
+ 	  install AMD/ATI graphics driver
+ 
