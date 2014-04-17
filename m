@@ -1,31 +1,36 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 17 Apr 2014 22:59:01 +0200
-Subject: [Buildroot] [PATCH] libnftnl: bump to 1.0.1
-In-Reply-To: <20140417214647.5a5d2ec2@skate>
-References: <1397738761-8883-1-git-send-email-yegorslists@googlemail.com>
- <20140417214647.5a5d2ec2@skate>
-Message-ID: <CAGm1_ktr1QLOp0Zbo0TcVxj4wYboZD+y=oLL9NFnU-T_qq2rTg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Apr 2014 22:59:22 +0200
+Subject: [Buildroot] [git commit] package/xorg-server: do not force-select
+	xf86driproto for mesa3d
+Message-ID: <20140417210125.516EB9C845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 17, 2014 at 9:46 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear yegorslists at googlemail.com,
->
-> On Thu, 17 Apr 2014 14:46:01 +0200, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->> ---
->>  package/libnftnl/libnftnl.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> Argh, sorry, Gustavo has sent almost the exact same patch at about the
-> same time. I applied his patch.
+commit: http://git.buildroot.net/buildroot/commit/?id=6ef1e8735eb4afdb35d68959100cb5abd63c023e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No problem :-)
+This is already handled by mesa3d itself.
 
-Yegor
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xserver_xorg-server/Config.in |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
+
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index dfa7d10..e191dce 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -45,7 +45,6 @@ config BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86BIGFONTPROTO
+ 	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+-	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
