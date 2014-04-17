@@ -1,47 +1,87 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 Apr 2014 23:01:58 +0200
-Subject: [Buildroot] Analysis of build failures, help requested!
-In-Reply-To: <20140417213939.35afc5ff@skate>
-References: <20140417063009.B2279100D24@stock.ovh.net>
- <20140417213939.35afc5ff@skate>
-Message-ID: <53504146.4040507@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Apr 2014 23:07:58 +0200
+Subject: [Buildroot] [git commit] Makefile: rename USER_HOOKS_EXTRA_ENV to
+	EXTRA_ENV
+Message-ID: <20140417210807.AA5B59C845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=9806bf5a9a2705a17b574ac4d376fba9a148b8bb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thomas Petazzoni wrote:
-...
->>     powerpc |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/d7cd279e8e0145c2cd0d8611512af83be6379e72/
->
-> checking snmp v3 status... required
-> configure: error: in `/home/test/test/3/output/build/snmppp-3.3.4':
-> configure: error: cryptographic library required for SNMPv3, but neither OpenSSL nor TomCrypt nor DES is available.
-> See `config.log' for more details
->
-> Luca, maybe ?
->
+This variable contains extra environment variables that we can not export
+since they are clashing with some build systems (eg. BUILD_DIR with
+u-boot).
 
-You committed the fix in:
+So, we may need these variables for uses other than the user's hooks
+for instrumentation. For example, we'll use them later on to export
+BUILD_DIR to the download helper scripts.
 
-   commit 15c5284d98168b9ccd3ff8cf9ba6ec82af75ac67
-   Author: Luca Ceresoli <luca@lucaceresoli.net>
-   Date:   Wed Apr 16 12:25:15 2014 +0200
+Fix comment, too.
 
-       snmp++: need dynamic library support
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile               |    4 ++--
+ package/Makefile.in    |    4 ++--
+ package/pkg-generic.mk |    2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-       Fixes:
+diff --git a/Makefile b/Makefile
+index 0f8ca72..42adf7c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -573,7 +573,7 @@ endif
  
-http://autobuild.buildroot.net/results/7b9/7b9ec11514219e5f315df0b30204f431b4c4f8a1/
-
-       Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-       Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-The build failure occurred on the parent commit. Your build server
-was faster that your commit ability! :)
-
--- 
-Luca
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-build script $(s)"); \
+-		$(USER_HOOKS_EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST=$(BUILD_DIR)/locales.nopurge
+@@ -619,7 +619,7 @@ endif
+ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+-		$(USER_HOOKS_EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
++		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+ toolchain-eclipse-register:
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 31eaaf2..c34a3bf 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -297,11 +297,11 @@ HOST_MAKE_ENV=PATH=$(BR_PATH) \
+ 		PKG_CONFIG_SYSROOT_DIR="/" \
+ 		PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig"
+ 
+-# This extra environment we can not export ourselves (eg. because some
++# This is extra environment we can not export ourselves (eg. because some
+ # packages use that variable internally, eg. uboot), so we have to
+ # explicitly pass it to user-supplied external hooks (eg. post-build,
+ # post-images)
+-USER_HOOKS_EXTRA_ENV=\
++EXTRA_ENV=\
+ 	PATH=$(BR_PATH) \
+ 	BUILD_DIR=$(BUILD_DIR)
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c162902..8a62d4c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -58,7 +58,7 @@ GLOBAL_INSTRUMENTATION_HOOKS += step_time
+ # User-supplied script
+ define step_user
+ 	@$(foreach user_hook, $(BR2_INSTRUMENTATION_SCRIPTS), \
+-		$(USER_HOOKS_EXTRA_ENV) $(user_hook) "$(1)" "$(2)" "$(3)"$(sep))
++		$(EXTRA_ENV) $(user_hook) "$(1)" "$(2)" "$(3)"$(sep))
+ endef
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ GLOBAL_INSTRUMENTATION_HOOKS += step_user
