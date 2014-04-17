@@ -1,55 +1,40 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 17 Apr 2014 23:47:42 +0200
-Subject: [Buildroot] [PATCH] legal-info: Add site to legal info manifest
-In-Reply-To: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
-References: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
-Message-ID: <53504BFE.2040703@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Apr 2014 23:50:30 +0200
+Subject: [Buildroot] [git commit] zmqpp: exclude old Sourcery PowerPC
+	toolchains that don't have C++0x
+Message-ID: <20140417215155.939779C845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Clayton,
+commit: http://git.buildroot.net/buildroot/commit/?id=e7a31657938f83f8a5f9261960e2809ad13e51d7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Clayton Shotwell wrote:
-> I would like to propose adding the site to the legal-info manifest
-> files. This gives a little more information on where the sources came
-> from without adding much overhead. Please note that is is only for
-> packages where the source is not local or set with OVERRIDE_SRCDIR.
->
-> This patch works for the most part. The only issue I see with it occurs
-> when the SITE for a package uses one of the common url macros such as
-> BR2_GNU_MIRROR. The legal info manifest ends up having an extra set of
-> double quotes in the site string.
->
-> Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+zmqpp needs some fairly advanced C++0x features, which apparently
+aren't all available in gcc 4.5 used in PowerPC Sourcery 2011.03. So
+this commit excludes both this toolchain and the older 2010.09 one.
 
-Thanks for the proposal.
+Fixes:
 
-The idea is generally good to me: it provides a useful info with a
-little effort.
+  http://autobuild.buildroot.org/results/a37/a374e85c714aff26bceaa0df4199bc44a1278f37/
 
-The project website URL would be nice as well, but that's not easily
-extracted.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zmqpp/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Of course the double-quote issue with some packages needs to be fixed.
-But this is just "implementation details". Note that, besides packages
-from GNU_MIRROR it also affects the kernel from kernel.org, probably
-U-Boot and Busybox, maybe a few others.
-
-Instead, the case of packages downloaded from custom locations deserves
-a little more thought on what we want to do.
-
-When using e.g. BR2_LINUX_KERNEL_CUSTOM_GIT=y, the REPO_URL may point
-either to a public server (github, gitorious, silicon vendors...) or to
-an enterprise server. In the former case the repository URL is
-informative. In the latter case it is not, and some companies may not
-like exposing their server names to the public. You know how netadmins
-are made... :)
-
-So I'm not sure of what is the best policy when using custom (non-wget)
-download methods.
-
--- 
-Luca
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index 68dbf4e..2ccaf7e 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_ZMQPP
+ 	bool "zmqpp"
+ 	depends on !BR2_avr32 # compiler needs c++0x support
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # c++0x support
++	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # c++0x support
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_INET_IPV6 # zeromq
+ 	depends on BR2_LARGEFILE # util-linux
