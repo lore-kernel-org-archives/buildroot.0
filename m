@@ -1,52 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 23:38:52 +0200
-Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
- autoreconfiguration
-In-Reply-To: <1395270180-12701-1-git-send-email-arnout@mind.be>
-References: <1395270180-12701-1-git-send-email-arnout@mind.be>
-Message-ID: <20140417233852.3882fe94@skate>
+Date: Thu, 17 Apr 2014 23:43:51 +0200
+Subject: [Buildroot] [git commit] dmalloc: disable on Microblaze with
+	debugging symbols
+Message-ID: <20140417214501.431EB9C845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=656cdc367e6f2bfba4316d605a5de27c82880473
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 20 Mar 2014 00:03:00 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> In 4268d39, a patch was added to update libtool.m4 for MIPS n64 targets.
-> However, this caused the configure script to be regenerated during the
-> build steps, which in turn caused build failures on Fedora 12 hosts. In
-> ed73d1d, this was fixed by patching the installed libtool.m4 file
-> instead of the source file.
-> 
-> However, ed73d1d did not take into account that the target libtool will
-> also install libtool.m4 to staging, and that that version has
-> precedence over the one in HOST_DIR.
-> 
-> Therefore, this patch takes a different approach: the source file is
-> patched in the usual way, and instead the reconfigure is avoided by
-> touching the generated files.
-> 
-> On the target, we also cannot use the AUTORECONF mechanism because of
-> some mysterious Makefile.inc file. So just use the same approach and
-> wait for upstream to make a new release.
-> 
-> Fixes:
->    http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+There is a Microblaze compiler issue when debugging symbols are
+enabled, causing assembler errors "Error: operation combines symbols
+in different segments". This commit prevents this situation from
+happening.
 
-Applied, thanks.
+Fixes:
 
-Can you let me know if this patch was superseds
-http://patchwork.ozlabs.org/patch/331090/ ?
+  http://autobuild.buildroot.org/results/d97/d9727e453d7c7c982ce32db5efd455496966e211/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dmalloc/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dmalloc/Config.in b/package/dmalloc/Config.in
+index 315f6ca..03d9f97 100644
+--- a/package/dmalloc/Config.in
++++ b/package/dmalloc/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_DMALLOC
+ 	bool "dmalloc"
++	# On some packages, Microblaze gcc has issues when debugging
++	# symbols are enabled: "Error: operation combines symbols in
++	# different segments".
++	depends on !(BR2_microblaze && BR2_ENABLE_DEBUG)
+ 	help
+ 	  A debug memory allocation library which is a drop in replacement for
+ 	  the system's malloc, realloc, calloc, free and other memory management
