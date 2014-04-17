@@ -1,50 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 22:39:56 +0200
-Subject: [Buildroot] [PATCH v5 6/8] libglu: new package
-In-Reply-To: <1396588694-6377-7-git-send-email-bernd.kuhls@t-online.de>
-References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
- <1396588694-6377-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140417223956.6703f9f5@skate>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Thu, 17 Apr 2014 22:49:15 +0200
+Subject: [Buildroot] [PATCH 1/1] qhull: new package
+Message-ID: <1397767755-17045-1-git-send-email-d.viti@infosolution.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Signed-off-by: Davide Viti <d.viti@infosolution.it>
+---
+ package/Config.in       |  1 +
+ package/qhull/Config.in | 13 +++++++++++++
+ package/qhull/qhull.mk  | 15 +++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/qhull/Config.in
+ create mode 100644 package/qhull/qhull.mk
 
-On Fri,  4 Apr 2014 07:18:12 +0200, Bernd Kuhls wrote:
-
-> diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
-> new file mode 100644
-> index 0000000..9a4ebc1
-> --- /dev/null
-> +++ b/package/libglu/libglu.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# libglu
-> +#
-> +################################################################################
-> +
-> +LIBGLU_VERSION = 9.0.0
-> +LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
-> +LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
-> +LIBGLU_LICENSE = SGI-B-2.0
-> +LIBGLU_LICENSE_FILES = include/GL/glu.h
-> +LIBGLU_INSTALL_STAGING = YES
-> +LIBGLU_AUTORECONF = YES
-> +LIBGLU_DEPENDENCIES = mesa3d
-> +
-> +LIBGLU_CONF_OPT = --disable-osmesa
-
-Since you're passing --disable-osmesa, libGLU is using libGL. So what
-makes it depend on mesa3d specifically, and not any other OpenGL
-compatible implementation? Maybe it needs to use
-BR2_PACKAGE_HAS_OPENGL instead?
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 748d28e..44c35ea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -820,6 +820,7 @@ source "package/p11-kit/Config.in"
+ source "package/poco/Config.in"
+ source "package/protobuf/Config.in"
+ source "package/protobuf-c/Config.in"
++source "package/qhull/Config.in"
+ source "package/schifra/Config.in"
+ source "package/startup-notification/Config.in"
+ source "package/tz/Config.in"
+diff --git a/package/qhull/Config.in b/package/qhull/Config.in
+new file mode 100644
+index 0000000..e64025e
+--- /dev/null
++++ b/package/qhull/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_QHULL
++	bool "qhull"
++	help
++	  Qhull computes the convex hull, Delaunay triangulation,
++	  Voronoi diagram, halfspace intersection about a point,
++	  furthest-site Delaunay triangulation, and furthest-site
++	  Voronoi diagram. The source code runs in 2-d, 3-d, 4-d, and
++	  higher dimensions. Qhull implements the Quickhull algorithm
++	  for computing the convex hull. It handles roundoff errors
++	  from floating point arithmetic. It computes volumes, surface
++	  areas, and approximations to the convex hull.
++
++	  http://www.qhull.org
+diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
+new file mode 100644
+index 0000000..08d3fa4
+--- /dev/null
++++ b/package/qhull/qhull.mk
+@@ -0,0 +1,15 @@
++###############################################################################
++#
++# qhull
++#
++###############################################################################
++
++QHULL_VERSION = 60d55819729d7b49391dde0271e15a56c70992b9
++QHULL_SITE = git://gitorious.org/qhull/qhull.git
++QHULL_SITE_METHOD = git
++QHULL_INSTALL_STAGING = YES
++QHULL_LICENSE = BSD-Style
++QHULL_LICENSE_FILES = COPYING.txt
++QHULL_CONF_OPT = -DCMAKE_BUILD_TYPE=Release
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
