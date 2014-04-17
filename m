@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Apr 2014 18:04:23 +0200
-Subject: [Buildroot] [PATCH 11/14] package/mesa3d: with a DRI driver,
-	is a full OpenGL provider
+Date: Thu, 17 Apr 2014 18:04:22 +0200
+Subject: [Buildroot] [PATCH 10/14] package/libgl: introduce as a new virtual
+	package for full-openGL providers
 In-Reply-To: <cover.1397750571.git.yann.morin.1998@free.fr>
 References: <cover.1397750571.git.yann.morin.1998@free.fr>
-Message-ID: <6c6c678af9a7ff235f32d25f3bea03670749f41d.1397750571.git.yann.morin.1998@free.fr>
+Message-ID: <3fefe2bea72a1088485920c0ac5ffdd0356d79d5.1397750571.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,58 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Make mesa3d a provider for full OpenGL, as soon as a DRI driver is enabled.
+Currently, only mesa3d is such a full-openGL provider.
 
-Full OpenGL is only possible when:
-  - a DRI driver is enabled,
-  - and X.Org is enabled
+But it is easy to see a few more cropping up at the door:
+  - NVidia's binary blob
+  - ATI's fglrx binary blob
 
-Since DRI driver in fact depend on X.Org being enabled in the first place,
-we can safely declare mesa3d as a full openGL provider as soon as at least
-one DRI driver is enabled.
+Having this virtual full-openGL package will help when those are getting in.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Paul Cercueil <paul@crapouillou.net>
 ---
- package/mesa3d/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/opengl/Config.in       | 1 +
+ package/opengl/libgl/Config.in | 6 ++++++
+ package/opengl/libgl/libgl.mk  | 7 +++++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 package/opengl/libgl/Config.in
+ create mode 100644 package/opengl/libgl/libgl.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bd7a853..0793b48 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -26,8 +26,12 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_MESA3D_DRIVER
-+	select BR2_PACKAGE_HAS_LIBGL
- 	bool
- 
-+config BR2_PACKAGE_PROVIDES_LIBGL
-+	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER
+diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+index ed81835..20ee28b 100644
+--- a/package/opengl/Config.in
++++ b/package/opengl/Config.in
+@@ -1,3 +1,4 @@
++source "package/opengl/libgl/Config.in"
+ source "package/opengl/libegl/Config.in"
+ source "package/opengl/libgles/Config.in"
+ source "package/opengl/libopenvg/Config.in"
+diff --git a/package/opengl/libgl/Config.in b/package/opengl/libgl/Config.in
+new file mode 100644
+index 0000000..8b99e5b
+--- /dev/null
++++ b/package/opengl/libgl/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_LIBGL
++	bool
 +
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
- 
++config BR2_PACKAGE_PROVIDES_LIBGL
++	depends on BR2_PACKAGE_HAS_LIBGL
++	string
+diff --git a/package/opengl/libgl/libgl.mk b/package/opengl/libgl/libgl.mk
+new file mode 100644
+index 0000000..7abc13d
+--- /dev/null
++++ b/package/opengl/libgl/libgl.mk
+@@ -0,0 +1,7 @@
++################################################################################
++#
++# libgl
++#
++################################################################################
++
++$(eval $(virtual-package))
 -- 
 1.8.3.2
