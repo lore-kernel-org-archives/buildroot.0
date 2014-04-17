@@ -1,40 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 21:50:35 +0200
-Subject: [Buildroot] [PATCH] qt5script: Check for QtGui before building
- the examples
-In-Reply-To: <1397750187-33936-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1397750187-33936-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140417215035.573dc994@skate>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 17 Apr 2014 23:51:44 +0400
+Subject: [Buildroot] Analysis of build failures, help requested!
+In-Reply-To: <20140417213939.35afc5ff@skate>
+References: <20140417063009.B2279100D24@stock.ovh.net>
+ <20140417213939.35afc5ff@skate>
+Message-ID: <CAMo8BfJLxhAV8a_JZ4+rx+z7AqiNZ9MuTF1NfMBjR0rMwZROJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+On Thu, Apr 17, 2014 at 11:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>>     xtensa |                       qt-4.8.5 | NOK | http://autobuild.buildroot.net/results/a54f3707781dc193292eda7d1723fce6487d6980/
+>
+> linking ../../lib/libQtCore.so.4.8.5
+> .obj/debug-shared-emb-generic/qmetaobject.o:(.debug_line+0x37a4): dangerous relocation: overflow after relaxation
+> .obj/debug-shared-emb-generic/qobject.o:(.debug_line+0x55b5): dangerous relocation: overflow after relaxation
+> .obj/debug-shared-emb-generic/qlatincodec.o:(.debug_line+0xcd7): dangerous relocation: overflow after relaxation
+> .obj/debug-shared-emb-generic/qmetaobject.o:(.debug_frame+0xa89): dangerous relocation: overflow after relaxation
+> .obj/debug-shared-emb-generic/qobject.o:(.debug_frame+0xae9): dangerous relocation: overflow after relaxation
+> .obj/debug-shared-emb-generic/qlatincodec.o:(.debug_frame+0x1a1): dangerous relocation: overflow after relaxation
+> collect2: error: ld returned 1 exit status
 
-On Thu, 17 Apr 2014 16:56:27 +0100, Vicente Olivert Riera wrote:
-> Adding an upstream patch to fix an autobuild failure.
-> 
-> qsdbg and marshal examples need QtGui module. If QtGui is not installed
-> they fail to compile.
-> 
-> Upstream commit:
->    https://github.com/qtproject/qtscript/commit/e4453c92ee41943a3a1d67a725804a44e747f64e
-> 
-> Fixes:
->    http://autobuild.buildroot.net/results/0e6/0e63bc604f3ec422996eb0f5fd92f4437954ca04/
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  ...ck-for-QtGui-before-building-the-examples.patch |   46 ++++++++++++++++++++
->  1 files changed, 46 insertions(+), 0 deletions(-)
->  create mode 100644 package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch
+[...]
 
-Applied, thanks!
+>>     xtensa |                   xerces-3.1.1 | NOK | http://autobuild.buildroot.net/results/8a8a0f8cca293ce1f383421ba8b1223b4266e3bc/
+>
+> Similar Xtensa problem?
 
-Thomas
+Yes, xtensa link-time relaxation is a bit buggy.
+Never seen it failing this way before though. Looking at it.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
