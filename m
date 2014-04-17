@@ -1,52 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 22:58:04 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: only enable full OpenGL
-	when a DRI driver is enabled
-Message-ID: <20140417210125.4B5099C845@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 17 Apr 2014 23:01:58 +0200
+Subject: [Buildroot] Analysis of build failures, help requested!
+In-Reply-To: <20140417213939.35afc5ff@skate>
+References: <20140417063009.B2279100D24@stock.ovh.net>
+ <20140417213939.35afc5ff@skate>
+Message-ID: <53504146.4040507@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c0d7d1c5bb55a173f2b4b7aca898ccd36c33872e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Full OpenGL is only provided when:
-  - a DRI driver is enabled,
-  - and X.Org is enabled
+Thomas Petazzoni wrote:
+...
+>>     powerpc |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/d7cd279e8e0145c2cd0d8611512af83be6379e72/
+>
+> checking snmp v3 status... required
+> configure: error: in `/home/test/test/3/output/build/snmppp-3.3.4':
+> configure: error: cryptographic library required for SNMPv3, but neither OpenSSL nor TomCrypt nor DES is available.
+> See `config.log' for more details
+>
+> Luca, maybe ?
+>
 
-Since DRI driver depend on X.Org being selected, this means that we
-can (have to) enable full OpenGL as soon as a DRI driver is enabled.
+You committed the fix in:
 
-On the other hand, Gallium drivers, which currently do enable full
-OpenGL, only really provide OpenGL EGL and GLES, not full OpenGL.
+   commit 15c5284d98168b9ccd3ff8cf9ba6ec82af75ac67
+   Author: Luca Ceresoli <luca@lucaceresoli.net>
+   Date:   Wed Apr 16 12:25:15 2014 +0200
 
-So we exclude Gallium drivers when checking whether to enable full
-OpenGL in mesa3d.
+       snmp++: need dynamic library support
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mesa3d/mesa3d.mk |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 0d41efa..db166f8 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -80,9 +80,9 @@ endif
+       Fixes:
  
- # APIs
- 
--# At least one API is required, for buildroot enable OpenGL API by default.
--# Other APIs (EGL, EGL_ES) are optional
--ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
-+# Full OpenGL is provided by DRI drivers with X.Org; DRI drivers are only
-+# enabled when X.Org is enabled anyway, so no need to check for X.Org here.
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
- MESA3D_CONF_OPT += --enable-opengl
- else
- MESA3D_CONF_OPT += --disable-opengl
+http://autobuild.buildroot.net/results/7b9/7b9ec11514219e5f315df0b30204f431b4c4f8a1/
+
+       Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+       Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+The build failure occurred on the parent commit. Your build server
+was faster that your commit ability! :)
+
+-- 
+Luca
