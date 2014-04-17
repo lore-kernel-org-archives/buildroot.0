@@ -1,33 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 22:18:05 +0200
-Subject: [Buildroot] [PATCH] libglib2: fix compilation for aarch64 and
- arc
-In-Reply-To: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
-References: <1397141196-1316-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140417221805.30a13a25@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 17 Apr 2014 17:25:10 -0300
+Subject: [Buildroot] [PATCH] nmap: make ndiff conditional on python2
+Message-ID: <1397766310-27745-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+ndiff only works when target python2 is available, so disable it
+completely when it's not. Fixes:
+http://autobuild.buildroot.net/results/402/40269fd96a3b62fa187e9b26e5ab4ce4e7711f95/
 
-On Thu, 10 Apr 2014 18:46:36 +0400, Alexey Brodkin wrote:
-> Copied from here - https://github.com/openembedded/oe-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
-> 
-> Initially posted here - http://lists.openembedded.org/pipermail/openembedded-core/2013-October/085174.html
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  ...ror-format-string-errors-from-mismatched-.patch | 56 ++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nmap/nmap.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 4ed39bf..c7e2225 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -21,4 +21,11 @@ else
+ NMAP_CONF_OPT += --without-openssl
+ endif
+ 
++# ndiff only works with python2.x
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++NMAP_DEPENDENCIES += python
++else
++NMAP_CONF_OPT += --without-ndiff
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
