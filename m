@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 22:53:39 +0200
-Subject: [Buildroot] [git commit] package/xdriver_xf86-video-ati: only
-	select libdrm if the DRI driver is enabled
-Message-ID: <20140417210125.20ED49C80A@busybox.osuosl.org>
+Date: Thu, 17 Apr 2014 23:00:19 +0200
+Subject: [Buildroot] [git commit] package/libevas: switch dependency from
+	mesa3d to _HAS_LIBGL
+Message-ID: <20140417210125.673349C80A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0ecf3f78dd85539f1758ac142e4e15bf7993a04f
+commit: http://git.buildroot.net/buildroot/commit/?id=ab1a236a0763c18d3990590940b6b3ab7c63131d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The xf86 radeon driver does not need libdrm, unless DRI is enabled too.
+We now have a virtual package that represents availability of
+full OpenGL.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This should be the end of this dependency hell epic, now. :-)
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-video-ati/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/efl/libevas/Config.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 3c0cac3..d8bb029 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
--	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_LIBDRM_RADEON
-+	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-+	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	select BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_GLPROTO
+diff --git a/package/efl/libevas/Config.in b/package/efl/libevas/Config.in
+index 8eea23d..febc115 100644
+--- a/package/efl/libevas/Config.in
++++ b/package/efl/libevas/Config.in
+@@ -148,7 +148,7 @@ choice
+ 
+ config BR2_PACKAGE_LIBEVAS_GL
+ 	bool "generic OpenGL"
+-	depends on BR2_PACKAGE_MESA3D
++	depends on BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBEET
+ 
+ config BR2_PACKAGE_LIBEVAS_GLES_SGX
