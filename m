@@ -1,58 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 22:56:25 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: DRI drivers depend on X.org
-Message-ID: <20140417210125.3833F9C846@busybox.osuosl.org>
+Date: Thu, 17 Apr 2014 22:53:39 +0200
+Subject: [Buildroot] [git commit] package/xdriver_xf86-video-ati: only
+	select libdrm if the DRI driver is enabled
+Message-ID: <20140417210125.20ED49C80A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c65d7e55a6a9a02f39976fb06e400eb3aefde160
+commit: http://git.buildroot.net/buildroot/commit/?id=0ecf3f78dd85539f1758ac142e4e15bf7993a04f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It does not make sense to build DRI drivers without X.org.
+The xf86 radeon driver does not need libdrm, unless DRI is enabled too.
 
+Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in |    9 ++++-----
- 1 files changed, 4 insertions(+), 5 deletions(-)
+ package/x11r7/xdriver_xf86-video-ati/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 801a203..3a2766b 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -56,10 +56,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
--comment "DRI drivers needs a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
- 
--if !BR2_PREFER_STATIC_LIB
-+if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
- 
- comment "DRI drivers"
- 
-@@ -73,7 +73,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
- 	bool "DRI i965 driver"
- 	depends on BR2_i386 || BR2_x86_64
--	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
-@@ -87,7 +86,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	help
- 	  Legacy Radeon driver for R100 series GPUs.
- 
--endif # !BR2_PREFER_STATIC_LIB
-+endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
- 
- if BR2_PACKAGE_MESA3D_DRIVER
- 
+diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
+index 3c0cac3..d8bb029 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	bool "xf86-video-ati"
+-	select BR2_PACKAGE_LIBDRM
+-	select BR2_PACKAGE_LIBDRM_RADEON
++	select BR2_PACKAGE_LIBDRM        if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
++	select BR2_PACKAGE_LIBDRM_RADEON if BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	select BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
+ 	select BR2_PACKAGE_XPROTO_GLPROTO
