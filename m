@@ -1,87 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Apr 2014 10:12:44 -0300
-Subject: [Buildroot] [PATCH 2/2] nftables: new package
-In-Reply-To: <1397740364-8312-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1397740364-8312-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1397740364-8312-2-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Thu, 17 Apr 2014 16:40:10 +0200
+Subject: [Buildroot] [PATCH 13/13] package/vlc: depends on the virtual
+	package libgl
+References: <cover.1396699629.git.yann.morin.1998@free.fr>
+ <55d8bed0fa397c30345e1ba8318eeeb76fac7a3a.1396699629.git.yann.morin.1998@free.fr>
+Message-ID: <an552bx168.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in            |  1 +
- package/nftables/Config.in   | 25 +++++++++++++++++++++++++
- package/nftables/nftables.mk | 15 +++++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/nftables/Config.in
- create mode 100644 package/nftables/nftables.mk
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:55d8bed0fa397c30345e1ba8318eeeb76fac7a3a.1396699629.git.yann.morin.199
+8 at free.fr: 
 
-diff --git a/package/Config.in b/package/Config.in
-index e5e575d..b65bc1d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -959,6 +959,7 @@ source "package/net-tools/Config.in"
- endif
- source "package/network-manager/Config.in"
- source "package/nfacct/Config.in"
-+source "package/nftables/Config.in"
- source "package/ngircd/Config.in"
- source "package/ngrep/Config.in"
- source "package/nmap/Config.in"
-diff --git a/package/nftables/Config.in b/package/nftables/Config.in
-new file mode 100644
-index 0000000..4ddfdbd
---- /dev/null
-+++ b/package/nftables/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_NFTABLES
-+	bool "nftables"
-+	depends on BR2_INET_IPV6
-+	depends on BR2_LARGEFILE
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-+	select BR2_PACKAGE_GMP
-+	select BR2_PACKAGE_LIBMNL
-+	select BR2_PACKAGE_LIBNFTNL
-+	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	help
-+	  nftables is the project that aims to replace the existing
-+	  {ip,ip6,arp,eb}tables framework.
-+	  Basically, this project provides a new packet filtering framework,
-+	  a new userspace utility and also a compatibility layer
-+	  for {ip,ip6}tables.
+> We now have a virtual package, libgl, which ensures openGL is available.
+
+Hi,
+
+a similar patch should be included in your patch series to fix
+http://autobuild.buildroot.net/results/f7a/f7af081048ad967ed4a76afd8c527395f7
+b0c2dc/
+
+--- a/package/x11r7/xapp_xdriinfo/Config.in
++++ b/package/x11r7/xapp_xdriinfo/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_XAPP_XDRIINFO
+        bool "xdriinfo"
+        select BR2_PACKAGE_XLIB_LIBX11
+        select BR2_PACKAGE_XPROTO_GLPROTO
+-       depends on BR2_PACKAGE_MESA3D
++       depends on BR2_PACKAGE_HAS_LIBGL
+        help
+          query configuration information of DRI drivers
 +
-+	  http://www.netfilter.org/projects/nftables/index.html
-+
-+comment "nftables needs a toolchain w/ IPv6, largefile, threads, wchar, headers >= 3.4"
-+	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-new file mode 100644
-index 0000000..1cfeeeb
---- /dev/null
-+++ b/package/nftables/nftables.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# nftables
-+#
-+################################################################################
-+
-+NFTABLES_VERSION = 0.2
-+NFTABLES_SOURCE = nftables-$(NFTABLES_VERSION).tar.bz2
-+NFTABLES_SITE = http://www.netfilter.org/projects/nftables/files
-+NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
-+	host-pkgconf $(if $(BR2_NEEDS_GETTEXT),gettext)
-+NFTABLES_LICENSE = GPLv2
-+NFTABLES_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-1.8.3.2
++comment "xdriinfo depends on OpenGL"
++       depends on !BR2_PACKAGE_HAS_LIBGL
+
+
+Regards, Bernd
