@@ -1,46 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Apr 2014 23:04:02 +0200
-Subject: [Buildroot] [PATCH 03/14] package/x11-video-drivers: do not
- select, but depends on mesa3d
-In-Reply-To: <cd22d0eb51964f177d803ef07c5050147df30f9e.1397750571.git.yann.morin.1998@free.fr>
-References: <cover.1397750571.git.yann.morin.1998@free.fr>
- <cd22d0eb51964f177d803ef07c5050147df30f9e.1397750571.git.yann.morin.1998@free.fr>
-Message-ID: <20140417230402.253ba4e4@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Apr 2014 23:37:57 +0200
+Subject: [Buildroot] [PATCH v5 2/8] mesa3d: Explain dependency for i965
+ DRI driver on xorg in Kconfig
+In-Reply-To: <1396588694-6377-3-git-send-email-bernd.kuhls@t-online.de>
+References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
+ <1396588694-6377-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140417213757.GB3270@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Bernd, All,
 
-On Thu, 17 Apr 2014 18:04:15 +0200, Yann E. MORIN wrote:
+On 2014-04-04 07:18 +0200, Bernd Kuhls spake thusly:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/Config.in |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index f3d855b..12ec068 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -77,6 +77,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
+>  	help
+>  	  Supports all Intel GPUs.  This version is most supported by Intel.
+>  
+> +comment "DRI i965 driver depends on X.org"
+> +	depends on !BR2_PACKAGE_XORG7
 
-> Currently, X.Org drivers that need mesa3d forcibly select it.
+This is oncorrect: the i965 driver does not have a "depends on XORG7",
+so the comment is wrong.
 
-[...]
+Either the driver is missing such a "depends on XORG7", or we should not
+add this comment.
 
->  package/x11r7/xdriver_xf86-video-ati/Config.in        | 5 ++++-
->  package/x11r7/xdriver_xf86-video-glint/Config.in      | 5 ++++-
->  package/x11r7/xdriver_xf86-video-intel/Config.in      | 8 ++++++--
->  package/x11r7/xdriver_xf86-video-mach64/Config.in     | 3 +++
->  package/x11r7/xdriver_xf86-video-mga/Config.in        | 5 ++++-
->  package/x11r7/xdriver_xf86-video-openchrome/Config.in | 5 ++++-
->  package/x11r7/xdriver_xf86-video-r128/Config.in       | 5 ++++-
->  package/x11r7/xdriver_xf86-video-savage/Config.in     | 5 ++++-
->  package/x11r7/xdriver_xf86-video-sis/Config.in        | 5 ++++-
->  package/x11r7/xdriver_xf86-video-tdfx/Config.in       | 5 ++++-
->  package/x11r7/xdriver_xf86-video-vmware/Config.in     | 5 ++++-
->  11 files changed, 45 insertions(+), 11 deletions(-)
+Regards,
+Yann E. MORIN.
 
-I know the dependency on mesa3d is not something added by your patch,
-but I'm wondering: do all these drivers actually *require* mesa3d ?
-Isn't it possible to build for example, the Intel X.org driver, for
-just 2D acceleration purposes? Or does even 2D acceleration relies on
-an OpenGL implementation being available, these days?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
