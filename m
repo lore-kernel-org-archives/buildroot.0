@@ -1,60 +1,44 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 17 Apr 2014 10:10:44 +0200
-Subject: [Buildroot] [PATCH v4 2/4] toolchain: add a hidden config
- option to enable the toolchain package
-In-Reply-To: <20140416194308.1f7e75f5@skate>
+Date: Thu, 17 Apr 2014 10:21:28 +0200
+Subject: [Buildroot] [PATCH v4 1/4] Makefile: fix coding style
+In-Reply-To: <20140416194215.7d3151fa@skate>
 References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
- <1396864610-8426-3-git-send-email-fabio.porcedda@gmail.com>
- <20140416194308.1f7e75f5@skate>
-Message-ID: <CAHkwnC8afrKQLbpYzvyFx0eP--4dW2Estk56eoZZbKkML-k92g@mail.gmail.com>
+ <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
+ <20140416194215.7d3151fa@skate>
+Message-ID: <CAHkwnC_PPDM9y7j7m1gEmVwD+XX95_GuWsX=2PZY4M+Vy9LNrA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 16, 2014 at 7:43 PM, Thomas Petazzoni
+On Wed, Apr 16, 2014 at 7:42 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Fabio Porcedda,
 >
-> On Mon,  7 Apr 2014 11:56:48 +0200, Fabio Porcedda wrote:
->> The usual way to enable a package using the package infrastructure is to
->> use a config option so instead to add the toolchain package to the
->> TARGETS variable in the Makefile add a config option like all the other
->> toolchain packages.
+> On Mon,  7 Apr 2014 11:56:47 +0200, Fabio Porcedda wrote:
+>> As stated in the buildroot user manual add just a single space before
+>> and after a '=' sign.
 >>
 >> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> ---
->>  Makefile            | 2 +-
->>  toolchain/Config.in | 4 ++++
->>  2 files changed, 5 insertions(+), 1 deletion(-)
->
-> I've applied this patch, which conflicted because it was based on the
-> previous patch :)
->
->> diff --git a/Makefile b/Makefile
->> index 82f2763..e0831b6 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -299,7 +299,7 @@ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
->>  #
->>  ################################################################################
->
-> I've removed this big comment here that was no longer making any sense.
->
->> diff --git a/toolchain/Config.in b/toolchain/Config.in
->> index 44f3ac6..94a0c7d 100644
->> --- a/toolchain/Config.in
->> +++ b/toolchain/Config.in
->> @@ -1,5 +1,9 @@
->>  menu "Toolchain"
->>
->> +config BR2_TOOLCHAIN
->
-> And added a comment above this, to explain what it's useful for.
 
-Thanks
+I don't understand how it was happened but i lost the Acked-by tag of Arnout.
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+>> ---
+>>  Makefile | 184 +++++++++++++++++++++++++++++++--------------------------------
+>>  1 file changed, 92 insertions(+), 92 deletions(-)
+>
+> To be honest, while I definitely value the change to harmonize the
+> coding style, such a large patch touching almost every line of the main
+> Makefile is a recipe for conflicts with many other patches. So I would
+> personally prefer to not apply this patch, and do the coding style
+> fixes progressively, as we make other changes to the main Makefile.
+
+I understand you concerns, nevertheless i personally think it's a
+useful patch to apply, but it's just my personal opinion.
+
+Regards
 -- 
 Fabio Porcedda
