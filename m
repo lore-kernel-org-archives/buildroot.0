@@ -1,29 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Apr 2014 23:52:27 +0200
-Subject: [Buildroot] [PATCH] package/sdl: disable x11 in host-sdl
-In-Reply-To: <1397850429-5560-1-git-send-email-yann.morin.1998@free.fr>
-References: <1397850429-5560-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140418235227.3a4dc5c8@skate>
+Date: Fri, 18 Apr 2014 23:52:59 +0200
+Subject: [Buildroot] [PATCH] qt5base: Remove feature test for
+ posix_fallocate in sqlite code
+In-Reply-To: <1397807099-1489-1-git-send-email-fatih.asici@gmail.com>
+References: <1397807099-1489-1-git-send-email-fatih.asici@gmail.com>
+Message-ID: <20140418235259.0ba69918@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Fatih A??c?,
 
-On Fri, 18 Apr 2014 21:47:09 +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Fri, 18 Apr 2014 10:44:59 +0300, Fatih A??c? wrote:
+> It's already checked by the build system more accurately.
 > 
-> We do not need an X11-capable host SDL, so jsut disable X11 support.
+> Fixes:
 > 
-> This currently works if the build machine has the X11 development
-> packages installed.
+>   http://autobuild.buildroot.net/results/e3b/e3b26ee314880fdb50bb774a0539bfba04d9fbcf/
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 > ---
->  package/sdl/sdl.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...not-check-feature-macros-for-posix_falloc.patch | 41 ++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
 
 Applied, thanks.
 
