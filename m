@@ -1,71 +1,50 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Sat, 19 Apr 2014 12:49:30 +0200
-Subject: [Buildroot] [PATCH 1/1] libsoxr: new package
-In-Reply-To: <20140419095242.4f405cdd@skate>
-References: <1397867553-7107-1-git-send-email-hadrien.boutteville@gmail.com>
- <20140419095242.4f405cdd@skate>
-Message-ID: <535254BA.9060004@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Apr 2014 18:27:47 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-04-10
+In-Reply-To: <87r4543r0z.fsf@dell.be.48ers.dk>
+References: <20140411063008.70B85100F1F@stock.ovh.net>
+ <87d2go5oz3.fsf@dell.be.48ers.dk> <20140411093044.07729d79@skate>
+ <87y4zc47il.fsf@dell.be.48ers.dk>
+ <20140411065158.0a9308de@core2quad.morethan.org>
+ <20140411141346.49e1251a@skate> <20140411123931.GZ4096@tarshish>
+ <20140411145923.21a38b08@skate> <87r4543r0z.fsf@dell.be.48ers.dk>
+Message-ID: <53515283.5060106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-On Sat, 19 Apr 2014 09:52:42 +0200, Thomas Petazzoni wrote:
-> Really no toolchain dependencies? Can you test this package with the
-> following toolchain configurations:
+On 11/04/14 16:00, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 > 
->  http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-linux-uclibc.config
->   -> this one tests !MMU
+>  > Aah, exactly! Except that the download was not interrupt by doing a
+>  > Ctrl+C, and it's actually wget which retried the download. And:
 > 
->  http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-uclinux.config
->   -> this one tests !MMU and static library only
+>  > 2014-04-08 04:27:12 (3.70 MB/s) - Connection closed at byte 1057288. Retrying.
 > 
->  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
->   -> this one tests the absence of thread support
+>  > The size at which the download was interrupted matches exactly my
+>  > findings.
 > 
->  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
->   -> and this one tests a minimal toolchain
+>  > Is it a bug in wget? Some option we forgot to pass to wget?
 > 
+> Seems like a bug to me. I don't see how this could ever be valid
+> behaviour.
 
-I packaged it with minimal toolchain configuration and checked for these
-cases, it built fine. I rebuilt with your configurations and it is
-always good.
+ Could also be a bug in the server: if it claims to support the Range:
+option, then wget will try to use it. But if the server then returns the
+start of the file instead of the request offset, you'll end up with this
+corrupted file.
 
-At first glance the threads references in the code depend on OpenMP, and
-I disabled it.
+ Regards,
+ Arnout
 
-I don't have time today to test the execution with static library and no
-thread, I just tested with a standard ARM configuration.
 
->> diff --git a/package/libsoxr/libsoxr.mk b/package/libsoxr/libsoxr.mk
->> new file mode 100644
->> index 0000000..c0fb72b
->> --- /dev/null
->> +++ b/package/libsoxr/libsoxr.mk
->> @@ -0,0 +1,24 @@
->> +################################################################################
->> +#
->> +# libsoxr
->> +#
->> +################################################################################
->> +
->> +LIBSOXR_VERSION = 0.1.1
->> +LIBSOXR_SITE = git://git.code.sf.net/p/soxr/code
-> 
-> The project apparently provides a tarball. Could you use the tarball
-> instead of the Git repository?
-
-OK. Is it better to always use the tarball if available?
-
->> +LIBSOXR_LICENSE = LGPLv2.1
-> 
-> According to the LICENSE file, the license is LGPLv2.1+
-
-Corrected, thanks !
-
-Regards,
-
-Hadrien
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
