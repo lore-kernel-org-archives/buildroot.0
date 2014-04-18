@@ -1,45 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 18 Apr 2014 08:34:08 +0200
-Subject: [Buildroot] [PATCH 1/1] xapp_xwd: Add missing dependency
-	xlib_libxkbfile
-Message-ID: <1397802848-4446-1-git-send-email-bernd.kuhls@t-online.de>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 18 Apr 2014 10:39:08 +0300
+Subject: [Buildroot] Analysis of build failures, help requested!
+In-Reply-To: <20140417213939.35afc5ff@skate>
+References: <20140417063009.B2279100D24@stock.ovh.net>
+ <20140417213939.35afc5ff@skate>
+Message-ID: <201404181039.08079.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/12b/12b7894a4f67d963ea93622eea1adc2d2c3d6847/
+On Thursday 17 April 2014 22:39:39 Thomas Petazzoni wrote:
+> >     x86_64 |                  qt5base-5.2.1 | NOK |
+> >http://autobuild.buildroot.net/results/e3b26ee314880fdb50bb774a0539bfba04
+> >d9fbcf/
+> 
+> posix_fallocate() problem:
+> 
+> ../../../3rdparty/sqlite/sqlite3.c:23535:42: error: 'posix_fallocate'
+> undeclared here (not in a function)
+> ../../../3rdparty/sqlite/sqlite3.c:93246:1: warning: missing initializer
+> [-Wmissing-field-initializers] ../../../3rdparty/sqlite/sqlite3.c:93246:1:
+> warning: (near initialization for 'sqlite3Apis.aggregate_count')
+> [-Wmissing-field-initializers]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xapp_xwd/Config.in   |    1 +
- package/x11r7/xapp_xwd/xapp_xwd.mk |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/x11r7/xapp_xwd/Config.in b/package/x11r7/xapp_xwd/Config.in
-index b7b3172..ada4820 100644
---- a/package/x11r7/xapp_xwd/Config.in
-+++ b/package/x11r7/xapp_xwd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_XAPP_XWD
- 	bool "xwd"
- 	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXKBFILE
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	help
- 	  dump an image of an X window
-diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
-index c46dbb5..0cda34e 100644
---- a/package/x11r7/xapp_xwd/xapp_xwd.mk
-+++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
-@@ -9,6 +9,6 @@ XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
- XAPP_XWD_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XWD_LICENSE = MIT
- XAPP_XWD_LICENSE_FILES = COPYING
--XAPP_XWD_DEPENDENCIES = xlib_libX11 xlib_libXmu
-+XAPP_XWD_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libxkbfile
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+It seems one of the hunks in out posix_fallocate() patch is not upstreamed. 
+Preparing a patch.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140418/73e2f145/attachment.html>
