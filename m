@@ -1,33 +1,45 @@
-From: Filippo Sironi <filippo.sironi@gmail.com>
-Date: Fri, 18 Apr 2014 17:00:47 +0200
-Subject: [Buildroot] x11/input-evdev and touchscreen
-Message-ID: <D18581C1-9C91-4453-8579-212E092B389F@gmail.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 18 Apr 2014 14:28:16 -0500
+Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support for
+	kernels older than 3.x.
+Message-ID: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+From: Matt Poduska <mjpodusk@rockwellcollins.com>
 
-I have an issue I cannot explain regarding X11/input-evdev.
-I recently configured and built a root file system through buildroot 2014.02.
-The root file system features X11 (1.12.4, but I also bumped it to 1.14.6) and the
-input-evdev driver (2.7, but I also bumped it to 2.8).
+In the case where DEVTMPFS is desired for older kernels where the
+support is experimental, it's still possible to enable the option in
+the board's specific linux .config instead of relying on buildroot to
+make the modification.
 
-NOTE: I cannot use HEAD on master since it provides X11 1.15 and I have to use the
-Nvidia Tegra T20 drivers, which are available up to X11 1.14.
+Signed-off-by: Matt Poduska <mjpodusk@rockwellcollins.com>
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+---
+ linux/linux.mk |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-The embedded device I'm targeting has a touchscreen display; evtest shows that events
-come from the touchscreen display to userspace but, unfortunately,  xinput test-xi2
-does not, even though the touchscreen display appears among the xinputs.
-
-The strange thing is that a very similar setup starting from the Ubuntu Core 13.10
-root file system works flawlessly (I cannot use this solution since I do not have
-enough space on my embedded device).
-
-Do you know anything about a configuration switch I may have missed? I looked through
-the configure script of input-evdev and there is nothing interesting.
-
-Thanks,
-Filippo
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e270705..694ea16 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -183,9 +183,11 @@ define LINUX_CONFIGURE_CMDS
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.cpio\",$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+-	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
+-		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
++	# Kernels prior to 2.6.32 don't support DEVTMPFS, which is also experimental prior to 3.x
++	$(if $(findstring x2.6.,x$(LINUX_VERSION)),,
++		$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
++			$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
++			$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config)))
+ 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KTAP),
+-- 
+1.7.9.5
