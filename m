@@ -1,45 +1,33 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 18 Apr 2014 14:28:16 -0500
-Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support for
-	kernels older than 3.x.
-Message-ID: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 18 Apr 2014 21:38:10 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support
+ for kernels older than 3.x.
+In-Reply-To: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>
+References: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <CACXmViZdUqoCUJi7QjuegYGqFkPU3P3PtALzC9N2cTX5VinOtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Poduska <mjpodusk@rockwellcollins.com>
+On Fri, Apr 18, 2014 at 9:28 PM, Ryan Barnett
+<rjbarnet@rockwellcollins.com> wrote:
+> From: Matt Poduska <mjpodusk@rockwellcollins.com>
+>
+> In the case where DEVTMPFS is desired for older kernels where the
+> support is experimental, it's still possible to enable the option in
+> the board's specific linux .config instead of relying on buildroot to
+> make the modification.
 
-In the case where DEVTMPFS is desired for older kernels where the
-support is experimental, it's still possible to enable the option in
-the board's specific linux .config instead of relying on buildroot to
-make the modification.
+Why? 2.6.32 is 5+ years old by now, and expecting modern SW to work
+with older kernels nowadays is probably not worth it. Udev has also
+required devtmpfs since quite a while, so I don't think you should
+read much into the "experimental" status.
 
-Signed-off-by: Matt Poduska <mjpodusk@rockwellcollins.com>
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- linux/linux.mk |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+If the kernel really is that ancient that it doesn't have devtmpfs,
+then the .config mangling afaik becomes a noop, so I don't see what we
+gain by not doing it.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e270705..694ea16 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -183,9 +183,11 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BINARIES_DIR)/rootfs.cpio\",$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
- 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
--	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
--		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
-+	# Kernels prior to 2.6.32 don't support DEVTMPFS, which is also experimental prior to 3.x
-+	$(if $(findstring x2.6.,x$(LINUX_VERSION)),,
-+		$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
-+			$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS,$(@D)/.config)
-+			$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config)))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_KTAP),
 -- 
-1.7.9.5
+Bye, Peter Korsgaard
