@@ -1,73 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Apr 2014 10:36:58 +0200
-Subject: [Buildroot] [git commit] qt5base: Remove feature test for
-	posix_fallocate in sqlite code
-Message-ID: <20140418194047.BF53D9C8F5@busybox.osuosl.org>
+Date: Fri, 18 Apr 2014 21:41:48 +0200
+Subject: [Buildroot] [git commit] xapp_xwd: Add missing dependency
+	xlib_libxkbfile
+Message-ID: <20140418194203.5C3CE9C8F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7a3861f23f8620c01542810f29aef18526845dee
+commit: http://git.buildroot.net/buildroot/commit/?id=3b70b6261852bdad5348920eaac8b858db499854
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It's already checked by the build system more accurately.
+Fixes http://autobuild.buildroot.net/results/12b/12b7894a4f67d963ea93622eea1adc2d2c3d6847/
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/e3b/e3b26ee314880fdb50bb774a0539bfba04d9fbcf/
-
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...not-check-feature-macros-for-posix_falloc.patch |   41 ++++++++++++++++++++
- 1 files changed, 41 insertions(+), 0 deletions(-)
+ package/x11r7/xapp_xwd/Config.in   |    1 +
+ package/x11r7/xapp_xwd/xapp_xwd.mk |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch b/package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
-new file mode 100644
-index 0000000..554f1cd
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
-@@ -0,0 +1,41 @@
-+From 18eee84e9458bdcb244df4c5ad968c8d5ea1860a Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-+Date: Fri, 18 Apr 2014 10:19:03 +0300
-+Subject: [PATCH] sqlite3: Do not check feature macros for posix_fallocate()
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Build system already checks for this function and defines
-+HAVE_POSIX_FALLOCATE if it is available.
-+
-+Next releases of Qt will come with an updated sqlite3 which removes this
-+check.
-+
-+Change-Id: I55e403aa01a7f054f9fe4773ce96dad399afce80
-+Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
-+---
-+ src/3rdparty/sqlite/sqlite3.c | 7 -------
-+ 1 file changed, 7 deletions(-)
-+
-+diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
-+index 03fa649..1ae9be2 100644
-+--- a/src/3rdparty/sqlite/sqlite3.c
-++++ b/src/3rdparty/sqlite/sqlite3.c
-+@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
-+ */
-+ #if SQLITE_OS_UNIX              /* This file is used on unix only */
-+ 
-+-/* Use posix_fallocate() if it is available
-+-*/
-+-#if !defined(HAVE_POSIX_FALLOCATE) \
-+-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
-+-# define HAVE_POSIX_FALLOCATE 1
-+-#endif
-+-
-+ /*
-+ ** There are various methods for file locking used for concurrency
-+ ** control:
-+-- 
-+1.9.1
-+
+diff --git a/package/x11r7/xapp_xwd/Config.in b/package/x11r7/xapp_xwd/Config.in
+index b7b3172..ada4820 100644
+--- a/package/x11r7/xapp_xwd/Config.in
++++ b/package/x11r7/xapp_xwd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_XAPP_XWD
+ 	bool "xwd"
+ 	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXKBFILE
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	help
+ 	  dump an image of an X window
+diff --git a/package/x11r7/xapp_xwd/xapp_xwd.mk b/package/x11r7/xapp_xwd/xapp_xwd.mk
+index c46dbb5..0cda34e 100644
+--- a/package/x11r7/xapp_xwd/xapp_xwd.mk
++++ b/package/x11r7/xapp_xwd/xapp_xwd.mk
+@@ -9,6 +9,6 @@ XAPP_XWD_SOURCE = xwd-$(XAPP_XWD_VERSION).tar.bz2
+ XAPP_XWD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XWD_LICENSE = MIT
+ XAPP_XWD_LICENSE_FILES = COPYING
+-XAPP_XWD_DEPENDENCIES = xlib_libX11 xlib_libXmu
++XAPP_XWD_DEPENDENCIES = xlib_libX11 xlib_libXmu xlib_libxkbfile
+ 
+ $(eval $(autotools-package))
