@@ -1,34 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Apr 2014 11:43:10 +0200
-Subject: [Buildroot] [PATCH 1/1] qhull: new package
-In-Reply-To: <5350E3A3.8070902@infosolution.it>
-References: <1397767755-17045-1-git-send-email-d.viti@infosolution.it>
- <20140417231640.2d48cc6c@skate> <5350E3A3.8070902@infosolution.it>
-Message-ID: <20140418114310.3761e897@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 18 Apr 2014 15:07:31 +0200
+Subject: [Buildroot] [PATCH 1/2] Makefile: toolchain-eclipse-register: add
+	toolchain dependency
+Message-ID: <1397826452-30281-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Davide Viti,
+The "toolchain-eclipse-register" target needs the toolchain so add
+toolchain as a dependency.
+This also fix the support to top-level parallel make.
 
-On Fri, 18 Apr 2014 10:34:43 +0200, Davide Viti wrote:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Il 17/04/2014 23:16, Thomas Petazzoni ha scritto:
-> > I'm just curious: are you using this kind of libraries in embedded 
-> > Linux systems? What kind of applications do they do? 
-> my colleagues use it on a system equipped with kinect-like sensors for 
-> implementing navigation algorithms.
-
-Ah, nice!
-
-> Will try all your suggestions and provide a new patch.
-
-Ok, thanks a lot!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 42adf7c..53282ae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -621,7 +621,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 
+-toolchain-eclipse-register:
++toolchain-eclipse-register: toolchain
+ 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+ 
+ source: $(TARGETS_SOURCE) $(HOST_SOURCE)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.2
