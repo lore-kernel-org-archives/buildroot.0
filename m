@@ -1,47 +1,33 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Apr 2014 15:20:43 +0200
-Subject: [Buildroot] [PATCH 2/2] Makefile: target-generatelocales: add
-	toolchain dependency
-In-Reply-To: <1397826452-30281-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1397826452-30281-1-git-send-email-fabio.porcedda@gmail.com>
- <1397826452-30281-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <CAHkwnC_P8JkmnhAv68yTO8Dnb2oGED64nMgyvG4bbx7huf1+Gg@mail.gmail.com>
+From: Filippo Sironi <filippo.sironi@gmail.com>
+Date: Fri, 18 Apr 2014 17:00:47 +0200
+Subject: [Buildroot] x11/input-evdev and touchscreen
+Message-ID: <D18581C1-9C91-4453-8579-212E092B389F@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 18, 2014 at 3:07 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> The target depends on the toolchain so add it as a dependency.
-> This also fix the support to top-level parallel make.
->
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index 53282ae..e204038 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -598,7 +598,7 @@ ifneq ($(GENERATE_LOCALE),)
->  # data comes preferably from the toolchain, or if the toolchain does
->  # not have them (Linaro toolchains), we use the ones available on the
->  # host machine.
-> -target-generatelocales: host-localedef
-> +target-generatelocales: host-localedef toolchain
->         $(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
->         $(Q)for locale in $(GENERATE_LOCALE) ; do \
->                 inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
-> --
-> 1.9.2
->
+Hi everyone,
 
-I've done like that because i think that the "target-generatelocales"
-depends only on the toolchain target, doesn't it?
+I have an issue I cannot explain regarding X11/input-evdev.
+I recently configured and built a root file system through buildroot 2014.02.
+The root file system features X11 (1.12.4, but I also bumped it to 1.14.6) and the
+input-evdev driver (2.7, but I also bumped it to 2.8).
 
-Regards
--- 
-Fabio Porcedda
+NOTE: I cannot use HEAD on master since it provides X11 1.15 and I have to use the
+Nvidia Tegra T20 drivers, which are available up to X11 1.14.
+
+The embedded device I'm targeting has a touchscreen display; evtest shows that events
+come from the touchscreen display to userspace but, unfortunately,  xinput test-xi2
+does not, even though the touchscreen display appears among the xinputs.
+
+The strange thing is that a very similar setup starting from the Ubuntu Core 13.10
+root file system works flawlessly (I cannot use this solution since I do not have
+enough space on my embedded device).
+
+Do you know anything about a configuration switch I may have missed? I looked through
+the configure script of input-evdev and there is nothing interesting.
+
+Thanks,
+Filippo
