@@ -1,72 +1,60 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 18 Apr 2014 10:44:59 +0300
-Subject: [Buildroot] [PATCH] qt5base: Remove feature test for
-	posix_fallocate in sqlite code
-Message-ID: <1397807099-1489-1-git-send-email-fatih.asici@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Apr 2014 10:12:24 +0200
+Subject: [Buildroot] [PATCH] libtool: use a different way to avoid
+	autoreconfiguration
+In-Reply-To: <20140417233852.3882fe94@skate>
+References: <1395270180-12701-1-git-send-email-arnout@mind.be>
+ <20140417233852.3882fe94@skate>
+Message-ID: <5350DE68.6040704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's already checked by the build system more accurately.
+On 17/04/14 23:38, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle (Essensium/Mind),
+> 
+> On Thu, 20 Mar 2014 00:03:00 +0100, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
+>> In 4268d39, a patch was added to update libtool.m4 for MIPS n64 targets.
+>> However, this caused the configure script to be regenerated during the
+>> build steps, which in turn caused build failures on Fedora 12 hosts. In
+>> ed73d1d, this was fixed by patching the installed libtool.m4 file
+>> instead of the source file.
+>>
+>> However, ed73d1d did not take into account that the target libtool will
+>> also install libtool.m4 to staging, and that that version has
+>> precedence over the one in HOST_DIR.
+>>
+>> Therefore, this patch takes a different approach: the source file is
+>> patched in the usual way, and instead the reconfigure is avoided by
+>> touching the generated files.
+>>
+>> On the target, we also cannot use the AUTORECONF mechanism because of
+>> some mysterious Makefile.inc file. So just use the same approach and
+>> wait for upstream to make a new release.
+>>
+>> Fixes:
+>>    http://autobuild.buildroot.net/results/b86/b86a83c6549004f226e7255242e54ef4e50c5ec3/
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> Applied, thanks.
+> 
+> Can you let me know if this patch was superseds
+> http://patchwork.ozlabs.org/patch/331090/ ?
 
-Fixes:
+ Yes it does, I marked it as such.
 
-  http://autobuild.buildroot.net/results/e3b/e3b26ee314880fdb50bb774a0539bfba04d9fbcf/
+ Regards,
+ Arnout
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
----
- ...not-check-feature-macros-for-posix_falloc.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
 
-diff --git a/package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch b/package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
-new file mode 100644
-index 0000000..554f1cd
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
-@@ -0,0 +1,41 @@
-+From 18eee84e9458bdcb244df4c5ad968c8d5ea1860a Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-+Date: Fri, 18 Apr 2014 10:19:03 +0300
-+Subject: [PATCH] sqlite3: Do not check feature macros for posix_fallocate()
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Build system already checks for this function and defines
-+HAVE_POSIX_FALLOCATE if it is available.
-+
-+Next releases of Qt will come with an updated sqlite3 which removes this
-+check.
-+
-+Change-Id: I55e403aa01a7f054f9fe4773ce96dad399afce80
-+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-+---
-+ src/3rdparty/sqlite/sqlite3.c | 7 -------
-+ 1 file changed, 7 deletions(-)
-+
-+diff --git a/src/3rdparty/sqlite/sqlite3.c b/src/3rdparty/sqlite/sqlite3.c
-+index 03fa649..1ae9be2 100644
-+--- a/src/3rdparty/sqlite/sqlite3.c
-++++ b/src/3rdparty/sqlite/sqlite3.c
-+@@ -22935,13 +22935,6 @@ SQLITE_PRIVATE const char *sqlite3OpcodeName(int i){
-+ */
-+ #if SQLITE_OS_UNIX              /* This file is used on unix only */
-+ 
-+-/* Use posix_fallocate() if it is available
-+-*/
-+-#if !defined(HAVE_POSIX_FALLOCATE) \
-+-      && (_XOPEN_SOURCE >= 600 || _POSIX_C_SOURCE >= 200112L)
-+-# define HAVE_POSIX_FALLOCATE 1
-+-#endif
-+-
-+ /*
-+ ** There are various methods for file locking used for concurrency
-+ ** control:
-+-- 
-+1.9.1
-+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
