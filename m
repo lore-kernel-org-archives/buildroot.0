@@ -1,107 +1,119 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Fri, 18 Apr 2014 23:36:03 +0200
-Subject: [Buildroot] [v2] qhull: new package
-Message-ID: <1397856963-30409-1-git-send-email-zinosat@tiscali.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Apr 2014 23:42:17 +0200
+Subject: [Buildroot] [PATCH 1/1] dcron: new package
+In-Reply-To: <1394613893-26144-1-git-send-email-alvaro.gamez@hazent.com>
+References: <1394613893-26144-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <20140418234217.6914f6a6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Davide Viti <d.viti@infosolution.it>
+Hello,
 
-Signed-off-by: Davide Viti <d.viti@infosolution.it>
----
-Changes v1 -> v2:
-  - add dependency on BR2_INSTALL_LIBSTDCPP  (Thomas Petazzoni)
-  - no need to specify "QHULL_SITE_METHOD = git"
-  - add "depends on !BR2_bfin" (see [1]) 
+Thanks for your contribution. I have a few comments below.
 
-As suggested, I've tried to switch from git to http(s) with no success:
-gitorious provides tarballs but wget needs to be invoked with
-"--no-check-certificate". I've checked the "packages" folder and all
-the packages hosted on gitorious use a git site
+On Wed, 12 Mar 2014 09:44:53 +0100, Alvaro G. M wrote:
 
-I successfully tried to build for qemu x86,x86_64 and arm-vexpress
-using the available config files
+> diff --git a/package/dcron/Config.in b/package/dcron/Config.in
+> new file mode 100644
+> index 0000000..70dadcd
+> --- /dev/null
+> +++ b/package/dcron/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_DCRON
+> +	bool "dcron"
 
-I rebuilt the packages also with the suggested minimal config files on
-a debian testing machine, inside a pbuilder-based chroot:
+Have you checked that dcron really has no dependencies on toolchain
+features? Could you test building it with the following toolchain
+configurations:
 
- * br-arm-basic.config: compilation, as expected, fails because of
-   missing C++ support ("C++ support is selected but is not available
-   in external toolchain")
- * br-arm-full-nothread.config: success
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-uclinux.config
 
-[1] bfin-uclinux.config: errors while linking (see
-http://pastebin.com/ygCd05ad). Not sure worth fixing, thus marking the
-package depending on "!BR2_bfin"
 
-regards,
-Davide
+> diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+> new file mode 100644
+> index 0000000..cfff875
+> --- /dev/null
+> +++ b/package/dcron/dcron.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# dcron
+> +#
+> +################################################################################
+> +
+> +DCRON_VERSION = 4.5
+> +DCRON_SITE = http://www.jimpryor.net/linux/releases/
+> +DCRON_LICENSE = GPLv2
 
- package/Config.in       |  1 +
- package/qhull/Config.in | 18 ++++++++++++++++++
- package/qhull/qhull.mk  | 14 ++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/qhull/Config.in
- create mode 100644 package/qhull/qhull.mk
+How do you know it's GPLv2 ? Unfortunately the source code isn't very
+specific about the version of the GPL license being used. The only
+information I've found is:
 
-diff --git a/package/Config.in b/package/Config.in
-index 748d28e..44c35ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -820,6 +820,7 @@ source "package/p11-kit/Config.in"
- source "package/poco/Config.in"
- source "package/protobuf/Config.in"
- source "package/protobuf-c/Config.in"
-+source "package/qhull/Config.in"
- source "package/schifra/Config.in"
- source "package/startup-notification/Config.in"
- source "package/tz/Config.in"
-diff --git a/package/qhull/Config.in b/package/qhull/Config.in
-new file mode 100644
-index 0000000..f49c96d
---- /dev/null
-+++ b/package/qhull/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_QHULL
-+	bool "qhull"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_bfin
-+	help
-+	  Qhull computes the convex hull, Delaunay triangulation,
-+	  Voronoi diagram, halfspace intersection about a point,
-+	  furthest-site Delaunay triangulation, and furthest-site
-+	  Voronoi diagram. The source code runs in 2-d, 3-d, 4-d, and
-+	  higher dimensions. Qhull implements the Quickhull algorithm
-+	  for computing the convex hull. It handles roundoff errors
-+	  from floating point arithmetic. It computes volumes, surface
-+	  areas, and approximations to the convex hull.
-+
-+	  http://www.qhull.org
-+
-+comment "qhull needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
-new file mode 100644
-index 0000000..f2bc771
---- /dev/null
-+++ b/package/qhull/qhull.mk
-@@ -0,0 +1,14 @@
-+###############################################################################
-+#
-+# qhull
-+#
-+###############################################################################
-+
-+QHULL_VERSION = 60d55819729d7b49391dde0271e15a56c70992b9
-+QHULL_SITE = git://gitorious.org/qhull/qhull.git
-+QHULL_INSTALL_STAGING = YES
-+QHULL_LICENSE = BSD-Style
-+QHULL_LICENSE_FILES = COPYING.txt
-+QHULL_CONF_OPT = -DCMAKE_BUILD_TYPE=Release
-+
-+$(eval $(cmake-package))
+May be distributed under the GNU General Public License
+
+> +
+> +DCRON_MAKE_OPT = CC="$(TARGET_CC)" CXX="$(TARGET_CXX)" AR="$(TARGET_AR)"
+
+You should instead use $(TARGET_CONFIGURE_OPTS), which already has all
+these definitions.
+
+> +
+> +define DCRON_PERMISSIONS
+> +/usr/sbin/crond			 f 4755	0 0 - - - - -
+
+Is it really needed to install this daemon suid-root? I don't think we
+install other daemons suid-root.
+
+> +/usr/bin/crontab		 f 755  0 0 - - - - -
+> +/etc/cron.d/system		 f 755  0 0 - - - - -
+
+These are not needed, as these permissions are normal ones, that
+can simply be defined by installation commands (below).
+
+> +endef
+> +
+> +define DCRON_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) $(DCRON_MAKE_OPT)
+
+Is DESTDIR= really needed during the build step?
+
+Also, use TARGET_CONFIGURE_OPTS instead of DCRON_MAKE_OPT.
+
+> +endef
+> +
+> +define DCRON_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m0700 $(@D)/crond $(TARGET_DIR)/usr/sbin/crond
+
+Use -D
+
+> +	$(INSTALL) -m4755 $(@D)/crontab $(TARGET_DIR)/usr/bin/crontab
+
+Ditto. And why 4755 instead of 755 ?
+
+> +	$(INSTALL) -D -m0644 $(@D)/extra/root.crontab $(TARGET_DIR)/etc/cron.d/system
+> +	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
+> +	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
+> +	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
+> +endef
+> +
+> +define DCRON_CLEAN_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) clean
+> +endef
+
+<pkg>_CLEAN_CMDS no longer exist, so this part should be removed.
+
+Could you take these comments into account and submit an updated
+version?
+
+Thanks a lot!
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
