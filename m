@@ -1,30 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Apr 2014 23:52:59 +0200
-Subject: [Buildroot] [PATCH] qt5base: Remove feature test for
- posix_fallocate in sqlite code
-In-Reply-To: <1397807099-1489-1-git-send-email-fatih.asici@gmail.com>
-References: <1397807099-1489-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20140418235259.0ba69918@skate>
+Date: Fri, 18 Apr 2014 23:53:10 +0200
+Subject: [Buildroot] [PATCH 1/1] xapp_xwd: Add missing dependency
+ xlib_libxkbfile
+In-Reply-To: <1397802848-4446-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1397802848-4446-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140418235310.285cc2c0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+Dear Bernd Kuhls,
 
-On Fri, 18 Apr 2014 10:44:59 +0300, Fatih A??c? wrote:
-> It's already checked by the build system more accurately.
+On Fri, 18 Apr 2014 08:34:08 +0200, Bernd Kuhls wrote:
+> Fixes http://autobuild.buildroot.net/results/12b/12b7894a4f67d963ea93622eea1adc2d2c3d6847/
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/e3b/e3b26ee314880fdb50bb774a0539bfba04d9fbcf/
-> 
-> Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...not-check-feature-macros-for-posix_falloc.patch | 41 ++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
+>  package/x11r7/xapp_xwd/Config.in   |    1 +
+>  package/x11r7/xapp_xwd/xapp_xwd.mk |    2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
 Applied, thanks.
 
