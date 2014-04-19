@@ -1,26 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Apr 2014 19:09:47 +0200
-Subject: [Buildroot] [v3] qhull: new package
-In-Reply-To: <1397860201-30520-1-git-send-email-zinosat@tiscali.it>
-References: <1397860201-30520-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <20140419190947.3310a9ca@skate>
+Date: Sat, 19 Apr 2014 19:10:46 +0200
+Subject: [Buildroot] [git commit] libuci: remove MMU dependency with Lua
+	binding
+Message-ID: <20140419173153.479F59C910@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Davide Viti,
+commit: http://git.buildroot.net/buildroot/commit/?id=8709cb950c516c437aa5c094262d1bb15ca68797
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Apr 2014 00:30:01 +0200, Davide Viti wrote:
-> From: Davide Viti <d.viti@infosolution.it>
-> 
-> Signed-off-by: Davide Viti <d.viti@infosolution.it>
+The Lua binding option of libuci doesn't need the MMU.
 
-Applied, thanks.
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libuci/libuci.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index ff50874..31623a2 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -10,7 +10,7 @@ LIBUCI_LICENSE = LGPLv2.1
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
+ 
+-ifeq ($(BR2_USE_MMU)$(BR2_PACKAGE_LUA_5_1),yy)
++ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+ LIBUCI_DEPENDENCIES += lua
+ LIBUCI_CONF_OPT += -DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
+ 	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
