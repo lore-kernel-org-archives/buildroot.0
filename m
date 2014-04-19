@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Apr 2014 23:53:25 +0200
-Subject: [Buildroot] [PATCH] graphs: store and keep intermediate 'dot'
- program for graph-depends
-In-Reply-To: <1397938628-16545-1-git-send-email-yann.morin.1998@free.fr>
-References: <1397938628-16545-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140419235325.11facae7@skate>
+Date: Sat, 19 Apr 2014 23:53:35 +0200
+Subject: [Buildroot] [PATCH 0/8] update of some Lua modules
+In-Reply-To: <1397941080-24157-1-git-send-email-francois.perrad@gadz.org>
+References: <1397941080-24157-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140419235335.531df05c@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Francois Perrad,
 
-On Sat, 19 Apr 2014 22:17:08 +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Currently, graph-depends (and PKG-graph-depends) do not store the
-> intermediate 'dot' program.
-> 
-> Some users would like to get the dot program to be able to further
-> customise the generated graphs (eg. modify the layout, colorise some
-> of the packages...)
-> 
-> So, store the intermediate dot program alongside the generated graph.
-> 
-> Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sat, 19 Apr 2014 22:57:52 +0200, Francois Perrad wrote:
+> Francois Perrad (8):
+>   cosmo: bump to version 14.03.04
+>   coxpcall: bump to version 1.15.0
+>   luajson: bump to version 1.3.3
+>   orbit: bump to version 2.2.1
+>   wsapi: bump to version 1.6.1
+>   cgilua: bump rockspec revision
+>   luafilesystem: bump rockspec revision
+>   luacrypto: luarocks conversion
 
-Applied, thanks.
+Applied, thanks!
 
 Thomas
 -- 
