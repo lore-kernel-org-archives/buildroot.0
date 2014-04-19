@@ -1,40 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Apr 2014 23:56:39 +0200
-Subject: [Buildroot] [RFC/PATCH 1/1] gst-fsl-plugins: fix compile for
- sysroot based on newer linux kernel headers
-In-Reply-To: <20140304225057.0d010df6@skate>
-References: <1393366722-27644-1-git-send-email-ps.report@gmx.net>
- <1393366722-27644-2-git-send-email-ps.report@gmx.net>
- <20140302094859.66470cdc@skate> <53161025.7040908@mind.be>
- <20140304225057.0d010df6@skate>
-Message-ID: <20140419235639.14dec5f6@skate>
+Date: Sat, 19 Apr 2014 23:58:38 +0200
+Subject: [Buildroot] [lua V3 0/8] lua
+In-Reply-To: <20140302000232.6430d956@skate>
+References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
+ <20140302000232.6430d956@skate>
+Message-ID: <20140419235838.1fb6d8db@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Fran?ois,
 
-On Tue, 4 Mar 2014 22:50:57 +0100, Thomas Petazzoni wrote:
+On Sun, 2 Mar 2014 00:02:32 +0100, Thomas Petazzoni wrote:
 
-> >  Maybe a generic solution for packages that require specific kernel
-> > headers is to include a headers_install in the kernel's build?
+> > Francois Perrad (8):
+> >   luajit: refactor without dont-strip.patch
+> >   luajit: refactor without shared-lib.patch
+> >   luajit: handles BR2_PREFER_STATIC_LIB
+> >   luajit: add host variant
+> >   luainterpreter: add host variant
+> >   luarocks: allow to work with host-luainterpreter
 > 
-> But will it work properly? I mean, most of the time, the packages that
-> need this are vendor-specific packages, that want to access specific
-> definitions in vendor-specific kernels. And the quality of
-> vendor-specific kernels is usually quite low, so there are quite some
-> chances that headers_install might not necessarily do the right thing
-> as it will not have been properly tested...
+> For all these patches, and especially the last three ones, I want
+> commit logs. I really do appreciate _a lot_ all the work you're doing
+> on Lua and Perl, it's really awesome. And I really mean it. But you
+> need to work on improving your commit logs. For now, we have no idea
+> *why* you're doing these changes.
 > 
-> >  Anyway, for this one, if it works with -I with all our external
-> > toolchains and with an internal uClibc and glibc toolchain, then I guess
-> > it's OK. Perhaps something got fixed in the gst-fsl-plugins bump.
+> All the other core developers are doing efforts to write long,
+> descriptive commit logs, and experience has shown that they are
+> immensely useful 6 or 12 months later when we got back in the Git
+> history to understand why things were done. Look at what they do, and
+> follow the basic rule of thumb that any non-trivial patch should have
+> at least 2 or 3 paragraphs in its commit log explaining *why* the
+> change is being made.
 > 
-> Is this a Acked-by for the patch?
+> At this point, I have no idea what you are doing. I presume patches 4
+> and 5 are preparations for patch 6, but I don't understand what patch 6
+> is doing, and nowhere it is mentioned why patches 4 and 5 are needed.
 
-Ping ? :-)
+Any news about these patches? From this series, we still have patches
+4, 5, 6 and 8 pending in patchwork. Could you take into account the
+comments that have been made (mainly the strong need for more detailed
+commit logs), and resend updated versions on top of master?
+
+Thanks!
 
 Thomas
 -- 
