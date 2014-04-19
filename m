@@ -1,78 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Apr 2014 23:52:51 +0200
-Subject: [Buildroot] [git commit] luacrypto: luarocks conversion
-Message-ID: <20140419215316.089D09C0C7@busybox.osuosl.org>
+Date: Sat, 19 Apr 2014 23:53:25 +0200
+Subject: [Buildroot] [PATCH] graphs: store and keep intermediate 'dot'
+ program for graph-depends
+In-Reply-To: <1397938628-16545-1-git-send-email-yann.morin.1998@free.fr>
+References: <1397938628-16545-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140419235325.11facae7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c6b1c24d167060490ad7a09f3d1425606d4c976
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luacrypto/luacrypto-01-autotools.patch |   30 ------------------------
- package/luacrypto/luacrypto.mk                 |   12 ++++----
- 2 files changed, 6 insertions(+), 36 deletions(-)
+On Sat, 19 Apr 2014 22:17:08 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Currently, graph-depends (and PKG-graph-depends) do not store the
+> intermediate 'dot' program.
+> 
+> Some users would like to get the dot program to be able to further
+> customise the generated graphs (eg. modify the layout, colorise some
+> of the packages...)
+> 
+> So, store the intermediate dot program alongside the generated graph.
+> 
+> Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/luacrypto/luacrypto-01-autotools.patch b/package/luacrypto/luacrypto-01-autotools.patch
-deleted file mode 100644
-index e8befb0..0000000
---- a/package/luacrypto/luacrypto-01-autotools.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--autotools: fix install directories
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/Makefile.am
--===================================================================
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -3,7 +3,7 @@
-- SUBDIRS = src \
-- 	  doc
-- 
---pkgconfigdir = $(libdir)/pkgconfig
--+pkgconfigdir = $(prefix)/lib/pkgconfig
-- pkgconfig_DATA = luacrypto.pc
-- 
-- test: all
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -31,7 +31,7 @@
-- PKG_CHECK_MODULES([LUA], [lua])
-- 
-- # lua libdir
---LUALIBDIR="`$PKGCONFIG --variable=libdir lua`"
--+LUALIBDIR="`$PKGCONFIG --variable=INSTALL_CMOD lua`"
-- 
-- # dest of headers
-- CRYPTOINC="${includedir}/${PACKAGE_NAME}"
-diff --git a/package/luacrypto/luacrypto.mk b/package/luacrypto/luacrypto.mk
-index 54ab388..42e20af 100644
---- a/package/luacrypto/luacrypto.mk
-+++ b/package/luacrypto/luacrypto.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--LUACRYPTO_VERSION = 0.3.2
--LUACRYPTO_SITE = $(call github,mkottman,luacrypto,$(LUACRYPTO_VERSION))
-+LUACRYPTO_VERSION_UPSTREAM = 0.3.2
-+LUACRYPTO_VERSION = $(LUACRYPTO_VERSION_UPSTREAM)-1
-+LUACRYPTO_SUBDIR = luacrypto-$(LUACRYPTO_VERSION_UPSTREAM)
- LUACRYPTO_LICENSE = MIT
--LUACRYPTO_LICENSE_FILES = COPYING
--LUACRYPTO_DEPENDENCIES = lua openssl host-pkgconf
--LUACRYPTO_AUTORECONF = YES
-+LUACRYPTO_LICENSE_FILES = $(LUACRYPTO_SUBDIR)/COPYING
-+LUACRYPTO_DEPENDENCIES = luainterpreter openssl
- 
--$(eval $(autotools-package))
-+$(eval $(luarocks-package))
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
