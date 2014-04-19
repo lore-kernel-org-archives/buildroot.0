@@ -1,50 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Apr 2014 18:27:47 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-04-10
-In-Reply-To: <87r4543r0z.fsf@dell.be.48ers.dk>
-References: <20140411063008.70B85100F1F@stock.ovh.net>
- <87d2go5oz3.fsf@dell.be.48ers.dk> <20140411093044.07729d79@skate>
- <87y4zc47il.fsf@dell.be.48ers.dk>
- <20140411065158.0a9308de@core2quad.morethan.org>
- <20140411141346.49e1251a@skate> <20140411123931.GZ4096@tarshish>
- <20140411145923.21a38b08@skate> <87r4543r0z.fsf@dell.be.48ers.dk>
-Message-ID: <53515283.5060106@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Apr 2014 14:06:21 +0200
+Subject: [Buildroot] [PATCH 1/1] libsoxr: new package
+In-Reply-To: <535254BA.9060004@gmail.com>
+References: <1397867553-7107-1-git-send-email-hadrien.boutteville@gmail.com>
+ <20140419095242.4f405cdd@skate> <535254BA.9060004@gmail.com>
+Message-ID: <20140419140621.27e4f589@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/04/14 16:00, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Aah, exactly! Except that the download was not interrupt by doing a
->  > Ctrl+C, and it's actually wget which retried the download. And:
-> 
->  > 2014-04-08 04:27:12 (3.70 MB/s) - Connection closed at byte 1057288. Retrying.
-> 
->  > The size at which the download was interrupted matches exactly my
->  > findings.
-> 
->  > Is it a bug in wget? Some option we forgot to pass to wget?
-> 
-> Seems like a bug to me. I don't see how this could ever be valid
-> behaviour.
+Dear Hadrien Boutteville,
 
- Could also be a bug in the server: if it claims to support the Range:
-option, then wget will try to use it. But if the server then returns the
-start of the file instead of the request offset, you'll end up with this
-corrupted file.
+On Sat, 19 Apr 2014 12:49:30 +0200, Hadrien Boutteville wrote:
 
- Regards,
- Arnout
+> I packaged it with minimal toolchain configuration and checked for these
+> cases, it built fine. I rebuilt with your configurations and it is
+> always good.
+
+Good.
+
+> At first glance the threads references in the code depend on OpenMP, and
+> I disabled it.
+> 
+> I don't have time today to test the execution with static library and no
+> thread, I just tested with a standard ARM configuration.
+
+That's ok.
 
 
+> > The project apparently provides a tarball. Could you use the tarball
+> > instead of the Git repository?
+> 
+> OK. Is it better to always use the tarball if available?
+
+Yes. It's typically faster to download, and git:// access can be
+problematic in some companies that have stupid firewall/proxy policies.
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
