@@ -1,9 +1,10 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 19 Apr 2014 11:47:32 +0200
-Subject: [Buildroot] [PATCH 4/5] lttng-tools: bump version to 2.4.1
+Date: Sat, 19 Apr 2014 11:47:33 +0200
+Subject: [Buildroot] [PATCH 5/5] lttng-libust: add python as optional
+	dependency
 In-Reply-To: <1397900853-7235-1-git-send-email-romain.naour@openwide.fr>
 References: <1397900853-7235-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1397900853-7235-4-git-send-email-romain.naour@openwide.fr>
+Message-ID: <1397900853-7235-5-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Romain Naour <romain.naour@openwide.fr>
 ---
- package/lttng-tools/lttng-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lttng-libust/lttng-libust.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 260bf82..a510adf 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index b6d1911..f3d40ae 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -15,4 +15,12 @@ LTTNG_LIBUST_DEPENDENCIES    = liburcu util-linux
  
--LTTNG_TOOLS_VERSION = 2.4.0
-+LTTNG_TOOLS_VERSION = 2.4.1
- LTTNG_TOOLS_SITE    = http://lttng.org/files/lttng-tools/
- LTTNG_TOOLS_SOURCE  = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_LICENSE = GPLv2+; LGPLv2.1+ for include/lttng/* and src/lib/lttng-ctl/*
+ LTTNG_LIBUST_AUTORECONF = YES
+ 
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++LTTNG_LIBUST_DEPENDENCIES += python
++else ifeq ($(BR2_PACKAGE_PYTHON3),y)
++LTTNG_LIBUST_DEPENDENCIES += python3
++else
++LTTNG_LIBUST_CONF_ENV=am_cv_pathless_PYTHON="none"
++endif
++
+ $(eval $(autotools-package))
 -- 
 1.9.0
