@@ -1,47 +1,71 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Sat, 19 Apr 2014 12:45:36 +0200
-Subject: [Buildroot] Analysis of build results for 2014-04-18
-In-Reply-To: <20140419123252.6147c733@skate>
-References: <20140419063009.6CB4810148A@stock.ovh.net>	<20140419090850.339ca98f@skate>	<53523738.4020409@openwide.fr>
- <20140419123252.6147c733@skate>
-Message-ID: <535253D0.1060207@openwide.fr>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Sat, 19 Apr 2014 12:49:30 +0200
+Subject: [Buildroot] [PATCH 1/1] libsoxr: new package
+In-Reply-To: <20140419095242.4f405cdd@skate>
+References: <1397867553-7107-1-git-send-email-hadrien.boutteville@gmail.com>
+ <20140419095242.4f405cdd@skate>
+Message-ID: <535254BA.9060004@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Thomas,
 
-Le 19/04/2014 12:32, Thomas Petazzoni a ?crit :
-> Dear Romain Naour,
+On Sat, 19 Apr 2014 09:52:42 +0200, Thomas Petazzoni wrote:
+> Really no toolchain dependencies? Can you test this package with the
+> following toolchain configurations:
 > 
-> On Sat, 19 Apr 2014 10:43:36 +0200, Romain Naour wrote:
+>  http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-linux-uclibc.config
+>   -> this one tests !MMU
 > 
->>> checking host system alignment requirements... checking for a Python interpreter with version >= 2.7... none
->>> configure: error: no suitable Python interpreter found
->>> make: *** [/home/test/test/1/output/build/lttng-libust-2.4.0/.stamp_configured] Error 1
->>>
->>> I think Romain Naour said the new version of lttng-libust was fixing
->>> this. Romain, could you send a patch to bump lttng-libust?
->>
->> Yes, but I think it would be better to keep all lttng tools in sync.
->> lttng-tools 2.4.1
->> lttng-modules 2.4.1
->> lttng-ust 2.4.1
->> and bump liburcu to 0.8.4 while we are at it.
+>  http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-uclinux.config
+>   -> this one tests !MMU and static library only
 > 
-> Sure. I'm waiting for your patches :-)
+>  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
+>   -> this one tests the absence of thread support
 > 
-> Thomas
+>  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
+>   -> and this one tests a minimal toolchain
 > 
 
-They are already in the patchwork :)
+I packaged it with minimal toolchain configuration and checked for these
+cases, it built fine. I rebuilt with your configurations and it is
+always good.
 
-http://patchwork.ozlabs.org/patch/340473/
-http://patchwork.ozlabs.org/patch/340477/
-http://patchwork.ozlabs.org/patch/340474/
-http://patchwork.ozlabs.org/patch/340475/
-http://patchwork.ozlabs.org/patch/340476/
+At first glance the threads references in the code depend on OpenMP, and
+I disabled it.
 
-Romain
+I don't have time today to test the execution with static library and no
+thread, I just tested with a standard ARM configuration.
+
+>> diff --git a/package/libsoxr/libsoxr.mk b/package/libsoxr/libsoxr.mk
+>> new file mode 100644
+>> index 0000000..c0fb72b
+>> --- /dev/null
+>> +++ b/package/libsoxr/libsoxr.mk
+>> @@ -0,0 +1,24 @@
+>> +################################################################################
+>> +#
+>> +# libsoxr
+>> +#
+>> +################################################################################
+>> +
+>> +LIBSOXR_VERSION = 0.1.1
+>> +LIBSOXR_SITE = git://git.code.sf.net/p/soxr/code
+> 
+> The project apparently provides a tarball. Could you use the tarball
+> instead of the Git repository?
+
+OK. Is it better to always use the tarball if available?
+
+>> +LIBSOXR_LICENSE = LGPLv2.1
+> 
+> According to the LICENSE file, the license is LGPLv2.1+
+
+Corrected, thanks !
+
+Regards,
+
+Hadrien
