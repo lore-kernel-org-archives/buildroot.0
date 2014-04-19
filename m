@@ -1,52 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Apr 2014 23:58:38 +0200
-Subject: [Buildroot] [lua V3 0/8] lua
-In-Reply-To: <20140302000232.6430d956@skate>
-References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
- <20140302000232.6430d956@skate>
-Message-ID: <20140419235838.1fb6d8db@skate>
+Date: Sat, 19 Apr 2014 23:59:45 +0200
+Subject: [Buildroot] [PATCH] pkg-cmaketargets.mk: do not hardcode
+ absolute path in toolchainfile.cmake
+In-Reply-To: <531429C3.80801@mind.be>
+References: <1393694162-21952-1-git-send-email-s.martin49@gmail.com>
+ <531429C3.80801@mind.be>
+Message-ID: <20140419235945.0601cc38@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois,
+Samuel,
 
-On Sun, 2 Mar 2014 00:02:32 +0100, Thomas Petazzoni wrote:
+On Mon, 03 Mar 2014 08:05:39 +0100, Arnout Vandecappelle wrote:
 
-> > Francois Perrad (8):
-> >   luajit: refactor without dont-strip.patch
-> >   luajit: refactor without shared-lib.patch
-> >   luajit: handles BR2_PREFER_STATIC_LIB
-> >   luajit: add host variant
-> >   luainterpreter: add host variant
-> >   luarocks: allow to work with host-luainterpreter
+> >  $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+> >  	@mkdir -p $(@D)
+> >  	@echo -en "\
+> > +	get_filename_component(_HOST_DIR \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
+> > +	set(_HOST_DIR \"\$${_HOST_DIR}/../../..\")\n\
+> >  	set(CMAKE_SYSTEM_NAME Linux)\n\
+> > -	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+> > -	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+> > +	set(CMAKE_C_COMPILER \"\$${_HOST_DIR}/$(subst $(HOST_DIR)/,,$(TARGET_CROSS))gcc\")\n\
 > 
-> For all these patches, and especially the last three ones, I want
-> commit logs. I really do appreciate _a lot_ all the work you're doing
-> on Lua and Perl, it's really awesome. And I really mean it. But you
-> need to work on improving your commit logs. For now, we have no idea
-> *why* you're doing these changes.
+>  Wouldn't it be more natural to write
 > 
-> All the other core developers are doing efforts to write long,
-> descriptive commit logs, and experience has shown that they are
-> immensely useful 6 or 12 months later when we got back in the Git
-> history to understand why things were done. Look at what they do, and
-> follow the basic rule of thumb that any non-trivial patch should have
-> at least 2 or 3 paragraphs in its commit log explaining *why* the
-> change is being made.
+> set(CMAKE_C_COMPILER \"$(subst $(HOST_DIR)/,\$${_HOST_DIR}/,$(TARGET_CC_NOCCACHE)\")\n\
 > 
-> At this point, I have no idea what you are doing. I presume patches 4
-> and 5 are preparations for patch 6, but I don't understand what patch 6
-> is doing, and nowhere it is mentioned why patches 4 and 5 are needed.
+> ?
 
-Any news about these patches? From this series, we still have patches
-4, 5, 6 and 8 pending in patchwork. Could you take into account the
-comments that have been made (mainly the strong need for more detailed
-commit logs), and resend updated versions on top of master?
+Can you reply to Arnout comment, and/or resend an updated version of
+this patch? Or take some other action about it?
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
