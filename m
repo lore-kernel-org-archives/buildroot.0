@@ -1,36 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Apr 2014 08:55:02 +0200
-Subject: [Buildroot] wget autoreconfigure problem
-In-Reply-To: <1899265.ckz4x4Fb2x@hyperion>
-References: <1899265.ckz4x4Fb2x@hyperion>
-Message-ID: <20140419085502.29a55aee@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 19 Apr 2014 09:02:00 +0200
+Subject: [Buildroot] [PATCH 1/1] libsoxr: new package
+In-Reply-To: <1397867553-7107-1-git-send-email-hadrien.boutteville@gmail.com>
+References: <1397867553-7107-1-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <059e93c0-e63d-43ce-bf3b-6dcbcfd11ee4@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maarten ter Huurne,
+Hadrien Boutteville <hadrien.boutteville@gmail.com> schreef:
+>Building tests fails mainly because of the cross-compilation, so they
+>are disabled for the moment.
+>
+>Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+>---
+> package/Config.in          |  1 +
+> package/libsoxr/Config.in  | 16 ++++++++++++++++
+> package/libsoxr/libsoxr.mk | 24 ++++++++++++++++++++++++
+> 3 files changed, 41 insertions(+)
+> create mode 100644 package/libsoxr/Config.in
+> create mode 100644 package/libsoxr/libsoxr.mk
+>
+>diff --git a/package/Config.in b/package/Config.in
+>index 748d28e..f04e422 100644
+>--- a/package/Config.in
+>+++ b/package/Config.in
+>@@ -505,6 +505,7 @@ source "package/libmpd/Config.in"
+> source "package/libreplaygain/Config.in"
+> source "package/libsamplerate/Config.in"
+> source "package/libsndfile/Config.in"
+>+source "package/libsoxr/Config.in"
+> source "package/libvorbis/Config.in"
+> source "package/opus/Config.in"
+> source "package/portaudio/Config.in"
+>diff --git a/package/libsoxr/Config.in b/package/libsoxr/Config.in
+>new file mode 100644
+>index 0000000..ad6f8dd
+>--- /dev/null
+>+++ b/package/libsoxr/Config.in
+>@@ -0,0 +1,16 @@
+>+config BR2_PACKAGE_LIBSOXR
+>+	bool "libsoxr"
+>+	help
+>+	  The SoX Resampler library `libsoxr' performs one-dimensional
+>+	  sample-rate conversion?it may be used, for example, to
+>+	  resample PCM-encoded audio.
+>+
+>+	  It aims to give fast and high quality results for any constant
+>+	  (rational or irrational) resampling ratio. Phase-response,
+>+	  preserved bandwidth, aliasing, and rejection level parameters
+>+	  are all configurable; alternatively, simple `preset'
+>+	  configurations may be selected. An experimental, variable-rate
+>+	  resampling mode of operation is also included.
+>+
+>+	  http://sourceforge.net/projects/soxr/
+>+
+>diff --git a/package/libsoxr/libsoxr.mk b/package/libsoxr/libsoxr.mk
+>new file mode 100644
+>index 0000000..c0fb72b
+>--- /dev/null
+>+++ b/package/libsoxr/libsoxr.mk
+>@@ -0,0 +1,24 @@
+>+################################################################################
+>+#
+>+# libsoxr
+>+#
+>+################################################################################
+>+
+>+LIBSOXR_VERSION = 0.1.1
+>+LIBSOXR_SITE = git://git.code.sf.net/p/soxr/code
+>+LIBSOXR_LICENSE = LGPLv2.1
+>+LIBSOXR_LICENSE_FILES = LICENCE COPYING.LGPL
+>+LIBSOXR_INSTALL_STAGING = YES
+>+LIBSOXR_CONF_OPT = -DWITH_OPENMP:BOOL=OFF -DBUILD_TESTS:BOOL=OFF
+>+
+>+ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>+LIBSOXR_CONF_OPT += -DBUILD_SHARED_LIBS:BOOL=OFF
+>+endif
+>+
+>+ifeq ($(BR2_ENDIAN),"BIG")
 
-On Sat, 19 Apr 2014 08:02:56 +0200, Maarten ter Huurne wrote:
-
-> The build of wget fails with the following error message:
-> 
-> make[3]: Entering directory 
-> `/home/mth/gcw0/buildroot/output/build/wget-1.15/po'
-> *** error: gettext infrastructure mismatch: using a Makefile.in.in from 
-> gettext version 0.17 but the autoconf macros are from gettext version 0.18
-> make[3]: *** [check-macro-version] Error 1
-
-This problem has been fixed by
-http://git.buildroot.net/buildroot/commit/package/wget?id=f8a2497287fa8fc0afa7698c30284a7674723aa2.
-
-Can you confirm it also fixes the problem for you?
+Use 
+ifeq ($(call qstrip,$(BR2_ENDIAN) ),BIG) 
+instead..
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
