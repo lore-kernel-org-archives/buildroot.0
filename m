@@ -1,19 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 17:41:05 +0200
-Subject: [Buildroot] [git commit] Makefile: toolchain-eclipse-register: add
+Date: Sun, 20 Apr 2014 17:41:09 +0200
+Subject: [Buildroot] [git commit] Makefile: target-generatelocales: add
 	toolchain dependency
-Message-ID: <20140420154123.B99F79C8B5@busybox.osuosl.org>
+Message-ID: <20140420154123.C9C7E9C8B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d174c6f8b6e983ea13729dcee427a37369e089df
+commit: http://git.buildroot.net/buildroot/commit/?id=1990e79f1439830291cac58f1fe6525cc68df637
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The "toolchain-eclipse-register" target needs the toolchain so add
-toolchain as a dependency.
+The target depends on the toolchain so add it as a dependency.
 This also fix the support to top-level parallel make.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
@@ -23,15 +22,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 files changed, 1 insertions(+), 1 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index dd47f77..c33368a 100644
+index c33368a..d10da9d 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -621,7 +621,7 @@ target-post-image: $(TARGETS_ROOTFS) target-finalize
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
- 
--toolchain-eclipse-register:
-+toolchain-eclipse-register: toolchain
- 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
- 
- source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+@@ -598,7 +598,7 @@ ifneq ($(GENERATE_LOCALE),)
+ # data comes preferably from the toolchain, or if the toolchain does
+ # not have them (Linaro toolchains), we use the ones available on the
+ # host machine.
+-target-generatelocales: host-localedef
++target-generatelocales: host-localedef toolchain
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+ 	$(Q)for locale in $(GENERATE_LOCALE) ; do \
+ 		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
