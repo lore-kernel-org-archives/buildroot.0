@@ -1,113 +1,80 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 20 Apr 2014 20:54:03 +0200
-Subject: [Buildroot] [PATCH 1/2] smack: new package.
+Date: Sun, 20 Apr 2014 20:54:04 +0200
+Subject: [Buildroot] [PATCH 2/2] systemd: add SMACK support option.
 In-Reply-To: <1398020044-21021-1-git-send-email-eric.le.bihan.dev@free.fr>
 References: <1398020044-21021-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1398020044-21021-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <1398020044-21021-3-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SMACK stands for Simplified Mandatory Access Control Kernel. It is a Linux
-Security Module which provides a Mandatory Access Control mechanism,
-like SELinux, but aiming towards simplicity.
+A new configuration option is available in systemd menu, to enable
+support for SMACK.
 
-This package provides the tools to load/unload the policy from the
-kernel as well as a library allowing applications to interact with
-SMACK. The proper kernel options are also set.
+For this feature to properly work, systemd requires attr (build
+dependency, also used for other features) and smack (runtime dependency).
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- linux/linux.mk          |  4 ++++
- package/Config.in       |  1 +
- package/smack/Config.in | 28 ++++++++++++++++++++++++++++
- package/smack/smack.mk  | 14 ++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/smack/Config.in
- create mode 100644 package/smack/smack.mk
+ package/systemd/Config.in  | 14 ++++++++++++++
+ package/systemd/systemd.mk | 13 +++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e270705..bd3f2ac 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -200,6 +200,10 @@ define LINUX_CONFIGURE_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUTOFS4_FS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_ACL,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_TMPFS_POSIX_XATTR,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_SMACK),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_SMACK,$(@D)/.config)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_SECURITY_NETWORK,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
- 	yes '' | $(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) oldconfig
-diff --git a/package/Config.in b/package/Config.in
-index 44c35ea..323596e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1104,6 +1104,7 @@ source "package/quota/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/rsyslog/Config.in"
- endif
-+source "package/smack/Config.in"
- source "package/supervisor/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/sysklogd/Config.in"
-diff --git a/package/smack/Config.in b/package/smack/Config.in
-new file mode 100644
-index 0000000..971b79a
---- /dev/null
-+++ b/package/smack/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_SMACK
-+	bool "smack"
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index f10637a..0c8ecd8 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -105,4 +105,18 @@ config BR2_PACKAGE_SYSTEMD_COMPAT
+ 
+ 	  This option enables the installation of compatibility *.pc files.
+ 
++config BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT
++	bool "enable SMACK support"
++	select BR2_PACKAGE_ATTR
++	select BR2_PACKAGE_SMACK
 +	help
-+	  User space programs and libraries for SMACK.
++	  Enable support for SMACK, the Simple Mandatory Access Control
++	  Kernel, a minimal approach to Access Control implemented as a kernel
++	  LSM.
 +
-+	  SMACK stands for Simplified Mandatory Access Control Kernel.
-+	  It is a Linux Security Module which provides a Mandatory Access
-+	  Control mechanism, aimed towards simplicity.
++	  This feature requires a kernel >= 3.8.
 +
-+	  This package provides a library which allows applications to work
-+	  with SMACK and tools to load/unload rules from the kernel, as well
-+	  as query the policy.
++	  When this feature is enabled, Systemd mounts smackfs and manages
++	  security labels for sockets.
 +
-+	  SMACK requires the following kernel options to be enabled:
+ endif
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index f7661ab..0dfd0c0 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -59,6 +59,13 @@ else
+ SYSTEMD_CONF_OPT += --disable-acl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ATTR),y)
++SYSTEMD_CONF_OPT += --enable-attr
++SYSTEMD_DEPENDENCIES += attr
++else
++SYSTEMD_CONF_OPT += --disable-attr
++endif
 +
-+	  - CONFIG_SECURITY
-+	  - CONFIG_SECURITY_SMACK
-+	  - CONFIG_SECURITY_NETWORK
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ SYSTEMD_CONF_OPT += --enable-gudev
+ SYSTEMD_DEPENDENCIES += libglib2
+@@ -92,6 +99,12 @@ else
+ SYSTEMD_CONF_OPT += --disable-networkd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_SMACK_SUPPORT),y)
++SYSTEMD_CONF_OPT += --enable-smack
++else
++SYSTEMD_CONF_OPT += --disable-smack
++endif
 +
-+	  These options will be automatically enabled by Buildroot if it is
-+	  responsible for building the kernel. Otherwise, if you are building
-+	  your kernel outside of Buildroot, make sure these options are
-+	  enabled.
-+
-+	  To activate SMACK, do not forget to add "security=smack" to your
-+	  kernel command line.
-+
-+	  https://github.com/smack-team/smack
-diff --git a/package/smack/smack.mk b/package/smack/smack.mk
-new file mode 100644
-index 0000000..41f71a4
---- /dev/null
-+++ b/package/smack/smack.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# smack
-+#
-+################################################################################
-+
-+SMACK_VERSION = 1.0.4
-+SMACK_SITE = $(call github,smack-team,smack,v$(SMACK_VERSION))
-+SMACK_LICENSE = LGPLv2.1+
-+SMACK_LICENSE_FILES = COPYING
-+SMACK_INSTALL_STAGING = YES
-+SMACK_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+ # mq_getattr needs -lrt
+ SYSTEMD_MAKE_OPT += LIBS=-lrt
+ SYSTEMD_MAKE_OPT += LDFLAGS+=-ldl
 -- 
 1.9.0
