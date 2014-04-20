@@ -1,33 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 20:44:30 +0200
-Subject: [Buildroot] [PATCH 2/2] perl-cross: bump to version 0.8.5
-In-Reply-To: <CAB0FRsuktZr9dubswhhRZQ=ReAZaJVtZNVcautexGnR7_e1cNg@mail.gmail.com>
-References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
- <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
- <20140420173730.1770c6e1@skate>
- <CAB0FRsuktZr9dubswhhRZQ=ReAZaJVtZNVcautexGnR7_e1cNg@mail.gmail.com>
-Message-ID: <20140420204430.0d93a02a@skate>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sun, 20 Apr 2014 20:54:02 +0200
+Subject: [Buildroot] [PATCH 0/2] SMACK: mandatory access control
+Message-ID: <1398020044-21021-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+Hi!
 
-On Sun, 20 Apr 2014 19:12:56 +0200, Fran?ois Perrad wrote:
+This small series adds support for SMACK, the Simplified Mandatory Access
+Control Kernel.
 
-> No. I've already tried it. The helper doesn't give the same result.
-> 
-> I need a tarball which allows to patch the perl distribution.
-> The helper gives a copy of the project which allows to build this tarball.
+In computer security, a Mandatory Access Control is a mechanism where the
+operating system contrains the access to an object (file, socket, ...) by a
+subject (typically a process) according to rules. A well-known example is
+SELinux.
 
-Then can you add a comment above the _SITE line to explain this?
+SMACK is an implementation of this mechanism, aimed towards simplicity.
+It can be used to harden embedded devices. It is currently used in Tizen.
 
-Thanks!
+This series introduces the "smack" package, which provides the user space
+library as well as the tools to manage the access rules. When selecting this
+package, the support for SMACK is actived in the kernel. SMACK is controlled
+via the pseudo file system /sys/fs/smackfs. Systemd can mount it automatically
+if compiled with SMACK support. So the systemd package has been updated
+accordingly.
 
-Thomas
+Best regards,
+ELB
+
+Eric Le Bihan (2):
+  smack: new package.
+  systemd: add SMACK support option.
+
+ linux/linux.mk             |  4 ++++
+ package/Config.in          |  1 +
+ package/smack/Config.in    | 28 ++++++++++++++++++++++++++++
+ package/smack/smack.mk     | 14 ++++++++++++++
+ package/systemd/Config.in  | 14 ++++++++++++++
+ package/systemd/systemd.mk | 13 +++++++++++++
+ 6 files changed, 74 insertions(+)
+ create mode 100644 package/smack/Config.in
+ create mode 100644 package/smack/smack.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.0
