@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 22:58:29 +0200
-Subject: [Buildroot] [git commit] sunxi-tools: bump version
-Message-ID: <20140420210331.8A5149BEC9@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 23:04:14 +0200
+Subject: [Buildroot] [PATCH 0/2] update sunxi-boards and sunxi-tools for
+ pcDuino board
+In-Reply-To: <1386721499.2817.17.camel@kokopelli>
+References: <1386721499.2817.17.camel@kokopelli>
+Message-ID: <20140420230414.5c69b8ec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=eb5e8d6ee2ec67b0bc013481aff7c1940dbd4b30
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Brian Beattie,
 
-Signed-off-by: Brian Beattie <beattie@beattie-home.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/sunxi-tools/sunxi-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, 10 Dec 2013 16:24:59 -0800, Brian Beattie wrote:
+> In preparation for adding support for for the pcduino board, update the
+> sunxi-boards and sunxi-tools to the commit recommended for pcduino.
+> 
+> These packages are also used by the Cubieboard so if somebody with a
+> Cubieboard could test this that would be good.
+> 
+> Brian Beattie (2):
+>   update sunxi-boards to newer commit as recomended for pcDuino board
+>   update sunxi-boards to newer commit as recomended for pcDuino board
 
-diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
-index a6c38d9..f84b286 100644
---- a/package/sunxi-tools/sunxi-tools.mk
-+++ b/package/sunxi-tools/sunxi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_TOOLS_VERSION = 3a94e721dd8d1e13d0b25da0a83463891e8e9ee0
-+SUNXI_TOOLS_VERSION = ed6f7969d80b91048b0ed95ccb61cc98f46fead7
- SUNXI_TOOLS_SITE = $(call github,linux-sunxi,sunxi-tools,$(SUNXI_TOOLS_VERSION))
- SUNXI_TOOLS_LICENSE = GPLv2+
- SUNXI_TOOLS_LICENSE_FILES = COPYING
+I've applied your two patches. However, note that they were
+line-wrapped, the title of the second patch was wrong (it was updating
+the sunxi-tools package), and the commit logs were both lacking your
+Signed-off-by line.
+
+Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
