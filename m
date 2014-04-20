@@ -1,84 +1,64 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 20 Apr 2014 21:30:13 +0200
-Subject: [Buildroot] [PATCH 1/1] libcap: add menu entry to install tools.
-Message-ID: <1398022213-9728-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Apr 2014 22:53:51 +0200
+Subject: [Buildroot] [git commit] libstrophe: fix detection of libxml2
+Message-ID: <20140420205505.2B75C9C838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcap provides a set of tools to manipulate capabilities, among which
-`setcap(8)` and `getcap(8)`. A new menu entry has been added to install them.
+commit: http://git.buildroot.net/buildroot/commit/?id=c946a78996c25a65861672389a63ac59b3a5a4bc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+This commit adds a patch to libstrophe to fix a typo that prevented a
+proper detection of libxml2. This patch has been submitted upstream,
+see https://github.com/metajack/libstrophe/pull/46.
+
+Fixes:
+
+ http://autobuild.buildroot.org/results/499/499ffd50ec58b54343d6606c0f1bf7cd04f14e1c/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcap/Config.in | 14 ++++++++++++++
- package/libcap/libcap.mk | 13 +++++++++++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ ...-configure.ac-fix-misdetection-of-libxml2.patch |   32 ++++++++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/libcap/Config.in b/package/libcap/Config.in
-index 7bf6c58..596da26 100644
---- a/package/libcap/Config.in
-+++ b/package/libcap/Config.in
-@@ -7,3 +7,17 @@ config BR2_PACKAGE_LIBCAP
- 	  privilege into a set of distinct privileges.
- 
- 	  http://sites.google.com/site/fullycapable/
+diff --git a/package/libstrophe/libstrophe-02-configure.ac-fix-misdetection-of-libxml2.patch b/package/libstrophe/libstrophe-02-configure.ac-fix-misdetection-of-libxml2.patch
+new file mode 100644
+index 0000000..7f6610c
+--- /dev/null
++++ b/package/libstrophe/libstrophe-02-configure.ac-fix-misdetection-of-libxml2.patch
+@@ -0,0 +1,32 @@
++From 816df67088fc590c9e8f8598a1a7e90ff1fc425d Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 20 Apr 2014 21:07:41 +0200
++Subject: [PATCH] configure.ac: fix misdetection of libxml2
 +
-+if BR2_PACKAGE_LIBCAP
++A small typo in the detection of libxml2 leads to a successful
++pkg-config discovery of libxml2 to be ignored. As a consequence,
++configure.ac falls back to detecting the host libxml2, which does not
++work in cross-compilation situation. This commit fixes this small
++typo.
 +
-+config BR2_PACKAGE_LIBCAP_TOOLS
-+	bool "install tools"
-+	help
-+	  Install setcap, getcap, getpcaps and capsh tools.
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+	  For these tools to run properly, you should enable, in your
-+	  kernel configuration, extended file attributes/security labels
-+	  support for the file system type used on target system (e.g.
-+	  CONFIG_EXT2_FS_XATTR and CONFIG_EXT2_FS_SECURITY for ext2).
++diff --git a/configure.ac b/configure.ac
++index e4f9299..a3e48ee 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -16,7 +16,7 @@ AC_ARG_WITH([libxml2],
++ if test "x$with_libxml2" != xno; then
++   PKG_CHECK_MODULES([libxml2], [libxml-2.0 >= 2.7],
++                     [with_libxml2=yes], [dummy=1])
++-  if test "x$with_libxml2" != yes; then
+++  if test "x$with_libxml2" != xyes; then
++     old_CFLAGS=$CFLAGS
++     CFLAGS="-I /usr/include/libxml2"
++     AC_CHECK_HEADER([libxml/parser.h],
++-- 
++1.9.2
 +
-+endif
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 17e2eb5..4570a62 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -14,6 +14,7 @@ LIBCAP_LICENSE_FILES = License
- 
- LIBCAP_DEPENDENCIES = host-libcap
- LIBCAP_INSTALL_STAGING = YES
-+LIBCAP_BINARIES = setcap getcap getpcaps capsh
- 
- ifeq ($(BR2_PACKAGE_ATTR),y)
- 	LIBCAP_DEPENDENCIES += attr
-@@ -34,7 +35,7 @@ LIBCAP_MAKE_INSTALL_TARGET = install
- endif
- 
- define LIBCAP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/libcap \
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
- 		LIBATTR=$(LIBCAP_HAVE_LIBATTR) BUILD_CC="$(HOSTCC)" \
- 		BUILD_CFLAGS="$(HOST_CFLAGS)" $(LIBCAP_MAKE_TARGET)
- endef
-@@ -45,10 +46,18 @@ define LIBCAP_INSTALL_STAGING_CMDS
- endef
- 
- define LIBCAP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libcap LIBATTR=$(LIBCAP_HAVE_LIBATTR) \
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=$(LIBCAP_HAVE_LIBATTR) \
-+		RAISE_SETFCAP=no \
- 		DESTDIR=$(TARGET_DIR) prefix=/usr lib=lib $(LIBCAP_MAKE_INSTALL_TARGET)
- endef
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP_TOOLS),)
-+define LIBCAP_REMOVE_TOOLS
-+	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/, $(LIBCAP_BINARIES))
-+endef
-+LIBCAP_POST_INSTALL_TARGET_HOOKS += LIBCAP_REMOVE_TOOLS
-+endif
-+
- define HOST_LIBCAP_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
- endef
--- 
-1.9.0
