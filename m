@@ -1,55 +1,64 @@
-From: Dima Zavin <dmitriyz@google.com>
-Date: Sun, 20 Apr 2014 09:05:48 -0700
-Subject: [Buildroot] [PATCH] grub2: add configuration options for grub
- config files
-In-Reply-To: <20140420175159.591f1714@skate>
-References: <1396600337-26228-1-git-send-email-dmitriyz@google.com>
- <20140420175159.591f1714@skate>
-Message-ID: <CAPz4a6Ch+B55ACGMjvH28tsfayC_D0PeuqpYZY0xT7kQp7WOEQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Apr 2014 18:07:11 +0200
+Subject: [Buildroot] [git commit] yaffs2: new filesystem type
+Message-ID: <20140420161457.7A0569C2AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sounds great, thanks!
+commit: http://git.buildroot.net/buildroot/commit/?id=6b1ca27b1a591ba82209b9f7bcd6b39536b41885
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---Dima
-On Apr 20, 2014 8:52 AM, "Thomas Petazzoni" <
-thomas.petazzoni@free-electrons.com> wrote:
+[Thomas: remove BR2_TARGET_ROOTFS_YAFFS_PATH option, rename to yaffs2
+instead of yaffs.]
 
-> Dear Dima Zavin,
->
-> On Fri,  4 Apr 2014 01:32:17 -0700, Dima Zavin wrote:
-> > Add an option for embedding a config file directly in grub as
-> > well as an option to provide a custom grub.cfg file through
-> > a defconfig.
-> >
-> > Signed-off-by: Dima Zavin <dmitriyz@google.com>
-> > ---
-> >  boot/grub2/Config.in | 12 ++++++++++++
-> >  boot/grub2/grub2.mk  |  8 +++++++-
-> >  2 files changed, 19 insertions(+), 1 deletion(-)
->
-> I've applied your patch, but:
->
->  * I've removed the BR2_TARGET_GRUB2_CONFIG option, because the same
->    thing can be achieved using a post-build script or a rootfs overlay.
->    We don't have options in each and every package that can use a
->    custom configuration, so I don't really see a reason to have this
->    for Grub2 specifically.
->
->  * I've reworded the Config.in help for the built-in configuration file
->    option.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140420/5b3510c8/attachment.html>
+Signed-off-by: Will Wagner <willw@carallon.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ fs/Config.in        |    1 +
+ fs/yaffs2/Config.in |    4 ++++
+ fs/yaffs2/yaffs.mk  |   13 +++++++++++++
+ 3 files changed, 18 insertions(+), 0 deletions(-)
+
+diff --git a/fs/Config.in b/fs/Config.in
+index da4c5ff..5853113 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -11,5 +11,6 @@ source "fs/romfs/Config.in"
+ source "fs/squashfs/Config.in"
+ source "fs/tar/Config.in"
+ source "fs/ubifs/Config.in"
++source "fs/yaffs2/Config.in"
+ 
+ endmenu
+diff --git a/fs/yaffs2/Config.in b/fs/yaffs2/Config.in
+new file mode 100644
+index 0000000..27da4ba
+--- /dev/null
++++ b/fs/yaffs2/Config.in
+@@ -0,0 +1,4 @@
++config BR2_TARGET_ROOTFS_YAFFS2
++	bool "yaffs2 root filesystem"
++	help
++	  Build a yaffs2 root filesystem
+diff --git a/fs/yaffs2/yaffs.mk b/fs/yaffs2/yaffs.mk
+new file mode 100644
+index 0000000..19bdbe8
+--- /dev/null
++++ b/fs/yaffs2/yaffs.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# Build the yaffs2 root filesystem image
++#
++################################################################################
++
++ROOTFS_YAFFS2_DEPENDENCIES = host-yaffs2utils
++
++define ROOTFS_YAFFS2_CMD
++	$(HOST_DIR)/usr/bin/mkyaffs2 --all-root $(TARGET_DIR) $@
++endef
++
++$(eval $(call ROOTFS_TARGET,yaffs2))
