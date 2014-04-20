@@ -1,31 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 18:15:28 +0200
-Subject: [Buildroot] yaffs2 file system
-In-Reply-To: <534CF34C.4050808@carallon.com>
-References: <CABzetm2LegsUVAH0a-3UYWNQcf2inSG4P8r5A6goGKNbJKsVVw@mail.gmail.com>
- <534CF34C.4050808@carallon.com>
-Message-ID: <20140420181528.6f4d2765@skate>
+Date: Sun, 20 Apr 2014 18:35:53 +0200
+Subject: [Buildroot] [git commit] python3: do not rely only on LIBRARY_PATH
+	for old compilers
+Message-ID: <20140420163847.CE0929BE8E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Wagner,
+commit: http://git.buildroot.net/buildroot/commit/?id=286ee8001c092f9dab1634f778d70d1d8b5d591f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Apr 2014 09:52:28 +0100, Will Wagner wrote:
+The cross-compilation improvements integrated in Python rely on the
+compiler exposing a line starting with LIBRARY_PATH when called with
+-E -v. This is used by Python setup.py to find the installation
+locations of libraries.
 
-> I have a couple of patches (attached) that add yaffs2 support for 
-> buildroot, that I have never got round to pushing upstream. They are 
-> based on buildroot_2013.05.
+However, this LIBRARY_PATH line is not shown by very old compilers,
+such as the gcc 4.2.x compiler used on the AVR32 architecture. This
+causes libraries installed in the sysroot, such as libffi, to not be
+detected by the setup.py script.
 
-I've taken your two patches, made a little bit of clean up, and I
-applied them.
+To fix this problem, this patch adds addtional logic to setup.py,
+which consists in deriving the library paths from the sysroot
+location, if no LIBRARY_PATH field was found.
 
-Thanks!
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  http://autobuild.buildroot.org/results/7a6/7a65e381cc04bf8f74fd63a6dcda502f3c26aeef/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...n3-011-support-library-path-old-compilers.patch |   54 ++++++++++++++++++++
+ 1 files changed, 54 insertions(+), 0 deletions(-)
+
+diff --git a/package/python3/python3-011-support-library-path-old-compilers.patch b/package/python3/python3-011-support-library-path-old-compilers.patch
+new file mode 100644
+index 0000000..4e0088a
+--- /dev/null
++++ b/package/python3/python3-011-support-library-path-old-compilers.patch
+@@ -0,0 +1,54 @@
++python3: do not rely only on LIBRARY_PATH for old compilers
++
++The cross-compilation improvements integrated in Python rely on the
++compiler exposing a line starting with LIBRARY_PATH when called with
++-E -v. This is used by Python setup.py to find the installation
++locations of libraries.
++
++However, this LIBRARY_PATH line is not shown by very old compilers,
++such as the gcc 4.2.x compiler used on the AVR32 architecture. This
++causes libraries installed in the sysroot, such as libffi, to not be
++detected by the setup.py script.
++
++To fix this problem, this patch adds addtional logic to setup.py,
++which consists in deriving the library paths from the sysroot
++location, if no LIBRARY_PATH field was found.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -421,6 +421,7 @@
++         in_incdirs = False
++         inc_dirs = []
++         lib_dirs = []
+++        compiler_has_library_path = False
++         try:
++             if ret >> 8 == 0:
++                 with open(tmpfile) as fp:
++@@ -432,6 +433,7 @@
++                         elif line.startswith("End of search list"):
++                             in_incdirs = False
++                         elif is_gcc and line.startswith("LIBRARY_PATH"):
+++                            compiler_has_library_path = True
++                             for d in line.strip().split("=")[1].split(":"):
++                                 d = os.path.normpath(d)
++                                 if '/gcc/' not in d:
++@@ -443,6 +445,15 @@
++         finally:
++             os.unlink(tmpfile)
++ 
+++        if not compiler_has_library_path:
+++            ret = os.system("%s -print-file-name=libc.a | sed -r -e 's:(usr/)?lib(32|64)?/([^/]*/)?libc\.a::' >%s" % (gcc, tmpfile))
+++            with open(tmpfile) as fp:
+++                line = fp.readline().strip()
+++                add_dir_to_list(self.compiler.library_dirs,
+++                                os.path.join(line, "usr", "lib"))
+++                add_dir_to_list(self.compiler.library_dirs,
+++                                os.path.join(line, "lib"))
+++
++     def detect_modules(self):
++         # Ensure that /usr/local is always used, but the local build
++         # directories (i.e. '.' and 'Include') must be first.  See issue
