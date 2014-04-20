@@ -1,47 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 19:05:44 +0200
-Subject: [Buildroot] [PATCH] php: fix wrong -L and -I paths added by
- iconv tests
-In-Reply-To: <1397299022-31655-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1397299022-31655-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20140420190544.68d6743e@skate>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 20 Apr 2014 19:12:56 +0200
+Subject: [Buildroot] [PATCH 2/2] perl-cross: bump to version 0.8.5
+In-Reply-To: <20140420173730.1770c6e1@skate>
+References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
+ <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
+ <20140420173730.1770c6e1@skate>
+Message-ID: <CAB0FRsuktZr9dubswhhRZQ=ReAZaJVtZNVcautexGnR7_e1cNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+2014-04-20 17:37 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Francois Perrad,
+>
+> On Sun, 20 Apr 2014 17:05:56 +0200, Francois Perrad wrote:
+>
+>> -PERL_CROSS_VERSION = 0.8.3
+>> -PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
+>> -PERL_CROSS_SITE    = http://download.berlios.de/perlcross
+>> +PERL_CROSS_VERSION = 0.8.5
+>> +PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
+>> +PERL_CROSS_SITE    = http://raw.github.com/arsv/perl-cross/releases
+>
+> You should use the $(github ...) helper here.
+>
 
-On Sat, 12 Apr 2014 14:37:02 +0400, Max Filippov wrote:
-> The commit f2a2c4cce "php: fix iconv related build failure" have removed
-> logic that used to detect the correct PHP_ICONV_PREFIX with an
-> assumption that "ICONV_DIR is fine". Currently the ICONV_DIR is only
-> fine when BR2_PACKAGE_LIBICONV is set to 'y', otherwise php is
-> configured with plain --with-iconv. This results in empty
-> PHP_ICONV_PREFIX and -L/lib and -I/include added to CFLAGS and LDFLAGS
-> respectively, which leads to build failures when e.g. /lib contains
-> files with the same names as the toolchain sysroot needed for linking.
-> 
-> Fix that by always specifying --with-iconv=$(STAGING_DIR)/usr when iconv
-> is configured for PHP.
-> 
-> Fixes: http://autobuild.buildroot.net/results/959/959b77fa2c1f13b1958b234803437e09734e882e/
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  package/php/php.mk |    4 +---
->  1 files changed, 1 insertions(+), 3 deletions(-)
+No. I've already tried it. The helper doesn't give the same result.
 
-Unfortunately, this doesn't solve the problem, so I've marked this
-patch as Rejected for now. More investigation will be needed.
+I need a tarball which allows to patch the perl distribution.
+The helper gives a copy of the project which allows to build this tarball.
 
-Thanks,
+Fran?ois
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
