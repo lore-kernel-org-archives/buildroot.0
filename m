@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 19:35:47 +0200
-Subject: [Buildroot] [git commit] Revert "host-nodejs: use g++ as linker"
-Message-ID: <20140420173732.565A29C90A@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 19:38:37 +0200
+Subject: [Buildroot] [git commit] cppcms: does not build on static library
+	only, needs dlopen()
+Message-ID: <20140420173903.B05EC9C90A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f565796fbb211d1f052241db76f36bae28f9e902
+commit: http://git.buildroot.net/buildroot/commit/?id=f9db7e6865e1805e8281136d5f2a6965f6a3b5c2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit ea737fb100785b3b5756dad320db04062261fd04, which in
-the end didn't fix the autobuilder problem. Since then,
-fb80d283412b610fc0f5e4baf1c5bcdf093dadc2 ('nodejs: add a patch forcing
-link command to use CXX') was added, and was successfully tested.
+Fixes:
+
+  http://autobuild.buildroot.org/results/5ee/5ee69eb7492fbd462124d7a23b5b79003fc1dd64/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nodejs/nodejs.mk |   10 ++--------
- 1 files changed, 2 insertions(+), 8 deletions(-)
+ package/cppcms/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 79393e2..b5973b5 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -40,17 +40,11 @@ define HOST_NODEJS_CONFIGURE_CMDS
- endef
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index bfbb203..688d8f2 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_CPPCMS
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB # dlopen()
+ 	help
+ 	  CppCMS is a Free High Performance Web Development Framework
+ 	  (not a CMS) aimed for Rapid Web Application Development. It
+@@ -38,5 +39,6 @@ comment "icu support needs a toolchain w/ wchar"
  
- define HOST_NODEJS_BUILD_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
--		$(MAKE) -C $(@D) \
--		$(HOST_CONFIGURE_OPTS) \
--		LD="$(HOSTCXX)"
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D)
- endef
+ endif
  
- define HOST_NODEJS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 \
--		$(MAKE) -C $(@D) install \
--		$(HOST_CONFIGURE_OPTS) \
--		LD="$(HOSTCXX)"
-+	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/usr/bin/python2 $(MAKE) -C $(@D) install
- endef
- 
- ifeq ($(BR2_i386),y)
+-comment "cppcms needs a toolchain w/ C++, threads"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "cppcms needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_PREFER_STATIC_LIB
