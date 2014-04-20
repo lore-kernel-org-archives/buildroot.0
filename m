@@ -1,35 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 23:04:14 +0200
-Subject: [Buildroot] [PATCH 0/2] update sunxi-boards and sunxi-tools for
- pcDuino board
-In-Reply-To: <1386721499.2817.17.camel@kokopelli>
-References: <1386721499.2817.17.camel@kokopelli>
-Message-ID: <20140420230414.5c69b8ec@skate>
+Date: Sun, 20 Apr 2014 23:17:25 +0200
+Subject: [Buildroot] [PATCH 1/1] xerces: add host
+In-Reply-To: <1385063284-31586-1-git-send-email-mlweber1@rockwellcollins.com>
+References: <1385063284-31586-1-git-send-email-mlweber1@rockwellcollins.com>
+Message-ID: <20140420231725.0c01e16a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Brian Beattie,
+Dear Matt Weber,
 
-On Tue, 10 Dec 2013 16:24:59 -0800, Brian Beattie wrote:
-> In preparation for adding support for for the pcduino board, update the
-> sunxi-boards and sunxi-tools to the commit recommended for pcduino.
+On Thu, 21 Nov 2013 13:48:04 -0600, Matt Weber wrote:
 > 
-> These packages are also used by the Cubieboard so if somebody with a
-> Cubieboard could test this that would be good.
+> Signed-off-by: Matt Weber <mlweber1@rockwellcollins.com>
+> ---
+>  package/xerces/xerces.mk |    1 +
+>  1 files changed, 1 insertions(+), 0 deletions(-)
 > 
-> Brian Beattie (2):
->   update sunxi-boards to newer commit as recomended for pcDuino board
->   update sunxi-boards to newer commit as recomended for pcDuino board
+> diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+> index 7bd7070..2e4c512 100644
+> --- a/package/xerces/xerces.mk
+> +++ b/package/xerces/xerces.mk
+> @@ -25,3 +25,4 @@ XERCES_CONF_OPT += --disable-network
+>  endif
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
 
-I've applied your two patches. However, note that they were
-line-wrapped, the title of the second patch was wrong (it was updating
-the sunxi-tools package), and the commit logs were both lacking your
-Signed-off-by line.
+Since there is no package in mainline Buildroot that needs host-xerces
+and that you've never submitted the other packages you mentioned back
+in November, I've marked this patch as Rejected in Patchwork for now.
+Do not hesitate to resend it later, together with other patches making
+use of it.
 
-Thanks for your contribution!
+Thanks!
 
 Thomas
 -- 
