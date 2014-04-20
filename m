@@ -1,37 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 20 Apr 2014 10:22:39 +0300
-Subject: [Buildroot] [PATCH] jansson: needs math library
-Message-ID: <1689aa2a424cf897e59956c16b850971c7a4b514.1397978559.git.baruch@tkos.co.il>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 20 Apr 2014 09:38:40 +0200
+Subject: [Buildroot] [UNSURE]Re:  [lua V3 0/8] lua
+In-Reply-To: <20140419235838.1fb6d8db@skate>
+References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
+ <20140302000232.6430d956@skate> <20140419235838.1fb6d8db@skate>
+Message-ID: <CAB0FRssGzra+R69RiHLvCSxSTXEBOz=hNp5hhJFJ0oZKzx65XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libjansson.so doesn't list libm in its NEEDED header. Fixes the following
-nftables config time failure:
+2014-04-19 23:58 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Fran?ois,
+>
+> On Sun, 2 Mar 2014 00:02:32 +0100, Thomas Petazzoni wrote:
+>
+>> > Francois Perrad (8):
+>> >   luajit: refactor without dont-strip.patch
+>> >   luajit: refactor without shared-lib.patch
+>> >   luajit: handles BR2_PREFER_STATIC_LIB
+>> >   luajit: add host variant
+>> >   luainterpreter: add host variant
+>> >   luarocks: allow to work with host-luainterpreter
+>>
+>> For all these patches, and especially the last three ones, I want
+>> commit logs. I really do appreciate _a lot_ all the work you're doing
+>> on Lua and Perl, it's really awesome. And I really mean it. But you
+>> need to work on improving your commit logs. For now, we have no idea
+>> *why* you're doing these changes.
+>>
+>> All the other core developers are doing efforts to write long,
+>> descriptive commit logs, and experience has shown that they are
+>> immensely useful 6 or 12 months later when we got back in the Git
+>> history to understand why things were done. Look at what they do, and
+>> follow the basic rule of thumb that any non-trivial patch should have
+>> at least 2 or 3 paragraphs in its commit log explaining *why* the
+>> change is being made.
+>>
+>> At this point, I have no idea what you are doing. I presume patches 4
+>> and 5 are preparations for patch 6, but I don't understand what patch 6
+>> is doing, and nowhere it is mentioned why patches 4 and 5 are needed.
+>
+> Any news about these patches? From this series, we still have patches
+> 4, 5, 6 and 8 pending in patchwork. Could you take into account the
+> comments that have been made (mainly the strong need for more detailed
+> commit logs), and resend updated versions on top of master?
 
-.../usr/lib/libjansson.so.4: undefined reference to `__isnan'
-.../usr/lib/libjansson.so.4: undefined reference to `__isinf'
+I'll work on them after 2014.05 release.
 
-Fixes:
-http://autobuild.buildroot.net/results/152/1525d7a3e1d1fcf35858962251c0b69a5e1b64db/
+Fran?ois
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/jansson/jansson.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index 6ead0ec10c9a..d51e7097cd8c 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
-@@ -9,5 +9,6 @@ JANSSON_SITE = http://www.digip.org/jansson/releases
- JANSSON_LICENSE = MIT
- JANSSON_LICENSE_FILES = LICENSE
- JANSSON_INSTALL_STAGING = YES
-+JANSSON_CONF_ENV = LIBS="-lm"
- 
- $(eval $(autotools-package))
--- 
-1.9.1
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
