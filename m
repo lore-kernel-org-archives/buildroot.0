@@ -1,38 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 11:12:22 +0200
-Subject: [Buildroot] FW: [PATCH] external toolchain: use relative path
- to external toolchain.
-In-Reply-To: <884EA965490E3C4D8E66AEF41E98025006BF60@ezex10.ezchip.com>
-References: <884EA965490E3C4D8E66AEF41E98025006BF60@ezex10.ezchip.com>
-Message-ID: <20140420111222.2a38cdd7@skate>
+Date: Sun, 20 Apr 2014 11:13:36 +0200
+Subject: [Buildroot] [git commit] support: properly check bash is available
+Message-ID: <20140420091352.087A89C7BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Noam Camus,
+commit: http://git.buildroot.net/buildroot/commit/?id=38b81eb17253c2590d42243524eed556e80ff58f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 23 Feb 2014 08:29:34 +0000, Noam Camus wrote:
-> Now configuration may include relative path to external toolchain.
-> 
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
+The current check is broken, as it only checks if the user's login
+shell is bash, not what the system shell is.
 
-A week or two after you submitted this patch, Yann E. Morin asked some
-questions about why this is needed (e-mail from March, 4th), and you
-never came back with answers to Yann's questions. Since Yann basically
-questions the usefulness of the patch, I'm going to mark this patch as
-"Rejected" for now in our patchwork tool. If, despite Yann comments,
-you feel that this patch is still useful for you, please resubmit with
-a more detailed commit log that explains *why* it is needed.
+Mimick the sequence found in the top-level Makefile to search for
+bash, except for the fallback case, where we explicitly check that
+'sh' is bash, by checking if it sets $BASH, so we know the fallback
+case, in the top-level Makefile, to use 'sh' will indeed use bash.
 
-Thanks!
+Remove superfluous semi-colons ';' at the end of lines, they are
+not needed in a shell script (this is not C!)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Andrew Barnes <andy@outsideglobe.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/dependencies/dependencies.sh |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index a8261b3..0566814 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -139,11 +139,15 @@ if [ ! -z "$CXXCOMPILER" ] ; then
+ fi
+ 
+ # Check bash
+-if ! $SHELL --version 2>&1 | grep -q '^GNU bash'; then
++# We only check bash is available, setting SHELL appropriately is done
++# in the top-level Makefile, and we mimick the same sequence here
++if   [ -n "${BASH}" ]; then :
++elif [ -x /bin/bash ]; then :
++elif [ -z "$( sh -c 'echo $BASH' )" ]; then
+ 	echo
+-	echo "You must install 'bash' on your build machine";
+-	exit 1;
+-fi;
++	echo "You must install 'bash' on your build machine"
++	exit 1
++fi
+ 
+ # Check that a few mandatory programs are installed
+ missing_progs="no"
