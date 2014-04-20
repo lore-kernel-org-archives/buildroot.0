@@ -1,39 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 11:04:18 +0200
-Subject: [Buildroot] [git commit] linux-headers: remove obsolete Config.in
-	help paragraph
-Message-ID: <20140420090540.0E4D09C8E7@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 11:07:24 +0200
+Subject: [Buildroot] [PATCH] Added support for linux headers for testing
+ versions to build cross-compile tools
+In-Reply-To: <1393334528-10441-1-git-send-email-lucas.zampar@gmail.com>
+References: <1393334528-10441-1-git-send-email-lucas.zampar@gmail.com>
+Message-ID: <20140420110724.5981255d@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0df19d2e5efd263c9d23f6df691b7a4cf8dd6f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Lucas Zampar Bernardi,
 
-In commit 971e331c54e08e82b4ed28a4eca8305933fa1cb0
-('package/linux-headers: remove 2.6 snapshot'), we removed the support
-for the Linux headers snapshot option, but we forgot to remove some
-related help text in the main Config.in option of the Linux headers
-package.
+On Tue, 25 Feb 2014 10:22:08 -0300, Lucas Zampar Bernardi wrote:
+> From: Lucas Zampar Bernardi <lucas@writesys.com.br>
+> 
+> 
+> This patch add support to buildroot compile an internal cross-compiler using linux hearders with releases candidates versions (testing).
+> ---
+>  package/linux-headers/linux-headers.mk |    6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 086e5d5..d6e9dbb 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -13,6 +13,12 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
+>  else
+>  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
+>  endif
+> +
+> +# release candidates are in testing/ subdir
+> +ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
+> +LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)testing/
+> +endif
+> +
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host |    3 ---
- 1 files changed, 0 insertions(+), 3 deletions(-)
+Thanks for your patch, and sorry for the slow response. However,
+instead of having a special case for -rc kernels, I'd prefer to either
+have a way of specifying a custom Linux kernel tarball for
+linux-headers, or even better, a way of using the same kernel headers
+source code as the ones used to build the Linux kernel package itself.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 1c735b3..23586fb 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -11,9 +11,6 @@ choice
- 	  You must select the correct set of header files to match
- 	  the kernel you intend to use on your target system.
- 
--	  For the snapshot, you have to provide the
--	  linux-2.6.tar.bz2 tarball in your download dir.
--
- 	config BR2_KERNEL_HEADERS_3_0
- 		bool "Linux 3.0.x kernel headers"
- 		depends on !BR2_arc
+So, for now, I'll mark this specific patch as Rejected, but I'll
+definitely welcome improvements in one of the two directions proposed
+above.
+
+Thanks again!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
