@@ -1,47 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 10:54:32 +0200
-Subject: [Buildroot] [git commit] mesa3d: needs NPTL threading
-Message-ID: <20140420085528.BFCF09C837@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 10:54:50 +0200
+Subject: [Buildroot] [git commit] jansson: needs math library
+Message-ID: <20140420085528.C77B89C8E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=783c8f5acb108b0737f7a367cc55ff553959059e
+commit: http://git.buildroot.net/buildroot/commit/?id=cbe4b0a71fdac86e6eaf09ee6ed5b8fa313287ac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Strictly speaking, linuxthreads (new) should be enough, since it includes
-pthread_barrier_* implementation. However, we currently have no clean way to
-distinguish between LT and LT.old.
+libjansson.so doesn't list libm in its NEEDED header. Fixes the following
+nftables config time failure:
+
+.../usr/lib/libjansson.so.4: undefined reference to `__isnan'
+.../usr/lib/libjansson.so.4: undefined reference to `__isinf'
 
 Fixes:
-http://autobuild.buildroot.net/results/66a/66a9d2c664e0a9b2b0c51b998c72c2ceda90ff9b/
+http://autobuild.buildroot.net/results/152/1525d7a3e1d1fcf35858962251c0b69a5e1b64db/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/jansson/jansson.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 0793b48..06f2bc3 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -12,6 +12,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	help
- 	  Mesa 3D, an open-source implementation of the OpenGL specification.
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index 6ead0ec..d51e709 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
+@@ -9,5 +9,6 @@ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
+ JANSSON_INSTALL_STAGING = YES
++JANSSON_CONF_ENV = LIBS="-lm"
  
-@@ -124,5 +125,6 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
- 
- endif # BR2_PACKAGE_MESA3D
- 
--comment "mesa3d needs a toolchain w/ C++, largefile"
--	depends on !BR2_LARGEFILE || !BR2_INSTALL_LIBSTDCPP
-+comment "mesa3d needs a toolchain w/ C++, largefile, NPTL"
-+	depends on !BR2_LARGEFILE || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ $(eval $(autotools-package))
