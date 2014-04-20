@@ -1,47 +1,37 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 20 Apr 2014 17:03:30 +0200
-Subject: [Buildroot] [UNSURE]Re:  [lua V3 0/8] lua
-In-Reply-To: <20140420101312.18aa6073@skate>
-References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
- <20140302000232.6430d956@skate> <20140419235838.1fb6d8db@skate>
- <CAB0FRssGzra+R69RiHLvCSxSTXEBOz=hNp5hhJFJ0oZKzx65XQ@mail.gmail.com>
- <20140420101312.18aa6073@skate>
-Message-ID: <CAB0FRssusKQ0Rmxxtz2rVTFEp0xJcKiUhf6Dj-5yHG6dkw5T2A@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 20 Apr 2014 17:05:55 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-perl: fix for Perl XS packages
+	configured by a Makefile.PL
+Message-ID: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-04-20 10:13 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Fran?ois Perrad,
->
-> On Sun, 20 Apr 2014 09:38:40 +0200, Fran?ois Perrad wrote:
->
->> > Any news about these patches? From this series, we still have patches
->> > 4, 5, 6 and 8 pending in patchwork. Could you take into account the
->> > comments that have been made (mainly the strong need for more detailed
->> > commit logs), and resend updated versions on top of master?
->>
->> I'll work on them after 2014.05 release.
->
-> Well, there is still some time before the 2014.05 release, so you can
-> submit them earlier if you want.
->
-> In the mean time, what can I do with your patches in patchwork? Can I
-> mark them as "Changes requested", making the assumption you will
-> remember to send updated versions in the future?
+for native package, ExtUtils::MakeMaker detects all include filenames on system perl,
+all these includes will be required by the generated Makefile but on STAGING_DIR.
 
-Ok.
+patchlevel-debian.h is not a part of the Perl distribution,
+but it was added by some Linux distributions (Debian, Ubuntu, ...)
+In this case, we create an empty file on STAGING_DIR.
 
-Fran?ois
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/pkg-perl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 447f364..876ffdb 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
+ 			INSTALLVENDORMAN1DIR=/usr/share/man/man1 \
+ 			INSTALLVENDORMAN3DIR=/usr/share/man/man3 \
+ 			$$($(2)_CONF_OPT); \
++		touch $(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h; \
+ 	fi
+ endef
+ else
+-- 
+1.9.1
