@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 17:37:30 +0200
-Subject: [Buildroot] [PATCH 2/2] perl-cross: bump to version 0.8.5
-In-Reply-To: <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
+Date: Sun, 20 Apr 2014 17:38:31 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-perl: fix for Perl XS packages
+ configured by a Makefile.PL
+In-Reply-To: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
 References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
- <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140420173730.1770c6e1@skate>
+Message-ID: <20140420173831.49d0cb23@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,19 @@ To: buildroot@busybox.net
 
 Dear Francois Perrad,
 
-On Sun, 20 Apr 2014 17:05:56 +0200, Francois Perrad wrote:
+On Sun, 20 Apr 2014 17:05:55 +0200, Francois Perrad wrote:
+> for native package, ExtUtils::MakeMaker detects all include filenames on system perl,
+> all these includes will be required by the generated Makefile but on STAGING_DIR.
+> 
+> patchlevel-debian.h is not a part of the Perl distribution,
+> but it was added by some Linux distributions (Debian, Ubuntu, ...)
+> In this case, we create an empty file on STAGING_DIR.
 
-> -PERL_CROSS_VERSION = 0.8.3
-> -PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
-> -PERL_CROSS_SITE    = http://download.berlios.de/perlcross
-> +PERL_CROSS_VERSION = 0.8.5
-> +PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
-> +PERL_CROSS_SITE    = http://raw.github.com/arsv/perl-cross/releases
+I'm sorry, but unfortunately, I don't understand this explanation. How
+the fact that a header file is added by Linux distributions affecting
+Buildroot? What package needs that? Which problem is this fixing?
 
-You should use the $(github ...) helper here.
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
