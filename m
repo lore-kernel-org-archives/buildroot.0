@@ -1,64 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 18:07:11 +0200
-Subject: [Buildroot] [git commit] yaffs2: new filesystem type
-Message-ID: <20140420161457.7A0569C2AE@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 18:02:25 +0200
+Subject: [Buildroot] [git commit] yaffs2utils: new package
+Message-ID: <20140420161457.6A0449C7BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b1ca27b1a591ba82209b9f7bcd6b39536b41885
+commit: http://git.buildroot.net/buildroot/commit/?id=f27831ae132eab5524b4b3ecec8747c1e9471b3d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: remove BR2_TARGET_ROOTFS_YAFFS_PATH option, rename to yaffs2
-instead of yaffs.]
+[Thomas: remove target variant of the package, use labelled version
+0.2.9 instead of latest.tar.gz, use 'make install' instead of doing
+manual installation, add license informations.]
 
 Signed-off-by: Will Wagner <willw@carallon.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/Config.in        |    1 +
- fs/yaffs2/Config.in |    4 ++++
- fs/yaffs2/yaffs.mk  |   13 +++++++++++++
- 3 files changed, 18 insertions(+), 0 deletions(-)
+ package/yaffs2utils/yaffs2utils.mk |   21 +++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index da4c5ff..5853113 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -11,5 +11,6 @@ source "fs/romfs/Config.in"
- source "fs/squashfs/Config.in"
- source "fs/tar/Config.in"
- source "fs/ubifs/Config.in"
-+source "fs/yaffs2/Config.in"
- 
- endmenu
-diff --git a/fs/yaffs2/Config.in b/fs/yaffs2/Config.in
+diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
 new file mode 100644
-index 0000000..27da4ba
+index 0000000..ba24958
 --- /dev/null
-+++ b/fs/yaffs2/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_TARGET_ROOTFS_YAFFS2
-+	bool "yaffs2 root filesystem"
-+	help
-+	  Build a yaffs2 root filesystem
-diff --git a/fs/yaffs2/yaffs.mk b/fs/yaffs2/yaffs.mk
-new file mode 100644
-index 0000000..19bdbe8
---- /dev/null
-+++ b/fs/yaffs2/yaffs.mk
-@@ -0,0 +1,13 @@
-+################################################################################
++++ b/package/yaffs2utils/yaffs2utils.mk
+@@ -0,0 +1,21 @@
++#############################################################
 +#
-+# Build the yaffs2 root filesystem image
++# yaffs2utils
 +#
-+################################################################################
++#############################################################
 +
-+ROOTFS_YAFFS2_DEPENDENCIES = host-yaffs2utils
++YAFFS2UTILS_VERSION = 0.2.9
++YAFFS2UTILS_SOURCE = $(YAFFS2UTILS_VERSION).tar.gz
++YAFFS2UTILS_SITE = https://yaffs2utils.googlecode.com/files/
++YAFFS2UTILS_LICENSE = GPLv2
++YAFFS2UTILS_LICENSE_FILES = COPYING
 +
-+define ROOTFS_YAFFS2_CMD
-+	$(HOST_DIR)/usr/bin/mkyaffs2 --all-root $(TARGET_DIR) $@
++define HOST_YAFFS2UTILS_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
 +endef
 +
-+$(eval $(call ROOTFS_TARGET,yaffs2))
++define HOST_YAFFS2UTILS_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLDIR=$(HOST_DIR)/usr/bin install
++endef
++
++$(eval $(host-generic-package))
