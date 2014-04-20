@@ -1,30 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 19:04:31 +0200
-Subject: [Buildroot] [PATCH v4] postgresql: new package
-In-Reply-To: <1396642441-4992-1-git-send-email-ps.report@gmx.net>
-References: <1396642441-4992-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140420190431.18c03ddb@skate>
+Date: Sun, 20 Apr 2014 19:05:44 +0200
+Subject: [Buildroot] [PATCH] php: fix wrong -L and -I paths added by
+ iconv tests
+In-Reply-To: <1397299022-31655-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1397299022-31655-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140420190544.68d6743e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Max Filippov,
 
-On Fri,  4 Apr 2014 22:14:01 +0200, Peter Seiderer wrote:
-> Based on suggested new package by Marco Trapanese ([1]).
+On Sat, 12 Apr 2014 14:37:02 +0400, Max Filippov wrote:
+> The commit f2a2c4cce "php: fix iconv related build failure" have removed
+> logic that used to detect the correct PHP_ICONV_PREFIX with an
+> assumption that "ICONV_DIR is fine". Currently the ICONV_DIR is only
+> fine when BR2_PACKAGE_LIBICONV is set to 'y', otherwise php is
+> configured with plain --with-iconv. This results in empty
+> PHP_ICONV_PREFIX and -L/lib and -I/include added to CFLAGS and LDFLAGS
+> respectively, which leads to build failures when e.g. /lib contains
+> files with the same names as the toolchain sysroot needed for linking.
 > 
-> [1] http://lists.busybox.net/pipermail/buildroot/2014-February/090661.html
+> Fix that by always specifying --with-iconv=$(STAGING_DIR)/usr when iconv
+> is configured for PHP.
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Fixes: http://autobuild.buildroot.net/results/959/959b77fa2c1f13b1958b234803437e09734e882e/
+> 
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/php/php.mk |    4 +---
+>  1 files changed, 1 insertions(+), 3 deletions(-)
 
-Applied, thanks. However I've made the package only available with
-glibc toolchains, since uClibc was causing problems with locales
-enabled. Yann E. Morin has reported the uClibc locales bug to the
-uClibc developers.
+Unfortunately, this doesn't solve the problem, so I've marked this
+patch as Rejected for now. More investigation will be needed.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
