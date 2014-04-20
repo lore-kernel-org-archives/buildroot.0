@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 11:58:45 +0200
-Subject: [Buildroot] [PATCH 1/5] python-pygame: Remove wildcards in
- macros
-In-Reply-To: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-References: <1396979109-10691-1-git-send-email-paul@crapouillou.net>
-Message-ID: <20140420115845.27350317@skate>
+Date: Sun, 20 Apr 2014 11:59:46 +0200
+Subject: [Buildroot] [PATCH 0/2] Drop X11 dependency of libpthread-stubs
+ and libdrm
+In-Reply-To: <1387553624-6780-1-git-send-email-paul@crapouillou.net>
+References: <1387553624-6780-1-git-send-email-paul@crapouillou.net>
+Message-ID: <20140420115946.780b38a0@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,28 @@ To: buildroot@busybox.net
 
 Dear Paul Cercueil,
 
-On Tue,  8 Apr 2014 19:45:05 +0200, Paul Cercueil wrote:
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  package/python-pygame/python-pygame.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, 20 Dec 2013 16:33:42 +0100, Paul Cercueil wrote:
+> The 'pthread-stubs' package was recently renamed to 'xlib_libpthread-stubs'.
+> This makes sense as libpthread-stubs is part of the X libraries.
+> 
+> However, this package does not have any real dependency, not even X11.
+> This is inconsistent with the current package, which can only be enabled
+> when BR2_PACKAGE_XORG7 is selected.
+> 
+> The first patch renames the 'xlib_libpthread-stubs' package into
+> 'libpthread-stubs', and moves it to 'Libraries -> Other' in the config
+> menu.
+> 
+> The second patch applies to libdrm, and removes the dependency towards X11,
+> if no X11-specific driver was selected. This permits to build the Mesa3d
+> library without X11.
 
-Following the comment from Peter, and some IRC discussion, I've marked
-this patch as Rejected.
+Thanks for these patches! However, in the mean time we've merged other
+similar patches, which on IRC you agreed are good replacements for your
+patches. Therefore, I've marked these two patches as Superseded in
+patchwork.
+
+Thanks,
 
 Thomas
 -- 
