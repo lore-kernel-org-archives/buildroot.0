@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 11:07:24 +0200
-Subject: [Buildroot] [PATCH] Added support for linux headers for testing
- versions to build cross-compile tools
-In-Reply-To: <1393334528-10441-1-git-send-email-lucas.zampar@gmail.com>
-References: <1393334528-10441-1-git-send-email-lucas.zampar@gmail.com>
-Message-ID: <20140420110724.5981255d@skate>
+Date: Sun, 20 Apr 2014 11:09:24 +0200
+Subject: [Buildroot] [PATCH 1/1] uboot: build custom target if custom
+ target selected
+In-Reply-To: <1392676369-19238-1-git-send-email-laurent.cans@gmail.com>
+References: <1392676369-19238-1-git-send-email-laurent.cans@gmail.com>
+Message-ID: <20140420110924.4545a967@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lucas Zampar Bernardi,
+Dear Laurent Cans,
 
-On Tue, 25 Feb 2014 10:22:08 -0300, Lucas Zampar Bernardi wrote:
-> From: Lucas Zampar Bernardi <lucas@writesys.com.br>
+On Mon, 17 Feb 2014 23:32:49 +0100, Laurent Cans wrote:
+> When selecting custom uboot target the installation fail due to incorrect
+> target built. So when configuring custom uboot target, build the target
+> configured in buildroot configuration instead of legacy one.
 > 
-> 
-> This patch add support to buildroot compile an internal cross-compiler using linux hearders with releases candidates versions (testing).
+> Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
 > ---
->  package/linux-headers/linux-headers.mk |    6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 086e5d5..d6e9dbb 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -13,6 +13,12 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6/
->  else
->  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x/
->  endif
-> +
-> +# release candidates are in testing/ subdir
-> +ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
-> +LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)testing/
-> +endif
-> +
+>  boot/uboot/uboot.mk |    1 +
+>  1 file changed, 1 insertion(+)
 
-Thanks for your patch, and sorry for the slow response. However,
-instead of having a special case for -rc kernels, I'd prefer to either
-have a way of specifying a custom Linux kernel tarball for
-linux-headers, or even better, a way of using the same kernel headers
-source code as the ones used to build the Linux kernel package itself.
+Two months ago you submitted this patch, and on the day of its
+submission, Arnout made some comments on it. However, you never came
+back with an updated version of the patch, and nobody else has stepped
+up to fix the problem.
 
-So, for now, I'll mark this specific patch as Rejected, but I'll
-definitely welcome improvements in one of the two directions proposed
-above.
+Could you resend an updated version that takes into account Arnout's
+comment?
 
-Thanks again!
+In the mean time, I'll mark your patch as "Changes requested" in our
+patchwork. This means we will no longer see it in the list of pending
+patches, so if you don't come back to us with an updated version, this
+change will never be applied.
+
+Thanks a lot for your contribution!
 
 Thomas
 -- 
