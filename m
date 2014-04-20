@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 19:59:27 +0200
-Subject: [Buildroot] [git commit] jack2: needs C++ support
-Message-ID: <20140420180001.DEB339C910@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 20:44:30 +0200
+Subject: [Buildroot] [PATCH 2/2] perl-cross: bump to version 0.8.5
+In-Reply-To: <CAB0FRsuktZr9dubswhhRZQ=ReAZaJVtZNVcautexGnR7_e1cNg@mail.gmail.com>
+References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
+ <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
+ <20140420173730.1770c6e1@skate>
+ <CAB0FRsuktZr9dubswhhRZQ=ReAZaJVtZNVcautexGnR7_e1cNg@mail.gmail.com>
+Message-ID: <20140420204430.0d93a02a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5035af0cbb6a1dcb1e9b443fbf601be4fad737f9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fran?ois Perrad,
 
-Fixes:
+On Sun, 20 Apr 2014 19:12:56 +0200, Fran?ois Perrad wrote:
 
-  http://autobuild.buildroot.org/results/ede/ede17f2fdb9b5cd4b974ef820d95b0eba863c420/
+> No. I've already tried it. The helper doesn't give the same result.
+> 
+> I need a tarball which allows to patch the perl distribution.
+> The helper gives a copy of the project which allows to build this tarball.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/jack2/Config.in |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+Then can you add a comment above the _SITE line to explain this?
 
-diff --git a/package/jack2/Config.in b/package/jack2/Config.in
-index 4d451d0..a1669ee 100644
---- a/package/jack2/Config.in
-+++ b/package/jack2/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_JACK2
- 	bool "jack2"
- 	depends on BR2_LARGEFILE # libsndfile
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBSAMPLERATE
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_ALSA_LIB
-@@ -18,5 +19,6 @@ config BR2_PACKAGE_JACK2
- 
- 	  http://jackaudio.org/
- 
--comment "jack2 needs a toolchain w/ largefile and threads"
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "jack2 needs a toolchain w/ largefile, threads, C++"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
