@@ -1,42 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 11:09:24 +0200
-Subject: [Buildroot] [PATCH 1/1] uboot: build custom target if custom
- target selected
-In-Reply-To: <1392676369-19238-1-git-send-email-laurent.cans@gmail.com>
-References: <1392676369-19238-1-git-send-email-laurent.cans@gmail.com>
-Message-ID: <20140420110924.4545a967@skate>
+Date: Sun, 20 Apr 2014 11:12:22 +0200
+Subject: [Buildroot] FW: [PATCH] external toolchain: use relative path
+ to external toolchain.
+In-Reply-To: <884EA965490E3C4D8E66AEF41E98025006BF60@ezex10.ezchip.com>
+References: <884EA965490E3C4D8E66AEF41E98025006BF60@ezex10.ezchip.com>
+Message-ID: <20140420111222.2a38cdd7@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Laurent Cans,
+Dear Noam Camus,
 
-On Mon, 17 Feb 2014 23:32:49 +0100, Laurent Cans wrote:
-> When selecting custom uboot target the installation fail due to incorrect
-> target built. So when configuring custom uboot target, build the target
-> configured in buildroot configuration instead of legacy one.
+On Sun, 23 Feb 2014 08:29:34 +0000, Noam Camus wrote:
+> Now configuration may include relative path to external toolchain.
 > 
-> Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
 > ---
->  boot/uboot/uboot.mk |    1 +
->  1 file changed, 1 insertion(+)
+>  toolchain/toolchain-external/toolchain-external.mk |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-Two months ago you submitted this patch, and on the day of its
-submission, Arnout made some comments on it. However, you never came
-back with an updated version of the patch, and nobody else has stepped
-up to fix the problem.
+A week or two after you submitted this patch, Yann E. Morin asked some
+questions about why this is needed (e-mail from March, 4th), and you
+never came back with answers to Yann's questions. Since Yann basically
+questions the usefulness of the patch, I'm going to mark this patch as
+"Rejected" for now in our patchwork tool. If, despite Yann comments,
+you feel that this patch is still useful for you, please resubmit with
+a more detailed commit log that explains *why* it is needed.
 
-Could you resend an updated version that takes into account Arnout's
-comment?
-
-In the mean time, I'll mark your patch as "Changes requested" in our
-patchwork. This means we will no longer see it in the list of pending
-patches, so if you don't come back to us with an updated version, this
-change will never be applied.
-
-Thanks a lot for your contribution!
+Thanks!
 
 Thomas
 -- 
