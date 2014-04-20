@@ -1,60 +1,47 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 20 Apr 2014 16:05:46 +0200
-Subject: [Buildroot] [PATCH 2/2] nodejs: add a patch forcing link command to
-	use CXX
-In-Reply-To: <1398002746-30716-1-git-send-email-s.martin49@gmail.com>
-References: <1398002746-30716-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398002746-30716-2-git-send-email-s.martin49@gmail.com>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 20 Apr 2014 17:03:30 +0200
+Subject: [Buildroot] [UNSURE]Re:  [lua V3 0/8] lua
+In-Reply-To: <20140420101312.18aa6073@skate>
+References: <1393694590-29945-1-git-send-email-francois.perrad@gadz.org>
+ <20140302000232.6430d956@skate> <20140419235838.1fb6d8db@skate>
+ <CAB0FRssGzra+R69RiHLvCSxSTXEBOz=hNp5hhJFJ0oZKzx65XQ@mail.gmail.com>
+ <20140420101312.18aa6073@skate>
+Message-ID: <CAB0FRssusKQ0Rmxxtz2rVTFEp0xJcKiUhf6Dj-5yHG6dkw5T2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+2014-04-20 10:13 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Fran?ois Perrad,
+>
+> On Sun, 20 Apr 2014 09:38:40 +0200, Fran?ois Perrad wrote:
+>
+>> > Any news about these patches? From this series, we still have patches
+>> > 4, 5, 6 and 8 pending in patchwork. Could you take into account the
+>> > comments that have been made (mainly the strong need for more detailed
+>> > commit logs), and resend updated versions on top of master?
+>>
+>> I'll work on them after 2014.05 release.
+>
+> Well, there is still some time before the 2014.05 release, so you can
+> submit them earlier if you want.
+>
+> In the mean time, what can I do with your patches in patchwork? Can I
+> mark them as "Changes requested", making the assumption you will
+> remember to send updated versions in the future?
 
----
-This patch should fix the host-nodejs autobuild failures but I cannot
-confirm it because I am not able to reproduce the failure.
+Ok.
 
-Should fix:
-  http://autobuild.buildroot.org/results/114/114df8d99e802b69a39804e0608b022419d912b4/
----
- ...js-0002-gyp-force-link-command-to-use-CXX.patch | 26 ++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch
+Fran?ois
 
-diff --git a/package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch
-new file mode 100644
-index 0000000..a2f02ab
---- /dev/null
-+++ b/package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch
-@@ -0,0 +1,26 @@
-+From 00d809e9305241f8636a2d75e22c493293e6971a Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 20 Apr 2014 15:03:01 +0200
-+Subject: [PATCH] gyp: force link command to use CXX
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ tools/gyp/pylib/gyp/generator/make.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/gyp/pylib/gyp/generator/make.py b/tools/gyp/pylib/gyp/generator/make.py
-+index 0de510e..54e4c96 100644
-+--- a/tools/gyp/pylib/gyp/generator/make.py
-++++ b/tools/gyp/pylib/gyp/generator/make.py
-+@@ -134,7 +134,7 @@ cmd_alink_thin = rm -f $@ && $(AR.$(TOOLSET)) crsT $@ $(filter %.o,$^)
-+ # special "figure out circular dependencies" flags around the entire
-+ # input list during linking.
-+ quiet_cmd_link = LINK($(TOOLSET)) $@
-+-cmd_link = $(LINK.$(TOOLSET)) $(GYP_LDFLAGS) $(LDFLAGS.$(TOOLSET)) -o $@ -Wl,--start-group $(LD_INPUTS) -Wl,--end-group $(LIBS)
-++cmd_link = $(CXX.$(TOOLSET)) $(GYP_LDFLAGS) $(LDFLAGS.$(TOOLSET)) -o $@ -Wl,--start-group $(LD_INPUTS) -Wl,--end-group $(LIBS)
-+ 
-+ # We support two kinds of shared objects (.so):
-+ # 1) shared_library, which is just bundling together many dependent libraries
-+-- 
-+1.9.2
-+
--- 
-1.9.2
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
