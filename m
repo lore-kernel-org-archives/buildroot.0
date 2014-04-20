@@ -1,39 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 10:54:50 +0200
-Subject: [Buildroot] [git commit] jansson: needs math library
-Message-ID: <20140420085528.C77B89C8E7@busybox.osuosl.org>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Sun, 20 Apr 2014 10:56:36 +0200
+Subject: [Buildroot] [v4,2/2] canfestival: new package
+In-Reply-To: <1397410895-2290-2-git-send-email-s.martin49@gmail.com>
+References: <1397410895-2290-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140420085636.GA2055@zinosat.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cbe4b0a71fdac86e6eaf09ee6ed5b8fa313287ac
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Just a few cosmetic things
 
-libjansson.so doesn't list libm in its NEEDED header. Fixes the following
-nftables config time failure:
+On Sun, Apr 13, 2014 at 07:41:35PM +0200, Samuel Martin wrote:
+[...]
+> @@ -0,0 +1,101 @@
+> +config BR2_PACKAGE_CANFESTIVAL
+> +	bool "CanFestival"
+> +	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm
+> +	help
+> +	  CanFestival is an OpenSource CANOpen framework, licensed with GPLv2
+> +	  and LGPLv2.
+> +
+> +	  http://www.canfestival.org
+> +
 
-.../usr/lib/libjansson.so.4: undefined reference to `__isnan'
-.../usr/lib/libjansson.so.4: undefined reference to `__isinf'
+here help comment is ended with a dot
 
-Fixes:
-http://autobuild.buildroot.net/results/152/1525d7a3e1d1fcf35858962251c0b69a5e1b64db/
+> +if BR2_PACKAGE_CANFESTIVAL
+> +
+> +choice
+> +	prompt "driver to use"
+> +	default BR2_PACKAGE_CANFESTIVAL_SOCKET
+> +
+> +config BR2_PACKAGE_CANFESTIVAL_ANAGATE_LINUX
+> +	bool "anagate_linux"
+> +	help
+> +	  AnaGate CAN(duo) driver for linux
+> +
+> +	  http://www.anagate.de/en/index.html
+> +
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/jansson/jansson.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+here the sentence is not ended with a dot
 
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index 6ead0ec..d51e709 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
-@@ -9,5 +9,6 @@ JANSSON_SITE = http://www.digip.org/jansson/releases
- JANSSON_LICENSE = MIT
- JANSSON_LICENSE_FILES = LICENSE
- JANSSON_INSTALL_STAGING = YES
-+JANSSON_CONF_ENV = LIBS="-lm"
- 
- $(eval $(autotools-package))
+> +config BR2_PACKAGE_CANFESTIVAL_PEAK_LINUX
+> +	bool "peak_linux"
+> +	help
+> +	  Linux build host installed Peak driver and library
+> +
+> +	  http://www.peak-system.com/linux/
+> +
+
+missing dot at the end of the help sentence
+The description is not very clear to me
+
+> +config BR2_PACKAGE_CANFESTIVAL_VIRTUAL
+> +	bool "virtual"
+> +	help
+> +	  Unix pipe based virtual can driver
+> +
+
+I'd use capital CAN
+missing dot
+
+> +config BR2_PACKAGE_CANFESTIVAL_VIRTUAL_KERNEL
+> +	bool "virtual_kernel"
+> +	help
+> +	  Kernel module virtual can driver
+> +
+
+I'd use capital CAN
+missing dot
+
+> +config BR2_PACKAGE_CANFESTIVAL_LINCAN
+> +	bool "lincan"
+> +	help
+> +	  Lincan driver
+> +
+> +	  http://www.ocera.org/download/components/WP7/lincan-0.3.3.html
+> +
+
+missing dot
+
+> +config BR2_PACKAGE_CANFESTIVAL_CAN4LINUX
+> +	bool "can4linux"
+> +	help
+> +	  Can4linux driver
+> +
+> +	  http://www.port.de/engl/canprod/hw_can4linux.html
+> +
+
+missing dot
+
+> +config BR2_PACKAGE_CANFESTIVAL_COPCICAN_LINUX
+> +	bool "copcican_linux"
+> +	help
+> +	  User space driver interface for CO-PCICAN card
+> +
+> +	  http://www.cosateq.com/
+> +
+
+missing dot
+
+> +config BR2_PACKAGE_CANFESTIVAL_COPCICAN_COMEDI
+> +	bool "copcican_comedi"
+> +	help
+> +	  COMEDI driver interface for CO-PCICAN card
+> +
+> +	  http://www.cosateq.com/
+> +
+
+missing dot
+
+
+regards,
+Davide
