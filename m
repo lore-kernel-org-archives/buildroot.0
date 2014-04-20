@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 17:36:22 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-bad: fix missing dependency
-	for opencv plugin
-Message-ID: <20140420153626.D06219C8B5@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 17:37:30 +0200
+Subject: [Buildroot] [PATCH 2/2] perl-cross: bump to version 0.8.5
+In-Reply-To: <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
+References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
+ <1398006356-5425-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140420173730.1770c6e1@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7105008a7f97e2c845fe80faa0c4cef3c7578d90
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Gstreamer1 opencv plugin requires opencv's contrib module.
+On Sun, 20 Apr 2014 17:05:56 +0200, Francois Perrad wrote:
 
-Fixes:
-  http://autobuild.buildroot.net/results/0aa/0aab79be8043bf88a227af2ca27b4447aa2f8901/
+> -PERL_CROSS_VERSION = 0.8.3
+> -PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
+> -PERL_CROSS_SITE    = http://download.berlios.de/perlcross
+> +PERL_CROSS_VERSION = 0.8.5
+> +PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
+> +PERL_CROSS_SITE    = http://raw.github.com/arsv/perl-cross/releases
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+You should use the $(github ...) helper here.
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 0e4765c..02fa18c 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -430,6 +430,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	# problem of including the old "cv.h" header
- 	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
- 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
- 	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	select BR2_PACKAGE_OPENCV_LIB_FLANN
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
