@@ -1,50 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 18:02:25 +0200
-Subject: [Buildroot] [git commit] yaffs2utils: new package
-Message-ID: <20140420161457.6A0449C7BA@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 18:15:28 +0200
+Subject: [Buildroot] yaffs2 file system
+In-Reply-To: <534CF34C.4050808@carallon.com>
+References: <CABzetm2LegsUVAH0a-3UYWNQcf2inSG4P8r5A6goGKNbJKsVVw@mail.gmail.com>
+ <534CF34C.4050808@carallon.com>
+Message-ID: <20140420181528.6f4d2765@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f27831ae132eab5524b4b3ecec8747c1e9471b3d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Will Wagner,
 
-[Thomas: remove target variant of the package, use labelled version
-0.2.9 instead of latest.tar.gz, use 'make install' instead of doing
-manual installation, add license informations.]
+On Tue, 15 Apr 2014 09:52:28 +0100, Will Wagner wrote:
 
-Signed-off-by: Will Wagner <willw@carallon.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/yaffs2utils/yaffs2utils.mk |   21 +++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
+> I have a couple of patches (attached) that add yaffs2 support for 
+> buildroot, that I have never got round to pushing upstream. They are 
+> based on buildroot_2013.05.
 
-diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
-new file mode 100644
-index 0000000..ba24958
---- /dev/null
-+++ b/package/yaffs2utils/yaffs2utils.mk
-@@ -0,0 +1,21 @@
-+#############################################################
-+#
-+# yaffs2utils
-+#
-+#############################################################
-+
-+YAFFS2UTILS_VERSION = 0.2.9
-+YAFFS2UTILS_SOURCE = $(YAFFS2UTILS_VERSION).tar.gz
-+YAFFS2UTILS_SITE = https://yaffs2utils.googlecode.com/files/
-+YAFFS2UTILS_LICENSE = GPLv2
-+YAFFS2UTILS_LICENSE_FILES = COPYING
-+
-+define HOST_YAFFS2UTILS_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_YAFFS2UTILS_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLDIR=$(HOST_DIR)/usr/bin install
-+endef
-+
-+$(eval $(host-generic-package))
+I've taken your two patches, made a little bit of clean up, and I
+applied them.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
