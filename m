@@ -1,82 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 11:18:43 +0200
-Subject: [Buildroot] [PATCH 1/2] qt5declarative: Reduce dependencies to
- GLes2 only
-In-Reply-To: <1396368972-8690-2-git-send-email-jezz@sysmic.org>
-References: <533A8F6C.1010606@gmail.com>
- <1396368972-8690-1-git-send-email-jezz@sysmic.org>
- <1396368972-8690-2-git-send-email-jezz@sysmic.org>
-Message-ID: <20140420111843.340cb627@skate>
+Date: Sun, 20 Apr 2014 10:15:46 +0200
+Subject: [Buildroot] Analysis of build results for 2014-04-18
+In-Reply-To: <20140420052348.GB4425@tarshish>
+References: <20140419063009.6CB4810148A@stock.ovh.net>
+ <20140419090850.339ca98f@skate> <20140420035125.GA4425@tarshish>
+ <20140420052348.GB4425@tarshish>
+Message-ID: <20140420101546.303ac442@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fatih,
+Dear Baruch Siach,
 
-Since you are our Qt5 expert, could you comment on this patch, and give
-your Reviewed-by, Tested-by and/or Acked-by?
+On Sun, 20 Apr 2014 08:23:48 +0300, Baruch Siach wrote:
+
+> > pthread_barrier_* are also available on LT and LT.old.
+> 
+> This is wrong. These declarations are under '#if 0' in LT.old, but implemented 
+> in LT.
+
+Correct. But since we use LT.old by default, and it's pretty much the
+recommended solution when NPTL is not available, there's not much in
+adding some additional Config.in options just for this. So we can mark
+mesa3d as depending on NPTL.
 
 Thanks!
 
 Thomas
-
-On Tue,  1 Apr 2014 18:16:11 +0200, J?r?me Pouiller wrote:
-> From: J?r?me Pouiller <j.pouiller@sysmic.fr>
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
->  package/qt5/qt5base/qt5base.mk       | 12 +++++++++---
->  package/qt5/qt5declarative/Config.in |  1 -
->  2 files changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-> index 618251e..b99733a 100644
-> --- a/package/qt5/qt5base/qt5base.mk
-> +++ b/package/qt5/qt5base/qt5base.mk
-> @@ -96,9 +96,15 @@ else
->  QT5BASE_CONFIGURE_OPTS += -no-xcb
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
-> -QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
-> +ifeq ($(BR2_PACKAGE_HAS_OPENGL_EGL)$(BR2_PACKAGE_HAS_OPENGL_ES),yy)
-> +QT5BASE_CONFIGURE_OPTS += -opengl es2
->  QT5BASE_DEPENDENCIES   += libgles libegl
-> +else
-> +QT5BASE_CONFIGURE_OPTS += -no-opengl
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
-> +QT5BASE_CONFIGURE_OPTS += -eglfs
->  ifeq ($(BR2_PACKAGE_GPU_VIV_BIN_MX6Q),y)
->  QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
->  	$(@D)/mkspecs/devices/linux-imx6-g++/qeglfshooks_imx6.cpp
-> @@ -108,7 +114,7 @@ QT5BASE_EGLFS_PLATFORM_HOOKS_SOURCES = \
->  	$(@D)/mkspecs/devices/linux-rasp-pi-g++/qeglfshooks_pi.cpp
->  endif
->  else
-> -QT5BASE_CONFIGURE_OPTS += -no-opengl -no-eglfs
-> +QT5BASE_CONFIGURE_OPTS += -no-eglfs
->  endif
->  
->  QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_OPENSSL),-openssl,-no-openssl)
-> diff --git a/package/qt5/qt5declarative/Config.in b/package/qt5/qt5declarative/Config.in
-> index c5753b1..7f25999 100644
-> --- a/package/qt5/qt5declarative/Config.in
-> +++ b/package/qt5/qt5declarative/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_QT5DECLARATIVE
->  	select BR2_PACKAGE_QT5XMLPATTERNS
->  	select BR2_PACKAGE_QT5BASE
->  	select BR2_PACKAGE_QT5BASE_GUI
-> -	select BR2_PACKAGE_QT5BASE_EGLFS
->  	depends on BR2_PACKAGE_HAS_OPENGL_EGL
->  	depends on BR2_PACKAGE_HAS_OPENGL_ES
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-
-
-
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
