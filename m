@@ -1,117 +1,58 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Sun, 20 Apr 2014 10:56:36 +0200
-Subject: [Buildroot] [v4,2/2] canfestival: new package
-In-Reply-To: <1397410895-2290-2-git-send-email-s.martin49@gmail.com>
-References: <1397410895-2290-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140420085636.GA2055@zinosat.dyndns.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 20 Apr 2014 10:57:06 +0200
+Subject: [Buildroot] [PATCH] pkg-cmaketargets.mk: do not hardcode
+ absolute path in toolchainfile.cmake
+In-Reply-To: <20140419235945.0601cc38@skate>
+References: <1393694162-21952-1-git-send-email-s.martin49@gmail.com>
+ <531429C3.80801@mind.be> <20140419235945.0601cc38@skate>
+Message-ID: <CAHXCMMJYNXHeWZ8oPcX4QTBfvhiQr_DfBCbbA505hutpwwRKYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just a few cosmetic things
+Hi all,
 
-On Sun, Apr 13, 2014 at 07:41:35PM +0200, Samuel Martin wrote:
-[...]
-> @@ -0,0 +1,101 @@
-> +config BR2_PACKAGE_CANFESTIVAL
-> +	bool "CanFestival"
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm
-> +	help
-> +	  CanFestival is an OpenSource CANOpen framework, licensed with GPLv2
-> +	  and LGPLv2.
-> +
-> +	  http://www.canfestival.org
-> +
+On Sat, Apr 19, 2014 at 11:59 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Samuel,
+>
+> On Mon, 03 Mar 2014 08:05:39 +0100, Arnout Vandecappelle wrote:
+>
+>> >  $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>> >     @mkdir -p $(@D)
+>> >     @echo -en "\
+>> > +   get_filename_component(_HOST_DIR \$${CMAKE_CURRENT_LIST_FILE} PATH)\n\
+>> > +   set(_HOST_DIR \"\$${_HOST_DIR}/../../..\")\n\
+>> >     set(CMAKE_SYSTEM_NAME Linux)\n\
+>> > -   set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+>> > -   set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+>> > +   set(CMAKE_C_COMPILER \"\$${_HOST_DIR}/$(subst $(HOST_DIR)/,,$(TARGET_CROSS))gcc\")\n\
+>>
+>>  Wouldn't it be more natural to write
+>>
+>> set(CMAKE_C_COMPILER \"$(subst $(HOST_DIR)/,\$${_HOST_DIR}/,$(TARGET_CC_NOCCACHE)\")\n\
+>>
+>> ?
+>
+> Can you reply to Arnout comment, and/or resend an updated version of
+> this patch? Or take some other action about it?
 
-here help comment is ended with a dot
+I'm on it
 
-> +if BR2_PACKAGE_CANFESTIVAL
-> +
-> +choice
-> +	prompt "driver to use"
-> +	default BR2_PACKAGE_CANFESTIVAL_SOCKET
-> +
-> +config BR2_PACKAGE_CANFESTIVAL_ANAGATE_LINUX
-> +	bool "anagate_linux"
-> +	help
-> +	  AnaGate CAN(duo) driver for linux
-> +
-> +	  http://www.anagate.de/en/index.html
-> +
+Regards,
 
-here the sentence is not ended with a dot
-
-> +config BR2_PACKAGE_CANFESTIVAL_PEAK_LINUX
-> +	bool "peak_linux"
-> +	help
-> +	  Linux build host installed Peak driver and library
-> +
-> +	  http://www.peak-system.com/linux/
-> +
-
-missing dot at the end of the help sentence
-The description is not very clear to me
-
-> +config BR2_PACKAGE_CANFESTIVAL_VIRTUAL
-> +	bool "virtual"
-> +	help
-> +	  Unix pipe based virtual can driver
-> +
-
-I'd use capital CAN
-missing dot
-
-> +config BR2_PACKAGE_CANFESTIVAL_VIRTUAL_KERNEL
-> +	bool "virtual_kernel"
-> +	help
-> +	  Kernel module virtual can driver
-> +
-
-I'd use capital CAN
-missing dot
-
-> +config BR2_PACKAGE_CANFESTIVAL_LINCAN
-> +	bool "lincan"
-> +	help
-> +	  Lincan driver
-> +
-> +	  http://www.ocera.org/download/components/WP7/lincan-0.3.3.html
-> +
-
-missing dot
-
-> +config BR2_PACKAGE_CANFESTIVAL_CAN4LINUX
-> +	bool "can4linux"
-> +	help
-> +	  Can4linux driver
-> +
-> +	  http://www.port.de/engl/canprod/hw_can4linux.html
-> +
-
-missing dot
-
-> +config BR2_PACKAGE_CANFESTIVAL_COPCICAN_LINUX
-> +	bool "copcican_linux"
-> +	help
-> +	  User space driver interface for CO-PCICAN card
-> +
-> +	  http://www.cosateq.com/
-> +
-
-missing dot
-
-> +config BR2_PACKAGE_CANFESTIVAL_COPCICAN_COMEDI
-> +	bool "copcican_comedi"
-> +	help
-> +	  COMEDI driver interface for CO-PCICAN card
-> +
-> +	  http://www.cosateq.com/
-> +
-
-missing dot
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
 
-regards,
-Davide
+
+-- 
+Samuel
