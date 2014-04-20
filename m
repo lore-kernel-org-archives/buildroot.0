@@ -1,52 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Apr 2014 17:31:03 +0200
-Subject: [Buildroot] [git commit] nodejs: add a patch forcing link command
-	to use CXX
-Message-ID: <20140420153600.95E9B9BE41@busybox.osuosl.org>
+Date: Sun, 20 Apr 2014 17:36:22 +0200
+Subject: [Buildroot] [git commit] gst1-plugins-bad: fix missing dependency
+	for opencv plugin
+Message-ID: <20140420153626.D06219C8B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb80d283412b610fc0f5e4baf1c5bcdf093dadc2
+commit: http://git.buildroot.net/buildroot/commit/?id=7105008a7f97e2c845fe80faa0c4cef3c7578d90
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Gstreamer1 opencv plugin requires opencv's contrib module.
+
+Fixes:
+  http://autobuild.buildroot.net/results/0aa/0aab79be8043bf88a227af2ca27b4447aa2f8901/
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...js-0002-gyp-force-link-command-to-use-CXX.patch |   26 ++++++++++++++++++++
- 1 files changed, 26 insertions(+), 0 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch
-new file mode 100644
-index 0000000..a2f02ab
---- /dev/null
-+++ b/package/nodejs/nodejs-0002-gyp-force-link-command-to-use-CXX.patch
-@@ -0,0 +1,26 @@
-+From 00d809e9305241f8636a2d75e22c493293e6971a Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sun, 20 Apr 2014 15:03:01 +0200
-+Subject: [PATCH] gyp: force link command to use CXX
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ tools/gyp/pylib/gyp/generator/make.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tools/gyp/pylib/gyp/generator/make.py b/tools/gyp/pylib/gyp/generator/make.py
-+index 0de510e..54e4c96 100644
-+--- a/tools/gyp/pylib/gyp/generator/make.py
-++++ b/tools/gyp/pylib/gyp/generator/make.py
-+@@ -134,7 +134,7 @@ cmd_alink_thin = rm -f $@ && $(AR.$(TOOLSET)) crsT $@ $(filter %.o,$^)
-+ # special "figure out circular dependencies" flags around the entire
-+ # input list during linking.
-+ quiet_cmd_link = LINK($(TOOLSET)) $@
-+-cmd_link = $(LINK.$(TOOLSET)) $(GYP_LDFLAGS) $(LDFLAGS.$(TOOLSET)) -o $@ -Wl,--start-group $(LD_INPUTS) -Wl,--end-group $(LIBS)
-++cmd_link = $(CXX.$(TOOLSET)) $(GYP_LDFLAGS) $(LDFLAGS.$(TOOLSET)) -o $@ -Wl,--start-group $(LD_INPUTS) -Wl,--end-group $(LIBS)
-+ 
-+ # We support two kinds of shared objects (.so):
-+ # 1) shared_library, which is just bundling together many dependent libraries
-+-- 
-+1.9.2
-+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 0e4765c..02fa18c 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -430,6 +430,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	# problem of including the old "cv.h" header
+ 	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
+ 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
++	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
+ 	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+ 	select BR2_PACKAGE_OPENCV_LIB_FLANN
+ 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
