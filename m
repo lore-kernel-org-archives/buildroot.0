@@ -1,31 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Apr 2014 22:19:46 +0200
-Subject: [Buildroot] [PATCH v2] libdrm: needs threads
-In-Reply-To: <1398102235-32101-1-git-send-email-romain.naour@openwide.fr>
-References: <1398102235-32101-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140421221946.0b82b3b0@skate>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 21 Apr 2014 22:22:17 +0200
+Subject: [Buildroot] [PATCH 1/1] sunxi-mali: add missing GLchar
+ definitions.
+In-Reply-To: <1398102582-16743-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1398102582-16743-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140421202217.GK3359@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Eric,All,
 
-On Mon, 21 Apr 2014 19:43:55 +0200, Romain Naour wrote:
-> libdrm select libpthread-stubs that needs threads support.
+On 2014-04-21 19:49 +0200, Eric Le Bihan spake thusly:
+> The GLES and GLES2 header files provided by sunxi-mali do not define the
+> type "GLchar" and use "char" instead in the prototype of some functions.
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/1da/1dad13110312a44b40b9ee4050b265de1f3c8a42/build-end.log
+> In order to have some applications build (like cairo), a new patch has
+> been added to define the missing type.
 > 
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+> This issue has been reported upstream some time ago, but the pull
+> request has not been merged yet.
+> (See https://github.com/linux-sunxi/sunxi-mali/pull/8).
+> 
+> Fixes http://autobuild.buildroot.net/results/2cb/2cb13a5bb92dabed219d49f49f0b9a2dfe65a0ca/.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
-> v2: Fix display comment (Yann)
+>  ...-mali-0001-Add-missing-GLchar-definitions.patch | 38 ++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch
+> 
+> diff --git a/package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch b/package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch
+> new file mode 100644
+> index 0000000..50bd7f9
+> --- /dev/null
+> +++ b/package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch
+> @@ -0,0 +1,38 @@
+> +From 058d5e8cd90d117535b5d314fd9e15c70028ff20 Mon Sep 17 00:00:00 2001
+> +From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +Date: Mon, 21 Apr 2014 19:31:23 +0200
+> +Subject: [PATCH] Add missing GLchar definitions.
+> +
+> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> +---
+> + include/GLES/gl.h   | 1 +
+> + include/GLES2/gl2.h | 1 +
+> + 2 files changed, 2 insertions(+)
+> +
+> +diff --git a/include/GLES/gl.h b/include/GLES/gl.h
+> +index 858f394..a6bb591 100644
+> +--- a/include/GLES/gl.h
+> ++++ b/include/GLES/gl.h
+> +@@ -29,6 +29,7 @@ typedef float  GLfloat;
+> + typedef float  GLclampf;
+> + typedef signed int  GLfixed;
+> + typedef signed int  GLclampx;
+> ++typedef char GLchar;
+> + 
+> + typedef int * GLintptr;
+> + typedef int *  GLsizeiptr;
+> +diff --git a/include/GLES2/gl2.h b/include/GLES2/gl2.h
+> +index 59e376c..90d96bb 100644
+> +--- a/include/GLES2/gl2.h
+> ++++ b/include/GLES2/gl2.h
+> +@@ -32,6 +32,7 @@ typedef unsigned int     GLuint;
+> + typedef khronos_float_t  GLfloat;
+> + typedef khronos_float_t  GLclampf;
+> + typedef khronos_int32_t  GLfixed;
+> ++typedef char             GLchar;
+> + 
+> + /* GL types for handling large vertex buffer objects */
+> + typedef khronos_intptr_t GLintptr;
+> +-- 
+> +1.9.0
+> +
+> -- 
+> 1.9.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
