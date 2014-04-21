@@ -1,74 +1,47 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 21 Apr 2014 19:49:42 +0200
-Subject: [Buildroot] [PATCH 1/1] sunxi-mali: add missing GLchar definitions.
-Message-ID: <1398102582-16743-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Mon, 21 Apr 2014 19:56:45 +0200
+Subject: [Buildroot] Analysis of build results for 2014-04-20
+In-Reply-To: <20140421171703.GF3359@free.fr>
+References: <20140421063009.036D5100FF4@stock.ovh.net>
+ <20140421114949.59c65c31@skate> <20140421142444.GC3359@free.fr>
+ <20140421170338.GA23980@ned> <20140421171703.GF3359@free.fr>
+Message-ID: <20140421175641.GB23980@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The GLES and GLES2 header files provided by sunxi-mali do not define the
-type "GLchar" and use "char" instead in the prototype of some functions.
+On Mon, Apr 21, 2014 at 07:17:03PM +0200, Yann E. MORIN wrote:
+> Eric, All,
+>
+> On 2014-04-21 19:03 +0200, Eric Le Bihan spake thusly:
+> > On Mon, Apr 21, 2014 at 04:24:44PM +0200, Yann E. MORIN wrote:
+> > > Thomas, All,
+> > >
+> > > On 2014-04-21 11:49 +0200, Thomas Petazzoni spake thusly:
+> > > > >        arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/2cb13a5bb92dabed219d49f49f0b9a2dfe65a0ca/
+> > > >
+> > > > cairo-gl-private.h:287:5: error: unknown type name 'GLchar'
+> > > >
+> > > > Could some OpenGL person look into this? Paul ? Yann ?
+> > >
+> > > With only a cursory look and a bit of Google-fuu, it looks like we need
+> > > a full OpenGL provider in this case.
+> >
+> > In fact, looking at src/cairo-gl-private.h, we can see that GLchar is used in
+> > functions related to shader loading. But the gl2.h file from sunxi-mali
+> > defines prototypes using "char" where the official header from the Khronos
+> > Group uses "GLchar". The gl2.h from Raspberry userland uses GLchar.
+> >
+> > So the issue is with Sunxi Mali and has been fixed upstream:
+> > https://github.com/linux-sunxi/sunxi-mali/commit/b36c94609c3a335c5bbe2019a8e8a1b261786b30
+>
+> Nice! Care to send a patch bumping sunxi-mali?
 
-In order to have some applications build (like cairo), a new patch has
-been added to define the missing type.
+Too bad, the pull request fixing the issue has not been merged yet! So I'll
+only post a small patch for sunxi-mali header files, as the pull request also
+covers the *.pc files issue, which has not been acked by upstream yet.
 
-This issue has been reported upstream some time ago, but the pull
-request has not been merged yet.
-(See https://github.com/linux-sunxi/sunxi-mali/pull/8).
-
-Fixes http://autobuild.buildroot.net/results/2cb/2cb13a5bb92dabed219d49f49f0b9a2dfe65a0ca/.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...-mali-0001-Add-missing-GLchar-definitions.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch
-
-diff --git a/package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch b/package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch
-new file mode 100644
-index 0000000..50bd7f9
---- /dev/null
-+++ b/package/sunxi-mali/sunxi-mali-0001-Add-missing-GLchar-definitions.patch
-@@ -0,0 +1,38 @@
-+From 058d5e8cd90d117535b5d314fd9e15c70028ff20 Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Mon, 21 Apr 2014 19:31:23 +0200
-+Subject: [PATCH] Add missing GLchar definitions.
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ include/GLES/gl.h   | 1 +
-+ include/GLES2/gl2.h | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/include/GLES/gl.h b/include/GLES/gl.h
-+index 858f394..a6bb591 100644
-+--- a/include/GLES/gl.h
-++++ b/include/GLES/gl.h
-+@@ -29,6 +29,7 @@ typedef float  GLfloat;
-+ typedef float  GLclampf;
-+ typedef signed int  GLfixed;
-+ typedef signed int  GLclampx;
-++typedef char GLchar;
-+ 
-+ typedef int * GLintptr;
-+ typedef int *  GLsizeiptr;
-+diff --git a/include/GLES2/gl2.h b/include/GLES2/gl2.h
-+index 59e376c..90d96bb 100644
-+--- a/include/GLES2/gl2.h
-++++ b/include/GLES2/gl2.h
-+@@ -32,6 +32,7 @@ typedef unsigned int     GLuint;
-+ typedef khronos_float_t  GLfloat;
-+ typedef khronos_float_t  GLclampf;
-+ typedef khronos_int32_t  GLfixed;
-++typedef char             GLchar;
-+ 
-+ /* GL types for handling large vertex buffer objects */
-+ typedef khronos_intptr_t GLintptr;
-+-- 
-+1.9.0
-+
--- 
-1.9.0
+Best regards,
+ELB
