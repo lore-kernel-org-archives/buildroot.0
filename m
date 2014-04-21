@@ -1,52 +1,93 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 21 Apr 2014 13:47:57 +0000
-Subject: [Buildroot] Analysis of build results for 2014-04-20
-In-Reply-To: <20140421135807.3002c46f@skate>
-References: <20140421063009.036D5100FF4@stock.ovh.net>
- <20140421114949.59c65c31@skate>
- <39A54937CC95F24AA2F794E2D2B66B1356CB9EA2@de02wembxa.internal.synopsys.com>
- <20140421135807.3002c46f@skate>
-Message-ID: <1398088076.25515.10.camel@abrodkin-8560l.internal.synopsys.com>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Mon, 21 Apr 2014 17:10:32 +0300
+Subject: [Buildroot] [PATCH] qt5base: fix no-opengl build with egl
+Message-ID: <1398089432-820-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes:
 
-On Mon, 2014-04-21 at 13:58 +0200, Thomas Petazzoni wrote:
-> Dear Anton Kolesov,
-> 
-> On Mon, 21 Apr 2014 10:18:53 +0000, Anton Kolesov wrote:
-> 
-> > [AK:] This is a limitation of ARC uClibc port: our crt1.o doesn't support PIE (though it seems simple hello world can be compiled). Our uClibc developer (added to CC) is going to fix this in near future, but he has a lot of other tasks to do right now, so this might not happen immediately.
-> 
-> Why do we need a PIE executable here? As far as I understand, PIC is
-> mandatory for shared libraries, but PIE for executables is only needed
-> for security reasons, if you want to randomize the location of
-> executables in memory, at least in MMU-capable platforms.
+  http://autobuild.buildroot.net/results/8ed/8eddd934bd80fdbcdf7a9dbf5d9f8b7ba69634d4/
 
-> So maybe we should just cook a patch to remove -fPIE when building
-> openswan ? I don't think we build any other package with -fPIE, so why
-> should openswan be different ?
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ ...qt5base-0007-Fix-no-opengl-build-with-egl.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
 
-As Anton has just answered -fPIE/-pie is enabled in top-level
-Makefile.inc. But as I may see at least in master branch here
-https://github.com/xelerance/Openswan/blob/master/Makefile.inc it's very
-easy to override these settings with simple definitoin of USERCOMPILE
-and USERLINK variables.
-
-So definitely it is doable. But another good question would be if this
-was done on purpose (which I cannot undersnad clearly from commit
-message because too many items were dropped in at once here -
-https://github.com/xelerance/Openswan/commit/6181d2b2999e112d47884dda48d1ca2916e2403e#diff-084b77e3e200296f6230945d5f0ea0ec) or not.
-
-Another comment on PIE usage.
-I know for sure that many architectures (and more to come) use PIE for
-U-Boot (and here it is used on purpose for entire relocation of both
-code and data), so definitely PIE is required feature of toolchains and
-IMHO we don't want to escape it if it is used by packages developers.
-
-Regards,
-Alexey
+diff --git a/package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch b/package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
+new file mode 100644
+index 0000000..c0f03d5
+--- /dev/null
++++ b/package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
+@@ -0,0 +1,65 @@
++From cd14b80dd87ff9ae632bf0479a1d824c72316362 Mon Sep 17 00:00:00 2001
++From: Laszlo Agocs <laszlo.agocs@digia.com>
++Date: Wed, 12 Mar 2014 16:56:19 +0100
++Subject: [PATCH] Fix no-opengl build with egl
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Disable eglfs and similar plugins when opengl is not enabled.
++(but egl is present)
++
++GL-dependent parts of eglconvenience need to be skipped too.
++
++Task-number: QTBUG-37457
++Change-Id: I44d49495241551bc7b1f565aa0b5ace9f310628e
++Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
++Reviewed-by: J?rgen Lind <jorgen.lind@digia.com>
++Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
++
++Conflicts:
++	src/platformsupport/eglconvenience/eglconvenience.pri
++---
++ configure                                             | 2 +-
++ src/platformsupport/eglconvenience/eglconvenience.pri | 7 +++++--
++ 2 files changed, 6 insertions(+), 3 deletions(-)
++
++diff --git a/configure b/configure
++index aaa59bd..0c310ff 100755
++--- a/configure
+++++ b/configure
++@@ -5337,7 +5337,7 @@ if [ "$CFG_EGL" != "no" ]; then
++ fi
++ 
++ if [ "$CFG_EGLFS" != "no" ]; then
++-    if [ "$XPLATFORM_QNX" = "no" ]; then
+++    if [ "$XPLATFORM_QNX" = "no" ] && [ "$CFG_OPENGL" != "no" ]; then
++         CFG_EGLFS="$CFG_EGL"
++     else
++         CFG_EGLFS="no"
++diff --git a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
++index 506f4ab..462c60c 100644
++--- a/src/platformsupport/eglconvenience/eglconvenience.pri
+++++ b/src/platformsupport/eglconvenience/eglconvenience.pri
++@@ -1,13 +1,16 @@
++ contains(QT_CONFIG,egl) {
++     HEADERS += \
++         $$PWD/qeglconvenience_p.h \
++-        $$PWD/qeglplatformcontext_p.h \
++         $$PWD/qeglpbuffer_p.h
++     SOURCES += \
++         $$PWD/qeglconvenience.cpp \
++-        $$PWD/qeglplatformcontext.cpp \
++         $$PWD/qeglpbuffer.cpp
++ 
+++    contains(QT_CONFIG,opengl) {
+++        HEADERS += $$PWD/qeglplatformcontext_p.h
+++        SOURCES += $$PWD/qeglplatformcontext.cpp
+++    }
+++
++     contains(QT_CONFIG,xlib) {
++         HEADERS += \
++             $$PWD/qxlibeglintegration_p.h
++-- 
++1.9.1
++
+-- 
+1.9.1
