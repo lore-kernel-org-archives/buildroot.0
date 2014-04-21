@@ -1,93 +1,59 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 21 Apr 2014 17:10:32 +0300
-Subject: [Buildroot] [PATCH] qt5base: fix no-opengl build with egl
-Message-ID: <1398089432-820-1-git-send-email-fatih.asici@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 21 Apr 2014 16:13:13 +0200
+Subject: [Buildroot] [PATCH] syslinux: install helper programs to the
+	host
+In-Reply-To: <CA+-urNQ8ME28j_cCfhYu=poEot8yFpEXexHce4iieV0rAbaeRA@mail.gmail.com>
+References: <1394996670-8037-1-git-send-email-fhunleth@troodon-software.com>
+ <20140420115741.1cb6a1b2@skate>
+ <CA+-urNQ8ME28j_cCfhYu=poEot8yFpEXexHce4iieV0rAbaeRA@mail.gmail.com>
+Message-ID: <20140421141313.GA3359@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Frank, Thomas, All,
 
-  http://autobuild.buildroot.net/results/8ed/8eddd934bd80fdbcdf7a9dbf5d9f8b7ba69634d4/
+On 2014-04-21 09:18 -0400, Frank Hunleth spake thusly:
+> On Sun, Apr 20, 2014 at 5:57 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Frank, syslinux upstream is now at version 6.x. Since you're using
+> > syslinux, could you take care of updating the package in Buildroot to
+> > match the latest upstream version?
 
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
----
- ...qt5base-0007-Fix-no-opengl-build-with-egl.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
+To be noted: I am already working on this too. :-)
 
-diff --git a/package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch b/package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
-new file mode 100644
-index 0000000..c0f03d5
---- /dev/null
-+++ b/package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
-@@ -0,0 +1,65 @@
-+From cd14b80dd87ff9ae632bf0479a1d824c72316362 Mon Sep 17 00:00:00 2001
-+From: Laszlo Agocs <laszlo.agocs@digia.com>
-+Date: Wed, 12 Mar 2014 16:56:19 +0100
-+Subject: [PATCH] Fix no-opengl build with egl
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Disable eglfs and similar plugins when opengl is not enabled.
-+(but egl is present)
-+
-+GL-dependent parts of eglconvenience need to be skipped too.
-+
-+Task-number: QTBUG-37457
-+Change-Id: I44d49495241551bc7b1f565aa0b5ace9f310628e
-+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
-+Reviewed-by: J?rgen Lind <jorgen.lind@digia.com>
-+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
-+
-+Conflicts:
-+	src/platformsupport/eglconvenience/eglconvenience.pri
-+---
-+ configure                                             | 2 +-
-+ src/platformsupport/eglconvenience/eglconvenience.pri | 7 +++++--
-+ 2 files changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure b/configure
-+index aaa59bd..0c310ff 100755
-+--- a/configure
-++++ b/configure
-+@@ -5337,7 +5337,7 @@ if [ "$CFG_EGL" != "no" ]; then
-+ fi
-+ 
-+ if [ "$CFG_EGLFS" != "no" ]; then
-+-    if [ "$XPLATFORM_QNX" = "no" ]; then
-++    if [ "$XPLATFORM_QNX" = "no" ] && [ "$CFG_OPENGL" != "no" ]; then
-+         CFG_EGLFS="$CFG_EGL"
-+     else
-+         CFG_EGLFS="no"
-+diff --git a/src/platformsupport/eglconvenience/eglconvenience.pri b/src/platformsupport/eglconvenience/eglconvenience.pri
-+index 506f4ab..462c60c 100644
-+--- a/src/platformsupport/eglconvenience/eglconvenience.pri
-++++ b/src/platformsupport/eglconvenience/eglconvenience.pri
-+@@ -1,13 +1,16 @@
-+ contains(QT_CONFIG,egl) {
-+     HEADERS += \
-+         $$PWD/qeglconvenience_p.h \
-+-        $$PWD/qeglplatformcontext_p.h \
-+         $$PWD/qeglpbuffer_p.h
-+     SOURCES += \
-+         $$PWD/qeglconvenience.cpp \
-+-        $$PWD/qeglplatformcontext.cpp \
-+         $$PWD/qeglpbuffer.cpp
-+ 
-++    contains(QT_CONFIG,opengl) {
-++        HEADERS += $$PWD/qeglplatformcontext_p.h
-++        SOURCES += $$PWD/qeglplatformcontext.cpp
-++    }
-++
-+     contains(QT_CONFIG,xlib) {
-+         HEADERS += \
-+             $$PWD/qxlibeglintegration_p.h
-+-- 
-+1.9.1
-+
+> I looked into this some last night and got as far as porting two new
+> prerequisite packages for 6.x and then debugging issues with building
+> the new EFI code. I personally don't use EFI, and without more digging
+> into it I wasn't sure how to turn off its compilation.
+
+syslinux is a pain to use in cross-compilation, as it assumes headers and
+libs from gnu-efi to be in /usr/blabla so it's a pain to make it work in
+Buildroot.
+
+That, plus a few other nits here and there...
+
+But I have a few patches here to fix the issue for us. It may even be
+possible to shape them for upstream...
+
+> It looks like it will take a little longer to make progress on this,
+> and I'm not sure when I'll have time again. In the mean time, if there
+> are any other interested syslinux users on this list, feel free to
+> contact me and I'll try to explain where I'm at with my partial work.
+
+As I am also working on this, if you just posted your changes (on the
+list on in a public git tree), I can incorporate your changes I am
+missing, and submit those.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
