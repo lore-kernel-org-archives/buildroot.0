@@ -1,51 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Apr 2014 16:13:13 +0200
-Subject: [Buildroot] [PATCH] syslinux: install helper programs to the
-	host
-In-Reply-To: <CA+-urNQ8ME28j_cCfhYu=poEot8yFpEXexHce4iieV0rAbaeRA@mail.gmail.com>
-References: <1394996670-8037-1-git-send-email-fhunleth@troodon-software.com>
- <20140420115741.1cb6a1b2@skate>
- <CA+-urNQ8ME28j_cCfhYu=poEot8yFpEXexHce4iieV0rAbaeRA@mail.gmail.com>
-Message-ID: <20140421141313.GA3359@free.fr>
+Date: Mon, 21 Apr 2014 16:21:57 +0200
+Subject: [Buildroot] [PATCH 0/2] postgresql fix and update
+In-Reply-To: <20140421115046.60bffaca@skate>
+References: <1398036313-26556-1-git-send-email-ps.report@gmx.net>
+ <20140421115046.60bffaca@skate>
+Message-ID: <20140421142157.GB3359@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, Thomas, All,
+On 2014-04-21 11:50 +0200, Thomas Petazzoni spake thusly:
+> Dear Peter Seiderer,
+> 
+> On Mon, 21 Apr 2014 01:25:11 +0200, Peter Seiderer wrote:
+> 
+> > thanks for applying the postgresql package (and for reporting the
+> > uClibc bug upstream).
+> > 
+> > Here two follow up patches (sorry for missing to disable the
+> > automatic readline/zlib selection in the last version).
+> 
+> Related to postgresql, can you have a look at the build problem
+> reported at
+> http://autobuild.buildroot.org/results/32f/32fc178cc3875c32e9b722654676fc44eccde8f1/build-end.log ?
 
-On 2014-04-21 09:18 -0400, Frank Hunleth spake thusly:
-> On Sun, Apr 20, 2014 at 5:57 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Frank, syslinux upstream is now at version 6.x. Since you're using
-> > syslinux, could you take care of updating the package in Buildroot to
-> > match the latest upstream version?
+Oh, that one should be pretty easy, something like:
 
-To be noted: I am already working on this too. :-)
+    ifeq ($(BR2_PACKAGE_TZDATA),y)
+    POSTGRESQL_DEPENDENCIES += tzdata
+    else
+    POSTGRESQL_DEPENDENCIES += host-zic
+    POSTGRESQL_CONF_ENV += ZIC=$$(ZIC)
+    endif
 
-> I looked into this some last night and got as far as porting two new
-> prerequisite packages for 6.x and then debugging issues with building
-> the new EFI code. I personally don't use EFI, and without more digging
-> into it I wasn't sure how to turn off its compilation.
+I doubt this one would kill baby seals, but it's totally untested. ;-)
 
-syslinux is a pain to use in cross-compilation, as it assumes headers and
-libs from gnu-efi to be in /usr/blabla so it's a pain to make it work in
-Buildroot.
-
-That, plus a few other nits here and there...
-
-But I have a few patches here to fix the issue for us. It may even be
-possible to shape them for upstream...
-
-> It looks like it will take a little longer to make progress on this,
-> and I'm not sure when I'll have time again. In the mean time, if there
-> are any other interested syslinux users on this list, feel free to
-> contact me and I'll try to explain where I'm at with my partial work.
-
-As I am also working on this, if you just posted your changes (on the
-list on in a public git tree), I can incorporate your changes I am
-missing, and submit those.
+Note: postgresql is only available with glibc, so we need not care about
+the tz package, which is only for uClibc. So we're fine with only tzdata,
+which is solely for glibc.
 
 Regards,
 Yann E. MORIN.
