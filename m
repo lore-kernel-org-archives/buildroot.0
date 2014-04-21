@@ -1,64 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Apr 2014 17:08:37 +0200
-Subject: [Buildroot] [PATCH] syslinux: install helper programs to the
-	host
-In-Reply-To: <CA+-urNTJCR=8oiiKqj31GZ5Pw0+Q88sM0FfZ3QEzSy9nL9h0dQ@mail.gmail.com>
-References: <1394996670-8037-1-git-send-email-fhunleth@troodon-software.com>
- <20140420115741.1cb6a1b2@skate>
- <CA+-urNQ8ME28j_cCfhYu=poEot8yFpEXexHce4iieV0rAbaeRA@mail.gmail.com>
- <20140421141313.GA3359@free.fr>
- <CA+-urNSGGG=sE7KXgOPBz_byTccxdg02mCJuWvcrhhY5Howrvg@mail.gmail.com>
- <20140421144028.GD3359@free.fr>
- <CA+-urNTJCR=8oiiKqj31GZ5Pw0+Q88sM0FfZ3QEzSy9nL9h0dQ@mail.gmail.com>
-Message-ID: <20140421150837.GE3359@free.fr>
+From: Clayton Shotwell <clshotwe@rockwellcollins.com>
+Date: Mon, 21 Apr 2014 10:43:04 -0500
+Subject: [Buildroot] [PATCH] legal-info: Add site to legal info manifest
+In-Reply-To: <53504BFE.2040703@lucaceresoli.net>
+References: <1396903522-10063-1-git-send-email-clshotwe@rockwellcollins.com>
+ <53504BFE.2040703@lucaceresoli.net>
+Message-ID: <OF67311920.5D148A28-ON86257CC1.00558820-86257CC1.00564A04@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Luca,
 
-On 2014-04-21 10:55 -0400, Frank Hunleth spake thusly:
-> On Mon, Apr 21, 2014 at 10:40 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Frank, All,
-> >
-> > On 2014-04-21 10:30 -0400, Frank Hunleth spake thusly:
-> >> On Mon, Apr 21, 2014 at 10:13 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >> > As I am also working on this, if you just posted your changes (on the
-> >> > list on in a public git tree), I can incorporate your changes I am
-> >> > missing, and submit those.
-> >>
-> >> I've attached my current progress just in case there's something of
-> >> use, but I suspect that you're farther along.
-> >
-> > Woot! :-) In fact, you are farther than me! I still did not had a need
-> > for usl of upx.
+Luca Ceresoli <luca@lucaceresoli.net> wrote on 04/17/2014 04:47:42 PM:
+
+> From: Luca Ceresoli <luca@lucaceresoli.net>
+> To: Clayton Shotwell <clshotwe@rockwellcollins.com>, 
+buildroot at buildroot.org
+> Date: 04/17/2014 04:47 PM
+> Subject: Re: [Buildroot] [PATCH] legal-info: Add site to legal info 
+manifest
 > 
-> Just a note, I've convinced myself that there's no way that upx will
-> do the right thing on cross-compiled executables. I suspect that it
-> will work on my x86 setup since the host and target are the same
-> architecture, but not in general. I didn't get far enough to verify it
-> though.
-
-Well, syslinux is only for the x86 world anyway, and it is only
-buildable on a x86 machine as well (since it uses the host compiler).
-
-> > This patch is missing your SoB. Could you just resend with your SoB
-> > added? Then I'll handle all the nitty-gritty work of finishing this, and
-> > pushing upstream.
+> Hi Clayton,
 > 
-> Done! And thanks. Let me know if I can help by testing anything in my setup.
+> Clayton Shotwell wrote:
+> > I would like to propose adding the site to the legal-info manifest
+> > files. This gives a little more information on where the sources came
+> > from without adding much overhead. Please note that is is only for
+> > packages where the source is not local or set with OVERRIDE_SRCDIR.
+> >
+> > This patch works for the most part. The only issue I see with it 
+occurs
+> > when the SITE for a package uses one of the common url macros such as
+> > BR2_GNU_MIRROR. The legal info manifest ends up having an extra set of
+> > double quotes in the site string.
+> >
+> > Signed-off-by: Clayton Shotwell <clshotwe@rockwellcollins.com>
+> 
+> Thanks for the proposal.
+> 
+> The idea is generally good to me: it provides a useful info with a
+> little effort.
+> 
+> The project website URL would be nice as well, but that's not easily
+> extracted.
 
-Thanks for this bootstrap code! :-)
+Agreed
 
-Regards,
-Yann E. MORIN.
+> Of course the double-quote issue with some packages needs to be fixed.
+> But this is just "implementation details". Note that, besides packages
+> from GNU_MIRROR it also affects the kernel from kernel.org, probably
+> U-Boot and Busybox, maybe a few others.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I think this could be solved with a creative strip command but I was not
+able to come up with anything that worked.  Maybe you or someone else will
+have more luck?
+
+> Instead, the case of packages downloaded from custom locations deserves
+> a little more thought on what we want to do.
+> 
+> When using e.g. BR2_LINUX_KERNEL_CUSTOM_GIT=y, the REPO_URL may point
+> either to a public server (github, gitorious, silicon vendors...) or to
+> an enterprise server. In the former case the repository URL is
+> informative. In the latter case it is not, and some companies may not
+> like exposing their server names to the public. You know how netadmins
+> are made... :)
+> 
+> So I'm not sure of what is the best policy when using custom (non-wget)
+> download methods.
+
+I was assuming the information could be scrubbed if needed from the 
+resulting csv files.
+
+Thanks,
+Clayton
+
+Clayton Shotwell
+Software Engineer
+clshotwe at rockwellcollins.com
+www.rockwellcollins.com 
