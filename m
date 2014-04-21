@@ -1,36 +1,61 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 21 Apr 2014 19:35:50 +0200
-Subject: [Buildroot] Analysis of build results for 2014-04-19
-In-Reply-To: <20140420104812.5bc926a9@skate>
-References: <20140420063009.8B76B100DB9@stock.ovh.net>
- <20140420104812.5bc926a9@skate>
-Message-ID: <535556F6.3050807@lucaceresoli.net>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 21 Apr 2014 19:39:41 +0200
+Subject: [Buildroot] [PATCH 1/1] libdrm: needs threads
+In-Reply-To: <20140421173258.GG3359@free.fr>
+References: <1398101284-31520-1-git-send-email-romain.naour@openwide.fr>
+ <20140421173258.GG3359@free.fr>
+Message-ID: <535557DD.5090407@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Yann,
 
-Thomas Petazzoni wrote:
-...
->>         arm |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/5a7fd0de2747e876a182117d7f7d8f16b20cadea/
->
-> checking for init_snmp in -lnetsnmp... no
-> configure: error: SNMP sanity check failed. Please check config.log for more information.
-> make: *** [/home/test/test/3/output/build/php-5.5.11/.stamp_configured] Error 1
->
-> Gustavo, Luca?
->
+Le 21/04/2014 19:32, Yann E. MORIN a ?crit :
+> Romain, All,
+> 
+> On 2014-04-21 19:28 +0200, Romain Naour spake thusly:
+>> libdrm select libpthread-stubs that needs threads support.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/1da/1dad13110312a44b40b9ee4050b265de1f3c8a42/build-end.log
+>>
+>> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+>> ---
+>>  package/libdrm/Config.in | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+>> index 72cf5f8..fdb541e 100644
+>> --- a/package/libdrm/Config.in
+>> +++ b/package/libdrm/Config.in
+>> @@ -1,6 +1,7 @@
+>>  config BR2_PACKAGE_LIBDRM
+>>  	bool "libdrm"
+>>  	select BR2_PACKAGE_LIBPTHREAD_STUBS
+>> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
+>>  	depends on BR2_LARGEFILE
+>>  	help
+>>  	  Direct Rendering Manager
+>> @@ -59,5 +60,6 @@ endmenu
+>>  
+>>  endif
+>>  
+>> -comment "libdrm needs a toolchain w/ largefile"
+>> +comment "libdrm needs a toolchain w/ largefile, threads"
+>>  	depends on !BR2_LARGEFILE
+>> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> 
+> This should be:
+>     depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> 
+> Otherwise, the comment is only visible when both are not set, while we
+> want to see the comment as soon as at least one is not set.
+> 
 
-My bad, it built perfectly here! Tried uninstalling net-snmp from my
-host, as well as installing it with -dev packages. It always built fine.
+Thanks, I'll send a new patch.
 
-FWIW, my build machine is a 64-bit Ubuntu 13.10.
-
-Can you share the output/build/php-5.5.11/config.log file from your
-build server please?
-
--- 
-Luca
+Best regards,
+Romain
