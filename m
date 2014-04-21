@@ -1,36 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Apr 2014 22:23:43 +0200
-Subject: [Buildroot] [git commit] package/linux-firmware: fix typo in
-	variable name
-Message-ID: <20140421202703.A5AF99C96C@busybox.osuosl.org>
+Date: Mon, 21 Apr 2014 22:26:55 +0200
+Subject: [Buildroot] [PATCH 0/2] Misc linux-firmware fixes (branch
+ yem/lnxfw)
+In-Reply-To: <cover.1398104592.git.yann.morin.1998@free.fr>
+References: <cover.1398104592.git.yann.morin.1998@free.fr>
+Message-ID: <20140421222655.05c4595e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82d685d33931a89ad023a89dd248707ab4da2690
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Remove a trailing _ leftover from: c0d82bd3 (package/linux-firmware: install
-license files with 'make legal-info')
+On Mon, 21 Apr 2014 20:24:02 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-firmware/linux-firmware.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> Yann E. MORIN (2):
+>       package/linux-firmware: fix typo in variable name
+>       package/linux-firmware: install missing symlink-target files
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index df6c36b..135b29b 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -10,7 +10,7 @@ LINUX_FIRMWARE_SITE_METHOD = git
- 
- # rt2501/rt61
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
--LINUX_FIRMWARE_FILES_ += rt2561.bin rt2561s.bin rt2661.bin
-+LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink-firmware.txt
- endif
- 
+Both applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
