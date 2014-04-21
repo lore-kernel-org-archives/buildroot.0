@@ -1,45 +1,32 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Apr 2014 16:21:57 +0200
-Subject: [Buildroot] [PATCH 0/2] postgresql fix and update
-In-Reply-To: <20140421115046.60bffaca@skate>
-References: <1398036313-26556-1-git-send-email-ps.report@gmx.net>
- <20140421115046.60bffaca@skate>
-Message-ID: <20140421142157.GB3359@free.fr>
+Date: Mon, 21 Apr 2014 16:24:44 +0200
+Subject: [Buildroot] Analysis of build results for 2014-04-20
+In-Reply-To: <20140421114949.59c65c31@skate>
+References: <20140421063009.036D5100FF4@stock.ovh.net>
+ <20140421114949.59c65c31@skate>
+Message-ID: <20140421142444.GC3359@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-04-21 11:50 +0200, Thomas Petazzoni spake thusly:
-> Dear Peter Seiderer,
+Thomas, All,
+
+On 2014-04-21 11:49 +0200, Thomas Petazzoni spake thusly:
+> >        arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/2cb13a5bb92dabed219d49f49f0b9a2dfe65a0ca/
 > 
-> On Mon, 21 Apr 2014 01:25:11 +0200, Peter Seiderer wrote:
+> cairo-gl-private.h:287:5: error: unknown type name 'GLchar'
 > 
-> > thanks for applying the postgresql package (and for reporting the
-> > uClibc bug upstream).
-> > 
-> > Here two follow up patches (sorry for missing to disable the
-> > automatic readline/zlib selection in the last version).
-> 
-> Related to postgresql, can you have a look at the build problem
-> reported at
-> http://autobuild.buildroot.org/results/32f/32fc178cc3875c32e9b722654676fc44eccde8f1/build-end.log ?
+> Could some OpenGL person look into this? Paul ? Yann ?
 
-Oh, that one should be pretty easy, something like:
+With only a cursory look and a bit of Google-fuu, it looks like we need
+a full OpenGL provider in this case.
 
-    ifeq ($(BR2_PACKAGE_TZDATA),y)
-    POSTGRESQL_DEPENDENCIES += tzdata
-    else
-    POSTGRESQL_DEPENDENCIES += host-zic
-    POSTGRESQL_CONF_ENV += ZIC=$$(ZIC)
-    endif
+I'll look at it more in details, but probably not before this evening...
 
-I doubt this one would kill baby seals, but it's totally untested. ;-)
-
-Note: postgresql is only available with glibc, so we need not care about
-the tz package, which is only for uClibc. So we're fine with only tzdata,
-which is solely for glibc.
+I was afraid my recent OpenGL virtual package as the reason for this
+failure, but we already had such failures in the past. Pfew... :-)
 
 Regards,
 Yann E. MORIN.
