@@ -1,64 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Apr 2014 20:38:18 +0200
-Subject: [Buildroot] [RFC] pkg-autotools: check if host-pkgconf should be
-	part of the dependencies
-Message-ID: <1398105498-7055-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Apr 2014 22:12:13 +0200
+Subject: [Buildroot] Analysis of build results for 2014-04-20
+In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356CB9F10@de02wembxa.internal.synopsys.com>
+References: <20140421063009.036D5100FF4@stock.ovh.net>
+ <20140421114949.59c65c31@skate>
+ <39A54937CC95F24AA2F794E2D2B66B1356CB9EA2@de02wembxa.internal.synopsys.com>
+ <20140421135807.3002c46f@skate>
+ <39A54937CC95F24AA2F794E2D2B66B1356CB9F10@de02wembxa.internal.synopsys.com>
+Message-ID: <20140421221213.0494d4f8@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a good number of autotools-based packages that use the
-PKG_CHECK_MODULES() in their configure.{ac,in} file, and the presence
-of this macro indicates that the package should depend on
-host-pkgconf. However, we very often fail at adding this dependency,
-and discover later that it is necessary.
+Dear Anton Kolesov,
 
-In order to prevent that from happening, this commit proposes to add a
-post-patch hook that looks if PKG_CHECK_MODULES is used in the
-configure.{ac,in} file, and if it is, it verifies that host-pkgconf is
-part of the current package dependencies. If not, it aborts the build
-with an error message.
+On Mon, 21 Apr 2014 13:29:14 +0000, Anton Kolesov wrote:
 
-Note that adding this dependency cannot be done automatically, because
-by the time the makefiles are parsed, the source code for the packages
-are not extracted, so we can't look at configure.{in,ac} to
-automatically add the host-pkgconf dependency. The only thing we can
-do is what this patch does: a check during the build itself.
+> Makefile.in of openswan contains -fPIE hardcoded . I suppose that is
+> for the "security reasons", because this packages is IPsec
+> implementation. I'm not a security expert, so I'm not sure how much
+> PIE is important here. I would say that it is not much of the use to
+> apply randomization to selected package, while leaving the rest of
+> software on the same system without randomization.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-This is purely an RFC patch, I just tested it on one package (the
-recently added 'smack' package), which was lacking this host-pkgconf
-dependency.
+Since we don't build all our binaries -fPIE, I don't think it makes
+much sense to build just openswan -fPIE. So probably a simple patch to
+remove -fPIE from openswan makefiles should be OK.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-autotools.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Best regards,
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index a646612..842a7c3 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -230,6 +230,17 @@ $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
- endif
- 
-+define CHECK_PKG_CONFIG_HOOK
-+	$(Q)if grep -q PKG_CHECK_MODULES $$($$(PKG)_SRCDIR)/configure.{ac,in}; then \
-+		if test -z "$$(filter host-pkgconf,$$($$(PKG)_DEPENDENCIES))" ; then \
-+			echo "ERROR: package $$(PKG) uses PKG_CHECK_MODULES but does not depend on host-pkgconf" ; \
-+			exit 1 ; \
-+		fi ; \
-+	fi
-+endef
-+
-+$(2)_POST_PATCH_HOOKS += CHECK_PKG_CONFIG_HOOK
-+
- #
- # Build step. Only define it if not already defined by the package .mk
- # file.
+Thomas
 -- 
-1.9.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
