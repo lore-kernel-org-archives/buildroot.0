@@ -1,10 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Apr 2014 12:04:01 -0300
-Subject: [Buildroot] [PATCH 5/6] temporary hack to fix linking error
-In-Reply-To: <1397382423-4939-6-git-send-email-wbx@openadk.org>
+Date: Mon, 21 Apr 2014 12:04:19 -0300
+Subject: [Buildroot] [PATCH 6/6] update to 3.14
+In-Reply-To: <1397382423-4939-7-git-send-email-wbx@openadk.org>
 References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
- <1397382423-4939-6-git-send-email-wbx@openadk.org>
-Message-ID: <53553361.80008@zacarias.com.ar>
+ <1397382423-4939-7-git-send-email-wbx@openadk.org>
+Message-ID: <53553373.70904@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +13,34 @@ To: buildroot@busybox.net
 
 On 04/13/2014 06:47 AM, Waldemar Brodkorb wrote:
 
-> See here for more info:
-> https://sourceware.org/ml/libc-help/2014-04/msg00020.html
+> * fix networking in Qemu using a small patch
+> * disable DTS, because linux.bin does not include any DTB the
+>   default Qemu included DTB is used and this is okay and works fine
 > 
-> Still working on the issue.
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-This patch works, but by it being temporary/hacky it should be
-conditionally applied just for microblaze since you probably have no
-idea how it can affect other architectures.
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+(on Qemu)
 
-By the way, how is it that we're not interested in fixing things or
-something like that?
-(https://sourceware.org/ml/libc-help/2014-04/msg00027.html)
-I'm using my (volunteer/spare) time looking at your patchset and testing
-it, so i think that's not a fair assessment, and disabling eglibc
-because "no time to test" and saying that at the same time sounds pretty
-much like double-standards.
-I'm not saying this to get you angry or anything like that, it's just
-that you're stating it in a very public mailing list and it seems
-utterly unfair to many BR contributors. Many people do what they can
-when they can.
+Some detail nitpicking below:
 
-Now with that out of the way, care to respin this patch with the
-consideration i mentioned above?
-Regards.
+> --- a/configs/qemu_microblazebe_mmu_defconfig
+> +++ b/configs/qemu_microblazebe_mmu_defconfig
+> +BR2_LINUX_KERNEL_USE_CUSTOM_DTS=n
+
+It's the default so you can just delete it.
+
+> +BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
+
+Should use a separate copy of the patch for BE in the BE dir even if
+it's the same.
+
+> diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+> index 3a66d1b..6a59707 100644
+> --- a/configs/qemu_microblazeel_mmu_defconfig
+> +++ b/configs/qemu_microblazeel_mmu_defconfig
+> +BR2_LINUX_KERNEL_USE_CUSTOM_DTS=n
+
+Ditto above.
+Thanks.
