@@ -1,35 +1,55 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 21 Apr 2014 10:18:53 +0000
-Subject: [Buildroot] Analysis of build results for 2014-04-20
-In-Reply-To: <20140421114949.59c65c31@skate>
-References: <20140421063009.036D5100FF4@stock.ovh.net>
- <20140421114949.59c65c31@skate>
-Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CB9EA2@de02wembxa.internal.synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Apr 2014 12:19:01 +0200
+Subject: [Buildroot] [PATCH 1/2] smack: new package.
+In-Reply-To: <1398020044-21021-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1398020044-21021-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1398020044-21021-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140421121901.743513ef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Eric Le Bihan,
 
-> 
-> >        arc |                openswan-2.6.41 | NOK |
-> http://autobuild.buildroot.net/results/71f92d80b1aa3ac98660fb88004efd0ea
-> 55e784e/
-> 
-> /home/test/test/3/output/host/usr/lib/gcc/arc-buildroot-linux-
-> uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
-> /home/test/test/3/output/host/usr/arc-buildroot-linux-
-> uclibc/sysroot/usr/lib/crt1.o: relocation R_ARC_32_ME against `main' can not
-> be used when making a shared object; recompile with -fPIC
-> /home/test/test/3/output/host/usr/arc-buildroot-linux-
-> uclibc/sysroot/usr/lib/crt1.o: could not read symbols: Bad value
-> collect2: error: ld returned 1 exit status
-> make[4]: *** [pluto] Error 1
-> 
-> Could some ARC person look into this? Alexey, Anton?
+On Sun, 20 Apr 2014 20:54:03 +0200, Eric Le Bihan wrote:
 
-[AK:] This is a limitation of ARC uClibc port: our crt1.o doesn't support PIE (though it seems simple hello world can be compiled). Our uClibc developer (added to CC) is going to fix this in near future, but he has a lot of other tasks to do right now, so this might not happen immediately.
+> diff --git a/package/smack/Config.in b/package/smack/Config.in
+> new file mode 100644
+> index 0000000..971b79a
+> --- /dev/null
+> +++ b/package/smack/Config.in
+> @@ -0,0 +1,28 @@
+> +config BR2_PACKAGE_SMACK
+> +	bool "smack"
 
-Anton 
+Dependency on !BR2_PREFER_STATIC_LIB was missing, due to <dlfcn.h>
+usage. Remember to build test your packages with
+http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-linux-uclibc.config
+(to test !MMU) and
+http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-uclinux.config
+(to test !MMU and BR2_PREFER_STATIC_LIB).
+
+
+> +SMACK_VERSION = 1.0.4
+> +SMACK_SITE = $(call github,smack-team,smack,v$(SMACK_VERSION))
+> +SMACK_LICENSE = LGPLv2.1+
+
+License is actually LGPLv2.1, according to comment headers in the
+source code.
+
+> +SMACK_LICENSE_FILES = COPYING
+> +SMACK_INSTALL_STAGING = YES
+> +SMACK_AUTORECONF = YES
+
+Dependency on host-pkgconf was missing, the configure.ac script uses
+PKG_CHECK_MODULES.
+
+Applied with those changes,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
