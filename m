@@ -1,62 +1,52 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 21 Apr 2014 09:18:41 -0400
-Subject: [Buildroot] [PATCH] syslinux: install helper programs to the
-	host
-In-Reply-To: <20140420115741.1cb6a1b2@skate>
-References: <1394996670-8037-1-git-send-email-fhunleth@troodon-software.com>
- <20140420115741.1cb6a1b2@skate>
-Message-ID: <CA+-urNQ8ME28j_cCfhYu=poEot8yFpEXexHce4iieV0rAbaeRA@mail.gmail.com>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Mon, 21 Apr 2014 13:29:14 +0000
+Subject: [Buildroot] Analysis of build results for 2014-04-20
+In-Reply-To: <20140421135807.3002c46f@skate>
+References: <20140421063009.036D5100FF4@stock.ovh.net>
+ <20140421114949.59c65c31@skate>
+ <39A54937CC95F24AA2F794E2D2B66B1356CB9EA2@de02wembxa.internal.synopsys.com>
+ <20140421135807.3002c46f@skate>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CB9F10@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Makefile.in of openswan contains -fPIE hardcoded . I suppose that is for the "security reasons", because this packages is IPsec implementation. I'm not a security expert, so I'm not sure how much PIE is important here. I would say that it is not much of the use to apply randomization to selected package, while leaving the rest of software on the same system without randomization.
+
+Anton
 
 
-On Sun, Apr 20, 2014 at 5:57 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Dear Frank Hunleth,
->
-> On Sun, 16 Mar 2014 15:04:30 -0400, Frank Hunleth wrote:
-> > Even though syslinux is built for the target, it does create helper
-> > programs intended to be run on the host such as syslinux and extlinux.
-> > This change installs these helper programs to the host so that they may be
-> > called by post image creation scripts.
-> >
-> > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> > ---
-> >  boot/syslinux/syslinux.mk | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> I've applied your patch, and removed the code that implements the
-> host-syslinux variant (which BTW was originally added by Arnout in
-> 9baaa5b4a39145f4cc64c6bba1a6aa8cec48f00a).
-
-Thanks!
-
->
-> Frank, syslinux upstream is now at version 6.x. Since you're using
-> syslinux, could you take care of updating the package in Buildroot to
-> match the latest upstream version?
-
-I looked into this some last night and got as far as porting two new
-prerequisite packages for 6.x and then debugging issues with building
-the new EFI code. I personally don't use EFI, and without more digging
-into it I wasn't sure how to turn off its compilation.
-
-It looks like it will take a little longer to make progress on this,
-and I'm not sure when I'll have time again. In the mean time, if there
-are any other interested syslinux users on this list, feel free to
-contact me and I'll try to explain where I'm at with my partial work.
-
-Frank
-
-
--- 
-Frank Hunleth
-Troodon Software LLC
-Embedded Software Development
-http://troodon-software.com/
+> -----Original Message-----
+> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+> Sent: 21 April 2014 15:58
+> To: Anton Kolesov
+> Cc: buildroot at uclibc.org; Alexey Brodkin; Vineet Gupta
+> Subject: Re: Analysis of build results for 2014-04-20
+> 
+> Dear Anton Kolesov,
+> 
+> On Mon, 21 Apr 2014 10:18:53 +0000, Anton Kolesov wrote:
+> 
+> > [AK:] This is a limitation of ARC uClibc port: our crt1.o doesn't support PIE
+> (though it seems simple hello world can be compiled). Our uClibc developer
+> (added to CC) is going to fix this in near future, but he has a lot of other tasks
+> to do right now, so this might not happen immediately.
+> 
+> Why do we need a PIE executable here? As far as I understand, PIC is
+> mandatory for shared libraries, but PIE for executables is only needed
+> for security reasons, if you want to randomize the location of
+> executables in memory, at least in MMU-capable platforms.
+> 
+> So maybe we should just cook a patch to remove -fPIE when building
+> openswan ? I don't think we build any other package with -fPIE, so why
+> should openswan be different ?
+> 
+> Best regards,
+> 
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
