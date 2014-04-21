@@ -1,32 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Apr 2014 10:36:03 +0200
-Subject: [Buildroot] [git commit] postgresql: bump version to 9.3.4
-Message-ID: <20140421083609.A16D29C90A@busybox.osuosl.org>
+Date: Mon, 21 Apr 2014 10:37:01 +0200
+Subject: [Buildroot] [PATCH 0/2] postgresql fix and update
+In-Reply-To: <1398036313-26556-1-git-send-email-ps.report@gmx.net>
+References: <1398036313-26556-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20140421103701.3bbf5ab2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04e6fe289121d0ba9693b8b13ff92ee1249f6e04
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Seiderer,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/postgresql/postgresql.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Mon, 21 Apr 2014 01:25:11 +0200, Peter Seiderer wrote:
+> Hello Thomas and Yann,
+> 
+> thanks for applying the postgresql package (and for reporting the
+> uClibc bug upstream).
+> 
+> Here two follow up patches (sorry for missing to disable the
+> automatic readline/zlib selection in the last version).
+> 
+> Regards,
+> Peter
+> 
+> 
+> Peter Seiderer (2):
+>   postgresql: change readline and zlib to be real optional selections
+>   postgresql: bump version to 9.3.4
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 16e644f..11b167a 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 9.3.3
-+POSTGRESQL_VERSION = 9.3.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+Both applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
