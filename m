@@ -1,57 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Apr 2014 23:37:48 +0200
-Subject: [Buildroot] [PATCH 1/1] zeromq: disable test_fork
-In-Reply-To: <1398192173-5081-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1398192173-5081-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140422233748.3b2b0599@skate>
+Date: Tue, 22 Apr 2014 23:41:22 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+In-Reply-To: <18590DF726304B8A9132C34717060A98@JohanW7>
+References: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
+ <20140422162711.7b4d0c17@skate>
+ <18590DF726304B8A9132C34717060A98@JohanW7>
+Message-ID: <20140422234122.778f4392@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear Sagaert Johan,
 
-On Tue, 22 Apr 2014 20:42:52 +0200, Jerzy Grzegorek wrote:
+On Tue, 22 Apr 2014 17:07:01 +0200, Sagaert Johan wrote:
 
-> diff --git a/package/zeromq/zeromq-01-disable-test_fork.patch b/package/zeromq/zeromq-01-disable-test_fork.patch
-> new file mode 100644
-> index 0000000..48a76ab
-> --- /dev/null
-> +++ b/package/zeromq/zeromq-01-disable-test_fork.patch
-> @@ -0,0 +1,22 @@
-> +Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> I did a quick check on :
+> http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
+> 
+> But this seem to fail on my build machine:
+> .....snip
+> make[2]: Leaving directory `/home/brcpy/support/kconfig'
+> BR2_DEFCONFIG='' KCONFIG_AUTOCONFIG=/home/brcpy/output/build/buildroot-config/auto.conf
+> KCONFIG_AUTOHEADER=/home/brcpy/output/build/buildroot-config/autoconf.h
+> KCONFIG_TRISTATE=/home/brcpy/output/build/buildroot-config/tristate.config BR2_CONFIG=/home/brcpy/.config
+> BR2_EXTERNAL=support/dummy-external /home/brcpy/output/build/buildroot-config/conf --silentoldconfig Config.in
+> make[1]: Leaving directory `/home/brcpy'
+> >>> toolchain-external undefined Extracting
+> mkdir -p /home/brcpy/output/host/opt/ext-toolchain
+> bzcat /home/johan/dl/br-arm11-full-nothread-2014.02-rc1.tar.bz2 | tar --strip-components=1 --exclude='usr/lib/locale/*' -C
+> /home/brcpy/output/host/opt/ext-toolchain  -xf -
+> >>> toolchain-external undefined Patching
+> >>> toolchain-external undefined Configuring
+> Cannot execute cross-compiler '/home/brcpy/output/host/opt/ext-toolchain/bin/arm-linux-gcc'
+> 
+> Is the x64 code ? I am on a 32 bit VM (debian 6).
 
-Even though this patch is quite trivial, we need a patch description
-anyway.
-
-> +
-> +--- a/tests/Makefile.am	2014-04-18 15:24:35.000000000 +0200
-> ++++ b/tests/Makefile.am	2014-04-22 11:31:08.000000000 +0200
-> +@@ -46,8 +46,7 @@ if !ON_MINGW
-> + noinst_PROGRAMS += test_shutdown_stress \
-> +                    test_pair_ipc \
-> +                    test_reqrep_ipc \
-> +-                   test_timeo \
-> +-                   test_fork
-> ++                   test_timeo
-> + endif
-> + 
-> + test_system_SOURCES = test_system.cpp
-> +@@ -93,7 +92,6 @@ test_shutdown_stress_SOURCES = test_shut
-> + test_pair_ipc_SOURCES = test_pair_ipc.cpp testutil.hpp
-> + test_reqrep_ipc_SOURCES = test_reqrep_ipc.cpp testutil.hpp
-> + test_timeo_SOURCES = test_timeo.cpp
-> +-test_fork_SOURCES = test_fork.cpp
-> + endif
-> + 
-> + #  Run the test cases
-
-I would actually prefer a patch that adds an AC_CHECK_FUNCS([fork])
-test to configure.ac, and uses that to build test_fork or not. In this
-case, the patch could be submitted upstream.
-
-Thanks!
+Hum, correct, the toolchain is 64 bits. Weird, I was pretty sure to
+build them in a 32 bits chroot, maybe that's no longer the case.
 
 Thomas
 -- 
