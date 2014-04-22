@@ -1,101 +1,44 @@
-From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 22 Apr 2014 18:58:39 +0200
-Subject: [Buildroot] [PATCH 1/2] pkg-perl: fix for Perl XS packages
- configured by a Makefile.PL
-In-Reply-To: <535605C4.2030109@mind.be>
-References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
- <535605C4.2030109@mind.be>
-Message-ID: <CAB0FRstJ565UB0LZy3AhqV-E32F6OjNThRTrQfrHY+tQCfy53w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Apr 2014 19:08:41 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-04-21
+In-Reply-To: <20140422063008.8B9CA101006@stock.ovh.net>
+References: <20140422063008.8B9CA101006@stock.ovh.net>
+Message-ID: <20140422170841.GB3601@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-04-22 8:01 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->  Hi Francois,
->
-> On 20/04/14 17:05, Francois Perrad wrote:
->> for native package, ExtUtils::MakeMaker detects all include filenames on system perl,
->> all these includes will be required by the generated Makefile but on STAGING_DIR.
->>
->> patchlevel-debian.h is not a part of the Perl distribution,
->> but it was added by some Linux distributions (Debian, Ubuntu, ...)
->> In this case, we create an empty file on STAGING_DIR.
->
->  Contrary to Thomas, I do understand the explanation, so here's a
-> hopefully improved one:
->
-> ExtUtils::MakeMaker adds all the header files used by the perl as
-> dependencies to the generated Makefile. This means that the generated
-> Makefile will depend on the system's header files.
->
-> Usually this is not a problem, because when building the target package,
-> these header files will indeed be found in $(STAGING_DIR). However, some
-> distro's add an extra header file to the system's perl. This header is
-> also included in the generated Makefile, which makes the build fail
-> because it doesn't exist in $(STAGING_DIR).
->
-> As a work-around, explicitly create this header file in $(STAGING_DIR).
-> It doesn't hurt to create it even if the system perl doesn't need it.
->
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/pkg-perl.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
->> index 447f364..876ffdb 100644
->> --- a/package/pkg-perl.mk
->> +++ b/package/pkg-perl.mk
->> @@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
->>                       INSTALLVENDORMAN1DIR=/usr/share/man/man1 \
->>                       INSTALLVENDORMAN3DIR=/usr/share/man/man3 \
->>                       $$($(2)_CONF_OPT); \
->> +             touch $(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h; \
->
->  Wouldn't it be better to do this in a post-install-staging hook in perl
-> itself? Now, this file will be touched over and over again for each perl
-> package.
->
+Thomas, All,
 
-2 reasons :
-1) currently, PERL_ARCHNAME is defined in pkg-perl.mk, but not in perl.mk
-2) here, the hack is close to the command which requires it (ie. perl
-Makefile.PL in _CONFIGURE_CMDS for target)
+On 2014-04-22 08:30 +0200, Thomas Petazzoni spake thusly:
+> Build statistics for 2014-04-21
+>    powerpc |               postgresql-9.3.3 | NOK | http://autobuild.buildroot.net/results/32fc178cc3875c32e9b722654676fc44eccde8f1/
+>       mips |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/a7eb3af3274950af9f81d6591b52d5d79fd1a318/
+>    powerpc |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/501d23481210bd6ed34745f42d86ee7a0591f734/
+>     x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/9ec69f92a48c1adc50bdb3096008243d842c27e6/
+>       mips |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/980830e18626a00c74f4a23e01e1f234955cb473/
+>     x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/04fa1eb0d479fef1754e01a2b03747e49a4604e0/
 
-The CPU cost of each `touch` is insignificant, and I don't observe
-problem with rebuild of package.
-But the hack could be improved like this :
+All due to the same error:
+    checking for zic... no
+    configure: error:
+    When cross-compiling, either use the option --with-system-tzdata to use
+    existing time-zone data, or set the environment variable ZIC to a zic
+    program to use during the build.
 
-PATCHLEVEL_DEBIAN_H =
-$(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
+These should be fixed with:
+    http://patchwork.ozlabs.org/patch/341386/
 
-       test -f $(PATCHLEVEL_DEBIAN_H) || touch $(PATCHLEVEL_DEBIAN_H)
+Regards,
+Yann E. MORIN.
 
-Fran?ois
-
->
->  Also, you probably should repeat the commit log's explanation here.
->
->  Regards,
->  Arnout
->
->>       fi
->>  endef
->>  else
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
