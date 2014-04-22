@@ -1,38 +1,23 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 22 Apr 2014 12:10:59 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: let show-targets prints also the
-	dependencies
-Message-ID: <1398161459-8343-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Tue, 22 Apr 2014 12:15:07 +0200
+Subject: [Buildroot] [PATCH v4 3/4] Makefile: let show-targets prints
+ also the dependencies
+In-Reply-To: <CAHkwnC--PbP42R6BtLsGc1rv2=mRCXwtFSy=CU=6t9NMH0s-zQ@mail.gmail.com>
+References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
+ <1396864610-8426-4-git-send-email-fabio.porcedda@gmail.com>
+ <20140416194932.2b8f31c0@skate>
+ <CAHkwnC--PbP42R6BtLsGc1rv2=mRCXwtFSy=CU=6t9NMH0s-zQ@mail.gmail.com>
+Message-ID: <CAHkwnC9sQch=dAg198Miu6BQ+hacyRv2Z5Z-u0vN7GVSHyYC1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because the "show-targets" target print the targets that will be built,
-print also their dependencies.
+I've sent an updated patch.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-v2:
- - remove the refactor code to simplify the merge of this patch
+http://patchwork.ozlabs.org/patch/341283/
 
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index d10da9d..a6e6ecb 100644
---- a/Makefile
-+++ b/Makefile
-@@ -653,7 +653,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
- 	@rm -f $(LEGAL_WARNINGS)
- 
- show-targets:
--	@echo $(TARGETS) $(TARGETS_ROOTFS)
-+	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
- 
- graph-build: $(O)/build/build-time.log
- 	@install -d $(O)/graphs
+Best regards
 -- 
-1.8.3.2
+Fabio Porcedda
