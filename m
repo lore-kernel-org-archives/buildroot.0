@@ -1,30 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Apr 2014 08:27:23 -0300
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.18.10
-Message-ID: <1398166043-5569-1-git-send-email-gustavo@zacarias.com.ar>
+From: Alexander Lukichev <alexander.lukichev@gmail.com>
+Date: Tue, 22 Apr 2014 15:35:03 +0300
+Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+In-Reply-To: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
+References: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <CAAHaz6EgxCM0umiE1cMq9hs9LW6SnORsOPAgy+wnptVGnTVFNw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpd/mpd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7e4ebac..ad393c7 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.18
--MPD_VERSION = $(MPD_VERSION_MAJOR).9
-+MPD_VERSION = $(MPD_VERSION_MAJOR).10
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf libglib2
--- 
-1.8.3.2
+  Sorry for being a bit late with the remark and for possible
+webclient-related
+formatting of my message.
+
+2014-04-22 11:25 GMT+03:00 Sagaert Johan <sagaert.johan@skynet.be>:
+> qDecoder is a powerful CGI library.
+...
+> +
+> +         http://www.qdecoder.org/wiki/qdecoder
+
+  This page says they have moved to a newer one and it might be out of date.
+The new URL is http://wolkykim.github.io/qdecoder/ .
+
+--
+Best regards,
+  Alexander Lukichev
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140422/073383fb/attachment.html>
