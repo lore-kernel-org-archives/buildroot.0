@@ -1,68 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Apr 2014 22:25:54 +0200
-Subject: [Buildroot] php / snmp / iconv problem
-In-Reply-To: <535556F6.3050807@lucaceresoli.net>
-References: <20140420063009.8B76B100DB9@stock.ovh.net>
- <20140420104812.5bc926a9@skate> <535556F6.3050807@lucaceresoli.net>
-Message-ID: <20140422222554.2d601379@skate>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 22 Apr 2014 22:28:22 +0200
+Subject: [Buildroot] [PATCH v4 1/4] Makefile: fix coding style
+In-Reply-To: <535692CF.1040607@mind.be>
+References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
+ <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
+ <20140416194215.7d3151fa@skate> <535692CF.1040607@mind.be>
+Message-ID: <CAHkwnC_sbZkgCxB5SEs82GEyCMoJMoCS159epRLGyuheAEhVtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+On Tue, Apr 22, 2014 at 6:03 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 16/04/14 19:42, Thomas Petazzoni wrote:
+>> Dear Fabio Porcedda,
+>>
+>> On Mon,  7 Apr 2014 11:56:47 +0200, Fabio Porcedda wrote:
+>>> As stated in the buildroot user manual add just a single space before
+>>> and after a '=' sign.
+>>>
+>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>> ---
+>>>  Makefile | 184 +++++++++++++++++++++++++++++++--------------------------------
+>>>  1 file changed, 92 insertions(+), 92 deletions(-)
+>>
+>> To be honest, while I definitely value the change to harmonize the
+>> coding style, such a large patch touching almost every line of the main
+>> Makefile is a recipe for conflicts with many other patches. So I would
+>> personally prefer to not apply this patch, and do the coding style
+>> fixes progressively, as we make other changes to the main Makefile.
+>
+>  I disagree. The entire patch does a single change to a single file
+> almost mechanically. It's true that there is a risk of conflicts, but
+> splitting up the patch doesn't reduce that risk. It's easy enough to try
+> to apply and ask for a refresh if there is a conflict.
+>
+>  Of course, currently it doesn't apply cleanly anymore because you
+> delayed applying it, so I also can't re-Ack it. So Fabio, can you refresh?
 
-On Mon, 21 Apr 2014 19:35:50 +0200, Luca Ceresoli wrote:
+Sure, i will do that tomorrow.
 
-> My bad, it built perfectly here! Tried uninstalling net-snmp from my
-> host, as well as installing it with -dev packages. It always built fine.
-> 
-> FWIW, my build machine is a 64-bit Ubuntu 13.10.
-> 
-> Can you share the output/build/php-5.5.11/config.log file from your
-> build server please?
-
-Sure. So, as expected, the error is:
-
-===============================================
-checking OpenSSL dir for SNMP... no
-checking for init_snmp in -lnetsnmp... no
-configure: error: SNMP sanity check failed. Please check config.log for more information.
-make: *** [/home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/build/php-5.5.11/.stamp_configured] Error 1
-===============================================
-
-In config.log, we see that:
-
-===============================================
-configure:83770: checking for init_snmp in -lnetsnmp
-configure:83795: /home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/host/usr/bin/arm-none-linux-gnueabi-gcc -o conftest -I/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -L/lib  -L/home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib conftest.c -lnetsnmp  -lgmp -lz -lpcre -lcrypto -lssl -lcrypto -lm  -lxml2 -lz -lm -ldl -
-lxml2 -lz -lm -ldl -lnetsnmp -lcrypto -lm >&5
-/home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.7.3/../../../../arm-none-linux-gnueabi/bin/ld: warning: library search path "/lib" is unsafe for cross-compilation
-/lib/libgcc_s.so.1: file not recognized: File format not recognized
-collect2: error: ld returned 1 exit status
-===============================================
-
-So the problem is due to /lib being present in the -L flags. This is
-most likely due to:
-
-ifeq ($(BR2_PACKAGE_PHP_EXT_ICONV),y)
-ifeq ($(BR2_PACKAGE_LIBICONV),y)
-        PHP_CONF_OPT += --with-iconv=$(STAGING_DIR)/usr
-        PHP_DEPENDENCIES += libiconv
-else
-        PHP_CONF_OPT += --with-iconv
-endif
-endif
-
-We are in a case where BR2_PACKAGE_PHP_EXT_ICONV=y but
-BR2_PACKAGE_LIBICONV is not enabled (glibc toolchain). So the iconv
-test of PHP starts looking in /lib for iconv. I think we already
-discussed this problem with Gustavo. See "[PATCH] php: fix wrong -L and
--I paths added by iconv tests" in the mailing list archive.
-
-Thomas
+Regards and thanks.
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Fabio Porcedda
