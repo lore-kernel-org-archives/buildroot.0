@@ -1,71 +1,81 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 22 Apr 2014 22:02:46 +0200
-Subject: [Buildroot] [Bug 7016] Git issues in resulting buildroot tar
-In-Reply-To: <1396897179003-67022.post@n4.nabble.com>
-References: <bug-7016-163@https.bugs.busybox.net/>
- <20140402073504.199469BF82@busybox.osuosl.org>
- <1396855570069-66989.post@n4.nabble.com>
- <CAAXf6LX0tqdsLEmk7bGVT-rUWrVdSew++GFDz-Cucw-Ueg0n9w@mail.gmail.com>
- <1396897179003-67022.post@n4.nabble.com>
-Message-ID: <CAAXf6LUM+sLYvcGFEBEaXXfpHRDVaED1W1cM87pg3De6ynLWTw@mail.gmail.com>
+Date: Tue, 22 Apr 2014 22:04:49 +0200
+Subject: [Buildroot] [PATCH v2] librtlsdr: new package
+In-Reply-To: <1398181795-11075-1-git-send-email-jrspruitt@gmail.com>
+References: <1398181795-11075-1-git-send-email-jrspruitt@gmail.com>
+Message-ID: <CAAXf6LWwE=KOVq8V-S7iEi1rEkzEiX2wY-RG3Y4zX-pMNxziYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Brian,
+Hi Jason,
 
-On Mon, Apr 7, 2014 at 8:59 PM, brianclements <brian@brianclements.net> wrote:
-> Hi Thomas,
+On Tue, Apr 22, 2014 at 5:49 PM, Jason Pruitt <jrspruitt@gmail.com> wrote:
+> librtlsdr is a library and software for using a Realtek RTL2832U based
+> DVB-T dongle as a cheap SDR.
 >
-[..]
-
-> Let me ask you this, can you possibly just compile a version of busybox with
-> x86_64, largefile, and git and link me up with the resulting tar? (only
-> probably around 10mb). That might be a quicker way to duplicate this error
-> then me trying to learn my way through qemu and introduce another set of
-> variables for me to mess up. That way I can see if a working version is even
-> possible when implemented with Docker and we can possibly get rid of that
-> variable as well, especially if your image works for you.
+> Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
+> ---
+> Changes v1 -> v2:
+>     - Added help to option (suggested by Thomas De Schampheleire)
+>     - Added _LICENSE_FILE (suggested by Thomas De Schampheleire)
+>     - Auto select udev rules (suggested by Thomas Petazzoni)
 >
+>  package/Config.in              |    1 +
+>  package/librtlsdr/Config.in    |   22 ++++++++++++++++++++++
+>  package/librtlsdr/librtlsdr.mk |   22 ++++++++++++++++++++++
+>  3 files changed, 45 insertions(+)
+>  create mode 100644 package/librtlsdr/Config.in
+>  create mode 100644 package/librtlsdr/librtlsdr.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 07fd166..ad3956d 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -628,6 +628,7 @@ source "package/libmbim/Config.in"
+>  source "package/libnfc/Config.in"
+>  source "package/libqmi/Config.in"
+>  source "package/libraw1394/Config.in"
+> +source "package/librtlsdr/Config.in"
+>  source "package/libserial/Config.in"
+>  source "package/libsoc/Config.in"
+>  source "package/libusb/Config.in"
+> diff --git a/package/librtlsdr/Config.in b/package/librtlsdr/Config.in
+> new file mode 100644
+> index 0000000..efe2b9e
+> --- /dev/null
+> +++ b/package/librtlsdr/Config.in
+> @@ -0,0 +1,22 @@
+> +config BR2_PACKAGE_LIBRTLSDR
+> +       bool "librtlsdr"
+> +       select BR2_PACKAGE_LIBUSB
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       help
+> +         Library and command line programs for accessing
+> +         RTL2832U SDR dongles.
+> +
+> +         http://sdr.osmocom.org/trac/wiki/rtl-sdr/
+> +
+> +if BR2_PACKAGE_LIBRTLSDR
+> +
+> +config BR2_PACKAGE_LIBRTLSDR_DETACH_DRIVER
+> +       bool "Detach driver if loaded"
+> +       default y
+> +    help
+> +        Detach associated kernel driver on startup if
+> +        if one is loaded.
+> +endif
 
-I now took the time to generate such an image.
-I started from the qemu_x86_64 defconfig, and changed:
-- use of external toolchain rather than buildroot-built toolchain (to
-save built time). This external toolchain includes largefile support.
-- add git, dhcpcd (I needed this to get proper networking from qemu)
+The indentation here is not correct. You did it right on the main
+option though...
 
-When running the image, I did:
-- login (root)
-- dhcpcd (get ip address)
-- echo 'nameserver 8.8.8.8' > /etc/resolv.conf  (set up DNS with
-Google's public DNS)
-- git clone git://github.com/EllisLab/CodeIgniter
+> +
+> +comment "librtlsdr needs a toolchain w/ threads"
+> +depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-This works fine. I had to increase the size of the ext2 rootfs (used
-in qemu instead of rootfs.tar) to get enough space, but other than
-that no problems.
-
-The rootfs.tar is 15M, the bzImage (kernel) is 2.2M. If you have a
-place where I can upload it to, let me know.
-
-The defconfig is as below:
-
-BR2_x86_64=y
-BR2_DL_DIR="/home/tdescham/repo/contrib/dl"
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux-3.13.config"
-BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-BR2_PACKAGE_GIT=y
-BR2_PACKAGE_DHCPCD=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_BLOCKS=200000
+Here the 'depends on' statement should be indented too.
 
 Best regards,
 Thomas
