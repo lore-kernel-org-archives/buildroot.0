@@ -1,34 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Apr 2014 15:29:21 -0300
-Subject: [Buildroot] [PATCH 5/6] temporary hack to fix linking error
-In-Reply-To: <20140422174926.GE14063@waldemar-brodkorb.de>
-References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
- <1397382423-4939-6-git-send-email-wbx@openadk.org>
- <53553361.80008@zacarias.com.ar>
- <20140422174926.GE14063@waldemar-brodkorb.de>
-Message-ID: <5356B501.20907@zacarias.com.ar>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 22 Apr 2014 20:40:40 +0200
+Subject: [Buildroot] [PATCH 1/1] mongrel2: bump to version v1.9.1
+Message-ID: <1398192040-4882-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/2014 02:49 PM, Waldemar Brodkorb wrote:
-> Okay, sorry. I thought that there is no interest in my patches,
-> because I got no feedback at all. Looking at the traffic on the
-> mailinglist nearly every patch set gets some feedback after 2-3
-> days. My bug report about the microblaze OOM got no feedback, too. 
-> I stop whining now, and start hacking.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/mongrel2/mongrel2.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi.
-Ok, cool, now we're talking! :)
-
-> I will respin the patches after your gcc 4.9 patch set gets
-> committed. I tested with gcc 4.9 and the workaround for glibc/eglibc
-> is not required anymore.
-
-Great.
-Only the gcc patch would need a respin i think, the rest can be
-committed as they are.
-Thanks.
-Regards.
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+index 590a522..1614bcc 100644
+--- a/package/mongrel2/mongrel2.mk
++++ b/package/mongrel2/mongrel2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGREL2_VERSION = v1.9.0
++MONGREL2_VERSION = v1.9.1
+ MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)/
+ MONGREL2_LICENSE = BSD-3c
+ MONGREL2_LICENSE_FILES = LICENSE
+-- 
+1.7.9.5
