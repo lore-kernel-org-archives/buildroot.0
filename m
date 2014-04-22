@@ -1,72 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Apr 2014 00:14:26 +0200
-Subject: [Buildroot] Analysis of build results for 2014-04-19
-In-Reply-To: <20140422221958.6240077e@skate>
-References: <20140420063009.8B76B100DB9@stock.ovh.net>	<20140420104812.5bc926a9@skate>	<53569BBE.1020707@mind.be>
- <20140422221958.6240077e@skate>
-Message-ID: <5356E9C2.9050900@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 23 Apr 2014 01:15:33 +0200
+Subject: [Buildroot] [PATCH v2 01/24] qt: add an option to install the test
+	module
+In-Reply-To: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398208556-4195-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/04/14 22:19, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Tue, 22 Apr 2014 18:41:34 +0200, Arnout Vandecappelle wrote:
-> 
->>  I think there should be two changes to the autobuilders.
->>
->> - Reduce the % yes. With the growing number of packages, the number of
->> selected packages is also becoming unrealistically large.
-> 
-> True. Currently the KCONFIG_PROBABILITY is chosen between 1% and 35%.
-> Should I reduce that to 30% ? 25% ?
+When building Qt in a minimal configuration, a couple of Qt modules
+(QtNetwork, QtSql, QtTest and QtXml) are built in addition to QtCore,
+so they are installed in the sysroot but they are not copied into the
+target tree.
 
- 25% still means 300 packages, and I think that that doesn't even include
-their dependencies. Isn't that exaggerated? I think that any defconfig
-with more than 50 packages is not very realistic anymore...
+Among these modules that could be built but optionally installed, only
+QtTest had no option to allow being installed in the target fs.
 
- Also, the interesting failures (with missing dependencies) are more
-likely to fall out when less packages are selected, right?
+Thus, programs linking against QtTest would successfully build, but
+would miserably fail at runtime due to this missing dependency.
 
- So my suggestion is to reduce the probability to 15% (still 180 packages
-in the defconfig...).
+So far, the only package triggering this issue is OpenCV (the highgui
+module built with Qt support).
 
->> - If webkit is selected, increase the timeout with an hour. I don't know
->> how easy that is, though.
-> 
-> Not easy with the current horrible script, because the timeout is
-> chosen in a shell script that runs the Python script that actually
-> generates the configuration and runs the build.
-> 
-> So let's say that I'll reduce the KCONFIG_PROBABILITY on one side, and
-> increase the timeout for all builds by an hour on the other side. How
-> does that look?
+A followup patch will add this missing dependency in OpenCV using this
+new option.
 
- The timeout is already 4 hours, isn't it? That's already quite long IMHO.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
+---
+changes v1 -> v2:
+- rebase
+- change default value to n
+---
+ package/qt/Config.in | 5 +++++
+ package/qt/qt.mk     | 3 +++
+ 2 files changed, 8 insertions(+)
 
- Regards,
- Arnout
-
-> 
->>  It would of course be even better if the autobuilder would calculate the
->> timeout based on historical information from build-time.log, but I guess
->> that's a bit too ambitious :-)
-> 
-> Hmmm, sounds fun! But I'd prefer to keep the autobuilder logic smaller
-> in size than Buildroot itself, if possible :-)
-> 
-> Thomas
-> 
-
-
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index eed25c8..9faf2cd 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -415,4 +415,9 @@ config BR2_PACKAGE_QT_DECLARATIVE
+ 	  Build the Qt Declarative Module for qml support
+ 	  if unsure, say n.
+ 
++config BR2_PACKAGE_QT_TEST
++	bool "Test Module"
++	help
++	  Install the Test module.
++
+ endif # BR2_PACKAGE_QT
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 507e0db..bb065f3 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -586,6 +586,9 @@ endif
+ ifeq ($(BR2_PACKAGE_QT_GFX_POWERVR),y)
+ QT_INSTALL_LIBS    += pvrQWSWSEGL
+ endif
++ifeq ($(BR2_PACKAGE_QT_TEST),y)
++QT_INSTALL_LIBS    += QtTest
++endif
+ 
+ QT_CONF_FILE=$(HOST_DIR)/usr/bin/qt.conf
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.2
