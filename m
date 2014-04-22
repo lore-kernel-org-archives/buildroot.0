@@ -1,60 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Apr 2014 18:41:08 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql: add host-zic dependency
-In-Reply-To: <20140422175244.5efaa18d@skate>
-References: <1398181285-4260-1-git-send-email-ps.report@gmx.net>
- <20140422175244.5efaa18d@skate>
-Message-ID: <20140422164108.GA3601@free.fr>
+From: =?ISO-8859-1?Q?Fran=E7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 22 Apr 2014 18:58:39 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-perl: fix for Perl XS packages
+ configured by a Makefile.PL
+In-Reply-To: <535605C4.2030109@mind.be>
+References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
+ <535605C4.2030109@mind.be>
+Message-ID: <CAB0FRstJ565UB0LZy3AhqV-E32F6OjNThRTrQfrHY+tQCfy53w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+2014-04-22 8:01 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
+>  Hi Francois,
+>
+> On 20/04/14 17:05, Francois Perrad wrote:
+>> for native package, ExtUtils::MakeMaker detects all include filenames on system perl,
+>> all these includes will be required by the generated Makefile but on STAGING_DIR.
+>>
+>> patchlevel-debian.h is not a part of the Perl distribution,
+>> but it was added by some Linux distributions (Debian, Ubuntu, ...)
+>> In this case, we create an empty file on STAGING_DIR.
+>
+>  Contrary to Thomas, I do understand the explanation, so here's a
+> hopefully improved one:
+>
+> ExtUtils::MakeMaker adds all the header files used by the perl as
+> dependencies to the generated Makefile. This means that the generated
+> Makefile will depend on the system's header files.
+>
+> Usually this is not a problem, because when building the target package,
+> these header files will indeed be found in $(STAGING_DIR). However, some
+> distro's add an extra header file to the system's perl. This header is
+> also included in the generated Makefile, which makes the build fail
+> because it doesn't exist in $(STAGING_DIR).
+>
+> As a work-around, explicitly create this header file in $(STAGING_DIR).
+> It doesn't hurt to create it even if the system perl doesn't need it.
+>
+>>
+>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>> ---
+>>  package/pkg-perl.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+>> index 447f364..876ffdb 100644
+>> --- a/package/pkg-perl.mk
+>> +++ b/package/pkg-perl.mk
+>> @@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
+>>                       INSTALLVENDORMAN1DIR=/usr/share/man/man1 \
+>>                       INSTALLVENDORMAN3DIR=/usr/share/man/man3 \
+>>                       $$($(2)_CONF_OPT); \
+>> +             touch $(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h; \
+>
+>  Wouldn't it be better to do this in a post-install-staging hook in perl
+> itself? Now, this file will be touched over and over again for each perl
+> package.
+>
 
-On 2014-04-22 17:52 +0200, Thomas Petazzoni spake thusly:
-> Dear Peter Seiderer,
-> 
-> On Tue, 22 Apr 2014 17:41:25 +0200, Peter Seiderer wrote:
-> 
-> > diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> > index 11b167a..2606e25 100644
-> > --- a/package/postgresql/postgresql.mk
-> > +++ b/package/postgresql/postgresql.mk
-> > @@ -29,6 +29,9 @@ endif
-> >  ifeq ($(BR2_PACKAGE_TZDATA),y)
-> >  	POSTGRESQL_DEPENDENCIES += tzdata
-> >  	POSTGRESQL_CONF_OPT += --with-system-tzdata=/usr/share/zoneinfo
-> > +else
-> > +	POSTGRESQL_DEPENDENCIES += host-zic
-> > +	POSTGRESQL_CONF_ENV += ZIC=$$(ZIC)
-> >  endif
-> 
-> I'm not entirely sure to understand how this works. If
-> BR2_PACKAGE_TZDATA is not enabled, where will host-zic find the
-> time-zone informations?
+2 reasons :
+1) currently, PERL_ARCHNAME is defined in pkg-perl.mk, but not in perl.mk
+2) here, the hack is close to the command which requires it (ie. perl
+Makefile.PL in _CONFIGURE_CMDS for target)
 
-host-zin only builds the 'zic' program, which pacakge can access using
-$(ZIC), so host-zip (our package) does not need the tz-data itslef.
+The CPU cost of each `touch` is insignificant, and I don't observe
+problem with rebuild of package.
+But the hack could be improved like this :
 
-But postgresql needs the time zone info. It can use either the system
-ones, or it has a limited set bundled in its source tree, in:
-    postgresql-9.3.3/src/timezone/data/
+PATCHLEVEL_DEBIAN_H =
+$(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
 
-That's what the error message hints at:
+       test -f $(PATCHLEVEL_DEBIAN_H) || touch $(PATCHLEVEL_DEBIAN_H)
 
-    When cross-compiling, either use the option --with-system-tzdata to use
-    existing time-zone data, or set the environment variable ZIC to a zic
-    program to use during the build.
+Fran?ois
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+>  Also, you probably should repeat the commit log's explanation here.
+>
+>  Regards,
+>  Arnout
+>
+>>       fi
+>>  endef
+>>  else
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
