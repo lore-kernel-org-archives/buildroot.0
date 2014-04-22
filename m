@@ -1,35 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Apr 2014 20:22:21 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-04-21
-In-Reply-To: <20140422170841.GB3601@free.fr>
-References: <20140422063008.8B9CA101006@stock.ovh.net>
- <20140422170841.GB3601@free.fr>
-Message-ID: <20140422202221.288b509a@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Apr 2014 15:29:21 -0300
+Subject: [Buildroot] [PATCH 5/6] temporary hack to fix linking error
+In-Reply-To: <20140422174926.GE14063@waldemar-brodkorb.de>
+References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
+ <1397382423-4939-6-git-send-email-wbx@openadk.org>
+ <53553361.80008@zacarias.com.ar>
+ <20140422174926.GE14063@waldemar-brodkorb.de>
+Message-ID: <5356B501.20907@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+On 04/22/2014 02:49 PM, Waldemar Brodkorb wrote:
+> Okay, sorry. I thought that there is no interest in my patches,
+> because I got no feedback at all. Looking at the traffic on the
+> mailinglist nearly every patch set gets some feedback after 2-3
+> days. My bug report about the microblaze OOM got no feedback, too. 
+> I stop whining now, and start hacking.
 
-On Tue, 22 Apr 2014 19:08:41 +0200, Yann E. MORIN wrote:
+Hi.
+Ok, cool, now we're talking! :)
 
-> All due to the same error:
->     checking for zic... no
->     configure: error:
->     When cross-compiling, either use the option --with-system-tzdata to use
->     existing time-zone data, or set the environment variable ZIC to a zic
->     program to use during the build.
-> 
-> These should be fixed with:
->     http://patchwork.ozlabs.org/patch/341386/
+> I will respin the patches after your gcc 4.9 patch set gets
+> committed. I tested with gcc 4.9 and the workaround for glibc/eglibc
+> is not required anymore.
 
-Which is still under discussion :-)
-
-Thmas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Great.
+Only the gcc patch would need a respin i think, the rest can be
+committed as they are.
+Thanks.
+Regards.
