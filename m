@@ -1,103 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Apr 2014 11:04:16 -0300
-Subject: [Buildroot] [PATCH 2/2] arm: update processor types
-In-Reply-To: <1398175456-11622-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398175456-11622-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1398175456-11622-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Apr 2014 16:27:11 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+In-Reply-To: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
+References: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20140422162711.7b4d0c17@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the arm processor types: add the cortex A12 variant supported by
-gcc 4.9.x
+Dear Sagaert Johan,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- arch/Config.in.arm         |  7 +++++++
- package/gcc/Config.in.host | 12 ++++++------
- 2 files changed, 13 insertions(+), 6 deletions(-)
+Thanks for this contribution! Some comments below.
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index dd58744..b7a9ed6 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -98,6 +98,11 @@ config BR2_cortex_a9
- 	select BR2_ARM_CPU_MAYBE_HAS_NEON
- 	select BR2_ARM_CPU_MAYBE_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_THUMB2
-+config BR2_cortex_a12
-+	bool "cortex-A12"
-+	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
- config BR2_cortex_a15
- 	bool "cortex-A15"
- 	select BR2_ARM_CPU_HAS_NEON
-@@ -357,6 +362,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a7"	if BR2_cortex_a7
- 	default "cortex-a8"	if BR2_cortex_a8
- 	default "cortex-a9"	if BR2_cortex_a9
-+	default "cortex-a12"	if BR2_cortex_a12
- 	default "cortex-a15"	if BR2_cortex_a15
- 	default "fa526"		if BR2_fa526
- 	default "marvell-pj4"	if BR2_pj4
-@@ -379,6 +385,7 @@ config BR2_GCC_TARGET_ARCH
- 	default "armv7-a"	if BR2_cortex_a7
- 	default "armv7-a"	if BR2_cortex_a8
- 	default "armv7-a"	if BR2_cortex_a9
-+	default "armv7-a"	if BR2_cortex_a12
- 	default "armv7-a"	if BR2_cortex_a15
- 	default "armv4"		if BR2_fa526
- 	default "armv7-a"	if BR2_pj4
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 6b44e94..9b77951 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -19,12 +19,12 @@ choice
- 		bool "gcc 4.2.2-avr32-2.1.5"
- 
- 	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.3.x"
- 
- 	config BR2_GCC_VERSION_4_4_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- 		bool "gcc 4.4.x"
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
-@@ -32,24 +32,24 @@ choice
- 		depends on !BR2_ARM_FPU_VFPV4 && !BR2_ARM_FPU_VFPV4D16
- 
- 	config BR2_GCC_VERSION_4_5_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a15 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		# ARM EABIhf support appeared in gcc 4.6
- 		depends on !BR2_ARM_EABIHF
- 		bool "gcc 4.5.x"
- 
- 	config BR2_GCC_VERSION_4_6_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.6.x"
- 
- 	config BR2_GCC_VERSION_4_7_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.8.x"
- 
+On Tue, 22 Apr 2014 10:25:22 +0200, Sagaert Johan wrote:
+
+> diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in
+> new file mode 100644
+> index 0000000..2bd2a2f
+> --- /dev/null
+> +++ b/package/qdecoder/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_QDECODER
+> +	bool "qdecoder"
+
+Really no toolchain dependency? From a quick look, qdecoder always
+tries to build a shared library, so this is going to play nice with
+BR2_PREFER_STATIC_LIB.
+
+Can you try to build this library with the following toolchain
+configurations:
+
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-linux-uclibc.config
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/bfin-uclinux.config
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config
+ http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full-nothread.config
+
+It will exercise a bit the needed toolchain dependencies.
+
+> +QDECODER_CONF_OPT = \
+> +	--prefix=$(STAGING_DIR)/usr \
+> +	--libdir=$(STAGING_DIR)/usr/lib
+
+This looks strange, and normally not needed for autotools packages. Why
+is it needed here? At least, if it's really needed, a comment above it
+to explain why would be necessary (and I believe it's needed because
+the package uses autoconf, but not automake: there is a Makefile.in
+and not a Makefile.am).
+
+Thanks,
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
