@@ -1,7 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 22 Apr 2014 20:40:40 +0200
-Subject: [Buildroot] [PATCH 1/1] mongrel2: bump to version v1.9.1
-Message-ID: <1398192040-4882-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Tue, 22 Apr 2014 20:41:23 +0200
+Subject: [Buildroot] [PATCH 1/1] smack: fix _VERSION and _SITE variable
+Message-ID: <1398192083-4977-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +10,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/mongrel2/mongrel2.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/smack/smack.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
-index 590a522..1614bcc 100644
---- a/package/mongrel2/mongrel2.mk
-+++ b/package/mongrel2/mongrel2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/smack/smack.mk b/package/smack/smack.mk
+index 2858686..af6e81c 100644
+--- a/package/smack/smack.mk
++++ b/package/smack/smack.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MONGREL2_VERSION = v1.9.0
-+MONGREL2_VERSION = v1.9.1
- MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)/
- MONGREL2_LICENSE = BSD-3c
- MONGREL2_LICENSE_FILES = LICENSE
+-SMACK_VERSION = 1.0.4
+-SMACK_SITE = $(call github,smack-team,smack,v$(SMACK_VERSION))
++SMACK_VERSION = v1.0.4
++SMACK_SITE = $(call github,smack-team,smack,$(SMACK_VERSION))
+ SMACK_LICENSE = LGPLv2.1
+ SMACK_LICENSE_FILES = COPYING
+ SMACK_INSTALL_STAGING = YES
 -- 
 1.7.9.5
