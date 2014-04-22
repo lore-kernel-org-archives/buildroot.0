@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Apr 2014 23:30:55 +0200
-Subject: [Buildroot] [PATCH] freetype: security bump to version 2.5.3
-In-Reply-To: <1398186760-1174-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398186760-1174-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140422233055.7bb66b80@skate>
+Date: Tue, 22 Apr 2014 23:31:13 +0200
+Subject: [Buildroot] [git commit] mongrel2: bump to version v1.9.1
+Message-ID: <20140422213117.83F979C99D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=2bddad55dbe7e29ef168b7b4ec2b4e7e8804419b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 22 Apr 2014 14:12:40 -0300, Gustavo Zacarias wrote:
-> Fixes CVE-2014-2240.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/freetype/freetype.mk | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mongrel2/mongrel2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mongrel2/mongrel2.mk b/package/mongrel2/mongrel2.mk
+index 590a522..1614bcc 100644
+--- a/package/mongrel2/mongrel2.mk
++++ b/package/mongrel2/mongrel2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGREL2_VERSION = v1.9.0
++MONGREL2_VERSION = v1.9.1
+ MONGREL2_SITE = https://github.com/zedshaw/mongrel2/releases/download/$(MONGREL2_VERSION)/
+ MONGREL2_LICENSE = BSD-3c
+ MONGREL2_LICENSE_FILES = LICENSE
