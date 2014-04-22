@@ -1,45 +1,102 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 22 Apr 2014 18:03:27 +0200
-Subject: [Buildroot] [PATCH v4 1/4] Makefile: fix coding style
-In-Reply-To: <20140416194215.7d3151fa@skate>
-References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
- <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
- <20140416194215.7d3151fa@skate>
-Message-ID: <535692CF.1040607@mind.be>
+Date: Tue, 22 Apr 2014 18:33:49 +0200
+Subject: [Buildroot] [RFC] pkg-autotools: check if host-pkgconf should
+ be part of the dependencies
+In-Reply-To: <1398105498-7055-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1398105498-7055-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <535699ED.9010203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/04/14 19:42, Thomas Petazzoni wrote:
-> Dear Fabio Porcedda,
+On 21/04/14 20:38, Thomas Petazzoni wrote:
+> There is a good number of autotools-based packages that use the
+> PKG_CHECK_MODULES() in their configure.{ac,in} file, and the presence
+> of this macro indicates that the package should depend on
+> host-pkgconf. However, we very often fail at adding this dependency,
+> and discover later that it is necessary.
 > 
-> On Mon,  7 Apr 2014 11:56:47 +0200, Fabio Porcedda wrote:
->> As stated in the buildroot user manual add just a single space before
->> and after a '=' sign.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> ---
->>  Makefile | 184 +++++++++++++++++++++++++++++++--------------------------------
->>  1 file changed, 92 insertions(+), 92 deletions(-)
+> In order to prevent that from happening, this commit proposes to add a
+> post-patch hook that looks if PKG_CHECK_MODULES is used in the
+> configure.{ac,in} file, and if it is, it verifies that host-pkgconf is
+> part of the current package dependencies. If not, it aborts the build
+> with an error message.
+
+ Instead of post-patch, I think that pre-configure is more appropriate.
+
+ Also, perhaps this could be done as a BR2_INSTRUMENTATION_SCRIPTS
+instead of a hard-coded check. The autobuilders would obviously have to
+enable that script. It's nicer to have such tests of buildroot itself
+isolated from the user's build. We can probably invent a lot more checks
+like that, which may potentially have an important impact on build time.
+
+ That said, it's a lot more difficult as an instrumentation script
+because then you don't have access to the make variables. You'd have to
+run a recursive 'make printvars' to get them.
+
 > 
-> To be honest, while I definitely value the change to harmonize the
-> coding style, such a large patch touching almost every line of the main
-> Makefile is a recipe for conflicts with many other patches. So I would
-> personally prefer to not apply this patch, and do the coding style
-> fixes progressively, as we make other changes to the main Makefile.
+> Note that adding this dependency cannot be done automatically, because
+> by the time the makefiles are parsed, the source code for the packages
+> are not extracted, so we can't look at configure.{in,ac} to
+> automatically add the host-pkgconf dependency. The only thing we can
+> do is what this patch does: a check during the build itself.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> This is purely an RFC patch, I just tested it on one package (the
+> recently added 'smack' package), which was lacking this host-pkgconf
+> dependency.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/pkg-autotools.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index a646612..842a7c3 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -230,6 +230,17 @@ $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
+>  $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
+>  endif
+>  
+> +define CHECK_PKG_CONFIG_HOOK
+> +	$(Q)if grep -q PKG_CHECK_MODULES $$($$(PKG)_SRCDIR)/configure.{ac,in}; then \
+> +		if test -z "$$(filter host-pkgconf,$$($$(PKG)_DEPENDENCIES))" ; then \
+> +			echo "ERROR: package $$(PKG) uses PKG_CHECK_MODULES but does not depend on host-pkgconf" ; \
+> +			exit 1 ; \
+> +		fi ; \
+> +	fi
+> +endef
 
- I disagree. The entire patch does a single change to a single file
-almost mechanically. It's true that there is a risk of conflicts, but
-splitting up the patch doesn't reduce that risk. It's easy enough to try
-to apply and ask for a refresh if there is a conflict.
+ If defined like this, the CHECK_PKG_CONFIG_HOOK variable will be
+redefined for every package... So I think it's better to move it outside
+of the inner-generic-package macro (removing the double dollars).
 
- Of course, currently it doesn't apply cleanly anymore because you
-delayed applying it, so I also can't re-Ack it. So Fabio, can you refresh?
+ Yes, the same is true of UPDATE_CONFIG_HOOK, AUTORECONF_HOOK and
+LIBTOOL_PATCH_HOOK - but that's historical accident :-)
+
+ Finally, perhaps it would be better to search for 'pkg-config' in the
+configure script itself, rather than configure.{ac,in}. The
+PKG_CHECK_MODULES may be hidden in one of the m4 files, or pkg-config may
+be used by some custom code instead. Obviously, that means it must be
+done after AUTORECONF_HOOK so it _must_ be in a pre-configure hook (not
+post-patch and not instrumentation).
+
 
  Regards,
  Arnout
+
+
+> +
+> +$(2)_POST_PATCH_HOOKS += CHECK_PKG_CONFIG_HOOK
+> +
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+>  # file.
+> 
 
 
 -- 
