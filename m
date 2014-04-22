@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Apr 2014 23:29:41 +0200
-Subject: [Buildroot] [git commit] smack: fix _VERSION and _SITE variable
-Message-ID: <20140422212946.137709C988@busybox.osuosl.org>
+Date: Tue, 22 Apr 2014 23:30:02 +0200
+Subject: [Buildroot] [PATCH] acpid: bump to version 2.0.22
+In-Reply-To: <1398201933-6022-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1398201933-6022-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140422233002.33e7ecdd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=938f7a4f740b1704228b6a3487097f463d904a30
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/smack/smack.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 22 Apr 2014 18:25:33 -0300, Gustavo Zacarias wrote:
+> Switch to upstream sourceforge page/download.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/acpid/Config.in                        |  2 ++
+>  package/acpid/S02acpid                         |  4 ++--
+>  package/acpid/acpid-01-dont-use-isfdtype.patch | 20 ++++++++++++++++++++
+>  package/acpid/acpid.mk                         | 25 ++++++++++++-------------
+>  4 files changed, 36 insertions(+), 15 deletions(-)
+>  create mode 100644 package/acpid/acpid-01-dont-use-isfdtype.patch
 
-diff --git a/package/smack/smack.mk b/package/smack/smack.mk
-index 2858686..af6e81c 100644
---- a/package/smack/smack.mk
-+++ b/package/smack/smack.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--SMACK_VERSION = 1.0.4
--SMACK_SITE = $(call github,smack-team,smack,v$(SMACK_VERSION))
-+SMACK_VERSION = v1.0.4
-+SMACK_SITE = $(call github,smack-team,smack,$(SMACK_VERSION))
- SMACK_LICENSE = LGPLv2.1
- SMACK_LICENSE_FILES = COPYING
- SMACK_INSTALL_STAGING = YES
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
