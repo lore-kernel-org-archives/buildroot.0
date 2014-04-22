@@ -1,60 +1,51 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 23 Apr 2014 01:15:50 +0200
-Subject: [Buildroot] [PATCH v2 18/24] opencv: add jasper support
+Date: Wed, 23 Apr 2014 01:15:56 +0200
+Subject: [Buildroot] [PATCH v2 24/24] gst1-plugins-bad: rework opencv plugin
+	dependencies
 In-Reply-To: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
 References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398208556-4195-19-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398208556-4195-25-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+gst1 opencv plugin source code still include OpenCV's headers from its
+deprecated API.
+
+Use the newly introduced BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS to
+select all required OpenCV module dependencies.
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1 -> v2:
-- reword the option help text (Yann)
+- new patch
 ---
- package/opencv/Config.in | 7 +++++++
- package/opencv/opencv.mk | 7 +++++++
- 2 files changed, 14 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/Config.in | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 0db239e..2f47869 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -161,6 +161,13 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
- 	depends on BR2_USE_MMU # libgtk2 -> glib2
- 	select BR2_PACKAGE_LIBGTK2
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 02fa18c..e8bc110 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -429,15 +429,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
+ 	# Remove the following opencv modules when gstreamer fixes the
+ 	# problem of including the old "cv.h" header
+ 	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
+-	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
+-	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
+-	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
+-	select BR2_PACKAGE_OPENCV_LIB_FLANN
+-	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
+-	select BR2_PACKAGE_OPENCV_LIB_LEGACY
+-	select BR2_PACKAGE_OPENCV_LIB_ML
+-	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+-	select BR2_PACKAGE_OPENCV_LIB_VIDEO
++	select BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
+ 	help
+ 	  GStreamer OpenCV Plugins
  
-+config BR2_PACKAGE_OPENCV_WITH_JASPER
-+	bool "jpeg2000 support"
-+	select BR2_PACKAGE_JASPER
-+	help
-+	  Use shared libjasper from the target system to provide support
-+	  for jpeg2000.
-+
- config BR2_PACKAGE_OPENCV_WITH_JPEG
- 	bool "jpeg support"
- 	select BR2_PACKAGE_JPEG
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index e6de252..c4aa967 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -185,6 +185,13 @@ else
- OPENCV_CONF_OPT += -DWITH_GTK=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
-+OPENCV_CONF_OPT += -DWITH_JASPER=ON
-+OPENCV_DEPENDENCIES += jasper
-+else
-+OPENCV_CONF_OPT += -DWITH_JASPER=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_JPEG),y)
- OPENCV_CONF_OPT += -DWITH_JPEG=ON
- OPENCV_DEPENDENCIES += jpeg
 -- 
 1.9.2
