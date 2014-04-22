@@ -1,78 +1,80 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 22 Apr 2014 08:01:40 +0200
-Subject: [Buildroot] [PATCH 1/2] pkg-perl: fix for Perl XS packages
- configured by a Makefile.PL
-In-Reply-To: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
-References: <1398006356-5425-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <535605C4.2030109@mind.be>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 22 Apr 2014 10:25:22 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+Message-ID: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Francois,
+qDecoder is a powerful CGI library.
+Features:
+   Supports parsing a request encoded by GET/POST method
+   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
+   Supports COOKIE handling.
+   Supports Session management.
+   Supports FastCGI
+   
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+v2:	Changed License to BSD-2
 
-On 20/04/14 17:05, Francois Perrad wrote:
-> for native package, ExtUtils::MakeMaker detects all include filenames on system perl,
-> all these includes will be required by the generated Makefile but on STAGING_DIR.
-> 
-> patchlevel-debian.h is not a part of the Perl distribution,
-> but it was added by some Linux distributions (Debian, Ubuntu, ...)
-> In this case, we create an empty file on STAGING_DIR.
+ package/Config.in            |  1 +
+ package/qdecoder/Config.in   |  7 +++++++
+ package/qdecoder/qdecoder.mk | 18 ++++++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/qdecoder/Config.in
+ create mode 100644 package/qdecoder/qdecoder.mk
 
- Contrary to Thomas, I do understand the explanation, so here's a
-hopefully improved one:
-
-ExtUtils::MakeMaker adds all the header files used by the perl as
-dependencies to the generated Makefile. This means that the generated
-Makefile will depend on the system's header files.
-
-Usually this is not a problem, because when building the target package,
-these header files will indeed be found in $(STAGING_DIR). However, some
-distro's add an extra header file to the system's perl. This header is
-also included in the generated Makefile, which makes the build fail
-because it doesn't exist in $(STAGING_DIR).
-
-As a work-around, explicitly create this header file in $(STAGING_DIR).
-It doesn't hurt to create it even if the system perl doesn't need it.
-
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-perl.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-> index 447f364..876ffdb 100644
-> --- a/package/pkg-perl.mk
-> +++ b/package/pkg-perl.mk
-> @@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
->  			INSTALLVENDORMAN1DIR=/usr/share/man/man1 \
->  			INSTALLVENDORMAN3DIR=/usr/share/man/man3 \
->  			$$($(2)_CONF_OPT); \
-> +		touch $(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h; \
-
- Wouldn't it be better to do this in a post-install-staging hook in perl
-itself? Now, this file will be touched over and over again for each perl
-package.
-
-
- Also, you probably should repeat the commit log's explanation here.
-
- Regards,
- Arnout
-
->  	fi
->  endef
->  else
-> 
-
-
+diff --git a/package/Config.in b/package/Config.in
+index abfc3cc..998f990 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -765,6 +765,7 @@ source "package/nss-mdns/Config.in"
+ source "package/omniorb/Config.in"
+ source "package/openpgm/Config.in"
+ source "package/ortp/Config.in"
++source "package/qdecoder/Config.in"
+ source "package/rtmpdump/Config.in"
+ source "package/slirp/Config.in"
+ source "package/snmppp/Config.in"
+diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in
+new file mode 100644
+index 0000000..2bd2a2f
+--- /dev/null
++++ b/package/qdecoder/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QDECODER
++	bool "qdecoder"
++	help
++	  qDecoder is a simple and powerful CGI library
++	  for the C/C++ programming language.
++
++	  http://www.qdecoder.org/wiki/qdecoder
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+new file mode 100644
+index 0000000..46b986e
+--- /dev/null
++++ b/package/qdecoder/qdecoder.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# qdecoder
++#
++################################################################################
++
++QDECODER_VERSION = r12.0.5
++QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
++QDECODER_LICENSE = BSD-2
++QDECODER_LICENSE_FILES = COPYING
++
++QDECODER_INSTALL_STAGING = YES
++
++QDECODER_CONF_OPT = \
++	--prefix=$(STAGING_DIR)/usr \
++	--libdir=$(STAGING_DIR)/usr/lib
++
++$(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.2
