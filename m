@@ -1,81 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 22 Apr 2014 22:04:49 +0200
-Subject: [Buildroot] [PATCH v2] librtlsdr: new package
-In-Reply-To: <1398181795-11075-1-git-send-email-jrspruitt@gmail.com>
-References: <1398181795-11075-1-git-send-email-jrspruitt@gmail.com>
-Message-ID: <CAAXf6LWwE=KOVq8V-S7iEi1rEkzEiX2wY-RG3Y4zX-pMNxziYg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Apr 2014 22:16:34 +0200
+Subject: [Buildroot] [PATCH v4 1/4] Makefile: fix coding style
+In-Reply-To: <535692CF.1040607@mind.be>
+References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
+ <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
+ <20140416194215.7d3151fa@skate> <535692CF.1040607@mind.be>
+Message-ID: <20140422221634.3da814b5@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jason,
+Dear Arnout Vandecappelle,
 
-On Tue, Apr 22, 2014 at 5:49 PM, Jason Pruitt <jrspruitt@gmail.com> wrote:
-> librtlsdr is a library and software for using a Realtek RTL2832U based
-> DVB-T dongle as a cheap SDR.
->
-> Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
-> ---
-> Changes v1 -> v2:
->     - Added help to option (suggested by Thomas De Schampheleire)
->     - Added _LICENSE_FILE (suggested by Thomas De Schampheleire)
->     - Auto select udev rules (suggested by Thomas Petazzoni)
->
->  package/Config.in              |    1 +
->  package/librtlsdr/Config.in    |   22 ++++++++++++++++++++++
->  package/librtlsdr/librtlsdr.mk |   22 ++++++++++++++++++++++
->  3 files changed, 45 insertions(+)
->  create mode 100644 package/librtlsdr/Config.in
->  create mode 100644 package/librtlsdr/librtlsdr.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 07fd166..ad3956d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -628,6 +628,7 @@ source "package/libmbim/Config.in"
->  source "package/libnfc/Config.in"
->  source "package/libqmi/Config.in"
->  source "package/libraw1394/Config.in"
-> +source "package/librtlsdr/Config.in"
->  source "package/libserial/Config.in"
->  source "package/libsoc/Config.in"
->  source "package/libusb/Config.in"
-> diff --git a/package/librtlsdr/Config.in b/package/librtlsdr/Config.in
-> new file mode 100644
-> index 0000000..efe2b9e
-> --- /dev/null
-> +++ b/package/librtlsdr/Config.in
-> @@ -0,0 +1,22 @@
-> +config BR2_PACKAGE_LIBRTLSDR
-> +       bool "librtlsdr"
-> +       select BR2_PACKAGE_LIBUSB
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS
-> +       help
-> +         Library and command line programs for accessing
-> +         RTL2832U SDR dongles.
-> +
-> +         http://sdr.osmocom.org/trac/wiki/rtl-sdr/
-> +
-> +if BR2_PACKAGE_LIBRTLSDR
-> +
-> +config BR2_PACKAGE_LIBRTLSDR_DETACH_DRIVER
-> +       bool "Detach driver if loaded"
-> +       default y
-> +    help
-> +        Detach associated kernel driver on startup if
-> +        if one is loaded.
-> +endif
+On Tue, 22 Apr 2014 18:03:27 +0200, Arnout Vandecappelle wrote:
 
-The indentation here is not correct. You did it right on the main
-option though...
+> > To be honest, while I definitely value the change to harmonize the
+> > coding style, such a large patch touching almost every line of the main
+> > Makefile is a recipe for conflicts with many other patches. So I would
+> > personally prefer to not apply this patch, and do the coding style
+> > fixes progressively, as we make other changes to the main Makefile.
+> 
+>  I disagree. The entire patch does a single change to a single file
+> almost mechanically. It's true that there is a risk of conflicts, but
+> splitting up the patch doesn't reduce that risk. It's easy enough to try
+> to apply and ask for a refresh if there is a conflict.
 
-> +
-> +comment "librtlsdr needs a toolchain w/ threads"
-> +depends on !BR2_TOOLCHAIN_HAS_THREADS
+True.
 
-Here the 'depends on' statement should be indented too.
+>  Of course, currently it doesn't apply cleanly anymore because you
+> delayed applying it, so I also can't re-Ack it.
 
-Best regards,
+Well, since April, 7th I was not the only one to have commit access,
+and I believe I worked quite a lot to apply many other patches. So your
+blame here is not really in order I believe :-)
+
+Also, back when I made this comment, nobody had Acked the patch: only
+after I made my comment Fabio realized that he had forgotten to include
+your Acked-by from a previous version of the series (please read the
+history of this patch at http://patchwork.ozlabs.org/patch/337436/).
+
+Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
