@@ -1,118 +1,92 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 23 Apr 2014 01:15:37 +0200
-Subject: [Buildroot] [PATCH v2 05/24] python-numpy: new package
+Date: Wed, 23 Apr 2014 01:15:39 +0200
+Subject: [Buildroot] [PATCH v2 07/24] opencv: bump to version 2.4.8
 In-Reply-To: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
 References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398208556-4195-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398208556-4195-8-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch add NumPy package for python.
+This patch bumps OpenCV version and address the minimal set of change to
+get the new version building correctly:
+- update the download location;
+- force Qt version to Qt 4 when support is enabled;
+- naively fix the v4l support.
 
-Since Fortran support has been deprecated in Buildroot since the 2013.11
-release, and because most of the external toolchains do not provide a
-Fortran compiler, it is necessary to explicity disable Fortran compiler
-to avoid catching the one from the host system if any.
-
-We also need to fill a site.cfg file to tell NumPy build-system where
-it should looking for BLAS and LAPACK libraries.
-
-Some packages may include headers provided by python-numpy package.
-Thus, python-numpy needs to be installed in the sysroot; so add and
-enable its install-staging command.
+However, it does not address a couple improvements, among these:
+- jasper support;
+- python/numpy support;
+- Qt4 and Qt5 support (since the 2.4.6 release), so only Qt4 support is
+  supported in this patch;
+- optional libv4l dependency (since 2.4.7 release);
+- etc.
+These will be addressed in followup patches.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v1 -> v2:
 - rebase
-- automatic support of blas/lapack when clapack is enabled (ThomasP)
-- split blas/lapack support in its own cset (ThomasP)
-- merge python-numpy staging install cset within the python-numpy
-  package integration (ThomasP)
+- use github *.tar.gz source location
+- split the big patch in several atomic ones (Yann)
 ---
- package/Config.in                    |  1 +
- package/python-numpy/Config.in       |  8 +++++++
- package/python-numpy/python-numpy.mk | 41 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 50 insertions(+)
- create mode 100644 package/python-numpy/Config.in
- create mode 100644 package/python-numpy/python-numpy.mk
+ package/opencv/Config.in |  2 +-
+ package/opencv/opencv.mk | 11 +++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9c91844..7d8ca95 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -455,6 +455,7 @@ source "package/python-meld3/Config.in"
- source "package/python-msgpack/Config.in"
- source "package/python-netifaces/Config.in"
- source "package/python-nfc/Config.in"
-+source "package/python-numpy/Config.in"
- source "package/python-posix-ipc/Config.in"
- source "package/python-protobuf/Config.in"
- source "package/python-pyasn/Config.in"
-diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
-new file mode 100644
-index 0000000..c80e5c4
---- /dev/null
-+++ b/package/python-numpy/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_NUMPY
-+	bool "python-numpy"
-+	help
-+	  NumPy is the fundamental package for scientific computing with Python.
-+
-+	  Note that NumPy needs fenv.h fully supported by the C-library.
-+
-+	  http://www.numpy.org/
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-new file mode 100644
-index 0000000..e7c91c4
---- /dev/null
-+++ b/package/python-numpy/python-numpy.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# python-numpy
-+#
-+################################################################################
-+
-+PYTHON_NUMPY_VERSION = 1.8.0
-+PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
-+PYTHON_NUMPY_SITE = http://downloads.sourceforge.net/numpy
-+PYTHON_NUMPY_LICENSE = BSD-3c
-+PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
-+PYTHON_NUMPY_SETUP_TYPE = distutils
-+
-+PYTHON_NUMPY_BUILD_OPT = --fcompiler=None
-+
-+define PYTHON_NUMPY_CONFIGURE_CMDS
-+	-rm -f $(@D)/site.cfg
-+	echo "[DEFAULT]" >> $(@D)/site.cfg
-+	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
-+	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
-+	echo "libraries =" >> $(@D)/site.cfg
-+endef
-+
-+# Some package may include few headers from NumPy, so let's install it in the
-+# staging area.
-+PYTHON_NUMPY_INSTALL_STAGING = YES
-+
-+# This install staging commands is an adjusted and simplified version of the
-+# install target commands vampirized from the python-package infrastructure.
-+#
-+# Note that the append '--prefix=...' parameter overrides the one set by the
-+# python-package infrastructure in the PYTHON_NUMPY_INSTALL_OPT variable.
-+define PYTHON_NUMPY_INSTALL_STAGING_CMDS
-+	(cd $(PYTHON_NUMPY_BUILDDIR)/; \
-+		$(PYTHON_NUMPY_BASE_ENV) $(PYTHON_NUMPY_ENV) \
-+		$(HOST_DIR)/usr/bin/python setup.py install \
-+		$(PYTHON_NUMPY_BASE_INSTALL_OPT) \
-+		$(PYTHON_NUMPY_INSTALL_OPT) --prefix=$(STAGING_DIR)/usr)
-+endef
-+
-+$(eval $(python-package))
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 49ada5d..2c6200c 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -8,7 +8,7 @@ menuconfig BR2_PACKAGE_OPENCV
+ 	  OpenCV (Open Source Computer Vision) is a library of programming
+ 	  functions for real time computer vision.
+ 
+-	  http://opencv.willowgarage.com/wiki/
++	  http://opencv.org/
+ 
+ if BR2_PACKAGE_OPENCV
+ 
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index 42f9b0a..10f11cf 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENCV_VERSION = 2.4.2
+-OPENCV_SITE    = http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_VERSION)
+-OPENCV_SOURCE  = OpenCV-$(OPENCV_VERSION).tar.bz2
++OPENCV_VERSION = 2.4.8
++OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
+ OPENCV_INSTALL_STAGING = YES
+ 
+ OPENCV_CONF_OPT += \
+@@ -140,7 +139,7 @@ OPENCV_CONF_OPT += -DWITH_PNG=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+-OPENCV_CONF_OPT += -DWITH_QT=ON
++OPENCV_CONF_OPT += -DWITH_QT=4
+ OPENCV_DEPENDENCIES += qt
+ else
+ OPENCV_CONF_OPT += -DWITH_QT=OFF
+@@ -154,10 +153,10 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+-OPENCV_CONF_OPT += -DWITH_V4L=ON
++OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
+ OPENCV_DEPENDENCIES += libv4l
+ else
+-OPENCV_CONF_OPT += -DWITH_V4L=OFF
++OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+ endif
+ 
+ # Installation hooks:
 -- 
 1.9.2
