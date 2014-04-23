@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Apr 2014 15:34:34 +0200
-Subject: [Buildroot] [PATCH] freetype: host variant needs to run autogen
- too
-In-Reply-To: <1398215421-1844-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398215421-1844-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140423153434.7f2370c6@skate>
+Date: Wed, 23 Apr 2014 15:41:07 +0200
+Subject: [Buildroot] [PATCH] acpid: bump to version 2.0.22
+In-Reply-To: <1398201933-6022-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1398201933-6022-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140423154107.533098a6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,20 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 22 Apr 2014 22:10:21 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/fb8/fb8e38bcc73ff60a71df7558a1a4d6cc7cc9157f/
+On Tue, 22 Apr 2014 18:25:33 -0300, Gustavo Zacarias wrote:
+> Switch to upstream sourceforge page/download.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/freetype/freetype.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/acpid/Config.in                        |  2 ++
+>  package/acpid/S02acpid                         |  4 ++--
+>  package/acpid/acpid-01-dont-use-isfdtype.patch | 20 ++++++++++++++++++++
+>  package/acpid/acpid.mk                         | 25 ++++++++++++-------------
+>  4 files changed, 36 insertions(+), 15 deletions(-)
+>  create mode 100644 package/acpid/acpid-01-dont-use-isfdtype.patch
 
-Ouch, this one is hitting the autobuilders pretty hard.
-
-Applied, thanks.
+Looks like some kernel headers issue is affecting the acpid build:
+http://autobuild.buildroot.org/results/6d4/6d471942788fa05f324649ab15e6ca382e46df9c/build-end.log.
 
 Thomas
 -- 
