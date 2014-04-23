@@ -1,30 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Apr 2014 15:34:02 +0200
-Subject: [Buildroot] [PATCH] libgc: fix build under uClibc
-In-Reply-To: <0f149850960676b78e6e35678ab580c1e1aba73c.1398254403.git.baruch@tkos.co.il>
-References: <0f149850960676b78e6e35678ab580c1e1aba73c.1398254403.git.baruch@tkos.co.il>
-Message-ID: <20140423153402.6fb6b860@skate>
+Date: Wed, 23 Apr 2014 15:34:34 +0200
+Subject: [Buildroot] [PATCH] freetype: host variant needs to run autogen
+ too
+In-Reply-To: <1398215421-1844-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1398215421-1844-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140423153434.7f2370c6@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Gustavo Zacarias,
 
-On Wed, 23 Apr 2014 15:00:03 +0300, Baruch Siach wrote:
-> fenv.h is used in a workaround for a glibc specific bug. However, uClibc lies
-> by defining __GLIBC__, but does not provide fenv.h in our default uClibc
-> configurations.
-> 
+On Tue, 22 Apr 2014 22:10:21 -0300, Gustavo Zacarias wrote:
 > Fixes:
-> http://autobuild.buildroot.net/results/b2a/b2a1b1e374764855e701ea62fe9f1385ba77ac0d/
+> http://autobuild.buildroot.net/results/fb8/fb8e38bcc73ff60a71df7558a1a4d6cc7cc9157f/
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ...01-Fix-build-on-Linux-x86_64-under-uClibc.patch | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/libgc/libgc-01-Fix-build-on-Linux-x86_64-under-uClibc.patch
+>  package/freetype/freetype.mk | 1 +
+>  1 file changed, 1 insertion(+)
+
+Ouch, this one is hitting the autobuilders pretty hard.
 
 Applied, thanks.
 
