@@ -1,91 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Apr 2014 10:51:16 +0200
-Subject: [Buildroot] Analysis of build results for 2014-04-19
-In-Reply-To: <20140423092209.4d1454ec@skate>
-References: <20140420063009.8B76B100DB9@stock.ovh.net>	<20140420104812.5bc926a9@skate>	<53569BBE.1020707@mind.be>	<20140422221958.6240077e@skate>	<5356E9C2.9050900@mind.be>
- <20140423092209.4d1454ec@skate>
-Message-ID: <53577F04.1040409@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 23 Apr 2014 10:52:22 +0200
+Subject: [Buildroot] [PATCH v2] Makefile: let show-targets prints also
+	the dependencies
+In-Reply-To: <1398161459-8343-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1398161459-8343-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <CAHkwnC_6990=V0cZt1Pc8kHv81SC6dA2PZc5m-eO6iZExV=j8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/04/14 09:22, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
-> 
-> On Wed, 23 Apr 2014 00:14:26 +0200, Arnout Vandecappelle wrote:
-> 
->>> True. Currently the KCONFIG_PROBABILITY is chosen between 1% and 35%.
->>> Should I reduce that to 30% ? 25% ?
->>
->>  25% still means 300 packages, and I think that that doesn't even include
->> their dependencies. Isn't that exaggerated? I think that any defconfig
->> with more than 50 packages is not very realistic anymore...
->>
->>  Also, the interesting failures (with missing dependencies) are more
->> likely to fall out when less packages are selected, right?
->>
->>  So my suggestion is to reduce the probability to 15% (still 180 packages
->> in the defconfig...).
-> 
-> Not really, because your calculations make the assumption that there is
-> one BR2_PACKAGE_<foo> option per package. But that's not true: certain
-> packages have several, sometimes dozens of BR2_PACKAGE_<foo> options
-> (think Qt4, Qt5, Python, etc.). And the percentage of randomization is
-> done per BR2_PACKAGE_<foo> options, not per package.
-> 
-> A quick analysis shows a total of 2832 BR2_PACKAGE_<foo> options
-> defined in Buildroot for around 1200 packages, so in average we have a
-> little more than 2 Config.in options per package.
+On Tue, Apr 22, 2014 at 12:10 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> Because the "show-targets" target print the targets that will be built,
+> print also their dependencies.
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> v2:
+>  - remove the refactor code to simplify the merge of this patch
+>
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index d10da9d..a6e6ecb 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -653,7 +653,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+>         @rm -f $(LEGAL_WARNINGS)
+>
+>  show-targets:
+> -       @echo $(TARGETS) $(TARGETS_ROOTFS)
+> +       @echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
+>
+>  graph-build: $(O)/build/build-time.log
+>         @install -d $(O)/graphs
+> --
+> 1.8.3.2
+>
 
- Ah correct, so my proposed 15% indeed becomes 30%.
+I've resent this patch as part of the original patch set:
+http://patchwork.ozlabs.org/patch/341727/
 
-> 
-> Also, by having a much smaller percentage, I'm wondering if we have a
-> lot less chances to trigger cases that require a fairly significant
-> combination of options to be produced.
-
- Do we actually have examples of such a situation, that a combination of
-packages leads to an error? It's more likely to lead to runtime errors I
-expect.
-
-> 
-> I've anyway reduced the percentage from 1% to 30% (where it was 1% to
-> 35%). I'm obviously open to more discussion on the matter, reducing to
-> 30% was just an initial measure.
-> 
->>> So let's say that I'll reduce the KCONFIG_PROBABILITY on one side, and
->>> increase the timeout for all builds by an hour on the other side. How
->>> does that look?
->>
->>  The timeout is already 4 hours, isn't it? That's already quite long IMHO.
-> 
-> Yes, that's quite large, but I've anyway increased it to 6 hours. The
-> goal of the time out was *only* to make sure builds entering some quite
-> of infinite loop terminate at some point (we used to have a PowerPC
-> toolchain whose 'ld' was buggy, and was entering an infinite loop when
-> building a certain package).
-
- True, if there is currently no situation that the timeout is "real",
-then it doesn't hurt to increase the timeout. And if a real timeout does
-start occuring, we can decrease the timeout again until it is solved.
-
-
- Regards,
- Arnout
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
-
-
+Regards
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
