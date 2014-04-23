@@ -1,21 +1,15 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 24 Apr 2014 00:48:28 +0200
-Subject: [Buildroot] [PATCH 09/14] pkg-cmake.mk: globally disable
-	BUILD_TESTING flag
+Date: Thu, 24 Apr 2014 00:48:25 +0200
+Subject: [Buildroot] [PATCH 06/14] pkg-cmake.mk: cosmetic changes in the
+	generated toolchainfile.cmake file
 In-Reply-To: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
 References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398293313-17580-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398293313-17580-7-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-This CMake flag is used to enable tests. It may not disable the test
-programs from being built, but it controls the test execution.
-
-Since we don't care about building the tests (and usually disable them
-when possible), make sure Buildroot won't try to run them.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -23,20 +17,38 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v1 -> v2:
 - new patch
 ---
- package/pkg-cmake.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-cmake.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index d6dadbe..e0efccb 100644
+index a032426..19f7843 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -65,6 +65,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
-+		-DBUILD_TESTING=OFF \
- 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
- 		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
- 		$$($$(PKG)_CONF_OPT) \
+@@ -161,17 +161,25 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+ ################################################################################
+ 
+ define TOOLCHAINFILE_CMAKE
++#
++# Automatically generated file; DO NOT EDIT.
++# CMake toolchain file for Buildroot
++#
++
+ string(REPLACE /usr/share/buildroot "" _HOST_DIR $${CMAKE_CURRENT_LIST_DIR})
++
+ set(CMAKE_SYSTEM_NAME Linux)
+ set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)" CACHE STRING "Buildroot CFLAGS" FORCE)
+ set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+ set(CMAKE_INSTALL_SO_NO_EXE 0)
++
+ set(CMAKE_PROGRAM_PATH $${_HOST_DIR}/usr/bin)
+ set(CMAKE_FIND_ROOT_PATH $${_HOST_DIR}/$(STAGING_SUBDIR))
+ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+ set(ENV{PKG_CONFIG_SYSROOT_DIR} $${_HOST_DIR}/$(STAGING_SUBDIR))
++
+ # This toolchain file can be used both inside and outside Buildroot.
+ # * When used inside Buildroot, ccache support is explicitly driven using the
+ #   USE_CCACHE variable.
 -- 
 1.9.2
