@@ -1,63 +1,50 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Wed, 23 Apr 2014 16:06:18 +0200
-Subject: [Buildroot] [PATCH v3] LT.old: Make
- __errno_location/__h_errno_location thread safe
-In-Reply-To: <1397642272-13260-1-git-send-email-vgupta@synopsys.com>
-References: <1397642272-13260-1-git-send-email-vgupta@synopsys.com>
-Message-ID: <CAC1BbcQS4EKiT8mHXUH36Zbr7Nvb95WEjcHfdgWQ+J1dWbTv7A@mail.gmail.com>
+From: Pascal =?ISO-8859-1?Q?H=FCrst?= <pascal.huerst@gmail.com>
+Date: Wed, 23 Apr 2014 16:21:46 +0200
+Subject: [Buildroot] Adding google-breakpad to buildroot
+Message-ID: <1398262906.30640.4.camel@mbpro.localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16 April 2014 11:57, Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
-> WHY: errno in uClibc is not thread safe
->
-> HOW: __errno_location and it's sibling __h_errno_location need to be called
->      via PLT - even from within libc. That way when linked with pthread,
->      intra-uClibc callers will also use the thread safe version.
->
->      This is achieved by removing the GI alias for these functions,
->      ensuring that they get called normally (via PLT)
->
-> Verified with ARC LT.old and ARM cubieboard2 buildroot (LT.old)
-> NPTL is unaffected by this bug.
->
-> ------------ History behind this patch ---------------------
->
-> This is a long standing bug (https://bugs.busybox.net/show_bug.cgi?id=2089)
->
-> Others have tried to fix it in past (alteast Peter Korsgaard's patch in 2010),
-> but somehow failed to be merged (or were backed out afterwards).
-> http://lists.uclibc.org/pipermail/uclibc/2010-July/044176.html
->
-> One of the causes could be side effect of atleast one more bug related to
-> pthreads and static link which has now been fixed.
-> http://lists.uclibc.org/pipermail/uclibc/2013-October/047958.html
->
-> I have solved this w/o looking at other pacthes but would like to give
-> credit to Peter and others for confirming that it makes sense.
->
-> Cc: Christian Ruppert <christian.ruppert@abilis.com>
-> CC: Francois Bedard <Francois.Bedard@synopsys.com>
-> Cc: Joern Rennecke  <joern.rennecke@embecosm.com>
-> Cc: Jeremy Bennett <jeremy.bennett@embecosm.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Khem Raj <raj.khem@gmail.com>
-> Cc: buildroot at busybox.net
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-> ---
-> Changes since v2
->    No code changes, added couple more lines to changelog
->
-> Changes since v1
-> (http://lists.uclibc.org/pipermail/uclibc/2014-March/048273.html
->
-> - Rebased to trunk
-> - Added handling for h_errno_location
->
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+Hi everyone,
 
-Applied, thanks!
+we are planing to add google-breakpad to buildroot. 
+
+From the project description at
+http://code.google.com/p/google-breakpad/:  
+
+[...] "Breakpad is a library and tool suite that allows you to
+distribute an application to users with compiler-provided debugging
+information removed, record crashes in compact "minidump" files, send
+them back to your server, and produce C and C++ stack traces from these
+minidumps." [...]
+
+Adding a package to buildroot is easy, but in this case we will have to
+find a way to extract all symbols from the target binaries, before they
+get stripped. My idea was to add a new target to the Makefile, just
+before "target-finalize:" and check against an option in the config
+like:
+
+ifeq ($(BR2_ENABLE_BREAKPAD),y)
+        TARGETS+=target-generate-breakpad-symbols
+endif
+
+and then:
+
+target-generate-breakpad-symbols:
+        extract symbols and deploy result to output/images 
+
+Is this basically the way to go, or is there a better way to achieve
+this?
+
+regards,
+pascal
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: This is a digitally signed message part
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140423/eebac11d/attachment.asc>
