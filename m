@@ -1,38 +1,45 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 24 Apr 2014 00:48:20 +0200
-Subject: [Buildroot] [PATCH 01/14] pkg-cmake.mk: replace "echo -en" with
-	printf
+Date: Thu, 24 Apr 2014 00:48:21 +0200
+Subject: [Buildroot] [PATCH 02/14] pkg-cmake.mk: remove unneeded quotes in
+	the generated toolchainfile.cmake
 In-Reply-To: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
 References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398293313-17580-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398293313-17580-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Since Buildroot does not support space in paths (at least neither in the
+Buildroot installation location, nor in the output directory).
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
-changes v1 -> v2
+changes v1 -> v2:
 - new patch
 ---
- package/pkg-cmake.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-cmake.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index bf3db90..edda14a 100644
+index edda14a..963a423 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -160,7 +160,7 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
- 
- $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 	@mkdir -p $(@D)
--	@echo -en "\
-+	@printf "\
- 	set(CMAKE_SYSTEM_NAME Linux)\n\
- 	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
- 	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+@@ -167,10 +167,10 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+ 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+ 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+-	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
+-	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
++	set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
++	set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
+ 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+ 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+ 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
+-	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
++	set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))\n\
+ 	" > $@
 -- 
 1.9.2
