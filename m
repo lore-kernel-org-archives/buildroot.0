@@ -1,20 +1,16 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 24 Apr 2014 00:48:26 +0200
-Subject: [Buildroot] [PATCH 07/14] pkg-cmake.mk: set additional variables in
-	toolchainfile.cmake
+Date: Thu, 24 Apr 2014 00:48:32 +0200
+Subject: [Buildroot] [PATCH 13/14] flann: do not override CMAKE_BUILD_TYPE
 In-Reply-To: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
 References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398293313-17580-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398293313-17580-14-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set binutils programs CMake variables in the toolchainfile.cmake file.
-
-This variables must be cached, otherwise they are wrongly set, resulting
-empty, which will make the builds fail.
+This flag is already correctly set by the cmake-package infrastructure.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -22,27 +18,20 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v1 -> v2:
 - new patch
 ---
- package/pkg-cmake.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/flann/flann.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 19f7843..d6dadbe 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -211,6 +211,14 @@ else()
- 		set(CMAKE_CXX_COMPILER $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))g++)
- 	endif()
- endif()
-+
-+set(CMAKE_LINKER  $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))ld      CACHE FILEPATH \"\" FORCE)
-+set(CMAKE_AR      $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))ar      CACHE FILEPATH \"\" FORCE)
-+set(CMAKE_RANLIB  $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))ranlib  CACHE FILEPATH \"\" FORCE)
-+set(CMAKE_NM      $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))nm      CACHE FILEPATH \"\" FORCE)
-+set(CMAKE_OBJCOPY $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))objcopy CACHE FILEPATH \"\" FORCE)
-+set(CMAKE_OBJDUMP $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))objdump CACHE FILEPATH \"\" FORCE)
-+set(CMAKE_STRIP   $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))strip   CACHE FILEPATH \"\" FORCE)
- endef
- 
- $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+diff --git a/package/flann/flann.mk b/package/flann/flann.mk
+index 6f95f19..cddd2aa 100644
+--- a/package/flann/flann.mk
++++ b/package/flann/flann.mk
+@@ -10,7 +10,6 @@ FLANN_INSTALL_STAGING = YES
+ FLANN_LICENSE = BSD-3c
+ FLANN_LICENSE_FILES = COPYING
+ FLANN_CONF_OPT = \
+-	-DCMAKE_BUILD_TYPE=Release \
+ 	-DBUILD_C_BINDINGS=ON \
+ 	-DBUILD_PYTHON_BINDINGS=OFF \
+ 	-DBUILD_MATLAB_BINDINGS=OFF \
 -- 
 1.9.2
