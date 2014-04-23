@@ -1,62 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Apr 2014 22:17:49 -0300
-Subject: [Buildroot] php / snmp / iconv problem
-In-Reply-To: <20140422222554.2d601379@skate>
-References: <20140420063009.8B76B100DB9@stock.ovh.net>	<20140420104812.5bc926a9@skate>	<535556F6.3050807@lucaceresoli.net>
- <20140422222554.2d601379@skate>
-Message-ID: <535714BD.4020403@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Apr 2014 08:30:07 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-04-22
+Message-ID: <20140423063007.EE7DB10157A@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/22/2014 05:25 PM, Thomas Petazzoni wrote:
-> Sure. So, as expected, the error is:
-> 
-> ===============================================
-> checking OpenSSL dir for SNMP... no
-> checking for init_snmp in -lnetsnmp... no
-> configure: error: SNMP sanity check failed. Please check config.log for more information.
-> make: *** [/home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/build/php-5.5.11/.stamp_configured] Error 1
-> ===============================================
-> 
-> In config.log, we see that:
-> 
-> ===============================================
-> configure:83770: checking for init_snmp in -lnetsnmp
-> configure:83795: /home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/host/usr/bin/arm-none-linux-gnueabi-gcc -o conftest -I/include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -L/lib  -L/home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib conftest.c -lnetsnmp  -lgmp -lz -lpcre -lcrypto -lssl -lcrypto -lm  -lxml2 -lz -lm -ldl -
-> lxml2 -lz -lm -ldl -lnetsnmp -lcrypto -lm >&5
-> /home/test/outputs/5a7fd0de2747e876a182117d7f7d8f16b20cadea/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabi/4.7.3/../../../../arm-none-linux-gnueabi/bin/ld: warning: library search path "/lib" is unsafe for cross-compilation
-> /lib/libgcc_s.so.1: file not recognized: File format not recognized
-> collect2: error: ld returned 1 exit status
-> ===============================================
-> 
-> So the problem is due to /lib being present in the -L flags. This is
-> most likely due to:
-> 
-> ifeq ($(BR2_PACKAGE_PHP_EXT_ICONV),y)
-> ifeq ($(BR2_PACKAGE_LIBICONV),y)
->         PHP_CONF_OPT += --with-iconv=$(STAGING_DIR)/usr
->         PHP_DEPENDENCIES += libiconv
-> else
->         PHP_CONF_OPT += --with-iconv
-> endif
-> endif
-> 
-> We are in a case where BR2_PACKAGE_PHP_EXT_ICONV=y but
-> BR2_PACKAGE_LIBICONV is not enabled (glibc toolchain). So the iconv
-> test of PHP starts looking in /lib for iconv. I think we already
-> discussed this problem with Gustavo. See "[PATCH] php: fix wrong -L and
-> -I paths added by iconv tests" in the mailing list archive.
+Build statistics for 2014-04-22
+===============================
 
-Hi.
-Ok, hopefully i've finally solved this php 'nuisance'.
-Ugly patch sent in need of heavy testing, it should solve many (all?) of
-the php autobuild failures related to iconv.
-I really don't want to see this b****** again, fingers crossed, i'm not
-a fan of modifying configure directly but there seem to be no other
-choice at the moment.
-Also php upstream should really take a hard look at hardcoding paths and
-using test instead of AC_TRY_LINK to check for headers, that's very dirty.
-Regards.
+        success : 65 
+       failures : 18 
+       timeouts : 1  
+          TOTAL : 84 
+
+Classification of failures by reason
+====================================
+
+              postgresql-9.3.4 | 6 
+                  cppcms-1.0.4 | 2 
+                   libgc-7.4.0 | 2 
+(cd /home/test/test/1/outpu... | 1 
+             lttng-tools-2.4.1 | 1 
+              uemacs-4.0.15-lt | 1 
+                  zeromq-4.0.4 | 1 
+               alsa-lib-1.0.26 | 1 
+                  libftdi-0.19 | 1 
+                    php-5.5.11 | 1 
+jack2-37976441044d69b91d61d... | 1 
+                minidlna-1.1.2 | 1 
+
+Detail of failures
+===================
+
+       arm | (cd /home/test/test/1/outpu... | TIM | http://autobuild.buildroot.net/results/413459149a300543e8daba38be4cfcbf256613aa/
+   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/04ab39ba9dc8e0985a2c4d24e8fe7eb2f9b61152/
+     avr32 |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/68944d9baca1f08df46b1244421e33bcc37d034b/
+      bfin |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/32d9cdb0563b2058c768e08e47d3e30bdcbaa10d/
+       arm | jack2-37976441044d69b91d61d... | NOK | http://autobuild.buildroot.net/results/dee2785b42dbd21c986f1c74dff24018f0e9f08a/
+       arc |                   libftdi-0.19 | NOK | http://autobuild.buildroot.net/results/6cb25ed954840109c9d0e582e922b0ba9d07e174/
+    x86_64 |                    libgc-7.4.0 | NOK | http://autobuild.buildroot.net/results/b2a1b1e374764855e701ea62fe9f1385ba77ac0d/
+    x86_64 |                    libgc-7.4.0 | NOK | http://autobuild.buildroot.net/results/3f488900aa3a662b6144372291d53e3241082009/
+       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/eb207d2fcc27e36b75001ec5fb0825a24490d915/
+   powerpc |                 minidlna-1.1.2 | NOK | http://autobuild.buildroot.net/results/ad9d4de51586425d811f00d29b5674c459df6e6c/
+   powerpc |                     php-5.5.11 | NOK | http://autobuild.buildroot.net/results/abe033f322cfdaa5edd22cc5aec7cdb7445a645d/
+    x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/a52eec753bb0276a1bc853f2ab2c9d5003ed64e3/
+    x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/52396b81b517452fdb7cd06b0f1c3eb77a1bbb64/
+       arm |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/02f53a2358d0f2c4ff08cbe96cdad6d92158d4d3/
+      sh4a |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/bfa783d8d98609c31f738073b1bd249adc5df6e8/
+       arm |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/656a50078480d87c812d6555497ee33803a055bd/
+   powerpc |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/20b17250a87b206eb62c78f83fa9f129c2d257fd/
+       arm |               uemacs-4.0.15-lt | NOK | http://autobuild.buildroot.net/results/4f8f729fe1bc14ad481116d4660251de784b9f0a/
+      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/4cef36013a7fdd1cd3622e4a5164be3c11878512/
+
+
+-- 
+http://autobuild.buildroot.net
