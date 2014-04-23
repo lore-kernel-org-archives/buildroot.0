@@ -1,16 +1,24 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 24 Apr 2014 00:48:32 +0200
-Subject: [Buildroot] [PATCH 13/14] flann: do not override CMAKE_BUILD_TYPE
+Date: Thu, 24 Apr 2014 00:48:29 +0200
+Subject: [Buildroot] [PATCH 10/14] pkg-cmake.mk: globally drive the
+	CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
 In-Reply-To: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
 References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398293313-17580-14-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This flag is already correctly set by the cmake-package infrastructure.
+This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
+etc).
+
+So, it makes sense for Buildroot to globally drive this CMake flags in
+the cmake-package infrastructure.
+
+However, if a package prefer overriding this default setting, it still
+can via the <PKG>_CONF_OPT variable.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -18,20 +26,20 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v1 -> v2:
 - new patch
 ---
- package/flann/flann.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/pkg-cmake.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/flann/flann.mk b/package/flann/flann.mk
-index 6f95f19..cddd2aa 100644
---- a/package/flann/flann.mk
-+++ b/package/flann/flann.mk
-@@ -10,7 +10,6 @@ FLANN_INSTALL_STAGING = YES
- FLANN_LICENSE = BSD-3c
- FLANN_LICENSE_FILES = COPYING
- FLANN_CONF_OPT = \
--	-DCMAKE_BUILD_TYPE=Release \
- 	-DBUILD_C_BINDINGS=ON \
- 	-DBUILD_PYTHON_BINDINGS=OFF \
- 	-DBUILD_MATLAB_BINDINGS=OFF \
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index e0efccb..1c52a53 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -63,6 +63,7 @@ define $(2)_CONFIGURE_CMDS
+ 	PATH=$(BR_PATH) \
+ 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
++		-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_TESTING=OFF \
 -- 
 1.9.2
