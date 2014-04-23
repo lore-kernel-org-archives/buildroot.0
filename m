@@ -1,57 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 00:19:56 +0200
-Subject: [Buildroot] [PATCH v3] wget: fix host-gettext build dependency
- race
-In-Reply-To: <241760c83c2b11674de4aa22c1f84786ac0a5fdf.1398275469.git.baruch@tkos.co.il>
-References: <241760c83c2b11674de4aa22c1f84786ac0a5fdf.1398275469.git.baruch@tkos.co.il>
-Message-ID: <20140424001956.11021ebe@skate>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Apr 2014 00:20:06 +0200
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.7 and improve
+ cross build
+In-Reply-To: <1398211678-20218-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1398211678-20218-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <53583C96.3030008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+On 23/04/14 02:07, Gustavo Zacarias wrote:
+> Bump to the latest 4.1.7 version and improve the cross-build logic.
+> With the new patches the build is basically architecture-agnostic making
+> it possible to ditch the arch-specific cache to use a generic one.
+> Some toolchains might not be too happy with samba4 because of bitrot,
+> hopefully we'll find and fix or blacklist those with autobuilder help.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-On Wed, 23 Apr 2014 20:51:09 +0300, Baruch Siach wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Currently, the gettextization of wget works by chance:
->   - host-gettext is added as a dependency to wget;
->   - gettextize is run as a post-patch hook.
-> 
-> But the dependencies are only guaranteed to be built and installed
-> for the configure step, not the patch step. Because post-patch hooks
-> are part of the patch step, we have no guarantee that the dependency
-> to host-gettext is done by the time we gettextize wget.
-> 
-> This happens to work by chance, since wget sorts alphabetically after
-> gettext, so we indeed have host-gettext built and installed by the
-> time we need to gettextize wget.
-> 
-> This is prone to fail in the parallel build case, since we can no
-> longer rely on alphabetical order in that case.
-> 
-> Instead, run gettextize in PRE_CONFIGURE_HOOKS to avoid the race.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [baruch: make the fix independent from the gettextize infra]
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> v3:
-> 	s/_HOOK/_HOOKS/
-> 
-> v2:
-> 	Use PRE_CONFIGURE_HOOKS to make the fix independent from the rejected
-> 	gettextize infrastructure; update the commit log accordingly
-> ---
->  package/wget/wget.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Applied, thanks.
 
-Thomas
+ Regards,
+ Arnout
+
+[snip]
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
