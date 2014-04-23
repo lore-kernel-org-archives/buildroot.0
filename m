@@ -1,36 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 23 Apr 2014 09:39:33 -0300
-Subject: [Buildroot] [PATCH 2/2] libdvdnav: bump to version 4.2.1
-In-Reply-To: <1398256773-28764-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398256773-28764-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1398256773-28764-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Apr 2014 15:24:44 +0200
+Subject: [Buildroot] [git commit] freetype: host variant needs to run
+	autogen too
+Message-ID: <20140423132509.87E3E9C9BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libdvdnav/libdvdnav.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=73797e7b3c948e6cbda8dec289df417958736d19
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/libdvdnav/libdvdnav.mk b/package/libdvdnav/libdvdnav.mk
-index befcd8b..78618d3 100644
---- a/package/libdvdnav/libdvdnav.mk
-+++ b/package/libdvdnav/libdvdnav.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
+Fixes:
+http://autobuild.buildroot.net/results/fb8/fb8e38bcc73ff60a71df7558a1a4d6cc7cc9157f/
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freetype/freetype.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 2f8d497..c7c9a06 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -26,6 +26,7 @@ define FREETYPE_RUN_AUTOGEN
+ 	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+ endef
+ FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
++HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
+ FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
+ HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
  
--LIBDVDNAV_VERSION = 4.1.3
--LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.bz2
-+LIBDVDNAV_VERSION = 4.2.1
-+LIBDVDNAV_SOURCE = libdvdnav-$(LIBDVDNAV_VERSION).tar.xz
- LIBDVDNAV_SITE = http://dvdnav.mplayerhq.hu/releases
-+# configure not shipped
- LIBDVDNAV_AUTORECONF = YES
- LIBDVDNAV_INSTALL_STAGING = YES
- LIBDVDNAV_CONFIG_SCRIPTS = dvdnav-config
--- 
-1.8.3.2
