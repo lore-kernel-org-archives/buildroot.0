@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 00:14:26 +0200
-Subject: [Buildroot] [RFCv1 2/8] gcc: add musl support patch for gcc 4.7.3
+Date: Thu, 24 Apr 2014 00:14:27 +0200
+Subject: [Buildroot] [RFCv1 3/8] gcc: add musl support patch to gcc 4.8.2
 In-Reply-To: <1398291272-17591-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1398291272-17591-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1398291272-17591-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1398291272-17591-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/4.7.3/900-musl-support.patch | 638 +++++++++++++++++++++++++++++++
- 1 file changed, 638 insertions(+)
- create mode 100644 package/gcc/4.7.3/900-musl-support.patch
+ package/gcc/4.8.2/900-musl-support.patch | 755 +++++++++++++++++++++++++++++++
+ 1 file changed, 755 insertions(+)
+ create mode 100644 package/gcc/4.8.2/900-musl-support.patch
 
-diff --git a/package/gcc/4.7.3/900-musl-support.patch b/package/gcc/4.7.3/900-musl-support.patch
+diff --git a/package/gcc/4.8.2/900-musl-support.patch b/package/gcc/4.8.2/900-musl-support.patch
 new file mode 100644
-index 0000000..fffb84a
+index 0000000..ec60c6e
 --- /dev/null
-+++ b/package/gcc/4.7.3/900-musl-support.patch
-@@ -0,0 +1,638 @@
++++ b/package/gcc/4.8.2/900-musl-support.patch
+@@ -0,0 +1,755 @@
 +Add musl support to gcc
 +
 +This patch comes from the musl-cross project at
@@ -40,43 +40,25 @@ index 0000000..fffb84a
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
 +
-+# HG changeset patch
-+# Parent f50bb54f331f73405131a30b4f353cfda1c70304
-+Use the generic implementation of libstdc++ primitives when we're on musl, not the glibc one.
-+
-+Index: b/libstdc++-v3/configure.host
++Index: b/fixincludes/mkfixinc.sh
 +===================================================================
-+--- a/libstdc++-v3/configure.host
-++++ b/libstdc++-v3/configure.host
-+@@ -243,6 +243,13 @@
-+     os_include_dir="os/bsd/freebsd"
-+     ;;
-+   gnu* | linux* | kfreebsd*-gnu | knetbsd*-gnu)
-++    # check for musl by target
-++    case "${host_os}" in
-++      *-musl*)
-++        os_include_dir="os/generic"
-++        ;;
-++      *)
-++
-+     if [ "$uclibc" = "yes" ]; then
-+       os_include_dir="os/uclibc"
-+     elif [ "$bionic" = "yes" ]; then
-+@@ -251,6 +258,9 @@
-+       os_include_dir="os/gnu-linux"
-+     fi
-+     ;;
-++
-++    esac
-++    ;;
-+   hpux*)
-+     os_include_dir="os/hpux"
-+     ;;
++--- a/fixincludes/mkfixinc.sh
+++++ b/fixincludes/mkfixinc.sh
++@@ -19,7 +19,8 @@
++     powerpc-*-eabi*    | \
++     powerpc-*-rtems*   | \
++     powerpcle-*-eabisim* | \
++-    powerpcle-*-eabi* )
+++    powerpcle-*-eabi* | \
+++    *-musl* )
++ 	#  IF there is no include fixing,
++ 	#  THEN create a no-op fixer and exit
++ 	(echo "#! /bin/sh" ; echo "exit 0" ) > ${target}
 +Index: b/gcc/config.gcc
 +===================================================================
 +--- a/gcc/config.gcc
 ++++ b/gcc/config.gcc
-+@@ -522,7 +522,7 @@
++@@ -550,7 +550,7 @@
 + esac
 + 
 + # Common C libraries.
@@ -85,7 +67,7 @@ index 0000000..fffb84a
 + 
 + # Common parts for widely ported systems.
 + case ${target} in
-+@@ -625,6 +625,9 @@
++@@ -653,6 +653,9 @@
 +     *-*-*uclibc*)
 +       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_UCLIBC"
 +       ;;
@@ -95,7 +77,7 @@ index 0000000..fffb84a
 +     *)
 +       tm_defines="$tm_defines DEFAULT_LIBC=LIBC_GLIBC"
 +       ;;
-+@@ -2092,6 +2095,10 @@
++@@ -2114,6 +2117,10 @@
 + 	    powerpc*-*-linux*paired*)
 + 		tm_file="${tm_file} rs6000/750cl.h" ;;
 + 	esac
@@ -106,11 +88,81 @@ index 0000000..fffb84a
 + 	if test x${enable_secureplt} = xyes; then
 + 		tm_file="rs6000/secureplt.h ${tm_file}"
 + 	fi
++Index: b/gcc/config/aarch64/aarch64-linux.h
++===================================================================
++--- a/gcc/config/aarch64/aarch64-linux.h
+++++ b/gcc/config/aarch64/aarch64-linux.h
++@@ -21,7 +21,12 @@
++ #ifndef GCC_AARCH64_LINUX_H
++ #define GCC_AARCH64_LINUX_H
++ 
+++/* The AArch64 port currently supports two dynamic linkers:
+++   - ld-linux-aarch64.so.1 - GLIBC dynamic linker
+++   - ld-musl-aarch64.so.1 - musl libc dynamic linker  */
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux-aarch64.so.1"
+++#undef MUSL_DYNAMIC_LINKER
+++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-aarch64.so.1"
++ 
++ #define CPP_SPEC "%{pthread:-D_REENTRANT}"
++ 
++Index: b/gcc/config/arm/linux-eabi.h
++===================================================================
++--- a/gcc/config/arm/linux-eabi.h
+++++ b/gcc/config/arm/linux-eabi.h
++@@ -77,6 +77,23 @@
++     %{mfloat-abi=soft*:" GLIBC_DYNAMIC_LINKER_SOFT_FLOAT "} \
++     %{!mfloat-abi=*:" GLIBC_DYNAMIC_LINKER_DEFAULT "}"
++ 
+++/* For ARM musl currently supports four dynamic linkers:
+++   - ld-musl-arm.so.1 - for the EABI-derived soft-float ABI
+++   - ld-musl-armhf.so.1 - for the EABI-derived hard-float ABI
+++   - ld-musl-armeb.so.1 - for the EABI-derived soft-float ABI, EB
+++   - ld-musl-armebhf.so.1 - for the EABI-derived hard-float ABI, EB
+++   musl does not support the legacy OABI mode.
+++   All the dynamic linkers live in /lib.
+++   We default to soft-float, EL. */
+++#undef  MUSL_DYNAMIC_LINKER
+++#if TARGET_BIG_ENDIAN_DEFAULT
+++#define MUSL_DYNAMIC_LINKER_E "%{mlittle-endian:;:eb}"
+++#else
+++#define MUSL_DYNAMIC_LINKER_E "%{mbig-endian:eb}"
+++#endif
+++#define MUSL_DYNAMIC_LINKER \
+++  "/lib/ld-musl-arm" MUSL_DYNAMIC_LINKER_E "%{mfloat-abi=hard:hf}.so.1"
+++
++ /* At this point, bpabi.h will have clobbered LINK_SPEC.  We want to
++    use the GNU/Linux version, not the generic BPABI version.  */
++ #undef  LINK_SPEC
++Index: b/gcc/config/i386/linux.h
++===================================================================
++--- a/gcc/config/i386/linux.h
+++++ b/gcc/config/i386/linux.h
++@@ -21,3 +21,5 @@
++ 
++ #define GNU_USER_LINK_EMULATION "elf_i386"
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
+++#undef MUSL_DYNAMIC_LINKER
+++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-i386.so.1"
++Index: b/gcc/config/i386/linux64.h
++===================================================================
++--- a/gcc/config/i386/linux64.h
+++++ b/gcc/config/i386/linux64.h
++@@ -30,3 +30,10 @@
++ #define GLIBC_DYNAMIC_LINKER32 "/lib/ld-linux.so.2"
++ #define GLIBC_DYNAMIC_LINKER64 "/lib64/ld-linux-x86-64.so.2"
++ #define GLIBC_DYNAMIC_LINKERX32 "/libx32/ld-linux-x32.so.2"
+++
+++#undef MUSL_DYNAMIC_LINKER32
+++#define MUSL_DYNAMIC_LINKER32 "/lib/ld-musl-i386.so.1"
+++#undef MUSL_DYNAMIC_LINKER64
+++#define MUSL_DYNAMIC_LINKER64 "/lib/ld-musl-x86_64.so.1"
+++#undef MUSL_DYNAMIC_LINKERX32
+++#define MUSL_DYNAMIC_LINKERX32 "/lib/ld-musl-x32.so.1"
 +Index: b/gcc/config/linux.h
 +===================================================================
 +--- a/gcc/config/linux.h
 ++++ b/gcc/config/linux.h
-+@@ -33,10 +33,12 @@
++@@ -32,10 +32,12 @@
 + #define OPTION_GLIBC  (DEFAULT_LIBC == LIBC_GLIBC)
 + #define OPTION_UCLIBC (DEFAULT_LIBC == LIBC_UCLIBC)
 + #define OPTION_BIONIC (DEFAULT_LIBC == LIBC_BIONIC)
@@ -123,7 +175,7 @@ index 0000000..fffb84a
 + #endif
 + 
 + #define GNU_USER_TARGET_OS_CPP_BUILTINS()			\
-+@@ -54,18 +56,21 @@
++@@ -53,18 +55,21 @@
 +    uClibc or Bionic is the default C library and whether
 +    -muclibc or -mglibc or -mbionic has been passed to change the default.  */
 + 
@@ -153,7 +205,7 @@ index 0000000..fffb84a
 + #else
 + #error "Unsupported DEFAULT_LIBC"
 + #endif /* DEFAULT_LIBC */
-+@@ -83,23 +88,32 @@
++@@ -82,23 +87,32 @@
 + #define BIONIC_DYNAMIC_LINKER64 "/system/bin/linker64"
 + #define BIONIC_DYNAMIC_LINKERX32 "/system/bin/linkerx32"
 + 
@@ -191,7 +243,7 @@ index 0000000..fffb84a
 + 
 + /* Whether we have sincos that follows the GNU extension.  */
 + #undef TARGET_HAS_SINCOS
-+@@ -108,3 +122,74 @@
++@@ -107,3 +121,74 @@
 + /* Whether we have Bionic libc runtime */
 + #undef TARGET_HAS_BIONIC
 + #define TARGET_HAS_BIONIC (OPTION_BIONIC)
@@ -278,11 +330,286 @@ index 0000000..fffb84a
 ++mmusl
 ++Target Report RejectNegative Var(linux_libc,LIBC_MUSL) Negative(mglibc)
 ++Use musl C library
++Index: b/gcc/config/microblaze/linux.h
++===================================================================
++--- a/gcc/config/microblaze/linux.h
+++++ b/gcc/config/microblaze/linux.h
++@@ -25,7 +25,23 @@
++ #undef TLS_NEEDS_GOT
++ #define TLS_NEEDS_GOT 1
++ 
++-#define DYNAMIC_LINKER "/lib/ld.so.1"
+++#if TARGET_BIG_ENDIAN_DEFAULT == 0 /* LE */
+++#define MUSL_DYNAMIC_LINKER_E "%{EB:;:el}"
+++#else
+++#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
+++#endif
+++
+++#undef MUSL_DYNAMIC_LINKER
+++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-microblaze" MUSL_DYNAMIC_LINKER_E ".so.1"
+++#define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
+++
+++#if DEFAULT_LIBC == LIBC_MUSL
+++#define DYNAMIC_LINKER MUSL_DYNAMIC_LINKER
+++#else
+++#define DYNAMIC_LINKER GLIBC_DYNAMIC_LINKER
+++#endif
+++
+++
++ #undef  SUBTARGET_EXTRA_SPECS
++ #define SUBTARGET_EXTRA_SPECS \
++   { "dynamic_linker", DYNAMIC_LINKER }
++Index: b/gcc/config/microblaze/microblaze.h
++===================================================================
++--- a/gcc/config/microblaze/microblaze.h
+++++ b/gcc/config/microblaze/microblaze.h
++@@ -213,6 +213,12 @@
++ #define STRICT_ALIGNMENT        1
++ #define PCC_BITFIELD_TYPE_MATTERS 1
++ 
+++#undef SIZE_TYPE
+++#define SIZE_TYPE "unsigned int"
+++
+++#undef PTRDIFF_TYPE
+++#define PTRDIFF_TYPE "int"
+++
++ #define CONSTANT_ALIGNMENT(EXP, ALIGN)					\
++   ((TREE_CODE (EXP) == STRING_CST  || TREE_CODE (EXP) == CONSTRUCTOR)	\
++    && (ALIGN) < BITS_PER_WORD						\
++Index: b/gcc/config/mips/linux.h
++===================================================================
++--- a/gcc/config/mips/linux.h
+++++ b/gcc/config/mips/linux.h
++@@ -18,3 +18,11 @@
++ <http://www.gnu.org/licenses/>.  */
++ 
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
+++
+++#if TARGET_ENDIAN_DEFAULT == 0 /* LE */
+++#define MUSL_DYNAMIC_LINKER_E "%{EB:;:el}"
+++#else
+++#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
+++#endif
+++#undef MUSL_DYNAMIC_LINKER
+++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
++Index: b/gcc/config/rs6000/linux64.h
++===================================================================
++--- a/gcc/config/rs6000/linux64.h
+++++ b/gcc/config/rs6000/linux64.h
++@@ -354,17 +354,23 @@
++ #define GLIBC_DYNAMIC_LINKER64 "/lib64/ld64.so.1"
++ #define UCLIBC_DYNAMIC_LINKER32 "/lib/ld-uClibc.so.0"
++ #define UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
+++#undef MUSL_DYNAMIC_LINKER32
+++#define MUSL_DYNAMIC_LINKER32 "/lib/ld-musl-powerpc.so.1"
+++#undef MUSL_DYNAMIC_LINKER64
+++#define MUSL_DYNAMIC_LINKER64 "/lib/ld-musl-powerpc64.so.1"
++ #if DEFAULT_LIBC == LIBC_UCLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
++ #elif DEFAULT_LIBC == LIBC_GLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
+++#elif DEFAULT_LIBC == LIBC_MUSL
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
++ #else
++ #error "Unsupported DEFAULT_LIBC"
++ #endif
++ #define GNU_USER_DYNAMIC_LINKER32 \
++-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32)
+++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32, MUSL_DYNAMIC_LINKER32)
++ #define GNU_USER_DYNAMIC_LINKER64 \
++-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64)
+++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKER64)
++ 
++ #undef  DEFAULT_ASM_ENDIAN
++ #if (TARGET_DEFAULT & MASK_LITTLE_ENDIAN)
++Index: b/gcc/config/rs6000/secureplt.h
++===================================================================
++--- a/gcc/config/rs6000/secureplt.h
+++++ b/gcc/config/rs6000/secureplt.h
++@@ -18,3 +18,4 @@
++ <http://www.gnu.org/licenses/>.  */
++ 
++ #define CC1_SECURE_PLT_DEFAULT_SPEC "-msecure-plt"
+++#define LINK_SECURE_PLT_DEFAULT_SPEC "--secure-plt"
++Index: b/gcc/config/rs6000/sysv4.h
++===================================================================
++--- a/gcc/config/rs6000/sysv4.h
+++++ b/gcc/config/rs6000/sysv4.h
++@@ -550,6 +550,9 @@
++ #ifndef CC1_SECURE_PLT_DEFAULT_SPEC
++ #define CC1_SECURE_PLT_DEFAULT_SPEC ""
++ #endif
+++#ifndef LINK_SECURE_PLT_DEFAULT_SPEC
+++#define LINK_SECURE_PLT_DEFAULT_SPEC ""
+++#endif
++ 
++ /* Pass -G xxx to the compiler and set correct endian mode.  */
++ #define	CC1_SPEC "%{G*} %(cc1_cpu)" \
++@@ -600,7 +603,8 @@
++ 
++ /* Override the default target of the linker.  */
++ #define	LINK_TARGET_SPEC \
++-  ENDIAN_SELECT("", " --oformat elf32-powerpcle", "")
+++  ENDIAN_SELECT("", " --oformat elf32-powerpcle", "") \
+++  "%{!mbss-plt: %{!msecure-plt: %(link_secure_plt_default)}}"
++ 
++ /* Any specific OS flags.  */
++ #define LINK_OS_SPEC "\
++@@ -778,15 +782,18 @@
++ 
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
++ #define UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
+++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-powerpc.so.1"
++ #if DEFAULT_LIBC == LIBC_UCLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
+++#elif DEFAULT_LIBC == LIBC_MUSL
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
++ #elif !defined (DEFAULT_LIBC) || DEFAULT_LIBC == LIBC_GLIBC
++-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
+++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
++ #else
++ #error "Unsupported DEFAULT_LIBC"
++ #endif
++ #define GNU_USER_DYNAMIC_LINKER \
++-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER)
+++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
++ 
++ #define LINK_OS_LINUX_SPEC "-m elf32ppclinux %{!shared: %{!static: \
++   %{rdynamic:-export-dynamic} \
++@@ -912,6 +919,7 @@
++   { "cc1_endian_little",	CC1_ENDIAN_LITTLE_SPEC },		\
++   { "cc1_endian_default",	CC1_ENDIAN_DEFAULT_SPEC },		\
++   { "cc1_secure_plt_default",	CC1_SECURE_PLT_DEFAULT_SPEC },		\
+++  { "link_secure_plt_default",	LINK_SECURE_PLT_DEFAULT_SPEC },		\
++   { "cpp_os_ads",		CPP_OS_ADS_SPEC },			\
++   { "cpp_os_yellowknife",	CPP_OS_YELLOWKNIFE_SPEC },		\
++   { "cpp_os_mvme",		CPP_OS_MVME_SPEC },			\
++Index: b/gcc/config/sh/linux.h
++===================================================================
++--- a/gcc/config/sh/linux.h
+++++ b/gcc/config/sh/linux.h
++@@ -43,7 +43,15 @@
++ 
++ #define TARGET_ASM_FILE_END file_end_indicate_exec_stack
++ 
+++#if TARGET_BIG_ENDIAN_DEFAULT /* BE */
+++#define MUSL_DYNAMIC_LINKER_E "eb"
+++#else
+++#define MUSL_DYNAMIC_LINKER_E
+++#endif
+++
++ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
+++#undef MUSL_DYNAMIC_LINKER
+++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-sh" MUSL_DYNAMIC_LINKER_E ".so.1"
++ 
++ #undef SUBTARGET_LINK_EMUL_SUFFIX
++ #define SUBTARGET_LINK_EMUL_SUFFIX "_linux"
++Index: b/gcc/config/sh/sh.c
++===================================================================
++--- a/gcc/config/sh/sh.c
+++++ b/gcc/config/sh/sh.c
++@@ -22,8 +22,17 @@
++ /* FIXME: This is a temporary hack, so that we can include <algorithm>
++    below.  <algorithm> will try to include <cstdlib> which will reference
++    malloc & co, which are poisoned by "system.h".  The proper solution is
++-   to include <cstdlib> in "system.h" instead of <stdlib.h>.  */
+++   to include <cstdlib> in "system.h" instead of <stdlib.h>.
+++   It's also a temporary hack as the inclusion of sstream will cause inclusion
+++   of libc's pthread.h (istream->ios->ios_base->atomicity->gth->gthr-default)
+++   which in turn includes sched.h, which defines the CPU_ALLOC, which uses
+++   the poisoned calloc. the proper fix would be to shield the poison pragmas
+++   with some define that is only set when gcc developers do testing.
+++*/
++ #include <cstdlib>
+++#include <sstream>
+++#include <vector>
+++#include <algorithm>
++ 
++ #include "config.h"
++ #include "system.h"
++@@ -60,10 +69,6 @@
++ #include "tm-constrs.h"
++ #include "opts.h"
++ 
++-#include <sstream>
++-#include <vector>
++-#include <algorithm>
++-
++ int code_for_indirect_jump_scratch = CODE_FOR_indirect_jump_scratch;
++ 
++ #define MSW (TARGET_LITTLE_ENDIAN ? 1 : 0)
++Index: b/gcc/configure
++===================================================================
++--- a/gcc/configure
+++++ b/gcc/configure
++@@ -26739,6 +26739,9 @@
++ else
++   gcc_cv_libc_provides_ssp=no
++     case "$target" in
+++       *-*-musl*)
+++         # All versions of musl provide stack protector
+++	 gcc_cv_libc_provides_ssp=yes;;
++        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
++       # glibc 2.4 and later provides __stack_chk_fail and
++       # either __stack_chk_guard, or TLS access to stack guard canary.
++@@ -26772,6 +26775,7 @@
++ 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
++ 	 # simply assert that glibc does provide this, which is true for all
++ 	 # realistically usable GNU/Hurd configurations.
+++	 # All supported versions of musl provide it as well
++ 	 gcc_cv_libc_provides_ssp=yes;;
++        *-*-darwin* | *-*-freebsd*)
++ 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
++@@ -26854,6 +26858,9 @@
++       gcc_cv_target_dl_iterate_phdr=no
++     fi
++     ;;
+++  *-linux-musl*)
+++    gcc_cv_target_dl_iterate_phdr=yes
+++    ;;
++ esac
++ 
++ if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
++Index: b/gcc/configure.ac
++===================================================================
++--- a/gcc/configure.ac
+++++ b/gcc/configure.ac
++@@ -4722,6 +4722,9 @@
++       gcc_cv_libc_provides_ssp,
++       [gcc_cv_libc_provides_ssp=no
++     case "$target" in
+++       *-*-musl*)
+++         # All versions of musl provide stack protector
+++	 gcc_cv_libc_provides_ssp=yes;;
++        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
++       [# glibc 2.4 and later provides __stack_chk_fail and
++       # either __stack_chk_guard, or TLS access to stack guard canary.
++@@ -4755,6 +4758,7 @@
++ 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
++ 	 # simply assert that glibc does provide this, which is true for all
++ 	 # realistically usable GNU/Hurd configurations.
+++	 # All supported versions of musl provide it as well
++ 	 gcc_cv_libc_provides_ssp=yes;;
++        *-*-darwin* | *-*-freebsd*)
++ 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
++@@ -4820,6 +4824,9 @@
++       gcc_cv_target_dl_iterate_phdr=no
++     fi
++     ;;
+++  *-linux-musl*)
+++    gcc_cv_target_dl_iterate_phdr=yes
+++    ;;
++ esac
++ GCC_TARGET_TEMPLATE([TARGET_DL_ITERATE_PHDR])
++ if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
 +Index: b/gcc/ginclude/stddef.h
 +===================================================================
 +--- a/gcc/ginclude/stddef.h
 ++++ b/gcc/ginclude/stddef.h
-+@@ -184,6 +184,7 @@
++@@ -181,6 +181,7 @@
 + #ifndef _GCC_SIZE_T
 + #ifndef _SIZET_
 + #ifndef __size_t
@@ -290,7 +617,7 @@ index 0000000..fffb84a
 + #define __size_t__	/* BeOS */
 + #define __SIZE_T__	/* Cray Unicos/Mk */
 + #define _SIZE_T
-+@@ -200,6 +201,7 @@
++@@ -197,6 +198,7 @@
 + #define ___int_size_t_h
 + #define _GCC_SIZE_T
 + #define _SIZET_
@@ -298,7 +625,7 @@ index 0000000..fffb84a
 + #if (defined (__FreeBSD__) && (__FreeBSD__ >= 5)) \
 +   || defined(__FreeBSD_kernel__)
 + /* __size_t is a typedef on FreeBSD 5, must not trash it. */
-+@@ -215,6 +217,7 @@
++@@ -214,6 +216,7 @@
 + typedef long ssize_t;
 + #endif /* __BEOS__ */
 + #endif /* !(defined (__GNUG__) && defined (size_t)) */
@@ -306,30 +633,22 @@ index 0000000..fffb84a
 + #endif /* __size_t */
 + #endif /* _SIZET_ */
 + #endif /* _GCC_SIZE_T */
-+Index: b/libgomp/config/posix/time.c
-+===================================================================
-+--- a/libgomp/config/posix/time.c
-++++ b/libgomp/config/posix/time.c
-+@@ -28,6 +28,8 @@
-+    The following implementation uses the most simple POSIX routines.
-+    If present, POSIX 4 clocks should be used instead.  */
-+ 
-++#define _POSIX_C_SOURCE 199309L /* for clocks */
-++
-+ #include "libgomp.h"
-+ #include <unistd.h>
-+ #if TIME_WITH_SYS_TIME
 +Index: b/libgcc/unwind-dw2-fde-dip.c
 +===================================================================
 +--- a/libgcc/unwind-dw2-fde-dip.c
 ++++ b/libgcc/unwind-dw2-fde-dip.c
-+@@ -47,28 +47,13 @@
++@@ -46,33 +46,13 @@
 + #include "unwind-compat.h"
 + #include "gthr.h"
 + 
 +-#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
 +-    && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ > 2) \
 +-	|| (__GLIBC__ == 2 && __GLIBC_MINOR__ == 2 && defined(DT_CONFIG)))
++-# define USE_PT_GNU_EH_FRAME
++-#endif
++-
++-#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
++-    && defined(__BIONIC__)
 +-# define USE_PT_GNU_EH_FRAME
 +-#endif
 +-
@@ -351,116 +670,42 @@ index 0000000..fffb84a
 ++#if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) && defined(TARGET_DL_ITERATE_PHDR)
 + # define USE_PT_GNU_EH_FRAME
 ++# ifdef __OpenBSD__
-++#  define ElfW(type) Elf_##typ
+++#  define ElfW(type) Elf_##type
 ++# elif defined(__FreeBSD__) && __FreeBSD__ >= 7
 ++#  define ElfW __ElfN
 ++# endif
 + #endif
 + 
 + #if defined(USE_PT_GNU_EH_FRAME)
-+Index: b/gcc/configure
++Index: b/libgomp/config/posix/time.c
 +===================================================================
-+--- a/gcc/configure
-++++ b/gcc/configure
-+@@ -26787,6 +26787,9 @@
-+ else
-+   gcc_cv_libc_provides_ssp=no
-+     case "$target" in
-++       *-*-musl*)
-++         # All versions of musl provide stack protector
-++	 gcc_cv_libc_provides_ssp=yes;;
-+        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
-+       # glibc 2.4 and later provides __stack_chk_fail and
-+       # either __stack_chk_guard, or TLS access to stack guard canary.
-+@@ -26820,6 +26823,7 @@
-+ 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-+ 	 # simply assert that glibc does provide this, which is true for all
-+ 	 # realistically usable GNU/Hurd configurations.
-++	 # All supported versions of musl provide it as well
-+ 	 gcc_cv_libc_provides_ssp=yes;;
-+        *-*-darwin* | *-*-freebsd*)
-+ 	 ac_fn_c_check_func "$LINENO" "__stack_chk_fail" "ac_cv_func___stack_chk_fail"
-+@@ -26902,6 +26906,9 @@
-+       gcc_cv_target_dl_iterate_phdr=no
-+     fi
-+     ;;
-++  *-linux-musl*)
-++    gcc_cv_target_dl_iterate_phdr=yes
-++    ;;
-+ esac
++--- a/libgomp/config/posix/time.c
+++++ b/libgomp/config/posix/time.c
++@@ -28,6 +28,8 @@
++    The following implementation uses the most simple POSIX routines.
++    If present, POSIX 4 clocks should be used instead.  */
 + 
-+ if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
-+Index: b/gcc/configure.ac
-+===================================================================
-+--- a/gcc/configure.ac
-++++ b/gcc/configure.ac
-+@@ -4664,6 +4664,9 @@
-+       gcc_cv_libc_provides_ssp,
-+       [gcc_cv_libc_provides_ssp=no
-+     case "$target" in
-++       *-*-musl*)
-++         # All versions of musl provide stack protector
-++	 gcc_cv_libc_provides_ssp=yes;;
-+        *-*-linux* | *-*-kfreebsd*-gnu | *-*-knetbsd*-gnu)
-+       [# glibc 2.4 and later provides __stack_chk_fail and
-+       # either __stack_chk_guard, or TLS access to stack guard canary.
-+@@ -4697,6 +4700,7 @@
-+ 	 # <http://gcc.gnu.org/ml/gcc/2008-10/msg00130.html>) and for now
-+ 	 # simply assert that glibc does provide this, which is true for all
-+ 	 # realistically usable GNU/Hurd configurations.
-++	 # All supported versions of musl provide it as well
-+ 	 gcc_cv_libc_provides_ssp=yes;;
-+        *-*-darwin* | *-*-freebsd*)
-+ 	 AC_CHECK_FUNC(__stack_chk_fail,[gcc_cv_libc_provides_ssp=yes],
-+@@ -4762,6 +4766,9 @@
-+       gcc_cv_target_dl_iterate_phdr=no
-+     fi
-+     ;;
-++  *-linux-musl*)
-++    gcc_cv_target_dl_iterate_phdr=yes
-++    ;;
-+ esac
-+ GCC_TARGET_TEMPLATE([TARGET_DL_ITERATE_PHDR])
-+ if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
-+Index: b/fixincludes/mkfixinc.sh
-+===================================================================
-+--- a/fixincludes/mkfixinc.sh
-++++ b/fixincludes/mkfixinc.sh
-+@@ -20,7 +20,8 @@
-+     powerpc-*-eabi*    | \
-+     powerpc-*-rtems*   | \
-+     powerpcle-*-eabisim* | \
-+-    powerpcle-*-eabi* )
-++    powerpcle-*-eabi* | \
-++    *-musl* )
-+ 	#  IF there is no include fixing,
-+ 	#  THEN create a no-op fixer and exit
-+ 	(echo "#! /bin/sh" ; echo "exit 0" ) > ${target}
-+Index: b/gcc/config/i386/linux.h
-+===================================================================
-+--- a/gcc/config/i386/linux.h
-++++ b/gcc/config/i386/linux.h
-+@@ -22,3 +22,5 @@
-+ 
-+ #define GNU_USER_LINK_EMULATION "elf_i386"
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-++#undef MUSL_DYNAMIC_LINKER
-++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-i386.so.1"
-+Index: b/gcc/config/i386/linux64.h
-+===================================================================
-+--- a/gcc/config/i386/linux64.h
-++++ b/gcc/config/i386/linux64.h
-+@@ -31,3 +31,10 @@
-+ #define GLIBC_DYNAMIC_LINKER32 "/lib/ld-linux.so.2"
-+ #define GLIBC_DYNAMIC_LINKER64 "/lib64/ld-linux-x86-64.so.2"
-+ #define GLIBC_DYNAMIC_LINKERX32 "/libx32/ld-linux-x32.so.2"
+++#define _POSIX_C_SOURCE 199309L /* for clocks */
 ++
-++#undef MUSL_DYNAMIC_LINKER32
-++#undef MUSL_DYNAMIC_LINKER64
-++#undef MUSL_DYNAMIC_LINKERX32
-++#define MUSL_DYNAMIC_LINKER32 "/lib/ld-musl-i386.so.1"
-++#define MUSL_DYNAMIC_LINKER64 "/lib/ld-musl-x86_64.so.1"
-++#define MUSL_DYNAMIC_LINKERX32 "/lib/ld-musl-x32.so.1"
++ #include "libgomp.h"
++ #include <unistd.h>
++ #if TIME_WITH_SYS_TIME
++Index: b/libitm/config/arm/hwcap.cc
++===================================================================
++--- a/libitm/config/arm/hwcap.cc
+++++ b/libitm/config/arm/hwcap.cc
++@@ -40,7 +40,11 @@
++ 
++ #ifdef __linux__
++ #include <unistd.h>
+++#ifdef __GLIBC__
++ #include <sys/fcntl.h>
+++#else
+++#include <fcntl.h>
+++#endif
++ #include <elf.h>
++ 
++ static void __attribute__((constructor))
 +Index: b/libitm/config/linux/x86/tls.h
 +===================================================================
 +--- a/libitm/config/linux/x86/tls.h
@@ -494,167 +739,39 @@ index 0000000..fffb84a
 ++#endif
 + 
 + #endif // LIBITM_X86_TLS_H
-+Index: b/gcc/config/arm/linux-eabi.h
++Index: b/libstdc++-v3/configure.host
 +===================================================================
-+--- a/gcc/config/arm/linux-eabi.h
-++++ b/gcc/config/arm/linux-eabi.h
-+@@ -64,6 +64,23 @@
-+ #undef  GLIBC_DYNAMIC_LINKER
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.3"
-+ 
-++/* For ARM musl currently supports four dynamic linkers:
-++   - ld-musl-arm.so.1 - for the EABI-derived soft-float ABI
-++   - ld-musl-armhf.so.1 - for the EABI-derived hard-float ABI
-++   - ld-musl-armeb.so.1 - for the EABI-derived soft-float ABI, EB
-++   - ld-musl-armebhf.so.1 - for the EABI-derived hard-float ABI, EB
-++   musl does not support the legacy OABI mode.
-++   All the dynamic linkers live in /lib.
-++   We default to soft-float, EL. */
-++#undef  MUSL_DYNAMIC_LINKER
-++#if TARGET_BIG_ENDIAN_DEFAULT
-++#define MUSL_DYNAMIC_LINKER_E "%{mlittle-endian:;:eb}"
-++#else
-++#define MUSL_DYNAMIC_LINKER_E "%{mbig-endian:eb}"
-++#endif
-++#define MUSL_DYNAMIC_LINKER \
-++  "/lib/ld-musl-arm" MUSL_DYNAMIC_LINKER_E "%{mfloat-abi=hard:hf}.so.1"
++--- a/libstdc++-v3/configure.host
+++++ b/libstdc++-v3/configure.host
++@@ -264,6 +264,13 @@
++     os_include_dir="os/bsd/freebsd"
++     ;;
++   gnu* | linux* | kfreebsd*-gnu | knetbsd*-gnu)
+++    # check for musl by target
+++    case "${host_os}" in
+++      *-musl*)
+++        os_include_dir="os/generic"
+++        ;;
+++      *)
 ++
-+ /* At this point, bpabi.h will have clobbered LINK_SPEC.  We want to
-+    use the GNU/Linux version, not the generic BPABI version.  */
-+ #undef  LINK_SPEC
-+Index: b/libitm/config/arm/hwcap.cc
-+===================================================================
-+--- a/libitm/config/arm/hwcap.cc
-++++ b/libitm/config/arm/hwcap.cc
-+@@ -40,7 +40,11 @@
-+ 
-+ #ifdef __linux__
-+ #include <unistd.h>
-++#ifdef __GLIBC__
-+ #include <sys/fcntl.h>
-++#else
-++#include <fcntl.h>
-++#endif
-+ #include <elf.h>
-+ 
-+ static void __attribute__((constructor))
-+Index: b/gcc/config/mips/linux.h
-+===================================================================
-+--- a/gcc/config/mips/linux.h
-++++ b/gcc/config/mips/linux.h
-+@@ -19,3 +19,11 @@
-+ <http://www.gnu.org/licenses/>.  */
-+ 
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
++     if [ "$uclibc" = "yes" ]; then
++       os_include_dir="os/uclibc"
++     elif [ "$bionic" = "yes" ]; then
++@@ -272,6 +279,9 @@
++       os_include_dir="os/gnu-linux"
++     fi
++     ;;
 ++
-++#if TARGET_ENDIAN_DEFAULT == 0 /* LE */
-++#define MUSL_DYNAMIC_LINKER_E "%{EB:;:el}"
-++#else
-++#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
-++#endif
-++#undef MUSL_DYNAMIC_LINKER
-++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
-+Index: b/gcc/config/rs6000/linux64.h
-+===================================================================
-+--- a/gcc/config/rs6000/linux64.h
-++++ b/gcc/config/rs6000/linux64.h
-+@@ -362,17 +362,23 @@
-+ #define GLIBC_DYNAMIC_LINKER64 "/lib64/ld64.so.1"
-+ #define UCLIBC_DYNAMIC_LINKER32 "/lib/ld-uClibc.so.0"
-+ #define UCLIBC_DYNAMIC_LINKER64 "/lib/ld64-uClibc.so.0"
-++#undef MUSL_DYNAMIC_LINKER32
-++#undef MUSL_DYNAMIC_LINKER64
-++#define MUSL_DYNAMIC_LINKER32 "/lib/ld-musl-powerpc.so.1"
-++#define MUSL_DYNAMIC_LINKER64 "/lib/ld-musl-powerpc64.so.1"
-+ #if DEFAULT_LIBC == LIBC_UCLIBC
-+-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
-+ #elif DEFAULT_LIBC == LIBC_GLIBC
-+-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
-++#elif DEFAULT_LIBC == LIBC_MUSL
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
-+ #else
-+ #error "Unsupported DEFAULT_LIBC"
-+ #endif
-+ #define GNU_USER_DYNAMIC_LINKER32 \
-+-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32)
-++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER32, UCLIBC_DYNAMIC_LINKER32, MUSL_DYNAMIC_LINKER32)
-+ #define GNU_USER_DYNAMIC_LINKER64 \
-+-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64)
-++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER64, UCLIBC_DYNAMIC_LINKER64, MUSL_DYNAMIC_LINKER64)
-+ 
-+ 
-+ #define LINK_OS_LINUX_SPEC32 "-m elf32ppclinux %{!shared: %{!static: \
-+Index: b/gcc/config/rs6000/secureplt.h
-+===================================================================
-+--- a/gcc/config/rs6000/secureplt.h
-++++ b/gcc/config/rs6000/secureplt.h
-+@@ -18,3 +18,4 @@
-+ <http://www.gnu.org/licenses/>.  */
-+ 
-+ #define CC1_SECURE_PLT_DEFAULT_SPEC "-msecure-plt"
-++#define LINK_SECURE_PLT_DEFAULT_SPEC "--secure-plt"
-+Index: b/gcc/config/rs6000/sysv4.h
-+===================================================================
-+--- a/gcc/config/rs6000/sysv4.h
-++++ b/gcc/config/rs6000/sysv4.h
-+@@ -566,6 +566,9 @@
-+ #ifndef CC1_SECURE_PLT_DEFAULT_SPEC
-+ #define CC1_SECURE_PLT_DEFAULT_SPEC ""
-+ #endif
-++#ifndef LINK_SECURE_PLT_DEFAULT_SPEC
-++#define LINK_SECURE_PLT_DEFAULT_SPEC ""
-++#endif
-+ 
-+ /* Pass -G xxx to the compiler and set correct endian mode.  */
-+ #define	CC1_SPEC "%{G*} %(cc1_cpu) \
-+@@ -626,7 +629,8 @@
-+ %{mlittle: --oformat elf32-powerpcle } %{mlittle-endian: --oformat elf32-powerpcle } \
-+ %{!mlittle: %{!mlittle-endian: %{!mbig: %{!mbig-endian: \
-+     %{mcall-i960-old: --oformat elf32-powerpcle} \
-+-  }}}}"
-++  }}}} \
-++%{!mbss-plt: %{!msecure-plt: %(link_secure_plt_default)}}"
-+ 
-+ /* Any specific OS flags.  */
-+ #define LINK_OS_SPEC "\
-+@@ -804,15 +808,19 @@
-+ 
-+ #define GLIBC_DYNAMIC_LINKER "/lib/ld.so.1"
-+ #define UCLIBC_DYNAMIC_LINKER "/lib/ld-uClibc.so.0"
-++#undef MUSL_DYNAMIC_LINKER
-++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-powerpc.so.1"
-+ #if DEFAULT_LIBC == LIBC_UCLIBC
-+-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{mglibc:" G ";:" U "}"
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{mmusl:" M ";:" U "}}"
-++#elif DEFAULT_LIBC == LIBC_MUSL
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{mglibc:" G ";:%{muclibc:" U ";:" M "}}"
-+ #elif !defined (DEFAULT_LIBC) || DEFAULT_LIBC == LIBC_GLIBC
-+-#define CHOOSE_DYNAMIC_LINKER(G, U) "%{muclibc:" U ";:" G "}"
-++#define CHOOSE_DYNAMIC_LINKER(G, U, M) "%{muclibc:" U ";:%{mmusl:" M ";:" G "}}"
-+ #else
-+ #error "Unsupported DEFAULT_LIBC"
-+ #endif
-+ #define GNU_USER_DYNAMIC_LINKER \
-+-  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER)
-++  CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKER, UCLIBC_DYNAMIC_LINKER, MUSL_DYNAMIC_LINKER)
-+ 
-+ #define LINK_OS_LINUX_SPEC "-m elf32ppclinux %{!shared: %{!static: \
-+   %{rdynamic:-export-dynamic} \
-+@@ -938,6 +946,7 @@
-+   { "cc1_endian_little",	CC1_ENDIAN_LITTLE_SPEC },		\
-+   { "cc1_endian_default",	CC1_ENDIAN_DEFAULT_SPEC },		\
-+   { "cc1_secure_plt_default",	CC1_SECURE_PLT_DEFAULT_SPEC },		\
-++  { "link_secure_plt_default",	LINK_SECURE_PLT_DEFAULT_SPEC },		\
-+   { "cpp_os_ads",		CPP_OS_ADS_SPEC },			\
-+   { "cpp_os_yellowknife",	CPP_OS_YELLOWKNIFE_SPEC },		\
-+   { "cpp_os_mvme",		CPP_OS_MVME_SPEC },			\
+++    esac
+++    ;;
++   hpux*)
++     os_include_dir="os/hpux"
++     ;;
 +Index: b/gcc/config/mips/linux64.h
 +===================================================================
 +--- a/gcc/config/mips/linux64.h
 ++++ b/gcc/config/mips/linux64.h
-+@@ -30,4 +30,4 @@
++@@ -29,4 +29,4 @@
 + #define BIONIC_DYNAMIC_LINKERN32 "/system/bin/linker32"
 + #define GNU_USER_DYNAMIC_LINKERN32 \
 +   CHOOSE_DYNAMIC_LINKER (GLIBC_DYNAMIC_LINKERN32, UCLIBC_DYNAMIC_LINKERN32, \
