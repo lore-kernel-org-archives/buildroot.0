@@ -1,52 +1,44 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 23 Apr 2014 10:43:10 +0200
-Subject: [Buildroot] [PATCH v4 1/4] Makefile: fix coding style
-In-Reply-To: <CAHkwnC_sbZkgCxB5SEs82GEyCMoJMoCS159epRLGyuheAEhVtA@mail.gmail.com>
-References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
- <1396864610-8426-2-git-send-email-fabio.porcedda@gmail.com>
- <20140416194215.7d3151fa@skate> <535692CF.1040607@mind.be>
- <CAHkwnC_sbZkgCxB5SEs82GEyCMoJMoCS159epRLGyuheAEhVtA@mail.gmail.com>
-Message-ID: <CAHkwnC_ULEgRaBXSGma58i4bBqcngG=RzRk37j8iCp5D_bNfTA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Apr 2014 10:45:33 +0200
+Subject: [Buildroot] [PATCH v5 1/2] Makefile: fix coding style regarding
+	the '=' sign
+In-Reply-To: <1398242364-4644-2-git-send-email-fabio.porcedda@gmail.com>
+References: <1398242364-4644-1-git-send-email-fabio.porcedda@gmail.com>
+ <1398242364-4644-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <53577DAD.5090405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 22, 2014 at 10:28 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> On Tue, Apr 22, 2014 at 6:03 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 16/04/14 19:42, Thomas Petazzoni wrote:
->>> Dear Fabio Porcedda,
->>>
->>> On Mon,  7 Apr 2014 11:56:47 +0200, Fabio Porcedda wrote:
->>>> As stated in the buildroot user manual add just a single space before
->>>> and after a '=' sign.
->>>>
->>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->>>> ---
->>>>  Makefile | 184 +++++++++++++++++++++++++++++++--------------------------------
->>>>  1 file changed, 92 insertions(+), 92 deletions(-)
->>>
->>> To be honest, while I definitely value the change to harmonize the
->>> coding style, such a large patch touching almost every line of the main
->>> Makefile is a recipe for conflicts with many other patches. So I would
->>> personally prefer to not apply this patch, and do the coding style
->>> fixes progressively, as we make other changes to the main Makefile.
->>
->>  I disagree. The entire patch does a single change to a single file
->> almost mechanically. It's true that there is a risk of conflicts, but
->> splitting up the patch doesn't reduce that risk. It's easy enough to try
->> to apply and ask for a refresh if there is a conflict.
->>
->>  Of course, currently it doesn't apply cleanly anymore because you
->> delayed applying it, so I also can't re-Ack it. So Fabio, can you refresh?
->
-> Sure, i will do that tomorrow.
+On 23/04/14 10:39, Fabio Porcedda wrote:
+> As stated in the buildroot user manual add just a single space before
+> and after a '=' sign.
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Updated patch sent
-http://patchwork.ozlabs.org/patch/341726/
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Regards
+Confirmed that it's whitespace fixes only with
+git log -p -1 --ignore-all-space
+
+
+ Regards,
+ Arnout
+
+> ---
+>  Makefile | 198 +++++++++++++++++++++++++++++++--------------------------------
+>  1 file changed, 99 insertions(+), 99 deletions(-)
+[snip]
+
+
 -- 
-Fabio Porcedda
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
