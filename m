@@ -1,65 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Apr 2014 10:59:06 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 23 Apr 2014 11:02:02 +0200
 Subject: [Buildroot] Analysis of build results for 2014-04-19
-In-Reply-To: <53577F04.1040409@mind.be>
-References: <20140420063009.8B76B100DB9@stock.ovh.net>
- <20140420104812.5bc926a9@skate> <53569BBE.1020707@mind.be>
- <20140422221958.6240077e@skate> <5356E9C2.9050900@mind.be>
- <20140423092209.4d1454ec@skate> <53577F04.1040409@mind.be>
-Message-ID: <20140423105906.45732b9f@skate>
+In-Reply-To: <435816036.13835416.1398243362765.JavaMail.root@openwide.fr>
+References: <435816036.13835416.1398243362765.JavaMail.root@openwide.fr>
+Message-ID: <5357818A.4090104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
-
-On Wed, 23 Apr 2014 10:51:16 +0200, Arnout Vandecappelle wrote:
-
-> > Also, by having a much smaller percentage, I'm wondering if we have a
-> > lot less chances to trigger cases that require a fairly significant
-> > combination of options to be produced.
+On 23/04/14 10:56, Jeremy Rosen wrote:
 > 
->  Do we actually have examples of such a situation, that a combination of
-> packages leads to an error? It's more likely to lead to runtime errors I
-> expect.
-
-I believe so. For example, the cairo build problem due to GLchar would
-only occur if both the sunxi-mali OpenGL implementation was selected
-*and* cairo was enabled.
-
-We also have lots of optional dependencies all over the place in many
-packages. Those optional dependencies are only triggered is the
-dependency is enabled.
-
-
-> > Yes, that's quite large, but I've anyway increased it to 6 hours. The
-> > goal of the time out was *only* to make sure builds entering some quite
-> > of infinite loop terminate at some point (we used to have a PowerPC
-> > toolchain whose 'ld' was buggy, and was entering an infinite loop when
-> > building a certain package).
+>>
+>>>
+>>> Also, by having a much smaller percentage, I'm wondering if we have
+>>> a
+>>> lot less chances to trigger cases that require a fairly significant
+>>> combination of options to be produced.
+>>
+>>  Do we actually have examples of such a situation, that a combination
+>>  of
+>> packages leads to an error? It's more likely to lead to runtime
+>> errors I
+>> expect.
+>>
 > 
->  True, if there is currently no situation that the timeout is "real",
-> then it doesn't hurt to increase the timeout. And if a real timeout does
-> start occuring, we can decrease the timeout again until it is solved.
+> 
+> on a side note, if the autobuilder has selected a high number of packages
+> so far, there are probably many "low number of packages" type of bug
+> that it could find. it might be interesting to temporarly set it to a
+> low number of packages...
 
-Indeed. Right now, all the timeouts we see seem to be spurious
-timeouts, only caused by the fact that the build is really taking
-longer than the timeout, not because there was some infinite loop or
-other issue that would have caused the build to actually never
-terminate.
+ No, the number of packages is randomly selected between 1% and 30/35%.
+So about 1 out of 6 builds has less than 5%, i.e. 30 packages. With such
+a small percentage, it's extremely likely that the selected packages are
+completely unrelated.
 
-A better thing would be to monitor build-time.log while the build is
-running, and only abort if the build duration of the *current* package
-is higher than a certain limit. This way, instead of having a per-build
-timeout, we would have a per-package timeout (which I believe, would be
-related to the webkit build time).
+ However, this makes me realize that with the lower percentages, most
+likely all the sub-options of a package will be set to no. With 30%,
+there's a decent chance that at least some sub-options are selected, and
+at least there is some chance that all of them are selected (though for a
+package with 4 suboptions the chance that all are selected is already
+less than 1%). Yet another reason not to reduce the percentage any further.
 
-Best regards,
+ It would probably be a lot better if the configurations would not use
+randconfig, but rather a more customised was of selecting a random
+configuration. But as usual, that's a lot of work...
 
-Thomas
+ Regards,
+ Arnout
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
