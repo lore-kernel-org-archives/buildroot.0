@@ -1,45 +1,63 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 24 Apr 2014 00:48:21 +0200
-Subject: [Buildroot] [PATCH 02/14] pkg-cmake.mk: remove unneeded quotes in
-	the generated toolchainfile.cmake
+Date: Thu, 24 Apr 2014 00:48:23 +0200
+Subject: [Buildroot] [PATCH 04/14] pkg-cmake.mk: do not hardcode absolute
+	path in toolchainfile.cmake
 In-Reply-To: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
 References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1398293313-17580-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1398293313-17580-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since Buildroot does not support space in paths (at least neither in the
-Buildroot installation location, nor in the output directory).
+The patch allows sharing or moving the toolchains.
+
+This is a step toward making the toolchain/sdk relocatable.
+
+Closes #6818
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Uwe Strempel <u.strempel@googlemail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 changes v1 -> v2:
-- new patch
+- rebase
+- use CMAKE_CURRENT_LIST_DIR instead of get_filename_component()
+- rewrite subst call in a more natural way (Arnout)
 ---
- package/pkg-cmake.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-cmake.mk | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index edda14a..963a423 100644
+index af8ecf5..b2ac2df 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -167,10 +167,10 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
- 	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
- 	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
--	set(CMAKE_PROGRAM_PATH \"$(HOST_DIR)/usr/bin\")\n\
--	set(CMAKE_FIND_ROOT_PATH \"$(STAGING_DIR)\")\n\
-+	set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
-+	set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
- 	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
--	set(ENV{PKG_CONFIG_SYSROOT_DIR} \"$(STAGING_DIR)\")\n\
-+	set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))\n\
- 	" > $@
+@@ -159,18 +159,19 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+ ################################################################################
+ 
+ define TOOLCHAINFILE_CMAKE
++string(REPLACE /usr/share/buildroot "" _HOST_DIR $${CMAKE_CURRENT_LIST_DIR})
+ set(CMAKE_SYSTEM_NAME Linux)
+-set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))
+-set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))
++set(CMAKE_C_COMPILER $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))gcc)
++set(CMAKE_CXX_COMPILER $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))g++)
+ set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)" CACHE STRING "Buildroot CFLAGS" FORCE)
+ set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+ set(CMAKE_INSTALL_SO_NO_EXE 0)
+-set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)
+-set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))
++set(CMAKE_PROGRAM_PATH $${_HOST_DIR}/usr/bin)
++set(CMAKE_FIND_ROOT_PATH $${_HOST_DIR}/$(STAGING_SUBDIR))
+ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+-set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))
++set(ENV{PKG_CONFIG_SYSROOT_DIR} $${_HOST_DIR}/$(STAGING_SUBDIR))
+ endef
+ 
+ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
 -- 
 1.9.2
