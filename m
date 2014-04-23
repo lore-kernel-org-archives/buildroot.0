@@ -1,42 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Apr 2014 19:42:05 +0200
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-In-Reply-To: <20131111215435.GC3510@free.fr>
-References: <20131111215435.GC3510@free.fr>
-Message-ID: <20140423174205.GA3183@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 Apr 2014 20:45:50 +0300
+Subject: [Buildroot] [PATCH v2] wget: fix host-gettext build dependency race
+Message-ID: <a860fe22c7311c8139b725508a98813bb23541d9.1398275150.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2013-11-11 22:54 +0100, Yann E. MORIN spake thusly:
-[--SNIP--]
-> We would like to suggest that the web GUI and the pwclient CLI both
-> display such tags besides each patch, a bit like (hypotetical output of
-> pwclient):
-> 
->     ID     Tags State       Subject
->     123456 ART  New         Wonderfull patch to apply quickly
-> 
-> Where each of 'A', 'R', and 'T' would mean Acked-by, Reviewed-by and
-> Tested-by, respectively. An uppercase letter would mean two of more of
-> such tag, while a lower-case letter would mean a single such tag.
+Currently, the gettextization of wget works by chance:
+  - host-gettext is added as a dependency to wget;
+  - gettextize is run as a post-patch hook.
 
-Any progress on this?
+But the dependencies are only guaranteed to be built and installed
+for the configure step, not the patch step. Because post-patch hooks
+are part of the patch step, we have no guarantee that the dependency
+to host-gettext is done by the time we gettextize wget.
 
-I've tried doing so myself, but my two attempts lamentably failed... :-(
-Any one with Python- and SQL-fuu willing to have a look?
+This happens to work by chance, since wget sorts alphabetically after
+gettext, so we indeed have host-gettext built and installed by the
+time we need to gettextize wget.
 
-Regards,
-Yann E. MORIN.
+This is prone to fail in the parallel build case, since we can no
+longer rely on alphabetical order in that case.
 
+Instead, run gettextize in PRE_CONFIGURE_HOOK to avoid the race.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[baruch: make the fix independent from the gettextize infra]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2:
+	Use PRE_CONFIGURE_HOOK to make the fix independent from the rejected
+	gettextize infrastructure; update the commit log accordingly
+---
+ package/wget/wget.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index f3a5274964dd..c014d173bca0 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -19,7 +19,7 @@ WGET_DEPENDENCIES += host-gettext
+ define WGET_GETTEXTIZE
+ 	cd $(@D) ; $(HOST_DIR)/usr/bin/gettextize -f
+ endef
+-WGET_POST_PATCH_HOOKS += WGET_GETTEXTIZE
++WGET_PRE_CONFIGURE_HOOK += WGET_GETTEXTIZE
+ 
+ # Prefer full-blown wget over busybox
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.2
