@@ -1,37 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 23 Apr 2014 10:55:03 -0300
-Subject: [Buildroot] [PATCH] acpid: unavailable for external uClibc
-	toolchains
-Message-ID: <1398261303-23311-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+Date: Wed, 23 Apr 2014 16:06:18 +0200
+Subject: [Buildroot] [PATCH v3] LT.old: Make
+ __errno_location/__h_errno_location thread safe
+In-Reply-To: <1397642272-13260-1-git-send-email-vgupta@synopsys.com>
+References: <1397642272-13260-1-git-send-email-vgupta@synopsys.com>
+Message-ID: <CAC1BbcQS4EKiT8mHXUH36Zbr7Nvb95WEjcHfdgWQ+J1dWbTv7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-External non-patched uClibc toolchains lack the MSG_CMSG_CLOEXEC
-definition, so does internal uClibc <0.9.33, so exclude it for those
-scenarios. Fixes:
-http://autobuild.buildroot.net/results/6d4/6d471942788fa05f324649ab15e6ca382e46df9c/
+On 16 April 2014 11:57, Vineet Gupta <Vineet.Gupta1@synopsys.com> wrote:
+> WHY: errno in uClibc is not thread safe
+>
+> HOW: __errno_location and it's sibling __h_errno_location need to be called
+>      via PLT - even from within libc. That way when linked with pthread,
+>      intra-uClibc callers will also use the thread safe version.
+>
+>      This is achieved by removing the GI alias for these functions,
+>      ensuring that they get called normally (via PLT)
+>
+> Verified with ARC LT.old and ARM cubieboard2 buildroot (LT.old)
+> NPTL is unaffected by this bug.
+>
+> ------------ History behind this patch ---------------------
+>
+> This is a long standing bug (https://bugs.busybox.net/show_bug.cgi?id=2089)
+>
+> Others have tried to fix it in past (alteast Peter Korsgaard's patch in 2010),
+> but somehow failed to be merged (or were backed out afterwards).
+> http://lists.uclibc.org/pipermail/uclibc/2010-July/044176.html
+>
+> One of the causes could be side effect of atleast one more bug related to
+> pthreads and static link which has now been fixed.
+> http://lists.uclibc.org/pipermail/uclibc/2013-October/047958.html
+>
+> I have solved this w/o looking at other pacthes but would like to give
+> credit to Peter and others for confirming that it makes sense.
+>
+> Cc: Christian Ruppert <christian.ruppert@abilis.com>
+> CC: Francois Bedard <Francois.Bedard@synopsys.com>
+> Cc: Joern Rennecke  <joern.rennecke@embecosm.com>
+> Cc: Jeremy Bennett <jeremy.bennett@embecosm.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Khem Raj <raj.khem@gmail.com>
+> Cc: buildroot at busybox.net
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+> ---
+> Changes since v2
+>    No code changes, added couple more lines to changelog
+>
+> Changes since v1
+> (http://lists.uclibc.org/pipermail/uclibc/2014-March/048273.html
+>
+> - Rebased to trunk
+> - Added handling for h_errno_location
+>
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/acpid/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/acpid/Config.in b/package/acpid/Config.in
-index 5aec7f1..205a6ae 100644
---- a/package/acpid/Config.in
-+++ b/package/acpid/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_ACPID
- 	bool "acpid"
- 	depends on BR2_x86_64 || BR2_i386
-+	# Usually lacks MSG_CMSG_CLOEXEC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
-+		!BR2_UCLIBC_VERSION_0_9_32
- 	help
- 	  Advanced Configuration and Power Interface event daemon.
- 
--- 
-1.8.3.2
+Applied, thanks!
