@@ -1,69 +1,63 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 23 Apr 2014 12:27:54 +0100
-Subject: [Buildroot] ld-linux.so.3 problem with external EABIhf toolchain
-In-Reply-To: <53579EAF.3020701@lucaceresoli.net>
-References: <53579EAF.3020701@lucaceresoli.net>
-Message-ID: <CAFbHwiQFveiQfjbGDW0+78akYmid7+PpNr3sJGe68PF0-7ASXg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 23 Apr 2014 15:00:03 +0300
+Subject: [Buildroot] [PATCH] libgc: fix build under uClibc
+Message-ID: <0f149850960676b78e6e35678ab580c1e1aba73c.1398254403.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 23, 2014 at 12:06 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> Hi all, Thomas,
->
-> I'm in the middle of updating a project from Buildroot 2013.08 to
-> 2013.11, but I hit a problem with the external toolchain installation.
->
-> The project uses an external ARMv7 EABIhf toolchain (no multilib)
-> previously built with crosstool-NG, installed on the build host.
->
-> Between 2013.08 and 2013.11 lies (*) this commit:
->
->>  commit 11ec38b6950cf3337b52fb97f27c2fd7c776c5c2
->>  Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>  Date:   Tue Oct 8 20:17:15 2013 +0200
->>
->>      toolchain-external: fix Linaro ARM toolchain support
->>
-> ...
->>
->>  -LIB_EXTERNAL_LIBS+=ld*.so.* libc.so.* libcrypt.so.* libdl.so.*
->> libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
->>  +LIB_EXTERNAL_LIBS+=libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.*
->> libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
->>  +ifeq ($(BR2_ARM_EABIHF),y)
->>  +LIB_EXTERNAL_LIBS+=ld-linux-armhf.so.*
->>  +else
->>  +LIB_EXTERNAL_LIBS+=ld*.so.*
->>  +endif
->
-> Here when an EABIhf toolchain is used, ld-2.13.so and ld-linux.so.3 are
-> not installed on the target. This is for Linaro toolchains.
->
-> My toolchain is EABIhf, but ships ld-2.13.so and ld-linux.so.3.
->
-> So the commit above breaks runtime execution of nearly every executable
-> (including busybox init), since no ld-linux is installed on the target.
->
-> The following dirty hack solves my own use case:
->
->  ifeq ($(BR2_ARM_EABIHF),y)
-> -LIB_EXTERNAL_LIBS+=ld-linux-armhf.so.*
-> +LIB_EXTERNAL_LIBS+=ld-linux-armhf.so.* ld*.so.*
->  else
->  LIB_EXTERNAL_LIBS+=ld*.so.*
->  endif
->
-> I wonder which may be the best way to fix it properly without breaking
-> other toolchains.
->
-> Is there a specific reason for having a different dynamic loader naming
-> in ARM EABIhf toolchains? Or is it just that, by coincidence, all
-> EABIhf toolchains supported by Buildroot (=Linaro) happen to do so?
+fenv.h is used in a workaround for a glibc specific bug. However, uClibc lies
+by defining __GLIBC__, but does not provide fenv.h in our default uClibc
+configurations.
 
-Linaro toochains do this renaming of ld.so to support multilibs (in
-other words supporting both hard and soft float on the same system).
-It seems like it should be safe to install all ld*.so.* in either case
-but I am sure Thomas has thought about this a lot harder than I have!
+Fixes:
+http://autobuild.buildroot.net/results/b2a/b2a1b1e374764855e701ea62fe9f1385ba77ac0d/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...01-Fix-build-on-Linux-x86_64-under-uClibc.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/libgc/libgc-01-Fix-build-on-Linux-x86_64-under-uClibc.patch
+
+diff --git a/package/libgc/libgc-01-Fix-build-on-Linux-x86_64-under-uClibc.patch b/package/libgc/libgc-01-Fix-build-on-Linux-x86_64-under-uClibc.patch
+new file mode 100644
+index 000000000000..9190a0165031
+--- /dev/null
++++ b/package/libgc/libgc-01-Fix-build-on-Linux-x86_64-under-uClibc.patch
+@@ -0,0 +1,32 @@
++From 9cbd876ebc6ef8cbe647d4a914d03f527f822424 Mon Sep 17 00:00:00 2001
++Message-Id: <9cbd876ebc6ef8cbe647d4a914d03f527f822424.1398253762.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 23 Apr 2014 14:42:21 +0300
++Subject: [PATCH] Fix build on Linux/x86_64 under uClibc
++
++* include/private/gcconfig.h (GETCONTEXT_FPU_EXCMASK_BUG): don't define for
++uClibc, as it may not have fenv.h
++
++Patch status: sent upstream
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ include/private/gcconfig.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/private/gcconfig.h b/include/private/gcconfig.h
++index de7998be0f54..f866cc4ed8cc 100644
++--- a/include/private/gcconfig.h
+++++ b/include/private/gcconfig.h
++@@ -2235,7 +2235,7 @@
++              extern int etext[];
++ #            define DATASTART ((ptr_t)((((word) (etext)) + 0xfff) & ~0xfff))
++ #       endif
++-#       if defined(__GLIBC__)
+++#       if defined(__GLIBC__) && !defined(__UCLIBC__)
++           /* At present, there's a bug in GLibc getcontext() on         */
++           /* Linux/x64 (it clears FPU exception mask).  We define this  */
++           /* macro to workaround it.                                    */
++-- 
++1.9.2
++
+-- 
+1.9.2
