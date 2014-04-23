@@ -1,44 +1,29 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Apr 2014 10:45:33 +0200
-Subject: [Buildroot] [PATCH v5 1/2] Makefile: fix coding style regarding
-	the '=' sign
-In-Reply-To: <1398242364-4644-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1398242364-4644-1-git-send-email-fabio.porcedda@gmail.com>
- <1398242364-4644-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <53577DAD.5090405@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 23 Apr 2014 10:46:24 +0200
+Subject: [Buildroot] [PATCH v4 3/4] Makefile: let show-targets prints
+ also the dependencies
+In-Reply-To: <CAHkwnC9sQch=dAg198Miu6BQ+hacyRv2Z5Z-u0vN7GVSHyYC1Q@mail.gmail.com>
+References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
+ <1396864610-8426-4-git-send-email-fabio.porcedda@gmail.com>
+ <20140416194932.2b8f31c0@skate>
+ <CAHkwnC--PbP42R6BtLsGc1rv2=mRCXwtFSy=CU=6t9NMH0s-zQ@mail.gmail.com>
+ <CAHkwnC9sQch=dAg198Miu6BQ+hacyRv2Z5Z-u0vN7GVSHyYC1Q@mail.gmail.com>
+Message-ID: <CAHkwnC_-g4F__Dz4ife_FBG-bCMAh8wFRkOxByiBDuiLxia_0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/04/14 10:39, Fabio Porcedda wrote:
-> As stated in the buildroot user manual add just a single space before
-> and after a '=' sign.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Tue, Apr 22, 2014 at 12:15 PM, Fabio Porcedda
+<fabio.porcedda@gmail.com> wrote:
+> I've sent an updated patch.
+>
+> http://patchwork.ozlabs.org/patch/341283/
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Patch resent as part of the new revision of this patch set.
+http://patchwork.ozlabs.org/patch/341727/
 
-Confirmed that it's whitespace fixes only with
-git log -p -1 --ignore-all-space
-
-
- Regards,
- Arnout
-
-> ---
->  Makefile | 198 +++++++++++++++++++++++++++++++--------------------------------
->  1 file changed, 99 insertions(+), 99 deletions(-)
-[snip]
-
-
+Regards
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
