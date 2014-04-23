@@ -1,42 +1,68 @@
-From: William Frost <tsmrnd0@gmail.com>
-Date: Wed, 23 Apr 2014 16:11:54 +0900
-Subject: [Buildroot] add ghostscript to buildroot
-Message-ID: <6387189.ReKiMDKImK@linux-qsenn>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Apr 2014 09:22:09 +0200
+Subject: [Buildroot] Analysis of build results for 2014-04-19
+In-Reply-To: <5356E9C2.9050900@mind.be>
+References: <20140420063009.8B76B100DB9@stock.ovh.net>
+ <20140420104812.5bc926a9@skate> <53569BBE.1020707@mind.be>
+ <20140422221958.6240077e@skate> <5356E9C2.9050900@mind.be>
+Message-ID: <20140423092209.4d1454ec@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+Dear Arnout Vandecappelle,
 
-I have been working with buildroot for little more than one year. I think is 
-great tool. Some months ago I needed to cross-compile DCMTK library (it is not 
-included in buildroot) for DICOM image file management and PACS connectivity. 
-By following your online help I managed to add this package and successfully 
-cross-compile and use it (if needed I can provide the files just let me know 
-how).
+On Wed, 23 Apr 2014 00:14:26 +0200, Arnout Vandecappelle wrote:
 
-Anyway, at this moment I need to cross-compile GhostScript (any version is 
-good enough for me). But this is really complicated, I'm getting errors every 
-where. I notice that openwrt has already included GhostScript 
-(https://code.google.com/p/wl500g-repo/source/browse/feeds/rtndev/ghostscript/Makefile?r=1336
-) so at this moment I'm trying to port this package to buildroot. Buildroot 
-and ?openwrt buildroot? are similar tools so I guess that with some 
-modifications it can be added to Buildroot. But my Buildroot knowledge it not 
-that good (I hope with more time and practice it gets better ;)).
+> > True. Currently the KCONFIG_PROBABILITY is chosen between 1% and 35%.
+> > Should I reduce that to 30% ? 25% ?
+> 
+>  25% still means 300 packages, and I think that that doesn't even include
+> their dependencies. Isn't that exaggerated? I think that any defconfig
+> with more than 50 packages is not very realistic anymore...
+> 
+>  Also, the interesting failures (with missing dependencies) are more
+> likely to fall out when less packages are selected, right?
+> 
+>  So my suggestion is to reduce the probability to 15% (still 180 packages
+> in the defconfig...).
 
-I need GhostScript to convert ps files to the file that will be sent to the 
-printer (I don?t know this format name). I already have a ppd parser, so I 
-just need to convert the ps file to the other format to open ?/dev/usb/lp0? and 
-write it inside. 
+Not really, because your calculations make the assumption that there is
+one BR2_PACKAGE_<foo> option per package. But that's not true: certain
+packages have several, sometimes dozens of BR2_PACKAGE_<foo> options
+(think Qt4, Qt5, Python, etc.). And the percentage of randomization is
+done per BR2_PACKAGE_<foo> options, not per package.
 
-Question:
+A quick analysis shows a total of 2832 BR2_PACKAGE_<foo> options
+defined in Buildroot for around 1200 packages, so in average we have a
+little more than 2 Config.in options per package.
 
-Is there any interest in adding Ghostscript package to buildroot in the near 
-future?
-Does anyone has some hints about porting packages from openwrt to buildroot 
-that I can use as guide?
+Also, by having a much smaller percentage, I'm wondering if we have a
+lot less chances to trigger cases that require a fairly significant
+combination of options to be produced.
 
-Thank you very much for your attention.
-William Frost
+I've anyway reduced the percentage from 1% to 30% (where it was 1% to
+35%). I'm obviously open to more discussion on the matter, reducing to
+30% was just an initial measure.
+
+> > So let's say that I'll reduce the KCONFIG_PROBABILITY on one side, and
+> > increase the timeout for all builds by an hour on the other side. How
+> > does that look?
+> 
+>  The timeout is already 4 hours, isn't it? That's already quite long IMHO.
+
+Yes, that's quite large, but I've anyway increased it to 6 hours. The
+goal of the time out was *only* to make sure builds entering some quite
+of infinite loop terminate at some point (we used to have a PowerPC
+toolchain whose 'ld' was buggy, and was entering an infinite loop when
+building a certain package).
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
