@@ -1,64 +1,48 @@
-From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
-Date: Wed, 23 Apr 2014 17:45:18 -0500
-Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support
- for kernels older than 3.x.
-In-Reply-To: <53564749.5060409@lucaceresoli.net>
-References: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>
- <20140418213924.6d5a3ebf@skate> <53564749.5060409@lucaceresoli.net>
-Message-ID: <OF4212D2FC.25E3AE63-ON86257CC3.004F7CF7-86257CC3.007CFC5D@rockwellcollins.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 24 Apr 2014 00:48:19 +0200
+Subject: [Buildroot] [PATCH 00/14] CMake infrastructure refactoring
+Message-ID: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, Peter, Thomas, All,
+Hi all,
 
-Luca Ceresoli <luca@lucaceresoli.net> wrote on 04/22/2014 05:41:13 AM:
+Here is a series reviving a couple of patches (pending for a long while in
+patchwork) about the CMake infrastructure (patch 4/14 and 5/14) and some new
+ones cleaning up this infrastructure, so some packages as well.
 
-> Hi Ryan, Thomas,
-> 
-> Thomas Petazzoni wrote:
->> Dear Ryan Barnett,
->>
->> On Fri, 18 Apr 2014 14:28:16 -0500, Ryan Barnett wrote:
->>> From: Matt Poduska <mjpodusk@rockwellcollins.com>
->>>
->>> In the case where DEVTMPFS is desired for older kernels where the
->>> support is experimental, it's still possible to enable the option in
->>> the board's specific linux .config instead of relying on buildroot to
->>> make the modification.
->>>
->>> Signed-off-by: Matt Poduska <mjpodusk@rockwellcollins.com>
->>> Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
->>> ---
->>>   linux/linux.mk |    8 +++++---
->>>   1 file changed, 5 insertions(+), 3 deletions(-)
->>
->> Which problem is this fixing? I remember having used devtmpfs prior to
->> 3.x, and it was working well. For versions prior to 2.6.32, the
-> 
-> And in fact I have targets here that are stuck on 2.6.37, they happily
-> use devtmpfs and it works just fine.
-> 
-> So I NACK this change, or if there's a strong motivation to apply it
-> I would at least conceive a backward-compatibility path.
+Yours,
+Samuel
 
-We recently ran into a issue where brought a board forward to use 
-Buildroot 2014.02 that we kept at a kernel version of 2.6.33. Yes, I agree 
-that we should be using a new kernel but the work to port to a newer 
-version is too great but we needed to upgrade some package versions. The 
-system was unable to boot because DEVTMPFS_MOUNT was enabled in kernel 
-config. We traced the issue back to Buildroot automatically enabling these 
-options in our kernel config. There was no way to not include this kernel 
-config option when BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
+Samuel Martin (14):
+  pkg-cmake.mk: replace "echo -en" with printf
+  pkg-cmake.mk: remove unneeded quotes in the generated
+    toolchainfile.cmake
+  pkg-cmake.mk: rework toolchainfile.cmake
+  pkg-cmake.mk: do not hardcode absolute path in toolchainfile.cmake
+  pkg-cmake.mk: enable ccache for cmake packages
+  pkg-cmake.mk: cosmetic changes in the generated toolchainfile.cmake
+    file
+  pkg-cmake.mk: set additional variables in toolchainfile.cmake
+  rpi-userland: cleanup *_CONF_OPT
+  pkg-cmake.mk: globally disable BUILD_TESTING flag
+  pkg-cmake.mk: globally drive the CMAKE_BUILD_TYPE flag using
+    BR2_ENABLE_DEBUG
+  openpowerlink: do not override CMAKE_BUILD_TYPE
+  opencv: do not override CMAKE_BUILD_TYPE
+  flann: do not override CMAKE_BUILD_TYPE
+  qhull: do not override CMAKE_BUILD_TYPE
 
-We will try to analyze to see if there is a better way to get around this 
-issue but I'm OK with this patch being rejected. Since this is mostly for 
-legacy support and who wants to do that ;)
+ package/flann/flann.mk                 |  1 -
+ package/opencv/opencv.mk               |  1 -
+ package/openpowerlink/openpowerlink.mk |  6 ---
+ package/pkg-cmake.mk                   | 80 ++++++++++++++++++++++++++++------
+ package/qhull/qhull.mk                 |  1 -
+ package/rpi-userland/rpi-userland.mk   |  2 +-
+ 6 files changed, 67 insertions(+), 24 deletions(-)
 
-Thanks,
--Ryan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140423/5fe914d8/attachment.html>
+--
+1.9.2
