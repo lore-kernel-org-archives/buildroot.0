@@ -1,29 +1,34 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 23 Apr 2014 10:46:24 +0200
-Subject: [Buildroot] [PATCH v4 3/4] Makefile: let show-targets prints
- also the dependencies
-In-Reply-To: <CAHkwnC9sQch=dAg198Miu6BQ+hacyRv2Z5Z-u0vN7GVSHyYC1Q@mail.gmail.com>
-References: <1396864610-8426-1-git-send-email-fabio.porcedda@gmail.com>
- <1396864610-8426-4-git-send-email-fabio.porcedda@gmail.com>
- <20140416194932.2b8f31c0@skate>
- <CAHkwnC--PbP42R6BtLsGc1rv2=mRCXwtFSy=CU=6t9NMH0s-zQ@mail.gmail.com>
- <CAHkwnC9sQch=dAg198Miu6BQ+hacyRv2Z5Z-u0vN7GVSHyYC1Q@mail.gmail.com>
-Message-ID: <CAHkwnC_-g4F__Dz4ife_FBG-bCMAh8wFRkOxByiBDuiLxia_0g@mail.gmail.com>
+Date: Wed, 23 Apr 2014 10:50:20 +0200
+Subject: [Buildroot] [PATCH v5 1/2] Makefile: fix coding style regarding
+	the '=' sign
+In-Reply-To: <53577DAD.5090405@mind.be>
+References: <1398242364-4644-1-git-send-email-fabio.porcedda@gmail.com>
+ <1398242364-4644-2-git-send-email-fabio.porcedda@gmail.com>
+ <53577DAD.5090405@mind.be>
+Message-ID: <CAHkwnC8UNgvY2SZD-aVs1ZAExkAoZmMdQtNx5yhYQS34hgvQPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 22, 2014 at 12:15 PM, Fabio Porcedda
-<fabio.porcedda@gmail.com> wrote:
-> I've sent an updated patch.
+On Wed, Apr 23, 2014 at 10:45 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 23/04/14 10:39, Fabio Porcedda wrote:
+>> As stated in the buildroot user manual add just a single space before
+>> and after a '=' sign.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
-> http://patchwork.ozlabs.org/patch/341283/
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> Confirmed that it's whitespace fixes only with
+> git log -p -1 --ignore-all-space
 
-Patch resent as part of the new revision of this patch set.
-http://patchwork.ozlabs.org/patch/341727/
+That's was really fast!
 
-Regards
+Thanks
 -- 
 Fabio Porcedda
