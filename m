@@ -1,36 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 24 Apr 2014 00:20:06 +0200
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.7 and improve
- cross build
-In-Reply-To: <1398211678-20218-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398211678-20218-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <53583C96.3030008@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Apr 2014 00:20:36 +0200
+Subject: [Buildroot] [git commit] Makefile: let show-targets prints also the
+	dependencies
+Message-ID: <20140423222043.C46B09C99D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/04/14 02:07, Gustavo Zacarias wrote:
-> Bump to the latest 4.1.7 version and improve the cross-build logic.
-> With the new patches the build is basically architecture-agnostic making
-> it possible to ditch the arch-specific cache to use a generic one.
-> Some toolchains might not be too happy with samba4 because of bitrot,
-> hopefully we'll find and fix or blacklist those with autobuilder help.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+commit: http://git.buildroot.net/buildroot/commit/?id=b9f0543fc84fd69f4d9a64b90cfeddee90b71f89
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Because the "show-targets" target print the targets that will be built,
+print also their dependencies.
 
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- Regards,
- Arnout
-
-[snip]
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/Makefile b/Makefile
+index fc111b3..eff408b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -653,7 +653,7 @@ legal-info: dirs legal-info-clean legal-info-prepare $(TARGETS_LEGAL_INFO) \
+ 	@rm -f $(LEGAL_WARNINGS)
+ 
+ show-targets:
+-	@echo $(TARGETS) $(TARGETS_ROOTFS)
++	@echo $(HOST_DEPS) $(TARGETS_HOST_DEPS) $(TARGETS) $(TARGETS_ROOTFS)
+ 
+ graph-build: $(O)/build/build-time.log
+ 	@install -d $(O)/graphs
