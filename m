@@ -1,43 +1,32 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 22 Apr 2014 20:49:09 -0400
-Subject: [Buildroot] [PATCH 1/1] cups: move localstatedir from /usr/var to
-	/var
-Message-ID: <1398214149-1914-1-git-send-email-danomimanchego123@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Apr 2014 22:10:21 -0300
+Subject: [Buildroot] [PATCH] freetype: host variant needs to run autogen too
+Message-ID: <1398215421-1844-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prior to commit f64a1b850fc897357040bb4c58b6e5e50e71e094 ("cups:
-convert to autotargets"), cups was explicitely configured to
-put its modifiable single-machine data under /var.  After that
-commit, the --localstatedir was not specified, so it remained at
-it's default value, "PREFIX/var" - making cups use "/usr/var".
+Fixes:
+http://autobuild.buildroot.net/results/fb8/fb8e38bcc73ff60a71df7558a1a4d6cc7cc9157f/
 
-Using /var to store state files seems preferable to /usr/var,
-as /usr might be read-only on some systems.  This patch
-re-introduces the --localstatedir specification to build cups
-to use /var.
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cups/cups.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/freetype/freetype.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index bcd6f1e..ee53735 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -17,7 +17,8 @@ CUPS_CONF_OPT = --without-perl \
- 		--without-php \
- 		--disable-gnutls \
- 		--disable-gssapi \
--		--libdir=/usr/lib
-+		--libdir=/usr/lib \
-+		--localstatedir=/var
- CUPS_CONFIG_SCRIPTS = cups-config
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 2f8d497..c7c9a06 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -26,6 +26,7 @@ define FREETYPE_RUN_AUTOGEN
+ 	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+ endef
+ FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
++HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
+ FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
+ HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
  
- CUPS_DEPENDENCIES = $(if $(BR2_PACKAGE_ZLIB),zlib) \
 -- 
-1.7.9.5
+1.8.3.2
