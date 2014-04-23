@@ -1,63 +1,98 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Apr 2014 23:13:46 +0200
-Subject: [Buildroot] Adding google-breakpad to buildroot
-In-Reply-To: <1398269552.30640.13.camel@mbpro.localhost>
-References: <1398262906.30640.4.camel@mbpro.localhost>	
- <5357DC41.6020608@mind.be>	
- <CAHXCMMKSGHSvYLr9JALDr0YzD4uTshQrNZYm46-0kgGpUP4Ptw@mail.gmail.com>
- <1398269552.30640.13.camel@mbpro.localhost>
-Message-ID: <53582D0A.2030302@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Apr 2014 00:14:25 +0200
+Subject: [Buildroot] [RFCv1 1/8] musl: new package
+In-Reply-To: <1398291272-17591-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1398291272-17591-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1398291272-17591-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/04/14 18:12, Pascal H?rst wrote:
-> On Mit, 2014-04-23 at 17:52 +0200, Samuel Martin wrote:
->> Hi Pascal, Arnout, all,
->>
->> On Wed, Apr 23, 2014 at 5:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>> On 23/04/14 16:21, Pascal H?rst wrote:
-[snip]
->>>  It is easier to add it to the target-finalize target. Then you can be
->>> sure that the ordering is correct (target-finalize already has all the
->>> needed dependencies). You can also easily use conditions there (it's not
->>> inside a define).
->>>
->>>  However, I think it will be more appropriate to implement breakpad as an
->>> additional strip alternative. You probably don't want to combine strip
->>> with breakpad...
->>
->> I think breakpad is more like a pre-strip hook, that one can enable or
->> not. But in the end, the target image will be stripped most of the
->> time (at least, this is the way I would use such a feature).
-> 
-> I agree, since the extraction of the symbols should always happen, when
-> breakpad is used, no mater what strip alternative is selected
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/musl.mk | 72 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/musl/musl.mk
 
- OK, I thought breakpad did stripping already.
-
- In that case, I think it's best to put it in target-finalize just before
-strip.
-
- Regards,
- Arnout
-
-
-
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+new file mode 100644
+index 0000000..a95e53e
+--- /dev/null
++++ b/package/musl/musl.mk
+@@ -0,0 +1,72 @@
++################################################################################
++#
++# musl
++#
++################################################################################
++
++MUSL_VERSION = 1.1.0
++MUSL_SITE = http://www.musl-libc.org/releases/
++MUSL_LICENSE = MIT
++MUSL_LICENSE_FILES = COPYRIGHT
++
++# Before musl is configured, we must have the first stage
++# cross-compiler and the kernel headers
++MUSL_DEPENDENCIES = host-gcc-initial linux-headers
++
++# musl is part of the toolchain so disable the toolchain dependency
++MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
++
++MUSL_INSTALL_STAGING = YES
++
++# We need to run the musl configure script prior to building the
++# gcc-intermediate, so that we can call the install-headers step and
++# get the crt<X>.o built. However, we need to call it again after
++# gcc-intermediate has been built, otherwise the configure script
++# doesn't realize that libgcc has been built, and doesn't link the C
++# library properly with libgcc, which causes build failure down the
++# road. We will have the opportunity to simplify this once we switch
++# to a 2-steps gcc build.
++define MUSL_CONFIGURE_CALL
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
++		CPPFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
++		./configure \
++			--target=$(GNU_TARGET_NAME) \
++			--host=$(GNU_TARGET_NAME) \
++			--prefix=/usr \
++			--disable-gcc-wrapper)
++endef
++
++define MUSL_CONFIGURE_CMDS
++	$(MUSL_CONFIGURE_CALL)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(STAGING_DIR) install-headers
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		crt/crt1.o crt/crti.o crt/crtn.o
++	cp $(@D)/crt/crt*.o $(STAGING_DIR)/usr/lib
++	$(TARGET_CROSS)gcc -nostdlib \
++		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
++endef
++
++define MUSL_BUILD_CMDS
++	$(MUSL_CONFIGURE_CALL)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MUSL_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(STAGING_DIR) install-libs install-tools
++endef
++
++define MUSL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install-libs
++	mv $(TARGET_DIR)/usr/lib/libc.so $(TARGET_DIR)/lib/
++	$(RM) $(addprefix $(TARGET_DIR)/usr/lib/,crt1.o crtn.o crti.o Scrt1.o)
++endef
++
++$(eval $(generic-package))
++
++# Before musl is built, we must have the second stage cross-compiler
++$(MUSL_TARGET_BUILD): | host-gcc-intermediate
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 880 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140423/84180dd6/attachment.asc>
+1.9.2
