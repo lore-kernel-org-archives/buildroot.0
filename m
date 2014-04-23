@@ -1,33 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 23 Apr 2014 17:33:01 +0200
-Subject: [Buildroot] How transfer what image(s) to target-CF?
-In-Reply-To: <CAEzGmjA3wbjEFb6sQYov_rJFJuB8oJFx2Y6XOA7WWHce743=dg@mail.gmail.com>
-References: <CAEzGmjA3wbjEFb6sQYov_rJFJuB8oJFx2Y6XOA7WWHce743=dg@mail.gmail.com>
-Message-ID: <5357DD2D.1030702@mind.be>
+Date: Wed, 23 Apr 2014 17:35:14 +0200
+Subject: [Buildroot] [Question] Are there tutorials for differnt rootfs ?
+In-Reply-To: <53578C56020000460004DEA4@gwia2.rz.hs-offenburg.de>
+References: <53578C56020000460004DEA4@gwia2.rz.hs-offenburg.de>
+Message-ID: <5357DDB2.7080507@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/04/14 15:42, Lennart Ramberg wrote:
-> Hello,
-> 
-> New and experimenting, I want my target Linux system to reside on a
-> Compact Flash,
-> such that I can pull it from the host (Buildroot) computer and
-> then insert it in my x86 target as an IDE-drive and boot.
-> 
-> What file(s) should I have in host .../output/images/  and how do I put
-> it(them) in the CF?
-> I have USB on my host and a USB-CF-adapter and a formatted CF.
+On 23/04/14 09:48, Frank Ihle wrote:
+> Hi Buildroot,
+>  
+> I was trying to switch from initramfs to different rootfs options of
+> Buildroot 2013.11. Unfortunately it seems that only  Images with an
+> initramfs and an already decompressed rootfs on a separate partition seem
+> to work to boot my system.
+>  
+> Because I guess to fix this error is a far bigger thread, I just want to
+> know if there are some examples or tutorials of how to use different
+> rootfs. Including e.g.: what the kernel command line has to look like,
+> the drivers that are used etc. - basically everything that is needed to
+> run my embedded system with a specific filesystem.
 
- The simplest is probably to use cpio as your rootfs, syslinux as the
-bootloader, bzImage as the kernel, and put that on a FAT filesystem.
-
+ I believe there are a few examples in the documentation, but the number
+of possibilities is simply too large to document. There are also a few
+examples in READMEs of the supported boards. It depends quite a lot on
+your target architecture and your boot medium.
 
  Regards,
  Arnout
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
