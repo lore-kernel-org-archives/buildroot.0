@@ -1,32 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 00:15:51 +0200
-Subject: [Buildroot] [git commit] ethtool: bump to version 3.14
-Message-ID: <20140423221725.98EB69C99D@busybox.osuosl.org>
+Date: Thu, 24 Apr 2014 00:16:51 +0200
+Subject: [Buildroot] [git commit] libdvdread: bump to version 4.2.1
+Message-ID: <20140423221725.A40E39C99D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ebd09188a1eb09d482f8ddf6d6777ef756a5d2c1
+commit: http://git.buildroot.net/buildroot/commit/?id=3d31e98f8166e1c33c599d56342c442b47d5bfad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+And drop redundant LIBTOOL_PATCH = YES
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ethtool/ethtool.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libdvdread/libdvdread.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index a6158ba..11debbb 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libdvdread/libdvdread.mk b/package/libdvdread/libdvdread.mk
+index 35d7548..6658460 100644
+--- a/package/libdvdread/libdvdread.mk
++++ b/package/libdvdread/libdvdread.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 3.13
-+ETHTOOL_VERSION = 3.14
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPLv2
+-LIBDVDREAD_VERSION = 4.1.3
+-LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.bz2
++LIBDVDREAD_VERSION = 4.2.1
++LIBDVDREAD_SOURCE = libdvdread-$(LIBDVDREAD_VERSION).tar.xz
+ LIBDVDREAD_SITE = http://dvdnav.mplayerhq.hu/releases
++# configure not shipped
+ LIBDVDREAD_AUTORECONF = YES
+-LIBDVDREAD_LIBTOOL_PATCH = YES
+ LIBDVDREAD_INSTALL_STAGING = YES
+ LIBDVDREAD_CONFIG_SCRIPTS = dvdread-config
+ LIBDVDREAD_LICENSE = GPLv2+
