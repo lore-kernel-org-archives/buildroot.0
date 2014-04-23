@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 00:16:13 +0200
-Subject: [Buildroot] [PATCH] ethtool: bump to version 3.14
-In-Reply-To: <1398279361-12842-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398279361-12842-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140424001613.6aa3747e@skate>
+Date: Thu, 24 Apr 2014 00:17:18 +0200
+Subject: [Buildroot] [PATCH 1/2] libdvdread: bump to version 4.2.1
+In-Reply-To: <1398256773-28764-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1398256773-28764-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140424001718.68bddaef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,15 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Wed, 23 Apr 2014 15:56:01 -0300, Gustavo Zacarias wrote:
+On Wed, 23 Apr 2014 09:39:32 -0300, Gustavo Zacarias wrote:
+> And drop redundant LIBTOOL_PATCH = YES
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/ethtool/ethtool.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/libdvdread/libdvdread.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks.
+Both applied, thanks.
 
 Thomas
 -- 
