@@ -1,47 +1,61 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 24 Apr 2014 19:47:40 +0100
-Subject: [Buildroot] [PATCH 1/1] qemu x86/x86_64: Add kernel IPC support
-Message-ID: <1398365260-1595-1-git-send-email-martin@barkynet.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Apr 2014 22:26:40 +0200
+Subject: [Buildroot] [PATCH 01/14] pkg-cmake.mk: replace "echo -en" with
+	printf
+In-Reply-To: <1398293313-17580-2-git-send-email-s.martin49@gmail.com>
+References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
+ <1398293313-17580-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <53597380.30308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The alsa utils packages require a kernel with IPC support to run.  The
-kernel config for the x86 and x86_64 qemu build includes sound support
-using the hda driver but without the IPC support the alsa utils won't work.
-This patch adds IPC support to the x86 and x86_64 kernel to allow alsa
-utils to run and brings the kernel config inline with kernel configs for
-other qemu boards.
+On 24/04/14 00:48, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- board/qemu/x86/linux-3.13.config    |    1 +
- board/qemu/x86_64/linux-3.13.config |    1 +
- 2 files changed, 2 insertions(+)
+ Commit message could have been clarified with
 
-diff --git a/board/qemu/x86/linux-3.13.config b/board/qemu/x86/linux-3.13.config
-index ad9517c..d738e4d 100644
---- a/board/qemu/x86/linux-3.13.config
-+++ b/board/qemu/x86/linux-3.13.config
-@@ -1,5 +1,6 @@
- # CONFIG_LOCALVERSION_AUTO is not set
- # CONFIG_SWAP is not set
-+CONFIG_SYSVIPC=y
- # CONFIG_COMPAT_BRK is not set
- # CONFIG_BLK_DEV_BSG is not set
- # CONFIG_IOSCHED_DEADLINE is not set
-diff --git a/board/qemu/x86_64/linux-3.13.config b/board/qemu/x86_64/linux-3.13.config
-index ad9517c..d738e4d 100644
---- a/board/qemu/x86_64/linux-3.13.config
-+++ b/board/qemu/x86_64/linux-3.13.config
-@@ -1,5 +1,6 @@
- # CONFIG_LOCALVERSION_AUTO is not set
- # CONFIG_SWAP is not set
-+CONFIG_SYSVIPC=y
- # CONFIG_COMPAT_BRK is not set
- # CONFIG_BLK_DEV_BSG is not set
- # CONFIG_IOSCHED_DEADLINE is not set
+printf is POSIX-compliant, echo -e is not.
+
+ Still,
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> 
+> ---
+> changes v1 -> v2
+> - new patch
+> ---
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index bf3db90..edda14a 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -160,7 +160,7 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+>  
+>  $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  	@mkdir -p $(@D)
+> -	@echo -en "\
+> +	@printf "\
+>  	set(CMAKE_SYSTEM_NAME Linux)\n\
+>  	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+>  	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+> 
+
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
