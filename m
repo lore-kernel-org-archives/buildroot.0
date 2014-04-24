@@ -1,43 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 24 Apr 2014 11:56:19 +0300
-Subject: [Buildroot] [PATCH] smack: needs kernel headers v3.0+
-Message-ID: <08771bc278220844d434dc32849b6a521644203b.1398329779.git.baruch@tkos.co.il>
+From: Frank Ihle <frank.ihle@hs-offenburg.de>
+Date: Thu, 24 Apr 2014 10:57:18 +0200
+Subject: [Buildroot] [Question] Are there tutorials for differnt rootfs ?
+In-Reply-To: <5357DDB2.7080507@mind.be>
+References: <53578C56020000460004DEA4@gwia2.rz.hs-offenburg.de>
+ <5357DDB2.7080507@mind.be>
+Message-ID: <5358EE0E020000460004DFCA@gwia2.rz.hs-offenburg.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-smack uses symbols that are exported to userspace only since Linux kernel
-commit 1dbe39424a43 (xattr.h: expose string defines to userspace).
 
-Fixes:
-http://autobuild.buildroot.net/results/7fc/7fc69002fbb37962e65e0f83384ae7a4e6eac8a9/
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/smack/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>>>> Arnout Vandecappelle <arnout@mind.be> 23.04.14 17.36 Uhr >>>
+>On 23/04/14 09:48, Frank Ihle wrote:
+>> Hi Buildroot,
+>>  
+>> I was trying to switch from initramfs to different rootfs options of
+>> Buildroot 2013.11. Unfortunately it seems that only  Images with an
+>> initramfs and an already decompressed rootfs on a separate partition seem
+>> to work to boot my system.
+>>  
+>> Because I guess to fix this error is a far bigger thread, I just want to
+>> know if there are some examples or tutorials of how to use different
+>> rootfs. Including e.g.: what the kernel command line has to look like,
+>> the drivers that are used etc. - basically everything that is needed to
+>> run my embedded system with a specific filesystem.
+>
+ >I believe there are a few examples in the documentation, but the number
+>of possibilities is simply too large to document. There are also a few
+>examples in READMEs of the supported boards. It depends quite a lot on
+>your target architecture and your boot medium.
 
-diff --git a/package/smack/Config.in b/package/smack/Config.in
-index 618a6807e175..55e9d2e694c3 100644
---- a/package/smack/Config.in
-+++ b/package/smack/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SMACK
- 	bool "smack"
- 	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	help
- 	  User space programs and libraries for SMACK.
- 
-@@ -28,5 +29,6 @@ config BR2_PACKAGE_SMACK
- 
- 	  https://github.com/smack-team/smack
- 
--comment "smack needs a toolchain w/ dynamic library"
-+comment "smack needs a toolchain w/ dynamic library, headers >= 3.0"
- 	depends on BR2_PREFER_STATIC_LIB
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--- 
-1.9.2
+Hello Arnout,
+
+thanks for the response. Well that's what I guessed, that there are various ways to get this running. Still I thought there is some kind of best practice.
+
+Kind Regards
+
+Frank
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140424/611b167f/attachment.html>
