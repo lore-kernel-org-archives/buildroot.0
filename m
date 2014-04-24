@@ -1,42 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 09:16:26 +0200
-Subject: [Buildroot] About static linking
-In-Reply-To: <20140424042911.GD22908@tarshish>
-References: <a2d055301fd7b62deb7599263ad3ff0ee94c1870.1398283199.git.baruch@tkos.co.il>
- <20140423225243.38a542c0@skate> <20140424042911.GD22908@tarshish>
-Message-ID: <20140424091626.61180eef@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 24 Apr 2014 09:44:00 +0200
+Subject: [Buildroot] adding DCMTK libraries to buildroot
+In-Reply-To: <2656055.10Mv5CXMOB@linux-qsenn>
+References: <2656055.10Mv5CXMOB@linux-qsenn>
+Message-ID: <CAAXf6LXWAV0_n=kMtuk_JRZ0N2PW_3L7+rAqR7dfQQO8i4kj6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi William,
 
-On Thu, 24 Apr 2014 07:29:11 +0300, Baruch Siach wrote:
+On Thu, Apr 24, 2014 at 3:38 AM, William Frost <tsmrnd0@gmail.com> wrote:
+> This patch is far from being perfect but at list it is a start point to
+> something better.
+> Known problems:
+>  - Building dynamic libraries is not optional. I prefer static linking for
+> this library but it will be nice to leave this option to the users.
+>  - Every time I try to build buildroot DCMTK gets configured again, I
+>  must be doing something wrong. But it compiles just fine and install the
+>  libraries on staging/usr/lib.
+> This is is first time contributing so if I'm doing something wrong please let
+> me know the right way to do it.
 
-> > This is not at all against your patch specifically, but I'm a bit
-> > worried about all the static linking related kludges we add all over
-> > the place. Is this normal? Shouldn't we fix the packages themselves and
-> > submit patches upstream?
-> 
-> Upstream submission is of course preferable. In this case upstream does not 
-> appear to be very active. The current release is from 2008, while development 
-> started at 2007.
-> 
-> Do you prefer a Makefile patch that could theoretically be upstreamed?
+Please have a look at the contribution section in the manual on how to
+send patches. Patches should be sent inline and not as attachment.
+This makes review of the patch much easier.
 
-I must say I don't know. In fact, I was not necessarily speaking
-specifically of this particular change, but more generally about all
-the LIBS='-lfoo' we're adding all over the place to fix static linking
-problems. This seems a bit fragile to me.
+The first line of the commit message should be a summary, followed by
+an empty line. The manual contains an example.
 
-And the point of raising this question was specifically to get a
-discussion started, and see the opinion of others (Gustavo, Peter,
-Arnout, Yann, etc.).
+The Config.in and .mk files should be line-wrapped to 80 characters.
+
+The symbol BR2_DCMTK_VERSION should be called BR2_PACKAGE_DCMTK_VERSION.
+
+The #### in the .mk file should be 80 characters wide.
+
+If you set DCMTK_VERSION = $(call qstrip,$(BR2_PACKAGE_DCMTK_VERSION)
+then you can remove the DCMTK_SOURCE line because the default is
+<pkg>-<version>.tar.gz.
+
+These are just some initial comments.
+
+When you send a new patch, please mark it as 'v2' and describe the
+changes you made (see the manual)
+
+Thanks for contributing,
 
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
