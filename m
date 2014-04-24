@@ -1,61 +1,144 @@
-From: Pascal =?ISO-8859-1?Q?H=FCrst?= <pascal.huerst@gmail.com>
-Date: Thu, 24 Apr 2014 09:52:24 +0200
-Subject: [Buildroot] Adding google-breakpad to buildroot
-In-Reply-To: <53582D0A.2030302@mind.be>
-References: <1398262906.30640.4.camel@mbpro.localhost>
- <5357DC41.6020608@mind.be>
- <CAHXCMMKSGHSvYLr9JALDr0YzD4uTshQrNZYm46-0kgGpUP4Ptw@mail.gmail.com>
- <1398269552.30640.13.camel@mbpro.localhost> <53582D0A.2030302@mind.be>
-Message-ID: <1398325944.3669.2.camel@mbpro.localhost>
+From: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+Date: Thu, 24 Apr 2014 09:39:19 +0100
+Subject: [Buildroot] [PATCH v3] package/zile: add Zile is Lossy Emacs
+	editor
+In-Reply-To: <20140417221418.5e3939fb@skate>
+References: <1397737179-12262-1-git-send-email-alex.bennee@linaro.org>
+ <1397737179-12262-2-git-send-email-alex.bennee@linaro.org>
+ <20140417221418.5e3939fb@skate>
+Message-ID: <87k3afqfyg.fsf@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mit, 2014-04-23 at 23:13 +0200, Arnout Vandecappelle wrote:
-> On 23/04/14 18:12, Pascal H?rst wrote:
-> > On Mit, 2014-04-23 at 17:52 +0200, Samuel Martin wrote:
-> >> Hi Pascal, Arnout, all,
-> >>
-> >> On Wed, Apr 23, 2014 at 5:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>> On 23/04/14 16:21, Pascal H?rst wrote:
-> [snip]
-> >>>  It is easier to add it to the target-finalize target. Then you can be
-> >>> sure that the ordering is correct (target-finalize already has all the
-> >>> needed dependencies). You can also easily use conditions there (it's not
-> >>> inside a define).
-> >>>
-> >>>  However, I think it will be more appropriate to implement breakpad as an
-> >>> additional strip alternative. You probably don't want to combine strip
-> >>> with breakpad...
-> >>
-> >> I think breakpad is more like a pre-strip hook, that one can enable or
-> >> not. But in the end, the target image will be stripped most of the
-> >> time (at least, this is the way I would use such a feature).
-> > 
-> > I agree, since the extraction of the symbols should always happen, when
-> > breakpad is used, no mater what strip alternative is selected
-> 
->  OK, I thought breakpad did stripping already.
-> 
->  In that case, I think it's best to put it in target-finalize just before
-> strip.
 
-Ok, I'll do it that way, then.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Thanks!
+> Dear Alex Benn?e,
+<snip>
+>> +++ b/package/zile/Config.in
+>> @@ -0,0 +1,13 @@
+>> +config BR2_PACKAGE_ZILE
+>> +	bool "zile"
+>> +	select BR2_PACKAGE_LIBGC
+>> +	depends on BR2_USE_MMU # fork()
+>
+> You need to replicate the dependencies of BR2_PACKAGE_LIBGC here.
 
->  Regards,
->  Arnout
+Surely the whole point of dependencies is the LIBGC ones get pulled in
+when you select LIBGC, or do you mean I need:
 
-Regards
-Pascal
+     select BR2_PACKAGE_LIBGC
+     depends on BR2_PACKAGE_LIBGC
+     depends on BR2_USE_MMU # fork()
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 198 bytes
-Desc: This is a digitally signed message part
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140424/990dae1f/attachment.asc>
+> Also, when testing your package, it failed because ncurses was not
+> available, so I had to add ncurses as a dependency here.
+>
+> This actually leads me to wonder if you actually tested this stuff. How
+> would it be possible to miss the ncurses dependency?
+
+I have a bunch of benchmarking tools enabled, one of them must of pulled
+it in. I have been testing in a qemu-system aarch64 initrd rootfs and it
+was working!
+
+>
+> Also, some of the configure messages need some investigation:
+>
+> configure: WARNING: libacl development library was not found or not
+> usable. configure: WARNING: Zile will be built without ACL support.
+>
+>  => this probably means that an optional dependency on BR2_PACKAGE_ACL,
+>  with a --enable-acl / --disable-acl as appropriate
+
+I'll look at that.
+
+>
+> checking whether btowc is declared without a macro... yes
+> checking whether wctob is declared without a macro... yes
+> checking whether mbsinit is declared without a macro... yes
+>
+>  => this smells like a dependency on wide-char support. Can you test
+>  your package with a toolchain that does not have wide char support,
+>  such as
+>  http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-basic.config.
+
+I've got to build some armv7 images so I'll do that then.
+
+>
+> checking for emacs... /usr/bin/emacs
+> checking Emacs version 24.3.50.1 >= 23.1... yes
+>
+>  => is it normal that it references my host emacs? what is this used
+>  for?
+
+No idea. Possibly too much autoconf boilerplate. I shall have a look.
+
+>
+>
+>> diff --git a/package/zile/zile-0001-remove-help2man.patch b/package/zile/zile-0001-remove-help2man.patch
+>> new file mode 100644
+>> index 0000000..d397543
+>> --- /dev/null
+>> +++ b/package/zile/zile-0001-remove-help2man.patch
+>> @@ -0,0 +1,30 @@
+>> +Upstream-Status: Inappropriate [configuration]
+>> +
+>> +Signed-off-by: Alex Benn?e <alex.bennee@linaro.org>
+>
+> Since you're passing --without-help2man, why is this patch useful?
+
+IIRC without that patch it still attempted to call the help2man tool
+even though it wasn't generating the final output. 
+
+>
+>> diff --git a/package/zile/zile.mk b/package/zile/zile.mk
+>> new file mode 100644
+>> index 0000000..07226c6
+>> --- /dev/null
+>> +++ b/package/zile/zile.mk
+>> @@ -0,0 +1,15 @@
+>> +################################################################################
+>> +#
+>> +# Zile
+>> +#
+>> +################################################################################
+>> +
+>> +ZILE_VERSION = 2.4.11
+>> +ZILE_SITE = $(BR2_GNU_MIRROR)/zile
+>> +ZILE_LICENSE = GPLv1+
+>
+> Have you actually read the COPYING file?
+
+Ahh ok - I shall fix that up.
+
+>
+>> +ZILE_LICENSE_FILES = COPYING
+>> +ZILE_AUTORECONF = YES
+>> +ZILE_CONF_OPT = --without-help2man
+>> +ZILE_DEPENDENCIES = libgc
+>
+> Missing ncurses library.
+>
+> Also, when I build your package with the toolchain at
+> http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-arm-full.config,
+> it fails to build with:
+>
+> /home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgc.so:
+> undefined reference to symbol 'pthread_cancel'
+> /home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
+> note: 'pthread_cancel' is defined in DSO /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0 so try adding it to the linker command line
+> /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/lib/libpthread.so.0:
+> could not read symbols: Invalid operation
+>
+> Could you work on these remaining issues, and resubmit an updated
+> version?
+>
+> Thanks!
+>
+> Thomas
+
+-- 
+Alex Benn?e
