@@ -1,32 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Apr 2014 17:24:44 +0200
-Subject: [Buildroot] [git commit] mpd: bump to version 0.18.10
-Message-ID: <20140424152749.E18BE9C9CC@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 24 Apr 2014 18:24:39 +0200
+Subject: [Buildroot] [PATCH] Makefile: target-purgelocales: add dependencies
+Message-ID: <1398356679-1438-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c6d5fc294a3af78e216e1c706702de99f18a0435
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The "target-purgelocales" target must be executed after all the other
+targets so add dependencies to ensure that.
+This also fix the support to top-level parallel make.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- package/mpd/mpd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 7e4ebac..ad393c7 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+When both BR2_ENABLE_LOCALE_PURGE BR2_GENERATE_LOCALE are defined it
+swap the execution order of target-purgelocales and
+target-generatelocales, but as far as i can understand it does not arm
+to do that.
+
+Regards
+Fabio Porcedda
+
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index eff408b..6b24482 100644
+--- a/Makefile
++++ b/Makefile
+@@ -579,7 +579,7 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
+ LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
+ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
  
- MPD_VERSION_MAJOR = 0.18
--MPD_VERSION = $(MPD_VERSION_MAJOR).9
-+MPD_VERSION = $(MPD_VERSION_MAJOR).10
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf libglib2
+-target-purgelocales:
++target-purgelocales: $(filter-out target-purgelocales,$(TARGETS))
+ 	rm -f $(LOCALE_WHITELIST)
+ 	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
+ 
+-- 
+1.8.3.2
