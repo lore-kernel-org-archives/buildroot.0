@@ -1,45 +1,86 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Apr 2014 00:01:49 +0200
-Subject: [Buildroot] About static linking
-In-Reply-To: <87tx9i21li.fsf@dell.be.48ers.dk>
-References: <a2d055301fd7b62deb7599263ad3ff0ee94c1870.1398283199.git.baruch@tkos.co.il>
- <20140423225243.38a542c0@skate> <87tx9i21li.fsf@dell.be.48ers.dk>
-Message-ID: <535989CD.9090105@mind.be>
+Date: Fri, 25 Apr 2014 00:10:34 +0200
+Subject: [Buildroot] [PATCH 04/14] pkg-cmake.mk: do not hardcode
+ absolute path in toolchainfile.cmake
+In-Reply-To: <1398293313-17580-5-git-send-email-s.martin49@gmail.com>
+References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
+ <1398293313-17580-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <53598BDA.6030005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/04/14 17:23, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 24/04/14 00:48, Samuel Martin wrote:
+> The patch allows sharing or moving the toolchains.
 > 
->  > Dear Baruch Siach,
->  > On Wed, 23 Apr 2014 22:59:59 +0300, Baruch Siach wrote:
+> This is a step toward making the toolchain/sdk relocatable.
 > 
->  >> +DHCPDUMP_LIBS = -lpcap
->  >> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
->  >> +DHCPDUMP_LIBS += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
->  >> +endif
+> Closes #6818
 > 
->  > This is not at all against your patch specifically, but I'm a bit
->  > worried about all the static linking related kludges we add all over
->  > the place. Is this normal? Shouldn't we fix the packages themselves and
->  > submit patches upstream?
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: Uwe Strempel <u.strempel@googlemail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 > 
-> It would certainly be nice to get these things handled upstream, but
-> it's similar to the special-archs/nommu/uClibc stuff, E.G. not something
-> "normal" people gets affected by (and something we have decided to
-> support), so I don't think there's much else we can do.
+> ---
+> changes v1 -> v2:
+> - rebase
+> - use CMAKE_CURRENT_LIST_DIR instead of get_filename_component()
+> - rewrite subst call in a more natural way (Arnout)
+> ---
+>  package/pkg-cmake.mk | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index af8ecf5..b2ac2df 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -159,18 +159,19 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+>  ################################################################################
+>  
+>  define TOOLCHAINFILE_CMAKE
+> +string(REPLACE /usr/share/buildroot "" _HOST_DIR $${CMAKE_CURRENT_LIST_DIR})
 
- Still, I expect that upstreams are more likely to be willing to accept
-patches for linking against a static library than patches for exotic
-systems. Especially since the former is usually only a config patch,
-while the special-archs/nommu/uClibc stuff is more likely to affect the
-code itself.
+ _HOST_DIR is not sufficiently explanatory. How about RELOCATED_HOST_DIR?
+
+ This could benefit from some explanatory comment (took me some time to
+figure it out, at least).
+
+# In order to allow the toolchain to be relocated, we calculated the
+# HOST_DIR based on this file's location: $(HOST_DIR)/usr/share/buildroot
+# In all the other variables, HOST_DIR will be replaced by
+# RELOCATED_HOST_DIR
+
+>  set(CMAKE_SYSTEM_NAME Linux)
+> -set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))
+> -set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))
+> +set(CMAKE_C_COMPILER $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))gcc)
+
+ Why is this using $(TARGET_CROSS)gcc instead of the original
+$(TARGET_CC_NOCACHE) ?
+
 
  Regards,
  Arnout
+
+> +set(CMAKE_CXX_COMPILER $(subst $(HOST_DIR),$${_HOST_DIR},$(TARGET_CROSS))g++)
+>  set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)" CACHE STRING "Buildroot CFLAGS" FORCE)
+>  set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+>  set(CMAKE_INSTALL_SO_NO_EXE 0)
+> -set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)
+> -set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))
+> +set(CMAKE_PROGRAM_PATH $${_HOST_DIR}/usr/bin)
+> +set(CMAKE_FIND_ROOT_PATH $${_HOST_DIR}/$(STAGING_SUBDIR))
+>  set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+>  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+>  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+> -set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))
+> +set(ENV{PKG_CONFIG_SYSROOT_DIR} $${_HOST_DIR}/$(STAGING_SUBDIR))
+>  endef
+>  
+>  $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+> 
 
 
 -- 
