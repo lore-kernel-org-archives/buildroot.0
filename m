@@ -1,63 +1,81 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 24 Apr 2014 06:47:38 +0300
-Subject: [Buildroot] [PATCH 06/14] pkg-cmake.mk: cosmetic changes in the
- generated toolchainfile.cmake file
-In-Reply-To: <1398293313-17580-7-git-send-email-s.martin49@gmail.com>
-References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
- <1398293313-17580-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140424034738.GB22908@tarshish>
+Date: Thu, 24 Apr 2014 07:04:46 +0300
+Subject: [Buildroot] [PATCHv2 4/6] binutils: enable for aarch64
+In-Reply-To: <1398301235-8445-4-git-send-email-gustavo@zacarias.com.ar>
+References: <1398301235-8445-1-git-send-email-gustavo@zacarias.com.ar>
+ <1398301235-8445-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140424040446.GC22908@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Hi Gustavo,
 
-On Thu, Apr 24, 2014 at 12:48:25AM +0200, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Wed, Apr 23, 2014 at 10:00:33PM -0300, Gustavo Zacarias wrote:
+> Versions lower than 2.24 fail to build a working kernel as in:
 > 
-> ---
-> changes v1 -> v2:
-> - new patch
-> ---
->  package/pkg-cmake.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Freeing unused kernel memory: 184K (ffffffc00059a000 - ffffffc0005c8000)
+> init[1]: unhandled level 2 translation fault (11) at 0x00000008, esr
+> 0x92000006
+> pgd = ffffffc876403000
+> [00000008] *pgd=00000008f6ea0003, *pmd=0000000000000000
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index a032426..19f7843 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -161,17 +161,25 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
->  ################################################################################
->  
->  define TOOLCHAINFILE_CMAKE
-> +#
-> +# Automatically generated file; DO NOT EDIT.
-> +# CMake toolchain file for Buildroot
-> +#
-> +
->  string(REPLACE /usr/share/buildroot "" _HOST_DIR $${CMAKE_CURRENT_LIST_DIR})
-> +
->  set(CMAKE_SYSTEM_NAME Linux)
->  set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)" CACHE STRING "Buildroot CFLAGS" FORCE)
->  set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)" CACHE STRING "Buildroot CXXFLAGS" FORCE)
->  set(CMAKE_INSTALL_SO_NO_EXE 0)
-> +
->  set(CMAKE_PROGRAM_PATH $${_HOST_DIR}/usr/bin)
->  set(CMAKE_FIND_ROOT_PATH $${_HOST_DIR}/$(STAGING_SUBDIR))
->  set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
->  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
->  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
->  set(ENV{PKG_CONFIG_SYSROOT_DIR} $${_HOST_DIR}/$(STAGING_SUBDIR))
-> +
->  # This toolchain file can be used both inside and outside Buildroot.
->  # * When used inside Buildroot, ccache support is explicitly driven using the
->  #   USE_CCACHE variable.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
 
-Shouldn't this be squashed into patch #3?
+The subject line is misleading. This patch actually disables aarch64 for
+binutils < 2.24.
 
 baruch
+
+>  package/binutils/Config.in.host | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> index 58738e8..2f86f51 100644
+> --- a/package/binutils/Config.in.host
+> +++ b/package/binutils/Config.in.host
+> @@ -14,30 +14,30 @@ choice
+>  		bool "binutils 2.18-avr32-1.0.1"
+>  
+>  	config BR2_BINUTILS_VERSION_2_20_1
+> -		depends on !BR2_avr32
+> +		depends on !BR2_avr32 && !BR2_aarch64
+>  		depends on !BR2_ARM_EABIHF
+>  		bool "binutils 2.20.1"
+>  
+>  	config BR2_BINUTILS_VERSION_2_21
+> -		depends on !BR2_avr32
+> +		depends on !BR2_avr32 && !BR2_aarch64
+>  		depends on !BR2_ARM_EABIHF
+>  		bool "binutils 2.21"
+>  
+>  	config BR2_BINUTILS_VERSION_2_21_1
+> -		depends on !BR2_avr32
+> +		depends on !BR2_avr32 && !BR2_aarch64
+>  		depends on !BR2_ARM_EABIHF
+>  		bool "binutils 2.21.1"
+>  
+>  	config BR2_BINUTILS_VERSION_2_22
+> -		depends on !BR2_avr32
+> +		depends on !BR2_avr32 && !BR2_aarch64
+>  		bool "binutils 2.22"
+>  
+>  	config BR2_BINUTILS_VERSION_2_23_1
+> -		depends on !BR2_avr32
+> +		depends on !BR2_avr32 && !BR2_aarch64
+>  		bool "binutils 2.23.1"
+>  
+>  	config BR2_BINUTILS_VERSION_2_23_2
+> -		depends on !BR2_avr32
+> +		depends on !BR2_avr32 && !BR2_aarch64
+>  		bool "binutils 2.23.2"
+>  
+>  	config BR2_BINUTILS_VERSION_2_24
+> -- 
+> 1.8.3.2
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
