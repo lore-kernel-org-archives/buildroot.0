@@ -1,35 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Apr 2014 08:49:14 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support
-	for kernels older than 3.x.
-In-Reply-To: <OF4212D2FC.25E3AE63-ON86257CC3.004F7CF7-86257CC3.007CFC5D@rockwellcollins.com>
- (rjbarnet@rockwellcollins.com's message of "Wed, 23 Apr 2014 17:45:18
- -0500")
-References: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>
- <20140418213924.6d5a3ebf@skate> <53564749.5060409@lucaceresoli.net>
- <OF4212D2FC.25E3AE63-ON86257CC3.004F7CF7-86257CC3.007CFC5D@rockwellcollins.com>
-Message-ID: <87bnvr2ped.fsf@dell.be.48ers.dk>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 24 Apr 2014 08:53:59 +0200
+Subject: [Buildroot] add ghostscript to buildroot
+In-Reply-To: <6387189.ReKiMDKImK@linux-qsenn>
+References: <6387189.ReKiMDKImK@linux-qsenn>
+Message-ID: <CAAXf6LVyHopuR945-tRuLxrMBRU31=Vo0ksLSosGke0GSG+5Ag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "rjbarnet" == rjbarnet  <rjbarnet@rockwellcollins.com> writes:
+Hi William,
 
-Hi,
+On Wed, Apr 23, 2014 at 9:11 AM, William Frost <tsmrnd0@gmail.com> wrote:
+> Hi everyone,
+>
+> I have been working with buildroot for little more than one year. I think is
+> great tool.
 
- > We recently ran into a issue where brought a board forward to use Buildroot
- > 2014.02 that we kept at a kernel version of 2.6.33. Yes, I agree that we should
- > be using a new kernel but the work to port to a newer version is too great but
- > we needed to upgrade some package versions. The system was unable to boot
- > because DEVTMPFS_MOUNT was enabled in kernel config. We traced the issue back
- > to Buildroot automatically enabling these options in our kernel config. There
- > was no way to not include this kernel config option when
- > BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
+Thanks! And welcome to the community!
 
-Huh, but we ONLY enable it if BR2_ROOTFS_DEVICE_CREATION_STATIC isn't
-enabled - So why not just enabled it?
+> Some months ago I needed to cross-compile DCMTK library (it is not
+> included in buildroot) for DICOM image file management and PACS connectivity.
+> By following your online help I managed to add this package and successfully
+> cross-compile and use it (if needed I can provide the files just let me know
+> how).
 
--- 
-Bye, Peter Korsgaard 
+There is a section in the manual regarding contribution:
+http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot
+I think it can guide you.
+
+>
+> Anyway, at this moment I need to cross-compile GhostScript (any version is
+> good enough for me). But this is really complicated, I'm getting errors every
+> where. I notice that openwrt has already included GhostScript
+> (https://code.google.com/p/wl500g-repo/source/browse/feeds/rtndev/ghostscript/Makefile?r=1336
+> ) so at this moment I'm trying to port this package to buildroot. Buildroot
+> and ?openwrt buildroot? are similar tools so I guess that with some
+> modifications it can be added to Buildroot. But my Buildroot knowledge it not
+> that good (I hope with more time and practice it gets better ;)).
+
+The Makefile you show is not at all similar to the current .mk files
+we are using in buildroot.
+I think you should describe the exact problems you are facing in
+adding ghostscript to buildroot on the list, so we can help you
+further in adding it to buildroot.
+
+>
+> I need GhostScript to convert ps files to the file that will be sent to the
+> printer (I don?t know this format name). I already have a ppd parser, so I
+> just need to convert the ps file to the other format to open ?/dev/usb/lp0? and
+> write it inside.
+>
+> Question:
+>
+> Is there any interest in adding Ghostscript package to buildroot in the near
+> future?
+> Does anyone has some hints about porting packages from openwrt to buildroot
+> that I can use as guide?
+
+We are always interested in accepting new packages to buildroot. It's
+great that you want to look into this.
+As I said above, I think it's best you describe the exact problems you
+are facing, and what your .mk file and Config.in file already looks
+like, so we can help you further.
+
+Best regards,
+Thomas
