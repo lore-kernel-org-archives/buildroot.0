@@ -1,32 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Apr 2014 13:36:09 +0200
-Subject: [Buildroot] [git commit] libfslcodec: add comment explaining why it
-	needs glibc
-Message-ID: <20140424113619.6C4989C9CB@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 24 Apr 2014 13:42:54 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,13}.x series
+In-Reply-To: <1398338019-25266-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 24 Apr 2014 08:13:39 -0300")
+References: <1398338019-25266-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877g6f2bsx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4f022830deb2475aaf87ec48f43a59037d1411b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libfslcodec/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/libfslcodec/Config.in b/package/libfslcodec/Config.in
-index be79352..d2007fe 100644
---- a/package/libfslcodec/Config.in
-+++ b/package/libfslcodec/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBFSLCODEC
- 	bool "libfslcodec"
- 	depends on BR2_arm # Only relevant for i.MX
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # prebuilt binaries
- 	help
- 	  Binary codec libraries for the Freescale i.MX SoCs.
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
