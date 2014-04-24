@@ -1,34 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Apr 2014 11:09:37 +0200
-Subject: [Buildroot] [PATCH] jack2: bump version to
- ab409a65df95bc261ff72b52d6b3f4a65cf3266a
-Message-ID: <25faea136ec8cf425d6f.1398330577@argentina>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Apr 2014 11:12:42 +0200
+Subject: [Buildroot] [PATCH] smack: needs kernel headers v3.0+
+In-Reply-To: <08771bc278220844d434dc32849b6a521644203b.1398329779.git.baruch@tkos.co.il>
+References: <08771bc278220844d434dc32849b6a521644203b.1398329779.git.baruch@tkos.co.il>
+Message-ID: <20140424111242.78331752@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/dfc/dfc9850a128ef46acc6bbc066656a692da08db04/build-end.log
-thanks to commit
-https://github.com/jackaudio/jack2/commit/80976954453395cdcf1d2a29acfced2a9391e48a
+Dear Baruch Siach,
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Thu, 24 Apr 2014 11:56:19 +0300, Baruch Siach wrote:
+> smack uses symbols that are exported to userspace only since Linux kernel
+> commit 1dbe39424a43 (xattr.h: expose string defines to userspace).
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/7fc/7fc69002fbb37962e65e0f83384ae7a4e6eac8a9/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/smack/Config.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
----
- package/jack2/jack2.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied... but I just realized there was a mistake:
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JACK2_VERSION = 37976441044d69b91d61d8f6278949a39cf1b7b7
-+JACK2_VERSION = ab409a65df95bc261ff72b52d6b3f4a65cf3266a
- JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
- JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
+> -comment "smack needs a toolchain w/ dynamic library"
+> +comment "smack needs a toolchain w/ dynamic library, headers >= 3.0"
+>  	depends on BR2_PREFER_STATIC_LIB
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+
+This means the comment will only be displayed if both conditions are
+met (i.e static lib is enabled *and* we don't have at least 3.0 kernel
+headers). But we need the comment to be displayed if static lib is
+enabled *OR* we don't have at least 3.0 kernel headers.
+
+Could you send a followup patch to fix this?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
