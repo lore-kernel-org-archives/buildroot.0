@@ -1,26 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 24 Apr 2014 15:22:23 +0200
-Subject: [Buildroot] [PATCHv2 1/6] toolchain: add gcc 4.9 series
-In-Reply-To: <1398301235-8445-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 23 Apr 2014 22:00:30 -0300")
-References: <1398301235-8445-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y4yu2774.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Apr 2014 13:46:43 +0200
+Subject: [Buildroot] [git commit] package/gcc: disable libsanitizer for
+	uClibc
+Message-ID: <20140424132247.C529E9C969@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=554e29e267e6b36a0fd78c82cbad2c82d939eb7f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add the recently released gcc 4.9.0.
- > Use 4.8.2 patches and remove those that no longer apply/are needed
- > (mostly PR fixes and xtensa).
- > libmudflap was removed upstream.
+libsanitizer requires wordexp() support which we lack in our current
+default uClibc configurations (and it's fat & big).
+Hence disable it when the toolchain is uClibc-based.
+It only affects gcc 4.9+ since it's default on now for supported
+platforms.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index dff6dce..32219cc 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -125,6 +125,11 @@ ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+ HOST_GCC_COMMON_CONF_OPT += --disable-libquadmath
+ endif
+ 
++# libsanitizer requires wordexp, not in default uClibc config
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC),y)
++HOST_GCC_COMMON_CONF_OPT += --disable-libsanitizer
++endif
++
+ ifeq ($(BR2_GCC_ENABLE_TLS),y)
+ HOST_GCC_COMMON_CONF_OPT += --enable-tls
+ else
