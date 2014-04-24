@@ -1,69 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Apr 2014 08:53:59 +0200
-Subject: [Buildroot] add ghostscript to buildroot
-In-Reply-To: <6387189.ReKiMDKImK@linux-qsenn>
-References: <6387189.ReKiMDKImK@linux-qsenn>
-Message-ID: <CAAXf6LVyHopuR945-tRuLxrMBRU31=Vo0ksLSosGke0GSG+5Ag@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Apr 2014 09:16:26 +0200
+Subject: [Buildroot] About static linking
+In-Reply-To: <20140424042911.GD22908@tarshish>
+References: <a2d055301fd7b62deb7599263ad3ff0ee94c1870.1398283199.git.baruch@tkos.co.il>
+ <20140423225243.38a542c0@skate> <20140424042911.GD22908@tarshish>
+Message-ID: <20140424091626.61180eef@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi William,
+Dear Baruch Siach,
 
-On Wed, Apr 23, 2014 at 9:11 AM, William Frost <tsmrnd0@gmail.com> wrote:
-> Hi everyone,
->
-> I have been working with buildroot for little more than one year. I think is
-> great tool.
+On Thu, 24 Apr 2014 07:29:11 +0300, Baruch Siach wrote:
 
-Thanks! And welcome to the community!
+> > This is not at all against your patch specifically, but I'm a bit
+> > worried about all the static linking related kludges we add all over
+> > the place. Is this normal? Shouldn't we fix the packages themselves and
+> > submit patches upstream?
+> 
+> Upstream submission is of course preferable. In this case upstream does not 
+> appear to be very active. The current release is from 2008, while development 
+> started at 2007.
+> 
+> Do you prefer a Makefile patch that could theoretically be upstreamed?
 
-> Some months ago I needed to cross-compile DCMTK library (it is not
-> included in buildroot) for DICOM image file management and PACS connectivity.
-> By following your online help I managed to add this package and successfully
-> cross-compile and use it (if needed I can provide the files just let me know
-> how).
+I must say I don't know. In fact, I was not necessarily speaking
+specifically of this particular change, but more generally about all
+the LIBS='-lfoo' we're adding all over the place to fix static linking
+problems. This seems a bit fragile to me.
 
-There is a section in the manual regarding contribution:
-http://buildroot.uclibc.org/downloads/manual/manual.html#_contributing_to_buildroot
-I think it can guide you.
+And the point of raising this question was specifically to get a
+discussion started, and see the opinion of others (Gustavo, Peter,
+Arnout, Yann, etc.).
 
->
-> Anyway, at this moment I need to cross-compile GhostScript (any version is
-> good enough for me). But this is really complicated, I'm getting errors every
-> where. I notice that openwrt has already included GhostScript
-> (https://code.google.com/p/wl500g-repo/source/browse/feeds/rtndev/ghostscript/Makefile?r=1336
-> ) so at this moment I'm trying to port this package to buildroot. Buildroot
-> and ?openwrt buildroot? are similar tools so I guess that with some
-> modifications it can be added to Buildroot. But my Buildroot knowledge it not
-> that good (I hope with more time and practice it gets better ;)).
-
-The Makefile you show is not at all similar to the current .mk files
-we are using in buildroot.
-I think you should describe the exact problems you are facing in
-adding ghostscript to buildroot on the list, so we can help you
-further in adding it to buildroot.
-
->
-> I need GhostScript to convert ps files to the file that will be sent to the
-> printer (I don?t know this format name). I already have a ppd parser, so I
-> just need to convert the ps file to the other format to open ?/dev/usb/lp0? and
-> write it inside.
->
-> Question:
->
-> Is there any interest in adding Ghostscript package to buildroot in the near
-> future?
-> Does anyone has some hints about porting packages from openwrt to buildroot
-> that I can use as guide?
-
-We are always interested in accepting new packages to buildroot. It's
-great that you want to look into this.
-As I said above, I think it's best you describe the exact problems you
-are facing, and what your .mk file and Config.in file already looks
-like, so we can help you further.
-
-Best regards,
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
