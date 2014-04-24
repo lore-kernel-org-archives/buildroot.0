@@ -1,55 +1,64 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Apr 2014 00:46:43 +0200
-Subject: [Buildroot] [PATCH 10/14] pkg-cmake.mk: globally drive the
- CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
-In-Reply-To: <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
-References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
- <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
-Message-ID: <53599453.8080000@mind.be>
+Date: Fri, 25 Apr 2014 00:55:22 +0200
+Subject: [Buildroot] [PATCH 3/9] boot/syslinux: remove 'default y' in
+ sub-options
+In-Reply-To: <d3ab10dd08d3a1f70c0f7c79a5104d17a503579f.1398378217.git.yann.morin.1998@free.fr>
+References: <cover.1398378217.git.yann.morin.1998@free.fr>
+ <d3ab10dd08d3a1f70c0f7c79a5104d17a503579f.1398378217.git.yann.morin.1998@free.fr>
+Message-ID: <5359965A.2040101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/04/14 00:48, Samuel Martin wrote:
-> This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
-> etc).
+On 25/04/14 00:29, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> So, it makes sense for Buildroot to globally drive this CMake flags in
-> the cmake-package infrastructure.
+> Remove the 'default y' from sub-options, but ensure at least one
+> is enabled anyway.
 > 
-> However, if a package prefer overriding this default setting, it still
-> can via the <PKG>_CONF_OPT variable.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> We keep the 'default y' to the default option, so that the menuconfig
+> behaviour is not too surprising.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ The "surprising" part is that isolinux will be unselected when one of
+the other options is selected. If you really want both isolinux and
+pxelinux, that indeed is surprising. But I think you usually want either,
+not both. So in that case the fact that you first have to select pxelinux
+and then unselect isolinux doesn't seem appropriate to me.
 
+ Otherwise, looks good to me.
 
  Regards,
  Arnout
 
 > 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Lundquist <thomasez@redpill-linpro.com>
+> Cc: Frank Hunleth <fhunleth@troodon-software.com>
 > ---
-> changes v1 -> v2:
-> - new patch
-> ---
->  package/pkg-cmake.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  boot/syslinux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index e0efccb..1c52a53 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -63,6 +63,7 @@ define $(2)_CONFIGURE_CMDS
->  	PATH=$(BR_PATH) \
->  	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-> +		-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
->  		-DCMAKE_INSTALL_PREFIX="/usr" \
->  		-DCMAKE_COLOR_MAKEFILE=OFF \
->  		-DBUILD_TESTING=OFF \
+> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+> index 5b1122d..1b8c527 100644
+> --- a/boot/syslinux/Config.in
+> +++ b/boot/syslinux/Config.in
+> @@ -2,6 +2,7 @@ config BR2_TARGET_SYSLINUX
+>  	bool "syslinux"
+>  	depends on BR2_i386 || BR2_x86_64
+>  	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
+> +	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_PXELINUX
+>  	help
+>  	  The syslinux bootloader for x86 systems.
+>  	  This includes: syslinux, pxelinux, extlinux.
+> @@ -16,6 +17,5 @@ config BR2_TARGET_SYSLINUX_ISOLINUX
+>  
+>  config BR2_TARGET_SYSLINUX_PXELINUX
+>  	bool "Install pxelinux"
+> -	default y
+>  
+>  endif
 > 
 
 
