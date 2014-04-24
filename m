@@ -1,61 +1,41 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 24 Apr 2014 18:26:01 +0200
-Subject: [Buildroot] [V2 1/2] pkg-perl: fix for Perl XS packages configured
-	by Makefile.PL
-Message-ID: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+Date: Thu, 24 Apr 2014 18:26:02 +0200
+Subject: [Buildroot] [V2 2/2] perl-cross: bump to version 0.8.5
+In-Reply-To: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+References: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1398356762-12486-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ExtUtils::MakeMaker adds all the header files used by the perl as
-dependencies to the generated Makefile. This means that the generated
-Makefile will depend on the system's header files.
-
-Usually this is not a problem, because when building the target package,
-these header files will indeed be found in $(STAGING_DIR). However, some
-distro's add an extra header file to the system's perl. This header is
-also included in the generated Makefile, which makes the build fail
-because it doesn't exist in $(STAGING_DIR).
-
-As a work-around, explicitly create this header file in $(STAGING_DIR).
-It doesn't hurt to create it even if the system perl doesn't need it.
+The perl-cross tarball allows to patch the Perl distribution (in a _POST_EXTRACT_HOOKS).
+The github helper gives a copy of the project which allows to build this tarball.
+So, the github helper can not be used here.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl/perl.mk | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ package/perl/perl.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 51aeb14..64ad7d3 100644
+index 64ad7d3..d9e506e 100644
 --- a/package/perl/perl.mk
 +++ b/package/perl/perl.mk
-@@ -94,4 +94,25 @@ define PERL_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
- endef
+@@ -12,9 +12,10 @@ PERL_LICENSE = Artistic or GPLv1+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
  
-+# perl infra: fix for Perl XS packages configured by Makefile.PL
-+#
-+# ExtUtils::MakeMaker adds all the header files used by the perl as
-+# dependencies to the generated Makefile. This means that the generated
-+# Makefile will depend on the system's header files.
-+#
-+# Usually this is not a problem, because when building the target package,
-+# these header files will indeed be found in $(STAGING_DIR). However, some
-+# distro's add an extra header file to the system's perl. This header is
-+# also included in the generated Makefile, which makes the build fail
-+# because it doesn't exist in $(STAGING_DIR).
-+#
-+# As a work-around, explicitly create this header file in $(STAGING_DIR).
-+# It doesn't hurt to create it even if the system perl doesn't need it.
-+#
-+define PERL_ADD_PATCHLEVEL_DEBIAN_H
-+	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
-+endef
-+
-+PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_PATCHLEVEL_DEBIAN_H
-+
- $(eval $(generic-package))
+-PERL_CROSS_VERSION = 0.8.3
+-PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).1
+-PERL_CROSS_SITE    = http://download.berlios.de/perlcross
++PERL_CROSS_VERSION = 0.8.5
++PERL_CROSS_BASE_VERSION = 5.$(PERL_VERSION_MAJOR).2
++# DO NOT refactor with the github helper (the result is not the same)
++PERL_CROSS_SITE    = http://raw.github.com/arsv/perl-cross/releases
+ PERL_CROSS_SOURCE  = perl-$(PERL_CROSS_BASE_VERSION)-cross-$(PERL_CROSS_VERSION).tar.gz
+ PERL_CROSS_OLD_POD = perl$(subst .,,$(PERL_CROSS_BASE_VERSION))delta.pod
+ PERL_CROSS_NEW_POD = perl$(subst .,,$(PERL_VERSION))delta.pod
 -- 
 1.9.1
