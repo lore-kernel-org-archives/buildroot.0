@@ -1,59 +1,32 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Thu, 24 Apr 2014 12:07:44 +0200
-Subject: [Buildroot] How transfer what image(s) to target-CF?
-In-Reply-To: <5357DD2D.1030702@mind.be>
-References: <CAEzGmjA3wbjEFb6sQYov_rJFJuB8oJFx2Y6XOA7WWHce743=dg@mail.gmail.com>
- <5357DD2D.1030702@mind.be>
-Message-ID: <CAEzGmjCXKEQTEEbz7a9JfX80rVafF4XedTjfZDQYyVOypASgAA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Apr 2014 12:16:40 +0200
+Subject: [Buildroot] [git commit] smack: fix dependencies comment
+Message-ID: <20140424101653.ECB609C9B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Arnout,
+commit: http://git.buildroot.net/buildroot/commit/?id=1e187d7720d55b979857d7a11d7cbac773f72e0a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now, please, for the 'how'-part, that 'put':
+The comment should show when any of these conditions is not met.
 
-How exactly would I here use commands like dd and/or cpio, and in what
-order?
-Assume the target CF is mounted as /dev/sdX on the host.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/smack/Config.in |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-To complicate matters :-) I aim at ext3.
-
-Regards
-Lennart
-
-
-On Wed, Apr 23, 2014 at 5:33 PM, Arnout Vandecappelle <arnout@mind.be>wrote:
-
-> On 23/04/14 15:42, Lennart Ramberg wrote:
-> > Hello,
-> >
-> > New and experimenting, I want my target Linux system to reside on a
-> > Compact Flash,
-> > such that I can pull it from the host (Buildroot) computer and
-> > then insert it in my x86 target as an IDE-drive and boot.
-> >
-> > What file(s) should I have in host .../output/images/  and how do I put
-> > it(them) in the CF?
-> > I have USB on my host and a USB-CF-adapter and a formatted CF.
->
->  The simplest is probably to use cpio as your rootfs, syslinux as the
-> bootloader, bzImage as the kernel, and put that on a FAT filesystem.
->
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140424/e1c285f4/attachment.html>
+diff --git a/package/smack/Config.in b/package/smack/Config.in
+index 55e9d2e..3f26cae 100644
+--- a/package/smack/Config.in
++++ b/package/smack/Config.in
+@@ -30,5 +30,4 @@ config BR2_PACKAGE_SMACK
+ 	  https://github.com/smack-team/smack
+ 
+ comment "smack needs a toolchain w/ dynamic library, headers >= 3.0"
+-	depends on BR2_PREFER_STATIC_LIB
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
