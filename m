@@ -1,58 +1,61 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Apr 2014 09:44:00 +0200
-Subject: [Buildroot] adding DCMTK libraries to buildroot
-In-Reply-To: <2656055.10Mv5CXMOB@linux-qsenn>
-References: <2656055.10Mv5CXMOB@linux-qsenn>
-Message-ID: <CAAXf6LXWAV0_n=kMtuk_JRZ0N2PW_3L7+rAqR7dfQQO8i4kj6g@mail.gmail.com>
+From: Pascal =?ISO-8859-1?Q?H=FCrst?= <pascal.huerst@gmail.com>
+Date: Thu, 24 Apr 2014 09:52:24 +0200
+Subject: [Buildroot] Adding google-breakpad to buildroot
+In-Reply-To: <53582D0A.2030302@mind.be>
+References: <1398262906.30640.4.camel@mbpro.localhost>
+ <5357DC41.6020608@mind.be>
+ <CAHXCMMKSGHSvYLr9JALDr0YzD4uTshQrNZYm46-0kgGpUP4Ptw@mail.gmail.com>
+ <1398269552.30640.13.camel@mbpro.localhost> <53582D0A.2030302@mind.be>
+Message-ID: <1398325944.3669.2.camel@mbpro.localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi William,
+On Mit, 2014-04-23 at 23:13 +0200, Arnout Vandecappelle wrote:
+> On 23/04/14 18:12, Pascal H?rst wrote:
+> > On Mit, 2014-04-23 at 17:52 +0200, Samuel Martin wrote:
+> >> Hi Pascal, Arnout, all,
+> >>
+> >> On Wed, Apr 23, 2014 at 5:29 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>> On 23/04/14 16:21, Pascal H?rst wrote:
+> [snip]
+> >>>  It is easier to add it to the target-finalize target. Then you can be
+> >>> sure that the ordering is correct (target-finalize already has all the
+> >>> needed dependencies). You can also easily use conditions there (it's not
+> >>> inside a define).
+> >>>
+> >>>  However, I think it will be more appropriate to implement breakpad as an
+> >>> additional strip alternative. You probably don't want to combine strip
+> >>> with breakpad...
+> >>
+> >> I think breakpad is more like a pre-strip hook, that one can enable or
+> >> not. But in the end, the target image will be stripped most of the
+> >> time (at least, this is the way I would use such a feature).
+> > 
+> > I agree, since the extraction of the symbols should always happen, when
+> > breakpad is used, no mater what strip alternative is selected
+> 
+>  OK, I thought breakpad did stripping already.
+> 
+>  In that case, I think it's best to put it in target-finalize just before
+> strip.
 
-On Thu, Apr 24, 2014 at 3:38 AM, William Frost <tsmrnd0@gmail.com> wrote:
-> This patch is far from being perfect but at list it is a start point to
-> something better.
-> Known problems:
->  - Building dynamic libraries is not optional. I prefer static linking for
-> this library but it will be nice to leave this option to the users.
->  - Every time I try to build buildroot DCMTK gets configured again, I
->  must be doing something wrong. But it compiles just fine and install the
->  libraries on staging/usr/lib.
-> This is is first time contributing so if I'm doing something wrong please let
-> me know the right way to do it.
+Ok, I'll do it that way, then.
 
-Please have a look at the contribution section in the manual on how to
-send patches. Patches should be sent inline and not as attachment.
-This makes review of the patch much easier.
+Thanks!
 
-The first line of the commit message should be a summary, followed by
-an empty line. The manual contains an example.
+>  Regards,
+>  Arnout
 
-The Config.in and .mk files should be line-wrapped to 80 characters.
+Regards
+Pascal
 
-The symbol BR2_DCMTK_VERSION should be called BR2_PACKAGE_DCMTK_VERSION.
-
-The #### in the .mk file should be 80 characters wide.
-
-If you set DCMTK_VERSION = $(call qstrip,$(BR2_PACKAGE_DCMTK_VERSION)
-then you can remove the DCMTK_SOURCE line because the default is
-<pkg>-<version>.tar.gz.
-
-These are just some initial comments.
-
-When you send a new patch, please mark it as 'v2' and describe the
-changes you made (see the manual)
-
-Thanks for contributing,
-
-Thomas
-
-
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 198 bytes
+Desc: This is a digitally signed message part
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140424/990dae1f/attachment.asc>
