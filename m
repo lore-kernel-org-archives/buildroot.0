@@ -1,29 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 12:17:30 +0200
-Subject: [Buildroot] [PATCH] smack: fix dependencies comment
-In-Reply-To: <310a5750548ad302ef39e202768ebb3b3a265eb3.1398331636.git.baruch@tkos.co.il>
-References: <310a5750548ad302ef39e202768ebb3b3a265eb3.1398331636.git.baruch@tkos.co.il>
-Message-ID: <20140424121730.6703f058@skate>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 24 Apr 2014 08:13:39 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{12,13}.x series
+Message-ID: <1398338019-25266-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, 24 Apr 2014 12:27:16 +0300, Baruch Siach wrote:
-> The comment should show when any of these conditions is not met.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/smack/Config.in | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-
-Applied, thanks!
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 23586fb..001c424 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -163,7 +163,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+ 	default "3.10.37"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.17"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.13.10"	if BR2_KERNEL_HEADERS_3_13
++	default "3.12.18"	if BR2_KERNEL_HEADERS_3_12
++	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.1"	if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
