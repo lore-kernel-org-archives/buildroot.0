@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 11:13:53 +0200
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.7 and improve
- cross build
-In-Reply-To: <1398211678-20218-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1398211678-20218-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140424111353.014f1d84@skate>
+Date: Thu, 24 Apr 2014 11:14:44 +0200
+Subject: [Buildroot] [git commit] jack2: bump version to
+	ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+Message-ID: <20140424091456.A1CFF9C9C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=f386839de1a2264f8e6c0eecd05b084c6ebe1935
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 22 Apr 2014 21:07:58 -0300, Gustavo Zacarias wrote:
-> Bump to the latest 4.1.7 version and improve the cross-build logic.
-> With the new patches the build is basically architecture-agnostic making
-> it possible to ditch the arch-specific cache to use a generic one.
-> Some toolchains might not be too happy with samba4 because of bitrot,
-> hopefully we'll find and fix or blacklist those with autobuilder help.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes
+http://autobuild.buildroot.net/results/dfc/dfc9850a128ef46acc6bbc066656a692da08db04/build-end.log
+thanks to commit
+https://github.com/jackaudio/jack2/commit/80976954453395cdcf1d2a29acfced2a9391e48a
 
-Applied, thanks.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/jack2/jack2.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 279fca0..f2ded00 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JACK2_VERSION = 37976441044d69b91d61d8f6278949a39cf1b7b7
++JACK2_VERSION = ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
+ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
