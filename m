@@ -1,39 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Apr 2014 22:35:33 +0200
-Subject: [Buildroot] [git commit] acpid: unavailable for external uClibc
-	toolchains
-Message-ID: <20140424204218.2F6159C9B8@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 24 Apr 2014 22:43:14 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+In-Reply-To: <20140422234122.778f4392@skate>
+References: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be><20140422162711.7b4d0c17@skate><18590DF726304B8A9132C34717060A98@JohanW7>
+ <20140422234122.778f4392@skate>
+Message-ID: <78843C93FA8647B482C22C49E4C4DB0D@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ec6aaa4706d6826aca4e48ea65bbebbd893f76d6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-External non-patched uClibc toolchains lack the MSG_CMSG_CLOEXEC
-definition, so does internal uClibc <0.9.33, so exclude it for those
-scenarios. Fixes:
-http://autobuild.buildroot.net/results/6d4/6d471942788fa05f324649ab15e6ca382e46df9c/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/acpid/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/acpid/Config.in b/package/acpid/Config.in
-index 5aec7f1..205a6ae 100644
---- a/package/acpid/Config.in
-+++ b/package/acpid/Config.in
-@@ -1,6 +1,9 @@
- config BR2_PACKAGE_ACPID
- 	bool "acpid"
- 	depends on BR2_x86_64 || BR2_i386
-+	# Usually lacks MSG_CMSG_CLOEXEC
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
-+		!BR2_UCLIBC_VERSION_0_9_32
- 	help
- 	  Advanced Configuration and Power Interface event daemon.
  
+Dear Thomas ;
+
+What should I do with the BR2_PREFER_STATIC_LIB ? 
+Is this a something I should add as depenency ?
+(I am not very familiar with libraries, I assume that qdecoder.a is a static library and the others (*.so.*) are shared)
+
+What should I add to finalize this patch ?
+I added a comment line to the QDECODER_CONF_OPT line for my next version of the patch. 
+
+Kind regards, Sagaert Johan
+
+-----Oorspronkelijk bericht-----
+Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
+Verzonden: dinsdag 22 april 2014 23:41
+Aan: Sagaert Johan
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+
+Dear Sagaert Johan,
+
+On Tue, 22 Apr 2014 17:07:01 +0200, Sagaert Johan wrote:
+
+> I did a quick check on :
+> http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-ar
+> m-full-nothread.config
+> 
+> But this seem to fail on my build machine:
+> .....snip
+> make[2]: Leaving directory `/home/brcpy/support/kconfig'
+> BR2_DEFCONFIG='' 
+> KCONFIG_AUTOCONFIG=/home/brcpy/output/build/buildroot-config/auto.conf
+> KCONFIG_AUTOHEADER=/home/brcpy/output/build/buildroot-config/autoconf.
+> h 
+> KCONFIG_TRISTATE=/home/brcpy/output/build/buildroot-config/tristate.co
+> nfig BR2_CONFIG=/home/brcpy/.config 
+> BR2_EXTERNAL=support/dummy-external 
+> /home/brcpy/output/build/buildroot-config/conf --silentoldconfig 
+> Config.in
+> make[1]: Leaving directory `/home/brcpy'
+> >>> toolchain-external undefined Extracting
+> mkdir -p /home/brcpy/output/host/opt/ext-toolchain
+> bzcat /home/johan/dl/br-arm11-full-nothread-2014.02-rc1.tar.bz2 | tar 
+> --strip-components=1 --exclude='usr/lib/locale/*' -C 
+> /home/brcpy/output/host/opt/ext-toolchain  -xf -
+> >>> toolchain-external undefined Patching toolchain-external undefined 
+> >>> Configuring
+> Cannot execute cross-compiler '/home/brcpy/output/host/opt/ext-toolchain/bin/arm-linux-gcc'
+> 
+> Is the x64 code ? I am on a 32 bit VM (debian 6).
+
+Hum, correct, the toolchain is 64 bits. Weird, I was pretty sure to build them in a 32 bits chroot, maybe that's no longer the case.
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering http://free-electrons.com
