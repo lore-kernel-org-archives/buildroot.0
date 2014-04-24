@@ -1,70 +1,94 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 24 Apr 2014 22:43:14 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
-In-Reply-To: <20140422234122.778f4392@skate>
-References: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be><20140422162711.7b4d0c17@skate><18590DF726304B8A9132C34717060A98@JohanW7>
- <20140422234122.778f4392@skate>
-Message-ID: <78843C93FA8647B482C22C49E4C4DB0D@JohanW7>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Apr 2014 22:59:58 +0200
+Subject: [Buildroot] [PATCH 03/14] pkg-cmake.mk: rework
+	toolchainfile.cmake
+In-Reply-To: <1398293313-17580-4-git-send-email-s.martin49@gmail.com>
+References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
+ <1398293313-17580-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <53597B4E.1030808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- 
-Dear Thomas ;
+On 24/04/14 00:48, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-What should I do with the BR2_PREFER_STATIC_LIB ? 
-Is this a something I should add as depenency ?
-(I am not very familiar with libraries, I assume that qdecoder.a is a static library and the others (*.so.*) are shared)
+ More explicit commit log:
 
-What should I add to finalize this patch ?
-I added a comment line to the QDECODER_CONF_OPT line for my next version of the patch. 
+By putting the content of toolchainfile.cmake in a separate define, we
+can remove a lot of the quoting and it becomes much more similar to the
+resulting file.
 
-Kind regards, Sagaert Johan
+ Otherwise, looks good to me except for the quoting.
 
------Oorspronkelijk bericht-----
-Van: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com] 
-Verzonden: dinsdag 22 april 2014 23:41
-Aan: Sagaert Johan
-CC: buildroot at busybox.net
-Onderwerp: Re: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
-
-Dear Sagaert Johan,
-
-On Tue, 22 Apr 2014 17:07:01 +0200, Sagaert Johan wrote:
-
-> I did a quick check on :
-> http://autobuild.buildroot.org/toolchains/configs/free-electrons/br-ar
-> m-full-nothread.config
 > 
-> But this seem to fail on my build machine:
-> .....snip
-> make[2]: Leaving directory `/home/brcpy/support/kconfig'
-> BR2_DEFCONFIG='' 
-> KCONFIG_AUTOCONFIG=/home/brcpy/output/build/buildroot-config/auto.conf
-> KCONFIG_AUTOHEADER=/home/brcpy/output/build/buildroot-config/autoconf.
-> h 
-> KCONFIG_TRISTATE=/home/brcpy/output/build/buildroot-config/tristate.co
-> nfig BR2_CONFIG=/home/brcpy/.config 
-> BR2_EXTERNAL=support/dummy-external 
-> /home/brcpy/output/build/buildroot-config/conf --silentoldconfig 
-> Config.in
-> make[1]: Leaving directory `/home/brcpy'
-> >>> toolchain-external undefined Extracting
-> mkdir -p /home/brcpy/output/host/opt/ext-toolchain
-> bzcat /home/johan/dl/br-arm11-full-nothread-2014.02-rc1.tar.bz2 | tar 
-> --strip-components=1 --exclude='usr/lib/locale/*' -C 
-> /home/brcpy/output/host/opt/ext-toolchain  -xf -
-> >>> toolchain-external undefined Patching toolchain-external undefined 
-> >>> Configuring
-> Cannot execute cross-compiler '/home/brcpy/output/host/opt/ext-toolchain/bin/arm-linux-gcc'
+> ---
+> changes v1 -> v2:
+> - new patch
+> ---
+>  package/pkg-cmake.mk | 30 ++++++++++++++++--------------
+>  1 file changed, 16 insertions(+), 14 deletions(-)
 > 
-> Is the x64 code ? I am on a 32 bit VM (debian 6).
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 963a423..af8ecf5 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -158,19 +158,21 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+>  # Generation of the CMake toolchain file
+>  ################################################################################
+>  
+> +define TOOLCHAINFILE_CMAKE
+> +set(CMAKE_SYSTEM_NAME Linux)
+> +set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))
+> +set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))
 
-Hum, correct, the toolchain is 64 bits. Weird, I was pretty sure to build them in a 32 bits chroot, maybe that's no longer the case.
+ Amendment to the comment I made on the previous patch 2/14: the quoting
+of these two should of course be consistent with the quoting of
+PROGRAM_PATH and FIND_ROOT_PATH. So I would say to add quotes.
 
-Thomas
---
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering http://free-electrons.com
+
+
+ Regards,
+ Arnout
+
+> +set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)" CACHE STRING "Buildroot CFLAGS" FORCE)
+> +set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+> +set(CMAKE_INSTALL_SO_NO_EXE 0)
+> +set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)
+> +set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))
+> +set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+> +set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+> +set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+> +set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))
+> +endef
+> +
+>  $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+>  	@mkdir -p $(@D)
+> -	@printf "\
+> -	set(CMAKE_SYSTEM_NAME Linux)\n\
+> -	set(CMAKE_C_COMPILER $(TARGET_CC_NOCCACHE))\n\
+> -	set(CMAKE_CXX_COMPILER $(TARGET_CXX_NOCCACHE))\n\
+> -	set(CMAKE_C_FLAGS \"\$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)\" CACHE STRING \"Buildroot CFLAGS\" FORCE)\n\
+> -	set(CMAKE_CXX_FLAGS \"\$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)\" CACHE STRING \"Buildroot CXXFLAGS\" FORCE)\n\
+> -	set(CMAKE_INSTALL_SO_NO_EXE 0)\n\
+> -	set(CMAKE_PROGRAM_PATH $(HOST_DIR)/usr/bin)\n\
+> -	set(CMAKE_FIND_ROOT_PATH $(STAGING_DIR))\n\
+> -	set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)\n\
+> -	set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)\n\
+> -	set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)\n\
+> -	set(ENV{PKG_CONFIG_SYSROOT_DIR} $(STAGING_DIR))\n\
+> -	" > $@
+> +	@printf '$(subst $(sep),\n,$(TOOLCHAINFILE_CMAKE))' > $@
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
