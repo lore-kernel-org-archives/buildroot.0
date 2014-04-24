@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 25 Apr 2014 00:45:42 +0200
-Subject: [Buildroot] [PATCH 09/14] pkg-cmake.mk: globally disable
- BUILD_TESTING flag
-In-Reply-To: <1398293313-17580-10-git-send-email-s.martin49@gmail.com>
+Date: Fri, 25 Apr 2014 00:46:43 +0200
+Subject: [Buildroot] [PATCH 10/14] pkg-cmake.mk: globally drive the
+ CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
+In-Reply-To: <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
 References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
- <1398293313-17580-10-git-send-email-s.martin49@gmail.com>
-Message-ID: <53599416.8090604@mind.be>
+ <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
+Message-ID: <53599453.8080000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,23 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 24/04/14 00:48, Samuel Martin wrote:
-> This CMake flag is used to enable tests. It may not disable the test
-> programs from being built, but it controls the test execution.
+> This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
+> etc).
 > 
-> Since we don't care about building the tests (and usually disable them
-> when possible), make sure Buildroot won't try to run them.
+> So, it makes sense for Buildroot to globally drive this CMake flags in
+> the cmake-package infrastructure.
+> 
+> However, if a package prefer overriding this default setting, it still
+> can via the <PKG>_CONF_OPT variable.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
 > 
 > ---
 > changes v1 -> v2:
@@ -29,29 +39,17 @@ On 24/04/14 00:48, Samuel Martin wrote:
 >  1 file changed, 1 insertion(+)
 > 
 > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index d6dadbe..e0efccb 100644
+> index e0efccb..1c52a53 100644
 > --- a/package/pkg-cmake.mk
 > +++ b/package/pkg-cmake.mk
-> @@ -65,6 +65,7 @@ define $(2)_CONFIGURE_CMDS
+> @@ -63,6 +63,7 @@ define $(2)_CONFIGURE_CMDS
+>  	PATH=$(BR_PATH) \
+>  	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
 >  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+> +		-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
 >  		-DCMAKE_INSTALL_PREFIX="/usr" \
 >  		-DCMAKE_COLOR_MAKEFILE=OFF \
-> +		-DBUILD_TESTING=OFF \
-
- Shouldn't this be done for the host variant as well?
-
->  		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
-
- Not really related to this patch, but is there a specific reason why
-some options are set in the toolchainfile.cmake and some are set on the
-command line?
-
-
- Regards,
- Arnout
-
->  		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
->  		$$($$(PKG)_CONF_OPT) \
+>  		-DBUILD_TESTING=OFF \
 > 
 
 
