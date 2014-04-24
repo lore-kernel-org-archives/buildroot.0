@@ -1,150 +1,114 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 24 Apr 2014 22:19:43 +0100
-Subject: [Buildroot] [PATCH 2/3] caps: new package
-In-Reply-To: <1398374384-8814-1-git-send-email-martin@barkynet.com>
-References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
-Message-ID: <1398374384-8814-2-git-send-email-martin@barkynet.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 24 Apr 2014 23:44:26 +0200
+Subject: [Buildroot] How transfer what image(s) to target-CF?
+In-Reply-To: <CAEzGmjCXKEQTEEbz7a9JfX80rVafF4XedTjfZDQYyVOypASgAA@mail.gmail.com>
+References: <CAEzGmjA3wbjEFb6sQYov_rJFJuB8oJFx2Y6XOA7WWHce743=dg@mail.gmail.com>
+ <5357DD2D.1030702@mind.be>
+ <CAEzGmjCXKEQTEEbz7a9JfX80rVafF4XedTjfZDQYyVOypASgAA@mail.gmail.com>
+Message-ID: <535985BA.1020009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CAPS is a collection of audio plugins comprising virtual guitar
-amplification and a small range of basic classic effects, signal
-processors and generators of often elementary and occasionally
-exotic nature.
+ Hi Lennart,
 
-The plugins aim to satisfy the highest demands in sound quality
-with maximal computational efficiency and zero latency.
+ [Please don't top-post, instead reply below the relevant quoted paragraph.]
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/Config.in                            |    1 +
- package/caps/Config.in                       |   12 ++++++
- package/caps/caps-01-cross-compile-fix.patch |   54 ++++++++++++++++++++++++++
- package/caps/caps.mk                         |   21 ++++++++++
- 4 files changed, 88 insertions(+)
- create mode 100644 package/caps/Config.in
- create mode 100644 package/caps/caps-01-cross-compile-fix.patch
- create mode 100644 package/caps/caps.mk
+On 24/04/14 12:07, Lennart Ramberg wrote:
+> Thanks Arnout,
+> 
+> Now, please, for the 'how'-part, that 'put':
+> 
+> How exactly would I here use commands like dd and/or cpio, and in what order?
 
-diff --git a/package/Config.in b/package/Config.in
-index 5956154..33d16ac 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -491,6 +491,7 @@ menu "Libraries"
- menu "Audio/Sound"
- source "package/alsa-lib/Config.in"
- source "package/audiofile/Config.in"
-+source "package/caps/Config.in"
- source "package/celt051/Config.in"
- source "package/fdk-aac/Config.in"
- source "package/ladspa-sdk/Config.in"
-diff --git a/package/caps/Config.in b/package/caps/Config.in
-new file mode 100644
-index 0000000..28ff332
---- /dev/null
-+++ b/package/caps/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_CAPS
-+	bool "caps"
-+	help
-+	  CAPS is a collection of audio plugins comprising virtual guitar
-+	  amplification and a small range of basic classic effects, signal
-+	  processors and generators of often elementary and occasionally
-+	  exotic nature.
-+
-+	  The plugins aim to satisfy the highest demands in sound quality
-+	  with maximal computational efficiency and zero latency.
-+
-+	  http://quitte.de/dsp/caps.html
-diff --git a/package/caps/caps-01-cross-compile-fix.patch b/package/caps/caps-01-cross-compile-fix.patch
-new file mode 100644
-index 0000000..4667191
---- /dev/null
-+++ b/package/caps/caps-01-cross-compile-fix.patch
-@@ -0,0 +1,54 @@
-+--- caps-0.9.23.original/Makefile	2014-03-13 08:06:40.000000000 +0000
-++++ caps-0.9.23/Makefile	2014-04-24 15:29:40.008145963 +0100
-+@@ -3,18 +3,18 @@
-+ PREFIX = /usr
-+ DESTDIR = 
-+ 
-+-CC = g++
-++CXX ?= g++
-+ 
-+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
-+ #OPTS = -g -DDEBUG 
-+ 
-+ _LDFLAGS = -shared 
-+-STRIP = strip
-++STRIP ?= strip
-+ 
-+ -include defines.make
-+ 
-+-CFLAGS += $(OPTS) $(_CFLAGS)
-+-LDFLAGS += $(_LDFLAGS) $(CFLAGS)
-++CXXFLAGS += $(OPTS) $(_CXXFLAGS)
-++LDFLAGS += $(_LDFLAGS) $(CXXFLAGS)
-+ 
-+ PLUG = caps
-+ 
-+@@ -48,13 +48,13 @@
-+ 	python tools/make-rdf.py > $(PLUG).rdf
-+ 
-+ $(PLUG).so: $(OBJECTS)
-+-	$(CC) $(ARCH) $(LDFLAGS) -o $@ $(OBJECTS)
-++	$(CXX) $(ARCH) $(LDFLAGS) -o $@ $(OBJECTS)
-+ 
-+ .cc.s: 
-+-	$(CC) $(ARCH) $(CFLAGS) -S $<
-++	$(CXX) $(ARCH) $(CXXFLAGS) -S $<
-+ 
-+ .cc.o: depend 
-+-	$(CC) $(ARCH) $(CFLAGS) -o $@ -c $<
-++	$(CXX) $(ARCH) $(CXXFLAGS) -o $@ -c $<
-+ 
-+ tags: $(SOURCES) $(HEADERS)
-+ 	@-if [ -x /usr/bin/ctags ]; then ctags $(SOURCES) $(HEADERS) >/dev/null 2>&1 ; fi
-+@@ -87,9 +87,9 @@
-+ 	@VERSION=$(VERSION) python tools/make-version.h.py
-+ 
-+ dist: all $(PLUG).rdf version.h
-+-	tools/make-dist.py caps $(VERSION) $(CFLAGS)
-++	tools/make-dist.py caps $(VERSION) $(CXXFLAGS)
-+ 
-+ depend: $(SOURCES) $(HEADERS)
-+-	$(CC) -MM $(CFLAGS) $(DEFINES) $(SOURCES) > depend
-++	$(CXX) -MM $(CXXFLAGS) $(DEFINES) $(SOURCES) > depend
-+ 
-+ -include depend
-diff --git a/package/caps/caps.mk b/package/caps/caps.mk
-new file mode 100644
-index 0000000..d642bc8
---- /dev/null
-+++ b/package/caps/caps.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# caps
-+#
-+################################################################################
-+
-+CAPS_VERSION = 0.9.23
-+CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
-+CAPS_SITE = http://quitte.de/dsp/
-+CAPS_LICENSE = GPLv3
-+CAPS_LICENSE_FILES = COPYING
-+
-+define CAPS_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-+endef
-+
-+define CAPS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
+ With "put", I just meant copying onto the existing FAT filesystem. But
+it seems that is not what you want.
+
+
+> Assume the target CF is mounted as /dev/sdX on the host.
+> 
+> To complicate matters :-) I aim at ext3.
+
+ Then you have two options: either create an ext3 image, or create a
+tarball and format the CF card from a separate script.
+
+1. Set the following options:
+
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_3=y
+BR2_TARGET_ROOTFS_EXT2_BLOCKS=1000000
+(the latter is assuming you have a 1GB CF card).
+
+This will create a rootfs.ext3 image.
+You can write this to your CF card with
+cat output/images/rootfs.ext3 > /dev/sdX1
+(assuming you've partitioned it already, and your rootfs is partition 1).
+
+2. Select the tarball as the target rootfs.
+
+Now in a separate script, use mkfs.ext3 to create the rootfs directly on
+the CF card. Then mount it and untar output/images/rootfs.tar to the rootfs.
+
+
+ In both cases, you'll probably want to use grub2 as the bootloader and
+select the BR2_LINUX_KERNEL_INSTALL_TARGET option.
+
+
+ Regards,
+ Arnout
+
+> 
+> Regards
+> Lennart
+> 
+> 
+> On Wed, Apr 23, 2014 at 5:33 PM, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+> 
+>     On 23/04/14 15:42, Lennart Ramberg wrote:
+>     > Hello,
+>     >
+>     > New and experimenting, I want my target Linux system to reside on a
+>     > Compact Flash,
+>     > such that I can pull it from the host (Buildroot) computer and
+>     > then insert it in my x86 target as an IDE-drive and boot.
+>     >
+>     > What file(s) should I have in host .../output/images/  and how do I put
+>     > it(them) in the CF?
+>     > I have USB on my host and a USB-CF-adapter and a formatted CF.
+> 
+>      The simplest is probably to use cpio as your rootfs, syslinux as the
+>     bootloader, bzImage as the kernel, and put that on a FAT filesystem.
+> 
+> 
+>      Regards,
+>      Arnout
+> 
+>     --
+>     Arnout Vandecappelle                          arnout at mind be
+>     Senior Embedded Software Architect            +32-16-286500
+>     <tel:%2B32-16-286500>
+>     Essensium/Mind                                http://www.mind.be
+>     G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>     LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>     GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> 
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
 -- 
-1.7.9.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
