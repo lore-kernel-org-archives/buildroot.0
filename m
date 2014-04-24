@@ -1,45 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Apr 2014 11:11:04 +0200
-Subject: [Buildroot] [git commit] smack: needs kernel headers v3.0+
-Message-ID: <20140424091111.3A98B9C9B8@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 24 Apr 2014 11:09:37 +0200
+Subject: [Buildroot] [PATCH] jack2: bump version to
+ ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+Message-ID: <25faea136ec8cf425d6f.1398330577@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36afe6de9c8760b4dc26ca89e97e78dce627e716
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes
+http://autobuild.buildroot.net/results/dfc/dfc9850a128ef46acc6bbc066656a692da08db04/build-end.log
+thanks to commit
+https://github.com/jackaudio/jack2/commit/80976954453395cdcf1d2a29acfced2a9391e48a
 
-smack uses symbols that are exported to userspace only since Linux kernel
-commit 1dbe39424a43 (xattr.h: expose string defines to userspace).
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Fixes:
-http://autobuild.buildroot.net/results/7fc/7fc69002fbb37962e65e0f83384ae7a4e6eac8a9/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/smack/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/jack2/jack2.mk |  2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/smack/Config.in b/package/smack/Config.in
-index 618a680..55e9d2e 100644
---- a/package/smack/Config.in
-+++ b/package/smack/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SMACK
- 	bool "smack"
- 	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	help
- 	  User space programs and libraries for SMACK.
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -28,5 +29,6 @@ config BR2_PACKAGE_SMACK
- 
- 	  https://github.com/smack-team/smack
- 
--comment "smack needs a toolchain w/ dynamic library"
-+comment "smack needs a toolchain w/ dynamic library, headers >= 3.0"
- 	depends on BR2_PREFER_STATIC_LIB
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-JACK2_VERSION = 37976441044d69b91d61d8f6278949a39cf1b7b7
++JACK2_VERSION = ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
+ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
