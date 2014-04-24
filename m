@@ -1,48 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Apr 2014 11:03:32 +0200
-Subject: [Buildroot] [PATCH v3] package/zile: add Zile is Lossy Emacs
-	editor
-In-Reply-To: <87k3afqfyg.fsf@linaro.org>
-References: <1397737179-12262-1-git-send-email-alex.bennee@linaro.org>
- <1397737179-12262-2-git-send-email-alex.bennee@linaro.org>
- <20140417221418.5e3939fb@skate> <87k3afqfyg.fsf@linaro.org>
-Message-ID: <CAAXf6LU_bVafpYfdZ-4+i+Tosxyj0FnJdn2CsUbCeSQDj9GKTA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Apr 2014 11:11:04 +0200
+Subject: [Buildroot] [git commit] smack: needs kernel headers v3.0+
+Message-ID: <20140424091111.3A98B9C9B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex,
+commit: http://git.buildroot.net/buildroot/commit/?id=36afe6de9c8760b4dc26ca89e97e78dce627e716
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, Apr 24, 2014 at 10:39 AM, Alex Benn?e <alex.bennee@linaro.org> wrote:
->
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
->
->> Dear Alex Benn?e,
-> <snip>
->>> +++ b/package/zile/Config.in
->>> @@ -0,0 +1,13 @@
->>> +config BR2_PACKAGE_ZILE
->>> +    bool "zile"
->>> +    select BR2_PACKAGE_LIBGC
->>> +    depends on BR2_USE_MMU # fork()
->>
->> You need to replicate the dependencies of BR2_PACKAGE_LIBGC here.
->
-> Surely the whole point of dependencies is the LIBGC ones get pulled in
-> when you select LIBGC, or do you mean I need:
->
->      select BR2_PACKAGE_LIBGC
->      depends on BR2_PACKAGE_LIBGC
->      depends on BR2_USE_MMU # fork()
+smack uses symbols that are exported to userspace only since Linux kernel
+commit 1dbe39424a43 (xattr.h: expose string defines to userspace).
 
+Fixes:
+http://autobuild.buildroot.net/results/7fc/7fc69002fbb37962e65e0f83384ae7a4e6eac8a9/
 
-You need to replicate the 'depends on' statements of libgc in the
-config option for zile, because the select would select libgc even
-though its dependencies may not be met. This is more or less explained
-here:
-http://buildroot.uclibc.org/downloads/manual/manual.html#_literal_config_in_literal_file
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/smack/Config.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
 
-Best regards,
-Thomas
+diff --git a/package/smack/Config.in b/package/smack/Config.in
+index 618a680..55e9d2e 100644
+--- a/package/smack/Config.in
++++ b/package/smack/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SMACK
+ 	bool "smack"
+ 	depends on !BR2_PREFER_STATIC_LIB # dlfcn.h
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	help
+ 	  User space programs and libraries for SMACK.
+ 
+@@ -28,5 +29,6 @@ config BR2_PACKAGE_SMACK
+ 
+ 	  https://github.com/smack-team/smack
+ 
+-comment "smack needs a toolchain w/ dynamic library"
++comment "smack needs a toolchain w/ dynamic library, headers >= 3.0"
+ 	depends on BR2_PREFER_STATIC_LIB
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
