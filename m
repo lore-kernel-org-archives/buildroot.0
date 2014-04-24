@@ -1,267 +1,286 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Thu, 24 Apr 2014 22:19:42 +0100
-Subject: [Buildroot] [PATCH 1/3] ladspa-sdk: new package
-Message-ID: <1398374384-8814-1-git-send-email-martin@barkynet.com>
+Date: Thu, 24 Apr 2014 22:19:44 +0100
+Subject: [Buildroot] [PATCH 3/3] alsaequal: new package
+In-Reply-To: <1398374384-8814-1-git-send-email-martin@barkynet.com>
+References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
+Message-ID: <1398374384-8814-3-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LADSPA is a standard that allows software audio processors and
-effects to be plugged into a wide range of audio synthesis and
-recording packages.
+Alsaequal is a real-time adjustable equalizer plugin for ALSA. It
+can be adjusted using an ALSA compatible mixer, like alsamixergui
+or alsamixer.
+
+Alsaequal uses the Eq CAPS LADSPA Plugin as it's default
+equalizer.
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
  package/Config.in                                  |    1 +
- package/ladspa-sdk/Config.in                       |    8 +++++
- .../ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch    |   18 ++++++++++
- .../ladspa-sdk-02-default-ladspa-path.patch        |   30 ++++++++++++++++
- .../ladspa-sdk-04-fix-linkage-C-plugins.diff       |   23 ++++++++++++
- .../ladspa-sdk/ladspa-sdk-05-linking-order.patch   |   37 ++++++++++++++++++++
- .../ladspa-sdk-06-cross-compile-fix.patch          |   35 ++++++++++++++++++
- package/ladspa-sdk/ladspa-sdk.mk                   |   27 ++++++++++++++
- 8 files changed, 179 insertions(+)
- create mode 100644 package/ladspa-sdk/Config.in
- create mode 100644 package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch
- create mode 100644 package/ladspa-sdk/ladspa-sdk-02-default-ladspa-path.patch
- create mode 100644 package/ladspa-sdk/ladspa-sdk-04-fix-linkage-C-plugins.diff
- create mode 100644 package/ladspa-sdk/ladspa-sdk-05-linking-order.patch
- create mode 100644 package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch
- create mode 100644 package/ladspa-sdk/ladspa-sdk.mk
+ package/alsaequal/Config.in                        |   19 ++++++
+ .../alsaequal/alsaequal-01-cross-compile-fix.patch |   17 ++++++
+ package/alsaequal/alsaequal-05_fix-eq-name.patch   |   63 ++++++++++++++++++++
+ .../alsaequal/alsaequal-06_fix-caps-error.patch    |   20 +++++++
+ package/alsaequal/alsaequal.mk                     |   22 +++++++
+ package/alsaequal/readme.txt                       |   59 ++++++++++++++++++
+ 7 files changed, 201 insertions(+)
+ create mode 100644 package/alsaequal/Config.in
+ create mode 100644 package/alsaequal/alsaequal-01-cross-compile-fix.patch
+ create mode 100644 package/alsaequal/alsaequal-05_fix-eq-name.patch
+ create mode 100644 package/alsaequal/alsaequal-06_fix-caps-error.patch
+ create mode 100644 package/alsaequal/alsaequal.mk
+ create mode 100644 package/alsaequal/readme.txt
 
 diff --git a/package/Config.in b/package/Config.in
-index 07fd166..5956154 100644
+index 33d16ac..4f0d61c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -493,6 +493,7 @@ source "package/alsa-lib/Config.in"
+@@ -489,6 +489,7 @@ endmenu
+ menu "Libraries"
+ 
+ menu "Audio/Sound"
++source "package/alsaequal/Config.in"
+ source "package/alsa-lib/Config.in"
  source "package/audiofile/Config.in"
- source "package/celt051/Config.in"
- source "package/fdk-aac/Config.in"
-+source "package/ladspa-sdk/Config.in"
- source "package/libao/Config.in"
- source "package/libcdaudio/Config.in"
- source "package/libcdio/Config.in"
-diff --git a/package/ladspa-sdk/Config.in b/package/ladspa-sdk/Config.in
+ source "package/caps/Config.in"
+diff --git a/package/alsaequal/Config.in b/package/alsaequal/Config.in
 new file mode 100644
-index 0000000..ec3d568
+index 0000000..857e4d0
 --- /dev/null
-+++ b/package/ladspa-sdk/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_LADSPA_SDK
-+	bool "ladspa-sdk"
++++ b/package/alsaequal/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_ALSAEQUAL
++	bool "alsaequal"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
++	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_CAPS # Runtime dependency
 +	help
-+	  LADSPA is a standard that allows software audio processors and
-+	  effects to be plugged into a wide range of audio synthesis and
-+	  recording packages.
++	  Alsaequal is a real-time adjustable equalizer plugin for ALSA. It
++	  can be adjusted using an ALSA compatible mixer, like alsamixergui
++	  or alsamixer.
 +
-+	  http://www.ladspa.org/
-diff --git a/package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch b/package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch
-new file mode 100644
-index 0000000..d424594
---- /dev/null
-+++ b/package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch
-@@ -0,0 +1,18 @@
-+Use mkdir -p instead of mkdirhier to avoid build-dep on xutils-dev
-+Index: ladspa-sdk/src/makefile
-+===================================================================
-+--- ladspa-sdk.orig/src/makefile	2009-06-05 14:49:37.000000000 +1000
-++++ ladspa-sdk/src/makefile	2009-06-05 14:50:07.000000000 +1000
-+@@ -59,9 +59,9 @@
-+ 	@echo Test complete.
-+ 
-+ install:	targets
-+-	-mkdirhier $(INSTALL_PLUGINS_DIR)
-+-	-mkdirhier $(INSTALL_INCLUDE_DIR)
-+-	-mkdirhier $(INSTALL_BINARY_DIR)
-++	-mkdir -p $(INSTALL_PLUGINS_DIR)
-++	-mkdir -p $(INSTALL_INCLUDE_DIR)
-++	-mkdir -p $(INSTALL_BINARY_DIR)
-+ 	cp ../plugins/* $(INSTALL_PLUGINS_DIR)
-+ 	cp ladspa.h $(INSTALL_INCLUDE_DIR)
-+ 	cp ../bin/* $(INSTALL_BINARY_DIR)
-diff --git a/package/ladspa-sdk/ladspa-sdk-02-default-ladspa-path.patch b/package/ladspa-sdk/ladspa-sdk-02-default-ladspa-path.patch
-new file mode 100644
-index 0000000..05f5122
---- /dev/null
-+++ b/package/ladspa-sdk/ladspa-sdk-02-default-ladspa-path.patch
-@@ -0,0 +1,30 @@
-+Use a default ladspa path instead of failing when LADSPA_PATH is undefined
-+Index: ladspa-sdk/src/load.c
-+===================================================================
-+--- ladspa-sdk.orig/src/load.c	2009-06-05 14:52:05.000000000 +1000
-++++ ladspa-sdk/src/load.c	2009-06-05 14:54:04.000000000 +1000
-+@@ -54,6 +54,8 @@
-+        to search. */
-+ 
-+     pcLADSPAPath = getenv("LADSPA_PATH");
-++    if (!pcLADSPAPath)
-++      pcLADSPAPath = "/usr/lib/ladspa";
-+     
-+     if (pcLADSPAPath) {
-+ 
-+Index: ladspa-sdk/src/search.c
-+===================================================================
-+--- ladspa-sdk.orig/src/search.c	2009-06-05 14:52:05.000000000 +1000
-++++ ladspa-sdk/src/search.c	2009-06-05 14:52:57.000000000 +1000
-+@@ -99,10 +99,10 @@
-+ 
-+   pcLADSPAPath = getenv("LADSPA_PATH");
-+   if (!pcLADSPAPath) {
-++    pcLADSPAPath = "/usr/lib/ladspa/";
-+     fprintf(stderr,
-+ 	    "Warning: You do not have a LADSPA_PATH "
-+ 	    "environment variable set.\n");
-+-    return;
-+   }
-+   
-+   pcStart = pcLADSPAPath;
-diff --git a/package/ladspa-sdk/ladspa-sdk-04-fix-linkage-C-plugins.diff b/package/ladspa-sdk/ladspa-sdk-04-fix-linkage-C-plugins.diff
-new file mode 100644
-index 0000000..5934f75
---- /dev/null
-+++ b/package/ladspa-sdk/ladspa-sdk-04-fix-linkage-C-plugins.diff
-@@ -0,0 +1,23 @@
-+LD does not automatically insert needed libraries, we must specify them
-+Index: ladspa-sdk/src/makefile
-+===================================================================
-+--- ladspa-sdk.orig/src/makefile	2009-11-03 20:36:21.000000000 -0300
-++++ ladspa-sdk/src/makefile	2009-11-03 20:37:25.000000000 -0300
-+@@ -14,7 +14,7 @@
-+ #
-+ 
-+ INCLUDES	=	-I.
-+-LIBRARIES	=	-ldl -lm
-++LIBRARIES	=	-ldl -lm -lc
-+ CFLAGS		=	$(INCLUDES) -Wall -Werror -O2 -fPIC
-+ CXXFLAGS	=	$(CFLAGS)
-+ PLUGINS		=	../plugins/amp.so				\
-+@@ -35,7 +35,7 @@
-+ 
-+ ../plugins/%.so:	plugins/%.c ladspa.h
-+ 	$(CC) $(CFLAGS) -o plugins/$*.o -c plugins/$*.c
-+-	$(LD) -o ../plugins/$*.so plugins/$*.o -shared
-++	$(LD) -o ../plugins/$*.so plugins/$*.o -shared $(LIBRARIES)
-+ 
-+ ../plugins/%.so:	plugins/%.cpp ladspa.h
-+ 	$(CPP) $(CXXFLAGS) -o plugins/$*.o -c plugins/$*.cpp
-diff --git a/package/ladspa-sdk/ladspa-sdk-05-linking-order.patch b/package/ladspa-sdk/ladspa-sdk-05-linking-order.patch
-new file mode 100644
-index 0000000..a66def7
---- /dev/null
-+++ b/package/ladspa-sdk/ladspa-sdk-05-linking-order.patch
-@@ -0,0 +1,37 @@
-+Description: Correct linking order to prevent FTBFS with GCC4.5 + binutils-gold.
-+Author: Alessio Treglia <quadrispro@ubuntu.com>
-+---
-+ src/makefile |   15 +++++++++------
-+ 1 file changed, 9 insertions(+), 6 deletions(-)
++	  Alsaequal uses the Eq CAPS LADSPA Plugin as it's default
++	  equalizer.
 +
-+--- ladspa-sdk-1.13.orig/src/makefile
-++++ ladspa-sdk-1.13/src/makefile
-+@@ -90,19 +90,22 @@ targets:	$(PLUGINS) $(PROGRAMS)
-+ #
-+ 
-+ ../bin/applyplugin:	applyplugin.o load.o default.o
-+-	$(CC) $(CFLAGS) $(LIBRARIES)					\
-++	$(CC) $(CFLAGS)					\
-+ 		-o ../bin/applyplugin					\
-+-		applyplugin.o load.o default.o
-++		applyplugin.o load.o default.o \
-++		$(LIBRARIES)
-+ 
-+ ../bin/analyseplugin:	analyseplugin.o load.o default.o
-+-	$(CC) $(CFLAGS) $(LIBRARIES)					\
-++	$(CC) $(CFLAGS)					\
-+ 		-o ../bin/analyseplugin 				\
-+-		analyseplugin.o load.o default.o
-++		analyseplugin.o load.o default.o \
-++		$(LIBRARIES)
-+ 
-+ ../bin/listplugins:	listplugins.o search.o
-+-	$(CC) $(CFLAGS) $(LIBRARIES)					\
-++	$(CC) $(CFLAGS)					\
-+ 		-o ../bin/listplugins	 				\
-+-		listplugins.o search.o
-++		listplugins.o search.o \
-++		$(LIBRARIES)
-+ 
-+ ###############################################################################
-+ #
-diff --git a/package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch b/package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch
++	  http://www.thedigitalmachine.net/alsaequal.html
++
++comment "alsaequal needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+diff --git a/package/alsaequal/alsaequal-01-cross-compile-fix.patch b/package/alsaequal/alsaequal-01-cross-compile-fix.patch
 new file mode 100644
-index 0000000..549b6eb
+index 0000000..6133106
 --- /dev/null
-+++ b/package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch
-@@ -0,0 +1,35 @@
-+--- ladspa-sdk-1.13.original/src/makefile	2014-04-24 19:59:18.151359520 +0100
-++++ ladspa-sdk-1.13/src/makefile	2014-04-24 20:01:42.820770007 +0100
-+@@ -15,8 +15,8 @@
++++ b/package/alsaequal/alsaequal-01-cross-compile-fix.patch
+@@ -0,0 +1,17 @@
++--- alsaequal-0.6.original/Makefile	2010-03-05 17:30:39.000000000 +0000
+++++ alsaequal-0.6/Makefile	2014-04-24 16:25:59.468030181 +0100
++@@ -4,10 +4,10 @@
++ #Q	?=
 + 
-+ INCLUDES	=	-I.
-+ LIBRARIES	=	-ldl -lm
-+-CFLAGS		=	$(INCLUDES) -Wall -Werror -O3 -fPIC
-+-CXXFLAGS	=	$(CFLAGS)
-++CFLAGS		+=	$(INCLUDES) -Wall -fPIC
-++CXXFLAGS	+=	$(CFLAGS)
-+ PLUGINS		=	../plugins/amp.so				\
-+ 			../plugins/delay.so				\
-+ 			../plugins/filter.so				\
-+@@ -25,8 +25,8 @@
-+ PROGRAMS	=	../bin/analyseplugin				\
-+ 			../bin/applyplugin 				\
-+ 			../bin/listplugins
-+-CC		=	cc
-+-CPP		=	c++
-++CC		?=	cc
-++CXX		?=	c++
++ # Build Tools
++-CC 	:= gcc
++-CFLAGS := -I. -O2 -Wall -funroll-loops -ffast-math -fPIC -DPIC
++-LD := gcc
++-LDFLAGS := -O2 -Wall -shared -lasound
+++CC 	?= gcc
+++CFLAGS += -I. -Wall -ffast-math -fPIC -DPIC
+++LD := $(CC)
+++LDFLAGS := -shared -lasound
 + 
-+ ###############################################################################
-+ #
-+@@ -38,8 +38,8 @@
-+ 	$(LD) -o ../plugins/$*.so plugins/$*.o -shared
-+ 
-+ ../plugins/%.so:	plugins/%.cpp ladspa.h
-+-	$(CPP) $(CXXFLAGS) -o plugins/$*.o -c plugins/$*.cpp
-+-	$(CPP) -o ../plugins/$*.so plugins/$*.o -shared
-++	$(CXX) $(CXXFLAGS) -o plugins/$*.o -c plugins/$*.cpp
-++	$(CXX) -o ../plugins/$*.so plugins/$*.o -shared
-+ 
-+ ###############################################################################
-+ #
-diff --git a/package/ladspa-sdk/ladspa-sdk.mk b/package/ladspa-sdk/ladspa-sdk.mk
++ SND_PCM_OBJECTS = pcm_equal.o ladspa_utils.o
++ SND_PCM_LIBS =
+diff --git a/package/alsaequal/alsaequal-05_fix-eq-name.patch b/package/alsaequal/alsaequal-05_fix-eq-name.patch
 new file mode 100644
-index 0000000..f6f4cf0
+index 0000000..7317214
 --- /dev/null
-+++ b/package/ladspa-sdk/ladspa-sdk.mk
-@@ -0,0 +1,27 @@
++++ b/package/alsaequal/alsaequal-05_fix-eq-name.patch
+@@ -0,0 +1,63 @@
++Description: Fix CAPS Eq plugin name
++Origin: vendor
++Bug-Debian: http://bugs.debian.org/721355
++Forwarded: no
++Author: Alessandro Ghedini <ghedo@debian.org>
++Last-Update: 2013-08-30
++
++--- a/ctl_equal.c
+++++ b/ctl_equal.c
++@@ -167,7 +167,7 @@
++ 	snd_ctl_equal_t *equal;
++ 	const char *controls = ".alsaequal.bin";
++ 	const char *library = "/usr/lib/ladspa/caps.so";
++-	const char *module = "Eq";
+++	const char *module = "Eq10";
++ 	long channels = 2;
++ 	const char *sufix = " Playback Volume";
++ 	int err, i, index;
++--- a/pcm_equal.c
+++++ b/pcm_equal.c
++@@ -151,7 +151,7 @@
++ 	snd_config_t *sconf = NULL;
++ 	const char *controls = ".alsaequal.bin";
++ 	const char *library = "/usr/lib/ladspa/caps.so";
++-	const char *module = "Eq";
+++	const char *module = "Eq10";
++ 	long channels = 2;
++ 	int err;
++ 	
++--- a/README
+++++ b/README
++@@ -1,11 +1,11 @@
++ Alsaequal is a real-time adjustable equalizer plugin for ALSA. It can
++ be adjusted using any ALSA compatible mixer, e.g. alsamixergui.
++ 
++-Alsaequal uses the Eq CAPS LADSPA Plugin for audio processing, actually
+++Alsaequal uses the Eq10 CAPS LADSPA Plugin for audio processing, actually
++ alsaequal is a generic LADSPA plugin interface with real-time access to
++ the LADSPA controls (the LADSPA plugin included with alsa doesn't allow
++ for real-time controls) but it was developed for and only tested with
++-Eq CAPS LADSPA plugin. You are welcome to try it with other plugins, it
+++Eq10 CAPS LADSPA plugin. You are welcome to try it with other plugins, it
++ may work. Let me know how it goes, you can reach me at
++ <charles@thedigitalmachine.net>.
++ 
++@@ -66,7 +66,7 @@
++ 	library -- location of the LADSPA library, the default is
++ 					"/usr/lib/ladspa/caps.so"
++ 	module -- module name within the LADSPA library, the deafault
++-					is "Eq"
+++					is "Eq10"
++ 	channels -- number of channels, the default is 2
++ }
++ 
++@@ -81,7 +81,7 @@
++ 	library -- location of the LADSPA library, the default is
++ 					"/usr/lib/ladspa/caps.so"
++ 	module -- module name within the LADSPA library, the deafault
++-					is "Eq"
+++					is "Eq10"
++ 	channels -- number of channels, the default is 2
++ }
++ 
+diff --git a/package/alsaequal/alsaequal-06_fix-caps-error.patch b/package/alsaequal/alsaequal-06_fix-caps-error.patch
+new file mode 100644
+index 0000000..85e205f
+--- /dev/null
++++ b/package/alsaequal/alsaequal-06_fix-caps-error.patch
+@@ -0,0 +1,20 @@
++Description: Fix a spurious error with newer caps versions
++Origin: vendor, https://aur.archlinux.org/packages/alsaequal/?comments=all
++Forwarded: no
++Author: Alessandro Ghedini <ghedo@debian.org>
++Last-Update: 2013-08-30
++Applied-Upstream: *** FIXME ***
++
++--- a/ctl_equal.c
+++++ b/ctl_equal.c
++@@ -263,8 +263,8 @@
++ 	for(i = 0; i < equal->num_input_controls; i++) {
++ 		if(equal->control_data->control[i].type == LADSPA_CNTRL_INPUT) {
++ 			index = equal->control_data->control[i].index;
++-			if(equal->klass->PortDescriptors[index] !=
++-					(LADSPA_PORT_INPUT | LADSPA_PORT_CONTROL)) {
+++			if((equal->klass->PortDescriptors[index] &
+++					(LADSPA_PORT_INPUT | LADSPA_PORT_CONTROL)) == 0) {
++ 				SNDERR("Problem with control file %s, %d.", controls, index);
++ 				return -1;
++ 			}
+diff --git a/package/alsaequal/alsaequal.mk b/package/alsaequal/alsaequal.mk
+new file mode 100644
+index 0000000..5669b55
+--- /dev/null
++++ b/package/alsaequal/alsaequal.mk
+@@ -0,0 +1,22 @@
 +################################################################################
 +#
-+# ladspa-sdk
++# alsaequal
 +#
 +################################################################################
 +
-+LADSPA_SDK_VERSION = 1.13
-+LADSPA_SDK_SOURCE = ladspa_sdk_$(LADSPA_SDK_VERSION).tgz
-+LADSPA_SDK_SITE = http://www.ladspa.org/download/
-+LADSPA_SDK_LICENSE = LGPLv2.1+
-+LADSPA_SDK_LICENSE_FILES = doc/COPYING
-+LADSPA_SDK_INSTALL_STAGING = YES
++ALSAEQUAL_VERSION = 0.6
++ALSAEQUAL_SOURCE = alsaequal-$(ALSAEQUAL_VERSION).tar.bz2
++ALSAEQUAL_SITE = http://www.thedigitalmachine.net/tools/
++ALSAEQUAL_LICENSE = LGPLv2.1
++ALSAEQUAL_LICENSE_FILES = COPYING
++ALSAEQUAL_DEPENDENCIES = alsa-lib
 +
-+define LADSPA_SDK_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/src targets
++define ALSAEQUAL_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
 +endef
 +
-+define LADSPA_SDK_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/plugins/*.so $(TARGET_DIR)/usr/lib/ladspa/.
-+	$(INSTALL) -D -m 0755 $(@D)/bin/* $(TARGET_DIR)/usr/bin/.
-+endef
-+
-+define LADSPA_SDK_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 0644 $(@D)/src/ladspa.h $(STAGING_DIR)/usr/include/.
++define ALSAEQUAL_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
 +endef
 +
 +$(eval $(generic-package))
+diff --git a/package/alsaequal/readme.txt b/package/alsaequal/readme.txt
+new file mode 100644
+index 0000000..579706d
+--- /dev/null
++++ b/package/alsaequal/readme.txt
+@@ -0,0 +1,59 @@
++
++Alsaequal is a real-time adjustable equalizer plugin for ALSA. It
++can be adjusted using an ALSA compatible mixer, like alsamixergui
++or alsamixer.
++
++For example, add the following line to /etc/asound.conf
++
++ctl.equal {
++    type equal;
++}
++
++pcm.plugequal {
++    type equal;
++    slave.pcm "plughw:0,0";
++}
++
++pcm.equal{
++    type plug;
++    slave.pcm plugequal;
++}
++
++you can now adjust the 10 band equaliser using
++
++    alsamixer -D equal
++
++and then play using
++
++    aplay -D equal some_audio.wav
++
++By default alsaequal uses the 10 band equaliser (Eq10) from the alsa
++ladspa plugin caps.  You can bypass alsaequal and directly use caps in
++/etc/asound.conf. This can be useful if you want to fix the equaliser
++settings.
++
++Add the following lines to /etc/asound.conf to add a fixed 10 band
++equaliser setup to attenuate frequencies below 500Hz
++
++pcm.plugequal_fixed {
++    type equal;
++    slave.pcm "plughw:0,0";
++}
++
++pcm.equal_fixed {
++    type ladspa
++    slave.pcm plugequal_fixed;
++    path "/usr/lib/ladspa";
++    plugins [{
++        label Eq10
++        input {
++            # bands (Hz)   31   63   125  250  500  1000 2000 4000 8000 16000
++            controls     [ -48  -48  -48  -48  -48  0    0    0    0    0     ]
++        }
++    }]
++}
++
++
++Further reading:
++    http://alsa.opensrc.org/Ladspa_(plugin)
++    http://quitte.de/dsp/caps.html#Eq10
 -- 
 1.7.9.5
