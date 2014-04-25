@@ -1,48 +1,35 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Fri, 25 Apr 2014 20:37:40 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Apr 2014 20:53:25 +0200
 Subject: [Buildroot] How transfer what image(s) to target-CF?
-In-Reply-To: <535985BA.1020009@mind.be>
+In-Reply-To: <CAEzGmjC+Hob859rdVSD74BsX5R+mwkNRtwsA5Pet=rM+uY4hwQ@mail.gmail.com>
 References: <CAEzGmjA3wbjEFb6sQYov_rJFJuB8oJFx2Y6XOA7WWHce743=dg@mail.gmail.com>
  <5357DD2D.1030702@mind.be>
  <CAEzGmjCXKEQTEEbz7a9JfX80rVafF4XedTjfZDQYyVOypASgAA@mail.gmail.com>
  <535985BA.1020009@mind.be>
-Message-ID: <CAEzGmjC+Hob859rdVSD74BsX5R+mwkNRtwsA5Pet=rM+uY4hwQ@mail.gmail.com>
+ <CAEzGmjC+Hob859rdVSD74BsX5R+mwkNRtwsA5Pet=rM+uY4hwQ@mail.gmail.com>
+Message-ID: <535AAF25.8090309@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Then you have two options: either create an ext3 image, or create a
->tarball and format the CF card from a separate script.
->
->1. Set the following options:
- >
- >BR2_TARGET_ROOTFS_EXT2=y
- >BR2_TARGET_ROOTFS_EXT2_3=y
- >BR2_TARGET_ROOTFS_EXT2_BLOCKS=1000000
- >(the latter is assuming you have a 1GB CF card).
- >
- >This will create a rootfs.ext3 image.
- >You can write this to your CF card with
- >cat output/images/rootfs.ext3 > /dev/sdX1
- >(assuming you've partitioned it already, and your rootfs is partition 1).
->
- >2. Select the tarball as the target rootfs.
->
- >Now in a separate script, use mkfs.ext3 to create the rootfs directly on
- >the CF card. Then mount it and untar output/images/rootfs.tar to the
-rootfs.
->
->
- >In both cases, you'll probably want to use grub2 as the bootloader and
- >select the BR2_LINUX_KERNEL_INSTALL_TARGET option.
+On 25/04/14 20:37, Lennart Ramberg wrote:
+[snip]
+> As for grub2, I understand that I can only chose grub(-legacy) in make
+> menuconfig.
+> Any tip on that, please?
 
-Thanks Arnout!
-As for grub2, I understand that I can only chose grub(-legacy) in make
-menuconfig.
-Any tip on that, please?
-/Lennart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140425/32bf88ca/attachment.html>
+ Ah sorry, grub2 has only been added a couple of weeks ago. But
+grub-legacy should work fine as well.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
