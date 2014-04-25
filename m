@@ -1,91 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Apr 2014 10:53:51 +0200
-Subject: [Buildroot] [git commit] evemu: bump version to 1.2.0
-Message-ID: <20140425085923.BC1E49C9F2@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 25 Apr 2014 11:27:15 +0200
+Subject: [Buildroot] [PATCH 1/1] cairo: fix build of any2ppm if no fork().
+Message-ID: <1398418035-21257-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e80e93906d6d1b52ddb780be0f6fd7a32bd7998
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The test program any2ppm can run as daemon. This feature can be disabled
+at compile time, if the required headers are not present. However the
+support for fork() is not checked.
 
-[Peter: add patches for modern kernel headers and to disable tests]
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes http://autobuild.buildroot.net/results/4f2/4f271d55d7060d412aa336cfc2da3be3538d3594/.
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/evemu/evemu-0001-SYN_MAX.patch       |   25 +++++++++++++++++++++++++
- package/evemu/evemu-0002-disable-tests.patch |   19 +++++++++++++++++++
- package/evemu/evemu.mk                       |    2 +-
- 3 files changed, 45 insertions(+), 1 deletions(-)
+ package/cairo/cairo-004-fix-nofork-any2ppm.patch | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/cairo/cairo-004-fix-nofork-any2ppm.patch
 
-diff --git a/package/evemu/evemu-0001-SYN_MAX.patch b/package/evemu/evemu-0001-SYN_MAX.patch
+diff --git a/package/cairo/cairo-004-fix-nofork-any2ppm.patch b/package/cairo/cairo-004-fix-nofork-any2ppm.patch
 new file mode 100644
-index 0000000..049bdc0
+index 0000000..16cc2e0
 --- /dev/null
-+++ b/package/evemu/evemu-0001-SYN_MAX.patch
-@@ -0,0 +1,25 @@
-+[PATCH] make-event-names.py: fix SYN_MAX definition for modern kernel headers
++++ b/package/cairo/cairo-004-fix-nofork-any2ppm.patch
+@@ -0,0 +1,23 @@
++test: fix build of any2ppm if fork is not available.
 +
-+SYN_MAX has been exported to user space since 3.12 (52764fed5: Input: add
-+SYN_MAX and SYN_CNT constants), so only define it locally if not already
-+defined, otherwise the build breaks.
++The test program any2ppm can run as daemon. This feature can be disabled at
++compile time, if the required headers are not present. However the support for
++fork() is not checked.
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/make-event-names.py |    2 ++
-+ 1 file changed, 2 insertions(+)
++This patch fixes this issue.
 +
-+Index: evemu-1.2.0/src/make-event-names.py
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++
++Index: cairo-1.12.10/test/any2ppm.c
 +===================================================================
-+--- evemu-1.2.0.orig/src/make-event-names.py
-++++ evemu-1.2.0/src/make-event-names.py
-+@@ -91,7 +91,9 @@
-+ 	print "#ifndef EVENT_NAMES_H"
-+ 	print "#define EVENT_NAMES_H"
-+ 	print ""
-++	print "#ifndef SYN_MAX"
-+ 	print "#define SYN_MAX 3 /* linux/input.h doesn't define that */"
-++	print "#endif"
-+ 	print ""
++--- cairo-1.12.10.orig/test/any2ppm.c	2012-04-19 14:17:34.000000000 +0200
+++++ cairo-1.12.10/test/any2ppm.c	2014-04-25 11:13:30.000000000 +0200
++@@ -79,7 +79,7 @@
 + 
-+ 	for prefix in prefixes:
-diff --git a/package/evemu/evemu-0002-disable-tests.patch b/package/evemu/evemu-0002-disable-tests.patch
-new file mode 100644
-index 0000000..e545c91
---- /dev/null
-+++ b/package/evemu/evemu-0002-disable-tests.patch
-@@ -0,0 +1,19 @@
-+[PATCH] disable tests
-+
-+The tests need C++ support and add to build time, so disable them for BR.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Makefile.am |    2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+Index: evemu-1.2.0/Makefile.am
-+===================================================================
-+--- evemu-1.2.0.orig/Makefile.am
-++++ evemu-1.2.0/Makefile.am
-+@@ -1,4 +1,4 @@
-+-SUBDIRS = src tools python test
-++SUBDIRS = src tools python
++ #include <errno.h>
 + 
-+ pkgconfigdir = $(libdir)/pkgconfig
-+ pkgconfig_DATA = evemu.pc
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 38b792d..df9aea1 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EVEMU_VERSION = 1.0.10
-+EVEMU_VERSION = 1.2.0
- EVEMU_SITE = http://cgit.freedesktop.org/evemu/snapshot
- EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
- EVEMU_LICENSE_FILES = COPYING COPYING.GPL3
++-#if HAVE_UNISTD_H && HAVE_FCNTL_H && HAVE_SIGNAL_H && HAVE_SYS_STAT_H && HAVE_SYS_SOCKET_H && HAVE_SYS_POLL_H && HAVE_SYS_UN_H
+++#if HAVE_UNISTD_H && HAVE_FCNTL_H && HAVE_SIGNAL_H && HAVE_SYS_STAT_H && HAVE_SYS_SOCKET_H && HAVE_SYS_POLL_H && HAVE_SYS_UN_H && HAVE_FORK
++ #include <fcntl.h>
++ #include <signal.h>
++ #include <sys/stat.h>
+-- 
+1.9.1
