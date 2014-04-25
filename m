@@ -1,47 +1,47 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Fri, 25 Apr 2014 08:09:27 -0500
-Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support
- for kernels older than 3.x.
-In-Reply-To: <87lhuu1or3.fsf@dell.be.48ers.dk>
-References: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>	<20140418213924.6d5a3ebf@skate>
- <53564749.5060409@lucaceresoli.net>
- <OF4212D2FC.25E3AE63-ON86257CC3.004F7CF7-86257CC3.007CFC5D@rockwellcollins.com>
- <87bnvr2ped.fsf@dell.be.48ers.dk>	<OF203E3A69.EF307CEE-ON86257CC4.006C7E39-86257CC4.006CBA0C@rockwellcollins.com>
- <87lhuu1or3.fsf@dell.be.48ers.dk>
-Message-ID: <OF93B7BADA.9E09D98E-ON86257CC5.00479001-86257CC5.0048440E@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Apr 2014 16:46:36 +0200
+Subject: [Buildroot] [PATCH] evemu: bump version to 1.2.0
+In-Reply-To: <1398203237-11976-1-git-send-email-ps.report@gmx.net>
+References: <1398203237-11976-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20140425164636.25fe2f3e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Dear Peter Seiderer,
 
-Peter Korsgaard <jacmet@gmail.com> wrote on 04/24/2014 03:00:48 PM:
+On Tue, 22 Apr 2014 23:47:17 +0200, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/evemu/evemu.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+> index 38b792d..df9aea1 100644
+> --- a/package/evemu/evemu.mk
+> +++ b/package/evemu/evemu.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -EVEMU_VERSION = 1.0.10
+> +EVEMU_VERSION = 1.2.0
+>  EVEMU_SITE = http://cgit.freedesktop.org/evemu/snapshot
+>  EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
+>  EVEMU_LICENSE_FILES = COPYING COPYING.GPL3
 
->>>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
-> 
-> Hi,
-> 
->>>> was no way to not include this kernel config option when
->>>> BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
->>> 
->>> Huh, but we ONLY enable it if BR2_ROOTFS_DEVICE_CREATION_STATIC isn't
->>> enabled - So why not just enabled it?
->
->> I meant to say, "when BR2_ROOTFS_DEVICE_CREATION_STATIC is NOT 
-enabled". 
->> Sorry for the confusion and thanks for the clarification.
-> 
-> Ok, but the point of the other options are that they REALLY need
-> devtmpfs support in the kernel, so if you don't want to use that then
-> you should really select static /dev.
-> 
-> mdev could be made to work without devtmpfs, but not in the setup we
-> support.
+This is causing some build failures in the autobuilders:
 
-Looking back the configuration that was causing the issue, this is the 
-exact corner case that we need to support - mdev without devtmpfs.
+  http://autobuild.buildroot.org/results/24b/24b0e8214e528f455b630c47f93b50a83f308ab5/build-end.log
+
+Could you have a look?
 
 Thanks,
--Ryan
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
