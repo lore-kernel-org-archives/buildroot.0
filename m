@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Apr 2014 09:16:34 +0200
-Subject: [Buildroot] [PATCH 1/2] smack: new package.
-In-Reply-To: <87ha5i1o45.fsf@dell.be.48ers.dk>
-References: <1398020044-21021-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1398020044-21021-2-git-send-email-eric.le.bihan.dev@free.fr>
- <20140421121901.743513ef@skate> <20140421115606.GA4082@milhouse>
- <20140421135542.26258821@skate>
- <349b40e5-c2f3-4b82-97dd-5f18e5638d24@email.android.com>
- <87ha5i1o45.fsf@dell.be.48ers.dk>
-Message-ID: <20140425091634.44faa70d@skate>
+Date: Fri, 25 Apr 2014 09:18:06 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] qdecoder : new package
+In-Reply-To: <78843C93FA8647B482C22C49E4C4DB0D@JohanW7>
+References: <1398155122-6872-1-git-send-email-sagaert.johan@skynet.be>
+ <20140422162711.7b4d0c17@skate>
+ <18590DF726304B8A9132C34717060A98@JohanW7>
+ <20140422234122.778f4392@skate>
+ <78843C93FA8647B482C22C49E4C4DB0D@JohanW7>
+Message-ID: <20140425091806.2bb5d65e@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Sagaert Johan,
 
-On Thu, 24 Apr 2014 22:14:34 +0200, Peter Korsgaard wrote:
+On Thu, 24 Apr 2014 22:43:14 +0200, Sagaert Johan wrote:
 
->  >> While reviewing these packages, I was indeed thinking of writing a
->  >> "package addition check list" for the manual. But I'm wondering if this
->  >> wouldn't replicate quite a lot of informations already in the manual,
->  >> though it's true the idea of testing with some specific toolchain
->  >> configurations isn't written anywhere.
-> 
->  > I certainly think a checklist would be a good addition to the
->  > manual. The checklist would not contain details, but only references
->  > to other parts of the manual.
-> 
->  > Adding a list of toolchain configurations to test packages with is
->  > also on my todo list but I haven't gotten around these improvements
->  > yet...
-> 
-> Perhaps we need something like checkpatch.pl to test a package with the
-> various toolchain combinations?
+> What should I do with the BR2_PREFER_STATIC_LIB ? 
+> Is this a something I should add as depenency ?
 
-That could work with the packages that don't have crazy dependencies.
-But as soon as the package starts depending on OpenGL or things like
-that, it would be more difficult I believe.
+Yes. You should add !BR2_PREFER_STATIC_LIB to the dependencies, and add
+the corresponding comment (see the Buildroot manual for details).
+
+> (I am not very familiar with libraries, I assume that qdecoder.a is a static library and the others (*.so.*) are shared)
+> 
+> What should I add to finalize this patch ?
+> I added a comment line to the QDECODER_CONF_OPT line for my next version of the patch. 
+
+You should get rid of the --prefix and --libdir options, by patching
+the Makefile.in to add ${DESTDIR} in front of the installation paths in
+the 'install' target. Then you can send this patch upstream :-)
+
+Thanks a lot,
 
 Thomas
 -- 
