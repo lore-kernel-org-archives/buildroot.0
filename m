@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Apr 2014 16:46:36 +0200
-Subject: [Buildroot] [PATCH] evemu: bump version to 1.2.0
-In-Reply-To: <1398203237-11976-1-git-send-email-ps.report@gmx.net>
-References: <1398203237-11976-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140425164636.25fe2f3e@skate>
+Date: Fri, 25 Apr 2014 16:47:09 +0200
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.18.10
+In-Reply-To: <1398166043-5569-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1398166043-5569-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140425164709.7c1ef6e9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Gustavo Zacarias,
 
-On Tue, 22 Apr 2014 23:47:17 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+On Tue, 22 Apr 2014 08:27:23 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/evemu/evemu.mk | 2 +-
+>  package/mpd/mpd.mk | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-> index 38b792d..df9aea1 100644
-> --- a/package/evemu/evemu.mk
-> +++ b/package/evemu/evemu.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+> index 7e4ebac..ad393c7 100644
+> --- a/package/mpd/mpd.mk
+> +++ b/package/mpd/mpd.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -EVEMU_VERSION = 1.0.10
-> +EVEMU_VERSION = 1.2.0
->  EVEMU_SITE = http://cgit.freedesktop.org/evemu/snapshot
->  EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
->  EVEMU_LICENSE_FILES = COPYING COPYING.GPL3
+>  MPD_VERSION_MAJOR = 0.18
+> -MPD_VERSION = $(MPD_VERSION_MAJOR).9
+> +MPD_VERSION = $(MPD_VERSION_MAJOR).10
+>  MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+>  MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+>  MPD_DEPENDENCIES = host-pkgconf libglib2
 
-This is causing some build failures in the autobuilders:
+This is causing some build failures (though not sure they are only
+related to this bump) :
 
-  http://autobuild.buildroot.org/results/24b/24b0e8214e528f455b630c47f93b50a83f308ab5/build-end.log
-
-Could you have a look?
-
-Thanks,
+  http://autobuild.buildroot.org/results/7be/7be0e42278657bd693dca9238ff3d7b66d601f32/build-end.log
 
 Thomas
 -- 
