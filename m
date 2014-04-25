@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Apr 2014 22:34:10 +0200
-Subject: [Buildroot] [PATCH 1/2] ltp-testsuite: re-enable on AArch64
-Message-ID: <1398458051-5251-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 25 Apr 2014 22:34:11 +0200
+Subject: [Buildroot] [PATCH 2/2] ltp-testsuite: does not build on NIOS II
+In-Reply-To: <1398458051-5251-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1398458051-5251-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1398458051-5251-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the bump of ltp-testsuite to a more recent version, the support
-for AArch64 is now working correctly, so we can remove the exclusion
-of this architecture from the ltp-testsuite package.
+Fixes:
+
+  http://autobuild.buildroot.org/results/1ae/1aef491ec016ddd601446164c5b97ce480e755e6/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltp-testsuite/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/ltp-testsuite/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 0883c8f..44592fc 100644
+index 44592fc..0e71677 100644
 --- a/package/ltp-testsuite/Config.in
 +++ b/package/ltp-testsuite/Config.in
-@@ -8,9 +8,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
  	depends on BR2_INET_IPV6
  	depends on BR2_LARGEFILE
  	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	# aarch64 build currently broken, reported at
--	# https://bugs.launchpad.net/linaro-aarch64/+bug/1236027
--	depends on !BR2_aarch64
++	# does not build, cachectl.h issue
++	depends on !BR2_nios2
  	help
  	  The Linux Test Project provides a huge testsuite for Linux.
  
-@@ -24,6 +21,5 @@ config BR2_PACKAGE_LTP_TESTSUITE
+@@ -21,5 +23,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
  	  http://ltp.sourceforge.net/
  
  comment "ltp-testsuite needs a toolchain w/ IPv6, RPC, largefile, threads"
--	depends on !BR2_aarch64
++	depends on !BR2_nios2
  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
  		!BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
 -- 
