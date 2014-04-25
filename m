@@ -1,34 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Apr 2014 10:29:25 +0200
-Subject: [Buildroot] [PATCH 1/2] Revert "acpid: unavailable for external
-	uClibc toolchains"
-Message-ID: <1398414566-20286-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 25 Apr 2014 10:57:56 +0200
+Subject: [Buildroot] [PATCH] evemu: bump version to 1.2.0
+In-Reply-To: <1398203237-11976-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Tue, 22 Apr 2014 23:47:17 +0200")
+References: <1398203237-11976-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87r44lzsyz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit ec6aaa4706d6826aca4e48ea65bbebbd893f76d6.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/acpid/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ >  package/evemu/evemu.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/acpid/Config.in b/package/acpid/Config.in
-index 205a6ae..5aec7f1 100644
---- a/package/acpid/Config.in
-+++ b/package/acpid/Config.in
-@@ -1,9 +1,6 @@
- config BR2_PACKAGE_ACPID
- 	bool "acpid"
- 	depends on BR2_x86_64 || BR2_i386
--	# Usually lacks MSG_CMSG_CLOEXEC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
--		!BR2_UCLIBC_VERSION_0_9_32
- 	help
- 	  Advanced Configuration and Power Interface event daemon.
+ > diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+ > index 38b792d..df9aea1 100644
+ > --- a/package/evemu/evemu.mk
+ > +++ b/package/evemu/evemu.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
  
+ > -EVEMU_VERSION = 1.0.10
+ > +EVEMU_VERSION = 1.2.0
+
+Committed with some changes:
+
+- It explicitly defined SYN_MAX, but modern (3.12+) kernels already
+  export that to user space
+
+- The tests now need C++ support, even though evemu itself doesn't, so I
+  disabled the tests.
+
+Thanks.
+
 -- 
-1.9.2
+Bye, Peter Korsgaard
