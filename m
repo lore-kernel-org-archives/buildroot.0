@@ -1,42 +1,47 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 25 Apr 2014 15:01:10 +0400
-Subject: [Buildroot] [PATCH] uboot: bump to version 2014.04
-Message-ID: <1398423670-12049-1-git-send-email-abrodkin@synopsys.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Fri, 25 Apr 2014 08:09:27 -0500
+Subject: [Buildroot] [PATCH 1/1] linux: Don't enable DEVTMPFS support
+ for kernels older than 3.x.
+In-Reply-To: <87lhuu1or3.fsf@dell.be.48ers.dk>
+References: <1397849296-5517-1-git-send-email-rjbarnet@rockwellcollins.com>	<20140418213924.6d5a3ebf@skate>
+ <53564749.5060409@lucaceresoli.net>
+ <OF4212D2FC.25E3AE63-ON86257CC3.004F7CF7-86257CC3.007CFC5D@rockwellcollins.com>
+ <87bnvr2ped.fsf@dell.be.48ers.dk>	<OF203E3A69.EF307CEE-ON86257CC4.006C7E39-86257CC4.006CBA0C@rockwellcollins.com>
+ <87lhuu1or3.fsf@dell.be.48ers.dk>
+Message-ID: <OF93B7BADA.9E09D98E-ON86257CC5.00479001-86257CC5.0048440E@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Peter,
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- boot/uboot/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Peter Korsgaard <jacmet@gmail.com> wrote on 04/24/2014 03:00:48 PM:
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 90437b5..1c77f6a 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2014.01"
-+	bool "2014.04"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -63,7 +63,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2014.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2014.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
--- 
-1.9.0
+>>>>>> "Ryan" == Ryan Barnett <rjbarnet@rockwellcollins.com> writes:
+> 
+> Hi,
+> 
+>>>> was no way to not include this kernel config option when
+>>>> BR2_ROOTFS_DEVICE_CREATION_STATIC is enabled.
+>>> 
+>>> Huh, but we ONLY enable it if BR2_ROOTFS_DEVICE_CREATION_STATIC isn't
+>>> enabled - So why not just enabled it?
+>
+>> I meant to say, "when BR2_ROOTFS_DEVICE_CREATION_STATIC is NOT 
+enabled". 
+>> Sorry for the confusion and thanks for the clarification.
+> 
+> Ok, but the point of the other options are that they REALLY need
+> devtmpfs support in the kernel, so if you don't want to use that then
+> you should really select static /dev.
+> 
+> mdev could be made to work without devtmpfs, but not in the setup we
+> support.
+
+Looking back the configuration that was causing the issue, this is the 
+exact corner case that we need to support - mdev without devtmpfs.
+
+Thanks,
+-Ryan
