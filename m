@@ -1,45 +1,187 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 26 Apr 2014 23:26:06 +0200
-Subject: [Buildroot] [PATCH v5 2/8] mesa3d: Explain dependency for i965
-	DRI driver on xorg in Kconfig
-References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
- <1396588694-6377-3-git-send-email-bernd.kuhls@t-online.de>
- <20140417213757.GB3270@free.fr>
-Message-ID: <eskt2bxp5s.ln2@ID-313208.user.individual.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 26 Apr 2014 23:43:35 +0200
+Subject: [Buildroot] [PATCH] evemu: fix make-event-names.py for python3
+	syntax
+Message-ID: <1398548615-18088-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140417213757.GB3270 at free.fr: 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...-event-names-fix-for-python3-print-syntax.patch | 162 +++++++++++++++++++++
+ 1 file changed, 162 insertions(+)
+ create mode 100644 package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
 
-> Bernd, All,
-> 
-> On 2014-04-04 07:18 +0200, Bernd Kuhls spake thusly:
->> 
->> --- a/package/mesa3d/Config.in
->> +++ b/package/mesa3d/Config.in
->> @@ -77,6 +77,9 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
->>       help
->>         Supports all Intel GPUs.  This version is most supported by
->>         Intel. 
->>  
->> +comment "DRI i965 driver depends on X.org"
->> +     depends on !BR2_PACKAGE_XORG7
-> 
-> This is oncorrect: the i965 driver does not have a "depends on XORG7",
-> so the comment is wrong.
-> 
-> Either the driver is missing such a "depends on XORG7", or we should not
-> add this comment.
-
-Hi,
-
-your patch 
-http://git.buildroot.net/buildroot/commit/package/mesa3d/Config.in?
-id=c65d7e55a6a9a02f39976fb06e400eb3aefde160
-superseeds my patch, closed in patchworks, thanks!
-
-Regards, Bernd
+diff --git a/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch b/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
+new file mode 100644
+index 0000000..156d374
+--- /dev/null
++++ b/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
+@@ -0,0 +1,162 @@
++From da078b9ae22c86279a48ab9888a7b4a6eeadecda Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 26 Apr 2014 22:32:46 +0200
++Subject: [PATCH] make-event-names: fix for python3 print syntax
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/make-event-names.py | 98 ++++++++++++++++++++++++-------------------------
++ 1 file changed, 49 insertions(+), 49 deletions(-)
++
++diff --git a/src/make-event-names.py b/src/make-event-names.py
++index 849d577..1c32bc8 100755
++--- a/src/make-event-names.py
+++++ b/src/make-event-names.py
++@@ -44,59 +44,59 @@ blacklist = [
++ def print_bits(bits, prefix):
++ 	if  not hasattr(bits, prefix):
++ 		return
++-	print "static const char * const %s_map[%s_MAX + 1] = {" % (prefix, prefix.upper())
++-	print "	[0 ... %s_MAX] = NULL," % prefix.upper()
+++	print ("static const char * const %s_map[%s_MAX + 1] = {" % (prefix, prefix.upper()))
+++	print ("	[0 ... %s_MAX] = NULL," % prefix.upper())
++ 	for val, name in getattr(bits, prefix).items():
++-		print "	[%s] = \"%s\"," % (name, name)
++-	print "};"
++-	print ""
+++		print ("	[%s] = \"%s\"," % (name, name))
+++	print ("};")
+++	print ("")
++ 
++ def print_python_bits(bits, prefix):
++ 	if  not hasattr(bits, prefix):
++ 		return
++ 
++-	print "%s_map = {" % (prefix)
+++	print ("%s_map = {" % (prefix))
++ 	for val, name in getattr(bits, prefix).items():
++-		print "	%d : \"%s\"," % (val, name)
++-	print "}"
++-	print "for k, v in %s_map.items():" % (prefix)
++-	print "	%s_map[v] = k" % (prefix)
++-	print ""
+++		print ("	%d : \"%s\"," % (val, name))
+++	print ("}")
+++	print ("for k, v in %s_map.items():" % (prefix))
+++	print ("	%s_map[v] = k" % (prefix))
+++	print ("")
++ 
++ def print_map(bits):
++-	print "static const char * const * const map[EV_MAX + 1] = {"
++-	print "	[0 ... EV_MAX] = NULL,"
+++	print ("static const char * const * const map[EV_MAX + 1] = {")
+++	print ("	[0 ... EV_MAX] = NULL,")
++ 
++ 	for prefix in prefixes:
++ 		if prefix == "BTN_" or prefix == "EV_" or prefix == "INPUT_PROP_":
++ 			continue
++-		print "	[EV_%s] = %s_map," % (prefix[:-1], prefix[:-1].lower())
+++		print ("	[EV_%s] = %s_map," % (prefix[:-1], prefix[:-1].lower()))
++ 
++-	print "};"
++-	print ""
+++	print ("};")
+++	print ("")
++ 
++ def print_python_map(bits):
++-	print "map = {"
+++	print ("map = {")
++ 
++ 	for val, name in getattr(bits, "ev").items():
++ 		name = name[3:]
++ 		if name == "REP" or name == "PWR"  or name == "FF_STATUS"  or name == "MAX":
++ 			continue
++-		print "	%d : %s_map," % (val, name.lower())
+++		print ("	%d : %s_map," % (val, name.lower()))
++ 
++-	print "}"
++-	print ""
+++	print ("}")
+++	print ("")
++ 
++ def print_mapping_table(bits):
++-	print "/* THIS FILE IS GENERATED, DO NOT EDIT */"
++-	print ""
++-	print "#ifndef EVENT_NAMES_H"
++-	print "#define EVENT_NAMES_H"
++-	print ""
++-	print "#ifndef SYN_MAX"
++-	print "#define SYN_MAX 3 /* linux/input.h doesn't define that */"
++-	print "#endif"
++-	print ""
+++	print ("/* THIS FILE IS GENERATED, DO NOT EDIT */")
+++	print ("")
+++	print ("#ifndef EVENT_NAMES_H")
+++	print ("#define EVENT_NAMES_H")
+++	print ("")
+++	print ("#ifndef SYN_MAX")
+++	print ("#define SYN_MAX 3 /* linux/input.h doesn't define that */")
+++	print ("#endif")
+++	print ("")
++ 
++ 	for prefix in prefixes:
++ 		if prefix == "BTN_":
++@@ -105,19 +105,19 @@ def print_mapping_table(bits):
++ 
++ 	print_map(bits)
++ 
++-	print "static const char * event_get_type_name(int type) {"
++-	print "	return ev_map[type];"
++-	print " }"
++-	print ""
++-	print "static const char * event_get_code_name(int type, int code) {"
++-	print "	return map[type] ? map[type][code] : NULL;"
++-	print "}"
++-	print ""
++-	print "#endif /* EVENT_NAMES_H */"
+++	print ("static const char * event_get_type_name(int type) {")
+++	print ("	return ev_map[type];")
+++	print (" }")
+++	print ("")
+++	print ("static const char * event_get_code_name(int type, int code) {")
+++	print ("	return map[type] ? map[type][code] : NULL;")
+++	print ("}")
+++	print ("")
+++	print ("#endif /* EVENT_NAMES_H */")
++ 
++ def print_python_mapping_table(bits):
++-	print "# THIS FILE IS GENERATED, DO NOT EDIT"
++-	print ""
+++	print ("# THIS FILE IS GENERATED, DO NOT EDIT")
+++	print ("")
++ 
++ 	for prefix in prefixes:
++ 		if prefix == "BTN_":
++@@ -126,15 +126,15 @@ def print_python_mapping_table(bits):
++ 
++ 	print_python_map(bits)
++ 
++-	print "def event_get_type_name(type):"
++-	print "	return ev_map[type]"
++-	print ""
++-	print ""
++-	print "def event_get_code_name(type, code):"
++-	print "	if map.has_key(type) and map[type].has_key(code):"
++-	print "		return map[type][code]"
++-	print "	return 'UNKNOWN'"
++-	print ""
+++	print ("def event_get_type_name(type):")
+++	print ("	return ev_map[type]")
+++	print ("")
+++	print ("")
+++	print ("def event_get_code_name(type, code):")
+++	print ("	if map.has_key(type) and map[type].has_key(code):")
+++	print ("		return map[type][code]")
+++	print ("	return 'UNKNOWN'")
+++	print ("")
++ 
++ def parse_define(bits, line):
++ 	m = re.match(r"^#define\s+(\w+)\s+(\w+)", line)
++-- 
++1.8.1.4
++
+-- 
+1.8.1.4
