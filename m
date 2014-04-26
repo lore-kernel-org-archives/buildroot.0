@@ -1,49 +1,52 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 25 Apr 2014 23:50:27 +0200
-Subject: [Buildroot] [PATCH] Makefile: target-purgelocales: add
-	dependencies
-In-Reply-To: <20140424184136.572de3d0@skate>
-References: <1398356679-1438-1-git-send-email-fabio.porcedda@gmail.com>
- <20140424184136.572de3d0@skate>
-Message-ID: <CAHkwnC8p7E8inhY7w+WiFcsZ-_mO26rdTFB8xKvgDrG2bSj0Uw@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Sat, 26 Apr 2014 08:08:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] zeromq: don't use fork() on noMMU
+	platforms
+Message-ID: <1398492531-2946-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 24, 2014 at 6:41 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Thu, 24 Apr 2014 18:24:39 +0200, Fabio Porcedda wrote:
->
->> -target-purgelocales:
->> +target-purgelocales: $(filter-out target-purgelocales,$(TARGETS))
->>       rm -f $(LOCALE_WHITELIST)
->>       for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
->
-> Don't we have several other targets that need to be executed only after
-> all packages have been built and installed? Wouldn't it make sense to
-> have a common solution for these? Like maybe a dedicated target?
+Fixes:
+http://autobuild.buildroot.net/results/439/439df2ad4482d08f295dbc40b2e88bf9167a7794/
 
-Can you please give some examples? I know only tatget-purgelocales and
-target-finalize.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+Changes v1 -> v2:
+  - change subject
+  - use an AC_CHECK_FUNCS(fork) test to build conditionally test_fork
 
-About the common solution, i see two possible solutions of the problem:
+ package/zeromq/zeromq-01-no-mmu.patch |   20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/zeromq/zeromq-01-no-mmu.patch
 
-1) all those targets must be listed in a variable like
-TARGETS_PRE_ROOTFS, but those targets must be able to be executed in
-parallel without a specific order.
-
-2) all those targets must be converted in hooks and added to a
-variable like PRE_ROOTFS_HOOKS, so those steps are going to be
-executed in serial observing a specific order.
-
-What is the more appropriate solution? The easiest and fastest one is
-the first, but i'm not sure if those targets can be executed in
-parallel.
-
-Regards
---
-Fabio Porcedda
+diff --git a/package/zeromq/zeromq-01-no-mmu.patch b/package/zeromq/zeromq-01-no-mmu.patch
+new file mode 100644
+index 0000000..0e0a4ca
+--- /dev/null
++++ b/package/zeromq/zeromq-01-no-mmu.patch
+@@ -0,0 +1,20 @@
++Don't use fork() on noMMU platforms
++
++Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
++
++diff -rupN a/tests/test_fork.cpp b/tests/test_fork.cpp
++--- a/tests/test_fork.cpp	2013-11-13 18:57:50.000000000 +0100
+++++ b/tests/test_fork.cpp	2014-04-24 08:57:01.000000000 +0200
++@@ -35,7 +35,11 @@ int main (void)
++     int rc = zmq_bind (pull, address);
++     assert (rc == 0);
++ 
++-    int pid = fork ();
+++#ifdef HAVE_FORK
+++    int pid = fork();
+++#else
+++    int pid = vfork();
+++#endif
++     if (pid == 0) {
++         //  Child process
++         //  Immediately close parent sockets and context
+-- 
+1.7.9.5
