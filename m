@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Apr 2014 11:33:49 +0200
-Subject: [Buildroot] [git commit] ltp-testsuite: re-enable on AArch64
-Message-ID: <20140426093441.442359CA0D@busybox.osuosl.org>
+Date: Sat, 26 Apr 2014 11:33:51 +0200
+Subject: [Buildroot] [git commit] ltp-testsuite: does not build on NIOS II
+Message-ID: <20140426093441.4D7C19CA0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c06e1bf4e2629b1bbb7b62169444fd9e3a0d8588
+commit: http://git.buildroot.net/buildroot/commit/?id=2d0903dd227abacca8bdc5ad961d8c920b8d8e1c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump of ltp-testsuite to a more recent version, the support
-for AArch64 is now working correctly, so we can remove the exclusion
-of this architecture from the ltp-testsuite package.
+Fixes:
+
+  http://autobuild.buildroot.org/results/1ae/1aef491ec016ddd601446164c5b97ce480e755e6/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ltp-testsuite/Config.in |    4 ----
- 1 files changed, 0 insertions(+), 4 deletions(-)
+ package/ltp-testsuite/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/package/ltp-testsuite/Config.in b/package/ltp-testsuite/Config.in
-index 0883c8f..44592fc 100644
+index 44592fc..0e71677 100644
 --- a/package/ltp-testsuite/Config.in
 +++ b/package/ltp-testsuite/Config.in
-@@ -8,9 +8,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_LTP_TESTSUITE
  	depends on BR2_INET_IPV6
  	depends on BR2_LARGEFILE
  	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
--	# aarch64 build currently broken, reported at
--	# https://bugs.launchpad.net/linaro-aarch64/+bug/1236027
--	depends on !BR2_aarch64
++	# does not build, cachectl.h issue
++	depends on !BR2_nios2
  	help
  	  The Linux Test Project provides a huge testsuite for Linux.
  
-@@ -24,6 +21,5 @@ config BR2_PACKAGE_LTP_TESTSUITE
+@@ -21,5 +23,6 @@ config BR2_PACKAGE_LTP_TESTSUITE
  	  http://ltp.sourceforge.net/
  
  comment "ltp-testsuite needs a toolchain w/ IPv6, RPC, largefile, threads"
--	depends on !BR2_aarch64
++	depends on !BR2_nios2
  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || \
  		!BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
