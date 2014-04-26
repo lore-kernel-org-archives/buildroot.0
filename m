@@ -1,32 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Apr 2014 11:35:29 +0200
-Subject: [Buildroot] [git commit] libtpl: bump version to v1.6.1
-Message-ID: <20140426093817.367829CA0C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Apr 2014 11:47:01 +0200
+Subject: [Buildroot] [PATCH v2 1/1] zeromq: don't use fork() on noMMU
+ platforms
+In-Reply-To: <1398492531-2946-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1398492531-2946-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140426114701.23e40741@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc7e2babbefd2be47a2027a250603b1105f724a5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libtpl/libtpl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Sat, 26 Apr 2014 08:08:51 +0200, Jerzy Grzegorek wrote:
 
-diff --git a/package/libtpl/libtpl.mk b/package/libtpl/libtpl.mk
-index 1d4becf..ed3bfb5 100644
---- a/package/libtpl/libtpl.mk
-+++ b/package/libtpl/libtpl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTPL_VERSION = 6df007e450cbee7d7a4896d3538128c5370b1c61
-+LIBTPL_VERSION = v1.6.1
- LIBTPL_SITE = $(call github,troydhanson,tpl,$(LIBTPL_VERSION))
- LIBTPL_INSTALL_STAGING = YES
- LIBTPL_LICENSE = BSD-like
+> +-    int pid = fork ();
+> ++#ifdef HAVE_FORK
+> ++    int pid = fork();
+> ++#else
+> ++    int pid = vfork();
+> ++#endif
+
+Are you sure the child immediately does an exec() ? vfork() is not
+equivalent to fork(), so one cannot be blindly replaced by the other.
+Since the whole test is dedicated to testing fork, I think it doesn't
+make sense to build it. So, your previous patch was better, it is just
+that your previous patch was completely removing the build of
+test_fork, while it should be conditional on whether the platform
+implements fork() or not.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
