@@ -1,28 +1,100 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 26 Apr 2014 16:24:55 +0200
-Subject: [Buildroot] [PATCH v5 7/8] libglew: new package
-References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
- <1396588694-6377-8-git-send-email-bernd.kuhls@t-online.de>
- <20140417225250.15ff2dd1@skate>
-Message-ID: <n6ss2bx3k9.ln2@ID-313208.user.individual.net>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 26 Apr 2014 19:28:25 +0200
+Subject: [Buildroot] [PATCH 1/1] qdecoder : new package
+Message-ID: <1398533305-12899-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20140417225250.15ff2dd1 at skate: 
+qDecoder is a powerful CGI library.
+Features:
+   Supports parsing a request encoded by GET/POST method
+   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
+   Supports COOKIE handling.
+   Supports Session management.
+   Supports FastCGI
 
-> Do you plan to include packages that depend on libglew? What are those
-> packages? I'm just trying to get the big picture, and see how libglew
-> fits in it.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+v2:	Changed License to BSD-2
+v3: removed QDECODER_CONF_OPT and created makefile.in patch
 
-Hi,
+ ...stall-header-and-lib-in-staging-directory.patch | 28 ++++++++++++++++++++++
+ package/qdecoder/Config.in                         |  7 ++++++
+ package/qdecoder/qdecoder.mk                       | 14 +++++++++++
+ 3 files changed, 49 insertions(+)
+ create mode 100644 package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
+ create mode 100644 package/qdecoder/Config.in
+ create mode 100644 package/qdecoder/qdecoder.mk
 
-xbmc gotham depends on libglew and libglu:
-https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1068
-
-Regards, Bernd
-(who is working through mail backlog after holiday ;))
+diff --git a/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch b/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
+new file mode 100644
+index 0000000..c044b6d
+--- /dev/null
++++ b/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
+@@ -0,0 +1,28 @@
++From 75e16fd73af6b2f8c0149dacb9c7be7e7123b449 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@skynet.be>
++Date: Sat, 26 Apr 2014 19:05:55 +0200
++Subject: [PATCH 1/1] install header and lib in staging directory
++
++Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
++---
++ src/Makefile.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/Makefile.in b/src/Makefile.in
++index 2688038..b2bf836 100644
++--- a/src/Makefile.in
+++++ b/src/Makefile.in
++@@ -43,8 +43,8 @@ SLIBNAME	= lib${PRGNAME}.so
++ SLIBREALNAME	= ${SLIBNAME}.${SLIBVERSION}
++ 
++ ## System library directory
++-LIBDIR		= @libdir@
++-HEADERDIR	= @includedir@
+++LIBDIR = $(STAGING_DIR)/usr/lib
+++HEADERDIR =$(STAGING_DIR)/usr/include
++ 
++ ## Which compiler & options for release
++ CC		= @CC@
++-- 
++1.9.2
++
+diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in
+new file mode 100644
+index 0000000..2bd2a2f
+--- /dev/null
++++ b/package/qdecoder/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QDECODER
++	bool "qdecoder"
++	help
++	  qDecoder is a simple and powerful CGI library
++	  for the C/C++ programming language.
++
++	  http://www.qdecoder.org/wiki/qdecoder
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
+new file mode 100644
+index 0000000..30fbcb3
+--- /dev/null
++++ b/package/qdecoder/qdecoder.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# qdecoder
++#
++################################################################################
++
++QDECODER_VERSION = r12.0.5
++QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
++QDECODER_LICENSE = GPL
++QDECODER_LICENSE_FILES = COPYING
++
++QDECODER_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+1.9.2
