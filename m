@@ -1,42 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 26 Apr 2014 21:55:35 +0200
-Subject: [Buildroot] [PATCH 1/1] qdecoder : new package
-In-Reply-To: <1398533305-12899-1-git-send-email-sagaert.johan@skynet.be>
-References: <1398533305-12899-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <e2e0f3d0-03f1-41b0-80c5-3169c77c290c@email.android.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 26 Apr 2014 22:29:56 +0200
+Subject: [Buildroot] [PATCH 1/1] mesa3d: Bump version to 10.0.5
+Message-ID: <1398544196-4571-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Johan,
 
-Sagaert Johan <sagaert.johan@skynet.be> schreef:
->qDecoder is a powerful CGI library.
->Features:
->   Supports parsing a request encoded by GET/POST method
->   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
->   Supports COOKIE handling.
->   Supports Session management.
->   Supports FastCGI
->
->Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
->---
->v2:	Changed License to BSD-2
->v3: removed QDECODER_CONF_OPT and created makefile.in patch
->
-> ...stall-header-and-lib-in-staging-directory.patch | 28 ++++++++++++++++++++++
-> package/qdecoder/Config.in                         |  7 ++++++
-> package/qdecoder/qdecoder.mk                       | 14 +++++++++++
-> 3 files changed, 49 insertions(+)
-> create mode 100644 package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
-> create mode 100644 package/qdecoder/Config.in
-> create mode 100644 package/qdecoder/qdecoder.mk
->
->diff --git a/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch b/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Patch filenames should start with the package name, so qdecoder-0001-description.patch
-
-Best regards,
-Thomas
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b8220ed..1f30efb 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESA3D_VERSION = 10.0.4
++MESA3D_VERSION = 10.0.5
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+1.7.10.4
