@@ -1,100 +1,36 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sat, 26 Apr 2014 19:28:25 +0200
-Subject: [Buildroot] [PATCH 1/1] qdecoder : new package
-Message-ID: <1398533305-12899-1-git-send-email-sagaert.johan@skynet.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 26 Apr 2014 20:51:33 +0200
+Subject: [Buildroot] [git commit] czmq: fix license after version bump
+Message-ID: <20140426185205.8BD559CA0C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qDecoder is a powerful CGI library.
-Features:
-   Supports parsing a request encoded by GET/POST method
-   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
-   Supports COOKIE handling.
-   Supports Session management.
-   Supports FastCGI
+commit: http://git.buildroot.net/buildroot/commit/?id=6f64cd187c1b23e7201a91850cbfd3e8c37ba8a4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+czmq is now under the MPLv2.0 license. For more details, see
+https://github.com/zeromq/czmq/commit/eabe063c2588cde0af90e
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-v2:	Changed License to BSD-2
-v3: removed QDECODER_CONF_OPT and created makefile.in patch
+ package/czmq/czmq.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
- ...stall-header-and-lib-in-staging-directory.patch | 28 ++++++++++++++++++++++
- package/qdecoder/Config.in                         |  7 ++++++
- package/qdecoder/qdecoder.mk                       | 14 +++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
- create mode 100644 package/qdecoder/Config.in
- create mode 100644 package/qdecoder/qdecoder.mk
-
-diff --git a/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch b/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
-new file mode 100644
-index 0000000..c044b6d
---- /dev/null
-+++ b/package/qdecoder/0001-install-header-and-lib-in-staging-directory.patch
-@@ -0,0 +1,28 @@
-+From 75e16fd73af6b2f8c0149dacb9c7be7e7123b449 Mon Sep 17 00:00:00 2001
-+From: Sagaert Johan <sagaert.johan@skynet.be>
-+Date: Sat, 26 Apr 2014 19:05:55 +0200
-+Subject: [PATCH 1/1] install header and lib in staging directory
-+
-+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-+---
-+ src/Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/Makefile.in b/src/Makefile.in
-+index 2688038..b2bf836 100644
-+--- a/src/Makefile.in
-++++ b/src/Makefile.in
-+@@ -43,8 +43,8 @@ SLIBNAME	= lib${PRGNAME}.so
-+ SLIBREALNAME	= ${SLIBNAME}.${SLIBVERSION}
-+ 
-+ ## System library directory
-+-LIBDIR		= @libdir@
-+-HEADERDIR	= @includedir@
-++LIBDIR = $(STAGING_DIR)/usr/lib
-++HEADERDIR =$(STAGING_DIR)/usr/include
-+ 
-+ ## Which compiler & options for release
-+ CC		= @CC@
-+-- 
-+1.9.2
-+
-diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in
-new file mode 100644
-index 0000000..2bd2a2f
---- /dev/null
-+++ b/package/qdecoder/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QDECODER
-+	bool "qdecoder"
-+	help
-+	  qDecoder is a simple and powerful CGI library
-+	  for the C/C++ programming language.
-+
-+	  http://www.qdecoder.org/wiki/qdecoder
-diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
-new file mode 100644
-index 0000000..30fbcb3
---- /dev/null
-+++ b/package/qdecoder/qdecoder.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# qdecoder
-+#
-+################################################################################
-+
-+QDECODER_VERSION = r12.0.5
-+QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
-+QDECODER_LICENSE = GPL
-+QDECODER_LICENSE_FILES = COPYING
-+
-+QDECODER_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
--- 
-1.9.2
+diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
+index 4703041..2f6866b 100644
+--- a/package/czmq/czmq.mk
++++ b/package/czmq/czmq.mk
+@@ -11,8 +11,8 @@ CZMQ_SITE = git://github.com/zeromq/czmq.git
+ CZMQ_AUTORECONF = YES
+ CZMQ_INSTALL_STAGING = YES
+ CZMQ_DEPENDENCIES = zeromq
+-CZMQ_LICENSE = LGPLv3+ with exceptions
+-CZMQ_LICENSE_FILES = COPYING COPYING.LESSER
++CZMQ_LICENSE = MPLv2.0
++CZMQ_LICENSE_FILES = LICENSE
+ 
+ # asciidoc is a python script that imports unicodedata, which is not in
+ # host-python, so disable asciidoc entirely.
