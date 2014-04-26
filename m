@@ -1,187 +1,53 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 26 Apr 2014 23:43:35 +0200
-Subject: [Buildroot] [PATCH] evemu: fix make-event-names.py for python3
-	syntax
-Message-ID: <1398548615-18088-1-git-send-email-ps.report@gmx.net>
+Date: Sat, 26 Apr 2014 23:47:01 +0200
+Subject: [Buildroot] [PATCH] evemu: bump version to 1.2.0
+In-Reply-To: <87eh0kzc1u.fsf@dell.be.48ers.dk>
+References: <trinity-1fce5222-5e5e-419c-baab-a89af52a2d58-1398454369404@3capp-gmx-bs30>, 
+ <87eh0kzc1u.fsf@dell.be.48ers.dk>
+Message-ID: <trinity-d69c2907-312f-4446-b08d-8d5a3a0bcbfa-1398548821493@3capp-gmx-bs17>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...-event-names-fix-for-python3-print-syntax.patch | 162 +++++++++++++++++++++
- 1 file changed, 162 insertions(+)
- create mode 100644 package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
+Hello Peter,
 
-diff --git a/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch b/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
-new file mode 100644
-index 0000000..156d374
---- /dev/null
-+++ b/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
-@@ -0,0 +1,162 @@
-+From da078b9ae22c86279a48ab9888a7b4a6eeadecda Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 26 Apr 2014 22:32:46 +0200
-+Subject: [PATCH] make-event-names: fix for python3 print syntax
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/make-event-names.py | 98 ++++++++++++++++++++++++-------------------------
-+ 1 file changed, 49 insertions(+), 49 deletions(-)
-+
-+diff --git a/src/make-event-names.py b/src/make-event-names.py
-+index 849d577..1c32bc8 100755
-+--- a/src/make-event-names.py
-++++ b/src/make-event-names.py
-+@@ -44,59 +44,59 @@ blacklist = [
-+ def print_bits(bits, prefix):
-+ 	if  not hasattr(bits, prefix):
-+ 		return
-+-	print "static const char * const %s_map[%s_MAX + 1] = {" % (prefix, prefix.upper())
-+-	print "	[0 ... %s_MAX] = NULL," % prefix.upper()
-++	print ("static const char * const %s_map[%s_MAX + 1] = {" % (prefix, prefix.upper()))
-++	print ("	[0 ... %s_MAX] = NULL," % prefix.upper())
-+ 	for val, name in getattr(bits, prefix).items():
-+-		print "	[%s] = \"%s\"," % (name, name)
-+-	print "};"
-+-	print ""
-++		print ("	[%s] = \"%s\"," % (name, name))
-++	print ("};")
-++	print ("")
-+ 
-+ def print_python_bits(bits, prefix):
-+ 	if  not hasattr(bits, prefix):
-+ 		return
-+ 
-+-	print "%s_map = {" % (prefix)
-++	print ("%s_map = {" % (prefix))
-+ 	for val, name in getattr(bits, prefix).items():
-+-		print "	%d : \"%s\"," % (val, name)
-+-	print "}"
-+-	print "for k, v in %s_map.items():" % (prefix)
-+-	print "	%s_map[v] = k" % (prefix)
-+-	print ""
-++		print ("	%d : \"%s\"," % (val, name))
-++	print ("}")
-++	print ("for k, v in %s_map.items():" % (prefix))
-++	print ("	%s_map[v] = k" % (prefix))
-++	print ("")
-+ 
-+ def print_map(bits):
-+-	print "static const char * const * const map[EV_MAX + 1] = {"
-+-	print "	[0 ... EV_MAX] = NULL,"
-++	print ("static const char * const * const map[EV_MAX + 1] = {")
-++	print ("	[0 ... EV_MAX] = NULL,")
-+ 
-+ 	for prefix in prefixes:
-+ 		if prefix == "BTN_" or prefix == "EV_" or prefix == "INPUT_PROP_":
-+ 			continue
-+-		print "	[EV_%s] = %s_map," % (prefix[:-1], prefix[:-1].lower())
-++		print ("	[EV_%s] = %s_map," % (prefix[:-1], prefix[:-1].lower()))
-+ 
-+-	print "};"
-+-	print ""
-++	print ("};")
-++	print ("")
-+ 
-+ def print_python_map(bits):
-+-	print "map = {"
-++	print ("map = {")
-+ 
-+ 	for val, name in getattr(bits, "ev").items():
-+ 		name = name[3:]
-+ 		if name == "REP" or name == "PWR"  or name == "FF_STATUS"  or name == "MAX":
-+ 			continue
-+-		print "	%d : %s_map," % (val, name.lower())
-++		print ("	%d : %s_map," % (val, name.lower()))
-+ 
-+-	print "}"
-+-	print ""
-++	print ("}")
-++	print ("")
-+ 
-+ def print_mapping_table(bits):
-+-	print "/* THIS FILE IS GENERATED, DO NOT EDIT */"
-+-	print ""
-+-	print "#ifndef EVENT_NAMES_H"
-+-	print "#define EVENT_NAMES_H"
-+-	print ""
-+-	print "#ifndef SYN_MAX"
-+-	print "#define SYN_MAX 3 /* linux/input.h doesn't define that */"
-+-	print "#endif"
-+-	print ""
-++	print ("/* THIS FILE IS GENERATED, DO NOT EDIT */")
-++	print ("")
-++	print ("#ifndef EVENT_NAMES_H")
-++	print ("#define EVENT_NAMES_H")
-++	print ("")
-++	print ("#ifndef SYN_MAX")
-++	print ("#define SYN_MAX 3 /* linux/input.h doesn't define that */")
-++	print ("#endif")
-++	print ("")
-+ 
-+ 	for prefix in prefixes:
-+ 		if prefix == "BTN_":
-+@@ -105,19 +105,19 @@ def print_mapping_table(bits):
-+ 
-+ 	print_map(bits)
-+ 
-+-	print "static const char * event_get_type_name(int type) {"
-+-	print "	return ev_map[type];"
-+-	print " }"
-+-	print ""
-+-	print "static const char * event_get_code_name(int type, int code) {"
-+-	print "	return map[type] ? map[type][code] : NULL;"
-+-	print "}"
-+-	print ""
-+-	print "#endif /* EVENT_NAMES_H */"
-++	print ("static const char * event_get_type_name(int type) {")
-++	print ("	return ev_map[type];")
-++	print (" }")
-++	print ("")
-++	print ("static const char * event_get_code_name(int type, int code) {")
-++	print ("	return map[type] ? map[type][code] : NULL;")
-++	print ("}")
-++	print ("")
-++	print ("#endif /* EVENT_NAMES_H */")
-+ 
-+ def print_python_mapping_table(bits):
-+-	print "# THIS FILE IS GENERATED, DO NOT EDIT"
-+-	print ""
-++	print ("# THIS FILE IS GENERATED, DO NOT EDIT")
-++	print ("")
-+ 
-+ 	for prefix in prefixes:
-+ 		if prefix == "BTN_":
-+@@ -126,15 +126,15 @@ def print_python_mapping_table(bits):
-+ 
-+ 	print_python_map(bits)
-+ 
-+-	print "def event_get_type_name(type):"
-+-	print "	return ev_map[type]"
-+-	print ""
-+-	print ""
-+-	print "def event_get_code_name(type, code):"
-+-	print "	if map.has_key(type) and map[type].has_key(code):"
-+-	print "		return map[type][code]"
-+-	print "	return 'UNKNOWN'"
-+-	print ""
-++	print ("def event_get_type_name(type):")
-++	print ("	return ev_map[type]")
-++	print ("")
-++	print ("")
-++	print ("def event_get_code_name(type, code):")
-++	print ("	if map.has_key(type) and map[type].has_key(code):")
-++	print ("		return map[type][code]")
-++	print ("	return 'UNKNOWN'")
-++	print ("")
-+ 
-+ def parse_define(bits, line):
-+ 	m = re.match(r"^#define\s+(\w+)\s+(\w+)", line)
-+-- 
-+1.8.1.4
-+
--- 
-1.8.1.4
+> Gesendet: Samstag, 26. April 2014 um 11:15 Uhr
+> Von: "Peter Korsgaard" <jacmet@uclibc.org>
+> An: "Peter Seiderer" <ps.report@gmx.net>
+> Cc: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>, buildroot at busybox.net
+> Betreff: Re: [PATCH] evemu: bump version to 1.2.0
+>
+> >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+> 
+> Hi,
+> 
+>  > SOURCE_FILE should be something like "${SYSROOT}/usr/include/linux/input.h", whats the best
+>  > way to achieve this (and which buildroot set variable should be uesed)?
+>  > - patch make-event-names.py directly with given sysroot path
+>  > - patch make-event-names.py to use given environment variable with sysroot path
+>  > - ...
+> 
+> Thanks for the patch. I see there's also another failure:
+> 
+> http://autobuild.buildroot.net/results/4ec/4ecfbca85ffd5544acad44312166bfcb323283b5/build-end.log
+> 
+> It seems like the python stuff doesn't work with python3. I guess we
+> will need to:
+> 
+> - Patch make-event-names.py to use python2 instead of python
+> - Add a configure flag to disable python support and/or fixup python/ to
+>   work with python3
+> 
+> Care to take a look?
+
+Patch with fixup for make-event-names.py is on the way...
+
+Regards,
+Peter
+
+> 
+> -- 
+> Bye, Peter Korsgaard
+> 
