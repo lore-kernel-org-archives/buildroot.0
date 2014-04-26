@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 26 Apr 2014 11:37:51 +0200
-Subject: [Buildroot] [PATCH] libtpl: bump version to v1.6.1
-In-Reply-To: <1398499700-621-1-git-send-email-spdawson@gmail.com> (Simon
- Dawson's message of "Sat, 26 Apr 2014 09:08:20 +0100")
-References: <1398499700-621-1-git-send-email-spdawson@gmail.com>
-Message-ID: <87sip0xwgg.fsf@dell.be.48ers.dk>
+Date: Sat, 26 Apr 2014 11:38:07 +0200
+Subject: [Buildroot] [PATCH] czmq: bump version to v2.2.0
+In-Reply-To: <1398501708-7756-1-git-send-email-spdawson@gmail.com> (Simon
+ Dawson's message of "Sat, 26 Apr 2014 09:41:48 +0100")
+References: <1398501708-7756-1-git-send-email-spdawson@gmail.com>
+Message-ID: <87oazoxwg0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
