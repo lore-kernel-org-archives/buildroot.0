@@ -1,30 +1,26 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Sat, 26 Apr 2014 09:41:48 +0100
-Subject: [Buildroot] [PATCH] czmq: bump version to v2.2.0
-Message-ID: <1398501708-7756-1-git-send-email-spdawson@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 26 Apr 2014 10:58:05 +0200
+Subject: [Buildroot] [PATCH] evemu: use sysroot provided input.h file
+	(instead of host system version)
+In-Reply-To: <1398460136-18217-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Fri, 25 Apr 2014 23:08:56 +0200")
+References: <1398460136-18217-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87iopwzcv6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/czmq/czmq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index db8f727..4703041 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CZMQ_VERSION = b5730c5f8290a611fd3b92e4a259c2b0ed96cb73
-+CZMQ_VERSION = v2.2.0
- CZMQ_SITE = git://github.com/zeromq/czmq.git
- 
- # Autoreconf required as we use the git tree
+ > Add patch for src/make-event-names.py to use sysroot provided input.h
+ > instead of hard coded '/usr/include/linux/input.h' (host system version)
+ > one.
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
