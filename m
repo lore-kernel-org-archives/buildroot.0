@@ -1,39 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Apr 2014 11:47:01 +0200
-Subject: [Buildroot] [PATCH v2 1/1] zeromq: don't use fork() on noMMU
- platforms
-In-Reply-To: <1398492531-2946-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1398492531-2946-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140426114701.23e40741@skate>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 26 Apr 2014 16:24:55 +0200
+Subject: [Buildroot] [PATCH v5 7/8] libglew: new package
+References: <1396588694-6377-1-git-send-email-bernd.kuhls@t-online.de>
+ <1396588694-6377-8-git-send-email-bernd.kuhls@t-online.de>
+ <20140417225250.15ff2dd1@skate>
+Message-ID: <n6ss2bx3k9.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140417225250.15ff2dd1 at skate: 
 
-On Sat, 26 Apr 2014 08:08:51 +0200, Jerzy Grzegorek wrote:
+> Do you plan to include packages that depend on libglew? What are those
+> packages? I'm just trying to get the big picture, and see how libglew
+> fits in it.
 
-> +-    int pid = fork ();
-> ++#ifdef HAVE_FORK
-> ++    int pid = fork();
-> ++#else
-> ++    int pid = vfork();
-> ++#endif
+Hi,
 
-Are you sure the child immediately does an exec() ? vfork() is not
-equivalent to fork(), so one cannot be blindly replaced by the other.
-Since the whole test is dedicated to testing fork, I think it doesn't
-make sense to build it. So, your previous patch was better, it is just
-that your previous patch was completely removing the build of
-test_fork, while it should be conditional on whether the platform
-implements fork() or not.
+xbmc gotham depends on libglew and libglu:
+https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1068
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
+(who is working through mail backlog after holiday ;))
