@@ -1,25 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 27 Apr 2014 22:31:28 +0200
-Subject: [Buildroot] [PATCH] bustle: fix static build
-In-Reply-To: <0d6bd6c7f561940efe319ceabaec1968fb546282.1398586240.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 27 Apr 2014 11:10:40 +0300")
-References: <0d6bd6c7f561940efe319ceabaec1968fb546282.1398586240.git.baruch@tkos.co.il>
-Message-ID: <877g6ay0nz.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Apr 2014 22:32:03 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10,
+	14}.x series
+In-Reply-To: <1398596978-20572-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 27 Apr 2014 08:09:37 -0300")
+References: <1398596978-20572-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8738gyy0n0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Use pcap-config to list optional libpcap dependencies needed for static link.
- > Fixes:
- > http://autobuild.buildroot.net/results/569/56987b9c39376d2443b96160485f4fd8eefda9bb/
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
