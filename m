@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Apr 2014 21:42:59 +0200
-Subject: [Buildroot] [PATCH v6 5/8] [v2] libglu: new package
+Date: Sun, 27 Apr 2014 21:43:00 +0200
+Subject: [Buildroot] [PATCH v6 6/8] [v2] libglew: new package
 In-Reply-To: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1398627782-1939-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1398627782-1939-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,64 +13,95 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: included hints by Thomas
-    http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82058
+    http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82060
+    LIBGLEW_BUILD_CMDS can not use $TARGET_CONFIGURE_OPTS
+    as this overwrite some options in Makefile
 
- package/Config.in        |    1 +
- package/libglu/Config.in |   10 ++++++++++
- package/libglu/libglu.mk |   16 ++++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/libglu/Config.in
- create mode 100644 package/libglu/libglu.mk
+ package/Config.in          |    1 +
+ package/libglew/Config.in  |   19 +++++++++++++++++++
+ package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 863e3d9..57b4dd7 100644
+index 57b4dd7..8f18eb4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -589,6 +589,7 @@ source "package/libexif/Config.in"
  source "package/libgail/Config.in"
  source "package/libgeotiff/Config.in"
  source "package/libglade/Config.in"
-+source "package/libglu/Config.in"
++source "package/libglew/Config.in"
+ source "package/libglu/Config.in"
  source "package/libgtk2/Config.in"
  source "package/libpng/Config.in"
- source "package/libqrencode/Config.in"
-diff --git a/package/libglu/Config.in b/package/libglu/Config.in
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
 new file mode 100644
-index 0000000..de8e1ef
+index 0000000..67c49d4
 --- /dev/null
-+++ b/package/libglu/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBGLU
-+	bool "libglu"
++++ b/package/libglew/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBGLEW
++	bool "libglew"
++	depends on BR2_PACKAGE_XORG7
 +	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XLIB_LIBXMU
 +	help
-+	  Mesa OpenGL Utility library
++	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
++	  extension loading library. GLEW provides efficient run-time mechanisms
++	  for determining which OpenGL extensions are supported on the target
++	  platform. OpenGL core and extension functionality is exposed in a
++	  single header file.
 +
-+	  http://cgit.freedesktop.org/mesa/glu/
++	  http://glew.sourceforge.net
 +
-+comment "libglu needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
++comment "libglew depends on X.org and needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
 new file mode 100644
-index 0000000..f4c47a0
+index 0000000..48ecf97
 --- /dev/null
-+++ b/package/libglu/libglu.mk
-@@ -0,0 +1,16 @@
++++ b/package/libglew/libglew.mk
+@@ -0,0 +1,36 @@
 +################################################################################
 +#
-+# libglu
++# libglew
 +#
 +################################################################################
 +
-+LIBGLU_VERSION = 9.0.0
-+LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
-+LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
-+LIBGLU_LICENSE = SGI-B-2.0
-+LIBGLU_LICENSE_FILES = include/GL/glu.h
-+LIBGLU_INSTALL_STAGING = YES
-+LIBGLU_AUTORECONF = YES
-+LIBGLU_DEPENDENCIES = libgl
++LIBGLEW_VERSION = 1.10.0
++LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
++LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_LICENSE = MIT
++LIBGLEW_LICENSE_FILES = LICENSE.txt
++LIBGLEW_INSTALL_STAGING = YES
++LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
 +
-+$(eval $(autotools-package))
++# using $TARGET_CONFIGURE_OPTS breaks compilation
++define LIBGLEW_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
++		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
++		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
++		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++endef
++
++define LIBGLEW_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++define LIBGLEW_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
