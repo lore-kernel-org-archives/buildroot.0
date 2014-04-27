@@ -1,22 +1,39 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 27 Apr 2014 12:36:32 +0200
-Subject: [Buildroot] [PATCH 1/1] mesa3d: Bump version to 10.0.5
-References: <1398594864-1049-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <g63v2bxukg.ln2@ID-313208.user.individual.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 27 Apr 2014 08:09:37 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4,10,14}.x series
+Message-ID: <1398596978-20572-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
-news:1398594864-1049-1-git-send-email-bernd.kuhls at t-online.de: 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> -MESA3D_VERSION = 10.0.4
-> +MESA3D_VERSION = 10.0.5
-
-Hi,
-
-sorry for the duplicate, deleted in patchworks...
-
-Regards, Bernd
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 001c424..6e2b7f7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -156,14 +156,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.57"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.87"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.88"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+ 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.37"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.38"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.18"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.1"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.2"	if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+1.8.3.2
