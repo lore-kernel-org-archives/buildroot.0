@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Apr 2014 21:43:00 +0200
-Subject: [Buildroot] [PATCH v6 6/8] [v2] libglew: new package
+Date: Sun, 27 Apr 2014 21:42:57 +0200
+Subject: [Buildroot] [PATCH v6 3/8] [v2] libva-intel-driver: new package
 In-Reply-To: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1398627782-1939-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1398627782-1939-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,95 +13,87 @@ To: buildroot@busybox.net
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: included hints by Thomas
-    http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82060
-    LIBGLEW_BUILD_CMDS can not use $TARGET_CONFIGURE_OPTS
-    as this overwrite some options in Makefile
+    http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82057
+    @Thomas: libdrm is a hard-dependency of libva, so it makes no sense
+    to add a --enable/disable-drm option
 
- package/Config.in          |    1 +
- package/libglew/Config.in  |   19 +++++++++++++++++++
- package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/libglew/Config.in
- create mode 100644 package/libglew/libglew.mk
+ package/Config.in                                |    1 +
+ package/libva-intel-driver/Config.in             |   19 +++++++++++++++
+ package/libva-intel-driver/libva-intel-driver.mk |   28 ++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/libva-intel-driver/Config.in
+ create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 57b4dd7..8f18eb4 100644
+index 4156d5c..863e3d9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -589,6 +589,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglew/Config.in"
- source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
-diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+@@ -599,6 +599,7 @@ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/libva/Config.in"
++source "package/libva-intel-driver/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
 new file mode 100644
-index 0000000..67c49d4
+index 0000000..89a3264
 --- /dev/null
-+++ b/package/libglew/Config.in
++++ b/package/libva-intel-driver/Config.in
 @@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBGLEW
-+	bool "libglew"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXMU
++config BR2_PACKAGE_LIBVA_INTEL_DRIVER
++	bool "libva-intel-driver"
++	select BR2_PACKAGE_LIBVA
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
++	depends on BR2_LARGEFILE # libdrm
 +	help
-+	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
-+	  extension loading library. GLEW provides efficient run-time mechanisms
-+	  for determining which OpenGL extensions are supported on the target
-+	  platform. OpenGL core and extension functionality is exposed in a
-+	  single header file.
++	  VA-API back-end driver for Intel graphics chips
 +
-+	  http://glew.sourceforge.net
++	  https://01.org/linuxgraphics/community/vaapi
 +
-+comment "libglew depends on X.org and needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
++comment "libva intel driver needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
 new file mode 100644
-index 0000000..48ecf97
+index 0000000..994fe44
 --- /dev/null
-+++ b/package/libglew/libglew.mk
-@@ -0,0 +1,36 @@
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -0,0 +1,28 @@
 +################################################################################
 +#
-+# libglew
++# libva-intel-driver
 +#
 +################################################################################
 +
-+LIBGLEW_VERSION = 1.10.0
-+LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
-+LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
-+LIBGLEW_LICENSE = MIT
-+LIBGLEW_LICENSE_FILES = LICENSE.txt
-+LIBGLEW_INSTALL_STAGING = YES
-+LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
++LIBVA_INTEL_DRIVER_VERSION = 1.3.0
++LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
++LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
++LIBVA_INTEL_DRIVER_LICENSE = MIT
++LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
++LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
 +
-+# using $TARGET_CONFIGURE_OPTS breaks compilation
-+define LIBGLEW_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
-+		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
-+		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
-+		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
-+endef
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
++endif
 +
-+define LIBGLEW_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
++endif
 +
-+define LIBGLEW_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.10.4
