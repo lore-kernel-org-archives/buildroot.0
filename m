@@ -1,40 +1,42 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 27 Apr 2014 09:36:44 +0300
-Subject: [Buildroot] [PATCH] filemq: bump git snapshot
-Message-ID: <dc2ea6e636f598ace1aafde0032a44369e3f62e1.1398580604.git.baruch@tkos.co.il>
+Date: Sun, 27 Apr 2014 11:10:40 +0300
+Subject: [Buildroot] [PATCH] bustle: fix static build
+Message-ID: <0d6bd6c7f561940efe319ceabaec1968fb546282.1398586240.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For API compatibility with czmq version 2.2.0.
+Use pcap-config to list optional libpcap dependencies needed for static link.
 
 Fixes:
-http://autobuild.buildroot.net/results/971/971e2f88a533cc829516b1cf426f6b1c27d0d82b/
+http://autobuild.buildroot.net/results/569/56987b9c39376d2443b96160485f4fd8eefda9bb/
 
-Also, switch to github helper.
-
-Cc: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/filemq/filemq.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/bustle/bustle.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 8cf69bc8e0cf..69469c698a35 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+index 7bc3e97bcf8c..9222cdbaad63 100644
+--- a/package/bustle/bustle.mk
++++ b/package/bustle/bustle.mk
+@@ -10,9 +10,14 @@ BUSTLE_LICENSE = LGPLv2.1+
+ BUSTLE_LICENSE_FILES = LICENSE
+ BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
  
--FILEMQ_VERSION = c398c096a427d341e9323d7673e6e0ca5e43902a
--FILEMQ_SITE = git://github.com/zeromq/filemq.git
-+FILEMQ_VERSION = 9a24134d4c0a84abc5eebf1dfb2eb184adee72df
-+FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
++BUSTLE_PCAP_FLAGS = "-lpcap"
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++BUSTLE_PCAP_FLAGS += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++endif
++
+ define BUSTLE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+-		PCAP_FLAGS='-lpcap' -C $(@D) dist/build/bustle-pcap
++		PCAP_FLAGS="$(BUSTLE_PCAP_FLAGS)" -C $(@D) dist/build/bustle-pcap
+ endef
  
- FILEMQ_AUTORECONF = YES
- FILEMQ_CONF_ENV = fmq_have_asciidoc=no
+ define BUSTLE_INSTALL_TARGET_CMDS
 -- 
 1.9.2
