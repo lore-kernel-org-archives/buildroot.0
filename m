@@ -1,42 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Apr 2014 22:31:55 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4,10,14}.x series
-Message-ID: <20140427203319.CDC559C9C5@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 Apr 2014 23:28:14 +0200
+Subject: [Buildroot] [PATCH 1/1] libdrm: Explain dependency on xorg in
+ Kconfig
+In-Reply-To: <1398594913-14255-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1398594913-14255-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140427212814.GA3190@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5dd1992a916baf5bf6b499c5c299f427c4dbb4e7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+On 2014-04-27 12:35 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libdrm/Config.in |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+> index df95eec..e6a7a42 100644
+> --- a/package/libdrm/Config.in
+> +++ b/package/libdrm/Config.in
+> @@ -21,6 +21,9 @@ config BR2_PACKAGE_LIBDRM_INTEL
+>  	help
+>  	  installs intel graphics driver
+>  
+> +comment "libdrm intel driver depends on X.org"
+> +	depends on !BR2_PACKAGE_XORG7
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 001c424..6e2b7f7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -156,14 +156,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.57"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.87"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.88"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
- 	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.37"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.38"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.18"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.1"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.2"	if BR2_KERNEL_HEADERS_3_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+This should also "depends on BR2_i386 || BR2_x86_64" because it is am
+x86-only option, no?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
