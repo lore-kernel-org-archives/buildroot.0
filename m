@@ -1,44 +1,188 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Apr 2014 22:31:25 +0200
-Subject: [Buildroot] [git commit] bustle: fix static build
-Message-ID: <20140427203319.C3FF89C9F6@busybox.osuosl.org>
+Date: Sun, 27 Apr 2014 22:10:11 +0200
+Subject: [Buildroot] [git commit] evemu: fix make-event-names.py for python3
+	syntax
+Message-ID: <20140427203319.B19EF9C9C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf232dd02de49d34a39443b94d99b147f396f8db
+commit: http://git.buildroot.net/buildroot/commit/?id=865fed9a3d9807bd5ab8ec57a98d4f8b9054716d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use pcap-config to list optional libpcap dependencies needed for static link.
-
-Fixes:
-http://autobuild.buildroot.net/results/569/56987b9c39376d2443b96160485f4fd8eefda9bb/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bustle/bustle.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+ ...-event-names-fix-for-python3-print-syntax.patch |  162 ++++++++++++++++++++
+ 1 files changed, 162 insertions(+), 0 deletions(-)
 
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index 7bc3e97..9222cdb 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -10,9 +10,14 @@ BUSTLE_LICENSE = LGPLv2.1+
- BUSTLE_LICENSE_FILES = LICENSE
- BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
- 
-+BUSTLE_PCAP_FLAGS = "-lpcap"
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+BUSTLE_PCAP_FLAGS += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
-+endif
+diff --git a/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch b/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
+new file mode 100644
+index 0000000..156d374
+--- /dev/null
++++ b/package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
+@@ -0,0 +1,162 @@
++From da078b9ae22c86279a48ab9888a7b4a6eeadecda Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 26 Apr 2014 22:32:46 +0200
++Subject: [PATCH] make-event-names: fix for python3 print syntax
 +
- define BUSTLE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		PCAP_FLAGS='-lpcap' -C $(@D) dist/build/bustle-pcap
-+		PCAP_FLAGS="$(BUSTLE_PCAP_FLAGS)" -C $(@D) dist/build/bustle-pcap
- endef
- 
- define BUSTLE_INSTALL_TARGET_CMDS
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/make-event-names.py | 98 ++++++++++++++++++++++++-------------------------
++ 1 file changed, 49 insertions(+), 49 deletions(-)
++
++diff --git a/src/make-event-names.py b/src/make-event-names.py
++index 849d577..1c32bc8 100755
++--- a/src/make-event-names.py
+++++ b/src/make-event-names.py
++@@ -44,59 +44,59 @@ blacklist = [
++ def print_bits(bits, prefix):
++ 	if  not hasattr(bits, prefix):
++ 		return
++-	print "static const char * const %s_map[%s_MAX + 1] = {" % (prefix, prefix.upper())
++-	print "	[0 ... %s_MAX] = NULL," % prefix.upper()
+++	print ("static const char * const %s_map[%s_MAX + 1] = {" % (prefix, prefix.upper()))
+++	print ("	[0 ... %s_MAX] = NULL," % prefix.upper())
++ 	for val, name in getattr(bits, prefix).items():
++-		print "	[%s] = \"%s\"," % (name, name)
++-	print "};"
++-	print ""
+++		print ("	[%s] = \"%s\"," % (name, name))
+++	print ("};")
+++	print ("")
++ 
++ def print_python_bits(bits, prefix):
++ 	if  not hasattr(bits, prefix):
++ 		return
++ 
++-	print "%s_map = {" % (prefix)
+++	print ("%s_map = {" % (prefix))
++ 	for val, name in getattr(bits, prefix).items():
++-		print "	%d : \"%s\"," % (val, name)
++-	print "}"
++-	print "for k, v in %s_map.items():" % (prefix)
++-	print "	%s_map[v] = k" % (prefix)
++-	print ""
+++		print ("	%d : \"%s\"," % (val, name))
+++	print ("}")
+++	print ("for k, v in %s_map.items():" % (prefix))
+++	print ("	%s_map[v] = k" % (prefix))
+++	print ("")
++ 
++ def print_map(bits):
++-	print "static const char * const * const map[EV_MAX + 1] = {"
++-	print "	[0 ... EV_MAX] = NULL,"
+++	print ("static const char * const * const map[EV_MAX + 1] = {")
+++	print ("	[0 ... EV_MAX] = NULL,")
++ 
++ 	for prefix in prefixes:
++ 		if prefix == "BTN_" or prefix == "EV_" or prefix == "INPUT_PROP_":
++ 			continue
++-		print "	[EV_%s] = %s_map," % (prefix[:-1], prefix[:-1].lower())
+++		print ("	[EV_%s] = %s_map," % (prefix[:-1], prefix[:-1].lower()))
++ 
++-	print "};"
++-	print ""
+++	print ("};")
+++	print ("")
++ 
++ def print_python_map(bits):
++-	print "map = {"
+++	print ("map = {")
++ 
++ 	for val, name in getattr(bits, "ev").items():
++ 		name = name[3:]
++ 		if name == "REP" or name == "PWR"  or name == "FF_STATUS"  or name == "MAX":
++ 			continue
++-		print "	%d : %s_map," % (val, name.lower())
+++		print ("	%d : %s_map," % (val, name.lower()))
++ 
++-	print "}"
++-	print ""
+++	print ("}")
+++	print ("")
++ 
++ def print_mapping_table(bits):
++-	print "/* THIS FILE IS GENERATED, DO NOT EDIT */"
++-	print ""
++-	print "#ifndef EVENT_NAMES_H"
++-	print "#define EVENT_NAMES_H"
++-	print ""
++-	print "#ifndef SYN_MAX"
++-	print "#define SYN_MAX 3 /* linux/input.h doesn't define that */"
++-	print "#endif"
++-	print ""
+++	print ("/* THIS FILE IS GENERATED, DO NOT EDIT */")
+++	print ("")
+++	print ("#ifndef EVENT_NAMES_H")
+++	print ("#define EVENT_NAMES_H")
+++	print ("")
+++	print ("#ifndef SYN_MAX")
+++	print ("#define SYN_MAX 3 /* linux/input.h doesn't define that */")
+++	print ("#endif")
+++	print ("")
++ 
++ 	for prefix in prefixes:
++ 		if prefix == "BTN_":
++@@ -105,19 +105,19 @@ def print_mapping_table(bits):
++ 
++ 	print_map(bits)
++ 
++-	print "static const char * event_get_type_name(int type) {"
++-	print "	return ev_map[type];"
++-	print " }"
++-	print ""
++-	print "static const char * event_get_code_name(int type, int code) {"
++-	print "	return map[type] ? map[type][code] : NULL;"
++-	print "}"
++-	print ""
++-	print "#endif /* EVENT_NAMES_H */"
+++	print ("static const char * event_get_type_name(int type) {")
+++	print ("	return ev_map[type];")
+++	print (" }")
+++	print ("")
+++	print ("static const char * event_get_code_name(int type, int code) {")
+++	print ("	return map[type] ? map[type][code] : NULL;")
+++	print ("}")
+++	print ("")
+++	print ("#endif /* EVENT_NAMES_H */")
++ 
++ def print_python_mapping_table(bits):
++-	print "# THIS FILE IS GENERATED, DO NOT EDIT"
++-	print ""
+++	print ("# THIS FILE IS GENERATED, DO NOT EDIT")
+++	print ("")
++ 
++ 	for prefix in prefixes:
++ 		if prefix == "BTN_":
++@@ -126,15 +126,15 @@ def print_python_mapping_table(bits):
++ 
++ 	print_python_map(bits)
++ 
++-	print "def event_get_type_name(type):"
++-	print "	return ev_map[type]"
++-	print ""
++-	print ""
++-	print "def event_get_code_name(type, code):"
++-	print "	if map.has_key(type) and map[type].has_key(code):"
++-	print "		return map[type][code]"
++-	print "	return 'UNKNOWN'"
++-	print ""
+++	print ("def event_get_type_name(type):")
+++	print ("	return ev_map[type]")
+++	print ("")
+++	print ("")
+++	print ("def event_get_code_name(type, code):")
+++	print ("	if map.has_key(type) and map[type].has_key(code):")
+++	print ("		return map[type][code]")
+++	print ("	return 'UNKNOWN'")
+++	print ("")
++ 
++ def parse_define(bits, line):
++ 	m = re.match(r"^#define\s+(\w+)\s+(\w+)", line)
++-- 
++1.8.1.4
++
