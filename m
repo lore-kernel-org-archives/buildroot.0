@@ -1,109 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Apr 2014 21:43:02 +0200
-Subject: [Buildroot] [PATCH v6 8/8] [v7] xdriver_xf86-video-intel: Bump
-	version to 2.99.911
+Date: Sun, 27 Apr 2014 21:42:58 +0200
+Subject: [Buildroot] [PATCH v6 4/8] ffmpeg: Add libva support
 In-Reply-To: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1398627782-1939-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1398627782-1939-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v7: rebased
-v6: reworked dependency
-v5: rebased
-v4: no changes
-v3: add optional dependency BR2_PACKAGE_XPROTO_XF86DRIPROTO (Thomas)
-v2: - depend on mesa3d only when the i965 DRI driver is selected (Thomas)
-    - allow both kms and ums support (Thomas):
-  Support for Kernel Mode Setting? yes
-  Support for legacy User Mode Setting (for i810)? yes
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
- package/x11r7/xdriver_xf86-video-intel/Config.in   |   11 ++++----
- .../xdriver_xf86-video-intel.mk                    |   27 +++++++++++++++-----
- 2 files changed, 27 insertions(+), 11 deletions(-)
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 69a9e78..e2708c0 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -2,13 +2,14 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_PACKAGE_MESA3D
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBPCIACCESS
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
- 	  Intel video driver
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index fae558a..d3acffc 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
+ endif
  
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..52b493f 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,21 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d xproto_xf86driproto
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
 +else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --disable-dri
++FFMPEG_CONF_OPT += --disable-vaapi
 +endif
- 
- $(eval $(autotools-package))
++
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
