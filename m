@@ -1,99 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Apr 2014 21:42:57 +0200
-Subject: [Buildroot] [PATCH v6 3/8] [v2] libva-intel-driver: new package
-In-Reply-To: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1398627782-1939-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1398627782-1939-4-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 27 Apr 2014 22:28:07 +0200
+Subject: [Buildroot] [PATCH] evemu: fix make-event-names.py for python3
+	syntax
+In-Reply-To: <1398548615-18088-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Sat, 26 Apr 2014 23:43:35 +0200")
+References: <1398548615-18088-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87fvkyy0tk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: included hints by Thomas
-    http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82057
-    @Thomas: libdrm is a hard-dependency of libva, so it makes no sense
-    to add a --enable/disable-drm option
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- package/Config.in                                |    1 +
- package/libva-intel-driver/Config.in             |   19 +++++++++++++++
- package/libva-intel-driver/libva-intel-driver.mk |   28 ++++++++++++++++++++++
- 3 files changed, 48 insertions(+)
- create mode 100644 package/libva-intel-driver/Config.in
- create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ >  ...-event-names-fix-for-python3-print-syntax.patch | 162 +++++++++++++++++++++
+ >  1 file changed, 162 insertions(+)
+ >  create mode 100644 package/evemu/evemu-0004-make-event-names-fix-for-python3-print-syntax.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 4156d5c..863e3d9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -599,6 +599,7 @@ source "package/libsvg-cairo/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/libva/Config.in"
-+source "package/libva-intel-driver/Config.in"
- source "package/opencv/Config.in"
- source "package/opengl/Config.in"
- source "package/pango/Config.in"
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-new file mode 100644
-index 0000000..89a3264
---- /dev/null
-+++ b/package/libva-intel-driver/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBVA_INTEL_DRIVER
-+	bool "libva-intel-driver"
-+	select BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
-+	depends on BR2_LARGEFILE # libdrm
-+	help
-+	  VA-API back-end driver for Intel graphics chips
-+
-+	  https://01.org/linuxgraphics/community/vaapi
-+
-+comment "libva intel driver needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-new file mode 100644
-index 0000000..994fe44
---- /dev/null
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libva-intel-driver
-+#
-+################################################################################
-+
-+LIBVA_INTEL_DRIVER_VERSION = 1.3.0
-+LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
-+LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_LICENSE = MIT
-+LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
-+LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBVA_DEPENDENCIES += wayland
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
-+endif
-+
-+$(eval $(autotools-package))
+Committed, thanks - But as I mentioned, this only fixes part of the
+problem.
+
+evemu also comes with python support code, and that code:
+
+- Gets unconditionally built/installed even if you don't have python on
+  the target
+
+- Is incompatible with python3:
+
+Byte-compiling python modules...
+evemu/base.py  File "/usr/lib/python3.4/site-packages/evemu/base.py", line 22
+    raise exception.ExecutionError, "%s: %s" % (
+                                  ^
+SyntaxError: invalid syntax
+
+evemu/const.pyevemu/exception.pyevemu/__init__.py
+Byte-compiling python modules (optimized versions) ...
+evemu/base.pyevemu/const.pyevemu/exception.pyevemu/__init__.py
+make[4]: Leaving directory `/home/peko/source/buildroot/output/build/evemu-1.2.0/python'
+
+
+
+It would be good you could patch the package to add a configure argument
+to enable/disable the python stuff and then change it to only enable it
+if BR2_PACKAGE_PYTHON is enabled.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
