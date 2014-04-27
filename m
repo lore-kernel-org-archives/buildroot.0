@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Apr 2014 22:29:00 +0200
-Subject: [Buildroot] [git commit] filemq: bump git snapshot
-Message-ID: <20140427203319.B81269C210@busybox.osuosl.org>
+Date: Sun, 27 Apr 2014 22:31:57 +0200
+Subject: [Buildroot] [git commit] linux: bump to version 3.14.2
+Message-ID: <20140427203319.D62629C210@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d00d1bdeb5b7338c27bb12d0775b6dc1d52e4770
+commit: http://git.buildroot.net/buildroot/commit/?id=eabb9da7348d66ab13c3217e03bdb2e43fe4cbfd
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For API compatibility with czmq version 2.2.0.
-
-Fixes:
-http://autobuild.buildroot.net/results/971/971e2f88a533cc829516b1cf426f6b1c27d0d82b/
-
-Also, switch to github helper.
-
-Cc: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/filemq/filemq.mk |    4 ++--
+ linux/Config.in |    4 ++--
  1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/filemq/filemq.mk b/package/filemq/filemq.mk
-index 8cf69bc..69469c6 100644
---- a/package/filemq/filemq.mk
-+++ b/package/filemq/filemq.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 9edafbf..1eac3b2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--FILEMQ_VERSION = c398c096a427d341e9323d7673e6e0ca5e43902a
--FILEMQ_SITE = git://github.com/zeromq/filemq.git
-+FILEMQ_VERSION = 9a24134d4c0a84abc5eebf1dfb2eb184adee72df
-+FILEMQ_SITE = $(call github,zeromq,filemq,$(FILEMQ_VERSION))
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.14.1"
++	bool "3.14.2"
  
- FILEMQ_AUTORECONF = YES
- FILEMQ_CONF_ENV = fmq_have_asciidoc=no
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.14.1" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.14.2" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
