@@ -1,90 +1,81 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Apr 2014 21:45:16 +0200
-Subject: [Buildroot] [PATCH 8/9] boot/syslinux: add option to install
- the EFI image
-In-Reply-To: <535EA927.3080701@mind.be>
-References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <b21bd8bd922ebfb71a12cf929f953f384216f43f.1398378217.git.yann.morin.1998@free.fr>
- <535DF2CD.3000100@mind.be> <20140428171514.GA3501@free.fr>
- <535EA927.3080701@mind.be>
-Message-ID: <20140428194516.GF3501@free.fr>
+From: William Welch <bvwelch@gmail.com>
+Date: Mon, 28 Apr 2014 14:45:31 -0500
+Subject: [Buildroot] [PATCH 3/6] upstream glibc 2.18/2.19 works fine
+	with microblaze
+In-Reply-To: <535EA993.8080108@zacarias.com.ar>
+References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
+ <1397382423-4939-4-git-send-email-wbx@openadk.org>
+ <53553336.2020401@zacarias.com.ar>
+ <CAPALihO_K2VsaYO9erhFrKZpY9755ACOjsm56O6VvxO9MA6-0Q@mail.gmail.com>
+ <535EA993.8080108@zacarias.com.ar>
+Message-ID: <CAPALihNu56_2XK5+oVrwON=pWS22xisVNTJc5Z6GX0vCvftScg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi again,
 
-On 2014-04-28 21:16 +0200, Arnout Vandecappelle spake thusly:
-> On 28/04/14 19:15, Yann E. MORIN wrote:
-> > Arnout, All,
-> > 
-> > On 2014-04-28 08:18 +0200, Arnout Vandecappelle spake thusly:
-> >> On 25/04/14 00:30, Yann E. MORIN wrote:
-> >>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [snip]
-> >>> +choice
-> >>> +	bool "Image type"
-> >>
-> >>  Why is this a choice? It's possible to build both, no? Similar to
-> >> iso/pxe. So it makes more sense to me to add efi as a third option after
-> >> iso and pxe.
-> > 
-> > Well, the target will be either BIOS-based or an EFI-based, not both.
-> > So it seems more logical to make it a choice (Thomas seemed to agree on
-> > IRC, as well.)
-> > 
-> > But thinking of it, we could go even further: iso/pxe/mbr/efi are all
-> > _alternate_ methods of booting, so it does not make sense to have more
-> > than one selected at any one time.
-> > 
-> > The only reason pxe/iso are not a choice _currently_ (e.g. syslinux-4.0.7),
-> > is that they are always built, and there is a no way to only build one or
-> > the other. This is the same behaviour in 6.0.2: you can build any
-> > combination of {bios,efi32,efi64} (only one, two, or all of them). But
-> > bios will always build pxe and iso (and mbr, see next cset).
-> 
->  Good point. But then of course, it also doesn't make sense to build both
-> U-Boot and syslinux :-)
-> 
->  So I'm OK with making iso/pxe/mbr/efi a choice.
-> 
->  When syslinux/extlinux is added, that does add some difficulty because
-> those can be combined with mbr. But that can be tackled when the problem
-> arises :-).
+Thank you for your help on this -- I should have said, that I am using the
+'git' buildroot from earlier today ( a few hours ago), with no luck on the
+native toolchain.  So am I correct, that, for example, using the 'git
+buildroot', then ' make qemu_microblazeel_mmu_defconfig'  should build the
+native toolchain and the resulting image should boot?  Or, maybe the
+patches are not merged into the git tree yet?
 
-Not really, because extlinux is a host tools that prepares a partition
-to be booted from the mbr blob.
+I am not very skilled with qemu, so to confirm, are the directions in the
+boards/qemu/microblazeel-mmu/readme.txt correct?  It is a little confusing,
+since they mention the s3adsp1800, whereas the system.dts mentions a ML505
+design.  Also the readme mentions qemu 1.7.0? I have 1.5.0 at the moment
+but I can install 1.7.0 if required.
 
-Here is the way you'd use extlinux:
-  - prepare a device with at least one partition
-  - format that partition as ext2/3/4
-  - run extlinux on that partition
-     -> extlinux installs some files in that filesystem
-     -> and then installs a special boot-record as the first sector of
-        the partition (yes, the first sector of an ext2/3/4 FS is free
-        to use)
-  - dump the mbr.bin blob as the MBR (eg. on the first sector of the
-    partition)
+thank you,
 
-So, we need not add an option of extlinux since it is not an image like
-pxelinux or isolinux, but really a host tool.
+William
 
-The addition of the mbr option in patch #9 is just so it is possible to
-indeed use extlinux.
 
-Note: the initial patch that prompted me to write this series did try to
-install extlinux to $(IMAGE_DIR) but that's plain wrong; see:
-    http://patchwork.ozlabs.org/patch/306958/
 
-Regards,
-Yann E. MORIN.
+On Mon, Apr 28, 2014 at 2:18 PM, Gustavo Zacarias
+<gustavo@zacarias.com.ar>wrote:
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> On 04/28/2014 04:08 PM, William Welch wrote:
+>
+> > Greetings,
+> >
+> > When you say BR works fine for microblaze 'on QEMU', could you be more
+> > specific?  little endian?  mmu? which 'defconfig' did you use with
+> > buildroot?  Which version of QEMU, what command line?
+> >
+> > I'd like to recreate your working setup and maybe that will give me a
+> > clue to my troubles here...
+> >
+> > I am trying to use the 'buildroot native toolchain' with a Spartan 6
+> > little endian microblaze MMU design, but I don't get very far with the
+> > native toolchain. However, using the older 'external' toolchain boots
+> > linux fine.
+> >
+> >
+> > thanks,
+> >
+> > William
+>
+> Hi.
+> It means all relevant buildroot qemu sample defconfigs boot to a login
+> prompt where you can login and get dhcp working on the emulated network
+> (if said config has networking).
+> For microblaze this means big and little endian with MMU, we don't have
+> a nommu configuration since i've never managed to get that working in a
+> satisfactory way.
+> And that's with Waldemar's patches, not as it is right now which broke
+> those qemu defconfigs when the toolchain was changed to the internal
+> backend.
+> I do not know if it's the toolchain to blame and/or some Qemu
+> limitation, i just know that Waldemar's patches fix it for what i have
+> at hand (no microblaze hardware, just emulation).
+> Regards.
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140428/7ba03a0a/attachment.html>
