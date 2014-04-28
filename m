@@ -1,9 +1,9 @@
 From: =?UTF-8?q?Jer=C3=B4nimo=20Lopes?= <lopesjeronimo@gmail.com>
-Date: Mon, 28 Apr 2014 12:34:52 -0300
-Subject: [Buildroot] [PATCH 3/3] ofono: add init script
+Date: Mon, 28 Apr 2014 12:34:51 -0300
+Subject: [Buildroot] [PATCH 2/3] ofono: bump to version 1.14
 In-Reply-To: <1398699292-19411-1-git-send-email-lopesjeronimo@gmail.com>
 References: <1398699292-19411-1-git-send-email-lopesjeronimo@gmail.com>
-Message-ID: <1398699292-19411-3-git-send-email-lopesjeronimo@gmail.com>
+Message-ID: <1398699292-19411-2-git-send-email-lopesjeronimo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,53 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jer?nimo Lopes <lopesjeronimo@gmail.com>
 ---
- package/ofono/S46ofono | 22 ++++++++++++++++++++++
- package/ofono/ofono.mk |  4 ++++
- 2 files changed, 26 insertions(+)
- create mode 100755 package/ofono/S46ofono
+ package/ofono/ofono.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ofono/S46ofono b/package/ofono/S46ofono
-new file mode 100755
-index 0000000..34d2b6a
---- /dev/null
-+++ b/package/ofono/S46ofono
-@@ -0,0 +1,22 @@
-+#!/bin/sh
-+
-+case "$1" in
-+	start)
-+		echo -n "Starting ofono ... "
-+		start-stop-daemon -S -q -m -b -p /var/run/ofonod.pid --exec /usr/sbin/ofonod -- -n
-+		echo "done."
-+		;;
-+	stop)
-+		echo -n "Stopping ofono ..."
-+		start-stop-daemon -K -q -p /var/run/ofonod.pid
-+		echo "done."
-+		;;
-+	restart)
-+		$0 stop
-+		sleep 1
-+		$0 start
-+		;;
-+	*)
-+		echo "usage: $0 {start|stop|restart}"
-+		;;
-+esac
 diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 3f31447..07b354d 100644
+index 9e30c63..3f31447 100644
 --- a/package/ofono/ofono.mk
 +++ b/package/ofono/ofono.mk
-@@ -22,6 +22,10 @@ OFONO_CONF_OPT = --disable-test
- # make sure that it is defined.
- OFONO_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define OFONO_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/ofono/S46ofono $(TARGET_DIR)/etc/init.d/S46ofono
-+endef
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- 	OFONO_CONF_OPT += --enable-udev
- 	OFONO_DEPENDENCIES += udev
+-OFONO_VERSION = 1.13
++OFONO_VERSION = 1.14
+ OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
+ OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
+ OFONO_LICENSE = GPLv2
 -- 
 1.9.1
