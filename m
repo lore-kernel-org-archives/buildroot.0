@@ -1,93 +1,131 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 28 Apr 2014 21:00:31 +0200
-Subject: [Buildroot] [PATCH 3/4] evemu: build python2 binding only if target
-	python2 is enabled
-In-Reply-To: <1398711632-5831-1-git-send-email-ps.report@gmx.net>
-References: <1398711632-5831-1-git-send-email-ps.report@gmx.net>
-Message-ID: <1398711632-5831-4-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Apr 2014 18:23:12 +0200
+Subject: [Buildroot] [PATCH 9/9] boot/syslinux: add an option to install
+ an MBR blob
+In-Reply-To: <ccf1ac950371fe7411ff812bb17958a8824be30d.1398378217.git.yann.morin.1998@free.fr>
+References: <cover.1398378217.git.yann.morin.1998@free.fr>
+ <ccf1ac950371fe7411ff812bb17958a8824be30d.1398378217.git.yann.morin.1998@free.fr>
+Message-ID: <535E8070.9090405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...gure.ac-add-disable-python-binding-option.patch | 46 ++++++++++++++++++++++
- package/evemu/evemu.mk                             |  8 ++++
- 2 files changed, 54 insertions(+)
- create mode 100644 package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
+On 25/04/14 00:30, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> This MBR blob will look for an active partition, and boot the bootcode
+> present in that partition. This can be used to boot an extlinux-prepared
+> partition.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Lundquist <lists@zelow.no>
+> Cc: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  boot/syslinux/Config.in   | 13 ++++++++++++-
+>  boot/syslinux/syslinux.mk |  1 +
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+> index d556c55..7d4dd08 100644
+> --- a/boot/syslinux/Config.in
+> +++ b/boot/syslinux/Config.in
+> @@ -15,7 +15,7 @@ choice
+>  
+>  config BR2_TARGET_SYSLINUX_LEGACY_BIOS
+>  	bool "bios (legacy)"
+> -	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_PXELINUX
+> +	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
 
-diff --git a/package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch b/package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
-new file mode 100644
-index 0000000..f100b2e
---- /dev/null
-+++ b/package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
-@@ -0,0 +1,46 @@
-+From 44f42cfa6b58a256d3b89bce1043b0efed7eeaeb Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 27 Apr 2014 13:23:41 +0200
-+Subject: [PATCH 6/8] configure.ac: add '--disable-python-binding' option
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Makefile.am  |  2 +-
-+ configure.ac | 11 +++++++++++
-+ 2 files changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index a83b35f..446ec4c 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,4 +1,4 @@
-+-SUBDIRS = src tools python $(SUBDIR_TESTS)
-++SUBDIRS = src tools $(SUBDIR_PYTHON_BINDING) $(SUBDIR_TESTS)
-+ 
-+ pkgconfigdir = $(libdir)/pkgconfig
-+ pkgconfig_DATA = evemu.pc
-+diff --git a/configure.ac b/configure.ac
-+index 4e0c3b8..bb49bbc 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -52,6 +52,17 @@ AS_IF([test "x$enable_tests" != "xno"], [
-+ 
-+ AC_SUBST([SUBDIR_TESTS])
-+ 
-++AC_ARG_ENABLE([python-binding],
-++	AS_HELP_STRING([--disable-python-binding],
-++		 [Disable generation of python binding]))
-++
-++AS_IF([test "x$enable_python_binding" != "xno"], [
-++	SUBDIR_PYTHON_BINDING=python
-++])
-++
-++AC_SUBST([SUBDIR_PYTHON_BINDING])
-++
-++
-+ AC_SUBST(AM_CFLAGS,
-+          "-Wall -Wextra -pedantic")
-+ 
-+-- 
-+1.8.1.4
-+
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 07ad6f6..44b8b89 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -27,6 +27,14 @@ EVEMU_DEPENDENCIES = host-pkgconf libevdev
- # Needs Python for header file generation
- EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
- 
-+# Check for target python (python3 binding disabled because
-+# of build/byte-compile problems)
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+	EVEMU_DEPENDENCIES += python
-+else
-+	EVEMU_CONF_OPT += --disable-python-binding
-+endif
-+
- # package source code coming from git, so it doesn't have generated
- # configure and Makefile.in
- EVEMU_AUTORECONF = YES
+ Hm, I don't really like this very much. Adding complexity like this for
+behaviour which is not even really perfect...
+
+ Maybe we should just have
+
+comment "please select one or more images to generate"
+
+config BR2_TARGET_SYSLINUX_ISOLINUX
+
+config BR2_TARGET_SYSLINUX_PXELINUX
+
+config BR2_TARGET_SYSLINUX_MBR
+
+
+and drop all checking. I mean, if the user selects syslinux I guess he'll
+be smart enough to also select the actual tool(s) he needs. It's like
+util-linux: if you just select the package without selecting anything
+else, you'll also just end up with nothing. And I've never heard anyone
+complain about that. Let's keep things simple.
+
+ Peter, judgement call on this one?
+
+
+ Note: this invalidates my comments on 3/9, of course.
+
+
+>  	help
+>  	  Install one or more of the the legacy BIOS images:
+>  	    - isolinux
+> @@ -31,6 +31,9 @@ endchoice
+>  
+>  if BR2_TARGET_SYSLINUX_LEGACY_BIOS
+>  
+> +config BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
+> +	bool
+> +
+>  config BR2_TARGET_SYSLINUX_ISOLINUX
+>  	bool "isolinux"
+>  	default y
+> @@ -40,10 +43,18 @@ config BR2_TARGET_SYSLINUX_ISOLINUX
+>  
+>  config BR2_TARGET_SYSLINUX_PXELINUX
+>  	bool "pxelinux"
+> +	select BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
+>  	help
+>  	  Install the legacy BIOS 'pxelinux' image, to boot off
+>  	  the network using PXE.
+>  
+> +config BR2_TARGET_SYSLINUX_MBR
+> +	bool "mbr"
+> +	select BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
+> +	help
+> +	  Install the legacy BIOS 'mbr' image, to boot off a
+
+ See my comment in 4/9 about "legacy".
+
+
+ BTW, while you're at it, perhaps you can add options for syslinux (=fat)
+and extlinux?
+
+
+ Regards,
+ Arnout
+
+> +	  local MBR-partition.
+> +
+>  endif # BR2_TARGET_SYSLINUX_LEGACY_BIOS
+>  
+>  endif # BR2_TARGET_SYSLINUX
+> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+> index bf0bae5..c614b1d 100644
+> --- a/boot/syslinux/syslinux.mk
+> +++ b/boot/syslinux/syslinux.mk
+> @@ -60,6 +60,7 @@ endef
+>  
+>  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
+>  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
+> +SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_MBR) += bios/mbr/mbr.bin
+>  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.efi
+>  
+>  define SYSLINUX_INSTALL_IMAGES_CMDS
+> 
+
+
 -- 
-1.8.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
