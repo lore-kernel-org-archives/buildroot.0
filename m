@@ -1,84 +1,78 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 21:16:55 +0200
-Subject: [Buildroot] [PATCH 8/9] boot/syslinux: add option to install
- the EFI image
-In-Reply-To: <20140428171514.GA3501@free.fr>
+Date: Mon, 28 Apr 2014 21:17:52 +0200
+Subject: [Buildroot] [PATCH 4/9] boot/syslinux: rewrite options prompts
+In-Reply-To: <20140428173651.GC3501@free.fr>
 References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <b21bd8bd922ebfb71a12cf929f953f384216f43f.1398378217.git.yann.morin.1998@free.fr>
- <535DF2CD.3000100@mind.be> <20140428171514.GA3501@free.fr>
-Message-ID: <535EA927.3080701@mind.be>
+ <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
+ <535DEDB4.4030601@mind.be> <20140428173651.GC3501@free.fr>
+Message-ID: <535EA960.1080800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/04/14 19:15, Yann E. MORIN wrote:
+On 28/04/14 19:36, Yann E. MORIN wrote:
 > Arnout, All,
 > 
-> On 2014-04-28 08:18 +0200, Arnout Vandecappelle spake thusly:
->> On 25/04/14 00:30, Yann E. MORIN wrote:
+> On 2014-04-28 07:57 +0200, Arnout Vandecappelle spake thusly:
+>> On 25/04/14 00:29, Yann E. MORIN wrote:
 >>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[snip]
->>> +choice
->>> +	bool "Image type"
+>>>
+>>> Rewrite the options prompt in preparation to adding a new
+>>> type of image to install.
+>>>
+>>> Add help entries to each option, too.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Frank Hunleth <fhunleth@troodon-software.com>
+>>> ---
+>>>  boot/syslinux/Config.in | 12 +++++++++---
+>>>  1 file changed, 9 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+>>> index 1b8c527..b92f28f 100644
+>>> --- a/boot/syslinux/Config.in
+>>> +++ b/boot/syslinux/Config.in
+>>> @@ -12,10 +12,16 @@ config BR2_TARGET_SYSLINUX
+>>>  if BR2_TARGET_SYSLINUX
+>>>  
+>>>  config BR2_TARGET_SYSLINUX_ISOLINUX
+>>> -	bool "Install isolinux"
+>>> +	bool "isolinux"
+>>>  	default y
+>>> +	help
+>>> +	  Install the legacy BIOS 'isolinux' image, to boot off
 >>
->>  Why is this a choice? It's possible to build both, no? Similar to
->> iso/pxe. So it makes more sense to me to add efi as a third option after
->> iso and pxe.
+>>  This sounds like it's a legacy image... I'd just skip the word "legacy".
+>> BIOS is BIOS.
 > 
-> Well, the target will be either BIOS-based or an EFI-based, not both.
-> So it seems more logical to make it a choice (Thomas seemed to agree on
-> IRC, as well.)
+> Hmmm. OK.
 > 
-> But thinking of it, we could go even further: iso/pxe/mbr/efi are all
-> _alternate_ methods of booting, so it does not make sense to have more
-> than one selected at any one time.
+> Side-channel rant: I always wonder how I should call the EFI 'firmware':
+>   - EFI BIOS
+>   - EFI firmware
+>   - BIOS
+>   - firmware
+>   - EFI  (but that more a spec than an implementation)
 > 
-> The only reason pxe/iso are not a choice _currently_ (e.g. syslinux-4.0.7),
-> is that they are always built, and there is a no way to only build one or
-> the other. This is the same behaviour in 6.0.2: you can build any
-> combination of {bios,efi32,efi64} (only one, two, or all of them). But
-> bios will always build pxe and iso (and mbr, see next cset).
+> So, I usually refer to what we called BIOS in the early days as the
+> "lecagy BIOS", which is also what you'd find in most EFI BIOSes when
+> you enable "legacy BIOS" (often as a simple and efficient way to
+> by-pass the secure-boot.)
 
- Good point. But then of course, it also doesn't make sense to build both
-U-Boot and syslinux :-)
-
- So I'm OK with making iso/pxe/mbr/efi a choice.
-
- When syslinux/extlinux is added, that does add some difficulty because
-those can be combined with mbr. But that can be tackled when the problem
-arises :-).
-
+ OK, good point. So "legacy BIOS" and "EFI BIOS" it is, then.
 
 
  Regards,
  Arnout
 
 > 
-> In the end, I don't really care, although I'd find it strange to be able
-> to build both at the same time, since the target will have one or the
-> other, not both (well, unless we target a desktop PC with legacy bios
-> enabled in the EFI bios; but we ain't do that, do we?) At worse, I'd
-> chamge it to a choice for everything (although I could understand a case
-> where the user would want both pxe and iso and mbr at the same time.)
-> 
->>> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
->>> index bec132f..bf0bae5 100644
->>> --- a/boot/syslinux/syslinux.mk
->>> +++ b/boot/syslinux/syslinux.mk
->>> @@ -15,6 +15,20 @@ SYSLINUX_INSTALL_IMAGES = YES
->>>  
->>>  SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
->>>  
->>> +ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
->>> +SYSLINUX_TARGET = bios
+>>> +	  optical medias (CDROM, DVD.)
 >>
->>  If you follow my suggestion, this would become SYSLINUX_TARGETS of
->> course. And +=
+>>  The plural of medium is media, without s.
 > 
-> Yes, of course. I already had that in the beginning, but I believe it
-> does not really make sense.
+> Yep, it always bites me... Thanks.
 > 
 > Regards,
 > Yann E. MORIN.
