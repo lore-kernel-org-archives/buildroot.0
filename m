@@ -1,124 +1,184 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 29 Apr 2014 00:15:28 +0200
-Subject: [Buildroot] [Patch v2 4/4] evemu: enable python3 bindings
-Message-ID: <1398723328-11107-1-git-send-email-ps.report@gmx.net>
+From: William Frost <tsmrnd0@gmail.com>
+Date: Tue, 29 Apr 2014 08:58:14 +0900
+Subject: [Buildroot] [PATCH v2] DCMTK: new package
+Message-ID: <535EEB16.4090906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add evemu/python3 related patches:
-- fix python/evemu/base.py for python3 (add patch from [1])
-- fix python3 binding runtime failure
+It works fine but still every time I type "make all" in Buildroot dcmtk 
+make the configure process again. Any idea on how to solve this?
 
-[1] http://ftp.de.debian.org/debian/pool/main/e/evemu/evemu_1.2.0-2.debian.tar.xz
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: William Frost <tsmrnd0@gmail.com>
 ---
 Changes v1 -> v2:
-  - use original debian patch
-  - remove patch numbering from patch subject (Arnout Vandecappelle)
----
- ...-fixes-the-syntax-for-raising-exceptions-.patch | 27 +++++++++++++++++
- ...u-0007-python-fix-device-open-for-python3.patch | 35 ++++++++++++++++++++++
- package/evemu/evemu.mk                             |  7 ++---
- 3 files changed, 65 insertions(+), 4 deletions(-)
- create mode 100644 package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
- create mode 100644 package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
+   - fixed DCMTK_LICENSE to BDS
+   - changed --host=$(arm-none-linux-gnueabi) to --host=$(GNU_TARGET_NAME)
+   - fixed PKG_CONFIG_PATH and PKG_CONFIG_SYSROOT_DIR
 
-diff --git a/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch b/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
+  (suggested by Thomas De Schampheleire):
+    - fixed all lines to less than 80 characters in Config.in ans dcmtk.mk
+    - changed BR2_DCMTK_VERSION to  BR2_PACKAGE_DCMTK_VERSION
+    - removed DCMTK_SOURCE
+---
+  package/Config.in       |  1 +
+  package/dcmtk/Config.in | 38 ++++++++++++++++++++++
+  package/dcmtk/dcmtk.mk  | 85 
++++++++++++++++++++++++++++++++++++++++++++++++++
+  3 files changed, 124 insertions(+)
+  create mode 100644 package/dcmtk/Config.in
+  create mode 100644 package/dcmtk/dcmtk.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 07fd166..b88c0b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -568,6 +568,7 @@ endmenu
+  menu "Graphics"
+  source "package/atk/Config.in"
+  source "package/cairo/Config.in"
++source "package/dcmtk/Config.in"
+  source "package/fltk/Config.in"
+  source "package/fontconfig/Config.in"
+  source "package/freetype/Config.in"
+diff --git a/package/dcmtk/Config.in b/package/dcmtk/Config.in
 new file mode 100644
-index 0000000..cf3da8b
+index 0000000..ba9d2ee
 --- /dev/null
-+++ b/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
-@@ -0,0 +1,27 @@
-+Description: fixes the syntax for raising exceptions to be Python2 and Python3
-+ acceptable.
-+Author: Stephen M. Webb
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=706155
++++ b/package/dcmtk/Config.in
+@@ -0,0 +1,38 @@
++config BR2_PACKAGE_DCMTK
++    bool "dcmtk"
++    help
++      DCMTK is a collection of libraries and applications implementing
++      large parts the DICOM standard. It includes software for examining,
++      constructing and converting DICOM image files, handling offline
++      media, sending and receiving images over a network connection, as
++      well as demonstrative image storage and worklist servers. DCMTK is
++      is written in a mixture of ANSI C and C++. It comes in complete
++      source code and is made available as "open source" software.
 +
-+--- a/python/evemu/base.py
-++++ b/python/evemu/base.py
-+@@ -19,15 +19,15 @@
-+     def _call0(self, api_call, *parameters):
-+         result = api_call(*parameters)
-+         if result == 0 and self.get_c_errno() != 0:
-+-            raise exception.ExecutionError, "%s: %s" % (
-+-                api_call.__name__, self.get_c_error())
-++            raise exception.ExecutionError("%s: %s" % (
-++                api_call.__name__, self.get_c_error()))
-+         return result
-+ 
-+     def _call(self, api_call, *parameters):
-+         result = api_call(*parameters)
-+         if result < 0 and self.get_c_errno() != 0:
-+-            raise exception.ExecutionError, "%s: %s" % (
-+-                api_call.__name__, self.get_c_error())
-++            raise exception.ExecutionError("%s: %s" % (
-++                api_call.__name__, self.get_c_error()))
-+         return result
-+ 
-+     def get_c_errno(self):
-diff --git a/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch b/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
++      http://dicom.offis.de/dcmtk.php.en
++
++if BR2_PACKAGE_DCMTK
++
++choice
++    prompt "DCMTK Version"
++    default BR2_PACKAGE_DCMTK_VERSION_3_6_0
++    help
++      Select the version of DCMTK you wish to use.
++
++    config BR2_PACKAGE_DCMTK_VERSION_3_6_0
++        bool "DCMTK 3.6.0"
++
++    config BR2_PACKAGE_DCMTK_VERSION_SNAPSHOT_2012
++        bool "DCMTK 3.6.1 snapshot (2012.11.02)"
++
++    config BR2_PACKAGE_DCMTK_VERSION_SNAPSHOT_2013
++        bool "DCMTK 3.6.1 snapshot (2013.11.14)"
++
++endchoice
++
++config BR2_PACKAGE_DCMTK_VERSION
++    string
++    default "3.6.0"    if BR2_PACKAGE_DCMTK_VERSION_3_6_0
++    default "3.6.1_20121102" if BR2_PACKAGE_DCMTK_VERSION_SNAPSHOT_2012
++    default "3.6.1_20131114" if BR2_PACKAGE_DCMTK_VERSION_SNAPSHOT_2013
++endif
+diff --git a/package/dcmtk/dcmtk.mk b/package/dcmtk/dcmtk.mk
 new file mode 100644
-index 0000000..ec989d2
+index 0000000..5c9a851
 --- /dev/null
-+++ b/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
-@@ -0,0 +1,35 @@
-+From f192db7848962a1616e243bb60e705da6c6f3412 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 27 Apr 2014 01:16:16 +0200
-+Subject: [PATCH] python: fix device open for python3
++++ b/package/dcmtk/dcmtk.mk
+@@ -0,0 +1,85 @@
++################################################################################
++#
++# dcmtk
++#
++################################################################################
++DCMTK_VERSION = $(call qstrip,$(BR2_PACKAGE_DCMTK_VERSION))
 +
-+- use 'rb' instead of 'r+b', fixes:
++ifeq ($(BR2_PACKAGE_DCMTK_VERSION), "3.6.0")
++DCMTK_SITE = http://dicom.offis.de/download/dcmtk/dcmtk360/
++endif
++ifeq ($(BR2_PACKAGE_DCMTK_VERSION),"3.6.1_20121102")
++DCMTK_SITE = http://dicom.offis.de/download/dcmtk/snapshot/old
++endif
++ifeq ($(BR2_PACKAGE_DCMTK_VERSION),"3.6.1_20131114")
++DCMTK_SITE = http://dicom.offis.de/download/dcmtk/snapshot
++endif
 +
-+>>> import evemu
-+>>> evemu.Device('/dev/input/event0')
-+Traceback (most recent call last):
-+  File "<stdin>", line 1, in <module>
-+  File "/usr/lib/python3.4/site-packages/evemu/__init__.py", line 50, in __init__
-+io.UnsupportedOperation: File or stream is not seekable.
++DCMTK_LICENSE = BSD
++DCMTK_LICENSE_FILES = COPYING
++DCMTK_INSTALL_STAGING = YES
 +
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ python/evemu/__init__.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++DCMTK_CFLAGS = $(TARGET_CFLAGS) --sysroot=$(STAGING_DIR) -O -D_REENTRANT \
++        -D_XOPEN_SOURCE_EXTENDED -D_XOPEN_SOURCE=500 -D_BSD_SOURCE \
++        -D_BSD_COMPAT -D_OSF_SOURCE -D_POSIX_C_SOURCE=199506L -Wall \
++        -Wno-psabi
 +
-+diff --git a/python/evemu/__init__.py b/python/evemu/__init__.py
-+index abdbf7e..aa73871 100644
-+--- a/python/evemu/__init__.py
-++++ b/python/evemu/__init__.py
-+@@ -47,7 +47,7 @@ class Device(object):
-+         """
-+ 
-+         if type(f).__name__ == 'str':
-+-            self._file = open(f, 'r+b')
-++            self._file = open(f, 'rb')
-+         elif type(f).__name__ == 'file':
-+             self._file = f
-+         else:
-+-- 
-+1.8.1.4
++DCMTK_CXXFLAGS = $(TARGET_CFLAGS) --sysroot=$(STAGING_DIR) -O 
+-D_REENTRANT \
++        -D_XOPEN_SOURCE_EXTENDED -D_XOPEN_SOURCE=500 -D_BSD_SOURCE \
++        -D_BSD_COMPAT -D_OSF_SOURCE -D_POSIX_C_SOURCE=199506L -Wall \
++        -Wno-psabi
 +
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 9ff9922..9f7f4af 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -27,11 +27,10 @@ EVEMU_DEPENDENCIES = host-pkgconf libevdev
- # Needs Python for header file generation
- EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
- 
--# Check for target python (python3 bindings disabled because
--# of build/byte-compile problems)
--ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# Check for target python
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
- EVEMU_CONF_OPT += --enable-python-bindings
--EVEMU_DEPENDENCIES += python
-+EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),python3,python)
- else
- EVEMU_CONF_OPT += --disable-python-bindings
- endif
++DCMTK_CPPFLAGS = $(TARGET_CFLAGS) --sysroot=$(STAGING_DIR)
++DCMTK_LDFLAGS = $(TARGET_CFLAGS) --sysroot=$(STAGING_DIR)
++
++DCMTK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) STRIP=$(TARGET_STRIP) \
++                install
++
++DCMTK_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) STRIP=$(TARGET_STRIP) 
+install
++
++DCMTK_CONF_OPT = --without-libtiff --without-openssl --without-libxml \
++          --without-libpng --without-libsndfile --disable-debug \
++          --without-private-tags --enable-std-includes --disable-rpath
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++    DCMTK_DEPENDENCIES += zlib
++else
++    DCMTK_CONF_OPT += --without-zlib
++endif
++VERBOSE=1
++
++define DCMTK_CONFIG_SET
++    $(CAT) $(@D)/config/Makefile.def | $(SED) 's%^$(1).*%$(1) = $(2)%g' \
++    $(@D)/config/Makefile.def
++endef
++
++define DCMTK_CONFIGURE_CMDS
++    (cd $(@D); \
++        CFLAGS="$(DCMTK_CFLAGS)" \
++        CXXFLAGS="$(DCMTK_CXXFLAGS)" \
++        CPPFLAGS="$(DCMTK_CPPFLAGS)" \
++        LDFLAGS="$(DCMTK_LDFLAGS)" \
++        ARFLAGS=cru \
++        CC=$(TARGET_CC) \
++        CXX=$(TARGET_CXX) \
++        RANLIB=$(TARGET_RANLIB) \
++        AR=$(TARGET_AR) \
++        STRIP=$(TARGET_STRIP) \
++        PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
++        PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
++        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++        MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" ./configure \
++        $(if $(VERBOSE),-verbose,-silent) \
++        $(DCMTK_CONF_OPT) \
++        ac_cv_my_c_rightshift_unsigned=no --prefix=$(STAGING_DIR)/usr \
++        --with-zlibinc=$(STAGING_DIR)/usr \
++        --host=$(GNU_TARGET_NAME) \
++    )
++endef
++
++define DCMTK_BUILD_CMDS
++    $(call DCMTK_CONFIG_SET,"CC =",$(TARGET_CC))
++    $(MAKE) -C $(@D) install-lib
++endef
++
++$(eval $(autotools-package))
 -- 
 1.8.1.4
