@@ -1,104 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Apr 2014 19:26:44 +0200
-Subject: [Buildroot] [PATCH 7/9] boot/syslinux: bump version
-In-Reply-To: <535DF1DC.9090307@mind.be>
+Date: Mon, 28 Apr 2014 19:36:51 +0200
+Subject: [Buildroot] [PATCH 4/9] boot/syslinux: rewrite options prompts
+In-Reply-To: <535DEDB4.4030601@mind.be>
 References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <e9a6a68649fc668ebc91f3f307e40af30c2ccb9b.1398378217.git.yann.morin.1998@free.fr>
- <535DF1DC.9090307@mind.be>
-Message-ID: <20140428172644.GB3501@free.fr>
+ <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
+ <535DEDB4.4030601@mind.be>
+Message-ID: <20140428173651.GC3501@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-04-28 08:14 +0200, Arnout Vandecappelle spake thusly:
-> On 25/04/14 00:30, Yann E. MORIN wrote:
+Arnout, All,
+
+On 2014-04-28 07:57 +0200, Arnout Vandecappelle spake thusly:
+> On 25/04/14 00:29, Yann E. MORIN wrote:
 > > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[--SNIP--]
-> > diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> > index a1eb394..bec132f 100644
-> > --- a/boot/syslinux/syslinux.mk
-> > +++ b/boot/syslinux/syslinux.mk
-> > @@ -4,32 +4,48 @@
-> >  #
-> >  ################################################################################
+> > 
+> > Rewrite the options prompt in preparation to adding a new
+> > type of image to install.
+> > 
+> > Add help entries to each option, too.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Frank Hunleth <fhunleth@troodon-software.com>
+> > ---
+> >  boot/syslinux/Config.in | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+> > index 1b8c527..b92f28f 100644
+> > --- a/boot/syslinux/Config.in
+> > +++ b/boot/syslinux/Config.in
+> > @@ -12,10 +12,16 @@ config BR2_TARGET_SYSLINUX
+> >  if BR2_TARGET_SYSLINUX
 > >  
-> > -SYSLINUX_VERSION = 4.07
-> > -SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
-> > -SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
-> > +SYSLINUX_VERSION = 6.02
-> > +SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.xz
-> > +SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/
-> >  
-> >  SYSLINUX_LICENSE = GPLv2+
-> >  SYSLINUX_LICENSE_FILES = COPYING
-> >  
-> >  SYSLINUX_INSTALL_IMAGES = YES
-> >  
-> > -SYSLINUX_DEPENDENCIES = host-nasm host-util-linux
-> > +SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
-> > +
-> > +# The syslinux tarball comes with pre-compiled binaries.
-> > +# Since timestamps might not be in the correct order, a rebuild is
-> > +# not always triggered for all the different images.
-> > +# Cleanup the mess even before we attempt a build, so we indeed
-> > +# build everything from source.
+> >  config BR2_TARGET_SYSLINUX_ISOLINUX
+> > -	bool "Install isolinux"
+> > +	bool "isolinux"
+> >  	default y
+> > +	help
+> > +	  Install the legacy BIOS 'isolinux' image, to boot off
 > 
->  Do we really need to build everything from source? We anyway already
-> check that our host compiler can build for ia32, so the included
-> executables will work.
+>  This sounds like it's a legacy image... I'd just skip the word "legacy".
+> BIOS is BIOS.
 
-We're not only talking about the host utilities, but also the target
-images (pxelinux, isolinux, mbr, efi32/64).
+Hmmm. OK.
 
-Yes, we do want to build from sources, so we know how to reproduce a
-working system, and reproduce a failure so we can fix it, rather than
-try to debug a binary blob that may have no relation whatsoever with the
-sources it comes from.
+Side-channel rant: I always wonder how I should call the EFI 'firmware':
+  - EFI BIOS
+  - EFI firmware
+  - BIOS
+  - firmware
+  - EFI  (but that more a spec than an implementation)
 
-Yes, ew do want to be sure that what gets distributed on the target is
-indeed coming from the sources (and not a lingering binary that comes
-in the tarball and may have no relation whatsoever with the souces) for
-which I can be rather confident I'm compliant.
+So, I usually refer to what we called BIOS in the early days as the
+"lecagy BIOS", which is also what you'd find in most EFI BIOSes when
+you enable "legacy BIOS" (often as a simple and efficient way to
+by-pass the secure-boot.)
 
-<troll>
-Heck, otherwise, let's just use those pesky proprietary bootloaders and
-operating systems and applications, no?  :-)  :-p  ;-]  (yes, many
-smileys, that's really just to tease you!)
-</troll>
-
-> > +define SYSLINUX_CLEANUP
-> > +	rm -rf $(@D)/bios $(@D)/efi32 $(@D)/efi64
-> > +endef
-> > +SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
-> >  
-> >  # syslinux build system has no convenient way to pass CFLAGS,
-> >  # and the internal zlib should take precedence so -I shouldn't
-> >  # be used.
+> > +	  optical medias (CDROM, DVD.)
 > 
->  Actually, I'm not sure if this comment is still true. I haven't checked
-> in 6.02, but 4.07 already had a MYCFLAGS variables that can probably be
-> used. Also, the HOST_LDFLAGS may no longer be needed.
+>  The plural of medium is media, without s.
 
-OK, I'll investigate those, but as a separate patch (it is working
-as-is, so a change would be a cleanup.)
-
-> >  define SYSLINUX_INSTALL_TARGET_CMDS
-> >  	# While the actual bootloader is compiled for the target, several
-> >  	# utilities for installing the bootloader are meant for the host.
-> > -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-> > +	# Repeat the target, otherwise syslinux will try to build everything
-> > +	# Repeat CC and AR, since syslinux really wants to check them at
-> > +	# install time
-> 
->  These comments should come before the define, otherwise they'll be
-> printed while building.
-
-Hey! That's how the existing comments are. ;-)
-Will see to clean up that, too.
-
-Thank you for the review! :-)
+Yep, it always bites me... Thanks.
 
 Regards,
 Yann E. MORIN.
