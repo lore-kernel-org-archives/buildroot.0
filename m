@@ -1,81 +1,122 @@
-From: William Welch <bvwelch@gmail.com>
-Date: Mon, 28 Apr 2014 14:45:31 -0500
-Subject: [Buildroot] [PATCH 3/6] upstream glibc 2.18/2.19 works fine
-	with microblaze
-In-Reply-To: <535EA993.8080108@zacarias.com.ar>
-References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
- <1397382423-4939-4-git-send-email-wbx@openadk.org>
- <53553336.2020401@zacarias.com.ar>
- <CAPALihO_K2VsaYO9erhFrKZpY9755ACOjsm56O6VvxO9MA6-0Q@mail.gmail.com>
- <535EA993.8080108@zacarias.com.ar>
-Message-ID: <CAPALihNu56_2XK5+oVrwON=pWS22xisVNTJc5Z6GX0vCvftScg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Apr 2014 21:48:09 +0200
+Subject: [Buildroot] [PATCH 3/4] evemu: build python2 binding only if
+ target python2 is enabled
+In-Reply-To: <1398711632-5831-4-git-send-email-ps.report@gmx.net>
+References: <1398711632-5831-1-git-send-email-ps.report@gmx.net>
+ <1398711632-5831-4-git-send-email-ps.report@gmx.net>
+Message-ID: <535EB079.4040604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again,
+On 28/04/14 21:00, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...gure.ac-add-disable-python-binding-option.patch | 46 ++++++++++++++++++++++
+>  package/evemu/evemu.mk                             |  8 ++++
+>  2 files changed, 54 insertions(+)
+>  create mode 100644 package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
+> 
+> diff --git a/package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch b/package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
+> new file mode 100644
+> index 0000000..f100b2e
+> --- /dev/null
+> +++ b/package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
+> @@ -0,0 +1,46 @@
+> +From 44f42cfa6b58a256d3b89bce1043b0efed7eeaeb Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Sun, 27 Apr 2014 13:23:41 +0200
+> +Subject: [PATCH 6/8] configure.ac: add '--disable-python-binding' option
 
-Thank you for your help on this -- I should have said, that I am using the
-'git' buildroot from earlier today ( a few hours ago), with no luck on the
-native toolchain.  So am I correct, that, for example, using the 'git
-buildroot', then ' make qemu_microblazeel_mmu_defconfig'  should build the
-native toolchain and the resulting image should boot?  Or, maybe the
-patches are not merged into the git tree yet?
+ Same remark about avoiding 6/8 (the reasoning is: if later on patches 7
+and 8 disappear and patch 9 is added, it looks strange to have the /8 there).
 
-I am not very skilled with qemu, so to confirm, are the directions in the
-boards/qemu/microblazeel-mmu/readme.txt correct?  It is a little confusing,
-since they mention the s3adsp1800, whereas the system.dts mentions a ML505
-design.  Also the readme mentions qemu 1.7.0? I have 1.5.0 at the moment
-but I can install 1.7.0 if required.
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + Makefile.am  |  2 +-
+> + configure.ac | 11 +++++++++++
+> + 2 files changed, 12 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/Makefile.am b/Makefile.am
+> +index a83b35f..446ec4c 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -1,4 +1,4 @@
+> +-SUBDIRS = src tools python $(SUBDIR_TESTS)
+> ++SUBDIRS = src tools $(SUBDIR_PYTHON_BINDING) $(SUBDIR_TESTS)
+> + 
+> + pkgconfigdir = $(libdir)/pkgconfig
+> + pkgconfig_DATA = evemu.pc
+> +diff --git a/configure.ac b/configure.ac
+> +index 4e0c3b8..bb49bbc 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -52,6 +52,17 @@ AS_IF([test "x$enable_tests" != "xno"], [
+> + 
+> + AC_SUBST([SUBDIR_TESTS])
+> + 
+> ++AC_ARG_ENABLE([python-binding],
+> ++	AS_HELP_STRING([--disable-python-binding],
+> ++		 [Disable generation of python binding]))
 
-thank you,
-
-William
-
+ bindings is typically used in plural. And actually, most packages will
+call it --enable-python or --with-python.
 
 
-On Mon, Apr 28, 2014 at 2:18 PM, Gustavo Zacarias
-<gustavo@zacarias.com.ar>wrote:
+> ++
+> ++AS_IF([test "x$enable_python_binding" != "xno"], [
+> ++	SUBDIR_PYTHON_BINDING=python
+> ++])
+> ++
+> ++AC_SUBST([SUBDIR_PYTHON_BINDING])
+> ++
+> ++
+> + AC_SUBST(AM_CFLAGS,
+> +          "-Wall -Wextra -pedantic")
+> + 
+> +-- 
+> +1.8.1.4
+> +
+> diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+> index 07ad6f6..44b8b89 100644
+> --- a/package/evemu/evemu.mk
+> +++ b/package/evemu/evemu.mk
+> @@ -27,6 +27,14 @@ EVEMU_DEPENDENCIES = host-pkgconf libevdev
+>  # Needs Python for header file generation
+>  EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+>  
+> +# Check for target python (python3 binding disabled because
+> +# of build/byte-compile problems)
+> +ifeq ($(BR2_PACKAGE_PYTHON),y)
+> +	EVEMU_DEPENDENCIES += python
 
-> On 04/28/2014 04:08 PM, William Welch wrote:
->
-> > Greetings,
-> >
-> > When you say BR works fine for microblaze 'on QEMU', could you be more
-> > specific?  little endian?  mmu? which 'defconfig' did you use with
-> > buildroot?  Which version of QEMU, what command line?
-> >
-> > I'd like to recreate your working setup and maybe that will give me a
-> > clue to my troubles here...
-> >
-> > I am trying to use the 'buildroot native toolchain' with a Spartan 6
-> > little endian microblaze MMU design, but I don't get very far with the
-> > native toolchain. However, using the older 'external' toolchain boots
-> > linux fine.
-> >
-> >
-> > thanks,
-> >
-> > William
->
-> Hi.
-> It means all relevant buildroot qemu sample defconfigs boot to a login
-> prompt where you can login and get dhcp working on the emulated network
-> (if said config has networking).
-> For microblaze this means big and little endian with MMU, we don't have
-> a nommu configuration since i've never managed to get that working in a
-> satisfactory way.
-> And that's with Waldemar's patches, not as it is right now which broke
-> those qemu defconfigs when the toolchain was changed to the internal
-> backend.
-> I do not know if it's the toolchain to blame and/or some Qemu
-> limitation, i just know that Waldemar's patches fix it for what i have
-> at hand (no microblaze hardware, just emulation).
-> Regards.
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140428/7ba03a0a/attachment.html>
+ We normally put an explicit --enable-python-binding(s) here.
+
+ Also, we don't normally indent inside conditions in .mk files
+(indentation is reserved for commands and for continuation lines of
+assignments).
+
+ Regards,
+ Arnout
+
+> +else
+> +	EVEMU_CONF_OPT += --disable-python-binding
+> +endif
+> +
+>  # package source code coming from git, so it doesn't have generated
+>  # configure and Makefile.in
+>  EVEMU_AUTORECONF = YES
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
