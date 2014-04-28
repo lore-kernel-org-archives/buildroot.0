@@ -1,66 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Apr 2014 19:51:32 +0200
-Subject: [Buildroot] [PATCH 1/9] boot/syslinux: needs an ia32-capable
- compiler
-In-Reply-To: <535DED52.20500@mind.be>
-References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <74ac3236bb1595c30d9fd230352e96ef29e0b3ad.1398378217.git.yann.morin.1998@free.fr>
- <535DED52.20500@mind.be>
-Message-ID: <20140428175132.GE3501@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 28 Apr 2014 21:00:28 +0200
+Subject: [Buildroot] [PATCH 0/4] evemu: disable python binding if not needed
+Message-ID: <1398711632-5831-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+[Patch 1/4] is a replacement for evemu-0002-disable-tests-patch, because
+I think it is nicer to add the evemu disable feature the same way
+as with the python binding (see [Patch 3/4]) and maybe this version
+is suitable for upstream...
 
-On 2014-04-28 07:55 +0200, Arnout Vandecappelle spake thusly:
-> On 25/04/14 00:29, Yann E. MORIN wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> 
->  It would be good to mention in the commit log and/or the Config.in why
-> this dependency is needed.  I thought it was because it uses -m32, but
-> now I see that it doesn't...
+[Patch 2/4] fixes host-python/host-python3 dependency
 
-Yes, it does:
-    /usr/bin/gcc -idirafter /home/ymorin/dev/buildroot/O/host/usr/include
-        -L/home/ymorin/dev/buildroot/O/host/lib
-        -L/home/ymorin/dev/buildroot/O/host/usr/lib
-        -Wl,-rpath,/home/ymorin/dev/buildroot/O/host/usr/lib
-        -Wp,-MT,cpio.o,-MD,./.cpio.o.d
-        -std=gnu99
--->     -m32                <----- Here. ;-)
-        -march=i386
-        -mpreferred-stack-boundary=2 -fno-stack-protector -fwrapv
-        -freg-struct-return -Os -fPIC
-        -fno-exceptions -fno-asynchronous-unwind-tables -fno-strict-aliasing
-        -falign-functions=0 -falign-jumps=0 -falign-labels=0 -falign-loops=0
-        -mregparm=3 -DREGPARM=3
-        -W -Wall -Wstrict-prototypes -fomit-frame-pointer
-        -D__COM32__
-        -nostdinc
-        -iwithprefix include
-        -I/home/ymorin/dev/buildroot/O/build/syslinux-6.02/com32/libutil/include
-        -I/home/ymorin/dev/buildroot/O/build/syslinux-6.02/com32/include
-        -I/home/ymorin/dev/buildroot/O/build/syslinux-6.02/com32/include/sys
-        -I/home/ymorin/dev/buildroot/O/build/syslinux-6.02/com32/gplinclude
-        -c -o cpio.o
-        /home/ymorin/dev/buildroot/O/build/syslinux-6.02/com32/libupload/cpio.c
+[Patch 3/4] enables python binding only for python2
 
-If not, then I get the usual 'bits/predefs.h' problem that is solved by
-installing gcc-multilib.
+[Patch 4/4] enables python binding for python3 (with two python3
+related fixes), but something seems to be broken with the
+evemu-1.2.0/config-aux/py-compile script, I get no compile error and
+no compiled python binding files on the target.
 
-Regards,
-Yann E. MORIN.
+Patch evemu-0008-python-fix-device-open-for-python3.patch fixed an python3
+binding runtime failure from an earlier build (still with
+EVEMU_DEPENDENCIES += host-python), which leaves non compiled python
+source files in the site-packages/evemu directory...
+
+Peter Seiderer (4):
+  evemu: disable tests via evemu configure option
+  evemu: fix host-python/host-python3 dependency
+  evemu: build python2 binding only if target python2 is enabled
+  evemu: enable python3 bindings
+
+ ...-00008-python-fix-device-open-for-python3.patch | 35 ++++++++++++++++
+ package/evemu/evemu-0002-disable-tests.patch       | 19 ---------
+ ...005-configure.ac-add-disable-tests-option.patch | 44 +++++++++++++++++++++
+ ...gure.ac-add-disable-python-binding-option.patch | 46 ++++++++++++++++++++++
+ ...-fixes-the-syntax-for-raising-exceptions-.patch | 39 ++++++++++++++++++
+ package/evemu/evemu.mk                             | 14 ++++++-
+ 6 files changed, 176 insertions(+), 21 deletions(-)
+ create mode 100644 package/evemu/evemu-00008-python-fix-device-open-for-python3.patch
+ delete mode 100644 package/evemu/evemu-0002-disable-tests.patch
+ create mode 100644 package/evemu/evemu-0005-configure.ac-add-disable-tests-option.patch
+ create mode 100644 package/evemu/evemu-0006-configure.ac-add-disable-python-binding-option.patch
+ create mode 100644 package/evemu/evemu-0007-Description-fixes-the-syntax-for-raising-exceptions-.patch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.4
