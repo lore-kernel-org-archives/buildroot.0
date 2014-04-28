@@ -1,110 +1,46 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 28 Apr 2014 12:32:13 +0200
-Subject: [Buildroot] [PATCH] Makefile: target-purgelocales: add
-	dependencies
-In-Reply-To: <535E2DA8.7090306@mind.be>
-References: <1398356679-1438-1-git-send-email-fabio.porcedda@gmail.com>
- <20140424184136.572de3d0@skate>
- <CAHkwnC8p7E8inhY7w+WiFcsZ-_mO26rdTFB8xKvgDrG2bSj0Uw@mail.gmail.com>
- <535DEBEC.80605@mind.be>
- <CAHkwnC8o4CsbpT9C_G20dRn1vRvb6wcz7gHKT5h6W7ehPZ4YRg@mail.gmail.com>
- <535E2DA8.7090306@mind.be>
-Message-ID: <CAHkwnC8YiF2W5px4z2EnkJ0nF+tF6eqD8S=G7t5_JYO-0JAYdQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 28 Apr 2014 13:53:56 +0300
+Subject: [Buildroot] [PATCH] dtc: don't treat warnings as errors
+Message-ID: <6360c91eb09e1bfa808ce9c3ea79501055974743.1398682436.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 28, 2014 at 12:30 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 28/04/14 09:58, Fabio Porcedda wrote:
->> On Mon, Apr 28, 2014 at 7:49 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>> On 25/04/14 23:50, Fabio Porcedda wrote:
->>>> On Thu, Apr 24, 2014 at 6:41 PM, Thomas Petazzoni
->>>> <thomas.petazzoni@free-electrons.com> wrote:
->>>>> Dear Fabio Porcedda,
->>>>>
->>>>> On Thu, 24 Apr 2014 18:24:39 +0200, Fabio Porcedda wrote:
->>>>>
->>>>>> -target-purgelocales:
->>>>>> +target-purgelocales: $(filter-out target-purgelocales,$(TARGETS))
->>>>>>       rm -f $(LOCALE_WHITELIST)
->>>>>>       for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
->>>>>
->>>>> Don't we have several other targets that need to be executed only after
->>>>> all packages have been built and installed? Wouldn't it make sense to
->>>>> have a common solution for these? Like maybe a dedicated target?
->>>>
->>>> Can you please give some examples? I know only tatget-purgelocales and
->>>> target-finalize.
->>>>
->>>> About the common solution, i see two possible solutions of the problem:
->>>>
->>>> 1) all those targets must be listed in a variable like
->>>> TARGETS_PRE_ROOTFS, but those targets must be able to be executed in
->>>> parallel without a specific order.
->>>>
->>>> 2) all those targets must be converted in hooks and added to a
->>>> variable like PRE_ROOTFS_HOOKS, so those steps are going to be
->>>> executed in serial observing a specific order.
->>>>
->>>> What is the more appropriate solution? The easiest and fastest one is
->>>> the first, but i'm not sure if those targets can be executed in
->>>> parallel.
->>>
->>>  My personal preference is to have a single rule (e.g. target-finalize)
->>> that performs everything that is post-targets and pre-rootfs. There isn't
->>> much that needs to be done so parallelisation doesn't make sense. And I
->>> think it's much easier to understand which steps are executed and in
->>> which order if they are all put together in a single rule rather than
->>> spread out over several.
->>>
->>>  To make things more readable, we can put the commands into separate
->>> variables. For instance:
->>>
->>> define TARGET_PURGE_LOCALES
->>>         rm -f $(LOCALE_WHITELIST)
->>>         ...
->>> endef
->>>
->>> define TARGET_PURGE_DEVFILES
->>>         rm -rf $(TARGET_DIR)/usr/include ...
->>> ...
->>> endef
->>>
->>> ifneq ($(BR2_PACKAGE_GDB),y)
->>> define TARGET_PURGE_GDB
->>>         rm -rf $(TARGET_DIR)/usr/share/gdb
->>> endef
->>> endif
->>>
->>> target-finalize: $(TARGETS)
->>>         $(TARGET_PURGE_LOCALES)
->>>         $(TARGET_PURGE_DEVFILES)
->>>         $(TARGET_PURGE_GDB)
->>>         $(TARGET_PURGE_DOC)
->>> ...
->>>
->>>
->>>  I'm giving the content of target-finalize as an example here, but it's
->>> not immediately needed to convert those into variables. The different
->>> target-* steps that are currently added to TARGETS are rather more important.
->>
->> It's fine for me.
->> So you prefer to list those variables inside the target instead of
->> adding them to a hook variable? like e.g. PRE_ROOTFS_HOOK?
->
->  Indeed. The HOOKS way of working is not very clear. The code for calling
-> the hooks is not easy to understand at first sight, because it contains
-> this $(foreach ...) and $(sep) stuff. Also, the assignments to the HOOKS
-> variable are spread out over the Makefiles so it's hard to see which
-> things will get executed and in which order. And finally, it's not needed
-> here because we can enumerate all the possible steps - that's different
-> from the package infrastructure, where the HOOK contents differs from
-> package to package.
+Fixes:
+http://autobuild.buildroot.net/results/c1e/c1e0764f27e6c842a2a324b7b2dc5052ff10f13b/
 
-Ok fine, i will do like that.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dtc/dtc-extra_cflags.patch | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-Thanks and regards
+diff --git a/package/dtc/dtc-extra_cflags.patch b/package/dtc/dtc-extra_cflags.patch
+index 3ce699b5d864..51b79572e8bf 100644
+--- a/package/dtc/dtc-extra_cflags.patch
++++ b/package/dtc/dtc-extra_cflags.patch
+@@ -13,12 +13,16 @@ Patch not sent upstream.
+ Although not specific to buildroot, I am not sure this is the best
+ way to handle user-supplied CFLAGS.
+ 
+-diff -durN dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile
+---- dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef.orig/Makefile	2012-10-22 22:02:47.541240846 +0200
+-+++ dtc-e4b497f367a3b2ae99cc52089a14a221b13a76ef/Makefile	2012-10-22 22:03:21.151047833 +0200
+-@@ -18,7 +18,8 @@
++diff --git a/Makefile b/Makefile
++index 962f94eba661..bf6b317158cf 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -16,9 +16,10 @@ LOCAL_VERSION =
++ CONFIG_LOCALVERSION =
++ 
+  CPPFLAGS = -I libfdt -I .
+- WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
++-WARNINGS = -Werror -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
+++WARNINGS = -Wall -Wpointer-arith -Wcast-qual -Wnested-externs \
+  	-Wstrict-prototypes -Wmissing-prototypes -Wredundant-decls
+ -CFLAGS = -g -Os -fPIC -Werror $(WARNINGS)
+ +CFLAGS ?= -g -Os
 -- 
-Fabio Porcedda
+1.9.2
