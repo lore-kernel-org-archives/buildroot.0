@@ -1,65 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 07:57:08 +0200
-Subject: [Buildroot] [PATCH 4/9] boot/syslinux: rewrite options prompts
-In-Reply-To: <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
+Date: Mon, 28 Apr 2014 08:03:17 +0200
+Subject: [Buildroot] [PATCH 6/9] package/upx: new package
+In-Reply-To: <d2b063c77023df58acb96852a8dfe0b812750355.1398378217.git.yann.morin.1998@free.fr>
 References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
-Message-ID: <535DEDB4.4030601@mind.be>
+ <d2b063c77023df58acb96852a8dfe0b812750355.1398378217.git.yann.morin.1998@free.fr>
+Message-ID: <535DEF25.4050701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/04/14 00:29, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 25/04/14 00:30, Yann E. MORIN wrote:
+> From: Frank Hunleth <fhunleth@troodon-software.com>
 > 
-> Rewrite the options prompt in preparation to adding a new
-> type of image to install.
+> UPX is a free, portable, extendable, high-performance executable packer
+> for several executable formats.
+
+ Just for my understanding: this builds a self-extractor, right? So my
+guess is that it won't be able to build a cross-self-extractor... Since
+we don't have a Config.in, there's no way to encode that information, but
+perhaps it's worth to add a comment that this tool will only work if
+target-arch == host-arch.
+
 > 
-> Add help entries to each option, too.
+> This is needed for syslinux 6.x.
 > 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> [yann.morin.1998 at free.fr: builds fine in parallel; fix build to
+>  locate libucl; fix installation; don't add a menuconfig entry]
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
 > ---
->  boot/syslinux/Config.in | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+>  package/upx/upx.mk | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/upx/upx.mk
 > 
-> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-> index 1b8c527..b92f28f 100644
-> --- a/boot/syslinux/Config.in
-> +++ b/boot/syslinux/Config.in
-> @@ -12,10 +12,16 @@ config BR2_TARGET_SYSLINUX
->  if BR2_TARGET_SYSLINUX
->  
->  config BR2_TARGET_SYSLINUX_ISOLINUX
-> -	bool "Install isolinux"
-> +	bool "isolinux"
->  	default y
-> +	help
-> +	  Install the legacy BIOS 'isolinux' image, to boot off
+> diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+> new file mode 100644
+> index 0000000..a039376
+> --- /dev/null
+> +++ b/package/upx/upx.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# upx
+> +#
+> +################################################################################
+> +
+> +UPX_VERSION = 3.91
+> +UPX_SITE = http://upx.sourceforge.net/download/
+> +UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.bz2
+> +UPX_LICENSE = GPLv2+
+> +UPX_LICENSE_FILES = COPYING
+> +
+> +HOST_UPX_DEPENDENCIES = host-ucl
+> +
+> +# We need to specify all, otherwise the default target only prints a message
+> +# stating to "please choose a target for 'make'"... :-(
 
- This sounds like it's a legacy image... I'd just skip the word "legacy".
-BIOS is BIOS.
+ This comment is entirely redundant IMHO.
 
-> +	  optical medias (CDROM, DVD.)
+> +define HOST_UPX_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
 
- The plural of medium is media, without s.
+ Is there something wrong with $(HOST_CONFIGURE_OPTS) ?
+
+> +	    LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR)/usr \
+> +	    -C $(@D) all
+> +endef
+> +
+> +# UPX has no install procedure, so install it manually.
+
+ We also usually don't have this type of comment. It's kind of obvious
+that if we install it manually, it's because there is no install procedure.
 
 
  Regards,
  Arnout
 
->  
->  config BR2_TARGET_SYSLINUX_PXELINUX
-> -	bool "Install pxelinux"
-> +	bool "pxelinux"
-> +	help
-> +	  Install the legacy BIOS 'pxelinux' image, to boot off
-> +	  the network using PXE.
->  
-> -endif
-> +endif # BR2_TARGET_SYSLINUX
+> +define HOST_UPX_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/src/upx.out $(HOST_DIR)/usr/bin/upx
+> +endef
+> +
+> +$(eval $(host-generic-package))
 > 
 
 
