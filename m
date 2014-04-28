@@ -1,33 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 28 Apr 2014 16:49:52 +0300
-Subject: [Buildroot] Grub or Network driver Compilation error !
-In-Reply-To: <37401db706d9ddea13b5101ae56a1983@paravisioner.com>
-References: <37401db706d9ddea13b5101ae56a1983@paravisioner.com>
-Message-ID: <20140428134952.GJ4531@tarshish>
+From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
+Date: Mon, 28 Apr 2014 09:05:32 -0500
+Subject: [Buildroot] Patchwork cleanup #9: triaging proposal
+In-Reply-To: <CAAXf6LW5GPZ_vegt_jO=xr0e5Qfzjt4Uq7yye6jF3si6qyycBQ@mail.gmail.com>
+References: <CAAXf6LW5GPZ_vegt_jO=xr0e5Qfzjt4Uq7yye6jF3si6qyycBQ@mail.gmail.com>
+Message-ID: <OFAD09C70D.50D5D3F4-ON86257CC8.004D6935-86257CC8.004D6938@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Parsa Panahi,
+Thomas,
 
-On Mon, Apr 28, 2014 at 06:01:05PM +0430, Parsa Panahi wrote:
-> My buildroot make process stuck in the grub configuration and I don't
-> know what exactly it is suffering from ?! I think it's something related
-> to realtek 8139 network driver but I don't know what caused the error
-> here .... 
-> 
-> Can anyone help me what to do ? I've attached my config file too. 
-> 
-> parsa at parsa-pc:~/Software/buildroot/buildroot-2014.02$ SUDO MAKE 
+>[RFC] core: Download all package sources
+>Clayton Shotwell <clshotwe@rockwellcollins.com>
+>http://patchwork.ozlabs.org/patch/288224
+>
+>C unsure: there was some debate as to this patch is the right way to
+>proceed, or whether the buildroot mirror should contain more
+>packages,
+>or provide a way to create a local buildroot mirror.
 
-I'm not sure it has anything to do with your problem, but you should never run 
-Buildroot 'make' as root.
+I would like to drop this patch. I will have to come up with
+another approach to cover all of the corner cases of downloading
+the different versions of the packages.
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thanks,
+Clayton
