@@ -1,57 +1,94 @@
-From: William Welch <bvwelch@gmail.com>
-Date: Mon, 28 Apr 2014 14:08:17 -0500
-Subject: [Buildroot] [PATCH 3/6] upstream glibc 2.18/2.19 works fine
-	with microblaze
-In-Reply-To: <53553336.2020401@zacarias.com.ar>
-References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
- <1397382423-4939-4-git-send-email-wbx@openadk.org>
- <53553336.2020401@zacarias.com.ar>
-Message-ID: <CAPALihO_K2VsaYO9erhFrKZpY9755ACOjsm56O6VvxO9MA6-0Q@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Apr 2014 21:16:55 +0200
+Subject: [Buildroot] [PATCH 8/9] boot/syslinux: add option to install
+ the EFI image
+In-Reply-To: <20140428171514.GA3501@free.fr>
+References: <cover.1398378217.git.yann.morin.1998@free.fr>
+ <b21bd8bd922ebfb71a12cf929f953f384216f43f.1398378217.git.yann.morin.1998@free.fr>
+ <535DF2CD.3000100@mind.be> <20140428171514.GA3501@free.fr>
+Message-ID: <535EA927.3080701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+On 28/04/14 19:15, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2014-04-28 08:18 +0200, Arnout Vandecappelle spake thusly:
+>> On 25/04/14 00:30, Yann E. MORIN wrote:
+>>> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[snip]
+>>> +choice
+>>> +	bool "Image type"
+>>
+>>  Why is this a choice? It's possible to build both, no? Similar to
+>> iso/pxe. So it makes more sense to me to add efi as a third option after
+>> iso and pxe.
+> 
+> Well, the target will be either BIOS-based or an EFI-based, not both.
+> So it seems more logical to make it a choice (Thomas seemed to agree on
+> IRC, as well.)
+> 
+> But thinking of it, we could go even further: iso/pxe/mbr/efi are all
+> _alternate_ methods of booting, so it does not make sense to have more
+> than one selected at any one time.
+> 
+> The only reason pxe/iso are not a choice _currently_ (e.g. syslinux-4.0.7),
+> is that they are always built, and there is a no way to only build one or
+> the other. This is the same behaviour in 6.0.2: you can build any
+> combination of {bios,efi32,efi64} (only one, two, or all of them). But
+> bios will always build pxe and iso (and mbr, see next cset).
 
-When you say BR works fine for microblaze 'on QEMU', could you be more
-specific?  little endian?  mmu? which 'defconfig' did you use with
-buildroot?  Which version of QEMU, what command line?
+ Good point. But then of course, it also doesn't make sense to build both
+U-Boot and syslinux :-)
 
-I'd like to recreate your working setup and maybe that will give me a clue
-to my troubles here...
+ So I'm OK with making iso/pxe/mbr/efi a choice.
 
-I am trying to use the 'buildroot native toolchain' with a Spartan 6 little
-endian microblaze MMU design, but I don't get very far with the native
-toolchain. However, using the older 'external' toolchain boots linux fine.
-
-
-thanks,
-
-William
+ When syslinux/extlinux is added, that does add some difficulty because
+those can be combined with mbr. But that can be tackled when the problem
+arises :-).
 
 
 
-On Mon, Apr 21, 2014 at 10:03 AM, Gustavo Zacarias
-<gustavo@zacarias.com.ar>wrote:
+ Regards,
+ Arnout
 
-> On 04/13/2014 06:47 AM, Waldemar Brodkorb wrote:
->
-> > There is no need for Xilinx Git.
-> >
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
->
-> Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> (on Qemu)
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140428/56da4166/attachment.html>
+> 
+> In the end, I don't really care, although I'd find it strange to be able
+> to build both at the same time, since the target will have one or the
+> other, not both (well, unless we target a desktop PC with legacy bios
+> enabled in the EFI bios; but we ain't do that, do we?) At worse, I'd
+> chamge it to a choice for everything (although I could understand a case
+> where the user would want both pxe and iso and mbr at the same time.)
+> 
+>>> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+>>> index bec132f..bf0bae5 100644
+>>> --- a/boot/syslinux/syslinux.mk
+>>> +++ b/boot/syslinux/syslinux.mk
+>>> @@ -15,6 +15,20 @@ SYSLINUX_INSTALL_IMAGES = YES
+>>>  
+>>>  SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
+>>>  
+>>> +ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
+>>> +SYSLINUX_TARGET = bios
+>>
+>>  If you follow my suggestion, this would become SYSLINUX_TARGETS of
+>> course. And +=
+> 
+> Yes, of course. I already had that in the beginning, but I believe it
+> does not really make sense.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
