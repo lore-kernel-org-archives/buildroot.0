@@ -1,49 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Apr 2014 16:18:43 -0300
-Subject: [Buildroot] [PATCH 3/6] upstream glibc 2.18/2.19 works fine
- with microblaze
-In-Reply-To: <CAPALihO_K2VsaYO9erhFrKZpY9755ACOjsm56O6VvxO9MA6-0Q@mail.gmail.com>
-References: <1397382423-4939-1-git-send-email-wbx@openadk.org>	<1397382423-4939-4-git-send-email-wbx@openadk.org>	<53553336.2020401@zacarias.com.ar>
- <CAPALihO_K2VsaYO9erhFrKZpY9755ACOjsm56O6VvxO9MA6-0Q@mail.gmail.com>
-Message-ID: <535EA993.8080108@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 28 Apr 2014 21:20:05 +0200
+Subject: [Buildroot] [PATCH 2/4] gdb: arc: bump to git commit 816890e
+In-Reply-To: <1398703406-12157-2-git-send-email-Anton.Kolesov@synopsys.com>
+References: <1398703406-12157-1-git-send-email-Anton.Kolesov@synopsys.com>
+ <1398703406-12157-2-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <535EA9E5.5010909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/28/2014 04:08 PM, William Welch wrote:
+On 28/04/14 18:43, Anton Kolesov wrote:
+> This revision corresponds to the 4.8-R3 release of the ARC GNU Tool chain.
 
-> Greetings,
-> 
-> When you say BR works fine for microblaze 'on QEMU', could you be more
-> specific?  little endian?  mmu? which 'defconfig' did you use with
-> buildroot?  Which version of QEMU, what command line?
-> 
-> I'd like to recreate your working setup and maybe that will give me a
-> clue to my troubles here...
-> 
-> I am trying to use the 'buildroot native toolchain' with a Spartan 6
-> little endian microblaze MMU design, but I don't get very far with the
-> native toolchain. However, using the older 'external' toolchain boots
-> linux fine.
-> 
-> 
-> thanks,
-> 
-> William
+ Does that happen to have a tag in the repository? A tag looks nicer in
+the build directory (gcc-final-4.8-R3 rather than
+gcc-final-cb15acc5eecea46d041730e5c2c9fa1d4283ef25).
 
-Hi.
-It means all relevant buildroot qemu sample defconfigs boot to a login
-prompt where you can login and get dhcp working on the emulated network
-(if said config has networking).
-For microblaze this means big and little endian with MMU, we don't have
-a nommu configuration since i've never managed to get that working in a
-satisfactory way.
-And that's with Waldemar's patches, not as it is right now which broke
-those qemu defconfigs when the toolchain was changed to the internal
-backend.
-I do not know if it's the toolchain to blame and/or some Qemu
-limitation, i just know that Waldemar's patches fix it for what i have
-at hand (no microblaze hardware, just emulation).
-Regards.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+> ---
+>  package/gdb/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index cbcec18..cf01b94 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -51,7 +51,7 @@ config BR2_GDB_VERSION
+>  	                      (!BR2_PACKAGE_HOST_GDB && BR2_bfin)
+>  	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
+>                                     (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
+> -	default "cb15acc5eecea46d041730e5c2c9fa1d4283ef25" if BR2_arc
+> +	default "816890e5d1685c957bf7ae03c304246619e77882" if BR2_arc
+>  	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+>  	default "7.4.1"    if BR2_GDB_VERSION_7_4
+>  	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
