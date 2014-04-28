@@ -1,136 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 08:14:52 +0200
-Subject: [Buildroot] [PATCH 7/9] boot/syslinux: bump version
-In-Reply-To: <e9a6a68649fc668ebc91f3f307e40af30c2ccb9b.1398378217.git.yann.morin.1998@free.fr>
-References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <e9a6a68649fc668ebc91f3f307e40af30c2ccb9b.1398378217.git.yann.morin.1998@free.fr>
-Message-ID: <535DF1DC.9090307@mind.be>
+Date: Mon, 28 Apr 2014 07:49:32 +0200
+Subject: [Buildroot] [PATCH] Makefile: target-purgelocales: add
+	dependencies
+In-Reply-To: <CAHkwnC8p7E8inhY7w+WiFcsZ-_mO26rdTFB8xKvgDrG2bSj0Uw@mail.gmail.com>
+References: <1398356679-1438-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140424184136.572de3d0@skate>
+ <CAHkwnC8p7E8inhY7w+WiFcsZ-_mO26rdTFB8xKvgDrG2bSj0Uw@mail.gmail.com>
+Message-ID: <535DEBEC.80605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/04/14 00:30, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 25/04/14 23:50, Fabio Porcedda wrote:
+> On Thu, Apr 24, 2014 at 6:41 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Fabio Porcedda,
+>>
+>> On Thu, 24 Apr 2014 18:24:39 +0200, Fabio Porcedda wrote:
+>>
+>>> -target-purgelocales:
+>>> +target-purgelocales: $(filter-out target-purgelocales,$(TARGETS))
+>>>       rm -f $(LOCALE_WHITELIST)
+>>>       for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
+>>
+>> Don't we have several other targets that need to be executed only after
+>> all packages have been built and installed? Wouldn't it make sense to
+>> have a common solution for these? Like maybe a dedicated target?
 > 
-> This new version has a very, very weird build system. There are different
-> images that syslinux can now build:
->   - the plain legacy-bios images we already supported previously
->   - two new EFI32 and EFI64 applications
+> Can you please give some examples? I know only tatget-purgelocales and
+> target-finalize.
 > 
-> To build one or the other, the Makefile accepts one or more of:
->     make (bios|efi32|efi64)
+> About the common solution, i see two possible solutions of the problem:
 > 
-> Specify all of them, and it builds all. Specify 'install', and it installs
-> all of them, as one may expect.
+> 1) all those targets must be listed in a variable like
+> TARGETS_PRE_ROOTFS, but those targets must be able to be executed in
+> parallel without a specific order.
 > 
-> Still a regular behaviour, is to build only a subset (down to one):
->     make bios           <-- builds just the legacy-bios images
->     make efi32 bios     <-- builds just the legacy-bios and efi32 images
+> 2) all those targets must be converted in hooks and added to a
+> variable like PRE_ROOTFS_HOOKS, so those steps are going to be
+> executed in serial observing a specific order.
 > 
-> Where it gets weird is the install procedure. Can you guess how it's done?
-> Hint: the syslinux guys have invented the multiple-argument parsing in
-> pure Makefiles. To build then install only the bios images, one would do:
->     make bios
->     make bios install
-> 
-> Yep, that's it. make bios install. Two arguments, one action.
-> 
-> That makes for some funky workarounds in our install procedure...
-> 
-> 'bios' is the only image we support so far, with efi to come in a future
-> patch.
-> 
-> Using MAKE1, as there are issues with highly-parallel builds.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  boot/syslinux/syslinux.mk | 32 ++++++++++++++++++++++++--------
->  1 file changed, 24 insertions(+), 8 deletions(-)
-> 
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index a1eb394..bec132f 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -4,32 +4,48 @@
->  #
->  ################################################################################
->  
-> -SYSLINUX_VERSION = 4.07
-> -SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
-> -SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
-> +SYSLINUX_VERSION = 6.02
-> +SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.xz
-> +SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/
->  
->  SYSLINUX_LICENSE = GPLv2+
->  SYSLINUX_LICENSE_FILES = COPYING
->  
->  SYSLINUX_INSTALL_IMAGES = YES
->  
-> -SYSLINUX_DEPENDENCIES = host-nasm host-util-linux
-> +SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
-> +
-> +# The syslinux tarball comes with pre-compiled binaries.
-> +# Since timestamps might not be in the correct order, a rebuild is
-> +# not always triggered for all the different images.
-> +# Cleanup the mess even before we attempt a build, so we indeed
-> +# build everything from source.
+> What is the more appropriate solution? The easiest and fastest one is
+> the first, but i'm not sure if those targets can be executed in
+> parallel.
 
- Do we really need to build everything from source? We anyway already
-check that our host compiler can build for ia32, so the included
-executables will work.
+ My personal preference is to have a single rule (e.g. target-finalize)
+that performs everything that is post-targets and pre-rootfs. There isn't
+much that needs to be done so parallelisation doesn't make sense. And I
+think it's much easier to understand which steps are executed and in
+which order if they are all put together in a single rule rather than
+spread out over several.
 
-> +define SYSLINUX_CLEANUP
-> +	rm -rf $(@D)/bios $(@D)/efi32 $(@D)/efi64
-> +endef
-> +SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
->  
->  # syslinux build system has no convenient way to pass CFLAGS,
->  # and the internal zlib should take precedence so -I shouldn't
->  # be used.
+ To make things more readable, we can put the commands into separate
+variables. For instance:
 
- Actually, I'm not sure if this comment is still true. I haven't checked
-in 6.02, but 4.07 already had a MYCFLAGS variables that can probably be
-used. Also, the HOST_LDFLAGS may no longer be needed.
+define TARGET_PURGE_LOCALES
+	rm -f $(LOCALE_WHITELIST)
+	...
+endef
 
->  define SYSLINUX_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" AR="$(HOSTAR)" -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> +	    AR="$(HOSTAR)" -C $(@D) bios
->  endef
->  
->  define SYSLINUX_INSTALL_TARGET_CMDS
->  	# While the actual bootloader is compiled for the target, several
->  	# utilities for installing the bootloader are meant for the host.
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
-> +	# Repeat the target, otherwise syslinux will try to build everything
-> +	# Repeat CC and AR, since syslinux really wants to check them at
-> +	# install time
+define TARGET_PURGE_DEVFILES
+	rm -rf $(TARGET_DIR)/usr/include ...
+...
+endef
 
- These comments should come before the define, otherwise they'll be
-printed while building.
+ifneq ($(BR2_PACKAGE_GDB),y)
+define TARGET_PURGE_GDB
+        rm -rf $(TARGET_DIR)/usr/share/gdb
+endef
+endif
+
+target-finalize: $(TARGETS)
+	$(TARGET_PURGE_LOCALES)
+	$(TARGET_PURGE_DEVFILES)
+	$(TARGET_PURGE_GDB)
+	$(TARGET_PURGE_DOC)
+...
+
+
+ I'm giving the content of target-finalize as an example here, but it's
+not immediately needed to convert those into variables. The different
+target-* steps that are currently added to TARGETS are rather more important.
 
 
  Regards,
  Arnout
-
-> +	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> +	    AR="$(HOSTAR)" INSTALLROOT=$(HOST_DIR) \
-> +	    -C $(@D) bios install
->  endef
->  
-> -SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += core/isolinux.bin
-> -SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += core/pxelinux.bin
-> +SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
-> +SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
->  
->  define SYSLINUX_INSTALL_IMAGES_CMDS
->  	for i in $(SYSLINUX_IMAGES-y); do \
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
