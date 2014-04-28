@@ -1,70 +1,82 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Apr 2014 19:36:51 +0200
-Subject: [Buildroot] [PATCH 4/9] boot/syslinux: rewrite options prompts
-In-Reply-To: <535DEDB4.4030601@mind.be>
+Date: Mon, 28 Apr 2014 19:43:05 +0200
+Subject: [Buildroot] [PATCH 6/9] package/upx: new package
+In-Reply-To: <535DEF25.4050701@mind.be>
 References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
- <535DEDB4.4030601@mind.be>
-Message-ID: <20140428173651.GC3501@free.fr>
+ <d2b063c77023df58acb96852a8dfe0b812750355.1398378217.git.yann.morin.1998@free.fr>
+ <535DEF25.4050701@mind.be>
+Message-ID: <20140428174305.GD3501@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
-
-On 2014-04-28 07:57 +0200, Arnout Vandecappelle spake thusly:
-> On 25/04/14 00:29, Yann E. MORIN wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2014-04-28 08:03 +0200, Arnout Vandecappelle spake thusly:
+> On 25/04/14 00:30, Yann E. MORIN wrote:
+> > From: Frank Hunleth <fhunleth@troodon-software.com>
 > > 
-> > Rewrite the options prompt in preparation to adding a new
-> > type of image to install.
-> > 
-> > Add help entries to each option, too.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> > ---
-> >  boot/syslinux/Config.in | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-> > index 1b8c527..b92f28f 100644
-> > --- a/boot/syslinux/Config.in
-> > +++ b/boot/syslinux/Config.in
-> > @@ -12,10 +12,16 @@ config BR2_TARGET_SYSLINUX
-> >  if BR2_TARGET_SYSLINUX
-> >  
-> >  config BR2_TARGET_SYSLINUX_ISOLINUX
-> > -	bool "Install isolinux"
-> > +	bool "isolinux"
-> >  	default y
-> > +	help
-> > +	  Install the legacy BIOS 'isolinux' image, to boot off
+> > UPX is a free, portable, extendable, high-performance executable packer
+> > for several executable formats.
 > 
->  This sounds like it's a legacy image... I'd just skip the word "legacy".
-> BIOS is BIOS.
+>  Just for my understanding: this builds a self-extractor, right? So my
+> guess is that it won't be able to build a cross-self-extractor... Since
+> we don't have a Config.in, there's no way to encode that information, but
+> perhaps it's worth to add a comment that this tool will only work if
+> target-arch == host-arch.
 
-Hmmm. OK.
+Well, that was my (and Frank's) fear, but:
 
-Side-channel rant: I always wonder how I should call the EFI 'firmware':
-  - EFI BIOS
-  - EFI firmware
-  - BIOS
-  - firmware
-  - EFI  (but that more a spec than an implementation)
+    $ ./host/usr/bin/upx -h
+    [--SNIP--]
+    This version supports:
+        AMD64-darwin.macho               Mach/AMD64
+        ARMEL-darwin.macho               Mach/ARMEL
+        amd64-linux.elf                  linux/ElfAMD
+        amd64-linux.kernel.vmlinux       vmlinux/AMD64
+        amd64-win64.pe                   win64/pe
+        arm-linux.elf                    linux/armel
+        arm-linux.kernel.vmlinux         vmlinux/armel
+        arm-wince.pe                     arm/pe
+        armeb-linux.elf                  linux/armeb
+        armeb-linux.kernel.vmlinux       vmlinux/armeb
+        armel-linux.kernel.vmlinuz       vmlinuz/armel
+        fat-darwin.macho                 Mach/fat
+        i086-dos16.com                   dos/com
+        i086-dos16.exe                   dos/exe
+        i086-dos16.sys                   dos/sys
+        i386-bsd.elf.execve              BSD/386
+        i386-darwin.macho                Mach/i386
+        i386-dos32.djgpp2.coff           djgpp2/coff
+        i386-dos32.tmt.adam              tmt/adam
+        i386-dos32.watcom.le             watcom/le
+        i386-freebsd.elf                 BSD/elf386
+        i386-linux.elf                   linux/elf386
+        i386-linux.elf.execve            linux/386
+        i386-linux.elf.shell             linux/sh386
+        i386-linux.kernel.bvmlinuz       bvmlinuz/386
+        i386-linux.kernel.vmlinux        vmlinux/386
+        i386-linux.kernel.vmlinuz        vmlinuz/386
+        i386-netbsd.elf                  netbsd/elf386
+        i386-openbsd.elf                 opnbsd/elf386
+        i386-win32.pe                    win32/pe
+        m68k-atari.tos                   atari/tos
+        mips-linux.elf                   linux/mipseb
+        mipsel-linux.elf                 linux/mipsel
+        mipsel.r3000-ps1                 ps1/exe
+        powerpc-darwin.macho             Mach/ppc32
+        powerpc-linux.elf                linux/ElfPPC
+        powerpc-linux.kernel.vmlinux     vmlinux/ppc32
 
-So, I usually refer to what we called BIOS in the early days as the
-"lecagy BIOS", which is also what you'd find in most EFI BIOSes when
-you enable "legacy BIOS" (often as a simple and efficient way to
-by-pass the secure-boot.)
+So it seems it does not mind being build natively and generate
+self-extractors for all these archs in the same binary.
 
-> > +	  optical medias (CDROM, DVD.)
-> 
->  The plural of medium is media, without s.
+But even is it would be only target-arch == host-arch, this is
+_currently_ not a problem, as the only way to get host-upx is to select
+syslinux, which is already only available in this case (eg. host and
+target are both x86) anyway.
 
-Yep, it always bites me... Thanks.
+Maybe that would warrant a bit of comment in the .mk too.
 
 Regards,
 Yann E. MORIN.
