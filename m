@@ -1,194 +1,95 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 08:18:53 +0200
-Subject: [Buildroot] [PATCH 8/9] boot/syslinux: add option to install
- the EFI image
-In-Reply-To: <b21bd8bd922ebfb71a12cf929f953f384216f43f.1398378217.git.yann.morin.1998@free.fr>
-References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <b21bd8bd922ebfb71a12cf929f953f384216f43f.1398378217.git.yann.morin.1998@free.fr>
-Message-ID: <535DF2CD.3000100@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 28 Apr 2014 09:58:06 +0200
+Subject: [Buildroot] [PATCH] Makefile: target-purgelocales: add
+	dependencies
+In-Reply-To: <535DEBEC.80605@mind.be>
+References: <1398356679-1438-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140424184136.572de3d0@skate>
+ <CAHkwnC8p7E8inhY7w+WiFcsZ-_mO26rdTFB8xKvgDrG2bSj0Uw@mail.gmail.com>
+ <535DEBEC.80605@mind.be>
+Message-ID: <CAHkwnC8o4CsbpT9C_G20dRn1vRvb6wcz7gHKT5h6W7ehPZ4YRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/04/14 00:30, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> syslinux can now also build an EFI application.
-> 
-> If the target is 64-bit, we build the 64-bit EFI app,
-> otherwise we build the 32-bit EFI app.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  boot/syslinux/Config.in                            | 24 +++++++++++++-
->  .../syslinux-000-user-headers-from-sysroot.patch   | 37 ++++++++++++++++++++++
->  boot/syslinux/syslinux.mk                          | 21 ++++++++++--
->  3 files changed, 78 insertions(+), 4 deletions(-)
->  create mode 100644 boot/syslinux/syslinux-000-user-headers-from-sysroot.patch
-> 
-> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-> index b92f28f..d556c55 100644
-> --- a/boot/syslinux/Config.in
-> +++ b/boot/syslinux/Config.in
-> @@ -2,7 +2,6 @@ config BR2_TARGET_SYSLINUX
->  	bool "syslinux"
->  	depends on BR2_i386 || BR2_x86_64
->  	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
-> -	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_PXELINUX
->  	help
->  	  The syslinux bootloader for x86 systems.
->  	  This includes: syslinux, pxelinux, extlinux.
-> @@ -11,6 +10,27 @@ config BR2_TARGET_SYSLINUX
->  
->  if BR2_TARGET_SYSLINUX
->  
-> +choice
-> +	bool "Image type"
+On Mon, Apr 28, 2014 at 7:49 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 25/04/14 23:50, Fabio Porcedda wrote:
+>> On Thu, Apr 24, 2014 at 6:41 PM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Dear Fabio Porcedda,
+>>>
+>>> On Thu, 24 Apr 2014 18:24:39 +0200, Fabio Porcedda wrote:
+>>>
+>>>> -target-purgelocales:
+>>>> +target-purgelocales: $(filter-out target-purgelocales,$(TARGETS))
+>>>>       rm -f $(LOCALE_WHITELIST)
+>>>>       for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
+>>>
+>>> Don't we have several other targets that need to be executed only after
+>>> all packages have been built and installed? Wouldn't it make sense to
+>>> have a common solution for these? Like maybe a dedicated target?
+>>
+>> Can you please give some examples? I know only tatget-purgelocales and
+>> target-finalize.
+>>
+>> About the common solution, i see two possible solutions of the problem:
+>>
+>> 1) all those targets must be listed in a variable like
+>> TARGETS_PRE_ROOTFS, but those targets must be able to be executed in
+>> parallel without a specific order.
+>>
+>> 2) all those targets must be converted in hooks and added to a
+>> variable like PRE_ROOTFS_HOOKS, so those steps are going to be
+>> executed in serial observing a specific order.
+>>
+>> What is the more appropriate solution? The easiest and fastest one is
+>> the first, but i'm not sure if those targets can be executed in
+>> parallel.
+>
+>  My personal preference is to have a single rule (e.g. target-finalize)
+> that performs everything that is post-targets and pre-rootfs. There isn't
+> much that needs to be done so parallelisation doesn't make sense. And I
+> think it's much easier to understand which steps are executed and in
+> which order if they are all put together in a single rule rather than
+> spread out over several.
+>
+>  To make things more readable, we can put the commands into separate
+> variables. For instance:
+>
+> define TARGET_PURGE_LOCALES
+>         rm -f $(LOCALE_WHITELIST)
+>         ...
+> endef
+>
+> define TARGET_PURGE_DEVFILES
+>         rm -rf $(TARGET_DIR)/usr/include ...
+> ...
+> endef
+>
+> ifneq ($(BR2_PACKAGE_GDB),y)
+> define TARGET_PURGE_GDB
+>         rm -rf $(TARGET_DIR)/usr/share/gdb
+> endef
+> endif
+>
+> target-finalize: $(TARGETS)
+>         $(TARGET_PURGE_LOCALES)
+>         $(TARGET_PURGE_DEVFILES)
+>         $(TARGET_PURGE_GDB)
+>         $(TARGET_PURGE_DOC)
+> ...
+>
+>
+>  I'm giving the content of target-finalize as an example here, but it's
+> not immediately needed to convert those into variables. The different
+> target-* steps that are currently added to TARGETS are rather more important.
 
- Why is this a choice? It's possible to build both, no? Similar to
-iso/pxe. So it makes more sense to me to add efi as a third option after
-iso and pxe.
+It's fine for me.
+So you prefer to list those variables inside the target instead of
+adding them to a hook variable? like e.g. PRE_ROOTFS_HOOK?
 
-> +
-> +config BR2_TARGET_SYSLINUX_LEGACY_BIOS
-> +	bool "bios (legacy)"
-> +	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_PXELINUX
-> +	help
-> +	  Install one or more of the the legacy BIOS images:
-> +	    - isolinux
-> +	    - pxelinux
-> +
-> +config BR2_TARGET_SYSLINUX_EFI
-> +	bool "efi"
-> +	select BR2_PACKAGE_GNU_EFI
-> +	help
-> +	  Install the 'efi' image, to boot from an EFI environment.
-> +
-> +endchoice
-> +
-> +if BR2_TARGET_SYSLINUX_LEGACY_BIOS
-> +
->  config BR2_TARGET_SYSLINUX_ISOLINUX
->  	bool "isolinux"
->  	default y
-> @@ -24,4 +44,6 @@ config BR2_TARGET_SYSLINUX_PXELINUX
->  	  Install the legacy BIOS 'pxelinux' image, to boot off
->  	  the network using PXE.
->  
-> +endif # BR2_TARGET_SYSLINUX_LEGACY_BIOS
-> +
->  endif # BR2_TARGET_SYSLINUX
-> diff --git a/boot/syslinux/syslinux-000-user-headers-from-sysroot.patch b/boot/syslinux/syslinux-000-user-headers-from-sysroot.patch
-> new file mode 100644
-> index 0000000..5edf79f
-> --- /dev/null
-> +++ b/boot/syslinux/syslinux-000-user-headers-from-sysroot.patch
-> @@ -0,0 +1,37 @@
-> +efi: look for headers and libs in the sysroot
-> +
-> +Currently, syslinux hard-codes search paths to /usr/.... directories.
-> +This does not play well in cross-compilation.
-> +
-> +If $SYSROOT is defined, prepend it to the search paths.
-> +
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +
-> +diff -durN syslinux-6.02.orig/efi/find-gnu-efi.sh syslinux-6.02/efi/find-gnu-efi.sh
-> +--- syslinux-6.02.orig/efi/find-gnu-efi.sh	2013-10-13 19:59:03.000000000 +0200
-> ++++ syslinux-6.02/efi/find-gnu-efi.sh	2014-04-22 00:19:23.638483887 +0200
-> +@@ -9,7 +9,7 @@
-> + find_include()
-> + {
-> +     for d in $include_dirs; do
-> +-	found=`find $d -name efi -type d 2> /dev/null`
-> ++	found=`find $SYSROOT$d -name efi -type d 2> /dev/null`
-> + 	if [ "$found"x != "x" ] && [ -e $found/$ARCH/efibind.h ]; then
-> + 	    echo $found
-> + 	    break;
-> +@@ -20,12 +20,12 @@
-> + find_lib()
-> + {
-> +     for d in $lib_dirs; do
-> +-	found=`find $d -name libgnuefi.a 2> /dev/null`
-> ++	found=`find $SYSROOT$d -name libgnuefi.a 2> /dev/null`
-> + 	if [ "$found"x != "x" ]; then
-> + 	    crt_name='crt0-efi-'$ARCH'.o'
-> +-	    crt=`find $d -name $crt_name 2> /dev/null`
-> ++	    crt=`find $SYSROOT$d -name $crt_name 2> /dev/null`
-> + 	    if [ "$crt"x != "x" ]; then
-> +-		echo $d
-> ++		echo $SYSROOT$d
-> + 		break;
-> + 	    fi
-> + 	fi
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index bec132f..bf0bae5 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -15,6 +15,20 @@ SYSLINUX_INSTALL_IMAGES = YES
->  
->  SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
->  
-> +ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
-> +SYSLINUX_TARGET = bios
-
- If you follow my suggestion, this would become SYSLINUX_TARGETS of
-course. And +=
-
-
- Regards,
- Arnout
-
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_SYSLINUX_EFI),y)
-> +ifeq ($(BR2_ARCH_IS_64),y)
-> +SYSLINUX_EFI_BITS = efi64
-> +else
-> +SYSLINUX_EFI_BITS = efi32
-> +endif # 64-bit
-> +SYSLINUX_DEPENDENCIES += gnu-efi
-> +SYSLINUX_TARGET = $(SYSLINUX_EFI_BITS)
-> +endif # EFI
-> +
->  # The syslinux tarball comes with pre-compiled binaries.
->  # Since timestamps might not be in the correct order, a rebuild is
->  # not always triggered for all the different images.
-> @@ -30,7 +44,7 @@ SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
->  # be used.
->  define SYSLINUX_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> -	    AR="$(HOSTAR)" -C $(@D) bios
-> +	    AR="$(HOSTAR)" SYSROOT=$(STAGING_DIR) -C $(@D) $(SYSLINUX_TARGET)
->  endef
->  
->  define SYSLINUX_INSTALL_TARGET_CMDS
-> @@ -40,12 +54,13 @@ define SYSLINUX_INSTALL_TARGET_CMDS
->  	# Repeat CC and AR, since syslinux really wants to check them at
->  	# install time
->  	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
-> -	    AR="$(HOSTAR)" INSTALLROOT=$(HOST_DIR) \
-> -	    -C $(@D) bios install
-> +	    AR="$(HOSTAR)" SYSROOT=$(STAGING_DIR) INSTALLROOT=$(HOST_DIR) \
-> +	    -C $(@D) $(SYSLINUX_TARGET) install
->  endef
->  
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
-> +SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.efi
->  
->  define SYSLINUX_INSTALL_IMAGES_CMDS
->  	for i in $(SYSLINUX_IMAGES-y); do \
-> 
-
-
+Regards
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
