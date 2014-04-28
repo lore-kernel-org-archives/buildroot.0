@@ -1,96 +1,124 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 29 Apr 2014 00:15:16 +0200
-Subject: [Buildroot] [Patch v2 3/4] evemu: build python2 binding only if
-	target python2 is enabled
-Message-ID: <1398723316-11060-1-git-send-email-ps.report@gmx.net>
+Date: Tue, 29 Apr 2014 00:15:28 +0200
+Subject: [Buildroot] [Patch v2 4/4] evemu: enable python3 bindings
+Message-ID: <1398723328-11107-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add evemu/python3 related patches:
+- fix python/evemu/base.py for python3 (add patch from [1])
+- fix python3 binding runtime failure
+
+[1] http://ftp.de.debian.org/debian/pool/main/e/evemu/evemu_1.2.0-2.debian.tar.xz
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
+  - use original debian patch
   - remove patch numbering from patch subject (Arnout Vandecappelle)
-  - add explicit '--enable-python-bindings' (Arnout Vandecappelle)
 ---
- ...ure.ac-add-disable-python-bindings-option.patch | 46 ++++++++++++++++++++++
- package/evemu/evemu.mk                             |  9 +++++
- 2 files changed, 55 insertions(+)
- create mode 100644 package/evemu/evemu-0005-configure.ac-add-disable-python-bindings-option.patch
+ ...-fixes-the-syntax-for-raising-exceptions-.patch | 27 +++++++++++++++++
+ ...u-0007-python-fix-device-open-for-python3.patch | 35 ++++++++++++++++++++++
+ package/evemu/evemu.mk                             |  7 ++---
+ 3 files changed, 65 insertions(+), 4 deletions(-)
+ create mode 100644 package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
+ create mode 100644 package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
 
-diff --git a/package/evemu/evemu-0005-configure.ac-add-disable-python-bindings-option.patch b/package/evemu/evemu-0005-configure.ac-add-disable-python-bindings-option.patch
+diff --git a/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch b/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
 new file mode 100644
-index 0000000..f174c62
+index 0000000..cf3da8b
 --- /dev/null
-+++ b/package/evemu/evemu-0005-configure.ac-add-disable-python-bindings-option.patch
-@@ -0,0 +1,46 @@
-+From 3169736eab530cdbd5d123e7df10f51c44090e0b Mon Sep 17 00:00:00 2001
++++ b/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
+@@ -0,0 +1,27 @@
++Description: fixes the syntax for raising exceptions to be Python2 and Python3
++ acceptable.
++Author: Stephen M. Webb
++Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=706155
++
++--- a/python/evemu/base.py
+++++ b/python/evemu/base.py
++@@ -19,15 +19,15 @@
++     def _call0(self, api_call, *parameters):
++         result = api_call(*parameters)
++         if result == 0 and self.get_c_errno() != 0:
++-            raise exception.ExecutionError, "%s: %s" % (
++-                api_call.__name__, self.get_c_error())
+++            raise exception.ExecutionError("%s: %s" % (
+++                api_call.__name__, self.get_c_error()))
++         return result
++ 
++     def _call(self, api_call, *parameters):
++         result = api_call(*parameters)
++         if result < 0 and self.get_c_errno() != 0:
++-            raise exception.ExecutionError, "%s: %s" % (
++-                api_call.__name__, self.get_c_error())
+++            raise exception.ExecutionError("%s: %s" % (
+++                api_call.__name__, self.get_c_error()))
++         return result
++ 
++     def get_c_errno(self):
+diff --git a/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch b/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
+new file mode 100644
+index 0000000..ec989d2
+--- /dev/null
++++ b/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
+@@ -0,0 +1,35 @@
++From f192db7848962a1616e243bb60e705da6c6f3412 Mon Sep 17 00:00:00 2001
 +From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 27 Apr 2014 13:23:41 +0200
-+Subject: [PATCH] configure.ac: add '--disable-python-bindings' option
++Date: Sun, 27 Apr 2014 01:16:16 +0200
++Subject: [PATCH] python: fix device open for python3
++
++- use 'rb' instead of 'r+b', fixes:
++
++>>> import evemu
++>>> evemu.Device('/dev/input/event0')
++Traceback (most recent call last):
++  File "<stdin>", line 1, in <module>
++  File "/usr/lib/python3.4/site-packages/evemu/__init__.py", line 50, in __init__
++io.UnsupportedOperation: File or stream is not seekable.
 +
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ Makefile.am  |  2 +-
-+ configure.ac | 11 +++++++++++
-+ 2 files changed, 12 insertions(+), 1 deletion(-)
++ python/evemu/__init__.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index a83b35f..fb87c76 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,4 +1,4 @@
-+-SUBDIRS = src tools python $(SUBDIR_TESTS)
-++SUBDIRS = src tools $(SUBDIR_PYTHON_BINDINGS) $(SUBDIR_TESTS)
++diff --git a/python/evemu/__init__.py b/python/evemu/__init__.py
++index abdbf7e..aa73871 100644
++--- a/python/evemu/__init__.py
+++++ b/python/evemu/__init__.py
++@@ -47,7 +47,7 @@ class Device(object):
++         """
 + 
-+ pkgconfigdir = $(libdir)/pkgconfig
-+ pkgconfig_DATA = evemu.pc
-+diff --git a/configure.ac b/configure.ac
-+index 4e0c3b8..ab1b553 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -52,6 +52,17 @@ AS_IF([test "x$enable_tests" != "xno"], [
-+ 
-+ AC_SUBST([SUBDIR_TESTS])
-+ 
-++AC_ARG_ENABLE([python-bindings],
-++	AS_HELP_STRING([--disable-python-bindings],
-++		 [Disable generation of python bindings]))
-++
-++AS_IF([test "x$enable_python_bindings" != "xno"], [
-++	SUBDIR_PYTHON_BINDINGS=python
-++])
-++
-++AC_SUBST([SUBDIR_PYTHON_BINDINGS])
-++
-++
-+ AC_SUBST(AM_CFLAGS,
-+          "-Wall -Wextra -pedantic")
-+ 
++         if type(f).__name__ == 'str':
++-            self._file = open(f, 'r+b')
+++            self._file = open(f, 'rb')
++         elif type(f).__name__ == 'file':
++             self._file = f
++         else:
 +-- 
 +1.8.1.4
 +
 diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 07ad6f6..9ff9922 100644
+index 9ff9922..9f7f4af 100644
 --- a/package/evemu/evemu.mk
 +++ b/package/evemu/evemu.mk
-@@ -27,6 +27,15 @@ EVEMU_DEPENDENCIES = host-pkgconf libevdev
+@@ -27,11 +27,10 @@ EVEMU_DEPENDENCIES = host-pkgconf libevdev
  # Needs Python for header file generation
  EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
  
-+# Check for target python (python3 bindings disabled because
-+# of build/byte-compile problems)
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+EVEMU_CONF_OPT += --enable-python-bindings
-+EVEMU_DEPENDENCIES += python
-+else
-+EVEMU_CONF_OPT += --disable-python-bindings
-+endif
-+
- # package source code coming from git, so it doesn't have generated
- # configure and Makefile.in
- EVEMU_AUTORECONF = YES
+-# Check for target python (python3 bindings disabled because
+-# of build/byte-compile problems)
+-ifeq ($(BR2_PACKAGE_PYTHON),y)
++# Check for target python
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
+ EVEMU_CONF_OPT += --enable-python-bindings
+-EVEMU_DEPENDENCIES += python
++EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),python3,python)
+ else
+ EVEMU_CONF_OPT += --disable-python-bindings
+ endif
 -- 
 1.8.1.4
