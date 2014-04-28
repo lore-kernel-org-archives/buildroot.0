@@ -1,49 +1,37 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 21:20:05 +0200
-Subject: [Buildroot] [PATCH 2/4] gdb: arc: bump to git commit 816890e
-In-Reply-To: <1398703406-12157-2-git-send-email-Anton.Kolesov@synopsys.com>
-References: <1398703406-12157-1-git-send-email-Anton.Kolesov@synopsys.com>
- <1398703406-12157-2-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <535EA9E5.5010909@mind.be>
+Date: Mon, 28 Apr 2014 21:27:53 +0200
+Subject: [Buildroot] [PATCH 1/4] evemu: disable tests via evemu
+ configure option
+In-Reply-To: <1398711632-5831-2-git-send-email-ps.report@gmx.net>
+References: <1398711632-5831-1-git-send-email-ps.report@gmx.net>
+ <1398711632-5831-2-git-send-email-ps.report@gmx.net>
+Message-ID: <535EABB9.1040106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28/04/14 18:43, Anton Kolesov wrote:
-> This revision corresponds to the 4.8-R3 release of the ARC GNU Tool chain.
+On 28/04/14 21:00, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- Does that happen to have a tag in the repository? A tag looks nicer in
-the build directory (gcc-final-4.8-R3 rather than
-gcc-final-cb15acc5eecea46d041730e5c2c9fa1d4283ef25).
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
+ It would have been nice to have used evemu-0002-... instead of
+evemu-0005-.... It would also have been nice to avoid the [5/8] in the
+patch subject. But neither remark is critical.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 > ---
->  package/gdb/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-> index cbcec18..cf01b94 100644
-> --- a/package/gdb/Config.in.host
-> +++ b/package/gdb/Config.in.host
-> @@ -51,7 +51,7 @@ config BR2_GDB_VERSION
->  	                      (!BR2_PACKAGE_HOST_GDB && BR2_bfin)
->  	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
->                                     (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
-> -	default "cb15acc5eecea46d041730e5c2c9fa1d4283ef25" if BR2_arc
-> +	default "816890e5d1685c957bf7ae03c304246619e77882" if BR2_arc
->  	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
->  	default "7.4.1"    if BR2_GDB_VERSION_7_4
->  	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
-> 
-
+>  package/evemu/evemu-0002-disable-tests.patch       | 19 ----------
+>  ...005-configure.ac-add-disable-tests-option.patch | 44 ++++++++++++++++++++++
+>  package/evemu/evemu.mk                             |  3 ++
+>  3 files changed, 47 insertions(+), 19 deletions(-)
+>  delete mode 100644 package/evemu/evemu-0002-disable-tests.patch
+>  create mode 100644 package/evemu/evemu-0005-configure.ac-add-disable-tests-option.patch
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
