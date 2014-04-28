@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 07:55:30 +0200
-Subject: [Buildroot] [PATCH 1/9] boot/syslinux: needs an ia32-capable
- compiler
-In-Reply-To: <74ac3236bb1595c30d9fd230352e96ef29e0b3ad.1398378217.git.yann.morin.1998@free.fr>
+Date: Mon, 28 Apr 2014 07:57:08 +0200
+Subject: [Buildroot] [PATCH 4/9] boot/syslinux: rewrite options prompts
+In-Reply-To: <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
 References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <74ac3236bb1595c30d9fd230352e96ef29e0b3ad.1398378217.git.yann.morin.1998@free.fr>
-Message-ID: <535DED52.20500@mind.be>
+ <8977ed467510f41bf80553eb104ed93e52aac1c8.1398378217.git.yann.morin.1998@free.fr>
+Message-ID: <535DEDB4.4030601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +14,52 @@ To: buildroot@busybox.net
 On 25/04/14 00:29, Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
+> Rewrite the options prompt in preparation to adding a new
+> type of image to install.
+> 
+> Add help entries to each option, too.
+> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  boot/syslinux/Config.in | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+> index 1b8c527..b92f28f 100644
+> --- a/boot/syslinux/Config.in
+> +++ b/boot/syslinux/Config.in
+> @@ -12,10 +12,16 @@ config BR2_TARGET_SYSLINUX
+>  if BR2_TARGET_SYSLINUX
+>  
+>  config BR2_TARGET_SYSLINUX_ISOLINUX
+> -	bool "Install isolinux"
+> +	bool "isolinux"
+>  	default y
+> +	help
+> +	  Install the legacy BIOS 'isolinux' image, to boot off
 
- It would be good to mention in the commit log and/or the Config.in why
-this dependency is needed.  I thought it was because it uses -m32, but
-now I see that it doesn't...
+ This sounds like it's a legacy image... I'd just skip the word "legacy".
+BIOS is BIOS.
+
+> +	  optical medias (CDROM, DVD.)
+
+ The plural of medium is media, without s.
 
 
  Regards,
  Arnout
 
-> ---
->  boot/syslinux/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-> index 2c39e65..5b1122d 100644
-> --- a/boot/syslinux/Config.in
-> +++ b/boot/syslinux/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_TARGET_SYSLINUX
->  	bool "syslinux"
->  	depends on BR2_i386 || BR2_x86_64
-> +	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
->  	help
->  	  The syslinux bootloader for x86 systems.
->  	  This includes: syslinux, pxelinux, extlinux.
+>  
+>  config BR2_TARGET_SYSLINUX_PXELINUX
+> -	bool "Install pxelinux"
+> +	bool "pxelinux"
+> +	help
+> +	  Install the legacy BIOS 'pxelinux' image, to boot off
+> +	  the network using PXE.
+>  
+> -endif
+> +endif # BR2_TARGET_SYSLINUX
 > 
 
 
