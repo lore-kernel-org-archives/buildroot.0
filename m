@@ -1,124 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Apr 2014 18:23:12 +0200
-Subject: [Buildroot] [PATCH 9/9] boot/syslinux: add an option to install
- an MBR blob
-In-Reply-To: <ccf1ac950371fe7411ff812bb17958a8824be30d.1398378217.git.yann.morin.1998@free.fr>
-References: <cover.1398378217.git.yann.morin.1998@free.fr>
- <ccf1ac950371fe7411ff812bb17958a8824be30d.1398378217.git.yann.morin.1998@free.fr>
-Message-ID: <535E8070.9090405@mind.be>
+Date: Mon, 28 Apr 2014 18:26:16 +0200
+Subject: [Buildroot] [V2 1/2] pkg-perl: fix for Perl XS packages
+ configured by Makefile.PL
+In-Reply-To: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+References: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <535E8128.7020105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/04/14 00:30, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 24/04/14 18:26, Francois Perrad wrote:
+> ExtUtils::MakeMaker adds all the header files used by the perl as
+> dependencies to the generated Makefile. This means that the generated
+> Makefile will depend on the system's header files.
 > 
-> This MBR blob will look for an active partition, and boot the bootcode
-> present in that partition. This can be used to boot an extlinux-prepared
-> partition.
+> Usually this is not a problem, because when building the target package,
+> these header files will indeed be found in $(STAGING_DIR). However, some
+> distro's add an extra header file to the system's perl. This header is
+> also included in the generated Makefile, which makes the build fail
+> because it doesn't exist in $(STAGING_DIR).
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Lundquist <lists@zelow.no>
-> Cc: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  boot/syslinux/Config.in   | 13 ++++++++++++-
->  boot/syslinux/syslinux.mk |  1 +
->  2 files changed, 13 insertions(+), 1 deletion(-)
+> As a work-around, explicitly create this header file in $(STAGING_DIR).
+> It doesn't hurt to create it even if the system perl doesn't need it.
 > 
-> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-> index d556c55..7d4dd08 100644
-> --- a/boot/syslinux/Config.in
-> +++ b/boot/syslinux/Config.in
-> @@ -15,7 +15,7 @@ choice
->  
->  config BR2_TARGET_SYSLINUX_LEGACY_BIOS
->  	bool "bios (legacy)"
-> -	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_PXELINUX
-> +	select BR2_TARGET_SYSLINUX_ISOLINUX if !BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- Hm, I don't really like this very much. Adding complexity like this for
-behaviour which is not even really perfect...
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- Maybe we should just have
-
-comment "please select one or more images to generate"
-
-config BR2_TARGET_SYSLINUX_ISOLINUX
-
-config BR2_TARGET_SYSLINUX_PXELINUX
-
-config BR2_TARGET_SYSLINUX_MBR
-
-
-and drop all checking. I mean, if the user selects syslinux I guess he'll
-be smart enough to also select the actual tool(s) he needs. It's like
-util-linux: if you just select the package without selecting anything
-else, you'll also just end up with nothing. And I've never heard anyone
-complain about that. Let's keep things simple.
-
- Peter, judgement call on this one?
-
-
- Note: this invalidates my comments on 3/9, of course.
-
-
->  	help
->  	  Install one or more of the the legacy BIOS images:
->  	    - isolinux
-> @@ -31,6 +31,9 @@ endchoice
->  
->  if BR2_TARGET_SYSLINUX_LEGACY_BIOS
->  
-> +config BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
-> +	bool
-> +
->  config BR2_TARGET_SYSLINUX_ISOLINUX
->  	bool "isolinux"
->  	default y
-> @@ -40,10 +43,18 @@ config BR2_TARGET_SYSLINUX_ISOLINUX
->  
->  config BR2_TARGET_SYSLINUX_PXELINUX
->  	bool "pxelinux"
-> +	select BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
->  	help
->  	  Install the legacy BIOS 'pxelinux' image, to boot off
->  	  the network using PXE.
->  
-> +config BR2_TARGET_SYSLINUX_MBR
-> +	bool "mbr"
-> +	select BR2_TARGET_SYSLINUX_HAS_BIOS_IMG
-> +	help
-> +	  Install the legacy BIOS 'mbr' image, to boot off a
-
- See my comment in 4/9 about "legacy".
-
-
- BTW, while you're at it, perhaps you can add options for syslinux (=fat)
-and extlinux?
+(as usual, not tested, but I don't even see the error that this patch
+fixes, for lack of target perl packages).
 
 
  Regards,
  Arnout
 
-> +	  local MBR-partition.
+> ---
+>  package/perl/perl.mk | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index 51aeb14..64ad7d3 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -94,4 +94,25 @@ define PERL_INSTALL_TARGET_CMDS
+>  	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
+>  endef
+>  
+> +# perl infra: fix for Perl XS packages configured by Makefile.PL
+> +#
+> +# ExtUtils::MakeMaker adds all the header files used by the perl as
+> +# dependencies to the generated Makefile. This means that the generated
+> +# Makefile will depend on the system's header files.
+> +#
+> +# Usually this is not a problem, because when building the target package,
+> +# these header files will indeed be found in $(STAGING_DIR). However, some
+> +# distro's add an extra header file to the system's perl. This header is
+> +# also included in the generated Makefile, which makes the build fail
+> +# because it doesn't exist in $(STAGING_DIR).
+> +#
+> +# As a work-around, explicitly create this header file in $(STAGING_DIR).
+> +# It doesn't hurt to create it even if the system perl doesn't need it.
+> +#
+> +define PERL_ADD_PATCHLEVEL_DEBIAN_H
+> +	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
+> +endef
 > +
->  endif # BR2_TARGET_SYSLINUX_LEGACY_BIOS
->  
->  endif # BR2_TARGET_SYSLINUX
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index bf0bae5..c614b1d 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -60,6 +60,7 @@ endef
->  
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
-> +SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_MBR) += bios/mbr/mbr.bin
->  SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.efi
->  
->  define SYSLINUX_INSTALL_IMAGES_CMDS
+> +PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_PATCHLEVEL_DEBIAN_H
+> +
+>  $(eval $(generic-package))
 > 
 
 
