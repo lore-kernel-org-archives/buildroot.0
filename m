@@ -1,90 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Apr 2014 14:17:14 -0300
-Subject: [Buildroot] [PATCHv2] btrfs-progs: new package
-Message-ID: <1398791834-7347-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Apr 2014 19:56:45 +0200
+Subject: [Buildroot] [PATCH 0/2] Raspberry Pi bumps (branch yem/bumps)
+Message-ID: <cover.1398794127.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                  |  1 +
- package/btrfs-progs/Config.in      | 23 +++++++++++++++++++++++
- package/btrfs-progs/btrfs-progs.mk | 22 ++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
- create mode 100644 package/btrfs-progs/Config.in
- create mode 100644 package/btrfs-progs/btrfs-progs.mk
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/Config.in b/package/Config.in
-index bc7271f..9e3090b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -130,6 +130,7 @@ source "package/yasm/Config.in"
- endmenu
- 
- menu "Filesystem and flash utilities"
-+source "package/btrfs-progs/Config.in"
- source "package/cifs-utils/Config.in"
- source "package/cramfs/Config.in"
- source "package/curlftpfs/Config.in"
-diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-new file mode 100644
-index 0000000..dcd2ec5
---- /dev/null
-+++ b/package/btrfs-progs/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_BTRFS_PROGS
-+	bool "btrfs-progs"
-+	depends on BR2_LARGEFILE # acl, attr
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_MMU # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_ACL
-+	select BR2_PACKAGE_ATTR
-+	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Btrfs filesystem utilities
-+
-+	  https://btrfs.wiki.kernel.org/index.php/Main_Page
-+
-+comment "btrfs-progs needs a toolchain w/ largefile, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-new file mode 100644
-index 0000000..415ded2
---- /dev/null
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# btrfs-progs
-+#
-+################################################################################
-+
-+BTRFS_PROGS_VERSION = 3.14.1
-+BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/mason/btrfs-progs
-+BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
-+BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
-+BTRFS_PROGS_LICENSE = GPLv2
-+BTRFS_PROGS_LICENSE_FILES = COPYING
-+
-+define BTRFS_PROGS_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define BTRFS_PROGS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) prefix=/usr DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+Hello All!
+
+Here are two bumps related to the Raspberry Pi:
+  - firmware bump, with some enhancement, new features and fixes
+  - switch to using the a 3.12 long-term kernel
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit a72b73852568227ee948a380c720756fbbdbec46:
+
+  upstream glibc 2.18/2.19 works fine with microblaze (2014-04-28 22:16:37 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/bumps
+
+for you to fetch changes up to 5efda6750ee674d89ab6d3ce4cf140930c107ea7:
+
+  configs: bump raspberrypi_defconfig to use latest rpi-3.12.y (2014-04-29 19:45:49 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/rpi-firmware: bump for enhancements and bug fixes
+      configs: bump raspberrypi_defconfig to use latest rpi-3.12.y
+
+ configs/raspberrypi_defconfig        | 6 +++---
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
