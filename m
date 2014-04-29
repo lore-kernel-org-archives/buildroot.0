@@ -1,60 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Apr 2014 00:03:51 +0200
-Subject: [Buildroot] [PATCH] target-finalize: avoid stripping kernel
- modules with incorrect permissions
-In-Reply-To: <7d963df83be71e515c67.1398797646@argentina>
-References: <7d963df83be71e515c67.1398797646@argentina>
-Message-ID: <536021C7.6030105@mind.be>
+Date: Wed, 30 Apr 2014 00:05:57 +0200
+Subject: [Buildroot] [PATCH] give a hint about git rebase
+In-Reply-To: <1398799827-13701-1-git-send-email-wbx@openadk.org>
+References: <1398799827-13701-1-git-send-email-wbx@openadk.org>
+Message-ID: <53602245.4050008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/14 20:54, Thomas De Schampheleire wrote:
-> If a kernel module is installed with incorrect permissions (0755 iso 0644),
-> it would get stripped in a way that would render the kernel module broken.
-> While the incorrect permissions are a developer error, it is a minor change
-> to prevent this mistake from causing incorrectly stripped modules.
+On 29/04/14 21:30, Waldemar Brodkorb wrote:
+> It seems common knowledge to use git rebase in interactive mode
+> to fixup issues while respinning patch series, but I found it hard
+> to find any hint about it. Add a note for git beginners like me.
 > 
-> This was reported with bug #6992:
-> https://bugs.busybox.net/show_bug.cgi?id=6992
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  Makefile |  2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
+>  docs/manual/contribute.txt |    2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Makefile b/Makefile
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -507,7 +507,7 @@ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUD
->  STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
->  endif
->  STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
-> -STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
-> +STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> index 47494cb..7795e71 100644
+> --- a/docs/manual/contribute.txt
+> +++ b/docs/manual/contribute.txt
+> @@ -230,6 +230,8 @@ should include a changelog of the modifications between each
+>  submission. Note that when your patch series is introduced by a cover
+>  letter, an overall changelog may be added to the cover letter in
+>  addition to the changelog in the individual commits.
+> +The best thing to rework a patch series is by using +git rebase+
+> +in interactive mode.
 
- The *.ko is a bit lost between the others, so maybe add a comment to
-explain why libpthread*.so* and *.ko are excluded.
+ If you're making such a suggestion, it's good to provide just a little
+bit more information:
 
- But that's optional and may be a separate patch, hence my Ack on this
-one already.
+The best thing to rework a patch series is by interactive rebasing: +git
+rebase -i origin/master+. Consult the git manual for more information.
+
 
  Regards,
  Arnout
 
 >  
->  $(TARGETS_ROOTFS): target-finalize
->  
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  When added to the individual commits, this changelog is added when
+>  editing the commit message.  Below the +Signed-off-by+ section, add
 > 
 
 
