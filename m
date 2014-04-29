@@ -1,45 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Apr 2014 07:22:51 +0200
-Subject: [Buildroot] [PATCH 1/1] xlib_libXpm: needs MMU (fork)
-In-Reply-To: <1398540667-23731-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1398540667-23731-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140429072251.2ccd99fd@skate>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Tue, 29 Apr 2014 07:28:42 +0200
+Subject: [Buildroot] [RFC PATCH 0/2] gitorious helper
+In-Reply-To: <9a8529fc-851d-4302-9198-67a100db0f26@email.android.com>
+References: <1387988339-17460-1-git-send-email-alexandre.belloni@free-electrons.com>
+ <CAAXf6LWy3cXCxTLZcPo+pgXeHjNwc2+uVGyJZZLYJ8RP2rCFHA@mail.gmail.com>
+ <20140110163510.1d2c8d8a@skate> <20140429051126.GA32291@piout.net>
+ <9a8529fc-851d-4302-9198-67a100db0f26@email.android.com>
+Message-ID: <20140429052841.GB32291@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
-
-On Sat, 26 Apr 2014 21:31:07 +0200, Bernd Kuhls wrote:
-> Fixes http://autobuild.buildroot.net/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
+On 29/04/2014 at 07:18:08 +0200, Thomas De Schampheleire wrote :
+> Alexandre Belloni <alexandre.belloni@free-electrons.com> schreef:
+> >After discussing quickly with Thomas, we feel that we can drop it as
+> >this would not really help with readability.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xlib_libXpm/Config.in |    1 +
->  1 file changed, 1 insertion(+)
+> Readability wasn't the only reason such helpers were introduced. For github, the download urls changed a few times, and having it coded in only one place made changing this much easier.
+> So if that us the only reason I prefer to keep this patch. I'm willing to adopt it by the way...
 > 
-> diff --git a/package/x11r7/xlib_libXpm/Config.in b/package/x11r7/xlib_libXpm/Config.in
-> index 528498c..077041a 100644
-> --- a/package/x11r7/xlib_libXpm/Config.in
-> +++ b/package/x11r7/xlib_libXpm/Config.in
-> @@ -4,5 +4,6 @@ config BR2_PACKAGE_XLIB_LIBXPM
->  	select BR2_PACKAGE_XLIB_LIBXEXT
->  	select BR2_PACKAGE_XLIB_LIBXT
->  	select BR2_PACKAGE_XPROTO_XPROTO
-> +	depends on BR2_USE_MMU # fork()
->  	help
->  	  X.Org Xpm library
 
-Remember that you need to propagate the BR2_USE_MMU dependency to the
-reverse dependencies that select xlib_libXpm. So as it is, the patch is
-not sufficient, as far as I can see.
+Feel free to adopt it but I'm not sure we can have something easy to use
+and elegant.
 
-Thanks!
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
+Alexandre Belloni, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
