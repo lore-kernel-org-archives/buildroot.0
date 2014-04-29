@@ -1,99 +1,220 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 29 Apr 2014 17:32:34 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: target-purgelocales: fix top-level
-	parallel make support
-Message-ID: <1398785554-6797-1-git-send-email-fabio.porcedda@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Apr 2014 13:37:42 -0300
+Subject: [Buildroot] [PATCH] gcc: switch microblaze to version 4.9.x
+Message-ID: <1398789462-11177-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The "target-purgelocales" target must be executed after all the other
-targets and before the "target-finalize" target, so create a
-TARGET_PURGE_LOCALES variable containing the commands of the target
-"target-purgelocales" and add it at the beginning of the
-"target-finalize" target.
+Switch to gcc 4.9.x for microblaze since it's a better target than
+4.8.x, and also add a build patch that fixes (e)glibc build issues.
+Hence disable 4.8.x for microblaze.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v2:
-  - rewrite the patch following Arnout suggestion
+ .../840-microblaze-enable-dwarf-eh-support.patch   | 169 +++++++++++++++++++++
+ package/gcc/Config.in.host                         |   4 +-
+ 2 files changed, 171 insertions(+), 2 deletions(-)
+ create mode 100644 package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch
 
- Makefile | 40 +++++++++++++++++++---------------------
- 1 file changed, 19 insertions(+), 21 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index eff408b..00e9798 100644
---- a/Makefile
-+++ b/Makefile
-@@ -391,10 +391,6 @@ include system/system.mk
- 
- include $(BR2_EXTERNAL)/external.mk
- 
--ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
--TARGETS += target-purgelocales
--endif
--
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- ifneq ($(GENERATE_LOCALE),)
- TARGETS += target-generatelocales
-@@ -509,9 +505,28 @@ endif
- STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
- 
-+ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
-+LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
-+LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+diff --git a/package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch b/package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch
+new file mode 100644
+index 0000000..e116e2b
+--- /dev/null
++++ b/package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch
+@@ -0,0 +1,169 @@
++Fetched from Xilinx gcc git at https://github.com/Xilinx/gcc
 +
-+define TARGET_PURGE_LOCALES
-+	rm -f $(LOCALE_WHITELIST)
-+	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
++From 23c35173490ac2d6348a668dfc9c1a6eb62171f2 Mon Sep 17 00:00:00 2001
++From: "Edgar E. Iglesias" <edgar.iglesias@gmail.com>
++Date: Mon, 18 Jun 2012 20:18:13 +0200
++Subject: [PATCH] [Patch, microblaze]: Enable DWARF exception handling support.
 +
-+	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
-+	do \
-+		for lang in $$(cd $$dir; ls .|grep -v man); \
-+		do \
-+			grep -qx $$lang $(LOCALE_WHITELIST) || rm -rf $$dir/$$lang; \
-+		done; \
-+	done
-+endef
-+endif
++Changelog
 +
- $(TARGETS_ROOTFS): target-finalize
++2013-03-18  Edgar E. Iglesias <edgar.iglesias@xilinx.com>
++            David Holsgrove <david.holsgrove@xilinx.com>
++
++ * common/config/microblaze/microblaze-common.c: Remove
++   TARGET_EXCEPT_UNWIND_INFO definition.
++ * config/microblaze/microblaze-protos.h: Add
++   microblaze_eh_return prototype.
++ * gcc/config/microblaze/microblaze.c: (microblaze_must_save_register,
++   microblaze_expand_epilogue, microblaze_return_addr): Handle
++   calls_eh_return
++   (microblaze_eh_return): New function.
++ * gcc/config/microblaze/microblaze.h: Define RETURN_ADDR_OFFSET,
++   EH_RETURN_DATA_REGNO, MB_EH_STACKADJ_REGNUM, EH_RETURN_STACKADJ_RTX,
++   ASM_PREFERRED_EH_DATA_FORMAT
++ * gcc/config/microblaze/microblaze.md: Define eh_return pattern.
++
++Signed-off-by: David Holsgrove <david.holsgrove@xilinx.com>
++Signed-off-by: Edgar E. Iglesias <edgar.iglesias@gmail.com>
++---
++ gcc/common/config/microblaze/microblaze-common.c |  3 ---
++ gcc/config/microblaze/microblaze-protos.h        |  1 +
++ gcc/config/microblaze/microblaze.c               | 29 ++++++++++++++++++++----
++ gcc/config/microblaze/microblaze.h               | 15 ++++++++++++
++ gcc/config/microblaze/microblaze.md              | 11 +++++++++
++ 5 files changed, 52 insertions(+), 7 deletions(-)
++
++diff --git a/gcc/common/config/microblaze/microblaze-common.c b/gcc/common/config/microblaze/microblaze-common.c
++index 5835acc..85e6a53 100644
++--- a/gcc/common/config/microblaze/microblaze-common.c
+++++ b/gcc/common/config/microblaze/microblaze-common.c
++@@ -39,7 +39,4 @@ static const struct default_options microblaze_option_optimization_table[] =
++ #undef  TARGET_OPTION_OPTIMIZATION_TABLE
++ #define TARGET_OPTION_OPTIMIZATION_TABLE microblaze_option_optimization_table
++ 
++-#undef TARGET_EXCEPT_UNWIND_INFO
++-#define TARGET_EXCEPT_UNWIND_INFO  sjlj_except_unwind_info
++-
++ struct gcc_targetm_common targetm_common = TARGETM_COMMON_INITIALIZER;
++diff --git a/gcc/config/microblaze/microblaze-protos.h b/gcc/config/microblaze/microblaze-protos.h
++index c30ec72..260f4e4 100644
++--- a/gcc/config/microblaze/microblaze-protos.h
+++++ b/gcc/config/microblaze/microblaze-protos.h
++@@ -56,6 +56,7 @@ extern bool microblaze_tls_referenced_p (rtx);
++ extern int symbol_mentioned_p (rtx);
++ extern int label_mentioned_p (rtx);
++ extern bool microblaze_cannot_force_const_mem (enum machine_mode, rtx);
+++extern void microblaze_eh_return (rtx op0);
++ #endif  /* RTX_CODE */
++ 
++ /* Declare functions in microblaze-c.c.  */
++diff --git a/gcc/config/microblaze/microblaze.c b/gcc/config/microblaze/microblaze.c
++index fe61fce..15166d3 100644
++--- a/gcc/config/microblaze/microblaze.c
+++++ b/gcc/config/microblaze/microblaze.c
++@@ -1999,6 +1999,11 @@ microblaze_must_save_register (int regno)
++   if (frame_pointer_needed && (regno == HARD_FRAME_POINTER_REGNUM))
++     return 1;
++ 
+++  if (crtl->calls_eh_return
+++      && regno == MB_ABI_SUB_RETURN_ADDR_REGNUM) {
+++    return 1;
+++  }
+++
++   if (!crtl->is_leaf)
++     {
++       if (regno == MB_ABI_SUB_RETURN_ADDR_REGNUM)
++@@ -2026,6 +2031,13 @@ microblaze_must_save_register (int regno)
++ 	return 1;
++     }
++ 
+++  if (crtl->calls_eh_return
+++      && (regno == EH_RETURN_DATA_REGNO (0)
+++          || regno == EH_RETURN_DATA_REGNO (1)))
+++    {
+++      return 1;
+++    }
+++
++   return 0;
++ }
++ 
++@@ -3131,6 +3143,12 @@ microblaze_expand_epilogue (void)
++       emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, fsiz_rtx));
++     }
++ 
+++  if (crtl->calls_eh_return)
+++    emit_insn (gen_addsi3 (stack_pointer_rtx,
+++                           stack_pointer_rtx,
+++                           gen_rtx_raw_REG (SImode,
+++                                            MB_EH_STACKADJ_REGNUM)));
+++
++   emit_jump_insn (gen_return_internal (gen_rtx_REG (Pmode, GP_REG_FIRST +
++ 						    MB_ABI_SUB_RETURN_ADDR_REGNUM)));
++ }
++@@ -3427,10 +3445,13 @@ microblaze_return_addr (int count, rtx frame ATTRIBUTE_UNUSED)
++   if (count != 0)
++     return NULL_RTX;
++ 
++-  return gen_rtx_PLUS (Pmode,
++-		       get_hard_reg_initial_val (Pmode,
++-						 MB_ABI_SUB_RETURN_ADDR_REGNUM),
++-		       GEN_INT (8));
+++  return get_hard_reg_initial_val (Pmode,
+++                                   MB_ABI_SUB_RETURN_ADDR_REGNUM);
+++}
+++
+++void microblaze_eh_return (rtx op0)
+++{
+++  emit_insn (gen_movsi(gen_rtx_MEM(Pmode, stack_pointer_rtx), op0));
++ }
++ 
++ /* Queue an .ident string in the queue of top-level asm statements.
++diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
++index 4072283..5e9f49c 100644
++--- a/gcc/config/microblaze/microblaze.h
+++++ b/gcc/config/microblaze/microblaze.h
++@@ -184,6 +184,21 @@ extern enum pipeline_type microblaze_pipe;
++ #define INCOMING_RETURN_ADDR_RTX  			\
++   gen_rtx_REG (VOIDmode, GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
++ 
+++/* Specifies the offset from INCOMING_RETURN_ADDR_RTX and the actual return PC.  */
+++#define RETURN_ADDR_OFFSET (8)
+++
+++/* Describe how we implement __builtin_eh_return.  */
+++#define EH_RETURN_DATA_REGNO(N) (((N) < 2) ? MB_ABI_FIRST_ARG_REGNUM + (N) : INVALID_REGNUM)
+++
+++#define MB_EH_STACKADJ_REGNUM  MB_ABI_INT_RETURN_VAL2_REGNUM
+++#define EH_RETURN_STACKADJ_RTX  gen_rtx_REG (Pmode, MB_EH_STACKADJ_REGNUM)
+++
+++/* Select a format to encode pointers in exception handling data.  CODE
+++   is 0 for data, 1 for code labels, 2 for function pointers.  GLOBAL is
+++   true if the symbol may be affected by dynamic relocations.  */
+++#define ASM_PREFERRED_EH_DATA_FORMAT(CODE,GLOBAL) \
+++  ((flag_pic || GLOBAL) ? DW_EH_PE_aligned : DW_EH_PE_absptr)
+++
++ /* Use DWARF 2 debugging information by default.  */
++ #define DWARF2_DEBUGGING_INFO
++ #define PREFERRED_DEBUGGING_TYPE DWARF2_DEBUG
++diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microblaze.md
++index ed6131a..dc2405f 100644
++--- a/gcc/config/microblaze/microblaze.md
+++++ b/gcc/config/microblaze/microblaze.md
++@@ -2327,4 +2327,15 @@
++   (set_attr "mode"      "SI")
++   (set_attr "length"    "4")])
++ 
+++; This is used in compiling the unwind routines.
+++(define_expand "eh_return"
+++  [(use (match_operand 0 "general_operand" ""))]
+++  ""
+++  "
+++{
+++  microblaze_eh_return(operands[0]);
+++  DONE;
+++}")
+++
++ (include "sync.md")
+++
++-- 
++1.8.3.2
++
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 6c2f753..c66382e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -9,7 +9,7 @@ choice
+ 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GCC_VERSION_4_8_X if BR2_aarch64
+ 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
+-	default BR2_GCC_VERSION_4_8_X if BR2_microblaze
++	default BR2_GCC_VERSION_4_9_X if BR2_microblaze
+ 	default BR2_GCC_VERSION_4_5_X if BR2_bfin
+ 	default BR2_GCC_VERSION_4_7_X
+ 	help
+@@ -50,7 +50,7 @@ choice
+ 		bool "gcc 4.7.x"
  
- target-finalize: $(TARGETS)
-+	$(TARGET_PURGE_LOCALES)
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
-@@ -575,23 +590,6 @@ endif
- 		$(call MESSAGE,"Executing post-build script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+ 	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
+ 		bool "gcc 4.8.x"
  
--ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
--LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
--LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
--
--target-purgelocales:
--	rm -f $(LOCALE_WHITELIST)
--	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
--
--	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
--	do \
--		for lang in $$(cd $$dir; ls .|grep -v man); \
--		do \
--			grep -qx $$lang $(LOCALE_WHITELIST) || rm -rf $$dir/$$lang; \
--		done; \
--	done
--endif
--
- ifneq ($(GENERATE_LOCALE),)
- # Generate locale data. Basically, we call the localedef program
- # (built by the host-localedef package) for each locale. The input
 -- 
 1.8.3.2
