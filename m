@@ -1,34 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Apr 2014 00:27:51 +0200
-Subject: [Buildroot] [git commit] gcc: fixup "standard" gcc location after
-	'use default gcc 4.8.2 for microblaze'
-Message-ID: <20140429223019.DE4AC9CA6F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Apr 2014 00:52:49 +0200
+Subject: [Buildroot] Patchwork cleanup #8: submitter notification
+In-Reply-To: <20140429210905.GE3248@free.fr>
+References: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
+ <20140429210905.GE3248@free.fr>
+Message-ID: <20140430005249.2d0f01de@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42ebd7475d3fc94590645182ed8ea8a4aa15197c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Somehow the 'else' part got dropped from commit 3f82e9dbcd (use default gcc
-4.8.2 for microblaze), breaking download for "normal" architectures.
+On Tue, 29 Apr 2014 23:09:05 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gcc/gcc.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> However, I can se one case where we would want to be able to set
+> ownership and/or permissions on a synlink: to avoid the identity of the
+> "builder" to seep down into the generated filesystem. But even in that
+> case, only the numerical UID would end up in the generated filesystem,
+> so it is not really a concern.
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 3fe2844..3274821 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -22,6 +22,7 @@ GCC_SITE = ftp://www.at91.com/pub/buildroot/
- else ifeq ($(BR2_arc),y)
- GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
-+else
- GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
- endif
- 
+We do a "chown -R 0:0" on all files in the root filesystem, before
+taking into account device tables. So I don't see how an ownership on
+the build machine can leak into the generated root filesystem.
+
+See fs/common.mk to see where's it's done.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
