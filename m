@@ -1,36 +1,33 @@
-From: Dan Moulding <dan.moulding@rackwareinc.com>
-Date: Tue, 29 Apr 2014 09:12:58 -0600
-Subject: [Buildroot] [PATCH] Create /dev/null device node when building a
-	cpio rootfs
-In-Reply-To: <1398784378-20251-1-git-send-email-dan.moulding@rackwareinc.com>
-References: <1398784378-20251-1-git-send-email-dan.moulding@rackwareinc.com>
-Message-ID: <1398784378-20251-2-git-send-email-dan.moulding@rackwareinc.com>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Tue, 29 Apr 2014 19:31:11 +0400
+Subject: [Buildroot] [PATCH v2 1/4] uclibc: arc: bump to arc-4.8-R3 release
+In-Reply-To: <535EA9E5.5010909@mind.be>
+References: <535EA9E5.5010909@mind.be>
+Message-ID: <1398785474-17540-1-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This allows mdev to be used for automatic device creation, even if the
-kernel doesn't support devtmpfs. The programs that run before mdev
-(e.g. init) expect /dev/null to already exist.
-
-Signed-off-by: Dan Moulding <dan.moulding@rackwareinc.com>
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 ---
- fs/cpio/cpio.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/uclibc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-index 771306c..8648ed9 100644
---- a/fs/cpio/cpio.mk
-+++ b/fs/cpio/cpio.mk
-@@ -22,6 +22,7 @@ define ROOTFS_CPIO_ADD_INIT
- endef
- 
- PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
-+PACKAGES_PERMISSIONS_TABLE += /dev/null c 666 0 0 1 3 - - -$(sep)
- 
- endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 2b93660..cc244a9 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -42,7 +42,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+ 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+-	default "f37101d94284c692ee9b23bc72ef38b9473cd316" if BR2_arc
++	default "arc-4.8-R3"	if BR2_arc
+ 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
  
 -- 
-1.8.2.1
+1.8.4.1
