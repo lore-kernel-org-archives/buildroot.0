@@ -1,74 +1,113 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Apr 2014 18:49:14 +0200
-Subject: [Buildroot] [PATCH 6/9] package/upx: new package
+Date: Tue, 29 Apr 2014 18:49:15 +0200
+Subject: [Buildroot] [PATCH 7/9] boot/syslinux: bump version
 In-Reply-To: <cover.1398789775.git.yann.morin.1998@free.fr>
 References: <cover.1398789775.git.yann.morin.1998@free.fr>
-Message-ID: <fe74c338bb8072b838c0452a9f6ff7fb7a036551.1398789775.git.yann.morin.1998@free.fr>
+Message-ID: <e214e956faa1c2ff0f03ce351cb8f6b0199250d0.1398789775.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Frank Hunleth <fhunleth@troodon-software.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-UPX is a free, portable, extendable, high-performance executable
-packer for several executable formats.
+This new version has a very, very weird build system. There are different
+images that syslinux can now build:
+  - the plain legacy-bios images we already supported previously
+  - two new EFI32 and EFI64 applications
 
-This is needed for syslinux 6.x.
+To build one or the other, the Makefile accepts one or more of:
+    make (bios|efi32|efi64)
 
-Note: upx is a host-only package. Although it supports quite a few
-target architectures, the only use so far wil be syslinux, which
-already has an x86-on-x86 requirement anyway. So we currently do
-not care to have target-dependencies on host-upx.
+Specify all of them, and it builds all. Specify 'install', and it installs
+all of them, as one may expect.
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-[yann.morin.1998 at free.fr: builds fine in parallel; fix build to
- locate libucl; fix installation; don't add a menuconfig entry]
+Still a regular behaviour, is to build only a subset (down to one):
+    make bios           <-- builds just the legacy-bios images
+    make efi32 bios     <-- builds just the legacy-bios and efi32 images
+
+Where it gets weird is the install procedure. Can you guess how it's done?
+Hint: the syslinux guys have invented the multiple-argument parsing in
+pure Makefiles. To build then install only the bios images, one would do:
+    make bios
+    make bios install
+
+Yep, that's it. make bios install. Two arguments, one action.
+
+That makes for some funky workarounds in our install procedure...
+
+'bios' is the only image we support so far, with efi to come in a future
+patch.
+
+Using MAKE1, as there are issues with highly-parallel builds.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
 ---
-Changes v1 -> v2:
-  - slightly improve on the commit log about host <-> target
-    architectutre limitations  (Arnout)
----
- package/upx/upx.mk | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/upx/upx.mk
+ boot/syslinux/syslinux.mk | 32 ++++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-new file mode 100644
-index 0000000..a039376
---- /dev/null
-+++ b/package/upx/upx.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# upx
-+#
-+################################################################################
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index a1eb394..bec132f 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -4,32 +4,48 @@
+ #
+ ################################################################################
+ 
+-SYSLINUX_VERSION = 4.07
+-SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.bz2
+-SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/4.xx/
++SYSLINUX_VERSION = 6.02
++SYSLINUX_SOURCE  = syslinux-$(SYSLINUX_VERSION).tar.xz
++SYSLINUX_SITE    = $(BR2_KERNEL_MIRROR)/linux/utils/boot/syslinux/
+ 
+ SYSLINUX_LICENSE = GPLv2+
+ SYSLINUX_LICENSE_FILES = COPYING
+ 
+ SYSLINUX_INSTALL_IMAGES = YES
+ 
+-SYSLINUX_DEPENDENCIES = host-nasm host-util-linux
++SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
 +
-+UPX_VERSION = 3.91
-+UPX_SITE = http://upx.sourceforge.net/download/
-+UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.bz2
-+UPX_LICENSE = GPLv2+
-+UPX_LICENSE_FILES = COPYING
-+
-+HOST_UPX_DEPENDENCIES = host-ucl
-+
-+# We need to specify all, otherwise the default target only prints a message
-+# stating to "please choose a target for 'make'"... :-(
-+define HOST_UPX_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
-+	    LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR)/usr \
-+	    -C $(@D) all
++# The syslinux tarball comes with pre-compiled binaries.
++# Since timestamps might not be in the correct order, a rebuild is
++# not always triggered for all the different images.
++# Cleanup the mess even before we attempt a build, so we indeed
++# build everything from source.
++define SYSLINUX_CLEANUP
++	rm -rf $(@D)/bios $(@D)/efi32 $(@D)/efi64
 +endef
-+
-+# UPX has no install procedure, so install it manually.
-+define HOST_UPX_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/upx.out $(HOST_DIR)/usr/bin/upx
-+endef
-+
-+$(eval $(host-generic-package))
++SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
+ 
+ # syslinux build system has no convenient way to pass CFLAGS,
+ # and the internal zlib should take precedence so -I shouldn't
+ # be used.
+ define SYSLINUX_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" AR="$(HOSTAR)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
++	    AR="$(HOSTAR)" -C $(@D) bios
+ endef
+ 
+ define SYSLINUX_INSTALL_TARGET_CMDS
+ 	# While the actual bootloader is compiled for the target, several
+ 	# utilities for installing the bootloader are meant for the host.
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
++	# Repeat the target, otherwise syslinux will try to build everything
++	# Repeat CC and AR, since syslinux really wants to check them at
++	# install time
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
++	    AR="$(HOSTAR)" INSTALLROOT=$(HOST_DIR) \
++	    -C $(@D) bios install
+ endef
+ 
+-SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += core/isolinux.bin
+-SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += core/pxelinux.bin
++SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
++SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
+ 
+ define SYSLINUX_INSTALL_IMAGES_CMDS
+ 	for i in $(SYSLINUX_IMAGES-y); do \
 -- 
 1.8.3.2
