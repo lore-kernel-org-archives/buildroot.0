@@ -1,85 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Apr 2014 22:14:27 +0200
-Subject: [Buildroot] [git commit] use default gcc 4.8.2 for microblaze
-Message-ID: <20140429125019.14E319C9C5@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Apr 2014 09:53:33 -0300
+Subject: [Buildroot] [PATCH] glibc: fix build for microblaze
+Message-ID: <1398776013-9322-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3f82e9dbcd6d066841f85c881bdc9beb591bc744
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add a conditional patch to get glibc building for microblaze toolchains,
+see https://sourceware.org/ml/libc-help/2014-04/msg00020.html
 
-Upstream gcc 4.8.2 works fine for microblaze, no need for
-Xilinx Git.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gcc/Config.in.host |   12 +++---------
- package/gcc/gcc.mk         |    4 ----
- 2 files changed, 3 insertions(+), 13 deletions(-)
+ ...icroblaze-link-with-libgcc_eh.patch.conditional | 23 ++++++++++++++++++++++
+ ...icroblaze-link-with-libgcc_eh.patch.conditional | 23 ++++++++++++++++++++++
+ package/glibc/glibc.mk                             |  9 +++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 package/glibc/2.18/glibc-microblaze-link-with-libgcc_eh.patch.conditional
+ create mode 100644 package/glibc/2.19/glibc-microblaze-link-with-libgcc_eh.patch.conditional
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ca991da..6c2f753 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -9,7 +9,7 @@ choice
- 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
- 	default BR2_GCC_VERSION_4_8_X if BR2_aarch64
- 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
--	default BR2_GCC_VERSION_4_9_MICROBLAZE if BR2_microblaze
-+	default BR2_GCC_VERSION_4_8_X if BR2_microblaze
- 	default BR2_GCC_VERSION_4_5_X if BR2_bfin
- 	default BR2_GCC_VERSION_4_7_X
- 	help
-@@ -50,7 +50,7 @@ choice
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.8.x"
- 
-@@ -64,13 +64,8 @@ choice
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.9.x"
- 
--	config BR2_GCC_VERSION_4_9_MICROBLAZE
--		depends on BR2_microblaze
--		select BR2_GCC_NEEDS_MPC
--		bool "gcc 4.9-microblaze"
--
- 	config BR2_GCC_VERSION_SNAP
--		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc snapshot"
- endchoice
-@@ -104,7 +99,6 @@ config BR2_GCC_VERSION
- 	default "4.8.2"     if BR2_GCC_VERSION_4_8_X
- 	default "4.9.0"     if BR2_GCC_VERSION_4_9_X
- 	default "c6227bc154124e270f15793deddfa3fe18f7db54" if BR2_GCC_VERSION_4_8_ARC
--	default "b93bb009e021aba64dd4b8cdb0bbc5a176c55543" if BR2_GCC_VERSION_4_9_MICROBLAZE
- 	default BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 32219cc..3fe2844 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -22,10 +22,6 @@ GCC_SITE = ftp://www.at91.com/pub/buildroot/
- else ifeq ($(BR2_arc),y)
- GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
--else ifeq ($(BR2_microblaze),y)
--GCC_SITE = $(call github,Xilinx,gcc,$(GCC_VERSION))
--GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
--else
- GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+diff --git a/package/glibc/2.18/glibc-microblaze-link-with-libgcc_eh.patch.conditional b/package/glibc/2.18/glibc-microblaze-link-with-libgcc_eh.patch.conditional
+new file mode 100644
+index 0000000..2ec1662
+--- /dev/null
++++ b/package/glibc/2.18/glibc-microblaze-link-with-libgcc_eh.patch.conditional
+@@ -0,0 +1,23 @@
++Temporary workaround to make it build, see:
++https://sourceware.org/ml/libc-help/2014-04/msg00020.html
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nur glibc-2.19.orig/Makeconfig glibc-2.19/Makeconfig
++--- glibc-2.19.orig/Makeconfig	2014-02-07 10:04:38.000000000 +0100
+++++ glibc-2.19/Makeconfig	2014-04-11 08:22:27.000000000 +0200
++@@ -559,12 +559,12 @@
++ # statically link programs.  When --disable-shared is used, we use
++ # -lgcc_eh since elf/static-stubs.o isn't sufficient.
++ ifeq (yes,$(build-shared))
++-static-gnulib = -lgcc $(static-gnulib-arch)
+++static-gnulib = -lgcc -lgcc_eh $(static-gnulib-arch)
++ else
++ static-gnulib = -lgcc -lgcc_eh $(static-gnulib-arch)
++ endif
++ static-gnulib-tests := -lgcc -lgcc_eh $(libunwind)
++-libc.so-gnulib := -lgcc
+++libc.so-gnulib := -lgcc -lgcc_eh
++ endif
++ +preinit = $(addprefix $(csu-objpfx),crti.o)
++ +postinit = $(addprefix $(csu-objpfx),crtn.o)
+diff --git a/package/glibc/2.19/glibc-microblaze-link-with-libgcc_eh.patch.conditional b/package/glibc/2.19/glibc-microblaze-link-with-libgcc_eh.patch.conditional
+new file mode 100644
+index 0000000..2ec1662
+--- /dev/null
++++ b/package/glibc/2.19/glibc-microblaze-link-with-libgcc_eh.patch.conditional
+@@ -0,0 +1,23 @@
++Temporary workaround to make it build, see:
++https://sourceware.org/ml/libc-help/2014-04/msg00020.html
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nur glibc-2.19.orig/Makeconfig glibc-2.19/Makeconfig
++--- glibc-2.19.orig/Makeconfig	2014-02-07 10:04:38.000000000 +0100
+++++ glibc-2.19/Makeconfig	2014-04-11 08:22:27.000000000 +0200
++@@ -559,12 +559,12 @@
++ # statically link programs.  When --disable-shared is used, we use
++ # -lgcc_eh since elf/static-stubs.o isn't sufficient.
++ ifeq (yes,$(build-shared))
++-static-gnulib = -lgcc $(static-gnulib-arch)
+++static-gnulib = -lgcc -lgcc_eh $(static-gnulib-arch)
++ else
++ static-gnulib = -lgcc -lgcc_eh $(static-gnulib-arch)
++ endif
++ static-gnulib-tests := -lgcc -lgcc_eh $(libunwind)
++-libc.so-gnulib := -lgcc
+++libc.so-gnulib := -lgcc -lgcc_eh
++ endif
++ +preinit = $(addprefix $(csu-objpfx),crti.o)
++ +postinit = $(addprefix $(csu-objpfx),crtn.o)
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index d02ab7e..e3028a5 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -37,6 +37,15 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ GLIBC_EXTRA_CFLAGS += -marm
  endif
  
++# Microblaze patches
++ifeq ($(BR2_microblaze)$(BR2_TOOLCHAIN_BUILDROOT_GLIBC),yy)
++define GLIBC_PATCH_MICROBLAZE
++	support/scripts/apply-patches.sh $(@D) package/glibc/$(GLIBC_VERSION) \
++		glibc-microblaze-link-with-libgcc_eh.patch.conditional
++endef
++endif
++GLIBC_POST_PATCH_HOOKS += GLIBC_PATCH_MICROBLAZE
++
+ # MIPS64 defaults to n32 so pass the correct -mabi if
+ # we are using a different ABI. OABI32 is also used
+ # in MIPS so we pass -mabi=32 in this case as well
+-- 
+1.8.3.2
