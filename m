@@ -1,51 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 Apr 2014 13:46:52 +0300
-Subject: [Buildroot] libwebsockets : missing header
-In-Reply-To: <385326490C3E4FFE925925E70428D1E5@JohanW7>
-References: <385326490C3E4FFE925925E70428D1E5@JohanW7>
-Message-ID: <20140429104652.GN4531@tarshish>
+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Date: Tue, 29 Apr 2014 12:53:13 +0200
+Subject: [Buildroot] Two stages compilation
+In-Reply-To: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
+References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
+Message-ID: <535F8499.8070406@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sagaert Johan,
+Dear Angelo,
 
-On Tue, Apr 29, 2014 at 12:11:39PM +0200, Sagaert Johan wrote:
-> building libwebsockets is broken :
->  
-> snip..........
-> -g -rdynamic -fPIC -Werror -c -DINSTALL_DATADIR=\"/usr/share\" -DLWS_OPENSSL_CLIENT_CERTS=\"/etc/pki/tls/certs/\"
-> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -D_DEBUG -DLWS_LIBRARY_VERSION=\"1.2\"
-> -DLWS_BUILD_HASH=\"dd06dc8\" -MT libwebsockets_la-output.lo -MD -MP -MF .deps/libwebsockets_la-output.Tpo -c output.c  -fPIC -DPIC
-> -o .libs/libwebsockets_la-output.o
-> libtool: compile:  /home/brcpy/output/host/usr/bin/ccache /home/brcpy/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
-> -DHAVE_CONFIG_H -I. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -std=gnu99 -pedantic -O0 -g
-> -rdynamic -fPIC -Werror -c -DINSTALL_DATADIR=\"/usr/share\" -DLWS_OPENSSL_CLIENT_CERTS=\"/etc/pki/tls/certs/\" -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -D_DEBUG -DLWS_LIBRARY_VERSION=\"1.2\" -DLWS_BUILD_HASH=\"dd06dc8\" -MT
-> libwebsockets_la-libwebsockets.lo -MD -MP -MF .deps/libwebsockets_la-libwebsockets.Tpo -c libwebsockets.c  -fPIC -DPIC -o
-> .libs/libwebsockets_la-libwebsockets.o
-> libtool: compile:  /home/brcpy/output/host/usr/bin/ccache /home/brcpy/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
-> -DHAVE_CONFIG_H -I. -I.. -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -std=gnu99 -pedantic -O0 -g
-> -rdynamic -fPIC -Werror -c -DINSTALL_DATADIR=\"/usr/share\" -DLWS_OPENSSL_CLIENT_CERTS=\"/etc/pki/tls/certs/\" -D_LARGEFILE_SOURCE
-> -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -pipe -Os -D_DEBUG -DLWS_LIBRARY_VERSION=\"1.2\" -DLWS_BUILD_HASH=\"dd06dc8\" -MT
-> libwebsockets_la-base64-decode.lo -MD -MP -MF .deps/libwebsockets_la-base64-decode.Tpo -c base64-decode.c  -fPIC -DPIC -o
-> .libs/libwebsockets_la-base64-decode.o
-> libwebsockets.c:32:21: fatal error: ifaddrs.h: No such file or directory
->  #include <ifaddrs.h>
->                      ^
-> Maybe this has been reported before. 
-> I found that this header file is not present in the staging include directory but is located
-> in the uclibc-0.9.33.2/include build directory.
+The point is here that for mono you have to define both a host package,
+and a target package. For this you can look for the
+"host-autotools-package" macro, and probably can get some ideas from
+checking package/python/python.mk.
 
-Please share your .config.
+A couple of months back i was able to package mono for OpenWrt (which is
+in this sense close to Buildroot), but i haven't finalized that project
+(as it turned out that the target MIPS CPU is not totally supported by
+Mono...). If you think it's useful, i can dig this out from the archive
+and share the package definition with you. Please let me know if so.
 
-Have you customized the uClibc configuration?
+regards
+zgyarmati
 
-baruch
+
+
+On 29.04.2014 11:29, Angelo Compagnucci wrote:
+> Hi List,
+>
+> I'm interested in porting mono package on buildroot. I aim to
+> inclusion and offering to maintain it in the future, but I need a
+> little bit of help.
+>
+> Mono compilation is in two stages:
+>
+> 1) Mono compiles the runtime for the target architecture. It means
+> that in this step you produce an ARM mono naked virtual machine.
+> 2) Mono compiles mono assemblies (c# libraries). This phase fails on
+> my package, cause to compile assemblies you should have Mono for the
+> host architecture, not the target one. So to compile assemblies you
+> should use the x86 mono's version installed on your computer.
+> Alternatively, if you don't want to install mono on your computer, the
+> makefile can download a precompiled stripped version just to compile
+> the assemblies, so the first phase is optional.
+>
+> I have the first phase running, so right now I can produce the ARM
+> mono virtual machine correctly, than I have to manual recompile
+> assemblies and transfer them to the target. I really want to make
+> everything as automatic as possible.
+>
+> So in the second phase I should force buildroot to compile mono on the
+> host environment and not the target one. How can I do this?
+>
+> Which is the advisable way to get the patch accepted?
+>
+> Thank you for your time!
+>
+> Angelo
+>
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+br, 
+Zoltan Gyarmati
+mail: mr.zoltan.gyarmati at gmail.com
+freenode nick: zgyarmati
