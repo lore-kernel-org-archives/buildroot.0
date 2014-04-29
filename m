@@ -1,7 +1,7 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 29 Apr 2014 21:03:10 +0200
-Subject: [Buildroot] [PATCH v2] update microblaze qemu boards to 3.14
-Message-ID: <1398798190-12528-1-git-send-email-wbx@openadk.org>
+Date: Tue, 29 Apr 2014 21:18:10 +0200
+Subject: [Buildroot] [PATCH v3] update microblaze qemu boards to 3.14
+Message-ID: <1398799090-13360-1-git-send-email-wbx@openadk.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,16 @@ To: buildroot@busybox.net
 - disable DTS, because linux.bin does not include any DTB the
   default Qemu included DTB is used and this is okay and works fine
 
----
-Changes v1 -> v2:
-  - remove default BR2_LINUX_KERNEL_USE_CUSTOM_DTS
-
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Tested-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+---
+Changes v2 -> v3:
+  - reference correct patch
+Changes v1 -> v2:
+  - remove default BR2_LINUX_KERNEL_USE_CUSTOM_DTS
+  - update to 3.14.2
 
 ---
  .../{linux-3.13.config => linux-3.14.config}       |    1 +
@@ -849,7 +852,7 @@ index 0000000..756bfae
 + 	{ .compatible = "xlnx,xps-ethernetlite-3.00.a", },
 + 	{ /* end of list */ },
 diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index f74a3a1..0d8671f 100644
+index f74a3a1..b3ec32f 100644
 --- a/configs/qemu_microblazebe_mmu_defconfig
 +++ b/configs/qemu_microblazebe_mmu_defconfig
 @@ -12,9 +12,8 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
@@ -864,7 +867,7 @@ index f74a3a1..0d8671f 100644
  BR2_LINUX_KERNEL_LINUX_BIN=y
 -BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
 -BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/qemu/microblazebe-mmu/system.dts"
-+BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
++BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
 diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
 index 3a66d1b..a009893 100644
 --- a/configs/qemu_microblazeel_mmu_defconfig
