@@ -1,21 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 29 Apr 2014 05:21:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 6944] building toolchain for sh4 fails
-In-Reply-To: <bug-6944-163@https.bugs.busybox.net/>
-References: <bug-6944-163@https.bugs.busybox.net/>
-Message-ID: <20140429052158.A85E39CA40@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Apr 2014 07:22:51 +0200
+Subject: [Buildroot] [PATCH 1/1] xlib_libXpm: needs MMU (fork)
+In-Reply-To: <1398540667-23731-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1398540667-23731-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140429072251.2ccd99fd@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6944
+Dear Bernd Kuhls,
 
---- Comment #8 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-04-29 05:21:57 UTC ---
-Did you try building an SH4 Linux kernel with the generated toolchain?
+On Sat, 26 Apr 2014 21:31:07 +0200, Bernd Kuhls wrote:
+> Fixes http://autobuild.buildroot.net/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xlib_libXpm/Config.in |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/x11r7/xlib_libXpm/Config.in b/package/x11r7/xlib_libXpm/Config.in
+> index 528498c..077041a 100644
+> --- a/package/x11r7/xlib_libXpm/Config.in
+> +++ b/package/x11r7/xlib_libXpm/Config.in
+> @@ -4,5 +4,6 @@ config BR2_PACKAGE_XLIB_LIBXPM
+>  	select BR2_PACKAGE_XLIB_LIBXEXT
+>  	select BR2_PACKAGE_XLIB_LIBXT
+>  	select BR2_PACKAGE_XPROTO_XPROTO
+> +	depends on BR2_USE_MMU # fork()
+>  	help
+>  	  X.Org Xpm library
 
+Remember that you need to propagate the BR2_USE_MMU dependency to the
+reverse dependencies that select xlib_libXpm. So as it is, the patch is
+not sufficient, as far as I can see.
+
+Thanks!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
