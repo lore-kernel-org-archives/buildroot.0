@@ -1,220 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Apr 2014 13:37:42 -0300
-Subject: [Buildroot] [PATCH] gcc: switch microblaze to version 4.9.x
-Message-ID: <1398789462-11177-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Apr 2014 18:49:12 +0200
+Subject: [Buildroot] [PATCH 0/9 v2] Bump and improve syslinux (branch
+	yem/syslinux)
+Message-ID: <cover.1398789775.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to gcc 4.9.x for microblaze since it's a better target than
-4.8.x, and also add a build patch that fixes (e)glibc build issues.
-Hence disable 4.8.x for microblaze.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../840-microblaze-enable-dwarf-eh-support.patch   | 169 +++++++++++++++++++++
- package/gcc/Config.in.host                         |   4 +-
- 2 files changed, 171 insertions(+), 2 deletions(-)
- create mode 100644 package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch
+Hello All!
 
-diff --git a/package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch b/package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch
-new file mode 100644
-index 0000000..e116e2b
---- /dev/null
-+++ b/package/gcc/4.9.0/840-microblaze-enable-dwarf-eh-support.patch
-@@ -0,0 +1,169 @@
-+Fetched from Xilinx gcc git at https://github.com/Xilinx/gcc
-+
-+From 23c35173490ac2d6348a668dfc9c1a6eb62171f2 Mon Sep 17 00:00:00 2001
-+From: "Edgar E. Iglesias" <edgar.iglesias@gmail.com>
-+Date: Mon, 18 Jun 2012 20:18:13 +0200
-+Subject: [PATCH] [Patch, microblaze]: Enable DWARF exception handling support.
-+
-+Changelog
-+
-+2013-03-18  Edgar E. Iglesias <edgar.iglesias@xilinx.com>
-+            David Holsgrove <david.holsgrove@xilinx.com>
-+
-+ * common/config/microblaze/microblaze-common.c: Remove
-+   TARGET_EXCEPT_UNWIND_INFO definition.
-+ * config/microblaze/microblaze-protos.h: Add
-+   microblaze_eh_return prototype.
-+ * gcc/config/microblaze/microblaze.c: (microblaze_must_save_register,
-+   microblaze_expand_epilogue, microblaze_return_addr): Handle
-+   calls_eh_return
-+   (microblaze_eh_return): New function.
-+ * gcc/config/microblaze/microblaze.h: Define RETURN_ADDR_OFFSET,
-+   EH_RETURN_DATA_REGNO, MB_EH_STACKADJ_REGNUM, EH_RETURN_STACKADJ_RTX,
-+   ASM_PREFERRED_EH_DATA_FORMAT
-+ * gcc/config/microblaze/microblaze.md: Define eh_return pattern.
-+
-+Signed-off-by: David Holsgrove <david.holsgrove@xilinx.com>
-+Signed-off-by: Edgar E. Iglesias <edgar.iglesias@gmail.com>
-+---
-+ gcc/common/config/microblaze/microblaze-common.c |  3 ---
-+ gcc/config/microblaze/microblaze-protos.h        |  1 +
-+ gcc/config/microblaze/microblaze.c               | 29 ++++++++++++++++++++----
-+ gcc/config/microblaze/microblaze.h               | 15 ++++++++++++
-+ gcc/config/microblaze/microblaze.md              | 11 +++++++++
-+ 5 files changed, 52 insertions(+), 7 deletions(-)
-+
-+diff --git a/gcc/common/config/microblaze/microblaze-common.c b/gcc/common/config/microblaze/microblaze-common.c
-+index 5835acc..85e6a53 100644
-+--- a/gcc/common/config/microblaze/microblaze-common.c
-++++ b/gcc/common/config/microblaze/microblaze-common.c
-+@@ -39,7 +39,4 @@ static const struct default_options microblaze_option_optimization_table[] =
-+ #undef  TARGET_OPTION_OPTIMIZATION_TABLE
-+ #define TARGET_OPTION_OPTIMIZATION_TABLE microblaze_option_optimization_table
-+ 
-+-#undef TARGET_EXCEPT_UNWIND_INFO
-+-#define TARGET_EXCEPT_UNWIND_INFO  sjlj_except_unwind_info
-+-
-+ struct gcc_targetm_common targetm_common = TARGETM_COMMON_INITIALIZER;
-+diff --git a/gcc/config/microblaze/microblaze-protos.h b/gcc/config/microblaze/microblaze-protos.h
-+index c30ec72..260f4e4 100644
-+--- a/gcc/config/microblaze/microblaze-protos.h
-++++ b/gcc/config/microblaze/microblaze-protos.h
-+@@ -56,6 +56,7 @@ extern bool microblaze_tls_referenced_p (rtx);
-+ extern int symbol_mentioned_p (rtx);
-+ extern int label_mentioned_p (rtx);
-+ extern bool microblaze_cannot_force_const_mem (enum machine_mode, rtx);
-++extern void microblaze_eh_return (rtx op0);
-+ #endif  /* RTX_CODE */
-+ 
-+ /* Declare functions in microblaze-c.c.  */
-+diff --git a/gcc/config/microblaze/microblaze.c b/gcc/config/microblaze/microblaze.c
-+index fe61fce..15166d3 100644
-+--- a/gcc/config/microblaze/microblaze.c
-++++ b/gcc/config/microblaze/microblaze.c
-+@@ -1999,6 +1999,11 @@ microblaze_must_save_register (int regno)
-+   if (frame_pointer_needed && (regno == HARD_FRAME_POINTER_REGNUM))
-+     return 1;
-+ 
-++  if (crtl->calls_eh_return
-++      && regno == MB_ABI_SUB_RETURN_ADDR_REGNUM) {
-++    return 1;
-++  }
-++
-+   if (!crtl->is_leaf)
-+     {
-+       if (regno == MB_ABI_SUB_RETURN_ADDR_REGNUM)
-+@@ -2026,6 +2031,13 @@ microblaze_must_save_register (int regno)
-+ 	return 1;
-+     }
-+ 
-++  if (crtl->calls_eh_return
-++      && (regno == EH_RETURN_DATA_REGNO (0)
-++          || regno == EH_RETURN_DATA_REGNO (1)))
-++    {
-++      return 1;
-++    }
-++
-+   return 0;
-+ }
-+ 
-+@@ -3131,6 +3143,12 @@ microblaze_expand_epilogue (void)
-+       emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, fsiz_rtx));
-+     }
-+ 
-++  if (crtl->calls_eh_return)
-++    emit_insn (gen_addsi3 (stack_pointer_rtx,
-++                           stack_pointer_rtx,
-++                           gen_rtx_raw_REG (SImode,
-++                                            MB_EH_STACKADJ_REGNUM)));
-++
-+   emit_jump_insn (gen_return_internal (gen_rtx_REG (Pmode, GP_REG_FIRST +
-+ 						    MB_ABI_SUB_RETURN_ADDR_REGNUM)));
-+ }
-+@@ -3427,10 +3445,13 @@ microblaze_return_addr (int count, rtx frame ATTRIBUTE_UNUSED)
-+   if (count != 0)
-+     return NULL_RTX;
-+ 
-+-  return gen_rtx_PLUS (Pmode,
-+-		       get_hard_reg_initial_val (Pmode,
-+-						 MB_ABI_SUB_RETURN_ADDR_REGNUM),
-+-		       GEN_INT (8));
-++  return get_hard_reg_initial_val (Pmode,
-++                                   MB_ABI_SUB_RETURN_ADDR_REGNUM);
-++}
-++
-++void microblaze_eh_return (rtx op0)
-++{
-++  emit_insn (gen_movsi(gen_rtx_MEM(Pmode, stack_pointer_rtx), op0));
-+ }
-+ 
-+ /* Queue an .ident string in the queue of top-level asm statements.
-+diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
-+index 4072283..5e9f49c 100644
-+--- a/gcc/config/microblaze/microblaze.h
-++++ b/gcc/config/microblaze/microblaze.h
-+@@ -184,6 +184,21 @@ extern enum pipeline_type microblaze_pipe;
-+ #define INCOMING_RETURN_ADDR_RTX  			\
-+   gen_rtx_REG (VOIDmode, GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
-+ 
-++/* Specifies the offset from INCOMING_RETURN_ADDR_RTX and the actual return PC.  */
-++#define RETURN_ADDR_OFFSET (8)
-++
-++/* Describe how we implement __builtin_eh_return.  */
-++#define EH_RETURN_DATA_REGNO(N) (((N) < 2) ? MB_ABI_FIRST_ARG_REGNUM + (N) : INVALID_REGNUM)
-++
-++#define MB_EH_STACKADJ_REGNUM  MB_ABI_INT_RETURN_VAL2_REGNUM
-++#define EH_RETURN_STACKADJ_RTX  gen_rtx_REG (Pmode, MB_EH_STACKADJ_REGNUM)
-++
-++/* Select a format to encode pointers in exception handling data.  CODE
-++   is 0 for data, 1 for code labels, 2 for function pointers.  GLOBAL is
-++   true if the symbol may be affected by dynamic relocations.  */
-++#define ASM_PREFERRED_EH_DATA_FORMAT(CODE,GLOBAL) \
-++  ((flag_pic || GLOBAL) ? DW_EH_PE_aligned : DW_EH_PE_absptr)
-++
-+ /* Use DWARF 2 debugging information by default.  */
-+ #define DWARF2_DEBUGGING_INFO
-+ #define PREFERRED_DEBUGGING_TYPE DWARF2_DEBUG
-+diff --git a/gcc/config/microblaze/microblaze.md b/gcc/config/microblaze/microblaze.md
-+index ed6131a..dc2405f 100644
-+--- a/gcc/config/microblaze/microblaze.md
-++++ b/gcc/config/microblaze/microblaze.md
-+@@ -2327,4 +2327,15 @@
-+   (set_attr "mode"      "SI")
-+   (set_attr "length"    "4")])
-+ 
-++; This is used in compiling the unwind routines.
-++(define_expand "eh_return"
-++  [(use (match_operand 0 "general_operand" ""))]
-++  ""
-++  "
-++{
-++  microblaze_eh_return(operands[0]);
-++  DONE;
-++}")
-++
-+ (include "sync.md")
-++
-+-- 
-+1.8.3.2
-+
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 6c2f753..c66382e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -9,7 +9,7 @@ choice
- 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
- 	default BR2_GCC_VERSION_4_8_X if BR2_aarch64
- 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
--	default BR2_GCC_VERSION_4_8_X if BR2_microblaze
-+	default BR2_GCC_VERSION_4_9_X if BR2_microblaze
- 	default BR2_GCC_VERSION_4_5_X if BR2_bfin
- 	default BR2_GCC_VERSION_4_7_X
- 	help
-@@ -50,7 +50,7 @@ choice
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
--		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
-+		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
- 		bool "gcc 4.8.x"
- 
+Here are a few patches to bump and enhance syslinux:
+  - patches 1..4: preparatory fixing and cleanup patches
+  - patches 5..6: new pacakges, dependency of the new syslinux
+  - patch   7   : actual syslinux bump
+  - patches 8..9: new options to install new types of blobs
+
+To be noted, the syslinx build system is, well, a bit weird, to say
+the least. There is I hope extensive-enough information about this
+in the bump-patch. Please pay it a bit of attention, it is really
+convoluted, and would benefit from some in-depth review.
+
+Thanks to Frank for his preliminary work on ucl and upx, and to
+Thomas L. whose extlinux patch prompted me to look at syslinux. ;-)
+
+Changes v1 -> v2:
+  - explain the need for an ia32 compiler  (Arnout)
+  - make the image selection a choice  (Arnout)
+  - improve upx commit log  (Arnout)
+  - typoes  (Arnout)
+  - improve help entry for the mbr option
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit a72b73852568227ee948a380c720756fbbdbec46:
+
+  upstream glibc 2.18/2.19 works fine with microblaze (2014-04-28 22:16:37 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git 
+
+for you to fetch changes up to 8643aef1dfbf257e6cd7a0721d4cfd9f9e3a6dea:
+
+  boot/syslinux: add an option to install an MBR blob (2014-04-29 18:41:59 +0200)
+
+----------------------------------------------------------------
+Frank Hunleth (2):
+      package/ucl: new package
+      package/upx: new package
+
+Yann E. MORIN (7):
+      boot/syslinux: needs an ia32-capable compiler
+      boot/syslinux: prepare to install non-core images
+      boot/syslinux: make the sub-options a choice
+      boot/syslinux: rewrite options prompts
+      boot/syslinux: bump version
+      boot/syslinux: add option to install the EFI image
+      boot/syslinux: add an option to install an MBR blob
+
+ boot/syslinux/Config.in                            | 39 ++++++++++++++---
+ .../syslinux-000-user-headers-from-sysroot.patch   | 37 ++++++++++++++++
+ boot/syslinux/syslinux.mk                          | 50 ++++++++++++++++++----
+ package/ucl/ucl.mk                                 | 12 ++++++
+ package/upx/upx.mk                                 | 28 ++++++++++++
+ 5 files changed, 152 insertions(+), 14 deletions(-)
+ create mode 100644 boot/syslinux/syslinux-000-user-headers-from-sysroot.patch
+ create mode 100644 package/ucl/ucl.mk
+ create mode 100644 package/upx/upx.mk
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
