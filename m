@@ -1,7 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Apr 2014 19:56:45 +0200
-Subject: [Buildroot] [PATCH 0/2] Raspberry Pi bumps (branch yem/bumps)
-Message-ID: <cover.1398794127.git.yann.morin.1998@free.fr>
+Date: Tue, 29 Apr 2014 19:56:49 +0200
+Subject: [Buildroot] [PATCH 2/2] configs: bump raspberrypi_defconfig to use
+	latest rpi-3.12.y
+In-Reply-To: <cover.1398794127.git.yann.morin.1998@free.fr>
+References: <cover.1398794127.git.yann.morin.1998@free.fr>
+Message-ID: <5efda6750ee674d89ab6d3ce4cf140930c107ea7.1398794127.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,41 +13,44 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+The Raspberry Pi people are now considering there stable version to
+be based on the 3.12.series:
+    http://www.raspberrypi.org/forums/viewtopic.php?f=29&t=75895
 
-Here are two bumps related to the Raspberry Pi:
-  - firmware bump, with some enhancement, new features and fixes
-  - switch to using the a 3.12 long-term kernel
+    > The 3.12 kernel tree has long term support and we are moving to it.
 
-Regards,
-Yann E. MORIN.
+Bump the Raspberry Pi defconfig to use the latest stable version of
+the rpi-3.12.y branch, based on linux-3.12.18.
 
+Bump the kernel headers at the same time.
 
-The following changes since commit a72b73852568227ee948a380c720756fbbdbec46:
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ configs/raspberrypi_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-  upstream glibc 2.18/2.19 works fine with microblaze (2014-04-28 22:16:37 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/bumps
-
-for you to fetch changes up to 5efda6750ee674d89ab6d3ce4cf140930c107ea7:
-
-  configs: bump raspberrypi_defconfig to use latest rpi-3.12.y (2014-04-29 19:45:49 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      package/rpi-firmware: bump for enhancements and bug fixes
-      configs: bump raspberrypi_defconfig to use latest rpi-3.12.y
-
- configs/raspberrypi_defconfig        | 6 +++---
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index b7fe8c0..6cefc74 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -8,15 +8,15 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ 
+-# Lock to 3.10 headers as the RPi kernel is based off the 3.10 branch
++# Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.10.36"
++BR2_DEFAULT_KERNEL_VERSION="3.12.18"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7193cfe22b63ae92d1f7e955c2276adbdafd28e0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="746069c0ac473cfb4fd70415149b4cfdea193119"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
