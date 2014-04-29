@@ -1,34 +1,44 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 29 Apr 2014 21:30:27 +0200
-Subject: [Buildroot] [PATCH] give a hint about git rebase
-Message-ID: <1398799827-13701-1-git-send-email-wbx@openadk.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 29 Apr 2014 21:37:36 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xlib_libXpm: needs MMU (fork)
+Message-ID: <1398800256-11508-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It seems common knowledge to use git rebase in interactive mode
-to fixup issues while respinning patch series, but I found it hard
-to find any hint about it. Add a note for git beginners like me.
+Fixes http://autobuild.buildroot.net/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- docs/manual/contribute.txt |    2 ++
- 1 file changed, 2 insertions(+)
+v2: extend patch to reverse dependency of xlib_libXpm (Thomas)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 47494cb..7795e71 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -230,6 +230,8 @@ should include a changelog of the modifications between each
- submission. Note that when your patch series is introduced by a cover
- letter, an overall changelog may be added to the cover letter in
- addition to the changelog in the individual commits.
-+The best thing to rework a patch series is by using +git rebase+
-+in interactive mode.
- 
- When added to the individual commits, this changelog is added when
- editing the commit message.  Below the +Signed-off-by+ section, add
+ package/x11r7/xlib_libXaw/Config.in |    1 +
+ package/x11r7/xlib_libXpm/Config.in |    1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/x11r7/xlib_libXaw/Config.in b/package/x11r7/xlib_libXaw/Config.in
+index 3695bb6..12addc4 100644
+--- a/package/x11r7/xlib_libXaw/Config.in
++++ b/package/x11r7/xlib_libXaw/Config.in
+@@ -5,5 +5,6 @@ config BR2_PACKAGE_XLIB_LIBXAW
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	select BR2_PACKAGE_XLIB_LIBXPM
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_USE_MMU # fork() / xlib_libXpm
+ 	help
+ 	  X.Org Xaw library
+diff --git a/package/x11r7/xlib_libXpm/Config.in b/package/x11r7/xlib_libXpm/Config.in
+index 528498c..077041a 100644
+--- a/package/x11r7/xlib_libXpm/Config.in
++++ b/package/x11r7/xlib_libXpm/Config.in
+@@ -4,5 +4,6 @@ config BR2_PACKAGE_XLIB_LIBXPM
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXT
+ 	select BR2_PACKAGE_XPROTO_XPROTO
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  X.Org Xpm library
 -- 
 1.7.10.4
