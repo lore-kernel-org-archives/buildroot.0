@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Apr 2014 18:49:10 +0200
-Subject: [Buildroot] [PATCH 2/9] boot/syslinux: prepare to install non-core
-	images
+Date: Tue, 29 Apr 2014 18:49:11 +0200
+Subject: [Buildroot] [PATCH 3/9] boot/syslinux: make the sub-options a choice
 In-Reply-To: <cover.1398789775.git.yann.morin.1998@free.fr>
 References: <cover.1398789775.git.yann.morin.1998@free.fr>
-Message-ID: <1c9b16418aecf7e3710ccf91cc2e4047f44b6217.1398789775.git.yann.morin.1998@free.fr>
+Message-ID: <7dc2975e14efed9252e5287502f96c74fecc1ffe.1398789775.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +12,48 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Currently, we hard-code the path to the images we install, and
-expect them to be from the core/ sub-dir.
+Currently it is possible to choose either, both or none of
+the pxelinux or isolinux images.
 
-Not all images we can install are located in core/. For example,
-the efi boot images (to come later) are not located in core/.
+But it does not make sense to build none or both, as we need
+at least one to boot the target, and the target can use more
+than one.
 
-Prepare the upcoming installation of extlinux by not expecting
-images are in core/.
+So, we need one and only one image to be selected at once.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Lundquist <lists@zelow.no>
+Cc: Thomas Lundquist <thomasez@redpill-linpro.com>
 Cc: Frank Hunleth <fhunleth@troodon-software.com>
----
- boot/syslinux/syslinux.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 0faa81f..a1eb394 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -28,12 +28,12 @@ define SYSLINUX_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) INSTALLROOT=$(HOST_DIR) install
- endef
+---
+Changes v1 -> v2:
+  - make it a choice, not a forced-bool  (Arnout)
+---
+ boot/syslinux/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index 5b1122d..f7525b8 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -10,12 +10,15 @@ config BR2_TARGET_SYSLINUX
  
--SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += isolinux.bin
--SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += pxelinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += core/isolinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += core/pxelinux.bin
+ if BR2_TARGET_SYSLINUX
  
- define SYSLINUX_INSTALL_IMAGES_CMDS
- 	for i in $(SYSLINUX_IMAGES-y); do \
--		$(INSTALL) -D -m 0755 $(@D)/core/$$i $(BINARIES_DIR)/$$i; \
-+		$(INSTALL) -D -m 0755 $(@D)/$$i $(BINARIES_DIR)/$${i##*/}; \
- 	done
- endef
++choice
++	bool "Image to install"
++
+ config BR2_TARGET_SYSLINUX_ISOLINUX
+ 	bool "Install isolinux"
+-	default y
  
+ config BR2_TARGET_SYSLINUX_PXELINUX
+ 	bool "Install pxelinux"
+-	default y
++
++endchoice
+ 
+ endif
 -- 
 1.8.3.2
