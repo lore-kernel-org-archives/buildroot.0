@@ -1,64 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Apr 2014 18:49:17 +0200
-Subject: [Buildroot] [PATCH 9/9] boot/syslinux: add an option to install an
-	MBR blob
-In-Reply-To: <cover.1398789775.git.yann.morin.1998@free.fr>
-References: <cover.1398789775.git.yann.morin.1998@free.fr>
-Message-ID: <8643aef1dfbf257e6cd7a0721d4cfd9f9e3a6dea.1398789775.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Apr 2014 13:49:26 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: new package
+Message-ID: <1398790166-18900-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-This MBR blob will look for an active partition, and boot the bootcode
-present in that partition. This can be used to boot an extlinux-prepared
-partition.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Lundquist <lists@zelow.no>
-Cc: Frank Hunleth <fhunleth@troodon-software.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v1 -> v2:
-  - slightly expand the help entry
----
- boot/syslinux/Config.in   | 8 ++++++++
- boot/syslinux/syslinux.mk | 1 +
- 2 files changed, 9 insertions(+)
+ package/Config.in                  |  1 +
+ package/btrfs-progs/Config.in      | 22 ++++++++++++++++++++++
+ package/btrfs-progs/btrfs-progs.mk | 22 ++++++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 package/btrfs-progs/Config.in
+ create mode 100644 package/btrfs-progs/btrfs-progs.mk
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 5f0fe97..b6e8673 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -30,6 +30,14 @@ config BR2_TARGET_SYSLINUX_PXELINUX
- 	  Install the legacy-BIOS 'pxelinux' image, to boot off
- 	  the network using PXE.
+diff --git a/package/Config.in b/package/Config.in
+index bc7271f..9e3090b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -130,6 +130,7 @@ source "package/yasm/Config.in"
+ endmenu
  
-+config BR2_TARGET_SYSLINUX_MBR
-+	bool "mbr"
-+	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ menu "Filesystem and flash utilities"
++source "package/btrfs-progs/Config.in"
+ source "package/cifs-utils/Config.in"
+ source "package/cramfs/Config.in"
+ source "package/curlftpfs/Config.in"
+diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
+new file mode 100644
+index 0000000..2e71a01
+--- /dev/null
++++ b/package/btrfs-progs/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_BTRFS_PROGS
++	bool "btrfs-progs"
++	depends on BR2_LARGEFILE # acl, attr
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_USE_MMU # util-linux
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_ACL
++	select BR2_PACKAGE_ATTR
++	select BR2_PACKAGE_E2FSPROGS
++	select BR2_PACKAGE_LZO
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Install the legacy BIOS 'mbr' image, to boot off a
-+	  local MBR-partition (e.g. prepared with 'extlinux'
-+	  or 'syslinux').
++	  Btrfs filesystem utilities
 +
- config BR2_TARGET_SYSLINUX_EFI
- 	bool "efi"
- 	select BR2_PACKAGE_GNU_EFI
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index bf0bae5..c614b1d 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -60,6 +60,7 @@ endef
- 
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_ISOLINUX) += bios/core/isolinux.bin
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_PXELINUX) += bios/core/pxelinux.bin
-+SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_MBR) += bios/mbr/mbr.bin
- SYSLINUX_IMAGES-$(BR2_TARGET_SYSLINUX_EFI) += $(SYSLINUX_EFI_BITS)/efi/syslinux.efi
- 
- define SYSLINUX_INSTALL_IMAGES_CMDS
++	  https://btrfs.wiki.kernel.org/index.php/Main_Page
++
++comment "btrfs-progs needs a toolchain w/ largefile, wchar, threads"
++	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+new file mode 100644
+index 0000000..415ded2
+--- /dev/null
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# btrfs-progs
++#
++################################################################################
++
++BTRFS_PROGS_VERSION = 3.14.1
++BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/mason/btrfs-progs
++BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
++BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
++BTRFS_PROGS_LICENSE = GPLv2
++BTRFS_PROGS_LICENSE_FILES = COPYING
++
++define BTRFS_PROGS_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define BTRFS_PROGS_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D) prefix=/usr DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.8.3.2
