@@ -1,34 +1,31 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue, 29 Apr 2014 16:25:27 -0400
-Subject: [Buildroot] Patchwork cleanup #8: submitter notification
-In-Reply-To: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
-References: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
-Message-ID: <CANxTyt6_tqB18B0e7vWL9e+hWW6k-LfTf8LS7azDPdQ-PCy8eg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 29 Apr 2014 23:08:53 +0200
+Subject: [Buildroot] [PATCH] imlib2: uses dlopen(),
+	not available in static cases
+In-Reply-To: <1398798016-14915-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 29 Apr 2014 21:00:16 +0200")
+References: <1398798016-14915-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <871twfvo62.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Tue, Apr 29, 2014 at 3:48 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> People in To,
-...
-> [2/3] ccache: change default cache directory path to match config setting
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287384
->
-> [3/3] ccache: provide capability to do initial ccache setup
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/287385
->
-> Danomi indicated that the above two patches are indepedent from the
-> first one. I'm triaging it as A, and hope to be able to refresh it (or
-> someone else).
+ > According to the imlib2 people, if you don't support dlopen(), you
+ > have a "crap box":
 
-I'm not in the "To" list, but I can refresh these and submit as a
-separate series, if you like.
+ > image.h:16:4: warning: #warning "your crap box doesn't define RTLD_LOCAL !?"
 
-Danomi -
+ > So, let's disable imlib2 when doing static linking.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/b5e/b5ee859409cd626b769e8a159026e60ec6f29180/
+
+Committed with the missing 'a' added, thanks.
+
+-- 
+Bye, Peter Korsgaard
