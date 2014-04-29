@@ -1,33 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Apr 2014 00:52:49 +0200
-Subject: [Buildroot] Patchwork cleanup #8: submitter notification
-In-Reply-To: <20140429210905.GE3248@free.fr>
-References: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
- <20140429210905.GE3248@free.fr>
-Message-ID: <20140430005249.2d0f01de@skate>
+Date: Wed, 30 Apr 2014 00:54:19 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xlib_libXpm: needs MMU (fork)
+In-Reply-To: <20140429200722.GQ4531@tarshish>
+References: <1398800256-11508-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140429200722.GQ4531@tarshish>
+Message-ID: <20140430005419.6f1a456a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Baruch Siach,
 
-On Tue, 29 Apr 2014 23:09:05 +0200, Yann E. MORIN wrote:
+On Tue, 29 Apr 2014 23:07:22 +0300, Baruch Siach wrote:
 
-> However, I can se one case where we would want to be able to set
-> ownership and/or permissions on a synlink: to avoid the identity of the
-> "builder" to seep down into the generated filesystem. But even in that
-> case, only the numerical UID would end up in the generated filesystem,
-> so it is not really a concern.
+> This dependency should be propagated further recursively. Many packages select 
+> BR2_PACKAGE_XLIB_LIBXAW and all of them must also depend on BR2_USE_MMU.
 
-We do a "chown -R 0:0" on all files in the root filesystem, before
-taking into account device tables. So I don't see how an ownership on
-the build machine can leak into the generated root filesystem.
-
-See fs/common.mk to see where's it's done.
-
-Best regards,
+Maybe we should take a step back and see if libXpm could be fixed to
+not use fork() at all, or use vfork().
 
 Thomas
 -- 
