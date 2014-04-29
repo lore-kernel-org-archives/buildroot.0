@@ -1,41 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Apr 2014 23:47:31 +0200
-Subject: [Buildroot] [git commit] gcc: arc: bump to arc-4.8-R3 release
-Message-ID: <20140429223019.D460F9CA6F@busybox.osuosl.org>
+Date: Tue, 29 Apr 2014 23:10:45 +0200
+Subject: [Buildroot] [git commit] util-linux: bump to version 2.24.2
+Message-ID: <20140429223019.AF8409CA6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8e94c5210fedb40424d6675faa9c015889553f87
+commit: http://git.buildroot.net/buildroot/commit/?id=5d2724a6cbf8ffdcbfc4dddb4c720a675901f0a9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch fixes several internal compiler errors including:
-http://autobuild.buildroot.net/results/2858bb1ca1d12955c837da5a8b7d69c587a75646/
-http://autobuild.buildroot.net/results/85deef67654019a630d6cbc37f3dbbbc071aad38/
-
-Support for the GCC built-in atomic functions is also added and is enabled
-with option -matomic. Atomic built-ins require LLOCK/SCOND instructions to
-be enabled in the ARC 700 CPU.
-
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...ine-mkostemp-for-older-version-of-uClibc.patch} |    0
+ ...util-linux-003-unshare-include-libmount.h.patch |   44 --------------------
+ package/util-linux/util-linux.mk                   |    2 +-
+ 3 files changed, 1 insertions(+), 45 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 6c2f753..2fe5ca5 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -98,7 +98,7 @@ config BR2_GCC_VERSION
- 	default "4.7.3"     if BR2_GCC_VERSION_4_7_X
- 	default "4.8.2"     if BR2_GCC_VERSION_4_8_X
- 	default "4.9.0"     if BR2_GCC_VERSION_4_9_X
--	default "c6227bc154124e270f15793deddfa3fe18f7db54" if BR2_GCC_VERSION_4_8_ARC
-+	default "arc-4.8-R3" if BR2_GCC_VERSION_4_8_ARC
- 	default BR2_GCC_SNAP_DATE if BR2_GCC_VERSION_SNAP
+diff --git a/package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch b/package/util-linux/util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+similarity index 100%
+rename from package/util-linux/util-linux-004-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+rename to package/util-linux/util-linux-003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+diff --git a/package/util-linux/util-linux-003-unshare-include-libmount.h.patch b/package/util-linux/util-linux-003-unshare-include-libmount.h.patch
+deleted file mode 100644
+index 5ccfe7d..0000000
+--- a/package/util-linux/util-linux-003-unshare-include-libmount.h.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From d754315c54af9cb8222e0a04ed5b2b4b927ed176 Mon Sep 17 00:00:00 2001
+-From: Ruediger Meier <ruediger.meier@ga-group.nl>
+-Date: Mon, 17 Mar 2014 11:48:47 +0100
+-Subject: [PATCH 1/1] unshare: include libmount.h to provide missing MS_*
+- defines
+-
+-Since 6728ca10 we are using MS_PRIVATE and MS_REC which are not defined
+-in some systems's sys/mount.h.
+-
+-Signed-off-by: Ruediger Meier <ruediger.meier@ga-group.nl>
+----
+- sys-utils/Makemodule.am | 1 +
+- sys-utils/unshare.c     | 3 +++
+- 2 files changed, 4 insertions(+)
+-
+-diff --git a/sys-utils/Makemodule.am b/sys-utils/Makemodule.am
+-index 30b5d3e..93a2c8d 100644
+---- a/sys-utils/Makemodule.am
+-+++ b/sys-utils/Makemodule.am
+-@@ -296,6 +296,7 @@ usrbin_exec_PROGRAMS += unshare
+- dist_man_MANS += sys-utils/unshare.1
+- unshare_SOURCES = sys-utils/unshare.c
+- unshare_LDADD = $(LDADD) libcommon.la
+-+unshare_CFLAGS = $(AM_CFLAGS) -I$(ul_libmount_incdir)
+- endif
+- 
+- if BUILD_NSENTER
+-diff --git a/sys-utils/unshare.c b/sys-utils/unshare.c
+-index 91e0ec7..1240293 100644
+---- a/sys-utils/unshare.c
+-+++ b/sys-utils/unshare.c
+-@@ -27,6 +27,9 @@
+- #include <sys/wait.h>
+- #include <sys/mount.h>
+- 
+-+/* we only need some defines missing in sys/mount.h, no libmount linkage */
+-+#include <libmount.h>
+-+
+- #include "nls.h"
+- #include "c.h"
+- #include "closestream.h"
+--- 
+-1.9.0
+-
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 4b8f731..811d8ac 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
+ UTIL_LINUX_VERSION_MAJOR = 2.24
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
