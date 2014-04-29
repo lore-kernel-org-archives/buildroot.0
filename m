@@ -1,36 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 Apr 2014 14:58:09 +0200
-Subject: [Buildroot] [git commit] samba4: disable for avr32
-Message-ID: <20140429180628.CA1209C952@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Apr 2014 20:08:07 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] Raspberry Pi bumps (branch yem/bumps)
+Message-ID: <cover.1398794817.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=80bff82be1211e64bac3a20184d29747687bbda1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The toolchain is not up to the task, fixes:
-http://autobuild.buildroot.net/results/21f/21f5fd1fc8415abff1d1178843586956ef1fd1e3/
-Also AVR32s are low on resources (RAM, no proper storage port, most of
-them short of flash) to handle it.
+Hello All!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Here are two bumps related to the Raspberry Pi:
+  - firmware bump, with some enhancement, new features and fixes
+  - switch to using the a long-term, 3.12-based kernel
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index c9a4712..77a46cd 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_SAMBA4
- 	depends on BR2_USE_WCHAR # e2fsprogs
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # talloc python threads
-+	depends on !BR2_avr32 # bad toolchain
- 	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_PYTHON
+Changes v1 -> v2:
+  - properly bump the kernel headers (missed the HEADERS_AT_LEAST_XXX)
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit a72b73852568227ee948a380c720756fbbdbec46:
+
+  upstream glibc 2.18/2.19 works fine with microblaze (2014-04-28 22:16:37 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/bumps
+
+for you to fetch changes up to 898e036445f0bc0800b4b150a19024278cbc5d92:
+
+  configs: bump raspberrypi_defconfig to use latest rpi-3.12.y (2014-04-29 20:05:09 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/rpi-firmware: bump for enhancements and bug fixes
+      configs: bump raspberrypi_defconfig to use latest rpi-3.12.y
+
+ configs/raspberrypi_defconfig        | 8 ++++----
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
