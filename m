@@ -1,61 +1,56 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 Apr 2014 23:07:22 +0300
-Subject: [Buildroot] [PATCH v2 1/1] xlib_libXpm: needs MMU (fork)
-In-Reply-To: <1398800256-11508-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1398800256-11508-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140429200722.GQ4531@tarshish>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 29 Apr 2014 22:10:34 +0200
+Subject: [Buildroot] Patchwork cleanup #7: submitter notification
+	(feedback deadline: April 12)
+In-Reply-To: <CAEBucnA-TVU1BcsyP5-NEueZrLLtU5CtfmzCGOnf658xtHnq9A@mail.gmail.com>
+References: <CAAXf6LW5stEOk84f-SiPvnYSxazu7vBgM-cNpQStV7j+dcMrbw@mail.gmail.com>
+ <CAAXf6LUAvi_C5NvSa6=mEhcipkBYM6XwPLHhRCZtxBccq05i0g@mail.gmail.com>
+ <CAAXf6LVighYqXYTQSQPJCXXWOAfOi+JOE2w=p4C2Y2Ni9vS1Lg@mail.gmail.com>
+ <CAEBucnA-TVU1BcsyP5-NEueZrLLtU5CtfmzCGOnf658xtHnq9A@mail.gmail.com>
+Message-ID: <fab840cf-f7b0-429f-b8cc-a12a2c42a7cd@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hi Spenser,
 
-On Tue, Apr 29, 2014 at 09:37:36PM +0200, Bernd Kuhls wrote:
-> Fixes http://autobuild.buildroot.net/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: extend patch to reverse dependency of xlib_libXpm (Thomas)
+Spenser Gilliland <spenser@gillilanding.com> schreef:
+>Thomas,
+>
+>
+>On Tue, Apr 29, 2014 at 2:57 PM, Thomas De Schampheleire
+><patrickdepinguin@gmail.com> wrote:
+>> Hi,
+>>
+>> On Thu, Mar 27, 2014 at 9:01 PM, Thomas De Schampheleire
+>> <patrickdepinguin@gmail.com> wrote:
+>> [..]
+>>>>
+>>>> C. Unsure, your feedback is requested
+>> [..]
+>>>> [v3,01/11] udev: explicitly include pthreads
+>>>> http://patchwork.ozlabs.org/patch/278298
+>>>> [v3,02/11] sunxi-mali: add explicit pthread/dl/rt dependencies
+>>>> http://patchwork.ozlabs.org/patch/278295
+>>>> Spenser Gilliland
+>>>> Spenser: the feedback on these patches was that it was unclear why the
+>>>> added dependencies could actually fix the problem. If you still
+>>>> believe these changes are necessary, could you restart the discussion
+>>>> providing more details?
+>>>>
+>>
+>> No feedback so far. I'm marking these patches as Rejected for now.
+>> Feel free to reopen/resubmit them if you still think this is the
+>> correct fix.
+>
+>I sent these patches when I was accidentally using an older version of
+>the Linaro ARM compiler.  The problem only occurred on that compiler
+>although I can't remember exactly which version it was.  It's fine by
+>me to mark them as rejected.
 
-The xvkbd package also selects BR2_PACKAGE_XLIB_LIBXPM.
+Ok, thanks for the feedback!
 
-> 
->  package/x11r7/xlib_libXaw/Config.in |    1 +
->  package/x11r7/xlib_libXpm/Config.in |    1 +
->  2 files changed, 2 insertions(+)
-
-> diff --git a/package/x11r7/xlib_libXaw/Config.in 
-> b/package/x11r7/xlib_libXaw/Config.in
-> index 3695bb6..12addc4 100644
-> --- a/package/x11r7/xlib_libXaw/Config.in
-> +++ b/package/x11r7/xlib_libXaw/Config.in
-> @@ -5,5 +5,6 @@ config BR2_PACKAGE_XLIB_LIBXAW
->  	select BR2_PACKAGE_XLIB_LIBXMU
->  	select BR2_PACKAGE_XLIB_LIBXPM
->  	select BR2_PACKAGE_XPROTO_XPROTO
-> +	depends on BR2_USE_MMU # fork() / xlib_libXpm
-
-This dependency should be propagated further recursively. Many packages select 
-BR2_PACKAGE_XLIB_LIBXAW and all of them must also depend on BR2_USE_MMU.
-
->  	help
->  	  X.Org Xaw library
-> diff --git a/package/x11r7/xlib_libXpm/Config.in b/package/x11r7/xlib_libXpm/Config.in
-> index 528498c..077041a 100644
-> --- a/package/x11r7/xlib_libXpm/Config.in
-> +++ b/package/x11r7/xlib_libXpm/Config.in
-> @@ -4,5 +4,6 @@ config BR2_PACKAGE_XLIB_LIBXPM
->  	select BR2_PACKAGE_XLIB_LIBXEXT
->  	select BR2_PACKAGE_XLIB_LIBXT
->  	select BR2_PACKAGE_XPROTO_XPROTO
-> +	depends on BR2_USE_MMU # fork()
->  	help
->  	  X.Org Xpm library
-> -- 
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Best regards,
+Thomas
