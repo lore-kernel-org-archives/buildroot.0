@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Apr 2014 18:49:11 +0200
-Subject: [Buildroot] [PATCH 3/9] boot/syslinux: make the sub-options a choice
+Date: Tue, 29 Apr 2014 18:49:12 +0200
+Subject: [Buildroot] [PATCH 4/9] boot/syslinux: rewrite options prompts
 In-Reply-To: <cover.1398789775.git.yann.morin.1998@free.fr>
 References: <cover.1398789775.git.yann.morin.1998@free.fr>
-Message-ID: <7dc2975e14efed9252e5287502f96c74fecc1ffe.1398789775.git.yann.morin.1998@free.fr>
+Message-ID: <f9f4553f42d9d117db5791189746d53994d3fe0d.1398789775.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,48 +12,46 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Currently it is possible to choose either, both or none of
-the pxelinux or isolinux images.
+Rewrite the options prompt in preparation to adding a new
+type of image to install.
 
-But it does not make sense to build none or both, as we need
-at least one to boot the target, and the target can use more
-than one.
-
-So, we need one and only one image to be selected at once.
+Add help entries to each option, too.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Lundquist <thomasez@redpill-linpro.com>
 Cc: Frank Hunleth <fhunleth@troodon-software.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-  - make it a choice, not a forced-bool  (Arnout)
+  - typo s/medias/media/  (Arnout)
+  - s/legacy BIOS/legacy-BIOS/ to remove ambiguity  (Arnout)
 ---
- boot/syslinux/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ boot/syslinux/Config.in | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 5b1122d..f7525b8 100644
+index f7525b8..7263128 100644
 --- a/boot/syslinux/Config.in
 +++ b/boot/syslinux/Config.in
-@@ -10,12 +10,15 @@ config BR2_TARGET_SYSLINUX
+@@ -14,11 +14,17 @@ choice
+ 	bool "Image to install"
  
- if BR2_TARGET_SYSLINUX
- 
-+choice
-+	bool "Image to install"
-+
  config BR2_TARGET_SYSLINUX_ISOLINUX
- 	bool "Install isolinux"
--	default y
+-	bool "Install isolinux"
++	bool "isolinux"
++	help
++	  Install the legacy-BIOS 'isolinux' image, to boot off
++	  optical media (CDROM, DVD.)
  
  config BR2_TARGET_SYSLINUX_PXELINUX
- 	bool "Install pxelinux"
--	default y
-+
-+endchoice
+-	bool "Install pxelinux"
++	bool "pxelinux"
++	help
++	  Install the legacy-BIOS 'pxelinux' image, to boot off
++	  the network using PXE.
  
- endif
+ endchoice
+ 
+-endif
++endif # BR2_TARGET_SYSLINUX
 -- 
 1.8.3.2
