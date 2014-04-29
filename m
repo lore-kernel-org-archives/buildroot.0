@@ -1,40 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Apr 2014 00:01:15 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: new package
-In-Reply-To: <535FDC9F.70805@zacarias.com.ar>
-References: <1398790166-18900-1-git-send-email-gustavo@zacarias.com.ar>
- <20140429165618.GB3248@free.fr> <535FDC9F.70805@zacarias.com.ar>
-Message-ID: <5360212B.20504@mind.be>
+Date: Wed, 30 Apr 2014 00:03:51 +0200
+Subject: [Buildroot] [PATCH] target-finalize: avoid stripping kernel
+ modules with incorrect permissions
+In-Reply-To: <7d963df83be71e515c67.1398797646@argentina>
+References: <7d963df83be71e515c67.1398797646@argentina>
+Message-ID: <536021C7.6030105@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/14 19:08, Gustavo Zacarias wrote:
-> On 04/29/2014 01:56 PM, Yann E. MORIN wrote:
+On 29/04/14 20:54, Thomas De Schampheleire wrote:
+> If a kernel module is installed with incorrect permissions (0755 iso 0644),
+> it would get stripped in a way that would render the kernel module broken.
+> While the incorrect permissions are a developer error, it is a minor change
+> to prevent this mistake from causing incorrectly stripped modules.
 > 
->> This should also "depends on BR2_USE_MMU".
+> This was reported with bug #6992:
+> https://bugs.busybox.net/show_bug.cgi?id=6992
 > 
-> Ooops, i'll add it up.
-> 
->> Would it make sense to add them as host-tools, too?
-> 
-> Not really IMHO.
-> Grub2 can in theory understand btrfs, but that would be realistically
-> speaking a x86/amd64-only thing.
-> And then btrfs-progs AFAIK doesn't include any tool to create images
-> like genext2fs does, it talks directly with block devices.
-> Sudo with loopback is a bit dangerous and off the charts i think.
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
- Still, it may be useful to add it as a Config.host option, for use in
-post-image scripts (which may indeed have sudo).
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> 
+> ---
+>  Makefile |  2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -507,7 +507,7 @@ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUD
+>  STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+>  endif
+>  STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+> -STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+> +STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
+
+ The *.ko is a bit lost between the others, so maybe add a comment to
+explain why libpthread*.so* and *.ko are excluded.
+
+ But that's optional and may be a separate patch, hence my Ack on this
+one already.
 
  Regards,
  Arnout
 
-> Regards.
-> 
+>  
+>  $(TARGETS_ROOTFS): target-finalize
+>  
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
