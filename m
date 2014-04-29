@@ -1,38 +1,29 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Tue, 29 Apr 2014 08:27:05 -0500
-Subject: [Buildroot] [PATCH 3/6] upstream glibc 2.18/2.19 works fine
- with microblaze
-In-Reply-To: <535FA5A1.6090102@zacarias.com.ar>
-References: <1397382423-4939-1-git-send-email-wbx@openadk.org>
- <1397382423-4939-4-git-send-email-wbx@openadk.org>
- <53553336.2020401@zacarias.com.ar>
- <CAPALihO_K2VsaYO9erhFrKZpY9755ACOjsm56O6VvxO9MA6-0Q@mail.gmail.com>
- <535EA993.8080108@zacarias.com.ar>
- <CAPALihNu56_2XK5+oVrwON=pWS22xisVNTJc5Z6GX0vCvftScg@mail.gmail.com>
- <20140429071843.GI14063@waldemar-brodkorb.de>
- <535FA5A1.6090102@zacarias.com.ar>
-Message-ID: <20140429082705.73d0af33@core2quad.morethan.org>
+From: Dan Moulding <dan.moulding@rackwareinc.com>
+Date: Tue, 29 Apr 2014 09:12:57 -0600
+Subject: [Buildroot] [PATCH] Create /dev/null along with /dev/console when
+	building cpio rootfs
+Message-ID: <1398784378-20251-1-git-send-email-dan.moulding@rackwareinc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 29 Apr 2014 10:14:09 -0300
-Gustavo Zacarias <gustavo@zacarias.com.ar> wrote:
+I am currently forced to support an older kernel (2.6.18). That kernel
+does not have devtmpfs support. However, I'd still like to be able to
+use mdev for automatic /dev management. mdev seems to be more than
+happy to work on top of just plain tmpfs (well, technically, in my
+case it is the special rootfs instance of tmpfs). However, init is
+unhappy because /dev/null hasn't been created by the time init
+runs. This patch creates /dev/null in addition to /dev/console when
+building the cpio rootfs, so that /dev/null will be there when init
+runs. Afterward, mdev is able to take care of the rest.
 
-> > The changes do not show up yet on
-> > http://git.buildroot.net/buildroot. May be Peter did not pushed the
-> > changes yesterday. 
- 
-Ah, so -
-The "Buildroot Gottcha" is back.
+Dan Moulding (1):
+  Create /dev/null device node when building a cpio rootfs
 
-Compare the view of:
-http://git.buildroot.net/buildroot
-with:
-http://git.buildroot.net/buildroot/
+ fs/cpio/cpio.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-At least at this moment, they are different (again).
-
-Mike
+-- 
+1.8.2.1
