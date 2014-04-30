@@ -1,51 +1,80 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Apr 2014 06:44:22 +0200
-Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Fix DRI detection
-Message-ID: <1398833062-11406-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Apr 2014 07:19:19 +0200
+Subject: [Buildroot] Patchwork cleanup #8: submitter notification
+In-Reply-To: <20140429210905.GE3248@free.fr>
+References: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
+ <20140429210905.GE3248@free.fr>
+Message-ID: <536087D7.2030100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/b8a/b8a905b864b01aa09940668130a62d9d90ef5f9a/
+On 29/04/14 23:09, Yann E. MORIN wrote:
+> Thomas, Angelo, All,
+> 
+> On 2014-04-29 21:48 +0200, Thomas De Schampheleire spake thusly:
+> [--SNIP--]
+>> For this cleanup session, here are the patches:
+> [--SNIP--]
+>> package/makedevs: add "l" type for symlinks ownership change
+>> angelo dureghello <angelo70@gmail.com>
+>> http://patchwork.ozlabs.org/patch/283015
+>>
+>> C unsure: Angelo: could you describe in more detail if you are still
+>> using this patch, and why you need it? How come the symbolic link does
+>> not have the right ownership from the start?
+> 
+> Note that ownership and permissions of symlinks are never checked, only
+> those of the pointed-to entity (file, dir...) are.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |   12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ Except for directories with mode 1777. From man 7 symlink:
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index ba6c503..4f2eff2 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -99,11 +99,11 @@ else # modular
- XSERVER_XORG_SERVER_CONF_OPT += --disable-kdrive --disable-xfbdev
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
--XSERVER_XORG_SERVER_CONF_OPT += --enable-dri
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+XSERVER_XORG_SERVER_CONF_OPT += --enable-dri --enable-glx
- XSERVER_XORG_SERVER_DEPENDENCIES += mesa3d xproto_xf86driproto
- else
--XSERVER_XORG_SERVER_CONF_OPT += --disable-dri
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-dri --disable-glx
- endif
- 
- ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_NULL_CURSOR),y)
-@@ -179,12 +179,6 @@ ifneq ($(BR2_PACKAGE_XLIB_LIBDMX),y)
- XSERVER_XORG_SERVER_CONF_OPT += --disable-dmx
- endif
- 
--ifeq ($(BR2_PACKAGE_MESA3D_DRIVER),y)
--XSERVER_XORG_SERVER_CONF_OPT += --enable-glx
--else
--XSERVER_XORG_SERVER_CONF_OPT += --disable-glx
--endif
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- XSERVER_XORG_SERVER_CONF_OPT += --with-sha1=libcrypto
- XSERVER_XORG_SERVER_DEPENDENCIES += openssl
+The only time that the ownership of a symbolic link
+matters is when the link is being removed or renamed in a directory
+that has the sticky bit set (see stat(2)).
+
+ I find it hard to construct a use case, but I can imagine there is one.
+It would indeed be good if this were documented in the commit log.
+
+> Setting ownership of symlinks should not generally be a concern.
+> 
+> However, I can se one case where we would want to be able to set
+> ownership and/or permissions on a synlink: to avoid the identity of the
+> "builder" to seep down into the generated filesystem. But even in that
+> case, only the numerical UID would end up in the generated filesystem,
+> so it is not really a concern.
+
+ That argument is void, since everything is already chown root:root.
+
+
+> So, I can't really understand what the underlying problem is.
+> 
+> Angelo, we need you to explain the issue you are facing, so we understand
+> why you believe this change to be needed.
+> 
+> (Note: a proper commit message would do just that: describe the observed
+> problem, explain the underlying reason it behaves that way, introduce
+> and explain the proposed fix. See for example cset 86c3244 "wget: fix
+> host-gettext build dependency race" for a real-world example.)
+
+ +1
+
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
