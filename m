@@ -1,73 +1,164 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Apr 2014 07:19:19 +0200
-Subject: [Buildroot] Patchwork cleanup #8: submitter notification
-In-Reply-To: <20140429210905.GE3248@free.fr>
-References: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
- <20140429210905.GE3248@free.fr>
-Message-ID: <536087D7.2030100@mind.be>
+Date: Wed, 30 Apr 2014 08:11:50 +0200
+Subject: [Buildroot] [PATCH v2 1/1] u-boot: allow to pass a custom
+ configuration file
+In-Reply-To: <1379675476-24448-1-git-send-email-eric.jarrige@armadeus.org>
+References: <1379589006-28682-1-git-send-email-eric.jarrige@armadeus.org>
+ <1379675476-24448-1-git-send-email-eric.jarrige@armadeus.org>
+Message-ID: <53609426.4050704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/14 23:09, Yann E. MORIN wrote:
-> Thomas, Angelo, All,
+On 20/09/13 13:11, Eric Jarrige wrote:
 > 
-> On 2014-04-29 21:48 +0200, Thomas De Schampheleire spake thusly:
-> [--SNIP--]
->> For this cleanup session, here are the patches:
-> [--SNIP--]
->> package/makedevs: add "l" type for symlinks ownership change
->> angelo dureghello <angelo70@gmail.com>
->> http://patchwork.ozlabs.org/patch/283015
+> Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
+> ---
+> Changes v1 -> v2:
+>   - Fix typo
+> 
+>  boot/uboot/Config.in |   18 ++++++++++++++++++
+>  boot/uboot/uboot.mk  |    3 +++
+>  2 files changed, 21 insertions(+), 0 deletions(-)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 1b98339..1db0339 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -71,6 +71,24 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
+>  endif
+>  
+>  choice
+> +	prompt "U-Boot configuration"
+> +	default BR2_TARGET_UBOOT_USE_DEFCONFIG
+> +
+> +config BR2_TARGET_UBOOT_USE_DEFCONFIG
+> +	bool "Using default board configuration file"
+
+ Thomas P. made a remark that you didn't take into account:
+
+>>> I don't think using the word 'defconfig' for U-Boot is appropriate,
+>>> since 'defconfig' really refers to a kconfig terminology and U-Boot,
+>>> sadly, doesn't use kconfig.
 >>
->> C unsure: Angelo: could you describe in more detail if you are still
->> using this patch, and why you need it? How come the symbolic link does
->> not have the right ownership from the start?
+>> Does the alternate terminology DEFAULT_CONFIG could be more
+>> appropriate or acceptable ?
 > 
-> Note that ownership and permissions of symlinks are never checked, only
-> those of the pointed-to entity (file, dir...) are.
+> I don't think "default" is really meaningful. Just "Path to the board
+> configuration file" would be sufficient.
 
- Except for directories with mode 1777. From man 7 symlink:
+ Also, it is missing help text. So I propose:
 
-The only time that the ownership of a symbolic link
-matters is when the link is being removed or renamed in a directory
-that has the sticky bit set (see stat(2)).
+config BR2_TARGET_UBOOT_USE_BUNDLED_CONFIG
+	bool "Use <boardname>.h in the U-Boot sources"
+	help
+	  Choose this option to use the include/configs/<boardname>.h
+	  file in the U-Boot sources as the configuration.
 
- I find it hard to construct a use case, but I can imagine there is one.
-It would indeed be good if this were documented in the commit log.
+config BR2_TARGET_UBOOT_USE_MODIFIED_CONFIG
+	bool "Use a modified configuration header file"
+	help
+	  Choose this option to provide a path to a customized header
+	  file with the configuration option. Note that this doesn't
+	  allow you to create a custom board, only to modify some of
+	  configuration variables.
 
-> Setting ownership of symlinks should not generally be a concern.
-> 
-> However, I can se one case where we would want to be able to set
-> ownership and/or permissions on a synlink: to avoid the identity of the
-> "builder" to seep down into the generated filesystem. But even in that
-> case, only the numerical UID would end up in the generated filesystem,
-> so it is not really a concern.
+> +
+> +config BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
+> +	bool "Using a custom board configuration file"
+> +
+> +endchoice
+> +
+> +config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
+> +	string "Configuration file path"
+> +	depends on BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG
+> +	help
+> +	  Path to the board configuration file
 
- That argument is void, since everything is already chown root:root.
+	help
+	  Path to the modified configuration header file. It will be
+	  copied to include/configs/<boardname>.h in the U-Boot sources.
+	  Note that this doesn't allow you to create a custom board,
+	  only to modify some of configuration variables.
 
 
-> So, I can't really understand what the underlying problem is.
-> 
-> Angelo, we need you to explain the issue you are facing, so we understand
-> why you believe this change to be needed.
-> 
-> (Note: a proper commit message would do just that: describe the observed
-> problem, explain the underlying reason it behaves that way, introduce
-> and explain the proposed fix. See for example cset 86c3244 "wget: fix
-> host-gettext build dependency race" for a real-world example.)
+ Also, instead of adding a choice to choose between bundled or modified
+configuration file, you could just have the string option and use the
+default if it is empty. The first way is what is used in kernel and
+barebox, the second way is what is done in busybox and uClibc. Well,
+actually, the latter don't use the default when it's empty, instead they
+encode the default in the Config.in - but I personally don't like that :-)
 
- +1
+ Peter, which approach do you prefer?
 
+
+> +
+> +choice
+>  	prompt "U-Boot binary format"
+>  	default BR2_TARGET_UBOOT_FORMAT_BIN
+>  
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 631da6b..8bcf260 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -80,6 +80,9 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+>  endif
+>  
+>  define UBOOT_CONFIGURE_CMDS
+> +	$(if $(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),
+> +		cp -pf $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
+> +			$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
+
+ I prefer the following idiom:
+
+ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
+define UBOOT_COPY_CUSTOM_CONFIG_FILE
+	...
+endef
+endif
+
+define UBOOT_CONFIGURE_CMDS
+	$(UBOOT_COPY_CUSTOM_CONFIG_FILE)
+	...
+
+ Peter, please confirm?
+
+
+ Also, I don't like the -f option of cp much because most people don't
+know what it means. And finally, I really wouldn't give it a -p.
+Actually, if it's not recursive, we usually use $(INSTALL). Therefore:
+
+ifeq ($(BR2_TARGET_UBOOT_USE_CUSTOM_CONFIG),y)
+define UBOOT_COPY_CUSTOM_CONFIG_FILE
+	(INSTALL) -m 0644 $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE)) \
+		$(@D)/include/configs/$(UBOOT_BOARD_NAME).h)
+endef
+endif
+
+
+
+ And finally, to completely defuse Thomas's remarks, you could put the
+following in the commit log.
+
+"""
+Add an option BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE that makes it possible
+to override the configuration options in the board header file. This
+avoids the need for manipulating the board header file with sed hacks
+like is currently done for the BR2_TARGET_UBOOT_NETWORK settings.
+
+Note that this option does not make it possible to add a new board to
+U-Boot. That still has to be done by patching the source.
+"""
 
  Regards,
  Arnout
 
-> 
-> Regards,
-> Yann E. MORIN.
+
+>  	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
+>  		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+>  		$(UBOOT_BOARD_NAME)_config
 > 
 
 
