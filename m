@@ -1,44 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 Apr 2014 14:03:09 +0200
-Subject: [Buildroot] [git commit] qt: webkit is now supported on MIPS64
-Message-ID: <20140430120350.468FD9CA96@busybox.osuosl.org>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Wed, 30 Apr 2014 14:32:19 +0200
+Subject: [Buildroot] [PATCH 1/1] libwebsockets : bump version to v1.23
+In-Reply-To: <CAAXf6LWycxjzrtxBYwfxUyLFQrKyA98JLYXMBN_NuLTSwCCpGA@mail.gmail.com>
+References: <1398852411-17462-1-git-send-email-sagaert.johan@skynet.be>
+ <CAAXf6LWycxjzrtxBYwfxUyLFQrKyA98JLYXMBN_NuLTSwCCpGA@mail.gmail.com>
+Message-ID: <090CCA1294CF41F2B38B5B7D8F593CF2@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b030b585be4d0e29e0909d1f277f390f39a0209f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since qt's version has been bumped to 4.8.6 we can add support for
-webkit on MIPS64 architectures (both big and little endian). It wasn't
-possible on 4.8.5 because QtScript wasn't supported on MIPS64, but that
-has been fixed on 4.8.6.
-
-With reference to:
-   https://codereview.qt-project.org/#change,73022
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index eed25c8..8d67e37 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -358,8 +358,9 @@ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
- 	bool
- 	# see src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
- 	default y if BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
--		BR2_mipsel || BR2_powerpc || BR2_sh4 || BR2_sh4eb || \
--		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
-+		BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_powerpc || \
-+		BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb || \
-+		BR2_sparc || BR2_x86_64
  
- config BR2_PACKAGE_QT_WEBKIT
- 	bool "WebKit Module"
+Dear Thomas
+
+Only cmake is supported, check the v1.23-chrome32-firefox24 sources.
+The previous version supported both cmake and autotools.
+
+-----Oorspronkelijk bericht-----
+Van: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] Namens Thomas De Schampheleire
+Verzonden: woensdag 30 april 2014 14:01
+Aan: Sagaert Johan
+CC: buildroot at busybox.net
+Onderwerp: Re: [Buildroot] [PATCH 1/1] libwebsockets : bump version to v1.23
+
+On Wed, Apr 30, 2014 at 12:06 PM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
+> bump to v1.23-chrome32-firefox24
+> The latest releases use the cmake build infrastructure.
+> Converted the makefile to the cmake infrastructure.
+>
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+> ---
+>  package/libwebsockets/libwebsockets.mk | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/libwebsockets/libwebsockets.mk 
+> b/package/libwebsockets/libwebsockets.mk
+> index ec5244c..1d76bc9 100644
+> --- a/package/libwebsockets/libwebsockets.mk
+> +++ b/package/libwebsockets/libwebsockets.mk
+> @@ -4,14 +4,18 @@
+>  #
+>  
+> ######################################################################
+> ##########
+>
+> -LIBWEBSOCKETS_VERSION = v1.22-chrome26-firefox18
+> +LIBWEBSOCKETS_VERSION = v1.23-chrome32-firefox24
+>  LIBWEBSOCKETS_SOURCE = libwebsockets-$(LIBWEBSOCKETS_VERSION).tar.xz
+>  LIBWEBSOCKETS_SITE = 
+> http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
+>  LIBWEBSOCKETS_LICENSE = LGPLv2.1
+>  LIBWEBSOCKETS_LICENSE_FILES = COPYING  LIBWEBSOCKETS_DEPENDENCIES = 
+> zlib -LIBWEBSOCKETS_AUTORECONF = YES -LIBWEBSOCKETS_CONF_OPT = 
+> --without-testapps  LIBWEBSOCKETS_INSTALL_STAGING = YES
+>
+> -$(eval $(autotools-package))
+> +LIBWEBSOCKETS_CONF_OPT += -DWITHOUT_TESTAPPS=ON
+> +
+> +ifeq ($(BR2_PACKAGE_OPENSSL),)
+> +       LIBWEBSOCKETS_CONF_OPT += -DWITH_SSL=OFF endif
+> +
+> +$(eval $(cmake-package))
+
+In fact, libwebsockets provides both an autotools as a cmake-based build infrastructure.
+The question is which one we prefer if both are provided.
+
+Personally, since there are more packages using autotools (and thus host-automake and host-autoconf need to be built anyhow) and
+host-cmake build time is significant, I prefer autotools in such a case as it avoids to build host-cmake for this one package
+(assuming it's the only one being enabled).
+
+Best regards,
+Thomas
+
+> --
+> 1.9.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
