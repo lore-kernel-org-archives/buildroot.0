@@ -1,50 +1,27 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 20:44:57 +0200
-Subject: [Buildroot] Two stages compilation
-In-Reply-To: <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
-References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
- <535F8499.8070406@gmail.com>
- <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
-Message-ID: <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
+Date: Wed, 30 Apr 2014 20:58:16 +0200
+Subject: [Buildroot] What happened to uclibc-update-config?
+In-Reply-To: <1398705091.394515596@apps.rackspace.com>
+References: <1398705091.394515596@apps.rackspace.com>
+Message-ID: <CAAXf6LUhWAGt0JX=5fKb+58rfYm8RkQP=-VqgMcUMqGfJtnRzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo, Zoltan,
+Hi Dan,
 
-(please don't top-post)
+On Mon, Apr 28, 2014 at 7:11 PM, Dan Moulding
+<dan.moulding@rackwareinc.com> wrote:
+> Hi,
+>
+> I am attempting to save my customized uclibc configuration using the methods prescribed in the Buildroot user manual. It mentions the existence of several "*-update-config" "make" targets. I've done "make busybox-update-config" and that seems to work just fine. But when I try "make uclibc-update-config" I get a "No rule to make target" error from "make".
+>
+> Looking back in the history, I see that the "uclibc-update-config" target was removed when uClibc was converted to the package infrastructure (commit a5e92d9). Was it never added back? Is there an alternative? Or do I need to just manually copy the .config for uclibc for now?
 
-On Wed, Apr 30, 2014 at 9:30 AM, Angelo Compagnucci
-<angelo.compagnucci@gmail.com> wrote:
-> Hi Zoltan,
->
-> Thank you very much for the info, I'm reading the documentation avidly
-> but I totally missed that option.
->
-> Could you please send me the package definitions you mentioned above
-> as an example?
->
-> Thank you!
->
-> 2014-04-29 12:53 GMT+02:00 Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>:
->> Dear Angelo,
->>
->> The point is here that for mono you have to define both a host package,
->> and a target package. For this you can look for the
->> "host-autotools-package" macro, and probably can get some ideas from
->> checking package/python/python.mk.
->>
->> A couple of months back i was able to package mono for OpenWrt (which is
->> in this sense close to Buildroot), but i haven't finalized that project
->> (as it turned out that the target MIPS CPU is not totally supported by
->> Mono...). If you think it's useful, i can dig this out from the archive
->> and share the package definition with you. Please let me know if so.
-
-Note that Alexander Varnin has submitted a patch to the list for the
-mono runtime a while back:
-http://patchwork.ozlabs.org/patch/299488/
+Thanks for the report. I don't think uclibc-update-config was removed
+intentionally, so I'll submit a patch that adds it again...
 
 Best regards,
 Thomas
