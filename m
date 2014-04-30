@@ -1,24 +1,38 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 12:18:00 +0200
-Subject: [Buildroot] Patchwork big patchsets: SELinux
-Message-ID: <CAAXf6LW8iN=SskGU6x7XkjfVR4NQR-JzE2sNRjYtehHnpu391Q@mail.gmail.com>
+Date: Wed, 30 Apr 2014 12:48:10 +0200
+Subject: [Buildroot] The uClibc saga: next steps
+Message-ID: <CAAXf6LUQb3a57R-ztncPtsRvouP=PxjoWn1fC1Xy3+XLhNTErA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+All,
 
-I would like to check on the state of one of the big patchsets in
-patchwork: the SELinux patches posted by Clayton Shotwell.
+At the last buildroot developer days, we discussed the uClibc
+situation at length [1]. We finally decided to try, once more, to take
+it up with the uClibc community, requesting them to make a release. We
+told them that we are considering to stop using uClibc as the default
+C library in Buildroot.
 
-The last iteration in patchwork is v5, posted in December 2013.
+Unfortunately, this approach failed to work, as did previous attempts.
+The discussion on the uClibc mailing list is at [2].
 
-What I would like to know specifically is:
-- what is the state of the patchset?
-- what is blocking integration of this patchset?
-- what can be done to deblock it?
+Hence, I think it is time to discuss the next steps, which could possibly be:
+- create a 'fork' of uClibc that just makes releases out of the
+existing code in the uClibc sources.
+- go forward with the plan to stop using uClibc as default C library,
+and either promote musl or (e)glibc.
+- (other possible steps here...)
 
-Thanks,
+What do you think?
+
+Best regards,
 Thomas
+
+
+[1] http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014#How_to_handle_the_uClibc_problem
+
+[2] http://lists.uclibc.org/pipermail/uclibc/2014-February/048252.html
+http://lists.uclibc.org/pipermail/uclibc/2014-March/048269.html
