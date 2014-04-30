@@ -1,49 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Apr 2014 21:03:24 +0200
-Subject: [Buildroot] Two stages compilation
-In-Reply-To: <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
-References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
- <535F8499.8070406@gmail.com>
- <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
- <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
-Message-ID: <20140430210324.31be1446@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 30 Apr 2014 21:06:14 +0200
+Subject: [Buildroot] default nice level for kernel processes
+In-Reply-To: <OFA47998B6.ADFB908A-ON85257CCA.0053D026-85257CCA.0053ED4B@LocalDomain>
+References: <OFA47998B6.ADFB908A-ON85257CCA.0053D026-85257CCA.0053ED4B@LocalDomain>
+Message-ID: <CAAXf6LVVqoJuoavLfTdiA-vzz9JGFD-yvN5zLm07nh38o-LwoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Angelo,
+Hi,
 
-On Wed, 30 Apr 2014 20:44:57 +0200, Thomas De Schampheleire wrote:
+On Wed, Apr 30, 2014 at 5:16 PM, Naitik Amin <Naitik.Amin@ametek.com> wrote:
+> Hi there,
+>
+> When I start my system, by default all kernel processes start at nice level
+> -20, how can give a different default nice level for the kernel processes ?
 
-> >> A couple of months back i was able to package mono for OpenWrt (which is
-> >> in this sense close to Buildroot), but i haven't finalized that project
-> >> (as it turned out that the target MIPS CPU is not totally supported by
-> >> Mono...). If you think it's useful, i can dig this out from the archive
-> >> and share the package definition with you. Please let me know if so.
-> 
-> Note that Alexander Varnin has submitted a patch to the list for the
-> mono runtime a while back:
-> http://patchwork.ozlabs.org/patch/299488/
+This isn't really related to buildroot, but as far as I know there is
+no standard way to achieve this.
+You can renice them once created, but take into account that new
+kworkers may be created on the fly which would get the default
+priority again.
 
-Though this particular package only provides a target version of Mono,
-which probably means that it relies on mono being installed on the
-build machine to be able to build all the Mono C# libraries (i.e step 2
-in Angelo's description).
+The creation of such new kworkers is done by kthreadd. Normally, new
+kworkers would get the priority of kthreadd (which you could change at
+userland init), but the kernel specifically assigns a fixed priority
+and scheduling class to the newly created thread.
+It is possible to patch the kernel to remove this extra step, and thus
+let new kworkers inherit their priority from kthreadd (which you can
+control from userspace).
 
-So indeed, as Zoltan pointed out, most likely the solution is to have
-both a target and a host variant for Mono. The host variant builds the
-compiler, and is used on the build machine to compile all the Mono C#
-libraries into the corresponding byte code. The target variant builds
-the "virtual machine" that runs on the target. And obviously most
-likely the target variant will have a dependency on the host variant.
-
-Also, the host variant building the compiler will be useful if people
-want to package other Mono libraries/applications.
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
