@@ -1,153 +1,124 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 21:34:56 +0200
-Subject: [Buildroot] [PATCH trivial] package .mk files: use 80 # signs in
-	header
-Message-ID: <e0ee3818ce568d7d0b28.1398886496@argentina>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 30 Apr 2014 22:30:45 +0200
+Subject: [Buildroot] Two stages compilation
+In-Reply-To: <20140430210324.31be1446@skate>
+References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
+ <535F8499.8070406@gmail.com>
+ <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
+ <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
+ <20140430210324.31be1446@skate>
+Message-ID: <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+HiTtomas
 
----
-Kids can't count anymore...
+>> Note that Alexander Varnin has submitted a patch to the list for the
+>> mono runtime a while back:
+>> http://patchwork.ozlabs.org/patch/299488/
+>
+> Though this particular package only provides a target version of Mono,
+> which probably means that it relies on mono being installed on the
+> build machine to be able to build all the Mono C# libraries (i.e step 2
+> in Angelo's description).
 
- package/exim/exim.mk                       |  4 ++--
- package/flann/flann.mk                     |  4 ++--
- package/gpm/gpm.mk                         |  4 ++--
- package/opentyrian-data/opentyrian-data.mk |  4 ++--
- package/opentyrian/opentyrian.mk           |  4 ++--
- package/qhull/qhull.mk                     |  4 ++--
- package/smstools3/smstools3.mk             |  4 ++--
- package/tmux/tmux.mk                       |  4 ++--
- package/yaffs2utils/yaffs2utils.mk         |  4 ++--
- 9 files changed, 18 insertions(+), 18 deletions(-)
+Yes, that patch only provides the first half, I want to provide both the halves.
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -1,8 +1,8 @@
--#############################################################
-+################################################################################
- #
- # exim
- #
--#############################################################
-+################################################################################
- 
- EXIM_VERSION = 4.82
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
-diff --git a/package/flann/flann.mk b/package/flann/flann.mk
---- a/package/flann/flann.mk
-+++ b/package/flann/flann.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # flann
- #
--###############################################################################
-+################################################################################
- 
- FLANN_VERSION = d0c04f4d290ebc3aa9411a3322992d298e51f5aa
- FLANN_SITE = $(call github,mariusmuja,flann,$(FLANN_VERSION))
-diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
---- a/package/gpm/gpm.mk
-+++ b/package/gpm/gpm.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # gpm
- #
--###############################################################################
-+################################################################################
- 
- GPM_VERSION = 1.20.7
- GPM_SOURCE = gpm-$(GPM_VERSION).tar.bz2
-diff --git a/package/opentyrian-data/opentyrian-data.mk b/package/opentyrian-data/opentyrian-data.mk
---- a/package/opentyrian-data/opentyrian-data.mk
-+++ b/package/opentyrian-data/opentyrian-data.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # opentyrian-data
- #
--###############################################################################
-+################################################################################
- 
- OPENTYRIAN_DATA_VERSION = 2.1
- OPENTYRIAN_DATA_SITE = http://www.camanis.net/opentyrian/
-diff --git a/package/opentyrian/opentyrian.mk b/package/opentyrian/opentyrian.mk
---- a/package/opentyrian/opentyrian.mk
-+++ b/package/opentyrian/opentyrian.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # opentyrian
- #
--###############################################################################
-+################################################################################
- 
- OPENTYRIAN_VERSION = 2.1.20130907
- OPENTYRIAN_SITE = http://www.camanis.net/opentyrian/releases/
-diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
---- a/package/qhull/qhull.mk
-+++ b/package/qhull/qhull.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # qhull
- #
--###############################################################################
-+################################################################################
- 
- QHULL_VERSION = 60d55819729d7b49391dde0271e15a56c70992b9
- QHULL_SITE = git://gitorious.org/qhull/qhull.git
-diff --git a/package/smstools3/smstools3.mk b/package/smstools3/smstools3.mk
---- a/package/smstools3/smstools3.mk
-+++ b/package/smstools3/smstools3.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # smstools3
- #
--###############################################################################
-+################################################################################
- 
- SMSTOOLS3_VERSION = 3.1.15
- SMSTOOLS3_SITE = http://smstools3.kekekasvi.com/packages/
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -1,8 +1,8 @@
--###############################################################################
-+################################################################################
- #
- # tmux
- #
--###############################################################################
-+################################################################################
- 
- TMUX_VERSION = 1.9a
- TMUX_SITE = http://downloads.sourceforge.net/tmux
-diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
---- a/package/yaffs2utils/yaffs2utils.mk
-+++ b/package/yaffs2utils/yaffs2utils.mk
-@@ -1,8 +1,8 @@
--#############################################################
-+################################################################################
- #
- # yaffs2utils
- #
--#############################################################
-+################################################################################
- 
- YAFFS2UTILS_VERSION = 0.2.9
- YAFFS2UTILS_SOURCE = $(YAFFS2UTILS_VERSION).tar.gz
+> So indeed, as Zoltan pointed out, most likely the solution is to have
+> both a target and a host variant for Mono. The host variant builds the
+> compiler, and is used on the build machine to compile all the Mono C#
+> libraries into the corresponding byte code. The target variant builds
+> the "virtual machine" that runs on the target. And obviously most
+> likely the target variant will have a dependency on the host variant.
+>
+> Also, the host variant building the compiler will be useful if people
+> want to package other Mono libraries/applications.
+
+Yes, this is exactly what I aiming at. Actually I have a mono
+metapackage that imports two subpackages, mono-native and
+mono-managed.
+The mono native part works like a charm, the mono-managed is where I'm
+having troubles.
+
+Actually I have something like this:
+
+
+#############################################################
+#
+# mono-managed
+#
+#############################################################
+
+MONO_MANAGED_VERSION         = $(MONO_VERSION)
+MONO_MANAGED_SITE            = $(MONO_SITE)
+MONO_MANAGED_SOURCE          = $(MONO_SOURCE)
+MONO_MANAGED_INSTALL_STAGING  = $(MONO_INSTALL_STAGING)
+
+HOST_MONO_MANAGED_CONF_ENV = \
+CFLAGS="--sysroot=$(STAGING_DIR)"
+
+HOST_MONO_MANAGED_CONF_OPT = \
+$(MONO_CONF_OPT)
+
+$(eval $(autotools-package))
+$(eval $(host-autotools-package))
+
+
+But looking at the configure phase I can see:
+
+   Libraries:
+        .NET 2.0/3.5:  no
+        .NET 4.0:      no
+        .NET 4.5:      no
+        MonoDroid:     no
+        MonoTouch:     no
+        Xamarin.Mac:   no
+        JNI support:   IKVM Native
+        libgdiplus:    assumed to be installed
+        zlib:
+
+So .NET libraries will be not compiled.
+
+If I enter manually the the build/mono-managed folder and issue a
+./configure I can see this:
+
+ Libraries:
+        .NET 2.0/3.5:  yes
+        .NET 4.0:      yes
+        .NET 4.5:      yes
+        MonoDroid:     no
+        MonoTouch:     no
+        Xamarin.Mac:   no
+        JNI support:   IKVM Native
+        libgdiplus:    assumed to be installed
+        zlib:          system zlib
+
+The main difference I can see in both config.log is --target and
+--host options, they are (wrongly?)
+
+--target=arm-buildroot-linux-uclibcgnueabi
+--host=arm-buildroot-linux-uclibcgnueabi
+
+when they should be
+
+--host=x86_64-linux-gnu
+--target=x86_64-linux-gnu
+
+Have you any advice?
+
+Thank you!
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
