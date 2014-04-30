@@ -1,152 +1,81 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 11:08:31 +0200
-Subject: [Buildroot] [PATCH v2 2/2] ccache: provide capability to do
- initial ccache setup
-In-Reply-To: <1398826359-2711-3-git-send-email-danomimanchego123@gmail.com>
-References: <1398826359-2711-1-git-send-email-danomimanchego123@gmail.com>
- <1398826359-2711-3-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <CAAXf6LWWxL2te_qi9xT52+Ho1dhwLnaTyQRqSnNRVdXCp1OEAQ@mail.gmail.com>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Wed, 30 Apr 2014 10:07:15 +0000
+Subject: [Buildroot] [PATCH v2 1/4] uclibc: arc: bump to arc-4.8-R3
+	release
+In-Reply-To: <87k3a7tjc5.fsf@dell.be.48ers.dk>
+References: <535EA9E5.5010909@mind.be>
+ <1398785474-17540-1-git-send-email-Anton.Kolesov@synopsys.com>
+ <87k3a7tjc5.fsf@dell.be.48ers.dk>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CC313C@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Danomi,
+Hi Peter,
 
-On Wed, Apr 30, 2014 at 4:52 AM, Danomi Manchego
-<danomimanchego123@gmail.com> wrote:
-> For example, if your project is known to require more space
-> than the default max cache size, then you might want to
-> automatically increase the cache size to a suitable amount
-> using the -M option.
->
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->
-> ---
->
-> Changes v1 -> v2:
-> * Refresh against latest
-> * Also, remove needless line-breaks in existing hooks
-> ---
->  Config.in                |   15 ++++++++++++++-
->  package/ccache/ccache.mk |   18 ++++++++++++++----
->  2 files changed, 28 insertions(+), 5 deletions(-)
->
-> diff --git a/Config.in b/Config.in
-> index 5823274..8ecd4ed 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -256,7 +256,7 @@ config BR2_CCACHE
->         help
->           This option will enable the use of ccache, a compiler
->           cache. It will cache the result of previous builds to speed
-> -         up future builds. The cache is stored in
-> +         up future builds. By default, the cache is stored in
->           $HOME/.buildroot-ccache.
->
->           Note that Buildroot does not try to invalidate the cache
-> @@ -273,6 +273,19 @@ config BR2_CCACHE_DIR
->         help
->           Where ccache should store cached files.
->
-> +config BR2_CCACHE_INITIAL_SETUP
-> +       string "Compiler cache initial setup"
-> +       depends on BR2_CCACHE
+I've talked with Vineet, and I will send a new uClibc bump-patch that will point to new commit, with this fix applied. 
 
-Since there is another option above (cache location) also using
-'depends on BR2_CCACHE', it is better to create an
-if BR2_CCACHE
-...
-endif
-block around both options, and remove the 'depends on' statements.
-
-> +       help
-> +         Additional ccache setup options, such as max-files or max-size.
-> +
-> +         For example, if your project is known to require more space
-> +         than the default max cache size, then you might want to
-> +         automatically increase the cache size to a suitable amount
-> +         using the -M option.
-
-I would change this wording to:
-
-Initial ccache settings to apply, such as --max-files or --max-size.
-
-For example, if your project is known to require more space
-than the default max cache size, then you might want to
-increase the cache size to a suitable amount using the
--M (--max-size) option.
-
-The string you specify here is passed verbatim to ccache, so
-see the ccache help for more details.
-
-> +
-> +         Applied at time of ccache compilation.
-
-This statement is a bit confusing to me: it gave me the impression
-that the values are encoded inside the ccache build which is not the
-case. While this is an interpretation error on my side, maybe the
-sentence could read:
-
-These initial settings are applied after ccache has been compiled.
-
-> +
->  config BR2_DEPRECATED
->         bool "Show packages that are deprecated or obsolete"
->         help
-> diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-> index df92c5e..5be6b16 100644
-> --- a/package/ccache/ccache.mk
-> +++ b/package/ccache/ccache.mk
-> @@ -38,15 +38,25 @@ define HOST_CCACHE_PATCH_CONFIGURATION
->         sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/ccache.c
->  endef
->
-> -HOST_CCACHE_POST_CONFIGURE_HOOKS += \
-> -       HOST_CCACHE_PATCH_CONFIGURATION
-> +HOST_CCACHE_POST_CONFIGURE_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
->
->  define HOST_CCACHE_MAKE_CACHE_DIR
->         mkdir -p $(BR_CACHE_DIR)
->  endef
->
-> -HOST_CCACHE_POST_INSTALL_HOOKS += \
-> -       HOST_CCACHE_MAKE_CACHE_DIR
-> +HOST_CCACHE_POST_INSTALL_HOOKS += HOST_CCACHE_MAKE_CACHE_DIR
-
-The above two changes aren't really related to the initial cache setup
-and could have been put in a separate patch, but I assume it's ok (not
-sure if there is a strict policy on this).
+Anton
 
 
-> +
-> +# Provide capability to do initial ccache setup (e.g. increase default size)
-> +BR_CCACHE_INITIAL_SETUP = $(call qstrip,$(BR2_CCACHE_INITIAL_SETUP))
-> +ifneq ($(BR_CCACHE_INITIAL_SETUP),)
-> +define HOST_CCACHE_DO_INITIAIL_SETUP
-
-typo: INITIAL
-
-> +       @$(call MESSAGE,"Do initial host ccache setup")
-
-Maybe this could be: "Applying initial settings"
-which would render the displayed string as:
-
->>> host-ccache 3.1.8 Applying initial settings
-
-> +       $(CCACHE) $(BR_CCACHE_INITIAL_SETUP)
-> +       $(CCACHE) -s
-> +endef
-> +
-> +HOST_CCACHE_POST_INSTALL_HOOKS += HOST_CCACHE_DO_INITIAIL_SETUP
-
-Same typo of course.
-
-
-Do you have time to refresh the patch taking into account these comments?
-Alternatively I can refresh it for you (keeping your credit, of course).
-Just let me know..
-
-Best regards,
-Thomas
+> -----Original Message-----
+> From: Peter Korsgaard [mailto:jacmet at gmail.com] On Behalf Of Peter
+> Korsgaard
+> Sent: 30 April 2014 10:36
+> To: Anton Kolesov
+> Cc: buildroot at uclibc.org; Alexey Brodkin
+> Subject: Re: [PATCH v2 1/4] uclibc: arc: bump to arc-4.8-R3 release
+> 
+> >>>>> "Anton" == Anton Kolesov <Anton.Kolesov@synopsys.com> writes:
+> 
+>  > Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+>  > Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+>  > ---
+>  >  package/uclibc/Config.in | 2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>  > diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+>  > index 2b93660..cc244a9 100644
+>  > --- a/package/uclibc/Config.in
+>  > +++ b/package/uclibc/Config.in
+>  > @@ -42,7 +42,7 @@ config BR2_UCLIBC_VERSION_STRING
+>  >  	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+>  >  	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+>  >  	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+>  > -	default "f37101d94284c692ee9b23bc72ef38b9473cd316" if BR2_arc
+>  > +	default "arc-4.8-R3"	if BR2_arc
+>  >  	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if
+> BR2_UCLIBC_VERSION_XTENSA_GIT
+>  >  	default BR2_USE_UCLIBC_SNAPSHOT	if
+> BR2_UCLIBC_VERSION_SNAPSHOT
+> 
+> This is broken for !lfs builds:
+> 
+>    CC libc/sysdeps/linux/common/posix_fadvise.os
+> libc/sysdeps/linux/common/posix_fadvise.c:26:29: error: unknown type
+> name 'off64_t'
+>  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+>                              ^
+> libc/sysdeps/linux/common/posix_fadvise.c:26:45: error: unknown type
+> name 'off64_t'
+>  int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
+>                                              ^
+> libc/sysdeps/linux/common/posix_fadvise.c: In function 'posix_fadvise':
+> libc/sysdeps/linux/common/posix_fadvise.c:32:2: warning: implicit
+> declaration of function 'posix_fadvise64' [-Wimplicit-function-declaration]
+>   return posix_fadvise64(fd, offset, len, advice);
+>   ^
+> make[1]: *** [libc/sysdeps/linux/common/posix_fadvise.os] Error 1
+> make[1]: Leaving directory
+> `/home/peko/source/buildroot/output/build/uclibc-arc-4.8-R3'
+> make: *** [/home/peko/source/buildroot/output/build/uclibc-arc-4.8-
+> R3/.stamp_built] Error 2
+> 
+> I believe this fixes it:
+> 
+> http://lists.uclibc.org/pipermail/uclibc/2014-April/048298.html
+> 
+> --
+> Bye, Peter Korsgaard
