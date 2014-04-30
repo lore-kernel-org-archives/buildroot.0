@@ -1,50 +1,46 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 21:18:57 +0200
-Subject: [Buildroot] [PATCH] uclibc: re-add uclibc-update-config target
-Message-ID: <ffb59038c33cd78676d8.1398885537@argentina>
+Date: Wed, 30 Apr 2014 21:29:02 +0200
+Subject: [Buildroot] [PATCH v2] target-finalize: avoid stripping kernel
+ modules with incorrect permissions
+Message-ID: <86b494c37c1419136d1e.1398886142@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit a5e92d92e7ee413157aae7cecf1f354e718731e1 converted uClibc to the
-package infrastructure, but while doing so removed support for the
-documented uclibc-update-config make target. This make target copies the
-uclibc .config file back to the original (typically version-controlled)
-configuration file.
+If a kernel module is installed with incorrect permissions (0755 iso 0644),
+it would get stripped in a way that would render the kernel module broken.
+While the incorrect permissions are a developer error, it is a minor change
+to prevent this mistake from causing incorrectly stripped modules.
 
-As this was an unintentional removal, this patch re-adds the
-uclibc-update-config target.
+This was reported with bug #6992:
+https://bugs.busybox.net/show_bug.cgi?id=6992
 
-Reported-by: Dan Moulding <dan.moulding@rackwareinc.com>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/uclibc/uclibc.mk |  5 ++++-
- 1 files changed, 4 insertions(+), 1 deletions(-)
+v2: add comment with more detail (Arnout)
 
+ Makefile |  9 ++++++++-
+ 1 files changed, 8 insertions(+), 1 deletions(-)
 
-Note: while I was at it, I fixed a small typo in uclibc.mk
-
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -211,7 +211,7 @@ endef
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -507,7 +507,14 @@ ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUD
+ STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
  endif
+ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+-STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
++# file exclusions:
++# - libpthread.so: a non-stripped libpthread shared library is needed for
++#   proper debugging of pthread programs using gdb.
++# - kernel modules (*.ko): do not function properly when stripped like normal
++#   applications and libraries. Normally kernel modules are already excluded
++#   by the executable permission check above, so the explicit exclusion is only
++#   done for kernel modules with incorrect permissions.
++STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print
  
- #
--# Endianess
-+# Endianness
- #
+ $(TARGETS_ROOTFS): target-finalize
  
- ifeq ($(call qstrip,$(BR2_ENDIAN)),BIG)
-@@ -553,5 +553,8 @@ uclibc-menuconfig: uclibc-patch
- 
- $(eval $(generic-package))
- 
-+uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
-+	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
-+
- # Before uClibc is built, we must have the second stage cross-compiler
- $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
