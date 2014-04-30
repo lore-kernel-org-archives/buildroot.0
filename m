@@ -1,48 +1,43 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Wed, 30 Apr 2014 12:06:51 +0200
-Subject: [Buildroot] [PATCH 1/1] libwebsockets : bump version to v1.23
-Message-ID: <1398852411-17462-1-git-send-email-sagaert.johan@skynet.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Apr 2014 08:57:37 -0300
+Subject: [Buildroot] Patchwork cleanup #9: triaging proposal
+In-Reply-To: <CAAXf6LX=CTGexZ-mm1dSjBzBV77WcDUo+mzNDyk=nAfwZSLKEQ@mail.gmail.com>
+References: <CAAXf6LW5GPZ_vegt_jO=xr0e5Qfzjt4Uq7yye6jF3si6qyycBQ@mail.gmail.com>
+ <CAAXf6LX=CTGexZ-mm1dSjBzBV77WcDUo+mzNDyk=nAfwZSLKEQ@mail.gmail.com>
+Message-ID: <5360E531.706@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bump to v1.23-chrome32-firefox24
-The latest releases use the cmake build infrastructure.
-Converted the makefile to the cmake infrastructure.
+On 04/30/2014 04:53 AM, Thomas De Schampheleire wrote:
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
- package/libwebsockets/libwebsockets.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+> On Thu, Apr 24, 2014 at 9:46 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> audiofile: needs dynamic library
+>> Simon Dawson <spdawson@gmail.com>
+>> http://patchwork.ozlabs.org/patch/290552
+>>
+>> C unsure: the autobuild problem this patch is supposed to fixed is
+>> still present (http://autobuild.buildroot.org/?reason=audiofile-0.3.6)
+>> but the correctness of the patch has been under discussion. Gustavo
+>> may possibly provide more details.
+> 
+> 
+> Gustavo: could you provide more details about this audiofile
+> situation, and what to do with the mentioned patch?
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index ec5244c..1d76bc9 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,14 +4,18 @@
- #
- ################################################################################
- 
--LIBWEBSOCKETS_VERSION = v1.22-chrome26-firefox18
-+LIBWEBSOCKETS_VERSION = v1.23-chrome32-firefox24
- LIBWEBSOCKETS_SOURCE = libwebsockets-$(LIBWEBSOCKETS_VERSION).tar.xz
- LIBWEBSOCKETS_SITE = http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
- LIBWEBSOCKETS_LICENSE = LGPLv2.1
- LIBWEBSOCKETS_LICENSE_FILES = COPYING
- LIBWEBSOCKETS_DEPENDENCIES = zlib
--LIBWEBSOCKETS_AUTORECONF = YES
--LIBWEBSOCKETS_CONF_OPT = --without-testapps
- LIBWEBSOCKETS_INSTALL_STAGING = YES
- 
--$(eval $(autotools-package))
-+LIBWEBSOCKETS_CONF_OPT += -DWITHOUT_TESTAPPS=ON
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),)
-+	LIBWEBSOCKETS_CONF_OPT += -DWITH_SSL=OFF
-+endif
-+
-+$(eval $(cmake-package))
--- 
-1.9.2
+Hi.
+After some testing with latest git i've got:
+
+Blackfin external 2013R1 FLAT builds audiofile (mpd can't because nommu).
+Sourcery external 2013.11 ARM builds mpd with audiofile fine.
+
+Mipsel internal defaults (+stdc +wchar) is fine too building mpd+audiofile.
+
+Now that libstdc++.a is being copying it seems at least some common
+cases work fine.
+Maybe i'm missing something?
+
+Regards.
