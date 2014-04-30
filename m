@@ -1,24 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Apr 2014 02:59:39 +0200
-Subject: [Buildroot] [PATCH] sockit board: Fix readme.txt
-In-Reply-To: <1398813743-631-1-git-send-email-cdhmanning@gmail.com>
-References: <1398813743-631-1-git-send-email-cdhmanning@gmail.com>
-Message-ID: <20140430025939.29db17b2@skate>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 29 Apr 2014 22:52:37 -0400
+Subject: [Buildroot] [PATCH v2 0/2] ccache improvements
+Message-ID: <1398826359-2711-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Charles Manning,
+I've refreshed two of the three ccache patches, the ones being considered as
+part of patchwork clean-up #8, in hopes of being useful to the reviewers.
 
-On Wed, 30 Apr 2014 11:22:23 +1200, Charles Manning wrote:
-> Config name has changed.
-> 
-> Signed-off-by: Charles Manning <cdhmanning@gmail.com>
+See the original cover-letter from October 2013 for more background on the
+patches, if needed:
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+http://lists.busybox.net/pipermail/buildroot/2013-October/081488.html
+
+
+Danomi Manchego (2):
+  ccache: change default cache directory path to match config setting
+  ccache: provide capability to do initial ccache setup
+
+ Config.in                |   15 ++++++++++++++-
+ package/ccache/ccache.mk |   21 +++++++++++++++++----
+ 2 files changed, 31 insertions(+), 5 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
