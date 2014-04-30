@@ -1,142 +1,174 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Apr 2014 15:46:27 +0200
-Subject: [Buildroot] Patchwork cleanup #7: submitter notification
- (feedback deadline: April 12)
-In-Reply-To: <CAAXf6LXikqyc=E84BFYGo1uX1TBiyDRJuUKTPLSQtsTacu0tKg@mail.gmail.com>
-References: <CAAXf6LW5stEOk84f-SiPvnYSxazu7vBgM-cNpQStV7j+dcMrbw@mail.gmail.com>
- <CAAXf6LUAvi_C5NvSa6=mEhcipkBYM6XwPLHhRCZtxBccq05i0g@mail.gmail.com>
- <CD43324F-6F9A-40AE-94AD-DD25A435DF7C@armadeus.org>
- <20140331171204.GB5004@free.fr> <533EDC3F.9060101@mind.be>
- <CAAXf6LXikqyc=E84BFYGo1uX1TBiyDRJuUKTPLSQtsTacu0tKg@mail.gmail.com>
-Message-ID: <5360FEB3.8000803@mind.be>
+From: arnaud at intelibre.fr <arnaud@intelibre.fr>
+Date: Wed, 30 Apr 2014 16:21:53 +0200
+Subject: [Buildroot] [PATCH v10] espeak: new package
+Message-ID: <1398867713-3604-1-git-send-email-arnaud@intelibre.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/04/14 21:52, Thomas De Schampheleire wrote:
-> Arnout, Yann, Luca,
-> 
-> On Fri, Apr 4, 2014 at 6:22 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 31/03/14 19:12, Yann E. MORIN wrote:
->>> On 2014-03-31 10:58 +0200, Eric Jarrige spake thusly:
->>>> Hi Thomas,
->>>>
->>>>>> [v2,1/1] u-boot: allow to pass a custom configuration file
->>>>>> http://patchwork.ozlabs.org/patch/276286/
->>>>>> Eric Jarrige
->>>>>> Yann Morin gave the feedback that this patch allows to overwrite
->>>>>> u-boot sources, rendering the declared license possible invalid.
->>>>
->>>> AFAIK this feature cannot overwrite the U-Boot license files and
->>>> according to the U-Boot licenses/README - "You can redistribute
->>>> U-Boot  and/or modify it under the terms of version 2 of the GNU
->>>> General Public License as published by the Free Software
->>>> Foundation."
->>>> So, it should not be an issue as long as the new config file respects
->>>> the terms of the version 2 of the GNU GPL license.
->>>
->>> Hmm. There was maybe a bit of misunderstanding in what I said. Lemme
->>> quote it here again:
->>>
->>>     ---
->>>     This is likely to overwrite a uboot source file
->>>     with a local file, so we won't be able to generate conpliant
->>>     legal-info when a custom comnfig file is used.
->>>     ---
->>>
->>> What I meant was, when running 'make legal-info', we will end up copying
->>> the tarball of the sources, and we will miss this file (since Buildroot
->>> is not recreating the tarballs from the build dir, but just copies what
->>> was downloaded.)
->>>
->>> So, this indeed can not overwrite the license file, but the sources in
->>> legal-info will not be the exact sources used to build U-Boot, so the
->>> legal-info will not create a compliant distribution.
->>
->>  Note that this is the same for the kernel (although a bit more vague).
->> One could easily argue that the .config file is part of the
->> infrastructure needed to build the kernel (if you've ever tried to
->> reverse engineer a kernel config you will know what I mean). With U-Boot
->> it's more obvious because the config file is a header file, but the
->> semantics are really the same.
->>
->>  That said, this shouldn't be a reason to do the wrong thing in U-Boot.
->>
->>>
->>> That's why I oppposed the change as-is.
->>>
->>>>>> Eric: are you still interested in pursuing this patch? If so, I think
->>>>>> some further discussion on it should be ignited.
->>>>
->>>> I submitted this patch because I think it is generic enough to support
->>>> custom U-Boot configuration file for any board without using a patch
->>>> but I can understand I am the only one customizing bootloader for
->>>> my boards.
->>>> So feel free to reject this patch if there is no interest to manage
->>>> U-Boot configuration files within BuildRoot.
->>>
->>> I did not say we did not want to be able to provide a custom config
->>> file. I just said we need to be careful on the impact.
->>>
->>> However, I see that it is possible to declare post-legal-info hooks in
->>> packages.
->>>
->>> So you could complement your patch with something like:
->>>
->>>     UBOOT_CUSTOM_CONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
->>>     ifneq ($(UBOOT_CUSTOM_CONFIG_FILE),)
->>>     define UBOOT_COPY_CUSTOM_CONFIG_FILE
->>>         $(INSTALL) -m 0644 -D $(UBOOT_CUSTOM_CONFIG_FILE) \
->>>                    $(SOMEWHERE)
->>>     endef
->>>     UBOOT_POST_LEGAL_INFO_HOOKS += UBOOT_COPY_CUSTOM_CONFIG_FILE
->>>     endif
->>>
->>> I'll leave it to you as an exercise to find what $(SOMEWHERE) should be.
->>> ;-)
->>
->>  Perhaps we should add legal-info infrastructure to support this kind of
->> thing. Something like
->>
->> PKG_LICENSE_EXTRA_SOURCE = list of files relative to BR dir
->>
->>
->>
->>  By the way, since this config.h copying is only useful for changing the
->> configuration of existing boards, I think this should be explicitly
->> mentioned in the help text of the option.
->>
->>  BTW, note that this patch has become more useful since the deprecation
->> of BR2_TARGET_UBOOT_IPADDR and friends.
->>
->>
-> 
-> What should we do with this issue now?
+Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+---
+Changes v9 -> v10:
+	- update Signed-off mail address
+Changes v8 -> v9:
+	- use VERSION_MAJOR
+Changes v7 -> v8:
+        - convert package name to lowercase
+        - fix comments following new policy
+Changes v6 -> v7:
+        - remove comment fromm v5 again
+Changes v5 -> v6:
+        - fix indent
+        - rename patch
+        - fix licence to GPLv3+
+Changes v4 -> v5:
+        - remove useless comment line
+Changes v3 -> v4:
+        - remove extre new lines
+        - remove useless help
+        - remove -source from ESPEAK_VERSION
+        - update extract command to remove -source
+---
+ package/Config.in                                  |  1 +
+ package/espeak/Config.in                           | 41 ++++++++++++++++++++
+ .../espeak-01-do-not-compil-when-install.patch     | 15 ++++++++
+ package/espeak/espeak.mk                           | 44 ++++++++++++++++++++++
+ 4 files changed, 101 insertions(+)
+ create mode 100644 package/espeak/Config.in
+ create mode 100644 package/espeak/espeak-01-do-not-compil-when-install.patch
+ create mode 100644 package/espeak/espeak.mk
 
- For me:
-
-* the legal-info argument is not a showstopper because it's the same for
-many other buildroot features;
-
-* the approach is not great, because it _looks_ like it makes it possible
-to create a new board, which is not true;
-
-* the patch is still very useful, and I like it much more than sedding
-the config file.
-
- So for me, this is an A-class. However, I still have some comments on
-the patch (see that thread).
-
- Regards,
- Arnout
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 07fd166..9e13711 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -6,6 +6,7 @@ menu "Audio and video applications"
+ source "package/alsa-utils/Config.in"
+ source "package/aumix/Config.in"
+ source "package/bellagio/Config.in"
++source "package/espeak/Config.in"
+ source "package/faad2/Config.in"
+ source "package/ffmpeg/Config.in"
+ source "package/flac/Config.in"
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+new file mode 100644
+index 0000000..0284c5c
+--- /dev/null
++++ b/package/espeak/Config.in
+@@ -0,0 +1,41 @@
++comment "espeak needs a toolchain w/ C++, wchar"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
++
++config BR2_PACKAGE_ESPEAK
++	bool "espeak"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	help
++	  espeak is a speech synthesizer software for English and other languages.
++
++	  http://espeak.sourceforge.net/
++
++if BR2_PACKAGE_ESPEAK
++choice
++prompt "choose audio backend"
++default BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
++
++config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
++	bool "No sound backend, only produce wav files"
++
++comment "alsa backend needs a toolchain w/ threads"
++depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
++	bool "alsa via portaudio"
++	select BR2_PACKAGE_PORTAUDIO
++	select BR2_PACKAGE_PORTAUDIO_CXX
++	depends on BR2_TOOLCHAIN_HAS_THREADS # portaudio
++
++comment "pulseaudio backend needs a toolchain w/ wchar, largefile, threads"
++depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR && BR2_LARGEFILE)
++
++config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
++	bool "pulseaudio"
++	select BR2_PACKAGE_PULSEAUDIO
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
++	depends on BR2_USE_WCHAR # pulseaudio
++	depends on BR2_LARGEFILE # pulseaudio
++
++endchoice
++endif # BR2_PACKAGE_ESPEAK
+diff --git a/package/espeak/espeak-01-do-not-compil-when-install.patch b/package/espeak/espeak-01-do-not-compil-when-install.patch
+new file mode 100644
+index 0000000..983cd1c
+--- /dev/null
++++ b/package/espeak/espeak-01-do-not-compil-when-install.patch
+@@ -0,0 +1,15 @@
++Makefile: do not execute the rule "all" when executing "install"
++
++signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
++===================================================================
++--- espeak-1.47.11-source.orig/src/Makefile
+++++ espeak-1.47.11-source/src/Makefile
++@@ -131,7 +131,7 @@
++ 	rm -f $(BIN2_NAME)
++ 	rm -f $(LIB_NAME)*
++ 
++-install: all
+++install:
++ 	# Create directories
++ 	rm -rf $(DESTDIR)$(DATADIR)
++ 	$(MKDIR) $(DESTDIR)$(BINDIR)
+diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
+new file mode 100644
+index 0000000..c2c346e
+--- /dev/null
++++ b/package/espeak/espeak.mk
+@@ -0,0 +1,44 @@
++###############################################################################
++#
++# espeak
++#
++###############################################################################
++
++ESPEAK_VERSION_MAJOR = 1.47
++ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).11
++ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
++ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/espeak-$(ESPEAK_VERSION_MAJOR)
++ESPEAK_LICENSE = GPLv3+
++ESPEAK_LICENSE_FILES = Licence.txt
++
++ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA),y)
++ESPEAK_AUDIO_BACKEND = portaudio
++ESPEAK_DEPENDENCIES = portaudio
++endif
++ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO),y)
++ESPEAK_AUDIO_BACKEND = pulseaudio
++ESPEAK_DEPENDENCIES = pulseaudio
++endif
++
++define ESPEAK_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(ESPEAK_SOURCE)
++	mv $(@D)/espeak-$(ESPEAK_VERSION)-source/* $(@D)
++	$(RM) -r $(@D)/espeak-$(ESPEAK_VERSION)-source
++endef
++
++define ESPEAK_CONFIGURE_CMDS
++	# Buildroot provides portaudio V19, see ReadMe file for more details.
++	cp $(@D)/src/portaudio19.h $(@D)/src/portaudio.h
++endef
++
++define ESPEAK_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
++		AUDIO="$(ESPEAK_AUDIO_BACKEND)" \
++		-C $(@D)/src all
++endef
++
++define ESPEAK_INSTALL_TARGET_CMDS
++	$(MAKE) install DESTDIR="$(TARGET_DIR)" -C $(@D)/src
++endef
++
++$(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.0
