@@ -1,43 +1,35 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 30 Apr 2014 07:33:49 +0000
-Subject: [Buildroot] [PATCH v3] uboot-tools: bump to version 2014.04
-In-Reply-To: <87y4yns2ar.fsf@dell.be.48ers.dk>
-References: <1398840891-19524-1-git-send-email-abrodkin@synopsys.com>
- <877g67thh9.fsf@dell.be.48ers.dk> <1398842399.21385.2.camel@abrodkin-8560l>
- <87y4yns2ar.fsf@dell.be.48ers.dk>
-Message-ID: <1398843229.21385.5.camel@abrodkin-8560l>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 30 Apr 2014 09:49:21 +0200
+Subject: [Buildroot] Patchwork cleanup #9: triaging proposal
+In-Reply-To: <OFAD09C70D.50D5D3F4-ON86257CC8.004D6935-86257CC8.004D6938@rockwellcollins.com>
+References: <CAAXf6LW5GPZ_vegt_jO=xr0e5Qfzjt4Uq7yye6jF3si6qyycBQ@mail.gmail.com>
+ <OFAD09C70D.50D5D3F4-ON86257CC8.004D6935-86257CC8.004D6938@rockwellcollins.com>
+Message-ID: <CAAXf6LUBOx+AHQUCzSKN8cPSVRdO1GEsajmb0KEMkFwTgdAydA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Clayton,
 
-On Wed, 2014-04-30 at 09:29 +0200, Peter Korsgaard wrote:
-> >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
-> 
->  >> That's not true. They are flags for the preprocessor. You must be
->  >> confusing them with CXXFLAGS.
->  >> 
->  >> With that said, I think we're passing everything from HOST_CPPFLAGS
->  >> through HOST_CFLAGS as well, so it shouldn't matter.
-> 
->  > Ok I think I did confused wit CXXFLAGS.
-> 
->  > But I haven't found any mention of HOSTCPPFLAGS in current U-Boot so I'm
->  > wondering if we still need to add any handling of HOSTCPPFLAGS in U-Boot
->  > or there's nothing to be done?
-> 
-> No, I also don't see it used anywhere in u-boot nowadays, so the patch
-> can get dropped.
-> 
-> I'll adjust the commit message when I commit (unless review finds other
-> issues).
-> 
+On Mon, Apr 28, 2014 at 4:05 PM,  <clshotwe@rockwellcollins.com> wrote:
+> Thomas,
+>
+>>[RFC] core: Download all package sources
+>>Clayton Shotwell <clshotwe@rockwellcollins.com>
+>>http://patchwork.ozlabs.org/patch/288224
+>>
+>>C unsure: there was some debate as to this patch is the right way to
+>>proceed, or whether the buildroot mirror should contain more
+>>packages,
+>>or provide a way to create a local buildroot mirror.
+>
+> I would like to drop this patch. I will have to come up with
+> another approach to cover all of the corner cases of downloading
+> the different versions of the packages.
 
-Thanks for handling this.
-My intention was to explicitly mention dropping of the patch. But seems
-like I failed to properly explain why it could be done.
+Thanks for the feedback, I'll mark the patch as such.
 
--Alexey
+Best regards,
+Thomas
