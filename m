@@ -1,36 +1,96 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 21:06:14 +0200
-Subject: [Buildroot] default nice level for kernel processes
-In-Reply-To: <OFA47998B6.ADFB908A-ON85257CCA.0053D026-85257CCA.0053ED4B@LocalDomain>
-References: <OFA47998B6.ADFB908A-ON85257CCA.0053D026-85257CCA.0053ED4B@LocalDomain>
-Message-ID: <CAAXf6LVVqoJuoavLfTdiA-vzz9JGFD-yvN5zLm07nh38o-LwoA@mail.gmail.com>
+Date: Wed, 30 Apr 2014 21:16:32 +0200
+Subject: [Buildroot] [PATCH v2] agg: new package
+In-Reply-To: <1398351989-24238-1-git-send-email-julien.boibessot@free.fr>
+References: <1398351989-24238-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <CAAXf6LXQ-L1GxM5AqBkzgP11+Arn_Jg6dAZnuiM6GxqN+fRDzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Julien,
 
-On Wed, Apr 30, 2014 at 5:16 PM, Naitik Amin <Naitik.Amin@ametek.com> wrote:
-> Hi there,
+On Thu, Apr 24, 2014 at 5:06 PM,  <julien.boibessot@free.fr> wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
 >
-> When I start my system, by default all kernel processes start at nice level
-> -20, how can give a different default nice level for the kernel processes ?
+>
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> ---
+>  This library will be needed by gnash (soon coming Flash player).
+>
+>  Changes since v1:
+>  * Took Arnout/Thomas/Yann remarks into account:
+>    - add comments for AGG_AUTORECONF usage and sdl-prefix redefinition,
+>    - fixes license (comments welcome),
+>    - add a patch to fixes autoreconf problems previously hacked directly in agg.mk
+>    - changed commit Subject
+>
+>  package/Config.in                         |    1 +
+>  package/agg/Config.in                     |   13 +++++++++
+>  package/agg/agg-make-autoreconfable.patch |   25 ++++++++++++++++++
+>  package/agg/agg.mk                        |   39 +++++++++++++++++++++++++++++
+>  4 files changed, 78 insertions(+), 0 deletions(-)
+>  create mode 100644 package/agg/Config.in
+>  create mode 100644 package/agg/agg-make-autoreconfable.patch
+>  create mode 100644 package/agg/agg.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 688ed4d..3b34a67 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -556,6 +556,7 @@ source "package/lockdev/Config.in"
+>  endmenu
+>
+>  menu "Graphics"
+> +source "package/agg/Config.in"
+>  source "package/atk/Config.in"
+>  source "package/cairo/Config.in"
+>  source "package/fltk/Config.in"
+> diff --git a/package/agg/Config.in b/package/agg/Config.in
+> new file mode 100644
+> index 0000000..a842098
+> --- /dev/null
+> +++ b/package/agg/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_AGG
+> +       bool "agg"
+> +       depends on BR2_INSTALL_LIBSTDCPP
+> +       select BR2_PACKAGE_SDL
+> +       help
+> +         The Anti-Grain Geometry project. A High Quality 2D Graphics Rendering
+> +         Engine for C++.
+> +         We select the SDL backend by default.
+> +
+> +         http://www.antigrain.com/index.html
+> +
+> +comment "agg needs a toolchain with C++ support"
+> +       depends on !BR2_INSTALL_LIBSTDCPP
 
-This isn't really related to buildroot, but as far as I know there is
-no standard way to achieve this.
-You can renice them once created, but take into account that new
-kworkers may be created on the fly which would get the default
-priority again.
+The comment should be 'agg needs a toolchain w/ C++'
+(the comment string is defined strictly for uniformity and
+limited-terminal-width reasons, see
+http://buildroot.uclibc.org/downloads/manual/manual.html#dependencies-target-toolchain-options)
 
-The creation of such new kworkers is done by kthreadd. Normally, new
-kworkers would get the priority of kthreadd (which you could change at
-userland init), but the kernel specifically assigns a fixed priority
-and scheduling class to the newly created thread.
-It is possible to patch the kernel to remove this extra step, and thus
-let new kworkers inherit their priority from kthreadd (which you can
-control from userspace).
+> diff --git a/package/agg/agg-make-autoreconfable.patch b/package/agg/agg-make-autoreconfable.patch
+
+Patches should be named foo-0001-description.patch
+
+[..]
+> diff --git a/package/agg/agg.mk b/package/agg/agg.mk
+> new file mode 100644
+> index 0000000..4802d3e
+> --- /dev/null
+> +++ b/package/agg/agg.mk
+> @@ -0,0 +1,39 @@
+> +###############################################################################
+> +#
+> +# agg
+> +#
+> +###############################################################################
+
+These should be 80 # signs, not 79.
 
 Best regards,
 Thomas
