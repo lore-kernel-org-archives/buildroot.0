@@ -1,43 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Apr 2014 19:41:35 +0200
-Subject: [Buildroot] [PATCH 0/9 v2] Bump and improve syslinux (branch
- yem/syslinux)
-In-Reply-To: <116346836.14216421.1398873487894.JavaMail.root@openwide.fr>
-References: <cover.1398789775.git.yann.morin.1998@free.fr>
- <116346836.14216421.1398873487894.JavaMail.root@openwide.fr>
-Message-ID: <20140430174135.GB3336@free.fr>
+Date: Wed, 30 Apr 2014 20:05:28 +0200
+Subject: [Buildroot] Patchwork cleanup #8: submitter notification
+In-Reply-To: <20140430194048.1e070625@skate>
+References: <CAAXf6LWPZAF2gMAFantNzF_KEuKNYheSCD0Qcs19Zgab7kU0Ow@mail.gmail.com>
+ <20140429210905.GE3248@free.fr> <20140430005249.2d0f01de@skate>
+ <20140430165659.GA3336@free.fr> <20140430194048.1e070625@skate>
+Message-ID: <20140430180528.GC3336@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Thomas, All,
 
-On 2014-04-30 17:58 +0200, Romain Naour spake thusly:
-> ----- Mail original -----
-[--SNIP--]
-> | Here are a few patches to bump and enhance syslinux:
-> |   - patches 1..4: preparatory fixing and cleanup patches
-> |   - patches 5..6: new pacakges, dependency of the new syslinux
-> |   - patch   7   : actual syslinux bump
-> |   - patches 8..9: new options to install new types of blobs
-[--SNIP--]
-> I did a quick test on real hardware with extlinux 6.02 and BIOS-legacy configuration.
-> I reused the same config as for 5.10-pre4, so it's ok for me :)
+On 2014-04-30 19:40 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 30 Apr 2014 18:56:59 +0200, Yann E. MORIN wrote:
 > 
-> Tested using serial port and menu.c32 module.
+> > > We do a "chown -R 0:0" on all files in the root filesystem, before
+> > > taking into account device tables. So I don't see how an ownership on
+> > > the build machine can leak into the generated root filesystem.
+> > 
+> > chown does not change the ownership of a symlink, only that of the
+> > pointed-to entity:
+> > 
+> >     $ touch titi
+> >     $ ln -s titi toto
+> >     $ sudo chown root:root toto
+> >     $ ls -l titi toto
+> >     -rw-r--r-- 1 root   root   0 Apr 30 18:55 titi
+> >     lrwxrwxrwx 1 ymorin ymorin 4 Apr 30 18:55 toto -> titi
+> > 
+> > So the symlink's ownership is not modified.
 > 
-> Tested-by Romain Naour <romain.naour@openwide.fr>
-> 
-> Note: all *.c32 modules for the target are installed in $(HOST_DIR)/usr/share/syslinux/
-> They can be installed in $(STAGING_DIR) instead ?
+> Should we do a chown -h -R 0:0 then?
 
-What are those .c32 modules? How are they to be used?
+Oh, Neat! I did not know about -h.
 
-From what I can infer, I doubt we want them in $(STAGING_DIR); they
-probably belong to either somewhere in $(TARGET_DIR) (in /boot ?) or to
-$(IMAGES_DIR).
+I was afraid that was a recent addition, but it's been in chown since
+1996-05-19, so we can safely assume that even enterprise distros (that
+get updated once in a blue moon) will all have it.
+
+Yeah! :-)
+
+I'll cook up a patch.
 
 Regards,
 Yann E. MORIN.
