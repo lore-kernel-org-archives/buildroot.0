@@ -1,170 +1,32 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 30 Apr 2014 10:54:51 +0400
-Subject: [Buildroot] [PATCH v3] uboot-tools: bump to version 2014.04
-Message-ID: <1398840891-19524-1-git-send-email-abrodkin@synopsys.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 30 Apr 2014 09:12:45 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] Raspberry Pi bumps (branch yem/bumps)
+In-Reply-To: <cover.1398794817.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 29 Apr 2014 20:08:07 +0200")
+References: <cover.1398794817.git.yann.morin.1998@free.fr>
+Message-ID: <87bnvjthn6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot v2014.04 introduced significant changes in its build infrastrcture.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Among things related to buildroot are:
-1. Special new target ("tools-only") was added for building host tools alone
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Hello All!
 
-2. Tools cross-building for target is no longer possible with substitution of
-HOSTxx with TARGETxx because host binaries won't be built. Instead we just set
-CROSS_COMPILE and CROSS_BUILD_TOOLS variables.
+ > Here are two bumps related to the Raspberry Pi:
+ >   - firmware bump, with some enhancement, new features and fixes
+ >   - switch to using the a long-term, 3.12-based kernel
 
-3. Most of make targets now require U-Boot to be configured before building.
-So for building generic "fw_printenv" we now need to make "env" target config-
-independent.
+ > Changes v1 -> v2:
+ >   - properly bump the kernel headers (missed the HEADERS_AT_LEAST_XXX)
 
-4. HOSTCPPFLAGS are only applicable to .cpp files so dropping
-"uboot-tools-02-hostcflags-override-fix.patch"
+ > Regards,
+ > Yann E. MORIN.
 
-Also due to lincese boilerplate change in sources
-"uboot-tools-01-drop-configh-from-tools.patch" required subtle changes.
+Committed both, thanks.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
-
-Changes compared to v2:
- * Added verbose commit message
- * Reverted meaningful comment in "uboot-tools-02-hostcflags-override-fix.patch"
----
- .../uboot-tools-01-drop-configh-from-tools.patch   | 26 ++++++-------------
- .../uboot-tools-02-hostcflags-override-fix.patch   | 29 ----------------------
- package/uboot-tools/uboot-tools.mk                 | 19 ++++++++------
- 3 files changed, 19 insertions(+), 55 deletions(-)
- delete mode 100644 package/uboot-tools/uboot-tools-02-hostcflags-override-fix.patch
-
-diff --git a/package/uboot-tools/uboot-tools-01-drop-configh-from-tools.patch b/package/uboot-tools/uboot-tools-01-drop-configh-from-tools.patch
-index 21995ec..a36332f 100644
---- a/package/uboot-tools/uboot-tools-01-drop-configh-from-tools.patch
-+++ b/package/uboot-tools/uboot-tools-01-drop-configh-from-tools.patch
-@@ -4,11 +4,12 @@ image, so it really isn't mandatory.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- 
--diff -Nura u-boot-2013.01.orig/tools/env/fw_env.h u-boot-2013.01/tools/env/fw_env.h
----- u-boot-2013.01.orig/tools/env/fw_env.h	2013-01-19 07:50:53.879241660 -0300
--+++ u-boot-2013.01/tools/env/fw_env.h	2013-01-19 07:58:11.897903403 -0300
--@@ -21,15 +21,6 @@
--  * MA 02111-1307 USA
-+diff --git a/tools/env/fw_env.h b/tools/env/fw_env.h
-+index aff471b..dfe7439 100644
-+--- a/tools/env/fw_env.h
-++++ b/tools/env/fw_env.h
-+@@ -5,14 +5,6 @@
-+  * SPDX-License-Identifier:	GPL-2.0+
-   */
-  
- -/* Pull in the current config to define the default environment */
-@@ -19,19 +20,6 @@ diff -Nura u-boot-2013.01.orig/tools/env/fw_env.h u-boot-2013.01/tools/env/fw_en
- -#else
- -#include <config.h>
- -#endif
---
-+ 
-  /*
-   * To build the utility with the static configuration
--  * comment out the next line.
--diff -Nura u-boot-2013.01.orig/tools/env/Makefile u-boot-2013.01/tools/env/Makefile
----- u-boot-2013.01.orig/tools/env/Makefile	2013-01-19 07:50:53.879241660 -0300
--+++ u-boot-2013.01/tools/env/Makefile	2013-01-19 07:59:34.926486346 -0300
--@@ -26,7 +26,7 @@
-- HOSTSRCS := $(SRCTREE)/lib/crc32.c  fw_env.c  fw_env_main.c
-- HOSTSRCS += $(SRCTREE)/lib/ctype.c $(SRCTREE)/lib/linux_string.c
-- HOSTSRCS += $(SRCTREE)/common/env_attr.c $(SRCTREE)/common/env_flags.c
---HEADERS	:= fw_env.h $(OBJTREE)/include/config.h
--+HEADERS	:= fw_env.h
-- 
-- # Compile for a hosted environment on the target
-- HOSTCPPFLAGS  = -idirafter $(SRCTREE)/include \
-diff --git a/package/uboot-tools/uboot-tools-02-hostcflags-override-fix.patch b/package/uboot-tools/uboot-tools-02-hostcflags-override-fix.patch
-deleted file mode 100644
-index 0202eda..0000000
---- a/package/uboot-tools/uboot-tools-02-hostcflags-override-fix.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--[PATCH] Fix tools build with custom HOSTCFLAGS
--
--We always need to append HOSTCPPFLAGS, even if HOSTCFLAGS have been
--overridden on the cmdline.
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- config.mk |    6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
--
--Index: u-boot-2011.03/config.mk
--===================================================================
----- u-boot-2011.03.orig/config.mk
--+++ u-boot-2011.03/config.mk
--@@ -46,10 +46,12 @@
-- 
-- #########################################################################
-- 
---HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer \
---		  $(HOSTCPPFLAGS)
--+HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
-- HOSTSTRIP	= strip
-- 
--+# append CPPFLAGS even if CFLAGS has been overridden on cmdline
--+override HOSTCFLAGS += $(HOSTCPPFLAGS)
--+
-- #
-- # Mac OS X / Darwin's C preprocessor is Apple specific.  It
-- # generates numerous errors and warnings.  We want to bypass it
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 398ce8b..0a3d711 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2014.01
-+UBOOT_TOOLS_VERSION = 2014.04
- UBOOT_TOOLS_SOURCE  = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE    = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPLv2+
-@@ -12,11 +12,16 @@ UBOOT_TOOLS_LICENSE_FILES = Licenses/gpl-2.0.txt
- 
- define UBOOT_TOOLS_BUILD_CMDS
- 	$(MAKE) -C $(@D) 			\
--		HOSTCC="$(TARGET_CC)"		\
--		HOSTCFLAGS="$(TARGET_CFLAGS)"	\
--		HOSTLDFLAGS="$(TARGET_LDFLAGS)"	\
--		HOSTSTRIP=true			\
--		tools env
-+		CROSS_COMPILE="$(TARGET_CROSS)"	\
-+		CFLAGS="$(TARGET_CFLAGS)"	\
-+		LDFLAGS="$(TARGET_LDFLAGS)"	\
-+		CROSS_BUILD_TOOLS=y		\
-+		tools-only
-+	$(MAKE) -C $(@D) 			\
-+		CROSS_COMPILE="$(TARGET_CROSS)"	\
-+		CFLAGS="$(TARGET_CFLAGS)"	\
-+		LDFLAGS="$(TARGET_LDFLAGS)"	\
-+		env no-dot-config-targets=env
- endef
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE),y)
-@@ -49,7 +54,7 @@ define HOST_UBOOT_TOOLS_BUILD_CMDS
- 		HOSTCC="$(HOSTCC)"		\
- 		HOSTCFLAGS="$(HOST_CFLAGS)"	\
- 		HOSTLDFLAGS="$(HOST_LDFLAGS)"	\
--		tools
-+		tools-only
- endef
- 
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
 -- 
-1.9.0
+Bye, Peter Korsgaard
