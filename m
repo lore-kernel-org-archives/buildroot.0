@@ -1,51 +1,54 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu,  1 May 2014 00:45:00 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] libwebsockets : bump version
-Message-ID: <1398897900-31163-1-git-send-email-sagaert.johan@skynet.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 1 May 2014 00:47:16 +0200
+Subject: [Buildroot] uboot.pbl - make 'include' issue
+In-Reply-To: <20140430223910.GF3336@free.fr>
+References: <OFB2294D5B.F4E5AC38-ON86257CCA.00752EA9-86257CCA.00753202@rockwellcollins.com>
+ <20140430223910.GF3336@free.fr>
+Message-ID: <20140501004716.5a27705a@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bump to v1.23-chrome32-firefox24
-The latest releases use the cmake build infrastructure.
-Converted the makefile to the cmake infrastructure.
-The autotools infrastructure is no longer supported.
+Dear Yann E. MORIN,
 
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
-v2 :added comment on the removed autotools support.
+On Thu, 1 May 2014 00:39:10 +0200, Yann E. MORIN wrote:
 
- package/libwebsockets/libwebsockets.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+> Yes, that's not so surprising:
+> 
+>   - the $(eval $(generic-package)) use the $(pkgname) macro, which uses
+>     the $(pkgdir) macro
+> 
+>   - the $(pkgdir) macro is defined as thus:
+>         pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+> 
+>   - and $(MAKEFILE_LIST) contains the _last_ Makefile that was parsed
+> 
+>   - but the pkg-inra expects that the last Makefile parsed be the
+>     current Makefile
+> 
+> Since you include other Makefiles from uboot.mk:
+>     boot/uboot/ppc-freescale/uboot-ppc-freescale.mk
+> 
+> then $(MAKEFILE_LIST) will end up with that when you call the usual eval
+> above, from which the generic-package derives the $(pkgdir) to be
+> "boot/uboot/ppc-freescale", and thus the $(pkgname) to be
+> "ppc-freescale", and not the "uboot" you expect.
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index ec5244c..1d76bc9 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,14 +4,18 @@
- #
- ################################################################################
- 
--LIBWEBSOCKETS_VERSION = v1.22-chrome26-firefox18
-+LIBWEBSOCKETS_VERSION = v1.23-chrome32-firefox24
- LIBWEBSOCKETS_SOURCE = libwebsockets-$(LIBWEBSOCKETS_VERSION).tar.xz
- LIBWEBSOCKETS_SITE = http://git.libwebsockets.org/cgi-bin/cgit/libwebsockets/snapshot
- LIBWEBSOCKETS_LICENSE = LGPLv2.1
- LIBWEBSOCKETS_LICENSE_FILES = COPYING
- LIBWEBSOCKETS_DEPENDENCIES = zlib
--LIBWEBSOCKETS_AUTORECONF = YES
--LIBWEBSOCKETS_CONF_OPT = --without-testapps
- LIBWEBSOCKETS_INSTALL_STAGING = YES
- 
--$(eval $(autotools-package))
-+LIBWEBSOCKETS_CONF_OPT += -DWITHOUT_TESTAPPS=ON
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),)
-+	LIBWEBSOCKETS_CONF_OPT += -DWITH_SSL=OFF
-+endif
-+
-+$(eval $(cmake-package))
+I haven't looked at the details, but linux/linux.mk seems to be doing
+the exact same thing with the "Linux extensions" for real-time, and
+doesn't appear to have any problem. It does:
+
+include $(sort $(wildcard linux/linux-ext-*.mk))
+
+$(eval $(generic-package))
+
+So by the time generic-package is expanded, the last included makefile
+is not linux.mk. And still the thing works.
+
+Thomas
 -- 
-1.9.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
