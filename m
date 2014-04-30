@@ -1,68 +1,119 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 May 2014 01:02:40 +0200
-Subject: [Buildroot] uboot.pbl - make 'include' issue
-In-Reply-To: <20140501004716.5a27705a@skate>
-References: <OFB2294D5B.F4E5AC38-ON86257CCA.00752EA9-86257CCA.00753202@rockwellcollins.com>
- <20140430223910.GF3336@free.fr> <20140501004716.5a27705a@skate>
-Message-ID: <20140430230240.GH3336@free.fr>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Thu, 1 May 2014 01:05:17 +0200
+Subject: [Buildroot] (resend) [PATCH 1/1 v4] qdecoder : new package
+Message-ID: <164F12A856D344AD995957EB8CD930C7@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Ryan, All,
 
-On 2014-05-01 00:47 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Thu, 1 May 2014 00:39:10 +0200, Yann E. MORIN wrote:
-> 
-> > Yes, that's not so surprising:
-> > 
-> >   - the $(eval $(generic-package)) use the $(pkgname) macro, which uses
-> >     the $(pkgdir) macro
-> > 
-> >   - the $(pkgdir) macro is defined as thus:
-> >         pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
-> > 
-> >   - and $(MAKEFILE_LIST) contains the _last_ Makefile that was parsed
-> > 
-> >   - but the pkg-inra expects that the last Makefile parsed be the
-> >     current Makefile
-> > 
-> > Since you include other Makefiles from uboot.mk:
-> >     boot/uboot/ppc-freescale/uboot-ppc-freescale.mk
-> > 
-> > then $(MAKEFILE_LIST) will end up with that when you call the usual eval
-> > above, from which the generic-package derives the $(pkgdir) to be
-> > "boot/uboot/ppc-freescale", and thus the $(pkgname) to be
-> > "ppc-freescale", and not the "uboot" you expect.
-> 
-> I haven't looked at the details, but linux/linux.mk seems to be doing
-> the exact same thing with the "Linux extensions" for real-time, and
-> doesn't appear to have any problem. It does:
-> 
-> include $(sort $(wildcard linux/linux-ext-*.mk))
-> 
-> $(eval $(generic-package))
-> 
-> So by the time generic-package is expanded, the last included makefile
-> is not linux.mk. And still the thing works.
+qDecoder is a powerful CGI library.
+Features:
+   Supports parsing a request encoded by GET/POST method
+   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
+   Supports COOKIE handling.
+   Supports Session management.
+   Supports FastCGI
 
-Indeed, but the includes are all in the same directory, so pkgdir still
-return "linux" and thus the pkgname is correct.
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+v2:	Changed License to BSD-2
+v3:	Removed QDECODER_CONF_OPT and created makefile.in patch
+v4:	Renamed the patch to qdecoder-0001-install-header-and-lib-in-staging-directory.patch
 
-In Ryan's case, the included Makefiles are in sub-dirs of uboot, so
-pkgdir returns that last sub-dir, hence the wrong pkgname.
+ package/Config.in                                  |  1 +
+ package/qdecoder/Config.in                         |  7 ++++++
+ ...stall-header-and-lib-in-staging-directory.patch | 28 ++++++++++++++++++++++
+ package/qdecoder/qdecoder.mk                       | 14 +++++++++++
+ 4 files changed, 50 insertions(+)
+ create mode 100644 package/qdecoder/Config.in  create mode 100644
+package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
+ create mode 100644 package/qdecoder/qdecoder.mk
 
-Regards,
-Yann E. MORIN.
+diff --git a/package/Config.in b/package/Config.in index abfc3cc..998f990 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -765,6 +765,7 @@ source "package/nss-mdns/Config.in"
+ source "package/omniorb/Config.in"
+ source "package/openpgm/Config.in"
+ source "package/ortp/Config.in"
++source "package/qdecoder/Config.in"
+ source "package/rtmpdump/Config.in"
+ source "package/slirp/Config.in"
+ source "package/snmppp/Config.in"
+diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in new file mode 100644 index 0000000..2bd2a2f
+--- /dev/null
++++ b/package/qdecoder/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QDECODER
++	bool "qdecoder"
++	help
++	  qDecoder is a simple and powerful CGI library
++	  for the C/C++ programming language.
++
++	  http://www.qdecoder.org/wiki/qdecoder
+diff --git a/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
+b/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
+new file mode 100644
+index 0000000..c044b6d
+--- /dev/null
++++ b/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-d
++++ irectory.patch
+@@ -0,0 +1,28 @@
++From 75e16fd73af6b2f8c0149dacb9c7be7e7123b449 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@skynet.be>
++Date: Sat, 26 Apr 2014 19:05:55 +0200
++Subject: [PATCH 1/1] install header and lib in staging directory
++
++Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
++---
++ src/Makefile.in | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/Makefile.in b/src/Makefile.in index 2688038..b2bf836 
++100644
++--- a/src/Makefile.in
+++++ b/src/Makefile.in
++@@ -43,8 +43,8 @@ SLIBNAME	= lib${PRGNAME}.so
++ SLIBREALNAME	= ${SLIBNAME}.${SLIBVERSION}
++ 
++ ## System library directory
++-LIBDIR		= @libdir@
++-HEADERDIR	= @includedir@
+++LIBDIR = $(STAGING_DIR)/usr/lib
+++HEADERDIR =$(STAGING_DIR)/usr/include
++ 
++ ## Which compiler & options for release
++ CC		= @CC@
++--
++1.9.2
++
+diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk new file mode 100644 index 0000000..30fbcb3
+--- /dev/null
++++ b/package/qdecoder/qdecoder.mk
+@@ -0,0 +1,14 @@
++#######################################################################
++#########
++#
++# qdecoder
++#
++#######################################################################
++#########
++
++QDECODER_VERSION = r12.0.5
++QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
++QDECODER_LICENSE = GPL
++QDECODER_LICENSE_FILES = COPYING
++
++QDECODER_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+--
+1.9.2
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
