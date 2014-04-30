@@ -1,124 +1,181 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 30 Apr 2014 22:30:45 +0200
-Subject: [Buildroot] Two stages compilation
-In-Reply-To: <20140430210324.31be1446@skate>
-References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
- <535F8499.8070406@gmail.com>
- <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
- <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
- <20140430210324.31be1446@skate>
-Message-ID: <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Apr 2014 22:43:46 +0200
+Subject: [Buildroot] [PATCH v2] agg: new package
+In-Reply-To: <1398351989-24238-1-git-send-email-julien.boibessot@free.fr>
+References: <1398351989-24238-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20140430204346.GD3336@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HiTtomas
+Julien, All,
 
->> Note that Alexander Varnin has submitted a patch to the list for the
->> mono runtime a while back:
->> http://patchwork.ozlabs.org/patch/299488/
->
-> Though this particular package only provides a target version of Mono,
-> which probably means that it relies on mono being installed on the
-> build machine to be able to build all the Mono C# libraries (i.e step 2
-> in Angelo's description).
+On 2014-04-24 17:06 +0200, julien.boibessot at free.fr spake thusly:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+[--SNIP--]
+> diff --git a/package/agg/Config.in b/package/agg/Config.in
+> new file mode 100644
+> index 0000000..a842098
+> --- /dev/null
+> +++ b/package/agg/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_AGG
+> +	bool "agg"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	select BR2_PACKAGE_SDL
+> +	help
+> +	  The Anti-Grain Geometry project. A High Quality 2D Graphics Rendering
+> +	  Engine for C++.
+> +	  We select the SDL backend by default.
+> +
+> +	  http://www.antigrain.com/index.html
 
-Yes, that patch only provides the first half, I want to provide both the halves.
+Not your fault, but here's what one gets when one visits
+http://antigrain.com/ :
 
-> So indeed, as Zoltan pointed out, most likely the solution is to have
-> both a target and a host variant for Mono. The host variant builds the
-> compiler, and is used on the build machine to compile all the Mono C#
-> libraries into the corresponding byte code. The target variant builds
-> the "virtual machine" that runs on the target. And obviously most
-> likely the target variant will have a dependency on the host variant.
->
-> Also, the host variant building the compiler will be useful if people
-> want to package other Mono libraries/applications.
+    antigrain.com expired on 04/09/2014 and is pending renewal or
+    deletion
 
-Yes, this is exactly what I aiming at. Actually I have a mono
-metapackage that imports two subpackages, mono-native and
-mono-managed.
-The mono native part works like a charm, the mono-managed is where I'm
-having troubles.
+So, I'm a bit sceptic at adding this package, just because there will
+shortly be no way of getting it... :-/
 
-Actually I have something like this:
+But wikipedia comes to the rescue, and points us to a "copy" of the
+site, on sourceforge:
+    http://agg.sourceforge.net/antigrain.com/index.html
 
+You may want to point to SF instead.
 
-#############################################################
-#
-# mono-managed
-#
-#############################################################
+Still upstream does not seem very active, and I'm a bit uneasy at adding
+it...
 
-MONO_MANAGED_VERSION         = $(MONO_VERSION)
-MONO_MANAGED_SITE            = $(MONO_SITE)
-MONO_MANAGED_SOURCE          = $(MONO_SOURCE)
-MONO_MANAGED_INSTALL_STAGING  = $(MONO_INSTALL_STAGING)
+BTW, strictly speaking, it is not *needed* by gnash. It is only one of
+the few, somewhat-supported backends:
+    directfb, OpenVG, OpenGLES1, OpenGL, Cairo.
 
-HOST_MONO_MANAGED_CONF_ENV = \
-CFLAGS="--sysroot=$(STAGING_DIR)"
+Granted, only cairo and agg are enabled by default (others are
+considered incomplete).
 
-HOST_MONO_MANAGED_CONF_OPT = \
-$(MONO_CONF_OPT)
+> +comment "agg needs a toolchain with C++ support"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/agg/agg-make-autoreconfable.patch b/package/agg/agg-make-autoreconfable.patch
+> new file mode 100644
+> index 0000000..9c069a3
+> --- /dev/null
+> +++ b/package/agg/agg-make-autoreconfable.patch
+> @@ -0,0 +1,25 @@
+> +Make the package autoreconfigurable without having to create NEWS, AUTHORS and
+> +README files. Also fixes reconfiguring with recent automake by removing
+> +AM_C_PROTOTYPES.
+> +
+> +Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> +
+> +--- agg-2.5.org/configure.in	2014-04-24 15:53:57.832886577 +0200
+> ++++ agg-2.5/configure.in	2014-04-24 16:06:56.788749209 +0200
+> +@@ -1,14 +1,13 @@
+> +-AC_INIT(src/agg_arc.cpp) # give me a source file, any source file...
+> ++AC_INIT([agg], 2.5.0)
 
-$(eval $(autotools-package))
-$(eval $(host-autotools-package))
+Yep, good, except you should now need something like:
+    AC_CONFIG_SRCDIR([src/agg_arc.cpp]) # give me a source file, any source file...
 
+> + AC_CANONICAL_TARGET
+> + AC_CONFIG_HEADERS(include/config.h)
+> +-AM_INIT_AUTOMAKE(agg, 2.5.0)
+> ++AM_INIT_AUTOMAKE([foreign])
 
-But looking at the configure phase I can see:
+Yep! :-)
 
-   Libraries:
-        .NET 2.0/3.5:  no
-        .NET 4.0:      no
-        .NET 4.5:      no
-        MonoDroid:     no
-        MonoTouch:     no
-        Xamarin.Mac:   no
-        JNI support:   IKVM Native
-        libgdiplus:    assumed to be installed
-        zlib:
+I know upstream looks pretty dead, but it might still be worth pushing
+this patch to them if possible (once the nit above is fixed.)
 
-So .NET libraries will be not compiled.
+> + 
+> + dnl Checks for programs.
+> + AC_PROG_CC
+> + AC_PROG_CXX
+> + AC_ISC_POSIX
+> +-AM_C_PROTOTYPES
 
-If I enter manually the the build/mono-managed folder and issue a
-./configure I can see this:
+Yep, die C prototypes, die! :-]
 
- Libraries:
-        .NET 2.0/3.5:  yes
-        .NET 4.0:      yes
-        .NET 4.5:      yes
-        MonoDroid:     no
-        MonoTouch:     no
-        Xamarin.Mac:   no
-        JNI support:   IKVM Native
-        libgdiplus:    assumed to be installed
-        zlib:          system zlib
+> + if test "x$U" != "x"; then
+> +   AC_MSG_ERROR(Compiler not ANSI compliant)
+> + fi
+> diff --git a/package/agg/agg.mk b/package/agg/agg.mk
+> new file mode 100644
+> index 0000000..4802d3e
+> --- /dev/null
+> +++ b/package/agg/agg.mk
+> @@ -0,0 +1,39 @@
+> +###############################################################################
+> +#
+> +# agg
+> +#
+> +###############################################################################
+> +
+> +AGG_VERSION = 2.5
+> +AGG_SITE = http://www.antigrain.com/
 
-The main difference I can see in both config.log is --target and
---host options, they are (wrongly?)
+Ditto, point to SF instead.
 
---target=arm-buildroot-linux-uclibcgnueabi
---host=arm-buildroot-linux-uclibcgnueabi
+> +AGG_LICENSE = GPLv2+
+> +AGG_LICENSE_FILES = copying
+> +# Examples (if one day enabled) use gpc library which has a different license:
+> +#AGG_LICENSE += with exceptions: gpc sources are free for non-commercial use
+> +#AGG_LICENSE_FILES += gpc/copying.txt
+> +AGG_INSTALL_STAGING = YES
+> +# No ./configure in the sources, we need to generate it:
+> +AGG_AUTORECONF = YES
+> +
+> +AGG_DEPENDENCIES = host-pkgconf sdl
+> +
+> +# Forces sdl-prefix, otherwise configure will set it to Host SDL devt files
+> +# directory, if installed:
+> +AGG_CONF_OPT = \
+> +        --with-sdl-prefix=$(STAGING_DIR)/usr \
+> +        --disable-sdltest
+> +
+> +ifeq ($(BR2_PACKAGE_SDL_X11),)
+> +AGG_CONF_OPT += \
+> +	--with-x=NO \
+> +	--disable-examples # examples require X11
 
-when they should be
+Single line, please, it is not long enough to warrant a multi-line
 
---host=x86_64-linux-gnu
---target=x86_64-linux-gnu
+Besides, the comment on that second line is part of the variable value,
+so it might come and interfere with the build. Move it above:
 
-Have you any advice?
+    # Dont build examples, they need X11
+    AGG_CONF_OPT += --with-x=NO --disable-examples
 
-Thank you!
+> +endif
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Peter might disagree, but I prefer when there is an explicit else-clause
+that does the opposite:
 
+    else
+    AGG_CONF_OPT += --with-x --enable-examples
+    endif
 
+(Or disable exanples altogether anyway.)
+
+> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
+> +AGG_DEPENDENCIES += freetype
+> +AGG_CONF_OPT += --enable-freetype
+> +else
+> +AGG_CONF_OPT += --disable-freetype
+> +endif
+> +
+> +$(eval $(autotools-package))
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
