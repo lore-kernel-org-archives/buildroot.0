@@ -1,116 +1,118 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Apr 2014 20:18:23 +0200
-Subject: [Buildroot] [PATCH 1 of 2] vala: remove deprecated target package
+Date: Wed, 30 Apr 2014 20:18:24 +0200
+Subject: [Buildroot] [PATCH 2 of 2] kernel headers: remove deprecated
+	versions 3.6 and 3.7
 In-Reply-To: <patchbomb.1398881902@argentina>
 References: <patchbomb.1398881902@argentina>
-Message-ID: <abd4f3c1158cf5b6cb65.1398881903@argentina>
+Message-ID: <aea1b80f364c9b924f6e.1398881904@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The vala target package has been deprecated since 2013.05 and thus can be
-removed in 2014.05. The host vala support is left untouched.
+Kernel headers versions 3.6.x and 3.7.x have been deprecated since 2013.05
+and thus can be removed in 2014.05.
+An automatic selection of 3.8.x headers is performed in the legacy menu.
+An existing automatic selection of 3.6.x headers is modified to select
+3.8.x.
+
+As this patch removes the last occurrances of BR2_DEPRECATED_SINCE_2013_05,
+the symbol is removed too.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- Config.in.legacy                 |   8 ++++++++
- package/Config.in                |   1 -
- package/pulseaudio/pulseaudio.mk |   2 --
- package/vala/Config.in           |  19 -------------------
- package/vala/vala.mk             |   8 --------
- 5 files changed, 8 insertions(+), 30 deletions(-)
+ Config.in                            |   4 ----
+ Config.in.legacy                     |  24 ++++++++++++++++++++++--
+ package/linux-headers/Config.in.host |  12 ------------
+ 3 files changed, 22 insertions(+), 18 deletions(-)
 
+diff --git a/Config.in b/Config.in
+--- a/Config.in
++++ b/Config.in
+@@ -280,10 +280,6 @@ config BR2_DEPRECATED
+ 
+ if BR2_DEPRECATED
+ 
+-config BR2_DEPRECATED_SINCE_2013_05
+-	bool
+-	default y
+-
+ config BR2_DEPRECATED_SINCE_2013_08
+ 	bool
+ 	default y
 diff --git a/Config.in.legacy b/Config.in.legacy
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -101,6 +101,14 @@ endif
+@@ -101,6 +101,26 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2014.05"
  
-+config BR2_PACKAGE_VALA
-+	bool "vala target package has been removed"
++config BR2_KERNEL_HEADERS_3_6
++	bool "kernel headers version 3.6.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_8
 +	select BR2_LEGACY
 +	help
-+	  The 'vala' target package has been removed since it has been
-+	  deprecated for more than four buildroot releases.
-+	  Note: the host vala package still exists.
++	  Version 3.6.x of the Linux kernel headers have been deprecated
++	  for more than four buildroot releases and are now removed.
++	  As an alternative, version 3.8.x of the headers have been
++	  automatically selected in your configuration.
 +
- config BR2_TARGET_TZ_ZONELIST
- 	default BR2_PACKAGE_TZDATA_ZONELIST if BR2_PACKAGE_TZDATA_ZONELIST != ""
++config BR2_KERNEL_HEADERS_3_7
++	bool "kernel headers version 3.7.x are no longer supported"
++	select BR2_KERNEL_HEADERS_3_8
++	select BR2_LEGACY
++	help
++	  Version 3.7.x of the Linux kernel headers have been deprecated
++	  for more than four buildroot releases and are now removed.
++	  As an alternative, version 3.8.x of the headers have been
++	  automatically selected in your configuration.
++
+ config BR2_PACKAGE_VALA
+ 	bool "vala target package has been removed"
+ 	select BR2_LEGACY
+@@ -278,12 +298,12 @@ config BR2_KERNEL_HEADERS_3_3
  
-diff --git a/package/Config.in b/package/Config.in
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -125,7 +125,6 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/tar/Config.in"
- endif
- source "package/tree/Config.in"
--source "package/vala/Config.in"
- source "package/yasm/Config.in"
- endmenu
+ config BR2_KERNEL_HEADERS_3_5
+ 	bool "kernel headers version 3.5.x are no longer supported"
+-	select BR2_KERNEL_HEADERS_3_6
++	select BR2_KERNEL_HEADERS_3_8
+ 	select BR2_LEGACY
+ 	help
+ 	  Version 3.5.x of the Linux kernel headers have been deprecated
+ 	  for more than four buildroot releases and are now removed.
+-	  As an alternative, version 3.6.x of the headers have been
++	  As an alternative, version 3.8.x of the headers have been
+ 	  automatically selected in your configuration.
  
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -100,13 +100,11 @@ else
- PULSEAUDIO_CONF_OPT += --disable-x11
- endif
+ config BR2_GDB_VERSION_7_2
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -26,16 +26,6 @@ choice
+ 		depends on !BR2_arc
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
  
--ifneq ($(BR2_PACKAGE_VALA),y)
- define PULSEAUDIO_REMOVE_VALA
- 	rm -rf $(TARGET_DIR)/usr/share/vala
- endef
- 
- PULSEAUDIO_POST_INSTALL_TARGET_HOOKS += PULSEAUDIO_REMOVE_VALA
--endif
- 
- ifeq ($(BR2_PACKAGE_PULSEAUDIO_DAEMON),y)
- define PULSEAUDIO_USERS
-diff --git a/package/vala/Config.in b/package/vala/Config.in
-deleted file mode 100644
---- a/package/vala/Config.in
-+++ /dev/null
-@@ -1,19 +0,0 @@
--config BR2_PACKAGE_VALA
--	bool "vala"
--	# We no longer support a toolchain on the target
--	depends on BR2_DEPRECATED_SINCE_2013_05
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
--	depends on BR2_USE_MMU # glib2
--	select BR2_PACKAGE_LIBGLIB2
--	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	help
--	  Compiler for the GObject type system.
+-	config BR2_KERNEL_HEADERS_3_6
+-		bool "Linux 3.6.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
 -
--	  http://live.gnome.org/Vala
+-	config BR2_KERNEL_HEADERS_3_7
+-		bool "Linux 3.7.x kernel headers"
+-		depends on BR2_DEPRECATED_SINCE_2013_05 && !BR2_arc
+-		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
 -
--comment "vala needs a toolchain w/ wchar, threads"
--	depends on BR2_DEPRECATED_SINCE_2013_05
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -11,17 +11,9 @@ VALA_SOURCE = vala-$(VALA_VERSION).tar.x
- VALA_LICENSE = LGPLv2.1+
- VALA_LICENSE_FILES = COPYING
- 
--VALA_DEPENDENCIES = host-flex host-bison libglib2 \
--		$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--
--# Force Vala to not use the host xsltproc even if available, because it may or
--# may not work with Vala documentation (some versions of xsltproc segfault)
--VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
--
- HOST_VALA_DEPENDENCIES = host-flex host-libglib2
- # Yes, the autoconf script understands ':' as "xsltproc is not
- # available".
- HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
- 
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ 	config BR2_KERNEL_HEADERS_3_8
+ 		bool "Linux 3.8.x kernel headers"
+ 		depends on BR2_DEPRECATED_SINCE_2013_08 && !BR2_arc
+@@ -157,8 +147,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.57"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.88"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.6.11"	if BR2_KERNEL_HEADERS_3_6
+-	default "3.7.10"	if BR2_KERNEL_HEADERS_3_7
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+ 	default "3.10.38"	if BR2_KERNEL_HEADERS_3_10
