@@ -1,35 +1,88 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Thu,  1 May 2014 19:21:37 +0400
-Subject: [Buildroot] [PATCH v2] uclibc: arc: bump to 8af9dc8
-In-Reply-To: <1398957078-8590-1-git-send-email-Anton.Kolesov@synopsys.com>
-References: <1398957078-8590-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1398957697-9358-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: rjbarnet at rockwellcollins.com <rjbarnet@rockwellcollins.com>
+Date: Thu, 1 May 2014 11:58:34 -0500
+Subject: [Buildroot] uboot.pbl - make 'include' issue
+In-Reply-To: <20140430230240.GH3336@free.fr>
+References: <OFB2294D5B.F4E5AC38-ON86257CCA.00752EA9-86257CCA.00753202@rockwellcollins.com>
+ <20140430223910.GF3336@free.fr> <20140501004716.5a27705a@skate>
+ <20140430230240.GH3336@free.fr>
+Message-ID: <OFD34F41A7.5039430E-ON86257CCB.005A97CF-86257CCB.005D3D34@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will resolve uClibc build error for configurations without large file
-support.
+Yann, Thomas, All,
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
----
- package/uclibc/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+"Yann E. MORIN" <yann.morin.1998@gmail.com> wrote on 04/30/2014 06:02:40 
+PM:
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index cc244a9..4b3b975 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -42,7 +42,7 @@ config BR2_UCLIBC_VERSION_STRING
- 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
- 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
- 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
--	default "arc-4.8-R3"	if BR2_arc
-+	default "8af9dc8f714d20a68df034f6ed1ededc2d752f5b" if BR2_arc
- 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
- 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
- 
--- 
-1.8.4.1
+> Thomas, Ryan, All,
+> 
+> On 2014-05-01 00:47 +0200, Thomas Petazzoni spake thusly:
+>> Dear Yann E. MORIN,
+>> 
+>> On Thu, 1 May 2014 00:39:10 +0200, Yann E. MORIN wrote:
+>> 
+>>> Yes, that's not so surprising:
+>>> 
+>>>   - the $(eval $(generic-package)) use the $(pkgname) macro, which 
+uses
+>>>     the $(pkgdir) macro
+>>> 
+>>>   - the $(pkgdir) macro is defined as thus:
+>>>         pkgdir = $(dir $(lastword $(MAKEFILE_LIST)))
+>>> 
+>>>   - and $(MAKEFILE_LIST) contains the _last_ Makefile that was parsed
+>>> 
+>>>   - but the pkg-inra expects that the last Makefile parsed be the
+>>>     current Makefile
+>>> 
+>>> Since you include other Makefiles from uboot.mk:
+>>>     boot/uboot/ppc-freescale/uboot-ppc-freescale.mk
+>>> 
+>>> then $(MAKEFILE_LIST) will end up with that when you call the usual 
+eval
+>>> above, from which the generic-package derives the $(pkgdir) to be
+>>> "boot/uboot/ppc-freescale", and thus the $(pkgname) to be
+>>> "ppc-freescale", and not the "uboot" you expect.
+
+Yann - thank you for this explanation as was trying to figure out how 
+MAKEFILE_LIST and all the includes were relating. When you run "make 
+--debug" and all of the includes are printed it is very difficult to get a 
+grasp of what is going on. I didn't realize that the targets were 
+"ppc-freescale" and not "uboot".
+
+>> I haven't looked at the details, but linux/linux.mk seems to be doing
+>> the exact same thing with the "Linux extensions" for real-time, and
+>> doesn't appear to have any problem. It does:
+>> 
+>> include $(sort $(wildcard linux/linux-ext-*.mk))
+>> 
+>> $(eval $(generic-package))
+>> 
+>> So by the time generic-package is expanded, the last included makefile
+>> is not linux.mk. And still the thing works.
+> 
+> Indeed, but the includes are all in the same directory, so pkgdir still
+> return "linux" and thus the pkgname is correct.
+> 
+> In Ryan's case, the included Makefiles are in sub-dirs of uboot, so
+> pkgdir returns that last sub-dir, hence the wrong pkgname.
+
+Based on this bit of information, I am going to rework the patch so that 
+the names of the processor architectures are as follows:
+
+boot/uboot/uboot.mk.<platform>
+boot/uboot/Config.in.<platform>
+
+Naming the files this way will get around the issues described above along 
+with identified in the patch. I should be sending the first version of the 
+patches later today to the mailing list.
+
+Thanks again for the help,
+-Ryan
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140501/9f810e84/attachment.html>
