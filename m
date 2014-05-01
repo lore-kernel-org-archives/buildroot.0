@@ -1,63 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  1 May 2014 06:17:28 +0300
-Subject: [Buildroot] [PATCH 2/2] flite: fix static linking against alsa
-In-Reply-To: <fe00d46b244bd6b6023e6a8f87307b136938cf70.1398914248.git.baruch@tkos.co.il>
-References: <fe00d46b244bd6b6023e6a8f87307b136938cf70.1398914248.git.baruch@tkos.co.il>
-Message-ID: <9de46632bda63213596b0df8c278edf32a232daa.1398914248.git.baruch@tkos.co.il>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 01 May 2014 07:52:47 +0200
+Subject: [Buildroot] [PATCH v3 1/2] ccache: change default cache
+	directory	path to match config setting
+In-Reply-To: <1398909907-1847-1-git-send-email-danomimanchego123@gmail.com>
+References: <1398909907-1847-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <e257628d-8ab3-488b-9f07-be3c5c829e85@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/3ff/3ff2217a4fccbddbdb2bc8ade68c88fc52848d36/
+Danomi Manchego <danomimanchego123@gmail.com> schreef:
+>Commit 433290761fceb476b095548eec10adf72405e050 changed the hard-coded
+>ccache directory location to use BR_CACHE_DIR (then BUILDROOT_CACHE_DIR),
+>which is exported by Makefile based on the BR2_CCACHE_DIR config option.
+>This allowed the cache location to be changed on-the-fly by setting a
+>"make" command line variable, but left the default location of ccache's
+>normal default at "$HOME/.ccache".  Since this location does not match the
+>default for BR2_CCACHE_DIR, it is basically almost never correct, so
+>direct invocation of ccache outside of the buildroot Makefile, such as for
+>increasing the cache size, becomes cumbersome.
+>
+>This patch changes the last-ditch cache location from "$HOME/.ccache" to
+>the BR_CCACHE_DIR value defined when host-ccache is configured.  Note that
+>the ability to later override the cache location by using a BR_CACHE_DIR
+>command line variable is left intact.
+>
+>Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/flite/flite-0002-fix-alsa-static.patch | 19 +++++++++++++++++++
- package/flite/flite.mk                         |  3 +++
- 2 files changed, 22 insertions(+)
- create mode 100644 package/flite/flite-0002-fix-alsa-static.patch
+You  should have pasted my review and test tags here...
 
-diff --git a/package/flite/flite-0002-fix-alsa-static.patch b/package/flite/flite-0002-fix-alsa-static.patch
-new file mode 100644
-index 000000000000..7ed4899cc4f7
---- /dev/null
-+++ b/package/flite/flite-0002-fix-alsa-static.patch
-@@ -0,0 +1,19 @@
-+Use pkg-config to determine alsa link flags. This fixes static linking.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+diff -Nuar flite-1.4-release.orig/configure.in flite-1.4-release/configure.in
-+--- flite-1.4-release.orig/configure.in	2009-08-14 23:46:38.000000000 +0300
-++++ flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
-+@@ -275,7 +275,10 @@
-+                 #endif],
-+               [AUDIODRIVER="alsa"
-+ 	       AUDIODEFS=-DCST_AUDIO_ALSA
-+-               AUDIOLIBS=-lasound])
-++               AUDIOLIBS=`pkg-config --libs alsa`
-++               if test "$shared" = false; then
-++                   AUDIOLIBS=`pkg-config --libs --static alsa`
-++               fi])
-+ AC_CHECK_HEADER(mmsystem.h,
-+ 	      [AUDIODRIVER="wince"
-+ 	       AUDIODEFS=-DCST_AUDIO_WINCE
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index 08d2ce1622f9..38aaebf51782 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -11,6 +11,9 @@ FLITE_LICENSE = BSD-4c
- FLITE_LICENSE_FILES = COPYING
- 
- FLITE_INSTALL_STAGING = YES
-+# Patching configure.in
-+FLITE_AUTORECONF = YES
-+FLITE_DEPENDENCIES = host-pkgconf
- 
- # Sadly, Flite does not support parallel build, especially when building its
- # shared libraries.
--- 
-1.9.2
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by : Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
