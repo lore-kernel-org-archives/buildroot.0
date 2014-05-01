@@ -1,58 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  1 May 2014 08:30:08 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-04-30
-Message-ID: <20140501063008.C5C1B101282@stock.ovh.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 01 May 2014 08:46:24 +0200
+Subject: [Buildroot] Two stages compilation
+In-Reply-To: <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
+References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
+ <535F8499.8070406@gmail.com>
+ <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
+ <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
+ <20140430210324.31be1446@skate>
+ <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
+Message-ID: <263e47a3-2d39-4a33-a352-0e225ac04a3b@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-04-30
-===============================
+Hi Angelo,
 
-        success : 60 
-       failures : 16 
-       timeouts : 0  
-          TOTAL : 76 
+Angelo Compagnucci <angelo.compagnucci@gmail.com> schreef:
+>HiTtomas
+>
+>>> Note that Alexander Varnin has submitted a patch to the list for the
+>>> mono runtime a while back:
+>>> http://patchwork.ozlabs.org/patch/299488/
+>>
+>> Though this particular package only provides a target version of Mono,
+>> which probably means that it relies on mono being installed on the
+>> build machine to be able to build all the Mono C# libraries (i.e step 2
+>> in Angelo's description).
+>
+>Yes, that patch only provides the first half, I want to provide both the halves.
+>
+>> So indeed, as Zoltan pointed out, most likely the solution is to have
+>> both a target and a host variant for Mono. The host variant builds the
+>> compiler, and is used on the build machine to compile all the Mono C#
+>> libraries into the corresponding byte code. The target variant builds
+>> the "virtual machine" that runs on the target. And obviously most
+>> likely the target variant will have a dependency on the host variant.
+>>
+>> Also, the host variant building the compiler will be useful if people
+>> want to package other Mono libraries/applications.
+>
+>Yes, this is exactly what I aiming at. Actually I have a mono
+>metapackage that imports two subpackages, mono-native and
+>mono-managed.
+>The mono native part works like a charm, the mono-managed is where I'm
+>having troubles.
+>
+>Actually I have something like this:
+>
+>
+>#############################################################
+>#
+># mono-managed
+>#
+>#############################################################
+>
+>MONO_MANAGED_VERSION         = $(MONO_VERSION)
+>MONO_MANAGED_SITE            = $(MONO_SITE)
+>MONO_MANAGED_SOURCE          = $(MONO_SOURCE)
+>MONO_MANAGED_INSTALL_STAGING  = $(MONO_INSTALL_STAGING)
+>
+>HOST_MONO_MANAGED_CONF_ENV = \
+>CFLAGS="--sysroot=$(STAGING_DIR)"
+>
+>HOST_MONO_MANAGED_CONF_OPT = \
+>$(MONO_CONF_OPT)
+>
+>$(eval $(autotools-package))
+>$(eval $(host-autotools-package))
+>
+>
+>But looking at the configure phase I can see:
+>
+>   Libraries:
+>        .NET 2.0/3.5:  no
+>        .NET 4.0:      no
+>        .NET 4.5:      no
+>        MonoDroid:     no
+>        MonoTouch:     no
+>        Xamarin.Mac:   no
+>        JNI support:   IKVM Native
+>        libgdiplus:    assumed to be installed
+>        zlib:
+>
+>So .NET libraries will be not compiled.
+>
+>If I enter manually the the build/mono-managed folder and issue a
+>./configure I can see this:
+>
+> Libraries:
+>        .NET 2.0/3.5:  yes
+>        .NET 4.0:      yes
+>        .NET 4.5:      yes
+>        MonoDroid:     no
+>        MonoTouch:     no
+>        Xamarin.Mac:   no
+>        JNI support:   IKVM Native
+>        libgdiplus:    assumed to be installed
+>        zlib:          system zlib
+>
+>The main difference I can see in both config.log is --target and
+>--host options, they are (wrongly?)
+>
+>--target=arm-buildroot-linux-uclibcgnueabi
+>--host=arm-buildroot-linux-uclibcgnueabi
+>
+>when they should be
+>
+>--host=x86_64-linux-gnu
+>--target=x86_64-linux-gnu
+>
+>Have you any advice?
 
-Classification of failures by reason
-====================================
+If I understand the situation correctly, you only need the managed part for host, right? In this case, you only need the host-autotools line, not the autotools one.
 
-          glibc-2.18-svnr23787 | 4 
-                  zeromq-4.0.4 | 1 
-                 qt5base-5.2.1 | 1 
-              postgresql-9.3.4 | 1 
-                    fltk-1.3.2 | 1 
-                 webkit-1.11.5 | 1 
-                     flite-1.4 | 1 
-                pciutils-3.2.1 | 1 
-                  samba-3.6.23 | 1 
-                 libssh2-1.4.3 | 1 
-                  thrift-0.9.1 | 1 
-                 cairo-1.12.10 | 1 
-                  smack-v1.0.4 | 1 
+Also, I think you should provide all what you have, plus a bigger part of the log.
+I believe the log you showed was from the 'target' managed part, caused by the fact you still had the normal autotools line.
+You should be looking at the output for host-mono-managed.
 
-Detail of failures
-===================
+Since host packages are normally not user selectable, you need to add a dependency to it from another package. For example using:
 
-      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/5746e7e3b2bc36f31dee1acf71e59dc4d6c90af2/
-      bfin |                      flite-1.4 | NOK | http://autobuild.buildroot.net/results/3ff2217a4fccbddbdb2bc8ade68c88fc52848d36/
-    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/cfc482506ec286a9af256a3ca5de24f25c30dcd6/
-   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/a8737b82b97bcb157d7312a9bf385e72a915127f/
-microblazeel |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/62db1c377e25bd85c3f9a67855baf642476a3d0f/
-microblazeel |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/47944b1a826739fb7947f8d6b3beda84f616ed5d/
-microblazeel |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/59d7a3bbf468f4da2dfca5aa67af16be2c3428bf/
-     nios2 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/bb9aeca90f33977f53422b88aa0e8b17823e96b6/
-      bfin |                 pciutils-3.2.1 | NOK | http://autobuild.buildroot.net/results/422b812f1634a36a5ea25647d7f0c624d1df483d/
-   powerpc |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/be7cd4963d70f4d2b4a33b2948dfe79f357bdf8b/
-      i686 |                  qt5base-5.2.1 | NOK | http://autobuild.buildroot.net/results/718e97a5a09a64772acec9e3cce37be99030b2b1/
-     nios2 |                   samba-3.6.23 | NOK | http://autobuild.buildroot.net/results/b5b3fac6aa6149abee6e3c4e05de9cb2468acaa6/
-       arm |                   smack-v1.0.4 | NOK | http://autobuild.buildroot.net/results/38a558be589784bcc700a0e83e2e1e14eed66d83/
-    xtensa |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/8ecd3ddc54fd4d05ff01f64e749bfddd6d5f0f29/
-      sh4a |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/46390aac3196c9b21a679d2a8ac4af131e09ae87/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/06b56a1435f017df5262d669f588487942909db0/
+MONO_NATIVE_DEPENDENCIES += host-mono-managed
 
+Another approach is where the use can choose whether he wants the host part too. This is only good if course if it is not strictly required. In this case you would add it in a Config.in.host file which would be included from the host utilities menu.
 
--- 
-http://autobuild.buildroot.net
+Best regards,
+Thomas
