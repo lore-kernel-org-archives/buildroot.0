@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 01 May 2014 23:35:20 +0200
-Subject: [Buildroot] [PATCH 0 of 2] Remove deprecated features (2014.05
-	cycle)
-In-Reply-To: <patchbomb.1398881902@argentina> (Thomas De Schampheleire's
- message of "Wed, 30 Apr 2014 20:18:22 +0200")
-References: <patchbomb.1398881902@argentina>
-Message-ID: <87vbtpqj1j.fsf@dell.be.48ers.dk>
+Date: Thu, 01 May 2014 23:36:38 +0200
+Subject: [Buildroot] [PATCH] uclibc: re-add uclibc-update-config target
+In-Reply-To: <ffb59038c33cd78676d8.1398885537@argentina> (Thomas De
+ Schampheleire's message of "Wed, 30 Apr 2014 21:18:57 +0200")
+References: <ffb59038c33cd78676d8.1398885537@argentina>
+Message-ID: <87r44dqizd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +13,19 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > Hi, 
- > This small patch series removes those deprecated features that can be
- > removed in 2014.05, being those that are deprecated since 2013.05.
+ > Commit a5e92d92e7ee413157aae7cecf1f354e718731e1 converted uClibc to the
+ > package infrastructure, but while doing so removed support for the
+ > documented uclibc-update-config make target. This make target copies the
+ > uclibc .config file back to the original (typically version-controlled)
+ > configuration file.
 
+ > As this was an unintentional removal, this patch re-adds the
+ > uclibc-update-config target.
+
+ > Reported-by: Dan Moulding <dan.moulding@rackwareinc.com>
  > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
