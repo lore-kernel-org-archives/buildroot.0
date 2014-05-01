@@ -1,129 +1,109 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 01 May 2014 08:46:24 +0200
-Subject: [Buildroot] Two stages compilation
-In-Reply-To: <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
-References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
- <535F8499.8070406@gmail.com>
- <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
- <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
- <20140430210324.31be1446@skate>
- <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
-Message-ID: <263e47a3-2d39-4a33-a352-0e225ac04a3b@email.android.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  1 May 2014 11:36:43 +0200
+Subject: [Buildroot] [PATCH v3 1/1] xlib_libXpm: Fix compilation on systems
+	lacking fork().
+Message-ID: <1398937003-14143-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+Fixes http://autobuild.buildroot.net/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
 
-Angelo Compagnucci <angelo.compagnucci@gmail.com> schreef:
->HiTtomas
->
->>> Note that Alexander Varnin has submitted a patch to the list for the
->>> mono runtime a while back:
->>> http://patchwork.ozlabs.org/patch/299488/
->>
->> Though this particular package only provides a target version of Mono,
->> which probably means that it relies on mono being installed on the
->> build machine to be able to build all the Mono C# libraries (i.e step 2
->> in Angelo's description).
->
->Yes, that patch only provides the first half, I want to provide both the halves.
->
->> So indeed, as Zoltan pointed out, most likely the solution is to have
->> both a target and a host variant for Mono. The host variant builds the
->> compiler, and is used on the build machine to compile all the Mono C#
->> libraries into the corresponding byte code. The target variant builds
->> the "virtual machine" that runs on the target. And obviously most
->> likely the target variant will have a dependency on the host variant.
->>
->> Also, the host variant building the compiler will be useful if people
->> want to package other Mono libraries/applications.
->
->Yes, this is exactly what I aiming at. Actually I have a mono
->metapackage that imports two subpackages, mono-native and
->mono-managed.
->The mono native part works like a charm, the mono-managed is where I'm
->having troubles.
->
->Actually I have something like this:
->
->
->#############################################################
->#
-># mono-managed
->#
->#############################################################
->
->MONO_MANAGED_VERSION         = $(MONO_VERSION)
->MONO_MANAGED_SITE            = $(MONO_SITE)
->MONO_MANAGED_SOURCE          = $(MONO_SOURCE)
->MONO_MANAGED_INSTALL_STAGING  = $(MONO_INSTALL_STAGING)
->
->HOST_MONO_MANAGED_CONF_ENV = \
->CFLAGS="--sysroot=$(STAGING_DIR)"
->
->HOST_MONO_MANAGED_CONF_OPT = \
->$(MONO_CONF_OPT)
->
->$(eval $(autotools-package))
->$(eval $(host-autotools-package))
->
->
->But looking at the configure phase I can see:
->
->   Libraries:
->        .NET 2.0/3.5:  no
->        .NET 4.0:      no
->        .NET 4.5:      no
->        MonoDroid:     no
->        MonoTouch:     no
->        Xamarin.Mac:   no
->        JNI support:   IKVM Native
->        libgdiplus:    assumed to be installed
->        zlib:
->
->So .NET libraries will be not compiled.
->
->If I enter manually the the build/mono-managed folder and issue a
->./configure I can see this:
->
-> Libraries:
->        .NET 2.0/3.5:  yes
->        .NET 4.0:      yes
->        .NET 4.5:      yes
->        MonoDroid:     no
->        MonoTouch:     no
->        Xamarin.Mac:   no
->        JNI support:   IKVM Native
->        libgdiplus:    assumed to be installed
->        zlib:          system zlib
->
->The main difference I can see in both config.log is --target and
->--host options, they are (wrongly?)
->
->--target=arm-buildroot-linux-uclibcgnueabi
->--host=arm-buildroot-linux-uclibcgnueabi
->
->when they should be
->
->--host=x86_64-linux-gnu
->--target=x86_64-linux-gnu
->
->Have you any advice?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: check for fork(), unpacking of .Z and .gz files will be disabled (Thomas)
+v2: extend patch to reverse dependency of xlib_libXpm (Thomas)
 
-If I understand the situation correctly, you only need the managed part for host, right? In this case, you only need the host-autotools line, not the autotools one.
+ .../xlib_libXpm/xlib_libXpm-0001-detect-fork.patch |   66 ++++++++++++++++++++
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    1 +
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
 
-Also, I think you should provide all what you have, plus a bigger part of the log.
-I believe the log you showed was from the 'target' managed part, caused by the fact you still had the normal autotools line.
-You should be looking at the output for host-mono-managed.
-
-Since host packages are normally not user selectable, you need to add a dependency to it from another package. For example using:
-
-MONO_NATIVE_DEPENDENCIES += host-mono-managed
-
-Another approach is where the use can choose whether he wants the host part too. This is only good if course if it is not strictly required. In this case you would add it in a Config.in.host file which would be included from the host utilities menu.
-
-Best regards,
-Thomas
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch b/package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
+new file mode 100644
+index 0000000..4bf7aa1
+--- /dev/null
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
+@@ -0,0 +1,66 @@
++Fix compilation on systems lacking fork().
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libXpm-3.5.11.org/configure.ac libXpm-3.5.11/configure.ac
++--- libXpm-3.5.11.org/configure.ac	2013-09-08 06:40:20.000000000 +0200
+++++ libXpm-3.5.11/configure.ac	2014-05-01 09:56:42.000000000 +0200
++@@ -20,7 +20,7 @@
++ XORG_DEFAULT_OPTIONS
++ 
++ # Checks for library functions
++-AC_CHECK_FUNCS([strlcat])
+++AC_CHECK_FUNCS([strlcat fork])
++ 
++ # Obtain compiler/linker options for dependencies
++ PKG_CHECK_MODULES(XPM, xproto x11)
++diff -uNr libXpm-3.5.11.org/src/RdFToI.c libXpm-3.5.11/src/RdFToI.c
++--- libXpm-3.5.11.org/src/RdFToI.c	2013-09-08 06:40:20.000000000 +0200
+++++ libXpm-3.5.11/src/RdFToI.c	2014-05-01 10:57:43.000000000 +0200
++@@ -128,7 +128,7 @@
++ }
++ #endif /* CXPMPROG */
++ 
++-#ifndef NO_ZPIPE
+++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
++ /* Do not depend on errno after read_through */
++ FILE*
++ xpmPipeThrough(
++@@ -202,7 +202,7 @@
++ 	mdata->type = XPMFILE;
++     } else {
++ 	int fd = open(filename, O_RDONLY);
++-#if defined(NO_ZPIPE)
+++#if defined(NO_ZPIPE) || ! defined(HAVE_FORK)
++ 	if ( fd < 0 )
++ 	    return XpmOpenFailed;
++ #else
++diff -uNr libXpm-3.5.11.org/src/WrFFrI.c libXpm-3.5.11/src/WrFFrI.c
++--- libXpm-3.5.11.org/src/WrFFrI.c	2013-09-08 06:40:20.000000000 +0200
+++++ libXpm-3.5.11/src/WrFFrI.c	2014-05-01 10:56:53.000000000 +0200
++@@ -307,8 +307,7 @@
++     fprintf(file, ",\n\"XPMENDEXT\"");
++ }
++ 
++-
++-#ifndef NO_ZPIPE
+++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
++ FUNC(xpmPipeThrough, FILE*, (int fd,
++ 			     const char* cmd,
++ 			     const char* arg1,
++@@ -327,13 +326,13 @@
++ 	mdata->stream.file = (stdout);
++ 	mdata->type = XPMFILE;
++     } else {
++-#ifndef NO_ZPIPE
+++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
++ 	size_t len;
++ #endif
++ 	int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC, 0644);
++ 	if ( fd < 0 )
++ 	    return(XpmOpenFailed);
++-#ifndef NO_ZPIPE
+++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
++ 	len = strlen(filename);
++ 	if (len > 2 && !strcmp(".Z", filename + (len - 2))) {
++ 	    mdata->stream.file = xpmPipeThrough(fd, "compress", NULL, "w");
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 86f331b..b5eb558 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -9,6 +9,7 @@ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.bz2
+ XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXPM_LICENSE = MIT
+ XLIB_LIBXPM_LICENSE_FILES = COPYING
++XLIB_LIBXPM_AUTORECONF = YES
+ XLIB_LIBXPM_INSTALL_STAGING = YES
+ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
+ 	host-gettext
+-- 
+1.7.10.4
