@@ -1,109 +1,84 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  1 May 2014 11:36:43 +0200
-Subject: [Buildroot] [PATCH v3 1/1] xlib_libXpm: Fix compilation on systems
-	lacking fork().
-Message-ID: <1398937003-14143-1-git-send-email-bernd.kuhls@t-online.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 1 May 2014 15:49:09 +0300
+Subject: [Buildroot] host-pkgconf: use --static option for static builds
+In-Reply-To: <20140408035851.GK4096@tarshish>
+References: <1394021977-60055-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20140408035851.GK4096@tarshish>
+Message-ID: <20140501124909.GX4531@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
+Hi Vicente, Buildroot list,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: check for fork(), unpacking of .Z and .gz files will be disabled (Thomas)
-v2: extend patch to reverse dependency of xlib_libXpm (Thomas)
+On Tue, Apr 08, 2014 at 06:58:51AM +0300, Baruch Siach wrote:
+> On Wed, Mar 05, 2014 at 12:19:37PM +0000, Vicente Olivert Riera wrote:
+> > Detect when BR2_PREFER_STATIC_LIBS is selected and modify the host
+> > pkg-config wrapper to append the --static option in that case.
+> > 
+> > Fixes:
+> >    http://autobuild.buildroot.net/results/161/161446dde7e8e774773eb2b34fd555f5ac22dd02/
+> > 
+> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> 
+> Also fixes 
+> http://autobuild.buildroot.net/results/e62/e62d35bcf7d6c98d0a0348532c2b159affb20e83/.
+> 
+> Tested-by: Baruch Siach <baruch@tkos.co.il>
 
- .../xlib_libXpm/xlib_libXpm-0001-detect-fork.patch |   66 ++++++++++++++++++++
- package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    1 +
- 2 files changed, 67 insertions(+)
- create mode 100644 package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
+Fixes also 
+http://autobuild.buildroot.net/results/7e7/7e7b33266317ead92ef275fe10111e8e90bebc5a/.
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch b/package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
-new file mode 100644
-index 0000000..4bf7aa1
---- /dev/null
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
-@@ -0,0 +1,66 @@
-+Fix compilation on systems lacking fork().
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr libXpm-3.5.11.org/configure.ac libXpm-3.5.11/configure.ac
-+--- libXpm-3.5.11.org/configure.ac	2013-09-08 06:40:20.000000000 +0200
-++++ libXpm-3.5.11/configure.ac	2014-05-01 09:56:42.000000000 +0200
-+@@ -20,7 +20,7 @@
-+ XORG_DEFAULT_OPTIONS
-+ 
-+ # Checks for library functions
-+-AC_CHECK_FUNCS([strlcat])
-++AC_CHECK_FUNCS([strlcat fork])
-+ 
-+ # Obtain compiler/linker options for dependencies
-+ PKG_CHECK_MODULES(XPM, xproto x11)
-+diff -uNr libXpm-3.5.11.org/src/RdFToI.c libXpm-3.5.11/src/RdFToI.c
-+--- libXpm-3.5.11.org/src/RdFToI.c	2013-09-08 06:40:20.000000000 +0200
-++++ libXpm-3.5.11/src/RdFToI.c	2014-05-01 10:57:43.000000000 +0200
-+@@ -128,7 +128,7 @@
-+ }
-+ #endif /* CXPMPROG */
-+ 
-+-#ifndef NO_ZPIPE
-++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
-+ /* Do not depend on errno after read_through */
-+ FILE*
-+ xpmPipeThrough(
-+@@ -202,7 +202,7 @@
-+ 	mdata->type = XPMFILE;
-+     } else {
-+ 	int fd = open(filename, O_RDONLY);
-+-#if defined(NO_ZPIPE)
-++#if defined(NO_ZPIPE) || ! defined(HAVE_FORK)
-+ 	if ( fd < 0 )
-+ 	    return XpmOpenFailed;
-+ #else
-+diff -uNr libXpm-3.5.11.org/src/WrFFrI.c libXpm-3.5.11/src/WrFFrI.c
-+--- libXpm-3.5.11.org/src/WrFFrI.c	2013-09-08 06:40:20.000000000 +0200
-++++ libXpm-3.5.11/src/WrFFrI.c	2014-05-01 10:56:53.000000000 +0200
-+@@ -307,8 +307,7 @@
-+     fprintf(file, ",\n\"XPMENDEXT\"");
-+ }
-+ 
-+-
-+-#ifndef NO_ZPIPE
-++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
-+ FUNC(xpmPipeThrough, FILE*, (int fd,
-+ 			     const char* cmd,
-+ 			     const char* arg1,
-+@@ -327,13 +326,13 @@
-+ 	mdata->stream.file = (stdout);
-+ 	mdata->type = XPMFILE;
-+     } else {
-+-#ifndef NO_ZPIPE
-++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
-+ 	size_t len;
-+ #endif
-+ 	int fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC, 0644);
-+ 	if ( fd < 0 )
-+ 	    return(XpmOpenFailed);
-+-#ifndef NO_ZPIPE
-++#if ! defined(NO_ZPIPE) && defined(HAVE_FORK)
-+ 	len = strlen(filename);
-+ 	if (len > 2 && !strcmp(".Z", filename + (len - 2))) {
-+ 	    mdata->stream.file = xpmPipeThrough(fd, "compress", NULL, "w");
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 86f331b..b5eb558 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -9,6 +9,7 @@ XLIB_LIBXPM_SOURCE = libXpm-$(XLIB_LIBXPM_VERSION).tar.bz2
- XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXPM_LICENSE = MIT
- XLIB_LIBXPM_LICENSE_FILES = COPYING
-+XLIB_LIBXPM_AUTORECONF = YES
- XLIB_LIBXPM_INSTALL_STAGING = YES
- XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
- 	host-gettext
+Is there a reason not to apply this one? It should not break shared linking 
+even for packages that are not static linking aware. Maybe only add some 
+redundant NEEDED entries in the ELF dynamic section.
+
+baruch
+
+> > ---
+> > package/pkgconf/pkg-config.in |    2 +-
+> >  package/pkgconf/pkgconf.mk    |   14 ++++++++++++++
+> >  2 files changed, 15 insertions(+), 1 deletions(-)
+> > 
+> > diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
+> > index 25a536b..4dec487 100644
+> > --- a/package/pkgconf/pkg-config.in
+> > +++ b/package/pkgconf/pkg-config.in
+> > @@ -1,2 +1,2 @@
+> >  #!/bin/sh
+> > -PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf $@
+> > +PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
+> > diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+> > index f3f6526..9641371 100644
+> > --- a/package/pkgconf/pkgconf.mk
+> > +++ b/package/pkgconf/pkgconf.mk
+> > @@ -24,8 +24,22 @@ define HOST_PKGCONF_INSTALL_WRAPPER
+> >  		$(HOST_DIR)/usr/bin/pkg-config
+> >  endef
+> >  
+> > +define HOST_PKGCONF_STATIC
+> > +	$(SED) 's, at STATIC@,--static,' $(HOST_DIR)/usr/bin/pkg-config
+> > +endef
+> > +
+> > +define HOST_PKGCONF_SHARED
+> > +	$(SED) 's, at STATIC@,,' $(HOST_DIR)/usr/bin/pkg-config
+> > +endef
+> > +
+> >  PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
+> >  HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
+> >  
+> > +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> > +	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
+> > +else
+> > +	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_SHARED
+> > +endif
+> > +
+> >  $(eval $(autotools-package))
+> >  $(eval $(host-autotools-package))
+
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
