@@ -1,66 +1,59 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Sat, 1 Mar 2014 00:39:10 +0100
-Subject: [Buildroot] [PATCH] legal-info: extract even no-redistribute
-	packages
-In-Reply-To: <1393605956-18133-1-git-send-email-yann.morin.1998@free.fr>
-References: <1393605956-18133-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAHkwnC_J=bVgXyK5X-MPA5csths8M1OkxnxU=d6Zk9=7gYc3Bw@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 30 Apr 2014 22:05:06 -0400
+Subject: [Buildroot] [PATCH v3 1/2] ccache: change default cache directory
+	path to match config setting
+Message-ID: <1398909907-1847-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 28, 2014 at 5:45 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> If a package is marked _REDISTRIBUTE = NO, then legal-info will not
-> try to extract it first.
->
-> If that package also declares some _LICENSE_FILES, legal-info fails
-> if it is the only action we're trying to run:
->
->     $ cat defconfig
->     BR2_INIT_NONE=y
->     BR2_PACKAGE_LIBFSLCODEC=y
->     $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
->     $ make libfslcodec-legal-info
->     /bin/sh: /home/ymorin/dev/buildroot/O/legal-info/licenses.txt: No such file or directory
->     make[1]: *** [libfslcodec-legal-info] Error 1
->
-> Fix this by always having legal-info extract the archives if one or
-> more _LICENSE_FILES are specified.
->
-> Fixes:
->     http://autobuild.buildroot.net/results/884/884ba13bb024fd9a4818f3184495b2cccc3f595e/
->     http://autobuild.buildroot.net/results/b6e/b6e152ce117764337c243a9f356b32064106f5c3/
->     http://autobuild.buildroot.net/results/a58/a588b3b535a1259f7bc110a6323e5f33830bcd94/
->     http://autobuild.buildroot.net/results/6d5/6d5da7fe5aee871d98fd5503875453556ccbf854/
->     [...]
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  package/pkg-generic.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 339c3eb..7b4d04e 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -555,7 +555,8 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
->  endif
->  $(2)_MANIFEST_LICENSE_FILES ?= not saved
->
-> -ifeq ($$($(2)_REDISTRIBUTE),YES)
-> +# If the package declares _LICENSE_FILES, we need to extract it
-> +ifneq ($$($(2)_LICENSE_FILES),)
->  ifneq ($$($(2)_SITE_METHOD),local)
->  ifneq ($$($(2)_SITE_METHOD),override)
+Commit 433290761fceb476b095548eec10adf72405e050 changed the hard-coded
+ccache directory location to use BR_CACHE_DIR (then BUILDROOT_CACHE_DIR),
+which is exported by Makefile based on the BR2_CCACHE_DIR config option.
+This allowed the cache location to be changed on-the-fly by setting a
+"make" command line variable, but left the default location of ccache's
+normal default at "$HOME/.ccache".  Since this location does not match the
+default for BR2_CCACHE_DIR, it is basically almost never correct, so
+direct invocation of ccache outside of the buildroot Makefile, such as for
+increasing the cache size, becomes cumbersome.
 
-If  the package declares _LICENSE_FILES we need to extract it even if
-SITE_METHOD is local or override?
+This patch changes the last-ditch cache location from "$HOME/.ccache" to
+the BR_CCACHE_DIR value defined when host-ccache is configured.  Note that
+the ability to later override the cache location by using a BR_CACHE_DIR
+command line variable is left intact.
 
-Regards
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+---
+
+Changes v2 -> v3:
+* n/a
+
+Changes v1 -> v2:
+* Refresh against latest, rather than building on top of unrelated WIP patch.
+* Update patch commit log wording.
+---
+ package/ccache/ccache.mk |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 650290d..df92c5e 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -30,9 +30,12 @@ HOST_CCACHE_CONF_OPT += ccache_cv_zlib_1_2_3=no
+ #    the compiler, because in the context of Buildroot, that completely
+ #    defeats the purpose of ccache. Of course, that leaves the user
+ #    responsible for purging its cache when the compiler changes.
++#  - Change hard-coded last-ditch default to match path in .config, to avoid
++#    the need to specify BR_CACHE_DIR when invoking ccache directly.
+ define HOST_CCACHE_PATCH_CONFIGURATION
+ 	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+ 	sed -i 's,getenv("CCACHE_COMPILERCHECK"),"none",' $(@D)/ccache.c
++	sed -i 's,"%s/.ccache","$(BR_CACHE_DIR)",' $(@D)/ccache.c
+ endef
+ 
+ HOST_CCACHE_POST_CONFIGURE_HOOKS += \
 -- 
-Fabio Porcedda
+1.7.9.5
