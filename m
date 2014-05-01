@@ -1,34 +1,49 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 01 May 2014 16:01:10 +0200
-Subject: [Buildroot] [PATCH v3 1/2] ccache: change default cache
-	directory path to match config setting
-In-Reply-To: <CANxTyt69TvC8xwbbuhgy+x70qRN4Xaq1Zx6=bLcTx+8TF0VVfA@mail.gmail.com>
-References: <1398909907-1847-1-git-send-email-danomimanchego123@gmail.com>
- <e257628d-8ab3-488b-9f07-be3c5c829e85@email.android.com>
- <CANxTyt69TvC8xwbbuhgy+x70qRN4Xaq1Zx6=bLcTx+8TF0VVfA@mail.gmail.com>
-Message-ID: <53f80af5-57d2-42f1-a383-e5df43bac90b@email.android.com>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Thu,  1 May 2014 19:11:18 +0400
+Subject: [Buildroot] [PATCH] uclibc: arc: bump to git commit 8af9dc8
+Message-ID: <1398957078-8590-1-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi Manchego <danomimanchego123@gmail.com> schreef:
->Thomas,
->
->On Thu, May 1, 2014 at 1:52 AM, Thomas De Schampheleire
-><patrickdepinguin@gmail.com> wrote:
->> You  should have pasted my review and test tags here...
->>
->> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->> Tested-by : Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
->Such tags survive the rev process?  In this case, this patch didn't
->change from v2 to v3, but in general, I thought it might be
->disingenuous to claim those fields on rev X, when they were granted on
->rev X-n ...
+This will resolve uClibc build error for configurations without large file
+support.
 
-They only survive on unchanged revisions, which was the case on this first patch. Indeed for changed revisions, like the second patch, any tag should not be copy pasted as the content is different.
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+---
+ configs/arc_defconfig    | 8 ++++++++
+ package/uclibc/Config.in | 2 +-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+ create mode 100644 configs/arc_defconfig
 
-Best regards,
-Thomas
+diff --git a/configs/arc_defconfig b/configs/arc_defconfig
+new file mode 100644
+index 0000000..467bf3d
+--- /dev/null
++++ b/configs/arc_defconfig
+@@ -0,0 +1,8 @@
++BR2_arcle=y
++BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
++BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
++BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
++BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
++BR2_PTHREAD_DEBUG=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_PACKAGE_HOST_GDB=y
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index cc244a9..4b3b975 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -42,7 +42,7 @@ config BR2_UCLIBC_VERSION_STRING
+ 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+ 	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+-	default "arc-4.8-R3"	if BR2_arc
++	default "8af9dc8f714d20a68df034f6ed1ededc2d752f5b" if BR2_arc
+ 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+ 	default BR2_USE_UCLIBC_SNAPSHOT	if BR2_UCLIBC_VERSION_SNAPSHOT
+ 
+-- 
+1.8.4.1
