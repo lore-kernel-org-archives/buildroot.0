@@ -1,90 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 May 2014 22:14:54 +0200
-Subject: [Buildroot] [git commit] btrfs-progs: new package
-Message-ID: <20140501201859.2134D9CA8F@busybox.osuosl.org>
+From: brianclements <brian@brianclements.net>
+Date: Thu, 1 May 2014 13:26:39 -0700 (PDT)
+Subject: [Buildroot] [Bug 7016] Git issues in resulting buildroot tar
+In-Reply-To: <3e06667e-ebb4-4571-9f34-dd559a37fb0e@email.android.com>
+References: <bug-7016-163@https.bugs.busybox.net/>
+ <20140402073504.199469BF82@busybox.osuosl.org>
+ <1396855570069-66989.post@n4.nabble.com>
+ <CAAXf6LX0tqdsLEmk7bGVT-rUWrVdSew++GFDz-Cucw-Ueg0n9w@mail.gmail.com>
+ <1396897179003-67022.post@n4.nabble.com>
+ <CAAXf6LUM+sLYvcGFEBEaXXfpHRDVaED1W1cM87pg3De6ynLWTw@mail.gmail.com>
+ <1398968712814-68658.post@n4.nabble.com>
+ <3e06667e-ebb4-4571-9f34-dd559a37fb0e@email.android.com>
+Message-ID: <1398975999806-68677.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c3eb1d33dda088fd6a599cb2c72a5407975b723
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>hi Brian,
+>(Please don't top post)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                  |    1 +
- package/btrfs-progs/Config.in      |   23 +++++++++++++++++++++++
- package/btrfs-progs/btrfs-progs.mk |   22 ++++++++++++++++++++++
- 3 files changed, 46 insertions(+), 0 deletions(-)
+Apologies, I'm new to mailing list etiquette. 
 
-diff --git a/package/Config.in b/package/Config.in
-index 07fd166..6888dc3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -130,6 +130,7 @@ source "package/yasm/Config.in"
- endmenu
- 
- menu "Filesystem and flash utilities"
-+source "package/btrfs-progs/Config.in"
- source "package/cifs-utils/Config.in"
- source "package/cramfs/Config.in"
- source "package/curlftpfs/Config.in"
-diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-new file mode 100644
-index 0000000..dcd2ec5
---- /dev/null
-+++ b/package/btrfs-progs/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_BTRFS_PROGS
-+	bool "btrfs-progs"
-+	depends on BR2_LARGEFILE # acl, attr
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_MMU # util-linux
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_ACL
-+	select BR2_PACKAGE_ATTR
-+	select BR2_PACKAGE_E2FSPROGS
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Btrfs filesystem utilities
-+
-+	  https://btrfs.wiki.kernel.org/index.php/Main_Page
-+
-+comment "btrfs-progs needs a toolchain w/ largefile, wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-new file mode 100644
-index 0000000..415ded2
---- /dev/null
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# btrfs-progs
-+#
-+################################################################################
-+
-+BTRFS_PROGS_VERSION = 3.14.1
-+BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/mason/btrfs-progs
-+BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
-+BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
-+BTRFS_PROGS_LICENSE = GPLv2
-+BTRFS_PROGS_LICENSE_FILES = COPYING
-+
-+define BTRFS_PROGS_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define BTRFS_PROGS_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) prefix=/usr DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+>In the menuconfig, in the toolchain menu, you can specify the toolchain
+type. It is set to 'Buildroot' by >default, but you can specify 'external'
+here. I then used the default proposed toolchain (Sourcery)
+
+So I've found the fix. Selecting the external toolchain "Sourcery" (and WOW
+is it much faster) with my other selections same as before of x86_64 and
+git, was all I needed to get git to work. So I know what I need to do now to
+get it to work for my uses. But I'm sure that still means there is a bug
+somewhere in the buildroot toolchain. I'm not sure how to go about finding
+it for you, but I'd be more then happy to test and reproduce things along
+the way for you if you desire. Let me know,
+
+Much Thanks!
+Brian
+_______________________________________________
+buildroot mailing list
+buildroot@
+http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Bug-7016-New-Git-issues-in-resulting-buildroot-tar-tp66457p68677.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
