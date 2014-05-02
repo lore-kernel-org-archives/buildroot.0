@@ -1,94 +1,71 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 2 May 2014 14:20:42 +0200
-Subject: [Buildroot] [PATCH v2 1/2] infra: Add generic check_prog_host
-	function
-In-Reply-To: <CAGduivw6n_tGvg+HOjptV01CxgpviCgumoq_6szpNzre7d8R-g@mail.gmail.com>
-References: <1393172261-17421-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140223184032.2c6d08de@skate>
- <CAGduivy7YPpfcvkOkZxH2_35BSxsjSK0_++RMaw3bxwJE2=QzA@mail.gmail.com>
- <CAGduivw6n_tGvg+HOjptV01CxgpviCgumoq_6szpNzre7d8R-g@mail.gmail.com>
-Message-ID: <CAAXf6LVFWqNKarZbUKh_3VR9sfx4F0vN++4siGh0JQHrSgjQ0w@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri,  2 May 2014 14:40:35 +0200
+Subject: [Buildroot] [PATCH] libwebsockets: disable checks for C++ compiler
+Message-ID: <1399034435-25851-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Since libwesockets in written in pure C, no C++, there is no reason to
+disable it or make the configuration failed when the toolchain has no
+C++ support.
 
-On Fri, Mar 28, 2014 at 7:41 PM, Maxime Hadjinlian
-<maxime.hadjinlian@gmail.com> wrote:
-> Hi all,
->
-> On Sun, Feb 23, 2014 at 7:12 PM, Maxime Hadjinlian
-> <maxime.hadjinlian@gmail.com> wrote:
->> On Sun, Feb 23, 2014 at 6:40 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> Dear Maxime Hadjinlian,
->>>
->>> On Sun, 23 Feb 2014 17:17:40 +0100, Maxime Hadjinlian wrote:
->>>
->>>> +# Verify that which is installed
->>>> +check_prog_host "which"
->>>
->>> Since your function check_prog_host uses which to determine if the
->>> program exists, isn't it weird to use which to verify it?
->> Agreed but that was the original check also which I found a little in
->> the first place. But since this patch is here only to introduce and
->> use a function, I didn't see how to change that here.
->>>
->>> Your check_host_prog function could also be used in:
->>>
->>> # Check that a few mandatory programs are installed
->>> missing_progs="no"
->>> for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
->>>         if ! which $prog > /dev/null ; then
->>>                 echo "You must install '$prog' on your build machine";
->>>                 missing_progs="yes"
->>>                 if test $prog = "svn" ; then
->>>                         echo "  svn is usually part of the subversion package in your distribution"
->>>                 elif test $prog = "hg" ; then
->>>                         echo "  hg is usually part of the mercurial package in your distribution"
->>>                 elif test $prog = "zcat" ; then
->>>                         echo "  zcat is usually part of the gzip package in your distribution"
->>>                 elif test $prog = "bzcat" ; then
->>>                         echo "  bzcat is usually part of the bzip2 package in your distribution"
->>>                 fi
->>>         fi
->>> done
->>>
->>> if test "${missing_progs}" = "yes" ; then
->>>         exit 1
->>> fi
->>>
->>> Though you see that this loop has this missing_progs variable that
->>> allows to list all the missing programs, and only abort at the end.
->> I wanted to keep this one as is for the moment.
->> As you point out, it uses the exact mechanisms we want for all the
->> dependencies.sh, and it would be part of a follow up patch later one,
->> which would uses the same mechanisms but all over the dependencies.sh.
->> Which is want we want in the end.
->> This first patch is mostly a follow up of the previous one, which
->> added the BR2_NEEDS_HOST_JAVA
->>>
->>> Thomas
->>> --
->>> Thomas Petazzoni, CTO, Free Electrons
->>> Embedded Linux, Kernel and Android engineering
->>> http://free-electrons.com
->
-> Just a bump.
-> Thomas, if I remember correctly, you were not opposed to this patch ?
-> As explained, it has been found that dependencies.sh needs a few other
-> rounds of patch so it would be better shaped, but that can be done
-> later.
+Unfortunately, CMake defaults sets C and C++ as languages used by the
+project. This makes the configuration failed if no C++ compiler is found.
 
-Is there a particular reason why the first part of the make check is
-not using check_prog_host ?
+This patch just make the CMake code of libwebsockets reflecting the real
+status of the project with regard to the languages used.
 
-Another comment is that I find the split between this and the second
-patch (classpath) strange: I would move the addition of
-BR2_NEEDS_HOST_JAVAC / JAR to that second patch.
+Should fix:
+  http://autobuild.buildroot.org/results/fef/fef98ef289d44d13ec61025c50febba1e835b421/
 
-Best regards,
-Thomas
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+---
+ ...ckets-0001-cmake-set-the-project-language.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch
+
+diff --git a/package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch b/package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch
+new file mode 100644
+index 0000000..7b017a7
+--- /dev/null
++++ b/package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch
+@@ -0,0 +1,34 @@
++From 6ab441e0509a9fda179fd1febf73d0f9fae321d6 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 2 May 2014 14:24:58 +0200
++Subject: [PATCH] cmake: set the project language
++
++By default, CMake sets C and C++ as languages used by the project.
++This makes the configuration failed if no C++ compiler is found.
++
++Since libwesockets in written in pure C, no C++, there is no reason to
++disable it when the toolchain has no C++ support.
++
++This patch just make the CMake code reflecting the real status of the
++project with regard to the languages used.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f1b6ace..72391b0 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,6 +1,6 @@
++ cmake_minimum_required(VERSION 2.6)
++ 
++-project(libwebsockets)
+++project(libwebsockets C)
++ 
++ set(PACKAGE "libwebsockets")
++ set(CPACK_PACKAGE_NAME "${PACKAGE}")
++-- 
++1.9.2
++
+-- 
+1.9.2
