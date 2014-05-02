@@ -1,77 +1,50 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 2 May 2014 10:33:41 +0200
-Subject: [Buildroot] 2014.05 release cycle: open patches to consider
-In-Reply-To: <CAAXf6LWk1C0uUjY3-5=a0347TnQyBRym9SpQUZN=xj0aNfNRNg@mail.gmail.com>
-References: <CAAXf6LWk1C0uUjY3-5=a0347TnQyBRym9SpQUZN=xj0aNfNRNg@mail.gmail.com>
-Message-ID: <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 02 May 2014 10:49:02 +0200
+Subject: [Buildroot] [PATCH v4] manual/configure.txt: fix C++ escaping
+In-Reply-To: <330afb14854c4fbd104f.1399017758@argentina> (Thomas De
+ Schampheleire's message of "Fri, 02 May 2014 10:02:38 +0200")
+References: <330afb14854c4fbd104f.1399017758@argentina>
+Message-ID: <87oazgpnup.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Grr, buildroot list in copy]
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-Hi,
+ > For asciidoc, a string like '+these are some words+' will be displayed in
+ > monospace font. Such sequences are identified by searching for a matching
+ > pair of + signs in the same block.
 
-During the last Buildroot Developer Days in February, we concluded on
-the goal of having no patches older than 6 months in patchwork, at the
-time of the release.
+ > The string 'C++' also contains such + signs. In most cases, this does not
+ > pose a problem and no escaping is necessary. However, if 'C++' occurs twice
+ > in the same block, the + signs will be matched to each other, and asciidoc
+ > formats all text between them as monospaced text. In this case, escaping of
+ > one of these 'C++' occurances is necessary to get the right formatting.
 
-Excluding the patches triaged during the patchwork cleanup sessions,
-we have reached that goal for the 2014.05 release (hooza!). The oldest
-patches are from November 2013.
+ > In one place of the manual, there is a sentence that causes such a problem:
+ >     "you only have to tell whether your toolchain supports C++ or not and
+ >     whether it has built-in RPC support. If your external toolchain uses
+ >     the 'uClibc' library, then you have to tell Buildroot if it supports
+ >     largefile, IPv6, RPC, wide-char, locale, program invocation, threads
+ >     and C++."
 
-Since we are starting the stabilization month for 2014.05, I won't try
-to push real feature patches anymore, but there are a number of
-improvement/bugfix patches in patchwork that I believe could still be
-applied.
+ > Commit 082dec8ce440236b1477e568f0965f05ad241adb was based on a patch fixing
+ > this problem in one place of the manual, but was incorrectly changed while
+ > committing.
 
-Some of these patches have not received any review/ack/test, or may
-need to be rebased. So this is an action point to the community:
-review, test and/or rebase these patches to help get these patches
-integrated!
+ > This patch reverts the incorrect changes in that commit, and solves the
+ > problem correctly.
 
-Here is the list of patches that I think should be considered for
-2014.05 still: (starting from the oldest first, not including the very
-latest patches)
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-http://patchwork.ozlabs.org/patch/305422/
-package: unification of use $(subst [._-], [._-], $(<PKG>_VERSION)) macro
-Jerzy Grzegorek
+ > ---
+ > v4:
+ >  - (ThomasDS) update commit message
 
-http://patchwork.ozlabs.org/patch/323339/
-[v2,1/2] infra: Add generic check_prog_host function
-http://patchwork.ozlabs.org/patch/323340/
-[v2,2/2] classpath: Use generic check for host program
-Maxime Hadjinlian
+Committed, thanks.
 
-http://patchwork.ozlabs.org/patch/326513/
-[1/2] toolchain: generate a gdbinit file
-Thomas Petazzoni
-
-http://patchwork.ozlabs.org/patch/332885/
-Makefile: move fs/common.mk above external.mk
-Philippe Reynes <tremyfr@yahoo.fr>
-
-http://patchwork.ozlabs.org/patch/334855/
-[v3] infra: Add PRE_*_HOOKS for every step
-Maxime Hadjinlian
-
-http://patchwork.ozlabs.org/patch/337161/
-perf: Fix compilation without libelf for post-3.10 kernels
-Peter Meerwald pmeerw at pmeerw.net
-
-http://patchwork.ozlabs.org/patch/341675/
-[1/1] cups: move localstatedir from /usr/var to /var
-Danomi Manchego
-
-http://patchwork.ozlabs.org/patch/344390/
-[v3,1/2] ccache: change default cache directory path to match config setting
-http://patchwork.ozlabs.org/patch/344391/
-[v3,2/2] ccache: provide capability to do initial ccache setup
-Danomi Manchego
-
-
-Best regards,
-Thomas
+-- 
+Bye, Peter Korsgaard
