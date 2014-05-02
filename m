@@ -1,61 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 May 2014 15:12:05 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi: use the branch name
- instead of the sha1 for the linux kernel
-In-Reply-To: <874n18pbrv.fsf@dell.be.48ers.dk>
-References: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr>
- <874n18pbrv.fsf@dell.be.48ers.dk>
-Message-ID: <20140502131205.GC3503@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 02 May 2014 10:21:34 -0300
+Subject: [Buildroot] [PATCH] Rebuild busybox when an external config is
+ updated
+In-Reply-To: <87ha58corn.fsf@steelpick.2x.cz>
+References: <1396469147-21713-1-git-send-email-sojka@merica.cz>
+ <CAAXf6LVyQfj8Z=RQkfq_tyjN-e305bZSpKaOg5N5FpVSsc1Tbg@mail.gmail.com>
+ <20140501203103.GA3231@free.fr> <87ha58corn.fsf@steelpick.2x.cz>
+Message-ID: <53639BDE.4050009@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On 05/02/2014 10:07 AM, Michal Sojka wrote:
 
-On 2014-05-02 15:09 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > Previously, when we were using the rpi-3.10.y branch, we coiuld use a sha1 to
->  > refer to a specific changeset, and that would work and give reproducible
->  > builds, thanks to upstream merging linux-stable into their branch.
-> 
->  > Now they have declared rpi-3.12.y the new stable branch, and deprecated the
->  > rpi-3.10.y branch.
-> 
->  > Unfortunately, they are now rebasing the rpi-3.12.y branch instead of merging
->  > linux-stable as they used to do. This means we can no longer use a sha1 as the
->  > tree will change as soon as upstream rebases onto a new linux-stable.
-> 
->  > There are two possibilities here:
->  >   - revert back to using a rpi-3.10.y cset
->  >   - use the rpi-3.12.y branch name
-> 
->  > This patch goes with the second option, since rpi-3.10.y is no longer maitained,
->  > and we prefer to use a stable branch, at the cost of reproducible builds.
-> 
-> Hmm, but that means that the builds are not reproducable :/
+> I could definitely live with this conclusion, but on the other hand I
+> don't think that adding one more dependency is being "too smart". What
+> are the drawbacks of adding this functionality? If it is just adding the
+> same to other packages, I'm willing to do that. Quick grep suggests that
+> only the following packages have custom config files: at91bootstrap3.mk,
+> barebox.mk, ubi.mk, linux.mk, busybox.mk, freetype.mk, luarocks.mk,
+> qt.mk, uclibc.mk.
 
-Indeed, that's a drawback.
-
-> Can't we convince them to create a new branch whenever they rebase or
-> something like that?
-
-Already done:
-    https://github.com/raspberrypi/linux/issues/584
-
-I forgot to add this in my commit log. Can you do that before you apply,
-please, or do you want me to re-submit?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Hi.
+I think i've already mentioned it in the past, but here it goes again.
+Because you'd need a full rebuild of packages that depend on busybox as
+well since we use DEPENDENCIES to make packages with superior
+functionality to that provided by busybox build afterwards to override
+it's functionality (logic = it's YES and better so do it).
+If you rebuild busybox without doing so for the other packages then your
+"reproducibly" goes down the drain since the "big and featured" binaries
+get overwritten by busybox (with the way busybox is installed at the
+moment) for a built project.
+Regards.
