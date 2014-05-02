@@ -1,31 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  2 May 2014 08:09:22 -0300
-Subject: [Buildroot] [PATCH] tmux: needs mmu
-Message-ID: <1399028962-21069-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 2 May 2014 13:22:30 +0200
+Subject: [Buildroot] [PATCH] manual: fix C++ suport in libc case,
+	fix indentation
+In-Reply-To: <1399027768-28337-1-git-send-email-yann.morin.1998@free.fr>
+References: <1399027768-28337-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXaMFu-bgxabW_TqD++oQ8dndrY8VHrvj+FBNz_WEi=CA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/1b2/1b2a8c75e73ec136e639896f23544bf85906e97b/
+On Fri, May 2, 2014 at 12:49 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> The manual has this sentence for the dependency on a C library *and* a
+> toolchain feature:
+>
+>     foo needs an (e)glibc toolchain, or foo needs an (e)glibc toolchain
+>     w/ C++ support
+>
+> And then, just below, the comment text for C++ is just 'C++', not
+> 'C++ support'.
+>
+> Fix that, and add a bit of indentation too.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/tmux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-diff --git a/package/tmux/Config.in b/package/tmux/Config.in
-index 831d119..fa8f64a 100644
---- a/package/tmux/Config.in
-+++ b/package/tmux/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TMUX
- 	bool "tmux"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_NCURSES
- 	help
--- 
-1.8.3.2
+I checked the Config.in files and fortunately this mistake was not yet applied.
+
+Thanks for noticing!
+
+Thomas
