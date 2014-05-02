@@ -1,42 +1,73 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 02 May 2014 15:09:56 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi: use the branch name
-	instead of the sha1 for the linux kernel
-In-Reply-To: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 2 May 2014 14:45:11 +0200")
-References: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <874n18pbrv.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 2 May 2014 15:07:43 +0200
+Subject: [Buildroot] [git commit] libwebsockets: disable checks for C++
+	compiler
+Message-ID: <20140502131010.D537F9CA8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=26132bac8dc4c2d3130c0d239ab4e174dd8b221c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Previously, when we were using the rpi-3.10.y branch, we coiuld use a sha1 to
- > refer to a specific changeset, and that would work and give reproducible
- > builds, thanks to upstream merging linux-stable into their branch.
+Since libwesockets in written in pure C, no C++, there is no reason to
+disable it or make the configuration failed when the toolchain has no
+C++ support.
 
- > Now they have declared rpi-3.12.y the new stable branch, and deprecated the
- > rpi-3.10.y branch.
+Unfortunately, CMake defaults sets C and C++ as languages used by the
+project. This makes the configuration failed if no C++ compiler is found.
 
- > Unfortunately, they are now rebasing the rpi-3.12.y branch instead of merging
- > linux-stable as they used to do. This means we can no longer use a sha1 as the
- > tree will change as soon as upstream rebases onto a new linux-stable.
+This patch just make the CMake code of libwebsockets reflecting the real
+status of the project with regard to the languages used.
 
- > There are two possibilities here:
- >   - revert back to using a rpi-3.10.y cset
- >   - use the rpi-3.12.y branch name
+Should fix:
+  http://autobuild.buildroot.org/results/fef/fef98ef289d44d13ec61025c50febba1e835b421/
 
- > This patch goes with the second option, since rpi-3.10.y is no longer maitained,
- > and we prefer to use a stable branch, at the cost of reproducible builds.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ckets-0001-cmake-set-the-project-language.patch |   34 ++++++++++++++++++++
+ 1 files changed, 34 insertions(+), 0 deletions(-)
 
-Hmm, but that means that the builds are not reproducable :/
-
-Can't we convince them to create a new branch whenever they rebase or
-something like that?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch b/package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch
+new file mode 100644
+index 0000000..7b017a7
+--- /dev/null
++++ b/package/libwebsockets/libwebsockets-0001-cmake-set-the-project-language.patch
+@@ -0,0 +1,34 @@
++From 6ab441e0509a9fda179fd1febf73d0f9fae321d6 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Fri, 2 May 2014 14:24:58 +0200
++Subject: [PATCH] cmake: set the project language
++
++By default, CMake sets C and C++ as languages used by the project.
++This makes the configuration failed if no C++ compiler is found.
++
++Since libwesockets in written in pure C, no C++, there is no reason to
++disable it when the toolchain has no C++ support.
++
++This patch just make the CMake code reflecting the real status of the
++project with regard to the languages used.
++
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f1b6ace..72391b0 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,6 +1,6 @@
++ cmake_minimum_required(VERSION 2.6)
++ 
++-project(libwebsockets)
+++project(libwebsockets C)
++ 
++ set(PACKAGE "libwebsockets")
++ set(CPACK_PACKAGE_NAME "${PACKAGE}")
++-- 
++1.9.2
++
