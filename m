@@ -1,35 +1,42 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 02 May 2014 15:07:51 +0200
-Subject: [Buildroot] [PATCH] libwebsockets: disable checks for C++
-	compiler
-In-Reply-To: <1399034435-25851-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Fri, 2 May 2014 14:40:35 +0200")
-References: <1399034435-25851-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <878uqkpbvc.fsf@dell.be.48ers.dk>
+Date: Fri, 02 May 2014 15:09:56 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi: use the branch name
+	instead of the sha1 for the linux kernel
+In-Reply-To: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 2 May 2014 14:45:11 +0200")
+References: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <874n18pbrv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Since libwesockets in written in pure C, no C++, there is no reason to
- > disable it or make the configuration failed when the toolchain has no
- > C++ support.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Previously, when we were using the rpi-3.10.y branch, we coiuld use a sha1 to
+ > refer to a specific changeset, and that would work and give reproducible
+ > builds, thanks to upstream merging linux-stable into their branch.
 
- > Unfortunately, CMake defaults sets C and C++ as languages used by the
- > project. This makes the configuration failed if no C++ compiler is found.
+ > Now they have declared rpi-3.12.y the new stable branch, and deprecated the
+ > rpi-3.10.y branch.
 
- > This patch just make the CMake code of libwebsockets reflecting the real
- > status of the project with regard to the languages used.
+ > Unfortunately, they are now rebasing the rpi-3.12.y branch instead of merging
+ > linux-stable as they used to do. This means we can no longer use a sha1 as the
+ > tree will change as soon as upstream rebases onto a new linux-stable.
 
- > Should fix:
- >   http://autobuild.buildroot.org/results/fef/fef98ef289d44d13ec61025c50febba1e835b421/
+ > There are two possibilities here:
+ >   - revert back to using a rpi-3.10.y cset
+ >   - use the rpi-3.12.y branch name
 
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ > This patch goes with the second option, since rpi-3.10.y is no longer maitained,
+ > and we prefer to use a stable branch, at the cost of reproducible builds.
 
-Committed, thanks.
+Hmm, but that means that the builds are not reproducable :/
+
+Can't we convince them to create a new branch whenever they rebase or
+something like that?
 
 -- 
 Bye, Peter Korsgaard
