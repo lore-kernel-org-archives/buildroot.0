@@ -1,33 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 May 2014 14:56:58 +0200
-Subject: [Buildroot] [git commit] tmux: needs mmu
-Message-ID: <20140502125931.600849CAA7@busybox.osuosl.org>
+From: Michal Sojka <sojka@merica.cz>
+Date: Fri, 02 May 2014 15:07:40 +0200
+Subject: [Buildroot] [PATCH] Rebuild busybox when an external config is
+	updated
+In-Reply-To: <20140501203103.GA3231@free.fr>
+References: <1396469147-21713-1-git-send-email-sojka@merica.cz>
+ <CAAXf6LVyQfj8Z=RQkfq_tyjN-e305bZSpKaOg5N5FpVSsc1Tbg@mail.gmail.com>
+ <20140501203103.GA3231@free.fr>
+Message-ID: <87ha58corn.fsf@steelpick.2x.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a8dc41442506d84a8b335280312d9652907290d4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Fixes:
-http://autobuild.buildroot.net/results/1b2/1b2a8c75e73ec136e639896f23544bf85906e97b/
+thanks for the response.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tmux/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+On Thu, May 01 2014, Yann E. MORIN wrote:
+> Thomas, Michal, All,
+>
+> On 2014-05-01 21:46 +0200, Thomas De Schampheleire spake thusly:
 
-diff --git a/package/tmux/Config.in b/package/tmux/Config.in
-index 831d119..fa8f64a 100644
---- a/package/tmux/Config.in
-+++ b/package/tmux/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_TMUX
- 	bool "tmux"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_NCURSES
- 	help
+[...]
+
+> We've already talked about it with Thomas P on IRC a while back. Here's
+> the transcript of our discussion:
+>
+> --- Log opened Sun Apr 20 10:52:25 2014
+> [--SNIP--]
+> 12:02 < kos_tom> opinions about http://patchwork.ozlabs.org/patch/336465/ ?
+> 12:04 < y_morin> kos_tom: http://patchwork.ozlabs.org/patch/336465/  <--
+>                  we have PKG-clean-for-reconfigure for this, no?
+> 12:05 < y_morin> kos_tom: But most importantly: if we do that for
+>                  busybox, we need to do that for: linux, uClibc and any
+>                  other package for which the user can provide a .config
+> 12:06 < y_morin> kos_tom: So, I'd suggest we mark is as "Rejected" and
+>                  ask to modify the manual about his situation.
+> 12:09 < kos_tom> y_morin: to me, it's part of the "we don't try to be
+>                  smart and to detect what needs to be rebuilt"
+> 12:11 < kos_tom> clean-for-* are internal targets, they are not really
+>                  meant to be used, and they are not documented
+> 12:12 < y_morin> kos_tom: Well, we do have rebuild and reconfigure.
+>
+>
+> So, it looks like both Thomas and me thinks this is not really something
+> we want. I especially like kos_tom's comment:
+>
+>     it's part of the "we don't try to be smart and to detect what needs
+>     to be rebuilt"
+>
+> I still stand by this position.
+
+I could definitely live with this conclusion, but on the other hand I
+don't think that adding one more dependency is being "too smart". What
+are the drawbacks of adding this functionality? If it is just adding the
+same to other packages, I'm willing to do that. Quick grep suggests that
+only the following packages have custom config files: at91bootstrap3.mk,
+barebox.mk, ubi.mk, linux.mk, busybox.mk, freetype.mk, luarocks.mk,
+qt.mk, uclibc.mk.
+
+Or, is there other easy way how to achieve the following? I want to have
+all files that influence my root filesystem in a separate repository.
+Currently my repo contains the following files:
+
+    output/.config          # buildroot config
+    output/.gitignore
+    output/GNUmakefile      # See below
+    output/busybox.config
+    output/perm_table.txt
+    output/postbuild
+    output/ubinize.cfg
+    buildroot               # Git submodule with buildroot
+
+Cloning this repo and running make in output/ reproducibly rebuilds the
+root filesystem. The GNUmakefile is a modified version of automatically
+generated Makefile from 'make menuconfig O=../output'. The modification
+include changing the -C parameter of make to relative path, setting
+environment variables such as BUSYBOX_CONFIG_FILE and updating "my"
+busybox config after buildroot innovation. See the full listing below.
+This setup allows me the easily track what has been changed in my project
+and I don't have to remember running XXX-update-config after every
+busybox-menuconfig.
+
+    export BUSYBOX_CONFIG_FILE=$(CURDIR)/busybox.config
+    #export BR2_EXTERNAL=$(CURDIR)/../XXX
+     
+    lastword = $(word $(words $(1)),$(1))
+    makedir := $(dir $(call lastword,$(MAKEFILE_LIST)))
+     
+    MAKEARGS := -C ../buildroot
+    MAKEARGS += O=$(if $(patsubst /%,,$(makedir)),$(CURDIR)/)$(patsubst %/,%,$(makedir))
+     
+    MAKEFLAGS += --no-print-directory
+     
+    .PHONY: all $(MAKECMDGOALS)
+     
+    all     := $(filter-out Makefile,$(MAKECMDGOALS))
+     
+    _all:
+            $(MAKE) $(MAKEARGS) $(all)
+            -$(MAKE) $(MAKEARGS) busybox-update-config
+     
+    Makefile:;
+     
+    $(all): _all
+            @:
+     
+    %/: _all
+            @:
+
+Best regards,
+-Michal
