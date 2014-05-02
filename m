@@ -1,48 +1,36 @@
-From: clshotwe at rockwellcollins.com <clshotwe@rockwellcollins.com>
-Date: Fri, 2 May 2014 10:53:02 -0500
-Subject: [Buildroot] Patchwork big patchsets: SELinux
-In-Reply-To: <CAAXf6LW8iN=SskGU6x7XkjfVR4NQR-JzE2sNRjYtehHnpu391Q@mail.gmail.com>
-References: <CAAXf6LW8iN=SskGU6x7XkjfVR4NQR-JzE2sNRjYtehHnpu391Q@mail.gmail.com>
-Message-ID: <OFC7852024.A07AA540-ON86257CCC.005740FD-86257CCC.00574102@rockwellcollins.com>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Fri, 2 May 2014 18:27:25 +0200 (CEST)
+Subject: [Buildroot] [PATCH] lsof: fix "'TCP_*' undeclared" build errors
+In-Reply-To: <61985964.1908854.1399044584132.JavaMail.zimbra@advansee.com>
+References: <1399042764-22388-1-git-send-email-benoit.thebaudeau@advansee.com>
+ <1399042764-22388-2-git-send-email-benoit.thebaudeau@advansee.com>
+ <61985964.1908854.1399044584132.JavaMail.zimbra@advansee.com>
+Message-ID: <275983561.1911680.1399048045010.JavaMail.zimbra@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+On Friday, May 2, 2014 5:29:44 PM, Beno?t Th?baudeau wrote:
+> On Friday, May 2, 2014 4:59:24 PM, Beno?t Th?baudeau wrote:
+> > diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+> > index aa101e4..66d2133 100644
+> > --- a/package/lsof/lsof.mk
+> > +++ b/package/lsof/lsof.mk
+> > @@ -47,7 +47,8 @@ endef
+> >  define LSOF_CONFIGURE_CMDS
+> >  	(cd $(@D) ; \
+> >  		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS)
+> >  		$(BR2_LSOF_CFLAGS)" \
+> > -		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1
+> > ./Configure linux)
+> > +		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 \
+> > +		LSOF_CC="cc --sysroot $(STAGING_DIR)" ./Configure linux)
+> 
+> It'd be better if $(STAGING_DIR) were quoted.
 
------Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote: -----
+Actually not because such quotes cause other issues in the configure tests, e.g.
+time.h not being found in the test for strftime().
 
->To: clshotwe at rockwellcollins.com, rjbarnet at rockwellcollins.com,
->Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
->Date: 04/30/2014 05:21AM
->Cc: buildroot <buildroot@buildroot.org>
->Subject: Patchwork big patchsets: SELinux
->
->
->Hi,
->
->I would like to check on the state of one of the big patchsets in
->patchwork: the SELinux patches posted by Clayton Shotwell.
->
->The last iteration in patchwork is v5, posted in December 2013.
->
->What I would like to know specifically is:
->- what is the state of the patchset?
-I have not had any time to touch it since they were last submitted. I probably wont be able to get to them late next month at the earliest. I know all of those packages have had at lease two releases since I submitted the patches so the new versions need to be reintegrated.
-
->- what is blocking integration of this patchset?
-I think mainly review time. The audit package required a large patch to get it to cross compile correctly. That one especially needs to be looked at it again. 
-
->- what can be done to deblock it?
-Me finding free time to revamp the packages. :)
-
-Thanks,
-Clayton
-
-Clayton Shotwell
-Software Engineer
-clshotwe at rockwellcollins.com
-www.rockwellcollins.com 
+Beno?t
