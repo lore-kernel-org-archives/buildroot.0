@@ -1,60 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 May 2014 12:43:51 +0200
-Subject: [Buildroot] [PATCH] manual: use one-line titles instead of
- two-line titles (trivial)
-In-Reply-To: <0f7edee196f1f7a6643f.1399009650@argentina>
-References: <0f7edee196f1f7a6643f.1399009650@argentina>
-Message-ID: <20140502104351.GB3503@free.fr>
+Date: Fri,  2 May 2014 12:49:28 +0200
+Subject: [Buildroot] [PATCH] manual: fix C++ suport in libc case,
+	fix indentation
+Message-ID: <1399027768-28337-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-05-02 07:47 +0200, Thomas De Schampheleire spake thusly:
-> Asciidoc supports two syntaxes for section titles: two-line titles (title
-> plus underline consisting of a particular symbol), and one-line titles
-> (title prefixed with a specific number of = signs).
-[--SNIP--]
-> and the one-line title prefixes:
-> = Document Title (level 0) =
-> == Section title (level 1) ==
-> === Section title (level 2) ===
-> ==== Section title (level 3) ====
-> ===== Section title (level 4) =====
+The manual has this sentence for the dependency on a C library *and* a
+toolchain feature:
 
-Here you use both a prefix and a suffix...
+    foo needs an (e)glibc toolchain, or foo needs an (e)glibc toolchain
+    w/ C++ support
 
-> diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-> --- a/docs/manual/adding-packages-autotools.txt
-> +++ b/docs/manual/adding-packages-autotools.txt
-> @@ -1,13 +1,11 @@
->  // -*- mode:doc; -*-
->  // vim: set syntax=asciidoc:
->  
-> -Infrastructure for autotools-based packages
-> -~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +=== Infrastructure for autotools-based packages
+And then, just below, the comment text for C++ is just 'C++', not
+'C++ support'.
 
-... but your script only added the prefix.
+Fix that, and add a bit of indentation too.
 
-I just checked, and asciidoc does the right thing. The asciidoc site
-itself is written with only the prefixes, and the doc says the suffix is
-optional.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+---
+ docs/manual/adding-packages-directory.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yet, I found it weird that the commit log says one thing, but the patch
-does it differently. I don't care either way, but it should have been
-coherent.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 5d4d5d9..3cf3afa 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -227,10 +227,10 @@ use in the comment.
+ 
+ * C library
+ ** Dependency symbol: +BR2_TOOLCHAIN_USES_GLIBC+,
+-+BR2_TOOLCHAIN_USES_UCLIBC+
++   +BR2_TOOLCHAIN_USES_UCLIBC+
+ ** Comment string: for the C library, a slightly different comment text
+    is used: +foo needs an (e)glibc toolchain+, or `foo needs an (e)glibc
+-   toolchain w/ C++ support`
++   toolchain w/ C++`
+ 
+ * C++ support
+ ** Dependency symbol: +BR2_INSTALL_LIBSTDCPP+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
