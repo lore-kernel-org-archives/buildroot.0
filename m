@@ -1,61 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 May 2014 21:18:24 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi: use the branch name
- instead of the sha1 for the linux kernel
-In-Reply-To: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr>
-References: <1399034711-12550-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140502191824.GA7817@free.fr>
+Date: Fri,  2 May 2014 21:29:54 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi: bump kernel version
+Message-ID: <1399058994-15218-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-05-02 14:45 +0200, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Previously, when we were using the rpi-3.10.y branch, we coiuld use a sha1 to
-> refer to a specific changeset, and that would work and give reproducible
-> builds, thanks to upstream merging linux-stable into their branch.
-> 
-> Now they have declared rpi-3.12.y the new stable branch, and deprecated the
-> rpi-3.10.y branch.
-> 
-> Unfortunately, they are now rebasing the rpi-3.12.y branch instead of merging
-> linux-stable as they used to do. This means we can no longer use a sha1 as the
-> tree will change as soon as upstream rebases onto a new linux-stable.
-> 
-> There are two possibilities here:
->   - revert back to using a rpi-3.10.y cset
->   - use the rpi-3.12.y branch name
-> 
-> This patch goes with the second option, since rpi-3.10.y is no longer maitained,
-> and we prefer to use a stable branch, at the cost of reproducible builds.
-> 
-> Reported-by: Jeremy Rosen <jeremy.rosen@openwide.fr>
-> Signed-off-by: yann.morin.1998 at free.fr
-> Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
-> 
-> ---
-> Note: before the next release, we should revisit this, and if upstream has
-> not switched to merging over rebasing, then we will just revert to using
-> the latest cset from the rpi-3.10.y branch for the release.
+Upstream has been playing evil-rebase on their tree, so they now
+no longer have the changeset we are currently referencing.
 
-OK, upstream has agreed to merge the stable branch:
-    https://github.com/raspberrypi/linux/issues/584#issuecomment-42057891
+They have now agreed to merge instead of rebasing:
+    https://github.com/raspberrypi/linux/issues/584
 
-So, I'll send an updated patch to use the latest cset instead of the
-branch name.
+So, update the raspberrypi_defconfig to use a new changeset that
+currently exists right _now_, in the hope it will not disapear in
+the future (but we'll catch it pretty fast anyway, so we'll be able
+to seriously bug up upstream in that case ;-) ).
 
-Regards,
-Yann E. MORIN.
+Reported-by: Jeremy Rosen <jeremy.rosen@openwide.fr>
+Signed-off-by: yann.morin.1998 at free.fr
+Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
+---
+ configs/raspberrypi_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 61e23c0..4fba6c7 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="746069c0ac473cfb4fd70415149b4cfdea193119"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="81bd944c02f65f706ad257f113fd5b2f62cdd03f"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
