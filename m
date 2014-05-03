@@ -1,31 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 May 2014 10:41:12 +0200
-Subject: [Buildroot] [PATCH 1/1] libdrm: bump version to 2.4.54
-Message-ID: <1399106472-14158-1-git-send-email-bernd.kuhls@t-online.de>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 03 May 2014 10:42:41 +0200
+Subject: [Buildroot] [PATCH 1/1] arch: add support for "corei7" Intel
+	CPU optimisations
+References: <1398598155-21007-1-git-send-email-bernd.kuhls@t-online.de>
+ <87vbtnoczn.fsf@dell.be.48ers.dk>
+Message-ID: <0pme3bxj6q.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Peter Korsgaard <jacmet@uclibc.org> wrote in
+news:87vbtnoczn.fsf at dell.be.48ers.dk: 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdrm/libdrm.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <bernd.kuhls@t-online.de> writes: 
+> 
+> > gcc support was added in version 4.6:
+> > http://gcc.gnu.org/gcc-4.6/changes.html
+> 
+> > Signed-off-by: Bernd Kuhls
+> > <bernd.kuhls@t-online.de> 
+> 
+> Committed, thanks.
+> 
 
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index bee1e77..b3e4d7a 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDRM_VERSION = 2.4.53
-+LIBDRM_VERSION = 2.4.54
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
- LIBDRM_LICENSE = MIT
--- 
-1.7.10.4
+Hi,
+
+according to http://git.buildroot.net/buildroot/log/ your commit did not 
+reach the public repo ;)
+
+Regards, Bernd
