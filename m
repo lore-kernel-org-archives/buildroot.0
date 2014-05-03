@@ -1,91 +1,114 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  3 May 2014 23:18:16 +0200
-Subject: [Buildroot] [PATCH] faifa: new package
-Message-ID: <1399151896-20703-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 May 2014 23:28:05 +0200
+Subject: [Buildroot] [PATCH v2 07/24] opencv: bump to version 2.4.8
+In-Reply-To: <1398208556-4195-8-git-send-email-s.martin49@gmail.com>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+ <1398208556-4195-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140503212805.GA13170@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-faifa is a library and a cli used to manage PLC hardware that use
-Intellon chipset.
-Almost everybody use theses chips nowadays.
+Samuel, All,
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- package/Config.in       |  1 +
- package/faifa/Config.in | 11 +++++++++++
- package/faifa/faifa.mk  | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
- create mode 100644 package/faifa/Config.in
- create mode 100644 package/faifa/faifa.mk
+On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
+> This patch bumps OpenCV version and address the minimal set of change to
+> get the new version building correctly:
+> - update the download location;
+> - force Qt version to Qt 4 when support is enabled;
+> - naively fix the v4l support.
+> 
+> However, it does not address a couple improvements, among these:
+> - jasper support;
+> - python/numpy support;
+> - Qt4 and Qt5 support (since the 2.4.6 release), so only Qt4 support is
+>   supported in this patch;
+> - optional libv4l dependency (since 2.4.7 release);
+> - etc.
+> These will be addressed in followup patches.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/Config.in b/package/Config.in
-index 4430241..e469a48 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -910,6 +910,7 @@ source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
-+source "package/faifa/Config.in"
- source "package/foomatic-filters/Config.in"
- source "package/fping/Config.in"
- source "package/gesftpserver/Config.in"
-diff --git a/package/faifa/Config.in b/package/faifa/Config.in
-new file mode 100644
-index 0000000..99abaab
---- /dev/null
-+++ b/package/faifa/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_FAIFA
-+	bool "faifa"
-+	select BR2_PACKAGE_LIBPCAP
-+	help
-+	  Faifa can configure any Intellon-based Power Line Communication device
-+	  using Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It
-+	  supports all Intellon-specific management and control frames as well as
-+	  standard management frames.
-+
-+	  https://dev.open-plc.org
-+
-diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
-new file mode 100644
-index 0000000..cd38598
---- /dev/null
-+++ b/package/faifa/faifa.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# faifa
-+#
-+################################################################################
-+
-+FAIFA_VERSION = master
-+FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
-+FAIFA_INSTALL_STAGING = YES
-+FAIFA_DEPENDENCIES = libpcap
-+FAIFA_LICENSE = GPLv2
-+FAIFA_LICENSE_FILES = COPYING
-+FAIFA_AUTORECONF=YES
-+
-+define FAIFA_INSTALL_TARGET_CMDS
-+    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+        PREFIX=/usr \
-+        STRIP=/bin/true \
-+        DESTDIR=$(TARGET_DIR) \
-+        install
-+endef
-+
-+define FAIFA_INSTALL_STAGING_CMDS
-+    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+        PREFIX=/usr \
-+        STRIP=/bin/true \
-+        DESTDIR=$(STAGING_DIR) \
-+        install
-+endef
-+
-+$(eval $(autotools-package))
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> changes v1 -> v2:
+> - rebase
+> - use github *.tar.gz source location
+> - split the big patch in several atomic ones (Yann)
+> ---
+>  package/opencv/Config.in |  2 +-
+>  package/opencv/opencv.mk | 11 +++++------
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+> index 49ada5d..2c6200c 100644
+> --- a/package/opencv/Config.in
+> +++ b/package/opencv/Config.in
+> @@ -8,7 +8,7 @@ menuconfig BR2_PACKAGE_OPENCV
+>  	  OpenCV (Open Source Computer Vision) is a library of programming
+>  	  functions for real time computer vision.
+>  
+> -	  http://opencv.willowgarage.com/wiki/
+> +	  http://opencv.org/
+>  
+>  if BR2_PACKAGE_OPENCV
+>  
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index 42f9b0a..10f11cf 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -4,9 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -OPENCV_VERSION = 2.4.2
+> -OPENCV_SITE    = http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_VERSION)
+> -OPENCV_SOURCE  = OpenCV-$(OPENCV_VERSION).tar.bz2
+> +OPENCV_VERSION = 2.4.8
+> +OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
+>  OPENCV_INSTALL_STAGING = YES
+>  
+>  OPENCV_CONF_OPT += \
+> @@ -140,7 +139,7 @@ OPENCV_CONF_OPT += -DWITH_PNG=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
+> -OPENCV_CONF_OPT += -DWITH_QT=ON
+> +OPENCV_CONF_OPT += -DWITH_QT=4
+>  OPENCV_DEPENDENCIES += qt
+>  else
+>  OPENCV_CONF_OPT += -DWITH_QT=OFF
+> @@ -154,10 +153,10 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
+> -OPENCV_CONF_OPT += -DWITH_V4L=ON
+> +OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
+>  OPENCV_DEPENDENCIES += libv4l
+>  else
+> -OPENCV_CONF_OPT += -DWITH_V4L=OFF
+> +OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+>  endif
+>  
+>  # Installation hooks:
+> -- 
+> 1.9.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
