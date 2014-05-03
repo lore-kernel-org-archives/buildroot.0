@@ -1,95 +1,106 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat,  3 May 2014 17:35:45 +0200
-Subject: [Buildroot] [PATCH] avahi: Add systemd init script
-Message-ID: <1399131345-11199-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  3 May 2014 18:33:02 +0200
+Subject: [Buildroot] [PATCH] zeromq: disable test_fork when fork() is no
+	available
+Message-ID: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This consists of two files:
-  - avahi-daemon.service:
-    It start/stop the daemon avahi, it's a copy of the S50avahi-daemon
-    script.
-  - avahi_tmpfiles.conf:
-    This one gets installed in /usr/lib/tmpfiles.d/ to be used by
-    systemd-tmpfiles which will create the correct directory structure
-    with the appropriate rights.
-    This is the equivalent of the S05avahi-setup.sh script.
+From: Samuel Martin <s.martin49@gmail.com>
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+zeromp's configure script correctly detects the fork availability, but
+unconditionally build test_fork program whatever the fork() availability.
+
+This patch fixes the build-system by disabling test_fork when fork is
+not available (e.g. when !BR2_USEMMU).
+
+Fixes:
+  http://autobuild.buildroot.org/results/359/3599cc3b7bf2bb22a78961cd84d21cb03cbd7015/
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[yann.morin.1998 at free.fr: remove Makefile.in hunks]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: tested against the failed bfin config, as well as
+ a i686 target]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/avahi/avahi-daemon.service | 15 +++++++++++++++
- package/avahi/avahi.mk             | 22 +++++++++++++++++++---
- package/avahi/avahi_tmpfiles.conf  |  1 +
- 3 files changed, 35 insertions(+), 3 deletions(-)
- create mode 100644 package/avahi/avahi-daemon.service
- create mode 100644 package/avahi/avahi_tmpfiles.conf
+ ...isable-test_fork-if-fork-is-not-available.patch | 52 ++++++++++++++++++++++
+ package/zeromq/zeromq.mk                           |  1 +
+ 2 files changed, 53 insertions(+)
+ create mode 100644 package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
 
-diff --git a/package/avahi/avahi-daemon.service b/package/avahi/avahi-daemon.service
+diff --git a/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
 new file mode 100644
-index 0000000..c9b7b1f
+index 0000000..1eefdc3
 --- /dev/null
-+++ b/package/avahi/avahi-daemon.service
-@@ -0,0 +1,15 @@
-+[Unit]
-+Description=Avahi daemon
-+Requires=dbus.target
-+After=syslog.target network.target auditd.service
++++ b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
+@@ -0,0 +1,52 @@
++From b50912f2eecec1ea7accc155f8132116f8702075 Mon Sep 17 00:00:00 2001
++From: Samuel Martin <s.martin49@gmail.com>
++Date: Sat, 3 May 2014 12:22:38 +0200
++Subject: [PATCH] tests: disable test_fork if fork() is not available
 +
-+[Service]
-+Type=oneshot
-+RemainAfterExit=ye
-+ExecStart=/usr/sbin/avahi-daemon -s
-+ExecReload=/usr/sbin/avahi-daemon -r
-+ExecStop=/usr/sbin/avahi-daemon -k
-+Restart=restart-always
++Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++---
++ configure.ac      | 1 +
++ tests/Makefile.am | 8 ++++++--
++ tests/Makefile.in | 8 ++++----
++ 3 files changed, 11 insertions(+), 6 deletions(-)
 +
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 609b05d..6e84564 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -153,12 +153,28 @@ ifeq ($(BR2_PACKAGE_AVAHI_AUTOIPD),y)
- AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_AUTOIPD
- endif
++diff --git a/configure.ac b/configure.ac
++index 0c41604..8f8521c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -431,6 +431,7 @@ AM_CONDITIONAL(BUILD_PGM, test "x$libzmq_pgm_ext" = "xyes")
++ AM_CONDITIONAL(ON_MINGW, test "x$libzmq_on_mingw32" = "xyes")
++ AM_CONDITIONAL(ON_ANDROID, test "x$libzmq_on_android" = "xyes")
++ AM_CONDITIONAL(ON_LINUX, test "x$libzmq_on_linux" = "xyes")
+++AM_CONDITIONAL(HAVE_FORK, test "x$ac_cv_func_fork" = "xyes")
++ 
++ # Checks for library functions.
++ AC_TYPE_SIGNAL
++diff --git a/tests/Makefile.am b/tests/Makefile.am
++index 0cfe4e8..2a1e257 100644
++--- a/tests/Makefile.am
+++++ b/tests/Makefile.am
++@@ -46,8 +46,10 @@ if !ON_MINGW
++ noinst_PROGRAMS += test_shutdown_stress \
++                    test_pair_ipc \
++                    test_reqrep_ipc \
++-                   test_timeo \
++-                   test_fork
+++                   test_timeo
+++if HAVE_FORK
+++noinst_PROGRAMS += test_fork
+++endif
++ endif
++ 
++ test_system_SOURCES = test_system.cpp
++@@ -93,8 +95,10 @@ test_shutdown_stress_SOURCES = test_shutdown_stress.cpp
++ test_pair_ipc_SOURCES = test_pair_ipc.cpp testutil.hpp
++ test_reqrep_ipc_SOURCES = test_reqrep_ipc.cpp testutil.hpp
++ test_timeo_SOURCES = test_timeo.cpp
+++if HAVE_FORK
++ test_fork_SOURCES = test_fork.cpp
++ endif
+++endif
++ 
++ #  Run the test cases
++ TESTS = $(noinst_PROGRAMS)
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 833c1d3..7802916 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -10,6 +10,7 @@ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_LICENSE = LGPLv3+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
++ZEROMQ_AUTORECONF = YES
  
--define AVAHI_INSTALL_DAEMON_INITSCRIPT
-+ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
-+
-+define AVAHI_INSTALL_INIT_SYSTEMD
-+  $(INSTALL) -D -m 644 package/avahi/avahi-daemon.service \
-+    $(TARGET_DIR)/etc/systemd/system/avahi-daemon.service
-+
-+  mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+
-+  ln -fs ../avahi-daemon.service \
-+    $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/avahi-daemon.service
-+
-+  mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
-+
-+  $(INSTALL) -D -m 644 package/avahi/avahi_tmpfiles.conf \
-+    $(TARGET_DIR)/usr/lib/tmpfiles.d/avahi.conf
-+
-+endef
-+
-+define AVAHI_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 package/avahi/S50avahi-daemon $(TARGET_DIR)/etc/init.d/
- endef
- 
--ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
--AVAHI_POST_INSTALL_TARGET_HOOKS += AVAHI_INSTALL_DAEMON_INITSCRIPT
- endif
- 
- $(eval $(autotools-package))
-diff --git a/package/avahi/avahi_tmpfiles.conf b/package/avahi/avahi_tmpfiles.conf
-new file mode 100644
-index 0000000..41eb3c6
---- /dev/null
-+++ b/package/avahi/avahi_tmpfiles.conf
-@@ -0,0 +1 @@
-+d /tmp/avahi-autopid 0755 default default
+ ifeq ($(BR2_PACKAGE_ZEROMQ_PGM),y)
+ 	ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
 -- 
-1.9.2
+1.8.3.2
