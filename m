@@ -1,86 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 May 2014 22:05:20 +0200
-Subject: [Buildroot] [PATCH v2 06/24] python-numpy: add optional
- blas/lapack support
-In-Reply-To: <1398208556-4195-7-git-send-email-s.martin49@gmail.com>
-References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
- <1398208556-4195-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140503200520.GF10671@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 03 May 2014 22:08:05 +0200
+Subject: [Buildroot] [PATCH 08/12] boot/syslinux: bump version
+In-Reply-To: <ebb3e343a568496b9406bce20eb802be33bcec3c.1399050467.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 2 May 2014 19:10:34 +0200")
+References: <cover.1399050467.git.yann.morin.1998@free.fr>
+ <ebb3e343a568496b9406bce20eb802be33bcec3c.1399050467.git.yann.morin.1998@free.fr>
+Message-ID: <87fvkqmxqy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
-> python-numpy can be linked with libblas and liblapack, so automatically
-> do it when clapack is enabled.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v1 -> v2:
-> - rebase
-> - split blas/lapack support in its own cset (ThomasP)
-> ---
->  package/python-numpy/python-numpy.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index e7c91c4..b0ab031 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -10,6 +10,11 @@ PYTHON_NUMPY_SITE = http://downloads.sourceforge.net/numpy
->  PYTHON_NUMPY_LICENSE = BSD-3c
->  PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
->  PYTHON_NUMPY_SETUP_TYPE = distutils
-> +PYTHON_NUMPY_DEPENDENCIES = \
-> +	$(if BR2_PACKAGE_CLAPACK,clapack)
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > This new version has a very, very weird build system. There are different
+ > images that syslinux can now build:
+ >   - the plain legacy-bios images we already supported previously
+ >   - two new EFI32 and EFI64 applications
 
-Uh? Did you forget to dereference the BR2_PACKAGE_CLAPACK variable? ;-)
-Anyway, see also below...
+ > To build one or the other, the Makefile accepts one or more of:
+ >     make (bios|efi32|efi64)
 
-> +PYTHON_NUMPY_SITE_CFG_LIBS = \
-> +	$(if $(BR2_PACKAGE_CLAPACK),blas lapack)
+ > Specify all of them, and it builds all. Specify 'install', and it installs
+ > all of them, as one may expect.
 
-We prefer using multi-line syntax. See:
-    http://buildroot.net/downloads/manual/manual.html#writing-rules-mk
+ > Still a regular behaviour, is to build only a subset (down to one):
+ >     make bios           <-- builds just the legacy-bios images
+ >     make efi32 bios     <-- builds just the legacy-bios and efi32 images
 
-So:
+ > Where it gets weird is the install procedure. Can you guess how it's done?
+ > Hint: the syslinux guys have invented the multiple-argument parsing in
+ > pure Makefiles. To build then install only the bios images, one would do:
+ >     make bios
+ >     make bios install
 
-    ifeq ($(BR2_PACKAGE_CLAPACK),y)
-    PYTHON_NUMPY_DEPENDENCIES += clapack
-    PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
-    endif
+ > Yep, that's it. make bios install. Two arguments, one action.
 
-Regards,
-Yann E. MORIN.
+ > That makes for some funky workarounds in our install procedure...
 
->  PYTHON_NUMPY_BUILD_OPT = --fcompiler=None
->  
-> @@ -19,6 +24,8 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
->  	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
->  	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
->  	echo "libraries =" >> $(@D)/site.cfg
-> +	$(foreach lib,$(PYTHON_NUMPY_SITE_CFG_LIBS),\
-> +		echo "    $(lib)" >> $(@D)/site.cfg ;)
->  endef
->  
->  # Some package may include few headers from NumPy, so let's install it in the
-> -- 
-> 1.9.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Is that so odd? If you don't have an explicit configure step, then there
+isn't really anything for the install step to know what configuration
+you have built (besides looking for what binaries are available).
+
+Committed this and the rest of the series, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
