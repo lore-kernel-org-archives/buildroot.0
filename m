@@ -1,27 +1,34 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 03 May 2014 23:02:06 +0200
-Subject: [Buildroot] [PATCH 3/8] mesa3d: compile fixes
-References: <1398968277-9044-1-git-send-email-bernd.kuhls@t-online.de>
- <1398968277-9044-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <e32g3bxsru.ln2@ID-313208.user.individual.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  3 May 2014 21:05:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 6956] Packaging libsoxr
+In-Reply-To: <bug-6956-163@https.bugs.busybox.net/>
+References: <bug-6956-163@https.bugs.busybox.net/>
+Message-ID: <20140503210540.B3A4B9CAD8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
-news:1398968277-9044-4-git-send-email-bernd.kuhls at t-online.de: 
+https://bugs.busybox.net/show_bug.cgi?id=6956
 
-> Signed-off-by: Bernd Kuhls
-> <bernd.kuhls@t-online.de> ---
->  package/mesa3d/mesa3d-0002-gbm-without-dri.patch |   31 ++++++++++++
+Gustavo Zacarias <gustavo@zacarias.com.ar> changed:
 
-Hi,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-please do not apply the patch mentioned above due to
-https://bugs.freedesktop.org/show_bug.cgi?id=78225#c1
+--- Comment #6 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2014-05-03 21:05:39 UTC ---
+libsoxr added in commit 705662b41d59558ad6ca11362c9611cf13f1d6fd for the
+upcoming 2014.05 release.
+But please note you're probably talking of mpd 0.18.6 (and not 18.6), and
+anyway the whole 0.18.x branch lacks libsoxr support, that'll probably be in
+0.19.x or whatever the next major release is called (it's in mpd git master for
+now).
+Thanks.
 
-I will update the mesa3d package to prevent the compile bug.
-
-Regards, Bernd
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
