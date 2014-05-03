@@ -1,35 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 May 2014 21:21:34 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi: bump kernel version
-In-Reply-To: <1399058994-15218-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Fri, 2 May 2014 21:29:54 +0200")
-References: <1399058994-15218-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87a9ayoegx.fsf@dell.be.48ers.dk>
+Date: Sat, 03 May 2014 21:22:11 +0200
+Subject: [Buildroot] [PATCH 1/1] arch: add support for "corei7" Intel
+	CPU optimisations
+In-Reply-To: <0pme3bxj6q.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Sat, 03 May 2014 10:42:41 +0200")
+References: <1398598155-21007-1-git-send-email-bernd.kuhls@t-online.de>
+ <87vbtnoczn.fsf@dell.be.48ers.dk>
+ <0pme3bxj6q.ln2@ID-313208.user.individual.net>
+Message-ID: <8761lmoefw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Upstream has been playing evil-rebase on their tree, so they now
- > no longer have the changeset we are currently referencing.
 
- > They have now agreed to merge instead of rebasing:
- >     https://github.com/raspberrypi/linux/issues/584
+ > according to http://git.buildroot.net/buildroot/log/ your commit did not 
+ > reach the public repo ;)
 
- > So, update the raspberrypi_defconfig to use a new changeset that
- > currently exists right _now_, in the hope it will not disapear in
- > the future (but we'll catch it pretty fast anyway, so we'll be able
- > to seriously bug up upstream in that case ;-) ).
+Sorry, I didn't push yet. It's there now.
 
- > Reported-by: Jeremy Rosen <jeremy.rosen@openwide.fr>
- > Signed-off-by: yann.morin.1998 at free.fr
- > Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
-
-Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
