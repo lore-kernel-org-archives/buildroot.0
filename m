@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 3 May 2014 21:20:47 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v2] Using gdb in buildroot
-In-Reply-To: <patchbomb.1399126191@argentina>
-References: <patchbomb.1399126191@argentina>
-Message-ID: <20140503212047.545161a7@skate>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 03 May 2014 21:21:34 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi: bump kernel version
+In-Reply-To: <1399058994-15218-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 2 May 2014 21:29:54 +0200")
+References: <1399058994-15218-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87a9ayoegx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Sat, 03 May 2014 16:09:51 +0200, Thomas De Schampheleire wrote:
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Upstream has been playing evil-rebase on their tree, so they now
+ > no longer have the changeset we are currently referencing.
 
-> This a small respin of two patches that Thomas Petazzoni sent to the list a
-> while back, adding a gdbinit file and updating the manual.
+ > They have now agreed to merge instead of rebasing:
+ >     https://github.com/raspberrypi/linux/issues/584
 
-Thanks for this update! However, it looks like you haven't preserved
-the authorship on these patches, even though your modifications are
-apparently relatively small. Is that intended?
+ > So, update the raspberrypi_defconfig to use a new changeset that
+ > currently exists right _now_, in the hope it will not disapear in
+ > the future (but we'll catch it pretty fast anyway, so we'll be able
+ > to seriously bug up upstream in that case ;-) ).
 
-Thanks!
+ > Reported-by: Jeremy Rosen <jeremy.rosen@openwide.fr>
+ > Signed-off-by: yann.morin.1998 at free.fr
+ > Cc: Jeremy Rosen <jeremy.rosen@openwide.fr>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
