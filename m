@@ -1,18 +1,31 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 03 May 2014 22:48:24 +0200
-Subject: [Buildroot] [PATCH 0/8] mesa3d version bump,
-	fix xbmc compile errors
-References: <1398968277-9044-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <o91g3bxsru.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 03 May 2014 22:57:23 +0200
+Subject: [Buildroot] [PATCH v2] evtest: bump version to 1.31
+In-Reply-To: <1398204743-15267-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Wed, 23 Apr 2014 00:12:23 +0200")
+References: <1398204743-15267-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87ppjulgwc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:1398968277-9044-1-git-send-email-bernd.kuhls at t-online.de:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
->  the version is unrelated
+ > - update version to 1.31
+ > - correct license to GPLv2+
+ > - change download url to official repository
+ > - remove evtest-capture support (dropped since 1.31)
+ > - change broken project URL to official repository
 
-make that "the version _bump_ is unrelated"
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - correct license (suggested by Thomas Petazzoni)
+ >   - add Config.in.legacy entry (suggested by Thomas Petazzoni)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
