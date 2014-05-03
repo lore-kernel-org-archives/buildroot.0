@@ -1,29 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 May 2014 21:03:39 +0200
-Subject: [Buildroot] [PATCH] zeromq: disable test_fork when fork() is no
-	available
-In-Reply-To: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 3 May 2014 18:33:02 +0200")
-References: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87iopmofas.fsf@dell.be.48ers.dk>
+Date: Sat, 03 May 2014 21:05:07 +0200
+Subject: [Buildroot] [PATCH 1/3] libmicrohttpd: bump to version 0.9.35
+In-Reply-To: <1399116983-5037-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sat, 3 May 2014 08:36:21 -0300")
+References: <1399116983-5037-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87eh0aof8c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > From: Samuel Martin <s.martin49@gmail.com>
- > zeromp's configure script correctly detects the fork availability, but
- > unconditionally build test_fork program whatever the fork() availability.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > This patch fixes the build-system by disabling test_fork when fork is
- > not available (e.g. when !BR2_USEMMU).
-
-The symbol is called BR2_USE_MMU.
-
-Committed, thanks. Please don't forget to send the patch upstream.
+Committed all 3, thanks.
 
 -- 
 Bye, Peter Korsgaard
