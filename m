@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  3 May 2014 08:36:22 -0300
-Subject: [Buildroot] [PATCH 2/3] libtasn1: bump to version 3.5
+Date: Sat,  3 May 2014 08:36:23 -0300
+Subject: [Buildroot] [PATCH 3/3] p11-kit: bump to version 0.20.2
 In-Reply-To: <1399116983-5037-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1399116983-5037-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1399116983-5037-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1399116983-5037-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libtasn1/libtasn1.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/p11-kit/Config.in  | 1 +
+ package/p11-kit/p11-kit.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 122f775..e223ad5 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/p11-kit/Config.in b/package/p11-kit/Config.in
+index c72006f..2640a32 100644
+--- a/package/p11-kit/Config.in
++++ b/package/p11-kit/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_P11_KIT
+ 	depends on !BR2_PREFER_STATIC_LIB
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_LIBTASN1
+ 	help
+ 	  Provides a way to load and enumerate PKCS#11 modules.
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 0db5ebf..9e210bb 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBTASN1_VERSION = 3.4
-+LIBTASN1_VERSION = 3.5
- LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison
- LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
+-P11_KIT_VERSION = 0.18.1
++P11_KIT_VERSION = 0.20.2
+ P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
+-P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
++P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPT = --disable-static
+ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
 -- 
 1.8.3.2
