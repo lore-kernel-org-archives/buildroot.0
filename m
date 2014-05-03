@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 May 2014 19:01:04 +0200
-Subject: [Buildroot] [PATCH v2 02/24] opencv: fix qt selection when
- highgui is enable
-In-Reply-To: <1398208556-4195-3-git-send-email-s.martin49@gmail.com>
+Date: Sat, 3 May 2014 19:08:09 +0200
+Subject: [Buildroot] [PATCH v2 03/24] armadillo: new package
+In-Reply-To: <1398208556-4195-4-git-send-email-s.martin49@gmail.com>
 References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
- <1398208556-4195-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140503170104.GB10671@free.fr>
+ <1398208556-4195-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140503170809.GC10671@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +14,55 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
-> The OpenCV highgui module links against QtGui and QtTest.
-> The latter is built by default but was never installed.
-> Thanks to the previous patch on Qt, this can be rectified.
-> 
-> So, update the OpenCV Config.in with the missing Qt module selection.
+> Armadillo is a C++ linear algebra library.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This should come _after_ you add the clapack package, since it is a
+dependency of armadillo.
+
+Some other comments below...
+
+[--SNIP--]
+> diff --git a/package/Config.in b/package/Config.in
+> index 07fd166..4475b07 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -766,6 +766,7 @@ source "package/zyre/Config.in"
+>  endmenu
+>  
+>  menu "Other"
+> +source "package/armadillo/Config.in"
+>  source "package/apr/Config.in"
+>  source "package/apr-util/Config.in"
+>  source "package/argp-standalone/Config.in"
+
+Alphabetical order, please.
+
+[--SNIP--]
+> diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+> new file mode 100644
+> index 0000000..b2cfdfc
+> --- /dev/null
+> +++ b/package/armadillo/armadillo.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# armadillo
+> +#
+> +################################################################################
+> +
+> +ARMADILLO_VERSION_MAJOR = 4.000
+> +ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).4
+
+There's now 4.300 availble. If 4.000 is a requirement, there's now
+4.000.5.
+
+With the patch re-ordering, plus the alphabetical sort, you can add my
+reviewed tag (not added here, so patchwork does not catch it.)
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> changes v1 -> v2:
-> - rebase
-> ---
->  package/opencv/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index b40e141..49ada5d 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -173,9 +173,11 @@ config BR2_PACKAGE_OPENCV_WITH_QT
->  	depends on BR2_USE_MMU # qt
->  	select BR2_PACKAGE_QT
->  	select BR2_PACKAGE_QT_STL
-> +	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-> +	select BR2_PACKAGE_QT_TEST       if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->  	default y
->  	help
-> -	  Use Qt with STL support
-> +	  Use Qt with QtTest module and STL support
->  
->  config BR2_PACKAGE_OPENCV_WITH_TIFF
->  	bool "tiff support"
-> -- 
-> 1.9.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
