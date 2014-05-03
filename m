@@ -1,67 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 May 2014 21:45:44 +0200
-Subject: [Buildroot] [git commit] package/upx: new package
-Message-ID: <20140503200856.0B5B99CACC@busybox.osuosl.org>
+Date: Sat, 3 May 2014 21:43:25 +0200
+Subject: [Buildroot] [git commit] package/ucl: new package
+Message-ID: <20140503200855.F2BBD9CAD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=531c5a0e3ed371c75eeeeacb00dfb78ea24d0d99
+commit: http://git.buildroot.net/buildroot/commit/?id=5be988c560a84b46235d2724ad11458353384cac
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-UPX is a free, portable, extendable, high-performance executable
-packer for several executable formats.
+UCL implements a number of compression algorithms that achieve an
+excellent compression ratio while allowing *very* fast decompression.
+Decompression requires no additional memory.
 
-This is needed for syslinux 6.x.
-
-Note: upx is a host-only package. Although it supports quite a few
-target architectures, the only use so far will be for use by syslinux,
-which already has an x86-on-x86 requirement anyway. So we currently do
-not care to have target-dependencies on host-upx.
+This is needed for UPX, which is needed for syslinux 6.x.
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-[yann.morin.1998 at free.fr: builds fine in parallel; fix build to
- locate libucl; fix installation; don't add a menuconfig entry]
+[yann.morin.1998 at free.fr: don't add a menuconfig entry, since it
+ currently is for internal use only]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: Romain Naour <romain.naour@openwide.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/upx/upx.mk |   28 ++++++++++++++++++++++++++++
- 1 files changed, 28 insertions(+), 0 deletions(-)
+ package/ucl/ucl.mk |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+diff --git a/package/ucl/ucl.mk b/package/ucl/ucl.mk
 new file mode 100644
-index 0000000..a039376
+index 0000000..225ad7c
 --- /dev/null
-+++ b/package/upx/upx.mk
-@@ -0,0 +1,28 @@
++++ b/package/ucl/ucl.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# upx
++# ucl
 +#
 +################################################################################
 +
-+UPX_VERSION = 3.91
-+UPX_SITE = http://upx.sourceforge.net/download/
-+UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.bz2
-+UPX_LICENSE = GPLv2+
-+UPX_LICENSE_FILES = COPYING
++UCL_VERSION = 1.03
++UCL_SITE = http://www.oberhumer.com/opensource/ucl/download/
++UCL_LICENSE = GPLv2+
++UCL_LICENSE_FILES = COPYING
 +
-+HOST_UPX_DEPENDENCIES = host-ucl
-+
-+# We need to specify all, otherwise the default target only prints a message
-+# stating to "please choose a target for 'make'"... :-(
-+define HOST_UPX_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) CPPFLAGS="$(HOST_CPPFLAGS)" \
-+	    LDFLAGS="$(HOST_LDFLAGS)" UPX_UCLDIR=$(HOST_DIR)/usr \
-+	    -C $(@D) all
-+endef
-+
-+# UPX has no install procedure, so install it manually.
-+define HOST_UPX_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/upx.out $(HOST_DIR)/usr/bin/upx
-+endef
-+
-+$(eval $(host-generic-package))
++$(eval $(host-autotools-package))
