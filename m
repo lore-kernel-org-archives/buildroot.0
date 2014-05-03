@@ -1,39 +1,21 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 May 2014 22:30:45 +0200
-Subject: [Buildroot] [git commit] flite: depend on alsa-lib when available
-Message-ID: <20140503203400.2EAD99CAD1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 03 May 2014 22:37:22 +0200
+Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Fix DRI detection
+In-Reply-To: <1398833062-11406-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Wed, 30 Apr 2014 06:44:22 +0200")
+References: <1398833062-11406-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87y4yilhtp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d42ac75fd07c1f5f187e08a0ccf02c24f1bde4e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-The flite configure script detects the availability of alsa-lib. Add alsa-lib
-to flite dependencies to make sure alsa-lib is always detected when
-available.
+ > Fixes http://autobuild.buildroot.net/results/b8a/b8a905b864b01aa09940668130a62d9d90ef5f9a/
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/flite/flite.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
-
-diff --git a/package/flite/flite.mk b/package/flite/flite.mk
-index 7511b87..08d2ce1 100644
---- a/package/flite/flite.mk
-+++ b/package/flite/flite.mk
-@@ -38,4 +38,11 @@ define FLITE_EXTRACT_CMDS
- 	$(RM) -rf $(BUILD_DIR)/$(subst .tar.bz2,,$(FLITE_SOURCE))
- endef
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+FLITE_DEPENDENCIES += alsa-lib
-+FLITE_CONF_OPT += --with-audio=alsa
-+else
-+FLITE_CONF_OPT += --with-audio=oss
-+endif
-+
- $(eval $(autotools-package))
+344052344052
+-- 
+Bye, Peter Korsgaard
