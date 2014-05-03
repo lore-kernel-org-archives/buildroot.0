@@ -1,84 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 May 2014 00:34:57 +0200
-Subject: [Buildroot] [PATCH v2 14/24] opencv: disable opencl
- support/module
-In-Reply-To: <1398208556-4195-15-git-send-email-s.martin49@gmail.com>
-References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
- <1398208556-4195-15-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140503223456.GH13170@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun,  4 May 2014 00:45:43 +0200
+Subject: [Buildroot] [PATCH v3 1/2] infra: Add generic check_prog_host
+	function
+Message-ID: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+Avoid copy/pasting the same block of code to check if a program is
+available on the host machine.
 
-On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+Changes v2 -> v3:
+    - None
+Changes v1 -> v2:
+    - Remove the introduction of BR2_NEEDS_HOST_JAVAC &
+      BR2_NEEDS_HOST_JAR to add them in the classpath patch. (Thomas De
+      Schampheleire)
+---
+ support/dependencies/dependencies.sh | 30 ++++++++++++++----------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, I have a question, below.
-
-> ---
-> changes v1 -> v2:
-> - new patch (split suggested by Yann)
-> ---
->  package/opencv/opencv.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-> index b87eddc..a4bdd39 100644
-> --- a/package/opencv/opencv.mk
-> +++ b/package/opencv/opencv.mk
-> @@ -59,6 +59,7 @@ OPENCV_CONF_OPT += \
->  	-DBUILD_opencv_ml=$(if $(BR2_PACKAGE_OPENCV_LIB_ML),ON,OFF)             \
->  	-DBUILD_opencv_nonfree=$(if $(BR2_PACKAGE_OPENCV_LIB_NONFREE),ON,OFF)   \
->  	-DBUILD_opencv_objdetect=$(if $(BR2_PACKAGE_OPENCV_LIB_OBJDETECT),ON,OFF) \
-> +	-DBUILD_opencv_ocl=OFF                                                  \
->  	-DBUILD_opencv_photo=$(if $(BR2_PACKAGE_OPENCV_LIB_PHOTO),ON,OFF)       \
->  	-DBUILD_opencv_python=OFF                                               \
->  	-DBUILD_opencv_stitching=$(if $(BR2_PACKAGE_OPENCV_LIB_STITCHING),ON,OFF) \
-> @@ -151,6 +152,7 @@ OPENCV_CONF_OPT += \
->  	-DWITH_1394=OFF    \
->  	-DWITH_EIGEN=OFF   \
->  	-DWITH_IMAGEIO=OFF \
-> +	-DWITH_OPENCL=OFF  \
-
-Here you have two options to disable it:
-    -DBUILD_opencv_ocl=OFF
-    -DWITH_OPENCL=OFF
-
-But I did not see the same schema with other modules, such as the
-dynamic cuda, where you only have:
-    -DBUILD_opencv_dynamicuda=OFF
-
-and not:
-    -DWITH_DYNAMIC_CUDA=OFF
-
-You are the cmake guy, but I'd like to understand the discrepancy
-between the two, which when I look at the code, are defined in a similar
-way.
-
-Regards,
-Yann E. MORIN.
-
->  	-DWITH_OPENEXR=OFF \
->  	-DWITH_OPENGL=OFF  \
->  	-DWITH_OPENNI=OFF  \
-> -- 
-> 1.9.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 0566814..655b4c6 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -51,18 +51,20 @@ if test -n "$PERL_MM_OPT" ; then
+ 	exit 1
+ fi
+ 
+-# Verify that which is installed
+-if ! which which > /dev/null ; then
+-	echo
+-	echo "You must install 'which' on your build machine";
+-	exit 1;
+-fi;
++check_prog_host()
++{
++	prog="$1"
++	if ! which $prog > /dev/null ; then
++		echo >&2
++		echo "You must install '$prog' on your build machine" >&2
++		exit 1
++	fi
++}
+ 
+-if ! which sed > /dev/null ; then
+-	echo
+-	echo "You must install 'sed' on your build machine"
+-	exit 1
+-fi
++# Verify that which is installed
++check_prog_host "which"
++# Verify that sed is installed
++check_prog_host "sed"
+ 
+ # Check make
+ MAKE=$(which make 2> /dev/null)
+@@ -196,11 +198,7 @@ if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
+ fi
+ 
+ if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+-	if ! which java > /dev/null ; then
+-		echo >&2
+-		echo "You must install 'java' on your build machine" >&2
+-		exit 1
+-	fi
++	check_prog_host "java"
+ fi
+ 
+ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.2
