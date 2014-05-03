@@ -1,50 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 May 2014 22:08:05 +0200
-Subject: [Buildroot] [PATCH 08/12] boot/syslinux: bump version
-In-Reply-To: <ebb3e343a568496b9406bce20eb802be33bcec3c.1399050467.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 2 May 2014 19:10:34 +0200")
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 May 2014 22:08:38 +0200
+Subject: [Buildroot] [PATCH 11/12] boot/syslinux: add option to install
+	c32 modules
+In-Reply-To: <87k3a2mxw3.fsf@dell.be.48ers.dk>
 References: <cover.1399050467.git.yann.morin.1998@free.fr>
- <ebb3e343a568496b9406bce20eb802be33bcec3c.1399050467.git.yann.morin.1998@free.fr>
-Message-ID: <87fvkqmxqy.fsf@dell.be.48ers.dk>
+ <f66cc7a87e5bcdc8a958dc40444541c4063cd5ab.1399050467.git.yann.morin.1998@free.fr>
+ <87k3a2mxw3.fsf@dell.be.48ers.dk>
+Message-ID: <20140503200838.GG10671@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Peter, All,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > This new version has a very, very weird build system. There are different
- > images that syslinux can now build:
- >   - the plain legacy-bios images we already supported previously
- >   - two new EFI32 and EFI64 applications
+On 2014-05-03 22:05 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > Cc: Romain Naour <romain.naour@openwide.fr>
+>  > ---
+>  >  boot/syslinux/Config.in   | 10 ++++++++++
+>  >  boot/syslinux/syslinux.mk |  9 +++++++++
+>  >  2 files changed, 19 insertions(+)
+> 
+>  > diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+>  > index 28c5329..f4b9870 100644
+>  > --- a/boot/syslinux/Config.in
+>  > +++ b/boot/syslinux/Config.in
+>  > @@ -46,4 +46,14 @@ config BR2_TARGET_SYSLINUX_EFI
+>  
+>  >  endchoice
+>  
+>  > +if BR2_TARGET_SYSLINUX_LEGACY_BIOS
+>  > +
+>  > +config BR2_TARGET_SYSLINUX_C32
+>  > +	string "modules to install"
+>  > +	help
+>  > +	  Enter a space-separated list of .c32 modules to install.
+>  > +	  Leave empty to install no module.
+> 
+> Out of interest, what are those c32 modules? Some kind of loadable
+> libraries?
 
- > To build one or the other, the Makefile accepts one or more of:
- >     make (bios|efi32|efi64)
+Yes, a kind of plugin. One provides a graphical (vesa) menu, another
+provides a simple shell, and so on...
 
- > Specify all of them, and it builds all. Specify 'install', and it installs
- > all of them, as one may expect.
+>  > +# We install the c32 modules from the host-installed tree, they are all
+>  > +# neatly installed in the same location, while they are scaterred around
+> 
+> s/scaterred/scattered/
+> 
+> Reworded slightly and committed, thanks.
 
- > Still a regular behaviour, is to build only a subset (down to one):
- >     make bios           <-- builds just the legacy-bios images
- >     make efi32 bios     <-- builds just the legacy-bios and efi32 images
+Doh, I really need to do something about my keyboard dislexia... ;-)
+Thanks for fixing. :-)
 
- > Where it gets weird is the install procedure. Can you guess how it's done?
- > Hint: the syslinux guys have invented the multiple-argument parsing in
- > pure Makefiles. To build then install only the bios images, one would do:
- >     make bios
- >     make bios install
-
- > Yep, that's it. make bios install. Two arguments, one action.
-
- > That makes for some funky workarounds in our install procedure...
-
-Is that so odd? If you don't have an explicit configure step, then there
-isn't really anything for the install step to know what configuration
-you have built (besides looking for what binaries are available).
-
-Committed this and the rest of the series, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
