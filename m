@@ -1,106 +1,93 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  3 May 2014 18:33:02 +0200
-Subject: [Buildroot] [PATCH] zeromq: disable test_fork when fork() is no
-	available
-Message-ID: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sat, 3 May 2014 18:58:13 +0200
+Subject: [Buildroot] [PATCH v2 01/24] qt: add an option to install the
+ test module
+In-Reply-To: <1398208556-4195-2-git-send-email-s.martin49@gmail.com>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+ <1398208556-4195-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140503165813.GA10671@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+Samuel, All,
 
-zeromp's configure script correctly detects the fork availability, but
-unconditionally build test_fork program whatever the fork() availability.
+On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
+> When building Qt in a minimal configuration, a couple of Qt modules
+> (QtNetwork, QtSql, QtTest and QtXml) are built in addition to QtCore,
+> so they are installed in the sysroot but they are not copied into the
+> target tree.
+> 
+> Among these modules that could be built but optionally installed, only
+> QtTest had no option to allow being installed in the target fs.
+> 
+> Thus, programs linking against QtTest would successfully build, but
+> would miserably fail at runtime due to this missing dependency.
+> 
+> So far, the only package triggering this issue is OpenCV (the highgui
+> module built with Qt support).
+> 
+> A followup patch will add this missing dependency in OpenCV using this
+> new option.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-This patch fixes the build-system by disabling test_fork when fork is
-not available (e.g. when !BR2_USEMMU).
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fixes:
-  http://autobuild.buildroot.org/results/359/3599cc3b7bf2bb22a78961cd84d21cb03cbd7015/
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[yann.morin.1998 at free.fr: remove Makefile.in hunks]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: tested against the failed bfin config, as well as
- a i686 target]
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- ...isable-test_fork-if-fork-is-not-available.patch | 52 ++++++++++++++++++++++
- package/zeromq/zeromq.mk                           |  1 +
- 2 files changed, 53 insertions(+)
- create mode 100644 package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
+> ---
+> changes v1 -> v2:
+> - rebase
+> - change default value to n
+> ---
+>  package/qt/Config.in | 5 +++++
+>  package/qt/qt.mk     | 3 +++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index eed25c8..9faf2cd 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -415,4 +415,9 @@ config BR2_PACKAGE_QT_DECLARATIVE
+>  	  Build the Qt Declarative Module for qml support
+>  	  if unsure, say n.
+>  
+> +config BR2_PACKAGE_QT_TEST
+> +	bool "Test Module"
+> +	help
+> +	  Install the Test module.
+> +
+>  endif # BR2_PACKAGE_QT
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index 507e0db..bb065f3 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -586,6 +586,9 @@ endif
+>  ifeq ($(BR2_PACKAGE_QT_GFX_POWERVR),y)
+>  QT_INSTALL_LIBS    += pvrQWSWSEGL
+>  endif
+> +ifeq ($(BR2_PACKAGE_QT_TEST),y)
+> +QT_INSTALL_LIBS    += QtTest
+> +endif
+>  
+>  QT_CONF_FILE=$(HOST_DIR)/usr/bin/qt.conf
+>  
+> -- 
+> 1.9.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
-new file mode 100644
-index 0000000..1eefdc3
---- /dev/null
-+++ b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
-@@ -0,0 +1,52 @@
-+From b50912f2eecec1ea7accc155f8132116f8702075 Mon Sep 17 00:00:00 2001
-+From: Samuel Martin <s.martin49@gmail.com>
-+Date: Sat, 3 May 2014 12:22:38 +0200
-+Subject: [PATCH] tests: disable test_fork if fork() is not available
-+
-+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-+---
-+ configure.ac      | 1 +
-+ tests/Makefile.am | 8 ++++++--
-+ tests/Makefile.in | 8 ++++----
-+ 3 files changed, 11 insertions(+), 6 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0c41604..8f8521c 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -431,6 +431,7 @@ AM_CONDITIONAL(BUILD_PGM, test "x$libzmq_pgm_ext" = "xyes")
-+ AM_CONDITIONAL(ON_MINGW, test "x$libzmq_on_mingw32" = "xyes")
-+ AM_CONDITIONAL(ON_ANDROID, test "x$libzmq_on_android" = "xyes")
-+ AM_CONDITIONAL(ON_LINUX, test "x$libzmq_on_linux" = "xyes")
-++AM_CONDITIONAL(HAVE_FORK, test "x$ac_cv_func_fork" = "xyes")
-+ 
-+ # Checks for library functions.
-+ AC_TYPE_SIGNAL
-+diff --git a/tests/Makefile.am b/tests/Makefile.am
-+index 0cfe4e8..2a1e257 100644
-+--- a/tests/Makefile.am
-++++ b/tests/Makefile.am
-+@@ -46,8 +46,10 @@ if !ON_MINGW
-+ noinst_PROGRAMS += test_shutdown_stress \
-+                    test_pair_ipc \
-+                    test_reqrep_ipc \
-+-                   test_timeo \
-+-                   test_fork
-++                   test_timeo
-++if HAVE_FORK
-++noinst_PROGRAMS += test_fork
-++endif
-+ endif
-+ 
-+ test_system_SOURCES = test_system.cpp
-+@@ -93,8 +95,10 @@ test_shutdown_stress_SOURCES = test_shutdown_stress.cpp
-+ test_pair_ipc_SOURCES = test_pair_ipc.cpp testutil.hpp
-+ test_reqrep_ipc_SOURCES = test_reqrep_ipc.cpp testutil.hpp
-+ test_timeo_SOURCES = test_timeo.cpp
-++if HAVE_FORK
-+ test_fork_SOURCES = test_fork.cpp
-+ endif
-++endif
-+ 
-+ #  Run the test cases
-+ TESTS = $(noinst_PROGRAMS)
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 833c1d3..7802916 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -10,6 +10,7 @@ ZEROMQ_INSTALL_STAGING = YES
- ZEROMQ_DEPENDENCIES = util-linux
- ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
-+ZEROMQ_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_ZEROMQ_PGM),y)
- 	ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
