@@ -1,53 +1,86 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 May 2014 22:05:00 +0200
-Subject: [Buildroot] [PATCH 11/12] boot/syslinux: add option to install
-	c32 modules
-In-Reply-To: <f66cc7a87e5bcdc8a958dc40444541c4063cd5ab.1399050467.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 2 May 2014 19:10:37 +0200")
-References: <cover.1399050467.git.yann.morin.1998@free.fr>
- <f66cc7a87e5bcdc8a958dc40444541c4063cd5ab.1399050467.git.yann.morin.1998@free.fr>
-Message-ID: <87k3a2mxw3.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 May 2014 22:05:20 +0200
+Subject: [Buildroot] [PATCH v2 06/24] python-numpy: add optional
+ blas/lapack support
+In-Reply-To: <1398208556-4195-7-git-send-email-s.martin49@gmail.com>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+ <1398208556-4195-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140503200520.GF10671@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Samuel, All,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Romain Naour <romain.naour@openwide.fr>
- > ---
- >  boot/syslinux/Config.in   | 10 ++++++++++
- >  boot/syslinux/syslinux.mk |  9 +++++++++
- >  2 files changed, 19 insertions(+)
+On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
+> python-numpy can be linked with libblas and liblapack, so automatically
+> do it when clapack is enabled.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> changes v1 -> v2:
+> - rebase
+> - split blas/lapack support in its own cset (ThomasP)
+> ---
+>  package/python-numpy/python-numpy.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index e7c91c4..b0ab031 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -10,6 +10,11 @@ PYTHON_NUMPY_SITE = http://downloads.sourceforge.net/numpy
+>  PYTHON_NUMPY_LICENSE = BSD-3c
+>  PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
+>  PYTHON_NUMPY_SETUP_TYPE = distutils
+> +PYTHON_NUMPY_DEPENDENCIES = \
+> +	$(if BR2_PACKAGE_CLAPACK,clapack)
 
- > diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
- > index 28c5329..f4b9870 100644
- > --- a/boot/syslinux/Config.in
- > +++ b/boot/syslinux/Config.in
- > @@ -46,4 +46,14 @@ config BR2_TARGET_SYSLINUX_EFI
- 
- >  endchoice
- 
- > +if BR2_TARGET_SYSLINUX_LEGACY_BIOS
- > +
- > +config BR2_TARGET_SYSLINUX_C32
- > +	string "modules to install"
- > +	help
- > +	  Enter a space-separated list of .c32 modules to install.
- > +	  Leave empty to install no module.
+Uh? Did you forget to dereference the BR2_PACKAGE_CLAPACK variable? ;-)
+Anyway, see also below...
 
-Out of interest, what are those c32 modules? Some kind of loadable
-libraries?
+> +PYTHON_NUMPY_SITE_CFG_LIBS = \
+> +	$(if $(BR2_PACKAGE_CLAPACK),blas lapack)
 
- > +# We install the c32 modules from the host-installed tree, they are all
- > +# neatly installed in the same location, while they are scaterred around
+We prefer using multi-line syntax. See:
+    http://buildroot.net/downloads/manual/manual.html#writing-rules-mk
 
-s/scaterred/scattered/
+So:
 
-Reworded slightly and committed, thanks.
+    ifeq ($(BR2_PACKAGE_CLAPACK),y)
+    PYTHON_NUMPY_DEPENDENCIES += clapack
+    PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
+    endif
+
+Regards,
+Yann E. MORIN.
+
+>  PYTHON_NUMPY_BUILD_OPT = --fcompiler=None
+>  
+> @@ -19,6 +24,8 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+>  	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
+>  	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+>  	echo "libraries =" >> $(@D)/site.cfg
+> +	$(foreach lib,$(PYTHON_NUMPY_SITE_CFG_LIBS),\
+> +		echo "    $(lib)" >> $(@D)/site.cfg ;)
+>  endef
+>  
+>  # Some package may include few headers from NumPy, so let's install it in the
+> -- 
+> 1.9.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
