@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 May 2014 21:39:20 +0200
-Subject: [Buildroot] [PATCH 05/12] boot/syslinux: move comments out of
-	define-block
-In-Reply-To: <758858debbeeb3f3bbc427ebe348986af6417d66.1399050467.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 2 May 2014 19:10:31 +0200")
+Date: Sat, 03 May 2014 21:48:42 +0200
+Subject: [Buildroot] [PATCH 06/12] package/ucl: new package
+In-Reply-To: <49966b58132dbede2fcd34a4a91dda3ec317a149.1399050467.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 2 May 2014 19:10:32 +0200")
 References: <cover.1399050467.git.yann.morin.1998@free.fr>
- <758858debbeeb3f3bbc427ebe348986af6417d66.1399050467.git.yann.morin.1998@free.fr>
-Message-ID: <87wqe2mz2v.fsf@dell.be.48ers.dk>
+ <49966b58132dbede2fcd34a4a91dda3ec317a149.1399050467.git.yann.morin.1998@free.fr>
+Message-ID: <87sioqmyn9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > The comments are mot really part of the command we want to execute,
+ > From: Frank Hunleth <fhunleth@troodon-software.com>
+ > UCL implements a number of compression algorithms that achieve an
+ > excellent compression ratio while allowing *very* fast decompression.
+ > Decompression requires no additional memory.
 
-s/mot/not/
+ > This is needed for UPX, which is needed for syslinux 6.x.
 
-
- > so move themn out of the define-block. This also cleans up the output,
-
-s/themn/them/
+ > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+ > [yann.morin.1998 at free.fr: don't add a menuconfig entry, since it
+ >  currently is for internal use only]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Tested-by: Romain Naour <romain.naour@openwide.fr>
 
 Committed, thanks.
 
