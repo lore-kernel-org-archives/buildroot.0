@@ -1,42 +1,94 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 03 May 2014 21:48:48 +0200
-Subject: [Buildroot] [PATCH 07/12] package/upx: new package
-In-Reply-To: <f0cb87087b13947a80acf27fe6c2dbec3c0430a1.1399050467.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Fri, 2 May 2014 19:10:33 +0200")
-References: <cover.1399050467.git.yann.morin.1998@free.fr>
- <f0cb87087b13947a80acf27fe6c2dbec3c0430a1.1399050467.git.yann.morin.1998@free.fr>
-Message-ID: <87oazemyn3.fsf@dell.be.48ers.dk>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 3 May 2014 21:50:58 +0200
+Subject: [Buildroot] [PATCH v2 03/24] armadillo: new package
+In-Reply-To: <20140503170809.GC10671@free.fr>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+ <1398208556-4195-4-git-send-email-s.martin49@gmail.com>
+ <20140503170809.GC10671@free.fr>
+Message-ID: <CAHXCMMJnij9s1Tz_nXq+GD936+rS2UNRgjXRbvQFVawFD9wSEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Yann, all,
 
- > From: Frank Hunleth <fhunleth@troodon-software.com>
- > UPX is a free, portable, extendable, high-performance executable
- > packer for several executable formats.
+On Sat, May 3, 2014 at 7:08 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
+>
+> On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
+>> Armadillo is a C++ linear algebra library.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
+> This should come _after_ you add the clapack package, since it is a
+> dependency of armadillo.
 
- > This is needed for syslinux 6.x.
+Ah! right! i rebased it too much :-/
 
- > Note: upx is a host-only package. Although it supports quite a few
- > target architectures, the only use so far will be for use by syslinux,
- > which already has an x86-on-x86 requirement anyway. So we currently do
- > not care to have target-dependencies on host-upx.
+>
+> Some other comments below...
+>
+> [--SNIP--]
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 07fd166..4475b07 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -766,6 +766,7 @@ source "package/zyre/Config.in"
+>>  endmenu
+>>
+>>  menu "Other"
+>> +source "package/armadillo/Config.in"
+>>  source "package/apr/Config.in"
+>>  source "package/apr-util/Config.in"
+>>  source "package/argp-standalone/Config.in"
+>
+> Alphabetical order, please.
+good catch!
 
- > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
- > [yann.morin.1998 at free.fr: builds fine in parallel; fix build to
- >  locate libucl; fix installation; don't add a menuconfig entry]
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Tested-by: Romain Naour <romain.naour@openwide.fr>
+>
+> [--SNIP--]
+>> diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+>> new file mode 100644
+>> index 0000000..b2cfdfc
+>> --- /dev/null
+>> +++ b/package/armadillo/armadillo.mk
+>> @@ -0,0 +1,15 @@
+>> +################################################################################
+>> +#
+>> +# armadillo
+>> +#
+>> +################################################################################
+>> +
+>> +ARMADILLO_VERSION_MAJOR = 4.000
+>> +ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).4
+>
+> There's now 4.300 availble. If 4.000 is a requirement, there's now
+> 4.000.5.
+Yep, i think bumping packages is often easier than getting them
+integrated, so i keep it for later (the same is true for opencv,
+numpy, and maybe others ;-])
 
- > ---
- > Changes v1 -> v2:
- >   - slightly improve on the commit log about host <-> target
- >     architectutre limitations  (Arnout)
+>
+> With the patch re-ordering, plus the alphabetical sort, you can add my
+> reviewed tag (not added here, so patchwork does not catch it.)
+>
 
-Committed, thanks.
+Thanks,
+
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+
 
 -- 
-Bye, Peter Korsgaard
+Samuel
