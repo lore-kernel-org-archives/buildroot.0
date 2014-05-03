@@ -1,101 +1,94 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  4 May 2014 00:45:44 +0200
-Subject: [Buildroot] [PATCH v3 2/2] classpath: Use generic check for host
-	program
-In-Reply-To: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1399157144-4112-2-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sun,  4 May 2014 00:47:33 +0200
+Subject: [Buildroot] [PATCH v2] faifa: new package
+Message-ID: <1399157253-4429-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the specific check that was done in dependencies.sh to use the
-generic one that were introduced by the previous patch.
-
-Also, introduce, BR2_NEEDS_HOST_JAVAC and BR2_NEEDS_HOST_JAR as it is
-needed by classpath.
+faifa is a library and a cli used to manage PLC hardware that use
+Intellon chipset.
+Almost everybody use theses chips nowadays.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
-Changes v2 -> v3:
-    - Fix commit log
 Changes v1 -> v2:
-    - Add the introduction of BR2_NEEDS_HOST_JAVAC & BR2_NEEDS_HOST_JAR
-      in this patch instead of the previous one.
+    - Changes version from master to a sha1
 ---
- Config.in                            | 10 ++++++++++
- package/classpath/Config.in          |  2 ++
- support/dependencies/dependencies.sh | 18 ++++++++----------
- 3 files changed, 20 insertions(+), 10 deletions(-)
+ package/Config.in       |  1 +
+ package/faifa/Config.in | 11 +++++++++++
+ package/faifa/faifa.mk  | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+ create mode 100644 package/faifa/Config.in
+ create mode 100644 package/faifa/faifa.mk
 
-diff --git a/Config.in b/Config.in
-index 79a455d..0d90ecc 100644
---- a/Config.in
-+++ b/Config.in
-@@ -23,6 +23,16 @@ config BR2_EXTERNAL
- config BR2_NEEDS_HOST_JAVA
- 	bool
- 
-+# Hidden boolean selected by packages in need of javac in order to build
-+# (example: classpath)
-+config BR2_NEEDS_HOST_JAVAC
-+	bool
+diff --git a/package/Config.in b/package/Config.in
+index 4430241..e469a48 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -910,6 +910,7 @@ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
++source "package/faifa/Config.in"
+ source "package/foomatic-filters/Config.in"
+ source "package/fping/Config.in"
+ source "package/gesftpserver/Config.in"
+diff --git a/package/faifa/Config.in b/package/faifa/Config.in
+new file mode 100644
+index 0000000..99abaab
+--- /dev/null
++++ b/package/faifa/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_FAIFA
++	bool "faifa"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  Faifa can configure any Intellon-based Power Line Communication device
++	  using Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It
++	  supports all Intellon-specific management and control frames as well as
++	  standard management frames.
 +
-+# Hidden boolean selected by packages in need of jar in order to build
-+# (example: classpath)
-+config BR2_NEEDS_HOST_JAR
-+	bool
++	  https://dev.open-plc.org
 +
- # Hidden boolean selected by pre-built packages for x86, when they
- # need to run on x86-64 machines (example: pre-built external
- # toolchains, binary tools like SAM-BA, etc.).
-diff --git a/package/classpath/Config.in b/package/classpath/Config.in
-index 0153bca..a11845c 100644
---- a/package/classpath/Config.in
-+++ b/package/classpath/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_CLASSPATH
- 	bool "classpath"
-+	select BR2_NEEDS_HOST_JAR
-+	select BR2_NEEDS_HOST_JAVAC
- 	depends on BR2_PACKAGE_JAMVM
- 	depends on BR2_INET_IPV6
- 	help
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 655b4c6..255a07b 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -187,20 +187,18 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BR2_CONFIG > /dev/null && \
- 	fi
- fi
- 
--if grep -q ^BR2_PACKAGE_CLASSPATH=y $BR2_CONFIG ; then
--	for prog in javac jar; do
--		if ! which $prog > /dev/null ; then
--			echo >&2
--			echo "You must install '$prog' on your build machine" >&2
--			exit 1
--		fi
--	done
--fi
--
- if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
- 	check_prog_host "java"
- fi
- 
-+if grep -q ^BR2_NEEDS_HOST_JAVAC=y $BR2_CONFIG ; then
-+	check_prog_host "javac"
-+fi
+diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
+new file mode 100644
+index 0000000..50c4240
+--- /dev/null
++++ b/package/faifa/faifa.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# faifa
++#
++################################################################################
 +
-+if grep -q ^BR2_NEEDS_HOST_JAR=y $BR2_CONFIG ; then
-+	check_prog_host "jar"
-+fi
++FAIFA_VERSION = aa0b5f90b89a9fd1533137b68ebf85f5437aba53
++FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
++FAIFA_INSTALL_STAGING = YES
++FAIFA_DEPENDENCIES = libpcap
++FAIFA_LICENSE = GPLv2
++FAIFA_LICENSE_FILES = COPYING
++FAIFA_AUTORECONF=YES
 +
- if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 	if test ! -f /lib/ld-linux.so.2 ; then
- 		echo
++define FAIFA_INSTALL_TARGET_CMDS
++    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++        PREFIX=/usr \
++        STRIP=/bin/true \
++        DESTDIR=$(TARGET_DIR) \
++        install
++endef
++
++define FAIFA_INSTALL_STAGING_CMDS
++    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++        PREFIX=/usr \
++        STRIP=/bin/true \
++        DESTDIR=$(STAGING_DIR) \
++        install
++endef
++
++$(eval $(autotools-package))
 -- 
 1.9.2
