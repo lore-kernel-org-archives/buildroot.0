@@ -1,23 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 May 2014 21:24:25 +0200
-Subject: [Buildroot] [PATCH 1/1] libmicrohttpd: Fix cross compilation
-	broken since 0.9.35
-In-Reply-To: <1399194280-24779-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 4 May 2014 11:04:40 +0200")
-References: <1399194280-24779-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87iopljqja.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 4 May 2014 20:59:24 +0200
+Subject: [Buildroot] [git commit] squid: bump to version 3.4.5
+Message-ID: <20140504192453.364409C3E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=6e77d4c19eb940861763260c743b27a4405fbbe9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes http://autobuild.buildroot.net/results/cb2/cb2cec1295a40667a3c21060864dd0e65a312c3e
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index a236ab9..4d0f516 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.4
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).4
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).5
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
