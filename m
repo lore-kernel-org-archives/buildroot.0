@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 04 May 2014 21:44:14 +0200
-Subject: [Buildroot] [PATCH 1/1] rtmpdump: bump version
-In-Reply-To: <1399218737-8498-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sun, 4 May 2014 17:52:17 +0200")
-References: <1399218737-8498-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87eh09jpm9.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 4 May 2014 21:44:11 +0200
+Subject: [Buildroot] [git commit] rtmpdump: bump version
+Message-ID: <20140504194425.4DBF39CADD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a449010b9bb2a9965005bcb5ae6d7a24777b4339
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rtmpdump/rtmpdump.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
+index e836cb6..4a8a1b0 100644
+--- a/package/rtmpdump/rtmpdump.mk
++++ b/package/rtmpdump/rtmpdump.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTMPDUMP_VERSION = dc76f0a8461e6c8f1277eba58eae201b2dc1d06a
++RTMPDUMP_VERSION = 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
+ RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
+ RTMPDUMP_INSTALL_STAGING = YES
+ # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
