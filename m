@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 May 2014 11:32:51 +0200
-Subject: [Buildroot] [PATCH v2 17/24] opencv: rework V4L/libv4l support
-In-Reply-To: <1398208556-4195-18-git-send-email-s.martin49@gmail.com>
+Date: Sun, 4 May 2014 11:40:34 +0200
+Subject: [Buildroot] [PATCH v2 18/24] opencv: add jasper support
+In-Reply-To: <1398208556-4195-19-git-send-email-s.martin49@gmail.com>
 References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
- <1398208556-4195-18-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140504093251.GD3211@free.fr>
+ <1398208556-4195-19-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140504094034.GE3211@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,87 +14,63 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
-> Starting with the 2.4.7 release, for V4L support, OpenCV does not
-> requires a libv4l dependency for its V4L support.
-> 
-> So, it now provides 2 distincts knobs for this: WITH_V4L and a new
-> one: WITH_LIBV4L.
-> 
-> This patch takes advantage of this new knob and libv4l support is
-> now automatically enabled if only the libv4l package is enabled.
-> 
-> In OpenCV, the logic behind this is:
-> - using libv4l if available,
-> - otherwise, use v4l2 or v4l API from the kernel if available.
-> 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > 
 > ---
 > changes v1 -> v2:
-> - rebase
-> - extend commit message
+> - reword the option help text (Yann)
 > ---
->  package/opencv/Config.in | 11 ++++++-----
->  package/opencv/opencv.mk | 10 +++++++---
->  2 files changed, 13 insertions(+), 8 deletions(-)
+>  package/opencv/Config.in | 7 +++++++
+>  package/opencv/opencv.mk | 7 +++++++
+>  2 files changed, 14 insertions(+)
 > 
 > diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 129e0aa..0db239e 100644
+> index 0db239e..2f47869 100644
 > --- a/package/opencv/Config.in
 > +++ b/package/opencv/Config.in
-> @@ -194,14 +194,15 @@ config BR2_PACKAGE_OPENCV_WITH_TIFF
+> @@ -161,6 +161,13 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
+>  	depends on BR2_USE_MMU # libgtk2 -> glib2
+>  	select BR2_PACKAGE_LIBGTK2
 >  
->  config BR2_PACKAGE_OPENCV_WITH_V4L
->  	bool "v4l support"
-> -	depends on BR2_LARGEFILE
-> -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	select BR2_PACKAGE_LIBV4L
->  	help
->  	  Enable Video 4 Linux support.
->  
-> -comment "v4l support needs a toolchain w/ largefile, threads"
-> -	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-> +	  If the package libv4l is enabled, its support is automatically enabled.
-> +
-> +if BR2_PACKAGE_OPENCV_WITH_V4L && !(BR2_LARGEFILE && BR2_TOOLCHAIN_HAS_THREADS)
-> +comment "libv4l support will be disabled."
-> +comment "libv4l support needs a toolchain w/ largefile, threads"
-> +endif
+> +config BR2_PACKAGE_OPENCV_WITH_JASPER
+> +	bool "jpeg2000 support"
+> +	select BR2_PACKAGE_JASPER
+> +	help
+> +	  Use shared libjasper from the target system to provide support
+> +	  for jpeg2000.
 
-I don't think we want to have such comments. As I said in my previous
-review, it is enough (INHO) to just state so in the help entry.
+This is still a bit unclear. What about:
 
-Except under rare circumstances, we do not warn the user that way. The
-usual way is to enable support if the needed package is selected, and
-to disable the support otherwise.
+    help
+      Enable jpeg2000 support.
+
+      Note: this does not use the libjasper bundled with opencv, but
+      uses the libjasper package installed system-wide by Buildroot.
 
 Regards,
 Yann E. MORIN.
 
->  comment "Install options"
->  
+>  config BR2_PACKAGE_OPENCV_WITH_JPEG
+>  	bool "jpeg support"
+>  	select BR2_PACKAGE_JPEG
 > diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-> index 14a095c..e6de252 100644
+> index e6de252..c4aa967 100644
 > --- a/package/opencv/opencv.mk
 > +++ b/package/opencv/opencv.mk
-> @@ -214,10 +214,14 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
+> @@ -185,6 +185,13 @@ else
+>  OPENCV_CONF_OPT += -DWITH_GTK=OFF
 >  endif
 >  
->  ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
-> -OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
-> -OPENCV_DEPENDENCIES += libv4l
-> +OPENCV_CONF_OPT += \
-> +	-DWITH_V4L=ON \
-> +	-DWITH_LIBV4L=$(if $(BR2_PACKAGE_LIBV4L),ON,OFF)
-> +OPENCV_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBV4L),libv4l)
->  else
-> -OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
-> +OPENCV_CONF_OPT += \
-> +	-DWITH_V4L=OFF \
-> +	-DWITH_LIBV4L=OFF
->  endif
->  
->  # Installation hooks:
+> +ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
+> +OPENCV_CONF_OPT += -DWITH_JASPER=ON
+> +OPENCV_DEPENDENCIES += jasper
+> +else
+> +OPENCV_CONF_OPT += -DWITH_JASPER=OFF
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_OPENCV_WITH_JPEG),y)
+>  OPENCV_CONF_OPT += -DWITH_JPEG=ON
+>  OPENCV_DEPENDENCIES += jpeg
 > -- 
 > 1.9.2
 > 
