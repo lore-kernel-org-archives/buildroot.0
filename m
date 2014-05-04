@@ -1,47 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 May 2014 11:20:54 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-03
-In-Reply-To: <20140504063006.941AA101544@stock.ovh.net>
-References: <20140504063006.941AA101544@stock.ovh.net>
-Message-ID: <20140504092054.GA3211@free.fr>
+Date: Sun, 4 May 2014 11:24:02 +0200
+Subject: [Buildroot] [PATCH v2 15/24] opencv: disable OpenMP support
+In-Reply-To: <1398208556-4195-16-git-send-email-s.martin49@gmail.com>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+ <1398208556-4195-16-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140504092402.GB3211@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Samuel, All,
 
-On 2014-05-04 08:30 +0200, Thomas Petazzoni spake thusly:
-> Build statistics for 2014-05-03
-> ===============================
+On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
+> Since there is currently no easy way to know if the current Buildroot
+> configuration has a toolchain supporting OpenMP (especially for external
+> toolchains), then just disable it.
 > 
->         success : 27 
->        failures : 3  
->        timeouts : 0  
->           TOTAL : 30 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Woops.. Something went wrong with the autobiulders?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Detail of failures
-> ===================
-> 
->    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/ff485236e0de26da0bb93fa2a7b0ea7207acd502/
-
-I've tried to reproduce that one, but it built fine here.
-
-What is strange is that the error is reproducible: there are at least
-two build errors with the exact same message:
-
-    collect2: error: ld terminated with signal 11 [Segmentation fault]
-
-but it does not happen here, even in a Squeeze-32 chroot... :-(
-
-IIRC, Gustavo was not able to rerproduce it either.
+A solution to that would be to add a config knob to enable/disable
+building openmp for the internal toolchain, and to state whether the
+external toolchain has/lacks openmp.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> changes v1 -> v2:
+> - new patch (split suggested by Yann)
+> ---
+>  package/opencv/opencv.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+> index a4bdd39..eed5338 100644
+> --- a/package/opencv/opencv.mk
+> +++ b/package/opencv/opencv.mk
+> @@ -155,6 +155,7 @@ OPENCV_CONF_OPT += \
+>  	-DWITH_OPENCL=OFF  \
+>  	-DWITH_OPENEXR=OFF \
+>  	-DWITH_OPENGL=OFF  \
+> +	-DWITH_OPENMP=OFF  \
+>  	-DWITH_OPENNI=OFF  \
+>  	-DWITH_UNICAP=OFF  \
+>  	-DWITH_XINE=OFF
+> -- 
+> 1.9.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
