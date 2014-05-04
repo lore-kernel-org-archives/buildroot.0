@@ -1,31 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 May 2014 17:52:17 +0200
-Subject: [Buildroot] [PATCH 1/1] rtmpdump: bump version
-Message-ID: <1399218737-8498-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 May 2014 18:01:24 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] tzdata-related fixes (branch yem/tz)
+Message-ID: <cover.1399219226.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/rtmpdump/rtmpdump.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello All!
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index e836cb6..4a8a1b0 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTMPDUMP_VERSION = dc76f0a8461e6c8f1277eba58eae201b2dc1d06a
-+RTMPDUMP_VERSION = 79459a2b43f41ac44a2ec001139bcb7b1b8f7497
- RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
- RTMPDUMP_INSTALL_STAGING = YES
- # Note that rtmpdump is GPLv2 but librtmp has its own license and since we only
+This series installs missing timzone data files.
+
+Changes v1 -> v2:
+  - proper install location for host-tzdata
+  - combine both previous patches in this series
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit dd5dbe627f4d66603e03ae2fdb09d4fe34d34dc7:
+
+  clapack: new package (2014-05-04 09:10:55 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/tz
+
+for you to fetch changes up to c976aa8f37ac787ecec903272d8c5fed7a75b833:
+
+  package/tz: install missing files (2014-05-04 17:59:34 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/tzdata: install missing files
+      package/tz: install missing files
+
+ package/tz/tz.mk         | 4 ++++
+ package/tzdata/tzdata.mk | 6 ++++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
