@@ -1,64 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 4 May 2014 13:18:41 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-03
-In-Reply-To: <20140504092054.GA3211@free.fr>
-References: <20140504063006.941AA101544@stock.ovh.net>
- <20140504092054.GA3211@free.fr>
-Message-ID: <20140504131841.3f90e9e9@skate>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 4 May 2014 13:29:50 +0200
+Subject: [Buildroot] [PATCH 8/8] xbmc: Fix TexturePacker compile
+In-Reply-To: <1398968277-9044-9-git-send-email-bernd.kuhls@t-online.de>
+References: <1398968277-9044-1-git-send-email-bernd.kuhls@t-online.de>
+ <1398968277-9044-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAGduivyfTiuETZKFUuk5CXzVePeDi7jSx_PUMgjtg1YFWsGFRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Bernd, all,
 
-On Sun, 4 May 2014 11:20:54 +0200, Yann E. MORIN wrote:
-
-> On 2014-05-04 08:30 +0200, Thomas Petazzoni spake thusly:
-> > Build statistics for 2014-05-03
-> > ===============================
-> > 
-> >         success : 27 
-> >        failures : 3  
-> >        timeouts : 0  
-> >           TOTAL : 30 
-> 
-> Woops.. Something went wrong with the autobiulders?
-
-Yes and no :-) Peter's autobuilders are still working fine. But the
-Free Electrons autobuilder machine has been migrated, so the builds
-have stopped for now. The migration is over now, so I hope to be able
-to restart the builds this afternoon.
-
-The plus side of this is that the Free Electrons build server has been
-upgraded: it has twice the amount of RAM it used to have (32 GB of RAM
-now), and a much better I/O system (SAS 10k disks in RAID0 instead of
-regular disks in RAID0).
-
-> > Detail of failures
-> > ===================
-> > 
-> >    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/ff485236e0de26da0bb93fa2a7b0ea7207acd502/
-> 
-> I've tried to reproduce that one, but it built fine here.
-> 
-> What is strange is that the error is reproducible: there are at least
-> two build errors with the exact same message:
-> 
->     collect2: error: ld terminated with signal 11 [Segmentation fault]
-> 
-> but it does not happen here, even in a Squeeze-32 chroot... :-(
-> 
-> IIRC, Gustavo was not able to rerproduce it either.
-
-Ok. I'll try to have a look and reproduce the issue.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Thu, May 1, 2014 at 8:17 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/xbmc/xbmc.mk |    2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index 8955197..1ab89b4 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -26,6 +26,8 @@ XBMC_CONF_ENV = \
+>         PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+>         PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+>         PYTHON_NOVERSIONCHECK="no-check" \
+> +       use_texturepacker_native=yes \
+> +       USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+>         TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+>
+>  XBMC_CONF_OPT +=  \
+> --
+> 1.7.10.4
+What was your issue exactly ?
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
