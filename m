@@ -1,25 +1,37 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 04 May 2014 15:30:50 +0200
-Subject: [Buildroot] [PATCH v3 1/2] infra: Add generic
-	check_prog_host	function
-In-Reply-To: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <31e5ed31-199f-44eb-98b9-16e527d7a798@email.android.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun,  4 May 2014 17:03:14 +0200
+Subject: [Buildroot] [PATCH] libfribidi: bump version
+Message-ID: <1399215794-28324-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime Hadjinlian <maxime.hadjinlian@gmail.com> schreef:
->Avoid copy/pasting the same block of code to check if a program is
->available on the host machine.
->
->Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+This patch also call autoreconf in order to use buildroot's libtool
 
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/libfribidi/libfribidi.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-As mentioned in the discussion of v1, there are many more improvements possible in dependencies.sh, but these can be done in a later patch...
-
-Best regards,
-Thomas
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 99005c2..52e2a84 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-LIBFRIBIDI_VERSION = 0.19.5
++LIBFRIBIDI_VERSION = 0.19.6
+ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
+ LIBFRIBIDI_SITE = http://www.fribidi.org/download/
+ LIBFRIBIDI_LICENSE = LGPLv2.1+
+ LIBFRIBIDI_LICENSE_FILES = COPYING
+ LIBFRIBIDI_INSTALL_STAGING = YES
++LIBFRIBIDI_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+-- 
+1.9.2
