@@ -1,73 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 May 2014 12:10:20 +0200
-Subject: [Buildroot] [PATCH v2 24/24] gst1-plugins-bad: rework opencv
- plugin dependencies
-In-Reply-To: <1398208556-4195-25-git-send-email-s.martin49@gmail.com>
-References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
- <1398208556-4195-25-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140504101020.GK3211@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 04 May 2014 12:25:39 +0200
+Subject: [Buildroot] [RFCv1 0/8] musl C library support in internal
+	backend
+In-Reply-To: <1398291272-17591-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 24 Apr 2014 00:14:24 +0200")
+References: <1398291272-17591-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87zjixkfh8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 2014-04-23 01:15 +0200, Samuel Martin spake thusly:
-> gst1 opencv plugin source code still include OpenCV's headers from its
-> deprecated API.
-> 
-> Use the newly introduced BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS to
-> select all required OpenCV module dependencies.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ > Hello,
+ > The following patches, at the RFC stage, add support for the musl C
+ > library in the internal toolchain backend.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > At this point, I'm mainly interested in having people:
 
-Regards,
-Yann E. MORIN.
+ >  * Test the musl stuff, for various architectures, both build time and
+ >    run time tests.
 
-> ---
-> changes v1 -> v2:
-> - new patch
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index 02fa18c..e8bc110 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -429,15 +429,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
->  	# Remove the following opencv modules when gstreamer fixes the
->  	# problem of including the old "cv.h" header
->  	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
-> -	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-> -	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
-> -	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-> -	select BR2_PACKAGE_OPENCV_LIB_FLANN
-> -	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> -	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-> -	select BR2_PACKAGE_OPENCV_LIB_ML
-> -	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-> -	select BR2_PACKAGE_OPENCV_LIB_VIDEO
-> +	select BR2_PACKAGE_OPENCV_USE_DEPRECATED_HEADERS
->  	help
->  	  GStreamer OpenCV Plugins
->  
-> -- 
-> 1.9.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ >  * But also tests of your usual configuration (uClibc or glibc). The
+ >    reason is that the musl supports requires gcc patches, and they can
+ >    in some ways cause issues when building with other C libraries
+ >    (I've already fixed a bunch of them, but more testing is welcome).
+
+Thanks. I have done a qemu_arm_versatile build with uclibc and with
+musl, and everything seems to work fine (except for the dynamic loader
+symlink).
+
+The gcc patches look fairly safe to me, and I think we should include it
+(with the experimental note) in 2014.05.
+
+Care to send an updated series fixing the issues I pointed out?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
