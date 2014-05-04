@@ -1,76 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 May 2014 23:18:13 +0200
-Subject: [Buildroot] [git commit] armadillo: new package
-Message-ID: <20140504212125.9C19A9C389@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 04 May 2014 23:24:44 +0200
+Subject: [Buildroot] [PATCH 1/1] cups: move localstatedir from /usr/var
+	to /var
+In-Reply-To: <1398214149-1914-1-git-send-email-danomimanchego123@gmail.com>
+ (Danomi Manchego's message of "Tue, 22 Apr 2014 20:49:09 -0400")
+References: <1398214149-1914-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <87siopi6eb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9583969992b9eb42e72d78f1dd0755f1ea17b0ff
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Danomi" == Danomi Manchego <danomimanchego123@gmail.com> writes:
 
-Armadillo is a C++ linear algebra library.
+ > Prior to commit f64a1b850fc897357040bb4c58b6e5e50e71e094 ("cups:
+ > convert to autotargets"), cups was explicitely configured to
+ > put its modifiable single-machine data under /var.  After that
+ > commit, the --localstatedir was not specified, so it remained at
+ > it's default value, "PREFIX/var" - making cups use "/usr/var".
 
-[Peter: needs largefile, sort Config.in alphabetically]
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in              |    1 +
- package/armadillo/Config.in    |   13 +++++++++++++
- package/armadillo/armadillo.mk |   15 +++++++++++++++
- 3 files changed, 29 insertions(+), 0 deletions(-)
+ > Using /var to store state files seems preferable to /usr/var,
+ > as /usr might be read-only on some systems.  This patch
+ > re-introduces the --localstatedir specification to build cups
+ > to use /var.
 
-diff --git a/package/Config.in b/package/Config.in
-index a39887f..7800f23 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -770,6 +770,7 @@ menu "Other"
- source "package/apr/Config.in"
- source "package/apr-util/Config.in"
- source "package/argp-standalone/Config.in"
-+source "package/armadillo/Config.in"
- source "package/boost/Config.in"
- source "package/clapack/Config.in"
- source "package/classpath/Config.in"
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-new file mode 100644
-index 0000000..2251d91
---- /dev/null
-+++ b/package/armadillo/Config.in
-@@ -0,0 +1,13 @@
-+comment "armadillo needs a toolchain w/ C++, largefile"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
-+
-+config BR2_PACKAGE_ARMADILLO
-+	bool "armadillo"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE # clapack
-+	select BR2_PACKAGE_CLAPACK
-+	help
-+	  Armadillo: An Open Source C++ Linear Algebra Library for
-+	  Fast Prototyping and Computationally Intensive Experiments.
-+
-+	  http://arma.sourceforge.net/
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-new file mode 100644
-index 0000000..b2cfdfc
---- /dev/null
-+++ b/package/armadillo/armadillo.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# armadillo
-+#
-+################################################################################
-+
-+ARMADILLO_VERSION_MAJOR = 4.000
-+ARMADILLO_VERSION = $(ARMADILLO_VERSION_MAJOR).4
-+ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma/
-+ARMADILLO_DEPENDENCIES = clapack
-+ARMADILLO_INSTALL_STAGING = YES
-+ARMADILLO_LICENSE = MPLv2.0
-+ARMADILLO_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(cmake-package))
+ > Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
