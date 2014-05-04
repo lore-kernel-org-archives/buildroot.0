@@ -1,92 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  4 May 2014 12:25:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 6950] Full unicode support in ncurses
-In-Reply-To: <bug-6950-163@https.bugs.busybox.net/>
-References: <bug-6950-163@https.bugs.busybox.net/>
-Message-ID: <20140504122510.9783B9C477@busybox.osuosl.org>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sun, 04 May 2014 15:06:37 +0200
+Subject: [Buildroot] [PATCH 8/8] xbmc: Fix TexturePacker compile
+References: <1398968277-9044-1-git-send-email-bernd.kuhls@t-online.de>
+ <1398968277-9044-9-git-send-email-bernd.kuhls@t-online.de>
+ <CAGduivyfTiuETZKFUuk5CXzVePeDi7jSx_PUMgjtg1YFWsGFRA@mail.gmail.com>
+Message-ID: <tjqh3bxm9f.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6950
+Maxime Hadjinlian
+<maxime.hadjinlian@gmail.com> wrote in
+news:CAGduivyfTiuETZKFUuk5CXzVePeDi7jSx_PUMgjtg1YFWsGFRA at mail.gmail.com: 
 
---- Comment #2 from prezi77 at wp.pl 2014-05-04 12:25:09 UTC ---
-(In reply to comment #1)
+> What was your issue exactly ?
 
-> So according to me, we either accept Jeremy's patch (possible refreshed) or
-> someone should implement the split package approach.
-> 
-I suggest you to use Jeremy's patch. It has one import advantage: it exists.
-Ncurses is uses by approximately 60 packages:
+Hi,
 
+my patch fixes the compilation of TexturePacker for xbmc frodo/gotham.
 
+use_texturepacker_native=yes
 
-alsa-utils
-aumix
-avrdude
-bash
-bmon
-bwm-ng
-cvs
-dialog
-dropwatch
-erlang
-gdb
-gnupg
-gpm
-gpsd
-gptfdisk
-htop
-httping
-iftop
-joe
-kismet
-lame
-latencytop
-lcdproc
-less
-libcdio
-libedit
-liboping
-lua
-luaposix
-lvm2
-minicom
-mtr
-mutt
-mysql
-nano
-ncdu
-ncftp
-ncmpcpp
-ncurses
-ola
-procps
-proftpd
-psmisc
-python
-python3
-readline
-rtorrent
-ruby
-screen
-sqlcipher
-sqlite
-statserial
-tmux
-tn5250
-uemacs
-util-linux
-vim
-xterm
-zsh
+is needed because we abviously need a native-compiled binary, but the xbmc 
+build system does enable this variable only for darwin, android and 
+raspberry-pi targets.
 
-I suppose it is possible to patch makefiles to link to ncursesw. Some of them
-uses ncursesw natively.
+USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+is also needed because
+USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
+is only executed for raspberry-pi by xbmc/configure and only 
+USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
+
+To sum up, building for raspberry-pi and other archs works out-of-the-box, 
+compiling for an Intel target, for example, fails:
+
+In file included from SDL_anigif.cpp:23:0:
+SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
+compilation terminated.
+XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
+
+Regards, Bernd
