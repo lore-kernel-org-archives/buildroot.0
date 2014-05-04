@@ -1,37 +1,48 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun,  4 May 2014 17:03:14 +0200
-Subject: [Buildroot] [PATCH] libfribidi: bump version
-Message-ID: <1399215794-28324-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  4 May 2014 17:28:42 +0200
+Subject: [Buildroot] [PATCH] package/tzdata: install missing files
+Message-ID: <1399217322-16239-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch also call autoreconf in order to use buildroot's libtool
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Install two files:
+  - zone.tab   : {country-code,coordinates,timezone} tuples
+  - iso3166.tab: {country-code,country} tuples
+
+Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libfribidi/libfribidi.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/tzdata/tzdata.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 99005c2..52e2a84 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 05a82a2..e90be40 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -37,7 +37,8 @@ define TZDATA_BUILD_CMDS
+ endef
  
--LIBFRIBIDI_VERSION = 0.19.5
-+LIBFRIBIDI_VERSION = 0.19.6
- LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
- LIBFRIBIDI_SITE = http://www.fribidi.org/download/
- LIBFRIBIDI_LICENSE = LGPLv2.1+
- LIBFRIBIDI_LICENSE_FILES = COPYING
- LIBFRIBIDI_INSTALL_STAGING = YES
-+LIBFRIBIDI_AUTORECONF = YES
+ define TZDATA_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
++	$(INSTALL) -D -m 0644 $(@D)/zone.tab $(TARGET_DIR)/usr/share/zoneinfo/zone.tab
++	$(INSTALL) -D -m 0644 $(@D)/iso3166.tab $(TARGET_DIR)/usr/share/zoneinfo/iso3166.tab
+ 	cp -a $(@D)/_output/* $(TARGET_DIR)/usr/share/zoneinfo
+ 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+ 	for zone in posix/*; do                 \
+@@ -65,7 +66,8 @@ define HOST_TZDATA_BUILD_CMDS
+ endef
  
- $(eval $(autotools-package))
+ define HOST_TZDATA_INSTALL_CMDS
+-	mkdir -p $(HOST_DIR)/usr/share/zoneinfo
++	$(INSTALL) -D -m 0644 $(@D)/zone.tab $(TARGET_DIR)/usr/share/zoneinfo/zone.tab
++	$(INSTALL) -D -m 0644 $(@D)/iso3166.tab $(TARGET_DIR)/usr/share/zoneinfo/iso3166.tab
+ 	cp -a $(@D)/_output/* $(HOST_DIR)/usr/share/zoneinfo
+ endef
+ 
 -- 
-1.9.2
+1.8.3.2
