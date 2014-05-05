@@ -1,39 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 5 May 2014 10:00:03 +0200
-Subject: [Buildroot] Patchwork big patchsets: SELinux
-In-Reply-To: <OFC7852024.A07AA540-ON86257CCC.005740FD-86257CCC.00574102@rockwellcollins.com>
-References: <CAAXf6LW8iN=SskGU6x7XkjfVR4NQR-JzE2sNRjYtehHnpu391Q@mail.gmail.com>
- <OFC7852024.A07AA540-ON86257CCC.005740FD-86257CCC.00574102@rockwellcollins.com>
-Message-ID: <CAAXf6LUCXuvR1DqHuxpORU_LjKzbZ6Kcc1fNZgcGsNb=AX0hHA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 5 May 2014 10:10:09 +0200
+Subject: [Buildroot] host-pkgconf: use --static option for static builds
+In-Reply-To: <53641563.5020903@mind.be>
+References: <1394021977-60055-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20140408035851.GK4096@tarshish> <20140501124909.GX4531@tarshish>
+ <53625154.7030701@imgtec.com> <53641563.5020903@mind.be>
+Message-ID: <20140505101009.268bc9a2@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Clayton,
+Dear Arnout Vandecappelle,
 
-On Fri, May 2, 2014 at 5:53 PM,  <clshotwe@rockwellcollins.com> wrote:
-[..]
->>I would like to check on the state of one of the big patchsets in
->>patchwork: the SELinux patches posted by Clayton Shotwell.
->>
->>The last iteration in patchwork is v5, posted in December 2013.
->>
->>What I would like to know specifically is:
->>- what is the state of the patchset?
-> I have not had any time to touch it since they were last submitted. I probably wont be able to get to them late next month at the earliest. I know all of those packages have had at lease two releases since I submitted the patches so the new versions need to be reintegrated.
->
->>- what is blocking integration of this patchset?
-> I think mainly review time. The audit package required a large patch to get it to cross compile correctly. That one especially needs to be looked at it again.
->
->>- what can be done to deblock it?
-> Me finding free time to revamp the packages. :)
->
+On Sat, 03 May 2014 00:00:03 +0200, Arnout Vandecappelle wrote:
+> On 01/05/14 15:51, Vicente Olivert Riera wrote:
+> > I was talking with ThomasP about the same thing. He told me that it has huge
+> > consequences and can't be committed easily, because it affects how almost all
+> > packages are built in a BR2_PREFER_STATIC_LIB=y build.
+> 
+>  That's a bit a strange argument... If it doesn't get committed, it will never
+> be tested. We have a month to fix autobuilder failures, that should be enough, no?
 
+Well, it would at least be good to have a preliminary testing with a
+fairly large set of packages enabled, in a BR2_PREFER_STATIC_LIB=y
+configuration, to check that things are still working OK after applying
+this patch. Not a 100% coverage, but at least testing a few dozens of
+packages.
 
-Thanks for the feedback.
-In the mean time, I'll remove the patches from patchwork then.
-
-Best regards,
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
