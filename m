@@ -1,111 +1,60 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 5 May 2014 16:19:45 +0200
-Subject: [Buildroot] [PATCH] freetype: freetype-patch: depends on
-	host-automake
-In-Reply-To: <CAHkwnC83qtUCbW1QYpdNB+ZBHJa4T-9FmgMq+NgusZup6dy0pw@mail.gmail.com>
-References: <1399282934-14517-1-git-send-email-fabio.porcedda@gmail.com>
- <CAHXCMMKtYtZxf3=FnOUTFcEo6mB3LC65VYUkAkbFnqfVDzoBaw@mail.gmail.com>
- <CAHkwnC_UsBmWC2QdY_=kjMsm35dXiYPc636_ySqx81oJtjMcpA@mail.gmail.com>
- <CAHkwnC_2oP8HZVxAToOUBOOvaXAG8Rnb23QcYecb8Qb=WQ9FUw@mail.gmail.com>
- <CAHkwnC83qtUCbW1QYpdNB+ZBHJa4T-9FmgMq+NgusZup6dy0pw@mail.gmail.com>
-Message-ID: <CAHkwnC9gqN1QWS5D2dn2ogR8JSOotFZn06a67Vc8yNqd5M=suw@mail.gmail.com>
+From: Wojciech Slenska <wojciech.slenska@gmail.com>
+Date: Mon,  5 May 2014 19:06:46 +0200
+Subject: [Buildroot] [PATCH 1/1] qtquick1: removed OpenGL dependencies
+Message-ID: <1399309606-25561-1-git-send-email-wojciech.slenska@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 5, 2014 at 4:15 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
-> On Mon, May 5, 2014 at 1:18 PM, Fabio Porcedda <fabio.porcedda@gmail.com> wrote:
->> On Mon, May 5, 2014 at 12:01 PM, Fabio Porcedda
->> <fabio.porcedda@gmail.com> wrote:
->>> On Mon, May 5, 2014 at 11:55 AM, Samuel Martin <s.martin49@gmail.com> wrote:
->>>> Hi Fabio, all,
->>>>
->>>> On Mon, May 5, 2014 at 11:42 AM, Fabio Porcedda
->>>> <fabio.porcedda@gmail.com> wrote:
->>>>> The "make freetype-patch" fails because does not found autogen.sh,
->>>>> because autogen.sh available only for the configure stage.
->>>>> To fix this add host-automake as a prerequisite to freetype-patch too.
->>>>>
->>>>> This also fix the support to top-level parallel make.
->>>>>
->>>>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->>>>> ---
->>>>>  package/freetype/freetype.mk | 3 +++
->>>>>  1 file changed, 3 insertions(+)
->>>>>
->>>>> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
->>>>> index c7c9a06..33a6317 100644
->>>>> --- a/package/freetype/freetype.mk
->>>>> +++ b/package/freetype/freetype.mk
->>>>> @@ -83,3 +83,6 @@ HOST_FREETYPE_POST_INSTALL_HOOKS += HOST_FREETYPE_FIX_FREETYPE_INCLUDE
->>>>>
->>>>>  $(eval $(autotools-package))
->>>>>  $(eval $(host-autotools-package))
->>>>> +
->>>>> +# freetype-patch uses autogen.sh so add it as a prerequisite
->>>>> +$(FREETYPE_TARGET_PATCH): host-automake
->>>>
->>>> It's an unusual way of doing this!
->>>> How about moving the *FREETYPE_RUN_AUTOGEN hook in
->>>> *FREETYPE_PRE_CONFIGURE_HOOKS?
->>>
->>> Unfortunately that's alone does not work because  LIBTOOL_PATCH_HOOK
->>> it's going to fail, the only solution i've found is to move
->>> LIBTOOL_PATCH_HOOK to PRE_CONFIGURE too, but i'm not sure is it fine
->>> to do that, what do you think about that?
->>>
->>> patch:
->>> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
->>> index c7c9a06..8aac8a2 100644
->>> --- a/package/freetype/freetype.mk
->>> +++ b/package/freetype/freetype.mk
->>> @@ -25,8 +25,8 @@ HOST_FREETYPE_CONF_OPT = --without-zlib
->>> --without-bzip2 --without-png
->>>  define FREETYPE_RUN_AUTOGEN
->>>         cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
->>>  endef
->>> -FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
->>> -HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
->>> +FREETYPE_PRE_CONFIGURE_HOOKS += FREETYPE_RUN_AUTOGEN
->>> +HOST_FREETYPE_PRE_CONFIGURE_HOOKS += FREETYPE_RUN_AUTOGEN
->>>  FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
->>>  HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
->>>
->>> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
->>> index a646612..38b8c4c 100644
->>> --- a/package/pkg-autotools.mk
->>> +++ b/package/pkg-autotools.mk
->>> @@ -193,7 +193,7 @@ endef
->>>
->>>  # default values are not evaluated yet, so don't rely on this defaulting to YES
->>>  ifneq ($$($(2)_LIBTOOL_PATCH),NO)
->>> -$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
->>> +$(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
->>>  endif
->>>
->>>  #
->>
->> I've tried to build a allyespackageconfig with the above patch but it fails:
->>
->>>>> php-gnupg 1.3.3 Patching libtool
->>
->> Applying buildroot-libtool-v1.5.patch using patch:
->> patching file ltmain.sh
->> Reversed (or previously applied) patch detected!  Skipping patch.
->> 5 out of 5 hunks ignored -- saving rejects to file ltmain.sh.rej
->> Patch failed!  Please fix buildroot-libtool-v1.5.patch!
->> make: *** [/home/fabiopo/buildroot/output/build/php-gnupg-1.3.3/.stamp_configured]
->> Error 1
->
-> I've sent an updated patch:
->
-> http://patchwork.ozlabs.org/patch/345730/
+QtQuick1 module doesn't need OpenGl libs and declarative module.
+This module can be used to port qt4 qml apps to qt5. Patch has been tested with linuxfb output plugin.
 
-Well.. i've replayed to the wrong mail, so forget the previous mail,
-this is the latest revision of the patch.
+Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+---
+ package/qt5/qt5quick1/Config.in    |    8 ++------
+ package/qt5/qt5quick1/qt5quick1.mk |    2 +-
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-Regards
+diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
+index 30c2e79..59b6c34 100644
+--- a/package/qt5/qt5quick1/Config.in
++++ b/package/qt5/qt5quick1/Config.in
+@@ -5,11 +5,8 @@ config BR2_PACKAGE_QT5QUICK1
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	select BR2_PACKAGE_QT5SCRIPT
+ 	select BR2_PACKAGE_QT5XMLPATTERNS
+-	select BR2_PACKAGE_QT5DECLARATIVE
+ 	# This module does not support static linking
+ 	depends on !BR2_PREFER_STATIC_LIB
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+-	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+@@ -19,7 +16,6 @@ config BR2_PACKAGE_QT5QUICK1
+ 
+ 	  http://qt-project.org
+ 
+-comment "qt5quick1 needs a toolchain w/ dynamic library and an OpenGL-capable backend"
++comment "qt5quick1 needs a toolchain w/ dynamic library"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES || \
+-		BR2_PREFER_STATIC_LIB
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
+index 624b130..e9d7a64 100644
+--- a/package/qt5/qt5quick1/qt5quick1.mk
++++ b/package/qt5/qt5quick1/qt5quick1.mk
+@@ -7,7 +7,7 @@
+ QT5QUICK1_VERSION = $(QT5_VERSION)
+ QT5QUICK1_SITE = $(QT5_SITE)
+ QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
+-QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative \
++QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script \
+ 	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
+ QT5QUICK1_INSTALL_STAGING = YES
+ 
 -- 
-Fabio Porcedda
+1.7.10.4
