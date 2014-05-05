@@ -1,36 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 5 May 2014 10:10:09 +0200
-Subject: [Buildroot] host-pkgconf: use --static option for static builds
-In-Reply-To: <53641563.5020903@mind.be>
-References: <1394021977-60055-1-git-send-email-Vincent.Riera@imgtec.com>
- <20140408035851.GK4096@tarshish> <20140501124909.GX4531@tarshish>
- <53625154.7030701@imgtec.com> <53641563.5020903@mind.be>
-Message-ID: <20140505101009.268bc9a2@skate>
+From: Mike Zick <minimod@morethan.org>
+Date: Mon, 5 May 2014 03:33:09 -0500
+Subject: [Buildroot] [PATCH] czmq: needs MMU
+In-Reply-To: <97ed4f06546e84c2b326a01447f77519460dfeff.1399262283.git.baruch@tkos.co.il>
+References: <97ed4f06546e84c2b326a01447f77519460dfeff.1399262283.git.baruch@tkos.co.il>
+Message-ID: <20140505033309.1dfc5aa8@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+On Mon,  5 May 2014 06:58:03 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-On Sat, 03 May 2014 00:00:03 +0200, Arnout Vandecappelle wrote:
-> On 01/05/14 15:51, Vicente Olivert Riera wrote:
-> > I was talking with ThomasP about the same thing. He told me that it has huge
-> > consequences and can't be committed easily, because it affects how almost all
-> > packages are built in a BR2_PREFER_STATIC_LIB=y build.
-> 
->  That's a bit a strange argument... If it doesn't get committed, it will never
-> be tested. We have a month to fix autobuilder failures, that should be enough, no?
+>  config BR2_PACKAGE_CZMQ
+>  	bool "czmq"
+>  	select BR2_PACKAGE_ZEROMQ
+> +	depends on BR2_USE_MMU # fork()
 
-Well, it would at least be good to have a preliminary testing with a
-fairly large set of packages enabled, in a BR2_PREFER_STATIC_LIB=y
-configuration, to check that things are still working OK after applying
-this patch. Not a 100% coverage, but at least testing a few dozens of
-packages.
+  ^ ^ ^ ^
+>  	depends on BR2_INSTALL_LIBSTDCPP # zeromq
+>  	depends on BR2_INET_IPV6 # zeromq
+>  	depends on BR2_LARGEFILE # util-linux
+>  	depends on BR2_USE_WCHAR # util-linux
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+> -	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
+> -	# support
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+> && \
+> -		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+>  	help
+>  	  High-level C Binding for 0MQ
+>  
+>  	  http://czmq.zeromq.org/
+>  
+>  comment "czmq needs a toolchain w/ C++, IPv6, largefile, wchar,
+> threads"
+> -	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+> && \
+> -		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+> +	depends on BR2_USE_MMU
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+  ^ ^ ^ ^
+>  	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 &&
+> BR2_LARGEFILE \ && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+>
+
+Shouldn't the option and the comment have opposite conditions?
+I.E: Either display the option or the comment?
+
+Mike
