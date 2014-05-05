@@ -1,61 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 5 May 2014 15:21:26 +0200
-Subject: [Buildroot] 2014.05 release cycle: open patches to consider
-In-Reply-To: <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
-References: <CAAXf6LWk1C0uUjY3-5=a0347TnQyBRym9SpQUZN=xj0aNfNRNg@mail.gmail.com>
- <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
-Message-ID: <CAAXf6LUArpFkyEAqDPz8d8Vy4gjQ=OFbVAZuPFH5mqxvqkpQpw@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Mon,  5 May 2014 15:24:07 +0200
+Subject: [Buildroot] [PATCH] libenca: Move build host tool to PRE_BUILD_HOOKS
+Message-ID: <1399296247-26320-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The make_hash host tool, should be built during a PRE_BUILD_HOOKS and
+not a POST_CONFIGURE_HOOKS.
 
-Here the current overview of patches in this list that have not yet
-been applied, with updated links:
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/libenca/libenca.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> http://patchwork.ozlabs.org/patch/323339/
-> [v2,1/2] infra: Add generic check_prog_host function
-> http://patchwork.ozlabs.org/patch/323340/
-> [v2,2/2] classpath: Use generic check for host program
-> Maxime Hadjinlian
-
-new versions: http://patchwork.ozlabs.org/patch/345366/ and
-http://patchwork.ozlabs.org/patch/345367/
-
->
-> http://patchwork.ozlabs.org/patch/332885/
-> Makefile: move fs/common.mk above external.mk
-> Philippe Reynes <tremyfr@yahoo.fr>
-
-new version: http://patchwork.ozlabs.org/patch/345605/
-
->
-> http://patchwork.ozlabs.org/patch/334855/
-> [v3] infra: Add PRE_*_HOOKS for every step
-> Maxime Hadjinlian
->
-
-new version: http://patchwork.ozlabs.org/patch/345719/
-
-
-> http://patchwork.ozlabs.org/patch/337161/
-> perf: Fix compilation without libelf for post-3.10 kernels
-> Peter Meerwald pmeerw at pmeerw.net
-
-Same version, now reviewed/tested by me.
-
-> http://patchwork.ozlabs.org/patch/344390/
-> [v3,1/2] ccache: change default cache directory path to match config setting
-> http://patchwork.ozlabs.org/patch/344391/
-> [v3,2/2] ccache: provide capability to do initial ccache setup
-> Danomi Manchego
->
-
-Same versions, now reviewed/tested by me.
-
-
-Best regards,
-Thomas
+diff --git a/package/libenca/libenca.mk b/package/libenca/libenca.mk
+index d998c66..66fcfaa 100644
+--- a/package/libenca/libenca.mk
++++ b/package/libenca/libenca.mk
+@@ -21,6 +21,6 @@ define LIBENCA_MAKE_HOST_TOOL
+ 	$(MAKE) -C $(@D)/tools $(HOST_CONFIGURE_OPTS) make_hash
+ endef
+ 
+-LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
++LIBENCA_PRE_BUILD_HOOKS += LIBENCA_MAKE_HOST_TOOL
+ 
+ $(eval $(autotools-package))
+-- 
+1.9.2
