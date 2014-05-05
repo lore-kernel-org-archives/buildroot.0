@@ -1,36 +1,45 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon, 5 May 2014 11:30:06 +0200
-Subject: [Buildroot] Two stages compilation
-In-Reply-To: <263e47a3-2d39-4a33-a352-0e225ac04a3b@email.android.com>
-References: <CA+TH9Vns0mvj6X2UiP_Biu1bnG4Adwg+UFhfnN9Dm4W9AGLx1A@mail.gmail.com>
- <535F8499.8070406@gmail.com>
- <CA+TH9VmbVayiELjF9FaMDBBE9tJvgBy8b2CUovg74b4qh4nBNA@mail.gmail.com>
- <CAAXf6LVtAuS4DHWH9B-HtMcL-H6JszDsA2853c6FpM2Pu50WbA@mail.gmail.com>
- <20140430210324.31be1446@skate>
- <CA+TH9V=W5gr5r_TuFXxVyN4gJp7f9pS7MQrG45G7KAq5jKLf6g@mail.gmail.com>
- <263e47a3-2d39-4a33-a352-0e225ac04a3b@email.android.com>
-Message-ID: <CA+TH9VnAcApreQV-K2pVY7ZAOTpcZrW+R4jyoowFQPydukKUgg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 05 May 2014 11:37:45 +0200
+Subject: [Buildroot] [PATCH] Makefile: move fs/common.mk above
+	external.mk
+In-Reply-To: <CAAXf6LVkhqmCuHcaA859otdpFrDu9vEPh-UBrnj28kJ6YnYkWQ@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Mon, 5 May 2014 09:47:14
+ +0200")
+References: <1395583071-10016-1-git-send-email-tremyfr@yahoo.fr>
+ <87ha6kk5bi.fsf@dell.be.48ers.dk>
+ <1395944229.86315.YahooMailNeo@web28802.mail.ir2.yahoo.com>
+ <87ppl7gwdz.fsf@dell.be.48ers.dk>
+ <CAAXf6LVkhqmCuHcaA859otdpFrDu9vEPh-UBrnj28kJ6YnYkWQ@mail.gmail.com>
+Message-ID: <87d2fsin12.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Since host packages are normally not user selectable, you need to add a dependency to it from another package. For example using:
->
-> MONO_NATIVE_DEPENDENCIES += host-mono-managed
->
-> Another approach is where the use can choose whether he wants the host part too. This is only good if course if it is not strictly required. In this case you would add it in a Config.in.host file which would be included from the host utilities menu.
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-I Thomas, after your advice, everything started working!!! Right now
-I'm making some more tests, but the packages compiles correctly. When
-finished, I'll make a patch and publish it on the mailing list.
+Hi,
 
-Probably I have to reread the documentation because I missed this part
-about host compiling and dependencies.
+ >> The specific issue I mentioned was about the externally defined rootfs
+ >> getting created before target-purgelocales / target-generatelocales gets
+ >> called. The easiest way to check that is to use a glibc toolchain and
+ >> enable BR2_ENABLE_LOCALE_PURGE / BR2_GENERATE_LOCALE, and then stick an
+ >> echo statement in each of them.
+ >> 
 
-Thank you again for your support!
+ > I performed this test, and can confirm that all is well:
+ > purging/generating of locale data is done before the filesystem is
+ > created, in the order generate / purge / rootfs.
 
+ > So moving that line does not impact the behavior with respect to locales.
+
+Thanks!
+
+ > As the patch does no longer cleanly apply, I'll send a new version.
+ > Do you still consider this for 2014.05 or is it too late/risky in your opinion?
+
+If you tested it then I'm Ok with it ;)
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
