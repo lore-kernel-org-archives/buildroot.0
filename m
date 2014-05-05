@@ -1,95 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 May 2014 13:44:28 +0200
-Subject: [Buildroot] [git commit] docs/manual: document how to use the cross
-	debugger
-Message-ID: <20140505114607.77E149CAFC@busybox.osuosl.org>
+Date: Mon, 5 May 2014 13:31:30 +0200
+Subject: [Buildroot] [git commit] toolchain: generate a gdbinit file
+Message-ID: <20140505114607.6E2219CB03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1614bf6be7766271f69bea245b37972802e13395
+commit: http://git.buildroot.net/buildroot/commit/?id=7130ceb267b587b97fb5baa005521709e2b415d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This commit slightly improves the external toolchain backend, and the
+gdb build logic to create a file named
+$(STAGING_DIR)/usr/share/buildroot/gdbinit which can be used as a
+gdbinit file using gdb -x option. This allows gdb to automatically use
+the proper sysroot to find libraries.
+
+The initial insight for this patch comes from the report of Oded
+Hanson <OHanson@xsightsys.com>, who found an issue with the Eclipse
+Buildroot plugin, which was setting a solib-path in gdb, but not a
+sysroot. Setting a solib-path was enough to find shared libraries, but
+not the dynamic linker. And since Eclipse doesn't allow to set the
+sysroot in any other way than giving a gdbinit file, it makes sense to
+have Buildroot generate a gdbinit file (which can be used in other
+situations than Eclipse).
+
+To achieve this, this commit introduces a gen_gdbinit_file helper in
+toolchain/helpers.mk, and uses it for the internal toolchain and
+external toolchain backends.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[ThomasDS: some rewording, add <buildroot> path prefix in example]
+[ThomasDS: minor updates in commit message]
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/advanced.txt                 |    2 +
- docs/manual/using-buildroot-debugger.txt |   53 ++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+), 0 deletions(-)
+ package/gdb/gdb.mk                                 |    2 ++
+ toolchain/helpers.mk                               |    7 +++++++
+ toolchain/toolchain-external/toolchain-external.mk |    7 +++++++
+ 3 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
-index 0ad79f7..05c5242 100644
---- a/docs/manual/advanced.txt
-+++ b/docs/manual/advanced.txt
-@@ -5,6 +5,8 @@
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 69fb3ba..678c17c 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -126,5 +126,7 @@ endef
  
- include::using-buildroot-toolchain.txt[]
+ HOST_GDB_POST_INSTALL_HOOKS += HOST_GDB_ADD_SYMLINK
  
-+include::using-buildroot-debugger.txt[]
++HOST_GDB_POST_INSTALL_HOOKS += gen_gdbinit_file
 +
- include::ccache-support.txt[]
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 9595196..ef60120 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -355,3 +355,10 @@ check_unusable_toolchain = \
+ 		echo "such as Buildroot." ; \
+ 		exit 1 ; \
+ 	fi
++
++#
++# Generate gdbinit file for use with Buildroot
++#
++gen_gdbinit_file = \
++	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
++	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index b40f54d..05d8867 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -651,6 +651,12 @@ define TOOLCHAIN_EXTERNAL_SANITIZE_KERNEL_HEADERS
+ 		-e 's@#(ifndef|define|endif[ \t]*/[*])[ \t]*_UAPI@#\1 @'
+ endef
  
- include::download-location.txt[]
-diff --git a/docs/manual/using-buildroot-debugger.txt b/docs/manual/using-buildroot-debugger.txt
-new file mode 100644
-index 0000000..962ecf7
---- /dev/null
-+++ b/docs/manual/using-buildroot-debugger.txt
-@@ -0,0 +1,53 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
++	if test -f $(TARGET_CROSS)gdb ; then \
++		$(call gen_gdbinit_file) ; \
++	fi
++endef
 +
-+=== Using +gdb+ in Buildroot
-+
-+Buildroot allows to do cross-debugging, where the debugger runs on the
-+build machine and communicates with +gdbserver+ on the target to
-+control the execution of the program.
-+
-+To achieve this:
-+
-+* If you are using an _internal toolchain_ (built by Buildroot), you
-+  must enable +BR2_PACKAGE_HOST_GDB+, +BR2_PACKAGE_GDB+ and
-+  +BR2_PACKAGE_GDB_SERVER+. This ensures that both the cross gdb and
-+  gdbserver get built, and that gdbserver gets installed to your target.
-+
-+* If you are using an _external toolchain_, you should enable
-+  +BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY+, which will copy the
-+  gdbserver included with the external toolchain to the target. If your
-+  external toolchain does not have a cross gdb or gdbserver, it is also
-+  possible to let Buildroot build them, by enabling the same options as
-+  for the _internal toolchain backend_.
-+
-+Now, to start debugging a program called +foo+, you should run on the
-+target:
-+
-+----------------------------
-+gdbserver :2345 foo
-+----------------------------
-+
-+This will cause +gdbserver+ to listen on TCP port 2345 for a connection
-+from the cross gdb.
-+
-+Then, on the host, you should start the cross gdb using the following
-+command line:
-+
-+----------------------------
-+<buildroot>/output/host/usr/bin/<tuple>-gdb -x <buildroot>/output/staging/usr/share/buildroot/gdbinit foo
-+----------------------------
-+
-+Of course, +foo+ must be available in the current directory, built
-+with debugging symbols. Typically you start this command from the
-+directory where +foo+ is built (and not from +output/target/+ as the
-+binaries in that directory are stripped).
-+
-+The +<buildroot>/output/staging/usr/share/buildroot/gdbinit+ file will tell the
-+cross gdb where to find the libraries of the target.
-+
-+Finally, to connect to the target from the cross gdb:
-+
-+----------------------------
-+(gdb) target remote <target ip address>:2345
-+----------------------------
+ # Even though we're installing things in both the staging, the host
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+@@ -659,6 +665,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+ 
+ $(eval $(generic-package))
