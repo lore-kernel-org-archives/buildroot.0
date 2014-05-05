@@ -1,28 +1,35 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 5 May 2014 09:04:22 +0200
-Subject: [Buildroot] 2014.05 release cycle: open patches to consider
-In-Reply-To: <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
-References: <CAAXf6LWk1C0uUjY3-5=a0347TnQyBRym9SpQUZN=xj0aNfNRNg@mail.gmail.com>
- <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
-Message-ID: <CAAXf6LUc1C42K+MtuCgdwX6WernPT4xa974RiAsANYc=rC5tSw@mail.gmail.com>
+Date: Mon, 5 May 2014 09:26:29 +0200
+Subject: [Buildroot] Patchwork cleanup #8: triaging proposal
+In-Reply-To: <CA+kK6WudQxWu-HndSPvv99XURDfjnyGatNRLhuUnfyQpCDg_NQ@mail.gmail.com>
+References: <CA+kK6WudQxWu-HndSPvv99XURDfjnyGatNRLhuUnfyQpCDg_NQ@mail.gmail.com>
+Message-ID: <CAAXf6LVJdzXXbWyHanWmLCbW0+Wqs2Y9t9DLjp+MxDXLxH9Uqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 2, 2014 at 10:33 AM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> [Grr, buildroot list in copy]
+Hi Marcelo,
+
+On Thu, May 1, 2014 at 8:37 PM, Marcelo Gutierrez <kuyurix@gmail.com> wrote:
+> Hi All,
 >
-> http://patchwork.ozlabs.org/patch/323339/
-> [v2,1/2] infra: Add generic check_prog_host function
-> http://patchwork.ozlabs.org/patch/323340/
-> [v2,2/2] classpath: Use generic check for host program
-> Maxime Hadjinlian
+>
+>> [v9] espeak: new package
+>> Arnaud Aujon <arnaud.aujon@gmail.com>
+>> http://patchwork.ozlabs.org/patch/284229
+>
+>
+> I've tested this patch on Beaglebone Black, and works great. It would be
+> interesting to install mbrola voices,  will offer a more realistic speech.
+>
+> http://espeak.sourceforge.net/mbrola.html
 
-Maxime has sent updated versions of these two patches to the list,
-they have been reviewed by me.
+Could you add a proper 'Tested-by' tag on v10 of the espeak patch?
+This helps the maintainer in assessing which patches are good to be integrated.
 
-Best regards,
+See also http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
+
+Thanks,
 Thomas
