@@ -1,29 +1,95 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 05 May 2014 08:59:04 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v3] Using gdb in buildroot
-Message-ID: <patchbomb.1399273144@argentina>
+Date: Mon, 05 May 2014 08:59:05 +0200
+Subject: [Buildroot] [PATCH 1 of 2 v3] toolchain: generate a gdbinit file
+In-Reply-To: <patchbomb.1399273144@argentina>
+References: <patchbomb.1399273144@argentina>
+Message-ID: <b19f4e5aecc193397e87.1399273145@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Hi, 
+This commit slightly improves the external toolchain backend, and the
+gdb build logic to create a file named
+$(STAGING_DIR)/usr/share/buildroot/gdbinit which can be used as a
+gdbinit file using gdb -x option. This allows gdb to automatically use
+the proper sysroot to find libraries.
 
-This a small respin of two patches that Thomas Petazzoni sent to the list a
-while back, adding a gdbinit file and updating the manual.
+The initial insight for this patch comes from the report of Oded
+Hanson <OHanson@xsightsys.com>, who found an issue with the Eclipse
+Buildroot plugin, which was setting a solib-path in gdb, but not a
+sysroot. Setting a solib-path was enough to find shared libraries, but
+not the dynamic linker. And since Eclipse doesn't allow to set the
+sysroot in any other way than giving a gdbinit file, it makes sense to
+have Buildroot generate a gdbinit file (which can be used in other
+situations than Eclipse).
 
-I think these could still go in for 2014.05.
+To achieve this, this commit introduces a gen_gdbinit_file helper in
+toolchain/helpers.mk, and uses it for the internal toolchain and
+external toolchain backends.
 
-In v2, the authorship of Thomas Petazzoni got lost, unintentionally. This
-was the first time I'm resending someone else's patches, and foolishly
-thought that the Signed-off-by line would be the key to authorship.
-Note also that I'm not using git but Mercurial. When applying the mbox from
-patchwork in my hg repo, the author is correctly shown as ThomasP, but as
-I'm sending the patch in non-hg (plain) mode, that piece of information is
-lost. It seems I have to add an explicit 'From: foo <bar>' line in the
-commit message to get git to recognize the correct author.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[ThomasDS: minor updates in commit message]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Best regards, 
-Thomas
+---
+v3: retain proper authorship of ThomasP
+v2: update commit message
+
+ package/gdb/gdb.mk                                 | 2 ++
+ toolchain/helpers.mk                               | 7 +++++++
+ toolchain/toolchain-external/toolchain-external.mk | 7 +++++++
+ 3 files changed, 16 insertions(+)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -126,5 +126,7 @@ endef
+ 
+ HOST_GDB_POST_INSTALL_HOOKS += HOST_GDB_ADD_SYMLINK
+ 
++HOST_GDB_POST_INSTALL_HOOKS += gen_gdbinit_file
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -355,3 +355,10 @@ check_unusable_toolchain = \
+ 		echo "such as Buildroot." ; \
+ 		exit 1 ; \
+ 	fi
++
++#
++# Generate gdbinit file for use with Buildroot
++#
++gen_gdbinit_file = \
++	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
++	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -651,6 +651,12 @@ define TOOLCHAIN_EXTERNAL_SANITIZE_KERNE
+ 		-e 's@#(ifndef|define|endif[ \t]*/[*])[ \t]*_UAPI@#\1 @'
+ endef
+ 
++define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
++	if test -f $(TARGET_CROSS)gdb ; then \
++		$(call gen_gdbinit_file) ; \
++	fi
++endef
++
+ # Even though we're installing things in both the staging, the host
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+@@ -659,6 +665,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGIN
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+ 
+ $(eval $(generic-package))
