@@ -1,70 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon,  5 May 2014 23:17:00 +0200
-Subject: [Buildroot] [PATCHv2 00/10] musl support,
-	internal and external backends
-Message-ID: <1399324630-3830-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon,  5 May 2014 23:17:01 +0200
+Subject: [Buildroot] [PATCHv2 01/10] musl: new package
+In-Reply-To: <1399324630-3830-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1399324630-3830-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1399324630-3830-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-This patch series does two things:
-
- * Adds the musl support in the internal toolchain backend.
-
- * Adds a set of pre-built musl toolchains to the external toolchain
-   backend.
-
-Compared to v1:
-
- * The issue of the symbolic link for the dynamic linker noticed by
-   Peter is fixed. In fact, the musl Makefile can create this symbolic
-   link perfectly fine if we are in the good conditions.
-
- * A patch for musl support in gcc 4.9.0 has been added.
-
- * The patch for musl external toolchains has been added, and after
-   the suggestion from Arnout, a single Kconfig option is now used
-   instead of one per architecture.
-
-I've built and boot tested under Qemu ARM/musl/gcc4.8 and
-i386/musl/gcc4.9.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (10):
-  musl: new package
-  gcc: add musl support patch for gcc 4.7.3
-  gcc: add musl support patch to gcc 4.8.2
-  gcc: add musl support patch to gcc 4.9.0
-  gcc: musl patches only available for gcc 4.7+
-  package: add support for musl in tuple
-  busybox: allow build with musl
-  toolchain-buildroot: add support for building musl toolchains
-  gcc: disable libsanitizer for musl
-  toolchain-external: add publicly available musl toolchains
-
- package/Makefile.in                                |   2 +
- package/busybox/busybox.mk                         |   9 +
- package/gcc/4.7.3/900-musl-support.patch           | 638 +++++++++++++++++
- package/gcc/4.8.2/900-musl-support.patch           | 755 +++++++++++++++++++++
- package/gcc/4.9.0/900-musl-support.patch           | 710 +++++++++++++++++++
- package/gcc/Config.in.host                         |   8 +
- package/gcc/gcc.mk                                 |   5 +-
- package/musl/musl.mk                               |  73 ++
- toolchain/toolchain-buildroot/Config.in            |  10 +
- toolchain/toolchain-external/Config.in             |  30 +
- toolchain/toolchain-external/toolchain-external.mk |  27 +
- 11 files changed, 2265 insertions(+), 2 deletions(-)
- create mode 100644 package/gcc/4.7.3/900-musl-support.patch
- create mode 100644 package/gcc/4.8.2/900-musl-support.patch
- create mode 100644 package/gcc/4.9.0/900-musl-support.patch
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/musl.mk | 73 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
  create mode 100644 package/musl/musl.mk
 
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+new file mode 100644
+index 0000000..c3e868d
+--- /dev/null
++++ b/package/musl/musl.mk
+@@ -0,0 +1,73 @@
++################################################################################
++#
++# musl
++#
++################################################################################
++
++MUSL_VERSION = 1.1.0
++MUSL_SITE = http://www.musl-libc.org/releases/
++MUSL_LICENSE = MIT
++MUSL_LICENSE_FILES = COPYRIGHT
++
++# Before musl is configured, we must have the first stage
++# cross-compiler and the kernel headers
++MUSL_DEPENDENCIES = host-gcc-initial linux-headers
++
++# musl is part of the toolchain so disable the toolchain dependency
++MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
++
++MUSL_INSTALL_STAGING = YES
++
++# We need to run the musl configure script prior to building the
++# gcc-intermediate, so that we can call the install-headers step and
++# get the crt<X>.o built. However, we need to call it again after
++# gcc-intermediate has been built, otherwise the configure script
++# doesn't realize that libgcc has been built, and doesn't link the C
++# library properly with libgcc, which causes build failure down the
++# road. We will have the opportunity to simplify this once we switch
++# to a 2-steps gcc build.
++define MUSL_CONFIGURE_CALL
++	(cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
++		CPPFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
++		./configure \
++			--target=$(GNU_TARGET_NAME) \
++			--host=$(GNU_TARGET_NAME) \
++			--prefix=/usr \
++			--disable-gcc-wrapper)
++endef
++
++define MUSL_CONFIGURE_CMDS
++	$(MUSL_CONFIGURE_CALL)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(STAGING_DIR) install-headers
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		crt/crt1.o crt/crti.o crt/crtn.o
++	cp $(@D)/crt/crt*.o $(STAGING_DIR)/usr/lib
++	$(TARGET_CROSS)gcc -nostdlib \
++		-nostartfiles -shared -x c /dev/null -o $(STAGING_DIR)/usr/lib/libc.so
++endef
++
++define MUSL_BUILD_CMDS
++	$(MUSL_CONFIGURE_CALL)
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MUSL_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(STAGING_DIR) install-libs install-tools
++endef
++
++# prefix is set to an empty value to get the C library installed in
++# /lib and not /usr/lib
++define MUSL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) prefix= install-libs
++	$(RM) $(addprefix $(TARGET_DIR)/lib/,crt1.o crtn.o crti.o Scrt1.o)
++endef
++
++$(eval $(generic-package))
++
++# Before musl is built, we must have the second stage cross-compiler
++$(MUSL_TARGET_BUILD): | host-gcc-intermediate
 -- 
 1.9.2
