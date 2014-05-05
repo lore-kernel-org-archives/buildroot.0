@@ -1,94 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 May 2014 13:31:30 +0200
-Subject: [Buildroot] [git commit] toolchain: generate a gdbinit file
-Message-ID: <20140505114607.6E2219CB03@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 05 May 2014 14:10:27 +0200
+Subject: [Buildroot] [PATCH v2] toolchain-external: Fix EABIhf check
+Message-ID: <ddb1629069cddb3d19fb.1399291827@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7130ceb267b587b97fb5baa005521709e2b415d1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
-This commit slightly improves the external toolchain backend, and the
-gdb build logic to create a file named
-$(STAGING_DIR)/usr/share/buildroot/gdbinit which can be used as a
-gdbinit file using gdb -x option. This allows gdb to automatically use
-the proper sysroot to find libraries.
+Currently the check for EABI/EABIhf toolchains looks for the
+Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
+EABIhf toolchain.
+In uClibc, however, crt1.o is not compiled from c but assembly, so the
+Tag_ABI_VFP_args attribute is not added in the object file.  This causes
+the EABIhf check in the external toolchain logic to fail for
+uClibc-based toolchains.
 
-The initial insight for this patch comes from the report of Oded
-Hanson <OHanson@xsightsys.com>, who found an issue with the Eclipse
-Buildroot plugin, which was setting a solib-path in gdb, but not a
-sysroot. Setting a solib-path was enough to find shared libraries, but
-not the dynamic linker. And since Eclipse doesn't allow to set the
-sysroot in any other way than giving a gdbinit file, it makes sense to
-have Buildroot generate a gdbinit file (which can be used in other
-situations than Eclipse).
+Fix by compiling a temporary .c file and checking for the attribute.
 
-To achieve this, this commit introduces a gen_gdbinit_file helper in
-toolchain/helpers.mk, and uses it for the internal toolchain and
-external toolchain backends.
+Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[ThomasDS: minor updates in commit message]
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+[ThomasDS: use /dev/null as input, update commit message]
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/gdb.mk                                 |    2 ++
- toolchain/helpers.mk                               |    7 +++++++
- toolchain/toolchain-external/toolchain-external.mk |    7 +++++++
- 3 files changed, 16 insertions(+), 0 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 69fb3ba..678c17c 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -126,5 +126,7 @@ endef
- 
- HOST_GDB_POST_INSTALL_HOOKS += HOST_GDB_ADD_SYMLINK
- 
-+HOST_GDB_POST_INSTALL_HOOKS += gen_gdbinit_file
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+---
+v2: (ThomasDS)
+  - avoid creating a temporary source file
+  - update commit message
+
+ toolchain/helpers.mk |  6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
+
 diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 9595196..ef60120 100644
 --- a/toolchain/helpers.mk
 +++ b/toolchain/helpers.mk
-@@ -355,3 +355,10 @@ check_unusable_toolchain = \
- 		echo "such as Buildroot." ; \
+@@ -297,12 +297,14 @@ check_arm_abi = \
+ 		echo "External toolchain uses the unsuported OABI" ; \
  		exit 1 ; \
- 	fi
-+
-+#
-+# Generate gdbinit file for use with Buildroot
-+#
-+gen_gdbinit_file = \
-+	mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
-+	echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index b40f54d..05d8867 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -651,6 +651,12 @@ define TOOLCHAIN_EXTERNAL_SANITIZE_KERNEL_HEADERS
- 		-e 's@#(ifndef|define|endif[ \t]*/[*])[ \t]*_UAPI@#\1 @'
- endef
- 
-+define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
-+	if test -f $(TARGET_CROSS)gdb ; then \
-+		$(call gen_gdbinit_file) ; \
-+	fi
-+endef
-+
- # Even though we're installing things in both the staging, the host
- # and the target directory, we do everything within the
- # install-staging step, arbitrarily.
-@@ -659,6 +665,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
- endef
- 
- $(eval $(generic-package))
+ 	fi ; \
+-	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
+-	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
++	TEMP_OBJ_FILE=`mktemp --tmpdir --suffix=.o`; \
++	$${__CROSS_CC} -x c -c -o $${TEMP_OBJ_FILE} /dev/null; \
++	if $${__CROSS_READELF} -A $${TEMP_OBJ_FILE} | grep -q "Tag_ABI_VFP_args:" ; then \
+ 		EXT_TOOLCHAIN_ABI="eabihf" ; \
+ 	else \
+ 		EXT_TOOLCHAIN_ABI="eabi" ; \
+ 	fi ; \
++	rm -f $${TEMP_OBJ_FILE}; \
+ 	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
+ 		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
+ 		exit 1 ; \
