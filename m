@@ -1,85 +1,91 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 5 May 2014 12:01:08 +0200
-Subject: [Buildroot] [PATCH] freetype: freetype-patch: depends on
-	host-automake
-In-Reply-To: <CAHXCMMKtYtZxf3=FnOUTFcEo6mB3LC65VYUkAkbFnqfVDzoBaw@mail.gmail.com>
-References: <1399282934-14517-1-git-send-email-fabio.porcedda@gmail.com>
- <CAHXCMMKtYtZxf3=FnOUTFcEo6mB3LC65VYUkAkbFnqfVDzoBaw@mail.gmail.com>
-Message-ID: <CAHkwnC_UsBmWC2QdY_=kjMsm35dXiYPc636_ySqx81oJtjMcpA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  5 May 2014 13:34:48 +0300
+Subject: [Buildroot] [PATCH] p11-kit: fix build against linuxthreads
+Message-ID: <ba5ce10c7316baaa811856f944dd3d2139aa2a0f.1399286088.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 5, 2014 at 11:55 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi Fabio, all,
->
-> On Mon, May 5, 2014 at 11:42 AM, Fabio Porcedda
-> <fabio.porcedda@gmail.com> wrote:
->> The "make freetype-patch" fails because does not found autogen.sh,
->> because autogen.sh available only for the configure stage.
->> To fix this add host-automake as a prerequisite to freetype-patch too.
->>
->> This also fix the support to top-level parallel make.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> ---
->>  package/freetype/freetype.mk | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
->> index c7c9a06..33a6317 100644
->> --- a/package/freetype/freetype.mk
->> +++ b/package/freetype/freetype.mk
->> @@ -83,3 +83,6 @@ HOST_FREETYPE_POST_INSTALL_HOOKS += HOST_FREETYPE_FIX_FREETYPE_INCLUDE
->>
->>  $(eval $(autotools-package))
->>  $(eval $(host-autotools-package))
->> +
->> +# freetype-patch uses autogen.sh so add it as a prerequisite
->> +$(FREETYPE_TARGET_PATCH): host-automake
->
-> It's an unusual way of doing this!
-> How about moving the *FREETYPE_RUN_AUTOGEN hook in
-> *FREETYPE_PRE_CONFIGURE_HOOKS?
+Fixes:
+http://autobuild.buildroot.net/results/9e9/9e9c83461fec44c85919e07a3ce2c5ca49ff9cf5/
 
-Unfortunately that's alone does not work because  LIBTOOL_PATCH_HOOK
-it's going to fail, the only solution i've found is to move
-LIBTOOL_PATCH_HOOK to PRE_CONFIGURE too, but i'm not sure is it fine
-to do that, what do you think about that?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...ld-against-older-pthreads-implementations.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
 
-patch:
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index c7c9a06..8aac8a2 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -25,8 +25,8 @@ HOST_FREETYPE_CONF_OPT = --without-zlib
---without-bzip2 --without-png
- define FREETYPE_RUN_AUTOGEN
-        cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
- endef
--FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
--HOST_FREETYPE_POST_PATCH_HOOKS += FREETYPE_RUN_AUTOGEN
-+FREETYPE_PRE_CONFIGURE_HOOKS += FREETYPE_RUN_AUTOGEN
-+HOST_FREETYPE_PRE_CONFIGURE_HOOKS += FREETYPE_RUN_AUTOGEN
- FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
- HOST_FREETYPE_DEPENDENCIES += host-automake host-autoconf host-libtool
-
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index a646612..38b8c4c 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -193,7 +193,7 @@ endef
-
- # default values are not evaluated yet, so don't rely on this defaulting to YES
- ifneq ($$($(2)_LIBTOOL_PATCH),NO)
--$(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
-+$(2)_PRE_CONFIGURE_HOOKS += LIBTOOL_PATCH_HOOK
- endif
-
- #
-
-Regards
+diff --git a/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch b/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
+new file mode 100644
+index 000000000000..3562f3c2b6be
+--- /dev/null
++++ b/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
+@@ -0,0 +1,64 @@
++From 05b6a7550756ffdced25a6c51cf2222bad9e59e7 Mon Sep 17 00:00:00 2001
++Message-Id: <05b6a7550756ffdced25a6c51cf2222bad9e59e7.1399285491.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 5 May 2014 09:32:23 +0300
++Subject: [PATCH] Fix build against older pthreads implementations
++
++Older pthreads implementations like glibc NPTL prior to version 2.12, and
++uClibc linuxthreads (both), need _XOPEN_SOURCE to expose
++pthread_mutexattr_settype() and THREAD_MUTEX_DEFAULT. The value 600 (SuSv3,
++POSIX.1-2001) is equivalent to _POSIX_C_SOURCE 200112L.
++
++Fixes the following build error:
++
++  CC       compat.lo
++compat.c: In function 'p11_mutex_init':
++compat.c:164:2: warning: implicit declaration of function 'pthread_mutexattr_settype' [-Wimplicit-function-declaration]
++compat.c:164:2: warning: nested extern declaration of 'pthread_mutexattr_settype' [-Wnested-externs]
++compat.c:164:36: error: 'PTHREAD_MUTEX_DEFAULT' undeclared (first use in this function)
++
++Patch status: sent upstream
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ common/compat.h  | 6 ++++++
++ common/message.c | 6 ------
++ 2 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/common/compat.h b/common/compat.h
++index d7fe414a46bf..fbc1dc1d4f0f 100644
++--- a/common/compat.h
+++++ b/common/compat.h
++@@ -37,6 +37,12 @@
++ 
++ #include "config.h"
++ 
+++/*
+++ * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
+++ * functions to completely different signatures depending on defines
+++ */
+++#define _XOPEN_SOURCE 600
+++
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ 
++diff --git a/common/message.c b/common/message.c
++index 35f2764487a9..e68dfac561c8 100644
++--- a/common/message.c
+++++ b/common/message.c
++@@ -37,12 +37,6 @@
++ 
++ #include "config.h"
++ 
++-/*
++- * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
++- * functions to completely different signatures depending on defines
++- */
++-#define _POSIX_C_SOURCE 200112L
++-
++ #include "compat.h"
++ #define P11_DEBUG_FLAG P11_DEBUG_LIB
++ #include "debug.h"
++-- 
++2.0.0.rc0
++
 -- 
-Fabio Porcedda
+2.0.0.rc0
