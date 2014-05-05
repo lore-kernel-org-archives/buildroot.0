@@ -1,51 +1,28 @@
-From: Arnaud Aujon <arnaud@intelibre.fr>
-Date: Mon, 05 May 2014 09:03:00 +0200
-Subject: [Buildroot] Patchwork cleanup #8: triaging proposal
-In-Reply-To: <CA+kK6WudQxWu-HndSPvv99XURDfjnyGatNRLhuUnfyQpCDg_NQ@mail.gmail.com>
-References: <CA+kK6WudQxWu-HndSPvv99XURDfjnyGatNRLhuUnfyQpCDg_NQ@mail.gmail.com>
-Message-ID: <d9f508dcd5990d03bc4f3aa18bdb8c48@intelibre.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 5 May 2014 09:04:22 +0200
+Subject: [Buildroot] 2014.05 release cycle: open patches to consider
+In-Reply-To: <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
+References: <CAAXf6LWk1C0uUjY3-5=a0347TnQyBRym9SpQUZN=xj0aNfNRNg@mail.gmail.com>
+ <CAAXf6LXWw5ybnPVNgjaadipuhG9PTv8LLsCzpnSC9h6QMNq9iA@mail.gmail.com>
+Message-ID: <CAAXf6LUc1C42K+MtuCgdwX6WernPT4xa974RiAsANYc=rC5tSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, May 2, 2014 at 10:33 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> [Grr, buildroot list in copy]
+>
+> http://patchwork.ozlabs.org/patch/323339/
+> [v2,1/2] infra: Add generic check_prog_host function
+> http://patchwork.ozlabs.org/patch/323340/
+> [v2,2/2] classpath: Use generic check for host program
+> Maxime Hadjinlian
 
-Oops, I didn't copy my last email to the mailing list.
-I just tried my patch against latest buildroot on a raspberry pi and 
-everything works fine for me.
-I resent a v10 version of the patch to update my email address, if there 
-is something else to fix before including, just let me know.
+Maxime has sent updated versions of these two patches to the list,
+they have been reviewed by me.
 
-Regards,
-
-Arnaud Aujon
-
-Le 01/05/2014 20:37, Marcelo Gutierrez a ?crit?:
-> Hi All,
-> 
->> [v9] espeak: new package
->> Arnaud Aujon <arnaud.aujon@gmail.com>
->> http://patchwork.ozlabs.org/patch/284229 [1]
-> 
-> I've tested this patch on Beaglebone Black, and works great. It would
-> be interesting to install mbrola voices,? will offer a more realistic
-> speech.
-> 
-> http://espeak.sourceforge.net/mbrola.html [2]
-> 
-> Regards,
-> 
-> Marcelo
-> 
-> 
-> Links:
-> ------
-> [1] http://patchwork.ozlabs.org/patch/284229
-> [2] http://espeak.sourceforge.net/mbrola.html
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Best regards,
+Thomas
