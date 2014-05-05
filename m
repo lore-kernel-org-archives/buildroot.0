@@ -1,127 +1,116 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Mon, 5 May 2014 11:01:18 +0200
-Subject: [Buildroot] How transfer what image(s) to target-CF?
-In-Reply-To: <1694493.96NdL4j4Hh@sagittea>
-References: <CAEzGmjA3wbjEFb6sQYov_rJFJuB8oJFx2Y6XOA7WWHce743=dg@mail.gmail.com>
- <CAEzGmjByYAXYo2bbnKqRcu4nzJfjbEz8ZsaiB_MdSNQgDs2M3Q@mail.gmail.com>
- <25917145.tTrImWgKe2@sagittea> <1694493.96NdL4j4Hh@sagittea>
-Message-ID: <CAEzGmjD3e5_4tVr6zvbE7Op+qrYtSMFNgF80-Avhqt3-DbD9rg@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 5 May 2014 11:01:54 +0200
+Subject: [Buildroot] [PATCH 2 of 2 v3] docs/manual: document how to use
+ the cross debugger
+In-Reply-To: <4e03735812e47df083a2.1399273146@argentina>
+References: <patchbomb.1399273144@argentina>
+ <4e03735812e47df083a2.1399273146@argentina>
+Message-ID: <CAHXCMMKMyDK2ihxaJtLaNqOzf7c3FzXL9XgKJjrAgOxkaG_NYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 28, 2014 at 4:27 PM, J?r?me Pouiller <jezz@sysmic.org> wrote:
+Hi Thomas?, all,
 
-> On Monday 28 April 2014 16:21:20 J?r?me Pouiller wrote:
-> > I did not check how it work exactly with grub-legacy. However, I can
-> > give you my recipe to get full disk image using grub2:
+On Mon, May 5, 2014 at 8:59 AM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >
->  Thank you J?r?me,
-But I'm afraid your recepie is still a bit over my head.
-Now,
-what I did do, though, was to download a recent Daily Snapshot, which has
-support for GRUB2.
-However, booting brings me to
-grub rescue>
-but not much further, for example:
-grub rescue> insmod normal.mod
-error: unknown filesystem.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> [ThomasDS: some rewording, add <buildroot> path prefix in example]
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+> v3: retain proper authorship of ThomasP
+> v2: some rewording, taking into account the comment of Baruch, also
+> clarifying the example command (typically foo is not in the buildroot root).
+>
+>
+>  docs/manual/advanced.txt                 |   2 +
+>  docs/manual/using-buildroot-debugger.txt |  49 +++++++++++++++++++++++++++
+>  2 files changed, 51 insertions(+), 0 deletions(-)
+>  create mode 100644 docs/manual/using-buildroot-debugger.txt
+>
+> diff --git a/docs/manual/advanced.txt b/docs/manual/advanced.txt
+> --- a/docs/manual/advanced.txt
+> +++ b/docs/manual/advanced.txt
+> @@ -5,6 +5,8 @@
+>
+>  include::using-buildroot-toolchain.txt[]
+>
+> +include::using-buildroot-debugger.txt[]
+> +
+>  include::ccache-support.txt[]
+>
+>  include::download-location.txt[]
+> diff --git a/docs/manual/using-buildroot-debugger.txt b/docs/manual/using-buildroot-debugger.txt
+> new file mode 100644
+> --- /dev/null
+> +++ b/docs/manual/using-buildroot-debugger.txt
+> @@ -0,0 +1,48 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +=== Using +gdb+ in Buildroot
+> +
+> +Buildroot allows to do cross-debugging, where the debugger runs on the
+> +build machine and communicates with +gdbserver+ on the target to
+> +control the execution of the program.
+> +
+> +To achieve this:
+> +
+> +* If you are using an _internal toolchain_ (built by Buildroot), you
+> +  must enable +BR2_PACKAGE_HOST_GDB+, +BR2_PACKAGE_GDB+ and
+> +  +BR2_PACKAGE_GDB_SERVER+. This ensures that both the cross gdb and
+> +  gdbserver get built, and that gdbserver gets installed to your target.
+> +
+> +* If you are using an _external toolchain_, you should enable
+> +  +BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY+, which will copy the
+> +  gdbserver included with the external toolchain to the target. If your
+> +  external toolchain does not have a cross gdb or gdbserver, it is also
+> +  possible to let Buildroot build them, by enabling the same options as
+> +  for the _internal toolchain backend_.
+> +
+> +Now, to start debugging a program called +foo+, you should run on the
+> +target:
+> +
+> +----------------------------
+> +gdbserver :2345 foo
+> +----------------------------
+> +
+> +This will cause +gdbserver+ to listen on TCP port 2345 for a connection
+> +from the cross gdb.
+> +
+> +Then, on the host, you should start the cross gdb using the following
+> +command line:
+> +
+> +----------------------------
+> +<buildroot>/output/host/usr/bin/<tuple>-gdb -x <buildroot>/output/staging/usr/share/buildroot/gdbinit foo
+> +----------------------------
+> +
+From here, one still needs to tell gdb where is the target by running:
 ---
-To recap, what I have done is: (Target CF sdX=sdc in my case.)
-sudo fdisk /dev/sdX    and created one primary partition 1GB.
-sudo mke2fs -j -m 0 /dev/sdX1
-sudo tune2fs -c0 -i0 /dev/sdX1
-
-~/buildroot $ make menuconfig    with the only changes from default being:
-----------
-Target options:
-   i686
-Build options:
-   Enable compiler cache
-Toolchain:
-   C library:
-      glibc
-System configuration:
-   de-selected: Run a getty (logon prompt) after boot
-Kernel:
-   Linux kernel
-   (i386) Defconfig name
-   Install  kernel image to /boot in target
-Target packages:
-   Graphic libraries and applications (graphic/text):
-      X.org X Window System
-   Libraries:
-      Graphics:
-         cairo
-   Network applications:
-      ntp
-   Text editors and viewers:
-      nano
-Filesystem images:
-   ext2/3/4 root filesystem
-      ext3
-   1000000 size in blocks
-Bootloaders:
-   grub2
-Host utilities:
-   (no change)
-Legacy config options:
-   (no change)
-----------
-~/buildroot $ make
-That produced in output/images/ the files:
-  bzImage
-  grub.img
-  rootfs.ext2
-  rootfs.ext3
-  rootfs.tar
+gdb$ target remote <target ip address>:2345
 ---
 
-~/buildroot $ sudo tar -xvf output/images/rootfs.tar -C
-/media/lennart/30bdb69e-d518-4a8c-8b12-70fe8481dae7/
+Might be worthwhile to help people who begins with remote debugging. ;)
 
-~buildroot $ sudo grub-install /dev/sdX
-Installation finished. No error reported.
+> +Of course, +foo+ must be available in the current directory, built
+> +with debugging symbols. Typically you start this command from the
+> +directory where +foo+ is built (and not from +output/target/+ as the
+> +binaries in that directory are stripped).
+> +
+> +The +<buildroot>/output/staging/usr/share/buildroot/gdbinit+ file will tell the
+> +cross gdb where to find the libraries of the target.
+> +
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I unmounted and put the CF as the only IDE-drive in my target system and
-power on:
-After bios follows 15 seconds black screen, then:
-error: no such device: ad7c5498-2ffc-44b0-80dd-01c5dcd23dc2.
-Entering rescue mode...
-grub rescue>
+Regards,
 
-Hm... that UUID ad7c....c2 comes from my host (/dev/sda6  TYPE="ext4").
-Anyway;
-
-grub rescue> set
-prefix=(hd0)/boot/grub
-root=hd0
-grub rescue> insmod normal
-error: unknown filesystem.
-grub rescue> ls
-(hd0) (hd0,msdos1)
-
-My target /boot/ contains only /boot/grub/grub.cfg and /boot/bzImage
-Shouldn't there be a /boot/grub/linux.mod and a /boot/grub/normal.mod?
-Should I have done anything with buildroot/output/images/grub.img?
-
-grub.cfg looks like below:
---
-set default="0"
-set timeout="5"
- menuentry "Buildroot" {
-         linux /bzImage root=/dev/sda1 console=tty1
-}
---
-Shouldn't it be /boot/bzImage? Or does the above imply a separate boot
-partition, which I don't have?
-
-Please, someone, what gives?
-
-Regards
-Lennart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140505/8dab5134/attachment.html>
+-- 
+Samuel
