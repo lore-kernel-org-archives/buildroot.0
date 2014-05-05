@@ -1,47 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 May 2014 21:53:19 +0200
-Subject: [Buildroot] [git commit] perf: Fix compilation without libelf for
-	post-3.10 kernels
-Message-ID: <20140505200037.72EAA9C477@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon,  5 May 2014 23:17:00 +0200
+Subject: [Buildroot] [PATCHv2 00/10] musl support,
+	internal and external backends
+Message-ID: <1399324630-3830-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=220490ceae9d66f45ce0d1d79fee0a6403e3f4de
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-kernel commit cf4cca10 (perf tools: Move libelf check config into config/Makefile)
-removes the NO_LIBELF check from the top-level Makefile
+This patch series does two things:
 
-for newer kernels, if config/Makefile exists, we can assume that NO_LIBELF is
-also there
+ * Adds the musl support in the internal toolchain backend.
 
-Signed-off-by: Peter Meerwald <pmeerw@pmeerw.net>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perf/perf.mk |    8 +++++---
- 1 files changed, 5 insertions(+), 3 deletions(-)
+ * Adds a set of pre-built musl toolchains to the external toolchain
+   backend.
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index d7898d0..7610f3d 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -36,9 +36,11 @@ define PERF_BUILD_CMDS
- 	fi
- 	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
- 		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile ; then \
--			echo "The perf tool in your kernel cannot be built without libelf." ; \
--			echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
--			exit 1 ; \
-+			if ! test -r $(LINUX_DIR)/tools/perf/config/Makefile ; then \
-+				echo "The perf tool in your kernel cannot be built without libelf." ; \
-+				echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
-+				exit 1 ; \
-+			fi \
- 		fi \
- 	fi
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(LINUX_DIR)/tools/perf \
+Compared to v1:
+
+ * The issue of the symbolic link for the dynamic linker noticed by
+   Peter is fixed. In fact, the musl Makefile can create this symbolic
+   link perfectly fine if we are in the good conditions.
+
+ * A patch for musl support in gcc 4.9.0 has been added.
+
+ * The patch for musl external toolchains has been added, and after
+   the suggestion from Arnout, a single Kconfig option is now used
+   instead of one per architecture.
+
+I've built and boot tested under Qemu ARM/musl/gcc4.8 and
+i386/musl/gcc4.9.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (10):
+  musl: new package
+  gcc: add musl support patch for gcc 4.7.3
+  gcc: add musl support patch to gcc 4.8.2
+  gcc: add musl support patch to gcc 4.9.0
+  gcc: musl patches only available for gcc 4.7+
+  package: add support for musl in tuple
+  busybox: allow build with musl
+  toolchain-buildroot: add support for building musl toolchains
+  gcc: disable libsanitizer for musl
+  toolchain-external: add publicly available musl toolchains
+
+ package/Makefile.in                                |   2 +
+ package/busybox/busybox.mk                         |   9 +
+ package/gcc/4.7.3/900-musl-support.patch           | 638 +++++++++++++++++
+ package/gcc/4.8.2/900-musl-support.patch           | 755 +++++++++++++++++++++
+ package/gcc/4.9.0/900-musl-support.patch           | 710 +++++++++++++++++++
+ package/gcc/Config.in.host                         |   8 +
+ package/gcc/gcc.mk                                 |   5 +-
+ package/musl/musl.mk                               |  73 ++
+ toolchain/toolchain-buildroot/Config.in            |  10 +
+ toolchain/toolchain-external/Config.in             |  30 +
+ toolchain/toolchain-external/toolchain-external.mk |  27 +
+ 11 files changed, 2265 insertions(+), 2 deletions(-)
+ create mode 100644 package/gcc/4.7.3/900-musl-support.patch
+ create mode 100644 package/gcc/4.8.2/900-musl-support.patch
+ create mode 100644 package/gcc/4.9.0/900-musl-support.patch
+ create mode 100644 package/musl/musl.mk
+
+-- 
+1.9.2
