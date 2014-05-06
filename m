@@ -1,48 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  6 May 2014 18:27:47 +0200
-Subject: [Buildroot] [PATCH] infra: relax the check on
-	BR2_TOOLCHAIN_BUILDROOT_VENDOR
-Message-ID: <1399393667-15009-1-git-send-email-arnout@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  6 May 2014 13:37:41 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4,10,14}.x series
+Message-ID: <1399394262-6125-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-65c2400f introduced BR2_TOOLCHAIN_BUILDROOT_VENDOR and a check that it
-is not empty or 'unknown'. However, when a .config file from before
-that commit exists, this makes it impossible to run *config in order
-to set a value. Catch-22.
-
-To break the cycle, remove the check when running one of the config
-targets.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Makefile.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index c34a3bf..da8b768 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -26,7 +26,8 @@ else
- TARGET_VENDOR = buildroot
- endif
- 
--# Sanity checks
-+# Sanity checks - but not when we try to reconfigure
-+ifeq ($(filter menuconfig xconfig gconfig nconfig config defconfig oldconfig silentoldconfig %_defconfig,$(MAKECMDGOALS)),)
- ifeq ($(TARGET_VENDOR),)
- $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
- endif
-@@ -34,6 +35,7 @@ ifeq ($(TARGET_VENDOR),unknown)
- $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
-         It might be confused with the native toolchain)
- endif
-+endif # not a config target
- 
- # Compute GNU_TARGET_NAME
- GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index df208bf..177f0c2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -146,12 +146,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.58"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.88"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.89"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.38"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.39"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.18"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.2"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.3"	if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.0.0.rc0
+1.8.5.5
