@@ -1,9 +1,9 @@
 From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Tue,  6 May 2014 22:25:00 +0200
-Subject: [Buildroot] [PATCH 2/3] protobuf: bump to version 2.5.0
+Date: Tue,  6 May 2014 22:25:01 +0200
+Subject: [Buildroot] [PATCH 3/3] protobuf-c: bump to version 1.0.0-rc1
 In-Reply-To: <1399407901-740-1-git-send-email-phil@zankapfel.net>
 References: <1399407901-740-1-git-send-email-phil@zankapfel.net>
-Message-ID: <1399407901-740-2-git-send-email-phil@zankapfel.net>
+Message-ID: <1399407901-740-3-git-send-email-phil@zankapfel.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 ---
- package/protobuf/protobuf.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/protobuf-c/protobuf-c.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 3538aaa..ceb64df 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 75e15a2..da0b139 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PROTOBUF_VERSION = 2.4.1
-+PROTOBUF_VERSION = 2.5.0
- PROTOBUF_SITE = http://protobuf.googlecode.com/files/
- PROTOBUF_LICENSE = BSD-3c
- PROTOBUF_LICENSE_FILES = COPYING.txt
+-PROTOBUF_C_VERSION = 1d1ad931dfda273bb12b9925d4b8cc413131af03
++PROTOBUF_C_VERSION = v1.0.0-rc1
+ PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+-HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf
++HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+ PROTOBUF_C_MAKE = $(MAKE1)
+ PROTOBUF_C_CONF_OPT = --disable-protoc
+ PROTOBUF_C_INSTALL_STAGING = YES
 -- 
 1.7.10.4
