@@ -1,66 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  6 May 2014 07:01:02 +0000 (UTC)
-Subject: [Buildroot] [Bug 4790] Running udhcpc on a system with NFS root
-	kills NFS
-In-Reply-To: <bug-4790-163@https.bugs.busybox.net/>
-References: <bug-4790-163@https.bugs.busybox.net/>
-Message-ID: <20140506070102.851D59CA5B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 May 2014 09:23:57 +0200
+Subject: [Buildroot] The aarch64 glibc failure
+In-Reply-To: <20140506063010.AD7E9101299@stock.ovh.net>
+References: <20140506063010.AD7E9101299@stock.ovh.net>
+Message-ID: <20140506092357.000b7903@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=4790
+Hello,
 
---- Comment #5 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-05-06 07:01:01 UTC ---
-Peter, all,
+On Tue,  6 May 2014 08:30:10 +0200 (CEST), Thomas Petazzoni wrote:
 
-What to do with this patch?
-In commit 8432d81a849efca1d95ab0bd1324afd96bbdd804, changing buildroot's
-udhcp.script file, Peter wrote:
+>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/ff63f70812eb8ab3ceae4efc8754865479ac1a27/
+>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/dd04d058bb26343c9dfded76608929942d83db5a/
+>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/4244da86604fbe1e51da2e7269bd373e8940a178/
+>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/65471a371199f79a60f3a8b881cdf2bdac633336/
+>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/7a828d00f062d33f3fd9df0be6e00f0c4e2459b7/
 
-http://git.buildroot.org/buildroot/commit/?id=8432d81a849efca1d95ab0bd1324afd96bbdd804
+So, I tried to reproduce dd04d058bb26343c9dfded76608929942d83db5a on
+the build server (the exact same build server)... and the build worked
+fine. So it would look like a spurious build issue. Except that
+according to http://autobuild.buildroot.org/?arch=aarch64, all aarch64
+builds since April 24th have failed because of this.
 
-"Systems might have multiple network devices, and perhaps run udhcpc on
-another interface even when booted over nfs, so don't disable the
-per-interface deconfig based on the global nfsroot= setting on the kernel
-command line.
+I was thinking that maybe the problem would have been solved by the
+switch from the old build server to the new one. But the latest builds
+are clearly done at date/times that indicate they were done on the new
+build server (on which I did the test build which was successful).
 
-If you don't want udhcpc to mess with kernel level IP autoconfiguration
-(E.G. for nfs boot), you should instead ensure udhcpc/ifup/ifplugd isn't
-started for that interface."
+So for now, I'm a bit unsure on how to attack this problem. I believe
+I'll let the build runs for a little more, and see if it continues to
+happen again.
 
-
-In that commit, an existing check for NFS boot was removed.
-This bug basically requests such a check to be added again, but as mentioned in
-the above commit message may not be desirable in all cases.
-
-According to me, we should close this bug in 2014.05 (it has been open for more
-than 2 years).
-1. Either we stand with the commit mentioned above, and do not try to be too
-smart. The user that does use NFS can use a rootfs-overlay or other mechanisms
-to provide a custom configuration. We may want to describe this situation in
-the manual to help unaware users.
-
-2. Or we adapt the script based on the request in this bug, and let those NFS
-users that do not use udhcpc on the NFS interface (but on others) use a rootfs
-overlay.
-
-One could argue that the simplest case (one network interface with NFS + dhcp)
-is more common than the other ones, so alternative 2 is preferred to help most
-users. Those developers that have a more complex setup, hopefully understand
-the behavior of the system better to be able to tweak the script.
-
-Another alternative is:
-3. We add a config switch in the script that does one thing or the other, the
-user can set this switch before the script is run, defaulting to one or the
-other.
-
-Input more than welcome, 
-Thanks, Thomas
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
