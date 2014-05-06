@@ -1,85 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 May 2014 21:21:21 +0200
-Subject: [Buildroot] [PATCH 1/1] qtquick1: removed OpenGL dependencies
-In-Reply-To: <1399309606-25561-1-git-send-email-wojciech.slenska@gmail.com>
-References: <1399309606-25561-1-git-send-email-wojciech.slenska@gmail.com>
-Message-ID: <20140506212121.7a895a27@free-electrons.com>
+Date: Tue,  6 May 2014 21:27:44 +0200
+Subject: [Buildroot] [PATCH] clapack: don't allow on PowerPC uClibc
+Message-ID: <1399404464-2378-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Wojciech Slenska,
+On PowerPC, clapack uses the _fpu_control symbol, which isn't defined
+on uClibc, so this commit disallows the selection of clapack on
+PowerPC uClibc configurations. PowerPC/glibc and ARM/uClibc
+configurations have been tested to build correctly.
 
-On Mon,  5 May 2014 19:06:46 +0200, Wojciech Slenska wrote:
-> QtQuick1 module doesn't need OpenGl libs and declarative module.
-> This module can be used to port qt4 qml apps to qt5. Patch has been tested with linuxfb output plugin.
-> 
-> Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+Fixes:
 
-Thanks for this patch. Can qt5quick1 optionally depend on
-qt5declarative? If it's the case, then the .mk file should have
-something like:
+  http://autobuild.buildroot.org/results/d1d/d1d721fa697956218dfc2c865dfb61911cf2600e/build-end.log
 
-ifeq ($(select BR2_PACKAGE_QT5DECLARATIVE),y)
-QT5QUICK1_DEPENDENCIES += qt5declarative
-endif
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/armadillo/Config.in | 2 ++
+ package/clapack/Config.in   | 4 ++++
+ 2 files changed, 6 insertions(+)
 
-Fatih, could you review this patch?
-
-Thanks!
-
-Thomas
-
-> ---
->  package/qt5/qt5quick1/Config.in    |    8 ++------
->  package/qt5/qt5quick1/qt5quick1.mk |    2 +-
->  2 files changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
-> index 30c2e79..59b6c34 100644
-> --- a/package/qt5/qt5quick1/Config.in
-> +++ b/package/qt5/qt5quick1/Config.in
-> @@ -5,11 +5,8 @@ config BR2_PACKAGE_QT5QUICK1
->  	select BR2_PACKAGE_QT5BASE_WIDGETS
->  	select BR2_PACKAGE_QT5SCRIPT
->  	select BR2_PACKAGE_QT5XMLPATTERNS
-> -	select BR2_PACKAGE_QT5DECLARATIVE
->  	# This module does not support static linking
->  	depends on !BR2_PREFER_STATIC_LIB
-> -	depends on BR2_PACKAGE_HAS_LIBEGL
-> -	depends on BR2_PACKAGE_HAS_LIBGLES
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
->  	help
->  	  Qt is a cross-platform application and UI framework for
-> @@ -19,7 +16,6 @@ config BR2_PACKAGE_QT5QUICK1
->  
->  	  http://qt-project.org
->  
-> -comment "qt5quick1 needs a toolchain w/ dynamic library and an OpenGL-capable backend"
-> +comment "qt5quick1 needs a toolchain w/ dynamic library"
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES || \
-> -		BR2_PREFER_STATIC_LIB
-> +	depends on BR2_PREFER_STATIC_LIB
-> diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
-> index 624b130..e9d7a64 100644
-> --- a/package/qt5/qt5quick1/qt5quick1.mk
-> +++ b/package/qt5/qt5quick1/qt5quick1.mk
-> @@ -7,7 +7,7 @@
->  QT5QUICK1_VERSION = $(QT5_VERSION)
->  QT5QUICK1_SITE = $(QT5_SITE)
->  QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
-> -QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative \
-> +QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script \
->  	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
->  QT5QUICK1_INSTALL_STAGING = YES
->  
-
-
-
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index b3ba2fc..898564d 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -1,12 +1,14 @@
+ comment "armadillo needs a toolchain w/ C++, largefile"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
++	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
+ 
+ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE # clapack
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
++	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
+ 	select BR2_PACKAGE_CLAPACK
+ 	help
+ 	  Armadillo: An Open Source C++ Linear Algebra Library for
+diff --git a/package/clapack/Config.in b/package/clapack/Config.in
+index 68a6dde..ee538a4 100644
+--- a/package/clapack/Config.in
++++ b/package/clapack/Config.in
+@@ -2,6 +2,9 @@ config BR2_PACKAGE_CLAPACK
+ 	bool "cblas/clapack"
+ 	depends on BR2_LARGEFILE
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
++	# _fpu_control is used on PowerPC, but not available with
++	# uClibc
++	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	help
+ 	  BLAS and LAPACK C implementation (f2c'ed version of).
+ 
+@@ -22,3 +25,4 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
+ comment "cblas/clapack needs a toolchain w/ largefile"
+ 	depends on !BR2_LARGEFILE
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
++	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.2
