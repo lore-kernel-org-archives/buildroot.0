@@ -1,70 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 6 May 2014 13:52:06 +0200
-Subject: [Buildroot] [PATCH] clapack: Disable for MIPS platforms
-In-Reply-To: <1399374660-25341-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1399374660-25341-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <CAAXf6LWP_cC8G4UHn4TD_FL0awpgvCqmE-XksAbwTfSJCy7gfw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 May 2014 14:06:01 +0200
+Subject: [Buildroot] [git commit] toolchain/buildroot: default to uClibc
+Message-ID: <20140506120613.5849E9CB16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente,
+commit: http://git.buildroot.net/buildroot/commit/?id=493b1177b970565fb407ad121a297d8efc10def2
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, May 6, 2014 at 1:11 PM, Vicente Olivert Riera
-<Vincent.Riera@imgtec.com> wrote:
-> Disable this package for MIPS because it needs IRIX headers and
-> libraries.
->
-> Fixes:
->    http://autobuild.buildroot.net/results/370/370f964441722675820c644403dde7fbc683a315/
->
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-> ---
->  package/armadillo/Config.in |    1 +
->  package/clapack/Config.in   |    1 +
->  2 files changed, 2 insertions(+), 0 deletions(-)
->
-> diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-> index 2251d91..0b86b77 100644
-> --- a/package/armadillo/Config.in
-> +++ b/package/armadillo/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_ARMADILLO
->         bool "armadillo"
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_LARGEFILE # clapack
-> +       depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
->         select BR2_PACKAGE_CLAPACK
->         help
->           Armadillo: An Open Source C++ Linear Algebra Library for
-> diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-> index a77094f..95dd343 100644
-> --- a/package/clapack/Config.in
-> +++ b/package/clapack/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_CLAPACK
->         bool "cblas/clapack"
->         depends on BR2_LARGEFILE
-> +       depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
->         help
->           BLAS and LAPACK C implementation (f2c'ed version of).
->
+Otherwise we're getting musl for everything except those who have a
+default (mips64*).
 
-These dependencies should also be added to the respective comment lines, see
-http://buildroot.uclibc.org/downloads/manual/manual.html#dependencies-target-toolchain-options
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-buildroot/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-"The comment should only be visible if the config option itself would
-be visible when the toolchain option dependencies are met. This means
-that all other dependencies of the package (including dependencies on
-target architecture and MMU support) have to be repeated on the
-comment definition. To keep it clear, the depends on statement for
-these non-toolchain option should be kept separate from the depends on
-statement for the toolchain options. If there is a dependency on a
-config option in that same file (typically the main package) it is
-preferable to have a global if ? endif construct rather than repeating
-the depends on statement on the comment and other config options."
-
-Best regards,
-Thomas
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 1bd3f92..216f9db 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -22,6 +22,7 @@ source "package/linux-headers/Config.in.host"
+ 
+ choice
+ 	prompt "C library"
++	default BR2_TOOLCHAIN_UCLIBC
+ 	default BR2_TOOLCHAIN_BUILDROOT_EGLIBC if BR2_mips64 || BR2_mips64el
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
