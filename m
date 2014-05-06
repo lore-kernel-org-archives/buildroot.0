@@ -1,39 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 May 2014 14:24:14 +0200
-Subject: [Buildroot] musl support added in Buildroot
-Message-ID: <20140506142414.26a431d2@skate>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 6 May 2014 14:26:31 +0200
+Subject: [Buildroot] [PATCH] toolchain package: set version as 'virtual'
+ instead of 'undefined'
+In-Reply-To: <20140506140745.1b072d2c@skate>
+References: <0533846efc9952901283.1399373479@argentina>
+ <20140506140745.1b072d2c@skate>
+Message-ID: <CAAXf6LXWCeGiH9bNsM=qaJ2bzH9RyOzu3FZpGxsmBsQyxHQMgw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, May 6, 2014 at 2:07 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Tue, 06 May 2014 12:51:19 +0200, Thomas De Schampheleire wrote:
+>> This patch causes the log messages to change from:
+>>
+>> >>> toolchain-external undefined Downloading
+>> >>> toolchain-external undefined Extracting
+>> ...
+>>
+>> to
+>>
+>> >>> toolchain-external virtual Downloading
+>> >>> toolchain-external virtual Extracting
+>> ...
+>>
+>> and similar for 'toolchain' and 'toolchain-buildroot', simply because it
+>> looks nicer.
+>> At the same time, the directory names also become toolchain-virtual,
+>> toolchain-buildroot-virtual, toolchain-external-virtual instead of the
+>> corresponding 'undefined' variants.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> Shouldn't we instead migrate these to use the virtual package
+> infrastructure, and make this infrastructure define this magic 'virtual'
+> version?
 
-Buildroot (http://buildroot.org) is a popular embedded Linux build
-system. We have recently (just today) added support for:
+For toolchain and toolchain-buildroot that would be possible, but for
+toolchain-external not, right?
 
- * Building cross-toolchains with the musl C library, through what we
-   call the "internal toolchain backend" (i.e Buildroot builds the
-   cross compilation toolchain)
-
- * Using pre-existing musl cross-toolchains, as provided from
-   musl.codu.org, through what we call the "external toolchain
-   backend" (i.e Buildroot does not build the cross compilation
-   toolchain, and relies on a pre-existing one).
-
-Both of these features will be part of the upcoming 2014.05 release.
-
-As part of this effort, we will be adding in the future a musl
-configuration to our autobuilders (http://autobuild.buildroot.org)
-which will lead to a fairly heavy testing of musl, as the 1200+
-packages of Buildroot will be built against it. There are chances that
-we might be reporting some issues related to this testing.
-
-Best regards,
-
+Thanks,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
