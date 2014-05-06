@@ -1,34 +1,49 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  6 May 2014 12:59:45 +0200
-Subject: [Buildroot] [PATCH] nftables: disable dblatex check
-Message-ID: <1399373985-12045-1-git-send-email-yegorslists@googlemail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 6 May 2014 12:11:00 +0100
+Subject: [Buildroot] [PATCH] clapack: Disable for MIPS platforms
+Message-ID: <1399374660-25341-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Disable this package for MIPS because it needs IRIX headers and
+libraries.
 
-On the systems with old dblatex (for example 3.0) the build step will
-fail, because dblatex doesn't support '-q' parameter. This patch
-overrides dblatex check.
+Fixes:
+   http://autobuild.buildroot.net/results/370/370f964441722675820c644403dde7fbc683a315/
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
 ---
- package/nftables/nftables.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/armadillo/Config.in |    1 +
+ package/clapack/Config.in   |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 1cfeeeb..4cfffd1 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -12,4 +12,6 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
- NFTABLES_LICENSE = GPLv2
- NFTABLES_LICENSE_FILES = COPYING
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index 2251d91..0b86b77 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE # clapack
++	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
+ 	select BR2_PACKAGE_CLAPACK
+ 	help
+ 	  Armadillo: An Open Source C++ Linear Algebra Library for
+diff --git a/package/clapack/Config.in b/package/clapack/Config.in
+index a77094f..95dd343 100644
+--- a/package/clapack/Config.in
++++ b/package/clapack/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_CLAPACK
+ 	bool "cblas/clapack"
+ 	depends on BR2_LARGEFILE
++	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ 	help
+ 	  BLAS and LAPACK C implementation (f2c'ed version of).
  
-+NFTABLES_CONF_ENV = ac_cv_prog_CONFIG_PDF=no
-+
- $(eval $(autotools-package))
 -- 
-1.7.7
+1.7.1
