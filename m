@@ -1,41 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  6 May 2014 13:37:42 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.14.3
-In-Reply-To: <1399394262-6125-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1399394262-6125-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1399394262-6125-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 May 2014 19:59:20 +0200
+Subject: [Buildroot] [PATCH] infra: relax the check on
+ BR2_TOOLCHAIN_BUILDROOT_VENDOR
+In-Reply-To: <1399393667-15009-1-git-send-email-arnout@mind.be>
+References: <1399393667-15009-1-git-send-email-arnout@mind.be>
+Message-ID: <20140506195920.697ab409@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e4fb712..77c28f3 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.14.2"
-+	bool "3.14.3"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.14.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.14.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On Tue,  6 May 2014 18:27:47 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> 65c2400f introduced BR2_TOOLCHAIN_BUILDROOT_VENDOR and a check that it
+> is not empty or 'unknown'. However, when a .config file from before
+> that commit exists, this makes it impossible to run *config in order
+> to set a value. Catch-22.
+> 
+> To break the cycle, remove the check when running one of the config
+> targets.
+> 
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/Makefile.in | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index c34a3bf..da8b768 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -26,7 +26,8 @@ else
+>  TARGET_VENDOR = buildroot
+>  endif
+>  
+> -# Sanity checks
+> +# Sanity checks - but not when we try to reconfigure
+> +ifeq ($(filter menuconfig xconfig gconfig nconfig config defconfig oldconfig silentoldconfig %_defconfig,$(MAKECMDGOALS)),)
+
+What about using $(noconfig_targets) here, like is done in the main
+Makefile?
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
