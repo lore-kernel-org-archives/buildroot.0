@@ -1,53 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 May 2014 22:54:40 +0200
-Subject: [Buildroot] [git commit] popt: fix build issue due to glob
-	functions on Blackfin
-Message-ID: <20140506205500.201599CAEA@busybox.osuosl.org>
+Date: Tue, 6 May 2014 22:53:55 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4,10,14}.x series
+Message-ID: <20140506205500.12C569CAEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=769eb599579f0cee32997a2d242e91b0540620e5
+commit: http://git.buildroot.net/buildroot/commit/?id=07ec054d85a9542a3d6bb5d7539e08c2031dca15
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While the Blackfin external uClibc toolchains have <glob.h>, they
-don't implement all the functions needed by popt, causing build
-failures. One solution would have been to disable popt with such
-toolchains, but this would have meant propagating this additional
-dependency to the numerous reverse dependencies of popt. Instead, this
-commit chooses to make popt build on Blackfin external toolchains by
-disabling the usage of <glob.h> functions altogether.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/bfc/bfcb2ed27debafc584e133f5ae11ad2061ad2b16/build-end.log
-  http://autobuild.buildroot.org/results/410/410c8f3a0c7ca2c7098a47c30088038411635ae4/build-end.log
-
-and gazillion of similar failures.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/popt/popt.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 180972a..9f2d070 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -13,6 +13,13 @@ POPT_LICENSE_FILES = COPYING
- 
- POPT_CONF_ENV = ac_cv_va_copy=yes
- 
-+# The external Blackfin toolchains have <glob.h>, but not all the
-+# necessary uClibc options for glob functions, so we force disable the
-+# usage of the glob functions for these toolchains.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
-+POPT_CONF_ENV += ac_cv_header_glob_h=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- POPT_CONF_ENV += am_cv_lib_iconv=yes
- POPT_CONF_OPT += --with-libiconv-prefix=$(STAGING_DIR)/usr
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index df208bf..177f0c2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -146,12 +146,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.58"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.88"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.89"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.38"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.39"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.18"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.2"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.3"	if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
