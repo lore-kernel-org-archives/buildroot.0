@@ -1,9 +1,9 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue,  6 May 2014 10:42:36 -0500
-Subject: [Buildroot] [PATCH 01/11] dsp-tools: add license information
+Date: Tue,  6 May 2014 10:42:37 -0500
+Subject: [Buildroot] [PATCH 02/11] memstat: add license information
 In-Reply-To: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1399390966-9678-2-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1399390966-9678-3-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/dsp-tools/dsp-tools.mk |    2 ++
+ package/memstat/memstat.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
-index d5f562d..c9f432c 100644
---- a/package/dsp-tools/dsp-tools.mk
-+++ b/package/dsp-tools/dsp-tools.mk
+diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
+index 8f1d96d..5e96405 100644
+--- a/package/memstat/memstat.mk
++++ b/package/memstat/memstat.mk
 @@ -7,6 +7,8 @@
- DSP_TOOLS_VERSION = 2.0
- DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files/
- DSP_TOOLS_DEPENDENCIES = tidsp-binaries
-+DSP_TOOLS_LICENSE = LGPLv2.1
-+DSP_TOOLS_LICENSE_FILES = LICENSE
+ MEMSTAT_VERSION = 0.8
+ MEMSTAT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/memstat
+ MEMSTAT_SOURCE = memstat_$(MEMSTAT_VERSION).tar.gz
++MEMSTAT_LICENSE = GPL
++MEMSTAT_LICENSE_FILES = debian/copyright
  
- define DSP_TOOLS_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
+ define MEMSTAT_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="$(TARGET_CFLAGS)" \
 -- 
 1.7.9.5
