@@ -1,95 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 6 May 2014 00:16:52 +0200
-Subject: [Buildroot] [PATCH v2] toolchain-external: Fix EABIhf check
-In-Reply-To: <ddb1629069cddb3d19fb.1399291827@argentina>
-References: <ddb1629069cddb3d19fb.1399291827@argentina>
-Message-ID: <20140506001652.05e9a81a@skate>
+From: Charles Manning <cdhmanning@gmail.com>
+Date: Tue,  6 May 2014 14:19:11 +1200
+Subject: [Buildroot] [PATCH] socfpga-cyclone5 Dev board support
+Message-ID: <1399342751-7799-1-git-send-email-cdhmanning@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+This is somewhat derived from the SocKit booard support.
 
-On Mon, 05 May 2014 14:10:27 +0200, Thomas De Schampheleire wrote:
-> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> 
-> Currently the check for EABI/EABIhf toolchains looks for the
-> Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
-> EABIhf toolchain.
-> In uClibc, however, crt1.o is not compiled from c but assembly, so the
-> Tag_ABI_VFP_args attribute is not added in the object file.  This causes
-> the EABIhf check in the external toolchain logic to fail for
-> uClibc-based toolchains.
-> 
-> Fix by compiling a temporary .c file and checking for the attribute.
-> 
-> Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> [ThomasDS: use /dev/null as input, update commit message]
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+It uses a fresher Linux and u-boot than SocKit. It also speeds the
+serial port up to 115200.
 
-Thanks for pushing this further. Unfortunately, it doesn't work really
-well. If you use an EABIhf toolchain, but select the EABI in Buildroot,
-the check is not going to complain. Test for example the following
-configuration:
+Signed-off-by: Charles Manning <cdhmanning@gmail.com>
+---
+ board/altera/cyclone5/post-image.sh |   10 ++++++++++
+ board/altera/cyclone5/readme.txt    |    3 +++
+ configs/altera_cyclone5_defconfig   |   29 +++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+ create mode 100755 board/altera/cyclone5/post-image.sh
+ create mode 100644 board/altera/cyclone5/readme.txt
+ create mode 100644 configs/altera_cyclone5_defconfig
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_ARM_FPU_VFPV2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://releases.linaro.org/14.02/components/toolchain/binaries/gcc-linaro-arm-linux-gnueabihf-4.8-2014.02_linux.tar.xz"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_1=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-
-See below for the explanation.
-
->  toolchain/helpers.mk |  6 ++++--
->  1 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -297,12 +297,14 @@ check_arm_abi = \
->  		echo "External toolchain uses the unsuported OABI" ; \
->  		exit 1 ; \
->  	fi ; \
-> -	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
-> -	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
-> +	TEMP_OBJ_FILE=`mktemp --tmpdir --suffix=.o`; \
-> +	$${__CROSS_CC} -x c -c -o $${TEMP_OBJ_FILE} /dev/null; \
-
-The problem is that here __CROSS_CC, as passed as the first argument to
-this function, is equal to:
-
-	$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)
-
-and TOOLCHAIN_EXTERNAL_CFLAGS contain some flags that will generate a
-softfp binary because we've selected EABI+VFP in the Buildroot
-configuration. I.e, we're not testing what the toolchain is natively
-producing, but rather that the flags are matching the configuration...
-which they are because they are actually built using the configuration.
-
-Note that building a softfp binary with an hardfp toolchain doesn't
-fail because you're doing only the compilation and not the linking in
-your test.
-
-One option would be to completely get rid of
-$(TOOLCHAIN_EXTERNAL_CFLAGS). However, the flags in here are also used
-to make sure we're using the right sysroot in the toolchain, in case of
-multilib toolchains, and whether we're passing -mfloat-abi=soft or
--mfloat-abi=hard can have an impact on the detected sysroot. Basically,
-we're making circles here.
-
-I don't really have a good solution to offer, unfortunately :/
-
-Thomas
+diff --git a/board/altera/cyclone5/post-image.sh b/board/altera/cyclone5/post-image.sh
+new file mode 100755
+index 0000000..ad70922
+--- /dev/null
++++ b/board/altera/cyclone5/post-image.sh
+@@ -0,0 +1,10 @@
++#!/bin/sh
++#
++# Altera Cyclone 5 Development Board post processing.
++#
++# A rip-off of the Sockit board support
++# 2014, "Roman Diouskine" <roman.diouskine@savoirfairelinux.com>
++# 2014, "Sebastien Bourdelin" <sebastien.bourdelin@savoirfairelinux.com>
++
++# create a DTB file copy with the name expected by the u-boot config
++cp -af $BINARIES_DIR/socfpga_cyclone5_socdk.dtb  $BINARIES_DIR/socfpga.dtb
+diff --git a/board/altera/cyclone5/readme.txt b/board/altera/cyclone5/readme.txt
+new file mode 100644
+index 0000000..fe5a758
+--- /dev/null
++++ b/board/altera/cyclone5/readme.txt
+@@ -0,0 +1,3 @@
++Modifications to make a Cyclone 5 setup. This is derived from the buildroot
++config first done for SocKit board. See boards/altera/sockit
++
+diff --git a/configs/altera_cyclone5_defconfig b/configs/altera_cyclone5_defconfig
+new file mode 100644
+index 0000000..df3b8c6
+--- /dev/null
++++ b/configs/altera_cyclone5_defconfig
+@@ -0,0 +1,29 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_ARM_EABIHF=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_FPU_NEON=y
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.13.5"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/altera/cyclone5/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.rocketboards.org/linux-socfpga.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
++BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="socfpga_cyclone5_socdk"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_3=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_socfpga_v2013.01.01_14.02.02"
++BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR="board/altera/cyclone5"
++BR2_TARGET_UBOOT_FORMAT_IMG=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl.bin"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
