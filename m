@@ -1,49 +1,73 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 6 May 2014 12:11:00 +0100
-Subject: [Buildroot] [PATCH] clapack: Disable for MIPS platforms
-Message-ID: <1399374660-25341-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 06 May 2014 13:25:40 +0200
+Subject: [Buildroot] [PATCH v3] toolchain-external: Fix EABIhf check
+Message-ID: <2531b66f78bfdb046ddb.1399375540@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable this package for MIPS because it needs IRIX headers and
-libraries.
+From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
-Fixes:
-   http://autobuild.buildroot.net/results/370/370f964441722675820c644403dde7fbc683a315/
+Currently the check for EABI/EABIhf toolchains looks for the
+Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
+EABIhf toolchain.
+In uClibc, however, crt1.o is not compiled from c but assembly, so the
+Tag_ABI_VFP_args attribute is not added in the object file. This causes
+the EABIhf check in the external toolchain logic to fail for
+uClibc-based toolchains.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+Fix by compiling a dummy .c file and trying to link the object against the
+C library. Since it is impossible to mix EABI and EABIhf code, a mismatch
+between the buildroot and toolchain ABI settings will be detected during
+this link step.
+
+Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
+
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+[ThomasDS: do full link iso readelf test, update commit message]
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/armadillo/Config.in |    1 +
- package/clapack/Config.in   |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+v3: (ThomasDS)
+  - v2 properly recognized a uClibc EABIhf toolchain, but failed to detect a
+    mismatch with buildroot settings (detected by ThomasP). Fix by
+    performing an actual link step to detect any incompatibility.
+v2: (ThomasDS)
+  - avoid creating a temporary source file
+  - update commit message
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index 2251d91..0b86b77 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # clapack
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
- 	select BR2_PACKAGE_CLAPACK
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
-diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-index a77094f..95dd343 100644
---- a/package/clapack/Config.in
-+++ b/package/clapack/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CLAPACK
- 	bool "cblas/clapack"
- 	depends on BR2_LARGEFILE
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	help
- 	  BLAS and LAPACK C implementation (f2c'ed version of).
+ toolchain/helpers.mk |  18 ++++++------------
+ 1 files changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -297,20 +297,14 @@ check_arm_abi = \
+ 		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
+-	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
+-		EXT_TOOLCHAIN_ABI="eabihf" ; \
+-	else \
+-		EXT_TOOLCHAIN_ABI="eabi" ; \
+-	fi ; \
+-	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
+-		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
++	TEMP_OBJ_FILE=`mktemp --tmpdir --suffix=.o`; \
++	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o $${TEMP_OBJ_FILE} /dev/null - 2>/dev/null; then \
++		abistr_$(BR2_ARM_EABI)='EABI'; \
++		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
++		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if [ "$(BR2_ARM_EABIHF)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabi" ] ; then \
+-		echo "Incorrect ABI setting: EABIhf selected, but toolchain uses EABI" ; \
+-		exit 1 ; \
+-	fi
++	rm -f $${TEMP_OBJ_FILE}
  
--- 
-1.7.1
+ #
+ # Check that the external toolchain supports C++
