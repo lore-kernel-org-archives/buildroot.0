@@ -1,116 +1,34 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Tue,  6 May 2014 14:35:03 +0200
-Subject: [Buildroot] [PATCH 1/1 v5] qdecoder : new package
-Message-ID: <1399379703-24061-1-git-send-email-sagaert.johan@skynet.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 May 2014 14:38:45 +0200
+Subject: [Buildroot] [PATCH] toolchain package: set version as 'virtual'
+ instead of 'undefined'
+In-Reply-To: <CAAXf6LXWCeGiH9bNsM=qaJ2bzH9RyOzu3FZpGxsmBsQyxHQMgw@mail.gmail.com>
+References: <0533846efc9952901283.1399373479@argentina>
+ <20140506140745.1b072d2c@skate>
+ <CAAXf6LXWCeGiH9bNsM=qaJ2bzH9RyOzu3FZpGxsmBsQyxHQMgw@mail.gmail.com>
+Message-ID: <20140506143845.0c802ae9@skate>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Features:
-   Supports parsing a request encoded by GET/POST method
-   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
-   Supports COOKIE handling.
-   Supports Session management.
-   Supports FastCGI
-   
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
----
-v2:	Changed License to BSD-2
-v3:	removed QDECODER_CONF_OPT and created makefile.in patch
-v4:	renamed the patch to qdecoder-0001-install-header-and-lib-in-staging-directory.patch
-v5:	-added !BR2_PREFER_STATIC_LIB dependency.
-	-changed Config.in help link to http://wolkykim.github.io/qdecoder
+Dear Thomas De Schampheleire,
 
- package/Config.in                                  |  1 +
- package/qdecoder/Config.in                         |  8 +++++++
- ...stall-header-and-lib-in-staging-directory.patch | 28 ++++++++++++++++++++++
- package/qdecoder/qdecoder.mk                       | 14 +++++++++++
- 4 files changed, 51 insertions(+)
- create mode 100644 package/qdecoder/Config.in
- create mode 100644 package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
- create mode 100644 package/qdecoder/qdecoder.mk
+On Tue, 6 May 2014 14:26:31 +0200, Thomas De Schampheleire wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 7800f23..2da27ce 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -755,6 +755,7 @@ source "package/nss-mdns/Config.in"
- source "package/omniorb/Config.in"
- source "package/openpgm/Config.in"
- source "package/ortp/Config.in"
-+source "package/qdecoder/Config.in"
- source "package/rtmpdump/Config.in"
- source "package/slirp/Config.in"
- source "package/snmppp/Config.in"
-diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in
-new file mode 100644
-index 0000000..edc4d34
---- /dev/null
-+++ b/package/qdecoder/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_QDECODER
-+	bool "qdecoder"
-+	depends on !BR2_PREFER_STATIC_LIB
-+	help
-+	  qDecoder is a simple and powerful CGI library
-+	  for the C/C++ programming language.
-+
-+	  http://wolkykim.github.io/qdecoder
-diff --git a/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch b/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
-new file mode 100644
-index 0000000..c044b6d
---- /dev/null
-+++ b/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
-@@ -0,0 +1,28 @@
-+From 75e16fd73af6b2f8c0149dacb9c7be7e7123b449 Mon Sep 17 00:00:00 2001
-+From: Sagaert Johan <sagaert.johan@skynet.be>
-+Date: Sat, 26 Apr 2014 19:05:55 +0200
-+Subject: [PATCH 1/1] install header and lib in staging directory
-+
-+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-+---
-+ src/Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/Makefile.in b/src/Makefile.in
-+index 2688038..b2bf836 100644
-+--- a/src/Makefile.in
-++++ b/src/Makefile.in
-+@@ -43,8 +43,8 @@ SLIBNAME	= lib${PRGNAME}.so
-+ SLIBREALNAME	= ${SLIBNAME}.${SLIBVERSION}
-+ 
-+ ## System library directory
-+-LIBDIR		= @libdir@
-+-HEADERDIR	= @includedir@
-++LIBDIR = $(STAGING_DIR)/usr/lib
-++HEADERDIR =$(STAGING_DIR)/usr/include
-+ 
-+ ## Which compiler & options for release
-+ CC		= @CC@
-+-- 
-+1.9.2
-+
-diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
-new file mode 100644
-index 0000000..506d975
---- /dev/null
-+++ b/package/qdecoder/qdecoder.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# qdecoder
-+#
-+################################################################################
-+
-+QDECODER_VERSION = r12.0.5
-+QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
-+QDECODER_LICENSE = BSD-2
-+QDECODER_LICENSE_FILES = COPYING
-+
-+QDECODER_INSTALL_STAGING = YES
-+
-+$(eval $(autotools-package))
+> > Shouldn't we instead migrate these to use the virtual package
+> > infrastructure, and make this infrastructure define this magic 'virtual'
+> > version?
+> 
+> For toolchain and toolchain-buildroot that would be possible, but for
+> toolchain-external not, right?
+
+Right. But toolchain-external is not a virtual package, so setting its
+version to 'virtual' would anyway be strange, no?
+
+Thomas
 -- 
-1.9.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
