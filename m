@@ -1,61 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 May 2014 17:13:20 +0200
-Subject: [Buildroot] [git commit] clapack: Disable for MIPS platforms
-Message-ID: <20140506151342.D17959CB06@busybox.osuosl.org>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Tue,  6 May 2014 10:42:35 -0500
+Subject: [Buildroot] [PATCH 00/11] License Updates
+Message-ID: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d2b52cebf3b8b4a922a54d38a44a8a183406c5f1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch series adds license information to packages that currently
+do not have any. It adds <pkg>_LICENSE variable to all the packages
+and the <pkg>_LICENSE_FILES where licenses are available.
 
-Disable this package for MIPS because it needs IRIX headers and
-libraries.
+Thanks,
+-Ryan
 
-Fixes:
-   http://autobuild.buildroot.net/results/370/370f964441722675820c644403dde7fbc683a315/
+Ryan Barnett (11):
+  dsp-tools: add license information
+  memstat: add license information
+  openssh: add license information
+  python-netifaces: add license information
+  python-pyasn: update license information
+  python-setuptools: add license information
+  python-serial: add license information
+  tidsp-binaries: add license information
+  xerces: add license information
+  nfs-utils: add license information
+  portmap: add license information
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/armadillo/Config.in |    2 ++
- package/clapack/Config.in   |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ package/dsp-tools/dsp-tools.mk                 |    2 ++
+ package/memstat/memstat.mk                     |    2 ++
+ package/nfs-utils/nfs-utils.mk                 |    2 ++
+ package/openssh/openssh.mk                     |    2 ++
+ package/portmap/portmap.mk                     |    2 ++
+ package/python-netifaces/python-netifaces.mk   |    2 ++
+ package/python-pyasn/python-pyasn.mk           |    3 ++-
+ package/python-serial/python-serial.mk         |    2 ++
+ package/python-setuptools/python-setuptools.mk |    2 ++
+ package/tidsp-binaries/tidsp-binaries.mk       |    2 ++
+ package/xerces/xerces.mk                       |    2 ++
+ 11 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index 2251d91..b3ba2fc 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -1,10 +1,12 @@
- comment "armadillo needs a toolchain w/ C++, largefile"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
- 
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # clapack
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
- 	select BR2_PACKAGE_CLAPACK
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
-diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-index a77094f..68a6dde 100644
---- a/package/clapack/Config.in
-+++ b/package/clapack/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CLAPACK
- 	bool "cblas/clapack"
- 	depends on BR2_LARGEFILE
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	help
- 	  BLAS and LAPACK C implementation (f2c'ed version of).
- 
-@@ -20,3 +21,4 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
- 
- comment "cblas/clapack needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
-+	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+-- 
+1.7.9.5
