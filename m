@@ -1,9 +1,9 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue,  6 May 2014 10:42:44 -0500
-Subject: [Buildroot] [PATCH 09/11] xerces: add license information
+Date: Tue,  6 May 2014 10:42:45 -0500
+Subject: [Buildroot] [PATCH 10/11] nfs-utils: add license information
 In-Reply-To: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
 References: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1399390966-9678-10-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <1399390966-9678-11-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 ---
- package/xerces/xerces.mk |    2 ++
+ package/nfs-utils/nfs-utils.mk |    2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 7bd7070..9402abe 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 76face5..2fe5d43 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
 @@ -7,6 +7,8 @@
- XERCES_VERSION = 3.1.1
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
- XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources/
-+XERCES_LICENSE = Apache-2.0
-+XERCES_LICENSE_FILES = LICENSE
- XERCES_MAKE = $(MAKE1)
- XERCES_INSTALL_STAGING = YES
- XERCES_CONF_OPT = --disable-threads \
+ NFS_UTILS_VERSION = 1.2.6
+ NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.bz2
+ NFS_UTILS_SITE = http://downloads.sourceforge.net/project/nfs/nfs-utils/$(NFS_UTILS_VERSION)
++NFS_UTILS_LICENSE = GPLv2
++NFS_UTILS_LICENSE_FILES = COPYING
+ NFS_UTILS_AUTORECONF = YES
+ NFS_UTILS_DEPENDENCIES = host-pkgconf
+ 
 -- 
 1.7.9.5
