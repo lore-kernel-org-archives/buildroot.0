@@ -1,32 +1,48 @@
-From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Tue,  6 May 2014 10:42:46 -0500
-Subject: [Buildroot] [PATCH 11/11] portmap: add license information
-In-Reply-To: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
-References: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <1399390966-9678-12-git-send-email-rjbarnet@rockwellcollins.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue,  6 May 2014 18:27:47 +0200
+Subject: [Buildroot] [PATCH] infra: relax the check on
+	BR2_TOOLCHAIN_BUILDROOT_VENDOR
+Message-ID: <1399393667-15009-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
----
- package/portmap/portmap.mk |    2 ++
- 1 file changed, 2 insertions(+)
+65c2400f introduced BR2_TOOLCHAIN_BUILDROOT_VENDOR and a check that it
+is not empty or 'unknown'. However, when a .config file from before
+that commit exists, this makes it impossible to run *config in order
+to set a value. Catch-22.
 
-diff --git a/package/portmap/portmap.mk b/package/portmap/portmap.mk
-index 1d8c166..8203555 100644
---- a/package/portmap/portmap.mk
-+++ b/package/portmap/portmap.mk
-@@ -7,6 +7,8 @@
- PORTMAP_VERSION = 6.0
- PORTMAP_SOURCE = portmap-$(PORTMAP_VERSION).tgz
- PORTMAP_SITE = http://neil.brown.name/portmap
-+PORTMAP_LICENSE = BSD-4c (portmap.c) SunRPC License (portmap.c from_local.c)
-+PORTMAP_LICENSE_FILES = portmap.c from_local.c
- PORTMAP_SBINS = portmap pmap_dump pmap_set
+To break the cycle, remove the check when running one of the config
+targets.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Makefile.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c34a3bf..da8b768 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -26,7 +26,8 @@ else
+ TARGET_VENDOR = buildroot
+ endif
  
- PORTMAP_FLAGS = NO_TCP_WRAPPER=1 NO_PIE=1 NO_PERROR=1
+-# Sanity checks
++# Sanity checks - but not when we try to reconfigure
++ifeq ($(filter menuconfig xconfig gconfig nconfig config defconfig oldconfig silentoldconfig %_defconfig,$(MAKECMDGOALS)),)
+ ifeq ($(TARGET_VENDOR),)
+ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR is not allowed to be empty)
+ endif
+@@ -34,6 +35,7 @@ ifeq ($(TARGET_VENDOR),unknown)
+ $(error BR2_TOOLCHAIN_BUILDROOT_VENDOR cannot be 'unknown'. \
+         It might be confused with the native toolchain)
+ endif
++endif # not a config target
+ 
+ # Compute GNU_TARGET_NAME
+ GNU_TARGET_NAME=$(ARCH)-$(TARGET_VENDOR)-$(TARGET_OS)-$(LIBC)$(ABI)
 -- 
-1.7.9.5
+2.0.0.rc0
