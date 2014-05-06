@@ -1,111 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 May 2014 10:18:51 +0200
-Subject: [Buildroot] [git commit] toolchain-external: add publicly available
-	musl toolchains
-Message-ID: <20140506081939.3E3DA9CB16@busybox.osuosl.org>
+From: Will Newton <will.newton@gmail.com>
+Date: Tue, 6 May 2014 09:57:39 +0100
+Subject: [Buildroot] The aarch64 glibc failure
+In-Reply-To: <20140506092357.000b7903@skate>
+References: <20140506063010.AD7E9101299@stock.ovh.net>
+ <20140506092357.000b7903@skate>
+Message-ID: <CAFbHwiSGYKtnXNZr=evLcib4tcjbSyhE+vQw663D4hboSC4Weg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d71c1249f3d00dbbb7828d1cdff47169a0b477c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, May 6, 2014 at 8:23 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
 
-This commit adds ten toolchains based on the musl C library that are
-publicly available from the musl-cross project.
+Hi Thomas,
 
-[Peter: fix ppc prefix, only for classic ABI]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-external/Config.in             |   30 ++++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |   27 ++++++++++++++++++
- 2 files changed, 57 insertions(+), 0 deletions(-)
+> On Tue,  6 May 2014 08:30:10 +0200 (CEST), Thomas Petazzoni wrote:
+>
+>>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/ff63f70812eb8ab3ceae4efc8754865479ac1a27/
+>>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/dd04d058bb26343c9dfded76608929942d83db5a/
+>>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/4244da86604fbe1e51da2e7269bd373e8940a178/
+>>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/65471a371199f79a60f3a8b881cdf2bdac633336/
+>>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/7a828d00f062d33f3fd9df0be6e00f0c4e2459b7/
+>
+> So, I tried to reproduce dd04d058bb26343c9dfded76608929942d83db5a on
+> the build server (the exact same build server)... and the build worked
+> fine. So it would look like a spurious build issue. Except that
+> according to http://autobuild.buildroot.org/?arch=aarch64, all aarch64
+> builds since April 24th have failed because of this.
+>
+> I was thinking that maybe the problem would have been solved by the
+> switch from the old build server to the new one. But the latest builds
+> are clearly done at date/times that indicate they were done on the new
+> build server (on which I did the test build which was successful).
+>
+> So for now, I'm a bit unsure on how to attack this problem. I believe
+> I'll let the build runs for a little more, and see if it continues to
+> happen again.
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 0d8d9b9..2bc5d4d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -867,6 +867,26 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_12
- 	  Toolchain for the AArch64 architecture, from
- 	  http://www.linaro.org/engineering/armv8/
- 
-+config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
-+	bool "Musl toolchain"
-+	depends on (BR2_arm && BR2_ARM_EABI) || (BR2_armeb && BR2_ARM_EABI) || \
-+		(BR2_i386 && !BR2_x86_i386) || BR2_microblaze || BR2_mips || \
-+		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	select BR2_TOOLCHAIN_EXTERNAL_MUSL
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	help
-+	  Toolchain based on the Musl C library, provided by the
-+	  musl-cross project. It uses gcc 4.8.2, binutils 2.24 and
-+	  musl 1.0.0. It does not have a cross debugger included.
-+
-+	  The ARM toolchain is built for ARMv4t, soft-float.
-+	  The x86 toolchain is built for i486.
-+
-+	  http://musl.codu.org/
-+
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 	bool "Custom toolchain"
- 	help
-@@ -953,6 +973,16 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
- 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
- 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
-+	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm
-+	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
-+	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
-+	default "microblaze-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_microblaze
-+	default "mips-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && !BR2_SOFT_FLOAT)
-+	default "mips-sf-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && BR2_SOFT_FLOAT)
-+	default "mipsel-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && !BR2_SOFT_FLOAT)
-+	default "mipsel-sf-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && BR2_SOFT_FLOAT)
-+	default "powerpc-linux-musl"     if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_powerpc
-+	default "x86_64-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_x86_64
- 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
- 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
- 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 05d8867..3f88188 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -369,6 +369,33 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_14_02),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.02/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2014.02_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
-+TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-1.0.0/
-+ifeq ($(BR2_arm),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabi-1.0.0.tar.xz
-+else ifeq ($(BR2_armeb),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-armeb-linux-musleabi-1.0.0.tar.xz
-+else ifeq ($(BR2_i386),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-1.0.0.tar.xz
-+else ifeq ($(BR2_microblaze),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-microblaze-linux-musl-1.0.0.tar.xz
-+else ifeq ($(BR2_mips),y)
-+ifeq ($(BR2_SOFT_FLOAT),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-sf-linux-musl-1.0.0.tar.xz
-+else
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-1.0.0.tar.xz
-+endif # BR2_SOFT_FLOAT
-+else ifeq ($(BR2_mipsel),y)
-+ifeq ($(BR2_SOFT_FLOAT),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-1.0.0.tar.xz
-+else
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-1.0.0.tar.xz
-+endif # BR2_SOFT_FLOAT
-+else ifeq ($(BR2_powerpc),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-1.0.0.tar.xz
-+else ifeq ($(BR2_x86_64),y)
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-x86_64-linux-musl-1.0.0.tar.xz
-+endif
- else
- # Custom toolchain
- TOOLCHAIN_EXTERNAL_SITE = $(dir $(call qstrip,$(BR2_TOOLCHAIN_EXTERNAL_URL)))
+I can't reproduce it either, but valgrind does show some invalid
+memory accesses with that linker. They are fixed by this patch:
+
+commit 99d190fac4d2aab238cfc798dc5c28ab41456882
+Author: Alan Modra <amodra@gmail.com>
+Date:   Fri Dec 20 23:57:52 2013 +1030
+
+    Don't segv on cie.initial_instructions[] overflow.
+
+    Don't attempt to merge CIEs with a larger number of insns than will
+    fit in the buffer.
+
+        * elf-eh-frame.c (cie_eq): Return false when initial_insn_length
+        is too large.
+        (cie_compute_hash): Don't exceed bounds of initial_instructions.
+        (_bfd_elf_parse_eh_frame): Always set initial_insn_length, and
+        save as much of insns to initial_instructions[] as will fit.
+
+So if the problem persists it may be worth trying to add that patch to
+see if it helps.
