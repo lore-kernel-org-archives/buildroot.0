@@ -1,28 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 06 May 2014 17:13:31 +0200
-Subject: [Buildroot] [PATCH v2] clapack: Disable for MIPS platforms
-In-Reply-To: <1399380451-25912-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 6 May 2014 13:47:31 +0100")
-References: <1399380451-25912-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87ha53ey90.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 May 2014 17:10:05 +0200
+Subject: [Buildroot] [git commit] nftables: disable dblatex check
+Message-ID: <20140506151342.CA3179CB16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9542bd4104ff0da22c60f787a900c83be8550a19
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Disable this package for MIPS because it needs IRIX headers and
- > libraries.
+On the systems with old dblatex (for example 3.0) the build step will
+fail, because dblatex doesn't support '-q' parameter. This patch
+overrides dblatex check.
 
- > Fixes:
- >    http://autobuild.buildroot.net/results/370/370f964441722675820c644403dde7fbc683a315/
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nftables/nftables.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 1cfeeeb..4cfffd1 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -12,4 +12,6 @@ NFTABLES_DEPENDENCIES = gmp libmnl libnftnl readline host-bison host-flex \
+ NFTABLES_LICENSE = GPLv2
+ NFTABLES_LICENSE_FILES = COPYING
+ 
++NFTABLES_CONF_ENV = ac_cv_prog_CONFIG_PDF=no
++
+ $(eval $(autotools-package))
