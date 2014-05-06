@@ -1,48 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 06 May 2014 22:05:28 +0200
-Subject: [Buildroot] [PATCH] toolchain package: set version as 'virtual'
-	instead of 'undefined'
-In-Reply-To: <20140506140745.1b072d2c@skate>
-References: <0533846efc9952901283.1399373479@argentina>
- <20140506140745.1b072d2c@skate>
-Message-ID: <3dba42f3-d595-4415-bd38-3220738fe4b6@email.android.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  6 May 2014 20:23:32 +0000 (UTC)
+Subject: [Buildroot] [Bug 6230] Cannot compile gcc without threads
+	(uClibc-based)
+In-Reply-To: <bug-6230-163@https.bugs.busybox.net/>
+References: <bug-6230-163@https.bugs.busybox.net/>
+Message-ID: <20140506202332.61C999CACE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Dear Thomas De Schampheleire,
->
->On Tue, 06 May 2014 12:51:19 +0200, Thomas De Schampheleire wrote:
->> This patch causes the log messages to change from:
->> 
->> >>> toolchain-external undefined Downloading
->> >>> toolchain-external undefined Extracting
->> ...
->> 
->> to
->> 
->> >>> toolchain-external virtual Downloading
->> >>> toolchain-external virtual Extracting
->> ...
->> 
->> and similar for 'toolchain' and 'toolchain-buildroot', simply because it
->> looks nicer.
->> At the same time, the directory names also become toolchain-virtual,
->> toolchain-buildroot-virtual, toolchain-external-virtual instead of the
->> corresponding 'undefined' variants.
->> 
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
->Shouldn't we instead migrate these to use the virtual package
->infrastructure, and make this infrastructure define this magic 'virtual'
->version?
+https://bugs.busybox.net/show_bug.cgi?id=6230
 
-I tried using virtual-package in toolchain/toolchain/toolchain.mk, but TOOLCHAIN_VERSION becomes empty, while HOST_TOOLCHAIN_VERSION is virtual.
+--- Comment #3 from Gustavo Zacarias <gustavo@zacarias.com.ar> 2014-05-06 20:23:31 UTC ---
+ARM nommu support is broken in general, there are several toolchain component
+version restrictions that are currently unaccounted for.
+Not only that but the toolchain build rules aren't properly done (the tuple is
+wrong for example).
 
-Yann, Thomas: any ideas?
+The problem is that Qemu doesn't emulate any usable (uc)linux hardware to test
+with, and probably the most experienced devels who can help with this lack any
+real nommu hardware that's tested with uclinux as a starting point.
 
-Thanks,
-Thomas
+Also it's probably more useful to work on modern ARM nommu support (Cortex M
+series) but in general from some quick investigations i've done it's mostly
+stuck with an oldish and heavily tweaked 2.6.33ish kernel.
+
+So for ARM7TDMI who knows which kernel works properly.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
