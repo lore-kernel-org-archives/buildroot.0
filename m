@@ -1,65 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 06 May 2014 21:14:44 +0200
-Subject: [Buildroot] [PATCH] infra: relax the check on
-	BR2_TOOLCHAIN_BUILDROOT_VENDOR
-In-Reply-To: <20140506195920.697ab409@free-electrons.com>
-References: <1399393667-15009-1-git-send-email-arnout@mind.be>
- <20140506195920.697ab409@free-electrons.com>
-Message-ID: <536934A4.6010206@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 6 May 2014 21:21:21 +0200
+Subject: [Buildroot] [PATCH 1/1] qtquick1: removed OpenGL dependencies
+In-Reply-To: <1399309606-25561-1-git-send-email-wojciech.slenska@gmail.com>
+References: <1399309606-25561-1-git-send-email-wojciech.slenska@gmail.com>
+Message-ID: <20140506212121.7a895a27@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/05/14 19:59, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle (Essensium/Mind),
+Dear Wojciech Slenska,
+
+On Mon,  5 May 2014 19:06:46 +0200, Wojciech Slenska wrote:
+> QtQuick1 module doesn't need OpenGl libs and declarative module.
+> This module can be used to port qt4 qml apps to qt5. Patch has been tested with linuxfb output plugin.
 > 
-> On Tue,  6 May 2014 18:27:47 +0200, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->> 65c2400f introduced BR2_TOOLCHAIN_BUILDROOT_VENDOR and a check that it
->> is not empty or 'unknown'. However, when a .config file from before
->> that commit exists, this makes it impossible to run *config in order
->> to set a value. Catch-22.
->>
->> To break the cycle, remove the check when running one of the config
->> targets.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->> ---
->>  package/Makefile.in | 4 +++-
->>  1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/Makefile.in b/package/Makefile.in
->> index c34a3bf..da8b768 100644
->> --- a/package/Makefile.in
->> +++ b/package/Makefile.in
->> @@ -26,7 +26,8 @@ else
->>  TARGET_VENDOR = buildroot
->>  endif
->>  
->> -# Sanity checks
->> +# Sanity checks - but not when we try to reconfigure
->> +ifeq ($(filter menuconfig xconfig gconfig nconfig config defconfig oldconfig silentoldconfig %_defconfig,$(MAKECMDGOALS)),)
+> Signed-off-by: Wojciech Slenska <wojciech.slenska@gmail.com>
+
+Thanks for this patch. Can qt5quick1 optionally depend on
+qt5declarative? If it's the case, then the .mk file should have
+something like:
+
+ifeq ($(select BR2_PACKAGE_QT5DECLARATIVE),y)
+QT5QUICK1_DEPENDENCIES += qt5declarative
+endif
+
+Fatih, could you review this patch?
+
+Thanks!
+
+Thomas
+
+> ---
+>  package/qt5/qt5quick1/Config.in    |    8 ++------
+>  package/qt5/qt5quick1/qt5quick1.mk |    2 +-
+>  2 files changed, 3 insertions(+), 7 deletions(-)
 > 
-> What about using $(noconfig_targets) here, like is done in the main
-> Makefile?
+> diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
+> index 30c2e79..59b6c34 100644
+> --- a/package/qt5/qt5quick1/Config.in
+> +++ b/package/qt5/qt5quick1/Config.in
+> @@ -5,11 +5,8 @@ config BR2_PACKAGE_QT5QUICK1
+>  	select BR2_PACKAGE_QT5BASE_WIDGETS
+>  	select BR2_PACKAGE_QT5SCRIPT
+>  	select BR2_PACKAGE_QT5XMLPATTERNS
+> -	select BR2_PACKAGE_QT5DECLARATIVE
+>  	# This module does not support static linking
+>  	depends on !BR2_PREFER_STATIC_LIB
+> -	depends on BR2_PACKAGE_HAS_LIBEGL
+> -	depends on BR2_PACKAGE_HAS_LIBGLES
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+>  	help
+>  	  Qt is a cross-platform application and UI framework for
+> @@ -19,7 +16,6 @@ config BR2_PACKAGE_QT5QUICK1
+>  
+>  	  http://qt-project.org
+>  
+> -comment "qt5quick1 needs a toolchain w/ dynamic library and an OpenGL-capable backend"
+> +comment "qt5quick1 needs a toolchain w/ dynamic library"
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES || \
+> -		BR2_PREFER_STATIC_LIB
+> +	depends on BR2_PREFER_STATIC_LIB
+> diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
+> index 624b130..e9d7a64 100644
+> --- a/package/qt5/qt5quick1/qt5quick1.mk
+> +++ b/package/qt5/qt5quick1/qt5quick1.mk
+> @@ -7,7 +7,7 @@
+>  QT5QUICK1_VERSION = $(QT5_VERSION)
+>  QT5QUICK1_SITE = $(QT5_SITE)
+>  QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
+> -QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script qt5declarative \
+> +QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script \
+>  	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
+>  QT5QUICK1_INSTALL_STAGING = YES
+>  
 
- D'oh, silly me. This patch is not necessary.
-
- I still have http://patchwork.ozlabs.org/patch/316667/ rebased on top of
-master, and that patch reads .config even for the *config targets.
-
- So I've marked this patch as Not Applicable in patchwork.
-
- Regards,
- Arnout
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
