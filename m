@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 13:46:08 +0200
-Subject: [Buildroot] [git commit] xerces: add license information
-Message-ID: <20140507120710.DAA4A9CA29@busybox.osuosl.org>
+Date: Wed, 7 May 2014 10:27:01 +0200
+Subject: [Buildroot] [git commit] memstat: add license information
+Message-ID: <20140507120710.94CF09CA29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d7284392853f27e21480a801c46e6266218a568f
+commit: http://git.buildroot.net/buildroot/commit/?id=edf4dcc3ae8ff4f3355606277a6e28fda8b26050
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xerces/xerces.mk |    2 ++
+ package/memstat/memstat.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index 7bd7070..9402abe 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
+diff --git a/package/memstat/memstat.mk b/package/memstat/memstat.mk
+index 8f1d96d..5e96405 100644
+--- a/package/memstat/memstat.mk
++++ b/package/memstat/memstat.mk
 @@ -7,6 +7,8 @@
- XERCES_VERSION = 3.1.1
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
- XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources/
-+XERCES_LICENSE = Apache-2.0
-+XERCES_LICENSE_FILES = LICENSE
- XERCES_MAKE = $(MAKE1)
- XERCES_INSTALL_STAGING = YES
- XERCES_CONF_OPT = --disable-threads \
+ MEMSTAT_VERSION = 0.8
+ MEMSTAT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/m/memstat
+ MEMSTAT_SOURCE = memstat_$(MEMSTAT_VERSION).tar.gz
++MEMSTAT_LICENSE = GPL
++MEMSTAT_LICENSE_FILES = debian/copyright
+ 
+ define MEMSTAT_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="$(TARGET_CFLAGS)" \
