@@ -1,62 +1,54 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 7 May 2014 22:51:02 +0200
-Subject: [Buildroot] [PATCH v5 18/32] xbmc: bump version to 13.0
-In-Reply-To: <1399493406-7247-19-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 7 May 2014 23:05:14 +0200
+Subject: [Buildroot] [PATCH v5 21/32] xbmc: Add host-gettext dependency
+In-Reply-To: <1399493406-7247-22-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
- <1399493406-7247-19-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAGduivy54hahPOa8K1D48yp3=H8FkQZrNau8osABps4dc0uvVg@mail.gmail.com>
+ <1399493406-7247-22-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAGduivy9YFPQtG5vdKhY8Fjms42uOZ7QMy1TxXRACthffL_C2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd, all,
+Hi Bernd, all
 
 Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
 On Wed, May 7, 2014 at 10:09 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> AUTOPOINT=/bin/true does not work anymore since
+> https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
+>
+> config.status: error: cannot find input file: `Makefile.in'
+> configure: error: Submodule lib/cpluff failed to configure
 >
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/xbmc/Config.in |    1 +
->  package/xbmc/xbmc.mk   |    4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  package/xbmc/xbmc.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-> index ed8872b..dfbd474 100644
-> --- a/package/xbmc/Config.in
-> +++ b/package/xbmc/Config.in
-> @@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
->         select BR2_PACKAGE_LIBUNGIF
->         select BR2_PACKAGE_LIBVORBIS
->         select BR2_PACKAGE_LIBXML2
-> +       select BR2_PACKAGE_LIBXSLT
->         select BR2_PACKAGE_LZO
->         select BR2_PACKAGE_NCURSES
->         select BR2_PACKAGE_OPENSSL
 > diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index 1bfc17d..926f050 100644
+> index 926f050..c081609 100644
 > --- a/package/xbmc/xbmc.mk
 > +++ b/package/xbmc/xbmc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -XBMC_VERSION = 12.3-Frodo
-> +XBMC_VERSION = 13.0-Gotham
->  XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
->  XBMC_LICENSE = GPLv2
->  XBMC_LICENSE_FILES = LICENSE.GPL
-> @@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
->  XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
+> @@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+>  # called TexturePacker. It is responsible to take all the images used in the
+>  # GUI and pack them in a blob.
+>  # http://wiki.xbmc.org/index.php?title=TexturePacker
+> -XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
+> +XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
 >  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
 >         libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
-> -       libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-> +       libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
->         openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+>         libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+> @@ -129,7 +129,7 @@ endif
 >
->  XBMC_CONF_ENV = \
+>  # Add HOST_DIR to PATH for codegenerator.mk to find swig
+>  define XBMC_BOOTSTRAP
+> -       cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
+> +       cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+>  endef
+>  XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
+>
 > --
 > 1.7.10.4
 >
