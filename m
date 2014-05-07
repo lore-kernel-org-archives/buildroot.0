@@ -1,79 +1,40 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 7 May 2014 18:27:13 +0200
-Subject: [Buildroot] CMake requires ncurses
-In-Reply-To: <20140507174421.04e3c2f2@free-electrons.com>
-References: <CAHkwnC-kaMHjsD9GjPiDLdx5vda2CKAnDVXPX-qAUx+r01MCAQ@mail.gmail.com>
- <20140507164753.48c13d65@free-electrons.com>
- <CAHkwnC_7GBG+a4oh1aLSc7QeaEsC-N0qROcaNuGSE+Wp0=z34g@mail.gmail.com>
- <20140507174421.04e3c2f2@free-electrons.com>
-Message-ID: <CAHkwnC-nxOwx6wj3hQaPbG4Q5nzQMbyK-xhuKsPd6F5_afSrhQ@mail.gmail.com>
+Date: Wed,  7 May 2014 18:40:39 +0200
+Subject: [Buildroot] [PATCH] cmake: disable building of ccmake
+Message-ID: <1399480839-30134-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 7, 2014 at 5:44 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Wed, 7 May 2014 17:32:38 +0200, Fabio Porcedda wrote:
->
->> Are you sure that In your system there isn't installed the ncurses
->> development package?
->>
->> On my ubuntu distribution if i uninstall the libncurses5-dev package i got:
->>
->> make defconfig && make allyespackageconfig
->>
->> make host-cmake
->
-> Well, right. On my system, libncurses-dev is definitely installed, but
-> I was thinking that on the autobuilders chroot it is not. But in fact
-> it is, for a simple reason: libncurses-dev is needed for 'make
-> menuconfig'.
->
-> So I believe you're maybe using 'make xconfig' or 'make gconfig', and
-> therefore you don't need to have the libncurses development files
-> installed.
+The ccmake program requires the ncurses package so it fails to build if
+the host system does not have it installed.
+To get rid off the ncurses dependency do not build anymore the ccmake
+program because it's not needed by buildroot.
 
-Well, i found that only because I used buildroot on a fresh installed
-system, i usually have installed the ncurses development files.
-I just think that it's useful to take care of it because it's not fun
-that the building fail halfway, so we have to choose between:
--  document it
-- add the dependency to cmake
--  disable it
-The last option seems to be the preferred one.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Alexander Potashev <aspotashev@gmail.com>
+---
+ package/cmake/cmake.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> However, there is some conditional code in the main CMakeLists.txt to
-> decide whether or not to build the ncurses stuff. I would rather prefer
-> to fix that, and not have to build host-ncurses everytime we need to
-> build host-cmake. Have a look at:
->
->   #---------------------------------------------------------------------
->   # Use curses?
->   if (UNIX)
->     # there is a bug in the Syllable libraries which makes linking ccmake fail, Alex
->     if(NOT "${CMAKE_SYSTEM_NAME}" MATCHES syllable)
->       set(CURSES_NEED_NCURSES TRUE)
->       find_package(Curses QUIET)
->       if (CURSES_LIBRARY)
->         option(BUILD_CursesDialog "Build the CMake Curses Dialog ccmake" ON)
->       else ()
->         message("Curses libraries were not found. Curses GUI for CMake will not be built.")
->         set(BUILD_CursesDialog 0)
->       endif ()
->     else()
->       set(BUILD_CursesDialog 0)
->     endif()
->   else ()
->     set(BUILD_CursesDialog 0)
->   endif ()
->   if(BUILD_CursesDialog)
->     add_subdirectory(Source/CursesDialog/form)
->   endif()
-
-Regards
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index d45c642..d0af828 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -15,6 +15,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 		LDFLAGS="$(HOST_LDFLAGS)" \
+ 		CFLAGS="$(HOST_CFLAGS)" \
+ 		./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
++		-- -DBUILD_CursesDialog=OFF \
+ 	)
+ endef
+ 
 -- 
-Fabio Porcedda
+1.9.1
