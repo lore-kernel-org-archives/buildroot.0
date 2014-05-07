@@ -1,12 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 07 May 2014 14:00:20 +0200
-Subject: [Buildroot] [PATCH 06/11] python-setuptools: add license
-	information
-In-Reply-To: <1399390966-9678-7-git-send-email-rjbarnet@rockwellcollins.com>
- (Ryan Barnett's message of "Tue, 6 May 2014 10:42:41 -0500")
+Date: Wed, 07 May 2014 14:01:52 +0200
+Subject: [Buildroot] [PATCH 10/11] nfs-utils: add license information
+In-Reply-To: <1399390966-9678-11-git-send-email-rjbarnet@rockwellcollins.com>
+ (Ryan Barnett's message of "Tue, 6 May 2014 10:42:45 -0500")
 References: <1399390966-9678-1-git-send-email-rjbarnet@rockwellcollins.com>
- <1399390966-9678-7-git-send-email-rjbarnet@rockwellcollins.com>
-Message-ID: <87r445er3f.fsf@dell.be.48ers.dk>
+ <1399390966-9678-11-git-send-email-rjbarnet@rockwellcollins.com>
+Message-ID: <87mweter0v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +16,45 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
  > ---
- >  package/python-setuptools/python-setuptools.mk |    2 ++
+ >  package/nfs-utils/nfs-utils.mk |    2 ++
  >  1 file changed, 2 insertions(+)
 
- > diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
- > index 48bf7c5..6ede292 100644
- > --- a/package/python-setuptools/python-setuptools.mk
- > +++ b/package/python-setuptools/python-setuptools.mk
+ > diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+ > index 76face5..2fe5d43 100644
+ > --- a/package/nfs-utils/nfs-utils.mk
+ > +++ b/package/nfs-utils/nfs-utils.mk
  > @@ -7,6 +7,8 @@
- >  PYTHON_SETUPTOOLS_VERSION = 2.1.2
- >  PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
- >  PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
- > +PYTHON_SETUPTOOLS_LICENSE = Python Software Foundation License
- > +PYTHON_SETUPTOOLS_LICENSE += or Zope Public License
+ >  NFS_UTILS_VERSION = 1.2.6
+ >  NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.bz2
+ >  NFS_UTILS_SITE = http://downloads.sourceforge.net/project/nfs/nfs-utils/$(NFS_UTILS_VERSION)
+ > +NFS_UTILS_LICENSE = GPLv2
 
-I prefer to keep it on a single line for easy grepping, and we should
-imho use PKG-INFO as license file.
+A number of the files contain the '(at your option) any later version'
+string:
+
+grep -rls 'at your option.*later' utils
+utils/nfsd/nfssvc.h
+utils/nfsdcld/sqlite.h
+utils/nfsdcld/sqlite.c
+utils/nfsdcld/nfsdcld.c
+utils/statd/COPYING
+utils/statd/hostname.c
+utils/mount/parse_dev.h
+utils/mount/network.c
+utils/mount/token.h
+utils/mount/stropts.h
+utils/mount/error.c
+utils/mount/parse_opt.c
+utils/mount/utils.h
+utils/mount/token.c
+utils/mount/parse_dev.c
+utils/mount/version.h
+utils/mount/parse_opt.h
+utils/mount/network.h
+utils/mount/error.h
+utils/mount/stropts.c
+
+So I made it GPLv2+. That's also what Debian lists it as.
 
 Committed with that fixed, thanks.
 
