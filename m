@@ -1,42 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 May 2014 10:58:12 +0200
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 7 May 2014 11:04:04 +0200
 Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <CAFbHwiSCJi8ZHTPFRteuvakFykU79dt1EuqY=9m2SiSr9x4Cvg@mail.gmail.com>
-References: <20140507063009.23A95100E55@stock.ovh.net>
+In-Reply-To: <20140507093155.18034c1d@free-electrons.com>
+References: <20140507063009.23A95100E55@stock.ovh.net>,
  <20140507093155.18034c1d@free-electrons.com>
- <CAFbHwiSCJi8ZHTPFRteuvakFykU79dt1EuqY=9m2SiSr9x4Cvg@mail.gmail.com>
-Message-ID: <20140507105812.4a2802e3@free-electrons.com>
+Message-ID: <trinity-2dbcf4e8-0f89-41ea-a300-89bf6b96ecb0-1399453444810@3capp-gmx-bs21>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Newton,
+Hello Thomas,
 
-On Wed, 7 May 2014 09:04:11 +0100, Will Newton wrote:
+> Gesendet: Mittwoch, 07. Mai 2014 um 09:31 Uhr
+> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> An: buildroot at uclibc.org, "Ezequiel Garcia" <ezequiel.garcia@free-electrons.com>, "Peter Seiderer" <ps.report@gmx.net>
+> Betreff: Analysis of build failures
+>
+> Hello all,
+> 
 
-> >>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/bd0aefa1b1efb1a28d2af89a983b389ed2aeeff5/
-> >>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/a0679d22dde393a8daa2e109e2438100e36e982d/
-> >>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/1b19e911ff26d53708ac107e271d179e0e913735/
-> >
-> > Ok, on these ones, I have some news. It turns out that I tried to
-> > reproduce the build issue on the *new* build server, while in fact the
-> > autobuilds were still running on the *old* one. However, I restarted
-> > the autobuilds on the new build server, and it has reported new
-> > glibc/aarch64 failures... which I'm not able to reproduce.
+[...]
 
-No: they are the same ld segfault issue. You can access the logs by
-using the links above, and read the "build-end.log" file.
+> >     x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/992c17e43664e8f2dfdfe711c1b0a43ebc21af90/
+> >   mips64el |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/2bbc9606281f4c96a264c5e1daa50f7957315047/
+> >    powerpc |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/0162d66ddbfe7f240819eaee9e76bbd0a0ad7e7f/
+> >       sh4a |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/d1f2083608540e9b7f778a25d54b94bdb582eca1/
+> 
+> Peter (Seiderer), could have a look at these? This issue has been
+> hitting the autobuilders since many days, we really need to get it
+> fixed.
+> 
 
-I saw your e-mail suggesting that to test a binutils patch. The only
-thing that surprises me here is that this issue is 100% reproducible
-when executed by the autobuilder script, but does not occur when I do a
-separate build (however in the same machine, same chroot as the
-autobuilder script).
+should be fixed by proposed patch
+http://lists.busybox.net/pipermail/buildroot/2014-April/094830.html
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Peter
