@@ -1,38 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:42 +0200
-Subject: [Buildroot] [PATCH v5 08/32] mesa3d: Add dri3 support
+Date: Wed,  7 May 2014 22:09:55 +0200
+Subject: [Buildroot] [PATCH v5 21/32] xbmc: Add host-gettext dependency
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+AUTOPOINT=/bin/true does not work anymore since
+https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
+
+config.status: error: cannot find input file: `Makefile.in'
+configure: error: Submodule lib/cpluff failed to configure
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/mesa3d.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/xbmc/xbmc.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1708a3e..09d7fab 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -22,6 +22,13 @@ MESA3D_DEPENDENCIES = \
- 	host-xutil_makedepend \
- 	libdrm
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 926f050..c081609 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+-XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
++XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+@@ -129,7 +129,7 @@ endif
  
-+ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
-+MESA3D_DEPENDENCIES += xproto_dri3proto
-+MESA3D_CONF_OPT += --enable-dri3
-+else
-+MESA3D_CONF_OPT += --disable-dri3
-+endif
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_DEPENDENCIES += \
- 	xproto_xf86driproto \
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define XBMC_BOOTSTRAP
+-	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
++	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+ endef
+ XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
+ 
 -- 
 1.7.10.4
