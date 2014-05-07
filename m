@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:56 +0200
-Subject: [Buildroot] [PATCH v5 22/32] xbmc: Allow compilation with uClibc
+Date: Wed,  7 May 2014 22:09:58 +0200
+Subject: [Buildroot] [PATCH v5 24/32] xbmc: Add X.org/OpenGL support
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-25-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +12,143 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ package/xbmc/Config.in |   24 ++++++++++++++++++++----
+ package/xbmc/xbmc.mk   |   40 ++++++++++++++++++++++++++++++++++------
+ 2 files changed, 54 insertions(+), 10 deletions(-)
 
 diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index dfbd474..9ca7620 100644
+index d592ad6..d04059c 100644
 --- a/package/xbmc/Config.in
 +++ b/package/xbmc/Config.in
-@@ -1,11 +1,10 @@
--comment "xbmc needs an (e)glibc toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "xbmc needs a toolchain w/ C++, largefile, threads, wchar"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+@@ -2,9 +2,12 @@ comment "xbmc needs a toolchain w/ C++, largefile, threads, wchar"
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
  
- comment "xbmc requires an OpenGL ES and EGL backend"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
+-comment "xbmc requires an OpenGL ES and EGL backend"
+-	depends on BR2_arm || BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
++comment "xbmc needs an OpenGL backend"
++	depends on (!BR2_arm && (BR2_i386 || BR2_x86_64)) && \
++		!BR2_PACKAGE_HAS_LIBGL && !(BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES)
++
++comment "xbmc needs EGL & GLES support"
++	depends on BR2_arm && !BR2_PACKAGE_HAS_LIBEGL && !BR2_PACKAGE_HAS_LIBGLES
  
  menuconfig BR2_PACKAGE_XBMC
  	bool "xbmc"
-@@ -57,10 +56,13 @@ menuconfig BR2_PACKAGE_XBMC
+@@ -22,6 +25,8 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBCDIO
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBFRIBIDI
++	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBID3TAG
+ 	select BR2_PACKAGE_LIBMAD
+@@ -50,16 +55,27 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_PYTHON_UNICODEDATA
+ 	select BR2_PACKAGE_PYTHON_ZLIB
+ 	select BR2_PACKAGE_READLINE
++	select BR2_PACKAGE_SDL if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TIFF
  	select BR2_PACKAGE_TINYXML
++
++	# mesa3d provides libgl only with dri drivers which depend on xorg
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_HAS_LIBGL
++
  	select BR2_PACKAGE_YAJL
  	select BR2_PACKAGE_ZLIB
--	depends on BR2_TOOLCHAIN_USES_GLIBC
  	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
+ 	depends on BR2_LARGEFILE
  	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_USE_MMU # python
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  XBMC is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
-@@ -126,11 +128,15 @@ config BR2_PACKAGE_XBMC_RTMPDUMP
+-	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_HAS_LIBGL || (BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES)
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index c081609..4b2b134 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -14,7 +14,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+ XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+-	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
++	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
- config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
- 	bool "shairport"
-+	depends on BR2_INET_IPV6
- 	select BR2_PACKAGE_LIBSHAIRPLAY
- 	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
+@@ -31,7 +31,6 @@ XBMC_CONF_OPT +=  \
+ 	--disable-crystalhd \
+ 	--disable-debug \
+ 	--disable-dvdcss \
+-	--disable-gl \
+ 	--disable-hal \
+ 	--disable-joystick \
+ 	--disable-mysql \
+@@ -39,14 +38,10 @@ XBMC_CONF_OPT +=  \
+ 	--disable-optical-drive \
+ 	--disable-projectm \
+ 	--disable-pulse \
+-	--disable-sdl \
+ 	--disable-ssh \
+ 	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+-	--disable-x11 \
+-	--disable-xrandr \
+-	--enable-gles \
+ 	--enable-optimizations
  
-+comment "shairport support needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+@@ -60,6 +55,39 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++XBMC_DEPENDENCIES += \
++	libglew \
++	libglu \
++	libgl \
++	sdl_image \
++	xlib_libX11 \
++	xlib_libXext \
++	xlib_libXmu \
++	xlib_libXrandr \
++	xlib_libXt
++XBMC_CONF_OPT += \
++	--enable-x11 \
++	--enable-xrandr \
++	--enable-gl \
++	--enable-sdl
++else
++XBMC_CONF_OPT += \
++	--disable-x11 \
++	--disable-xrandr \
++	--disable-gl \
++	--disable-sdl
++endif
 +
- config BR2_PACKAGE_XBMC_LIBSMBCLIENT
- 	bool "samba"
- 	select BR2_PACKAGE_SAMBA
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
++XBMC_DEPENDENCIES += libegl libgles
++XBMC_CONF_OPT += --enable-gles
++XBMC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++else
++XBMC_CONF_OPT += --disable-gles
++endif
++
+ ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+ XBMC_DEPENDENCIES += libusb-compat
+ XBMC_CONF_OPT += --enable-libusb
 -- 
 1.7.10.4
