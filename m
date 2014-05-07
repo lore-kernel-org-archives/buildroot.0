@@ -1,102 +1,32 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:48 +0200
-Subject: [Buildroot] [PATCH v5 14/32] libglew: new package
+Date: Wed,  7 May 2014 22:10:05 +0200
+Subject: [Buildroot] [PATCH v5 31/32] xbmc: Fix ffmpeg cross compile
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-32-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in          |    1 +
- package/libglew/Config.in  |   19 +++++++++++++++++++
- package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/libglew/Config.in
- create mode 100644 package/libglew/libglew.mk
+ package/xbmc/xbmc.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5af7dcb..ab77d90 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglew/Config.in"
- source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
-diff --git a/package/libglew/Config.in b/package/libglew/Config.in
-new file mode 100644
-index 0000000..67c49d4
---- /dev/null
-+++ b/package/libglew/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBGLEW
-+	bool "libglew"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXMU
-+	help
-+	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
-+	  extension loading library. GLEW provides efficient run-time mechanisms
-+	  for determining which OpenGL extensions are supported on the target
-+	  platform. OpenGL core and extension functionality is exposed in a
-+	  single header file.
-+
-+	  http://glew.sourceforge.net
-+
-+comment "libglew depends on X.org and needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-new file mode 100644
-index 0000000..48ecf97
---- /dev/null
-+++ b/package/libglew/libglew.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# libglew
-+#
-+################################################################################
-+
-+LIBGLEW_VERSION = 1.10.0
-+LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
-+LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
-+LIBGLEW_LICENSE = MIT
-+LIBGLEW_LICENSE_FILES = LICENSE.txt
-+LIBGLEW_INSTALL_STAGING = YES
-+LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
-+
-+# using $TARGET_CONFIGURE_OPTS breaks compilation
-+define LIBGLEW_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
-+		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
-+		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
-+		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
-+endef
-+
-+define LIBGLEW_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+define LIBGLEW_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 99e78d4..46d969a 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -29,6 +29,7 @@ XBMC_CONF_ENV = \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+ 
+ XBMC_CONF_OPT +=  \
++	--with-arch=$(BR2_ARCH) \
+ 	--disable-crystalhd \
+ 	--disable-debug \
+ 	--disable-dvdcss \
 -- 
 1.7.10.4
