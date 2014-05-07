@@ -1,69 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:35 +0200
-Subject: [Buildroot] [PATCH v5 01/32] xproto_dri3proto: New package
+Date: Wed,  7 May 2014 22:09:46 +0200
+Subject: [Buildroot] [PATCH v5 12/32] ffmpeg: Add libva support
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xproto_dri3proto/Config.in           |    5 +++++
- package/x11r7/xproto_dri3proto/xproto_dri3proto.mk |   16 ++++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/x11r7/xproto_dri3proto/Config.in
- create mode 100644 package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 8685ca1..087b816 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -227,6 +227,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xproto_damageproto/Config.in
- 		source package/x11r7/xproto_dmxproto/Config.in
- 		source package/x11r7/xproto_dri2proto/Config.in
-+		source package/x11r7/xproto_dri3proto/Config.in
- 		source package/x11r7/xproto_fixesproto/Config.in
- 		source package/x11r7/xproto_fontcacheproto/Config.in
- 		source package/x11r7/xproto_fontsproto/Config.in
-diff --git a/package/x11r7/xproto_dri3proto/Config.in b/package/x11r7/xproto_dri3proto/Config.in
-new file mode 100644
-index 0000000..e4dbf23
---- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_XPROTO_DRI3PROTO
-+	bool "dri3proto"
-+	select BR2_PACKAGE_XUTIL_UTIL_MACROS
-+	help
-+	  X.Org DRI3 protocol headers
-diff --git a/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-new file mode 100644
-index 0000000..0af39d1
---- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# xproto_dri3proto
-+#
-+################################################################################
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index fae558a..d3acffc 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
++else
++FFMPEG_CONF_OPT += --disable-vaapi
++endif
 +
-+XPROTO_DRI3PROTO_VERSION = 1.0
-+XPROTO_DRI3PROTO_SOURCE = dri3proto-$(XPROTO_DRI3PROTO_VERSION).tar.bz2
-+XPROTO_DRI3PROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
-+XPROTO_DRI3PROTO_LICENSE = MIT
-+XPROTO_DRI3PROTO_LICENSE_FILES = COPYING
-+XPROTO_DRI3PROTO_INSTALL_STAGING = YES
-+XPROTO_DRI3PROTO_INSTALL_TARGET = NO
-+XPROTO_DRI3PROTO_DEPENDENCIES = xutil_util-macros
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
