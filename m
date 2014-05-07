@@ -1,13 +1,9 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 07 May 2014 19:37:23 +0200
-Subject: [Buildroot] CMake requires ncurses
-In-Reply-To: <CAHkwnC-nxOwx6wj3hQaPbG4Q5nzQMbyK-xhuKsPd6F5_afSrhQ@mail.gmail.com>
-References: <CAHkwnC-kaMHjsD9GjPiDLdx5vda2CKAnDVXPX-qAUx+r01MCAQ@mail.gmail.com>
- <20140507164753.48c13d65@free-electrons.com>
- <CAHkwnC_7GBG+a4oh1aLSc7QeaEsC-N0qROcaNuGSE+Wp0=z34g@mail.gmail.com>
- <20140507174421.04e3c2f2@free-electrons.com>
- <CAHkwnC-nxOwx6wj3hQaPbG4Q5nzQMbyK-xhuKsPd6F5_afSrhQ@mail.gmail.com>
-Message-ID: <536A6F53.1020408@lucaceresoli.net>
+Date: Wed, 07 May 2014 19:39:44 +0200
+Subject: [Buildroot] [PATCH] cmake: disable building of ccmake
+In-Reply-To: <1399480839-30134-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1399480839-30134-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <536A6FE0.4060007@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,50 +13,21 @@ To: buildroot@busybox.net
 Hi Fabio,
 
 Fabio Porcedda wrote:
-> On Wed, May 7, 2014 at 5:44 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Dear Fabio Porcedda,
->>
->> On Wed, 7 May 2014 17:32:38 +0200, Fabio Porcedda wrote:
->>
->>> Are you sure that In your system there isn't installed the ncurses
->>> development package?
->>>
->>> On my ubuntu distribution if i uninstall the libncurses5-dev package i got:
->>>
->>> make defconfig && make allyespackageconfig
->>>
->>> make host-cmake
->>
->> Well, right. On my system, libncurses-dev is definitely installed, but
->> I was thinking that on the autobuilders chroot it is not. But in fact
->> it is, for a simple reason: libncurses-dev is needed for 'make
->> menuconfig'.
-
-Still I find it strange that it fails. If libncurses-dev is not
-found, CMake just disables building ccmake. Maybe you had configured
-host-cmake with libncurses-dev installed, then (re)built it without
-libncurses?
-
-Anyway, this is not that important because...
-
->>
->> So I believe you're maybe using 'make xconfig' or 'make gconfig', and
->> therefore you don't need to have the libncurses development files
->> installed.
+> The ccmake program requires the ncurses package so it fails to build if
+> the host system does not have it installed.
+> To get rid off the ncurses dependency do not build anymore the ccmake
+> program because it's not needed by buildroot.
 >
-> Well, i found that only because I used buildroot on a fresh installed
-> system, i usually have installed the ncurses development files.
-> I just think that it's useful to take care of it because it's not fun
-> that the building fail halfway, so we have to choose between:
-> -  document it
-> - add the dependency to cmake
-> -  disable it
-> The last option seems to be the preferred one.
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Alexander Potashev <aspotashev@gmail.com>
 
-...disabling ccmake is by far the best thing to do.
-
-I'm having a look at your patch right now.
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 -- 
 Luca
