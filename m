@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 10:10:28 +0200
-Subject: [Buildroot] [git commit] dsp-tools: add license information
-Message-ID: <20140507120710.8934D9CB29@busybox.osuosl.org>
+Date: Wed, 7 May 2014 13:46:08 +0200
+Subject: [Buildroot] [git commit] xerces: add license information
+Message-ID: <20140507120710.DAA4A9CA29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1a834c80d8e57d16d183bd74be002a69f20445f7
+commit: http://git.buildroot.net/buildroot/commit/?id=d7284392853f27e21480a801c46e6266218a568f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dsp-tools/dsp-tools.mk |    2 ++
+ package/xerces/xerces.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
-index d5f562d..c9f432c 100644
---- a/package/dsp-tools/dsp-tools.mk
-+++ b/package/dsp-tools/dsp-tools.mk
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index 7bd7070..9402abe 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
 @@ -7,6 +7,8 @@
- DSP_TOOLS_VERSION = 2.0
- DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files/
- DSP_TOOLS_DEPENDENCIES = tidsp-binaries
-+DSP_TOOLS_LICENSE = LGPLv2.1
-+DSP_TOOLS_LICENSE_FILES = LICENSE
- 
- define DSP_TOOLS_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
+ XERCES_VERSION = 3.1.1
+ XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.gz
+ XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources/
++XERCES_LICENSE = Apache-2.0
++XERCES_LICENSE_FILES = LICENSE
+ XERCES_MAKE = $(MAKE1)
+ XERCES_INSTALL_STAGING = YES
+ XERCES_CONF_OPT = --disable-threads \
