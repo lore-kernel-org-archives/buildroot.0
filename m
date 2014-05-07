@@ -1,47 +1,91 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:43 +0200
-Subject: [Buildroot] [PATCH v5 09/32] mesa3d: dri2 does not need udev support
+Date: Wed,  7 May 2014 22:09:39 +0200
+Subject: [Buildroot] [PATCH v5 05/32] mesa3d: Depend on xorg meta package
+	instead of xserver_xorg-server
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=b959fd9674938e127a34d42d34b903e3a9ae7ad9
-"The loader infrastructure for everything but DRI2 requires that udev be present"
-
-Check for udev only for dri3.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch   |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
+ package/mesa3d/Config.in |   22 +++++++++++-----------
+ package/mesa3d/mesa3d.mk |    4 ++--
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch b/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
-new file mode 100644
-index 0000000..825debc
---- /dev/null
-+++ b/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
-@@ -0,0 +1,16 @@
-+diff -uNr Mesa-10.2.0-rc1.org/configure.ac Mesa-10.2.0-rc1/configure.ac
-+--- Mesa-10.2.0-rc1.org/configure.ac	2014-05-03 02:17:23.000000000 +0200
-++++ Mesa-10.2.0-rc1/configure.ac	2014-05-07 19:51:54.187921825 +0200
-+@@ -998,11 +998,11 @@
-+         DEFINES="$DEFINES -DHAVE_ALIAS"
-+         if test "x$enable_dri3" = xyes; then
-+             DEFINES="$DEFINES -DHAVE_DRI3"
-+-        fi
-+ 
-+         if test "x$have_libudev" != xyes; then
-+             AC_MSG_ERROR([libudev-dev required for building DRI])
-+         fi
-++        fi
-+ 
-+         case "$host_cpu" in
-+         powerpc* | sparc*)
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 06f2bc3..b645712 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -3,13 +3,13 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
++	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+@@ -61,10 +61,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
+-comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
+-	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
++comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
+ 
+-if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
++if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+ 
+ comment "DRI drivers"
+ 
+@@ -91,7 +91,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
+-endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
++endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+ 
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index e9e5b8b..b0a11ab 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -23,7 +23,7 @@ MESA3D_DEPENDENCIES = \
+ 	host-xutil_makedepend \
+ 	libdrm
+ 
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+ 	xproto_dri2proto \
+@@ -92,7 +92,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland
+ MESA3D_EGL_PLATFORMS += wayland
+ endif
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_EGL_PLATFORMS += x11
+ endif
+ MESA3D_CONF_OPT += \
 -- 
 1.7.10.4
