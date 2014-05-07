@@ -1,165 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  7 May 2014 00:44:27 +0200
-Subject: [Buildroot] [PATCH] graphs: add option to remove transitive
-	dependencies in dependency graph
-Message-ID: <1399416267-16009-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  7 May 2014 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-06
+Message-ID: <20140507063009.23A95100E55@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Build statistics for 2014-05-06
+===============================
 
-Currently, all the dependencies of a package are drawn on the dependency
-graph, including transitive dependencies (e.g. A->B->C and A->C).
+        success : 93 
+       failures : 22 
+       timeouts : 0  
+          TOTAL : 115
 
-Very big graphs, with lots of packages with lots of dependencies, the
-dependency graph can be very dense, and transitive dependencies are
-cluttering the graph.
+Classification of failures by reason
+====================================
 
-In some cases, only getting the "build-order" dependencies is enough (e.g.
-to see what impact a package rebuild would have).
+              postgresql-9.3.4 | 4 
+                 clapack-3.2.1 | 4 
+          glibc-2.18-svnr23787 | 3 
+             lttng-tools-2.4.1 | 2 
+                  zeromq-4.0.4 | 1 
+make: *** [host-gdb-legal-i... | 1 
+znc-b396cafdb249544164ed029... | 1 
+                    fltk-1.3.2 | 1 
+                 fio-fio-2.1.4 | 1 
+                  bustle-0.4.3 | 1 
+                  opencv-2.4.2 | 1 
+                     popt-1.16 | 1 
+configure: WARNING: unrecog... | 1 
 
-Add a new environment variable to disable drawing transitive dependencies.
+Detail of failures
+===================
 
-Basically, it would turn this graph:
+       arm |                   bustle-0.4.3 | NOK | http://autobuild.buildroot.net/results/400f86cd3c5e418a05089f7a58ecc1cf436ac810/
+   powerpc |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/d1d721fa697956218dfc2c865dfb61911cf2600e/
+    mipsel |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/518ed5822cfd88468f5600f3053699e1b06d7245/
+   powerpc |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/0d7ea169ab8b2da946ec4444d6e3db1a352c08ff/
+   powerpc |                  clapack-3.2.1 | NOK | http://autobuild.buildroot.net/results/6e14fa44622e8e4e16cceee591389b07517f6aeb/
+      i686 | configure: WARNING: unrecog... | NOK | http://autobuild.buildroot.net/results/dab457f00dcf6fdb5a5081291eb9ebaaadbfe7c0/
+     nios2 |                  fio-fio-2.1.4 | NOK | http://autobuild.buildroot.net/results/9cd30031a40f768f6090cfba44c880fb2406672b/
+    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/2253f1efb8da80f30615535724f6b444a38e7fea/
+   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/bd0aefa1b1efb1a28d2af89a983b389ed2aeeff5/
+   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/a0679d22dde393a8daa2e109e2438100e36e982d/
+   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/1b19e911ff26d53708ac107e271d179e0e913735/
+       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/f1982b05693fe3c6939729f7008afdc56a58e7c3/
+       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/6e25c8c64756ac6515a91ad4238de977773b67be/
+      bfin | make: *** [host-gdb-legal-i... | NOK | http://autobuild.buildroot.net/results/753570793be3f35bdf9b344af7252607a82c3b60/
+       arm |                   opencv-2.4.2 | NOK | http://autobuild.buildroot.net/results/ee6187d85c84af382e54b0c9c16ee0e8ec45d0a6/
+      bfin |                      popt-1.16 | NOK | http://autobuild.buildroot.net/results/bfcb2ed27debafc584e133f5ae11ad2061ad2b16/
+    x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/992c17e43664e8f2dfdfe711c1b0a43ebc21af90/
+  mips64el |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/2bbc9606281f4c96a264c5e1daa50f7957315047/
+   powerpc |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/0162d66ddbfe7f240819eaee9e76bbd0a0ad7e7f/
+      sh4a |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/d1f2083608540e9b7f778a25d54b94bdb582eca1/
+       arm |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/7c552e514f8c13ba8cdd420dc5bbf5edac915a83/
+       arm | znc-b396cafdb249544164ed029... | NOK | http://autobuild.buildroot.net/results/53e97320fcbad6e51a0bc5183c03a00f86ba86ae/
 
-    pkg1 ---> pkg2 ---> pkg3 -------------------.
-         |\__________/                 \         \
-         |\____________________         \         \
-         |                     \         \         \
-          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
-                    \__________/
 
-into that graph:
-
-    pkg1 ---> pkg2 ---> pkg3 -----------.
-         |                               \
-          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
----
-Note: some graphs showing the results are there:
-    http://ymorin.is-a-geek.org/download/tmp/graphs/
----
- Makefile                      |  9 +++++++--
- package/pkg-generic.mk        |  2 +-
- support/scripts/graph-depends | 45 +++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 53 insertions(+), 3 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 2f18aab..5c71cd7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -150,7 +150,12 @@ endif
- # Need that early, before we scan packages
- # Avoids doing the $(or...) everytime
- BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
--BR_GRAPH_DEPTH := $(or $(BR2_GRAPH_DEPTH),0)
-+BR_GRAPH_DEPS_OPTS := --depth $(or $(BR2_GRAPH_DEPTH),0)
-+ifeq ($(BR2_GRAPH_NO_TRANSITIVE),)
-+BR_GRAPH_DEPS_OPTS += --transitive
-+else
-+BR_GRAPH_DEPS_OPTS += --no-transitive
-+endif
- 
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
-@@ -674,7 +679,7 @@ graph-build: $(O)/build/build-time.log
- graph-depends:
- 	@$(INSTALL) -d $(O)/graphs
- 	@cd "$(CONFIG_DIR)"; \
--	$(TOPDIR)/support/scripts/graph-depends -d $(BR_GRAPH_DEPTH) \
-+	$(TOPDIR)/support/scripts/graph-depends $(BR_GRAPH_DEPS_OPTS) \
- 	|tee $(O)/graphs/$(@).dot \
- 	|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cf02210..6b53746 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -495,7 +495,7 @@ $(1)-show-depends:
- $(1)-graph-depends:
- 			@$(INSTALL) -d $(O)/graphs
- 			@cd "$(CONFIG_DIR)"; \
--			$(TOPDIR)/support/scripts/graph-depends -p $(1) -d $(BR_GRAPH_DEPTH) \
-+			$(TOPDIR)/support/scripts/graph-depends -p $(1) $(BR_GRAPH_DEPS_OPTS) \
- 			|tee $(O)/graphs/$$(@).dot \
- 			|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
- 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index e2a5e1e..4195646 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -40,6 +40,9 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
- parser.add_argument("--depth", '-d', metavar="DEPTH",
-                     help="Limit the dependency graph to DEPTH levels")
-+parser.add_argument("--transitive", dest="transitive", action='store_true')
-+parser.add_argument("--no-transitive", dest="transitive", action='store_false')
-+parser.set_defaults(transitive=True)
- args = parser.parse_args()
- 
- if args.package is None:
-@@ -51,6 +54,8 @@ else:
- if args.depth is not None:
-     max_depth = int(args.depth)
- 
-+transitive = args.transitive
-+
- allpkgs = []
- 
- # Execute the "make show-targets" command to get the list of the main
-@@ -220,6 +225,46 @@ for dep in dependencies:
-         dict_deps[dep[0]] = []
-     dict_deps[dep[0]].append(dep[1])
- 
-+# This function return True if pkg is a dependency (direct or
-+# transitive) of pkg2, dependencies being listed in the deps
-+# dictionary.
-+def is_dep(pkg,pkg2,deps):
-+    if deps.has_key(pkg2):
-+        for p in deps[pkg2]:
-+            if pkg == p:
-+                return True
-+            if is_dep(pkg,p,deps):
-+                return True
-+    return False
-+
-+# This function eliminates transitive dependencies; for example, given
-+# these dependency chain: A->{B,C} and B->{C}, the A->{C} dependency is
-+# already covered by B->{C}, so C is a transitive dependency of A, via B.
-+# The functions does:
-+#   - for each package 'pkg' (for which we have a dependency list):
-+#     - for each dependency d[i] of that package
-+#       - if d[i] is a dependency of any of the other dependency d[j]
-+#         - do not keep d[i]
-+#       - otherwise keep d[i] 
-+def remove_transitive_deps(deps):
-+    new_dict_deps = {}
-+    for pkg in deps.keys():
-+        d = deps[pkg]
-+        new_dict_deps[pkg] = []
-+        for i in range(len(d)):
-+            add_me = True
-+            for j in range(len(d)):
-+                if j==i:
-+                    continue
-+                if is_dep(d[i],d[j],deps):
-+                    add_me = False
-+            if add_me:
-+                new_dict_deps[pkg].append(d[i])
-+    return new_dict_deps
-+
-+if not transitive:
-+    dict_deps = remove_transitive_deps(dict_deps)
-+
- # Print the attributes of a node: label and fill-color
- def print_attrs(pkg):
-     if pkg == 'all':
 -- 
-1.8.3.2
+http://autobuild.buildroot.net
