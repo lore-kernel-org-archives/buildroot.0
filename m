@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 13:40:49 +0200
-Subject: [Buildroot] [git commit] python-setuptools: add license information
-Message-ID: <20140507120710.BA80C9CB2A@busybox.osuosl.org>
+Date: Wed, 7 May 2014 13:20:43 +0200
+Subject: [Buildroot] [git commit] python-netifaces: add license information
+Message-ID: <20140507120710.AAC379CA29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=407db483bad294443f67515485dd8e3bd3e05968
+commit: http://git.buildroot.net/buildroot/commit/?id=c3ef7d20ae7ec80012cfd3623f8daa40e51e8efa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: license on single line, use PKG-INFO as license file]
 Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-setuptools/python-setuptools.mk |    2 ++
+ package/python-netifaces/python-netifaces.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 48bf7c5..54a11c4 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
+diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
+index faa39bd..33d63cf 100644
+--- a/package/python-netifaces/python-netifaces.mk
++++ b/package/python-netifaces/python-netifaces.mk
 @@ -7,6 +7,8 @@
- PYTHON_SETUPTOOLS_VERSION = 2.1.2
- PYTHON_SETUPTOOLS_SOURCE  = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
- PYTHON_SETUPTOOLS_SITE    = http://pypi.python.org/packages/source/s/setuptools
-+PYTHON_SETUPTOOLS_LICENSE = Python Software Foundation or Zope Public License
-+PYTHON_SETUPTOOLS_LICENSE_FILES = PKG-INFO
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
+ PYTHON_NETIFACES_VERSION = 0.7
+ PYTHON_NETIFACES_SOURCE  = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
+ PYTHON_NETIFACES_SITE    = http://alastairs-place.net/projects/netifaces
++PYTHON_NETIFACES_LICENSE = MIT
++PYTHON_NETIFACES_LICENSE_FILES = README
+ PYTHON_NETIFACES_SETUP_TYPE = setuptools
  
  $(eval $(python-package))
