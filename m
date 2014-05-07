@@ -1,49 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 May 2014 10:56:24 +0200
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-In-Reply-To: <5369F20B.5030903@ozlabs.org>
-References: <20131111215435.GC3510@free.fr>
-	<5369F20B.5030903@ozlabs.org>
-Message-ID: <20140507105624.3ecaaeb5@free-electrons.com>
+Date: Wed, 7 May 2014 10:58:12 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <CAFbHwiSCJi8ZHTPFRteuvakFykU79dt1EuqY=9m2SiSr9x4Cvg@mail.gmail.com>
+References: <20140507063009.23A95100E55@stock.ovh.net>
+ <20140507093155.18034c1d@free-electrons.com>
+ <CAFbHwiSCJi8ZHTPFRteuvakFykU79dt1EuqY=9m2SiSr9x4Cvg@mail.gmail.com>
+Message-ID: <20140507105812.4a2802e3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Kerr,
+Dear Will Newton,
 
-On Wed, 07 May 2014 16:42:51 +0800, Jeremy Kerr wrote:
+On Wed, 7 May 2014 09:04:11 +0100, Will Newton wrote:
 
-> OK, I have some progress on this one; but wanted to make sure what I'm
-> doing is in the direction that'd be generally useful for you.
-> 
-> How's this look?
-> 
->   http://ozlabs.org/~jk/tmp/patchwork-ART.png
-> 
-> - there are title attributes on the column header, so you get a tooltip
-> saying "Acked-by / Reviewed-by / Tested-by" when hovering over it. The
-> actual numbers have specific tooltips too (eg, "2 Acked-by").
+> >>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/bd0aefa1b1efb1a28d2af89a983b389ed2aeeff5/
+> >>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/a0679d22dde393a8daa2e109e2438100e36e982d/
+> >>    aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/1b19e911ff26d53708ac107e271d179e0e913735/
+> >
+> > Ok, on these ones, I have some news. It turns out that I tried to
+> > reproduce the build issue on the *new* build server, while in fact the
+> > autobuilds were still running on the *old* one. However, I restarted
+> > the autobuilds on the new build server, and it has reported new
+> > glibc/aarch64 failures... which I'm not able to reproduce.
 
-This looks good! I actually made an implementation of this when I was
-in the plane to the US a week ago, but I didn't had the necessary setup
-to test it. Glad to see you've done it :)
+No: they are the same ld segfault issue. You can access the logs by
+using the links above, and read the "build-end.log" file.
 
-> Also, are you wanting to filter by the presence of these tags? Just
-> non-zero? How about sorting?
-
-Sorting would be useful. I guess sorting for each tag is a bit too
-much, so maybe sorting by the total of A+R+T is sufficient.
-
-> Anyone have objections to adding a small column to the default patch
-> lists? Does anyone want to *not* have this information present?
-
-On Buildroot's side, we wanted this feature, so we're not really
-interested in being able to disable it. But maybe some other projects
-do not need it, indeed.
-
-Best regards,
+I saw your e-mail suggesting that to test a binutils patch. The only
+thing that surprises me here is that this issue is 100% reproducible
+when executed by the autobuilder script, but does not occur when I do a
+separate build (however in the same machine, same chroot as the
+autobuilder script).
 
 Thomas
 -- 
