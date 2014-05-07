@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:41 +0200
-Subject: [Buildroot] [PATCH v5 07/32] mesa3d: Add patch note about upstream
-	bug
+Date: Wed,  7 May 2014 22:09:47 +0200
+Subject: [Buildroot] [PATCH v5 13/32] libglu: new package
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,62 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...a3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch |    2 ++
- 1 file changed, 2 insertions(+)
+ package/Config.in        |    1 +
+ package/libglu/Config.in |   10 ++++++++++
+ package/libglu/libglu.mk |   16 ++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/libglu/Config.in
+ create mode 100644 package/libglu/libglu.mk
 
-diff --git a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-index 79df1ce..53ba519 100644
---- a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-+++ b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-@@ -8,6 +8,8 @@ only installed if Mesa3d is compiled with EGL support.
- 
- This patch installs this header file unconditionally.
- 
-+Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=77240
+diff --git a/package/Config.in b/package/Config.in
+index 77dec52..5af7dcb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
++source "package/libglu/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+ source "package/libqrencode/Config.in"
+diff --git a/package/libglu/Config.in b/package/libglu/Config.in
+new file mode 100644
+index 0000000..de8e1ef
+--- /dev/null
++++ b/package/libglu/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGLU
++	bool "libglu"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	help
++	  Mesa OpenGL Utility library
 +
- Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
- ---
-  src/egl/main/Makefile.am | 3 ---
++	  http://cgit.freedesktop.org/mesa/glu/
++
++comment "libglu needs an OpenGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
+new file mode 100644
+index 0000000..f4c47a0
+--- /dev/null
++++ b/package/libglu/libglu.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libglu
++#
++################################################################################
++
++LIBGLU_VERSION = 9.0.0
++LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
++LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
++LIBGLU_LICENSE = SGI-B-2.0
++LIBGLU_LICENSE_FILES = include/GL/glu.h
++LIBGLU_INSTALL_STAGING = YES
++LIBGLU_AUTORECONF = YES
++LIBGLU_DEPENDENCIES = libgl
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
