@@ -1,36 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 22:30:59 +0200
-Subject: [Buildroot] [git commit] protobuf-c: bump to version 1.0.0-rc1
-Message-ID: <20140507204846.291FB9CB25@busybox.osuosl.org>
+Date: Wed, 7 May 2014 22:30:49 +0200
+Subject: [Buildroot] [git commit] protobuf: bump to version 2.5.0
+Message-ID: <20140507204846.238AA9CB29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fcb5b619f8ad6a58f4afa88c46941848a58e40e0
+commit: http://git.buildroot.net/buildroot/commit/?id=cf37d83f5c1774faa8b3f1c588356c0d918aee1f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Phil Eichinger <phil@zankapfel.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/protobuf-c/protobuf-c.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/protobuf/protobuf.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 75e15a2..da0b139 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 3538aaa..ceb64df 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROTOBUF_C_VERSION = 1d1ad931dfda273bb12b9925d4b8cc413131af03
-+PROTOBUF_C_VERSION = v1.0.0-rc1
- PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
--HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf
-+HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
- PROTOBUF_C_MAKE = $(MAKE1)
- PROTOBUF_C_CONF_OPT = --disable-protoc
- PROTOBUF_C_INSTALL_STAGING = YES
+-PROTOBUF_VERSION = 2.4.1
++PROTOBUF_VERSION = 2.5.0
+ PROTOBUF_SITE = http://protobuf.googlecode.com/files/
+ PROTOBUF_LICENSE = BSD-3c
+ PROTOBUF_LICENSE_FILES = COPYING.txt
