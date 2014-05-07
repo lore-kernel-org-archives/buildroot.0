@@ -1,73 +1,94 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:54 +0200
-Subject: [Buildroot] [PATCH v5 20/32] xbmc-addon-xvdr: Version bump to xbmc
-	Gotham-compatible addon
+Date: Wed,  7 May 2014 22:09:45 +0200
+Subject: [Buildroot] [PATCH v5 11/32] libva-intel-driver: new package
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-21-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove upstream applied patch xbmc-addon-xvdr-0001-foreign-automake.patch
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xbmc-addon-xvdr-0001-foreign-automake.patch    |   28 --------------------
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         |    4 +--
- 2 files changed, 1 insertion(+), 31 deletions(-)
- delete mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+ package/Config.in                                |    1 +
+ package/libva-intel-driver/Config.in             |   19 +++++++++++++++
+ package/libva-intel-driver/libva-intel-driver.mk |   28 ++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
+ create mode 100644 package/libva-intel-driver/Config.in
+ create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-deleted file mode 100644
-index 0f49dcf..0000000
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--commit 846b0b5a8b559f94dffadf5b2f95ca845b6ba9f1
--Author: Yann E. MORIN <yann.morin.1998@free.fr>
--Date:   Wed Mar 26 07:45:58 2014 +0100
--
--    configure: set the foreign flag
--    
--    This is required since we do not bundle the necessary files (NEWS,
--    INSTALL et al.) Setting it in configure.in is needed to be able
--    to run autoreconf (in lieu of the weird autogen.sh)
--    
--    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--Patch accepted upstream in master:
--    https://github.com/pipelka/xbmc-addon-xvdr/commit/84e5860f488e67a3a3386c779f9a56adeb3dc220
--
--diff --git a/configure.in b/configure.in
--index 6e692e1..7be0d18 100755
----- a/configure.in
--+++ b/configure.in
--@@ -12,7 +12,7 @@ AC_CANONICAL_HOST
-- AC_CANONICAL_TARGET
-- 
-- dnl Setup for automake
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([foreign])
-- 
-- dnl Check for tools
-- 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-index 28c90f7..601df63 100644
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-+++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-@@ -4,9 +4,7 @@
- #
- ################################################################################
- 
--# This cset is on the branch 'xbmc-frodo'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_ADDON_XVDR_VERSION = acd4e145fc3220cf708aaf40d895904732dce2c7
-+XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
- XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
- XBMC_ADDON_XVDR_LICENSE = GPLv2+
- XBMC_ADDON_XVDR_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index a1bd1c0..77dec52 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -600,6 +600,7 @@ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/libva/Config.in"
++source "package/libva-intel-driver/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
+new file mode 100644
+index 0000000..89a3264
+--- /dev/null
++++ b/package/libva-intel-driver/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBVA_INTEL_DRIVER
++	bool "libva-intel-driver"
++	select BR2_PACKAGE_LIBVA
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
++	depends on BR2_LARGEFILE # libdrm
++	help
++	  VA-API back-end driver for Intel graphics chips
++
++	  https://01.org/linuxgraphics/community/vaapi
++
++comment "libva intel driver needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+new file mode 100644
+index 0000000..994fe44
+--- /dev/null
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# libva-intel-driver
++#
++################################################################################
++
++LIBVA_INTEL_DRIVER_VERSION = 1.3.0
++LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
++LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
++LIBVA_INTEL_DRIVER_LICENSE = MIT
++LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
++LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
++endif
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
