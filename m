@@ -1,59 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:10:03 +0200
-Subject: [Buildroot] [PATCH v5 29/32] xbmc: Add option for Goom screensaver
+Date: Wed,  7 May 2014 22:09:42 +0200
+Subject: [Buildroot] [PATCH v5 08/32] mesa3d: Add dri3 support
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-30-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |   11 +++++++++++
- package/xbmc/xbmc.mk   |    6 ++++++
- 2 files changed, 17 insertions(+)
+ package/mesa3d/mesa3d.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index d04059c..cbf1fa9 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -125,6 +125,17 @@ config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	help
- 	  Enable webserver feature
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1708a3e..09d7fab 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -22,6 +22,13 @@ MESA3D_DEPENDENCIES = \
+ 	host-xutil_makedepend \
+ 	libdrm
  
-+config BR2_PACKAGE_XBMC_GOOM
-+	bool "goom screensaver"
-+	depends on BR2_i386 || BR2_x86_64 # it does not make sense to use goom on embedded archs
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	help
-+	  Enable goom screensaver
-+
-+comment "goom needs an OpenGL backend"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-+
- config BR2_PACKAGE_XBMC_LIBNFS
- 	bool "nfs"
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 9b52d18..bdefc8e 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -109,6 +109,12 @@ else
- XBMC_CONF_OPT += --disable-libmp3lame
- endif
- 
-+ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
-+XBMC_CONF_OPT += --enable-goom
++ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++MESA3D_DEPENDENCIES += xproto_dri3proto
++MESA3D_CONF_OPT += --enable-dri3
 +else
-+XBMC_CONF_OPT += --disable-goom
++MESA3D_CONF_OPT += --disable-dri3
 +endif
 +
- ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
- XBMC_DEPENDENCIES += libusb-compat
- XBMC_CONF_OPT += --enable-libusb
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
 -- 
 1.7.10.4
