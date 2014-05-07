@@ -1,37 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 7 May 2014 17:48:27 +0200
-Subject: [Buildroot] CMake requires ncurses
-In-Reply-To: <CAHXCMMJOQc=pO=X+C7ruNAGm44wYv3nJEUjKo=+=sNF7+kbzTA@mail.gmail.com>
-References: <CAHkwnC-kaMHjsD9GjPiDLdx5vda2CKAnDVXPX-qAUx+r01MCAQ@mail.gmail.com>
- <20140507164753.48c13d65@free-electrons.com>
- <CAHkwnC_7GBG+a4oh1aLSc7QeaEsC-N0qROcaNuGSE+Wp0=z34g@mail.gmail.com>
- <CAHXCMMJOQc=pO=X+C7ruNAGm44wYv3nJEUjKo=+=sNF7+kbzTA@mail.gmail.com>
-Message-ID: <20140507174827.2f0bb635@free-electrons.com>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Wed, 7 May 2014 10:49:38 -0500
+Subject: [Buildroot] Packages Missing License Information
+In-Reply-To: <1889a9ee-6445-4289-b93b-2ec3f92b6057@email.android.com>
+References: <OFDB06073D.7A986E79-ON86257CD1.0054D967-86257CD1.0054DA94@rockwellcollins.com>
+ <1889a9ee-6445-4289-b93b-2ec3f92b6057@email.android.com>
+Message-ID: <OF2DEE2D98.D4D5786E-ON86257CD1.0056D2F7-86257CD1.0056F164@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi Thomas,
 
-On Wed, 7 May 2014 17:45:34 +0200, Samuel Martin wrote:
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote on 05/07/2014 
+10:46:28 AM:
 
-> After checking cmake source, it seems ncurses is a dependency of
-> ccmake program (the CMake curses interface).
-> 
-> Its build can be disabled by adding -DBUILD_CursesDialog=OFF to the
-> configure command line.
-> 
-> @Fabio: care to test this and cook a patch if it works as expected?
+[..]
 
-Are there other parts of CMake that we can disable the build for? For
-example CTest and CPack? CMake is quite long to build, so anything we
-can remove from its build that isn't necessary to build other packages
-is welcome.
+> It seems you are not aware of the package statistics at http://
+> autobuild.buildroot.org/stats/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+No I was not aware of this very useful site. Thanks for making me aware of 
+it!
+
+Thanks,
+-Ryan
