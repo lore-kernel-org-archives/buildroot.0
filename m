@@ -1,94 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:09:45 +0200
-Subject: [Buildroot] [PATCH v5 11/32] libva-intel-driver: new package
+Date: Wed,  7 May 2014 22:09:37 +0200
+Subject: [Buildroot] [PATCH v5 03/32] mesa3d: use --enable-shared-glapi also
+	for Gallium drivers
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed since this upstream commit:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.2&id=0432aa064bf5d4d0ad8fc3c4d648b8feb238ddfa
+
+Remove --disable-shared-glapi from the non-DRI-block, this
+would break with enabled Gallium drivers.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                |    1 +
- package/libva-intel-driver/Config.in             |   19 +++++++++++++++
- package/libva-intel-driver/libva-intel-driver.mk |   28 ++++++++++++++++++++++
- 3 files changed, 48 insertions(+)
- create mode 100644 package/libva-intel-driver/Config.in
- create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ package/mesa3d/mesa3d.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a1bd1c0..77dec52 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -600,6 +600,7 @@ source "package/libsvg-cairo/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/libva/Config.in"
-+source "package/libva-intel-driver/Config.in"
- source "package/opencv/Config.in"
- source "package/opengl/Config.in"
- source "package/pango/Config.in"
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-new file mode 100644
-index 0000000..89a3264
---- /dev/null
-+++ b/package/libva-intel-driver/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBVA_INTEL_DRIVER
-+	bool "libva-intel-driver"
-+	select BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
-+	depends on BR2_LARGEFILE # libdrm
-+	help
-+	  VA-API back-end driver for Intel graphics chips
-+
-+	  https://01.org/linuxgraphics/community/vaapi
-+
-+comment "libva intel driver needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-new file mode 100644
-index 0000000..994fe44
---- /dev/null
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# libva-intel-driver
-+#
-+################################################################################
-+
-+LIBVA_INTEL_DRIVER_VERSION = 1.3.0
-+LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
-+LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_LICENSE = MIT
-+LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
-+LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBVA_DEPENDENCIES += wayland
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 706b481..f95df0c 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -63,13 +63,13 @@ MESA3D_CONF_OPT += \
+ 	--without-gallium-drivers
+ else
+ MESA3D_CONF_OPT += \
++	--enable-shared-glapi \
+ 	--with-gallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y))
+ endif
+ 
+ ifeq ($(MESA3D_DRI_DRIVERS-y),)
+ MESA3D_CONF_OPT += \
+ 	--disable-dri \
+-	--disable-shared-glapi \
+ 	--without-dri-drivers
+ else
+ MESA3D_CONF_OPT += \
 -- 
 1.7.10.4
