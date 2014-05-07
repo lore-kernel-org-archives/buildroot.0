@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 22:48:13 +0200
-Subject: [Buildroot] [PATCH] dhcpdump: fix static build
-In-Reply-To: <a2d055301fd7b62deb7599263ad3ff0ee94c1870.1398283199.git.baruch@tkos.co.il>
-References: <a2d055301fd7b62deb7599263ad3ff0ee94c1870.1398283199.git.baruch@tkos.co.il>
-Message-ID: <CACXmViZ8Ciadt+mE5d-xb1Sni3umA2SdEmwAtcJbfz087rDaSg@mail.gmail.com>
+Date: Wed, 7 May 2014 22:30:59 +0200
+Subject: [Buildroot] [git commit] protobuf-c: bump to version 1.0.0-rc1
+Message-ID: <20140507204846.291FB9CB25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 23, 2014 at 9:59 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Use pcap-config to list optional libpcap dependencies that we need to list
-> when building statically.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/110/1107c21cdf656763bf7048c6c5c7899369724f5f/
->
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+commit: http://git.buildroot.net/buildroot/commit/?id=fcb5b619f8ad6a58f4afa88c46941848a58e40e0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Committed, thanks.
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/protobuf-c/protobuf-c.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 75e15a2..da0b139 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = 1d1ad931dfda273bb12b9925d4b8cc413131af03
++PROTOBUF_C_VERSION = v1.0.0-rc1
+ PROTOBUF_C_SITE = $(call github,protobuf-c,protobuf-c,$(PROTOBUF_C_VERSION))
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+-HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf
++HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+ PROTOBUF_C_MAKE = $(MAKE1)
+ PROTOBUF_C_CONF_OPT = --disable-protoc
+ PROTOBUF_C_INSTALL_STAGING = YES
