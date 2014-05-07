@@ -1,32 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:10:05 +0200
-Subject: [Buildroot] [PATCH v5 31/32] xbmc: Fix ffmpeg cross compile
-In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-32-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 May 2014 22:24:19 +0200
+Subject: [Buildroot] [PATCH 1/1 v5] qdecoder : new package
+In-Reply-To: <1399379703-24061-1-git-send-email-sagaert.johan@skynet.be>
+ (Sagaert Johan's message of "Tue, 6 May 2014 14:35:03 +0200")
+References: <1399379703-24061-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <871tw5e3rg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Sagaert" == Sagaert Johan <sagaert.johan@skynet.be> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/xbmc/xbmc.mk |    1 +
- 1 file changed, 1 insertion(+)
+ > Features:
+ >    Supports parsing a request encoded by GET/POST method
+ >    Supports parsing multipart/form-data encoding.(in-memory and direct disk)
+ >    Supports COOKIE handling.
+ >    Supports Session management.
+ >    Supports FastCGI
+   
+ > Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+ > ---
+ > v2:	Changed License to BSD-2
+ > v3:	removed QDECODER_CONF_OPT and created makefile.in patch
+ > v4:	renamed the patch to qdecoder-0001-install-header-and-lib-in-staging-directory.patch
+ > v5:	-added !BR2_PREFER_STATIC_LIB dependency.
+ > 	-changed Config.in help link to http://wolkykim.github.io/qdecoder
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 99e78d4..46d969a 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -29,6 +29,7 @@ XBMC_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- XBMC_CONF_OPT +=  \
-+	--with-arch=$(BR2_ARCH) \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
+You still didn't fix the Makefile.in patch.
+
+Looking closer, we also need to patch configure.ac as it hardcodes PATH
+and /usr for includes and libraries.
+
+Committed with the patch dropped / two patches added.
+
 -- 
-1.7.10.4
+Bye, Peter Korsgaard
