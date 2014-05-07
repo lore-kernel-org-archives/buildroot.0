@@ -1,31 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  7 May 2014 17:15:52 +0000 (UTC)
-Subject: [Buildroot] [Bug 7010] jamvm builds and runs fine under mips (be)
-In-Reply-To: <bug-7010-163@https.bugs.busybox.net/>
-References: <bug-7010-163@https.bugs.busybox.net/>
-Message-ID: <20140507171552.1C90A9CAFC@busybox.osuosl.org>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 07 May 2014 19:37:23 +0200
+Subject: [Buildroot] CMake requires ncurses
+In-Reply-To: <CAHkwnC-nxOwx6wj3hQaPbG4Q5nzQMbyK-xhuKsPd6F5_afSrhQ@mail.gmail.com>
+References: <CAHkwnC-kaMHjsD9GjPiDLdx5vda2CKAnDVXPX-qAUx+r01MCAQ@mail.gmail.com>
+ <20140507164753.48c13d65@free-electrons.com>
+ <CAHkwnC_7GBG+a4oh1aLSc7QeaEsC-N0qROcaNuGSE+Wp0=z34g@mail.gmail.com>
+ <20140507174421.04e3c2f2@free-electrons.com>
+ <CAHkwnC-nxOwx6wj3hQaPbG4Q5nzQMbyK-xhuKsPd6F5_afSrhQ@mail.gmail.com>
+Message-ID: <536A6F53.1020408@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7010
+Hi Fabio,
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-05-07 17:15:51 UTC ---
-It seems that a development tree of jamvm is available containing mips(be)
-support already. This tree is supposed to become version 1.6.0 of jamvm, but it
-seems that no release has been made for a long time now.
+Fabio Porcedda wrote:
+> On Wed, May 7, 2014 at 5:44 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Fabio Porcedda,
+>>
+>> On Wed, 7 May 2014 17:32:38 +0200, Fabio Porcedda wrote:
+>>
+>>> Are you sure that In your system there isn't installed the ncurses
+>>> development package?
+>>>
+>>> On my ubuntu distribution if i uninstall the libncurses5-dev package i got:
+>>>
+>>> make defconfig && make allyespackageconfig
+>>>
+>>> make host-cmake
+>>
+>> Well, right. On my system, libncurses-dev is definitely installed, but
+>> I was thinking that on the autobuilders chroot it is not. But in fact
+>> it is, for a simple reason: libncurses-dev is needed for 'make
+>> menuconfig'.
 
-See the tree at http://developer.berlios.de/git/?group_id=6545
+Still I find it strange that it fails. If libncurses-dev is not
+found, CMake just disables building ccmake. Maybe you had configured
+host-cmake with libncurses-dev installed, then (re)built it without
+libncurses?
 
-One solution would be to accept Alexander's patch as is, the other one being to
-switch to a git revision.
+Anyway, this is not that important because...
 
-In the mean time I will contact the jamvm team with request for an update on
-1.6.0.
+>>
+>> So I believe you're maybe using 'make xconfig' or 'make gconfig', and
+>> therefore you don't need to have the libncurses development files
+>> installed.
+>
+> Well, i found that only because I used buildroot on a fresh installed
+> system, i usually have installed the ncurses development files.
+> I just think that it's useful to take care of it because it's not fun
+> that the building fail halfway, so we have to choose between:
+> -  document it
+> - add the dependency to cmake
+> -  disable it
+> The last option seems to be the preferred one.
+
+...disabling ccmake is by far the best thing to do.
+
+I'm having a look at your patch right now.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Luca
