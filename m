@@ -1,67 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 14:39:18 +0200
-Subject: [Buildroot] [git commit] clapack: don't allow on PowerPC uClibc
-Message-ID: <20140507123935.27E199CB28@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 07 May 2014 15:04:09 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <trinity-2dbcf4e8-0f89-41ea-a300-89bf6b96ecb0-1399453444810@3capp-gmx-bs21>
+ (Peter Seiderer's message of "Wed, 7 May 2014 11:04:04 +0200")
+References: <20140507063009.23A95100E55@stock.ovh.net>
+ <20140507093155.18034c1d@free-electrons.com>
+ <trinity-2dbcf4e8-0f89-41ea-a300-89bf6b96ecb0-1399453444810@3capp-gmx-bs21>
+Message-ID: <87a9ateo52.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d05c2793609187d3ce843a2e491a0f31adf3216a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On PowerPC, clapack uses the _fpu_control symbol, which isn't defined
-on uClibc, so this commit disallows the selection of clapack on
-PowerPC uClibc configurations. PowerPC/glibc and ARM/uClibc
-configurations have been tested to build correctly.
+ > Hello Thomas,
+ >> Gesendet: Mittwoch, 07. Mai 2014 um 09:31 Uhr
+ >> Von: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+ >> An: buildroot at uclibc.org, "Ezequiel Garcia" <ezequiel.garcia@free-electrons.com>, "Peter Seiderer" <ps.report@gmx.net>
+ >> Betreff: Analysis of build failures
+ >> 
+ >> Hello all,
+ >> 
 
-Fixes:
+ > [...]
 
-  http://autobuild.buildroot.org/results/d1d/d1d721fa697956218dfc2c865dfb61911cf2600e/build-end.log
+ >> >     x86_64 |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/992c17e43664e8f2dfdfe711c1b0a43ebc21af90/
+ >> >   mips64el |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/2bbc9606281f4c96a264c5e1daa50f7957315047/
+ >> >    powerpc |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/0162d66ddbfe7f240819eaee9e76bbd0a0ad7e7f/
+ >> >       sh4a |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/d1f2083608540e9b7f778a25d54b94bdb582eca1/
+ >> 
+ >> Peter (Seiderer), could have a look at these? This issue has been
+ >> hitting the autobuilders since many days, we really need to get it
+ >> fixed.
+ >> 
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/armadillo/Config.in |    2 ++
- package/clapack/Config.in   |    4 ++++
- 2 files changed, 6 insertions(+), 0 deletions(-)
+ > should be fixed by proposed patch
+ > http://lists.busybox.net/pipermail/buildroot/2014-April/094830.html
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index b3ba2fc..898564d 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -1,12 +1,14 @@
- comment "armadillo needs a toolchain w/ C++, largefile"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
- 
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # clapack
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
- 	select BR2_PACKAGE_CLAPACK
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
-diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-index 68a6dde..ee538a4 100644
---- a/package/clapack/Config.in
-+++ b/package/clapack/Config.in
-@@ -2,6 +2,9 @@ config BR2_PACKAGE_CLAPACK
- 	bool "cblas/clapack"
- 	depends on BR2_LARGEFILE
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
-+	# _fpu_control is used on PowerPC, but not available with
-+	# uClibc
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 	help
- 	  BLAS and LAPACK C implementation (f2c'ed version of).
- 
-@@ -22,3 +25,4 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
- comment "cblas/clapack needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
