@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 May 2014 22:10:00 +0200
-Subject: [Buildroot] [PATCH v5 26/32] xbmc: Add alsa support
+Date: Wed,  7 May 2014 22:09:59 +0200
+Subject: [Buildroot] [PATCH v5 25/32] xbmc: Add VA-API support
 In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399493406-7247-27-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399493406-7247-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/xbmc/xbmc.mk |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index f23c989..38fdabb 100644
+index 4b2b134..f23c989 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -27,7 +27,6 @@ XBMC_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- XBMC_CONF_OPT +=  \
--	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
-@@ -95,6 +94,13 @@ else
- XBMC_CONF_OPT += --disable-gles
+@@ -39,7 +39,6 @@ XBMC_CONF_OPT +=  \
+ 	--disable-projectm \
+ 	--disable-pulse \
+ 	--disable-ssh \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -55,6 +54,14 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
  endif
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+XBMC_DEPENDENCIES += alsa-lib
-+XBMC_CONF_OPT += --enable-alsa
++# xbmc needs libva & libva-glx
++ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
++XBMC_DEPENDENCIES += libva
++XBMC_CONF_OPT += --enable-vaapi
 +else
-+XBMC_CONF_OPT += --disable-alsa
++XBMC_CONF_OPT += --disable-vaapi
 +endif
 +
- ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
- XBMC_DEPENDENCIES += libusb-compat
- XBMC_CONF_OPT += --enable-libusb
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ XBMC_DEPENDENCIES += \
+ 	libglew \
 -- 
 1.7.10.4
