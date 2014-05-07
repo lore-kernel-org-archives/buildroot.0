@@ -1,65 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 May 2014 22:39:33 +0200
-Subject: [Buildroot] [git commit] host-pkgconf: use --static option for
-	static builds
-Message-ID: <20140507204846.30C719CB25@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 7 May 2014 22:51:02 +0200
+Subject: [Buildroot] [PATCH v5 18/32] xbmc: bump version to 13.0
+In-Reply-To: <1399493406-7247-19-git-send-email-bernd.kuhls@t-online.de>
+References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
+ <1399493406-7247-19-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAGduivy54hahPOa8K1D48yp3=H8FkQZrNau8osABps4dc0uvVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=958c9438ccb5e8c8864edf242b6b4ce3b1f058a4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Bernd, all,
 
-Detect when BR2_PREFER_STATIC_LIBS is selected and modify the host
-pkg-config wrapper to append the --static option in that case.
+Acked-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Fixes:
-   http://autobuild.buildroot.net/results/161/161446dde7e8e774773eb2b34fd555f5ac22dd02/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkgconf/pkg-config.in |    2 +-
- package/pkgconf/pkgconf.mk    |   14 ++++++++++++++
- 2 files changed, 15 insertions(+), 1 deletions(-)
-
-diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
-index 25a536b..4dec487 100644
---- a/package/pkgconf/pkg-config.in
-+++ b/package/pkgconf/pkg-config.in
-@@ -1,2 +1,2 @@
- #!/bin/sh
--PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf $@
-+PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index f3f6526..9641371 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -24,8 +24,22 @@ define HOST_PKGCONF_INSTALL_WRAPPER
- 		$(HOST_DIR)/usr/bin/pkg-config
- endef
- 
-+define HOST_PKGCONF_STATIC
-+	$(SED) 's, at STATIC@,--static,' $(HOST_DIR)/usr/bin/pkg-config
-+endef
-+
-+define HOST_PKGCONF_SHARED
-+	$(SED) 's, at STATIC@,,' $(HOST_DIR)/usr/bin/pkg-config
-+endef
-+
- PKGCONF_POST_INSTALL_TARGET_HOOKS += PKGCONF_LINK_PKGCONFIG
- HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_INSTALL_WRAPPER
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_STATIC
-+else
-+	HOST_PKGCONF_POST_INSTALL_HOOKS += HOST_PKGCONF_SHARED
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+On Wed, May 7, 2014 at 10:09 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/xbmc/Config.in |    1 +
+>  package/xbmc/xbmc.mk   |    4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+> index ed8872b..dfbd474 100644
+> --- a/package/xbmc/Config.in
+> +++ b/package/xbmc/Config.in
+> @@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+>         select BR2_PACKAGE_LIBUNGIF
+>         select BR2_PACKAGE_LIBVORBIS
+>         select BR2_PACKAGE_LIBXML2
+> +       select BR2_PACKAGE_LIBXSLT
+>         select BR2_PACKAGE_LZO
+>         select BR2_PACKAGE_NCURSES
+>         select BR2_PACKAGE_OPENSSL
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index 1bfc17d..926f050 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -XBMC_VERSION = 12.3-Frodo
+> +XBMC_VERSION = 13.0-Gotham
+>  XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+>  XBMC_LICENSE = GPLv2
+>  XBMC_LICENSE_FILES = LICENSE.GPL
+> @@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+>  XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
+>  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+>         libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+> -       libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+> +       libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+>         openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+>
+>  XBMC_CONF_ENV = \
+> --
+> 1.7.10.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
