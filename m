@@ -1,188 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 May 2014 22:00:47 +0200
-Subject: [Buildroot] [git commit] infra: Add PRE_*_HOOKS for every step
-Message-ID: <20140508200413.789DA9CB12@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 8 May 2014 23:48:50 +0300
+Subject: [Buildroot] [PATCH v3] protobuf: fix build for some unsupported
+	architectures
+In-Reply-To: <871tw4cauk.fsf@dell.be.48ers.dk>
+References: <7785bef8562b61c25931c80386ab9a60fe80459f.1399554410.git.baruch@tkos.co.il>
+ <871tw4cauk.fsf@dell.be.48ers.dk>
+Message-ID: <20140508204850.GO3861@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac93fabb66de0a2acb703b9079bfeed2f9d2cd45
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Add PRE_*_HOOKS to all the different steps through which a package may go.
+On Thu, May 08, 2014 at 09:46:27PM +0200, Peter Korsgaard wrote:
+> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> 
+>  > Add patches for making use of generic gcc atomic operations for unknown
+>  > architectures. Patches taken from
+>  > http://code.google.com/p/protobuf/issues/detail?id=488 .
+> 
+>  > Disable build for architectures that are not supported.
+> 
+>  > Fixes:
+>  > http://autobuild.buildroot.net/results/7e5/7e5791225334096206887de8a38fd947e1f8e9a2/
+>  > http://autobuild.buildroot.net/results/cf1/cf147b9188d6787a6a1a6072bf9bc6f7ddf5e5ae/
+> 
+>  > Cc: Phil Eichinger <phil.eichinger@gmail.com>
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Thanks, but a quick test with powerpc and the default external toolchain
+> doesn't build:
+> 
+> BR2_powerpc=y
+> BR2_powerpc_603e=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_PACKAGE_PROTOBUF=y
+> 
+> In file included from ./google/protobuf/stubs/atomicops.h:188:0,
+>                  from ./google/protobuf/stubs/once.h:81,
+>                  from google/protobuf/stubs/once.cc:38:
+> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h: In function 'google::protobuf::internal::Atomic32 google::protobuf::internal::NoBarrier_CompareAndSwap(volatile google::protobuf::internal::Atomic32*, google::protobuf::internal::Atomic32, google::protobuf::internal::Atomic32)':
+> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h:44:31: error: '__ATOMIC_RELAXED' was not declared in this scope
+> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h:44:65: error: '__atomic_compare_exchange_n' was not declared in this scope
+> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h: In function 'google::protobuf::internal::Atomic32 google::protobuf::internal::NoBarrier_AtomicExchange(volatile google::protobuf::internal::Atomic32*, google::protobuf::internal::Atomic32)':
+> 
+> So it looks like we need to tweak the arch list a bit.
 
-This will help avoid using POST_*_HOOKS to do tasks that should be done
-in the PRE_*_HOOKS of the next step.
-Otherwise, when the user would do a make foo-re<step>, this would not do
-what was really intented, the POST_*_HOOK of the preceding step not
-being executed.
+The generic internal atomic ops implementation (which is used to fix powerpc 
+build) is using the gcc feature of "memory model aware atomic operations". 
+These were introduced in gcc 4.7, while the Sourcery toolchain is gcc 4.5. I 
+don't see a straightforward way to depend on gcc version like we have for 
+kernel headers. Any ideas?
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-[ThomasDS: rebase, add images hooks to manual]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-hooks.txt |   20 ++++++++++++++++++++
- package/pkg-generic.mk                |   22 ++++++++++++++++++++--
- 2 files changed, 40 insertions(+), 2 deletions(-)
+baruch
 
-diff --git a/docs/manual/adding-packages-hooks.txt b/docs/manual/adding-packages-hooks.txt
-index 164315d..5b5bf6a 100644
---- a/docs/manual/adding-packages-hooks.txt
-+++ b/docs/manual/adding-packages-hooks.txt
-@@ -13,17 +13,37 @@ of the package construction.
- 
- The following hook points are available:
- 
-+* +LIBFOO_PRE_DOWNLOAD_HOOKS+
- * +LIBFOO_POST_DOWNLOAD_HOOKS+
-+
-+* +LIBFOO_PRE_EXTRACT_HOOKS+
- * +LIBFOO_POST_EXTRACT_HOOKS+
-+
-+* +LIBFOO_PRE_RSYNC_HOOKS+
- * +LIBFOO_POST_RSYNC_HOOKS+
-+
- * +LIBFOO_PRE_PATCH_HOOKS+
- * +LIBFOO_POST_PATCH_HOOKS+
-+
- * +LIBFOO_PRE_CONFIGURE_HOOKS+
- * +LIBFOO_POST_CONFIGURE_HOOKS+
-+
-+* +LIBFOO_PRE_BUILD_HOOKS+
- * +LIBFOO_POST_BUILD_HOOKS+
-+
-+* +LIBFOO_PRE_INSTALL_HOOKS+ (for host packages only)
- * +LIBFOO_POST_INSTALL_HOOKS+ (for host packages only)
-+
-+* +LIBFOO_PRE_INSTALL_STAGING_HOOKS+ (for target packages only)
- * +LIBFOO_POST_INSTALL_STAGING_HOOKS+ (for target packages only)
-+
-+* +LIBFOO_PRE_INSTALL_TARGET_HOOKS+ (for target packages only)
- * +LIBFOO_POST_INSTALL_TARGET_HOOKS+ (for target packages only)
-+
-+* +LIBFOO_PRE_INSTALL_IMAGES_HOOKS+
-+* +LIBFOO_POST_INSTALL_IMAGES_HOOKS+
-+
-+* +LIBFOO_PRE_LEGAL_INFO_HOOKS+
- * +LIBFOO_POST_LEGAL_INFO_HOOKS+
- 
- These variables are 'lists' of variable names containing actions to be
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cf02210..6eca6d4 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -70,6 +70,7 @@ endif
- 
- # Retrieve the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
-+	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- ifeq ($(DL_MODE),DOWNLOAD)
- # Only show the download message if it isn't already downloaded
- 	$(Q)if test ! -e $(DL_DIR)/$($(PKG)_SOURCE); then \
-@@ -101,6 +102,7 @@ endif
- $(BUILD_DIR)/%/.stamp_extracted:
- 	@$(call step_start,extract)
- 	@$(call MESSAGE,"Extracting")
-+	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
- 	$($(PKG)_EXTRACT_CMDS)
- # some packages have messed up permissions inside
-@@ -114,6 +116,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
- $(BUILD_DIR)/%/.stamp_rsynced:
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
-+	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	rsync -au $(RSYNC_VCS_EXCLUSIONS) $(SRCDIR)/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -162,8 +165,8 @@ $(BUILD_DIR)/%/.stamp_patched:
- # Configure
- $(BUILD_DIR)/%/.stamp_configured:
- 	@$(call step_start,configure)
--	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Configuring")
-+	$(foreach hook,$($(PKG)_PRE_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$($(PKG)_CONFIGURE_CMDS)
- 	$(foreach hook,$($(PKG)_POST_CONFIGURE_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -173,6 +176,7 @@ $(BUILD_DIR)/%/.stamp_configured:
- $(BUILD_DIR)/%/.stamp_built::
- 	@$(call step_start,build)
- 	@$(call MESSAGE,"Building")
-+	$(foreach hook,$($(PKG)_PRE_BUILD_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_BUILD_CMDS)
- 	$(foreach hook,$($(PKG)_POST_BUILD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -182,6 +186,7 @@ $(BUILD_DIR)/%/.stamp_built::
- $(BUILD_DIR)/%/.stamp_host_installed:
- 	@$(call step_start,install-host)
- 	@$(call MESSAGE,"Installing to host directory")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
- 	$(Q)touch $@
-@@ -191,6 +196,7 @@ $(BUILD_DIR)/%/.stamp_host_installed:
- $(BUILD_DIR)/%/.stamp_staging_installed:
- 	@$(call step_start,install-staging)
- 	@$(call MESSAGE,"Installing to staging directory")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	+$($(PKG)_INSTALL_STAGING_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
-@@ -206,6 +212,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
- # Install to images dir
- $(BUILD_DIR)/%/.stamp_images_installed:
- 	@$(call step_start,install-image)
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
- 	@$(call MESSAGE,"Installing to images directory")
- 	+$($(PKG)_INSTALL_IMAGES_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_IMAGES_HOOKS),$(call $(hook))$(sep))
-@@ -216,6 +223,7 @@ $(BUILD_DIR)/%/.stamp_images_installed:
- $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_start,install-target)
- 	@$(call MESSAGE,"Installing to target")
-+	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(if $(BR2_INIT_SYSTEMD),\
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-@@ -387,19 +395,28 @@ $(2)_EXTRACT_CMDS ?= \
- 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $(DL_DIR)/$$($(2)_SOURCE) | \
- 	$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $$($(2)_DIR) $(TAR_OPTIONS) -)
- 
--# post-steps hooks
-+# pre/post-steps hooks
-+$(2)_PRE_DOWNLOAD_HOOKS         ?=
- $(2)_POST_DOWNLOAD_HOOKS        ?=
-+$(2)_PRE_EXTRACT_HOOKS          ?=
- $(2)_POST_EXTRACT_HOOKS         ?=
-+$(2)_PRE_RSYNC_HOOKS            ?=
- $(2)_POST_RSYNC_HOOKS           ?=
- $(2)_PRE_PATCH_HOOKS            ?=
- $(2)_POST_PATCH_HOOKS           ?=
- $(2)_PRE_CONFIGURE_HOOKS        ?=
- $(2)_POST_CONFIGURE_HOOKS       ?=
-+$(2)_PRE_BUILD_HOOKS            ?=
- $(2)_POST_BUILD_HOOKS           ?=
-+$(2)_PRE_INSTALL_HOOKS          ?=
- $(2)_POST_INSTALL_HOOKS         ?=
-+$(2)_PRE_INSTALL_STAGING_HOOKS  ?=
- $(2)_POST_INSTALL_STAGING_HOOKS ?=
-+$(2)_PRE_INSTALL_TARGET_HOOKS   ?=
- $(2)_POST_INSTALL_TARGET_HOOKS  ?=
-+$(2)_PRE_INSTALL_IMAGES_HOOKS   ?=
- $(2)_POST_INSTALL_IMAGES_HOOKS  ?=
-+$(2)_PRE_LEGAL_INFO_HOOKS       ?=
- $(2)_POST_LEGAL_INFO_HOOKS      ?=
- 
- # human-friendly targets and target sequencing
-@@ -570,6 +587,7 @@ $(2)_MANIFEST_TARBALL ?= not saved
- # legal-info: produce legally relevant info.
- $(1)-legal-info:
- # Packages without a source are assumed to be part of Buildroot, skip them.
-+	$(foreach hook,$($(2)_PRE_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
- ifneq ($(call qstrip,$$($(2)_SOURCE)),)
- 
- ifeq ($$($(2)_SITE_METHOD),local)
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
