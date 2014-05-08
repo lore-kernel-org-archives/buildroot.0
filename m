@@ -1,75 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 08 May 2014 11:52:57 +0200
-Subject: [Buildroot] [PATCH] toolchain package: set version as 'virtual'
- instead of 'undefined'
-In-Reply-To: <CAAXf6LW8niwU+9y=erwUnrdbgj4JtP5mNKWZ+CJpAg6zS+8zUQ@mail.gmail.com>
-References: <0533846efc9952901283.1399373479@argentina>
- <20140506140745.1b072d2c@skate>
- <3dba42f3-d595-4415-bd38-3220738fe4b6@email.android.com>
- <CAAXf6LUKatxzDZOWC4tWq28rS3m_BcYT7Zg80Ea5HDz-C0O=nQ@mail.gmail.com>
- <d2a5d78d-c512-4fad-ae86-fbb5bcc42d8f@email.android.com>
- <CAAXf6LX19u3q95iMO5sUReKPdHwiuAnup0mXFJN2_-14mqnOMw@mail.gmail.com>
- <536B40EF.7060700@mind.be>
- <CAAXf6LW8niwU+9y=erwUnrdbgj4JtP5mNKWZ+CJpAg6zS+8zUQ@mail.gmail.com>
-Message-ID: <536B53F9.6090906@mind.be>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 8 May 2014 11:19:53 +0100
+Subject: [Buildroot] [PATCH] qt5connectivity: the poster example needs no
+	widgets, but it needs quick
+Message-ID: <1399544393-21292-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/05/14 11:28, Thomas De Schampheleire wrote:
-> Hi Arnout,
-> 
-> On Thu, May 8, 2014 at 10:31 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+Adding an upstream patch to fix an autobuild failure.
 
-[snip]
->>  I repeat my earlier statement: within a function that is supposed to be
->> eval'ed, *everything* should be $$'ed except the function arguments and except
->> some very specific cases.
->>
-> 
-> But in the case of host variables being set based on target variables
-> if there is no explicit host variable, as for the _VERSION, there
-> would be a recursive assignment as $(2) == $(3).
+Upstream commit:
+   https://qt.gitorious.org/qt/qtconnectivity/commit/0156038682cc40d44fedfc28dc9b78d1a0e6203b
 
-True; if you set
-$(2)_VERSION = $$(subst /,_,$$($(3)_VERSION))
+Fixes:
+   http://autobuild.buildroot.net/results/d12/d120355cbb42307d35e59bc4528e973a2b12150e/
 
-that will expand to
-PKG_VERSION = $$(subst /,_,$$(PKG_VERSION))
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
+---
+ ...ample-needs-no-widgets-but-it-needs-quick.patch |   67 ++++++++++++++++++++
+ 1 files changed, 67 insertions(+), 0 deletions(-)
+ create mode 100644 package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
 
-in the eval, which is indeed recursive.
-
-But that can be solved with a simple:
-
-$(2)_VERSION := $$(subst /,_,$$($(3)_VERSION))
-
-Fortunately, make is smart enough to break the recursion even if PKG_VERSION had
-been assigned with = before.
-
-> So statement   $(2)_VERSION = $$(subst /,_,$($(3)_VERSION))
-> should become   $(2)_VERSION := $$(subst /,_,$($(3)_VERSION))
-
- No, that doesn't make a difference, because the $(MYPKG_VERSION) is still
-expanded too early.
-
-
- Regards,
- Arnout
-
-> then, right?
-> I haven't tested whether this works though...
-> 
-> Best regards,
-> Thomas
-> 
-
-
+diff --git a/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch b/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
+new file mode 100644
+index 0000000..d8b75f4
+--- /dev/null
++++ b/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
+@@ -0,0 +1,67 @@
++qt5connectivity: the poster example needs no widgets, but it needs quick
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++
++From 0156038682cc40d44fedfc28dc9b78d1a0e6203b Mon Sep 17 00:00:00 2001
++From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
++Date: Tue, 18 Feb 2014 15:28:48 +0100
++Subject: [PATCH] the poster example needs no widgets, but it needs quick
++
++Task-number: QTBUG-36893
++Change-Id: Ic77fe07aa450001386be0b2e0d4a99f2e674dbb2
++Reviewed-by: Alex Blasche <alexander.blasche@digia.com>
++Reviewed-by: Rolf Eike Beer <eb@emlix.com>
++---
++ examples/nfc/nfc.pro              |    5 ++++-
++ examples/nfc/poster/poster.pro    |    2 +-
++ examples/nfc/poster/qmlposter.cpp |    4 ++--
++ 3 files changed, 7 insertions(+), 4 deletions(-)
++
++diff --git a/examples/nfc/nfc.pro b/examples/nfc/nfc.pro
++index e4f7e35..0076a71 100644
++--- a/examples/nfc/nfc.pro
+++++ b/examples/nfc/nfc.pro
++@@ -2,7 +2,10 @@ TEMPLATE = subdirs
++ qtHaveModule(widgets) {
++     SUBDIRS += \
++         annotatedurl \
++-        ndefeditor \
+++        ndefeditor
+++}
+++qtHaveModule(quick) {
+++    SUBDIRS += \
++         poster
++ }
++ 
++diff --git a/examples/nfc/poster/poster.pro b/examples/nfc/poster/poster.pro
++index 47de298..b6e87ed 100644
++--- a/examples/nfc/poster/poster.pro
+++++ b/examples/nfc/poster/poster.pro
++@@ -1,4 +1,4 @@
++-QT += qml quick network nfc widgets
+++QT += qml quick network nfc
++ 
++ SOURCES += \
++     qmlposter.cpp
++diff --git a/examples/nfc/poster/qmlposter.cpp b/examples/nfc/poster/qmlposter.cpp
++index 89f3695..2fc943d 100644
++--- a/examples/nfc/poster/qmlposter.cpp
+++++ b/examples/nfc/poster/qmlposter.cpp
++@@ -38,13 +38,13 @@
++ **
++ ****************************************************************************/
++ 
++-#include <QtWidgets/QApplication>
+++#include <QtGui/QGuiApplication>
++ #include <QtQml/QQmlEngine>
++ #include <QtQuick/QQuickView>
++ 
++ int main(int argc, char *argv[])
++ {
++-    QApplication application(argc, argv);
+++    QGuiApplication application(argc, argv);
++     const QString mainQmlApp = QLatin1String("qrc:/poster.qml");
++     QQuickView view;
++     view.setSource(QUrl(mainQmlApp));
++-- 
++1.7.1
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.7.1
