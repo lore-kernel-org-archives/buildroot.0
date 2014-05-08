@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  8 May 2014 23:10:56 +0200
-Subject: [Buildroot] [PATCH 0/3] RPi-related bumps (branch yem/bumps)
-Message-ID: <cover.1399583377.git.yann.morin.1998@free.fr>
+Date: Thu,  8 May 2014 23:11:00 +0200
+Subject: [Buildroot] [PATCH 1/3] package/rpi-firmware: bump
+In-Reply-To: <cover.1399583377.git.yann.morin.1998@free.fr>
+References: <cover.1399583377.git.yann.morin.1998@free.fr>
+Message-ID: <48bcaed707ac8aa4c599b8a5569a776dad80415d.1399583377.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +12,25 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+Undocumented changes (probably related to HDMI).
 
-Here are the usual Raspberry Pi related bumps:
-  - bump kernel for USB fix
-  - bump userland for stereo and NTSC outputs
-  - bump firmware for undisclosed changes (HDMI related?)
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 272759d8ff91b607233593a6e12a7fcf6255a588:
-
-  libenca: Move build host tool to PRE_BUILD_HOOKS (2014-05-08 22:02:25 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/bumps
-
-for you to fetch changes up to f466493038ac6b119a8eb14d5b2aa47e35bb7009:
-
-  configs: bump kernel used for the RPi (2014-05-08 23:07:06 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/rpi-firmware: bump
-      package/rpi-userland: bump version
-      configs: bump kernel used for the RPi
-
- configs/raspberrypi_defconfig        | 2 +-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
  package/rpi-firmware/rpi-firmware.mk | 2 +-
- package/rpi-userland/rpi-userland.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 138c37d..babb0a8 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 81e54c47b1cb26dd3990cbc970f4ddd3614196e8
++RPI_FIRMWARE_VERSION = c8881991d9181779aee9637d6f4b215f108021a3
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
