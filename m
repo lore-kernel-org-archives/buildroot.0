@@ -1,89 +1,143 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 8 May 2014 10:25:29 +0200
-Subject: [Buildroot] [PATCH v5 00/32] xbmc: bump version to 13.0-Gotham
-In-Reply-To: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1399493406-7247-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAGduivxVEQFqDVX9uH-cM=GyW26okJrcr84_phGzEgkcnH2NcA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 08 May 2014 10:31:43 +0200
+Subject: [Buildroot] [PATCH] toolchain package: set version as 'virtual'
+ instead of 'undefined'
+In-Reply-To: <CAAXf6LX19u3q95iMO5sUReKPdHwiuAnup0mXFJN2_-14mqnOMw@mail.gmail.com>
+References: <0533846efc9952901283.1399373479@argentina>
+ <20140506140745.1b072d2c@skate>
+ <3dba42f3-d595-4415-bd38-3220738fe4b6@email.android.com>
+ <CAAXf6LUKatxzDZOWC4tWq28rS3m_BcYT7Zg80Ea5HDz-C0O=nQ@mail.gmail.com>
+ <d2a5d78d-c512-4fad-ae86-fbb5bcc42d8f@email.android.com>
+ <CAAXf6LX19u3q95iMO5sUReKPdHwiuAnup0mXFJN2_-14mqnOMw@mail.gmail.com>
+Message-ID: <536B40EF.7060700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd, all,
-
-Thanks a lot for this.
-
-A note though, XBMC Gotham doesn't actually work well with the
-RaspberryPi when built with Buildroot, they are a few quirks that need
-to be ironed out.
-I will send two patches for libcec in order to fix a few of them.
-
-But there are still one issue that is troubling me, there's an assert
-from the rpi-userland code that fires when XBMC tries to display some
-thumbnails, or when you go into Settings, the assert speak for itself:
-assertion failure:[...]/rpi-userland-a59842a068cbd19e262701f30014499e9070fbf6/interface/khronos/egl/egl_client_surface.c:331:egl_surface_create():width
-> 0 && height > 0
-
-And Yann has a weird error that I don't have that the TexturePacker
-doesn't seem to build correctly it's textures.xbt (which is the binary
-blob packing all the GUI elements).
-
-On Wed, May 7, 2014 at 10:09 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On 08/05/14 09:04, Thomas De Schampheleire wrote:
 > Hi,
->
-> the patch series combines my latest patches to bump xbmc.
-> It also adds uClibc support to xbmc, a mesa3d version bump
-> and several new packages to support the new xbmc release
-> along with libva to get the best out of Intel systems.
->
-> Regards, Bernd
->
->
-> Bernd Kuhls (32):
->   xproto_dri3proto: New package
->   mesa3d: Bump version to 10.2-rc1
->   mesa3d: use --enable-shared-glapi also for Gallium drivers
->   mesa3d: Fix gbm related compile error
->   mesa3d: Depend on xorg meta package instead of xserver_xorg-server
->   mesa3d: Remove dependency for the libxml2 module of host-python
->   mesa3d: Add patch note about upstream bug
->   mesa3d: Add dri3 support
->   mesa3d: dri2 does not need udev support
->   libva: new package
->   libva-intel-driver: new package
->   ffmpeg: Add libva support
->   libglu: new package
->   libglew: new package
->   sdl: Add new dependency libglu for opengl support
->   xdriver_xf86-video-intel: Bump version to 2.99.911
->   rtmpdump: Add KSV patch
->   xbmc: bump version to 13.0
->   xbmc-pvr-addons: Version bump to xbmc Gotham-compatible addon
->   xbmc-addon-xvdr: Version bump to xbmc Gotham-compatible addon
->   xbmc: Add host-gettext dependency
->   xbmc: Allow compilation with uClibc
->   xbmc: fix arm/uclibc compilation
->   xbmc: Add X.org/OpenGL support
->   xbmc: Add VA-API support
->   xbmc: Add alsa support
->   xbmc: Add lame support
->   xbmc: Disable broken rsxs screensaver
->   xbmc: Add option for Goom screensaver
->   xbmc: add nasm/yasm dependency
->   xbmc: Fix ffmpeg cross compile
->   xbmc: Fix TexturePacker compile
->
->  package/libdrm/Config.in                           |    1 -
->  .../xlib_libXpm/xlib_libXpm-0001-detect-fork.patch |   66 --------------------
->  package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    1 -
->  3 files changed, 68 deletions(-)
->  delete mode 100644 package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
->
-> --
-> 1.7.10.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> On Wed, May 7, 2014 at 9:37 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+> [..]
+> 
+>>>> I tried using virtual-package in toolchain/toolchain/toolchain.mk, but TOOLCHAIN_VERSION becomes empty, while HOST_TOOLCHAIN_VERSION is virtual.
+> 
+> [..]
+> 
+> Some more feedback: I stepped away from toolchain and added a simple
+> test package 'mytest' as below.
+> I added a debug target 'bar' and some variable assignment in pkg-generic.mk.
+> 
+> 
+> diff --git a/package/mytest/mytest.mk b/package/mytest/mytest.mk
+> new file mode 100644
+> --- /dev/null
+> +++ b/package/mytest/mytest.mk
+> @@ -0,0 +1,10 @@
+> +
+> +$(eval $(virtual-package))
+> +
+> +bar:
+> +       @echo MYTEST_VERSION = $(MYTEST_VERSION)
+> +       @echo HOST_MYTEST_VERSION = $(HOST_MYTEST_VERSION)
+> +       @echo MYTEST_X = $(MYTEST_X)
+> +       @echo MYTEST_Y = $(MYTEST_Y)
+> +       @echo HOST_MYTEST_X = $(HOST_MYTEST_X)
+> +       @echo HOST_MYTEST_Y = $(HOST_MYTEST_Y)
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -262,6 +262,12 @@ define inner-generic-package
+>  # sanitize the package version that is used in paths, directory and file names.
+>  # Forward slashes may appear in the package's version when pointing to a
+>  # version control system branch or tag, for example remotes/origin/1_10_stable.
+> +
+> +ifdef $(2)_VERSION
+> +  $(2)_X := $(subst /,_,$($(2)_VERSION))
+> +  $(2)_Y := $(subst /,_,$$($(2)_VERSION))
+> +endif
+> +
+>  ifndef $(2)_VERSION
+>   ifdef $(3)_VERSION
+>    $(2)_DL_VERSION = $($(3)_VERSION)
+> 
+> 
+> In pkg-generic.mk, the _VERSION variables are defined, and there is a
+> subst() statement to replace / with _.
+> My conclusion is that the line with the subst statement does not work
+> when _VERSION is set like in virtual-package.
+> 
+> The output of 'make bar' is:
+> MYTEST_VERSION =
+> HOST_MYTEST_VERSION = virtual
+> MYTEST_X =
+> MYTEST_Y = virtual
+> HOST_MYTEST_X =
+> HOST_MYTEST_Y =
+> 
+> X is using the standard subst line as pkg-generic is using, while Y
+> adds an extra dollar sign.
+> When the version is set directly, as in MYTEST_VERSION = bla, then X
+> seems to be correct. This is the way buildroot works today. However,
+> when the version is set indirectly from an inner-xxx-package, like
+> $(3)_VERSION, then X no longer works but Y does. However, adding an
+> extra dollar by default doesn't work for the normal packages.
+> 
+> So how to proceed? Any experts in the inner-xxx-package and make internals?
+> Arnout, ThomasP, Yann?
+
+ Let me see if I can analyse it.
+
+$(eval $(virtual-package))
+
+recursively expands to:
+
+$(eval
+...
+MYTEST_VERSION = virtual
+HOST_MYTEST_VERSION = virtual
+...
+
+# expansion of inner-generic-package
+# ** At this point MYTEST_VERSION is not set yet! **
+ifdef MYTEST_VERSION
+  MYTEST_X :=
+  MYTEST_Y := $$(MYTEST_VERSION)
+endif
+
+ifndef MYTEST_VERSION
+ ifdef MYTEST_VERSION
+  MYTEST_DL_VERSION =
+  MYTEST_VERSION =
+ else
+  MYTEST_VERSION = undefined
+  MYTEST_DL_VERSION = undefined
+ endif
+else
+  MYTEST_DL_VERSION =
+  MYTEST_VERSION =
+endif
+...
+) #eval
+
+
+
+ I repeat my earlier statement: within a function that is supposed to be
+eval'ed, *everything* should be $$'ed except the function arguments and except
+some very specific cases.
+
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
