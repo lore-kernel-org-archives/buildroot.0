@@ -1,40 +1,50 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  9 May 2014 01:24:27 +0200
-Subject: [Buildroot] [PATCH] zeromq: explicitly add -lstdc++ for static build
-Message-ID: <1399591467-2219-1-git-send-email-arnout@mind.be>
+From: Ryan Barnett <rjbarnet@rockwellcollins.com>
+Date: Thu, 8 May 2014 18:55:06 -0500
+Subject: [Buildroot] [git commit] infra: Add PRE_*_HOOKS for every step
+In-Reply-To: <20140508200413.789DA9CB12@busybox.osuosl.org>
+References: <20140508200413.789DA9CB12@busybox.osuosl.org>
+Message-ID: <OF1318F845.0A53FD4C-ON86257CD2.00817C9E-86257CD2.0083637C@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes http://autobuild.buildroot.net/results/7c552e514f8c13ba8cdd420dc5bbf5edac915a83
+Thomas, All,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/zeromq/zeromq.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Peter Korsgaard <peter@korsgaard.com> wrote on 05/08/2014 03:00:47 PM:
+ 
+> commit: http://git.buildroot.net/buildroot/commit/?
+> id=ac93fabb66de0a2acb703b9079bfeed2f9d2cd45
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Add PRE_*_HOOKS to all the different steps through which a package may 
+go.
+> 
+> This will help avoid using POST_*_HOOKS to do tasks that should be done
+> in the PRE_*_HOOKS of the next step.
+> Otherwise, when the user would do a make foo-re<step>, this would not do
+> what was really intented, the POST_*_HOOK of the preceding step not
+> being executed.
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> [ThomasDS: rebase, add images hooks to manual]
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 7802916..c1eee3e 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -12,9 +12,15 @@ ZEROMQ_LICENSE = LGPLv3+ with exceptions
- ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
- ZEROMQ_AUTORECONF = YES
- 
-+# Only tools/curve_keygen.c needs this, but it doesn't hurt to pass it
-+# for the rest of the build as well (which automatically includes stdc++).
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	ZEROMQ_CONF_OPT += LIBS=-lstdc++
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZEROMQ_PGM),y)
- 	ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
--	ZEROMQ_CONF_OPT = --with-system-pgm
-+	ZEROMQ_CONF_OPT += --with-system-pgm
- endif
- 
- $(eval $(autotools-package))
--- 
-2.0.0.rc2
+An interesting note is that the <pkg>_INSTALL_IMAGES_CMDS is undocumented 
+step in the Buildroot manual. I only just recently (yesterday) discovered 
+that this option was available to a "generic-package" and had to do some 
+greping through the source code to confirm that it existed.
+
+I will submit a patch to add this step to the documentation.
+
+> Signed-off-by: Thomas De Schampheleire 
+<thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+[..]
+
+Thanks,
+-Ryan
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140508/cd2180f7/attachment.html>
