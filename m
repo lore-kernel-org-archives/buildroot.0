@@ -1,36 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  8 May 2014 23:11:02 +0200
-Subject: [Buildroot] [PATCH 3/3] configs: bump kernel used for the RPi
-In-Reply-To: <cover.1399583377.git.yann.morin.1998@free.fr>
-References: <cover.1399583377.git.yann.morin.1998@free.fr>
-Message-ID: <f466493038ac6b119a8eb14d5b2aa47e35bb7009.1399583377.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 8 May 2014 23:14:17 +0200
+Subject: [Buildroot] [git commit] tcl: needs threads
+Message-ID: <20140508211528.D9EA29CB25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+commit: http://git.buildroot.net/buildroot/commit/?id=a1134320e6ff0e34df79459a490b43d6582497bc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes some USB-related bugs.
+Fixes http://autobuild.buildroot.net/results/486/48696710a270ac69d6d62654779f164075cb3451/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tcl itself has a --disable-threads configure flag, but it unconditially
+configures its packages with --enable-threads, causing build failure.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/raspberrypi_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tcl/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 4fba6c7..d0c5813 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -16,7 +16,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="81bd944c02f65f706ad257f113fd5b2f62cdd03f"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="b09a27249d61475e4423607f7632a5aa6e7b3a53"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
--- 
-1.8.3.2
+diff --git a/package/tcl/Config.in b/package/tcl/Config.in
+index db41d65..c3d0d87 100644
+--- a/package/tcl/Config.in
++++ b/package/tcl/Config.in
+@@ -3,14 +3,15 @@ config BR2_PACKAGE_TCL
+ 	# fork()
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INET_IPV6
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  TCL (Tool Command Language) is a simple textual language.
+ 
+ 	  http://www.tcl.tk
+ 
+-comment "tcl needs a toolchain w/ ipv6"
++comment "tcl needs a toolchain w/ ipv6, threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INET_IPV6
++	depends on !BR2_INET_IPV6 || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ if BR2_PACKAGE_TCL
+ 
