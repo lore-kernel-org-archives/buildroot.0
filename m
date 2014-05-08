@@ -1,53 +1,41 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri,  9 May 2014 01:05:13 +0200
-Subject: [Buildroot] [PATCH 2/2] openpowerlink: add Intel I210 chip support
-In-Reply-To: <1399590313-30617-1-git-send-email-romain.naour@openwide.fr>
-References: <1399590313-30617-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1399590313-30617-2-git-send-email-romain.naour@openwide.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 09 May 2014 01:24:19 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140507093155.18034c1d@free-electrons.com>
+References: <20140507063009.23A95100E55@stock.ovh.net>
+ <20140507093155.18034c1d@free-electrons.com>
+Message-ID: <536C1223.1060801@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/openpowerlink/Config.in        | 3 +++
- package/openpowerlink/openpowerlink.mk | 6 ++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
+On 07/05/14 09:31, Thomas Petazzoni wrote:
+>>        arm |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/7c552e514f8c13ba8cdd420dc5bbf5edac915a83/
 
-diff --git a/package/openpowerlink/Config.in b/package/openpowerlink/Config.in
-index 8573961..d87f8be 100644
---- a/package/openpowerlink/Config.in
-+++ b/package/openpowerlink/Config.in
-@@ -60,6 +60,9 @@ config BR2_PACKAGE_OPENPOWERLINK_82573
- config BR2_PACKAGE_OPENPOWERLINK_8255x
- 	bool "Intel 8255x"
- 
-+config BR2_PACKAGE_OPENPOWERLINK_I210
-+	bool "Intel I210"
-+
- config BR2_PACKAGE_OPENPOWERLINK_RTL8139
- 	bool "Realtek RTL-8139"
- 
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 0aae544..152f014 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -51,10 +51,12 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENPOWERLINK_82573),y)
- OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=82573
--else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_RTL8139),y)
--OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8139
- else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_8255x),y)
- OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8255x
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_I210),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=I210
-+else ifeq ($(BR2_PACKAGE_OPENPOWERLINK_RTL8139),y)
-+OPENPOWERLINK_CONF_OPT += -DCFG_POWERLINK_EDRV=8139
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENPOWERLINK_MN),y)
+> Oh maan, I hate C++ errors. Any C++ person in the place to explain
+> what's going on? Might be related to BR2_PREFER_STATIC_LIB.
+
+ The issue is that the curve_keygen tool is written in C, but the zeromq library
+itself is C++. Therefore, it needs to be linked with libstdc++. With dynamic
+linking, the ELF dependencies will take care of that, but with static linking,
+it has to be added explicitly. And it looks like libtool doesn't find that
+dependency on libstdc++.
+
+ Renaming curve_keygen.c to curve_keygen.cpp and adjusting Makefile.am
+accordingly solves it, but I'm not sure if that is the best solution...
+
+ Oh well, adding LIBS=-lstdc++ works as well...
+
+ Regards,
+ Arnout
+
+
 -- 
-1.9.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
