@@ -1,62 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 8 May 2014 23:48:50 +0300
-Subject: [Buildroot] [PATCH v3] protobuf: fix build for some unsupported
-	architectures
-In-Reply-To: <871tw4cauk.fsf@dell.be.48ers.dk>
-References: <7785bef8562b61c25931c80386ab9a60fe80459f.1399554410.git.baruch@tkos.co.il>
- <871tw4cauk.fsf@dell.be.48ers.dk>
-Message-ID: <20140508204850.GO3861@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  8 May 2014 23:10:56 +0200
+Subject: [Buildroot] [PATCH 0/3] RPi-related bumps (branch yem/bumps)
+Message-ID: <cover.1399583377.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Thu, May 08, 2014 at 09:46:27PM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > Add patches for making use of generic gcc atomic operations for unknown
->  > architectures. Patches taken from
->  > http://code.google.com/p/protobuf/issues/detail?id=488 .
-> 
->  > Disable build for architectures that are not supported.
-> 
->  > Fixes:
->  > http://autobuild.buildroot.net/results/7e5/7e5791225334096206887de8a38fd947e1f8e9a2/
->  > http://autobuild.buildroot.net/results/cf1/cf147b9188d6787a6a1a6072bf9bc6f7ddf5e5ae/
-> 
->  > Cc: Phil Eichinger <phil.eichinger@gmail.com>
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Thanks, but a quick test with powerpc and the default external toolchain
-> doesn't build:
-> 
-> BR2_powerpc=y
-> BR2_powerpc_603e=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_PROTOBUF=y
-> 
-> In file included from ./google/protobuf/stubs/atomicops.h:188:0,
->                  from ./google/protobuf/stubs/once.h:81,
->                  from google/protobuf/stubs/once.cc:38:
-> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h: In function 'google::protobuf::internal::Atomic32 google::protobuf::internal::NoBarrier_CompareAndSwap(volatile google::protobuf::internal::Atomic32*, google::protobuf::internal::Atomic32, google::protobuf::internal::Atomic32)':
-> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h:44:31: error: '__ATOMIC_RELAXED' was not declared in this scope
-> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h:44:65: error: '__atomic_compare_exchange_n' was not declared in this scope
-> ./google/protobuf/stubs/atomicops_internals_generic_gcc.h: In function 'google::protobuf::internal::Atomic32 google::protobuf::internal::NoBarrier_AtomicExchange(volatile google::protobuf::internal::Atomic32*, google::protobuf::internal::Atomic32)':
-> 
-> So it looks like we need to tweak the arch list a bit.
+Hello All!
 
-The generic internal atomic ops implementation (which is used to fix powerpc 
-build) is using the gcc feature of "memory model aware atomic operations". 
-These were introduced in gcc 4.7, while the Sourcery toolchain is gcc 4.5. I 
-don't see a straightforward way to depend on gcc version like we have for 
-kernel headers. Any ideas?
+Here are the usual Raspberry Pi related bumps:
+  - bump kernel for USB fix
+  - bump userland for stereo and NTSC outputs
+  - bump firmware for undisclosed changes (HDMI related?)
 
-baruch
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 272759d8ff91b607233593a6e12a7fcf6255a588:
+
+  libenca: Move build host tool to PRE_BUILD_HOOKS (2014-05-08 22:02:25 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/bumps
+
+for you to fetch changes up to f466493038ac6b119a8eb14d5b2aa47e35bb7009:
+
+  configs: bump kernel used for the RPi (2014-05-08 23:07:06 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/rpi-firmware: bump
+      package/rpi-userland: bump version
+      configs: bump kernel used for the RPi
+
+ configs/raspberrypi_defconfig        | 2 +-
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
