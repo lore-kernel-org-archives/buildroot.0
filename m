@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
 Date: Thu,  8 May 2014 12:03:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 261] New package: wxWidgets
-In-Reply-To: <bug-261-163@https.bugs.busybox.net/>
-References: <bug-261-163@https.bugs.busybox.net/>
-Message-ID: <20140508120359.026E79CB3B@busybox.osuosl.org>
+Subject: [Buildroot] [Bug 325] New package: ratpoison
+In-Reply-To: <bug-325-163@https.bugs.busybox.net/>
+References: <bug-325-163@https.bugs.busybox.net/>
+Message-ID: <20140508120359.2D3159CB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=261
+https://bugs.busybox.net/show_bug.cgi?id=325
 
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
