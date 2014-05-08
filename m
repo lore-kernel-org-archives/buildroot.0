@@ -1,66 +1,118 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu,  8 May 2014 10:59:43 +0200
-Subject: [Buildroot] [PATCH 2/2] libcec: Add patch to fix assert with XBMC
-	Gotham
-In-Reply-To: <1399539583-31334-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1399539583-31334-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1399539583-31334-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 8 May 2014 11:14:14 +0200
+Subject: [Buildroot] CMake requires ncurses
+In-Reply-To: <536B46E1.2000107@lucaceresoli.net>
+References: <CAHkwnC-kaMHjsD9GjPiDLdx5vda2CKAnDVXPX-qAUx+r01MCAQ@mail.gmail.com>
+ <20140507164753.48c13d65@free-electrons.com>
+ <CAHkwnC_7GBG+a4oh1aLSc7QeaEsC-N0qROcaNuGSE+Wp0=z34g@mail.gmail.com>
+ <20140507174421.04e3c2f2@free-electrons.com>
+ <CAHkwnC-nxOwx6wj3hQaPbG4Q5nzQMbyK-xhuKsPd6F5_afSrhQ@mail.gmail.com>
+ <536A6F53.1020408@lucaceresoli.net>
+ <CAHkwnC98U2CNXV0KD8Uh1QEisSZvbmTwTiY3t7bp=guYjhMqFg@mail.gmail.com>
+ <CAHXCMMLXcYKfuedgtRwqT-auXF-VCJJsd9a5GriOegZK_2jzzw@mail.gmail.com>
+ <CAHkwnC_2Nhx5dUOb4AjR670dasOaDpJDEW3F526sO3LA83bgQA@mail.gmail.com>
+ <536B46E1.2000107@lucaceresoli.net>
+Message-ID: <CAHkwnC92LbBLEe_Z2hiE_XQTKTHQXKTFoYWiEnmgEqSDjwdqLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the new XBMC, on RaspberryPi, libcec throws an asserts in RPi
-userland's code which forbid XBMC Gotham to start.
+On Thu, May 8, 2014 at 10:57 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Hi Fabio,
+>
+> Fabio Porcedda wrote:
+>>
+>> On Wed, May 7, 2014 at 9:06 PM, Samuel Martin <s.martin49@gmail.com>
+>> wrote:
+>>>
+>>> Fabio, Luca, all,
+>>>
+>>> On Wed, May 7, 2014 at 7:46 PM, Fabio Porcedda <fabio.porcedda@gmail.com>
+>>> wrote:
+>>>>
+>>>> On Wed, May 7, 2014 at 7:37 PM, Luca Ceresoli <luca@lucaceresoli.net>
+>>>> wrote:
+>>>>>
+>>>>> Hi Fabio,
+>>>>>
+>>>>>
+>>>>> Fabio Porcedda wrote:
+>>>>>>
+>>>>>>
+>>>>>> On Wed, May 7, 2014 at 5:44 PM, Thomas Petazzoni
+>>>>>> <thomas.petazzoni@free-electrons.com> wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> Dear Fabio Porcedda,
+>>>>>>>
+>>>>>>> On Wed, 7 May 2014 17:32:38 +0200, Fabio Porcedda wrote:
+>>>>>>>
+>>>>>>>> Are you sure that In your system there isn't installed the ncurses
+>>>>>>>> development package?
+>>>>>>>>
+>>>>>>>> On my ubuntu distribution if i uninstall the libncurses5-dev package
+>>>>>>>> i
+>>>>>>>> got:
+>>>>>>>>
+>>>>>>>> make defconfig && make allyespackageconfig
+>>>>>>>>
+>>>>>>>> make host-cmake
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Well, right. On my system, libncurses-dev is definitely installed,
+>>>>>>> but
+>>>>>>> I was thinking that on the autobuilders chroot it is not. But in fact
+>>>>>>> it is, for a simple reason: libncurses-dev is needed for 'make
+>>>>>>> menuconfig'.
+>>>>>
+>>>>>
+>>>>>
+>>>>> Still I find it strange that it fails. If libncurses-dev is not
+>>>>> found, CMake just disables building ccmake. Maybe you had configured
+>>>>> host-cmake with libncurses-dev installed, then (re)built it without
+>>>>> libncurses?
+>>>
+>>>
+>>> That's weird!
+>>> I just gave a try in a debian chroot with libncurses5 installed but
+>>> not libncurses5-dev (so, there is the *.so files but no ncurses'
+>>> headers) and cmake build script correctly detect that something is
+>>> missing to build ccmake. Thus it disables ccmake build, and the build
+>>> successfully ends.
+>>
+>>
+>> You are right! Usually cmake builds fine even without the
+>> libncurses5-dev package installed, but it fails when buildroot have
+>> already built the host-ncurses package, try it:
+>>
+>> make clean host-ncurses host-cmake
+>>
+>> I found that because I'm building the allyespackageconfig.
+>>
+>> I'm not sure to understand why it's happening.
+>> Maybe cmake doesn't search headers in output/host/usr/include?
+>>
+>>> The configure/build log would help to understand what happened.
+>>
+>>
+>> This is the log of make host-cmake:
+>> https://gist.github.com/anonymous/123770e4ed5a12820066
+>
+>
+> Maybe CMake looks in output/host/ to check for ncurses availability, but
+> then uses the system path (/usr) when building. This is not visible
+> from your log, you may want to use verbose mode to have CMake print the
+> build command line.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- ...gistering-a-callback-that-wasn-t-register.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
+You are right, the "host/usr/include" is passed on the configuring
+stage but not at building stage.
 
-diff --git a/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch b/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
-new file mode 100644
-index 0000000..41d93aa
---- /dev/null
-+++ b/package/libcec/libcec-0001-Fix-unregistering-a-callback-that-wasn-t-register.patch
-@@ -0,0 +1,36 @@
-+From 78e52d55d6fc079b9a96d1a663d1991d9a0f2a2b Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Wed, 7 May 2014 08:41:27 +0200
-+Subject: [PATCH] Fix unregistering a callback that wasn't register
-+
-+This patchs fixes an asserts that get's thrown when you start XBMC and thus
-+prevents it from starting.
-+The asserts you'll endup getting is:
-+assertion failure:
-+[...]/interface/vmcs_host/vc_vchi_tvservice.c:430:vc_tv_unregister_callback():done
-+
-+Found: https://github.com/raspberrypi/userland/issues/159
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+---
-+ src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
-+index 76c61b3..1eb6417 100644
-+--- a/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
-++++ b/src/lib/adapter/RPi/RPiCECAdapterCommunication.cpp
-+@@ -353,7 +353,9 @@ void CRPiCECAdapterCommunication::Close(void)
-+     else
-+       return;
-+   }
-+-  vc_tv_unregister_callback(rpi_tv_callback);
-++
-++  if (m_bInitialised)
-++    vc_tv_unregister_callback(rpi_tv_callback);
-+
-+   UnregisterLogicalAddress();
-+
-+--
-+1.9.2
-+
+This is the verbose log:
+https://gist.github.com/anonymous/7d08f76c049705f12e47
+
+Regards
 -- 
-1.9.2
+Fabio Porcedda
