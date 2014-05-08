@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  8 May 2014 12:03:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 405] New package: OpenVZ tools
-In-Reply-To: <bug-405-163@https.bugs.busybox.net/>
-References: <bug-405-163@https.bugs.busybox.net/>
-Message-ID: <20140508120358.C15319CB3B@busybox.osuosl.org>
+Date: Thu,  8 May 2014 12:03:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 261] New package: wxWidgets
+In-Reply-To: <bug-261-163@https.bugs.busybox.net/>
+References: <bug-261-163@https.bugs.busybox.net/>
+Message-ID: <20140508120359.026E79CB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=405
+https://bugs.busybox.net/show_bug.cgi?id=261
 
 Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
