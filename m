@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 May 2014 22:02:25 +0200
-Subject: [Buildroot] [git commit] libenca: Move build host tool to
-	PRE_BUILD_HOOKS
-Message-ID: <20140508200413.8053B9CB12@busybox.osuosl.org>
+Date: Thu, 8 May 2014 21:55:18 +0200
+Subject: [Buildroot] [git commit] libcec: Bump version
+Message-ID: <20140508200413.67F3D9CB3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=272759d8ff91b607233593a6e12a7fcf6255a588
+commit: http://git.buildroot.net/buildroot/commit/?id=37b2613dfe95e0aad50b97e3d9d7ff9a1d9ef137
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The make_hash host tool, should be built during a PRE_BUILD_HOOKS and
-not a POST_CONFIGURE_HOOKS.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libenca/libenca.mk |    2 +-
+ package/libcec/libcec.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libenca/libenca.mk b/package/libenca/libenca.mk
-index d998c66..66fcfaa 100644
---- a/package/libenca/libenca.mk
-+++ b/package/libenca/libenca.mk
-@@ -21,6 +21,6 @@ define LIBENCA_MAKE_HOST_TOOL
- 	$(MAKE) -C $(@D)/tools $(HOST_CONFIGURE_OPTS) make_hash
- endef
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 99cc767..0aabb06 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--LIBENCA_POST_CONFIGURE_HOOKS += LIBENCA_MAKE_HOST_TOOL
-+LIBENCA_PRE_BUILD_HOOKS += LIBENCA_MAKE_HOST_TOOL
- 
- $(eval $(autotools-package))
+-LIBCEC_VERSION = libcec-2.1.1
++LIBCEC_VERSION = libcec-2.1.4-repack
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
