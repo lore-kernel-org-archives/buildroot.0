@@ -1,45 +1,52 @@
-From: Frank Bergmann <frank@frajasalo.de>
-Date: Fri, 09 May 2014 21:06:55 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140509133412.GE764@arch.cereza>
-References: <20140507063009.23A95100E55@stock.ovh.net>
- <20140507093155.18034c1d@free-electrons.com>
- <20140509133412.GE764@arch.cereza>
-Message-ID: <536D274F.3030100@frajasalo.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 09 May 2014 21:53:39 +0200
+Subject: [Buildroot] [PATCH v3] toolchain-external: Fix EABIhf check
+In-Reply-To: <CAAXf6LUActiMzXEXGqUJDkmrGhb_LXNaf1=Ca+A16PurGRBuBQ@mail.gmail.com>
+References: <2531b66f78bfdb046ddb.1399375540@argentina>
+ <536C06AF.2000107@mind.be>
+ <CAAXf6LUActiMzXEXGqUJDkmrGhb_LXNaf1=Ca+A16PurGRBuBQ@mail.gmail.com>
+Message-ID: <536D3243.9090704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09.05.2014 15:34, Ezequiel Garcia wrote:
-> On 07 May 09:31 AM, Thomas Petazzoni wrote:
->>>       nios2 |                  fio-fio-2.1.4 | NOK | http://autobuild.buildroot.net/results/9cd30031a40f768f6090cfba44c880fb2406672b/
+On 09/05/14 09:23, Thomas De Schampheleire wrote:
+> Hi Arnout,
+> 
+> On Fri, May 9, 2014 at 12:35 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 06/05/14 13:25, Thomas De Schampheleire wrote:
+[snip]
 >>
->> Ezequiel?
+>>> +             abistr_$(BR2_ARM_EABI)='EABI'; \
+>>> +             abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
+>>> +             echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
 >>
->
-> fio does a configure-time test to see if fallocate() is there, which passes
-> successfully. Then BR builds fio passing LARGE_FILE flags which makes the
-> toolchain try fallocate64(), which is not implemented.
->
-> However, I'm not sure how to either make the configure-time fallocate test
-> fail (so fio knows there's no fallocate), or prevent BR from passing the
-> LARGE_FILE flags.
->
-> Disable fio for nios2?
+>>  Nice approach! But to keep the original output, you could use:
+>>
+>> $${abistr_y} selected, but toolchain uses $${abistr_}
+>>
+> 
+> This did cross my mind, but it assumes that there are only two
+> possibilities: EABI and EABIhf. Suppose that a new EABI pops up. Or
+> suppose the compilation/link step fails for a completely different
+> reason. Then we have told the user that their toolchain is EABI or
+> EABIhf while it is not true.
+> So here I choice correctness over completeness, but if you prefer I
+> can change it. Do let me know if you still think we should add
+> $${abistr_} to the message.
 
-Or patch away the fallocate function in the configure script for nios2
-like the patch in attachment do ?
+ Good point, let's say "incompatible" then.
 
-With regards,
-Frank Bergmann.
+ Regards,
+ Arnout
 
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-fio-fix-missing-fallocate64.patch
-Type: text/x-patch
-Size: 2185 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140509/0a686dff/attachment.bin>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
