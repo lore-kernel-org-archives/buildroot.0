@@ -1,37 +1,116 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 May 2014 11:43:36 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-08
-In-Reply-To: <20140509071416.GQ3861@tarshish> (Baruch Siach's message of "Fri, 
- 9 May 2014 10:14:16 +0300")
-References: <20140509063010.6A8B2100DED@stock.ovh.net>
- <20140509071416.GQ3861@tarshish>
-Message-ID: <87bnv7b83b.fsf@dell.be.48ers.dk>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri, 09 May 2014 11:47:32 +0200
+Subject: [Buildroot] [PATCH] zeromq: disable test_fork when fork() is no
+ available
+In-Reply-To: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr>
+References: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <536CA434.2050901@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Hi Buildroot list,
- > On Fri, May 09, 2014 at 08:30:10AM +0200, Thomas Petazzoni wrote:
- >> microblazeel |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/1b3c1a4e0e043c5ab8ef03807a095a312a19a587/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/e06b1665546e2f85ff26eb487db667abef633477/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/6910ef6cebeb2c4cabb0467f87dfc3ec4be359f9/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/ff9ea039c88457a222c6b0433e019f64817e18be/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/52c384def2adf5f1eace38866d0271aa5332beda/
+Hi Yann,
 
- > The build log shows:
+> From: Samuel Martin <s.martin49@gmail.com>
+>
+> zeromp's configure script correctly detects the fork availability, but
+> unconditionally build test_fork program whatever the fork() availability.
+>
+> This patch fixes the build-system by disabling test_fork when fork is
+> not available (e.g. when !BR2_USEMMU).
+>
+> Fixes:
+>    http://autobuild.buildroot.org/results/359/3599cc3b7bf2bb22a78961cd84d21cb03cbd7015/
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> [yann.morin.1998 at free.fr: remove Makefile.in hunks]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> [yann.morin.1998 at free.fr: tested against the failed bfin config, as well as
+>   a i686 target]
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>   ...isable-test_fork-if-fork-is-not-available.patch | 52 ++++++++++++++++++++++
+>   package/zeromq/zeromq.mk                           |  1 +
+>   2 files changed, 53 insertions(+)
+>   create mode 100644 package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
+>
+> diff --git a/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
+> new file mode 100644
+> index 0000000..1eefdc3
+> --- /dev/null
+> +++ b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
+> @@ -0,0 +1,52 @@
+> +From b50912f2eecec1ea7accc155f8132116f8702075 Mon Sep 17 00:00:00 2001
+> +From: Samuel Martin <s.martin49@gmail.com>
+> +Date: Sat, 3 May 2014 12:22:38 +0200
+> +Subject: [PATCH] tests: disable test_fork if fork() is not available
+> +
+> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> +---
+> + configure.ac      | 1 +
+> + tests/Makefile.am | 8 ++++++--
+> + tests/Makefile.in | 8 ++++----
 
- > checking whether the C compiler works... no
- > configure: error: in `/home/test/test/3/output/build/qdecoder-r12.0.5':
- > configure: error: C compiler cannot create executables
+What about the changes in Makefile.in file?
+I don't see them here.
 
- > But I can't reproduce it here. Thomas, Peter, what's in config.log?
+Regards,
+Jerzy
 
-I don't have it anymore, but will restart one of the builds manually.
-
--- 
-Bye, Peter Korsgaard
+> + 3 files changed, 11 insertions(+), 6 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 0c41604..8f8521c 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -431,6 +431,7 @@ AM_CONDITIONAL(BUILD_PGM, test "x$libzmq_pgm_ext" = "xyes")
+> + AM_CONDITIONAL(ON_MINGW, test "x$libzmq_on_mingw32" = "xyes")
+> + AM_CONDITIONAL(ON_ANDROID, test "x$libzmq_on_android" = "xyes")
+> + AM_CONDITIONAL(ON_LINUX, test "x$libzmq_on_linux" = "xyes")
+> ++AM_CONDITIONAL(HAVE_FORK, test "x$ac_cv_func_fork" = "xyes")
+> +
+> + # Checks for library functions.
+> + AC_TYPE_SIGNAL
+> +diff --git a/tests/Makefile.am b/tests/Makefile.am
+> +index 0cfe4e8..2a1e257 100644
+> +--- a/tests/Makefile.am
+> ++++ b/tests/Makefile.am
+> +@@ -46,8 +46,10 @@ if !ON_MINGW
+> + noinst_PROGRAMS += test_shutdown_stress \
+> +                    test_pair_ipc \
+> +                    test_reqrep_ipc \
+> +-                   test_timeo \
+> +-                   test_fork
+> ++                   test_timeo
+> ++if HAVE_FORK
+> ++noinst_PROGRAMS += test_fork
+> ++endif
+> + endif
+> +
+> + test_system_SOURCES = test_system.cpp
+> +@@ -93,8 +95,10 @@ test_shutdown_stress_SOURCES = test_shutdown_stress.cpp
+> + test_pair_ipc_SOURCES = test_pair_ipc.cpp testutil.hpp
+> + test_reqrep_ipc_SOURCES = test_reqrep_ipc.cpp testutil.hpp
+> + test_timeo_SOURCES = test_timeo.cpp
+> ++if HAVE_FORK
+> + test_fork_SOURCES = test_fork.cpp
+> + endif
+> ++endif
+> +
+> + #  Run the test cases
+> + TESTS = $(noinst_PROGRAMS)
+> diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+> index 833c1d3..7802916 100644
+> --- a/package/zeromq/zeromq.mk
+> +++ b/package/zeromq/zeromq.mk
+> @@ -10,6 +10,7 @@ ZEROMQ_INSTALL_STAGING = YES
+>   ZEROMQ_DEPENDENCIES = util-linux
+>   ZEROMQ_LICENSE = LGPLv3+ with exceptions
+>   ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+> +ZEROMQ_AUTORECONF = YES
+>   
+>   ifeq ($(BR2_PACKAGE_ZEROMQ_PGM),y)
+>   	ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
