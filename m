@@ -1,37 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 May 2014 16:23:38 +0200
-Subject: [Buildroot] [git commit] qdecoder: autoreconf and fix c99 detection
-Message-ID: <20140509142353.7FBB09CB4A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 May 2014 16:28:25 +0200
+Subject: [Buildroot] [PATCH 1/1] qemu x86/x86_64: Add kernel IPC support
+In-Reply-To: <1398365260-1595-1-git-send-email-martin@barkynet.com> (Martin
+ Bark's message of "Thu, 24 Apr 2014 19:47:40 +0100")
+References: <1398365260-1595-1-git-send-email-martin@barkynet.com>
+Message-ID: <87eh039gc6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0b2342950dab87314268623c4bec737c8f77b5d8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-Fixes http://autobuild.buildroot.net/results/da8/da8ce760cdabeb9d4cda00dcc801817e4b4eb12c/
+ > The alsa utils packages require a kernel with IPC support to run.  The
+ > kernel config for the x86 and x86_64 qemu build includes sound support
+ > using the hda driver but without the IPC support the alsa utils won't work.
+ > This patch adds IPC support to the x86 and x86_64 kernel to allow alsa
+ > utils to run and brings the kernel config inline with kernel configs for
+ > other qemu boards.
 
-As we're patching configure.ac we need to autoreconf the package.
-After reconf, the c99 check fails, so force it like we do elsewhere.
+ > Signed-off-by: Martin Bark <martin@barkynet.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qdecoder/qdecoder.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+Committed, thanks.
 
-diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk
-index 506d975..bbbf42a 100644
---- a/package/qdecoder/qdecoder.mk
-+++ b/package/qdecoder/qdecoder.mk
-@@ -8,6 +8,9 @@ QDECODER_VERSION = r12.0.5
- QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
- QDECODER_LICENSE = BSD-2
- QDECODER_LICENSE_FILES = COPYING
-+# we patch configure.ac
-+QDECODER_AUTORECONF = YES
-+QDECODER_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
- QDECODER_INSTALL_STAGING = YES
- 
+-- 
+Bye, Peter Korsgaard
