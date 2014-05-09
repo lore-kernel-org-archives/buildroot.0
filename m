@@ -1,27 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 May 2014 16:30:26 +0200
-Subject: [Buildroot] [PATCH 0/3] RPi-related bumps (branch yem/bumps)
-In-Reply-To: <cover.1399583377.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 8 May 2014 23:10:56 +0200")
-References: <cover.1399583377.git.yann.morin.1998@free.fr>
-Message-ID: <87a9ar9g8t.fsf@dell.be.48ers.dk>
+Date: Fri, 09 May 2014 16:31:53 +0200
+Subject: [Buildroot] [PATCH] zeromq: explicitly add -lstdc++ for static
+	build
+In-Reply-To: <1399591467-2219-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Fri, 9 May 2014 01:24:27 +0200")
+References: <1399591467-2219-1-git-send-email-arnout@mind.be>
+Message-ID: <8761lf9g6e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Hello All!
+ > Fixes http://autobuild.buildroot.net/results/7c552e514f8c13ba8cdd420dc5bbf5edac915a83
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > Here are the usual Raspberry Pi related bumps:
- >   - bump kernel for USB fix
- >   - bump userland for stereo and NTSC outputs
- >   - bump firmware for undisclosed changes (HDMI related?)
-
-Committed series, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
