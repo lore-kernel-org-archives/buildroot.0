@@ -1,28 +1,27 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 May 2014 16:28:25 +0200
-Subject: [Buildroot] [PATCH 1/1] qemu x86/x86_64: Add kernel IPC support
-In-Reply-To: <1398365260-1595-1-git-send-email-martin@barkynet.com> (Martin
- Bark's message of "Thu, 24 Apr 2014 19:47:40 +0100")
-References: <1398365260-1595-1-git-send-email-martin@barkynet.com>
-Message-ID: <87eh039gc6.fsf@dell.be.48ers.dk>
+Date: Fri, 09 May 2014 16:30:26 +0200
+Subject: [Buildroot] [PATCH 0/3] RPi-related bumps (branch yem/bumps)
+In-Reply-To: <cover.1399583377.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 8 May 2014 23:10:56 +0200")
+References: <cover.1399583377.git.yann.morin.1998@free.fr>
+Message-ID: <87a9ar9g8t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > The alsa utils packages require a kernel with IPC support to run.  The
- > kernel config for the x86 and x86_64 qemu build includes sound support
- > using the hda driver but without the IPC support the alsa utils won't work.
- > This patch adds IPC support to the x86 and x86_64 kernel to allow alsa
- > utils to run and brings the kernel config inline with kernel configs for
- > other qemu boards.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Hello All!
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
+ > Here are the usual Raspberry Pi related bumps:
+ >   - bump kernel for USB fix
+ >   - bump userland for stereo and NTSC outputs
+ >   - bump firmware for undisclosed changes (HDMI related?)
 
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
