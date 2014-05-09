@@ -1,103 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 9 May 2014 16:38:30 +0200
-Subject: [Buildroot] [PATCH] graphs: add option to remove transitive
- dependencies in dependency graph
-In-Reply-To: <CAHXCMMLkk-0FxgrcExWQukmpZcwC4qELaRexRYDGnapyzPECFQ@mail.gmail.com>
-References: <1399416267-16009-1-git-send-email-yann.morin.1998@free.fr>
- <20140509095224.GB3173@free.fr> <877g5vb7bb.fsf@dell.be.48ers.dk>
- <20140509102029.GC3173@free.fr>
- <CAHXCMMK9Y-bReA=vij5ti0ZKeehXEx45nsw8H-+G01LUcF1RMw@mail.gmail.com>
- <20140509133441.GE3173@free.fr>
- <CAHXCMMLkk-0FxgrcExWQukmpZcwC4qELaRexRYDGnapyzPECFQ@mail.gmail.com>
-Message-ID: <20140509143830.GF3173@free.fr>
+Date: Fri,  9 May 2014 16:58:20 +0200
+Subject: [Buildroot] [PATCH 0/7 v2] [RFC] graph-depends improvements (branch
+	yem/graphs)
+Message-ID: <cover.1399647182.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-05-09 16:09 +0200, Samuel Martin spake thusly:
-> On Fri, May 9, 2014 at 3:34 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > too) as make targets so it was easier for users to generate the graphs
-> > rather than directly call the scripts (since the scripts could even
-> > reside in another dir when building out-of-tree, and it would be more
-> > complex to reach for the scripts).
-> 
-> Arf! I forgot this.
-> 
-> In this case, I would do:
-> - to get the default graph:
->   make foo-graph-depends
-> - to get a customized graph:
->   make foo-graph-depends BR2_GRAPH_DEPS_OPTS="..."
+Hello All!
 
-A single variable is not enough, since we have options:
+This series brings a few improvements to the graph-depends utility:
 
-  - for support/scripts/graph-depends: maximum depth, transitive deps or
-    not
+  - add option to remove transitive dependencies
+  - add option to pas arbitrary args to the dot utility
+  - cleanup and re-arrange the code
 
-  - the 'dot' utilities: draw top-down or left-right, and so on...
+This series is open for discusion, especially on how we pass options to
+the graph generators:
 
-So either greaph-depends has to understand a subset (or all) of dot's
-options (Eeek!), or we offer two variables.
+  - support/scripts/graph-depends: needs to know whether to generate
+    transitive dependencies or not, and how deep to limit the dependencies
 
-> And I'd expect to find some help somewhere in the doc to know what are
-> the supported options,
+  - the 'dot' utility: needs to know whether to graph top-down or
+    left-right (or whatever), the type of graph (tree, circle...) and
+    so on...
 
-Already in the manual, section 3.5, "Daily use" and sub-sections:
+Currently, environment variables are used, but that is not in the tastes
+of some (me including), but I can't see a better way.
 
-    3.5.7. Graphing the dependencies between packages
-    http://buildroot.net/downloads/manual/manual.html#_graphing_the_dependencies_between_packages
+Peter suggested using kconfig knobs, but it does not scale when you want
+different settings for different graphs (e.g, different depth level for
+different packages).
 
-    3.5.8. Graphing the build duration
-    http://buildroot.net/downloads/manual/manual.html#_graphing_the_build_duration
+Samuel suggested using a config file, but it has the same issues as the
+kconfig options. He also suggested pasing a single environment variable,
+but that does not work since some options are for graph-depends shile
+others are for dot.
 
-    3.5.5. Environment variables
-    http://buildroot.net/downloads/manual/manual.html#env-vars
-
-> or how to get the graph-depends help, so via
-> the manual or in the help message of the BR2_GRAPH_DEPS_OPTS kconfig
-> entry.
-
-We already document the mere existence of graph-build, graph-depends and
-PKG-graph-depends inthe output of make help:
-
-    <package>-graph-depends    - generate graph of the dependency tree
-                                 for package
-    graph-build            - generate graphs of the build times
-    graph-depends          - generate graph of the dependency tree
-
-But the variables are only documented in the manual (see above.)
-
-> So, in the end, the call to graph-depends script would just be:
->   $(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS)
-> or:
->   $(TOPDIR)/support/scripts/graph-depends -p $(1) $(BR2_GRAPH_DEPS_OPTS)
-
-Not really, it currently is (roughly):
-
-    $(TOPDIR)/support/scripts/graph-depends -d $(DEPTH) \
-    |tee $(O)/graphs/$(@).dot \
-    |dot $(DOT_OPTS) -o$(O)/graphs/$(@).$(BR_GRAPH_OUT)
-
-support/scripts/graph-depends /only/ generates a dot program, not the
-graph itself.
-
-> No black magics with the args... just keep it simple ;-)
-> "Buildroot is a simple, efficient and easy-to-use tool" (not from me,
-> from http://buildroot.org/ :-])
-
-Yes, but all the alternate solutions are ending being more complex that
-mere environment variables.
-
-Grantes, I do not like the environment variables much, since it is easy
-to forget them on a subsequent make. That's why my series (I still have
-to post it) gets rid of as many variables as possible.
+Any other suggestion? ;-)
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit ebb5692f358833e4fb6f3ed5f3075241d80c6667:
+
+  zeromq: explicitly add -lstdc++ for static build (2014-05-09 16:31:42 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/graphs
+
+for you to fetch changes up to ccbf2dd69529d62cc925cc891016988e2cb59bbb:
+
+  manual: document the new graph-depends options (2014-05-09 16:51:14 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      graphs: add option to remove transitive dependencies in dependency graph
+      graphs-depends: merge redundant-dependencies elimination
+      graph-depends: handle the depth argument in a more pythonic way
+      graph-depends: document the max_depth variable
+      graph-depends: rename the mode constants
+      graph-depends: add option to pass arbitrary dot options
+      manual: document the new graph-depends options
+
+ Makefile                      |   7 ++-
+ docs/manual/common-usage.txt  |   6 ++
+ package/pkg-generic.mk        |   4 +-
+ support/scripts/graph-depends | 126 +++++++++++++++++++++++++-----------------
+ 4 files changed, 86 insertions(+), 57 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
