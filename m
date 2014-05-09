@@ -1,47 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 May 2014 21:53:39 +0200
-Subject: [Buildroot] [PATCH v3] toolchain-external: Fix EABIhf check
-In-Reply-To: <CAAXf6LUActiMzXEXGqUJDkmrGhb_LXNaf1=Ca+A16PurGRBuBQ@mail.gmail.com>
-References: <2531b66f78bfdb046ddb.1399375540@argentina>
- <536C06AF.2000107@mind.be>
- <CAAXf6LUActiMzXEXGqUJDkmrGhb_LXNaf1=Ca+A16PurGRBuBQ@mail.gmail.com>
-Message-ID: <536D3243.9090704@mind.be>
+Date: Fri, 09 May 2014 21:59:59 +0200
+Subject: [Buildroot] [PATCH v4] toolchain-external: Fix EABIhf check
+In-Reply-To: <84b0ee8257dae0a623d4.1399635840@argentina>
+References: <84b0ee8257dae0a623d4.1399635840@argentina>
+Message-ID: <536D33BF.7010700@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/05/14 09:23, Thomas De Schampheleire wrote:
-> Hi Arnout,
+On 09/05/14 13:44, Thomas De Schampheleire wrote:
+> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 > 
-> On Fri, May 9, 2014 at 12:35 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 06/05/14 13:25, Thomas De Schampheleire wrote:
+> Currently the check for EABI/EABIhf toolchains looks for the
+> Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
+> EABIhf toolchain.
+> In uClibc, however, crt1.o is not compiled from c but assembly, so the
+> Tag_ABI_VFP_args attribute is not added in the object file. This causes
+> the EABIhf check in the external toolchain logic to fail for
+> uClibc-based toolchains.
+> 
+> Fix by compiling a dummy .c file and trying to link the object against the
+> C library. Since it is impossible to mix EABI and EABIhf code, a mismatch
+> between the buildroot and toolchain ABI settings will be detected during
+> this link step.
+> 
+> Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
+> 
+> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> [ThomasDS: do full link iso readelf test, update commit message]
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 [snip]
->>
->>> +             abistr_$(BR2_ARM_EABI)='EABI'; \
->>> +             abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
->>> +             echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
->>
->>  Nice approach! But to keep the original output, you could use:
->>
->> $${abistr_y} selected, but toolchain uses $${abistr_}
->>
-> 
-> This did cross my mind, but it assumes that there are only two
-> possibilities: EABI and EABIhf. Suppose that a new EABI pops up. Or
-> suppose the compilation/link step fails for a completely different
-> reason. Then we have told the user that their toolchain is EABI or
-> EABIhf while it is not true.
-> So here I choice correctness over completeness, but if you prefer I
-> can change it. Do let me know if you still think we should add
-> $${abistr_} to the message.
-
- Good point, let's say "incompatible" then.
-
- Regards,
- Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
