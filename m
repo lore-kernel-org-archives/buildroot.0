@@ -1,46 +1,114 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 May 2014 15:42:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-08
-In-Reply-To: <20140509071416.GQ3861@tarshish> (Baruch Siach's message of "Fri, 
- 9 May 2014 10:14:16 +0300")
-References: <20140509063010.6A8B2100DED@stock.ovh.net>
- <20140509071416.GQ3861@tarshish>
-Message-ID: <87lhub9ihb.fsf@dell.be.48ers.dk>
+From: Chris Lesiak <chris.lesiak@licor.com>
+Date: Fri, 9 May 2014 08:51:55 -0500
+Subject: [Buildroot] [PATCH] Reduce need for BR2_HOSTARCH_NEEDS_IA32_COMPILER
+Message-ID: <536cdd7b.ATs+iKVatjmU5yNL%chris.lesiak@licor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Reduce need for BR2_HOSTARCH_NEEDS_IA32_COMPILER
 
- > Hi Buildroot list,
- > On Fri, May 09, 2014 at 08:30:10AM +0200, Thomas Petazzoni wrote:
- >> microblazeel |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/1b3c1a4e0e043c5ab8ef03807a095a312a19a587/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/e06b1665546e2f85ff26eb487db667abef633477/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/6910ef6cebeb2c4cabb0467f87dfc3ec4be359f9/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/ff9ea039c88457a222c6b0433e019f64817e18be/
- >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/52c384def2adf5f1eace38866d0271aa5332beda/
+When building grub and syslinux, the 32-bit host compiler is only
+needed when building for 64-bit target.  For 32-bit targets, the
+target compiler will work.
 
- > The build log shows:
+This change makes it less likely that a mulilib host is needed.
 
- > checking whether the C compiler works... no
- > configure: error: in `/home/test/test/3/output/build/qdecoder-r12.0.5':
- > configure: error: C compiler cannot create executables
+Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+---
+ boot/grub/Config.in       |  2 +-
+ boot/grub/grub.mk         |  6 ++++++
+ boot/syslinux/Config.in   |  2 +-
+ boot/syslinux/syslinux.mk | 18 ++++++++++++++----
+ 4 files changed, 22 insertions(+), 6 deletions(-)
 
- > But I can't reproduce it here. Thomas, Peter, what's in config.log?
-
-It ends up using host paths:
-
-configure:2428: /home/peko/source/buildroot-test/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE 
--D_FILE_OFFSET_BITS=64 -I/usr/include -I/usr/local/include -I./ -D_GNU_SOURCE  -L/usr/lib -L/usr/local/lib conftest.c  >&5
-/home/peko/source/buildroot-test/output/host/usr/lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.7.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: skipping incompatible /usr/lib/libc.so when searching for -lc
-/usr/lib/libc.a: could not read symbols: File format not recognized
-
-Because I patched configure.ac, but forgot to set AUTORECONF = YES
-
-Will fix now.
-
+diff --git a/boot/grub/Config.in b/boot/grub/Config.in
+index 4db8642..86e1753 100644
+--- a/boot/grub/Config.in
++++ b/boot/grub/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_GRUB
+ 	bool "grub"
+ 	depends on BR2_i386 || BR2_x86_64
+-	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
++	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_ARCH_IS_64
+ 	help
+ 	  The GRand Unified Bootloader for x86 systems.
+ 
+diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
+index dc11307..8c02fe3 100644
+--- a/boot/grub/grub.mk
++++ b/boot/grub/grub.mk
+@@ -71,9 +71,15 @@ endef
+ 
+ GRUB_POST_PATCH_HOOKS += GRUB_DEBIAN_PATCHES
+ 
++ifeq ($(BR2_HOSTARCH_NEEDS_IA32_COMPILER),y)
+ GRUB_CONF_ENV = \
+ 	$(HOST_CONFIGURE_OPTS) \
+ 	CFLAGS="$(HOST_CFLAGS) $(GRUB_CFLAGS) -m32"
++else
++GRUB_CONF_ENV = \
++	$(TARGET_CONFIGURE_OPTS) \
++	CFLAGS="$(TARGET_CFLAGS) $(GRUB_CFLAGS)"
++endif
+ 
+ GRUB_CONF_OPT = \
+ 	--disable-auto-linux-mem-opt \
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index f4b9870..8d32214 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_SYSLINUX
+ 	bool "syslinux"
+ 	depends on BR2_i386 || BR2_x86_64
+-	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
++	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_ARCH_IS_64
+ 	help
+ 	  The syslinux bootloader for x86 systems.
+ 	  This includes: syslinux, pxelinux, extlinux.
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 51b6417..c20a817 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -39,12 +39,22 @@ define SYSLINUX_CLEANUP
+ endef
+ SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
+ 
++ifeq ($(BR2_HOSTARCH_NEEDS_IA32_COMPILER),y)
++	SYSLINUX_CC = $(HOSTCC)
++	SYSLINUX_LDFLAGS = $(HOST_LDFLAGS)
++	SYSLINUX_AR = $(HOSTAR)
++else
++	SYSLINUX_CC = $(TARGET_CC)
++	SYSLINUX_LDFLAGS = $(TARGET_LDFLAGS)
++	SYSLINUX_AR = $(TARGET_AR)
++endif
++
+ # syslinux build system has no convenient way to pass CFLAGS,
+ # and the internal zlib should take precedence so -I shouldn't
+ # be used.
+ define SYSLINUX_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
+-	    AR="$(HOSTAR)" SYSROOT=$(STAGING_DIR) -C $(@D) $(SYSLINUX_TARGET)
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(SYSLINUX_CC) -idirafter $(HOST_DIR)/usr/include $(SYSLINUX_LDFLAGS)" \
++	    AR="$(SYSLINUX_AR)" SYSROOT=$(STAGING_DIR) -C $(@D) $(SYSLINUX_TARGET)
+ endef
+ 
+ # While the actual bootloader is compiled for the target, several
+@@ -53,8 +63,8 @@ endef
+ # Repeat CC and AR, since syslinux really wants to check them at
+ # install time
+ define SYSLINUX_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
+-	    AR="$(HOSTAR)" SYSROOT=$(STAGING_DIR) INSTALLROOT=$(HOST_DIR) \
++	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(SYSLINUX_CC) -idirafter $(HOST_DIR)/usr/include $(SYSLINUX_LDFLAGS)" \
++	    AR="$(SYSLINUX_AR)" SYSROOT=$(STAGING_DIR) INSTALLROOT=$(HOST_DIR) \
+ 	    -C $(@D) $(SYSLINUX_TARGET) install
+ endef
+ 
 -- 
-Bye, Peter Korsgaard
+1.9.0
