@@ -1,23 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 09 May 2014 16:31:53 +0200
-Subject: [Buildroot] [PATCH] zeromq: explicitly add -lstdc++ for static
-	build
-In-Reply-To: <1399591467-2219-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Fri, 9 May 2014 01:24:27 +0200")
-References: <1399591467-2219-1-git-send-email-arnout@mind.be>
-Message-ID: <8761lf9g6e.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 9 May 2014 16:29:43 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump
+Message-ID: <20140509143213.EEB839CB24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=510f088d01438ae75495913bbb3862ad6870b84f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes http://autobuild.buildroot.net/results/7c552e514f8c13ba8cdd420dc5bbf5edac915a83
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Undocumented changes (probably related to HDMI).
 
-Committed, thanks.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-firmware/rpi-firmware.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 138c37d..babb0a8 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 81e54c47b1cb26dd3990cbc970f4ddd3614196e8
++RPI_FIRMWARE_VERSION = c8881991d9181779aee9637d6f4b215f108021a3
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
