@@ -1,59 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 May 2014 11:36:35 +0200
-Subject: [Buildroot] [git commit] cmake: forward HOST_{C,
-	LD}FLAGS as cmake flags
-Message-ID: <20140509094128.A0F079CB4C@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 May 2014 11:43:36 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-08
+In-Reply-To: <20140509071416.GQ3861@tarshish> (Baruch Siach's message of "Fri, 
+ 9 May 2014 10:14:16 +0300")
+References: <20140509063010.6A8B2100DED@stock.ovh.net>
+ <20140509071416.GQ3861@tarshish>
+Message-ID: <87bnv7b83b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f3b1b92d321b4b21c35e6f8ac27f076edd268639
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-During the CMake bootstrap phase, the {C,LD}FLAGS set in the bootstrap
-environment are not forwarded/converted as CMake flags.
+ > Hi Buildroot list,
+ > On Fri, May 09, 2014 at 08:30:10AM +0200, Thomas Petazzoni wrote:
+ >> microblazeel |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/1b3c1a4e0e043c5ab8ef03807a095a312a19a587/
+ >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/e06b1665546e2f85ff26eb487db667abef633477/
+ >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/6910ef6cebeb2c4cabb0467f87dfc3ec4be359f9/
+ >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/ff9ea039c88457a222c6b0433e019f64817e18be/
+ >> arm |               qdecoder-r12.0.5 | NOK | http://autobuild.buildroot.net/results/52c384def2adf5f1eace38866d0271aa5332beda/
 
-The CMake build contains a bootstrap phase building a minimal CMake
-program using a standard Makfile, then reconfigures itself with this
-minimal program.
+ > The build log shows:
 
-On system with no ncurses installed, and because the prefix option
-points to $(HOST_DIR)/usr, if host-cmake was built after host-ncurses,
-then ncurses libraries and headers are correctly found (in the host
-tree) during the second configuration (because of the prefix). However,
-it fails at building ccmake (the curses interface) because the
-CMAKE_C_FLAGS, CMAKE_CXX_FLAGS and CMAKE_EXE_LINKER_FLAGS do not
-point to the host tree.
+ > checking whether the C compiler works... no
+ > configure: error: in `/home/test/test/3/output/build/qdecoder-r12.0.5':
+ > configure: error: C compiler cannot create executables
 
-Because these flags are needed when running the bootstrap script,
-this patch makes sure the same flags are set when running the second
-configuration.
+ > But I can't reproduce it here. Thomas, Peter, what's in config.log?
 
-Reported-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cmake/cmake.mk |    6 +++++-
- 1 files changed, 5 insertions(+), 1 deletions(-)
+I don't have it anymore, but will restart one of the builds manually.
 
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index d45c642..235988b 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -14,7 +14,11 @@ define HOST_CMAKE_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
- 		CFLAGS="$(HOST_CFLAGS)" \
--		./bootstrap --prefix=$(HOST_DIR)/usr --parallel=$(PARALLEL_JOBS) \
-+		./bootstrap --prefix=$(HOST_DIR)/usr \
-+			--parallel=$(PARALLEL_JOBS) -- \
-+			-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
-+			-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
-+			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
- 	)
- endef
- 
+-- 
+Bye, Peter Korsgaard
