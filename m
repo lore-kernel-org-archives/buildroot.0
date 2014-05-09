@@ -1,50 +1,43 @@
 From: Ryan Barnett <rjbarnet@rockwellcollins.com>
-Date: Thu, 8 May 2014 18:55:06 -0500
-Subject: [Buildroot] [git commit] infra: Add PRE_*_HOOKS for every step
-In-Reply-To: <20140508200413.789DA9CB12@busybox.osuosl.org>
-References: <20140508200413.789DA9CB12@busybox.osuosl.org>
-Message-ID: <OF1318F845.0A53FD4C-ON86257CD2.00817C9E-86257CD2.0083637C@rockwellcollins.com>
+Date: Thu,  8 May 2014 19:20:11 -0500
+Subject: [Buildroot] [PATCH 1/1] manual: add information about
+	INSTALL_IMAGES_CMDS
+Message-ID: <1399594811-27028-1-git-send-email-rjbarnet@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+The Buildroot manual currently does not contain any mention of the
+<pkg>_INSTALL_IMAGES_CMDS which could potentially be of interest when
+developing a new 'generic-package'.
 
-Peter Korsgaard <peter@korsgaard.com> wrote on 05/08/2014 03:00:47 PM:
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+CC: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ docs/manual/adding-packages-generic.txt |    9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 1567487..f421651 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -410,6 +410,15 @@ different steps of the build process.
+   should be installed, since they might be needed to compile other
+   packages.
  
-> commit: http://git.buildroot.net/buildroot/commit/?
-> id=ac93fabb66de0a2acb703b9079bfeed2f9d2cd45
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Add PRE_*_HOOKS to all the different steps through which a package may 
-go.
-> 
-> This will help avoid using POST_*_HOOKS to do tasks that should be done
-> in the PRE_*_HOOKS of the next step.
-> Otherwise, when the user would do a make foo-re<step>, this would not do
-> what was really intented, the POST_*_HOOK of the preceding step not
-> being executed.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> [ThomasDS: rebase, add images hooks to manual]
-
-An interesting note is that the <pkg>_INSTALL_IMAGES_CMDS is undocumented 
-step in the Buildroot manual. I only just recently (yesterday) discovered 
-that this option was available to a "generic-package" and had to do some 
-greping through the source code to confirm that it existed.
-
-I will submit a patch to add this step to the documentation.
-
-> Signed-off-by: Thomas De Schampheleire 
-<thomas.de.schampheleire@gmail.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-[..]
-
-Thanks,
--Ryan
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140508/cd2180f7/attachment.html>
++* +LIBFOO_INSTALL_IMAGES_CMDS+ lists the actions to be performed to
++  install the package to the images directory, when the package is a
++  target package. The package must install its files to the directory
++  given by +$(BINARIES_DIR)+. Only files that are binary images (aka
++  images) that do not belong in the +TARGET_DIR+ but are necessary
++  for booting the board should be placed here. For example, a package
++  should utilize this step if it has binaries which would be similar
++  to the kernel image, bootloader or root filesystem images.
++
+ * +LIBFOO_INSTALL_INIT_SYSV+ and +LIBFOO_INSTALL_INIT_SYSTEMD+ list the
+   actions to install init scripts either for the systemV-like init systems
+   (busybox, sysvinit, etc.) or for the systemd units. These commands
+-- 
+1.7.9.5
