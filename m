@@ -1,114 +1,43 @@
-From: Chris Lesiak <chris.lesiak@licor.com>
-Date: Fri, 9 May 2014 08:51:55 -0500
-Subject: [Buildroot] [PATCH] Reduce need for BR2_HOSTARCH_NEEDS_IA32_COMPILER
-Message-ID: <536cdd7b.ATs+iKVatjmU5yNL%chris.lesiak@licor.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri,  9 May 2014 18:08:42 +0400
+Subject: [Buildroot] [PATCH] ARC: allow uImage cretaion for ARC
+Message-ID: <1399644522-31363-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reduce need for BR2_HOSTARCH_NEEDS_IA32_COMPILER
+From: Mischa Jonker <mjonker@synopsys.com>
 
-When building grub and syslinux, the 32-bit host compiler is only
-needed when building for 64-bit target.  For 32-bit targets, the
-target compiler will work.
+Starting from U-Boot v2014.04 ARC architecture is supported,
+so now it's possible to create uImage for ARC as well.
 
-This change makes it less likely that a mulilib host is needed.
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
 
-Signed-off-by: Chris Lesiak <chris.lesiak@licor.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+
 ---
- boot/grub/Config.in       |  2 +-
- boot/grub/grub.mk         |  6 ++++++
- boot/syslinux/Config.in   |  2 +-
- boot/syslinux/syslinux.mk | 18 ++++++++++++++----
- 4 files changed, 22 insertions(+), 6 deletions(-)
+Prerequisite:
+	[PATCH v3] uboot-tools: bump to version 2014.04
+---
+ linux/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/boot/grub/Config.in b/boot/grub/Config.in
-index 4db8642..86e1753 100644
---- a/boot/grub/Config.in
-+++ b/boot/grub/Config.in
-@@ -1,7 +1,7 @@
- config BR2_TARGET_GRUB
- 	bool "grub"
- 	depends on BR2_i386 || BR2_x86_64
--	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
-+	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_ARCH_IS_64
- 	help
- 	  The GRand Unified Bootloader for x86 systems.
+diff --git a/linux/Config.in b/linux/Config.in
+index 77c28f3..cc1127a 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -167,7 +167,8 @@ choice
  
-diff --git a/boot/grub/grub.mk b/boot/grub/grub.mk
-index dc11307..8c02fe3 100644
---- a/boot/grub/grub.mk
-+++ b/boot/grub/grub.mk
-@@ -71,9 +71,15 @@ endef
+ config BR2_LINUX_KERNEL_UIMAGE
+ 	bool "uImage"
+-	depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
++	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
++		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
+ 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
  
- GRUB_POST_PATCH_HOOKS += GRUB_DEBIAN_PATCHES
- 
-+ifeq ($(BR2_HOSTARCH_NEEDS_IA32_COMPILER),y)
- GRUB_CONF_ENV = \
- 	$(HOST_CONFIGURE_OPTS) \
- 	CFLAGS="$(HOST_CFLAGS) $(GRUB_CFLAGS) -m32"
-+else
-+GRUB_CONF_ENV = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(TARGET_CFLAGS) $(GRUB_CFLAGS)"
-+endif
- 
- GRUB_CONF_OPT = \
- 	--disable-auto-linux-mem-opt \
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index f4b9870..8d32214 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -1,7 +1,7 @@
- config BR2_TARGET_SYSLINUX
- 	bool "syslinux"
- 	depends on BR2_i386 || BR2_x86_64
--	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
-+	select BR2_HOSTARCH_NEEDS_IA32_COMPILER if BR2_ARCH_IS_64
- 	help
- 	  The syslinux bootloader for x86 systems.
- 	  This includes: syslinux, pxelinux, extlinux.
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 51b6417..c20a817 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -39,12 +39,22 @@ define SYSLINUX_CLEANUP
- endef
- SYSLINUX_POST_PATCH_HOOKS += SYSLINUX_CLEANUP
- 
-+ifeq ($(BR2_HOSTARCH_NEEDS_IA32_COMPILER),y)
-+	SYSLINUX_CC = $(HOSTCC)
-+	SYSLINUX_LDFLAGS = $(HOST_LDFLAGS)
-+	SYSLINUX_AR = $(HOSTAR)
-+else
-+	SYSLINUX_CC = $(TARGET_CC)
-+	SYSLINUX_LDFLAGS = $(TARGET_LDFLAGS)
-+	SYSLINUX_AR = $(TARGET_AR)
-+endif
-+
- # syslinux build system has no convenient way to pass CFLAGS,
- # and the internal zlib should take precedence so -I shouldn't
- # be used.
- define SYSLINUX_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
--	    AR="$(HOSTAR)" SYSROOT=$(STAGING_DIR) -C $(@D) $(SYSLINUX_TARGET)
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(SYSLINUX_CC) -idirafter $(HOST_DIR)/usr/include $(SYSLINUX_LDFLAGS)" \
-+	    AR="$(SYSLINUX_AR)" SYSROOT=$(STAGING_DIR) -C $(@D) $(SYSLINUX_TARGET)
- endef
- 
- # While the actual bootloader is compiled for the target, several
-@@ -53,8 +63,8 @@ endef
- # Repeat CC and AR, since syslinux really wants to check them at
- # install time
- define SYSLINUX_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(HOSTCC) -idirafter $(HOST_DIR)/usr/include $(HOST_LDFLAGS)" \
--	    AR="$(HOSTAR)" SYSROOT=$(STAGING_DIR) INSTALLROOT=$(HOST_DIR) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(SYSLINUX_CC) -idirafter $(HOST_DIR)/usr/include $(SYSLINUX_LDFLAGS)" \
-+	    AR="$(SYSLINUX_AR)" SYSROOT=$(STAGING_DIR) INSTALLROOT=$(HOST_DIR) \
- 	    -C $(@D) $(SYSLINUX_TARGET) install
- endef
- 
+ config BR2_LINUX_KERNEL_APPENDED_UIMAGE
 -- 
 1.9.0
