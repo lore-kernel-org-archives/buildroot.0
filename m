@@ -1,76 +1,100 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 09 May 2014 13:44:00 +0200
-Subject: [Buildroot] [PATCH v4] toolchain-external: Fix EABIhf check
-Message-ID: <84b0ee8257dae0a623d4.1399635840@argentina>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 09 May 2014 13:54:55 +0200
+Subject: [Buildroot] [PATCH] iptraf-ng: new package
+In-Reply-To: <1399493248-15443-1-git-send-email-ezequiel.garcia@free-electrons.com>
+ (Ezequiel Garcia's message of "Wed, 7 May 2014 17:07:28 -0300")
+References: <1399493248-15443-1-git-send-email-ezequiel.garcia@free-electrons.com>
+Message-ID: <8738gjb20g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel.garcia@free-electrons.com> writes:
 
-Currently the check for EABI/EABIhf toolchains looks for the
-Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
-EABIhf toolchain.
-In uClibc, however, crt1.o is not compiled from c but assembly, so the
-Tag_ABI_VFP_args attribute is not added in the object file. This causes
-the EABIhf check in the external toolchain logic to fail for
-uClibc-based toolchains.
+ > Signed-off-by: Ezequiel Garcia <ezequiel.garcia@free-electrons.com>
+ > ---
+ > I'm not sure how robust is this usage of MAKE_ENV to force a proper
+ > LDFLAGS for ncurses. Without this, the link is attempted against
+ > the host /usr/lib/ path.
 
-Fix by compiling a dummy .c file and trying to link the object against the
-C library. Since it is impossible to mix EABI and EABIhf code, a mismatch
-between the buildroot and toolchain ABI settings will be detected during
-this link step.
+ > If someone can give a hint on how to call ncurses-config to set
+ > the LDFLAG, it would be much nicer.
 
-Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
+ >  package/Config.in              |  1 +
+ >  package/iptraf-ng/Config.in    | 16 ++++++++++++++++
+ >  package/iptraf-ng/iptraf-ng.mk | 15 +++++++++++++++
+ >  3 files changed, 32 insertions(+)
+ >  create mode 100644 package/iptraf-ng/Config.in
+ >  create mode 100644 package/iptraf-ng/iptraf-ng.mk
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-[ThomasDS: do full link iso readelf test, update commit message]
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 7800f23..d7fe94c 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -932,6 +932,7 @@ source "package/iproute2/Config.in"
+ >  source "package/ipsec-tools/Config.in"
+ >  source "package/ipset/Config.in"
+ >  source "package/iptables/Config.in"
+ > +source "package/iptraf-ng/Config.in"
+ >  source "package/iputils/Config.in"
+ >  source "package/iw/Config.in"
+ >  source "package/kismet/Config.in"
+ > diff --git a/package/iptraf-ng/Config.in b/package/iptraf-ng/Config.in
+ > new file mode 100644
+ > index 0000000..4302b95
+ > --- /dev/null
+ > +++ b/package/iptraf-ng/Config.in
+ > @@ -0,0 +1,16 @@
+ > +config BR2_PACKAGE_IPTRAF_NG
+ > +	bool "iptraf-ng"
+ > +	select BR2_PACKAGE_NCURSES
+ > +	select BR2_PACKAGE_NCURSES_TARGET_PANEL
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
----
-Note: this v4 did not change the error message, awaiting Arnout's input.
+I don't see any pthread references anywwhere, but it does include
+netinet/ip6.h so it needs to depend on BR2_INET_IPV6.
 
-v4: (ThomasDS)
-  - avoid creating a temporary object file (Arnout)
+ > +	help
+ > +	  IPTraf-ng is a ncurses-based network monitoring utility. It gathers
+ > +	  data like TCP connection packet and byte counts, interface statistics
+ > +	  and activity indicators.
+ > +
+ > +	  https://fedorahosted.org/iptraf-ng/
+ > +
+ > +	  IPTraf-ng is a fork of original IPTraf v3.0.0 (http://iptraf.seul.org).
+ > +
+ > +comment "iptraf-ng needs a toolchain w/ threads"
+ > +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-ng/iptraf-ng.mk
+ > new file mode 100644
+ > index 0000000..5821971
+ > --- /dev/null
+ > +++ b/package/iptraf-ng/iptraf-ng.mk
+ > @@ -0,0 +1,15 @@
+ > +################################################################################
+ > +#
+ > +# iptraf-ng
+ > +#
+ > +################################################################################
+ > +
+ > +IPTRAF_NG_VERSION = 1.1.4
+ > +IPTRAF_NG_SITE = https://fedorahosted.org/releases/i/p/iptraf-ng/
+ > +IPTRAF_NG_LICENSE = GPLv2+
+ > +IPTRAF_NG_LICENSE_FILES = LICENSE
+ > +IPTRAF_NG_DEPENDENCIES = ncurses
+ > +
+ > +IPTRAF_NG_MAKE_ENV = NCURSES_LDFLAGS="-L$(TARGET_DIR)/usr/lib -lncurses -lpanel"
 
-v3: (ThomasDS)
-  - v2 properly recognized a uClibc EABIhf toolchain, but failed to detect a
-    mismatch with buildroot settings (detected by ThomasP). Fix by
-    performing an actual link step to detect any incompatibility.
-v2: (ThomasDS)
-  - avoid creating a temporary source file
-  - update commit message
+The target directory will normally have the needed .a / .la files
+stripped, so it should use STAGING_DIR instead. None of them are needed
+though as the compiler is already configured to look there.
 
- toolchain/helpers.mk |  16 ++++------------
- 1 files changed, 4 insertions(+), 12 deletions(-)
+Finally -lpanel should go before -lncurses for static linking as it uses
+functions from there.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -297,20 +297,12 @@ check_arm_abi = \
- 		echo "External toolchain uses the unsuported OABI" ; \
- 		exit 1 ; \
- 	fi ; \
--	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
--	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
--		EXT_TOOLCHAIN_ABI="eabihf" ; \
--	else \
--		EXT_TOOLCHAIN_ABI="eabi" ; \
--	fi ; \
--	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
--		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
-+	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - 2>/dev/null; then \
-+		abistr_$(BR2_ARM_EABI)='EABI'; \
-+		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
-+		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
- 		exit 1 ; \
- 	fi ; \
--	if [ "$(BR2_ARM_EABIHF)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabi" ] ; then \
--		echo "Incorrect ABI setting: EABIhf selected, but toolchain uses EABI" ; \
--		exit 1 ; \
--	fi
- 
- #
- # Check that the external toolchain supports C++
+Committed with these fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
