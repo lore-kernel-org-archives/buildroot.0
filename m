@@ -1,78 +1,85 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri, 09 May 2014 12:42:16 +0200
-Subject: [Buildroot] [PATCH] zeromq: disable test_fork when fork() is no
- available
-In-Reply-To: <20140509094736.GA3173@free.fr>
-References: <1399134782-18013-1-git-send-email-yann.morin.1998@free.fr>
- <536CA383.404@trzebnica.net> <20140509094736.GA3173@free.fr>
-Message-ID: <536CB108.2000005@trzebnica.net>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Fri, 9 May 2014 13:16:56 +0200
+Subject: [Buildroot] [PATCH] graphs: add option to remove transitive
+ dependencies in dependency graph
+In-Reply-To: <20140509102029.GC3173@free.fr>
+References: <1399416267-16009-1-git-send-email-yann.morin.1998@free.fr>
+ <20140509095224.GB3173@free.fr> <877g5vb7bb.fsf@dell.be.48ers.dk>
+ <20140509102029.GC3173@free.fr>
+Message-ID: <CAHXCMMK9Y-bReA=vij5ti0ZKeehXEx45nsw8H-+G01LUcF1RMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Yann, Peter, all
 
-Hi Yann,
-
-> Jerzy, All,
+On Fri, May 9, 2014 at 12:20 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Peter, All,
 >
-> On 2014-05-09 11:44 +0200, Jerzy Grzegorek spake thusly:
->>> From: Samuel Martin <s.martin49@gmail.com>
->>>
->>> zeromp's configure script correctly detects the fork availability, but
->>> unconditionally build test_fork program whatever the fork() availability.
->>>
->>> This patch fixes the build-system by disabling test_fork when fork is
->>> not available (e.g. when !BR2_USEMMU).
->>>
->>> Fixes:
->>>    http://autobuild.buildroot.org/results/359/3599cc3b7bf2bb22a78961cd84d21cb03cbd7015/
->>>
->>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>> [yann.morin.1998 at free.fr: remove Makefile.in hunks]
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> [yann.morin.1998 at free.fr: tested against the failed bfin config, as well as
->>>   a i686 target]
->>> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> ---
->>>   ...isable-test_fork-if-fork-is-not-available.patch | 52 ++++++++++++++++++++++
->>>   package/zeromq/zeromq.mk                           |  1 +
->>>   2 files changed, 53 insertions(+)
->>>   create mode 100644 package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
->>>
->>> diff --git a/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
->>> new file mode 100644
->>> index 0000000..1eefdc3
->>> --- /dev/null
->>> +++ b/package/zeromq/zeromq-0001-tests-disable-test_fork-if-fork-is-not-available.patch
->>> @@ -0,0 +1,52 @@
->>> +From b50912f2eecec1ea7accc155f8132116f8702075 Mon Sep 17 00:00:00 2001
->>> +From: Samuel Martin <s.martin49@gmail.com>
->>> +Date: Sat, 3 May 2014 12:22:38 +0200
->>> +Subject: [PATCH] tests: disable test_fork if fork() is not available
->>> +
->>> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>> +---
->>> + configure.ac      | 1 +
->>> + tests/Makefile.am | 8 ++++++--
->>> + tests/Makefile.in | 8 ++++----
->> What about the changes in Makefile.in file?
->> I don't see them here.
-> Ah, right. When I edited the patch to remove them, I forgot to remove
-> Makefile.in from the diffstat. We do not need the changes to Makefile.in
-> in this patch, since we do autoreconf the beast, so Makefile.in gets
-> re-generated.
+> On 2014-05-09 12:00 +0200, Peter Korsgaard spake thusly:
+>> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>  > On 2014-05-07 00:44 +0200, Yann E. MORIN spake thusly:
+>>  >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>  >>
+>>  >> Currently, all the dependencies of a package are drawn on the dependency
+>>  >> graph, including transitive dependencies (e.g. A->B->C and A->C).
+>>  >>
+>>  >> Very big graphs, with lots of packages with lots of dependencies, the
+>>  >> dependency graph can be very dense, and transitive dependencies are
+>>  >> cluttering the graph.
+>>  >>
+>>  >> In some cases, only getting the "build-order" dependencies is enough (e.g.
+>>  >> to see what impact a package rebuild would have).
+>>  >>
+>>  >> Add a new environment variable to disable drawing transitive dependencies.
+>>
+>>  > I've marked it as Changes Requested in PAtchwork, since I have a cleaner
+>>  > patch to come soon, with other cleanups in the graph-depends script.
+>>
+>> Thanks. Like I mentioned on IRC I do like the looks of the graphs, but
+>> I'm not really happy with the use of environment variables to control
+>> it, as it isn't intuitive.
 
-Thanks for the clarification.
+I'm not a big fan of env. vars. either.
+
+>>
+>> Perhaps we should simply have kconfig options for these things?
+>
+> As I said on IRC, I doubt this would be usefull, For example:
+>
+>   - for depth: someone might want a 3-level deep graph for some package,
+>     and a 4-level deep graph for another,
+>
+>   - for transitive deps: someone would like the complete dependencies
+>     graphed for some package, and only the 'build-order' deps for some
+>     another.
+>
+> This means the user would have to go back to the menuconfig between each
+> graph, and this could not be made automatic (eg. called from within a
+> script that generates the graphs for the documentation of the project.)
+>
+> What we could do, however, would be something like:
+>
+>     make BR2_GRAPH_OPTS='--depth 4 --no-transitive' graph-depends
+>
+> (the existing BR2_GRPAH_DEPS would disapear).
+>
+> Thoughts?
+
+An alternaitve solution could be using a config file; Python has some
+packages for this [1] ;-).
+This way, the config file could be initialized with what is set in the
+menuconfig, so used as defaults.
+If some options are passed on the command line, they will override
+these defaults.
+If someone wants to do something more fancy and automatic, then one
+just could update the config file.
+
+[1] https://docs.python.org/2.7/library/configparser.html
 
 Regards,
-Jerzy
 
->
-> See the commit log that states;
->      [yann.morin.1998 at free.fr: remove Makefile.in hunks]
->
-> Regards,
-> Yann E. MORIN.
->
+-- 
+Samuel
