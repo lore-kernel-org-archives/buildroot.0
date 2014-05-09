@@ -1,45 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 09 May 2014 21:59:59 +0200
-Subject: [Buildroot] [PATCH v4] toolchain-external: Fix EABIhf check
-In-Reply-To: <84b0ee8257dae0a623d4.1399635840@argentina>
-References: <84b0ee8257dae0a623d4.1399635840@argentina>
-Message-ID: <536D33BF.7010700@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 09 May 2014 22:20:35 +0200
+Subject: [Buildroot] [PATCH 7/7] manual: document the new
+	graph-depends	options
+In-Reply-To: <ccbf2dd69529d62cc925cc891016988e2cb59bbb.1399647182.git.yann.morin.1998@free.fr>
+References: <cover.1399647182.git.yann.morin.1998@free.fr>
+ <ccbf2dd69529d62cc925cc891016988e2cb59bbb.1399647182.git.yann.morin.1998@free.fr>
+Message-ID: <bd3ce16a-2b38-409e-94a8-a66fb356bfb6@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/05/14 13:44, Thomas De Schampheleire wrote:
-> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>---
+> docs/manual/common-usage.txt | 6 ++++++
+> 1 file changed, 6 insertions(+)
+>
+>diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+>index 3d5842d..33e0462 100644
+>--- a/docs/manual/common-usage.txt
+>+++ b/docs/manual/common-usage.txt
+>@@ -94,6 +94,10 @@ to +make+ or set in the environment:
+>   default), or +png+.
+> * +BR2_GRAPH_DEPTH+ (an integer) to limit the depth of the dependency graph.
+>   The default, +0+, is to not limit the depth.
+>+* +BR2_GRAPH_NO_TRANSITIVE+, if set and non-empty, to not draw the transitive
+>+  dependencies. The default is to draw transitive dependencies.
+>+* +BR2_GRAPH_DOT_OPTS+ is passed verbatim as options to the +dot+ utility to
+>+  draw the dependency graph.
 > 
-> Currently the check for EABI/EABIhf toolchains looks for the
-> Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
-> EABIhf toolchain.
-> In uClibc, however, crt1.o is not compiled from c but assembly, so the
-> Tag_ABI_VFP_args attribute is not added in the object file. This causes
-> the EABIhf check in the external toolchain logic to fail for
-> uClibc-based toolchains.
+> An example that uses config files located in the toplevel directory and
+> in your $HOME:
+>@@ -198,6 +202,8 @@ supported.
+> BR2_GRAPH_OUT=svg make graph-depends
+> --------------------------------
 > 
-> Fix by compiling a dummy .c file and trying to link the object against the
-> C library. Since it is impossible to mix EABI and EABIhf code, a mismatch
-> between the buildroot and toolchain ABI settings will be detected during
-> this link step.
+>+See xref:env-vars[] for other ways to customize the dependency graph.
+>+
+> === Graphing the build duration
 > 
-> Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> [ThomasDS: do full link iso readelf test, update commit message]
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> [[graph-duration]]
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-[snip]
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(Checked for spelling only)
