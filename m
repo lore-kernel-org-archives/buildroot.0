@@ -1,34 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 May 2014 16:29:51 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: bump version
-Message-ID: <20140509143214.017889CB24@busybox.osuosl.org>
+Date: Fri, 9 May 2014 16:29:26 +0200
+Subject: [Buildroot] [git commit] qemu x86/x86_64: Add kernel IPC support
+Message-ID: <20140509143213.E73C29CB4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=067398c636bd0ac414c480f1cd05b55b84d87784
+commit: http://git.buildroot.net/buildroot/commit/?id=a1865331edcc5f328d941ad7615126541598f6f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Allow stereo modes to be selected for output; enable NTSC output.
+The alsa utils packages require a kernel with IPC support to run.  The
+kernel config for the x86 and x86_64 qemu build includes sound support
+using the hda driver but without the IPC support the alsa utils won't work.
+This patch adds IPC support to the x86 and x86_64 kernel to allow alsa
+utils to run and brings the kernel config inline with kernel configs for
+other qemu boards.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ board/qemu/x86/linux-3.13.config    |    1 +
+ board/qemu/x86_64/linux-3.13.config |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 7188dcf..f6e4443 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = a59842a068cbd19e262701f30014499e9070fbf6
-+RPI_USERLAND_VERSION = eccb81050afd177da1923404b366c6226f29bfe0
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+diff --git a/board/qemu/x86/linux-3.13.config b/board/qemu/x86/linux-3.13.config
+index ad9517c..d738e4d 100644
+--- a/board/qemu/x86/linux-3.13.config
++++ b/board/qemu/x86/linux-3.13.config
+@@ -1,5 +1,6 @@
+ # CONFIG_LOCALVERSION_AUTO is not set
+ # CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
+ # CONFIG_COMPAT_BRK is not set
+ # CONFIG_BLK_DEV_BSG is not set
+ # CONFIG_IOSCHED_DEADLINE is not set
+diff --git a/board/qemu/x86_64/linux-3.13.config b/board/qemu/x86_64/linux-3.13.config
+index ad9517c..d738e4d 100644
+--- a/board/qemu/x86_64/linux-3.13.config
++++ b/board/qemu/x86_64/linux-3.13.config
+@@ -1,5 +1,6 @@
+ # CONFIG_LOCALVERSION_AUTO is not set
+ # CONFIG_SWAP is not set
++CONFIG_SYSVIPC=y
+ # CONFIG_COMPAT_BRK is not set
+ # CONFIG_BLK_DEV_BSG is not set
+ # CONFIG_IOSCHED_DEADLINE is not set
