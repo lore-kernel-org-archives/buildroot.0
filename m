@@ -1,68 +1,94 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 May 2014 12:02:13 +0200
-Subject: [Buildroot] [PATCH v6 01/32] xproto_dri3proto: New package
+Date: Sat, 10 May 2014 12:02:23 +0200
+Subject: [Buildroot] [PATCH v6 11/32] libva-intel-driver: new package
 In-Reply-To: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399716164-6452-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399716164-6452-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xproto_dri3proto/Config.in           |    5 +++++
- package/x11r7/xproto_dri3proto/xproto_dri3proto.mk |   16 ++++++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/x11r7/xproto_dri3proto/Config.in
- create mode 100644 package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
+ package/Config.in                                |    1 +
+ package/libva-intel-driver/Config.in             |   19 ++++++++++++++
+ package/libva-intel-driver/libva-intel-driver.mk |   29 ++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
+ create mode 100644 package/libva-intel-driver/Config.in
+ create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 8685ca1..087b816 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -227,6 +227,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xproto_damageproto/Config.in
- 		source package/x11r7/xproto_dmxproto/Config.in
- 		source package/x11r7/xproto_dri2proto/Config.in
-+		source package/x11r7/xproto_dri3proto/Config.in
- 		source package/x11r7/xproto_fixesproto/Config.in
- 		source package/x11r7/xproto_fontcacheproto/Config.in
- 		source package/x11r7/xproto_fontsproto/Config.in
-diff --git a/package/x11r7/xproto_dri3proto/Config.in b/package/x11r7/xproto_dri3proto/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index e2499f7..4115002 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -600,6 +600,7 @@ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/libva/Config.in"
++source "package/libva-intel-driver/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
 new file mode 100644
-index 0000000..e4dbf23
+index 0000000..89a3264
 --- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_XPROTO_DRI3PROTO
-+	bool "dri3proto"
-+	select BR2_PACKAGE_XUTIL_UTIL_MACROS
++++ b/package/libva-intel-driver/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBVA_INTEL_DRIVER
++	bool "libva-intel-driver"
++	select BR2_PACKAGE_LIBVA
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
++	depends on BR2_LARGEFILE # libdrm
 +	help
-+	  X.Org DRI3 protocol headers
-diff --git a/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
++	  VA-API back-end driver for Intel graphics chips
++
++	  https://01.org/linuxgraphics/community/vaapi
++
++comment "libva intel driver needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
 new file mode 100644
-index 0000000..0af39d1
+index 0000000..5ada9f1
 --- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-@@ -0,0 +1,16 @@
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -0,0 +1,29 @@
 +################################################################################
 +#
-+# xproto_dri3proto
++# libva-intel-driver
 +#
 +################################################################################
 +
-+XPROTO_DRI3PROTO_VERSION = 1.0
-+XPROTO_DRI3PROTO_SOURCE = dri3proto-$(XPROTO_DRI3PROTO_VERSION).tar.bz2
-+XPROTO_DRI3PROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
-+XPROTO_DRI3PROTO_LICENSE = MIT
-+XPROTO_DRI3PROTO_LICENSE_FILES = COPYING
-+XPROTO_DRI3PROTO_INSTALL_STAGING = YES
-+XPROTO_DRI3PROTO_INSTALL_TARGET = NO
-+XPROTO_DRI3PROTO_DEPENDENCIES = xutil_util-macros
++LIBVA_INTEL_DRIVER_VERSION = 1.3.1
++LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
++LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
++LIBVA_INTEL_DRIVER_LICENSE = MIT
++LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
++LIBVA_INTEL_DRIVER_AUTORECONF = YES
++LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
++endif
 +
 +$(eval $(autotools-package))
 -- 
