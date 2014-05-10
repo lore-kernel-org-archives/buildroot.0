@@ -1,33 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 May 2014 12:02:19 +0200
-Subject: [Buildroot] [PATCH v6 07/32] mesa3d: Add patch note about upstream
-	bug
+Date: Sat, 10 May 2014 12:02:20 +0200
+Subject: [Buildroot] [PATCH v6 08/32] mesa3d: Add dri3 support
 In-Reply-To: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399716164-6452-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399716164-6452-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...a3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch |    2 ++
- 1 file changed, 2 insertions(+)
+ package/mesa3d/mesa3d.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-index 79df1ce..53ba519 100644
---- a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-+++ b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
-@@ -8,6 +8,8 @@ only installed if Mesa3d is compiled with EGL support.
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 23ab5e9..5070d08 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -22,6 +22,13 @@ MESA3D_DEPENDENCIES = \
+ 	host-xutil_makedepend \
+ 	libdrm
  
- This patch installs this header file unconditionally.
- 
-+Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=77240
++ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++MESA3D_DEPENDENCIES += xproto_dri3proto
++MESA3D_CONF_OPT += --enable-dri3
++else
++MESA3D_CONF_OPT += --disable-dri3
++endif
 +
- Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
- ---
-  src/egl/main/Makefile.am | 3 ---
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
 -- 
 1.7.10.4
