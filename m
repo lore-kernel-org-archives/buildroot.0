@@ -1,70 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 May 2014 12:02:34 +0200
-Subject: [Buildroot] [PATCH v6 22/32] xbmc: Allow compilation with uClibc
+Date: Sat, 10 May 2014 12:02:44 +0200
+Subject: [Buildroot] [PATCH v6 32/32] xbmc: Fix TexturePacker compile
 In-Reply-To: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399716164-6452-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399716164-6452-33-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Patch description:
+
+use_texturepacker_native=yes
+
+is needed because we obviously need a native-compiled binary, but the xbmc
+build system does enable this variable only for darwin, android and
+raspberry-pi targets.
+
+USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+
+is also needed because
+USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
+is only executed for raspberry-pi by xbmc/configure and only
+USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
+
+To sum up, building for raspberry-pi and other archs works out-of-the-box,
+compiling for an Intel target, for example, fails:
+
+In file included from SDL_anigif.cpp:23:0:
+SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
+compilation terminated.
+XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |   18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ package/xbmc/xbmc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index dfbd474..9ca7620 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -1,11 +1,10 @@
--comment "xbmc needs an (e)glibc toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "xbmc needs a toolchain w/ C++, largefile, threads, wchar"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 46d969a..82bc33c 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -26,6 +26,8 @@ XBMC_CONF_ENV = \
+ 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	PYTHON_NOVERSIONCHECK="no-check" \
++	use_texturepacker_native=yes \
++	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
- comment "xbmc requires an OpenGL ES and EGL backend"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
- 
- menuconfig BR2_PACKAGE_XBMC
- 	bool "xbmc"
-@@ -57,10 +56,13 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_TINYXML
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
--	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_USE_MMU # python
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_i386 || BR2_x86_64
- 	help
- 	  XBMC is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
-@@ -126,11 +128,15 @@ config BR2_PACKAGE_XBMC_RTMPDUMP
- 
- config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
- 	bool "shairport"
-+	depends on BR2_INET_IPV6
- 	select BR2_PACKAGE_LIBSHAIRPLAY
- 	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
- 
-+comment "shairport support needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
- config BR2_PACKAGE_XBMC_LIBSMBCLIENT
- 	bool "samba"
- 	select BR2_PACKAGE_SAMBA
+ XBMC_CONF_OPT +=  \
 -- 
 1.7.10.4
