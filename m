@@ -1,33 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 May 2014 12:02:42 +0200
-Subject: [Buildroot] [PATCH v6 30/32] xbmc: add nasm/yasm dependency
+Date: Sat, 10 May 2014 12:02:37 +0200
+Subject: [Buildroot] [PATCH v6 25/32] xbmc: Add VA-API support
 In-Reply-To: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399716164-6452-31-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399716164-6452-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ package/xbmc/xbmc.mk |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index bdefc8e..99e78d4 100644
+index 4b2b134..f23c989 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -18,6 +18,8 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+@@ -39,7 +39,6 @@ XBMC_CONF_OPT +=  \
+ 	--disable-projectm \
+ 	--disable-pulse \
+ 	--disable-ssh \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -55,6 +54,14 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ endif
  
-+XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm) $(if $(BR2_x86_64),host-yasm)
++# xbmc needs libva & libva-glx
++ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
++XBMC_DEPENDENCIES += libva
++XBMC_CONF_OPT += --enable-vaapi
++else
++XBMC_CONF_OPT += --disable-vaapi
++endif
 +
- XBMC_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ XBMC_DEPENDENCIES += \
+ 	libglew \
 -- 
 1.7.10.4
