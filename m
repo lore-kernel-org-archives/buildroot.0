@@ -1,269 +1,99 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 10 May 2014 12:02:31 +0200
-Subject: [Buildroot] [PATCH v6 19/32] xbmc-pvr-addons: Version bump to xbmc
-	Gotham-compatible addon
+Date: Sat, 10 May 2014 12:02:28 +0200
+Subject: [Buildroot] [PATCH v6 16/32] xdriver_xf86-video-intel: Bump version
+	to 2.99.911
 In-Reply-To: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1399716164-6452-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1399716164-6452-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- add necessary dependencies
+- add -D_GNU_SOURCE to avoid getline compilation error
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch |  226 ++++++++++++++++++++
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk         |    4 +-
- 2 files changed, 227 insertions(+), 3 deletions(-)
- create mode 100644 package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |   11 ++++----
+ .../xdriver_xf86-video-intel.mk                    |   27 +++++++++++++++-----
+ 2 files changed, 27 insertions(+), 11 deletions(-)
 
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch b/package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch
-new file mode 100644
-index 0000000..aedaf6f
---- /dev/null
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch
-@@ -0,0 +1,226 @@
-+patch taken from OpenElec
-+
-+https://github.com/OpenELEC/OpenELEC.tv/blob/5d7777390abcb59cdc8f99c4253f89da94a8055c/packages/mediacenter/xbmc-pvr-addons/patches/xbmc-pvr-addons-buildfix.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/Makefile.include.am xbmc-pvr-addons-f38b2eb.patch/addons/Makefile.include.am
-+--- xbmc-pvr-addons-f38b2eb/addons/Makefile.include.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/Makefile.include.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -36,7 +36,9 @@
-+ 	mkdir -m 755 -p $(DESTDIR)@LIBDIR@/$(ADDONNAME)
-+ 	mkdir -m 755 -p $(DESTDIR)@DATADIR@/$(ADDONNAME)
-+ 	cp -f @BINPREFIX@$(ADDONBINNAME)@BIN_EXT@ $(DESTDIR)@LIBDIR@/$(ADDONNAME) ; chmod 655 $(DESTDIR)@LIBDIR@/$(ADDONNAME)/@BINPREFIX@$(ADDONBINNAME)@BIN_EXT@
-+-	cp -r -f @abs_top_srcdir@/addons/$(ADDONNAME)/addon/* $(DESTDIR)@DATADIR@/$(ADDONNAME) ; chmod -R o+rx $(DESTDIR)@DATADIR@/$(ADDONNAME)
-++	cp -r -f @abs_top_srcdir@/addons/$(ADDONNAME)/addon/* $(DESTDIR)@DATADIR@/$(ADDONNAME)
-++	cp -r -f @abs_top_builddir@/addons/$(ADDONNAME)/addon/* $(DESTDIR)@DATADIR@/$(ADDONNAME)
-++	chmod -R o+rx $(DESTDIR)@DATADIR@/$(ADDONNAME)
-+ endif
-+ 
-+ all: @BUILD_TYPE@
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.argustv/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.argustv/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.argustv/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.argustv/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,11 +10,11 @@
-+ LIBNAME         = libargustv-addon
-+ lib_LTLIBRARIES = libargustv-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/jsoncpp/libjsoncpp.la
-++LIBS            = @abs_top_builddir@/lib/jsoncpp/libjsoncpp.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+-INCLUDES+=-Isrc -Isrc/lib/filesystem -I at abs_top_srcdir@/lib/jsoncpp/include
-++INCLUDES+=-I$(srcdir)/src -I$(srcdir)/src/lib/filesystem -I at abs_top_srcdir@/lib/jsoncpp/include
-+ 
-+ libargustv_addon_la_SOURCES = src/activerecording.cpp \
-+                                    src/channel.cpp \
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.demo/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.demo/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.demo/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.demo/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libpvrdemo-addon
-+ lib_LTLIBRARIES = libpvrdemo-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.dvblink/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.dvblink/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.dvblink/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.dvblink/Makefile.am	2014-05-04 14:38:41.761644652 +0200
-+@@ -10,11 +10,11 @@
-+ LIBNAME         = libdvblink-addon
-+ lib_LTLIBRARIES = libdvblink-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/libdvblinkremote/libdvblinkremote.la
-++LIBS            = @abs_top_builddir@/lib/libdvblinkremote/libdvblinkremote.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+-INCLUDES+=-Isrc
-++INCLUDES+=-I$(srcdir)/src
-+ 
-+ libdvblink_addon_la_SOURCES = src/client.cpp \
-+                               src/base64.cpp \
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.dvbviewer/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.dvbviewer/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.dvbviewer/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.dvbviewer/Makefile.am	2014-05-04 14:36:53.759689719 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libdvbviewer-addon
-+ lib_LTLIBRARIES = libdvbviewer-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.hts/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.hts/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.hts/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.hts/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libtvheadend-addon
-+ lib_LTLIBRARIES = libtvheadend-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/libhts/libhts.la -ldl
-++LIBS            = @abs_top_builddir@/lib/libhts/libhts.la -ldl
-+ 
-+ include ../Makefile.include.am
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.mediaportal.tvserver/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.mediaportal.tvserver/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.mediaportal.tvserver/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.mediaportal.tvserver/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,11 +10,11 @@
-+ LIBNAME         = libmediaportal-addon
-+ lib_LTLIBRARIES = libmediaportal-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+-INCLUDES+=-Isrc
-++INCLUDES+=-I$(srcdir)/src
-+ 
-+ libmediaportal_addon_la_SOURCES = src/Cards.cpp \
-+                                   src/channels.cpp \
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.mythtv.cmyth/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.mythtv.cmyth/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.mythtv.cmyth/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.mythtv.cmyth/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libmythtvcmyth-addon
-+ lib_LTLIBRARIES = libmythtvcmyth-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/cmyth/libcmyth.la
-++LIBS            = @abs_top_builddir@/lib/cmyth/libcmyth.la
-+ 
-+ AM_CPPFLAGS = -I$(abs_top_srcdir)/lib/cmyth/include
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.nextpvr/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.nextpvr/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.nextpvr/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.nextpvr/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,11 +10,11 @@
-+ LIBNAME         = libnextpvr-addon
-+ lib_LTLIBRARIES = libnextpvr-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+-INCLUDES+=-Isrc
-++INCLUDES+=-I$(srcdir)/src
-+ 
-+ libnextpvr_addon_la_SOURCES = src/client.cpp \
-+                                   src/pvrclient-nextpvr.cpp \
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.njoy/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.njoy/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.njoy/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.njoy/Makefile.am	2014-05-04 14:35:47.618601552 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libpvrnjoy-addon
-+ lib_LTLIBRARIES = libpvrnjoy-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.vuplus/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.vuplus/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.vuplus/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.vuplus/Makefile.am	2014-05-04 14:35:47.619601641 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libvuplus-addon
-+ lib_LTLIBRARIES = libvuplus-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/addons/pvr.wmc/Makefile.am xbmc-pvr-addons-f38b2eb.patch/addons/pvr.wmc/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/addons/pvr.wmc/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/addons/pvr.wmc/Makefile.am	2014-05-04 14:35:47.619601641 +0200
-+@@ -10,7 +10,7 @@
-+ LIBNAME         = libpvrwmc-addon
-+ lib_LTLIBRARIES = libpvrwmc-addon.la
-+ 
-+-LIBS            = @abs_top_srcdir@/lib/tinyxml/libtinyxml.la
-++LIBS            = @abs_top_builddir@/lib/tinyxml/libtinyxml.la
-+ 
-+ include ../Makefile.include.am
-+ 
-+diff -Naur xbmc-pvr-addons-f38b2eb/lib/cmyth/libcmyth/Makefile.am xbmc-pvr-addons-f38b2eb.patch/lib/cmyth/libcmyth/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/lib/cmyth/libcmyth/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/lib/cmyth/libcmyth/Makefile.am	2014-05-04 14:35:47.619601641 +0200
-+@@ -26,7 +26,7 @@
-+                      storagegroup.c \
-+                      epginfo.c
-+ 
-+-INCLUDES=-I../include/ $(MYSQL_INCLUDES)
-++INCLUDES=-I$(srcdir)/../include/ $(MYSQL_INCLUDES)
-+ 
-+ $(LIB): libcmyth.la
-+ 	cp -f .libs/libcmyth.a .
-+diff -Naur xbmc-pvr-addons-f38b2eb/lib/cmyth/librefmem/Makefile.am xbmc-pvr-addons-f38b2eb.patch/lib/cmyth/librefmem/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/lib/cmyth/librefmem/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/lib/cmyth/librefmem/Makefile.am	2014-05-04 14:35:47.619601641 +0200
-+@@ -3,7 +3,7 @@
-+ librefmem_la_SOURCES = alloc.c \
-+                       debug_refmem.c
-+ 
-+-INCLUDES=-I../include/ -I../libcmyth/
-++INCLUDES=-I$(srcdir)/../include/ -I$(srcdir)/../libcmyth/
-+ 
-+ $(LIB): librefmem.la
-+ 	cp -f .libs/librefmem.a .
-+diff -Naur xbmc-pvr-addons-f38b2eb/lib/jsoncpp/Makefile.am xbmc-pvr-addons-f38b2eb.patch/lib/jsoncpp/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/lib/jsoncpp/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/lib/jsoncpp/Makefile.am	2014-05-04 14:35:47.619601641 +0200
-+@@ -4,7 +4,7 @@
-+                         src/lib_json/json_value.cpp \
-+                         src/lib_json/json_writer.cpp
-+ 
-+-INCLUDES=-Iinclude/
-++INCLUDES=-I$(srcdir)/include/
-+ 
-+ $(LIB): libjsoncpp.la
-+ 	cp -f .libs/libjsoncpp.a .
-+diff -Naur xbmc-pvr-addons-f38b2eb/lib/libdvblinkremote/Makefile.am xbmc-pvr-addons-f38b2eb.patch/lib/libdvblinkremote/Makefile.am
-+--- xbmc-pvr-addons-f38b2eb/lib/libdvblinkremote/Makefile.am	2014-05-04 14:27:57.000000000 +0200
-++++ xbmc-pvr-addons-f38b2eb.patch/lib/libdvblinkremote/Makefile.am	2014-05-04 14:35:47.619601641 +0200
-+@@ -26,10 +26,10 @@
-+ 			util.cpp \
-+ 			xml_object_serializer_factory.cpp
-+ 
-+-LIBS= @abs_top_srcdir@/lib/tinyxml2/libtinyxml2.la
-++LIBS= @abs_top_builddir@/lib/tinyxml2/libtinyxml2.la
-+  
-+-INCLUDES=-I..
-++INCLUDES=-I$(srcdir)/..
-+ 
-+ $(LIB): libdvblinkremote.la
-+ 	cp -f .libs/libdvblinkremote.a .
-+-	cp -f .libs/libdvblinkremote.la $(LIB)
-+\ Kein Zeilenumbruch am Dateiende.
-++	cp -f .libs/libdvblinkremote.la $(LIB)
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-index b6d061b..0f229a4 100644
---- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-@@ -4,9 +4,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
+index 69a9e78..e2708c0 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/Config.in
++++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
+@@ -2,13 +2,14 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+ 	bool "xf86-video-intel"
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_PACKAGE_MESA3D
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_XLIB_LIBPCIACCESS
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XPROTO_FONTSPROTO
++	select BR2_PACKAGE_XPROTO_XPROTO
+ 	help
+ 	  Intel video driver
+ 
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 332de54..52b493f 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,18 +4,18 @@
  #
  ################################################################################
  
--# This cset is on the branch 'frodo'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
-+XBMC_PVR_ADDONS_VERSION = f38b2ebdc6f96244d5e4bc584315f4a2c24bc787
- XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
- XBMC_PVR_ADDONS_LICENSE = GPLv3+
- XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
++
++# this fixes a getline-related compilation in src/sna/kgem.c
++XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+-	--enable-dri \
+-	--enable-kms-only \
+ 	--disable-xvmc \
+-	--disable-ums-only \
+ 	--enable-sna \
+ 	--disable-uxa \
+ 	--disable-glamor \
+@@ -23,6 +23,21 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+ 	--disable-dga \
+ 	--disable-async-swap
+ 
+-XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
++	libdrm \
++	xlib_libXcomposite \
++	xlib_libXrandr \
++	xlib_libXtst \
++	xlib_libpciaccess \
++	xproto_fontsproto \
++	xproto_xproto \
++	xserver_xorg-server
++
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --enable-dri
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d xproto_xf86driproto
++else
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --disable-dri
++endif
+ 
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
