@@ -1,87 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 11 May 2014 21:27:08 +0200
-Subject: [Buildroot] [PATCH v4] toolchain-external: Fix EABIhf check
-In-Reply-To: <87fvkg86ju.fsf@dell.be.48ers.dk>
-References: <84b0ee8257dae0a623d4.1399635840@argentina>
- <87fvkg86ju.fsf@dell.be.48ers.dk>
-Message-ID: <cfc3b301-4f99-4da5-a527-143b6a93fbcc@email.android.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 11 May 2014 19:33:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 6842] Checking external toolchain for eabihf
+In-Reply-To: <bug-6842-163@https.bugs.busybox.net/>
+References: <bug-6842-163@https.bugs.busybox.net/>
+Message-ID: <20140511193323.6F9BA9CB26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <jacmet@uclibc.org> schreef:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
->
-> > From: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> > Currently the check for EABI/EABIhf toolchains looks for the
-> > Tag_ABI_VFP_args attribute in the crt1.o file which gcc adds in an
-> > EABIhf toolchain.
-> > In uClibc, however, crt1.o is not compiled from c but assembly, so the
-> > Tag_ABI_VFP_args attribute is not added in the object file. This causes
-> > the EABIhf check in the external toolchain logic to fail for
-> > uClibc-based toolchains.
->
-> > Fix by compiling a dummy .c file and trying to link the object against the
-> > C library. Since it is impossible to mix EABI and EABIhf code, a mismatch
-> > between the buildroot and toolchain ABI settings will be detected during
-> > this link step.
->
-> > Fixes bug #6842: https://bugs.busybox.net/show_bug.cgi?id=6842
->
-> > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> > [ThomasDS: do full link iso readelf test, update commit message]
-> > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> > ---
-> > Note: this v4 did not change the error message, awaiting Arnout's input.
->
-> > v4: (ThomasDS)
-> >   - avoid creating a temporary object file (Arnout)
->
-> > v3: (ThomasDS)
-> >   - v2 properly recognized a uClibc EABIhf toolchain, but failed to detect a
-> >     mismatch with buildroot settings (detected by ThomasP). Fix by
-> >     performing an actual link step to detect any incompatibility.
-> > v2: (ThomasDS)
-> >   - avoid creating a temporary source file
-> >   - update commit message
->
-> >  toolchain/helpers.mk |  16 ++++------------
-> >  1 files changed, 4 insertions(+), 12 deletions(-)
->
-> > diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> > --- a/toolchain/helpers.mk
-> > +++ b/toolchain/helpers.mk
-> > @@ -297,20 +297,12 @@ check_arm_abi = \
-> >  		echo "External toolchain uses the unsuported OABI" ; \
-> >  		exit 1 ; \
-> >  	fi ; \
-> > -	EXT_TOOLCHAIN_CRT1=`LANG=C $${__CROSS_CC} -print-file-name=crt1.o` ; \
-> > -	if $${__CROSS_READELF} -A $${EXT_TOOLCHAIN_CRT1} | grep -q "Tag_ABI_VFP_args:" ; then \
-> > -		EXT_TOOLCHAIN_ABI="eabihf" ; \
-> > -	else \
-> > -		EXT_TOOLCHAIN_ABI="eabi" ; \
-> > -	fi ; \
-> > -	if [ "$(BR2_ARM_EABI)" = "y" -a "$${EXT_TOOLCHAIN_ABI}" = "eabihf" ] ; then \
-> > -		echo "Incorrect ABI setting: EABI selected, but toolchain uses EABIhf" ; \
-> > +	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - 2>/dev/null; then \
-> > +		abistr_$(BR2_ARM_EABI)='EABI'; \
-> > +		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
-> > +		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
-> >  		exit 1 ; \
-> >  	fi ; \
->
->This final line should just be 'fi' otherwise the shell gets confused
->and I get:
->
->>>> toolchain-external undefined Configuring
->/bin/bash: -c: line 0: syntax error near unexpected token `;'
->
->Committed with that fixed, thanks.
+https://bugs.busybox.net/show_bug.cgi?id=6842
 
-Aargh, that's entirely my fault due to removing the temporary file in v4 and not retesting, sorry.
+Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> changed:
 
-Best regards,
-Thomas
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #10 from Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> 2014-05-11 19:33:22 UTC ---
+Fixed with
+http://git.buildroot.net/buildroot/commit/?id=3787592063b0f30c69d074534a5a437bb458fbd7
+
+Thanks for reporting!
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
