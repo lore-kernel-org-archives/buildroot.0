@@ -1,35 +1,92 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 11 May 2014 22:47:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-09
-In-Reply-To: <536FE087.1030103@mind.be> (Arnout Vandecappelle's message of
- "Sun, 11 May 2014 22:41:43 +0200")
-References: <20140510063010.4D1F81010DF@stock.ovh.net>
- <536E86B1.4050005@mind.be> <20140511043405.GB4096@tarshish>
- <536F8C6E.1050004@mind.be> <20140511145522.GH4096@tarshish>
- <536FE087.1030103@mind.be>
-Message-ID: <8738gg82lp.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 11 May 2014 22:14:54 +0200
+Subject: [Buildroot] [git commit] p11-kit: fix build against linuxthreads
+Message-ID: <20140511204727.B9F329CB26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=4d7249bdee218b95556b2835f358a9da4f7dcc67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/9e9/9e9c83461fec44c85919e07a3ce2c5ca49ff9cf5/
 
- >> How would that solve the problem? Host packages are selected directly from 
- >> Makefiles, regardless of Kconfig settings, isn't it? Or do you intend to add 
- >> host architecture dependencies to all reverse dependencies of host-protobuf 
- >> (currently: protobuf-c, protobuf, python-protobuf, and their reverse 
- >> dependencies)?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ld-against-older-pthreads-implementations.patch |   64 ++++++++++++++++++++
+ 1 files changed, 64 insertions(+), 0 deletions(-)
 
- >  Exactly. But I don't really think it's worthwhile to do that - except for the
- > autobuilder, there is probably nobody who tries building on anything except x86.
-
-Indeed. I don't think the host-protobuf issue is something anybody will
-run into in reality.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch b/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
+new file mode 100644
+index 0000000..3562f3c
+--- /dev/null
++++ b/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
+@@ -0,0 +1,64 @@
++From 05b6a7550756ffdced25a6c51cf2222bad9e59e7 Mon Sep 17 00:00:00 2001
++Message-Id: <05b6a7550756ffdced25a6c51cf2222bad9e59e7.1399285491.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 5 May 2014 09:32:23 +0300
++Subject: [PATCH] Fix build against older pthreads implementations
++
++Older pthreads implementations like glibc NPTL prior to version 2.12, and
++uClibc linuxthreads (both), need _XOPEN_SOURCE to expose
++pthread_mutexattr_settype() and THREAD_MUTEX_DEFAULT. The value 600 (SuSv3,
++POSIX.1-2001) is equivalent to _POSIX_C_SOURCE 200112L.
++
++Fixes the following build error:
++
++  CC       compat.lo
++compat.c: In function 'p11_mutex_init':
++compat.c:164:2: warning: implicit declaration of function 'pthread_mutexattr_settype' [-Wimplicit-function-declaration]
++compat.c:164:2: warning: nested extern declaration of 'pthread_mutexattr_settype' [-Wnested-externs]
++compat.c:164:36: error: 'PTHREAD_MUTEX_DEFAULT' undeclared (first use in this function)
++
++Patch status: sent upstream
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ common/compat.h  | 6 ++++++
++ common/message.c | 6 ------
++ 2 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/common/compat.h b/common/compat.h
++index d7fe414a46bf..fbc1dc1d4f0f 100644
++--- a/common/compat.h
+++++ b/common/compat.h
++@@ -37,6 +37,12 @@
++ 
++ #include "config.h"
++ 
+++/*
+++ * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
+++ * functions to completely different signatures depending on defines
+++ */
+++#define _XOPEN_SOURCE 600
+++
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ 
++diff --git a/common/message.c b/common/message.c
++index 35f2764487a9..e68dfac561c8 100644
++--- a/common/message.c
+++++ b/common/message.c
++@@ -37,12 +37,6 @@
++ 
++ #include "config.h"
++ 
++-/*
++- * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
++- * functions to completely different signatures depending on defines
++- */
++-#define _POSIX_C_SOURCE 200112L
++-
++ #include "compat.h"
++ #define P11_DEBUG_FLAG P11_DEBUG_LIB
++ #include "debug.h"
++-- 
++2.0.0.rc0
++
