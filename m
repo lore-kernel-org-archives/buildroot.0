@@ -1,102 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 May 2014 22:37:10 +0200
-Subject: [Buildroot] [git commit] qt5connectivity: the poster example needs
-	no widgets, but it needs quick
-Message-ID: <20140511204727.C01159CAFC@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 11 May 2014 22:57:56 +0200
+Subject: [Buildroot] [PATCH 4 of 7] toolchain/toolchain-buildroot:
+ migrate to virtual package infrastructure
+In-Reply-To: <4a84f87803add852946f.1399822728@argentina>
+References: <patchbomb.1399822724@argentina>
+ <4a84f87803add852946f.1399822728@argentina>
+Message-ID: <20140511205756.GH3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d7133b9e9b96c527c595868b6904894784b87a8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
+> This patch migrates the toolchain and toolchain-buildroot packages to the
+> virtual package infrastructure, 
 
-Adding an upstream patch to fix an autobuild failure.
+For a true conversion to the virtual package infra, it should have been
+using these variables:
+    BR2_$(PACKAGE)_HAS_TOOLCHAIN
+    BR2_$(PACKAGE)_PROVIDES_TOOLCHAIN
 
-Upstream commit:
-   https://qt.gitorious.org/qt/qtconnectivity/commit/0156038682cc40d44fedfc28dc9b78d1a0e6203b
+But I guess in this case it is a bit far-fetched and over-reaching...
 
-Fixes:
-   http://autobuild.buildroot.net/results/d12/d120355cbb42307d35e59bc4528e973a2b12150e/
+graph-depends is still happy, so am I. ;-)
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ample-needs-no-widgets-but-it-needs-quick.patch |   67 ++++++++++++++++++++
- 1 files changed, 67 insertions(+), 0 deletions(-)
+> causing the log messages to change from:
+> 
+> >>> toolchain undefined Downloading
+> >>> toolchain undefined Extracting
+> ...
+> 
+> to
+> 
+> >>> toolchain virtual Downloading
+> >>> toolchain virtual Extracting
+> ...
+> 
+> and similar for 'toolchain-buildroot', simply because it looks nicer.
+> 
+> At the same time, the directory names also become toolchain-virtual,
+> toolchain-buildroot-virtual instead of the corresponding 'undefined'
+> variants.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-diff --git a/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch b/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
-new file mode 100644
-index 0000000..d8b75f4
---- /dev/null
-+++ b/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
-@@ -0,0 +1,67 @@
-+qt5connectivity: the poster example needs no widgets, but it needs quick
-+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+
-+From 0156038682cc40d44fedfc28dc9b78d1a0e6203b Mon Sep 17 00:00:00 2001
-+From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
-+Date: Tue, 18 Feb 2014 15:28:48 +0100
-+Subject: [PATCH] the poster example needs no widgets, but it needs quick
-+
-+Task-number: QTBUG-36893
-+Change-Id: Ic77fe07aa450001386be0b2e0d4a99f2e674dbb2
-+Reviewed-by: Alex Blasche <alexander.blasche@digia.com>
-+Reviewed-by: Rolf Eike Beer <eb@emlix.com>
-+---
-+ examples/nfc/nfc.pro              |    5 ++++-
-+ examples/nfc/poster/poster.pro    |    2 +-
-+ examples/nfc/poster/qmlposter.cpp |    4 ++--
-+ 3 files changed, 7 insertions(+), 4 deletions(-)
-+
-+diff --git a/examples/nfc/nfc.pro b/examples/nfc/nfc.pro
-+index e4f7e35..0076a71 100644
-+--- a/examples/nfc/nfc.pro
-++++ b/examples/nfc/nfc.pro
-+@@ -2,7 +2,10 @@ TEMPLATE = subdirs
-+ qtHaveModule(widgets) {
-+     SUBDIRS += \
-+         annotatedurl \
-+-        ndefeditor \
-++        ndefeditor
-++}
-++qtHaveModule(quick) {
-++    SUBDIRS += \
-+         poster
-+ }
-+ 
-+diff --git a/examples/nfc/poster/poster.pro b/examples/nfc/poster/poster.pro
-+index 47de298..b6e87ed 100644
-+--- a/examples/nfc/poster/poster.pro
-++++ b/examples/nfc/poster/poster.pro
-+@@ -1,4 +1,4 @@
-+-QT += qml quick network nfc widgets
-++QT += qml quick network nfc
-+ 
-+ SOURCES += \
-+     qmlposter.cpp
-+diff --git a/examples/nfc/poster/qmlposter.cpp b/examples/nfc/poster/qmlposter.cpp
-+index 89f3695..2fc943d 100644
-+--- a/examples/nfc/poster/qmlposter.cpp
-++++ b/examples/nfc/poster/qmlposter.cpp
-+@@ -38,13 +38,13 @@
-+ **
-+ ****************************************************************************/
-+ 
-+-#include <QtWidgets/QApplication>
-++#include <QtGui/QGuiApplication>
-+ #include <QtQml/QQmlEngine>
-+ #include <QtQuick/QQuickView>
-+ 
-+ int main(int argc, char *argv[])
-+ {
-+-    QApplication application(argc, argv);
-++    QGuiApplication application(argc, argv);
-+     const QString mainQmlApp = QLatin1String("qrc:/poster.qml");
-+     QQuickView view;
-+     view.setSource(QUrl(mainQmlApp));
-+-- 
-+1.7.1
-+
+AS previously, when the prior preceding patches have been applied (or
+reworked):
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> v2:
+> - use virtual-package infrastructure instead of explicitly defining VERSION
+> - exclude toolchain-external from this patch
+> 
+>  toolchain/toolchain-buildroot/toolchain-buildroot.mk |  4 +---
+>  toolchain/toolchain/toolchain.mk                     |  4 +---
+>  2 files changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> --- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+> @@ -4,8 +4,6 @@
+>  #
+>  ################################################################################
+>  
+> -TOOLCHAIN_BUILDROOT_SOURCE =
+> -
+>  BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+>  
+>  # Triggering the build of the host-gcc-final will automatically do the
+> @@ -16,4 +14,4 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-
+>  
+>  TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  
+> -$(eval $(generic-package))
+> +$(eval $(virtual-package))
+> diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+> --- a/toolchain/toolchain/toolchain.mk
+> +++ b/toolchain/toolchain/toolchain.mk
+> @@ -4,8 +4,6 @@
+>  #
+>  ################################################################################
+>  
+> -TOOLCHAIN_SOURCE =
+> -
+>  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+>  TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+> @@ -14,6 +12,6 @@ endif
+>  
+>  TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  
+> -$(eval $(generic-package))
+> +$(eval $(virtual-package))
+>  
+>  toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
