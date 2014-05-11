@@ -1,45 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 May 2014 18:00:04 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-09
-In-Reply-To: <536F8C6E.1050004@mind.be>
-References: <20140510063010.4D1F81010DF@stock.ovh.net>
- <536E86B1.4050005@mind.be> <20140511043405.GB4096@tarshish>
- <536F8C6E.1050004@mind.be>
-Message-ID: <20140511160004.GD3428@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 11 May 2014 18:07:06 +0200
+Subject: [Buildroot] Autobuilder news
+In-Reply-To: <536E8BEB.7020300@mind.be>
+References: <20140504223611.5a6177c1@skate>
+	<536E8BEB.7020300@mind.be>
+Message-ID: <20140511180706.4a6f449e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Dear Arnout Vandecappelle,
 
-On 2014-05-11 16:42 +0200, Arnout Vandecappelle spake thusly:
->  True. We could add a dependency on BR2_HOSTARCH for that. Except that Kconfig
-> doesn't support string comparison AFAIK.
+On Sat, 10 May 2014 22:28:27 +0200, Arnout Vandecappelle wrote:
 
-He, yes it does:
+>  Is it possible that you installed new binaries with the same name but a
+> different ctng configuration? That's a bit annoying because it breaks
+> reproducibility... It's OK to remove the old toolchains, but it would be good if
+> the new ones would have a different name.
 
-    config FOO
-        string "foo"
+No: the new toolchains have a different tarball names, and the old
+toolchain tarballs were all kept at their original location with their
+original name. So normally all the builds from the Free Electrons build
+server should be reproducible, including the ones using older
+Crosstool-NG toolchains.
 
-    config BAR
-        string "bar"
+Have you noticed any specific problem?
 
-    config EQ
-        default y if FOO = BAR
+Thanks,
 
-Now, try to set FOO="whatever" and BAR="whatever" and look at the
-resulting .config file. ;-)
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
