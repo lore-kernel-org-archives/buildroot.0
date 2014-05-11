@@ -1,92 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 11 May 2014 22:14:54 +0200
-Subject: [Buildroot] [git commit] p11-kit: fix build against linuxthreads
-Message-ID: <20140511204727.B9F329CB26@busybox.osuosl.org>
+Date: Sun, 11 May 2014 22:37:10 +0200
+Subject: [Buildroot] [git commit] qt5connectivity: the poster example needs
+	no widgets, but it needs quick
+Message-ID: <20140511204727.C01159CAFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d7249bdee218b95556b2835f358a9da4f7dcc67
+commit: http://git.buildroot.net/buildroot/commit/?id=3d7133b9e9b96c527c595868b6904894784b87a8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/9e9/9e9c83461fec44c85919e07a3ce2c5ca49ff9cf5/
+Adding an upstream patch to fix an autobuild failure.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Upstream commit:
+   https://qt.gitorious.org/qt/qtconnectivity/commit/0156038682cc40d44fedfc28dc9b78d1a0e6203b
+
+Fixes:
+   http://autobuild.buildroot.net/results/d12/d120355cbb42307d35e59bc4528e973a2b12150e/
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ld-against-older-pthreads-implementations.patch |   64 ++++++++++++++++++++
- 1 files changed, 64 insertions(+), 0 deletions(-)
+ ...ample-needs-no-widgets-but-it-needs-quick.patch |   67 ++++++++++++++++++++
+ 1 files changed, 67 insertions(+), 0 deletions(-)
 
-diff --git a/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch b/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
+diff --git a/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch b/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
 new file mode 100644
-index 0000000..3562f3c
+index 0000000..d8b75f4
 --- /dev/null
-+++ b/package/p11-kit/p11-kit-01-Fix-build-against-older-pthreads-implementations.patch
-@@ -0,0 +1,64 @@
-+From 05b6a7550756ffdced25a6c51cf2222bad9e59e7 Mon Sep 17 00:00:00 2001
-+Message-Id: <05b6a7550756ffdced25a6c51cf2222bad9e59e7.1399285491.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Mon, 5 May 2014 09:32:23 +0300
-+Subject: [PATCH] Fix build against older pthreads implementations
++++ b/package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
+@@ -0,0 +1,67 @@
++qt5connectivity: the poster example needs no widgets, but it needs quick
++Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 +
-+Older pthreads implementations like glibc NPTL prior to version 2.12, and
-+uClibc linuxthreads (both), need _XOPEN_SOURCE to expose
-+pthread_mutexattr_settype() and THREAD_MUTEX_DEFAULT. The value 600 (SuSv3,
-+POSIX.1-2001) is equivalent to _POSIX_C_SOURCE 200112L.
++From 0156038682cc40d44fedfc28dc9b78d1a0e6203b Mon Sep 17 00:00:00 2001
++From: Oswald Buddenhagen <oswald.buddenhagen@digia.com>
++Date: Tue, 18 Feb 2014 15:28:48 +0100
++Subject: [PATCH] the poster example needs no widgets, but it needs quick
 +
-+Fixes the following build error:
-+
-+  CC       compat.lo
-+compat.c: In function 'p11_mutex_init':
-+compat.c:164:2: warning: implicit declaration of function 'pthread_mutexattr_settype' [-Wimplicit-function-declaration]
-+compat.c:164:2: warning: nested extern declaration of 'pthread_mutexattr_settype' [-Wnested-externs]
-+compat.c:164:36: error: 'PTHREAD_MUTEX_DEFAULT' undeclared (first use in this function)
-+
-+Patch status: sent upstream
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Task-number: QTBUG-36893
++Change-Id: Ic77fe07aa450001386be0b2e0d4a99f2e674dbb2
++Reviewed-by: Alex Blasche <alexander.blasche@digia.com>
++Reviewed-by: Rolf Eike Beer <eb@emlix.com>
 +---
-+ common/compat.h  | 6 ++++++
-+ common/message.c | 6 ------
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
++ examples/nfc/nfc.pro              |    5 ++++-
++ examples/nfc/poster/poster.pro    |    2 +-
++ examples/nfc/poster/qmlposter.cpp |    4 ++--
++ 3 files changed, 7 insertions(+), 4 deletions(-)
 +
-+diff --git a/common/compat.h b/common/compat.h
-+index d7fe414a46bf..fbc1dc1d4f0f 100644
-+--- a/common/compat.h
-++++ b/common/compat.h
-+@@ -37,6 +37,12 @@
++diff --git a/examples/nfc/nfc.pro b/examples/nfc/nfc.pro
++index e4f7e35..0076a71 100644
++--- a/examples/nfc/nfc.pro
+++++ b/examples/nfc/nfc.pro
++@@ -2,7 +2,10 @@ TEMPLATE = subdirs
++ qtHaveModule(widgets) {
++     SUBDIRS += \
++         annotatedurl \
++-        ndefeditor \
+++        ndefeditor
+++}
+++qtHaveModule(quick) {
+++    SUBDIRS += \
++         poster
++ }
 + 
-+ #include "config.h"
++diff --git a/examples/nfc/poster/poster.pro b/examples/nfc/poster/poster.pro
++index 47de298..b6e87ed 100644
++--- a/examples/nfc/poster/poster.pro
+++++ b/examples/nfc/poster/poster.pro
++@@ -1,4 +1,4 @@
++-QT += qml quick network nfc widgets
+++QT += qml quick network nfc
 + 
-++/*
-++ * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
-++ * functions to completely different signatures depending on defines
-++ */
-++#define _XOPEN_SOURCE 600
-++
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
++ SOURCES += \
++     qmlposter.cpp
++diff --git a/examples/nfc/poster/qmlposter.cpp b/examples/nfc/poster/qmlposter.cpp
++index 89f3695..2fc943d 100644
++--- a/examples/nfc/poster/qmlposter.cpp
+++++ b/examples/nfc/poster/qmlposter.cpp
++@@ -38,13 +38,13 @@
++ **
++ ****************************************************************************/
 + 
-+diff --git a/common/message.c b/common/message.c
-+index 35f2764487a9..e68dfac561c8 100644
-+--- a/common/message.c
-++++ b/common/message.c
-+@@ -37,12 +37,6 @@
++-#include <QtWidgets/QApplication>
+++#include <QtGui/QGuiApplication>
++ #include <QtQml/QQmlEngine>
++ #include <QtQuick/QQuickView>
 + 
-+ #include "config.h"
-+ 
-+-/*
-+- * Oh god. glibc is nasty. Changes behavior and definitions of POSIX
-+- * functions to completely different signatures depending on defines
-+- */
-+-#define _POSIX_C_SOURCE 200112L
-+-
-+ #include "compat.h"
-+ #define P11_DEBUG_FLAG P11_DEBUG_LIB
-+ #include "debug.h"
++ int main(int argc, char *argv[])
++ {
++-    QApplication application(argc, argv);
+++    QGuiApplication application(argc, argv);
++     const QString mainQmlApp = QLatin1String("qrc:/poster.qml");
++     QQuickView view;
++     view.setSource(QUrl(mainQmlApp));
 +-- 
-+2.0.0.rc0
++1.7.1
 +
