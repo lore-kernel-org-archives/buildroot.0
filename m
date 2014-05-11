@@ -1,9 +1,9 @@
 From: Davide Viti <zinosat@tiscali.it>
-Date: Sun, 11 May 2014 13:24:06 +0200
+Date: Sun, 11 May 2014 13:24:07 +0200
 Subject: [Buildroot] [PATCH 2/2] mongoose: optionally provide shared library
 In-Reply-To: <1399807447-9469-1-git-send-email-zinosat@tiscali.it>
 References: <1399807447-9469-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <1399807447-9469-2-git-send-email-zinosat@tiscali.it>
+Message-ID: <1399807447-9469-3-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,21 +15,6 @@ From: Davide Viti <d.viti@infosolution.it>
 
 Signed-off-by: Davide Viti <zinosat@tiscali.it>
 ---
-mongoose package can provide a webserver and, optionally, a shared
-library: this is what Centos, among other distros, is doing.
-
-It's now possible to include in the build both the mongoose executable
-and libmongoose.so
-
-Not too sure how should be handled the situation where mongoose is
-select and neither the webserver nor libmongoose.so are not selected
-
-I'd also appreciate some feedback on the shared library compilation
-flags
-
-regards,
-Davide
-
  package/mongoose/Config.in   |   14 ++++++++++++++
  package/mongoose/mongoose.mk |   32 +++++++++++++++++++++++++++++---
  2 files changed, 43 insertions(+), 3 deletions(-)
