@@ -1,36 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 May 2014 23:14:44 +0200
-Subject: [Buildroot] Autobuilder news
-In-Reply-To: <536FDF8F.3040704@mind.be>
-References: <20140504223611.5a6177c1@skate> <536E8BEB.7020300@mind.be>
- <20140511182949.55e5e115@free-electrons.com>
- <536FDF8F.3040704@mind.be>
-Message-ID: <20140511231444.1ca6d7ae@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 May 2014 23:17:30 +0200
+Subject: [Buildroot] [PATCH v2] freetype: freetype-patch: depends on
+	host-automake
+In-Reply-To: <1399298902-19863-1-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Mon, 5 May 2014 16:08:22 +0200")
+References: <1399298902-19863-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87y4y86mmt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+>>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
 
-On Sun, 11 May 2014 22:37:35 +0200, Arnout Vandecappelle wrote:
+ > The "make freetype-patch" fails because does not found autogen.sh,
+ > because autogen.sh available only for the configure stage.
+ > To fix this add host-automake as a prerequisite to freetype-patch.
 
-> > No, it is not possible. The new toolchains have a different tarball
-> > name, and all the tarballs from the previous ctng configurations have
-> > been kept. So all builds made on the Free Electrons build server should
-> > be fully reproducible.
-> > 
-> > Have you found any specific issue?
-> 
->  No, just that when I tried one of the new toolchains it didn't download because
-> it was already there. But I guess I must have forgotten that I had downloaded it
-> before, then.
+ > This change also fix the support to top-level parallel make.
 
-Do you remember which one specifically?
+ > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+ > ---
+ > v2:
+ >  - Add host-automake as a order-only-prerequisite because it is a
+ >    phony target.
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
