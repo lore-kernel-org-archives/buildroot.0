@@ -1,7 +1,9 @@
 From: Davide Viti <zinosat@tiscali.it>
-Date: Sun, 11 May 2014 13:24:05 +0200
-Subject: [Buildroot] [PATCH 1/2] mongoose: bump to version 5.3
-Message-ID: <1399807447-9469-1-git-send-email-zinosat@tiscali.it>
+Date: Sun, 11 May 2014 13:24:06 +0200
+Subject: [Buildroot] [PATCH 2/2] mongoose: optionally provide shared library
+In-Reply-To: <1399807447-9469-1-git-send-email-zinosat@tiscali.it>
+References: <1399807447-9469-1-git-send-email-zinosat@tiscali.it>
+Message-ID: <1399807447-9469-2-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,100 +15,105 @@ From: Davide Viti <d.viti@infosolution.it>
 
 Signed-off-by: Davide Viti <zinosat@tiscali.it>
 ---
-Mongoose has changed quite drastically in the last months.
-Here is a list of changes which had to be applied:
+mongoose package can provide a webserver and, optionally, a shared
+library: this is what Centos, among other distros, is doing.
 
- - Bump version from 3.7 to 5.3
- - use tarball download via github helper iso git clone
- - need largefile support
- - compilation takes place into "examples"
- - weberver source is now "server.c"
- - adapt to new command line options
- - SSL support now controlled via NS_ENABLE_SSL
+It's now possible to include in the build both the mongoose executable
+and libmongoose.so
 
-I'd appreciate some feedback in particular on the SSL change: the old
-NO_SSL_DL and NO_SSL macros have been removed and the only SSL-related
-macro is now NS_ENABLE_SSL.
+Not too sure how should be handled the situation where mongoose is
+select and neither the webserver nor libmongoose.so are not selected
+
+I'd also appreciate some feedback on the shared library compilation
+flags
 
 regards,
 Davide
 
- package/mongoose/Config.in   |    5 +++--
- package/mongoose/S85mongoose |    2 +-
- package/mongoose/mongoose.mk |   15 ++++++---------
- 3 files changed, 10 insertions(+), 12 deletions(-)
+ package/mongoose/Config.in   |   14 ++++++++++++++
+ package/mongoose/mongoose.mk |   32 +++++++++++++++++++++++++++++---
+ 2 files changed, 43 insertions(+), 3 deletions(-)
 
 diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
-index 35723de..2526112 100644
+index 2526112..ac2c5b5 100644
 --- a/package/mongoose/Config.in
 +++ b/package/mongoose/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MONGOOSE
- 	bool "mongoose"
-+	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	help
-@@ -7,6 +8,6 @@ config BR2_PACKAGE_MONGOOSE
+@@ -8,6 +8,20 @@ config BR2_PACKAGE_MONGOOSE
  
  	  https://github.com/valenok/mongoose
  
--comment "mongoose needs a toolchain w/ threads"
-+comment "mongoose needs a toolchain w/ threads, largefile"
++if BR2_PACKAGE_MONGOOSE
++
++config BR2_PACKAGE_MONGOOSE_INSTALL_WEBSERVER
++	bool "Install standalone webserver"
++	help
++	  Install mongoose webserver
++
++config BR2_PACKAGE_MONGOOSE_INSTALL_SHARED_LIBRARY
++	bool "Install shared library"
++	help
++	  Install shared library
++
++endif
++
+ comment "mongoose needs a toolchain w/ threads, largefile"
  	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
-index dc042d0..98e537f 100755
---- a/package/mongoose/S85mongoose
-+++ b/package/mongoose/S85mongoose
-@@ -10,7 +10,7 @@ NAME=mongoose
- DESC="Mongoose HTTP server"
- 
- DAEMON=`which mongoose`
--OPTIONS="-num_threads 3 -document_root /var/www -listening_ports 80"
-+OPTIONS="-document_root /var/www -listening_port 80"
- 
- [ -e /etc/default/mongoose ] && . /etc/default/mongoose
- 
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
 diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index d928dd8..97843e8 100644
+index 97843e8..e08bf85 100644
 --- a/package/mongoose/mongoose.mk
 +++ b/package/mongoose/mongoose.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 3.7
--MONGOOSE_SOURCE = mongoose-$(MONGOOSE_VERSION).tgz
--MONGOOSE_SITE = https://mongoose.googlecode.com/files
-+MONGOOSE_VERSION = 5.3
-+MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+@@ -8,6 +8,7 @@ MONGOOSE_VERSION = 5.3
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
  MONGOOSE_LICENSE = MIT
  MONGOOSE_LICENSE_FILES = LICENSE
++MONGOOSE_INSTALL_STAGING = YES
  
-@@ -15,18 +14,16 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
- # directly linked
--MONGOOSE_CFLAGS += -DNO_SSL_DL -lssl -lcrypto -lz
--else
--MONGOOSE_CFLAGS += -DNO_SSL
-+MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+ 
+@@ -17,15 +18,40 @@ MONGOOSE_DEPENDENCIES += openssl
+ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
  endif
  
++ifeq ($(BR2_PACKAGE_MONGOOSE_INSTALL_SHARED_LIBRARY),y)
++define MONGOOSE_INSTALL_SHARED_LIBRARY_CMDS
++	$(INSTALL) -D -m 755 $(@D)/libmongoose.so $(TARGET_DIR)/usr/lib
++endef
++
++define MONGOOSE_INSTALL_STAGING_SHARED_LIBRARY_CMDS
++	$(INSTALL) -D -m 755 $(@D)/libmongoose.so $(STAGING_DIR)/usr/lib
++	$(INSTALL) -D -m 644 $(@D)/mongoose.h $(STAGING_DIR)/usr/include
++endef
++
++endif
++
++ifeq ($(BR2_PACKAGE_MONGOOSE_INSTALL_WEBSERVER),y)
++define MONGOOSE_INSTALL_WEBSERVER_CMDS
++        $(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin
++        $(INSTALL) -D -m 755 package/mongoose/S85mongoose \
++		$(TARGET_DIR)/etc/init.d
++endef
++endif
++
  define MONGOOSE_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) \
--		linux COPT="$(MONGOOSE_CFLAGS)"
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
-+		COPT="$(MONGOOSE_CFLAGS)"
+ 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
+ 		COPT="$(MONGOOSE_CFLAGS)"
++	$(TARGET_CC) $(@D)/mongoose.c -shared -fpic \
++		-o $(@D)/libmongoose.so -pthread -ldl
  endef
  
  define MONGOOSE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin/mongoose
-+	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
- 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
- 		$(TARGET_DIR)/etc/init.d/S85mongoose
+-	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
+-	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+-		$(TARGET_DIR)/etc/init.d/S85mongoose
++	$(MONGOOSE_INSTALL_SHARED_LIBRARY_CMDS)
++	$(MONGOOSE_INSTALL_WEBSERVER_CMDS)
++endef
++
++define MONGOOSE_INSTALL_STAGING_CMDS
++	$(MONGOOSE_INSTALL_STAGING_SHARED_LIBRARY_CMDS)
  endef
+ 
+ $(eval $(generic-package))
 -- 
 1.7.10.4
