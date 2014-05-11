@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 May 2014 22:42:01 +0200
-Subject: [Buildroot] [PATCH 2 of 7] infra: add comment describing
- single/double dollar-sign rules
-In-Reply-To: <32d9759c21dfe0792ff0.1399822726@argentina>
+Date: Sun, 11 May 2014 22:43:43 +0200
+Subject: [Buildroot] [PATCH 3 of 7] pkg-virtual: simplify definition of
+ FOO_VERSION to 'virtual'
+In-Reply-To: <bce8edd889a7bc696824.1399822727@argentina>
 References: <patchbomb.1399822724@argentina>
- <32d9759c21dfe0792ff0.1399822726@argentina>
-Message-ID: <20140511204201.GF3428@free.fr>
+ <bce8edd889a7bc696824.1399822727@argentina>
+Message-ID: <20140511204343.GG3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,42 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
-> As the rules with respect to variable and function references and the need
-> for single or double dollar signs are not trivial, add a comment in
-> pkg-generic.mk describing them.
+> As mentioned in the e-mail accompanying the introduction of the pkg-virtual
+> infrastructure [1], the definition of FOO_VERSION is 'strange'.
+> 
+> After the cleanup of single/double dollar signs in inner-generic-package,
+> the special construction in pkg-virtual is no longer needed and can be
+> simplified.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> ---
->  package/pkg-generic.mk |  13 +++++++++++++
->  1 files changed, 13 insertions(+), 0 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -250,6 +250,19 @@ endif
->  #  argument 3 is the uppercase package name, without the HOST_ prefix
->  #             for host packages
->  #  argument 4 is the type (target or host)
-> +#
-> +# Note about variable and function references: inside all blocks that are
-> +# evaluated with $(eval), which includes all 'inner-xxx-package' blocks,
 
-Here I'd say something like:
+Provided the preceding patches are applied (as-is or after being
+reworked, of course):
 
-    ... evaluated with $(eval) [either directly or indirectly], ...
-
-We want these rules to apply even to functions called from inside an
-evaluated function, right?
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +# specific rules apply with respect to variable and function references.
-> +# Numbered variables (parameters to the block) can be referenced with a single
-> +# dollar sign: $(1), $(2), $(3), etc. All other variables should be referenced
-> +# with a double dollar sign: $$(TARGET_DIR), $$($(2)_VERSION), etc. Also all
-> +# make functions should be referenced with a double dollar sign: $$(subst),
-> +# $$(call), $$(filter-out), etc.
-> +# These rules ensure that these variables and functions are only expanded during
-> +# the $(eval) step, and not earlier. Otherwise, unintuitive and undesired
-> +# behavior occurs with respect to these variables and functions.
-> +#
->  ################################################################################
+> [1] http://lists.busybox.net/pipermail/buildroot/2014-April/093670.html
+> 
+> ---
+>  package/pkg-virtual.mk |  3 +--
+>  1 files changed, 1 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+> --- a/package/pkg-virtual.mk
+> +++ b/package/pkg-virtual.mk
+> @@ -45,8 +45,7 @@ endif
+>  $(2)_SOURCE =
 >  
->  define inner-generic-package
+>  # Fake a version string, so it looks nicer in the build log
+> -$(3)_VERSION = virtual
+> -HOST_$(3)_VERSION = virtual
+> +$(2)_VERSION = virtual
+>  
+>  # This must be repeated from inner-generic-package, otherwise we get an empty
+>  # _DEPENDENCIES
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
