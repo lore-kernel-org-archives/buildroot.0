@@ -1,36 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 11 May 2014 18:29:49 +0200
-Subject: [Buildroot] Autobuilder news
-In-Reply-To: <536E8BEB.7020300@mind.be>
-References: <20140504223611.5a6177c1@skate>
-	<536E8BEB.7020300@mind.be>
-Message-ID: <20140511182949.55e5e115@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 May 2014 20:51:20 +0200
+Subject: [Buildroot] [PATCH] libeio: needs threads
+In-Reply-To: <082d8eff94b1a2e5f210119dcff157435af6147c.1399797292.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 11 May 2014 11:34:52 +0300")
+References: <082d8eff94b1a2e5f210119dcff157435af6147c.1399797292.git.baruch@tkos.co.il>
+Message-ID: <87oaz487yv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Sat, 10 May 2014 22:28:27 +0200, Arnout Vandecappelle wrote:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/278/27854bf8425d64dbb475653161bbf1f386173366/
 
->  Is it possible that you installed new binaries with the same name but a
-> different ctng configuration? That's a bit annoying because it breaks
-> reproducibility... It's OK to remove the old toolchains, but it would be good if
-> the new ones would have a different name.
+ > libeio only reverse dependency (enlightenment) depends on
+ > BR2_TOOLCHAIN_HAS_THREADS already.
 
-No, it is not possible. The new toolchains have a different tarball
-name, and all the tarballs from the previous ctng configurations have
-been kept. So all builds made on the Free Electrons build server should
-be fully reproducible.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Have you found any specific issue?
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
