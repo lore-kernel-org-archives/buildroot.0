@@ -1,42 +1,27 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 11 May 2014 11:34:52 +0300
-Subject: [Buildroot] [PATCH] libeio: needs threads
-Message-ID: <082d8eff94b1a2e5f210119dcff157435af6147c.1399797292.git.baruch@tkos.co.il>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 May 2014 10:51:11 +0200
+Subject: [Buildroot] [PATCH] fs: use our own mkpasswd when creating users
+In-Reply-To: <1399729186-30497-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 10 May 2014 15:39:46 +0200")
+References: <1399729186-30497-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87wqds8zr4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/278/27854bf8425d64dbb475653161bbf1f386173366/
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-libeio only reverse dependency (enlightenment) depends on
-BR2_TOOLCHAIN_HAS_THREADS already.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Export PATH=$(BR_PATH) so that our own mkpasswd is found before
+ > any existing host-system one.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/efl/libeio/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Reported-by: Romain Naour <romain.naour@openwide.fr>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
-index 0b2751ce6d22..5b1e395788ed 100644
---- a/package/efl/libeio/Config.in
-+++ b/package/efl/libeio/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBEIO
- 	select BR2_PACKAGE_LIBEET
- 	select BR2_PACKAGE_LIBEINA
- 	select BR2_PACKAGE_LIBECORE
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Eio integrates with EFL (Ecore, Eina) to provide efficient
- 	  filesystem Input/Output (I/O). It use the best techniques to
-@@ -16,3 +17,6 @@ config BR2_PACKAGE_LIBEIO
- 	  naive implementations, and it is easy to use.
- 
- 	  http://trac.enlightenment.org/e/wiki/Eio
-+
-+comment "libeio needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+Committed, thanks.
+
 -- 
-2.0.0.rc0
+Bye, Peter Korsgaard
