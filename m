@@ -1,39 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 11 May 2014 17:38:51 +0200
-Subject: [Buildroot] [PATCH 7 of 7] mkpasswd: change version from
- 'undefined' to 'buildroot-$(BR2_VERSION)'
-In-Reply-To: <patchbomb.1399822724@argentina>
-References: <patchbomb.1399822724@argentina>
-Message-ID: <752fa92b51b8ef9eeaec.1399822731@argentina>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 11 May 2014 18:00:04 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-09
+In-Reply-To: <536F8C6E.1050004@mind.be>
+References: <20140510063010.4D1F81010DF@stock.ovh.net>
+ <536E86B1.4050005@mind.be> <20140511043405.GB4096@tarshish>
+ <536F8C6E.1050004@mind.be>
+Message-ID: <20140511160004.GD3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sources of the mkpasswd package are shipped with Buildroot, rather than
-downloaded from an external location. As a result, no explicit version is
-defined, causing build messages and build directory to show 'undefined' as
-version.
+Arnout, All,
 
-This patch sets the version for mkpasswd to 'buildroot-$(BR2_VERSION), which
-would for example expand to 'buildroot-2014.05'.
+On 2014-05-11 16:42 +0200, Arnout Vandecappelle spake thusly:
+>  True. We could add a dependency on BR2_HOSTARCH for that. Except that Kconfig
+> doesn't support string comparison AFAIK.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+He, yes it does:
 
----
- package/mkpasswd/mkpasswd.mk |  2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+    config FOO
+        string "foo"
 
-diff --git a/package/mkpasswd/mkpasswd.mk b/package/mkpasswd/mkpasswd.mk
---- a/package/mkpasswd/mkpasswd.mk
-+++ b/package/mkpasswd/mkpasswd.mk
-@@ -10,6 +10,8 @@
- HOST_MKPASSWD_SOURCE =
- HOST_MKPASSWD_LICENSE = GPLv2+
- 
-+HOST_MKPASSWD_VERSION = buildroot-$(BR2_VERSION)
-+
- define HOST_MKPASSWD_BUILD_CMDS
- 	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
- 		package/mkpasswd/mkpasswd.c package/mkpasswd/utils.c \
+    config BAR
+        string "bar"
+
+    config EQ
+        default y if FOO = BAR
+
+Now, try to set FOO="whatever" and BAR="whatever" and look at the
+resulting .config file. ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
