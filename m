@@ -1,52 +1,31 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 May 2014 22:57:56 +0200
-Subject: [Buildroot] [PATCH 4 of 7] toolchain/toolchain-buildroot:
- migrate to virtual package infrastructure
-In-Reply-To: <4a84f87803add852946f.1399822728@argentina>
+Date: Sun, 11 May 2014 23:01:42 +0200
+Subject: [Buildroot] [PATCH 5 of 7] toolchain-external: change version
+ from 'undefined' to 'virtual'
+In-Reply-To: <ecb45870f7cb7c15e560.1399822729@argentina>
 References: <patchbomb.1399822724@argentina>
- <4a84f87803add852946f.1399822728@argentina>
-Message-ID: <20140511205756.GH3428@free.fr>
+ <ecb45870f7cb7c15e560.1399822729@argentina>
+Message-ID: <20140511210142.GI3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
+
 On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
-> This patch migrates the toolchain and toolchain-buildroot packages to the
-> virtual package infrastructure, 
-
-For a true conversion to the virtual package infra, it should have been
-using these variables:
-    BR2_$(PACKAGE)_HAS_TOOLCHAIN
-    BR2_$(PACKAGE)_PROVIDES_TOOLCHAIN
-
-But I guess in this case it is a bit far-fetched and over-reaching...
-
-graph-depends is still happy, so am I. ;-)
-
-> causing the log messages to change from:
+> The toolchain-external package displays the version 'undefined' in the build
+> messages and the directory in output/build, which is not very nice.
+> This patch sets the version to 'virtual', in analogy to the toolchain and
+> toolchain-buildroot packages (which use the virtual-package infrastructure).
 > 
-> >>> toolchain undefined Downloading
-> >>> toolchain undefined Extracting
-> ...
-> 
-> to
-> 
-> >>> toolchain virtual Downloading
-> >>> toolchain virtual Extracting
-> ...
-> 
-> and similar for 'toolchain-buildroot', simply because it looks nicer.
-> 
-> At the same time, the directory names also become toolchain-virtual,
-> toolchain-buildroot-virtual instead of the corresponding 'undefined'
-> variants.
+> Although toolchain-external is not strictly a virtual package, since it uses
+> the generic-package infrastructure, it can be considered as a virtual
+> package in the sense that it does not have a fixed version or source (they
+> depend on the selected external toolchain).
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-AS previously, when the prior preceding patches have been applied (or
-reworked):
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -54,52 +33,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> v2:
-> - use virtual-package infrastructure instead of explicitly defining VERSION
-> - exclude toolchain-external from this patch
+>  toolchain/toolchain-external/toolchain-external.mk |  2 ++
+>  1 files changed, 2 insertions(+), 0 deletions(-)
 > 
->  toolchain/toolchain-buildroot/toolchain-buildroot.mk |  4 +---
->  toolchain/toolchain/toolchain.mk                     |  4 +---
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-> --- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-> +++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
-> @@ -4,8 +4,6 @@
->  #
->  ################################################################################
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -410,6 +410,8 @@ TOOLCHAIN_EXTERNAL_SITE =
+>  TOOLCHAIN_EXTERNAL_SOURCE =
+>  endif
 >  
-> -TOOLCHAIN_BUILDROOT_SOURCE =
-> -
->  BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
+> +TOOLCHAIN_EXTERNAL_VERSION = virtual
+> +
+>  TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
 >  
->  # Triggering the build of the host-gcc-final will automatically do the
-> @@ -16,4 +14,4 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-
->  
->  TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
->  
-> -$(eval $(generic-package))
-> +$(eval $(virtual-package))
-> diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
-> --- a/toolchain/toolchain/toolchain.mk
-> +++ b/toolchain/toolchain/toolchain.mk
-> @@ -4,8 +4,6 @@
->  #
->  ################################################################################
->  
-> -TOOLCHAIN_SOURCE =
-> -
->  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
->  TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
-> @@ -14,6 +12,6 @@ endif
->  
->  TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
->  
-> -$(eval $(generic-package))
-> +$(eval $(virtual-package))
->  
->  toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
+>  TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
