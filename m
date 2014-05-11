@@ -1,49 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 11 May 2014 22:41:43 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-09
-In-Reply-To: <20140511145522.GH4096@tarshish>
-References: <20140510063010.4D1F81010DF@stock.ovh.net>
- <536E86B1.4050005@mind.be> <20140511043405.GB4096@tarshish>
- <536F8C6E.1050004@mind.be> <20140511145522.GH4096@tarshish>
-Message-ID: <536FE087.1030103@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 11 May 2014 22:42:01 +0200
+Subject: [Buildroot] [PATCH 2 of 7] infra: add comment describing
+ single/double dollar-sign rules
+In-Reply-To: <32d9759c21dfe0792ff0.1399822726@argentina>
+References: <patchbomb.1399822724@argentina>
+ <32d9759c21dfe0792ff0.1399822726@argentina>
+Message-ID: <20140511204201.GF3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/05/14 16:55, Baruch Siach wrote:
-> Hi Arnout,
+Thomas, All,
+
+On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
+> As the rules with respect to variable and function references and the need
+> for single or double dollar signs are not trivial, add a comment in
+> pkg-generic.mk describing them.
 > 
-> On Sun, May 11, 2014 at 04:42:54PM +0200, Arnout Vandecappelle wrote:
->> On 11/05/14 06:34, Baruch Siach wrote:
-[snip]
->>> Your patch is correct, I guess, but as far as I understand it doesn't solve 
->>> the host architecture dependency problem that is causing the host-protobuf 
->>> failure above.
->>
->>  True. We could add a dependency on BR2_HOSTARCH for that. Except that Kconfig
->> doesn't support string comparison AFAIK. So we'd need to create bool symbols for
->> all the supported host architectures...
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > 
-> How would that solve the problem? Host packages are selected directly from 
-> Makefiles, regardless of Kconfig settings, isn't it? Or do you intend to add 
-> host architecture dependencies to all reverse dependencies of host-protobuf 
-> (currently: protobuf-c, protobuf, python-protobuf, and their reverse 
-> dependencies)?
+> ---
+>  package/pkg-generic.mk |  13 +++++++++++++
+>  1 files changed, 13 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -250,6 +250,19 @@ endif
+>  #  argument 3 is the uppercase package name, without the HOST_ prefix
+>  #             for host packages
+>  #  argument 4 is the type (target or host)
+> +#
+> +# Note about variable and function references: inside all blocks that are
+> +# evaluated with $(eval), which includes all 'inner-xxx-package' blocks,
 
- Exactly. But I don't really think it's worthwhile to do that - except for the
-autobuilder, there is probably nobody who tries building on anything except x86.
+Here I'd say something like:
 
- Regards,
- Arnout
+    ... evaluated with $(eval) [either directly or indirectly], ...
 
+We want these rules to apply even to functions called from inside an
+evaluated function, right?
+
+Regards,
+Yann E. MORIN.
+
+> +# specific rules apply with respect to variable and function references.
+> +# Numbered variables (parameters to the block) can be referenced with a single
+> +# dollar sign: $(1), $(2), $(3), etc. All other variables should be referenced
+> +# with a double dollar sign: $$(TARGET_DIR), $$($(2)_VERSION), etc. Also all
+> +# make functions should be referenced with a double dollar sign: $$(subst),
+> +# $$(call), $$(filter-out), etc.
+> +# These rules ensure that these variables and functions are only expanded during
+> +# the $(eval) step, and not earlier. Otherwise, unintuitive and undesired
+> +# behavior occurs with respect to these variables and functions.
+> +#
+>  ################################################################################
+>  
+>  define inner-generic-package
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
