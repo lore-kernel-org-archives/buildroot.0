@@ -1,61 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 11 May 2014 22:43:43 +0200
-Subject: [Buildroot] [PATCH 3 of 7] pkg-virtual: simplify definition of
- FOO_VERSION to 'virtual'
-In-Reply-To: <bce8edd889a7bc696824.1399822727@argentina>
-References: <patchbomb.1399822724@argentina>
- <bce8edd889a7bc696824.1399822727@argentina>
-Message-ID: <20140511204343.GG3428@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 11 May 2014 22:44:50 +0200
+Subject: [Buildroot] [PATCH] qt5connectivity: the poster example needs
+	no widgets, but it needs quick
+In-Reply-To: <1399544393-21292-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 8 May 2014 11:19:53 +0100")
+References: <1399544393-21292-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87bnv482pp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
-> As mentioned in the e-mail accompanying the introduction of the pkg-virtual
-> infrastructure [1], the definition of FOO_VERSION is 'strange'.
-> 
-> After the cleanup of single/double dollar signs in inner-generic-package,
-> the special construction in pkg-virtual is no longer needed and can be
-> simplified.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > Adding an upstream patch to fix an autobuild failure.
+ > Upstream commit:
+ >    https://qt.gitorious.org/qt/qtconnectivity/commit/0156038682cc40d44fedfc28dc9b78d1a0e6203b
 
-Provided the preceding patches are applied (as-is or after being
-reworked, of course):
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/d12/d120355cbb42307d35e59bc4528e973a2b12150e/
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
 
-Regards,
-Yann E. MORIN.
-
-> [1] http://lists.busybox.net/pipermail/buildroot/2014-April/093670.html
-> 
-> ---
->  package/pkg-virtual.mk |  3 +--
->  1 files changed, 1 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-> --- a/package/pkg-virtual.mk
-> +++ b/package/pkg-virtual.mk
-> @@ -45,8 +45,7 @@ endif
->  $(2)_SOURCE =
->  
->  # Fake a version string, so it looks nicer in the build log
-> -$(3)_VERSION = virtual
-> -HOST_$(3)_VERSION = virtual
-> +$(2)_VERSION = virtual
->  
->  # This must be repeated from inner-generic-package, otherwise we get an empty
->  # _DEPENDENCIES
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
