@@ -1,50 +1,42 @@
-From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Sun, 11 May 2014 01:18:06 -0700
-Subject: [Buildroot] [PATCH 2/2] package/gdb: add gdb 7.7.1
-In-Reply-To: <1399796286-14822-1-git-send-email-cody@linux.vnet.ibm.com>
-References: <1399796286-14822-1-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <1399796286-14822-2-git-send-email-cody@linux.vnet.ibm.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 11 May 2014 11:34:52 +0300
+Subject: [Buildroot] [PATCH] libeio: needs threads
+Message-ID: <082d8eff94b1a2e5f210119dcff157435af6147c.1399797292.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
----
- package/gdb/Config.in.host | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Fixes:
+http://autobuild.buildroot.net/results/278/27854bf8425d64dbb475653161bbf1f386173366/
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index e853469..77c5459 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -19,7 +19,7 @@ choice
- 	depends on !BR2_microblaze
- 	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
--	default BR2_GDB_VERSION_7_5
-+	default BR2_GDB_VERSION_7_7
+libeio only reverse dependency (enlightenment) depends on
+BR2_TOOLCHAIN_HAS_THREADS already.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/efl/libeio/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/efl/libeio/Config.in b/package/efl/libeio/Config.in
+index 0b2751ce6d22..5b1e395788ed 100644
+--- a/package/efl/libeio/Config.in
++++ b/package/efl/libeio/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBEIO
+ 	select BR2_PACKAGE_LIBEET
+ 	select BR2_PACKAGE_LIBEINA
+ 	select BR2_PACKAGE_LIBECORE
++	depends on BR2_TOOLCHAIN_HAS_THREADS
  	help
- 	  Select the version of gdb you wish to use.
+ 	  Eio integrates with EFL (Ecore, Eina) to provide efficient
+ 	  filesystem Input/Output (I/O). It use the best techniques to
+@@ -16,3 +17,6 @@ config BR2_PACKAGE_LIBEIO
+ 	  naive implementations, and it is easy to use.
  
-@@ -39,6 +39,10 @@ choice
- 		bool "gdb 7.5.x"
- 		depends on !BR2_bfin
- 
-+	config BR2_GDB_VERSION_7_7
-+		bool "gdb 7.7.x"
-+		depends on !BR2_bfin
+ 	  http://trac.enlightenment.org/e/wiki/Eio
 +
- endchoice
- 
- endif
-@@ -54,4 +58,5 @@ config BR2_GDB_VERSION
- 	default "arc-4.8-R3" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.4.1"    if BR2_GDB_VERSION_7_4
--	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
-+	default "7.5.1"    if BR2_GDB_VERSION_7_5
-+	default "7.7.1"    if BR2_GDB_VERSION_7_7 || !BR2_PACKAGE_HOST_GDB
++comment "libeio needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-1.9.3
+2.0.0.rc0
