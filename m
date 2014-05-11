@@ -1,31 +1,112 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 11 May 2014 12:45:35 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-10
-In-Reply-To: <20140511063009.DE62C100F87@stock.ovh.net>
-References: <20140511063009.DE62C100F87@stock.ovh.net>
-Message-ID: <20140511094535.GF4096@tarshish>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Sun, 11 May 2014 13:24:05 +0200
+Subject: [Buildroot] [PATCH 1/2] mongoose: bump to version 5.3
+Message-ID: <1399807447-9469-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+From: Davide Viti <d.viti@infosolution.it>
 
-On Sun, May 11, 2014 at 08:30:09AM +0200, Thomas Petazzoni wrote:
->        arm |                   ltrace-0.7.3 | NOK | http://autobuild.buildroot.net/results/eefa8efbe6e6a6b203c02c2977d29be9c77846cb/
 
-Build log says:
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
+---
+Mongoose has changed quite drastically in the last months.
+Here is a list of changes which had to be applied:
 
-checking for backtrace in -lunwind... no
-configure: error: Couldn't find or use libunwind.
+ - Bump version from 3.7 to 5.3
+ - use tarball download via github helper iso git clone
+ - need largefile support
+ - compilation takes place into "examples"
+ - weberver source is now "server.c"
+ - adapt to new command line options
+ - SSL support now controlled via NS_ENABLE_SSL
 
-But I can't reproduce it here. Thomas, can you look into config.log?
+I'd appreciate some feedback in particular on the SSL change: the old
+NO_SSL_DL and NO_SSL macros have been removed and the only SSL-related
+macro is now NS_ENABLE_SSL.
 
-baruch
+regards,
+Davide
 
+ package/mongoose/Config.in   |    5 +++--
+ package/mongoose/S85mongoose |    2 +-
+ package/mongoose/mongoose.mk |   15 ++++++---------
+ 3 files changed, 10 insertions(+), 12 deletions(-)
+
+diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+index 35723de..2526112 100644
+--- a/package/mongoose/Config.in
++++ b/package/mongoose/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MONGOOSE
+ 	bool "mongoose"
++	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+@@ -7,6 +8,6 @@ config BR2_PACKAGE_MONGOOSE
+ 
+ 	  https://github.com/valenok/mongoose
+ 
+-comment "mongoose needs a toolchain w/ threads"
++comment "mongoose needs a toolchain w/ threads, largefile"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
+index dc042d0..98e537f 100755
+--- a/package/mongoose/S85mongoose
++++ b/package/mongoose/S85mongoose
+@@ -10,7 +10,7 @@ NAME=mongoose
+ DESC="Mongoose HTTP server"
+ 
+ DAEMON=`which mongoose`
+-OPTIONS="-num_threads 3 -document_root /var/www -listening_ports 80"
++OPTIONS="-document_root /var/www -listening_port 80"
+ 
+ [ -e /etc/default/mongoose ] && . /etc/default/mongoose
+ 
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index d928dd8..97843e8 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 3.7
+-MONGOOSE_SOURCE = mongoose-$(MONGOOSE_VERSION).tgz
+-MONGOOSE_SITE = https://mongoose.googlecode.com/files
++MONGOOSE_VERSION = 5.3
++MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = MIT
+ MONGOOSE_LICENSE_FILES = LICENSE
+ 
+@@ -15,18 +14,16 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MONGOOSE_DEPENDENCIES += openssl
+ # directly linked
+-MONGOOSE_CFLAGS += -DNO_SSL_DL -lssl -lcrypto -lz
+-else
+-MONGOOSE_CFLAGS += -DNO_SSL
++MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) \
+-		linux COPT="$(MONGOOSE_CFLAGS)"
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
++		COPT="$(MONGOOSE_CFLAGS)"
+ endef
+ 
+ define MONGOOSE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin/mongoose
++	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
+ 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+ 		$(TARGET_DIR)/etc/init.d/S85mongoose
+ endef
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.10.4
