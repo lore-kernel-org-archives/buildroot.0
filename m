@@ -1,37 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:55:54 +0200
-Subject: [Buildroot] [git commit] package/xbmc: add missing dependency on
-	libtheora
-Message-ID: <20140512205829.9886F9CBAE@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:53:19 +0200
+Subject: [Buildroot] [git commit] mesa3d: Add patch note about upstream bug
+Message-ID: <20140512205829.8DD959CBAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=45f3af23405b10d51fed63d555f1cdf7c89cbf81
+commit: http://git.buildroot.net/buildroot/commit/?id=7a945c10d5255895f7ee53363c9961b90178b936
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xbmc/xbmc.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ ...atform.h-not-installed-if-EGL-is-disabled.patch |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 1bfc17d..c7a4607 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -127,6 +127,10 @@ ifeq ($(BR2_PACKAGE_XBMC_WAVPACK),y)
- XBMC_DEPENDENCIES += wavpack
- endif
+diff --git a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+index 79df1ce..53ba519 100644
+--- a/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
++++ b/package/mesa3d/mesa3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch
+@@ -8,6 +8,8 @@ only installed if Mesa3d is compiled with EGL support.
  
-+ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
-+XBMC_DEPENDENCIES += libtheora
-+endif
+ This patch installs this header file unconditionally.
+ 
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=77240
 +
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define XBMC_BOOTSTRAP
- 	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
+ Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+ ---
+  src/egl/main/Makefile.am | 3 ---
