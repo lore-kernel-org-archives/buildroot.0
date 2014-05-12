@@ -1,180 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 12 May 2014 13:17:03 +0200
-Subject: [Buildroot] [PATCH 1 of 7] infra: consistently use double
-	dollar signs inside inner-xxx-targets
-In-Reply-To: <20140511203808.GE3428@free.fr>
-References: <patchbomb.1399822724@argentina>
- <62c2548e30bd735f625e.1399822725@argentina>
- <20140511203808.GE3428@free.fr>
-Message-ID: <CAAXf6LVF=urALb=J6dJ07_V221h3jc0AQM-fc52x9XfpAMLuTw@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 12 May 2014 13:19:36 +0200
+Subject: [Buildroot] [PATCH v2] cmake: disable building of ccmake
+Message-ID: <1399893576-24505-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+To speedup building disable ccmake because it's not needed by buildroot.
+Also disabling ccmake get rid of the ncurses optional unspecified
+dependency for the sake of reproducible builds.
 
-First of all: thanks a lot for the review!
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Alexander Potashev <aspotashev@gmail.com>
+---
 
-On Sun, May 11, 2014 at 10:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
->> The inner-xxx-targets in the buildroot package infrastructures are
->> evaluated using $(eval) which causes variable references to be a bit
->> different than in regular make code. As we want most references to be
->> expanded only at the time of the $(eval) we should not use standard
->> references $(VAR) but rather use double dollar signs $$(VAR). This includes
->> function references like $(call), $(subst), etc. The only exception is the
->> reference to numbered variables, which are paremeters to the inner block:
->> $(1), $(2), etc.
->>
->> This patch introduces consistent usage of double-dollar signs throughout the
->> different inner-xxx-targets blocks.
-> [--SNIP--]
->> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
->> --- a/package/pkg-autotools.mk
->> +++ b/package/pkg-autotools.mk
->
-> Did you forget that one, or did you leave it out on purpose:
->
-> 46: AUTOCONF_AC_CHECK_FILE_VAL = ac_cv_file_$(subst -,_,$(subst /,_,$(subst .,_,$(1))))
+v2:
+ - rebased
+ - change description
 
-This is not inside inner-xxx-targets. Moreover, it is used with
-$(call), not $(eval) so there is no need for the double dollar signs.
+Luca because the patch it's changed I was not sure if adding your
+Reviewed-by and Tested-by tags by myself was ok.
 
->
-> [--SNIP--]
->> @@ -201,7 +204,7 @@ endif
->>  #
->>  define AUTORECONF_HOOK
->>       @$$(call MESSAGE,"Autoreconfiguring")
->> -     $(Q)cd $$($$(PKG)_SRCDIR) && $(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
->> +     $(Q)cd $$($$(PKG)_SRCDIR) && $$(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
->
-> You left out the $(Q) as-is. Although I agreee it's not very important
-> and would still work (heck it already work as-is), I think we should
-> cahnge it, for consistency sake, no?
+ package/cmake/cmake.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yes, I will change it to avoid any confusion about the rules.
-
->
-> [--SNIP--]
->
-> I see you have not changed anything in pkg-download.mk. Do you thinks
-> there is nothing worth changing in there?
->
-> I'm especialy thinking about these functions:
->
->     {DOWNLOAD,SOURCE_CHECK,SHOW_EXTERNAL_DEPS}_{GIT,BZR,CVS,SVN,SCP,HG,WGET,LOCALFILES}
->
-> as well as: DOWNLOAD and DOWNLOAD_INNER
-
-These functions are not eval'ed but call'ed. According to me, the
-double dollars are not correct there.
-
-Following your comment, I searched for the use of eval throughout
-buildroot (filtering out the already known cases of generic, cmake,
-autotools etc., and found following addition references:
-
-docs/manual/manual.mk (GENDOC)
-fs/*  (ROOTFS_TARGET)
-package/pkg-utils.mk (caseconvert-helper)
-
-I will update these blocks too in v2.
-
->
-> [--SNIP--]
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->
-> You've left out the hook functions:
->     step_start
->     step_end
->     step_user
->
-> and potentially:
->     step_time
-
-These are all called using $(call) from a place that is outside of
-inner-xxx-targets.
-As far as I understand, double dollar signs are not needed (and will
-not work) here.
-For example, adding following line in step_start:
-
-@echo Step start $(1) TOPDIR=$(TOPDIR) TOPDIR2=$$(TOPDIR)
-
-will cause TOPDIR2 to be passed to the shell as $(TOPDIR) which gives:
-
-/bin/bash: TOPDIR: command not found
-Step start configure TOPDIR=/home/tdescham/repo/contrib/buildroot-misc TOPDIR2=
-
->
->> @@ -548,7 +550,7 @@ endif
->>  $$($(2)_TARGET_RSYNC_SOURCE):                SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
->>  $$($(2)_TARGET_RSYNC_SOURCE):                PKG=$(2)
->>  $$($(2)_TARGET_PATCH):                       PKG=$(2)
->> -$$($(2)_TARGET_PATCH):                       RAWNAME=$(patsubst host-%,%,$(1))
->> +$$($(2)_TARGET_PATCH):                       RAWNAME=$$(patsubst host-%,%,$(1))
->>  $$($(2)_TARGET_PATCH):                       PKGDIR=$(pkgdir)
->
-> Why not change the call to pkgdir ?
-
-Because it does not work for pkgdir nor pkgname. These have to have a
-single dollar sign.
-I should update the comment in the next patch to reflect this.
-
->
->>  $$($(2)_TARGET_EXTRACT):             PKG=$(2)
->>  $$($(2)_TARGET_SOURCE):                      PKG=$(2)
->> @@ -559,9 +561,9 @@ endif
->>  # kernel case, the bootloaders case, and the normal packages case.
->>  ifeq ($(1),linux)
->>  $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
->> -else ifneq ($(filter boot/%,$(pkgdir)),)
->> +else ifneq ($$(filter boot/%,$(pkgdir)),)
->
-> Ditto pkgdir.
->
->>  $(2)_KCONFIG_VAR = BR2_TARGET_$(2)
->> -else ifneq ($(filter toolchain/%,$(pkgdir)),)
->> +else ifneq ($$(filter toolchain/%,$(pkgdir)),)
->
-> Ditto pkgdir.
->
-> [--SNIP--]
->
-> No change required in pkg-utils.mk either?
->
-> For example, caseconvert-helper is $(eval)-ed.
-
-True, I will fix in v2.
-The other places in pkg-utils are not eval'ed.
-
->
-> Also, in none of the xxx-package or host-xxx-package macros, you did
-> double-$ the calls to pkgname or UPPERACSE. Is that a missing piece, or
-> is taht on purpose?
-
-I should indeed add double dollars on the uppercase call, but not on
-pkgname as that doesn't work.
-
->
-> Note: all my questions are just to make sure we did not miss anything.
-> I'm genuinely asking if it is needed or not. This is a complex topic,
-> and I'm unsure we've covered all the bases here. Maybe I'm just being a
-> bit over-paranoid... ;-)
-
-Not at all. Your questions are all valid and very useful! This is
-exactly what code review is for...
-
->
-> And, thank you for looking into this horrid mess that are Makefile
-> functions! ;-)
-
-Once and then never again ;-)
-
-Best regards,
-Thomas
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 235988b..ee49e80 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -19,6 +19,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 			-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
+ 			-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
+ 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
++			-DBUILD_CursesDialog=OFF \
+ 	)
+ endef
+ 
+-- 
+1.9.1
