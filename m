@@ -1,66 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:19:11 +0200
-Subject: [Buildroot] [git commit] libbluray: needs dynamic library support
-Message-ID: <20140512204138.86D439CBAB@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:11:03 +0200
+Subject: [Buildroot] [git commit] radvd: not available on AVR32
+Message-ID: <20140512204138.62F0D9CB9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=952f3dfb54d3424225edaa78fe6b107f045aa29b
+commit: http://git.buildroot.net/buildroot/commit/?id=e37f97527e4aeb8a4b3b34002dadc5a55b808455
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The dependency is propagated to XBMC, even though XBMC currently
-requires an (e)glibc toolchain, which always have dynamic library
-support. This is just in case one day XBMC can be built against
-uClibc.
+radvd needs some C library definitions not available in old uClibc
+versions. Since we don't care much about AVR32, we simply disallow the
+radvd package on this architecture.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/3fa/3fae35ebcf14d6f38284d8318f61f9b99998794c/
+  http://autobuild.buildroot.org/results/f03/f0367a30e8d772eb5e955a85b853ec3e43fe54b3/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbluray/Config.in |    4 +++-
- package/xbmc/Config.in      |    4 ++++
- 2 files changed, 7 insertions(+), 1 deletions(-)
+ package/radvd/Config.in |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
-index 2571f5c..e174773 100644
---- a/package/libbluray/Config.in
-+++ b/package/libbluray/Config.in
-@@ -1,10 +1,12 @@
- config BR2_PACKAGE_LIBBLURAY
- 	bool "libbluray"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB
+diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+index 6edfd7c..71f2f34 100644
+--- a/package/radvd/Config.in
++++ b/package/radvd/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_RADVD
+ 	select BR2_PACKAGE_FLEX
+ 	select BR2_PACKAGE_LIBDAEMON
+ 	depends on BR2_INET_IPV6
++	# uClibc too old, does not define ARPHRD_IEEE802154
++	depends on !BR2_avr32
  	help
- 	  libbluray is a client library for accessing bluray disks.
+ 	  IPv6 Router Advertisement Daemon.
  
- 	  http://www.videolan.org/developers/libbluray.html
- 
--comment "libbluray needs a toolchain w/ threads"
-+comment "libbluray needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index ed8872b..1e2f932 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -85,10 +85,14 @@ config BR2_PACKAGE_XBMC_DBUS
- config BR2_PACKAGE_XBMC_LIBBLURAY
- 	bool "blu-ray"
- 	select BR2_PACKAGE_LIBBLURAY
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Enable Blu-ray input support.
- 	  Select this if you want to play back Blu-ray content.
- 
-+comment "libbluray support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
+@@ -13,3 +15,4 @@ config BR2_PACKAGE_RADVD
+ comment "radvd needs a toolchain w/ IPv6"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INET_IPV6
++	depends on !BR2_avr32
