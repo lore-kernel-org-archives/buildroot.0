@@ -1,41 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:16:28 +0200
-Subject: [Buildroot] [git commit] CHANGES: fix typos
-Message-ID: <20140512204138.6EED29BE7B@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:17:20 +0200
+Subject: [Buildroot] [git commit] libmbus: fix upstream location
+Message-ID: <20140512204138.77F439CBAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41d53bca67b4cdd77de9d272026a4eb3f4e2cd9d
+commit: http://git.buildroot.net/buildroot/commit/?id=24e164403214847b6cb1993e9d3cd46ae86f64c7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The libmbus tarball is no longer available at
+http://www.freescada.com/public-dist. Apparently, the new upstream is
+at http://www.rscada.se/libmbus/ and tarballs are at
+http://www.rscada.se/public-dist/. Without this patch, the current
+download of libmbus-0.8.0.tar.gz downloads an HTML document with an
+error, which cannot be extracted, obviously.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libmbus/Config.in  |    2 +-
+ package/libmbus/libmbus.mk |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d7e0582..b2106c3 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -20,7 +20,7 @@
- 	for ARC, Internal toolchain support for Aarch64 and
- 	Microblaze. Environment variable to control debug output of
- 	toolchain wrapper renamed to BR2_DEBUG_WRAPPER to match the
--	other variables. Toolchain tupple vendor name can now be
-+	other variables. Toolchain tuple vendor name can now be
- 	customized. Updated external Linaro ARM/Aarch64
- 	toolchains. Added external Linaro ARMEB toolchain.
- 	A GDB gdbinit file is now generated for external toolchains to
-@@ -31,7 +31,7 @@
- 	features can specify these requirements in Kconfig.
+diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
+index 1e2a8de..8614069 100644
+--- a/package/libmbus/Config.in
++++ b/package/libmbus/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBMBUS
+ 	  It supports TCP and RS232 M-bus gateways.
+ 	  (M-bus standard: http://www.m-bus.com/)
  
- 	Infrastructure: Support for (but disabled as it leads to
--	unreproducable builds) toplevel parallel builds. See the
-+	unreproducible builds) toplevel parallel builds. See the
- 	comment at the top of Makefile for details about how to enable
- 	it and what the problems are if you want to test it.
- 	Python package infrastructure extended to support Python 3.x
+-	  http://www.freescada.com/libmbus
++	  http://www.rscada.se/libmbus/
+diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
+index e1b02e0..93fe95f 100644
+--- a/package/libmbus/libmbus.mk
++++ b/package/libmbus/libmbus.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBMBUS_VERSION = 0.8.0
+-LIBMBUS_SITE = http://www.freescada.com/public-dist
++LIBMBUS_SITE = http://www.rscada.se/public-dist/
+ LIBMBUS_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
