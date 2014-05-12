@@ -1,35 +1,122 @@
-From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 12:25:48 -0700
-Subject: [Buildroot] [PATCH v2 2/2] package/gdb: add gdb 7.7.1
-In-Reply-To: <20140512212131.4f83a517@free-electrons.com>
-References: <1399842673-21261-1-git-send-email-cody@linux.vnet.ibm.com>
- <1399842673-21261-2-git-send-email-cody@linux.vnet.ibm.com>
- <20140511235400.67d6ac5f@free-electrons.com>
- <53711C15.5010909@linux.vnet.ibm.com>
- <20140512212131.4f83a517@free-electrons.com>
-Message-ID: <5371203C.2000206@linux.vnet.ibm.com>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Mon, 12 May 2014 21:31:26 +0200
+Subject: [Buildroot] [PATCH v2 1/2] mongoose: bump to version 5.3
+Message-ID: <1399923087-5550-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/12/2014 12:21 PM, Thomas Petazzoni wrote:
-> Dear Cody P Schafer,
->
-> On Mon, 12 May 2014 12:08:05 -0700, Cody P Schafer wrote:
->
->>> I'm not sure we want to jump straight to 7.7 for all architectures.
->>> We're usually a bit conservative with regard to the version of toolchain
->>> components. So I'd suggest instead to add 7.6 and 7.7. Make 7.6 the new
->>> default for all architectures except PPC64, and make 7.6 unavailable
->>> for PPC64, and therefore select 7.7 for PPC64. Of course, all older gdb
->>> versions should be unavailable for PPC64.
->>
->> So long as s/PPC64/PPC64le/, sure.
->
-> Right. I guess PPC64 (big endian) has been supported since a long time,
-> is this correct?
+From: Davide Viti <d.viti@infosolution.it>
 
-Yep, ppc64 (big endian) has been around and supported in gcc/glibc/gdb 
-for quite a while now (looks like the first gdb support landed in 2007).
+
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
+Cc: Will Wagner <will_wagner@carallon.com>
+
+---
+Changes v1 -> v2:
+  - rebase
+  - update license to GPLv2 (Will Wagner)
+
+Original patch content:
+
+Mongoose has changed quite drastically in the last months.
+Here is a list of changes which had to be applied:
+
+ - Bump version from 3.7 to 5.3
+ - use tarball download via github helper iso git clone
+ - need largefile support
+ - compilation takes place into "examples"
+ - weberver source is now "server.c"
+ - adapt to new command line options
+ - SSL support now controlled via NS_ENABLE_SSL
+
+I'd appreciate some feedback in particular on the SSL change: the old
+NO_SSL_DL and NO_SSL macros have been removed and the only SSL-related
+macro is now NS_ENABLE_SSL.
+
+regards,
+Davide
+
+ package/mongoose/Config.in   |    5 +++--
+ package/mongoose/S85mongoose |    2 +-
+ package/mongoose/mongoose.mk |   17 +++++++----------
+ 3 files changed, 11 insertions(+), 13 deletions(-)
+
+diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+index 35723de..2526112 100644
+--- a/package/mongoose/Config.in
++++ b/package/mongoose/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_MONGOOSE
+ 	bool "mongoose"
++	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+@@ -7,6 +8,6 @@ config BR2_PACKAGE_MONGOOSE
+ 
+ 	  https://github.com/valenok/mongoose
+ 
+-comment "mongoose needs a toolchain w/ threads"
++comment "mongoose needs a toolchain w/ threads, largefile"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
+index dc042d0..98e537f 100755
+--- a/package/mongoose/S85mongoose
++++ b/package/mongoose/S85mongoose
+@@ -10,7 +10,7 @@ NAME=mongoose
+ DESC="Mongoose HTTP server"
+ 
+ DAEMON=`which mongoose`
+-OPTIONS="-num_threads 3 -document_root /var/www -listening_ports 80"
++OPTIONS="-document_root /var/www -listening_port 80"
+ 
+ [ -e /etc/default/mongoose ] && . /etc/default/mongoose
+ 
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index d928dd8..a7164bb 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 3.7
+-MONGOOSE_SOURCE = mongoose-$(MONGOOSE_VERSION).tgz
+-MONGOOSE_SITE = https://mongoose.googlecode.com/files
+-MONGOOSE_LICENSE = MIT
++MONGOOSE_VERSION = 5.3
++MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
++MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
+ 
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+@@ -15,18 +14,16 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MONGOOSE_DEPENDENCIES += openssl
+ # directly linked
+-MONGOOSE_CFLAGS += -DNO_SSL_DL -lssl -lcrypto -lz
+-else
+-MONGOOSE_CFLAGS += -DNO_SSL
++MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) \
+-		linux COPT="$(MONGOOSE_CFLAGS)"
++	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
++		COPT="$(MONGOOSE_CFLAGS)"
+ endef
+ 
+ define MONGOOSE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin/mongoose
++	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
+ 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+ 		$(TARGET_DIR)/etc/init.d/S85mongoose
+ endef
+-- 
+1.7.10.4
