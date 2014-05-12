@@ -1,42 +1,86 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 12 May 2014 13:21:01 +0200
-Subject: [Buildroot] [PATCH] cmake: disable building of ccmake
-In-Reply-To: <536A6FE0.4060007@lucaceresoli.net>
-References: <1399480839-30134-1-git-send-email-fabio.porcedda@gmail.com>
- <536A6FE0.4060007@lucaceresoli.net>
-Message-ID: <CAHkwnC-3_5XuJHNx3gdURcA+_qiZrLnuuPpOcGefi1s_6jc1zw@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 12 May 2014 13:55:16 +0200
+Subject: [Buildroot] [PATCH 2 of 7] infra: add comment describing
+ single/double dollar-sign rules
+In-Reply-To: <20140511204201.GF3428@free.fr>
+References: <patchbomb.1399822724@argentina>
+ <32d9759c21dfe0792ff0.1399822726@argentina>
+ <20140511204201.GF3428@free.fr>
+Message-ID: <CAAXf6LX-owX0xWtze_u8umgCe0u8qScHZcYfN_ob0T13QHS-nA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 7, 2014 at 7:39 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> Hi Fabio,
->
->
-> Fabio Porcedda wrote:
->>
->> The ccmake program requires the ncurses package so it fails to build if
->> the host system does not have it installed.
->> To get rid off the ncurses dependency do not build anymore the ccmake
->> program because it's not needed by buildroot.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
->> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Samuel Martin <s.martin49@gmail.com>
->> Cc: Alexander Potashev <aspotashev@gmail.com>
->
->
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Hi Yann,
 
-I've sent an updated patch:
-http://patchwork.ozlabs.org/patch/347975/
+On Sun, May 11, 2014 at 10:42 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
+>
+> On 2014-05-11 17:38 +0200, Thomas De Schampheleire spake thusly:
+>> As the rules with respect to variable and function references and the need
+>> for single or double dollar signs are not trivial, add a comment in
+>> pkg-generic.mk describing them.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>>  package/pkg-generic.mk |  13 +++++++++++++
+>>  1 files changed, 13 insertions(+), 0 deletions(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -250,6 +250,19 @@ endif
+>>  #  argument 3 is the uppercase package name, without the HOST_ prefix
+>>  #             for host packages
+>>  #  argument 4 is the type (target or host)
+>> +#
+>> +# Note about variable and function references: inside all blocks that are
+>> +# evaluated with $(eval), which includes all 'inner-xxx-package' blocks,
+>
+> Here I'd say something like:
+>
+>     ... evaluated with $(eval) [either directly or indirectly], ...
+>
+> We want these rules to apply even to functions called from inside an
+> evaluated function, right?
+>
 
-Best regards
--- 
-Fabio Porcedda
+No, I don't think this is true. The big problem is that most functions
+can be called both within as outside of an evaluated block. When it is
+not evaluated, then the double dollar signs cause incorrect behavior.
+
+Take the following test program (which you can play with to test out
+different combinations)
+
+FOO = bar
+
+func = something-$(FOO)-$(1)
+
+define block
+????????X = $(1)
+????????Y = $$(FOO)
+
+target:
+????????@echo X=$$(X) Y=$$(Y) Z=$(call func,else)
+endef
+
+
+all:
+????????@echo Z=$(call func,else)
+
+$(eval $(call block,hello))
+
+
+If you change 'func' to use $$(FOO) instead of $(FOO), then the 'all'
+target will have output
+/bin/sh: 1: FOO: not found
+Z=something--else
+
+instead of
+Z=something-bar-else
+
+Best regards,
+Thomas
