@@ -1,50 +1,37 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 13 May 2014 01:05:28 +0400
-Subject: [Buildroot] [PATCH 0/2] xtensa binutils fixes backports
-In-Reply-To: <1399503065-18819-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1399503065-18819-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <CAMo8Bf+NTxK-PDG4cYR36h2tFcLSnmv9seEoLcfirYKjb+x0Fg@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 12 May 2014 23:03:45 +0200
+Subject: [Buildroot] OpenGL issues affecting the autobuilders
+References: <20140512220140.5fe69970@free-electrons.com>
+Message-ID: <hip74bxv7r.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140512220140.5fe69970 at free-electrons.com: 
 
-On Thu, May 8, 2014 at 2:51 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> Hi Thomas,
->
-> this series backports two fixes for binutils:
-> - first fixes call target misalignment during link-time relaxation often
->   seen with linux kernel builds;
-> - second fixes 'overflow after relaxation' link-time error recently seen
->   with some buildroot packages.
->
-> Max Filippov (2):
->   binutils: backport first section frag alignment fix for xtensa gas
->   binutils: backport R_XTENSA_DIFF* relocation signedness fix
->
->  .../2.22/901-xtensa-gas-first-frag-alignment.patch |  51 ++++++++
->  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
->  .../901-xtensa-gas-first-frag-alignment.patch      |  51 ++++++++
->  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
->  .../901-xtensa-gas-first-frag-alignment.patch      |  51 ++++++++
->  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
->  .../2.24/901-xtensa-gas-first-frag-alignment.patch |  51 ++++++++
->  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
->  8 files changed, 736 insertions(+)
->  create mode 100644 package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
->  create mode 100644 package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
->  create mode 100644 package/binutils/2.23.1/901-xtensa-gas-first-frag-alignment.patch
->  create mode 100644 package/binutils/2.23.1/902-xtensa-gas-ld-diff-relocation-signed.patch
->  create mode 100644 package/binutils/2.23.2/901-xtensa-gas-first-frag-alignment.patch
->  create mode 100644 package/binutils/2.23.2/902-xtensa-gas-ld-diff-relocation-signed.patch
->  create mode 100644 package/binutils/2.24/901-xtensa-gas-first-frag-alignment.patch
->  create mode 100644 package/binutils/2.24/902-xtensa-gas-ld-diff-relocation-signed.patch
+> With the MESA OpenGL implementation
+> ===================================
+> 
+> Pango fails to build, see
+> http://autobuild.buildroot.org/results/23f/23f1178838e32832b24354ba99dbb7
+> b53763291c/build-end.log. Error is:
+> 
+> /home/test/test/1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/li
+> b/libGLESv2.so: undefined reference to `_glapi_get_dispatch' 
+> /home/test/test/1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/li
+> b/libGLESv2.so: undefined reference to `_glapi_Dispatch' 
 
-could you please also review/ack this series?
+Hi,
 
--- 
-Thanks.
--- Max
+should be fixed by picking
+
+http://patchwork.ozlabs.org/patch/347624/
+http://patchwork.ozlabs.org/patch/347621/
+
+from my xbmc patch series. Both patches apply to HEAD.
+
+Regards, Bernd
