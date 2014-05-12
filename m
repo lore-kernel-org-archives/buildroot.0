@@ -1,39 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 08:36:55 +0200
-Subject: [Buildroot] [git commit] ARC: allow uImage creation for ARC
-Message-ID: <20140512063725.98E4E9CBA9@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 12 May 2014 08:38:53 +0200
+Subject: [Buildroot] [PATCH 1/2] powerpc64 powerpc64le: add support
+In-Reply-To: <CAPoQQ-2Xq7MSaH4AH4mRpzj0dQayaHGiOcK10KBSwqoiFKkzqQ@mail.gmail.com>
+References: <1399796286-14822-1-git-send-email-cody@linux.vnet.ibm.com>
+ <536F65CD.4070901@zacarias.com.ar>
+ <CAPoQQ-2Xq7MSaH4AH4mRpzj0dQayaHGiOcK10KBSwqoiFKkzqQ@mail.gmail.com>
+Message-ID: <53706C7D.8090303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a9e06ab73348f5446d458f98203b76db0fe84cb2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/05/14 22:44, Cody P Schafer wrote:
+> You're right, that ALTIVEC selection needs to be removed.
 
-Starting from U-Boot v2014.04 ARC architecture is supported,
-so now it's possible to create uImage for ARC as well.
+ Please don't top-post.
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+> 
+> On Sun, May 11, 2014 at 4:58 AM, Gustavo Zacarias
+> <gustavo@zacarias.com.ar> wrote:
+>> On 05/11/2014 05:18 AM, Cody P Schafer wrote:
+>>
+>>>  config BR2_generic_powerpc
+>>>       bool "generic"
+>>> +     select BR2_POWERPC_CPU_HAS_ALTIVEC if BR2_ARCH_IS_64
+>>
+>>> +config BR2_powerpc_power4
+>>> +     bool "power4"
+>>> +config BR2_powerpc_power5
+>>> +     bool "power5"
+>>
+>> Generic has altivec and power4/5 don't?
+>> That doesn't sound right, generic should be the lowest common denominator...
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+ Looks OK to me though. I do think that all 64-bit PowerPC platforms have
+Altivec, so the generic of powerpc64 and powerpc64le should indeed enable Altivec.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 77c28f3..cc1127a 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -167,7 +167,8 @@ choice
- 
- config BR2_LINUX_KERNEL_UIMAGE
- 	bool "uImage"
--	depends on BR2_arm || BR2_armeb || BR2_bfin || BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
-+	depends on BR2_arc || BR2_arm || BR2_armeb || BR2_bfin || \
-+		   BR2_powerpc || BR2_avr32 || BR2_sh || BR2_sh64
- 	select BR2_LINUX_KERNEL_UBOOT_IMAGE
- 
- config BR2_LINUX_KERNEL_APPENDED_UIMAGE
+ Remember that we're reusing the same symbols here for the three ppc architectures.
+
+ Regards,
+ Arnout
+
+>> Regards.
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
