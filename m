@@ -1,50 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:17:20 +0200
-Subject: [Buildroot] [git commit] libmbus: fix upstream location
-Message-ID: <20140512204138.77F439CBAA@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:22:32 +0200
+Subject: [Buildroot] [git commit] build log: add message when starting
+	target-finalize target
+Message-ID: <20140512204138.A38959CB9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24e164403214847b6cb1993e9d3cd46ae86f64c7
+commit: http://git.buildroot.net/buildroot/commit/?id=6f6a2cfd819dd96e04d942e24612b7ada75773ed
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libmbus tarball is no longer available at
-http://www.freescada.com/public-dist. Apparently, the new upstream is
-at http://www.rscada.se/libmbus/ and tarballs are at
-http://www.rscada.se/public-dist/. Without this patch, the current
-download of libmbus-0.8.0.tar.gz downloads an HTML document with an
-error, which cannot be extracted, obviously.
+The target-finalize target does a large number of actions (removing
+unnecessary files, stripping objects, etc.) but does not have a header. This
+makes it seem that all these actions are done as part of the last action
+before target-finalize, for example:
+    >>> makedevs undefined Installing to target
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+To make a clear distinction, add a message to the beginning of
+target-finalize:
+    >>>   Finalizing target directory
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmbus/Config.in  |    2 +-
- package/libmbus/libmbus.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
-index 1e2a8de..8614069 100644
---- a/package/libmbus/Config.in
-+++ b/package/libmbus/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBMBUS
- 	  It supports TCP and RS232 M-bus gateways.
- 	  (M-bus standard: http://www.m-bus.com/)
+diff --git a/Makefile b/Makefile
+index 2f18aab..4b06ab5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -533,6 +533,7 @@ endif
+ $(TARGETS_ROOTFS): target-finalize
  
--	  http://www.freescada.com/libmbus
-+	  http://www.rscada.se/libmbus/
-diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
-index e1b02e0..93fe95f 100644
---- a/package/libmbus/libmbus.mk
-+++ b/package/libmbus/libmbus.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMBUS_VERSION = 0.8.0
--LIBMBUS_SITE = http://www.freescada.com/public-dist
-+LIBMBUS_SITE = http://www.rscada.se/public-dist/
- LIBMBUS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+ target-finalize: $(TARGETS)
++	@$(call MESSAGE,"Finalizing target directory")
+ 	$(TARGET_PURGE_LOCALES)
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
