@@ -1,39 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 15:11:34 +0200
-Subject: [Buildroot] [PATCH] protobuf: host-protobuf can only be built
- on certain architectures
-In-Reply-To: <20140512112044.GN4096@tarshish>
-References: <1399893031-28657-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140512112044.GN4096@tarshish>
-Message-ID: <20140512151134.500a8619@free-electrons.com>
+From: =?iso-8859-1?Q?Oscar_Hellstr=F6m?= <oscar.hellstrom@vinnter.se>
+Date: Mon, 12 May 2014 13:55:19 +0000
+Subject: [Buildroot] Enabling readline support in wpa_cli
+Message-ID: <6ef3c8ef78fb45e3b64d042d0a681898@DB3PR04MB075.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi,
 
-On Mon, 12 May 2014 14:20:44 +0300, Baruch Siach wrote:
+I wanted readline support in my wpa_cli, so I created the attached patch. This patch enables readline support if readline is selected separately. I'm not sure if this is the preferred way to do it, or if there should be an option, but it's how openssl is support is selected. The patch was created and tested in bouldroot-2013.08. I created a patch against git HEAD, but I haven't been able to test that one... I include both versions here if anyone's interested.
 
-> > technically it could build on ARM and MIPS.
-> > 
-> > Fixes:
-> > 
-> >  http://autobuild.buildroot.org/results/9b9/9b9b20b0e4694b11425cdc2382650cdc2774e400/
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> What about reverse dependencies? A quick search shows collectd (selects 
-> BR2_PACKAGE_PROTOBUF_C), and ola (selects BR2_PACKAGE_PYTHON_PROTOBUF).
+Kind regards
+Oscar Hellstr?m
 
-Aaah, indeed. I thought of all the packages using host-protobuf, but
-not the reverse dependencies of those packages.
+[cid:image003.jpg at 01CF1D9A.E7C218A0]
+Oscar Hellstr?m
+Embedded Product Developer
 
-I'll resend an updated version.
++46 734 41 81 12
+oscar.hellstrom at vinnter.se<mailto:oscar.hellstrom@vinnter.se>
+Lync: oshe at vinngroup.net
+LinkedIn<http://www.linkedin.com/in/oscarh>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Vinnter AB
+Alfred Wigelius V?g 10
+412 72 G?teborg, Sweden
+www.vinnter.se<http://www.vinnter.se/>
+
+[cid:image004.jpg at 01CF1D9A.E7C218A0]
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image001.jpg
+Type: image/jpeg
+Size: 2083 bytes
+Desc: image001.jpg
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment.jpg>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: image002.jpg
+Type: image/jpeg
+Size: 1432 bytes
+Desc: image002.jpg
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment-0001.jpg>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-2013.08-wpa_cli-readline.patch
+Type: application/octet-stream
+Size: 884 bytes
+Desc: buildroot-2013.08-wpa_cli-readline.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot-2014-05-12-wpa_cli-readline.patch
+Type: application/octet-stream
+Size: 561 bytes
+Desc: buildroot-2014-05-12-wpa_cli-readline.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment-0001.obj>
