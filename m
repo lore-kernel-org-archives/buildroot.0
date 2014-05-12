@@ -1,30 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 21:44:42 +0200
-Subject: [Buildroot] [PATCH 1/1] fio: fix missing fallocate64()
-In-Reply-To: <1399668168-4521-1-git-send-email-frank@frajasalo.de>
-References: <1399668168-4521-1-git-send-email-frank@frajasalo.de>
-Message-ID: <20140512214442.014f1eb5@free-electrons.com>
+Date: Mon, 12 May 2014 21:46:09 +0200
+Subject: [Buildroot] [PATCH v6 07/32] mesa3d: Add patch note about
+ upstream bug
+In-Reply-To: <1399716164-6452-8-git-send-email-bernd.kuhls@t-online.de>
+References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
+ <1399716164-6452-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140512214609.702dac42@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Bergmann,
+Dear Bernd Kuhls,
 
-On Fri,  9 May 2014 22:42:48 +0200, Frank Bergmann wrote:
+On Sat, 10 May 2014 12:02:19 +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...a3d-0001-Fix-khrplatform.h-not-installed-if-EGL-is-disabled.patch |    2 ++
+>  1 file changed, 2 insertions(+)
 
-> +ifeq ($(BR2_nios2),y)
-> +BR2_GLOBAL_PATCH_DIR += "board/common-nios2"
-> +endif
-
-Unfortunately, we don't want to have architecture-specific patches, and
-not applied with this mechanism.
-
-I believe the easiest solution is just to make the fio package not
-available on NIOS II.
-
-Thanks,
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thomas
 -- 
