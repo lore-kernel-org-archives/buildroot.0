@@ -1,69 +1,46 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 12 May 2014 21:55:37 +0200
-Subject: [Buildroot] Discussing libudev,
-	was: Re: [PATCH v6 09/32] mesa3d: dri2 does not need udev support
-Message-ID: <pil74bx9op.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 May 2014 22:01:40 +0200
+Subject: [Buildroot] OpenGL issues affecting the autobuilders
+Message-ID: <20140512220140.5fe69970@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
-news:1399716164-6452-10-git-send-email-bernd.kuhls at t-online.de: 
+Hello,
 
-> http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=b959fd967493
-> 8e127a34d42d34b903e3a9ae7ad9 "The loader infrastructure for everything
-> but DRI2 requires that udev be present" 
-> 
-> Check for udev only for dri3.
+There are currently several OpenGL issues affecting the autobuilders.
+It would be nice if you could have a look at them.
 
-> Patch sent upstream:
-> https://bugs.freedesktop.org/show_bug.cgi?id=75212#c5
+With the RPi OpenGL implementation
+==================================
 
-Hi,
+Cairo fails to build, see
+http://autobuild.buildroot.org/results/285/2851069d6964aa46d26b4aabe7d84e8c0c6c72ce/build-end.log.
+Error is:
 
-I would like to discuss feedback I received for my patch to remove udev as 
-a requirement for mesa dri2 support. Before going into details I would like 
-to explain the system where I am using xbmc:
-The distro (www.fli4l.de) uses buildroot to compile its binary files and 
-the kernel. As an user-provided package for fli4l I am building xbmc & 
-tvheadend here, so I am not in a position to have a free design choice 
-while using fli4l, which I want to do.
+  fatal error: vcos_platform_types.h: No such file or directory
 
-Quoted are some important configuration options of fli4l:
+With the MESA OpenGL implementation
+===================================
 
-buildroot .config
-BR2_i386=y
-BR2_TOOLCHAIN_USES_UCLIBC=y
-BR2_TOOLCHAIN_BUILDROOT=y
-BR2_ROOTFS_DEVICE_CREATION_STATIC=y
+Pango fails to build, see
+http://autobuild.buildroot.org/results/23f/23f1178838e32832b24354ba99dbb7b53763291c/build-end.log.
+Error is:
 
-busybox .config
-CONFIG_MDEV=y
+/home/test/test/1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/libGLESv2.so: undefined reference to `_glapi_get_dispatch'
+/home/test/test/1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/libGLESv2.so: undefined reference to `_glapi_Dispatch'
 
-Now the feedback on the mesa3d bug tracker:
-https://bugs.freedesktop.org/show_bug.cgi?id=75212#c6
+This issue was already discussed on the list, but I don't remember if a
+patch was sent for it.
 
-Emil Velikov wrote:
---- snip
-udev != libudev. The latter can be used without the presence of the former 
-as it is a selection of helper functions that helps abstract dev 
-manipulations.
+It would be nice to fix these issues in the near future.
 
-AFAICS you have a couple options here - install libudev or keep a bunch of 
-local patches. I would encourage you go with the former.
---- snap
+Thanks a lot!
 
-This was an interesting piece of information for me because I am patching 
-xbmc to remove its libudev dependency in the cec-adapter detection part.
-While trying to setup Emil?s suggestion I created a libudev package which 
-was successfully linked by libcec and its binary cec-client to detect my 
-cec adapter so I guess Emil?s idea could really work.
-
-I have yet to do more testing but reading through the udev/systemd/eudev 
-discussion of the last months here I would like to ask for feedback already 
-at this early stage whether a seperate libudev package is useful for the 
-broader public.
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
