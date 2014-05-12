@@ -1,96 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 12 May 2014 14:20:44 +0300
-Subject: [Buildroot] [PATCH] protobuf: host-protobuf can only be built
- on certain architectures
-In-Reply-To: <1399893031-28657-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1399893031-28657-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140512112044.GN4096@tarshish>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 12 May 2014 13:21:01 +0200
+Subject: [Buildroot] [PATCH] cmake: disable building of ccmake
+In-Reply-To: <536A6FE0.4060007@lucaceresoli.net>
+References: <1399480839-30134-1-git-send-email-fabio.porcedda@gmail.com>
+ <536A6FE0.4060007@lucaceresoli.net>
+Message-ID: <CAHkwnC-3_5XuJHNx3gdURcA+_qiZrLnuuPpOcGefi1s_6jc1zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Wed, May 7, 2014 at 7:39 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Hi Fabio,
+>
+>
+> Fabio Porcedda wrote:
+>>
+>> The ccmake program requires the ncurses package so it fails to build if
+>> the host system does not have it installed.
+>> To get rid off the ncurses dependency do not build anymore the ccmake
+>> program because it's not needed by buildroot.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+>> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+>> Cc: Samuel Martin <s.martin49@gmail.com>
+>> Cc: Alexander Potashev <aspotashev@gmail.com>
+>
+>
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-On Mon, May 12, 2014 at 01:10:31PM +0200, Thomas Petazzoni wrote:
-> The host-protobuf package can only build on certain architectures. For
-> example, host-protobuf does not build on PowerPC platforms, causing
-> build failures on the autobuilders. Since we don't really care about
-> build platforms other than x86 and x86-64, this commit restricts the
-> build of host-protobuf to these architectures only, even though if
+I've sent an updated patch:
+http://patchwork.ozlabs.org/patch/347975/
 
-Redundant 'if'.
-
-> technically it could build on ARM and MIPS.
-> 
-> Fixes:
-> 
->  http://autobuild.buildroot.org/results/9b9/9b9b20b0e4694b11425cdc2382650cdc2774e400/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-What about reverse dependencies? A quick search shows collectd (selects 
-BR2_PACKAGE_PROTOBUF_C), and ola (selects BR2_PACKAGE_PYTHON_PROTOBUF).
-
-baruch
-
-> ---
->  package/protobuf-c/Config.in      | 3 +++
->  package/protobuf/Config.in        | 3 +++
->  package/python-protobuf/Config.in | 2 ++
->  3 files changed, 8 insertions(+)
-> 
-> diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-> index 732befc..f9fab37 100644
-> --- a/package/protobuf-c/Config.in
-> +++ b/package/protobuf-c/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_PROTOBUF_C
->  	bool "protobuf-c"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
-> +	# host-protobuf only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Code generator and runtime libraries to use Protocol Buffers
->  	  from pure C (not C++).
-> @@ -10,3 +12,4 @@ config BR2_PACKAGE_PROTOBUF_C
->  
->  comment "protobuf-c needs a toolchain w/ C++, threads"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-> index 293a9b9..6015b13 100644
-> --- a/package/protobuf/Config.in
-> +++ b/package/protobuf/Config.in
-> @@ -5,6 +5,8 @@ config BR2_PACKAGE_PROTOBUF
->  	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
->  	# PowerPC doesn't actually work.
->  	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +	# host-protobuf only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Protocol buffers are Google's language-neutral, platform-neutral,
->  	  extensible mechanism for serializing structured data.
-> @@ -14,3 +16,4 @@ config BR2_PACKAGE_PROTOBUF
->  comment "protobuf needs a toolchain w/ C++, threads"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-> index ec22057..6649dfc 100644
-> --- a/package/python-protobuf/Config.in
-> +++ b/package/python-protobuf/Config.in
-> @@ -1,6 +1,8 @@
->  config BR2_PACKAGE_PYTHON_PROTOBUF
->  	bool "python-protobuf"
->  	depends on BR2_PACKAGE_PYTHON
-> +	# host-protobuf only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Python implementation of the Google Protocol Buffers.
-
+Best regards
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Fabio Porcedda
