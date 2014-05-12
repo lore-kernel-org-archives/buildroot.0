@@ -1,71 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 12 May 2014 22:02:32 +0200
-Subject: [Buildroot] [PATCH v2 1/1] xproto_dri3proto: New package
-Message-ID: <1399924952-8127-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 May 2014 22:04:08 +0200
+Subject: [Buildroot] [PATCH] radvd: not available on AVR32
+Message-ID: <1399925048-5117-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+radvd needs some C library definitions not available in old uClibc
+versions. Since we don't care much about AVR32, we simply disallow the
+radvd package on this architecture.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+
+  http://autobuild.buildroot.org/results/f03/f0367a30e8d772eb5e955a85b853ec3e43fe54b3/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: remove xutil_util-macros, needed only for autoreconf
-    compile tested with following defconfig
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XPROTO_DRI3PROTO=y
+ package/radvd/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xproto_dri3proto/Config.in           |    4 ++++
- package/x11r7/xproto_dri3proto/xproto_dri3proto.mk |   15 +++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/x11r7/xproto_dri3proto/Config.in
- create mode 100644 package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 8685ca1..087b816 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -227,6 +227,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xproto_damageproto/Config.in
- 		source package/x11r7/xproto_dmxproto/Config.in
- 		source package/x11r7/xproto_dri2proto/Config.in
-+		source package/x11r7/xproto_dri3proto/Config.in
- 		source package/x11r7/xproto_fixesproto/Config.in
- 		source package/x11r7/xproto_fontcacheproto/Config.in
- 		source package/x11r7/xproto_fontsproto/Config.in
-diff --git a/package/x11r7/xproto_dri3proto/Config.in b/package/x11r7/xproto_dri3proto/Config.in
-new file mode 100644
-index 0000000..eead7d4
---- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_XPROTO_DRI3PROTO
-+	bool "dri3proto"
-+	help
-+	  X.Org DRI3 protocol headers
-diff --git a/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-new file mode 100644
-index 0000000..00f5b57
---- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# xproto_dri3proto
-+#
-+################################################################################
-+
-+XPROTO_DRI3PROTO_VERSION = 1.0
-+XPROTO_DRI3PROTO_SOURCE = dri3proto-$(XPROTO_DRI3PROTO_VERSION).tar.bz2
-+XPROTO_DRI3PROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
-+XPROTO_DRI3PROTO_LICENSE = MIT
-+XPROTO_DRI3PROTO_LICENSE_FILES = COPYING
-+XPROTO_DRI3PROTO_INSTALL_STAGING = YES
-+XPROTO_DRI3PROTO_INSTALL_TARGET = NO
-+
-+$(eval $(autotools-package))
+diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+index 6edfd7c..71f2f34 100644
+--- a/package/radvd/Config.in
++++ b/package/radvd/Config.in
+@@ -5,6 +5,8 @@ config BR2_PACKAGE_RADVD
+ 	select BR2_PACKAGE_FLEX
+ 	select BR2_PACKAGE_LIBDAEMON
+ 	depends on BR2_INET_IPV6
++	# uClibc too old, does not define ARPHRD_IEEE802154
++	depends on !BR2_avr32
+ 	help
+ 	  IPv6 Router Advertisement Daemon.
+ 
+@@ -13,3 +15,4 @@ config BR2_PACKAGE_RADVD
+ comment "radvd needs a toolchain w/ IPv6"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INET_IPV6
++	depends on !BR2_avr32
 -- 
-1.7.10.4
+1.9.2
