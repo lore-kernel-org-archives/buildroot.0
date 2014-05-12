@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 May 2014 08:38:53 +0200
+Date: Mon, 12 May 2014 08:41:25 +0200
 Subject: [Buildroot] [PATCH 1/2] powerpc64 powerpc64le: add support
 In-Reply-To: <CAPoQQ-2Xq7MSaH4AH4mRpzj0dQayaHGiOcK10KBSwqoiFKkzqQ@mail.gmail.com>
 References: <1399796286-14822-1-git-send-email-cody@linux.vnet.ibm.com>
  <536F65CD.4070901@zacarias.com.ar>
  <CAPoQQ-2Xq7MSaH4AH4mRpzj0dQayaHGiOcK10KBSwqoiFKkzqQ@mail.gmail.com>
-Message-ID: <53706C7D.8090303@mind.be>
+Message-ID: <53706D15.2060404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
