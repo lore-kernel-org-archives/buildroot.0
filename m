@@ -1,84 +1,67 @@
-From: Eric Jarrige <eric.jarrige@armadeus.org>
-Date: Mon, 12 May 2014 16:22:07 +0200
-Subject: [Buildroot] [PATCH v3] u-boot: allow to pass a custom configuration
-	file
-Message-ID: <1399904527-8159-1-git-send-email-eric.jarrige@armadeus.org>
+From: Cody P Schafer <cody@linux.vnet.ibm.com>
+Date: Mon, 12 May 2014 12:17:09 -0700
+Subject: [Buildroot] [PATCH v2 1/2] powerpc64 powerpc64le: add support
+In-Reply-To: <20140511234912.7b70a9c2@free-electrons.com>
+References: <1399842673-21261-1-git-send-email-cody@linux.vnet.ibm.com>
+ <20140511234912.7b70a9c2@free-electrons.com>
+Message-ID: <53711E35.9020603@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE that makes it possible
-to override the configuration options in the board header file. This
-avoids the need for manipulating the board header file with sed hacks
-like is currently done for the BR2_TARGET_UBOOT_NETWORK settings.
+On 05/11/2014 02:49 PM, Thomas Petazzoni wrote:
 
-Note that this option does not make it possible to add a new board to
-U-Boot. That still has to be done by patching the source.
+> Generally speaking, I believe it would be nice if this patch could be
+> split into smaller patches. This would also ease their way for merging.
+> I'll try to suggest approaches to split it up while reviewing it, below.
 
-Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
----
+yep, will do.
 
-Changes v2 -> v3:
- - refactoring based on uClibc/BusyBox model (suggested by Thomas and Arnoult)
- - add missing help text (suggested by Arnoult)
- - copy custom configuration file to legal info (suggested by Yann)
-Changes v1 -> v2:
- - Fix typo
+[...]
 
- boot/uboot/Config.in |    8 ++++++++
- boot/uboot/uboot.mk  |   18 ++++++++++++++++++
- 2 files changed, 26 insertions(+)
+>> +config BR2_POWERPC_CPU_HAS_SPE
+>> +	bool
+>> +
+>> +config BR2_POWERPC
+>> +	bool
+>> +	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+>
+> I see what you want to do, but I'm not a big fan of just using a case
+> difference between BR2_POWERPC and BR2_powerpc. Unfortunately, I don't
+> really have a great proposal to make here. One possibility would be to
+> rename the current BR2_powerpc to BR2_powerpcbe, and then use
+> BR2_powerpc64be instead of BR2_powerpc64. Then BR2_powerpc would be
+> available as a common option for all PowerPC architectures. But that
+> requires a fairly significant rename, so before implementing it, I'd
+> suggest you wait a bit to see if there's a consensus around this
+> proposal or not.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 1c77f6a..299d50f 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -79,6 +79,14 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
- 
- 	  Most users may leave this empty
- 
-+config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
-+	string "Configuration file path"
-+	help
-+	  Path to the modified configuration header file. It will be
-+	  copied to include/configs/<boardname>.h in the U-Boot sources.
-+	  Note that this doesn't allow you to create a custom board,
-+	  only to modify some of configuration variables.
-+
- choice
- 	prompt "U-Boot binary format"
- 	default BR2_TARGET_UBOOT_FORMAT_BIN
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index da67706..1fa3fb9 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -94,7 +94,25 @@ endef
- UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
- endif
- 
-+UBOOT_CUSTOM_CONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
-+
-+ifneq ($(UBOOT_CUSTOM_CONFIG),)
-+
-+define UBOOT_COPY_CUSTOM_CONFIG_FILE
-+	$(INSTALL) -m 0644 $(UBOOT_CUSTOM_CONFIG) \
-+		$(@D)/include/configs/$(UBOOT_BOARD_NAME).h;
-+endef
-+
-+define UBOOT_COPY_CUSTOM_CONFIG_FILE_TO_LEGAL_INFO
-+	$(INSTALL) -m 0644 $(UBOOT_CUSTOM_CONFIG) \
-+		$(REDIST_SOURCES_DIR_TARGET)/$(UBOOT_BOARD_NAME).h;
-+endef
-+
-+UBOOT_POST_LEGAL_INFO_HOOKS += UBOOT_COPY_CUSTOM_CONFIG_FILE_TO_LEGAL_INFO
-+endif
-+
- define UBOOT_CONFIGURE_CMDS
-+	$(UBOOT_COPY_CUSTOM_CONFIG_FILE)
- 	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
- 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
- 		$(UBOOT_BOARD_NAME)_config
--- 
-1.7.9.5
+I don't like the BR2_powerpcbe change as it would mean the arch name and 
+config option wouldn't be the same, potentially causing even more 
+confusion than the switched caps mechanism I went with.
+
+> In any case, introducing this common BR2_POWERPC or BR2_powerpc option
+> could be done as a separate, preliminary patch. This way, a good number
+> of the package related changes to use BR2_POWERPC could be made before
+> introducing the PPC64 support.
+
+I avoided using BR2_POWERPC in packages as generally when a new ppc 
+variant is added they'll need to be updated to support it.
+
+>>   choice
+>>   	prompt "Target Architecture Variant"
+>> -	depends on BR2_powerpc
+>> +	depends on BR2_POWERPC
+>
+> Not your fault, but since the file containing this is only included
+> when BR2_powerpc is defined, I'm not sure to see why we have this
+> 'depends on' here.
+>
+
+Yep, I'll remove these. This also removes much of the point of 
+BR2_POWERPC, so I think I'll nuke it as well in v2.
+
+[... removed a bunch of acks to your suggestions hidden in a mountain of 
+code ...]
