@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 23:10:35 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: Sourcery CodeBench ARM
-	2013.05 affected by PR58595
-Message-ID: <1399929035-10908-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 May 2014 23:11:51 +0200
+Subject: [Buildroot] [PATCH 0/2] xtensa binutils fixes backports
+In-Reply-To: <CAMo8Bf+NTxK-PDG4cYR36h2tFcLSnmv9seEoLcfirYKjb+x0Fg@mail.gmail.com>
+References: <1399503065-18819-1-git-send-email-jcmvbkbc@gmail.com>
+ <CAMo8Bf+NTxK-PDG4cYR36h2tFcLSnmv9seEoLcfirYKjb+x0Fg@mail.gmail.com>
+Message-ID: <20140512231151.17048ad8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Dear Max Filippov,
 
-  http://autobuild.buildroot.org/results/6b3/6b342c2d101348e4d39285f45481e2aafa3d8b3f/
+On Tue, 13 May 2014 01:05:28 +0400, Max Filippov wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-external/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+> >  create mode 100644 package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
+> >  create mode 100644 package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
+> >  create mode 100644 package/binutils/2.23.1/901-xtensa-gas-first-frag-alignment.patch
+> >  create mode 100644 package/binutils/2.23.1/902-xtensa-gas-ld-diff-relocation-signed.patch
+> >  create mode 100644 package/binutils/2.23.2/901-xtensa-gas-first-frag-alignment.patch
+> >  create mode 100644 package/binutils/2.23.2/902-xtensa-gas-ld-diff-relocation-signed.patch
+> >  create mode 100644 package/binutils/2.24/901-xtensa-gas-first-frag-alignment.patch
+> >  create mode 100644 package/binutils/2.24/902-xtensa-gas-ld-diff-relocation-signed.patch
+> 
+> could you please also review/ack this series?
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 2bc5d4d..857f26d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -138,6 +138,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_ARM_EABI
- 	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # based-on gcc-4.7.3
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
+I just asked Peter a few minutes ago on IRC to pull these two patches.
+Should be done tonight, hopefully :)
+
+Thanks!
+
+Thomas
 -- 
-1.9.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
