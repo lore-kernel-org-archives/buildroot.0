@@ -1,44 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 12 May 2014 18:12:27 +0200
-Subject: [Buildroot] Enabling readline support in wpa_cli
-In-Reply-To: <c0fce23a65a14e6cbd228a9ec03cf091@DB3PR04MB075.eurprd04.prod.outlook.com>
-References: <6ef3c8ef78fb45e3b64d042d0a681898@DB3PR04MB075.eurprd04.prod.outlook.com>
- <c0fce23a65a14e6cbd228a9ec03cf091@DB3PR04MB075.eurprd04.prod.outlook.com>
-Message-ID: <5370F2EB.5000601@mind.be>
+From: =?UTF-8?q?Oscar=20Hellstr=C3=B6m?= <oscar.hellstrom@vinnter.se>
+Date: Mon, 12 May 2014 18:16:09 +0200
+Subject: [Buildroot] [PATCH 1/1] wpa_supplicant: detect readline support in
+	wpa_cli
+Message-ID: <1399911369-3165-1-git-send-email-oscar.hellstrom@vinnter.se>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/05/14 16:16, Oscar Hellstr?m wrote:
-> I should probably have added the readline dependency as well, right?
-> 
+Signed-off-by: Oscar Hellstr?m <oscar.hellstrom@vinnter.se>
+---
+ package/wpa_supplicant/wpa_supplicant.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- Indeed, you should have something like
-
-ifeq ($(BR2_PACKAGE_READLINE),y)
-BR2_PACKAGE_WPA_SUPPLICANT_DEPENDENCIES += readline
-...
-endif
-
-
- BTW, a patch like this would typically has as subject:
-
-wpa_supplicant: enable readline support in wpa_cli
-
-
- BTW 2: on this list, the policy is not to top-post, but to reply below the
-relevant quoted text (like I was doing here).
-
-
- Regards,
- Arnout
-
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 9fcda2e..9321f08 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -105,6 +105,11 @@ define WPA_SUPPLICANT_DEBUG_CONFIG
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_READLINE),y)
++	WPA_SUPPLICANT_DEPENDENCIES += readline
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
++endif
++
+ define WPA_SUPPLICANT_CONFIGURE_CMDS
+ 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
+ 	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.1
