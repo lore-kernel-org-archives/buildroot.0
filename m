@@ -1,30 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 May 2014 22:19:56 +0200
-Subject: [Buildroot] [PATCH] libbluray: needs dynamic library support
-In-Reply-To: <1399919032-9512-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 12 May 2014 20:23:52 +0200")
-References: <1399919032-9512-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878uq67nrn.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 12 May 2014 22:16:08 +0200
+Subject: [Buildroot] [PATCH v6 01/32] xproto_dri3proto: New package
+References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
+ <1399716164-6452-2-git-send-email-bernd.kuhls@t-online.de>
+ <20140512195358.58b15414@free-electrons.com>
+ <sme74bxen4.ln2@ID-313208.user.individual.net>
+ <20140512213834.52724817@free-electrons.com>
+Message-ID: <8pm74bx9op.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140512213834.52724817 at free-electrons.com:
 
- > The dependency is propagated to XBMC, even though XBMC currently
- > requires an (e)glibc toolchain, which always have dynamic library
- > support. This is just in case one day XBMC can be built against
- > uClibc.
+> Well, since the package is autoreconf'ed, then maybe those macros from
+> xutil_util-macros are needed?
 
- > Fixes:
+Hi,
 
- >   http://autobuild.buildroot.org/results/3fa/3fae35ebcf14d6f38284d8318f61f9b99998794c/
+xproto_dri3proto does not use autoreconf, I sent an updated patch:
+http://patchwork.ozlabs.org/patch/348099/
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The updated package is detected by mesa3d:
+checking for DRI3PROTO... yes
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Regards, Bernd
