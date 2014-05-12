@@ -1,44 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 May 2014 00:18:37 +0200
-Subject: [Buildroot] [git commit] crda: disable on NIOS II
-Message-ID: <20140512221920.7D7739BE7B@busybox.osuosl.org>
+Date: Tue, 13 May 2014 00:18:04 +0200
+Subject: [Buildroot] [git commit] cppcms: needs NPTL support
+Message-ID: <20140512221920.75CB09CAFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f287f0aab695b2a36bd1abc776e2ccfddee6c3fb
+commit: http://git.buildroot.net/buildroot/commit/?id=f015ad1c7b7453b38b19356882d434254f23b9cf
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Building crda on NIOS II triggers the infamous _gp linker issue. Since
-nobody cared, let's disable this package on NIOS II for the moment.
+cppcms uses some thread functions that are not available in certain
+uClibc thread implementations. Even though a bit more restrictive than
+necessary, adding a NPTL dependency is the easiest solution, and is
+quite logical for a relatively large and complex package such as
+cppcms.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/272/272f18410e4855ab6b3bfd8a44243c1ebecf6abe/
+  http://autobuild.buildroot.net/results/a26/a26574419aacbea4140dfca1d503bcab599edd71/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/crda/Config.in |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/cppcms/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/crda/Config.in b/package/crda/Config.in
-index e56a45e..0e0eb7f 100644
---- a/package/crda/Config.in
-+++ b/package/crda/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_CRDA
- 	select BR2_PACKAGE_LIBNL
- 	# regdb is a runtime dependency
- 	select BR2_PACKAGE_WIRELESS_REGDB
-+	# Triggers the _gp link issue
-+	depends on !BR2_nios2
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 688d8f2..614abeb 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_CPPCMS
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_PREFER_STATIC_LIB # dlopen()
  	help
- 	  Central Regulatory Domain Agent.
+ 	  CppCMS is a Free High Performance Web Development Framework
+@@ -39,6 +39,6 @@ comment "icu support needs a toolchain w/ wchar"
  
-@@ -17,3 +19,4 @@ config BR2_PACKAGE_CRDA
+ endif
  
- comment "crda needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_nios2
+-comment "cppcms needs a toolchain w/ C++, threads, dynamic library"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++comment "cppcms needs a toolchain w/ C++, NPTL, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_PREFER_STATIC_LIB
