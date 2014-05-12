@@ -1,128 +1,84 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 12 May 2014 22:05:12 +0300
-Subject: [Buildroot] [PATCHv2] protobuf: host-protobuf can only be built
- on certain architectures
-In-Reply-To: <1399916748-8733-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1399916748-8733-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140512190512.GR4096@tarshish>
+From: Eric Jarrige <eric.jarrige@armadeus.org>
+Date: Mon, 12 May 2014 16:22:07 +0200
+Subject: [Buildroot] [PATCH v3] u-boot: allow to pass a custom configuration
+	file
+Message-ID: <1399904527-8159-1-git-send-email-eric.jarrige@armadeus.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Add an option BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE that makes it possible
+to override the configuration options in the board header file. This
+avoids the need for manipulating the board header file with sed hacks
+like is currently done for the BR2_TARGET_UBOOT_NETWORK settings.
 
-On Mon, May 12, 2014 at 07:45:48PM +0200, Thomas Petazzoni wrote:
-> The host-protobuf package can only build on certain architectures. For
-> example, host-protobuf does not build on PowerPC platforms, causing
-> build failures on the autobuilders. Since we don't really care about
-> build platforms other than x86 and x86-64, this commit restricts the
-> build of host-protobuf to these architectures only, even though if
-> technically it could build on ARM and MIPS.
-> 
-> Fixes:
-> 
->  http://autobuild.buildroot.org/results/9b9/9b9b20b0e4694b11425cdc2382650cdc2774e400/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Note that this option does not make it possible to add a new board to
+U-Boot. That still has to be done by patching the source.
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
+---
 
-baruch
+Changes v2 -> v3:
+ - refactoring based on uClibc/BusyBox model (suggested by Thomas and Arnoult)
+ - add missing help text (suggested by Arnoult)
+ - copy custom configuration file to legal info (suggested by Yann)
+Changes v1 -> v2:
+ - Fix typo
 
-> ---
-> Changes since v1:
->  - Propagate the dependency to ola and collectd, as noticed by Baruch
->    Siach
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/collectd/Config.in        | 2 ++
->  package/ola/Config.in             | 2 ++
->  package/protobuf-c/Config.in      | 3 +++
->  package/protobuf/Config.in        | 3 +++
->  package/python-protobuf/Config.in | 2 ++
->  5 files changed, 12 insertions(+)
-> 
-> diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-> index daa9603..f693f31 100644
-> --- a/package/collectd/Config.in
-> +++ b/package/collectd/Config.in
-> @@ -419,6 +419,8 @@ comment "rrdtool support needs a toolchain w/ wchar"
->  config BR2_PACKAGE_COLLECTD_RIEMANN
->  	bool "riemann"
->  	depends on BR2_INSTALL_LIBSTDCPP # protobuf
-> +	# protobuf-c -> host-protobuf
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	select BR2_PACKAGE_PROTOBUF_C
->  	help
->  	  Sends data to Riemann, a stream processing and monitoring system.
-> diff --git a/package/ola/Config.in b/package/ola/Config.in
-> index 8d202a5..713102c 100644
-> --- a/package/ola/Config.in
-> +++ b/package/ola/Config.in
-> @@ -12,6 +12,8 @@ config BR2_PACKAGE_OLA
->  	depends on BR2_USE_WCHAR # util-linux
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
-> +	# protobuf -> host-protobuf
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Open Lighting Architecture provides applications
->  	  with a mechanism to send and receive DMX512 & RDM
-> diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-> index 732befc..f9fab37 100644
-> --- a/package/protobuf-c/Config.in
-> +++ b/package/protobuf-c/Config.in
-> @@ -2,6 +2,8 @@ config BR2_PACKAGE_PROTOBUF_C
->  	bool "protobuf-c"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
-> +	# host-protobuf only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Code generator and runtime libraries to use Protocol Buffers
->  	  from pure C (not C++).
-> @@ -10,3 +12,4 @@ config BR2_PACKAGE_PROTOBUF_C
->  
->  comment "protobuf-c needs a toolchain w/ C++, threads"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-> index 293a9b9..6015b13 100644
-> --- a/package/protobuf/Config.in
-> +++ b/package/protobuf/Config.in
-> @@ -5,6 +5,8 @@ config BR2_PACKAGE_PROTOBUF
->  	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
->  	# PowerPC doesn't actually work.
->  	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +	# host-protobuf only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Protocol buffers are Google's language-neutral, platform-neutral,
->  	  extensible mechanism for serializing structured data.
-> @@ -14,3 +16,4 @@ config BR2_PACKAGE_PROTOBUF
->  comment "protobuf needs a toolchain w/ C++, threads"
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-> index ec22057..6649dfc 100644
-> --- a/package/python-protobuf/Config.in
-> +++ b/package/python-protobuf/Config.in
-> @@ -1,6 +1,8 @@
->  config BR2_PACKAGE_PYTHON_PROTOBUF
->  	bool "python-protobuf"
->  	depends on BR2_PACKAGE_PYTHON
-> +	# host-protobuf only builds on certain architectures
-> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	help
->  	  Python implementation of the Google Protocol Buffers.
->  
-> -- 
+ boot/uboot/Config.in |    8 ++++++++
+ boot/uboot/uboot.mk  |   18 ++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1c77f6a..299d50f 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -79,6 +79,14 @@ config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ 
+ 	  Most users may leave this empty
+ 
++config BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	help
++	  Path to the modified configuration header file. It will be
++	  copied to include/configs/<boardname>.h in the U-Boot sources.
++	  Note that this doesn't allow you to create a custom board,
++	  only to modify some of configuration variables.
++
+ choice
+ 	prompt "U-Boot binary format"
+ 	default BR2_TARGET_UBOOT_FORMAT_BIN
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index da67706..1fa3fb9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -94,7 +94,25 @@ endef
+ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
+ endif
+ 
++UBOOT_CUSTOM_CONFIG = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE))
++
++ifneq ($(UBOOT_CUSTOM_CONFIG),)
++
++define UBOOT_COPY_CUSTOM_CONFIG_FILE
++	$(INSTALL) -m 0644 $(UBOOT_CUSTOM_CONFIG) \
++		$(@D)/include/configs/$(UBOOT_BOARD_NAME).h;
++endef
++
++define UBOOT_COPY_CUSTOM_CONFIG_FILE_TO_LEGAL_INFO
++	$(INSTALL) -m 0644 $(UBOOT_CUSTOM_CONFIG) \
++		$(REDIST_SOURCES_DIR_TARGET)/$(UBOOT_BOARD_NAME).h;
++endef
++
++UBOOT_POST_LEGAL_INFO_HOOKS += UBOOT_COPY_CUSTOM_CONFIG_FILE_TO_LEGAL_INFO
++endif
++
+ define UBOOT_CONFIGURE_CMDS
++	$(UBOOT_COPY_CUSTOM_CONFIG_FILE)
+ 	$(TARGET_CONFIGURE_OPTS) $(UBOOT_CONFIGURE_OPTS) 	\
+ 		$(MAKE) -C $(@D) $(UBOOT_MAKE_OPTS)		\
+ 		$(UBOOT_BOARD_NAME)_config
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+1.7.9.5
