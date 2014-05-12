@@ -1,125 +1,50 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Mon, 12 May 2014 21:31:27 +0200
-Subject: [Buildroot] [PATCH v2 2/2] mongoose: optionally provide shared
-	library
-In-Reply-To: <1399923087-5550-1-git-send-email-zinosat@tiscali.it>
-References: <1399923087-5550-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <1399923087-5550-2-git-send-email-zinosat@tiscali.it>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 May 2014 21:36:29 +0200
+Subject: [Buildroot] [PATCH] libcec: fix build issue on AVR32
+Message-ID: <1399923389-4496-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Davide Viti <d.viti@infosolution.it>
+Fixes:
 
+  http://autobuild.buildroot.org/results/89d/89d8165b455cd7131e4c0729cec50dad8980ceb1/
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-  - rebase
-  - add dot at the end of help messages
+ package/libcec/libcec-0002-no-psabi-warning.patch | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 package/libcec/libcec-0002-no-psabi-warning.patch
 
-Original patch content:
-mongoose package can provide a webserver and, optionally, a shared
-library: this is what Centos, among other distros, is doing.
-
-It's now possible to include in the build both the mongoose executable
-and libmongoose.so
-
-Not too sure how should be handled the situation where mongoose is
-select and neither the webserver nor libmongoose.so are not selected
-
-I'd also appreciate some feedback on the shared library compilation
-flags
-
-regards,
-Davide
-
- package/mongoose/Config.in   |   14 ++++++++++++++
- package/mongoose/mongoose.mk |   32 +++++++++++++++++++++++++++++---
- 2 files changed, 43 insertions(+), 3 deletions(-)
-
-diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
-index 2526112..2b93ab8 100644
---- a/package/mongoose/Config.in
-+++ b/package/mongoose/Config.in
-@@ -8,6 +8,20 @@ config BR2_PACKAGE_MONGOOSE
- 
- 	  https://github.com/valenok/mongoose
- 
-+if BR2_PACKAGE_MONGOOSE
+diff --git a/package/libcec/libcec-0002-no-psabi-warning.patch b/package/libcec/libcec-0002-no-psabi-warning.patch
+new file mode 100644
+index 0000000..bd6557e
+--- /dev/null
++++ b/package/libcec/libcec-0002-no-psabi-warning.patch
+@@ -0,0 +1,22 @@
++Do not use -Wno-psabi warning, not available on old g++
 +
-+config BR2_PACKAGE_MONGOOSE_INSTALL_WEBSERVER
-+	bool "Install standalone webserver"
-+	help
-+	  Install mongoose webserver.
++AVR32 uses a very old g++ version, which does not implement the
++-Wno-psabi warning flag. This patch simply removes this warning flag
++from the libcec build. It can be dropped if only gcc 4.5+ versions are
++supported in Buildroot.
 +
-+config BR2_PACKAGE_MONGOOSE_INSTALL_SHARED_LIBRARY
-+	bool "Install shared library"
-+	help
-+	  Install shared library.
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +
-+endif
-+
- comment "mongoose needs a toolchain w/ threads, largefile"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index a7164bb..3628c0c 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -8,6 +8,7 @@ MONGOOSE_VERSION = 5.3
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPLv2
- MONGOOSE_LICENSE_FILES = LICENSE
-+MONGOOSE_INSTALL_STAGING = YES
- 
- MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
- 
-@@ -17,15 +18,40 @@ MONGOOSE_DEPENDENCIES += openssl
- MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
- endif
- 
-+ifeq ($(BR2_PACKAGE_MONGOOSE_INSTALL_SHARED_LIBRARY),y)
-+define MONGOOSE_INSTALL_SHARED_LIBRARY_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/libmongoose.so $(TARGET_DIR)/usr/lib
-+endef
-+
-+define MONGOOSE_INSTALL_STAGING_SHARED_LIBRARY_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/libmongoose.so $(STAGING_DIR)/usr/lib
-+	$(INSTALL) -D -m 644 $(@D)/mongoose.h $(STAGING_DIR)/usr/include
-+endef
-+
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MONGOOSE_INSTALL_WEBSERVER),y)
-+define MONGOOSE_INSTALL_WEBSERVER_CMDS
-+        $(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin
-+        $(INSTALL) -D -m 755 package/mongoose/S85mongoose \
-+		$(TARGET_DIR)/etc/init.d
-+endef
-+endif
-+
- define MONGOOSE_BUILD_CMDS
- 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
- 		COPT="$(MONGOOSE_CFLAGS)"
-+	$(TARGET_CC) $(@D)/mongoose.c -shared -fpic \
-+		-o $(@D)/libmongoose.so -pthread -ldl
- endef
- 
- define MONGOOSE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
--	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
--		$(TARGET_DIR)/etc/init.d/S85mongoose
-+	$(MONGOOSE_INSTALL_SHARED_LIBRARY_CMDS)
-+	$(MONGOOSE_INSTALL_WEBSERVER_CMDS)
-+endef
-+
-+define MONGOOSE_INSTALL_STAGING_CMDS
-+	$(MONGOOSE_INSTALL_STAGING_SHARED_LIBRARY_CMDS)
- endef
- 
- $(eval $(generic-package))
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -130,7 +130,7 @@
++ use_udev="no"
++ use_adapter_detection="yes"
++ use_lockdev="no"
++-SUPPRESS_MANGLING_WARNINGS=" -Wno-psabi"
+++SUPPRESS_MANGLING_WARNINGS=""
++ case "${host}" in
++   *-*-linux*)
++     ## search for udev if pkg-config was found
 -- 
-1.7.10.4
+1.9.2
