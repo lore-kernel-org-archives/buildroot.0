@@ -1,23 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 12 May 2014 22:55:45 +0200
-Subject: [Buildroot] [PATCH v6 07/32] mesa3d: Add patch note about
-	upstream bug
-In-Reply-To: <1399716164-6452-8-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sat, 10 May 2014 12:02:19 +0200")
-References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
- <1399716164-6452-8-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87iopa67ji.fsf@dell.be.48ers.dk>
+Date: Mon, 12 May 2014 22:56:42 +0200
+Subject: [Buildroot] [PATCH] package/xbmc: add missing dependency on
+	libtheora
+In-Reply-To: <1399588125-11165-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 9 May 2014 00:28:45 +0200")
+References: <1399588125-11165-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87egzy67hx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 
 Committed, thanks.
+
 
 -- 
 Bye, Peter Korsgaard
