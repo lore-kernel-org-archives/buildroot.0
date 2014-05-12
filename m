@@ -1,35 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 23:02:38 +0200
-Subject: [Buildroot] Discussing libudev,
- was: Re: [PATCH v6 09/32] mesa3d: dri2 does not need udev support
-In-Reply-To: <pil74bx9op.ln2@ID-313208.user.individual.net>
-References: <pil74bx9op.ln2@ID-313208.user.individual.net>
-Message-ID: <20140512230238.76c7fb6b@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 13 May 2014 01:05:28 +0400
+Subject: [Buildroot] [PATCH 0/2] xtensa binutils fixes backports
+In-Reply-To: <1399503065-18819-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1399503065-18819-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <CAMo8Bf+NTxK-PDG4cYR36h2tFcLSnmv9seEoLcfirYKjb+x0Fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Thomas,
 
-On Mon, 12 May 2014 21:55:37 +0200, Bernd Kuhls wrote:
+On Thu, May 8, 2014 at 2:51 AM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> Hi Thomas,
+>
+> this series backports two fixes for binutils:
+> - first fixes call target misalignment during link-time relaxation often
+>   seen with linux kernel builds;
+> - second fixes 'overflow after relaxation' link-time error recently seen
+>   with some buildroot packages.
+>
+> Max Filippov (2):
+>   binutils: backport first section frag alignment fix for xtensa gas
+>   binutils: backport R_XTENSA_DIFF* relocation signedness fix
+>
+>  .../2.22/901-xtensa-gas-first-frag-alignment.patch |  51 ++++++++
+>  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
+>  .../901-xtensa-gas-first-frag-alignment.patch      |  51 ++++++++
+>  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
+>  .../901-xtensa-gas-first-frag-alignment.patch      |  51 ++++++++
+>  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
+>  .../2.24/901-xtensa-gas-first-frag-alignment.patch |  51 ++++++++
+>  .../902-xtensa-gas-ld-diff-relocation-signed.patch | 133 +++++++++++++++++++++
+>  8 files changed, 736 insertions(+)
+>  create mode 100644 package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
+>  create mode 100644 package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
+>  create mode 100644 package/binutils/2.23.1/901-xtensa-gas-first-frag-alignment.patch
+>  create mode 100644 package/binutils/2.23.1/902-xtensa-gas-ld-diff-relocation-signed.patch
+>  create mode 100644 package/binutils/2.23.2/901-xtensa-gas-first-frag-alignment.patch
+>  create mode 100644 package/binutils/2.23.2/902-xtensa-gas-ld-diff-relocation-signed.patch
+>  create mode 100644 package/binutils/2.24/901-xtensa-gas-first-frag-alignment.patch
+>  create mode 100644 package/binutils/2.24/902-xtensa-gas-ld-diff-relocation-signed.patch
 
-> This was an interesting piece of information for me because I am patching 
-> xbmc to remove its libudev dependency in the cec-adapter detection part.
-> While trying to setup Emil?s suggestion I created a libudev package which 
-> was successfully linked by libcec and its binary cec-client to detect my 
-> cec adapter so I guess Emil?s idea could really work.
-> 
-> I have yet to do more testing but reading through the udev/systemd/eudev 
-> discussion of the last months here I would like to ask for feedback already 
-> at this early stage whether a seperate libudev package is useful for the 
-> broader public.
+could you please also review/ack this series?
 
-What would be the upstream source for this libudev package?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
