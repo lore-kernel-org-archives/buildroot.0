@@ -1,32 +1,33 @@
-From: Charles Manning <cdhmanning@gmail.com>
-Date: Mon, 12 May 2014 13:32:21 +1200
-Subject: [Buildroot] Why must I specify toolchain kernel headers?
-Message-ID: <CAE21AQp0xD2ZP7pEGCxUZis97vnwN3zLHj=nW-a-Y=bq6rT2Og@mail.gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 12 May 2014 07:27:02 +0400
+Subject: [Buildroot] [PATCH 0/4] fix environment variables passing to
+	configure/make
+Message-ID: <1399865226-7054-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Build-rooters
+Hi,
 
-I don't quite understand why I need to set the kernel header version under
-Toolchain/Kernel headers.
+this series fixes erroneous usage of the 'CFLAGS+="..."' pattern in configure
+and make steps, replacing it with 'CFLAGS="$(TARGET_CFLAGS) ..."'.
 
-Surely this can be figured out from the kernel source I am using?
+This fixes one issue reported by autobuilder and makes build commands look
+correct in other cases.
 
-Setting the version under toolchain/kernel headers makes sense when there
-is no kernel being built, but makes little sense when a kernel is buing
-built.
+Max Filippov (4):
+  sqlcipher: fix passing CFLAGS/LDFLAGS to configure
+  libcgroup: fix passing CFLAGS/LDFLAGS to configure
+  ebtables: fix passing CFLAGS to configure
+  sysstat: fix passing CFLAGS to make
 
-Having to set this in multiple places leads to inconsistency.
+ package/ebtables/ebtables.mk   |    4 ++--
+ package/libcgroup/libcgroup.mk |    4 ++--
+ package/sqlcipher/sqlcipher.mk |    4 ++--
+ package/sysstat/sysstat.mk     |    2 +-
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-... or have I misunderstood something?
-
-
-Thanks
-
-Charles
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/4876518d/attachment.html>
+-- 
+1.7.7.6
