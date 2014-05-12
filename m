@@ -1,30 +1,45 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Mon, 12 May 2014 22:59:40 +0200
-Subject: [Buildroot] Discussing libudev,
-	was: Re: [PATCH v6 09/32] mesa3d: dri2 does not need udev support
-References: <pil74bx9op.ln2@ID-313208.user.individual.net>
- <20140512205324.GD3619@free.fr>
-Message-ID: <sap74bxb7p.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 12 May 2014 22:58:51 +0200
+Subject: [Buildroot] [git commit] manual: add information about
+	INSTALL_IMAGES_CMDS
+Message-ID: <20140512210141.D4E9D9CB9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140512205324.GD3619 at free.fr: 
+commit: http://git.buildroot.net/buildroot/commit/?id=7649b2820e9b6061d8c149be6cff30c3899dfdb5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Now, this should be well integrated with the existing udev providers.
+The Buildroot manual currently does not contain any mention of the
+<pkg>_INSTALL_IMAGES_CMDS which could potentially be of interest when
+developing a new 'generic-package'.
 
-Hi,
+Signed-off-by: Ryan Barnett <rjbarnet@rockwellcollins.com>
+CC: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-packages-generic.txt |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-reading the current code I am not sure what BR2_PACKAGE_HAS_UDEV means.
-
-Currently only eudev and systemd select BR2_PACKAGE_HAS_UDEV, both are system 
-daemons while libudev being only a subset of them. I am not sure if libudev 
-should be a udev provider at all. My current patch includes
-
-depends on !BR2_INIT_SYSTEMD
-depends on !BR2_PACKAGE_EUDEV
-
-Regards, Bernd
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 1567487..f421651 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -410,6 +410,15 @@ different steps of the build process.
+   should be installed, since they might be needed to compile other
+   packages.
+ 
++* +LIBFOO_INSTALL_IMAGES_CMDS+ lists the actions to be performed to
++  install the package to the images directory, when the package is a
++  target package. The package must install its files to the directory
++  given by +$(BINARIES_DIR)+. Only files that are binary images (aka
++  images) that do not belong in the +TARGET_DIR+ but are necessary
++  for booting the board should be placed here. For example, a package
++  should utilize this step if it has binaries which would be similar
++  to the kernel image, bootloader or root filesystem images.
++
+ * +LIBFOO_INSTALL_INIT_SYSV+ and +LIBFOO_INSTALL_INIT_SYSTEMD+ list the
+   actions to install init scripts either for the systemV-like init systems
+   (busybox, sysvinit, etc.) or for the systemd units. These commands
