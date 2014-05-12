@@ -1,46 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 22:01:40 +0200
-Subject: [Buildroot] OpenGL issues affecting the autobuilders
-Message-ID: <20140512220140.5fe69970@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 12 May 2014 22:02:32 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xproto_dri3proto: New package
+Message-ID: <1399924952-8127-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-There are currently several OpenGL issues affecting the autobuilders.
-It would be nice if you could have a look at them.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: remove xutil_util-macros, needed only for autoreconf
+    compile tested with following defconfig
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XPROTO_DRI3PROTO=y
 
-With the RPi OpenGL implementation
-==================================
+ package/x11r7/Config.in                            |    1 +
+ package/x11r7/xproto_dri3proto/Config.in           |    4 ++++
+ package/x11r7/xproto_dri3proto/xproto_dri3proto.mk |   15 +++++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/x11r7/xproto_dri3proto/Config.in
+ create mode 100644 package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
 
-Cairo fails to build, see
-http://autobuild.buildroot.org/results/285/2851069d6964aa46d26b4aabe7d84e8c0c6c72ce/build-end.log.
-Error is:
-
-  fatal error: vcos_platform_types.h: No such file or directory
-
-With the MESA OpenGL implementation
-===================================
-
-Pango fails to build, see
-http://autobuild.buildroot.org/results/23f/23f1178838e32832b24354ba99dbb7b53763291c/build-end.log.
-Error is:
-
-/home/test/test/1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/libGLESv2.so: undefined reference to `_glapi_get_dispatch'
-/home/test/test/1/output/host/usr/i686-buildroot-linux-gnu/sysroot/usr/lib/libGLESv2.so: undefined reference to `_glapi_Dispatch'
-
-This issue was already discussed on the list, but I don't remember if a
-patch was sent for it.
-
-It would be nice to fix these issues in the near future.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 8685ca1..087b816 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -227,6 +227,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xproto_damageproto/Config.in
+ 		source package/x11r7/xproto_dmxproto/Config.in
+ 		source package/x11r7/xproto_dri2proto/Config.in
++		source package/x11r7/xproto_dri3proto/Config.in
+ 		source package/x11r7/xproto_fixesproto/Config.in
+ 		source package/x11r7/xproto_fontcacheproto/Config.in
+ 		source package/x11r7/xproto_fontsproto/Config.in
+diff --git a/package/x11r7/xproto_dri3proto/Config.in b/package/x11r7/xproto_dri3proto/Config.in
+new file mode 100644
+index 0000000..eead7d4
+--- /dev/null
++++ b/package/x11r7/xproto_dri3proto/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_XPROTO_DRI3PROTO
++	bool "dri3proto"
++	help
++	  X.Org DRI3 protocol headers
+diff --git a/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
+new file mode 100644
+index 0000000..00f5b57
+--- /dev/null
++++ b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# xproto_dri3proto
++#
++################################################################################
++
++XPROTO_DRI3PROTO_VERSION = 1.0
++XPROTO_DRI3PROTO_SOURCE = dri3proto-$(XPROTO_DRI3PROTO_VERSION).tar.bz2
++XPROTO_DRI3PROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
++XPROTO_DRI3PROTO_LICENSE = MIT
++XPROTO_DRI3PROTO_LICENSE_FILES = COPYING
++XPROTO_DRI3PROTO_INSTALL_STAGING = YES
++XPROTO_DRI3PROTO_INSTALL_TARGET = NO
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
