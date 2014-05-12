@@ -1,41 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:22:17 +0200
-Subject: [Buildroot] [git commit] barebox: bump to version 2014.05.0
-Message-ID: <20140512204138.99DD19CB9C@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:19:11 +0200
+Subject: [Buildroot] [git commit] libbluray: needs dynamic library support
+Message-ID: <20140512204138.86D439CBAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=af4f0322d574a991d2ed6f2b4958d5b5f53d52a1
+commit: http://git.buildroot.net/buildroot/commit/?id=952f3dfb54d3424225edaa78fe6b107f045aa29b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+The dependency is propagated to XBMC, even though XBMC currently
+requires an (e)glibc toolchain, which always have dynamic library
+support. This is just in case one day XBMC can be built against
+uClibc.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/3fa/3fae35ebcf14d6f38284d8318f61f9b99998794c/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/libbluray/Config.in |    4 +++-
+ package/xbmc/Config.in      |    4 ++++
+ 2 files changed, 7 insertions(+), 1 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 2924a2a..b09aa20 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
+index 2571f5c..e174773 100644
+--- a/package/libbluray/Config.in
++++ b/package/libbluray/Config.in
+@@ -1,10 +1,12 @@
+ config BR2_PACKAGE_LIBBLURAY
+ 	bool "libbluray"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  libbluray is a client library for accessing bluray disks.
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2014.04.0"
-+	bool "2014.05.0"
+ 	  http://www.videolan.org/developers/libbluray.html
  
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
+-comment "libbluray needs a toolchain w/ threads"
++comment "libbluray needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index ed8872b..1e2f932 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -85,10 +85,14 @@ config BR2_PACKAGE_XBMC_DBUS
+ config BR2_PACKAGE_XBMC_LIBBLURAY
+ 	bool "blu-ray"
+ 	select BR2_PACKAGE_LIBBLURAY
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  Enable Blu-ray input support.
+ 	  Select this if you want to play back Blu-ray content.
  
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2014.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2014.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
++comment "libbluray support needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
++
+ config BR2_PACKAGE_XBMC_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_PREFER_STATIC_LIB # libcec
