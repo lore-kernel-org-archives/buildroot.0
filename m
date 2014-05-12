@@ -1,257 +1,591 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 23:03:38 +0200
-Subject: [Buildroot] [git commit] binutils: backport first section frag
-	alignment fix for xtensa gas
-Message-ID: <20140512212752.04D0C9CB9C@busybox.osuosl.org>
+Date: Mon, 12 May 2014 23:03:47 +0200
+Subject: [Buildroot] [git commit] binutils: backport R_XTENSA_DIFF*
+	relocation signedness fix
+Message-ID: <20140512212752.0DA759CB86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aae48f1c6f40edffd747e545164e3b305a9d4935
+commit: http://git.buildroot.net/buildroot/commit/?id=f7230f6af5edd247f41029173d795f5e0bcf0c09
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes the following build error often seen during linux kernel
-linking step with relaxation enabled:
+This fixes the following build errors:
 
-  dangerous relocation: call8: misaligned call target: (.text.unlikely+0x63)
+  qlatincodec.o:(.debug_line+0xcd7): dangerous relocation: overflow after relaxation
+  qmetaobject.o:(.debug_frame+0xa89): dangerous relocation: overflow after relaxation
 
-Backported from: a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1
+Fixes:
+  http://autobuild.buildroot.net/results/f51/f51c87ae3c883cc36b06c0741999b52e48e4c943/
+  http://autobuild.buildroot.net/results/bcb/bcbf25e4054911a7a192bdb5c92e0ebd50e9666c/
+  http://autobuild.buildroot.net/results/8a8/8a8a0f8cca293ce1f383421ba8b1223b4266e3bc/
+  http://autobuild.buildroot.net/results/a54/a54f3707781dc193292eda7d1723fce6487d6980/
+
+Backported from: 1058c7532d0b012ac329219264ddad59049fb6e6
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../2.22/901-xtensa-gas-first-frag-alignment.patch |   51 ++++++++++++++++++++
- .../901-xtensa-gas-first-frag-alignment.patch      |   51 ++++++++++++++++++++
- .../901-xtensa-gas-first-frag-alignment.patch      |   51 ++++++++++++++++++++
- .../2.24/901-xtensa-gas-first-frag-alignment.patch |   51 ++++++++++++++++++++
- 4 files changed, 204 insertions(+), 0 deletions(-)
+ .../902-xtensa-gas-ld-diff-relocation-signed.patch |  133 ++++++++++++++++++++
+ .../902-xtensa-gas-ld-diff-relocation-signed.patch |  133 ++++++++++++++++++++
+ .../902-xtensa-gas-ld-diff-relocation-signed.patch |  133 ++++++++++++++++++++
+ .../902-xtensa-gas-ld-diff-relocation-signed.patch |  133 ++++++++++++++++++++
+ 4 files changed, 532 insertions(+), 0 deletions(-)
 
-diff --git a/package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch b/package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
+diff --git a/package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch b/package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
 new file mode 100644
-index 0000000..e1c2d85
+index 0000000..ba24f4e
 --- /dev/null
-+++ b/package/binutils/2.22/901-xtensa-gas-first-frag-alignment.patch
-@@ -0,0 +1,51 @@
-+From a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 15 Apr 2014 19:12:46 +0400
-+Subject: [PATCH] Fix alignment for the first section frag on xtensa
++++ b/package/binutils/2.22/902-xtensa-gas-ld-diff-relocation-signed.patch
+@@ -0,0 +1,133 @@
++From 6a17eba5358549d0d6d195bb22b34cdbc068def2 Mon Sep 17 00:00:00 2001
++From: Volodymyr Arbatov <arbatov@cadence.com>
++Date: Mon, 6 May 2013 09:43:21 -0800
++Subject: [PATCH] Use signed data type for R_XTENSA_DIFF* relocation offsets.
 +
-+Linking object files produced by partial linking with link-time
-+relaxation enabled sometimes fails with the following error message:
++R_XTENSA_DIFF relocation offsets are in fact signed. Treat them as such.
++Add testcase that examines ld behaviour on R_XTENSA_DIFF relocation
++changing sign during relaxation.
 +
-+dangerous relocation: call8: misaligned call target: (.text.unlikely+0x63)
++2014-05-02  Volodymyr Arbatov  <arbatov@cadence.com>
++	    David Weatherford  <weath@cadence.com>
++	    Max Filippov  <jcmvbkbc@gmail.com>
 +
-+This happens because no basic block with an XTENSA_PROP_ALIGN flag in the
-+property table is generated for the first basic block, even if the
-+.align directive is present.
-+It was believed that the first frag alignment could be derived from the
-+section alignment, but this was not implemented for the partial linking
-+case: after partial linking first frag of a section may become not
-+first, but no additional alignment frag is inserted before it.
-+Basic block for such frag may be merged with previous basic block into
-+extended basic block during relaxation pass losing its alignment
-+restrictions.
-+
-+Fix this by always recording alignment for the first section frag.
-+
-+2014-04-22  Max Filippov  <jcmvbkbc@gmail.com>
++bfd/
++  * elf32-xtensa.c (relax_section): treat R_XTENSA_DIFF* relocations as
++  signed.
 +
 +gas/
-+    * config/tc-xtensa.c (xtensa_handle_align): record alignment for the
-+    first section frag.
-+
++  * config/tc-xtensa.c (md_apply_fix): mark BFD_RELOC_XTENSA_DIFF*
++  fixups as signed.
 +---
-+Backported from: a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1
++Backported from: 1058c7532d0b012ac329219264ddad59049fb6e6
 +Changes to Changelog files and tests are dropped.
 +
-+ gas/config/tc-xtensa.c                      | 1 -
-+ 1 file changed, 1 deletion(-)
++ bfd/elf32-xtensa.c                       | 32 ++++++++++++-----------
++ gas/config/tc-xtensa.c                   |  3 +++
++ 2 files changed, 20 insertions(+), 15 deletions(-)
 +
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index edb04b4..8818d67 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -222,11 +222,11 @@ static reloc_howto_type elf_howto_table[] =
++ 	 FALSE, 0, 0, FALSE),
++ 
++   /* Relocations for supporting difference of symbols.  */
++-  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF8", FALSE, 0, 0xff, FALSE),
++-  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF16", FALSE, 0, 0xffff, FALSE),
++-  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF32", FALSE, 0, 0xffffffff, FALSE),
++ 
++   /* General immediate operand relocations.  */
++@@ -9013,7 +9013,8 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  || r_type == R_XTENSA_DIFF16
++ 		  || r_type == R_XTENSA_DIFF32)
++ 		{
++-		  bfd_vma diff_value = 0, new_end_offset, diff_mask = 0;
+++		  bfd_signed_vma diff_value = 0;
+++		  bfd_vma new_end_offset, diff_mask = 0;
++ 
++ 		  if (bfd_get_section_limit (abfd, sec) < old_source_offset)
++ 		    {
++@@ -9027,15 +9028,15 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++ 		      diff_value =
++-			bfd_get_8 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++ 		      diff_value =
++-			bfd_get_16 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++ 		      diff_value =
++-			bfd_get_32 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++@@ -9047,24 +9048,25 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  switch (r_type)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++-		      diff_mask = 0xff;
++-		      bfd_put_8 (abfd, diff_value,
+++		      diff_mask = 0x7f;
+++		      bfd_put_signed_8 (abfd, diff_value,
++ 				 &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++-		      diff_mask = 0xffff;
++-		      bfd_put_16 (abfd, diff_value,
+++		      diff_mask = 0x7fff;
+++		      bfd_put_signed_16 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++-		      diff_mask = 0xffffffff;
++-		      bfd_put_32 (abfd, diff_value,
+++		      diff_mask = 0x7fffffff;
+++		      bfd_put_signed_32 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++-		  /* Check for overflow.  */
++-		  if ((diff_value & ~diff_mask) != 0)
+++		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+++		  if ((diff_value & ~diff_mask) != 0 &&
+++		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
++ 		    {
++ 		      (*link_info->callbacks->reloc_dangerous)
++ 			(link_info, _("overflow after relaxation"),
 +diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index ea23c96..58ace38 100644
++index 58ace38..7547c0a0 100644
 +--- a/gas/config/tc-xtensa.c
 ++++ b/gas/config/tc-xtensa.c
-+@@ -5609,7 +5609,6 @@ xtensa_handle_align (fragS *fragP)
-+       && ! fragP->tc_frag_data.is_literal
-+       && (fragP->fr_type == rs_align
-+ 	  || fragP->fr_type == rs_align_code)
-+-      && fragP->fr_address + fragP->fr_fix > 0
-+       && fragP->fr_offset > 0
-+       && now_seg != bss_section)
-+     {
++@@ -5867,12 +5867,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    default:
++ 	      break;
 +-- 
 +1.8.1.4
 +
-diff --git a/package/binutils/2.23.1/901-xtensa-gas-first-frag-alignment.patch b/package/binutils/2.23.1/901-xtensa-gas-first-frag-alignment.patch
+diff --git a/package/binutils/2.23.1/902-xtensa-gas-ld-diff-relocation-signed.patch b/package/binutils/2.23.1/902-xtensa-gas-ld-diff-relocation-signed.patch
 new file mode 100644
-index 0000000..e1c2d85
+index 0000000..ba24f4e
 --- /dev/null
-+++ b/package/binutils/2.23.1/901-xtensa-gas-first-frag-alignment.patch
-@@ -0,0 +1,51 @@
-+From a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 15 Apr 2014 19:12:46 +0400
-+Subject: [PATCH] Fix alignment for the first section frag on xtensa
++++ b/package/binutils/2.23.1/902-xtensa-gas-ld-diff-relocation-signed.patch
+@@ -0,0 +1,133 @@
++From 6a17eba5358549d0d6d195bb22b34cdbc068def2 Mon Sep 17 00:00:00 2001
++From: Volodymyr Arbatov <arbatov@cadence.com>
++Date: Mon, 6 May 2013 09:43:21 -0800
++Subject: [PATCH] Use signed data type for R_XTENSA_DIFF* relocation offsets.
 +
-+Linking object files produced by partial linking with link-time
-+relaxation enabled sometimes fails with the following error message:
++R_XTENSA_DIFF relocation offsets are in fact signed. Treat them as such.
++Add testcase that examines ld behaviour on R_XTENSA_DIFF relocation
++changing sign during relaxation.
 +
-+dangerous relocation: call8: misaligned call target: (.text.unlikely+0x63)
++2014-05-02  Volodymyr Arbatov  <arbatov@cadence.com>
++	    David Weatherford  <weath@cadence.com>
++	    Max Filippov  <jcmvbkbc@gmail.com>
 +
-+This happens because no basic block with an XTENSA_PROP_ALIGN flag in the
-+property table is generated for the first basic block, even if the
-+.align directive is present.
-+It was believed that the first frag alignment could be derived from the
-+section alignment, but this was not implemented for the partial linking
-+case: after partial linking first frag of a section may become not
-+first, but no additional alignment frag is inserted before it.
-+Basic block for such frag may be merged with previous basic block into
-+extended basic block during relaxation pass losing its alignment
-+restrictions.
-+
-+Fix this by always recording alignment for the first section frag.
-+
-+2014-04-22  Max Filippov  <jcmvbkbc@gmail.com>
++bfd/
++  * elf32-xtensa.c (relax_section): treat R_XTENSA_DIFF* relocations as
++  signed.
 +
 +gas/
-+    * config/tc-xtensa.c (xtensa_handle_align): record alignment for the
-+    first section frag.
-+
++  * config/tc-xtensa.c (md_apply_fix): mark BFD_RELOC_XTENSA_DIFF*
++  fixups as signed.
 +---
-+Backported from: a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1
++Backported from: 1058c7532d0b012ac329219264ddad59049fb6e6
 +Changes to Changelog files and tests are dropped.
 +
-+ gas/config/tc-xtensa.c                      | 1 -
-+ 1 file changed, 1 deletion(-)
++ bfd/elf32-xtensa.c                       | 32 ++++++++++++-----------
++ gas/config/tc-xtensa.c                   |  3 +++
++ 2 files changed, 20 insertions(+), 15 deletions(-)
 +
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index edb04b4..8818d67 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -222,11 +222,11 @@ static reloc_howto_type elf_howto_table[] =
++ 	 FALSE, 0, 0, FALSE),
++ 
++   /* Relocations for supporting difference of symbols.  */
++-  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF8", FALSE, 0, 0xff, FALSE),
++-  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF16", FALSE, 0, 0xffff, FALSE),
++-  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF32", FALSE, 0, 0xffffffff, FALSE),
++ 
++   /* General immediate operand relocations.  */
++@@ -9013,7 +9013,8 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  || r_type == R_XTENSA_DIFF16
++ 		  || r_type == R_XTENSA_DIFF32)
++ 		{
++-		  bfd_vma diff_value = 0, new_end_offset, diff_mask = 0;
+++		  bfd_signed_vma diff_value = 0;
+++		  bfd_vma new_end_offset, diff_mask = 0;
++ 
++ 		  if (bfd_get_section_limit (abfd, sec) < old_source_offset)
++ 		    {
++@@ -9027,15 +9028,15 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++ 		      diff_value =
++-			bfd_get_8 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++ 		      diff_value =
++-			bfd_get_16 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++ 		      diff_value =
++-			bfd_get_32 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++@@ -9047,24 +9048,25 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  switch (r_type)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++-		      diff_mask = 0xff;
++-		      bfd_put_8 (abfd, diff_value,
+++		      diff_mask = 0x7f;
+++		      bfd_put_signed_8 (abfd, diff_value,
++ 				 &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++-		      diff_mask = 0xffff;
++-		      bfd_put_16 (abfd, diff_value,
+++		      diff_mask = 0x7fff;
+++		      bfd_put_signed_16 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++-		      diff_mask = 0xffffffff;
++-		      bfd_put_32 (abfd, diff_value,
+++		      diff_mask = 0x7fffffff;
+++		      bfd_put_signed_32 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++-		  /* Check for overflow.  */
++-		  if ((diff_value & ~diff_mask) != 0)
+++		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+++		  if ((diff_value & ~diff_mask) != 0 &&
+++		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
++ 		    {
++ 		      (*link_info->callbacks->reloc_dangerous)
++ 			(link_info, _("overflow after relaxation"),
 +diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index ea23c96..58ace38 100644
++index 58ace38..7547c0a0 100644
 +--- a/gas/config/tc-xtensa.c
 ++++ b/gas/config/tc-xtensa.c
-+@@ -5609,7 +5609,6 @@ xtensa_handle_align (fragS *fragP)
-+       && ! fragP->tc_frag_data.is_literal
-+       && (fragP->fr_type == rs_align
-+ 	  || fragP->fr_type == rs_align_code)
-+-      && fragP->fr_address + fragP->fr_fix > 0
-+       && fragP->fr_offset > 0
-+       && now_seg != bss_section)
-+     {
++@@ -5867,12 +5867,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    default:
++ 	      break;
 +-- 
 +1.8.1.4
 +
-diff --git a/package/binutils/2.23.2/901-xtensa-gas-first-frag-alignment.patch b/package/binutils/2.23.2/901-xtensa-gas-first-frag-alignment.patch
+diff --git a/package/binutils/2.23.2/902-xtensa-gas-ld-diff-relocation-signed.patch b/package/binutils/2.23.2/902-xtensa-gas-ld-diff-relocation-signed.patch
 new file mode 100644
-index 0000000..e1c2d85
+index 0000000..ba24f4e
 --- /dev/null
-+++ b/package/binutils/2.23.2/901-xtensa-gas-first-frag-alignment.patch
-@@ -0,0 +1,51 @@
-+From a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 15 Apr 2014 19:12:46 +0400
-+Subject: [PATCH] Fix alignment for the first section frag on xtensa
++++ b/package/binutils/2.23.2/902-xtensa-gas-ld-diff-relocation-signed.patch
+@@ -0,0 +1,133 @@
++From 6a17eba5358549d0d6d195bb22b34cdbc068def2 Mon Sep 17 00:00:00 2001
++From: Volodymyr Arbatov <arbatov@cadence.com>
++Date: Mon, 6 May 2013 09:43:21 -0800
++Subject: [PATCH] Use signed data type for R_XTENSA_DIFF* relocation offsets.
 +
-+Linking object files produced by partial linking with link-time
-+relaxation enabled sometimes fails with the following error message:
++R_XTENSA_DIFF relocation offsets are in fact signed. Treat them as such.
++Add testcase that examines ld behaviour on R_XTENSA_DIFF relocation
++changing sign during relaxation.
 +
-+dangerous relocation: call8: misaligned call target: (.text.unlikely+0x63)
++2014-05-02  Volodymyr Arbatov  <arbatov@cadence.com>
++	    David Weatherford  <weath@cadence.com>
++	    Max Filippov  <jcmvbkbc@gmail.com>
 +
-+This happens because no basic block with an XTENSA_PROP_ALIGN flag in the
-+property table is generated for the first basic block, even if the
-+.align directive is present.
-+It was believed that the first frag alignment could be derived from the
-+section alignment, but this was not implemented for the partial linking
-+case: after partial linking first frag of a section may become not
-+first, but no additional alignment frag is inserted before it.
-+Basic block for such frag may be merged with previous basic block into
-+extended basic block during relaxation pass losing its alignment
-+restrictions.
-+
-+Fix this by always recording alignment for the first section frag.
-+
-+2014-04-22  Max Filippov  <jcmvbkbc@gmail.com>
++bfd/
++  * elf32-xtensa.c (relax_section): treat R_XTENSA_DIFF* relocations as
++  signed.
 +
 +gas/
-+    * config/tc-xtensa.c (xtensa_handle_align): record alignment for the
-+    first section frag.
-+
++  * config/tc-xtensa.c (md_apply_fix): mark BFD_RELOC_XTENSA_DIFF*
++  fixups as signed.
 +---
-+Backported from: a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1
++Backported from: 1058c7532d0b012ac329219264ddad59049fb6e6
 +Changes to Changelog files and tests are dropped.
 +
-+ gas/config/tc-xtensa.c                      | 1 -
-+ 1 file changed, 1 deletion(-)
++ bfd/elf32-xtensa.c                       | 32 ++++++++++++-----------
++ gas/config/tc-xtensa.c                   |  3 +++
++ 2 files changed, 20 insertions(+), 15 deletions(-)
 +
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index edb04b4..8818d67 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -222,11 +222,11 @@ static reloc_howto_type elf_howto_table[] =
++ 	 FALSE, 0, 0, FALSE),
++ 
++   /* Relocations for supporting difference of symbols.  */
++-  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF8", FALSE, 0, 0xff, FALSE),
++-  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF16", FALSE, 0, 0xffff, FALSE),
++-  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF32", FALSE, 0, 0xffffffff, FALSE),
++ 
++   /* General immediate operand relocations.  */
++@@ -9013,7 +9013,8 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  || r_type == R_XTENSA_DIFF16
++ 		  || r_type == R_XTENSA_DIFF32)
++ 		{
++-		  bfd_vma diff_value = 0, new_end_offset, diff_mask = 0;
+++		  bfd_signed_vma diff_value = 0;
+++		  bfd_vma new_end_offset, diff_mask = 0;
++ 
++ 		  if (bfd_get_section_limit (abfd, sec) < old_source_offset)
++ 		    {
++@@ -9027,15 +9028,15 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++ 		      diff_value =
++-			bfd_get_8 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++ 		      diff_value =
++-			bfd_get_16 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++ 		      diff_value =
++-			bfd_get_32 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++@@ -9047,24 +9048,25 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  switch (r_type)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++-		      diff_mask = 0xff;
++-		      bfd_put_8 (abfd, diff_value,
+++		      diff_mask = 0x7f;
+++		      bfd_put_signed_8 (abfd, diff_value,
++ 				 &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++-		      diff_mask = 0xffff;
++-		      bfd_put_16 (abfd, diff_value,
+++		      diff_mask = 0x7fff;
+++		      bfd_put_signed_16 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++-		      diff_mask = 0xffffffff;
++-		      bfd_put_32 (abfd, diff_value,
+++		      diff_mask = 0x7fffffff;
+++		      bfd_put_signed_32 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++-		  /* Check for overflow.  */
++-		  if ((diff_value & ~diff_mask) != 0)
+++		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+++		  if ((diff_value & ~diff_mask) != 0 &&
+++		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
++ 		    {
++ 		      (*link_info->callbacks->reloc_dangerous)
++ 			(link_info, _("overflow after relaxation"),
 +diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index ea23c96..58ace38 100644
++index 58ace38..7547c0a0 100644
 +--- a/gas/config/tc-xtensa.c
 ++++ b/gas/config/tc-xtensa.c
-+@@ -5609,7 +5609,6 @@ xtensa_handle_align (fragS *fragP)
-+       && ! fragP->tc_frag_data.is_literal
-+       && (fragP->fr_type == rs_align
-+ 	  || fragP->fr_type == rs_align_code)
-+-      && fragP->fr_address + fragP->fr_fix > 0
-+       && fragP->fr_offset > 0
-+       && now_seg != bss_section)
-+     {
++@@ -5867,12 +5867,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    default:
++ 	      break;
 +-- 
 +1.8.1.4
 +
-diff --git a/package/binutils/2.24/901-xtensa-gas-first-frag-alignment.patch b/package/binutils/2.24/901-xtensa-gas-first-frag-alignment.patch
+diff --git a/package/binutils/2.24/902-xtensa-gas-ld-diff-relocation-signed.patch b/package/binutils/2.24/902-xtensa-gas-ld-diff-relocation-signed.patch
 new file mode 100644
-index 0000000..e1c2d85
+index 0000000..ba24f4e
 --- /dev/null
-+++ b/package/binutils/2.24/901-xtensa-gas-first-frag-alignment.patch
-@@ -0,0 +1,51 @@
-+From a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 15 Apr 2014 19:12:46 +0400
-+Subject: [PATCH] Fix alignment for the first section frag on xtensa
++++ b/package/binutils/2.24/902-xtensa-gas-ld-diff-relocation-signed.patch
+@@ -0,0 +1,133 @@
++From 6a17eba5358549d0d6d195bb22b34cdbc068def2 Mon Sep 17 00:00:00 2001
++From: Volodymyr Arbatov <arbatov@cadence.com>
++Date: Mon, 6 May 2013 09:43:21 -0800
++Subject: [PATCH] Use signed data type for R_XTENSA_DIFF* relocation offsets.
 +
-+Linking object files produced by partial linking with link-time
-+relaxation enabled sometimes fails with the following error message:
++R_XTENSA_DIFF relocation offsets are in fact signed. Treat them as such.
++Add testcase that examines ld behaviour on R_XTENSA_DIFF relocation
++changing sign during relaxation.
 +
-+dangerous relocation: call8: misaligned call target: (.text.unlikely+0x63)
++2014-05-02  Volodymyr Arbatov  <arbatov@cadence.com>
++	    David Weatherford  <weath@cadence.com>
++	    Max Filippov  <jcmvbkbc@gmail.com>
 +
-+This happens because no basic block with an XTENSA_PROP_ALIGN flag in the
-+property table is generated for the first basic block, even if the
-+.align directive is present.
-+It was believed that the first frag alignment could be derived from the
-+section alignment, but this was not implemented for the partial linking
-+case: after partial linking first frag of a section may become not
-+first, but no additional alignment frag is inserted before it.
-+Basic block for such frag may be merged with previous basic block into
-+extended basic block during relaxation pass losing its alignment
-+restrictions.
-+
-+Fix this by always recording alignment for the first section frag.
-+
-+2014-04-22  Max Filippov  <jcmvbkbc@gmail.com>
++bfd/
++  * elf32-xtensa.c (relax_section): treat R_XTENSA_DIFF* relocations as
++  signed.
 +
 +gas/
-+    * config/tc-xtensa.c (xtensa_handle_align): record alignment for the
-+    first section frag.
-+
++  * config/tc-xtensa.c (md_apply_fix): mark BFD_RELOC_XTENSA_DIFF*
++  fixups as signed.
 +---
-+Backported from: a35d5e823fdfe8a6e7e05ca8e3fb8bb5697335b1
++Backported from: 1058c7532d0b012ac329219264ddad59049fb6e6
 +Changes to Changelog files and tests are dropped.
 +
-+ gas/config/tc-xtensa.c                      | 1 -
-+ 1 file changed, 1 deletion(-)
++ bfd/elf32-xtensa.c                       | 32 ++++++++++++-----------
++ gas/config/tc-xtensa.c                   |  3 +++
++ 2 files changed, 20 insertions(+), 15 deletions(-)
 +
++diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
++index edb04b4..8818d67 100644
++--- a/bfd/elf32-xtensa.c
+++++ b/bfd/elf32-xtensa.c
++@@ -222,11 +222,11 @@ static reloc_howto_type elf_howto_table[] =
++ 	 FALSE, 0, 0, FALSE),
++ 
++   /* Relocations for supporting difference of symbols.  */
++-  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF8, 0, 0, 8, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF8", FALSE, 0, 0xff, FALSE),
++-  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF16, 0, 1, 16, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF16", FALSE, 0, 0xffff, FALSE),
++-  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+++  HOWTO (R_XTENSA_DIFF32, 0, 2, 32, FALSE, 0, complain_overflow_signed,
++ 	 bfd_elf_xtensa_reloc, "R_XTENSA_DIFF32", FALSE, 0, 0xffffffff, FALSE),
++ 
++   /* General immediate operand relocations.  */
++@@ -9013,7 +9013,8 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  || r_type == R_XTENSA_DIFF16
++ 		  || r_type == R_XTENSA_DIFF32)
++ 		{
++-		  bfd_vma diff_value = 0, new_end_offset, diff_mask = 0;
+++		  bfd_signed_vma diff_value = 0;
+++		  bfd_vma new_end_offset, diff_mask = 0;
++ 
++ 		  if (bfd_get_section_limit (abfd, sec) < old_source_offset)
++ 		    {
++@@ -9027,15 +9028,15 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++ 		      diff_value =
++-			bfd_get_8 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++ 		      diff_value =
++-			bfd_get_16 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++ 		      diff_value =
++-			bfd_get_32 (abfd, &contents[old_source_offset]);
+++			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++@@ -9047,24 +9048,25 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
++ 		  switch (r_type)
++ 		    {
++ 		    case R_XTENSA_DIFF8:
++-		      diff_mask = 0xff;
++-		      bfd_put_8 (abfd, diff_value,
+++		      diff_mask = 0x7f;
+++		      bfd_put_signed_8 (abfd, diff_value,
++ 				 &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF16:
++-		      diff_mask = 0xffff;
++-		      bfd_put_16 (abfd, diff_value,
+++		      diff_mask = 0x7fff;
+++		      bfd_put_signed_16 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    case R_XTENSA_DIFF32:
++-		      diff_mask = 0xffffffff;
++-		      bfd_put_32 (abfd, diff_value,
+++		      diff_mask = 0x7fffffff;
+++		      bfd_put_signed_32 (abfd, diff_value,
++ 				  &contents[old_source_offset]);
++ 		      break;
++ 		    }
++ 
++-		  /* Check for overflow.  */
++-		  if ((diff_value & ~diff_mask) != 0)
+++		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+++		  if ((diff_value & ~diff_mask) != 0 &&
+++		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
++ 		    {
++ 		      (*link_info->callbacks->reloc_dangerous)
++ 			(link_info, _("overflow after relaxation"),
 +diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index ea23c96..58ace38 100644
++index 58ace38..7547c0a0 100644
 +--- a/gas/config/tc-xtensa.c
 ++++ b/gas/config/tc-xtensa.c
-+@@ -5609,7 +5609,6 @@ xtensa_handle_align (fragS *fragP)
-+       && ! fragP->tc_frag_data.is_literal
-+       && (fragP->fr_type == rs_align
-+ 	  || fragP->fr_type == rs_align_code)
-+-      && fragP->fr_address + fragP->fr_fix > 0
-+       && fragP->fr_offset > 0
-+       && now_seg != bss_section)
-+     {
++@@ -5867,12 +5867,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+++	      fixP->fx_signed = 1;
++ 	      break;
++ 	    default:
++ 	      break;
 +-- 
 +1.8.1.4
 +
