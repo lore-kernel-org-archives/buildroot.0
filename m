@@ -1,48 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 22:10:48 +0200
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 12 May 2014 22:17:59 +0200
 Subject: [Buildroot] [PATCH] libmbus: fix upstream location
-Message-ID: <1399925448-11644-1-git-send-email-thomas.petazzoni@free-electrons.com>
+In-Reply-To: <1399925448-11644-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Mon, 12 May 2014 22:10:48 +0200")
+References: <1399925448-11644-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87ha4u7nuw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libmbus tarball is no longer available at
-http://www.freescada.com/public-dist. Apparently, the new upstream is
-at http://www.rscada.se/libmbus/ and tarballs are at
-http://www.rscada.se/public-dist/. Without this patch, the current
-download of libmbus-0.8.0.tar.gz downloads an HTML document with an
-error, which cannot be extracted, obviously.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libmbus/Config.in  | 2 +-
- package/libmbus/libmbus.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > The libmbus tarball is no longer available at
+ > http://www.freescada.com/public-dist. Apparently, the new upstream is
+ > at http://www.rscada.se/libmbus/ and tarballs are at
+ > http://www.rscada.se/public-dist/. Without this patch, the current
+ > download of libmbus-0.8.0.tar.gz downloads an HTML document with an
+ > error, which cannot be extracted, obviously.
 
-diff --git a/package/libmbus/Config.in b/package/libmbus/Config.in
-index 1e2a8de..8614069 100644
---- a/package/libmbus/Config.in
-+++ b/package/libmbus/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBMBUS
- 	  It supports TCP and RS232 M-bus gateways.
- 	  (M-bus standard: http://www.m-bus.com/)
- 
--	  http://www.freescada.com/libmbus
-+	  http://www.rscada.se/libmbus/
-diff --git a/package/libmbus/libmbus.mk b/package/libmbus/libmbus.mk
-index e1b02e0..93fe95f 100644
---- a/package/libmbus/libmbus.mk
-+++ b/package/libmbus/libmbus.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBMBUS_VERSION = 0.8.0
--LIBMBUS_SITE = http://www.freescada.com/public-dist
-+LIBMBUS_SITE = http://www.rscada.se/public-dist/
- LIBMBUS_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-1.9.2
+Bye, Peter Korsgaard
