@@ -1,42 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 23:31:56 +0200
-Subject: [Buildroot] [git commit] mesa3d: Fix gbm related compile error
-Message-ID: <20140512214905.348B09CAF5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 12 May 2014 23:50:40 +0200
+Subject: [Buildroot] Discussing libudev,
+ was: Re: [PATCH v6 09/32] mesa3d: dri2 does not need udev support
+In-Reply-To: <g2q74bxv7r.ln2@ID-313208.user.individual.net>
+References: <pil74bx9op.ln2@ID-313208.user.individual.net>
+ <20140512230238.76c7fb6b@free-electrons.com>
+ <g2q74bxv7r.ln2@ID-313208.user.individual.net>
+Message-ID: <20140512235040.1be8bbb0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c95a30471da61bd8b1396d85fd4401c0cf7901c8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-https://bugs.freedesktop.org/show_bug.cgi?id=78225#c1
-"AFAICS both gbm backends require DRI"
+On Mon, 12 May 2014 23:12:16 +0200, Bernd Kuhls wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mesa3d/mesa3d.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+> I copied the systemd package and build only the libudev part, short snippets 
+> from my hacky package:
+> 
+> LIBUDEV_VERSION = 212
+> LIBUDEV_SITE = http://www.freedesktop.org/software/systemd/
+> LIBUDEV_SOURCE = systemd-$(LIBUDEV_VERSION).tar.xz
+> [...]
+> define LIBUDEV_BUILD_CMDS
+>         $(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+>                 src/libudev/libudev.pc \
+>                 src/shared/errno-from-name.h \
+>                 src/shared/errno-to-name.h \
+>                 src/shared/af-from-name.h \
+>                 src/shared/af-to-name.h
+>         $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) libudev.la
+> endef
+> 
+> followed by some LIBUDEV_INSTALL_STAGING/TARGET_CMDS file copying.
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 8c0678c..63ba574 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -69,7 +69,6 @@ endif
- 
- ifeq ($(MESA3D_DRI_DRIVERS-y),)
- MESA3D_CONF_OPT += \
--	--disable-dri \
- 	--without-dri-drivers
- else
- MESA3D_CONF_OPT += \
-@@ -102,7 +101,6 @@ MESA3D_CONF_OPT += \
- 	--with-egl-platforms=$(subst $(space),$(comma),$(MESA3D_EGL_PLATFORMS))
- else
- MESA3D_CONF_OPT += \
--	--disable-gbm \
- 	--disable-egl
- endif
- 
+To be honest, this seems quite hacky to me, and fragile for future
+version bumps.
+
+If you run a complete monster software such as XBMC, I'm pretty sure
+your platform can also afford to run either eudev or systemd, no?
+
+In Buildroot, we've always tried to avoid going *against* upstream
+decisions. The decision of upstream for udev is to bundle it as part of
+systemd. Gentoo has decided to provide a maintained fork of udev as
+eudev, so we support both options. But I definitely wouldn't want to
+support things that are completely Buildroot-specific.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
