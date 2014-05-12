@@ -1,46 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:49:16 +0200
-Subject: [Buildroot] [git commit] ebtables: fix passing CFLAGS to configure
-Message-ID: <20140512205829.7BC429CBAB@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:49:42 +0200
+Subject: [Buildroot] [git commit] sysstat: fix passing CFLAGS to make
+Message-ID: <20140512205829.851459CBAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=10fa142d1ec3f0a6163fb1903003d5fb78f843f5
+commit: http://git.buildroot.net/buildroot/commit/?id=bb7271b9fe7e4fc3611e9ae0f3cf3171149a8ec0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-EBTABLES_K64U32 is a string passed directly to the configure script,
-'+=' operator doesn't have any special meaningi inside it, so
-CFLAGS+=-DKERNEL_64_USERSPACE_32 is passed to shell, overwriting previous
-CFLAGS value.
+SYSSTAT_MAKE_OPT is a string used to pass options to make, '+=' operator
+doesn't have any special meaning inside it, so CFLAGS+=... is passed to
+shell, overwriting previous CFLAGS value.
 
-Replace CFLAGS+="-DKERNEL_64_USERSPACE_32" with -DKERNEL_64_USERSPACE_32
-and pass CFLAGS="$(TARGET_CFLAGS) $(EBTABLES_K64U32)".
+Replace CFLAGS+="..." with CFLAGS="$(TARGET_CFLAGS) ...".
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ebtables/ebtables.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/sysstat/sysstat.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 66a47a2..578c3ae 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -10,11 +10,11 @@ EBTABLES_SITE = http://downloads.sourceforge.net/project/ebtables/ebtables/ebtab
- EBTABLES_LICENSE = GPLv2+
- EBTABLES_LICENSE_FILES = COPYING
- EBTABLES_STATIC = $(if $(BR2_PREFER_STATIC_LIB),static)
--EBTABLES_K64U32 = $(if $(BR2_KERNEL_64_USERLAND_32),CFLAGS+="-DKERNEL_64_USERSPACE_32")
-+EBTABLES_K64U32 = $(if $(BR2_KERNEL_64_USERLAND_32),-DKERNEL_64_USERSPACE_32)
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index d3d7519..23486b6 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -14,7 +14,7 @@ SYSSTAT_LICENSE_FILES = COPYING
  
- define EBTABLES_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) LIBDIR=/lib/ebtables $(EBTABLES_STATIC) \
--		$(EBTABLES_K64U32) -C $(@D)
-+		CFLAGS="$(TARGET_CFLAGS) $(EBTABLES_K64U32)" -C $(@D)
- endef
+ ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
+ SYSSTAT_DEPENDENCIES += gettext
+-SYSSTAT_MAKE_OPT += CFLAGS+=-lintl
++SYSSTAT_MAKE_OPT += CFLAGS="$(TARGET_CFLAGS) -lintl"
+ endif
  
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ # The isag tool is a post processing script that depends on tcl/tk
