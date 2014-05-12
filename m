@@ -1,64 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 12 May 2014 20:23:52 +0200
-Subject: [Buildroot] [PATCH] libbluray: needs dynamic library support
-Message-ID: <1399919032-9512-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 12 May 2014 20:24:16 +0200
+Subject: [Buildroot] [PATCH v6 00/32] xbmc: bump version to 13.0-Gotham
+References: <1399716164-6452-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140512195612.0e26443a@free-electrons.com>
+Message-ID: <g7g74bx73e.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dependency is propagated to XBMC, even though XBMC currently
-requires an (e)glibc toolchain, which always have dynamic library
-support. This is just in case one day XBMC can be built against
-uClibc.
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140512195612.0e26443a at free-electrons.com:
 
-Fixes:
+> It would be nice if you could split it in two patch series, one with
+> the fixes only (to be applied during the -rc cycle) and one with the
+> major changes changes
 
-  http://autobuild.buildroot.org/results/3fa/3fae35ebcf14d6f38284d8318f61f9b99998794c/
+Hi,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libbluray/Config.in | 4 +++-
- package/xbmc/Config.in      | 4 ++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+looking at my patch series I consider none of them relevant for inclusion 
+before 2014.05 is released.
 
-diff --git a/package/libbluray/Config.in b/package/libbluray/Config.in
-index 2571f5c..e174773 100644
---- a/package/libbluray/Config.in
-+++ b/package/libbluray/Config.in
-@@ -1,10 +1,12 @@
- config BR2_PACKAGE_LIBBLURAY
- 	bool "libbluray"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  libbluray is a client library for accessing bluray disks.
- 
- 	  http://www.videolan.org/developers/libbluray.html
- 
--comment "libbluray needs a toolchain w/ threads"
-+comment "libbluray needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index ed8872b..1e2f932 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -85,10 +85,14 @@ config BR2_PACKAGE_XBMC_DBUS
- config BR2_PACKAGE_XBMC_LIBBLURAY
- 	bool "blu-ray"
- 	select BR2_PACKAGE_LIBBLURAY
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  Enable Blu-ray input support.
- 	  Select this if you want to play back Blu-ray content.
- 
-+comment "libbluray support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-+
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
--- 
-1.9.2
+Most of the mesa3d patches are only relevant for the mesa3d 10.2 version bump 
+(like the libxml2/python patch).
+
+The xdriver_xf86-video-intel version bump patch can be committed as is, 
+however, but it is not really necessary, according to autobuilder logs ;)
+
+The rtmpdump KSV patch does not fix a broken package but extends it with 
+community patches.
+
+All other xbmc patches are extentions/fixes which are only relevant for xbmc 
+Gotham.
+
+So I would like to suggest to commit my series right after the release of 
+2014.05 so it can be extensively tested by autobuilders. I am still finding 
+problems here, like the need for ipv6 support last weekend, so we should use 
+as much time of the next release cycle as possible.
+
+Regards, Bernd
