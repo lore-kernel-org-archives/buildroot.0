@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 12 May 2014 22:22:32 +0200
-Subject: [Buildroot] [git commit] build log: add message when starting
-	target-finalize target
-Message-ID: <20140512204138.A38959CB9C@busybox.osuosl.org>
+Date: Mon, 12 May 2014 22:23:43 +0200
+Subject: [Buildroot] [git commit] cmake: disable building of ccmake
+Message-ID: <20140512204138.AA32A9CB9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6f6a2cfd819dd96e04d942e24612b7ada75773ed
+commit: http://git.buildroot.net/buildroot/commit/?id=e87c0ded4df0e539c5c1cb0b578dfc2ab2af5e45
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The target-finalize target does a large number of actions (removing
-unnecessary files, stripping objects, etc.) but does not have a header. This
-makes it seem that all these actions are done as part of the last action
-before target-finalize, for example:
-    >>> makedevs undefined Installing to target
+To speedup building disable ccmake because it's not needed by buildroot.
+Also disabling ccmake get rid of the ncurses optional unspecified
+dependency for the sake of reproducible builds.
 
-To make a clear distinction, add a message to the beginning of
-target-finalize:
-    >>>   Finalizing target directory
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Alexander Potashev <aspotashev@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile |    1 +
+ package/cmake/cmake.mk |    1 +
  1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 2f18aab..4b06ab5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -533,6 +533,7 @@ endif
- $(TARGETS_ROOTFS): target-finalize
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 235988b..ee49e80 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -19,6 +19,7 @@ define HOST_CMAKE_CONFIGURE_CMDS
+ 			-DCMAKE_C_FLAGS="$(HOST_CFLAGS)" \
+ 			-DCMAKE_CXX_FLAGS="$(HOST_CXXFLAGS)" \
+ 			-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS)" \
++			-DBUILD_CursesDialog=OFF \
+ 	)
+ endef
  
- target-finalize: $(TARGETS)
-+	@$(call MESSAGE,"Finalizing target directory")
- 	$(TARGET_PURGE_LOCALES)
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
