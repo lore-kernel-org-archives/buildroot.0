@@ -1,64 +1,47 @@
-From: =?iso-8859-1?Q?Oscar_Hellstr=F6m?= <oscar.hellstrom@vinnter.se>
-Date: Mon, 12 May 2014 13:55:19 +0000
-Subject: [Buildroot] Enabling readline support in wpa_cli
-Message-ID: <6ef3c8ef78fb45e3b64d042d0a681898@DB3PR04MB075.eurprd04.prod.outlook.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 12 May 2014 16:19:27 +0200
+Subject: [Buildroot] [PATCH] build log: add message when starting
+	target-finalize target
+Message-ID: <3230f72b2606158b2575.1399904367@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The target-finalize target does a large number of actions (removing
+unnecessary files, stripping objects, etc.) but does not have a header. This
+makes it seem that all these actions are done as part of the last action
+before target-finalize, for example:
+    >>> makedevs undefined Installing to target
 
-I wanted readline support in my wpa_cli, so I created the attached patch. This patch enables readline support if readline is selected separately. I'm not sure if this is the preferred way to do it, or if there should be an option, but it's how openssl is support is selected. The patch was created and tested in bouldroot-2013.08. I created a patch against git HEAD, but I haven't been able to test that one... I include both versions here if anyone's interested.
+To make a clear distinction, add a message to the beginning of
+target-finalize:
+    >>>   Finalizing target directory
 
-Kind regards
-Oscar Hellstr?m
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-[cid:image003.jpg at 01CF1D9A.E7C218A0]
-Oscar Hellstr?m
-Embedded Product Developer
+---
+ Makefile |  1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-+46 734 41 81 12
-oscar.hellstrom at vinnter.se<mailto:oscar.hellstrom@vinnter.se>
-Lync: oshe at vinngroup.net
-LinkedIn<http://www.linkedin.com/in/oscarh>
+Note: in system/system.mk there are a number of smaller items that are
+executed before target-finalize but do not have any message associated with
+them. This includes the adding to securetty, the setting of issue and
+hostname, ... Adding a message to each of these small targets is probably
+too much, but if we could find an elegant way to add a message to the group
+of system/system.mk, that would be nice.
+Adding an initial target in system/system.mk just printing a message would
+work, but only if there is no top-level parallel build.
 
-Vinnter AB
-Alfred Wigelius V?g 10
-412 72 G?teborg, Sweden
-www.vinnter.se<http://www.vinnter.se/>
-
-[cid:image004.jpg at 01CF1D9A.E7C218A0]
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.jpg
-Type: image/jpeg
-Size: 2083 bytes
-Desc: image001.jpg
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment.jpg>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image002.jpg
-Type: image/jpeg
-Size: 1432 bytes
-Desc: image002.jpg
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment-0001.jpg>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-2013.08-wpa_cli-readline.patch
-Type: application/octet-stream
-Size: 884 bytes
-Desc: buildroot-2013.08-wpa_cli-readline.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment.obj>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot-2014-05-12-wpa_cli-readline.patch
-Type: application/octet-stream
-Size: 561 bytes
-Desc: buildroot-2014-05-12-wpa_cli-readline.patch
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140512/7b3c7cc1/attachment-0001.obj>
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -533,6 +533,7 @@ endif
+ $(TARGETS_ROOTFS): target-finalize
+ 
+ target-finalize: $(TARGETS)
++	@$(call MESSAGE,"Finalizing target directory")
+ 	$(TARGET_PURGE_LOCALES)
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
