@@ -1,41 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 May 2014 00:04:05 +0200
-Subject: [Buildroot] jack2 issue is a python/python3 issue
-Message-ID: <20140514000405.15b5a9db@free-electrons.com>
+Date: Wed, 14 May 2014 00:05:36 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-virtual: validate only one
+ provider provides an implementation
+In-Reply-To: <1400017670-2708-1-git-send-email-yann.morin.1998@free.fr>
+References: <20140513180945.GC3507@free.fr>
+ <1400017670-2708-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140514000536.10ad4931@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann E. MORIN,
 
-I started investigating the jack2 build failure:
+On Tue, 13 May 2014 23:47:50 +0200, Yann E. MORIN wrote:
 
- http://autobuild.buildroot.org/?reason=jack2-ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+> +# Providers shall call this function with all the FEATURES they provide
+> +# 	$(eval $(call virt-provides,FEATURE[ FEATURE ...]))
+> +# where FEATURE has a corresponding BR2_PACKAGE_HAS_FEATURE
+> +define virt-provides
+> +$(foreach p,$(1),\
+> +ifneq ($$(BR2_PACKAGE_PROVIDES_$(p)),$(pkgname))$(sep)\
+> +$$(error $(pkgname is trying to override $$(BR2_PACKAGE_PROVIDES_$(p)) to provide $(p)))$(sep)\
+> +endif$(sep))
+> +endef
+>  
+>  ################################################################################
+>  # inner-virtual-package -- defines the dependency rules of the virtual
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index f6e4443..86125f2 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -16,4 +16,7 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
+>  endef
+>  RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+>  
+> +# rpi-userland is a provider for those features:
+> +$(eval $(call virt-provides,LIBEGL LIBGLES OPENVG OPENMAX))
+> +
+>  $(eval $(cmake-package))
 
-===
->>> jack2 ab409a65df95bc261ff72b52d6b3f4a65cf3266a Building
-(cd /home/thomas/projets/buildroot/output/build/jack2-ab409a65df95bc261ff72b52d6b3f4a65cf3266a; ./waf build -j 5)
-The project was not configured: run "waf configure" first!
-make: *** [/home/thomas/projets/buildroot/output/build/jack2-ab409a65df95bc261ff72b52d6b3f4a65cf3266a/.stamp_built] Erreur 1
-===
-
-Building just jack2 works fine. What triggers the problem is if
-host-python3 is built before jack2. So:
-
-	make host-python3
-	make jack2
-
-Triggers the problem. It is also confirmed by the fact that all build
-failures have BR2_PACKAGE_PYTHON3=y.
-
-Samuel, it looks like waf doesn't like Python 3 somehow. However, some
-quite Google search seems to indicate that waf is supposed to work ok
-with Python 3. As our Python/Python3 issues expert, could you have a
-look into this?
-
-Thanks a lot!
+Just thinking out loud: isn't it possible to instead check if
+<pkg>_DEPENDENCIES for each virtual package contains only one word?
 
 Thomas
 -- 
