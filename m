@@ -1,151 +1,81 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 13 May 2014 19:58:59 +0200
-Subject: [Buildroot] [PATCH 1/1] google-breakpad: added package to
-	buildroot
-In-Reply-To: <1399631550-4058-1-git-send-email-pascal.huerst@gmail.com>
-References: <1399631550-4058-1-git-send-email-pascal.huerst@gmail.com>
-Message-ID: <CAGduivwKX-9r5HOm9X5Y_fkU+_YEf4rE43O=GG3HYi5m_2RxzQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 13 May 2014 20:09:45 +0200
+Subject: [Buildroot] virtual-packages: the case for multiple providers
+	selected
+Message-ID: <20140513180945.GC3507@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pascal, all,
+Hello All!
 
-Thanks a lot for this patch !
-Here are a few comments inlined:
+We have recently identified the reasons for some weird autobuilder
+failures.
 
-On Fri, May 9, 2014 at 12:32 PM, Pascal Huerst <pascal.huerst@gmail.com> wrote:
-> This adds all necessary host and target tools to use google-breakpad
-> within buildroot. If the package is selected, the symbols needed by
-> google-breakpad's stackwalk are deployed to:
->
-> output/images/google_breakpad_symbols
->
-> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
-> ---
->  Makefile                                   | 11 ++++++++++-
->  package/Config.in                          |  1 +
->  package/google-breakpad/Config.in          | 12 ++++++++++++
->  package/google-breakpad/google-breakpad.mk | 21 +++++++++++++++++++++
->  4 files changed, 44 insertions(+), 1 deletion(-)
->  create mode 100644 package/google-breakpad/Config.in
->  create mode 100644 package/google-breakpad/google-breakpad.mk
->
-> diff --git a/Makefile b/Makefile
-> index 2f18aab..613f451 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -530,9 +530,18 @@ define TARGET_PURGE_LOCALES
->  endef
->  endif
->
-> +# Dump symbols and create directorytree for google breakpad
-> +BREAKPAD_SEARCH_CMD = $(shell find $(STAGING_DIR) -type f \( -perm /111 -a ! -name "*.py" -a ! -name "*.sh" -a ! -type l -a ! -name "*~" -a ! -name "*.la" \) -print)
-I think, it would be better if this could be splitted as a string
-(without the call to shell) like STRIP_FIND_CMD.
-> +
-> +extract-breakpad-symbols: $(TARGETS)
-> +ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
-> +       mkdir -p $(BINARIES_DIR)/google_breakpad_symbols
-> +       $(PYTHON) $(HOST_DIR)/usr/bin/symbolstore.py $(HOST_DIR)/usr/bin/dump_syms $(BINARIES_DIR)/google_breakpad_symbols $(BREAKPAD_SEARCH_CMD)
-> +endif
-And here instead of $(BREAKPAD_SEARCH_CMD) I would see:
-$(shell $(BREAKPAD_SEARCH_CMD))
+The failures happen when two or more providers of the same virtual
+package are enabled at once in the same config.
 
-Also, I had an issues with symbolstore.py, it relies on /bin/env
-whereas on my Debian, it's /usr/bin/env.
+Although this seems like a minor issue, as a carefull user will probably
+never generate such a config on purpose, we're still exposed to this
+isue for two reasons:
 
-> +
->  $(TARGETS_ROOTFS): target-finalize
->
-> -target-finalize: $(TARGETS)
-> +target-finalize: extract-breakpad-symbols
->         $(TARGET_PURGE_LOCALES)
->         rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
->                 $(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+  - the autobuilders do random configurations to stress-test the
+    packages combinations will continue to generate such configurations;
 
-Instead of defining a new targets, I would really do as split is done.
-I would put this:
-+ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
-+       mkdir -p $(BINARIES_DIR)/google_breakpad_symbols
-+       $(PYTHON) $(HOST_DIR)/usr/bin/symbolstore.py
-$(HOST_DIR)/usr/bin/dump_syms $(BINARIES_DIR)/google_breakpad_symbols
-$(BREAKPAD_SEARCH_CMD)
-+endif
-Right before calling STRIP_FIND_CMD.
+  - a user who does a configuration mistake that is thus hard to debug
+    and understand.
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 2da27ce..e2f04c6 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -82,6 +82,7 @@ source "package/tinymembench/Config.in"
->  source "package/trace-cmd/Config.in"
->  source "package/valgrind/Config.in"
->  source "package/whetstone/Config.in"
-> +source "package/google-breakpad/Config.in"
->  endmenu
->
->  menu "Development tools"
-> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-> new file mode 100644
-> index 0000000..fc68e6a
-> --- /dev/null
-> +++ b/package/google-breakpad/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_GOOGLE_BREAKPAD
-> +       bool "google-breakpad"
-> +       depends on BR2_INSTALL_LIBSTDCPP
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
-> +       help
-> +         An open-source multi-platform crash reporting system
-> +
-> +         http://code.google.com/p/google-breakpad/
-> +
-> +comment "google-breakpad requires an (e)glibc toolchain with C++"
-> +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_USES_GLIBC)
-> +
-> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-> new file mode 100644
-> index 0000000..a1c4224
-> --- /dev/null
-> +++ b/package/google-breakpad/google-breakpad.mk
-> @@ -0,0 +1,21 @@
-> +#############################################################
-> +#
-> +# google-breakpad
-> +#
-> +#############################################################
-> +GOOGLE_BREAKPAD_VERSION = 1320
-> +GOOGLE_BREAKPAD_SITE = http://google-breakpad.googlecode.com/svn/trunk
-> +GOOGLE_BREAKPAD_SITE_METHOD = svn
-> +GOOGLE_BREAKPAD_CONF_OPT = --disable-processor --disable-tools
-> +GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
-> +HOST_GOOGLE_BREAKPAD_DEPENDENCIES = host-python
-> +GOOGLE_BREAKPAD_INSTALL_STAGING = YES
-You need to specify a LICENSE and the LICENSE_FILES, have a look at
-http://buildroot.org/downloads/manual/manual.html#generic-package-reference
-for more information about theses variables.
-> +
-> +define HOST_GOOGLE_INSTALL_MOZILLA_SYMBOLSTORE
-> +       wget -O $(HOST_DIR)/usr/bin/symbolstore.py "http://mxr.mozilla.org/mozilla-central/source/toolkit/crashreporter/tools/symbolstore.py?raw=1" && chmod +x $(HOST_DIR)/usr/bin/symbolstore.py
-> +endef
-Here you are downloading a specific python scripts for a URL, why ? It
-is not included in the main sources ? Could it be a patch that goes
-along the package instead of downloading this like that ?
-Also, if you need to download it, doing it step by step, is more
-lisible than a really long line. Also the URL could maybe be a
-variable.
-> +
-> +HOST_GOOGLE_BREAKPAD_POST_INSTALL_HOOKS += HOST_GOOGLE_INSTALL_MOZILLA_SYMBOLSTORE
-> +
-> +$(eval $(host-autotools-package))
-> +$(eval $(autotools-package))
-> --
-> 1.9.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+So, we need to find away to avoid this situation.
+
+Two options have been proposed by Thomas P. on IRC:
+
+  - add a choice to select one and only provider at a time, and make all
+    the providers prompt-less config options so it is not possible to
+    choose more than one at a time;
+
+  - add a pre-build check that verifies that not two providers of the
+    same feature are selected, and bail out early in the build if that
+    is the case.
+
+Both of those options have issues.
+
+  - going with the choice means that it is no longer possible to add a
+    new provider in BR2_EXTERNAL without changing the Buildroot source
+    tree, one of the main selling-point of BR2_EXTERNAL to begin with,
+
+  - going with the check means that it will still possible to generate
+    such configurations, which means we'd still get autobuild failures
+    for those (unless the autobuilders are tweaked to recognise this,)
+    while it would be a minimal annoyance to the user.
+
+Thomas P. suggested that providers for our virtual packages would not be
+supported in BR2_EXTERNAL. This would allow us to go with the choice
+option.
+
+I am rather opposed to this, since I believe allowing providers from
+BR2_EXTERNAL is a requirement for BR2_EXTERNAL, and we do want to
+support this situation. After all, I can easily see a BR2_EXTERNAL tree
+with proprietary, non-public providers for 3d and/or video-decoding
+hardware acceleration.
+
+On the other hand, kconfig does not expose the number of config item
+that select another one, e.g. it is not possible to know how many
+packages did 'select HAS_EGL', we'd have to resort to the .mk to do the
+calculations and the check. I think this should be doable in a
+relatively non-invasive way, with some Makefile trickery.
+
+So, what do you guys think of these two proposals? Do you have an
+alternate solution to propose?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
