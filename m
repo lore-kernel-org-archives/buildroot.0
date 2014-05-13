@@ -1,10 +1,10 @@
 From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 17:33:19 -0700
-Subject: [Buildroot] [PATCH v3 4/8] powerpc: add BR2_POWERPC_CPU_HAS_ALTIVEC
-	to replace adhoc deps/checks
+Date: Mon, 12 May 2014 17:33:20 -0700
+Subject: [Buildroot] [PATCH v3 5/8] powerpc: mark 32-bit only powerpc cpus
+	to prep for adding powerpc64 support
 In-Reply-To: <1399941203-8282-1-git-send-email-cody@linux.vnet.ibm.com>
 References: <1399941203-8282-1-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <1399941203-8282-5-git-send-email-cody@linux.vnet.ibm.com>
+Message-ID: <1399941203-8282-6-git-send-email-cody@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,151 +13,115 @@ To: buildroot@busybox.net
 
 Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
 ---
- arch/Config.in.powerpc                      | 6 ++++++
- package/efl/libevas/libevas.mk              | 2 +-
- package/ffmpeg/ffmpeg.mk                    | 5 +----
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk  | 5 +----
- package/gstreamer1/gst1-libav/gst1-libav.mk | 5 +----
- package/mpg123/mpg123.mk                    | 4 +---
- package/vlc/vlc.mk                          | 3 +--
- 7 files changed, 12 insertions(+), 18 deletions(-)
+ arch/Config.in.powerpc | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 56360d7..813b49f 100644
+index 813b49f..ef33e6e 100644
 --- a/arch/Config.in.powerpc
 +++ b/arch/Config.in.powerpc
-@@ -1,3 +1,6 @@
-+config BR2_POWERPC_CPU_HAS_ALTIVEC
-+	bool
-+
- config BR2_POWERPC_CPU_HAS_SPE
- 	bool
- 
-@@ -51,8 +54,10 @@ config BR2_powerpc_740
+@@ -14,73 +14,102 @@ config BR2_generic_powerpc
+ 	bool "generic"
+ config BR2_powerpc_401
+ 	bool "401"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_403
+ 	bool "403"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_405
+ 	bool "405"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_405fp
+ 	bool "405 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_440
+ 	bool "440"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_440fp
+ 	bool "440 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_464
+ 	bool "464"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_464fp
+ 	bool "464 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_476
+ 	bool "476"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_476fp
+ 	bool "476 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_505
+ 	bool "505"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_601
+ 	bool "601"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_602
+ 	bool "602"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_603
+ 	bool "603"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_603e
+ 	bool "603e"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_604
+ 	bool "604"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_604e
+ 	bool "604e"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_620
+ 	bool "620"
+ config BR2_powerpc_630
+ 	bool "630"
+ config BR2_powerpc_740
  	bool "740"
++	depends on !BR2_ARCH_IS_64
  config BR2_powerpc_7400
  	bool "7400"
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
++	depends on !BR2_ARCH_IS_64
  config BR2_powerpc_7450
  	bool "7450"
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
++	depends on !BR2_ARCH_IS_64
  config BR2_powerpc_750
  	bool "750"
++	depends on !BR2_ARCH_IS_64
  config BR2_powerpc_821
-@@ -63,6 +68,7 @@ config BR2_powerpc_860
+ 	bool "821"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_823
+ 	bool "823"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_860
  	bool "860"
++	depends on !BR2_ARCH_IS_64
  config BR2_powerpc_970
  	bool "970"
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
  config BR2_powerpc_8540
  	bool "8540 / e500v1"
++	depends on !BR2_ARCH_IS_64
  	select BR2_POWERPC_CPU_HAS_SPE
-diff --git a/package/efl/libevas/libevas.mk b/package/efl/libevas/libevas.mk
-index 41ceb49..71f1aeb 100644
---- a/package/efl/libevas/libevas.mk
-+++ b/package/efl/libevas/libevas.mk
-@@ -136,7 +136,7 @@ else
- LIBEVAS_CONF_OPT += --disable-cpu-sse3
- endif
+ config BR2_powerpc_8548
+ 	bool "8548 / e500v2"
++	depends on !BR2_ARCH_IS_64
+ 	select BR2_POWERPC_CPU_HAS_SPE
+ config BR2_powerpc_e300c2
+ 	bool "e300c2"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_e300c3
+ 	bool "e300c3"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_e500mc
+ 	bool "e500mc"
++	depends on !BR2_ARCH_IS_64
+ endchoice
  
--ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- LIBEVAS_CONF_OPT += --enable-cpu-altivec
- else
- LIBEVAS_CONF_OPT += --disable-cpu-altivec
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f8c1526..b14f678 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -299,14 +299,11 @@ FFMPEG_CONF_OPT += \
- 	--disable-mipsdspr2
- endif
- 
--# Set powerpc altivec appropriately
--ifeq ($(BR2_powerpc),y)
--ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPT += --enable-altivec
- else
- FFMPEG_CONF_OPT += --disable-altivec
- endif
--endif
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),)
- FFMPEG_CONF_OPT += --enable-pic
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-index f18ab18..5c4b754 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-@@ -63,14 +63,11 @@ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
- GST_FFMPEG_CONF_EXTRA_OPT += --enable-neon
- endif
- 
--# Set powerpc altivec appropriately
--ifeq ($(BR2_powerpc),y)
--ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- GST_FFMPEG_CONF_EXTRA_OPT += --enable-altivec
- else
- GST_FFMPEG_CONF_EXTRA_OPT += --disable-altivec
- endif
--endif
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),)
- GST_FFMPEG_CONF_EXTRA_OPT += --enable-pic
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 7a0182e..f84bcb2 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -71,14 +71,11 @@ else
- GST1_LIBAV_CONF_EXTRA_OPT += --disable-vfp
- endif
- 
--# Set powerpc altivec appropriately
--ifeq ($(BR2_powerpc),y)
--ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+ifeq ($(BR2_POWERPC_CPU_HASH_ALTIVEC),y)
- GST1_LIBAV_CONF_EXTRA_OPT += --enable-altivec
- else
- GST1_LIBAV_CONF_EXTRA_OPT += --disable-altivec
- endif
--endif
- 
- GST1_LIBAV_CONF_OPT = \
- 	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPT)"
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index a950813..d66592c 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -22,14 +22,12 @@ ifeq ($(BR2_i386),y)
- MPG123_CPU = x86
- endif
- 
--ifeq ($(BR2_powerpc),y)
--ifneq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),)
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- MPG123_CPU = altivec
- endif
- ifeq ($(BR2_SOFT_FLOAT),y)
- MPG123_CPU = ppc_nofpu
- endif
--endif
- 
- ifeq ($(BR2_x86_64),y)
- MPG123_CPU = x86-64
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index e14c9c3..6eb7eea 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -49,8 +49,7 @@ ifeq ($(BR2_PREFER_STATIC_LIB),)
- VLC_CONF_OPT += --disable-static
- endif
- 
--# Set powerpc altivec appropriately
--ifeq ($(BR2_powerpc_7400)$(BR2_powerpc_7450)$(BR2_powerpc_970),y)
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- VCL_CONF_OPT += --enable-altivec
- else
- VLC_CONF_OPT += --disable-altivec
+ choice
 -- 
 1.9.3
