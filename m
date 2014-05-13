@@ -1,10 +1,10 @@
 From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 21:03:13 -0700
-Subject: [Buildroot] [PATCH v4 3/9] package/binutils: add depends for
-	powerpc64le (only 2.24 works)
+Date: Mon, 12 May 2014 21:03:16 -0700
+Subject: [Buildroot] [PATCH v4 6/9] powerpc: mark 32-bit only powerpc cpus
+	to prep for adding powerpc64 support
 In-Reply-To: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
 References: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <1399953799-32054-4-git-send-email-cody@linux.vnet.ibm.com>
+Message-ID: <1399953799-32054-7-git-send-email-cody@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +13,115 @@ To: buildroot@busybox.net
 
 Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
 ---
- package/binutils/Config.in.host | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ arch/Config.in.powerpc | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 15def13..08540a3 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -4,7 +4,7 @@ choice
- 	prompt "Binutils Version"
- 	depends on !BR2_arc
- 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
--	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze
-+	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
- 	default BR2_BINUTILS_VERSION_2_22
- 	help
- 	  Select the version of binutils you wish to use.
-@@ -14,30 +14,30 @@ choice
- 		bool "binutils 2.18-avr32-1.0.1"
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 813b49f..ef33e6e 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -14,73 +14,102 @@ config BR2_generic_powerpc
+ 	bool "generic"
+ config BR2_powerpc_401
+ 	bool "401"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_403
+ 	bool "403"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_405
+ 	bool "405"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_405fp
+ 	bool "405 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_440
+ 	bool "440"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_440fp
+ 	bool "440 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_464
+ 	bool "464"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_464fp
+ 	bool "464 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_476
+ 	bool "476"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_476fp
+ 	bool "476 with FPU"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_505
+ 	bool "505"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_601
+ 	bool "601"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_602
+ 	bool "602"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_603
+ 	bool "603"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_603e
+ 	bool "603e"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_604
+ 	bool "604"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_604e
+ 	bool "604e"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_620
+ 	bool "620"
+ config BR2_powerpc_630
+ 	bool "630"
+ config BR2_powerpc_740
+ 	bool "740"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_7400
+ 	bool "7400"
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_7450
+ 	bool "7450"
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_750
+ 	bool "750"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_821
+ 	bool "821"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_823
+ 	bool "823"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_860
+ 	bool "860"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_970
+ 	bool "970"
+ 	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ config BR2_powerpc_8540
+ 	bool "8540 / e500v1"
++	depends on !BR2_ARCH_IS_64
+ 	select BR2_POWERPC_CPU_HAS_SPE
+ config BR2_powerpc_8548
+ 	bool "8548 / e500v2"
++	depends on !BR2_ARCH_IS_64
+ 	select BR2_POWERPC_CPU_HAS_SPE
+ config BR2_powerpc_e300c2
+ 	bool "e300c2"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_e300c3
+ 	bool "e300c3"
++	depends on !BR2_ARCH_IS_64
+ config BR2_powerpc_e500mc
+ 	bool "e500mc"
++	depends on !BR2_ARCH_IS_64
+ endchoice
  
- 	config BR2_BINUTILS_VERSION_2_20_1
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		depends on !BR2_ARM_EABIHF
- 		bool "binutils 2.20.1"
- 
- 	config BR2_BINUTILS_VERSION_2_21
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		depends on !BR2_ARM_EABIHF
- 		bool "binutils 2.21"
- 
- 	config BR2_BINUTILS_VERSION_2_21_1
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		depends on !BR2_ARM_EABIHF
- 		bool "binutils 2.21.1"
- 
- 	config BR2_BINUTILS_VERSION_2_22
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.22"
- 
- 	config BR2_BINUTILS_VERSION_2_23_1
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.23.1"
- 
- 	config BR2_BINUTILS_VERSION_2_23_2
--		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
-+		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24
+ choice
 -- 
 1.9.3
