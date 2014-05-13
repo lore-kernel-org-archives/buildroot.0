@@ -1,65 +1,70 @@
 From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 22:28:13 -0700
-Subject: [Buildroot] [PATCH v5 1/9] package/gdb: add gdb 7.7.x (7.7.1) and
-	7.6.x (7.6.2)
+Date: Mon, 12 May 2014 22:28:15 -0700
+Subject: [Buildroot] [PATCH v5 3/9] package/binutils: add depends for
+	powerpc64le (only 2.24 works)
 In-Reply-To: <1399958901-7867-1-git-send-email-cody@linux.vnet.ibm.com>
 References: <1399958901-7867-1-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <1399958901-7867-2-git-send-email-cody@linux.vnet.ibm.com>
+Message-ID: <1399958901-7867-4-git-send-email-cody@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To prep for powerpc64le, we also disable gdb prior to 7.7.1 on
-powerpc64le.
-
-The default gdb on powerpc64le is set to 7.7.
-
 Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
 ---
- package/gdb/Config.in.host | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ package/binutils/Config.in.host | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index e853469..9f6b880 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -19,6 +19,7 @@ choice
- 	depends on !BR2_microblaze
- 	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
-+	default BR2_GDB_VERSION_7_7 if BR2_powerpc64le
- 	default BR2_GDB_VERSION_7_5
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 15def13..08540a3 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
+ 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+-	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze
++	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
+ 	default BR2_BINUTILS_VERSION_2_22
  	help
- 	  Select the version of gdb you wish to use.
-@@ -33,10 +34,18 @@ choice
+ 	  Select the version of binutils you wish to use.
+@@ -14,30 +14,30 @@ choice
+ 		bool "binutils 2.18-avr32-1.0.1"
  
- 	config BR2_GDB_VERSION_7_4
- 		bool "gdb 7.4.x"
--		depends on !BR2_bfin
-+		depends on !BR2_bfin && !BR2_powerpc64le
+ 	config BR2_BINUTILS_VERSION_2_20_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.20.1"
  
- 	config BR2_GDB_VERSION_7_5
- 		bool "gdb 7.5.x"
-+		depends on !BR2_bfin && !BR2_powerpc64le
-+
-+	config BR2_GDB_VERSION_7_6
-+		bool "gdb 7.6.x"
-+		depends on !BR2_bfin && !BR2_powerpc64le
-+
-+	config BR2_GDB_VERSION_7_7
-+		bool "gdb 7.7.x"
- 		depends on !BR2_bfin
+ 	config BR2_BINUTILS_VERSION_2_21
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21"
  
- endchoice
-@@ -54,4 +63,6 @@ config BR2_GDB_VERSION
- 	default "arc-4.8-R3" if BR2_arc
- 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
- 	default "7.4.1"    if BR2_GDB_VERSION_7_4
--	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
-+	default "7.5.1"    if BR2_GDB_VERSION_7_5
-+	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
-+	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
+ 	config BR2_BINUTILS_VERSION_2_21_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.22"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
 -- 
 1.9.3
