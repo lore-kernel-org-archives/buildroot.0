@@ -1,42 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 May 2014 10:36:25 +0200
-Subject: [Buildroot] http://autobuild.buildroot.net/stats/ doesn't
- detect python perl luarocks infrastructures
-In-Reply-To: <CAHkwnC8Aj7W4YY1qWRrAfWRnSXEKHdVeDhkXCj441D3ah_rqVA@mail.gmail.com>
-References: <CAHkwnC8Aj7W4YY1qWRrAfWRnSXEKHdVeDhkXCj441D3ah_rqVA@mail.gmail.com>
-Message-ID: <20140513103625.2e4e11f3@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 13 May 2014 09:22:03 +0100
+Subject: [Buildroot] [PATCH] libnss: Disable for MIPS64 n32 platforms
+Message-ID: <1399969323-9290-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+This package fails to compile for MIPS64 n32 platforms. We are in
+conversations with upstream to fix this problem. Meanwhile we disable
+this package until we fix it.
 
-On Tue, 13 May 2014 10:28:53 +0200, Fabio Porcedda wrote:
+Fixes:
+   http://autobuild.buildroot.net/results/0e3/0e3f1482d6f2f9bddc53d4e78b575120a2729e1d/
 
-> The statistics about package using infrastructures are misleading
-> because it does not recognize the recently added infrastructures like:
-> python, luarocks, perl.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ecryptfs-utils/Config.in |    1 +
+ package/libnss/Config.in         |    1 +
+ 2 files changed, 2 insertions(+), 0 deletions(-)
 
-Correct.
-
-> Could be possible to add those new infrastructures?
-
-Yes.
-
-> Where is the source code that generates those pages?
-
-http://git.buildroot.net/buildroot/tree/support/scripts/pkg-stats.
-
-However, there is a new Python variant of this script currently in
-patchwork, which is capable of comparing the Buildroot version of a
-package with the upstream version. We should probably look at merging
-this one at some point, but in the mean time, a quick fix to the
-existing shell-based version would be OK.
-
-Thomas
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 62cf6c8..076e1d4 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_LARGEFILE # libnss
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
++	depends on !BR2_MIPS_NABI32 # libnss
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 690f928..4e7db5c 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
++	depends on !BR2_MIPS_NABI32
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.1
