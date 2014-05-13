@@ -1,45 +1,30 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 13 May 2014 10:42:27 +0200
-Subject: [Buildroot] http://autobuild.buildroot.net/stats/ doesn't
- detect python perl luarocks infrastructures
-In-Reply-To: <20140513103625.2e4e11f3@free-electrons.com>
-References: <CAHkwnC8Aj7W4YY1qWRrAfWRnSXEKHdVeDhkXCj441D3ah_rqVA@mail.gmail.com>
- <20140513103625.2e4e11f3@free-electrons.com>
-Message-ID: <CAHkwnC_BRm+wwgVToJhh9BpOFsh9S=tPRX9r+HzZkhZE1b2WFg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 13 May 2014 10:44:41 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-11
+In-Reply-To: <20140513094426.335d2361@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 13 May 2014 09:44:26 +0200")
+References: <20140512063008.74E21100DB2@stock.ovh.net>
+ <20140513094426.335d2361@free-electrons.com>
+Message-ID: <87k39qukxy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 13, 2014 at 10:36 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Tue, 13 May 2014 10:28:53 +0200, Fabio Porcedda wrote:
->
->> The statistics about package using infrastructures are misleading
->> because it does not recognize the recently added infrastructures like:
->> python, luarocks, perl.
->
-> Correct.
->
->> Could be possible to add those new infrastructures?
->
-> Yes.
->
->> Where is the source code that generates those pages?
->
-> http://git.buildroot.net/buildroot/tree/support/scripts/pkg-stats.
->
-> However, there is a new Python variant of this script currently in
-> patchwork, which is capable of comparing the Buildroot version of a
-> package with the upstream version. We should probably look at merging
-> this one at some point, but in the mean time, a quick fix to the
-> existing shell-based version would be OK.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Thanks, I will send a patch.
+ > Hello,
+ > On Mon, 12 May 2014 08:30:08 +0200 (CEST), Thomas Petazzoni wrote:
 
-Regards
+ >> nios2 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/7864cd5789a9f9b9f0603d738f4e63822d8469dd/
+
+ > Will be fixed once http://patchwork.ozlabs.org/patch/348125/ is
+ > committed.
+
+I committed that yesterday.
+
+
 -- 
-Fabio Porcedda
+Bye, Peter Korsgaard
