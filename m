@@ -1,72 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 May 2014 23:37:24 +0200
-Subject: [Buildroot] [git commit] clapack: disable on blackfin
-Message-ID: <20140513214539.29F8A9CBCF@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 13 May 2014 23:47:50 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-virtual: validate only one provider
+	provides an implementation
+In-Reply-To: <20140513180945.GC3507@free.fr>
+References: <20140513180945.GC3507@free.fr>
+Message-ID: <1400017670-2708-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7f5fec620101dba2e97a08d7e61640aa39a3c3f0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The "_" symbol prefix added by the blackfin toolchain causes "undefined
-symbol" build failures when the compiler is trying to link a binary
-with libblas and/or liblapack.
+BIG FAT NOTICE:
+    This is *not* tested.
+    This is only a track I'd like to further explore to fix the issue.
 
-This patch also disables clapack reverse dependencies: armadillo.
+Currently, it is possible that more than one provider of a virtual package
+is selected in the menuconfig.
 
-Fixes:
-  http://autobuild.buildroot.net/results/a28df0ba10803e6e54c2f8160bbd8190cba4d690/
+This leads to autobuild failures, and we do not protect the user from
+making a mistake in the configuration. The failure is then hard to
+troubleshoot in any case.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+We can't use kconfig constructs to prevent this, sicne kconfig does not
+tell how many options did a select on another option.
+
+This patch adds a new function that providers *must* call in their .mk
+to ensure at most one provider is selected.
+
+This works by taking advantage that when more than one provider is
+selected, only one of them will 'win' in setting the _PROVIDES_FOO
+option. Thus any provider just have to check they are indeed the declared
+provider. If not, it means that one or more other provider is selected.
+
+This gives the opportunity to the user to change its configuration, and
+we can match the error message in the autobuilders to skip those failures
+(we can skip them instead of reporting them, since they are obviously
+configuration errors that should not happen in the first place.)
+
+NOT Signed-off-by on purpose.
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- package/armadillo/Config.in |    2 ++
- package/clapack/Config.in   |    5 +++++
- 2 files changed, 7 insertions(+), 0 deletions(-)
+ package/pkg-virtual.mk               | 9 +++++++++
+ package/rpi-userland/rpi-userland.mk | 3 +++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index 898564d..c7a680a 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -2,6 +2,7 @@ comment "armadillo needs a toolchain w/ C++, largefile"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
-+	depends on !BR2_bfin # clapack
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 617e5f2..66537bf 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -13,6 +13,15 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_ARMADILLO
- 	bool "armadillo"
-@@ -9,6 +10,7 @@ config BR2_PACKAGE_ARMADILLO
- 	depends on BR2_LARGEFILE # clapack
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
-+	depends on !BR2_bfin # clapack
- 	select BR2_PACKAGE_CLAPACK
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
-diff --git a/package/clapack/Config.in b/package/clapack/Config.in
-index ee538a4..5e930a6 100644
---- a/package/clapack/Config.in
-+++ b/package/clapack/Config.in
-@@ -5,6 +5,10 @@ config BR2_PACKAGE_CLAPACK
- 	# _fpu_control is used on PowerPC, but not available with
- 	# uClibc
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-+	# disable clapack on blackfin, it triggers "undefined symbol" failure
-+	# because of the "_" symbol prefix:
-+	# http://autobuild.buildroot.net/results/a28df0ba10803e6e54c2f8160bbd8190cba4d690/
-+	depends on !BR2_bfin
- 	help
- 	  BLAS and LAPACK C implementation (f2c'ed version of).
++# Providers shall call this function with all the FEATURES they provide
++# 	$(eval $(call virt-provides,FEATURE[ FEATURE ...]))
++# where FEATURE has a corresponding BR2_PACKAGE_HAS_FEATURE
++define virt-provides
++$(foreach p,$(1),\
++ifneq ($$(BR2_PACKAGE_PROVIDES_$(p)),$(pkgname))$(sep)\
++$$(error $(pkgname is trying to override $$(BR2_PACKAGE_PROVIDES_$(p)) to provide $(p)))$(sep)\
++endif$(sep))
++endef
  
-@@ -24,5 +28,6 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
+ ################################################################################
+ # inner-virtual-package -- defines the dependency rules of the virtual
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index f6e4443..86125f2 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -16,4 +16,7 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
+ endef
+ RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
  
- comment "cblas/clapack needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
-+	depends on !BR2_bfin
- 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
++# rpi-userland is a provider for those features:
++$(eval $(call virt-provides,LIBEGL LIBGLES OPENVG OPENMAX))
++
+ $(eval $(cmake-package))
+-- 
+1.8.3.2
