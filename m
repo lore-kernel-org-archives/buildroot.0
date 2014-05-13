@@ -1,45 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 May 2014 22:18:33 +0200
-Subject: [Buildroot] virtual-packages: the case for multiple providers
-	selected
-In-Reply-To: <a67a948f-b496-4385-9796-fc2d079d9641@email.android.com>
-References: <20140513180945.GC3507@free.fr>
- <a67a948f-b496-4385-9796-fc2d079d9641@email.android.com>
-Message-ID: <20140513221833.016e1d8e@free-electrons.com>
+Date: Tue, 13 May 2014 22:19:28 +0200
+Subject: [Buildroot] eclipse luna & buildroot toolchain integration:
+ problem with latest luna update.
+In-Reply-To: <E12AC747A2CC47AFBF299EF9CEE6C899@JohanW7>
+References: <E12AC747A2CC47AFBF299EF9CEE6C899@JohanW7>
+Message-ID: <20140513221928.2c026e44@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Sagaert Johan,
 
-(Would be nice to wrap your e-mails!)
-
-On Tue, 13 May 2014 22:12:59 +0200, Thomas De Schampheleire wrote:
-
-> >  - going with the choice means that it is no longer possible to add a
-> >    new provider in BR2_EXTERNAL without changing the Buildroot source
-> >    tree, one of the main selling-point of BR2_EXTERNAL to begin with,
-> 
-> I guess it's not possible to put an 'include' statement inside the choice? The included file would then just contain the external options.
-
-What would it include? Remember that include statements in kconfig fail
-if the target file doesn't exist.
-
-> >  - going with the check means that it will still possible to generate
-> >    such configurations, which means we'd still get autobuild failures
-> >    for those (unless the autobuilders are tweaked to recognise this,)
-> >    while it would be a minimal annoyance to the user.
-> >
-> 
-> It doesn't look too difficult to me to handle such prebuild checks in a generic way in the autobuilders.
-> Suppose that a magic return code is used if a prebuild check fails (also for the kernel headers check for example), then the autobuilders can check for this magic code and then simply ignore the configuration and generate a new one.
-
-Or we could have a specific make target to allow the autobuilders to
-check a configuration before starting the build.
+Thanks for the report. I'm Cc'ing M?lanie Bats, who is responsible for
+our Eclipse integration.
 
 Thomas
+
+On Tue, 13 May 2014 22:10:52 +0200, Sagaert Johan wrote:
+> Hi
+> 
+> When checking for updates in eclipse luna:
+> Eclipse complains :
+>  
+> Cannot complete the install because of a conflicting dependency.
+>   Software being installed: Eclipse IDE for C/C++ Developers 4.4.0.20140508-1754 (epp.package.cpp 4.4.0.20140508-1754)
+>   Software currently installed: Buildroot SDK Feature 3.0.0.201308291052 (org.buildroot.bundle.feature.feature.group
+> 3.0.0.201308291052)
+>   Software currently installed: Local Terminal (Incubation) 0.2.300.201307231220 (org.eclipse.tm.terminal.local.feature.group
+> 0.2.300.201307231220)
+>   Only one of the following can be installed at once: 
+>     CDT Build System Core 8.2.0.201308291048 (org.eclipse.cdt.managedbuilder.core 8.2.0.201308291048)
+>     CDT Build System Core 8.3.0.201405061918 (org.eclipse.cdt.managedbuilder.core 8.3.0.201405061918)
+>   Cannot satisfy dependency:
+>     From: Eclipse IDE for C/C++ Developers 4.4.0.20140508-1754 (epp.package.cpp 4.4.0.20140508-1754)
+>     To: org.eclipse.epp.package.cpp.feature.feature.group [4.4.0.20140508-1754]
+>   Cannot satisfy dependency:
+>     From: Buildroot SDK Feature 3.0.0.201308291052 (org.buildroot.bundle.feature.feature.group 3.0.0.201308291052)
+>     To: org.buildroot.cdt.toolchain.feature.feature.group [3.0.0.201308291048]
+>   Cannot satisfy dependency:
+>     From: Buildroot Toolchain 3.0.0.201308291048 (org.buildroot.cdt.toolchain.feature.feature.group 3.0.0.201308291048)
+>     To: org.eclipse.cdt.managedbuilder.core.feature.patch.feature.group [1.0.0.201308291048]
+>   Cannot satisfy dependency:
+>     From: C/C++ Stand-alone Debugger 1.0.0.201405061918 (org.eclipse.cdt.debug.application 1.0.0.201405061918)
+>     To: bundle org.eclipse.cdt.managedbuilder.core 8.2.1
+>   Cannot satisfy dependency:
+>     From: CDT Standalone Debugger Support 1.0.0.201405061918 (org.eclipse.cdt.debug.standalone.feature.group 1.0.0.201405061918)
+>     To: org.eclipse.cdt.debug.application [1.0.0.201405061918]
+>   Cannot satisfy dependency:
+>     From: EPP CPP Feature 4.4.0.20140508-1754 (org.eclipse.epp.package.cpp.feature.feature.group 4.4.0.20140508-1754)
+>     To: org.eclipse.cdt.debug.standalone.feature.group 0.0.0
+>   Cannot satisfy dependency:
+>     From: Local Terminal (Incubation) 0.2.300.201307231220 (org.eclipse.tm.terminal.local.feature.group 0.2.300.201307231220)
+>     To: org.eclipse.cdt.platform.feature.group 7.0.0
+>   Cannot satisfy dependency:
+>     From Patch: org.eclipse.cdt.managedbuilder.core.feature.patch.feature.group 1.0.0.201308291048 C/C++ Development Platform
+> 8.4.0.201405061918 (org.eclipse.cdt.platform.feature.group 8.4.0.201405061918)
+>     To: org.eclipse.cdt.managedbuilder.core [8.2.0.201308291048] 
+>  
+> I was using http://buildroot.org/downloads/eclipse/kepler, this worked well in Luna M6
+> 
+> 
+> Regards, Johan
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
