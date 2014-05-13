@@ -1,127 +1,66 @@
 From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 21:03:16 -0700
-Subject: [Buildroot] [PATCH v4 6/9] powerpc: mark 32-bit only powerpc cpus
-	to prep for adding powerpc64 support
+Date: Mon, 12 May 2014 21:03:11 -0700
+Subject: [Buildroot] [PATCH v4 1/9] package/gdb: add gdb 7.7.x (7.7.1) and
+	7.6.x (7.6.2)
 In-Reply-To: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
 References: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <1399953799-32054-7-git-send-email-cody@linux.vnet.ibm.com>
+Message-ID: <1399953799-32054-2-git-send-email-cody@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+To prep for powerpc64le, we also disable gdb prior to 7.7.1 on
+powerpc64le.
+
+The default gdb on powerpc64le is set to 7.7.
+7.6.
+
 Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
 ---
- arch/Config.in.powerpc | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/gdb/Config.in.host | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 813b49f..ef33e6e 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -14,73 +14,102 @@ config BR2_generic_powerpc
- 	bool "generic"
- config BR2_powerpc_401
- 	bool "401"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_403
- 	bool "403"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_405
- 	bool "405"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_405fp
- 	bool "405 with FPU"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_440
- 	bool "440"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_440fp
- 	bool "440 with FPU"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_464
- 	bool "464"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_464fp
- 	bool "464 with FPU"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_476
- 	bool "476"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_476fp
- 	bool "476 with FPU"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_505
- 	bool "505"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_601
- 	bool "601"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_602
- 	bool "602"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_603
- 	bool "603"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_603e
- 	bool "603e"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_604
- 	bool "604"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_604e
- 	bool "604e"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_620
- 	bool "620"
- config BR2_powerpc_630
- 	bool "630"
- config BR2_powerpc_740
- 	bool "740"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_7400
- 	bool "7400"
- 	select BR2_POWERPC_CPU_HAS_ALTIVEC
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_7450
- 	bool "7450"
- 	select BR2_POWERPC_CPU_HAS_ALTIVEC
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_750
- 	bool "750"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_821
- 	bool "821"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_823
- 	bool "823"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_860
- 	bool "860"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_970
- 	bool "970"
- 	select BR2_POWERPC_CPU_HAS_ALTIVEC
- config BR2_powerpc_8540
- 	bool "8540 / e500v1"
-+	depends on !BR2_ARCH_IS_64
- 	select BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_8548
- 	bool "8548 / e500v2"
-+	depends on !BR2_ARCH_IS_64
- 	select BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_e300c2
- 	bool "e300c2"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_e300c3
- 	bool "e300c3"
-+	depends on !BR2_ARCH_IS_64
- config BR2_powerpc_e500mc
- 	bool "e500mc"
-+	depends on !BR2_ARCH_IS_64
- endchoice
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index e853469..9f6b880 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -19,6 +19,7 @@ choice
+ 	depends on !BR2_microblaze
+ 	default BR2_GDB_VERSION_6_6 if BR2_bfin
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
++	default BR2_GDB_VERSION_7_7 if BR2_powerpc64le
+ 	default BR2_GDB_VERSION_7_5
+ 	help
+ 	  Select the version of gdb you wish to use.
+@@ -33,10 +34,18 @@ choice
  
- choice
+ 	config BR2_GDB_VERSION_7_4
+ 		bool "gdb 7.4.x"
+-		depends on !BR2_bfin
++		depends on !BR2_bfin && !BR2_powerpc64le
+ 
+ 	config BR2_GDB_VERSION_7_5
+ 		bool "gdb 7.5.x"
++		depends on !BR2_bfin && !BR2_powerpc64le
++
++	config BR2_GDB_VERSION_7_6
++		bool "gdb 7.6.x"
++		depends on !BR2_bfin && !BR2_powerpc64le
++
++	config BR2_GDB_VERSION_7_7
++		bool "gdb 7.7.x"
+ 		depends on !BR2_bfin
+ 
+ endchoice
+@@ -54,4 +63,6 @@ config BR2_GDB_VERSION
+ 	default "arc-4.8-R3" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+ 	default "7.4.1"    if BR2_GDB_VERSION_7_4
+-	default "7.5.1"    if BR2_GDB_VERSION_7_5 || !BR2_PACKAGE_HOST_GDB
++	default "7.5.1"    if BR2_GDB_VERSION_7_5
++	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
++	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
 -- 
 1.9.3
