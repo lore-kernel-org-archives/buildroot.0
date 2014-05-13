@@ -1,51 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 13 May 2014 23:44:36 +0200
-Subject: [Buildroot] [git commit] flann: disallow static library build
-Message-ID: <20140513214539.321799CBE5@busybox.osuosl.org>
+Date: Tue, 13 May 2014 23:37:24 +0200
+Subject: [Buildroot] [git commit] clapack: disable on blackfin
+Message-ID: <20140513214539.29F8A9CBCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=190b4e12b7ea2de783cf7ed54fa2207f45d66fa5
+commit: http://git.buildroot.net/buildroot/commit/?id=7f5fec620101dba2e97a08d7e61640aa39a3c3f0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though flann build system uses CMake, it always tries to build a
-shared library, even if BUILD_SHARED_LIBS=OFF is passed. It could
-probably be fixed in flann's CMakeLists.txt, but that's not really
-worth the effort if upstream doesn't support it.
+The "_" symbol prefix added by the blackfin toolchain causes "undefined
+symbol" build failures when the compiler is trying to link a binary
+with libblas and/or liblapack.
 
-Therefore, we simply disallow the flann package in purely static
-builds.
+This patch also disables clapack reverse dependencies: armadillo.
 
 Fixes:
+  http://autobuild.buildroot.net/results/a28df0ba10803e6e54c2f8160bbd8190cba4d690/
 
-  http://autobuild.buildroot.org/results/a4e/a4ec0e9f28cd12ce770718fb407bbb4dc93b528b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flann/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/armadillo/Config.in |    2 ++
+ package/clapack/Config.in   |    5 +++++
+ 2 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/flann/Config.in b/package/flann/Config.in
-index 4b0b5a8..6185b12 100644
---- a/package/flann/Config.in
-+++ b/package/flann/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_FLANN
- 	bool "flann"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_PREFER_STATIC_LIB
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index 898564d..c7a680a 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -2,6 +2,7 @@ comment "armadillo needs a toolchain w/ C++, largefile"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
+ 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
++	depends on !BR2_bfin # clapack
+ 
+ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+@@ -9,6 +10,7 @@ config BR2_PACKAGE_ARMADILLO
+ 	depends on BR2_LARGEFILE # clapack
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) # clapack
+ 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC) # clapack
++	depends on !BR2_bfin # clapack
+ 	select BR2_PACKAGE_CLAPACK
  	help
- 	  FLANN is a library for performing fast approximate nearest
- 	  neighbor searches in high dimensional spaces. It contains a
-@@ -20,5 +21,5 @@ config BR2_PACKAGE_FLANN_EXAMPLES
+ 	  Armadillo: An Open Source C++ Linear Algebra Library for
+diff --git a/package/clapack/Config.in b/package/clapack/Config.in
+index ee538a4..5e930a6 100644
+--- a/package/clapack/Config.in
++++ b/package/clapack/Config.in
+@@ -5,6 +5,10 @@ config BR2_PACKAGE_CLAPACK
+ 	# _fpu_control is used on PowerPC, but not available with
+ 	# uClibc
+ 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
++	# disable clapack on blackfin, it triggers "undefined symbol" failure
++	# because of the "_" symbol prefix:
++	# http://autobuild.buildroot.net/results/a28df0ba10803e6e54c2f8160bbd8190cba4d690/
++	depends on !BR2_bfin
+ 	help
+ 	  BLAS and LAPACK C implementation (f2c'ed version of).
  
- endif
+@@ -24,5 +28,6 @@ config BR2_PACKAGE_CLAPACK_ARITH_H
  
--comment "flann needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "flann needs a toolchain w/ C++, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_PREFER_STATIC_LIB
+ comment "cblas/clapack needs a toolchain w/ largefile"
+ 	depends on !BR2_LARGEFILE
++	depends on !BR2_bfin
+ 	depends on !(BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el)
+ 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
