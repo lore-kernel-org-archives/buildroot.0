@@ -1,32 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 13 May 2014 18:57:04 -0300
-Subject: [Buildroot] [PATCH] openvpn: bump to version 2.3.4
-Message-ID: <1400018224-2434-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 14 May 2014 00:04:05 +0200
+Subject: [Buildroot] jack2 issue is a python/python3 issue
+Message-ID: <20140514000405.15b5a9db@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes TLS version interoperability issues.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openvpn/openvpn.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I started investigating the jack2 build failure:
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index a989ffe..0355678 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.3.3
-+OPENVPN_VERSION = 2.3.4
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
+ http://autobuild.buildroot.org/?reason=jack2-ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+
+===
+>>> jack2 ab409a65df95bc261ff72b52d6b3f4a65cf3266a Building
+(cd /home/thomas/projets/buildroot/output/build/jack2-ab409a65df95bc261ff72b52d6b3f4a65cf3266a; ./waf build -j 5)
+The project was not configured: run "waf configure" first!
+make: *** [/home/thomas/projets/buildroot/output/build/jack2-ab409a65df95bc261ff72b52d6b3f4a65cf3266a/.stamp_built] Erreur 1
+===
+
+Building just jack2 works fine. What triggers the problem is if
+host-python3 is built before jack2. So:
+
+	make host-python3
+	make jack2
+
+Triggers the problem. It is also confirmed by the fact that all build
+failures have BR2_PACKAGE_PYTHON3=y.
+
+Samuel, it looks like waf doesn't like Python 3 somehow. However, some
+quite Google search seems to indicate that waf is supposed to work ok
+with Python 3. As our Python/Python3 issues expert, could you have a
+look into this?
+
+Thanks a lot!
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
