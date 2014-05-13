@@ -1,73 +1,40 @@
-From: Johan Derycke <johanderycke@gmail.com>
-Date: Tue, 13 May 2014 18:10:18 +0200
-Subject: [Buildroot] [PATCH 1/1] icu: add an option to add a custom data
-	library file
-Message-ID: <1399997418-27131-1-git-send-email-johan.derycke@barco.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 13 May 2014 18:38:50 +0200
+Subject: [Buildroot] OpenGL issues affecting the autobuilders
+In-Reply-To: <20140512220140.5fe69970@free-electrons.com>
+References: <20140512220140.5fe69970@free-electrons.com>
+Message-ID: <20140513163849.GA3507@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas, All,
 
-Signed-off-by: Johan Derycke <johan.derycke@barco.com>
----
- package/icu/Config.in |   21 +++++++++++++++++++++
- package/icu/icu.mk    |    9 +++++++++
- 2 files changed, 30 insertions(+)
+On 2014-05-12 22:01 +0200, Thomas Petazzoni spake thusly:
+> With the RPi OpenGL implementation
+> ==================================
+> 
+> Cairo fails to build, see
+> http://autobuild.buildroot.org/results/285/2851069d6964aa46d26b4aabe7d84e8c0c6c72ce/build-end.log.
+> Error is:
+> 
+>   fatal error: vcos_platform_types.h: No such file or directory
 
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index 9a27894..1f27b4b 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -13,8 +13,29 @@ config BR2_PACKAGE_ICU
- 
- 	  http://site.icu-project.org/
- 
-+if BR2_PACKAGE_ICU
-+
-+config BR2_PACKAGE_ICU_CUSTOM_DATA
-+	bool "Custom data library"
-+	  help
-+	    Use a custom data library generated with:
-+	    http://apps.icu-project.org/datacustom/ICUData51.html
-+
-+if BR2_PACKAGE_ICU_CUSTOM_DATA
-+
-+config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
-+	string "Data library file to use?"
-+	default "/path/to/data/library"
-+	help
-+	  This option allows to set the path of such a data library file
-+
-+endif
-+
-+endif
-+
- comment "icu needs a toolchain w/ C++, wchar, threads"
- 	depends on !BR2_arc
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-+
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index f93eab1..664ce1c 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -26,5 +26,14 @@ ICU_MAKE = $(MAKE1)
- ICU_SUBDIR = source
- HOST_ICU_SUBDIR = source
- 
-+define ICU_COPY_CUSTOM_DATA
-+	cp $(BR2_PACKAGE_ICU_CUSTOM_DATA_PATH) $(@D)/source/data/in/
-+endef
-+
-+ifeq ($(BR2_PACKAGE_ICU_CUSTOM_DATA),y)
-+ICU_POST_EXTRACT_HOOKS += ICU_COPY_CUSTOM_DATA
-+endif
-+
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+OK, we've identified the error for this build: more than one openGL
+provider was selected, so there is a mismatch (am ess!) between the
+headers and the libs.
+
+To be fixed some way, investigation in progress...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
