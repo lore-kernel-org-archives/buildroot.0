@@ -1,72 +1,70 @@
 From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 21:03:10 -0700
-Subject: [Buildroot] [PATCH v4 0/9] powerpc: powerpc64 and powerpc64le
-	support
-Message-ID: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
+Date: Mon, 12 May 2014 21:03:13 -0700
+Subject: [Buildroot] [PATCH v4 3/9] package/binutils: add depends for
+	powerpc64le (only 2.24 works)
+In-Reply-To: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
+References: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
+Message-ID: <1399953799-32054-4-git-send-email-cody@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This enables powerpc64 and powerpc64le, adds support for some new cpus, and
-cleans up some of the powerpc dependency cruft.
+Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
+---
+ package/binutils/Config.in.host | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-The one thing that dependencies aren't added to prevent:
-
-Only linux kernel-3.12 and later support building for powerpc64le, but any of
-the linux headers choices in buildroot work as headers.
-
---
-
-since v3:
- - split gdb-set-default-to-7.6 out
-
-since v2:
- - split out patches
- - prevent using too old glibc/binutils/gcc/gdb (2.19/???/4.8.2/7.7.1 are the earliest
-   working versions, respectively)
- - remove BR2_POWERPC
- - add an extra '\n'
- - remove some powerpc dep cruft that wasn't needed
-
-since v1:
- - remove altivec from generic + 64bit (power4 & 5 break that)
- - filter ppc64le first.
- - SPE config is a bool.
-
-Cody P Schafer (9):
-  package/gdb: add gdb 7.7.x (7.7.1) and 7.6.x (7.6.2)
-  package/gdb: change default gdb from 7.5 to 7.6
-  package/binutils: add depends for powerpc64le (only 2.24 works)
-  powerpc: add BR2_POWERPC_CPU_HAS_SPE to replace adhoc deps/checks
-  powerpc: add BR2_POWERPC_CPU_HAS_ALTIVEC to replace adhoc deps/checks
-  powerpc: mark 32-bit only powerpc cpus to prep for adding powerpc64
-    support
-  powerpc: add power{4,5,6,7,8} cpus
-  powerpc: remove unneeded dependencies
-  powerpc: add powerpc64 and powerpc64le support
-
- Makefile                                    |  3 +-
- arch/Config.in                              | 21 ++++++++-
- arch/Config.in.powerpc                      | 71 ++++++++++++++++++++++++++---
- linux/Config.in                             |  3 +-
- package/Makefile.in                         |  2 +-
- package/binutils/Config.in.host             | 14 +++---
- package/efl/libevas/libevas.mk              |  2 +-
- package/ffmpeg/ffmpeg.mk                    |  5 +-
- package/gcc/Config.in.host                  | 10 ++--
- package/gdb/Config.in.host                  | 17 +++++--
- package/glibc/Config.in                     |  8 ++--
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk  |  5 +-
- package/gstreamer1/gst1-libav/gst1-libav.mk |  5 +-
- package/libatomic_ops/Config.in             |  2 +-
- package/mpg123/mpg123.mk                    |  4 +-
- package/openssl/openssl.mk                  |  6 +++
- package/systemd/Config.in                   |  3 +-
- package/vlc/vlc.mk                          |  3 +-
- toolchain/toolchain-buildroot/Config.in     |  5 +-
- 19 files changed, 138 insertions(+), 51 deletions(-)
-
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 15def13..08540a3 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
+ 	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+-	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze
++	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
+ 	default BR2_BINUTILS_VERSION_2_22
+ 	help
+ 	  Select the version of binutils you wish to use.
+@@ -14,30 +14,30 @@ choice
+ 		bool "binutils 2.18-avr32-1.0.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_20_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.20.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_21
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21"
+ 
+ 	config BR2_BINUTILS_VERSION_2_21_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.22"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
 -- 
 1.9.3
