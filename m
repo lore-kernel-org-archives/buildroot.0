@@ -1,30 +1,54 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 13 May 2014 10:44:41 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-11
-In-Reply-To: <20140513094426.335d2361@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 13 May 2014 09:44:26 +0200")
-References: <20140512063008.74E21100DB2@stock.ovh.net>
- <20140513094426.335d2361@free-electrons.com>
-Message-ID: <87k39qukxy.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 13 May 2014 09:46:14 +0100
+Subject: [Buildroot] [PATCH v2] libnss: Disable for MIPS64 n32 platforms
+Message-ID: <1399970774-9697-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This package fails to compile for MIPS64 n32 platforms. We are in
+conversations with upstream to fix this problem. Meanwhile we disable
+this package until we fix it.
 
- > Hello,
- > On Mon, 12 May 2014 08:30:08 +0200 (CEST), Thomas Petazzoni wrote:
+Fixes:
+   http://autobuild.buildroot.net/results/0e3/0e3f1482d6f2f9bddc53d4e78b575120a2729e1d/
 
- >> nios2 |                 aiccu-20070115 | NOK | http://autobuild.buildroot.net/results/7864cd5789a9f9b9f0603d738f4e63822d8469dd/
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/ecryptfs-utils/Config.in |    1 +
+ package/libnss/Config.in         |    2 ++
+ 2 files changed, 3 insertions(+), 0 deletions(-)
 
- > Will be fixed once http://patchwork.ozlabs.org/patch/348125/ is
- > committed.
-
-I committed that yesterday.
-
-
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 62cf6c8..076e1d4 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_LARGEFILE # libnss
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
++	depends on !BR2_MIPS_NABI32 # libnss
+ 	help
+ 	  eCryptfs is a POSIX-compliant enterprise cryptographic
+ 	  filesystem for Linux. It is stacked on top of any other
+diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+index 690f928..9a1668c 100644
+--- a/package/libnss/Config.in
++++ b/package/libnss/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
++	depends on !BR2_MIPS_NABI32
+ 	help
+ 	  Network Security Services (NSS) is a set of libraries designed
+ 	  to support development of security-enabled client and server
+@@ -18,3 +19,4 @@ config BR2_PACKAGE_LIBNSS
+ comment "libnss needs a toolchain w/ largefile, threads"
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_MIPS_NABI32
 -- 
-Bye, Peter Korsgaard
+1.7.1
