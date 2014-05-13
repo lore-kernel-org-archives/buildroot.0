@@ -1,9 +1,10 @@
 From: Cody P Schafer <cody@linux.vnet.ibm.com>
-Date: Mon, 12 May 2014 21:03:17 -0700
-Subject: [Buildroot] [PATCH v4 7/9] powerpc: add power{4,5,6,7,8} cpus
+Date: Mon, 12 May 2014 21:03:12 -0700
+Subject: [Buildroot] [PATCH v4 2/9] package/gdb: change default gdb from 7.5
+	to 7.6
 In-Reply-To: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
 References: <1399953799-32054-1-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <1399953799-32054-8-git-send-email-cody@linux.vnet.ibm.com>
+Message-ID: <1399953799-32054-3-git-send-email-cody@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,44 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
 ---
- arch/Config.in.powerpc | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/gdb/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index ef33e6e..6b9a56f 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -110,6 +110,19 @@ config BR2_powerpc_e300c3
- config BR2_powerpc_e500mc
- 	bool "e500mc"
- 	depends on !BR2_ARCH_IS_64
-+config BR2_powerpc_power4
-+	bool "power4"
-+config BR2_powerpc_power5
-+	bool "power5"
-+config BR2_powerpc_power6
-+	bool "power6"
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
-+config BR2_powerpc_power7
-+	bool "power7"
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
-+config BR2_powerpc_power8
-+	bool "power8"
-+	select BR2_POWERPC_CPU_HAS_ALTIVEC
- endchoice
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9f6b880..16a7291 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -20,7 +20,7 @@ choice
+ 	default BR2_GDB_VERSION_6_6 if BR2_bfin
+ 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
+ 	default BR2_GDB_VERSION_7_7 if BR2_powerpc64le
+-	default BR2_GDB_VERSION_7_5
++	default BR2_GDB_VERSION_7_6
+ 	help
+ 	  Select the version of gdb you wish to use.
  
- choice
-@@ -176,6 +189,11 @@ config BR2_GCC_TARGET_TUNE
- 	default "e300c2"	if BR2_powerpc_e300c2
- 	default "e300c3"	if BR2_powerpc_e300c3
- 	default "e500mc"	if BR2_powerpc_e500mc
-+	default "power4"	if BR2_powerpc_power4
-+	default "power5"	if BR2_powerpc_power5
-+	default "power6"	if BR2_powerpc_power6
-+	default "power7"	if BR2_powerpc_power7
-+	default "power8"	if BR2_powerpc_power8
- 
- config BR2_GCC_TARGET_ABI
- 	default "altivec"		if BR2_PPC_ABI_altivec
 -- 
 1.9.3
