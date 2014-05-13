@@ -1,59 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 13 May 2014 11:36:31 +0200
-Subject: [Buildroot] error while building kernel linux 2.6.19
-In-Reply-To: <CA+1cARyZ-JiXanYHDq7AAyd+3O7VhcOwnjjaULqBKMYQoNN4QA@mail.gmail.com>
-References: <CA+1cARzjF8hapKmHUUrS=dWMhUCAnvzqVtbXWnOknFs-dbCzQw@mail.gmail.com>
- <CA+1cARyZ-JiXanYHDq7AAyd+3O7VhcOwnjjaULqBKMYQoNN4QA@mail.gmail.com>
-Message-ID: <20140513113631.72cd9fea@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 13 May 2014 06:36:44 -0300
+Subject: [Buildroot] [PATCHv2] btrfs-progs: disable for avr32
+Message-ID: <1399973804-11934-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Digesh patel,
+Toolchain issues prevent it from being built, also there's no AVR32 with
+proper storage ports for such a filesystem. Fixes:
+http://autobuild.buildroot.net/results/06501fd32c30549810c12f0ad50f510c4b74ee63/
 
-On Tue, 13 May 2014 14:57:01 +0530, Digesh patel wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/btrfs-progs/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> i am getting error while building linux 2.6.19 after installing
-> buildroot tool.i am using following,
-> 
-> target system=powerPC MPC8555 processor with linux 2.6.19
-> host system having linux-2.6.32.11-custom-2.6.32.11.
-> i am sending you error message when building kernel 2.6.19
-> 
-> i am getting following error message after giving this command
-> 
-> root at systemuser-desktop:/home/systemuser/xenomai_BEL/rajj1/linux-2.6.19#
-> make ARCH=powerpc CROSS_COMPILE=powerpc-linux- uImage
-> make: powerpc-linux-gcc: Command not found
-> /home/systemuser/xenomai_BEL/rajj1/linux-2.6.19/scripts/gcc-version.sh:
-> line 11: powerpc-linux-gcc: command not found
-> /home/systemuser/xenomai_BEL/rajj1/linux-2.6.19/scripts/gcc-version.sh:
-> line 12: powerpc-linux-gcc: command not found
-> *** 2.6 kernels no longer build correctly with old versions of binutils.
-> *** Please upgrade your binutils to 2.12.1 or newer
-> make: *** [checkbin] Error 1
-
-The error is pretty clear: it doesn't find your cross-compiler. So
-either your CROSS_COMPILE value is wrong, or your cross-compiler is not
-in your PATH.
-
-I would suggest you to:
-
- 1/ Use Buildroot to build your kernel, as it will make sure the right
-    environment variables are passed. This is especially useful if you
-    are a beginning with all this cross-compilation stuff and don't yet
-    understand all the details.
-
- 2/ Use a newer kernel than 2.6.19, which is completely outdated.
-
- 3/ Not build as root, since it's useless.
-
-Best regards,
-
-Thomas
+diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
+index dcd2ec5..b6f1116 100644
+--- a/package/btrfs-progs/Config.in
++++ b/package/btrfs-progs/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BTRFS_PROGS
+ 	depends on BR2_USE_WCHAR # util-linux
+ 	depends on BR2_USE_MMU # util-linux
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_avr32 # toolchain issues
+ 	select BR2_PACKAGE_ACL
+ 	select BR2_PACKAGE_ATTR
+ 	select BR2_PACKAGE_E2FSPROGS
+@@ -19,5 +20,6 @@ config BR2_PACKAGE_BTRFS_PROGS
+ 
+ comment "btrfs-progs needs a toolchain w/ largefile, wchar, threads"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_avr32
+ 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
