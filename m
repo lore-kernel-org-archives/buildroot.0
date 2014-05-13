@@ -1,54 +1,97 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 13 May 2014 09:46:14 +0100
-Subject: [Buildroot] [PATCH v2] libnss: Disable for MIPS64 n32 platforms
-Message-ID: <1399970774-9697-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 13 May 2014 10:49:03 +0200
+Subject: [Buildroot] [git commit] Update for 2014.05-rc1
+Message-ID: <20140513084927.425BD9CACE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package fails to compile for MIPS64 n32 platforms. We are in
-conversations with upstream to fix this problem. Meanwhile we disable
-this package until we fix it.
+commit: http://git.buildroot.net/buildroot/commit/?id=921a9efa40f8ec2574700fcff5074a60f409cf72
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-   http://autobuild.buildroot.net/results/0e3/0e3f1482d6f2f9bddc53d4e78b575120a2729e1d/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ecryptfs-utils/Config.in |    1 +
- package/libnss/Config.in         |    2 ++
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ CHANGES            |    2 +-
+ Makefile           |    2 +-
+ docs/download.html |   14 +++++++-------
+ docs/news.html     |   13 +++++++++++++
+ 4 files changed, 22 insertions(+), 9 deletions(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 62cf6c8..076e1d4 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_LARGEFILE # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
-+	depends on !BR2_MIPS_NABI32 # libnss
- 	help
- 	  eCryptfs is a POSIX-compliant enterprise cryptographic
- 	  filesystem for Linux. It is stacked on top of any other
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index 690f928..9a1668c 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBNSS
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
-+	depends on !BR2_MIPS_NABI32
- 	help
- 	  Network Security Services (NSS) is a set of libraries designed
- 	  to support development of security-enabled client and server
-@@ -18,3 +19,4 @@ config BR2_PACKAGE_LIBNSS
- comment "libnss needs a toolchain w/ largefile, threads"
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_MIPS_NABI32
--- 
-1.7.1
+diff --git a/CHANGES b/CHANGES
+index d4fe2aa..e9cdd56 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2014.05, Not yet released:
++2014.05-rc1, Released May 13th, 2014
+ 
+ 	Fixes all over the tree and new features.
+ 
+diff --git a/Makefile b/Makefile
+index 4b06ab5..6d97262 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,7 +25,7 @@
+ #--------------------------------------------------------------
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2014.05-git
++export BR2_VERSION := 2014.05-rc1
+ 
+ # Check for minimal make version (note: this check will break at make 10.x)
+ MIN_MAKE_VERSION = 3.81
+diff --git a/docs/download.html b/docs/download.html
+index 828b49c..2d18c65 100644
+--- a/docs/download.html
++++ b/docs/download.html
+@@ -14,17 +14,17 @@ or
+ (<a href="/downloads/buildroot-2014.02.tar.bz2.sign">PGP signature</a>).
+ 
+ <p>
+-<!--
+-The latest release candidate is <b>2014.02-rc3</b>, which can be
++
++The latest release candidate is <b>2014.05-rc1</b>, which can be
+ downloaded here:<p>
+ 
+-<a href="/downloads/buildroot-2014.02-rc3.tar.gz">buildroot-2014.02-rc3.tar.gz</a>
+-(<a href="/downloads/buildroot-2014.02-rc3.tar.gz.sign">PGP signature</a>)
++<a href="/downloads/buildroot-2014.05-rc1.tar.gz">buildroot-2014.05-rc1.tar.gz</a>
++(<a href="/downloads/buildroot-2014.05-rc1.tar.gz.sign">PGP signature</a>)
+ or
+-<a href="/downloads/buildroot-2014.02-rc3.tar.bz2">buildroot-2014.02-rc3.tar.bz2</a>
+-(<a href="/downloads/buildroot-2014.02-rc3.tar.bz2.sign">PGP signature</a>).
++<a href="/downloads/buildroot-2014.05-rc1.tar.bz2">buildroot-2014.05-rc1.tar.bz2</a>
++(<a href="/downloads/buildroot-2014.05-rc1.tar.bz2.sign">PGP signature</a>).
+ <p>
+--->
++
+ This and earlier releases (and their PGP signatures) can always be downloaded from
+ <a href="/downloads/">http://buildroot.net/downloads/</a>.
+ 
+diff --git a/docs/news.html b/docs/news.html
+index 56d7f1d..8a6f642 100644
+--- a/docs/news.html
++++ b/docs/news.html
+@@ -6,6 +6,19 @@
+ 
+ <ul>
+ 
++  <li><b>13 May 2014 -- 2014.05-rc1 released</b>
++
++    <p>We have a new release candidate! Lots of changes all over the
++    tree, see the <a
++    href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05-rc1">CHANGES</a>
++    file for details.</p>
++
++    <p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++    <a href="/downloads/buildroot-2014.05-rc1.tar.bz2">2014.05-rc1
++    release candidate</a>, and report any problems found to the
++    <a href="support.html">mailing list</a> or
++    <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++
+   <li><b>27 February 2014 -- 2014.02 released</b>
+ 
+     <p>The stable 2014.02 release is out - Thanks to everyone
