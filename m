@@ -1,16 +1,14 @@
 From: Digesh patel <digpeshark@gmail.com>
-Date: Tue, 13 May 2014 14:57:01 +0530
-Subject: [Buildroot] error while building kernel linux 2.6.19
-In-Reply-To: <CA+1cARzjF8hapKmHUUrS=dWMhUCAnvzqVtbXWnOknFs-dbCzQw@mail.gmail.com>
-References: <CA+1cARzjF8hapKmHUUrS=dWMhUCAnvzqVtbXWnOknFs-dbCzQw@mail.gmail.com>
-Message-ID: <CA+1cARyZ-JiXanYHDq7AAyd+3O7VhcOwnjjaULqBKMYQoNN4QA@mail.gmail.com>
+Date: Tue, 13 May 2014 15:01:12 +0530
+Subject: [Buildroot] error while building kernel
+Message-ID: <CA+1cARzHzyZNbj7suaR4f6dUbWwnqF4eAuEStWn4uXSObsqe_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+hi,
 
 i am getting error while building linux 2.6.19 after installing
 buildroot tool.i am using following,
