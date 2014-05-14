@@ -1,41 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 14 May 2014 10:11:57 +0200
-Subject: [Buildroot] virtual-packages: the case for multiple providers
-	selected
-In-Reply-To: <20140513180945.GC3507@free.fr>
-References: <20140513180945.GC3507@free.fr>
-Message-ID: <5373254D.2060501@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 14 May 2014 08:13:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 7016] Git issues in resulting buildroot tar
+In-Reply-To: <bug-7016-163@https.bugs.busybox.net/>
+References: <bug-7016-163@https.bugs.busybox.net/>
+Message-ID: <20140514081348.417189CBEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13/05/14 20:09, Yann E. MORIN wrote:
->   - add a choice to select one and only provider at a time, and make all
->     the providers prompt-less config options so it is not possible to
->     choose more than one at a time;
+https://bugs.busybox.net/show_bug.cgi?id=7016
 
- I'm really against this. One of the great things about the current virtual
-package infrastructure is that it makes it possible to avoid a choice construct.
-And it still is possible to have the choice construct as well. Just perfect.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-> 
->   - add a pre-build check that verifies that not two providers of the
->     same feature are selected, and bail out early in the build if that
->     is the case.
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-14 08:13:47 UTC ---
+Investigation was discussed further on the mailing list, see
+http://lists.busybox.net/pipermail/buildroot/2014-April/093307.html
+http://lists.busybox.net/pipermail/buildroot/2014-May/095513.html
 
- With Yann's proposed patch I think this is really feasible.
+The issue could not be reproduced using the same configuration in qemu.
+My assumption is that the way the rootfs is run through docker is causing
+trouble, and thus that it isn't a buildroot problem.
+Therefore, I'm going to close this bug.
 
+Brian: do not hesitate to continue the discussion on the mailing list, or to
+reopen this bug if you think it effectively is a buildroot bug.
 
- Regards,
- Arnout
+Thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
