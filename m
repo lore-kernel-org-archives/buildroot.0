@@ -1,73 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 May 2014 00:14:42 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-virtual: validate only one
- provider provides an implementation
-In-Reply-To: <20140514000536.10ad4931@free-electrons.com>
-References: <20140513180945.GC3507@free.fr>
- <1400017670-2708-1-git-send-email-yann.morin.1998@free.fr>
- <20140514000536.10ad4931@free-electrons.com>
-Message-ID: <20140513221442.GD3507@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 14 May 2014 06:51:12 +0200
+Subject: [Buildroot] [PATCH v2 1/1] netsnmp: Remove ldconfig calls
+Message-ID: <1400043072-22885-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+ldconfig breaks links created by gpu-viv-bin-mx6q.
 
-On 2014-05-14 00:05 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Tue, 13 May 2014 23:47:50 +0200, Yann E. MORIN wrote:
-> 
-> > +# Providers shall call this function with all the FEATURES they provide
-> > +# 	$(eval $(call virt-provides,FEATURE[ FEATURE ...]))
-> > +# where FEATURE has a corresponding BR2_PACKAGE_HAS_FEATURE
-> > +define virt-provides
-> > +$(foreach p,$(1),\
-> > +ifneq ($$(BR2_PACKAGE_PROVIDES_$(p)),$(pkgname))$(sep)\
-> > +$$(error $(pkgname is trying to override $$(BR2_PACKAGE_PROVIDES_$(p)) to provide $(p)))$(sep)\
-> > +endif$(sep))
-> > +endef
-> >  
-> >  ################################################################################
-> >  # inner-virtual-package -- defines the dependency rules of the virtual
-> > diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-> > index f6e4443..86125f2 100644
-> > --- a/package/rpi-userland/rpi-userland.mk
-> > +++ b/package/rpi-userland/rpi-userland.mk
-> > @@ -16,4 +16,7 @@ define RPI_USERLAND_POST_TARGET_CLEANUP
-> >  endef
-> >  RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
-> >  
-> > +# rpi-userland is a provider for those features:
-> > +$(eval $(call virt-provides,LIBEGL LIBGLES OPENVG OPENMAX))
-> > +
-> >  $(eval $(cmake-package))
-> 
-> Just thinking out loud: isn't it possible to instead check if
-> <pkg>_DEPENDENCIES for each virtual package contains only one word?
+fixes
+http://autobuild.buildroot.net/results/ab5/ab57dd3729d529366808cbfc802f49360b2ec2b9/
 
-No, because FOO_DEPENDENCIES is set from _PROVIDES_FOO, which as a
-kconfig option, can be only one word to begin with.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: rework the fix to not need a separate patch file
 
-I've tried to remove _PROVIDES_FOO for the Config.in and move it into
-the .mk, but then, as it is used to set FOO_DEPENDENCIES, it could be
-empty at the time we define the virtual package, which would be
-depndency-less, when the provider sorts after the virtual package.
+ package/netsnmp/netsnmp.mk |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Unless Thomas DS' patchset would allow to have depndencies evaluated as
-second-expansion, in which case we could then define _PROVIDES_FOO in
-the .mk instead of the Config.in (but we would still need to checit is
-not already set, as this patch does.)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 63ec97a..665b564 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -67,9 +67,14 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
+ 	NETSNMP_CONF_OPT += --disable-debugging
+ endif
+ 
++define NETSNMP_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
++endef
++
+ define NETSNMP_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+-		DESTDIR=$(TARGET_DIR) install
++		DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+ 	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
+ 		$(TARGET_DIR)/etc/init.d/S59snmpd
+ 	for mib in $(NETSNMP_BLOAT_MIBS); do \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
