@@ -1,22 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 14 May 2014 08:15:10 +0000 (UTC)
-Subject: [Buildroot] [Bug 5396] Boot hangs when starting samba if
- BR2_ENABLE_LOCALE is enabled
-In-Reply-To: <bug-5396-163@https.bugs.busybox.net/>
-References: <bug-5396-163@https.bugs.busybox.net/>
-Message-ID: <20140514081510.5647F9CBEF@busybox.osuosl.org>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 14 May 2014 12:26:50 +0200
+Subject: [Buildroot] [PATCH 0/4] Replace 'echo -e' with printf
+Message-ID: <1400063214-29462-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5396
+Hi all
 
---- Comment #6 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-14 08:15:09 UTC ---
-Jonathan: any feedback? Could you retest this bug with the latest buildroot?
+This little series, is only aimed as a follow up of Peter's comment on Samuel's
+patch. (http://patchwork.ozlabs.org/patch/342023/)
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Maxime Hadjinlian (4):
+  acpid: replace "echo -e" with printf
+  eudev: replace "echo -en" with printf
+  udev: replace "echo -en" with printf
+  infra: pkg-utils.mk replace "echo -en" with printf
+
+ package/acpid/acpid.mk | 2 +-
+ package/eudev/S10udev  | 4 ++--
+ package/pkg-utils.mk   | 2 +-
+ package/udev/S10udev   | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+--
+2.0.0.rc0
