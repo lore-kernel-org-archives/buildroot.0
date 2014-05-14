@@ -1,9 +1,9 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 14 May 2014 12:26:52 +0200
-Subject: [Buildroot] [PATCH 2/4] eudev: replace "echo -en" with printf
+Date: Wed, 14 May 2014 12:26:53 +0200
+Subject: [Buildroot] [PATCH 3/4] udev: replace "echo -en" with printf
 In-Reply-To: <1400063214-29462-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1400063214-29462-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1400063214-29462-3-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1400063214-29462-4-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,13 @@ printf is POSIX-compliant, echo -e/n is not.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/eudev/S10udev | 4 ++--
+ package/udev/S10udev | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index e4d28a2..e00aa91 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
+diff --git a/package/udev/S10udev b/package/udev/S10udev
+index 2c7b7e9..cf825b4 100755
+--- a/package/udev/S10udev
++++ b/package/udev/S10udev
 @@ -27,8 +27,8 @@ test -r $UDEV_CONFIG || exit 6
  
  case "$1" in
