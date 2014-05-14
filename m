@@ -1,82 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 14 May 2014 23:11:34 +0200
-Subject: [Buildroot] [PATCH 2/3] docs/manual: document the new FOO_PROVIDES
-	variable
-In-Reply-To: <cover.1400101273.git.yann.morin.1998@free.fr>
-References: <cover.1400101273.git.yann.morin.1998@free.fr>
-Message-ID: <0dad6313445d161cc75a22d89173fc43998ade64.1400101273.git.yann.morin.1998@free.fr>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Wed, 14 May 2014 23:25:53 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-11
+In-Reply-To: <20140514205653.GL4096@tarshish>
+References: <20140512063008.74E21100DB2@stock.ovh.net>
+ <20140513094426.335d2361@free-electrons.com>
+ <20140513075247.GZ4096@tarshish> <20140513100102.14163e6c@free-electrons.com>
+ <20140514205653.GL4096@tarshish>
+Message-ID: <CA+sos7-Ht2wOJC+2ToqnKazE2Bxhhffo7Ef38uRd+ZqPq+D2KA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
----
- docs/manual/adding-packages-generic.txt |  3 +++
- docs/manual/adding-packages-virtual.txt | 15 ++++++++++++---
- 2 files changed, 15 insertions(+), 3 deletions(-)
+On Wed, May 14, 2014 at 10:56 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> On Tue, May 13, 2014 at 10:01:02AM +0200, Thomas Petazzoni wrote:
+>> On Tue, 13 May 2014 10:52:47 +0300, Baruch Siach wrote:
+>>
+>> > On Tue, May 13, 2014 at 09:44:26AM +0200, Thomas Petazzoni wrote:
+>> > > >        arm |                      lsof-4.85 | NOK | http://autobuild.buildroot.net/results/a1f0572dbf968c21f70b35cefff7ef7a1d9a348a/
+>> > >
+>> > > Missing TCP_* definitions. Weird because the toolchain has recent
+>> > > kernel headers (3.12) and uses glibc. Investigation needed.
+>> >
+>> > http://patchwork.ozlabs.org/patch/345018/ seems applicable (but I didn't test).
+>>
+>> Indeed, but I'm not really convinced by the fix, seems strange that
+>> --sysroot needs to be passed. More investigation is needed to validate
+>> the proposed fix, I believe.
+>
+> Right. It just papers over the real problem which is building a target config
+> test using the host toolchain, and then running it. The patch at
+> http://patchwork.ozlabs.org/patch/348765/ is better, I believe.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index f421651..d3fa45b 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -304,6 +304,9 @@ information is (assuming the package name is +libfoo+) :
-   a similar way, +HOST_LIBFOO_DEPENDENCIES+ lists the dependencies for
-   the current host package.
- 
-+* +LIBFOO_PROVIDES+ lists all the virtual packages +libfoo+ is an
-+  implementation of. See xref:virtual-package-tutorial[].
-+
- * +LIBFOO_INSTALL_STAGING+ can be set to +YES+ or +NO+ (default). If
-   set to +YES+, then the commands in the +LIBFOO_INSTALL_STAGING_CMDS+
-   variables are executed to install the package into the staging
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-index 1c1116f..0cbe753 100644
---- a/docs/manual/adding-packages-virtual.txt
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -39,7 +39,7 @@ In this file, we declare two options, +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+ and
- +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+, whose values will be used by the
- providers.
- 
--==== Virtual package's +*.mk+ file
-+==== Virtual package's +.mk+ file
- 
- The +.mk+ for the virtual package should just evaluate the +virtual-package+ macro:
- 
-@@ -59,8 +59,7 @@ The ability to have target and host packages is also available, with the
- ==== Provider's +Config.in+ file
- 
- When adding a package as a provider, only the +Config.in+ file requires some
--modifications. The +*.mk+ file should follow the Buildroot infrastructure with
--no change at all.
-+modifications.
- 
- The +Config.in+ file of the package 'some-provider', which provides the
- functionalities of 'something-virtual', should contain:
-@@ -84,6 +83,16 @@ On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
- set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
- provider, but only if it is selected.
- 
-+==== Provider's +.mk+ file
-+
-+The +.mk+ file should also declare an additional variable
-++SOME_PROVIDER_PROVIDES+ to contain the names of all the virtual
-+packages it is an implementation of:
-+
-+---------------------------
-+01: SOME_PROVIDER_PROVIDES = something-virtual
-+---------------------------
-+
- Of course, do not forget to add the proper build and runtime dependencies for
- this package!
- 
--- 
-1.8.3.2
+The issue in my case was that the native toolchain used for the
+configure test implicitly #included a header file, which triggered a
+conflict of direct inclusion between the native and cross toolchains
+header files. Passing --sysroot forces the native toolchain to only
+use the header files from the cross toolchain, fixing this conflict.
+This directly addresses the issue without any assumption regarding the
+cross libc.
+
+http://patchwork.ozlabs.org/patch/348765/ works too, but it removes a
+configure test and it relies on the "all libc variants we support have
+the netinet/tcp.h header" assumption, which might become wrong in the
+future, which is why I didn't choose this solution.
+
+Best regards,
+Beno?t
