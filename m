@@ -1,39 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 14 May 2014 09:31:06 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4.10.14}.x series
-Message-ID: <20140514080153.242B89CBF3@busybox.osuosl.org>
+Date: Wed, 14 May 2014 09:31:08 +0200
+Subject: [Buildroot] [git commit] linux: bump to version 3.14.4
+Message-ID: <20140514080153.2C87C9CBF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad1cfef6ef5ac121dedaf514a3a990b1803c6f82
+commit: http://git.buildroot.net/buildroot/commit/?id=655c0212f87ca4fc2621fb66a5dabd8bcc445eb7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6a6a761..d1b18cf 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -146,12 +146,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+diff --git a/linux/Config.in b/linux/Config.in
+index cc1127a..069a7d6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.14.3"
++	bool "3.14.4"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.58"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.89"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.90"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.39"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.40"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.19"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.3"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.4"	if BR2_KERNEL_HEADERS_3_14
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-	default "3.14.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.14.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
