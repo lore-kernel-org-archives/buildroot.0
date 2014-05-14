@@ -1,34 +1,36 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 14 May 2014 12:26:51 +0200
-Subject: [Buildroot] [PATCH 1/4] acpid: replace "echo -e" with printf
+Date: Wed, 14 May 2014 12:26:52 +0200
+Subject: [Buildroot] [PATCH 2/4] eudev: replace "echo -en" with printf
 In-Reply-To: <1400063214-29462-1-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1400063214-29462-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1400063214-29462-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1400063214-29462-3-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-printf is POSIX-compliant, echo -e is not.
+printf is POSIX-compliant, echo -e/n is not.
 
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
- package/acpid/acpid.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/eudev/S10udev | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index 1f4ec31..4a61f16 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -17,7 +17,7 @@ endef
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index e4d28a2..e00aa91 100755
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -27,8 +27,8 @@ test -r $UDEV_CONFIG || exit 6
  
- define ACPID_SET_EVENTS
- 	mkdir -p $(TARGET_DIR)/etc/acpi/events
--	/bin/echo -e "event=button[ /]power\naction=/sbin/poweroff" \
-+	printf "event=button[ /]power\naction=/sbin/poweroff" \
- 		>$(TARGET_DIR)/etc/acpi/events/powerbtn
- endef
- 
+ case "$1" in
+     start)
+-        echo -n "Populating ${udev_root:-/dev} using udev: "
+-        echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
++        printf "Populating ${udev_root:-/dev} using udev: "
++        printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+         $UDEV_BIN -d || (echo "FAIL" && exit 1)
+         udevadm trigger
+         echo "done"
 -- 
 2.0.0.rc0
