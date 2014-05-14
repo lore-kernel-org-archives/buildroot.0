@@ -1,44 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 May 2014 08:30:07 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-13
-Message-ID: <20140514063007.573B7100D85@stock.ovh.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 14 May 2014 09:21:33 +0200
+Subject: [Buildroot] virtual-packages: the case for multiple providers
+	selected
+In-Reply-To: <20140513221833.016e1d8e@free-electrons.com>
+References: <20140513180945.GC3507@free.fr>
+ <a67a948f-b496-4385-9796-fc2d079d9641@email.android.com>
+ <20140513221833.016e1d8e@free-electrons.com>
+Message-ID: <CAAXf6LXa0MRtnb8xQ266J+O1Tp5BkWzVWJP7C3aYZCGbx8gd0w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-05-13
-===============================
+On Tue, May 13, 2014 at 10:18 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> (Would be nice to wrap your e-mails!)
 
-        success : 75 
-       failures : 8  
-       timeouts : 0  
-          TOTAL : 83 
+Yes sorry, it's the darn K9 mail app on Android that does not offer a
+wrap option (or wraps the entire mail including the mail you reply
+on).
+Who makes a decent mailing list friendly app for Android?
 
-Classification of failures by reason
-====================================
+>
+> On Tue, 13 May 2014 22:12:59 +0200, Thomas De Schampheleire wrote:
+>
+>> >  - going with the choice means that it is no longer possible to add a
+>> >    new provider in BR2_EXTERNAL without changing the Buildroot source
+>> >    tree, one of the main selling-point of BR2_EXTERNAL to begin with,
+>>
+>> I guess it's not possible to put an 'include' statement inside the choice? The included file would then just contain the external options.
+>
+> What would it include? Remember that include statements in kconfig fail
+> if the target file doesn't exist.
 
-             lttng-tools-2.4.1 | 2 
-          glibc-2.18-svnr23787 | 1 
-                    gpm-1.20.7 | 1 
-flann-d0c04f4d290ebc3aa9411... | 1 
-                 webkit-1.11.5 | 1 
-                  ltrace-0.7.3 | 1 
-jack2-ab409a65df95bc261ff72... | 1 
+Something like this (tested):
+tdescham at argentina ~/repo/contrib/buildroot-bugs $ hg diff
+diff --git a/Config.in b/Config.in
+--- a/Config.in
++++ b/Config.in
+@@ -369,6 +369,9 @@ config BR2_STRIP_none
+        help
+          Do not strip binaries and libraries in the target
+          filesystem.
++
++source "$BR2_EXTERNAL/test.in"
++
+ endchoice
 
-Detail of failures
-===================
-
-      bfin | flann-d0c04f4d290ebc3aa9411... | NOK | http://autobuild.buildroot.net/results/a4ec0e9f28cd12ce770718fb407bbb4dc93b528b/
-   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/827b487b219eda8c86d85041e2ceac983bcf5dd7/
-microblazeel |                     gpm-1.20.7 | NOK | http://autobuild.buildroot.net/results/690a83eccd5b4eab8bf431bb4e02ccb79592a0d9/
-       arm | jack2-ab409a65df95bc261ff72... | NOK | http://autobuild.buildroot.net/results/913bb1836076be9f201bf6641c7614708d6916bc/
-       arm |                   ltrace-0.7.3 | NOK | http://autobuild.buildroot.net/results/e1b330abfa2d80f3f30bc3359428ea429c690eb8/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/5a29077e6c8ab1ed14167ab20324dbb6131758ee/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/cb4e5347781e9a78b2ac0ff191c8f0f0120348c9/
-      sh4a |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/7e9f13a4bf3e8e68dceca7a8d5b6b5f4bbebe667/
+ config BR2_STRIP_EXCLUDE_FILES
+diff --git a/support/dummy-external/test.in b/support/dummy-external/test.in
+new file mode 100644
+--- /dev/null
++++ b/support/dummy-external/test.in
+@@ -0,0 +1,2 @@
++config BR2_STRIP_test
++       bool "test"
 
 
--- 
-http://autobuild.buildroot.net
+test.in would either exist in dummy-external, or in BR2_EXTERNAL, so
+there is no problem of missing files.
+It requires a separate file in BR2_EXTERNAL that has to be present if
+you choose to use BR2_EXTERNAL, but can be empty. Moreover, you need
+one such file for each choice you want to expand this way.
+I'm leaning more towards the preflight check, but I just want to
+highlight that expanding a choice from BR2_EXTERNAL is effectively
+possible.
+
+>
+>> >  - going with the check means that it will still possible to generate
+>> >    such configurations, which means we'd still get autobuild failures
+>> >    for those (unless the autobuilders are tweaked to recognise this,)
+>> >    while it would be a minimal annoyance to the user.
+>> >
+>>
+>> It doesn't look too difficult to me to handle such prebuild checks in a generic way in the autobuilders.
+>> Suppose that a magic return code is used if a prebuild check fails (also for the kernel headers check for example), then the autobuilders can check for this magic code and then simply ignore the configuration and generate a new one.
+>
+> Or we could have a specific make target to allow the autobuilders to
+> check a configuration before starting the build.
+
+Yes, that sounds very good too.
+
+Best regards,
+Thomas
