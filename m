@@ -1,43 +1,121 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 14 May 2014 18:37:57 +0200
-Subject: [Buildroot] [PATCH] libffi: back-port support for ARC
-In-Reply-To: <1400078588.3178.6.camel@abrodkin-8560l>
-References: <1398970819-17551-1-git-send-email-abrodkin@synopsys.com>
- <1399634834.3396.15.camel@abrodkin-8560l>
- <1400078588.3178.6.camel@abrodkin-8560l>
-Message-ID: <20140514183757.111e792f@free-electrons.com>
+From: Pascal Huerst <pascal.huerst@gmail.com>
+Date: Wed, 14 May 2014 18:51:17 +0200
+Subject: [Buildroot] [PATCH v2 1/1] google-breakpad: added package to
+	buildroot
+Message-ID: <1400086277-18900-1-git-send-email-pascal.huerst@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Changes v1 -> v2 (All suggested by maxime.hadjinlian at gmail.com)
+	Added dependency from BR2_ENABLE_DEBUG
+	Removed symbolstore.py -> Its all done in Makefile now
+	Removed new Target -> It in target-finalize before stripping now
+	Added LICENSE and LICENSE_FILE to *.mk
 
-On Wed, 14 May 2014 14:43:08 +0000, Alexey Brodkin wrote:
+Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
+---
+ Makefile                                   | 22 ++++++++++++++++++++++
+ package/Config.in                          |  1 +
+ package/google-breakpad/Config.in          | 12 ++++++++++++
+ package/google-breakpad/google-breakpad.mk | 16 ++++++++++++++++
+ 4 files changed, 51 insertions(+)
+ create mode 100644 package/google-breakpad/Config.in
+ create mode 100644 package/google-breakpad/google-breakpad.mk
 
-> > I'm wondering if there're chances to get this one reviewed or applied if
-> > there're no objections?
-> 
-> It's been 2 weeks since I sent this patch so I may assume nobody has any
-> objections. If so is there a chance to get this one applied?
-> 
-> libffi is a prerequisite for libgtk, gstreamer etc so we definitely need
-> it.
-
-Sorry for the lack of feedback. Since -rc1 has been released, we won't
-merge such a patch for 2014.05, which probably explains why Peter has
-not answered.
-
-I'll try to test build your patch soon, and give my Tested-by so that
-Peter can merge it in the 'next' branch. If you don't have a Tested-by
-from me by the end of the week, ping me again (you can ping me on IRC
-as well).
-
-Thanks!
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 6d97262..114c0e7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -530,6 +530,15 @@ define TARGET_PURGE_LOCALES
+ endef
+ endif
+ 
++# Dump symbols for google-breakpad of these files
++BREAKPAD_FIND_CMD = find $(STAGING_DIR) -type f \( -perm /111 \
++-a ! -name "*.py" \
++-a ! -name "*.sh" \
++-a ! -name "*~" \
++-a ! -name "*.la" \
++-a ! -type l \
++\) -print
++
+ $(TARGETS_ROOTFS): target-finalize
+ 
+ target-finalize: $(TARGETS)
+@@ -555,6 +564,19 @@ endif
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+ endif
++ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
++	mkdir -p $(BINARIES_DIR)/google_breakpad_symbols/tmp
++	for GBP_BIN_PATH in $(shell $(BREAKPAD_FIND_CMD)); do \
++		GBP_BIN=$$(basename $$GBP_BIN_PATH); \
++		GBP_BIN+=.sym; \
++		$(HOST_DIR)/usr/bin/dump_syms $$GBP_BIN_PATH > $(BINARIES_DIR)/google_breakpad_symbols/tmp/$$GBP_BIN 2>/dev/null; \
++		GBP_HASH=$$(head -n1 $(BINARIES_DIR)/google_breakpad_symbols/tmp/$$GBP_BIN | cut -d ' ' -f 4); \
++		mkdir -p $(BINARIES_DIR)/google_breakpad_symbols/$$(basename $$GBP_BIN_PATH)/$$GBP_HASH; \
++		mv $(BINARIES_DIR)/google_breakpad_symbols/tmp/$$GBP_BIN $(BINARIES_DIR)/google_breakpad_symbols/$$(basename $$GBP_BIN_PATH)/$$GBP_HASH; \
++	done
++	rm -Rf $(BINARIES_DIR)/google_breakpad_symbols/tmp
++endif
++
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+ 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+ 	if test -d $(TARGET_DIR)/lib/modules; then \
+diff --git a/package/Config.in b/package/Config.in
+index 3bc8d24..2e9babe 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -82,6 +82,7 @@ source "package/tinymembench/Config.in"
+ source "package/trace-cmd/Config.in"
+ source "package/valgrind/Config.in"
+ source "package/whetstone/Config.in"
++source "package/google-breakpad/Config.in"
+ endmenu
+ 
+ menu "Development tools"
+diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+new file mode 100644
+index 0000000..d998345
+--- /dev/null
++++ b/package/google-breakpad/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_GOOGLE_BREAKPAD
++	bool "google-breakpad"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	help
++	  An open-source multi-platform crash reporting system
++
++	  http://code.google.com/p/google-breakpad/
++
++comment "google-breakpad requires an (e)glibc toolchain with C++ and Debug enabled"
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_USES_GLIBC && BR2_ENABLE_DEBUG)
++
+diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+new file mode 100644
+index 0000000..207c81a
+--- /dev/null
++++ b/package/google-breakpad/google-breakpad.mk
+@@ -0,0 +1,16 @@
++#############################################################
++#
++# google-breakpad
++#
++#############################################################
++GOOGLE_BREAKPAD_VERSION = head
++GOOGLE_BREAKPAD_SITE = http://google-breakpad.googlecode.com/svn/trunk
++GOOGLE_BREAKPAD_SITE_METHOD = svn
++GOOGLE_BREAKPAD_CONF_OPT = --disable-processor --disable-tools
++GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
++GOOGLE_BREAKPAD_INSTALL_STAGING = YES
++GOOGLE_BREAKPAD_LICENSE = BSD-3c
++GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
++
++$(eval $(host-autotools-package))
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.0
