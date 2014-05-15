@@ -1,47 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 May 2014 09:40:45 +0200
-Subject: [Buildroot] [PATCH 3/3] packages: make providers declare what
-	they provide
-In-Reply-To: <40eb8c9da48a46856d0acb7576d35d621a9efc9c.1400101273.git.yann.morin.1998@free.fr>
-References: <cover.1400101273.git.yann.morin.1998@free.fr>
- <40eb8c9da48a46856d0acb7576d35d621a9efc9c.1400101273.git.yann.morin.1998@free.fr>
-Message-ID: <20140515094045.148d404e@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 15 May 2014 09:44:08 +0200
+Subject: [Buildroot] [PATCH] package/cairo: uses fork(),
+ so requires an MMU
+In-Reply-To: <20140514221537.GC3495@free.fr>
+References: <1400104601-31625-1-git-send-email-yann.morin.1998@free.fr>
+ <20140514221537.GC3495@free.fr>
+Message-ID: <20140515074408.GA11475@pc-eric>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi!
+On Thu, May 15, 2014 at 12:15:37AM +0200, Yann E. MORIN wrote:
+> On 2014-05-14 23:56 +0200, Yann E. MORIN spake thusly:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > Fixes:
+> >     http://autobuild.buildroot.net/results/038/038371cc8548b3d39d8174289bedc9aae4076303/
+>
+> Also fixes:
+>     http://autobuild.buildroot.net/results/d93/d9374c1bd08eae5db60e6939ce5e9e4c8ff8cbd5/
+>     http://autobuild.buildroot.net/results/574/5746e7e3b2bc36f31dee1acf71e59dc4d6c90af2/
+>     http://autobuild.buildroot.net/results/b66/b66d7125ea7e10313221462097ae6c22ede963e5/
+>     [...]
 
-On Wed, 14 May 2014 23:11:35 +0200, Yann E. MORIN wrote:
+A few weeks ago, I posted a fix to cairo for these issues:
 
->  # DirectFB is not supported (wrong version)
->  ifeq ($(BR2_PACKAGE_XORG7),y)
->  GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
-> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-> index bc8799a..4f940ab 100644
-> --- a/package/lua/lua.mk
-> +++ b/package/lua/lua.mk
-> @@ -14,6 +14,8 @@ LUA_INSTALL_STAGING = YES
->  LUA_LICENSE = MIT
->  LUA_LICENSE_FILES = COPYRIGHT
->  
-> +LUA_PROVIDES = lua
+http://patchwork.ozlabs.org/patch/342715/
 
-This should be:
+The problem occurs on one of the test program, not on cairo itself, so cairo
+should be usable on Blackfin (I do not own one, so I have not tested it).
 
-LUA_PROVIDES = luainterpreter
+I opened a bug at freedesktop.org too:
 
-> +LUAJIT_PROVIDES = lua
+https://bugs.freedesktop.org/show_bug.cgi?id=78709
 
-Same here.
-
-I was surprised by "LUA_PROVIDES = lua". How can a real package provide
-itself as a provider for itself as a virtual package ? :-)
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+ELB
