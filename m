@@ -1,41 +1,50 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 15 May 2014 09:44:08 +0200
-Subject: [Buildroot] [PATCH] package/cairo: uses fork(),
- so requires an MMU
-In-Reply-To: <20140514221537.GC3495@free.fr>
-References: <1400104601-31625-1-git-send-email-yann.morin.1998@free.fr>
- <20140514221537.GC3495@free.fr>
-Message-ID: <20140515074408.GA11475@pc-eric>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 15 May 2014 09:50:42 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-11
+In-Reply-To: <CA+sos7-Ht2wOJC+2ToqnKazE2Bxhhffo7Ef38uRd+ZqPq+D2KA@mail.gmail.com>
+References: <20140512063008.74E21100DB2@stock.ovh.net>
+ <20140513094426.335d2361@free-electrons.com>
+ <20140513075247.GZ4096@tarshish>
+ <20140513100102.14163e6c@free-electrons.com>
+ <20140514205653.GL4096@tarshish>
+ <CA+sos7-Ht2wOJC+2ToqnKazE2Bxhhffo7Ef38uRd+ZqPq+D2KA@mail.gmail.com>
+Message-ID: <20140515095042.14f7c07a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On Thu, May 15, 2014 at 12:15:37AM +0200, Yann E. MORIN wrote:
-> On 2014-05-14 23:56 +0200, Yann E. MORIN spake thusly:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > Fixes:
-> >     http://autobuild.buildroot.net/results/038/038371cc8548b3d39d8174289bedc9aae4076303/
->
-> Also fixes:
->     http://autobuild.buildroot.net/results/d93/d9374c1bd08eae5db60e6939ce5e9e4c8ff8cbd5/
->     http://autobuild.buildroot.net/results/574/5746e7e3b2bc36f31dee1acf71e59dc4d6c90af2/
->     http://autobuild.buildroot.net/results/b66/b66d7125ea7e10313221462097ae6c22ede963e5/
->     [...]
+Dear Beno?t Th?baudeau,
 
-A few weeks ago, I posted a fix to cairo for these issues:
+On Wed, 14 May 2014 23:25:53 +0200, Beno?t Th?baudeau wrote:
 
-http://patchwork.ozlabs.org/patch/342715/
+> > Right. It just papers over the real problem which is building a target config
+> > test using the host toolchain, and then running it. The patch at
+> > http://patchwork.ozlabs.org/patch/348765/ is better, I believe.
+> 
+> The issue in my case was that the native toolchain used for the
+> configure test implicitly #included a header file, which triggered a
+> conflict of direct inclusion between the native and cross toolchains
+> header files. Passing --sysroot forces the native toolchain to only
+> use the header files from the cross toolchain, fixing this conflict.
+> This directly addresses the issue without any assumption regarding the
+> cross libc.
 
-The problem occurs on one of the test program, not on cairo itself, so cairo
-should be usable on Blackfin (I do not own one, so I have not tested it).
+Right, but using target headers with the native toolchain is wrong, and
+potentially also very fragile.
 
-I opened a bug at freedesktop.org too:
+> http://patchwork.ozlabs.org/patch/348765/ works too, but it removes a
+> configure test and it relies on the "all libc variants we support have
+> the netinet/tcp.h header" assumption, which might become wrong in the
+> future, which is why I didn't choose this solution.
 
-https://bugs.freedesktop.org/show_bug.cgi?id=78709
+How likely is that to happen? If it does, we will have very clear
+build failures, so we will notice, no?
 
-Best regards,
-ELB
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
