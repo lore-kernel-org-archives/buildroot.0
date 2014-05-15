@@ -1,31 +1,25 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 15 May 2014 21:42:41 +0300
-Subject: [Buildroot] [PATCH] libunwind: depend on libatomic_ops when
-	available
-Message-ID: <85ff00479bda328ec3fa5dd9c7d7f3d0dce4d77d.1400179361.git.baruch@tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 15 May 2014 19:18:48 +0000 (UTC)
+Subject: [Buildroot] [Bug 5750] Doing a Buildroot build from /usr doesn't
+	work
+In-Reply-To: <bug-5750-163@https.bugs.busybox.net/>
+References: <bug-5750-163@https.bugs.busybox.net/>
+Message-ID: <20140515191848.7D83B9CBFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libunwind/libunwind.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+https://bugs.busybox.net/show_bug.cgi?id=5750
 
-diff --git a/package/libunwind/libunwind.mk b/package/libunwind/libunwind.mk
-index 48dd0ec5bb08..a75a88848be9 100644
---- a/package/libunwind/libunwind.mk
-+++ b/package/libunwind/libunwind.mk
-@@ -11,4 +11,8 @@ LIBUNWIND_LICENSE_FILES = COPYING
- LIBUNWIND_LICENSE = MIT
- LIBUNWIND_AUTORECONF = YES
- 
-+ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
-+LIBUNWIND_DEPENDENCIES = libatomic_ops
-+endif
-+
- $(eval $(autotools-package))
+--- Comment #8 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-15 19:18:48 UTC ---
+(In reply to comment #7)
+> This fixes the problem for me.
+
+Thanks, I will definitely test this out!
+
 -- 
-2.0.0.rc0
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
