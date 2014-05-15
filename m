@@ -1,30 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 May 2014 17:08:16 +0200
-Subject: [Buildroot] [PATCH 0/2] gdb fixes for xtensa
-In-Reply-To: <1400164410-13037-1-git-send-email-jcmvbkbc@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 15 May 2014 19:15:45 +0400
+Subject: [Buildroot] [PATCH 1/2] gdb: replace xtensa patches with proper
+ backports from binutils-gdb
+In-Reply-To: <1400164410-13037-2-git-send-email-jcmvbkbc@gmail.com>
 References: <1400164410-13037-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20140515170816.635323e8@free-electrons.com>
+ <1400164410-13037-2-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <CAMo8BfLzYVSoghWby=a35rjdkqR4bY3sbCgQFnjUPB2XhBhw_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+On Thu, May 15, 2014 at 6:33 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> The functionality is unchanged.
 
-On Thu, 15 May 2014 18:33:28 +0400, Max Filippov wrote:
+[...]
 
-> this series replaces existing gdb-7.4.1 patches for xtensa with their
-> backported versions from binutils-gdb and adds same patches for gdb-7.5.1.
-> 
-> Max Filippov (2):
->   gdb: replace xtensa patches with proper backports from binutils-gdb
->   gdb: add xtensa fixes for 7.5.1
+> --- a/package/gdb/7.4.1/xtensa-gdb-regsize.patch
+> +++ /dev/null
+> @@ -1,19 +0,0 @@
+> ---- gdb-7.4.1/gdb/xtensa-tdep.h.orig   2012-10-30 11:40:23.546448594 -0700
+> -+++ gdb-7.4.1/gdb/xtensa-tdep.h        2012-10-30 11:41:43.078445337 -0700
+> -@@ -17,6 +17,7 @@
+> -    You should have received a copy of the GNU General Public License
+> -    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+> -
+> -+#include <stdint.h>
 
-Thanks a lot, looks good to me!
+Oops, the backported version doesn't have this include and fails to build
+due to missing uint32_t definition ): I'll send fixed v2.
 
-Thomas
+> -
+> - /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
+> -    whenever the "tdep" structure changes in an incompatible way.  */
+> -@@ -84,7 +85,7 @@
+> - /* Xtensa ELF core file register set representation ('.reg' section).
+> -    Copied from target-side ELF header <xtensa/elf.h>.  */
+> -
+> --typedef unsigned long xtensa_elf_greg_t;
+> -+typedef uint32_t xtensa_elf_greg_t;
+> -
+> - typedef struct
+> - {
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
