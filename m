@@ -1,86 +1,88 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 15 May 2014 17:31:13 +0000 (UTC)
-Subject: [Buildroot] [Bug 5750] Doing a Buildroot build from /usr doesn't
-	work
-In-Reply-To: <bug-5750-163@https.bugs.busybox.net/>
-References: <bug-5750-163@https.bugs.busybox.net/>
-Message-ID: <20140515173113.7A6E79CC01@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 15 May 2014 19:37:01 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] Detect and prevent multiple providers
+	(branch yem/fix-virt-pkg)
+Message-ID: <cover.1400175284.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5750
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
---- Comment #7 from Ben Stoltz <benstoltz@gmail.com> 2014-05-15 17:31:12 UTC ---
-This fixes the problem for me.
+Hello All!
 
-Ben Stoltz <benstoltz@gmail.com>
+Following a weird report about a cairo build failure, we came to the
+conclusion that the problem was due to multiple providers of the same
+virtual package were selected in the failing configuration. See the
+thread starting there:
+    http://lists.busybox.net/pipermail/buildroot/2014-May/096379.html
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index a66ecd4..74c90dd 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -249,8 +249,12 @@ ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
-     $$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE)
-$$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
-     for i in $$$$(find $(STAGING_DIR)/usr/lib* -name "*.la"); do \
--        cp -f $$$$i $$$$i~; \
--        $$(SED) "s:\(['= ]\)/usr:\\1$(STAGING_DIR)/usr:g" $$$$i; \
-+        cp -n $$$$i $$$$i~; \
-+        $$(SED) "s,$(BASE_DIR), at BASE_DIR@,g" \
-+            -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-+            -e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
-+            -e "s, at BASE_DIR@,$(BASE_DIR),g" \
-+            $$$$i; \
-     done
- endef
- endif
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 1b99c2a..af3675a 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -195,9 +195,12 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
-     $(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
-     $(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
-         $(call MESSAGE,"Fixing package configuration files") ;\
--            $(SED)  "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
--                -e "s,-I/usr/,-I$(STAGING_DIR)/usr/,g" \
--                -e "s,-L/usr/,-L$(STAGING_DIR)/usr/,g" \
-+            $(SED)  's,$(BASE_DIR), at BASE_DIR@,g' \
-+                -e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
-+                -e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
-+                -e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
-+                -e 's, at STAGING_DIR@,$(STAGING_DIR),g' \
-+                -e 's, at BASE_DIR@,$(BASE_DIR),g' \
-                 $(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS))
-;\
-     fi
-     $(Q)touch $@
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index f3f6526..536c967 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -19,8 +19,10 @@ endef
- define HOST_PKGCONF_INSTALL_WRAPPER
-     $(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
-         $(HOST_DIR)/usr/bin/pkg-config
--    $(SED)
-'s, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,'
-\
--        -e 's, at STAGING_DIR@,$(STAGING_DIR),' \
-+    $(SED)  's,$(BASE_DIR), at BASE_DIR@,g' \
-+        -e
-'s, at PKG_CONFIG_LIBDIR@, at STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig,'
-\
-+        -e 's, at STAGING_DIR@,$(STAGING_DIR),g' \
-+        -e 's, at BASE_DIR@,$(BASE_DIR),g' \
-         $(HOST_DIR)/usr/bin/pkg-config
- endef
+The matter was discussed on the list, and we came up to the conclusion
+we would not implement anything in the menuconfig to prevent this
+situation, but that we would just detect it prior to running the build.
+See the thread starting there:
+    http://lists.busybox.net/pipermail/buildroot/2014-May/096517.html
+
+So, what this series does is just that: detect that more than one
+provider for a virtual package are selected.
+
+The way it does that is fully described in patch 1/3, but basically:
+
+  - providers must now declare the virtual packages they are an
+    implementation of, in their .mk file;
+
+  - the generic package infrastructure checks that for each such
+    declared virtual package, the current provider is indeed the
+    selected implmenetation. If not, then it means two or more
+    providers for that virtual package are selected, and it bails
+    out very early in the build.
+
+Changes v1 -> v2:
+  - fix providers for luainterpreter  (Thomas P.)
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 655c0212f87ca4fc2621fb66a5dabd8bcc445eb7:
+
+  linux: bump to version 3.14.4 (2014-05-14 09:31:08 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/fix-virt-pkg
+
+for you to fetch changes up to ddf899127c90b51c88fbf298f0343852f930c698:
+
+  packages: make providers declare what they provide (2014-05-15 18:19:01 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      infra/pkg-virtual: validate only one provider provides an implementation
+      docs/manual: document the new FOO_PROVIDES variable
+      packages: make providers declare what they provide
+
+ docs/manual/adding-packages-generic.txt            |  3 +++
+ docs/manual/adding-packages-virtual.txt            | 15 ++++++++++---
+ package/bellagio/bellagio.mk                       |  1 +
+ package/eudev/eudev.mk                             |  1 +
+ .../gpu-viv-bin-mx6q/gpu-viv-bin-mx6q.mk           |  2 ++
+ package/lua/lua.mk                                 |  2 ++
+ package/luajit/luajit.mk                           |  2 ++
+ package/mesa3d/mesa3d.mk                           |  5 +++++
+ package/pkg-generic.mk                             | 26 ++++++++++++++++++++++
+ package/rpi-userland/rpi-userland.mk               |  2 ++
+ package/sunxi-mali/sunxi-mali.mk                   |  1 +
+ package/systemd/systemd.mk                         |  2 ++
+ package/ti-gfx/ti-gfx.mk                           |  1 +
+ 13 files changed, 60 insertions(+), 3 deletions(-)
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
