@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 15 May 2014 09:15:23 +0200
-Subject: [Buildroot] [PATCH] gdb: add xtensa fixes for 7.5.1
-In-Reply-To: <1400113561-851-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1400113561-851-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20140515091523.272c9e2f@free-electrons.com>
+Date: Thu, 15 May 2014 09:40:45 +0200
+Subject: [Buildroot] [PATCH 3/3] packages: make providers declare what
+	they provide
+In-Reply-To: <40eb8c9da48a46856d0acb7576d35d621a9efc9c.1400101273.git.yann.morin.1998@free.fr>
+References: <cover.1400101273.git.yann.morin.1998@free.fr>
+ <40eb8c9da48a46856d0acb7576d35d621a9efc9c.1400101273.git.yann.morin.1998@free.fr>
+Message-ID: <20140515094045.148d404e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+Dear Yann E. MORIN,
 
-On Thu, 15 May 2014 04:26:01 +0400, Max Filippov wrote:
-> Two fixes for xtensa are still applicable to gdb-7.5.1, which is now the
-> default; copy them from 7.4.1 and rename accordingly.
-> This fixes native and cross-gdb build for xtensa.
-> 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  .../gdb/7.5.1/gdb-100-xtensa-asm-ptrace-h.patch    | 22 ++++++++++++++++++++++
->  package/gdb/7.5.1/gdb-101-xtensa-regsize.patch     | 19 +++++++++++++++++++
->  2 files changed, 41 insertions(+)
->  create mode 100644 package/gdb/7.5.1/gdb-100-xtensa-asm-ptrace-h.patch
->  create mode 100644 package/gdb/7.5.1/gdb-101-xtensa-regsize.patch
+On Wed, 14 May 2014 23:11:35 +0200, Yann E. MORIN wrote:
 
-Thanks. It would have been nice to have description + Signed-off-by for
-these patches. I know they already exist in the tree for 7.4.1, but
-it's not an excuse to continue to do things badly :-)
+>  # DirectFB is not supported (wrong version)
+>  ifeq ($(BR2_PACKAGE_XORG7),y)
+>  GPU_VIV_BIN_MX6Q_DEPENDENCIES = xlib_libXdamage xlib_libXext
+> diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+> index bc8799a..4f940ab 100644
+> --- a/package/lua/lua.mk
+> +++ b/package/lua/lua.mk
+> @@ -14,6 +14,8 @@ LUA_INSTALL_STAGING = YES
+>  LUA_LICENSE = MIT
+>  LUA_LICENSE_FILES = COPYRIGHT
+>  
+> +LUA_PROVIDES = lua
+
+This should be:
+
+LUA_PROVIDES = luainterpreter
+
+> +LUAJIT_PROVIDES = lua
+
+Same here.
+
+I was surprised by "LUA_PROVIDES = lua". How can a real package provide
+itself as a provider for itself as a virtual package ? :-)
 
 Thomas
 -- 
