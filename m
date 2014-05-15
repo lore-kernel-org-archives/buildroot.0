@@ -1,66 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 May 2014 23:23:55 +0200
-Subject: [Buildroot] [PATCH] lsof: don't use host toolchain to determine
- target libc
-In-Reply-To: <106644d5ef8b1b8a9cfeba005079957f63702757.1400071508.git.baruch@tkos.co.il>
-References: <106644d5ef8b1b8a9cfeba005079957f63702757.1400071508.git.baruch@tkos.co.il>
-Message-ID: <20140515212355.GE3463@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 15 May 2014 18:31:34 -0300
+Subject: [Buildroot] [PATCH 1/3] lz4: new package
+Message-ID: <1400189496-29633-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/Config.in     |  1 +
+ package/lz4/Config.in | 14 ++++++++++++++
+ package/lz4/lz4.mk    | 41 +++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/lz4/Config.in
+ create mode 100644 package/lz4/lz4.mk
 
-On 2014-05-14 15:45 +0300, Baruch Siach spake thusly:
-> The lsof Configure script builds a test program using the host toolchain to
-> test whether glibc is used. This test is broken in cross compilation
-> environment. Set LINUX_CLIB to avoid the test. This should give the correct
-> result even for non glibc toolchains, since all libc variants we support have
-> the netinet/tcp.h header.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/a1f/a1f0572dbf968c21f70b35cefff7ef7a1d9a348a/
-> 
-> Cc: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/lsof/lsof.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-> index f4b1b4cb8f86..332d1f83a5df 100644
-> --- a/package/lsof/lsof.mk
-> +++ b/package/lsof/lsof.mk
-> @@ -49,7 +49,8 @@ endef
->  define LSOF_CONFIGURE_CMDS
->  	(cd $(@D) ; \
->  		echo n | $(TARGET_CONFIGURE_OPTS) DEBUG="$(TARGET_CFLAGS) $(BR2_LSOF_CFLAGS)" \
-> -		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 ./Configure linux)
-> +		LSOF_INCLUDE="$(STAGING_DIR)/usr/include" LSOF_CFLAGS_OVERRIDE=1 \
-> +		LINUX_CLIB=-DGLIBCV=2 ./Configure linux)
->  	$(LSOF_CONFIGURE_WCHAR_FIXUPS)
->  	$(LSOF_CONFIGURE_LOCALE_FIXUPS)
->  endef
-> -- 
-> 2.0.0.rc0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index e0f982e..7a3e5ef 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -38,6 +38,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ source "package/gzip/Config.in"
+ endif
+ source "package/infozip/Config.in"
++source "package/lz4/Config.in"
+ source "package/lzip/Config.in"
+ source "package/lzop/Config.in"
+ source "package/xz/Config.in"
+diff --git a/package/lz4/Config.in b/package/lz4/Config.in
+new file mode 100644
+index 0000000..a855e31
+--- /dev/null
++++ b/package/lz4/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LZ4
++	bool "lz4"
++	depends on BR2_LARGEFILE
++	help
++	  LZ4 is a very fast lossless compression algorithm, providing
++	  compression speed at 400 MB/s per core, scalable with multi-cores
++	  CPU. It also features an extremely fast decoder, with speed
++	  in multiple GB/s per core, typically reaching RAM speed limits
++	  on multi-core systems.
++
++	  https://code.google.com/p/lz4/
++
++comment "lz4 needs a toolchain w/ largefile"
++	depends on !BR2_LARGEFILE
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+new file mode 100644
+index 0000000..a089b0e
+--- /dev/null
++++ b/package/lz4/lz4.mk
+@@ -0,0 +1,41 @@
++################################################################################
++#
++# lz4
++#
++################################################################################
++
++LZ4_VERSION = r117
++LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
++LZ4_INSTALL_STAGING = YES
++LZ4_LICENSE = BSD-2c
++LZ4_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++define LZ4_DISABLE_SHARED
++	$(SED) '/SHARED/d' $(@D)/Makefile
++endef
++LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
++endif
++
++define HOST_LZ4_BUILD_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++endef
++
++define HOST_LZ4_INSTALL_CMDS
++	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
++endef
++
++define LZ4_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
++endef
++
++define LZ4_INSTALL_STAGING_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
++endef
++
++define LZ4_INSTALL_TARGET_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.5
