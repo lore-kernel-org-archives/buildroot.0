@@ -1,100 +1,116 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 15 May 2014 18:31:34 -0300
-Subject: [Buildroot] [PATCH 1/3] lz4: new package
-Message-ID: <1400189496-29633-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 15 May 2014 18:31:35 -0300
+Subject: [Buildroot] [PATCH 2/3] squashfs: bump to version 4.3
+In-Reply-To: <1400189496-29633-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1400189496-29633-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1400189496-29633-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also add optional lz4 support.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in     |  1 +
- package/lz4/Config.in | 14 ++++++++++++++
- package/lz4/lz4.mk    | 41 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/lz4/Config.in
- create mode 100644 package/lz4/lz4.mk
+ package/squashfs/Config.in                      |  6 ++++++
+ package/squashfs/squashfs-4.2-no-gzip-fix.patch | 26 -------------------------
+ package/squashfs/squashfs.mk                    | 13 ++++++++++---
+ 3 files changed, 16 insertions(+), 29 deletions(-)
+ delete mode 100644 package/squashfs/squashfs-4.2-no-gzip-fix.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index e0f982e..7a3e5ef 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -38,6 +38,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- source "package/gzip/Config.in"
- endif
- source "package/infozip/Config.in"
-+source "package/lz4/Config.in"
- source "package/lzip/Config.in"
- source "package/lzop/Config.in"
- source "package/xz/Config.in"
-diff --git a/package/lz4/Config.in b/package/lz4/Config.in
-new file mode 100644
-index 0000000..a855e31
---- /dev/null
-+++ b/package/lz4/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_LZ4
-+	bool "lz4"
-+	depends on BR2_LARGEFILE
+diff --git a/package/squashfs/Config.in b/package/squashfs/Config.in
+index 385df1a..79ebf57 100644
+--- a/package/squashfs/Config.in
++++ b/package/squashfs/Config.in
+@@ -18,6 +18,12 @@ config BR2_PACKAGE_SQUASHFS_GZIP
+ 	help
+ 	  Support GZIP compression algorithm
+ 
++config BR2_PACKAGE_SQUASHFS_LZ4
++	bool "lz4 support"
++	select BR2_PACKAGE_LZ4
 +	help
-+	  LZ4 is a very fast lossless compression algorithm, providing
-+	  compression speed at 400 MB/s per core, scalable with multi-cores
-+	  CPU. It also features an extremely fast decoder, with speed
-+	  in multiple GB/s per core, typically reaching RAM speed limits
-+	  on multi-core systems.
++	  Support LZ4 compression algorithm
 +
-+	  https://code.google.com/p/lz4/
-+
-+comment "lz4 needs a toolchain w/ largefile"
-+	depends on !BR2_LARGEFILE
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-new file mode 100644
-index 0000000..a089b0e
---- /dev/null
-+++ b/package/lz4/lz4.mk
-@@ -0,0 +1,41 @@
-+################################################################################
-+#
-+# lz4
-+#
-+################################################################################
-+
-+LZ4_VERSION = r117
-+LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
-+LZ4_INSTALL_STAGING = YES
-+LZ4_LICENSE = BSD-2c
-+LZ4_LICENSE_FILES = LICENSE
-+
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+define LZ4_DISABLE_SHARED
-+	$(SED) '/SHARED/d' $(@D)/Makefile
-+endef
-+LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ config BR2_PACKAGE_SQUASHFS_LZMA
+ 	bool "lzma support"
+ 	select BR2_PACKAGE_XZ
+diff --git a/package/squashfs/squashfs-4.2-no-gzip-fix.patch b/package/squashfs/squashfs-4.2-no-gzip-fix.patch
+deleted file mode 100644
+index 4cb5f50..0000000
+--- a/package/squashfs/squashfs-4.2-no-gzip-fix.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-[PATCH] squashfs-tools: unbreak builds without gzip support
+-
+-The initialization of gzip_comp_ops if gzip support is disabled is
+-missing 2 null pointers, causing the id element to be initialized to 0
+-rather than ZLIB_COMPRESSION, which breaks all the compressor functions
+-as they loop until finding the correct element or id = 0.
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- squashfs-tools/compressor.c |    3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-Index: squashfs4.2/squashfs-tools/compressor.c
+-===================================================================
+---- squashfs4.2.orig/squashfs-tools/compressor.c
+-+++ squashfs4.2/squashfs-tools/compressor.c
+-@@ -27,7 +27,8 @@
+- 
+- #ifndef GZIP_SUPPORT
+- static struct compressor gzip_comp_ops =  {
+--	NULL, NULL, NULL, NULL, NULL, NULL, ZLIB_COMPRESSION, "gzip", 0
+-+	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, ZLIB_COMPRESSION,
+-+	"gzip", 0
+- };
+- #else
+- extern struct compressor gzip_comp_ops;
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index bff308c..aaf568c 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -4,13 +4,20 @@
+ #
+ ################################################################################
+ 
+-SQUASHFS_VERSION = 4.2
++SQUASHFS_VERSION = 4.3
+ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
+ 
+ # no libattr in BR
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
+ 
++ifeq ($(BR2_PACKAGE_SQUASHFS_LZ4),y)
++SQUASHFS_DEPENDENCIES += lz4
++SQUASHFS_MAKE_ARGS += LZ4_SUPPORT=1 COMP_DEFAULT=lz4
++else
++SQUASHFS_MAKE_ARGS += LZ4_SUPPORT=0
 +endif
 +
-+define HOST_LZ4_BUILD_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-+endef
-+
-+define HOST_LZ4_INSTALL_CMDS
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
-+endef
-+
-+define LZ4_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
-+endef
-+
-+define LZ4_INSTALL_STAGING_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
-+endef
-+
-+define LZ4_INSTALL_TARGET_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
+ ifeq ($(BR2_PACKAGE_SQUASHFS_LZMA),y)
+ SQUASHFS_DEPENDENCIES += xz
+ SQUASHFS_MAKE_ARGS += LZMA_XZ_SUPPORT=1 COMP_DEFAULT=lzma
+@@ -39,14 +46,14 @@ else
+ SQUASHFS_MAKE_ARGS += GZIP_SUPPORT=0
+ endif
+ 
+-
+-HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lzo host-xz
++HOST_SQUASHFS_DEPENDENCIES = host-zlib host-lz4 host-lzo host-xz
+ 
+ # no libattr/xz in BR
+ HOST_SQUASHFS_MAKE_ARGS = \
+ 	XATTR_SUPPORT=0 \
+ 	XZ_SUPPORT=1    \
+ 	GZIP_SUPPORT=1  \
++	LZ4_SUPPORT=1	\
+ 	LZO_SUPPORT=1	\
+ 	LZMA_XZ_SUPPORT=1
+ 
 -- 
 1.8.5.5
