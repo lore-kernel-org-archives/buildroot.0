@@ -1,49 +1,39 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 15 May 2014 19:15:45 +0400
-Subject: [Buildroot] [PATCH 1/2] gdb: replace xtensa patches with proper
- backports from binutils-gdb
-In-Reply-To: <1400164410-13037-2-git-send-email-jcmvbkbc@gmail.com>
-References: <1400164410-13037-1-git-send-email-jcmvbkbc@gmail.com>
- <1400164410-13037-2-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <CAMo8BfLzYVSoghWby=a35rjdkqR4bY3sbCgQFnjUPB2XhBhw_Q@mail.gmail.com>
+Date: Thu, 15 May 2014 19:37:18 +0400
+Subject: [Buildroot] [PATCH v2 0/2] gdb fixes for xtensa
+Message-ID: <1400168240-12105-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 15, 2014 at 6:33 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> The functionality is unchanged.
+Hi,
 
-[...]
+this series replaces existing gdb-7.4.1 patches for xtensa with their
+backported versions from binutils-gdb and adds same patches for gdb-7.5.1.
 
-> --- a/package/gdb/7.4.1/xtensa-gdb-regsize.patch
-> +++ /dev/null
-> @@ -1,19 +0,0 @@
-> ---- gdb-7.4.1/gdb/xtensa-tdep.h.orig   2012-10-30 11:40:23.546448594 -0700
-> -+++ gdb-7.4.1/gdb/xtensa-tdep.h        2012-10-30 11:41:43.078445337 -0700
-> -@@ -17,6 +17,7 @@
-> -    You should have received a copy of the GNU General Public License
-> -    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-> -
-> -+#include <stdint.h>
+Changes v1 -> v2:
+- add #include <stdint.h> to fix build error due to missing uint32_t
+  definition.
 
-Oops, the backported version doesn't have this include and fails to build
-due to missing uint32_t definition ): I'll send fixed v2.
+Max Filippov (2):
+  gdb: replace xtensa patches with proper backports from binutils-gdb
+  gdb: add xtensa fixes for 7.5.1
 
-> -
-> - /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
-> -    whenever the "tdep" structure changes in an incompatible way.  */
-> -@@ -84,7 +85,7 @@
-> - /* Xtensa ELF core file register set representation ('.reg' section).
-> -    Copied from target-side ELF header <xtensa/elf.h>.  */
-> -
-> --typedef unsigned long xtensa_elf_greg_t;
-> -+typedef uint32_t xtensa_elf_greg_t;
-> -
-> - typedef struct
-> - {
+ .../gdb-100-xtensa-fix-linux-ptrace-includes.patch | 60 ++++++++++++++++++++++
+ .../7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch | 42 +++++++++++++++
+ package/gdb/7.4.1/xtensa-asm-ptrace-h.patch        | 22 --------
+ package/gdb/7.4.1/xtensa-gdb-regsize.patch         | 19 -------
+ .../gdb-100-xtensa-fix-linux-ptrace-includes.patch | 60 ++++++++++++++++++++++
+ .../7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch | 42 +++++++++++++++
+ 6 files changed, 204 insertions(+), 41 deletions(-)
+ create mode 100644 package/gdb/7.4.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
+ create mode 100644 package/gdb/7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
+ delete mode 100644 package/gdb/7.4.1/xtensa-asm-ptrace-h.patch
+ delete mode 100644 package/gdb/7.4.1/xtensa-gdb-regsize.patch
+ create mode 100644 package/gdb/7.5.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
+ create mode 100644 package/gdb/7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
 
 -- 
-Thanks.
--- Max
+1.8.1.4
