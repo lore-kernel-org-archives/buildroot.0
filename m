@@ -1,27 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 16 May 2014 09:28:46 +0200
-Subject: [Buildroot] [PATCH] libunwind: depend on libatomic_ops when
- available
-In-Reply-To: <85ff00479bda328ec3fa5dd9c7d7f3d0dce4d77d.1400179361.git.baruch@tkos.co.il>
-References: <85ff00479bda328ec3fa5dd9c7d7f3d0dce4d77d.1400179361.git.baruch@tkos.co.il>
-Message-ID: <20140516092846.0c25fb48@free-electrons.com>
+Date: Fri, 16 May 2014 09:31:42 +0200
+Subject: [Buildroot] [PATCH 1/2] pkg-stats: add luarocks perl python
+ virtual infrastructures
+In-Reply-To: <1400066654-32196-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1400066654-32196-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140516093142.29f7c4e6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Fabio Porcedda,
 
-On Thu, 15 May 2014 21:42:41 +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Wed, 14 May 2014 13:24:13 +0200, Fabio Porcedda wrote:
+> Recongize the recently added infrastrucures: luarocks, perl, python,
+> virtual.
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/libunwind/libunwind.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  support/scripts/pkg-stats | 71 +++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 71 insertions(+)
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Today's output is now correct thanks to your patch:
+http://autobuild.buildroot.org/stats/. And it now properly concludes
+that there are 0 packages not using any infrastructure \o/
 
-And thanks for following up on this!
+Thanks for having worked on updating this script!
+
+Best regards,
 
 Thomas
 -- 
