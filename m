@@ -1,8 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 May 2014 23:05:15 +0200
-Subject: [Buildroot] [PATCH 0/8 v3] graph-depends improvements (branch
-	yem/graphs)
-Message-ID: <cover.1400273945.git.yann.morin.1998@free.fr>
+Date: Fri, 16 May 2014 23:05:13 +0200
+Subject: [Buildroot] [PATCH 1/8] graph-depends: rename the variable to pass
+	the max depth
+In-Reply-To: <cover.1400273945.git.yann.morin.1998@free.fr>
+References: <cover.1400273945.git.yann.morin.1998@free.fr>
+Message-ID: <ac099fb409cf8c37410df8af5af933758fafa368.1400273945.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,92 +13,99 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+There will soon be new options to the graph-depends script, which we
+can only sanely pass via environment variables.
 
-This series brings a few improvements to the graph-depends utility:
+Currently, we use such an environment variable to pass the maximum depth
+of the dependency graph; the name of that variable is explicit that it
+contains just the depth.
 
-  - add option to remove transitive dependencies
-  - add option to pas arbitrary args to the dot utility
-  - cleanup and re-arrange the code
+However, there has been so far no release of Buildroot which would make
+use of that variable, so no user should have come to rely on it.
 
-This series is open for discusion, especially on how we pass options to
-the graph generators:
+Rename that variable so it is less specific, and more generic, so it can
+be used to pass more options to graph-depends.
 
-  - support/scripts/graph-depends: needs to know whether to generate
-    transitive dependencies or not, and how deep to limit the dependencies
-
-  - the 'dot' utility: needs to know whether to graph top-down or
-    left-right (or whatever), the type of graph (tree, circle...) and
-    so on...
-
-Currently, environment variables are used, but that is not in the tastes
-of some (me including), but I can't see a better way.
-
-Peter suggested using kconfig knobs, but it does not scale when you want
-different settings for different graphs (e.g, different depth level for
-different packages).
-
-Samuel suggested using a config file, but it has the same issues as the
-kconfig options. He also suggested pasing a single environment variable,
-but that does not work since some options are for graph-depends shile
-others are for dot.
-
-So I went for:
-
-  - renaming the existing DEPTH variable: we can do that since it's
-    been in no release for now (quick! let's apply at least the first
-    patch for this cycle! ;-) )
-
-  - add a new variable to pass options to dot
-
-Changes v2 -> v3:
-  - pythonise even further the handling of --depth  (Samuel)
-  - rename BR2_GRAPH_DEPTH to BR2_GRAPH_DEPS_OPTS
-  - introduce BR2_GRAPH_DOT_OPTS
-  - update manual accordingly
-
-Changes v1 -> v2:
-  - complete rewrite, split into a series
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit ae1df831c0d56aaa88741595963e97aa39ed5961:
-
-  package/avahi: does not build with static-only (2014-05-16 22:41:55 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git 
-
-for you to fetch changes up to 62b0daddcbd6ba88226ca7cb658b9ad021168b56:
-
-  manual: document the new graph-depends options (2014-05-16 22:57:56 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (8):
-      graph-depends: rename the variable to pass the max depth
-      graphs: add option to remove transitive dependencies in dependency graph
-      graphs-depends: merge redundant-dependencies elimination
-      graph-depends: handle the depth argument in a more pythonic way
-      graph-depends: document the max_depth variable
-      graph-depends: rename the mode constants
-      graph-depends: add option to pass arbitrary dot options
-      manual: document the new graph-depends options
-
- Makefile                      |   5 +-
- docs/manual/common-usage.txt  |  19 ++++++-
- foo                           |   0
- package/pkg-generic.mk        |   4 +-
- support/scripts/graph-depends | 125 ++++++++++++++++++++++++------------------
- 5 files changed, 94 insertions(+), 59 deletions(-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+---
+ Makefile                     |  3 +--
+ docs/manual/common-usage.txt | 14 ++++++++++++--
+ foo                          |  0
+ package/pkg-generic.mk       |  2 +-
+ 4 files changed, 14 insertions(+), 5 deletions(-)
  create mode 100644 foo
 
+diff --git a/Makefile b/Makefile
+index 6d97262..d91231c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -150,7 +150,6 @@ endif
+ # Need that early, before we scan packages
+ # Avoids doing the $(or...) everytime
+ BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
+-BR_GRAPH_DEPTH := $(or $(BR2_GRAPH_DEPTH),0)
+ 
+ BUILD_DIR := $(BASE_DIR)/build
+ BINARIES_DIR := $(BASE_DIR)/images
+@@ -675,7 +674,7 @@ graph-build: $(O)/build/build-time.log
+ graph-depends:
+ 	@$(INSTALL) -d $(O)/graphs
+ 	@cd "$(CONFIG_DIR)"; \
+-	$(TOPDIR)/support/scripts/graph-depends -d $(BR_GRAPH_DEPTH) \
++	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+ 	|tee $(O)/graphs/$(@).dot \
+ 	|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
+ 
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 3d5842d..772982a 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -92,8 +92,8 @@ to +make+ or set in the environment:
+   build-time graphs
+ * +BR2_GRAPH_OUT+ to set the filetype of generated graphs, either +pdf+ (the
+   default), or +png+.
+-* +BR2_GRAPH_DEPTH+ (an integer) to limit the depth of the dependency graph.
+-  The default, +0+, is to not limit the depth.
++* +BR2_GRAPH_DEPS_OPTS+ to pass extra options to the dependency graph; see
++  xref:graph-depends[] for the accepted options
+ 
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
+@@ -198,6 +198,16 @@ supported.
+ BR2_GRAPH_OUT=svg make graph-depends
+ --------------------------------
+ 
++The +graph-depends+ behaviour can be controlled by setting options in the
+++BR2_GRAPH_DEPS_OPTS+ environment variable. The accepted options are:
++
++* +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
++  default, +0+, means no limit.
++
++--------------------------------
++BR2_GRAPH_DEPS_OPTS='-d 3' make graph-depends
++--------------------------------
++
+ === Graphing the build duration
+ 
+ [[graph-duration]]
+diff --git a/foo b/foo
+new file mode 100644
+index 0000000..e69de29
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6eca6d4..426d269 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -512,7 +512,7 @@ $(1)-show-depends:
+ $(1)-graph-depends:
+ 			@$(INSTALL) -d $(O)/graphs
+ 			@cd "$(CONFIG_DIR)"; \
+-			$(TOPDIR)/support/scripts/graph-depends -p $(1) -d $(BR_GRAPH_DEPTH) \
++			$(TOPDIR)/support/scripts/graph-depends -p $(1) $(BR2_GRAPH_DEPS_OPTS) \
+ 			|tee $(O)/graphs/$$(@).dot \
+ 			|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
