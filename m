@@ -1,29 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 May 2014 16:13:30 +0200
-Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: fix fontrootdir
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 May 2014 16:12:48 +0200
+Subject: [Buildroot] [git commit] xserver_xorg-server: fix fontrootdir
 	configuration
-In-Reply-To: <1399989589-3731-1-git-send-email-filippo.sironi@gmail.com>
- (Filippo Sironi's message of "Tue, 13 May 2014 15:59:49 +0200")
-References: <1399989589-3731-1-git-send-email-filippo.sironi@gmail.com>
-Message-ID: <87lhu1reut.fsf@dell.be.48ers.dk>
+Message-ID: <20140516141341.2C03E9CBC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Filippo" == Filippo Sironi <filippo.sironi@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=3d6199ca8988d2624159dc0868165b0cc09143bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The --with-fontdir switch has been substituted by the --with-fontrootdir
- > switch a few versions ago. The use of the old configuration switch was
- > causing error messages like the following:
+The --with-fontdir switch has been substituted by the --with-fontrootdir
+switch a few versions ago. The use of the old configuration switch was
+causing error messages like the following:
 
- > _FontTransOpen: Unable to Parse address ${prefix}/share/fonts/X11/*/
- > [dix] Could not init font path element ${prefix}/share/fonts/X11/*/, removing from list!
+_FontTransOpen: Unable to Parse address ${prefix}/share/fonts/X11/*/
+[dix] Could not init font path element ${prefix}/share/fonts/X11/*/, removing from list!
 
- > Signed-off-by: Filippo Sironi <filippo.sironi@gmail.com>
+Signed-off-by: Filippo Sironi <filippo.sironi@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 4f2eff2..284d602 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -59,7 +59,7 @@ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
+ 		--disable-xnest --disable-xephyr --disable-dmx \
+ 		--with-builder-addr=buildroot at buildroot.org \
+ 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
+-		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var \
++		--with-fontrootdir=/usr/share/fonts/X11/ --localstatedir=/var \
+ 		--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
+ 
+ ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
