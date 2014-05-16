@@ -1,28 +1,36 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Fri, 16 May 2014 07:42:37 -0500
-Subject: [Buildroot] [PATCH 1/2] pkg-stats: add luarocks perl python
- virtual infrastructures
-In-Reply-To: <20140516093142.29f7c4e6@free-electrons.com>
-References: <1400066654-32196-1-git-send-email-fabio.porcedda@gmail.com>
- <20140516093142.29f7c4e6@free-electrons.com>
-Message-ID: <20140516074237.17e4eff0@core2quad.morethan.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 May 2014 16:08:08 +0200
+Subject: [Buildroot] [PATCH] jack2: force host-python dependency for waf
+	build-system
+In-Reply-To: <1400064376-31656-1-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Wed, 14 May 2014 12:46:16 +0200")
+References: <1400064376-31656-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <8738g9sto7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 16 May 2014 09:31:42 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
-> Today's output is now correct thanks to your patch:
-> http://autobuild.buildroot.org/stats/. And it now properly concludes
-> that there are 0 packages not using any infrastructure \o/
->
+ > jack2 uses Waf 1.6.11. The waf configure program combines a part of
+ > python script with a compiled blob. According to Waf documentation,
+ > waf currently supports python interpreter from version 2.3 to 3.1.
 
-Nice looking report.
+ > However, Buildroot provides python-3.4. So, let's uses host python2
+ > interpreter for building jack2.
 
-A very tiny nit:
-Pick a single spelling of license/licence in the summary section.
+ > This patch also cleanup whitespace, replacing wrongly used spaces with
+ > tabs.
 
-Mike
+ > Fixed:
+ >   http://autobuild.buildroot.net/results/913/913bb1836076be9f201bf6641c7614708d6916bc/
+
+ > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
