@@ -1,71 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 May 2014 23:18:58 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Rebuild packages when their external
- config is updated
-In-Reply-To: <1400253776-21759-2-git-send-email-sojka@merica.cz>
-References: <1400253776-21759-1-git-send-email-sojka@merica.cz>
- <1400253776-21759-2-git-send-email-sojka@merica.cz>
-Message-ID: <20140516211858.GD3466@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 May 2014 23:26:41 +0200
+Subject: [Buildroot] [PATCH 5/8] graph-depends: document the max_depth
+	variable
+In-Reply-To: <77ef0e4acd2da331895bf92aa03593bb284dbe62.1400273945.git.yann.morin.1998@free.fr>
+References: <cover.1400273945.git.yann.morin.1998@free.fr>
+ <77ef0e4acd2da331895bf92aa03593bb284dbe62.1400273945.git.yann.morin.1998@free.fr>
+Message-ID: <20140516232641.201c1825@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michal, All,
+Dear Yann E. MORIN,
 
-On 2014-05-16 17:22 +0200, Michal Sojka spake thusly:
-> Packages like busybox, Linux kernel or uclibc can "import" their
-> configuration files from external location specified either in
-> buildroot's .config or in an environment variable. Currently, this
-> import happens only when the package is built for the first time. When
-> the external config changes later, the package is not rebuilt with the
-> updated configuration until the corresponding .stamp_configured file
-> is manually deleted. This patch changes this to automatically rebuild
-> the package, when its external configuration files is newer than
-> .stamp_configured.
+On Fri, 16 May 2014 23:05:17 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Although unnecessary (we already have initialisation via the parser),
+> initialise the max_depth option, and document it at the same time.
 
-I think this is still too far-reaching.
+This description...
 
-If you were to change a source file of your package, then you are
-supposed to tell Buildroot that it has to rebiuild the package with
-either of:
-    make PKG-reconfigure
-    make PKG-rebuild
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  support/scripts/graph-depends | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index c3dcbf1..dc6b98f 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -37,6 +37,9 @@ mode = 0
+>  # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+>  max_depth = 0
+>  
+> +# Whether to draw the transitive dependencies
+> +transitive = True
+> +
 
-The same goes if you modify the package's .mk file in Buildroot, or
-changing an option of the package in Buildroot's own .config.
+doesn't seem to match what the patch is doing. Am I missing something?
 
-I don't see how different changing a .config is from changing a source
-file, changing the .mk of the package, or changing an option in the
-Buildroot's menuconfig.
-
-Changing the .config is like if you were changing the package source
-tree, and telling Buildroot to use that with _OVERRIDE_SRCDIR, and we
-explicitly state that this should be handled with either 'reconfigure'
-or 'rebuild'.
-
-Really, the .config is part of the sources of a package.
-
-If we were to automatically rebuild a package because its .config did
-change, then I don.t see why we would not do it when a source file, its
-.mk or an option did change as well. And surely we do not want to go
-that route, or it would be a mess, and pratically impossible to detect
-correctly.
-
-And as Gustavo pointed out, this would even break a system in the case
-of uClibc anyway, since reconfiguring uClibc is most probably an ABI
-breakage, and would require much more than only rebuilding uClibc alone.
-
-So, I'm still not convinced by this change.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
