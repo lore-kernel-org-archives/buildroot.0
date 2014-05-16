@@ -1,60 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 16 May 2014 08:20:01 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-11
-In-Reply-To: <637450823.253368.1400157851288.JavaMail.zimbra@advansee.com>
-References: <20140512063008.74E21100DB2@stock.ovh.net>
- <20140513075247.GZ4096@tarshish>
- <20140513100102.14163e6c@free-electrons.com>
- <20140514205653.GL4096@tarshish>
- <CA+sos78G3YxRUCd6pj8naGBSHANEp=1f5FrtuG2oeQpbhNbOuw@mail.gmail.com>
- <20140514214141.GM4096@tarshish>
- <CA+sos7-42Mw1f_M_4+GDmP2-V1da7XwVTbtrsPTQQdiz4r0d+Q@mail.gmail.com>
- <20140515034447.GN4096@tarshish>
- <637450823.253368.1400157851288.JavaMail.zimbra@advansee.com>
-Message-ID: <20140516052001.GQ4096@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 16 May 2014 08:30:07 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-15
+Message-ID: <20140516063007.BBF65100E93@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Beno?t,
+Build statistics for 2014-05-15
+===============================
 
-On Thu, May 15, 2014 at 02:44:11PM +0200, Beno?t Th?baudeau wrote:
-> On Thursday, May 15, 2014 5:44:47 AM, Baruch Siach wrote:
-> > On Thu, May 15, 2014 at 12:10:06AM +0200, Beno?t Th?baudeau wrote:
-> > > Also, 'LSOF_INCLUDE="$(STAGING_DIR)/usr/include"' is explicitly asking
-> > > the configuration script to mix native and cross stuff for tests.
-> > 
-> > This should be fixed then. I'll look into it.
-> 
-> Cool.
+        success : 88 
+       failures : 11 
+       timeouts : 0  
+          TOTAL : 99 
 
-I went through the Configure script, and it seems that almost all uses of 
-$LSOF_INCLUDE are for direct headers existence or grep tests, not build/run 
-tests. I guess leaving the $LSOF_INCLUDE setting as is should be safe for now.
+Classification of failures by reason
+====================================
 
-> OTOH, the worst test is probably the one for strftime() support, which
-> just tests native toolchain features by running code on the build machine (not
-> just testing #define-s).
+                 cairo-1.12.10 | 2 
+          glibc-2.18-svnr23787 | 2 
+jack2-ab409a65df95bc261ff72... | 1 
+                  samba-3.6.23 | 1 
+               audiofile-0.3.6 | 1 
+             dosfstools-3.0.26 | 1 
+              postgresql-9.3.4 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+             libfribidi-0.19.6 | 1 
 
-This test doesn't use $LSOF_INCLUDE at all, and is a purely host test and thus 
-useless. OTOH, there is no easy way to disable this test short of patching the 
-Configure script. IMO this test is harmless. In case we encounter a target 
-without strftime()/localtime(), we'll see a clear build failure. So I believe 
-we should just leave this test as is for now as well.
+Detail of failures
+===================
 
-> Most of the other tests do things like for GLIBC, hence
-> a lot of mix-up in the header files.
+       arm |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/b0cdbd79cdd61cdcf21dabb72835c8c9a859552d/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/ab05ebf608c8ca8d1344b0e6f32ce21ff6bd5795/
+      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/2c25c0d66ed89fc3f8c87911d32dfff9208b9f66/
+      bfin |              dosfstools-3.0.26 | NOK | http://autobuild.buildroot.net/results/9a210e565fe88d474e92fb94844c2c91d584fe3c/
+   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/d9a8a7327bdba3cacfb5afce8021e281a11cfaae/
+   aarch64 |           glibc-2.18-svnr23787 | NOK | http://autobuild.buildroot.net/results/185b9ab5604b2c66576bb4e5fbcb4f8a1216fe95/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/7b9d647f1a85e1d232dace6a5925314f39c2081b/
+       arm | jack2-ab409a65df95bc261ff72... | NOK | http://autobuild.buildroot.net/results/1fe9cece681f02f58a97fe40350e555d050e5bcf/
+     nios2 |              libfribidi-0.19.6 | NOK | http://autobuild.buildroot.net/results/a584831261c431210549aa247e746a99cacf599c/
+microblazeel |               postgresql-9.3.4 | NOK | http://autobuild.buildroot.net/results/6860988c9edb62d0d32cc6b0bd6af4f35ca0e343/
+     avr32 |                   samba-3.6.23 | NOK | http://autobuild.buildroot.net/results/01cd52a9f1a21cc6d33d7373ffe439d3cd7d4786/
 
-Other that the glibc test which is now disabled I have not found any other 
-example of host toolchain with target headers mix in the Configure script. 
-Have you seen any?
-
-baruch
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
