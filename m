@@ -1,39 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 May 2014 22:40:57 +0200
-Subject: [Buildroot] [PATCH 4/4] infra: pkg-utils.mk replace "echo -en"
-	with printf
-In-Reply-To: <1400063214-29462-5-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Wed, 14 May 2014 12:26:54 +0200")
-References: <1400063214-29462-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1400063214-29462-5-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87iop5picm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 16 May 2014 22:38:27 +0200
+Subject: [Buildroot] [git commit] udev: replace "echo -en" with printf
+Message-ID: <20140516204123.B4D049CBC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=ec43c84ce8139644bbce260e17693c551baf4135
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > printf is POSIX-compliant, echo -e/n is not.
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > ---
- >  package/pkg-utils.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+printf is POSIX-compliant, echo -e/n is not.
 
- > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
- > index da3f0fc..f299e55 100644
- > --- a/package/pkg-utils.mk
- > +++ b/package/pkg-utils.mk
- > @@ -110,7 +110,7 @@ define legal-manifest # pkg, version, license, license-files, source, {HOST|TARG
- >  endef
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/udev/S10udev |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/udev/S10udev b/package/udev/S10udev
+index 2c7b7e9..cf825b4 100755
+--- a/package/udev/S10udev
++++ b/package/udev/S10udev
+@@ -27,8 +27,8 @@ test -r $UDEV_CONFIG || exit 6
  
- >  define legal-license-header # pkg, license-file, {HOST|TARGET}
- > -	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
- > +	printf "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
- >  		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
-
-Same as for acpid. Are you sure the missing newline doesn't matter?
-
--- 
-Bye, Peter Korsgaard
+ case "$1" in
+     start)
+-        echo -n "Populating ${udev_root:-/dev} using udev: "
+-        echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
++        printf "Populating ${udev_root:-/dev} using udev: "
++        printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+         $UDEV_BIN -d || (echo "FAIL" && exit 1)
+         udevadm trigger
+         echo "done"
