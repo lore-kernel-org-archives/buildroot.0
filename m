@@ -1,36 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 May 2014 16:08:08 +0200
-Subject: [Buildroot] [PATCH] jack2: force host-python dependency for waf
-	build-system
-In-Reply-To: <1400064376-31656-1-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Wed, 14 May 2014 12:46:16 +0200")
-References: <1400064376-31656-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <8738g9sto7.fsf@dell.be.48ers.dk>
+Date: Fri, 16 May 2014 16:09:43 +0200
+Subject: [Buildroot] [PATCH v2 0/2] gdb fixes for xtensa
+In-Reply-To: <1400168240-12105-1-git-send-email-jcmvbkbc@gmail.com> (Max
+ Filippov's message of "Thu, 15 May 2014 19:37:18 +0400")
+References: <1400168240-12105-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <87y4y1rf14.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
- > jack2 uses Waf 1.6.11. The waf configure program combines a part of
- > python script with a compiled blob. According to Waf documentation,
- > waf currently supports python interpreter from version 2.3 to 3.1.
+ > Hi,
+ > this series replaces existing gdb-7.4.1 patches for xtensa with their
+ > backported versions from binutils-gdb and adds same patches for gdb-7.5.1.
 
- > However, Buildroot provides python-3.4. So, let's uses host python2
- > interpreter for building jack2.
+ > Changes v1 -> v2:
+ > - add #include <stdint.h> to fix build error due to missing uint32_t
+ >   definition.
 
- > This patch also cleanup whitespace, replacing wrongly used spaces with
- > tabs.
+ > Max Filippov (2):
+ >   gdb: replace xtensa patches with proper backports from binutils-gdb
+ >   gdb: add xtensa fixes for 7.5.1
 
- > Fixed:
- >   http://autobuild.buildroot.net/results/913/913bb1836076be9f201bf6641c7614708d6916bc/
-
- > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
