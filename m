@@ -1,64 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 15 May 2014 23:51:44 +0200
-Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: fix fontrootdir
- configuration
-In-Reply-To: <1399989589-3731-1-git-send-email-filippo.sironi@gmail.com>
-References: <1399989589-3731-1-git-send-email-filippo.sironi@gmail.com>
-Message-ID: <20140515215144.GH3463@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 16 May 2014 05:51:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXfont: Bump version
+	to 1.4.8
+Message-ID: <1400212297-14833-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Filippo, All,
+Fixes CVE-2014-0209, CVE-2014-0210 & CVE-2014-0211
+http://lists.x.org/archives/xorg-announce/2014-May/002431.html
 
-On 2014-05-13 15:59 +0200, Filippo Sironi spake thusly:
-> The --with-fontdir switch has been substituted by the --with-fontrootdir
-> switch a few versions ago. The use of the old configuration switch was
-> causing error messages like the following:
-> 
-> _FontTransOpen: Unable to Parse address ${prefix}/share/fonts/X11/*/
-> [dix] Could not init font path element ${prefix}/share/fonts/X11/*/, removing from list!
-> 
-> Signed-off-by: Filippo Sironi <filippo.sironi@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Confirmed by looking at: ./configure --help |grep font  
-
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> index 4f2eff2..284d602 100644
-> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-> @@ -59,7 +59,7 @@ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
->  		--disable-xnest --disable-xephyr --disable-dmx \
->  		--with-builder-addr=buildroot at buildroot.org \
->  		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1" \
-> -		--with-fontdir=/usr/share/fonts/X11/ --localstatedir=/var \
-> +		--with-fontrootdir=/usr/share/fonts/X11/ --localstatedir=/var \
->  		--$(if $(BR2_PACKAGE_XSERVER_XORG_SERVER_XVFB),en,dis)able-xvfb
->  
->  ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR),y)
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index b692d08..5f2b1e1 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXFONT_VERSION = 1.4.7
++XLIB_LIBXFONT_VERSION = 1.4.8
+ XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
+ XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFONT_LICENSE = MIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
