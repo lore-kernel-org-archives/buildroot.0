@@ -1,37 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 16 May 2014 22:37:26 +0200
-Subject: [Buildroot] [git commit] eudev: replace "echo -en" with printf
-Message-ID: <20140516204123.AE7179CC3B@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 May 2014 22:42:23 +0200
+Subject: [Buildroot] [PATCH v2] package/avahi: does not build with
+	static-only
+In-Reply-To: <1400271779-15102-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Fri, 16 May 2014 22:22:59 +0200")
+References: <1400271779-15102-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87egztpia8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dcab4e880160e37b8d0cb2adb0e2e7b1d490a639
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-printf is POSIX-compliant, echo -e/n is not.
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > ... and propagate to reverse dependencies.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/eudev/S10udev |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ > Fixes (which I reproduced here):
+ >     http://autobuild.buildroot.net/results/ea2/ea2c8f20c4032bf82876805ea787a55834091cec
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index e4d28a2..e00aa91 100755
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -27,8 +27,8 @@ test -r $UDEV_CONFIG || exit 6
- 
- case "$1" in
-     start)
--        echo -n "Populating ${udev_root:-/dev} using udev: "
--        echo -e '\000\000\000\000' > /proc/sys/kernel/hotplug
-+        printf "Populating ${udev_root:-/dev} using udev: "
-+        printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-         $UDEV_BIN -d || (echo "FAIL" && exit 1)
-         udevadm trigger
-         echo "done"
+ > Should fix (which I did not even try to reproduce):
+ >     http://autobuild.buildroot.net/results/4ef/4ef5bfc17f50bddb00f7ef3d62fc1fe963b7da82
+ >     http://autobuild.buildroot.net/results/76e/76e4854812b0ef3862c080eead4012b35ef27f0f
+ >     http://autobuild.buildroot.net/results/5bf/5bfb3fd9fe61bef5f998dc5999ce2060c334662c
+ >     http://autobuild.buildroot.net/results/dc6/dc607c35471ef6dda04e06ad05ae7794615af578
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - add autobuilder references  (Thomas)
+ >   - propagate to reverse dependencies  (Peter)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
