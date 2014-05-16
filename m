@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 May 2014 23:05:13 +0200
-Subject: [Buildroot] [PATCH 1/8] graph-depends: rename the variable to pass
-	the max depth
+Date: Fri, 16 May 2014 23:05:14 +0200
+Subject: [Buildroot] [PATCH 2/8] graphs: add option to remove transitive
+	dependencies in dependency graph
 In-Reply-To: <cover.1400273945.git.yann.morin.1998@free.fr>
 References: <cover.1400273945.git.yann.morin.1998@free.fr>
-Message-ID: <ac099fb409cf8c37410df8af5af933758fafa368.1400273945.git.yann.morin.1998@free.fr>
+Message-ID: <ef77e0e21954654789a2af7f86ccea4ec6b4d5ce.1400273945.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,99 +13,120 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-There will soon be new options to the graph-depends script, which we
-can only sanely pass via environment variables.
+Currently, all the dependencies of a package are drawn on the dependency
+graph, including transitive dependencies (e.g. A->B->C and A->C).
 
-Currently, we use such an environment variable to pass the maximum depth
-of the dependency graph; the name of that variable is explicit that it
-contains just the depth.
+For very big graphs, with lots of packages with lots of dependencies, the
+dependency graph can be very dense, and transitive dependencies are
+cluttering the graph.
 
-However, there has been so far no release of Buildroot which would make
-use of that variable, so no user should have come to rely on it.
+In some cases, only getting the "build-order" dependencies is enough (e.g.
+to see what impact a package rebuild would have).
 
-Rename that variable so it is less specific, and more generic, so it can
-be used to pass more options to graph-depends.
+Add a new environment variable to disable drawing transitive dependencies.
+
+Basically, it would turn this graph:
+
+    pkg1 ---> pkg2 ---> pkg3 -------------------.
+         |\__________/                 \         \
+         |\____________________         \         \
+         |                     \         \         \
+          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
+                    \__________/
+
+into that graph:
+
+    pkg1 ---> pkg2 ---> pkg3 -----------.
+         |                               \
+          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
+
+[Thanks to Samuel for the parser hints]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
----
- Makefile                     |  3 +--
- docs/manual/common-usage.txt | 14 ++++++++++++--
- foo                          |  0
- package/pkg-generic.mk       |  2 +-
- 4 files changed, 14 insertions(+), 5 deletions(-)
- create mode 100644 foo
 
-diff --git a/Makefile b/Makefile
-index 6d97262..d91231c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -150,7 +150,6 @@ endif
- # Need that early, before we scan packages
- # Avoids doing the $(or...) everytime
- BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
--BR_GRAPH_DEPTH := $(or $(BR2_GRAPH_DEPTH),0)
+---
+Note: some graphs showing the results are there:
+    http://ymorin.is-a-geek.org/download/tmp/graphs/
+---
+ support/scripts/graph-depends | 49 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index e2a5e1e..4ad18b4 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -40,6 +40,10 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+ parser.add_argument("--depth", '-d', metavar="DEPTH",
+                     help="Limit the dependency graph to DEPTH levels")
++parser.add_argument("--transitive", dest="transitive", action='store_true')
++parser.add_argument("--no-transitive", dest="transitive", action='store_false',
++                    default=True,
++                    help="Draw (do not draw) transitive dependencies")
+ args = parser.parse_args()
  
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
-@@ -675,7 +674,7 @@ graph-build: $(O)/build/build-time.log
- graph-depends:
- 	@$(INSTALL) -d $(O)/graphs
- 	@cd "$(CONFIG_DIR)"; \
--	$(TOPDIR)/support/scripts/graph-depends -d $(BR_GRAPH_DEPTH) \
-+	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
- 	|tee $(O)/graphs/$(@).dot \
- 	|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
+ if args.package is None:
+@@ -51,6 +55,8 @@ else:
+ if args.depth is not None:
+     max_depth = int(args.depth)
  
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 3d5842d..772982a 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -92,8 +92,8 @@ to +make+ or set in the environment:
-   build-time graphs
- * +BR2_GRAPH_OUT+ to set the filetype of generated graphs, either +pdf+ (the
-   default), or +png+.
--* +BR2_GRAPH_DEPTH+ (an integer) to limit the depth of the dependency graph.
--  The default, +0+, is to not limit the depth.
-+* +BR2_GRAPH_DEPS_OPTS+ to pass extra options to the dependency graph; see
-+  xref:graph-depends[] for the accepted options
- 
- An example that uses config files located in the toplevel directory and
- in your $HOME:
-@@ -198,6 +198,16 @@ supported.
- BR2_GRAPH_OUT=svg make graph-depends
- --------------------------------
- 
-+The +graph-depends+ behaviour can be controlled by setting options in the
-++BR2_GRAPH_DEPS_OPTS+ environment variable. The accepted options are:
++transitive = args.transitive
 +
-+* +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
-+  default, +0+, means no limit.
-+
-+--------------------------------
-+BR2_GRAPH_DEPS_OPTS='-d 3' make graph-depends
-+--------------------------------
-+
- === Graphing the build duration
+ allpkgs = []
  
- [[graph-duration]]
-diff --git a/foo b/foo
-new file mode 100644
-index 0000000..e69de29
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6eca6d4..426d269 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -512,7 +512,7 @@ $(1)-show-depends:
- $(1)-graph-depends:
- 			@$(INSTALL) -d $(O)/graphs
- 			@cd "$(CONFIG_DIR)"; \
--			$(TOPDIR)/support/scripts/graph-depends -p $(1) -d $(BR_GRAPH_DEPTH) \
-+			$(TOPDIR)/support/scripts/graph-depends -p $(1) $(BR2_GRAPH_DEPS_OPTS) \
- 			|tee $(O)/graphs/$$(@).dot \
- 			|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
+ # Execute the "make show-targets" command to get the list of the main
+@@ -220,6 +226,49 @@ for dep in dependencies:
+         dict_deps[dep[0]] = []
+     dict_deps[dep[0]].append(dep[1])
  
++# This function return True if pkg is a dependency (direct or
++# transitive) of pkg2, dependencies being listed in the deps
++# dictionary. Returns False otherwise.
++def is_dep(pkg,pkg2,deps):
++    if deps.has_key(pkg2):
++        for p in deps[pkg2]:
++            if pkg == p:
++                return True
++            if is_dep(pkg,p,deps):
++                return True
++    return False
++
++# This function eliminates transitive dependencies; for example, given
++# these dependency chain: A->{B,C} and B->{C}, the A->{C} dependency is
++# already covered by B->{C}, so C is a transitive dependency of A, via B.
++# The functions does:
++#   - for each dependency d[i] of the package pkg
++#     - if d[i] is a dependency of any of the other dependencies d[j]
++#       - do not keep d[i]
++#     - otherwise keep d[i]
++def remove_transitive_deps(pkg,deps):
++    d = deps[pkg]
++    new_d = []
++    for i in range(len(d)):
++        keep_me = True
++        for j in range(len(d)):
++            if j==i:
++                continue
++            if is_dep(d[i],d[j],deps):
++                keep_me = False
++        if keep_me:
++            new_d.append(d[i])
++    return new_d
++
++# This functions trims down the dependency list of all packages.
++def remove_extra_deps(deps):
++    for pkg in deps.keys():
++        if not transitive:
++            deps[pkg] = remove_transitive_deps(pkg,deps)
++    return deps
++
++dict_deps = remove_extra_deps(dict_deps)
++
+ # Print the attributes of a node: label and fill-color
+ def print_attrs(pkg):
+     if pkg == 'all':
 -- 
 1.8.3.2
