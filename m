@@ -1,63 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 May 2014 22:22:59 +0200
-Subject: [Buildroot] [PATCH v2] package/avahi: does not build with
-	static-only
-Message-ID: <1400271779-15102-1-git-send-email-yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 16 May 2014 22:27:50 +0200
+Subject: [Buildroot] [PATCH v2 1/1] netsnmp: Remove ldconfig calls
+In-Reply-To: <1400043072-22885-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Wed, 14 May 2014 06:51:12 +0200")
+References: <1400043072-22885-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87zjihpiyh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-... and propagate to reverse dependencies.
+ > ldconfig breaks links created by gpu-viv-bin-mx6q.
+ > fixes
+ > http://autobuild.buildroot.net/results/ab5/ab57dd3729d529366808cbfc802f49360b2ec2b9/
 
-Fixes (which I reproduced here):
-    http://autobuild.buildroot.net/results/ea2/ea2c8f20c4032bf82876805ea787a55834091cec
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: rework the fix to not need a separate patch file
 
-Should fix (which I did not even try to reproduce):
-    http://autobuild.buildroot.net/results/4ef/4ef5bfc17f50bddb00f7ef3d62fc1fe963b7da82
-    http://autobuild.buildroot.net/results/76e/76e4854812b0ef3862c080eead4012b35ef27f0f
-    http://autobuild.buildroot.net/results/5bf/5bfb3fd9fe61bef5f998dc5999ce2060c334662c
-    http://autobuild.buildroot.net/results/dc6/dc607c35471ef6dda04e06ad05ae7794615af578
+ >  package/netsnmp/netsnmp.mk |    7 ++++++-
+ >  1 file changed, 6 insertions(+), 1 deletion(-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-
----
-Changes v1 -> v2:
-  - add autobuilder references  (Thomas)
-  - propagate to reverse dependencies  (Peter)
----
- package/avahi/Config.in | 1 +
- package/xbmc/Config.in  | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/package/avahi/Config.in b/package/avahi/Config.in
-index fd4d229..483d976 100644
---- a/package/avahi/Config.in
-+++ b/package/avahi/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_AVAHI
- 	# libdaemon uses fork()
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Avahi is a system which facilitates service
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 1e2f932..75666a4 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -70,6 +70,7 @@ if BR2_PACKAGE_XBMC
+ > diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+ > index 63ec97a..665b564 100644
+ > --- a/package/netsnmp/netsnmp.mk
+ > +++ b/package/netsnmp/netsnmp.mk
+ > @@ -67,9 +67,14 @@ ifneq ($(BR2_PACKAGE_NETSNMP_ENABLE_DEBUGGING),y)
+ >  	NETSNMP_CONF_OPT += --disable-debugging
+ >  endif
  
- config BR2_PACKAGE_XBMC_AVAHI
- 	bool "avahi"
-+	depends on !BR2_PREFER_STATIC_LIB # avahi
- 	select BR2_PACKAGE_AVAHI
- 	select BR2_PACKAGE_AVAHI_DAEMON
- 	help
+ > +define NETSNMP_INSTALL_STAGING_CMDS
+ > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ > +		DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true install
+ > +endef
+
+You can simply override NETSNMP_INSTALL_STAGING_OPT instead. Fixed to
+use that for both staging and target install and committed, thanks.
+
+ > +
+ >  define NETSNMP_INSTALL_TARGET_CMDS
+ >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ > -		DESTDIR=$(TARGET_DIR) install
+ > +		DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+ >  	$(INSTALL) -D -m 0755 package/netsnmp/S59snmpd \
+ >  		$(TARGET_DIR)/etc/init.d/S59snmpd
+ >  	for mib in $(NETSNMP_BLOAT_MIBS); do \
+ > -- 
+ > 1.7.10.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
