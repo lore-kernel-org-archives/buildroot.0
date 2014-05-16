@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 16 May 2014 23:05:18 +0200
-Subject: [Buildroot] [PATCH 6/8] graph-depends: rename the mode constants
+Date: Fri, 16 May 2014 23:05:19 +0200
+Subject: [Buildroot] [PATCH 7/8] graph-depends: add option to pass arbitrary
+	dot options
 In-Reply-To: <cover.1400273945.git.yann.morin.1998@free.fr>
 References: <cover.1400273945.git.yann.morin.1998@free.fr>
-Message-ID: <b029198bc6379b7a5aafb98d3d2b43cf913ef39a.1400273945.git.yann.morin.1998@free.fr>
+Message-ID: <f57ab08d87e9819dd0b75796667fcff6f747a22c.1400273945.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,77 +13,48 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This is ugly, since Python does not have enum constructs, so by moving
-the 'type' of the constant ('MODE' here) to the beginning, we get an
-artificial 'namespace' for the constants.
+Kids nowaday seem to prefer a left-to-right drawing rather than the
+more conventional and historical top-down drawing.
+
+Rather than multiply the number of environment variables, just add
+a single one where the user can pass arbitrary dot options, such as:
+
+    make BR2_GRAPH_DOT_OPTS=-Grankdir=LR graph-depends
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- support/scripts/graph-depends | 20 ++++++++------------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+ Makefile               | 2 +-
+ package/pkg-generic.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index dc6b98f..86af779 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -25,13 +25,9 @@ import sys
- import subprocess
- import argparse
+diff --git a/Makefile b/Makefile
+index d91231c..950f95f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -676,7 +676,7 @@ graph-depends:
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+ 	|tee $(O)/graphs/$(@).dot \
+-	|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
++	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
  
--# In FULL_MODE, we draw the full dependency graph for all selected
--# packages
--FULL_MODE = 1
--
--# In PKG_MODE, we only draw the dependency graph for a given package
--PKG_MODE  = 2
--
-+# Modes of operation:
-+MODE_FULL = 1   # draw full dependency graph for all selected packages
-+MODE_PKG  = 2   # draw dependency graph for a given package
- mode = 0
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
- # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
-@@ -52,9 +48,9 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
- args = parser.parse_args()
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 426d269..9251290 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -514,7 +514,7 @@ $(1)-graph-depends:
+ 			@cd "$(CONFIG_DIR)"; \
+ 			$(TOPDIR)/support/scripts/graph-depends -p $(1) $(BR2_GRAPH_DEPS_OPTS) \
+ 			|tee $(O)/graphs/$$(@).dot \
+-			|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
++			|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
  
- if args.package is None:
--    mode = FULL_MODE
-+    mode = MODE_FULL
- else:
--    mode = PKG_MODE
-+    mode = MODE_PKG
-     rootpkg = args.package
+ $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
  
- max_depth = args.depth
-@@ -166,7 +162,7 @@ TARGET_EXCEPTIONS = [
- 
- # In full mode, start with the result of get_targets() to get the main
- # targets and then use get_all_depends() for all targets
--if mode == FULL_MODE:
-+if mode == MODE_FULL:
-     targets = get_targets()
-     dependencies = []
-     allpkgs.append('all')
-@@ -184,7 +180,7 @@ if mode == FULL_MODE:
- 
- # In pkg mode, start directly with get_all_depends() on the requested
- # package
--elif mode == PKG_MODE:
-+elif mode == MODE_PKG:
-     dependencies = get_all_depends([rootpkg])
- 
- # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
-@@ -252,7 +248,7 @@ def print_attrs(pkg):
-         print "all [color=lightblue,style=filled]"
-         return
-     print "%s [label = \"%s\"]" % (pkg_node_name(pkg), pkg)
--    if mode == PKG_MODE and pkg == rootpkg:
-+    if mode == MODE_PKG and pkg == rootpkg:
-         print "%s [color=lightblue,style=filled]" % pkg_node_name(rootpkg)
-     else:
-         print "%s [color=grey,style=filled]" % pkg_node_name(pkg)
 -- 
 1.8.3.2
