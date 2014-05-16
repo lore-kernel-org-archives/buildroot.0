@@ -1,25 +1,29 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 16 May 2014 09:54:40 +0200
-Subject: [Buildroot] [PATCH] postgresql: disable spinlock support for
-	microblaze (el/be)
-In-Reply-To: <1400172131-724-1-git-send-email-ps.report@gmx.net> (Peter
- Seiderer's message of "Thu, 15 May 2014 18:42:11 +0200")
-References: <1400172131-724-1-git-send-email-ps.report@gmx.net>
-Message-ID: <87egzurwe7.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 16 May 2014 08:01:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 7010] jamvm builds and runs fine under mips (be)
+In-Reply-To: <bug-7010-163@https.bugs.busybox.net/>
+References: <bug-7010-163@https.bugs.busybox.net/>
+Message-ID: <20140516080154.234839CC3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+https://bugs.busybox.net/show_bug.cgi?id=7010
 
- > Fixes:
- >   http://autobuild.buildroot.org/results/686/6860988c9edb62d0d32cc6b0bd6af4f35ca0e343/
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Target Milestone|2014.05                     |2014.08
 
-Committed, thanks.
+--- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-16 08:01:52 UTC ---
+Feedback from Robert Lougher: new jamvm to be released hopefully this weekend.
+
+As I guess this is too short for 2014.05, I'm moving the milestone to 2014.08.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
