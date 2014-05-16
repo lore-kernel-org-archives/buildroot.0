@@ -1,30 +1,38 @@
-From: Tal Lubko <tallubko@yahoo.com>
-Date: Fri, 16 May 2014 15:07:00 -0700 (PDT)
-Subject: [Buildroot] Booting new kernels
-Message-ID: <1400278020.25876.YahooMailNeo@web122103.mail.ne1.yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 May 2014 00:27:51 +0200
+Subject: [Buildroot] [PATCH] binutils: add patch to fix AArch64 glibc
+ build issue
+In-Reply-To: <1400169395-11964-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1400169395-11964-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140516222751.GF3466@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Thomas, All,
 
-I'm using buildroot to build embedded Linux.
-I'm using syslinux 4.05 and kernel 3.6.8 and it works fine for me.
+On 2014-05-15 17:56 +0200, Thomas Petazzoni spake thusly:
+[--SNIP description of Aarch64 build failures--]
+> Therefore, even though we have not been able to reproduce the issue
+> outside of the autobuilders, and cannot confirm that the patch is
+> fixing the issue, I propose to integrate this binutils patch into
+> Buildroot. It is anyway an upstream binutils patch, which fixes a real
+> problem.
 
+And it seems it did fix the problem:
+    http://autobuild.buildroot.net/results/820/820d1796c5c09b032efdd10eadc1e61df4c00257
 
-However I need to use newer kernel and it doesn't work for me.For some reason when I use kernel 3.7.1 and above the system crashes during boot and I have no reason why.
-I tried syslinux mailing list but they think it's not a syslinux issue.
-Any ideas???
-I've attached the output.
+Wee! :-)
 
-Thanks for your help,
-Tal
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140516/f893fbf9/attachment-0001.html>
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: out.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140516/f893fbf9/attachment-0001.txt>
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
