@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 May 2014 16:11:34 +0200
-Subject: [Buildroot] [PATCH v7 31/31] xbmc needs IPv6 support
-In-Reply-To: <1400326806-16428-32-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 16:12:38 +0200
+Subject: [Buildroot] [PATCH v7 29/31] xbmc: Fix ffmpeg cross compile
+In-Reply-To: <1400326806-16428-30-git-send-email-bernd.kuhls@t-online.de>
 References: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
- <1400326806-16428-32-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140517161134.24d42424@free-electrons.com>
+ <1400326806-16428-30-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140517161238.40c04fc2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +13,28 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 17 May 2014 13:40:06 +0200, Bernd Kuhls wrote:
-
->  config BR2_PACKAGE_XBMC_LIBSHAIRPLAY
->  	bool "shairport"
-> -	depends on BR2_INET_IPV6
->  	select BR2_PACKAGE_LIBSHAIRPLAY
->  	help
->  	  Enable Shairport support.
->  	  Select this if you want to stream content from an Apple device.
+On Sat, 17 May 2014 13:40:04 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/xbmc/xbmc.mk |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index f564466..f537e92 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -29,6 +29,7 @@ XBMC_CONF_ENV = \
+>  	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
 >  
-> -comment "shairport support needs a toolchain w/ IPv6"
-> -	depends on !BR2_INET_IPV6
+>  XBMC_CONF_OPT +=  \
+> +	--with-arch=$(BR2_ARCH) \
+>  	--disable-crystalhd \
+>  	--disable-debug \
+>  	--disable-dvdcss \
 
-This partially reverts PATCH 20/31 from your series. It doesn't make
-much sense to have one patch in the series doing one thing, and then a
-later patch reverting that thing, no?
-
-Thanks!
+What is this fixing exactly? If it's needed for the bump to version
+13.0, then it should be part of the commit doing the bump.
 
 Thomas
 -- 
