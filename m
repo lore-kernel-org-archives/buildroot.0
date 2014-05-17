@@ -1,55 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 17:57:56 +0200
-Subject: [Buildroot] [PATCH v8 28/28] xbmc: Fix TexturePacker compile
-In-Reply-To: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400342276-10303-29-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 May 2014 18:53:30 +0200
+Subject: [Buildroot] [PATCH] xlib_libXpm: fix build on noMMU architectures
+Message-ID: <1400345610-11771-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch description:
+Add a patch to libXpm to fix build on noMMU architectures.
 
-use_texturepacker_native=yes
+Fixes:
 
-is needed because we obviously need a native-compiled binary, but the xbmc
-build system does enable this variable only for darwin, android and
-raspberry-pi targets.
+  http://autobuild.buildroot.org/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
 
-USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
-
-is also needed because
-USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
-is only executed for raspberry-pi by xbmc/configure and only
-USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
-
-To sum up, building for raspberry-pi and other archs works out-of-the-box,
-compiling for an Intel target, for example, fails:
-
-In file included from SDL_anigif.cpp:23:0:
-SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
-compilation terminated.
-XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xbmc/xbmc.mk |    2 ++
- 1 file changed, 2 insertions(+)
+ .../xlib_libXpm/xlib_libXpm-01-fork-check.patch     | 21 +++++++++++++++++++++
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk            |  2 ++
+ 2 files changed, 23 insertions(+)
+ create mode 100644 package/x11r7/xlib_libXpm/xlib_libXpm-01-fork-check.patch
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index f537e92..8e4979e 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -26,6 +26,8 @@ XBMC_CONF_ENV = \
- 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
- 	PYTHON_NOVERSIONCHECK="no-check" \
-+	use_texturepacker_native=yes \
-+	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm-01-fork-check.patch b/package/x11r7/xlib_libXpm/xlib_libXpm-01-fork-check.patch
+new file mode 100644
+index 0000000..fb4fb7d
+--- /dev/null
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm-01-fork-check.patch
+@@ -0,0 +1,21 @@
++Allow usage when fork() is not available
++
++When fork() is not available, we need to define NO_ZPIPE so that
++libXpm doesn't try to fork/exec to use a pipe to uncompress compressed
++.xpm files. There is obviously a loss of functionality, but loading
++uncompressed .xpm files should continue to work.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -22,6 +22,7 @@
++ 
++ # Checks for library functions
++ AC_CHECK_FUNCS([strlcat])
+++AC_CHECK_FUNC([fork],[], AC_DEFINE(NO_ZPIPE))
++ 
++ # Obtain compiler/linker options for dependencies
++ PKG_CHECK_MODULES(XPM, xproto x11)
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 86f331b..766724f 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -10,6 +10,8 @@ XLIB_LIBXPM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXPM_LICENSE = MIT
+ XLIB_LIBXPM_LICENSE_FILES = COPYING
+ XLIB_LIBXPM_INSTALL_STAGING = YES
++# we patch configure.ac
++XLIB_LIBXPM_AUTORECONF = YES
+ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
+ 	host-gettext
  
- XBMC_CONF_OPT +=  \
 -- 
-1.7.10.4
+1.9.3
