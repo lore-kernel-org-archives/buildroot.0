@@ -1,38 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 May 2014 23:07:24 +0200
-Subject: [Buildroot] [PATCH v8 03/28] mesa3d: Depend on xorg meta
- package instead of xserver_xorg-server
-In-Reply-To: <rluk4bxmh2.ln2@ID-313208.user.individual.net>
+Date: Sat, 17 May 2014 23:09:23 +0200
+Subject: [Buildroot] [PATCH v8 14/28] xdriver_xf86-video-intel: Bump
+ version to 2.99.911
+In-Reply-To: <8nuk4bxmh2.ln2@ID-313208.user.individual.net>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
- <20140517195636.GD3459@free.fr>
- <rluk4bxmh2.ln2@ID-313208.user.individual.net>
-Message-ID: <20140517210724.GQ3459@free.fr>
+ <1400342276-10303-15-git-send-email-bernd.kuhls@t-online.de>
+ <20140517200617.GF3459@free.fr>
+ <8nuk4bxmh2.ln2@ID-313208.user.individual.net>
+Message-ID: <20140517210923.GR3459@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
-
-On 2014-05-17 22:50 +0200, Bernd Kuhls spake thusly:
+On 2014-05-17 22:51 +0200, Bernd Kuhls spake thusly:
 > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-> news:20140517195636.GD3459 at free.fr: 
+> news:20140517200617.GF3459 at free.fr: 
 > 
-> > It would be nice if you could provide a bit more details in the commit
-> > log. I fail to see the reason for this change.
-> > 
-> > Care to expand a bit the commit log, please?
+> > Please, avoid re-ordering the dependencies.
 > 
 > Hi,
 > 
-> v9 will carry this small note:
-> "mesa3d does not depend on the xorg server as such, only on X libraries."
-> 
-> Is it enough?
+> v9 has the re-ordering removed.
 
-Yes, good! Thanks! :-)
+Thanks.
+
+While I'm at it, care to wait a bit before resending the series?Others
+may have comments, too, so wait a bit before respins. Something like two
+days should be OK.
+
+Thank you for your huge amount of work on this series! :-)
 
 Regards,
 Yann E. MORIN.
