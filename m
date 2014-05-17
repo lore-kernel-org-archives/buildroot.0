@@ -1,30 +1,69 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 17 May 2014 22:50:36 +0200
-Subject: [Buildroot] [PATCH v8 03/28] mesa3d: Depend on xorg meta
-	package instead of xserver_xorg-server
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 May 2014 23:01:08 +0200
+Subject: [Buildroot] [PATCH v8 22/28] xbmc: Add VA-API support
+In-Reply-To: <1400342276-10303-23-git-send-email-bernd.kuhls@t-online.de>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
- <20140517195636.GD3459@free.fr>
-Message-ID: <rluk4bxmh2.ln2@ID-313208.user.individual.net>
+ <1400342276-10303-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140517210108.GN3459@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140517195636.GD3459 at free.fr: 
+Bernd, All,
 
-> It would be nice if you could provide a bit more details in the commit
-> log. I fail to see the reason for this change.
+On 2014-05-17 17:57 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/xbmc/xbmc.mk |    9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> Care to expand a bit the commit log, please?
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index 7fdaafc..6718d46 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -40,7 +40,6 @@ XBMC_CONF_OPT +=  \
+>  	--disable-projectm \
+>  	--disable-pulse \
+>  	--disable-ssh \
+> -	--disable-vaapi \
+>  	--disable-vdpau \
+>  	--disable-vtbdecoder \
+>  	--enable-optimizations
+> @@ -56,6 +55,14 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+>  XBMC_DEPENDENCIES += dbus
+>  endif
+>  
+> +# xbmc needs libva & libva-glx
+> +ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
+> +XBMC_DEPENDENCIES += libva
 
-Hi,
+Shouldn't it also depend on mesa3d, too?
 
-v9 will carry this small note:
-"mesa3d does not depend on the xorg server as such, only on X libraries."
+Regards,
+Yann E. MORIN.
 
-Is it enough?
+> +XBMC_CONF_OPT += --enable-vaapi
+> +else
+> +XBMC_CONF_OPT += --disable-vaapi
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+>  XBMC_DEPENDENCIES += \
+>  	libglew \
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
