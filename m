@@ -1,67 +1,56 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 13:39:35 +0200
-Subject: [Buildroot] [PATCH v7 00/31] xbmc: bump version to 13.0-Gotham
-Message-ID: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 13:39:42 +0200
+Subject: [Buildroot] [PATCH v7 07/31] mesa3d: dri2 does not need udev support
+In-Reply-To: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400326806-16428-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the patch series combines my latest patches to bump xbmc.
-It also adds uClibc support to xbmc, a mesa3d version bump
-and several new packages to support the new xbmc release
-along with libva to get the best out of Intel systems.
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=b959fd9674938e127a34d42d34b903e3a9ae7ad9
+"The loader infrastructure for everything but DRI2 requires that udev be present"
 
-Regards, Bernd
+Check for udev only for dri3.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../mesa3d-0002-dri2-does-not-need-udev.patch      |   25 ++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
 
-v7: - rebased
-    - bump mesa3d version to 10.2-rc3
-    - included v2 of "xproto_dri3proto: New package"
-v6: - bump mesa3d version to 10.2-rc2
-    - bump libva and libva-intel-driver to 1.3.1
-
-
-Bernd Kuhls (31):
-  xproto_dri3proto: New package
-  mesa3d: Bump version to 10.2-rc3
-  mesa3d: Depend on xorg meta package instead of xserver_xorg-server
-  mesa3d: add dependency xproto_presentproto
-  mesa3d: Remove dependency for the libxml2 module of host-python
-  mesa3d: Add dri3 support
-  mesa3d: dri2 does not need udev support
-  libva: new package
-  libva-intel-driver: new package
-  ffmpeg: Add libva support
-  libglu: new package
-  libglew: new package
-  sdl: Add new dependency libglu for opengl support
-  xdriver_xf86-video-intel: Bump version to 2.99.911
-  rtmpdump: Add KSV patch
-  xbmc: bump version to 13.0
-  xbmc-pvr-addons: Version bump to xbmc Gotham-compatible addon
-  xbmc-addon-xvdr: Version bump to xbmc Gotham-compatible addon
-  xbmc: Add host-gettext dependency
-  xbmc: Allow compilation with uClibc
-  xbmc: fix arm/uclibc compilation
-  xbmc: Add X.org/OpenGL support
-  xbmc: Add VA-API support
-  xbmc: Add alsa support
-  xbmc: Add lame support
-  xbmc: Disable broken rsxs screensaver
-  xbmc: Add option for Goom screensaver
-  xbmc: add nasm/yasm dependency
-  xbmc: Fix ffmpeg cross compile
-  xbmc: Fix TexturePacker compile
-  xbmc needs IPv6 support
-
- package/libdrm/Config.in                           |    1 -
- package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    2 +-
- .../xlib_libXpm/xlib_libXpm-0001-detect-fork.patch |   66 --------------------
- package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    1 -
- 4 files changed, 1 insertion(+), 69 deletions(-)
- delete mode 100644 package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
-
+diff --git a/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch b/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
+new file mode 100644
+index 0000000..88c6861
+--- /dev/null
++++ b/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
+@@ -0,0 +1,25 @@
++http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=b959fd9674938e127a34d42d34b903e3a9ae7ad9
++"The loader infrastructure for everything but DRI2 requires that udev be present"
++
++Check for udev only for dri3.
++
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=75212#c5
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr Mesa-10.2.0-rc1.org/configure.ac Mesa-10.2.0-rc1/configure.ac
++--- Mesa-10.2.0-rc1.org/configure.ac	2014-05-03 02:17:23.000000000 +0200
+++++ Mesa-10.2.0-rc1/configure.ac	2014-05-07 19:51:54.187921825 +0200
++@@ -998,11 +998,11 @@
++         DEFINES="$DEFINES -DHAVE_ALIAS"
++         if test "x$enable_dri3" = xyes; then
++             DEFINES="$DEFINES -DHAVE_DRI3"
++-        fi
++ 
++         if test "x$have_libudev" != xyes; then
++             AC_MSG_ERROR([libudev-dev required for building DRI])
++         fi
+++        fi
++ 
++         case "$host_cpu" in
++         powerpc* | sparc*)
 -- 
 1.7.10.4
