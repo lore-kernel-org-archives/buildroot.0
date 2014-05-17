@@ -1,56 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 May 2014 23:06:32 +0200
-Subject: [Buildroot] [PATCH v8 27/28] xbmc: add nasm/yasm dependency
-In-Reply-To: <1400342276-10303-28-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 23:07:24 +0200
+Subject: [Buildroot] [PATCH v8 03/28] mesa3d: Depend on xorg meta
+ package instead of xserver_xorg-server
+In-Reply-To: <rluk4bxmh2.ln2@ID-313208.user.individual.net>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-28-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140517210632.GP3459@free.fr>
+ <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
+ <20140517195636.GD3459@free.fr>
+ <rluk4bxmh2.ln2@ID-313208.user.individual.net>
+Message-ID: <20140517210724.GQ3459@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-05-17 17:57 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Bernd, All,
 
-Could you please add a bit more description in your commit logs?
+On 2014-05-17 22:50 +0200, Bernd Kuhls spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+> news:20140517195636.GD3459 at free.fr: 
+> 
+> > It would be nice if you could provide a bit more details in the commit
+> > log. I fail to see the reason for this change.
+> > 
+> > Care to expand a bit the commit log, please?
+> 
+> Hi,
+> 
+> v9 will carry this small note:
+> "mesa3d does not depend on the xorg server as such, only on X libraries."
+> 
+> Is it enough?
 
-This change comes out of the blue, and we can't see why it is needed.
-
-If it breaks without it, then it should probably be part of the Gotham
-bump, no?
-
-If you are afraid the bump patch gets too big, then add it before the
-bump, and state it is a preparatory patch.
+Yes, good! Thanks! :-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/xbmc/xbmc.mk |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index a18b82a..f537e92 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -18,6 +18,8 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
->  	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
->  	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
->  
-> +XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm) $(if $(BR2_x86_64),host-yasm)
-> +
->  XBMC_CONF_ENV = \
->  	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
->  	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
