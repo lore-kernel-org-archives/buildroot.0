@@ -1,36 +1,31 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 12:32:44 +0200
-Subject: [Buildroot] [PATCH 2/2] mysql: Add optional OpenSSL dependency
-In-Reply-To: <1400322764-24571-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1400322764-24571-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400322764-24571-2-git-send-email-bernd.kuhls@t-online.de>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 17 May 2014 12:30:48 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-14
+References: <20140515063008.42ABD100ECD@stock.ovh.net>
+Message-ID: <obqj4bxae8.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make sure OpenSSL is build before mysql.
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140515063008.42ABD100ECD at stock.ovh.net: 
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mysql/mysql.mk |    4 ++++
- 1 file changed, 4 insertions(+)
+>        arm |                     php-5.5.12 | NOK |
+>        http://autobuild.buildroot.net/results/657781d2bc8e95ffc0478ecc9ce
+>        954f7316df26e/
 
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index d338c31..808abce 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -33,6 +33,10 @@ MYSQL_CONF_OPT = \
- 	--enable-thread-safe-client \
- 	--disable-mysql-maintainer-mode
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MYSQL_DEPENDENCIES += openssl
-+endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- MYSQL_DEPENDENCIES += zlib
- endif
--- 
-1.7.10.4
+Hi,
+
+currently I am trying to reproduce this build error, but without success.
+I used the defconfig used by autobuild, but neither using "make", "make php" 
+nor "make", followed by the packages shown in build-time.log in that precise 
+order, triggers the php configure bug here.
+
+Nonetheless, I found two missing optional dependencies in mysql, for which I 
+will send a patch.
+
+Regards, Bernd
