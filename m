@@ -1,29 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 May 2014 23:30:10 +0200
-Subject: [Buildroot] [PATCH] package/duma: do not let MAkefile guess OS
-In-Reply-To: <1400348090-29954-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 17 May 2014 19:34:50 +0200")
-References: <1400348090-29954-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87ha4om6u5.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 17 May 2014 23:25:04 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: Udev
+	kms support depends on libdrm
+Message-ID: <20140517213137.117AF9CC58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9d50fe608f968a5cc81ec859259f6304c3bf83c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > We ened to tell the duma Makefile what OS we're gonna run on, or it
- > uses default values.
+Fixes
+http://autobuild.buildroot.net/results/18c/18c554d148fc00f85690c1638976dd6d0d7ff219/
 
- > It turns out the default values are the same as for OS=linux (and so
- > this change should be a no-op), but it's just better to force it, and
- > it avoids a warning during the build.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Committed with the typos fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 284d602..cae3ba0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -127,6 +127,13 @@ endif
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
++# udev kms support depends on libdrm
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
++XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev-kms
++else
++XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev-kms
++endif
+ else
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += dbus
