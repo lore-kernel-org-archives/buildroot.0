@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 May 2014 10:30:57 +0200
-Subject: [Buildroot] [PATCH] jack2: not available on ARC
-Message-ID: <1400315457-29378-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 May 2014 10:52:51 +0200
+Subject: [Buildroot] [PATCH] elfutils: propagate architecture dependency to
+	comment
+Message-ID: <1400316771-25226-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC lacks some compiler intrinsics to build jack2.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/c21/c218be876d3abf7a8e212b6d526595bfd835e1c5/
+elfutils depends on !BR2_avr32, but this dependency was not properly
+propagated to the comment about toolchain options. This commit fixes
+that.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/jack2/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/elfutils/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/jack2/Config.in b/package/jack2/Config.in
-index 6908455..a443f58 100644
---- a/package/jack2/Config.in
-+++ b/package/jack2/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_JACK2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc # missing compiler intrinsics
- 	select BR2_PACKAGE_LIBSAMPLERATE
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_ALSA_LIB
-@@ -22,5 +23,6 @@ config BR2_PACKAGE_JACK2
+diff --git a/package/elfutils/Config.in b/package/elfutils/Config.in
+index 588c29d..6025a74 100644
+--- a/package/elfutils/Config.in
++++ b/package/elfutils/Config.in
+@@ -1,4 +1,5 @@
+ comment "elfutils needs a toolchain w/ largefile, wchar"
++	depends on !BR2_avr32
+ 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR
  
- comment "jack2 needs a toolchain w/ largefile, threads, C++"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_arc
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_INSTALL_LIBSTDCPP
+ config BR2_PACKAGE_ELFUTILS
 -- 
 1.9.3
