@@ -1,102 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 17:57:40 +0200
-Subject: [Buildroot] [PATCH v8 12/28] libglew: new package
+Date: Sat, 17 May 2014 17:57:44 +0200
+Subject: [Buildroot] [PATCH v8 16/28] xbmc: bump version to 13.0
 In-Reply-To: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400342276-10303-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400342276-10303-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in          |    1 +
- package/libglew/Config.in  |   19 +++++++++++++++++++
- package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/libglew/Config.in
- create mode 100644 package/libglew/libglew.mk
+ package/xbmc/Config.in |    1 +
+ package/xbmc/xbmc.mk   |    5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index b31e7a0..5442ae9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglew/Config.in"
- source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
-diff --git a/package/libglew/Config.in b/package/libglew/Config.in
-new file mode 100644
-index 0000000..67c49d4
---- /dev/null
-+++ b/package/libglew/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBGLEW
-+	bool "libglew"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXMU
-+	help
-+	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
-+	  extension loading library. GLEW provides efficient run-time mechanisms
-+	  for determining which OpenGL extensions are supported on the target
-+	  platform. OpenGL core and extension functionality is exposed in a
-+	  single header file.
-+
-+	  http://glew.sourceforge.net
-+
-+comment "libglew depends on X.org and needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-new file mode 100644
-index 0000000..48ecf97
---- /dev/null
-+++ b/package/libglew/libglew.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# libglew
-+#
-+################################################################################
-+
-+LIBGLEW_VERSION = 1.10.0
-+LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
-+LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
-+LIBGLEW_LICENSE = MIT
-+LIBGLEW_LICENSE_FILES = LICENSE.txt
-+LIBGLEW_INSTALL_STAGING = YES
-+LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
-+
-+# using $TARGET_CONFIGURE_OPTS breaks compilation
-+define LIBGLEW_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
-+		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
-+		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
-+		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
-+endef
-+
-+define LIBGLEW_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+define LIBGLEW_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 75666a4..0f45f5c 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBUNGIF
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index c7a4607..9123d35 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XBMC_VERSION = 12.3-Frodo
++XBMC_VERSION = 13.0-Gotham
+ XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+ XBMC_LICENSE = GPLv2
+ XBMC_LICENSE_FILES = LICENSE.GPL
+@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+-	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
++	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ 
+ XBMC_CONF_ENV = \
+@@ -27,6 +27,7 @@ XBMC_CONF_ENV = \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+ 
+ XBMC_CONF_OPT +=  \
++	--with-arch=$(BR2_ARCH) \
+ 	--disable-alsa \
+ 	--disable-crystalhd \
+ 	--disable-debug \
 -- 
 1.7.10.4
