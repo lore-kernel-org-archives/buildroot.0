@@ -1,44 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 May 2014 23:09:23 +0200
-Subject: [Buildroot] [PATCH v8 14/28] xdriver_xf86-video-intel: Bump
- version to 2.99.911
-In-Reply-To: <8nuk4bxmh2.ln2@ID-313208.user.individual.net>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sat, 17 May 2014 23:01:51 +0200
+Subject: [Buildroot] [PATCH v8 21/28] xbmc: Add X.org/OpenGL support
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-15-git-send-email-bernd.kuhls@t-online.de>
- <20140517200617.GF3459@free.fr>
- <8nuk4bxmh2.ln2@ID-313208.user.individual.net>
-Message-ID: <20140517210923.GR3459@free.fr>
+ <1400342276-10303-22-git-send-email-bernd.kuhls@t-online.de>
+ <20140517205500.GL3459@free.fr>
+Message-ID: <vavk4bx9g4.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-05-17 22:51 +0200, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-> news:20140517200617.GF3459 at free.fr: 
-> 
-> > Please, avoid re-ordering the dependencies.
-> 
-> Hi,
-> 
-> v9 has the re-ordering removed.
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:20140517205500.GL3459 at free.fr: 
 
-Thanks.
+> Also, I doubt the GL dependency is tied to x86, or the EGL/GLES
+> dependency is tied to ARM. What if an ARM platform has a full openGL
+> implementation? Probably XBMC would be able to use that, no?
 
-While I'm at it, care to wait a bit before resending the series?Others
-may have comments, too, so wait a bit before respins. Something like two
-days should be OK.
+Hi,
 
-Thank you for your huge amount of work on this series! :-)
+xbmc depends on GLES on ARM:
+https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L695
 
-Regards,
-Yann E. MORIN.
+I consider this patch as one of the most complicated ones regarding Kconfig, 
+for which I am really not an expert ;) I will have a look at the rest of your 
+comment tomorrow.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Regards, Bernd
