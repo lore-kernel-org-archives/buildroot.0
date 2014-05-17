@@ -1,40 +1,25 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sat, 17 May 2014 23:15:45 +0200
-Subject: [Buildroot] [PATCH v8 15/28] rtmpdump: Add KSV patch
-References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-16-git-send-email-bernd.kuhls@t-online.de>
- <20140517201125.GG3459@free.fr>
-Message-ID: <150l4bx9g4.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 17 May 2014 23:26:04 +0200
+Subject: [Buildroot] [PATCH 1/2] zyre: propagate missing BR2_USE_MMU
+	dependency
+In-Reply-To: <1400335344-8531-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 17 May 2014 16:02:23 +0200")
+References: <1400335344-8531-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <877g5knllf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140517201125.GG3459 at free.fr: 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Wee... Huge patch without any explanation.
-> 
-> What is this 'KSV' stuff?
-> What does the patch do?
-> Why is it needed?
+ > zyre selects filemq, and filemq 'depends on BR2_USE_MMU', but this
+ > dependency was not propagated to zyre. This commit fixes that.
 
-Hi,
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-KSV is a member of the stream-recorder board, he collects patches to rtmpdump 
-and releases them as a combined patch.
+Committed, thanks.
 
-My patch contains a link to the forum thread[1] where the patch development 
-takes place. That forum post contains a long list of explanations and a 
-changelog. Shall I quote that webpage in my patch file?
-
-The patch improves rtmpdump by adding website-specific fixes, for example.
-An older version of the patch is used in OpenELEC, btw: 
-https://github.com/OpenELEC/OpenELEC.tv/tree/master/packages/multimedia/rtmpd
-ump/patches
-
-Regards, Bernd
-
-[1] http://stream-recorder.com/forum/customized-rtmpdump-binaries-patch-file-
-t16103.html
+-- 
+Bye, Peter Korsgaard
