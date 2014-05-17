@@ -1,36 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 17 May 2014 09:02:49 +0000 (UTC)
-Subject: [Buildroot] [Bug 7088] New: elfutils on Blackfin doesn't build
-Message-ID: <bug-7088-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 May 2014 11:10:09 +0200
+Subject: [Buildroot] Status of your patches
+Message-ID: <20140517111009.42385b15@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7088
+Hello Spenser,
 
-           Summary: elfutils on Blackfin doesn't build
-           Product: buildroot
-           Version: 2014.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: thomas.petazzoni at free-electrons.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+I'd like to get some update about the status of some of your patches in
+patchwork, especially:
 
+  http://patchwork.ozlabs.org/patch/314517/ [v2] gcc: coexist upstream with vendor git releases for mb and arc
+  http://patchwork.ozlabs.org/patch/314518/ [v2] gdb: use git version for cross-gdb
+  http://patchwork.ozlabs.org/patch/314512/ [v2] binutils: coexist upstream and vendor binutils for arc and microblaze
+  http://patchwork.ozlabs.org/patch/314513/ [v2] libsigsegv: fix for microblaze
+  http://patchwork.ozlabs.org/patch/314515/ [v2] glibc: change to tagged release
+  http://patchwork.ozlabs.org/patch/314511/ [v2] binutils: change to tagged release
+  http://patchwork.ozlabs.org/patch/314521/ [v2] gcc: change to tagged release
+  http://patchwork.ozlabs.org/patch/314514/ [v2] gdb: change to tagged release
 
-The elfutils package is currently disabled on Blackfin, due to an assembly
-symbol prefix issue. See
-http://autobuild.buildroot.org/results/922/92291286e86f9ea943ae7aa58cbd884c8db0c5d2/build-end.log.
-It would be good to fix this and re-enable the elfutils package on Blackfin.
+Most of these patches are related to the versions of Microblaze
+toolchain components. But more recently, Waldemar has posted a patch
+series to also update the Microblaze toolchain components, and his
+series was merged.
 
+Therefore, I'm wondering which parts of your series are still
+necessary. Maybe Waldemar can also have a look and give us a status?
+
+Thanks!
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
