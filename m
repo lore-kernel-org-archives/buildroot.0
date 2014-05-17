@@ -1,54 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 May 2014 09:11:21 +0200
-Subject: [Buildroot] Booting new kernels
-In-Reply-To: <1400278020.25876.YahooMailNeo@web122103.mail.ne1.yahoo.com>
-References: <1400278020.25876.YahooMailNeo@web122103.mail.ne1.yahoo.com>
-Message-ID: <20140517091121.59fdaa6b@free-electrons.com>
+Date: Sat, 17 May 2014 09:35:46 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-16
+In-Reply-To: <20140517063007.AED55100CC0@stock.ovh.net>
+References: <20140517063007.AED55100CC0@stock.ovh.net>
+Message-ID: <20140517093546.6b5dfca1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tal Lubko,
+Hello,
 
-On Fri, 16 May 2014 15:07:00 -0700 (PDT), Tal Lubko wrote:
+On Sat, 17 May 2014 08:30:07 +0200 (CEST), Thomas Petazzoni wrote:
 
-> I'm using buildroot to build embedded Linux.
-> I'm using syslinux 4.05 and kernel 3.6.8 and it works fine for me.
-> 
-> However I need to use newer kernel and it doesn't work for me.For some reason when I use kernel 3.7.1 and above the system crashes during boot and I have no reason why.
-> I tried syslinux mailing list but they think it's not a syslinux issue.
-> Any ideas???
-> I've attached the output.
+>        arm |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/437c77485043f0ef21cc1ffbe45e9cc29a1af374/
 
-That's most likely a kernel configuration problem. What we see in your
-boot is:
+Still the static build / libstdc++ problem. We had some good discussion
+about it with Gustavo yesterday.
 
-[    0.000000] Kernel command line: root=/dev/sda1 initrd=rootfs.ext2 console=ttyS0,115200 BOOT_IMAGE=bzImage 
-...
-[    0.983947] VFS: Mounted root (vfat filesystem) readonly on device 8:1.
-[    0.985102] devtmpfs: error mounting -2
-...
-[    0.989220] Kernel panic - not syncing: No init found.  Try passing init= option to kernel. See Linux Documentation/init.txt for guidance.
+>       bfin |                    duma-2.5.15 | NOK | http://autobuild.buildroot.net/results/f9cee096078555a40307bb37f3695ac83fd68f27/
 
-So, first your kernel command line is a little bit strange: you
-indicate to use an ext2 image as initrd, but you also point
-to /dev/sda1 as your root filesystem.
+To be investigated.
 
-Later on, it happens that /dev/sda (i.e device 8:1) is indeed mounted
-as your root filesystem. And it doesn't contain a /dev directory (which
-explains the devtmpfs failure), and it doesn't contain a /sbin/init
-program.
+>        arm | jack2-ab409a65df95bc261ff72... | NOK | http://autobuild.buildroot.net/results/8869615310642b8de8231ab23d1bbaf57b7cdae1/
 
-So it seems like /dev/sda1 does not contain a proper root filesystem.
-Maybe what you want to do was to use an initrd instead as your root
-filesystem, but something (a kernel configuration problem) made it fail.
+This one is fixed by
+http://git.buildroot.net/buildroot/commit/?id=fc8fcec306dab7191dc557ee583e90fc1a3a6c29.
 
-Also, I'm not very familiar with usage of initrd on x86, but shouldn't
-the initrd= argument take a memory address at which the bootloader has
-loaded the initrd? At least this is how it works on ARM, if I remember
-correctly.
+>       bfin | jack2-ab409a65df95bc261ff72... | NOK | http://autobuild.buildroot.net/results/0d441bf1831b2a657b466e44c29423c45c07decd/
+
+fork() missing. I'll send a patch for this one.
+
+>    powerpc | jack2-ab409a65df95bc261ff72... | NOK | http://autobuild.buildroot.net/results/75fc8f0a475ce77706789e77f385a0704207c04d/
+
+This one is fixed by
+http://git.buildroot.net/buildroot/commit/?id=fc8fcec306dab7191dc557ee583e90fc1a3a6c29.
+
+>        arc | jack2-ab409a65df95bc261ff72... | NOK | http://autobuild.buildroot.net/results/c218be876d3abf7a8e212b6d526595bfd835e1c5/
+
+Missing some compiler intrinsics. I'll send a patch to disable jack2 on
+ARC for now.
+
+>     x86_64 |                   samba4-4.1.7 | NOK | http://autobuild.buildroot.net/results/65726ceccbc2d8fa24e178ea66cd44703768bc95/
+>     x86_64 |                   samba4-4.1.7 | NOK | http://autobuild.buildroot.net/results/9c3da047ee16ea3d9b828059db3a082738aa1cbc/
+
+Symbol conflict between heimdal code and C library:
+
+default/source4/heimdal/lib/krb5/krb5_err.c:279:23: error: 'link' redeclared as different kind of symbol
+[...]
+/home/test/test/2/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/unistd.h:812:12: note: previous declaration of 'link' was here
+
+Gustavo ?
+
+>    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/e9b4b232efa66dbde30238b0184bdb61c4226a4c/
+>    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/07b2dd87650775a1e235b7fbe8cd1a97eaf25f2c/
+
+Compiler issue. I'll add an exception to the autobuilders.
 
 Thomas
 -- 
