@@ -1,31 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 May 2014 11:01:47 +0200
-Subject: [Buildroot] Creating Buildroot bug tracker accounts
-Message-ID: <20140517110147.47eeecb0@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 17 May 2014 09:02:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 7088] New: elfutils on Blackfin doesn't build
+Message-ID: <bug-7088-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, Anton, Aaron, Sonic, Waldemar,
+https://bugs.busybox.net/show_bug.cgi?id=7088
 
-Would it be possible for you to create accounts on the Buildroot bug
-tracker? This would allow us to assign you bugs related to architecture
-specific issues. Of course, only one person for each architecture is
-sufficient:
+           Summary: elfutils on Blackfin doesn't build
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: thomas.petazzoni at free-electrons.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
- * For ARC: Alexey and/or Anton
- * For Blackfin: Aaron and/or Sonic
- * For Microblaze: Waldemar
 
-Go to https://bugs.busybox.net/, create an account, and let us know the
-e-mail address with which you created the account.
+The elfutils package is currently disabled on Blackfin, due to an assembly
+symbol prefix issue. See
+http://autobuild.buildroot.org/results/922/92291286e86f9ea943ae7aa58cbd884c8db0c5d2/build-end.log.
+It would be good to fix this and re-enable the elfutils package on Blackfin.
 
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
