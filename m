@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 17:57:51 +0200
-Subject: [Buildroot] [PATCH v8 23/28] xbmc: Add alsa support
+Date: Sat, 17 May 2014 17:57:55 +0200
+Subject: [Buildroot] [PATCH v8 27/28] xbmc: add nasm/yasm dependency
 In-Reply-To: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400342276-10303-24-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400342276-10303-28-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/xbmc/xbmc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 6718d46..86c5a65 100644
+index a18b82a..f537e92 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -28,7 +28,6 @@ XBMC_CONF_ENV = \
+@@ -18,6 +18,8 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
- XBMC_CONF_OPT +=  \
- 	--with-arch=$(BR2_ARCH) \
--	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
-@@ -96,6 +95,13 @@ else
- XBMC_CONF_OPT += --disable-gles
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+XBMC_DEPENDENCIES += alsa-lib
-+XBMC_CONF_OPT += --enable-alsa
-+else
-+XBMC_CONF_OPT += --disable-alsa
-+endif
++XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm) $(if $(BR2_x86_64),host-yasm)
 +
- ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
- XBMC_DEPENDENCIES += libusb-compat
- XBMC_CONF_OPT += --enable-libusb
+ XBMC_CONF_ENV = \
+ 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
 -- 
 1.7.10.4
