@@ -1,13 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 May 2014 17:40:17 +0200
-Subject: [Buildroot] [PATCH v7 17/31] xbmc-pvr-addons: Version bump to
- xbmc Gotham-compatible addon
-In-Reply-To: <cmak4bxjmf.ln2@ID-313208.user.individual.net>
+Date: Sat, 17 May 2014 17:41:11 +0200
+Subject: [Buildroot] [PATCH v7 20/31] xbmc: Allow compilation with uClibc
+In-Reply-To: <oubk4bxabr.ln2@ID-313208.user.individual.net>
 References: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
- <1400326806-16428-18-git-send-email-bernd.kuhls@t-online.de>
- <20140517161342.5e745481@free-electrons.com>
- <cmak4bxjmf.ln2@ID-313208.user.individual.net>
-Message-ID: <20140517154017.GA3459@free.fr>
+ <1400326806-16428-21-git-send-email-bernd.kuhls@t-online.de>
+ <20140517161009.56006692@free-electrons.com>
+ <ae9k4bxjmf.ln2@ID-313208.user.individual.net>
+ <oubk4bxabr.ln2@ID-313208.user.individual.net>
+Message-ID: <20140517154111.GB3459@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +16,26 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2014-05-17 17:09 +0200, Bernd Kuhls spake thusly:
-> Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote
-> in news:20140517161342.5e745481 at free-electrons.com: 
-[--SNIP--]
-> >> -# This cset is on the branch 'frodo'
-> >> -# When XBMC is updated, then this should be updated to the
-> >> corresponding branch 
-> > 
-> > I think this comment was quite useful. Could we keep it, after updating
-> > it?
+On 2014-05-17 17:31 +0200, Bernd Kuhls spake thusly:
+> Bernd Kuhls <berndkuhls@hotmail.com> wrote in
+> news:ae9k4bxjmf.ln2 at ID-313208.user.individual.net: 
 > 
-> This patch does, what the comment was all about: Update xbmc-pvr-addons "to 
-> the corresponding branch" "[w]hen XBMC is updated", so I think the comment 
-> served its purpose ;)
+> > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+> > @public.gmane.org> wrote in
+> > news:20140517161009.56006692-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8 at public.gman
+> > e.org: 
+> > 
+> >>> +     depends on BR2_i386 || BR2_x86_64
+> >> 
+> >> Are you sure RasberryPi and other ARM users are happy with XBMC only
+> >> being available on x86/x86-64 ?
+> > 
+> > of course not, but uclibc at arm compilation is broken upstream[1] and
+> > fixed by the next patch[2]
+> 
+> thinking about it I squashed the arm patch into the uclibc patch.
 
-Yep, indeed. However, I think we should keep a comment tht states
-basically something similar, but for Gotham:
-    # This cset in on master. When a Gotham branch is made, we should
-    # follow it, as incompatible changes in the plugins API can happen
-    # on the master branch.
-
-That is, when XBMC makes such incompatible API changes on their master,
-so do the plugins (at least, that's what hapenned between Frodo and
-Gotham, hence the comment to stay on the Frodo branch.)
+Exactly what I was gonna suggest. Thanks! :-)
 
 Regards,
 Yann E. MORIN.
