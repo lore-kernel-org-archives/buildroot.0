@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 17 May 2014 21:56:36 +0200
-Subject: [Buildroot] [PATCH v8 03/28] mesa3d: Depend on xorg meta
- package instead of xserver_xorg-server
-In-Reply-To: <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 22:00:16 +0200
+Subject: [Buildroot] [PATCH v8 13/28] sdl: Add new dependency libglu for
+ opengl support
+In-Reply-To: <1400342276-10303-14-git-send-email-bernd.kuhls@t-online.de>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140517195636.GD3459@free.fr>
+ <1400342276-10303-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140517200016.GE3459@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,90 +16,35 @@ Bernd, All,
 
 On 2014-05-17 17:57 +0200, Bernd Kuhls spake thusly:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/sdl/sdl.mk |    5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+> index 8d0e5bd..e8ee0c0 100644
+> --- a/package/sdl/sdl.mk
+> +++ b/package/sdl/sdl.mk
+> @@ -62,9 +62,12 @@ SDL_DEPENDENCIES += alsa-lib
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D),y)
+> -SDL_DEPENDENCIES += mesa3d
+> +SDL_DEPENDENCIES += libglu mesa3d
+> +SDL_CONF_OPT += --enable-video-opengl
+>  endif
+>  
+> +SDL_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
 
-It would be nice if you could provide a bit more details in the commit
-log. I fail to see the reason for this change.
-
-Care to expand a bit the commit log, please?
+It looks like this should be in a separate patch. If it is needed here,
+then please expand the commit log with the reason libiconv is now a
+dependency of sdl.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/mesa3d/Config.in |   22 +++++++++++-----------
->  package/mesa3d/mesa3d.mk |    4 ++--
->  2 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 06f2bc3..b645712 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -3,13 +3,13 @@ menuconfig BR2_PACKAGE_MESA3D
->  	select BR2_PACKAGE_LIBDRM
->  	select BR2_PACKAGE_EXPAT
->  	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
-> -	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
-> -	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
-> -	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
-> -	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
-> -	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
-> -	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
-> -	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
-> +	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-> +	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_LARGEFILE
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> @@ -61,10 +61,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
->  	  This is a software opengl implementation using the Gallium3D
->  	  infrastructure.
->  
-> -comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
-> -	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
-> +comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
-> +	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
->  
-> -if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
-> +if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
->  
->  comment "DRI drivers"
->  
-> @@ -91,7 +91,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
->  	help
->  	  Legacy Radeon driver for R100 series GPUs.
->  
-> -endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
-> +endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
->  
->  if BR2_PACKAGE_MESA3D_DRIVER
->  
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 8416501..1789c5b 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -23,7 +23,7 @@ MESA3D_DEPENDENCIES = \
->  	host-xutil_makedepend \
->  	libdrm
->  
-> -ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-> +ifeq ($(BR2_PACKAGE_XORG7),y)
->  MESA3D_DEPENDENCIES += \
->  	xproto_xf86driproto \
->  	xproto_dri2proto \
-> @@ -92,7 +92,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
->  MESA3D_DEPENDENCIES += wayland
->  MESA3D_EGL_PLATFORMS += wayland
->  endif
-> -ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-> +ifeq ($(BR2_PACKAGE_XORG7),y)
->  MESA3D_EGL_PLATFORMS += x11
->  endif
->  MESA3D_CONF_OPT += \
+>  SDL_CONF_OPT += --enable-pulseaudio=no \
+>  		--disable-arts \
+>  		--disable-esd \
 > -- 
 > 1.7.10.4
 > 
