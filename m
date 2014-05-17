@@ -1,100 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 May 2014 11:34:05 +0200
-Subject: [Buildroot] [git commit] libdvd{nav,
-	read}: add patches to fix build on NIOS II
-Message-ID: <20140517093855.34CB29CC52@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 17 May 2014 11:50:21 +0200
+Subject: [Buildroot] [PATCH] gpm: fix build on Microblaze due to ELF check
+Message-ID: <1400320221-7784-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=503f76ae3ded088169c795d70b70bb997e53d9b8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Fixes:
 
-  http://autobuild.buildroot.org/results/628/62839c4b2e687b940b97ad61bceb41cd5eb6e17a/build-end.log
+  http://autobuild.buildroot.org/results/19d/19d93324caac8b4aad7abfe7b6c3d85612636368/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../libdvdnav/libdvdnav-01-fix-os2-support.patch   |   32 ++++++++++++++++++++
- .../libdvdread/libdvdread-01-fix-os2-support.patch |   31 +++++++++++++++++++
- 2 files changed, 63 insertions(+), 0 deletions(-)
+ package/gpm/gpm.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libdvdnav/libdvdnav-01-fix-os2-support.patch b/package/libdvdnav/libdvdnav-01-fix-os2-support.patch
-new file mode 100644
-index 0000000..0f75f2f
---- /dev/null
-+++ b/package/libdvdnav/libdvdnav-01-fix-os2-support.patch
-@@ -0,0 +1,32 @@
-+configure: fix build on NIOS II platform
+diff --git a/package/gpm/gpm.mk b/package/gpm/gpm.mk
+index 477c54a..d37b4ed 100644
+--- a/package/gpm/gpm.mk
++++ b/package/gpm/gpm.mk
+@@ -17,6 +17,14 @@ GPM_DEPENDENCIES = host-bison
+ # built. CPPFLAGS is used to pass the right include path to dependency rules.
+ GPM_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -I$(@D)/src/headers/"
+ 
++# For some reason, Microblaze gcc does not define __ELF__, which gpm
++# configure script uses to determine whether the architecture uses ELF
++# binaries and therefore can build shared libraries. We fix this by
++# telling GPM that ELF is used on Microblaze.
++ifeq ($(BR2_microblaze),y)
++GPM_CONF_ENV += itz_cv_sys_elf=yes
++endif
 +
-+NIOS II is a CPU architecture from Altera, which uses 'nios2' as the
-+architecture part of the tuple. Unfortunately, 'nios2' matches the
-+current '*os2*' test done by libdvdnav's configure script to detect
-+the OS/2 operating system. This leads to build issues as the build
-+process of libdvdnav then tries to use OS/2 specific compiler
-+options, that do not exist in the gcc used for Linux/NIOS2.
-+
-+To fix this, this patch makes the test for OS/2 a little bit more
-+specific: in the case of the OS/2 operating system, the OS part of the
-+tuple contains just 'os2' (confirmed by looking at config.guess and
-+config.sub in the gnuconfig project). So using '*-os2-*' will properly
-+match the OS/2 operating system but not the NIOS II architecture.
-+
-+Upstream-status: not needed, newer upstream versions no longer have
-+		 this test
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -166,7 +166,7 @@
-+   *cygwin*)
-+     LDFLAGS="-no-undefined $LDFLAGS"
-+     ;;
-+-  *os2*)
-++  *-os2-*)
-+     LDFLAGS="-no-undefined -Zbin-files $LDFLAGS"
-+     ;;
-+   *)
-diff --git a/package/libdvdread/libdvdread-01-fix-os2-support.patch b/package/libdvdread/libdvdread-01-fix-os2-support.patch
-new file mode 100644
-index 0000000..755bfaf
---- /dev/null
-+++ b/package/libdvdread/libdvdread-01-fix-os2-support.patch
-@@ -0,0 +1,31 @@
-+configure: fix build on NIOS II platform
-+
-+NIOS II is a CPU architecture from Altera, which uses 'nios2' as the
-+architecture part of the tuple. Unfortunately, 'nios2' matches the
-+current '*os2*' test done by libdvdread's configure script to detect
-+the OS/2 operating system. This leads to build issues as the build
-+process of libdvdread then tries to use OS/2 specific compiler
-+options, that do not exist in the gcc used for Linux/NIOS2.
-+
-+To fix this, this patch makes the test for OS/2 a little bit more
-+specific: in the case of the OS/2 operating system, the OS part of the
-+tuple contains just 'os2' (confirmed by looking at config.guess and
-+config.sub in the gnuconfig project). So using '*-os2-*' will properly
-+match the OS/2 operating system but not the NIOS II architecture.
-+
-+Upstream-status: submitted
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -146,7 +146,7 @@
-+   *cygwin*)
-+     LDFLAGS="-no-undefined $LDFLAGS"
-+     ;;
-+-  *os2*)
-++  *-os2-*)
-+     LDFLAGS="-no-undefined -Zbin-files $LDFLAGS"
-+     ;;
-+   *)
+ # gpm and ncurses have a circular dependency. As gpm function GPM_Wgetch()
+ # (requiring ncurses) is not recommended for use by ncurses people themselves
+ # and as it's better to have gpm support in ncurses that the contrary, we force
+-- 
+1.9.3
