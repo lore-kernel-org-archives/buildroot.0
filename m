@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 13:39:59 +0200
-Subject: [Buildroot] [PATCH v7 24/31] xbmc: Add alsa support
+Date: Sat, 17 May 2014 13:40:02 +0200
+Subject: [Buildroot] [PATCH v7 27/31] xbmc: Add option for Goom screensaver
 In-Reply-To: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400326806-16428-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400326806-16428-28-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/xbmc/Config.in |   11 +++++++++++
+ package/xbmc/xbmc.mk   |    6 ++++++
+ 2 files changed, 17 insertions(+)
 
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 67da0ed..d56b284 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -130,6 +130,17 @@ config BR2_PACKAGE_XBMC_LIBMICROHTTPD
+ 	help
+ 	  Enable webserver feature
+ 
++config BR2_PACKAGE_XBMC_GOOM
++	bool "goom screensaver"
++	depends on BR2_i386 || BR2_x86_64 # it does not make sense to use goom on embedded archs
++	depends on BR2_PACKAGE_HAS_LIBGL
++	help
++	  Enable goom screensaver
++
++comment "goom needs an OpenGL backend"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_HAS_LIBGL
++
+ config BR2_PACKAGE_XBMC_LIBNFS
+ 	bool "nfs"
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index cb3db38..42388e8 100644
+index ae790f2..b93ed2f 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -27,7 +27,6 @@ XBMC_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- XBMC_CONF_OPT +=  \
--	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
-@@ -95,6 +94,13 @@ else
- XBMC_CONF_OPT += --disable-gles
+@@ -109,6 +109,12 @@ else
+ XBMC_CONF_OPT += --disable-libmp3lame
  endif
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+XBMC_DEPENDENCIES += alsa-lib
-+XBMC_CONF_OPT += --enable-alsa
++ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
++XBMC_CONF_OPT += --enable-goom
 +else
-+XBMC_CONF_OPT += --disable-alsa
++XBMC_CONF_OPT += --disable-goom
 +endif
 +
  ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
