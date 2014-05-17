@@ -1,47 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 17:57:47 +0200
-Subject: [Buildroot] [PATCH v8 19/28] xbmc: Add host-gettext dependency
+Date: Sat, 17 May 2014 17:57:56 +0200
+Subject: [Buildroot] [PATCH v8 28/28] xbmc: Fix TexturePacker compile
 In-Reply-To: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400342276-10303-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400342276-10303-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AUTOPOINT=/bin/true does not work anymore since
-https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
+Patch description:
 
-config.status: error: cannot find input file: `Makefile.in'
-configure: error: Submodule lib/cpluff failed to configure
+use_texturepacker_native=yes
+
+is needed because we obviously need a native-compiled binary, but the xbmc
+build system does enable this variable only for darwin, android and
+raspberry-pi targets.
+
+USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+
+is also needed because
+USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
+is only executed for raspberry-pi by xbmc/configure and only
+USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
+
+To sum up, building for raspberry-pi and other archs works out-of-the-box,
+compiling for an Intel target, for example, fails:
+
+In file included from SDL_anigif.cpp:23:0:
+SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
+compilation terminated.
+XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/xbmc/xbmc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 9123d35..5a72dab 100644
+index f537e92..8e4979e 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
-@@ -134,7 +134,7 @@ endif
+@@ -26,6 +26,8 @@ XBMC_CONF_ENV = \
+ 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	PYTHON_NOVERSIONCHECK="no-check" \
++	use_texturepacker_native=yes \
++	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define XBMC_BOOTSTRAP
--	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
-+	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
- endef
- XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
- 
+ XBMC_CONF_OPT +=  \
 -- 
 1.7.10.4
