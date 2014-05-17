@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 17 May 2014 16:12:38 +0200
-Subject: [Buildroot] [PATCH v7 29/31] xbmc: Fix ffmpeg cross compile
-In-Reply-To: <1400326806-16428-30-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 16:13:42 +0200
+Subject: [Buildroot] [PATCH v7 17/31] xbmc-pvr-addons: Version bump to
+ xbmc Gotham-compatible addon
+In-Reply-To: <1400326806-16428-18-git-send-email-bernd.kuhls@t-online.de>
 References: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
- <1400326806-16428-30-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140517161238.40c04fc2@free-electrons.com>
+ <1400326806-16428-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140517161342.5e745481@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,54 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 17 May 2014 13:40:04 +0200, Bernd Kuhls wrote:
-> 
+On Sat, 17 May 2014 13:39:52 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/xbmc/xbmc.mk |    1 +
->  1 file changed, 1 insertion(+)
+>  .../xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch |  226 ++++++++++++++++++++
+>  package/xbmc-pvr-addons/xbmc-pvr-addons.mk         |    4 +-
+>  2 files changed, 227 insertions(+), 3 deletions(-)
+>  create mode 100644 package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch
 > 
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index f564466..f537e92 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -29,6 +29,7 @@ XBMC_CONF_ENV = \
->  	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
->  
->  XBMC_CONF_OPT +=  \
-> +	--with-arch=$(BR2_ARCH) \
->  	--disable-crystalhd \
->  	--disable-debug \
->  	--disable-dvdcss \
+> diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch b/package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch
+> new file mode 100644
+> index 0000000..aedaf6f
+> --- /dev/null
+> +++ b/package/xbmc-pvr-addons/xbmc-pvr-addons-buildfix.patch
 
-What is this fixing exactly? If it's needed for the bump to version
-13.0, then it should be part of the commit doing the bump.
+Please use sequence numbers for the patches.
+
+> @@ -0,0 +1,226 @@
+> +patch taken from OpenElec
+> +
+> +https://github.com/OpenELEC/OpenELEC.tv/blob/5d7777390abcb59cdc8f99c4253f89da94a8055c/packages/mediacenter/xbmc-pvr-addons/patches/xbmc-pvr-addons-buildfix.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Besides the origin of the patch, we also usually like to have a
+description here.
+
+
+> diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+> index b6d061b..0f229a4 100644
+> --- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+> +++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+> @@ -4,9 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -# This cset is on the branch 'frodo'
+> -# When XBMC is updated, then this should be updated to the corresponding branch
+
+I think this comment was quite useful. Could we keep it, after updating
+it?
+
+> -XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
+> +XBMC_PVR_ADDONS_VERSION = f38b2ebdc6f96244d5e4bc584315f4a2c24bc787
+>  XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
+>  XBMC_PVR_ADDONS_LICENSE = GPLv3+
+>  XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+
+Thanks,
 
 Thomas
 -- 
