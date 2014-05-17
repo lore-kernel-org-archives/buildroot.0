@@ -1,42 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 May 2014 23:27:25 +0200
-Subject: [Buildroot] [git commit] fluxbox: uses fork(),
-	not available on noMMU platforms
-Message-ID: <20140517213137.2D1539CC59@busybox.osuosl.org>
+Date: Sat, 17 May 2014 23:29:20 +0200
+Subject: [Buildroot] [git commit] package/duma: do not let Makefile guess OS
+Message-ID: <20140517213137.443639CC59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad7ea9452034f04c9eb1d25b2da1d1a564869ac3
+commit: http://git.buildroot.net/buildroot/commit/?id=3ab9774f234946552df041a3d1459fd21a2d982d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-fluxbox uses the fork() system call, not available on noMMU
-platforms. It's also fairly unlikely to have to use a full-blown
-X.org window manager on such platforms.
+We need to tell the duma Makefile what OS we're gonna run on, or it
+uses default values.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+It turns out the default values are the same as for OS=linux (and so
+this change should be a no-op), but it's just better to force it, and
+it avoids a warning during the build.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluxbox/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/duma/duma.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/fluxbox/Config.in b/package/fluxbox/Config.in
-index cb4d76f..ab479a9 100644
---- a/package/fluxbox/Config.in
-+++ b/package/fluxbox/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLUXBOX
- 	bool "fluxbox"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	# Runtime dependency, needed by startup script
- 	select BR2_PACKAGE_XAPP_XMODMAP
-@@ -11,4 +12,5 @@ config BR2_PACKAGE_FLUXBOX
- 	  http://fluxbox.org
- 
- comment "fluxbox needs a toolchain w/ C++"
-+	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7 && !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/duma/duma.mk b/package/duma/duma.mk
+index d11987f..6e730f9 100644
+--- a/package/duma/duma.mk
++++ b/package/duma/duma.mk
+@@ -19,6 +19,7 @@ DUMA_OPTIONS = \
+ # build time, is not specified in the Makefile. Force non-parallel build.
+ define DUMA_BUILD_CMDS
+ 	$(MAKE1) $(TARGET_CONFIGURE_OPTS)       \
++		OS=linux \
+ 		DUMA_OPTIONS="$(DUMA_OPTIONS)"   \
+ 		$(DUMA_CPP) -C $(@D)
+ endef
