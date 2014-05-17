@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 17 May 2014 23:28:04 +0200
-Subject: [Buildroot] [PATCH] pulseaudio: uses fork(),
-	not available on noMMU platforms
-In-Reply-To: <1400337631-8964-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Sat, 17 May 2014 16:40:31 +0200")
-References: <1400337631-8964-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87ppjcm6xn.fsf@dell.be.48ers.dk>
+Date: Sat, 17 May 2014 23:29:05 +0200
+Subject: [Buildroot] [PATCH] xlib_libXpm: fix build on noMMU
+	architectures
+In-Reply-To: <1400345610-11771-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 17 May 2014 18:53:30 +0200")
+References: <1400345610-11771-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87lhu0m6vy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Even though pulseaudio has some HAVE_FORK compile-time conditionals to
- > avoid using fork(), those parts of pulseaudio are not using it. Since
- > using pulseaudio on !MMU platforms is fairly unlikely, we simply
- > disable it when no MMU is available, and propagate this dependency to
- > the appropriate locations.
+ > Add a patch to libXpm to fix build on noMMU architectures.
+ > Fixes:
+
+ >   http://autobuild.buildroot.org/results/c57/c571b0a9d9f36a445ea36a4bd609154f9a9bddd5/
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
