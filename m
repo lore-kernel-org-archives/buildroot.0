@@ -1,58 +1,117 @@
-From: Tal Lubko <tallubko@yahoo.com>
-Date: Sat, 17 May 2014 11:55:17 -0700 (PDT)
-Subject: [Buildroot] Booting new kernels
-In-Reply-To: <20140517102101.1034b695@free-electrons.com>
-References: <1400278020.25876.YahooMailNeo@web122103.mail.ne1.yahoo.com>	<20140517091121.59fdaa6b@free-electrons.com>	<1400313412.16686.YahooMailNeo@web122105.mail.ne1.yahoo.com>
- <20140517102101.1034b695@free-electrons.com> 
-Message-ID: <1400352917.66521.YahooMailNeo@web122102.mail.ne1.yahoo.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 17 May 2014 21:56:36 +0200
+Subject: [Buildroot] [PATCH v8 03/28] mesa3d: Depend on xorg meta
+ package instead of xserver_xorg-server
+In-Reply-To: <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
+ <1400342276-10303-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140517195636.GD3459@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Damn it !!!
+Bernd, All,
 
-I took yours and Gene's advices and? looked again at the kernel configuration.
-For some reason, starting from kernel 3.7.1, "RAM block device support" is turned off by default.
-I think its mandatory for me because I use initrd. Now I'm going to try a newer kernel (3.14.3).
-I think I'll go and read about the boot sequence to understand it a little bit better.
+On 2014-05-17 17:57 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thanks a lot for your help,
-Tal
+It would be nice if you could provide a bit more details in the commit
+log. I fail to see the reason for this change.
 
+Care to expand a bit the commit log, please?
 
-________________________________
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-To: Tal Lubko <tallubko@yahoo.com> 
-Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
-Sent: Saturday, May 17, 2014 11:21 AM
-Subject: Re: [Buildroot] Booting new kernels
- 
+Regards,
+Yann E. MORIN.
 
-Dear Tal Lubko,
-
-On Sat, 17 May 2014 00:56:52 -0700 (PDT), Tal Lubko wrote:
-
-> Thanks a lot for replying.
+> ---
+>  package/mesa3d/Config.in |   22 +++++++++++-----------
+>  package/mesa3d/mesa3d.mk |    4 ++--
+>  2 files changed, 13 insertions(+), 13 deletions(-)
 > 
-> I'm not sure I'm using initrd kernel option correctly (I have to do my homework and read a little bit about it).
-> BUT, it works
- with kernel 3.6.8 and even with 3.6.11 and the same kernel parameters...
-> Still, it doesn't mean that I use it correctly.
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 06f2bc3..b645712 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -3,13 +3,13 @@ menuconfig BR2_PACKAGE_MESA3D
+>  	select BR2_PACKAGE_LIBDRM
+>  	select BR2_PACKAGE_EXPAT
+>  	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+> -	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+> -	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+> -	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
+> -	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
+> -	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
+> -	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
+> -	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
+> +	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_LARGEFILE
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> @@ -61,10 +61,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+>  	  This is a software opengl implementation using the Gallium3D
+>  	  infrastructure.
+>  
+> -comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
+> -	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
+> +comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
+> +	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
+>  
+> -if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
+> +if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+>  
+>  comment "DRI drivers"
+>  
+> @@ -91,7 +91,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+>  	help
+>  	  Legacy Radeon driver for R100 series GPUs.
+>  
+> -endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
+> +endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+>  
+>  if BR2_PACKAGE_MESA3D_DRIVER
+>  
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 8416501..1789c5b 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -23,7 +23,7 @@ MESA3D_DEPENDENCIES = \
+>  	host-xutil_makedepend \
+>  	libdrm
+>  
+> -ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
+> +ifeq ($(BR2_PACKAGE_XORG7),y)
+>  MESA3D_DEPENDENCIES += \
+>  	xproto_xf86driproto \
+>  	xproto_dri2proto \
+> @@ -92,7 +92,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+>  MESA3D_DEPENDENCIES += wayland
+>  MESA3D_EGL_PLATFORMS += wayland
+>  endif
+> -ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
+> +ifeq ($(BR2_PACKAGE_XORG7),y)
+>  MESA3D_EGL_PLATFORMS += x11
+>  endif
+>  MESA3D_CONF_OPT += \
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Probably your kernel configuration that is different.
-
-> Maybe it has something to do to permissions table but it's only a guess.
-
-No, I clearly don't think it's related to the permission table.
-
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140517/a7bca8c0/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
