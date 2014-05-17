@@ -1,36 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 May 2014 13:21:13 +0200
-Subject: [Buildroot] [git commit] mysql: Add optional OpenSSL dependency
-Message-ID: <20140517112201.DEF519CB44@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 13:28:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: Udev kms
+	support depends on libdrm
+Message-ID: <1400326118-14543-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9587eea148df35532c06e25ef0be37af46d0ab36
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Make sure OpenSSL is built before mysql.
+Fixes
+http://autobuild.buildroot.net/results/18c/18c554d148fc00f85690c1638976dd6d0d7ff219/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mysql/mysql.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index d338c31..808abce 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -33,6 +33,10 @@ MYSQL_CONF_OPT = \
- 	--enable-thread-safe-client \
- 	--disable-mysql-maintainer-mode
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+MYSQL_DEPENDENCIES += openssl
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 284d602..cae3ba0 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -127,6 +127,13 @@ endif
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += udev
+ XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
++# udev kms support depends on libdrm
++ifeq ($(BR2_PACKAGE_LIBDRM),y)
++XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
++XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev-kms
++else
++XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev-kms
 +endif
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- MYSQL_DEPENDENCIES += zlib
- endif
+ else
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+-- 
+1.7.10.4
