@@ -1,40 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 May 2014 11:37:32 +0200
-Subject: [Buildroot] [git commit] tstools: uses fork() therefore needs MMU
-Message-ID: <20140517093855.5B58F9CC52@busybox.osuosl.org>
+Date: Sat, 17 May 2014 11:34:36 +0200
+Subject: [Buildroot] [git commit] jack2: not available on ARC
+Message-ID: <20140517093855.447369CC27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0821b7521e5103ff71042d33b4e0f613e64914be
+commit: http://git.buildroot.net/buildroot/commit/?id=fe33b6fd47651d609e3a6152193170e017db8677
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ARC lacks some compiler intrinsics to build jack2.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/4f6/4f611e085a3e21319a98f5383adf2caac77a0bd6/
+  http://autobuild.buildroot.org/results/c21/c218be876d3abf7a8e212b6d526595bfd835e1c5/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tstools/Config.in |    2 ++
+ package/jack2/Config.in |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/tstools/Config.in b/package/tstools/Config.in
-index 24d4403..6712b0f 100644
---- a/package/tstools/Config.in
-+++ b/package/tstools/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TSTOOLS
- 	bool "tstools"
- 	depends on BR2_LARGEFILE
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  This is a set of cross-platform command line tools for
- 	  working with MPEG data
-@@ -18,3 +19,4 @@ config BR2_PACKAGE_TSTOOLS
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index 6908455..a443f58 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_JACK2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_arc # missing compiler intrinsics
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
+@@ -22,5 +23,6 @@ config BR2_PACKAGE_JACK2
  
- comment "tstools needs a toolchain w/ largefile"
- 	depends on !BR2_LARGEFILE
-+	depends on BR2_USE_MMU
+ comment "jack2 needs a toolchain w/ largefile, threads, C++"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_arc
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_INSTALL_LIBSTDCPP
