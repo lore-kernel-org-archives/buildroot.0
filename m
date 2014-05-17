@@ -1,67 +1,67 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 17 May 2014 13:39:36 +0200
-Subject: [Buildroot] [PATCH v7 01/31] xproto_dri3proto: New package
-In-Reply-To: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400326806-16428-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 17 May 2014 13:39:35 +0200
+Subject: [Buildroot] [PATCH v7 00/31] xbmc: bump version to 13.0-Gotham
+Message-ID: <1400326806-16428-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+the patch series combines my latest patches to bump xbmc.
+It also adds uClibc support to xbmc, a mesa3d version bump
+and several new packages to support the new xbmc release
+along with libva to get the best out of Intel systems.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/Config.in                            |    1 +
- package/x11r7/xproto_dri3proto/Config.in           |    4 ++++
- package/x11r7/xproto_dri3proto/xproto_dri3proto.mk |   15 +++++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/x11r7/xproto_dri3proto/Config.in
- create mode 100644 package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
+Regards, Bernd
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index 8685ca1..087b816 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -227,6 +227,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xproto_damageproto/Config.in
- 		source package/x11r7/xproto_dmxproto/Config.in
- 		source package/x11r7/xproto_dri2proto/Config.in
-+		source package/x11r7/xproto_dri3proto/Config.in
- 		source package/x11r7/xproto_fixesproto/Config.in
- 		source package/x11r7/xproto_fontcacheproto/Config.in
- 		source package/x11r7/xproto_fontsproto/Config.in
-diff --git a/package/x11r7/xproto_dri3proto/Config.in b/package/x11r7/xproto_dri3proto/Config.in
-new file mode 100644
-index 0000000..eead7d4
---- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/Config.in
-@@ -0,0 +1,4 @@
-+config BR2_PACKAGE_XPROTO_DRI3PROTO
-+	bool "dri3proto"
-+	help
-+	  X.Org DRI3 protocol headers
-diff --git a/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-new file mode 100644
-index 0000000..00f5b57
---- /dev/null
-+++ b/package/x11r7/xproto_dri3proto/xproto_dri3proto.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# xproto_dri3proto
-+#
-+################################################################################
-+
-+XPROTO_DRI3PROTO_VERSION = 1.0
-+XPROTO_DRI3PROTO_SOURCE = dri3proto-$(XPROTO_DRI3PROTO_VERSION).tar.bz2
-+XPROTO_DRI3PROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
-+XPROTO_DRI3PROTO_LICENSE = MIT
-+XPROTO_DRI3PROTO_LICENSE_FILES = COPYING
-+XPROTO_DRI3PROTO_INSTALL_STAGING = YES
-+XPROTO_DRI3PROTO_INSTALL_TARGET = NO
-+
-+$(eval $(autotools-package))
+
+v7: - rebased
+    - bump mesa3d version to 10.2-rc3
+    - included v2 of "xproto_dri3proto: New package"
+v6: - bump mesa3d version to 10.2-rc2
+    - bump libva and libva-intel-driver to 1.3.1
+
+
+Bernd Kuhls (31):
+  xproto_dri3proto: New package
+  mesa3d: Bump version to 10.2-rc3
+  mesa3d: Depend on xorg meta package instead of xserver_xorg-server
+  mesa3d: add dependency xproto_presentproto
+  mesa3d: Remove dependency for the libxml2 module of host-python
+  mesa3d: Add dri3 support
+  mesa3d: dri2 does not need udev support
+  libva: new package
+  libva-intel-driver: new package
+  ffmpeg: Add libva support
+  libglu: new package
+  libglew: new package
+  sdl: Add new dependency libglu for opengl support
+  xdriver_xf86-video-intel: Bump version to 2.99.911
+  rtmpdump: Add KSV patch
+  xbmc: bump version to 13.0
+  xbmc-pvr-addons: Version bump to xbmc Gotham-compatible addon
+  xbmc-addon-xvdr: Version bump to xbmc Gotham-compatible addon
+  xbmc: Add host-gettext dependency
+  xbmc: Allow compilation with uClibc
+  xbmc: fix arm/uclibc compilation
+  xbmc: Add X.org/OpenGL support
+  xbmc: Add VA-API support
+  xbmc: Add alsa support
+  xbmc: Add lame support
+  xbmc: Disable broken rsxs screensaver
+  xbmc: Add option for Goom screensaver
+  xbmc: add nasm/yasm dependency
+  xbmc: Fix ffmpeg cross compile
+  xbmc: Fix TexturePacker compile
+  xbmc needs IPv6 support
+
+ package/libdrm/Config.in                           |    1 -
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    2 +-
+ .../xlib_libXpm/xlib_libXpm-0001-detect-fork.patch |   66 --------------------
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk           |    1 -
+ 4 files changed, 1 insertion(+), 69 deletions(-)
+ delete mode 100644 package/x11r7/xlib_libXpm/xlib_libXpm-0001-detect-fork.patch
+
 -- 
 1.7.10.4
