@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 17 May 2014 23:25:04 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: Udev
-	kms support depends on libdrm
-Message-ID: <20140517213137.117AF9CC58@busybox.osuosl.org>
+Date: Sat, 17 May 2014 23:25:34 +0200
+Subject: [Buildroot] [git commit] php-imagick: propagate BR2_USE_MMU
+	dependency
+Message-ID: <20140517213137.2632D9C7C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d50fe608f968a5cc81ec859259f6304c3bf83c6
+commit: http://git.buildroot.net/buildroot/commit/?id=8e6fa1b4b02e85b47e16a7e2ea7cd05db6394ce8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/18c/18c554d148fc00f85690c1638976dd6d0d7ff219/
+php-imagick selects imagemagick, and imagemagick 'depends on
+BR2_USE_MMU', but this dependency was not propagated to
+php-imagick. This commit fixes that.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xserver_xorg-server/xserver_xorg-server.mk     |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ package/php-imagick/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 284d602..cae3ba0 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -127,6 +127,13 @@ endif
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += udev
- XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev
-+# udev kms support depends on libdrm
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+XSERVER_XORG_SERVER_DEPENDENCIES += libdrm
-+XSERVER_XORG_SERVER_CONF_OPT += --enable-config-udev-kms
-+else
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev-kms
-+endif
- else
- ifeq ($(BR2_PACKAGE_DBUS),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+diff --git a/package/php-imagick/Config.in b/package/php-imagick/Config.in
+index 1d55fcc..a5e32a5 100644
+--- a/package/php-imagick/Config.in
++++ b/package/php-imagick/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PHP_IMAGICK
+ 	bool "php-imagick"
+ 	depends on BR2_PACKAGE_PHP
++	depends on BR2_USE_MMU # imagemagick
+ 	select BR2_PACKAGE_IMAGEMAGICK
+ 	help
+ 	  PHP wrapper to the ImageMagick library.
