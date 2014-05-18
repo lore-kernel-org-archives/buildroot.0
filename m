@@ -1,7 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 May 2014 19:14:30 +0200
-Subject: [Buildroot] [PATCH] cairo: fix build issue with gcc 4.9
-Message-ID: <1400433270-3386-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 18 May 2014 19:16:54 +0200
+Subject: [Buildroot] [PATCH] mplayer: not supported on ARC
+Message-ID: <1400433414-23716-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,70 +10,25 @@ To: buildroot@busybox.net
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/277/277038de62d6262576a63b213374a33357a8333b/
+  http://autobuild.buildroot.org/results/af1/af1ca869dbc7a71aa4cc89373d605ca8f790fcc9/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cairo/cairo-005-fix-gcc-49-build.patch | 38 ++++++++++++++++++++++++++
- package/cairo/cairo.mk                         |  1 +
- 2 files changed, 39 insertions(+)
- create mode 100644 package/cairo/cairo-005-fix-gcc-49-build.patch
+ package/mplayer/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cairo/cairo-005-fix-gcc-49-build.patch b/package/cairo/cairo-005-fix-gcc-49-build.patch
-new file mode 100644
-index 0000000..112c9ea
---- /dev/null
-+++ b/package/cairo/cairo-005-fix-gcc-49-build.patch
-@@ -0,0 +1,38 @@
-+Fix build with gcc 4.9
-+
-+cairo fails to build with gcc 4.9 due to a bad interaction of cairo
-+modules with the LTO mechanism. The suggested workaround is to pass
-+-ffat-lto-objects. See
-+https://bugs.freedesktop.org/show_bug.cgi?id=77060 for the upstream
-+bug report, and
-+https://bugs.archlinux.org/task/40313?project=1&openedfrom=-1+week for
-+the ArchLinux bug report.
-+
-+This patch passes -ffat-lto-objects when gcc understands this option,
-+in order to provide compatibility with gcc versions older than 4.8,
-+which did not provide this option, but are anyway unaffected by the
-+issue.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/configure.ac
-+===================================================================
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -37,6 +37,16 @@
-+ m4_include(build/configure.ac.pthread)  dnl checks for pthreads
-+ AC_CACHE_SAVE
-+ 
-++old_cflags=$CFLAGS
-++CFLAGS=-ffat-lto-objects
-++AC_MSG_CHECKING([whether CC supports -ffat-lto-objects])
-++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],
-++    [AC_MSG_RESULT([yes])]
-++    [LTO_CFLAGS=-ffat-lto-objects],
-++    [AC_MSG_RESULT([no])]
-++)
-++CFLAGS="${old_CFLAGS} ${LTO_CFLAGS}"
-++
-+ dnl ===========================================================================
-+ 
-+ AC_CHECK_LIB(z, compress,
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 43238ca..789dfa7 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -10,6 +10,7 @@ CAIRO_LICENSE = LGPLv2.1+
- CAIRO_LICENSE_FILES = COPYING
- CAIRO_SITE = http://cairographics.org/releases
- CAIRO_INSTALL_STAGING = YES
-+CAIRO_AUTORECONF = YES
- 
- CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
- 		glib_cv_uscore=no ac_cv_func_strtod=yes \
+diff --git a/package/mplayer/Config.in b/package/mplayer/Config.in
+index 8b5d05e..7c4877d 100644
+--- a/package/mplayer/Config.in
++++ b/package/mplayer/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MPLAYER
+ 	bool "mplayer"
+ 	# Those architectures are not supported by MPlayer
+-	depends on !(BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
++	depends on !(BR2_arc || BR2_bfin || BR2_sh2a || BR2_sh4a || BR2_sh4aeb \
+ 			|| BR2_microblaze || BR2_aarch64 || BR2_nios2)
+ 	# Broken support for <ARMv5
+ 	depends on !(BR2_arm920t || BR2_arm920t || BR2_arm922t || BR2_fa526 \
 -- 
 1.9.3
