@@ -1,43 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 May 2014 10:26:42 +0200
-Subject: [Buildroot] How to disable patches for libtool
-In-Reply-To: <SNT146-W8595A45AC23B3F05582F95A8300@phx.gbl>
-References: <SNT146-W8595A45AC23B3F05582F95A8300@phx.gbl>
-Message-ID: <20140518102642.04683fb6@free-electrons.com>
+Date: Sun, 18 May 2014 10:47:21 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-17
+In-Reply-To: <20140518063007.3CDF6100CA6@stock.ovh.net>
+References: <20140518063007.3CDF6100CA6@stock.ovh.net>
+Message-ID: <20140518104721.188f17ed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stephen Thomas,
+Hello,
 
-It would be nice if you could send a plain text only version of your
-e-mail.
+On Sun, 18 May 2014 08:30:07 +0200 (CEST), Thomas Petazzoni wrote:
 
-On Sun, 18 May 2014 00:04:26 +0100, Stephen Thomas wrote:
+>    powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/3c42ccc16279f6dbdfe47a44da2fd49852f4286f/
 
-> I have been playing around with buildroot and have managed to hack something that uses graphite in GCC as this speeds up compilation and can produce slightly smaller code.
+Problem was analyzed a little bit in
+http://lists.busybox.net/pipermail/buildroot/2014-April/094658.html,
+but I'm still not sure how to fix it. Could some C++ person have a look?
 
-Nice! I haven't looked at some of the new gcc things such as graphite,
-gold and al.
+>       bfin |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/92291286e86f9ea943ae7aa58cbd884c8db0c5d2/
 
-> I have hacked a couple of things, which I am a bit ashamed to admit. First I hardcoded the config for binutils to only build the gold tools, and in gcc and binutils I disabled the search for the isl and cloog libraries. However, one problem that I cannot hack around is the need to add an isl package. The changes were as follows in the gcc.mk file: HOST_GCC_COMMON_DEPENDENCIES = \-       host-binutils \        host-gmp \+       host-isl \        host-mpfr \+       host-mpc \+       host-cloog \+       host-binutils \
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=b1cf2b21dd9e2283f9020e3a5ac9ac35f8855c1a.
 
-I am not sure why you consider adding a package for ISL is a hack. If
-gcc depends on it, we surely need to create a package for it.
+> microblazeel |                     gpm-1.20.7 | NOK | http://autobuild.buildroot.net/results/19d93324caac8b4aad7abfe7b6c3d85612636368/
 
-> But the problem that I cannot get around is how to patch the file ltmain.sh in isl version 0.13. I have a patch that patches this file and this causes the one from the buildroot to fail. So all I do is just touch the build/isl-0.13/.stamp_patched file or whatever and I can continue the build. But is there a way to not have this file patched from the buildroot? I have looked into the packages and I didn't see this done anywhere. If it has been would someone please be kind enough to point me in the right direction?
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=d5996197e2e28ca8d35776012ee7e08b8301de5c.
 
-You could always use <pkg>_LIBTOOL_PATCH = NO in this package to tell
-Buildroot to not apply its libtool patches. Though it would be nice to
-see exactly what your own ltmain.sh patch is doing, and why it
-conflicts with our own libtool patch.
+>     x86_64 |            imagemagick-6.8.9-0 | NOK | http://autobuild.buildroot.net/results/d34077ce582866c50bbd90de10bbe593e39463f1/
 
-Do you intend to submit your patches at some point? It would be nice to
-see such improvements make their way into the mainline Buildroot.
+Problem unknown, and somewhat weird. Yann said he tried to reproduce,
+and didn't manage to.
 
-Thanks!
+>       bfin |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/fc4ef4101a20e64eb52da56557d6996dd73b3d86/
+
+Not sure how to solve that one. Exclude the Blackfin toolchains that
+lack the GNU Glob features?
+
+>        sh4 |                   python-2.7.6 | NOK | http://autobuild.buildroot.net/results/2b1016a610fd8855168844433652245e2d73882e/
+
+Static linking problem. Could be a bug in uClibc.
+
+>       bfin |           sane-backends-1.0.22 | NOK | http://autobuild.buildroot.net/results/136100c3a2d843b7915fdd83d23d8b301fee577e/
+
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=8989bfc8a6b88b56d7942a95d6e7517075ed8ffc
+
+>    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/486344e7be38a07feda80bda5b95fedaad837581/
+>    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/6a3287430f080b016c6b246bfbb19a61ec62b659/
+
+I've added an exception in the autobuilder scripts to avoid building
+SDL with this compiler version.
+
+>       bfin |                   tstools-1_11 | NOK | http://autobuild.buildroot.net/results/4f611e085a3e21319a98f5383adf2caac77a0bd6/
+
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=0821b7521e5103ff71042d33b4e0f613e64914be
+
+> microblazeel |            xapp_bdftopcf-1.0.4 | NOK | http://autobuild.buildroot.net/results/8c5423f63a3887f3b3d0c3e11f60beee6a20731a/
+
+To be investigated.
+
+>        arm |     xserver_xorg-server-1.15.1 | NOK | http://autobuild.buildroot.net/results/18c554d148fc00f85690c1638976dd6d0d7ff219/
+
+Fixed by
+http://git.buildroot.net/buildroot/commit/?id=9d50fe608f968a5cc81ec859259f6304c3bf83c6.
 
 Thomas
 -- 
