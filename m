@@ -1,31 +1,21 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 18 May 2014 23:39:04 +0200
-Subject: [Buildroot] Statistics of build per architecture
-In-Reply-To: <20140518190605.4ec48068@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 18 May 2014 19:06:05 +0200")
-References: <20140518190605.4ec48068@free-electrons.com>
-Message-ID: <87r43qlqbr.fsf@dell.be.48ers.dk>
+Date: Sun, 18 May 2014 23:50:24 +0200
+Subject: [Buildroot] [PATCH 1/3] lz4: new package
+In-Reply-To: <1400189496-29633-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 15 May 2014 18:31:34 -0300")
+References: <1400189496-29633-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mweelpsv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Note that in both cases, we're roughly comparing 1.5 months of builds,
- > with 1 month being the last month of the 'development' part of the
- > cycle, and 0.5 month being the beginning of the 'debugging' part of the
- > cycle. So I would say the results are fairly comparable.
-
- > And we can notice a pretty significant improvement in the results.
- > There's still a lot of work to be done, but it's pretty clear that
- > we're making progress. We've moved to over 60% of success for most of
- > the architectures.
-
-Indeed - Thanks all!
+Committed series to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
