@@ -1,33 +1,31 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 18 May 2014 19:40:53 +0200
-Subject: [Buildroot] [PATCH v8 21/28] xbmc: Add X.org/OpenGL support
-References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-22-git-send-email-bernd.kuhls@t-online.de>
- <20140517205500.GL3459@free.fr>
- <0sjm4bxrs4.ln2@ID-313208.user.individual.net>
- <20140518162900.GA3631@free.fr>
- <le5n4bxjvb.ln2@ID-313208.user.individual.net>
- <20140518172928.GD3631@free.fr>
-Message-ID: <5u7n4bxiil.ln2@ID-313208.user.individual.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 18 May 2014 19:19:46 +0000 (UTC)
+Subject: [Buildroot] [Bug 5396] Boot hangs when starting samba if
+ BR2_ENABLE_LOCALE is enabled
+In-Reply-To: <bug-5396-163@https.bugs.busybox.net/>
+References: <bug-5396-163@https.bugs.busybox.net/>
+Message-ID: <20140518191946.5061F9CC4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20140518172928.GD3631 at free.fr:
+https://bugs.busybox.net/show_bug.cgi?id=5396
 
-> Of course, this would probably not scale if we were to support it on
-> other archs (eg. PPC), but it will be time to revisit this if/when we
-> happen to add that support.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-Hi,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
 
-compiling for ppc and mips was already successful here, it takes only some 
-extensions for the xbmc build system and one patch for ldt_keeper.c.
+--- Comment #7 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-18 19:19:45 UTC ---
+Problem not reproducible in current Buildroot and no feedback from submitter,
+so I'm closing this bug.
+Don't hesitate to reopen if the problem persists.
 
-I do not plan to extend my patch series with these archs now, but we should 
-have them in mind, it may happen earlier then you might have thaught ;)
-
-Regards, Bernd
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
