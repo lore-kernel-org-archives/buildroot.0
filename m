@@ -1,49 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 May 2014 23:35:25 +0200
-Subject: [Buildroot] [git commit] duma: not available on non-MMU platforms
-Message-ID: <20140518213731.83DAB9CC00@busybox.osuosl.org>
+Date: Sun, 18 May 2014 23:28:21 +0200
+Subject: [Buildroot] [git commit] cairo: fix build issue with gcc 4.9
+Message-ID: <20140518213731.6B1699CC00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=822d5d5f19cb8de7f0fdad9db9dee2aad6d13a62
+commit: http://git.buildroot.net/buildroot/commit/?id=f4c093f2d08a44686f540959f28cb600c2c61fb3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-By design, building duma on Blackfin and other non-MMU platforms is
-quite useless: it uses page mappings to detect buffer overrun and
-use-after-free programming errors. Therefore, this commit simply marks
-duma as not available on non-MMU platforms.
 
 Fixes:
 
-  http://autobuild.buildroot.org/results/951/9519d7abb45c6a789874ec6bb84418c31a98916b/
+  http://autobuild.buildroot.org/results/277/277038de62d6262576a63b213374a33357a8333b/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/duma/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/cairo/cairo-005-fix-gcc-49-build.patch |   38 ++++++++++++++++++++++++
+ package/cairo/cairo.mk                         |    1 +
+ 2 files changed, 39 insertions(+), 0 deletions(-)
 
-diff --git a/package/duma/Config.in b/package/duma/Config.in
-index e9cc9b2..7679e64 100644
---- a/package/duma/Config.in
-+++ b/package/duma/Config.in
-@@ -2,6 +2,10 @@ config BR2_PACKAGE_DUMA
- 	bool "duma"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# By design, duma uses page mapping to isolate
-+	# allocations. Non-MMU platforms cannot perform such
-+	# things.
-+	depends on BR2_USE_MMU
- 	help
- 	  D.U.M.A. - Detect Unintended Memory Access. A fork of the
- 	  Electric Fence library. Detects buffer overflow and
-@@ -17,4 +21,5 @@ config BR2_PACKAGE_DUMA_NO_LEAKDETECTION
- endif # BR2_PACKAGE_DUMA
+diff --git a/package/cairo/cairo-005-fix-gcc-49-build.patch b/package/cairo/cairo-005-fix-gcc-49-build.patch
+new file mode 100644
+index 0000000..112c9ea
+--- /dev/null
++++ b/package/cairo/cairo-005-fix-gcc-49-build.patch
+@@ -0,0 +1,38 @@
++Fix build with gcc 4.9
++
++cairo fails to build with gcc 4.9 due to a bad interaction of cairo
++modules with the LTO mechanism. The suggested workaround is to pass
++-ffat-lto-objects. See
++https://bugs.freedesktop.org/show_bug.cgi?id=77060 for the upstream
++bug report, and
++https://bugs.archlinux.org/task/40313?project=1&openedfrom=-1+week for
++the ArchLinux bug report.
++
++This patch passes -ffat-lto-objects when gcc understands this option,
++in order to provide compatibility with gcc versions older than 4.8,
++which did not provide this option, but are anyway unaffected by the
++issue.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/configure.ac
++===================================================================
++--- a/configure.ac
+++++ b/configure.ac
++@@ -37,6 +37,16 @@
++ m4_include(build/configure.ac.pthread)  dnl checks for pthreads
++ AC_CACHE_SAVE
++ 
+++old_cflags=$CFLAGS
+++CFLAGS=-ffat-lto-objects
+++AC_MSG_CHECKING([whether CC supports -ffat-lto-objects])
+++AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],
+++    [AC_MSG_RESULT([yes])]
+++    [LTO_CFLAGS=-ffat-lto-objects],
+++    [AC_MSG_RESULT([no])]
+++)
+++CFLAGS="${old_CFLAGS} ${LTO_CFLAGS}"
+++
++ dnl ===========================================================================
++ 
++ AC_CHECK_LIB(z, compress,
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 43238ca..789dfa7 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -10,6 +10,7 @@ CAIRO_LICENSE = LGPLv2.1+
+ CAIRO_LICENSE_FILES = COPYING
+ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
++CAIRO_AUTORECONF = YES
  
- comment "duma needs a toolchain w/ C++, threads"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ CAIRO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
+ 		glib_cv_uscore=no ac_cv_func_strtod=yes \
