@@ -1,51 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 May 2014 19:26:28 +0200
-Subject: [Buildroot] [PATCH] fbgrab: fix static linking
-Message-ID: <1400433988-2509-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 18 May 2014 19:29:28 +0200
+Subject: [Buildroot] [PATCH v8 21/28] xbmc: Add X.org/OpenGL support
+In-Reply-To: <le5n4bxjvb.ln2@ID-313208.user.individual.net>
+References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
+ <1400342276-10303-22-git-send-email-bernd.kuhls@t-online.de>
+ <20140517205500.GL3459@free.fr>
+ <0sjm4bxrs4.ln2@ID-313208.user.individual.net>
+ <20140518162900.GA3631@free.fr>
+ <le5n4bxjvb.ln2@ID-313208.user.individual.net>
+Message-ID: <20140518172928.GD3631@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Bernd, All,
 
-  http://autobuild.buildroot.org/results/9e0/9e079632a6c0556c96ec8ed7564286aa84044bf7/
-  http://autobuild.buildroot.org/results/401/401105b5e120176e78c2e5fcabe54ab0bde1bf40/
-  and more
+On 2014-05-18 18:58 +0200, Bernd Kuhls spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+> news:20140518162900.GA3631 at free.fr: 
+> 
+> > Something like:
+> [...]
+> > should do the trick.
+> 
+> Hi,
+> 
+> for further comments I posted my current patch here:
+> http://pastebin.com/zv7jueLB (expires in one week).
+> 
+> Especially the last "depends on" block looks crude, but seems to work.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fbgrab/fbgrab-01-fix-static-build.patch | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/fbgrab/fbgrab-01-fix-static-build.patch
+Yep, it looks too dense. I think we can factor it into:
 
-diff --git a/package/fbgrab/fbgrab-01-fix-static-build.patch b/package/fbgrab/fbgrab-01-fix-static-build.patch
-new file mode 100644
-index 0000000..fe5ae2c
---- /dev/null
-+++ b/package/fbgrab/fbgrab-01-fix-static-build.patch
-@@ -0,0 +1,21 @@
-+Fix static build
-+
-+fbgrab links against libpng, which depends on libm. For shared library
-+builds, there is nothing special to do about this, but for static
-+library builds, it is necessary to pass -lm when linking fbgrab.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/Makefile
-+===================================================================
-+--- a/Makefile
-++++ b/Makefile
-+@@ -12,7 +12,7 @@
-+ all: fbgrab fbgrab.1.gz
-+ 
-+ fbgrab: fbgrab.c
-+-	$(CC) -g -Wall $(CFLAGS) $(LDFLAGS) $< -lpng -lz -o $@
-++	$(CC) -g -Wall $(CFLAGS) $(LDFLAGS) $< -lpng -lz -lm -o $@
-+ 
-+ fbgrab.1.gz: fbgrab.1.man
-+ 	$(GZIP) $(GZIPFLAGS) $< > $@
+    depends on BR2_arm || BR2_i386 || BR2_x86_64
+    depends on HAS_LIBEGL && HAS_LIBGLES \
+            || (BR2_i386 || BR2_x86_64) && HAS_LIBGL
+
+So, it first ensures that it is only visible for ARM or x86 (the only
+archs we currently support SBMC on.)
+
+Then, it is available only for EGL+GLES or x86+GL, since EGL+GLES is
+posible on ARM and x86 alike, but full GL is only possible on x86.
+
+I think it is much cleaner to separate the architectures dependencies
+from the GL dependencies.
+
+Of course, this would probably not scale if we were to support it on
+other archs (eg. PPC), but it will be time to revisit this if/when we
+happen to add that support.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
