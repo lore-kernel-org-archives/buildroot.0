@@ -1,71 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 18 May 2014 23:36:14 +0200
-Subject: [Buildroot] [PATCH] duma: not available on non-MMU platforms
-In-Reply-To: <1400435100-10211-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1400435100-10211-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140518213614.GE3631@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 May 2014 23:32:43 +0200
+Subject: [Buildroot] [git commit] fbgrab: fix static linking
+Message-ID: <20140518213731.7B7EE9CC00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=b8242149e48d78a5b62f2d9743dfa421bc1b8c65
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-05-18 19:45 +0200, Thomas Petazzoni spake thusly:
-> By design, building duma on Blackfin and other non-MMU platforms is
-> quite useless: it uses page mappings to detect buffer overrun and
-> use-after-free programming errors. Therefore, this commit simply marks
-> duma as not available on non-MMU platforms.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/951/9519d7abb45c6a789874ec6bb84418c31a98916b/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Fixes:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  http://autobuild.buildroot.org/results/9e0/9e079632a6c0556c96ec8ed7564286aa84044bf7/
+  http://autobuild.buildroot.org/results/401/401105b5e120176e78c2e5fcabe54ab0bde1bf40/
+  and more
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/fbgrab/fbgrab-01-fix-static-build.patch |   21 +++++++++++++++++++++
+ 1 files changed, 21 insertions(+), 0 deletions(-)
 
-> ---
->  package/duma/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/duma/Config.in b/package/duma/Config.in
-> index e9cc9b2..7679e64 100644
-> --- a/package/duma/Config.in
-> +++ b/package/duma/Config.in
-> @@ -2,6 +2,10 @@ config BR2_PACKAGE_DUMA
->  	bool "duma"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	# By design, duma uses page mapping to isolate
-> +	# allocations. Non-MMU platforms cannot perform such
-> +	# things.
-> +	depends on BR2_USE_MMU
->  	help
->  	  D.U.M.A. - Detect Unintended Memory Access. A fork of the
->  	  Electric Fence library. Detects buffer overflow and
-> @@ -17,4 +21,5 @@ config BR2_PACKAGE_DUMA_NO_LEAKDETECTION
->  endif # BR2_PACKAGE_DUMA
->  
->  comment "duma needs a toolchain w/ C++, threads"
-> +	depends on BR2_USE_MMU
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> -- 
-> 1.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fbgrab/fbgrab-01-fix-static-build.patch b/package/fbgrab/fbgrab-01-fix-static-build.patch
+new file mode 100644
+index 0000000..fe5ae2c
+--- /dev/null
++++ b/package/fbgrab/fbgrab-01-fix-static-build.patch
+@@ -0,0 +1,21 @@
++Fix static build
++
++fbgrab links against libpng, which depends on libm. For shared library
++builds, there is nothing special to do about this, but for static
++library builds, it is necessary to pass -lm when linking fbgrab.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Makefile
++===================================================================
++--- a/Makefile
+++++ b/Makefile
++@@ -12,7 +12,7 @@
++ all: fbgrab fbgrab.1.gz
++ 
++ fbgrab: fbgrab.c
++-	$(CC) -g -Wall $(CFLAGS) $(LDFLAGS) $< -lpng -lz -o $@
+++	$(CC) -g -Wall $(CFLAGS) $(LDFLAGS) $< -lpng -lz -lm -o $@
++ 
++ fbgrab.1.gz: fbgrab.1.man
++ 	$(GZIP) $(GZIPFLAGS) $< > $@
