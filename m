@@ -1,41 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 31 May 2014 19:51:15 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.14.5
-In-Reply-To: <1401576675-25418-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1401576675-25418-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1401576675-25418-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 18 May 2014 23:54:09 +0200
+Subject: [Buildroot] [git commit] scancpan: sort dependencies
+Message-ID: <20140601083244.D47479C779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=9c2be26ed8221f4053e203692711841884defdb4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 069a7d6..9b42736 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.14.4"
-+	bool "3.14.5"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.14.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.14.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-1.8.5.5
+in order to avoid spurious diff when updating packages
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/scripts/scancpan |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index dc62b47..d8723f3 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -581,7 +581,7 @@ while (my ($distname, $dist) = each %dist) {
+         open my $fh, q{>}, $cfgname;
+         say {$fh} qq{config BR2_PACKAGE_${brname}};
+         say {$fh} qq{\tbool "${fsname}"};
+-        foreach my $dep (@{$deps_runtime{$distname}}) {
++        foreach my $dep (sort @{$deps_runtime{$distname}}) {
+             my $brdep = brname( fsname( $dep ) );
+             say {$fh} qq{\tselect BR2_PACKAGE_${brdep}};
+         }
+@@ -596,10 +596,10 @@ while (my ($distname, $dist) = each %dist) {
+         # the scheme is not used, because the job is done by the BR download infrastructure
+         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
+         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
+-        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } @{$deps_build{$distname}} ),
+-                                      map( { fsname( $_ ); } @{$deps_runtime{$distname}} );
+-        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } @{$deps_build{$distname}},
+-                                                                            @{$deps_runtime{$distname}};
++        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
++                                      map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
++        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
++                                                                                  @{$deps_runtime{$distname}} );
+         my $license = ref $dist->{license} eq 'ARRAY'
+                     ? join q{ or }, @{$dist->{license}}
+                     : $dist->{license};
