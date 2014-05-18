@@ -1,37 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 18 May 2014 10:19:12 +0200
-Subject: [Buildroot] Booting new kernels
-In-Reply-To: <1400352917.66521.YahooMailNeo@web122102.mail.ne1.yahoo.com>
-References: <1400278020.25876.YahooMailNeo@web122103.mail.ne1.yahoo.com>
- <20140517091121.59fdaa6b@free-electrons.com>
- <1400313412.16686.YahooMailNeo@web122105.mail.ne1.yahoo.com>
- <20140517102101.1034b695@free-electrons.com>
- <1400352917.66521.YahooMailNeo@web122102.mail.ne1.yahoo.com>
-Message-ID: <20140518101912.4bd86d86@free-electrons.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Sun, 18 May 2014 10:20:00 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-14
+References: <20140515063008.42ABD100ECD@stock.ovh.net>
+ <obqj4bxae8.ln2@ID-313208.user.individual.net>
+Message-ID: <g27m4bxe1n.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tal Lubko,
+Bernd Kuhls <berndkuhls@hotmail.com> wrote in
+news:obqj4bxae8.ln2 at ID-313208.user.individual.net: 
 
-On Sat, 17 May 2014 11:55:17 -0700 (PDT), Tal Lubko wrote:
+> Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>
+> wrote in
+> news:20140515063008.42ABD100ECD at stock.ovh.net:
+> 
+>>        arm |                     php-5.5.12 | NOK |
+>>        http://autobuild.buildroot.net/results/657781d2bc8e95ffc0478ecc9c
+>>        e 954f7316df26e/
+> 
+> Hi,
+> 
+> currently I am trying to reproduce this build error, but without
+> success.
 
-> I took yours and Gene's advices and? looked again at the kernel configuration.
-> For some reason, starting from kernel 3.7.1, "RAM block device support" is turned off by default.
-> I think its mandatory for me because I use initrd. Now I'm going to try a newer kernel (3.14.3).
-> I think I'll go and read about the boot sequence to understand it a little bit better.
+Hi,
 
-Glad to see you figured out what the problem was.
+reproducing a similar build error, this time with sqlite, also failed:
 
-I think you should have a look at using initramfs instead, it's much
-more memory efficient than initrd.
+http://autobuild.buildroot.net/results/f0d/f0d2bcc11f04db9853d18f019993e28d03
+f8d8c0//
 
-Best regards,
+Are there any hints in php config.log about this error?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
