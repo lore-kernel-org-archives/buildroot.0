@@ -1,7 +1,7 @@
 From: Tom Deblauwe <tom.deblauwe@ebo-enterprises.com>
-Date: Mon, 19 May 2014 09:59:08 +0200
+Date: Mon, 19 May 2014 10:07:33 +0200
 Subject: [Buildroot] grub2
-Message-ID: <5379B9CC.9000709@ebo-enterprises.com>
+Message-ID: <5379BBC5.5020202@ebo-enterprises.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,12 +10,12 @@ To: buildroot@busybox.net
 
 Hello list,
 
-I am trying to build grub2 with the platform as x86-64-efi. I am
+  I am trying to build grub2 with the platform as x86-64-efi. I am
 building on Ubuntu 14.04 64bit. My target is i386 atom. This works when
 I use an external toolchain from Sourcery codebench 2012.09.
 
-But when I try to build with an internal buildroot toolchain it fails on
-the grub2 configure step with an error about gcc not having the
+  But when I try to build with an internal buildroot toolchain it fails
+on the grub2 configure step with an error about gcc not having the
 "-mcmodel=large" support. I tried gcc 4.9 and 4.8 and they both didn't
 have it compiled in apparently. I have enabled the
 BR2_TOOLCHAIN_BUILDROOT_LARGEFILE support so I guessed that was ok then
@@ -28,3 +28,10 @@ What could be wrong with this?
 Best regards,
 Tom,
 Email Confidentiality: e-BO Enterprises<http://www.ebo-enterprises.com/> Company Registration Number BE 0470174242. This email message and any attachments are for the sole use of the intended recipient(s) and may contain information that is proprietary to e-BO Enterprises<http://www.ebo-enterprises.com/>. If you have received this message in error, please notify the sender by reply, and delete all copies of this message and any attachments. If you are the intended recipient you may use the information contained in this message and any files attached to this message only as authorized by e-BO Enterprises<http://www.ebo-enterprises.com/>. Any unauthorized use, dissemination or disclosure of this message or its attachments is strictly prohibited. The contents of this e-mail are not to be considered binding upon e-BO Enterprises<http://www.ebo-enterprises.com/>.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: grub2_config.gz
+Type: application/gzip
+Size: 8067 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140519/7322ec19/attachment.bin>
