@@ -1,45 +1,96 @@
-From: Frank Bergmann <frank@frajasalo.de>
-Date: Mon, 19 May 2014 22:44:42 +0200
-Subject: [Buildroot] [PATCH 1/1] fio: fix missing fallocate64()
-In-Reply-To: <20140519221549.09b43dbf@free-electrons.com>
-References: <1399668168-4521-1-git-send-email-frank@frajasalo.de>	<20140512214442.014f1eb5@free-electrons.com>	<537A5CD4.70500@frajasalo.de>
- <20140519221549.09b43dbf@free-electrons.com>
-Message-ID: <537A6D3A.60801@frajasalo.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 19 May 2014 22:51:35 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/webkit: Fix OpenGL-related
+	dependencies
+Message-ID: <1400532695-12447-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19.05.2014 22:15, Thomas Petazzoni wrote:
-> Dear Frank Bergmann,
->
-> On Mon, 19 May 2014 21:34:44 +0200, Frank Bergmann wrote:
->
->> On 12.05.2014 21:44, Thomas Petazzoni wrote:
->>> Dear Frank Bergmann,
->>>
->>> On Fri,  9 May 2014 22:42:48 +0200, Frank Bergmann wrote:
->>>
->>>> +ifeq ($(BR2_nios2),y)
->>>> +BR2_GLOBAL_PATCH_DIR += "board/common-nios2"
->>>> +endif
->>>
->>> Unfortunately, we don't want to have architecture-specific patches, and
->>> not applied with this mechanism.
->>
->> Sorry I didn't take notice of that.
->> Maybe someone could edit chapter 3.4.4 "Customizing packages"
->> (http://buildroot.org/downloads/manual/manual.html#packages-custom)
->> where such architecture-specific patches are mentioned to avoid
->> misinterpreting it like I did.
->
-> I don't think chapter 3.4.4 is wrong, but the BR2_GLOBAL_PATCH_DIR is
-> not meant to be used by Buildroot upstream itself. It's a way for
-> Buildroot *users* to apply their own custom patches on top of the
-> various packages that Buildroot has.
+fixes
+http://autobuild.buildroot.net/results/27a/27a674c6a19a729fae5cc33de0360b2a061930c1/
 
-Ah, I understand now. Thanks for the explanation !
+This patch indeed fixes several problems based on the autobuilder-defconfig used.
 
-Regards,
-Frank Bergmann.
+1) Add missing dependencies when opengl is detected by webkit to satisfy autobuilder:
+
+checking which GPU acceleration backend to use... opengl
+checking for XCOMPOSITE... yes
+checking for XDAMAGE... no
+configure: error: Package requirements (xdamage) were not met:
+
+2) ... but opengl should not have been detected with the used defconfig:
+$ grep MESA .config
+BR2_PACKAGE_MESA3D=y
+
+which will lead to a link error although webkit configure found all dependencies:
+
+/home/br2/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/4.7.3/../../../../mips-linux-gnu/bin/ld: cannot find -lGL
+
+3) same is valid for glx, having GL/glx.h means nothing
+
+4) add some configure options for gles/egl as well, just to make sure ;)
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: - rework dependencies (Peter)
+    - more compile fixes
+
+ package/webkit/Config.in |    2 ++
+ package/webkit/webkit.mk |   21 +++++++++++++++++++++
+ 2 files changed, 23 insertions(+)
+
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 21da2b2..c86eb94 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -31,6 +31,8 @@ config BR2_PACKAGE_WEBKIT
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_WEBP
+ 	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  WebKit is an open source, standards compliant web browser engine.
+ 
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 21b535f..63740c2 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -11,6 +11,10 @@ WEBKIT_INSTALL_STAGING = YES
+ WEBKIT_DEPENDENCIES = host-ruby host-flex host-bison host-gperf enchant harfbuzz \
+ 	icu jpeg libcurl libgail libsecret libsoup libxml2 libxslt libgtk2 sqlite webp
+ 
++WEBKIT_DEPENDENCIES += \
++	$(if $(BR_PACKAGE_XLIB_LIBXCOMPOSITE),xlib_libXcomposite) \
++	$(if $(BR_PACKAGE_XLIB_LIBXDAMAGE),xlib_libXdamage)
++
+ # webkit-disable-tests.patch changes configure.ac therefore autoreconf required
+ WEBKIT_AUTORECONF = YES
+ WEBKIT_AUTORECONF_OPT = -I $(@D)/Source/autotools
+@@ -48,4 +52,21 @@ WEBKIT_CONF_OPT += \
+ WEBKIT_CONF_OPT += --with-target=x11
+ WEBKIT_DEPENDENCIES += xlib_libXt
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
++WEBKIT_CONF_OPT += --enable-gles2
++WEBKIT_DEPENDENCIES += libegl libgles
++else
++WEBKIT_CONF_OPT += --disable-gles2
++endif
++
++# gles/egl support is prefered over opengl by webkit configure
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++WEBKIT_CONF_OPT += --with-acceleration-backend=opengl
++WEBKIT_DEPENDENCIES += libgl
++else
++# OpenGL/glx is auto-detected due to the presence of gl.h/glx.h, which is not
++# enough, so disable glx and the use of the OpenGL acceleration backend here
++WEBKIT_CONF_OPT += --disable-glx --with-acceleration-backend=none
++endif
++
+ $(eval $(autotools-package))
+-- 
+1.7.10.4
