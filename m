@@ -1,71 +1,103 @@
-From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 02:36:58 +0000
-Subject: [Buildroot] [buildroot][PATCH] Add cloog package. This package
-	depends on ISL and GMP and is used by the GCC graphite
-	optimisations.
-Message-ID: <BLU436-SMTP926FE10AFAA2D9A363495FA8320@phx.gbl>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 19 May 2014 05:56:10 +0300
+Subject: [Buildroot] Problems building for Olimex A13. A new user
+ enquires ...
+In-Reply-To: <09d801cf72fa$f6cc2c40$e46484c0$@novadsp.com>
+References: <09d801cf72fa$f6cc2c40$e46484c0$@novadsp.com>
+Message-ID: <20140519025610.GE27238@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Steve Thomas <scjthm@live.com>
----
- package/Config.in       |  1 +
- package/cloog/Config.in |  8 ++++++++
- package/cloog/cloog.mk  | 16 ++++++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/cloog/Config.in
- create mode 100644 package/cloog/cloog.mk
+Hi Jerry,
 
-diff --git a/package/Config.in b/package/Config.in
-index 2e71210..d5ada2f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -779,6 +779,7 @@ source "package/flann/Config.in"
- source "package/glibmm/Config.in"
- source "package/gmp/Config.in"
- source "package/isl/Config.in"
-+source "package/cloog/Config.in"
- source "package/gsl/Config.in"
- source "package/gtest/Config.in"
- source "package/libargtable2/Config.in"
-diff --git a/package/cloog/Config.in b/package/cloog/Config.in
-new file mode 100644
-index 0000000..db99242
---- /dev/null
-+++ b/package/cloog/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_CLOOG
-+	bool "cloog"
-+    select BR2_PACKAGE_GMP
-+    select BR2_PACKAGE_ISL
-+	help
-+	  Chunky LOOp Generator - Library which generates loops for scanning Z-polyhedra.
-+
-+	  http://clooglib.org/
-diff --git a/package/cloog/cloog.mk b/package/cloog/cloog.mk
-new file mode 100644
-index 0000000..f5e3046
---- /dev/null
-+++ b/package/cloog/cloog.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# cloog
-+#
-+################################################################################
-+
-+CLOOG_VERSION = 0.18.1
-+CLOOG_SITE = http://www.bastoul.net/cloog/pages/download/count.php3?url=./
-+CLOOG_SOURCE = cloog-$(CLOOG_VERSION).tar.gz
-+CLOOG_INSTALL_STAGING = YES
-+CLOOG_LICENSE = LGPLv2.1
-+CLOOG_LICENSE_FILES = LICENSE
-+CLOOG_DEPENDENCIES = gmp isl
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+On Mon, May 19, 2014 at 01:40:42AM +0100, g4 at novadsp.com wrote:
+> First off: Thanks for Buildroot. 
+> 
+> Second: Building on a Xubuntu 14.04 Virtual Box guest using Buildroot
+> 2014-05-RC1
+> 
+> Thirdly: Please advise If there is a better place (to ask questions :))
+> 
+> I have set up a .config (attached if this helps)
+
+Is it? I couldn't find one (and it really helps).
+
+baruch
+
+> which builds quite happily
+> from scratch until the board specific u-boot. The u-boot URL has been
+> changed to https://github.com/linux-sunxi/u-boot-sunxi.git.
+> 
+> This is possibly a slightly odd combination as I'm trying to build using a
+> board-specific u-boot with the mainline kernel sources (3.14.4). 
+> 
+> The symptoms of the problem are below. I note this:
+> http://stackoverflow.com/questions/17216067/git-clone-b-tag-results-in-warni
+> ng-remote-branch-not-found-in-upstream-origi
+> 
+> How best to fix/resolve this? Is it a .config problem?
+> 
+> Many thanks.
+> 
+> Jerry.
+> 
+> --------------------------snip------------------------------
+> make[1]: Leaving directory `/home/jevans/olimex/buildroot'
+> >>> uboot  Downloading
+> Doing shallow clone
+> Cloning into 'uboot-'...
+> warning: Could not find remote branch --bare to clone.
+> fatal: Remote branch --bare not found in upstream origin
+> Unexpected end of command stream
+> Doing full clone
+> Cloning into bare repository 'uboot-'...
+> remote: Reusing existing pack: 261244, done.
+> remote: Counting objects: 52, done.
+> remote: Compressing objects: 100% (52/52), done.
+> remote: Total 261296 (delta 29), reused 2 (delta 0)
+> Receiving objects: 100% (261296/261296), 72.68 MiB | 228.00 KiB/s, done.
+> Resolving deltas: 100% (205455/205455), done.
+> Checking connectivity... done.
+> usage: git archive [options] <tree-ish> [<path>...]
+>    or: git archive --list
+>    or: git archive --remote <repo> [--exec <cmd>] [options] <tree-ish>
+> [<path>...]
+>    or: git archive --remote <repo> [--exec <cmd>] --list
+> 
+>     --format <fmt>        archive format
+>     --prefix <prefix>     prepend prefix to each pathname in the archive
+>     -o, --output <file>   write the archive to this file
+>     --worktree-attributes
+>                           read .gitattributes in working directory
+>     -v, --verbose         report archived files on stderr
+>     -0                    store only
+>     -1                    compress faster
+>     -9                    compress better
+> 
+>     -l, --list            list supported archive formats
+> 
+>     --remote <repo>       retrieve the archive from remote repository <repo>
+>     --exec <command>      path to the remote git-upload-archive command
+> 
+> --2014-05-19 01:03:33--  http://sources.buildroot.net/uboot-.tar.gz
+> Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
+> Connecting to sources.buildroot.net
+> (sources.buildroot.net)|176.9.16.109|:80... connected.
+> HTTP request sent, awaiting response... 404 Not Found
+> 2014-05-19 01:03:33 ERROR 404: Not Found.
+> 
+> make: ***
+> [/home/jevans/olimex/buildroot/output/build/uboot-/.stamp_downloaded] Error
+> 1
+> jevans at xub64:~/olimex/buildroot$ 
+> jevans at xub64:~/olimex/buildroot/output/build$ make
+> make: *** No targets specified and no makefile found. Stop.
+> jevans at xub64:~/olimex/buildroot/output/build$ 
+
 -- 
-1.9.3
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
