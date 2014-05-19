@@ -1,31 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 19 May 2014 17:11:24 -0300
-Subject: [Buildroot] [PATCH] ruby: add psych/libyaml support
-Message-ID: <1400530284-17057-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 19 May 2014 22:15:49 +0200
+Subject: [Buildroot] [PATCH 1/1] fio: fix missing fallocate64()
+In-Reply-To: <537A5CD4.70500@frajasalo.de>
+References: <1399668168-4521-1-git-send-email-frank@frajasalo.de>
+ <20140512214442.014f1eb5@free-electrons.com>
+ <537A5CD4.70500@frajasalo.de>
+Message-ID: <20140519221549.09b43dbf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ruby/ruby.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Dear Frank Bergmann,
 
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 0ea352d..1185323 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -29,6 +29,9 @@ RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- 	RUBY_DEPENDENCIES += berkeleydb
- endif
-+ifeq ($(BR2_PACKAGE_LIBYAML),y)
-+	RUBY_DEPENDENCIES += libyaml
-+endif
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- 	RUBY_DEPENDENCIES += ncurses
- endif
+On Mon, 19 May 2014 21:34:44 +0200, Frank Bergmann wrote:
+
+> On 12.05.2014 21:44, Thomas Petazzoni wrote:
+> > Dear Frank Bergmann,
+> >
+> > On Fri,  9 May 2014 22:42:48 +0200, Frank Bergmann wrote:
+> >
+> >> +ifeq ($(BR2_nios2),y)
+> >> +BR2_GLOBAL_PATCH_DIR += "board/common-nios2"
+> >> +endif
+> >
+> > Unfortunately, we don't want to have architecture-specific patches, and
+> > not applied with this mechanism.
+> 
+> Sorry I didn't take notice of that.
+> Maybe someone could edit chapter 3.4.4 "Customizing packages"
+> (http://buildroot.org/downloads/manual/manual.html#packages-custom)
+> where such architecture-specific patches are mentioned to avoid
+> misinterpreting it like I did.
+
+I don't think chapter 3.4.4 is wrong, but the BR2_GLOBAL_PATCH_DIR is
+not meant to be used by Buildroot upstream itself. It's a way for
+Buildroot *users* to apply their own custom patches on top of the
+various packages that Buildroot has.
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
