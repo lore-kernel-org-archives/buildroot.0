@@ -1,43 +1,35 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 19 May 2014 17:00:09 +0200
-Subject: [Buildroot] [Question] How is the kconfig parser working ?
-In-Reply-To: <CAAXf6LWAckgk0-BgnT_PB+Vdb6KyVyMUfYxCSePdo1NEKeetOQ@mail.gmail.com>
-References: <537A1CB2020000460004FF90@gwia2.rz.hs-offenburg.de>
- <CAAXf6LWAckgk0-BgnT_PB+Vdb6KyVyMUfYxCSePdo1NEKeetOQ@mail.gmail.com>
-Message-ID: <CAAXf6LVGmu9hNQ82vkhfF2y=kN5qHTHHzYn4PL+RfyRc4dLhYQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 May 2014 18:37:51 +0200
+Subject: [Buildroot] [PATCH 1/1] netsnmp: Remove ldconfig calls
+In-Reply-To: <5379A235.2050101@mind.be>
+References: <1400013313-2281-1-git-send-email-bernd.kuhls@t-online.de>
+ <5379A235.2050101@mind.be>
+Message-ID: <20140519163751.GA3508@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 19, 2014 at 4:59 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi Frank,
->
-> (please use plaintext-only mail, no html or mixed mail)
->
-> On Mon, May 19, 2014 at 3:01 PM, Frank Ihle <frank.ihle@hs-offenburg.de> wrote:
->> Hi everyone,
->>
->> I'd like to parse some packages in the Buildroot directory and their
->> dependencies.
->>
->> I've seen that BR is using the lxdialog. I already got it running to load
->> the "config.in"s with my own frontends. But what I couldn't figure out is
->> how to get the information of a specific package, e.g.: how can I trigger
->> the parser to print all names and dependencies of the packages e.g. in the
->> "audio/video" section? Is it even possible to parse all of the Config.in
->> easily? The "conf_parse()" in zconf.y looks like to me it is parsing the
->> .config and not the Config.in - but maybe I got this part wrong.
->>
->> I guess this would lead to a long answer, therefor maybe you can just point
->> me to the right direction, like: where BR itself uses this functionality, an
->> example, or a helpful link in the internet.
->
-> Buildroot is not using this directly, but are you aware that there is
-> a kconfiglib python module, that is for example used by the
-> gen-manual-lists.py script? See support/scripts/ for that. Maybe it
-> can be useful to you.
+Arnout, All,
 
-(ai, just see ThomasP already said that, sorry)
+On 2014-05-19 08:18 +0200, Arnout Vandecappelle spake thusly:
+> On 13/05/14 22:35, Bernd Kuhls wrote:
+> > ldconfig breaks links created by gpu-viv-bin-mx6q.
+> 
+>  As far as I can tell, there is never any reason to call ldconfig during the
+> build. So, maybe a more fundamental solution would be to symlink
+> $(HOST_DIR)/usr/bin/ldconfig to /bin/true...
+
+Exactly what I was thinking...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
