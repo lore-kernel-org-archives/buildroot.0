@@ -1,109 +1,81 @@
-From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 19:48:13 +0000
-Subject: [Buildroot] [PATCH v6 3/3] Add an BR2_GCC_ENABLE_GRAPHITE flag for
-	the buildroot toolchain
-In-Reply-To: <1400528893-4483-1-git-send-email-scjthm@live.com>
-References: <1400528893-4483-1-git-send-email-scjthm@live.com>
-Message-ID: <BLU436-SMTP1389119D64FEA33BF25D8E5A8320@phx.gbl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 19 May 2014 21:50:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] fio: disable on nios2 because of
+ missing fallocate64()
+In-Reply-To: <1400527410-4637-1-git-send-email-frank@frajasalo.de>
+References: <1400527410-4637-1-git-send-email-frank@frajasalo.de>
+Message-ID: <20140519195051.GC3508@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gcc graphite optimisations such as loop-interchange, blocking
-and loop-flattening, also known as graphite are an optional feature of
-gcc that is very well supported since about gcc version 4.5.
+Frank, All,
 
-This patch adds support for graphite for the toolchain as an optional
-flag for versions 4.8 onwards as an optional flag, that is disabled by
-default.
+On 2014-05-19 21:23 +0200, Frank Bergmann spake thusly:
+> The fallocate() function is replaced by fallocate64() while compiling
+> with LARGE_FILE flags. Current nios2 toolchain is missing the fallocate64()
+> function.
 
-Signed-off-by: Steve Thomas <scjthm@live.com>
----
-Changes v5 -> v6:
-    - removing supported versions (as per gentoo) should be 4.8 onwards (MORIN)
-Changes v4 -> v5:
-    - fixed email address
-    - removed the cloog version check
-    - added note about the isl version check
+It would have been nice to have autobuilders referneces:
 
-Changes v3 -> v4:
-    - no changes apart from incorrect email.
+Fixes:
+    http://autobuild.buildroot.net/results/9cd/9cd30031a40f768f6090cfba44c880fb2406672b
+    http://autobuild.buildroot.net/results/7da/7da32ca8178aa6bada06dfaea38e9e693fba0db2
+    http://autobuild.buildroot.net/results/0ef/0ef7358289bff2a5f9efda27115eddb379c1a0b9
+    [...]
 
-Changes v2 -> v3:
-    - removed packages from Config.in
-    - disabled target builds
-    - added empty line to commit messages
-    - removed isl patch as different version used
+> Signed-off-by: Frank Bergmann <frank@frajasalo.de>
 
-Changes v1 -> v2:
-    - added more lucid and verbose description in commit messages
-    - fixed the url and removed the sources files
-    - add complete graphite as three commits yet a single patch
----
- package/gcc/Config.in.host |  6 ++++++
- package/gcc/gcc.mk         | 10 ++++++++++
- 2 files changed, 16 insertions(+)
+With the aforementioned autobuilders references:
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ca991da..d2fecda 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -3,6 +3,9 @@ comment "GCC Options"
- config BR2_GCC_NEEDS_MPC
- 	bool
- 
-+config BR2_GCC_SUPPORTS_GRAPHITE
-+   bool
-+
- choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
-@@ -52,6 +55,7 @@ choice
- 	config BR2_GCC_VERSION_4_8_X
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_4_8_ARC
-@@ -62,6 +66,7 @@ choice
- 	config BR2_GCC_VERSION_4_9_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9.x"
- 
- 	config BR2_GCC_VERSION_4_9_MICROBLAZE
-@@ -72,6 +77,7 @@ choice
- 	config BR2_GCC_VERSION_SNAP
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc snapshot"
- endchoice
- 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 32219cc..8a35dbd 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -156,6 +156,16 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
- HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
- endif
- 
-+ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
-+HOST_GCC_COMMON_DEPENDENCIES += \
-+   host-isl \
-+   host-cloog
-+
-+#This is needed as with-isl doesn't work
-+HOST_GCC_COMMON_CONF_OPT += \
-+   --disable-isl-version-check
-+endif
-+
- ifneq ($(BR2_arc)$(BR2_GCC_VERSION_SNAP),)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>   - don't use an architecture-specific patch
+>   - disable whole package for nios (suggested by Thomas Petazzoni)
+> 
+> Signed-off-by: Frank Bergmann <frank@frajasalo.de>
+> ---
+>  package/fio/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/fio/Config.in b/package/fio/Config.in
+> index be99f25..5a20b85 100644
+> --- a/package/fio/Config.in
+> +++ b/package/fio/Config.in
+> @@ -12,6 +12,9 @@ config BR2_PACKAGE_FIO
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
+>  		!BR2_UCLIBC_VERSION_0_9_31 && \
+>  		!BR2_UCLIBC_VERSION_0_9_32
+> +	# fio uses fallocate() which gets fallocate64() while compiling
+> +	# with *LARGE_FILE* flags but fallocate64() is not available on nios2
+> +	depends on !BR2_nios2
+>  	help
+>  	  fio is an I/O tool meant to be used both for benchmark
+>  	  and stress/hardware verification.
+> @@ -20,3 +23,4 @@ config BR2_PACKAGE_FIO
+>  
+>  comment "fio needs a toolchain w/ largefile, threads"
+>  	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_nios2
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
