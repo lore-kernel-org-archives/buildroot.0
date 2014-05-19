@@ -1,67 +1,49 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 19 May 2014 10:03:33 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-16
-In-Reply-To: <20140519115155.10e652cd@free-electrons.com>
-References: <20140517063007.AED55100CC0@stock.ovh.net>
- <20140517093546.6b5dfca1@free-electrons.com>
- <39A54937CC95F24AA2F794E2D2B66B1356CCD708@de02wembxa.internal.synopsys.com>
- <20140519115155.10e652cd@free-electrons.com>
-Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CCD760@de02wembxa.internal.synopsys.com>
+From: Steve Thomas <scjthm@live.com>
+Date: Mon, 19 May 2014 10:09:06 +0000
+Subject: [Buildroot] [PATCH v2 0/3] Adding support for graphite to buildroot
+	gcc toolchain
+Message-ID: <BLU436-SMTP16035AC1286C923498EFC49A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thanks for pointing me to the buildroot patch submission site. Lets try again :)
 
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: 19 May 2014 13:52
-> To: Anton Kolesov
-> Cc: buildroot at uclibc.org; Alexey Brodkin
-> Subject: Re: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-16
-> 
-> Dear Anton Kolesov,
-> 
-> (Would be nice to wrap your e-mails to a reasonable line length)
-> 
-> On Mon, 19 May 2014 09:46:36 +0000, Anton Kolesov wrote:
-> 
-> > > Missing some compiler intrinsics. I'll send a patch to disable jack2 on
-> > > ARC for now.
-> >
-> > We have added an implementation for those intrinsics in the latest release
-> of GCC, however they are disabled by default, because they require optional
-> hardware features. User can enable those intrinsics with compiler flag -
-> matomic, in case of Buildroot by adding it to the
-> "BR2_TARGET_OPTIMIZATION", if they know that required HW is present. Is
-> it possible to add -matomic to TARGET_OPTIMIZATION in autobuilder by
-> default? There is a lot of packages that depend on atomic intrinsics, so
-> enabling them would be useful for autobuilder, but I don't want to do this for
-> the whole toolchain by default because users without required hardware
-> support will get "illegal instruction" exception only in runtime.
-> 
-> I'd prefer to have an option under "Target options" to allow the user
-> to define whether his hardware has the required optional features to
-> provide the intrinsics. Something such as BR2_ARC_HAS_<feature>. Then
-> packages can do:
-> 
-> 	depends on !(BR2_arc && !BR2_ARC_HAS_<feature>)
-> 
-> or something like that (my boolean algebra might be rusty on this
-> Monday morning).
+This patchset add support for the graphite optimisation to the buildroot toolchain.
+Graphite has been around for quite some time and is almost standard is some distributions
 
+The patchset consists of two new packages and a new flag in the supported gcc toolchains.
+I have omitted support for 4.5 as this might not work with the more recent version of 
+cloog and isl, and if memory serves me correctly there was a transition from cloog-ppl
+to cloog around that time.
 
-Ok, will do that.
+The impact is minimal as the flag is ordinarily disabled.
 
+Cheers
 
-> 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+Thomo
+
+Steve Thomas (3):
+  isl: new package
+  cloog: new package
+  Add an BR2_GCC_ENABLE_GRAPHITE flag for the buildroot toolchain
+
+ package/Config.in                 |  2 ++
+ package/cloog/Config.in           |  8 ++++++++
+ package/cloog/cloog.mk            | 17 +++++++++++++++++
+ package/gcc/Config.in.host        | 16 ++++++++++++++++
+ package/gcc/gcc.mk                |  9 +++++++++
+ package/isl/Config.in             |  7 +++++++
+ package/isl/isl-000-libtool.patch | 28 ++++++++++++++++++++++++++++
+ package/isl/isl.mk                | 17 +++++++++++++++++
+ 8 files changed, 104 insertions(+)
+ create mode 100644 package/cloog/Config.in
+ create mode 100644 package/cloog/cloog.mk
+ create mode 100644 package/isl/Config.in
+ create mode 100644 package/isl/isl-000-libtool.patch
+ create mode 100644 package/isl/isl.mk
+
+-- 
+1.9.3
