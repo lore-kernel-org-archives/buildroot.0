@@ -1,120 +1,40 @@
-From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 09:28:58 +0000
-Subject: [Buildroot] [buildroot][PATCH 3/3] Added BR2_GCC_ENABLE_GRAPHITE
-	flag for the buildroot toolchain.
-In-Reply-To: <1400491738-8352-1-git-send-email-scjthm@live.com>
-References: <1400491738-8352-1-git-send-email-scjthm@live.com>
-Message-ID: <BLU436-SMTP121240F06ED8606148B3751A8320@phx.gbl>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Mon, 19 May 2014 09:33:07 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-18
+In-Reply-To: <20140519063009.7B5A9100E3F@stock.ovh.net>
+References: <20140519063009.7B5A9100E3F@stock.ovh.net>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CCD6CE@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gcc graphite optimisations such as loop-interchange, blocking
-and loop-flattening, also known as graphite are an optional feature of
-gcc that is very well supported since about gcc version 4.5.
+Hi all,
 
-This patch adds support for graphite for the toolchain as an optional
-flag for versions 4.6 onwards as an optional flag, that is disabled by
-default.
+>        arc |                  mplayer-1.1.1 | NOK |
+> http://autobuild.buildroot.net/results/af1ca869dbc7a71aa4cc89373d605ca8f7
+> 90fcc9/
 
-Signed-off-by: Steve Thomas <scjthm@live.com>
----
- package/gcc/Config.in.host | 16 ++++++++++++++++
- package/gcc/gcc.mk         |  9 +++++++++
- 2 files changed, 25 insertions(+)
+[AK:] ARC is now supported in the MPlayer trunk. So this problem will go away with the next MPlayer release, though no idea when this will happen.
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ca991da..6ecfef5 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -3,6 +3,9 @@ comment "GCC Options"
- config BR2_GCC_NEEDS_MPC
- 	bool
- 
-+config BR2_GCC_SUPPORTS_GRAPHITE
-+	bool
-+
- choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
-@@ -42,36 +45,43 @@ choice
- 	config BR2_GCC_VERSION_4_6_X
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.6.x"
- 
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_4_8_ARC
- 		depends on BR2_arc
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.8-arc"
- 
- 	config BR2_GCC_VERSION_4_9_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9.x"
- 
- 	config BR2_GCC_VERSION_4_9_MICROBLAZE
- 		depends on BR2_microblaze
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9-microblaze"
- 
- 	config BR2_GCC_VERSION_SNAP
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc snapshot"
- endchoice
- 
-@@ -147,6 +157,12 @@ config BR2_INSTALL_FORTRAN
- 	  cross-compiler, and install the Fortran runtime to the
- 	  target.
- 
-+config BR2_GCC_ENABLE_GRAPHITE
-+	bool "Enable compiler graphite optimisations"
-+	depends on BR2_GCC_SUPPORTS_GRAPHITE 
-+	help
-+	  Enable the compiler to support graphite optimisations
-+
- config BR2_GCC_ENABLE_TLS
- 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	default y
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 32219cc..c05a824 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -156,6 +156,15 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
- HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
- endif
- 
-+ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
-+HOST_GCC_COMMON_DEPENDENCIES += \
-+	host-isl \
-+	host-cloog
-+HOST_GCC_COMMON_CONF_OPT += \
-+	--disable-isl-version-check \
-+	--disable-cloog-version-check
-+endif
-+
- ifneq ($(BR2_arc)$(BR2_GCC_VERSION_SNAP),)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
--- 
-1.9.3
+
+>       bfin |                 pciutils-3.2.1 | NOK |
+> http://autobuild.buildroot.net/results/a27ce61967ef8f780887f7681c8b0edd9
+> 1656be6/
+>        arm |                     php-5.5.12 | NOK |
+> http://autobuild.buildroot.net/results/f0d2bcc11f04db9853d18f019993e28d0
+> 3f8d8c0/
+>       mips |                  webkit-1.11.5 | NOK |
+> http://autobuild.buildroot.net/results/27a674c6a19a729fae5cc33de0360b2a0
+> 61930c1/
+> 
+> 
+> --
+> http://autobuild.buildroot.net
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
