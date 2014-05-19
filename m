@@ -1,33 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 May 2014 00:09:20 +0200
-Subject: [Buildroot] how to assign cpp and c++ in buildroot?
-In-Reply-To: <5F503FD3-3FBC-4ADB-9D17-BA0CB5606B6D@gmail.com>
-References: <52E9D80E-B9AD-417A-BC0F-66A69C39FC21@gmail.com>
- <5F503FD3-3FBC-4ADB-9D17-BA0CB5606B6D@gmail.com>
-Message-ID: <20140520000920.20ae6b5b@free-electrons.com>
+From: Marcelo Gutierrez <kuyurix@gmail.com>
+Date: Mon, 19 May 2014 19:27:06 -0300
+Subject: [Buildroot] [git commit] mysql: Add optional zlib dependency
+In-Reply-To: <20140517112201.D10199CB44@busybox.osuosl.org>
+References: <20140517112201.D10199CB44@busybox.osuosl.org>
+Message-ID: <CA+kK6Wt9j5-bK8YEOmQ+vVfbcf+YzOE702XdsJozYwUVBMTZDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear cem akpolat,
+Hi Peter,
 
-On Mon, 19 May 2014 23:48:21 +0200, cem akpolat wrote:
+I've sent a patch to fix zlib dependency a few months ago:
 
-> > Since many days I have been trying to compile build root, however,  I encounter nearly each time the sanity check failure due to the misinterpretation of cpp. cpp is pretended as c++, however this is of course not true. When I compile through make command, I see also in the make parameters that cpp 
-> > refers to g++ under /host/usr/bin/?. There is clearly something wrong. I wanted to compile only the related packet, bridge-utils, under output/built/bridge-utils by providing the accurate CPP path, there is no problem while configuring and compiling the file. Briefly, how can I say the accurate path of CPP to build root such as make CPP=/path/to/file.
-> > 
-> > One remark, the name of the packet isn?t significant here, since I saw a lot of different packets which gave the same ?sanity check? error.
+http://patchwork.ozlabs.org/patch/326425/
 
-Could you post: the Buildroot version you're using, the
-Buildroot .config file you're using, and the last ~200 lines of the
-build output showing the error you're seeing?
+Just need to install host-zlib.
 
-Thanks,
+Regards,
+Marcelo
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2014-05-17 8:21 GMT-03:00 Peter Korsgaard <peter@korsgaard.com>:
+> commit: http://git.buildroot.net/buildroot/commit/?id=221b52b3ab8f4f90ebfe25ff52512233fd6fa49e
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Make sure zlib is built before mysql.
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/mysql/mysql.mk |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
+> index 5b30d84..d338c31 100644
+> --- a/package/mysql/mysql.mk
+> +++ b/package/mysql/mysql.mk
+> @@ -33,6 +33,10 @@ MYSQL_CONF_OPT = \
+>         --enable-thread-safe-client \
+>         --disable-mysql-maintainer-mode
+>
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +MYSQL_DEPENDENCIES += zlib
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_MYSQL_SERVER),y)
+>  MYSQL_DEPENDENCIES += host-mysql host-bison
+>  HOST_MYSQL_DEPENDENCIES =
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
