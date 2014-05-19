@@ -1,32 +1,48 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 19 May 2014 22:10:14 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-18
-In-Reply-To: <20140519113557.5f0ef8a6@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 19 May 2014 11:35:57 +0200")
-References: <20140519063009.7B5A9100E3F@stock.ovh.net>
- <39A54937CC95F24AA2F794E2D2B66B1356CCD6CE@de02wembxa.internal.synopsys.com>
- <20140519113557.5f0ef8a6@free-electrons.com>
-Message-ID: <87ha4ljzrt.fsf@dell.be.48ers.dk>
+Date: Mon, 19 May 2014 22:04:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] fio: disable on nios2 because of
+	missing fallocate64()
+In-Reply-To: <1400527410-4637-1-git-send-email-frank@frajasalo.de> (Frank
+ Bergmann's message of "Mon, 19 May 2014 21:23:30 +0200")
+References: <1400527410-4637-1-git-send-email-frank@frajasalo.de>
+Message-ID: <87oaytk01z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Frank" == Frank Bergmann <frank@frajasalo.de> writes:
 
-Hi,
+ > The fallocate() function is replaced by fallocate64() while compiling
+ > with LARGE_FILE flags. Current nios2 toolchain is missing the fallocate64()
+ > function.
 
- > If the patch to support ARC is small, we could integrate it in
- > Buildroot. If not, waiting for the next release is indeed better.
+ > Signed-off-by: Frank Bergmann <frank@frajasalo.de>
+ > ---
+ > Changes v1 -> v2:
+ >   - don't use an architecture-specific patch
+ >   - disable whole package for nios (suggested by Thomas Petazzoni)
 
- > I also wonder how we will 'discover' that a given package is now
- > available for a certain architecture for which it was disabled. I guess
- > the only solution is for someone interested by this architecture to
- > notice that it can now be enabled.
+ > Signed-off-by: Frank Bergmann <frank@frajasalo.de>
+ > ---
+ >  package/fio/Config.in | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-Yes, I think that's the only realistic way.
+ > diff --git a/package/fio/Config.in b/package/fio/Config.in
+ > index be99f25..5a20b85 100644
+ > --- a/package/fio/Config.in
+ > +++ b/package/fio/Config.in
+ > @@ -12,6 +12,9 @@ config BR2_PACKAGE_FIO
+ >  	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
+ >  		!BR2_UCLIBC_VERSION_0_9_31 && \
+ >  		!BR2_UCLIBC_VERSION_0_9_32
+ > +	# fio uses fallocate() which gets fallocate64() while compiling
+ > +	# with *LARGE_FILE* flags but fallocate64() is not available on nios2
+ > +	depends on !BR2_nios2
+
+Changed *LARGE_FILE* to the Buildroot symbol (BR2_LARGEFILE), added
+the autobuilder references as suggested by Yann and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
