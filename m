@@ -1,87 +1,105 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Mon, 19 May 2014 01:40:42 +0100
-Subject: [Buildroot] Problems building for Olimex A13. A new user enquires
-	...
-Message-ID: <09d801cf72fa$f6cc2c40$e46484c0$@novadsp.com>
+From: Steve Thomas <scjthm@live.com>
+Date: Mon, 19 May 2014 01:54:51 +0000
+Subject: [Buildroot] [buildroot][PATCH] Add isl package
+Message-ID: <BLU436-SMTP841403BA3990E47D42D079A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First off: Thanks for Buildroot. 
+Signed-off-by: Steve Thomas <scjthm@live.com>
+---
+ package/Config.in                 |  1 +
+ package/isl/Config.in             |  7 +++++++
+ package/isl/isl-000-libtool.patch | 28 ++++++++++++++++++++++++++++
+ package/isl/isl.mk                | 17 +++++++++++++++++
+ 4 files changed, 53 insertions(+)
+ create mode 100644 package/isl/Config.in
+ create mode 100644 package/isl/isl-000-libtool.patch
+ create mode 100644 package/isl/isl.mk
 
-Second: Building on a Xubuntu 14.04 Virtual Box guest using Buildroot
-2014-05-RC1
-
-Thirdly: Please advise If there is a better place (to ask questions :))
-
-I have set up a .config (attached if this helps) which builds quite happily
-from scratch until the board specific u-boot. The u-boot URL has been
-changed to https://github.com/linux-sunxi/u-boot-sunxi.git.
-
-This is possibly a slightly odd combination as I'm trying to build using a
-board-specific u-boot with the mainline kernel sources (3.14.4). 
-
-The symptoms of the problem are below. I note this:
-http://stackoverflow.com/questions/17216067/git-clone-b-tag-results-in-warni
-ng-remote-branch-not-found-in-upstream-origi
-
-How best to fix/resolve this? Is it a .config problem?
-
-Many thanks.
-
-Jerry.
-
---------------------------snip------------------------------
-make[1]: Leaving directory `/home/jevans/olimex/buildroot'
->>> uboot  Downloading
-Doing shallow clone
-Cloning into 'uboot-'...
-warning: Could not find remote branch --bare to clone.
-fatal: Remote branch --bare not found in upstream origin
-Unexpected end of command stream
-Doing full clone
-Cloning into bare repository 'uboot-'...
-remote: Reusing existing pack: 261244, done.
-remote: Counting objects: 52, done.
-remote: Compressing objects: 100% (52/52), done.
-remote: Total 261296 (delta 29), reused 2 (delta 0)
-Receiving objects: 100% (261296/261296), 72.68 MiB | 228.00 KiB/s, done.
-Resolving deltas: 100% (205455/205455), done.
-Checking connectivity... done.
-usage: git archive [options] <tree-ish> [<path>...]
-   or: git archive --list
-   or: git archive --remote <repo> [--exec <cmd>] [options] <tree-ish>
-[<path>...]
-   or: git archive --remote <repo> [--exec <cmd>] --list
-
-    --format <fmt>        archive format
-    --prefix <prefix>     prepend prefix to each pathname in the archive
-    -o, --output <file>   write the archive to this file
-    --worktree-attributes
-                          read .gitattributes in working directory
-    -v, --verbose         report archived files on stderr
-    -0                    store only
-    -1                    compress faster
-    -9                    compress better
-
-    -l, --list            list supported archive formats
-
-    --remote <repo>       retrieve the archive from remote repository <repo>
-    --exec <command>      path to the remote git-upload-archive command
-
---2014-05-19 01:03:33--  http://sources.buildroot.net/uboot-.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
-Connecting to sources.buildroot.net
-(sources.buildroot.net)|176.9.16.109|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2014-05-19 01:03:33 ERROR 404: Not Found.
-
-make: ***
-[/home/jevans/olimex/buildroot/output/build/uboot-/.stamp_downloaded] Error
-1
-jevans at xub64:~/olimex/buildroot$ 
-jevans at xub64:~/olimex/buildroot/output/build$ make
-make: *** No targets specified and no makefile found. Stop.
-jevans at xub64:~/olimex/buildroot/output/build$ 
+diff --git a/package/Config.in b/package/Config.in
+index 07fd166..2e71210 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -778,6 +778,7 @@ source "package/fftw/Config.in"
+ source "package/flann/Config.in"
+ source "package/glibmm/Config.in"
+ source "package/gmp/Config.in"
++source "package/isl/Config.in"
+ source "package/gsl/Config.in"
+ source "package/gtest/Config.in"
+ source "package/libargtable2/Config.in"
+diff --git a/package/isl/Config.in b/package/isl/Config.in
+new file mode 100644
+index 0000000..c470fd8
+--- /dev/null
++++ b/package/isl/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ISL
++	bool "isl"
++	select BR2_PACKAGE_GMP
++	help
++	  Library for manipulating sets and relations of integer points bounded by linear constraints.
++
++	  http://www.multiprecision.org/
+diff --git a/package/isl/isl-000-libtool.patch b/package/isl/isl-000-libtool.patch
+new file mode 100644
+index 0000000..319c45a
+--- /dev/null
++++ b/package/isl/isl-000-libtool.patch
+@@ -0,0 +1,28 @@
++--- a/ltmain.sh	2014-04-23 23:52:39.104640815 +0000
+++++ b/ltmain.sh	2014-04-23 23:56:59.818000038 +0000
++@@ -2583,8 +2583,8 @@
++ 	# was found and let the user know that the "--tag" command
++ 	# line option must be used.
++ 	if test -z "$tagname"; then
++-	  func_echo "unable to infer tagged configuration"
++-	  func_fatal_error "specify a tag with '--tag'"
+++	  func_echo "defaulting to \`CC'"
+++	  func_echo "if this is not correct, specify a tag with \`--tag'"
++ #	else
++ #	  func_verbose "using $tagname tagged configuration"
++ 	fi
++@@ -4172,8 +4172,12 @@
++ 	  # At present, this check doesn't affect windows .dll's that
++ 	  # are installed into $libdir/../bin (currently, that works fine)
++ 	  # but it's something to keep an eye on.
++-	  test "$inst_prefix_dir" = "$destdir" && \
++-	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
+++	  #
+++	 # This breaks install into our staging area.  -PB
+++	 #
+++	 # test "$inst_prefix_dir" = "$destdir" && \
+++	 #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
+++
++ 
++ 	  if test -n "$inst_prefix_dir"; then
++ 	    # Stick the inst_prefix_dir data into the link command.
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+new file mode 100644
+index 0000000..614cae1
+--- /dev/null
++++ b/package/isl/isl.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# isl
++#
++################################################################################
++
++ISL_VERSION = 0.13
++ISL_SITE = http://isl.gforge.inria.fr/
++ISL_LICENSE = MIT
++ISL_LICENSE_FILES = MIT
++ISL_INSTALL_STAGING = YES
++ISL_DEPENDENCIES = gmp
++
++ISL_LIBTOOL_PATCH = NO
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+1.9.3
