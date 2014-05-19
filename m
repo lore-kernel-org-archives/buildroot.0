@@ -1,35 +1,52 @@
-From: Frank Ihle <frank.ihle@hs-offenburg.de>
-Date: Mon, 19 May 2014 15:57:31 +0200
-Subject: [Buildroot] [Question] How is the kconfig parser working ?
-In-Reply-To: <20140519153349.13769ca4@free-electrons.com>
-References: <537A1CB2020000460004FF90@gwia2.rz.hs-offenburg.de>
- <20140519153349.13769ca4@free-electrons.com>
-Message-ID: <537A29EB020000460004FFED@gwia2.rz.hs-offenburg.de>
+From: Steve Thomas <scjthm@live.com>
+Date: Mon, 19 May 2014 14:16:13 +0000
+Subject: [Buildroot] [PATCH v5 0/3] Adding support for graphite to buildroot
+	gcc toolchain
+Message-ID: <BLU436-SMTP113EE6A422C84A9E9AC6BE5A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas
+This patchset add support for the graphite optimisation to the buildroot toolchain.
+Graphite has been around for quite some time and is almost standard is some distributions
 
-> I'd like to parse some packages in the Buildroot directory and their dependencies. 
->
->With what goal? If you told us the final goal, we could probably help
->giving some more useful directions.
+The patchset consists of two new packages and a new flag in the supported gcc toolchains.
+I have omitted support for 4.5 as this might not work with the more recent version of 
+cloog and isl, and if memory serves me correctly there was a transition from cloog-ppl
+to cloog around that time. 
 
-to extend the available information with e.g. the bytesize of a package - but not just to show it, it's about selecting multiple packages and then make a calculation to get the size of all selected packages together. Hence, I need to get the name of specific packages, their dependencies, ... and then add the new information.  In the end it should be visible in the menuconfig.
+The impact is minimal as the flag is ordinarily disabled. 
 
->Also, have you had a look at kconfiglib ? Look at
->support/scripts/kconfiglib.py and the gen-manual-lists.py script in the
->same directory?
+Also, for some reason using the with-isl flag doesn't work as the gcc configure script
+doesn't actually find isl. That is to say no option worked until I used the same trick
+that gentoo use. See line 1160 of 
+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/eclass/toolchain.eclass?view=markup
+for how they do it. I think that this was needed because there are many versions of isl 
+bundled here, one in cloog and one in gcc. I never managed to get it to work using a 
+with-isl option. 
 
-AFAIU the kconfiglib.py is an alternative to the kconfig parser. For me, it is not important how this was exactly made, but I'd like to have a look at the code where the parser was triggered, so that I can avoid lots of code-struggling of a foreign code. I'm asking Buildroot because there is very little information about the usage in the internet.
+To test gcc should support at the very least -floop-parallelize-all -ftree-parallelize-loops
+and -ftree-loop-linear.
 
-Kind Regards
+Cheers
 
-Frank
+Thomo
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140519/ef021b79/attachment.html>
+
+Steve Thomas (3):
+  isl: new package
+  cloog: new package
+  Add an BR2_GCC_ENABLE_GRAPHITE flag for the buildroot toolchain
+
+ package/cloog/cloog.mk     | 16 ++++++++++++++++
+ package/gcc/Config.in.host | 16 ++++++++++++++++
+ package/gcc/gcc.mk         |  9 +++++++++
+ package/isl/isl.mk         | 14 ++++++++++++++
+ 4 files changed, 55 insertions(+)
+ create mode 100644 package/cloog/cloog.mk
+ create mode 100644 package/isl/isl.mk
+
+-- 
+1.9.3
