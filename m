@@ -1,49 +1,123 @@
 From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 10:09:06 +0000
-Subject: [Buildroot] [PATCH v2 0/3] Adding support for graphite to buildroot
-	gcc toolchain
-Message-ID: <BLU436-SMTP16035AC1286C923498EFC49A8320@phx.gbl>
+Date: Mon, 19 May 2014 10:09:07 +0000
+Subject: [Buildroot] [PATCH v2 1/3] isl: new package
+In-Reply-To: <1400494150-6936-1-git-send-email-scjthm@live.com>
+References: <1400494150-6936-1-git-send-email-scjthm@live.com>
+Message-ID: <BLU436-SMTP1600EE9BD13FBE215922CC1A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for pointing me to the buildroot patch submission site. Lets try again :)
+isl is a library for manipulating sets and relations of integer points
+bounded by linear constraints.
 
-This patchset add support for the graphite optimisation to the buildroot toolchain.
-Graphite has been around for quite some time and is almost standard is some distributions
+isl is needed for the optional graphite optimisations that are supported
+by gcc since version 4.5. Therefore this package is required for the
+toolchain to support graphite.
 
-The patchset consists of two new packages and a new flag in the supported gcc toolchains.
-I have omitted support for 4.5 as this might not work with the more recent version of 
-cloog and isl, and if memory serves me correctly there was a transition from cloog-ppl
-to cloog around that time.
+Graphite optimisations primarily involve loop blocking flattening and
+interchage so are probably of mimimal use in an embedded system where
+small sizes are favoured.
 
-The impact is minimal as the flag is ordinarily disabled.
-
-Cheers
-
-Thomo
-
-Steve Thomas (3):
-  isl: new package
-  cloog: new package
-  Add an BR2_GCC_ENABLE_GRAPHITE flag for the buildroot toolchain
-
- package/Config.in                 |  2 ++
- package/cloog/Config.in           |  8 ++++++++
- package/cloog/cloog.mk            | 17 +++++++++++++++++
- package/gcc/Config.in.host        | 16 ++++++++++++++++
- package/gcc/gcc.mk                |  9 +++++++++
+Signed-off-by: Steve Thomas <scjthm@live.com>
+---
+Changes v1 -> v2:
+    - added more lucid and verbose description in commit messages
+    - fixed the url and removed the sources files
+    - add complete graphite as three commits yet a single patch
+---
+ package/Config.in                 |  1 +
  package/isl/Config.in             |  7 +++++++
  package/isl/isl-000-libtool.patch | 28 ++++++++++++++++++++++++++++
  package/isl/isl.mk                | 17 +++++++++++++++++
- 8 files changed, 104 insertions(+)
- create mode 100644 package/cloog/Config.in
- create mode 100644 package/cloog/cloog.mk
+ 4 files changed, 53 insertions(+)
  create mode 100644 package/isl/Config.in
  create mode 100644 package/isl/isl-000-libtool.patch
  create mode 100644 package/isl/isl.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 07fd166..1248eeb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -780,6 +780,7 @@ source "package/glibmm/Config.in"
+ source "package/gmp/Config.in"
+ source "package/gsl/Config.in"
+ source "package/gtest/Config.in"
++source "package/isl/Config.in"
+ source "package/libargtable2/Config.in"
+ source "package/libatomic_ops/Config.in"
+ source "package/libbsd/Config.in"
+diff --git a/package/isl/Config.in b/package/isl/Config.in
+new file mode 100644
+index 0000000..bc2a3ef
+--- /dev/null
++++ b/package/isl/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ISL
++	bool "isl"
++	select BR2_PACKAGE_GMP
++	help
++	  Library for manipulating sets and relations of integer points bounded by linear constraints.
++
++	  http://freecode.com/projects/isl
+diff --git a/package/isl/isl-000-libtool.patch b/package/isl/isl-000-libtool.patch
+new file mode 100644
+index 0000000..319c45a
+--- /dev/null
++++ b/package/isl/isl-000-libtool.patch
+@@ -0,0 +1,28 @@
++--- a/ltmain.sh	2014-04-23 23:52:39.104640815 +0000
+++++ b/ltmain.sh	2014-04-23 23:56:59.818000038 +0000
++@@ -2583,8 +2583,8 @@
++ 	# was found and let the user know that the "--tag" command
++ 	# line option must be used.
++ 	if test -z "$tagname"; then
++-	  func_echo "unable to infer tagged configuration"
++-	  func_fatal_error "specify a tag with '--tag'"
+++	  func_echo "defaulting to \`CC'"
+++	  func_echo "if this is not correct, specify a tag with \`--tag'"
++ #	else
++ #	  func_verbose "using $tagname tagged configuration"
++ 	fi
++@@ -4172,8 +4172,12 @@
++ 	  # At present, this check doesn't affect windows .dll's that
++ 	  # are installed into $libdir/../bin (currently, that works fine)
++ 	  # but it's something to keep an eye on.
++-	  test "$inst_prefix_dir" = "$destdir" && \
++-	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
+++	  #
+++	 # This breaks install into our staging area.  -PB
+++	 #
+++	 # test "$inst_prefix_dir" = "$destdir" && \
+++	 #   func_fatal_error "error: cannot install \`$file' to a directory not ending in $libdir"
+++
++ 
++ 	  if test -n "$inst_prefix_dir"; then
++ 	    # Stick the inst_prefix_dir data into the link command.
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+new file mode 100644
+index 0000000..f6a5184
+--- /dev/null
++++ b/package/isl/isl.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# isl
++#
++################################################################################
++
++ISL_VERSION = 0.13
++ISL_SITE = http://isl.gforge.inria.fr/
++ISL_LICENSE = MIT
++ISL_LICENSE_FILES = LICENSE
++ISL_INSTALL_STAGING = YES
++ISL_DEPENDENCIES = gmp
++
++ISL_LIBTOOL_PATCH = NO
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 1.9.3
