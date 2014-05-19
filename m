@@ -1,134 +1,54 @@
-From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 12:20:54 +0000
-Subject: [Buildroot] [PATCH v4 3/3] Add an BR2_GCC_ENABLE_GRAPHITE flag for
-	the buildroot toolchain
-In-Reply-To: <1400502054-9389-1-git-send-email-scjthm@live.com>
-References: <1400502054-9389-1-git-send-email-scjthm@live.com>
-Message-ID: <BLU436-SMTP98CA6E3D3B3B921DF6B9BFA8320@phx.gbl>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 19 May 2014 09:27:57 -0300
+Subject: [Buildroot] [PATCH] samba4: disable libbsd support
+Message-ID: <1400502477-945-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gcc graphite optimisations such as loop-interchange, blocking
-and loop-flattening, also known as graphite are an optional feature of
-gcc that is very well supported since about gcc version 4.5.
+There's a symbol conflict between regular (POSIX) link(2) and the BSD
+variant for builtin heimdal when libbsd is around and used. Fixes:
+http://autobuild.buildroot.net/results/657/65726ceccbc2d8fa24e178ea66cd44703768bc95/
 
-This patch adds support for graphite for the toolchain as an optional
-flag for versions 4.6 onwards as an optional flag, that is disabled by
-default.
-
-Signed-off-by: Steve Thomas <scjthm@ive.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v3 -> v4:
-    - removing the parts not needed
+ package/samba4/samba4-0009-disable-libbsd.patch | 26 +++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/samba4/samba4-0009-disable-libbsd.patch
 
-Changes v2 -> v3:
-    - removed packages from Config.in
-    - disabled target builds
-    - added empty line to commit messages
-    - removed isl patch as different version used
-
-Changes v1 -> v2:
-    - added more lucid and verbose description in commit messages
-    - fixed the url and removed the sources files
-    - add complete graphite as three commits yet a single patch
----
- package/gcc/Config.in.host | 16 ++++++++++++++++
- package/gcc/gcc.mk         |  9 +++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index ca991da..6ecfef5 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -3,6 +3,9 @@ comment "GCC Options"
- config BR2_GCC_NEEDS_MPC
- 	bool
- 
-+config BR2_GCC_SUPPORTS_GRAPHITE
-+	bool
+diff --git a/package/samba4/samba4-0009-disable-libbsd.patch b/package/samba4/samba4-0009-disable-libbsd.patch
+new file mode 100644
+index 0000000..b29a812
+--- /dev/null
++++ b/package/samba4/samba4-0009-disable-libbsd.patch
+@@ -0,0 +1,26 @@
++Disable libbsd support, samba4 uses a global config.h for its own
++codebase and that of heimdal (when building with builtin).
++This causes redefinition conflicts for link(2) when both standard unistd.h
++and bsd/unistd.h get included.
 +
- choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
-@@ -42,36 +45,43 @@ choice
- 	config BR2_GCC_VERSION_4_6_X
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.6.x"
- 
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.7.x"
- 
- 	config BR2_GCC_VERSION_4_8_X
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_4_8_ARC
- 		depends on BR2_arc
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.8-arc"
- 
- 	config BR2_GCC_VERSION_4_9_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9.x"
- 
- 	config BR2_GCC_VERSION_4_9_MICROBLAZE
- 		depends on BR2_microblaze
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9-microblaze"
- 
- 	config BR2_GCC_VERSION_SNAP
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
- 		select BR2_GCC_NEEDS_MPC
-+		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc snapshot"
- endchoice
- 
-@@ -147,6 +157,12 @@ config BR2_INSTALL_FORTRAN
- 	  cross-compiler, and install the Fortran runtime to the
- 	  target.
- 
-+config BR2_GCC_ENABLE_GRAPHITE
-+	bool "Enable compiler graphite optimisations"
-+	depends on BR2_GCC_SUPPORTS_GRAPHITE 
-+	help
-+	  Enable the compiler to support graphite optimisations
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
- config BR2_GCC_ENABLE_TLS
- 	bool "Enable compiler tls support" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
- 	default y
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 32219cc..c05a824 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -156,6 +156,15 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
- HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
- endif
- 
-+ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
-+HOST_GCC_COMMON_DEPENDENCIES += \
-+	host-isl \
-+	host-cloog
-+HOST_GCC_COMMON_CONF_OPT += \
-+	--disable-isl-version-check \
-+	--disable-cloog-version-check
-+endif
-+
- ifneq ($(BR2_arc)$(BR2_GCC_VERSION_SNAP),)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
++diff -Nura samba-4.1.7.orig/lib/replace/wscript samba-4.1.7/lib/replace/wscript
++--- samba-4.1.7.orig/lib/replace/wscript	2014-04-17 04:59:14.000000000 -0300
+++++ samba-4.1.7/lib/replace/wscript	2014-05-19 09:17:25.561947774 -0300
++@@ -253,15 +253,6 @@
++     conf.CHECK_FUNCS('strtouq strtoll __strtoll strtoq memalign posix_memalign')
++     conf.CHECK_FUNCS('prctl')
++ 
++-    # libbsd on some platforms provides strlcpy and strlcat
++-    if not conf.CHECK_FUNCS('strlcpy strlcat'):
++-        conf.CHECK_FUNCS_IN('strlcpy strlcat', 'bsd', headers='bsd/string.h',
++-                checklibc=True)
++-    if not conf.CHECK_FUNCS('getpeereid'):
++-        conf.CHECK_FUNCS_IN('getpeereid', 'bsd', headers='sys/types.h bsd/unistd.h')
++-    if not conf.CHECK_FUNCS_IN('setproctitle', 'bsd', headers='sys/types.h bsd/unistd.h'):
++-        conf.CHECK_FUNCS_IN('setproctitle', 'setproctitle', headers='setproctitle.h')
++-
++     conf.CHECK_CODE('''
++                 struct ucred cred;
++                 socklen_t cred_len;
 -- 
-1.9.3
+1.8.5.5
