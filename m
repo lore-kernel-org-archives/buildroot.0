@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 May 2014 15:35:09 +0200
+Date: Mon, 19 May 2014 15:35:39 +0200
 Subject: [Buildroot] [PATCH v4 3/3] Add an BR2_GCC_ENABLE_GRAPHITE flag
  for the buildroot toolchain
 In-Reply-To: <BLU436-SMTP98CA6E3D3B3B921DF6B9BFA8320@phx.gbl>
 References: <1400502054-9389-1-git-send-email-scjthm@live.com>
  <BLU436-SMTP98CA6E3D3B3B921DF6B9BFA8320@phx.gbl>
-Message-ID: <20140519153509.1b0f7246@free-electrons.com>
+Message-ID: <20140519153539.233ff0e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -24,14 +24,9 @@ On Mon, 19 May 2014 12:20:54 +0000, Steve Thomas wrote:
 > default.
 > 
 > Signed-off-by: Steve Thomas <scjthm@ive.com>
-> ---
-> Changes v3 -> v4:
->     - removing the parts not needed
 
-I don't see any change in this patch between v3 and v4. And therefore
-the comments I made on the v3 of your PATCH 3/3 were not addressed.
-
-Thanks!
+Just realizing: there is probably a typo in your e-mail address here,
+no?
 
 Thomas
 -- 
