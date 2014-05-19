@@ -1,7 +1,9 @@
 From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 01:54:51 +0000
-Subject: [Buildroot] [buildroot][PATCH] Add isl package
-Message-ID: <BLU436-SMTP841403BA3990E47D42D079A8320@phx.gbl>
+Date: Mon, 19 May 2014 02:34:01 +0000
+Subject: [Buildroot] [buildroot][PATCH] Add isl package. This includes the
+	correct URL for the library. This libary is used by needed by
+	components that support the GCC graphite optimisations.
+Message-ID: <BLU436-SMTP237E88398270F116F85CAABA8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -33,7 +35,7 @@ index 07fd166..2e71210 100644
  source "package/libargtable2/Config.in"
 diff --git a/package/isl/Config.in b/package/isl/Config.in
 new file mode 100644
-index 0000000..c470fd8
+index 0000000..bc2a3ef
 --- /dev/null
 +++ b/package/isl/Config.in
 @@ -0,0 +1,7 @@
@@ -43,7 +45,7 @@ index 0000000..c470fd8
 +	help
 +	  Library for manipulating sets and relations of integer points bounded by linear constraints.
 +
-+	  http://www.multiprecision.org/
++	  http://freecode.com/projects/isl
 diff --git a/package/isl/isl-000-libtool.patch b/package/isl/isl-000-libtool.patch
 new file mode 100644
 index 0000000..319c45a
