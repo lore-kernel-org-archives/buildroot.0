@@ -1,25 +1,27 @@
 From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 11:54:23 +0000
-Subject: [Buildroot] [PATCH v3 1/3] isl: new package
+Date: Mon, 19 May 2014 11:54:24 +0000
+Subject: [Buildroot] [PATCH v3 2/3] cloog: new package
 In-Reply-To: <1400500465-9142-1-git-send-email-scjthm@live.com>
 References: <1400500465-9142-1-git-send-email-scjthm@live.com>
-Message-ID: <BLU436-SMTP204DD838D8182EFE104B7A8320@phx.gbl>
+Message-ID: <BLU436-SMTP25605C9B636A28776C2EAA8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-isl is a library for manipulating sets and relations of integer points
-bounded by linear constraints.
+CLooG is a free software and library to generate code for scanning
+Z-polyhedra.
 
-isl is needed for the optional graphite optimisations that are supported
-by gcc since version 4.5. Therefore this package is required for the
-toolchain to support graphite.
+cloog is needed for the optional graphite optimisations that are
+supported by gcc since version 4.5. Therefore this package is required
+for the toolchain to support graphite.
 
 Graphite optimisations primarily involve loop blocking flattening and
 interchage so are probably of mimimal use in an embedded system where
 small sizes are favoured.
+
+cloog depends on isl.
 
 Signed-off-by: Steve Thomas <scjthm@live.com>
 ---
@@ -34,43 +36,46 @@ Changes v1 -> v2:
     - fixed the url and removed the sources files
     - add complete graphite as three commits yet a single patch
 ---
- package/isl/Config.in |  7 +++++++
- package/isl/isl.mk    | 14 ++++++++++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/isl/Config.in
- create mode 100644 package/isl/isl.mk
+ package/cloog/Config.in |  8 ++++++++
+ package/cloog/cloog.mk  | 16 ++++++++++++++++
+ 2 files changed, 24 insertions(+)
+ create mode 100644 package/cloog/Config.in
+ create mode 100644 package/cloog/cloog.mk
 
-diff --git a/package/isl/Config.in b/package/isl/Config.in
+diff --git a/package/cloog/Config.in b/package/cloog/Config.in
 new file mode 100644
-index 0000000..bc2a3ef
+index 0000000..db99242
 --- /dev/null
-+++ b/package/isl/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_ISL
-+	bool "isl"
-+	select BR2_PACKAGE_GMP
++++ b/package/cloog/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CLOOG
++	bool "cloog"
++    select BR2_PACKAGE_GMP
++    select BR2_PACKAGE_ISL
 +	help
-+	  Library for manipulating sets and relations of integer points bounded by linear constraints.
++	  Chunky LOOp Generator - Library which generates loops for scanning Z-polyhedra.
 +
-+	  http://freecode.com/projects/isl
-diff --git a/package/isl/isl.mk b/package/isl/isl.mk
++	  http://clooglib.org/
+diff --git a/package/cloog/cloog.mk b/package/cloog/cloog.mk
 new file mode 100644
-index 0000000..68de1aa
+index 0000000..9308e8f
 --- /dev/null
-+++ b/package/isl/isl.mk
-@@ -0,0 +1,14 @@
++++ b/package/cloog/cloog.mk
+@@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# isl
++# cloog
 +#
 +################################################################################
 +
-+ISL_VERSION = 0.11.1
-+ISL_SITE = http://isl.gforge.inria.fr/
-+ISL_LICENSE = MIT
-+ISL_LICENSE_FILES = LICENSE
-+ISL_INSTALL_STAGING = YES
-+ISL_DEPENDENCIES = gmp
++CLOOG_VERSION = 0.18.1
++CLOOG_SITE = http://www.bastoul.net/cloog/pages/download/
++CLOOG_INSTALL_STAGING = YES
++CLOOG_LICENSE = LGPLv2.1
++CLOOG_LICENSE_FILES = LICENSE
++CLOOG_DEPENDENCIES = gmp isl
++
++HOST_CLOOG_CONF_OPT = --with-isl=system --with-polylib=no
 +
 +$(eval $(host-autotools-package))
 -- 
