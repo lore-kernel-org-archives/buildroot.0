@@ -1,37 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 May 2014 13:10:33 +0200
-Subject: [Buildroot] [PATCH v2 0/3] Adding support for graphite to
- buildroot gcc toolchain
-In-Reply-To: <BLU436-SMTP16035AC1286C923498EFC49A8320@phx.gbl>
-References: <BLU436-SMTP16035AC1286C923498EFC49A8320@phx.gbl>
-Message-ID: <20140519131033.2c6071cf@free-electrons.com>
+From: Steve Thomas <scjthm@live.com>
+Date: Mon, 19 May 2014 11:52:08 +0000
+Subject: [Buildroot] [PATCH v3 0/3] ] Adding support for graphite to
+	buildroot gcc toolchain
+Message-ID: <BLU436-SMTP90E9431B44D1B687B29012A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Thomas,
+This patchset add support for the graphite optimisation to the buildroot toolchain.
+Graphite has been around for quite some time and is almost standard is some distributions
 
-On Mon, 19 May 2014 10:09:06 +0000, Steve Thomas wrote:
+The patchset consists of two new packages and a new flag in the supported gcc toolchains.
+I have omitted support for 4.5 as this might not work with the more recent version of 
+cloog and isl, and if memory serves me correctly there was a transition from cloog-ppl
+to cloog around that time. 
 
-> Thanks for pointing me to the buildroot patch submission site. Lets try again :)
+The impact is minimal as the flag is ordinarily disabled. 
 
-Looks better, thanks. Though there is still one weird thing: normally
-git format-patch/send-email make the patch e-mails answers to the cover
-letter e-mail, so that they nicely appear as threaded.
 
-Also, you still haven't taken into account the comments I made on your
-first version. Can you look at the entire e-mails
-http://lists.busybox.net/pipermail/buildroot/2014-May/096954.html and
-http://lists.busybox.net/pipermail/buildroot/2014-May/096955.html ? I
-suspect you overlooked the comments I made inline, in the various parts
-of your patch.
+Cheers
 
-Thanks,
+Thomo
 
-Thomas
+
+Steve Thomas (3):
+  isl: new package
+  cloog: new package
+  Add an BR2_GCC_ENABLE_GRAPHITE flag for the buildroot toolchain
+
+ package/cloog/Config.in    |  8 ++++++++
+ package/cloog/cloog.mk     | 16 ++++++++++++++++
+ package/gcc/Config.in.host | 16 ++++++++++++++++
+ package/gcc/gcc.mk         |  9 +++++++++
+ package/isl/Config.in      |  7 +++++++
+ package/isl/isl.mk         | 14 ++++++++++++++
+ 6 files changed, 70 insertions(+)
+ create mode 100644 package/cloog/Config.in
+ create mode 100644 package/cloog/cloog.mk
+ create mode 100644 package/isl/Config.in
+ create mode 100644 package/isl/isl.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
