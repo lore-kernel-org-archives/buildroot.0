@@ -1,34 +1,76 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 19 May 2014 22:36:07 +0200
+Date: Mon, 19 May 2014 22:37:51 +0200
 Subject: [Buildroot] [PATCH 1/1] package/webkit: Fix OpenGL-related
 	dependencies
-In-Reply-To: <0b5q4bx1us.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Mon, 19 May 2014 22:14:56 +0200")
+In-Reply-To: <1400525369-32257-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Mon, 19 May 2014 20:49:29 +0200")
 References: <1400525369-32257-1-git-send-email-bernd.kuhls@t-online.de>
- <0b5q4bx1us.ln2@ID-313208.user.individual.net>
-Message-ID: <87d2f9jyko.fsf@dell.be.48ers.dk>
+Message-ID: <878upxjyhs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <berndkuhls@hotmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
- > news:1400525369-32257-1-git-send-email-bernd.kuhls at t-online.de: 
+ > fixes
+ > http://autobuild.buildroot.net/results/27a/27a674c6a19a729fae5cc33de0360b2a061930c1/
 
- >> fixes
- >> http://autobuild.buildroot.net/results/27a/27a674c6a19a729fae5cc33de0360b
- >> 2a061930c1/ 
+ > This patch indeed fixes two problems based on the autobuilder-defconfig used.
 
- > Hi,
+ > 1) Add missing dependencies when opengl is detected by webkit to satisfy autobuilder:
 
- > please do not commit the patch as is, it needs more polishing ;)
- > (webkit takes ages to compile...)
+ > checking which GPU acceleration backend to use... opengl
+ > checking for XCOMPOSITE... yes
+ > checking for XDAMAGE... no
+ > configure: error: Package requirements (xdamage) were not met:
 
-Yes, I'm doing some tests as well. I'll reply to your patch and explain
-what I'm changing.
+ > 2) ... but opengl should not have been detected with the used defconfig:
+ > $ grep MESA .config
+ > BR2_PACKAGE_MESA3D=y
+
+ > which will lead to a link error although webkit configure found all dependencies:
+
+ > /home/br2/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/4.7.3/../../../../mips-linux-gnu/bin/ld: cannot find -lGL
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/webkit/webkit.mk |    7 +++++++
+ >  1 file changed, 7 insertions(+)
+
+ > diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+ > index 21b535f..c693de7 100644
+ > --- a/package/webkit/webkit.mk
+ > +++ b/package/webkit/webkit.mk
+ > @@ -48,4 +48,11 @@ WEBKIT_CONF_OPT += \
+ >  WEBKIT_CONF_OPT += --with-target=x11
+ >  WEBKIT_DEPENDENCIES += xlib_libXt
+ 
+ > +ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ > +WEBKIT_CONF_OPT += --with-acceleration-backend=opengl
+ > +WEBKIT_DEPENDENCIES += xlib_libXcomposite xlib_libXdamage
+
+We have to select the corresponding symbols in Config.in as well to
+ensure Kconfig is in sync with the makefiles - E.G. something like:
+
+select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_HAS_LIBGL
+select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_HAS_LIBGL
+
+and then in the .mk:
+
+WEBKIT_DEPENDENCIES += \
+       $(if $(BR_PACKAGE_XLIB_LIBXCOMPOSITE),xlib_libXcomposite) \
+       $(if $(BR_PACKAGE_XLIB_LIBXDAMAGE),xlib_libXdamage)
+
+ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+WEBKIT_CONF_OPT += --with-acceleration-backend=opengl
+WEBKIT_DEPENDENCIES += libgl
+else
+WEBKIT_CONF_OPT += --with-acceleration-backend=none
+endif
+
+I'm currently doing a test build to verify.
 
 -- 
 Bye, Peter Korsgaard
