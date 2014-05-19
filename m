@@ -1,39 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 19 May 2014 14:12:04 +0200
-Subject: [Buildroot] [PATCH v3 3/3] Add an BR2_GCC_ENABLE_GRAPHITE flag
- for the buildroot toolchain
-In-Reply-To: <BLU436-SMTP2271716BEAADD735F8B21A8320@phx.gbl>
-References: <1400500465-9142-1-git-send-email-scjthm@live.com>
- <BLU436-SMTP2271716BEAADD735F8B21A8320@phx.gbl>
-Message-ID: <20140519141204.5421f0ff@free-electrons.com>
+From: Steve Thomas <scjthm@live.com>
+Date: Mon, 19 May 2014 12:20:51 +0000
+Subject: [Buildroot] [PATCH v4 0/3] Adding support for graphite to buildroot
+	gcc toolchain
+Message-ID: <BLU436-SMTP985F2561F4CA06C5C45BE6A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steve Thomas,
+This patchset add support for the graphite optimisation to the buildroot toolchain.
+Graphite has been around for quite some time and is almost standard is some distributions
 
-On Mon, 19 May 2014 11:54:25 +0000, Steve Thomas wrote:
+The patchset consists of two new packages and a new flag in the supported gcc toolchains.
+I have omitted support for 4.5 as this might not work with the more recent version of 
+cloog and isl, and if memory serves me correctly there was a transition from cloog-ppl
+to cloog around that time. 
 
-> +ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
-> +HOST_GCC_COMMON_DEPENDENCIES += \
-> +	host-isl \
-> +	host-cloog
-> +HOST_GCC_COMMON_CONF_OPT += \
-> +	--disable-isl-version-check \
-> +	--disable-cloog-version-check
-> +endif
+The impact is minimal as the flag is ordinarily disabled. 
 
-Do we really need to disable the version checks? Also, for gmp and mpfr
-we pass --with-gmp, --with-mpfr. Maybe we should do the same here when
-graphite is enabled, and pass --without-{isl,cloog} when graphite is
-disabled?
 
-Best regards,
+Cheers
 
-Thomas
+Thomo
+
+
+Steve Thomas (3):
+  isl: new package
+  cloog: new package
+  Add an BR2_GCC_ENABLE_GRAPHITE flag for the buildroot toolchain
+
+ package/cloog/cloog.mk     | 16 ++++++++++++++++
+ package/gcc/Config.in.host | 16 ++++++++++++++++
+ package/gcc/gcc.mk         |  9 +++++++++
+ package/isl/isl.mk         | 14 ++++++++++++++
+ 4 files changed, 55 insertions(+)
+ create mode 100644 package/cloog/cloog.mk
+ create mode 100644 package/isl/isl.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
