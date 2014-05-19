@@ -1,72 +1,41 @@
-From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 14:16:15 +0000
-Subject: [Buildroot] [PATCH v5 2/3] cloog: new package
-In-Reply-To: <1400508976-3593-1-git-send-email-scjthm@live.com>
-References: <1400508976-3593-1-git-send-email-scjthm@live.com>
-Message-ID: <BLU436-SMTP1132D6DD8F7B182EBFD811DA8320@phx.gbl>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 19 May 2014 16:59:27 +0200
+Subject: [Buildroot] [Question] How is the kconfig parser working ?
+In-Reply-To: <537A1CB2020000460004FF90@gwia2.rz.hs-offenburg.de>
+References: <537A1CB2020000460004FF90@gwia2.rz.hs-offenburg.de>
+Message-ID: <CAAXf6LWAckgk0-BgnT_PB+Vdb6KyVyMUfYxCSePdo1NEKeetOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CLooG is a free software and library to generate code for scanning
-Z-polyhedra.
+Hi Frank,
 
-cloog is needed for the optional graphite optimisations that are
-supported by gcc since version 4.5. Therefore this package is required
-for the toolchain to support graphite.
+(please use plaintext-only mail, no html or mixed mail)
 
-Graphite optimisations primarily involve loop blocking flattening and
-interchage so are probably of mimimal use in an embedded system where
-small sizes are favoured.
+On Mon, May 19, 2014 at 3:01 PM, Frank Ihle <frank.ihle@hs-offenburg.de> wrote:
+> Hi everyone,
+>
+> I'd like to parse some packages in the Buildroot directory and their
+> dependencies.
+>
+> I've seen that BR is using the lxdialog. I already got it running to load
+> the "config.in"s with my own frontends. But what I couldn't figure out is
+> how to get the information of a specific package, e.g.: how can I trigger
+> the parser to print all names and dependencies of the packages e.g. in the
+> "audio/video" section? Is it even possible to parse all of the Config.in
+> easily? The "conf_parse()" in zconf.y looks like to me it is parsing the
+> .config and not the Config.in - but maybe I got this part wrong.
+>
+> I guess this would lead to a long answer, therefor maybe you can just point
+> me to the right direction, like: where BR itself uses this functionality, an
+> example, or a helpful link in the internet.
 
-cloog depends on isl.
+Buildroot is not using this directly, but are you aware that there is
+a kconfiglib python module, that is for example used by the
+gen-manual-lists.py script? See support/scripts/ for that. Maybe it
+can be useful to you.
 
-Signed-off-by: Steve Thomas <scjthm@live.com>
----
-Changes v4 -> v5:
-    - no change
-
-Changes v3 -> v4:
-    - removing the parts not needed
-
-Changes v2 -> v3:
-    - removed packages from Config.in
-    - disabled target builds
-    - added empty line to commit messages
-    - removed isl patch as different version used
-
-Changes v1 -> v2:
-    - added more lucid and verbose description in commit messages
-    - fixed the url and removed the sources files
-    - add complete graphite as three commits yet a single patch
----
- package/cloog/cloog.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/cloog/cloog.mk
-
-diff --git a/package/cloog/cloog.mk b/package/cloog/cloog.mk
-new file mode 100644
-index 0000000..9308e8f
---- /dev/null
-+++ b/package/cloog/cloog.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# cloog
-+#
-+################################################################################
-+
-+CLOOG_VERSION = 0.18.1
-+CLOOG_SITE = http://www.bastoul.net/cloog/pages/download/
-+CLOOG_INSTALL_STAGING = YES
-+CLOOG_LICENSE = LGPLv2.1
-+CLOOG_LICENSE_FILES = LICENSE
-+CLOOG_DEPENDENCIES = gmp isl
-+
-+HOST_CLOOG_CONF_OPT = --with-isl=system --with-polylib=no
-+
-+$(eval $(host-autotools-package))
--- 
-1.9.3
+Best regards,
+Thomas
