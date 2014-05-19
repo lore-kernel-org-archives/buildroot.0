@@ -1,12 +1,13 @@
 From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 19 May 2014 09:54:13 +0000
+Date: Mon, 19 May 2014 10:03:33 +0000
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-18
-In-Reply-To: <20140519113557.5f0ef8a6@free-electrons.com>
-References: <20140519063009.7B5A9100E3F@stock.ovh.net>
- <39A54937CC95F24AA2F794E2D2B66B1356CCD6CE@de02wembxa.internal.synopsys.com>
- <20140519113557.5f0ef8a6@free-electrons.com>
-Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CCD739@de02wembxa.internal.synopsys.com>
+ 2014-05-16
+In-Reply-To: <20140519115155.10e652cd@free-electrons.com>
+References: <20140517063007.AED55100CC0@stock.ovh.net>
+ <20140517093546.6b5dfca1@free-electrons.com>
+ <39A54937CC95F24AA2F794E2D2B66B1356CCD708@de02wembxa.internal.synopsys.com>
+ <20140519115155.10e652cd@free-electrons.com>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CCD760@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +16,49 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-This patch is tiny: it just adds ARC entry to "configure". 
-
-Wayne, could you please submit your patch for mplayer in Buildroot as well? Let me know if you will need any assistance.
-
-Anton
-
-
 > -----Original Message-----
 > From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: 19 May 2014 13:36
+> Sent: 19 May 2014 13:52
 > To: Anton Kolesov
-> Cc: buildroot at uclibc.org
-> Subject: Re: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-18
+> Cc: buildroot at uclibc.org; Alexey Brodkin
+> Subject: Re: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-16
 > 
 > Dear Anton Kolesov,
 > 
-> On Mon, 19 May 2014 09:33:07 +0000, Anton Kolesov wrote:
+> (Would be nice to wrap your e-mails to a reasonable line length)
 > 
-> > >        arc |                  mplayer-1.1.1 | NOK |
-> > >
-> http://autobuild.buildroot.net/results/af1ca869dbc7a71aa4cc89373d605ca8f7
-> > > 90fcc9/
+> On Mon, 19 May 2014 09:46:36 +0000, Anton Kolesov wrote:
+> 
+> > > Missing some compiler intrinsics. I'll send a patch to disable jack2 on
+> > > ARC for now.
 > >
-> > [AK:] ARC is now supported in the MPlayer trunk. So this problem will go
-> away with the next MPlayer release, though no idea when this will happen.
+> > We have added an implementation for those intrinsics in the latest release
+> of GCC, however they are disabled by default, because they require optional
+> hardware features. User can enable those intrinsics with compiler flag -
+> matomic, in case of Buildroot by adding it to the
+> "BR2_TARGET_OPTIMIZATION", if they know that required HW is present. Is
+> it possible to add -matomic to TARGET_OPTIMIZATION in autobuilder by
+> default? There is a lot of packages that depend on atomic intrinsics, so
+> enabling them would be useful for autobuilder, but I don't want to do this for
+> the whole toolchain by default because users without required hardware
+> support will get "illegal instruction" exception only in runtime.
 > 
-> If the patch to support ARC is small, we could integrate it in
-> Buildroot. If not, waiting for the next release is indeed better.
+> I'd prefer to have an option under "Target options" to allow the user
+> to define whether his hardware has the required optional features to
+> provide the intrinsics. Something such as BR2_ARC_HAS_<feature>. Then
+> packages can do:
 > 
-> I also wonder how we will 'discover' that a given package is now
-> available for a certain architecture for which it was disabled. I guess
-> the only solution is for someone interested by this architecture to
-> notice that it can now be enabled.
+> 	depends on !(BR2_arc && !BR2_ARC_HAS_<feature>)
+> 
+> or something like that (my boolean algebra might be rusty on this
+> Monday morning).
+
+
+Ok, will do that.
+
+
+> 
+> Best regards,
 > 
 > Thomas
 > --
