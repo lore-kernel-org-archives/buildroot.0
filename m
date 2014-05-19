@@ -1,52 +1,71 @@
 From: Steve Thomas <scjthm@live.com>
-Date: Mon, 19 May 2014 19:48:10 +0000
-Subject: [Buildroot] [PATCH v6 0/3] Adding support for graphite to buildroot
-	gcc toolchain
-Message-ID: <BLU436-SMTP138158505B82776645355FCA8320@phx.gbl>
+Date: Mon, 19 May 2014 19:48:11 +0000
+Subject: [Buildroot] [PATCH v6 1/3] isl: new package
+In-Reply-To: <1400528893-4483-1-git-send-email-scjthm@live.com>
+References: <1400528893-4483-1-git-send-email-scjthm@live.com>
+Message-ID: <BLU436-SMTP138C9EAD057B0769B85E111A8320@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset add support for the graphite optimisation to the buildroot toolchain.
-Graphite has been around for quite some time and is almost standard is some distributions
+isl is a library for manipulating sets and relations of integer points
+bounded by linear constraints.
 
-The patchset consists of two new packages and a new flag in the supported gcc toolchains.
-I have omitted support for 4.5 as this might not work with the more recent version of 
-cloog and isl, and if memory serves me correctly there was a transition from cloog-ppl
-to cloog around that time. 
+isl is needed for the optional graphite optimisations that are supported
+by gcc since version 4.5. Therefore this package is required for the
+toolchain to support graphite.
 
-The impact is minimal as the flag is ordinarily disabled. 
+Graphite optimisations primarily involve loop blocking flattening and
+interchage so are probably of mimimal use in an embedded system where
+small sizes are favoured.
 
-Also, for some reason using the with-isl flag doesn't work as the gcc configure script
-doesn't actually find isl. That is to say no option worked until I used the same trick
-that gentoo use. See line 1160 of 
-http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/eclass/toolchain.eclass?view=markup
-for how they do it. I think that this was needed because there are many versions of isl 
-bundled here, one in cloog and one in gcc. I never managed to get it to work using a 
-with-isl option. 
+Signed-off-by: Steve Thomas <scjthm@live.com>
+---
+Changes v6 -> v7:
+    - no change
 
-To test gcc should support at the very least -floop-parallelize-all -ftree-parallelize-loops
-and -ftree-loop-linear.
+Changes v4 -> v5:
+    - no change
 
-Cheers
+Changes v3 -> v4:
+    - removing the parts not needed
 
-Thomo
+Changes v2 -> v3:
+    - removed packages from Config.in
+    - disabled target builds
+    - added empty line to commit messages
+    - removed isl patch as different version used
 
-
-Steve Thomas (3):
-  isl: new package
-  cloog: new package
-  Add an BR2_GCC_ENABLE_GRAPHITE flag for the buildroot toolchain
-
- package/cloog/cloog.mk     | 16 ++++++++++++++++
- package/gcc/Config.in.host | 16 ++++++++++++++++
- package/gcc/gcc.mk         |  9 +++++++++
- package/isl/isl.mk         | 14 ++++++++++++++
- 4 files changed, 55 insertions(+)
- create mode 100644 package/cloog/cloog.mk
+Changes v1 -> v2:
+    - added more lucid and verbose description in commit messages
+    - fixed the url and removed the sources files
+    - add complete graphite as three commits yet a single patch
+---
+ package/isl/isl.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
  create mode 100644 package/isl/isl.mk
 
+diff --git a/package/isl/isl.mk b/package/isl/isl.mk
+new file mode 100644
+index 0000000..68de1aa
+--- /dev/null
++++ b/package/isl/isl.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# isl
++#
++################################################################################
++
++ISL_VERSION = 0.11.1
++ISL_SITE = http://isl.gforge.inria.fr/
++ISL_LICENSE = MIT
++ISL_LICENSE_FILES = LICENSE
++ISL_INSTALL_STAGING = YES
++ISL_DEPENDENCIES = gmp
++
++$(eval $(host-autotools-package))
 -- 
 1.9.3
