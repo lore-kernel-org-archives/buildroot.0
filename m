@@ -1,48 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 19 May 2014 22:04:08 +0200
-Subject: [Buildroot] [PATCH v2 1/1] fio: disable on nios2 because of
-	missing fallocate64()
-In-Reply-To: <1400527410-4637-1-git-send-email-frank@frajasalo.de> (Frank
- Bergmann's message of "Mon, 19 May 2014 21:23:30 +0200")
-References: <1400527410-4637-1-git-send-email-frank@frajasalo.de>
-Message-ID: <87oaytk01z.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 19 May 2014 17:11:24 -0300
+Subject: [Buildroot] [PATCH] ruby: add psych/libyaml support
+Message-ID: <1400530284-17057-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Frank" == Frank Bergmann <frank@frajasalo.de> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/ruby/ruby.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- > The fallocate() function is replaced by fallocate64() while compiling
- > with LARGE_FILE flags. Current nios2 toolchain is missing the fallocate64()
- > function.
-
- > Signed-off-by: Frank Bergmann <frank@frajasalo.de>
- > ---
- > Changes v1 -> v2:
- >   - don't use an architecture-specific patch
- >   - disable whole package for nios (suggested by Thomas Petazzoni)
-
- > Signed-off-by: Frank Bergmann <frank@frajasalo.de>
- > ---
- >  package/fio/Config.in | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/fio/Config.in b/package/fio/Config.in
- > index be99f25..5a20b85 100644
- > --- a/package/fio/Config.in
- > +++ b/package/fio/Config.in
- > @@ -12,6 +12,9 @@ config BR2_PACKAGE_FIO
- >  	depends on !BR2_TOOLCHAIN_EXTERNAL_UCLIBC && \
- >  		!BR2_UCLIBC_VERSION_0_9_31 && \
- >  		!BR2_UCLIBC_VERSION_0_9_32
- > +	# fio uses fallocate() which gets fallocate64() while compiling
- > +	# with *LARGE_FILE* flags but fallocate64() is not available on nios2
- > +	depends on !BR2_nios2
-
-Changed *LARGE_FILE* to the Buildroot symbol (BR2_LARGEFILE), added
-the autobuilder references as suggested by Yann and committed, thanks.
-
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 0ea352d..1185323 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -29,6 +29,9 @@ RUBY_CONF_ENV = CFLAGS="$(RUBY_CFLAGS)"
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+ 	RUBY_DEPENDENCIES += berkeleydb
+ endif
++ifeq ($(BR2_PACKAGE_LIBYAML),y)
++	RUBY_DEPENDENCIES += libyaml
++endif
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ 	RUBY_DEPENDENCIES += ncurses
+ endif
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
