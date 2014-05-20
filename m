@@ -1,58 +1,32 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 20 May 2014 14:43:48 +0200
-Subject: [Buildroot] Fwd: Fwd: how to assign cpp and c++ in buildroot?
-In-Reply-To: <CAMm5YqqioD+6fDWrTW+Jo=wxpCWRet33MJ_OL7=pyFCgbL1ojQ@mail.gmail.com>
-References: <52E9D80E-B9AD-417A-BC0F-66A69C39FC21@gmail.com>
- <5F503FD3-3FBC-4ADB-9D17-BA0CB5606B6D@gmail.com>
- <20140520000920.20ae6b5b@free-electrons.com>
- <0727D305-97AD-471C-BA2D-D6A251B4FA90@gmail.com>
- <CAMm5YqqFDD0a_hA0fGdiLDuHLoaCVVgf2L_-wzQikpF4cm7FJw@mail.gmail.com>
- <CAAXf6LUF7eXsQvJRLoO0oHcefs9PGnUOVXGCNNhZ2YKV_SkGVA@mail.gmail.com>
- <20140520113955.475370b3@free-electrons.com>
- <CAMm5YqoPu1QDkzdpoFfZfNCj0V+VeVkYcUPW=xzzqLB-eYAAuQ@mail.gmail.com>
- <CAMm5YqqZjnWaNQ+S5a+huY+tOfHgqv51St9HhQZ=69i-4u9PQw@mail.gmail.com>
- <CAAXf6LUC7Vki85_4iVr-AhijdjpXxHQoYOVSgUAdJcta4-jb6A@mail.gmail.com>
- <CAMm5YqqioD+6fDWrTW+Jo=wxpCWRet33MJ_OL7=pyFCgbL1ojQ@mail.gmail.com>
-Message-ID: <CAAXf6LU+UjV3-xWQa5K8CNu79z-2cOoHZgAhmCrxbgth_YFLiw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 May 2014 14:43:41 +0200
+Subject: [Buildroot] [git commit branch/next] jquery: bump to version 1.11.1
+Message-ID: <20140520124418.3D0BC9CCC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Cem,
+commit: http://git.buildroot.net/buildroot/commit/?id=8a83253b2614ac31fc5ebf746b5959748e6cc967
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-(please keep the buildroot list in copy)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jquery/jquery.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-On Tue, May 20, 2014 at 2:24 PM, cem akpolat <akpolatcem@gmail.com> wrote:
-> Hi Thomas,
->
-> the results are :
->
-> env | grep -i cpp
->
->     returns nothing
->
-> echo $TARGET_CPP
->
->    returns nothing
->
->
-> grep -rn TARGET_CPP package/Makefile.in
->
->
-> 110:TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
-> -D_FILE_OFFSET_BITS=64
-> 113:TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION)
-> $(TARGET_DEBUGGING)
-> 154:TARGET_CPP      = $(TARGET_CROSS)cpp
-> 218: CPP="$(TARGET_CPP)"\
-> 240: CPPFLAGS="$(TARGET_CPPFLAGS)" \
-
-Thanks, nothing odd here.
-
-Could you also try changing the package/Makefile.in as requested in my
-last e-mail?
-
-Thanks,
-Thomas
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 8188012..17d3e8b 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JQUERY_VERSION = 1.11.0
++JQUERY_VERSION = 1.11.1
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
+ JQUERY_LICENSE = MIT
