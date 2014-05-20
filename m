@@ -1,39 +1,70 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 May 2014 23:36:25 +0200
-Subject: [Buildroot] [PATCH] build: remove sstrip
-In-Reply-To: <20140520212336.GC3506@free.fr> (Yann E. MORIN's message of "Tue, 
- 20 May 2014 23:23:36 +0200")
-References: <1400620403-14763-1-git-send-email-yann.morin.1998@free.fr>
- <20140520212336.GC3506@free.fr>
-Message-ID: <8738g4gmjq.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 20 May 2014 23:43:58 +0200
+Subject: [Buildroot] [git commit] matchbox-keyboard: fix dependencies
+Message-ID: <20140520214434.7A1A29CCC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=39b926d968647e1a6e5c5556e9e4175806dc9c5a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > All,
- > On 2014-05-20 23:13 +0200, Yann E. MORIN spake thusly:
- >> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- >> 
- >> Quoting Thomas on IRC:
- >> > sstrip is a piece of crap that we should exterminate
- >> > from the surface of the planet
- >> 
- >> sstrip is now unmaintained, has a long history of generating butchered
- >> binaries in some cases, and does not gain that much space in the end.
- >> 
- >> Obliviate sstrip from the strip options, anihilate the sstrip package,
- >> scortch any reference in fire, and cleanse our tree free of any remnants...
+Correct a number of issues with matchbox-keyboard:
+ - Missing dependencies on host-pkgconf and expat
+ - Missing kconfig select on xlib_libXft
+ - pango/cairo confusion, ensure cairo is built before if enabled
+ - _CONF_OPT variable typo
 
- > Missing legacy option, though. Will respin a bit later...
+Fixes:
+http://autobuild.buildroot.net/results/473/47380d57e507ec395a1132dfd7b32d35459c1c7a//
+http://autobuild.buildroot.net/results/d9a/d9aa2b6ddce920ea45fbd7093addfc0ee6b94467//
+http://autobuild.buildroot.net/results/aad/aad393a81812df28cbc296f556de2acb4e6d114b//
+http://autobuild.buildroot.net/results/124/124b28336ed61822fa6d5d2591b4e70d83b8a213//
+and 17 other build errors, dating back to 2013-07-03
 
-Thanks. As mentioned on IRC I would prefer to see two patches:
+Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/matchbox/Config.in                         |    1 +
+ .../matchbox-keyboard/matchbox-keyboard.mk         |    7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-- One to mark it as deprecated for 2014.05 (BR2_DEPRECATED_SINCE_2014_05)
-- And another to remove it. This we can normally only merge for 205.05.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
+index 67c9716..da02df3 100644
+--- a/package/matchbox/Config.in
++++ b/package/matchbox/Config.in
+@@ -36,6 +36,7 @@ config BR2_PACKAGE_MATCHBOX_COMMON_PDA
+ config BR2_PACKAGE_MATCHBOX_KEYBOARD
+ 	bool "Matchbox Virtual Keyboard"
+ 	select BR2_PACKAGE_XLIB_LIBXTST
++	select BR2_PACKAGE_XLIB_LIBXFT if !BR2_PACKAGE_CAIRO
+ 	help
+ 	  Virtual Keyboard
+ 
+diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+index ff85370..f8bf19a 100644
+--- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
++++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
+@@ -9,7 +9,7 @@ MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz
+ MATCHBOX_KEYBOARD_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
+ MATCHBOX_KEYBOARD_LICENSE = GPLv2+
+ MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING
+-MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
++MATCHBOX_KEYBOARD_DEPENDENCIES = host-pkgconf matchbox-lib matchbox-fakekey expat
+ 
+ # Workaround bug in configure script
+ MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
+@@ -22,8 +22,9 @@ MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FI
+ 
+ ################################################################################
+ 
+-ifeq ($(BR2_PACKAGE_PANGO),y)
+-  MATCHBOX_PKEYBOARD_CONF_OPT += --enable-pango
++ifeq ($(BR2_PACKAGE_CAIRO),y)
++  MATCHBOX_KEYBOARD_CONF_OPT += --enable-cairo
++  MATCHBOX_KEYBOARD_DEPENDENCIES += cairo
+ else
+   MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
+ endif
