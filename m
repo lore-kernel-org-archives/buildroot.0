@@ -1,34 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 May 2014 14:05:05 +0200
-Subject: [Buildroot] [git commit branch/next] inadyn: install initscript in
-	INSTALL_INIT_SYSV hook
-Message-ID: <20140520120656.0F0B19CCC9@busybox.osuosl.org>
+Date: Tue, 20 May 2014 14:06:17 +0200
+Subject: [Buildroot] [git commit branch/next] i2c-tools: udated to version
+	3.1.1
+Message-ID: <20140520120656.15E829CCCB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7fc34b7be19602ee2f600e34072e39e9d949050d
+commit: http://git.buildroot.net/buildroot/commit/?id=f80dc6f36105dbfbc52271288c1d165690c20480
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+3.1.0 is dated 2011-12-04.
+3.1.1 is from 2014-02-20 and has quite a few enhancements.
+
+Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/inadyn/inadyn.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/i2c-tools/i2c-tools.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 463eaa8..3886390 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -17,6 +17,9 @@ define INADYN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
- 	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
- 		$(TARGET_DIR)/etc/inadyn.conf
-+endef
-+
-+define INADYN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
- 		$(TARGET_DIR)/etc/init.d/S70inadyn
- endef
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index c6a967d..286c868 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-I2C_TOOLS_VERSION = 3.1.0
++I2C_TOOLS_VERSION = 3.1.1
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
