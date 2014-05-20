@@ -1,55 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:01 +0200
-Subject: [Buildroot] [PATCH v9 02/29] mesa3d: Bump version to 10.2-rc3,
-	fix xa build
+Date: Tue, 20 May 2014 22:41:15 +0200
+Subject: [Buildroot] [PATCH v9 16/29] xbmc - prepare for 13.x-Gotham: Add
+	host-nasm dependency
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building xa requires at least one non swrast gallium driver, needed since:
-http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.2&id=e283e966660fdf037be6353dc96b7f63b8aa315a
+Fixes:
+checking for nasm... no
+configure: error: Could not find a required program. Please see the README for your platform.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/mesa3d.mk |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ package/xbmc/xbmc.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 63ba574..8caa5c6 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index d8b9508..3522802 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -18,6 +18,9 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
--MESA3D_VERSION = 10.0.4
--MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
-+MESA3D_VERSION = 10.2
-+MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).0-rc3.tar.bz2
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
- MESA3D_LICENSE_FILES = docs/license.html
-@@ -33,9 +33,13 @@ MESA3D_DEPENDENCIES += \
- 	xlib_libXdamage \
- 	xlib_libXfixes \
- 	libxcb
--MESA3D_CONF_OPT += \
--	--enable-glx \
--	--enable-xa
-+MESA3D_CONF_OPT += --enable-glx
-+# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
-+ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
-+MESA3D_CONF_OPT += --enable-xa
-+else
-+MESA3D_CONF_OPT += --disable-xa
-+endif
- else
- MESA3D_CONF_OPT += \
- 	--disable-glx \
++# xbmc at i386 depends on nasm
++XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
++
+ XBMC_CONF_ENV = \
+ 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
 -- 
 1.7.10.4
