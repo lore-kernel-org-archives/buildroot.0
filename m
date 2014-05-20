@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 May 2014 23:51:51 +0200
-Subject: [Buildroot] [PATCH] ipsec-tools: needs MMU support
-In-Reply-To: <1400621560-27628-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 20 May 2014 23:32:40 +0200")
-References: <1400621560-27628-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y4xwf79k.fsf@dell.be.48ers.dk>
+Date: Tue, 20 May 2014 23:53:31 +0200
+Subject: [Buildroot] [PATCH] uboot: check various configuration
+	parameters and bail out if empty
+In-Reply-To: <1400618551-24883-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 20 May 2014 22:42:31 +0200")
+References: <1400618551-24883-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87tx8kf76s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > ipsec-tools currently fails to build for Blackfin due to GLOB_TILDE
- > not being supported in Blackfin external toolchains. However, after
- > fixing this problem (which will be fixed in later versions of the
- > Blackfin external toolchains) allows to discover that ipsec-tools uses
- > fork() anyway.
+ > Following the issues reported by Jerry <g4@novadsp.com>, it appears
+ > that there are a number of U-Boot configuration variables we are not
+ > checking properly, leaving users with weird behavior at build time.
 
- > Therefore, this patch simply marks ipsec-tools as not available on
- > non-MMU systems.
-
- > Consequently, it fixes:
-
- >   http://autobuild.buildroot.org/results/fc4/fc4ef4101a20e64eb52da56557d6996dd73b3d86/
+ > This commit extends the existing U-Boot checks to verify that when a
+ > custom version, custom tarball, or custom Git or Mercurial
+ > repositories are selected, the appropriate fields are not empty in the
+ > configuration.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
