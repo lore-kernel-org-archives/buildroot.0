@@ -1,34 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 20 May 2014 06:59:51 -0300
-Subject: [Buildroot] [PATCH 2/2] inadyn: install initscript in
-	INSTALL_INIT_SYSV hook
-In-Reply-To: <1400579991-3808-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1400579991-3808-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1400579991-3808-2-git-send-email-gustavo@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 20 May 2014 10:21:43 +0000
+Subject: [Buildroot] Creating Buildroot bug tracker accounts
+In-Reply-To: <20140517110147.47eeecb0@free-electrons.com>
+References: <20140517110147.47eeecb0@free-electrons.com>
+Message-ID: <1400581302.4364.13.camel@abrodkin-8560l>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/inadyn/inadyn.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Thomas,
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 463eaa8..3886390 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -17,6 +17,9 @@ define INADYN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
- 	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
- 		$(TARGET_DIR)/etc/inadyn.conf
-+endef
-+
-+define INADYN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
- 		$(TARGET_DIR)/etc/init.d/S70inadyn
- endef
--- 
-1.8.5.5
+On Sat, 2014-05-17 at 11:01 +0200, Thomas Petazzoni wrote:
+> Alexey, Anton, Aaron, Sonic, Waldemar,
+> 
+> Would it be possible for you to create accounts on the Buildroot bug
+> tracker? This would allow us to assign you bugs related to architecture
+> specific issues. Of course, only one person for each architecture is
+> sufficient:
+> 
+>  * For ARC: Alexey and/or Anton
+>  * For Blackfin: Aaron and/or Sonic
+>  * For Microblaze: Waldemar
+> 
+> Go to https://bugs.busybox.net/, create an account, and let us know the
+> e-mail address with which you created the account.
+
+Please add my account "abrodkin at synopsys.com" (note this address doesn't
+match my email as in the header of this message, still this is just an
+alias) as a default assignee for ARC architecture.
+
+Regards,
+Alexey
