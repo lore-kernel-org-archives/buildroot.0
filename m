@@ -1,49 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:16 +0200
-Subject: [Buildroot] [PATCH v9 17/29] xbmc - prepare for 13.x-Gotham: Add
-	host-yasm dependency for MMX/64bit archs
+Date: Tue, 20 May 2014 22:41:28 +0200
+Subject: [Buildroot] [PATCH v9 29/29] xbmc: Add VA-API support
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-30-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes error during xbmc configure:
-
-yasm not found, use --disable-yasm for a crippled build
-
-If you think configure made a mistake, make sure you are using the latest
-version from Git.  If the latest version fails, report the problem to the
-ffmpeg-user at ffmpeg.org mailing list or IRC #ffmpeg on irc.freenode.net.
-Include the log file "config.log" produced by configure as this will help
-solving the problem.
-configure: error: Submodule lib/ffmpeg failed to configure
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/xbmc/xbmc.mk |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 3522802..ffe573f 100644
+index 505c46f..a021c89 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -21,6 +21,13 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- # xbmc at i386 depends on nasm
- XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
+@@ -53,7 +53,6 @@ XBMC_CONF_OPT +=  \
+ 	--disable-projectm \
+ 	--disable-pulse \
+ 	--disable-ssh \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -105,6 +104,14 @@ XBMC_CONF_OPT += --disable-gles
+ endif
+ endif
  
-+# ffmpeg depends on yasm on MMX archs
-+# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
-+# yasm as dependency for x86_64, even if BR2_x86_generic=y
-+ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
-+XBMC_DEPENDENCIES += host-yasm
++# xbmc needs libva & libva-glx
++ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
++XBMC_DEPENDENCIES += mesa3d libva
++XBMC_CONF_OPT += --enable-vaapi
++else
++XBMC_CONF_OPT += --disable-vaapi
 +endif
 +
- XBMC_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+ ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+ XBMC_DEPENDENCIES += libusb-compat
+ XBMC_CONF_OPT += --enable-libusb
 -- 
 1.7.10.4
