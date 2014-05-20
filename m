@@ -1,53 +1,97 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 May 2014 16:38:19 +0200
-Subject: [Buildroot] [PATCH] oprofile: bump to version 0.9.9
-In-Reply-To: <1400592658-14517-1-git-send-email-abrodkin@synopsys.com>
-References: <1400592658-14517-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140520163819.0e16582d@free-electrons.com>
+From: cem akpolat <akpolatcem@gmail.com>
+Date: Tue, 20 May 2014 16:38:46 +0200
+Subject: [Buildroot] Fwd: Fwd: how to assign cpp and c++ in buildroot?
+In-Reply-To: <CAAXf6LWNcwXYyDHBKx0HZUndv2BE3jZYqKwQt=-7GMjjuGuNzA@mail.gmail.com>
+References: <52E9D80E-B9AD-417A-BC0F-66A69C39FC21@gmail.com>
+ <5F503FD3-3FBC-4ADB-9D17-BA0CB5606B6D@gmail.com>
+ <20140520000920.20ae6b5b@free-electrons.com>
+ <0727D305-97AD-471C-BA2D-D6A251B4FA90@gmail.com>
+ <CAMm5YqqFDD0a_hA0fGdiLDuHLoaCVVgf2L_-wzQikpF4cm7FJw@mail.gmail.com>
+ <CAAXf6LUF7eXsQvJRLoO0oHcefs9PGnUOVXGCNNhZ2YKV_SkGVA@mail.gmail.com>
+ <20140520113955.475370b3@free-electrons.com>
+ <CAMm5YqoPu1QDkzdpoFfZfNCj0V+VeVkYcUPW=xzzqLB-eYAAuQ@mail.gmail.com>
+ <CAMm5YqqZjnWaNQ+S5a+huY+tOfHgqv51St9HhQZ=69i-4u9PQw@mail.gmail.com>
+ <CAAXf6LUC7Vki85_4iVr-AhijdjpXxHQoYOVSgUAdJcta4-jb6A@mail.gmail.com>
+ <CAMm5YqqioD+6fDWrTW+Jo=wxpCWRet33MJ_OL7=pyFCgbL1ojQ@mail.gmail.com>
+ <CAAXf6LU+UjV3-xWQa5K8CNu79z-2cOoHZgAhmCrxbgth_YFLiw@mail.gmail.com>
+ <CAMm5YqoWFFVf5RkG_N0_S2R3xawSt0T9rEgH4AMJNDu27Ox7Zw@mail.gmail.com>
+ <CAAXf6LWn_BwZPG7B_zoQPqN4Sr=4b+wLNz+-EKHfCdU0LD6nHQ@mail.gmail.com>
+ <CAMm5YqqUYHNGXRYeBzLAcv_ZF5y83GpODD84ZhZpXGxSrURoDQ@mail.gmail.com>
+ <CAAXf6LWNcwXYyDHBKx0HZUndv2BE3jZYqKwQt=-7GMjjuGuNzA@mail.gmail.com>
+Message-ID: <CAMm5YqoA-rGbvRZ=GLb_iqpuUdmBNOe8fbcxvnApJThE3nGsxg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Hi Thomas,
 
-On Tue, 20 May 2014 17:30:58 +0400, Alexey Brodkin wrote:
-> Relese notes for 0.9.9 release are avaialble here:
-> http://oprofile.sourceforge.net/release-notes/oprofile-0.9.9
-> 
-> This release adds support for ARC architecture.
-> 
-> Also introduces new "ocount" program for collection of raw event counts.
-> 
-> With release of 0.9.9 we may drop back-ported patches:
-> oprofile-002-no-query-modules.patch - liblegacy was removed since 2.4 kernels
-> are no longer supported
-> http://sourceforge.net/p/oprofile/oprofile/ci/fcb818623bf1a638ef4f93dca9e90f8651899bf3/
-> 
-> oprofile-003-oprofile-ppc32-build-fix.patch
-> http://sourceforge.net/p/oprofile/oprofile/ci/fa889ea74b6b931e241a8cd57e90edc23cd7ab03/
-> 
-> oprofile-004-fix-ppc64-specific-libpfm-usage.patch
-> http://sourceforge.net/p/oprofile/oprofile/ci/79a183ed0d9611955714bfa1d6edb361d6bf5c2c/
-> 
-> oprofile-005-fix-up-configure-to-handle-architectures-that-do-not.patch
-> http://sourceforge.net/p/oprofile/oprofile/ci/ca6d916a6f8f0f8abbb4c9b6a97dd1a1615bb124/
-> 
-> But in 0.9.9 was introduced build breakage which was fixed later so adding
-> another back-ported patch
-> oprofile-002-Fix-compile-error-on-ppc-uClibc-platform-AT_BASE_PLA.patch
-> http://sourceforge.net/p/oprofile/oprofile/ci/08241f1b2c5a4d48020c82b509dc1076f51bf0bd/
+I noticed the same failure:  you do not
+have g++ on your machine.
 
-I just wanted to say I really appreciate the fact that you made the
-effort of justifying to each patch why it gets removed/added as part of
-the version bump. This is very useful, and give a lot more confidence
-about the version bump patch.
+Then I checked whether there is any link to g++, actually there is any g++
+command, I assigned through the command sudo ln -s /usr/bin/g++-4.8 g++,
+then recompile it again.
+The compilation is now finished without errors. If I see this issue next
+time, the only thing that I will do is to look at package/Makefile.in. I
+assume that the whole configuration, if any of them aren't overwritten in a
+package, is in the previous mentioned file. If I see the same error, first
+of all I should check the commands that you provided me.
 
-Thanks a lot for doing this!
+I cannot notice every detail sometimes, buildroot is quite new to me :).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thank you so much,
+
+
+
+Cem Akpolat
+
+
+On Tue, May 20, 2014 at 4:25 PM, Thomas De Schampheleire <
+patrickdepinguin@gmail.com> wrote:
+
+> Hi Cem,
+>
+> On Tue, May 20, 2014 at 3:29 PM, cem akpolat <akpolatcem@gmail.com> wrote:
+> > Hi Thomas,
+> >
+> > the line starting wirh @@@@
+> >
+> >
+> > akpolat at akpolatX240:~/mysvn/buildroot$ make
+> > package/Makefile.in:211: @@@@@@@ TARGET_CPP
+> >
+> value='/home/akpolat/mysvn/buildroot/output/host/usr/bin/i586-buildroot-linux-uclibc-cpp'
+> > origin='file'
+>
+> Well this looks normal too. I'm puzzled about the cause of your original
+> error.
+>
+> >
+> >
+> > You may have to install 'g++' on your build machine
+>
+> This message gives the explanation for the host-m4 error: you do not
+> have g++ on your machine.
+> The config.log file says:
+>
+> configure:5351: checking how to run the C preprocessor
+> configure:5421: result: cpp
+> configure:5441: cpp
+> -I/home/akpolat/mysvn/buildroot/output/host/usr/include conftest.c
+> ./configure: line 2631: cpp: command not found
+> configure:5441: $? = 127
+>
+> So the host toolchain is not present, and this is needed to build the
+> target toolchain.
+>
+> However, in a previous run it seemed you already had the target
+> toolchain, so I wonder how you achieved this.
+>
+> Best regards,
+> Thomas
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140520/291a689f/attachment.html>
