@@ -1,45 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:09 +0200
-Subject: [Buildroot] [PATCH v9 10/29] ffmpeg: Add libva support
+Date: Tue, 20 May 2014 22:41:14 +0200
+Subject: [Buildroot] [PATCH v9 15/29] xbmc - prepare for 13.x-Gotham: Add
+	host-gettext dependency
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+AUTOPOINT=/bin/true does not work anymore since
+https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
+
+config.status: error: cannot find input file: `Makefile.in'
+configure: error: Submodule lib/cpluff failed to configure
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.mk |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/xbmc/xbmc.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index f8c1526..1be3575 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
- 	--enable-mdct \
- 	--enable-rdft \
- 	--disable-crystalhd \
--	--disable-vaapi \
- 	--disable-vdpau \
- 	--disable-dxva2 \
- 	--enable-runtime-cpudetect \
-@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
- 	--enable-encoder=libvorbis
- endif
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index c7a4607..d8b9508 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+-XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
++XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+@@ -133,7 +133,7 @@ endif
  
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+FFMPEG_CONF_OPT += --enable-vaapi
-+FFMPEG_DEPENDENCIES += libva
-+else
-+FFMPEG_CONF_OPT += --disable-vaapi
-+endif
-+
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPT += --enable-yasm
- FFMPEG_DEPENDENCIES += host-yasm
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define XBMC_BOOTSTRAP
+-	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
++	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+ endef
+ XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
+ 
 -- 
 1.7.10.4
