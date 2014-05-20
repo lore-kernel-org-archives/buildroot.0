@@ -1,46 +1,95 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:03 +0200
-Subject: [Buildroot] [PATCH v9 04/29] mesa3d: add dependency
-	xproto_presentproto
+Date: Tue, 20 May 2014 22:41:08 +0200
+Subject: [Buildroot] [PATCH v9 09/29] libva-intel-driver: new package
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in |    1 +
- package/mesa3d/mesa3d.mk |    1 +
- 2 files changed, 2 insertions(+)
+ package/Config.in                                |    1 +
+ package/libva-intel-driver/Config.in             |   19 ++++++++++++++
+ package/libva-intel-driver/libva-intel-driver.mk |   29 ++++++++++++++++++++++
+ 3 files changed, 49 insertions(+)
+ create mode 100644 package/libva-intel-driver/Config.in
+ create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index b645712..0bea798 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6d396b8..6423d69 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -28,6 +28,7 @@ MESA3D_DEPENDENCIES += \
- 	xproto_xf86driproto \
- 	xproto_dri2proto \
- 	xproto_glproto \
-+	xproto_presentproto \
- 	xlib_libX11 \
- 	xlib_libXext \
- 	xlib_libXdamage \
+diff --git a/package/Config.in b/package/Config.in
+index 63acbeb..b5afcca 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -600,6 +600,7 @@ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
+ source "package/libva/Config.in"
++source "package/libva-intel-driver/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
+new file mode 100644
+index 0000000..89a3264
+--- /dev/null
++++ b/package/libva-intel-driver/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBVA_INTEL_DRIVER
++	bool "libva-intel-driver"
++	select BR2_PACKAGE_LIBVA
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
++	depends on BR2_LARGEFILE # libdrm
++	help
++	  VA-API back-end driver for Intel graphics chips
++
++	  https://01.org/linuxgraphics/community/vaapi
++
++comment "libva intel driver needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
+new file mode 100644
+index 0000000..5ada9f1
+--- /dev/null
++++ b/package/libva-intel-driver/libva-intel-driver.mk
+@@ -0,0 +1,29 @@
++################################################################################
++#
++# libva-intel-driver
++#
++################################################################################
++
++LIBVA_INTEL_DRIVER_VERSION = 1.3.1
++LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
++LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
++LIBVA_INTEL_DRIVER_LICENSE = MIT
++LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
++LIBVA_INTEL_DRIVER_AUTORECONF = YES
++LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
++else
++LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
++endif
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
