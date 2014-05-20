@@ -1,76 +1,147 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:20 +0200
-Subject: [Buildroot] [PATCH v9 21/29] xbmc-addon-xvdr: Version bump to xbmc
-	Gotham-compatible addon
+Date: Tue, 20 May 2014 22:41:07 +0200
+Subject: [Buildroot] [PATCH v9 08/29] libva: new package
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-22-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove upstream applied patch xbmc-addon-xvdr-0001-foreign-automake.patch
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xbmc-addon-xvdr-0001-foreign-automake.patch    |   28 --------------------
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         |    7 ++---
- 2 files changed, 4 insertions(+), 31 deletions(-)
- delete mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+ package/Config.in                             |    1 +
+ package/libva/Config.in                       |   18 ++++++++
+ package/libva/libva-0001-no_test_decode.patch |   17 ++++++++
+ package/libva/libva.mk                        |   57 +++++++++++++++++++++++++
+ 4 files changed, 93 insertions(+)
+ create mode 100644 package/libva/Config.in
+ create mode 100644 package/libva/libva-0001-no_test_decode.patch
+ create mode 100644 package/libva/libva.mk
 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-deleted file mode 100644
-index 0f49dcf..0000000
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--commit 846b0b5a8b559f94dffadf5b2f95ca845b6ba9f1
--Author: Yann E. MORIN <yann.morin.1998@free.fr>
--Date:   Wed Mar 26 07:45:58 2014 +0100
--
--    configure: set the foreign flag
--    
--    This is required since we do not bundle the necessary files (NEWS,
--    INSTALL et al.) Setting it in configure.in is needed to be able
--    to run autoreconf (in lieu of the weird autogen.sh)
--    
--    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--Patch accepted upstream in master:
--    https://github.com/pipelka/xbmc-addon-xvdr/commit/84e5860f488e67a3a3386c779f9a56adeb3dc220
--
--diff --git a/configure.in b/configure.in
--index 6e692e1..7be0d18 100755
----- a/configure.in
--+++ b/configure.in
--@@ -12,7 +12,7 @@ AC_CANONICAL_HOST
-- AC_CANONICAL_TARGET
-- 
-- dnl Setup for automake
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([foreign])
-- 
-- dnl Check for tools
-- 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-index 28c90f7..1f452de 100644
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-+++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--# This cset is on the branch 'xbmc-frodo'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_ADDON_XVDR_VERSION = acd4e145fc3220cf708aaf40d895904732dce2c7
-+# This cset in on master. When a Gotham branch is made, we should
-+# follow it, as incompatible changes in the plugins API can happen
-+# on the master branch.
-+XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
- XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
- XBMC_ADDON_XVDR_LICENSE = GPLv2+
- XBMC_ADDON_XVDR_LICENSE_FILES = COPYING
+diff --git a/package/Config.in b/package/Config.in
+index 14d632e..63acbeb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -599,6 +599,7 @@ source "package/libsvg/Config.in"
+ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
++source "package/libva/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva/Config.in b/package/libva/Config.in
+new file mode 100644
+index 0000000..9d63b52
+--- /dev/null
++++ b/package/libva/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBVA
++	bool "libva"
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
++	depends on BR2_LARGEFILE # libdrm
++	help
++	  The main motivation for VA-API (Video Acceleration API) is to enable
++	  hardware accelerated video decode/encode at various entry-points (VLD,
++	  IDCT, Motion Compensation etc.) for the prevailing coding standards
++	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
++
++	  http://www.freedesktop.org/wiki/Software/vaapi/
++
++comment "libva needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libva/libva-0001-no_test_decode.patch b/package/libva/libva-0001-no_test_decode.patch
+new file mode 100644
+index 0000000..0f0d786
+--- /dev/null
++++ b/package/libva/libva-0001-no_test_decode.patch
+@@ -0,0 +1,17 @@
++mpeg2vldemo is the only file requiring cxx support. It is not needed for
++buildroot, so disable its compilation to avoid depending on cxx.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libva-1.3.0.org/test/Makefile.am libva-1.3.0/test/Makefile.am
++--- libva-1.3.0.org/test/Makefile.am	2014-03-24 05:49:46.000000000 +0100
+++++ libva-1.3.0/test/Makefile.am	2014-04-26 18:12:25.644390292 +0200
++@@ -20,7 +20,7 @@
++ # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++ # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ 
++-SUBDIRS = common decode encode vainfo
+++SUBDIRS = common encode vainfo
++ 
++ if USE_X11
++ SUBDIRS += basic putsurface
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+new file mode 100644
+index 0000000..550fa3f
+--- /dev/null
++++ b/package/libva/libva.mk
+@@ -0,0 +1,57 @@
++################################################################################
++#
++# libva
++#
++################################################################################
++
++LIBVA_VERSION = 1.3.1
++LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
++LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
++LIBVA_LICENSE = MIT
++LIBVA_LICENSE_FILES = COPYING
++LIBVA_AUTORECONF = YES
++LIBVA_INSTALL_STAGING = YES
++LIBVA_DEPENDENCIES = host-pkgconf libdrm
++
++# libdrm is a hard-dependency
++LIBVA_CONF_OPT = \
++	--enable-drm \
++	--disable-dummy-driver \
++	--with-drivers-path="/usr/lib/va"
++
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
++LIBVA_DEPENDENCIES += mesa3d
++LIBVA_CONF_OPT += --enable-glx
++else
++LIBVA_CONF_OPT += --disable-glx
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
++LIBVA_CONF_OPT += --enable-x11
++else
++LIBVA_CONF_OPT += --disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_CONF_OPT += --enable-wayland
++else
++LIBVA_CONF_OPT += --disable-wayland
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++LIBVA_DEPENDENCIES += libegl
++LIBVA_CONF_OPT += --enable-egl
++else
++LIBVA_CONF_OPT += --disable-egl
++endif
++
++# Autoreconf requires an m4 directory to exist
++define LIBVA_PATCH_M4
++	mkdir -p $(@D)/m4
++endef
++
++LIBVA_POST_PATCH_HOOKS += LIBVA_PATCH_M4
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
