@@ -1,70 +1,190 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 20 May 2014 23:16:51 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: add systemd service file
-Message-ID: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 May 2014 23:23:36 +0200
+Subject: [Buildroot] [PATCH] build: remove sstrip
+In-Reply-To: <1400620403-14763-1-git-send-email-yann.morin.1998@free.fr>
+References: <1400620403-14763-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140520212336.GC3506@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - add '-w' (wait) to pg_ctl start command (to ensure pid
-    file generation)
----
- package/postgresql/postgresql.mk      |  8 ++++++++
- package/postgresql/postgresql.service | 24 ++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
- create mode 100644 package/postgresql/postgresql.service
+All,
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index b331737..cf4700a 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -58,4 +58,12 @@ define POSTGRESQL_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50postgresql
- endef
- 
-+define POSTGRESQL_INSTALL_INIT_SYSTEMD
-+        $(INSTALL) -D -m 644 package/postgresql/postgresql.service \
-+                $(TARGET_DIR)/etc/systemd/system/postgresql.service
-+        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+        ln -fs ../postgresql.service \
-+                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
-new file mode 100644
-index 0000000..4a96258
---- /dev/null
-+++ b/package/postgresql/postgresql.service
-@@ -0,0 +1,24 @@
-+[Unit]
-+Description=PostgreSQL database server
-+After=network.target
-+
-+[Service]
-+Type=forking
-+
-+# start timeout disabled because initdb may run a little
-+# longer (eg. 5 minutes on RaspberryPi)
-+TimeoutStartSec=0
-+
-+User=postgres
-+Group=postgres
-+
-+SyslogIdentifier=postgres
-+PIDFile=/var/lib/pgsql/postmaster.pid
-+
-+ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
-+ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
-+ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
-+ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
-+
-+[Install]
-+WantedBy=multi-user.target
+On 2014-05-20 23:13 +0200, Yann E. MORIN spake thusly:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Quoting Thomas on IRC:
+>   > sstrip is a piece of crap that we should exterminate
+>   > from the surface of the planet
+> 
+> sstrip is now unmaintained, has a long history of generating butchered
+> binaries in some cases, and does not gain that much space in the end.
+> 
+> Obliviate sstrip from the strip options, anihilate the sstrip package,
+> scortch any reference in fire, and cleanse our tree free of any remnants...
+
+Missing legacy option, though. Will respin a bit later...
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  Config.in                            | 12 ------------
+>  configs/armadeus_apf9328_defconfig   |  1 -
+>  package/Config.in                    |  1 -
+>  package/Makefile.in                  |  8 --------
+>  package/sstrip/Config.in             |  7 -------
+>  package/sstrip/sstrip.mk             | 32 --------------------------------
+>  support/dependencies/dependencies.mk |  4 ----
+>  7 files changed, 65 deletions(-)
+>  delete mode 100644 package/sstrip/Config.in
+>  delete mode 100644 package/sstrip/sstrip.mk
+> 
+> diff --git a/Config.in b/Config.in
+> index 79a455d..cccfd83 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -352,18 +352,6 @@ config BR2_STRIP_strip
+>  	  symbols on the target are needed for native debugging, but
+>  	  not when remote debugging is used.
+>  
+> -config BR2_STRIP_sstrip
+> -	bool "sstrip"
+> -	select BR2_PACKAGE_SSTRIP_HOST
+> -	depends on !BR2_PACKAGE_HOST_ELF2FLT
+> -	help
+> -	  Binaries and libraries in the target filesystem will be
+> -	  stripped using the 'sstrip' command, which strips a little
+> -	  bit more than the traditional 'strip' command. This allows to
+> -	  save space, mainly by removing debugging symbols. Debugging
+> -	  symbols on the target are needed for native debugging, but
+> -	  not when remote debugging is used.
+> -
+>  config BR2_STRIP_none
+>  	bool "none"
+>  	help
+> diff --git a/configs/armadeus_apf9328_defconfig b/configs/armadeus_apf9328_defconfig
+> index b42f757..806e9a8 100644
+> --- a/configs/armadeus_apf9328_defconfig
+> +++ b/configs/armadeus_apf9328_defconfig
+> @@ -3,7 +3,6 @@ BR2_arm=y
+>  BR2_arm920t=y
+>  
+>  # Toolchain
+> -BR2_STRIP_sstrip=y
+>  BR2_GCC_VERSION_4_4_X=y
+>  BR2_PACKAGE_GDB=y
+>  BR2_PACKAGE_HOST_GDB=y
+> diff --git a/package/Config.in b/package/Config.in
+> index 3bc8d24..d09cba3 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -119,7 +119,6 @@ source "package/pkgconf/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/sed/Config.in"
+>  endif
+> -source "package/sstrip/Config.in"
+>  source "package/subversion/Config.in"
+>  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  source "package/tar/Config.in"
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 2fc3aa7..b8d1dad 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -200,14 +200,6 @@ TARGET_STRIP=$(TARGET_CROSS)strip
+>  STRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note
+>  KSTRIPCMD=$(STRIPCMD) $(STRIP_STRIP_UNNEEDED)
+>  endif
+> -ifeq ($(BR2_STRIP_sstrip),y)
+> -STRIP_STRIP_DEBUG:=
+> -STRIP_STRIP_UNNEEDED:=
+> -STRIP_STRIP_ALL:=
+> -TARGET_STRIP=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-sstrip
+> -STRIPCMD=$(TARGET_STRIP)
+> -KSTRIPCMD=$(TARGET_CROSS)strip --remove-section=.comment --remove-section=.note --strip-unneeded
+> -endif
+>  ifeq ($(BR2_STRIP_none),y)
+>  TARGET_STRIP=true
+>  STRIPCMD=$(TARGET_STRIP)
+> diff --git a/package/sstrip/Config.in b/package/sstrip/Config.in
+> deleted file mode 100644
+> index 12a5941..0000000
+> --- a/package/sstrip/Config.in
+> +++ /dev/null
+> @@ -1,7 +0,0 @@
+> -config BR2_PACKAGE_SSTRIP
+> -	bool "sstrip"
+> -	help
+> -	  Small utility that removes a few bytes from an executable that
+> -	  strip leaves behind.
+> -
+> -	  http://www.muppetlabs.com/~breadbox/software/elfkickers.html
+> diff --git a/package/sstrip/sstrip.mk b/package/sstrip/sstrip.mk
+> deleted file mode 100644
+> index deab010..0000000
+> --- a/package/sstrip/sstrip.mk
+> +++ /dev/null
+> @@ -1,32 +0,0 @@
+> -################################################################################
+> -#
+> -# sstrip
+> -#
+> -################################################################################
+> -
+> -SSTRIP_SITE = svn://dev.openwrt.org/openwrt/trunk/tools/sstrip
+> -SSTRIP_VERSION = 20154
+> -HOST_SSTRIP_BINARY = $(GNU_TARGET_NAME)-sstrip
+> -
+> -define SSTRIP_BUILD_CMDS
+> -	cd $(@D) ; \
+> -	$(TARGET_CC) $(TARGET_CFLAGS) -include endian.h -include byteswap.h \
+> -		-o sstrip src/sstrip.c
+> -endef
+> -
+> -define SSTRIP_INSTALL_TARGET_CMDS
+> -	$(INSTALL) -D $(@D)/sstrip $(TARGET_DIR)/usr/bin/sstrip
+> -endef
+> -
+> -define HOST_SSTRIP_BUILD_CMDS
+> -	cd $(@D) ; \
+> -	$(HOSTCC) $(HOST_CFLAGS) -include endian.h -include byteswap.h \
+> -		-o sstrip src/sstrip.c
+> -endef
+> -
+> -define HOST_SSTRIP_INSTALL_CMDS
+> -	$(INSTALL) -D $(@D)/sstrip $(HOST_DIR)/usr/bin/$(HOST_SSTRIP_BINARY)
+> -endef
+> -
+> -$(eval $(generic-package))
+> -$(eval $(host-generic-package))
+> diff --git a/support/dependencies/dependencies.mk b/support/dependencies/dependencies.mk
+> index 155a909..05d57ff 100644
+> --- a/support/dependencies/dependencies.mk
+> +++ b/support/dependencies/dependencies.mk
+> @@ -16,10 +16,6 @@ $(shell support/dependencies/check-host-$(1).sh $(2))
+>  endef
+>  -include $(sort $(wildcard support/dependencies/check-host-*.mk))
+>  
+> -ifeq ($(BR2_STRIP_sstrip),y)
+> -DEPENDENCIES_HOST_PREREQ+=host-sstrip
+> -endif
+> -
+>  ifeq ($(BR2_CCACHE),y)
+>  DEPENDENCIES_HOST_PREREQ += host-ccache
+>  endif
+> -- 
+> 1.8.3.2
+> 
+
 -- 
-1.8.1.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
