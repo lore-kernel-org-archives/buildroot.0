@@ -1,36 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 May 2014 14:06:17 +0200
-Subject: [Buildroot] [git commit branch/next] i2c-tools: udated to version
-	3.1.1
-Message-ID: <20140520120656.15E829CCCB@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 20 May 2014 12:07:49 +0000 (UTC)
+Subject: [Buildroot] [Bug 7088] elfutils on Blackfin doesn't build
+In-Reply-To: <bug-7088-163@https.bugs.busybox.net/>
+References: <bug-7088-163@https.bugs.busybox.net/>
+Message-ID: <20140520120749.0AF979CCC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f80dc6f36105dbfbc52271288c1d165690c20480
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+https://bugs.busybox.net/show_bug.cgi?id=7088
 
-3.1.0 is dated 2011-12-04.
-3.1.1 is from 2014-02-20 and has quite a few enhancements.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/i2c-tools/i2c-tools.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |sonic.zhang at analog.com
+                   |.org                        |
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index c6a967d..286c868 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--I2C_TOOLS_VERSION = 3.1.0
-+I2C_TOOLS_VERSION = 3.1.1
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
- I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
- I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
