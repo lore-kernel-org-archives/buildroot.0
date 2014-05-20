@@ -1,65 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:18 +0200
-Subject: [Buildroot] [PATCH v9 19/29] xbmc: bump version to 13.1 Beta2
+Date: Tue, 20 May 2014 22:41:17 +0200
+Subject: [Buildroot] [PATCH v9 18/29] xbmc - prepare for 13.x-Gotham: Add
+	missing egl-related cflags
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+A similar patch is used in package/qt/qt.mk.
+
+Fixes compilation error:
+
+In file included from /home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36:0,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/egl/WinSystemEGL.h:28,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/WindowingFactory.h:39,
+                 from DVDPlayerVideo.cpp:23:
+/home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+
+using this defconfig
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    1 +
- package/xbmc/xbmc.mk   |    7 +++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/xbmc/xbmc.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 75666a4..0f45f5c 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBUNGIF
- 	select BR2_PACKAGE_LIBVORBIS
- 	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index acbdb91..35764a0 100644
+index ffe573f..acbdb91 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -4,7 +4,9 @@
- #
- ################################################################################
+@@ -70,6 +70,10 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ endif
  
--XBMC_VERSION = 12.3-Frodo
-+# XBMC_VERSION = 13.1b2-Gotham
-+# tarball for 13.1b2 is currently missing
-+XBMC_VERSION = a6a271389ce4a67a323e547412567ace9d84c274
- XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
-@@ -15,7 +17,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
--	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-+	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
- 
- # xbmc at i386 depends on nasm
-@@ -37,6 +39,7 @@ XBMC_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- XBMC_CONF_OPT +=  \
-+	--with-arch=$(BR2_ARCH) \
- 	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
++XBMC_CONF_ENV += \
++	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++
+ ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+ XBMC_DEPENDENCIES += libusb-compat
+ XBMC_CONF_OPT += --enable-libusb
 -- 
 1.7.10.4
