@@ -1,69 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 May 2014 11:39:55 +0200
-Subject: [Buildroot] Fwd: how to assign cpp and c++ in buildroot?
-In-Reply-To: <CAAXf6LUF7eXsQvJRLoO0oHcefs9PGnUOVXGCNNhZ2YKV_SkGVA@mail.gmail.com>
-References: <52E9D80E-B9AD-417A-BC0F-66A69C39FC21@gmail.com>
- <5F503FD3-3FBC-4ADB-9D17-BA0CB5606B6D@gmail.com>
- <20140520000920.20ae6b5b@free-electrons.com>
- <0727D305-97AD-471C-BA2D-D6A251B4FA90@gmail.com>
- <CAMm5YqqFDD0a_hA0fGdiLDuHLoaCVVgf2L_-wzQikpF4cm7FJw@mail.gmail.com>
- <CAAXf6LUF7eXsQvJRLoO0oHcefs9PGnUOVXGCNNhZ2YKV_SkGVA@mail.gmail.com>
-Message-ID: <20140520113955.475370b3@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 20 May 2014 06:59:50 -0300
+Subject: [Buildroot] [PATCH 1/2] inadyn: bump to version 1.99.7
+Message-ID: <1400579991-3808-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/inadyn/inadyn.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Tue, 20 May 2014 10:58:43 +0200, Thomas De Schampheleire wrote:
-
-> >  [7m>>> expat 2.1.0 Configuring [27m
-> > (cd /home/cem/buildroot/buildroot-2014.02/output/build/expat-2.1.0/ && rm
-> > -rf config.cache &&
-> > PATH="/home/cem/buildroot/buildroot-2014.02/output/host/bin:/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin:/home/cem/buildroot/buildroot-2014.02/output/host/usr/sbin/:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
-> > AR="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-ar"
-> > AS="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-as"
-> > LD="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-ld"
-> > NM="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-nm"
-> > CC="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc"
-> > GCC="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-gcc"
-> > CPP="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-g++
-> > "
-> > CXX="/home/cem/buildroot/buildroot-2014.02/output/host/usr/bin/i586-buildroot-linux-uclibc-g++"
-> 
-> Are you sure that you do not have any custom TARGET_CPP variable in
-> your environment, or made custom changes to buildroot?
-> The above command is composed using: (package/Makefile.in)
-> 
->                 GCC="$(TARGET_CC)" \
->                 CPP="$(TARGET_CPP)" \
->                 CXX="$(TARGET_CXX)" \
-> 
-> and these variables TARGET_xxxx are defined in the same file as:
-> 
-> TARGET_CC       = $(TARGET_CROSS)gcc
-> TARGET_CPP      = $(TARGET_CROSS)cpp
-> TARGET_CXX      = $(TARGET_CROSS)g++
-> 
-> I think the error you experience can only happen if you would have a
-> custom TARGET_CPP in your environment, which would overwrite the
-> definition above. The fact that there is an extra space between the
-> 'g++' and the closing quote " also makes me believe you have something
-> custom in your environment/makefiles.
-
-FWIW, I've just built 'expat' here, and here is what I see:
-
-(cd /home/thomas/projets/buildroot/output/build/expat-2.1.0/ && rm -rf config.cache && PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/home/thomas/projets/buildroot/output/host/usr/bin:/home/thomas/projets/buildroot/output/host/usr/sbin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/thomas/sys/bin" AR="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-ar" AS="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-as" LD="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-ld" NM="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-nm" CC="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc" GCC="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc" CPP="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-cpp" CXX="/home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-g++"
-
-So here, the value of the CPP variable is correct, which confirms what
-Thomas DS is suggesting.
-
-Best regards,
-
-Thomas
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index dc443f9..463eaa8 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 1.99.6
++INADYN_VERSION = 1.99.7
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
