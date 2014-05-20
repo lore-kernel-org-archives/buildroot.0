@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 May 2014 14:05:05 +0200
-Subject: [Buildroot] [git commit] inadyn: install initscript in
-	INSTALL_INIT_SYSV hook
-Message-ID: <20140601083244.EF20D9CE5B@busybox.osuosl.org>
+Date: Tue, 20 May 2014 22:26:35 +0200
+Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.71
+Message-ID: <20140601083245.325C19C779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7fc34b7be19602ee2f600e34072e39e9d949050d
+commit: http://git.buildroot.net/buildroot/commit/?id=980e652a936015d2f6aa89e4ecfdf16225e55971
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/inadyn/inadyn.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ package/dnsmasq/dnsmasq.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 463eaa8..3886390 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -17,6 +17,9 @@ define INADYN_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/src/inadyn $(TARGET_DIR)/usr/sbin/inadyn
- 	$(INSTALL) -D -m 0600 package/inadyn/inadyn.conf \
- 		$(TARGET_DIR)/etc/inadyn.conf
-+endef
-+
-+define INADYN_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/inadyn/S70inadyn \
- 		$(TARGET_DIR)/etc/init.d/S70inadyn
- endef
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 087b7dc..dd15994 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.70
++DNSMASQ_VERSION = 2.71
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
