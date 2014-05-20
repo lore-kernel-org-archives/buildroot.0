@@ -1,40 +1,90 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 20 May 2014 22:34:42 +0200
-Subject: [Buildroot] [PATCH 1/1] matchbox-keyboard: Fix dependencies
-References: <1400601515-29764-1-git-send-email-bernd.kuhls@t-online.de>
- <87sio4gpso.fsf@dell.be.48ers.dk>
-Message-ID: <2sqs4bxc14.ln2@ID-313208.user.individual.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 20 May 2014 22:40:59 +0200
+Subject: [Buildroot] [PATCH v9 00/29] xbmc: bump version to 13.1 Beta2
+Message-ID: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard <jacmet@uclibc.org> wrote in
-news:87sio4gpso.fsf at dell.be.48ers.dk: 
-
-> > -ifeq ($(BR2_PACKAGE_PANGO),y)
-> > -  MATCHBOX_PKEYBOARD_CONF_OPT += --enable-pango
-> > -else
-> > -  MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
-> > -endif
-> 
-> No?
-> 
-> ./configure --help|grep cairo
->   --enable-cairo    enable experimental Cairo support default=no
-
-Hi,
-
-I fail to see the connection between pango and cairo regarding the matchbox-
-keyboard package.
-
-The defconfig used by autobuilder enables BR2_PACKAGE_PANGO, but the phrase 
-"pango" is used nowhere in the matchbox-keyboard-0.1 sourcecode.
-
-Support for cairo is disabled by default in matchbox-keyboard-
-0.1/configure.ac, and not present in package/matchbox/* either, so the 
-matchbox-keyboard package will always check for xlib_libXft and fail if it?s 
-absent. This is fixed by my patch.
+the patch series combines my latest patches to bump xbmc.
+It also adds uClibc support to xbmc, a mesa3d version bump
+and several new packages to support the new xbmc release
+along with libva to get the best out of Intel systems.
 
 Regards, Bernd
+
+v9: - reworked patch series based on comments by Yann & Arnout:
+      - moved some patches before xbmc version bump for bisectability
+      - removed iconv patch to SDL, to be checked later
+      - removed rtmpdump/KSV patch from series, to be checked later
+      - added description to mesa3d/xorg meta package dependency
+      - reworked OpenGL/egl+gles logic in package/xbmc/
+    - bump xbmc to 13.1 Beta2
+    - cec needs udev to be useful
+v8: - squashed "[v7 29/31] ffmpeg cross-compile" into
+      "[v8 16/28] Gotham bump" (Thomas)
+    - squashed "[v7 21/31] uclibc at arm" & "[v7 31/31] ipv6"
+      patches into "[v8 20/28] uclibc" patch (Thomas/Yann)
+    - xbmc-pvr-addons: updated comment (Yann)
+v7: - rebased
+    - bump mesa3d version to 10.2-rc3
+    - included v2 of "xproto_dri3proto: New package"
+v6: - bump mesa3d version to 10.2-rc2
+    - bump libva and libva-intel-driver to 1.3.1
+
+
+Bernd Kuhls (29):
+  xproto_dri3proto: New package
+  mesa3d: Bump version to 10.2-rc3, fix xa build
+  mesa3d: Depend on xorg meta package instead of xserver_xorg-server
+  mesa3d: add dependency xproto_presentproto
+  mesa3d: Remove dependency for the libxml2 module of host-python
+  mesa3d: Add dri3 support
+  mesa3d: dri2 does not need udev support
+  libva: new package
+  libva-intel-driver: new package
+  ffmpeg: Add libva support
+  libglu: new package
+  libglew: new package
+  sdl: Add new dependency libglu for opengl support
+  xdriver_xf86-video-intel: Bump version to 2.99.911
+  xbmc - prepare for 13.x-Gotham: Add host-gettext dependency
+  xbmc - prepare for 13.x-Gotham: Add host-nasm dependency
+  xbmc - prepare for 13.x-Gotham: Add host-yasm dependency for
+    MMX/64bit archs
+  xbmc - prepare for 13.x-Gotham: Add missing egl-related cflags
+  xbmc: bump version to 13.1 Beta2
+  xbmc-pvr-addons: Version bump to xbmc Gotham-compatible addon
+  xbmc-addon-xvdr: Version bump to xbmc Gotham-compatible addon
+  xbmc: hdmi cec supports needs udev for device scanning
+  xbmc: Allow compilation with uClibc
+  xbmc: Add alsa support
+  xbmc: Add lame support
+  xbmc: Fix TexturePacker compile
+  xbmc: Add X.org/OpenGL support
+  xbmc: Add option for Goom screensaver
+  xbmc: Add VA-API support
+
+ package/Config.in                            |    1 -
+ package/libdrm/Config.in                     |    1 -
+ package/libmms/Config.in                     |    8 +
+ package/libmms/libmms.mk                     |    4 +-
+ package/libudev/Config.in                    |    9 -
+ package/libudev/libudev-0001-locale.patch    |   29 -
+ package/libudev/libudev-0002-getenv.patch    |   23 -
+ package/libudev/libudev-0003-clock.patch     |   42 -
+ package/libudev/libudev.mk                   |   71 -
+ package/rtmpdump/rtmpdump-0001-ksv.patch     | 3397 --------------------------
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk |    2 +-
+ 11 files changed, 11 insertions(+), 3576 deletions(-)
+ delete mode 100644 package/libudev/Config.in
+ delete mode 100644 package/libudev/libudev-0001-locale.patch
+ delete mode 100644 package/libudev/libudev-0002-getenv.patch
+ delete mode 100644 package/libudev/libudev-0003-clock.patch
+ delete mode 100644 package/libudev/libudev.mk
+ delete mode 100644 package/rtmpdump/rtmpdump-0001-ksv.patch
+
+-- 
+1.7.10.4
