@@ -1,9 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 May 2014 12:07:49 +0000 (UTC)
+Date: Tue, 20 May 2014 12:08:11 +0000 (UTC)
 Subject: [Buildroot] [Bug 7088] elfutils on Blackfin doesn't build
 In-Reply-To: <bug-7088-163@https.bugs.busybox.net/>
 References: <bug-7088-163@https.bugs.busybox.net/>
-Message-ID: <20140520120749.0AF979CCC9@busybox.osuosl.org>
+Message-ID: <20140520120811.232279CCC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,9 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=7088
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |sonic.zhang at analog.com
-                   |.org                        |
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-05-20 12:08:10 UTC ---
+This issue is also tracked by ADI at
+http://sourceforge.net/p/adi-buildroot/buildroot-up/tasks/1/.
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
