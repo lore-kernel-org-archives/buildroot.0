@@ -1,69 +1,115 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 17:58:35 +0200
-Subject: [Buildroot] [PATCH 1/1] matchbox-keyboard: Fix dependencies
-Message-ID: <1400601515-29764-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 20 May 2014 18:33:10 +0200
+Subject: [Buildroot] [PATCH v8 21/28] xbmc: Add X.org/OpenGL support
+In-Reply-To: <20140518172928.GD3631@free.fr>
+References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
+ <1400342276-10303-22-git-send-email-bernd.kuhls@t-online.de>
+ <20140517205500.GL3459@free.fr>
+ <0sjm4bxrs4.ln2@ID-313208.user.individual.net>
+ <20140518162900.GA3631@free.fr>
+ <le5n4bxjvb.ln2@ID-313208.user.individual.net>
+ <20140518172928.GD3631@free.fr>
+Message-ID: <537B83C6.6080403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Always depend on xlib_libXft, pango is not used by the package
+On 18/05/14 19:29, Yann E. MORIN wrote:
+> Bernd, All,
+> 
+> On 2014-05-18 18:58 +0200, Bernd Kuhls spake thusly:
+>> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+>> news:20140518162900.GA3631 at free.fr: 
+>>
+>>> Something like:
+>> [...]
+>>> should do the trick.
+>>
+>> Hi,
+>>
+>> for further comments I posted my current patch here:
+>> http://pastebin.com/zv7jueLB (expires in one week).
+>>
+>> Especially the last "depends on" block looks crude, but seems to work.
+> 
+> Yep, it looks too dense. I think we can factor it into:
+> 
+>     depends on BR2_arm || BR2_i386 || BR2_x86_64
+>     depends on HAS_LIBEGL && HAS_LIBGLES \
+>             || (BR2_i386 || BR2_x86_64) && HAS_LIBGL
 
-Fixes
-http://autobuild.buildroot.net/results/473/47380d57e507ec395a1132dfd7b32d35459c1c7a//
-http://autobuild.buildroot.net/results/d9a/d9aa2b6ddce920ea45fbd7093addfc0ee6b94467//
-http://autobuild.buildroot.net/results/aad/aad393a81812df28cbc296f556de2acb4e6d114b//
-http://autobuild.buildroot.net/results/124/124b28336ed61822fa6d5d2591b4e70d83b8a213//
-and 17 other build errors, dating back to 2013-07-03
+ I don't agree with you Yann that the () should be left out here. Not many
+people know enough about the Kconfig logic to be able to be sure about the
+precedence here.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/matchbox/Config.in                              |    3 ++-
- package/matchbox/matchbox-keyboard/matchbox-keyboard.mk |   12 +-----------
- 2 files changed, 3 insertions(+), 12 deletions(-)
+> 
+> So, it first ensures that it is only visible for ARM or x86 (the only
+> archs we currently support SBMC on.)
+> 
+> Then, it is available only for EGL+GLES or x86+GL, since EGL+GLES is
+> posible on ARM and x86 alike, but full GL is only possible on x86.
 
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 67c9716..e1f6db9 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -35,7 +35,8 @@ config BR2_PACKAGE_MATCHBOX_COMMON_PDA
- 
- config BR2_PACKAGE_MATCHBOX_KEYBOARD
- 	bool "Matchbox Virtual Keyboard"
--	select BR2_PACKAGE_XLIB_LIBXTST
-+	select BR2_PACKAGE_XLIB_LIBXTST # matchbox-fakekey
-+	select BR2_PACKAGE_XLIB_LIBXFT
- 	help
- 	  Virtual Keyboard
- 
-diff --git a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-index ff85370..d8109ad 100644
---- a/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-+++ b/package/matchbox/matchbox-keyboard/matchbox-keyboard.mk
-@@ -9,7 +9,7 @@ MATCHBOX_KEYBOARD_SOURCE = matchbox-keyboard-$(MATCHBOX_KEYBOARD_VERSION).tar.bz
- MATCHBOX_KEYBOARD_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-keyboard/$(MATCHBOX_KEYBOARD_VERSION)
- MATCHBOX_KEYBOARD_LICENSE = GPLv2+
- MATCHBOX_KEYBOARD_LICENSE_FILES = COPYING
--MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey
-+MATCHBOX_KEYBOARD_DEPENDENCIES = matchbox-lib matchbox-fakekey xlib_libXft
- 
- # Workaround bug in configure script
- MATCHBOX_KEYBOARD_CONF_ENV = expat=yes
-@@ -20,14 +20,4 @@ endef
- 
- MATCHBOX_KEYBOARD_POST_INSTALL_TARGET_HOOKS += MATCHBOX_KEYBOARD_POST_INSTALL_FIXES
- 
--################################################################################
--
--ifeq ($(BR2_PACKAGE_PANGO),y)
--  MATCHBOX_PKEYBOARD_CONF_OPT += --enable-pango
--else
--  MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
--endif
--
--################################################################################
--
- $(eval $(autotools-package))
+ I think there's something more fundamentally inappropriate about the approach
+taken here. I think the way out could be to add auxiliary symbols to identify
+which provider is used. Something like:
+
+config BR2_PACKAGE_XBMC_EGL_GLES
+	bool
+	default y
+	depends on BR2_PACKAGE_HAS_LIBEGL
+	depends on BR2_PACKAGE_HAS_LIBGLES
+	depends on !BR2_PACKAGE_XBMC_GL # prefer GL if available
+
+config BR2_PACKAGE_XBMC_GL
+	bool
+	depends on BR2_PACKAGE_XORG7
+	depends on BR2_PACKAGE_HAS_LIBGL
+
+comment "xbmc requires an OpenGL-capable backend"
+	depends on BR2_USE_MMU
+	depends on BR2_arm || BR2_i386 || BR2_x86_64
+	depends on !BR2_PACKAGE_XBMC_EGL_GLES
+	depends on !BR2_PACKAGE_XBMC_GL
+
+config BR2_PACKAGE_XBMC
+	...
+	depends on BR2_PACKAGE_XBMC_EGL_GLES || BR2_PACKAGE_XBMC_GL
+
+
+ That also allows you to use these new symbols in the .mk file instead of the
+_HAS_LIBGL which IMHO is not sufficiently accurate and future-safe.
+
+
+ BTW, I don't understand this comment:
+
+# mesa3d provides libgl only with dri drivers which depend on xorg
+
+ If that is the case, then it's up to mesa3d to add the required dependencies, no?
+
+
+ Regards,
+ Arnout
+
+
+> 
+> I think it is much cleaner to separate the architectures dependencies
+> from the GL dependencies.
+> 
+> Of course, this would probably not scale if we were to support it on
+> other archs (eg. PPC), but it will be time to revisit this if/when we
+> happen to add that support.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+
 -- 
-1.7.10.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
