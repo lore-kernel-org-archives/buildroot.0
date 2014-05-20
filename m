@@ -1,69 +1,35 @@
 From: oli vogt <oli.vogt.pub01@gmail.com>
-Date: Tue, 20 May 2014 13:52:58 +1200
-Subject: [Buildroot] [PATCH 1/3] python: new module flup
-Message-ID: <1400550780-16669-1-git-send-email-oli.vogt.pub01@gmail.com>
+Date: Tue, 20 May 2014 13:52:59 +1200
+Subject: [Buildroot] [PATCH 2/3] i2c-tools: udated to version 3.1.1
+In-Reply-To: <1400550780-16669-1-git-send-email-oli.vogt.pub01@gmail.com>
+References: <1400550780-16669-1-git-send-email-oli.vogt.pub01@gmail.com>
+Message-ID: <1400550780-16669-2-git-send-email-oli.vogt.pub01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This module is useful to implement a fastCGI webserver
-Tested with ARM and Python 2.7.6
+3.1.0 is dated 2011-12-04.
+3.1.1 is from 2014-02-20 and has quite a few enhancements.
 
 Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
 ---
- package/Config.in                  |  1 +
- package/python-flup/Config.in      |  9 +++++++++
- package/python-flup/python-flup.mk | 12 ++++++++++++
- 3 files changed, 22 insertions(+)
- create mode 100644 package/python-flup/Config.in
- create mode 100644 package/python-flup/python-flup.mk
+ package/i2c-tools/i2c-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3bc8d24..9c61485 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -445,6 +445,7 @@ source "package/python-configobj/Config.in"
- source "package/python-crc16/Config.in"
- source "package/python-dialog/Config.in"
- source "package/python-dpkt/Config.in"
-+source "package/python-flup/Config.in"
- source "package/python-id3/Config.in"
- source "package/python-ipy/Config.in"
- source "package/python-json-schema-validator/Config.in"
-diff --git a/package/python-flup/Config.in b/package/python-flup/Config.in
-new file mode 100644
-index 0000000..cc0efa5
---- /dev/null
-+++ b/package/python-flup/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_FLUP
-+	bool "python-flup"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  flup provides of a collection of WSGI modules for Python.
-+	  It allows a webserver to use scgi-mod and fastcgi-mod
-+	  with python.
-+
-+	  http://www.saddi.com/software/flup/
-diff --git a/package/python-flup/python-flup.mk b/package/python-flup/python-flup.mk
-new file mode 100644
-index 0000000..0525dc9
---- /dev/null
-+++ b/package/python-flup/python-flup.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# python-flup
-+#
-+################################################################################
-+
-+PYTHON_FLUP_VERSION = 1.0.3.dev-20110405
-+PYTHON_FLUP_SOURCE = flup-$(PYTHON_FLUP_VERSION).tar.gz
-+PYTHON_FLUP_SITE = http://pypi.python.org/packages/source/f/flup
-+PYTHON_FLUP_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+index c6a967d..286c868 100644
+--- a/package/i2c-tools/i2c-tools.mk
++++ b/package/i2c-tools/i2c-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-I2C_TOOLS_VERSION = 3.1.0
++I2C_TOOLS_VERSION = 3.1.1
+ I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.bz2
+ I2C_TOOLS_SITE = http://dl.lm-sensors.org/i2c-tools/releases
+ I2C_TOOLS_LICENSE = GPLv2+, GPLv2 (py-smbus)
 -- 
 1.9.1
