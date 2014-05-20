@@ -1,47 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 May 2014 00:14:56 +0200
-Subject: [Buildroot] [git commit] build/sstrip: deprecate for 2014.05
-Message-ID: <20140520221710.C8EAC9CCB0@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 May 2014 00:27:11 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] Detect and prevent multiple
+	providers (branch yem/fix-virt-pkg)
+In-Reply-To: <cover.1400175284.git.yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Thu, 15 May 2014 19:37:01 +0200")
+References: <cover.1400175284.git.yann.morin.1998@free.fr>
+Message-ID: <87lhtwf5mo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a6962fd82ca92f2e7ad7be07cf6a986d5224a61
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Quoting Thomas on IRC:
-  > sstrip is a piece of crap that we should exterminate
-  > from the surface of the planet
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Hello All!
 
-sstrip is now unmaintained, has a long history of generating butchered
-binaries in some cases, and does not gain that much space in the end.
+ > Following a weird report about a cairo build failure, we came to the
+ > conclusion that the problem was due to multiple providers of the same
+ > virtual package were selected in the failing configuration. See the
+ > thread starting there:
+ >     http://lists.busybox.net/pipermail/buildroot/2014-May/096379.html
 
-We'd like to obliviate sstrip from the strip options, anihilate the
-sstrip package, scorch any reference in fire, and cleanse our tree
-free of any remnants...
+ > The matter was discussed on the list, and we came up to the conclusion
+ > we would not implement anything in the menuconfig to prevent this
+ > situation, but that we would just detect it prior to running the build.
+ > See the thread starting there:
+ >     http://lists.busybox.net/pipermail/buildroot/2014-May/096517.html
 
-But first, let's just deprecate it for now.
+ > So, what this series does is just that: detect that more than one
+ > provider for a virtual package are selected.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > The way it does that is fully described in patch 1/3, but basically:
 
-diff --git a/Config.in b/Config.in
-index 79a455d..d402c93 100644
---- a/Config.in
-+++ b/Config.in
-@@ -356,6 +356,7 @@ config BR2_STRIP_sstrip
- 	bool "sstrip"
- 	select BR2_PACKAGE_SSTRIP_HOST
- 	depends on !BR2_PACKAGE_HOST_ELF2FLT
-+	depends on BR2_DEPRECATED_SINCE_2014_05
- 	help
- 	  Binaries and libraries in the target filesystem will be
- 	  stripped using the 'sstrip' command, which strips a little
+ >   - providers must now declare the virtual packages they are an
+ >     implementation of, in their .mk file;
+
+ >   - the generic package infrastructure checks that for each such
+ >     declared virtual package, the current provider is indeed the
+ >     selected implmenetation. If not, then it means two or more
+ >     providers for that virtual package are selected, and it bails
+ >     out very early in the build.
+
+ > Changes v1 -> v2:
+ >   - fix providers for luainterpreter  (Thomas P.)
+
+Committed series, thanks.
+
+-- 
+Bye, Peter Korsgaard
