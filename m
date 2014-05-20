@@ -1,48 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:14 +0200
-Subject: [Buildroot] [PATCH v9 15/29] xbmc - prepare for 13.x-Gotham: Add
-	host-gettext dependency
+Date: Tue, 20 May 2014 22:41:01 +0200
+Subject: [Buildroot] [PATCH v9 02/29] mesa3d: Bump version to 10.2-rc3,
+	fix xa build
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AUTOPOINT=/bin/true does not work anymore since
-https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
-
-config.status: error: cannot find input file: `Makefile.in'
-configure: error: Submodule lib/cpluff failed to configure
+Building xa requires at least one non swrast gallium driver, needed since:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.2&id=e283e966660fdf037be6353dc96b7f63b8aa315a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mesa3d/mesa3d.mk |   14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index c7a4607..d8b9508 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-@@ -133,7 +133,7 @@ endif
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 63ba574..8caa5c6 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define XBMC_BOOTSTRAP
--	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
-+	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
- endef
- XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
- 
+-MESA3D_VERSION = 10.0.4
+-MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
++MESA3D_VERSION = 10.2
++MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).0-rc3.tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+ MESA3D_LICENSE_FILES = docs/license.html
+@@ -33,9 +33,13 @@ MESA3D_DEPENDENCIES += \
+ 	xlib_libXdamage \
+ 	xlib_libXfixes \
+ 	libxcb
+-MESA3D_CONF_OPT += \
+-	--enable-glx \
+-	--enable-xa
++MESA3D_CONF_OPT += --enable-glx
++# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
++ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
++MESA3D_CONF_OPT += --enable-xa
++else
++MESA3D_CONF_OPT += --disable-xa
++endif
+ else
+ MESA3D_CONF_OPT += \
+ 	--disable-glx \
 -- 
 1.7.10.4
