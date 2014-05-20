@@ -1,49 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 18 May 2014 23:54:09 +0200
-Subject: [Buildroot] [git commit branch/next] scancpan: sort dependencies
-Message-ID: <20140520120656.0231A9CCC9@busybox.osuosl.org>
+Date: Tue, 20 May 2014 14:05:00 +0200
+Subject: [Buildroot] [git commit branch/next] inadyn: bump to version 1.99.7
+Message-ID: <20140520120656.084449BFE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c2be26ed8221f4053e203692711841884defdb4
+commit: http://git.buildroot.net/buildroot/commit/?id=a5a589b600859ec9bc3f66a176326afbc9d261f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-in order to avoid spurious diff when updating packages
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/scancpan |   10 +++++-----
- 1 files changed, 5 insertions(+), 5 deletions(-)
+ package/inadyn/inadyn.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index dc62b47..d8723f3 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -581,7 +581,7 @@ while (my ($distname, $dist) = each %dist) {
-         open my $fh, q{>}, $cfgname;
-         say {$fh} qq{config BR2_PACKAGE_${brname}};
-         say {$fh} qq{\tbool "${fsname}"};
--        foreach my $dep (@{$deps_runtime{$distname}}) {
-+        foreach my $dep (sort @{$deps_runtime{$distname}}) {
-             my $brdep = brname( fsname( $dep ) );
-             say {$fh} qq{\tselect BR2_PACKAGE_${brdep}};
-         }
-@@ -596,10 +596,10 @@ while (my ($distname, $dist) = each %dist) {
-         # the scheme is not used, because the job is done by the BR download infrastructure
-         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
-         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
--        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } @{$deps_build{$distname}} ),
--                                      map( { fsname( $_ ); } @{$deps_runtime{$distname}} );
--        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } @{$deps_build{$distname}},
--                                                                            @{$deps_runtime{$distname}};
-+        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
-+                                      map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
-+        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
-+                                                                                  @{$deps_runtime{$distname}} );
-         my $license = ref $dist->{license} eq 'ARRAY'
-                     ? join q{ or }, @{$dist->{license}}
-                     : $dist->{license};
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index dc443f9..463eaa8 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 1.99.6
++INADYN_VERSION = 1.99.7
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
