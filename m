@@ -1,25 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 20 May 2014 12:11:51 +0000 (UTC)
-Subject: [Buildroot] [Bug 6878] dmraid: disabled on ARC
-In-Reply-To: <bug-6878-163@https.bugs.busybox.net/>
-References: <bug-6878-163@https.bugs.busybox.net/>
-Message-ID: <20140520121151.332DA9CB24@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 May 2014 14:12:23 +0200
+Subject: [Buildroot] Status of your patches
+In-Reply-To: <20140517111009.42385b15@free-electrons.com>
+References: <20140517111009.42385b15@free-electrons.com>
+Message-ID: <20140520141223.0e8a94f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6878
+Spenser, Waldemar,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+Any input on the below questions?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |abrodkin at synopsys.com
-                   |.org                        |
+Thanks,
+
+Thomas
+
+On Sat, 17 May 2014 11:10:09 +0200, Thomas Petazzoni wrote:
+> Hello Spenser,
+> 
+> I'd like to get some update about the status of some of your patches in
+> patchwork, especially:
+> 
+>   http://patchwork.ozlabs.org/patch/314517/ [v2] gcc: coexist upstream with vendor git releases for mb and arc
+>   http://patchwork.ozlabs.org/patch/314518/ [v2] gdb: use git version for cross-gdb
+>   http://patchwork.ozlabs.org/patch/314512/ [v2] binutils: coexist upstream and vendor binutils for arc and microblaze
+>   http://patchwork.ozlabs.org/patch/314513/ [v2] libsigsegv: fix for microblaze
+>   http://patchwork.ozlabs.org/patch/314515/ [v2] glibc: change to tagged release
+>   http://patchwork.ozlabs.org/patch/314511/ [v2] binutils: change to tagged release
+>   http://patchwork.ozlabs.org/patch/314521/ [v2] gcc: change to tagged release
+>   http://patchwork.ozlabs.org/patch/314514/ [v2] gdb: change to tagged release
+> 
+> Most of these patches are related to the versions of Microblaze
+> toolchain components. But more recently, Waldemar has posted a patch
+> series to also update the Microblaze toolchain components, and his
+> series was merged.
+> 
+> Therefore, I'm wondering which parts of your series are still
+> necessary. Maybe Waldemar can also have a look and give us a status?
+> 
+> Thanks!
+> 
+> Thomas
+
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
