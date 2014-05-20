@@ -1,48 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 May 2014 17:48:09 +0200
-Subject: [Buildroot] [PATCH] pciutils: disallow on Blackfin
-Message-ID: <1400600889-3386-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 20 May 2014 15:50:38 +0000 (UTC)
+Subject: [Buildroot] [Bug 7094] pciutils doesn't build on Blackfin
+In-Reply-To: <bug-7094-163@https.bugs.busybox.net/>
+References: <bug-7094-163@https.bugs.busybox.net/>
+Message-ID: <20140520155038.0F81D9CCC9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even though some Blackfin processors have PCI interfaces, the PCI
-support is not supported by the Linux kernel: it has been marked as
-broken since 2008. This means there's probably little interest for PCI
-on Blackfin, and consequently little interest about getting pciutils
-to build.
+https://bugs.busybox.net/show_bug.cgi?id=7094
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/iprutils/Config.in | 1 +
- package/pciutils/Config.in | 2 ++
- 2 files changed, 3 insertions(+)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
-index a7e3cb3..1bc58e8 100644
---- a/package/iprutils/Config.in
-+++ b/package/iprutils/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_IPRUTILS
- 	select BR2_PACKAGE_NCURSES_TARGET_MENU
- 	select BR2_PACKAGE_LIBSYSFS
- 	select BR2_PACKAGE_PCIUTILS
-+	depends on !BR2_bfin # pciutils
- 	help
- 	  System utilities for IBM Power RAID devices
- 
-diff --git a/package/pciutils/Config.in b/package/pciutils/Config.in
-index a082f23..d46df6c 100644
---- a/package/pciutils/Config.in
-+++ b/package/pciutils/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PCIUTILS
- 	bool "pciutils"
-+	# PCI not supported on Blackfin
-+	depends on !BR2_bfin
- 	help
- 	  Various utilities dealing with the PCI bus.
- 	  Provides things like setpci and lspci.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WONTFIX
+
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-05-20 15:50:37 UTC ---
+In fact, since PCI is not used on Blackfin (marked as broken since 2008 in the
+kernel), there's probably little reason to worry about getting pciutils to
+build.
+
+Marking this bug as WONTFIX. I've submitted a patch at
+http://patchwork.ozlabs.org/patch/350772/ to disable pciutils on Blackfin.
+
 -- 
-1.9.3
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
