@@ -1,38 +1,102 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:15 +0200
-Subject: [Buildroot] [PATCH v9 16/29] xbmc - prepare for 13.x-Gotham: Add
-	host-nasm dependency
+Date: Tue, 20 May 2014 22:41:11 +0200
+Subject: [Buildroot] [PATCH v9 12/29] libglew: new package
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-checking for nasm... no
-configure: error: Could not find a required program. Please see the README for your platform.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    3 +++
- 1 file changed, 3 insertions(+)
+ package/Config.in          |    1 +
+ package/libglew/Config.in  |   19 +++++++++++++++++++
+ package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew.mk
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index d8b9508..3522802 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -18,6 +18,9 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
- 
-+# xbmc at i386 depends on nasm
-+XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
+diff --git a/package/Config.in b/package/Config.in
+index 49738b0..7f0edbb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
++source "package/libglew/Config.in"
+ source "package/libglu/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+new file mode 100644
+index 0000000..67c49d4
+--- /dev/null
++++ b/package/libglew/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBGLEW
++	bool "libglew"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XLIB_LIBXMU
++	help
++	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
++	  extension loading library. GLEW provides efficient run-time mechanisms
++	  for determining which OpenGL extensions are supported on the target
++	  platform. OpenGL core and extension functionality is exposed in a
++	  single header file.
 +
- XBMC_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
++	  http://glew.sourceforge.net
++
++comment "libglew depends on X.org and needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+new file mode 100644
+index 0000000..48ecf97
+--- /dev/null
++++ b/package/libglew/libglew.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# libglew
++#
++################################################################################
++
++LIBGLEW_VERSION = 1.10.0
++LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
++LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_LICENSE = MIT
++LIBGLEW_LICENSE_FILES = LICENSE.txt
++LIBGLEW_INSTALL_STAGING = YES
++LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
++
++# using $TARGET_CONFIGURE_OPTS breaks compilation
++define LIBGLEW_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
++		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
++		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
++		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++endef
++
++define LIBGLEW_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++define LIBGLEW_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
