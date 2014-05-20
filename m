@@ -1,44 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 May 2014 23:51:25 +0200
-Subject: [Buildroot] [git commit] ipsec-tools: needs MMU support
-Message-ID: <20140520215352.A3D9E9CCC1@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 20 May 2014 23:54:02 +0200
+Subject: [Buildroot] [PATCH] build/sstrip: deprecate for 2014.05
+Message-ID: <1400622842-30173-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1698bbe49ffc2874afcdd855a97ac6468bd2814b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-ipsec-tools currently fails to build for Blackfin due to GLOB_TILDE
-not being supported in Blackfin external toolchains. However, after
-fixing this problem (which will be fixed in later versions of the
-Blackfin external toolchains) allows to discover that ipsec-tools uses
-fork() anyway.
+Quoting Thomas on IRC:
+  > sstrip is a piece of crap that we should exterminate
+  > from the surface of the planet
 
-Therefore, this patch simply marks ipsec-tools as not available on
-non-MMU systems.
+sstrip is now unmaintained, has a long history of generating butchered
+binaries in some cases, and does not gain that much space in the end.
 
-Consequently, it fixes:
+We'd like to obliviate sstrip from the strip options, anihilate the
+sstrip package, scorch any reference in fire, and cleanse our tree
+free of any remnants...
 
-  http://autobuild.buildroot.org/results/fc4/fc4ef4101a20e64eb52da56557d6996dd73b3d86/
+But first, let's just deprecate it for now.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+
 ---
- package/ipsec-tools/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+/me postpones getting his flamethrower out of the closet for one
+more year... ;-)
+---
+ Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ipsec-tools/Config.in b/package/ipsec-tools/Config.in
-index 57fa5d4..a0d7600 100644
---- a/package/ipsec-tools/Config.in
-+++ b/package/ipsec-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_IPSEC_TOOLS
- 	bool "ipsec-tools"
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_FLEX
-+	depends on BR2_USE_MMU # fork()
+diff --git a/Config.in b/Config.in
+index 79a455d..d402c93 100644
+--- a/Config.in
++++ b/Config.in
+@@ -356,6 +356,7 @@ config BR2_STRIP_sstrip
+ 	bool "sstrip"
+ 	select BR2_PACKAGE_SSTRIP_HOST
+ 	depends on !BR2_PACKAGE_HOST_ELF2FLT
++	depends on BR2_DEPRECATED_SINCE_2014_05
  	help
- 	  This package is required to support IPSec for Linux 2.6+
- 
+ 	  Binaries and libraries in the target filesystem will be
+ 	  stripped using the 'sstrip' command, which strips a little
+-- 
+1.8.3.2
