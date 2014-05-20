@@ -1,25 +1,41 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 20 May 2014 22:50:44 +0200
-Subject: [Buildroot] [PATCH v9 27/29] xbmc: Add X.org/OpenGL support
-References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
- <1400618488-6995-28-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <4qrs4bx8ub.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 20 May 2014 23:01:03 +0200
+Subject: [Buildroot] [PATCH 1/1] matchbox-keyboard: Fix dependencies
+In-Reply-To: <20140520224331.74d22bcd@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 20 May 2014 22:43:31 +0200")
+References: <1400601515-29764-1-git-send-email-bernd.kuhls@t-online.de>
+ <87sio4gpso.fsf@dell.be.48ers.dk>
+ <20140520224331.74d22bcd@free-electrons.com>
+Message-ID: <87fvk4go6o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
-news:1400618488-6995-28-git-send-email-bernd.kuhls at t-online.de: 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> - rsxs gets enabled when OpenGL is available,
->   therefore the compile fix, courtesy of
->   https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacente
->   r/xbmc/package.mk#L109 is part of this patch
+ > Dear Peter Korsgaard,
+ > On Tue, 20 May 2014 22:26:15 +0200, Peter Korsgaard wrote:
 
-Hi,
+ >> > -################################################################################
+ >> > -
+ >> > -ifeq ($(BR2_PACKAGE_PANGO),y)
+ >> > -  MATCHBOX_PKEYBOARD_CONF_OPT += --enable-pango
+ >> > -else
+ >> > -  MATCHBOX_KEYBOARD_DEPENDENCIES += xlib_libXft
+ >> > -endif
+ >> 
+ >> No?
+ >> 
+ >> ./configure --help|grep cairo
+ >> --enable-cairo    enable experimental Cairo support default=no
 
-I forgot the mention the rsxs patch in the cover letter.
+ > Hum cairo != pango ?
 
-Regards, Bernd
+Ehh, true. I guess I need to go to bed.
+
+With that said, I think the fix is simply to s/pango/cairo/.
+
+-- 
+Bye, Peter Korsgaard
