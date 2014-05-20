@@ -1,22 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 May 2014 22:50:21 +0200
-Subject: [Buildroot] [PATCH] ruby: fix build with recent openssl versions
-In-Reply-To: <1400594769-31393-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 20 May 2014 17:06:09 +0300")
-References: <1400594769-31393-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <87k39ggooi.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Tue, 20 May 2014 22:50:44 +0200
+Subject: [Buildroot] [PATCH v9 27/29] xbmc: Add X.org/OpenGL support
+References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
+ <1400618488-6995-28-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <4qrs4bx8ub.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote in
+news:1400618488-6995-28-git-send-email-bernd.kuhls at t-online.de: 
 
- > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+> - rsxs gets enabled when OpenGL is available,
+>   therefore the compile fix, courtesy of
+>   https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacente
+>   r/xbmc/package.mk#L109 is part of this patch
 
-What exact problem is it fixing? I just tried building ruby+openssl
-without problems.
+Hi,
 
--- 
-Bye, Peter Korsgaard
+I forgot the mention the rsxs patch in the cover letter.
+
+Regards, Bernd
