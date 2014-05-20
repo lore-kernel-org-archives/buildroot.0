@@ -1,60 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:21 +0200
-Subject: [Buildroot] [PATCH v9 22/29] xbmc: hdmi cec supports needs udev for
-	device scanning
+Date: Tue, 20 May 2014 22:41:25 +0200
+Subject: [Buildroot] [PATCH v9 26/29] xbmc: Fix TexturePacker compile
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-27-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcec support in xbmc compiles without udev being linked to libcec,
-but it is useless because xbmc uses libcec?s udev support for scanning
-connected CEC devices since:
-https://github.com/xbmc/xbmc/commit/59171c7a030f8a9c913abbce931967a6a8ff6897
+Patch description:
+
+use_texturepacker_native=yes
+
+is needed because we obviously need a native-compiled binary, but the xbmc
+build system does enable this variable only for darwin, android and
+raspberry-pi targets.
+
+USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+
+is also needed because
+USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
+is only executed for raspberry-pi by xbmc/configure and only
+USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
+
+To sum up, building for raspberry-pi and other archs works out-of-the-box,
+compiling for an Intel target, for example, fails:
+
+In file included from SDL_anigif.cpp:23:0:
+SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
+compilation terminated.
+XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    5 +++--
- package/xbmc/xbmc.mk   |    2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/xbmc/xbmc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 0f45f5c..0c449b8 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -98,13 +98,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
-+	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want XBMC to support HDMI CEC.
- 
--comment "hdmi cec support needs a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	bool "web server"
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 35764a0..d73815f 100644
+index 9035942..cbc51f4 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -134,7 +134,7 @@ XBMC_CONF_OPT += --disable-avahi
- endif
+@@ -36,6 +36,8 @@ XBMC_CONF_ENV = \
+ 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	PYTHON_NOVERSIONCHECK="no-check" \
++	use_texturepacker_native=yes \
++	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
- ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
--XBMC_DEPENDENCIES += libcec
-+XBMC_DEPENDENCIES += libcec udev
- XBMC_CONF_OPT += --enable-libcec
- else
- XBMC_CONF_OPT += --disable-libcec
+ XBMC_CONF_OPT +=  \
 -- 
 1.7.10.4
