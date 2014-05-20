@@ -1,52 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 May 2014 22:20:35 +0200
-Subject: [Buildroot] [git commit] pciutils: disallow on Blackfin
-Message-ID: <20140520202721.5032D9CBFD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 May 2014 22:30:14 +0200
+Subject: [Buildroot] [PATCH] nodejs: fix build when python3 is selected in
+	Buildroot
+Message-ID: <1400617814-21757-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffacbf7ec2e1011456f0994a7527491392d4d45a
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When Python 3 is selected in Buildroot, the host/usr/bin/python
+symlink of the host Python interpreter points to python3. Packages
+that need to use the host Python 2 interpreter have to use python2.
 
-Even though some Blackfin processors have PCI interfaces, the PCI
-support is not supported by the Linux kernel: it has been marked as
-broken since 2008. This means there's probably little interest for PCI
-on Blackfin, and consequently little interest about getting pciutils
-to build.
+In commit 40218a16526946f35dab0d05f379f71a01f29530 ("nodejs: force
+python interpreter"), Samuel made some changes to the nodejs package
+to use python2. One part of the changes is to sed a .gyp file to
+replace the string 'python' by the path to python2. However, this
+operation is done *after* calling the configure script, so it has in
+fact no effect. Putting this sed before calling the configure script
+fixes the problem.
 
-Fixes http://autobuild.buildroot.net/results/a27/a27ce61967ef8f780887f7681c8b0edd91656be6/
+However, there is a better solution: the nodejs build system has a
+mechanism of variables, and it already defines a python variable
+according to the environment variable PYTHON being passed. So this
+patch instead adds a new patch to nodejs to use this python variable.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/aff/affd7300895ec400de50a33d51b4e94e15d63341/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iprutils/Config.in |    1 +
- package/pciutils/Config.in |    2 ++
- 2 files changed, 3 insertions(+), 0 deletions(-)
+ .../nodejs/nodejs-0003-use-python-variable.patch   | 43 ++++++++++++++++++++++
+ package/nodejs/nodejs.mk                           |  2 -
+ 2 files changed, 43 insertions(+), 2 deletions(-)
+ create mode 100644 package/nodejs/nodejs-0003-use-python-variable.patch
 
-diff --git a/package/iprutils/Config.in b/package/iprutils/Config.in
-index a7e3cb3..1bc58e8 100644
---- a/package/iprutils/Config.in
-+++ b/package/iprutils/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_IPRUTILS
- 	select BR2_PACKAGE_NCURSES_TARGET_MENU
- 	select BR2_PACKAGE_LIBSYSFS
- 	select BR2_PACKAGE_PCIUTILS
-+	depends on !BR2_bfin # pciutils
- 	help
- 	  System utilities for IBM Power RAID devices
+diff --git a/package/nodejs/nodejs-0003-use-python-variable.patch b/package/nodejs/nodejs-0003-use-python-variable.patch
+new file mode 100644
+index 0000000..f231f4c
+--- /dev/null
++++ b/package/nodejs/nodejs-0003-use-python-variable.patch
+@@ -0,0 +1,43 @@
++Use a python variable instead of hardcoding Python
++
++The nodejs build system uses python in a number of locations. However,
++there are some locations where it hardcodes 'python' as the Python
++interpreter. However, this causes problems when we need to use python2
++instead of just python.
++
++This patch fixes that by using the python variable already in place in
++the nodejs build system.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/deps/v8/tools/gyp/v8.gyp
++===================================================================
++--- a/deps/v8/tools/gyp/v8.gyp
+++++ b/deps/v8/tools/gyp/v8.gyp
++@@ -792,7 +792,7 @@
++                 '<(SHARED_INTERMEDIATE_DIR)/libraries.cc',
++               ],
++               'action': [
++-                'python',
+++                '<(python)',
++                 '../../tools/js2c.py',
++                 '<@(_outputs)',
++                 'CORE',
++@@ -810,7 +810,7 @@
++                 '<(SHARED_INTERMEDIATE_DIR)/experimental-libraries.cc',
++               ],
++               'action': [
++-                'python',
+++                '<(python)',
++                 '../../tools/js2c.py',
++                 '<@(_outputs)',
++                 'EXPERIMENTAL',
++@@ -840,7 +840,7 @@
++                   '<(SHARED_INTERMEDIATE_DIR)/debug-support.cc',
++                 ],
++                 'action': [
++-                  'python',
+++                  '<(python)',
++                   '../../tools/gen-postmortem-metadata.py',
++                   '<@(_outputs)',
++                   '<@(heapobject_files)'
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index b5973b5..7415bdf 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -35,8 +35,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--without-dtrace \
+ 		--without-etw \
+ 	)
+-	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
+-		$(@D)/deps/v8/tools/gyp/v8.gyp
+ endef
  
-diff --git a/package/pciutils/Config.in b/package/pciutils/Config.in
-index a082f23..d46df6c 100644
---- a/package/pciutils/Config.in
-+++ b/package/pciutils/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PCIUTILS
- 	bool "pciutils"
-+	# PCI not supported on Blackfin
-+	depends on !BR2_bfin
- 	help
- 	  Various utilities dealing with the PCI bus.
- 	  Provides things like setpci and lspci.
+ define HOST_NODEJS_BUILD_CMDS
+-- 
+1.9.3
