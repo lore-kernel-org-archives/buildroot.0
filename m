@@ -1,38 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 20 May 2014 22:41:19 +0200
-Subject: [Buildroot] [PATCH v9 20/29] xbmc-pvr-addons: Version bump to xbmc
-	Gotham-compatible addon
+Date: Tue, 20 May 2014 22:41:23 +0200
+Subject: [Buildroot] [PATCH v9 24/29] xbmc: Add alsa support
 In-Reply-To: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1400618488-6995-21-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1400618488-6995-25-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/xbmc/xbmc.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-index b6d061b..97628e2 100644
---- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index d73815f..5f23c13 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -40,7 +40,6 @@ XBMC_CONF_ENV = \
  
--# This cset is on the branch 'frodo'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
-+# This cset in on master. When a Gotham branch is made, we should
-+# follow it, as incompatible changes in the plugins API can happen
-+# on the master branch.
-+XBMC_PVR_ADDONS_VERSION = f38b2ebdc6f96244d5e4bc584315f4a2c24bc787
- XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
- XBMC_PVR_ADDONS_LICENSE = GPLv3+
- XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+ XBMC_CONF_OPT +=  \
+ 	--with-arch=$(BR2_ARCH) \
+-	--disable-alsa \
+ 	--disable-crystalhd \
+ 	--disable-debug \
+ 	--disable-dvdcss \
+@@ -73,6 +72,13 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
++XBMC_DEPENDENCIES += alsa-lib
++XBMC_CONF_OPT += --enable-alsa
++else
++XBMC_CONF_OPT += --disable-alsa
++endif
++
+ XBMC_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
+ 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
 -- 
 1.7.10.4
