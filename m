@@ -1,67 +1,206 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 20 May 2014 09:25:13 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-19
-In-Reply-To: <20140520063007.ACE63100F8E@stock.ovh.net>
-References: <20140520063007.ACE63100F8E@stock.ovh.net>
-Message-ID: <20140520092513.0ad98a62@free-electrons.com>
+From: Arnaud Aujon <arnaud@intelibre.fr>
+Date: Tue, 20 May 2014 09:37:54 +0200
+Subject: [Buildroot] [PATCH v10] espeak: new package
+In-Reply-To: <CA+kK6WutgUs2hvvZUnxAQuLZSk9_05T_xqHk7HHxe43MNgrXcQ@mail.gmail.com>
+References: <1398867713-3604-1-git-send-email-arnaud@intelibre.fr>
+ <CA+kK6WutgUs2hvvZUnxAQuLZSk9_05T_xqHk7HHxe43MNgrXcQ@mail.gmail.com>
+Message-ID: <537B0652.4040707@intelibre.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Marcelo,
 
-On Tue, 20 May 2014 08:30:07 +0200 (CEST), Thomas Petazzoni wrote:
+Thanks for testing the package !
+I think it's ready to be included now.
 
->     x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/3ecb780be9e7912dac9670d9e7ad9a810c6243af/
+It would be great to include Mbrola voice pack, but I don't have much 
+time to do it and they use a specific licence that we need to carefull with.
 
-Multiple definitions of vfork in libc.a and libpthread.a. To me, this
-looks like a uClibc bug. Do other agree about this? Should we mark
-alsa-lib as not available on pure static builds with uClibc? Is there a
-uClibc patch that fixes that?
+Regards,
 
->       i686 |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/725962e174198f0b26b7cbd335691d9a23be73f5/
+Arnaud
 
-A build error in Busybox? Really weird:
-
-libbb/appletlib.c:164:13: error: ???NUM_APPLETS??? undeclared (first use in this function)
-libbb/appletlib.c:164:13: note: each undeclared identifier is reported only once for each function it appears in
-libbb/appletlib.c: In function ???install_links???:
-libbb/appletlib.c:595:18: error: invalid application of ???sizeof??? to incomplete type ???int (* const[])(int,  char **)???
-
-Peter, any idea?
-
->     mipsel |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/cde0a6eda1db441cd16ef933fa27cd37411b837e/
-
-The infamous static linking problem with libstdc++.so.
-
->       bfin |                  host-gdb-6.6a | NOK | http://autobuild.buildroot.net/results/b47f85553336b7f63ee4ecdf8598374ce4a225a3/
-
-Fixed by http://git.buildroot.net/buildroot/commit/?id=dfc3cc23af3ceb715f322dcb63d82d9d9abfe3ac.
-
->        arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/5cde56a0bf8dfac22d01752a98d399f71f664e07/
-
-The usual gcc issue. Last night, I've restarted the build of the
-Buildroot external toolchains used in the autobuilders with Buildroot
-2014.05-rc1. When I'll deploy them, it should hopefully fix the issue
-since we now have the gcc patch that fixes this problem.
-
->        arm |          matchbox-keyboard-0.1 | NOK | http://autobuild.buildroot.net/results/47380d57e507ec395a1132dfd7b32d35459c1c7a/
-
-checking for FAKEKEY... yes
-checking for XFT... configure: error: *** Required xft Librarys not found ***
-make: *** [/scratch/peko/build/matchbox-keyboard-0.1/.stamp_configured] Error 1
-
->      avr32 |                   samba-3.6.23 | NOK | http://autobuild.buildroot.net/results/0142b1d5b8c3f20f1bff76ece646d901407f7490/
-
-Could be fixed by applying http://patchwork.ozlabs.org/patch/350543/.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On 19/05/2014 23:13, Marcelo Gutierrez wrote:
+> Hi all,
+>
+> I've tested this patch on BeagleBone Black and works like a charm.
+>
+> Good Job Arnaud!!!.
+>
+> Regards,
+> Marcelo
+>
+> 2014-04-30 11:21 GMT-03:00 <arnaud@intelibre.fr>:
+>> Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+> Tested-by: Marcelo Gutierrez <kuyurix@gmail.com>
+>> ---
+>> Changes v9 -> v10:
+>>          - update Signed-off mail address
+>> Changes v8 -> v9:
+>>          - use VERSION_MAJOR
+>> Changes v7 -> v8:
+>>          - convert package name to lowercase
+>>          - fix comments following new policy
+>> Changes v6 -> v7:
+>>          - remove comment fromm v5 again
+>> Changes v5 -> v6:
+>>          - fix indent
+>>          - rename patch
+>>          - fix licence to GPLv3+
+>> Changes v4 -> v5:
+>>          - remove useless comment line
+>> Changes v3 -> v4:
+>>          - remove extre new lines
+>>          - remove useless help
+>>          - remove -source from ESPEAK_VERSION
+>>          - update extract command to remove -source
+>> ---
+>>   package/Config.in                                  |  1 +
+>>   package/espeak/Config.in                           | 41 ++++++++++++++++++++
+>>   .../espeak-01-do-not-compil-when-install.patch     | 15 ++++++++
+>>   package/espeak/espeak.mk                           | 44 ++++++++++++++++++++++
+>>   4 files changed, 101 insertions(+)
+>>   create mode 100644 package/espeak/Config.in
+>>   create mode 100644 package/espeak/espeak-01-do-not-compil-when-install.patch
+>>   create mode 100644 package/espeak/espeak.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 07fd166..9e13711 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -6,6 +6,7 @@ menu "Audio and video applications"
+>>   source "package/alsa-utils/Config.in"
+>>   source "package/aumix/Config.in"
+>>   source "package/bellagio/Config.in"
+>> +source "package/espeak/Config.in"
+>>   source "package/faad2/Config.in"
+>>   source "package/ffmpeg/Config.in"
+>>   source "package/flac/Config.in"
+>> diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+>> new file mode 100644
+>> index 0000000..0284c5c
+>> --- /dev/null
+>> +++ b/package/espeak/Config.in
+>> @@ -0,0 +1,41 @@
+>> +comment "espeak needs a toolchain w/ C++, wchar"
+>> +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR)
+>> +
+>> +config BR2_PACKAGE_ESPEAK
+>> +       bool "espeak"
+>> +       depends on BR2_INSTALL_LIBSTDCPP
+>> +       depends on BR2_USE_WCHAR
+>> +       help
+>> +         espeak is a speech synthesizer software for English and other languages.
+>> +
+>> +         http://espeak.sourceforge.net/
+>> +
+>> +if BR2_PACKAGE_ESPEAK
+>> +choice
+>> +prompt "choose audio backend"
+>> +default BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
+>> +
+>> +config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
+>> +       bool "No sound backend, only produce wav files"
+>> +
+>> +comment "alsa backend needs a toolchain w/ threads"
+>> +depends on !BR2_TOOLCHAIN_HAS_THREADS
+>> +
+>> +config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+>> +       bool "alsa via portaudio"
+>> +       select BR2_PACKAGE_PORTAUDIO
+>> +       select BR2_PACKAGE_PORTAUDIO_CXX
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS # portaudio
+>> +
+>> +comment "pulseaudio backend needs a toolchain w/ wchar, largefile, threads"
+>> +depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR && BR2_LARGEFILE)
+>> +
+>> +config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
+>> +       bool "pulseaudio"
+>> +       select BR2_PACKAGE_PULSEAUDIO
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
+>> +       depends on BR2_USE_WCHAR # pulseaudio
+>> +       depends on BR2_LARGEFILE # pulseaudio
+>> +
+>> +endchoice
+>> +endif # BR2_PACKAGE_ESPEAK
+>> diff --git a/package/espeak/espeak-01-do-not-compil-when-install.patch b/package/espeak/espeak-01-do-not-compil-when-install.patch
+>> new file mode 100644
+>> index 0000000..983cd1c
+>> --- /dev/null
+>> +++ b/package/espeak/espeak-01-do-not-compil-when-install.patch
+>> @@ -0,0 +1,15 @@
+>> +Makefile: do not execute the rule "all" when executing "install"
+>> +
+>> +signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+>> +===================================================================
+>> +--- espeak-1.47.11-source.orig/src/Makefile
+>> ++++ espeak-1.47.11-source/src/Makefile
+>> +@@ -131,7 +131,7 @@
+>> +       rm -f $(BIN2_NAME)
+>> +       rm -f $(LIB_NAME)*
+>> +
+>> +-install: all
+>> ++install:
+>> +       # Create directories
+>> +       rm -rf $(DESTDIR)$(DATADIR)
+>> +       $(MKDIR) $(DESTDIR)$(BINDIR)
+>> diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
+>> new file mode 100644
+>> index 0000000..c2c346e
+>> --- /dev/null
+>> +++ b/package/espeak/espeak.mk
+>> @@ -0,0 +1,44 @@
+>> +###############################################################################
+>> +#
+>> +# espeak
+>> +#
+>> +###############################################################################
+>> +
+>> +ESPEAK_VERSION_MAJOR = 1.47
+>> +ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).11
+>> +ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
+>> +ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/espeak-$(ESPEAK_VERSION_MAJOR)
+>> +ESPEAK_LICENSE = GPLv3+
+>> +ESPEAK_LICENSE_FILES = Licence.txt
+>> +
+>> +ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA),y)
+>> +ESPEAK_AUDIO_BACKEND = portaudio
+>> +ESPEAK_DEPENDENCIES = portaudio
+>> +endif
+>> +ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO),y)
+>> +ESPEAK_AUDIO_BACKEND = pulseaudio
+>> +ESPEAK_DEPENDENCIES = pulseaudio
+>> +endif
+>> +
+>> +define ESPEAK_EXTRACT_CMDS
+>> +       unzip -d $(@D) $(DL_DIR)/$(ESPEAK_SOURCE)
+>> +       mv $(@D)/espeak-$(ESPEAK_VERSION)-source/* $(@D)
+>> +       $(RM) -r $(@D)/espeak-$(ESPEAK_VERSION)-source
+>> +endef
+>> +
+>> +define ESPEAK_CONFIGURE_CMDS
+>> +       # Buildroot provides portaudio V19, see ReadMe file for more details.
+>> +       cp $(@D)/src/portaudio19.h $(@D)/src/portaudio.h
+>> +endef
+>> +
+>> +define ESPEAK_BUILD_CMDS
+>> +       $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+>> +               AUDIO="$(ESPEAK_AUDIO_BACKEND)" \
+>> +               -C $(@D)/src all
+>> +endef
+>> +
+>> +define ESPEAK_INSTALL_TARGET_CMDS
+>> +       $(MAKE) install DESTDIR="$(TARGET_DIR)" -C $(@D)/src
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> --
+>> 1.9.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
