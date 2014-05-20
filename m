@@ -1,146 +1,143 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 May 2014 01:16:15 +0200
-Subject: [Buildroot] [PATCH v8 21/28] xbmc: Add X.org/OpenGL support
-In-Reply-To: <20140520164924.GA3506@free.fr>
-References: <1400342276-10303-1-git-send-email-bernd.kuhls@t-online.de>
- <1400342276-10303-22-git-send-email-bernd.kuhls@t-online.de>
- <20140517205500.GL3459@free.fr>
- <0sjm4bxrs4.ln2@ID-313208.user.individual.net>
- <20140518162900.GA3631@free.fr>
- <le5n4bxjvb.ln2@ID-313208.user.individual.net>
- <20140518172928.GD3631@free.fr> <537B83C6.6080403@mind.be>
- <20140520164924.GA3506@free.fr>
-Message-ID: <537BE23F.602@mind.be>
+From: Steve Thomas <scjthm@live.com>
+Date: Tue, 20 May 2014 23:21:20 +0000
+Subject: [Buildroot] [PATCH 1/1] Add support for ld.gold in toolchain.
+Message-ID: <BLU436-SMTP2194D0C95F4AFEB38829312A83D0@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/05/14 18:49, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2014-05-20 18:33 +0200, Arnout Vandecappelle spake thusly:
->> On 18/05/14 19:29, Yann E. MORIN wrote:
->>> Bernd, All,
->>>
->>> On 2014-05-18 18:58 +0200, Bernd Kuhls spake thusly:
->>>> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
->>>> news:20140518162900.GA3631 at free.fr: 
->>>>
->>>>> Something like:
->>>> [...]
->>>>> should do the trick.
->>>>
->>>> Hi,
->>>>
->>>> for further comments I posted my current patch here:
->>>> http://pastebin.com/zv7jueLB (expires in one week).
->>>>
->>>> Especially the last "depends on" block looks crude, but seems to work.
->>>
->>> Yep, it looks too dense. I think we can factor it into:
->>>
->>>     depends on BR2_arm || BR2_i386 || BR2_x86_64
->>>     depends on HAS_LIBEGL && HAS_LIBGLES \
->>>             || (BR2_i386 || BR2_x86_64) && HAS_LIBGL
->>
->>  I don't agree with you Yann that the () should be left out here. Not many
->> people know enough about the Kconfig logic to be able to be sure about the
->> precedence here.
-> 
-> Well, the precedence of the || and && operators is always the same in
-> virtually all languages: C, shell, java, you-name-it. kconfig does just
-> abide by the usual standards, here, and it's clearly stated in the
-> kconfig grammar.
+The ld.gold linker has been around for about six years, and is quite
+well supported. It also used to be the only linker for gcc that
+supported the plugin option needed for LTO.
 
- In shell, || and && have equal precedence. So I disagree here.
+This patch enables a system to be build with the gold linker which is
+very well supported on recent builds.
 
-> 
-> Furthermore, leaving the () would falsely imply that || would have
-> precedence over &&, which is not the case.
-> 
->>> So, it first ensures that it is only visible for ARM or x86 (the only
->>> archs we currently support SBMC on.)
->>>
->>> Then, it is available only for EGL+GLES or x86+GL, since EGL+GLES is
->>> posible on ARM and x86 alike, but full GL is only possible on x86.
->>
->>  I think there's something more fundamentally inappropriate about the approach
->> taken here. I think the way out could be to add auxiliary symbols to identify
->> which provider is used. Something like:
->>
->> config BR2_PACKAGE_XBMC_EGL_GLES
->> 	bool
->> 	default y
->> 	depends on BR2_PACKAGE_HAS_LIBEGL
->> 	depends on BR2_PACKAGE_HAS_LIBGLES
->> 	depends on !BR2_PACKAGE_XBMC_GL # prefer GL if available
->>
->> config BR2_PACKAGE_XBMC_GL
->> 	bool
-> 
-> Missing 'default y' here too, I guess. ;-)
-> 
->> 	depends on BR2_PACKAGE_XORG7
->> 	depends on BR2_PACKAGE_HAS_LIBGL
-> 
-> And as Bernd said, full openGL support in XBMC is not possible on ARM,
-> so it is missing a dependency on !BR2_arm. But the basis are here,
-> granted.
+Signed-off-by: Steve Thomas <scjthm@live.com>
+---
+ package/binutils/Config.in.host         | 4 ++++
+ package/binutils/binutils.mk            | 7 +++++++
+ package/gcc/Config.in.host              | 6 ++++++
+ package/gcc/gcc.mk                      | 7 +++++++
+ toolchain/toolchain-buildroot/Config.in | 9 +++++++++
+ 5 files changed, 33 insertions(+)
 
- Agreed if there is a specific ARM dependency in XBMC itself. I don't agree if
-this is just because only mesa3d on x86 implements libgl.
-
->> comment "xbmc requires an OpenGL-capable backend"
-> 
-> I think we want to differentiate the full-openGL vs. openGL EGL/GLES
-> cases, here, since ARM can only work with EGL/GLES, while x86 can use
-> either. So we'd need a comment for ARM (or any arch that requires
-> GL/GLES), and another comment for x86 (or any arch that supports both.)
-
- Other packages use "requires an OpenGL-capable backend" even if they need
-EGL/GLES. But admittedly these others are all qt5.
-
-> 
->> 	depends on BR2_USE_MMU
->> 	depends on BR2_arm || BR2_i386 || BR2_x86_64
->> 	depends on !BR2_PACKAGE_XBMC_EGL_GLES
->> 	depends on !BR2_PACKAGE_XBMC_GL
->>
->> config BR2_PACKAGE_XBMC
->> 	...
->> 	depends on BR2_PACKAGE_XBMC_EGL_GLES || BR2_PACKAGE_XBMC_GL
-> 
-> Yes, this seems more sound, indeed. I tried to come up with something
-> like that, but I failed to properly abstract the situation. Your
-> solution is pretty good, I like it. ;-)
-> 
->>  That also allows you to use these new symbols in the .mk file instead of the
->> _HAS_LIBGL which IMHO is not sufficiently accurate and future-safe.
-> 
-> I disagree. _HAS_LIBGL is just that: we do have a libGL implementation
-> available.
-
- Well, if we get another libgl provider that doesn't require X, then the
-_HAS_LIBGL condition will be incorrect...
-
-
- Regards,
- Arnout
-
-
-> Now, I never managed to grasp all those lib*GL* stuff. What about libGLX?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
-
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 2f86f51..3bc9349 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -1,5 +1,8 @@
+ comment "Binutils Options"
+ 
++config BR2_BINUTILS_SUPPORTS_GOLD
++	bool
++
+ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
+@@ -42,6 +45,7 @@ choice
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
+ 		depends on !BR2_avr32
++		select BR2_BINUTILS_SUPPORTS_GOLD
+ 		bool "binutils 2.24"
+ 
+ endchoice
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index b5a2dc7..2caa045 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -67,6 +67,13 @@ HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
+ 			--with-sysroot=$(STAGING_DIR) \
+ 			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
++# disable ld explicitely and use ld.gold exclusively
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GOLD),y)
++HOST_BINUTILS_CONF_OPT += \
++			--enable-gold \
++			--enable-ld=no
++endif
++
+ # We just want libbfd and libiberty, not the full-blown binutils in staging
+ define BINUTILS_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D)/bfd DESTDIR=$(STAGING_DIR) install
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index ca991da..cf04fd6 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -3,6 +3,9 @@ comment "GCC Options"
+ config BR2_GCC_NEEDS_MPC
+ 	bool
+ 
++config BR2_GCC_SUPPORTS_GOLD
++	bool
++
+ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+@@ -52,6 +55,7 @@ choice
+ 	config BR2_GCC_VERSION_4_8_X
+ 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_GCC_SUPPORTS_GOLD
+ 		bool "gcc 4.8.x"
+ 
+ 	config BR2_GCC_VERSION_4_8_ARC
+@@ -62,6 +66,7 @@ choice
+ 	config BR2_GCC_VERSION_4_9_X
+ 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_GCC_SUPPORTS_GOLD
+ 		bool "gcc 4.9.x"
+ 
+ 	config BR2_GCC_VERSION_4_9_MICROBLAZE
+@@ -72,6 +77,7 @@ choice
+ 	config BR2_GCC_VERSION_SNAP
+ 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
+ 		select BR2_GCC_NEEDS_MPC
++		select BR2_GCC_SUPPORTS_GOLD
+ 		bool "gcc snapshot"
+ endchoice
+ 
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 32219cc..1971187 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -160,6 +160,13 @@ ifneq ($(BR2_arc)$(BR2_GCC_VERSION_SNAP),)
+ HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+ endif
+ 
++# disable ld explicitely and use ld.gold exclusively
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GOLD),y)
++HOST_GCC_COMMON_CONF_OPT += \
++	--enable-gold \
++	--enable-ld=no
++endif
++
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ # only mips*-*-*, arm*-*-* and sparc*-*-* accept --with-float
+ # powerpc seems to be needing it as well
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 42166d2..527ad5b 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -79,6 +79,15 @@ comment "(e)glibc only available with shared lib support"
+ 
+ endchoice
+ 
++config BR2_TOOLCHAIN_BUILDROOT_GOLD
++	bool "Use the GOLD linker"
++	depends on BR2_GCC_SUPPORTS_GOLD
++	depends on BR2_BINUTILS_SUPPORTS_GOLD
++	default n
++	help
++	  This option selects the gold linker exclusively for
++	  the cross-compilation toolchain.
++
+ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	string
+ 	default "uclibc" if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+1.9.3
