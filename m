@@ -1,38 +1,69 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 20 May 2014 00:31:30 +0200
-Subject: [Buildroot] [PATCH 2/2] gdb: switch to 7.x for Blackfin
-In-Reply-To: <1400537239-24812-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 20 May 2014 00:07:19 +0200")
-References: <1400537239-24812-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1400537239-24812-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vbt1ienx.fsf@dell.be.48ers.dk>
+From: oli vogt <oli.vogt.pub01@gmail.com>
+Date: Tue, 20 May 2014 13:52:58 +1200
+Subject: [Buildroot] [PATCH 1/3] python: new module flup
+Message-ID: <1400550780-16669-1-git-send-email-oli.vogt.pub01@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+This module is useful to implement a fastCGI webserver
+Tested with ARM and Python 2.7.6
 
- > For some reason, we were keeping gdb version 6.6a specially for
- > Blackfin. However, it turns out that support for Blackfin was merged
- > in gdb 7.4 (cross-gdb and gdbserver, not native gdb on the
- > target). Therefore, we can simply remove the support for version 6.6a
- > and use 7.5 as the default.
+Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
+---
+ package/Config.in                  |  1 +
+ package/python-flup/Config.in      |  9 +++++++++
+ package/python-flup/python-flup.mk | 12 ++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/python-flup/Config.in
+ create mode 100644 package/python-flup/python-flup.mk
 
- > Both 7.4 and 7.5 were built tested, including cross-gdb and gdbserver.
-
- > The original reason to switch to 7.x is that 6.6a doesn't build for
- > Blackfin FLAT, and while it builds for Blackfin FDPIC, it only builds
- > libiberty.a and does not actually build a cross debugger.
-
- > Fixes:
-
- >   http://autobuild.buildroot.org/results/b47/b47f85553336b7f63ee4ecdf8598374ce4a225a3/
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/package/Config.in b/package/Config.in
+index 3bc8d24..9c61485 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -445,6 +445,7 @@ source "package/python-configobj/Config.in"
+ source "package/python-crc16/Config.in"
+ source "package/python-dialog/Config.in"
+ source "package/python-dpkt/Config.in"
++source "package/python-flup/Config.in"
+ source "package/python-id3/Config.in"
+ source "package/python-ipy/Config.in"
+ source "package/python-json-schema-validator/Config.in"
+diff --git a/package/python-flup/Config.in b/package/python-flup/Config.in
+new file mode 100644
+index 0000000..cc0efa5
+--- /dev/null
++++ b/package/python-flup/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_FLUP
++	bool "python-flup"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  flup provides of a collection of WSGI modules for Python.
++	  It allows a webserver to use scgi-mod and fastcgi-mod
++	  with python.
++
++	  http://www.saddi.com/software/flup/
+diff --git a/package/python-flup/python-flup.mk b/package/python-flup/python-flup.mk
+new file mode 100644
+index 0000000..0525dc9
+--- /dev/null
++++ b/package/python-flup/python-flup.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# python-flup
++#
++################################################################################
++
++PYTHON_FLUP_VERSION = 1.0.3.dev-20110405
++PYTHON_FLUP_SOURCE = flup-$(PYTHON_FLUP_VERSION).tar.gz
++PYTHON_FLUP_SITE = http://pypi.python.org/packages/source/f/flup
++PYTHON_FLUP_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-Bye, Peter Korsgaard
+1.9.1
