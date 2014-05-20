@@ -1,73 +1,43 @@
-From: oli vogt <oli.vogt.pub01@gmail.com>
-Date: Tue, 20 May 2014 13:53:00 +1200
-Subject: [Buildroot] [PATCH 3/3] python: new module cffi
-In-Reply-To: <1400550780-16669-1-git-send-email-oli.vogt.pub01@gmail.com>
-References: <1400550780-16669-1-git-send-email-oli.vogt.pub01@gmail.com>
-Message-ID: <1400550780-16669-3-git-send-email-oli.vogt.pub01@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 20 May 2014 08:30:07 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-19
+Message-ID: <20140520063007.ACE63100F8E@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Foreign Function Interface for Python calling C code.
+Build statistics for 2014-05-19
+===============================
 
-Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
----
- package/Config.in                  |  1 +
- package/python-cffi/Config.in      | 11 +++++++++++
- package/python-cffi/python-cffi.mk | 13 +++++++++++++
- 3 files changed, 25 insertions(+)
- create mode 100644 package/python-cffi/Config.in
- create mode 100644 package/python-cffi/python-cffi.mk
+        success : 79 
+       failures : 7  
+       timeouts : 0  
+          TOTAL : 86 
 
-diff --git a/package/Config.in b/package/Config.in
-index 9c61485..60bdbf2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -441,6 +441,7 @@ source "package/python3/Config.in"
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "external python modules"
- source "package/python-bottle/Config.in"
-+source "package/python-cffi/Config.in"
- source "package/python-configobj/Config.in"
- source "package/python-crc16/Config.in"
- source "package/python-dialog/Config.in"
-diff --git a/package/python-cffi/Config.in b/package/python-cffi/Config.in
-new file mode 100644
-index 0000000..7967e8a
---- /dev/null
-+++ b/package/python-cffi/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_CFFI
-+	bool "python-cffi"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  This is the Foreign Function Interface for Python calling C code.
-+	  The aim of this project is to provide a convenient and
-+	  reliable way of calling C code from Python.
-+
-+	  Not tested with Python-3
-+
-+	  https://pypi.python.org/pypi/cffi
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-new file mode 100644
-index 0000000..10bf535
---- /dev/null
-+++ b/package/python-cffi/python-cffi.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-cffi
-+#
-+################################################################################
-+
-+PYTHON_CFFI_VERSION = 0.8.2
-+PYTHON_CFFI_SOURCE  = cffi-$(PYTHON_CFFI_VERSION).tar.gz
-+PYTHON_CFFI_SITE    = https://pypi.python.org/packages/source/c/cffi/
-+PYTHON_CFFI_SETUP_TYPE = setuptools
-+PYTHON_CFFI_LICENSE = MIT
-+
-+$(eval $(python-package))
+Classification of failures by reason
+====================================
+
+                  samba-3.6.23 | 1 
+         matchbox-keyboard-0.1 | 1 
+                busybox-1.22.1 | 1 
+                 host-gdb-6.6a | 1 
+               alsa-lib-1.0.26 | 1 
+                 cairo-1.12.10 | 1 
+             lttng-tools-2.4.1 | 1 
+
+Detail of failures
+===================
+
+    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/3ecb780be9e7912dac9670d9e7ad9a810c6243af/
+      i686 |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/725962e174198f0b26b7cbd335691d9a23be73f5/
+    mipsel |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/cde0a6eda1db441cd16ef933fa27cd37411b837e/
+      bfin |                  host-gdb-6.6a | NOK | http://autobuild.buildroot.net/results/b47f85553336b7f63ee4ecdf8598374ce4a225a3/
+       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/5cde56a0bf8dfac22d01752a98d399f71f664e07/
+       arm |          matchbox-keyboard-0.1 | NOK | http://autobuild.buildroot.net/results/47380d57e507ec395a1132dfd7b32d35459c1c7a/
+     avr32 |                   samba-3.6.23 | NOK | http://autobuild.buildroot.net/results/0142b1d5b8c3f20f1bff76ece646d901407f7490/
+
+
 -- 
-1.9.1
+http://autobuild.buildroot.net
