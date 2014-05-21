@@ -1,43 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 21 May 2014 13:47:44 +0200
-Subject: [Buildroot] [PATCH 1/1] python2: Fix disabling module bsddb
-Message-ID: <1400672864-30941-1-git-send-email-bernd.kuhls@t-online.de>
+From: Pierre Ficheux <pierre.ficheux@openwide.fr>
+Date: Wed, 21 May 2014 14:05:31 +0200 (CEST)
+Subject: [Buildroot] RPi
+In-Reply-To: <123137298.15041034.1400673767940.JavaMail.root@openwide.fr>
+Message-ID: <1826939078.15041392.1400673931165.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using this minimal defconfig
+Hi BR people,
 
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_PYTHON=y
-BR2_PACKAGE_BERKELEYDB=y
+I did some work on BR around Raspberry Pi platform:
 
-the current code does not prevent the build of
+- adding a post-image script for RP SD-card image generation (adapted from Yocto RPi recipe)
+- adding BR support for Adafruit touchscreen -> https://www.adafruit.com/products/1601
 
-output/build/python-2.7.6/Modules/_bsddb.o
+I don't know if it could help, but I can build patches.
 
-because the module is really called _bsddb,
-see python-2.7.6/Modules/_bsddb.c, line 9604.
+Regards
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/python/python-110-optional-db.patch |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/python/python-110-optional-db.patch b/package/python/python-110-optional-db.patch
-index ea756da..a3e5fe8 100644
---- a/package/python/python-110-optional-db.patch
-+++ b/package/python/python-110-optional-db.patch
-@@ -70,7 +70,7 @@ Index: b/configure.ac
- +	AS_HELP_STRING([--disable-bsddb], [disable BerkeyleyDB]),
- +	[ if test "$enableval" = "no"; then
- +    	     BSDDB=no
--+    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} bsddb"
-++    	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _bsddb"
- +  	  else
- +	     BSDDB=yes
- +  	  fi], [ BSDDB=yes ])
 -- 
-1.7.10.4
+Pierre FICHEUX -/- CTO OW/OWI, France -\- pierre.ficheux at openwide.fr
+                                         http://ingenierie.openwide.fr
+                                         http://www.linuxembedded.fr
+I would love to change the world, but they won't give me the source code
