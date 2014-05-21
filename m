@@ -1,41 +1,45 @@
-From: oli vogt <oli.vogt.pub01@gmail.com>
-Date: Wed, 21 May 2014 20:23:00 +1200
-Subject: [Buildroot] [PATCH 1/3] python: new module flup
-Message-ID: <CAAwwcmTihumuK=NCx3MQX3P1GuSM5OGMQ8UKhPCkW9fXpwnonw@mail.gmail.com>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Wed, 21 May 2014 10:23:51 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix Linaro 2014.02
+	symlink
+In-Reply-To: <20140521101450.37cdd182@e6520eb>
+References: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAGduivwVfArTNkhk2vE5NiJnfBssZcP6fjj+iWytvV-oqjt4rQ@mail.gmail.com>
+ <20140521101450.37cdd182@e6520eb>
+Message-ID: <CABbD_XC_z97n3xPfeXyZh29ueSf3BgzY-2_RBhJbiMXjiO5sew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas.
+Hi,
 
-Thank you for your feed back.
+Same. Thank you!
 
-
-- No I did not test with python-3. flup has not been touched since
-2011-04-05 and I don't think it is supported but I could be wrong.
-  In <https://pypi.python.org/pypi/flup/1.0.3.dev-20110405> there are .egg
-files for 2.5, 2.6 and 2.7.
-
-- I had a bit of a read about the licensing-support concept of Buildroot
-and came up with the following:
-  There is no COPYING or other license file in the project.
-  The PKG-INFO file mentions BSD and. "greping" the project for 'license'
-returns a source file licensed under the MIT licence so I suggest:
-
-  PYTHON_FLUP_LICENSE = BSD-4c, MIT
-
-  PYTHON_FLUP_LICENSE_FILES should be absent. (PKG-INFO is not really the
-licence)
-
-If this is OK I will re-submit a patch.
+BR
+KK
 
 
-Thank's for your patience, I'm still new to Buildroot and Git.
+On Wed, May 21, 2014 at 10:14 AM, Eric B?nard <eric@eukrea.com> wrote:
 
-
-Kind regards, oli
+> Hi Maxime and Thomas,
+>
+> Le Wed, 21 May 2014 10:08:07 +0200,
+> Maxime Hadjinlian <maxime.hadjinlian@gmail.com> a ?crit :
+> > Thanks for this quick patch !
+> > For futher references, the error I encountered was:
+> > /bin/sh: error while loading shared libraries: libc.so.6: cannot open
+> > shared object file: No such file or directory
+> >
+> same thing here thanks for the fix.
+>
+> Eric
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140521/31770424/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140521/67bddec7/attachment.html>
