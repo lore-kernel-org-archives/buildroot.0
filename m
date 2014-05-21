@@ -1,28 +1,41 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Wed, 21 May 2014 09:16:33 +0100
-Subject: [Buildroot] [PATCH 1/1] Add support for ld.gold in toolchain.
-In-Reply-To: <20140521054008.GC618@waldemar-brodkorb.de>
-References: <BLU436-SMTP2194D0C95F4AFEB38829312A83D0@phx.gbl>
- <20140521054008.GC618@waldemar-brodkorb.de>
-Message-ID: <CAFbHwiSC5PqzTXLHmCuG7WWuz=Gvy4tSzrTZFPPYwiP3JxEL3w@mail.gmail.com>
+From: oli vogt <oli.vogt.pub01@gmail.com>
+Date: Wed, 21 May 2014 20:23:00 +1200
+Subject: [Buildroot] [PATCH 1/3] python: new module flup
+Message-ID: <CAAwwcmTihumuK=NCx3MQX3P1GuSM5OGMQ8UKhPCkW9fXpwnonw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 21, 2014 at 6:40 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> Hi Steve,
-> Steve Thomas wrote,
->
->> The ld.gold linker has been around for about six years, and is quite
->> well supported. It also used to be the only linker for gcc that
->> supported the plugin option needed for LTO.
->>
->> This patch enables a system to be build with the gold linker which is
->> very well supported on recent builds.
->
-> But gold is not available for all architectures. I am sure it does
-> not work for MIPS f.e.
+Hello Thomas.
 
-gold also has problems (or at least did) building working kernels on ARM.
+Thank you for your feed back.
+
+
+- No I did not test with python-3. flup has not been touched since
+2011-04-05 and I don't think it is supported but I could be wrong.
+  In <https://pypi.python.org/pypi/flup/1.0.3.dev-20110405> there are .egg
+files for 2.5, 2.6 and 2.7.
+
+- I had a bit of a read about the licensing-support concept of Buildroot
+and came up with the following:
+  There is no COPYING or other license file in the project.
+  The PKG-INFO file mentions BSD and. "greping" the project for 'license'
+returns a source file licensed under the MIT licence so I suggest:
+
+  PYTHON_FLUP_LICENSE = BSD-4c, MIT
+
+  PYTHON_FLUP_LICENSE_FILES should be absent. (PKG-INFO is not really the
+licence)
+
+If this is OK I will re-submit a patch.
+
+
+Thank's for your patience, I'm still new to Buildroot and Git.
+
+
+Kind regards, oli
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140521/31770424/attachment.html>
