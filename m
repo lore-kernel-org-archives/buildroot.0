@@ -1,57 +1,72 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 May 2014 14:35:29 -0300
-Subject: [Buildroot] [PATCH] libv4l: needs mmu
-Message-ID: <1400693729-2407-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 21 May 2014 20:04:35 +0200
+Subject: [Buildroot] RPi
+In-Reply-To: <1826939078.15041392.1400673931165.JavaMail.root@openwide.fr>
+References: <123137298.15041034.1400673767940.JavaMail.root@openwide.fr>
+ <1826939078.15041392.1400673931165.JavaMail.root@openwide.fr>
+Message-ID: <20140521180435.GA3556@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/989/989d32f3532283817e9439aa78cceff5983dc421/
+Pierre, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libv4l/Config.in | 2 ++
- package/opencv/Config.in | 2 ++
- 2 files changed, 4 insertions(+)
+(He! The same usual suspects! ;-) )
 
-diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
-index 9d04921..2c9a919 100644
---- a/package/libv4l/Config.in
-+++ b/package/libv4l/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBV4L
- 	bool "libv4l"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_JPEG
- 	help
- 	  libv4l is an accompanying collection of libraries that adds a thin
-@@ -61,3 +62,4 @@ endif
- 
- comment "libv4l needs a toolchain w/ largefile, threads"
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 49ada5d..f9ee416 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -189,12 +189,14 @@ config BR2_PACKAGE_OPENCV_WITH_V4L
- 	bool "v4l support"
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # libv4l fork
- 	select BR2_PACKAGE_LIBV4L
- 	help
- 	  Enable Video 4 Linux support.
- 
- comment "v4l support needs a toolchain w/ largefile, threads"
- 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
- 
- comment "Install options"
- 
+On 2014-05-21 14:05 +0200, Pierre Ficheux spake thusly:
+> I did some work on BR around Raspberry Pi platform:
+> 
+> - adding a post-image script for RP SD-card image generation (adapted
+> from Yocto RPi recipe)
+> - adding BR support for Adafruit touchscreen ->
+> https://www.adafruit.com/products/1601
+> 
+> I don't know if it could help, but I can build patches.
+
+For the RPi script, I have to admit I'm a bit sceptic. We usually
+document, as much as we can, the preparation of media for the boards
+(you can see the one for the RPi in boards/raspberrypi/readme) but we
+usually do not provide such scripts.
+
+The only board we're currently doing it for, is the cubieboard, and it
+IMHO has quite a few shortcomings:
+  - requires being root
+  - uses host-tools without enabling them in the defconfig
+  - makes some heavy assumptions on the layout (generated files and
+    medium)
+  - does not handle all failure modes
+  - is (a bit) convoluted
+
+Also, I'm a bit warry at providing such a root-requiring script, as it
+is so easy to bork things on an unsuspecting user's machine. I for one
+would not run such a script to begin with.
+
+I highly prefer we provide a good documentation on how to generate basic
+media for a board, and redirect the user to the upstream documentation
+(if it exists.)
+
+We've tried to have a generic infrastructure that would generate images
+for any board, without any hard-coded layout or the likes), but it turns
+to not be so easy. Such an infra would have to cover all comon cases,
+but also weird corner-cases, where the layout is not simply a collection
+of partitions laid out on some media (think initramfs with part of the
+VFS mounted from a block device, it's not easy.)
+
+Others may disagree on the above, so please provide your script, so we
+can see and decide on actual code. ;-)
+
+As for the touchscreen support, that would be very interesting, indeed!
+Please send your patch! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
