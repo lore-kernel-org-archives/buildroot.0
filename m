@@ -1,45 +1,36 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Wed, 21 May 2014 10:23:51 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix Linaro 2014.02
-	symlink
-In-Reply-To: <20140521101450.37cdd182@e6520eb>
-References: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAGduivwVfArTNkhk2vE5NiJnfBssZcP6fjj+iWytvV-oqjt4rQ@mail.gmail.com>
- <20140521101450.37cdd182@e6520eb>
-Message-ID: <CABbD_XC_z97n3xPfeXyZh29ueSf3BgzY-2_RBhJbiMXjiO5sew@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 21 May 2014 10:25:09 +0200
+Subject: [Buildroot] [PATCH v2 1/2] acpid: replace "echo -e" with printf
+Message-ID: <1400660710-15758-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+printf is POSIX-compliant, echo -e is not.
 
-Same. Thank you!
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+Changes v1 -> v2:
+    - Added trailing \n (Peter Korsgaard)
+---
+ package/acpid/acpid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BR
-KK
-
-
-On Wed, May 21, 2014 at 10:14 AM, Eric B?nard <eric@eukrea.com> wrote:
-
-> Hi Maxime and Thomas,
->
-> Le Wed, 21 May 2014 10:08:07 +0200,
-> Maxime Hadjinlian <maxime.hadjinlian@gmail.com> a ?crit :
-> > Thanks for this quick patch !
-> > For futher references, the error I encountered was:
-> > /bin/sh: error while loading shared libraries: libc.so.6: cannot open
-> > shared object file: No such file or directory
-> >
-> same thing here thanks for the fix.
->
-> Eric
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140521/67bddec7/attachment.html>
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 1f4ec31..7a6a478 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -17,7 +17,7 @@ endef
+ 
+ define ACPID_SET_EVENTS
+ 	mkdir -p $(TARGET_DIR)/etc/acpi/events
+-	/bin/echo -e "event=button[ /]power\naction=/sbin/poweroff" \
++	printf "event=button[ /]power\naction=/sbin/poweroff\n" \
+ 		>$(TARGET_DIR)/etc/acpi/events/powerbtn
+ endef
+ 
+-- 
+2.0.0.rc0
