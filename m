@@ -1,38 +1,88 @@
-From: oli vogt <oli.vogt.pub01@gmail.com>
-Date: Wed, 21 May 2014 20:26:23 +1200
-Subject: [Buildroot] [PATCH 3/3] python: new module cffi
-Message-ID: <CAAwwcmRbgqBacovNfSRFbrThg=jdOnAfi2YvXGhr5eE1uSzo8A@mail.gmail.com>
+From: Alvaro G. M <alvaro.gamez@hazent.com>
+Date: Wed, 21 May 2014 10:26:08 +0200
+Subject: [Buildroot] [PATCH v2 1/1] dcron: new package
+Message-ID: <1400660768-2472-1-git-send-email-alvaro.gamez@hazent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas.
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+---
+This version of the patch solves the whole lot of problems noted before.
+This patch, as is, would enable a system level cron daemon with hourly,
+daily, weekly and monthly crontabs.
 
-- Why cffi:
- <http://eev.ee/blog/2013/09/13/cython-versus-cffi/> makes me think that
-'ease of use' and performance are good.
+However, it doesn't allow non root users to create their own crontab file.
+This is because /var/spool/cron/crontabs is non user writable.
 
-- Unfortunately I have not the resources to test with python-3 in the
-foreseeable future.
+Typically, a crontab group is created on the system and users allowed to
+create crontab entries are added into this group, while crontab executable
+is owned by root:crontab with sgid bit enabled.
 
-- From the documentation <http://cffi.readthedocs.org/en/release-0.8/>: "
-libffi is notoriously messy to install and use ? to the point that CPython
-includes its own copy to avoid relying on external packages".
- I will have to look into the dependencies more carefully and see if there
-is no dependence.
 
-- Perhaps I submitted the patch prematurely.
-  My primary aim is to get "smbus-cffi", <
-https://pypi.python.org/pypi/smbus-cffi> working for an Olimex iMx233
-system or, if I cannot, to roll my own.
-  I installed python-cffi on the side because I thought it might be
-necessary.
+ package/Config.in       |  1 +
+ package/dcron/Config.in |  9 +++++++++
+ package/dcron/dcron.mk  | 22 ++++++++++++++++++++++
+ 3 files changed, 32 insertions(+)
+ create mode 100644 package/dcron/Config.in
+ create mode 100644 package/dcron/dcron.mk
 
-Thanks, I hope I don't bore you with all that.
-
-Kind regards, oli
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140521/b9adecdb/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index 7800f23..3145bf9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1090,6 +1090,7 @@ source "package/bootutils/Config.in"
+ source "package/coreutils/Config.in"
+ endif
+ source "package/cpuload/Config.in"
++source "package/dcron/Config.in"
+ source "package/dsp-tools/Config.in"
+ source "package/htop/Config.in"
+ source "package/iprutils/Config.in"
+diff --git a/package/dcron/Config.in b/package/dcron/Config.in
+new file mode 100644
+index 0000000..fea2693
+--- /dev/null
++++ b/package/dcron/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_DCRON
++	bool "dcron"
++	depends on BR2_USE_MMU # fork()
++	help
++	  dcron is a time-based job scheduler with anacron-like features.
++	  It works as a background daemon that parses individual crontab
++	  files and executes commands on behalf of the users in question.
++
++	  http://www.jimpryor.net/linux/dcron.html
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+new file mode 100644
+index 0000000..221e0d5
+--- /dev/null
++++ b/package/dcron/dcron.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# dcron
++#
++################################################################################
++
++DCRON_VERSION = 4.5
++DCRON_SITE = http://www.jimpryor.net/linux/releases/
++DCRON_LICENSE = GPL
++
++define DCRON_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++endef
++
++define DCRON_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m0644 $(@D)/extra/root.crontab $(TARGET_DIR)/etc/cron.d/system
++	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
++	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
++	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
++endef
++
++$(eval $(generic-package))
+-- 
+2.0.0.rc2
