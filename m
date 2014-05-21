@@ -1,43 +1,57 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 21 May 2014 14:14:12 -0300
-Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.9
-Message-ID: <1400692452-30405-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 21 May 2014 14:35:29 -0300
+Subject: [Buildroot] [PATCH] libv4l: needs mmu
+Message-ID: <1400693729-2407-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/989/989d32f3532283817e9439aa78cceff5983dc421/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/inadyn/inadyn.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/libv4l/Config.in | 2 ++
+ package/opencv/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
-index 3886390..21e983e 100644
---- a/package/inadyn/inadyn.mk
-+++ b/package/inadyn/inadyn.mk
-@@ -4,11 +4,20 @@
- #
- ################################################################################
+diff --git a/package/libv4l/Config.in b/package/libv4l/Config.in
+index 9d04921..2c9a919 100644
+--- a/package/libv4l/Config.in
++++ b/package/libv4l/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBV4L
+ 	bool "libv4l"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_JPEG
+ 	help
+ 	  libv4l is an accompanying collection of libraries that adds a thin
+@@ -61,3 +62,4 @@ endif
  
--INADYN_VERSION = 1.99.7
-+INADYN_VERSION = 1.99.9
- INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
- INADYN_LICENSE = GPLv2+
- INADYN_LICENSE_FILES = COPYING LICENSE
+ comment "libv4l needs a toolchain w/ largefile, threads"
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 49ada5d..f9ee416 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -189,12 +189,14 @@ config BR2_PACKAGE_OPENCV_WITH_V4L
+ 	bool "v4l support"
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # libv4l fork
+ 	select BR2_PACKAGE_LIBV4L
+ 	help
+ 	  Enable Video 4 Linux support.
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+INADYN_DEPENDENCIES += openssl
-+else
-+define INADYN_DISABLE_OPENSSL
-+	$(SED) '/ssl/Id' $(@D)/config.mk
-+endef
-+endif
-+INADYN_POST_PATCH_HOOKS += INADYN_DISABLE_OPENSSL
-+
- define INADYN_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
+ comment "v4l support needs a toolchain w/ largefile, threads"
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+ 
+ comment "Install options"
+ 
 -- 
 1.8.5.5
