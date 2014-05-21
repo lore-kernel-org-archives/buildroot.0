@@ -1,30 +1,28 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Wed, 21 May 2014 08:22:52 +0300
-Subject: [Buildroot] [PATCH] ruby: fix build with recent openssl versions
-In-Reply-To: <87k39ggooi.fsf@dell.be.48ers.dk>
-References: <1400594769-31393-1-git-send-email-fatih.asici@gmail.com>
- <87k39ggooi.fsf@dell.be.48ers.dk>
-Message-ID: <201405210822.52997.fatih.asici@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 21 May 2014 07:40:08 +0200
+Subject: [Buildroot] [PATCH 1/1] Add support for ld.gold in toolchain.
+In-Reply-To: <BLU436-SMTP2194D0C95F4AFEB38829312A83D0@phx.gbl>
+References: <BLU436-SMTP2194D0C95F4AFEB38829312A83D0@phx.gbl>
+Message-ID: <20140521054008.GC618@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 20 May 2014 23:50:21 Peter Korsgaard wrote:
-> >>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
->  > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Hi Steve,
+Steve Thomas wrote,
+
+> The ld.gold linker has been around for about six years, and is quite
+> well supported. It also used to be the only linker for gcc that
+> supported the plugin option needed for LTO.
 > 
-> What exact problem is it fixing? I just tried building ruby+openssl
-> without problems.
+> This patch enables a system to be build with the gold linker which is
+> very well supported on recent builds.
 
-OpenSSL version on my system (Debian Wheezy) is 1.0.1e-2+deb7u9. When
-building host-ruby it fails because of an undefined macro:
+But gold is not available for all architectures. I am sure it does
+not work for MIPS f.e.
 
-make[3]: Entering directory `/home/fatih/git/buildroot/output/build/host-ruby-1.9.3-p545/ext/openssl'
-compiling ossl_ssl.c
-ossl_ssl.c: In function ?Init_ossl_ssl?:
-ossl_ssl.c:1988:79: error: ?SSL_OP_MSIE_SSLV2_RSA_PADDING? undeclared (first use in this function)
-ossl_ssl.c:1988:79: note: each undeclared identifier is reported only once for each function it appears in
-make[3]: *** [ossl_ssl.o] Error 1
-make[3]: Leaving directory `/home/fatih/git/buildroot/output/build/host-ruby-1.9.3-p545/ext/openssl'
+best regards
+ Waldemar
+ 
