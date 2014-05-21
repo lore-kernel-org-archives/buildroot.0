@@ -1,52 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 May 2014 08:30:07 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-20
-Message-ID: <20140521063007.8F27E101336@stock.ovh.net>
+Date: Wed, 21 May 2014 09:20:18 +0200
+Subject: [Buildroot] cannot login into files ystem created by buildroot
+In-Reply-To: <CABzetm0CQh5v4Z7EBCpbdZq7JyAq0O4rR_F5pqnh5pSpEaTxPg@mail.gmail.com>
+References: <CABzetm2nEujsMqxS6EJejgM=ETa6--JPZpNRZbdOokZ=jHyRQQ@mail.gmail.com>
+ <20140520105023.6fa15cdb@free-electrons.com>
+ <CABzetm0S6WajX95UTnCv12TS9x4y5GOEqP0KJfMzGMP33h74eQ@mail.gmail.com>
+ <20140520113149.3e321fff@free-electrons.com>
+ <CABzetm0CQh5v4Z7EBCpbdZq7JyAq0O4rR_F5pqnh5pSpEaTxPg@mail.gmail.com>
+Message-ID: <20140521092018.5b59edce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-05-20
-===============================
+Dear Rohit Kumar,
 
-        success : 85 
-       failures : 12 
-       timeouts : 1  
-          TOTAL : 98 
+On Wed, 21 May 2014 12:48:58 +0900, Rohit Kumar wrote:
 
-Classification of failures by reason
-====================================
+> > Then it means you have extracted the Buildroot sources as root, or did
+> > some other operation as root. You'd have to restart from scratch:
+> > remove the entire Buildroot source tree, and do everything again, as a
+> > user.
+> >
+> yeah it works when i build everything as a user.
 
-           host-nodejs-0.10.12 | 2 
-                    php-5.5.12 | 2 
-  toolchain-external-undefined | 2 
-Connecting to github.com|19... | 1 
-znc-b396cafdb249544164ed029... | 1 
-                pulseaudio-5.0 | 1 
-                 qt5base-5.2.1 | 1 
-                    fltk-1.3.2 | 1 
-             util-linux-2.24.2 | 1 
-              xapp_xedit-1.2.0 | 1 
+Clearly not related. Your build as root should have worked just as well
+(it's just bad to use your root account to build Buildroot).
 
-Detail of failures
-===================
-
-       arm | Connecting to github.com|19... | TIM | http://autobuild.buildroot.net/results/ae0818fb7c28777ab1322b043d0dd4724ebee6c1/
-    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/a7733d8f5160c574ab0f6a43b3dedba74ba78019/
-       arm |            host-nodejs-0.10.12 | NOK | http://autobuild.buildroot.net/results/affd7300895ec400de50a33d51b4e94e15d63341/
-       arm |            host-nodejs-0.10.12 | NOK | http://autobuild.buildroot.net/results/047068ded3209a8d483f1c2627d4225d0b54c678/
-       arm |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/6324d0754c62383adb258ef17b53ed0cbaab824e/
-       sh4 |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/b388a93fb2aef6df35611d985cd7bff993d949c9/
-       arc |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/819bedec174dcad11b93a1a0bde8f42702a6bd3a/
-      i686 |                  qt5base-5.2.1 | NOK | http://autobuild.buildroot.net/results/59a5a797a5006e62197b177d14f7c4155d0fa79b/
-      i686 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/5a266fa3c8b4dcf488bf09ccbed8f224a6d9ae93/
-     avr32 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/79a3c09bf0e3cc03f8c20e8329e1328ef9108dd0/
-     nios2 |              util-linux-2.24.2 | NOK | http://autobuild.buildroot.net/results/a9b8f03a1c104d835cddf2a820c51086f437b6d3/
-     avr32 |               xapp_xedit-1.2.0 | NOK | http://autobuild.buildroot.net/results/367a548a3ea7c292676deb117fc96c2e5697baee/
-      bfin | znc-b396cafdb249544164ed029... | NOK | http://autobuild.buildroot.net/results/6950376308235f28429cb8bd3dfa622261873fbe/
-
-
+Thomas
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
