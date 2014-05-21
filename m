@@ -1,42 +1,38 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 21 May 2014 10:25:10 +0200
-Subject: [Buildroot] [PATCH v2 2/2] infra: pkg-utils.mk replace "echo -en"
-	with printf
-In-Reply-To: <1400660710-15758-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1400660710-15758-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <1400660710-15758-2-git-send-email-maxime.hadjinlian@gmail.com>
+From: oli vogt <oli.vogt.pub01@gmail.com>
+Date: Wed, 21 May 2014 20:26:23 +1200
+Subject: [Buildroot] [PATCH 3/3] python: new module cffi
+Message-ID: <CAAwwcmRbgqBacovNfSRFbrThg=jdOnAfi2YvXGhr5eE1uSzo8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-printf is POSIX-compliant, echo -e/n is not.
+Hi Thomas.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
-Changes v1 -> v2:
-    - Add a trailing \n while retaining splitted lines (Peter Korsgaard,
-      Thomas De Schampheleire)
----
- package/pkg-utils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+- Why cffi:
+ <http://eev.ee/blog/2013/09/13/cython-versus-cffi/> makes me think that
+'ease of use' and performance are good.
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index da3f0fc..c627a64 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -110,8 +110,8 @@ define legal-manifest # pkg, version, license, license-files, source, {HOST|TARG
- endef
- 
- define legal-license-header # pkg, license-file, {HOST|TARGET}
--	echo -e "$(LEGAL_INFO_SEPARATOR)\n\t$(1):" \
--		"$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
-+	printf "$(LEGAL_INFO_SEPARATOR)\n\t$(1):\
-+		$(2)\n$(LEGAL_INFO_SEPARATOR)\n\n\n" >>$(LEGAL_LICENSES_TXT_$(3))
- endef
- 
- define legal-license-nofiles # pkg, {HOST|TARGET}
--- 
-2.0.0.rc0
+- Unfortunately I have not the resources to test with python-3 in the
+foreseeable future.
+
+- From the documentation <http://cffi.readthedocs.org/en/release-0.8/>: "
+libffi is notoriously messy to install and use ? to the point that CPython
+includes its own copy to avoid relying on external packages".
+ I will have to look into the dependencies more carefully and see if there
+is no dependence.
+
+- Perhaps I submitted the patch prematurely.
+  My primary aim is to get "smbus-cffi", <
+https://pypi.python.org/pypi/smbus-cffi> working for an Olimex iMx233
+system or, if I cannot, to roll my own.
+  I installed python-cffi on the side because I thought it might be
+necessary.
+
+Thanks, I hope I don't bore you with all that.
+
+Kind regards, oli
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140521/b9adecdb/attachment.html>
