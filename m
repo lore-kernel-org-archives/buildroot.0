@@ -1,39 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 May 2014 21:22:09 +0200
-Subject: [Buildroot] [git commit] powerpc: remove unneeded dependencies
-Message-ID: <20140601083246.42D799CE5B@busybox.osuosl.org>
+Date: Wed, 21 May 2014 11:45:02 +0200
+Subject: [Buildroot] [git commit] feh: bump to 2.12
+Message-ID: <20140601083245.3E47C9CE5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32a471824bcc0fd11a535c01f9a2a96eefe1d25d
+commit: http://git.buildroot.net/buildroot/commit/?id=1ad60052837fcc6476e4cc47f027ee5e7a0e4f26
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
+giblib is now part of feh, so drop giblib as dependency.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.powerpc |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+ package/feh/Config.in |    2 +-
+ package/feh/feh.mk    |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 9a7b2b7..c8a21b5 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -6,7 +6,6 @@ config BR2_POWERPC_CPU_HAS_SPE
- 
- choice
- 	prompt "Target Architecture Variant"
--	depends on BR2_powerpc || BR2_powerpc64le
- 	default BR2_generic_powerpc
+diff --git a/package/feh/Config.in b/package/feh/Config.in
+index f85612e..19b4abe 100644
+--- a/package/feh/Config.in
++++ b/package/feh/Config.in
+@@ -4,10 +4,10 @@ config BR2_PACKAGE_FEH
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_IMLIB2
+ 	select BR2_PACKAGE_IMLIB2_PNG
+ 	select BR2_PACKAGE_IMLIB2_JPEG
+ 	select BR2_PACKAGE_IMLIB2_X
+-	select BR2_PACKAGE_GIBLIB
+ 	select BR2_PACKAGE_LIBCURL
  	help
- 	  Specific CPU variant to use
-@@ -127,7 +126,6 @@ endchoice
+ 	  feh is an X11 image viewer aimed mostly at console users.
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index ddd4895..e63f89e 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- choice
- 	prompt "Target ABI"
--	depends on BR2_powerpc || BR2_powerpc64le
- 	default BR2_powerpc_SPE if BR2_POWERPC_CPU_HAS_SPE
- 	default BR2_powerpc_CLASSIC
- 	help
+-FEH_VERSION = 2.10
++FEH_VERSION = 2.12
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org/
+-FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
++FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+ 
+ define FEH_BUILD_CMDS
+ 	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
