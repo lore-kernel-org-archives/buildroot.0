@@ -1,32 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 May 2014 09:20:18 +0200
-Subject: [Buildroot] cannot login into files ystem created by buildroot
-In-Reply-To: <CABzetm0CQh5v4Z7EBCpbdZq7JyAq0O4rR_F5pqnh5pSpEaTxPg@mail.gmail.com>
-References: <CABzetm2nEujsMqxS6EJejgM=ETa6--JPZpNRZbdOokZ=jHyRQQ@mail.gmail.com>
- <20140520105023.6fa15cdb@free-electrons.com>
- <CABzetm0S6WajX95UTnCv12TS9x4y5GOEqP0KJfMzGMP33h74eQ@mail.gmail.com>
- <20140520113149.3e321fff@free-electrons.com>
- <CABzetm0CQh5v4Z7EBCpbdZq7JyAq0O4rR_F5pqnh5pSpEaTxPg@mail.gmail.com>
-Message-ID: <20140521092018.5b59edce@free-electrons.com>
+Date: Wed, 21 May 2014 09:21:14 +0200
+Subject: [Buildroot] [PATCH] nodejs: fix build when python3 is selected
+ in Buildroot
+In-Reply-To: <20140521025243.GI27238@tarshish>
+References: <1400617814-21757-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140521025243.GI27238@tarshish>
+Message-ID: <20140521092114.7f8caeb1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rohit Kumar,
+Dear Baruch Siach,
 
-On Wed, 21 May 2014 12:48:58 +0900, Rohit Kumar wrote:
+On Wed, 21 May 2014 05:52:43 +0300, Baruch Siach wrote:
 
-> > Then it means you have extracted the Buildroot sources as root, or did
-> > some other operation as root. You'd have to restart from scratch:
-> > remove the entire Buildroot source tree, and do everything again, as a
-> > user.
-> >
-> yeah it works when i build everything as a user.
+> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> > index b5973b5..7415bdf 100644
+> > --- a/package/nodejs/nodejs.mk
+> > +++ b/package/nodejs/nodejs.mk
+> > @@ -35,8 +35,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
+> >  		--without-dtrace \
+> >  		--without-etw \
+> >  	)
+> > -	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
+> > -		$(@D)/deps/v8/tools/gyp/v8.gyp
+> 
+> The comment above 'define HOST_NODEJS_CONFIGURE_CMDS' should be updated to 
+> match.
 
-Clearly not related. Your build as root should have worked just as well
-(it's just bad to use your root account to build Buildroot).
+Ah, right, indeed. Will send a v2.
 
 Thomas
 -- 
