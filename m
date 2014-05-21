@@ -1,33 +1,26 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 May 2014 10:38:36 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix Linaro 2014.02
-	symlink
-In-Reply-To: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 21 May 2014 09:52:02 +0200")
-References: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2f7frw3.fsf@dell.be.48ers.dk>
+Date: Wed, 21 May 2014 10:42:05 +0200
+Subject: [Buildroot] [PATCH v2 1/2] acpid: replace "echo -e" with printf
+In-Reply-To: <1400660710-15758-1-git-send-email-maxime.hadjinlian@gmail.com>
+ (Maxime Hadjinlian's message of "Wed, 21 May 2014 10:25:09 +0200")
+References: <1400660710-15758-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <878upvfrqa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 
- > In commit cd32da8f7931af61737df293d1f8bcedaab8648e
- > ("toolchain-external: add Linaro ARM big endian toolchain") a mistake
- > was made, probably due to a rebase conflict that was incorrect solved:
- > the call to the post install staging hook that creates the necessary
- > symbolic links for a root filesystem based on Linaro 2014.02 to work
- > was removed.
+ > printf is POSIX-compliant, echo -e is not.
+ > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >     - Added trailing \n (Peter Korsgaard)
 
- > This commit reinstates this call, which should fix the problem
- > observed by Maxime Hadjinlian while using Linaro 2014.02.
-
- > Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed with 's/incorrect/incorrectly/, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
