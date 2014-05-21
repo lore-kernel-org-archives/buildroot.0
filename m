@@ -1,39 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 21 May 2014 09:21:14 +0200
-Subject: [Buildroot] [PATCH] nodejs: fix build when python3 is selected
- in Buildroot
-In-Reply-To: <20140521025243.GI27238@tarshish>
-References: <1400617814-21757-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140521025243.GI27238@tarshish>
-Message-ID: <20140521092114.7f8caeb1@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 21 May 2014 09:25:41 +0200
+Subject: [Buildroot] [PATCH] feh: bump to 2.12
+Message-ID: <1400657141-13616-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Wed, 21 May 2014 05:52:43 +0300, Baruch Siach wrote:
+giblib is now part of feh, so drop giblib as dependency.
 
-> > diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> > index b5973b5..7415bdf 100644
-> > --- a/package/nodejs/nodejs.mk
-> > +++ b/package/nodejs/nodejs.mk
-> > @@ -35,8 +35,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
-> >  		--without-dtrace \
-> >  		--without-etw \
-> >  	)
-> > -	$(SED) "s@'python',@'$(HOST_DIR)/usr/bin/python2',@" \
-> > -		$(@D)/deps/v8/tools/gyp/v8.gyp
-> 
-> The comment above 'define HOST_NODEJS_CONFIGURE_CMDS' should be updated to 
-> match.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/feh/Config.in | 2 +-
+ package/feh/feh.mk    | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ah, right, indeed. Will send a v2.
-
-Thomas
+diff --git a/package/feh/Config.in b/package/feh/Config.in
+index f85612e..19b4abe 100644
+--- a/package/feh/Config.in
++++ b/package/feh/Config.in
+@@ -4,10 +4,10 @@ config BR2_PACKAGE_FEH
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_IMLIB2
+ 	select BR2_PACKAGE_IMLIB2_PNG
+ 	select BR2_PACKAGE_IMLIB2_JPEG
+ 	select BR2_PACKAGE_IMLIB2_X
+-	select BR2_PACKAGE_GIBLIB
+ 	select BR2_PACKAGE_LIBCURL
+ 	help
+ 	  feh is an X11 image viewer aimed mostly at console users.
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index ddd4895..e63f89e 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-FEH_VERSION = 2.10
++FEH_VERSION = 2.12
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org/
+-FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
++FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+ 
+ define FEH_BUILD_CMDS
+ 	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.1.2
