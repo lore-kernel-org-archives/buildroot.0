@@ -1,57 +1,52 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 21 May 2014 07:58:01 +0200
-Subject: [Buildroot] Status of your patches
-In-Reply-To: <20140520141223.0e8a94f6@free-electrons.com>
-References: <20140517111009.42385b15@free-electrons.com>
- <20140520141223.0e8a94f6@free-electrons.com>
-Message-ID: <20140521055801.GE618@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 21 May 2014 08:30:07 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-20
+Message-ID: <20140521063007.8F27E101336@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Build statistics for 2014-05-20
+===============================
 
-> Spenser, Waldemar,
-> 
-> Any input on the below questions?
+        success : 85 
+       failures : 12 
+       timeouts : 1  
+          TOTAL : 98 
 
-I don't think I am a microblaze expert.
-Not sure I can help here.
- 
-> Thanks,
-> 
-> Thomas
-> 
-> On Sat, 17 May 2014 11:10:09 +0200, Thomas Petazzoni wrote:
-> > Hello Spenser,
-> > 
-> > I'd like to get some update about the status of some of your patches in
-> > patchwork, especially:
-> > 
-> >   http://patchwork.ozlabs.org/patch/314517/ [v2] gcc: coexist upstream with vendor git releases for mb and arc
-> >   http://patchwork.ozlabs.org/patch/314518/ [v2] gdb: use git version for cross-gdb
-> >   http://patchwork.ozlabs.org/patch/314512/ [v2] binutils: coexist upstream and vendor binutils for arc and microblaze
-> >   http://patchwork.ozlabs.org/patch/314513/ [v2] libsigsegv: fix for microblaze
-> >   http://patchwork.ozlabs.org/patch/314515/ [v2] glibc: change to tagged release
-> >   http://patchwork.ozlabs.org/patch/314511/ [v2] binutils: change to tagged release
-> >   http://patchwork.ozlabs.org/patch/314521/ [v2] gcc: change to tagged release
-> >   http://patchwork.ozlabs.org/patch/314514/ [v2] gdb: change to tagged release
-> > 
-> > Most of these patches are related to the versions of Microblaze
-> > toolchain components. But more recently, Waldemar has posted a patch
-> > series to also update the Microblaze toolchain components, and his
-> > series was merged.
-> > 
-> > Therefore, I'm wondering which parts of your series are still
-> > necessary. Maybe Waldemar can also have a look and give us a status?
+Classification of failures by reason
+====================================
 
-The gdb changes might be interesting. Another way would be a gdb patch
-for 7.7 to make native debugging without single stepping working. 
-It is a forward patch from Xilinx gdb repository. At least Rich
-Felker (author of musl) used it to fix a microblaze specific bug.
+           host-nodejs-0.10.12 | 2 
+                    php-5.5.12 | 2 
+  toolchain-external-undefined | 2 
+Connecting to github.com|19... | 1 
+znc-b396cafdb249544164ed029... | 1 
+                pulseaudio-5.0 | 1 
+                 qt5base-5.2.1 | 1 
+                    fltk-1.3.2 | 1 
+             util-linux-2.24.2 | 1 
+              xapp_xedit-1.2.0 | 1 
 
-best regards
-        Waldemar
+Detail of failures
+===================
+
+       arm | Connecting to github.com|19... | TIM | http://autobuild.buildroot.net/results/ae0818fb7c28777ab1322b043d0dd4724ebee6c1/
+    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/a7733d8f5160c574ab0f6a43b3dedba74ba78019/
+       arm |            host-nodejs-0.10.12 | NOK | http://autobuild.buildroot.net/results/affd7300895ec400de50a33d51b4e94e15d63341/
+       arm |            host-nodejs-0.10.12 | NOK | http://autobuild.buildroot.net/results/047068ded3209a8d483f1c2627d4225d0b54c678/
+       arm |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/6324d0754c62383adb258ef17b53ed0cbaab824e/
+       sh4 |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/b388a93fb2aef6df35611d985cd7bff993d949c9/
+       arc |                 pulseaudio-5.0 | NOK | http://autobuild.buildroot.net/results/819bedec174dcad11b93a1a0bde8f42702a6bd3a/
+      i686 |                  qt5base-5.2.1 | NOK | http://autobuild.buildroot.net/results/59a5a797a5006e62197b177d14f7c4155d0fa79b/
+      i686 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/5a266fa3c8b4dcf488bf09ccbed8f224a6d9ae93/
+     avr32 |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/79a3c09bf0e3cc03f8c20e8329e1328ef9108dd0/
+     nios2 |              util-linux-2.24.2 | NOK | http://autobuild.buildroot.net/results/a9b8f03a1c104d835cddf2a820c51086f437b6d3/
+     avr32 |               xapp_xedit-1.2.0 | NOK | http://autobuild.buildroot.net/results/367a548a3ea7c292676deb117fc96c2e5697baee/
+      bfin | znc-b396cafdb249544164ed029... | NOK | http://autobuild.buildroot.net/results/6950376308235f28429cb8bd3dfa622261873fbe/
+
+
+-- 
+http://autobuild.buildroot.net
