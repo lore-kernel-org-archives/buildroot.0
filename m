@@ -1,59 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 21 May 2014 17:43:46 +0200
-Subject: [Buildroot] Buildroot 2014.05-rc2 released
-Message-ID: <87mwebdtn1.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 21 May 2014 14:14:12 -0300
+Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.9
+Message-ID: <1400692452-30405-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/inadyn/inadyn.mk | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Buildroot 2014.05-rc2 is released - Go download it at:
-
-http://buildroot.net/downloads/buildroot-2014.05-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2014.05-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2014.05-rc1..
-    28	Thomas Petazzoni
-     8	Bernd Kuhls
-     7	Yann E. MORIN
-     6	Gustavo Zacarias
-     5	Peter Korsgaard
-     4	Maxime Hadjinlian
-     3	Baruch Siach
-     3	Fabio Porcedda
-     3	Romain Naour
-     2	Max Filippov
-     2	Samuel Martin
-     1	Eric Le Bihan
-     1	Fatih A??c?
-     1	Filippo Sironi
-     1	Francois Perrad
-     1	Frank Bergmann
-     1	Peter Seiderer
-     1	Philippe Reynes
-     1	Vicente Olivert Riera
-     1	Wojciech Slenska
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05-rc2
-
-Expect the final 2014.05 release by the end of the month.
-
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 3886390..21e983e 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,11 +4,20 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 1.99.7
++INADYN_VERSION = 1.99.9
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++INADYN_DEPENDENCIES += openssl
++else
++define INADYN_DISABLE_OPENSSL
++	$(SED) '/ssl/Id' $(@D)/config.mk
++endef
++endif
++INADYN_POST_PATCH_HOOKS += INADYN_DISABLE_OPENSSL
++
+ define INADYN_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
