@@ -1,26 +1,28 @@
-From: Eric =?ISO-8859-1?B?QuluYXJk?= <eric@eukrea.com>
-Date: Wed, 21 May 2014 10:14:50 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix Linaro 2014.02
- symlink
-In-Reply-To: <CAGduivwVfArTNkhk2vE5NiJnfBssZcP6fjj+iWytvV-oqjt4rQ@mail.gmail.com>
-References: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAGduivwVfArTNkhk2vE5NiJnfBssZcP6fjj+iWytvV-oqjt4rQ@mail.gmail.com>
-Message-ID: <20140521101450.37cdd182@e6520eb>
+From: Will Newton <will.newton@gmail.com>
+Date: Wed, 21 May 2014 09:16:33 +0100
+Subject: [Buildroot] [PATCH 1/1] Add support for ld.gold in toolchain.
+In-Reply-To: <20140521054008.GC618@waldemar-brodkorb.de>
+References: <BLU436-SMTP2194D0C95F4AFEB38829312A83D0@phx.gbl>
+ <20140521054008.GC618@waldemar-brodkorb.de>
+Message-ID: <CAFbHwiSC5PqzTXLHmCuG7WWuz=Gvy4tSzrTZFPPYwiP3JxEL3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime and Thomas,
+On Wed, May 21, 2014 at 6:40 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+> Hi Steve,
+> Steve Thomas wrote,
+>
+>> The ld.gold linker has been around for about six years, and is quite
+>> well supported. It also used to be the only linker for gcc that
+>> supported the plugin option needed for LTO.
+>>
+>> This patch enables a system to be build with the gold linker which is
+>> very well supported on recent builds.
+>
+> But gold is not available for all architectures. I am sure it does
+> not work for MIPS f.e.
 
-Le Wed, 21 May 2014 10:08:07 +0200,
-Maxime Hadjinlian <maxime.hadjinlian@gmail.com> a ?crit :
-> Thanks for this quick patch !
-> For futher references, the error I encountered was:
-> /bin/sh: error while loading shared libraries: libc.so.6: cannot open
-> shared object file: No such file or directory
-> 
-same thing here thanks for the fix.
-
-Eric
+gold also has problems (or at least did) building working kernels on ARM.
