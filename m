@@ -1,41 +1,33 @@
-From: Tom Deblauwe <tom.deblauwe@ebo-enterprises.com>
-Date: Wed, 21 May 2014 10:36:15 +0200
-Subject: [Buildroot] psplash and systemd
-Message-ID: <537C657F.4090106@ebo-enterprises.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 21 May 2014 10:38:36 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: fix Linaro 2014.02
+	symlink
+In-Reply-To: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 21 May 2014 09:52:02 +0200")
+References: <1400658722-31343-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87d2f7frw3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-I am using psplash in my initramfs and it shows up a graphical
-bootscreen, but then the regular bootprocess starts and there I would
-like to continue showing the splash screen. I am using the 6d3336a
-commit of master buildroot. So I would like to use systemd. What is the
-best solution for this?
+ > In commit cd32da8f7931af61737df293d1f8bcedaab8648e
+ > ("toolchain-external: add Linaro ARM big endian toolchain") a mistake
+ > was made, probably due to a rebase conflict that was incorrect solved:
+ > the call to the post install staging hook that creates the necessary
+ > symbolic links for a root filesystem based on Linaro 2014.02 to work
+ > was removed.
 
-Best regards,
-Tom,
+ > This commit reinstates this call, which should fix the problem
+ > observed by Maxime Hadjinlian while using Linaro 2014.02.
 
+ > Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+Committed with 's/incorrect/incorrectly/, thanks.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Email Confidentiality: e-BO Enterprises<http://www.ebo-enterprises.com/> Company Registration Number BE 0470174242. This email message and any attachments are for the sole use of the intended recipient(s) and may contain information that is proprietary to e-BO Enterprises<http://www.ebo-enterprises.com/>. If you have received this message in error, please notify the sender by reply, and delete all copies of this message and any attachments. If you are the intended recipient you may use the information contained in this message and any files attached to this message only as authorized by e-BO Enterprises<http://www.ebo-enterprises.com/>. Any unauthorized use, dissemination or disclosure of this message or its attachments is strictly prohibited. The contents of this e-mail are not to be considered binding upon e-BO Enterprises<http://www.ebo-enterprises.com/>.
+-- 
+Bye, Peter Korsgaard
