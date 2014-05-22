@@ -1,50 +1,39 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 22 May 2014 14:35:40 +0200
-Subject: [Buildroot] [PATCH 1 of 2] infra: permissions/users/device tables:
- avoid adding empty entries
+Date: Thu, 22 May 2014 14:35:41 +0200
+Subject: [Buildroot] [PATCH 2 of 2] fs/tar: use qstrip to clean up build
+	output
 In-Reply-To: <patchbomb.1400762139@argentina>
 References: <patchbomb.1400762139@argentina>
-Message-ID: <f9a9da19bf34a6862ec5.1400762140@argentina>
+Message-ID: <cda34eac2826e87dffc2.1400762141@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In pkg-generic.mk, an entry would be added to each of the permissions,
-devices and users tables, even if FOO_PERMISSIONS/DEVICES/USERS is empty. In
-that last case, the entry would contain only the separator, which is
-substituted to '\n' in fs/common.mk.
-For configurations with many packages, this would render the build output a
-bit odd, containing many \n instances (even though the end result in the
-target would of course be the same).
+When using the tar filesystem method, the build output shows at the end:
 
-This patch cleans up the build output by only adding to these tables when
-the package actually specified contents for them.
+echo " tar -c""f <br>/output/images/rootfs.tar -C <br>/output/target ." >>
+                                    <br>/output/build/_fakeroot.fs
+
+The inner set of quotes can be easily removed by properly stripping the tar
+options (coming from the buildroot configuration).
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/pkg-generic.mk |  7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
+ fs/tar/tar.mk |  2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -653,9 +653,16 @@ ifneq ($$($(2)_PROVIDES),)
- endif
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- TARGETS += $(1)
-+
-+ifneq ($$($(2)_PERMISSIONS),)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
-+endif
-+ifneq ($$($(2)_DEVICES),)
- PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
-+endif
-+ifneq ($$($(2)_USERS),)
- PACKAGES_USERS += $$($(2)_USERS)$$(sep)
-+endif
+-TAR_OPTS := $(BR2_TARGET_ROOTFS_TAR_OPTIONS)
++TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
  
- ifeq ($$($(2)_SITE_METHOD),svn)
- DL_TOOLS_DEPENDENCIES += svn
+ define ROOTFS_TAR_CMD
+  tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
