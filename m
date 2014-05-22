@@ -1,55 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 21 May 2014 11:45:02 +0200
-Subject: [Buildroot] [git commit] feh: bump to 2.12
-Message-ID: <20140601083245.3E47C9CE5B@busybox.osuosl.org>
+Date: Thu, 22 May 2014 11:11:17 +0200
+Subject: [Buildroot] [git commit] inadyn: bump to version 1.99.9
+Message-ID: <20140601083245.4674D9C779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ad60052837fcc6476e4cc47f027ee5e7a0e4f26
+commit: http://git.buildroot.net/buildroot/commit/?id=41398fa8d92ef43df11fdbe49981b9f3305df4b4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-giblib is now part of feh, so drop giblib as dependency.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/feh/Config.in |    2 +-
- package/feh/feh.mk    |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/inadyn/inadyn.mk |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
 
-diff --git a/package/feh/Config.in b/package/feh/Config.in
-index f85612e..19b4abe 100644
---- a/package/feh/Config.in
-+++ b/package/feh/Config.in
-@@ -4,10 +4,10 @@ config BR2_PACKAGE_FEH
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_XLIB_LIBXINERAMA
- 	select BR2_PACKAGE_XLIB_LIBXT
-+	select BR2_PACKAGE_IMLIB2
- 	select BR2_PACKAGE_IMLIB2_PNG
- 	select BR2_PACKAGE_IMLIB2_JPEG
- 	select BR2_PACKAGE_IMLIB2_X
--	select BR2_PACKAGE_GIBLIB
- 	select BR2_PACKAGE_LIBCURL
- 	help
- 	  feh is an X11 image viewer aimed mostly at console users.
-diff --git a/package/feh/feh.mk b/package/feh/feh.mk
-index ddd4895..e63f89e 100644
---- a/package/feh/feh.mk
-+++ b/package/feh/feh.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 3886390..21e983e 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,11 +4,20 @@
  #
  ################################################################################
  
--FEH_VERSION = 2.10
-+FEH_VERSION = 2.12
- FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
- FEH_SITE = http://feh.finalrewind.org/
--FEH_DEPENDENCIES = libcurl giblib imlib2 libpng xlib_libXinerama xlib_libXt
-+FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+-INADYN_VERSION = 1.99.7
++INADYN_VERSION = 1.99.9
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
  
- define FEH_BUILD_CMDS
- 	$(MAKE1) CC="$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS)" \
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++INADYN_DEPENDENCIES += openssl
++else
++define INADYN_DISABLE_OPENSSL
++	$(SED) '/ssl/Id' $(@D)/config.mk
++endef
++endif
++INADYN_POST_PATCH_HOOKS += INADYN_DISABLE_OPENSSL
++
+ define INADYN_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
