@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 May 2014 15:41:36 +0200
-Subject: [Buildroot] [PATCH 1/3] qt5: bump to 5.3.0
-In-Reply-To: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 20 May 2014 15:12:12 +0300")
+Date: Thu, 22 May 2014 15:42:09 +0200
+Subject: [Buildroot] [PATCH 2/3] qt5enginio: new package
+In-Reply-To: <1400587934-17338-2-git-send-email-fatih.asici@gmail.com> ("Fatih
+ =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 20 May 2014 15:12:13 +0300")
 References: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com>
-Message-ID: <87sio2c4mn.fsf@dell.be.48ers.dk>
+ <1400587934-17338-2-git-send-email-fatih.asici@gmail.com>
+Message-ID: <87oayqc4lq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,47 @@ To: buildroot@busybox.net
 
 >>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
- > Remove upstreamed patches.
- > See http://qt-project.org/qt5/qt53 for the release information.
+ > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+ > ---
+ >  package/qt5/Config.in                |  1 +
+ >  package/qt5/qt5enginio/Config.in     | 13 +++++++++
+ >  package/qt5/qt5enginio/qt5enginio.mk | 56 ++++++++++++++++++++++++++++++++++++
+ >  3 files changed, 70 insertions(+)
+ >  create mode 100644 package/qt5/qt5enginio/Config.in
+ >  create mode 100644 package/qt5/qt5enginio/qt5enginio.mk
 
-Thanks. It unfortunately doesn't build for me with the default
-uClibc/gcc versions:
+ > diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+ > index d36852e..e810ecb 100644
+ > --- a/package/qt5/Config.in
+ > +++ b/package/qt5/Config.in
+ > @@ -29,6 +29,7 @@ if BR2_PACKAGE_QT5
+ >  source "package/qt5/qt5base/Config.in"
+ >  source "package/qt5/qt5connectivity/Config.in"
+ >  source "package/qt5/qt5declarative/Config.in"
+ > +source "package/qt5/qt5enginio/Config.in"
+ >  source "package/qt5/qt5graphicaleffects/Config.in"
+ >  source "package/qt5/qt5imageformats/Config.in"
+ >  source "package/qt5/qt5multimedia/Config.in"
+ > diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+ > new file mode 100644
+ > index 0000000..c06e6da
+ > --- /dev/null
+ > +++ b/package/qt5/qt5enginio/Config.in
+ > @@ -0,0 +1,13 @@
+ > +config BR2_PACKAGE_QT5ENGINIO
+ > +	bool "qt5enginio"
+ > +	select BR2_PACKAGE_OPENSSL
+ > +	select BR2_PACKAGE_QT5BASE
+ > +	select BR2_PACKAGE_QT5BASE_GUI
+ > +	select BR2_PACKAGE_QT5BASE_NETWORK
 
-kernel/qdnslookup_unix.cpp: In static member function ?static void QDnsLookupRunnable::query(int, const QByteArray&, const QHostAddress&, QDnsLookupReply*)?:
-kernel/qdnslookup_unix.cpp:165:27: error: ?struct __res_state::<anonymous union>::<anonymous>? has no member named ?nsmap?
-Makefile:16244: recipe for target '.obj/qdnslookup_unix.o' failed
-make[3]: *** [.obj/qdnslookup_unix.o] Error 1
+<snip>
 
-Seems to have been introduced here:
+ > +QT5ENGINIO_DEPENDENCIES = qt5base
 
-https://qt.gitorious.org/qt/qtbase/commit/62f01d581bdda6f67cd96af179ae1953e30fa218
+You forgot to add openssl to _DEPENDENCIES.
 
-uClibc doesn't have a nsmap member in __res_state:
-
-http://git.uclibc.org/uClibc/tree/include/resolv.h
-
-So I guess this need to go in an #ifndef __UCLIBC__ conditional.
-
-Care to create a patch (and send upstream!)?
+Otherwise it looks good.
 
 -- 
 Bye, Peter Korsgaard
