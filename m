@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 23 May 2014 00:30:48 +0200
-Subject: [Buildroot] [PATCH 1 of 2] infra: permissions/users/device
- tables: avoid adding empty entries
-In-Reply-To: <f9a9da19bf34a6862ec5.1400762140@argentina>
+Date: Fri, 23 May 2014 00:30:55 +0200
+Subject: [Buildroot] [PATCH 2 of 2] fs/tar: use qstrip to clean up build
+ output
+In-Reply-To: <cda34eac2826e87dffc2.1400762141@argentina>
 References: <patchbomb.1400762139@argentina>
- <f9a9da19bf34a6862ec5.1400762140@argentina>
-Message-ID: <537E7A98.1040000@openwide.fr>
+ <cda34eac2826e87dffc2.1400762141@argentina>
+Message-ID: <537E7A9F.4050207@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,20 +15,16 @@ To: buildroot@busybox.net
 Hi Thomas,
 
 Le 22/05/2014 14:35, Thomas De Schampheleire a ?crit :
-> In pkg-generic.mk, an entry would be added to each of the permissions,
-> devices and users tables, even if FOO_PERMISSIONS/DEVICES/USERS is empty. In
-> that last case, the entry would contain only the separator, which is
-> substituted to '\n' in fs/common.mk.
-> For configurations with many packages, this would render the build output a
-> bit odd, containing many \n instances (even though the end result in the
-> target would of course be the same).
+> When using the tar filesystem method, the build output shows at the end:
 > 
-> This patch cleans up the build output by only adding to these tables when
-> the package actually specified contents for them.
+> echo " tar -c""f <br>/output/images/rootfs.tar -C <br>/output/target ." >>
+>                                     <br>/output/build/_fakeroot.fs
+> 
+> The inner set of quotes can be easily removed by properly stripping the tar
+> options (coming from the buildroot configuration).
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Tested-by: Romain Naour <romain.naour@openwide.fr>
 Acked-by: Romain Naour <romain.naour@openwide.fr>
 
 Thanks
@@ -36,29 +32,21 @@ Romain
 
 > 
 > ---
->  package/pkg-generic.mk |  7 +++++++
->  1 files changed, 7 insertions(+), 0 deletions(-)
+>  fs/tar/tar.mk |  2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -653,9 +653,16 @@ ifneq ($$($(2)_PROVIDES),)
->  endif
+> diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+> --- a/fs/tar/tar.mk
+> +++ b/fs/tar/tar.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  TARGETS += $(1)
-> +
-> +ifneq ($$($(2)_PERMISSIONS),)
->  PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
-> +endif
-> +ifneq ($$($(2)_DEVICES),)
->  PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
-> +endif
-> +ifneq ($$($(2)_USERS),)
->  PACKAGES_USERS += $$($(2)_USERS)$$(sep)
-> +endif
+> -TAR_OPTS := $(BR2_TARGET_ROOTFS_TAR_OPTIONS)
+> +TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
 >  
->  ifeq ($$($(2)_SITE_METHOD),svn)
->  DL_TOOLS_DEPENDENCIES += svn
+>  define ROOTFS_TAR_CMD
+>   tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
