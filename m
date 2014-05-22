@@ -1,47 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 May 2014 23:52:29 +0200
-Subject: [Buildroot] [PATCH] system/timezone: check localtime exists
-In-Reply-To: <1400791259-2017-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Thu, 22 May 2014 22:40:59 +0200")
-References: <1400791259-2017-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87bnupcwgy.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 May 2014 23:52:18 +0200
+Subject: [Buildroot] [git commit] system/timezone: check localtime exists
+Message-ID: <20140522215335.9271B9C8DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=5f017a8961e071ceda5350e2d12b58d969b439dd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > When installing a localtime, check it is a valid timezone.
+When installing a localtime, check it is a valid timezone.
 
- > Reported-by: Sagaert Johan <sagaert.johan@skynet.be>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/tz/tz.mk         | 5 +++++
- >  package/tzdata/tzdata.mk | 5 +++++
- >  2 files changed, 10 insertions(+)
+[Peter: extend error message to make it clear to the user what to change]
+Reported-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tz/tz.mk         |    5 +++++
+ package/tzdata/tzdata.mk |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
- > diff --git a/package/tz/tz.mk b/package/tz/tz.mk
- > index 865ba3b..3198db7 100644
- > --- a/package/tz/tz.mk
- > +++ b/package/tz/tz.mk
- > @@ -27,6 +27,11 @@ define TZ_INSTALL_TARGET_CMDS
- >  	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo/uclibc
- >  	cp -a $(@D)/output/* $(TARGET_DIR)/usr/share/zoneinfo/uclibc
- >  	if [ -n "$(TZ_LOCALTIME)" ]; then                               \
- > +	    if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZDATA_LOCALTIME) ]; then \
- > +	        printf "'%s' is not a valid timezone\n"                 \
- > +	               "$(TZDATA_LOCALTIME)";                           \
-
-I have extended this to make it a bit more clear what the user should
-change:
-
--               printf "'%s' is not a valid timezone\n"                 \
-+               printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
-
-And committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tz/tz.mk b/package/tz/tz.mk
+index 865ba3b..770cc46 100644
+--- a/package/tz/tz.mk
++++ b/package/tz/tz.mk
+@@ -27,6 +27,11 @@ define TZ_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo/uclibc
+ 	cp -a $(@D)/output/* $(TARGET_DIR)/usr/share/zoneinfo/uclibc
+ 	if [ -n "$(TZ_LOCALTIME)" ]; then                               \
++	    if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/uclibc/$(TZDATA_LOCALTIME) ]; then \
++	        printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
++	               "$(TZDATA_LOCALTIME)";                           \
++	        exit 1;                                                 \
++	    fi;                                                         \
+ 	    cd $(TARGET_DIR)/etc;                                       \
+ 	    ln -sf ../usr/share/zoneinfo/uclibc/$(TZDATA_LOCALTIME) TZ; \
+ 	fi
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index a498d10..58b5f13 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -44,6 +44,11 @@ define TZDATA_INSTALL_TARGET_CMDS
+ 	    ln -sfn "$${zone}" "$${zone##*/}";  \
+ 	done
+ 	if [ -n "$(TZDATA_LOCALTIME)" ]; then                           \
++	    if [ ! -f $(TARGET_DIR)/usr/share/zoneinfo/$(TZDATA_LOCALTIME) ]; then \
++	        printf "Error: '%s' is not a valid timezone, check your BR2_TARGET_LOCALTIME setting\n" \
++	               "$(TZDATA_LOCALTIME)";                           \
++	        exit 1;                                                 \
++	    fi;                                                         \
+ 	    cd $(TARGET_DIR)/etc;                                       \
+ 	    ln -sf ../usr/share/zoneinfo/$(TZDATA_LOCALTIME) localtime; \
+ 	    echo "$(TZDATA_LOCALTIME)" >timezone;                       \
