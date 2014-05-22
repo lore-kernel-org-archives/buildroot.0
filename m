@@ -1,31 +1,63 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 22 May 2014 19:16:14 -0300
-Subject: [Buildroot] [PATCH 2/3] glibc: doesn't build for PowerPC SPE
+Date: Thu, 22 May 2014 19:16:15 -0300
+Subject: [Buildroot] [PATCH 3/3] glibc: add eglibc 2.19-svnr25243 and choice
+	menu
 In-Reply-To: <1400796975-17647-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1400796975-17647-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1400796975-17647-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1400796975-17647-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add glibc 2.19-svnr25243 and a choice menu to select between different
+eglibc versions.
+Blacklist it for PowerPC SPE since it's broken.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/toolchain-buildroot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/glibc/Config.in | 17 +++++++++++++++++
+ package/glibc/glibc.mk  |  2 +-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 216f9db..0d34f1d 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -66,6 +66,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_x86_64 || BR2_microblaze
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PREFER_STATIC_LIB
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 1c1d5e5..83f655a 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -1,3 +1,20 @@
++if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
++
++choice
++	prompt "eglibc version"
++	default BR2_EGLIBC_VERSION_2_18
++
++config BR2_EGLIBC_VERSION_2_18
++	bool "2.18-svnr23787"
++
++config BR2_EGLIBC_VERSION_2_19
++	bool "2.19-svnr25243"
 +	depends on !BR2_powerpc_SPE
- 	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our glibc.mk enables RPC support
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++
++endchoice
++
++endif
++
+ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
+ choice
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index d02ab7e..f841fd0 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
+-GLIBC_VERSION = 2.18-svnr23787
++GLIBC_VERSION = $(if $(BR2_EGLIBC_VERSION_2_19),2.19-svnr25243,2.18-svnr23787)
+ GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
+ GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
+ GLIBC_SRC_SUBDIR = libc
 -- 
 1.8.5.5
