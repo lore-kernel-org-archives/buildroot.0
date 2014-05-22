@@ -1,34 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 21 May 2014 23:27:54 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-19
-In-Reply-To: <20140520092513.0ad98a62@free-electrons.com>
-References: <20140520063007.ACE63100F8E@stock.ovh.net>
- <20140520092513.0ad98a62@free-electrons.com>
-Message-ID: <537D1A5A.1000000@mind.be>
+Date: Thu, 22 May 2014 02:02:29 +0200
+Subject: [Buildroot] [PATCH 1 of 7 v2] infra: consistently use double
+ dollar signs inside inner-xxx-targets
+In-Reply-To: <CAAXf6LXt9=durmGRQhgav5F0qsDtdeSzKXrks5=WGfo5dzLoQw@mail.gmail.com>
+References: <patchbomb.1399905848@argentina>
+ <a0eab18241e211343bfa.1399905849@argentina> <5371E50C.7010606@mind.be>
+ <CAAXf6LXt9=durmGRQhgav5F0qsDtdeSzKXrks5=WGfo5dzLoQw@mail.gmail.com>
+Message-ID: <537D3E95.9080707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/05/14 09:25, Thomas Petazzoni wrote:
-> On Tue, 20 May 2014 08:30:07 +0200 (CEST), Thomas Petazzoni wrote:
+On 21/05/14 15:14, Thomas De Schampheleire wrote:
+> Hi Arnout,
 > 
->> >     x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/3ecb780be9e7912dac9670d9e7ad9a810c6243af/
-> Multiple definitions of vfork in libc.a and libpthread.a. To me, this
-> looks like a uClibc bug. Do other agree about this? Should we mark
-> alsa-lib as not available on pure static builds with uClibc? Is there a
-> uClibc patch that fixes that?
+> On Tue, May 13, 2014 at 11:25 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> [..]
+>>>
+>>> @@ -548,7 +550,7 @@ endif
+>>>  $$($(2)_TARGET_RSYNC_SOURCE):                SRCDIR=$$($(2)_OVERRIDE_SRCDIR)
+>>>  $$($(2)_TARGET_RSYNC_SOURCE):                PKG=$(2)
+>>>  $$($(2)_TARGET_PATCH):                       PKG=$(2)
+>>> -$$($(2)_TARGET_PATCH):                       RAWNAME=$(patsubst host-%,%,$(1))
+>>> +$$($(2)_TARGET_PATCH):                       RAWNAME=$$(patsubst host-%,%,$(1))
+>>>  $$($(2)_TARGET_PATCH):                       PKGDIR=$(pkgdir)
+>>>  $$($(2)_TARGET_EXTRACT):             PKG=$(2)
+>>>  $$($(2)_TARGET_SOURCE):                      PKG=$(2)
+>>> @@ -559,9 +561,9 @@ endif
+>>>  # kernel case, the bootloaders case, and the normal packages case.
+>>>  ifeq ($(1),linux)
+>>>  $(2)_KCONFIG_VAR = BR2_LINUX_KERNEL
+>>> -else ifneq ($(filter boot/%,$(pkgdir)),)
+>>> +else ifneq ($$(filter boot/%,$(pkgdir)),)
+>>
+>>  $$(pkgdir) works fine here. Also, it gets evaluated only once anyway, so
+>> there's no speedup from using a single $.
+>>
+> 
+> While creating v3 of this patch and retesting, I bumped into a nasty
+> situation regarding pkgdir: the foo-patch rule is executed with the
+> variable PKGDIR=$(pkgdir) which I changed to PKGDIR=$$(pkgdir).
+> However, in that case, the foo-patch rule, which is outside
+> inner-targets, gets executed with the literal $(pkgdir) as PKGDIR,
+> which is evaluated to docs/manual (the directory of the last makefile
+> parsed).
+> As a result, package patching does not occur.
+> 
+> There are two solutions:
+> - do not double the $$ here, so keep the originial PKGDIR=$(pkgdir)
+> - use :=, so PKGDIR:=$(pkgdir)
+> 
+> I feel that if we take the first alternative, we should consistently
+> use $(pkgdir) like that as it is less error-prone to have it as a
+> general exception, than as an
+> exception-only-if-you-pass-it-to-non-inner-rules.
+> All of this is because the pkgdir variable is rather tricky.
 
- When I did that allpackageyes of a static arm configuration, there were dozens
-of packages that show the same or a similar problem (duplicates in libpthread
-and libc). I looked at one of them in more detail, and I could make it link by
-playing around with the link options, but I haven't been able to find the real
-cause.
+ Okay, I agree: first option is the best one, and then we should use it
+everywhere for pkgdir. Also, for pkgdir, not delaying expansion (i.e. single-$)
+can never be incorrect. Same goes for pkgname, obviously. Which matches your
+earlier observation that pkgname is special.
+
+ Can you add an explanation about this in the leading comment of
+inner-generic-package?
+
 
  Regards,
  Arnout
+
+> 
+> Thanks,
+> Thomas
+> 
 
 
 -- 
