@@ -1,108 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 May 2014 13:53:25 +0200
-Subject: [Buildroot] [git commit] mongoose: bump to version 5.3
-Message-ID: <20140601083245.E4F209CE5B@busybox.osuosl.org>
+Date: Thu, 22 May 2014 23:37:41 +0200
+Subject: [Buildroot] [git commit] gcc: bump 4.8.x series to version 4.8.3
+Message-ID: <20140601083245.679519C779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=926affb40dba28696ef4a62aced946269c1f1a62
+commit: http://git.buildroot.net/buildroot/commit/?id=acab108a7748384376063a0c0ccdd7ad0cee92bb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mongoose has changed quite drastically in the last months.
-Here is a list of changes which had to be applied:
+Update 900-musl-support.patch with upstreamed chunks.
 
- - Bump version from 3.7 to 5.3
- - use tarball download via github helper iso git clone
- - need largefile support
- - compilation takes place into "examples"
- - weberver source is now "server.c"
- - adapt to new command line options
- - SSL support now controlled via NS_ENABLE_SSL
+Now upstreamed hence dropped:
+840-PR57717.patch (in another way).
+842-gcc-4.8.2-Fix-PR-target-58854.patch
+843-gcc-4.8.2-Fix-PR-target-58595.patch
+850-xtensa-libgcc-linker-script.patch
 
-[Peter: extend commit text, use CFLAGS_EXTRA, only build server]
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
-Cc: Will Wagner <will_wagner@carallon.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongoose/Config.in   |    5 +++--
- package/mongoose/S85mongoose |    2 +-
- package/mongoose/mongoose.mk |   17 +++++++----------
- 3 files changed, 11 insertions(+), 13 deletions(-)
+ package/gcc/4.8.2/840-PR57717.patch                |   23 --
+ .../4.8.2/842-gcc-4.8.2-Fix-PR-target-58854.patch  |   32 --
+ .../4.8.2/843-gcc-4.8.2-Fix-PR-target-58595.patch  |  101 ------
+ .../4.8.2/850-xtensa-libgcc-linker-script.patch    |   29 --
+ package/gcc/{4.8.2 => 4.8.3}/100-uclibc-conf.patch |    0
+ .../{4.8.2 => 4.8.3}/301-missing-execinfo_h.patch  |    0
+ .../gcc/{4.8.2 => 4.8.3}/302-c99-snprintf.patch    |    0
+ .../305-libmudflap-susv3-legacy.patch              |    0
+ .../810-arm-softfloat-libgcc.patch                 |    0
+ .../{4.8.2 => 4.8.3}/830-arm_unbreak_armv4t.patch  |    0
+ .../gcc/{4.8.2 => 4.8.3}/841-PR57717-E500v2.patch  |   10 +-
+ .../gcc/{4.8.2 => 4.8.3}/900-musl-support.patch    |  328 ++++++++------------
+ .../powerpc-link-with-math-lib.patch.conditional   |    0
+ package/gcc/Config.in.host                         |    2 +-
+ 14 files changed, 134 insertions(+), 391 deletions(-)
 
-diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
-index 35723de..2526112 100644
---- a/package/mongoose/Config.in
-+++ b/package/mongoose/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MONGOOSE
- 	bool "mongoose"
-+	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	help
-@@ -7,6 +8,6 @@ config BR2_PACKAGE_MONGOOSE
- 
- 	  https://github.com/valenok/mongoose
- 
--comment "mongoose needs a toolchain w/ threads"
-+comment "mongoose needs a toolchain w/ threads, largefile"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
-diff --git a/package/mongoose/S85mongoose b/package/mongoose/S85mongoose
-index dc042d0..98e537f 100755
---- a/package/mongoose/S85mongoose
-+++ b/package/mongoose/S85mongoose
-@@ -10,7 +10,7 @@ NAME=mongoose
- DESC="Mongoose HTTP server"
- 
- DAEMON=`which mongoose`
--OPTIONS="-num_threads 3 -document_root /var/www -listening_ports 80"
-+OPTIONS="-document_root /var/www -listening_port 80"
- 
- [ -e /etc/default/mongoose ] && . /etc/default/mongoose
- 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index d928dd8..75a4d3f 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 3.7
--MONGOOSE_SOURCE = mongoose-$(MONGOOSE_VERSION).tgz
--MONGOOSE_SITE = https://mongoose.googlecode.com/files
--MONGOOSE_LICENSE = MIT
-+MONGOOSE_VERSION = 5.3
-+MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
-+MONGOOSE_LICENSE = GPLv2
- MONGOOSE_LICENSE_FILES = LICENSE
- 
- MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
-@@ -15,18 +14,16 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
- # directly linked
--MONGOOSE_CFLAGS += -DNO_SSL_DL -lssl -lcrypto -lz
--else
--MONGOOSE_CFLAGS += -DNO_SSL
-+MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
- endif
- 
- define MONGOOSE_BUILD_CMDS
--	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D) \
--		linux COPT="$(MONGOOSE_CFLAGS)"
-+	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
-+		CFLAGS_EXTRA="$(MONGOOSE_CFLAGS)" server
- endef
- 
- define MONGOOSE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin/mongoose
-+	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
- 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
- 		$(TARGET_DIR)/etc/init.d/S85mongoose
- endef
+Patch is too large, so refusing to show it
