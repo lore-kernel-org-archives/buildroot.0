@@ -1,19 +1,23 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 May 2014 11:13:38 +0200
-Subject: [Buildroot] [PATCH] inadyn: bump to version 1.99.9
-In-Reply-To: <1400692452-30405-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 21 May 2014 14:14:12 -0300")
-References: <1400692452-30405-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a9aadvlp.fsf@dell.be.48ers.dk>
+Date: Thu, 22 May 2014 11:13:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/transmission: Bump version to
+	2.83
+In-Reply-To: <1400686445-20975-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Wed, 21 May 2014 17:34:05 +0200")
+References: <1400686445-20975-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <8761kydvle.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > - removed transmission-02-fix-cxx-check-with-ccache.patch
+ >   applied upstream: https://trac.transmissionbt.com/changeset/14256
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to next, thanks.
 
