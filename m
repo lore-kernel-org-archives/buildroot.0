@@ -1,37 +1,39 @@
-From: Freedreamer <freedreamer@email.it>
-Date: Thu, 22 May 2014 14:08:33 +0200
-Subject: [Buildroot] beagleBone remount FS systemd
-Message-ID: <CAAs3wMhmNROnQb6wRuu7TVcEcpVrQJgzrjToCXnQbyeCjtVcVg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 22 May 2014 13:27:06 +0100
+Subject: [Buildroot] [PATCH v2] libnss: Enable for MIPS64 n32 platforms
+In-Reply-To: <20140522140609.30baa089@free-electrons.com>
+References: <1400753901-49457-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20140522140609.30baa089@free-electrons.com>
+Message-ID: <537DED1A.9020902@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all ,
+On 05/22/2014 01:06 PM, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
+>
+> On Thu, 22 May 2014 11:18:21 +0100, Vicente Olivert Riera wrote:
+>
+>>   ifeq ($(BR2_ARCH_IS_64),y)
+>> +ifeq ($(BR2_MIPS_NABI32),)
+>>   LIBNSS_BUILD_VARS += USE_64=1
+>>   endif
+>> +endif
+>
+> I'm sorry to be annoying here, but do you think we could add a comment
+> above this to explain why BR2_MIPS_NABI32 is handled specially here?
 
-I built with br a rootfs based on systemd on a beaglebone white. Everything
-is ok except that i can't remount rootfs in rw with the systemd service
-the service status says:
+You don't need to say sorry, Thomas. It's a good idea, I will add a comment.
 
-   Active: active (exited) since Sat 2000-01-01 02:29:56 UTC; 3min 57s ago
-     Docs: man:systemd-remount-fs.service(8)
-           http://www.freedesktop.org/wiki/Software/systemd/APIFileSystems
-  Process: 73 ExecStart=/lib/systemd/systemd-remount-fs (code=exited,
-status=0/SUCCESS)
- Main PID: 73 (code=exited, status=0/SUCCESS)
-   CGroup: /system.slice/systemd-remount-fs.service
+> Thanks!
 
-but no way to get it working.
-If I remount manually with "mount -o remount rw /"  it works...
+Thanks to you.
 
-any idea?
+> Thomas
+>
 
-thanks 4 the help
 
-PS
-im ' on rc5.2014 but same problem on the last release
-Marco
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140522/4cf18ac9/attachment.html>
+-- 
+Vincent
