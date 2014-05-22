@@ -1,63 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 22 May 2014 19:16:15 -0300
-Subject: [Buildroot] [PATCH 3/3] glibc: add eglibc 2.19-svnr25243 and choice
-	menu
-In-Reply-To: <1400796975-17647-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1400796975-17647-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1400796975-17647-3-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 23 May 2014 00:21:47 +0200
+Subject: [Buildroot] [PATCH for next] package/tzdata: only compile the
+	zoneinfo once
+Message-ID: <1400797307-6741-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add glibc 2.19-svnr25243 and a choice menu to select between different
-eglibc versions.
-Blacklist it for PowerPC SPE since it's broken.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+We already compile the zoneinfo once for the host, so there is
+no need to recompile it for the target, we can just re-use the
+host files.
+
+This has no impact on tz (the uClibc counterpart of tzdata), since
+it already made use of the host files anyway.
+
+This means we no longer need to extract the target variant of
+tzdata, too.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/glibc/Config.in | 17 +++++++++++++++++
- package/glibc/glibc.mk  |  2 +-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ package/tzdata/tzdata.mk | 23 ++++++-----------------
+ 1 file changed, 6 insertions(+), 17 deletions(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index 1c1d5e5..83f655a 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -1,3 +1,20 @@
-+if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
-+
-+choice
-+	prompt "eglibc version"
-+	default BR2_EGLIBC_VERSION_2_18
-+
-+config BR2_EGLIBC_VERSION_2_18
-+	bool "2.18-svnr23787"
-+
-+config BR2_EGLIBC_VERSION_2_19
-+	bool "2.19-svnr25243"
-+	depends on !BR2_powerpc_SPE
-+
-+endchoice
-+
-+endif
-+
- if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 58b5f13..b619851 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -7,7 +7,8 @@
+ TZDATA_VERSION = 2014a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+-TZDATA_DEPENDENCIES = host-zic
++TZDATA_DEPENDENCIES = host-tzdata
++HOST_TZDATA_DEPENDENCIES = host-zic
+ TZDATA_LICENSE = Public domain
  
- choice
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d02ab7e..f841fd0 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+ TZDATA_DEFAULT_ZONELIST = africa antarctica asia australasia backward etcetera \
+@@ -21,24 +22,12 @@ endif
  
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
--GLIBC_VERSION = 2.18-svnr23787
-+GLIBC_VERSION = $(if $(BR2_EGLIBC_VERSION_2_19),2.19-svnr25243,2.18-svnr23787)
- GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
- GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
- GLIBC_SRC_SUBDIR = libc
+ TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
+ 
+-# Don't strip any path components during extraction.
+-define TZDATA_EXTRACT_CMDS
+-	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
+-		| $(TAR) --strip-components=0 -C $(@D) -xf -
+-endef
+-
+-define TZDATA_BUILD_CMDS
+-	(cd $(@D); \
+-		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
+-			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
+-		done; \
+-	)
+-endef
++# No need to extract for target, we're using the host-installed files
++TZDATA_EXTRACT_CMDS =
+ 
+ define TZDATA_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
+-	cp -a $(@D)/_output/* $(@D)/*.tab $(TARGET_DIR)/usr/share/zoneinfo
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share
++	cp -a $(HOST_DIR)/usr/share/zoneinfo $(TARGET_DIR)/usr/share/zoneinfo
+ 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
+ 	for zone in posix/*; do                 \
+ 	    ln -sfn "$${zone}" "$${zone##*/}";  \
 -- 
-1.8.5.5
+1.8.3.2
