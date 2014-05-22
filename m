@@ -1,25 +1,45 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 22 May 2014 11:13:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/transmission: Bump version to
-	2.83
-In-Reply-To: <1400686445-20975-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Wed, 21 May 2014 17:34:05 +0200")
-References: <1400686445-20975-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <8761kydvle.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 22 May 2014 11:11:17 +0200
+Subject: [Buildroot] [git commit branch/next] inadyn: bump to version 1.99.9
+Message-ID: <20140522091455.365019CD33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=41398fa8d92ef43df11fdbe49981b9f3305df4b4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > - removed transmission-02-fix-cxx-check-with-ccache.patch
- >   applied upstream: https://trac.transmissionbt.com/changeset/14256
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/inadyn/inadyn.mk |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 3886390..21e983e 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
+@@ -4,11 +4,20 @@
+ #
+ ################################################################################
+ 
+-INADYN_VERSION = 1.99.7
++INADYN_VERSION = 1.99.9
+ INADYN_SITE = $(call github,troglobit,inadyn,$(INADYN_VERSION))
+ INADYN_LICENSE = GPLv2+
+ INADYN_LICENSE_FILES = COPYING LICENSE
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++INADYN_DEPENDENCIES += openssl
++else
++define INADYN_DISABLE_OPENSSL
++	$(SED) '/ssl/Id' $(@D)/config.mk
++endef
++endif
++INADYN_POST_PATCH_HOOKS += INADYN_DISABLE_OPENSSL
++
+ define INADYN_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
