@@ -1,73 +1,66 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 May 2014 00:21:47 +0200
-Subject: [Buildroot] [PATCH for next] package/tzdata: only compile the
-	zoneinfo once
-Message-ID: <1400797307-6741-1-git-send-email-yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Fri, 23 May 2014 00:30:48 +0200
+Subject: [Buildroot] [PATCH 1 of 2] infra: permissions/users/device
+ tables: avoid adding empty entries
+In-Reply-To: <f9a9da19bf34a6862ec5.1400762140@argentina>
+References: <patchbomb.1400762139@argentina>
+ <f9a9da19bf34a6862ec5.1400762140@argentina>
+Message-ID: <537E7A98.1040000@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi Thomas,
 
-We already compile the zoneinfo once for the host, so there is
-no need to recompile it for the target, we can just re-use the
-host files.
+Le 22/05/2014 14:35, Thomas De Schampheleire a ?crit :
+> In pkg-generic.mk, an entry would be added to each of the permissions,
+> devices and users tables, even if FOO_PERMISSIONS/DEVICES/USERS is empty. In
+> that last case, the entry would contain only the separator, which is
+> substituted to '\n' in fs/common.mk.
+> For configurations with many packages, this would render the build output a
+> bit odd, containing many \n instances (even though the end result in the
+> target would of course be the same).
+> 
+> This patch cleans up the build output by only adding to these tables when
+> the package actually specified contents for them.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-This has no impact on tz (the uClibc counterpart of tzdata), since
-it already made use of the host files anyway.
+Tested-by: Romain Naour <romain.naour@openwide.fr>
+Acked-by: Romain Naour <romain.naour@openwide.fr>
 
-This means we no longer need to extract the target variant of
-tzdata, too.
+Thanks
+Romain
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/tzdata/tzdata.mk | 23 ++++++-----------------
- 1 file changed, 6 insertions(+), 17 deletions(-)
-
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 58b5f13..b619851 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -7,7 +7,8 @@
- TZDATA_VERSION = 2014a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
--TZDATA_DEPENDENCIES = host-zic
-+TZDATA_DEPENDENCIES = host-tzdata
-+HOST_TZDATA_DEPENDENCIES = host-zic
- TZDATA_LICENSE = Public domain
- 
- TZDATA_DEFAULT_ZONELIST = africa antarctica asia australasia backward etcetera \
-@@ -21,24 +22,12 @@ endif
- 
- TZDATA_LOCALTIME = $(call qstrip,$(BR2_TARGET_LOCALTIME))
- 
--# Don't strip any path components during extraction.
--define TZDATA_EXTRACT_CMDS
--	gzip -d -c $(DL_DIR)/$(TZDATA_SOURCE) \
--		| $(TAR) --strip-components=0 -C $(@D) -xf -
--endef
--
--define TZDATA_BUILD_CMDS
--	(cd $(@D); \
--		for zone in $(TZDATA_ZONELIST); do \
--			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
--			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
--		done; \
--	)
--endef
-+# No need to extract for target, we're using the host-installed files
-+TZDATA_EXTRACT_CMDS =
- 
- define TZDATA_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/usr/share/zoneinfo
--	cp -a $(@D)/_output/* $(@D)/*.tab $(TARGET_DIR)/usr/share/zoneinfo
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share
-+	cp -a $(HOST_DIR)/usr/share/zoneinfo $(TARGET_DIR)/usr/share/zoneinfo
- 	cd $(TARGET_DIR)/usr/share/zoneinfo;    \
- 	for zone in posix/*; do                 \
- 	    ln -sfn "$${zone}" "$${zone##*/}";  \
--- 
-1.8.3.2
+> 
+> ---
+>  package/pkg-generic.mk |  7 +++++++
+>  1 files changed, 7 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -653,9 +653,16 @@ ifneq ($$($(2)_PROVIDES),)
+>  endif
+>  
+>  TARGETS += $(1)
+> +
+> +ifneq ($$($(2)_PERMISSIONS),)
+>  PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+> +endif
+> +ifneq ($$($(2)_DEVICES),)
+>  PACKAGES_DEVICES_TABLE += $$($(2)_DEVICES)$$(sep)
+> +endif
+> +ifneq ($$($(2)_USERS),)
+>  PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+> +endif
+>  
+>  ifeq ($$($(2)_SITE_METHOD),svn)
+>  DL_TOOLS_DEPENDENCIES += svn
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
