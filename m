@@ -1,39 +1,40 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 22 May 2014 14:35:41 +0200
-Subject: [Buildroot] [PATCH 2 of 2] fs/tar: use qstrip to clean up build
-	output
-In-Reply-To: <patchbomb.1400762139@argentina>
-References: <patchbomb.1400762139@argentina>
-Message-ID: <cda34eac2826e87dffc2.1400762141@argentina>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 22 May 2014 15:41:36 +0200
+Subject: [Buildroot] [PATCH 1/3] qt5: bump to 5.3.0
+In-Reply-To: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com> ("Fatih
+ =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 20 May 2014 15:12:12 +0300")
+References: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com>
+Message-ID: <87sio2c4mn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using the tar filesystem method, the build output shows at the end:
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-echo " tar -c""f <br>/output/images/rootfs.tar -C <br>/output/target ." >>
-                                    <br>/output/build/_fakeroot.fs
+ > Remove upstreamed patches.
+ > See http://qt-project.org/qt5/qt53 for the release information.
 
-The inner set of quotes can be easily removed by properly stripping the tar
-options (coming from the buildroot configuration).
+Thanks. It unfortunately doesn't build for me with the default
+uClibc/gcc versions:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+kernel/qdnslookup_unix.cpp: In static member function ?static void QDnsLookupRunnable::query(int, const QByteArray&, const QHostAddress&, QDnsLookupReply*)?:
+kernel/qdnslookup_unix.cpp:165:27: error: ?struct __res_state::<anonymous union>::<anonymous>? has no member named ?nsmap?
+Makefile:16244: recipe for target '.obj/qdnslookup_unix.o' failed
+make[3]: *** [.obj/qdnslookup_unix.o] Error 1
 
----
- fs/tar/tar.mk |  2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Seems to have been introduced here:
 
-diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
---- a/fs/tar/tar.mk
-+++ b/fs/tar/tar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TAR_OPTS := $(BR2_TARGET_ROOTFS_TAR_OPTIONS)
-+TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
- 
- define ROOTFS_TAR_CMD
-  tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
+https://qt.gitorious.org/qt/qtbase/commit/62f01d581bdda6f67cd96af179ae1953e30fa218
+
+uClibc doesn't have a nsmap member in __res_state:
+
+http://git.uclibc.org/uClibc/tree/include/resolv.h
+
+So I guess this need to go in an #ifndef __UCLIBC__ conditional.
+
+Care to create a patch (and send upstream!)?
+
+-- 
+Bye, Peter Korsgaard
