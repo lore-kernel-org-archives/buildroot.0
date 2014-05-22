@@ -1,54 +1,59 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Fri, 23 May 2014 00:30:55 +0200
-Subject: [Buildroot] [PATCH 2 of 2] fs/tar: use qstrip to clean up build
- output
-In-Reply-To: <cda34eac2826e87dffc2.1400762141@argentina>
-References: <patchbomb.1400762139@argentina>
- <cda34eac2826e87dffc2.1400762141@argentina>
-Message-ID: <537E7A9F.4050207@openwide.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 22 May 2014 19:38:44 -0300
+Subject: [Buildroot] [PATCH] lvm2: bump to version 2.02.106
+Message-ID: <1400798324-21265-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Readline patch is now upstream.
 
-Le 22/05/2014 14:35, Thomas De Schampheleire a ?crit :
-> When using the tar filesystem method, the build output shows at the end:
-> 
-> echo " tar -c""f <br>/output/images/rootfs.tar -C <br>/output/target ." >>
->                                     <br>/output/build/_fakeroot.fs
-> 
-> The inner set of quotes can be easily removed by properly stripping the tar
-> options (coming from the buildroot configuration).
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/lvm2/lvm2-001-readline-deprecated.patch | 19 -------------------
+ package/lvm2/lvm2.mk                            |  2 +-
+ 2 files changed, 1 insertion(+), 20 deletions(-)
+ delete mode 100644 package/lvm2/lvm2-001-readline-deprecated.patch
 
-Acked-by: Romain Naour <romain.naour@openwide.fr>
-
-Thanks
-Romain
-
-> 
-> ---
->  fs/tar/tar.mk |  2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-> --- a/fs/tar/tar.mk
-> +++ b/fs/tar/tar.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TAR_OPTS := $(BR2_TARGET_ROOTFS_TAR_OPTIONS)
-> +TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
->  
->  define ROOTFS_TAR_CMD
->   tar -c$(TAR_OPTS)f $@ -C $(TARGET_DIR) .
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/lvm2/lvm2-001-readline-deprecated.patch b/package/lvm2/lvm2-001-readline-deprecated.patch
+deleted file mode 100644
+index d36adc3..0000000
+--- a/package/lvm2/lvm2-001-readline-deprecated.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-The CPPFunction typedef (among others) have been deprecated in favour of
+-specific prototyped typedefs since readline 4.2.
+-It's been working since because compatibility typedefs have been
+-in place until they were removed in readline 6.3.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura LVM2.2.02.103.orig/tools/lvm.c LVM2.2.02.103/tools/lvm.c
+---- LVM2.2.02.103.orig/tools/lvm.c	2014-03-01 16:10:57.902422044 -0300
+-+++ LVM2.2.02.103/tools/lvm.c	2014-03-01 16:11:34.791598230 -0300
+-@@ -185,7 +185,7 @@
+- 	char *input = NULL, *args[MAX_ARGS], **argv;
+- 
+- 	rl_readline_name = "lvm";
+--	rl_attempted_completion_function = (CPPFunction *) _completion;
+-+	rl_attempted_completion_function = (rl_completion_func_t *) _completion;
+- 
+- 	_read_history(cmd);
+- 
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index ee281a1..612f92f 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.103
++LVM2_VERSION = 2.02.106
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
+-- 
+1.8.5.5
