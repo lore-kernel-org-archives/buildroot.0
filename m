@@ -1,46 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 23 May 2014 14:42:50 -0300
-Subject: [Buildroot] root password and dhcp
-In-Reply-To: <CAMm5YqrLgFpGE4m2Mqi+KoSQtYv7O36A2w3DBtUy0p_uaVZdGA@mail.gmail.com>
-References: <CAMm5YqrLgFpGE4m2Mqi+KoSQtYv7O36A2w3DBtUy0p_uaVZdGA@mail.gmail.com>
-Message-ID: <537F889A.2030907@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 23 May 2014 19:59:30 +0200
+Subject: [Buildroot] [PATCH] package/samba{,4}: disable on nios2
+Message-ID: <1400867970-13186-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/23/2014 11:10 AM, cem akpolat wrote:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Dear all,
-> 
-> I have compiled a new file system via buildroot and modified the .cpio
-> according to my requirements, then repack it and run with the linux kernel. 
-> 
-> My first question how can I access via ssh without root password? For
-> instance in openwrt file system, it is possible to access firstly
-> through telnet, if required, you can assign a password after the telnet
-> connection. Does buildroot provide the same functionality? 
+samba produces particularly large binaries, and the relocations needed
+for it do not fit in the possible relocation mechanisms available on
+nios2. Since samba is very unlikely to be used on nios2, let's just
+disable it, as we've done for AVR32.
 
-You could probably wrap something up to do that with some scripting.
-Why are you editing the cpio by hand?
-You could do all your customization in a post build script.
+Fixes:
+    http://autobuild.buildroot.net/results/7b9/7b9dcb537f98714fe57fe384ecbb49bd9ae52aee/
 
-> Secondly, it seems that the dhcp doesn't work well, because even though
-> the users connected to hostapd (I can see the messages), the assignment
-> of the ip doesn't take place. What could be possible issue here? I am
-> using dnsmaq and dhcp packages and all configurations are defined
-> actually in dnsmasq.conf.
-> 
-> Here is the configuration file content:
-> 
-> dhcp-leasefile=/var/tmp/dnsmasq.leases
-> dhcp-range=wlan0,192.168.126.10,192.168.126.250,1m
-> resolv-file=/etc/resolv.dnsmasq.conf
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba/Config.in  | 4 ++--
+ package/samba4/Config.in | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Well, you're somewhat light on details so we're left here to guess.
-One possibility is that your dnsmasq package has dhcp support disabled,
-another possibility is that your wlan0 doesn't belong to a proper
-subnet/hasn't got an ip address configured at all to match that range.
-Again, i can just guess without some proper information.
-Regards.
+diff --git a/package/samba/Config.in b/package/samba/Config.in
+index 70ff960..8dd0bf2 100644
+--- a/package/samba/Config.in
++++ b/package/samba/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_SAMBA
+ 	bool "samba"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	# binary too large, relocations don't fit
+-	depends on !BR2_avr32
++	depends on !BR2_avr32 # binary too large, relocations don't fit
++	depends on !BR2_nios2 # binary too large, relocations don't fit
+ 	select BR2_PACKAGE_POPT
+ 	help
+ 	  Provides secure, stable and fast file and print services
+diff --git a/package/samba4/Config.in b/package/samba4/Config.in
+index 77a46cd..7008ba2 100644
+--- a/package/samba4/Config.in
++++ b/package/samba4/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_SAMBA4
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # talloc python threads
+ 	depends on !BR2_avr32 # bad toolchain
++	depends on !BR2_nios2 # binary too large, relocations don't fit
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_POPT
+ 	select BR2_PACKAGE_PYTHON
+-- 
+1.8.3.2
