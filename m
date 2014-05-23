@@ -1,49 +1,49 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 May 2014 10:02:54 +0200
-Subject: [Buildroot] [PATCH 2/3] qt5enginio: new package
-In-Reply-To: <201405230854.51725.fatih.asici@gmail.com> ("Fatih
- =?utf-8?B?QcWfxLFjxLEiJ3M=?=
- message of "Fri, 23 May 2014 08:54:51 +0300")
-References: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com>
- <1400587934-17338-2-git-send-email-fatih.asici@gmail.com>
- <87oayqc4lq.fsf@dell.be.48ers.dk>
- <201405230854.51725.fatih.asici@gmail.com>
-Message-ID: <877g5cdis1.fsf@dell.be.48ers.dk>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 23 May 2014 11:32:28 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-22
+In-Reply-To: <20140523063008.8A64410106F@stock.ovh.net>
+References: <20140523063008.8A64410106F@stock.ovh.net>
+Message-ID: <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+On Fri, May 23, 2014 at 8:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2014-05-22
+> ===============================
+>
+>         success : 107
+>        failures : 11
+>        timeouts : 0
+>           TOTAL : 118
+>
+> Classification of failures by reason
+> ====================================
+>
+>                  httping-2.3.4 | 1
+>                       qt-4.8.6 | 1
+>                alsa-lib-1.0.26 | 1
+>                  mplayer-1.1.1 | 1
+>                audiofile-0.3.6 | 1
+>                     php-5.5.12 | 1
+>              dosfstools-3.0.26 | 1
+>                   python-2.7.6 | 1
+>                   cppcms-1.0.4 | 1
+> package/rpi-userland/rpi-us... | 1
+>               gst1-libav-1.2.4 | 1
+>
+> Detail of failures
+> ===================
+>
+>    powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/520606ec674f6c8efad6ebbb840099ec89d03130/
+>     x86_64 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/cc21623fbc3d4e94f09b2cb0be36ce05cf75a2e6/
 
-Hi,
+It's related to BR2_PREFER_STATIC_LIB=y, I'm trying to fix it.
 
- >> > +config BR2_PACKAGE_QT5ENGINIO
- >> > +	bool "qt5enginio"
- >> > +	select BR2_PACKAGE_OPENSSL
- >> > +	select BR2_PACKAGE_QT5BASE
- >> > +	select BR2_PACKAGE_QT5BASE_GUI
- >> > +	select BR2_PACKAGE_QT5BASE_NETWORK
- >> 
- >> <snip>
- >> 
- >> > +QT5ENGINIO_DEPENDENCIES = qt5base
- >> 
- >> You forgot to add openssl to _DEPENDENCIES.
-
- > openssl is not a direct dependency of this package. It needs an openssl-
- > enabled qt5base. qt5base has openssl in its _DEPENDENCIES variable.
-
-Ahh, ok - That wasn't clear to me.
-
- > In this case, do I really need to add this dependency to this package?
-
-It cannot hurt. I would say you should either:
-
- - Add openssl to _DEPENDENCIES
- - Add a comment after the 'select BR2_PACKAGE_OPENSSL' to explain why
-   (similar to how we do for runtime dependencies)
-
+Regards
 -- 
-Bye, Peter Korsgaard
+Fabio Porcedda
