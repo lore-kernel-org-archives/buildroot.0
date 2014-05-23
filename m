@@ -1,32 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 23 May 2014 18:37:43 +0200
-Subject: [Buildroot] [PATCH] package/connman: update homepage
-Message-ID: <1400863063-15489-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 May 2014 19:08:19 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-22
+In-Reply-To: <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
+References: <20140523063008.8A64410106F@stock.ovh.net>
+ <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
+Message-ID: <20140523190819.45a80027@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Dear Fabio Porcedda,
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/connman/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 23 May 2014 11:32:28 +0200, Fabio Porcedda wrote:
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 4a4090f..8083233 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -15,7 +15,7 @@ config BR2_PACKAGE_CONNMAN
- 	  managing internet connections within embedded devices running
- 	  the Linux operating system.
- 
--	  For more information, see http://connman.net/
-+	  For more information, see https://01.org/connman
- 
- if BR2_PACKAGE_CONNMAN
- 
+> >    powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/520606ec674f6c8efad6ebbb840099ec89d03130/
+> >     x86_64 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/cc21623fbc3d4e94f09b2cb0be36ce05cf75a2e6/
+> 
+> It's related to BR2_PREFER_STATIC_LIB=y, I'm trying to fix it.
+
+Please note that Gustavo has already done a lot of investigation on
+this one. It boils done to the fact that we pass --static instead of
+-static when building statically. But we switched from -static to
+--static a while ago, for some reason that the commit doesn't make
+really clear.
+
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
