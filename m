@@ -1,32 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 20 May 2014 22:26:35 +0200
-Subject: [Buildroot] [git commit] dnsmasq: bump to version 2.71
-Message-ID: <20140601083245.325C19C779@busybox.osuosl.org>
+Date: Fri, 23 May 2014 22:07:17 +0200
+Subject: [Buildroot] [git commit] nbd: bump to version 3.8
+Message-ID: <20140601083245.93A0A9CE5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=980e652a936015d2f6aa89e4ecfdf16225e55971
+commit: http://git.buildroot.net/buildroot/commit/?id=4023c4671e500fbc8b55ad6a2c9dacb64b88a959
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dnsmasq/dnsmasq.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/nbd/nbd.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 087b7dc..dd15994 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index e5b5023..6c31180 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DNSMASQ_VERSION = 2.70
-+DNSMASQ_VERSION = 2.71
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+-NBD_VERSION = 3.3
+-NBD_SOURCE = nbd-$(NBD_VERSION).tar.bz2
++NBD_VERSION = 3.8
++NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPT = $(if $(BR2_LARGEFILE),--enable-lfs,--disable-lfs)
+ NBD_DEPENDENCIES = libglib2
