@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 23 May 2014 22:06:50 +0200
-Subject: [Buildroot] [PATCH 1/2] ffmpeg: bump to version 1.2.6
-In-Reply-To: <1400803381-5875-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 22 May 2014 21:03:00 -0300")
+Date: Fri, 23 May 2014 22:07:09 +0200
+Subject: [Buildroot] [PATCH 2/2] libcurl: bump to version 7.37.0
+In-Reply-To: <1400803381-5875-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 22 May 2014 21:03:01 -0300")
 References: <1400803381-5875-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ha4gb6p1.fsf@dell.be.48ers.dk>
+ <1400803381-5875-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2f4b6oi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
