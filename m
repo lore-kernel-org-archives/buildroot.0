@@ -1,43 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 23 May 2014 06:43:55 +0300
-Subject: [Buildroot] [PATCH] lttng-babeltrace: needs posix_fallocate
-Message-ID: <4273b97938555a6f1005b86be56657523070a08e.1400816635.git.baruch@tkos.co.il>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 23 May 2014 08:48:56 +0300
+Subject: [Buildroot] [PATCH 1/3] qt5: bump to 5.3.0
+In-Reply-To: <87sio2c4mn.fsf@dell.be.48ers.dk>
+References: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com>
+ <87sio2c4mn.fsf@dell.be.48ers.dk>
+Message-ID: <201405230848.56805.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d8b/d8b5ccc643fe0fb5577392fed37e05b89d4a3951/
+On Thursday 22 May 2014 16:41:36 Peter Korsgaard wrote:
+> >>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
+>  > Remove upstreamed patches.
+>  > See http://qt-project.org/qt5/qt53 for the release information.
+> 
+> Thanks. It unfortunately doesn't build for me with the default
+> uClibc/gcc versions:
+> 
+> kernel/qdnslookup_unix.cpp: In static member function ?static void
+> QDnsLookupRunnable::query(int, const QByteArray&, const QHostAddress&,
+> QDnsLookupReply*)?: kernel/qdnslookup_unix.cpp:165:27: error: ?struct
+> __res_state::<anonymous union>::<anonymous>? has no member named ?nsmap?
+> Makefile:16244: recipe for target '.obj/qdnslookup_unix.o' failed
+> make[3]: *** [.obj/qdnslookup_unix.o] Error 1
+> 
+> Seems to have been introduced here:
+> 
+> https://qt.gitorious.org/qt/qtbase/commit/62f01d581bdda6f67cd96af179ae1953e
+> 30fa218
+> 
+> uClibc doesn't have a nsmap member in __res_state:
+> 
+> http://git.uclibc.org/uClibc/tree/include/resolv.h
+> 
+> So I guess this need to go in an #ifndef __UCLIBC__ conditional.
+> 
+> Care to create a patch (and send upstream!)?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/lttng-babeltrace/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+This time I didn't test it with a uclibc toolchain. Will look at it.
 
-diff --git a/package/lttng-babeltrace/Config.in b/package/lttng-babeltrace/Config.in
-index cb857c80beb2..fae49ab21594 100644
---- a/package/lttng-babeltrace/Config.in
-+++ b/package/lttng-babeltrace/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC # posix_fallocate
- 	help
- 	  Babeltrace is part of the LTTng 2.x project.
- 
-@@ -25,7 +26,8 @@ config BR2_PACKAGE_LTTNG_BABELTRACE
- 
- 	  http://lttng.org
- 
--comment "lttng-babeltrace needs a toolchain w/ wchar, threads, largefile"
-+comment "lttng-babeltrace needs a uclibc snapshot or (e)glib toolchain w/ wchar, threads, largefile"
- 	depends on BR2_PACKAGE_LTTNG_TOOLS
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_UCLIBC_VERSION_SNAPSHOT || !BR2_TOOLCHAIN_USES_GLIBC
--- 
-2.0.0.rc2
+Regards,
+Fatih
