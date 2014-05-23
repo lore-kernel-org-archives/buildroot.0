@@ -1,37 +1,41 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 23 May 2014 16:19:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 7112] New: license info for package 'hwdata'
-Message-ID: <bug-7112-163@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 23 May 2014 13:35:45 -0300
+Subject: [Buildroot] [PATCH] Add support for Ariag25 and Terra board
+ from Acmesystems
+In-Reply-To: <1400859951-21323-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1400859951-21323-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <537F78E1.9000300@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7112
+On 05/23/2014 12:45 PM, Angelo Compagnucci wrote:
 
-           Summary: license info for package 'hwdata'
-           Product: buildroot
-           Version: 2014.05
-          Platform: All
-        OS/Version: All
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: abrahamh at web.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> This patch adds support for Acmesystems' AriaG25 SOM and the
+> corresponding Terra demo board.
+> The AriaG25 config is fairly basic, it provides only the minimal
+> configuration to get the module booting.
+> The Terra config instead provides many userspace tools.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> ---
+>  board/acmesystems/ariag25/at91-ariag25.config      | 2583 ++++++++++++++++++++
+>  board/acmesystems/ariag25/at91-ariag25.dts         |  191 ++
+>  .../fs-overlay/etc/network/interfaces              |    5 +
+>  configs/ariag25_defconfig                          | 2070 ++++++++++++++++
+>  configs/ariag25_demo_terra_defconfig               | 1942 +++++++++++++++
+>  5 files changed, 6791 insertions(+)
+>  create mode 100644 board/acmesystems/ariag25/at91-ariag25.config
+>  create mode 100644 board/acmesystems/ariag25/at91-ariag25.dts
+>  create mode 100644 board/acmesystems/ariag25_terra/fs-overlay/etc/network/interfaces
+>  create mode 100644 configs/ariag25_defconfig
+>  create mode 100644 configs/ariag25_demo_terra_defconfig
 
-
-Created attachment 5414
-  --> https://bugs.busybox.net/attachment.cgi?id=5414
-patch to fix issue
-
-License info in file 'hwdata.mk'  missing
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Hi Angelo.
+Could you use proper defconfigs instead of plain .config files? (make
+savedefconfig, buildroot & kernel).
+They're unnecessarily huge with redundant information.
+Thanks!
+Regards.
