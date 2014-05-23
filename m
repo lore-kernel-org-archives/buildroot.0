@@ -1,151 +1,51 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 23 May 2014 16:50:20 +0200
-Subject: [Buildroot] [PATCH v2] Add Mono native/managed package
-Message-ID: <1400856620-12562-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Fri, 23 May 2014 12:13:19 -0300
+Subject: [Buildroot] [PATCH] libdrm: Add menu option to install the test
+	programs
+Message-ID: <1400857999-17449-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package builds both the native and managed part
-with all standard libraries and provides a complete
-mono environment, it's based on latest mono version 3.4.0.
+The libdrm has a bunch of useful test programs. Add an option to pass
+the configure option to install them.
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- package/Config.in                                  |  1 +
- package/mono/Config.in                             |  7 ++++++
- ...anaged-0001-fixes-lacking-of-targets-file.patch | 13 +++++++++++
- package/mono/mono-managed/mono-managed.mk          | 27 ++++++++++++++++++++++
- package/mono/mono-native/mono-native.mk            | 17 ++++++++++++++
- package/mono/mono.mk                               | 14 +++++++++++
- 6 files changed, 79 insertions(+)
- create mode 100644 package/mono/Config.in
- create mode 100644 package/mono/mono-managed/mono-managed-0001-fixes-lacking-of-targets-file.patch
- create mode 100644 package/mono/mono-managed/mono-managed.mk
- create mode 100644 package/mono/mono-native/mono-native.mk
- create mode 100644 package/mono/mono.mk
+ package/libdrm/Config.in | 5 +++++
+ package/libdrm/libdrm.mk | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3bc8d24..5e0068e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -415,6 +415,7 @@ source "package/wsapi/Config.in"
- source "package/xavante/Config.in"
- endmenu
- endif
-+source "package/mono/Config.in"
- source "package/nodejs/Config.in"
- source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-new file mode 100644
-index 0000000..5451f36
---- /dev/null
-+++ b/package/mono/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_MONO
-+	bool "mono"
-+	select BR2_STRIP_none
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index e6a7a42..9acc908 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -10,6 +10,11 @@ config BR2_PACKAGE_LIBDRM
+ 
+ if BR2_PACKAGE_LIBDRM
+ 
++config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
++	bool "Install test programs"
 +	help
-+	  An open source, cross-platform, implementation of C# and the CLR that is binary compatible with Microsoft.NET.
-+	  
-+	  http://download.mono-project.com/sources/mono/
-diff --git a/package/mono/mono-managed/mono-managed-0001-fixes-lacking-of-targets-file.patch b/package/mono/mono-managed/mono-managed-0001-fixes-lacking-of-targets-file.patch
-new file mode 100644
-index 0000000..a9213e1
---- /dev/null
-+++ b/package/mono/mono-managed/mono-managed-0001-fixes-lacking-of-targets-file.patch
-@@ -0,0 +1,13 @@
-+diff --git a/mcs/tools/xbuild/targets/Microsoft.Portable.Common.targets b/mcs/tools/xbuild/targets/Microsoft.Portable.Common.targets
-+new file mode 100644
-+index 0000000..82bea1e
-+--- /dev/null
-++++ b/mcs/tools/xbuild/targets/Microsoft.Portable.Common.targets
-+@@ -0,0 +1,4 @@
-++<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-++	<Import Project="..\Microsoft.Portable.Core.props" />
-++	<Import Project="..\Microsoft.Portable.Core.targets" />
-++</Project>
-+-- 
-+1.9.3
++	  This option allows to install the libdrm test programs.
 +
-diff --git a/package/mono/mono-managed/mono-managed.mk b/package/mono/mono-managed/mono-managed.mk
-new file mode 100644
-index 0000000..3f7b581
---- /dev/null
-+++ b/package/mono/mono-managed/mono-managed.mk
-@@ -0,0 +1,27 @@
-+#############################################################
-+#
-+# mono-managed
-+#
-+#############################################################
+ menu "DRM Drivers"
+ 
+ config BR2_PACKAGE_LIBDRM_INTEL
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index b3e4d7a..d912d6d 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -69,4 +69,8 @@ else
+ LIBDRM_CONF_OPT += --disable-udev
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
++LIBDRM_CONF_OPT += --enable-install-test-programs
++endif
 +
-+MONO_MANAGED_VERSION = $(MONO_VERSION)
-+MONO_MANAGED_SITE = $(MONO_SITE)
-+MONO_MANAGED_SOURCE = $(MONO_SOURCE)
-+
-+# Enable static, otherwise Mono complains and the build fails
-+HOST_MONO_MANAGED_CONF_OPT = $(MONO_CONF_OPT) --enable-static
-+
-+define MONO_MANAGED_GETMONOLITE
-+	$(MAKE) -C $(@D) get-monolite-latest
-+endef
-+
-+HOST_MONO_MANAGED_POST_CONFIGURE_HOOKS += MONO_MANAGED_GETMONOLITE
-+
-+define MONO_MANAGED_INSTALL
-+     cp -av $(HOST_DIR)/usr/lib/mono $(TARGET_DIR)/usr/lib/
-+     cp -av $(HOST_DIR)/etc/mono/ $(TARGET_DIR)/etc/
-+endef
-+
-+HOST_MONO_MANAGED_POST_INSTALL_HOOKS += MONO_MANAGED_INSTALL
-+
-+$(eval $(host-autotools-package))
-diff --git a/package/mono/mono-native/mono-native.mk b/package/mono/mono-native/mono-native.mk
-new file mode 100644
-index 0000000..4656248
---- /dev/null
-+++ b/package/mono/mono-native/mono-native.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# mono-native
-+#
-+#############################################################
-+
-+MONO_NATIVE_VERSION = $(MONO_VERSION)
-+MONO_NATIVE_SITE = $(MONO_SITE)
-+MONO_NATIVE_SOURCE = $(MONO_SOURCE)
-+MONO_NATIVE_INSTALL_STAGING = $(MONO_INSTALL_STAGING)
-+
-+MONO_NATIVE_DEPENDENCIES += host-mono-managed
-+
-+# Disable managed code (mcs folder) from building
-+MONO_NATIVE_CONF_OPT = $(MONO_CONF_OPT) --disable-mcs-build
-+
-+$(eval $(autotools-package))
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-new file mode 100644
-index 0000000..830b469
---- /dev/null
-+++ b/package/mono/mono.mk
-@@ -0,0 +1,14 @@
-+#############################################################
-+#
-+# mono
-+#
-+#############################################################
-+
-+MONO_VERSION = 3.4.0
-+MONO_SITE = http://download.mono-project.com/sources/mono/
-+MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
-+MONO_INSTALL_STAGING = YES
-+
-+MONO_CONF_OPT = --disable-gtk-doc --with-mcs-docs=no 
-+
-+include package/mono/*/*.mk
+ $(eval $(autotools-package))
 -- 
 1.9.1
