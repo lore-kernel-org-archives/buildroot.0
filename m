@@ -1,69 +1,51 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Fri, 23 May 2014 08:54:51 +0300
-Subject: [Buildroot] [PATCH 2/3] qt5enginio: new package
-In-Reply-To: <87oayqc4lq.fsf@dell.be.48ers.dk>
-References: <1400587934-17338-1-git-send-email-fatih.asici@gmail.com>
- <1400587934-17338-2-git-send-email-fatih.asici@gmail.com>
- <87oayqc4lq.fsf@dell.be.48ers.dk>
-Message-ID: <201405230854.51725.fatih.asici@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 23 May 2014 08:30:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-22
+Message-ID: <20140523063008.8A64410106F@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday 22 May 2014 16:42:09 Peter Korsgaard wrote:
-> >>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
->  > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
->  > ---
->  > 
->  >  package/qt5/Config.in                |  1 +
->  >  package/qt5/qt5enginio/Config.in     | 13 +++++++++
->  >  package/qt5/qt5enginio/qt5enginio.mk | 56
->  >  ++++++++++++++++++++++++++++++++++++ 3 files changed, 70 insertions(+)
->  >  create mode 100644 package/qt5/qt5enginio/Config.in
->  >  create mode 100644 package/qt5/qt5enginio/qt5enginio.mk
->  > 
->  > diff --git a/package/qt5/Config.in b/package/qt5/Config.in
->  > index d36852e..e810ecb 100644
->  > --- a/package/qt5/Config.in
->  > +++ b/package/qt5/Config.in
->  > @@ -29,6 +29,7 @@ if BR2_PACKAGE_QT5
->  > 
->  >  source "package/qt5/qt5base/Config.in"
->  >  source "package/qt5/qt5connectivity/Config.in"
->  >  source "package/qt5/qt5declarative/Config.in"
->  > 
->  > +source "package/qt5/qt5enginio/Config.in"
->  > 
->  >  source "package/qt5/qt5graphicaleffects/Config.in"
->  >  source "package/qt5/qt5imageformats/Config.in"
->  >  source "package/qt5/qt5multimedia/Config.in"
->  > 
->  > diff --git a/package/qt5/qt5enginio/Config.in
->  > b/package/qt5/qt5enginio/Config.in new file mode 100644
->  > index 0000000..c06e6da
->  > --- /dev/null
->  > +++ b/package/qt5/qt5enginio/Config.in
->  > @@ -0,0 +1,13 @@
->  > +config BR2_PACKAGE_QT5ENGINIO
->  > +	bool "qt5enginio"
->  > +	select BR2_PACKAGE_OPENSSL
->  > +	select BR2_PACKAGE_QT5BASE
->  > +	select BR2_PACKAGE_QT5BASE_GUI
->  > +	select BR2_PACKAGE_QT5BASE_NETWORK
-> 
-> <snip>
-> 
->  > +QT5ENGINIO_DEPENDENCIES = qt5base
-> 
-> You forgot to add openssl to _DEPENDENCIES.
+Build statistics for 2014-05-22
+===============================
 
-openssl is not a direct dependency of this package. It needs an openssl-
-enabled qt5base. qt5base has openssl in its _DEPENDENCIES variable.
+        success : 107
+       failures : 11 
+       timeouts : 0  
+          TOTAL : 118
 
-In this case, do I really need to add this dependency to this package?
+Classification of failures by reason
+====================================
+
+                 httping-2.3.4 | 1 
+                      qt-4.8.6 | 1 
+               alsa-lib-1.0.26 | 1 
+                 mplayer-1.1.1 | 1 
+               audiofile-0.3.6 | 1 
+                    php-5.5.12 | 1 
+             dosfstools-3.0.26 | 1 
+                  python-2.7.6 | 1 
+                  cppcms-1.0.4 | 1 
+package/rpi-userland/rpi-us... | 1 
+              gst1-libav-1.2.4 | 1 
+
+Detail of failures
+===================
+
+   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/520606ec674f6c8efad6ebbb840099ec89d03130/
+    x86_64 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/cc21623fbc3d4e94f09b2cb0be36ce05cf75a2e6/
+   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/6a6eca78e0f8d730de612ed440ca5d030b363c12/
+    mipsel |              dosfstools-3.0.26 | NOK | http://autobuild.buildroot.net/results/246c067f1e9def748498f0c6fa6988c036e1d109/
+     avr32 |               gst1-libav-1.2.4 | NOK | http://autobuild.buildroot.net/results/ec6675adad4e09d71d7e365c399172ff233107f3/
+   powerpc |                  httping-2.3.4 | NOK | http://autobuild.buildroot.net/results/365d6be787c5560aa1daa28065668261e1171d24/
+       arc |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/f62ace7ba49d492ea224bb8f3beb547389aab517/
+       arm | package/rpi-userland/rpi-us... | NOK | http://autobuild.buildroot.net/results/0ef46e5d60c55387416c3293da8f26770854e158/
+       arm |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/3545a3a45124ef4f2c4c420ed56d0c923e3d63eb/
+     avr32 |                   python-2.7.6 | NOK | http://autobuild.buildroot.net/results/4b42887bc7739447dd299361070e3625c3de7a56/
+  mips64el |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/14309cd2c14f6a41f30cd00f7aef199b11612a85/
 
 
-Regards,
-Fatih
+-- 
+http://autobuild.buildroot.net
