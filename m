@@ -1,41 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 24 May 2014 07:57:27 +0200
-Subject: [Buildroot] Fwd:  root password and dhcp
-In-Reply-To: <4B870E1C-7161-4A44-8B57-243F6845BB3C@gmail.com>
-References: <83E0831E-A969-40BA-9022-B9024D5AB91C@gmail.com>
- <4B870E1C-7161-4A44-8B57-243F6845BB3C@gmail.com>
-Message-ID: <082c35fb-f075-4ade-8b37-5b145389005d@email.android.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 24 May 2014 08:30:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-23
+Message-ID: <20140524063008.5FEFE101555@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cem akpolat <akpolatcem@gmail.com> schreef:
->
->>> Hi Cem,
->>> 
->>> On Fri, May 23, 2014 at 4:10 PM, cem akpolat <akpolatcem@gmail.com> wrote:
->>>> Dear all,
->>>> 
->>>> I have compiled a new file system via buildroot and modified the .cpio
->>>> according to my requirements, then repack it and run with the linux kernel.
->>>> 
->>>> My first question how can I access via ssh without root password? For
->>>> instance in openwrt file system, it is possible to access firstly through
->>>> telnet, if required, you can assign a password after the telnet connection.
->>>> Does buildroot provide the same functionality?
->>> 
->>> You can either set the root password in the buildroot configuration
->>> (but it will be stored in the config file in plaintext, so for a
->>> non-personal project that may not be ok) or you can update the
->>> /etc/shadow file from a post-build script, see the presentation
->>> http://elinux.org/images/2/2a/Using-buildroot-real-project.pdf slide
->>> 25.
->> This is exactly the point that I want to know. There are some scripts that I want to add to the file system. It seems that I have to add also them in the system/skeleton and 
->> define the required rule in post-build.sh script. This is the whole thing that I understood from the slide :)
+Build statistics for 2014-05-23
+===============================
 
-I should have realized that the slides are a bit outdated. In the mean time, in addition to post build scripts, we directly support a rootfs overlay, see config BR2_ROOTFS_OVERLAYS, also explained in the manual...
+        success : 105
+       failures : 5  
+       timeouts : 0  
+          TOTAL : 110
 
-Best regards,
-Thomas
+Classification of failures by reason
+====================================
+
+        lttng-babeltrace-1.2.1 | 1 
+               audiofile-0.3.6 | 1 
+                  samba-3.6.23 | 1 
+znc-b396cafdb249544164ed029... | 1 
+                  python-2.7.6 | 1 
+
+Detail of failures
+===================
+
+    mipsel |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/327c18db4e5d0ddc2c72a4684e103c19a1405e50/
+   powerpc |         lttng-babeltrace-1.2.1 | NOK | http://autobuild.buildroot.net/results/d8b5ccc643fe0fb5577392fed37e05b89d4a3951/
+   powerpc |                   python-2.7.6 | NOK | http://autobuild.buildroot.net/results/01c1783a44388b9b7de600dce7f55bab1db72ae3/
+     nios2 |                   samba-3.6.23 | NOK | http://autobuild.buildroot.net/results/7b9dcb537f98714fe57fe384ecbb49bd9ae52aee/
+      bfin | znc-b396cafdb249544164ed029... | NOK | http://autobuild.buildroot.net/results/be0175d4c246679ae1c0626f83c9ed4a0adbe2df/
+
+
+-- 
+http://autobuild.buildroot.net
