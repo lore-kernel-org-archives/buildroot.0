@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 24 May 2014 18:45:41 +0200
-Subject: [Buildroot] [PATCH] audiofile: does not build with static-only
-In-Reply-To: <1400941494-29900-1-git-send-email-luca@lucaceresoli.net>
-References: <1400941494-29900-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20140524184541.47d3f8f9@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 24 May 2014 19:13:48 +0200
+Subject: [Buildroot] [PATCH] package/rpi-userland: bump version
+Message-ID: <1400951628-23186-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On Sat, 24 May 2014 16:24:54 +0200, Luca Ceresoli wrote:
-> Also propagate to its reverse dependency (audiofile module for mpd).
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/327/327c18db4e5d0ddc2c72a4684e103c19a1405e50/
->   http://autobuild.buildroot.org/results/c8b/c8b64588eebf0bd8d879881b65e9d8efde00397d/
->   http://autobuild.buildroot.org/results/028/028a3b97d56674560b8aa90b6e44b2e91858a5cb/
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Important fix to EGL surface validation.
 
-No, I disagree. The real problem is the fact that we pass --static
-instead of -static when building statically, so libtool turns -lstdc++
-into a full path to libstdc++.so instead of libstdc++.a.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The real fix is to understand why we switched from -static to --static
-a few years ago: there is a commit from Andy Kennedy making this
-change, but the commit log is quite fuzzy about why this is actually
-needed.
-
-Thomas
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 690fd1e..8b225ba 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = eccb81050afd177da1923404b366c6226f29bfe0
++RPI_USERLAND_VERSION = 4855a45b118cb7b97b83e5160551db9813487c91
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.3.2
