@@ -1,23 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 24 May 2014 14:26:52 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-23
-In-Reply-To: <20140524063008.5FEFE101555@stock.ovh.net>
-References: <20140524063008.5FEFE101555@stock.ovh.net>
-Message-ID: <1bd011ff-336a-4d6d-ae79-338d2a1856b5@email.android.com>
+From: Heiko Abraham <abrahamh@web.de>
+Date: Sat, 24 May 2014 15:16:52 +0200
+Subject: [Buildroot] [PATCH] acl: add license information
+Message-ID: <1400937412-9808-1-git-send-email-abrahamh@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Build statistics for 2014-05-23
->===============================
->
->        success : 105
->       failures : 5  
->       timeouts : 0  
->          TOTAL : 110
+Add missing license info and file for package 'acl'
+---
+ package/acl/acl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-WOOT WOOT!
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 130ad10..684eb20 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -10,6 +10,8 @@ ACL_SITE = http://download.savannah.gnu.org/releases/acl
+ ACL_INSTALL_STAGING = YES
+ ACL_DEPENDENCIES = attr
+ ACL_CONF_OPT = --enable-gettext=no
++ACL_LICENSE = GPLv2, LGPLv2.1
++ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ 
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+-- 
+1.8.5.2 (Apple Git-48)
