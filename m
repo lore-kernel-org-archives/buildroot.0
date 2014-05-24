@@ -1,89 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 May 2014 19:32:05 +0200
-Subject: [Buildroot] [PATCH 2 of 2 for-2014.05] website: remove
- remaining references to uclibc.org
-In-Reply-To: <36e66c9b8a9f7a434c4b.1400951995@argentina>
-References: <patchbomb.1400951993@argentina>
- <36e66c9b8a9f7a434c4b.1400951995@argentina>
-Message-ID: <20140524173205.GA3491@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sat, 24 May 2014 19:42:37 +0200
+Subject: [Buildroot] [PATCH] package/rpi-userland: bump version
+In-Reply-To: <1400951628-23186-1-git-send-email-yann.morin.1998@free.fr>
+References: <1400951628-23186-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAGduivwu65bSCV0ncJ3fxaiE0AkMh0dbLz7eKAddPG0kUsxONg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+This is a really important commit as it allow us to bump XBMC to
+Gotham, this was the main obstacle preventing us from its uses :).
 
-On 2014-05-24 19:19 +0200, Thomas De Schampheleire spake thusly:
-> The website still used some uclibc.org URLs which can now use buildroot.org.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-With the minor not below fixed:
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
+On Sat, May 24, 2014 at 7:13 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Important fix to EGL surface validation.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 > ---
->  docs/docs.html       |  2 +-
->  docs/js/buildroot.js |  2 +-
->  docs/support.html    |  2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> Note: the news.html page still uses bugs.uclibc.org instead of
-> bugs.buildroot.org, which I was hesitant to change ("you can't rewrite the
-> past"). However, I would like to request Peter if upcoming release
-> announcements could start using bugs.buildroot.org instead...
-> 
-> diff --git a/docs/docs.html b/docs/docs.html
-> --- a/docs/docs.html
-> +++ b/docs/docs.html
-> @@ -34,7 +34,7 @@ help:</p>
->    <li>On the <a href="irc://freenode.net/#buildroot">Buildroot IRC
->    channel</a>, <code>#buildroot</code> on Freenode</li>
->  
-> -  <li>On our <a href="https://bugs.uclibc.org">bugtracker</a>.</li>
-> +  <li>On our <a href="https://bugs.buildroot.org">bugtracker</a>.</li>
->  
->    <li>Through the various companies offering commercial Buildroot
->    support.</li>
-> diff --git a/docs/js/buildroot.js b/docs/js/buildroot.js
-> --- a/docs/js/buildroot.js
-> +++ b/docs/js/buildroot.js
-> @@ -36,7 +36,7 @@ function load_activity(feedurl, divid) {
->  
->  function initialize() {
->    load_activity("http://rss.gmane.org/topics/excerpts/gmane.comp.lib.uclibc.buildroot", "mailing-list-activity");
-> -  load_activity("http://git.uclibc.org/buildroot/atom/?h=master", "commit-activity");
-> +  load_activity("http://git.buildroot.org/buildroot/atom/?h=master", "commit-activity");
->  }
->  
->  function google_analytics() {
-> diff --git a/docs/support.html b/docs/support.html
-> --- a/docs/support.html
-> +++ b/docs/support.html
-> @@ -37,7 +37,7 @@ list with frequently asked questions...
->  
->  <h3>Bug Tracker</h3>
->  
-> -If you encounter any problems while using Buildroot, you can use the <a href="https://bugs.uclibc.org/">Bug Tracker</a>
-> +If you encounter any problems while using Buildroot, you can use the <a href="https://bugs.buildroot.org/">Bug Tracker</a>
-                               ^
-While you are at it, this should be a singular.
-
-Regards,
-Yann E. MORIN.
-
->  to post your bugs and/or participate to find solutions to existing problems.
->  
->  Note: Patch are only accepted through the mailing list.
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>  package/rpi-userland/rpi-userland.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index 690fd1e..8b225ba 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -RPI_USERLAND_VERSION = eccb81050afd177da1923404b366c6226f29bfe0
+> +RPI_USERLAND_VERSION = 4855a45b118cb7b97b83e5160551db9813487c91
+>  RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+>  RPI_USERLAND_LICENSE = BSD-3c
+>  RPI_USERLAND_LICENSE_FILES = LICENCE
+> --
+> 1.8.3.2
+>
