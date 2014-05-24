@@ -1,35 +1,27 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 24 May 2014 19:13:48 +0200
-Subject: [Buildroot] [PATCH] package/rpi-userland: bump version
-Message-ID: <1400951628-23186-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 24 May 2014 19:19:53 +0200
+Subject: [Buildroot] [PATCH 0 of 2 for-2014.05] website: some limited updates
+Message-ID: <patchbomb.1400951993@argentina>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Important fix to EGL surface validation.
+These two patches make two updates to the buildroot website:
+- update contribute page
+- remove references to uclibc.org
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/rpi-userland/rpi-userland.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/contribute.html |  53 ++++++++++++++++++++--------------------------
+ docs/docs.html       |   2 +-
+ docs/js/buildroot.js |   2 +-
+ docs/support.html    |   2 +-
+ 4 files changed, 26 insertions(+), 33 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 690fd1e..8b225ba 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_USERLAND_VERSION = eccb81050afd177da1923404b366c6226f29bfe0
-+RPI_USERLAND_VERSION = 4855a45b118cb7b97b83e5160551db9813487c91
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
--- 
-1.8.3.2
+
+Note: it seems that lists.buildroot.org forwards to bugs.busybox.net instead
+of staying at lists, which makes the list URL unchangeable, currently.
