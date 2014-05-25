@@ -1,60 +1,57 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 May 2014 22:26:15 +0200
-Subject: [Buildroot] [PATCH v10 22/29] xbmc: hdmi cec supports needs udev
-	for device scanning
+Date: Sun, 25 May 2014 22:26:11 +0200
+Subject: [Buildroot] [PATCH v10 18/29] xbmc - prepare for 13.x-Gotham: Add
+	missing egl-related cflags
 In-Reply-To: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1401049582-2110-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401049582-2110-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcec support in xbmc compiles without udev being linked to libcec,
-but it is useless because xbmc uses libcec?s udev support for scanning
-connected CEC devices since:
-https://github.com/xbmc/xbmc/commit/59171c7a030f8a9c913abbce931967a6a8ff6897
+A similar patch is used in package/qt/qt.mk.
+
+Fixes compilation error:
+
+In file included from /home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36:0,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/egl/WinSystemEGL.h:28,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/WindowingFactory.h:39,
+                 from DVDPlayerVideo.cpp:23:
+/home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+
+using this defconfig
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    5 +++--
- package/xbmc/xbmc.mk   |    2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/xbmc/xbmc.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 0f45f5c..0c449b8 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -98,13 +98,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
-+	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want XBMC to support HDMI CEC.
- 
--comment "hdmi cec support needs a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	bool "web server"
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 2debe16..3290bca 100644
+index ffe573f..acbdb91 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -132,7 +132,7 @@ XBMC_CONF_OPT += --disable-avahi
+@@ -70,6 +70,10 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
  endif
  
- ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
--XBMC_DEPENDENCIES += libcec
-+XBMC_DEPENDENCIES += libcec udev
- XBMC_CONF_OPT += --enable-libcec
- else
- XBMC_CONF_OPT += --disable-libcec
++XBMC_CONF_ENV += \
++	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++
+ ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+ XBMC_DEPENDENCIES += libusb-compat
+ XBMC_CONF_OPT += --enable-libusb
 -- 
 1.7.10.4
