@@ -1,47 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 May 2014 22:26:22 +0200
-Subject: [Buildroot] [PATCH v10 29/29] xbmc: Add VA-API support
+Date: Sun, 25 May 2014 22:26:09 +0200
+Subject: [Buildroot] [PATCH v10 16/29] xbmc - prepare for 13.x-Gotham: Add
+	host-nasm dependency
 In-Reply-To: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1401049582-2110-30-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401049582-2110-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+checking for nasm... no
+configure: error: Could not find a required program. Please see the README for your platform.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/xbmc/xbmc.mk |    3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 252f427..501c926 100644
+index d8b9508..3522802 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -51,7 +51,6 @@ XBMC_CONF_OPT +=  \
- 	--disable-projectm \
- 	--disable-pulse \
- 	--disable-ssh \
--	--disable-vaapi \
- 	--disable-vdpau \
- 	--disable-vtbdecoder \
- 	--enable-optimizations
-@@ -110,6 +109,14 @@ XBMC_CONF_OPT += --disable-gles
- endif
- endif
+@@ -18,6 +18,9 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
-+# xbmc needs libva & libva-glx
-+ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
-+XBMC_DEPENDENCIES += mesa3d libva
-+XBMC_CONF_OPT += --enable-vaapi
-+else
-+XBMC_CONF_OPT += --disable-vaapi
-+endif
++# xbmc at i386 depends on nasm
++XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
 +
- ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
- XBMC_DEPENDENCIES += libusb-compat
- XBMC_CONF_OPT += --enable-libusb
+ XBMC_CONF_ENV = \
+ 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
 -- 
 1.7.10.4
