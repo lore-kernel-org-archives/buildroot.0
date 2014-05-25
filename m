@@ -1,35 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 25 May 2014 19:13:00 -0300
-Subject: [Buildroot] [WIP PATCH 5/5] package infra: add -static to C/CXXFLAGS
-In-Reply-To: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1401055980-28742-6-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 May 2014 00:43:13 +0200
+Subject: [Buildroot] [PATCH v10 19/29] xbmc: bump version to 13.1 Beta2
+In-Reply-To: <1401049582-2110-20-git-send-email-bernd.kuhls@t-online.de>
+References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
+ <1401049582-2110-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140525224313.GE3542@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Generic infra packages might not use LDFLAGS at all so add -static for
-static builds to CFLAGS and CXXFLAGS too.
+Bernd, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Makefile.in | 2 ++
- 1 file changed, 2 insertions(+)
+On 2014-05-25 22:26 +0200, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[--SNIP--]
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index acbdb91..2debe16 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -XBMC_VERSION = 12.3-Frodo
+> +XBMC_VERSION = 13.1b2-Gotham
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index ec1f22b..ec8fb1b 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -373,6 +373,8 @@ endif
- 
- ifeq ($(BR2_PREFER_STATIC_LIB),y)
- SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
-+TARGET_CFLAGS += -static
-+TARGET_CXXFLAGS += -static
- TARGET_LDFLAGS += -static
- else
- SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+Bumped to 13.1rc1 here. :-)
+
+Hopefully, 13.1 will be released before we can merge this in master! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
