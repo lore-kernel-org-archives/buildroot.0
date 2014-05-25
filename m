@@ -1,44 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 25 May 2014 18:29:01 -0300
-Subject: [Buildroot] [PATCH] audiofile: does not build with static-only
-In-Reply-To: <538259D0.4090008@lucaceresoli.net>
-References: <1400941494-29900-1-git-send-email-luca@lucaceresoli.net>
- <20140524184541.47d3f8f9@free-electrons.com>
- <5381278F.9040209@zacarias.com.ar> <538259D0.4090008@lucaceresoli.net>
-Message-ID: <5382609D.9030909@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 May 2014 23:44:13 +0200
+Subject: [Buildroot] [PATCH 1/1] Add support for powerpc64le.
+In-Reply-To: <1401001162-8868-1-git-send-email-jeffbailey@google.com> (Jeff
+ Bailey's message of "Sat, 24 May 2014 23:59:22 -0700")
+References: <1401001162-8868-1-git-send-email-jeffbailey@google.com>
+Message-ID: <87r43h7cuq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/25/2014 06:00 PM, Luca Ceresoli wrote:
+>>>>> "Jeff" == Jeff Bailey <jeffbailey@google.com> writes:
 
-> Ah, I see, I hadn't followed that discussion and was not aware of such
-> work you're doing. Sorry for the noise and thanks for the detailed
-> clarification.
-> 
-> I understand the solution won't land in 2014.05.
-> I wonder what's the best thing to do in cases like this to make users
-> aware what there's a known bug in a release.
-> 
-> Should audiofile depend on BROKEN if BR2_PREFER_STATIC_LIB? This way it
-> would disappear from both the user's sight and the autobuilders, but
-> still visible via menuconfig search.
-> 
-> Or should we just add a comment that depends on audiofile and
-> BR2_PREFER_STATIC_LIB?
-> 
-> I think the former (o the sum of the two) is preferred. It would stop
-> polluting the autobuilders with known bugs and track the issue via
-> `git grep BROKEN`.
-> 
-> Helping in fixing this bug is out of reach for me, but I can at least
-> send a patch for BROKEN if it's the proper way to go.
+ > This patch adds support for powerpc64le-linux-gnu.  This includes
+ > needed patches to fakeroot and gmp.
 
-Doing anything for 2014.05 at this point would be band aid, audiofile is
-the usual failing package because it sorts nicely at the beginning, but
-there are other packages that will show up if it's blacklisted.
-Maybe removing static builds from the testing rotation would be nice,
-but then we want to find broken stuff :)
-Regards.
+ > gmp patch is from upstream HG tree.
+ > fakeroot patch is from Ubuntu written by Adam Conrad.
+
+ > Signed-off-by: Jeff Bailey <jeffbailey@google.com>
+ > ---
+ >  Makefile                                           |  2 +-
+ >  arch/Config.in                                     | 10 +++++++-
+ >  arch/Config.in.powerpc                             |  9 ++++---
+ >  package/binutils/Config.in.host                    |  2 +-
+ >  package/fakeroot/01-powerpc64le-support.patch      | 29 ++++++++++++++++++++++
+ >  package/gcc/Config.in.host                         |  2 +-
+ >  package/glibc/Config.in                            | 11 ++++----
+ >  ...c-provide-default-bmod-to-mod-threshold-1.patch | 22 ++++++++++++++++
+ >  toolchain/toolchain-buildroot/Config.in            | 10 ++++----
+ >  9 files changed, 80 insertions(+), 17 deletions(-)
+ >  create mode 100644 package/fakeroot/01-powerpc64le-support.patch
+ >  create mode 100644 package/gmp/gmp-03-powerpc-provide-default-bmod-to-mod-threshold-1.patch
+
+
+ > +++ b/arch/Config.in.powerpc
+ > @@ -99,9 +99,11 @@ config BR2_POWERPC_SOFT_FLOAT
+ 
+ >  config BR2_ARCH
+ >  	default "powerpc"	if BR2_powerpc
+ > +	default "powerpc64le"	if BR2_powerpc64le
+ 
+ >  config BR2_ENDIAN
+ > -	default "BIG"
+ > +        default "BIG"    if BR2_powerpc
+ > +        default "LITTLE" if BR2_powerpc64le
+
+Config.in should be indented with <tab>, not spaces.
+
+Committed with that fixed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
