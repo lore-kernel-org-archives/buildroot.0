@@ -1,48 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 May 2014 22:26:08 +0200
-Subject: [Buildroot] [PATCH v10 15/29] xbmc - prepare for 13.x-Gotham: Add
-	host-gettext dependency
+Date: Sun, 25 May 2014 22:26:12 +0200
+Subject: [Buildroot] [PATCH v10 19/29] xbmc: bump version to 13.1 Beta2
 In-Reply-To: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1401049582-2110-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401049582-2110-20-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AUTOPOINT=/bin/true does not work anymore since
-https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
-
-config.status: error: cannot find input file: `Makefile.in'
-configure: error: Submodule lib/cpluff failed to configure
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/xbmc/Config.in |    1 +
+ package/xbmc/xbmc.mk   |    5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 75666a4..0f45f5c 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBUNGIF
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index c7a4607..d8b9508 100644
+index acbdb91..2debe16 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # called TexturePacker. It is responsible to take all the images used in the
- # GUI and pack them in a blob.
- # http://wiki.xbmc.org/index.php?title=TexturePacker
--XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
-+XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XBMC_VERSION = 12.3-Frodo
++XBMC_VERSION = 13.1b2-Gotham
+ XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+ XBMC_LICENSE = GPLv2
+ XBMC_LICENSE_FILES = LICENSE.GPL
+@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
  	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-@@ -133,7 +133,7 @@ endif
+-	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
++	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
  
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define XBMC_BOOTSTRAP
--	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
-+	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
- endef
- XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
+ # xbmc at i386 depends on nasm
+@@ -37,6 +37,7 @@ XBMC_CONF_ENV = \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
+ XBMC_CONF_OPT +=  \
++	--with-arch=$(BR2_ARCH) \
+ 	--disable-alsa \
+ 	--disable-crystalhd \
+ 	--disable-debug \
 -- 
 1.7.10.4
