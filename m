@@ -1,24 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 25 May 2014 21:24:05 +0200
-Subject: [Buildroot] [PATCH] lesstif: needs MMU
-In-Reply-To: <deaccc2e665b5480b06ee2948ff5217c78a97f2e.1400992881.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 25 May 2014 07:41:21 +0300")
-References: <deaccc2e665b5480b06ee2948ff5217c78a97f2e.1400992881.git.baruch@tkos.co.il>
-Message-ID: <87iootach6.fsf@dell.be.48ers.dk>
+Date: Sun, 25 May 2014 21:34:10 +0200
+Subject: [Buildroot] [PATCH] php: fix more iconv related build failures
+In-Reply-To: <20140525160903.GB3542@free.fr> (Yann E. MORIN's message of "Sun, 
+ 25 May 2014 18:09:03 +0200")
+References: <1398215534-1893-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140525160903.GB3542@free.fr>
+Message-ID: <87egzhac0d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/9f7/9f718c9c9907d9aa2a7a0c45c872f5a8f34b8399/
+ > Gustavo, All,
+ > On 2014-04-22 22:12 -0300, Gustavo Zacarias spake thusly:
+ >> See php-01-no-iconv.patch for the gory details. Fixes:
+ >> http://autobuild.buildroot.net/results/1c9/1c9bdfe55288430dca80a1bb514b85353d2f1c54/
+ >> 
+ >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Committed, thanks.
+ > This should probably go in 2014.05.
+
+True. Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
