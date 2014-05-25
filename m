@@ -1,42 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 25 May 2014 19:12:58 -0300
-Subject: [Buildroot] [WIP PATCH 3/5] libiconv: disable preloadable for
-	static builds
+Date: Sun, 25 May 2014 19:12:59 -0300
+Subject: [Buildroot] [WIP PATCH 4/5] package infra: revert 0a4bd19f
 In-Reply-To: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1401055980-28742-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1401055980-28742-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable the preloadable libiconv variant when building for static
-targets since that's not possible.
+Revert commit 0a4bd19f4a136930c611027942ce43124a81c5cb
+Using --static is not documented and actually breaks static linking
+according to my tests.
+Fixes:
+http://autobuild.buildroot.net/results/327/327c18db4e5d0ddc2c72a4684e103c19a1405e50/
+...for external toolchains
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libiconv/libiconv.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libiconv/libiconv.mk b/package/libiconv/libiconv.mk
-index ee313ce..d2209bc 100644
---- a/package/libiconv/libiconv.mk
-+++ b/package/libiconv/libiconv.mk
-@@ -8,6 +8,14 @@ LIBICONV_VERSION = 1.14
- LIBICONV_SITE = $(BR2_GNU_MIRROR)/libiconv
- LIBICONV_INSTALL_STAGING = YES
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 2fc3aa7..ec1f22b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -373,7 +373,7 @@ endif
  
-+# Preloadable libiconv is for dynamic targets only
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+define LIBICONV_DISABLE_PRELOAD
-+	$(SED) '/preload/d' $(@D)/Makefile.in
-+endef
-+endif
-+LIBICONV_PRE_CONFIGURE_HOOKS += LIBICONV_DISABLE_PRELOAD
-+
- # Remove not used preloadable libiconv.so
- define LIBICONV_TARGET_REMOVE_PRELOADABLE_LIBS
- 	rm -f $(TARGET_DIR)/usr/lib/preloadable_libiconv.so
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ SHARED_STATIC_LIBS_OPTS=--enable-static --disable-shared
+-TARGET_LDFLAGS += --static
++TARGET_LDFLAGS += -static
+ else
+ SHARED_STATIC_LIBS_OPTS=--enable-static --enable-shared
+ endif
 -- 
 1.8.5.5
