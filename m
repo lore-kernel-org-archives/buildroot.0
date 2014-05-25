@@ -1,63 +1,74 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 May 2014 22:26:12 +0200
-Subject: [Buildroot] [PATCH v10 19/29] xbmc: bump version to 13.1 Beta2
+Date: Sun, 25 May 2014 22:26:04 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_v10_11/29=5D_libglu=3A_new_package?=
 In-Reply-To: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1401049582-2110-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401049582-2110-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    1 +
- package/xbmc/xbmc.mk   |    5 +++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/Config.in        |    1 +
+ package/libglu/Config.in |   10 ++++++++++
+ package/libglu/libglu.mk |   17 +++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/libglu/Config.in
+ create mode 100644 package/libglu/libglu.mk
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 75666a4..0f45f5c 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBUNGIF
- 	select BR2_PACKAGE_LIBVORBIS
- 	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index acbdb91..2debe16 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XBMC_VERSION = 12.3-Frodo
-+XBMC_VERSION = 13.1b2-Gotham
- XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
-@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
--	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-+	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
- 
- # xbmc at i386 depends on nasm
-@@ -37,6 +37,7 @@ XBMC_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- XBMC_CONF_OPT +=  \
-+	--with-arch=$(BR2_ARCH) \
- 	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
+diff --git a/package/Config.in b/package/Config.in
+index b5afcca..49738b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
++source "package/libglu/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+ source "package/libqrencode/Config.in"
+diff --git a/package/libglu/Config.in b/package/libglu/Config.in
+new file mode 100644
+index 0000000..de8e1ef
+--- /dev/null
++++ b/package/libglu/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGLU
++	bool "libglu"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	help
++	  Mesa OpenGL Utility library
++
++	  http://cgit.freedesktop.org/mesa/glu/
++
++comment "libglu needs an OpenGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
+new file mode 100644
+index 0000000..038d281
+--- /dev/null
++++ b/package/libglu/libglu.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# libglu
++#
++################################################################################
++
++LIBGLU_VERSION = 9.0.0
++LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
++LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
++LIBGLU_LICENSE = SGI-B-2.0
++LIBGLU_LICENSE_FILES = include/GL/glu.h
++LIBGLU_INSTALL_STAGING = YES
++# upstream does not distribute a autoconf?ed configure script
++LIBGLU_AUTORECONF = YES
++LIBGLU_DEPENDENCIES = libgl
++
++$(eval $(autotools-package))
 -- 
 1.7.10.4
