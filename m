@@ -1,35 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 25 May 2014 15:37:09 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-24
-In-Reply-To: <20140525063007.921281015A1@stock.ovh.net>
-References: <20140525063007.921281015A1@stock.ovh.net>
-Message-ID: <20140525133708.GA3542@free.fr>
+Date: Sun, 25 May 2014 16:12:52 +0200
+Subject: [Buildroot] [PATCH] package infra: remove duplicats in dependencies
+	list
+Message-ID: <1401027172-27405-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-05-25 08:30 +0200, Thomas Petazzoni spake thusly:
-> Detail of failures
->        arm |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/39e9980691c693b26e2db76ee7babbc0b5321248/
+Currently, we just use what a package declares as its dependencies.
 
-Unable to reproduce here.
+But some packages may declare the same depdency more than once. For
+example, php has two options to add SQL support: 'mysql' or 'mysqli',
+which are not exclusive. So, php.mk ahs mysql twice as a dependency.
 
-There's another more recent failure of php on ARM:
-    http://autobuild.buildroot.net/results/5bc/5bcf8475f5ef7800efdff6be3aa4d7109ab76b67/
-which I was also unable to reproduce.
+Although that does not cause any grievance for make, we end up generating
+dependency graphs where this duplicate dependency is visible.
 
-Regards,
-Yann E. MORIN.
+Add an intermediary variable which contains the $(sort)-ed list of the
+dependnecies, thus eliminating any duplicates.
 
+This has the side effect of also sorting the list, which is probably
+good for reproducibility anyway.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/pkg-generic.mk | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 260f374..10dd83f 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -391,6 +391,9 @@ $(2)_DEPENDENCIES += toolchain
+ endif
+ endif
+ 
++# Eliminate dupes in dependencies
++$(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
++
+ $(2)_INSTALL_STAGING		?= NO
+ $(2)_INSTALL_IMAGES		?= NO
+ $(2)_INSTALL_TARGET		?= YES
+@@ -476,14 +479,14 @@ $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
+ $(1)-build:		$$($(2)_TARGET_BUILD)
+ $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
+ 
+-# Since $(2)_DEPENDENCIES are phony targets, they are always "newer"
++# Since $(2)_FINAL_DEPENDENCIES are phony targets, they are always "newer"
+ # than $(2)_TARGET_CONFIGURE. This would force the configure step (and
+ # therefore the other steps as well) to be re-executed with every
+-# invocation of make.  Therefore, make $(2)_DEPENDENCIES an order-only
++# invocation of make.  Therefore, make $(2)_FINAL_DEPENDENCIES an order-only
+ # dependency by using |.
+ 
+ $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
+-$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
++$$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
+ 
+ $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
+ ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
+@@ -505,7 +508,7 @@ $$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
+ $(1)-extract:			$$($(2)_TARGET_EXTRACT)
+ $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
+ 
+-$(1)-depends:		$$($(2)_DEPENDENCIES)
++$(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+ 
+ $(1)-source:		$$($(2)_TARGET_SOURCE)
+ else
+@@ -515,7 +518,7 @@ else
+ #  configure
+ $$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
+ 
+-$(1)-depends:		$$($(2)_DEPENDENCIES)
++$(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+ 
+ $(1)-patch:		$(1)-rsync
+ $(1)-extract:		$(1)-rsync
+@@ -526,7 +529,7 @@ $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
+ endif
+ 
+ $(1)-show-depends:
+-			@echo $$($(2)_DEPENDENCIES)
++			@echo $$($(2)_FINAL_DEPENDENCIES)
+ 
+ $(1)-graph-depends:
+ 			@$(INSTALL) -d $(O)/graphs
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
