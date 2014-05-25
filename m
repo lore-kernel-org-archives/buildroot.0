@@ -1,26 +1,37 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Sun, 25 May 2014 22:29:52 +0200
-Subject: [Buildroot] [PATCH v9 00/29] xbmc: bump version to 13.1 Beta2
-References: <1400618488-6995-1-git-send-email-bernd.kuhls@t-online.de>
- <20140524222515.GF3491@free.fr>
-Message-ID: <0f0a5bxrfg.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 25 May 2014 22:36:58 +0200
+Subject: [Buildroot] [PATCH] hwdata: add license information
+In-Reply-To: <1400939383-10495-1-git-send-email-abrahamh@web.de> (Heiko
+ Abraham's message of "Sat, 24 May 2014 15:49:43 +0200")
+References: <1400939383-10495-1-git-send-email-abrahamh@web.de>
+Message-ID: <878upp8uj9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20140524222515.GF3491 at free.fr:
+>>>>> "Heiko" == Heiko Abraham <abrahamh@web.de> writes:
 
-> If you don't mind, I'll wait for your v10. I'll start from there,
-> re-order the series as per the above, add the missing gconv stuff in it,
-> and respin it, so you can get it back.
-> 
-> Does that sound like an OK plan for you?
+ > Add missing license info and file for package 'hwdata'
+ > ---
+ >  package/hwdata/hwdata.mk | 2 ++
+ >  1 file changed, 2 insertions(+)
 
-Hi,
+ > diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+ > index 501baec..d1044c4 100644
+ > --- a/package/hwdata/hwdata.mk
+ > +++ b/package/hwdata/hwdata.mk
+ > @@ -8,6 +8,8 @@ HWDATA_VERSION = 0.230
+ >  HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
+ >  HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
+ >  HWDATA_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/h/hwdata/
+ > +HWDATA_LICENSE = GPLv2 XFree86_1.0_license
+ > +HWDATA_LICENSE_FILES = COPYING LICENSE
 
-yes, this sounds good. I just sent v10 of my patch series.
+LICENSE states that it is GPLv2+. We normally use 'or' between the
+licenses to clarify that you can choose and that it isn't a mix of both,
+so I've added that and committed, thanks.
 
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
