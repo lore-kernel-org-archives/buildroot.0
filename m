@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 25 May 2014 21:12:41 +0200
-Subject: [Buildroot] [git commit] lesstif: needs MMU
-Message-ID: <20140525204125.818D99CDAC@busybox.osuosl.org>
+Date: Sun, 25 May 2014 22:35:13 +0200
+Subject: [Buildroot] [git commit] hwdata: add license information
+Message-ID: <20140525204125.CCEB79CD68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9b4a795f072bea6871562ad1c12f1eb94288e298
+commit: http://git.buildroot.net/buildroot/commit/?id=b9824b3631a183c3594fda8c021e334b51b7c0c6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/9f7/9f718c9c9907d9aa2a7a0c45c872f5a8f34b8399/
+Add missing license info and file for package 'hwdata'
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[Peter: GPLv2 should be '+' variant, clarify that it is dual licensed]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lesstif/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/hwdata/hwdata.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/lesstif/Config.in b/package/lesstif/Config.in
-index 3a999ea..a6a88ec 100644
---- a/package/lesstif/Config.in
-+++ b/package/lesstif/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LESSTIF
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_FREETYPE
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  lesstif is the Hungry Programmers' version of OSF/Motif
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index 501baec..9d976d1 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -8,6 +8,8 @@ HWDATA_VERSION = 0.230
+ HWDATA_SOURCE = hwdata_$(HWDATA_VERSION).orig.tar.gz
+ HWDATA_PATCH = hwdata_$(HWDATA_VERSION)-1.diff.gz
+ HWDATA_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/h/hwdata/
++HWDATA_LICENSE = GPLv2+ or XFree86 1.0 license
++HWDATA_LICENSE_FILES = COPYING LICENSE
  
+ define HWDATA_INSTALL_TARGET_CMDS
+ 	install -D -m 644 $(@D)/pci.ids $(TARGET_DIR)/usr/share/hwdata/pci.ids
