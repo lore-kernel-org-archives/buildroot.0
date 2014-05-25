@@ -1,74 +1,126 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 25 May 2014 22:26:04 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_v10_11/29=5D_libglu=3A_new_package?=
+Date: Sun, 25 May 2014 22:25:58 +0200
+Subject: [Buildroot] [PATCH v10 05/29] mesa3d: Remove dependency for the
+	libxml2 module of host-python
 In-Reply-To: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1401049582-2110-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401049582-2110-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove the ugly BR2_PACKAGE_HOST_LIBXML2_PYTHON hack as well as
+mesa3d was the only package needing it, this is not the case
+anymore since:
+
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=2de70fe23f320ce4f559e37057fe07b7af99cf5a
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in        |    1 +
- package/libglu/Config.in |   10 ++++++++++
- package/libglu/libglu.mk |   17 +++++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/libglu/Config.in
- create mode 100644 package/libglu/libglu.mk
+ package/libxml2/Config.in             |    3 ---
+ package/libxml2/libxml2-python2.patch |   27 ---------------------------
+ package/libxml2/libxml2.mk            |   16 +---------------
+ package/mesa3d/Config.in              |    1 -
+ package/mesa3d/mesa3d.mk              |    1 -
+ 5 files changed, 1 insertion(+), 47 deletions(-)
+ delete mode 100644 package/libxml2/libxml2-python2.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index b5afcca..49738b0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
- source "package/libqrencode/Config.in"
-diff --git a/package/libglu/Config.in b/package/libglu/Config.in
-new file mode 100644
-index 0000000..de8e1ef
---- /dev/null
-+++ b/package/libglu/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBGLU
-+	bool "libglu"
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	help
-+	  Mesa OpenGL Utility library
-+
-+	  http://cgit.freedesktop.org/mesa/glu/
-+
-+comment "libglu needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
-new file mode 100644
-index 0000000..038d281
---- /dev/null
-+++ b/package/libglu/libglu.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libglu
-+#
-+################################################################################
-+
-+LIBGLU_VERSION = 9.0.0
-+LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
-+LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
-+LIBGLU_LICENSE = SGI-B-2.0
-+LIBGLU_LICENSE_FILES = include/GL/glu.h
-+LIBGLU_INSTALL_STAGING = YES
-+# upstream does not distribute a autoconf?ed configure script
-+LIBGLU_AUTORECONF = YES
-+LIBGLU_DEPENDENCIES = libgl
-+
-+$(eval $(autotools-package))
+diff --git a/package/libxml2/Config.in b/package/libxml2/Config.in
+index 85694f9..ebd63fe 100644
+--- a/package/libxml2/Config.in
++++ b/package/libxml2/Config.in
+@@ -4,6 +4,3 @@ config BR2_PACKAGE_LIBXML2
+ 	  XML C Parser
+ 
+ 	  http://xmlsoft.org/
+-
+-config BR2_PACKAGE_HOST_LIBXML2_PYTHON
+-	bool
+diff --git a/package/libxml2/libxml2-python2.patch b/package/libxml2/libxml2-python2.patch
+deleted file mode 100644
+index 19195a6..0000000
+--- a/package/libxml2/libxml2-python2.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Prefer python2 binary in case python points to python3
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr libxml2-2.9.1.org/configure.in libxml2-2.9.1/configure.in
+---- libxml2-2.9.1.org/configure.in	2013-04-19 09:25:20.000000000 +0200
+-+++ libxml2-2.9.1/configure.in	2014-04-12 14:16:26.579361068 +0200
+-@@ -748,6 +748,11 @@
+- PYTHON_TESTS=
+- pythondir=
+- if test "$with_python" != "no" ; then
+-+    if test -x "$with_python/bin/python2"
+-+    then
+-+        echo Found python2 in $with_python/bin/python2
+-+        PYTHON="$with_python/bin/python2"
+-+    else
+-     if test -x "$with_python/bin/python"
+-     then
+-         echo Found python in $with_python/bin/python
+-@@ -773,6 +778,7 @@
+- 	    fi
+- 	fi
+-     fi
+-+    fi
+-     if test "$PYTHON" != ""
+-     then
+-         PYTHON_VERSION=`$PYTHON -c "from distutils import sysconfig; print(sysconfig.get_python_version())"`
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 62f3e27..9bf4c28 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -20,21 +20,7 @@ LIBXML2_CONF_OPT = --with-gnu-ld --without-python --without-debug --without-lzma
+ 
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+ 
+-HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma
+-
+-# mesa3d uses functions that are only available with debug
+-ifeq ($(BR2_PACKAGE_MESA3D),y)
+-HOST_LIBXML2_CONF_OPT += --with-debug
+-else
+-HOST_LIBXML2_CONF_OPT += --without-debug
+-endif
+-
+-ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
+-HOST_LIBXML2_DEPENDENCIES += host-python
+-HOST_LIBXML2_CONF_OPT += --with-python=$(HOST_DIR)/usr
+-else
+-HOST_LIBXML2_CONF_OPT += --without-python
+-endif
++HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma --without-python
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBXML2_DEPENDENCIES += zlib
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 0bea798..10a5f96 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -2,7 +2,6 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	bool "Mesa 3D Graphics Library"
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index db5b55f..78b2580 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -20,7 +20,6 @@ MESA3D_DEPENDENCIES = \
+ 	host-bison \
+ 	host-flex \
+ 	host-gettext \
+-	host-libxml2 \
+ 	host-python \
+ 	host-xutil_makedepend \
+ 	libdrm
 -- 
 1.7.10.4
