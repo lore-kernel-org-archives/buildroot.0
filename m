@@ -1,43 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 26 May 2014 00:43:13 +0200
-Subject: [Buildroot] [PATCH v10 19/29] xbmc: bump version to 13.1 Beta2
-In-Reply-To: <1401049582-2110-20-git-send-email-bernd.kuhls@t-online.de>
-References: <1401049582-2110-1-git-send-email-bernd.kuhls@t-online.de>
- <1401049582-2110-20-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140525224313.GE3542@free.fr>
+From: oli vogt <oli.vogt.pub01@gmail.com>
+Date: Mon, 26 May 2014 11:04:21 +1200
+Subject: [Buildroot] [PATCH 2/2] docs: Added referenc to EUPL
+In-Reply-To: <87lhtp8wis.fsf@dell.be.48ers.dk>
+References: <1401005324-10428-1-git-send-email-oli.vogt.pub01@gmail.com>
+ <87lhtp8wis.fsf@dell.be.48ers.dk>
+Message-ID: <CAAwwcmRKHufLk_Jq-Z9jE160kZmSZ++5b9f4kKan3bmwYebpQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hi Peter.
 
-On 2014-05-25 22:26 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[--SNIP--]
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index acbdb91..2debe16 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -XBMC_VERSION = 12.3-Frodo
-> +XBMC_VERSION = 13.1b2-Gotham
+- Sorry about [2/2]. I'm still learning git.
+ I'll submit a second patch if this is accepted. <
+https://launchpad.net/nfcpy> uses EUPL.
 
-Bumped to 13.1rc1 here. :-)
+- In general don't care much about legal issues but I thought that it can
+just as well be included for completeness reasons.
+ Its major feature, in my opinion, is that it is available in many
+languages. It breaks up the english monotony ;-)
 
-Hopefully, 13.1 will be released before we can merge this in master! :-)
+Kind regards, Olivier
 
-Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On 26 May 2014 07:54, Peter Korsgaard <jacmet@uclibc.org> wrote:
+
+> >>>>> "oli" == oli vogt <oli.vogt.pub01@gmail.com> writes:
+>
+> This patch was listed as 2/2, but I don't seem to have received 1/2?
+>
+>  > The first European Union Public Licence
+>  > Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
+>  > ---
+>  >  docs/manual/legal-notice.txt | 3 +++
+>  >  1 file changed, 3 insertions(+)
+>
+>  > diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+>  > index d4344b9..42a4a52 100644
+>  > --- a/docs/manual/legal-notice.txt
+>  > +++ b/docs/manual/legal-notice.txt
+>  > @@ -122,6 +122,9 @@ Buildroot, with the name used in the manifest files:
+>  >  * `Apache-2.0`:
+>  >    http://apache.org/licenses/LICENSE-2.0.html[
+>  >    Apache License, version 2.0];
+>  > +* `EUPL-1`:
+>  > +  http://ec.europa.eu/idabc/eupl.html[
+>  > +   The first European Union Public Licence];
+>
+> Is that really a widely used license? I don't know of any sw licensed
+> under it and the string isn't present anywhere in Buildroot.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140526/42e78b1b/attachment.html>
