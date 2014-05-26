@@ -1,33 +1,60 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 May 2014 08:03:48 -0300
-Subject: [Buildroot] [WIP PATCH 2/5] gcc-final: disable shared build for
- static
-In-Reply-To: <20140526122419.213075c3@free-electrons.com>
-References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>	<1401055980-28742-3-git-send-email-gustavo@zacarias.com.ar>	<20140526113840.3473ed77@free-electrons.com>	<53831210.40406@zacarias.com.ar>
- <20140526122419.213075c3@free-electrons.com>
-Message-ID: <53831F94.7000900@zacarias.com.ar>
+From: Javier Almansa <javier.almansa@efsystems.net>
+Date: Mon, 26 May 2014 13:13:37 +0200
+Subject: [Buildroot] Install python setuptools package in staging directory
+Message-ID: <CAPnaeVCKRCqFkGoJifzGHw7FZHofZ6sTGj6_bjp54+iq5_RJMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/26/2014 07:24 AM, Thomas Petazzoni wrote:
-> There is an advantage with the pure dynamic scenario: build time.
-> 
-> When you have dyn+static, you build all object files (for packages that
-> do it correctly): once for static without -fPIC, and once for dynamic
-> with -fPIC. Here is what I have in my commit log about this:
-> 
->     For example, a static+shared build of libglib2 takes 1 minutes and
->     59 seconds, with a final build directory of 96 MB. A shared-only
->     build of libglib2 takes only 1 minutes and 31 seconds (almost a 25%
->     reduction of the build time), and the final build directory weights
->     89 MB (a reduction of almost 8%).
-> 
-> A 25% reduction in build time is certainly nice for users who don't
-> care about static libraries, no?
+Hello everybody.
 
-Ok, so then we can go for it, i don't think anyone will care about the
-space saving though, but time is a whole different matter.
-Regards.
+I am new in this mailing list and I have been using BuildRoot since some
+months ago for making rootfs for Raspberry PI, FriendlyARM and Beagleboard
+targets.
+
+Now, I am trying to add support for ROS (http://www.ros.org) into buildroot
+but I have some troubles with dependencies.
+
+Specifically, trying to install some ROS depemdencies, such as PyYaml (
+http://pyyaml.org), I can add this package to the target directory, but I
+am not able to install into Staging directory too (PyYaml is needed in
+croos-compilation too).
+
+This is my python-yaml.mk file:
+
+################################################################################
+#
+# python-yaml
+#
+################################################################################
+
+PYTHON_YAML_VERSION = 3.11
+PYTHON_YAML_SOURCE = PyYAML-$(PYTHON_YAML_VERSION).tar.gz
+PYTHON_YAML_SITE = http://pyyaml.org/download/pyyaml
+PYTHON_YAML_LICENSE = MIT License
+PYTHON_YAML_LICENSE_FILES = MIT License
+PYTHON_YAML_SETUP_TYPE = distutils
+
+$(eval $(python-package))
+$(eval $(host-python-package))
+
+Also, I tried with key PYTHON_YAML_INSTALL_STAGING = YES and it did not
+install PyYaml in staging directory, only in target.
+
+Also, I tried removing python-package evaluation rule and when I tried
+"make python-yaml" I received a message telling that there is not rule for
+python-yaml.
+
+I am trying with master branch and SHA1
+ID 78271772e3dcb09fe7f9a249e896acd925e7fc79.
+
+Any Idea?
+
+Thanks in advance.
+
+Javier
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140526/fbb95cad/attachment.html>
