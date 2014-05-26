@@ -1,21 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 May 2014 11:50:08 +0200
-Subject: [Buildroot] [PATCH 1/3] libtasn1: bump to version 3.6
-In-Reply-To: <1401068529-4738-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 25 May 2014 22:42:07 -0300")
-References: <1401068529-4738-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871tvgj2cv.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 May 2014 11:49:37 +0200
+Subject: [Buildroot] [git commit branch/next] grep: bump to version 2.19
+Message-ID: <20140526095109.C3DAF9CD63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c275ebb60d105edf035f4ee122c640c405ec982a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/grep/grep.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed all 3 to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 78e60dc..8d199d1 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GREP_VERSION = 2.18
++GREP_VERSION = 2.19
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
