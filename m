@@ -1,33 +1,25 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 26 May 2014 07:02:29 -0300
-Subject: [Buildroot] [WIP PATCH 0/5] Static linking fixes
-In-Reply-To: <CAAXf6LUuv3vuX-wh1oYBuCfcUFvq356KPxCw61pqtOp10ESubg@mail.gmail.com>
-References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
- <CAAXf6LUuv3vuX-wh1oYBuCfcUFvq356KPxCw61pqtOp10ESubg@mail.gmail.com>
-Message-ID: <53831135.4080405@zacarias.com.ar>
+Date: Mon, 26 May 2014 07:04:14 -0300
+Subject: [Buildroot] [WIP PATCH 2/5] gcc-final: disable shared build for
+ static
+In-Reply-To: <20140526113727.6ac42e12@free-electrons.com>
+References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>	<1401055980-28742-3-git-send-email-gustavo@zacarias.com.ar>
+ <20140526113727.6ac42e12@free-electrons.com>
+Message-ID: <5383119E.9@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/26/2014 05:13 AM, Thomas De Schampheleire wrote:
+On 05/26/2014 06:37 AM, Thomas Petazzoni wrote:
 
-Hi.
+> While on principle I'm probably fine with the patch, I kinda disagree
+> that it fixes the autobuilder issues. Because the same autobuilder
+> issue will appear with an external toolchain that has both libstdc++.so
+> and libstdc++.a.
 
-> Your patches do not yet go as far as touching the
-> BR2_PREFER_STATIC_LIB variable. We have talked about this in the past
-> but as far as I know there is no-one that has actually wrote patches
-> for it.
-> See also http://www.elinux.org/Buildroot:DeveloperDaysFOSDEM2014#BR2_PREFER_STATIC_LIB_refactoring
-> 
-> It would be awesome if this refactoring could be taken up by someone
-> in the 2014.08 cycle, but I don't know if anyone has time for this...
-
-Well, that's why it's called a WIP :)
-Also Thomas P. told me he has done something about it so i would just be
-reinventing the wheel.
-And if it's just a rename it's a pretty simple "find . -type f -exec sed
--i -e "s/BR2_PREFER_STATIC_LIB/BR2_SOMETHING/" {} \;" with some hand
-editing of toplevel Config.in to adjust the description as well.
+This is a way to fix it for internal toolchains, i can build up to mpd
+static with audiofile support with this, but it's not complete, that's
+for sure.
 Regards.
