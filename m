@@ -1,117 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 May 2014 22:08:54 +0200
-Subject: [Buildroot] [git commit branch/next] xserver_xorg-server: add
-	support of ARC architecture
-Message-ID: <20140526201015.B3DAD9CD2A@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 May 2014 22:13:12 +0200
+Subject: [Buildroot] [PATCH v3] libnss: Enable for MIPS64 n32 platforms
+In-Reply-To: <1400761846-36033-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 22 May 2014 13:30:46 +0100")
+References: <1400761846-36033-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <878upofgdj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=299f89ab57d7a5df1031f6b4c28588bb878a7ddb
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-Support of ARC was added after 1.15.1 release so until the next official release
-happens this patch enables building and execution of Xorg server on ARC.
+ > After talking with upstream we concluded that MIPS64 n32 is treated as a
+ > 32-bit architecture by libnss because it has 32-bit pointers, so
+ > USE_64=1 should not be set in that case.
 
-Upstream commit:
-http://cgit.freedesktop.org/xorg/xserver/commit/?id=c08d2b8ccb0158dbf1f529f80cc3236e66236cce
+ > Upstream bug:
+ >    https://bugzilla.mozilla.org/show_bug.cgi?id=1010730
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > WRT:
+ >    http://git.buildroot.net/buildroot/commit/?id=73e6ae0fe6a69f88183ae33401f2314088b5f799
 
-Cc: Bernd Kuhls <berndkuhls@hotmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../xserver_xorg-server-add-support-for-arc.patch  |   81 ++++++++++++++++++++
- 1 files changed, 81 insertions(+), 0 deletions(-)
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-add-support-for-arc.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-add-support-for-arc.patch
-new file mode 100644
-index 0000000..4bf2018
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-add-support-for-arc.patch
-@@ -0,0 +1,81 @@
-+Upstream-Status: Backport (should be a part of 1.15.2 - remove then)
-+
-+http://cgit.freedesktop.org/xorg/xserver/commit/?id=c08d2b8ccb0158dbf1f529f80cc3236e66236cce
-+
-+From c08d2b8ccb0158dbf1f529f80cc3236e66236cce Mon Sep 17 00:00:00 2001
-+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-+Date: Thu, 01 May 2014 12:39:29 +0000
-+Subject: ARC: Add support for ARC architecture
-+
-+Xorg server could be built for and run on Synopsys DesignWare ARC cores.
-+These changes are required for successful building and execution of the server.
-+
-+Both little-endian and big-endian flavors of ARC cores are supported.
-+
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+Acked-by: Adam Jackson <ajax@redhat.com>
-+Reviewed-by: Egbert Eich <eich@freedesktop.org>
-+Signed-off-by: Keith Packard <keithp@keithp.com>
-+---
-+diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
-+index fb95f58..0319de0 100644
-+--- a/hw/xfree86/common/compiler.h
-++++ b/hw/xfree86/common/compiler.h
-+@@ -1352,7 +1352,7 @@ stl_u(unsigned long val, unsigned int *p)
-+ #else                           /* ix86 */
-+ 
-+ #if !defined(__SUNPRO_C)
-+-#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__)
-++#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__)
-+ #ifdef GCCUSESGAS
-+ 
-+ /*
-+@@ -1454,7 +1454,7 @@ inl(unsigned short port)
-+ 
-+ #endif                          /* GCCUSESGAS */
-+ 
-+-#else                           /* !defined(FAKEIT) && !defined(__mc68000__)  && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__m32r__) */
-++#else                           /* !defined(FAKEIT) && !defined(__mc68000__)  && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__m32r__) && !defined(__arc__) */
-+ 
-+ static __inline__ void
-+ outb(unsigned short port, unsigned char val)
-+diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
-+index 47f5abc..40765fc 100644
-+--- a/hw/xfree86/os-support/linux/lnx_video.c
-++++ b/hw/xfree86/os-support/linux/lnx_video.c
-+@@ -59,7 +59,8 @@ static Bool ExtendedEnabled = FALSE;
-+       !defined(__mips__) && \
-+       !defined(__nds32__) && \
-+       !defined(__arm__) && \
-+-      !defined(__aarch64__)
-++      !defined(__aarch64__) && \
-++      !defined(__arc__)
-+ 
-+ /*
-+  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
-+diff --git a/include/servermd.h b/include/servermd.h
-+index 11f6c10..2d1ccb1 100644
-+--- a/include/servermd.h
-++++ b/include/servermd.h
-+@@ -300,6 +300,19 @@ SOFTWARE.
-+ 
-+ #endif                          /* __aarch64__ */
-+ 
-++#if defined(__arc__)
-++
-++#if defined(__BIG_ENDIAN__)
-++#define IMAGE_BYTE_ORDER	MSBFirst
-++#define BITMAP_BIT_ORDER	MSBFirst
-++#else
-++#define IMAGE_BYTE_ORDER	LSBFirst
-++#define BITMAP_BIT_ORDER	LSBFirst
-++#endif
-++#define GLYPHPADBYTES		4
-++
-++#endif                          /* ARC */
-++
-+ /* size of buffer to use with GetImage, measured in bytes. There's obviously
-+  * a trade-off between the amount of heap used and the number of times the
-+  * ddx routine has to be called.
-+--
-+cgit v0.9.0.2-2-gbebe
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
