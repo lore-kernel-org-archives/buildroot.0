@@ -1,33 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 May 2014 11:42:33 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for powerpc64le.
-In-Reply-To: <20140526112905.35300b6d@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 26 May 2014 11:29:05 +0200")
-References: <1401001162-8868-1-git-send-email-jeffbailey@google.com>
- <87r43h7cuq.fsf@dell.be.48ers.dk>
- <20140526112905.35300b6d@free-electrons.com>
-Message-ID: <8761ksj2pi.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 May 2014 11:44:41 +0200
+Subject: [Buildroot] [git commit] attr: clarify license info
+Message-ID: <20140526094735.2796D9CDD4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d30a13652ad63e866f12d54c22f796fe1ace275c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter Korsgaard,
- > On Sun, 25 May 2014 23:44:13 +0200, Peter Korsgaard wrote:
+As pointed out by Thomas Petazzoni in his review.
 
- >> Config.in should be indented with <tab>, not spaces.
- >> 
- >> Committed with that fixed to next, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/attr/attr.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Why the heck did you commit this patch instead of the patch series from
- > Cody P Schafer which is more elaborate and was posted way before, and
- > had some review on the list?
-
-Sorry, seems like I got the patches mixed up. I'll apply the delta from
-Cody's patches.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 87bdd21..97f8939 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -9,7 +9,7 @@ ATTR_SOURCE = attr-$(ATTR_VERSION).src.tar.gz
+ ATTR_SITE = http://download.savannah.gnu.org/releases/attr
+ ATTR_INSTALL_STAGING = YES
+ ATTR_CONF_OPT = --enable-gettext=no
+-ATTR_LICENSE = GPLv2+ LGPGv2.1+
++ATTR_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ 
+ # While the configuration system uses autoconf, the Makefiles are
