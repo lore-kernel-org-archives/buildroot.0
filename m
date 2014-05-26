@@ -1,115 +1,107 @@
-From: =?UTF-8?q?Guido=20Mart=C3=ADnez?= <guido@vanguardiasur.com.ar>
-Date: Mon, 26 May 2014 18:01:37 -0300
-Subject: [Buildroot] [RFC/PATCH] linux: add external initramfs options
-Message-ID: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 26 May 2014 23:19:09 +0200
+Subject: [Buildroot] [PATCH 1/1] WIP: libudev: New package
+In-Reply-To: <1401129061-25216-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1401129061-25216-1-git-send-email-bernd.kuhls@t-online.de>
+ <1401129061-25216-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140526211909.GA13529@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch allows building the kernel with an external initramfs. This
-is useful in cases where one wants to generate the kernel and rootfs
-with BR, and the kernel needs to contain an initramfs different to the
-rootfs.
+Bernd, All,
 
-The path specified can be a cpio archive or a directory, just like
-the kernel config. The path is specified w.r.t. BRs topdir, and made
-absolute since the kernel builds in another directory.
+On 2014-05-26 20:31 +0200, Bernd Kuhls spake thusly:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[--SNIP--]
+> diff --git a/package/libudev/Config.in b/package/libudev/Config.in
+> new file mode 100644
+> index 0000000..f3f1b59
+> --- /dev/null
+> +++ b/package/libudev/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_LIBUDEV
+> +	bool "libudev"
+> +	depends on !BR2_INIT_SYSTEMD
+> +	depends on !BR2_PACKAGE_EUDEV
 
-Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
----
-Hi,
+Maybe replace those two 'depends on' with simply:
 
-I'm marking this as RFC because I don't particularly like what I wrote
-to detect if the path is relative, but I found no other way.
+    depends on !BR2_PACKAGE_HAS_UDEV
 
-Any comment is appreciated,
-Thanks!
-Guido
+[--SNIP--]
+> diff --git a/package/libudev/libudev.mk b/package/libudev/libudev.mk
+> new file mode 100644
+> index 0000000..9dfd214
+> --- /dev/null
+> +++ b/package/libudev/libudev.mk
+> @@ -0,0 +1,43 @@
+> +################################################################################
+> +#
+> +# libudev
+> +#
+> +################################################################################
+> +
+> +LIBUDEV_VERSION = v1.6
+> +LIBUDEV_SITE = $(call github,gentoo,eudev,$(LIBUDEV_VERSION))
+> +LIBUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+> +LIBUDEV_LICENSE_FILES = COPYING
 
- linux/Config.in | 32 ++++++++++++++++++++++++++++++++
- linux/linux.mk  | 22 ++++++++++++++++++++++
- 2 files changed, 54 insertions(+)
+I was wondering if we could somehow keep this in sync with the eudev
+package, to avoid duplicating the versions, so we can bump both in a
+single change.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 069a7d6..1efb845 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -155,6 +155,38 @@ config BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE
- 	help
- 	  Path to the kernel configuration file
- 
-+config BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS
-+	depends on !BR2_TARGET_ROOTFS_INITRAMFS
-+	bool "Use an external initramfs"
-+	help
-+	  Append an external initramfs to the kernel image.
-+
-+comment "using BR initramfs, can't use an external one"
-+	depends on BR2_TARGET_ROOTFS_INITRAMFS
-+
-+config BR2_LINUX_KERNEL_INITRAMFS_SOURCE
-+	string "Appended initramfs source"
-+	depends on BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS
-+	help
-+	  Path to use as the external initramfs in the kernel. Can be
-+	  a CPIO archive or a directory.
-+
-+config BR2_LINUX_KERNEL_INITRAMFS_ROOT_UID
-+	string "Initramfs squash UID"
-+	depends on BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS
-+	help
-+	  If "Appended initramfs source" is a directory, select a UID
-+	  to be squashed to 0 (root). This allows creating an archive
-+	  with root-owned files as a user.
-+
-+config BR2_LINUX_KERNEL_INITRAMFS_ROOT_GID
-+	string "Initramfs squash GID"
-+	depends on BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS
-+	help
-+	  If "Appended initramfs source" is a directory, select a GID
-+	  to be squashed to 0 (root). This allows creating an archive
-+	  with root-owned files as a user.
-+
- #
- # Binary format
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index bd3f2ac..1ce5a25 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -166,9 +166,31 @@ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
- KERNEL_SOURCE_CONFIG = $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
- endif
- 
-+define LINUX_CONFIGURE_INITRAMFS
-+	$(if $(filter-out /%,$(call qstrip,$(BR2_LINUX_KERNEL_INITRAMFS_SOURCE))),
-+	$(if $(filter-out ~%,$(call qstrip,$(BR2_LINUX_KERNEL_INITRAMFS_SOURCE))),
-+		$(eval BR2_LINUX_KERNEL_INITRAMFS_SOURCE="${TOPDIR}/$(call qstrip,$(BR2_LINUX_KERNEL_INITRAMFS_SOURCE))")))
-+
-+	$(if $(BR2_LINUX_KERNEL_INITRAMFS_SOURCE),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config)
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,\"$(BR2_LINUX_KERNEL_INITRAMFS_SOURCE)\",$(@D)/.config)
-+	)
-+
-+	$(if $(BR2_LINUX_KERNEL_INITRAMFS_ROOT_UID),
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,$(BR2_LINUX_KERNEL_INITRAMFS_ROOT_UID),$(@D)/.config)
-+	)
-+
-+	$(if $(BR2_LINUX_KERNEL_INITRAMFS_ROOT_GID),
-+		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,$(BR2_LINUX_KERNEL_INITRAMFS_ROOT_GID),$(@D)/.config)
-+	)
-+endef
-+
-+
- define LINUX_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
-+	$(if $(BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS),
-+		$(call LINUX_CONFIGURE_INITRAMFS))
- 	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+> +LIBUDEV_INSTALL_STAGING = YES
+> +LIBUDEV_AUTORECONF = YES
+> +
+> +LIBUDEV_DEPENDENCIES = host-pkgconf
+> +
+> +LIBUDEV_CONF_OPT += \
+> +	--disable-manpages \
+> +	--with-rootlibdir=/lib \
+> +	--libexecdir=/lib \
+> +	--with-firmware-path=/lib/firmware \
+> +	--disable-introspection \
+
+Would it be possible to build the library with introspection?
+That would require adding gobject-introspection, though...
+But I'm not too fluent in udev itself, so I won;t complain! ;-)
+
+> +	--disable-keymap \
+> +	--disable-libkmod \
+> +	--disable-modules \
+> +	--disable-selinux \
+> +	--disable-rule-generator \
+> +	--disable-gtk-doc \
+> +	--disable-gudev \
+> +	--enable-split-usr
+> +
+> +define LIBUDEV_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev
+> +endef
+> +
+> +define LIBUDEV_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev DESTDIR=$(STAGING_DIR) install
+> +endef
+> +
+> +define LIBUDEV_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/libudev DESTDIR=$(TARGET_DIR) install
+> +endef
+> +
+> +$(eval $(autotools-package))
+
+Otherwise, looks good to me.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.0.0.rc2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
