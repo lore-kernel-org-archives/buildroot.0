@@ -1,63 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 May 2014 14:28:59 +0200
-Subject: [Buildroot] [git commit branch/next] powerpc: add
-	BR2_POWERPC_CPU_HAS_SPE to replace adhoc deps/checks
-Message-ID: <20140526123008.A53CB9C963@busybox.osuosl.org>
+Date: Mon, 26 May 2014 14:25:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/binutils: add depends
+	for powerpc64le (only 2.24 works)
+Message-ID: <20140526123008.91A979C963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4c824562bb120796ff0f5b90ebd7233929a3ffa
+commit: http://git.buildroot.net/buildroot/commit/?id=89e934baab9167d39fab2eecbd3cd0daf42b6906
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.powerpc |   11 ++++++++---
- 1 files changed, 8 insertions(+), 3 deletions(-)
+ package/binutils/Config.in.host |   12 ++++++------
+ 1 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 5f9f473..cb8935c 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -1,3 +1,6 @@
-+config BR2_POWERPC_CPU_HAS_SPE
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_powerpc || BR2_powerpc64le
-@@ -62,8 +65,10 @@ config BR2_powerpc_970
- 	bool "970"
- config BR2_powerpc_8540
- 	bool "8540 / e500v1"
-+	select BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_8548
- 	bool "8548 / e500v2"
-+	select BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_e300c2
- 	bool "e300c2"
- config BR2_powerpc_e300c3
-@@ -75,17 +80,17 @@ endchoice
- choice
- 	prompt "Target ABI"
- 	depends on BR2_powerpc || BR2_powerpc64le
--	default BR2_powerpc_SPE if BR2_powerpc_8540 || BR2_powerpc_8548
-+	default BR2_powerpc_SPE if BR2_POWERPC_CPU_HAS_SPE
- 	default BR2_powerpc_CLASSIC
- 	help
- 	  Application Binary Interface to use
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 0f7321e..08540a3 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -14,30 +14,30 @@ choice
+ 		bool "binutils 2.18-avr32-1.0.1"
  
- config BR2_powerpc_CLASSIC
- 	bool "Classic"
--	depends on !(BR2_powerpc_8540 || BR2_powerpc_8548)
-+	depends on !BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_SPE
- 	bool "SPE"
--	depends on BR2_powerpc_8540 || BR2_powerpc_8548
-+	depends on BR2_POWERPC_CPU_HAS_SPE
- endchoice
+ 	config BR2_BINUTILS_VERSION_2_20_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.20.1"
  
- config BR2_POWERPC_SOFT_FLOAT
+ 	config BR2_BINUTILS_VERSION_2_21
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21"
+ 
+ 	config BR2_BINUTILS_VERSION_2_21_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		depends on !BR2_ARM_EABIHF
+ 		bool "binutils 2.21.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_22
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.22"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_1
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.1"
+ 
+ 	config BR2_BINUTILS_VERSION_2_23_2
+-		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze
++		depends on !BR2_avr32 && !BR2_aarch64 && !BR2_microblaze && !BR2_powerpc64le
+ 		bool "binutils 2.23.2"
+ 
+ 	config BR2_BINUTILS_VERSION_2_24
