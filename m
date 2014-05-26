@@ -1,84 +1,137 @@
-From: Javier Almansa <javier.almansa@efsystems.net>
-Date: Mon, 26 May 2014 14:14:20 +0200
-Subject: [Buildroot] Install python setuptools package in staging
-	directory
-In-Reply-To: <20140526134944.10b48937@free-electrons.com>
-References: <CAPnaeVCKRCqFkGoJifzGHw7FZHofZ6sTGj6_bjp54+iq5_RJMQ@mail.gmail.com>
- <20140526134944.10b48937@free-electrons.com>
-Message-ID: <CAPnaeVBJPkwpsaS3-+NuVt2y-zyEFFidF8rKNBY8eetiky9RuA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 May 2014 14:14:47 +0200
+Subject: [Buildroot] [PATCH v2 2/2] mongoose: optionally provide shared
+	library
+In-Reply-To: <1399923087-5550-2-git-send-email-zinosat@tiscali.it> (Davide
+ Viti's message of "Mon, 12 May 2014 21:31:27 +0200")
+References: <1399923087-5550-1-git-send-email-zinosat@tiscali.it>
+ <1399923087-5550-2-git-send-email-zinosat@tiscali.it>
+Message-ID: <87oaykhh3c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, thanks for your fast reply.
+>>>>> "Davide" == Davide Viti <zinosat@tiscali.it> writes:
 
-pyYaml is used in the build process of ROS Components and later, at
-runtime, as pyYaml is needed for lots of ROS runtime components.
+Hi,
 
-In fact, when build process finishes, I need to manually copy pyyaml from
-target directory (target/usr/lib/python2.7/site-packages/yaml*) to staging
-dir (host/usr/lib/python2.7/site-packages) in order to cross-compile ROS
-components due that the package is not installed in this staging directory.
+ > From: Davide Viti <d.viti@infosolution.it>
+ > Signed-off-by: Davide Viti <zinosat@tiscali.it>
+ > ---
+ > Changes v1 -> v2:
+ >   - rebase
+ >   - add dot at the end of help messages
 
-I read the doc several times but I do not know why. Maybe I need to define
-PYTHON_YAML_INSTALL_STAGING_CMDS (I think this is automatic, but I am not
-sure).
+ > Original patch content:
+ > mongoose package can provide a webserver and, optionally, a shared
+ > library: this is what Centos, among other distros, is doing.
 
-Cheers.
+ > It's now possible to include in the build both the mongoose executable
+ > and libmongoose.so
 
-Javier.
+ > Not too sure how should be handled the situation where mongoose is
+ > select and neither the webserver nor libmongoose.so are not selected
+
+ > I'd also appreciate some feedback on the shared library compilation
+ > flags
+
+Most of this should go above the '---' line so it becomes part of the
+commit description.
+
+Why a shared library and not a static one? If upstream doesn't
+officially support shared libraries (and versioning of it), then I think
+it makes more sense to build a static library instead, especially for
+something like this you most likely are not going to use from a lot of
+different applications in your rootfs.
 
 
-2014-05-26 13:49 GMT+02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
+ > regards,
+ > Davide
 
-> Dear Javier Almansa,
->
-> On Mon, 26 May 2014 13:13:37 +0200, Javier Almansa wrote:
->
-> > I am new in this mailing list and I have been using BuildRoot since
-> > some months ago for making rootfs for Raspberry PI, FriendlyARM and
-> > Beagleboard targets.
-> >
-> > Now, I am trying to add support for ROS (http://www.ros.org) into
-> > buildroot but I have some troubles with dependencies.
-> >
-> > Specifically, trying to install some ROS depemdencies, such as PyYaml
-> > ( http://pyyaml.org), I can add this package to the target directory,
-> > but I am not able to install into Staging directory too (PyYaml is
-> > needed in croos-compilation too).
->
-> Why would you need a Python module in the staging directory?
->
-> There are two possibilities:
->
->  * PyYaml is used during the build process of another component. In
->    this case, PyYaml is used in the *build* machine and should be
->    installed in the host/ directory of Buildroot, through a
->    host-python-package.
->
->  * PyYaml is used at runtime on the target. In this case, PyYaml is
->    used on the *target* machine and should be installed in the target/
->    directory of Buildroot, through a python-package.
->
-> > Also, I tried with key PYTHON_YAML_INSTALL_STAGING = YES and it did
-> > not install PyYaml in staging directory, only in target.
->
-> Correct.
->
-> I'd like to help you, but I first need to understand why you think you
-> need PyYaml installed in the staging directory.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140526/30a8f15c/attachment.html>
+ >  package/mongoose/Config.in   |   14 ++++++++++++++
+ >  package/mongoose/mongoose.mk |   32 +++++++++++++++++++++++++++++---
+ >  2 files changed, 43 insertions(+), 3 deletions(-)
+
+ > diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+ > index 2526112..2b93ab8 100644
+ > --- a/package/mongoose/Config.in
+ > +++ b/package/mongoose/Config.in
+ > @@ -8,6 +8,20 @@ config BR2_PACKAGE_MONGOOSE
+ 
+ >  	  https://github.com/valenok/mongoose
+ 
+ > +if BR2_PACKAGE_MONGOOSE
+ > +
+ > +config BR2_PACKAGE_MONGOOSE_INSTALL_WEBSERVER
+ > +	bool "Install standalone webserver"
+ > +	help
+ > +	  Install mongoose webserver.
+ > +
+ > +config BR2_PACKAGE_MONGOOSE_INSTALL_SHARED_LIBRARY
+ > +	bool "Install shared library"
+ > +	help
+ > +	  Install shared library.
+ > +
+
+Are these options really needed? The webserver is tiny and the library
+only requires a single .c file to be built, so I think we should just
+unconditionally build/install both. If you really want to save the ~50k
+from your rootfs you can always remove it in your post build script.
+
+
+ > +endif
+ > +
+ >  comment "mongoose needs a toolchain w/ threads, largefile"
+ >  	depends on BR2_USE_MMU
+ >  	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE
+ > diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+ > index a7164bb..3628c0c 100644
+ > --- a/package/mongoose/mongoose.mk
+ > +++ b/package/mongoose/mongoose.mk
+ > @@ -8,6 +8,7 @@ MONGOOSE_VERSION = 5.3
+ >  MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ >  MONGOOSE_LICENSE = GPLv2
+ >  MONGOOSE_LICENSE_FILES = LICENSE
+ > +MONGOOSE_INSTALL_STAGING = YES
+ 
+ >  MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+ 
+ > @@ -17,15 +18,40 @@ MONGOOSE_DEPENDENCIES += openssl
+ >  MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ >  endif
+ 
+ > +ifeq ($(BR2_PACKAGE_MONGOOSE_INSTALL_SHARED_LIBRARY),y)
+ > +define MONGOOSE_INSTALL_SHARED_LIBRARY_CMDS
+ > +	$(INSTALL) -D -m 755 $(@D)/libmongoose.so $(TARGET_DIR)/usr/lib
+ > +endef
+ > +
+ > +define MONGOOSE_INSTALL_STAGING_SHARED_LIBRARY_CMDS
+ > +	$(INSTALL) -D -m 755 $(@D)/libmongoose.so $(STAGING_DIR)/usr/lib
+ > +	$(INSTALL) -D -m 644 $(@D)/mongoose.h $(STAGING_DIR)/usr/include
+ > +endef
+ > +
+ > +endif
+ > +
+ > +ifeq ($(BR2_PACKAGE_MONGOOSE_INSTALL_WEBSERVER),y)
+ > +define MONGOOSE_INSTALL_WEBSERVER_CMDS
+ > +        $(INSTALL) -D -m 755 $(@D)/mongoose $(TARGET_DIR)/usr/sbin
+ > +        $(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+ > +		$(TARGET_DIR)/etc/init.d
+ > +endef
+ > +endif
+ > +
+ >  define MONGOOSE_BUILD_CMDS
+ >  	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
+ >  		COPT="$(MONGOOSE_CFLAGS)"
+ > +	$(TARGET_CC) $(@D)/mongoose.c -shared -fpic \
+ > +		-o $(@D)/libmongoose.so -pthread -ldl
+
+It should also use MONGOOSE_CFLAGS to ensure it gets built with openssl
+support if present like the example server.
+
+Care to send an opdated patch fixing these issues?
+
+-- 
+Bye, Peter Korsgaard
