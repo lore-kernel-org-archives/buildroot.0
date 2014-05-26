@@ -1,38 +1,57 @@
-From: cem akpolat <akpolatcem@gmail.com>
-Date: Mon, 26 May 2014 13:34:02 +0200
-Subject: [Buildroot] ssh connection: connection refused?
-Message-ID: <CAMm5Yqorxn=XyRZNGPpAx8xKtJDhtuAdhvuJLwR71ixzw0QUDQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 May 2014 13:49:44 +0200
+Subject: [Buildroot] Install python setuptools package in staging
+ directory
+In-Reply-To: <CAPnaeVCKRCqFkGoJifzGHw7FZHofZ6sTGj6_bjp54+iq5_RJMQ@mail.gmail.com>
+References: <CAPnaeVCKRCqFkGoJifzGHw7FZHofZ6sTGj6_bjp54+iq5_RJMQ@mail.gmail.com>
+Message-ID: <20140526134944.10b48937@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Dear Javier Almansa,
 
-I set the root passwod of the file system in the menuconfig and establish a
-ssh connection to my file system. Some ssh keys are generated as below, but
-then I couldn't connect second time to the file system. it results in
-"connection refused". What could be the principal reason underlying this
-issue?
+On Mon, 26 May 2014 13:13:37 +0200, Javier Almansa wrote:
 
+> I am new in this mailing list and I have been using BuildRoot since
+> some months ago for making rootfs for Raspberry PI, FriendlyARM and
+> Beagleboard targets.
+> 
+> Now, I am trying to add support for ROS (http://www.ros.org) into
+> buildroot but I have some troubles with dependencies.
+> 
+> Specifically, trying to install some ROS depemdencies, such as PyYaml
+> ( http://pyyaml.org), I can add this package to the target directory,
+> but I am not able to install into Staging directory too (PyYaml is
+> needed in croos-compilation too).
 
--rw-r--r--  1 root    root      1574 May 26 11:10 ssh_config
--rw-------  1 root    root       668 May 26 19:15 ssh_host_dsa_key
--rw-r--r--  1 root    root       590 May 26 19:15 ssh_host_dsa_key.pub
--rw-------  1 root    root       227 May 26 19:15 ssh_host_ecdsa_key
--rw-r--r--  1 root    root       162 May 26 19:15 ssh_host_ecdsa_key.pub
--rw-------  1 root    root       411 May 26 19:24 ssh_host_ed25519_key
--rw-------  1 root    root        96 May 26 19:24 ssh_host_ed25519_key.pub
--rw-------  1 root    root       965 May 26 19:15 ssh_host_key
--rw-r--r--  1 root    root       630 May 26 19:15 ssh_host_key.pub
--rw-------  1 root    root      1679 May 26 19:15 ssh_host_rsa_key
--rw-r--r--  1 root    root       382 May 26 19:15 ssh_host_rsa_key.pub
--rw-r--r--  1 root    root      3622 May 26 11:10 sshd_config
+Why would you need a Python module in the staging directory?
 
-thanks for your recommendation,
+There are two possibilities:
 
-Cem Akpolat
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140526/00c4a2d8/attachment-0001.html>
+ * PyYaml is used during the build process of another component. In
+   this case, PyYaml is used in the *build* machine and should be
+   installed in the host/ directory of Buildroot, through a
+   host-python-package.
+
+ * PyYaml is used at runtime on the target. In this case, PyYaml is
+   used on the *target* machine and should be installed in the target/
+   directory of Buildroot, through a python-package.
+
+> Also, I tried with key PYTHON_YAML_INSTALL_STAGING = YES and it did
+> not install PyYaml in staging directory, only in target.
+
+Correct.
+
+I'd like to help you, but I first need to understand why you think you
+need PyYaml installed in the staging directory.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
