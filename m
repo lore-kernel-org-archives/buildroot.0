@@ -1,63 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 May 2014 14:28:59 +0200
-Subject: [Buildroot] [git commit] powerpc: add BR2_POWERPC_CPU_HAS_SPE to
-	replace adhoc deps/checks
-Message-ID: <20140601083246.16D4E9CE5B@busybox.osuosl.org>
+Date: Mon, 26 May 2014 11:49:31 +0200
+Subject: [Buildroot] [git commit] libtasn1: bump to version 3.6
+Message-ID: <20140601083245.C54ED9CE5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4c824562bb120796ff0f5b90ebd7233929a3ffa
+commit: http://git.buildroot.net/buildroot/commit/?id=26f033b8ee1a85099825cecfe4ab52fa5eccd14b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.powerpc |   11 ++++++++---
- 1 files changed, 8 insertions(+), 3 deletions(-)
+ package/libtasn1/libtasn1.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 5f9f473..cb8935c 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -1,3 +1,6 @@
-+config BR2_POWERPC_CPU_HAS_SPE
-+	bool
-+
- choice
- 	prompt "Target Architecture Variant"
- 	depends on BR2_powerpc || BR2_powerpc64le
-@@ -62,8 +65,10 @@ config BR2_powerpc_970
- 	bool "970"
- config BR2_powerpc_8540
- 	bool "8540 / e500v1"
-+	select BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_8548
- 	bool "8548 / e500v2"
-+	select BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_e300c2
- 	bool "e300c2"
- config BR2_powerpc_e300c3
-@@ -75,17 +80,17 @@ endchoice
- choice
- 	prompt "Target ABI"
- 	depends on BR2_powerpc || BR2_powerpc64le
--	default BR2_powerpc_SPE if BR2_powerpc_8540 || BR2_powerpc_8548
-+	default BR2_powerpc_SPE if BR2_POWERPC_CPU_HAS_SPE
- 	default BR2_powerpc_CLASSIC
- 	help
- 	  Application Binary Interface to use
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index e223ad5..d95578a 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_powerpc_CLASSIC
- 	bool "Classic"
--	depends on !(BR2_powerpc_8540 || BR2_powerpc_8548)
-+	depends on !BR2_POWERPC_CPU_HAS_SPE
- config BR2_powerpc_SPE
- 	bool "SPE"
--	depends on BR2_powerpc_8540 || BR2_powerpc_8548
-+	depends on BR2_POWERPC_CPU_HAS_SPE
- endchoice
- 
- config BR2_POWERPC_SOFT_FLOAT
+-LIBTASN1_VERSION = 3.5
++LIBTASN1_VERSION = 3.6
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
