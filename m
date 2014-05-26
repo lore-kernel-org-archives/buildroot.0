@@ -1,75 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 26 May 2014 21:43:49 +0200
-Subject: [Buildroot] [PATCH v5 9/9] powerpc: add powerpc64 and
-	powerpc64le support
-In-Reply-To: <1399958901-7867-10-git-send-email-cody@linux.vnet.ibm.com> (Cody
- P. Schafer's message of "Mon, 12 May 2014 22:28:21 -0700")
-References: <1399958901-7867-1-git-send-email-cody@linux.vnet.ibm.com>
- <1399958901-7867-10-git-send-email-cody@linux.vnet.ibm.com>
-Message-ID: <87ha4cfhqi.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 26 May 2014 21:18:10 +0200
+Subject: [Buildroot] [git commit branch/next] powerpc: add power{4, 5, 6, 7,
+	8} cpus
+Message-ID: <20140526200606.5C7239CDDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cody" == Cody P Schafer <cody@linux.vnet.ibm.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=71badded4bbd3beae992eade472a37a2339d6efe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This enables powerpc64 and powerpc64le. Currently, le needs at least
- > glibc 2.19 and gcc 4.9.0. For gdb, 7.7.1 works (added in an earlier
- > patch).
+Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in.powerpc |   18 ++++++++++++++++++
+ 1 files changed, 18 insertions(+), 0 deletions(-)
 
- > Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
-
-[snip]
-
- > +++ b/package/gcc/Config.in.host
- > @@ -20,14 +20,14 @@ choice
- >  		bool "gcc 4.2.2-avr32-2.1.5"
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 66ca883..9a7b2b7 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -110,6 +110,19 @@ config BR2_powerpc_e300c3
+ config BR2_powerpc_e500mc
+ 	bool "e500mc"
+ 	depends on !BR2_ARCH_IS_64
++config BR2_powerpc_power4
++	bool "power4"
++config BR2_powerpc_power5
++	bool "power5"
++config BR2_powerpc_power6
++	bool "power6"
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
++config BR2_powerpc_power7
++	bool "power7"
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
++config BR2_powerpc_power8
++	bool "power8"
++	select BR2_POWERPC_CPU_HAS_ALTIVEC
+ endchoice
  
- >  	config BR2_GCC_VERSION_4_3_X
- > -		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- > +		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
- >  		depends on !BR2_ARM_EABIHF
- >  		bool "gcc 4.3.x"
- >  		# musl patches only for gcc 4.7+
- >  		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+ choice
+@@ -178,6 +191,11 @@ config BR2_GCC_TARGET_TUNE
+ 	default "e300c2"	if BR2_powerpc_e300c2
+ 	default "e300c3"	if BR2_powerpc_e300c3
+ 	default "e500mc"	if BR2_powerpc_e500mc
++	default "power4"	if BR2_powerpc_power4
++	default "power5"	if BR2_powerpc_power5
++	default "power6"	if BR2_powerpc_power6
++	default "power7"	if BR2_powerpc_power7
++	default "power8"	if BR2_powerpc_power8
  
- >  	config BR2_GCC_VERSION_4_4_X
- > -		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4
- > +		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
- >  		bool "gcc 4.4.x"
- >  		# ARM EABIhf support appeared in gcc 4.6
- >  		depends on !BR2_ARM_EABIHF
- > @@ -37,7 +37,7 @@ choice
- >  		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
- >  	config BR2_GCC_VERSION_4_5_X
- > -		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4
- > +		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
- >  		select BR2_GCC_NEEDS_MPC
- >  		# ARM EABIhf support appeared in gcc 4.6
- >  		depends on !BR2_ARM_EABIHF
- > @@ -46,14 +46,14 @@ choice
- >  		bool "gcc 4.5.x"
- 
- >  	config BR2_GCC_VERSION_4_6_X
- > -		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- > +		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4 && !BR2_powerpc64le
- >  		select BR2_GCC_NEEDS_MPC
- >  		# musl patches only for gcc 4.7+
- >  		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
- >  		bool "gcc 4.6.x"
- 
- >  	config BR2_GCC_VERSION_4_7_X
- > -		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4
- > +		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4 && !BR2_powerpc64le
- >  		select BR2_GCC_NEEDS_MPC
- >  		bool "gcc 4.7.x"
-
-It looks like you forgot gcc 4.8.x.
-
-Committed with that fixed (and some minor fixups to get it to apply) to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+ config BR2_GCC_TARGET_ABI
+ 	default "altivec"		if BR2_PPC_ABI_altivec
