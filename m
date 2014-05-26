@@ -1,57 +1,46 @@
-From: cem akpolat <akpolatcem@gmail.com>
-Date: Mon, 26 May 2014 15:55:29 +0200
-Subject: [Buildroot] Fwd: all files and folders seem as an executable
-	file ?
-In-Reply-To: <20140526154848.3f948951@free-electrons.com>
-References: <CAMm5YqrU4Vk9KJpVVPoYrNL-wNeVXEPVu3GdSLTNe2gYHc=ZMw@mail.gmail.com>
- <20140526135034.74637680@free-electrons.com>
- <CAMm5YqqX4pKA5Exxser2OSWfsUX9sHp2Tjsump2cW65JHktHeA@mail.gmail.com>
- <CAMm5Yqrn7psH2jRb2Uh1u30ni4iQdNMDSUy1=U3vHz5tu+sRTA@mail.gmail.com>
- <20140526152359.3918fd4a@free-electrons.com>
- <CAMm5Yqpk5=2-EBa51qmiWrOA2qHE+_2Bh5Y2s=_064zN2u_AeA@mail.gmail.com>
- <20140526154848.3f948951@free-electrons.com>
-Message-ID: <CAMm5YqrXTy6PyvAxnsk6Grf6cLLfW3Yxe8wwjGHn9AH8w3nyGg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 26 May 2014 20:31:00 +0200
+Subject: [Buildroot] [PATCH 0/1] WIP: libudev: New package
+Message-ID: <1401129061-25216-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hi,
 
-Yes, you are right, thank you for the reference!
+in reply to Thomas[1]: "Gentoo has decided to provide a maintained fork of udev
+as eudev, so we support both options. But I definitely wouldn't want to support
+things that are completely Buildroot-specific."
 
-Best regards,
+for my first libudev package, based on systemd sourcecode, aimed at platforms
+having  BR2_ROOTFS_DEVICE_CREATION_STATIC=y I picked up his hint. This libudev
+package is now based on eudev sourcecode in a less hackish way. Even the Gentoo
+ebuild[2] partly uses "$(MAKE) -C $(@D)/src/libudev".
 
-Cem
+This package install these files to $(STAGING_DIR):
+./usr/include/libudev.h
+./usr/lib/libudev.la
+./usr/lib/libudev.a
+./usr/lib/pkgconfig/libudev.pc
+./usr/lib/libudev.so -> ../../lib/libudev.so.1.4.0
+./lib/libudev.so.1.4.0
+./lib/libudev.so.1 -> libudev.so.1.4.0
 
-Cem Akpolat
+I am planning to merge this libudev package and the existing eudev package, but
+I am not sure what is the best way. This is something I would like to discuss
+based on this patch. My idea is to compile libudev using eudev.mk for platforms
+without a udev daemon. Therefore this patch should not be committed as is.
 
+Btw, I am using this package successfully to provide udev device detection
+support to libcec, which in turn is used by xbmc to find my cec adapter without
+hacking xbmc, which I did in the past ;)
 
-On Mon, May 26, 2014 at 3:48 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Regards, Bernd
 
-> Dear cem akpolat,
->
-> On Mon, 26 May 2014 15:37:04 +0200, cem akpolat wrote:
->
-> > The following shows the folders' permissions, as you see the folders are
-> > seen as executable.
->
-> Yes, and? Executable directories are normal. Read
-> http://en.wikipedia.org/wiki/File_system_permissions, about the
-> executable permission: "When set for a directory, this permission
-> grants the ability to access file contents and metainfo if its name is
-> known, but not list files inside the directory (unless read is set)."
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140526/f2b4f4c1/attachment.html>
+[1] http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/83953
+[2] http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-fs/eudev/eudev-1.6.ebuild
+
+-- 
+1.7.10.4
