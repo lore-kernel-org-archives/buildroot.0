@@ -1,72 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 25 May 2014 22:42:09 -0300
-Subject: [Buildroot] [PATCH 3/3] libmicrohttpd: bump to version 0.9.36
-In-Reply-To: <1401068529-4738-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1401068529-4738-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1401068529-4738-3-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 May 2014 08:30:07 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-25
+Message-ID: <20140526063007.A011F10158F@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../libmicrohttpd/libmicrohttpd-0001-cross.patch   | 28 ----------------------
- package/libmicrohttpd/libmicrohttpd.mk             |  3 +--
- 2 files changed, 1 insertion(+), 30 deletions(-)
- delete mode 100644 package/libmicrohttpd/libmicrohttpd-0001-cross.patch
+Build statistics for 2014-05-25
+===============================
 
-diff --git a/package/libmicrohttpd/libmicrohttpd-0001-cross.patch b/package/libmicrohttpd/libmicrohttpd-0001-cross.patch
-deleted file mode 100644
-index 5980b9c..0000000
---- a/package/libmicrohttpd/libmicrohttpd-0001-cross.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Fix cross-compilation
--
--Patch sent upstream: http://article.gmane.org/gmane.comp.gnu.libmicrohttpd/1193
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr libmicrohttpd-0.9.35.org/configure.ac libmicrohttpd-0.9.35/configure.ac
----- libmicrohttpd-0.9.35.org/configure.ac	2014-05-02 20:38:40.000000000 +0200
--+++ libmicrohttpd-0.9.35/configure.ac	2014-05-04 09:17:00.000000000 +0200
--@@ -639,8 +639,7 @@
--         SAVE_CPPFLAGS="$CPPFLAGS"
--         LDFLAGS="-L$with_gnutls/lib $LDFLAGS"
--         CPPFLAGS="-I$with_gnutls/include $CPPFLAGS"
---        AC_CHECK_FILE([$with_gnutls/include/gnutls/gnutls.h],
---          [AC_CHECK_HEADERS([gnutls/gnutls.h],
--+          AC_CHECK_HEADERS([gnutls/gnutls.h],
--             [AC_CHECK_LIB([gnutls], [gnutls_priority_set],
--               [
--                 GNUTLS_CPPFLAGS="-I$with_gnutls/include"
--@@ -648,7 +647,7 @@
--                 GNUTLS_LIBS="-lgnutls"
--                 AC_CHECK_LIB([gnutls], [gnutls_load_file], [AC_CHECK_LIB([gnutls], [gnutls_privkey_import_x509_raw], [have_gnutls_sni=yes])])
--                 have_gnutls=yes
---              ])])])
--+              ])])
--         AS_IF([test "x$have_gnutls" != "xyes"], [AC_MSG_ERROR([can't find usable libgnutls at specified prefix $with_gnutls])])
--         LDFLAGS="$SAVE_LDFLAGS"
--         CPPFLAGS="$SAVE_CPPFLAGS"
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index edf4f9a..6e3b756 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
- 
--LIBMICROHTTPD_VERSION = 0.9.35
-+LIBMICROHTTPD_VERSION = 0.9.36
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
--LIBMICROHTTPD_AUTORECONF = YES
- LIBMICROHTTPD_CONF_OPT = --disable-curl --disable-spdy
- 
- ifeq ($(BR2_PACKAGE_LIBMICROHTTPD_SSL),y)
+        success : 114
+       failures : 8  
+       timeouts : 0  
+          TOTAL : 122
+
+Classification of failures by reason
+====================================
+
+                    php-5.5.12 | 2 
+    xserver_xorg-server-1.15.1 | 1 
+                      gdb-6.6a | 1 
+                lesstif-0.95.2 | 1 
+                 libssh2-1.4.3 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+               ruby-1.9.3-p545 | 1 
+
+Detail of failures
+===================
+
+      bfin |                       gdb-6.6a | NOK | http://autobuild.buildroot.net/results/864d2e67427462a73cfc6d9e5d4eafa2b35c0321/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/95fa2904f81a114abfa337dcce141b7c87d5a52c/
+      bfin |                 lesstif-0.95.2 | NOK | http://autobuild.buildroot.net/results/9f718c9c9907d9aa2a7a0c45c872f5a8f34b8399/
+     nios2 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/c7250b415fde22fe2c40ad0bc959aa81cbbf5cbf/
+       arm |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/c0e206399ebe53d4998fd5a141bdefd754f1929f/
+       arm |                     php-5.5.12 | NOK | http://autobuild.buildroot.net/results/5bcf8475f5ef7800efdff6be3aa4d7109ab76b67/
+      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/6bfd07405f31ca5c432dbf1575bf969f622eeecb/
+   powerpc |     xserver_xorg-server-1.15.1 | NOK | http://autobuild.buildroot.net/results/a952932b832ee3296d6c225c7a9df408ca3eef9f/
+
+
 -- 
-1.8.5.5
+http://autobuild.buildroot.net
