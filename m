@@ -1,38 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 May 2014 11:38:40 +0200
-Subject: [Buildroot] [WIP PATCH 2/5] gcc-final: disable shared build for
- static
-In-Reply-To: <1401055980-28742-3-git-send-email-gustavo@zacarias.com.ar>
-References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
- <1401055980-28742-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140526113840.3473ed77@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 26 May 2014 11:42:33 +0200
+Subject: [Buildroot] [PATCH 1/1] Add support for powerpc64le.
+In-Reply-To: <20140526112905.35300b6d@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 26 May 2014 11:29:05 +0200")
+References: <1401001162-8868-1-git-send-email-jeffbailey@google.com>
+ <87r43h7cuq.fsf@dell.be.48ers.dk>
+ <20140526112905.35300b6d@free-electrons.com>
+Message-ID: <8761ksj2pi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 25 May 2014 19:12:57 -0300, Gustavo Zacarias wrote:
+ > Dear Peter Korsgaard,
+ > On Sun, 25 May 2014 23:44:13 +0200, Peter Korsgaard wrote:
 
->  ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +define HOST_GCC_FINAL_INSTALL_USR_LIBS
-> +	mkdir -p $(TARGET_DIR)/usr/lib
-> +	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
-> +		cp -dpf $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/lib*/$${i}.a \
-> +			$(STAGING_DIR)/usr/lib/ ; \
-> +	done
-> +endef
+ >> Config.in should be indented with <tab>, not spaces.
+ >> 
+ >> Committed with that fixed to next, thanks.
 
-No, we want to install .a files as well in my opinion. In fact, the
-patch series I have to rename BR2_PREFER_STATIC_LIB makes things even
-clearer, with three possibilities: pure static, static and shared, pure
-shared.
+ > Why the heck did you commit this patch instead of the patch series from
+ > Cody P Schafer which is more elaborate and was posted way before, and
+ > had some review on the list?
 
-Thomas
+Sorry, seems like I got the patches mixed up. I'll apply the delta from
+Cody's patches.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
