@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 26 May 2014 14:05:27 +0200
-Subject: [Buildroot] [WIP PATCH 2/5] gcc-final: disable shared build for
- static
-In-Reply-To: <53831F94.7000900@zacarias.com.ar>
-References: <1401055980-28742-1-git-send-email-gustavo@zacarias.com.ar>
- <1401055980-28742-3-git-send-email-gustavo@zacarias.com.ar>
- <20140526113840.3473ed77@free-electrons.com>
- <53831210.40406@zacarias.com.ar>
- <20140526122419.213075c3@free-electrons.com>
- <53831F94.7000900@zacarias.com.ar>
-Message-ID: <20140526140527.3d6bd86c@free-electrons.com>
+Date: Mon, 26 May 2014 14:10:25 +0200
+Subject: [Buildroot] ssh connection: connection refused?
+In-Reply-To: <CAMm5Yqqa4ajmfiRzgivA2pcnVaLhbaR=ni5fC_-N6YiH5Pbsww@mail.gmail.com>
+References: <CAMm5Yqorxn=XyRZNGPpAx8xKtJDhtuAdhvuJLwR71ixzw0QUDQ@mail.gmail.com>
+ <20140526135131.740b337d@free-electrons.com>
+ <CAMm5Yqqa4ajmfiRzgivA2pcnVaLhbaR=ni5fC_-N6YiH5Pbsww@mail.gmail.com>
+Message-ID: <20140526141025.0caae374@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear cem akpolat,
 
-On Mon, 26 May 2014 08:03:48 -0300, Gustavo Zacarias wrote:
+On Mon, 26 May 2014 14:04:33 +0200, cem akpolat wrote:
 
-> >     For example, a static+shared build of libglib2 takes 1 minutes
-> > and 59 seconds, with a final build directory of 96 MB. A shared-only
-> >     build of libglib2 takes only 1 minutes and 31 seconds (almost a
-> > 25% reduction of the build time), and the final build directory
-> > weights 89 MB (a reduction of almost 8%).
-> > 
-> > A 25% reduction in build time is certainly nice for users who don't
-> > care about static libraries, no?
-> 
-> Ok, so then we can go for it, i don't think anyone will care about the
-> space saving though, but time is a whole different matter.
+> I am using both, dropbear and openssh. If using together leads to the
+> conflict, I should disable one of them.
 
-Agreed, the disk space saving nobody really cares, especially if it's
-only ~8%. But a build time saving of 25% is quite nice, in my opinion.
-Normally, all packages using libtool should be affected, but I haven't
-checked.
+Of course it leads to a conflict (though I believe one of them should
+start successfully, and the other fail).
 
-Best regards,
+> By the way, I can boot first
+> time the file system, I can login via ssh, but the second time I
+> cannot and receive "connection refused". I have right now two init
+> scripts under init.d. One for dropbear S50dropbear and the other for
+> probably openssh S50sshd.
+
+Please chose one or the other. Having two SSH servers listening on the
+same TCP port doesn't make any sense.
 
 Thomas
 -- 
