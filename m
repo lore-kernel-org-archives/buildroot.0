@@ -1,31 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 May 2014 13:22:07 +0000 (UTC)
-Subject: [Buildroot] [Bug 7112] license info for package 'hwdata'
-In-Reply-To: <bug-7112-163@https.bugs.busybox.net/>
-References: <bug-7112-163@https.bugs.busybox.net/>
-Message-ID: <20140526132207.7E99E9CDD2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 26 May 2014 15:23:59 +0200
+Subject: [Buildroot] Fwd: all files and folders seem as an executable
+ file ?
+In-Reply-To: <CAMm5Yqrn7psH2jRb2Uh1u30ni4iQdNMDSUy1=U3vHz5tu+sRTA@mail.gmail.com>
+References: <CAMm5YqrU4Vk9KJpVVPoYrNL-wNeVXEPVu3GdSLTNe2gYHc=ZMw@mail.gmail.com>
+ <20140526135034.74637680@free-electrons.com>
+ <CAMm5YqqX4pKA5Exxser2OSWfsUX9sHp2Tjsump2cW65JHktHeA@mail.gmail.com>
+ <CAMm5Yqrn7psH2jRb2Uh1u30ni4iQdNMDSUy1=U3vHz5tu+sRTA@mail.gmail.com>
+Message-ID: <20140526152359.3918fd4a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7112
+Dear cem akpolat,
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
+On Mon, 26 May 2014 13:59:50 +0200, cem akpolat wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+> in the generated file system I am seeing that all files/folders are
+> executable. In terms of format, if you mean the file system format, this is
+> .cpio. Would it be possible due to the fact that I pack out the file system
+> via root permission and then re-pack again with root-permission (I haven't
+> started to use root_overlay).
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-26 13:22:07 UTC ---
-Fixed by commit
-http://git.buildroot.org/buildroot/commit/?id=b9824b3631a183c3594fda8c021e334b51b7c0c6
+Maybe the way you unpack/repack is incorrect. Can you check just
+unpacking the .cpio ? I'm using the cpio filesystem format everyday,
+and I have correct permissions.
 
-Thanks for the patch!
+Also, in your separate question about SSH, you pasted the following
+thing:
 
+-rw-r--r--  1 root    root      1574 May 26 11:10 ssh_config
+-rw-------  1 root    root       668 May 26 19:15 ssh_host_dsa_key
+-rw-r--r--  1 root    root       590 May 26 19:15 ssh_host_dsa_key.pub
+-rw-------  1 root    root       227 May 26 19:15 ssh_host_ecdsa_key
+-rw-r--r--  1 root    root       162 May 26 19:15 ssh_host_ecdsa_key.pub
+-rw-------  1 root    root       411 May 26 19:24 ssh_host_ed25519_key
+-rw-------  1 root    root        96 May 26 19:24 ssh_host_ed25519_key.pub
+-rw-------  1 root    root       965 May 26 19:15 ssh_host_key
+-rw-r--r--  1 root    root       630 May 26 19:15 ssh_host_key.pub
+-rw-------  1 root    root      1679 May 26 19:15 ssh_host_rsa_key
+-rw-r--r--  1 root    root       382 May 26 19:15 ssh_host_rsa_key.pub
+-rw-r--r--  1 root    root      3622 May 26 11:10 sshd_config
+
+As you can see, none of these files have the executable permissions.
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
