@@ -1,16 +1,16 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 26 May 2014 13:21:01 +0000 (UTC)
-Subject: [Buildroot] [Bug 7100] license info for package 'acl' missing
-In-Reply-To: <bug-7100-163@https.bugs.busybox.net/>
-References: <bug-7100-163@https.bugs.busybox.net/>
-Message-ID: <20140526132101.371D59CDD2@busybox.osuosl.org>
+Date: Mon, 26 May 2014 13:21:40 +0000 (UTC)
+Subject: [Buildroot] [Bug 7106] license info for package 'attr' missing
+In-Reply-To: <bug-7106-163@https.bugs.busybox.net/>
+References: <bug-7106-163@https.bugs.busybox.net/>
+Message-ID: <20140526132140.915069CDD2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7100
+https://bugs.busybox.net/show_bug.cgi?id=7106
 
 Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
@@ -19,12 +19,12 @@ Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
              Status|NEW                         |RESOLVED
          Resolution|                            |FIXED
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-26 13:21:00 UTC ---
-Fixed by commits:
-http://git.buildroot.org/buildroot/commit/?id=6783c64d0fee12ff107ef9fbdf14f07b8901256b
-http://git.buildroot.org/buildroot/commit/?id=f1a3e0cb1be043bb8efe91a415615440f7ba94a4
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-05-26 13:21:40 UTC ---
+Fixed by commits
+http://git.buildroot.org/buildroot/commit/?id=006f1192695df1defa03c4ed83f2292876c8fe9c
+http://git.buildroot.org/buildroot/commit/?id=d30a13652ad63e866f12d54c22f796fe1ace275c
 
-Thanks for the patches!
+Thanks for the patch!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
