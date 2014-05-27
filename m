@@ -1,77 +1,78 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Tue, 27 May 2014 11:31:43 +0200
-Subject: [Buildroot] [PATCH v3] mongoose: provide libmongoose.a static
-	library
-Message-ID: <1401183103-16716-1-git-send-email-d.viti@infosolution.it>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 May 2014 11:32:28 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-26
+In-Reply-To: <20140527063007.C907B100BA4@stock.ovh.net> (Thomas Petazzoni's
+ message of "Tue, 27 May 2014 08:30:07 +0200 (CEST)")
+References: <20140527063007.C907B100BA4@stock.ovh.net>
+Message-ID: <87ioorefdf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package provides a webserver and, eventually, a library: this is
-what Centos, among other distros, is doing.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Davide Viti <d.viti@infosolution.it>
----
-     - unconditionally create static rather than shared library (Peter
-       Korsgaard)
-     - honour $(MONGOOSE_CFLAGS) when building mongoose.c (Peter Korsgaard)
-     - don't exceed 80 columns in mongoose.mk
-     - install libmongoose.a as 644 rather than 755
-     - update github URL in Config.in
+ > Build statistics for 2014-05-26
+ > ===============================
 
- package/mongoose/Config.in   |  2 +-
- package/mongoose/mongoose.mk | 13 +++++++++++--
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ >         success : 114
+ >        failures : 9  
+ >        timeouts : 0  
+ >           TOTAL : 123
 
-diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
-index 2526112..8060942 100644
---- a/package/mongoose/Config.in
-+++ b/package/mongoose/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_MONGOOSE
- 	help
- 	  Mongoose is a small and easy to use web server
- 
--	  https://github.com/valenok/mongoose
-+	  https://github.com/cesanta/mongoose
- 
- comment "mongoose needs a toolchain w/ threads, largefile"
- 	depends on BR2_USE_MMU
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 75a4d3f..bb1bed3 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -8,6 +8,7 @@ MONGOOSE_VERSION = 5.3
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPLv2
- MONGOOSE_LICENSE_FILES = LICENSE
-+MONGOOSE_INSTALL_STAGING = YES
- 
- MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
- 
-@@ -20,12 +21,20 @@ endif
- define MONGOOSE_BUILD_CMDS
- 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
- 		CFLAGS_EXTRA="$(MONGOOSE_CFLAGS)" server
-+	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
-+	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
- endef
- 
- define MONGOOSE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
-+	$(INSTALL) -D -m 755 $(@D)/examples/server \
-+		$(TARGET_DIR)/usr/sbin/mongoose
- 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
--		$(TARGET_DIR)/etc/init.d/S85mongoose
-+		$(TARGET_DIR)/etc/init.d
-+endef
-+
-+define MONGOOSE_INSTALL_STAGING_CMDS
-+	$(INSTALL) -D -m 644 $(@D)/libmongoose.a $(STAGING_DIR)/usr/lib
-+	$(INSTALL) -D -m 644 $(@D)/mongoose.h $(STAGING_DIR)/usr/include
- endef
- 
- $(eval $(generic-package))
+ > Classification of failures by reason
+ > ====================================
+
+ >                  mplayer-1.1.1 | 1 
+ >            host-gdb-arc-4.8-R3 | 1 
+ >                   midori-0.4.6 | 1 
+ >     xserver_xorg-server-1.15.1 | 1 
+ >                   python-2.7.6 | 1 
+ >                    slang-2.2.4 | 1 
+ >                       gdb-6.6a | 1 
+ > host-gdb-6be65fb56ea6694a92... | 1 
+ > dvb-apps-3d43b280298c39a67d... | 1 
+
+ > Detail of failures
+ > ===================
+
+ >     mipsel | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/4b56b89dd0ccd3b7e4017782e8d48b9c71207ff7/
+
+Fixed by http://git.buildroot.net/buildroot/commit/?id=6b7719f9642fed0de5052b05eff28ec00be67caa
+
+ >       bfin |                       gdb-6.6a | NOK | http://autobuild.buildroot.net/results/3e2b733758651f7a168832de2d3b34afc171609d/
+
+Fixed by http://git.buildroot.net/buildroot/commit/?id=a3f18230402224c3f696d7f0336d7066acc2c508
+
+ > microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/16d4a83eb1e1b9d65641de47f2a2bc5d8ab18bdd/
+ >        arc |            host-gdb-arc-4.8-R3 | NOK | http://autobuild.buildroot.net/results/df64fe6e834f016267f522f089e00a08b1fd893e/
+
+Both fixed by http://git.buildroot.net/buildroot/commit/?id=ffd243c6527250c488a83ee22460416e167be7dd
+
+ >        arm |                   midori-0.4.6 | NOK | http://autobuild.buildroot.net/results/d48b68dd6a43fa9a224237e8f458ca8987a3d7b4/
+
+Fixed by http://git.buildroot.net/buildroot/commit/?id=8ca6a6fff28ebee0c8ed3a8234f2923c4af938e5
+
+
+ >        arm |                  mplayer-1.1.1 | NOK | http://autobuild.buildroot.net/results/a5494f6560125f7ba4f70db18e15e582c17d1b57/
+
+The handwritten configure script leaves temporary files around in
+/tmp. Thomas has cleaned up the build server for now.
+
+ >        arm |                   python-2.7.6 | NOK | http://autobuild.buildroot.net/results/ebaae4009d7ef26b3db9b1c4bf94199366f0e5a2/
+
+Mix of --static and -export-dynamic. Perhaps python should depend on
+!BR2_PREFER_STATIC_LIB?
+
+ >       bfin |                    slang-2.2.4 | NOK | http://autobuild.buildroot.net/results/dbce9e591466717d9c87f42b5f192d8fd1be0475/
+
+Fixed by http://git.buildroot.net/buildroot/commit/?id=fcff0d9cd0d077a35aab4250060a3362678ad2ac
+
+ >     x86_64 |     xserver_xorg-server-1.15.1 | NOK | http://autobuild.buildroot.net/results/11ece737078ca8da2fee4249432148675b4e630e/
+
+Looks like a race condition.
+
 -- 
-2.0.0.rc0
+Bye, Peter Korsgaard
