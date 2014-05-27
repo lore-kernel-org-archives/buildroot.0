@@ -1,47 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 May 2014 11:27:23 +0200
-Subject: [Buildroot] [git commit] dvb-apps: fix static linking with libiconv
-Message-ID: <20140527092821.C4DF59CDD5@busybox.osuosl.org>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Tue, 27 May 2014 11:31:43 +0200
+Subject: [Buildroot] [PATCH v3] mongoose: provide libmongoose.a static
+	library
+Message-ID: <1401183103-16716-1-git-send-email-d.viti@infosolution.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6b7719f9642fed0de5052b05eff28ec00be67caa
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The package provides a webserver and, eventually, a library: this is
+what Centos, among other distros, is doing.
 
-Fixes http://autobuild.buildroot.net/results/4b5/4b56b89dd0ccd3b7e4017782e8d48b9c71207ff7/
-
-Pass the libraries to be linked in LDLIBS instead of LDFLAGS so the end up
-after the object files on the linker command line.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Davide Viti <d.viti@infosolution.it>
 ---
- package/dvb-apps/dvb-apps.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+     - unconditionally create static rather than shared library (Peter
+       Korsgaard)
+     - honour $(MONGOOSE_CFLAGS) when building mongoose.c (Peter Korsgaard)
+     - don't exceed 80 columns in mongoose.mk
+     - install libmongoose.a as 644 rather than 755
+     - update github URL in Config.in
 
-diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-index 2a35d29..98ff7eb 100644
---- a/package/dvb-apps/dvb-apps.mk
-+++ b/package/dvb-apps/dvb-apps.mk
-@@ -10,17 +10,15 @@ DVB_APPS_SITE_METHOD = hg
- DVB_APPS_LICENSE = GPLv2 GPLv2+ LGPLv2.1+
- DVB_APPS_LICENSE_FILES = COPYING COPYING.LGPL
+ package/mongoose/Config.in   |  2 +-
+ package/mongoose/mongoose.mk | 13 +++++++++++--
+ 2 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/package/mongoose/Config.in b/package/mongoose/Config.in
+index 2526112..8060942 100644
+--- a/package/mongoose/Config.in
++++ b/package/mongoose/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_MONGOOSE
+ 	help
+ 	  Mongoose is a small and easy to use web server
  
--DVB_APPS_LDFLAGS = $(TARGET_LDFLAGS)
--
- ifeq ($(BR2_ENABLE_LOCALE),)
- DVB_APPS_DEPENDENCIES = libiconv
--DVB_APPS_LDFLAGS += -liconv
-+DVB_APPS_LDLIBS += -liconv
- endif
+-	  https://github.com/valenok/mongoose
++	  https://github.com/cesanta/mongoose
  
- DVB_APPS_INSTALL_STAGING = YES
+ comment "mongoose needs a toolchain w/ threads, largefile"
+ 	depends on BR2_USE_MMU
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 75a4d3f..bb1bed3 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -8,6 +8,7 @@ MONGOOSE_VERSION = 5.3
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
++MONGOOSE_INSTALL_STAGING = YES
  
- define DVB_APPS_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) LDFLAGS="$(DVB_APPS_LDFLAGS)" \
-+	$(TARGET_CONFIGURE_OPTS) LDLIBS="$(DVB_APPS_LDLIBS)" \
- 		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) V=1
+ MONGOOSE_CFLAGS = $(TARGET_CFLAGS) $(TARGET_LDFLAGS)
+ 
+@@ -20,12 +21,20 @@ endif
+ define MONGOOSE_BUILD_CMDS
+ 	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
+ 		CFLAGS_EXTRA="$(MONGOOSE_CFLAGS)" server
++	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
++	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
  endef
  
+ define MONGOOSE_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/examples/server $(TARGET_DIR)/usr/sbin/mongoose
++	$(INSTALL) -D -m 755 $(@D)/examples/server \
++		$(TARGET_DIR)/usr/sbin/mongoose
+ 	$(INSTALL) -D -m 755 package/mongoose/S85mongoose \
+-		$(TARGET_DIR)/etc/init.d/S85mongoose
++		$(TARGET_DIR)/etc/init.d
++endef
++
++define MONGOOSE_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 644 $(@D)/libmongoose.a $(STAGING_DIR)/usr/lib
++	$(INSTALL) -D -m 644 $(@D)/mongoose.h $(STAGING_DIR)/usr/include
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.0.0.rc0
