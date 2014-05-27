@@ -1,40 +1,53 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Tue, 27 May 2014 12:45:38 +0400
-Subject: [Buildroot] [PATCH] gdb: Reenable makeinfo for GDB from git
-Message-ID: <1401180338-18317-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 27 May 2014 11:02:56 +0200
+Subject: [Buildroot] [git commit] gdb: don't force makeinfo programs for
+	GDB_FROM_GIT variants
+Message-ID: <20140527090626.992F29CDEC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This effectively reverts commit 21aaa85 for GDB versions that use Git
-instead of upstream tarballs. When building GDB from Git it is required to
-compile .info files from .texi files, otherwise build fails.
+commit: http://git.buildroot.net/buildroot/commit/?id=ffd243c6527250c488a83ee22460416e167be7dd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This fixes:
+Fixes:
+http://autobuild.buildroot.net/results/16d/16d4a83eb1e1b9d65641de47f2a2bc5d8ab18bdd/
 http://autobuild.buildroot.net/results/df6/df64fe6e834f016267f522f089e00a08b1fd893e/
-http://autobuild.buildroot.net/results/95f/95fa2904f81a114abfa337dcce141b7c87d5a52c/
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+The GDB_FROM_GIT variants unconditionally use makeinfo, so ensure our
+host-texinfo version is used instead of the missing script.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/gdb.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/gdb/gdb.mk |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index c3fca40..50bbf20 100644
+index c3fca40..6640d2c 100644
 --- a/package/gdb/gdb.mk
 +++ b/package/gdb/gdb.mk
-@@ -50,8 +50,10 @@ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
+@@ -50,11 +50,7 @@ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
  HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
  endif
  
-+ifneq ($(GDB_FROM_GIT),y)
- HOST_GDB_CONF_ENV = \
- 	ac_cv_prog_MAKEINFO=missing
-+endif
- 
+-HOST_GDB_CONF_ENV = \
+-	ac_cv_prog_MAKEINFO=missing
+-
  GDB_CONF_ENV = \
- 	ac_cv_prog_MAKEINFO=missing \
--- 
-1.8.4.1
+-	ac_cv_prog_MAKEINFO=missing \
+ 	ac_cv_type_uintptr_t=yes \
+ 	gt_cv_func_gettext_libintl=yes \
+ 	ac_cv_func_dcgettext=yes \
+@@ -119,6 +115,10 @@ HOST_GDB_CONF_OPT = \
+ 
+ ifeq ($(GDB_FROM_GIT),y)
+ HOST_GDB_DEPENDENCIES += host-texinfo
++else
++# don't generate documentation
++GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
++HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+ endif
+ 
+ # legacy $arch-linux-gdb symlink
