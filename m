@@ -1,56 +1,121 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue, 27 May 2014 11:51:35 +0200
-Subject: [Buildroot] [PATCH] dropbear: fix missing directory with systemd
-In-Reply-To: <87r43fegap.fsf@dell.be.48ers.dk>
-References: <1400861026-5987-1-git-send-email-maxime.hadjinlian@gmail.com>
- <87r43fegap.fsf@dell.be.48ers.dk>
-Message-ID: <CAGduivwKK3n-r6RVZahyRkKbYPBttTVVoXckgKbF66BTNStyvg@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 May 2014 14:33:44 +0200
+Subject: [Buildroot] [PATCH v2 2/3] qt5enginio: new package
+In-Reply-To: <1401171847-1719-3-git-send-email-fatih.asici@gmail.com> ("Fatih
+ =?utf-8?B?QcWfxLFjxLEiJ3M=?= message of "Tue, 27 May 2014 09:24:06 +0300")
+References: <1401171847-1719-1-git-send-email-fatih.asici@gmail.com>
+ <1401171847-1719-3-git-send-email-fatih.asici@gmail.com>
+Message-ID: <87egzfe6zb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, all,
+>>>>> "Fatih" == Fatih A??c? <fatih.asici@gmail.com> writes:
 
-On Tue, May 27, 2014 at 11:12 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
->>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
->
->  > With the current systemd unit files, the folder '/etc/dropbear' is not
->  > created, which caused dropbear to fail to create its keys and then
->  > accept connections.
->
->  > This add a new file which is used by systemd to create the correct
->  > directory structure.
->
->  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->  > ---
->  >  package/dropbear/dropbear.mk            | 3 +++
->  >  package/dropbear/dropbear_tmpfiles.conf | 1 +
->  >  2 files changed, 4 insertions(+)
->  >  create mode 100644 package/dropbear/dropbear_tmpfiles.conf
->
->  > diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
->  > index 2ac6211..f176f7c 100644
->  > --- a/package/dropbear/dropbear.mk
->  > +++ b/package/dropbear/dropbear.mk
->  > @@ -49,6 +49,9 @@ define DROPBEAR_INSTALL_INIT_SYSTEMD
->  >      mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->  >      ln -fs ../dropbear.service \
->  >              $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dropbear.service
->  > +    mkdir -p $(TARGET_DIR)/usr/lib/tmpfiles.d
->  > +    $(INSTALL) -D -m 644 package/dropbear/dropbear_tmpfiles.conf \
->  > +            $(TARGET_DIR)/usr/lib/tmpfiles.d/dropbear.conf
->
-> Why the tmpfiles dance and not just a mkdir -p
-> $(TARGET_DIR)/etc/dropbear? It is not really specific to systemd, so we
-> could just do it in _INSTALL_TARGET_CMDS (and remove the mkdir in
-> S50dropbear).
-Yes you're right after all it's needed for the right execution of the
-program, it's not temporary at all.
-I'll do another patch today.
+ > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+ > ---
+ >  package/qt5/Config.in                |  1 +
+ >  package/qt5/qt5enginio/Config.in     | 13 +++++++++
+ >  package/qt5/qt5enginio/qt5enginio.mk | 56 ++++++++++++++++++++++++++++++++++++
+ >  3 files changed, 70 insertions(+)
+ >  create mode 100644 package/qt5/qt5enginio/Config.in
+ >  create mode 100644 package/qt5/qt5enginio/qt5enginio.mk
 
-Thanks
->
-> --
-> Bye, Peter Korsgaard
+ > diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+ > index d36852e..e810ecb 100644
+ > --- a/package/qt5/Config.in
+ > +++ b/package/qt5/Config.in
+ > @@ -29,6 +29,7 @@ if BR2_PACKAGE_QT5
+ >  source "package/qt5/qt5base/Config.in"
+ >  source "package/qt5/qt5connectivity/Config.in"
+ >  source "package/qt5/qt5declarative/Config.in"
+ > +source "package/qt5/qt5enginio/Config.in"
+ >  source "package/qt5/qt5graphicaleffects/Config.in"
+ >  source "package/qt5/qt5imageformats/Config.in"
+ >  source "package/qt5/qt5multimedia/Config.in"
+ > diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+ > new file mode 100644
+ > index 0000000..c06e6da
+ > --- /dev/null
+ > +++ b/package/qt5/qt5enginio/Config.in
+ > @@ -0,0 +1,13 @@
+ > +config BR2_PACKAGE_QT5ENGINIO
+ > +	bool "qt5enginio"
+ > +	select BR2_PACKAGE_OPENSSL
+ > +	select BR2_PACKAGE_QT5BASE
+ > +	select BR2_PACKAGE_QT5BASE_GUI
+ > +	select BR2_PACKAGE_QT5BASE_NETWORK
+ > +	help
+ > +	  Qt is a cross-platform application and UI framework for
+ > +	  developers using C++.
+ > +
+ > +	  This package corresponds to the qt5enginio module.
+ > +
+ > +	  http://qt-project.org
+ > diff --git a/package/qt5/qt5enginio/qt5enginio.mk b/package/qt5/qt5enginio/qt5enginio.mk
+ > new file mode 100644
+ > index 0000000..33a492b
+ > --- /dev/null
+ > +++ b/package/qt5/qt5enginio/qt5enginio.mk
+ > @@ -0,0 +1,56 @@
+ > +################################################################################
+ > +#
+ > +# qt5enginio
+ > +#
+ > +################################################################################
+ > +
+ > +QT5ENGINIO_VERSION = $(QT5_VERSION)
+ > +QT5ENGINIO_SITE = $(QT5_SITE)
+ > +QT5ENGINIO_SOURCE = qtenginio-opensource-src-$(QT5ENGINIO_VERSION).tar.xz
+ > +QT5ENGINIO_DEPENDENCIES = openssl qt5base
+ > +QT5ENGINIO_INSTALL_STAGING = YES
+ > +
+ > +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ > +QT5ENGINIO_LICENSE = LGPLv2.1 or GPLv3.0
+ > +QT5ENGINIO_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ > +else
+ > +QT5ENGINIO_LICENSE = Commercial license
+ > +QT5ENGINIO_REDISTRIBUTE = NO
+ > +endif
+ > +
+ > +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ > +QT5ENGINIO_DEPENDENCIES += qt5declarative
+ > +endif
+ > +
+ > +define QT5ENGINIO_CONFIGURE_CMDS
+ > +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+ > +endef
+ > +
+ > +define QT5ENGINIO_BUILD_CMDS
+ > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+ > +endef
+ > +
+ > +define QT5ENGINIO_INSTALL_STAGING_CMDS
+ > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ > +	$(QT5_LA_PRL_FILES_FIXUP)
+ > +endef
+ > +
+ > +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ > +define QT5ENGINIO_INSTALL_TARGET_QMLS
+ > +	cp -dpfr $(STAGING_DIR)/usr/qml/Enginio $(TARGET_DIR)/usr/qml/
+ > +endef
+ > +endif
+ > +
+ > +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ > +define QT5ENGINIO_INSTALL_TARGET_EXAMPLES
+ > +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/enginio $(TARGET_DIR)/usr/lib/qt/examples/
+ > +endef
+ > +endif
+ > +
+ > +define QT5ENGINIO_INSTALL_TARGET_CMDS
+ > +	cp -dpf $(STAGING_DIR)/usr/lib/libEnginio.so.* $(TARGET_DIR)/usr/lib
+
+This should only be done for !BR2_PREFER_STATIC_LIB (same for
+qt5websockets).
+
+Committed all 3 to next with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
