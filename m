@@ -1,29 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 27 May 2014 11:19:42 +0200
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Tue, 27 May 2014 09:22:23 +0000
 Subject: [Buildroot] [PATCH] gdb: Reenable makeinfo for GDB from git
-In-Reply-To: <1401180338-18317-1-git-send-email-Anton.Kolesov@synopsys.com>
- (Anton Kolesov's message of "Tue, 27 May 2014 12:45:38 +0400")
+In-Reply-To: <87mwe3efyp.fsf@dell.be.48ers.dk>
 References: <1401180338-18317-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <87mwe3efyp.fsf@dell.be.48ers.dk>
+ <87mwe3efyp.fsf@dell.be.48ers.dk>
+Message-ID: <39A54937CC95F24AA2F794E2D2B66B1356CD341E@de02wembxa.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Anton" == Anton Kolesov <Anton.Kolesov@synopsys.com> writes:
+Hi Peter,
 
- > This effectively reverts commit 21aaa85 for GDB versions that use Git
- > instead of upstream tarballs. When building GDB from Git it is required to
- > compile .info files from .texi files, otherwise build fails.
+> 
+> Sorry, I just committed a similar fix myself:
+> 
+> http://git.buildroot.net/buildroot/commit/?id=ffd243c6527250c488a83ee224
+> 60416e167be7dd
 
- > This fixes:
- > http://autobuild.buildroot.net/results/df6/df64fe6e834f016267f522f089e00a08b1fd893e/
- > http://autobuild.buildroot.net/results/95f/95fa2904f81a114abfa337dcce141b7c87d5a52c/
+No problem. Thanks! 
 
-Sorry, I just committed a similar fix myself:
-
-http://git.buildroot.net/buildroot/commit/?id=ffd243c6527250c488a83ee22460416e167be7dd
-
--- 
-Bye, Peter Korsgaard
+Anton
