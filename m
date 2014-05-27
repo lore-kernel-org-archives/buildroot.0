@@ -1,39 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 May 2014 11:16:13 +0200
-Subject: [Buildroot] [git commit] gdb: remove remaining 6.6a reference for
-	bfin
-Message-ID: <20140527091837.022319CDD5@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 May 2014 11:19:42 +0200
+Subject: [Buildroot] [PATCH] gdb: Reenable makeinfo for GDB from git
+In-Reply-To: <1401180338-18317-1-git-send-email-Anton.Kolesov@synopsys.com>
+ (Anton Kolesov's message of "Tue, 27 May 2014 12:45:38 +0400")
+References: <1401180338-18317-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <87mwe3efyp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a3f18230402224c3f696d7f0336d7066acc2c508
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Anton" == Anton Kolesov <Anton.Kolesov@synopsys.com> writes:
 
-Fixes http://autobuild.buildroot.net/results/3e2/3e2b733758651f7a168832de2d3b34afc171609d/
+ > This effectively reverts commit 21aaa85 for GDB versions that use Git
+ > instead of upstream tarballs. When building GDB from Git it is required to
+ > compile .info files from .texi files, otherwise build fails.
 
-We recently (dfc3cc23af: gdb: switch to 7.x for Blackfin) moved to the
-normal 7.x versions for bfin, but Config.in wasn't updated, causing bfin to
-still use the old 6.6a variant (but without the uClibc patch) if the
-host-gdb isn't selected, breaking the build.
+ > This fixes:
+ > http://autobuild.buildroot.net/results/df6/df64fe6e834f016267f522f089e00a08b1fd893e/
+ > http://autobuild.buildroot.net/results/95f/95fa2904f81a114abfa337dcce141b7c87d5a52c/
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/Config.in.host |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+Sorry, I just committed a similar fix myself:
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 4dbc81d..1ba3664 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -40,8 +40,6 @@ endif
- config BR2_GDB_VERSION
- 	string
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
--	default "6.6a"     if BR2_GDB_VERSION_6_6 || \
--	                      (!BR2_PACKAGE_HOST_GDB && BR2_bfin)
- 	default "6.7.1-avr32-2.1.5" if BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 || \
-                                    (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
- 	default "arc-4.8-R3" if BR2_arc
+http://git.buildroot.net/buildroot/commit/?id=ffd243c6527250c488a83ee22460416e167be7dd
+
+-- 
+Bye, Peter Korsgaard
