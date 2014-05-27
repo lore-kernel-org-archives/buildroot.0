@@ -1,105 +1,117 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 27 May 2014 16:15:32 -0500
-Subject: [Buildroot] [PATCH 1/1] configs: bump zedboard to 2014.1
-Message-ID: <1401225332-4254-1-git-send-email-spenser@gillilanding.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 28 May 2014 00:38:27 +0200
+Subject: [Buildroot] [PATCH] dillo: new package
+Message-ID: <1401230307-17697-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump zedboard defconfig to version 2014.1.  This makes it possible to use
-uboot-spl instead of the xilinx specific fsbl.  However, the result is kinda
-hacky due to the licensing state of ps7_init.{c,h} needed for building uboot
-spl.  Directions for building a proper boot.bin using the new methodolgy is
-included in the readme.txt.
-
-Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- board/avnet/zedboard/readme.txt |   26 ++++++++++++++------------
- configs/zedboard_defconfig      |   17 +++++------------
- 2 files changed, 19 insertions(+), 24 deletions(-)
+ package/Config.in       |  1 +
+ package/dillo/Config.in | 21 ++++++++++++++++++++
+ package/dillo/dillo.mk  | 51 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 73 insertions(+)
+ create mode 100644 package/dillo/Config.in
+ create mode 100644 package/dillo/dillo.mk
 
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index 6b6df36..efd076f 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -10,19 +10,21 @@ to the sdcard:
- 	zynq-zed.dtb -> devicetree.dtb
- 	rootfs.cpio.gz.uboot -> uramdisk.image.gz
- 	uImage -> uImage
-+	boot.bin -> boot.bin
- 
--Uboot Support
-+U-Boot SPL Support
- -------------
- 
--Uboot is installed in a wrapper file called BOOT.BIN located on the root of
--the SD card.  To create the BOOT.BIN file do the following.
-+Due to licensing issues, the files ps7_init.c/h are not able to be
-+distributed with the U-Boot source code.  These files are required to make a
-+boot.bin file.
+diff --git a/package/Config.in b/package/Config.in
+index 3bc8d24..5a92032 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -224,6 +224,7 @@ source "package/x11r7/Config.in"
+ comment "X applications"
+ source "package/alsamixergui/Config.in"
+ source "package/apitrace/Config.in"
++source "package/dillo/Config.in"
+ source "package/docker/Config.in"
+ source "package/feh/Config.in"
+ source "package/freerdp/Config.in"
+diff --git a/package/dillo/Config.in b/package/dillo/Config.in
+new file mode 100644
+index 0000000..07198f1
+--- /dev/null
++++ b/package/dillo/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_DILLO
++	bool "dillo"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # fltk fork()
++	select BR2_PACKAGE_FLTK
 +
-+If you already have the Xilinx tools installed, the follwing sequence will
-+unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
++	help
++	  Dillo is a multi-platform graphical web browser known
++	  for its speed and small footprint. 
 +
-+make zedboard_defconfig
-+make uboot-patch
-+cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
-+output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
-+make
- 
--source <path/to/xilinx/settings.sh>
--cat <<EOF > boot.bif
--{
--   [bootloader]<path/to/fsbl.elf>
--   <path/to/system.bit>
--   <path/to/uboot.elf>
--}
--EOF
--bootgen -image boot.bif -o i BOOT.BIN
-diff --git a/configs/zedboard_defconfig b/configs/zedboard_defconfig
-index 071ff65..e0e7760 100644
---- a/configs/zedboard_defconfig
-+++ b/configs/zedboard_defconfig
-@@ -1,33 +1,26 @@
- BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
--
--# Lock to 3.8 headers as the kernel is based off 3.8
- BR2_KERNEL_HEADERS_VERSION=y
- BR2_DEFAULT_KERNEL_VERSION="3.8"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
--
- BR2_TARGET_GENERIC_GETTY_PORT="ttyPS0"
--
--# Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v14.5"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2014.1"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="zynq-zed"
--
--# Root filesystem
- BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
- BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
--
--# Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="zynq_zed"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v14.5"
--BR2_TARGET_UBOOT_FORMAT_ELF=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2014.1"
-+BR2_TARGET_UBOOT_FORMAT_IMG=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="boot.bin"
++	  Enable jpeg and png packages to gain full feature image
++	  support.
++
++	  Enable openssl package to gain https support.
++
++	  http://www.dillo.org
++
++comment "dillo needs a toolchain w/ C++"
++        depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
++        depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
+new file mode 100644
+index 0000000..f15a02a
+--- /dev/null
++++ b/package/dillo/dillo.mk
+@@ -0,0 +1,51 @@
++################################################################################
++#
++# dillo
++#
++################################################################################
++
++DILLO_VERSION = 3.0.4
++DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
++DILLO_SITE = http://www.dillo.org/download
++DILLO_LICENSE = GPLv3+
++DILLO_LICENSE_FILES = COPYING
++
++DILLO_DEPENDENCIES = fltk
++
++# set additional path for fltk-config and libpng-config
++DILLO_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++	DILLO_CONF_OPT += --enable-ssl
++	DILLO_DEPENDENCIES += openssl
++else
++	DILLO_CONF_OPT += --disable-ssl
++endif
++
++ifeq ($(BR2_INET_IPV6),y)
++	DILLO_CONF_OPT += --enable-ipv6
++else
++	DILLO_CONF_OPT += --disable-ipv6
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++	DILLO_CONF_OPT += --enable-png
++	DILLO_DEPENDENCIES += libpng
++else
++	DILLO_CONF_OPT += --disable-png
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++	DILLO_CONF_OPT += --enable-jpeg
++	DILLO_DEPENDENCIES += libjpeg
++else
++	DILLO_CONF_OPT += --disable-jpeg
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++	DILLO_CONF_OPT += --enable-threaded-dns
++else
++	DILLO_CONF_OPT += --disable-threaded-dns
++endif
++
++$(eval $(autotools-package))
 -- 
-1.7.1
+1.8.1.4
