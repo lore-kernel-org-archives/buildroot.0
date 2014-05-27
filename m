@@ -1,63 +1,56 @@
-From: Bernd Kuhls <berndkuhls@hotmail.com>
-Date: Tue, 27 May 2014 06:46:25 +0200
-Subject: [Buildroot] [PATCH 1/1] WIP: libudev: New package
-References: <1401129061-25216-1-git-send-email-bernd.kuhls@t-online.de>
- <1401129061-25216-2-git-send-email-bernd.kuhls@t-online.de>
- <20140526211909.GA13529@free.fr>
-Message-ID: <1uhd5bxpm4.ln2@ID-313208.user.individual.net>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 27 May 2014 09:24:04 +0300
+Subject: [Buildroot] [PATCH v2 0/3] Qt 5.3.0
+Message-ID: <1401171847-1719-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Bump to the latest stable release.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140526211909.GA13529 at free.fr: 
+Changes v1 -> v2:
+  - fix build with uClibc
+  - add openssl dependency also in makefile (Suggested by Peter Korsgaard)
+  - remove redundant sql dependency of websockets module
 
->> +     depends on !BR2_INIT_SYSTEMD
->> +     depends on !BR2_PACKAGE_EUDEV
-> 
-> Maybe replace those two 'depends on' with simply:
-> 
->     depends on !BR2_PACKAGE_HAS_UDEV
+Fatih A??c? (3):
+  qt5: bump to 5.3.0
+  qt5enginio: new package
+  qt5websockets: new package
 
-I think we need to distinguish between the need for a daemon managing /dev 
-and libudev. Currently a lot of packages depend on BR2_PACKAGE_HAS_UDEV 
-although libudev should be enough for them. For libcec & xbmc I can confirm 
-this for sure, I suppose this is also valid for mesa3d, maybe others.
+ package/qt5/Config.in                              |  2 +
+ package/qt5/qt5.mk                                 |  4 +-
+ ...ase-0004-QDnsLookup-Fix-build-with-uClibc.patch | 35 +++++++++++
+ package/qt5/qt5base/qt5base-0004-qatomic-ppc.patch | 29 ----------
+ .../qt5base-0005-uclibc-no-gnu-lib-names.patch     | 44 --------------
+ ...not-check-feature-macros-for-posix_falloc.patch | 41 -------------
+ ...qt5base-0007-Fix-no-opengl-build-with-egl.patch | 65 ---------------------
+ ...on-t-require-GL-when-build-with-no-opengl.patch | 28 ---------
+ ...5base-Fix-linuxfb-argument-mmsize-parsing.patch | 38 ------------
+ ...n_t-build-scanner-example-without-qtquick.patch | 30 ----------
+ ...ample-needs-no-widgets-but-it-needs-quick.patch | 67 ----------------------
+ package/qt5/qt5enginio/Config.in                   | 13 +++++
+ package/qt5/qt5enginio/qt5enginio.mk               | 56 ++++++++++++++++++
+ package/qt5/qt5websockets/Config.in                | 11 ++++
+ ...01-Remove-dependency-on-unused-sql-module.patch | 28 +++++++++
+ package/qt5/qt5websockets/qt5websockets.mk         | 55 ++++++++++++++++++
+ 16 files changed, 202 insertions(+), 344 deletions(-)
+ create mode 100644 package/qt5/qt5base/qt5base-0004-QDnsLookup-Fix-build-with-uClibc.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-0004-qatomic-ppc.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-0005-uclibc-no-gnu-lib-names.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-0006-sqlite3-Do-not-check-feature-macros-for-posix_falloc.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-0007-Fix-no-opengl-build-with-egl.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-CMake-don-t-require-GL-when-build-with-no-opengl.patch
+ delete mode 100644 package/qt5/qt5base/qt5base-Fix-linuxfb-argument-mmsize-parsing.patch
+ delete mode 100644 package/qt5/qt5connectivity/qt5connectivity-0001-don_t-build-scanner-example-without-qtquick.patch
+ delete mode 100644 package/qt5/qt5connectivity/qt5connectivity-0002-the-poster-example-needs-no-widgets-but-it-needs-quick.patch
+ create mode 100644 package/qt5/qt5enginio/Config.in
+ create mode 100644 package/qt5/qt5enginio/qt5enginio.mk
+ create mode 100644 package/qt5/qt5websockets/Config.in
+ create mode 100644 package/qt5/qt5websockets/qt5websockets-0001-Remove-dependency-on-unused-sql-module.patch
+ create mode 100644 package/qt5/qt5websockets/qt5websockets.mk
 
-Libcec, for example, needs a patch like this for configure.ac though:
-
--    REQUIRES="$REQUIRES udev"
-+    REQUIRES="$REQUIRES libudev"
-
-As several packages (systemd, eudev, libudev) can provide libudev we should 
-add a new provider BR2_PACKAGE_HAS_LIBUDEV and let xbmc, libcec, mesa, ... 
-depend on it instead of BR2_PACKAGE_HAS_UDEV. With this change in place 
-adding your suggestion makes sense.
-
-What do you think?
-
->> +LIBUDEV_VERSION = v1.6
->> +LIBUDEV_SITE = $(call github,gentoo,eudev,$(LIBUDEV_VERSION))
->> +LIBUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
->> +LIBUDEV_LICENSE_FILES = COPYING
-> 
-> I was wondering if we could somehow keep this in sync with the eudev
-> package, to avoid duplicating the versions, so we can bump both in a
-> single change.
-
-My plan is to merge libudev to the eudev package, a bump patch for eudev 
-v1.6 was already posted by sagaert.
-
->> +     --disable-introspection \
-> 
-> Would it be possible to build the library with introspection?
-> That would require adding gobject-introspection, though...
-> But I'm not too fluent in udev itself, so I won;t complain! ;-)
-
-I?ll have a look.
-
-Regards, Bernd
+-- 
+1.9.1
