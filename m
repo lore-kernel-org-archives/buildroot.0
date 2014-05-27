@@ -1,53 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 27 May 2014 11:02:56 +0200
-Subject: [Buildroot] [git commit] gdb: don't force makeinfo programs for
-	GDB_FROM_GIT variants
-Message-ID: <20140527090626.992F29CDEC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 27 May 2014 11:08:14 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-25
+In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356CD2DCF@de02wembxa.internal.synopsys.com>
+ (Anton Kolesov's message of "Mon, 26 May 2014 18:50:24 +0000")
+References: <20140526063007.A011F10158F@stock.ovh.net>
+ <39A54937CC95F24AA2F794E2D2B66B1356CD2DCF@de02wembxa.internal.synopsys.com>
+Message-ID: <87vbsreght.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffd243c6527250c488a83ee22460416e167be7dd
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Anton" == Anton Kolesov <Anton.Kolesov@synopsys.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/16d/16d4a83eb1e1b9d65641de47f2a2bc5d8ab18bdd/
-http://autobuild.buildroot.net/results/df6/df64fe6e834f016267f522f089e00a08b1fd893e/
+ > Hi Thomas,
+ >> microblazeel | host-gdb-6be65fb56ea6694a92... | NOK |
+ >> http://autobuild.buildroot.net/results/95fa2904f81a114abfa337dcce141b7c8
+ >> 7d5a52c/
 
-The GDB_FROM_GIT variants unconditionally use makeinfo, so ensure our
-host-texinfo version is used instead of the missing script.
+ > Host gdb build fails because it cannot build etc/standards.info from
+ > etc/standards.texi. The same is true for any other "texi ->info"
+ > compilation. The same problems affects GDB for ARC (based on GDB
+ > 7.5). Apparently this is caused by 21aaa85 - "missing makeinfo"
+ > causes build failure for docs, and GDB doesn't ignore this error
+ > (despite --disable-doc* options to configure). Can this "missing
+ > makeinfo" become conditional, so it will be applied only to those
+ > cases where it was required (I suppose GDB 7.4, from the commit log)?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gdb/gdb.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+I've checked in a fix for this (and similar issues on arc) now, thanks.
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index c3fca40..6640d2c 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -50,11 +50,7 @@ GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
- HOST_GDB_PRE_PATCH_HOOKS += GDB_XTENSA_PRE_PATCH
- endif
- 
--HOST_GDB_CONF_ENV = \
--	ac_cv_prog_MAKEINFO=missing
--
- GDB_CONF_ENV = \
--	ac_cv_prog_MAKEINFO=missing \
- 	ac_cv_type_uintptr_t=yes \
- 	gt_cv_func_gettext_libintl=yes \
- 	ac_cv_func_dcgettext=yes \
-@@ -119,6 +115,10 @@ HOST_GDB_CONF_OPT = \
- 
- ifeq ($(GDB_FROM_GIT),y)
- HOST_GDB_DEPENDENCIES += host-texinfo
-+else
-+# don't generate documentation
-+GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
-+HOST_GDB_CONF_ENV += ac_cv_prog_MAKEINFO=missing
- endif
- 
- # legacy $arch-linux-gdb symlink
+-- 
+Bye, Peter Korsgaard
