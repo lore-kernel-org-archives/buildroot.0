@@ -1,14 +1,10 @@
-From: cem akpolat <akpolatcem@gmail.com>
-Date: Tue, 27 May 2014 00:28:00 +0200
-Subject: [Buildroot] root password and dhcp
-In-Reply-To: <CAMm5YqrjM7Q-xkw=_qKtLcmSV=rV6KfSv0udxFCVdVBy1ooa8w@mail.gmail.com>
-References: <CAMm5YqrLgFpGE4m2Mqi+KoSQtYv7O36A2w3DBtUy0p_uaVZdGA@mail.gmail.com>
- <537F889A.2030907@zacarias.com.ar>
- <839C6E81-EB22-4269-A6B1-CB60169DE097@gmail.com>
- <53807151.90401@zacarias.com.ar>
- <CAMm5YqoEXvPLZmHGOT6oHwHAw_RWJ2yQZuqMnK994uBOe_dE2g@mail.gmail.com>
- <CAMm5YqrjM7Q-xkw=_qKtLcmSV=rV6KfSv0udxFCVdVBy1ooa8w@mail.gmail.com>
-Message-ID: <CAMm5Yqopnr-BkARPqtaxvU1UWKKiEt9hMJzFM2=qp+0viCLqvw@mail.gmail.com>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Tue, 27 May 2014 06:46:25 +0200
+Subject: [Buildroot] [PATCH 1/1] WIP: libudev: New package
+References: <1401129061-25216-1-git-send-email-bernd.kuhls@t-online.de>
+ <1401129061-25216-2-git-send-email-bernd.kuhls@t-online.de>
+ <20140526211909.GA13529@free.fr>
+Message-ID: <1uhd5bxpm4.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,119 +13,51 @@ To: buildroot@busybox.net
 
 Hi,
 
-I figured out dhcp server issue when I noticed that wlan interface doesn't
-get ip addresses. I am now using dnsmasq configuration ant it works fine.
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:20140526211909.GA13529 at free.fr: 
 
-About netlink message "netlink: 20 bytes leftover after parsing
-attributes", it is still there.
+>> +     depends on !BR2_INIT_SYSTEMD
+>> +     depends on !BR2_PACKAGE_EUDEV
+> 
+> Maybe replace those two 'depends on' with simply:
+> 
+>     depends on !BR2_PACKAGE_HAS_UDEV
 
+I think we need to distinguish between the need for a daemon managing /dev 
+and libudev. Currently a lot of packages depend on BR2_PACKAGE_HAS_UDEV 
+although libudev should be enough for them. For libcec & xbmc I can confirm 
+this for sure, I suppose this is also valid for mesa3d, maybe others.
 
-Cem
-Am 26.05.2014 12:05 schrieb "cem akpolat" <akpolatcem@gmail.com>:
+Libcec, for example, needs a patch like this for configure.ac though:
 
-> Hi,
->
-> After removing dhcp-server from the configuration list, I recompiled the
-> whole image and tested it again. However, the problem is still there, and
-> shows the same error "dnsmasq: failed to bind DHCP server socket: Address
-> already in use ". netstat result indicates that dnsmasq listens on 53 port
-> as below:
->
-> # netstat -anlp | grep -w LISTEN
-> tcp        0      0 0.0.0.0:1194            0.0.0.0:*
-> LISTEN      1493/openvpn
-> tcp        0      0 0.0.0.0:53              0.0.0.0:*
-> LISTEN      11794/dnsmasq
-> tcp        0      0 0.0.0.0:22              0.0.0.0:*
-> LISTEN      1459/dropbear
->
-> That is a bit interesting. By the way, all files in the filesystem seem as
-> executable files, is that really normal ?
->
->
-> Another point that I didn't mention in the previous mails I am always
-> seeing "netlink: 20 bytes leftover after parsing attributes". This message
-> comes directly from netlink source code (
-> http://lxr.free-electrons.com/source/lib/nlattr.c). It seems as a bug.
-> May be I should open another topic for that.
->
-> Thank you,
-> Cem
->
-> Cem Akpolat
->
->
-> On Sat, May 24, 2014 at 12:29 PM, cem akpolat <akpolatcem@gmail.com>wrote:
->
->> Hi Gustavo,
->>
->>
->> Actually, the last sentence "My guess is you are trying both to get a
->> result and this happened, and
->> that you only want dnsmasq around." explains that I want to do. Therefore
->> I will try to disable to dhcp/dhcp-server and than compile the source code
->> again. I was thinking, it might be case that dnsmasq uses dhcp-server,
->> however, in this case dhcp-server would have been a dependecy for dnsmasq.
->>
->> As soon as I compile and attempt to run it, I will inform you, thank you
->> again.
->>
->> Regards.
->>
->>  P.S: Sorry for the mailing list, I noticed yesterday, and then
->> send separately another mail to the mailing list.
->>
->> Cem
->>
->>
->> Cem Akpolat
->>
->>
->> On Sat, May 24, 2014 at 12:15 PM, Gustavo Zacarias <
->> gustavo at zacarias.com.ar> wrote:
->>
->>> On 05/23/2014 10:35 PM, cem akpolat wrote:
->>>
->>> >> Well, you're somewhat light on details so we're left here to guess.
->>> >> One possibility is that your dnsmasq package has dhcp support
->>> disabled,
->>> >> another possibility is that your wlan0 doesn't belong to a proper
->>> >> subnet/hasn't got an ip address configured at all to match that range.
->>> >> Again, i can just guess without some proper information.
->>> >> Regards.
->>> >
->>> > Regarding dnsmasq configuration, I enabled the dhcp support of dnsmasq,
->>> > and dnsmasq actually tries to run dhcp, but the following error arises:
->>> >
->>> > *dnsmasq: failed to bind DHCP server socket: Address already in use*
->>> > *
->>> > *
->>> > At that point, I wonder is there another dhcp server running at the
->>> > background? Even if  this could be the case, dnsmasq stops all dhcp
->>> > server and then restart with respect to the given configurations.
->>> > Apart from dhsmasq package, I added also dhcp-relay and dhcp-server
->>> > which are under dhcp package. Can dhcp-server lead to the conflict in
->>> > this case ?
->>> >
->>> > Thank you for all recommendations, they helped a lot!
->>>
->>> Hi.
->>> Remember to copy the mailing list too, someone else might be interested
->>> in the future.
->>> Well, there's your problem then, you enable the dhcp package which acts
->>> as a dhcp server and dnsmasq which does so as well, so you can't have
->>> both doing the same job.
->>> So either you just use one by unselecting the other or if you need both
->>> you'll need to tell each other to not meddle with the interface the
->>> other is using via configuration files (interface=xx in dnsmasq.conf,
->>> for dhcp i believe you need an invocation option for that).
->>> My guess is you are trying both to get a result and this happened, and
->>> that you only want dnsmasq around.
->>> Regards.
->>>
->>>
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140527/54970697/attachment.html>
+-    REQUIRES="$REQUIRES udev"
++    REQUIRES="$REQUIRES libudev"
+
+As several packages (systemd, eudev, libudev) can provide libudev we should 
+add a new provider BR2_PACKAGE_HAS_LIBUDEV and let xbmc, libcec, mesa, ... 
+depend on it instead of BR2_PACKAGE_HAS_UDEV. With this change in place 
+adding your suggestion makes sense.
+
+What do you think?
+
+>> +LIBUDEV_VERSION = v1.6
+>> +LIBUDEV_SITE = $(call github,gentoo,eudev,$(LIBUDEV_VERSION))
+>> +LIBUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+>> +LIBUDEV_LICENSE_FILES = COPYING
+> 
+> I was wondering if we could somehow keep this in sync with the eudev
+> package, to avoid duplicating the versions, so we can bump both in a
+> single change.
+
+My plan is to merge libudev to the eudev package, a bump patch for eudev 
+v1.6 was already posted by sagaert.
+
+>> +     --disable-introspection \
+> 
+> Would it be possible to build the library with introspection?
+> That would require adding gobject-introspection, though...
+> But I'm not too fluent in udev itself, so I won;t complain! ;-)
+
+I?ll have a look.
+
+Regards, Bernd
