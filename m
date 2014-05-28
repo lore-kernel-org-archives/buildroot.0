@@ -1,40 +1,56 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 May 2014 10:05:29 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-22
-In-Reply-To: <20140528090639.732647c8@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 28 May 2014 09:06:39 +0200")
-References: <20140523063008.8A64410106F@stock.ovh.net>
- <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
- <20140523190819.45a80027@free-electrons.com>
- <53857DE2.6040509@mind.be> <20140528063024.GA3510@free.fr>
- <20140528084311.05629fce@free-electrons.com>
- <20140528064706.GC3510@free.fr>
- <20140528090639.732647c8@free-electrons.com>
-Message-ID: <877g56coqe.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 May 2014 10:01:44 +0200
+Subject: [Buildroot] [git commit] dropbear: fix missing directory with
+	systemd
+Message-ID: <20140528080949.C8D659CB94@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=fe823b63741ba8eca70a534207d655f5affa927c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+The current SysV startup script create a directory which is necessary
+for dropbear to correctly work.
+This creation is not done with systemd.
 
- > Regarding using the wrapper for the internal toolchain, there's always
- > the problem of where we put the real toolchain binaries vs. the wrapper
- > binaries. For the external toolchain, it's simple: the real toolchain
- > binaries are in $(HOST_DIR)/opt/ext-toolchain, and the wrappers in
- > $(HOST_DIR)/usr/bin. But for the internal toolchain, we build/install
- > all the toolchain components with --prefix=$(HOST_DIR)/usr.
+Instead of both init creating the directory, we add the creation of this
+directory to the INSTALL_TARGET_CMDS to make sure it's present.
 
-Conceptually we could do something like
+[Peter: use make syntax for TARGET_DIR as pointed out by Thomas]
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dropbear/S50dropbear |    4 ----
+ package/dropbear/dropbear.mk |    1 +
+ 2 files changed, 1 insertions(+), 4 deletions(-)
 
- --prefix=$(HOST_DIR)/usr \
- --bindir=$(HOST_DIR)/opt/raw-toolchain
-
-But I haven't tried it.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index a343b9e..f36165a 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -10,10 +10,6 @@ start() {
+ 	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
+ 
+ 	echo -n "Starting dropbear sshd: "
+-	# Make sure dropbear directory exists
+-	if [ ! -d /etc/dropbear ] ; then
+-		mkdir -p /etc/dropbear
+-	fi
+ 	umask 077
+ 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+ 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 2ac6211..3a39169 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -85,6 +85,7 @@ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+ 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
+ 	done
++	mkdir -p $(TARGET_DIR)/etc/dropbear
+ endef
+ 
+ $(eval $(autotools-package))
