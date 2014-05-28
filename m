@@ -1,117 +1,55 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 28 May 2014 00:38:27 +0200
-Subject: [Buildroot] [PATCH] dillo: new package
-Message-ID: <1401230307-17697-1-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 28 May 2014 07:27:02 +0200
+Subject: [Buildroot] Buildroot manual: author list
+In-Reply-To: <871tvfdmyx.fsf@dell.be.48ers.dk>
+References: <CAAXf6LXSqbJAjOi-YvEdPvcC=-XZE+6Z1Y-d2BRWEhMXu6ufFw@mail.gmail.com>	<20140527193640.GE3503@free.fr>
+ <871tvfdmyx.fsf@dell.be.48ers.dk>
+Message-ID: <538573A6.6080503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/Config.in       |  1 +
- package/dillo/Config.in | 21 ++++++++++++++++++++
- package/dillo/dillo.mk  | 51 +++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 73 insertions(+)
- create mode 100644 package/dillo/Config.in
- create mode 100644 package/dillo/dillo.mk
+On 27/05/14 21:45, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+> Hi,
+> 
+>  >> I'm leaning more to a. or b. than to c.
+>  >> The advantage of a. over b. is that there is no discussion about whose
+>  >> name should be in the list (where to draw the line), while b. has the
+>  >> advantage of giving more explicit credit.
+> 
+>  > As I suggested on IRC: what about a.+c.? Just change the introduction to:
+> 
+>  >     Buildroot manual by the Buildroot developers, see xref:credits[].
+> 
+>  > and add the appendix 'credits' at the end of the manual?
+> 
+> I would also suggest we go for a (unless any of the people explictly
+> listed would disagree). We don't list authorship anywhere else (E.G. in
+> the .mk files) in Buildroot, and it sounds like a pain to maintain such
+> a list and decide what a 'major contribution' is.
 
-diff --git a/package/Config.in b/package/Config.in
-index 3bc8d24..5a92032 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -224,6 +224,7 @@ source "package/x11r7/Config.in"
- comment "X applications"
- source "package/alsamixergui/Config.in"
- source "package/apitrace/Config.in"
-+source "package/dillo/Config.in"
- source "package/docker/Config.in"
- source "package/feh/Config.in"
- source "package/freerdp/Config.in"
-diff --git a/package/dillo/Config.in b/package/dillo/Config.in
-new file mode 100644
-index 0000000..07198f1
---- /dev/null
-+++ b/package/dillo/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_DILLO
-+	bool "dillo"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # fltk fork()
-+	select BR2_PACKAGE_FLTK
-+
-+	help
-+	  Dillo is a multi-platform graphical web browser known
-+	  for its speed and small footprint. 
-+
-+	  Enable jpeg and png packages to gain full feature image
-+	  support.
-+
-+	  Enable openssl package to gain https support.
-+
-+	  http://www.dillo.org
-+
-+comment "dillo needs a toolchain w/ C++"
-+        depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-+        depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-new file mode 100644
-index 0000000..f15a02a
---- /dev/null
-+++ b/package/dillo/dillo.mk
-@@ -0,0 +1,51 @@
-+################################################################################
-+#
-+# dillo
-+#
-+################################################################################
-+
-+DILLO_VERSION = 3.0.4
-+DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
-+DILLO_SITE = http://www.dillo.org/download
-+DILLO_LICENSE = GPLv3+
-+DILLO_LICENSE_FILES = COPYING
-+
-+DILLO_DEPENDENCIES = fltk
-+
-+# set additional path for fltk-config and libpng-config
-+DILLO_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+	DILLO_CONF_OPT += --enable-ssl
-+	DILLO_DEPENDENCIES += openssl
-+else
-+	DILLO_CONF_OPT += --disable-ssl
-+endif
-+
-+ifeq ($(BR2_INET_IPV6),y)
-+	DILLO_CONF_OPT += --enable-ipv6
-+else
-+	DILLO_CONF_OPT += --disable-ipv6
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+	DILLO_CONF_OPT += --enable-png
-+	DILLO_DEPENDENCIES += libpng
-+else
-+	DILLO_CONF_OPT += --disable-png
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+	DILLO_CONF_OPT += --enable-jpeg
-+	DILLO_DEPENDENCIES += libjpeg
-+else
-+	DILLO_CONF_OPT += --disable-jpeg
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+	DILLO_CONF_OPT += --enable-threaded-dns
-+else
-+	DILLO_CONF_OPT += --disable-threaded-dns
-+endif
-+
-+$(eval $(autotools-package))
+ I agree with this. If we want to list contributors, it's more relevant to do
+that for the entire codebase than just for the manual.
+
+ On a side note however: Karsten Kruse, Ned Ludd, Martin Herren are *not* in the
+shortlog of buildroot.html!
+
+ Regards,
+ Arnout
+
+> 
+> Thomas (Petazzoni), what do you say?
+> 
+
+
 -- 
-1.8.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
