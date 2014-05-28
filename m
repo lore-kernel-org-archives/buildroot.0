@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:46 +0200
-Subject: [Buildroot] [PATCH 23/30] xdriver_xf86-video-intel: Bump version to
-	2.99.911
+Date: Wed, 28 May 2014 13:08:45 +0200
+Subject: [Buildroot] [PATCH 22/30] sdl: Add new dependency libglu for opengl
+	support
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <e7e4ac5bcd891ee36ba173a1dfc4bfba6df3dcf9.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <043ce3622b0f78e103bedd5c23741137f5706b4f.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +13,24 @@ To: buildroot@busybox.net
 
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-video-intel/Config.in   |  5 ++--
- .../xdriver_xf86-video-intel.mk                    | 27 +++++++++++++++++-----
- 2 files changed, 24 insertions(+), 8 deletions(-)
+ package/sdl/sdl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 69a9e78..bba7cd1 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -3,12 +3,13 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
- 	  Intel video driver
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 8d0e5bd..8adc66b 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -62,7 +62,8 @@ SDL_DEPENDENCIES += alsa-lib
+ endif
  
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..52b493f 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
+ ifeq ($(BR2_PACKAGE_MESA3D),y)
+-SDL_DEPENDENCIES += mesa3d
++SDL_DEPENDENCIES += libglu mesa3d
++SDL_CONF_OPT += --enable-video-opengl
+ endif
  
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,21 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d xproto_xf86driproto
-+else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --disable-dri
-+endif
- 
- $(eval $(autotools-package))
+ SDL_CONF_OPT += --enable-pulseaudio=no \
 -- 
 1.8.3.2
