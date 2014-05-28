@@ -1,66 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 28 May 2014 18:51:20 +0200
-Subject: [Buildroot] [PATCH v2 for-2014.05] manual: remove contributor list
- and add copyright
-Message-ID: <d8e41c0960cd9064e59c.1401295880@argentina>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 28 May 2014 19:07:16 +0200
+Subject: [Buildroot] busybox-savedefconfig no rule to make target
+Message-ID: <CA+TH9VkoFTiwFNwKeutQN5oCmU+y5MbpkFYF+qBbCvkV2urS3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed on the mailing list [1], remove the limited explicit list of
-contributors in favor of the general mention of 'The Buildroot developers'.
-Add a copyright statement.
-Move the generation info to the front.
+Hi guys,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-May/097589.html
+The manual says:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+"busybox-menuconfig and busybox-savedefconfig ony work when busybox is enabled;"
 
----
-v2: remove accidental changes to manual.mk
+I have busybox enabled, I modified the configuration with
+busybox-menuconfig, saving the configuration raise this error:
 
- docs/manual/manual.txt |  11 +++++------
- 1 files changed, 5 insertions(+), 6 deletions(-)
+make -C /home/angelo/DEV/BUILDROOT/buildroot
+O=/home/angelo/DEV/BUILDROOT/br_ariag25_14_2/. busybox-savedefconfig
+make[1]: *** No rule to make target `busybox-savedefconfig'.  Stop.
+make: *** [_all] Error 2
 
-diff --git a/docs/manual/manual.mk b/docs/manual/manual.mk
---- a/docs/manual/manual.mk
-+++ b/docs/manual/manual.mk
-@@ -61,9 +61,9 @@ manual-check-dependencies-$(3):
- 	$(Q)$(call MESSAGE,"Generating $(5) $(1)...")
- 	$(Q)mkdir -p $$(@D)/.build
- 	$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
--	$(Q)a2x $(6) -f $(2) -d book -L -r $(TOPDIR)/docs/images \
-+	$(Q)a2x $(6) --verbose -k -f $(2) -d book -L -r $(TOPDIR)/docs/images \
- 	        -D $$(@D) $$(@D)/.build/$(1).txt
--	-$(Q)rm -rf $$(@D)/.build
-+	#-$(Q)rm -rf $$(@D)/.build
- endef
- 
- ################################################################################
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -4,16 +4,15 @@
- = The Buildroot user manual
- :toc:
- 
--Buildroot usage and documentation by Thomas Petazzoni. Contributions
--from Karsten Kruse, Ned Ludd, Martin Herren and others.
-+Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
-+{localtime} from git revision {sys:git rev-parse --short HEAD}
- 
--The Buildroot manual is licensed under the GNU General Public License,
--version 2. Refer to file
-+The Buildroot manual is written by the Buildroot developers. +
-+It is licensed under the GNU General Public License, version 2. Refer to file
- http://git.buildroot.org/buildroot/tree/COPYING[COPYING] in the Buildroot
- sources for the full text of this license.
- 
--Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
--{localtime} from git revision {sys:git rev-parse --short HEAD}
-+Copyright (C) 2004-2014 The Buildroot developers
- 
- image::logo.png[]
- 
+Is this a bug?
+
+Thank you!
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
