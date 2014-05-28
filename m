@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:29 +0200
-Subject: [Buildroot] [PATCH 06/30] xbmc: hdmi cec supports needs udev for
-	device scanning
+Date: Wed, 28 May 2014 13:08:31 +0200
+Subject: [Buildroot] [PATCH 08/30] xbmc-pvr-addons: bump to a version
+	compatible with XBMC Gotham
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <ad931b21cf72b9b6d758551092cc756da7a541ca.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <a2afa5bcd214009dc98ce89751606f53417f2205.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +13,29 @@ To: buildroot@busybox.net
 
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-libcec support in xbmc compiles without udev being linked to libcec,
-but it is useless because xbmc uses libcec?s udev support for scanning
-connected CEC devices since:
-https://github.com/xbmc/xbmc/commit/59171c7a030f8a9c913abbce931967a6a8ff6897
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/xbmc/Config.in | 5 +++--
- package/xbmc/xbmc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 4db7378..52bf0cd 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -98,13 +98,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
-+	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want XBMC to support HDMI CEC.
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+index b6d061b..97628e2 100644
+--- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
--comment "hdmi cec support needs a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	bool "web server"
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index acbdb91..9f44c34 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -131,7 +131,7 @@ XBMC_CONF_OPT += --disable-avahi
- endif
- 
- ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
--XBMC_DEPENDENCIES += libcec
-+XBMC_DEPENDENCIES += libcec udev
- XBMC_CONF_OPT += --enable-libcec
- else
- XBMC_CONF_OPT += --disable-libcec
+-# This cset is on the branch 'frodo'
+-# When XBMC is updated, then this should be updated to the corresponding branch
+-XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
++# This cset in on master. When a Gotham branch is made, we should
++# follow it, as incompatible changes in the plugins API can happen
++# on the master branch.
++XBMC_PVR_ADDONS_VERSION = f38b2ebdc6f96244d5e4bc584315f4a2c24bc787
+ XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
+ XBMC_PVR_ADDONS_LICENSE = GPLv3+
+ XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
 -- 
 1.8.3.2
