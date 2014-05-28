@@ -1,64 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 May 2014 08:10:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-22
-In-Reply-To: <20140523190819.45a80027@free-electrons.com>
-References: <20140523063008.8A64410106F@stock.ovh.net>
- <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
- <20140523190819.45a80027@free-electrons.com>
-Message-ID: <53857DE2.6040509@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 28 May 2014 08:14:29 +0200
+Subject: [Buildroot] [PATCH] dillo: new package
+In-Reply-To: <1401230307-17697-1-git-send-email-ps.report@gmx.net>
+References: <1401230307-17697-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20140528081429.347da974@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/05/14 19:08, Thomas Petazzoni wrote:
-> Dear Fabio Porcedda,
-> 
-> On Fri, 23 May 2014 11:32:28 +0200, Fabio Porcedda wrote:
-> 
->>>    powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/520606ec674f6c8efad6ebbb840099ec89d03130/
->>>     x86_64 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/cc21623fbc3d4e94f09b2cb0be36ce05cf75a2e6/
->>
->> It's related to BR2_PREFER_STATIC_LIB=y, I'm trying to fix it.
-> 
-> Please note that Gustavo has already done a lot of investigation on
-> this one. It boils done to the fact that we pass --static instead of
-> -static when building statically. But we switched from -static to
-> --static a while ago, for some reason that the commit doesn't make
-> really clear.
+Dear Peter Seiderer,
 
- I remember that: libtool will parse the -static option and act accordingly.
-Only, it interprets it differently than gcc: it will only link statically
-against local libraries, not against installed libraries. If we don't have any
-.so files in $(STAGING_DIR), that wouldn't be a problem because it would still
-link statically (no other option). But unfortunately there are still quite a few
-packages that do install .so files in $(STAGING_DIR) - e.g. toolchain-external.
-So without the --static, you end up with a lot of dynamically linked programs.
+On Wed, 28 May 2014 00:38:27 +0200, Peter Seiderer wrote:
 
- For reference, the commit is 0a4bd19f4.
+> diff --git a/package/dillo/Config.in b/package/dillo/Config.in
+> new file mode 100644
+> index 0000000..07198f1
+> --- /dev/null
+> +++ b/package/dillo/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_DILLO
+> +	bool "dillo"
+> +	depends on BR2_PACKAGE_XORG7
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_USE_MMU # fltk fork()
+> +	select BR2_PACKAGE_FLTK
+> +
 
- As that commit mentions, we would actually like to pass -all-static to libtool.
-But of course, that option is not known by gcc, so it won't work if libtool is
-not used...
+No need for this empty line here.
 
- A proper solution would be to adapt our libtool patches to interpret -static as
--all-static. Or alternatively, to patch the compiler wrapper to interpret
--all-static as -static (and then of course we'd have to generalize the compiler
-wrapper to also use it for internal toolchains).
+> +	help
+> +	  Dillo is a multi-platform graphical web browser known
+> +	  for its speed and small footprint. 
+> +
+> +	  Enable jpeg and png packages to gain full feature image
+> +	  support.
 
- If someone writes a patch, put me in Cc and I'll test it on a static
-allpackageyesconfig.
+I believe this comment is not really necessary: fltk selects libpng and
+jpeg, so they will also be there.
 
- Regards,
- Arnout
+> +	  Enable openssl package to gain https support.
 
+However, this one is indeed useful.
 
+> +	  http://www.dillo.org
+> +
+> +comment "dillo needs a toolchain w/ C++"
+> +        depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
+> +        depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
+> new file mode 100644
+> index 0000000..f15a02a
+> --- /dev/null
+> +++ b/package/dillo/dillo.mk
+> @@ -0,0 +1,51 @@
+> +################################################################################
+> +#
+> +# dillo
+> +#
+> +################################################################################
+> +
+> +DILLO_VERSION = 3.0.4
+> +DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
+> +DILLO_SITE = http://www.dillo.org/download
+> +DILLO_LICENSE = GPLv3+
+> +DILLO_LICENSE_FILES = COPYING
+> +
+> +DILLO_DEPENDENCIES = fltk
+> +
+> +# set additional path for fltk-config and libpng-config
+> +DILLO_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
+
+It's not that nice to add $(STAGING_DIR)/usr/bin to the path, as it
+means that if there are target binaries in there, they will be picked
+up in preference to host binaries, which might break things. Instead,
+we prefer to explicitly point to fltk-config and libpng-config. For
+libpng:
+
+DILLO_CONF_ENV = \
+	PNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
+
+For fltk, you'd need to patch configure.ac a bit to make it use a
+variable like FLTK_CONFIG instead of hardcoding the use of fltk-config.
+Or better, make it use AC_PATH_PROG(), like:
+
+	AC_PATH_PROG(FLTK_CONFIG,fltk-config)
+
+and then use $FLTK_CONFIG throughout the configure.ac, and pass
+ac_cv_path_FLTK_CONFIG=$(STAGING_DIR)/usr/bin/fltk-config
+
+This patch could then be submitted upstream.
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
