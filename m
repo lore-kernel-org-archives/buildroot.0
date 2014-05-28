@@ -1,5 +1,5 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 May 2014 16:49:41 +0200
+Date: Wed, 28 May 2014 16:49:49 +0200
 Subject: [Buildroot] how to enable -mfloat-abi=hard in cross toolchain
  for ARM1136
 In-Reply-To: <CABzetm1r05rv2y0NzN039R+bwznpYzfginXF7qC3S=QLq5HjAg@mail.gmail.com>
@@ -12,7 +12,7 @@ References: <CABzetm3LyoP3JCsvMZOO1fbQBuaSLbahJJU81gSzLB2yeG_+Uw@mail.gmail.com>
  <CABzetm0XxJnPJJjvQWSm=DJusqMd4JNWDCeo56G2P2mPzxitXQ@mail.gmail.com>
  <20140528133323.4106f3d3@free-electrons.com>
  <CABzetm1r05rv2y0NzN039R+bwznpYzfginXF7qC3S=QLq5HjAg@mail.gmail.com>
-Message-ID: <20140528164941.6a9dee60@free-electrons.com>
+Message-ID: <20140528164949.3a2c1d9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
