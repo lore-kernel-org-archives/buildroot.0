@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:26 +0200
-Subject: [Buildroot] [PATCH 03/30] xbmc: add host-nasm dependency
+Date: Wed, 28 May 2014 13:08:28 +0200
+Subject: [Buildroot] [PATCH 05/30] xbmc: add missing egl-related cflags
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <e00f42bd94002c4b3c9c14e07466b3c19be61325.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <9d392b8f36e6ef61ea1967e5cb93ada969dd06a0.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +12,50 @@ To: buildroot@busybox.net
 
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Fixes:
-checking for nasm... no
-configure: error: Could not find a required program. Please see the README for your platform.
+A similar patch is used in package/qt/qt.mk.
+
+Fixes compilation error:
+
+In file included from /home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36:0,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/egl/WinSystemEGL.h:28,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/WindowingFactory.h:39,
+                 from DVDPlayerVideo.cpp:23:
+/home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+
+using this defconfig
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
 
 This will be needed for 13.0 Gotham.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/xbmc/xbmc.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/xbmc/xbmc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index d8b9508..3522802 100644
+index ffe573f..acbdb91 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -18,6 +18,9 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+@@ -70,6 +70,10 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
+ endif
  
-+# xbmc at i386 depends on nasm
-+XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
++XBMC_CONF_ENV += \
++	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
 +
- XBMC_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+ ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+ XBMC_DEPENDENCIES += libusb-compat
+ XBMC_CONF_OPT += --enable-libusb
 -- 
 1.8.3.2
