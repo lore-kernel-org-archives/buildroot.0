@@ -1,56 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 May 2014 18:02:44 +0200
-Subject: [Buildroot] [PATCH 2/2] docs: Added referenc to EUPL
-In-Reply-To: <1401005324-10428-1-git-send-email-oli.vogt.pub01@gmail.com>
-References: <1401005324-10428-1-git-send-email-oli.vogt.pub01@gmail.com>
-Message-ID: <538608A4.8050104@mind.be>
+Date: Wed, 28 May 2014 18:47:23 +0200
+Subject: [Buildroot] [RFC/PATCH] linux: add external initramfs options
+In-Reply-To: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <5386131B.6090809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Olli,
+ Hi Guido,
 
- It would make more sense to submit this patch as part of a series adding a
-package that actually uses the license.
+ Thanks for your patch. However, I don't think it is appropriate. See my
+comments below.
 
- Also:
+On 26/05/14 23:01, Guido Mart?nez wrote:
+> This patch allows building the kernel with an external initramfs. This
+> is useful in cases where one wants to generate the kernel and rootfs
+> with BR, and the kernel needs to contain an initramfs different to the
+> rootfs.
 
-On 25/05/14 10:08, oli vogt wrote:
-> The first European Union Public Licence
+ In that case, don't you typically want to copy part of the rootfs in the
+initramfs? Of course, it's possible to do that with a post-build script, but if
+we add a feature like this to buildroot, I think the copying part should be
+included.
+
 > 
-> Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
+> The path specified can be a cpio archive or a directory, just like
+> the kernel config. The path is specified w.r.t. BRs topdir, and made
+> absolute since the kernel builds in another directory.
+
+ This patch does nothing more than update the kernel config. Since you can
+already supply a custom kernel config, I don't think there is much added value
+to moving these options to the buildroot config.
+
+ The only feature you add is that the patch can be relative to the buildroot
+directory. Not enough to be relevant, IMHO, especially since the patch adds
+non-negligible complexity.
+
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 > ---
->  docs/manual/legal-notice.txt | 3 +++
->  1 file changed, 3 insertions(+)
+> Hi,
 > 
-> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-> index d4344b9..42a4a52 100644
-> --- a/docs/manual/legal-notice.txt
-> +++ b/docs/manual/legal-notice.txt
-> @@ -122,6 +122,9 @@ Buildroot, with the name used in the manifest files:
->  * `Apache-2.0`:
->    http://apache.org/licenses/LICENSE-2.0.html[
->    Apache License, version 2.0];
-> +* `EUPL-1`:
+> I'm marking this as RFC because I don't particularly like what I wrote
+> to detect if the path is relative, but I found no other way.
 
- spdx.org has EUPL-1.0 and EUPL-1.1. I expect only EUPL-1.1 is relevant.
+ There is a very easy way:
+$(abspath $(call qstrip,$(BR2_LINUX_KERNEL_INITRAMFS_SOURCE)))
 
-> +  http://ec.europa.eu/idabc/eupl.html[
-> +   The first European Union Public Licence];
+this will evaluate the path relative to the buildroot directly. It will also
+expand ~ I think (but I'm not sure, possibly you need to use wildcard for that).
 
- "The first"? The website refers to it as v1.1. So I'd call it
+[snip]
+>  define LINUX_CONFIGURE_CMDS
+>  	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>  	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
+> +	$(if $(BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS),
+> +		$(call LINUX_CONFIGURE_INITRAMFS))
 
-European Union Public License, version 1.1
+ You don't need a $(call ...) here.
 
 
  Regards,
  Arnout
 
->  
->  == Complying with the Buildroot license
->  
+
+>  	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
+>  	$(if $(BR2_arm)$(BR2_armeb),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
 > 
 
 
