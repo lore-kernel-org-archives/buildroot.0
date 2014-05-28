@@ -1,70 +1,72 @@
-From: Rohit Kumar <rkthebest@gmail.com>
-Date: Wed, 28 May 2014 17:32:25 +0900
-Subject: [Buildroot] how to enable -mfloat-abi=hard in cross toolchain
-	for ARM1136
-In-Reply-To: <20140528095100.719c69ac@free-electrons.com>
-References: <CABzetm3LyoP3JCsvMZOO1fbQBuaSLbahJJU81gSzLB2yeG_+Uw@mail.gmail.com>
- <20140528095100.719c69ac@free-electrons.com>
-Message-ID: <CABzetm3NU_ZZrpU0+uw+iA8f2gcTRqVEVNP7023Vho=G4RFE7Q@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 28 May 2014 10:42:55 +0200
+Subject: [Buildroot] [PATCH 10/14] pkg-cmake.mk: globally drive the
+ CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
+In-Reply-To: <53599453.8080000@mind.be>
+References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
+ <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
+ <53599453.8080000@mind.be>
+Message-ID: <CAGduivwxrOoH_7K1_Qu5zQeqq-Tv5S=gu+FCiT6K25grixMiXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hi all,
 
+Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-On Wed, May 28, 2014 at 4:51 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear Rohit Kumar,
+On Fri, Apr 25, 2014 at 12:46 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 24/04/14 00:48, Samuel Martin wrote:
+>> This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
+>> etc).
+>>
+>> So, it makes sense for Buildroot to globally drive this CMake flags in
+>> the cmake-package infrastructure.
+>>
+>> However, if a package prefer overriding this default setting, it still
+>> can via the <PKG>_CONF_OPT variable.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >
-> On Wed, 28 May 2014 16:09:02 +0900, Rohit Kumar wrote:
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 >
-> > i created toolchain using buildroot for ARM1136
-> > attached is the configuration file.
-> > i want to cross compile the program with "-mfloat-abi=hard" option, i
-> > get following error
-> >
-> >
-> /home/rohit/Desktop/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29:
-> > fatal error: gnu/stubs-hard.h: No such file or directory
-> > compilation terminated.
-> >
-> > how to enable above in buildroot configuration?
 >
-> Use EABIhf instead of EABI in the Buildroot configuration, under
-> "Target options".
+>  Regards,
+>  Arnout
 >
-
-enabling it leads to errors in compiling
-
-
-checking for .previous assembler directive... yes
-checking for .protected and .hidden assembler directive... yes
-checking whether __attribute__((visibility())) is supported... yes
-checking for broken __attribute__((visibility()))... no
-checking for broken __attribute__((alias()))... no
-checking whether to put _rtld_local into .sdata section... no
-checking for .preinit_array/.init_array/.fini_array support... no
-configure: error: Need linker with .init_array/.fini_array support.
-make: ***
-[/home/rohit/Desktop/buildroot/output/build/glibc-2.18/.stamp_configured]
-Error 1
-
-
-> Best regards,
+>>
+>> ---
+>> changes v1 -> v2:
+>> - new patch
+>> ---
+>>  package/pkg-cmake.mk | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+>> index e0efccb..1c52a53 100644
+>> --- a/package/pkg-cmake.mk
+>> +++ b/package/pkg-cmake.mk
+>> @@ -63,6 +63,7 @@ define $(2)_CONFIGURE_CMDS
+>>       PATH=$(BR_PATH) \
+>>       $$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+>>               -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+>> +             -DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
+>>               -DCMAKE_INSTALL_PREFIX="/usr" \
+>>               -DCMAKE_COLOR_MAKEFILE=OFF \
+>>               -DBUILD_TESTING=OFF \
+>>
 >
-> Thomas
+>
 > --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
-With Regards,
-
-Rohit Kumar
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140528/4ad3e2f1/attachment.html>
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
