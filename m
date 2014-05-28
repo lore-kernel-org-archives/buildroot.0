@@ -1,12 +1,11 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Wed, 28 May 2014 10:42:55 +0200
-Subject: [Buildroot] [PATCH 10/14] pkg-cmake.mk: globally drive the
- CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
-In-Reply-To: <53599453.8080000@mind.be>
-References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
- <1398293313-17580-11-git-send-email-s.martin49@gmail.com>
- <53599453.8080000@mind.be>
-Message-ID: <CAGduivwxrOoH_7K1_Qu5zQeqq-Tv5S=gu+FCiT6K25grixMiXw@mail.gmail.com>
+Date: Wed, 28 May 2014 10:45:07 +0200
+Subject: [Buildroot] [PATCH v2] dropbear: fix missing directory with
+	systemd
+In-Reply-To: <87bnuicovg.fsf@dell.be.48ers.dk>
+References: <1401263180-30574-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <87bnuicovg.fsf@dell.be.48ers.dk>
+Message-ID: <CAGduivwXLj6kbWgNj=+FiMfqkB=j_v_toUZm=jwB549QO7nMaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,58 +14,22 @@ To: buildroot@busybox.net
 
 Hi all,
 
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Thanks, doing too much shell scripting currently :(
 
-On Fri, Apr 25, 2014 at 12:46 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 24/04/14 00:48, Samuel Martin wrote:
->> This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
->> etc).
->>
->> So, it makes sense for Buildroot to globally drive this CMake flags in
->> the cmake-package infrastructure.
->>
->> However, if a package prefer overriding this default setting, it still
->> can via the <PKG>_CONF_OPT variable.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Wed, May 28, 2014 at 10:02 AM, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
 >
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>  > The current SysV startup script create a directory which is necessary
+>  > for dropbear to correctly work.
+>  > This creation is not done with systemd.
 >
+>  > Instead of both init creating the directory, we add the creation of this
+>  > directory to the INSTALL_TARGET_CMDS to make sure it's present.
 >
->  Regards,
->  Arnout
+>  > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 >
->>
->> ---
->> changes v1 -> v2:
->> - new patch
->> ---
->>  package/pkg-cmake.mk | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
->> index e0efccb..1c52a53 100644
->> --- a/package/pkg-cmake.mk
->> +++ b/package/pkg-cmake.mk
->> @@ -63,6 +63,7 @@ define $(2)_CONFIGURE_CMDS
->>       PATH=$(BR_PATH) \
->>       $$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->>               -DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
->> +             -DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
->>               -DCMAKE_INSTALL_PREFIX="/usr" \
->>               -DCMAKE_COLOR_MAKEFILE=OFF \
->>               -DBUILD_TESTING=OFF \
->>
->
+> Committed with the TARGET_DIR reference fixed as pointed out by Thomas,
+> thanks.
 >
 > --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Bye, Peter Korsgaard
