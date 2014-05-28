@@ -1,44 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 May 2014 09:06:39 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-05-22
-In-Reply-To: <20140528064706.GC3510@free.fr>
-References: <20140523063008.8A64410106F@stock.ovh.net>
- <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
- <20140523190819.45a80027@free-electrons.com>
- <53857DE2.6040509@mind.be> <20140528063024.GA3510@free.fr>
- <20140528084311.05629fce@free-electrons.com>
- <20140528064706.GC3510@free.fr>
-Message-ID: <20140528090639.732647c8@free-electrons.com>
+From: Rohit Kumar <rkthebest@gmail.com>
+Date: Wed, 28 May 2014 16:09:02 +0900
+Subject: [Buildroot] how to enable -mfloat-abi=hard in cross toolchain for
+	ARM1136
+Message-ID: <CABzetm3LyoP3JCsvMZOO1fbQBuaSLbahJJU81gSzLB2yeG_+Uw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hello Thomas,
 
-On Wed, 28 May 2014 08:47:06 +0200, Yann E. MORIN wrote:
+i created toolchain using buildroot for ARM1136
+attached is the configuration file.
+i want to cross compile the program with "-mfloat-abi=hard" option, i get
+following error
 
-> > > Yes, I think this is a good idea. But we can't use the wrapper to build
-> > > the toolchain itself, of course.
-> > 
-> > And there is no wrapper at all when we use the internal toolchain
-> > backend. At least as of today.
-> 
-> Hu? Of course we're not using the wrapper for internal toolchain. That's
-> why I replied it would be a good idea to use it (OK, I should have
-> trimmed the quote a bit more.)
+/home/rohit/Desktop/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29:
+fatal error: gnu/stubs-hard.h: No such file or directory
+compilation terminated.
 
-Regarding using the wrapper for the internal toolchain, there's always
-the problem of where we put the real toolchain binaries vs. the wrapper
-binaries. For the external toolchain, it's simple: the real toolchain
-binaries are in $(HOST_DIR)/opt/ext-toolchain, and the wrappers in
-$(HOST_DIR)/usr/bin. But for the internal toolchain, we build/install
-all the toolchain components with --prefix=$(HOST_DIR)/usr.
+how to enable above in buildroot configuration?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+With Regards,
+
+Rohit Kumar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140528/ed85a70d/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: buildroot_config
+Type: application/octet-stream
+Size: 47578 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140528/ed85a70d/attachment-0001.obj>
