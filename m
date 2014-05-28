@@ -1,116 +1,100 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Wed, 28 May 2014 14:19:01 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for Congatec QMX6 SoC
-Message-ID: <1401279541-28922-1-git-send-email-sho@relinux.de>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 28 May 2014 15:39:06 +0200
+Subject: [Buildroot] [PATCH v3] faifa: new package
+Message-ID: <1401284346-2929-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for the iMX6 based conga-QMX6 family of Qseven modules.
+faifa is a library and a cli used to manage PLC hardware that use
+Intellon chipset.
+Almost everybody use theses chips nowadays.
 
-This patch is based on Linux 3.0.35 from Congatec's kernel git reporitory
-
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
-There has been a similar patch set from Lahoudere Fabien <fabien.lahoudere@openwide.fr>
-last year adding a patch to the freescale kernel repository, but it seems more logical
-to me to start from the manufacturer's repo (which might not have been availeable at
-that time).
+Changes v2 -> v3:
+    - Do not use AUTORECONF, uses autogen.sh instead
+Changes v1 -> v2:
+    - Changes version from master to a sha1
+---
+ package/Config.in       |  1 +
+ package/faifa/Config.in | 11 +++++++++++
+ package/faifa/faifa.mk  | 35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 47 insertions(+)
+ create mode 100644 package/faifa/Config.in
+ create mode 100644 package/faifa/faifa.mk
 
- board/congatec/qmx6/6q_bootscript.txt |  6 ++++++
- board/congatec/qmx6/post-build.sh     |  8 ++++++++
- board/congatec/qmx6/readme.txt        | 32 ++++++++++++++++++++++++++++++++
- configs/qmx6_defconfig                | 13 +++++++++++++
- 4 files changed, 59 insertions(+)
- create mode 100644 board/congatec/qmx6/6q_bootscript.txt
- create mode 100755 board/congatec/qmx6/post-build.sh
- create mode 100644 board/congatec/qmx6/readme.txt
- create mode 100644 configs/qmx6_defconfig
-
-diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
+diff --git a/package/Config.in b/package/Config.in
+index 3bc8d24..68406e8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -913,6 +913,7 @@ source "package/dnsmasq/Config.in"
+ source "package/dropbear/Config.in"
+ source "package/ebtables/Config.in"
+ source "package/ethtool/Config.in"
++source "package/faifa/Config.in"
+ source "package/foomatic-filters/Config.in"
+ source "package/fping/Config.in"
+ source "package/gesftpserver/Config.in"
+diff --git a/package/faifa/Config.in b/package/faifa/Config.in
 new file mode 100644
-index 0000000..0c9517d
+index 0000000..99abaab
 --- /dev/null
-+++ b/board/congatec/qmx6/6q_bootscript.txt
-@@ -0,0 +1,6 @@
-+set bootargs $bootargs console=ttymxc1,115200 vmalloc=400M root=/dev/mmcblk0p1 rootwait consoleblank=0 ;
-+setenv bootargs $bootargs video=mxcfb0:dev=hdmi,1280x720M at 60,if=RGB24
-+setenv bootargs $bootargs video=mxcfb1:dev=lcd,CLAA-WVGA,if=RGB666
-+setenv bootargs $bootargs fbmem=28M,10M
-+${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
++++ b/package/faifa/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_FAIFA
++	bool "faifa"
++	select BR2_PACKAGE_LIBPCAP
++	help
++	  Faifa can configure any Intellon-based Power Line Communication device
++	  using Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It
++	  supports all Intellon-specific management and control frames as well as
++	  standard management frames.
 +
-diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
-new file mode 100755
-index 0000000..d2173a0
---- /dev/null
-+++ b/board/congatec/qmx6/post-build.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
++	  https://dev.open-plc.org
 +
-+TARGET_DIR=$1
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=$1/../host/usr/bin/mkimage
-+
-+$MKIMAGE -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
-+
-diff --git a/board/congatec/qmx6/readme.txt b/board/congatec/qmx6/readme.txt
+diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
 new file mode 100644
-index 0000000..f038fef
+index 0000000..4435802
 --- /dev/null
-+++ b/board/congatec/qmx6/readme.txt
-@@ -0,0 +1,32 @@
-+This is the minimal buildroot support for the Congatec QMX6 Qseven CoM
++++ b/package/faifa/faifa.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# faifa
++#
++################################################################################
 +
-+conga-QMX6 is based on the freescale iMX6 SoC. For more information please
-+have a look at http://www.congatec.com/products/qseven/conga-qmx6.html
++FAIFA_VERSION = aa0b5f90b89a9fd1533137b68ebf85f5437aba53
++FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
++FAIFA_INSTALL_STAGING = YES
++FAIFA_DEPENDENCIES = libpcap
++FAIFA_LICENSE = GPLv2
++FAIFA_LICENSE_FILES = COPYING
 +
-+The configuration is based on the currently latest kernel release from
-+Congatec's git repository which is based on 3.0.35. The bootloader u-boot
-+is preconfigured on the CPU module and does not need to be replaced.
++define FAIFA_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++FAIFA_PRE_CONFIGURE_HOOKS += FAIFA_RUN_AUTOGEN
 +
-+To build the default configuration you only have to:
++define FAIFA_INSTALL_TARGET_CMDS
++    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++        PREFIX=/usr \
++        STRIP=/bin/true \
++        DESTDIR=$(TARGET_DIR) \
++        install
++endef
 +
-+	make qmx6_defconfig && make
++define FAIFA_INSTALL_STAGING_CMDS
++    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++        PREFIX=/usr \
++        STRIP=/bin/true \
++        DESTDIR=$(STAGING_DIR) \
++        install
++endef
 +
-+You will need a microSD card of sufficient size and the first or only
-+partition configured as Linux type.
-+
-+To transfer the system to the card you have zwo options:
-+
-+1.	$ sudo dd if=output/images/rootfs.ext2 of=/dev/sdX1
-+
-+2. 	only once: sudo mkfs.ext3 /dev/sdX1
-+	$ sudo mount /dev/sdX1 /mnt
-+	$ sudo tar xf output/images/rootfs.tar -C 
-+	$ sudo umount /mnt
-+
-+Connect a terminal program to the rs232 connector marked "CONSOLE",
-+insert the microSD card into the socket on the CPU module and power
-+the board to watch the system boot.
-+
-+Booting from the SD card slot on the base board is currently not
-+supported.
-+
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-new file mode 100644
-index 0000000..8cc8de3
---- /dev/null
-+++ b/configs/qmx6_defconfig
-@@ -0,0 +1,13 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
-+BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
++$(eval $(autotools-package))
 -- 
-2.0.0.rc2
+2.0.0.rc0
