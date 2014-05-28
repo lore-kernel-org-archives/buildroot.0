@@ -1,78 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:24 +0200
-Subject: [Buildroot] [PATCH 01/30] toolchain: add option to copy the gconv
-	libraries
+Date: Wed, 28 May 2014 13:08:25 +0200
+Subject: [Buildroot] [PATCH 02/30] xbmc: add host-gettext dependency
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <bd4936cffb6b9a15326d591ea15075c381b701db.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <5272d9f2b0b762d0cc2d23438248b778b68249e6.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-The gconv libraries are used to translate between different character
-sets (charsets).
+AUTOPOINT=/bin/true does not work anymore since
+https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
 
-In (e)glibc they are implemented by the internal implemenation of
-iconv, called gconv, and are provided as dlopen-able libraries.
+config.status: error: cannot find input file: `Makefile.in'
+configure: error: Submodule lib/cpluff failed to configure
 
-Some packages need them to present text to the user (eg. XBMC Gotham).
+This will be needed for 13.0 Gotham.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Makefile                      |  6 ++++++
- toolchain/toolchain-common.in | 10 ++++++++++
- 2 files changed, 16 insertions(+)
+ package/xbmc/xbmc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index b7a0721..7377478 100644
---- a/Makefile
-+++ b/Makefile
-@@ -395,6 +395,9 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- ifneq ($(GENERATE_LOCALE),)
- TARGETS += target-generatelocales
- endif
-+ifeq ($(BR2_COPY_GCONV_LIBS),y)
-+TARGETS += target-copygconvlibs
-+endif
- endif
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index c7a4607..d8b9508 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+-XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
++XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+@@ -133,7 +133,7 @@ endif
  
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
-@@ -620,6 +623,9 @@ target-generatelocales: host-localedef toolchain
- 	done
- endif
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define XBMC_BOOTSTRAP
+-	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
++	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+ endef
+ XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
  
-+target-copygconvlibs:
-+	$(Q)cp -a $(STAGING_DIR)/usr/lib/gconv $(TARGET_DIR)/usr/lib/gconv
-+
- target-post-image: $(TARGETS_ROOTFS) target-finalize
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1573e00..59ec64e 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -77,6 +77,16 @@ config BR2_GENERATE_LOCALE
- 	  specified, UTF-8 is assumed. Examples of locales: en_US,
- 	  fr_FR.UTF-8.
- 
-+config BR2_COPY_GCONV_LIBS
-+	bool "copy gconv libs"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  The gconv libraries are used to convert between different
-+	  character sets (charsets).
-+
-+	  Say 'y' if you need to store and/or display different charsets.
-+	  Note that the full set of gconv libraries is worth around 7MiB.
-+
- # glibc and eglibc directly include gettext, so a separatly compiled
- # gettext isn't needed and shouldn't be built to avoid conflicts. Some
- # packages always need gettext, other packages only need gettext when
 -- 
 1.8.3.2
