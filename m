@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:49 +0200
-Subject: [Buildroot] [PATCH 26/30] xbmc: Add lame support
+Date: Wed, 28 May 2014 13:08:50 +0200
+Subject: [Buildroot] [PATCH 27/30] xbmc: Fix TexturePacker compile
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <14f71698a0fe2a0d30959e0bb931d2f34e1d0bbc.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <7c737fc6eb77614462bba836f7b49c3f564979de.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,46 @@ To: buildroot@busybox.net
 
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
+Patch description:
+
+use_texturepacker_native=yes
+
+is needed because we obviously need a native-compiled binary, but the xbmc
+build system does enable this variable only for darwin, android and
+raspberry-pi targets.
+
+USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+
+is also needed because
+USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
+is only executed for raspberry-pi by xbmc/configure and only
+USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
+
+To sum up, building for raspberry-pi and other archs works out-of-the-box,
+compiling for an Intel target, for example, fails:
+
+In file included from SDL_anigif.cpp:23:0:
+SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
+compilation terminated.
+XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/xbmc/xbmc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 8e8d3cb..9c7735e 100644
+index 9c7735e..8b1b94f 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -77,6 +77,13 @@ else
- XBMC_CONF_OPT += --disable-alsa
- endif
+@@ -34,6 +34,8 @@ XBMC_CONF_ENV = \
+ 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	PYTHON_NOVERSIONCHECK="no-check" \
++	use_texturepacker_native=yes \
++	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
-+ifeq ($(BR2_PACKAGE_LAME),y)
-+XBMC_DEPENDENCIES += lame
-+XBMC_CONF_OPT += --enable-libmp3lame
-+else
-+XBMC_CONF_OPT += --disable-libmp3lame
-+endif
-+
- XBMC_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
+ XBMC_CONF_OPT +=  \
 -- 
 1.8.3.2
