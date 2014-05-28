@@ -1,43 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 May 2014 17:17:40 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: bump zedboard to 2014.1
-In-Reply-To: <CAEBucnCS2Xf9phGpjwBf81U0KVABM10NstdW6FdaqiNMfCfrOw@mail.gmail.com>
-References: <1401225332-4254-1-git-send-email-spenser@gillilanding.com>
- <20140528081603.0146ff8f@free-electrons.com>
- <CAEBucnAq561jBMHV4ksEr2nT+oZ1ieSJqBuavGNSpxqfgCzZgg@mail.gmail.com>
- <20140528084358.53ec9670@free-electrons.com>
- <CAEBucnDKscR9UQwkL3R1VZ_Fn2ReOPyyQi7W_beqRRJoeCoQVg@mail.gmail.com>
- <20140528163634.37145ea8@free-electrons.com>
- <CAEBucnAmLn1C7zVevhPL+e4sJybWXadQrd8prr8a68=+BN6e-A@mail.gmail.com>
- <20140528164755.2568e568@free-electrons.com>
- <CAEBucnCS2Xf9phGpjwBf81U0KVABM10NstdW6FdaqiNMfCfrOw@mail.gmail.com>
-Message-ID: <20140528171740.331c046a@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 28 May 2014 17:21:55 +0200
+Subject: [Buildroot] Buildroot 2014.05-rc3 released
+Message-ID: <87vbsqapyk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Spenser Gilliland,
+Hi,
 
-On Wed, 28 May 2014 10:03:19 -0500, Spenser Gilliland wrote:
+Buildroot 2014.05-rc3 is released - Go download it at:
 
-> > Waldemar patches have been applied, so they are no longer visible in
-> > patchwork as 'New'.
-> 
-> I'm rebasing on master so his patches should not cause an issue.
+http://buildroot.net/downloads/buildroot-2014.05-rc3.tar.gz
 
-Ok, but remember we asked some questions on your patches, and I think
-you never got back to us with any answers. So a new posting of the
-patches will have to have answers to those questions. Especially since
-you were changing the gcc/gdb/glibc/binutils versions used for
-Microblaze, and they have been changed in the mean time by Waldemar. So
-yet another change will have to come with an appropriate justification.
+or
 
-Thanks!
+http://buildroot.net/downloads/buildroot-2014.05-rc3.tar.bz2
 
-Thomas
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2014.05-rc2..
+    11  Peter Korsgaard
+     6  Yann E. MORIN
+     5  Thomas De Schampheleire
+     4  Gustavo Zacarias
+     3  Baruch Siach
+     3  Heiko Abraham
+     2  Maxime Hadjinlian
+     1  Anton Kolesov
+     1  Bernd Kuhls
+     1  Vicente Olivert Riera
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2014.05-rc3
+
+Expect the final 2014.05 release by the end of the week.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
