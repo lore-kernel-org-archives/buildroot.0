@@ -1,75 +1,76 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 28 May 2014 18:47:23 +0200
-Subject: [Buildroot] [RFC/PATCH] linux: add external initramfs options
-In-Reply-To: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
-References: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
-Message-ID: <5386131B.6090809@mind.be>
+Date: Wed, 28 May 2014 18:15:31 +0200
+Subject: [Buildroot] [PATCH] audiofile: does not build with static-only
+In-Reply-To: <538259D0.4090008@lucaceresoli.net>
+References: <1400941494-29900-1-git-send-email-luca@lucaceresoli.net>
+ <20140524184541.47d3f8f9@free-electrons.com>
+ <5381278F.9040209@zacarias.com.ar> <538259D0.4090008@lucaceresoli.net>
+Message-ID: <53860BA3.6080605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Guido,
+[I hope my FIFO reading is not going to cause me to make more duplicate comments..]
 
- Thanks for your patch. However, I don't think it is appropriate. See my
-comments below.
+On 25/05/14 23:00, Luca Ceresoli wrote:
+> Hi Gustavo, Thomas,
+> 
+> Gustavo Zacarias wrote:
+>> On 05/24/2014 01:45 PM, Thomas Petazzoni wrote:
+>>
+>>> No, I disagree. The real problem is the fact that we pass --static
+>>> instead of -static when building statically, so libtool turns -lstdc++
+>>> into a full path to libstdc++.so instead of libstdc++.a.
+>>>
+>>> The real fix is to understand why we switched from -static to --static
+>>> a few years ago: there is a commit from Andy Kennedy making this
+>>> change, but the commit log is quite fuzzy about why this is actually
+>>> needed.
+>>
+>> Hi.
+>> As we discussed with Thomas on IRC i've been digging and testing a bit
+>> and promised to write about my assorted notes for the static dilemma:
+> 
+> Ah, I see, I hadn't followed that discussion and was not aware of such
+> work you're doing. Sorry for the noise and thanks for the detailed
+> clarification.
 
-On 26/05/14 23:01, Guido Mart?nez wrote:
-> This patch allows building the kernel with an external initramfs. This
-> is useful in cases where one wants to generate the kernel and rootfs
-> with BR, and the kernel needs to contain an initramfs different to the
-> rootfs.
-
- In that case, don't you typically want to copy part of the rootfs in the
-initramfs? Of course, it's possible to do that with a post-build script, but if
-we add a feature like this to buildroot, I think the copying part should be
-included.
+ Yeah, much better clarification than what I said this morning :-)
 
 > 
-> The path specified can be a cpio archive or a directory, just like
-> the kernel config. The path is specified w.r.t. BRs topdir, and made
-> absolute since the kernel builds in another directory.
-
- This patch does nothing more than update the kernel config. Since you can
-already supply a custom kernel config, I don't think there is much added value
-to moving these options to the buildroot config.
-
- The only feature you add is that the patch can be relative to the buildroot
-directory. Not enough to be relevant, IMHO, especially since the patch adds
-non-negligible complexity.
-
+> I understand the solution won't land in 2014.05.
+> I wonder what's the best thing to do in cases like this to make users
+> aware what there's a known bug in a release.
 > 
-> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
-> ---
-> Hi,
+> Should audiofile depend on BROKEN if BR2_PREFER_STATIC_LIB? This way it
+> would disappear from both the user's sight and the autobuilders, but
+> still visible via menuconfig search.
 > 
-> I'm marking this as RFC because I don't particularly like what I wrote
-> to detect if the path is relative, but I found no other way.
+> Or should we just add a comment that depends on audiofile and
+> BR2_PREFER_STATIC_LIB?
 
- There is a very easy way:
-$(abspath $(call qstrip,$(BR2_LINUX_KERNEL_INITRAMFS_SOURCE)))
+ I think it's better if we start having release notes for these kinds of known
+issues. This could actually be part of the CHANGES file, but then we should make
+a habit of including updates to the CHANGES file when submitting patches. Or it
+could be part of the documentation. Or of course a separate ReleaseNotes file.
+For sure, it must be something that is easily googlable.
 
-this will evaluate the path relative to the buildroot directly. It will also
-expand ~ I think (but I'm not sure, possibly you need to use wildcard for that).
-
-[snip]
->  define LINUX_CONFIGURE_CMDS
->  	$(INSTALL) -m 0644 $(KERNEL_SOURCE_CONFIG) $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
->  	$(TARGET_MAKE_ENV) $(MAKE1) $(LINUX_MAKE_FLAGS) -C $(@D) buildroot_defconfig
-> +	$(if $(BR2_LINUX_KERNEL_EXTERNAL_INITRAMFS),
-> +		$(call LINUX_CONFIGURE_INITRAMFS))
-
- You don't need a $(call ...) here.
+ Deprecated .config symbols (i.e. the legacy stuff) should also be in these
+release notes.
 
 
  Regards,
  Arnout
 
-
->  	rm $(KERNEL_ARCH_PATH)/configs/buildroot_defconfig
->  	$(if $(BR2_arm)$(BR2_armeb),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+> 
+> I think the former (o the sum of the two) is preferred. It would stop
+> polluting the autobuilders with known bugs and track the issue via
+> `git grep BROKEN`.
+> 
+> Helping in fixing this bug is out of reach for me, but I can at least
+> send a patch for BROKEN if it's the proper way to go.
 > 
 
 
