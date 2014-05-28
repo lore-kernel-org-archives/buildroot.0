@@ -1,55 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 May 2014 08:52:41 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-05-27
-In-Reply-To: <20140528063007.1778D101696@stock.ovh.net> (Thomas Petazzoni's
- message of "Wed, 28 May 2014 08:30:07 +0200 (CEST)")
-References: <20140528063007.1778D101696@stock.ovh.net>
-Message-ID: <87k396cs3q.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 28 May 2014 08:55:30 +0200
+Subject: [Buildroot] [git commit] monit: uses fork(), disable for nommu
+Message-ID: <20140528065621.84DAC9CDF6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=e507615555d190dc86787506d3e3854027d6f628
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Build statistics for 2014-05-27
- > ===============================
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/monit/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- >         success : 105
- >        failures : 2  
- >        timeouts : 0  
- >           TOTAL : 107
-
-Wee!
-
- > Classification of failures by reason
- > ====================================
-
- >                      monit-5.7 | 1 
- >                      exim-4.82 | 1 
-
- > Detail of failures
- > ===================
-
- >        arm |                      exim-4.82 | NOK | http://autobuild.buildroot.net/results/0a392087878f80a70435981856455a30152b684d/
-
-Static linking / pthread issue. I doubt many people really care about
-linking something as big as that statically, so I will just make it
-depend on !BR2_PREFER_STATIC_LIB for 2014.05.
-
- >       bfin |                      monit-5.7 | NOK | http://autobuild.buildroot.net/results/67623f87f8bc2c73f30bdc3943c58238686c106e/
-
-No GLOB_ONLYDIR. This flag is just an optimization, and from the looks
-of the code it seems it will still work if we simply add a patch doing:
-
-#ifndef GLOB_ONLYDIR
-#define GLOB_ONLYDIR 0
-#endif
-
-But once you fix that the build fails as monit uses fork(), so I will
-simply make it depend on BR2_USE_MMU for 2014.05.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/monit/Config.in b/package/monit/Config.in
+index b5d4b52..9f80858 100644
+--- a/package/monit/Config.in
++++ b/package/monit/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MONIT
+ 	bool "monit"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Monit is a free open source utility for managing and
+ 	  monitoring, processes, programs, files, directories and
+@@ -11,4 +12,5 @@ config BR2_PACKAGE_MONIT
+ 	  http://mmonit.com/monit/
+ 
+ comment "monit needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
