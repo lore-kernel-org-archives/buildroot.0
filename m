@@ -1,98 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 28 May 2014 08:14:29 +0200
-Subject: [Buildroot] [PATCH] dillo: new package
-In-Reply-To: <1401230307-17697-1-git-send-email-ps.report@gmx.net>
-References: <1401230307-17697-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140528081429.347da974@free-electrons.com>
+Date: Wed, 28 May 2014 08:16:03 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: bump zedboard to 2014.1
+In-Reply-To: <1401225332-4254-1-git-send-email-spenser@gillilanding.com>
+References: <1401225332-4254-1-git-send-email-spenser@gillilanding.com>
+Message-ID: <20140528081603.0146ff8f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+Dear Spenser Gilliland,
 
-On Wed, 28 May 2014 00:38:27 +0200, Peter Seiderer wrote:
+On Tue, 27 May 2014 16:15:32 -0500, Spenser Gilliland wrote:
 
-> diff --git a/package/dillo/Config.in b/package/dillo/Config.in
-> new file mode 100644
-> index 0000000..07198f1
-> --- /dev/null
-> +++ b/package/dillo/Config.in
-> @@ -0,0 +1,21 @@
-> +config BR2_PACKAGE_DILLO
-> +	bool "dillo"
-> +	depends on BR2_PACKAGE_XORG7
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_MMU # fltk fork()
-> +	select BR2_PACKAGE_FLTK
+> +Due to licensing issues, the files ps7_init.c/h are not able to be
+> +distributed with the U-Boot source code.  These files are required to make a
+> +boot.bin file.
 > +
-
-No need for this empty line here.
-
-> +	help
-> +	  Dillo is a multi-platform graphical web browser known
-> +	  for its speed and small footprint. 
+> +If you already have the Xilinx tools installed, the follwing sequence will
+> +unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
 > +
-> +	  Enable jpeg and png packages to gain full feature image
-> +	  support.
+> +make zedboard_defconfig
+> +make uboot-patch
+> +cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
+> +output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
+> +make
 
-I believe this comment is not really necessary: fltk selects libpng and
-jpeg, so they will also be there.
+Does this means that the U-Boot build will fail without those files? If
+that's the case, then that's not really an acceptable solution, because
+this defconfig will continuously fail to build in our Jenkins CI.
 
-> +	  Enable openssl package to gain https support.
-
-However, this one is indeed useful.
-
-> +	  http://www.dillo.org
-> +
-> +comment "dillo needs a toolchain w/ C++"
-> +        depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-> +        depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-> new file mode 100644
-> index 0000000..f15a02a
-> --- /dev/null
-> +++ b/package/dillo/dillo.mk
-> @@ -0,0 +1,51 @@
-> +################################################################################
-> +#
-> +# dillo
-> +#
-> +################################################################################
-> +
-> +DILLO_VERSION = 3.0.4
-> +DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
-> +DILLO_SITE = http://www.dillo.org/download
-> +DILLO_LICENSE = GPLv3+
-> +DILLO_LICENSE_FILES = COPYING
-> +
-> +DILLO_DEPENDENCIES = fltk
-> +
-> +# set additional path for fltk-config and libpng-config
-> +DILLO_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
-
-It's not that nice to add $(STAGING_DIR)/usr/bin to the path, as it
-means that if there are target binaries in there, they will be picked
-up in preference to host binaries, which might break things. Instead,
-we prefer to explicitly point to fltk-config and libpng-config. For
-libpng:
-
-DILLO_CONF_ENV = \
-	PNG_CONFIG=$(STAGING_DIR)/usr/bin/libpng-config
-
-For fltk, you'd need to patch configure.ac a bit to make it use a
-variable like FLTK_CONFIG instead of hardcoding the use of fltk-config.
-Or better, make it use AC_PATH_PROG(), like:
-
-	AC_PATH_PROG(FLTK_CONFIG,fltk-config)
-
-and then use $FLTK_CONFIG throughout the configure.ac, and pass
-ac_cv_path_FLTK_CONFIG=$(STAGING_DIR)/usr/bin/fltk-config
-
-This patch could then be submitted upstream.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
