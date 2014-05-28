@@ -1,36 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 28 May 2014 17:12:39 -0300
-Subject: [Buildroot] [PATCH] ncurses: enable parallel build
-Message-ID: <1401307959-19956-1-git-send-email-gustavo@zacarias.com.ar>
+From: Mike Zick <minimod@morethan.org>
+Date: Wed, 28 May 2014 15:17:03 -0500
+Subject: [Buildroot] [PATCH 1/1] qt5base: stop qt stripping installed
+ libraries
+In-Reply-To: <20140528195428.GH3510@free.fr>
+References: <1401306290-25105-1-git-send-email-will_wagner@carallon.com>
+ <20140528195428.GH3510@free.fr>
+Message-ID: <20140528151703.3da5afbd@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using a trick taken from gentoo enable parallel build when building for
-the target to reduce the build time for my test case from about 54s to
-32s on a dual-core laptop.
+On Wed, 28 May 2014 21:54:28 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ncurses/ncurses.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> > By default the 'make install' step for qt5base will strip all the
+> > binaries and libraries when they are stinalled to staging. This
+> > hinders debugging  
+> 
+> stinalled? :-)
+>
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 9805113..8e4b9e7 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -46,7 +46,9 @@ NCURSES_CONF_OPT += --without-debug
- endif
- 
- define NCURSES_BUILD_CMDS
--	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR)
-+	$(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) sources
-+	rm -rf $(@D)/misc/pc-files
-+	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR)
- endef
- 
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
--- 
-1.8.5.5
+Coffee cup in right hand.
+(LLrr ... rather than rrLL ...)
+
+Mike
