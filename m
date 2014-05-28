@@ -1,30 +1,40 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 28 May 2014 10:02:27 +0200
-Subject: [Buildroot] [PATCH v2] dropbear: fix missing directory with
-	systemd
-In-Reply-To: <1401263180-30574-1-git-send-email-maxime.hadjinlian@gmail.com>
- (Maxime Hadjinlian's message of "Wed, 28 May 2014 09:46:20 +0200")
-References: <1401263180-30574-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <87bnuicovg.fsf@dell.be.48ers.dk>
+Date: Wed, 28 May 2014 10:05:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-05-22
+In-Reply-To: <20140528090639.732647c8@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 28 May 2014 09:06:39 +0200")
+References: <20140523063008.8A64410106F@stock.ovh.net>
+ <CAHkwnC-hvNQMqCJ3iqL=EVEb8FvGNA9+ZU56OngtCe=1pAmf5w@mail.gmail.com>
+ <20140523190819.45a80027@free-electrons.com>
+ <53857DE2.6040509@mind.be> <20140528063024.GA3510@free.fr>
+ <20140528084311.05629fce@free-electrons.com>
+ <20140528064706.GC3510@free.fr>
+ <20140528090639.732647c8@free-electrons.com>
+Message-ID: <877g56coqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Maxime" == Maxime Hadjinlian <maxime.hadjinlian@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The current SysV startup script create a directory which is necessary
- > for dropbear to correctly work.
- > This creation is not done with systemd.
+Hi,
 
- > Instead of both init creating the directory, we add the creation of this
- > directory to the INSTALL_TARGET_CMDS to make sure it's present.
+ > Regarding using the wrapper for the internal toolchain, there's always
+ > the problem of where we put the real toolchain binaries vs. the wrapper
+ > binaries. For the external toolchain, it's simple: the real toolchain
+ > binaries are in $(HOST_DIR)/opt/ext-toolchain, and the wrappers in
+ > $(HOST_DIR)/usr/bin. But for the internal toolchain, we build/install
+ > all the toolchain components with --prefix=$(HOST_DIR)/usr.
 
- > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Conceptually we could do something like
 
-Committed with the TARGET_DIR reference fixed as pointed out by Thomas,
-thanks.
+ --prefix=$(HOST_DIR)/usr \
+ --bindir=$(HOST_DIR)/opt/raw-toolchain
+
+But I haven't tried it.
 
 -- 
 Bye, Peter Korsgaard
