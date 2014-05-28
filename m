@@ -1,38 +1,52 @@
-From: Rohit Kumar <rkthebest@gmail.com>
-Date: Wed, 28 May 2014 16:09:02 +0900
-Subject: [Buildroot] how to enable -mfloat-abi=hard in cross toolchain for
-	ARM1136
-Message-ID: <CABzetm3LyoP3JCsvMZOO1fbQBuaSLbahJJU81gSzLB2yeG_+Uw@mail.gmail.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 28 May 2014 09:46:20 +0200
+Subject: [Buildroot] [PATCH v2] dropbear: fix missing directory with systemd
+Message-ID: <1401263180-30574-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+The current SysV startup script create a directory which is necessary
+for dropbear to correctly work.
+This creation is not done with systemd.
 
-i created toolchain using buildroot for ARM1136
-attached is the configuration file.
-i want to cross compile the program with "-mfloat-abi=hard" option, i get
-following error
+Instead of both init creating the directory, we add the creation of this
+directory to the INSTALL_TARGET_CMDS to make sure it's present.
 
-/home/rohit/Desktop/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29:
-fatal error: gnu/stubs-hard.h: No such file or directory
-compilation terminated.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ package/dropbear/S50dropbear | 4 ----
+ package/dropbear/dropbear.mk | 1 +
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
-how to enable above in buildroot configuration?
-
-
-With Regards,
-
-Rohit Kumar
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140528/ed85a70d/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: buildroot_config
-Type: application/octet-stream
-Size: 47578 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140528/ed85a70d/attachment-0001.obj>
+diff --git a/package/dropbear/S50dropbear b/package/dropbear/S50dropbear
+index a343b9e..f36165a 100644
+--- a/package/dropbear/S50dropbear
++++ b/package/dropbear/S50dropbear
+@@ -10,10 +10,6 @@ start() {
+ 	DROPBEAR_ARGS="$DROPBEAR_ARGS -R"
+ 
+ 	echo -n "Starting dropbear sshd: "
+-	# Make sure dropbear directory exists
+-	if [ ! -d /etc/dropbear ] ; then
+-		mkdir -p /etc/dropbear
+-	fi
+ 	umask 077
+ 	start-stop-daemon -S -q -p /var/run/dropbear.pid \
+ 		--exec /usr/sbin/dropbear -- $DROPBEAR_ARGS
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 2ac6211..6f860e5 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -85,6 +85,7 @@ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+ 		ln -snf ../sbin/dropbear $(TARGET_DIR)/usr/bin/$$f ; \
+ 	done
++	mkdir -p ${TARGET_DIR}/etc/dropbear
+ endef
+ 
+ $(eval $(autotools-package))
+-- 
+2.0.0.rc0
