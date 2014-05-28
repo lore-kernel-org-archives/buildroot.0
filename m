@@ -1,57 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 28 May 2014 09:59:32 +0200
-Subject: [Buildroot] [git commit] package/exim: fix static linking
-Message-ID: <20140528080949.BC26F9CDFF@busybox.osuosl.org>
+From: Rohit Kumar <rkthebest@gmail.com>
+Date: Wed, 28 May 2014 17:32:25 +0900
+Subject: [Buildroot] how to enable -mfloat-abi=hard in cross toolchain
+	for ARM1136
+In-Reply-To: <20140528095100.719c69ac@free-electrons.com>
+References: <CABzetm3LyoP3JCsvMZOO1fbQBuaSLbahJJU81gSzLB2yeG_+Uw@mail.gmail.com>
+ <20140528095100.719c69ac@free-electrons.com>
+Message-ID: <CABzetm3NU_ZZrpU0+uw+iA8f2gcTRqVEVNP7023Vho=G4RFE7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf22cea53fa2af48bde3010673d3babee1ae6873
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Fixes http://autobuild.buildroot.net/results/0a3/0a392087878f80a70435981856455a30152b684d/
 
-When building static, we need to tell exim that it needs to link
-statically (obviously), and that it should link against pthreads.
+On Wed, May 28, 2014 at 4:51 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-Yet, exim is still not happy with that, as it still wants to build
-something (a version-related program) at install time, so we need
-to replicate the ld flags at install time.
+> Dear Rohit Kumar,
+>
+> On Wed, 28 May 2014 16:09:02 +0900, Rohit Kumar wrote:
+>
+> > i created toolchain using buildroot for ARM1136
+> > attached is the configuration file.
+> > i want to cross compile the program with "-mfloat-abi=hard" option, i
+> > get following error
+> >
+> >
+> /home/rohit/Desktop/buildroot/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/include/gnu/stubs.h:10:29:
+> > fatal error: gnu/stubs-hard.h: No such file or directory
+> > compilation terminated.
+> >
+> > how to enable above in buildroot configuration?
+>
+> Use EABIhf instead of EABI in the Buildroot configuration, under
+> "Target options".
+>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/exim/exim.mk |   11 +++++++++--
- 1 files changed, 9 insertions(+), 2 deletions(-)
+enabling it leads to errors in compiling
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index ca9c8a7..b780b85 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -49,15 +49,22 @@ define EXIM_CONFIGURE_CMDS
- 	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
- endef
- 
-+# exim needs a bit of love to build statically
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+EXIM_STATIC_FLAGS = LFLAGS="-pthread --static"
-+endif
-+
- # "The -j (parallel) flag must not be used with make"
- # (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
- define EXIM_BUILD_CMDS
--	build=br $(MAKE1) -C $(@D)
-+	build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
- endef
- 
-+# Need to replicate the LFLAGS in install, as exim still wants to build
-+# something when installing...
- define EXIM_INSTALL_TARGET_CMDS
- 	DESTDIR=$(TARGET_DIR) INSTALL_ARG="-no_chown -no_symlink" build=br \
--	  $(MAKE1) -C $(@D) install
-+	  $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS) install
- 	chmod u+s $(TARGET_DIR)/usr/sbin/exim
- endef
- 
+
+checking for .previous assembler directive... yes
+checking for .protected and .hidden assembler directive... yes
+checking whether __attribute__((visibility())) is supported... yes
+checking for broken __attribute__((visibility()))... no
+checking for broken __attribute__((alias()))... no
+checking whether to put _rtld_local into .sdata section... no
+checking for .preinit_array/.init_array/.fini_array support... no
+configure: error: Need linker with .init_array/.fini_array support.
+make: ***
+[/home/rohit/Desktop/buildroot/output/build/glibc-2.18/.stamp_configured]
+Error 1
+
+
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+With Regards,
+
+Rohit Kumar
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140528/4ad3e2f1/attachment.html>
