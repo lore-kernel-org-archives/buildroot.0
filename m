@@ -1,52 +1,69 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 28 May 2014 19:29:51 +0200
-Subject: [Buildroot] [PATCH v3 for-2014.05] manual: remove contributor list
- and add copyright
-Message-ID: <7ccc79e730c982d53177.1401298191@argentina>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 28 May 2014 21:07:07 +0200
+Subject: [Buildroot] [PATCH 06/14] pkg-cmake.mk: cosmetic changes in the
+ generated toolchainfile.cmake file
+In-Reply-To: <20140424034738.GB22908@tarshish>
+References: <1398293313-17580-1-git-send-email-s.martin49@gmail.com>
+ <1398293313-17580-7-git-send-email-s.martin49@gmail.com>
+ <20140424034738.GB22908@tarshish>
+Message-ID: <CAHXCMMJEHPqiSoFxnmX=oTOwgpBOHdnLKcMtan5zuyefSDFeHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As discussed on the mailing list [1], remove the limited explicit list of
-contributors in favor of the general mention of 'The Buildroot developers'.
-Add a copyright statement.
-Move the generation info to the front.
+Baruch, all,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2014-May/097589.html
+On Thu, Apr 24, 2014 at 5:47 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Samuel,
+>
+> On Thu, Apr 24, 2014 at 12:48:25AM +0200, Samuel Martin wrote:
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>>
+>> ---
+>> changes v1 -> v2:
+>> - new patch
+>> ---
+>>  package/pkg-cmake.mk | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+>> index a032426..19f7843 100644
+>> --- a/package/pkg-cmake.mk
+>> +++ b/package/pkg-cmake.mk
+>> @@ -161,17 +161,25 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+>>  ################################################################################
+>>
+>>  define TOOLCHAINFILE_CMAKE
+>> +#
+>> +# Automatically generated file; DO NOT EDIT.
+>> +# CMake toolchain file for Buildroot
+>> +#
+>> +
+>>  string(REPLACE /usr/share/buildroot "" _HOST_DIR $${CMAKE_CURRENT_LIST_DIR})
+>> +
+>>  set(CMAKE_SYSTEM_NAME Linux)
+>>  set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} $(TARGET_CFLAGS)" CACHE STRING "Buildroot CFLAGS" FORCE)
+>>  set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} $(TARGET_CXXFLAGS)" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+>>  set(CMAKE_INSTALL_SO_NO_EXE 0)
+>> +
+>>  set(CMAKE_PROGRAM_PATH $${_HOST_DIR}/usr/bin)
+>>  set(CMAKE_FIND_ROOT_PATH $${_HOST_DIR}/$(STAGING_SUBDIR))
+>>  set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+>>  set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+>>  set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+>>  set(ENV{PKG_CONFIG_SYSROOT_DIR} $${_HOST_DIR}/$(STAGING_SUBDIR))
+>> +
+>>  # This toolchain file can be used both inside and outside Buildroot.
+>>  # * When used inside Buildroot, ccache support is explicitly driven using the
+>>  #   USE_CCACHE variable.
+>
+> Shouldn't this be squashed into patch #3?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Will do.
 
----
-v3: dammit, remove for real now, sorry.
-v2: remove accidental changes to manual.mk
+Regards,
 
- docs/manual/manual.txt |  11 +++++------
- 1 files changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -4,16 +4,15 @@
- = The Buildroot user manual
- :toc:
- 
--Buildroot usage and documentation by Thomas Petazzoni. Contributions
--from Karsten Kruse, Ned Ludd, Martin Herren and others.
-+Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
-+{localtime} from git revision {sys:git rev-parse --short HEAD}
- 
--The Buildroot manual is licensed under the GNU General Public License,
--version 2. Refer to file
-+The Buildroot manual is written by the Buildroot developers. +
-+It is licensed under the GNU General Public License, version 2. Refer to file
- http://git.buildroot.org/buildroot/tree/COPYING[COPYING] in the Buildroot
- sources for the full text of this license.
- 
--Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
--{localtime} from git revision {sys:git rev-parse --short HEAD}
-+Copyright (C) 2004-2014 The Buildroot developers
- 
- image::logo.png[]
- 
+-- 
+Samuel
