@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:35 +0200
-Subject: [Buildroot] [PATCH 12/30] mesa3d: Depend on xorg meta package
-	instead of xserver_xorg-server
+Date: Wed, 28 May 2014 13:08:36 +0200
+Subject: [Buildroot] [PATCH 13/30] mesa3d: add dependency xproto_presentproto
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <e13b6ed11d59b5a3f96c7bfca3f47f93ed332a21.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <40d72c079e536f0b6c53bbbacabeb34d07c6a70a.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +12,35 @@ To: buildroot@busybox.net
 
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-mesa3d does not depend on the xorg server as such, only on X libraries.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in | 22 +++++++++++-----------
- package/mesa3d/mesa3d.mk |  4 ++--
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ package/mesa3d/Config.in | 1 +
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 06f2bc3..b645712 100644
+index b645712..0bea798 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -3,13 +3,13 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
+@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
  	select BR2_PACKAGE_EXPAT
  	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
--	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -61,10 +61,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
--comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
-+comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
- 
--if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
-+if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
- 
- comment "DRI drivers"
- 
-@@ -91,7 +91,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	help
- 	  Legacy Radeon driver for R100 series GPUs.
- 
--endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
-+endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
- 
- if BR2_PACKAGE_MESA3D_DRIVER
- 
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 38bb3ca..d43476e 100644
+index d43476e..db5b55f 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -25,7 +25,7 @@ MESA3D_DEPENDENCIES = \
- 	host-xutil_makedepend \
- 	libdrm
- 
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_DEPENDENCIES += \
+@@ -30,6 +30,7 @@ MESA3D_DEPENDENCIES += \
  	xproto_xf86driproto \
  	xproto_dri2proto \
-@@ -100,7 +100,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEPENDENCIES += wayland
- MESA3D_EGL_PLATFORMS += wayland
- endif
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_EGL_PLATFORMS += x11
- endif
- MESA3D_CONF_OPT += \
+ 	xproto_glproto \
++	xproto_presentproto \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+ 	xlib_libXdamage \
 -- 
 1.8.3.2
