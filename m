@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 28 May 2014 13:08:41 +0200
-Subject: [Buildroot] [PATCH 18/30] libva-intel-driver: new package
+Date: Wed, 28 May 2014 13:08:43 +0200
+Subject: [Buildroot] [PATCH 20/30] libglu: new package
 In-Reply-To: <cover.1401274944.git.yann.morin.1998@free.fr>
 References: <cover.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <d66bbf9daa9b4422c6015a4506b6d2387a991e78.1401274944.git.yann.morin.1998@free.fr>
+Message-ID: <2bd14ca42a43cb609b85d87348444b780dabe98a.1401274944.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,83 +14,62 @@ From: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                |  1 +
- package/libva-intel-driver/Config.in             | 19 ++++++++++++++++
- package/libva-intel-driver/libva-intel-driver.mk | 29 ++++++++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 package/libva-intel-driver/Config.in
- create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ package/Config.in        |  1 +
+ package/libglu/Config.in | 10 ++++++++++
+ package/libglu/libglu.mk | 17 +++++++++++++++++
+ 3 files changed, 28 insertions(+)
+ create mode 100644 package/libglu/Config.in
+ create mode 100644 package/libglu/libglu.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e2499f7..4115002 100644
+index 4115002..b31e7a0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -600,6 +600,7 @@ source "package/libsvg-cairo/Config.in"
- source "package/libsvgtiny/Config.in"
- source "package/libungif/Config.in"
- source "package/libva/Config.in"
-+source "package/libva-intel-driver/Config.in"
- source "package/opencv/Config.in"
- source "package/opengl/Config.in"
- source "package/pango/Config.in"
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
+@@ -590,6 +590,7 @@ source "package/libexif/Config.in"
+ source "package/libgail/Config.in"
+ source "package/libgeotiff/Config.in"
+ source "package/libglade/Config.in"
++source "package/libglu/Config.in"
+ source "package/libgtk2/Config.in"
+ source "package/libpng/Config.in"
+ source "package/libqrencode/Config.in"
+diff --git a/package/libglu/Config.in b/package/libglu/Config.in
 new file mode 100644
-index 0000000..89a3264
+index 0000000..de8e1ef
 --- /dev/null
-+++ b/package/libva-intel-driver/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBVA_INTEL_DRIVER
-+	bool "libva-intel-driver"
-+	select BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
-+	depends on BR2_LARGEFILE # libdrm
++++ b/package/libglu/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_LIBGLU
++	bool "libglu"
++	depends on BR2_PACKAGE_HAS_LIBGL
 +	help
-+	  VA-API back-end driver for Intel graphics chips
++	  Mesa OpenGL Utility library
 +
-+	  https://01.org/linuxgraphics/community/vaapi
++	  http://cgit.freedesktop.org/mesa/glu/
 +
-+comment "libva intel driver needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
++comment "libglu needs an OpenGL backend"
++	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglu/libglu.mk b/package/libglu/libglu.mk
 new file mode 100644
-index 0000000..5ada9f1
+index 0000000..038d281
 --- /dev/null
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -0,0 +1,29 @@
++++ b/package/libglu/libglu.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# libva-intel-driver
++# libglu
 +#
 +################################################################################
 +
-+LIBVA_INTEL_DRIVER_VERSION = 1.3.1
-+LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
-+LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_LICENSE = MIT
-+LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
-+LIBVA_INTEL_DRIVER_AUTORECONF = YES
-+LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBVA_DEPENDENCIES += wayland
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
-+endif
++LIBGLU_VERSION = 9.0.0
++LIBGLU_SITE = http://cgit.freedesktop.org/mesa/glu/snapshot
++LIBGLU_SOURCE = glu-$(LIBGLU_VERSION).tar.gz
++LIBGLU_LICENSE = SGI-B-2.0
++LIBGLU_LICENSE_FILES = include/GL/glu.h
++LIBGLU_INSTALL_STAGING = YES
++# upstream does not distribute a autoconf?ed configure script
++LIBGLU_AUTORECONF = YES
++LIBGLU_DEPENDENCIES = libgl
 +
 +$(eval $(autotools-package))
 -- 
