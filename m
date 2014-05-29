@@ -1,10 +1,8 @@
 From: vomlehn at canopus-us.com <vomlehn@canopus-us.com>
-Date: Wed, 28 May 2014 22:24:13 -0700
-Subject: [Buildroot] [PATCH 2/3] Allow specification of values for --prefix
-	and --exec-prefix in autotools.
-In-Reply-To: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
-References: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
-Message-ID: <1401341054-16705-3-git-send-email-vomlehn@canopus-us.com>
+Date: Wed, 28 May 2014 22:24:11 -0700
+Subject: [Buildroot] [PATCH 0/3] Manage big root directory trees by breaking
+	them up.
+Message-ID: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +11,102 @@ To: buildroot@busybox.net
 
 From: David VomLehn <vomlehn@canopus-us.com>
 
-The --prefix and --exec-prefix arguments to autotools configuration files
-allow the installation location to be specified. This is particularly
-useful when a package must be located in another directory so that it
-can be split into a separate filesystem image.
+These patches are not as tightly coupled as the usually series of patches,
+but I think the pieces make more sense when viewed in the context of the
+whole patchset.  The problem to be solved is that Python is big and my root
+filesystem has to fit in a little flash device. So, I:
 
-Signed-off-by: David VomLehn <vomlehn@canopus-us.com>
----
- docs/manual/adding-packages-autotools.txt |    8 ++++++++
- package/pkg-autotools.mk                  |    7 ++++---
- 2 files changed, 12 insertions(+), 3 deletions(-)
+1.	Created the ability to break the target filesystem into multiple
+	filesystems,
+2.	Enhanced autotools so that I could specify the --prefix and
+	--exec-prefix values. This allowed me to install packages in
+	their own directory, which the above patch lets me split into a
+	filesystem I can store on a much bigger flash device, and
+3.	I modified the Python package so that the installation directory
+	is a configurable.
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index c7e797f..7cac94e 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -99,6 +99,14 @@ cases, typical packages will therefore only use a few of them.
- * +LIBFOO_CONF_OPT+, to specify additional configure
-   options to pass to the configure script. By default, empty.
- 
-+* +LIBFOO_CONF_PREFIX+, to specify the installation directory for
-+  architecture-independent files, i.e. the argument to --prefix.
-+  By default, /usr.
-+
-+* +LIBFOO_CONF_EXEC_PREFIX+, to specify the installation directory for
-+  architecture-dependent files, i.e. the argument to --exec-prefix.
-+  By default, the value given for +LIBFOO_CONF_PREFIX+.
-+
- * +LIBFOO_MAKE+, to specify an alternate +make+
-   command. This is typically useful when parallel make is enabled in
-   the configuration (using +BR2_JLEVEL+) but that this
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index a646612..5cb0f20 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -95,7 +95,8 @@ $(2)_AUTORECONF_OPT		?= $($(3)_AUTORECONF_OPT)
- $(2)_INSTALL_OPT                ?= install
- $(2)_INSTALL_STAGING_OPT	?= DESTDIR=$$(STAGING_DIR) install
- $(2)_INSTALL_TARGET_OPT		?= DESTDIR=$$(TARGET_DIR)  install
--
-+$(2)_CONF_PREFIX		?= /usr
-+$(2)_CONF_EXEC_PREFIX		?= $$($(2)_CONF_PREFIX)
- 
- #
- # Configure step. Only define it if not already defined by the package
-@@ -115,8 +116,8 @@ define $(2)_CONFIGURE_CMDS
- 		--target=$$(GNU_TARGET_NAME) \
- 		--host=$$(GNU_TARGET_NAME) \
- 		--build=$$(GNU_HOST_NAME) \
--		--prefix=/usr \
--		--exec-prefix=/usr \
-+		--prefix=$$($$(PKG)_CONF_PREFIX) \
-+		--exec-prefix=$$($$(PKG)_CONF_EXEC_PREFIX) \
- 		--sysconfdir=/etc \
- 		--program-prefix="" \
- 		--disable-gtk-doc \
+With these in place, I configure Python to be in /usr/local and make that
+a separate filesystem, which I can deploy in a nice big flash device. Problem
+solved.
+
+David VomLehn (3):
+  Add the capability to create sub-filesystems from the target
+    filesystem.
+  Allow specification of values for --prefix and --exec-prefix in
+    autotools.
+  Support installation of Python in a different directory.
+
+ Makefile                                  |    5 +-
+ docs/manual/adding-packages-autotools.txt |    8 ++
+ docs/manual/customize-rootfs.txt          |   74 ++++++++++
+ fs/Config.in                              |   25 ++++
+ fs/cloop/Config.in                        |   12 ++
+ fs/cloop/cloop-post.mk                    |   13 ++
+ fs/cloop/cloop-pre.mk                     |    7 +
+ fs/common.mk                              |  224 ++++++++++++++++++++++++++---
+ fs/cpio/Config.in                         |   12 ++
+ fs/cpio/cpio-post.mk                      |   42 ++++++
+ fs/cpio/cpio-pre.mk                       |    7 +
+ fs/cramfs/Config.in                       |   12 ++
+ fs/cramfs/cramfs-post.mk                  |   19 +++
+ fs/cramfs/cramfs-pre.mk                   |    7 +
+ fs/ext2/Config.in                         |   12 ++
+ fs/ext2/ext2-post.mk                      |   37 +++++
+ fs/ext2/ext2-pre.mk                       |    6 +
+ fs/initramfs/initramfs-post.mk            |   22 +++
+ fs/initramfs/initramfs-pre.mk             |    5 +
+ fs/iso9660/iso9660-post.mk                |   51 +++++++
+ fs/iso9660/iso9660-pre.mk                 |    9 ++
+ fs/jffs2/Config.in                        |   12 ++
+ fs/jffs2/jffs2-post.mk                    |   49 +++++++
+ fs/jffs2/jffs2-pre.mk                     |    7 +
+ fs/romfs/Config.in                        |   12 ++
+ fs/romfs/romfs-post.mk                    |   15 ++
+ fs/romfs/romfs-pre.mk                     |    7 +
+ fs/squashfs/Config.in                     |   12 ++
+ fs/squashfs/squashfs-post.mk              |   29 ++++
+ fs/squashfs/squashfs-pre.mk               |    7 +
+ fs/tar/Config.in                          |   12 ++
+ fs/tar/tar-post.mk                        |   13 ++
+ fs/tar/tar-pre.mk                         |    7 +
+ fs/ubifs/Config.in                        |   12 ++
+ fs/ubifs/ubi-post.mk                      |   30 ++++
+ fs/ubifs/ubi-pre.mk                       |    7 +
+ fs/ubifs/ubifs-post.mk                    |   27 ++++
+ fs/ubifs/ubifs-pre.mk                     |    7 +
+ fs/yaffs2/Config.in                       |   12 ++
+ fs/yaffs2/yaffs-post.mk                   |   13 ++
+ fs/yaffs2/yaffs-pre.mk                    |    7 +
+ package/pkg-autotools.mk                  |    7 +-
+ package/python/Config.in                  |    7 +
+ package/python/python.mk                  |   26 ++--
+ 44 files changed, 911 insertions(+), 35 deletions(-)
+ create mode 100644 fs/cloop/cloop-post.mk
+ create mode 100644 fs/cloop/cloop-pre.mk
+ create mode 100644 fs/cpio/cpio-post.mk
+ create mode 100644 fs/cpio/cpio-pre.mk
+ create mode 100644 fs/cramfs/cramfs-post.mk
+ create mode 100644 fs/cramfs/cramfs-pre.mk
+ create mode 100644 fs/ext2/ext2-post.mk
+ create mode 100644 fs/ext2/ext2-pre.mk
+ create mode 100644 fs/initramfs/initramfs-post.mk
+ create mode 100644 fs/initramfs/initramfs-pre.mk
+ create mode 100644 fs/iso9660/iso9660-post.mk
+ create mode 100644 fs/iso9660/iso9660-pre.mk
+ create mode 100644 fs/jffs2/jffs2-post.mk
+ create mode 100644 fs/jffs2/jffs2-pre.mk
+ create mode 100644 fs/romfs/romfs-post.mk
+ create mode 100644 fs/romfs/romfs-pre.mk
+ create mode 100644 fs/squashfs/squashfs-post.mk
+ create mode 100644 fs/squashfs/squashfs-pre.mk
+ create mode 100644 fs/tar/tar-post.mk
+ create mode 100644 fs/tar/tar-pre.mk
+ create mode 100644 fs/ubifs/ubi-post.mk
+ create mode 100644 fs/ubifs/ubi-pre.mk
+ create mode 100644 fs/ubifs/ubifs-post.mk
+ create mode 100644 fs/ubifs/ubifs-pre.mk
+ create mode 100644 fs/yaffs2/yaffs-post.mk
+ create mode 100644 fs/yaffs2/yaffs-pre.mk
+
 -- 
 1.7.9.5
