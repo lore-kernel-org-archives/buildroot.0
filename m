@@ -1,8 +1,10 @@
 From: vomlehn at canopus-us.com <vomlehn@canopus-us.com>
-Date: Wed, 28 May 2014 22:24:11 -0700
-Subject: [Buildroot] [PATCH 0/3] Manage big root directory trees by breaking
-	them up.
-Message-ID: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
+Date: Wed, 28 May 2014 22:24:14 -0700
+Subject: [Buildroot] [PATCH 3/3] Support installation of Python in a
+	different directory.
+In-Reply-To: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
+References: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
+Message-ID: <1401341054-16705-4-git-send-email-vomlehn@canopus-us.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,102 +13,103 @@ To: buildroot@busybox.net
 
 From: David VomLehn <vomlehn@canopus-us.com>
 
-These patches are not as tightly coupled as the usually series of patches,
-but I think the pieces make more sense when viewed in the context of the
-whole patchset.  The problem to be solved is that Python is big and my root
-filesystem has to fit in a little flash device. So, I:
+Python is both useful and large. This patch allows installation in a
+different directory, which can then be installed on its own device
+by packaging it as part of a separated filesystem.
 
-1.	Created the ability to break the target filesystem into multiple
-	filesystems,
-2.	Enhanced autotools so that I could specify the --prefix and
-	--exec-prefix values. This allowed me to install packages in
-	their own directory, which the above patch lets me split into a
-	filesystem I can store on a much bigger flash device, and
-3.	I modified the Python package so that the installation directory
-	is a configurable.
+Signed-off-by: David VomLehn <vomlehn@canopus-us.com>
+---
+ package/python/Config.in |    7 +++++++
+ package/python/python.mk |   26 ++++++++++++++++----------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-With these in place, I configure Python to be in /usr/local and make that
-a separate filesystem, which I can deploy in a nice big flash device. Problem
-solved.
-
-David VomLehn (3):
-  Add the capability to create sub-filesystems from the target
-    filesystem.
-  Allow specification of values for --prefix and --exec-prefix in
-    autotools.
-  Support installation of Python in a different directory.
-
- Makefile                                  |    5 +-
- docs/manual/adding-packages-autotools.txt |    8 ++
- docs/manual/customize-rootfs.txt          |   74 ++++++++++
- fs/Config.in                              |   25 ++++
- fs/cloop/Config.in                        |   12 ++
- fs/cloop/cloop-post.mk                    |   13 ++
- fs/cloop/cloop-pre.mk                     |    7 +
- fs/common.mk                              |  224 ++++++++++++++++++++++++++---
- fs/cpio/Config.in                         |   12 ++
- fs/cpio/cpio-post.mk                      |   42 ++++++
- fs/cpio/cpio-pre.mk                       |    7 +
- fs/cramfs/Config.in                       |   12 ++
- fs/cramfs/cramfs-post.mk                  |   19 +++
- fs/cramfs/cramfs-pre.mk                   |    7 +
- fs/ext2/Config.in                         |   12 ++
- fs/ext2/ext2-post.mk                      |   37 +++++
- fs/ext2/ext2-pre.mk                       |    6 +
- fs/initramfs/initramfs-post.mk            |   22 +++
- fs/initramfs/initramfs-pre.mk             |    5 +
- fs/iso9660/iso9660-post.mk                |   51 +++++++
- fs/iso9660/iso9660-pre.mk                 |    9 ++
- fs/jffs2/Config.in                        |   12 ++
- fs/jffs2/jffs2-post.mk                    |   49 +++++++
- fs/jffs2/jffs2-pre.mk                     |    7 +
- fs/romfs/Config.in                        |   12 ++
- fs/romfs/romfs-post.mk                    |   15 ++
- fs/romfs/romfs-pre.mk                     |    7 +
- fs/squashfs/Config.in                     |   12 ++
- fs/squashfs/squashfs-post.mk              |   29 ++++
- fs/squashfs/squashfs-pre.mk               |    7 +
- fs/tar/Config.in                          |   12 ++
- fs/tar/tar-post.mk                        |   13 ++
- fs/tar/tar-pre.mk                         |    7 +
- fs/ubifs/Config.in                        |   12 ++
- fs/ubifs/ubi-post.mk                      |   30 ++++
- fs/ubifs/ubi-pre.mk                       |    7 +
- fs/ubifs/ubifs-post.mk                    |   27 ++++
- fs/ubifs/ubifs-pre.mk                     |    7 +
- fs/yaffs2/Config.in                       |   12 ++
- fs/yaffs2/yaffs-post.mk                   |   13 ++
- fs/yaffs2/yaffs-pre.mk                    |    7 +
- package/pkg-autotools.mk                  |    7 +-
- package/python/Config.in                  |    7 +
- package/python/python.mk                  |   26 ++--
- 44 files changed, 911 insertions(+), 35 deletions(-)
- create mode 100644 fs/cloop/cloop-post.mk
- create mode 100644 fs/cloop/cloop-pre.mk
- create mode 100644 fs/cpio/cpio-post.mk
- create mode 100644 fs/cpio/cpio-pre.mk
- create mode 100644 fs/cramfs/cramfs-post.mk
- create mode 100644 fs/cramfs/cramfs-pre.mk
- create mode 100644 fs/ext2/ext2-post.mk
- create mode 100644 fs/ext2/ext2-pre.mk
- create mode 100644 fs/initramfs/initramfs-post.mk
- create mode 100644 fs/initramfs/initramfs-pre.mk
- create mode 100644 fs/iso9660/iso9660-post.mk
- create mode 100644 fs/iso9660/iso9660-pre.mk
- create mode 100644 fs/jffs2/jffs2-post.mk
- create mode 100644 fs/jffs2/jffs2-pre.mk
- create mode 100644 fs/romfs/romfs-post.mk
- create mode 100644 fs/romfs/romfs-pre.mk
- create mode 100644 fs/squashfs/squashfs-post.mk
- create mode 100644 fs/squashfs/squashfs-pre.mk
- create mode 100644 fs/tar/tar-post.mk
- create mode 100644 fs/tar/tar-pre.mk
- create mode 100644 fs/ubifs/ubi-post.mk
- create mode 100644 fs/ubifs/ubi-pre.mk
- create mode 100644 fs/ubifs/ubifs-post.mk
- create mode 100644 fs/ubifs/ubifs-pre.mk
- create mode 100644 fs/yaffs2/yaffs-post.mk
- create mode 100644 fs/yaffs2/yaffs-pre.mk
-
+diff --git a/package/python/Config.in b/package/python/Config.in
+index a0c78c6..58666e7 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -15,6 +15,13 @@ comment "python needs a toolchain w/ wchar"
+ 
+ if BR2_PACKAGE_PYTHON
+ 
++config BR2_PACKAGE_PYTHON_PREFIX
++	string "Directory for generated files (executables, libraries, etc.)"
++	default "/usr"
++	help
++	  Python is big! Installing Python in a different directory allows
++	  it to be packaged as a separate filesystem.
++
+ choice
+ 	prompt "python module format to install"
+ 	default BR2_PACKAGE_PYTHON_PYC_ONLY
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 8a2ba65..9e4843d 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -11,6 +11,9 @@ PYTHON_SITE          = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE       = Python software foundation license v2, others
+ PYTHON_LICENSE_FILES = LICENSE
+ 
++# Relocate to the desired location
++PYTHON_CONF_PREFIX   = $(BR2_PACKAGE_PYTHON_PREFIX)
++
+ # Python needs itself to be built, so in order to cross-compile
+ # Python, we need to build a host Python first. This host Python is
+ # also installed in $(HOST_DIR), as it is needed when cross-compiling
+@@ -153,12 +156,12 @@ PYTHON_POST_PATCH_HOOKS += PYTHON_TOUCH_GRAMMAR_FILES
+ # idle & smtpd.py have bad shebangs and are mostly samples
+ #
+ define PYTHON_REMOVE_USELESS_FILES
+-	rm -f $(TARGET_DIR)/usr/bin/idle
+-	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR)-config
+-	rm -f $(TARGET_DIR)/usr/bin/python2-config
+-	rm -f $(TARGET_DIR)/usr/bin/python-config
+-	rm -f $(TARGET_DIR)/usr/bin/smtpd.py
+-	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
++	rm -f $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin/idle
++	rm -f $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin/python$(PYTHON_VERSION_MAJOR)-config
++	rm -f $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin/python2-config
++	rm -f $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin/python-config
++	rm -f $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin/smtpd.py
++	for i in `find $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/lib/python$(PYTHON_VERSION_MAJOR)/config/ \
+ 		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
+ 		rm -f $$i ; \
+ 	done
+@@ -170,21 +173,24 @@ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_REMOVE_USELESS_FILES
+ # Make sure libpython gets stripped out on target
+ #
+ define PYTHON_ENSURE_LIBPYTHON_STRIPPED
+-	chmod u+w $(TARGET_DIR)/usr/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
++	mkdir -p $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/lib
++	chmod u+w $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/lib/libpython$(PYTHON_VERSION_MAJOR)*.so
+ endef
+ 
+ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_ENSURE_LIBPYTHON_STRIPPED
+ 
+ # Always install the python symlink in the target tree
+ define PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
+-	ln -sf python2 $(TARGET_DIR)/usr/bin/python
++	mkdir -p $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin
++	ln -sf python2 $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin/python
+ endef
+ 
+ PYTHON_POST_INSTALL_TARGET_HOOKS += PYTHON_INSTALL_TARGET_PYTHON_SYMLINK
+ 
+ # Always install the python-config symlink in the staging tree
+ define PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
+-	ln -sf python2-config $(STAGING_DIR)/usr/bin/python-config
++	mkdir -p $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/bin
++	ln -sf python2-config $(STAGING_DIR)$(PYTHON_CONF_PREFIX)/bin/python-config
+ endef
+ 
+ PYTHON_POST_INSTALL_STAGING_HOOKS += PYTHON_INSTALL_STAGING_PYTHON_CONFIG_SYMLINK
+@@ -204,7 +210,7 @@ HOST_PYTHON_POST_INSTALL_HOOKS += HOST_PYTHON_INSTALL_PYTHON_SYMLINK
+ endif
+ 
+ # Provided to other packages
+-PYTHON_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
++PYTHON_PATH = $(TARGET_DIR)$(PYTHON_CONF_PREFIX)/lib/python$(PYTHON_VERSION_MAJOR)/sysconfigdata/:$(TARGET_DIR)$(PYTHON_CONF_PREFIX)/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 1.7.9.5
