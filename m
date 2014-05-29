@@ -1,35 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 May 2014 13:20:36 +0200
-Subject: [Buildroot] [PATCH 3/3] gettext: optimize build time
-In-Reply-To: <20140529105623.GN20069@tarshish>
-References: <1401360028-10423-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1401360028-10423-4-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140529105623.GN20069@tarshish>
-Message-ID: <20140529132036.3b24cc80@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 29 May 2014 14:26:33 +0200
+Subject: [Buildroot] [PATCH 2/2] package/webkit: Broken on raspberry pi
+In-Reply-To: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401366393-5815-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Linking libwebkitgtk-1.0.so fails
 
-On Thu, 29 May 2014 13:56:23 +0300, Baruch Siach wrote:
+./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::GLContext()'
+./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::sharedX11Display()'
+./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::~GLContext()'
+./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::makeContextCurrent()'
 
-> > Thanks to these changes, the build time of gettext goes from 1 minutes
-> > and 37 seconds to just 24 seconds, and the build of host-gettext goes
-> > from 2 minutes and 18 seconds to 1 minute and 13 seconds.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  .../gettext-03-option-to-disable-tools.patch       | 42 ----------------------
-> 
-> Why not remove --disable-tools from GETTEXT_CONF_OPT then?
+This link error occurred after fixing the configure problem
+http://autobuild.buildroot.net/results/bc0/bc0f9114f9dacf68a510f1e01f2dc3661c34f536/
 
-Indeed, thanks for noticing. I'll fix that up in v2.
+webkit-1.x apparently is missing support for raspberry pi.
 
-Thomas
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/webkit/Config.in |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index c86eb94..95c621d 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
+ 		BR2_sh || BR2_sparc || BR2_x86_64
+ 	depends on BR2_USE_MMU # libgail -> pango -> libglib2
++	depends on !BR2_PACKAGE_RPI_USERLAND
+ 
+ # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
