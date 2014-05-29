@@ -1,35 +1,34 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 29 May 2014 06:18:53 +0300
-Subject: [Buildroot] [PATCH] libfribidi: depend on host-pkgconf
-Message-ID: <e29e05429fd22afb4a69057e36d7e26402845764.1401333533.git.baruch@tkos.co.il>
+Date: Thu, 29 May 2014 06:25:10 +0300
+Subject: [Buildroot] python 2 or 3
+In-Reply-To: <20140528194852.fe13e0e104246a21d4742916@lavabit.com>
+References: <20140528194852.fe13e0e104246a21d4742916@lavabit.com>
+Message-ID: <20140529032510.GK20069@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libfribidi needs macros from pkgconf to generate its configure script. Since
-commit 5693f236a2a0 (libfribidi: bump version) we AUTORECONF, so host-pkgconf
-is also needed.
+Hi Richard,
 
-Fixes:
-http://autobuild.buildroot.net/results/5d7/5d76a8333fb05e903460ad51dc0737c18431d033/
+On Wed, May 28, 2014 at 07:48:52PM -0700, rh_ wrote:
+> python won't build, I am trying to build with -static.
+> Should I abandon any hope of making this work?
+> I am building for ARM.
+> 
+> Fails on "Multiple definitions of setreuid" and friends.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libfribidi/libfribidi.mk | 1 +
- 1 file changed, 1 insertion(+)
+Please post your .config file. This would enable us to diagnose the problem 
+you see.
 
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index c9130fe48580..32f414e911a0 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -12,5 +12,6 @@ LIBFRIBIDI_LICENSE_FILES = COPYING
- LIBFRIBIDI_INSTALL_STAGING = YES
- # BR's libtool patch doesn't apply
- LIBFRIBIDI_AUTORECONF = YES
-+LIBFRIBIDI_DEPENDENCIES = host-pkgconf
- 
- $(eval $(autotools-package))
+> Or is this a busybox problem?
+
+Most likely not.
+
+baruch
+
 -- 
-2.0.0.rc2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
