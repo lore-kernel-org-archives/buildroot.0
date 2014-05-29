@@ -1,30 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 May 2014 09:23:59 +0200
-Subject: [Buildroot] python 2 or 3
-In-Reply-To: <20140528194852.fe13e0e104246a21d4742916@lavabit.com> (rh's
- message of "Wed, 28 May 2014 19:48:52 -0700")
-References: <20140528194852.fe13e0e104246a21d4742916@lavabit.com>
-Message-ID: <87r43d9hf4.fsf@dell.be.48ers.dk>
+From: will_wagner at carallon.com <will_wagner@carallon.com>
+Date: Thu, 29 May 2014 08:31:57 +0100
+Subject: [Buildroot] [PATCH v2 1/1] qt5base: stop qt stripping installed
+	libraries
+Message-ID: <1401348717-16224-1-git-send-email-will_wagner@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "rh" == rh  <richard_hubbe11@lavabit.com> writes:
+From: Will Wagner <will_wagner@carallon.com>
 
- > python won't build, I am trying to build with -static.
- > Should I abandon any hope of making this work?
- > I am building for ARM.
+By default the 'make install' step for qt5base will strip all the binaries
+and libraries when they are installed to staging. This hinders debugging
+as the libraries in staging dir have been stripped and is unnecessary
+as buildroot will strip all files on the target
 
- > Fails on "Multiple definitions of setreuid" and friends.
+Signed-off-by: Will Wagner <will_wagner@carallon.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Changes v1 ->v2
+  - fix spelling in commit log
+  - add review by Yann
+  
+ .../qt5/qt5base/qt5base-0002-mkspecs-files.patch   |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-It sounds like this issue:
-
-http://autobuild.buildroot.net/results/fd2/fd295b2f324dc2649d95796cc37262aacad3fb4f/build-end.log
-
-I haven't investigated it yet. Do you really want to build a statically
-linked python?
-
+diff --git a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+index 06436b4..6283bbe 100644
+--- a/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
++++ b/package/qt5/qt5base/qt5base-0002-mkspecs-files.patch
+@@ -14,13 +14,14 @@ Index: b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+ ===================================================================
+ --- /dev/null
+ +++ b/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-@@ -0,0 +1,11 @@
++@@ -0,0 +1,12 @@
+ +include(../common/linux_device_pre.conf)
+ +
+ +#modifications to gcc-base.conf
+ +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+ +QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+ +QMAKE_CXXFLAGS_RELEASE += -O3
+++CONFIG                 += nostrip
+ +
+ +QMAKE_LIBS             += -lrt -lpthread -ldl
+ +
 -- 
-Bye, Peter Korsgaard
+1.7.2.5
