@@ -1,107 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 29 May 2014 22:38:25 +0200
-Subject: [Buildroot] [PATCH 11/11 RFC] docs/manual: add the virtual packages
-	list
-In-Reply-To: <cover.1401395407.git.yann.morin.1998@free.fr>
-References: <cover.1401395407.git.yann.morin.1998@free.fr>
-Message-ID: <9c5df6459abdeee10721e353296cf776a5021f31.1401395407.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 29 May 2014 23:11:04 +0200
+Subject: [Buildroot] buildroot-2014.05-rc3 and spl file
+In-Reply-To: <20140529110206.70265c717a9884bea46c2f21@lavabit.com> (rh's
+ message of "Thu, 29 May 2014 11:02:06 -0700")
+References: <20140529082417.5475b95e34d3321dbc2d2aab@lavabit.com>
+ <20140529185752.6a53e895@free-electrons.com>
+ <20140529110206.70265c717a9884bea46c2f21@lavabit.com>
+Message-ID: <878upk9tp3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "rh" == rh  <richard_hubbe11@lavabit.com> writes:
 
-Add the list of virtual packages as an appendix to the manual.
+Hi,
 
-Also reference this list from appropriate locations elsewhere in
-the manual:
+ > The english language (and many others) is fraught with vagueries
+ > and ambiguities. It was by design. Lots of room for plausible
+ > deniability. Perhaps I should have said:
 
-  - in section 7.2.2. "Config.in file", after the existing explanations
-    on dependencies on target and toolchain options, a linux kernel, and
-    udev /dev management,
+ > Note, NB, the installer is incorrectly looking for the spl file in
+ > uboot-2014.04/
 
-  - in section 7.2.10. "Infrastructure for virtual packages", in the
-    provider Config.in and .mk explanations, to have the list of existing
-    symbols to select (in Config.in) and packages to provide (in .mk).
+ > I have this data point from my other buildroot work:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
+ > /buildroot-2013.08-rc3/output/build/uboot-2013.07/spl/u-boot-spl.bin
 
----
-Note: a pre-rendered version of the manual with these modifications is
-available at:
-    http://ymorin.is-a-geek.org/download/tmp/buildroot/manual/manual.html
----
- docs/manual/adding-packages-directory.txt | 10 ++++++++++
- docs/manual/adding-packages-virtual.txt   |  6 ++++++
- docs/manual/appendix.txt                  |  8 ++++++++
- 3 files changed, 24 insertions(+)
+The question is if u-boot-spl.bin has ever been the right value for
+you. Looking at u-boot history, it has always outputted to
+spl/u-boot-spl.bin since the generic spl support got added for 2012.10.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 3cf3afa..daa0eca 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -298,6 +298,16 @@ management, use this format:
- foo needs udev /dev management and a toolchain w/ featA, featB, featC
- --------------------------
- 
-+==== Dependencies on features provided by virtual packages
-+
-+Some features can be provided by more than one package, such as the
-+openGL libraries.
-+
-+See xref:virtual-package-tutorial[] for more on the virtual packages.
-+
-+See xref:virtual-package-list[] for the symbols to depend on if your package
-+depends on a feature provided by a virtual package.
-+
- === The +.mk+ file
- 
- [[adding-packages-mk]]
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-index 0cbe753..34563f5 100644
---- a/docs/manual/adding-packages-virtual.txt
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -83,6 +83,9 @@ On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
- set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
- provider, but only if it is selected.
- 
-+See xref:virtual-package-list[] for the symbols to select if you implement
-+a new provider for an existing virtual package.
-+
- ==== Provider's +.mk+ file
- 
- The +.mk+ file should also declare an additional variable
-@@ -96,6 +99,9 @@ packages it is an implementation of:
- Of course, do not forget to add the proper build and runtime dependencies for
- this package!
- 
-+See xref:virtual-package-list[] for the names of virtual packages to provide
-+if you implement a new provider for an existing virtual package.
-+
- ==== Notes on depending on a virtual package
- 
- When adding a package that requires a certain +FEATURE+ provided by a virtual
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index 35328c6..3f95551 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -14,6 +14,14 @@ include::makeusers-syntax.txt[]
- 
- include::package-list.txt[]
- 
-+[[virtual-package-list]]
-+== List of virtual packages
-+
-+These are the virtual packages known to +Buildroot+, with the
-+corresponding symbols and providers.
-+
-+include::virtual-package-list.txt[]
-+
- [[host-package-list]]
- == List of host utilities available in Buildroot
- 
+The Buildroot uboot/spl option got added early 2012, and the default
+setting hasn't changed since then. Probably the spl support got reworked
+into spl/ before it got upstream.
+
+I just did a quick test with out beaglebone defconfig, and u-boot
+2013.10 / 2014.01 / 2014.04 all behave in the same way:
+
+/home/peko/source/buildroot/output/host/usr/bin/arm-linux-gnueabihf-objcopy
+ --gap-fill=0xff -O binary
+ /home/peko/source/buildroot/output/build/uboot-2013.10/spl/u-boot-spl
+ /home/peko/source/buildroot/output/build/uboot-2013.10/spl/u-boot-spl.bin
+
+/home/peko/source/buildroot/output/build/uboot-2013.10/tools/mkimage -T omapimage
+ -a 0x402F0400
+ -d /home/peko/source/buildroot/output/build/uboot-2013.10/spl/u-boot-spl.bin
+ /home/peko/source/buildroot/output/build/uboot-2013.10/MLO
+
+
+It probably does make sense to change the default spl location to
+spl/u-boot-spl.bin, so I'll go and do that now.
+
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
