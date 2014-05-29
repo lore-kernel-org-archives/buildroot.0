@@ -1,43 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 29 May 2014 14:26:33 +0200
-Subject: [Buildroot] [PATCH 2/2] package/webkit: Broken on raspberry pi
+Date: Thu, 29 May 2014 14:26:32 +0200
+Subject: [Buildroot] [PATCH 1/2] package/webkit: Fix detection of egl
+	headers provided by rpi-userland
 In-Reply-To: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1401366393-5815-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1401366393-5815-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Linking libwebkitgtk-1.0.so fails
+quote from webkit/config.log:
+/home/br2/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/interface/vcos/vcos_types.h:38:33:
+fatal error: vcos_platform_types.h: No such file or directory
 
-./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::GLContext()'
-./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::sharedX11Display()'
-./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::~GLContext()'
-./.libs/libwebkitgtk-1.0.so: undefined reference to `WebCore::GLContext::makeContextCurrent()'
+Package rpi-userland provides this header file, but in a non-default directory,
+therefore use pkg-config to add the appropriate flags.
 
-This link error occurred after fixing the configure problem
+Fixes
 http://autobuild.buildroot.net/results/bc0/bc0f9114f9dacf68a510f1e01f2dc3661c34f536/
-
-webkit-1.x apparently is missing support for raspberry pi.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/webkit/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ package/webkit/webkit.mk |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index c86eb94..95c621d 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	default y if BR2_i386 || BR2_mips || BR2_mipsel || \
- 		BR2_sh || BR2_sparc || BR2_x86_64
- 	depends on BR2_USE_MMU # libgail -> pango -> libglib2
-+	depends on !BR2_PACKAGE_RPI_USERLAND
+diff --git a/package/webkit/webkit.mk b/package/webkit/webkit.mk
+index 6b04ccd..1f40736 100644
+--- a/package/webkit/webkit.mk
++++ b/package/webkit/webkit.mk
+@@ -35,8 +35,9 @@ WEBKIT_PRE_CONFIGURE_HOOKS += DISABLE_INDEXED_DATABASE
+ # Give explicit path to icu-config, and silence gazillions of warnings
+ # with recent gcc versions.
+ WEBKIT_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config \
+-	CFLAGS="$(TARGET_CFLAGS) -Wno-cast-align -Wno-sign-compare" \
+-	CXXFLAGS="$(TARGET_CXXFLAGS) -Wno-cast-align -Wno-sign-compare" \
++	CFLAGS="$(TARGET_CFLAGS) $(WEBKIT_EGLFLAGS) -Wno-cast-align -Wno-sign-compare" \
++	CPPFLAGS="$(TARGET_CPPFLAGS) $(WEBKIT_EGLFLAGS)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) $(WEBKIT_EGLFLAGS) -Wno-cast-align -Wno-sign-compare" \
+ 	AR_FLAGS="cru"
  
- # disabled on powerpc due to bug https://bugs.webkit.org/show_bug.cgi?id=113638
- 
+ WEBKIT_CONF_OPT += \
+@@ -55,6 +56,7 @@ WEBKIT_DEPENDENCIES += xlib_libXt
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES),yy)
+ WEBKIT_CONF_OPT += --enable-gles2
+ WEBKIT_DEPENDENCIES += libegl libgles
++WEBKIT_EGLFLAGS = $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)
+ else
+ WEBKIT_CONF_OPT += --disable-gles2
+ endif
 -- 
 1.7.10.4
