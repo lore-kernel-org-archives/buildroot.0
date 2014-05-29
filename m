@@ -1,58 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 29 May 2014 16:07:27 +0000
-Subject: [Buildroot] [PATCH] libffi: back-port support for ARC
-In-Reply-To: <1401090915.3151.3.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1398970819-17551-1-git-send-email-abrodkin@synopsys.com>
- <1399634834.3396.15.camel@abrodkin-8560l>
- <1400078588.3178.6.camel@abrodkin-8560l>
- <20140514183757.111e792f@free-electrons.com>
- <1400581768.4364.14.camel@abrodkin-8560l>
- <1401090915.3151.3.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <1401379646.27157.14.camel@abrodkin-8560l>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 May 2014 18:57:52 +0200
+Subject: [Buildroot] buildroot-2014.05-rc3 and spl file
+In-Reply-To: <20140529082417.5475b95e34d3321dbc2d2aab@lavabit.com>
+References: <20140529082417.5475b95e34d3321dbc2d2aab@lavabit.com>
+Message-ID: <20140529185752.6a53e895@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Dear rh_,
 
-On Mon, 2014-05-26 at 11:55 +0400, Alexey Brodkin wrote:
-> Dear Thomas,
+On Thu, 29 May 2014 08:24:17 -0700, rh_ wrote:
+
+> cp -dpf /buildroot-2014.05-rc3/output/build/uboot-2014.04/"u-boot-spl.bin" /buildroot-2014.05-rc3/output/images/
+> cp: cannot stat ?/buildroot-2014.05-rc3/output/build/uboot-2014.04/u-boot-spl.bin?: No such file or directory
+> make: *** [/buildroot-2014.05-rc3/output/build/uboot-2014.04/.stamp_images_installed] Error 1
 > 
-> On Tue, 2014-05-20 at 14:29 +0400, Alexey Brodkin wrote:
-> > Dear Thomas,
-> > 
-> > On Wed, 2014-05-14 at 18:37 +0200, Thomas Petazzoni wrote:
-> > > Dear Alexey Brodkin,
-> > > 
-> > > On Wed, 14 May 2014 14:43:08 +0000, Alexey Brodkin wrote:
-> > > 
-> > > > > I'm wondering if there're chances to get this one reviewed or applied if
-> > > > > there're no objections?
-> > > > 
-> > > > It's been 2 weeks since I sent this patch so I may assume nobody has any
-> > > > objections. If so is there a chance to get this one applied?
-> > > > 
-> > > > libffi is a prerequisite for libgtk, gstreamer etc so we definitely need
-> > > > it.
-> > > 
-> > > Sorry for the lack of feedback. Since -rc1 has been released, we won't
-> > > merge such a patch for 2014.05, which probably explains why Peter has
-> > > not answered.
-> > > 
-> > > I'll try to test build your patch soon, and give my Tested-by so that
-> > > Peter can merge it in the 'next' branch. If you don't have a Tested-by
-> > > from me by the end of the week, ping me again (you can ping me on IRC
-> > > as well).
-> > 
-> > This is a gentle reminder for you if you haven't yet tested this patch.
+> The file's in:
+> /buildroot-2014.05-rc3/output/build/uboot-2014.04/spl/"u-boot-spl.bin"
 > 
-> Could you please run a build test with this patch and if everything is
-> OK apply it to "next" branch?
+> Note the addition of the "spl" directory in uboot-2014.04.
 
-Since Thomas is not responding, may I ask you to test and apply the
-patch in question?
+Thanks for the report. Is the fact that the u-boot-spl.bin is generated
+in spl/ something new in U-Boot 2014.04 ? Something specific to a given
+board configuration ?
 
-Regards,
-Alexey
+We need to understand this in order to make a patch that will not break
+other situations.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
