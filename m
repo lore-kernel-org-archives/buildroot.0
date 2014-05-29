@@ -1,72 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 29 May 2014 09:47:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Fix race condition
-	when installing man pages
-Message-ID: <1401349625-9239-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 29 May 2014 09:54:57 +0200
+Subject: [Buildroot] [PATCH] audiofile: does not build with static-only
+In-Reply-To: <53860BA3.6080605@mind.be>
+References: <1400941494-29900-1-git-send-email-luca@lucaceresoli.net>
+ <20140524184541.47d3f8f9@free-electrons.com>
+ <5381278F.9040209@zacarias.com.ar>
+ <538259D0.4090008@lucaceresoli.net> <53860BA3.6080605@mind.be>
+Message-ID: <20140529095457.1913343a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reproduced the bug using BR2_JLEVEL=16
+Dear Arnout Vandecappelle,
 
-Fixes race condition by disabling parallel make in man/
+On Wed, 28 May 2014 18:15:31 +0200, Arnout Vandecappelle wrote:
 
-http://autobuild.buildroot.net/results/11e/11ece737078ca8da2fee4249432148675b4e630e/
-http://autobuild.buildroot.net/results/a95/a952932b832ee3296d6c225c7a9df408ca3eef9f/
+>  I think it's better if we start having release notes for these kinds of known
+> issues. This could actually be part of the CHANGES file, but then we should make
+> a habit of including updates to the CHANGES file when submitting patches. Or it
+> could be part of the documentation. Or of course a separate ReleaseNotes file.
+> For sure, it must be something that is easily googlable.
 
-While being at it, rename xserver_xorg-server-mips.patch.
+Like http://buildroot.org/downloads/manual/manual.html#_known_issues ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...ps.patch => xserver_xorg-server-0001-mips.patch} |    0
- .../xserver_xorg-server-0002-fix-man.patch          |   19 +++++++++++++++++++
- .../xserver_xorg-server/xserver_xorg-server.mk      |    1 +
- 3 files changed, 20 insertions(+)
- rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-mips.patch => xserver_xorg-server-0001-mips.patch} (100%)
- create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-0002-fix-man.patch
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-mips.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0001-mips.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/xserver_xorg-server-mips.patch
-rename to package/x11r7/xserver_xorg-server/xserver_xorg-server-0001-mips.patch
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-0002-fix-man.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0002-fix-man.patch
-new file mode 100644
-index 0000000..901e98a
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-0002-fix-man.patch
-@@ -0,0 +1,19 @@
-+Fix race condition when installing man page
-+
-+Fixes
-+http://autobuild.buildroot.net/results/11e/11ece737078ca8da2fee4249432148675b4e630e/
-+http://autobuild.buildroot.net/results/a95/a952932b832ee3296d6c225c7a9df408ca3eef9f/
-+
-+Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=79396
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr xorg-server-1.15.1.org/man/Makefile.am xorg-server-1.15.1/man/Makefile.am
-+--- xorg-server-1.15.1.org/man/Makefile.am	2014-03-22 06:37:53.000000000 +0100
-++++ xorg-server-1.15.1/man/Makefile.am	2014-05-29 09:27:48.808356591 +0200
-+@@ -4,3 +4,5 @@
-+ 
-+ include $(top_srcdir)/manpages.am
-+ appman_PRE = Xserver.man
-++
-++.NOTPARALLEL:
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index cae3ba0..9a998a2 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -9,6 +9,7 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
- XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
-+XSERVER_XORG_SERVER_AUTORECONF = YES
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
- XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
- XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
