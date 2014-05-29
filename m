@@ -1,30 +1,53 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 29 May 2014 14:26:31 +0200
-Subject: [Buildroot] [PATCH 0/2] package/webkit: Broken on rpi?
-Message-ID: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 29 May 2014 15:04:52 +0200
+Subject: [Buildroot] [PATCH 2/3] gettext: remove support for
+ gettext-tools on target
+In-Reply-To: <1401360028-10423-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401360028-10423-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401360028-10423-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAXf6LU=u7YjJ821h1fV2ioa7AMg_bHNXX8WnWe_vgHUSbrnLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Thu, May 29, 2014 at 12:40 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> This commit removes the BR2_PACKAGE_GETTEXT_TOOLS option, which could
+> be used to install gettext tools on the target. This is not needed,
+> because Buildroot is not designed to provide a full development
+> environment on the target, and gettext translation files should be
+> processed on the build machine, using the host gettext tools.
+>
+> Remove this option will allow to optimize the build time of gettext on
+> the target, by only building the gettext runtime libraries.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  Config.in.legacy           | 12 ++++++++++++
+>  package/gettext/Config.in  | 14 --------------
+>  package/gettext/gettext.mk |  4 ----
+>  3 files changed, 12 insertions(+), 18 deletions(-)
+>
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 00661db..10e495b 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -99,6 +99,18 @@ comment "----------------------------------------------------"
+>  endif
+>
+>  ###############################################################################
+> +comment "Legacy options removed in 2014.08"
+> +
+> +config BR2_PACKAGE_GETTEXT_TOOLS
+> +       bool "gettext-tools on target support removed"
 
-after fixing a configure problem (see patch 1/2) the build failed at the linking
-stage, so the real fix, afaics, is to disable webkit for rpi (patch 2/2).
-Patch 1/2 therefore is not really needed at all, but the rpi experts should have
-a closer look whether webkit could work on rpi despite the current problem.
+I would rewrite this as any of the following:
 
-Regards, Bernd
+support for gettext-tools on target has been removed
+gettext-tools target support has been removed
+gettext-tools target option has been removed
 
-
-Bernd Kuhls (2):
-  package/webkit: Fix detection of egl headers provided by rpi-userland
-  package/webkit: Broken on raspberry pi
-
- package/webkit/Config.in |    1 +
- package/webkit/webkit.mk |    6 ++++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
--- 
-1.7.10.4
+Best regards,
+Thomas
