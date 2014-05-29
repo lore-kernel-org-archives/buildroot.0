@@ -1,90 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 29 May 2014 11:13:26 +0200
-Subject: [Buildroot] Roku is Hiring Senior Software Engineers with Buildroot
-	experience
-Message-ID: <87ppix9ccp.fsf@dell.be.48ers.dk>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Thu, 29 May 2014 11:21:35 +0200
+Subject: [Buildroot] [PATCH 1/3] Add the capability to create
+	sub-filesystems from the target filesystem.
+In-Reply-To: <1401341054-16705-2-git-send-email-vomlehn@canopus-us.com>
+References: <1401341054-16705-1-git-send-email-vomlehn@canopus-us.com>
+ <1401341054-16705-2-git-send-email-vomlehn@canopus-us.com>
+Message-ID: <2385189.JHtluQLb2I@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-FYI,
+Hello David,
 
-Deeann Liu of Roku contacted me to ask if it would be OK to send a mail
-to the list about a Buildroot related job opening. We discussed it
-yesterday on IRC, and nobody disagreed as long as this doesn't start
-happening very often.
+On Wednesday 28 May 2014 22:24:12 vomlehn at canopus-us.com wrote:
+> For example, say that the the root filesystem has a set of files and
+> directories that are critical to being able to control, recover, and
+> install software on an embedded system. These are redundantly stored in a
+> small but reliable memory. The rest of the system is written in Python,
+> which is huge (too big to fit in the reliable memory) but not a critical
+> part of the system. It can, if necessary, be reloaded remotely, so it is
+> stored without redundancy, in NAND flash.
+> 
+> This patch allows these two pieces to be split up so that the reliable core
+> can be an initramfs filesystem (in cpio format) and a JFFS2 image can hold
+> the rest of the root filesystem. It supports an arbitrary division of the
+> root filesystem among one or more of the available filesystem formats.
 
-Looking at http://www.roku.com/opensource, they do use Buildroot (but
-unfortunately quite old versions, hopefully this person they are seeking
-can improve that).
+Did you check features of "genimage" tool? It looks like it do similar work. 
+Maybe it would be better to add missing features to genimage?
 
-Deeann had some issues mailing the list, so I'm forwarding it here:
-
-<snip>
-
-Open Source Software Engineer
-
-The Role and Responsibilities:
-
-Roku is seeking a qualified and versatile Open Source Software Engineer
-with the drive to succeed in a fast paced and dynamic environment. The
-candidate will be responsible for maintaining all open source software
-used in Roku?s firmware, upgrading packages when appropriate, migrating
-proprietary code that interfaces with open source software, applying
-security patches, interacting with the open source community, and
-evangelizing new open source features to the broader Roku engineering
-team.
-
-Experience/Qualifications:
-
-
-- 3+ years software engineering experience using a variety of open
-  source software
-
-- Experience with tools commonly used in open source Linux software
-  development, such as gcc, glibc, make, autoconf, git, subversion, etc.
-
-- Experience with embedded Linux environments and packages such as
-  buildroot and bionic is preferred
-
-- Comfort at all levels of the software stack, from applying kernel
-  patches all the way up to GUI libraries
-
-- Interest in and suitability for representing Roku to the open source
-  community
-
-- Excellent C/C++ programmer
-
-- BSCS or equivalent required
-
-We are also looking to build a team of Senior Software Engineers with
-systems, multimedia &/or security experience, as well as UI frameworks
-&/or apps development experience.
-
-Roku is the market leader in streaming entertainment devices for the TV
-& our products are revolutionary, innovative & fun (just like our folks
-here).  Located in Saratoga, CA, we offer generous compensation,
-benefits, pre-IPO stock options, as well as an opportunity to work &
-play with some brilliant folks! Join us?and be a part of the Roku
-revolution!
-
-If you're interested in hearing more, then please email me your resume &
-the best times to talk @ dmahoney at roku.com. Also check us out @
-http://www.roku.com/about/employment.
-
-If you're happy & not looking to make a career move, perhaps you know of
-someone who is a good fit? If your referral gets hired, then we will
-give you a free, Roku3! In any case, we should connect on LinkedIn. :-)
-
-Deeann Liu Mahoney
-
-Senior Technical Recruiter | dmahoney at roku.com | C: 408.761.0373
-
-Roku, Inc. 
-
-12980 Saratoga Ave., Suite D | Saratoga | CA 95070
+BR,
 
 -- 
-Bye, Peter Korsgaard
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
