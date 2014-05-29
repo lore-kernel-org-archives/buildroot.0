@@ -1,31 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 29 May 2014 23:20:00 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5base: stop qt stripping installed
-	libraries
-In-Reply-To: <1401348717-16224-1-git-send-email-will_wagner@carallon.com>
- (will wagner's message of "Thu, 29 May 2014 08:31:57 +0100")
-References: <1401348717-16224-1-git-send-email-will_wagner@carallon.com>
-Message-ID: <87r43c8epr.fsf@dell.be.48ers.dk>
+Date: Thu, 29 May 2014 23:21:28 +0200
+Subject: [Buildroot] [PATCH 1/1] manual: Fix BR2_GLOBAL_PATCH_DIR example
+In-Reply-To: <1401376172-27514-1-git-send-email-sebastien.roy@savoirfairelinux.com>
+ (Sebastien Roy's message of "Thu, 29 May 2014 11:09:32 -0400")
+References: <1401376172-27514-1-git-send-email-sebastien.roy@savoirfairelinux.com>
+Message-ID: <87mwe08enb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "will" == will wagner <will_wagner@carallon.com> writes:
+>>>>> "Sebastien" == Sebastien Roy <sebastien.roy@savoirfairelinux.com> writes:
 
- > From: Will Wagner <will_wagner@carallon.com>
- > By default the 'make install' step for qt5base will strip all the binaries
- > and libraries when they are installed to staging. This hinders debugging
- > as the libraries in staging dir have been stripped and is unnecessary
- > as buildroot will strip all files on the target
+ >     As discussed on irc, there is a missing part in the BR2_GLOBAL_PATCH_DIR
+ >     example compared to the ASCII figure under customize-packages section.
 
- > Signed-off-by: Will Wagner <will_wagner@carallon.com>
- > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- > Changes v1 ->v2
- >   - fix spelling in commit log
- >   - add review by Yann
+ > Signed-off-by: Sebastien Roy <sebastien.roy@savoirfairelinux.com>
 
 Committed, thanks.
 
