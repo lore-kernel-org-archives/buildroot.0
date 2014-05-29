@@ -1,34 +1,37 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 29 May 2014 06:25:10 +0300
-Subject: [Buildroot] python 2 or 3
-In-Reply-To: <20140528194852.fe13e0e104246a21d4742916@lavabit.com>
-References: <20140528194852.fe13e0e104246a21d4742916@lavabit.com>
-Message-ID: <20140529032510.GK20069@tarshish>
+Date: Thu, 29 May 2014 07:17:04 +0300
+Subject: [Buildroot] [PATCH] thrift: disable for ARC
+Message-ID: <e63eec000f13ac9865b58ab5efc736db87cb45d3.1401337024.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Richard,
+thrift uses the __sync_fetch_and_add() atomic primitive that is not available
+for ARC.
 
-On Wed, May 28, 2014 at 07:48:52PM -0700, rh_ wrote:
-> python won't build, I am trying to build with -static.
-> Should I abandon any hope of making this work?
-> I am building for ARM.
-> 
-> Fails on "Multiple definitions of setreuid" and friends.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/thrift/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Please post your .config file. This would enable us to diagnose the problem 
-you see.
-
-> Or is this a busybox problem?
-
-Most likely not.
-
-baruch
-
+diff --git a/package/thrift/Config.in b/package/thrift/Config.in
+index a7f3479982ed..ac998014bcc6 100644
+--- a/package/thrift/Config.in
++++ b/package/thrift/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_THRIFT
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_arc # atomic builtins
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_OPENSSL
+@@ -21,3 +22,4 @@ config BR2_PACKAGE_THRIFT
+ comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
+ 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_arc
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.0.0.rc2
