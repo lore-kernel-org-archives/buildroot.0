@@ -1,39 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 29 May 2014 18:57:52 +0200
-Subject: [Buildroot] buildroot-2014.05-rc3 and spl file
-In-Reply-To: <20140529082417.5475b95e34d3321dbc2d2aab@lavabit.com>
-References: <20140529082417.5475b95e34d3321dbc2d2aab@lavabit.com>
-Message-ID: <20140529185752.6a53e895@free-electrons.com>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 29 May 2014 17:03:14 +0000 (UTC)
+Subject: [Buildroot] python 2 or 3
+References: <20140528194852.fe13e0e104246a21d4742916@lavabit.com>
+ <87r43d9hf4.fsf@dell.be.48ers.dk>
+ <20140529081348.e67be25036aefa1f48864236@lavabit.com>
+Message-ID: <lm7p8h$gel$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear rh_,
+On 2014-05-29, rh_ <richard_hubbe11@lavabit.com> wrote:
+> On Thu, 29 May 2014 09:23:59 +0200 Peter Korsgaard <jacmet@uclibc.org> wrote:
+>
+>> I haven't investigated it yet. Do you really want to build a
+>> statically linked python?
+>
+> FWIW, I think I saw that link before I posted. I did intend to build
+> a statically linked python
 
-On Thu, 29 May 2014 08:24:17 -0700, rh_ wrote:
+We know.  The question is why do you want to build a _statically_
+linked python?  (As opposed to a dynamically linked one.)
 
-> cp -dpf /buildroot-2014.05-rc3/output/build/uboot-2014.04/"u-boot-spl.bin" /buildroot-2014.05-rc3/output/images/
-> cp: cannot stat ?/buildroot-2014.05-rc3/output/build/uboot-2014.04/u-boot-spl.bin?: No such file or directory
-> make: *** [/buildroot-2014.05-rc3/output/build/uboot-2014.04/.stamp_images_installed] Error 1
-> 
-> The file's in:
-> /buildroot-2014.05-rc3/output/build/uboot-2014.04/spl/"u-boot-spl.bin"
-> 
-> Note the addition of the "spl" directory in uboot-2014.04.
+> but have given up for now.
+>
+> I built a statically linked perl instead. I needed something that
+> didn't end with "sh" to write programs. I've been doing more python
+> than perl but perl will be fine.
 
-Thanks for the report. Is the fact that the u-boot-spl.bin is generated
-in spl/ something new in U-Boot 2014.04 ? Something specific to a given
-board configuration ?
+But why does it need to be statically linked?
 
-We need to understand this in order to make a patch that will not break
-other situations.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Grant Edwards               grant.b.edwards        Yow! I didn't order any
+                                  at               WOO-WOO ... Maybe a YUBBA
+                              gmail.com            ... But no WOO-WOO!
