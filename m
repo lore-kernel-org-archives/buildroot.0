@@ -1,36 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 May 2014 23:29:02 +0200
-Subject: [Buildroot] [git commit branch/next] package/elf2flt: hide when an
-	MMU is used
-Message-ID: <20140530212932.A34709CE4E@busybox.osuosl.org>
+From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
+Date: Fri, 30 May 2014 23:29:55 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: pkg-config should also set
+ parent include dir
+In-Reply-To: <8761kn7zw8.fsf@dell.be.48ers.dk>
+References: <1401462022-10744-1-git-send-email-syntheticpp@gmx.net>	<CAEBucnAiAtrF1uthDyuTPyS5TF8OQdSBchCLZOwRuLJ+ZP67wg@mail.gmail.com>	<5388A9DC.1010204@gmx.net>	<CAEBucnDa_EjmUu2buXEA16by0_Wck+sp-RF1Rajc8uSOswb_Zg@mail.gmail.com>	<20140530222718.5cb42dd5@free-electrons.com>	<5388ECDC.6050909@gmx.net>
+ <8761kn7zw8.fsf@dell.be.48ers.dk>
+Message-ID: <5388F853.1020406@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=36017b3d3acdbcfeb8c6e89f5bd71c379f5f5ecf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 30.05.2014 22:52, Peter Korsgaard wrote:
+>>>>>> "Peter" == Peter K?mmel <syntheticpp@gmx.net> writes:
+>
+> Hi,
+>
+>   >> Agreed, and therefore I'd like to understand in more details why the
+>   >> patch is needed. We typically don't commit things we don't understand
+>   >> why they are needed :)
+>
+>   > In short: anybody assumes "#include <GLES2/gl2.h>" works when the search
+>   > paths of pkg-config are used. But when pkg-config reports /usr/include/GLES2
+>   > gl2.h could not be found, because there is no /usr/include/GLES2/GLES2/gl2.h.
+>
+>   > Until now this doesn't pop up because by chance the directory GLES2
+>   > resides in /usr/include and this path is added by most by build systems.
+>   > But the cmake configure scripts of Qt5 test for "GLES2/gl2.h" only in the path
+>   > reported by pkg-config.
+>
+> But $SYSROOT/usr/include is the standard include path, so gcc
+> automatically looks there. What exactly doesn't work for you?
 
-elf2flt is specifically for cases where an MMU is not available.
-There is no point in building elf2flt when using an MMU.
+See my last mail with the cmake code.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/elf2flt/Config.in.host |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+Overall I think it is the best solution that pkg-config reports
+a path which in combination with the uppercase prefix in #include
+makes it possible to include an OpenGL header without being dependent
+on any implicit set include paths.
 
-diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
-index dad48d8..605ce20 100644
---- a/package/elf2flt/Config.in.host
-+++ b/package/elf2flt/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_ELF2FLT
- 	bool "Enable elf2flt support?"
- 	depends on BR2_arm || BR2_bfin || BR2_sh || BR2_sparc
-+	depends on !BR2_USE_MMU
- 	help
- 	  uCLinux uses a Binary Flat format commonly known as BFLT. It
- 	  is a relatively simple and lightweight executable format
+I don't know if Ubuntu is a reference here, but when you install gles2
+     sudo apt-get install libgles2-mesa-dev
+and have a look at the.pc file,
+     cat /usr/lib/x86_64-linux-gnu/pkgconfig/glesv2.pc
+(or gl.pc) you see, that there also the path to the dir containing GLES2 is set:
+
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${prefix}/lib/x86_64-linux-gnu
+includedir=${prefix}/include
+
+Name: glesv2
+Description: Mesa OpenGL ES 2.0 library
+Requires.private:
+Version: 9.0.3
+Libs: -L${libdir} -lGLESv2
+Libs.private: -lm -lpthread -ldl
+Cflags: -I${includedir}
+
+
+>
+> This is exactly the same as E.G. #include <sys/stat.h> for open(2).
+>
