@@ -1,48 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 30 May 2014 23:41:54 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: pkg-config should also set
-	parent include dir
-In-Reply-To: <5388F853.1020406@gmx.net> ("Peter =?utf-8?Q?K=C3=BCmmel=22's?=
- message of "Fri, 30 May 2014 23:29:55 +0200")
-References: <1401462022-10744-1-git-send-email-syntheticpp@gmx.net>
- <CAEBucnAiAtrF1uthDyuTPyS5TF8OQdSBchCLZOwRuLJ+ZP67wg@mail.gmail.com>
- <5388A9DC.1010204@gmx.net>
- <CAEBucnDa_EjmUu2buXEA16by0_Wck+sp-RF1Rajc8uSOswb_Zg@mail.gmail.com>
- <20140530222718.5cb42dd5@free-electrons.com>
- <5388ECDC.6050909@gmx.net> <8761kn7zw8.fsf@dell.be.48ers.dk>
- <5388F853.1020406@gmx.net>
-Message-ID: <87ha476j19.fsf@dell.be.48ers.dk>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Fri, 30 May 2014 14:18:26 -0700
+Subject: [Buildroot] new TI  kernel version for beaglebone black
+Message-ID: <5388F5A2.1080008@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter K?mmel <syntheticpp@gmx.net> writes:
+Hello All,
 
-Hi,
+I have a question that is probably not 100% buildroot related, but was 
+hoping to get some help. I am using buildroot to build a kernel and 
+rootFS for a beaglebone black. Buildroot is awesome and builds 
+everything fine. The board boots up and all packages work properly. 
+Unfortunately, USB seems to be badly broken. In the kernel I have USB 
+driver enabled and USB Announce New Devices turned on. Googling around I 
+find several people with the same problem, hotplug does not work at all, 
+and no device I have tried shows up in dmesg or lsusb on cold or warm 
+boot. A band aid is to use a powered USB hub (have not tried that). Some 
+guys on the beagleboard.org IRC say to try a newer kernel version (3.14 
+or >) because beaglebone USB is fixed in newer kernel versions. Current 
+buildroot beaglebone black kernel version is 3.12.10
 
- > I don't know if Ubuntu is a reference here, but when you install gles2
- >     sudo apt-get install libgles2-mesa-dev
- > and have a look at the.pc file,
- >     cat /usr/lib/x86_64-linux-gnu/pkgconfig/glesv2.pc
- > (or gl.pc) you see, that there also the path to the dir containing GLES2 is set:
+In buildroot I used make beaglebone_defconfig.
+Under the Kernel menu, Custom Git repository is selected.
+The git URL is https://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
+The custom repository version is 7f280334068b7c875ade51f8f3921ab311f0c824
+The def config is board/beaglebone/linux-3.12.config
 
- > prefix=/usr
- > exec_prefix=${prefix}
- > libdir=${prefix}/lib/x86_64-linux-gnu
- > includedir=${prefix}/include
+How was the custom repository number 
+(7f280334068b7c875ade51f8f3921ab311f0c824) derived? Looking on the TI 
+gitorious site, I see they are working on kernel 3.15. How can I make 
+buildroot use the newer version? How do I find the newer custom 
+repository version? I tried to find my answer with google, but I must 
+not be using the correct search term. Please excuse the newbish questions.
 
- > Name: glesv2
- > Description: Mesa OpenGL ES 2.0 library
- > Requires.private:
- > Version: 9.0.3
- > Libs: -L${libdir} -lGLESv2
- > Libs.private: -lm -lpthread -ldl
- > Cflags: -I${includedir}
-
-And what does pkg-config --cflags glesv2.pc show? pkg-config afaik
-strips -I<standard-include-dir> away.
+Thank you,
 
 -- 
-Bye, Peter Korsgaard
+Dan Pattison
+Ethertek Circuits
