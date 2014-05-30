@@ -1,36 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 May 2014 22:25:49 +0200
-Subject: [Buildroot] [PATCH] toolchain-buildroot: only allow the selection
-	of Musl for Microblaze BE
-Message-ID: <1401481549-23804-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 30 May 2014 22:27:18 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: pkg-config should also set
+ parent include dir
+In-Reply-To: <CAEBucnDa_EjmUu2buXEA16by0_Wck+sp-RF1Rajc8uSOswb_Zg@mail.gmail.com>
+References: <1401462022-10744-1-git-send-email-syntheticpp@gmx.net>
+ <CAEBucnAiAtrF1uthDyuTPyS5TF8OQdSBchCLZOwRuLJ+ZP67wg@mail.gmail.com>
+ <5388A9DC.1010204@gmx.net>
+ <CAEBucnDa_EjmUu2buXEA16by0_Wck+sp-RF1Rajc8uSOswb_Zg@mail.gmail.com>
+Message-ID: <20140530222718.5cb42dd5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Musl C library only supports Microblaze BE, not Microblaze LE, so
-this commit adjusts the dependencies of the toolchain-buildroot
-package to not allow the selection of Musl on Microblaze LE.
+Dear Spenser Gilliland,
 
-Cc: William Welch <bvwelch@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-buildroot/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 30 May 2014 14:57:19 -0500, Spenser Gilliland wrote:
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 216f9db..840668c 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -80,7 +80,7 @@ comment "(e)glibc only available with shared lib support"
- 
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl (experimental)"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblaze || \
-+	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazebe || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
- 	select BR2_TOOLCHAIN_USES_MUSL
- 	help
+> > Yes, Qt5's cmake files assume /usr/include not /usr/include/GLES2.
+> >
+> > I added -I${includedir} instead of removing only "GLES2" because then
+> nothing will break,
+> > and the other .pc file also sets both dirs.
+> > But it seems common practice is to not add the uppercase dir names in the
+> pkg-congig file.
+
+You should fix your e-mail client, as it very badly handles quotations.
+
+> This patch won't break anything.  But it would be nice if you could go back
+> and reverify this just to be sure.
+> 
+> My reasoning is that,  /usr/include is a default include dir which all
+> compilers should use automatically.   There should not be a need to
+> manually specify it.
+
+Agreed, and therefore I'd like to understand in more details why the
+patch is needed. We typically don't commit things we don't understand
+why they are needed :)
+
+Thanks,
+
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
