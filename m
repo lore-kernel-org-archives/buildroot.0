@@ -1,33 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 26 May 2014 14:25:11 +0200
-Subject: [Buildroot] [git commit] package/gdb: change default gdb from 7.5
-	to 7.6
-Message-ID: <20140601083246.05B359CE5B@busybox.osuosl.org>
+Date: Fri, 30 May 2014 23:12:05 +0200
+Subject: [Buildroot] [git commit] package/connman : enable build without
+	gnutls dependency
+Message-ID: <20140601083246.C4C0F9C779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=30bbfe9669d084b1d940454b28bd2042d44c5054
+commit: http://git.buildroot.net/buildroot/commit/?id=8b8174e714118a559d7cb196d89a8303c0122bf3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Cody P Schafer <cody@linux.vnet.ibm.com>
+- add new configuration option '--enable-wispr' (disabled by default)
+- move gnutls dependency to "wispr" config option
+
+[Peter: drop gnutls ref for wchar, tweak help text, simplify .mk]
+Signed-off-by: Heiko Abraham <abrahamh@web.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/connman/Config.in  |   17 +++++++++++++++--
+ package/connman/connman.mk |    6 ++++--
+ 2 files changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 9f6b880..16a7291 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -20,7 +20,7 @@ choice
- 	default BR2_GDB_VERSION_6_6 if BR2_bfin
- 	default BR2_GDB_VERSION_6_7_1_AVR32_2_1_5 if BR2_avr32
- 	default BR2_GDB_VERSION_7_7 if BR2_powerpc64le
--	default BR2_GDB_VERSION_7_5
-+	default BR2_GDB_VERSION_7_6
- 	help
- 	  Select the version of gdb you wish to use.
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 4a4090f..3d11843 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -3,10 +3,9 @@ config BR2_PACKAGE_CONNMAN
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_IPTABLES
+-	select BR2_PACKAGE_GNUTLS
+ 	depends on !BR2_avr32 # no inotify_init1
+ 	depends on !BR2_UCLIBC_VERSION_0_9_32
+-	depends on BR2_USE_WCHAR # libglib2 and gnutls
++	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+@@ -26,9 +25,23 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
+ config BR2_PACKAGE_CONNMAN_WIFI
+ 	bool "enable WiFi support"
+ 	select BR2_PACKAGE_WPA_SUPPLICANT
++	help
++	  Enable WiFi support (scan and static/dhcp interface setup). ConnMan 
++	  detect the start of wpa_supplicant automatically.
++
++config BR2_PACKAGE_CONNMAN_WISPR
++	bool "enable WISPr support"
++	select BR2_PACKAGE_GNUTLS
++	help
++	  Enable support for Wireless Internet Service Provider
++	  roaming (WISPr). A RADIUS server is used to authenticate the
++	  subscriber's credentials.
  
+ config BR2_PACKAGE_CONNMAN_BLUETOOTH
+ 	bool "enable Bluetooth support"
++	help
++	  Enable Bluetooth (PAN profile) support. The start of bluetoothd is 
++	  automatically detected and only a runtime dependency. 
+ 
+ config BR2_PACKAGE_CONNMAN_LOOPBACK
+ 	bool "enable loopback support"
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index f720d1c..fb698c4 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -7,7 +7,7 @@
+ CONNMAN_VERSION = 1.23
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
+-CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
++CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+ CONNMAN_INSTALL_STAGING = YES
+ CONNMAN_LICENSE = GPLv2
+ CONNMAN_LICENSE_FILES = COPYING
+@@ -15,6 +15,7 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
+ 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
+ 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
++	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
+ 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
+@@ -23,7 +24,8 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
+ 
+ CONNMAN_DEPENDENCIES += \
+ 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
++	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
++	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
+ 
+ define CONNMAN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
