@@ -1,49 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 30 May 2014 22:03:01 +0200
-Subject: [Buildroot] buildroot-2014.05-rc3 report on Microblazeel
- Spartan 6 LX45 little endian uartlite and ethernetlite AXI hardware design
-In-Reply-To: <CAPALihMP2UAY_VyxhX84Y64hb1NEWA+M9uFziw6gtmZtOi3kHw@mail.gmail.com>
-References: <CAPALihMP2UAY_VyxhX84Y64hb1NEWA+M9uFziw6gtmZtOi3kHw@mail.gmail.com>
-Message-ID: <20140530220301.47c4e2cc@free-electrons.com>
+Date: Fri, 30 May 2014 22:24:39 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: restrict Musl external
+	toolchain to Microblaze BE
+Message-ID: <1401481479-23667-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear William Welch,
+As reported by William Welch <bvwelch@gmail.com>, the Musl external
+toolchain provided by the musl-cross project is only Microblaze
+big-endian. In fact, Musl seems to only support the big endian variant
+of the Microblaze architecture, with the microblaze-* tuple.
 
-On Fri, 30 May 2014 10:58:02 -0500, William Welch wrote:
+This commit makes sure the Musl pre-built external toolchain provided
+by musl-cross can only be selected for a big-endian Microblaze
+configuration.
 
-> First congratulations and thank you for all the hard work!
+Reported-by: William Welch <bvwelch@gmail.com>
+Cc: William Welch <bvwelch@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+This is a fix, should be committed to 2014.05.
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/Config.in             | 4 ++--
+ toolchain/toolchain-external/toolchain-external.mk | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> The internal buildroot toolchain for microblazeel works fine. -- the system
-> boots up into the shell prompt.  Previously it had not worked on my Spartan
-> 6, even though it was working on QEMU.
-
-Cool, glad to know the recent changes made by Waldemar improved things.
-
-> The old 'Xilinx' toolchain also works fine, as expected.
-
-Yeah, for basic things. But we had to deprecate them because they are
-causing way too many build issues with a significant number of packages.
-
-> However, the 'MUSL' toolchain does not work -- apparently, buildroot
-> quietly installs a 'big endian' toolchain, even though I selected
-> microblazeel AXI.   I am basing this on the output of 'readelf' on the
-> kernel image and the busybox image -- both say 'big endian'.  When I tried
-> to boot anyway, I get no console output.
-
-Seems like musl only supports 'microblaze', which is the BE variant of
-Microblaze. I'll send a patch to adjust the Buildroot dependencies to
-not offer the MUSL external toolchain on microblazeel.
-
-Thanks a lot for the report!
-
-Thomas
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 857f26d..f4a5ccf 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -871,7 +871,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_13_12
+ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+ 	bool "Musl toolchain"
+ 	depends on (BR2_arm && BR2_ARM_EABI) || (BR2_armeb && BR2_ARM_EABI) || \
+-		(BR2_i386 && !BR2_x86_i386) || BR2_microblaze || BR2_mips || \
++		(BR2_i386 && !BR2_x86_i386) || BR2_microblazebe || BR2_mips || \
+ 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || BR2_x86_64
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+@@ -977,7 +977,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm
+ 	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
+ 	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
+-	default "microblaze-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_microblaze
++	default "microblaze-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_microblazebe
+ 	default "mips-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && !BR2_SOFT_FLOAT)
+ 	default "mips-sf-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mips && BR2_SOFT_FLOAT)
+ 	default "mipsel-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && (BR2_mipsel && !BR2_SOFT_FLOAT)
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 34520be..c73cc4a 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -378,7 +378,7 @@ else ifeq ($(BR2_armeb),y)
+ TOOLCHAIN_EXTERNAL_SOURCE = crossx86-armeb-linux-musleabi-1.0.0.tar.xz
+ else ifeq ($(BR2_i386),y)
+ TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-1.0.0.tar.xz
+-else ifeq ($(BR2_microblaze),y)
++else ifeq ($(BR2_microblazebe),y)
+ TOOLCHAIN_EXTERNAL_SOURCE = crossx86-microblaze-linux-musl-1.0.0.tar.xz
+ else ifeq ($(BR2_mips),y)
+ ifeq ($(BR2_SOFT_FLOAT),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
