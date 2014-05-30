@@ -1,38 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 May 2014 09:30:59 -0300
-Subject: [Buildroot] [PATCH v6 3/3] Add an BR2_GCC_ENABLE_GRAPHITE flag
- for the buildroot toolchain
-In-Reply-To: <BLU436-SMTP1389119D64FEA33BF25D8E5A8320@phx.gbl>
-References: <1400528893-4483-1-git-send-email-scjthm@live.com>
- <BLU436-SMTP1389119D64FEA33BF25D8E5A8320@phx.gbl>
-Message-ID: <53887A03.90001@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 30 May 2014 16:24:23 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-05-29
+In-Reply-To: <20140530063009.C131B1013EE@stock.ovh.net>
+References: <20140530063009.C131B1013EE@stock.ovh.net>
+Message-ID: <20140530142423.GA3474@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/19/2014 04:48 PM, Steve Thomas wrote:
-> +ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
-> +HOST_GCC_COMMON_DEPENDENCIES += \
-> +   host-isl \
-> +   host-cloog
-> +
-> +#This is needed as with-isl doesn't work
-> +HOST_GCC_COMMON_CONF_OPT += \
-> +   --disable-isl-version-check
-> +endif
+Thomas, All,
 
-Hi.
-Hidden option?
-How about adding something like:
+On 2014-05-30 08:30 +0200, Thomas Petazzoni spake thusly:
+>        arm |                     ofono-1.14 | NOK | http://autobuild.buildroot.net/results/a84a35d3319aec09f7b83474bbed7235d4336fbc/
 
-config BR2_GCC_ENABLE_GRAPHITE
-        bool "Enable graphite loop optimizations"
-        depends on BR2_GCC_SUPPORTS_GRAPHITE
-        help
-          Enable the support for the framework for loop optimizations
-          based on a polyhedral intermediate representation.
+Happens because ofono links with -lc before -pthread, which is
+considered to not be sound, and expected to fail. See:
+    https://sourceware.org/bugzilla/show_bug.cgi?id=15648#c11
 
-...to package/gcc/Config.in.host before BR2_GCC_ENABLE_TLS ?
-Regards.
+Investigating further...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
