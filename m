@@ -1,71 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 30 May 2014 14:11:33 -0300
-Subject: [Buildroot] openssl and cryptodev engine
-In-Reply-To: <CAOMv6XyrqkUSw1ya+fSfrk=vUYREapTBcZwhuEJ1fjff0WCSBA@mail.gmail.com>
-References: <CAOMv6XyrqkUSw1ya+fSfrk=vUYREapTBcZwhuEJ1fjff0WCSBA@mail.gmail.com>
-Message-ID: <5388BBC5.6050709@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 30 May 2014 19:16:07 +0200
+Subject: [Buildroot] [PATCH] Improve tar check if bsdtar is installed
+In-Reply-To: <1401464676-2315-1-git-send-email-abrahamh@web.de>
+References: <1401464676-2315-1-git-send-email-abrahamh@web.de>
+Message-ID: <20140530171607.GC3474@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/30/2014 11:13 AM, Xh Xiao wrote:
+Heiko, All,
 
-> I selected openssl and cryptodev-linux at menuconfig
+On 2014-05-30 17:44 +0200, Heiko Abraham spake thusly:
+> If bsdtar is installed, fix script error for tar version detection.
+> Set tar version to 'invalid' to trigger rebuild of 'host-tar'.
+> ---
+>  support/dependencies/check-host-tar.sh | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> after a successful built, I noticed the key file to build
-> cryptodev-linux which is shared between cryptodev-linux and openssl is
-> different, the file name is enc_cryptodev.c, they really should be
-> identical I think.
-> 
-> plus, enc_cryptodev is not built to a library, i.e. libcryptodev.so,
-> without that the crytodev engine can't be really used by openssl.
-> 
-> xxiao
+> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+> index 2cfc2b3..b5818f0 100755
+> --- a/support/dependencies/check-host-tar.sh
+> +++ b/support/dependencies/check-host-tar.sh
+> @@ -14,10 +14,18 @@ fi
+>  # Output of 'tar --version' examples:
+>  # tar (GNU tar) 1.15.1
+>  # tar (GNU tar) 1.25
+> +# bsdtar 2.8.3 - libarchive 2.8.3
+>  version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
+>  major=`echo "$version" | cut -d. -f1`
+>  minor=`echo "$version" | cut -d. -f2`
+>  bugfix=`echo "$version" | cut -d. -f3`
+> +version_bsd=`$tar --version | grep 'bsdtar'`
+> +if [ ! -z "${version_bsd}" ] ; then 
 
-libcryptodev.so? Why? It's builtin into openssl, you don't even need the
-extra engines option, it's taken care of when building openssl with
-cryptodev support in buildroot.
+if [ -n "${version_bsd}" ]; then
 
-You only need a couple of things done for this to work in a seamless way:
+> +  # mark as invalid tar version
+> +  major=1
+> +  minor=14
+> +  bugfix=1
 
-1) Have some hardware crypto driver builtin or module loaded for the kernel.
-2) Load the cryptodev kernel module.
+Any reason you used 1.14.1? To be obvious that this is an invalid
+version, I'd have set it to something like:
+    major=0
+    minor=0
 
-That's it.
+Alternatively, since our minimal supported version is 1.17, I'd have
+used something like:
+    major=1
+    minor=16
 
-Now for the gory details of how it works just fine:
+And, no need to set bugfix, it;s not used in the check.
 
-# openssl speed -evp aes256 -elapsed -multi 4
+Regards,
+Yann E. MORIN.
 
-Gives me 11976.21k, 13457.76k, 13919.93k, 14035.04k and 14090.24k for a
-test run _WITHOUT_ cryptodev being loaded, for block sizes 16, 64, 256,
-1024 and 8192.
--evp is to make openssl use the engines (even builtin).
--elapsed is to measure elapsed time instead of cpu time, otherwise with
-hardware acceleration in place you'll get pretty fake numbers.
--multi is to throw N (4) concurrent jobs for the benchmark, some
-hardware accelerators have multiple execution units and you'll see
-greater benefit if you load them all.
-Ballpark numbers without cryptodev for the different block sizes are
-usually the same since it's all cpu work with low overhead since there's
-no hardware acceleration to set up.
-
-After loading cryptodev i get 1253.61k, 5011.29k, 20502.87k, 79707.48k
-and 219848.91k.
-You now see a lot or variation on different block sizes, that's because
-of hardware acceleration engine setup times which have a bad penalty for
-small block sizes.
-For architectures where acceleration is part of the ISA that's normally
-not the case - just for SOCs where crypto acceleration is a different
-entity.
-For those who ask what's the benefit, well, almost 0% cpu load for those
-SOCs where acceleration is not part of the ISA, you get the crypto for
-free and the cpu can do other things.
-
-If you don't see any benefit that's maybe because the SOC you are using
-doesn't support the cipher suite you need for your application, take a
-look at /proc/crypto.
-
-Regards.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
