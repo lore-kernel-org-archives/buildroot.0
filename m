@@ -1,41 +1,56 @@
-From: Heiko Abraham <abrahamh@web.de>
-Date: Fri, 30 May 2014 17:44:36 +0200
-Subject: [Buildroot] [PATCH] Improve tar check if bsdtar is installed
-Message-ID: <1401464676-2315-1-git-send-email-abrahamh@web.de>
+From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
+Date: Fri, 30 May 2014 17:55:08 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: pkg-config should also set
+ parent include dir
+In-Reply-To: <CAEBucnAiAtrF1uthDyuTPyS5TF8OQdSBchCLZOwRuLJ+ZP67wg@mail.gmail.com>
+References: <1401462022-10744-1-git-send-email-syntheticpp@gmx.net>
+ <CAEBucnAiAtrF1uthDyuTPyS5TF8OQdSBchCLZOwRuLJ+ZP67wg@mail.gmail.com>
+Message-ID: <5388A9DC.1010204@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If bsdtar is installed, fix script error for tar version detection.
-Set tar version to 'invalid' to trigger rebuild of 'host-tar'.
----
- support/dependencies/check-host-tar.sh | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On 30.05.2014 17:31, Spenser Gilliland wrote:
+> Peter,
+>
+> On May 30, 2014 10:00 AM, "Peter K?mmel" <syntheticpp at gmx.net <mailto:syntheticpp@gmx.net>> wrote:
+>  >
+>  > Signed-off-by: Peter K?mmel <syntheticpp at gmx.net <mailto:syntheticpp@gmx.net>>
+>  > ---
+>  >  package/ti-gfx/glesv2.pc | 2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
+>  >
+>  > diff --git a/package/ti-gfx/glesv2.pc b/package/ti-gfx/glesv2.pc
+>  > index 4c70aec..c3846d0 100644
+>  > --- a/package/ti-gfx/glesv2.pc
+>  > +++ b/package/ti-gfx/glesv2.pc
+>  > @@ -8,4 +8,4 @@ Description: TI Graphics SDK implementation of OpenGL ESv2
+>  >  Version: 1.9.2188537
+>  >  Requires:
+>  >  Libs: -L${libdir} -lGLESv2 -lGLES_CM -lsrv_um -lusc -lEGL -lIMGegl
+>  > -Cflags: -I${includedir}/GLES2
+>  > +Cflags: -I${includedir}/GLES2 -I${includedir}
+>  > --
+>  > 1.9.1
+>  >
+>  >
+>
+> Does this fix a package for you?   The includedir var should be /usr/include which is a default include path.
 
-diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-index 2cfc2b3..b5818f0 100755
---- a/support/dependencies/check-host-tar.sh
-+++ b/support/dependencies/check-host-tar.sh
-@@ -14,10 +14,18 @@ fi
- # Output of 'tar --version' examples:
- # tar (GNU tar) 1.15.1
- # tar (GNU tar) 1.25
-+# bsdtar 2.8.3 - libarchive 2.8.3
- version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
- major=`echo "$version" | cut -d. -f1`
- minor=`echo "$version" | cut -d. -f2`
- bugfix=`echo "$version" | cut -d. -f3`
-+version_bsd=`$tar --version | grep 'bsdtar'`
-+if [ ! -z "${version_bsd}" ] ; then 
-+  # mark as invalid tar version
-+  major=1
-+  minor=14
-+  bugfix=1
-+fi
- 
- # Minimal version = 1.17 (previous versions do not correctly unpack archives
- # containing hard-links if the --strip-components option is used).
--- 
-1.8.5.2 (Apple Git-48)
+Yes, Qt5's cmake files assume /usr/include not /usr/include/GLES2.
+
+I added -I${includedir} instead of removing only "GLES2" because then nothing will break,
+and the other .pc file also sets both dirs.
+But it seems common practice is to not add the uppercase dir names in the pkg-congig file.
+
+Peter
+
+>
+> Thanks,
+> Spenser _______________________________________________
+>  > buildroot mailing list
+>  > buildroot at busybox.net <mailto:buildroot@busybox.net>
+>  > http://lists.busybox.net/mailman/listinfo/buildroot
+>
