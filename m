@@ -1,96 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 May 2014 23:12:05 +0200
-Subject: [Buildroot] [git commit branch/next] package/connman : enable build
-	without gnutls dependency
-Message-ID: <20140530212633.C054F9CE4E@busybox.osuosl.org>
+Date: Fri, 30 May 2014 23:26:03 +0200
+Subject: [Buildroot] [git commit branch/next] connman: cleanup Config.in
+Message-ID: <20140530212633.CA17B9CE4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b8174e714118a559d7cb196d89a8303c0122bf3
+commit: http://git.buildroot.net/buildroot/commit/?id=019188d2ee8705717e8e5840f21e47ef043433d8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- add new configuration option '--enable-wispr' (disabled by default)
-- move gnutls dependency to "wispr" config option
+Reformat help text to fit in menuconfig, slightly tweak wording, strip
+trailing spaces and clarify that wpa_supplicant is only a runtime
+dependency.
 
-[Peter: drop gnutls ref for wchar, tweak help text, simplify .mk]
-Signed-off-by: Heiko Abraham <abrahamh@web.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/Config.in  |   17 +++++++++++++++--
- package/connman/connman.mk |    6 ++++--
- 2 files changed, 19 insertions(+), 4 deletions(-)
+ package/connman/Config.in |   18 ++++++++++--------
+ 1 files changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 4a4090f..3d11843 100644
+index 3d11843..ea1fb71 100644
 --- a/package/connman/Config.in
 +++ b/package/connman/Config.in
-@@ -3,10 +3,9 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_IPTABLES
--	select BR2_PACKAGE_GNUTLS
- 	depends on !BR2_avr32 # no inotify_init1
- 	depends on !BR2_UCLIBC_VERSION_0_9_32
--	depends on BR2_USE_WCHAR # libglib2 and gnutls
-+	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_INET_IPV6
+@@ -10,9 +10,9 @@ config BR2_PACKAGE_CONNMAN
  	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
  	depends on BR2_USE_MMU # dbus, libglib2
-@@ -26,9 +25,23 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
+ 	help
+-	  The Connection Manager (ConnMan) project provides a daemon for
+-	  managing internet connections within embedded devices running
+-	  the Linux operating system.
++	  The Connection Manager (ConnMan) project provides a daemon
++	  for managing internet connections within embedded devices
++	  running the Linux operating system.
+ 
+ 	  For more information, see http://connman.net/
+ 
+@@ -24,10 +24,11 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
+ 
  config BR2_PACKAGE_CONNMAN_WIFI
  	bool "enable WiFi support"
- 	select BR2_PACKAGE_WPA_SUPPLICANT
-+	help
-+	  Enable WiFi support (scan and static/dhcp interface setup). ConnMan 
-+	  detect the start of wpa_supplicant automatically.
-+
-+config BR2_PACKAGE_CONNMAN_WISPR
-+	bool "enable WISPr support"
-+	select BR2_PACKAGE_GNUTLS
-+	help
-+	  Enable support for Wireless Internet Service Provider
-+	  roaming (WISPr). A RADIUS server is used to authenticate the
-+	  subscriber's credentials.
+-	select BR2_PACKAGE_WPA_SUPPLICANT
++	select BR2_PACKAGE_WPA_SUPPLICANT # runtime
+ 	help
+-	  Enable WiFi support (scan and static/dhcp interface setup). ConnMan 
+-	  detect the start of wpa_supplicant automatically.
++	  Enable WiFi support (scan and static/dhcp interface
++	  setup). ConnMan detects the start of wpa_supplicant
++	  automatically.
  
+ config BR2_PACKAGE_CONNMAN_WISPR
+ 	bool "enable WISPr support"
+@@ -40,8 +41,9 @@ config BR2_PACKAGE_CONNMAN_WISPR
  config BR2_PACKAGE_CONNMAN_BLUETOOTH
  	bool "enable Bluetooth support"
-+	help
-+	  Enable Bluetooth (PAN profile) support. The start of bluetoothd is 
-+	  automatically detected and only a runtime dependency. 
+ 	help
+-	  Enable Bluetooth (PAN profile) support. The start of bluetoothd is 
+-	  automatically detected and only a runtime dependency. 
++	  Enable Bluetooth (PAN profile) support. The start of
++	  bluetoothd is automatically detected and only a runtime
++	  dependency.
  
  config BR2_PACKAGE_CONNMAN_LOOPBACK
  	bool "enable loopback support"
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index f720d1c..fb698c4 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -7,7 +7,7 @@
- CONNMAN_VERSION = 1.23
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
--CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
-+CONNMAN_DEPENDENCIES = libglib2 dbus iptables
- CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPLv2
- CONNMAN_LICENSE_FILES = COPYING
-@@ -15,6 +15,7 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
- 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
- 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
-+	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
-@@ -23,7 +24,8 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
- 
- CONNMAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
--	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
-+	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
-+	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
- 
- define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
