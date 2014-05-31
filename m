@@ -1,65 +1,33 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Sat, 31 May 2014 15:32:16 -0700
-Subject: [Buildroot] [PATCH] sshpass: new package
-Message-ID: <1401575536-18595-1-git-send-email-bisson.gary@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 31 May 2014 19:51:14 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,14}.x series
+Message-ID: <1401576675-25418-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in          |  1 +
- package/sshpass/Config.in  |  8 ++++++++
- package/sshpass/sshpass.mk | 12 ++++++++++++
- 3 files changed, 21 insertions(+)
- create mode 100644 package/sshpass/Config.in
- create mode 100644 package/sshpass/sshpass.mk
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index a5a328e..67c094f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1008,6 +1008,7 @@ source "package/spawn-fcgi/Config.in"
- source "package/spice/Config.in"
- source "package/spice-protocol/Config.in"
- source "package/squid/Config.in"
-+source "package/sshpass/Config.in"
- source "package/strongswan/Config.in"
- source "package/stunnel/Config.in"
- source "package/tcpdump/Config.in"
-diff --git a/package/sshpass/Config.in b/package/sshpass/Config.in
-new file mode 100644
-index 0000000..aa5a16b
---- /dev/null
-+++ b/package/sshpass/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SSHPASS
-+	bool "sshpass"
-+	help
-+	  Sshpass is a tool for non-interactivly performing
-+	  password authentication with SSH's so called
-+	  "interactive keyboard password authentication".
-+
-+	  http://sshpass.sourceforge.net
-diff --git a/package/sshpass/sshpass.mk b/package/sshpass/sshpass.mk
-new file mode 100644
-index 0000000..e851f41
---- /dev/null
-+++ b/package/sshpass/sshpass.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# sshpass
-+#
-+################################################################################
-+
-+SSHPASS_VERSION = 1.05
-+SSHPASS_SITE = http://downloads.sourceforge.net/project/sshpass/sshpass/$(SSHPASS_VERSION)
-+SSHPASS_LICENSE = GPLv2
-+SSHPASS_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7c688ef..dc71332 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,9 +149,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.91"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.40"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.41"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.20"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.4"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.5"	if BR2_KERNEL_HEADERS_3_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.0.0.rc2
+1.8.5.5
