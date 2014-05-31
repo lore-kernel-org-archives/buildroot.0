@@ -1,31 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 31 May 2014 08:30:06 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-30
-Message-ID: <20140531063006.13FE6101026@stock.ovh.net>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 31 May 2014 09:21:16 +0200
+Subject: [Buildroot] [PATCH 2/3] glibc: doesn't build for PowerPC SPE
+In-Reply-To: <1400796975-17647-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 22 May 2014 19:16:14 -0300")
+References: <1400796975-17647-1-git-send-email-gustavo@zacarias.com.ar>
+ <1400796975-17647-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2eu76s3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-05-30
-===============================
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-        success : 99 
-       failures : 1  
-       timeouts : 0  
-          TOTAL : 100
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Classification of failures by reason
-====================================
-
-               qt5webkit-5.2.1 | 1 
-
-Detail of failures
-===================
-
-       arm |                qt5webkit-5.2.1 | NOK | http://autobuild.buildroot.net/results/dbe4e8f7b7ddd8ab3fdc1a6f41d775b3c8132160/
-
+Committed, thanks.
 
 -- 
-http://autobuild.buildroot.net
+Bye, Peter Korsgaard
