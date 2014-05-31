@@ -1,39 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 May 2014 11:39:59 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: pkg-config should also set
- parent include dir
-In-Reply-To: <20140531093736.GA3522@free.fr>
-References: <CAEBucnAiAtrF1uthDyuTPyS5TF8OQdSBchCLZOwRuLJ+ZP67wg@mail.gmail.com>
- <5388A9DC.1010204@gmx.net>
- <CAEBucnDa_EjmUu2buXEA16by0_Wck+sp-RF1Rajc8uSOswb_Zg@mail.gmail.com>
- <20140530222718.5cb42dd5@free-electrons.com>
- <5388ECDC.6050909@gmx.net> <8761kn7zw8.fsf@dell.be.48ers.dk>
- <5388F853.1020406@gmx.net> <87ha476j19.fsf@dell.be.48ers.dk>
- <53895BCA.8020900@gmx.net> <20140531093736.GA3522@free.fr>
-Message-ID: <20140531093959.GB3522@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 31 May 2014 13:13:46 +0200
+Subject: [Buildroot] [PATCH] reenable microblaze little endian for
+ internal musl toolchain
+In-Reply-To: <20140531084556.GA17277@waldemar-brodkorb.de>
+References: <20140531084556.GA17277@waldemar-brodkorb.de>
+Message-ID: <20140531131346.082c4fed@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Dear Waldemar Brodkorb,
 
-On 2014-05-31 11:37 +0200, Yann E. MORIN spake thusly:
-> Peter K.
+On Sat, 31 May 2014 10:45:56 +0200, Waldemar Brodkorb wrote:
 
-And I just realised that matches both Peters.
-/me grabs coffee...
+>  	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazebe || \
+> -		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
+> +		BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
 
-Well, I guess You know who I wasa talking to! :-)
+Nope, just revert the patch I made, i.e turn BR2_microblazebe into
+BR2_microblaze again. We have three options in Buildroot:
 
-Regards,
-Yann E. MORIN.
+	BR2_microblazeel, for Microblaze LE
+	BR2_microblazebe, for Microblaze BE
+	BR2_microblaze, when either Microblaze LE or BE is chosen
 
+See arch/Config.in.microblaze.
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
