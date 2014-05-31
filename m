@@ -1,50 +1,27 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 31 May 2014 09:35:51 +0200
-Subject: [Buildroot] busybox-savedefconfig no rule to make target
-In-Reply-To: <874n06769i.fsf@dell.be.48ers.dk>
-References: <CA+TH9VkoFTiwFNwKeutQN5oCmU+y5MbpkFYF+qBbCvkV2urS3A@mail.gmail.com>
- <874n06769i.fsf@dell.be.48ers.dk>
-Message-ID: <CA+TH9VmtHXcT13iENGGyoFFuhbNjcPh70WC1SB4ns6CmtoYbAQ@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 31 May 2014 09:40:36 +0200
+Subject: [Buildroot] [PATCH v2] Improve tar check if bsdtar is installed
+In-Reply-To: <1401487838-4010-1-git-send-email-abrahamh@web.de> (Heiko
+ Abraham's message of "Sat, 31 May 2014 00:10:38 +0200")
+References: <1401464676-2315-1-git-send-email-abrahamh@web.de>
+ <1401487838-4010-1-git-send-email-abrahamh@web.de>
+Message-ID: <87zjhy5rbf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI Peter,
+>>>>> "Heiko" == Heiko Abraham <abrahamh@web.de> writes:
 
-Thank you for the kindly reply and for your time!
+ > If bsdtar is installed, fix script error for tar version detection.
+ > bsdtar not provide all expected command line (long) options
+ > like "--hard-dereference". To ensure compatibly mark version
+ > of tar as 'invalid' and trigger rebuild of 'host-tar'.
 
-Sincerly, Angelo
+ > Signed-off-by: Heiko Abraham <abrahamh@web.de>
 
-2014-05-31 9:32 GMT+02:00 Peter Korsgaard <jacmet@uclibc.org>:
->>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
->
->  > Hi guys,
->  > The manual says:
->
->  > "busybox-menuconfig and busybox-savedefconfig ony work when busybox is enabled;"
->
->  > I have busybox enabled, I modified the configuration with
->  > busybox-menuconfig, saving the configuration raise this error:
->
->  > make -C /home/angelo/DEV/BUILDROOT/buildroot
->  > O=/home/angelo/DEV/BUILDROOT/br_ariag25_14_2/. busybox-savedefconfig
->  > make[1]: *** No rule to make target `busybox-savedefconfig'.  Stop.
->  > make: *** [_all] Error 2
->
->  > Is this a bug?
->
-> Kind of. It is a mistake in the manual. Upstream busybox doesn't have a
-> 'savedefconfig' make target to generate a minimal config, so we also
-> don't provide a busybox-savedefconfig.
->
-> I will fix the manual, thanks!
->
-> --
-> Bye, Peter Korsgaard
-
-
+Committed to next, thanks.
 
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Bye, Peter Korsgaard
