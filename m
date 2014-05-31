@@ -1,32 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 31 May 2014 15:22:10 +0200
-Subject: [Buildroot] Patchwork / Hackfest day on Sunday, 1st June
-In-Reply-To: <20140531141811.6a38b31e@free-electrons.com>
-References: <20140531141811.6a38b31e@free-electrons.com>
-Message-ID: <f72a8c5c-c457-4583-9daa-5197d5ac977f@email.android.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 31 May 2014 15:20:08 +0200
+Subject: [Buildroot] [PATCHv2] reenable microblaze little endian for
+ internal musl toolchain
+Message-ID: <20140531132008.GA22450@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Hello,
->
->Tomorrow, I'll be meeting Samuel Martin, Maxime Hadjinlian and Hadrien
->Boutteville in Paris for a day of Buildroot hacking.
->
->If some of you are available, do not hesitate to join us on IRC
->(#buildroot). We could work together on cleaning up the patchwork,
->reviving old patches, getting back to contributors, etc. If needed, we
->could also set up Google Hangouts session to discuss specific topics.
->
->We will start around 10 AM CEST, and probably continue until the
->evening, maybe even after dinner depending on our motivation.
->
->Don't hesitate to let me know if you intend to participate.
+The assumption musl libc does not support microblaze
+little endian mode is wrong. See
+http://git.musl-libc.org/cgit/musl/tree/configure line
+number 447-448.
 
-I will not be able to participate but I want to express my sympathy with this event. Great idea!
+Tested with qemu. Just revert previous commit as suggested by
+Thomas Petazzoni.
 
-Best regards,
-Thomas
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ toolchain/toolchain-buildroot/Config.in |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 11404e8..0d34f1d 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -81,7 +81,7 @@ comment "(e)glibc only available with shared lib support"
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	bool "musl (experimental)"
+-	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazebe || \
++	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblaze || \
+ 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 	help
+-- 
+1.7.10.4
