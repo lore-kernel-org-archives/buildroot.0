@@ -1,40 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 31 May 2014 22:33:24 +0200
-Subject: [Buildroot] [PATCH] graph-depends: refactor with more color
-In-Reply-To: <1401564012-23822-1-git-send-email-francois.perrad@gadz.org>
-References: <1401564012-23822-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140531203324.GE3522@free.fr>
+From: William Welch <bvwelch@gmail.com>
+Date: Sat, 31 May 2014 15:56:01 -0500
+Subject: [Buildroot] [PATCH] reenable microblaze little endian for
+ internal musl toolchain
+In-Reply-To: <20140531084556.GA17277@waldemar-brodkorb.de>
+References: <20140531084556.GA17277@waldemar-brodkorb.de>
+Message-ID: <CAPALihPyH5erdhQOsTiQ7E2_La9AuTi_7ED5tUqpfph713sjWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Farn?ois, All,
+Greetings,
 
-On 2014-05-31 21:20 +0200, Francois Perrad spake thusly:
-> target and host packages don't use the same background color
-> +            color = 'gainsboro'
-> +        else:
-> +            color = 'grey'
+What I know is, that the resulting images built by musl toolchain did not
+work, and readelf says the images are big-endian.
 
-The difference between 'gainsboro' and 'grey' is very light. At first, I
-thought I had forgotten to apply your patch, so the difference is light.
+I selected microblaze little endian target and then chose 3 different
+toolchains and made 3 separate builds.  -- musl, buildroot internal, and
+the old Xilinx. Musl was the only one that did not run.
 
-Did you choose it on-purpose? Did you choose it because it really looks
-different when printed?
+Note that buildroot did not build the musl toolchain from source, but
+rather downloaded it from somewhere...
 
-I'd like we get colours that are visually different, both on-display and
-printed. I'll try to find a better default that is more visually
-different, and add a new option to specify alternate colours.
+QEMU is nice but does not necessarily prove that a toolchain will work on
+my spartan6 microblazeel design, which I have been using with builroot,
+successfully, for some time now.
 
-Regards,
-Yann E. MORIN.
+thank you,
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+William
+
+
+
+
+On Sat, May 31, 2014 at 3:45 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
+
+> The assumption musl libc does not support microblaze little endian
+> mode is wrong.
+> See http://git.musl-libc.org/cgit/musl/tree/configure
+> line number 447-448.
+>
+> Tested with qemu.
+>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  toolchain/toolchain-buildroot/Config.in |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/toolchain/toolchain-buildroot/Config.in
+> b/toolchain/toolchain-buildroot/Config.in
+> index 840668c..7623790 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -81,7 +81,7 @@ comment "(e)glibc only available with shared lib support"
+>  config BR2_TOOLCHAIN_BUILDROOT_MUSL
+>         bool "musl (experimental)"
+>         depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazebe ||
+> \
+> -               BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
+> +               BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc ||
+> BR2_x86_64
+>         select BR2_TOOLCHAIN_USES_MUSL
+>         help
+>           This option selects musl as the C library for the
+> --
+> 1.7.10.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140531/aea563cd/attachment.html>
