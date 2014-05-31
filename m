@@ -1,36 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 31 May 2014 09:33:10 +0200
-Subject: [Buildroot] [git commit] manual/make-tips.txt: busybox doesn't have
-	a savedefconfig target
-Message-ID: <20140531073357.123629CE56@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 31 May 2014 09:35:51 +0200
+Subject: [Buildroot] busybox-savedefconfig no rule to make target
+In-Reply-To: <874n06769i.fsf@dell.be.48ers.dk>
+References: <CA+TH9VkoFTiwFNwKeutQN5oCmU+y5MbpkFYF+qBbCvkV2urS3A@mail.gmail.com>
+ <874n06769i.fsf@dell.be.48ers.dk>
+Message-ID: <CA+TH9VmtHXcT13iENGGyoFFuhbNjcPh70WC1SB4ns6CmtoYbAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5a3899065e0622df573e8b55a1132a1107cd7eef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+HI Peter,
 
-So don't mention it here.
+Thank you for the kindly reply and for your time!
 
-Reported-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/make-tips.txt |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+Sincerly, Angelo
 
-diff --git a/docs/manual/make-tips.txt b/docs/manual/make-tips.txt
-index 1360943..9fabb6f 100644
---- a/docs/manual/make-tips.txt
-+++ b/docs/manual/make-tips.txt
-@@ -31,8 +31,7 @@ The result of the search shows the help message of the matching items.
- Not all targets are always available,
- some settings in the +.config+ file may hide some targets:
- 
--* +busybox-menuconfig+ and +busybox-savedefconfig+ only work when
--  +busybox+ is enabled;
-+* +busybox-menuconfig+ only works when +busybox+ is enabled;
- * +linux-menuconfig+ and +linux-savedefconfig+ only work when
-   +linux+ is enabled;
- * +uclibc-menuconfig+ is only available when the uClibc C library is
+2014-05-31 9:32 GMT+02:00 Peter Korsgaard <jacmet@uclibc.org>:
+>>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>
+>  > Hi guys,
+>  > The manual says:
+>
+>  > "busybox-menuconfig and busybox-savedefconfig ony work when busybox is enabled;"
+>
+>  > I have busybox enabled, I modified the configuration with
+>  > busybox-menuconfig, saving the configuration raise this error:
+>
+>  > make -C /home/angelo/DEV/BUILDROOT/buildroot
+>  > O=/home/angelo/DEV/BUILDROOT/br_ariag25_14_2/. busybox-savedefconfig
+>  > make[1]: *** No rule to make target `busybox-savedefconfig'.  Stop.
+>  > make: *** [_all] Error 2
+>
+>  > Is this a bug?
+>
+> Kind of. It is a mistake in the manual. Upstream busybox doesn't have a
+> 'savedefconfig' make target to generate a minimal config, so we also
+> don't provide a busybox-savedefconfig.
+>
+> I will fix the manual, thanks!
+>
+> --
+> Bye, Peter Korsgaard
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
