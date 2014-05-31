@@ -1,96 +1,64 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sat, 31 May 2014 17:01:44 +0200
-Subject: [Buildroot] [PATCH 01/30] toolchain: add option to copy the
-	gconv libraries
-In-Reply-To: <bd4936cffb6b9a15326d591ea15075c381b701db.1401274944.git.yann.morin.1998@free.fr>
-References: <cover.1401274944.git.yann.morin.1998@free.fr>
- <bd4936cffb6b9a15326d591ea15075c381b701db.1401274944.git.yann.morin.1998@free.fr>
-Message-ID: <CAGduivxMRDT1Eo92uG8xYG3G3Z2wxyu_7aChrw+bstQdFXi5gA@mail.gmail.com>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Sat, 31 May 2014 08:42:28 -0700
+Subject: [Buildroot] new TI  kernel version for beaglebone black
+In-Reply-To: <5389CDB9.3080209@gmail.com>
+References: <5388F5A2.1080008@ethertek.ca> <5389CDB9.3080209@gmail.com>
+Message-ID: <5389F864.80909@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all
+On 5/31/2014 5:40 AM, Hadrien Boutteville wrote:
+> Hello Dan,
+>
+> On Fri, 30 May 2014 14:18:26 -0700, Dan Pattison wrote:
+>> I have a question that is probably not 100% buildroot related, but was
+>> hoping to get some help. I am using buildroot to build a kernel and
+>> rootFS for a beaglebone black. Buildroot is awesome and builds
+>> everything fine. The board boots up and all packages work properly.
+>> Unfortunately, USB seems to be badly broken. In the kernel I have USB
+>> driver enabled and USB Announce New Devices turned on. Googling around I
+>> find several people with the same problem, hotplug does not work at all,
+>> and no device I have tried shows up in dmesg or lsusb on cold or warm
+>> boot. A band aid is to use a powered USB hub (have not tried that). Some
+>> guys on the beagleboard.org IRC say to try a newer kernel version (3.14
+>> or >) because beaglebone USB is fixed in newer kernel versions. Current
+>> buildroot beaglebone black kernel version is 3.12.10
+>>
+>> In buildroot I used make beaglebone_defconfig.
+>> Under the Kernel menu, Custom Git repository is selected.
+>> The git URL is https://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
+>> The custom repository version is 7f280334068b7c875ade51f8f3921ab311f0c824
+>> The def config is board/beaglebone/linux-3.12.config
+> I'm using the default beaglebone_defconfig on BBB and USB hotplug works
+> fine. In the default kernel config the options are selected as modules,
+> so you have to load them:
+>
+>    $ modprobe musb_am335x
+>    $ modprobe musb_dsps
+>
+> After that, outputs in dmesg will tell you that the USB port is found
+> (short version) and USB hotplug will work (I just tested).
+>
+>> How was the custom repository number
+>> (7f280334068b7c875ade51f8f3921ab311f0c824) derived? Looking on the TI
+>> gitorious site, I see they are working on kernel 3.15. How can I make
+>> buildroot use the newer version? How do I find the newer custom
+>> repository version? I tried to find my answer with google, but I must
+>> not be using the correct search term. Please excuse the newbish questions.
+> Regards,
+>
+> Hadrien
+>
+Hello Hadrien,
 
-We discussed this patch with Yann on IRC, and it may not be the best
-solution as it bluntly copy all the files to the target but at least
-it solve an issues, it could be refined by following patches.
-The issue I had (and IIRC, Jerzy too) with XBMC that led to this
-patch, was some subtitles with a non 'utf-8' encoding with some
-characters outside the ASCII standard (like '?') stopped being
-displayed as soon as you hit the 'bad' characters.
-XBMC tries to convert them, but fail to do so without theses files installed.
+Thanks for the help. I had the drivers compiled into he kernel not as 
+modules. When I reverted my changes back to module and added depmod to 
+busybox, then things started to happen. Again, thanks for the help.
 
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Best Regards,
 
-On Wed, May 28, 2014 at 1:08 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> The gconv libraries are used to translate between different character
-> sets (charsets).
->
-> In (e)glibc they are implemented by the internal implemenation of
-> iconv, called gconv, and are provided as dlopen-able libraries.
->
-> Some packages need them to present text to the user (eg. XBMC Gotham).
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  Makefile                      |  6 ++++++
->  toolchain/toolchain-common.in | 10 ++++++++++
->  2 files changed, 16 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index b7a0721..7377478 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -395,6 +395,9 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
->  ifneq ($(GENERATE_LOCALE),)
->  TARGETS += target-generatelocales
->  endif
-> +ifeq ($(BR2_COPY_GCONV_LIBS),y)
-> +TARGETS += target-copygconvlibs
-> +endif
->  endif
->
->  ifeq ($(BR2_ECLIPSE_REGISTER),y)
-> @@ -620,6 +623,9 @@ target-generatelocales: host-localedef toolchain
->         done
->  endif
->
-> +target-copygconvlibs:
-> +       $(Q)cp -a $(STAGING_DIR)/usr/lib/gconv $(TARGET_DIR)/usr/lib/gconv
-> +
->  target-post-image: $(TARGETS_ROOTFS) target-finalize
->         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
->                 $(call MESSAGE,"Executing post-image script $(s)"); \
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 1573e00..59ec64e 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -77,6 +77,16 @@ config BR2_GENERATE_LOCALE
->           specified, UTF-8 is assumed. Examples of locales: en_US,
->           fr_FR.UTF-8.
->
-> +config BR2_COPY_GCONV_LIBS
-> +       bool "copy gconv libs"
-I know that it has already been told, but anyway, it should be 'Copy'
-instead of 'copy'.
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
-> +       help
-> +         The gconv libraries are used to convert between different
-> +         character sets (charsets).
-> +
-> +         Say 'y' if you need to store and/or display different charsets.
-> +         Note that the full set of gconv libraries is worth around 7MiB.
-> +
->  # glibc and eglibc directly include gettext, so a separatly compiled
->  # gettext isn't needed and shouldn't be built to avoid conflicts. Some
->  # packages always need gettext, other packages only need gettext when
-> --
-> 1.8.3.2
->
+Dan Pattison
+Ethertek Circuits
