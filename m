@@ -1,96 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 May 2014 23:12:05 +0200
-Subject: [Buildroot] [git commit] package/connman : enable build without
-	gnutls dependency
-Message-ID: <20140601083246.C4C0F9C779@busybox.osuosl.org>
+Date: Sat, 31 May 2014 09:39:40 +0200
+Subject: [Buildroot] [git commit] Improve tar check if bsdtar is installed
+Message-ID: <20140601083246.E02309CE5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b8174e714118a559d7cb196d89a8303c0122bf3
+commit: http://git.buildroot.net/buildroot/commit/?id=fc90fa9417d8b99b5d1c77aaa9e4c9ac4c8c7c58
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- add new configuration option '--enable-wispr' (disabled by default)
-- move gnutls dependency to "wispr" config option
+If bsdtar is installed, fix script error for tar version detection.
 
-[Peter: drop gnutls ref for wchar, tweak help text, simplify .mk]
+bsdtar does not provide all expected command line (long) options
+like "--hard-dereference". To ensure compatibility, mark version
+of tar as 'invalid' and trigger build of 'host-tar'.
+
+[Peter; slightly reworded commit text]
 Signed-off-by: Heiko Abraham <abrahamh@web.de>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/Config.in  |   17 +++++++++++++++--
- package/connman/connman.mk |    6 ++++--
- 2 files changed, 19 insertions(+), 4 deletions(-)
+ support/dependencies/check-host-tar.sh |    7 +++++++
+ 1 files changed, 7 insertions(+), 0 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 4a4090f..3d11843 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -3,10 +3,9 @@ config BR2_PACKAGE_CONNMAN
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_IPTABLES
--	select BR2_PACKAGE_GNUTLS
- 	depends on !BR2_avr32 # no inotify_init1
- 	depends on !BR2_UCLIBC_VERSION_0_9_32
--	depends on BR2_USE_WCHAR # libglib2 and gnutls
-+	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
-@@ -26,9 +25,23 @@ config BR2_PACKAGE_CONNMAN_ETHERNET
- config BR2_PACKAGE_CONNMAN_WIFI
- 	bool "enable WiFi support"
- 	select BR2_PACKAGE_WPA_SUPPLICANT
-+	help
-+	  Enable WiFi support (scan and static/dhcp interface setup). ConnMan 
-+	  detect the start of wpa_supplicant automatically.
-+
-+config BR2_PACKAGE_CONNMAN_WISPR
-+	bool "enable WISPr support"
-+	select BR2_PACKAGE_GNUTLS
-+	help
-+	  Enable support for Wireless Internet Service Provider
-+	  roaming (WISPr). A RADIUS server is used to authenticate the
-+	  subscriber's credentials.
+diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+index 2cfc2b3..932d3c4 100755
+--- a/support/dependencies/check-host-tar.sh
++++ b/support/dependencies/check-host-tar.sh
+@@ -14,10 +14,17 @@ fi
+ # Output of 'tar --version' examples:
+ # tar (GNU tar) 1.15.1
+ # tar (GNU tar) 1.25
++# bsdtar 2.8.3 - libarchive 2.8.3
+ version=`$tar --version | head -n 1 | sed 's/^.*\s\([0-9]\+\.\S\+\).*$/\1/'`
+ major=`echo "$version" | cut -d. -f1`
+ minor=`echo "$version" | cut -d. -f2`
+ bugfix=`echo "$version" | cut -d. -f3`
++version_bsd=`$tar --version | grep 'bsdtar'`
++if [ ! -z "${version_bsd}" ] ; then 
++  # mark as invalid version - not all command line options are available
++  major=0
++  minor=0
++fi
  
- config BR2_PACKAGE_CONNMAN_BLUETOOTH
- 	bool "enable Bluetooth support"
-+	help
-+	  Enable Bluetooth (PAN profile) support. The start of bluetoothd is 
-+	  automatically detected and only a runtime dependency. 
- 
- config BR2_PACKAGE_CONNMAN_LOOPBACK
- 	bool "enable loopback support"
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index f720d1c..fb698c4 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -7,7 +7,7 @@
- CONNMAN_VERSION = 1.23
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman/
--CONNMAN_DEPENDENCIES = libglib2 dbus iptables gnutls
-+CONNMAN_DEPENDENCIES = libglib2 dbus iptables
- CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPLv2
- CONNMAN_LICENSE_FILES = COPYING
-@@ -15,6 +15,7 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
- 	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug)		\
- 	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi)			\
-+	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
- 	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback)	\
- 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
-@@ -23,7 +24,8 @@ CONNMAN_CONF_OPT += --localstatedir=/var \
- 
- CONNMAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
--	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono)
-+	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
-+	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
- 
- define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+ # Minimal version = 1.17 (previous versions do not correctly unpack archives
+ # containing hard-links if the --strip-components option is used).
