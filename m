@@ -1,54 +1,47 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Sat, 31 May 2014 14:40:25 +0200
-Subject: [Buildroot] new TI  kernel version for beaglebone black
-In-Reply-To: <5388F5A2.1080008@ethertek.ca>
-References: <5388F5A2.1080008@ethertek.ca>
-Message-ID: <5389CDB9.3080209@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 31 May 2014 13:03:03 +0000 (UTC)
+Subject: [Buildroot] [Bug 7124] New: Use BR toolchain externally results a
+ non-bootable root filesystem
+Message-ID: <bug-7124-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dan,
+https://bugs.busybox.net/show_bug.cgi?id=7124
 
-On Fri, 30 May 2014 14:18:26 -0700, Dan Pattison wrote:
-> I have a question that is probably not 100% buildroot related, but was 
-> hoping to get some help. I am using buildroot to build a kernel and 
-> rootFS for a beaglebone black. Buildroot is awesome and builds 
-> everything fine. The board boots up and all packages work properly. 
-> Unfortunately, USB seems to be badly broken. In the kernel I have USB 
-> driver enabled and USB Announce New Devices turned on. Googling around I 
-> find several people with the same problem, hotplug does not work at all, 
-> and no device I have tried shows up in dmesg or lsusb on cold or warm 
-> boot. A band aid is to use a powered USB hub (have not tried that). Some 
-> guys on the beagleboard.org IRC say to try a newer kernel version (3.14 
-> or >) because beaglebone USB is fixed in newer kernel versions. Current 
-> buildroot beaglebone black kernel version is 3.12.10
-> 
-> In buildroot I used make beaglebone_defconfig.
-> Under the Kernel menu, Custom Git repository is selected.
-> The git URL is https://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
-> The custom repository version is 7f280334068b7c875ade51f8f3921ab311f0c824
-> The def config is board/beaglebone/linux-3.12.config
+           Summary: Use BR toolchain externally results a non-bootable
+                    root filesystem
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: xxiao8 at fosiao.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-I'm using the default beaglebone_defconfig on BBB and USB hotplug works
-fine. In the default kernel config the options are selected as modules,
-so you have to load them:
 
-  $ modprobe musb_am335x
-  $ modprobe musb_dsps
+To reproduce(I used IMX6 board)
+1. set HOST_DIR to wherever you want to relocate the toolchain.
+2. make toolchain
+3. build a rootfs using the above-built toolchain _externally_.
+4. boot it up, you will find error saying "no init is found"
 
-After that, outputs in dmesg will tell you that the USB port is found
-(short version) and USB hotplug will work (I just tested).
+To fix it manually we need add a ld-linux.so.3 symlink under /lib on the rootfs
+1. cd output/target/lib
+2. ln -s ld-linux-armhf.so.3 ld-linux.so.3
+3. boot with the modified rootfs
 
-> How was the custom repository number 
-> (7f280334068b7c875ade51f8f3921ab311f0c824) derived? Looking on the TI 
-> gitorious site, I see they are working on kernel 3.15. How can I make 
-> buildroot use the newer version? How do I find the newer custom 
-> repository version? I tried to find my answer with google, but I must 
-> not be using the correct search term. Please excuse the newbish questions.
+If we use internal buildroot toolchain directly, the ld-linux.so.3 is there. If
+we use external buildroot toolchain, the ld-linux.so.3 was not created somehow.
 
-Regards,
-
-Hadrien
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
