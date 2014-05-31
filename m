@@ -1,39 +1,45 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 31 May 2014 15:20:08 +0200
-Subject: [Buildroot] [PATCHv2] reenable microblaze little endian for
- internal musl toolchain
-Message-ID: <20140531132008.GA22450@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 31 May 2014 15:36:21 +0200
+Subject: [Buildroot] =?utf-8?q?Help_to_sponsor/organize_the_next_meeting_i?=
+ =?utf-8?q?n_D=C3=BCsseldorf?=
+Message-ID: <20140531153621.5c03d3fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The assumption musl libc does not support microblaze
-little endian mode is wrong. See
-http://git.musl-libc.org/cgit/musl/tree/configure line
-number 447-448.
+Hello,
 
-Tested with qemu. Just revert previous commit as suggested by
-Thomas Petazzoni.
+The next Embedded Linux Conference Europe will take place on October
+13-15 in D?sseldorf, Germany.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- toolchain/toolchain-buildroot/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Right before this event, on October 11-12 (Saturday/Sunday), we will
+organize the next Buildroot Developers Meeting. In order to organize
+this event we are looking for:
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 11404e8..0d34f1d 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -81,7 +81,7 @@ comment "(e)glibc only available with shared lib support"
- 
- config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	bool "musl (experimental)"
--	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazebe || \
-+	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblaze || \
- 		BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
- 	select BR2_TOOLCHAIN_USES_MUSL
- 	help
+ * A company located in D?sseldorf and willing to sponsor the Buildroot
+   project by providing a meeting location in its offices. There are
+   typically 8-10 participants to Buildroot meetings, so there is no
+   need for a very large meeting room;
+
+ * Companies willing to sponsor a meeting location for the Buildroot
+   project: if we cannot find a sponsor located in D?sseldorf we will
+   have to rent a meeting room for the two days. We typically need
+   250-500 EUR to organize the event;
+
+ * A Buildroot user/enthusiast located in D?sseldorf who could help in
+   selecting an appropriate meeting location and/or finding a local
+   company willing to provide a meeting room during the week-end.
+
+Of course, in exchange of the sponsoring, the Buildroot project offers
+some visibility to the sponsors, through announcements on our mailing
+list, our release e-mails, website and so on.
+
+Thanks a lot for your support,
+
+Thomas Petazzoni
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
