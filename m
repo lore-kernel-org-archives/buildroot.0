@@ -1,31 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 30 May 2014 23:56:37 +0200
-Subject: [Buildroot] [git commit] glibc: doesn't build for PowerPC SPE
-Message-ID: <20140531072534.4C6E69CE56@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 31 May 2014 09:32:25 +0200
+Subject: [Buildroot] busybox-savedefconfig no rule to make target
+In-Reply-To: <CA+TH9VkoFTiwFNwKeutQN5oCmU+y5MbpkFYF+qBbCvkV2urS3A@mail.gmail.com>
+ (Angelo Compagnucci's message of "Wed, 28 May 2014 19:07:16 +0200")
+References: <CA+TH9VkoFTiwFNwKeutQN5oCmU+y5MbpkFYF+qBbCvkV2urS3A@mail.gmail.com>
+Message-ID: <874n06769i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5777e3ffd99132a57e3d29659850eec14b1625f8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/toolchain-buildroot/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > Hi guys,
+ > The manual says:
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 840668c..11404e8 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -66,6 +66,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_x86_64 || BR2_microblaze
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on !BR2_powerpc_SPE
- 	select BR2_TOOLCHAIN_USES_GLIBC
- 	# our glibc.mk enables RPC support
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ > "busybox-menuconfig and busybox-savedefconfig ony work when busybox is enabled;"
+
+ > I have busybox enabled, I modified the configuration with
+ > busybox-menuconfig, saving the configuration raise this error:
+
+ > make -C /home/angelo/DEV/BUILDROOT/buildroot
+ > O=/home/angelo/DEV/BUILDROOT/br_ariag25_14_2/. busybox-savedefconfig
+ > make[1]: *** No rule to make target `busybox-savedefconfig'.  Stop.
+ > make: *** [_all] Error 2
+
+ > Is this a bug?
+
+Kind of. It is a mistake in the manual. Upstream busybox doesn't have a
+'savedefconfig' make target to generate a minimal config, so we also
+don't provide a busybox-savedefconfig.
+
+I will fix the manual, thanks!
+
+-- 
+Bye, Peter Korsgaard
