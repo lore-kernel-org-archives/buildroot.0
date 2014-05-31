@@ -1,92 +1,65 @@
-From: William Welch <bvwelch@gmail.com>
-Date: Sat, 31 May 2014 17:12:45 -0500
-Subject: [Buildroot] [PATCH] reenable microblaze little endian for
- internal musl toolchain
-In-Reply-To: <20140531234315.3cc32e4e@free-electrons.com>
-References: <20140531084556.GA17277@waldemar-brodkorb.de>
- <CAPALihPyH5erdhQOsTiQ7E2_La9AuTi_7ED5tUqpfph713sjWw@mail.gmail.com>
- <20140531234315.3cc32e4e@free-electrons.com>
-Message-ID: <CAPALihOk0J7b7GWzth6AsiEm5KE7EZJ1w_XeSfRXbBvZ_Aa04Q@mail.gmail.com>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Sat, 31 May 2014 15:32:16 -0700
+Subject: [Buildroot] [PATCH] sshpass: new package
+Message-ID: <1401575536-18595-1-git-send-email-bisson.gary@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+---
+ package/Config.in          |  1 +
+ package/sshpass/Config.in  |  8 ++++++++
+ package/sshpass/sshpass.mk | 12 ++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/sshpass/Config.in
+ create mode 100644 package/sshpass/sshpass.mk
 
-Recall this is for 2014.05-rc3.  I just ran through the process again.
-
-All I did was make simple selection choices in menuconfig.
-
-I did not manually enter any specifics about where/how to download the
-toolchain.
-
-When I asked for an external toolchain, Musl was the only external
-toolchain listed.
-
-
-The resulting 'savedefconfig' looked like this (note: there is no mention
-of musl...)
-
-BR2_microblazeel=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_ENABLE_LOCALE_PURGE=y
-BR2_TARGET_OPTIMIZATION="-pipe -mno-xl-soft-mul -mxl-barrel-shift
--mcpu=v8.20.a"
-BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
-BR2_TARGET_GENERIC_GETTY_BAUDRATE_9600=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_PATCH="board/plus/reader3/linux.patch"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/plus/reader3/rdr3k_defconfig"
-BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
-BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/plus/reader3/rdr3.dts"
-BR2_PACKAGE_MTD=y
-BR2_TARGET_ROOTFS_INITRAMFS=y
-
-I noticed in the log this toolchain was downloaded:
-
-https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-1.0.0/crossx86-microblaze-linux-musl-1.0.0.tar.xz
-
-thank you,
-
-William
-
-
-
-On Sat, May 31, 2014 at 4:43 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Dear William Welch,
->
-> On Sat, 31 May 2014 15:56:01 -0500, William Welch wrote:
->
-> > What I know is, that the resulting images built by musl toolchain did not
-> > work, and readelf says the images are big-endian.
-> >
-> > I selected microblaze little endian target and then chose 3 different
-> > toolchains and made 3 separate builds.  -- musl, buildroot internal, and
-> > the old Xilinx. Musl was the only one that did not run.
->
-> You did use the musl external toolchain, right?
->
-> > QEMU is nice but does not necessarily prove that a toolchain will work on
-> > my spartan6 microblazeel design, which I have been using with builroot,
-> > successfully, for some time now.
->
-> Absolutely. Do not hesitate to report back to us any issue that you
-> might see on Microblaze. We're definitely interested in growing the
-> user base of Buildroot users on this architecture.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140531/e87dda4a/attachment.html>
+diff --git a/package/Config.in b/package/Config.in
+index a5a328e..67c094f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1008,6 +1008,7 @@ source "package/spawn-fcgi/Config.in"
+ source "package/spice/Config.in"
+ source "package/spice-protocol/Config.in"
+ source "package/squid/Config.in"
++source "package/sshpass/Config.in"
+ source "package/strongswan/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/sshpass/Config.in b/package/sshpass/Config.in
+new file mode 100644
+index 0000000..aa5a16b
+--- /dev/null
++++ b/package/sshpass/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_SSHPASS
++	bool "sshpass"
++	help
++	  Sshpass is a tool for non-interactivly performing
++	  password authentication with SSH's so called
++	  "interactive keyboard password authentication".
++
++	  http://sshpass.sourceforge.net
+diff --git a/package/sshpass/sshpass.mk b/package/sshpass/sshpass.mk
+new file mode 100644
+index 0000000..e851f41
+--- /dev/null
++++ b/package/sshpass/sshpass.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# sshpass
++#
++################################################################################
++
++SSHPASS_VERSION = 1.05
++SSHPASS_SITE = http://downloads.sourceforge.net/project/sshpass/sshpass/$(SSHPASS_VERSION)
++SSHPASS_LICENSE = GPLv2
++SSHPASS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
+-- 
+2.0.0.rc2
