@@ -1,77 +1,63 @@
-From: William Welch <bvwelch@gmail.com>
-Date: Sat, 31 May 2014 15:56:01 -0500
-Subject: [Buildroot] [PATCH] reenable microblaze little endian for
- internal musl toolchain
-In-Reply-To: <20140531084556.GA17277@waldemar-brodkorb.de>
-References: <20140531084556.GA17277@waldemar-brodkorb.de>
-Message-ID: <CAPALihPyH5erdhQOsTiQ7E2_La9AuTi_7ED5tUqpfph713sjWw@mail.gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 31 May 2014 23:18:43 +0200
+Subject: [Buildroot] [PATCH 0/11 RFC] Add list of virtual packages to
+	manual (branch yem/manual)
+In-Reply-To: <cover.1401395407.git.yann.morin.1998@free.fr>
+References: <cover.1401395407.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJmE0imToa-Veb5E+SDxYy2Hu-j6Le+8GB9_EH92vG=8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greetings,
+Yann , all,
 
-What I know is, that the resulting images built by musl toolchain did not
-work, and readelf says the images are big-endian.
-
-I selected microblaze little endian target and then chose 3 different
-toolchains and made 3 separate builds.  -- musl, buildroot internal, and
-the old Xilinx. Musl was the only one that did not run.
-
-Note that buildroot did not build the musl toolchain from source, but
-rather downloaded it from somewhere...
-
-QEMU is nice but does not necessarily prove that a toolchain will work on
-my spartan6 microblazeel design, which I have been using with builroot,
-successfully, for some time now.
-
-thank you,
-
-William
-
-
-
-
-On Sat, May 31, 2014 at 3:45 AM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-
-> The assumption musl libc does not support microblaze little endian
-> mode is wrong.
-> See http://git.musl-libc.org/cgit/musl/tree/configure
-> line number 447-448.
+On Thu, May 29, 2014 at 10:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Tested with qemu.
+> Hello All!
 >
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  toolchain/toolchain-buildroot/Config.in |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> This series intend to add the list of virtual pacakges to the manual, for
+
+s/intend/intends/
+s/pacakges/packages/
+I know you already starting fixing the typos ;)
+
+> three reasons:
 >
-> diff --git a/toolchain/toolchain-buildroot/Config.in
-> b/toolchain/toolchain-buildroot/Config.in
-> index 840668c..7623790 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -81,7 +81,7 @@ comment "(e)glibc only available with shared lib support"
->  config BR2_TOOLCHAIN_BUILDROOT_MUSL
->         bool "musl (experimental)"
->         depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazebe ||
-> \
-> -               BR2_mips || BR2_mipsel || BR2_powerpc || BR2_x86_64
-> +               BR2_microblaze || BR2_mips || BR2_mipsel || BR2_powerpc ||
-> BR2_x86_64
->         select BR2_TOOLCHAIN_USES_MUSL
->         help
->           This option selects musl as the C library for the
-> --
-> 1.7.10.4
+>   - for users that are told (in a comment in the menuconfig) that a
+>     pacakage they need depends on a virtual pacakge, to know what provider
+
+s/pacakge/package/g
+
+>     to select,
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>   - for people writing a new provider for an existing virtual package to
+>     have a reference of which symbol to select and which package to provide
+>     in their Config.in and .mk files,
 >
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140531/aea563cd/attachment.html>
+>   - for people writing a new package that depends on features provided by
+>     a virtual pacakge to know what symbol to depend on.
+
+s/pacakge/package/
+
+>
+> The series starts with some preparatory changes and cleanups, then
+> introduces a away to generate different forms of tables, then goes on by
+> removing virtual packages from the current lists, and finally add a new
+> list with the virtual packages.
+>
+> I consider this to be in RFC stage for now, especially as I would like
+> some feedback on the changes I made on the Python script, changes which
+> were done in an ad-hoc fashion, until it works, but will probably need
+> some more love to be clean.
+>
+> Special thanks to Samuel for his pythonistic help! :-)
+
+You're welcome! :-)
+
+Regards,
+
+-- 
+Samuel
