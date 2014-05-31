@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jun 2014 00:37:39 +0200
-Subject: [Buildroot] [PATCH 03/11 RFC] support/scripts: prepare handling
+Date: Sun, 1 Jun 2014 00:38:34 +0200
+Subject: [Buildroot] [PATCH 04/11 RFC] support/scripts: do not display
  virtual packages in generated lists
-In-Reply-To: <CAHXCMMLo6YeU4R5k+_agkuuvvEfdpKUesNgdXf_4fgAb_Ggx1A@mail.gmail.com>
+In-Reply-To: <CAHXCMMKrXuRS5aH5tkwH197339geD1NDPmaSvHO-Gq-Yh--7=Q@mail.gmail.com>
 References: <cover.1401395407.git.yann.morin.1998@free.fr>
- <79b154e4585560398b477fca5a01e33d4ac3075a.1401395407.git.yann.morin.1998@free.fr>
- <CAHXCMMLo6YeU4R5k+_agkuuvvEfdpKUesNgdXf_4fgAb_Ggx1A@mail.gmail.com>
-Message-ID: <20140531223739.GF3522@free.fr>
+ <2f34830f1709a346a1b2a45415242a7e28dbfd0d.1401395407.git.yann.morin.1998@free.fr>
+ <CAHXCMMKrXuRS5aH5tkwH197339geD1NDPmaSvHO-Gq-Yh--7=Q@mail.gmail.com>
+Message-ID: <20140531223834.GG3522@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,35 +17,24 @@ Samuel, All,
 
 On 2014-05-31 23:19 +0200, Samuel Martin spake thusly:
 > On Thu, May 29, 2014 at 10:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP commit log--]
-
-Typoes fixed.
-
-> > diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-> > index b33fcf0..8dec089 100644
-> > --- a/support/scripts/gen-manual-lists.py
-> > +++ b/support/scripts/gen-manual-lists.py
-[--SNIP--]
-> > @@ -238,11 +238,13 @@ class Buildroot:
-> >          return bool([ symbol for x in symbol.get_referenced_symbols()
-> >              if x.get_name().startswith(self._deprecated.get_name()) ])
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > >
-> > -    def _is_package(self, symbol):
-> > +    def _is_package(self, symbol, type = 'real'):
-> >          """ Return True if the symbol is a package or a host package, otherwise
-> >          False.
+> > If a package has both a 'real' and a 'virtual' definition, consider it
+> > is a virtual package and do not display it in the generated package list.
 > >
-> >          :param symbol:  The symbol to check
-> > +        :param type:    Limit to 'real', 'virtual' or 'both' types of packages
-> > +                        Note: only 'real' is (implictly) handled for now
+> > This is the case for jpeg and cryptodev, that are virtual packages, but
+> > also real (but empty) packages used to provide a prompt to enable/disable
+> > a choice to select an implementation. In this case, we do not want to
+> > list the virtul packages, but only its implementations.
 > 
-> also, the default value for the type parameter is 'real'.
+> s/virtul/virtual/
+> s/its implementations/their implementations/
 
-Added.
+Fixed.
 
-I also removed 'both', as it's indeed never used.
+> With the typo fixed, you'll have my Acked-by.
 
-Thanks!
+Added, thanks!
 
 Regards,
 Yann E. MORIN.
