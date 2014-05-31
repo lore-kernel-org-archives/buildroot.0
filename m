@@ -1,26 +1,32 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 31 May 2014 13:06:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 7124] Use BR toolchain externally results a
- non-bootable root filesystem
-In-Reply-To: <bug-7124-163@https.bugs.busybox.net/>
-References: <bug-7124-163@https.bugs.busybox.net/>
-Message-ID: <20140531130643.1A09C9CE67@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 31 May 2014 15:22:10 +0200
+Subject: [Buildroot] Patchwork / Hackfest day on Sunday, 1st June
+In-Reply-To: <20140531141811.6a38b31e@free-electrons.com>
+References: <20140531141811.6a38b31e@free-electrons.com>
+Message-ID: <f72a8c5c-c457-4583-9daa-5197d5ac977f@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7124
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Hello,
+>
+>Tomorrow, I'll be meeting Samuel Martin, Maxime Hadjinlian and Hadrien
+>Boutteville in Paris for a day of Buildroot hacking.
+>
+>If some of you are available, do not hesitate to join us on IRC
+>(#buildroot). We could work together on cleaning up the patchwork,
+>reviving old patches, getting back to contributors, etc. If needed, we
+>could also set up Google Hangouts session to discuss specific topics.
+>
+>We will start around 10 AM CEST, and probably continue until the
+>evening, maybe even after dinner depending on our motivation.
+>
+>Don't hesitate to let me know if you intend to participate.
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I will not be able to participate but I want to express my sympathy with this event. Great idea!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         AssignedTo|unassigned at buildroot.uclibc |thomas.petazzoni at free-elect
-                   |.org                        |rons.com
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Thomas
