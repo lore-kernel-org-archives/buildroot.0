@@ -1,45 +1,123 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Jun 2014 12:47:39 +0200
-Subject: [Buildroot] [PATCH 02/11] toolchain-external: do not pass
-	TOOLCHAIN_EXTERNAL_CFLAGS for kernel headers check
+Date: Sun,  1 Jun 2014 12:47:40 +0200
+Subject: [Buildroot] [PATCH 03/11] toolchain-external: support only one
+	Linaro ARM toolchain at a time
 In-Reply-To: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1401619668-28062-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1401619668-28062-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When getting the sysroot used for the kernel headers version check,
-passing TOOLCHAIN_EXTERNAL_CFLAGS causes a problem when used with
-multilib toolchains, where only the main sysroot has the header files,
-and the other sysroots only have the libraries.
+Linaro toolchains are released so frequently (every month) that it
+doesn't make much sense to support 3 consecutive versions. So, like we
+do for ARM big-endian, let's support only one version at a time.
 
-Since the kernel headers version used is normally the same for all
-sysroots, this commit solves this problem by removing the
-TOOLCHAIN_EXTERNAL_CFLAGS argument when calling
-toolchain_find_sysroot, so that it returns the main sysroot, in which
-<linux/version.h> can be found for the kernel headers version check.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/toolchain-external/Config.in             | 52 ++--------------------
+ toolchain/toolchain-external/toolchain-external.mk | 10 +----
+ 2 files changed, 4 insertions(+), 58 deletions(-)
 
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index f4a5ccf..c187116 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -6,8 +6,8 @@ choice
+ comment "(e)glibc toolchains only available with shared lib support"
+ 	depends on BR2_PREFER_STATIC_LIB
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_02
+-	bool "Linaro 2014.02"
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
++	bool "Linaro ARM 2014.02"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+@@ -28,50 +28,6 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_02
+ 	  with the hard floating point calling convention, and uses
+ 	  the VFPv3-D16 FPU instructions.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_01
+-	bool "Linaro 2014.01"
+-	depends on BR2_arm
+-	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	depends on BR2_ARM_EABIHF
+-	depends on !BR2_PREFER_STATIC_LIB
+-	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # toolchain generated before fix backport
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+-	help
+-	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2014.01 (based on gcc 4.8), Linaro GDB 2013.10 (based on
+-	  GDB 7.6), eglibc 2.18, Binutils 2013.11 (based on 2.24). It
+-	  generates code that runs on all Cortex-A profile devices,
+-	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+-	  with the hard floating point calling convention, and uses
+-	  the VFPv3-D16 FPU instructions.
+-
+-config BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_12
+-	bool "Linaro 2013.12"
+-	depends on BR2_arm
+-	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+-	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+-	depends on BR2_ARM_EABIHF
+-	depends on !BR2_PREFER_STATIC_LIB
+-	select BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # toolchain generated before fix backport
+-	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	select BR2_INSTALL_LIBSTDCPP
+-	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+-	help
+-	  Linaro toolchain for the ARM architecture. It uses Linaro
+-	  GCC 2013.12 (based on gcc 4.8), Linaro GDB 2013.10 (based on
+-	  GDB 7.6), eglibc 2.18, Binutils 2013.11 (based on 2.24). It
+-	  generates code that runs on all Cortex-A profile devices,
+-	  but tuned for the Cortex-A9. The code generated is Thumb 2,
+-	  with the hard floating point calling convention, and uses
+-	  the VFPv3-D16 FPU instructions.
+-
+ comment "Linaro toolchains available for Cortex-A + EABIhf"
+ 	depends on BR2_arm
+ 	depends on BR2_GCC_TARGET_ARCH != "armv7-a" || !BR2_ARM_EABIHF
+@@ -938,9 +894,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	string
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_02
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_01
+-	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_12
++	default "arm-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+ 	default "armeb-linux-gnueabihf"	 if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201203
+ 	default "arm-none-linux-gnueabi" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201305
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 70781db..6816b3f 100644
+index 6816b3f..bb81f4c 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -467,7 +467,7 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 		exit 1 ; \
- 	fi ; \
- 	$(call check_kernel_headers_version,\
--		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)),\
-+		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
- 	if test "$(BR2_arm)" = "y" ; then \
- 		$(call check_arm_abi,\
+@@ -275,15 +275,7 @@ define TOOLCHAIN_EXTERNAL_FIXUP_CMDS
+ 	mv $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/armv5te/* $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/
+ 	rm -rf $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)/arago-2011.09/
+ endef
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_12),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/13.12/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2013.12_linux.tar.xz
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_01),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.01/components/toolchain/binaries/
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2014.01_linux.tar.xz
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_02),y)
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.02/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.8-2014.02_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
 -- 
 1.9.3
