@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:46 +0200
-Subject: [Buildroot] [PATCH 15/21] package/weston: libxkbcommon is optional
+Date: Sun,  1 Jun 2014 23:43:49 +0200
+Subject: [Buildroot] [PATCH 18/21] package/freerdp: not forcibly depend on
+	X.Org
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <a71e7e58835a658675c879f3abe68e1c09aa53d3.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <128f67b85c1520c932f1a04879f94f1382b77439.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +13,100 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It is possible to build weston without libxkbcommon, for example
-if using an input method that is not an hardware keyboard (e.g. a
-virtual keyboard, or none at all.)
+It is possible to build the libfreerdp standalone, without X.Org.
+Having a libfreerdp will be usefull for the weston RDP compositor.
 
-Make it optional.
+Re-order the menuconfig, as freerdp is no longer an X-only application.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/weston/Config.in | 11 ++++++++++-
- package/weston/weston.mk |  9 ++++++++-
- 2 files changed, 18 insertions(+), 2 deletions(-)
+ package/Config.in          |  2 +-
+ package/freerdp/Config.in  | 17 ++++++++++++-----
+ package/freerdp/freerdp.mk | 18 ++++++++++++++----
+ 3 files changed, 27 insertions(+), 10 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index aaef405..96ebdf1 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -5,7 +5,6 @@ comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
- config BR2_PACKAGE_WESTON
- 	bool "weston"
- 	select BR2_PACKAGE_WAYLAND
--	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_LIBPNG
-@@ -29,6 +28,16 @@ config BR2_PACKAGE_WESTON
+diff --git a/package/Config.in b/package/Config.in
+index da8258f..2503ae8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -190,6 +190,7 @@ endif
+ source "package/fb-test-app/Config.in"
+ source "package/fbterm/Config.in"
+ source "package/fbv/Config.in"
++source "package/freerdp/Config.in"
+ source "package/imagemagick/Config.in"
+ source "package/linux-fusion/Config.in"
+ source "package/lite/Config.in"
+@@ -227,7 +228,6 @@ source "package/alsamixergui/Config.in"
+ source "package/apitrace/Config.in"
+ source "package/docker/Config.in"
+ source "package/feh/Config.in"
+-source "package/freerdp/Config.in"
+ source "package/gmpc/Config.in"
+ source "package/gob2/Config.in"
+ source "package/gqview/Config.in"
+diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
+index c5ff769..81a67ea 100644
+--- a/package/freerdp/Config.in
++++ b/package/freerdp/Config.in
+@@ -1,14 +1,21 @@
+ config BR2_PACKAGE_FREERDP
+ 	bool "freerdp"
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_ZLIB
+-	depends on BR2_PACKAGE_XORG7
+ 	help
+ 	  FreeRDP is a free implementation of the Remote Desktop
+ 	  Protocol (RDP), released under the Apache license
  
- if BR2_PACKAGE_WESTON
- 
-+config BR2_PACKAGE_WESTON_HW_KBD
-+	bool "enable keyboard support"
-+	default y
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	help
-+	  Say 'y' here if you plan on using a keyboard.
+ 	  http://www.freerdp.com/
 +
-+	  Only say 'n' if you're going to use a virtual keyboard or any other
-+	  input method.
++if BR2_PACKAGE_FREERDP
 +
- # Helper to make sure at least one compositor is selected.
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 8188ae6..ea63203 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -10,7 +10,7 @@ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
++config BR2_PACKAGE_FREERDP_NEEDS_XLIBS
++	def_bool y
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXT
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXCURSOR
++
++endif
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index e92067c..95430bb 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,13 +4,23 @@
+ #
+ ################################################################################
  
--WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
-+WESTON_DEPENDENCIES = host-pkgconf wayland pixman libpng \
- 	jpeg mtdev udev cairo
+-FREERDP_VERSION = 1.0.1
+-FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
+-FREERDP_DEPENDENCIES = openssl zlib \
+-	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
++# Changeset on the stable-1.1 branch
++FREERDP_VERSION = 01865f0e284ce34bb5f38842b34dc80f08b58749
++FREERDP_SITE = https://github.com/FreeRDP/FreeRDP
++FREERDP_SITE_METHOD = git
++FREERDP_DEPENDENCIES = openssl zlib
+ FREERDP_LICENSE = Apache-2.0
+ FREEDRP_LICENSE_FILES = LICENSE
  
- WESTON_CONF_OPT = \
-@@ -25,6 +25,13 @@ WESTON_CONF_OPT = \
- 	--disable-weston-launch \
- 	--disable-colord
- 
-+ifeq ($(BR2_PACKAGE_WESTON_HW_KBD),y)
-+WESTON_DEPENDENCIES += libxkbcommon
-+WESTON_CONF_OPT += --enable-xkbcommon
++FREERDP_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_FREERDP_NEEDS_XLIBS),y)
++FREERDP_DEPENDENCIES += xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
++FREERDP_CONF_OPT += -DWITH_X11=ON
 +else
-+WESTON_CONF_OPT += --disable-xkbcommon
++FREERDP_CONF_OPT += -DWITH_X11=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ FREERDP_CONF_OPT += -DWITH_CUPS=ON
+ FREERDP_DEPENDENCIES += cups
 -- 
 1.8.3.2
