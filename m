@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:44 +0200
-Subject: [Buildroot] [PATCH 13/21] package/wayland: bump version
+Date: Sun,  1 Jun 2014 23:43:48 +0200
+Subject: [Buildroot] [PATCH 17/21] package/weston: add support for libinput
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <f02ec2fef80258e901ba1337cb6c347539ec0445.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <04c179087a1d27273a58bb533ce9f3f136572540.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,28 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Bump to the recently-released 1.5.0.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/wayland/wayland.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/weston/weston.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 3ab94ca..cfa770d 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index ea63203..325cfc7 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -32,6 +32,13 @@ else
+ WESTON_CONF_OPT += --disable-xkbcommon
+ endif
  
--WAYLAND_VERSION = 1.4.0
-+WAYLAND_VERSION = 1.5.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases/
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
-@@ -19,7 +19,7 @@ WAYLAND_CONF_OPT = --disable-scanner
- # We must provide a specialy-crafted wayland-scanner .pc file
- # which we vampirise and adapt from the host-wayland copy
- define WAYLAND_SCANNER_PC
--	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/share/pkgconfig/wayland-scanner.pc \
-+	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/lib/pkgconfig/wayland-scanner.pc \
- 	              $(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
- 	$(SED) 's:^prefix=.*:prefix=/usr:' \
- 	    -e 's:^wayland_scanner=.*:wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner:' \
++ifeq ($(BR2_PACKAGE_LIBINPUT),y)
++WESTON_DEPENDENCIES += libinput
++WESTON_CONF_OPT += --enable-libinput-backend
++else
++WESTON_CONF_OPT += --disable-libinput-backend
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ WESTON_DEPENDENCIES += libunwind
+ else
 -- 
 1.8.3.2
