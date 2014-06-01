@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:45 +0200
-Subject: [Buildroot] [PATCH 21/26] package/libinput: new package
+Date: Sun,  1 Jun 2014 23:03:46 +0200
+Subject: [Buildroot] [PATCH 22/26] package/weston: add support for libinput
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <dacfd282279f29683e8df6ede51b828f18e7f364.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <a50da3b01e379d0117e27a3d7e883b9073f5b1ed.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,72 +14,26 @@ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/Config.in            |  1 +
- package/libinput/Config.in   | 17 +++++++++++++++++
- package/libinput/libinput.mk | 19 +++++++++++++++++++
- 3 files changed, 37 insertions(+)
- create mode 100644 package/libinput/Config.in
- create mode 100644 package/libinput/libinput.mk
+ package/weston/weston.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1152c10..da8258f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -624,6 +624,7 @@ source "package/libcec/Config.in"
- source "package/libfreefare/Config.in"
- source "package/libftdi/Config.in"
- source "package/libhid/Config.in"
-+source "package/libinput/Config.in"
- source "package/libiqrf/Config.in"
- source "package/libllcp/Config.in"
- source "package/libmbim/Config.in"
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-new file mode 100644
-index 0000000..14e4e70
---- /dev/null
-+++ b/package/libinput/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBINPUT
-+	bool "libinput"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_LIBEVDEV
-+	select BR2_PACKAGE_MTDEV
-+	help
-+	  libinput is a library to handle input devices in Wayland
-+	  compositors and to provide a generic X.Org input driver.
-+	  It provides device detection, device handling, input device
-+	  event processing and abstraction so minimize the amount of
-+	  custom input code compositors need to provide the common
-+	  set of functionality that users expect.
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index ea63203..325cfc7 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -32,6 +32,13 @@ else
+ WESTON_CONF_OPT += --disable-xkbcommon
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBINPUT),y)
++WESTON_DEPENDENCIES += libinput
++WESTON_CONF_OPT += --enable-libinput-backend
++else
++WESTON_CONF_OPT += --disable-libinput-backend
++endif
 +
-+	  http://freedesktop.org/wiki/Software/libinput/
-+
-+comment "libinput needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-new file mode 100644
-index 0000000..7c3e5e8
---- /dev/null
-+++ b/package/libinput/libinput.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# libinput
-+#
-+################################################################################
-+
-+LIBINPUT_VERSION = 0.2.0
-+LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
-+LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
-+LIBINPUT_LICENSE = MIT
-+LIBINPUT_LICENSE_FILES = COPYING
-+
-+LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-+LIBINPUT_INSTALL_STAGING = YES
-+
-+# Tests need fork, so just disable them everywhere.
-+LIBINPUT_CONF_OPT = --disable-tests
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ WESTON_DEPENDENCIES += libunwind
+ else
 -- 
 1.8.3.2
