@@ -1,47 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 15:24:41 +0200
-Subject: [Buildroot] [PATCH 0/11 v5] Some download-related changes
- (branch yem/check-downloads)
-In-Reply-To: <cover.1399204808.git.yann.morin.1998@free.fr>
-References: <cover.1399204808.git.yann.morin.1998@free.fr>
-Message-ID: <20140601152441.045ec06b@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Jun 2014 15:25:49 +0200
+Subject: [Buildroot] [PATCH] package infra: remove duplicates in
+ dependencies list
+In-Reply-To: <20140601151543.0d804348@free-electrons.com>
+References: <1401618534-16200-1-git-send-email-yann.morin.1998@free.fr>
+ <20140601151543.0d804348@free-electrons.com>
+Message-ID: <20140601132549.GF3430@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Sun,  4 May 2014 14:01:43 +0200, Yann E. MORIN wrote:
+On 2014-06-01 15:15 +0200, Thomas Petazzoni spake thusly:
+> On Sun,  1 Jun 2014 12:28:54 +0200, Yann E. MORIN wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > Currently, we just use what a package declares as its dependencies.
+> > 
+> > But some packages may declare the same depdency more than once. For
+> > example, php has two options to add SQL support: 'mysql' or 'mysqli',
+> > which are not exclusive. So, php.mk has mysql twice as a dependency.
+> > 
+> > Although that does not cause any grievance for make, we end up generating
+> > dependency graphs where this duplicate dependency is visible.
+> > 
+> > Add an intermediary variable which contains the $(sort)-ed list of the
+> > dependnecies, thus eliminating any duplicates.
+> 
+> Typo: dependencies
 
-> This series contains those download-related changes:
+Grr.. I missed that one, already reported by the other Thomas... :-/
 
-I have one request regarding this series: I would like all the
-temporary steps for the download procedures to take place somewhere in
-$(O), and then only after the download is completed, do an atomic
-rename of the file into $(DL_DIR).
+> Also, I'm wondering: is it necessary to do this in the core package
+> infrastructure, or should we do it in the graph-depends tool, or even
+> do it only in the $(1)-show-depends target? I don't have a strong
+> disagreement with the patch, maybe after all it's cleaner to have the
+> dependencies sorted and with duplicates removed.
 
-The problem I'd like to solve is that it is currently impossible to
-share a download directory between separate, parallel, builds of
-Buildroot, because all the builds are going to use $(DL_DIR) as a
-temporary location to download things, stepping on each other if the
-different builds happen to download the same file at the same time. For
-this reason, I had to switch to one download directory per build
-instance in the autobuilder.
+IMHO, it makes sense to cleanup and sort dependencies, even for make
+rules.
 
-By downloading all the temporary files in $(O), and then doing an
-atomic rename, the other build instances will either see the file and
-use it, or not see it, and do the same procedure, with an atomic rename
-at the end. Of course, it won't work if the download directory is on a
-different filesystem, because the atomic property of file rename is
-guaranteed only inside a given filesystem. But still, it's going to be
-better than what we have today.
+Regards,
+Yann E. MORIN.
 
-Thoughts?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
