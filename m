@@ -1,32 +1,31 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Sun,  1 Jun 2014 19:37:28 +0200
-Subject: [Buildroot] [PATCH 2/2] ti-gfx: select fbset as it is a runtime
-	dependency
-In-Reply-To: <1401644248-27612-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1401644248-27612-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <1401644248-27612-2-git-send-email-hadrien.boutteville@gmail.com>
+From: Simon Dawson <spdawson@gmail.com>
+Date: Sun, 1 Jun 2014 18:39:37 +0100
+Subject: [Buildroot] [PATCH] manual: fix spelling mistakes
+In-Reply-To: <87iook63td.fsf@dell.be.48ers.dk>
+References: <1401524780-5128-1-git-send-email-spdawson@gmail.com>
+ <e7f92132-1c41-46b9-818b-f6e14eedc722@email.android.com>
+ <87iook63td.fsf@dell.be.48ers.dk>
+Message-ID: <CAHt8ZCO00Ru88w5+YkPnFaSDzCjBqqmoxX-cqUTFTYNGOHdd4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
----
- package/ti-gfx/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Hi Thomas, Peter.
 
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 3e8648e..4ee8622 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TI_GFX
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_POWERVR
-+	select BR2_PACKAGE_FBSET if !BR2_PACKAGE_BUSYBOX # Runtime dependency only
- 	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
- 	help
- 	  Graphics libraries for TI boards.
--- 
-1.9.3
+On 1 June 2014 16:35, Peter Korsgaard <jacmet@uclibc.org> wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>  > Previously in this patch, meta information was written with
+>  > hyphen. Which is the correct spelling?
+>
+> I don't know. Simon?
+>
+> This inconsistency is not really related to this patch, so I have
+> applied it.
+
+I don't really know either. It looks like maybe it should be
+"metainformation" (single, unhyphenated word): see
+http://en.wiktionary.org/wiki/metainformation, for example.
+
+Simon.
