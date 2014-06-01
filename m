@@ -1,84 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 20:54:08 +0200
-Subject: [Buildroot] [git commit] libdvdread: needs dynamic library support
-Message-ID: <20140601200640.D01459CE45@busybox.osuosl.org>
+Date: Sun, 1 Jun 2014 21:51:17 +0200
+Subject: [Buildroot] [git commit] package/php: Bump version to 5.5.13
+Message-ID: <20140601200641.1C97E9CE45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d140790eb749b0450feefc65c03ffdf1c16b0e8
+commit: http://git.buildroot.net/buildroot/commit/?id=41b2e1a74cf2810f6783186b10d86e70a49dd60b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-  http://autobuild.buildroot.org/results/0ed/0ed3152a166a69d65a226e3cef755ed370cc245b/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-ugly/Config.in |    5 +++--
- package/libdvdnav/Config.in                    |    5 +++--
- package/libdvdread/Config.in                   |    5 +++--
- 3 files changed, 9 insertions(+), 6 deletions(-)
+ package/php/php.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
-index ad9f13c..958b8c3 100644
---- a/package/gstreamer1/gst1-plugins-ugly/Config.in
-+++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
-@@ -41,12 +41,13 @@ comment "plugins with external dependencies (there may be more available)"
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
- 	bool "dvdread"
- 	depends on BR2_LARGEFILE # libdvdread
-+	depends on !BR2_PREFER_STATIC_LIB # libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
- 	  Access a DVD with dvdread
+diff --git a/package/php/php.mk b/package/php/php.mk
+index c17a623..a878800 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--comment "dvdread needs a toolchain w/ largefile"
--	depends on !BR2_LARGEFILE
-+comment "dvdread needs a toolchain w/ dynamic library, largefile"
-+	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
- 	bool "lame (*.mp3 audio encoder)"
-diff --git a/package/libdvdnav/Config.in b/package/libdvdnav/Config.in
-index 6378382..fed3b16 100644
---- a/package/libdvdnav/Config.in
-+++ b/package/libdvdnav/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBDVDNAV
- 	bool "libdvdnav"
- 	depends on BR2_LARGEFILE # libdvdread
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_PREFER_STATIC_LIB # libdvdread
- 	select BR2_PACKAGE_LIBDVDREAD
- 	help
- 	  libdvdnav is a library that allows easy use of sophisticated
-@@ -10,5 +11,5 @@ config BR2_PACKAGE_LIBDVDNAV
- 
- 	  http://www.mplayerhq.hu
- 
--comment "libdvdnav needs a toolchain w/ largefile, threads"
--	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "libdvdnav needs a toolchain w/ dynamic library, largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREEFER_STATIC_LIB
-diff --git a/package/libdvdread/Config.in b/package/libdvdread/Config.in
-index 94f4e62..65d3d40 100644
---- a/package/libdvdread/Config.in
-+++ b/package/libdvdread/Config.in
-@@ -1,11 +1,12 @@
- config BR2_PACKAGE_LIBDVDREAD
- 	bool "libdvdread"
- 	depends on BR2_LARGEFILE
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  libdvdread provides a simple foundation for reading
- 	  DVD-Video images.
- 
- 	  http://www.mplayerhq.hu/MPlayer/releases/dvdnav/
- 
--comment "libdvdread needs a toolchain w/ largefile"
--	depends on !BR2_LARGEFILE
-+comment "libdvdread needs a toolchain w/ dynamic library, largefile"
-+	depends on !BR2_LARGEFILE || BR2_PREFER_STATIC_LIB
+-PHP_VERSION = 5.5.12
++PHP_VERSION = 5.5.13
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
