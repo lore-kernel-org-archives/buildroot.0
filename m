@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:39 +0200
-Subject: [Buildroot] [PATCH 08/21] package/libbsd: bump version
+Date: Sun,  1 Jun 2014 23:43:40 +0200
+Subject: [Buildroot] [PATCH 09/21] package/snappy: do not line-up variables
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <ff3965ebd44be23106f9a3db7a2495727dfe8fe6.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <1f8d81da242ce73b8e7b1c281b6d4fa848adff76.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,30 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-... and switch to using .tar.xz as that's all upstream is providing now.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libbsd/libbsd.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/snappy/snappy.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index c1cd59e..d6481b2 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,7 +4,8 @@
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index b94f8cc..c30cb3c 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBBSD_VERSION = 0.4.2
-+LIBBSD_VERSION = 0.6.0
-+LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
- LIBBSD_SITE = http://libbsd.freedesktop.org/releases
- LIBBSD_LICENSE = BSD-3c MIT
- LIBBSD_LICENSE_FILES = COPYING
+-SNAPPY_VERSION		= 1.1.1
+-SNAPPY_SITE		= http://snappy.googlecode.com/files/
+-SNAPPY_LICENSE		= BSD-3c
+-SNAPPY_LICENSE_FILES	= COPYING
+-SNAPPY_INSTALL_STAGING	= YES
++SNAPPY_VERSION = 1.1.1
++SNAPPY_SITE = http://snappy.googlecode.com/files/
++SNAPPY_LICENSE = BSD-3c
++SNAPPY_LICENSE_FILES = COPYING
++SNAPPY_INSTALL_STAGING = YES
+ 
+ $(eval $(autotools-package))
 -- 
 1.8.3.2
