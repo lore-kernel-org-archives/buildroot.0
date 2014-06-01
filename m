@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:35 +0200
-Subject: [Buildroot] [PATCH 11/26] package/w_scan: bump version
+Date: Sun,  1 Jun 2014 23:03:37 +0200
+Subject: [Buildroot] [PATCH 13/26] package/libbsd: bump version
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <707b867ce24697979e0b2dd5a47b23a7df9004c0.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <cc254fbb97d751691c3b821bdb1df895d0cb3eb7.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,26 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+... and switch to using .tar.xz as that's all upstream is providing now.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/w_scan/w_scan.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libbsd/libbsd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
-index 86bd34e..44f3193 100644
---- a/package/w_scan/w_scan.mk
-+++ b/package/w_scan/w_scan.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index c1cd59e..d6481b2 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -4,7 +4,8 @@
  #
  ################################################################################
  
--W_SCAN_VERSION = 20130331
-+W_SCAN_VERSION = 20140118
- W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
- W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
- W_SCAN_LICENSE = GPLv2+
+-LIBBSD_VERSION = 0.4.2
++LIBBSD_VERSION = 0.6.0
++LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+ LIBBSD_SITE = http://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-3c MIT
+ LIBBSD_LICENSE_FILES = COPYING
 -- 
 1.8.3.2
