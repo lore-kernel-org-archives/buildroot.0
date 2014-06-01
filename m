@@ -1,86 +1,145 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Jun 2014 12:47:45 +0200
-Subject: [Buildroot] [PATCH 08/11] toolchain-external: bump musl external
-	toolchains to 1.1.1
+Date: Sun,  1 Jun 2014 12:47:46 +0200
+Subject: [Buildroot] [PATCH 09/11] toolchain-external: add CodeSourcery MIPS
+	2014.05, remove 2012.09
 In-Reply-To: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1401619668-28062-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1401619668-28062-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And while we're at it, factorize the definition of the musl version,
-since it's common to the definition of the tarball names for the
-various supported architectures.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             |  2 +-
- toolchain/toolchain-external/toolchain-external.mk | 23 +++++++++++-----------
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ toolchain/toolchain-external/Config.in             | 40 +++++++++++-----------
+ toolchain/toolchain-external/toolchain-external.mk |  6 ++--
+ 2 files changed, 23 insertions(+), 23 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 8fca01a..527ff04 100644
+index 527ff04..3331b69 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -804,7 +804,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	select BR2_TOOLCHAIN_EXTERNAL_MUSL
+@@ -190,8 +190,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+ 
+ 	  This toolchain uses software-floating point.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
+-	bool "Sourcery CodeBench MIPS 2013.11"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
++	bool "Sourcery CodeBench MIPS 2014.05"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+@@ -200,12 +200,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_INSTALL_LIBSTDCPP
  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
  	help
- 	  Toolchain based on the Musl C library, provided by the
- 	  musl-cross project. It uses gcc 4.8.2, binutils 2.24 and
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
+-	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
+-	  3.11. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
++	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers
++	  3.13. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+@@ -259,8 +259,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+-	bool "Sourcery CodeBench MIPS 2013.05"
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
++	bool "Sourcery CodeBench MIPS 2013.11"
+ 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+@@ -269,12 +269,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
+-	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
+-	  3.8.2. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
++	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
++	  3.11. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+@@ -328,9 +328,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	    - MIPS32 little endian soft float uclibc
+ 	      Not usable in Buildroot yet.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+-	bool "Sourcery CodeBench MIPS 2012.09"
+-	depends on BR2_mips || BR2_mipsel
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
++	bool "Sourcery CodeBench MIPS 2013.05"
++	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on !BR2_MIPS_NABI32
+ 	depends on !BR2_PREFER_STATIC_LIB
+@@ -338,12 +338,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+ 	help
+ 	  Sourcery CodeBench toolchain for the MIPS architecture, from
+-	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
+-	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
+-	  3.5.4. It has support for the following variants:
++	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
++	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
++	  3.8.2. It has support for the following variants:
+ 	    - MIPS32 O32 big endian glibc
+ 	      Select a MIPS generic core
+ 	      Disable BR2_SOFT_FLOAT
+@@ -877,9 +877,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
+ 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+-	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
+ 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
++	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
+ 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index a6c4061..47273d3 100644
+index 47273d3..50e8dca 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -355,31 +355,32 @@ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.05_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
--TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-1.0.0/
-+TOOLCHAIN_EXTERNAL_VERSION = 1.1.1
-+TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-$(TOOLCHAIN_EXTERNAL_VERSION)/
- ifeq ($(BR2_arm),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabi-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-arm-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_armeb),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-armeb-linux-musleabi-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-armeb-linux-musleabi-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_i386),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-i486-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_microblazebe),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-microblaze-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-microblaze-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_mips),y)
- ifeq ($(BR2_SOFT_FLOAT),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-sf-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mips-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- endif # BR2_SOFT_FLOAT
- else ifeq ($(BR2_mipsel),y)
- ifeq ($(BR2_SOFT_FLOAT),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-sf-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-mipsel-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- endif # BR2_SOFT_FLOAT
- else ifeq ($(BR2_powerpc),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-powerpc-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- else ifeq ($(BR2_x86_64),y)
--TOOLCHAIN_EXTERNAL_SOURCE = crossx86-x86_64-linux-musl-1.0.0.tar.xz
-+TOOLCHAIN_EXTERNAL_SOURCE = crossx86-x86_64-linux-musl-$(TOOLCHAIN_EXTERNAL_VERSION).tar.xz
- endif
- else
- # Custom toolchain
+@@ -283,15 +283,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+-TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
++TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
 -- 
 1.9.3
