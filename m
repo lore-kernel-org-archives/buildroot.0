@@ -1,56 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 15:41:45 +0200
-Subject: [Buildroot] [PATCH 0/11 v5] Some download-related changes
- (branch yem/check-downloads)
-In-Reply-To: <20140601133822.GG3430@free.fr>
-References: <cover.1399204808.git.yann.morin.1998@free.fr>
- <20140601152441.045ec06b@free-electrons.com>
- <20140601133822.GG3430@free.fr>
-Message-ID: <20140601154145.6fa6e4ee@free-electrons.com>
+From: Javier Domingo Cansino <javierdo1@gmail.com>
+Date: Sun, 1 Jun 2014 15:48:52 +0200
+Subject: [Buildroot]  [PATCH 1/1] configs: bump zedboard to 2014.1
+Message-ID: <CALZVapnO=eXG1utmqQM7TTyNbci91K2yYM4uRNQ5N5eQaFRs_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hello!
 
-On Sun, 1 Jun 2014 15:38:22 +0200, Yann E. MORIN wrote:
+I am trying to use this patch to boot a zedboard, but I can't get it
+working, I also tried doing it without the patch, and didn't succeed
+neither.
 
-> Well, that's basically what happens in patch 8/11 (as you noticed
-> already!).
+I had started rewriting a more complete readme.txt to make it easier
+for people create a buildroot based system[1], but didn't get zedboard
+boot with those instructions neither.
 
-Yes, right!
+Regarding your patch, I followed the specified commands in the readme,
+and I noticed a failure on it, the path to copy the sources to has a
+typo, needs to be board instead of boards:
 
-> You said on IRC:
->     at least for the wget download method, it's still wrong.
-> 
-> What Arnout said is that we want to create the temporary file in the
-> same filesystem as for the final file.
-> 
-> That can only be true if we create the temp file in the same directory
-> as the final file, as we have no info about the mountpoints.
-> 
-> But, as you said you want it to work even for parallel downloads, we
-> will have to do a bit of a gymnastic to avoid to builds in different
-> directories clobbering each others temp files.
-> 
-> So, of course, two parallel wget will step on each other's temp file.
-> Ditto for the other downloaders.
-> 
-> So, we must create temp files and temp clones with unique names. I'll
-> use mktemp for that.
+>+output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
++output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
 
-Ah, yes, indeed, makes sense. It will work even if $(O) and $(DL_DIR)
-are in separate file systems *and* provide the atomicity guarantees
-that we need to use the same $(DL_DIR) for several parallel builds.
+The steps I made after make (as stated in the readme) ended, have been
 
-Looks good. I guess you'll respin the series with this change?
+cp output/images/uImage SD/
+cp output/images/rootfs.cpio.uboot SD/uramdisk.image
+gzip SD/uramdisk.image
+cp output/images/boot.bin SD/
+cp output/images/zynq-zed.dtb SD/devicetree.dtb
 
-Thanks,
+The board doesn't even boot, nor load with the blue led (DONE one).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I will be in #buildroot as txomon or txomon|home , and can have the
+card available for testing for one week,
+
+Cheers,
+
+Javier Domingo Cansino
+
+[1] Github buildroot clone: https://github.com/txomon/buildroot ->
+doc/zedboard-instructions
