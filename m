@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 13:04:19 +0200
-Subject: [Buildroot] [PATCH v4 04/11] rpi-userland: cleanup *_CONF_OPT
-In-Reply-To: <1401614673-3703-5-git-send-email-s.martin49@gmail.com>
+Date: Sun, 1 Jun 2014 13:05:26 +0200
+Subject: [Buildroot] [PATCH v4 06/11] pkg-cmake.mk: globally disable
+ BUILD_TESTING flag
+In-Reply-To: <1401614673-3703-7-git-send-email-s.martin49@gmail.com>
 References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
- <1401614673-3703-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140601130419.58ed869e@free-electrons.com>
+ <1401614673-3703-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140601130526.08882da0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,17 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sun,  1 Jun 2014 11:24:26 +0200, Samuel Martin wrote:
-> rpi-userland does not need -DBUILD_SHARED_LIBS=OFF to be passed to
-> correclty build its static libraries; so remove this cmake flag from the
-> configure options.
+On Sun,  1 Jun 2014 11:24:28 +0200, Samuel Martin wrote:
+> This CMake flag is used to enable tests. It may not disable the test
+> programs from being built, but it controls the test execution.
+> 
+> Since we don't care about building the tests (and usually disable them
+> when possible), make sure Buildroot won't try to run them.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-As discussed in real-life, this should probably be squashed with PATCH
-05/11, and with an expanded explanation that details why reverting
-5e3b1f31b3f82e3b163567f10d7131c9d649a2cf does not re-introduce the bug
-that 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf was fixing.
-
-Maybe you should submit these fixes separately, since they are not
-related to the CMake package infrastructure per se?
-
-Thanks,
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Thomas
 -- 
