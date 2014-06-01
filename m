@@ -1,248 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jun 2014 23:27:25 +0200
-Subject: [Buildroot] [PATCH 17/26] package/procps: bump version and
- rename to procps-ng
-In-Reply-To: <40c318b64d99494c2050d99e3abae26822d8c68b.1401656581.git.yann.morin.1998@free.fr>
-References: <cover.1401656581.git.yann.morin.1998@free.fr>
- <40c318b64d99494c2050d99e3abae26822d8c68b.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <20140601212725.GP3430@free.fr>
+Date: Sun,  1 Jun 2014 23:43:48 +0200
+Subject: [Buildroot] [PATCH 0/21 v2] A bunch of bumps (branch yem/bumps)
+Message-ID: <cover.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-06-01 23:03 +0200, Yann E. MORIN spake thusly:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> procps is getting replaced by procps-ng, and there are
-> new versions available!
+Hello All!
 
-Gee... I forgot to apply a fix-up patch that renames the variables...
-Will respin later.
+This series has been sitting here waiting for the last release to be out.
+It is now, so here are the bumps.
+
+
+Changes v1 -> v2:
+  - apply a fixup to procps that I forgot in the previous round...
+
 
 Regards,
 Yann E. MORIN.
 
-> diff --git a/package/Config.in b/package/Config.in
-> index a5a328e..1152c10 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1105,7 +1105,7 @@ source "package/numactl/Config.in"
->  source "package/nut/Config.in"
->  source "package/polkit/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> -source "package/procps/Config.in"
-> +source "package/procps-ng/Config.in"
->  source "package/psmisc/Config.in"
->  endif
->  source "package/quota/Config.in"
-> diff --git a/package/procps/Config.in b/package/procps-ng/Config.in
-> similarity index 100%
-> rename from package/procps/Config.in
-> rename to package/procps-ng/Config.in
-> diff --git a/package/procps-ng/procps-0000-remove-index.patch b/package/procps-ng/procps-0000-remove-index.patch
-> new file mode 100644
-> index 0000000..1d85b31
-> --- /dev/null
-> +++ b/package/procps-ng/procps-0000-remove-index.patch
-> @@ -0,0 +1,16 @@
-> +sysctl: remove use of legacy index()
-> +
-> +[yann.morin.1998 at free.fr: adapt to procps-ng]
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +diff -durN procps-v3.3.9.orig/sysctl.c procps-v3.3.9/sysctl.c
-> +--- procps-v3.3.9.orig/sysctl.c	2013-12-03 12:16:18.000000000 +0100
-> ++++ procps-v3.3.9/sysctl.c	2014-05-31 00:45:00.869748741 +0200
-> +@@ -794,7 +794,7 @@
-> + 		      program_invocation_short_name);
-> + 
-> + 	for ( ; *argv; argv++) {
-> +-		if (WriteMode || index(*argv, '='))
-> ++		if (WriteMode || strchr(*argv, '='))
-> + 			ReturnCode += WriteSetting(*argv);
-> + 		else
-> + 			ReturnCode += ReadSetting(*argv);
-> diff --git a/package/procps-ng/procps.mk b/package/procps-ng/procps.mk
-> new file mode 100644
-> index 0000000..326c19c
-> --- /dev/null
-> +++ b/package/procps-ng/procps.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# procps
-> +#
-> +################################################################################
-> +
-> +PROCPS_VERSION = 3.3.9
-> +PROCPS_SOURCE = procps-ng-$(PROCPS_VERSION).tar.xz
-> +PROCPS_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
-> +PROCPS_LICENSE = GPLv2+, libproc and libps LGPLv2+
-> +PROCPS_LICENSE_FILES = COPYING COPYING.LIB
-> +
-> +PROCPS_DEPENDENCIES = ncurses
-> +
-> +$(eval $(autotools-package))
-> diff --git a/package/procps/procps-make-3.82.patch b/package/procps/procps-make-3.82.patch
-> deleted file mode 100644
-> index 2a56356..0000000
-> --- a/package/procps/procps-make-3.82.patch
-> +++ /dev/null
-> @@ -1,23 +0,0 @@
-> -[PATCH] procps: fix build with make 3.82
-> -
-> -Equivalent to upstream fix:
-> -http://procps.cvs.sourceforge.net/viewvc/procps/procps/Makefile?r1=1.70&r2=1.71
-> -
-> -Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-> ----
-> - Makefile |    2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -Index: procps-3.2.8/Makefile
-> -===================================================================
-> ---- procps-3.2.8.orig/Makefile
-> -+++ procps-3.2.8/Makefile
-> -@@ -174,7 +174,7 @@
-> - # want this rule first, use := on ALL, and ALL not filled in yet
-> - all: do_all
-> - 
-> ---include */module.mk
-> -+-include proc/module.mk ps/module.mk
-> - 
-> - do_all:    $(ALL)
-> - 
-> diff --git a/package/procps/procps-remove-flags.patch b/package/procps/procps-remove-flags.patch
-> deleted file mode 100644
-> index cb4dc56..0000000
-> --- a/package/procps/procps-remove-flags.patch
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -diff -u procps-3.2.5/Makefile procps-3.2.5-patched/Makefile
-> ---- procps-3.2.5/Makefile	2005-01-25 22:55:26.000000000 -0600
-> -+++ procps-3.2.5-patched/Makefile	2007-07-05 23:09:24.251423681 -0500
-> -@@ -70,9 +70,7 @@
-> - CURSES := -lncurses
-> - 
-> - # Preprocessor flags.
-> --PKG_CPPFLAGS := -D_GNU_SOURCE -I proc
-> --CPPFLAGS     := -I/usr/include/ncurses
-> --ALL_CPPFLAGS := $(PKG_CPPFLAGS) $(CPPFLAGS)
-> -+ALL_CPPFLAGS := -D_GNU_SOURCE -I proc
-> - 
-> - # Left out -Wconversion due to noise in glibc headers.
-> - # Left out -Wunreachable-code and -Wdisabled-optimization
-> -@@ -91,11 +89,9 @@
-> -   -Wstrict-prototypes -Wmissing-prototypes
-> - # Note that some stuff below is conditional on CFLAGS containing
-> - # an option that starts with "-g". (-g, -g2, -g3, -ggdb, etc.)
-> --CFLAGS       := -O2 -s
-> - ALL_CFLAGS   := $(PKG_CFLAGS) $(CFLAGS)
-> - 
-> - PKG_LDFLAGS  := -Wl,-warn-common
-> --LDFLAGS      :=
-> - ALL_LDFLAGS  := $(PKG_LDFLAGS) $(LDFLAGS)
-> - 
-> - ############ Add some extra flags if gcc allows
-> diff --git a/package/procps/procps-remove-index.patch b/package/procps/procps-remove-index.patch
-> deleted file mode 100644
-> index 4f4cfb7..0000000
-> --- a/package/procps/procps-remove-index.patch
-> +++ /dev/null
-> @@ -1,21 +0,0 @@
-> -diff -ur procps-3.2.5/sysctl.c procps-3.2.5-patched/sysctl.c
-> ---- procps-3.2.5/sysctl.c	2005-01-05 15:00:47.000000000 -0600
-> -+++ procps-3.2.5-patched/sysctl.c	2006-12-04 19:51:36.272843000 -0600
-> -@@ -272,7 +272,7 @@
-> -       return 0;
-> -    } /* end if */
-> - 
-> --   equals = index(setting, '=');
-> -+   equals = strchr(setting, '=');
-> -  
-> -    if (!equals) {
-> -       fprintf(stderr, ERR_NO_EQUALS, setting);
-> -@@ -498,7 +498,7 @@
-> -          if (NameOnly && Quiet)   // nonsense
-> -             return Usage(me);
-> -          SwitchesAllowed = false;
-> --         if (WriteMode || index(*argv, '='))
-> -+         if (WriteMode || strchr(*argv, '='))
-> -             ReturnCode = WriteSetting(*argv);
-> -          else
-> -             ReturnCode = ReadSetting(*argv);
-> diff --git a/package/procps/procps-wchar.patch b/package/procps/procps-wchar.patch
-> deleted file mode 100644
-> index 7915229..0000000
-> --- a/package/procps/procps-wchar.patch
-> +++ /dev/null
-> @@ -1,29 +0,0 @@
-> ---- procps-3.2.7/proc/escape.c	2005-01-06 07:50:26.000000000 +1100
-> -+++ procps-3.2.7.fixed/proc/escape.c	2008-09-09 11:55:57.000000000 +1000
-> -@@ -15,7 +15,7 @@
-> - #include "escape.h"
-> - #include "readproc.h"
-> - 
-> --#if (__GNU_LIBRARY__ >= 6)
-> -+#if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-> - # include <wchar.h>
-> - # include <wctype.h>
-> - # include <stdlib.h>  /* MB_CUR_MAX */
-> -@@ -23,7 +23,7 @@
-> - # include <langinfo.h>
-> - #endif
-> - 
-> --#if (__GNU_LIBRARY__ >= 6)
-> -+#if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-> - static int escape_str_utf8(char *restrict dst, const char *restrict src, int bufsize, int *maxcells){
-> -   int my_cells = 0;
-> -   int my_bytes = 0;
-> -@@ -123,7 +123,7 @@
-> -   "********************************"
-> -   "********************************";
-> -   
-> --#if (__GNU_LIBRARY__ >= 6)
-> -+#if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-> -   static int utf_init=0;
-> -   
-> -   if(utf_init==0){
-> diff --git a/package/procps/procps.mk b/package/procps/procps.mk
-> deleted file mode 100644
-> index dc2b841..0000000
-> --- a/package/procps/procps.mk
-> +++ /dev/null
-> @@ -1,25 +0,0 @@
-> -################################################################################
-> -#
-> -# procps
-> -#
-> -################################################################################
-> -
-> -PROCPS_VERSION = 3.2.8
-> -PROCPS_SITE = http://procps.sourceforge.net/
-> -PROCPS_LICENSE = GPLv2+, libproc and libps LGPLv2+
-> -PROCPS_LICENSE_FILES = COPYING COPYING.LIB
-> -
-> -PROCPS_DEPENDENCIES = ncurses
-> -
-> -define PROCPS_BUILD_CMDS
-> -	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-> -endef
-> -
-> -define PROCPS_INSTALL_TARGET_CMDS
-> -	mkdir -p $(addprefix $(TARGET_DIR)/,usr/bin bin sbin) \
-> -		 $(addprefix $(TARGET_DIR)/usr/share/man/,man1 man5 man8)
-> -	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) lib64=lib install=install \
-> -		ldconfig=true install
-> -endef
-> -
-> -$(eval $(generic-package))
-> -- 
-> 1.8.3.2
-> 
+
+The following changes since commit 21dd304ec5cb70e2b24705dce3519e395802121e:
+
+  package/nut: bump to latest stable (2014-06-01 23:14:15 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git 
+
+for you to fetch changes up to 6e3e424b836e09ce9a880897d7983b543ae2f765:
+
+  [WIP] package/weston: add support for the RDP compositor (2014-06-01 23:31:58 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (21):
+      package/tzdata: bump version for some new timezones
+      package/zic: bump version for misc fixes
+      package/dtv-scan-tables: bump version
+      package/tvheadend: bump version
+      package/w_scan: do not line-up variables
+      package/w_scan: bump version
+      package/libbsd: do not line-up variables
+      package/libbsd: bump version
+      package/snappy: do not line-up variables
+      package/snappy: bump version
+      package/libevdev: bump version
+      package/procps: bump version and rename to procps-ng
+      package/wayland: bump version
+      package/weston: bump version
+      package/weston: libxkbcommon is optional
+      package/libinput: new package
+      package/weston: add support for libinput
+      package/freerdp: not forcibly depend on X.Org
+      pacakge/freerdp: disable building the manpages
+      package/freerdp: add options to enable/disable server and/or client
+      [WIP] package/weston: add support for the RDP compositor
+
+ package/Config.in                                  |  5 +-
+ package/dtv-scan-tables/dtv-scan-tables.mk         |  4 +-
+ package/freerdp/Config.in                          | 31 ++++++++++--
+ package/freerdp/freerdp.mk                         | 32 ++++++++++--
+ package/libbsd/libbsd.mk                           |  9 ++--
+ package/libevdev/libevdev.mk                       |  2 +-
+ package/libinput/Config.in                         | 17 +++++++
+ package/libinput/libinput.mk                       | 19 ++++++++
+ package/{procps => procps-ng}/Config.in            |  6 +--
+ package/procps-ng/procps-0000-remove-index.patch   | 16 ++++++
+ package/procps-ng/procps.mk                        | 15 ++++++
+ package/procps/procps-make-3.82.patch              | 23 ---------
+ package/procps/procps-remove-flags.patch           | 26 ----------
+ package/procps/procps-remove-index.patch           | 21 --------
+ package/procps/procps-wchar.patch                  | 29 -----------
+ package/procps/procps.mk                           | 25 ----------
+ package/snappy/snappy.mk                           | 10 ++--
+ package/tvheadend/tvheadend.mk                     |  2 +-
+ package/tzdata/tzdata.mk                           |  2 +-
+ package/w_scan/w_scan.mk                           | 14 +++---
+ package/wayland/wayland.mk                         |  4 +-
+ package/weston/Config.in                           | 16 +++++-
+ ...0-compositor-rpi-fix-input-initialization.patch | 57 ----------------------
+ package/weston/weston-0000-safe-foreach.patch      | 36 ++++++++++++++
+ package/weston/weston-0003-dont-build-tests.patch  | 17 -------
+ package/weston/weston.mk                           | 28 +++++++++--
+ package/zic/zic.mk                                 |  2 +-
+ 27 files changed, 226 insertions(+), 242 deletions(-)
+ create mode 100644 package/libinput/Config.in
+ create mode 100644 package/libinput/libinput.mk
+ rename package/{procps => procps-ng}/Config.in (63%)
+ create mode 100644 package/procps-ng/procps-0000-remove-index.patch
+ create mode 100644 package/procps-ng/procps.mk
+ delete mode 100644 package/procps/procps-make-3.82.patch
+ delete mode 100644 package/procps/procps-remove-flags.patch
+ delete mode 100644 package/procps/procps-remove-index.patch
+ delete mode 100644 package/procps/procps-wchar.patch
+ delete mode 100644 package/procps/procps.mk
+ delete mode 100644 package/weston/weston-0000-compositor-rpi-fix-input-initialization.patch
+ create mode 100644 package/weston/weston-0000-safe-foreach.patch
+ delete mode 100644 package/weston/weston-0003-dont-build-tests.patch
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
