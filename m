@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:27 +0200
-Subject: [Buildroot] [PATCH 03/26] package/linux-firmware: bump version
+Date: Sun,  1 Jun 2014 23:03:28 +0200
+Subject: [Buildroot] [PATCH 04/26] package/linux-firmware: install new
+	Broadcom 43xxx firmware
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <2d9b6ec02d2e247691f3a91d6657396800db70eb.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <0d35a734db9d102fa44f3f056179aebd4d76acc5.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,49 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This bump brings in a new version of the iwlwifi firmware.
+This installs firmware files for the FullMAC series of Broadcom
+WiFi devices.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/linux-firmware/linux-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-firmware/Config.in         | 5 +++--
+ package/linux-firmware/linux-firmware.mk | 7 ++++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index ba9a6c1..ba41598 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -26,9 +26,10 @@ config BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271
+ 	  Firmware files for the Atheros 9271 module
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX
+-	bool "Broadcom BRCM bcm43xx"
++	bool "Broadcom BRCM bcm43xx/43xxx"
+ 	help
+-	  Firmware files for the Broadcom BRCM bcm43xx
++	  Firmware files for the Broadcom bcm43xx and bcm43xxx,
++	  SoftMAC and FullMAC.
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160
+ 	bool "Intel iwlwifi 3160"
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9c7e05c..9f36591 100644
+index 9f36591..aa87c73 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -185,7 +185,12 @@ endif
  
--LINUX_FIRMWARE_VERSION = f8c22c692bdee57a20b092e647464ff6176df3ed
-+LINUX_FIRMWARE_VERSION = 4a050f5524a09c35192273e3a5d741f63e7bf7d6
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
+ # brcm
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX),y)
+-LINUX_FIRMWARE_FILES += brcm/bcm43xx-0.fw brcm/bcm43xx_hdr-0.fw
++LINUX_FIRMWARE_FILES += brcm/bcm43xx-0.fw brcm/bcm43xx_hdr-0.fw \
++			brcm/bcm4329-fullmac-4.bin brcm/brcmfmac43236b.bin \
++			brcm/brcmfmac43241b0-sdio.bin brcm/brcmfmac43241b4-sdio.bin \
++			brcm/brcmfmac4329-sdio.bin brcm/brcmfmac4330-sdio.bin \
++			brcm/brcmfmac4334-sdio.bin brcm/brcmfmac4335-sdio.bin \
++			brcm/brcmfmac43362-sdio.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.broadcom_bcm43xx
+ endif
  
 -- 
 1.8.3.2
