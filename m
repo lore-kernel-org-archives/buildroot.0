@@ -1,104 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 22:16:24 +0200
-Subject: [Buildroot] [git commit] pkg-cmake.mk: enable ccache for cmake
-	packages
-Message-ID: <20140601202128.3BF5F9CAB0@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Jun 2014 22:23:29 +0200
+Subject: [Buildroot] [PATCHv2 1/6] minidlna: do not select
+	BR2_PACKAGE_GETTEXT_TOOLS
+In-Reply-To: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1401654214-19384-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8f2d248f65067979f9b7da25ee2469ae020ec1b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit 9ff640ae30ca588228030faf2c6fd13af292cb66 ("minidlna: needs
+gettext and host-gettext tools if locale is enabled") modified the
+minidlna package to fix gettext related issues. As part of this patch,
+a select of BR2_PACKAGE_GETTEXT_TOOLS was added, which according to
+the commit title is used to have host-gettext tools installed.
 
-This patch updates the generated toolchainfile.cmake to use ccache.
+However, this is not what this option is about: this option is about
+having gettext tools installed on the target.
 
-When toolchainfile.cmake is used inside Buildroot, using ccache during
-the build is driven by a CMake knob: USE_CCACHE, automatically set by
-the cmake-package infrastructure and reflecting the BR2_CCACHE value.
+Since this is not what minidlna needs, and we anyway plan to remove
+this BR2_PACKAGE_GETTEXT_TOOLS option, this commit removes this
+incorrect select statement.
 
-Since this toolchainefile.cmake file can be used outside Buildroot, and
-this file also set a couple of things (among these: the sysroot cflag,
-some pkg-config environment variables), it is important to set the
-compiler variables as well to keep the consistency of the
-cross-compilation configuration.
-So, when it is used outside Buildroot, using ccache for the build is
-driven by the ccache program availability.
-
-Note that using ccache for the build is achieved by setting the *_ARG1
-CMake variables to let CMake use ccache without failing in detecting
-the compiler.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 ---
- package/pkg-cmake.mk                |    2 ++
- support/misc/toolchainfile.cmake.in |   33 +++++++++++++++++++++++++++++++--
- 2 files changed, 33 insertions(+), 2 deletions(-)
+ package/minidlna/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index a84aa0b..56a93c7 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -66,6 +66,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
-+		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
- endef
-@@ -83,6 +84,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
- 		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
-+		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
- endef
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 27a0af1..46ed932 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -23,5 +23,34 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
- set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
- set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- 
--set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+# This toolchain file can be used both inside and outside Buildroot.
-+# * When used inside Buildroot, ccache support is explicitly driven using the
-+#   USE_CCACHE variable.
-+# * When used outside Buildroot (i.e. when USE_CCACHE is not defined), ccache
-+#   support is automatically enabled if the ccache program is available.
-+if(DEFINED USE_CCACHE)
-+	if(USE_CCACHE)
-+		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
-+		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
-+		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+	else()
-+		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+	endif()
-+else()
-+	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
-+	if(CCACHE)
-+		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_C_COMPILER "${CCACHE}")
-+		set(CMAKE_CXX_COMPILER "${CCACHE}")
-+		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+		message(STATUS "ccache program has been found and will be used for the build.")
-+		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
-+	else()
-+		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+	endif()
-+endif()
+diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+index 4a46b0c..5c5306d 100644
+--- a/package/minidlna/Config.in
++++ b/package/minidlna/Config.in
+@@ -14,7 +14,6 @@ config BR2_PACKAGE_MINIDLNA
+ 	select BR2_PACKAGE_LIBJPEG
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+-	select BR2_PACKAGE_GETTEXT_TOOLS if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+ 	  MiniDLNA (aka ReadyDLNA) is server software with the aim of being
+ 	  fully compliant with DLNA/UPnP-AV clients.
+-- 
+1.9.3
