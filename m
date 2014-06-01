@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:32 +0200
-Subject: [Buildroot] [PATCH 01/21] package/tzdata: bump version for some new
-	timezones
+Date: Sun,  1 Jun 2014 23:43:33 +0200
+Subject: [Buildroot] [PATCH 02/21] package/zic: bump version for misc fixes
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <f1f3a9214acd73434eacf134d86fc2357ff36db4.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <1aa59b894c0775ce2a9516403c6a59a279fc33a0.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,23 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-A few adjustments here and there, plus re-definition
-of the Crimea timezone.
-
-New definition for the moment the Big-Bang occured, too. :-)
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tzdata/tzdata.mk | 2 +-
+ package/zic/zic.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 58b5f13..4f86289 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 65605c5..d9d8523 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2014a
-+TZDATA_VERSION = 2014d
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
- TZDATA_DEPENDENCIES = host-zic
+-ZIC_VERSION = 2013i
++ZIC_VERSION = 2014d
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = ftp://ftp.iana.org/tz/releases
+ ZIC_LICENSE = Public domain
 -- 
 1.8.3.2
