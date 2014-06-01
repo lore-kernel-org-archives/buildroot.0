@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:34 +0200
-Subject: [Buildroot] [PATCH 03/21] package/dtv-scan-tables: bump version
+Date: Sun,  1 Jun 2014 23:43:35 +0200
+Subject: [Buildroot] [PATCH 04/21] package/tvheadend: bump version
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <6d42eb217e609fe87b8dbca54739aac981b0b80b.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <e2187ddfaefbda7a99b3e9f2b149c0cbbb9c12ac.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,26 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-New scan tables, and updates to existing ones.
-Update upstream URL at the same time.
+Lotta fixes all over the tree.
+Still no new release... :-/
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/tvheadend/tvheadend.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index db7fb91..9d85325 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index ac4c290..244e129 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DTV_SCAN_TABLES_VERSION = 7809ca1c04e688f35d09b8c1b2ac9b8ef4865322
--DTV_SCAN_TABLES_SITE = http://linuxtv.org/git/dtv-scan-tables.git
-+DTV_SCAN_TABLES_VERSION = 1246b27f8b45f84c1824925060ad931530542f2e
-+DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
- # This package only contains the transponders data. This is not a 'work'
+-TVHEADEND_VERSION = 6482d33ba90848018c530018e5c38992b8ac921c
++TVHEADEND_VERSION = 0ebca1b3dbb6a18d8adcf66a32b5922ce769b9b5
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE
 -- 
 1.8.3.2
