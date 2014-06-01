@@ -1,100 +1,44 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  1 Jun 2014 11:24:24 +0200
-Subject: [Buildroot] [PATCH v4 02/11] pkg-cmake.mk: do not hardcode absolute
-	path in toolchainfile.cmake
+Date: Sun,  1 Jun 2014 11:24:26 +0200
+Subject: [Buildroot] [PATCH v4 04/11] rpi-userland: cleanup *_CONF_OPT
 In-Reply-To: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
 References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1401614673-3703-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <1401614673-3703-5-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch allows sharing or moving the toolchains.
-
-This is a step toward making the toolchain/sdk relocatable.
-
-Closes #6818
+rpi-userland does not need -DBUILD_SHARED_LIBS=OFF to be passed to
+correclty build its static libraries; so remove this cmake flag from the
+configure options.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Uwe Strempel <u.strempel@googlemail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
 changes v3 -> v4:
 - rebase
-- add comments to explain the logic (Arnout)
 
 changes v2 -> v3:
-- rebase
-- use CMAKE_CURRENT_LIST_DIR instead of get_filename_component()
-- rewrite subst call in a more natural way (Arnout)
+- new patch
 ---
- package/pkg-cmake.mk                | 11 +++++++----
- support/misc/toolchainfile.cmake.in | 17 ++++++++++++-----
- 2 files changed, 19 insertions(+), 9 deletions(-)
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index a7a9380..2d4a264 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -158,14 +158,17 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
- # Generation of the CMake toolchain file
- ################################################################################
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 8b225ba..2de6b92 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
+ RPI_USERLAND_INSTALL_STAGING = YES
+-RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
++RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
  
-+# In order to allow the toolchain to be relocated, we calculate the HOST_DIR
-+# based on the toolchainfile.cmake file's location: $(HOST_DIR)/usr/share/buildroot
-+# In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
-+# so we have to strip "$(HOST_DIR)/" from the paths that contain it.
- $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 	@mkdir -p $(@D)
- 	sed \
--		-e 's:@@HOST_DIR@@:$(call qstrip,$(HOST_DIR)):' \
--		-e 's:@@STAGING_DIR@@:$(call qstrip,$(STAGING_DIR)):' \
-+		-e 's:@@STAGING_SUBDIR@@:$(call qstrip,$(STAGING_SUBDIR)):' \
- 		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
- 		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
--		-e 's:@@TARGET_CC_NOCCACHE@@:$(call qstrip,$(TARGET_CC_NOCCACHE)):' \
--		-e 's:@@TARGET_CXX_NOCCACHE@@:$(call qstrip,$(TARGET_CXX_NOCCACHE)):' \
-+		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
-+		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
- 		< $(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index e8cc378..df79acd 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -3,18 +3,25 @@
- # CMake toolchain file for Buildroot
- #
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
  
-+# In order to allow the toolchain to be relocated, we calculate the
-+# HOST_DIR based on this file's location: $(HOST_DIR)/usr/share/buildroot
-+# and store it in RELOCATED_HOST_DIR.
-+# In all the other variables that need to refer to HOST_DIR will use
-+# the RELOCATED_HOST_DIR variable.
-+string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
-+
- set(CMAKE_SYSTEM_NAME Linux)
- 
- set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
- set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
- set(CMAKE_INSTALL_SO_NO_EXE 0)
- 
--set(CMAKE_PROGRAM_PATH "@@HOST_DIR@@/usr/bin")
--set(CMAKE_FIND_ROOT_PATH "@@STAGING_DIR@@")
-+set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
-+set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
- set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
- set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
--set(ENV{PKG_CONFIG_SYSROOT_DIR} "@@STAGING_DIR@@")
-+set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- 
--set(CMAKE_C_COMPILER "@@TARGET_CC_NOCCACHE@@")
--set(CMAKE_CXX_COMPILER "@@TARGET_CXX_NOCCACHE@@")
-+set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
 -- 
 1.9.2
