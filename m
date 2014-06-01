@@ -1,27 +1,31 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jun 2014 23:11:40 +0200
-Subject: [Buildroot] Patchwork / Hackfest day on Sunday, 1st June
-In-Reply-To: <f72a8c5c-c457-4583-9daa-5197d5ac977f@email.android.com> (Thomas
- De Schampheleire's message of "Sat, 31 May 2014 15:22:10 +0200")
-References: <20140531141811.6a38b31e@free-electrons.com>
- <f72a8c5c-c457-4583-9daa-5197d5ac977f@email.android.com>
-Message-ID: <87sino1gj7.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Jun 2014 23:12:27 +0200
+Subject: [Buildroot] [PATCH 01/26] package/rpi-firmware: bump
+In-Reply-To: <378956497535d52b6dad5a505f50f70cbd535e8f.1401656581.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:03:25 +0200")
+References: <cover.1401656581.git.yann.morin.1998@free.fr>
+ <378956497535d52b6dad5a505f50f70cbd535e8f.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <87oayc1ghw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Yet another bump for the Raspberry Pi firmware:
+ >   - HDMI: EDID override; HDCP fix; add command to control power to HDMI phy;
+ >         fixes to mode selection
+ >   - GPU: enable use of HW cursor; fix for GLES FFT compliance; fix scaling;
+ >         remove arbitrary restrictions on output sizes
+ >   - video-decode: better handle corrupted h264 streams, better allocate memory
+ >   - misc: choose composite video when HDMI is not plugged
 
- >> Don't hesitate to let me know if you intend to participate.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > I will not be able to participate but I want to express my sympathy
- > with this event. Great idea!
-
-Yes, same here - Thanks!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
