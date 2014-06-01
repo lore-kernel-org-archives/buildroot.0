@@ -1,38 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  1 Jun 2014 17:13:42 +0000 (UTC)
-Subject: [Buildroot] [Bug 7136] New: ecryptfs-utils needs gettext to run
- when glibc/eglibc is used
-Message-ID: <bug-7136-163@https.bugs.busybox.net/>
+From: Javier Domingo Cansino <javierdo1@gmail.com>
+Date: Sun, 1 Jun 2014 19:14:53 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: bump zedboard to 2014.1
+In-Reply-To: <CAEBucnAj-m1G0rvL1+uHSTUMh5dhsqFy0L87_zGTqi75v6H+VA@mail.gmail.com>
+References: <CALZVapnO=eXG1utmqQM7TTyNbci91K2yYM4uRNQ5N5eQaFRs_A@mail.gmail.com>
+ <CAEBucnAifQGsZVyi8z42vkyug31nH_UnvS1hM12+A0x4kd_ESQ@mail.gmail.com>
+ <CALZVapm8jFJaoOjy2cGy0HNPGB4R7M8gfvr18i8xFv+JiuAjPQ@mail.gmail.com>
+ <CAEBucnAj-m1G0rvL1+uHSTUMh5dhsqFy0L87_zGTqi75v6H+VA@mail.gmail.com>
+Message-ID: <CALZVap=TMZFzS5xhE50R1JNDTW74cmEXU187X_oqxFmGyY2LUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7136
+I am currently trying to integrate Zedboard in Openwrt, mainly because
+it is the one I am accustomed to and because I sick when people uses
+over 20MB in an embedded system ;).
 
-           Summary: ecryptfs-utils needs gettext to run when glibc/eglibc
-                    is used
-           Product: buildroot
-           Version: 2014.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: xxiao8 at fosiao.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+> Sounds great.   If your willing to write docs, it may be interesting to
+> create a wiki page on wiki.xilinx.com that walks through the whole process.
+> This would give the buildroot port some additional exposure.
 
+I don't know how much time I will have spare but I will definitely
+consider doing it =)
 
-gettext package is disabled by default when glibc/eglibc is chosen, this should
-be enabled at least for package such as ecryptfs, there might be other packages
-that need gettext as well. gettext should not depend on BR2_NEEDS_GETTEXT which
-is uClibc only.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Javier Domingo Cansino
