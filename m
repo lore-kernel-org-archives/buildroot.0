@@ -1,42 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Jun 2014 12:47:37 +0200
-Subject: [Buildroot] [PATCH 00/11] Round of external toolchain updates
-Message-ID: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Jun 2014 12:47:38 +0200
+Subject: [Buildroot] [PATCH 01/11] toolchain-external: apply kernel headers
+	check to non-custom toolchains
+In-Reply-To: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1401619668-28062-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since the introduction of the kernel headers Config.in options, the
+external toolchain logic had a check for custom external toolchains to
+verify that the kernel headers version entered by the user matches the
+one of the toolchain. However, this check was not made for non-custom
+external toolchains (i.e the built-in profiles, such as Linaro,
+CodeSourcery and al.), making the assumption that the Buildroot
+developers will do the right selection.
 
-Here is a round of external toolchain updates, mainly bumping the
-versions of the various toolchains we have, and a few improvements to
-the kernel headers version check.
+However, it is quite nice when bumping external toolchains to have
+this automatic kernel headers version check, to ensure we select the
+appropriate kernel headers version.
 
-Thanks,
+Therefore, this commit makes the kernel headers version check
+applicable to non-custom external toolchains.
 
-Thomas
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Thomas Petazzoni (11):
-  toolchain-external: apply kernel headers check to non-custom
-    toolchains
-  toolchain-external: do not pass TOOLCHAIN_EXTERNAL_CFLAGS for kernel
-    headers check
-  toolchain-external: support only one Linaro ARM toolchain at a time
-  toolchain-external: support only one Linaro AArch64 toolchain at a
-    time
-  toolchain-external: bump Linaro ARM to 2014.05
-  toolchain-external: bump Linaro ARMeb toolchain to 2014.04
-  toolchain-external: bump Linaro AArch64 toolchain to 2014.05
-  toolchain-external: bump musl external toolchains to 1.1.1
-  toolchain-external: add CodeSourcery MIPS 2014.05, remove 2012.09
-  toolchain-external: add CodeSourcery PowerPC 2012.03
-  toolchain-external: add ADI Blackfin 2014R1 toolchain, remove 2012R1
-
- toolchain/toolchain-external/Config.in             | 200 +++++++++------------
- toolchain/toolchain-external/toolchain-external.mk |  86 ++++-----
- 2 files changed, 119 insertions(+), 167 deletions(-)
-
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c73cc4a..70781db 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -466,11 +466,9 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if [ "$(BR2_TOOLCHAIN_EXTERNAL_CUSTOM)" = "y" ]; then \
+-		$(call check_kernel_headers_version,\
+-			$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)),\
+-			$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+-	fi ; \
++	$(call check_kernel_headers_version,\
++		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)),\
++		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+ 	if test "$(BR2_arm)" = "y" ; then \
+ 		$(call check_arm_abi,\
+ 			"$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS)",\
 -- 
 1.9.3
