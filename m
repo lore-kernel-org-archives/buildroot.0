@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 12:54:50 +0200
-Subject: [Buildroot] [PATCH v4 01/11] pkg-cmake.mk: refactor the
- toolchainfile.cmake generation
-In-Reply-To: <1401614673-3703-2-git-send-email-s.martin49@gmail.com>
+Date: Sun, 1 Jun 2014 12:57:09 +0200
+Subject: [Buildroot] [PATCH v4 02/11] pkg-cmake.mk: do not hardcode
+ absolute path in toolchainfile.cmake
+In-Reply-To: <1401614673-3703-3-git-send-email-s.martin49@gmail.com>
 References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
- <1401614673-3703-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140601125450.75594d10@free-electrons.com>
+ <1401614673-3703-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140601125709.4ee4e631@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +14,37 @@ To: buildroot@busybox.net
 
 Dear Samuel Martin,
 
-On Sun,  1 Jun 2014 11:24:23 +0200, Samuel Martin wrote:
-> This patch introduces a toolchainfile.cmake.in template which is filled
-> by Buildroot.
+On Sun,  1 Jun 2014 11:24:24 +0200, Samuel Martin wrote:
+> The patch allows sharing or moving the toolchains.
 > 
-> Using a toolchainfile.cmake.in template file allows to avoid overloading
-> quoting and/or escaping and it becomes much more similar to the
-> resulting file.
+> This is a step toward making the toolchain/sdk relocatable.
 > 
-> This patch also cleans up the quoting style.
+> Closes #6818
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Baruch Siach <baruch@tkos.co.il>
+> Cc: Uwe Strempel <u.strempel@googlemail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> +	sed \
-> +		-e 's:@@HOST_DIR@@:$(call qstrip,$(HOST_DIR)):' \
-> +		-e 's:@@STAGING_DIR@@:$(call qstrip,$(STAGING_DIR)):' \
-> +		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
-> +		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
-> +		-e 's:@@TARGET_CC_NOCCACHE@@:$(call qstrip,$(TARGET_CC_NOCCACHE)):' \
-> +		-e 's:@@TARGET_CXX_NOCCACHE@@:$(call qstrip,$(TARGET_CXX_NOCCACHE)):' \
-> +		< $(TOPDIR)/support/misc/toolchainfile.cmake.in \
+> +# In all the other variables that need to refer to HOST_DIR will use
+> +# the RELOCATED_HOST_DIR variable.
 
-The stdin redirection here is not strictly needed: as argument, sed
-takes an input file. But it's not necessary to do another post of the
-patch series just for this, I believe.
+There's a typo in this sentence. Either:
 
-Thanks,
+"""
+All the other variables that need to refer to HOST_DIR will use the
+RELOCATED_HOST_DIR variable.
+"""
+
+or
+
+"""
+In all the other variables that need to refer to HOST_DIR, we'll use
+the RELOCATED_HOST_DIR variable.
+"""
+
+But hopefully Peter can fix this while applying.
 
 Thomas
 -- 
