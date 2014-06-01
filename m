@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:48 +0200
-Subject: [Buildroot] [PATCH 17/21] package/weston: add support for libinput
+Date: Sun,  1 Jun 2014 23:43:46 +0200
+Subject: [Buildroot] [PATCH 15/21] package/weston: libxkbcommon is optional
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <04c179087a1d27273a58bb533ce9f3f136572540.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <a71e7e58835a658675c879f3abe68e1c09aa53d3.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,69 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+It is possible to build weston without libxkbcommon, for example
+if using an input method that is not an hardware keyboard (e.g. a
+virtual keyboard, or none at all.)
+
+Make it optional.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/weston/weston.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/weston/Config.in | 11 ++++++++++-
+ package/weston/weston.mk |  9 ++++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index aaef405..96ebdf1 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -5,7 +5,6 @@ comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
+ 	select BR2_PACKAGE_WAYLAND
+-	select BR2_PACKAGE_LIBXKBCOMMON
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_LIBPNG
+@@ -29,6 +28,16 @@ config BR2_PACKAGE_WESTON
+ 
+ if BR2_PACKAGE_WESTON
+ 
++config BR2_PACKAGE_WESTON_HW_KBD
++	bool "enable keyboard support"
++	default y
++	select BR2_PACKAGE_LIBXKBCOMMON
++	help
++	  Say 'y' here if you plan on using a keyboard.
++
++	  Only say 'n' if you're going to use a virtual keyboard or any other
++	  input method.
++
+ # Helper to make sure at least one compositor is selected.
+ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+ 	bool
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index ea63203..325cfc7 100644
+index 8188ae6..ea63203 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -32,6 +32,13 @@ else
- WESTON_CONF_OPT += --disable-xkbcommon
- endif
+@@ -10,7 +10,7 @@ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_LIBINPUT),y)
-+WESTON_DEPENDENCIES += libinput
-+WESTON_CONF_OPT += --enable-libinput-backend
+-WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
++WESTON_DEPENDENCIES = host-pkgconf wayland pixman libpng \
+ 	jpeg mtdev udev cairo
+ 
+ WESTON_CONF_OPT = \
+@@ -25,6 +25,13 @@ WESTON_CONF_OPT = \
+ 	--disable-weston-launch \
+ 	--disable-colord
+ 
++ifeq ($(BR2_PACKAGE_WESTON_HW_KBD),y)
++WESTON_DEPENDENCIES += libxkbcommon
++WESTON_CONF_OPT += --enable-xkbcommon
 +else
-+WESTON_CONF_OPT += --disable-libinput-backend
++WESTON_CONF_OPT += --disable-xkbcommon
 +endif
 +
  ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
