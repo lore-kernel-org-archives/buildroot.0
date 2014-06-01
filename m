@@ -1,121 +1,100 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  1 Jun 2014 11:24:25 +0200
-Subject: [Buildroot] [PATCH v4 03/11] pkg-cmake.mk: enable ccache for cmake
-	packages
+Date: Sun,  1 Jun 2014 11:24:24 +0200
+Subject: [Buildroot] [PATCH v4 02/11] pkg-cmake.mk: do not hardcode absolute
+	path in toolchainfile.cmake
 In-Reply-To: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
 References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1401614673-3703-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1401614673-3703-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch updates the generated toolchainfile.cmake to use ccache.
+The patch allows sharing or moving the toolchains.
 
-When toolchainfile.cmake is used inside Buildroot, using ccache during
-the build is driven by a CMake knob: USE_CCACHE, automatically set by
-the cmake-package infrastructure and reflecting the BR2_CCACHE value.
+This is a step toward making the toolchain/sdk relocatable.
 
-Since this toolchainefile.cmake file can be used outside Buildroot, and
-this file also set a couple of things (among these: the sysroot cflag,
-some pkg-config environment variables), it is important to set the
-compiler variables as well to keep the consistency of the
-cross-compilation configuration.
-So, when it is used outside Buildroot, using ccache for the build is
-driven by the ccache program availability.
+Closes #6818
 
-Note that using ccache for the build is achieved by setting the *_ARG1
-CMake variables to let CMake use ccache without failing in detecting
-the compiler.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Uwe Strempel <u.strempel@googlemail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
-changes v3 -> v4 (Samuel):
+changes v3 -> v4:
 - rebase
-- make sure ccache built by Buildroot can be found when
-  toolchainfile.cmakeis used outside Buildroot (Arnout)
+- add comments to explain the logic (Arnout)
 
-changes v2 -> v3 (Samuel):
+changes v2 -> v3:
 - rebase
-- inline the -DUSE_CCACHE=... in the configure commands.
-- always set the compiler variables, even when called for outside
-  Buildroot.
-- update commit message
-
-changes v1 -> v2 (Luca):
-- totally reimplemented based on Samuel's suggestion;
-- added dependency on host-ccache for cmake packages if ccache is
-  enabled.
+- use CMAKE_CURRENT_LIST_DIR instead of get_filename_component()
+- rewrite subst call in a more natural way (Arnout)
 ---
- package/pkg-cmake.mk                |  2 ++
- support/misc/toolchainfile.cmake.in | 33 +++++++++++++++++++++++++++++++--
- 2 files changed, 33 insertions(+), 2 deletions(-)
+ package/pkg-cmake.mk                | 11 +++++++----
+ support/misc/toolchainfile.cmake.in | 17 ++++++++++++-----
+ 2 files changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 2d4a264..1de1d4a 100644
+index a7a9380..2d4a264 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -66,6 +66,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_INSTALL_PREFIX="/usr" \
- 		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
-+		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
- endef
-@@ -83,6 +84,7 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
- 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
- 		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
-+		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
- 		$$($$(PKG)_CONF_OPT) \
- 	)
- endef
+@@ -158,14 +158,17 @@ host-cmake-package = $(call inner-cmake-package,host-$(pkgname),$(call UPPERCASE
+ # Generation of the CMake toolchain file
+ ################################################################################
+ 
++# In order to allow the toolchain to be relocated, we calculate the HOST_DIR
++# based on the toolchainfile.cmake file's location: $(HOST_DIR)/usr/share/buildroot
++# In all the other variables, HOST_DIR will be replaced by RELOCATED_HOST_DIR,
++# so we have to strip "$(HOST_DIR)/" from the paths that contain it.
+ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
+ 	@mkdir -p $(@D)
+ 	sed \
+-		-e 's:@@HOST_DIR@@:$(call qstrip,$(HOST_DIR)):' \
+-		-e 's:@@STAGING_DIR@@:$(call qstrip,$(STAGING_DIR)):' \
++		-e 's:@@STAGING_SUBDIR@@:$(call qstrip,$(STAGING_SUBDIR)):' \
+ 		-e 's:@@TARGET_CFLAGS@@:$(call qstrip,$(TARGET_CFLAGS)):' \
+ 		-e 's:@@TARGET_CXXFLAGS@@:$(call qstrip,$(TARGET_CXXFLAGS)):' \
+-		-e 's:@@TARGET_CC_NOCCACHE@@:$(call qstrip,$(TARGET_CC_NOCCACHE)):' \
+-		-e 's:@@TARGET_CXX_NOCCACHE@@:$(call qstrip,$(TARGET_CXX_NOCCACHE)):' \
++		-e 's:@@TARGET_CC_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC_NOCCACHE))):' \
++		-e 's:@@TARGET_CXX_NOCCACHE@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX_NOCCACHE))):' \
+ 		< $(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $@
 diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index df79acd..8cf28e9 100644
+index e8cc378..df79acd 100644
 --- a/support/misc/toolchainfile.cmake.in
 +++ b/support/misc/toolchainfile.cmake.in
-@@ -23,5 +23,34 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
- set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
- set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+@@ -3,18 +3,25 @@
+ # CMake toolchain file for Buildroot
+ #
  
--set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
--set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+# This toolchain file can be used both inside and outside Buildroot.
-+# * When used inside Buildroot, ccache support is explicitly driven using the
-+#   USE_CCACHE variable.
-+# * When used outside Buildroot (i.e. when USE_CCACHE is not defined), ccache
-+#   support is automatically enabled if the ccache program is available.
-+if(DEFINED USE_CCACHE)
-+	if(USE_CCACHE)
-+		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
-+		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
-+		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+	else()
-+		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+	endif()
-+else()
-+	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
-+	if(CCACHE)
-+		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_C_COMPILER "${CCACHE}")
-+		set(CMAKE_CXX_COMPILER "${CCACHE}")
-+		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+		message(STATUS "ccache program has been found and will be used for the build.")
-+		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
-+	else()
-+		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
-+		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
-+	endif()
-+endif()
++# In order to allow the toolchain to be relocated, we calculate the
++# HOST_DIR based on this file's location: $(HOST_DIR)/usr/share/buildroot
++# and store it in RELOCATED_HOST_DIR.
++# In all the other variables that need to refer to HOST_DIR will use
++# the RELOCATED_HOST_DIR variable.
++string(REPLACE "/usr/share/buildroot" "" RELOCATED_HOST_DIR ${CMAKE_CURRENT_LIST_DIR})
++
+ set(CMAKE_SYSTEM_NAME Linux)
+ 
+ set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS" FORCE)
+ set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS" FORCE)
+ set(CMAKE_INSTALL_SO_NO_EXE 0)
+ 
+-set(CMAKE_PROGRAM_PATH "@@HOST_DIR@@/usr/bin")
+-set(CMAKE_FIND_ROOT_PATH "@@STAGING_DIR@@")
++set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
++set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+-set(ENV{PKG_CONFIG_SYSROOT_DIR} "@@STAGING_DIR@@")
++set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ 
+-set(CMAKE_C_COMPILER "@@TARGET_CC_NOCCACHE@@")
+-set(CMAKE_CXX_COMPILER "@@TARGET_CXX_NOCCACHE@@")
++set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
 -- 
 1.9.2
