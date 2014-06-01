@@ -1,47 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 14:51:19 +0200
-Subject: [Buildroot] UCLIBC_EXTRA_CFLAGS in uClibc overridden while
- using buildroot
-In-Reply-To: <5315041D.9010906@zacarias.com.ar>
-References: <43F7AEDD312F9E499A1A4E3608E505ED2ABF12D3@SJEXCHMB09.corp.ad.broadcom.com>
- <20130607115530.7132b7b1@skate>
- <43F7AEDD312F9E499A1A4E3608E505ED2ABF14F2@SJEXCHMB09.corp.ad.broadcom.com>
- <5315041D.9010906@zacarias.com.ar>
-Message-ID: <20140601145119.128ff510@free-electrons.com>
+Date: Sun, 1 Jun 2014 14:56:00 +0200
+Subject: [Buildroot] [PATCHv2 2/2] glibc: add eglibc 2.19-svnr25243 and
+ choice menu
+In-Reply-To: <538B20BA.5040600@zacarias.com.ar>
+References: <1401623919-16671-1-git-send-email-gustavo@zacarias.com.ar>
+ <1401623919-16671-2-git-send-email-gustavo@zacarias.com.ar>
+ <20140601143431.683da18d@free-electrons.com>
+ <538B20BA.5040600@zacarias.com.ar>
+Message-ID: <20140601145600.1222fac1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Gustavo Zacarias,
 
-On Mon, 03 Mar 2014 19:37:17 -0300, Gustavo Zacarias wrote:
-> On 06/07/2013 06:08 PM, Rajendra Dendukuri wrote:
+On Sun, 01 Jun 2014 09:46:50 -0300, Gustavo Zacarias wrote:
+
+> > I'd like to see a comment above this dependency that explains why we
+> > have this dependency: it's not because there is no support for PowerPC
+> > SPE, but only because it's broken, so a future bump to a newer version
+> > of eglibc 2.19 might fix the problem.
 > 
-> > Thanks for the inputs. The said patch works. Can we get this into release buildroot source tree.
-> 
-> Hi.
-> Revived old thread!
-> It may work for your particular case, but generally, it's a bad idea to
-> allow tweaking libc build CFLAGS, specially when they're merged with
-> package CFLAGS.
-> What's the intention of this, fixing some problem or just plain
-> optimization?
-> The patch as it is right now would break PowerPC SPE ABI toolchains and
-> probably Xtensa to a certain degree too (see package/Makefile.in)
-> A config option with separate extra CFLAGS for uClibc could be
-> introduced, but really, if it's not fixing anything in particular, why?
-> If you're fixing some issue in a determined fixed scenario then it might
-> be good to make it automatic.
+> Ok.
+> For the record there are other commits in a similar vein that didn't get
+> that benefit, and it's build breakage (so quite obvious to test & catch).
 
-Almost three months later after Gustavo's request for more details, the
-original submitter hasn't provide these details. I'm therefore marking
-the patch as Rejected in patchwork. Rajendra, if you think your patch
-is still useful, please resend an updated version, with a more detailed
-explanation of the cases where it is needed.
+Yeah, might be the case. I'm not at all pretending that the rest of the
+code is perfect. Just pointing out that this particular patch could be
+improved by having a little comment, IMO.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
