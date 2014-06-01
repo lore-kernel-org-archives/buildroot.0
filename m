@@ -1,39 +1,45 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun,  1 Jun 2014 11:24:33 +0200
-Subject: [Buildroot] [PATCH v4 11/11] qhull: do not override CMAKE_BUILD_TYPE
-In-Reply-To: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
-References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1401614673-3703-12-git-send-email-s.martin49@gmail.com>
+From: =?UTF-8?q?Peter=20K=C3=BCmmel?= <syntheticpp@gmx.net>
+Date: Sun,  1 Jun 2014 11:50:41 +0200
+Subject: [Buildroot] [PATCH 1/2] ti-gfx: use only -I${includedir} as
+	pkg-config Cflags
+Message-ID: <1401616242-5692-1-git-send-email-syntheticpp@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This flag is already correctly set by the cmake-package infrastructure.
+Using only -I${includedir} in common practice.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Settings only -I${includedir}/GLES2 breaks Qt5's CMake files,
+because at configure time CMake only searchs the paths reported
+by pkg-config, and not even /usr/include is used as default.
 
+Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
 ---
-changes v3 -> v4:
-- rebase
+ package/ti-gfx/egl.pc    |    2 +-
+ package/ti-gfx/glesv2.pc |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-changes v2 -> v3:
-- new patch
----
- package/qhull/qhull.mk | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
-index 15fb46e..6992d71 100644
---- a/package/qhull/qhull.mk
-+++ b/package/qhull/qhull.mk
-@@ -9,6 +9,5 @@ QHULL_SITE = git://gitorious.org/qhull/qhull.git
- QHULL_INSTALL_STAGING = YES
- QHULL_LICENSE = BSD-Style
- QHULL_LICENSE_FILES = COPYING.txt
--QHULL_CONF_OPT = -DCMAKE_BUILD_TYPE=Release
- 
- $(eval $(cmake-package))
+diff --git a/package/ti-gfx/egl.pc b/package/ti-gfx/egl.pc
+index 223fb04..36ea413 100644
+--- a/package/ti-gfx/egl.pc
++++ b/package/ti-gfx/egl.pc
+@@ -8,4 +8,4 @@ Description: TI Graphics SDK implementation of EGL
+ Version: 1.9.2188537
+ Requires:
+ Libs: -L${libdir} -lEGL -lGLESv2 -lIMGegl
+-Cflags: -I${includedir}/EGL/ -I${includedir}
++Cflags: -I${includedir}
+diff --git a/package/ti-gfx/glesv2.pc b/package/ti-gfx/glesv2.pc
+index 4c70aec..b458133 100644
+--- a/package/ti-gfx/glesv2.pc
++++ b/package/ti-gfx/glesv2.pc
+@@ -8,4 +8,4 @@ Description: TI Graphics SDK implementation of OpenGL ESv2
+ Version: 1.9.2188537
+ Requires:
+ Libs: -L${libdir} -lGLESv2 -lGLES_CM -lsrv_um -lusc -lEGL -lIMGegl
+-Cflags: -I${includedir}/GLES2
++Cflags: -I${includedir}
 -- 
-1.9.2
+1.7.10.4
