@@ -1,43 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jun 2014 15:49:11 +0200
-Subject: [Buildroot] [PATCH] graph-depends: refactor with more color
-In-Reply-To: <CAB0FRsuy94wo81ybkcFNkwZBg3sOPs-jAx+4RZ7S1nJM8AXtaQ@mail.gmail.com>
-References: <1401564012-23822-1-git-send-email-francois.perrad@gadz.org>
- <20140531203324.GE3522@free.fr>
- <CAB0FRsuy94wo81ybkcFNkwZBg3sOPs-jAx+4RZ7S1nJM8AXtaQ@mail.gmail.com>
-Message-ID: <20140601134910.GH3430@free.fr>
+Date: Sun, 1 Jun 2014 15:51:25 +0200
+Subject: [Buildroot] [PATCH 0/11 v5] Some download-related changes
+ (branch yem/check-downloads)
+In-Reply-To: <20140601154145.6fa6e4ee@free-electrons.com>
+References: <cover.1399204808.git.yann.morin.1998@free.fr>
+ <20140601152441.045ec06b@free-electrons.com>
+ <20140601133822.GG3430@free.fr>
+ <20140601154145.6fa6e4ee@free-electrons.com>
+Message-ID: <20140601135125.GI3430@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Thomas, All,
 
-On 2014-06-01 15:23 +0200, Fran?ois Perrad spake thusly:
-> 2014-05-31 22:33 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> > Farn?ois, All,
-> >
-> > On 2014-05-31 21:20 +0200, Francois Perrad spake thusly:
-> >> target and host packages don't use the same background color
-> >> +            color = 'gainsboro'
-> >> +        else:
-> >> +            color = 'grey'
-> >
-> > The difference between 'gainsboro' and 'grey' is very light. At first, I
-> > thought I had forgotten to apply your patch, so the difference is light.
-> >
-> > Did you choose it on-purpose? Did you choose it because it really looks
-> > different when printed?
+On 2014-06-01 15:41 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 1 Jun 2014 15:38:22 +0200, Yann E. MORIN wrote:
+[--SNIP--]
+> > So, we must create temp files and temp clones with unique names. I'll
+> > use mktemp for that.
 > 
-> I don't like flashy color.
-> Feel free to experiment another set of color (don't forget black&white
-> printing).
-> See http://graphviz.org/content/color-names
+> Ah, yes, indeed, makes sense. It will work even if $(O) and $(DL_DIR)
+> are in separate file systems *and* provide the atomicity guarantees
+> that we need to use the same $(DL_DIR) for several parallel builds.
+> 
+> Looks good. I guess you'll respin the series with this change?
 
-OK, thanks! I kept your patch as-is, and added an option to change
-the colours:
-    https://www.gitorious.org/buildroot/buildroot/commit/2092984509902a1f12e30c69f413acf0f55ec0ac
+Yep.
 
 Regards,
 Yann E. MORIN.
