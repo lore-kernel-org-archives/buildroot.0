@@ -1,45 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 15:15:43 +0200
-Subject: [Buildroot] [PATCH] package infra: remove duplicates in
- dependencies list
-In-Reply-To: <1401618534-16200-1-git-send-email-yann.morin.1998@free.fr>
-References: <1401618534-16200-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140601151543.0d804348@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 1 Jun 2014 15:20:22 +0200
+Subject: [Buildroot] [PATCH] mpg123: bump to 1.20.0,
+ providing better optimizations for ARM and AArch64
+In-Reply-To: <1401628284-23998-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401628284-23998-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140601132022.GE3430@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Sun,  1 Jun 2014 12:28:54 +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2014-06-01 15:11 +0200, Thomas Petazzoni spake thusly:
+> As suggested by Gustavo, this patch bumps mpg123 to 1.20.0, and
+> therefore superseds the patch initially provided by Sven Neumann. In
+> 1.20.0, there is a new CPU type arm_fpu, which will compile code for
+> both VFP and NEON, and choose at runtime which one to use.
 > 
-> Currently, we just use what a package declares as its dependencies.
+> Similarly for AArch64, the option --with-cpu=aarch64 will compile both
+> the NEON and generic decoders, and select at runtime which one to use.
 > 
-> But some packages may declare the same depdency more than once. For
-> example, php has two options to add SQL support: 'mysql' or 'mysqli',
-> which are not exclusive. So, php.mk has mysql twice as a dependency.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/mpg123/mpg123.mk | 10 +++++++++-
+>  1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> Although that does not cause any grievance for make, we end up generating
-> dependency graphs where this duplicate dependency is visible.
+> diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+> index d66592c..ac64132 100644
+> --- a/package/mpg123/mpg123.mk
+> +++ b/package/mpg123/mpg123.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MPG123_VERSION = 1.18.0
+> +MPG123_VERSION = 1.20.0
+>  MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+>  MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+>  MPG123_CONF_OPT = --disable-lfs-alias
+> @@ -14,9 +14,17 @@ MPG123_LICENSE_FILES = COPYING
+>  
+>  MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
+>  
+> +ifeq ($(BR2_aarch64),y)
+> +MPG123_CPU = aarch64
+> +endif
+> +
+>  ifeq ($(BR2_arm),y)
+> +ifeq ($(or $(BR2_ARM_CPU_HAS_NEON),$(BR2_ARM_CPU_HAS_VFPV2)),y)
+> +MPG123_CPU = arm_fpu
+> +else
+>  MPG123_CPU = arm_nofpu
+>  endif
+> +endif
+>  
+>  ifeq ($(BR2_i386),y)
+>  MPG123_CPU = x86
+> -- 
+> 1.9.3
 > 
-> Add an intermediary variable which contains the $(sort)-ed list of the
-> dependnecies, thus eliminating any duplicates.
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Typo: dependencies
-
-Also, I'm wondering: is it necessary to do this in the core package
-infrastructure, or should we do it in the graph-depends tool, or even
-do it only in the $(1)-show-depends target? I don't have a strong
-disagreement with the patch, maybe after all it's cleaner to have the
-dependencies sorted and with duplicates removed.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
