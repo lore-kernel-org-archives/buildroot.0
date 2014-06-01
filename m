@@ -1,42 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jun 2014 15:51:25 +0200
-Subject: [Buildroot] [PATCH 0/11 v5] Some download-related changes
- (branch yem/check-downloads)
-In-Reply-To: <20140601154145.6fa6e4ee@free-electrons.com>
-References: <cover.1399204808.git.yann.morin.1998@free.fr>
- <20140601152441.045ec06b@free-electrons.com>
- <20140601133822.GG3430@free.fr>
- <20140601154145.6fa6e4ee@free-electrons.com>
-Message-ID: <20140601135125.GI3430@free.fr>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Sun,  1 Jun 2014 16:57:15 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: select fbset as it is a runtime
+	dependency
+Message-ID: <1401634635-20325-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+---
+ package/ti-gfx/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 2014-06-01 15:41 +0200, Thomas Petazzoni spake thusly:
-> On Sun, 1 Jun 2014 15:38:22 +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> > So, we must create temp files and temp clones with unique names. I'll
-> > use mktemp for that.
-> 
-> Ah, yes, indeed, makes sense. It will work even if $(O) and $(DL_DIR)
-> are in separate file systems *and* provide the atomicity guarantees
-> that we need to use the same $(DL_DIR) for several parallel builds.
-> 
-> Looks good. I guess you'll respin the series with this change?
-
-Yep.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
+index 3e8648e..f1f3a07 100644
+--- a/package/ti-gfx/Config.in
++++ b/package/ti-gfx/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_TI_GFX
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_HAS_POWERVR
++	select BR2_PACKAGE_FBSET # Runtime dependency only
+ 	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
+ 	help
+ 	  Graphics libraries for TI boards.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
