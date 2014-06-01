@@ -1,54 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jun 2014 21:51:10 +0200
-Subject: [Buildroot] [PATCH 09/12] pkg-infra: don't use DL_DIR as
- scratchpad for temporary downloads
-In-Reply-To: <6de658f7751ced3969fb11871c77f98fe9cdc097.1401644349.git.yann.morin.1998@free.fr>
-References: <cover.1401644349.git.yann.morin.1998@free.fr>
- <6de658f7751ced3969fb11871c77f98fe9cdc097.1401644349.git.yann.morin.1998@free.fr>
-Message-ID: <20140601195110.GM3430@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 1 Jun 2014 21:51:09 +0200
+Subject: [Buildroot] [git commit] glibc: move version handling to Config.in
+Message-ID: <20140601200641.04F529CE46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+commit: http://git.buildroot.net/buildroot/commit/?id=990a46fdec6a6b7f6fc342371a09f0a7f846647b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-06-01 19:40 +0200, Yann E. MORIN spake thusly:
-[--SNIP--]
-> diff --git a/support/download/bzr b/support/download/bzr
-> index 68121f4..4be36a0 100755
-> --- a/support/download/bzr
-> +++ b/support/download/bzr
-> @@ -9,11 +9,29 @@ set -e
->  #   $2: bzr revision
->  #   $3: output file
->  # And this environment:
-> -#   BZR       : the bzr command to call
-> -#   BR2_DL_DIR: path to Buildroot's download dir
-> +#   BZR      : the bzr command to call
-> +#   BUILD_DIR: path to Buildroot's build dir
->  
->  repo="${1}"
->  rev="${2}"
->  output="${3}"
->  
-> -${BZR} export "${output}" "${repo}" -r "${rev}"
-> +tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-> +
-> +# Remove leftovers from a previous failed run
-> +rm -rf "${BUILD_DIR}/.foo.tmp"
+Like we do elsewhere. No functional change, but nicer and easier to keep in
+sync.
 
-As noticed by Thomas on IRC: leftovers from a previous attempt.
-Fixed locally, waiting for more review before re-spinning.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/Config.in |    7 +++++++
+ package/glibc/glibc.mk  |    1 +
+ 2 files changed, 8 insertions(+), 0 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index d9b6acc..c2d6231 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -32,3 +32,10 @@ config BR2_GLIBC_VERSION_2_19
+ endchoice
+ 
+ endif
++
++config BR2_GLIBC_VERSION_STRING
++	string
++	default "2.18-svnr23787" if BR2_EGLIBC_VERSION_2_18
++	default "2.19-svnr25243" if BR2_EGLIBC_VERSION_2_19
++	default "2.18" if BR2_GLIBC_VERSION_2_18
++	default "2.19" if BR2_GLIBC_VERSION_2_19
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index f841fd0..d465665 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -16,6 +16,7 @@ GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
+ GLIBC_SRC_SUBDIR = .
+ endif
+ 
++GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION_STRING))
+ GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
+ GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
+ 
