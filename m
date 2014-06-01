@@ -1,64 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 21:00:19 +0200
-Subject: [Buildroot] [git commit] glibc: add eglibc 2.19-svnr25243 and
-	choice menu
-Message-ID: <20140601200640.F23069CE46@busybox.osuosl.org>
+Date: Sun, 1 Jun 2014 21:51:17 +0200
+Subject: [Buildroot] [git commit] gcc: switch to gcc 4.8.x as the default
+	compiler version
+Message-ID: <20140601200641.22FB09CE45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb48cdee66b1e1eb4a1a95d197ce895358c84a92
+commit: http://git.buildroot.net/buildroot/commit/?id=3d997bf7bc5acc89b2de60efe69fbcb7c66a2a11
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add glibc 2.19-svnr25243 and a choice menu to select between different
-eglibc versions.
-Blacklist it for PowerPC SPE since it doesn't even build.
+gcc 4.7.x is going to be retired soon, and now that gcc 4.9.0 is out,
+it's time for Buildroot to switch to gcc 4.8.x as the default gcc
+compiler version.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+See https://gcc.gnu.org/ml/gcc/2014-05/msg00324.html for details about
+gcc 4.7.x life cycle.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/Config.in |   18 ++++++++++++++++++
- package/glibc/glibc.mk  |    2 +-
- 2 files changed, 19 insertions(+), 1 deletions(-)
+ package/gcc/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index dbb1a19..d9b6acc 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -1,3 +1,21 @@
-+if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
-+
-+choice
-+	prompt "eglibc version"
-+	default BR2_EGLIBC_VERSION_2_18
-+
-+config BR2_EGLIBC_VERSION_2_18
-+	bool "2.18-svnr23787"
-+
-+config BR2_EGLIBC_VERSION_2_19
-+	bool "2.19-svnr25243"
-+	# Build breakage
-+	depends on !BR2_powerpc_SPE
-+
-+endchoice
-+
-+endif
-+
- if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index fd2c5e8..60835e9 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -11,7 +11,7 @@ choice
+ 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_4_9_X if BR2_microblaze || BR2_powerpc64le
+ 	default BR2_GCC_VERSION_4_5_X if BR2_bfin
+-	default BR2_GCC_VERSION_4_7_X
++	default BR2_GCC_VERSION_4_8_X
+ 	help
+ 	  Select the version of gcc you wish to use.
  
- choice
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d02ab7e..f841fd0 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
--GLIBC_VERSION = 2.18-svnr23787
-+GLIBC_VERSION = $(if $(BR2_EGLIBC_VERSION_2_19),2.19-svnr25243,2.18-svnr23787)
- GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
- GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
- GLIBC_SRC_SUBDIR = libc
