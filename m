@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jun 2014 22:20:32 +0200
-Subject: [Buildroot] [PATCH v4 10/11] flann: do not override
+Date: Sun, 01 Jun 2014 22:20:44 +0200
+Subject: [Buildroot] [PATCH v4 11/11] qhull: do not override
 	CMAKE_BUILD_TYPE
-In-Reply-To: <1401614673-3703-11-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 1 Jun 2014 11:24:32 +0200")
+In-Reply-To: <1401614673-3703-12-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 1 Jun 2014 11:24:33 +0200")
 References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
- <1401614673-3703-11-git-send-email-s.martin49@gmail.com>
-Message-ID: <87a99w2xgv.fsf@dell.be.48ers.dk>
+ <1401614673-3703-12-git-send-email-s.martin49@gmail.com>
+Message-ID: <8761kk2xgj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
