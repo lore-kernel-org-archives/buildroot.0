@@ -1,28 +1,22 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jun 2014 20:53:54 +0200
-Subject: [Buildroot] [PATCHv2] reenable microblaze little endian for
-	internal musl toolchain
-In-Reply-To: <20140531132008.GA22450@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Sat, 31 May 2014 15:20:08 +0200")
-References: <20140531132008.GA22450@waldemar-brodkorb.de>
-Message-ID: <87egz85um5.fsf@dell.be.48ers.dk>
+Date: Sun, 01 Jun 2014 20:55:30 +0200
+Subject: [Buildroot] [PATCH] libdvdread: needs dynamic library support
+In-Reply-To: <1401551809-2346-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 31 May 2014 17:56:49 +0200")
+References: <1401551809-2346-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87a99w5ujh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > The assumption musl libc does not support microblaze
- > little endian mode is wrong. See
- > http://git.musl-libc.org/cgit/musl/tree/configure line
- > number 447-448.
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/0ed/0ed3152a166a69d65a226e3cef755ed370cc245b/
 
- > Tested with qemu. Just revert previous commit as suggested by
- > Thomas Petazzoni.
-
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
