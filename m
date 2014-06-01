@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jun 2014 22:17:47 +0200
-Subject: [Buildroot] [PATCH v4 03/11] pkg-cmake.mk: enable ccache for
-	cmake packages
-In-Reply-To: <1401614673-3703-4-git-send-email-s.martin49@gmail.com> (Samuel
- Martin's message of "Sun, 1 Jun 2014 11:24:25 +0200")
+Date: Sun, 01 Jun 2014 22:18:30 +0200
+Subject: [Buildroot] [PATCH v4 07/11] pkg-cmake.mk: globally drive the
+	CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
+In-Reply-To: <1401614673-3703-8-git-send-email-s.martin49@gmail.com> (Samuel
+ Martin's message of "Sun, 1 Jun 2014 11:24:29 +0200")
 References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
- <1401614673-3703-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <87vbsk2xlg.fsf@dell.be.48ers.dk>
+ <1401614673-3703-8-git-send-email-s.martin49@gmail.com>
+Message-ID: <87r4382xk9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,27 +15,18 @@ To: buildroot@busybox.net
 
 >>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
 
- > This patch updates the generated toolchainfile.cmake to use ccache.
- > When toolchainfile.cmake is used inside Buildroot, using ccache during
- > the build is driven by a CMake knob: USE_CCACHE, automatically set by
- > the cmake-package infrastructure and reflecting the BR2_CCACHE value.
+ > This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
+ > etc).
 
- > Since this toolchainefile.cmake file can be used outside Buildroot, and
- > this file also set a couple of things (among these: the sysroot cflag,
- > some pkg-config environment variables), it is important to set the
- > compiler variables as well to keep the consistency of the
- > cross-compilation configuration.
- > So, when it is used outside Buildroot, using ccache for the build is
- > driven by the ccache program availability.
+ > So, it makes sense for Buildroot to globally drive this CMake flags in
+ > the cmake-package infrastructure.
 
- > Note that using ccache for the build is achieved by setting the *_ARG1
- > CMake variables to let CMake use ccache without failing in detecting
- > the compiler.
+ > However, if a package prefer overriding this default setting, it still
+ > can via the <PKG>_CONF_OPT variable.
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
  > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- > Cc: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
 Committed, thanks.
 
