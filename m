@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:36 +0200
-Subject: [Buildroot] [PATCH 12/26] package/libbsd: do not line-up variables
+Date: Sun,  1 Jun 2014 23:03:38 +0200
+Subject: [Buildroot] [PATCH 14/26] package/snappy: do not line-up variables
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <6f868019add43a39ca61e80464961fb74a64d291.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <91ff7883e881f67b5dc4879e47b90b6a4215cf8f.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,28 @@ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libbsd/libbsd.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/snappy/snappy.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 761a440..c1cd59e 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index b94f8cc..c30cb3c 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBBSD_VERSION         = 0.4.2
--LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
--LIBBSD_LICENSE         = BSD-3c MIT
--LIBBSD_LICENSE_FILES   = COPYING
-+LIBBSD_VERSION = 0.4.2
-+LIBBSD_SITE = http://libbsd.freedesktop.org/releases
-+LIBBSD_LICENSE = BSD-3c MIT
-+LIBBSD_LICENSE_FILES = COPYING
+-SNAPPY_VERSION		= 1.1.1
+-SNAPPY_SITE		= http://snappy.googlecode.com/files/
+-SNAPPY_LICENSE		= BSD-3c
+-SNAPPY_LICENSE_FILES	= COPYING
+-SNAPPY_INSTALL_STAGING	= YES
++SNAPPY_VERSION = 1.1.1
++SNAPPY_SITE = http://snappy.googlecode.com/files/
++SNAPPY_LICENSE = BSD-3c
++SNAPPY_LICENSE_FILES = COPYING
++SNAPPY_INSTALL_STAGING = YES
  
- LIBBSD_INSTALL_STAGING = YES
- 
+ $(eval $(autotools-package))
 -- 
 1.8.3.2
