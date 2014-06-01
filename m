@@ -1,100 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 12:28:54 +0200
-Subject: [Buildroot] [PATCH] package infra: remove duplicates in
-	dependencies list
-Message-ID: <1401618534-16200-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Jun 2014 12:47:37 +0200
+Subject: [Buildroot] [PATCH 00/11] Round of external toolchain updates
+Message-ID: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hello,
 
-Currently, we just use what a package declares as its dependencies.
+Here is a round of external toolchain updates, mainly bumping the
+versions of the various toolchains we have, and a few improvements to
+the kernel headers version check.
 
-But some packages may declare the same depdency more than once. For
-example, php has two options to add SQL support: 'mysql' or 'mysqli',
-which are not exclusive. So, php.mk has mysql twice as a dependency.
+Thanks,
 
-Although that does not cause any grievance for make, we end up generating
-dependency graphs where this duplicate dependency is visible.
+Thomas
 
-Add an intermediary variable which contains the $(sort)-ed list of the
-dependnecies, thus eliminating any duplicates.
+Thomas Petazzoni (11):
+  toolchain-external: apply kernel headers check to non-custom
+    toolchains
+  toolchain-external: do not pass TOOLCHAIN_EXTERNAL_CFLAGS for kernel
+    headers check
+  toolchain-external: support only one Linaro ARM toolchain at a time
+  toolchain-external: support only one Linaro AArch64 toolchain at a
+    time
+  toolchain-external: bump Linaro ARM to 2014.05
+  toolchain-external: bump Linaro ARMeb toolchain to 2014.04
+  toolchain-external: bump Linaro AArch64 toolchain to 2014.05
+  toolchain-external: bump musl external toolchains to 1.1.1
+  toolchain-external: add CodeSourcery MIPS 2014.05, remove 2012.09
+  toolchain-external: add CodeSourcery PowerPC 2012.03
+  toolchain-external: add ADI Blackfin 2014R1 toolchain, remove 2012R1
 
-This has the side effect of also sorting the list, which is probably
-good for reproducibility anyway.
+ toolchain/toolchain-external/Config.in             | 200 +++++++++------------
+ toolchain/toolchain-external/toolchain-external.mk |  86 ++++-----
+ 2 files changed, 119 insertions(+), 167 deletions(-)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
----
-Changes v1 -> v2:
-  - fix typoes in commit log  (Thomas)
-  - s/dupes/duplicates/  (Thomas)
----
- package/pkg-generic.mk | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 5116ed9..e950569 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -391,6 +391,9 @@ $(2)_DEPENDENCIES += toolchain
- endif
- endif
- 
-+# Eliminate duplicates in dependencies
-+$(2)_FINAL_DEPENDENCIES = $$(sort $$($(2)_DEPENDENCIES))
-+
- $(2)_INSTALL_STAGING		?= NO
- $(2)_INSTALL_IMAGES		?= NO
- $(2)_INSTALL_TARGET		?= YES
-@@ -476,14 +479,14 @@ $$($(2)_TARGET_INSTALL_HOST):	$$($(2)_TARGET_BUILD)
- $(1)-build:		$$($(2)_TARGET_BUILD)
- $$($(2)_TARGET_BUILD):	$$($(2)_TARGET_CONFIGURE)
- 
--# Since $(2)_DEPENDENCIES are phony targets, they are always "newer"
-+# Since $(2)_FINAL_DEPENDENCIES are phony targets, they are always "newer"
- # than $(2)_TARGET_CONFIGURE. This would force the configure step (and
- # therefore the other steps as well) to be re-executed with every
--# invocation of make.  Therefore, make $(2)_DEPENDENCIES an order-only
-+# invocation of make.  Therefore, make $(2)_FINAL_DEPENDENCIES an order-only
- # dependency by using |.
- 
- $(1)-configure:			$$($(2)_TARGET_CONFIGURE)
--$$($(2)_TARGET_CONFIGURE):	| $$($(2)_DEPENDENCIES)
-+$$($(2)_TARGET_CONFIGURE):	| $$($(2)_FINAL_DEPENDENCIES)
- 
- $$($(2)_TARGET_SOURCE) $$($(2)_TARGET_RSYNC): | dirs prepare
- ifeq ($(filter $(1),$(DEPENDENCIES_HOST_PREREQ)),)
-@@ -505,7 +508,7 @@ $$($(2)_TARGET_PATCH):	$$($(2)_TARGET_EXTRACT)
- $(1)-extract:			$$($(2)_TARGET_EXTRACT)
- $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
- 
--$(1)-depends:		$$($(2)_DEPENDENCIES)
-+$(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
- 
- $(1)-source:		$$($(2)_TARGET_SOURCE)
- else
-@@ -515,7 +518,7 @@ else
- #  configure
- $$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
- 
--$(1)-depends:		$$($(2)_DEPENDENCIES)
-+$(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
- 
- $(1)-patch:		$(1)-rsync
- $(1)-extract:		$(1)-rsync
-@@ -526,7 +529,7 @@ $(1)-source:		$$($(2)_TARGET_RSYNC_SOURCE)
- endif
- 
- $(1)-show-depends:
--			@echo $$($(2)_DEPENDENCIES)
-+			@echo $$($(2)_FINAL_DEPENDENCIES)
- 
- $(1)-graph-depends:
- 			@$(INSTALL) -d $(O)/graphs
 -- 
-1.8.3.2
+1.9.3
