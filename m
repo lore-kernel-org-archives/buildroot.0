@@ -1,60 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 21:51:17 +0200
-Subject: [Buildroot] [git commit] mpg123: bump to 1.20.0,
-	providing better optimizations for ARM and AArch64
-Message-ID: <20140601200641.161549CE45@busybox.osuosl.org>
+Date: Sun, 1 Jun 2014 20:55:47 +0200
+Subject: [Buildroot] [git commit] linux: bump to version 3.14.5
+Message-ID: <20140601200640.DEA369CE48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1cf2c6ea93d3bd855df7c9883d3882034f0568fa
+commit: http://git.buildroot.net/buildroot/commit/?id=014076da4cda075fb8afe03bb9f919c8b39dbd29
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As suggested by Gustavo, this patch bumps mpg123 to 1.20.0, and
-therefore superseds the patch initially provided by Sven Neumann. In
-1.20.0, there is a new CPU type arm_fpu, which will compile code for
-both VFP and NEON, and choose at runtime which one to use.
-
-Similarly for AArch64, the option --with-cpu=aarch64 will compile both
-the NEON and generic decoders, and select at runtime which one to use.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpg123/mpg123.mk |   10 +++++++++-
- 1 files changed, 9 insertions(+), 1 deletions(-)
+ linux/Config.in |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index d66592c..ac64132 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 419bc8c..b16d428 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -21,7 +21,7 @@ choice
+ 	prompt "Kernel version"
  
--MPG123_VERSION = 1.18.0
-+MPG123_VERSION = 1.20.0
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPT = --disable-lfs-alias
-@@ -14,9 +14,17 @@ MPG123_LICENSE_FILES = COPYING
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "3.14.4"
++	bool "3.14.5"
  
- MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
  
-+ifeq ($(BR2_aarch64),y)
-+MPG123_CPU = aarch64
-+endif
-+
- ifeq ($(BR2_arm),y)
-+ifeq ($(or $(BR2_ARM_CPU_HAS_NEON),$(BR2_ARM_CPU_HAS_VFPV2)),y)
-+MPG123_CPU = arm_fpu
-+else
- MPG123_CPU = arm_nofpu
- endif
-+endif
- 
- ifeq ($(BR2_i386),y)
- MPG123_CPU = x86
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "3.14.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "3.14.5" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
