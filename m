@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:52 +0200
-Subject: [Buildroot] [PATCH 21/21] [WIP] package/weston: add support for the
-	RDP compositor
+Date: Sun,  1 Jun 2014 23:43:47 +0200
+Subject: [Buildroot] [PATCH 16/21] package/libinput: new package
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <6e3e424b836e09ce9a880897d7983b543ae2f765.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <d7dd122837ceee43f6cbd3f8a6a7d2b839fbc9db.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,61 +12,74 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Using the RDP compositor, one can run a headless machine to serve remote
-clients, using the RDP protocol.
-
-Add an option to enable the rdp-backend.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-Note: this is mostly in an WIP state. The backend builds and does
-not crash. But the best I was able to get when connecting to this
-RDP server, is an empty, completely black client window, in which
-I could do nothing, not even run a weston-terminal or whatever,
-even by explicitly asking to run it via the RDP 'shell' command...
-But it works, as it does not crash. Oh, wait...
+ package/Config.in            |  1 +
+ package/libinput/Config.in   | 17 +++++++++++++++++
+ package/libinput/libinput.mk | 19 +++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/libinput/Config.in
+ create mode 100644 package/libinput/libinput.mk
 
-Although WIP, sending it to show off what weston is (supposed to be)
-capable of.
----
- package/weston/Config.in | 5 +++++
- package/weston/weston.mk | 7 +++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 96ebdf1..267571a 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -45,6 +45,11 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 
-+config BR2_PACKAGE_WESTON_RDP
-+	bool "RDP compositor"
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+diff --git a/package/Config.in b/package/Config.in
+index 1152c10..da8258f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -624,6 +624,7 @@ source "package/libcec/Config.in"
+ source "package/libfreefare/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
++source "package/libinput/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libllcp/Config.in"
+ source "package/libmbim/Config.in"
+diff --git a/package/libinput/Config.in b/package/libinput/Config.in
+new file mode 100644
+index 0000000..14e4e70
+--- /dev/null
++++ b/package/libinput/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBINPUT
++	bool "libinput"
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_LIBEVDEV
++	select BR2_PACKAGE_MTDEV
++	help
++	  libinput is a library to handle input devices in Wayland
++	  compositors and to provide a generic X.Org input driver.
++	  It provides device detection, device handling, input device
++	  event processing and abstraction so minimize the amount of
++	  custom input code compositors need to provide the common
++	  set of functionality that users expect.
 +
- comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
- 	depends on BR2_arm
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 325cfc7..6189601 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -39,6 +39,13 @@ else
- WESTON_CONF_OPT += --disable-libinput-backend
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
-+WESTON_DEPENDENCIES += freerdp
-+WESTON_CONF_OPT += --enable-rdp-compositor
-+else
-+WESTON_CONF_OPT += --disable-rdp-compositor
-+endif
++	  http://freedesktop.org/wiki/Software/libinput/
 +
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
++comment "libinput needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+new file mode 100644
+index 0000000..7c3e5e8
+--- /dev/null
++++ b/package/libinput/libinput.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libinput
++#
++################################################################################
++
++LIBINPUT_VERSION = 0.2.0
++LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
++LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
++LIBINPUT_LICENSE = MIT
++LIBINPUT_LICENSE_FILES = COPYING
++
++LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
++LIBINPUT_INSTALL_STAGING = YES
++
++# Tests need fork, so just disable them everywhere.
++LIBINPUT_CONF_OPT = --disable-tests
++
++$(eval $(autotools-package))
 -- 
 1.8.3.2
