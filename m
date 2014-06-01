@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:43:35 +0200
-Subject: [Buildroot] [PATCH 04/21] package/tvheadend: bump version
+Date: Sun,  1 Jun 2014 23:43:36 +0200
+Subject: [Buildroot] [PATCH 05/21] package/w_scan: do not line-up variables
 In-Reply-To: <cover.1401658972.git.yann.morin.1998@free.fr>
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <e2187ddfaefbda7a99b3e9f2b149c0cbbb9c12ac.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <517df36804751594e8fe8affc408570d3b4468da.1401658972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,37 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Lotta fixes all over the tree.
-Still no new release... :-/
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tvheadend/tvheadend.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/w_scan/w_scan.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index ac4c290..244e129 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
+index 5ca02b8..86bd34e 100644
+--- a/package/w_scan/w_scan.mk
++++ b/package/w_scan/w_scan.mk
+@@ -4,15 +4,15 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 6482d33ba90848018c530018e5c38992b8ac921c
-+TVHEADEND_VERSION = 0ebca1b3dbb6a18d8adcf66a32b5922ce769b9b5
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE
+-W_SCAN_VERSION              = 20130331
+-W_SCAN_SOURCE               = w_scan-$(W_SCAN_VERSION).tar.bz2
+-W_SCAN_SITE                 = http://wirbel.htpc-forum.de/w_scan
+-W_SCAN_LICENSE              = GPLv2+
+-W_SCAN_LICENSE_FILES        = COPYING
++W_SCAN_VERSION = 20130331
++W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
++W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
++W_SCAN_LICENSE = GPLv2+
++W_SCAN_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+-W_SCAN_DEPENDENCIES        += libiconv
+-W_SCAN_CONF_ENV            += LIBS=-liconv
++W_SCAN_DEPENDENCIES += libiconv
++W_SCAN_CONF_ENV += LIBS=-liconv
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
 1.8.3.2
