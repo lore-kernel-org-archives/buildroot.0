@@ -1,71 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Jun 2014 22:23:28 +0200
-Subject: [Buildroot] [PATCHv2 0/6] gettext improvements
-Message-ID: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Jun 2014 22:23:30 +0200
+Subject: [Buildroot] [PATCHv2 2/6] gettext: remove support for gettext-tools
+	on target
+In-Reply-To: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1401654214-19384-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit removes the BR2_PACKAGE_GETTEXT_TOOLS option, which could
+be used to install gettext tools on the target. This is not needed,
+because Buildroot is not designed to provide a full development
+environment on the target, and gettext translation files should be
+processed on the build machine, using the host gettext tools.
 
-This patch series is an extension of the gettext/host-gettext speedup
-patch series sent previously.
+Remove this option will allow to optimize the build time of gettext on
+the target, by only building the gettext runtime libraries.
 
-The first three patches are almost identical, with just a few minor
-changes:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+---
+ Config.in.legacy           | 12 ++++++++++++
+ package/gettext/Config.in  | 14 --------------
+ package/gettext/gettext.mk |  4 ----
+ 3 files changed, 12 insertions(+), 18 deletions(-)
 
- - Improved the prompt of the Config.in.legacy option in "gettext:
-   remove support for gettext-tools on target", as suggested by Thomas
-   DS.
- - Remove the --disable-tools option from gettext configure options,
-   as suggested by Baruch.
- - Add Tested-by tags from Andrew Ruder
-
-Those first three patches can be applied without looking at the last
-three patches, which are not directly related.
-
-The last three patches fix a situation that our gettext handling was
-not handling. We were assuming that gettext was *never* necessary for
-glibc-based builds. However, it turns out that certain programs (for
-example ecryptfs-utils) need the 'gettext' binary program on the
-target to get translated strings. It is used in shell scripts in
-ecryptfs-utils. This was reported at
-https://bugs.busybox.net/show_bug.cgi?id=7136 and discussed on IRC
-with the bug submitter, who tested the proposed patches and confirmed
-that they work.
-
-The approach is to allow the gettext package to be built even with
-glibc toolchains. In this case, the gettext-runtime configure script
-detects that it's not necessary to build libintl, and therefore only
-the gettext utilities are built and installed on the target. Of
-course, only packages that need this will select gettext
-unconditionally (i.e without depending on BR2_NEEDS_GETTEXT or
-BR2_NEEDS_GETTEXT_IF_LOCALE). This is a quite sensitive change, but I
-believe it's good to do it early in the development cycle.
-
-Thomas
-
-Thomas Petazzoni (6):
-  minidlna: do not select BR2_PACKAGE_GETTEXT_TOOLS
-  gettext: remove support for gettext-tools on target
-  gettext: optimize build time
-  gettext: allow building when BR2_NEEDS_GETTEXT is not selected
-  ecryptfs-utils: select gettext, needed for command line utilities
-  docs/manual: update documentation about gettext handling
-
- Config.in.legacy                                   | 12 +++++++
- docs/manual/adding-packages-gettext.txt            | 22 +++++++++---
- package/ecryptfs-utils/Config.in                   |  8 +++--
- package/gettext/Config.in                          | 15 --------
- .../gettext-03-option-to-disable-tools.patch       | 42 ----------------------
- .../gettext/gettext-04-remove-examples-tests.patch | 20 -----------
- package/gettext/gettext.mk                         | 30 ++++++++--------
- package/minidlna/Config.in                         |  1 -
- 8 files changed, 52 insertions(+), 98 deletions(-)
- delete mode 100644 package/gettext/gettext-03-option-to-disable-tools.patch
- delete mode 100644 package/gettext/gettext-04-remove-examples-tests.patch
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 00661db..50f7363 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -99,6 +99,18 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2014.08"
++
++config BR2_PACKAGE_GETTEXT_TOOLS
++	bool "support for gettext-tools on target has been removed"
++	select BR2_LEGACY
++	help
++	  The option to install the gettext utilities on the target
++	  has been removed. This is not necessary as Buildroot is not
++	  designed to provide a full development environment on the
++	  target. gettext tools should be used on the build machine
++	  instead.
++
+ comment "Legacy options removed in 2014.05"
+ 
+ config BR2_PACKAGE_EVTEST_CAPTURE
+diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+index d33dd3a..158b14e 100644
+--- a/package/gettext/Config.in
++++ b/package/gettext/Config.in
+@@ -13,20 +13,6 @@ config BR2_PACKAGE_GETTEXT
+ 
+ 	  http://www.gnu.org/software/gettext/
+ 
+-if BR2_PACKAGE_GETTEXT
+-
+-config BR2_PACKAGE_GETTEXT_TOOLS
+-	bool "Install gettext tools"
+-	depends on BR2_USE_MMU # fork()
+-	depends on BR2_LARGEFILE
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	help
+-	  This option allows to install the complete gettext suite in
+-	  the target filesystem. This is typically not useful for
+-	  correct operation of programs.
+-
+-endif
+-
+ comment "gettext needs a toolchain w/ wchar"
+ 	depends on BR2_NEEDS_GETTEXT
+ 	depends on !BR2_USE_WCHAR
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index b5efa76..52a72db 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -46,16 +46,12 @@ ifeq ($(BR2_ENABLE_LOCALE),)
+ GETTEXT_CONF_OPT += --enable-nls
+ endif
+ 
+-# When the gettext tools are not enabled in the configuration, we only
+-# install libintl to the target.
+-ifeq ($(BR2_PACKAGE_GETTEXT_TOOLS),)
+ # When static libs are preferred the .so files aren't created
+ ifeq ($(BR2_PREFER_STATIC_LIB),)
+ define GETTEXT_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
+ endef
+ endif
+-endif # GETTEXT_TOOLS = n
+ 
+ # Disable interactive confirmation in host gettextize for package fixups
+ define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
 -- 
 1.9.3
