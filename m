@@ -1,57 +1,48 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Sun, 01 Jun 2014 18:08:05 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: select fbset as it is a runtime
- dependency
-In-Reply-To: <CAEBucnCENKuaq6oidc9o0S9KjB_Hkt7h3oc0eed4mRs3ZRSZ3g@mail.gmail.com>
-References: <1401634635-20325-1-git-send-email-hadrien.boutteville@gmail.com>
- <CAEBucnCENKuaq6oidc9o0S9KjB_Hkt7h3oc0eed4mRs3ZRSZ3g@mail.gmail.com>
-Message-ID: <538B4FE5.6050809@gmail.com>
+From: Javier Domingo Cansino <javierdo1@gmail.com>
+Date: Sun, 1 Jun 2014 18:14:02 +0200
+Subject: [Buildroot] [PATCH 1/1] configs: bump zedboard to 2014.1
+In-Reply-To: <CAEBucnAifQGsZVyi8z42vkyug31nH_UnvS1hM12+A0x4kd_ESQ@mail.gmail.com>
+References: <CALZVapnO=eXG1utmqQM7TTyNbci91K2yYM4uRNQ5N5eQaFRs_A@mail.gmail.com>
+ <CAEBucnAifQGsZVyi8z42vkyug31nH_UnvS1hM12+A0x4kd_ESQ@mail.gmail.com>
+Message-ID: <CALZVapm8jFJaoOjy2cGy0HNPGB4R7M8gfvr18i8xFv+JiuAjPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Spenser,
+Hi Spenser,
 
-On Sun, 1 Jun 2014 10:30:10 -0500, Spenser Gilliland wrote:
-> On Jun 1, 2014 7:57 AM, "Hadrien Boutteville"
-> <hadrien.boutteville at gmail.com <mailto:hadrien.boutteville@gmail.com>>
-> wrote:
->>
->> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com
-> <mailto:hadrien.boutteville@gmail.com>>
->> ---
->>  package/ti-gfx/Config.in | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
->> index 3e8648e..f1f3a07 100644
->> --- a/package/ti-gfx/Config.in
->> +++ b/package/ti-gfx/Config.in
->> @@ -3,6 +3,7 @@ config BR2_PACKAGE_TI_GFX
->>         select BR2_PACKAGE_HAS_LIBEGL
->>         select BR2_PACKAGE_HAS_LIBGLES
->>         select BR2_PACKAGE_HAS_POWERVR
->> +       select BR2_PACKAGE_FBSET # Runtime dependency only
->>         depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
->>         help
->>           Graphics libraries for TI boards.
->> --
->> 1.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net <mailto:buildroot@busybox.net>
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> Fbset is available in either the package or as part of busybox.  Is
-> there a good way to support both?
+> You should not run gzip this will compress the uboot header which will make
+> it impossible for uboot to load the rfs.
+>
+> You will also need to install the u-boot.img binary to the root of the sd
+> card.
 
-Erf, yes, I didn't pay attention to that... According to Thomas the
-solution would be to select fbset in the default busybox configuration,
-and select it in ti-gfx only if busybox is not used.
+Ok, just for future references and because I finally realized that the
+rootfs.cpio.uboot was indeed compressed thought file command didn't
+say so, this should be the final SD layout:
 
-Regards,
+cp output/images/uImage SD/uImage
+cp output/images/rootfs.cpio.uboot SD/uramdisk.image.gz
+cp output/images/boot.bin SD/boot.bin
+cp output/images/zynq-zed.dtb SD/devicetree.dtb
+cp output/images/u-boot.img SD/u-boot.img
 
-Hadrien
+> The blue led will not come on in the current configuration.  This is because
+> no bitfile is loaded. You will need to install a bitfile on the sdcard and
+> load it with the fpga command in uboot or the xdevcfg device in Linux.
+Ok, I had such feeling and this asserts that feeling =)
+
+> Just for reference, the patch changes the initial boot loader from the
+> Xilinx fsbl based boot loader to the uboot spl loader.
+
+Yup, I read that, the problem was that I didn't get the previous
+configuration working, this makes easier for me to start now with a
+base working system =)
+
+I will be looking forward for your patch to get applied, to rebase
+mine and improve the docs :)
+
+
+Javier Domingo Cansino
