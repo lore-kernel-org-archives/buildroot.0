@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:32 +0200
-Subject: [Buildroot] [PATCH 08/26] package/dtv-scan-tables: bump version
+Date: Sun,  1 Jun 2014 23:03:31 +0200
+Subject: [Buildroot] [PATCH 07/26] package/zic: bump version for misc fixes
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <0e102a21f0b3174f07cf8ef5310c8e3bde55e65e.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <57e4705be4d2fe841f1beb0d9621996651d5cfdc.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,23 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-New scan tables, and updates to existing ones.
-Update upstream URL at the same time.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/zic/zic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index db7fb91..9d85325 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 65605c5..d9d8523 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DTV_SCAN_TABLES_VERSION = 7809ca1c04e688f35d09b8c1b2ac9b8ef4865322
--DTV_SCAN_TABLES_SITE = http://linuxtv.org/git/dtv-scan-tables.git
-+DTV_SCAN_TABLES_VERSION = 1246b27f8b45f84c1824925060ad931530542f2e
-+DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
- # This package only contains the transponders data. This is not a 'work'
+-ZIC_VERSION = 2013i
++ZIC_VERSION = 2014d
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = ftp://ftp.iana.org/tz/releases
+ ZIC_LICENSE = Public domain
 -- 
 1.8.3.2
