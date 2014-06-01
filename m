@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:44 +0200
-Subject: [Buildroot] [PATCH 20/26] package/weston: libxkbcommon is optional
+Date: Sun,  1 Jun 2014 23:03:45 +0200
+Subject: [Buildroot] [PATCH 21/26] package/libinput: new package
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <6e6b9ff8ce0366a66f16600e37b77508dd61bb16.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <dacfd282279f29683e8df6ede51b828f18e7f364.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,73 +12,74 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-It is possible to build weston without libxkbcommon, for example
-if using an input method that is not an hardware keyboard (e.g. a
-virtual keyboard, or none at all.)
-
-Make it optional.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/weston/Config.in | 11 ++++++++++-
- package/weston/weston.mk |  9 ++++++++-
- 2 files changed, 18 insertions(+), 2 deletions(-)
+ package/Config.in            |  1 +
+ package/libinput/Config.in   | 17 +++++++++++++++++
+ package/libinput/libinput.mk | 19 +++++++++++++++++++
+ 3 files changed, 37 insertions(+)
+ create mode 100644 package/libinput/Config.in
+ create mode 100644 package/libinput/libinput.mk
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index aaef405..96ebdf1 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -5,7 +5,6 @@ comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
- config BR2_PACKAGE_WESTON
- 	bool "weston"
- 	select BR2_PACKAGE_WAYLAND
--	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_LIBPNG
-@@ -29,6 +28,16 @@ config BR2_PACKAGE_WESTON
- 
- if BR2_PACKAGE_WESTON
- 
-+config BR2_PACKAGE_WESTON_HW_KBD
-+	bool "enable keyboard support"
-+	default y
-+	select BR2_PACKAGE_LIBXKBCOMMON
+diff --git a/package/Config.in b/package/Config.in
+index 1152c10..da8258f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -624,6 +624,7 @@ source "package/libcec/Config.in"
+ source "package/libfreefare/Config.in"
+ source "package/libftdi/Config.in"
+ source "package/libhid/Config.in"
++source "package/libinput/Config.in"
+ source "package/libiqrf/Config.in"
+ source "package/libllcp/Config.in"
+ source "package/libmbim/Config.in"
+diff --git a/package/libinput/Config.in b/package/libinput/Config.in
+new file mode 100644
+index 0000000..14e4e70
+--- /dev/null
++++ b/package/libinput/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBINPUT
++	bool "libinput"
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_LIBEVDEV
++	select BR2_PACKAGE_MTDEV
 +	help
-+	  Say 'y' here if you plan on using a keyboard.
++	  libinput is a library to handle input devices in Wayland
++	  compositors and to provide a generic X.Org input driver.
++	  It provides device detection, device handling, input device
++	  event processing and abstraction so minimize the amount of
++	  custom input code compositors need to provide the common
++	  set of functionality that users expect.
 +
-+	  Only say 'n' if you're going to use a virtual keyboard or any other
-+	  input method.
++	  http://freedesktop.org/wiki/Software/libinput/
 +
- # Helper to make sure at least one compositor is selected.
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 8188ae6..ea63203 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -10,7 +10,7 @@ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
--WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
-+WESTON_DEPENDENCIES = host-pkgconf wayland pixman libpng \
- 	jpeg mtdev udev cairo
- 
- WESTON_CONF_OPT = \
-@@ -25,6 +25,13 @@ WESTON_CONF_OPT = \
- 	--disable-weston-launch \
- 	--disable-colord
- 
-+ifeq ($(BR2_PACKAGE_WESTON_HW_KBD),y)
-+WESTON_DEPENDENCIES += libxkbcommon
-+WESTON_CONF_OPT += --enable-xkbcommon
-+else
-+WESTON_CONF_OPT += --disable-xkbcommon
-+endif
++comment "libinput needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+new file mode 100644
+index 0000000..7c3e5e8
+--- /dev/null
++++ b/package/libinput/libinput.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# libinput
++#
++################################################################################
 +
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
++LIBINPUT_VERSION = 0.2.0
++LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
++LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
++LIBINPUT_LICENSE = MIT
++LIBINPUT_LICENSE_FILES = COPYING
++
++LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
++LIBINPUT_INSTALL_STAGING = YES
++
++# Tests need fork, so just disable them everywhere.
++LIBINPUT_CONF_OPT = --disable-tests
++
++$(eval $(autotools-package))
 -- 
 1.8.3.2
