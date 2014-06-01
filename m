@@ -1,145 +1,151 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  1 Jun 2014 12:47:46 +0200
-Subject: [Buildroot] [PATCH 09/11] toolchain-external: add CodeSourcery MIPS
-	2014.05, remove 2012.09
+Date: Sun,  1 Jun 2014 12:47:48 +0200
+Subject: [Buildroot] [PATCH 11/11] toolchain-external: add ADI Blackfin
+	2014R1 toolchain, remove 2012R1
 In-Reply-To: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1401619668-28062-10-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1401619668-28062-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This commit adds support for two ADI Blackfin toolchains: the 'stable'
+2014R1 based on gcc 4.3, and the 'experimental' 2014R1 based on gcc
+4.5.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/Config.in             | 40 +++++++++++-----------
- toolchain/toolchain-external/toolchain-external.mk |  6 ++--
- 2 files changed, 23 insertions(+), 23 deletions(-)
+ toolchain/toolchain-external/Config.in             | 40 ++++++++++++++++------
+ toolchain/toolchain-external/toolchain-external.mk | 14 +++++---
+ 2 files changed, 39 insertions(+), 15 deletions(-)
 
 diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 527ff04..3331b69 100644
+index 7d086ef..9c6862c 100644
 --- a/toolchain/toolchain-external/Config.in
 +++ b/toolchain/toolchain-external/Config.in
-@@ -190,8 +190,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
+@@ -689,8 +689,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	  Other architecture variants (beyond Pentium-4/Xeon) are
+ 	  supported as well, but glibc is not optimised for it.
  
- 	  This toolchain uses software-floating point.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
--	bool "Sourcery CodeBench MIPS 2013.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-+	bool "Sourcery CodeBench MIPS 2014.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+-	bool "Blackfin.uclinux.org 2013R1"
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45
++	bool "Blackfin.uclinux.org 2014R1 (gcc 4.5.x stable)"
+ 	depends on BR2_bfin
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -200,12 +200,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
--	  3.11. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers
-+	  3.13. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -259,8 +259,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -707,8 +707,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
  
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
--	bool "Sourcery CodeBench MIPS 2013.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-+	bool "Sourcery CodeBench MIPS 2013.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+-	bool "Blackfin.uclinux.org 2012R2-RC2"
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43
++	bool "Blackfin.uclinux.org 2014R1 (gcc 4.3.x stable)"
+ 	depends on BR2_bfin
  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -269,12 +269,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
--	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
--	  3.8.2. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
-+	  3.11. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -328,9 +328,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
--	bool "Sourcery CodeBench MIPS 2012.09"
--	depends on BR2_mips || BR2_mipsel
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
-+	bool "Sourcery CodeBench MIPS 2013.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -338,12 +338,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -720,13 +720,13 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
 -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
  	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
--	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
--	  3.5.4. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-+	  3.8.2. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -877,9 +877,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
--	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+ 
+-config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+-	bool "Blackfin.uclinux.org 2012R1-RC2"
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
++	bool "Blackfin.uclinux.org 2013R1"
+ 	depends on BR2_bfin
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -738,7 +738,25 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	help
++	  Toolchain for the Blackfin architecture, from
++	  http://blackfin.uclinux.org.
++
++config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
++	bool "Blackfin.uclinux.org 2012R2-RC2"
++	depends on BR2_bfin
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_LARGEFILE
++	select BR2_INET_IPV6
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_USE_WCHAR
++	select BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+ 	help
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
+@@ -910,12 +928,14 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+ 	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+-	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FLAT
+-	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
+ 	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
+ 	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
++	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43 && BR2_BINFMT_FLAT
++	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43 && BR2_BINFMT_FDPIC
++	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45 && BR2_BINFMT_FLAT
++	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45 && BR2_BINFMT_FDPIC
+ 	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm
+ 	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
+ 	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 47273d3..50e8dca 100644
+index 163428f..9ac669c 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -283,15 +283,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+@@ -329,10 +329,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+ TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+-else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
+-TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/projects/adi-toolchain/files/2012R1-BF60X/2012R1-RC2-BF60X/i386/
+-TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
+-TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R1-RC2.i386.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+ TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
+@@ -341,6 +337,14 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
+ TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
+ TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
+ TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43),y)
++TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386/
++TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45),y)
++TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1_45-RC2/i386/
++TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1_45-RC2.i386.tar.bz2
++TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1_45-RC2.i386.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+ TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
+@@ -403,7 +407,7 @@ TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+ 
+-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45),y)
+ # Special handling for Blackfin toolchain, because of the split in two
+ # tarballs, and the organization of tarball contents. The tarballs
+ # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
 -- 
 1.9.3
