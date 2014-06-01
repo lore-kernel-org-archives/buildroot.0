@@ -1,31 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun,  1 Jun 2014 06:07:14 +0300
-Subject: [Buildroot] [PATCH] xapp_xedit: needs MMU
-Message-ID: <9994e810927e9adfcf2f6caafbb8702ca65b7a49.1401592034.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun,  1 Jun 2014 08:30:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-05-31
+Message-ID: <20140601063009.10D8F101057@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/6b9/6b941b5992c73acd19e8077dbe6cb9fc65e5eba1/
+Build statistics for 2014-05-31
+===============================
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/x11r7/xapp_xedit/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+        success : 95 
+       failures : 7  
+       timeouts : 0  
+          TOTAL : 102
 
-diff --git a/package/x11r7/xapp_xedit/Config.in b/package/x11r7/xapp_xedit/Config.in
-index 5a7045907c4e..feaea7486f68 100644
---- a/package/x11r7/xapp_xedit/Config.in
-+++ b/package/x11r7/xapp_xedit/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XAPP_XEDIT
- 	bool "xedit"
- 	select BR2_PACKAGE_XLIB_LIBXAW
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  simple text editor for X
+Classification of failures by reason
+====================================
+
+                 webkit-1.11.5 | 1 
+    xserver_xorg-server-1.15.1 | 1 
+                  cppcms-1.0.4 | 1 
+              libdvdread-4.2.1 | 1 
+                  zeromq-4.0.4 | 1 
+                    fltk-1.3.2 | 1 
+              xapp_xedit-1.2.0 | 1 
+
+Detail of failures
+===================
+
+   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/2ea212b8a43694b9d302b3331d4ff9f45fe00b38/
+    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/b4aa4702a6453e162290641a5e32a1e618dc95aa/
+      bfin |               libdvdread-4.2.1 | NOK | http://autobuild.buildroot.net/results/0ed3152a166a69d65a226e3cef755ed370cc245b/
+       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/57928b7cdacb73de453b71da11dfb18893fa3e94/
+      bfin |               xapp_xedit-1.2.0 | NOK | http://autobuild.buildroot.net/results/6b941b5992c73acd19e8077dbe6cb9fc65e5eba1/
+    xtensa |     xserver_xorg-server-1.15.1 | NOK | http://autobuild.buildroot.net/results/14308a9d1806574f06ab2a7d222f53119fab1c90/
+       arm |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/c4a27b3adf6b5137214324dbbca5f7b468a818bc/
+
+
 -- 
-2.0.0.rc2
+http://autobuild.buildroot.net
