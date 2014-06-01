@@ -1,110 +1,45 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Sun,  1 Jun 2014 17:22:07 +0200
-Subject: [Buildroot] [PATCH 1/1] Improve support of OpenGL for BeagleBone
-	Black
-Message-ID: <1401636127-20618-1-git-send-email-hadrien.boutteville@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 1 Jun 2014 17:22:03 +0200
+Subject: [Buildroot] [PATCH 05/11 RFC] support/scripts: who's
+ responsibile to decide what is a package
+In-Reply-To: <20140531223923.GH3522@free.fr>
+References: <cover.1401395407.git.yann.morin.1998@free.fr>
+ <422547083c511f283426d0c0bae5ecc4d4dcee4e.1401395407.git.yann.morin.1998@free.fr>
+ <CAHXCMMK3RmhWzW5CgBLp8ozRupGReETKCG-QJ8yzvSyQoAzLiQ@mail.gmail.com>
+ <20140531223923.GH3522@free.fr>
+Message-ID: <CAHXCMMLFRbVDuzwpqeYRwy1pyLEMdAQ9UscRR6zWROrNiQC0kA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make ti-gfx working on BeagleBone Black by adding an ugly necessary
-patch to the kernel wich fix:
-pvrsrvkm: Unknown symbol v7_dma_map_area
-pvrsrvkm: Unknown symbol v7_dma_flush_range
+Yann,
 
-Add drivers to the default kernel config used in beaglebone_defconfig
-to enable the framebuffer.
+Just caught a typo in the subject:
+s/responsibile/responsible/
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
----
- board/beaglebone/linux-3.12.config                 | 11 ++++++-
- ...cache-flush-management-symbols-when-MULTI.patch | 34 ++++++++++++++++++++++
- configs/beaglebone_defconfig                       |  1 +
- 3 files changed, 45 insertions(+), 1 deletion(-)
- create mode 100644 board/beaglebone/patches/linux/linux-0001-arm-Export-cache-flush-management-symbols-when-MULTI.patch
+On Sun, Jun 1, 2014 at 12:39 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
+>
+> On 2014-05-31 23:20 +0200, Samuel Martin spake thusly:
+>> On Thu, May 29, 2014 at 10:38 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP commit log--]
+>
+> Typoes fixed, thanks! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 
-diff --git a/board/beaglebone/linux-3.12.config b/board/beaglebone/linux-3.12.config
-index d2d80e9..0be5722 100644
---- a/board/beaglebone/linux-3.12.config
-+++ b/board/beaglebone/linux-3.12.config
-@@ -122,7 +122,6 @@ CONFIG_SMSC_PHY=y
- # CONFIG_INPUT_KEYBOARD is not set
- # CONFIG_INPUT_MOUSE is not set
- CONFIG_SERIO_LIBPS2=y
--CONFIG_VT_HW_CONSOLE_BINDING=y
- # CONFIG_LEGACY_PTYS is not set
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
-@@ -163,6 +162,16 @@ CONFIG_REGULATOR_TPS65023=y
- CONFIG_REGULATOR_TPS6507X=y
- CONFIG_REGULATOR_TPS65217=y
- CONFIG_REGULATOR_TIAVSCLASS0=y
-+CONFIG_FB=y
-+CONFIG_FIRMWARE_EDID=y
-+CONFIG_FB_DA8XX=y
-+CONFIG_FB_DA8XX_TDA998X=y
-+CONFIG_OMAP2_DSS=y
-+CONFIG_OMAP2_DSS_SDI=y
-+CONFIG_OMAP2_DSS_DSI=y
-+CONFIG_FB_OMAP2=y
-+CONFIG_DISPLAY_CONNECTOR_HDMI=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_USB=y
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_MON=y
-diff --git a/board/beaglebone/patches/linux/linux-0001-arm-Export-cache-flush-management-symbols-when-MULTI.patch b/board/beaglebone/patches/linux/linux-0001-arm-Export-cache-flush-management-symbols-when-MULTI.patch
-new file mode 100644
-index 0000000..1ca1e70
---- /dev/null
-+++ b/board/beaglebone/patches/linux/linux-0001-arm-Export-cache-flush-management-symbols-when-MULTI.patch
-@@ -0,0 +1,34 @@
-+From 29885f2f3d700341d322274db6ad085e601c0994 Mon Sep 17 00:00:00 2001
-+From: Pantelis Antoniou <panto@antoniou-consulting.com>
-+Date: Fri, 4 Jan 2013 00:32:33 +0200
-+Subject: [PATCH 3/3] arm: Export cache flush management symbols when
-+ !MULTI_CACHE
-+
-+When compiling a kernel without CONFIG_MULTI_CACHE enabled the
-+dma access functions end up not being exported. Fix it.
-+
-+Signed-off-by: Pantelis Antoniou <panto@antoniou-consulting.com>
-+---
-+ arch/arm/kernel/setup.c |    9 +++++++++
-+ 1 file changed, 9 insertions(+)
-+
-+diff --git a/arch/arm/kernel/setup.c b/arch/arm/kernel/setup.c
-+index da1d1aa..dcb678c 100644
-+--- a/arch/arm/kernel/setup.c
-++++ b/arch/arm/kernel/setup.c
-+@@ -923,3 +923,12 @@ const struct seq_operations cpuinfo_op = {
-+ 	.stop	= c_stop,
-+ 	.show	= c_show
-+ };
-++
-++/* export the cache management functions */
-++#ifndef MULTI_CACHE
-++
-++EXPORT_SYMBOL(__glue(_CACHE,_dma_map_area));
-++EXPORT_SYMBOL(__glue(_CACHE,_dma_unmap_area));
-++EXPORT_SYMBOL(__glue(_CACHE,_dma_flush_range));
-++
-++#endif
-+-- 
-+1.7.10.4
-+
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index 3181c66..f825fa9 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -33,6 +33,7 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="7f280334068b7c875ade51f8f3921ab311f0c824"
-+BR2_LINUX_KERNEL_PATCH="board/beaglebone/patches/linux/"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/beaglebone/linux-3.12.config"
- BR2_LINUX_KERNEL_ZIMAGE=y
+Regards,
+
 -- 
-1.9.3
+Samuel
