@@ -1,40 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 14:56:00 +0200
-Subject: [Buildroot] [PATCHv2 2/2] glibc: add eglibc 2.19-svnr25243 and
- choice menu
-In-Reply-To: <538B20BA.5040600@zacarias.com.ar>
-References: <1401623919-16671-1-git-send-email-gustavo@zacarias.com.ar>
- <1401623919-16671-2-git-send-email-gustavo@zacarias.com.ar>
- <20140601143431.683da18d@free-electrons.com>
- <538B20BA.5040600@zacarias.com.ar>
-Message-ID: <20140601145600.1222fac1@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  1 Jun 2014 09:56:58 -0300
+Subject: [Buildroot] [PATCH] mysql: disable for AVR32
+Message-ID: <1401627418-23164-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+The compiler can't even build it, fixes:
+http://autobuild.buildroot.net/results/b5c/b5c3893accc777d717e1d70283437aa626f0aa2d/
 
-On Sun, 01 Jun 2014 09:46:50 -0300, Gustavo Zacarias wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/collectd/Config.in    | 1 +
+ package/mysql/Config.in       | 2 ++
+ package/poco/Config.in        | 1 +
+ package/qt5/qt5base/Config.in | 1 +
+ package/sconeserver/Config.in | 1 +
+ 5 files changed, 6 insertions(+)
 
-> > I'd like to see a comment above this dependency that explains why we
-> > have this dependency: it's not because there is no support for PowerPC
-> > SPE, but only because it's broken, so a future bump to a newer version
-> > of eglibc 2.19 might fix the problem.
-> 
-> Ok.
-> For the record there are other commits in a similar vein that didn't get
-> that benefit, and it's build breakage (so quite obvious to test & catch).
-
-Yeah, might be the case. I'm not at all pretending that the rest of the
-code is perfect. Just pointing out that this particular patch could be
-improved by having a little comment, IMO.
-
-Thanks!
-
-Thomas
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index f693f31..a2e7877 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -240,6 +240,7 @@ config BR2_PACKAGE_COLLECTD_MYSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP # mysql
+ 	depends on BR2_USE_MMU # mysql
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
++	depends on !BR2_avr32 # mysql
+ 	select BR2_PACKAGE_MYSQL
+ 	help
+ 	  Connects to a MySQL database and issues a "show status" command.
+diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+index 7133892..9c5d6ed 100644
+--- a/package/mysql/Config.in
++++ b/package/mysql/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_MYSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# Toolchain is not up to the task
++	depends on !BR2_avr32
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
+ 	help
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index e8832e8..8384b42 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -55,6 +55,7 @@ config BR2_PACKAGE_POCO_DATA_SQLITE
+ config BR2_PACKAGE_POCO_DATA_MYSQL
+ 	bool "mysql"
+ 	depends on BR2_USE_MMU # mysql
++	depends on !BR2_avr32 # mysql
+ 	select BR2_PACKAGE_POCO_DATA
+ 	select BR2_PACKAGE_MYSQL
+ 
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 5d5b7f6..70ddcd3 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -57,6 +57,7 @@ config BR2_PACKAGE_QT5BASE_MYSQL
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
+ 	depends on BR2_USE_MMU # mysql
++	depends on !BR2_avr32 # mysql
+ 	help
+ 	  Build MySQL plugin
+ 	  If unsure, say n.
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 0e0b07c..6999535 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
+ config BR2_PACKAGE_SCONESERVER_MYSQL
+ 	bool "mysql"
+ 	depends on BR2_USE_MMU # mysql
++	depends on !BR2_avr32 # mysql
+ 	select BR2_PACKAGE_MYSQL
+ 	help
+ 	  MySQL module for Sconeserver
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
