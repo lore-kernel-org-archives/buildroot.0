@@ -1,44 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 22:19:36 +0200
-Subject: [Buildroot] [git commit] pkg-cmake.mk: globally drive the
-	CMAKE_BUILD_TYPE flag using BR2_ENABLE_DEBUG
-Message-ID: <20140601202128.4D7379CE00@busybox.osuosl.org>
+Date: Sun, 1 Jun 2014 22:16:24 +0200
+Subject: [Buildroot] [git commit] pkg-cmake.mk: enable ccache for cmake
+	packages
+Message-ID: <20140601202128.3BF5F9CAB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=642e44e263e9f25157594f98c393bca21544f745
+commit: http://git.buildroot.net/buildroot/commit/?id=c8f2d248f65067979f9b7da25ee2469ae020ec1b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This CMake flag is usually used to adjust compiler flags (like: -Ox, -g,
-etc).
+This patch updates the generated toolchainfile.cmake to use ccache.
 
-So, it makes sense for Buildroot to globally drive this CMake flags in
-the cmake-package infrastructure.
+When toolchainfile.cmake is used inside Buildroot, using ccache during
+the build is driven by a CMake knob: USE_CCACHE, automatically set by
+the cmake-package infrastructure and reflecting the BR2_CCACHE value.
 
-However, if a package prefer overriding this default setting, it still
-can via the <PKG>_CONF_OPT variable.
+Since this toolchainefile.cmake file can be used outside Buildroot, and
+this file also set a couple of things (among these: the sysroot cflag,
+some pkg-config environment variables), it is important to set the
+compiler variables as well to keep the consistency of the
+cross-compilation configuration.
+So, when it is used outside Buildroot, using ccache for the build is
+driven by the ccache program availability.
 
+Note that using ccache for the build is achieved by setting the *_ARG1
+CMake variables to let CMake use ccache without failing in detecting
+the compiler.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/pkg-cmake.mk                |    2 ++
+ support/misc/toolchainfile.cmake.in |   33 +++++++++++++++++++++++++++++++--
+ 2 files changed, 33 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 6331e0f..fb8144e 100644
+index a84aa0b..56a93c7 100644
 --- a/package/pkg-cmake.mk
 +++ b/package/pkg-cmake.mk
-@@ -63,6 +63,7 @@ define $(2)_CONFIGURE_CMDS
- 	PATH=$(BR_PATH) \
- 	$$($$(PKG)_CONF_ENV) $(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
- 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
-+		-DCMAKE_BUILD_TYPE=$(if $(BR2_ENABLE_DEBUG),Debug,Release) \
+@@ -66,6 +66,7 @@ define $(2)_CONFIGURE_CMDS
  		-DCMAKE_INSTALL_PREFIX="/usr" \
  		-DCMAKE_COLOR_MAKEFILE=OFF \
- 		-DBUILD_TESTING=OFF \
+ 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
++		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+ endef
+@@ -83,6 +84,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY="BOTH" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
+ 		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
++		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+ endef
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index 27a0af1..46ed932 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -23,5 +23,34 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ 
+-set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
+-set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
++# This toolchain file can be used both inside and outside Buildroot.
++# * When used inside Buildroot, ccache support is explicitly driven using the
++#   USE_CCACHE variable.
++# * When used outside Buildroot (i.e. when USE_CCACHE is not defined), ccache
++#   support is automatically enabled if the ccache program is available.
++if(DEFINED USE_CCACHE)
++	if(USE_CCACHE)
++		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
++		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/usr/bin/ccache")
++		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
++	else()
++		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
++	endif()
++else()
++	find_program(CCACHE ccache HINTS "${RELOCATED_HOST_DIR}/usr/bin")
++	if(CCACHE)
++		set(CMAKE_ASM_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++		set(CMAKE_C_COMPILER "${CCACHE}")
++		set(CMAKE_CXX_COMPILER "${CCACHE}")
++		set(CMAKE_C_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++		set(CMAKE_CXX_COMPILER_ARG1 "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
++		message(STATUS "ccache program has been found and will be used for the build.")
++		message(STATUS "  To disable ccache, add -DUSE_CCACHE=OFF on the cmake command line.")
++	else()
++		set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC_NOCCACHE@@")
++		set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX_NOCCACHE@@")
++	endif()
++endif()
