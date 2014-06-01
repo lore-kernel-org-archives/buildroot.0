@@ -1,29 +1,25 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 01 Jun 2014 09:44:56 -0300
-Subject: [Buildroot] [PATCHv2] mpg123: use code optimized for ARM NEON
- SIMD engine if available
-In-Reply-To: <1401626541-11036-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1401626541-11036-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <538B2048.60204@zacarias.com.ar>
+Date: Sun, 01 Jun 2014 09:46:50 -0300
+Subject: [Buildroot] [PATCHv2 2/2] glibc: add eglibc 2.19-svnr25243 and
+ choice menu
+In-Reply-To: <20140601143431.683da18d@free-electrons.com>
+References: <1401623919-16671-1-git-send-email-gustavo@zacarias.com.ar>	<1401623919-16671-2-git-send-email-gustavo@zacarias.com.ar>
+ <20140601143431.683da18d@free-electrons.com>
+Message-ID: <538B20BA.5040600@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/01/2014 09:42 AM, Thomas Petazzoni wrote:
+On 06/01/2014 09:34 AM, Thomas Petazzoni wrote:
 
-> From: Sven Neumann <neumann@teufel.de>
-> 
-> [Thomas: as suggested by Peter, enable NEON as soon as NEON is
-> available, not necessarily when NEON is used as the default FPU. Note
-> that this requires passing -mfpu=neon to build mpg123, so that for
-> this specific package, the NEON unit is used as the FPU.]
-> 
-> Signed-off-by: Sven Neumann <neumann@teufel.de>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> I'd like to see a comment above this dependency that explains why we
+> have this dependency: it's not because there is no support for PowerPC
+> SPE, but only because it's broken, so a future bump to a newer version
+> of eglibc 2.19 might fix the problem.
 
-It might be better to look at the new mpg123 release that does ARM
-optimizations in a different (and possibly incompatible) way.
-1.20.0 for Aarch64, 1.19.0 for ARM (--with-cpu for configure).
+Ok.
+For the record there are other commits in a similar vein that didn't get
+that benefit, and it's build breakage (so quite obvious to test & catch).
 Regards.
