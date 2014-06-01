@@ -1,40 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 22:19:43 +0200
-Subject: [Buildroot] [git commit] openpowerlink: do not override
-	CMAKE_BUILD_TYPE
-Message-ID: <20140601202128.561AD9CE48@busybox.osuosl.org>
+Date: Sun, 1 Jun 2014 22:18:25 +0200
+Subject: [Buildroot] [git commit] pkg-cmake.mk: globally disable
+	BUILD_TESTING flag
+Message-ID: <20140601202128.430389CE48@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bccca5a0e27412d9fbeb82fe5d78891a13d529aa
+commit: http://git.buildroot.net/buildroot/commit/?id=257a82031ebeb1e155ce74b9cfe87add8b223d66
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This flag is already correctly set by the cmake-package infrastructure.
+This CMake flag is used to enable tests. It may not disable the test
+programs from being built, but it controls the test execution.
+
+Since we don't care about building the tests (and usually disable them
+when possible), make sure Buildroot won't try to run them.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openpowerlink/openpowerlink.mk |    6 ------
- 1 files changed, 0 insertions(+), 6 deletions(-)
+ package/pkg-cmake.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
-index 152f014..a888eb3 100644
---- a/package/openpowerlink/openpowerlink.mk
-+++ b/package/openpowerlink/openpowerlink.mk
-@@ -25,12 +25,6 @@ OPENPOWERLINK_CONF_OPT = -DCMAKE_SYSTEM_PROCESSOR=$(OPENPOWERLINK_ARCH)
- # so force static lib to build libpowerlink.a
- OPENPOWERLINK_CONF_OPT += -DBUILD_SHARED_LIBS=OFF
- 
--ifeq ($(BR2_ENABLE_DEBUG),y)
--OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Debug
--else
--OPENPOWERLINK_CONF_OPT += -DCMAKE_BUILD_TYPE=Release
--endif
--
- OPENPOWERLINK_CONF_OPT += -DCFG_DEBUG_LVL=$(call qstrip,$(BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL))
- 
- ifeq ($(BR2_PACKAGE_OPENPOWERLINK_LIBPCAP),y)
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 56a93c7..6331e0f 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -65,6 +65,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
++		-DBUILD_TESTING=OFF \
+ 		-DBUILD_SHARED_LIBS=$(if $(BR2_PREFER_STATIC_LIB),OFF,ON) \
+ 		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
+ 		$$($$(PKG)_CONF_OPT) \
+@@ -85,6 +86,7 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" \
+ 		-DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
+ 		-DUSE_CCACHE=$(if $(BR2_CCACHE),ON,OFF) \
++		-DBUILD_TESTING=OFF \
+ 		$$($$(PKG)_CONF_OPT) \
+ 	)
+ endef
