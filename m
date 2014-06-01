@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sun, 01 Jun 2014 23:12:46 +0200
-Subject: [Buildroot] [PATCH 02/26] configs: bump kernel used for the RPi
-In-Reply-To: <32a3ef4762be156ec7d7b17419df1e8b60d9f1da.1401656581.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:03:26 +0200")
+Date: Sun, 01 Jun 2014 23:13:01 +0200
+Subject: [Buildroot] [PATCH 03/26] package/linux-firmware: bump version
+In-Reply-To: <2d9b6ec02d2e247691f3a91d6657396800db70eb.1401656581.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:03:27 +0200")
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
- <32a3ef4762be156ec7d7b17419df1e8b60d9f1da.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <87k3901ghd.fsf@dell.be.48ers.dk>
+ <2d9b6ec02d2e247691f3a91d6657396800db70eb.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <87fvjo1ggy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,7 @@ To: buildroot@busybox.net
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > The rpi-3.12.y branch has now been merged with the 3.12.20 upstream,
- > and contains some fixes for FIQ, v4l2, i2c, USB, and 1-wire GPIOs.
-
- > Bump kernel headers used for the toolchain at the same time.
+ > This bump brings in a new version of the iwlwifi firmware.
 
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
