@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  1 Jun 2014 23:03:30 +0200
-Subject: [Buildroot] [PATCH 06/26] package/tzdata: bump version for some new
-	timezones
+Date: Sun,  1 Jun 2014 23:03:32 +0200
+Subject: [Buildroot] [PATCH 08/26] package/dtv-scan-tables: bump version
 In-Reply-To: <cover.1401656581.git.yann.morin.1998@free.fr>
 References: <cover.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <65531c070eb1214153e3a95b1bf837898af67448.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <0e102a21f0b3174f07cf8ef5310c8e3bde55e65e.1401656581.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +12,28 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-A few adjustments here and there, plus re-definition
-of the Crimea timezone.
-
-New definition for the moment the Big-Bang occured, too. :-)
+New scan tables, and updates to existing ones.
+Update upstream URL at the same time.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/tzdata/tzdata.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dtv-scan-tables/dtv-scan-tables.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 58b5f13..4f86289 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index db7fb91..9d85325 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--TZDATA_VERSION = 2014a
-+TZDATA_VERSION = 2014d
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = ftp://ftp.iana.org/tz/releases
- TZDATA_DEPENDENCIES = host-zic
+-DTV_SCAN_TABLES_VERSION = 7809ca1c04e688f35d09b8c1b2ac9b8ef4865322
+-DTV_SCAN_TABLES_SITE = http://linuxtv.org/git/dtv-scan-tables.git
++DTV_SCAN_TABLES_VERSION = 1246b27f8b45f84c1824925060ad931530542f2e
++DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
+ # This package only contains the transponders data. This is not a 'work'
 -- 
 1.8.3.2
