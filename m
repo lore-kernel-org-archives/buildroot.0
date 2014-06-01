@@ -1,54 +1,47 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 1 Jun 2014 15:23:57 +0200
-Subject: [Buildroot] [PATCH] graph-depends: refactor with more color
-In-Reply-To: <20140531203324.GE3522@free.fr>
-References: <1401564012-23822-1-git-send-email-francois.perrad@gadz.org>
- <20140531203324.GE3522@free.fr>
-Message-ID: <CAB0FRsuy94wo81ybkcFNkwZBg3sOPs-jAx+4RZ7S1nJM8AXtaQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 1 Jun 2014 15:24:41 +0200
+Subject: [Buildroot] [PATCH 0/11 v5] Some download-related changes
+ (branch yem/check-downloads)
+In-Reply-To: <cover.1399204808.git.yann.morin.1998@free.fr>
+References: <cover.1399204808.git.yann.morin.1998@free.fr>
+Message-ID: <20140601152441.045ec06b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-05-31 22:33 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Farn?ois, All,
->
-> On 2014-05-31 21:20 +0200, Francois Perrad spake thusly:
->> target and host packages don't use the same background color
->> +            color = 'gainsboro'
->> +        else:
->> +            color = 'grey'
->
-> The difference between 'gainsboro' and 'grey' is very light. At first, I
-> thought I had forgotten to apply your patch, so the difference is light.
->
-> Did you choose it on-purpose? Did you choose it because it really looks
-> different when printed?
+Dear Yann E. MORIN,
 
-I don't like flashy color.
-Feel free to experiment another set of color (don't forget black&white
-printing).
-See http://graphviz.org/content/color-names
+On Sun,  4 May 2014 14:01:43 +0200, Yann E. MORIN wrote:
 
-Fran?ois
+> This series contains those download-related changes:
 
->
-> I'd like we get colours that are visually different, both on-display and
-> printed. I'll try to find a better default that is more visually
-> different, and add a new option to specify alternate colours.
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I have one request regarding this series: I would like all the
+temporary steps for the download procedures to take place somewhere in
+$(O), and then only after the download is completed, do an atomic
+rename of the file into $(DL_DIR).
+
+The problem I'd like to solve is that it is currently impossible to
+share a download directory between separate, parallel, builds of
+Buildroot, because all the builds are going to use $(DL_DIR) as a
+temporary location to download things, stepping on each other if the
+different builds happen to download the same file at the same time. For
+this reason, I had to switch to one download directory per build
+instance in the autobuilder.
+
+By downloading all the temporary files in $(O), and then doing an
+atomic rename, the other build instances will either see the file and
+use it, or not see it, and do the same procedure, with an atomic rename
+at the end. Of course, it won't work if the download directory is on a
+different filesystem, because the atomic property of file rename is
+guaranteed only inside a given filesystem. But still, it's going to be
+better than what we have today.
+
+Thoughts?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
