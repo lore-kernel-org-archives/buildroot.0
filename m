@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 1 Jun 2014 13:02:57 +0200
-Subject: [Buildroot] [PATCH 08/11] toolchain-external: bump musl
- external toolchains to 1.1.1
-In-Reply-To: <20140601105859.GD4280@tarshish>
-References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1401619668-28062-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140601105859.GD4280@tarshish>
-Message-ID: <20140601130257.17e8b2b6@free-electrons.com>
+Date: Sun, 1 Jun 2014 13:04:19 +0200
+Subject: [Buildroot] [PATCH v4 04/11] rpi-userland: cleanup *_CONF_OPT
+In-Reply-To: <1401614673-3703-5-git-send-email-s.martin49@gmail.com>
+References: <1401614673-3703-1-git-send-email-s.martin49@gmail.com>
+ <1401614673-3703-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140601130419.58ed869e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Samuel Martin,
 
-On Sun, 1 Jun 2014 13:58:59 +0300, Baruch Siach wrote:
-
-> > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> > index a6c4061..47273d3 100644
-> > --- a/toolchain/toolchain-external/toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/toolchain-external.mk
-> > @@ -355,31 +355,32 @@ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/
-> >  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.05_linux.tar.xz
-> >  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
-> >  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
-> > -TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-1.0.0/
-> > +TOOLCHAIN_EXTERNAL_VERSION = 1.1.1
+On Sun,  1 Jun 2014 11:24:26 +0200, Samuel Martin wrote:
+> rpi-userland does not need -DBUILD_SHARED_LIBS=OFF to be passed to
+> correclty build its static libraries; so remove this cmake flag from the
+> configure options.
 > 
-> This name sounds too generic. Other external toolchains are unlikely to use 
-> the same version string. Maybe MUSL_TOOLCHAIN_EXTERNAL_VERSION?
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I believe it's OK: other toolchains could also define
-TOOLCHAIN_EXTERNAL_VERSION (I'm actually thinking of sending patches to
-do this). It's exactly like the choice between gcc versions in the gcc
-package: we assign a different GCC_VERSION value in each case. That's
-the same thing here: we have the choice between multiple toolchains and
-toolchain versions, so it makes sense to have
-TOOLCHAIN_EXTERNAL_VERSION defined to whatever the version of the
-currently selected toolchain is.
+As discussed in real-life, this should probably be squashed with PATCH
+05/11, and with an expanded explanation that details why reverting
+5e3b1f31b3f82e3b163567f10d7131c9d649a2cf does not re-introduce the bug
+that 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf was fixing.
 
-Best regards,
+Maybe you should submit these fixes separately, since they are not
+related to the CMake package infrastructure per se?
+
+Thanks,
 
 Thomas
 -- 
