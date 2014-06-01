@@ -1,42 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 1 Jun 2014 20:58:29 +0200
-Subject: [Buildroot] [git commit] glibc: drop redundant arch depends
-Message-ID: <20140601200640.EB7E09CE46@busybox.osuosl.org>
+Date: Sun, 1 Jun 2014 21:51:17 +0200
+Subject: [Buildroot] [git commit] mysql: disable for AVR32
+Message-ID: <20140601200641.0FCD79CE46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94df3e6d1bcad61e8e4cced672501e0b26f1f297
+commit: http://git.buildroot.net/buildroot/commit/?id=2bdc60c6b77f825d4e28526b858823db7f6b99ea
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These are already in toolchain/toolchain-buildroot/Config.in and since
-package/glibc/Config.in is filtered by BR2_TOOLCHAIN_USES_GLIBC there's
-no need to duplicate this.
+The compiler can't even build it, fixes:
+http://autobuild.buildroot.net/results/b5c/b5c3893accc777d717e1d70283437aa626f0aa2d/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/Config.in |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ package/collectd/Config.in    |    1 +
+ package/mysql/Config.in       |    2 ++
+ package/poco/Config.in        |    1 +
+ package/qt5/qt5base/Config.in |    1 +
+ package/sconeserver/Config.in |    1 +
+ 5 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index d1ad3de..dbb1a19 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -3,13 +3,6 @@ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- choice
- 	prompt "glibc version"
- 	default BR2_GLIBC_VERSION_2_18
--	# Architectures supported in mainline glibc
--	depends on BR2_arm         || BR2_armeb    || BR2_aarch64 || \
--		   BR2_i386        || BR2_mips     || BR2_mipsel  || \
--		   BR2_mips64      || BR2_mips64el || BR2_powerpc || \
--		   BR2_powerpc64   || BR2_powerpc64le || BR2_sh   || \
--		   BR2_sh64        || BR2_sparc    || BR2_x86_64  || \\
--		   BR2_microblaze
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index f693f31..a2e7877 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -240,6 +240,7 @@ config BR2_PACKAGE_COLLECTD_MYSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP # mysql
+ 	depends on BR2_USE_MMU # mysql
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # mysql
++	depends on !BR2_avr32 # mysql
+ 	select BR2_PACKAGE_MYSQL
+ 	help
+ 	  Connects to a MySQL database and issues a "show status" command.
+diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+index 7133892..9c5d6ed 100644
+--- a/package/mysql/Config.in
++++ b/package/mysql/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_MYSQL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# Toolchain is not up to the task
++	depends on !BR2_avr32
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
+ 	help
+diff --git a/package/poco/Config.in b/package/poco/Config.in
+index e8832e8..8384b42 100644
+--- a/package/poco/Config.in
++++ b/package/poco/Config.in
+@@ -55,6 +55,7 @@ config BR2_PACKAGE_POCO_DATA_SQLITE
+ config BR2_PACKAGE_POCO_DATA_MYSQL
+ 	bool "mysql"
+ 	depends on BR2_USE_MMU # mysql
++	depends on !BR2_avr32 # mysql
+ 	select BR2_PACKAGE_POCO_DATA
+ 	select BR2_PACKAGE_MYSQL
  
- config BR2_GLIBC_VERSION_2_18
- 	bool "2.18"
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 5d5b7f6..70ddcd3 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -57,6 +57,7 @@ config BR2_PACKAGE_QT5BASE_MYSQL
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_READLINE
+ 	depends on BR2_USE_MMU # mysql
++	depends on !BR2_avr32 # mysql
+ 	help
+ 	  Build MySQL plugin
+ 	  If unsure, say n.
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 0e0b07c..6999535 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE
+ config BR2_PACKAGE_SCONESERVER_MYSQL
+ 	bool "mysql"
+ 	depends on BR2_USE_MMU # mysql
++	depends on !BR2_avr32 # mysql
+ 	select BR2_PACKAGE_MYSQL
+ 	help
+ 	  MySQL module for Sconeserver
