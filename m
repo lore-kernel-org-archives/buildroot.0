@@ -1,81 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jun 2014 15:20:22 +0200
-Subject: [Buildroot] [PATCH] mpg123: bump to 1.20.0,
- providing better optimizations for ARM and AArch64
-In-Reply-To: <1401628284-23998-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1401628284-23998-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140601132022.GE3430@free.fr>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 1 Jun 2014 15:23:57 +0200
+Subject: [Buildroot] [PATCH] graph-depends: refactor with more color
+In-Reply-To: <20140531203324.GE3522@free.fr>
+References: <1401564012-23822-1-git-send-email-francois.perrad@gadz.org>
+ <20140531203324.GE3522@free.fr>
+Message-ID: <CAB0FRsuy94wo81ybkcFNkwZBg3sOPs-jAx+4RZ7S1nJM8AXtaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+2014-05-31 22:33 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Farn?ois, All,
+>
+> On 2014-05-31 21:20 +0200, Francois Perrad spake thusly:
+>> target and host packages don't use the same background color
+>> +            color = 'gainsboro'
+>> +        else:
+>> +            color = 'grey'
+>
+> The difference between 'gainsboro' and 'grey' is very light. At first, I
+> thought I had forgotten to apply your patch, so the difference is light.
+>
+> Did you choose it on-purpose? Did you choose it because it really looks
+> different when printed?
 
-On 2014-06-01 15:11 +0200, Thomas Petazzoni spake thusly:
-> As suggested by Gustavo, this patch bumps mpg123 to 1.20.0, and
-> therefore superseds the patch initially provided by Sven Neumann. In
-> 1.20.0, there is a new CPU type arm_fpu, which will compile code for
-> both VFP and NEON, and choose at runtime which one to use.
-> 
-> Similarly for AArch64, the option --with-cpu=aarch64 will compile both
-> the NEON and generic decoders, and select at runtime which one to use.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+I don't like flashy color.
+Feel free to experiment another set of color (don't forget black&white
+printing).
+See http://graphviz.org/content/color-names
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fran?ois
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/mpg123/mpg123.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-> index d66592c..ac64132 100644
-> --- a/package/mpg123/mpg123.mk
-> +++ b/package/mpg123/mpg123.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MPG123_VERSION = 1.18.0
-> +MPG123_VERSION = 1.20.0
->  MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
->  MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
->  MPG123_CONF_OPT = --disable-lfs-alias
-> @@ -14,9 +14,17 @@ MPG123_LICENSE_FILES = COPYING
->  
->  MPG123_CPU = $(if $(BR2_SOFT_FLOAT),generic_nofpu,generic_fpu)
->  
-> +ifeq ($(BR2_aarch64),y)
-> +MPG123_CPU = aarch64
-> +endif
-> +
->  ifeq ($(BR2_arm),y)
-> +ifeq ($(or $(BR2_ARM_CPU_HAS_NEON),$(BR2_ARM_CPU_HAS_VFPV2)),y)
-> +MPG123_CPU = arm_fpu
-> +else
->  MPG123_CPU = arm_nofpu
->  endif
-> +endif
->  
->  ifeq ($(BR2_i386),y)
->  MPG123_CPU = x86
-> -- 
-> 1.9.3
-> 
+>
+> I'd like we get colours that are visually different, both on-display and
+> printed. I'll try to find a better default that is more visually
+> different, and add a new option to specify alternate colours.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
