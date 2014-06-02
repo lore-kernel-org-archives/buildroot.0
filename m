@@ -1,19 +1,33 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 22:32:05 +0200
-Subject: [Buildroot] [PATCH] strongswan: bump to version 5.1.3
-In-Reply-To: <1401740066-23005-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 Jun 2014 17:14:26 -0300")
-References: <1401740066-23005-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ppirt5mi.fsf@dell.be.48ers.dk>
+Date: Mon, 02 Jun 2014 22:34:37 +0200
+Subject: [Buildroot] [PATCH 1/7] package/procps: bump version and rename
+	to procps-ng
+In-Reply-To: <c827e84d7c56c699982501adbc8fd01e8602ce10.1401740805.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 2 Jun 2014 22:27:22 +0200")
+References: <cover.1401740805.git.yann.morin.1998@free.fr>
+ <c827e84d7c56c699982501adbc8fd01e8602ce10.1401740805.git.yann.morin.1998@free.fr>
+Message-ID: <87lhtft5ia.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > procps is getting replaced by procps-ng, and there are
+ > new versions available!
+
+ > procps-ng is now an autotools package, so get rid of our
+ > custom build/install rules.
+
+ > Remove most patches, except for one that still half-applies,
+ > so update and rename it.
+
+ > procps is dead, long live procps-ng!
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Committed, thanks.
 
