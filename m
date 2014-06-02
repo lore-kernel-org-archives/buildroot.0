@@ -1,36 +1,33 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 3 Jun 2014 02:26:35 +0400
-Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: add ordering
-	prefix to patches
-In-Reply-To: <20140602235742.0d164e8a@free-electrons.com>
-References: <1401745306-2162-1-git-send-email-jcmvbkbc@gmail.com>
- <1401745306-2162-2-git-send-email-jcmvbkbc@gmail.com>
- <20140602235742.0d164e8a@free-electrons.com>
-Message-ID: <CAMo8Bf+_vaBMSmtxk-6nK91+kgn=rbb=gfnSCpWu1odRurpxsA@mail.gmail.com>
+Date: Tue,  3 Jun 2014 02:31:00 +0400
+Subject: [Buildroot] [PATCH v2 0/2] xserver_xorg-server: add ordering prefix
+	to patches
+Message-ID: <1401748262-4192-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 3, 2014 at 1:57 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Max Filippov,
->
-> On Tue,  3 Jun 2014 01:41:45 +0400, Max Filippov wrote:
->
->>  ...ps.patch => 100-xserver_xorg-server-mips.patch} |    0
->>  ...-xserver_xorg-server-add-support-for-arc.patch} |    0
->>  2 files changed, 0 insertions(+), 0 deletions(-)
->>  rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-mips.patch => 100-xserver_xorg-server-mips.patch} (100%)
->>  rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-add-support-for-arc.patch => 200-xserver_xorg-server-add-support-for-arc.patch} (100%)
->
-> The new names do not comply with the documentation, the naming
-> convention is:
->         <packagename>-<sequencenumber>-<description>.patch
+Hi,
 
-Must be some previous version that I remembered ):
+this series renames existing xserver_xorg-server patches to comply with
+documentation and adds support for xtensa architecture.
+
+Changes v1->v2:
+- put sequence number at the right place of the patch file names
+
+Max Filippov (2):
+  xserver_xorg-server: add ordering prefix to patches
+  xserver_xorg-server: add support for xtensa architecture
+
+ ...ps.patch => xserver_xorg-server-100-mips.patch} |    0
+ ...rver_xorg-server-200-add-support-for-arc.patch} |    0
+ ...tensa-add-support-for-xtensa-architecture.patch |   74 ++++++++++++++++++++
+ 3 files changed, 74 insertions(+), 0 deletions(-)
+ rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-mips.patch => xserver_xorg-server-100-mips.patch} (100%)
+ rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-add-support-for-arc.patch => xserver_xorg-server-200-add-support-for-arc.patch} (100%)
+ create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
 
 -- 
-Thanks.
--- Max
+1.7.7.6
