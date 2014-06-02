@@ -1,32 +1,24 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  2 Jun 2014 11:39:12 +0200
-Subject: [Buildroot] [PATCH] libqmi: bump to 1.10.0
-Message-ID: <1401701952-8758-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Jun 2014 12:50:44 +0200
+Subject: [Buildroot] [PATCH 05/21] package/w_scan: do not line-up
+	variables
+In-Reply-To: <517df36804751594e8fe8affc408570d3b4468da.1401658972.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:43:36 +0200")
+References: <cover.1401658972.git.yann.morin.1998@free.fr>
+ <517df36804751594e8fe8affc408570d3b4468da.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <874n03zit7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libqmi/libqmi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index f258af1..f63fd49 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.8.0
-+LIBQMI_VERSION = 1.10.0
- LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
- LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+Committed, thanks.
+
 -- 
-1.8.1.2
+Bye, Peter Korsgaard
