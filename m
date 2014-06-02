@@ -1,35 +1,50 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 22:34:37 +0200
-Subject: [Buildroot] [PATCH 1/7] package/procps: bump version and rename
-	to procps-ng
-In-Reply-To: <c827e84d7c56c699982501adbc8fd01e8602ce10.1401740805.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 2 Jun 2014 22:27:22 +0200")
-References: <cover.1401740805.git.yann.morin.1998@free.fr>
- <c827e84d7c56c699982501adbc8fd01e8602ce10.1401740805.git.yann.morin.1998@free.fr>
-Message-ID: <87lhtft5ia.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Jun 2014 23:00:10 +0200
+Subject: [Buildroot] simple xtensa build fails
+In-Reply-To: <20140602064030.GB4473@tarshish>
+References: <20140602062354.GB4197@waldemar-brodkorb.de>
+ <20140602064030.GB4473@tarshish>
+Message-ID: <20140602230010.591ed0c4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Baruch Siach,
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > procps is getting replaced by procps-ng, and there are
- > new versions available!
+On Mon, 2 Jun 2014 09:40:30 +0300, Baruch Siach wrote:
+> Hi Waldemar,
+> 
+> On Mon, Jun 02, 2014 at 08:23:54AM +0200, Waldemar Brodkorb wrote:
+> > a simple Xtensa build fails:
+> >  CC libc/sysdeps/linux/common/posix_fadvise.os
+> > libc/sysdeps/linux/common/posix_fadvise.c:26:29: error: unknown type
+> > name 'off64_t'
+> > libc/sysdeps/linux/common/posix_fadvise.c:26:45: error: unknown type
+> > name 'off64_t'
+> > libc/sysdeps/linux/common/posix_fadvise.c: In function
+> > 'posix_fadvise':
+> > libc/sysdeps/linux/common/posix_fadvise.c:32:2: warning: implicit
+> > declaration of function 'posix_fadvise64'
+> > [-Wimplicit-function-declaration]
+> > make[1]: *** [libc/sysdeps/linux/common/posix_fadvise.os] Error 1
+> > make[1]: Leaving directory
+> > `/home/wbx/br/output/build/uclibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c'
+> > make: ***
+> > [/home/wbx/br/output/build/uclibc-7bf35c8b7d4a1f97174eb49f47f33946b282114c/.stamp_built]
+> > Error 2
+> 
+> Snapshot uClibc build without LFS is currently broken. See 
+> http://article.gmane.org/gmane.comp.lib.uclibc.general/23714 for a fix.
 
- > procps-ng is now an autotools package, so get rid of our
- > custom build/install rules.
+Should we integrate this patch in our Xtensa and ARC uClibc patch
+series?
 
- > Remove most patches, except for one that still half-applies,
- > so update and rename it.
+Thanks,
 
- > procps is dead, long live procps-ng!
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
