@@ -1,73 +1,21 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jun 2014 22:27:28 +0200
-Subject: [Buildroot] [PATCH 7/7] [WIP] package/weston: add support for the
-	RDP compositor
-In-Reply-To: <cover.1401740805.git.yann.morin.1998@free.fr>
-References: <cover.1401740805.git.yann.morin.1998@free.fr>
-Message-ID: <79d083ee71a1e3c81a26f9f8a1b47cbb8c0b6d83.1401740805.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 02 Jun 2014 22:29:28 +0200
+Subject: [Buildroot] [PATCH 1/2] flot: bump to version 0.8.3
+In-Reply-To: <1401739874-18576-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 2 Jun 2014 17:11:13 -0300")
+References: <1401739874-18576-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877g4zukbb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Using the RDP compositor, one can run a headless machine to serve remote
-clients, using the RDP protocol.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Add an option to enable the rdp-backend.
+Committed, thanks.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
----
-Note: this is mostly in an WIP state. The backend builds and does
-not crash. But the best I was able to get when connecting to this
-RDP server, is an empty, completely black client window, in which
-I could do nothing, not even run a weston-terminal or whatever,
-even by explicitly asking to run it via the RDP 'shell' command...
-But it works, as it does not crash. Oh, wait...
-
-Although WIP, sending it to show off what weston is (supposed to be)
-capable of.
----
- package/weston/Config.in | 5 +++++
- package/weston/weston.mk | 7 +++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 96ebdf1..267571a 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -45,6 +45,11 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 
-+config BR2_PACKAGE_WESTON_RDP
-+	bool "RDP compositor"
-+	select BR2_PACKAGE_FREERDP
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+
- comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
- 	depends on BR2_arm
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 325cfc7..6189601 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -39,6 +39,13 @@ else
- WESTON_CONF_OPT += --disable-libinput-backend
- endif
- 
-+ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
-+WESTON_DEPENDENCIES += freerdp
-+WESTON_CONF_OPT += --enable-rdp-compositor
-+else
-+WESTON_CONF_OPT += --disable-rdp-compositor
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
 -- 
-1.8.3.2
+Bye, Peter Korsgaard
