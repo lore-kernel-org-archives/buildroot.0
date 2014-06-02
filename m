@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 22:02:20 +0200
-Subject: [Buildroot] [PATCH] lftp: bump to last version 4.4.16
-In-Reply-To: <1401716490-19572-1-git-send-email-rebillout@syscom.ch> ("Arnaud
- =?utf-8?Q?R=C3=A9billout=22's?= message of "Mon, 2 Jun 2014 15:41:30
- +0200")
-References: <1401716490-19572-1-git-send-email-rebillout@syscom.ch>
-Message-ID: <87k38zulkj.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Jun 2014 22:02:16 +0200
+Subject: [Buildroot] [git commit] lftp: bump to last version 4.4.16
+Message-ID: <20140602200240.3E9179CE82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnaud" == Arnaud R?billout <rebillout@syscom.ch> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=92501f8a25f585bd93a7972cc1915a3a364292e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Arnaud R?billout <rebillout@syscom.ch>
+Signed-off-by: Arnaud R??billout <rebillout@syscom.ch>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/lftp/lftp.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 5c6fd4b..244ebde 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LFTP_VERSION = 4.4.15
++LFTP_VERSION = 4.4.16
+ LFTP_SITE    = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPLv3+
+ LFTP_LICENSE_FILES = COPYING
