@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jun 2014 22:27:27 +0200
-Subject: [Buildroot] [PATCH 6/7] package/freerdp: add options to
-	enable/disable server and/or client
+Date: Mon,  2 Jun 2014 22:27:28 +0200
+Subject: [Buildroot] [PATCH 7/7] [WIP] package/weston: add support for the
+	RDP compositor
 In-Reply-To: <cover.1401740805.git.yann.morin.1998@free.fr>
 References: <cover.1401740805.git.yann.morin.1998@free.fr>
-Message-ID: <17eef943e634d0f930234f026b8b2eb1fdce19a2.1401740805.git.yann.morin.1998@free.fr>
+Message-ID: <79d083ee71a1e3c81a26f9f8a1b47cbb8c0b6d83.1401740805.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,81 +13,61 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Building the client or the server requires an X.Org stack.
+Using the RDP compositor, one can run a headless machine to serve remote
+clients, using the RDP protocol.
 
-Since freerdp can also be used for weston (wayland-based, hence no X.Org
-stack), we may want to disable the client and server.
-
-Conversely, with on an X.Org stack, we may want to enable either or
-none if we're just interested in the library.
-
-Add two options, one to enable the server, the other the client.
+Add an option to enable the rdp-backend.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/freerdp/Config.in  | 18 ++++++++++++++++--
- package/freerdp/freerdp.mk | 12 ++++++++++++
- 2 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/package/freerdp/Config.in b/package/freerdp/Config.in
-index 81a67ea..0c2edc5 100644
---- a/package/freerdp/Config.in
-+++ b/package/freerdp/Config.in
-@@ -6,16 +6,30 @@ config BR2_PACKAGE_FREERDP
- 	  FreeRDP is a free implementation of the Remote Desktop
- 	  Protocol (RDP), released under the Apache license
+---
+Note: this is mostly in an WIP state. The backend builds and does
+not crash. But the best I was able to get when connecting to this
+RDP server, is an empty, completely black client window, in which
+I could do nothing, not even run a weston-terminal or whatever,
+even by explicitly asking to run it via the RDP 'shell' command...
+But it works, as it does not crash. Oh, wait...
+
+Although WIP, sending it to show off what weston is (supposed to be)
+capable of.
+---
+ package/weston/Config.in | 5 +++++
+ package/weston/weston.mk | 7 +++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 96ebdf1..267571a 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -45,6 +45,11 @@ config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
+ config BR2_PACKAGE_WESTON_FBDEV
+ 	bool "fbdev compositor"
  
-+	  This only installs the freerdp library.
++config BR2_PACKAGE_WESTON_RDP
++	bool "RDP compositor"
++	select BR2_PACKAGE_FREERDP
++	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
 +
- 	  http://www.freerdp.com/
- 
- if BR2_PACKAGE_FREERDP
- 
- config BR2_PACKAGE_FREERDP_NEEDS_XLIBS
--	def_bool y
--	depends on BR2_PACKAGE_XORG7
-+	bool
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXCURSOR
- 
-+config BR2_PACKAGE_FREERDP_SERVER
-+	bool "build server"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_FREERDP_X_LIBS
-+
-+config BR2_PACKAGE_FREERDP_CLIENT
-+	bool "build client"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_FREERDP_X_LIBS
-+
-+comment "freerdp server and client needs X.Org"
-+	depends on !BR2_PACKAGE_XORG7
-+
- endif
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index aef9350..80e4945 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -23,6 +23,18 @@ else
- FREERDP_CONF_OPT += -DWITH_X11=OFF
+ comment "RPi compositor needs a toolchain w/ C++, largefile, threads"
+ 	depends on BR2_arm
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 325cfc7..6189601 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -39,6 +39,13 @@ else
+ WESTON_CONF_OPT += --disable-libinput-backend
  endif
  
-+ifeq ($(BR2_PACKAGE_FREERDP_SERVER),y)
-+FREERDP_CONF_OPT += -DWITH_SERVER=ON -DWITH_SERVER_INTERFACE=ON
++ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
++WESTON_DEPENDENCIES += freerdp
++WESTON_CONF_OPT += --enable-rdp-compositor
 +else
-+FREERDP_CONF_OPT += -DWITH_SERVER=OFF -DWITH_SERVER_INTERFACE=OFF
++WESTON_CONF_OPT += --disable-rdp-compositor
 +endif
 +
-+ifeq ($(BR2_PACKAGE_FREERDP_CLIENT),y)
-+FREERDP_CONF_OPT += -DWITH_CLIENT=ON -DWITH_CLIENT_INTERFACE=ON
-+else
-+FREERDP_CONF_OPT += -DWITH_CLIENT=OFF -DWITH_CLIENT_INTERFACE=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_CUPS),y)
- FREERDP_CONF_OPT += -DWITH_CUPS=ON
- FREERDP_DEPENDENCIES += cups
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ WESTON_DEPENDENCIES += libunwind
+ else
 -- 
 1.8.3.2
