@@ -1,23 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 22:29:54 +0200
-Subject: [Buildroot] [PATCH 2/2] usb_modeswitch_data: bump to version
-	20140529
-In-Reply-To: <1401739908-21009-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 2 Jun 2014 17:11:48 -0300")
-References: <1401739908-21009-1-git-send-email-gustavo@zacarias.com.ar>
- <1401739908-21009-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87tx83t5q5.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <berndkuhls@hotmail.com>
+Date: Mon, 02 Jun 2014 22:29:59 +0200
+Subject: [Buildroot] [PATCHv2 1/6] minidlna: do not select
+	BR2_PACKAGE_GETTEXT_TOOLS
+References: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401654214-19384-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <7f3v5bx3rr.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in
+news:1401654214-19384-2-git-send-email-thomas.petazzoni at free-electrons.com:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> diff --git a/package/minidlna/Config.in b/package/minidlna/Config.in
+> index 4a46b0c..5c5306d 100644
+> --- a/package/minidlna/Config.in
+> +++ b/package/minidlna/Config.in
+> @@ -14,7 +14,6 @@ config BR2_PACKAGE_MINIDLNA
+>       select BR2_PACKAGE_LIBJPEG
+>       select BR2_PACKAGE_SQLITE
+>       select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+> -     select BR2_PACKAGE_GETTEXT_TOOLS if BR2_NEEDS_GETTEXT_IF_LOCALE
+>       help
+>         MiniDLNA (aka ReadyDLNA) is server software with the aim of
+>         being fully compliant with DLNA/UPnP-AV clients.
 
-Committed, thanks.
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
--- 
-Bye, Peter Korsgaard
+using this minimal defconfig:
+
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_PACKAGE_MINIDLNA=y
