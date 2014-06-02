@@ -1,106 +1,36 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue,  3 Jun 2014 01:41:46 +0400
-Subject: [Buildroot] [PATCH 2/2] xserver_xorg-server: add support for xtensa
-	architecture
-In-Reply-To: <1401745306-2162-1-git-send-email-jcmvbkbc@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 2 Jun 2014 23:57:42 +0200
+Subject: [Buildroot] [PATCH 1/2] xserver_xorg-server: add ordering
+	prefix to patches
+In-Reply-To: <1401745306-2162-2-git-send-email-jcmvbkbc@gmail.com>
 References: <1401745306-2162-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1401745306-2162-3-git-send-email-jcmvbkbc@gmail.com>
+ <1401745306-2162-2-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20140602235742.0d164e8a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/143/14308a9d1806574f06ab2a7d222f53119fab1c90/
-  http://autobuild.buildroot.net/results/5cc/5cceb96ac29a410316fd7d8f7de0615ba33e3f2c/
+Dear Max Filippov,
 
-Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...tensa-add-support-for-xtensa-architecture.patch |   74 ++++++++++++++++++++
- 1 files changed, 74 insertions(+), 0 deletions(-)
- create mode 100644 package/x11r7/xserver_xorg-server/300-xserver_xorg-server-xtensa-add-support-for-xtensa-architecture.patch
+On Tue,  3 Jun 2014 01:41:45 +0400, Max Filippov wrote:
 
-diff --git a/package/x11r7/xserver_xorg-server/300-xserver_xorg-server-xtensa-add-support-for-xtensa-architecture.patch b/package/x11r7/xserver_xorg-server/300-xserver_xorg-server-xtensa-add-support-for-xtensa-architecture.patch
-new file mode 100644
-index 0000000..67bce1c
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/300-xserver_xorg-server-xtensa-add-support-for-xtensa-architecture.patch
-@@ -0,0 +1,74 @@
-+From dc8d0688471695ec5a8db5fef93fbcfc064891d5 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 2 Jun 2014 01:17:31 +0400
-+Subject: [PATCH] xtensa: add support for xtensa architecture
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Reviewed-by: Adam Jackson <ajax@redhat.com>
-+Signed-off-by: Keith Packard <keithp@keithp.com>
-+---
-+Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
-+
-+ hw/xfree86/common/compiler.h            |    5 ++++-
-+ hw/xfree86/os-support/linux/lnx_video.c |    3 ++-
-+ include/servermd.h                      |   14 ++++++++++++++
-+ 3 files changed, 20 insertions(+), 2 deletions(-)
-+
-+diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
-+index 0319de0..1bd8def 100644
-+--- a/hw/xfree86/common/compiler.h
-++++ b/hw/xfree86/common/compiler.h
-+@@ -1352,7 +1352,10 @@ stl_u(unsigned long val, unsigned int *p)
-+ #else                           /* ix86 */
-+ 
-+ #if !defined(__SUNPRO_C)
-+-#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__)
-++#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && \
-++    !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && \
-++    !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__) && \
-++    !defined(__xtensa__)
-+ #ifdef GCCUSESGAS
-+ 
-+ /*
-+diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
-+index 40765fc..652f963 100644
-+--- a/hw/xfree86/os-support/linux/lnx_video.c
-++++ b/hw/xfree86/os-support/linux/lnx_video.c
-+@@ -60,7 +60,8 @@ static Bool ExtendedEnabled = FALSE;
-+       !defined(__nds32__) && \
-+       !defined(__arm__) && \
-+       !defined(__aarch64__) && \
-+-      !defined(__arc__)
-++      !defined(__arc__) && \
-++      !defined(__xtensa__)
-+ 
-+ /*
-+  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
-+diff --git a/include/servermd.h b/include/servermd.h
-+index 2d1ccb1..081123b 100644
-+--- a/include/servermd.h
-++++ b/include/servermd.h
-+@@ -313,6 +313,20 @@ SOFTWARE.
-+ 
-+ #endif                          /* ARC */
-+ 
-++#ifdef __xtensa__
-++
-++#ifdef __XTENSA_EL__
-++#define IMAGE_BYTE_ORDER        LSBFirst
-++#define BITMAP_BIT_ORDER        LSBFirst
-++#endif
-++#ifdef __XTENSA_EB__
-++#define IMAGE_BYTE_ORDER        MSBFirst
-++#define BITMAP_BIT_ORDER        MSBFirst
-++#endif
-++#define GLYPHPADBYTES           4
-++
-++#endif                          /* __xtensa__ */
-++
-+ /* size of buffer to use with GetImage, measured in bytes. There's obviously
-+  * a trade-off between the amount of heap used and the number of times the
-+  * ddx routine has to be called.
-+-- 
-+1.7.7.6
-+
+>  ...ps.patch => 100-xserver_xorg-server-mips.patch} |    0
+>  ...-xserver_xorg-server-add-support-for-arc.patch} |    0
+>  2 files changed, 0 insertions(+), 0 deletions(-)
+>  rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-mips.patch => 100-xserver_xorg-server-mips.patch} (100%)
+>  rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-add-support-for-arc.patch => 200-xserver_xorg-server-add-support-for-arc.patch} (100%)
+
+The new names do not comply with the documentation, the naming
+convention is:
+
+	<packagename>-<sequencenumber>-<description>.patch
+
+Thanks!
+
+Thomas
 -- 
-1.7.7.6
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
