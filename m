@@ -1,34 +1,106 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue,  3 Jun 2014 02:31:01 +0400
-Subject: [Buildroot] [PATCH v2 1/2] xserver_xorg-server: add ordering prefix
-	to patches
+Date: Tue,  3 Jun 2014 02:31:02 +0400
+Subject: [Buildroot] [PATCH v2 2/2] xserver_xorg-server: add support for
+	xtensa architecture
 In-Reply-To: <1401748262-4192-1-git-send-email-jcmvbkbc@gmail.com>
 References: <1401748262-4192-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1401748262-4192-2-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1401748262-4192-3-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is to keep patch application order correct and to comply with
-documentation.
+Fixes:
+  http://autobuild.buildroot.net/results/143/14308a9d1806574f06ab2a7d222f53119fab1c90/
+  http://autobuild.buildroot.net/results/5cc/5cceb96ac29a410316fd7d8f7de0615ba33e3f2c/
 
+Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- ...ps.patch => xserver_xorg-server-100-mips.patch} |    0
- ...rver_xorg-server-200-add-support-for-arc.patch} |    0
- 2 files changed, 0 insertions(+), 0 deletions(-)
- rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-mips.patch => xserver_xorg-server-100-mips.patch} (100%)
- rename package/x11r7/xserver_xorg-server/{xserver_xorg-server-add-support-for-arc.patch => xserver_xorg-server-200-add-support-for-arc.patch} (100%)
+ ...tensa-add-support-for-xtensa-architecture.patch |   74 ++++++++++++++++++++
+ 1 files changed, 74 insertions(+), 0 deletions(-)
+ create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-mips.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-100-mips.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/xserver_xorg-server-mips.patch
-rename to package/x11r7/xserver_xorg-server/xserver_xorg-server-100-mips.patch
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-add-support-for-arc.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-200-add-support-for-arc.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/xserver_xorg-server-add-support-for-arc.patch
-rename to package/x11r7/xserver_xorg-server/xserver_xorg-server-200-add-support-for-arc.patch
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
+new file mode 100644
+index 0000000..67bce1c
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
+@@ -0,0 +1,74 @@
++From dc8d0688471695ec5a8db5fef93fbcfc064891d5 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Mon, 2 Jun 2014 01:17:31 +0400
++Subject: [PATCH] xtensa: add support for xtensa architecture
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Reviewed-by: Adam Jackson <ajax@redhat.com>
++Signed-off-by: Keith Packard <keithp@keithp.com>
++---
++Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
++
++ hw/xfree86/common/compiler.h            |    5 ++++-
++ hw/xfree86/os-support/linux/lnx_video.c |    3 ++-
++ include/servermd.h                      |   14 ++++++++++++++
++ 3 files changed, 20 insertions(+), 2 deletions(-)
++
++diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
++index 0319de0..1bd8def 100644
++--- a/hw/xfree86/common/compiler.h
+++++ b/hw/xfree86/common/compiler.h
++@@ -1352,7 +1352,10 @@ stl_u(unsigned long val, unsigned int *p)
++ #else                           /* ix86 */
++ 
++ #if !defined(__SUNPRO_C)
++-#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__)
+++#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && \
+++    !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && \
+++    !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__) && \
+++    !defined(__xtensa__)
++ #ifdef GCCUSESGAS
++ 
++ /*
++diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
++index 40765fc..652f963 100644
++--- a/hw/xfree86/os-support/linux/lnx_video.c
+++++ b/hw/xfree86/os-support/linux/lnx_video.c
++@@ -60,7 +60,8 @@ static Bool ExtendedEnabled = FALSE;
++       !defined(__nds32__) && \
++       !defined(__arm__) && \
++       !defined(__aarch64__) && \
++-      !defined(__arc__)
+++      !defined(__arc__) && \
+++      !defined(__xtensa__)
++ 
++ /*
++  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
++diff --git a/include/servermd.h b/include/servermd.h
++index 2d1ccb1..081123b 100644
++--- a/include/servermd.h
+++++ b/include/servermd.h
++@@ -313,6 +313,20 @@ SOFTWARE.
++ 
++ #endif                          /* ARC */
++ 
+++#ifdef __xtensa__
+++
+++#ifdef __XTENSA_EL__
+++#define IMAGE_BYTE_ORDER        LSBFirst
+++#define BITMAP_BIT_ORDER        LSBFirst
+++#endif
+++#ifdef __XTENSA_EB__
+++#define IMAGE_BYTE_ORDER        MSBFirst
+++#define BITMAP_BIT_ORDER        MSBFirst
+++#endif
+++#define GLYPHPADBYTES           4
+++
+++#endif                          /* __xtensa__ */
+++
++ /* size of buffer to use with GetImage, measured in bytes. There's obviously
++  * a trade-off between the amount of heap used and the number of times the
++  * ddx routine has to be called.
++-- 
++1.7.7.6
++
 -- 
 1.7.7.6
