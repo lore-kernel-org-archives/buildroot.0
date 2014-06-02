@@ -1,11 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 12:50:57 +0200
-Subject: [Buildroot] [PATCH 06/21] package/w_scan: bump version
-In-Reply-To: <c9e8f82e52fad1509d945e245490844a7b12f1d5.1401658972.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:43:37 +0200")
+Date: Mon, 02 Jun 2014 12:51:01 +0200
+Subject: [Buildroot] [PATCH 07/21] package/libbsd: do not line-up
+	variables
+In-Reply-To: <0ce2f55875ad8f8e1a00e9d50a3d4fbe9aefcb9d.1401658972.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:43:38 +0200")
 References: <cover.1401658972.git.yann.morin.1998@free.fr>
- <c9e8f82e52fad1509d945e245490844a7b12f1d5.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <87vbsjy48e.fsf@dell.be.48ers.dk>
+ <0ce2f55875ad8f8e1a00e9d50a3d4fbe9aefcb9d.1401658972.git.yann.morin.1998@free.fr>
+Message-ID: <87r437y48a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
