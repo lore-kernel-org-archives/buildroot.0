@@ -1,48 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Jun 2014 08:41:46 +0200
-Subject: [Buildroot] [git commit] glibc: remove redundant version logic
-Message-ID: <20140602064241.C73D29CE6E@busybox.osuosl.org>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon,  2 Jun 2014 11:39:12 +0200
+Subject: [Buildroot] [PATCH] libqmi: bump to 1.10.0
+Message-ID: <1401701952-8758-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1ec6bc5137af4d862c81ceb97abf2511846367f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Since commit 990a46fdec6a (glibc: move version handling to Config.in) we use
-Config.in version strings. Remove glibc.mk duplicate.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/glibc/glibc.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/libqmi/libqmi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d465665..a0077d2 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -4,19 +4,18 @@
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index f258af1..f63fd49 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION_STRING))
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
--GLIBC_VERSION = $(if $(BR2_EGLIBC_VERSION_2_19),2.19-svnr25243,2.18-svnr23787)
- GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
- GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
- GLIBC_SRC_SUBDIR = libc
- else
--GLIBC_VERSION = $(if $(BR2_GLIBC_VERSION_2_19),2.19,2.18)
- GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
- GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
- GLIBC_SRC_SUBDIR = .
- endif
- 
--GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION_STRING))
- GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
- GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
- 
+-LIBQMI_VERSION = 1.8.0
++LIBQMI_VERSION = 1.10.0
+ LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
+ LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+-- 
+1.8.1.2
