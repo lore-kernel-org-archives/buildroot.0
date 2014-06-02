@@ -1,30 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 13:10:57 +0200
-Subject: [Buildroot] [PATCH 15/21] package/weston: libxkbcommon is
-	optional
-In-Reply-To: <a71e7e58835a658675c879f3abe68e1c09aa53d3.1401658972.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:43:46 +0200")
-References: <cover.1401658972.git.yann.morin.1998@free.fr>
- <a71e7e58835a658675c879f3abe68e1c09aa53d3.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <87ppirwoqm.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Jun 2014 12:45:37 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20140602111141.64E4A9CE7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=dd15da6b4ec864fc315df06549048a49e4c2366c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > It is possible to build weston without libxkbcommon, for example
- > if using an input method that is not an hardware keyboard (e.g. a
- > virtual keyboard, or none at all.)
+Lotta fixes all over the tree.
+Still no new release... :-/
 
- > Make it optional.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tvheadend/tvheadend.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index ac4c290..244e129 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 6482d33ba90848018c530018e5c38992b8ac921c
++TVHEADEND_VERSION = 0ebca1b3dbb6a18d8adcf66a32b5922ce769b9b5
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE
