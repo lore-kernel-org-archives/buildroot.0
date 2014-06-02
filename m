@@ -1,38 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Jun 2014 12:46:33 +0200
-Subject: [Buildroot] [git commit] package/libbsd: do not line-up variables
-Message-ID: <20140602111141.7BF8C9CE82@busybox.osuosl.org>
+Date: Mon, 2 Jun 2014 13:08:17 +0200
+Subject: [Buildroot] [git commit] package/wayland: bump version
+Message-ID: <20140602111141.9D7DD9CE7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8862585c278888cec01037080f770561b669a0f0
+commit: http://git.buildroot.net/buildroot/commit/?id=6f526465eb09935426ebae86bf2c21030fe8f258
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Bump to the recently-released 1.5.0.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbsd/libbsd.mk |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/wayland/wayland.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 761a440..c1cd59e 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 3ab94ca..cfa770d 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBSD_VERSION         = 0.4.2
--LIBBSD_SITE            = http://libbsd.freedesktop.org/releases
--LIBBSD_LICENSE         = BSD-3c MIT
--LIBBSD_LICENSE_FILES   = COPYING
-+LIBBSD_VERSION = 0.4.2
-+LIBBSD_SITE = http://libbsd.freedesktop.org/releases
-+LIBBSD_LICENSE = BSD-3c MIT
-+LIBBSD_LICENSE_FILES = COPYING
- 
- LIBBSD_INSTALL_STAGING = YES
- 
+-WAYLAND_VERSION = 1.4.0
++WAYLAND_VERSION = 1.5.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases/
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
+@@ -19,7 +19,7 @@ WAYLAND_CONF_OPT = --disable-scanner
+ # We must provide a specialy-crafted wayland-scanner .pc file
+ # which we vampirise and adapt from the host-wayland copy
+ define WAYLAND_SCANNER_PC
+-	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/share/pkgconfig/wayland-scanner.pc \
++	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/lib/pkgconfig/wayland-scanner.pc \
+ 	              $(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
+ 	$(SED) 's:^prefix=.*:prefix=/usr:' \
+ 	    -e 's:^wayland_scanner=.*:wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner:' \
