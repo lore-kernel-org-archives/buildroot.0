@@ -1,46 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon,  2 Jun 2014 06:42:04 +0300
-Subject: [Buildroot] [PATCH] glibc: remove redundant version logic
-Message-ID: <22d4afc12d7eb01dc41b9ac5e4cb3e25867d0073.1401680524.git.baruch@tkos.co.il>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 02 Jun 2014 07:50:58 +0200
+Subject: [Buildroot] [PATCHv2 6/6] docs/manual: update documentation
+	about	gettext handling
+In-Reply-To: <1401654214-19384-7-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401654214-19384-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <f9ca3d84-198d-4afe-b30c-3c30c06628c8@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 990a46fdec6a (glibc: move version handling to Config.in) we use
-Config.in version strings. Remove glibc.mk duplicate.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>---
+> docs/manual/adding-packages-gettext.txt | 22 ++++++++++++++++++----
+> 1 file changed, 18 insertions(+), 4 deletions(-)
+>
+>diff --git a/docs/manual/adding-packages-gettext.txt b/docs/manual/adding-packages-gettext.txt
+>index d265607..580787f 100644
+>--- a/docs/manual/adding-packages-gettext.txt
+>+++ b/docs/manual/adding-packages-gettext.txt
+>@@ -8,10 +8,16 @@ library. Dependencies for this library are fairly complicated and
+> therefore, deserve some explanation.
+> 
+> The 'uClibc' C library doesn't implement gettext functionality;
+>-therefore with this C library, a separate gettext must be compiled. On
+>-the other hand, the 'glibc' C library does integrate its own gettext,
+>-and in this case the separate gettext library should not be compiled,
+>-because it creates various kinds of build failures.
+>+therefore with this C library, a separate gettext must be compiled,
+>+which will provide the libintl library.
+>+
+>+On the other hand, the 'glibc' C library does integrate its own
+>+gettext library functions, so it is not necessary to build a separate
+>+libintl library.
+>+
+>+However, certain packages will need some gettext utilities on the
+>+target, such as the +gettext+ program itself, which allows, from the
+>+command line, to retrieve translated strings.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/glibc/glibc.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+I would reorder as: ... which allows to retrieve translated strings, from the command line.
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d4656654e0d6..a0077d252181 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -4,19 +4,18 @@
- #
- ################################################################################
- 
-+GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION_STRING))
-+
- ifeq ($(BR2_TOOLCHAIN_BUILDROOT_EGLIBC),y)
--GLIBC_VERSION = $(if $(BR2_EGLIBC_VERSION_2_19),2.19-svnr25243,2.18-svnr23787)
- GLIBC_SITE = http://downloads.yoctoproject.org/releases/eglibc/
- GLIBC_SOURCE = eglibc-$(GLIBC_VERSION).tar.bz2
- GLIBC_SRC_SUBDIR = libc
- else
--GLIBC_VERSION = $(if $(BR2_GLIBC_VERSION_2_19),2.19,2.18)
- GLIBC_SITE = $(BR2_GNU_MIRROR)/libc
- GLIBC_SOURCE = glibc-$(GLIBC_VERSION).tar.xz
- GLIBC_SRC_SUBDIR = .
- endif
- 
--GLIBC_VERSION = $(call qstrip,$(BR2_GLIBC_VERSION_STRING))
- GLIBC_LICENSE = GPLv2+ (programs), LGPLv2.1+, BSD-3c, MIT (library)
- GLIBC_LICENSE_FILES = $(addprefix $(GLIBC_SRC_SUBDIR)/,COPYING COPYING.LIB LICENSES)
- 
--- 
-2.0.0.rc2
+
+> 
+> Additionally, some packages (such as +libglib2+) do require gettext
+> unconditionally, while other packages (those who support
+>@@ -44,3 +50,11 @@ should:
+> * use +$(if $(BR2_NEEDS_GETTEXT),gettext)+ in the package
+>   +DEPENDENCIES+ variable in the +.mk+ file.
+> 
+>+Packages that need the +gettext+ utilities on the target (should be
+>+rare) should:
+>+
+>+* use +select BR2_PACKAGE_GETTEXT+ in their +Config.in+ file,
+>+  indicating in a comment above that it's a runtime dependency only.
+>+
+>+* not add any dependency to their +.mk+ file +DEPENDENCIES+ variable.
+
+I would clarify: not add any gettext dependency...
+
+Also, it should probably be file's, or rewrite as
+... to the DEPENDENCIES variable in their .mk file.
+
+Best regards,
+Thomas
