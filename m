@@ -1,106 +1,91 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue,  3 Jun 2014 02:31:02 +0400
-Subject: [Buildroot] [PATCH v2 2/2] xserver_xorg-server: add support for
-	xtensa architecture
-In-Reply-To: <1401748262-4192-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1401748262-4192-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1401748262-4192-3-git-send-email-jcmvbkbc@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 3 Jun 2014 00:53:03 +0200
+Subject: [Buildroot] [PATCH 07/11] support/scripts: do not display
+ virtual packages in generated lists
+In-Reply-To: <0cfa42eb55966a62df475298ffc7b9c045f79862.1401743146.git.yann.morin.1998@free.fr>
+References: <cover.1401743146.git.yann.morin.1998@free.fr>
+ <0cfa42eb55966a62df475298ffc7b9c045f79862.1401743146.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMM+PxKqL0R==-d1SRJUcrAL_7V9Op=tyAeECvAjKZfcgmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-  http://autobuild.buildroot.net/results/143/14308a9d1806574f06ab2a7d222f53119fab1c90/
-  http://autobuild.buildroot.net/results/5cc/5cceb96ac29a410316fd7d8f7de0615ba33e3f2c/
+Yann,
 
-Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...tensa-add-support-for-xtensa-architecture.patch |   74 ++++++++++++++++++++
- 1 files changed, 74 insertions(+), 0 deletions(-)
- create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
+On Mon, Jun 2, 2014 at 11:06 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> If a package has both a 'real' and a 'virtual' definition, consider it
+> is a virtual package and do not display it in the generated package list.
+>
+> This is the case for jpeg and cryptodev, that are virtual packages, but
+> also real (but empty) packages used to provide a prompt to enable/disable
+> a choice to select an implementation. In this case, we do not want to
+> list the virtual packages, but only their implementations.
+>
+> So, consider packages that are both real and virtual as virtual packages.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Acked-by: Samuel Martin <s.martin49@gmail.com>
+>
+> ---
+> Changes RFC -> v2:
+>   - fix typoes  (Samuel)
+> ---
+>  support/scripts/gen-manual-lists.py | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+>
+> diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+> index e234ef1..a3fb00c 100644
+> --- a/support/scripts/gen-manual-lists.py
+> +++ b/support/scripts/gen-manual-lists.py
+> @@ -279,13 +279,30 @@ class Buildroot:
+>                      pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
+>              setattr(self, "_package_list", pkg_list)
+>          for pkg in getattr(self, "_package_list"):
+> -            if pattern.match(pkg):
+> -                return True
+> +            if type == 'real' or type == 'both':
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
-new file mode 100644
-index 0000000..67bce1c
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
-@@ -0,0 +1,74 @@
-+From dc8d0688471695ec5a8db5fef93fbcfc064891d5 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 2 Jun 2014 01:17:31 +0400
-+Subject: [PATCH] xtensa: add support for xtensa architecture
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Reviewed-by: Adam Jackson <ajax@redhat.com>
-+Signed-off-by: Keith Packard <keithp@keithp.com>
-+---
-+Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
-+
-+ hw/xfree86/common/compiler.h            |    5 ++++-
-+ hw/xfree86/os-support/linux/lnx_video.c |    3 ++-
-+ include/servermd.h                      |   14 ++++++++++++++
-+ 3 files changed, 20 insertions(+), 2 deletions(-)
-+
-+diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
-+index 0319de0..1bd8def 100644
-+--- a/hw/xfree86/common/compiler.h
-++++ b/hw/xfree86/common/compiler.h
-+@@ -1352,7 +1352,10 @@ stl_u(unsigned long val, unsigned int *p)
-+ #else                           /* ix86 */
-+ 
-+ #if !defined(__SUNPRO_C)
-+-#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__)
-++#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && \
-++    !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && \
-++    !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__) && \
-++    !defined(__xtensa__)
-+ #ifdef GCCUSESGAS
-+ 
-+ /*
-+diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
-+index 40765fc..652f963 100644
-+--- a/hw/xfree86/os-support/linux/lnx_video.c
-++++ b/hw/xfree86/os-support/linux/lnx_video.c
-+@@ -60,7 +60,8 @@ static Bool ExtendedEnabled = FALSE;
-+       !defined(__nds32__) && \
-+       !defined(__arm__) && \
-+       !defined(__aarch64__) && \
-+-      !defined(__arc__)
-++      !defined(__arc__) && \
-++      !defined(__xtensa__)
-+ 
-+ /*
-+  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
-+diff --git a/include/servermd.h b/include/servermd.h
-+index 2d1ccb1..081123b 100644
-+--- a/include/servermd.h
-++++ b/include/servermd.h
-+@@ -313,6 +313,20 @@ SOFTWARE.
-+ 
-+ #endif                          /* ARC */
-+ 
-++#ifdef __xtensa__
-++
-++#ifdef __XTENSA_EL__
-++#define IMAGE_BYTE_ORDER        LSBFirst
-++#define BITMAP_BIT_ORDER        LSBFirst
-++#endif
-++#ifdef __XTENSA_EB__
-++#define IMAGE_BYTE_ORDER        MSBFirst
-++#define BITMAP_BIT_ORDER        MSBFirst
-++#endif
-++#define GLYPHPADBYTES           4
-++
-++#endif                          /* __xtensa__ */
-++
-+ /* size of buffer to use with GetImage, measured in bytes. There's obviously
-+  * a trade-off between the amount of heap used and the number of times the
-+  * ddx routine has to be called.
-+-- 
-+1.7.7.6
-+
+Ooops! I forgot, since you removed the 'both' semantic in the previous
+patch, it should no longer appears here ;-)
+
+Otherwise, lgtm.
+
+> +                if pattern.match(pkg) and not self._exists_virt_symbol(pkg):
+> +                    return True
+>          return False
+>
+>      def _is_real_package(self, symbol):
+>          return self._is_package(symbol, 'real')
+>
+> +    def _exists_virt_symbol(self, pkg_name):
+> +        """ Return True if a symbol exists that defines the package as
+> +        a virtual package, False otherwise
+> +
+> +        :param pkg_name:    The name of the package, for which to check if
+> +                            a symbol exists defining it as a virtual package
+> +
+> +        """
+> +        virt_pattern = "BR2_PACKAGE_HAS_" + pkg_name + "$"
+> +        virt_pattern = re.sub("_", ".", virt_pattern)
+> +        virt_pattern = re.compile(virt_pattern, re.IGNORECASE)
+> +        for sym in self.config:
+> +            if virt_pattern.match(sym.get_name()):
+> +                return True
+> +        return False
+> +
+>      def _get_pkg_name(self, symbol):
+>          """ Return the package name of the specified symbol.
+>
+> --
+> 1.8.3.2
+>
+
+Regards,
+
 -- 
-1.7.7.6
+Samuel
