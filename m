@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jun 2014 23:06:08 +0200
-Subject: [Buildroot] [PATCH 06/11] support/scripts: prepare handling virtual
-	packages in generated lists
+Date: Mon,  2 Jun 2014 23:06:10 +0200
+Subject: [Buildroot] [PATCH 08/11] support/scripts: who's responsible to
+	decide what is a package
 In-Reply-To: <cover.1401743146.git.yann.morin.1998@free.fr>
 References: <cover.1401743146.git.yann.morin.1998@free.fr>
-Message-ID: <8ef3f9141946ec875dcaa789792862d883f967e3.1401743146.git.yann.morin.1998@free.fr>
+Message-ID: <79fbc7f7584aa8d0fc4db2498bdc4395b76266db.1401743146.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,100 +13,63 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Prepare to tell apart real packages from virtual packages.
+When generating the package lists, the responsibility to decide what is
+actually a package symbol is currently split between the _is_package(),
+the get_symbol_subset() and the format_asciidoc_table() functions.
 
-Currently, the code implicitly recognises only real packages, and
-discards virtual packages, because of the heuristic used to recognise
-whether a symbol is a package:
+The two latter functions check that an item is really a symbol, and that
+is has a prompt.
 
-  - for real package:
-    - symbols  : BR2_PACKAGE_FOO
-    - .mk files: foo.mk
-  - for virtual packages:
-    - symbols  : BR2_PACKAGE_HAS_FOO
-    - .mk files: foo.mk
+While this is currently correct for real packages, this will no longer
+be the case when we also generate a list of virtual packages, since they
+do not have a prompt.
 
-The current heuristic is to check for each symbol if a corresponding .mk
-file exists, by stripping 'BR2_PACKAGE_' from the beginning of the symbol,
-converting the result to lowercase, and checking if a .mk file exists.
-
-So, as a side effect, it completely misses the virtual packages [*], which
-is pretty nice since we get a list with only real packages that the user
-can indeed select and see in the menuconfig.
-
-[*] Except for 'cryptodev' and 'jpeg' which are both virtual packages and
-normal packages. Except they are not normal packages, they are used to
-display a choice of the implementation to use. This case will be fixed in
-follow-up patches.
-
-Since we'll soon need to also output the table of virtual packages, we
-need to teach the _is_package() function to recognise them as well.
-
-This patch is the first step into that direction: it introduces a new
-function _is_real_package() that is just a wrapper to _is_package(), which
-gains a new parameter, being the type of packages to filter on.
-
-No behavioural change is made in this patch, it is just a preparatory
-patch.
+Move the responsibility to verify that a symbol is indeed a package symbol
+to _is_package(), so it's all in one place, and makes it easier to change
+for virtual packages.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
 
 ---
-Changes RFC -> v2
-  - remove useless 'both' semantic  (Samuel)
-  - document default value  (Samuel)
-  - fix typoes  (Samuel)
+Changes RFC -> v2:
+  - fix typoes  (samuel)
 ---
- support/scripts/gen-manual-lists.py | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ support/scripts/gen-manual-lists.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index b33fcf0..e234ef1 100644
+index a3fb00c..0ad7d20 100644
 --- a/support/scripts/gen-manual-lists.py
 +++ b/support/scripts/gen-manual-lists.py
-@@ -183,14 +183,14 @@ class Buildroot:
-         'target-packages': {
-             'filename': "package-list",
-             'root_menu': "Target packages",
--            'filter': "_is_package",
-+            'filter': "_is_real_package",
-             'sorted': True,
-             'sub_menu': True,
-         },
-         'host-packages': {
-             'filename': "host-package-list",
-             'root_menu': "Host utilities",
--            'filter': "_is_package",
-+            'filter': "_is_real_package",
-             'sorted': True,
-             'sub_menu': False,
-         },
-@@ -238,11 +238,14 @@ class Buildroot:
-         return bool([ symbol for x in symbol.get_referenced_symbols()
-             if x.get_name().startswith(self._deprecated.get_name()) ])
- 
--    def _is_package(self, symbol):
-+    def _is_package(self, symbol, type='real'):
-         """ Return True if the symbol is a package or a host package, otherwise
-         False.
- 
-         :param symbol:  The symbol to check
-+        :param type:    Limit to 'real' or 'virtual' types of packages,
-+                        with 'real' being the default.
-+                        Note: only 'real' is (implictly) handled for now
+@@ -75,8 +75,6 @@ def get_symbol_subset(root, filter_func):
+         raise Exception(message)
+     for item in get_items():
+         if item.is_symbol():
+-            if not item.prompts:
+-                continue
+             if not filter_func(item):
+                 continue
+             yield item
+@@ -134,8 +132,6 @@ def format_asciidoc_table(root, get_label_func, filter_func=lambda x: True,
+             return "| {0:<40}\n".format(item)
+     lines = []
+     for item in get_symbol_subset(root, filter_func):
+-        if not item.is_symbol() or not item.prompts:
+-            continue
+         loc = get_symbol_parents(item, root, enable_choice=enable_choice)
+         lines.append(_format_entry(get_label_func(item), loc, sub_menu))
+     if sorted:
+@@ -248,6 +244,10 @@ class Buildroot:
+                         Note: only 'real' is (implictly) handled for now
  
          """
++        if not symbol.is_symbol():
++            return False
++        if type == 'real' and not symbol.prompts:
++            return False
          if not self.re_pkg_prefix.match(symbol.get_name()):
-@@ -280,6 +283,9 @@ class Buildroot:
-                 return True
-         return False
- 
-+    def _is_real_package(self, symbol):
-+        return self._is_package(symbol, 'real')
-+
-     def _get_pkg_name(self, symbol):
-         """ Return the package name of the specified symbol.
- 
+             return False
+         pkg_name = self._get_pkg_name(symbol)
 -- 
 1.8.3.2
