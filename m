@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jun 2014 23:06:11 +0200
-Subject: [Buildroot] [PATCH 09/11] support/scripts: introduce a symbol
-	formatter to generate package lists
+Date: Mon,  2 Jun 2014 23:06:13 +0200
+Subject: [Buildroot] [PATCH 11/11] docs/manual: add the virtual packages list
 In-Reply-To: <cover.1401743146.git.yann.morin.1998@free.fr>
 References: <cover.1401743146.git.yann.morin.1998@free.fr>
-Message-ID: <e47f3b1d0a79f0ba4751fdcd9cc8230fbd9642b1.1401743146.git.yann.morin.1998@free.fr>
+Message-ID: <28e1d0b8a88b0208938dcd1e0f4ed072a6e32f8b.1401743146.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,210 +12,96 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Currently, we can generate two different tables of packages:
-  - a single-column table with the symbols' prompts,
-  - a two-column table with the symbols' prompts and locations in the
-    menuconfig.
+Add the list of virtual packages as an appendix to the manual.
 
-For virtual packages, this is not enough, since we will have to display
-more columns, with different content:
-  - the virtual package name (but such symbols do not have a prompt)
-  - the symbol name
-  - the providers for the virtual package
+Also reference this list from appropriate locations elsewhere in
+the manual:
 
-So, instead of having a single function that knows how to generate any
-table, introduce a formatter function that is passed as argument to,
-and called by format_asciidoc_table(). Such formatter functions are
-responsible for providing:
-  - the layout of the table (number of columns, column arrangement),
-  - the formatted header line,
-  - a formatted line for a symbol.
+  - in section 7.2.2. "Config.in file", after the existing explanations
+    on dependencies on target and toolchain options, on a linux kernel,
+    and on udev /dev management,
 
-What the formatter should ouput depends on its arguments:
-  - if none are passed, the layout is returned,
-  - if the header label is passed, it returns the formatted header line,
-  - otherwise, it returns the formatted line for a symbol.
-
-Two formatter functions are introduced in this changeset, to replace the
-current 'sub_menu' feature:
-  - _format_symbol_prompt() to display a one-column table with only the
-    symbols' prompts,
-  - _format_symbol_prompt_location() to display a two-column table with
-    the symbols' prompts and locations.
-
-This will help us to later introduce a new formatter to generate a table
-for virtual packages.
-
-[Thanks to Samuel for his pythonistic help!]
+  - in section 7.2.10. "Infrastructure for virtual packages", in the
+    provider Config.in and .mk explanations, to have the list of existing
+    symbols to select (in Config.in) and packages to provide (in .mk).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
-Changes RFC -> v2:
-  - add explicit parameter to formatters to decide what to do, instead
-    of relying on argument being None or not  (Samuel)
-  - use traditional 'lambda x: x' instead of custom ones  (Samuel)
-  - fix typoes  (samuel)
+Note: a pre-rendered version of the manual with these modifications is
+available at:
+    http://ymorin.is-a-geek.org/download/tmp/buildroot/virtual-pacakges/manual/manual.html
 ---
- support/scripts/gen-manual-lists.py | 83 ++++++++++++++++++++++++-------------
- 1 file changed, 54 insertions(+), 29 deletions(-)
+ docs/manual/adding-packages-directory.txt | 10 ++++++++++
+ docs/manual/adding-packages-virtual.txt   |  6 ++++++
+ docs/manual/appendix.txt                  |  8 ++++++++
+ 3 files changed, 24 insertions(+)
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index 0ad7d20..68a36a9 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -109,50 +109,33 @@ def get_symbol_parents(item, root=None, enable_choice=False):
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index f735244..fe61d30 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -298,6 +298,16 @@ management, use this format:
+ foo needs udev /dev management and a toolchain w/ featA, featB, featC
+ --------------------------
  
++==== Dependencies on features provided by virtual packages
++
++Some features can be provided by more than one package, such as the
++openGL libraries.
++
++See xref:virtual-package-tutorial[] for more on the virtual packages.
++
++See xref:virtual-package-list[] for the symbols to depend on if your package
++depends on a feature provided by a virtual package.
++
+ === The +.mk+ file
  
- def format_asciidoc_table(root, get_label_func, filter_func=lambda x: True,
--                          enable_choice=False, sorted=True, sub_menu=True,
-+                          format_func=lambda x: x,
-+                          enable_choice=False, sorted=True,
-                           item_label=None):
-     """ Return the asciidoc formatted table of the items and their location.
+ [[adding-packages-mk]]
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+index 6326bb5..a5f17a2 100644
+--- a/docs/manual/adding-packages-virtual.txt
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -83,6 +83,9 @@ On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
+ set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
+ provider, but only if it is selected.
  
-     :param root:           Root item of the item subset
-     :param get_label_func: Item's label getter function
-     :param filter_func:    Filter function to apply on the item subset
-+    :param format_func:    Function to format a symbol and the table header
-     :param enable_choice:  Enable choices to appear as part of the item's
-                            location
-     :param sorted:         Flag to alphabetically sort the table
--    :param sub_menu:       Output the column with the sub-menu path
++See xref:virtual-package-list[] for the symbols to select if you implement
++a new provider for an existing virtual package.
++
+ ==== Provider's +.mk+ file
  
-     """
--    def _format_entry(item, parents, sub_menu):
--        """ Format an asciidoc table entry.
+ The +.mk+ file should also declare an additional variable
+@@ -96,6 +99,9 @@ packages it is an implementation of:
+ Of course, do not forget to add the proper build and runtime dependencies for
+ this package!
  
--        """
--        if sub_menu:
--            return "| {0:<40} <| {1}\n".format(item, " -> ".join(parents))
--        else:
--            return "| {0:<40}\n".format(item)
-     lines = []
-     for item in get_symbol_subset(root, filter_func):
--        loc = get_symbol_parents(item, root, enable_choice=enable_choice)
--        lines.append(_format_entry(get_label_func(item), loc, sub_menu))
-+        lines.append(format_func(what="symbol", symbol=item, root=root,
-+                                 get_label_func=get_label_func,
-+                                 enable_choice=enable_choice))
-     if sorted:
-         lines.sort(key=lambda x: x.lower())
--    if hasattr(root, "get_title"):
--        loc_label = get_symbol_parents(root, None, enable_choice=enable_choice)
--        loc_label += [root.get_title(), "..."]
--    else:
--        loc_label = ["Location"]
--    if not item_label:
--        item_label = "Items"
-     table = ":halign: center\n\n"
--    if sub_menu:
--        width = "100%"
--        columns = "^1,4"
--    else:
--        width = "30%"
--        columns = "^1"
-+    width, columns = format_func(what="layout")
-     table = "[width=\"{0}\",cols=\"{1}\",options=\"header\"]\n".format(width, columns)
-     table += "|===================================================\n"
--    table += _format_entry(item_label, loc_label, sub_menu)
-+    table += format_func(what="header", header=item_label, root=root)
-     table += "\n" + "".join(lines) + "\n"
-     table += "|===================================================\n"
-     return table
-@@ -180,22 +163,22 @@ class Buildroot:
-             'filename': "package-list",
-             'root_menu': "Target packages",
-             'filter': "_is_real_package",
-+            'format': "_format_symbol_prompt_location",
-             'sorted': True,
--            'sub_menu': True,
-         },
-         'host-packages': {
-             'filename': "host-package-list",
-             'root_menu': "Host utilities",
-             'filter': "_is_real_package",
-+            'format': "_format_symbol_prompt",
-             'sorted': True,
--            'sub_menu': False,
-         },
-         'deprecated': {
-             'filename': "deprecated-list",
-             'root_menu': None,
-             'filter': "_is_deprecated",
-+            'format': "_format_symbol_prompt_location",
-             'sorted': False,
--            'sub_menu': True,
-         },
-     }
++See xref:virtual-package-list[] for the names of virtual packages to provide
++if you implement a new provider for an existing virtual package.
++
+ ==== Notes on depending on a virtual package
  
-@@ -324,6 +307,47 @@ class Buildroot:
-             label += " *(deprecated)*"
-         return label
+ When adding a package that requires a certain +FEATURE+ provided by a virtual
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 35328c6..3f95551 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -14,6 +14,14 @@ include::makeusers-syntax.txt[]
  
-+    def _format_symbol_prompt(self, what=None, symbol=None, root=None,
-+                                    enable_choice=False, header=None,
-+                                    get_label_func=lambda x: x):
-+        if what is None:
-+            raise Exception("Don't know what to format")
-+
-+        if what == "layout":
-+            return ( "30%", "^1" )
-+
-+        if what == "header":
-+            return "| {0:<40}\n".format(header)
-+
-+        if what == "symbol":
-+            return "| {0:<40}\n".format(get_label_func(symbol))
-+
-+        raise Exception("Don't know how to format '%s'" % str(what))
-+
-+    def _format_symbol_prompt_location(self, what=None, symbol=None, root=None,
-+                                             enable_choice=False, header=None,
-+                                             get_label_func=lambda x: x):
-+        if what is None:
-+            raise Exception("Don't know what to format")
-+
-+        if what == "layout":
-+            return ( "100%", "^1,4" )
-+
-+        if what == "header":
-+            if hasattr(root, "get_title"):
-+                loc_label = get_symbol_parents(root, None, enable_choice=enable_choice)
-+                loc_label += [root.get_title(), "..."]
-+            else:
-+                loc_label = ["Location"]
-+            return "| {0:<40} <| {1}\n".format(header, " -> ".join(loc_label))
-+
-+        if what == "symbol":
-+            parents = get_symbol_parents(symbol, root, enable_choice)
-+            return "| {0:<40} <| {1}\n".format(get_label_func(symbol),
-+                                               " -> ".join(parents))
-+
-+        raise Exception("Don't know how to format '%s'" % str(what))
-+
-     def print_list(self, list_type, enable_choice=True, enable_deprecated=True,
-                    dry_run=False, output=None):
-         """ Print the requested list. If not dry run, then the list is
-@@ -356,6 +380,7 @@ class Buildroot:
-             root_item = self.config
-         filter_ = getattr(self, list_config.get('filter'))
-         filter_func = lambda x: filter_(x)
-+        format_func = getattr(self, list_config.get('format'))
-         if not enable_deprecated and list_type != "deprecated":
-             filter_func = lambda x: filter_(x) and not self._is_deprecated(x)
-         mark_depr = list_type != "deprecated"
-@@ -364,9 +389,9 @@ class Buildroot:
+ include::package-list.txt[]
  
-         table = format_asciidoc_table(root_item, get_label,
-                                       filter_func=filter_func,
-+                                      format_func=format_func,
-                                       enable_choice=enable_choice,
-                                       sorted=list_config.get('sorted'),
--                                      sub_menu=list_config.get('sub_menu'),
-                                       item_label=item_label)
++[[virtual-package-list]]
++== List of virtual packages
++
++These are the virtual packages known to +Buildroot+, with the
++corresponding symbols and providers.
++
++include::virtual-package-list.txt[]
++
+ [[host-package-list]]
+ == List of host utilities available in Buildroot
  
-         content = self.list_in.format(table=table)
 -- 
 1.8.3.2
