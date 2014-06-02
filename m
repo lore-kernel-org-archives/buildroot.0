@@ -1,63 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Jun 2014 21:41:45 +0200
-Subject: [Buildroot] [PATCH 10/21] package/snappy: bump version
-In-Reply-To: <87d2erw2d9.fsf@dell.be.48ers.dk>
-References: <cover.1401658972.git.yann.morin.1998@free.fr>
- <baf017295cfab2600216c057e3a75a25a2b7f8c1.1401658972.git.yann.morin.1998@free.fr>
- <87d2erw2d9.fsf@dell.be.48ers.dk>
-Message-ID: <20140602194145.GC3404@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Jun 2014 21:42:34 +0200
+Subject: [Buildroot] [git commit] xapp_twm: needs host-bison
+Message-ID: <20140602194308.05DED9CE7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Al,
+commit: http://git.buildroot.net/buildroot/commit/?id=be382d949c84fc12c37aacace4391046abadcd8a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-06-02 21:14 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > This is the un-tagged 1.1.2 release.
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > ---
->  >  package/snappy/snappy.mk | 4 ++--
->  >  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
->  > diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
->  > index c30cb3c..6d20df8 100644
->  > --- a/package/snappy/snappy.mk
->  > +++ b/package/snappy/snappy.mk
->  > @@ -4,8 +4,8 @@
->  >  #
->  >  ################################################################################
->  
->  > -SNAPPY_VERSION = 1.1.1
->  > -SNAPPY_SITE = http://snappy.googlecode.com/files/
->  > +SNAPPY_VERSION = 1ff9be9b8fafc8528ca9e055646f5932aa5db9c4
->  > +SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
-> 
-> Seems like it is missing an AUTORECONF:
-> 
-> http://autobuild.buildroot.net/results/0ec/0ec62efed0e0aec56b4aa6b5ef1a3bcbd1474949/build-end.log
+Fixes http://autobuild.buildroot.net/results/c68/c680a2fec88861f20a2cbb17078537a62924dab9/
 
-Sigh... So sorry... :-(
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xapp_twm/xapp_twm.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-I had it autoreconfed manually, and forgot to remove the build-dir for
-subsequent builds... :-(
-
-> Will fix now.
-
-Thanks.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/x11r7/xapp_twm/xapp_twm.mk b/package/x11r7/xapp_twm/xapp_twm.mk
+index e004b8d..7f6ba4f 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.mk
++++ b/package/x11r7/xapp_twm/xapp_twm.mk
+@@ -9,6 +9,7 @@ XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.bz2
+ XAPP_TWM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_TWM_LICENSE = MIT
+ XAPP_TWM_LICENSE_FILES = COPYING
+-XAPP_TWM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xlib_libXmu
++XAPP_TWM_DEPENDENCIES = \
++	host-bison xlib_libX11 xlib_libXext xlib_libXt xlib_libXmu
+ 
+ $(eval $(autotools-package))
