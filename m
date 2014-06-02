@@ -1,11 +1,11 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 3 Jun 2014 00:53:47 +0200
-Subject: [Buildroot] [PATCH 09/11] support/scripts: introduce a symbol
- formatter to generate package lists
-In-Reply-To: <e47f3b1d0a79f0ba4751fdcd9cc8230fbd9642b1.1401743146.git.yann.morin.1998@free.fr>
+Date: Tue, 3 Jun 2014 00:57:06 +0200
+Subject: [Buildroot] [PATCH 10/11] support/scripts: generate a list of
+	virtual packages
+In-Reply-To: <f1b7ee0250910741741d6d4374f261afb426df03.1401743146.git.yann.morin.1998@free.fr>
 References: <cover.1401743146.git.yann.morin.1998@free.fr>
- <e47f3b1d0a79f0ba4751fdcd9cc8230fbd9642b1.1401743146.git.yann.morin.1998@free.fr>
-Message-ID: <CAHXCMM+_bQC7Zb-=DCVeGXezQop4TCy=FgJBeFG-UwhnG1r+tw@mail.gmail.com>
+ <f1b7ee0250910741741d6d4374f261afb426df03.1401743146.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMLfowPbYoozgFqKYHk-TWnqnWMNaXYP17KxZOSPLeJEfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,228 +17,188 @@ Yann,
 On Mon, Jun 2, 2014 at 11:06 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Currently, we can generate two different tables of packages:
->   - a single-column table with the symbols' prompts,
->   - a two-column table with the symbols' prompts and locations in the
->     menuconfig.
+> Generate an asciidoc table that can be included in the manual, that
+> lists the existing virtual packages, the corresponding symbols, and
+> their providers (and sub-options thereof).
 >
-> For virtual packages, this is not enough, since we will have to display
-> more columns, with different content:
->   - the virtual package name (but such symbols do not have a prompt)
->   - the symbol name
->   - the providers for the virtual package
+> The core of this change is the addition of a new formatter for virtual
+> packages. This formatter is a bit tricky, as it has to catter for a
+> bunch of corner cases:
+>   - provider is not a package, but is sub-options of a package
+>   - such a sub-option may be itself 'select'-ed by one or more
+>     other sub-options
+>   - legacy packages should not be considered as a provider
 >
-> So, instead of having a single function that knows how to generate any
-> table, introduce a formatter function that is passed as argument to,
-> and called by format_asciidoc_table(). Such formatter functions are
-> responsible for providing:
->   - the layout of the table (number of columns, column arrangement),
->   - the formatted header line,
->   - a formatted line for a symbol.
->
-> What the formatter should ouput depends on its arguments:
->   - if none are passed, the layout is returned,
->   - if the header label is passed, it returns the formatted header line,
->   - otherwise, it returns the formatted line for a symbol.
->
-> Two formatter functions are introduced in this changeset, to replace the
-> current 'sub_menu' feature:
->   - _format_symbol_prompt() to display a one-column table with only the
->     symbols' prompts,
->   - _format_symbol_prompt_location() to display a two-column table with
->     the symbols' prompts and locations.
->
-> This will help us to later introduce a new formatter to generate a table
-> for virtual packages.
->
-> [Thanks to Samuel for his pythonistic help!]
+> Those cases are real:
+>   - sub-options of mesa3d provide EGL or GLES
+>   - selected sub-options of mesa3d provide GL
+>   - udev is a legacy package, but it provides udev
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Samuel Martin <s.martin49@gmail.com>
 >
 > ---
 > Changes RFC -> v2:
->   - add explicit parameter to formatters to decide what to do, instead
->     of relying on argument being None or not  (Samuel)
->   - use traditional 'lambda x: x' instead of custom ones  (Samuel)
->   - fix typoes  (samuel)
+>   - fix disctionnaries to use usual quoteation marks  (Samuel)
+>   - rewrite _is_legacy_symbol() in a more pythonic way  (samuel)
+>   - avoid passing the 'br' object since we're only ever calling the
+>     functions as class members anyway  (Samuel)
+>   - fix typoes  (Samuel)
 > ---
->  support/scripts/gen-manual-lists.py | 83 ++++++++++++++++++++++++-------------
->  1 file changed, 54 insertions(+), 29 deletions(-)
+>  support/scripts/gen-manual-lists.py | 87 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 85 insertions(+), 2 deletions(-)
 >
 > diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-> index 0ad7d20..68a36a9 100644
+> index 68a36a9..fbdc453 100644
 > --- a/support/scripts/gen-manual-lists.py
 > +++ b/support/scripts/gen-manual-lists.py
-> @@ -109,50 +109,33 @@ def get_symbol_parents(item, root=None, enable_choice=False):
->
->
->  def format_asciidoc_table(root, get_label_func, filter_func=lambda x: True,
-> -                          enable_choice=False, sorted=True, sub_menu=True,
-> +                          format_func=lambda x: x,
-> +                          enable_choice=False, sorted=True,
->                            item_label=None):
->      """ Return the asciidoc formatted table of the items and their location.
->
->      :param root:           Root item of the item subset
->      :param get_label_func: Item's label getter function
->      :param filter_func:    Filter function to apply on the item subset
-> +    :param format_func:    Function to format a symbol and the table header
->      :param enable_choice:  Enable choices to appear as part of the item's
->                             location
->      :param sorted:         Flag to alphabetically sort the table
-> -    :param sub_menu:       Output the column with the sub-menu path
->
->      """
-> -    def _format_entry(item, parents, sub_menu):
-> -        """ Format an asciidoc table entry.
->
-> -        """
-> -        if sub_menu:
-> -            return "| {0:<40} <| {1}\n".format(item, " -> ".join(parents))
-> -        else:
-> -            return "| {0:<40}\n".format(item)
->      lines = []
->      for item in get_symbol_subset(root, filter_func):
-> -        loc = get_symbol_parents(item, root, enable_choice=enable_choice)
-> -        lines.append(_format_entry(get_label_func(item), loc, sub_menu))
-> +        lines.append(format_func(what="symbol", symbol=item, root=root,
-> +                                 get_label_func=get_label_func,
-> +                                 enable_choice=enable_choice))
->      if sorted:
->          lines.sort(key=lambda x: x.lower())
-> -    if hasattr(root, "get_title"):
-> -        loc_label = get_symbol_parents(root, None, enable_choice=enable_choice)
-> -        loc_label += [root.get_title(), "..."]
-> -    else:
-> -        loc_label = ["Location"]
-> -    if not item_label:
-> -        item_label = "Items"
->      table = ":halign: center\n\n"
-> -    if sub_menu:
-> -        width = "100%"
-> -        columns = "^1,4"
-> -    else:
-> -        width = "30%"
-> -        columns = "^1"
-> +    width, columns = format_func(what="layout")
->      table = "[width=\"{0}\",cols=\"{1}\",options=\"header\"]\n".format(width, columns)
->      table += "|===================================================\n"
-> -    table += _format_entry(item_label, loc_label, sub_menu)
-> +    table += format_func(what="header", header=item_label, root=root)
->      table += "\n" + "".join(lines) + "\n"
->      table += "|===================================================\n"
->      return table
-> @@ -180,22 +163,22 @@ class Buildroot:
->              'filename': "package-list",
->              'root_menu': "Target packages",
->              'filter': "_is_real_package",
-> +            'format': "_format_symbol_prompt_location",
+> @@ -173,6 +173,13 @@ class Buildroot:
+>              'format': "_format_symbol_prompt",
 >              'sorted': True,
-> -            'sub_menu': True,
 >          },
->          'host-packages': {
->              'filename': "host-package-list",
->              'root_menu': "Host utilities",
->              'filter': "_is_real_package",
-> +            'format': "_format_symbol_prompt",
->              'sorted': True,
-> -            'sub_menu': False,
->          },
+> +        'virtual-packages': {
+> +            'filename': "virtual-package-list",
+> +            'root_menu': "Target packages",
+> +            'filter': "_is_virtual_package",
+> +            'format': "_format_symbol_virtual",
+> +            'sorted': True,
+> +        },
 >          'deprecated': {
 >              'filename': "deprecated-list",
 >              'root_menu': None,
->              'filter': "_is_deprecated",
-> +            'format': "_format_symbol_prompt_location",
->              'sorted': False,
-> -            'sub_menu': True,
->          },
->      }
+> @@ -231,6 +238,8 @@ class Buildroot:
+>              return False
+>          if type == 'real' and not symbol.prompts:
+>              return False
+> +        if type == 'virtual' and symbol.prompts:
+> +            return False
+>          if not self.re_pkg_prefix.match(symbol.get_name()):
+>              return False
+>          pkg_name = self._get_pkg_name(symbol)
+> @@ -262,14 +271,20 @@ class Buildroot:
+>                      pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
+>              setattr(self, "_package_list", pkg_list)
+>          for pkg in getattr(self, "_package_list"):
+> -            if type == 'real' or type == 'both':
+> +            if type == 'real':
+
+ok, you remove the 'both' keyword support here, I expected it in patch 7/11...
+
+>                  if pattern.match(pkg) and not self._exists_virt_symbol(pkg):
+>                      return True
+> +            if type == 'virtual':
+> +                if pattern.match('has_' + pkg):
+> +                    return True
+>          return False
 >
-> @@ -324,6 +307,47 @@ class Buildroot:
->              label += " *(deprecated)*"
->          return label
+>      def _is_real_package(self, symbol):
+>          return self._is_package(symbol, 'real')
 >
-> +    def _format_symbol_prompt(self, what=None, symbol=None, root=None,
-> +                                    enable_choice=False, header=None,
-> +                                    get_label_func=lambda x: x):
+> +    def _is_virtual_package(self, symbol):
+> +        return self._is_package(symbol, 'virtual')
+> +
+>      def _exists_virt_symbol(self, pkg_name):
+>          """ Return True if a symbol exists that defines the package as
+>          a virtual package, False otherwise
+> @@ -348,6 +363,72 @@ class Buildroot:
+>
+>          raise Exception("Don't know how to format '%s'" % str(what))
+>
+> +    def _format_symbol_virtual(self, what=None, symbol=None, root=None,
+> +                                     enable_choice=False, header=None,
+> +                                     get_label_func=lambda x: "?"):
+> +        def _symbol_is_legacy(symbol):
+> +            selects = [ s.get_name() for s in symbol.get_selected_symbols() ]
+> +            return ("BR2_LEGACY" in selects)
+> +
+> +        def _get_parent_package(sym):
+> +            if self._is_real_package(sym):
+> +                return None
+> +            # Trim the symbol name from its last component (separated with
+> +            # underscores), until we either find a symbol which is a real
+> +            # package, or until we have no component (i.e. just 'BR2')
+> +            name = sym.get_name()
+> +            while name != "BR2":
+> +                name = name.rsplit("_", 1)[0]
+> +                s = self.config.get_symbol(name)
+> +                if s is None:
+> +                    continue
+> +                if self._is_real_package(s):
+> +                    return s
+> +            return None
+> +
+> +        def _get_providers(config, symbol):
+> +            providers = list()
+> +            for sym in self.config:
+> +                if not sym.is_symbol():
+> +                    continue
+> +                selects = sym.get_selected_symbols()
+> +                if not selects:
+> +                    continue
+> +                for s in selects:
+> +                    if s == symbol:
+> +                        if _symbol_is_legacy(sym):
+> +                            continue
+> +                        if sym.prompts:
+> +                            l = self._get_symbol_label(sym,False)
+> +                            parent_pkg = _get_parent_package(sym)
+> +                            if parent_pkg is not None:
+> +                                l = self._get_symbol_label(parent_pkg, False) \
+> +                                  + " (w/ " + l + ")"
+> +                            providers.append(l)
+> +                        else:
+> +                            providers.extend(_get_providers(config,sym))
+> +            return providers
+> +
 > +        if what is None:
 > +            raise Exception("Don't know what to format")
 > +
 > +        if what == "layout":
-> +            return ( "30%", "^1" )
+> +            return ( "100%", "^1,4,4" )
 > +
 > +        if what == "header":
-> +            return "| {0:<40}\n".format(header)
+> +            return "| {0:<20} <| {1:<32} <| Providers\n".format("Virtual packages", "Symbols")
 > +
 > +        if what == "symbol":
-> +            return "| {0:<40}\n".format(get_label_func(symbol))
+> +            pkg = re.sub(r"^BR2_PACKAGE_HAS_(.+)$", r"\1", symbol.get_name())
+> +            providers = _get_providers(self.config, symbol)
 > +
-> +        raise Exception("Don't know how to format '%s'" % str(what))
-> +
-> +    def _format_symbol_prompt_location(self, what=None, symbol=None, root=None,
-> +                                             enable_choice=False, header=None,
-> +                                             get_label_func=lambda x: x):
-> +        if what is None:
-> +            raise Exception("Don't know what to format")
-> +
-> +        if what == "layout":
-> +            return ( "100%", "^1,4" )
-> +
-> +        if what == "header":
-> +            if hasattr(root, "get_title"):
-> +                loc_label = get_symbol_parents(root, None, enable_choice=enable_choice)
-> +                loc_label += [root.get_title(), "..."]
-> +            else:
-> +                loc_label = ["Location"]
-> +            return "| {0:<40} <| {1}\n".format(header, " -> ".join(loc_label))
-> +
-> +        if what == "symbol":
-> +            parents = get_symbol_parents(symbol, root, enable_choice)
-> +            return "| {0:<40} <| {1}\n".format(get_label_func(symbol),
-> +                                               " -> ".join(parents))
+> +            return "| {0:<20} <| {1:<32} <| {2}\n".format(pkg.lower(),
+> +                                                          '+' + symbol.get_name() + '+',
+> +                                                          ", ".join(providers))
 > +
 > +        raise Exception("Don't know how to format '%s'" % str(what))
 
-Raising an exception if 'what' is None, and raising an exception when
-it  has an invalid value seems a bit overkill to me... ;-)
+Same comment as patch 9/11, None-check is overkill IMHO.
 
-I would drop the None-check, and make the exception message more
-helpful in invalid case:
-
-  message = "Invalid argument 'what': '%s'\n" % str(what)
-  message += "Allowed values are: 'layout', 'header' and 'symbol'"
-  raise Exception(message)
-
-
+> +
 > +
 >      def print_list(self, list_type, enable_choice=True, enable_deprecated=True,
 >                     dry_run=False, output=None):
 >          """ Print the requested list. If not dry run, then the list is
-> @@ -356,6 +380,7 @@ class Buildroot:
->              root_item = self.config
->          filter_ = getattr(self, list_config.get('filter'))
->          filter_func = lambda x: filter_(x)
-> +        format_func = getattr(self, list_config.get('format'))
->          if not enable_deprecated and list_type != "deprecated":
->              filter_func = lambda x: filter_(x) and not self._is_deprecated(x)
->          mark_depr = list_type != "deprecated"
-> @@ -364,9 +389,9 @@ class Buildroot:
+> @@ -416,7 +497,7 @@ class Buildroot:
 >
->          table = format_asciidoc_table(root_item, get_label,
->                                        filter_func=filter_func,
-> +                                      format_func=format_func,
->                                        enable_choice=enable_choice,
->                                        sorted=list_config.get('sorted'),
-> -                                      sub_menu=list_config.get('sub_menu'),
->                                        item_label=item_label)
 >
->          content = self.list_in.format(table=table)
+>  if __name__ == '__main__':
+> -    list_types = ['target-packages', 'host-packages', 'deprecated']
+> +    list_types = ['target-packages', 'host-packages', 'virtual-packages', 'deprecated']
+>      parser = ArgumentParser()
+>      parser.add_argument("list_type", nargs="?", choices=list_types,
+>                          help="""\
+> @@ -427,6 +508,8 @@ Generate the given list (generate all lists if unspecified)""")
+>                          help="Output target package file")
+>      parser.add_argument("--output-host", dest="output_host",
+>                          help="Output host package file")
+> +    parser.add_argument("--output-virtual", dest="output_virtual",
+> +                        help="Output virtual package file")
+>      parser.add_argument("--output-deprecated", dest="output_deprecated",
+>                          help="Output deprecated file")
+>      args = parser.parse_args()
 > --
 > 1.8.3.2
 >
 
-Regards,
+
 
 -- 
 Samuel
