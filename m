@@ -1,23 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 23:16:08 +0200
-Subject: [Buildroot] [PATCH 3/7] package/weston: add support for libinput
-In-Reply-To: <80dc215610e32808bdd08c0ba7846beef5c3b382.1401740805.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 2 Jun 2014 22:27:24 +0200")
-References: <cover.1401740805.git.yann.morin.1998@free.fr>
- <80dc215610e32808bdd08c0ba7846beef5c3b382.1401740805.git.yann.morin.1998@free.fr>
-Message-ID: <87d2ert3l3.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 2 Jun 2014 22:29:46 +0200
+Subject: [Buildroot] [git commit] usb_modeswitch: bump to version 2.2.0
+Message-ID: <20140602211714.CC0F69CDCF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=a2abe7165cf2c12280f075b8858bfa80602c981c
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/usb_modeswitch/usb_modeswitch.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index dce7817..ea874be 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USB_MODESWITCH_VERSION = 2.1.1
++USB_MODESWITCH_VERSION = 2.2.0
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
