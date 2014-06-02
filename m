@@ -1,46 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Jun 2014 12:45:46 +0200
-Subject: [Buildroot] [git commit] package/w_scan: do not line-up variables
-Message-ID: <20140602111141.6C60E9CE82@busybox.osuosl.org>
+Date: Mon, 2 Jun 2014 12:46:58 +0200
+Subject: [Buildroot] [git commit] package/snappy: bump version
+Message-ID: <20140602111141.9101B9CE7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac4edbccc7eb62e1720e06921d07564d5326a1f8
+commit: http://git.buildroot.net/buildroot/commit/?id=e9f28b7c8caa4091836866f3323cb7905257539c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This is the un-tagged 1.1.2 release.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/w_scan/w_scan.mk |   14 +++++++-------
- 1 files changed, 7 insertions(+), 7 deletions(-)
+ package/snappy/snappy.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
-index 5ca02b8..86bd34e 100644
---- a/package/w_scan/w_scan.mk
-+++ b/package/w_scan/w_scan.mk
-@@ -4,15 +4,15 @@
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index c30cb3c..6d20df8 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--W_SCAN_VERSION              = 20130331
--W_SCAN_SOURCE               = w_scan-$(W_SCAN_VERSION).tar.bz2
--W_SCAN_SITE                 = http://wirbel.htpc-forum.de/w_scan
--W_SCAN_LICENSE              = GPLv2+
--W_SCAN_LICENSE_FILES        = COPYING
-+W_SCAN_VERSION = 20130331
-+W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
-+W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
-+W_SCAN_LICENSE = GPLv2+
-+W_SCAN_LICENSE_FILES = COPYING
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
--W_SCAN_DEPENDENCIES        += libiconv
--W_SCAN_CONF_ENV            += LIBS=-liconv
-+W_SCAN_DEPENDENCIES += libiconv
-+W_SCAN_CONF_ENV += LIBS=-liconv
- endif
- 
- $(eval $(autotools-package))
+-SNAPPY_VERSION = 1.1.1
+-SNAPPY_SITE = http://snappy.googlecode.com/files/
++SNAPPY_VERSION = 1ff9be9b8fafc8528ca9e055646f5932aa5db9c4
++SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
+ SNAPPY_LICENSE = BSD-3c
+ SNAPPY_LICENSE_FILES = COPYING
+ SNAPPY_INSTALL_STAGING = YES
