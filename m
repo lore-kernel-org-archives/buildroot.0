@@ -1,43 +1,31 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 02 Jun 2014 21:26:06 +0200
-Subject: [Buildroot] [PATCH 04/21] package/tvheadend: bump version
-In-Reply-To: <e2187ddfaefbda7a99b3e9f2b149c0cbbb9c12ac.1401658972.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:43:35 +0200")
-References: <cover.1401658972.git.yann.morin.1998@free.fr>
- <e2187ddfaefbda7a99b3e9f2b149c0cbbb9c12ac.1401658972.git.yann.morin.1998@free.fr>
-Message-ID: <878upfw1td.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  2 Jun 2014 21:38:44 +0200
+Subject: [Buildroot] [PATCH 1/1] xapp_twm: Depends on host-bison
+Message-ID: <1401737924-23156-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Fixes http://autobuild.buildroot.net/results/c68/c680a2fec88861f20a2cbb17078537a62924dab9/
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Lotta fixes all over the tree.
- > Still no new release... :-/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_twm/xapp_twm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > ---
- >  package/tvheadend/tvheadend.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
- > index ac4c290..244e129 100644
- > --- a/package/tvheadend/tvheadend.mk
- > +++ b/package/tvheadend/tvheadend.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+diff --git a/package/x11r7/xapp_twm/xapp_twm.mk b/package/x11r7/xapp_twm/xapp_twm.mk
+index e004b8d..de2d8f6 100644
+--- a/package/x11r7/xapp_twm/xapp_twm.mk
++++ b/package/x11r7/xapp_twm/xapp_twm.mk
+@@ -9,6 +9,6 @@ XAPP_TWM_SOURCE = twm-$(XAPP_TWM_VERSION).tar.bz2
+ XAPP_TWM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_TWM_LICENSE = MIT
+ XAPP_TWM_LICENSE_FILES = COPYING
+-XAPP_TWM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xlib_libXmu
++XAPP_TWM_DEPENDENCIES = host-bison xlib_libX11 xlib_libXext xlib_libXt xlib_libXmu
  
- > -TVHEADEND_VERSION = 6482d33ba90848018c530018e5c38992b8ac921c
- > +TVHEADEND_VERSION = 0ebca1b3dbb6a18d8adcf66a32b5922ce769b9b5
-
-Is there something missing from this commit? The patch no longer
-applies:
-
-http://autobuild.buildroot.net/results/808/808e5bb035ddef09339fe6a4d00147ee29ec2a18/build-end.log
-
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+1.7.10.4
