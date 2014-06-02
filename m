@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 2 Jun 2014 13:20:15 +0200
-Subject: [Buildroot] [git commit] nut: now needs C++ support
-Message-ID: <20140602112138.E218D9CE7D@busybox.osuosl.org>
+Date: Mon, 2 Jun 2014 13:25:33 +0200
+Subject: [Buildroot] [git commit] qt5websockets: correct license info
+Message-ID: <20140602112623.6DA009CE7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=048c84ec636d65967aa9177700f871b174d03abc
+commit: http://git.buildroot.net/buildroot/commit/?id=0fbda5b69e488b5655a65b63a849e77574e84ba7
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/8c5/8c5dc5f09e2dcb2a3aba1c451a53de8e79d531dc/
+Fixes http://autobuild.buildroot.net/results/c1d/c1de3b819af574712ec69a99d0db355c6c0ba735/
 
-After the version bump, nut now unconditionally builds a C++ client library,
-so adjust the dependencies to match.
+As stated by README.md:
+This code is licensed under LGPL v2.1.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nut/Config.in |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/qt5/qt5websockets/qt5websockets.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nut/Config.in b/package/nut/Config.in
-index 7045787..659c958 100644
---- a/package/nut/Config.in
-+++ b/package/nut/Config.in
-@@ -1,6 +1,11 @@
-+comment "nut needs a toolchain w/ C++"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_NUT
- 	bool "nut"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Network UPS tools
+diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
+index cac9931..5bfa1ed 100644
+--- a/package/qt5/qt5websockets/qt5websockets.mk
++++ b/package/qt5/qt5websockets/qt5websockets.mk
+@@ -11,8 +11,8 @@ QT5WEBSOCKETS_DEPENDENCIES = qt5base
+ QT5WEBSOCKETS_INSTALL_STAGING = YES
  
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5WEBSOCKETS_LICENSE = LGPLv2.1 or GPLv3.0
+-QT5WEBSOCKETS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
++QT5WEBSOCKETS_LICENSE = LGPLv2.1
++QT5WEBSOCKETS_LICENSE_FILES = LICENSE
+ else
+ QT5WEBSOCKETS_LICENSE = Commercial license
+ QT5WEBSOCKETS_REDISTRIBUTE = NO
