@@ -1,128 +1,117 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jun 2014 09:17:29 +0200
-Subject: [Buildroot] [git commit] uclibc: fix build without LARGEFILE for
-	xtensa
-Message-ID: <20140603072002.52EBA9CA1E@busybox.osuosl.org>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Tue,  3 Jun 2014 09:21:23 +0200
+Subject: [Buildroot] [PATCH v2] Add support for Congatec QMX6
+Message-ID: <1401780083-25730-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c28a679080d35c03b84799b33e0413687940d1b4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add support for the iMX6 based conga-QMX6 family of Qseven modules.
 
-The default uClibc version for xtensa is broken when LARGEFILE is disabled.
-Add a patch to fix this.
+This patch is based on Linux 3.0.35 from Congatec's kernel reporitory
 
-Reported-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 ---
- ...-posix_fadvise-Fix-build-breakage-for-LFS.patch |   98 ++++++++++++++++++++
- 1 files changed, 98 insertions(+), 0 deletions(-)
+There has been a similar patch set from
+Lahoudere Fabien <fabien.lahoudere@openwide.fr> last year adding a patch
+to the freescale kernel repository, but it seems more logical to me to
+start from the board manufacturer's repo (which might not have been
+availeable at that time).
 
-diff --git a/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0002-libc-posix_fadvise-Fix-build-breakage-for-LFS.patch b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0002-libc-posix_fadvise-Fix-build-breakage-for-LFS.patch
+Changes v1 -> v2
+  - fix whitespace errors
+
+ board/congatec/qmx6/6q_bootscript.txt |  5 +++++
+ board/congatec/qmx6/post-build.sh     |  7 +++++++
+ board/congatec/qmx6/readme.txt        | 31 +++++++++++++++++++++++++++++++
+ configs/qmx6_defconfig                | 13 +++++++++++++
+ 4 files changed, 56 insertions(+)
+ create mode 100644 board/congatec/qmx6/6q_bootscript.txt
+ create mode 100755 board/congatec/qmx6/post-build.sh
+ create mode 100644 board/congatec/qmx6/readme.txt
+ create mode 100644 configs/qmx6_defconfig
+
+diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
 new file mode 100644
-index 0000000..b17ea52
+index 0000000..087f13d
 --- /dev/null
-+++ b/package/uclibc/7bf35c8b7d4a1f97174eb49f47f33946b282114c/uclibc-0002-libc-posix_fadvise-Fix-build-breakage-for-LFS.patch
-@@ -0,0 +1,98 @@
-+From patchwork Thu Jan  9 09:35:45 2014
-+Content-Type: text/plain; charset="utf-8"
-+MIME-Version: 1.0
-+Content-Transfer-Encoding: 7bit
-+Subject: libc: posix_fadvise: Fix build breakage for !LFS
-+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-+X-Patchwork-Id: 308533
-+Message-Id: <1389260145-8810-1-git-send-email-vgupta@synopsys.com>
-+To: <uclibc@uclibc.org>
-+Cc: Francois.Bedard at synopsys.com, Vineet Gupta <Vineet.Gupta1@synopsys.com>, 
-+ markos Chandras <markos.chandras@gmail.com>
-+Date: Thu, 9 Jan 2014 15:05:45 +0530
++++ b/board/congatec/qmx6/6q_bootscript.txt
+@@ -0,0 +1,5 @@
++set bootargs $bootargs console=ttymxc1,115200 vmalloc=400M root=/dev/mmcblk0p1 rootwait consoleblank=0 ;
++setenv bootargs $bootargs video=mxcfb0:dev=hdmi,1280x720M at 60,if=RGB24
++setenv bootargs $bootargs video=mxcfb1:dev=lcd,CLAA-WVGA,if=RGB666
++setenv bootargs $bootargs fbmem=28M,10M
++${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
+diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
+new file mode 100755
+index 0000000..85c0c97
+--- /dev/null
++++ b/board/congatec/qmx6/post-build.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
 +
-+commit 00571b43df2e "libc: posix_fadvise: restore implementation for xtensa"
-+enabled posix_fadvise() for all arches (it was just not generated
-+before).
++TARGET_DIR=$1
++BOARD_DIR="$(dirname $0)"
++MKIMAGE=$1/../host/usr/bin/mkimage
 +
-+However this also unearthed an issue introduced by ee84b8b400
-+"linux: posix_fadvise: use new SYSCALL_ALIGN_64BIT" which is to
-+referencing LFS'ish code (off64_t) w/o proper checks which causes build
-+to break for !LFS.
++$MKIMAGE -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
+diff --git a/board/congatec/qmx6/readme.txt b/board/congatec/qmx6/readme.txt
+new file mode 100644
+index 0000000..6e8be9b
+--- /dev/null
++++ b/board/congatec/qmx6/readme.txt
+@@ -0,0 +1,31 @@
++This is the minimal buildroot support for the Congatec QMX6 Qseven CoM
 +
-+Fix this by calling posix_fadvise64() only for LFS case and open-code
-+it's equivalent for !LFS.
++conga-QMX6 is based on the freescale iMX6 SoC. For more information please
++have a look at http://www.congatec.com/products/qseven/conga-qmx6.html
 +
-+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-+Cc: Mike Frysinger <vapier@gentoo.org>
-+Cc: Baruch Siach <baruch@tkos.co.il>
-+Cc: Khem Raj <raj.khem@gmail.com>
-+Cc: markos Chandras <markos.chandras@gmail.com>
-+Cc: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++The configuration is based on the currently latest kernel release from
++Congatec's git repository which is based on 3.0.35. The bootloader u-boot
++is preconfigured on the CPU module and does not need to be replaced.
 +
-+---
++To build the default configuration you only have to:
 +
-+Patch status: sent upstream (http://patchwork.ozlabs.org/patch/308533/)
++	make qmx6_defconfig && make
 +
-+libc/sysdeps/linux/common/posix_fadvise.c | 30 ++++++++++++++++++++++++------
-+ 1 file changed, 24 insertions(+), 6 deletions(-)
++You will need a microSD card of sufficient size and the first or only
++partition configured as Linux type.
 +
-+diff --git a/libc/sysdeps/linux/common/posix_fadvise.c b/libc/sysdeps/linux/common/posix_fadvise.c
-+index 25c294178e5e..14bbeeea13bc 100644
-+--- a/libc/sysdeps/linux/common/posix_fadvise.c
-++++ b/libc/sysdeps/linux/common/posix_fadvise.c
-+@@ -22,17 +22,34 @@
-+ # include <endian.h>
-+ # include <bits/wordsize.h>
-+ 
-+-# ifdef __NR_fadvise64_64
-+-int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
-+-# endif
-++# if defined(__NR_fadvise64_64) && defined(__UCLIBC_HAS_LFS__)
-++#include <_lfs_64.h>
-+ 
-++int posix_fadvise64(int fd, off64_t offset, off64_t len, int advice);
-+ int posix_fadvise(int fd, off_t offset, off_t len, int advice)
-+ {
-+-# ifdef __NR_fadvise64_64
-+ 	return posix_fadvise64(fd, offset, len, advice);
-+-# else
-++}
-++#else
-++
-++int posix_fadvise(int fd, off_t offset, off_t len, int advice)
-++{
-+ 	int ret;
-+ 	INTERNAL_SYSCALL_DECL(err);
-++
-++# ifdef __NR_fadvise64_64
-++#  if __WORDSIZE == 64
-++	ret = INTERNAL_SYSCALL(fadvise64_64, err, 4, fd, offset, len, advice);
-++#  else
-++#   if defined(__UCLIBC_SYSCALL_ALIGN_64BIT__) || defined(__arm__)
-++	ret = INTERNAL_SYSCALL(fadvise64_64, err, 6, fd, advice,
-++			OFF_HI_LO (offset), OFF_HI_LO (len));
-++#   else
-++	ret = INTERNAL_SYSCALL(fadvise64_64, err, 6, fd,
-++			OFF_HI_LO (offset), OFF_HI_LO (len), advice);
-++#   endif
-++#  endif
-++# else  /* __NR_fadvise64 */
-+ #  if __WORDSIZE == 64
-+ 	ret = INTERNAL_SYSCALL(fadvise64, err, 4, fd, offset, len, advice);
-+ #  else
-+@@ -43,12 +60,13 @@ int posix_fadvise(int fd, off_t offset, off_t len, int advice)
-+ #   endif
-+ 			OFF_HI_LO (offset), len, advice);
-+ #  endif
-++#  endif
-+ 	if (INTERNAL_SYSCALL_ERROR_P (ret, err))
-+ 		return INTERNAL_SYSCALL_ERRNO (ret, err);
-+ 	return 0;
-+-#  endif
-+ }
-+ # if defined __UCLIBC_HAS_LFS__ && (!defined __NR_fadvise64_64 || __WORDSIZE == 64)
-+ strong_alias(posix_fadvise,posix_fadvise64)
-+ # endif
-+ #endif
-++#endif
++To transfer the system to the card you have zwo options:
++
++1.	$ sudo dd if=output/images/rootfs.ext2 of=/dev/sdX1
++
++2. 	only once: sudo mkfs.ext3 /dev/sdX1
++	$ sudo mount /dev/sdX1 /mnt
++	$ sudo tar xf output/images/rootfs.tar -C
++	$ sudo umount /mnt
++
++Connect a terminal program to the rs232 connector marked "CONSOLE",
++insert the microSD card into the socket on the CPU module and power
++the board to watch the system boot.
++
++Booting from the SD card slot on the base board is currently not
++supported.
+diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
+new file mode 100644
+index 0000000..8cc8de3
+--- /dev/null
++++ b/configs/qmx6_defconfig
+@@ -0,0 +1,13 @@
++BR2_arm=y
++BR2_cortex_a9=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
++BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
+-- 
+2.0.0.rc2
