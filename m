@@ -1,32 +1,45 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue,  3 Jun 2014 12:15:27 +0200
-Subject: [Buildroot] [PATCH] network-manager: bump to 0.9.8.10
-Message-ID: <1401790527-12627-1-git-send-email-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  3 Jun 2014 12:36:19 +0000 (UTC)
+Subject: [Buildroot] [Bug 7154] New: Local uClibc config file gets
+ overwritten using make uclibc-update-config
+Message-ID: <bug-7154-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+https://bugs.busybox.net/show_bug.cgi?id=7154
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/network-manager/network-manager.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+           Summary: Local uClibc config file gets overwritten using make
+                    uclibc-update-config
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Windows
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: oliver.kasten at trsystems.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 1953888..55116e6 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NETWORK_MANAGER_VERSION_MAJOR = 0.9
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.8
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.10
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+
+I've defined an external place for the uClibc config file using
+BR_UCLIBC_CONFIG. After editing the configuration with make uclibc-menuconfig I
+want to copy the edited config file with make uclibc-update-config to the
+external place.
+
+It seems that before copying the config file to the external place, it gets
+re-configured using the UCLIBC_CONFIGURE_CMDS, which overwrites the local
+config file with the external file.
+
+For me deleting the .stamp_configured file in the uclibc-menuconfig entry of
+the makefile seems not to be a good idea.
+
 -- 
-1.8.1.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
