@@ -1,11 +1,10 @@
 From: =?UTF-8?B?UGV0ZXIgS8O8bW1lbA==?= <syntheticpp@gmx.net>
-Date: Tue, 03 Jun 2014 06:54:21 +0200
-Subject: [Buildroot] [PATCH 2/2] sunxi-mali: use only -I${includedir} as
- pkg-config Cflags
-In-Reply-To: <1401617908-6489-2-git-send-email-syntheticpp@gmx.net>
+Date: Tue, 03 Jun 2014 06:54:30 +0200
+Subject: [Buildroot] [PATCH 1/2] ti-gfx: use only -I${includedir} as
+	pkg-config Cflags
+In-Reply-To: <1401617908-6489-1-git-send-email-syntheticpp@gmx.net>
 References: <1401617908-6489-1-git-send-email-syntheticpp@gmx.net>
- <1401617908-6489-2-git-send-email-syntheticpp@gmx.net>
-Message-ID: <538D54FD.8070900@gmx.net>
+Message-ID: <538D5506.7040003@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,30 +28,28 @@ On 01.06.2014 12:18, Peter K?mmel wrote:
 > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Signed-off-by: Peter K?mmel <syntheticpp@gmx.net>
 > ---
->   package/sunxi-mali/egl.pc    |    2 +-
->   package/sunxi-mali/glesv2.pc |    2 +-
+>   package/ti-gfx/egl.pc    |    2 +-
+>   package/ti-gfx/glesv2.pc |    2 +-
 >   2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/sunxi-mali/egl.pc b/package/sunxi-mali/egl.pc
-> index b062ad1..2823209 100644
-> --- a/package/sunxi-mali/egl.pc
-> +++ b/package/sunxi-mali/egl.pc
-> @@ -8,5 +8,5 @@ Description: ARM Mali implementation of EGL
->   Version: 1.4
+> diff --git a/package/ti-gfx/egl.pc b/package/ti-gfx/egl.pc
+> index 223fb04..36ea413 100644
+> --- a/package/ti-gfx/egl.pc
+> +++ b/package/ti-gfx/egl.pc
+> @@ -8,4 +8,4 @@ Description: TI Graphics SDK implementation of EGL
+>   Version: 1.9.2188537
 >   Requires:
->   Libs: -L${libdir} -lEGL -lGLESv2 -lUMP
+>   Libs: -L${libdir} -lEGL -lGLESv2 -lIMGegl
 > -Cflags: -I${includedir}/EGL/ -I${includedir}
 > +Cflags: -I${includedir}
->
-> diff --git a/package/sunxi-mali/glesv2.pc b/package/sunxi-mali/glesv2.pc
-> index 9273678..4702d13 100644
-> --- a/package/sunxi-mali/glesv2.pc
-> +++ b/package/sunxi-mali/glesv2.pc
-> @@ -8,5 +8,5 @@ Description: ARM Mali implementation of OpenGL ESv2
->   Version: 2.0
+> diff --git a/package/ti-gfx/glesv2.pc b/package/ti-gfx/glesv2.pc
+> index 4c70aec..b458133 100644
+> --- a/package/ti-gfx/glesv2.pc
+> +++ b/package/ti-gfx/glesv2.pc
+> @@ -8,4 +8,4 @@ Description: TI Graphics SDK implementation of OpenGL ESv2
+>   Version: 1.9.2188537
 >   Requires:
->   Libs: -L${libdir} -lGLESv2 -lGLESv1_CM -lUMP
+>   Libs: -L${libdir} -lGLESv2 -lGLES_CM -lsrv_um -lusc -lEGL -lIMGegl
 > -Cflags: -I${includedir}/GLES2
 > +Cflags: -I${includedir}
->
 >
