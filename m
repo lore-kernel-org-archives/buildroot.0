@@ -1,28 +1,49 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Tue, 03 Jun 2014 22:15:30 +0800
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-In-Reply-To: <538DD7AA.9080604@ozlabs.org>
-References: <20131111215435.GC3510@free.fr> <5369F20B.5030903@ozlabs.org>
- <20140601201115.GN3430@free.fr> <538DD7AA.9080604@ozlabs.org>
-Message-ID: <538DD882.1080201@ozlabs.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 3 Jun 2014 16:23:59 +0200
+Subject: [Buildroot] [PATCH 1/1] libcgroup: bump to version 0.41 and use
+ LIBCGROUP_VERSION
+In-Reply-To: <1401799950-15116-1-git-send-email-kim.demey@gmail.com>
+References: <1401799950-15116-1-git-send-email-kim.demey@gmail.com>
+Message-ID: <20140603162359.073f523a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Dear Kim De Mey,
 
-> I've just rolled out the initial code to patchwork.ozlabs.org. The tag
-> counts are all at zero to start with; I've triggered a re-parse of all
-> of the existing comments, so the counts should reflect reality when that
-> process finishes.
+On Tue,  3 Jun 2014 14:52:30 +0200, Kim De Mey wrote:
+> 
+> Signed-off-by: Kim De Mey <kim.demey@gmail.com>
+> ---
+>  package/libcgroup/libcgroup.mk |    4 ++--
+>  1 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+> index 0ef1e91..b8e4047 100644
+> --- a/package/libcgroup/libcgroup.mk
+> +++ b/package/libcgroup/libcgroup.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -LIBCGROUP_VERSION = 0.38
+> +LIBCGROUP_VERSION = 0.41
+>  LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+> -LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
+> +LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v$(LIBCGROUP_VERSION)
 
-On second thoughts, I've disabled the display of the counts until the
-update is complete, so we don't have false info in the UI in the
-meantime. I'll re-enable once that's done.
+I was surprised at first by the change of the _SITE variable, but
+indeed, upstream is now using v0.41 as the subdirectory, so what you
+did works. Therefore:
 
-Cheers,
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+Thanks,
 
-Jeremy
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
