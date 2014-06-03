@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jun 2014 23:50:33 +0200
-Subject: [Buildroot] [git commit] mpd: add optional avahi support
-Message-ID: <20140603223417.4D3BD9C3C6@busybox.osuosl.org>
+Date: Wed, 4 Jun 2014 00:20:34 +0200
+Subject: [Buildroot] [git commit] grep: bump to version 2.20
+Message-ID: <20140603223417.581AA8223C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=12b674148a473e19361c9c1d2a75091b96bc137b
+commit: http://git.buildroot.net/buildroot/commit/?id=6767952a62a924983fd726b0783162b3e5f85d13
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/mpd.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/grep/grep.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 0e8a510..2f0b37e 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -13,6 +13,11 @@ MPD_LICENSE = GPLv2+
- MPD_LICENSE_FILES = COPYING
+diff --git a/package/grep/grep.mk b/package/grep/grep.mk
+index 8d199d1..5a3314f 100644
+--- a/package/grep/grep.mk
++++ b/package/grep/grep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Some options need an explicit --disable or --enable
-+ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
-+MPD_DEPENDENCIES += avahi
-+else
-+MPD_CONF_OPT += --with-zeroconf=no
-+endif
- 
- ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
- MPD_DEPENDENCIES += alsa-lib
+-GREP_VERSION = 2.19
++GREP_VERSION = 2.20
+ GREP_SITE = $(BR2_GNU_MIRROR)/grep
+ GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
+ GREP_LICENSE = GPLv3+
