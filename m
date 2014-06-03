@@ -1,64 +1,34 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Tue,  3 Jun 2014 18:14:04 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_01_01
-Message-ID: <1401812044-11578-1-git-send-email-hadrien.boutteville@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  3 Jun 2014 20:46:58 +0200
+Subject: [Buildroot] [PATCH] perl: removes useless files in target tree
+Message-ID: <1401821218-5716-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Note that SDK 5_01_01_01 only support EABIhf.
+$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE contains include files.
+*.bs & .packlist files come with perl or perl/cpan packages.
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/ti-gfx/Config.in | 7 ++++---
- package/ti-gfx/ti-gfx.mk | 8 +-------
- 2 files changed, 5 insertions(+), 10 deletions(-)
+ Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/ti-gfx/Config.in b/package/ti-gfx/Config.in
-index 4ee8622..bd6189e 100644
---- a/package/ti-gfx/Config.in
-+++ b/package/ti-gfx/Config.in
-@@ -4,7 +4,8 @@ config BR2_PACKAGE_TI_GFX
- 	select BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_HAS_POWERVR
- 	select BR2_PACKAGE_FBSET if !BR2_PACKAGE_BUSYBOX # Runtime dependency only
--	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm
-+	depends on BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_arm && \
-+		BR2_ARM_EABIHF
- 	help
- 	  Graphics libraries for TI boards.
- 
-@@ -70,6 +71,6 @@ endchoice
- 
+diff --git a/Makefile b/Makefile
+index 0b4264a..8bfba51 100644
+--- a/Makefile
++++ b/Makefile
+@@ -554,6 +554,9 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
  endif
- 
--comment "ti-gfx needs an (e)glibc toolchain and a Linux kernel to be built"
-+comment "ti-gfx needs an (e)glibc and EABIhf toolchain and a Linux kernel to be built"
- 	depends on BR2_arm
--	depends on !(BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC)
-+	depends on !(BR2_LINUX_KERNEL && BR2_TOOLCHAIN_USES_GLIBC && BR2_ARM_EABIHF)
-diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
-index 324e19c..8235917 100644
---- a/package/ti-gfx/ti-gfx.mk
-+++ b/package/ti-gfx/ti-gfx.mk
-@@ -4,15 +4,9 @@
- #
- ################################################################################
- 
--TI_GFX_VERSION = 5_01_00_01
-+TI_GFX_VERSION = 5_01_01_01
- TI_GFX_SO_VERSION = 1.10.2359475
--
--ifeq ($(BR2_ARM_EABIHF),y)
- TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
--else
--TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
--endif
--
- TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
- TI_GFX_LICENSE = Technology / Software Publicly Available
- TI_GFX_LICENSE_FILES = TSPA.txt
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
++	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
++	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
++	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
+ 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+ 	if test -d $(TARGET_DIR)/lib/modules; then \
+ 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
 -- 
-2.0.0
+1.9.1
