@@ -1,34 +1,24 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  3 Jun 2014 20:46:58 +0200
-Subject: [Buildroot] [PATCH] perl: removes useless files in target tree
-Message-ID: <1401821218-5716-1-git-send-email-francois.perrad@gadz.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Jun 2014 20:58:45 +0200
+Subject: [Buildroot] [PATCH] smcroute: needs MMU
+In-Reply-To: <29cc396d3df1992c2073e7d9f7836e155533c7ca.1401801003.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 3 Jun 2014 16:10:03 +0300")
+References: <29cc396d3df1992c2073e7d9f7836e155533c7ca.1401801003.git.baruch@tkos.co.il>
+Message-ID: <87mwdtstui.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-$(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE contains include files.
-*.bs & .packlist files come with perl or perl/cpan packages.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- Makefile | 3 +++
- 1 file changed, 3 insertions(+)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/9ce/9ce921dc00bcabcddd260916d0f7c44b62029df1/
 
-diff --git a/Makefile b/Makefile
-index 0b4264a..8bfba51 100644
---- a/Makefile
-+++ b/Makefile
-@@ -554,6 +554,9 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
- 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
-+	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
-+	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
-+	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
- 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
- 	if test -d $(TARGET_DIR)/lib/modules; then \
- 		find $(TARGET_DIR)/lib/modules -type f -name '*.ko' | \
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
