@@ -1,37 +1,154 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  3 Jun 2014 16:10:03 +0300
-Subject: [Buildroot] [PATCH] smcroute: needs MMU
-Message-ID: <29cc396d3df1992c2073e7d9f7836e155533c7ca.1401801003.git.baruch@tkos.co.il>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  3 Jun 2014 10:55:16 -0300
+Subject: [Buildroot] [PATCH] samba4: security bump to version 4.1.8
+Message-ID: <1401803716-13253-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/9ce/9ce921dc00bcabcddd260916d0f7c44b62029df1/
+Fixes CVE-2014-0178 (Malformed FSCTL_SRV_ENUMERATE_SNAPSHOTS response)
+and CVE-2014-0239 (dns: Don't reply to replies).
+Patches 0001 and 0002 are now part of the 4.1.x release branch.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/smcroute/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ ...-0001-build-don-t-execute-tests-summary.c.patch | 69 ----------------------
+ ...a4-0002-Minor-typo-fix-in-source3-wscript.patch | 35 -----------
+ package/samba4/samba4.mk                           |  2 +-
+ 3 files changed, 1 insertion(+), 105 deletions(-)
+ delete mode 100644 package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+ delete mode 100644 package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch
 
-diff --git a/package/smcroute/Config.in b/package/smcroute/Config.in
-index df42db33d789..c244cb934585 100755
---- a/package/smcroute/Config.in
-+++ b/package/smcroute/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SMCROUTE
- 	bool "smcroute"
- 	depends on BR2_INET_IPV6
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  SMCRoute is a command line tool to manipulate the multicast
- 	  routes of a UNIX kernel. It supports both IPv4 and IPv6 multicast
-@@ -13,3 +14,4 @@ config BR2_PACKAGE_SMCROUTE
+diff --git a/package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch b/package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
+deleted file mode 100644
+index 8302487..0000000
+--- a/package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
++++ /dev/null
+@@ -1,69 +0,0 @@
+-From 960d710ee5410a5c03815a5ce6837203be00d218 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Thu, 30 Jan 2014 11:14:27 -0300
+-Subject: [PATCH 1/3] build: don't execute tests/summary.c
+-
+-tests/summary.c will never be able to be executed when cross compiling.
+-Use #error and #warning directives to fail or warn accordingly when
+-compiling it.
+-
+-Status: Upstream.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- tests/summary.c | 14 +++++---------
+- wscript         |  1 -
+- 2 files changed, 5 insertions(+), 10 deletions(-)
+-
+-diff --git a/tests/summary.c b/tests/summary.c
+-index 27f7d4d..0843ee2 100644
+---- a/tests/summary.c
+-+++ b/tests/summary.c
+-@@ -5,27 +5,23 @@ void exit(int);
+- int main()
+- {
+- #if !defined(HAVE_FCNTL_LOCK)
+--	printf("ERROR: No locking available. Running Samba would be unsafe\n");
+--	exit(1);
+-+#error "ERROR: No locking available. Running Samba would be unsafe"
+- #endif
+- 
+- #if !(defined(HAVE_IFACE_GETIFADDRS) || defined(HAVE_IFACE_IFCONF) || defined(HAVE_IFACE_IFREQ) || defined(HAVE_IFACE_AIX))
+--	printf("WARNING: No automated network interface determination\n");
+-+#warning "WARNING: No automated network interface determination"
+- #endif
+- 
+- #if !(defined(USE_SETEUID) || defined(USE_SETREUID) || defined(USE_SETRESUID) || defined(USE_SETUIDX) || defined(USE_LINUX_THREAD_CREDENTIALS))
+--	printf("ERROR: no seteuid method available\n");
+--	exit(1);
+-+#error "ERROR: no seteuid method available"
+- #endif
+- 
+- #if !(defined(STAT_STATVFS) || defined(STAT_STATFS3_OSF1) || defined(STAT_STATFS2_BSIZE) || defined(STAT_STATFS4) || defined(STAT_STATFS2_FSIZE) || defined(STAT_STATFS2_FS_DATA))
+--	printf("ERROR: No disk free routine!\n");
+--	exit(1);
+-+#error "ERROR: No disk free routine!"
+- #endif
+- 
+- #if !((defined(HAVE_RANDOM) || defined(HAVE_RAND)) && (defined(HAVE_SRANDOM) || defined(HAVE_SRAND)))
+--    printf("ERROR: No random or srandom routine!\n");
+--    exit(1);
+-+#error "ERROR: No random or srandom routine!"
+- #endif
+- 
+- 	exit(0);
+-diff --git a/wscript b/wscript
+-index 47b7b50..26431a4 100644
+---- a/wscript
+-+++ b/wscript
+-@@ -170,7 +170,6 @@ def configure(conf):
+-     if not conf.CHECK_CODE('#include "tests/summary.c"',
+-                            define='SUMMARY_PASSES',
+-                            addmain=False,
+--                           execute=True,
+-                            msg='Checking configure summary'):
+-         raise Utils.WafError('configure summary failed')
+-     
+--- 
+-1.8.3.2
+-
+diff --git a/package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch b/package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch
+deleted file mode 100644
+index 3f5849d..0000000
+--- a/package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 8dc24d4006a2e936baf73e116129d2b0a5d71ed7 Mon Sep 17 00:00:00 2001
+-From: "Jose A. Rivera" <jarrpa@redhat.com>
+-Date: Mon, 5 May 2014 07:29:57 -0500
+-Subject: [PATCH] Minor typo fix in source3/wscript.
+-
+-Signed-off-by: Jose A. Rivera <jarrpa@redhat.com>
+-Reviewed-by: Volker Lendecke <vl@samba.org>
+-Reviewed-by: Jeremy Allison <jra@samba.org>
+-
+-Autobuild-User(master): Jeremy Allison <jra@samba.org>
+-Autobuild-Date(master): Mon May  5 22:41:19 CEST 2014 on sn-devel-104
+-
+-Status: Upstream.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- source3/wscript | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/source3/wscript b/source3/wscript
+-index 4fe49fa..8cbd9bc 100644
+---- a/source3/wscript
+-+++ b/source3/wscript
+-@@ -475,7 +475,7 @@ return acl_get_perm_np(permset_d, perm);
+- 
+-     conf.CHECK_CODE('struct statfs fsd; fsid_t fsid = fsd.f_fsid; return statfs(".", &fsd);',
+-                     'HAVE_STATFS_F_FSID',
+--                    msg="vfs_fileid: checking for statfs() and struct statfs.f_fsid",
+-+                    msg="vfs_fileid checking for statfs() and struct statfs.f_fsid",
+-                     headers='sys/types.h sys/statfs.h',
+-                     execute=True)
+- 
+--- 
+-1.8.5.5
+-
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 28e1458..a15ddb4 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "smcroute needs a toolchain w/ IPv6"
- 	depends on !BR2_INET_IPV6
-+	depends on BR2_USE_MMU
+-SAMBA4_VERSION = 4.1.7
++SAMBA4_VERSION = 4.1.8
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_LICENSE = GPLv3+
 -- 
-2.0.0.rc2
+1.8.5.5
