@@ -1,28 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Jun 2014 09:17:41 +0200
-Subject: [Buildroot] [PATCHv2] configs/calao_qil_a9260: fix kernel build
-In-Reply-To: <1401744469-32558-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Mon, 2 Jun 2014 23:27:49 +0200")
-References: <1401744469-32558-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <874n02tqay.fsf@dell.be.48ers.dk>
+Date: Tue, 03 Jun 2014 09:17:50 +0200
+Subject: [Buildroot] [PATCH] uclibc: remove unused patch
+In-Reply-To: <9f97a4aa91762f607ec076a35b0c3a74347d45c7.1401768774.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 3 Jun 2014 07:12:54 +0300")
+References: <9f97a4aa91762f607ec076a35b0c3a74347d45c7.1401768774.git.baruch@tkos.co.il>
+Message-ID: <87zjhusbq9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The calao_qil_a9260 was not specifying an explicit kernel version, so
- > it ended up downloading the latest kernel version, and therefore fail
- > to apply the patches. This commit changes the defconfig to used a
- > fixed kernel version, so that the patches apply properly. It fixes a
- > Jenkins build failure that has been occuring since quite some time.
+ > Since commit c31d5bfdecf (uclibc: arc: bump to arc-4.8-R3 release) uClibc
+ > version f37101d94284 is no longer used for ARC. Remove a version specific
+ > patch.
 
- > While we're at it, also lock down the version of the kernel headers,
- > as noticed by Peter Korsgaard.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Anton Kolesov <Anton.Kolesov@synopsys.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
