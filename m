@@ -1,31 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Jun 2014 17:21:46 -0300
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 03 Jun 2014 22:34:23 +0200
 Subject: [Buildroot] [PATCH] libwebsockets: needs mmu
-Message-ID: <1401826906-14174-1-git-send-email-gustavo@zacarias.com.ar>
+In-Reply-To: <1401826906-14174-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 3 Jun 2014 17:21:46 -0300")
+References: <1401826906-14174-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87sinlrauo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/92d/92d29c3f8ab0686c6de765c108937240a6649d18/
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libwebsockets/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/92d/92d29c3f8ab0686c6de765c108937240a6649d18/
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index 1d927bb..2b350bf 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBWEBSOCKETS
- 	bool "libwebsockets"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Libwebsockets is a lightweight pure C library built to use
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.8.5.5
+Bye, Peter Korsgaard
