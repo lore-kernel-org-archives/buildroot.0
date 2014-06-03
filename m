@@ -1,154 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Jun 2014 10:55:16 -0300
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.1.8
-Message-ID: <1401803716-13253-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Tue, 03 Jun 2014 22:11:54 +0800
+Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
+In-Reply-To: <20140601201115.GN3430@free.fr>
+References: <20131111215435.GC3510@free.fr> <5369F20B.5030903@ozlabs.org>
+ <20140601201115.GN3430@free.fr>
+Message-ID: <538DD7AA.9080604@ozlabs.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-0178 (Malformed FSCTL_SRV_ENUMERATE_SNAPSHOTS response)
-and CVE-2014-0239 (dns: Don't reply to replies).
-Patches 0001 and 0002 are now part of the 4.1.x release branch.
+Hi Yann,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...-0001-build-don-t-execute-tests-summary.c.patch | 69 ----------------------
- ...a4-0002-Minor-typo-fix-in-source3-wscript.patch | 35 -----------
- package/samba4/samba4.mk                           |  2 +-
- 3 files changed, 1 insertion(+), 105 deletions(-)
- delete mode 100644 package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
- delete mode 100644 package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch
+>> How's this look?
+>>
+>>   http://ozlabs.org/~jk/tmp/patchwork-ART.png
+> 
+> Just a little reminder on this...
+> 
+> When are you planning on deploying that?
+> Will it also show up in the output of pwclient?
 
-diff --git a/package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch b/package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
-deleted file mode 100644
-index 8302487..0000000
---- a/package/samba4/samba4-0001-build-don-t-execute-tests-summary.c.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From 960d710ee5410a5c03815a5ce6837203be00d218 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Thu, 30 Jan 2014 11:14:27 -0300
--Subject: [PATCH 1/3] build: don't execute tests/summary.c
--
--tests/summary.c will never be able to be executed when cross compiling.
--Use #error and #warning directives to fail or warn accordingly when
--compiling it.
--
--Status: Upstream.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- tests/summary.c | 14 +++++---------
-- wscript         |  1 -
-- 2 files changed, 5 insertions(+), 10 deletions(-)
--
--diff --git a/tests/summary.c b/tests/summary.c
--index 27f7d4d..0843ee2 100644
----- a/tests/summary.c
--+++ b/tests/summary.c
--@@ -5,27 +5,23 @@ void exit(int);
-- int main()
-- {
-- #if !defined(HAVE_FCNTL_LOCK)
---	printf("ERROR: No locking available. Running Samba would be unsafe\n");
---	exit(1);
--+#error "ERROR: No locking available. Running Samba would be unsafe"
-- #endif
-- 
-- #if !(defined(HAVE_IFACE_GETIFADDRS) || defined(HAVE_IFACE_IFCONF) || defined(HAVE_IFACE_IFREQ) || defined(HAVE_IFACE_AIX))
---	printf("WARNING: No automated network interface determination\n");
--+#warning "WARNING: No automated network interface determination"
-- #endif
-- 
-- #if !(defined(USE_SETEUID) || defined(USE_SETREUID) || defined(USE_SETRESUID) || defined(USE_SETUIDX) || defined(USE_LINUX_THREAD_CREDENTIALS))
---	printf("ERROR: no seteuid method available\n");
---	exit(1);
--+#error "ERROR: no seteuid method available"
-- #endif
-- 
-- #if !(defined(STAT_STATVFS) || defined(STAT_STATFS3_OSF1) || defined(STAT_STATFS2_BSIZE) || defined(STAT_STATFS4) || defined(STAT_STATFS2_FSIZE) || defined(STAT_STATFS2_FS_DATA))
---	printf("ERROR: No disk free routine!\n");
---	exit(1);
--+#error "ERROR: No disk free routine!"
-- #endif
-- 
-- #if !((defined(HAVE_RANDOM) || defined(HAVE_RAND)) && (defined(HAVE_SRANDOM) || defined(HAVE_SRAND)))
---    printf("ERROR: No random or srandom routine!\n");
---    exit(1);
--+#error "ERROR: No random or srandom routine!"
-- #endif
-- 
-- 	exit(0);
--diff --git a/wscript b/wscript
--index 47b7b50..26431a4 100644
----- a/wscript
--+++ b/wscript
--@@ -170,7 +170,6 @@ def configure(conf):
--     if not conf.CHECK_CODE('#include "tests/summary.c"',
--                            define='SUMMARY_PASSES',
--                            addmain=False,
---                           execute=True,
--                            msg='Checking configure summary'):
--         raise Utils.WafError('configure summary failed')
--     
---- 
--1.8.3.2
--
-diff --git a/package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch b/package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch
-deleted file mode 100644
-index 3f5849d..0000000
---- a/package/samba4/samba4-0002-Minor-typo-fix-in-source3-wscript.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 8dc24d4006a2e936baf73e116129d2b0a5d71ed7 Mon Sep 17 00:00:00 2001
--From: "Jose A. Rivera" <jarrpa@redhat.com>
--Date: Mon, 5 May 2014 07:29:57 -0500
--Subject: [PATCH] Minor typo fix in source3/wscript.
--
--Signed-off-by: Jose A. Rivera <jarrpa@redhat.com>
--Reviewed-by: Volker Lendecke <vl@samba.org>
--Reviewed-by: Jeremy Allison <jra@samba.org>
--
--Autobuild-User(master): Jeremy Allison <jra@samba.org>
--Autobuild-Date(master): Mon May  5 22:41:19 CEST 2014 on sn-devel-104
--
--Status: Upstream.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- source3/wscript | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/source3/wscript b/source3/wscript
--index 4fe49fa..8cbd9bc 100644
----- a/source3/wscript
--+++ b/source3/wscript
--@@ -475,7 +475,7 @@ return acl_get_perm_np(permset_d, perm);
-- 
--     conf.CHECK_CODE('struct statfs fsd; fsid_t fsid = fsd.f_fsid; return statfs(".", &fsd);',
--                     'HAVE_STATFS_F_FSID',
---                    msg="vfs_fileid: checking for statfs() and struct statfs.f_fsid",
--+                    msg="vfs_fileid checking for statfs() and struct statfs.f_fsid",
--                     headers='sys/types.h sys/statfs.h',
--                     execute=True)
-- 
---- 
--1.8.5.5
--
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 28e1458..a15ddb4 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.1.7
-+SAMBA4_VERSION = 4.1.8
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_LICENSE = GPLv3+
--- 
-1.8.5.5
+I've just rolled out the initial code to patchwork.ozlabs.org. The tag
+counts are all at zero to start with; I've triggered a re-parse of all
+of the existing comments, so the counts should reflect reality when that
+process finishes.
+
+The filter UI and pwclient interface are still yet to be done though;
+they're next on my todo list :)
+
+Cheers,
+
+
+Jeremy
