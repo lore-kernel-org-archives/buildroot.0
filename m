@@ -1,24 +1,82 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 03 Jun 2014 22:34:23 +0200
-Subject: [Buildroot] [PATCH] libwebsockets: needs mmu
-In-Reply-To: <1401826906-14174-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 3 Jun 2014 17:21:46 -0300")
-References: <1401826906-14174-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87sinlrauo.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Tue,  3 Jun 2014 23:03:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: remove upstreamed patch
+Message-ID: <1401829398-5107-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+The patch has been applied in the 6.8.9-2 version.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/92d/92d29c3f8ab0686c6de765c108937240a6649d18/
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+---
+ ...2-remove-magick-install-data-local-target.patch | 56 ----------------------
+ 1 file changed, 56 deletions(-)
+ delete mode 100644 package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
+diff --git a/package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch b/package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch
+deleted file mode 100644
+index 0798f2e..0000000
+--- a/package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 8f8f73265b281b0a01f1b6bfe8ec189b24fe75c0 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sun, 18 May 2014 20:44:26 +0200
+-Subject: [PATCH 1/1] Remove magick-install-data-local target.
+-
+-The magick-baseconfig.h is already installed by install-magickincarchHEADERS target.
+-This cause a race condition by calling install command twice to copy the same file at the same location at the same time.
+-
+-Fixes:
+-http://autobuild.buildroot.net/results/d34/d34077ce582866c50bbd90de10bbe593e39463f1/build-end.log
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Makefile.am        |  4 ++--
+- magick/Makefile.am | 12 ------------
+- 2 files changed, 2 insertions(+), 14 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 0741336..f9598b6 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -184,9 +184,9 @@ all-local: $(MAGICKPP_LOCAL_TARGETS) $(PERLMAGICK_ALL_LOCAL_TARGETS) $(MAINTAINE
+- 
+- install-exec-local: $(PERLMAGICK_INSTALL_EXEC_LOCAL_TARGETS)
+- 
+--install-data-local: $(MAGICK_INSTALL_DATA_LOCAL_TARGETS) $(PERLMAGICK_INSTALL_DATA_LOCAL_TARGETS) $(HTML_INSTALL_DATA_TARGETS)
+-+install-data-local: $(PERLMAGICK_INSTALL_DATA_LOCAL_TARGETS) $(HTML_INSTALL_DATA_TARGETS)
+- 
+--uninstall-local: $(MAGICK_UNINSTALL_LOCAL_TARGETS) $(PERLMAGICK_UNINSTALL_LOCAL_TARGETS) $(HTML_UNINSTALL_DATA_TARGETS)
+-+uninstall-local: $(PERLMAGICK_UNINSTALL_LOCAL_TARGETS) $(HTML_UNINSTALL_DATA_TARGETS)
+- 
+- clean-local: $(PERLMAGICK_CLEAN_LOCAL_TARGETS)
+- 
+-diff --git a/magick/Makefile.am b/magick/Makefile.am
+-index 4c6360b..2e389f2 100644
+---- a/magick/Makefile.am
+-+++ b/magick/Makefile.am
+-@@ -471,15 +471,3 @@ MAGICK_EXTRA_DIST = \
+- 	magick/nt-feature.c \
+- 	magick/vms.c \
+- 	magick/xwdfile.h_vms 
+--
+--# Install magick-baseconfig.h
+--MAGICK_INSTALL_DATA_LOCAL_TARGETS = magick-install-data-local
+--magick-install-data-local:
+--	$(mkinstalldirs) $(DESTDIR)$(magickincarchdir)
+--	$(INSTALL_HEADER) magick/magick-baseconfig.h $(DESTDIR)$(magickincarchdir)/magick-baseconfig.h
+--
+--# Uninstall magick-config.h
+--MAGICK_UNINSTALL_LOCAL_TARGETS = magick-uninstall-local
+--magick-uninstall-local:
+--	rm -f $(DESTDIR)$(magickincarchdir)/magick-baseconfig.h
+--
+--- 
+-1.9.0
+-
 -- 
-Bye, Peter Korsgaard
+1.9.3
