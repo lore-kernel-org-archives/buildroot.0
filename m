@@ -1,49 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  3 Jun 2014 12:11:14 +0200
-Subject: [Buildroot] [PATCH] package/procps-ng: needs gettext if locales
-Message-ID: <1401790274-15039-1-git-send-email-yann.morin.1998@free.fr>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue,  3 Jun 2014 12:15:27 +0200
+Subject: [Buildroot] [PATCH] network-manager: bump to 0.9.8.10
+Message-ID: <1401790527-12627-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes:
-    http://autobuild.buildroot.net/results/88a/88a2c8907dce0e5abe0d544ce9a2875dfdcc9e7c/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/procps-ng/Config.in    | 1 +
- package/procps-ng/procps-ng.mk | 5 +++++
- 2 files changed, 6 insertions(+)
+ package/network-manager/network-manager.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
-index 0dea84a..7463fa8 100644
---- a/package/procps-ng/Config.in
-+++ b/package/procps-ng/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PROCPS_NG
- 	bool "procps-ng"
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  Standard informational utilities and process-handling tools.
- 	  Provides things like kill, ps, uptime, free, top, etc...
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 3245e92..9227cc4 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -12,4 +12,9 @@ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 1953888..55116e6 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- PROCPS_NG_DEPENDENCIES = ncurses
- 
-+ifeq ($(BR2_PACKAGE_GETTEXT),y)
-+PROCPS_NG_DEPENDENCIES += gettext
-+PROCPS_NG_CONF_OPT += LIBS=-lintl
-+endif
-+
- $(eval $(autotools-package))
+ NETWORK_MANAGER_VERSION_MAJOR = 0.9
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.8
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).8.10
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
-1.8.3.2
+1.8.1.2
