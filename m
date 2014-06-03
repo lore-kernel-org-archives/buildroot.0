@@ -1,84 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 3 Jun 2014 23:27:24 +0200
-Subject: [Buildroot] [git commit] package/imagemagick: remove upstreamed
-	patch
-Message-ID: <20140603213003.B9BBA9CE4E@busybox.osuosl.org>
+Date: Tue, 3 Jun 2014 23:28:30 +0200
+Subject: [Buildroot] [git commit] libcgroup: bump to version 0.41 and use
+	LIBCGROUP_VERSION
+Message-ID: <20140603213003.C0F529CAC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a67824b4193e66a2b73c4d4ac7a1b1bf3a69fa07
+commit: http://git.buildroot.net/buildroot/commit/?id=2457a9484b7cc198931af3c75f48cbdd2dd69802
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch has been applied in the 6.8.9-2 version.
-
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Kim De Mey <kim.demey@gmail.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...2-remove-magick-install-data-local-target.patch |   56 --------------------
- 1 files changed, 0 insertions(+), 56 deletions(-)
+ package/libcgroup/libcgroup.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch b/package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch
-deleted file mode 100644
-index 0798f2e..0000000
---- a/package/imagemagick/imagemagick-02-remove-magick-install-data-local-target.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 8f8f73265b281b0a01f1b6bfe8ec189b24fe75c0 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@openwide.fr>
--Date: Sun, 18 May 2014 20:44:26 +0200
--Subject: [PATCH 1/1] Remove magick-install-data-local target.
--
--The magick-baseconfig.h is already installed by install-magickincarchHEADERS target.
--This cause a race condition by calling install command twice to copy the same file at the same location at the same time.
--
--Fixes:
--http://autobuild.buildroot.net/results/d34/d34077ce582866c50bbd90de10bbe593e39463f1/build-end.log
--
--Signed-off-by: Romain Naour <romain.naour@openwide.fr>
-----
-- Makefile.am        |  4 ++--
-- magick/Makefile.am | 12 ------------
-- 2 files changed, 2 insertions(+), 14 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 0741336..f9598b6 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -184,9 +184,9 @@ all-local: $(MAGICKPP_LOCAL_TARGETS) $(PERLMAGICK_ALL_LOCAL_TARGETS) $(MAINTAINE
-- 
-- install-exec-local: $(PERLMAGICK_INSTALL_EXEC_LOCAL_TARGETS)
-- 
---install-data-local: $(MAGICK_INSTALL_DATA_LOCAL_TARGETS) $(PERLMAGICK_INSTALL_DATA_LOCAL_TARGETS) $(HTML_INSTALL_DATA_TARGETS)
--+install-data-local: $(PERLMAGICK_INSTALL_DATA_LOCAL_TARGETS) $(HTML_INSTALL_DATA_TARGETS)
-- 
---uninstall-local: $(MAGICK_UNINSTALL_LOCAL_TARGETS) $(PERLMAGICK_UNINSTALL_LOCAL_TARGETS) $(HTML_UNINSTALL_DATA_TARGETS)
--+uninstall-local: $(PERLMAGICK_UNINSTALL_LOCAL_TARGETS) $(HTML_UNINSTALL_DATA_TARGETS)
-- 
-- clean-local: $(PERLMAGICK_CLEAN_LOCAL_TARGETS)
-- 
--diff --git a/magick/Makefile.am b/magick/Makefile.am
--index 4c6360b..2e389f2 100644
----- a/magick/Makefile.am
--+++ b/magick/Makefile.am
--@@ -471,15 +471,3 @@ MAGICK_EXTRA_DIST = \
-- 	magick/nt-feature.c \
-- 	magick/vms.c \
-- 	magick/xwdfile.h_vms 
---
---# Install magick-baseconfig.h
---MAGICK_INSTALL_DATA_LOCAL_TARGETS = magick-install-data-local
---magick-install-data-local:
---	$(mkinstalldirs) $(DESTDIR)$(magickincarchdir)
---	$(INSTALL_HEADER) magick/magick-baseconfig.h $(DESTDIR)$(magickincarchdir)/magick-baseconfig.h
---
---# Uninstall magick-config.h
---MAGICK_UNINSTALL_LOCAL_TARGETS = magick-uninstall-local
---magick-uninstall-local:
---	rm -f $(DESTDIR)$(magickincarchdir)/magick-baseconfig.h
---
---- 
--1.9.0
--
+diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
+index 0ef1e91..b8e4047 100644
+--- a/package/libcgroup/libcgroup.mk
++++ b/package/libcgroup/libcgroup.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBCGROUP_VERSION = 0.38
++LIBCGROUP_VERSION = 0.41
+ LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
+-LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
++LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v$(LIBCGROUP_VERSION)
+ LIBCGROUP_LICENSE = LGPLv2.1
+ LIBCGROUP_LICENSE_FILES = COPYING
+ LIBCGROUP_DEPENDENCIES = host-bison host-flex
