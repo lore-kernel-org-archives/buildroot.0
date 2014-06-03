@@ -1,49 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 3 Jun 2014 16:23:59 +0200
-Subject: [Buildroot] [PATCH 1/1] libcgroup: bump to version 0.41 and use
- LIBCGROUP_VERSION
-In-Reply-To: <1401799950-15116-1-git-send-email-kim.demey@gmail.com>
-References: <1401799950-15116-1-git-send-email-kim.demey@gmail.com>
-Message-ID: <20140603162359.073f523a@free-electrons.com>
+From: =?UTF-8?Q?Jer=C3=B4nimo_Lopes?= <lopesjeronimo@gmail.com>
+Date: Tue, 3 Jun 2014 11:29:54 -0300
+Subject: [Buildroot] Build cross gdb and eclipse plugin
+Message-ID: <CAM5ihG8wmEYwx7aZRT7+ypTHr3C3AbkzG_LJX8RZu=Qy1Vtm5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Kim De Mey,
+First off all, sorry if this isn't the right place to post this.
 
-On Tue,  3 Jun 2014 14:52:30 +0200, Kim De Mey wrote:
-> 
-> Signed-off-by: Kim De Mey <kim.demey@gmail.com>
-> ---
->  package/libcgroup/libcgroup.mk |    4 ++--
->  1 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-> index 0ef1e91..b8e4047 100644
-> --- a/package/libcgroup/libcgroup.mk
-> +++ b/package/libcgroup/libcgroup.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -LIBCGROUP_VERSION = 0.38
-> +LIBCGROUP_VERSION = 0.41
->  LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
-> -LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
-> +LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v$(LIBCGROUP_VERSION)
+I'm using buildroot, with external toolchain Sourcery CodeBench ARM
+2013.11. I'm also using buildroot eclipse plugin.
 
-I was surprised at first by the change of the _SITE variable, but
-indeed, upstream is now using v0.41 as the subdirectory, so what you
-did works. Therefore:
+If I set BR2_PACKAGE_HOST_GDB [=y] buildroot creates a file named
+'arm-linux-gdb'.
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+But if I create a new debug configuration in eclipse, it sets the path for
+the GDB debbuger as
+'"buildroot_folder"/output/host/usr/bin/arm-none-linux-gnueabi-gdb'.
 
-Thanks,
+It's not a big problem at all, I just change the name of the file and
+everything works, but I no idea how to provide a patch for it.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Jer?nimo Lopes
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140603/b6fa973c/attachment.html>
