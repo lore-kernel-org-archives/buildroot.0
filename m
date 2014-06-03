@@ -1,35 +1,37 @@
-From: Kim De Mey <kim.demey@gmail.com>
-Date: Tue,  3 Jun 2014 14:52:30 +0200
-Subject: [Buildroot] [PATCH 1/1] libcgroup: bump to version 0.41 and use
-	LIBCGROUP_VERSION
-Message-ID: <1401799950-15116-1-git-send-email-kim.demey@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  3 Jun 2014 16:10:03 +0300
+Subject: [Buildroot] [PATCH] smcroute: needs MMU
+Message-ID: <29cc396d3df1992c2073e7d9f7836e155533c7ca.1401801003.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/9ce/9ce921dc00bcabcddd260916d0f7c44b62029df1/
 
-Signed-off-by: Kim De Mey <kim.demey@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libcgroup/libcgroup.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/smcroute/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libcgroup/libcgroup.mk b/package/libcgroup/libcgroup.mk
-index 0ef1e91..b8e4047 100644
---- a/package/libcgroup/libcgroup.mk
-+++ b/package/libcgroup/libcgroup.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/smcroute/Config.in b/package/smcroute/Config.in
+index df42db33d789..c244cb934585 100755
+--- a/package/smcroute/Config.in
++++ b/package/smcroute/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SMCROUTE
+ 	bool "smcroute"
+ 	depends on BR2_INET_IPV6
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  SMCRoute is a command line tool to manipulate the multicast
+ 	  routes of a UNIX kernel. It supports both IPv4 and IPv6 multicast
+@@ -13,3 +14,4 @@ config BR2_PACKAGE_SMCROUTE
  
--LIBCGROUP_VERSION = 0.38
-+LIBCGROUP_VERSION = 0.41
- LIBCGROUP_SOURCE = libcgroup-$(LIBCGROUP_VERSION).tar.bz2
--LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v.038
-+LIBCGROUP_SITE = http://downloads.sourceforge.net/project/libcg/libcgroup/v$(LIBCGROUP_VERSION)
- LIBCGROUP_LICENSE = LGPLv2.1
- LIBCGROUP_LICENSE_FILES = COPYING
- LIBCGROUP_DEPENDENCIES = host-bison host-flex
+ comment "smcroute needs a toolchain w/ IPv6"
+ 	depends on !BR2_INET_IPV6
++	depends on BR2_USE_MMU
 -- 
-1.7.1
+2.0.0.rc2
