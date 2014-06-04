@@ -1,34 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Jun 2014 05:59:24 +0000 (UTC)
-Subject: [Buildroot] [Bug 7160] host-xz not built.
-In-Reply-To: <bug-7160-163@https.bugs.busybox.net/>
-References: <bug-7160-163@https.bugs.busybox.net/>
-Message-ID: <20140604055924.E4D889CE93@busybox.osuosl.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Wed, 04 Jun 2014 08:08:01 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.9-2
+In-Reply-To: <538E39E9.9030007@openwide.fr>
+References: <1401781611-32603-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ <871tv5sqbr.fsf@dell.be.48ers.dk> <538E39E9.9030007@openwide.fr>
+Message-ID: <538EB7C1.6000605@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7160
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Hi Romain,
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+> Hi Jerzy,
+>
+> Le 03/06/2014 22:14, Peter Korsgaard a ?crit :
+>>>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
+>>   > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+>>
+>> Committed, thanks.
+>>
+> The second patch has been upstreamed recently, so I sent a patch to remove it.
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2014-06-04 05:59:24 UTC ---
-Thanks for the report.
+Ah yes, right.
+Thanks.
 
-From a quick look I think the right fix is to change $$(XZ) to xz in
-fs/common.mk, E.G.:
+Regards,
+Jerzy
 
-ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
-
-But I will take a closer look and test.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+>
+> Best regards,
+> Romain Naour
+>
