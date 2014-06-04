@@ -1,24 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Jun 2014 23:15:13 +0200
-Subject: [Buildroot] [PATCH] manual: make consistent references to
-	package metadata information
-In-Reply-To: <1401724965-4195-1-git-send-email-spdawson@gmail.com> (Simon
- Dawson's message of "Mon, 2 Jun 2014 17:02:45 +0100")
-References: <1401724965-4195-1-git-send-email-spdawson@gmail.com>
-Message-ID: <878upcpeam.fsf@dell.be.48ers.dk>
+Date: Wed, 04 Jun 2014 23:18:16 +0200
+Subject: [Buildroot] [PATCH 1/1] lite/Config.in: indentation cleanup
+In-Reply-To: <1401781704-325-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Tue, 3 Jun 2014 09:48:24 +0200")
+References: <1401781704-325-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <874n00pe5j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Simon" == Simon Dawson <spdawson@gmail.com> writes:
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
- > The de facto standard terminology in the manual appears to be "package
- > metadata information"; fix a couple of inconsistent references to package
- > "meta-information" and "meta information".
-
- > Signed-off-by: Simon Dawson <spdawson@gmail.com>
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
 Committed, thanks.
 
