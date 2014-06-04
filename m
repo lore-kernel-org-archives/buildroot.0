@@ -1,136 +1,72 @@
-From: Pascal Huerst <pascal.huerst@gmail.com>
-Date: Wed,  4 Jun 2014 13:32:52 +0200
-Subject: [Buildroot] [PATCH V4 1/2] google-breakpad: new package
-In-Reply-To: <1401881573-12921-1-git-send-email-pascal.huerst@gmail.com>
-References: <1401881573-12921-1-git-send-email-pascal.huerst@gmail.com>
-Message-ID: <1401881573-12921-2-git-send-email-pascal.huerst@gmail.com>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 04 Jun 2014 13:46:22 +0200
+Subject: [Buildroot] [PATCH v2] Allow setting the password for user
+	default
+In-Reply-To: <87ppipossk.fsf@dell.be.48ers.dk>
+References: <1401787751-32600-1-git-send-email-sho@relinux.de>
+ <87ppipossk.fsf@dell.be.48ers.dk>
+Message-ID: <538F070E.7000705@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Breakpad is a library and tool suite that allows you to distribute an application
-to users with compiler-provided debugging information removed, record crashes in
-compact "minidump" files, send them back to your server, and produce C and C++
-stack traces from these minidumps. Breakpad can also write minidumps on request
-for programs that have not crashed.
+On 04.06.2014 12:47, Peter Korsgaard wrote:
+>>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
+>  > Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+>  > ---
+>  > Since we can set the password for root while configuring the system
+>  > it seems logical to have the same possibility for user "default".
+>
+>  > Changes v1 -> v2
+>  >   - remove rewording in help text for BR2_TARGET_GENERIC_ROOT_PASSWD
+>  > ---
+>  >  system/Config.in | 23 ++++++++++++++++++++++-
+>  >  system/system.mk | 11 ++++++++++-
+>  >  2 files changed, 32 insertions(+), 2 deletions(-)
+>
+>  > diff --git a/system/Config.in b/system/Config.in
+>  > index 53bca53..d5408e1 100644
+>  > --- a/system/Config.in
+>  > +++ b/system/Config.in
+>  > @@ -211,6 +211,27 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+>  >  	  in the build log! Avoid using a valuable password if either the
+>  >  	  .config file or the build log may be distributed!
+>  
+>  > +config BR2_TARGET_GENERIC_DEFAULT_PASSWD
+>  > +	string "Password for user default"
+>  > +	default ""
+>  > +	help
+>  > +	  Set the initial password for user default (in clear). It will be encrypted.
+>  > +
+>  > +	  If set to empty (the default), then no password will be set,
+>  > +	  and default will need no password to log in.
+>
+> I would actually rather get rid of the 'default' user, now that we have
+> support for BR2_ROOTFS_USERS_TABLES. The 'default' user is not needed
+> for anything in Buildroot itself, and I'm pretty sure some people might
+> not know / remember that we always have this password-less user and
+> remember to remove it in a post build - I know I haven't.
+Good point, Peter!
 
-Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
----
- package/Config.in                                  |  1 +
- package/google-breakpad/Config.in                  | 21 ++++++++++++
- .../google-breakpad/google-breakpad-gen-syms.sh    | 37 ++++++++++++++++++++++
- package/google-breakpad/google-breakpad.mk         | 17 ++++++++++
- 4 files changed, 76 insertions(+)
- create mode 100644 package/google-breakpad/Config.in
- create mode 100755 package/google-breakpad/google-breakpad-gen-syms.sh
- create mode 100644 package/google-breakpad/google-breakpad.mk
+This patch was sitting around here for a while and I obviously missed
+the invention of BR2_ROOTFS_USERS_TABLES.
 
-diff --git a/package/Config.in b/package/Config.in
-index 1706197..ea94f01 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -54,6 +54,7 @@ source "package/dstat/Config.in"
- source "package/duma/Config.in"
- source "package/fio/Config.in"
- source "package/gdb/Config.in"
-+source "package/google-breakpad/Config.in"
- source "package/iozone/Config.in"
- source "package/kexec/Config.in"
- source "package/ktap/Config.in"
-diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-new file mode 100644
-index 0000000..5c9e18b
---- /dev/null
-+++ b/package/google-breakpad/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_GOOGLE_BREAKPAD
-+	bool "google-breakpad"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+
-+	help
-+	  Google-Breakpad is a library and tool suite that allows you to distribute 
-+	  an application to users with compiler-provided debugging information 
-+	  removed, record crashes in compact "minidump" files, send them back to 
-+	  your server, and produce C and C++ stack traces from these minidumps. 
-+	  Breakpad can also write minidumps on request for programs that have not 
-+	  crashed. 	 
-+
-+	  Add all binaries and libraries you want to debug by google-breakpad to
-+	  BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
-+
-+	  http://code.google.com/p/google-breakpad/
-+
-+comment "google-breakpad requires an (e)glibc toolchain w/ C++ enabled"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_USES_GLIBC)
-diff --git a/package/google-breakpad/google-breakpad-gen-syms.sh b/package/google-breakpad/google-breakpad-gen-syms.sh
-new file mode 100755
-index 0000000..e082875
---- /dev/null
-+++ b/package/google-breakpad/google-breakpad-gen-syms.sh
-@@ -0,0 +1,37 @@
-+#!/bin/sh
-+
-+STAGING_DIR=$1
-+HOST_DIR=$2
-+INCLUDE_FILES=$3
-+
-+# Search for files we want to dump symbols of
-+FIND_CMD="find $STAGING_DIR -name \"\""
-+
-+for INCLUDE_FILE in $INCLUDE_FILES; do
-+	FIND_CMD="$FIND_CMD -o -name \"$INCLUDE_FILE\""
-+done
-+
-+# Create directory structure
-+SYMBOLS_DIR=$STAGING_DIR/usr/share/google-breakpad-symbols
-+
-+mkdir -p $SYMBOLS_DIR/tmp
-+
-+for BIN_PATH in $(eval $FIND_CMD); do
-+	BIN=$(basename $BIN_PATH);
-+	SYM=$BIN.sym;
-+
-+	$HOST_DIR/usr/bin/dump_syms $BIN_PATH > $SYMBOLS_DIR/tmp/$SYM 2>/dev/null;
-+
-+	if [ $? -eq 0 ]; then
-+		HASH=$(head -n1 $SYMBOLS_DIR/tmp/$SYM | cut -d ' ' -f 4);
-+		mkdir -p $SYMBOLS_DIR/$BIN/$HASH
-+		mv $SYMBOLS_DIR/tmp/$SYM $SYMBOLS_DIR/$BIN/$HASH;
-+	else
-+		rm -f $SYMBOLS_DIR/tmp/$SYM
-+		echo "Can not dump symbols of $BIN for google-breakpad!"
-+	fi
-+done
-+
-+rm -Rf $SYMBOLS_DIR/tmp
-+
-+exit 0
-diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-new file mode 100644
-index 0000000..e5b69c0
---- /dev/null
-+++ b/package/google-breakpad/google-breakpad.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# google-breakpad
-+#
-+################################################################################
-+
-+GOOGLE_BREAKPAD_VERSION = 1320
-+GOOGLE_BREAKPAD_SITE = http://google-breakpad.googlecode.com/svn/trunk
-+GOOGLE_BREAKPAD_SITE_METHOD = svn
-+GOOGLE_BREAKPAD_CONF_OPT = --disable-processor --disable-tools
-+GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
-+GOOGLE_BREAKPAD_INSTALL_STAGING = YES
-+GOOGLE_BREAKPAD_LICENSE = BSD-3c
-+GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-autotools-package))
-+$(eval $(autotools-package))
+> Do you have any use case for keeping it instead of just using
+> BR2_ROOTFS_USERS_TABLES?
+No, so we shall drop this patch. I can also cook a patch that removes
+the old default user, because I definitively do not want to have it
+without the possibility to give it a password easily.
+
+Kind regards
+
+Stephan
+>
+
+
 -- 
-1.9.3
+reLinux     -    Stephan Hoffmann
+Am Schmidtgrund 124    50765 K?ln
+Tel. +49.221.95595-19    Fax: -64
+www.reLinux.de Stephan at reLinux.de
