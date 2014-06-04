@@ -1,34 +1,63 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu,  5 Jun 2014 01:04:09 +0200
-Subject: [Buildroot] [PATCH v6 0/4] rpi-userland/xbmc fixes
-Message-ID: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+Date: Thu,  5 Jun 2014 01:04:11 +0200
+Subject: [Buildroot] [PATCH v6 2/4] xbmc: fix missing libraries from
+	rpi-userland
+In-Reply-To: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1401923053-30292-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+When rpi-userland libraries are built as shared-objects, not all needed
+libraries are passed in the LD_FLAGS, leading to failure at linkage.
 
-Here is just more fixes about rpi-userland/xbmc and all.
+To avoid this issue, set the LIBS variable content in accordance with the
+INCLUDES variable value.
 
-Yours,
-Samuel
+The commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf currently works
+around this issue by forcing rpi-userland to be statically linked,
+whereas it is actually a LIBS flags problem in xbmc package.
 
-Samuel Martin (3):
-  xbmc: fix missing libraries from rpi-userland
-  rpi-userland: add patch fix missing libvcilcs install rules
-  rpi-userland: cleanup *_CONF_OPT
+A follow-up patch fixes rpi-userland package.
 
-Yann E. MORIN (1):
-  package/libcec: fix missing libraries from rpi-userland
+Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- package/libcec/libcec.mk                           |  1 +
- ...vmcs_host-add-install-rules-for-libvcilcs.patch | 23 ++++++++++++++++++++++
- package/rpi-userland/rpi-userland.mk               |  2 +-
- package/xbmc/xbmc.mk                               |  3 ++-
- 4 files changed, 27 insertions(+), 2 deletions(-)
- create mode 100644 package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+---
+changes v5 -> v6:
+- rebase
 
---
+changes v4 -> v5:
+- rebase
+- extend commit message
+
+changes v3 -> v4:
+- rebase
+
+changes v2 -> v3:
+- new patch
+---
+ package/xbmc/xbmc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index c7a4607..8c0146e 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -53,7 +53,8 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ XBMC_DEPENDENCIES += rpi-userland
+ XBMC_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
+ XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+-	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
++	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
++	LIBS="-lvcos -lvchostif"
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+-- 
 2.0.0
