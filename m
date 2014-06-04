@@ -1,31 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 04 Jun 2014 09:44:28 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.42.10
-In-Reply-To: <20140604085237.2de9d1f5@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 4 Jun 2014 08:52:37 +0200")
-References: <1401833214-31074-1-git-send-email-gustavo@zacarias.com.ar>
- <20140604085237.2de9d1f5@free-electrons.com>
-Message-ID: <87y4xdp19f.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  4 Jun 2014 09:11:33 +0000 (UTC)
+Subject: [Buildroot] [Bug 7166] hostapd: segfault when using RT5370
+In-Reply-To: <bug-7166-163@https.bugs.busybox.net/>
+References: <bug-7166-163@https.bugs.busybox.net/>
+Message-ID: <20140604091133.A6D3A9CE85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=7166
 
- > Dear Gustavo Zacarias,
- > On Tue,  3 Jun 2014 19:06:54 -0300, Gustavo Zacarias wrote:
- >> Drop --disable-tls since it's not needed.
- >> 
- >> Add --disable-rpath to avoid unnecessary pollution.
- >> 
- >> e4defrag now needs an (e)glibc toolchain because of sync_file_range()
+Jonathan <jmavermeulen@gmail.com> changed:
 
- > Or musl, but I see that you implement the dependency as 'depends
- > on !uclibc', so it's fine. Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |NEW
 
-Yes, see my comment and Gustavo's v2.
+--- Comment #2 from Jonathan <jmavermeulen@gmail.com> 2014-06-04 09:11:33 UTC ---
+(In reply to comment #1)
+> I don't know much about hostapd, but from the looks of it that patch seems
+> trivial to backport to the 2.1 release, so we could add it as a patch in
+> buildroot until the next hostapd release.
+> 
+> Care to send a patch doing that?
+
+How can I make a patch based on the git diff? I'm really new to working with
+buildroot and compiling kernel/rootfs in general.
 
 -- 
-Bye, Peter Korsgaard
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
