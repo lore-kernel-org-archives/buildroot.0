@@ -1,75 +1,63 @@
-From: psnsilva <psnsilva.stuff+nabble@gmail.com>
-Date: Wed, 4 Jun 2014 09:02:36 -0700 (PDT)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 4 Jun 2014 19:09:14 +0200
 Subject: [Buildroot] Check root file system at boot time
-Message-ID: <1401897756168-71600.post@n4.nabble.com>
+In-Reply-To: <1401897756168-71600.post@n4.nabble.com>
+References: <1401897756168-71600.post@n4.nabble.com>
+Message-ID: <20140604170914.GA3325@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all.
-I am facing a problem with checking my root file system at boot time and I
-don't know what I am missing here.
-The target device is a Raspberry Pi and my intention is to check the SD card
-at boot time.
+Pedro, All,
 
-I have the following configuration to e2fsck:
-# cat /etc/e2fsck.conf
-[options]
-        log_dir = /var/log/e2fsck
-        log_filename = %D%T-e2fsck-%N.%h.log
-        log_dir_wait = true
-        accept_time_fudge = true
-        *broken_system_clock = true*     (as the rPi has no RTC)
+On 2014-06-04 09:02 -0700, psnsilva spake thusly:
+> I am facing a problem with checking my root file system at boot time and I
+> don't know what I am missing here.
+> The target device is a Raspberry Pi and my intention is to check the SD card
+> at boot time.
 
-And I defined the verification to occur on each boot (at this development
-phase): *tune2fs -C 2 -c 1 /dev/mmcblk0p2*
+This should not be necessary if the system is properly shut down or
+rebooted. In case of power failure, the filesystem is automatically
+checked by the filesystem "driver" in the kernel.
 
-However, in every boot I get the message:
-[    2.431923] EXT4-fs (mmcblk0p2): *warning: maximal mount count reached,
-running e2fsck is recommended*
-[    2.467516] EXT4-fs (mmcblk0p2): recovery complete
-[    2.477056] EXT4-fs (mmcblk0p2): mounted filesystem with ordered data
-mode. Opts: (null)
+Besides, with the standard Buildroot boot process, the root filesystem is
+already mounted by the time you can run e2fsck, so you're out of luck in
+any case.
 
-and running "*e2fsck -n /dev/mmcblk0p2*" I get:
-e2fsck -n /dev/mmcblk0p2
-e2fsck 1.42.9 (28-Dec-2013)
-Warning!  /dev/mmcblk0p2 is mounted.
-Warning: skipping journal recovery because doing a read-only filesystem
-check.
-*/dev/mmcblk0p2 has been mounted 4 times without being checked, check
-forced.*
-Pass 1: Checking inodes, blocks, and sizes
-Pass 2: Checking directory structure
-Pass 3: Checking directory connectivity
-Pass 4: Checking reference counts
-Pass 5: Checking group summary information
-Free blocks count wrong (1791665, counted=1791658).
-Fix? no
+> and running "*e2fsck -n /dev/mmcblk0p2*" I get:
+> e2fsck -n /dev/mmcblk0p2
 
-/dev/mmcblk0p2: 3451/467712 files (0.2% non-contiguous), 79183/1870848
-blocks
+You should *not* run fsck on a read-write mounted filesystem. This could
+gravely confuse the filesystem "driver" in the kernel.
 
-My /etc/fstab as the following entries (among others):
-/dev/mmcblk0p1          /boot                        vfat      noatime                   
-0       2
-/dev/mmcblk0p2         /                               ext4     
-defaults,noatime       0       1
+> In addition, running e2fsck to the SD card, but using my Linux PC is
+> working. At the next rPi boot the messages does not appear. Reappearing
+> again on the the second and following boots.
+> 
+> Am I missing some needed scripts at /etc/init.d/ (e.g., SXXcheckroot)?
 
-In addition, running e2fsck to the SD card, but using my Linux PC is
-working. At the next rPi boot the messages does not appear. Reappearing
-again on the the second and following boots.
+How do you turn off your RPi? If you just unplug the power from the RPI
+without doing a proper shutdown, then it is expected the filesystem will
+be incoherent, and a repair is done on the next boot.
 
-Am I missing some needed scripts at /etc/init.d/ (e.g., SXXcheckroot)?
+I have a bunch of RPi herre at home, and I never experienced this
+behaviour when I issue a "shutdown" or a "poweroff" command before
+unplugging the power supply.
 
-Thank you in advance by your time.
-Kind regards,
-Pedro Silva
+BTW, the "poweroff" command will not power off the RPI, obviously, since
+it lacks a power control circuit, but will flash the "ACT" LED 10 times
+when it is safe to remove the power supply from the RPi  (I discovered
+that by accident, and it is very handy on a headless RPi!)
 
+Regards,
+Yann E. MORIN.
 
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Check-root-file-system-at-boot-time-tp71600.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
