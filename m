@@ -1,31 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  4 Jun 2014 06:45:58 +0000 (UTC)
-Subject: [Buildroot] [Bug 7166] hostapd: segfault when using RT5370
-In-Reply-To: <bug-7166-163@https.bugs.busybox.net/>
-References: <bug-7166-163@https.bugs.busybox.net/>
-Message-ID: <20140604064558.1BFA99CE96@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 4 Jun 2014 08:51:29 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bump to v213
+In-Reply-To: <1401833204-32300-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1401833204-32300-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140604085129.70751c98@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7166
+Dear Eric Le Bihan,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+On Wed,  4 Jun 2014 00:06:44 +0200, Eric Le Bihan wrote:
+> This patch bumps systemd to v213. This new version introduces
+> systemd-timesyncd, a SNTP daemon, which requires a new user
+> systemd-timesync to be created.
+> 
+> It also refreshes the patch for reverting the use of --relative option
+> when calling `ln`. Since this version, the configure script checks if
+> `ln` supports the --relative option and fails if it does not. Instead of
+> reverting commit 446883528524429283626208928b51f49f28f810, which affects
+> configure.ac, the configure script is directly patched to remove this
+> check (hence avoiding an autoreconf).
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+The patch is nonetheless changing a Makefile.am, so it should need an
+autoreconf anyway, no?
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> 2014-06-04 06:45:57 UTC ---
-I don't know much about hostapd, but from the looks of it that patch seems
-trivial to backport to the 2.1 release, so we could add it as a patch in
-buildroot until the next hostapd release.
-
-Care to send a patch doing that?
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
