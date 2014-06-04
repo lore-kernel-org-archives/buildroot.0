@@ -1,57 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Jun 2014 19:37:31 +0200
-Subject: [Buildroot] [PATCH] packages: replace command install by
- $(INSTALL)
-In-Reply-To: <9904698c937856394f641361bee0ffed.squirrel@sysmic.org>
-References: <1401626281-29034-1-git-send-email-maxime.hadjinlian@gmail.com>
- <9904698c937856394f641361bee0ffed.squirrel@sysmic.org>
-Message-ID: <20140604173731.GB3325@free.fr>
+Date: Wed, 4 Jun 2014 19:47:14 +0200
+Subject: [Buildroot] [PATCH 07/11] support/scripts: do not display
+ virtual packages in generated lists
+In-Reply-To: <CAHXCMM+PxKqL0R==-d1SRJUcrAL_7V9Op=tyAeECvAjKZfcgmw@mail.gmail.com>
+References: <cover.1401743146.git.yann.morin.1998@free.fr>
+ <0cfa42eb55966a62df475298ffc7b9c045f79862.1401743146.git.yann.morin.1998@free.fr>
+ <CAHXCMM+PxKqL0R==-d1SRJUcrAL_7V9Op=tyAeECvAjKZfcgmw@mail.gmail.com>
+Message-ID: <20140604174714.GC3325@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Samuel, All,
 
-On 2014-06-04 16:00 +0200, "J?r?me Pouiller" spake thusly:
-> On Sunday 01 June 2014 14:38:01 Maxime Hadjinlian wrote:
-> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> [...]
-> > diff --git a/package/alsa-utils/alsa-utils.mk
-> > b/package/alsa-utils/alsa-utils.mk index 48b4bfd..2083c97 100644
-> > --- a/package/alsa-utils/alsa-utils.mk
-> > +++ b/package/alsa-utils/alsa-utils.mk
-> > @@ -41,7 +41,7 @@ LSA_UTILS_TARGETS_$(BR2_PACKAGE_ALSA_UTILS_SPEAKER_TEST)
-> > += usr/bin/speaker-tes define ALSA_UTILS_INSTALL_TARGET_CMDS
-> >       mkdir -p $(TARGET_DIR)/var/lib/alsa
-> >       for i in $(ALSA_UTILS_TARGETS_y); do \
-> > -             install -D -m 755 $(STAGING_DIR)/$$i $(TARGET_DIR)/$$i; \
-> > +             $(INSTALL) -D -m 755 $(STAGING_DIR)/$$i $(TARGET_DIR)/$$i; \
-> >       done
-> >       if [ -x "$(TARGET_DIR)/usr/bin/speaker-test" ]; then \
-> >               mkdir -p $(TARGET_DIR)/usr/share/alsa/speaker-test; \
-> [...]
+On 2014-06-03 00:53 +0200, Samuel Martin spake thusly:
+> On Mon, Jun 2, 2014 at 11:06 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > If a package has both a 'real' and a 'virtual' definition, consider it
+> > is a virtual package and do not display it in the generated package list.
+> >
+> > This is the case for jpeg and cryptodev, that are virtual packages, but
+> > also real (but empty) packages used to provide a prompt to enable/disable
+> > a choice to select an implementation. In this case, we do not want to
+> > list the virtual packages, but only their implementations.
+> >
+> > So, consider packages that are both real and virtual as virtual packages.
+> >
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Samuel Martin <s.martin49@gmail.com>
+> > Acked-by: Samuel Martin <s.martin49@gmail.com>
+> >
+> > ---
+> > Changes RFC -> v2:
+> >   - fix typoes  (Samuel)
+> > ---
+> >  support/scripts/gen-manual-lists.py | 21 +++++++++++++++++++--
+> >  1 file changed, 19 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+> > index e234ef1..a3fb00c 100644
+> > --- a/support/scripts/gen-manual-lists.py
+> > +++ b/support/scripts/gen-manual-lists.py
+> > @@ -279,13 +279,30 @@ class Buildroot:
+> >                      pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
+> >              setattr(self, "_package_list", pkg_list)
+> >          for pkg in getattr(self, "_package_list"):
+> > -            if pattern.match(pkg):
+> > -                return True
+> > +            if type == 'real' or type == 'both':
 > 
-> Just out of curiosity, why '$(INSTALL)' is preferred over 'install'?
+> Ooops! I forgot, since you removed the 'both' semantic in the previous
+> patch, it should no longer appears here ;-)
 
-Because it's been there for the past 9+ years? The commit #9cc9476c (more
-dhcp updates) introduced this variable in 2005-02-16.
-
-And because that's what we document in the manual? ;-)
-
-More seriously, there's no much reason for now. But in the grand scheme
-of the Universe, not all 'install' commands were made equal, so this
-would allow us (in the case it is needed) to point $(INSTALL) to a
-select 'install' command that we control.
-
-Again, it's mostly historical bagage, but we want consistency acros
-packages.
-
-> And what about '$(RM)' versus 'rm'?
-
-We do not have $(RM) currently, since all 'rm' commands are pretty much
-on par with each others, so it is not really needed.
+Ah, right, I fixed it here. Thanks!
 
 Regards,
 Yann E. MORIN.
