@@ -1,29 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 4 Jun 2014 08:52:37 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.42.10
-In-Reply-To: <1401833214-31074-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1401833214-31074-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140604085237.2de9d1f5@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Jun 2014 08:53:54 +0200
+Subject: [Buildroot] [PATCHv2] e2fsprogs: bump to version 1.42.10
+In-Reply-To: <1401837356-3563-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 3 Jun 2014 20:15:56 -0300")
+References: <1401837356-3563-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8738flqi65.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Tue,  3 Jun 2014 19:06:54 -0300, Gustavo Zacarias wrote:
-> Drop --disable-tls since it's not needed.
-> 
-> Add --disable-rpath to avoid unnecessary pollution.
-> 
-> e4defrag now needs an (e)glibc toolchain because of sync_file_range()
+ > Drop --disable-tls since it's not needed.
+ > Add --disable-rpath to avoid unnecessary pollution.
 
-Or musl, but I see that you implement the dependency as 'depends
-on !uclibc', so it's fine. Thanks!
+ > e4defrag now needs an (e)glibc or musl toolchain because of
+ > sync_file_range()
+ > See e2fsprogs commit 58229aaf85d435469e901c974f31ead6d9124166
 
-Thomas
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
