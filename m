@@ -1,46 +1,27 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 4 Jun 2014 17:45:05 -0300
-Subject: [Buildroot] [RFC/PATCH] linux: add external initramfs options
-In-Reply-To: <5386131B.6090809@mind.be>
-References: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
- <5386131B.6090809@mind.be>
-Message-ID: <20140604204505.GA19703@arch.cereza>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 04 Jun 2014 22:59:27 +0200
+Subject: [Buildroot] [PATCH] package/w_scan: needs kernel headers >= 3.3
+In-Reply-To: <1401913475-2483-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Wed, 4 Jun 2014 22:24:35 +0200")
+References: <1401913475-2483-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87ha40pf0v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 28 May 06:47 PM, Arnout Vandecappelle wrote:
-[..]
-> > 
-> > The path specified can be a cpio archive or a directory, just like
-> > the kernel config. The path is specified w.r.t. BRs topdir, and made
-> > absolute since the kernel builds in another directory.
-> 
->  This patch does nothing more than update the kernel config. Since you can
-> already supply a custom kernel config, I don't think there is much added value
-> to moving these options to the buildroot config.
-> 
->  The only feature you add is that the patch can be relative to the buildroot
-> directory. Not enough to be relevant, IMHO, especially since the patch adds
-> non-negligible complexity.
-> 
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > w_scan needs SYS_DVBC_ANNEX_C, introduced in Linux 3.3.
 
-Our software stack includes a kernel with an appended initramfs to take care
-of software upgrade and find, check and switch to the "real" rootfs. Both
-the initramfs and rootfs are Buildroot-based, but each of them with their
-own configuration and history (in separate git repos).
+ > Fixes:
+ >     http://autobuild.buildroot.net/results/143/143960dc6de5377567dd2a383becc5a7bca90b41/
 
-Hence we came up with this solution: the initramfs would live in a different
-repo, and after it's built we use this new option to append it in the kernel.
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Maybe you have a better idea, and there's a cleaner way to accomplish this
-with Buildroot?
+Committed, thanks.
 
-Thanks for the feedback!
 -- 
-Ezequiel Garcia, VanguardiaSur
-www.vanguardiasur.com.ar
+Bye, Peter Korsgaard
