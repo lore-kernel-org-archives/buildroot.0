@@ -1,45 +1,34 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu,  5 Jun 2014 01:04:10 +0200
-Subject: [Buildroot] [PATCH v6 1/4] package/libcec: fix missing libraries
-	from rpi-userland
-In-Reply-To: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
-References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1401923053-30292-2-git-send-email-s.martin49@gmail.com>
+Date: Thu,  5 Jun 2014 01:04:09 +0200
+Subject: [Buildroot] [PATCH v6 0/4] rpi-userland/xbmc fixes
+Message-ID: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi all,
 
-When rpi-userland libraries are built as shared-objects, not all needed
-libraries are passed in the LD_FLAGS, leading to failure at linkage.
+Here is just more fixes about rpi-userland/xbmc and all.
 
-To avoid this issue, set the LIBS variable content in accordance with
-INCLUDES variable value.
+Yours,
+Samuel
 
-This is needed because libcec does not use pkg-config to look for the
-ldflags needed for -lbcm_host, even though bcm_host provides a .pc
-file (even a correct one!)
+Samuel Martin (3):
+  xbmc: fix missing libraries from rpi-userland
+  rpi-userland: add patch fix missing libvcilcs install rules
+  rpi-userland: cleanup *_CONF_OPT
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
----
- package/libcec/libcec.mk | 1 +
- 1 file changed, 1 insertion(+)
+Yann E. MORIN (1):
+  package/libcec: fix missing libraries from rpi-userland
 
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 0aabb06..ad919fc 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -26,6 +26,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- LIBCEC_CONF_OPT = --enable-rpi \
-    --with-rpi-include-path=$(STAGING_DIR)/usr/include
- LIBCEC_DEPENDENCIES += rpi-userland
-+LIBCEC_CONF_ENV += LIBS="-lvcos -lvchostif"
- else
- LIBCEC_CONF_OPT = --disable-rpi
- endif
--- 
+ package/libcec/libcec.mk                           |  1 +
+ ...vmcs_host-add-install-rules-for-libvcilcs.patch | 23 ++++++++++++++++++++++
+ package/rpi-userland/rpi-userland.mk               |  2 +-
+ package/xbmc/xbmc.mk                               |  3 ++-
+ 4 files changed, 27 insertions(+), 2 deletions(-)
+ create mode 100644 package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+
+--
 2.0.0
