@@ -1,12 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Jun 2014 19:47:14 +0200
-Subject: [Buildroot] [PATCH 07/11] support/scripts: do not display
- virtual packages in generated lists
-In-Reply-To: <CAHXCMM+PxKqL0R==-d1SRJUcrAL_7V9Op=tyAeECvAjKZfcgmw@mail.gmail.com>
+Date: Wed, 4 Jun 2014 19:48:27 +0200
+Subject: [Buildroot] [PATCH 09/11] support/scripts: introduce a symbol
+ formatter to generate package lists
+In-Reply-To: <20140603061040.GA8994@free.fr>
 References: <cover.1401743146.git.yann.morin.1998@free.fr>
- <0cfa42eb55966a62df475298ffc7b9c045f79862.1401743146.git.yann.morin.1998@free.fr>
- <CAHXCMM+PxKqL0R==-d1SRJUcrAL_7V9Op=tyAeECvAjKZfcgmw@mail.gmail.com>
-Message-ID: <20140604174714.GC3325@free.fr>
+ <e47f3b1d0a79f0ba4751fdcd9cc8230fbd9642b1.1401743146.git.yann.morin.1998@free.fr>
+ <CAHXCMM+_bQC7Zb-=DCVeGXezQop4TCy=FgJBeFG-UwhnG1r+tw@mail.gmail.com>
+ <20140603061040.GA8994@free.fr>
+Message-ID: <20140604174827.GD3325@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +16,51 @@ To: buildroot@busybox.net
 
 Samuel, All,
 
-On 2014-06-03 00:53 +0200, Samuel Martin spake thusly:
-> On Mon, Jun 2, 2014 at 11:06 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > If a package has both a 'real' and a 'virtual' definition, consider it
-> > is a virtual package and do not display it in the generated package list.
-> >
-> > This is the case for jpeg and cryptodev, that are virtual packages, but
-> > also real (but empty) packages used to provide a prompt to enable/disable
-> > a choice to select an implementation. In this case, we do not want to
-> > list the virtual packages, but only their implementations.
-> >
-> > So, consider packages that are both real and virtual as virtual packages.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Samuel Martin <s.martin49@gmail.com>
-> > Acked-by: Samuel Martin <s.martin49@gmail.com>
-> >
-> > ---
-> > Changes RFC -> v2:
-> >   - fix typoes  (Samuel)
-> > ---
-> >  support/scripts/gen-manual-lists.py | 21 +++++++++++++++++++--
-> >  1 file changed, 19 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-> > index e234ef1..a3fb00c 100644
-> > --- a/support/scripts/gen-manual-lists.py
-> > +++ b/support/scripts/gen-manual-lists.py
-> > @@ -279,13 +279,30 @@ class Buildroot:
-> >                      pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
-> >              setattr(self, "_package_list", pkg_list)
-> >          for pkg in getattr(self, "_package_list"):
-> > -            if pattern.match(pkg):
-> > -                return True
-> > +            if type == 'real' or type == 'both':
+On 2014-06-03 08:10 +0200, Yann E. MORIN spake thusly:
+> On 2014-06-03 00:53 +0200, Samuel Martin spake thusly:
+> > On Mon, Jun 2, 2014 at 11:06 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+> > > +    def _format_symbol_prompt_location(self, what=None, symbol=None, root=None,
+> > > +                                             enable_choice=False, header=None,
+> > > +                                             get_label_func=lambda x: x):
+> > > +        if what is None:
+> > > +            raise Exception("Don't know what to format")
+> > > +
+> > > +        if what == "layout":
+> > > +            return ( "100%", "^1,4" )
+> > > +
+> > > +        if what == "header":
+> > > +            if hasattr(root, "get_title"):
+> > > +                loc_label = get_symbol_parents(root, None, enable_choice=enable_choice)
+> > > +                loc_label += [root.get_title(), "..."]
+> > > +            else:
+> > > +                loc_label = ["Location"]
+> > > +            return "| {0:<40} <| {1}\n".format(header, " -> ".join(loc_label))
+> > > +
+> > > +        if what == "symbol":
+> > > +            parents = get_symbol_parents(symbol, root, enable_choice)
+> > > +            return "| {0:<40} <| {1}\n".format(get_label_func(symbol),
+> > > +                                               " -> ".join(parents))
+> > > +
+> > > +        raise Exception("Don't know how to format '%s'" % str(what))
+> > 
+> > Raising an exception if 'what' is None, and raising an exception when
+> > it  has an invalid value seems a bit overkill to me... ;-)
+> > 
+> > I would drop the None-check, and make the exception message more
+> > helpful in invalid case:
+> > 
+> >   message = "Invalid argument 'what': '%s'\n" % str(what)
+> >   message += "Allowed values are: 'layout', 'header' and 'symbol'"
+> >   raise Exception(message)
 > 
-> Ooops! I forgot, since you removed the 'both' semantic in the previous
-> patch, it should no longer appears here ;-)
+> But then, what happens if 'what' is in fact None, and we compare it to a
+> string? Does Python automagically convert None to an empty string
+> (whatever that might be in Python)?
+> 
+> OK, I'll give it a shot...
 
-Ah, right, I fixed it here. Thanks!
+OK, it looks like it is working. Thanks!
 
 Regards,
 Yann E. MORIN.
