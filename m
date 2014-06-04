@@ -1,141 +1,66 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  4 Jun 2014 23:07:44 +0200
-Subject: [Buildroot] [PATCH] dejavu: new package
-Message-ID: <1401916064-11345-1-git-send-email-ps.report@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 4 Jun 2014 23:08:52 +0200
+Subject: [Buildroot] [git commit] hostapd: backport rt5370 fix from upstream
+Message-ID: <20140604210907.312A89CE97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/Config.in        |  1 +
- package/dejavu/Config.in | 33 +++++++++++++++++++++++++
- package/dejavu/dejavu.mk | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 97 insertions(+)
- create mode 100644 package/dejavu/Config.in
- create mode 100644 package/dejavu/dejavu.mk
+commit: http://git.buildroot.net/buildroot/commit/?id=f3a12bc334d4673df1c2abf6311f6f85f93d53cd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/Config.in b/package/Config.in
-index 5a92032..89b0ef4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -245,6 +245,7 @@ source "package/xterm/Config.in"
- source "package/xvkbd/Config.in"
- 
- comment "X libraries and helper libraries"
-+source "package/dejavu/Config.in"
- source "package/liberation/Config.in"
- source "package/libsexy/Config.in"
- source "package/x11r7/xkeyboard-config/Config.in"
-diff --git a/package/dejavu/Config.in b/package/dejavu/Config.in
+Fixes #7166
+
+hostapd crashes with segfault when using RT5370. This is because the driver
+reports Beacon RX prior to hostapd having completed the AP mode setup.
+
+This upstream commit fixes it.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-Fix-Beacon-RX-before-AP-setup-completion.patch |   35 ++++++++++++++++++++
+ 1 files changed, 35 insertions(+), 0 deletions(-)
+
+diff --git a/package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch b/package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch
 new file mode 100644
-index 0000000..bd38d58
+index 0000000..d5ac55a
 --- /dev/null
-+++ b/package/dejavu/Config.in
-@@ -0,0 +1,33 @@
-+config BR2_PACKAGE_DEJAVU
-+	bool "DejaVu fonts"
-+	help
-+	  The DejaVu fonts are a font family based on the Vera Fonts.
-+	  Its purpose is to provide a wider range of characters while maintaining
-+	  the original look and feel through the process of collaborative
-+	  development, under a Free license. 
++++ b/package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch
+@@ -0,0 +1,35 @@
++From 334ec001bbd31c5bc83d6593e58dfbbf6b8785a2 Mon Sep 17 00:00:00 2001
++From: Jouni Malinen <j@w1.fi>
++Date: Thu, 6 Feb 2014 15:22:06 +0200
++Subject: [PATCH] Fix Beacon RX before AP setup completion
 +
-+	  http://dejavu-fonts.org
++It is possible for the driver to report Beacon RX prior to hostapd
++having completed AP mode setup, e.g., when changing country code. Beacon
++frame processing for OLBC was not prepared for this and could trigger
++segfault due to NULL pointer dereference. Fix this by ignoring the
++Beacon frames received prior to completing interface setup when
++determining OLBC updates.
 +
-+if BR2_PACKAGE_DEJAVU
++Signed-hostap: Jouni Malinen <j@w1.fi>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/ap/ap_list.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+config BR2_PACKAGE_DEJAVU_MONO
-+	bool "mono fonts"
-+	default y
++diff --git a/src/ap/ap_list.c b/src/ap/ap_list.c
++index f9b1540..287d520 100644
++--- a/src/ap/ap_list.c
+++++ b/src/ap/ap_list.c
++@@ -32,7 +32,8 @@ static int ap_list_beacon_olbc(struct hostapd_iface *iface, struct ap_info *ap)
++ {
++ 	int i;
++ 
++-	if (iface->current_mode->mode != HOSTAPD_MODE_IEEE80211G ||
+++	if (iface->current_mode == NULL ||
+++	    iface->current_mode->mode != HOSTAPD_MODE_IEEE80211G ||
++ 	    iface->conf->channel != ap->channel)
++ 		return 0;
++ 
++-- 
++2.0.0.rc2
 +
-+config BR2_PACKAGE_DEJAVU_SANS
-+	bool "sans fonts"
-+	default y
-+
-+config BR2_PACKAGE_DEJAVU_SERIF
-+	bool "serif fonts"
-+	default y
-+
-+config BR2_PACKAGE_DEJAVU_SANS_CONDENSED
-+	bool "sans condensed fonts"
-+	default y
-+
-+config BR2_PACKAGE_DEJAVU_SERIF_CONDENSED
-+	bool "serif condensed fonts"
-+	default y
-+
-+endif
-diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
-new file mode 100644
-index 0000000..a2252cd
---- /dev/null
-+++ b/package/dejavu/dejavu.mk
-@@ -0,0 +1,63 @@
-+################################################################################
-+#
-+# dejavu
-+#
-+################################################################################
-+
-+DEJAVU_VERSION = 2.34
-+DEJAVU_SITE = http://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
-+DEJAVU_SOURCE = dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
-+DEJAVU_LICENSE_FILES = LICENSE
-+
-+DEJAVU_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/dejavu
-+DEJAVU_FONTCONFIG_TARGET_DIR = $(TARGET_DIR)/usr/share/fontconfig/conf.avail
-+
-+ifeq ($(BR2_PACKAGE_DEJAVU_MONO),y)
-+define DEJAVU_INSTALL_MONO
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSansMono*.ttf $(DEJAVU_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/fontconfig/20-unhint-small-dejavu-sans-mono.conf $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/fontconfig/57-dejavu-sans-mono.conf $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DEJAVU_SANS),y)
-+define DEJAVU_INSTALL_SANS
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSans.ttf $(DEJAVU_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSans-*.ttf $(DEJAVU_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/fontconfig/20-unhint-small-dejavu-sans.conf $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/fontconfig/57-dejavu-sans.conf $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DEJAVU_SERIF),y)
-+define DEJAVU_INSTALL_SERIF
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSerif.ttf $(DEJAVU_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSerif-*.ttf $(DEJAVU_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/fontconfig/20-unhint-small-dejavu-serif.conf $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+	$(INSTALL) -m 644 $(@D)/fontconfig/57-dejavu-serif.conf $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DEJAVU_SANS_CONDENSED),y)
-+define DEJAVU_INSTALL_SANS_CONDENSED
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSansCondensed*.ttf $(DEJAVU_TARGET_DIR)
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DEJAVU_SERIF_CONDENSED),y)
-+define DEJAVU_INSTALL_SERIF_CONDENSED
-+	$(INSTALL) -m 644 $(@D)/ttf/DejaVuSerifCondensed*.ttf $(DEJAVU_TARGET_DIR)
-+endef
-+endif
-+
-+define DEJAVU_INSTALL_TARGET_CMDS
-+	mkdir -p $(DEJAVU_TARGET_DIR)
-+	mkdir -p $(DEJAVU_FONTCONFIG_TARGET_DIR)
-+	$(DEJAVU_INSTALL_MONO)
-+	$(DEJAVU_INSTALL_SANS)
-+	$(DEJAVU_INSTALL_SERIF)
-+	$(DEJAVU_INSTALL_SANS_CONDENSED)
-+	$(DEJAVU_INSTALL_SERIF_CONDENSED)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.8.1.4
