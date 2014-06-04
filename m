@@ -1,78 +1,69 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Jun 2014 00:24:34 +0200
-Subject: [Buildroot] [PATCH v5 2/2] rpi-userland: cleanup *_CONF_OPT
-In-Reply-To: <1401880448-2496-3-git-send-email-s.martin49@gmail.com>
-References: <1401880448-2496-1-git-send-email-s.martin49@gmail.com>
- <1401880448-2496-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140604222434.GI3325@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 05 Jun 2014 00:29:43 +0200
+Subject: [Buildroot] [RFC/PATCH] linux: add external initramfs options
+In-Reply-To: <20140604204505.GA19703@arch.cereza>
+References: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
+ <5386131B.6090809@mind.be> <20140604204505.GA19703@arch.cereza>
+Message-ID: <538F9DD7.6020102@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel, All,
+On 04/06/14 22:45, Ezequiel Garcia wrote:
+> Hello Arnout,
+> 
+> On 28 May 06:47 PM, Arnout Vandecappelle wrote:
+> [..]
+>>>
+>>> The path specified can be a cpio archive or a directory, just like
+>>> the kernel config. The path is specified w.r.t. BRs topdir, and made
+>>> absolute since the kernel builds in another directory.
+>>
+>>  This patch does nothing more than update the kernel config. Since you can
+>> already supply a custom kernel config, I don't think there is much added value
+>> to moving these options to the buildroot config.
+>>
+>>  The only feature you add is that the patch can be relative to the buildroot
+>> directory. Not enough to be relevant, IMHO, especially since the patch adds
+>> non-negligible complexity.
+>>
+> 
+> Our software stack includes a kernel with an appended initramfs to take care
+> of software upgrade and find, check and switch to the "real" rootfs. Both
+> the initramfs and rootfs are Buildroot-based, but each of them with their
+> own configuration and history (in separate git repos).
+> 
+> Hence we came up with this solution: the initramfs would live in a different
+> repo, and after it's built we use this new option to append it in the kernel.
+> 
+> Maybe you have a better idea, and there's a cleaner way to accomplish this
+> with Buildroot?
 
-On 2014-06-04 13:14 +0200, Samuel Martin spake thusly:
-> This change reverts the commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
-> because rpi-userland is correctly built whatever the value of the
-> BUILD_SHARED_LIBS CMake flags.
-> 
-> The cset 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf originally intends to
-> fix linkage/runtime failure in xbmc package because of missing flags in
-> xbmc LIBS env. var. This has been fixed in the previous patch.
-> 
-> So, for rpi-userland package, BUILD_SHARED_LIBS does no longer need to
-> be forced to OFF, and can safely be driven by the CMake infrastructure.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Use a custom kernel config, and code the path to the external initramfs in that
+custom kernel config instead of in the buildroot config. You can use
+$(BASE_DIR)/../initramfs-output-dir if you want to avoid absolute paths in the
+config.
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Actually, in your case the easiest solution would be to build the kernel
+together with the initramfs-buildroot and use the initramfs rootfs instead of
+the cpio one. In the real-rootfs-buildroot you don't need to build a kernel.
 
-Of course, don't forget to include the two new other patches before that
-one. ;-)
+ Or am I missing something?
 
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
 
-> ---
-> changes v4 -> v5:
-> - rebase
-> - extend commit log (ThomasP)
 > 
-> changes v3 -> v4:
-> - rebase
+> Thanks for the feedback!
 > 
-> changes v2 -> v3:
-> - new patch
-> ---
->  package/rpi-userland/rpi-userland.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-> index 8b225ba..2de6b92 100644
-> --- a/package/rpi-userland/rpi-userland.mk
-> +++ b/package/rpi-userland/rpi-userland.mk
-> @@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
->  RPI_USERLAND_LICENSE = BSD-3c
->  RPI_USERLAND_LICENSE_FILES = LICENCE
->  RPI_USERLAND_INSTALL_STAGING = YES
-> -RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
-> +RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
->  
->  RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
->  
-> -- 
-> 1.9.2
-> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
