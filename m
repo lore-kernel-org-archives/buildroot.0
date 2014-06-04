@@ -1,111 +1,112 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  3 Jun 2014 20:15:56 -0300
-Subject: [Buildroot] [PATCHv2] e2fsprogs: bump to version 1.42.10
-Message-ID: <1401837356-3563-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  4 Jun 2014 00:54:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 7160] New: host-xz not built.
+Message-ID: <bug-7160-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop --disable-tls since it's not needed.
+https://bugs.busybox.net/show_bug.cgi?id=7160
 
-Add --disable-rpath to avoid unnecessary pollution.
+           Summary: host-xz not built.
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Windows
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: tommygunsster at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-e4defrag now needs an (e)glibc or musl toolchain because of
-sync_file_range()
-See e2fsprogs commit 58229aaf85d435469e901c974f31ead6d9124166
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/e2fsprogs/Config.in                        |  4 +++
- ..._CFLAGS-add-includes-when-cross-compiling.patch | 29 ++++++++++++++++++++++
- package/e2fsprogs/e2fsprogs.mk                     |  8 +++---
- 3 files changed, 38 insertions(+), 3 deletions(-)
- create mode 100644 package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
+When trying to build with xz as the compression medium for the built
+rootfs-ext2, in the final steps it fails to run xz compression with a message
+like:
 
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index eb7bedb..05fa4e3 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -51,6 +51,10 @@ config BR2_PACKAGE_E2FSPROGS_E2UNDO
- config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
- 	bool "e4defrag"
- 	depends on !BR2_avr32 && !BR2_nios2 # fallocate not implemented
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # sync_file_range not impl
-+
-+comment "e4defrag needs an (e)glibc or musl toolchain"
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC
- 
- config BR2_PACKAGE_E2FSPROGS_FILEFRAG
- 	bool "filefrag"
-diff --git a/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch b/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
-new file mode 100644
-index 0000000..2aa86aa
---- /dev/null
-+++ b/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
-@@ -0,0 +1,29 @@
-+From 2d9bfcc82b986f9da203270fd4059041bb7f1983 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 3 Jun 2014 18:51:07 -0300
-+Subject: [PATCH] e2fsprogs: Add INCLUDES to BUILD_CFLAGS when cross-compiling
-+
-+We need $INCLUDES in BUILD_CFLAGS otherwise cross-compilation is broken
-+now that util/subst.c uses config.h (from commit 2873927d15).
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ configure.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.in b/configure.in
-+index 448a292..8bac870 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -1382,7 +1382,7 @@ if test $cross_compiling = no; then
-+    BUILD_CFLAGS="$CFLAGS $CPPFLAGS $INCLUDES -DHAVE_CONFIG_H"
-+    BUILD_LDFLAGS="$LDFLAGS"
-+ else
-+-   BUILD_CFLAGS=
-++   BUILD_CFLAGS="$INCLUDES -DHAVE_CONFIG_H"
-+    BUILD_LDFLAGS=
-+ fi
-+ AC_SUBST(BUILD_CFLAGS)
-+--
-+1.8.5.5
-+
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 76e2d4e..fa0191f 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,15 +4,16 @@
- #
- ################################################################################
- 
--E2FSPROGS_VERSION = 1.42.9
-+E2FSPROGS_VERSION = 1.42.10
- E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
- E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
-+# For e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
-+E2FSPROGS_AUTORECONF = YES
- E2FSPROGS_INSTALL_STAGING = YES
- E2FSPROGS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-libs
- 
- E2FSPROGS_CONF_OPT = \
--	--disable-tls \
- 	$(if $(BR2_PREFER_STATIC_LIB),,--enable-elf-shlibs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_DEBUGFS),,--disable-debugfs) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS_E2IMAGE),,--disable-imager) \
-@@ -23,7 +24,8 @@ E2FSPROGS_CONF_OPT = \
- 	--disable-libuuid \
- 	--enable-fsck \
- 	--disable-e2initrd-helper \
--	--disable-testio-debug
-+	--disable-testio-debug \
-+	--disable-rpath
- 
- ifeq ($(BR2_nios2),y)
- E2FSPROGS_CONF_ENV += ac_cv_func_fallocate=no
+/root/buildroot32/output/host/usr/bin/xz -9 -C crc32 -c
+/root/buildroot32/output/images/rootfs.ext2 >
+/root/buildroot32/output/images/rootfs.ext2.xz
+/bin/bash: /root/buildroot32/output/host/usr/bin/xz: No such file or directory
+make: *** [/root/buildroot32/output/images/rootfs.ext2] Error 127
+
+The reason is because the host-xz tools are not built.
+
+Looking at a diff between 2014.02 and 2014.05 reveals that the reasoning is in
+buildroot/fs/common.mk
+
+--- ../buildroot-2014.02/fs/common.mk   2014-02-27 15:51:23.000000000 -0500
++++ ../buildroot32/fs/common.mk 2014-05-31 03:52:49.000000000 -0400
+@@ -33,6 +33,7 @@
+ ROOTFS_DEVICE_TABLES = $(call qstrip,$(BR2_ROOTFS_DEVICE_TABLE) \
+        $(BR2_ROOTFS_STATIC_DEVICE_TABLE))
+ USERS_TABLE = $(BUILD_DIR)/_users_table.txt
++ROOTFS_USERS_TABLES = $(call qstrip,$(BR2_ROOTFS_USERS_TABLES))
+
+ define ROOTFS_TARGET_INTERNAL
+
+@@ -59,16 +60,16 @@
+ ROOTFS_$(2)_COMPRESS_CMD = $$(LZOP) -9 -c
+ endif
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_XZ),y)
+-ROOTFS_$(2)_DEPENDENCIES += host-xz
+ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = $$(XZ) -9 -C crc32 -c
+ endif
+
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
++$$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+        @$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+        $$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+        rm -f $$(FAKEROOT_SCRIPT)
+        rm -f $$(TARGET_DIR_WARNING_FILE)
++       rm -f $(USERS_TABLE)
+        echo "chown -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ ifneq ($$(ROOTFS_DEVICE_TABLES),)
+        cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
+@@ -78,11 +79,14 @@
+        printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >>
+$$(FULL_DEVICE_TABLE)
+        echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE)
+$$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ endif
+-       printf '$(subst $(sep),\n,$(PACKAGES_USERS))' > $(USERS_TABLE)
+-       $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE) $(TARGET_DIR) >>
+$(FAKEROOT_SCRIPT)
++ifneq ($$(ROOTFS_USERS_TABLES),)
++       cat $$(ROOTFS_USERS_TABLES) >> $(USERS_TABLE)
++endif
++       printf '$(subst $(sep),\n,$(PACKAGES_USERS))' >> $(USERS_TABLE)
++       PATH=$(BR_PATH) $(TOPDIR)/support/scripts/mkusers $(USERS_TABLE)
+$(TARGET_DIR) >> $(FAKEROOT_SCRIPT)
+        echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+        chmod a+x $$(FAKEROOT_SCRIPT)
+-       $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
++       PATH=$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+        $(INSTALL) -m 0644 support/misc/target-dir-warning.txt
+$$(TARGET_DIR_WARNING_FILE)
+        - at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+@@ -95,7 +99,7 @@
+ rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+-TARGETS += rootfs-$(1)
++TARGETS_ROOTFS += rootfs-$(1)
+ endif
+ endef
+
+Re-adding this line:
+ROOTFS_$(2)_DEPENDENCIES += host-xz
+
+right below line 62 fixes the issue.
+
 -- 
-1.8.5.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
