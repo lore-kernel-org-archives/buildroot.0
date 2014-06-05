@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Jun 2014 21:27:41 +0200
-Subject: [Buildroot] [PATCH v6 3/4] rpi-userland: add patch fix missing
- libvcilcs install rules
-In-Reply-To: <1401923053-30292-4-git-send-email-s.martin49@gmail.com>
+Date: Thu, 5 Jun 2014 21:28:06 +0200
+Subject: [Buildroot] [PATCH v6 4/4] rpi-userland: cleanup *_CONF_OPT
+In-Reply-To: <1401923053-30292-5-git-send-email-s.martin49@gmail.com>
 References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
- <1401923053-30292-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140605192741.GG3553@free.fr>
+ <1401923053-30292-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140605192806.GH3553@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +14,22 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2014-06-05 01:04 +0200, Samuel Martin spake thusly:
-> This change adds a patch fix the missing install rules for libvcilcs.
+> This change reverts the commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
+> because rpi-userland is correctly built whatever the value of the
+> BUILD_SHARED_LIBS CMake flags.
 > 
-> This is a pre-requisite to be able to build the shared libraries of the
-> rpi-userland package, and most importantly avoid linkage failure (at
-> link-time and/or runtime) in others libraries that link with it.
+> The cset 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf originally intends to
+> fix linkage/runtime failure in xbmc package because of missing flags in
+> xbmc LIBS env. var. This has been fixed in the previous patch.
 > 
-> Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> So, for rpi-userland package, BUILD_SHARED_LIBS does no longer need to
+> be forced to OFF, and can safely be driven by the CMake infrastructure.
+> 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
@@ -32,48 +37,37 @@ Yann E. MORIN.
 
 > ---
 > changes v5 -> v6:
+> - rebase
+> 
+> changes v4 -> v5:
+> - rebase
+> - extend commit log (ThomasP)
+> 
+> changes v3 -> v4:
+> - rebase
+> 
+> changes v2 -> v3:
 > - new patch
 > ---
->  ...vmcs_host-add-install-rules-for-libvcilcs.patch | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+>  package/rpi-userland/rpi-userland.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch b/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
-> new file mode 100644
-> index 0000000..05cf4b3
-> --- /dev/null
-> +++ b/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
-> @@ -0,0 +1,23 @@
-> +From b60398837ddf39d4b605600abc167d4366e454a6 Mon Sep 17 00:00:00 2001
-> +From: Samuel Martin <s.martin49@gmail.com>
-> +Date: Thu, 5 Jun 2014 00:06:08 +0200
-> +Subject: [PATCH] interface/vmcs_host: add install rules for libvcilcs
-> +
-> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> +---
-> + interface/vmcs_host/CMakeLists.txt | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/interface/vmcs_host/CMakeLists.txt b/interface/vmcs_host/CMakeLists.txt
-> +index 64ba2f8..8510f81 100755
-> +--- a/interface/vmcs_host/CMakeLists.txt
-> ++++ b/interface/vmcs_host/CMakeLists.txt
-> +@@ -33,4 +33,5 @@ target_link_libraries(vchostif vchiq_arm vcos vcfiled_check)
-> + 
-> + add_subdirectory(linux/vcfiled)
-> + install(TARGETS vchostif DESTINATION lib)
-> ++install(TARGETS vcilcs DESTINATION lib)
-> + 
-> +-- 
-> +2.0.0
-> +
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index 8b225ba..2de6b92 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+>  RPI_USERLAND_LICENSE = BSD-3c
+>  RPI_USERLAND_LICENSE_FILES = LICENCE
+>  RPI_USERLAND_INSTALL_STAGING = YES
+> -RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
+> +RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
+>  
+>  RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+>  
 > -- 
 > 2.0.0
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
