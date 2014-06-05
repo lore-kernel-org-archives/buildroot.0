@@ -1,62 +1,63 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 5 Jun 2014 09:53:43 +0300
-Subject: [Buildroot] [PATCH v6 0/4] rpi-userland/xbmc fixes
-In-Reply-To: <a8809a02-4f3d-4671-a9dc-0c251445c498@email.android.com>
-References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
- <a8809a02-4f3d-4671-a9dc-0c251445c498@email.android.com>
-Message-ID: <20140605065342.GE4193@tarshish>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Thu,  5 Jun 2014 10:30:50 +0200
+Subject: [Buildroot] [PATCH] Remove user "default"
+Message-ID: <1401957050-24705-1-git-send-email-sho@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+User "default" with no password has been around for long time, but not
+used within buildroot. Since we now have BR2_ROOTFS_USERS_TABLES it is
+no longer needed.
 
-On Thu, Jun 05, 2014 at 08:45:16AM +0200, Yann E. MORIN wrote:
-> (Grr... K9 drops the text in the quoted part)
+Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+---
+ system/device_table.txt    | 1 -
+ system/skeleton/etc/group  | 1 -
+ system/skeleton/etc/passwd | 1 -
+ system/skeleton/etc/shadow | 1 -
+ 4 files changed, 4 deletions(-)
 
-Your text appears correctly in the plaintext part of your email 
-(http://lists.busybox.net/pipermail/buildroot/2014-June/098501.html), but not 
-the on HTML part 
-(http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/86031).
-
-baruch
-
-> You forgot to propagate my tested-and-acked-tags to patches 1 and 3.
-> 
-> Regards,
-> Yann E  MORIN.
-> 
-> On June 5, 2014 1:04:09 AM CEST, Samuel Martin <s.martin49@gmail.com> wrote:
-> >Hi all,
-> >
-> >Here is just more fixes about rpi-userland/xbmc and all.
-> >
-> >Yours,
-> >Samuel
-> >
-> >Samuel Martin (3):
-> >  xbmc: fix missing libraries from rpi-userland
-> >  rpi-userland: add patch fix missing libvcilcs install rules
-> >  rpi-userland: cleanup *_CONF_OPT
-> >
-> >Yann E. MORIN (1):
-> >  package/libcec: fix missing libraries from rpi-userland
-> >
-> > package/libcec/libcec.mk                           |  1 +
-> >...vmcs_host-add-install-rules-for-libvcilcs.patch | 23
-> >++++++++++++++++++++++
-> > package/rpi-userland/rpi-userland.mk               |  2 +-
-> > package/xbmc/xbmc.mk                               |  3 ++-
-> > 4 files changed, 27 insertions(+), 2 deletions(-)
-> >create mode 100644
-> >package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
-> >
-> >--
-> >2.0.0
-
+diff --git a/system/device_table.txt b/system/device_table.txt
+index 7ae4b07..e15412d 100644
+--- a/system/device_table.txt
++++ b/system/device_table.txt
+@@ -10,7 +10,6 @@
+ /tmp					d	1777	0	0	-	-	-	-	-
+ /etc					d	755	0	0	-	-	-	-	-
+ /root					d	700	0	0	-	-	-	-	-
+-/home/default				d	755	1000	1000	-	-	-	-	-
+ /var/www				d	755	33	33	-	-	-	-	-
+ /etc/shadow				f	600	0	0	-	-	-	-	-
+ /etc/passwd				f	644	0	0	-	-	-	-	-
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index 85a1fa2..11d58ac 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -27,4 +27,3 @@ ftp:x:83
+ nobody:x:99:
+ nogroup:x:99:
+ users:x:100:
+-default:x:1000:
+diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
+index ed7006a..8696954 100644
+--- a/system/skeleton/etc/passwd
++++ b/system/skeleton/etc/passwd
+@@ -13,4 +13,3 @@ dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
+ ftp:x:83:83:ftp:/home/ftp:/bin/sh
+ nobody:x:99:99:nobody:/home:/bin/sh
+ sshd:x:103:99:Operator:/var:/bin/sh
+-default:x:1000:1000:Default non-root user:/home/default:/bin/sh
+diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
+index 67b67c1..d5734d7 100644
+--- a/system/skeleton/etc/shadow
++++ b/system/skeleton/etc/shadow
+@@ -10,4 +10,3 @@ uucp:*:10933:0:99999:7:::
+ operator:*:10933:0:99999:7:::
+ ftp:*:10933:0:99999:7:::
+ nobody:*:10933:0:99999:7:::
+-default::10933:0:99999:7:::
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.0.0.rc2
