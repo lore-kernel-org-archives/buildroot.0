@@ -1,24 +1,82 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Jun 2014 21:26:36 +0200
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1h
-In-Reply-To: <44fa427ecf27cf613ec56738f0f85a23974d0370.1401979007.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 5 Jun 2014 17:36:47 +0300")
-References: <44fa427ecf27cf613ec56738f0f85a23974d0370.1401979007.git.baruch@tkos.co.il>
-Message-ID: <8761kfnonn.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 5 Jun 2014 21:27:11 +0200
+Subject: [Buildroot] [PATCH v6 2/4] xbmc: fix missing libraries from
+	rpi-userland
+In-Reply-To: <1401923053-30292-3-git-send-email-s.martin49@gmail.com>
+References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+ <1401923053-30292-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140605192711.GF3553@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Samuel, All,
 
- > Fixes CVE-2014-0224, CVE-2014-0221, CVE-2014-0195, CVE-2014-0198 among others.
- > See https://www.openssl.org/news/secadv_20140605.txt for details.
+On 2014-06-05 01:04 +0200, Samuel Martin spake thusly:
+> When rpi-userland libraries are built as shared-objects, not all needed
+> libraries are passed in the LD_FLAGS, leading to failure at linkage.
+> 
+> To avoid this issue, set the LIBS variable content in accordance with the
+> INCLUDES variable value.
+> 
+> The commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf currently works
+> around this issue by forcing rpi-userland to be statically linked,
+> whereas it is actually a LIBS flags problem in xbmc package.
+> 
+> A follow-up patch fixes rpi-userland package.
+> 
+> Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Committed, thanks.
+Regards,
+Yann E. MORIN.
+
+> ---
+> changes v5 -> v6:
+> - rebase
+> 
+> changes v4 -> v5:
+> - rebase
+> - extend commit message
+> 
+> changes v3 -> v4:
+> - rebase
+> 
+> changes v2 -> v3:
+> - new patch
+> ---
+>  package/xbmc/xbmc.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index c7a4607..8c0146e 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -53,7 +53,8 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>  XBMC_DEPENDENCIES += rpi-userland
+>  XBMC_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
+>  XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+> -	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
+> +	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
+> +	LIBS="-lvcos -lvchostif"
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DBUS),y)
+> -- 
+> 2.0.0
+> 
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
