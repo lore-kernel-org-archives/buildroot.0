@@ -1,20 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 05 Jun 2014 11:31:20 -0300
-Subject: [Buildroot] [PATCH v2 1/2] hostapd: bump to version 2.2
-In-Reply-To: <beac89df1d15b9b192b30dbd1e1363d5a11c7833.1401978259.git.baruch@tkos.co.il>
-References: <beac89df1d15b9b192b30dbd1e1363d5a11c7833.1401978259.git.baruch@tkos.co.il>
-Message-ID: <53907F38.1040708@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  5 Jun 2014 17:36:47 +0300
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1h
+Message-ID: <44fa427ecf27cf613ec56738f0f85a23974d0370.1401979007.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/05/2014 11:24 AM, Baruch Siach wrote:
+Fixes CVE-2014-0224, CVE-2014-0221, CVE-2014-0195, CVE-2014-0198 among others.
+See https://www.openssl.org/news/secadv_20140605.txt for details.
 
-> Drop upstream patch.
-> CONFIG_IEEE80211W is now enabled by default.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/openssl/openssl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 87bc2efcd499..743ca52ca93e 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSL_VERSION = 1.0.1g
++OPENSSL_VERSION = 1.0.1h
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
+-- 
+2.0.0.rc2
