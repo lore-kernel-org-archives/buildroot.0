@@ -1,111 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Jun 2014 19:20:24 +0200
-Subject: [Buildroot] [PATCH] Remove user "default"
-In-Reply-To: <1401957050-24705-1-git-send-email-sho@relinux.de>
-References: <1401957050-24705-1-git-send-email-sho@relinux.de>
-Message-ID: <20140605172024.GA3553@free.fr>
+Date: Thu, 5 Jun 2014 19:34:31 +0200
+Subject: [Buildroot] autoconf caching
+In-Reply-To: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+Message-ID: <20140605173431.GB3553@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stephan, All,
+Dallas, All,
 
-On 2014-06-05 10:30 +0200, Stephan Hoffmann spake thusly:
-> User "default" with no password has been around for long time, but not
-> used within buildroot. Since we now have BR2_ROOTFS_USERS_TABLES it is
-> no longer needed.
+On 2014-06-05 11:34 -0500, Dallas Clement spake thusly:
+> Hi All - I have seen posts on this subject before.  It looks like things
+> flamed out.
 > 
-> Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+> http://lists.gnu.org/archive/html/autoconf/2012-11/msg00022.html
+> 
+> I'm getting killed by autoconf.  My builds take 1.5 hours even with ccache
+> turned on.  Most of the cores in my very impressive build machine are
+> sitting on their !#@ while autoconf is running.  Most of my packages rely
+> on autotools and it seems that most of the time spent is running configure
+> scripts.
+> 
+> Can anyone offer some advice on how to speed things up with autoconf?  Or
+> is it a lost cause?
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Yes, it is a lost cause.
 
-Note a comment below...
+autoconf implements a way for the user to provide pre-canned answers to
+tests, so it looks tempting to just provide such a set of answers,
+gathered during the build, so that latter packages profit from the tests
+done in previous packages.
+
+We had something like that in the past, since we thought that would be
+such a good idea.
+
+Turned out it is not, after all.
+
+The underlying problem is that the naming of variables is not consistent
+across packages, so two packages may use two different variables for the
+same test. While this is sub-optimal, it causes no much harm, it is just
+not as fast as it could be.
+
+But since the naming is inconsistent, it means that two packages may
+also use the same variable for two different tests. This is causing much
+more pain, since the results from a previous package would pollute the
+tests for a latter package.
+
+The result is that caching autoconf tests is a really bad idea, in fact.
+
+As Baruch suggested, you may want to give a spin at top-level parallel
+builds. This is turned off by default (see top-level Makefile, lines 46
+to 60).
+
+However, if you have a mostly-linear chain of dependency (aka a deep
+dependency tree), you'll gain nothing, or close to nothing. If your
+dependency tree is wide (as opposed to deep), then you may get a
+noticeable speed up.
+
+Also notice that top-level parallel builds are bad for reproducibility,
+since you then no longer guarantee the ordering of non-dependent package
+builds, and there might be hideen (unknown to Buildroot) dependencies
+that would kick in one build but not in another, even though using the
+same .config file.
+
+So, besides getting a yet-faster machine, there's not much you can do to
+speed up the build...
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  system/device_table.txt    | 1 -
->  system/skeleton/etc/group  | 1 -
->  system/skeleton/etc/passwd | 1 -
->  system/skeleton/etc/shadow | 1 -
->  4 files changed, 4 deletions(-)
-> 
-> diff --git a/system/device_table.txt b/system/device_table.txt
-> index 7ae4b07..e15412d 100644
-> --- a/system/device_table.txt
-> +++ b/system/device_table.txt
-> @@ -10,7 +10,6 @@
->  /tmp					d	1777	0	0	-	-	-	-	-
->  /etc					d	755	0	0	-	-	-	-	-
->  /root					d	700	0	0	-	-	-	-	-
-> -/home/default				d	755	1000	1000	-	-	-	-	-
->  /var/www				d	755	33	33	-	-	-	-	-
->  /etc/shadow				f	600	0	0	-	-	-	-	-
->  /etc/passwd				f	644	0	0	-	-	-	-	-
-> diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
-> index 85a1fa2..11d58ac 100644
-> --- a/system/skeleton/etc/group
-> +++ b/system/skeleton/etc/group
-> @@ -27,4 +27,3 @@ ftp:x:83
->  nobody:x:99:
->  nogroup:x:99:
->  users:x:100:
-> -default:x:1000:
-> diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
-> index ed7006a..8696954 100644
-> --- a/system/skeleton/etc/passwd
-> +++ b/system/skeleton/etc/passwd
-> @@ -13,4 +13,3 @@ dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
->  ftp:x:83:83:ftp:/home/ftp:/bin/sh
->  nobody:x:99:99:nobody:/home:/bin/sh
->  sshd:x:103:99:Operator:/var:/bin/sh
-
-Should we make these system accounts no-login accounts, and set the set
-their shells to /bin/false to prevent any latent issue?
-
-For example, my distro's passwd has:
-    sshd:x:115:65534::/var/run/sshd:/usr/sbin/nologin
-    nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
-
-and shadow has:
-    sshd:*:15767:0:99999:7:::
-    nobody:*:15630:0:99999:7:::
-
-So, setting at least the shell to /bin/false would be better.
-
-Also, why do we have an sshd user to begin with? We already had this
-discussion about the 'mail' user, but 'mail' is in the low-digits, and
-very traditional to UNIX. 'sshd' on the other hand is above 100, and
-is not really needed: the ssh server should run as root to allow logins
-anyway.
-
-And since packages can now create users... ;-)
-
-Should we prepare to claen up etc/passwd (and associated files)?
-
-Regards,
-Yann E. MORIN.
-
-> -default:x:1000:1000:Default non-root user:/home/default:/bin/sh
-> diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
-> index 67b67c1..d5734d7 100644
-> --- a/system/skeleton/etc/shadow
-> +++ b/system/skeleton/etc/shadow
-> @@ -10,4 +10,3 @@ uucp:*:10933:0:99999:7:::
->  operator:*:10933:0:99999:7:::
->  ftp:*:10933:0:99999:7:::
->  nobody:*:10933:0:99999:7:::
-> -default::10933:0:99999:7:::
-> -- 
-> 2.0.0.rc2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
