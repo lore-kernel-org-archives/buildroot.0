@@ -1,35 +1,29 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Thu, 05 Jun 2014 12:27:24 -0700
-Subject: [Buildroot] Build Output
-Message-ID: <5390C49C.9080209@ethertek.ca>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Jun 2014 20:00:04 +0000 (UTC)
+Subject: [Buildroot] [Bug 7166] hostapd: segfault when using RT5370
+In-Reply-To: <bug-7166-163@https.bugs.busybox.net/>
+References: <bug-7166-163@https.bugs.busybox.net/>
+Message-ID: <20140605200004.3F44F9CEE0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=7166
 
-I am using the post image script feature to compile and install various 
-custom packages. In my shell and make files I want to make the ouput 
-show the various stages of package installation like buildroot does with 
-text that has a highlighted back ground. This helps in debugging to see 
-where certain programs start their build process.
+Jonathan <jmavermeulen@gmail.com> changed:
 
-For instance, when the post-image script fires it outputs the line below 
-with a highlighted back ground that is easy to spot.
- >>>   Executing post-image script board/ethertek/ws/post-build.sh
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |VERIFIED
 
-I tried the line below in my own post-build.sh, but get a command not 
-found error.
-$(call MESSAGE,"Building Package FOO");
+--- Comment #4 from Jonathan <jmavermeulen@gmail.com> 2014-06-05 20:00:03 UTC ---
+Works perfectly!!
 
-Is it possible to make the call command above work in my own shell 
-scripts that reside in the board folder? If yes, what do I include to 
-make that work?
-
-Thank you,
+Thanks this fixes the issue at least until the next release!
 
 -- 
-Dan Pattison
-Ethertek Circuits
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
