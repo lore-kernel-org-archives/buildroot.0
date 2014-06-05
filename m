@@ -1,81 +1,87 @@
-From: Arni <arni@arni.lv>
-Date: Thu, 05 Jun 2014 14:21:28 +0100
-Subject: [Buildroot] Patch to add Tilera tilegx platform support
-Message-ID: <53906ED8.90500@arni.lv>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  5 Jun 2014 17:24:18 +0300
+Subject: [Buildroot] [PATCH v2 1/2] hostapd: bump to version 2.2
+Message-ID: <beac89df1d15b9b192b30dbd1e1363d5a11c7833.1401978259.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Drop upstream patch.
+CONFIG_IEEE80211W is now enabled by default.
 
-I'm working on porting Tilera tilegx platform to OpenWRT project, but
-I'm sure you are also interested in it.
-Patch is very simple, hope someone will find it usefull. Here is the patch :
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+v2:
+	Remove CONFIG_IEEE80211W (Gustavo Zacarias)
+---
+ ...-Fix-Beacon-RX-before-AP-setup-completion.patch | 35 ----------------------
+ package/hostapd/hostapd.mk                         |  3 +-
+ 2 files changed, 1 insertion(+), 37 deletions(-)
+ delete mode 100644 package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 1f60f81..4152267 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -201,6 +201,13 @@ config BR2_xtensa
-          http://en.wikipedia.org/wiki/Xtensa
-          http://www.tensilica.com/
+diff --git a/package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch b/package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch
+deleted file mode 100644
+index d5ac55a67ee1..000000000000
+--- a/package/hostapd/hostapd-0001-Fix-Beacon-RX-before-AP-setup-completion.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 334ec001bbd31c5bc83d6593e58dfbbf6b8785a2 Mon Sep 17 00:00:00 2001
+-From: Jouni Malinen <j@w1.fi>
+-Date: Thu, 6 Feb 2014 15:22:06 +0200
+-Subject: [PATCH] Fix Beacon RX before AP setup completion
+-
+-It is possible for the driver to report Beacon RX prior to hostapd
+-having completed AP mode setup, e.g., when changing country code. Beacon
+-frame processing for OLBC was not prepared for this and could trigger
+-segfault due to NULL pointer dereference. Fix this by ignoring the
+-Beacon frames received prior to completing interface setup when
+-determining OLBC updates.
+-
+-Signed-hostap: Jouni Malinen <j@w1.fi>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/ap/ap_list.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/ap/ap_list.c b/src/ap/ap_list.c
+-index f9b1540..287d520 100644
+---- a/src/ap/ap_list.c
+-+++ b/src/ap/ap_list.c
+-@@ -32,7 +32,8 @@ static int ap_list_beacon_olbc(struct hostapd_iface *iface, struct ap_info *ap)
+- {
+- 	int i;
+- 
+--	if (iface->current_mode->mode != HOSTAPD_MODE_IEEE80211G ||
+-+	if (iface->current_mode == NULL ||
+-+	    iface->current_mode->mode != HOSTAPD_MODE_IEEE80211G ||
+- 	    iface->conf->channel != ap->channel)
+- 		return 0;
+- 
+--- 
+-2.0.0.rc2
+-
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 5b7dd77483ad..8c5db418e24e 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_tilegx
-+       bool "Tile-GX"
-+#      select BR2_ARCH_IS_64
-+       help
-+         tilera tileGX
-+
-+
- endchoice
- 
- # The following string values are defined by the individual
-@@ -360,4 +367,8 @@ if BR2_xtensa
- source "arch/Config.in.xtensa"
- endif
- 
-+if BR2_tilegx
-+source "arch/Config.in.tilegx"
-+endif
-+
- endmenu # Target options
-diff --git a/arch/Config.in.tilegx b/arch/Config.in.tilegx
-new file mode 100644
-index 0000000..bdecf64
---- /dev/null
-+++ b/arch/Config.in.tilegx
-@@ -0,0 +1,15 @@
-+
-+#config BR2_GCC_TARGET_ARCH
-+#      default "tilegx"
-+
-+config BR2_ENDIAN
-+       default "LITTLE"
-+
-+config BR2_ARCH
-+       default "tilegx"
-+
-+#config BR2_GCC_TARGET_ABI
-+#      default "64"
-+
-+#config BR2_GCC_TARGET_CPU
-+#      default "tilegx"
-diff --git a/linux/linux.mk b/linux/linux.mk
-index bd3f2ac..5fb9b40 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -120,6 +120,8 @@ ifeq ($(KERNEL_ARCH),i386)
- KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
- else ifeq ($(KERNEL_ARCH),x86_64)
- KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/x86
-+else ifeq ($(KERNEL_ARCH),tilegx)
-+KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/tile
- else
- KERNEL_ARCH_PATH = $(LINUX_DIR)/arch/$(KERNEL_ARCH)
- endif
-
-
-Regards,
-Arni
+-HOSTAPD_VERSION = 2.1
++HOSTAPD_VERSION = 2.2
+ HOSTAPD_SITE = http://hostap.epitest.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+@@ -21,7 +21,6 @@ HOSTAPD_CONFIG_ENABLE = \
+ 	CONFIG_IEEE80211AC \
+ 	CONFIG_IEEE80211N \
+ 	CONFIG_IEEE80211R \
+-	CONFIG_IEEE80211W \
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+ 	CONFIG_INTERWORKING \
+ 	CONFIG_LIBNL32 \
+-- 
+2.0.0.rc2
