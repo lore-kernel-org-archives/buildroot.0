@@ -1,42 +1,33 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Jun 2014 20:57:46 +0200
-Subject: [Buildroot] autoconf caching
-In-Reply-To: <CAE9DZURFSJhZ5+1PGYTyLwtCRkaYOWU_nNbkti6SDjdJ1-LuDQ@mail.gmail.com>
-References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
- <20140605173431.GB3553@free.fr>
- <CAE9DZURFSJhZ5+1PGYTyLwtCRkaYOWU_nNbkti6SDjdJ1-LuDQ@mail.gmail.com>
-Message-ID: <20140605185746.GC3553@free.fr>
+Date: Thu, 5 Jun 2014 21:14:44 +0200
+Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
+In-Reply-To: <538DD882.1080201@ozlabs.org>
+References: <20131111215435.GC3510@free.fr> <5369F20B.5030903@ozlabs.org>
+ <20140601201115.GN3430@free.fr> <538DD7AA.9080604@ozlabs.org>
+ <538DD882.1080201@ozlabs.org>
+Message-ID: <20140605191444.GD3553@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dallas, All,
+Jeremy, All,
 
-On 2014-06-05 12:39 -0500, Dallas Clement spake thusly:
-> Maybe there is hope if the
-> autotools people can figure out a way to provide a unique namespace for
-> each package and variables.
+On 2014-06-03 22:15 +0800, Jeremy Kerr spake thusly:
+> > I've just rolled out the initial code to patchwork.ozlabs.org. The tag
+> > counts are all at zero to start with; I've triggered a re-parse of all
+> > of the existing comments, so the counts should reflect reality when that
+> > process finishes.
+> 
+> On second thoughts, I've disabled the display of the counts until the
+> update is complete, so we don't have false info in the UI in the
+> meantime. I'll re-enable once that's done.
 
-That's not really the responsibility of the autotools folks.
+For those not checking their web UI: the A/R/T status is now visible in
+the web UI!
 
-Say I write a pacakge that uses ac_cv_has_gstreamer which for my pckage
-means "gst-inspect is present".
-
-Now you have no knowledge of my package, and you write your own package
-that uses ac_cv_has_gstreamer which would mean "libgstreamer.so.0 is
-present and usable".
-
-There is no reconciliation possible betwen your package and mine. That's
-not the fault of the autotools. Maybe we could say that it's the fault
-of gstreamer to not provide the adequate macros, but even if that was
-the case, that would not prevent two packages to use the same variable
-to represent two different things (think optinal behaviour depending on
-the environment for a package, while another would use it to represent
-a user-selectable --enable/disable option).
-
-There's no way out of this mess...
+Thanks Jeremy!
 
 Regards,
 Yann E. MORIN.
