@@ -1,53 +1,42 @@
-From: Dan Pattison <dan.pattison@ethertek.ca>
-Date: Thu, 05 Jun 2014 14:00:06 -0700
-Subject: [Buildroot] Build Output
-In-Reply-To: <87ppinm7jy.fsf@dell.be.48ers.dk>
-References: <5390C49C.9080209@ethertek.ca> <87ppinm7jy.fsf@dell.be.48ers.dk>
-Message-ID: <5390DA56.30508@ethertek.ca>
+From: Mike Zick <minimod@morethan.org>
+Date: Thu, 5 Jun 2014 16:34:51 -0500
+Subject: [Buildroot] BR-2014.05 Arm Config
+Message-ID: <20140605163451.4af6d6d5@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 6/5/2014 1:21 PM, Peter Korsgaard wrote:
->>>>>> "Dan" == Dan Pattison <dan.pattison@ethertek.ca> writes:
->   > Hello,
->   > I am using the post image script feature to compile and install
->   > various custom packages. In my shell and make files I want to make the
->   > ouput show the various stages of package installation like buildroot
->   > does with text that has a highlighted back ground. This helps in
->   > debugging to see where certain programs start their build process.
->
->   > For instance, when the post-image script fires it outputs the line
->   > below with a highlighted back ground that is easy to spot.
->   >>>> Executing post-image script board/ethertek/ws/post-build.sh
->
->   > I tried the line below in my own post-build.sh, but get a command not
->   > found error.
->   > $(call MESSAGE,"Building Package FOO");
->
->   > Is it possible to make the call command above work in my own shell
->   > scripts that reside in the board folder? If yes, what do I include to
->   > make that work?
->
-> Not really. MESSAGE is a make macro, so you cannot use it from a shell
-> script.
->
-> But you can take a look at the implementation in package/pkg-utils.mk
-> and create a similar shell function, something like:
->
-> MESSAGE() {
->      tput smso
->      echo ">>> $*"
->      tput rmso
-> }
->
-> MESSAGE hello world
->
-Hello Peter,
+While browsing:
 
-Thanks for the reply. I will try that.
 
-Dan Pattison
-Ethertek Circuits
+I spotted this:
+
+> # for some cores, VFPv4 is optional
+> config BR2_ARM_CPU_MAYBE_HAS_VFPV4
+>         bool
+>         select BR2_ARM_CPU_MAYBE_HAS_VFPV3
+> 
+> config BR2_ARM_CPU_HAS_VFPV4
+>         bool
+>         select BR2_ARM_CPU_HAS_VFPV3
+>
+
+Are those ^^^ '_has_' selections typos?
+Shouldn't they be: *_HAS_VFPV4 ?
+
+Note: 
+Yes, I know that VFPV4 hardware will run VFPV3 code.
+
+Hmm (thinks himself to himself) . . . .
+Changing this might lead to a lot of changes of
+*_HAS_VFPV3 
+into
+*_HAS_VFPV3 || *_HAS_VFPV4
+through-out the configuration system.
+
+But at the moment, it looks like selecting any VFPV4
+specific features is not possible (if there is such a thing).
+
+Mike
