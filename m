@@ -1,35 +1,35 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 05 Jun 2014 21:30:02 +0200
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-In-Reply-To: <20140605191444.GD3553@free.fr> (Yann E. MORIN's message of "Thu, 
- 5 Jun 2014 21:14:44 +0200")
-References: <20131111215435.GC3510@free.fr> <5369F20B.5030903@ozlabs.org>
- <20140601201115.GN3430@free.fr> <538DD7AA.9080604@ozlabs.org>
- <538DD882.1080201@ozlabs.org> <20140605191444.GD3553@free.fr>
-Message-ID: <871tv3nohx.fsf@dell.be.48ers.dk>
+From: Dan Pattison <dan.pattison@ethertek.ca>
+Date: Thu, 05 Jun 2014 12:27:24 -0700
+Subject: [Buildroot] Build Output
+Message-ID: <5390C49C.9080209@ethertek.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > Jeremy, All,
- > On 2014-06-03 22:15 +0800, Jeremy Kerr spake thusly:
- >> > I've just rolled out the initial code to patchwork.ozlabs.org. The tag
- >> > counts are all at zero to start with; I've triggered a re-parse of all
- >> > of the existing comments, so the counts should reflect reality when that
- >> > process finishes.
- >> 
- >> On second thoughts, I've disabled the display of the counts until the
- >> update is complete, so we don't have false info in the UI in the
- >> meantime. I'll re-enable once that's done.
+I am using the post image script feature to compile and install various 
+custom packages. In my shell and make files I want to make the ouput 
+show the various stages of package installation like buildroot does with 
+text that has a highlighted back ground. This helps in debugging to see 
+where certain programs start their build process.
 
- > For those not checking their web UI: the A/R/T status is now visible in
- > the web UI!
+For instance, when the post-image script fires it outputs the line below 
+with a highlighted back ground that is easy to spot.
+ >>>   Executing post-image script board/ethertek/ws/post-build.sh
 
-Great, thanks all!
+I tried the line below in my own post-build.sh, but get a command not 
+found error.
+$(call MESSAGE,"Building Package FOO");
+
+Is it possible to make the call command above work in my own shell 
+scripts that reside in the board folder? If yes, what do I include to 
+make that work?
+
+Thank you,
 
 -- 
-Bye, Peter Korsgaard
+Dan Pattison
+Ethertek Circuits
