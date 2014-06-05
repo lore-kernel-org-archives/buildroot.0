@@ -1,35 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 5 Jun 2014 21:26:30 +0200
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.1h
-Message-ID: <20140605201506.BDC6999C9B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu,  5 Jun 2014 20:15:54 +0000 (UTC)
+Subject: [Buildroot] [Bug 7166] hostapd: segfault when using RT5370
+In-Reply-To: <bug-7166-163@https.bugs.busybox.net/>
+References: <bug-7166-163@https.bugs.busybox.net/>
+Message-ID: <20140605201554.A0D119CEB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e00a5e3a941a462900a7356a64e8a4413f1e364
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=7166
 
-Fixes CVE-2014-0224, CVE-2014-0221, CVE-2014-0195, CVE-2014-0198 among others.
-See https://www.openssl.org/news/secadv_20140605.txt for details.
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> 2014-06-05 20:15:54 UTC ---
+Great to hear. Notice that we have now moved to the recently released 2.2
+version in git:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/openssl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+http://git.buildroot.net/buildroot/commit/?id=b912fff5500653856697cf8d339e
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 87bc2ef..743ca52 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.1g
-+OPENSSL_VERSION = 1.0.1h
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
