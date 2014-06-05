@@ -1,34 +1,32 @@
-From: psnsilva <psnsilva.stuff+nabble@gmail.com>
-Date: Thu, 5 Jun 2014 03:25:33 -0700 (PDT)
-Subject: [Buildroot] Check root file system at boot time
-In-Reply-To: <20140604170914.GA3325@free.fr>
-References: <1401897756168-71600.post@n4.nabble.com>
- <20140604170914.GA3325@free.fr>
-Message-ID: <1401963933710-71653.post@n4.nabble.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  5 Jun 2014 07:51:35 -0300
+Subject: [Buildroot] [PATCH] python-bottle: security bump to version 0.12.7
+Message-ID: <1401965495-16738-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-Thank you by your time.
+Fixes CVE-2014-3137.
 
-I usually properly shutdown the rPi triggering "poweroff" or "reboot".
-However, the system I am build is to be installed at an uncontrolled
-environment, where power interruptions can occur.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/python-bottle/python-bottle.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As you say, I would expect that in this case the "filesystem "driver" in the
-kernel" automatically check the file system at boot time, but it's not
-happening. I think I have all the necessary tools (e2fstools) and
-configurations on my systems, but I should be missing something here.
-
-Thank you very much,
-Pedro Silva
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Check-root-file-system-at-boot-time-tp71600p71653.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index 58c51f9..441419e 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BOTTLE_VERSION = 0.11.6
++PYTHON_BOTTLE_VERSION = 0.12.7
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+ PYTHON_BOTTLE_SITE = http://pypi.python.org/packages/source/b/bottle
+ PYTHON_BOTTLE_LICENSE = MIT
+-- 
+1.8.5.5
