@@ -1,24 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu,  5 Jun 2014 20:15:54 +0000 (UTC)
-Subject: [Buildroot] [Bug 7166] hostapd: segfault when using RT5370
-In-Reply-To: <bug-7166-163@https.bugs.busybox.net/>
-References: <bug-7166-163@https.bugs.busybox.net/>
-Message-ID: <20140605201554.A0D119CEB6@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 05 Jun 2014 22:21:21 +0200
+Subject: [Buildroot] Build Output
+In-Reply-To: <5390C49C.9080209@ethertek.ca> (Dan Pattison's message of "Thu,
+ 05 Jun 2014 12:27:24 -0700")
+References: <5390C49C.9080209@ethertek.ca>
+Message-ID: <87ppinm7jy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7166
+>>>>> "Dan" == Dan Pattison <dan.pattison@ethertek.ca> writes:
 
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> 2014-06-05 20:15:54 UTC ---
-Great to hear. Notice that we have now moved to the recently released 2.2
-version in git:
+ > Hello,
+ > I am using the post image script feature to compile and install
+ > various custom packages. In my shell and make files I want to make the
+ > ouput show the various stages of package installation like buildroot
+ > does with text that has a highlighted back ground. This helps in
+ > debugging to see where certain programs start their build process.
 
-http://git.buildroot.net/buildroot/commit/?id=b912fff5500653856697cf8d339e
+ > For instance, when the post-image script fires it outputs the line
+ > below with a highlighted back ground that is easy to spot.
+ >>>> Executing post-image script board/ethertek/ws/post-build.sh
+
+ > I tried the line below in my own post-build.sh, but get a command not
+ > found error.
+ > $(call MESSAGE,"Building Package FOO");
+
+ > Is it possible to make the call command above work in my own shell
+ > scripts that reside in the board folder? If yes, what do I include to
+ > make that work?
+
+Not really. MESSAGE is a make macro, so you cannot use it from a shell
+script.
+
+But you can take a look at the implementation in package/pkg-utils.mk
+and create a similar shell function, something like:
+
+MESSAGE() {
+    tput smso
+    echo ">>> $*"
+    tput rmso
+}
+
+MESSAGE hello world
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
