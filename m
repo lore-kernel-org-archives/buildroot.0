@@ -1,33 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 5 Jun 2014 21:14:44 +0200
-Subject: [Buildroot] Make Acked/Reviewd/Tested-by tags visible
-In-Reply-To: <538DD882.1080201@ozlabs.org>
-References: <20131111215435.GC3510@free.fr> <5369F20B.5030903@ozlabs.org>
- <20140601201115.GN3430@free.fr> <538DD7AA.9080604@ozlabs.org>
- <538DD882.1080201@ozlabs.org>
-Message-ID: <20140605191444.GD3553@free.fr>
+Date: Thu, 5 Jun 2014 21:21:13 +0200
+Subject: [Buildroot] Check root file system at boot time
+In-Reply-To: <1401963933710-71653.post@n4.nabble.com>
+References: <1401897756168-71600.post@n4.nabble.com>
+ <20140604170914.GA3325@free.fr>
+ <1401963933710-71653.post@n4.nabble.com>
+Message-ID: <20140605192113.GE3553@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, All,
+Pedro, All,
 
-On 2014-06-03 22:15 +0800, Jeremy Kerr spake thusly:
-> > I've just rolled out the initial code to patchwork.ozlabs.org. The tag
-> > counts are all at zero to start with; I've triggered a re-parse of all
-> > of the existing comments, so the counts should reflect reality when that
-> > process finishes.
-> 
-> On second thoughts, I've disabled the display of the counts until the
-> update is complete, so we don't have false info in the UI in the
-> meantime. I'll re-enable once that's done.
+On 2014-06-05 03:25 -0700, psnsilva spake thusly:
+> I usually properly shutdown the rPi triggering "poweroff" or "reboot".
+> However, the system I am build is to be installed at an uncontrolled
+> environment, where power interruptions can occur.
 
-For those not checking their web UI: the A/R/T status is now visible in
-the web UI!
+Ah, then that makes sense.
 
-Thanks Jeremy!
+> As you say, I would expect that in this case the "filesystem "driver" in the
+> kernel" automatically check the file system at boot time, but it's not
+> happening.
+
+Check your dmesg for messages like "recovery required on readonly
+filesystem".
+
+These mean that recovery on the filesystem is indeed happening.
+
+> I think I have all the necessary tools (e2fstools) and
+> configurations on my systems, but I should be missing something here.
+
+As I said, you can't really do an fscp pass on a mounted filesystem. You
+may be able to do so on a filesystem mounted read-only, but then you'd
+have to reboot after fixing the filesystem.
+
+An alternate solution would be to boot into an initramfs, that would be
+responsible for checking the root filesystem, and then pivotroot-ing
+into it.
+
+But that will need some additional work on your side, since that not the
+standrrd boot process of Buildroot-generated systems.
 
 Regards,
 Yann E. MORIN.
