@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 5 Jun 2014 22:39:28 +0200
-Subject: [Buildroot] Build Output
-In-Reply-To: <5390C49C.9080209@ethertek.ca>
-References: <5390C49C.9080209@ethertek.ca>
-Message-ID: <20140605223928.3794a407@free-electrons.com>
+Date: Thu, 5 Jun 2014 22:42:22 +0200
+Subject: [Buildroot] autoconf caching
+In-Reply-To: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+Message-ID: <20140605224222.0184a9b7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dan Pattison,
+Dear Dallas Clement,
 
-On Thu, 05 Jun 2014 12:27:24 -0700, Dan Pattison wrote:
+On Thu, 5 Jun 2014 11:34:41 -0500, Dallas Clement wrote:
 
-> I am using the post image script feature to compile and install various 
-> custom packages. In my shell and make files I want to make the ouput 
+> I'm getting killed by autoconf.  My builds take 1.5 hours even with ccache
+> turned on.  Most of the cores in my very impressive build machine are
 
-Why don't you create additional Buildroot packages instead? That would
-be a lot more logical that doing this in a post-image script.
+Could you post the build-time.log file of your build, and the .config
+file you're using? What are the specifications of your build machine?
+Do you build inside a virtual machine ? Do you build over NFS ?
 
 Thomas
 -- 
