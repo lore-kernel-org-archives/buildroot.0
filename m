@@ -1,69 +1,52 @@
-From: Dallas Clement <dallas.a.clement@gmail.com>
-Date: Fri, 6 Jun 2014 11:14:15 -0500
-Subject: [Buildroot] autoconf caching
-In-Reply-To: <20140606091548.53f07f90@free-electrons.com>
-References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
- <20140605224222.0184a9b7@free-electrons.com>
- <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
- <20140606091548.53f07f90@free-electrons.com>
-Message-ID: <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 6 Jun 2014 18:15:22 +0200
+Subject: [Buildroot] [PATCH 06/26] package/tzdata: bump version for some
+	new timezones
+In-Reply-To: <87ha3ymhg8.fsf@dell.be.48ers.dk>
+References: <cover.1401656581.git.yann.morin.1998@free.fr>
+ <65531c070eb1214153e3a95b1bf837898af67448.1401656581.git.yann.morin.1998@free.fr>
+ <87ha3ymhg8.fsf@dell.be.48ers.dk>
+Message-ID: <20140606161522.GA3481@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 6, 2014 at 2:15 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+Peter, All,
 
-> Dear Dallas Clement,
->
-> On Thu, 5 Jun 2014 17:06:48 -0500, Dallas Clement wrote:
->
-> > You bet.  Please see attached.  I'm in the process of fully upgrading
-> over
-> > to latest buildroot / master from 2012.08 so there is probably still some
-> > deprecated stuff in my .config.
->
-> There is another thing that strikes out in your configuration: there
-> are many packages that we don't have in Buildroot, and that don't seem
-> to be specific to your company or project. What about submitting your
-> new packages upstream?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
+On 2014-06-06 12:59 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  > A few adjustments here and there, plus re-definition
+>  > of the Crimea timezone.
+> 
+>  > New definition for the moment the Big-Bang occured, too. :-)
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> While reading lwn.net, I noticed this:
+> 
+> https://bugzilla.gnome.org/show_bug.cgi?id=730332
+> 
+> Have you noticed isses with glib-based programs?
 
-Hi Thomas.  Thanks very much for looking at my configuration.  I think you
-certainly nailed it.
-I have a lot of packages, and perl and mysql especially are taking a long
-time.  My build recipes
-for both of these are a year or two out of date.  In fact, my perl recipe
-is still using qemu to build
-instead of perl cross.  Hopefully updating this recipe will help some,
-though as you pointed out
-it is still using MAKE1.
+No, the only application I'm currently using that displays a user-facing
+clock is XBMC, which does not seem to use glib to handle the time.
 
-> Seems a fairly decent setup. You have enough RAM, and a good storage
-> system (ideally based on SSDs) ?
+> Do we need to patch glib?
 
-Yep, very speedy SSDs and 64 GB for RAM.  Because of all the serialization
-in this build process,
-building from a large ram disk seems to make little difference.
+I'll have a look at the two patches proposed in the PR you referenced
+above.
 
-> There is another thing that strikes out in your configuration: there
-> are many packages that we don't have in Buildroot, and that don't seem
-> to be specific to your company or project. What about submitting your
-> new packages upstream?
+Regards,
+Yann E. MORIN.
 
-Yes, I can certainly do that.  There's a lot here.  Much of it is obscure.
-Please let me know which ones you are most
-interested in.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140606/8122b93f/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
