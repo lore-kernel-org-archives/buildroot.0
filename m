@@ -1,29 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  6 Jun 2014 16:45:03 +0200
-Subject: [Buildroot] [PATCH 1/1] fetchmail: Update project URL after
-	shutdown of berlios.de
-Message-ID: <1402065903-2779-1-git-send-email-bernd.kuhls@t-online.de>
+From: Massimo Callegari <massimocallegari@yahoo.it>
+Date: Fri, 6 Jun 2014 16:16:13 +0100 (BST)
+Subject: [Buildroot] Patch: qt5webkitexamples
+Message-ID: <1402067773.64897.YahooMailNeo@web172303.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi, attached a patch that adds the missing qt5 webkit examples module.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fetchmail/Config.in |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+One thing though. Have you ever considered migrating to GitHub ?
+Submitting patches via email is, in my opinion, extremely inefficient and can lead to human errors.
 
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-index 3419821..1eb0359 100644
---- a/package/fetchmail/Config.in
-+++ b/package/fetchmail/Config.in
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_FETCHMAIL
- 	  Fetchmail - the mail-retrieval daemon
- 	  Client daemon to move mail from POP and IMAP to your local computer
- 
--	  http://sourceforge.net/projects/fetchmail/
-+	  http://www.fetchmail.info/
--- 
-1.7.10.4
+GitHub, on the other hand, encourages open source communities and reduce errors to the minimum.
+
+Cheers,
+Massimo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140606/7f065171/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: qt5webkitexamples.patch
+Type: text/x-patch
+Size: 2963 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140606/7f065171/attachment.bin>
