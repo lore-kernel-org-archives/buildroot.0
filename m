@@ -1,76 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 Jun 2014 23:23:40 +0200
-Subject: [Buildroot] [PATCH 2 of 7 v3] infra: add comment describing
- single/double dollar-sign rules
-In-Reply-To: <c09add9a59c5afc09926.1402085578@localhost>
-References: <patchbomb.1402085576@localhost>
- <c09add9a59c5afc09926.1402085578@localhost>
-Message-ID: <20140606212340.GF3481@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 07 Jun 2014 00:13:10 +0200
+Subject: [Buildroot] [PATCH] Remove user "default"
+In-Reply-To: <1401957050-24705-1-git-send-email-sho@relinux.de> (Stephan
+ Hoffmann's message of "Thu, 5 Jun 2014 10:30:50 +0200")
+References: <1401957050-24705-1-git-send-email-sho@relinux.de>
+Message-ID: <87d2eln0uh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
 
-On 2014-06-06 22:12 +0200, Thomas De Schampheleire spake thusly:
-> As the rules with respect to variable and function references and the need
-> for single or double dollar signs are not trivial, add a comment in
-> pkg-generic.mk describing them.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+ > User "default" with no password has been around for long time, but not
+ > used within buildroot. Since we now have BR2_ROOTFS_USERS_TABLES it is
+ > no longer needed.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: Stephan Hoffmann <sho@relinux.de>
 
-Regards,
-Yann E. MORIN.
-
-> ---
-> v3: expand exception for pkgdir and pkgname
-> v2: clarify exception for pkgdir and pkgname
-> 
->  package/pkg-generic.mk |  23 +++++++++++++++++++++++
->  1 files changed, 23 insertions(+), 0 deletions(-)
-> 
-> diff -r b1861ead4977 -r c09add9a59c5 package/pkg-generic.mk
-> --- a/package/pkg-generic.mk	Thu May 08 21:53:48 2014 +0200
-> +++ b/package/pkg-generic.mk	Sat May 10 10:04:45 2014 +0200
-> @@ -269,6 +269,29 @@
->  #  argument 3 is the uppercase package name, without the HOST_ prefix
->  #             for host packages
->  #  argument 4 is the type (target or host)
-> +#
-> +# Note about variable and function references: inside all blocks that are
-> +# evaluated with $(eval), which includes all 'inner-xxx-package' blocks,
-> +# specific rules apply with respect to variable and function references.
-> +# - Numbered variables (parameters to the block) can be referenced with a single
-> +#   dollar sign: $(1), $(2), $(3), etc.
-> +# - pkgdir and pkgname should be referenced with a single dollar sign too. These
-> +#   functions rely on 'the most recently parsed makefile' which is supposed to
-> +#   be the package .mk file. If we defer the evaluation of these functions using
-> +#   double dollar signs, then they may be evaluated too late, when other
-> +#   makefiles have already been parsed. One specific case is when $$(pkgdir) is
-> +#   assigned to a variable using deferred evaluation with '=' and this variable
-> +#   is used in a target rule outside the eval'ed inner block. In this case, the
-> +#   pkgdir will be that of the last makefile parsed by buildroot, which is not
-> +#   the expected value. This mechanism is for example used for the TARGET_PATCH
-> +#   rule.
-> +# - All other variables should be referenced with a double dollar sign:
-> +#   $$(TARGET_DIR), $$($(2)_VERSION), etc. Also all make functions should be
-> +#   referenced with a double dollar sign: $$(subst), $$(call), $$(filter-out),
-> +#   etc. This rule ensures that these variables and functions are only expanded
-> +#   during the $(eval) step, and not earlier. Otherwise, unintuitive and
-> +#   undesired behavior occurs with respect to these variables and functions.
-> +#
->  ################################################################################
->  
->  define inner-generic-package
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
