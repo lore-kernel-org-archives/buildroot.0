@@ -1,51 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 6 Jun 2014 21:47:32 +0200
-Subject: [Buildroot] [PATCH 1/5] pth: new package
-In-Reply-To: <1402062269-57018-2-git-send-email-Vincent.Riera@imgtec.com>
-References: <1402062269-57018-1-git-send-email-Vincent.Riera@imgtec.com>
- <1402062269-57018-2-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140606214732.268997d1@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 06 Jun 2014 22:12:56 +0200
+Subject: [Buildroot] [PATCH 0 of 7 v3] infra: fix dollar signs;
+ remove some undefined versions
+Message-ID: <patchbomb.1402085576@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
 
-On Fri, 6 Jun 2014 14:44:25 +0100, Vicente Olivert Riera wrote:
+This patch series fixes the double sign problem in the inner-xxx-targets
+(see description in the patch itself), and makes the following semi-related
+changes:
+- convert toolchain and toolchain-buildroot package to virtual-package
+- change toolchain-external package to have a virtual version
+- change makedevs and mkpasswd to have a 'buildroot' version
 
-> diff --git a/package/pth/Config.in b/package/pth/Config.in
-> new file mode 100644
-> index 0000000..54bb34c
-> --- /dev/null
-> +++ b/package/pth/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PTH
-> +	bool "pth"
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> +	help
-> +	  GNU Pth - The GNU Portable Threads
-> +
-> +	  http://www.gnu.org/software/pth/
+The changes are related in the sense that the double dollar signs were
+needed to correctly implement the subsequent patches.
 
-We already have a pthsem package, which claims in its description:
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-config BR2_PACKAGE_LIBPTHSEM
-        bool "libpthsem"
-        depends on BR2_USE_MMU # fork()
-        select BR2_PACKAGE_ARGP_STANDALONE
-        help
-          GNU pth is a user mode multi threading library. pthsem is an extend
-          version, with support for semaphores added.
-
-Do you know if pthsem could be used instead of pth for gnupg, or if pth
-and pthsem would conflict with each other?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+---
+v3: rebase and implement comments on first patch
+v2: increase consistency of rules (first two patches)
