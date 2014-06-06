@@ -1,27 +1,37 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 06 Jun 2014 22:12:59 +0200
-Subject: [Buildroot] [PATCH 3 of 7 v3] pkg-virtual: simplify definition of
- FOO_VERSION to 'virtual'
+Date: Fri, 06 Jun 2014 22:13:00 +0200
+Subject: [Buildroot] [PATCH 4 of 7 v3] toolchain/toolchain-buildroot:
+ migrate to virtual package infrastructure
 In-Reply-To: <patchbomb.1402085576@localhost>
 References: <patchbomb.1402085576@localhost>
-Message-ID: <b3ada349b3a1113ef0f5.1402085579@localhost>
+Message-ID: <58ea2200cf19b356f9d9.1402085580@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As mentioned in the e-mail accompanying the introduction of the pkg-virtual
-infrastructure [1], the definition of FOO_VERSION is 'strange'.
+This patch migrates the toolchain and toolchain-buildroot packages to the
+virtual package infrastructure, causing the log messages to change from:
 
-After the cleanup of single/double dollar signs in inner-generic-package,
-the special construction in pkg-virtual is no longer needed and can be
-simplified.
+>>> toolchain undefined Downloading
+>>> toolchain undefined Extracting
+...
+
+to
+
+>>> toolchain virtual Downloading
+>>> toolchain virtual Extracting
+...
+
+and similar for 'toolchain-buildroot', simply because it looks nicer.
+
+At the same time, the directory names also become toolchain-virtual,
+toolchain-buildroot-virtual instead of the corresponding 'undefined'
+variants.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-April/093670.html
 
 ---
 v3: no changes
@@ -30,19 +40,45 @@ v2: no changes
 Note: this patch should only be applied when the first patch in this series
 is.
 
- package/pkg-virtual.mk |  3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ toolchain/toolchain-buildroot/toolchain-buildroot.mk |  4 +---
+ toolchain/toolchain/toolchain.mk                     |  4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff -r c09add9a59c5 -r b3ada349b3a1 package/pkg-virtual.mk
---- a/package/pkg-virtual.mk	Sat May 10 10:04:45 2014 +0200
-+++ b/package/pkg-virtual.mk	Sun May 11 10:32:44 2014 +0200
-@@ -45,8 +45,7 @@
- $(2)_SOURCE =
+diff -r b3ada349b3a1 -r 58ea2200cf19 toolchain/toolchain-buildroot/toolchain-buildroot.mk
+--- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk	Sun May 11 10:32:44 2014 +0200
++++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk	Tue May 06 09:36:14 2014 +0200
+@@ -4,8 +4,6 @@
+ #
+ ################################################################################
  
- # Fake a version string, so it looks nicer in the build log
--$(3)_VERSION = virtual
--HOST_$(3)_VERSION = virtual
-+$(2)_VERSION = virtual
+-TOOLCHAIN_BUILDROOT_SOURCE =
+-
+ BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
  
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES
+ # Triggering the build of the host-gcc-final will automatically do the
+@@ -16,4 +14,4 @@
+ 
+ TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+-$(eval $(generic-package))
++$(eval $(virtual-package))
+diff -r b3ada349b3a1 -r 58ea2200cf19 toolchain/toolchain/toolchain.mk
+--- a/toolchain/toolchain/toolchain.mk	Sun May 11 10:32:44 2014 +0200
++++ b/toolchain/toolchain/toolchain.mk	Tue May 06 09:36:14 2014 +0200
+@@ -4,8 +4,6 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_SOURCE =
+-
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+@@ -14,6 +12,6 @@
+ 
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+-$(eval $(generic-package))
++$(eval $(virtual-package))
+ 
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
