@@ -1,60 +1,48 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 06 Jun 2014 12:59:51 +0200
-Subject: [Buildroot] [PATCH 06/26] package/tzdata: bump version for some
-	new timezones
-In-Reply-To: <65531c070eb1214153e3a95b1bf837898af67448.1401656581.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:03:30 +0200")
-References: <cover.1401656581.git.yann.morin.1998@free.fr>
- <65531c070eb1214153e3a95b1bf837898af67448.1401656581.git.yann.morin.1998@free.fr>
-Message-ID: <87ha3ymhg8.fsf@dell.be.48ers.dk>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 Jun 2014 14:44:24 +0100
+Subject: [Buildroot] [PATCH 0/5] Add support for gnupg2
+Message-ID: <1402062269-57018-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+This series of patches add support for gnupg2 by adding the gnupg2 
+package. The pth and libksba packages are added because they are direct 
+dependencies of gnupg2.
+It also makes gnupg and gnupg2 mutual exclusive because they can't be 
+installed at the same time due to file collisions.
+And it also add support for pinentry by adding this package to make the 
+gnupg and gnupg2 packages more useful. Right now we can't even generate 
+a key with "gpg --gen-key" because there isn't a pinentry program to ask 
+for a passphrase.
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > A few adjustments here and there, plus re-definition
- > of the Crimea timezone.
+Vicente Olivert Riera (5):
+  pth: new package
+  libksba: new package
+  gnupg2: new package
+  gnupg: Make gnupg and gnupg2 mutual exclusive
+  pinentry: new package
 
- > New definition for the moment the Big-Bang occured, too. :-)
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-While reading lwn.net, I noticed this:
-
-https://bugzilla.gnome.org/show_bug.cgi?id=730332
-
-Have you noticed isses with glib-based programs? Do we need to patch
-glib?
-
- > ---
- >  package/tzdata/tzdata.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
-
- > diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
- > index 58b5f13..4f86289 100644
- > --- a/package/tzdata/tzdata.mk
- > +++ b/package/tzdata/tzdata.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -TZDATA_VERSION = 2014a
- > +TZDATA_VERSION = 2014d
- >  TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- >  TZDATA_SITE = ftp://ftp.iana.org/tz/releases
- >  TZDATA_DEPENDENCIES = host-zic
- > -- 
- > 1.8.3.2
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+ package/Config.in                               |    4 +
+ package/gnupg/Config.in                         |    1 +
+ package/gnupg2/Config.in                        |   39 ++++++++++++
+ package/gnupg2/gnupg2.mk                        |   27 ++++++++
+ package/libksba/Config.in                       |    7 ++
+ package/libksba/libksba.mk                      |   16 +++++
+ package/pinentry/Config.in                      |   53 ++++++++++++++++
+ package/pinentry/pinentry.mk                    |   47 ++++++++++++++
+ package/pth/Config.in                           |   10 +++
+ package/pth/pth-001-disable-documentation.patch |   74 +++++++++++++++++++++++
+ package/pth/pth.mk                              |   28 +++++++++
+ 11 files changed, 306 insertions(+), 0 deletions(-)
+ create mode 100644 package/gnupg2/Config.in
+ create mode 100644 package/gnupg2/gnupg2.mk
+ create mode 100644 package/libksba/Config.in
+ create mode 100644 package/libksba/libksba.mk
+ create mode 100644 package/pinentry/Config.in
+ create mode 100644 package/pinentry/pinentry.mk
+ create mode 100644 package/pth/Config.in
+ create mode 100644 package/pth/pth-001-disable-documentation.patch
+ create mode 100644 package/pth/pth.mk
