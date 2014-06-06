@@ -1,33 +1,39 @@
-From: Sven Neumann <neumann@teufel.de>
-Date: Fri,  6 Jun 2014 10:16:23 +0200
-Subject: [Buildroot] [PATCH] wpa_supplicant: fix
-	BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG option
-Message-ID: <1402042583-13595-1-git-send-email-neumann@teufel.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri,  6 Jun 2014 11:05:57 +0200
+Subject: [Buildroot] [PATCH] barebox: bump to version 2014.06.0
+Message-ID: <1402045557-23699-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Neumann <neumann@teufel.de>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ boot/barebox/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 920f96a..c704809 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -117,9 +117,7 @@ endef
- endif
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index b09aa20..3fb7600 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
--define WPA_SUPPLICANT_DEBUG_CONFIG
--	$(SED) 's/\(#\)\(CONFIG_DEBUG_SYSLOG.*\)/\2/' $(WPA_SUPPLICANT_CONFIG)
--endef
-+	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_SYSLOG
- endif
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2014.05.0"
++	bool "2014.06.0"
  
- define WPA_SUPPLICANT_CONFIGURE_CMDS
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2014.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.06.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
 -- 
 1.9.1
