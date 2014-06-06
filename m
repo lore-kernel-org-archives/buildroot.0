@@ -1,80 +1,60 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Fri,  6 Jun 2014 13:56:24 +0400
-Subject: [Buildroot] [PATCH] binutils: arc: Fix native binutils build failure
-Message-ID: <1402048584-19658-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 06 Jun 2014 12:59:51 +0200
+Subject: [Buildroot] [PATCH 06/26] package/tzdata: bump version for some
+	new timezones
+In-Reply-To: <65531c070eb1214153e3a95b1bf837898af67448.1401656581.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Sun, 1 Jun 2014 23:03:30 +0200")
+References: <cover.1401656581.git.yann.morin.1998@free.fr>
+ <65531c070eb1214153e3a95b1bf837898af67448.1401656581.git.yann.morin.1998@free.fr>
+Message-ID: <87ha3ymhg8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARC-specific Makefile has been ignoring DESTDIR when doing target "install".
-This has been causing build failure for native binutils, since it was trying
-to install into the host's "/usr". This commit adds a patch that teaches
-Makefile to honor DESTDIR. This patch should be removed after ARC Binutils
-will be bumped to next release.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-This fixes:
-http://autobuild.buildroot.net/results/68ee094509db3e8fbedf9bab5745ff68cdfe0a84/
+ > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > A few adjustments here and there, plus re-definition
+ > of the Crimea timezone.
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
----
- ...0001-arc-Honor-DESTDIR-in-custom-Makefile.patch | 47 ++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
- create mode 100644 package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch
+ > New definition for the moment the Big-Bang occured, too. :-)
 
-diff --git a/package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch b/package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch
-new file mode 100644
-index 0000000..9895a3f
---- /dev/null
-+++ b/package/binutils/arc-4.8-R3/0001-arc-Honor-DESTDIR-in-custom-Makefile.patch
-@@ -0,0 +1,47 @@
-+From e2b7b635c28915d59cb3c1b47f8e79401e1e6c46 Mon Sep 17 00:00:00 2001
-+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-+Date: Fri, 6 Jun 2014 12:58:45 +0400
-+Subject: [PATCH] arc: Honor DESTDIR in custom Makefile
-+
-+Installing native binutils in Buildroot faile, because `prefix` is /usr, and
-+proper installation path on host is achieved via usage of DESTDIR variable.
-+Homegrown ARC Makefile was ignoring this variable and therefour it was
-+trying to install files into /usr/extlib, when doing native binutils build.
-+This patch teaches our Makefile to honor DESTDIR.
-+
-+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-+---
-+ gas/ChangeLog.ARC             | 4 ++++
-+ gas/config/extlib/Makefile.in | 4 ++--
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/gas/ChangeLog.ARC b/gas/ChangeLog.ARC
-+index 42a386f..80aedb5 100644
-+--- a/gas/ChangeLog.ARC
-++++ b/gas/ChangeLog.ARC
-+@@ -1,3 +1,7 @@
-++2014-06-06 Anton Kolesov  <Anton Kolesov@synopsys.com>
-++
-++	* config/extlib/Makefile.in: Honor DESTDIR.
-++
-+ 2014-03-20 Claudiu Zissulescu <claziss@synopsys.com>
-+ 
-+         * config/tc-arc.c (arc_extoper): Allow negative value when
-+diff --git a/gas/config/extlib/Makefile.in b/gas/config/extlib/Makefile.in
-+index 75e6a82..35232ea 100644
-+--- a/gas/config/extlib/Makefile.in
-++++ b/gas/config/extlib/Makefile.in
-+@@ -1,8 +1,8 @@
-+ all:
-+ 	-install @srcdir@/*.s .
-+ install:
-+-	install -d @prefix@/extlib
-+-	install @srcdir@/*.s @prefix@/extlib
-++	install -d $(DESTDIR)@prefix@/extlib
-++	install @srcdir@/*.s $(DESTDIR)@prefix@/extlib
-+ 
-+ check:
-+ clean:
-+-- 
-+1.8.4.1
-+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+While reading lwn.net, I noticed this:
+
+https://bugzilla.gnome.org/show_bug.cgi?id=730332
+
+Have you noticed isses with glib-based programs? Do we need to patch
+glib?
+
+ > ---
+ >  package/tzdata/tzdata.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+ > index 58b5f13..4f86289 100644
+ > --- a/package/tzdata/tzdata.mk
+ > +++ b/package/tzdata/tzdata.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -TZDATA_VERSION = 2014a
+ > +TZDATA_VERSION = 2014d
+ >  TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ >  TZDATA_SITE = ftp://ftp.iana.org/tz/releases
+ >  TZDATA_DEPENDENCIES = host-zic
+ > -- 
+ > 1.8.3.2
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-1.8.4.1
+Bye, Peter Korsgaard
