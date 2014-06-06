@@ -1,40 +1,81 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Fri, 6 Jun 2014 11:31:48 -0500
-Subject: [Buildroot] autoconf caching
-In-Reply-To: <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
-References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
- <20140605224222.0184a9b7@free-electrons.com>
- <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
- <20140606091548.53f07f90@free-electrons.com>
- <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
-Message-ID: <20140606113148.464ff3c8@core2quad.morethan.org>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 6 Jun 2014 17:34:53 +0100
+Subject: [Buildroot] [PATCH 3/5] gnupg2: new package
+In-Reply-To: <k2096bxgbf.ln2@ID-313208.user.individual.net>
+References: <1402062269-57018-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1402062269-57018-4-git-send-email-Vincent.Riera@imgtec.com>
+ <k2096bxgbf.ln2@ID-313208.user.individual.net>
+Message-ID: <5391EDAD.6070908@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 6 Jun 2014 11:14:15 -0500
-Dallas Clement <dallas.a.clement@gmail.com> wrote:
+On 06/06/2014 03:33 PM, Bernd Kuhls wrote:
+> Vicente Olivert Riera
+> <Vincent.Riera@imgtec.com> wrote in
+> news:1402062269-57018-4-git-send-email-Vincent.Riera at imgtec.com:
+>
+>> +     select BR2_PACKAGE_PTH
+>> +     depends on !BR2_TOOLCHAIN_USES_UCLIBC # pth
+>
+> Hi,
 
-> > Seems a fairly decent setup. You have enough RAM, and a good storage
-> > system (ideally based on SSDs) ?  
-> 
-> Yep, very speedy SSDs and 64 GB for RAM.  Because of all the
-> serialization in this build process,
-> building from a large ram disk seems to make little difference.
+Hello Bernd, all,
+
+> afaik gnupg2 is compatible with uclibc if you use the existing libpthsem
+> package instead of your new pth package.
+
+no, it doesn't build (as is) using libpthsem. Here is why:
+
+First, because it looks for pth-config, which is installed by pth. 
+libpthsem installs pthsem-config.
+
+Second, although you try to make a pth-config symlink pointing to 
+pthsem-config, it will fail again because "pthsem-config --version" 
+outputs the version in a different format than pth-config, so the pth 
+version check in gnupg2's configure script will fail.
+
+Third, although you make a copy of pthsem-config calling it pth-config, 
+and you modify it to output the version in the same way as the original 
+pth-config does, it will fail again because it also looks for pth.h 
+which is installed by pth. pthsem installs pthsem.h.
+
+Now, if you make a pth.h symlink pointing to pthsem.h, then it builds fine.
+
+To summarize: if you want to build gnupg2 using libpthsem instead of 
+pth, you will need to patch libpthsem package to install a compatibility 
+pth-config script (just a copy with the --version modification) and a 
+compatibility pth.h symlink.
+
+So, we have three options here and we need to decide one of them:
+
+Option 1: add the new pth package
+   pros: -there is no need to patch libpthsem
+   cons: -gnupg2 will not work with uclibc
+
+Option 2: patch the libpthsem package
+   pros: -no need to add pth package
+         -gnupg2 will work with uclibc
+   cons: -we need to patch libpthsem to install compatibility stuff
+
+Option 3: patch gnupg2 to use libpthsem in case of pth is missing
+   pros: -no need to add pth package
+         -gnupg2 will work with uclibc
+         -gnupg2 will work with both libpthsem and pth
+   cons: -patching gnupg2 source code should be accepted upstream
+
+Let's vote! :)
+
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
-Having 7 of your 8 cores sitting in their idle loop is probably your
-#1 thing to address. . . .
 
-With a very large selection of packages, perhaps you could split them
-into several (8, 9?) Buildroot trees.
-Then run those buildroot instances as jobs at the same time.
-
-Or...
-
-At least pull the really big time consumers out, into their own BR
-instance, and use your idle cores on those.
-
-Mike
+-- 
+Vincent
