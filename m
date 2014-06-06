@@ -1,66 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Jun 2014 00:06:31 +0200
-Subject: [Buildroot] [git commit] Remove user "default"
-Message-ID: <20140606221344.7D33C9C49F@busybox.osuosl.org>
+Date: Sat, 7 Jun 2014 00:00:16 +0200
+Subject: [Buildroot] [git commit] avahi: run as avahi user/group instead of
+	default
+Message-ID: <20140606221344.749FD9CE9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b4f6274585d3fa63502f52997f715be0a1dbd08f
+commit: http://git.buildroot.net/buildroot/commit/?id=d3ccfa362b21394d15b2cccc2636a0cb0ef87832
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-User "default" with no password has been around for long time, but not
-used within buildroot. Since we now have BR2_ROOTFS_USERS_TABLES it is
-no longer needed.
+Create an avahi specific user/group and use it instead of the global
+'default' one, so it can be removed.
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- system/device_table.txt    |    1 -
- system/skeleton/etc/group  |    1 -
- system/skeleton/etc/passwd |    1 -
- system/skeleton/etc/shadow |    1 -
- 4 files changed, 0 insertions(+), 4 deletions(-)
+ package/avahi/avahi.mk |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/system/device_table.txt b/system/device_table.txt
-index 7ae4b07..e15412d 100644
---- a/system/device_table.txt
-+++ b/system/device_table.txt
-@@ -10,7 +10,6 @@
- /tmp					d	1777	0	0	-	-	-	-	-
- /etc					d	755	0	0	-	-	-	-	-
- /root					d	700	0	0	-	-	-	-	-
--/home/default				d	755	1000	1000	-	-	-	-	-
- /var/www				d	755	33	33	-	-	-	-	-
- /etc/shadow				f	600	0	0	-	-	-	-	-
- /etc/passwd				f	644	0	0	-	-	-	-	-
-diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
-index 85a1fa2..11d58ac 100644
---- a/system/skeleton/etc/group
-+++ b/system/skeleton/etc/group
-@@ -27,4 +27,3 @@ ftp:x:83
- nobody:x:99:
- nogroup:x:99:
- users:x:100:
--default:x:1000:
-diff --git a/system/skeleton/etc/passwd b/system/skeleton/etc/passwd
-index ed7006a..8696954 100644
---- a/system/skeleton/etc/passwd
-+++ b/system/skeleton/etc/passwd
-@@ -13,4 +13,3 @@ dbus:x:81:81:dbus:/var/run/dbus:/bin/sh
- ftp:x:83:83:ftp:/home/ftp:/bin/sh
- nobody:x:99:99:nobody:/home:/bin/sh
- sshd:x:103:99:Operator:/var:/bin/sh
--default:x:1000:1000:Default non-root user:/home/default:/bin/sh
-diff --git a/system/skeleton/etc/shadow b/system/skeleton/etc/shadow
-index 67b67c1..d5734d7 100644
---- a/system/skeleton/etc/shadow
-+++ b/system/skeleton/etc/shadow
-@@ -10,4 +10,3 @@ uucp:*:10933:0:99999:7:::
- operator:*:10933:0:99999:7:::
- ftp:*:10933:0:99999:7:::
- nobody:*:10933:0:99999:7:::
--default::10933:0:99999:7:::
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 6e84564..725e96b 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -80,10 +80,10 @@ AVAHI_CONF_OPT = --localstatedir=/var \
+ 		--with-distro=none \
+ 		--disable-manpages \
+ 		$(if $(BR2_PACKAGE_AVAHI_AUTOIPD),--enable,--disable)-autoipd \
+-		--with-avahi-user=default \
+-		--with-avahi-group=default \
+-		--with-autoipd-user=default \
+-		--with-autoipd-group=default
++		--with-avahi-user=avahi \
++		--with-avahi-group=avahi \
++		--with-autoipd-user=avahi \
++		--with-autoipd-group=avahi
+ 
+ AVAHI_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-intltool \
+        host-pkgconf host-gettext
+@@ -136,6 +136,10 @@ endif
+ 
+ AVAHI_MAKE_OPT += $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),LIBS=-lintl)
+ 
++define AVAHI_USERS
++	avahi -1 avahi -1 * - - -
++endef
++
+ define AVAHI_REMOVE_INITSCRIPT
+ 	rm -rf $(TARGET_DIR)/etc/init.d/avahi-*
+ endef
