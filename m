@@ -1,46 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 6 Jun 2014 18:51:46 +0200
-Subject: [Buildroot] Check root file system at boot time
-In-Reply-To: <1402072948875-71738.post@n4.nabble.com>
-References: <1401897756168-71600.post@n4.nabble.com>
- <20140604170914.GA3325@free.fr>
- <1401963933710-71653.post@n4.nabble.com>
- <20140605192113.GE3553@free.fr>
- <1402062388810-71727.post@n4.nabble.com>
- <20140606162737.GB3481@free.fr>
- <1402072948875-71738.post@n4.nabble.com>
-Message-ID: <20140606165146.GC3481@free.fr>
+Date: Fri, 6 Jun 2014 19:06:58 +0200
+Subject: [Buildroot] [PATCH 3/5] gnupg2: new package
+In-Reply-To: <5391EDAD.6070908@imgtec.com>
+References: <1402062269-57018-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1402062269-57018-4-git-send-email-Vincent.Riera@imgtec.com>
+ <k2096bxgbf.ln2@ID-313208.user.individual.net>
+ <5391EDAD.6070908@imgtec.com>
+Message-ID: <20140606170658.GD3481@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pedro, All,
+Vincente, All,
 
-On 2014-06-06 09:42 -0700, psnsilva spake thusly:
-> I am generating the ext4 file system within buildroot. What I did here was,
-> after the first boot, to force the check every boot issuing the command
-> "tune2fs -C 2 -c 1 /dev/mmcblk0p2". But seems like I have no need for doing
-> it.
+On 2014-06-06 17:34 +0100, Vicente Olivert Riera spake thusly:
+> On 06/06/2014 03:33 PM, Bernd Kuhls wrote:
+> >afaik gnupg2 is compatible with uclibc if you use the existing libpthsem
+> >package instead of your new pth package.
+> 
+> no, it doesn't build (as is) using libpthsem. Here is why:
+[--SNIP--]
+> So, we have three options here and we need to decide one of them:
+> 
+> Option 1: add the new pth package
+>   pros: -there is no need to patch libpthsem
+>   cons: -gnupg2 will not work with uclibc
+> 
+> Option 2: patch the libpthsem package
+>   pros: -no need to add pth package
+>         -gnupg2 will work with uclibc
+>   cons: -we need to patch libpthsem to install compatibility stuff
+> 
+> Option 3: patch gnupg2 to use libpthsem in case of pth is missing
+>   pros: -no need to add pth package
+>         -gnupg2 will work with uclibc
+>         -gnupg2 will work with both libpthsem and pth
+>   cons: -patching gnupg2 source code should be accepted upstream
 
-Ah, OK. No it is not needed. Upon mounted an uncleanly unmounted
-filesystem, the kernel will (try to) repair it.
+I think option 1 is the best for now.
 
-Note however, that if the filesystem is that badly damaged that the
-kernel can't even repair it, your screwed. fsck might have a better
-chance of fixing the filesystem.
+If Bernd (or anyone else) is interested in making gnupg2 work on uClibc,
+it will be possible for him to apply either option 2 or option 3 later
+on. Adding support for uClibc can (and should) be done in a separate
+patch, anyway.
 
-Really, if you expect the filesystem to be often uncleanly unmounted.
-you should switch to a read-only filesystem for your / mountpoint (eg.
-squashfs). An alternative would be to use a flash-optimised filesystem,
-like jffs2, which is designed to recover from untimely power failures to
-start with. But jffs2 can sit on a block device, you'd need a reverse
-translation layer (eg. blockmtd) to emulate a flash on a block device.
-
-Or, if your filesystem is small enough, put it entirely in an initramfs,
-so it is purely in RAM (and only mount your persistent-data filesystem
-from the SDcard.)
+And whatever the package we patch (pthsem or gnupg2 or both), the patch
+should be submitted upstream, of course! ;-)
 
 Regards,
 Yann E. MORIN.
