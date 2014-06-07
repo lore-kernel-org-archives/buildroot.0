@@ -1,48 +1,74 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:31 +0200
-Subject: [Buildroot] [PATCH v12 31/32] rpi-userland: cleanup *_CONF_OPT
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Jun 2014 14:39:36 +0200
+Subject: [Buildroot] [PATCH v12 00/32] xbmc: bump version to 13.1
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-32-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140607123936.GA3492@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
+Bernd, All,
 
-This change reverts the commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
-because rpi-userland is correctly built whatever the value of the
-BUILD_SHARED_LIBS CMake flags.
+On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
+> the patch series combines my latest patches to bump xbmc.
+[--SNIP--]
+> Bernd Kuhls (28):
+>   xbmc: add host-gettext dependency
+>   xbmc: add host-nasm dependency
+>   xbmc: add host-yasm dependency for MMX/64bit archs
+>   xbmc: add missing egl-related cflags
+>   xbmc: hdmi cec supports needs udev for device scanning
+>   xbmc: bump version to 13.1
+>   xbmc-pvr-addons: bump to a version compatible with XBMC Gotham
+>   xbmc-addon-xvdr: bump to a version compatible with XBMC Gotham
+>   mesa3d: Bump version to 10.2.1, fix xa build
+>   mesa3d: Depend on xorg meta package instead of xserver_xorg-server
+>   mesa3d: add dependency xproto_presentproto
+>   mesa3d: Remove dependency for the libxml2 module of host-python
+>   mesa3d: Add dri3 support
+>   mesa3d: dri2 does not need udev support
+>   libva: new package
+>   libva-intel-driver: new package
+>   ffmpeg: Add libva support
+>   libglu: new package
+>   libglew: new package
+>   sdl: Add new dependency libglu for opengl support
+>   xdriver_xf86-video-intel: Bump version to 2.99.911
+>   xbmc: Allow compilation with uClibc
+>   xbmc: Add alsa support
+>   xbmc: Add lame support
+>   xbmc: Fix TexturePacker compile
+>   xbmc: Add X.org/OpenGL support
+>   xbmc: Add option for Goom screensaver
+>   xbmc: Add VA-API support
+> 
+> Samuel Martin (2):
+>   xbmc: fix missing libraries from rpi-userland
+>   rpi-userland: cleanup *_CONF_OPT
+> 
+> Yann E. MORIN (2):
+>   toolchain: add option to copy the gconv libraries
+>   package/libcec: fix missing libraries from rpi-userland
 
-The cset 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf originally intends to
-fix linkage/runtime failure in xbmc package because of missing flags in
-xbmc LIBS env. var. This has been fixed in the previous patch.
+The last three patches in the series should not be part of the series,
+and should be applied first; besides there's a mising one. They are part
+of another series by Samuel:
+    http://lists.busybox.net/pipermail/buildroot/2014-June/098496.html
+    http://patchwork.ozlabs.org/patch/356127/
+    http://patchwork.ozlabs.org/patch/356128/
+    http://patchwork.ozlabs.org/patch/356129/
+    http://patchwork.ozlabs.org/patch/356130/
 
-So, for rpi-userland package, BUILD_SHARED_LIBS does no longer need to
-be forced to OFF, and can safely be driven by the CMake infrastructure.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 8b225ba..2de6b92 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
- RPI_USERLAND_INSTALL_STAGING = YES
--RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
-+RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
- 
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
- 
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
