@@ -1,52 +1,66 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:30 +0200
-Subject: [Buildroot] [PATCH v12 30/32] xbmc: fix missing libraries from
-	rpi-userland
+Date: Sat,  7 Jun 2014 14:31:07 +0200
+Subject: [Buildroot] [PATCH v12 07/32] xbmc: bump version to 13.1
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-31-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Samuel Martin <s.martin49@gmail.com>
-
-When rpi-userland libraries are built as shared-objects, not all needed
-libraries are passed in the LD_FLAGS, leading to failure at linkage.
-
-To avoid this issue, set the LIBS variable content in accordance with the
-INCLUDES variable value.
-
-The commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf currently works
-around this issue by forcing rpi-userland to be statically linked,
-whereas it is actually a LIBS flags problem in xbmc package.
-
-A follow-up patch fixes rpi-userland package.
-
-Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/xbmc/xbmc.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/xbmc/Config.in |    1 +
+ package/xbmc/xbmc.mk   |    8 +++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 52bf0cd..592fdc1 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBUNGIF
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index ac8b1a0..ae365e8 100644
+index 9f44c34..b9ff001 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -60,7 +60,8 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- XBMC_DEPENDENCIES += rpi-userland
- XBMC_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
- XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
--	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
-+	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
-+	LIBS="-lvcos -lvchostif"
- endif
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_DBUS),y)
+-XBMC_VERSION = 12.3-Frodo
+-XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
++XBMC_VERSION = 13.1-Gotham
++XBMC_SOURCE = $(XBMC_VERSION).tar.gz
++XBMC_SITE = https://github.com/xbmc/xbmc/archive
+ XBMC_LICENSE = GPLv2
+ XBMC_LICENSE_FILES = LICENSE.GPL
+ # XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+@@ -15,7 +16,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+-	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
++	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ 
+ # xbmc at i386 depends on nasm
+@@ -37,6 +38,7 @@ XBMC_CONF_ENV = \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+ 
+ XBMC_CONF_OPT +=  \
++	--with-arch=$(BR2_ARCH) \
+ 	--disable-alsa \
+ 	--disable-crystalhd \
+ 	--disable-debug \
 -- 
 1.7.10.4
