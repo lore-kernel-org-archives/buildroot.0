@@ -1,80 +1,163 @@
-From: Massimo Callegari <massimocallegari@yahoo.it>
-Date: Sat, 7 Jun 2014 11:47:41 +0100 (BST)
-Subject: [Buildroot] Patch: qt5webkitexamples
-In-Reply-To: <20140607122338.33ab44ce@free-electrons.com>
-References: <1402067773.64897.YahooMailNeo@web172303.mail.ir2.yahoo.com>
- <20140607122338.33ab44ce@free-electrons.com>
-Message-ID: <1402138061.2503.YahooMailNeo@web172304.mail.ir2.yahoo.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  7 Jun 2014 14:31:00 +0200
+Subject: [Buildroot] [PATCH v12 00/32] xbmc: bump version to 13.1
+Message-ID: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-then I clearly haven't read the whole guidelines in the BR manual. Apologies for that.
+the patch series combines my latest patches to bump xbmc.
+It also adds uClibc support to xbmc, a mesa3d version bump
+and several new packages to support the new xbmc release
+along with libva to get the best out of Intel systems.
 
-I am totally aware that the patch system this project adopted is working since years. Mine was just a suggestion since I work on a daily basis with GitHub and I find it simply splendid for code review.
-Maybe it's just my impression but the flow "fork -> patch -> pull request" sounds easier than manual git commands where you have to remember the email address of a mailing list (thus human errors...) and where dozens of emails float around every day even to users not interested in a particular topic.
-In my opinion a mailing list should be used only to discuss bugs, ideas and help users. In the current way, users emails risk to get lost into a ton of [PATCH] emails.
-Maybe a ML dedicated to patches could help ?
+The series is compiled-tested using
 
-On GitHub users can add inline comments to a patch and you can even share a URL to a specific line of code !
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_XBMC_AVAHI=y
+BR2_PACKAGE_XBMC_DBUS=y
+BR2_PACKAGE_XBMC_LIBBLURAY=y
+BR2_PACKAGE_XBMC_LIBMICROHTTPD=y
+BR2_PACKAGE_XBMC_LIBNFS=y
+BR2_PACKAGE_XBMC_RTMPDUMP=y
+BR2_PACKAGE_XBMC_LIBSHAIRPLAY=y
+BR2_PACKAGE_XBMC_LIBSMBCLIENT=y
+BR2_PACKAGE_XBMC_LIBTHEORA=y
+BR2_PACKAGE_XBMC_LIBUSB=y
+BR2_PACKAGE_XBMC_WAVPACK=y
+BR2_PACKAGE_XBMC_GOOM=y
+BR2_PACKAGE_XBMC_ADDON_XVDR=y
+BR2_PACKAGE_XBMC_PVR_ADDONS=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
 
-Anyway, I'm not complaining or trying to teach you something. Just sharing my opinion.
-I've seen BR is actually on GitHub, but it's 2 months behind the current developments. Is that a "dead" idea or lack of interest/time ?
+Regards, Bernd
 
-If you want, I'll try to submit my patch again on monday using git send-email. The patch is very simple, if you can review it as it is it would save me a bit of time and speed things up.
+v12: - rebased (no more RC versions ;))
+     - bump xbmc to 13.1
+       - github helper produces a wrong URL
+         (wrong: xbmc-13.1-Gotham.tar.gz, correct: 13.1-Gotham.tar.gz),
+         so I had to switch to _SOURCE until a fix is found
+     - bump mesa3d version to 10.2.1
+v11: - patch series updated by Yann
+       - series re-ordering
+       - add new required gconv-related patch
+       - some commit logs massaging
+v10: - reworked patch series based on comments by Yann
+       - added comment to xproto_dri3proto
+       - removed emtpy line from libva
+       - added comment to libglu
+     - fix libpng support in xbmc??s rsxs screensaver
+     - bump mesa3d version to 10.2-rc4
+v9: - reworked patch series based on comments by Yann & Arnout:
+      - moved some patches before xbmc version bump for bisectability
+      - removed iconv patch to SDL, to be checked later
+      - removed rtmpdump/KSV patch from series, to be checked later
+      - added description to mesa3d/xorg meta package dependency
+      - reworked OpenGL/egl+gles logic in package/xbmc/
+    - bump xbmc to 13.1 Beta2
+    - cec needs udev to be useful
+v8: - squashed "[v7 29/31] ffmpeg cross-compile" into
+      "[v8 16/28] Gotham bump" (Thomas)
+    - squashed "[v7 21/31] uclibc at arm" & "[v7 31/31] ipv6"
+      patches into "[v8 20/28] uclibc" patch (Thomas/Yann)
+    - xbmc-pvr-addons: updated comment (Yann)
+v7: - rebased
+    - bump mesa3d version to 10.2-rc3
+    - included v2 of "xproto_dri3proto: New package"
+v6: - bump mesa3d version to 10.2-rc2
+    - bump libva and libva-intel-driver to 1.3.1
 
-Best regards,
-Massimo
 
+Bernd Kuhls (28):
+  xbmc: add host-gettext dependency
+  xbmc: add host-nasm dependency
+  xbmc: add host-yasm dependency for MMX/64bit archs
+  xbmc: add missing egl-related cflags
+  xbmc: hdmi cec supports needs udev for device scanning
+  xbmc: bump version to 13.1
+  xbmc-pvr-addons: bump to a version compatible with XBMC Gotham
+  xbmc-addon-xvdr: bump to a version compatible with XBMC Gotham
+  mesa3d: Bump version to 10.2.1, fix xa build
+  mesa3d: Depend on xorg meta package instead of xserver_xorg-server
+  mesa3d: add dependency xproto_presentproto
+  mesa3d: Remove dependency for the libxml2 module of host-python
+  mesa3d: Add dri3 support
+  mesa3d: dri2 does not need udev support
+  libva: new package
+  libva-intel-driver: new package
+  ffmpeg: Add libva support
+  libglu: new package
+  libglew: new package
+  sdl: Add new dependency libglu for opengl support
+  xdriver_xf86-video-intel: Bump version to 2.99.911
+  xbmc: Allow compilation with uClibc
+  xbmc: Add alsa support
+  xbmc: Add lame support
+  xbmc: Fix TexturePacker compile
+  xbmc: Add X.org/OpenGL support
+  xbmc: Add option for Goom screensaver
+  xbmc: Add VA-API support
 
+Samuel Martin (2):
+  xbmc: fix missing libraries from rpi-userland
+  rpi-userland: cleanup *_CONF_OPT
 
->________________________________
-> Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->A: Massimo Callegari <massimocallegari@yahoo.it> 
->Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
->Inviato: Sabato 7 Giugno 2014 12:23
->Oggetto: Re: [Buildroot] Patch: qt5webkitexamples
-> 
->
->Dear Massimo Callegari,
->
->On Fri, 6 Jun 2014 16:16:13 +0100 (BST), Massimo Callegari wrote:
->
->> Hi, attached a patch that adds the missing qt5 webkit examples module.
->
->Thanks for your contribution! However, as Mike Zick said, and as
->explained in the Buildroot manual, patches should be submitted inline.
->The 'git send-email' tool does that for you.
->
->
->
->
->
->> One thing though. Have you ever considered migrating to GitHub ?
->> Submitting patches via email is, in my opinion, extremely inefficient and can lead to human errors.
->
->Which human errors? If you use 'git send-email', there is no problem at
->all, and sending patches just requires one command.
->
->Submitting patches on a mailing list allows people to easily review
->them, discuss comments. Buildroot is by far not the only community to
->do this. Other major communities in the embedded Linux space do the
->same: the kernel, U-Boot, Barebox and others.
->
->Best regards,
->
->Thomas
->-- 
->Thomas Petazzoni, CTO, Free Electrons
->Embedded Linux, Kernel and Android engineering
->http://free-electrons.com
->
->
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140607/f1f757a2/attachment.html>
+Yann E. MORIN (2):
+  toolchain: add option to copy the gconv libraries
+  package/libcec: fix missing libraries from rpi-userland
+
+ Makefile                                           |    6 +
+ package/Config.in                                  |    4 +
+ package/ffmpeg/ffmpeg.mk                           |    8 +-
+ package/libcec/libcec.mk                           |    1 +
+ package/libglew/Config.in                          |   19 ++
+ package/libglew/libglew.mk                         |   36 ++++
+ package/libglu/Config.in                           |   10 +
+ package/libglu/libglu.mk                           |   17 ++
+ package/libva-intel-driver/Config.in               |   19 ++
+ package/libva-intel-driver/libva-intel-driver.mk   |   29 +++
+ package/libva/Config.in                            |   18 ++
+ package/libva/libva-0001-no_test_decode.patch      |   17 ++
+ package/libva/libva.mk                             |   56 +++++
+ package/libxml2/Config.in                          |    3 -
+ package/libxml2/libxml2-python2.patch              |   27 ---
+ package/libxml2/libxml2.mk                         |   16 +-
+ package/mesa3d/Config.in                           |   24 +--
+ .../mesa3d-0002-dri2-does-not-need-udev.patch      |   25 +++
+ package/mesa3d/mesa3d.mk                           |   25 ++-
+ package/rpi-userland/rpi-userland.mk               |    2 +-
+ package/sdl/sdl.mk                                 |    3 +-
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |    5 +-
+ .../xdriver_xf86-video-intel.mk                    |   27 ++-
+ .../xbmc-addon-xvdr-0001-foreign-automake.patch    |   28 ---
+ package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         |    7 +-
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk         |    7 +-
+ package/xbmc/Config.in                             |   59 +++++-
+ package/xbmc/xbmc-0002-mathutil.patch              |  213 ++++++++++++++++++++
+ package/xbmc/xbmc.mk                               |   95 +++++++--
+ toolchain/toolchain-common.in                      |   10 +
+ 30 files changed, 682 insertions(+), 134 deletions(-)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew.mk
+ create mode 100644 package/libglu/Config.in
+ create mode 100644 package/libglu/libglu.mk
+ create mode 100644 package/libva-intel-driver/Config.in
+ create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ create mode 100644 package/libva/Config.in
+ create mode 100644 package/libva/libva-0001-no_test_decode.patch
+ create mode 100644 package/libva/libva.mk
+ delete mode 100644 package/libxml2/libxml2-python2.patch
+ create mode 100644 package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
+ delete mode 100644 package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
+ create mode 100644 package/xbmc/xbmc-0002-mathutil.patch
+
+-- 
+1.7.10.4
