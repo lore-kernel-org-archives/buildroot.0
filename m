@@ -1,46 +1,198 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  7 Jun 2014 23:46:07 +0200
-Subject: [Buildroot] [RFCv1 4/4] Makefile: implement a graph-size target
+Date: Sat,  7 Jun 2014 23:46:06 +0200
+Subject: [Buildroot] [RFCv1 3/4] support/scripts: add graph-size script
 In-Reply-To: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1402177567-8021-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1402177567-8021-4-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Like we have graph-build and graph-depends, this commit implements a
-graph-size target to generate the corresponding graph.
+This new script uses the data collected by the step_pkg_size
+instrumentation hook to generate a pie chart of the size contribution
+of each package to the target root filesystem. To achieve this, it
+looks at each file in $(TARGET_DIR), and using the <pkgname>.filelist
+information collected by the step_pkg_size hook, it determines to
+which package the file belongs. It is therefore able to give the size
+installed by each package.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ support/scripts/graph-size | 164 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 164 insertions(+)
+ create mode 100755 support/scripts/graph-size
 
-diff --git a/Makefile b/Makefile
-index 0b4264a..fee6b46 100644
---- a/Makefile
-+++ b/Makefile
-@@ -677,6 +677,11 @@ graph-depends:
- 	|tee $(O)/graphs/$(@).dot \
- 	|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
- 
-+graph-size:
-+	@$(INSTALL) -d $(O)/graphs
-+	@cd "$(TOPDIR)"; \
-+	./support/scripts/graph-size --builddir $(O) --output $(O)/graphs/$(@).$(BR_GRAPH_OUT)
+diff --git a/support/scripts/graph-size b/support/scripts/graph-size
+new file mode 100755
+index 0000000..5f7fe58
+--- /dev/null
++++ b/support/scripts/graph-size
+@@ -0,0 +1,164 @@
++#!/usr/bin/env python
 +
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
- 
- all: menuconfig
-@@ -892,6 +897,7 @@ endif
- 	@echo '  manual-epub            - build manual in ePub'
- 	@echo '  graph-build            - generate graphs of the build times'
- 	@echo '  graph-depends          - generate graph of the dependency tree'
-+	@echo '  graph-size             - generate graph of the filesystem size'
- 	@echo
- 	@echo 'Miscellaneous:'
- 	@echo '  source                 - download all sources needed for offline-build'
++# Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++
++# This script draws a pie chart of the size used by each package in
++# the target filesystem.
++
++import sys
++import os.path
++import argparse
++import matplotlib.font_manager as fm
++import matplotlib.pyplot as plt
++
++colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
++          '#0068b5', '#f28e00', '#940084', '#97c000']
++
++#
++# This function parses one .filelist file (which lists the files
++# installed by a particular package), and returns a Python list of the
++# file paths installed by the package.
++#
++# pkgf: path to the .filelist file
++#
++def handle_pkg(pkgf):
++    files = []
++    with open(pkgf) as f:
++        for l in f.readlines():
++            files.append(l.strip().replace("./", ""))
++    return files
++
++#
++# This function returns the list of files present in the skeleton,
++# with the exception of the .empty files. It is used to create a fake
++# entry in the dictionary of files installed by each package, emulated
++# the presence of a skeleton package.
++#
++def handle_skeleton():
++    skeleton_files = []
++    for root, _, files in os.walk("system/skeleton"):
++        for f in files:
++            if f == ".empty":
++                continue
++            frelpath = os.path.relpath(os.path.join(root, f), "system/skeleton")
++            skeleton_files.append(frelpath)
++    return skeleton_files
++
++#
++# This function returns a dict where each key is the name of a
++# package, and the value is a list of the files installed by this
++# package.
++#
++# builddir: path to the Buildroot output directory
++#
++def build_package_dict(builddir):
++    pkgdict = {}
++    # Parse all the .filelist files generated by the package
++    # installation process
++    filelist = os.listdir(os.path.join(builddir, "build"))
++    for file in filelist:
++        (_, ext) = os.path.splitext(file)
++        if ext != ".filelist":
++            continue
++        pkgname = file.replace(".filelist", "")
++        pkgdict[pkgname] = handle_pkg(os.path.join(builddir, "build", file))
++    # Add a special fake entry for the files installed by the skeleton
++    pkgdict['skeleton'] = handle_skeleton()
++    return pkgdict
++
++#
++# This function looks into the 'pkgdict' dictionary (as generated by
++# build_package_dict) to see which package has installed the file 'f',
++# and returns the name of that package.
++#
++def find_file(pkgdict, f):
++    for (p, flist) in pkgdict.iteritems():
++        if f in flist:
++            return p
++    return None
++
++#
++# This function build a dictionary that contains the name of a package
++# as key, and the size of the files installed by this package as the
++# value.
++#
++def build_package_size(builddir):
++    pkgdict = build_package_dict(builddir)
++    pkgsize = {}
++
++    for root, _, files in os.walk(os.path.join(builddir, "target")):
++        for f in files:
++            fpath = os.path.join(root, f)
++            if os.path.islink(fpath):
++                continue
++            frelpath = os.path.relpath(fpath, os.path.join(builddir, "target"))
++            pkg = find_file(pkgdict, frelpath)
++            if pkg is None:
++                print "WARNING: %s is not part of any package" % frelpath
++                pkg = "unknown"
++            if pkg in pkgsize:
++                pkgsize[pkg] += os.path.getsize(fpath)
++            else:
++                pkgsize[pkg] = os.path.getsize(fpath)
++
++    return pkgsize
++
++#
++# Given a dict returned by build_package_size(), this function
++# generates a pie chart of the size installed by each package.
++#
++def draw_graph(pkgsize, outputf):
++    total = 0
++    for (p, sz) in pkgsize.iteritems():
++        total += sz
++    labels = []
++    values = []
++    other_value = 0
++    for (p, sz) in pkgsize.iteritems():
++        if sz < (total * 0.01):
++            other_value += sz
++        else:
++            labels.append(p)
++            values.append(sz)
++    labels.append("Other")
++    values.append(other_value)
++
++    plt.figure()
++    patches, texts, autotexts = plt.pie(values, labels=labels,
++                                        autopct='%1.1f%%', shadow=True,
++                                        colors=colors)
++    # Reduce text size
++    proptease = fm.FontProperties()
++    proptease.set_size('xx-small')
++    plt.setp(autotexts, fontproperties=proptease)
++    plt.setp(texts, fontproperties=proptease)
++
++    plt.title('Size per package')
++    plt.savefig(outputf)
++
++parser = argparse.ArgumentParser(description='Draw build time graphs')
++
++parser.add_argument("--builddir", '-i', metavar="BUILDDIR",
++                    help="Buildroot output directory")
++parser.add_argument("--output", '-o', metavar="OUTPUT", required=True,
++                    help="Output file (.pdf or .png extension)")
++args = parser.parse_args()
++
++
++ps = build_package_size(args.builddir)
++draw_graph(ps, args.output)
++
 -- 
 2.0.0
