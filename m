@@ -1,37 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Jun 2014 10:57:28 +0200
-Subject: [Buildroot] [PATCH 5 of 7 v3] toolchain-external: change
- version from 'undefined' to 'virtual'
-In-Reply-To: <640c5d9c5ac14d442207.1402085581@localhost>
-References: <patchbomb.1402085576@localhost>
- <640c5d9c5ac14d442207.1402085581@localhost>
-Message-ID: <20140607105728.469dd87d@free-electrons.com>
+Date: Sat, 7 Jun 2014 11:04:32 +0200
+Subject: [Buildroot] autoconf caching
+In-Reply-To: <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+ <20140605224222.0184a9b7@free-electrons.com>
+ <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
+ <20140606091548.53f07f90@free-electrons.com>
+ <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+Message-ID: <20140607110432.3e52d064@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Dallas Clement,
 
-On Fri, 06 Jun 2014 22:13:01 +0200, Thomas De Schampheleire wrote:
-> The toolchain-external package displays the version 'undefined' in the build
-> messages and the directory in output/build, which is not very nice.
-> This patch sets the version to 'virtual', in analogy to the toolchain and
-> toolchain-buildroot packages (which use the virtual-package infrastructure).
-> 
-> Although toolchain-external is not strictly a virtual package, since it uses
-> the generic-package infrastructure, it can be considered as a virtual
-> package in the sense that it does not have a fixed version or source (they
-> depend on the selected external toolchain).
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Fri, 6 Jun 2014 11:14:15 -0500, Dallas Clement wrote:
 
-I'm sorry, but I continue to disagree. toolchain-external is definitely
-*not* a virtual package. I've started using the
-TOOLCHAIN_EXTERNAL_VERSION field for musl external toolchains, and I
-will send a patch that use it for other toolchains as well.
+> Hi Thomas.  Thanks very much for looking at my configuration.  I think you
+> certainly nailed it.
+> I have a lot of packages, and perl and mysql especially are taking a long
+> time.  My build recipes
+> for both of these are a year or two out of date.  In fact, my perl recipe
+> is still using qemu to build
+> instead of perl cross.  Hopefully updating this recipe will help some,
+> though as you pointed out
+> it is still using MAKE1.
+
+Right. I'll send a separate e-mail to Fran?ois Perrad about this (our
+Perl guy), because it seems like other build systems are building Perl
+in parallel.
+
+> Yep, very speedy SSDs and 64 GB for RAM.  Because of all the serialization
+> in this build process,
+> building from a large ram disk seems to make little difference.
+
+Right. So you have a good build configuration, there's not much we can
+do here.
+
+> > There is another thing that strikes out in your configuration: there
+> > are many packages that we don't have in Buildroot, and that don't seem
+> > to be specific to your company or project. What about submitting your
+> > new packages upstream?
+> 
+> Yes, I can certainly do that.  There's a lot here.  Much of it is obscure.
+> Please let me know which ones you are most
+> interested in.
+
+Could you make a list of the packages that you've added, and that are
+open-source? I'm pretty sure a majority of them could potentially be
+useful to have in Buildroot.
+
+Best regards,
 
 Thomas
 -- 
