@@ -1,81 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 7 Jun 2014 23:29:31 +0200
-Subject: [Buildroot] [PATCH v12 03/32] xbmc: add host-nasm dependency
-In-Reply-To: <20140607212725.GB10718@free.fr>
-References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
- <1402144292-27837-4-git-send-email-bernd.kuhls@t-online.de>
- <20140607212725.GB10718@free.fr>
-Message-ID: <20140607212931.GC10718@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat,  7 Jun 2014 23:46:03 +0200
+Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size installed by
+	each package
+Message-ID: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hello,
 
-On 2014-06-07 23:27 +0200, Yann E. MORIN spake thusly:
-> On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
-> > Fixes:
-> > checking for nasm... no
-> > configure: error: Could not find a required program. Please see the README for your platform.
-> > 
-> > This will be needed for 13.0 Gotham.
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I gave a training this week, and one of the question I had was how to
+analyze the size of the things that are present on the root
+filesystem. And I thought that Buildroot was lacking a tool to help
+with this. Therefore, the following set of commits implement a script
+that generates a pie chart of the size contribution of each package to
+the target root filesystem.
 
-Eh, no, just reviewed, I did not do any i386 test...
+To see an example of the generated pie chart, see:
 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  http://free-electrons.com/~thomas/pub/buildroot/graph-size.pdf
 
-Regards,
-Yann E. MORIN.
-> 
-> > ---
-> >  package/xbmc/xbmc.mk |    3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> > index d8b9508..3522802 100644
-> > --- a/package/xbmc/xbmc.mk
-> > +++ b/package/xbmc/xbmc.mk
-> > @@ -18,6 +18,9 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
-> >  	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-> >  	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
-> >  
-> > +# xbmc at i386 depends on nasm
-> > +XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
-> > +
-> >  XBMC_CONF_ENV = \
-> >  	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
-> >  	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
-> > -- 
-> > 1.7.10.4
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The implementation consists in adding a global instrumentation hook
+that registers which files are installed by each package. A limitation
+of the current implementation is that when a file is installed by a
+package A and then overriden by package B, the mechanism will assume
+the file was installed by package A. Suggestions to welcome on how to
+solve this in a reasonably simple way.
+
+The size contribution of each package is not computed directly in the
+global instrumentation hook, because all the stripping and cleanup
+work takes place in target-finalize, after all packages are
+installed. Therefore, the hook only registers the path of the files
+that are installed.
+
+The 'graph-size' make target then runs a Python scripts, that looks at
+all files in $(TARGET_DIR) and is able to find out, thanks to the data
+registered by the global instrumentation hook, to which package the
+file belongs. Using this, it is quite simple to generate a pie chart.
+
+Comments, ideas, suggestions are welcome.
+
+Thomas
+
+Thomas Petazzoni (4):
+  toolchain-external: split target installation from staging
+    installation
+  pkg-generic: add step_pkg_size global instrumentation hook
+  support/scripts: add graph-size script
+  Makefile: implement a graph-size target
+
+ Makefile                                           |   6 +
+ package/pkg-generic.mk                             |  24 +++
+ support/scripts/graph-size                         | 164 +++++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |  36 ++++-
+ 4 files changed, 223 insertions(+), 7 deletions(-)
+ create mode 100755 support/scripts/graph-size
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.0
