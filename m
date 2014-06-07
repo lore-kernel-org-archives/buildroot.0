@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 7 Jun 2014 10:52:17 +0200
-Subject: [Buildroot] [PATCH 2 of 7 v3] infra: add comment describing
- single/double dollar-sign rules
-In-Reply-To: <c09add9a59c5afc09926.1402085578@localhost>
+Date: Sat, 7 Jun 2014 10:56:29 +0200
+Subject: [Buildroot] [PATCH 4 of 7 v3] toolchain/toolchain-buildroot:
+ migrate to virtual package infrastructure
+In-Reply-To: <58ea2200cf19b356f9d9.1402085580@localhost>
 References: <patchbomb.1402085576@localhost>
- <c09add9a59c5afc09926.1402085578@localhost>
-Message-ID: <20140607105217.54f27357@free-electrons.com>
+ <58ea2200cf19b356f9d9.1402085580@localhost>
+Message-ID: <20140607105629.4126282a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +14,30 @@ To: buildroot@busybox.net
 
 Dear Thomas De Schampheleire,
 
-On Fri, 06 Jun 2014 22:12:58 +0200, Thomas De Schampheleire wrote:
-> As the rules with respect to variable and function references and the need
-> for single or double dollar signs are not trivial, add a comment in
-> pkg-generic.mk describing them.
+On Fri, 06 Jun 2014 22:13:00 +0200, Thomas De Schampheleire wrote:
+> This patch migrates the toolchain and toolchain-buildroot packages to the
+> virtual package infrastructure, causing the log messages to change from:
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> >>> toolchain undefined Downloading
+> >>> toolchain undefined Extracting
+> ...
+> 
+> to
+> 
+> >>> toolchain virtual Downloading
+> >>> toolchain virtual Extracting
+> ...
+> 
+> and similar for 'toolchain-buildroot', simply because it looks nicer.
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+While 'toolchain' is really a virtual package, 'toolchain-buildroot' is
+a bit weird because it always pulls the same dependency
+(host-gcc-final). But oh, well, I guess we can consider it as being a
+virtual package that has only one provider.
+
+So:
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
