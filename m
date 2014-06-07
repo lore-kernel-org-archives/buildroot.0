@@ -1,35 +1,24 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 7 Jun 2014 09:58:41 +0200
-Subject: [Buildroot] [git commit] musl: security bump to version 1.1.2
-Message-ID: <20140607075856.8E0F19CF06@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sat, 07 Jun 2014 09:58:57 +0200
+Subject: [Buildroot] [PATCH] musl: security bump to version 1.1.2
+In-Reply-To: <1402098577-28375-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 6 Jun 2014 20:49:37 -0300")
+References: <1402098577-28375-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqctkv5q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a67b9b2df8d74313d13b5bc39ce33d6e5ef7196c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Fixes CVE-2014-3484 (stack-based buffer overflow in DNS response
-parsing).
+ > Fixes CVE-2014-3484 (stack-based buffer overflow in DNS response
+ > parsing).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/musl/musl.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index b5d6c56..7b59377 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.1
-+MUSL_VERSION = 1.1.2
- MUSL_SITE = http://www.musl-libc.org/releases/
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
