@@ -1,66 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:07 +0200
-Subject: [Buildroot] [PATCH v12 07/32] xbmc: bump version to 13.1
+Date: Sat,  7 Jun 2014 14:31:31 +0200
+Subject: [Buildroot] [PATCH v12 31/32] rpi-userland: cleanup *_CONF_OPT
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-32-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/xbmc/Config.in |    1 +
- package/xbmc/xbmc.mk   |    8 +++++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
+From: Samuel Martin <s.martin49@gmail.com>
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 52bf0cd..592fdc1 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBUNGIF
- 	select BR2_PACKAGE_LIBVORBIS
- 	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 9f44c34..b9ff001 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+This change reverts the commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
+because rpi-userland is correctly built whatever the value of the
+BUILD_SHARED_LIBS CMake flags.
+
+The cset 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf originally intends to
+fix linkage/runtime failure in xbmc package because of missing flags in
+xbmc LIBS env. var. This has been fixed in the previous patch.
+
+So, for rpi-userland package, BUILD_SHARED_LIBS does no longer need to
+be forced to OFF, and can safely be driven by the CMake infrastructure.
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/rpi-userland/rpi-userland.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 8b225ba..2de6b92 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
+ RPI_USERLAND_INSTALL_STAGING = YES
+-RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
++RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
  
--XBMC_VERSION = 12.3-Frodo
--XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
-+XBMC_VERSION = 13.1-Gotham
-+XBMC_SOURCE = $(XBMC_VERSION).tar.gz
-+XBMC_SITE = https://github.com/xbmc/xbmc/archive
- XBMC_LICENSE = GPLv2
- XBMC_LICENSE_FILES = LICENSE.GPL
- # XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
-@@ -15,7 +16,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
--	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
-+	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
  
- # xbmc at i386 depends on nasm
-@@ -37,6 +38,7 @@ XBMC_CONF_ENV = \
- 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
- 
- XBMC_CONF_OPT +=  \
-+	--with-arch=$(BR2_ARCH) \
- 	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
 -- 
 1.7.10.4
