@@ -1,99 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  7 Jun 2014 23:46:04 +0200
-Subject: [Buildroot] [RFCv1 1/4] toolchain-external: split target
-	installation from staging installation
+Date: Sat,  7 Jun 2014 23:46:05 +0200
+Subject: [Buildroot] [RFCv1 2/4] pkg-generic: add step_pkg_size global
+	instrumentation hook
 In-Reply-To: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1402177567-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, all the installation work of the toolchain-external package
-is done during the install-staging step. However, in order to be able
-to properly collect the size added by each package to the target
-filesystem, we need to make sure that toolchain-external installs its
-files to $(TARGET_DIR) during the install-target step.
+This patch adds a global instrumentation hook that collects the list
+of files installed in $(TARGET_DIR) by each package, and stores this
+list into a file called $(BUILD_DIR)/<pkgname>.filelist. It can later
+be used to determine the size contribution of each package to the
+target root filesystem.
+
+The only limitation is that if a file is installed by a package A, and
+then overriden by a file from package B, the file will only be listed
+in $(BUILD_DIR)/A.filelist as it is the first time we will see the
+file.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 36 +++++++++++++++++-----
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ package/pkg-generic.mk | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index c73cc4a..45926cf 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -551,7 +551,7 @@ endif
- #                       considered when searching libraries for copy
- #                       to the target filesystem.
- 
--define TOOLCHAIN_EXTERNAL_INSTALL_CORE
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
- 	if test -z "$${SYSROOT_DIR}" ; then \
- 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-@@ -576,8 +576,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
- 			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
- 		done ; \
- 	fi ; \
--	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
--	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
- 	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
- 		$(call MESSAGE,"Copying gdbserver") ; \
- 		gdbserver_found=0 ; \
-@@ -595,6 +593,26 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
- 	fi
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 5116ed9..069653e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -55,6 +55,30 @@ define step_time
  endef
+ GLOBAL_INSTRUMENTATION_HOOKS += step_time
  
-+define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
-+	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-+	if test -z "$${SYSROOT_DIR}" ; then \
-+		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-+		exit 1 ; \
-+	fi ; \
-+	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	SUPPORT_LIB_DIR="" ; \
-+	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-+		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-+		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
-+			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-+		fi ; \
-+	fi ; \
-+	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
-+	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
-+	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
++# Package size steps
++define step_pkg_size_start
++	echo "PKG SIZE START $(1)"
++	(cd $(TARGET_DIR) ; find . -type f) | sort > \
++		$(BUILD_DIR)/$(1).tmp_filelist_before
 +endef
 +
- # Special installation target used on the Blackfin architecture when
- # FDPIC is not the primary binary format being used, but the user has
- # nonetheless requested the installation of the FDPIC libraries to the
-@@ -685,15 +703,19 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
- 	fi
- endef
- 
-+define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
++define step_pkg_size_end
++	echo "PKG SIZE END $(1)"
++	(cd $(TARGET_DIR); find . -type f) | sort > \
++		$(BUILD_DIR)/$(1).tmp_filelist_after
++	diff -u $(BUILD_DIR)/$(1).tmp_filelist_before $(BUILD_DIR)/$(1).tmp_filelist_after | \
++		grep '^\+\./' | sed 's%^\+%%' > $(BUILD_DIR)/$(1).filelist
++	$(RM) -f $(BUILD_DIR)/$(1).tmp_filelist_before \
++		$(BUILD_DIR)/$(1).tmp_filelist_after
 +endef
 +
- # Even though we're installing things in both the staging, the host
- # and the target directory, we do everything within the
- # install-staging step, arbitrarily.
--define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
--	$(TOOLCHAIN_EXTERNAL_INSTALL_CORE)
-+define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
--	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
- endef
- 
- $(eval $(generic-package))
++define step_pkg_size
++	$(if $(filter install-target,$(2)),\
++		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
++		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
++
+ # User-supplied script
+ define step_user
+ 	@$(foreach user_hook, $(BR2_INSTRUMENTATION_SCRIPTS), \
 -- 
 2.0.0
