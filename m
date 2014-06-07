@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:24 +0200
-Subject: [Buildroot] [PATCH v12 24/32] xbmc: Add alsa support
+Date: Sat,  7 Jun 2014 14:31:28 +0200
+Subject: [Buildroot] [PATCH v12 28/32] xbmc: Add option for Goom screensaver
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +12,46 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/xbmc/Config.in |    9 +++++++++
+ package/xbmc/xbmc.mk   |    6 ++++++
+ 2 files changed, 15 insertions(+)
 
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 08b0a0f..a31788c 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -194,6 +194,15 @@ config BR2_PACKAGE_XBMC_WAVPACK
+ 	  Enable WAV input support.
+ 	  Select this if you want to play back WV files.
+ 
++config BR2_PACKAGE_XBMC_GOOM
++	bool "goom screensaver"
++	depends on BR2_PACKAGE_XBMC_GL
++	help
++	  Enable goom screensaver
++
++comment "goom needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XBMC_GL
++
+ comment "XBMC addons"
+ 
+ source "package/xbmc-addon-xvdr/Config.in"
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index b9ff001..3f16bf9 100644
+index d1c1710..8b1a342 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -39,7 +39,6 @@ XBMC_CONF_ENV = \
- 
- XBMC_CONF_OPT +=  \
- 	--with-arch=$(BR2_ARCH) \
--	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
-@@ -72,6 +71,13 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- XBMC_DEPENDENCIES += dbus
+@@ -182,6 +182,12 @@ ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
+ XBMC_DEPENDENCIES += libtheora
  endif
  
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+XBMC_DEPENDENCIES += alsa-lib
-+XBMC_CONF_OPT += --enable-alsa
++ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
++XBMC_CONF_OPT += --enable-goom
 +else
-+XBMC_CONF_OPT += --disable-alsa
++XBMC_CONF_OPT += --disable-goom
 +endif
 +
- XBMC_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define XBMC_BOOTSTRAP
+ 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
 -- 
 1.7.10.4
