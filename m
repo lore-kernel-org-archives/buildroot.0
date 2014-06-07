@@ -1,62 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat,  7 Jun 2014 23:46:03 +0200
-Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size installed by
-	each package
-Message-ID: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat,  7 Jun 2014 23:46:04 +0200
+Subject: [Buildroot] [RFCv1 1/4] toolchain-external: split target
+	installation from staging installation
+In-Reply-To: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1402177567-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently, all the installation work of the toolchain-external package
+is done during the install-staging step. However, in order to be able
+to properly collect the size added by each package to the target
+filesystem, we need to make sure that toolchain-external installs its
+files to $(TARGET_DIR) during the install-target step.
 
-I gave a training this week, and one of the question I had was how to
-analyze the size of the things that are present on the root
-filesystem. And I thought that Buildroot was lacking a tool to help
-with this. Therefore, the following set of commits implement a script
-that generates a pie chart of the size contribution of each package to
-the target root filesystem.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 36 +++++++++++++++++-----
+ 1 file changed, 29 insertions(+), 7 deletions(-)
 
-To see an example of the generated pie chart, see:
-
-  http://free-electrons.com/~thomas/pub/buildroot/graph-size.pdf
-
-The implementation consists in adding a global instrumentation hook
-that registers which files are installed by each package. A limitation
-of the current implementation is that when a file is installed by a
-package A and then overriden by package B, the mechanism will assume
-the file was installed by package A. Suggestions to welcome on how to
-solve this in a reasonably simple way.
-
-The size contribution of each package is not computed directly in the
-global instrumentation hook, because all the stripping and cleanup
-work takes place in target-finalize, after all packages are
-installed. Therefore, the hook only registers the path of the files
-that are installed.
-
-The 'graph-size' make target then runs a Python scripts, that looks at
-all files in $(TARGET_DIR) and is able to find out, thanks to the data
-registered by the global instrumentation hook, to which package the
-file belongs. Using this, it is quite simple to generate a pie chart.
-
-Comments, ideas, suggestions are welcome.
-
-Thomas
-
-Thomas Petazzoni (4):
-  toolchain-external: split target installation from staging
-    installation
-  pkg-generic: add step_pkg_size global instrumentation hook
-  support/scripts: add graph-size script
-  Makefile: implement a graph-size target
-
- Makefile                                           |   6 +
- package/pkg-generic.mk                             |  24 +++
- support/scripts/graph-size                         | 164 +++++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |  36 ++++-
- 4 files changed, 223 insertions(+), 7 deletions(-)
- create mode 100755 support/scripts/graph-size
-
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index c73cc4a..45926cf 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -551,7 +551,7 @@ endif
+ #                       considered when searching libraries for copy
+ #                       to the target filesystem.
+ 
+-define TOOLCHAIN_EXTERNAL_INSTALL_CORE
++define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+ 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+ 	if test -z "$${SYSROOT_DIR}" ; then \
+ 		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+@@ -576,8 +576,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
+ 			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
+ 		done ; \
+ 	fi ; \
+-	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
+-	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
+ 	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
+ 		$(call MESSAGE,"Copying gdbserver") ; \
+ 		gdbserver_found=0 ; \
+@@ -595,6 +593,26 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
+ 	fi
+ endef
+ 
++define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
++	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
++	if test -z "$${SYSROOT_DIR}" ; then \
++		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
++		exit 1 ; \
++	fi ; \
++	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	SUPPORT_LIB_DIR="" ; \
++	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
++			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++		fi ; \
++	fi ; \
++	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
++	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
++	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
++endef
++
+ # Special installation target used on the Blackfin architecture when
+ # FDPIC is not the primary binary format being used, but the user has
+ # nonetheless requested the installation of the FDPIC libraries to the
+@@ -685,15 +703,19 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
+ 	fi
+ endef
+ 
++define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
++	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
++endef
++
+ # Even though we're installing things in both the staging, the host
+ # and the target directory, we do everything within the
+ # install-staging step, arbitrarily.
+-define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_CORE)
++define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
++	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+-	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.0.0
