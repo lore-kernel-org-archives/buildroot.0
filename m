@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:20 +0200
-Subject: [Buildroot] [PATCH v12 20/32] libglew: new package
+Date: Sat,  7 Jun 2014 14:31:16 +0200
+Subject: [Buildroot] [PATCH v12 16/32] libva: new package
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-21-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,91 +12,135 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in          |    1 +
- package/libglew/Config.in  |   19 +++++++++++++++++++
- package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 56 insertions(+)
- create mode 100644 package/libglew/Config.in
- create mode 100644 package/libglew/libglew.mk
+ package/Config.in                             |    1 +
+ package/libva/Config.in                       |   18 ++++++++
+ package/libva/libva-0001-no_test_decode.patch |   17 ++++++++
+ package/libva/libva.mk                        |   56 +++++++++++++++++++++++++
+ 4 files changed, 92 insertions(+)
+ create mode 100644 package/libva/Config.in
+ create mode 100644 package/libva/libva-0001-no_test_decode.patch
+ create mode 100644 package/libva/libva.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 5abacd1..67309f1 100644
+index 1706197..adbc57d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -592,6 +592,7 @@ source "package/libexif/Config.in"
- source "package/libgail/Config.in"
- source "package/libgeotiff/Config.in"
- source "package/libglade/Config.in"
-+source "package/libglew/Config.in"
- source "package/libglu/Config.in"
- source "package/libgtk2/Config.in"
- source "package/libpng/Config.in"
-diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+@@ -601,6 +601,7 @@ source "package/libsvg/Config.in"
+ source "package/libsvg-cairo/Config.in"
+ source "package/libsvgtiny/Config.in"
+ source "package/libungif/Config.in"
++source "package/libva/Config.in"
+ source "package/opencv/Config.in"
+ source "package/opengl/Config.in"
+ source "package/pango/Config.in"
+diff --git a/package/libva/Config.in b/package/libva/Config.in
 new file mode 100644
-index 0000000..67c49d4
+index 0000000..9d63b52
 --- /dev/null
-+++ b/package/libglew/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBGLEW
-+	bool "libglew"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXI
-+	select BR2_PACKAGE_XLIB_LIBXMU
++++ b/package/libva/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_LIBVA
++	bool "libva"
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
++	depends on BR2_LARGEFILE # libdrm
 +	help
-+	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
-+	  extension loading library. GLEW provides efficient run-time mechanisms
-+	  for determining which OpenGL extensions are supported on the target
-+	  platform. OpenGL core and extension functionality is exposed in a
-+	  single header file.
++	  The main motivation for VA-API (Video Acceleration API) is to enable
++	  hardware accelerated video decode/encode at various entry-points (VLD,
++	  IDCT, Motion Compensation etc.) for the prevailing coding standards
++	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
 +
-+	  http://glew.sourceforge.net
++	  http://www.freedesktop.org/wiki/Software/vaapi/
 +
-+comment "libglew depends on X.org and needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
++comment "libva needs a toolchain w/ largefile, threads"
++	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libva/libva-0001-no_test_decode.patch b/package/libva/libva-0001-no_test_decode.patch
 new file mode 100644
-index 0000000..48ecf97
+index 0000000..0f0d786
 --- /dev/null
-+++ b/package/libglew/libglew.mk
-@@ -0,0 +1,36 @@
++++ b/package/libva/libva-0001-no_test_decode.patch
+@@ -0,0 +1,17 @@
++mpeg2vldemo is the only file requiring cxx support. It is not needed for
++buildroot, so disable its compilation to avoid depending on cxx.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr libva-1.3.0.org/test/Makefile.am libva-1.3.0/test/Makefile.am
++--- libva-1.3.0.org/test/Makefile.am	2014-03-24 05:49:46.000000000 +0100
+++++ libva-1.3.0/test/Makefile.am	2014-04-26 18:12:25.644390292 +0200
++@@ -20,7 +20,7 @@
++ # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
++ # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
++ 
++-SUBDIRS = common decode encode vainfo
+++SUBDIRS = common encode vainfo
++ 
++ if USE_X11
++ SUBDIRS += basic putsurface
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+new file mode 100644
+index 0000000..85fd712
+--- /dev/null
++++ b/package/libva/libva.mk
+@@ -0,0 +1,56 @@
 +################################################################################
 +#
-+# libglew
++# libva
 +#
 +################################################################################
 +
-+LIBGLEW_VERSION = 1.10.0
-+LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
-+LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
-+LIBGLEW_LICENSE = MIT
-+LIBGLEW_LICENSE_FILES = LICENSE.txt
-+LIBGLEW_INSTALL_STAGING = YES
-+LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
++LIBVA_VERSION = 1.3.1
++LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
++LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
++LIBVA_LICENSE = MIT
++LIBVA_LICENSE_FILES = COPYING
++LIBVA_AUTORECONF = YES
++LIBVA_INSTALL_STAGING = YES
++LIBVA_DEPENDENCIES = host-pkgconf libdrm
 +
-+# using $TARGET_CONFIGURE_OPTS breaks compilation
-+define LIBGLEW_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
-+		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
-+		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
-+		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++# libdrm is a hard-dependency
++LIBVA_CONF_OPT = \
++	--enable-drm \
++	--disable-dummy-driver \
++	--with-drivers-path="/usr/lib/va"
++
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
++LIBVA_DEPENDENCIES += mesa3d
++LIBVA_CONF_OPT += --enable-glx
++else
++LIBVA_CONF_OPT += --disable-glx
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
++LIBVA_CONF_OPT += --enable-x11
++else
++LIBVA_CONF_OPT += --disable-x11
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++LIBVA_DEPENDENCIES += wayland
++LIBVA_CONF_OPT += --enable-wayland
++else
++LIBVA_CONF_OPT += --disable-wayland
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++LIBVA_DEPENDENCIES += libegl
++LIBVA_CONF_OPT += --enable-egl
++else
++LIBVA_CONF_OPT += --disable-egl
++endif
++
++# Autoreconf requires an m4 directory to exist
++define LIBVA_PATCH_M4
++	mkdir -p $(@D)/m4
 +endef
++LIBVA_POST_PATCH_HOOKS += LIBVA_PATCH_M4
 +
-+define LIBGLEW_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+define LIBGLEW_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
-+		$(TARGET_CONFIGURE_OPTS) install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.10.4
