@@ -1,41 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat,  7 Jun 2014 18:27:06 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump to version 3.14.6
-In-Reply-To: <1402176426-27004-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1402176426-27004-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1402176426-27004-2-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 7 Jun 2014 23:29:31 +0200
+Subject: [Buildroot] [PATCH v12 03/32] xbmc: add host-nasm dependency
+In-Reply-To: <20140607212725.GB10718@free.fr>
+References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+ <1402144292-27837-4-git-send-email-bernd.kuhls@t-online.de>
+ <20140607212725.GB10718@free.fr>
+Message-ID: <20140607212931.GC10718@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Bernd, All,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b16d428..80f4e8b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.14.5"
-+	bool "3.14.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.14.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.14.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On 2014-06-07 23:27 +0200, Yann E. MORIN spake thusly:
+> On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
+> > Fixes:
+> > checking for nasm... no
+> > configure: error: Could not find a required program. Please see the README for your platform.
+> > 
+> > This will be needed for 13.0 Gotham.
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Eh, no, just reviewed, I did not do any i386 test...
+
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+> 
+> > ---
+> >  package/xbmc/xbmc.mk |    3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> > index d8b9508..3522802 100644
+> > --- a/package/xbmc/xbmc.mk
+> > +++ b/package/xbmc/xbmc.mk
+> > @@ -18,6 +18,9 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+> >  	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+> >  	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+> >  
+> > +# xbmc at i386 depends on nasm
+> > +XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
+> > +
+> >  XBMC_CONF_ENV = \
+> >  	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+> >  	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+> > -- 
+> > 1.7.10.4
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.8.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
