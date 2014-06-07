@@ -1,39 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:08 +0200
-Subject: [Buildroot] [PATCH v12 08/32] xbmc-pvr-addons: bump to a version
-	compatible with XBMC Gotham
+Date: Sat,  7 Jun 2014 14:31:10 +0200
+Subject: [Buildroot] [PATCH v12 10/32] mesa3d: Bump version to 10.2.1,
+	fix xa build
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Building xa requires at least one non swrast gallium driver, needed since:
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?h=10.2&id=e283e966660fdf037be6353dc96b7f63b8aa315a
 
-diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-index b6d061b..97628e2 100644
---- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-+++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
-@@ -4,9 +4,10 @@
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index fa17177..1a61af8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# This cset is on the branch 'frodo'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
-+# This cset in on master. When a Gotham branch is made, we should
-+# follow it, as incompatible changes in the plugins API can happen
-+# on the master branch.
-+XBMC_PVR_ADDONS_VERSION = f38b2ebdc6f96244d5e4bc584315f4a2c24bc787
- XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
- XBMC_PVR_ADDONS_LICENSE = GPLv3+
- XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
+-MESA3D_VERSION = 10.0.4
++MESA3D_VERSION = 10.2.1
+ MESA3D_SOURCE = MesaLib-$(MESA3D_VERSION).tar.bz2
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -35,9 +35,13 @@ MESA3D_DEPENDENCIES += \
+ 	xlib_libXdamage \
+ 	xlib_libXfixes \
+ 	libxcb
+-MESA3D_CONF_OPT += \
+-	--enable-glx \
+-	--enable-xa
++MESA3D_CONF_OPT += --enable-glx
++# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
++ifneq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA),)
++MESA3D_CONF_OPT += --enable-xa
++else
++MESA3D_CONF_OPT += --disable-xa
++endif
+ else
+ MESA3D_CONF_OPT += \
+ 	--disable-glx \
 -- 
 1.7.10.4
