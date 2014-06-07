@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:25 +0200
-Subject: [Buildroot] [PATCH v12 25/32] xbmc: Add lame support
+Date: Sat,  7 Jun 2014 14:31:18 +0200
+Subject: [Buildroot] [PATCH v12 18/32] ffmpeg: Add libva support
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 3f16bf9..b730e51 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -78,6 +78,13 @@ else
- XBMC_CONF_OPT += --disable-alsa
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5510b80..39fe815 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
  endif
  
-+ifeq ($(BR2_PACKAGE_LAME),y)
-+XBMC_DEPENDENCIES += lame
-+XBMC_CONF_OPT += --enable-libmp3lame
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
 +else
-+XBMC_CONF_OPT += --disable-libmp3lame
++FFMPEG_CONF_OPT += --disable-vaapi
 +endif
 +
- XBMC_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
