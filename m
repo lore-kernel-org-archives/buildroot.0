@@ -1,52 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  7 Jun 2014 14:31:04 +0200
-Subject: [Buildroot] [PATCH v12 04/32] xbmc: add host-yasm dependency for
-	MMX/64bit archs
+Date: Sat,  7 Jun 2014 14:31:08 +0200
+Subject: [Buildroot] [PATCH v12 08/32] xbmc-pvr-addons: bump to a version
+	compatible with XBMC Gotham
 In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402144292-27837-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402144292-27837-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes error during xbmc configure:
-
-yasm not found, use --disable-yasm for a crippled build
-
-If you think configure made a mistake, make sure you are using the latest
-version from Git.  If the latest version fails, report the problem to the
-ffmpeg-user at ffmpeg.org mailing list or IRC #ffmpeg on irc.freenode.net.
-Include the log file "config.log" produced by configure as this will help
-solving the problem.
-configure: error: Submodule lib/ffmpeg failed to configure
-
-This will be needed for 13.0 Gotham.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/xbmc/xbmc.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ package/xbmc-pvr-addons/xbmc-pvr-addons.mk |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 3522802..ffe573f 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -21,6 +21,13 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- # xbmc at i386 depends on nasm
- XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
+diff --git a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+index b6d061b..97628e2 100644
+--- a/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
++++ b/package/xbmc-pvr-addons/xbmc-pvr-addons.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
-+# ffmpeg depends on yasm on MMX archs
-+# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
-+# yasm as dependency for x86_64, even if BR2_x86_generic=y
-+ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
-+XBMC_DEPENDENCIES += host-yasm
-+endif
-+
- XBMC_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+-# This cset is on the branch 'frodo'
+-# When XBMC is updated, then this should be updated to the corresponding branch
+-XBMC_PVR_ADDONS_VERSION = 319351af7f3b546a5a56cdf6492f6ba1aec1cd2f
++# This cset in on master. When a Gotham branch is made, we should
++# follow it, as incompatible changes in the plugins API can happen
++# on the master branch.
++XBMC_PVR_ADDONS_VERSION = f38b2ebdc6f96244d5e4bc584315f4a2c24bc787
+ XBMC_PVR_ADDONS_SITE = $(call github,opdenkamp,xbmc-pvr-addons,$(XBMC_PVR_ADDONS_VERSION))
+ XBMC_PVR_ADDONS_LICENSE = GPLv3+
+ XBMC_PVR_ADDONS_LICENSE_FILES = COPYING
 -- 
 1.7.10.4
