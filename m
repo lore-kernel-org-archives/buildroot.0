@@ -1,45 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:43:04 +0200
-Subject: [Buildroot] [git commit] graphs: add option to remove transitive
-	dependencies in dependency graph
-Message-ID: <20140608145131.7477A9CF1C@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 16:43:27 +0200
+Subject: [Buildroot] [git commit] graph-depends: rename the mode constants
+Message-ID: <20140608145131.97A939CF25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67957967a5594790f75b2d76fbf9f210b5b02e92
+commit: http://git.buildroot.net/buildroot/commit/?id=47aeebd95619e41f2d6bcb4af72acf958b2b1ef4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, all the dependencies of a package are drawn on the dependency
-graph, including transitive dependencies (e.g. A->B->C and A->C).
-
-For very big graphs, with lots of packages with lots of dependencies, the
-dependency graph can be very dense, and transitive dependencies are
-cluttering the graph.
-
-In some cases, only getting the "build-order" dependencies is enough (e.g.
-to see what impact a package rebuild would have).
-
-Add a new environment variable to disable drawing transitive dependencies.
-
-Basically, it would turn this graph:
-
-    pkg1 ---> pkg2 ---> pkg3 -------------------.
-         |\__________/                 \         \
-         |\____________________         \         \
-         |                     \         \         \
-          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
-                    \__________/
-
-into that graph:
-
-    pkg1 ---> pkg2 ---> pkg3 -----------.
-         |                               \
-          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
-
-[Thanks to Samuel for the parser hints]
+This is ugly, since Python does not have enum constructs, so by moving
+the 'type' of the constant ('MODE' here) to the beginning, we get an
+artificial 'namespace' for the constants.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -47,80 +21,66 @@ Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |   49 +++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 49 insertions(+), 0 deletions(-)
+ support/scripts/graph-depends |   20 ++++++++------------
+ 1 files changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 443ac7d..c5fb520 100755
+index 07b9c22..42a42a8 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -40,6 +40,10 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
- parser.add_argument("--depth", '-d', metavar="DEPTH",
-                     help="Limit the dependency graph to DEPTH levels")
-+parser.add_argument("--transitive", dest="transitive", action='store_true',
-+                    default=True)
-+parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-+                    help="Draw (do not draw) transitive dependencies")
+@@ -25,13 +25,9 @@ import sys
+ import subprocess
+ import argparse
+ 
+-# In FULL_MODE, we draw the full dependency graph for all selected
+-# packages
+-FULL_MODE = 1
+-
+-# In PKG_MODE, we only draw the dependency graph for a given package
+-PKG_MODE  = 2
+-
++# Modes of operation:
++MODE_FULL = 1   # draw full dependency graph for all selected packages
++MODE_PKG  = 2   # draw dependency graph for a given package
+ mode = 0
+ 
+ # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+@@ -58,9 +54,9 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
  args = parser.parse_args()
  
  if args.package is None:
-@@ -51,6 +55,8 @@ else:
- if args.depth is not None:
-     max_depth = int(args.depth)
+-    mode = FULL_MODE
++    mode = MODE_FULL
+ else:
+-    mode = PKG_MODE
++    mode = MODE_PKG
+     rootpkg = args.package
  
-+transitive = args.transitive
-+
- allpkgs = []
+ max_depth = args.depth
+@@ -183,7 +179,7 @@ TARGET_EXCEPTIONS = [
  
- # Execute the "make show-targets" command to get the list of the main
-@@ -220,6 +226,49 @@ for dep in dependencies:
-         dict_deps[dep[0]] = []
-     dict_deps[dep[0]].append(dep[1])
+ # In full mode, start with the result of get_targets() to get the main
+ # targets and then use get_all_depends() for all targets
+-if mode == FULL_MODE:
++if mode == MODE_FULL:
+     targets = get_targets()
+     dependencies = []
+     allpkgs.append('all')
+@@ -201,7 +197,7 @@ if mode == FULL_MODE:
  
-+# This function return True if pkg is a dependency (direct or
-+# transitive) of pkg2, dependencies being listed in the deps
-+# dictionary. Returns False otherwise.
-+def is_dep(pkg,pkg2,deps):
-+    if deps.has_key(pkg2):
-+        for p in deps[pkg2]:
-+            if pkg == p:
-+                return True
-+            if is_dep(pkg,p,deps):
-+                return True
-+    return False
-+
-+# This function eliminates transitive dependencies; for example, given
-+# these dependency chain: A->{B,C} and B->{C}, the A->{C} dependency is
-+# already covered by B->{C}, so C is a transitive dependency of A, via B.
-+# The functions does:
-+#   - for each dependency d[i] of the package pkg
-+#     - if d[i] is a dependency of any of the other dependencies d[j]
-+#       - do not keep d[i]
-+#     - otherwise keep d[i]
-+def remove_transitive_deps(pkg,deps):
-+    d = deps[pkg]
-+    new_d = []
-+    for i in range(len(d)):
-+        keep_me = True
-+        for j in range(len(d)):
-+            if j==i:
-+                continue
-+            if is_dep(d[i],d[j],deps):
-+                keep_me = False
-+        if keep_me:
-+            new_d.append(d[i])
-+    return new_d
-+
-+# This functions trims down the dependency list of all packages.
-+def remove_extra_deps(deps):
-+    for pkg in deps.keys():
-+        if not transitive:
-+            deps[pkg] = remove_transitive_deps(pkg,deps)
-+    return deps
-+
-+dict_deps = remove_extra_deps(dict_deps)
-+
- # Print the attributes of a node: label and fill-color
- def print_attrs(pkg):
-     name = pkg_node_name(pkg)
+ # In pkg mode, start directly with get_all_depends() on the requested
+ # package
+-elif mode == PKG_MODE:
++elif mode == MODE_PKG:
+     dependencies = get_all_depends([rootpkg])
+ 
+ # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+@@ -269,7 +265,7 @@ def print_attrs(pkg):
+         label = 'ALL'
+     else:
+         label = pkg
+-    if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
++    if pkg == 'all' or (mode == MODE_PKG and pkg == rootpkg):
+         color = root_colour
+     else:
+         if pkg.startswith('host') \
