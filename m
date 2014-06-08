@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jun 2014 16:03:49 +0200
-Subject: [Buildroot] [PATCH 5/9] graph-depends: add option to set the colours
+Date: Sun,  8 Jun 2014 16:03:51 +0200
+Subject: [Buildroot] [PATCH 7/9] graph-depends: rename the mode constants
 In-Reply-To: <cover.1402236171.git.yann.morin.1998@free.fr>
 References: <cover.1402236171.git.yann.morin.1998@free.fr>
-Message-ID: <7b5c1eaa7b5ccf603eafc46dda6558ec7eb47f16.1402236171.git.yann.morin.1998@free.fr>
+Message-ID: <f7994edb742df53009feb99756b24253799cdde7.1402236171.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,64 +12,77 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+This is ugly, since Python does not have enum constructs, so by moving
+the 'type' of the constant ('MODE' here) to the beginning, we get an
+artificial 'namespace' for the constants.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- support/scripts/graph-depends | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ support/scripts/graph-depends | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 2b46040..0dafd77 100755
+index 07b9c22..42a42a8 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -42,6 +42,12 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
- parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
-                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
-+parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
-+                    default="lightblue,grey,gainsboro",
-+                    help="Comma-separated list of the three colours to use" \
-+                       + " to draw the top-level package, the target" \
-+                       + " packages, and the host packages, in this order." \
-+                       + " Defaults to: 'lightblue,grey,gainsboro'")
- parser.add_argument("--transitive", dest="transitive", action='store_true',
-                     default=True)
- parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-@@ -58,6 +64,17 @@ max_depth = args.depth
+@@ -25,13 +25,9 @@ import sys
+ import subprocess
+ import argparse
  
- transitive = args.transitive
+-# In FULL_MODE, we draw the full dependency graph for all selected
+-# packages
+-FULL_MODE = 1
+-
+-# In PKG_MODE, we only draw the dependency graph for a given package
+-PKG_MODE  = 2
+-
++# Modes of operation:
++MODE_FULL = 1   # draw full dependency graph for all selected packages
++MODE_PKG  = 2   # draw dependency graph for a given package
+ mode = 0
  
-+# Get the colours: we need exactly three colours,
-+# so no need not split more than 4
-+# We'll let 'dot' validate the colours...
-+colours = args.colours.split(',',4)
-+if len(colours) != 3:
-+    sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
-+    sys.exit(1)
-+root_colour = colours[0]
-+target_colour = colours[1]
-+host_colour = colours[2]
-+
- allpkgs = []
+ # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+@@ -58,9 +54,9 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+ args = parser.parse_args()
  
- # Execute the "make show-targets" command to get the list of the main
-@@ -250,14 +267,14 @@ def print_attrs(pkg):
+ if args.package is None:
+-    mode = FULL_MODE
++    mode = MODE_FULL
+ else:
+-    mode = PKG_MODE
++    mode = MODE_PKG
+     rootpkg = args.package
+ 
+ max_depth = args.depth
+@@ -183,7 +179,7 @@ TARGET_EXCEPTIONS = [
+ 
+ # In full mode, start with the result of get_targets() to get the main
+ # targets and then use get_all_depends() for all targets
+-if mode == FULL_MODE:
++if mode == MODE_FULL:
+     targets = get_targets()
+     dependencies = []
+     allpkgs.append('all')
+@@ -201,7 +197,7 @@ if mode == FULL_MODE:
+ 
+ # In pkg mode, start directly with get_all_depends() on the requested
+ # package
+-elif mode == PKG_MODE:
++elif mode == MODE_PKG:
+     dependencies = get_all_depends([rootpkg])
+ 
+ # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+@@ -269,7 +265,7 @@ def print_attrs(pkg):
+         label = 'ALL'
      else:
          label = pkg
-     if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
--        color = 'lightblue'
-+        color = root_colour
+-    if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
++    if pkg == 'all' or (mode == MODE_PKG and pkg == rootpkg):
+         color = root_colour
      else:
          if pkg.startswith('host') \
-         or pkg.startswith('toolchain') \
-         or pkg.startswith('rootfs'):
--            color = 'gainsboro'
-+            color = host_colour
-         else:
--            color = 'grey'
-+            color = target_colour
-     print "%s [label = \"%s\"]" % (name, label)
-     print "%s [color=%s,style=filled]" % (name, color)
- 
 -- 
 1.8.3.2
