@@ -1,66 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 17:07:19 +0200
-Subject: [Buildroot] [git commit] package/cryptodev: make it behave more
-	like other virtual packages
-Message-ID: <20140608151243.9F5929CC04@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 17:08:01 +0200
+Subject: [Buildroot] [git commit] support/scripts: prepare expanding the
+	packages lists
+Message-ID: <20140608151243.C08E19CC04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a54ba31db7b23dd563a5014348fa052b7745426
+commit: http://git.buildroot.net/buildroot/commit/?id=d3fa2bebc7f2e0f378d9fca68795c72cc44343ad
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the virtual package cryptodev is a special virtual package,
-as it offers a choice for its implementation, rather than letting the
-user enable them manually.
+Move to a function the code generating the package name from a
+symbol's name, to avoid code duplication.
 
-In so doing, it defines its _HAS option as a 'def_bool y' rather than
-letting each implementation 'select' it.
-
-Since we are going to generate a list of virtual packages and their
-providers, this defeats the heuristic used to find providers.
-
-Coming with an alternate heuristic that also matches the cryptodev
-package is quite complex, so better and easier to make it look more
-like any other virtual package.
+This is not used currently, but will be in a subsequent patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cryptodev/Config.in |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ support/scripts/gen-manual-lists.py |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
 
-diff --git a/package/cryptodev/Config.in b/package/cryptodev/Config.in
-index 2407e04..9f9df02 100644
---- a/package/cryptodev/Config.in
-+++ b/package/cryptodev/Config.in
-@@ -18,6 +18,7 @@ choice
- config BR2_PACKAGE_CRYPTODEV_LINUX
- 	bool "cryptodev-linux"
- 	depends on !BR2_microblaze
-+	select BR2_PACKAGE_HAS_CRYPTODEV
- 	help
- 	  Cryptodev-linux is a device that allows access to Linux kernel
- 	  cryptographic drivers; thus allowing userspace applications
-@@ -27,6 +28,7 @@ config BR2_PACKAGE_CRYPTODEV_LINUX
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 94f403e..aee2299 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -245,7 +245,7 @@ class Buildroot:
+         """
+         if not self.re_pkg_prefix.match(symbol.get_name()):
+             return False
+-        pkg_name = re.sub("BR2_PACKAGE_(HOST_)?(.*)", r"\2", symbol.get_name())
++        pkg_name = self._get_pkg_name(symbol)
  
- config BR2_PACKAGE_OCF_LINUX
- 	bool "ocf-linux"
-+	select BR2_PACKAGE_HAS_CRYPTODEV
- 	help
- 	  OCF-Linux is a Linux port of the OpenBSD/FreeBSD Cryptographic
- 	  Framework (OCF). This port aims to bring full asynchronous HW/SW
-@@ -38,7 +40,7 @@ config BR2_PACKAGE_OCF_LINUX
- endchoice
+         pattern = "^(HOST_)?" + pkg_name + "$"
+         pattern = re.sub("_", ".", pattern)
+@@ -278,6 +278,15 @@ class Buildroot:
+                 return True
+         return False
  
- config BR2_PACKAGE_HAS_CRYPTODEV
--	def_bool y
-+	bool
++    def _get_pkg_name(self, symbol):
++        """ Return the package name of the specified symbol.
++
++        :param symbol:      The symbol to get the package name of
++
++        """
++
++        return re.sub("BR2_PACKAGE_(HOST_)?(.*)", r"\2", symbol.get_name())
++
+     def _get_symbol_label(self, symbol, mark_deprecated=True):
+         """ Return the label (a.k.a. prompt text) of the symbol.
  
- config BR2_PACKAGE_PROVIDES_CRYPTODEV
- 	string
