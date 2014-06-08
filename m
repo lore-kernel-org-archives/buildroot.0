@@ -1,78 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 12:44:53 +0200
-Subject: [Buildroot] [PATCH v12 04/32] xbmc: add host-yasm dependency
- for MMX/64bit archs
-In-Reply-To: <1402144292-27837-5-git-send-email-bernd.kuhls@t-online.de>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 8 Jun 2014 12:45:47 +0200
+Subject: [Buildroot] [PATCH v12 02/32] xbmc: add host-gettext dependency
+In-Reply-To: <20140607212554.GA10718@free.fr>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
- <1402144292-27837-5-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140608104453.GA15981@free.fr>
+ <1402144292-27837-3-git-send-email-bernd.kuhls@t-online.de>
+ <20140607212554.GA10718@free.fr>
+Message-ID: <CAGduivxo_ShPUGMUsoBOnWkhs9B7w3=PuoOZY_7B=z+AhmUvbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Hi all,
 
-On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
-> Fixes error during xbmc configure:
-> 
-> yasm not found, use --disable-yasm for a crippled build
-> 
-> If you think configure made a mistake, make sure you are using the latest
-> version from Git.  If the latest version fails, report the problem to the
-> ffmpeg-user at ffmpeg.org mailing list or IRC #ffmpeg on irc.freenode.net.
-> Include the log file "config.log" produced by configure as this will help
-> solving the problem.
-> configure: error: Submodule lib/ffmpeg failed to configure
-> 
-> This will be needed for 13.0 Gotham.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-> ---
->  package/xbmc/xbmc.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index 3522802..ffe573f 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -21,6 +21,13 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
->  # xbmc at i386 depends on nasm
->  XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
->  
-> +# ffmpeg depends on yasm on MMX archs
-> +# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
-> +# yasm as dependency for x86_64, even if BR2_x86_generic=y
-
-Yes, all x86_64 have MMX.
-
-Regards,
-Yann E. MORIN.
-
-> +ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
-> +XBMC_DEPENDENCIES += host-yasm
-> +endif
-> +
->  XBMC_CONF_ENV = \
->  	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
->  	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
-> -- 
-> 1.7.10.4
-> 
+On Sat, Jun 7, 2014 at 11:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Bernd, All,
+>
+> On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
+>> AUTOPOINT=/bin/true does not work anymore since
+>> https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
+>>
+>> config.status: error: cannot find input file: `Makefile.in'
+>> configure: error: Submodule lib/cpluff failed to configure
+>>
+>> This will be needed for 13.0 Gotham.
+>>
+>> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>>  package/xbmc/xbmc.mk |    4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+>> index c7a4607..d8b9508 100644
+>> --- a/package/xbmc/xbmc.mk
+>> +++ b/package/xbmc/xbmc.mk
+>> @@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+>>  # called TexturePacker. It is responsible to take all the images used in the
+>>  # GUI and pack them in a blob.
+>>  # http://wiki.xbmc.org/index.php?title=TexturePacker
+>> -XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
+>> +XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+>>  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+>>       libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+>>       libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+>> @@ -133,7 +133,7 @@ endif
+>>
+>>  # Add HOST_DIR to PATH for codegenerator.mk to find swig
+>>  define XBMC_BOOTSTRAP
+>> -     cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
+>> +     cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+>>  endef
+>>  XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
+>>
+>> --
+>> 1.7.10.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
