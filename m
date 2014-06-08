@@ -1,25 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 17:57:53 +0200
-Subject: [Buildroot] [PATCH] packages: replace command install by
- $(INSTALL)
-In-Reply-To: <1401626281-29034-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1401626281-29034-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140608175753.6d45527f@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  8 Jun 2014 16:03:34 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140608160334.7EA039CF43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-On Sun,  1 Jun 2014 14:38:01 +0200, Maxime Hadjinlian wrote:
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+--- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-08 16:03:34 UTC ---
+Is what you wrote here correct? (No copy paste error?) Case one and two are
+identical?
+Have you tried four dollar signs? Depending on how things are parsed it may be
+needed...
 
-Applied, thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
