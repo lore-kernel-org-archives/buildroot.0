@@ -1,48 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:10:53 +0200
-Subject: [Buildroot] [git commit] rpi-userland: cleanup *_CONF_OPT
-Message-ID: <20140608131255.3725C9CB8D@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 15:09:58 +0200
+Subject: [Buildroot] [git commit] package/libcec: fix missing libraries from
+	rpi-userland
+Message-ID: <20140608131255.21EB29CE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74ef77c4325a4a77b5585158f1c093becb741bee
+commit: http://git.buildroot.net/buildroot/commit/?id=a19bb4b873a9592b3cc16ad992e473f7d56a0b35
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This change reverts the commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
-because rpi-userland is correctly built whatever the value of the
-BUILD_SHARED_LIBS CMake flags.
+When rpi-userland libraries are built as shared-objects, not all needed
+libraries are passed in the LD_FLAGS, leading to failure at linkage.
 
-The cset 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf originally intends to
-fix linkage/runtime failure in xbmc package because of missing flags in
-xbmc LIBS env. var. This has been fixed in the previous patch.
+To avoid this issue, set the LIBS variable content in accordance with
+INCLUDES variable value.
 
-So, for rpi-userland package, BUILD_SHARED_LIBS does no longer need to
-be forced to OFF, and can safely be driven by the CMake infrastructure.
+This is needed because libcec does not use pkg-config to look for the
+ldflags needed for -lbcm_host, even though bcm_host provides a .pc
+file (even a correct one!)
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/libcec/libcec.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 8b225ba..2de6b92 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
- RPI_USERLAND_INSTALL_STAGING = YES
--RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
-+RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
- 
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
- 
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 0aabb06..ad919fc 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -26,6 +26,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+ LIBCEC_CONF_OPT = --enable-rpi \
+    --with-rpi-include-path=$(STAGING_DIR)/usr/include
+ LIBCEC_DEPENDENCIES += rpi-userland
++LIBCEC_CONF_ENV += LIBS="-lvcos -lvchostif"
+ else
+ LIBCEC_CONF_OPT = --disable-rpi
+ endif
