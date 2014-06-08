@@ -1,59 +1,101 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 11:51:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-06-07
-In-Reply-To: <20140608063008.43578101511@stock.ovh.net>
-References: <20140608063008.43578101511@stock.ovh.net>
-Message-ID: <20140608095111.GA3526@free.fr>
+From: Mike Zick <minimod@morethan.org>
+Date: Sun, 8 Jun 2014 05:38:21 -0500
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion
+ and internal variables
+In-Reply-To: <20140608070329.A41679CEEE@busybox.osuosl.org>
+References: <bug-7172-163@https.bugs.busybox.net/>
+ <20140608070329.A41679CEEE@busybox.osuosl.org>
+Message-ID: <20140608053821.1c486f66@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sun,  8 Jun 2014 07:03:29 +0000 (UTC)
+bugzilla at busybox.net wrote:
 
-On 2014-06-08 08:30 +0200, Thomas Petazzoni spake thusly:
-> Detail of failures
->     x86_64 |                   libbsd-0.6.0 | NOK | http://autobuild.buildroot.net/results/b19d24dbf9d05d86d839349695da45d548705b25/
+> https://bugs.busybox.net/show_bug.cgi?id=7172
+> 
+> --- Comment #1 from Samuel Martin <s.martin49@gmail.com> 2014-06-08
+> 07:03:28 UTC --- Mike,
+> 
+> (In reply to comment #0)
+> > Ref:  man ld.so
+> > 
+> > Example:
+> > In menu -> tool chain -> Target Linker Options (BR2_TARGET_LDFLAGS)
+> > to: -Wl,-rpath='$ORIGIN/../lib'
+> > (A relative path from executable to pathname of its required
+> > libraries. The example in ld.so manual.).
+> > 
+> > Build BusyBox (which honors BR_TARGET_LDFLAGS, not everything does).
+> > 
+> > Use: readelf -dl on the resulting binary and find an entry similar
+> > to: 0x0000000f (RPATH)                      Library rpath:
+> > [outputRIGIN/../lib]
+> > 
+> > Where the $O of $ORIGIN has been expanded to an internal value by
+> > the time the content of BR2_TARGET_LDFLAGS is seen by the compiler.
+> 
+> Unfortunately, there is no trivial solution. This bug comes from the
+> interaction between Buildroot and the packages' build-systems
+> (especially those based on autotools).
+> 
+> I mean there no easy way to correctly escape "$ORIGIN" in makefiles
+> (form Buildroot and the package itself) or/and in sh scripts.
+> 
 
-libbsd checks whether the toolchain has support for .init_array, which
-it checks as thus:
+Grumble.
+But I half-way expected that finding.
+;)
 
-    /* Look for a known libc that supports .init_array with the GNU extension
-     * to pass main() arguments to the init functions. */
-    #include <stdlib.h>
-    #if defined __GLIBC_PREREQ
-    #  if __GLIBC_PREREQ(2, 4)
-    /* glibc supports GNU .init_array since 2.4. */
-    #  else
-    #    error glibc does not support GNU .init_array
-    #  endif
-    #else
-    /*
-     * Basic SysV ABI .init_array support, init functions do not get arguments:
-     * - Bionic since its inception.
-     * - uClibc since 0.9.29.
-     */
-    #  error unknown whether libc supports GNU .init_array
-    #endif
+> > 
+> > This was when using the Buildroot generation of a toolchain.
+> > Other toolchain selections not tested.
+> 
+> The toolchain has nothing to do with this issue.
+> 
+> 
+> From the couple of experiments I run, the only reliable solution to
+> correctly set RPATH is using chrpath or patchelf at the end of the
+> build.
+> 
 
-So, it is only happy with a glibc >= 2.4. Unfortunately, uClibc only
-impersonates a glibc-2.2, in include/features.h:
+That (patchelf ref:
+http://anonscm.debian.org/gitweb/?p=collab-maint/patchelf.git;a=summary
+http://nixos.org/patchelf.html)
+was going to be my 'temporary' work-around.
 
-      395 #define __GLIBC__   2
-      396 #define __GLIBC_MINOR__ 2
+Along with a post-build script to munge things as required.
 
-I suggest we just disable libbsd (and its reverse dependencies) on
-uClibc. Thoughts?
+Not so temporary now I guess.
 
-Regards,
-Yann E. MORIN.
+- - - -
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+There is an alternative, for people who only need a very few
+binaries built - -
+Set 'Target Linker Options' to a long string, longer than they
+will need, and after build hex-edit the binaries to the required 
+string.
+
+But that gets tiring real soon.  ;)
+And some packages are ignoring 'Target Linker Options' anyway.
+So even with this method, people would still need patchelf.
+
+- - - -
+
+Hmm...
+I guess I should add a selection to build host-patchelf to BR.
+Someone else out there might need it, even if they don't need
+ld.so token expansion in runpath and/or rpath.
+
+Thanks for taking the time to check this out.
+Might have to mark it as: "Can't be fixed" in the bug tracker.
+
+Mike
+> 
+> Regards,
+> 
+> Samuel
+> 
