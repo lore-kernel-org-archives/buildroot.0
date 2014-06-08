@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:11:47 +0200
-Subject: [Buildroot] [PATCH v6 0/4] rpi-userland/xbmc fixes
-In-Reply-To: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
-References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140608151147.4d574c69@free-electrons.com>
+Date: Sun, 8 Jun 2014 15:12:43 +0200
+Subject: [Buildroot] [PATCH v12 00/32] xbmc: bump version to 13.1
+In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140608151243.658be276@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Bernd Kuhls,
 
-On Thu,  5 Jun 2014 01:04:09 +0200, Samuel Martin wrote:
+On Sat,  7 Jun 2014 14:31:00 +0200, Bernd Kuhls wrote:
 
-> Samuel Martin (3):
 >   xbmc: fix missing libraries from rpi-userland
->   rpi-userland: add patch fix missing libvcilcs install rules
 >   rpi-userland: cleanup *_CONF_OPT
-> 
-> Yann E. MORIN (1):
 >   package/libcec: fix missing libraries from rpi-userland
 
-Series applied, thanks.
+These patches can be dropped from your series, I've applied them from
+Samuel's series.
 
 Thomas
 -- 
