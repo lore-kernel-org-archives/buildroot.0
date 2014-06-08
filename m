@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 18:37:02 +0200
-Subject: [Buildroot] [PATCH 06/11] toolchain-external: bump Linaro ARMeb
- toolchain to 2014.04
-In-Reply-To: <1401619668-28062-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 18:39:40 +0200
+Subject: [Buildroot] [PATCH 07/11] toolchain-external: bump Linaro
+ AArch64 toolchain to 2014.05
+In-Reply-To: <1401619668-28062-8-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1401619668-28062-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140608163702.GJ3266@free.fr>
+ <1401619668-28062-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140608163940.GK3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +15,6 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-06-01 12:47 +0200, Thomas Petazzoni spake thusly:
-> For some reason, there is no ARMeb toolchain available in the 2014.05
-> Linaro release.
-> 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -26,49 +23,38 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  toolchain/toolchain-external/Config.in             | 6 +++---
+>  toolchain/toolchain-external/Config.in             | 2 +-
 >  toolchain/toolchain-external/toolchain-external.mk | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 54a94f8..dcdd383 100644
+> index dcdd383..8fca01a 100644
 > --- a/toolchain/toolchain-external/Config.in
 > +++ b/toolchain/toolchain-external/Config.in
-> @@ -33,7 +33,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
->  	depends on !BR2_PREFER_STATIC_LIB
+> @@ -782,7 +782,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
+>  	  http://wiki.xilinx.com/mb-gnu-tools
 >  
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
-> -	bool "Linaro armeb 2014.02"
-> +	bool "Linaro armeb 2014.04"
->  	depends on BR2_armeb
->  	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+>  config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+> -	bool "Linaro AArch64 14.02"
+> +	bool "Linaro AArch64 14.05"
+>  	depends on BR2_aarch64
 >  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> @@ -46,8 +46,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
->  	help
->  	  Linaro toolchain for the ARM big endian architecture. It
-> -	  uses Linaro GCC 2014.01 (based on gcc 4.8), Linaro GDB
-> -	  2013.10 (based on GDB 7.6), eglibc 2.18, Binutils 2013.11
-> +	  uses Linaro GCC 2014.04 (based on gcc 4.8), Linaro GDB
-> +	  2014.04 (based on GDB 7.6), eglibc 2.19, Binutils 2014.04
->  	  (based on 2.24). It generates code that runs on all Cortex-A
->  	  profile devices, but tuned for the Cortex-A9. The code
->  	  generated is Thumb 2, with the hard floating point calling
+>  	depends on !BR2_PREFER_STATIC_LIB
 > diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index ba1690b..8185c89 100644
+> index 8185c89..a6c4061 100644
 > --- a/toolchain/toolchain-external/toolchain-external.mk
 > +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -280,8 +280,8 @@ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.05_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+> @@ -351,8 +351,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+>  TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
 > -TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.02/components/toolchain/binaries/
-> -TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.02_linux.tar.xz
-> +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
-> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+> -TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2014.02_linux.tar.xz
+> +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/binaries/
+> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.05_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
+>  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-1.0.0/
 > -- 
 > 1.9.3
 > 
