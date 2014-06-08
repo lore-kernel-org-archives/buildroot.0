@@ -1,33 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 14:29:04 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-06-06
-In-Reply-To: <20140607063010.048D81014F6@stock.ovh.net>
-References: <20140607063010.048D81014F6@stock.ovh.net>
-Message-ID: <20140608122904.GB3266@free.fr>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Sun, 8 Jun 2014 14:39:47 +0200
+Subject: [Buildroot] [PATCH] package/libcec: fix missing libraries from
+	rpi-userland
+In-Reply-To: <1401917401-26161-1-git-send-email-yann.morin.1998@free.fr>
+References: <1401917401-26161-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <CAGduivy1wngk65xFKyimx5VEvqEpki-bnW6yDYcULg_NM_-RkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi all,
 
-On 2014-06-07 08:30 +0200, Thomas Petazzoni spake thusly:
->        arm | rpi-userland-4855a45b118cb7... | NOK | http://autobuild.buildroot.net/results/789fd88c66f898d0a2fd22acc27e9378dd4147af/
+I could not test if it works or not since I don't have a compatible
+hardware, but it builds.
 
-Fixed by Samuel's series:
-    http://patchwork.ozlabs.org/patch/356127/
-    ...
-    http://patchwork.ozlabs.org/patch/356130/
+Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+On Wed, Jun 4, 2014 at 11:30 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> When rpi-userland libraries are built as shared-objects, not all needed
+> libraries are passed in the LD_FLAGS, leading to failure at linkage.
+>
+> To avoid this issue, set the LIBS variable content in accordance with
+> INCLUDES variable value.
+>
+> This is needed because libcec does not use pkg-config to look for the
+> ldflags needed for -lbcm_host, even though bcm_host provides a .pc
+> file (even a correct one!)
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  package/libcec/libcec.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+> index 0aabb06..ad919fc 100644
+> --- a/package/libcec/libcec.mk
+> +++ b/package/libcec/libcec.mk
+> @@ -26,6 +26,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>  LIBCEC_CONF_OPT = --enable-rpi \
+>     --with-rpi-include-path=$(STAGING_DIR)/usr/include
+>  LIBCEC_DEPENDENCIES += rpi-userland
+> +LIBCEC_CONF_ENV += LIBS="-lvcos -lvchostif"
+>  else
+>  LIBCEC_CONF_OPT = --disable-rpi
+>  endif
+> --
+> 1.8.3.2
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
