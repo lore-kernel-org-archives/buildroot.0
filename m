@@ -1,61 +1,52 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun,  8 Jun 2014 07:03:29 +0000 (UTC)
-Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
- internal variables
-In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
-References: <bug-7172-163@https.bugs.busybox.net/>
-Message-ID: <20140608070329.A41679CEEE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 09:42:32 +0200
+Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size
+ installed by each package
+In-Reply-To: <53938A1E.4060802@carallon.com>
+References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <53938A1E.4060802@carallon.com>
+Message-ID: <20140608094232.741b6417@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7172
+Dear Will Wagner,
 
---- Comment #1 from Samuel Martin <s.martin49@gmail.com> 2014-06-08 07:03:28 UTC ---
-Mike,
+On Sat, 07 Jun 2014 22:54:38 +0100, Will Wagner wrote:
 
-(In reply to comment #0)
-> Ref:  man ld.so
+> > The implementation consists in adding a global instrumentation hook
+> > that registers which files are installed by each package. A limitation
+> > of the current implementation is that when a file is installed by a
+> > package A and then overriden by package B, the mechanism will assume
+> > the file was installed by package A. Suggestions to welcome on how to
+> > solve this in a reasonably simple way.
 > 
-> Example:
-> In menu -> tool chain -> Target Linker Options (BR2_TARGET_LDFLAGS) to:
-> -Wl,-rpath='$ORIGIN/../lib'
-> (A relative path from executable to pathname of its required libraries.
-> The example in ld.so manual.).
-> 
-> Build BusyBox (which honors BR_TARGET_LDFLAGS, not everything does).
-> 
-> Use: readelf -dl on the resulting binary and find an entry similar to:
->  0x0000000f (RPATH)                      Library rpath: [outputRIGIN/../lib]
-> 
-> Where the $O of $ORIGIN has been expanded to an internal value by the time the
-> content of BR2_TARGET_LDFLAGS is seen by the compiler.
+> Can you not record the timestamp the first time you see the file and see 
+> if it has changed at the end. I appreciate a bash script to do this is 
+> going to be pretty hard.
 
-Unfortunately, there is no trivial solution. This bug comes from the
-interaction between Buildroot and the packages' build-systems (especially those
-based on autotools).
+Depends on what you call "at the end". The problem is that between the
+end of the install-target step of a given package, and the end of the
+entire build of the system, most of the files in $(TARGET_DIR) are
+modified due to stripping. Therefore, their timestamp changes.
 
-I mean there no easy way to correctly escape "$ORIGIN" in makefiles (form
-Buildroot and the package itself) or/and in sh scripts.
+The only thing I could think of would be based on SHA1: in the global
+instrumentation hook, instead of just doing a "find" on all files in
+$(TARGET_DIR) and then diff the result before/after the installation,
+we include the SHA1. Therefore, the diff would indicate when a file has
+changed, so we would be able to detect that. However, this would mean
+that a file will be mentioned in two .filelist files, and since the
+Python script has no idea in which order the packages were built, it
+does not know which of the two packages won for the installation of the
+given file. Could be based on the timestamp of the .filelist file,
+though. Starts to be a bit tricky, as you can see :)
 
-> 
-> This was when using the Buildroot generation of a toolchain.
-> Other toolchain selections not tested.
+Thanks for your feedback!
 
-The toolchain has nothing to do with this issue.
-
-
-From the couple of experiments I run, the only reliable solution to correctly
-set RPATH is using chrpath or patchelf at the end of the build.
-
-
-Regards,
-
-Samuel
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
