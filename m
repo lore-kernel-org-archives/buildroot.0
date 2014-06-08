@@ -1,19 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:43:27 +0200
-Subject: [Buildroot] [git commit] graph-depends: rename the mode constants
-Message-ID: <20140608145131.97A939CF25@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 16:43:13 +0200
+Subject: [Buildroot] [git commit] graph-depends: handle the depth argument
+	in a more pythonic way
+Message-ID: <20140608145131.85A8B9CF1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=47aeebd95619e41f2d6bcb4af72acf958b2b1ef4
+commit: http://git.buildroot.net/buildroot/commit/?id=e347bee02ca7696e17d482f163c999d8d705be7d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is ugly, since Python does not have enum constructs, so by moving
-the 'type' of the constant ('MODE' here) to the beginning, we get an
-artificial 'namespace' for the constants.
+Add some comment as well, enhance help text.
+
+[thanks to Samuel for the hints to make it even more pythonic]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -21,66 +22,38 @@ Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |   20 ++++++++------------
- 1 files changed, 8 insertions(+), 12 deletions(-)
+ support/scripts/graph-depends |    9 +++++----
+ 1 files changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 07b9c22..42a42a8 100755
+index 3560a15..2b46040 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -25,13 +25,9 @@ import sys
- import subprocess
- import argparse
+@@ -33,13 +33,15 @@ FULL_MODE = 1
+ PKG_MODE  = 2
  
--# In FULL_MODE, we draw the full dependency graph for all selected
--# packages
--FULL_MODE = 1
--
--# In PKG_MODE, we only draw the dependency graph for a given package
--PKG_MODE  = 2
--
-+# Modes of operation:
-+MODE_FULL = 1   # draw full dependency graph for all selected packages
-+MODE_PKG  = 2   # draw dependency graph for a given package
  mode = 0
++
++# Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+ max_depth = 0
  
- # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
-@@ -58,9 +54,9 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
- args = parser.parse_args()
- 
- if args.package is None:
--    mode = FULL_MODE
-+    mode = MODE_FULL
- else:
--    mode = PKG_MODE
-+    mode = MODE_PKG
+ parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+-parser.add_argument("--depth", '-d', metavar="DEPTH",
+-                    help="Limit the dependency graph to DEPTH levels")
++parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
++                    help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
+ parser.add_argument("--transitive", dest="transitive", action='store_true',
+                     default=True)
+ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+@@ -52,8 +54,7 @@ else:
+     mode = PKG_MODE
      rootpkg = args.package
  
- max_depth = args.depth
-@@ -183,7 +179,7 @@ TARGET_EXCEPTIONS = [
+-if args.depth is not None:
+-    max_depth = int(args.depth)
++max_depth = args.depth
  
- # In full mode, start with the result of get_targets() to get the main
- # targets and then use get_all_depends() for all targets
--if mode == FULL_MODE:
-+if mode == MODE_FULL:
-     targets = get_targets()
-     dependencies = []
-     allpkgs.append('all')
-@@ -201,7 +197,7 @@ if mode == FULL_MODE:
+ transitive = args.transitive
  
- # In pkg mode, start directly with get_all_depends() on the requested
- # package
--elif mode == PKG_MODE:
-+elif mode == MODE_PKG:
-     dependencies = get_all_depends([rootpkg])
- 
- # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
-@@ -269,7 +265,7 @@ def print_attrs(pkg):
-         label = 'ALL'
-     else:
-         label = pkg
--    if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
-+    if pkg == 'all' or (mode == MODE_PKG and pkg == rootpkg):
-         color = root_colour
-     else:
-         if pkg.startswith('host') \
