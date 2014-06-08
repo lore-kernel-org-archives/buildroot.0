@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jun 2014 16:03:53 +0200
-Subject: [Buildroot] [PATCH 9/9] manual: document the new graph-depends
-	options
+Date: Sun,  8 Jun 2014 16:03:50 +0200
+Subject: [Buildroot] [PATCH 6/9] graph-depends: document the 'transitive'
+	variable
 In-Reply-To: <cover.1402236171.git.yann.morin.1998@free.fr>
 References: <cover.1402236171.git.yann.morin.1998@free.fr>
-Message-ID: <fa5477ea2ced52b952961623097578564a7247b6.1402236171.git.yann.morin.1998@free.fr>
+Message-ID: <33d46f82ca02a0c4f1d5696581dc66522c7a0218.1402236171.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,34 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+Although unnecessary (we already have initialisation via the parser),
+initialise the 'transitive' option, and document it at the same time.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- docs/manual/common-usage.txt | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 16a1351..eb83990 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -94,6 +94,8 @@ to +make+ or set in the environment:
-   default), or +png+.
- * +BR2_GRAPH_DEPS_OPTS+ to pass extra options to the dependency graph; see
-   xref:graph-depends[] for the accepted options
-+* +BR2_GRAPH_DOT_OPTS+ is passed verbatim as options to the +dot+ utility to
-+  draw the dependency graph.
+---
+Changes v3 -> v4:
+  - fix commit log s/max_depth/transitive/  (Thomas)
+---
+ support/scripts/graph-depends | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 0dafd77..07b9c22 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -37,6 +37,9 @@ mode = 0
+ # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+ max_depth = 0
  
- An example that uses config files located in the toplevel directory and
- in your $HOME:
-@@ -204,8 +206,15 @@ The +graph-depends+ behaviour can be controlled by setting options in the
- * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
-   default, +0+, means no limit.
- 
-+* +--transitive+, +--no-transitive+, to draw (or not) the transitive
-+  dependencies. The default is to draw transitive dependencies.
++# Whether to draw the transitive dependencies
++transitive = True
 +
-+* +--colours R,T,H+, the comma-separated list of colours to draw the
-+  root package (+R+), the target packages (+T+) and the host packages
-+  (+H+). Defaults to: +lightblue,grey,gainsboro+
-+
- --------------------------------
--BR2_GRAPH_DEPS_OPTS='-d 3' make graph-depends
-+BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
- --------------------------------
- 
- === Graphing the build duration
+ parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
 -- 
 1.8.3.2
