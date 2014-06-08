@@ -1,50 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  8 Jun 2014 08:30:08 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-07
-Message-ID: <20140608063008.43578101511@stock.ovh.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  8 Jun 2014 07:03:29 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140608070329.A41679CEEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-06-07
-===============================
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-        success : 86 
-       failures : 12 
-       timeouts : 0  
-          TOTAL : 98 
+--- Comment #1 from Samuel Martin <s.martin49@gmail.com> 2014-06-08 07:03:28 UTC ---
+Mike,
 
-Classification of failures by reason
-====================================
+(In reply to comment #0)
+> Ref:  man ld.so
+> 
+> Example:
+> In menu -> tool chain -> Target Linker Options (BR2_TARGET_LDFLAGS) to:
+> -Wl,-rpath='$ORIGIN/../lib'
+> (A relative path from executable to pathname of its required libraries.
+> The example in ld.so manual.).
+> 
+> Build BusyBox (which honors BR_TARGET_LDFLAGS, not everything does).
+> 
+> Use: readelf -dl on the resulting binary and find an entry similar to:
+>  0x0000000f (RPATH)                      Library rpath: [outputRIGIN/../lib]
+> 
+> Where the $O of $ORIGIN has been expanded to an internal value by the time the
+> content of BR2_TARGET_LDFLAGS is seen by the compiler.
 
-                   perl-5.18.2 | 3 
-                    sdl-1.2.15 | 2 
-                  libbsd-0.6.0 | 1 
-                 webkit-1.11.5 | 1 
-                  weston-1.5.0 | 1 
-              lm-sensors-3.3.5 | 1 
-               alsa-lib-1.0.26 | 1 
-                 gnuplot-4.6.2 | 1 
-              cosmo-14.03.04-1 | 1 
+Unfortunately, there is no trivial solution. This bug comes from the
+interaction between Buildroot and the packages' build-systems (especially those
+based on autotools).
 
-Detail of failures
-===================
+I mean there no easy way to correctly escape "$ORIGIN" in makefiles (form
+Buildroot and the package itself) or/and in sh scripts.
 
-    x86_64 |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/9ee4d27ff2e5ae6a178cde6a9ba46919324d12cc/
-      i686 |               cosmo-14.03.04-1 | NOK | http://autobuild.buildroot.net/results/c9c98a49aa02ca0fd62a96719a7b9891cd5094f6/
-      bfin |                  gnuplot-4.6.2 | NOK | http://autobuild.buildroot.net/results/356b3aee46138ae6e305be5f369497f39adfaa9d/
-    x86_64 |                   libbsd-0.6.0 | NOK | http://autobuild.buildroot.net/results/b19d24dbf9d05d86d839349695da45d548705b25/
-      bfin |               lm-sensors-3.3.5 | NOK | http://autobuild.buildroot.net/results/428793c24d5a73d2e1540d53e27a15994a93c3e3/
-   powerpc |                    perl-5.18.2 | NOK | http://autobuild.buildroot.net/results/52bab93e3903ce059815c5c4077f2e437fb4ffb7/
-    mipsel |                    perl-5.18.2 | NOK | http://autobuild.buildroot.net/results/e0f429d601368598bbe18e8a53dfaeb040cccafb/
-   powerpc |                    perl-5.18.2 | NOK | http://autobuild.buildroot.net/results/ec248a1a0b083b74a1fc4c3dc1ded5e79dc3cf9c/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/a16a4406185573aa8c367cd003b39f26656d8944/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/9dd9a5b7c6a5762d4f5c9e70e57be42553f9cc8e/
-       sh4 |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/c98b544afe3c1366072657b4db892db85bb5c255/
-    x86_64 |                   weston-1.5.0 | NOK | http://autobuild.buildroot.net/results/e94767c11f9ed22488c92054339c586364950f3a/
+> 
+> This was when using the Buildroot generation of a toolchain.
+> Other toolchain selections not tested.
 
+The toolchain has nothing to do with this issue.
+
+
+From the couple of experiments I run, the only reliable solution to correctly
+set RPATH is using chrpath or patchelf at the end of the build.
+
+
+Regards,
+
+Samuel
 
 -- 
-http://autobuild.buildroot.net
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
