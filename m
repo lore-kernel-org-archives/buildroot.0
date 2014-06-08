@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:22:43 +0200
-Subject: [Buildroot] [PATCH 2/2] package/trace-cmd: bump to version 2.3.2
-In-Reply-To: <1402006038-8840-2-git-send-email-romain.naour@openwide.fr>
-References: <1402006038-8840-1-git-send-email-romain.naour@openwide.fr>
- <1402006038-8840-2-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140608152243.48fd5c25@free-electrons.com>
+Date: Sun, 8 Jun 2014 15:33:02 +0200
+Subject: [Buildroot] [Patch v2 0/1] systemd: bump to v213
+In-Reply-To: <1401918049-10503-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1401918049-10503-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140608153302.2cc49ded@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Eric Le Bihan,
 
-On Fri,  6 Jun 2014 00:07:18 +0200, Romain Naour wrote:
-> The first patch "use-pkg-config-instead-of-python-config" has been applied upstream.
+On Wed,  4 Jun 2014 23:40:48 +0200, Eric Le Bihan wrote:
+> This patch bumps systemd to v213.
 > 
-> The flag _GNU_SOURCE is now always defined in Makefile, so it can be removed from trace-cmd.mk
-> 
-> CPPFLAGS are appended to CFLAGS and are used to add extra flags, but the flag _LARGEFILE64_SOURCE
-> in TARGET_CPPFLAGS is already defined in source files, which causes a build error.
-> CPPFLAGS are cleared before passing them to the trace-cmd Makefile.
+> This version features systemd-timesyncd, a SNTP daemon, which is useful on
+> machines without a RTC, like Raspberry Pi.
 
-Please wrap your commit message properly.
+Applied, thanks.
 
->  # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
->  # redefining it on the command line causes build problems.
-> -TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
-> +TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
-> +
-> +# trace-cmd use CPPFLAGS to add some extra flags.
-> +# But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
-> +# that causes build problems.
-> +TRACE_CMD_CPPFLAGS = ""
+> Note that in order to have systemd and this daemon to run properly, some
+> changes to /var, /run and /etc/resolv.conf in the target skeleton should be
+> made. This can be done in a post-build script (see
+> https://github.com/elebihan/buildroot-ext-elb/commit/557d5df324db4ec12d1b98bed7c1a899eb24bdb6
+> for an example).
 
-And therefore why don't you use the same strategy as the one used for
-CFLAGS, by filtering out the -D_LARGEFILE64_SOURCE ?
+I think we should find a way of making this automatic. I believe it is
+quite related to something we've discussed last week with Maxime: maybe
+the skeleton should become a proper package, and should be freed from
+everything Busybox-specific. Then, we can have additional
+skeleton-busybox and skeleton-systemd packages, or some other mechanism
+to introduce the specificities needed by these init systems (maybe
+directly in the busybox and systemd packages).
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
