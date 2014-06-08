@@ -1,20 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:43:13 +0200
-Subject: [Buildroot] [git commit] graph-depends: handle the depth argument
-	in a more pythonic way
-Message-ID: <20140608145131.85A8B9CF1C@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 16:43:22 +0200
+Subject: [Buildroot] [git commit] graph-depends: document the 'transitive'
+	variable
+Message-ID: <20140608145131.9175C9CB8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e347bee02ca7696e17d482f163c999d8d705be7d
+commit: http://git.buildroot.net/buildroot/commit/?id=4a2db6d19322b46968e63df06b562ec0cbaa2d0c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add some comment as well, enhance help text.
-
-[thanks to Samuel for the hints to make it even more pythonic]
+Although unnecessary (we already have initialisation via the parser),
+initialise the 'transitive' option, and document it at the same time.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
@@ -22,38 +21,20 @@ Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |    9 +++++----
- 1 files changed, 5 insertions(+), 4 deletions(-)
+ support/scripts/graph-depends |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 3560a15..2b46040 100755
+index 0dafd77..07b9c22 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -33,13 +33,15 @@ FULL_MODE = 1
- PKG_MODE  = 2
- 
- mode = 0
-+
-+# Limit drawing the dependency graph to this depth. 0 means 'no limit'.
+@@ -37,6 +37,9 @@ mode = 0
+ # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
  max_depth = 0
  
++# Whether to draw the transitive dependencies
++transitive = True
++
  parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
  parser.add_argument("--package", '-p', metavar="PACKAGE",
                      help="Graph the dependencies of PACKAGE")
--parser.add_argument("--depth", '-d', metavar="DEPTH",
--                    help="Limit the dependency graph to DEPTH levels")
-+parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
-+                    help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
- parser.add_argument("--transitive", dest="transitive", action='store_true',
-                     default=True)
- parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-@@ -52,8 +54,7 @@ else:
-     mode = PKG_MODE
-     rootpkg = args.package
- 
--if args.depth is not None:
--    max_depth = int(args.depth)
-+max_depth = args.depth
- 
- transitive = args.transitive
- 
