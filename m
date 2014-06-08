@@ -1,50 +1,35 @@
-From: Noam Camus <noamc@ezchip.com>
-Date: Sun, 8 Jun 2014 13:16:01 +0000
-Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create
-	a	relocatable one
-In-Reply-To: <20140608145430.0125bb29@free-electrons.com>
-References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
- <20140608145430.0125bb29@free-electrons.com>
-Message-ID: <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 15:21:28 +0200
+Subject: [Buildroot] [git commit] package/trace-cmd: update download url
+Message-ID: <20140608132137.E7C6F9CE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=70740ddc0a3bbf9a6fd54a9e2799d30cdd0dc101
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I wish to contribute.
-However my organization security rules are not allowing me to send directly with send-email outside our organization.
+The git repository has been moved to http://www.kernel.org/pub/ which
+allows to use $(BR2_KERNEL_MIRROR)
 
-So I send-email to myself and only through outlook and exchange server I can forward the email to buildroot.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/trace-cmd/trace-cmd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Isn't there a way to send a patch as file?
-
-Editing the patch manually in outlook is something I wish to avoid.
-
-Regards,
-noam
-
-> -----Original Message-----
-> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
-> Sent: Sunday, June 08, 2014 3:55 PM
-> To: Noam Camus
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
-> relocatable one
-> 
-> Dear Noam Camus,
-> 
-> On Sun, 8 Jun 2014 12:50:03 +0000, Noam Camus wrote:
-> 
-> > Please review below patch
-> 
-> Please send it properly with git send-email :-)
-> 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering http://free-electrons.com
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 6a732db..9a1ba71 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TRACE_CMD_VERSION = trace-cmd-v2.2.1
+-TRACE_CMD_SITE = http://git.kernel.org/cgit/linux/kernel/git/rostedt/trace-cmd.git
++TRACE_CMD_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/rostedt/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+ TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPLv2 LGPLv2.1
