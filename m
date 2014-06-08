@@ -1,93 +1,176 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 8 Jun 2014 19:08:32 +0200
-Subject: [Buildroot] [PATCH v3] faifa: new package
-In-Reply-To: <20140608183400.5c399805@free-electrons.com>
-References: <1401284346-2929-1-git-send-email-maxime.hadjinlian@gmail.com>
- <20140608183400.5c399805@free-electrons.com>
-Message-ID: <CAHXCMMJg6Vsjd+rCU-DqDjUa0MBQzKEwNRjKg1OvkbZ1Jbq1Ew@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Jun 2014 19:16:06 +0200
+Subject: [Buildroot] [PATCH 11/11] toolchain-external: add ADI Blackfin
+ 2014R1 toolchain, remove 2012R1
+In-Reply-To: <1401619668-28062-12-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401619668-28062-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140608171606.GN3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, Thomas, all,
+Thomas, All,
 
-On Sun, Jun 8, 2014 at 6:34 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Maxime Hadjinlian,
->
-> On Wed, 28 May 2014 15:39:06 +0200, Maxime Hadjinlian wrote:
->
->> diff --git a/package/faifa/Config.in b/package/faifa/Config.in
->> new file mode 100644
->> index 0000000..99abaab
->> --- /dev/null
->> +++ b/package/faifa/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_FAIFA
->> +     bool "faifa"
->> +     select BR2_PACKAGE_LIBPCAP
->> +     help
->> +       Faifa can configure any Intellon-based Power Line Communication device
->> +       using Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It
->> +       supports all Intellon-specific management and control frames as well as
->> +       standard management frames.
->
-> These lines are too long and had to be wrapped to a shorter length.
->
-> I had to add a !BR2_PREFER_STATIC_LIB dependency, because this package
-> always builds a shared library.
->
->
->> +FAIFA_VERSION = aa0b5f90b89a9fd1533137b68ebf85f5437aba53
->> +FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
->> +FAIFA_INSTALL_STAGING = YES
->> +FAIFA_DEPENDENCIES = libpcap
->> +FAIFA_LICENSE = GPLv2
->
-> GPLv2+.
->
->> +FAIFA_LICENSE_FILES = COPYING
->> +
->> +define FAIFA_RUN_AUTOGEN
->> +     cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
->> +endef
->> +FAIFA_PRE_CONFIGURE_HOOKS += FAIFA_RUN_AUTOGEN
->
-> I've added a comment above this to explain what's going on, and added
-> the missing host-autoconf dependency.
->
->> +
->> +define FAIFA_INSTALL_TARGET_CMDS
->> +    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->> +        PREFIX=/usr \
->> +        STRIP=/bin/true \
->> +        DESTDIR=$(TARGET_DIR) \
->> +        install
->> +endef
->> +
->> +define FAIFA_INSTALL_STAGING_CMDS
->> +    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
->> +        PREFIX=/usr \
->> +        STRIP=/bin/true \
->> +        DESTDIR=$(STAGING_DIR) \
->> +        install
->> +endef
+On 2014-06-01 12:47 +0200, Thomas Petazzoni spake thusly:
+> This commit adds support for two ADI Blackfin toolchains: the 'stable'
+> 2014R1 based on gcc 4.3, and the 'experimental' 2014R1 based on gcc
+> 4.5.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Just nit and late, but why do you need override the whole commands?
-All of this could have been set in the FAIFA_INSTALL_TARGET_OPT
-variable (respectively in FAIFA_INSTALL_STAGING_OPT):
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-FAIFA_INSTALL_TARGET_OPT = \
-    PREFIX=/usr \
-    STRIP=/bin/true \
-    DESTDIR=$(TARGET_DIR) \
-    install
-
-Just nitpicking ;-)
+The URLs work! ;-)
 
 Regards,
+Yann E. MORIN.
+
+> ---
+>  toolchain/toolchain-external/Config.in             | 40 ++++++++++++++++------
+>  toolchain/toolchain-external/toolchain-external.mk | 14 +++++---
+>  2 files changed, 39 insertions(+), 15 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index 7d086ef..9c6862c 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -689,8 +689,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+>  	  Other architecture variants (beyond Pentium-4/Xeon) are
+>  	  supported as well, but glibc is not optimised for it.
+>  
+> -config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+> -	bool "Blackfin.uclinux.org 2013R1"
+> +config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45
+> +	bool "Blackfin.uclinux.org 2014R1 (gcc 4.5.x stable)"
+>  	depends on BR2_bfin
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> @@ -707,8 +707,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+>  	  Toolchain for the Blackfin architecture, from
+>  	  http://blackfin.uclinux.org.
+>  
+> -config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+> -	bool "Blackfin.uclinux.org 2012R2-RC2"
+> +config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43
+> +	bool "Blackfin.uclinux.org 2014R1 (gcc 4.3.x stable)"
+>  	depends on BR2_bfin
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> @@ -720,13 +720,13 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+>  	select BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+>  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+>  	help
+>  	  Toolchain for the Blackfin architecture, from
+>  	  http://blackfin.uclinux.org.
+>  
+> -config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+> -	bool "Blackfin.uclinux.org 2012R1-RC2"
+> +config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
+> +	bool "Blackfin.uclinux.org 2013R1"
+>  	depends on BR2_bfin
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>  	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> @@ -738,7 +738,25 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
+>  	select BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+>  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+> +	help
+> +	  Toolchain for the Blackfin architecture, from
+> +	  http://blackfin.uclinux.org.
+> +
+> +config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
+> +	bool "Blackfin.uclinux.org 2012R2-RC2"
+> +	depends on BR2_bfin
+> +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> +	select BR2_INSTALL_LIBSTDCPP
+> +	select BR2_LARGEFILE
+> +	select BR2_INET_IPV6
+> +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +	select BR2_USE_WCHAR
+> +	select BR2_TOOLCHAIN_HAS_THREADS
+> +	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+> +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+>  	help
+>  	  Toolchain for the Blackfin architecture, from
+>  	  http://blackfin.uclinux.org.
+> @@ -910,12 +928,14 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>  	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201109
+>  	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201203
+>  	default "i686-pc-linux-gnu"	 if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209
+> -	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FLAT
+> -	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 && BR2_BINFMT_FDPIC
+>  	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FLAT
+>  	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && BR2_BINFMT_FDPIC
+>  	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FLAT
+>  	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 && BR2_BINFMT_FDPIC
+> +	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43 && BR2_BINFMT_FLAT
+> +	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43 && BR2_BINFMT_FDPIC
+> +	default "bfin-uclinux"		 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45 && BR2_BINFMT_FLAT
+> +	default "bfin-linux-uclibc"	 if BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45 && BR2_BINFMT_FDPIC
+>  	default "arm-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_arm
+>  	default "armeb-linux-musleabi"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_armeb
+>  	default "i486-linux-musl"	 if BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS && BR2_i386
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 163428f..9ac669c 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -329,10 +329,6 @@ TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.03-27-i686-pc-linux-gnu-i386-linux.tar.bz2
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201209),y)
+>  TOOLCHAIN_EXTERNAL_SITE = https://sourcery.mentor.com/public/gnu_toolchain/i686-pc-linux-gnu/
+>  TOOLCHAIN_EXTERNAL_SOURCE = ia32-2012.09-62-i686-pc-linux-gnu-i386-linux.tar.bz2
+> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1),y)
+> -TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/projects/adi-toolchain/files/2012R1-BF60X/2012R1-RC2-BF60X/i386/
+> -TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R1-RC2.i386.tar.bz2
+> -TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2012R1-RC2.i386.tar.bz2
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2),y)
+>  TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2012R2/2012R2-RC2/i386/
+>  TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2012R2-RC2.i386.tar.bz2
+> @@ -341,6 +337,14 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
+>  TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2013R1/2013R1-RC1/i386/
+>  TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2013R1-RC1.i386.tar.bz2
+>  TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2013R1-RC1.i386.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43),y)
+> +TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386/
+> +TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1-RC2.i386.tar.bz2
+> +TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1-RC2.i386.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45),y)
+> +TOOLCHAIN_EXTERNAL_SITE   = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1_45-RC2/i386/
+> +TOOLCHAIN_EXTERNAL_SOURCE = blackfin-toolchain-2014R1_45-RC2.i386.tar.bz2
+> +TOOLCHAIN_EXTERNAL_EXTRA_DOWNLOADS = blackfin-toolchain-uclibc-full-2014R1_45-RC2.i386.tar.bz2
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_14_3),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
+>  TOOLCHAIN_EXTERNAL_SOURCE = lin32-microblazeel-unknown-linux-gnu_14.3_early.tar.xz
+> @@ -403,7 +407,7 @@ TOOLCHAIN_EXTERNAL_ADD_TOOLCHAIN_DEPENDENCY = NO
+>  
+>  TOOLCHAIN_EXTERNAL_INSTALL_STAGING = YES
+>  
+> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC43)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2014R1_GCC45),y)
+>  # Special handling for Blackfin toolchain, because of the split in two
+>  # tarballs, and the organization of tarball contents. The tarballs
+>  # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Samuel
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
