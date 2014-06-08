@@ -1,44 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 21:04:01 +0200
+Date: Sun, 8 Jun 2014 21:20:43 +0200
 Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to
  target
-In-Reply-To: <CAGduivyc7DUBHJcUHac=4Vu4r_erMo1rCarrjho6v0u9HOXb7A@mail.gmail.com>
+In-Reply-To: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
 References: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
- <20140608172310.GO3266@free.fr>
- <CADYw_J+TWZWFa6vA=arnLymR46xwXpT56qOu9vQig2mar1v0rg@mail.gmail.com>
- <CAGduivyc7DUBHJcUHac=4Vu4r_erMo1rCarrjho6v0u9HOXb7A@mail.gmail.com>
-Message-ID: <20140608190401.GP3266@free.fr>
+Message-ID: <20140608192043.GQ3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxime, Stanislav, All,
+Stanislav, All,
 
-On 2014-06-08 20:53 +0200, Maxime Hadjinlian spake thusly:
-> On Sun, Jun 8, 2014 at 8:18 PM, Stanislav Vlasic <svlasic@gmail.com> wrote:
-> > Hi Yann, all,
-> >
-> > if GCONV_PATH is not exported, xbmc doesn't see it and decoding subtitles or
-> > whatever which have special characters (eg cp1250) fails. Also, w/o gconv
-> > libs XBMC 13.0+ doesn't draw menus etc. I exported GCONV_PATH in xbmc
-> > startup script, but I guess exporting it in profile would also work.
-> >
-> Just a quick question, where did you export theses libraries ?
-> As Yann stated, we did not need to export this variable to make it
-> work for XBMC.
-> And I can assure you that it's nowhere in my env.
+On 2013-11-02 22:37 +0100, Stanislav Vasic spake thusly:
+> Also exports GCONV_PATH if folder exists on target.
+> That is needed because some programs (eg. XBMC) dont
+> see gconv libs if GCONV_PATH is not exported.
+[--SNIP--]
+> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+> index 31d3180..d7fef65 100644
+> --- a/system/skeleton/etc/profile
+> +++ b/system/skeleton/etc/profile
+> @@ -8,6 +8,12 @@ export PATH=\
+>  /usr/bin/X11:\
+>  /usr/local/bin
+>  
+> +# If gconv folder exists, export GCONV_PATH
+> +
+> +if [ -d /usr/lib/gconv ]; then
+> +    export GCONV_PATH = /usr/lib/gconv
+> +fi
 
-I think the problem Stanislav had is that he is using a Linaro
-toolchain, which puts the gconv module in /usr/lib/arm-linux-gnueabihf
-and so expects them in that location at runtime.
+This will only work for programs started from a login shell. Programs
+that are started /automatically/ (eg. by startup scripts, like we do for
+XBMC) will not have that variable in their environment, so will still
+fail to find the gconv libs.
 
-But since Buildroot does not follow the multi-arch convention (and
-rightfully, IMHO), it does not work for Stanislav.
+I've looked at the glibc source code, and besides the GCONV_PATH
+solution, I can't see another wayt to tell where to look for the gconv
+libs.
 
-I'm not very happy with the exporting of GCONV_PATH as-is. I'd prefer we
-find another solution. I'll look into that.
+All this multi-arch stuff is so utterly broken, and there is not even a
+real use-case for it. Not even a Debian developper I talked to, which
+was involved in the mess, was able to explain what the reason was, that
+was not already covered by existing mechanisms. That's a shame...
+
+I still have to look if it is possible to pass an alternative path to
+the dynamic linker in one of its config files...
+
+Sigh...
 
 Regards,
 Yann E. MORIN.
