@@ -1,63 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 21:20:43 +0200
-Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to
- target
-In-Reply-To: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
-References: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
-Message-ID: <20140608192043.GQ3266@free.fr>
+Date: Sun,  8 Jun 2014 22:02:23 +0200
+Subject: [Buildroot] [PATCH] filesystems: also chown symlinks
+Message-ID: <1402257743-21650-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stanislav, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2013-11-02 22:37 +0100, Stanislav Vasic spake thusly:
-> Also exports GCONV_PATH if folder exists on target.
-> That is needed because some programs (eg. XBMC) dont
-> see gconv libs if GCONV_PATH is not exported.
-[--SNIP--]
-> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-> index 31d3180..d7fef65 100644
-> --- a/system/skeleton/etc/profile
-> +++ b/system/skeleton/etc/profile
-> @@ -8,6 +8,12 @@ export PATH=\
->  /usr/bin/X11:\
->  /usr/local/bin
->  
-> +# If gconv folder exists, export GCONV_PATH
-> +
-> +if [ -d /usr/lib/gconv ]; then
-> +    export GCONV_PATH = /usr/lib/gconv
-> +fi
+Currently, the symlinks in the generated filesystems will have the
+UID of the user running the build, because 'chown' does not change
+the ownership of symlinks, by default.
 
-This will only work for programs started from a login shell. Programs
-that are started /automatically/ (eg. by startup scripts, like we do for
-XBMC) will not have that variable in their environment, so will still
-fail to find the gconv libs.
+Although the implications are limited, some may not want that UID
+to leak in the generated filesystems.
 
-I've looked at the glibc source code, and besides the GCONV_PATH
-solution, I can't see another wayt to tell where to look for the gconv
-libs.
+So, use 'chown -h' so even symlinks get properly chowned.
 
-All this multi-arch stuff is so utterly broken, and there is not even a
-real use-case for it. Not even a Debian developper I talked to, which
-was involved in the mess, was able to explain what the reason was, that
-was not already covered by existing mechanisms. That's a shame...
+Reported-by: Angelo Dureghello <angelo@barix.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-I still have to look if it is possible to pass an alternative path to
-the dynamic linker in one of its config files...
+---
+Note: 'chown -h' exist since 1996-05-19, so we can safely use it! :-)
+---
+ fs/common.mk            | 2 +-
+ fs/iso9660/iso9660.mk   | 2 +-
+ support/scripts/mkusers | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-Sigh...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/fs/common.mk b/fs/common.mk
+index 2adaf8c..45f88b2 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -70,7 +70,7 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	rm -f $$(FAKEROOT_SCRIPT)
+ 	rm -f $$(TARGET_DIR_WARNING_FILE)
+ 	rm -f $(USERS_TABLE)
+-	echo "chown -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
++	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+ ifneq ($$(ROOTFS_DEVICE_TABLES),)
+ 	cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
+ ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index 6c8ace0..b0e755d 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -29,7 +29,7 @@ else
+ endif
+ 	# Use fakeroot to pretend all target binaries are owned by root
+ 	rm -f $(FAKEROOT_SCRIPT)
+-	echo "chown -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
++	echo "chown -h -R 0:0 $(ISO9660_TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+ 	# Use fakeroot so mkisofs believes the previous fakery
+ 	echo "$(HOST_DIR)/usr/bin/genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot " \
+ 		"-boot-load-size 4 -boot-info-table -o $@ $(ISO9660_TARGET_DIR)" \
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index 3fa0fa8..ffd192d 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -342,7 +342,7 @@ add_one_user() {
+     # (Note: stdout goes to the fakeroot-script)
+     if [ "${home}" != "-" ]; then
+         mkdir -p "${TARGET_DIR}/${home}"
+-        printf "chown -R %d:%d '%s'\n" "${uid}" "${_gid}" "${TARGET_DIR}/${home}"
++        printf "chown -h -R %d:%d '%s'\n" "${uid}" "${_gid}" "${TARGET_DIR}/${home}"
+     fi
+ }
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
