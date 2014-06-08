@@ -1,52 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 09:42:32 +0200
-Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size
- installed by each package
-In-Reply-To: <53938A1E.4060802@carallon.com>
-References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53938A1E.4060802@carallon.com>
-Message-ID: <20140608094232.741b6417@free-electrons.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 8 Jun 2014 10:19:13 +0200
+Subject: [Buildroot] [UNSURE]Re:  autoconf caching
+In-Reply-To: <20140607110432.3e52d064@free-electrons.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+ <20140605224222.0184a9b7@free-electrons.com>
+ <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
+ <20140606091548.53f07f90@free-electrons.com>
+ <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+ <20140607110432.3e52d064@free-electrons.com>
+Message-ID: <CAB0FRst_Vp6Dq43Jeogo820TXOsU7u101CJOOu26G2XEa4k0Pg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Will Wagner,
+2014-06-07 11:04 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Dallas Clement,
+>
+> On Fri, 6 Jun 2014 11:14:15 -0500, Dallas Clement wrote:
+>
+>> Hi Thomas.  Thanks very much for looking at my configuration.  I think you
+>> certainly nailed it.
+>> I have a lot of packages, and perl and mysql especially are taking a long
+>> time.  My build recipes
+>> for both of these are a year or two out of date.  In fact, my perl recipe
+>> is still using qemu to build
+>> instead of perl cross.  Hopefully updating this recipe will help some,
+>> though as you pointed out
+>> it is still using MAKE1.
+>
+> Right. I'll send a separate e-mail to Fran?ois Perrad about this (our
+> Perl guy), because it seems like other build systems are building Perl
+> in parallel.
+>
 
-On Sat, 07 Jun 2014 22:54:38 +0100, Will Wagner wrote:
+The build of perl with qemu takes very very long time.
+The build of perl with perl-cross takes the same time as Linux Kernel
+for example.
+Parallel build with perl-cross seems not supported (this needs a
+confirmation of Alex Suykov, the author of perl-cross).
 
-> > The implementation consists in adding a global instrumentation hook
-> > that registers which files are installed by each package. A limitation
-> > of the current implementation is that when a file is installed by a
-> > package A and then overriden by package B, the mechanism will assume
-> > the file was installed by package A. Suggestions to welcome on how to
-> > solve this in a reasonably simple way.
-> 
-> Can you not record the timestamp the first time you see the file and see 
-> if it has changed at the end. I appreciate a bash script to do this is 
-> going to be pretty hard.
+Fran?ois
 
-Depends on what you call "at the end". The problem is that between the
-end of the install-target step of a given package, and the end of the
-entire build of the system, most of the files in $(TARGET_DIR) are
-modified due to stripping. Therefore, their timestamp changes.
-
-The only thing I could think of would be based on SHA1: in the global
-instrumentation hook, instead of just doing a "find" on all files in
-$(TARGET_DIR) and then diff the result before/after the installation,
-we include the SHA1. Therefore, the diff would indicate when a file has
-changed, so we would be able to detect that. However, this would mean
-that a file will be mentioned in two .filelist files, and since the
-Python script has no idea in which order the packages were built, it
-does not know which of the two packages won for the installation of the
-given file. Could be based on the timestamp of the .filelist file,
-though. Starts to be a bit tricky, as you can see :)
-
-Thanks for your feedback!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>> Yep, very speedy SSDs and 64 GB for RAM.  Because of all the serialization
+>> in this build process,
+>> building from a large ram disk seems to make little difference.
+>
+> Right. So you have a good build configuration, there's not much we can
+> do here.
+>
+>> > There is another thing that strikes out in your configuration: there
+>> > are many packages that we don't have in Buildroot, and that don't seem
+>> > to be specific to your company or project. What about submitting your
+>> > new packages upstream?
+>>
+>> Yes, I can certainly do that.  There's a lot here.  Much of it is obscure.
+>> Please let me know which ones you are most
+>> interested in.
+>
+> Could you make a list of the packages that you've added, and that are
+> open-source? I'm pretty sure a majority of them could potentially be
+> useful to have in Buildroot.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
