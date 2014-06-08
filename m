@@ -1,30 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:33:26 +0200
-Subject: [Buildroot] [PATCH 2/2] systemd: add SMACK support option.
-In-Reply-To: <1398020044-21021-3-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1398020044-21021-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1398020044-21021-3-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140608163326.669c44b2@free-electrons.com>
+Date: Sun, 8 Jun 2014 16:35:24 +0200
+Subject: [Buildroot] [PATCH 1/1] Improve support of OpenGL for
+ BeagleBone Black
+In-Reply-To: <1401636127-20618-1-git-send-email-hadrien.boutteville@gmail.com>
+References: <1401636127-20618-1-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <20140608163524.6fc64df5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Dear Hadrien Boutteville,
 
-On Sun, 20 Apr 2014 20:54:04 +0200, Eric Le Bihan wrote:
-> A new configuration option is available in systemd menu, to enable
-> support for SMACK.
+On Sun,  1 Jun 2014 17:22:07 +0200, Hadrien Boutteville wrote:
+> Make ti-gfx working on BeagleBone Black by adding an ugly necessary
+> patch to the kernel wich fix:
+> pvrsrvkm: Unknown symbol v7_dma_map_area
+> pvrsrvkm: Unknown symbol v7_dma_flush_range
 > 
-> For this feature to properly work, systemd requires attr (build
-> dependency, also used for other features) and smack (runtime dependency).
+> Add drivers to the default kernel config used in beaglebone_defconfig
+> to enable the framebuffer.
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 > ---
->  package/systemd/Config.in  | 14 ++++++++++++++
->  package/systemd/systemd.mk | 13 +++++++++++++
->  2 files changed, 27 insertions(+)
+>  board/beaglebone/linux-3.12.config                 | 11 ++++++-
+>  ...cache-flush-management-symbols-when-MULTI.patch | 34 ++++++++++++++++++++++
+>  configs/beaglebone_defconfig                       |  1 +
+>  3 files changed, 45 insertions(+), 1 deletion(-)
+>  create mode 100644 board/beaglebone/patches/linux/linux-0001-arm-Export-cache-flush-management-symbols-when-MULTI.patch
 
 Applied, thanks.
 
