@@ -1,57 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:42:58 +0200
-Subject: [Buildroot] [git commit] graph-depends: refactor with more colors
-Message-ID: <20140608145131.6BC009CF1C@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 16:43:04 +0200
+Subject: [Buildroot] [git commit] graphs: add option to remove transitive
+	dependencies in dependency graph
+Message-ID: <20140608145131.7477A9CF1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b689264d38053c1fdcce69607debefb56632a769
+commit: http://git.buildroot.net/buildroot/commit/?id=67957967a5594790f75b2d76fbf9f210b5b02e92
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Do not use the same colors for toolchain, host and target packages.
+Currently, all the dependencies of a package are drawn on the dependency
+graph, including transitive dependencies (e.g. A->B->C and A->C).
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[yann.morin.1998 at free.fr rephrase commit log]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+For very big graphs, with lots of packages with lots of dependencies, the
+dependency graph can be very dense, and transitive dependencies are
+cluttering the graph.
+
+In some cases, only getting the "build-order" dependencies is enough (e.g.
+to see what impact a package rebuild would have).
+
+Add a new environment variable to disable drawing transitive dependencies.
+
+Basically, it would turn this graph:
+
+    pkg1 ---> pkg2 ---> pkg3 -------------------.
+         |\__________/                 \         \
+         |\____________________         \         \
+         |                     \         \         \
+          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
+                    \__________/
+
+into that graph:
+
+    pkg1 ---> pkg2 ---> pkg3 -----------.
+         |                               \
+          `-> pkg4 ---> pkg5 ---> pkg6 ---> pkg7 ---> pkg8
+
+[Thanks to Samuel for the parser hints]
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |   21 ++++++++++++++-------
- 1 files changed, 14 insertions(+), 7 deletions(-)
+ support/scripts/graph-depends |   49 +++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 49 insertions(+), 0 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index e2a5e1e..443ac7d 100755
+index 443ac7d..c5fb520 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -222,15 +222,22 @@ for dep in dependencies:
+@@ -40,6 +40,10 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
+                     help="Graph the dependencies of PACKAGE")
+ parser.add_argument("--depth", '-d', metavar="DEPTH",
+                     help="Limit the dependency graph to DEPTH levels")
++parser.add_argument("--transitive", dest="transitive", action='store_true',
++                    default=True)
++parser.add_argument("--no-transitive", dest="transitive", action='store_false',
++                    help="Draw (do not draw) transitive dependencies")
+ args = parser.parse_args()
  
+ if args.package is None:
+@@ -51,6 +55,8 @@ else:
+ if args.depth is not None:
+     max_depth = int(args.depth)
+ 
++transitive = args.transitive
++
+ allpkgs = []
+ 
+ # Execute the "make show-targets" command to get the list of the main
+@@ -220,6 +226,49 @@ for dep in dependencies:
+         dict_deps[dep[0]] = []
+     dict_deps[dep[0]].append(dep[1])
+ 
++# This function return True if pkg is a dependency (direct or
++# transitive) of pkg2, dependencies being listed in the deps
++# dictionary. Returns False otherwise.
++def is_dep(pkg,pkg2,deps):
++    if deps.has_key(pkg2):
++        for p in deps[pkg2]:
++            if pkg == p:
++                return True
++            if is_dep(pkg,p,deps):
++                return True
++    return False
++
++# This function eliminates transitive dependencies; for example, given
++# these dependency chain: A->{B,C} and B->{C}, the A->{C} dependency is
++# already covered by B->{C}, so C is a transitive dependency of A, via B.
++# The functions does:
++#   - for each dependency d[i] of the package pkg
++#     - if d[i] is a dependency of any of the other dependencies d[j]
++#       - do not keep d[i]
++#     - otherwise keep d[i]
++def remove_transitive_deps(pkg,deps):
++    d = deps[pkg]
++    new_d = []
++    for i in range(len(d)):
++        keep_me = True
++        for j in range(len(d)):
++            if j==i:
++                continue
++            if is_dep(d[i],d[j],deps):
++                keep_me = False
++        if keep_me:
++            new_d.append(d[i])
++    return new_d
++
++# This functions trims down the dependency list of all packages.
++def remove_extra_deps(deps):
++    for pkg in deps.keys():
++        if not transitive:
++            deps[pkg] = remove_transitive_deps(pkg,deps)
++    return deps
++
++dict_deps = remove_extra_deps(dict_deps)
++
  # Print the attributes of a node: label and fill-color
  def print_attrs(pkg):
-+    name = pkg_node_name(pkg)
-     if pkg == 'all':
--        print "all [label = \"ALL\"]"
--        print "all [color=lightblue,style=filled]"
--        return
--    print "%s [label = \"%s\"]" % (pkg_node_name(pkg), pkg)
--    if mode == PKG_MODE and pkg == rootpkg:
--        print "%s [color=lightblue,style=filled]" % pkg_node_name(rootpkg)
-+        label = 'ALL'
-+    else:
-+        label = pkg
-+    if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
-+        color = 'lightblue'
-     else:
--        print "%s [color=grey,style=filled]" % pkg_node_name(pkg)
-+        if pkg.startswith('host') \
-+        or pkg.startswith('toolchain') \
-+        or pkg.startswith('rootfs'):
-+            color = 'gainsboro'
-+        else:
-+            color = 'grey'
-+    print "%s [label = \"%s\"]" % (name, label)
-+    print "%s [color=%s,style=filled]" % (name, color)
- 
- # Print the dependency graph of a package
- def print_pkg_deps(depth, pkg):
+     name = pkg_node_name(pkg)
