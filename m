@@ -1,140 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 19:23:10 +0200
-Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to
- target
-In-Reply-To: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
-References: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
-Message-ID: <20140608172310.GO3266@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 8 Jun 2014 19:23:09 +0200
+Subject: [Buildroot] [PATCH 5 of 7 v3] toolchain-external: change
+ version from 'undefined' to 'virtual'
+In-Reply-To: <20140608181033.29a00966@free-electrons.com>
+References: <patchbomb.1402085576@localhost>
+ <640c5d9c5ac14d442207.1402085581@localhost>
+ <20140607105728.469dd87d@free-electrons.com>
+ <CAAXf6LX4nfHkyBe_G3eQSBTHr67SWb37TFEOL=0q+vZ1DMmdtA@mail.gmail.com>
+ <20140608181033.29a00966@free-electrons.com>
+Message-ID: <CAAXf6LX4zN1bYaxdskq9Evc5uT2Rw2ip-U7Dqf78bOOXiQgf4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stanislav, All,
+On Sun, Jun 8, 2014 at 6:10 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Sun, 8 Jun 2014 17:04:17 +0200, Thomas De Schampheleire wrote:
+>
+>> > I'm sorry, but I continue to disagree. toolchain-external is definitely
+>> > *not* a virtual package. I've started using the
+>> > TOOLCHAIN_EXTERNAL_VERSION field for musl external toolchains, and I
+>> > will send a patch that use it for other toolchains as well.
+>>
+>> Ok, I understand your objections. Note that my main point is that it
+>> shouldn't be 'undefined', not that it necessarily has to be 'virtual'.
+>>
+>> However, in your pending musl patch, you set
+>> TOOLCHAIN_EXTERNAL_VERSION to 1.0.0 (for example), causing the 'build'
+>> directory to be output/build/toolchain-external-1.0.0 and the messages
+>> to be:
+>> toolchain-external 1.0.0 Downloading
+>>
+>> The value 1.0.0 doesn't mean a lot here, you have no clue that this is
+>> a musl, glibc, ... toolchain or which is the provider. Considering
+>> only the messages for a moment, it would make more sense that they
+>> would read:
+>>
+>> toolchain-external Sourcery ARM 2012.03 Downloading
+>>
+>> (for example), i.e. actually specify which is the external toolchain
+>> we're using.
+>>
+>> This could be achieved in multiple ways:
+>> - by setting the TOOLCHAIN_EXTERNAL_VERSION field to this value
+>> (imposing the requirement of it not containing spaces as this value is
+>> also used for the directory name).
+>> - adding an extra field in the MESSAGE definition that can be set in
+>> the toolchain-external package, with 'extra' info. The VERSION field
+>> can then still be 1.0.0 or 2012.03, and the extra info would be
+>> 'Sourcery ARM' for example.
+>>
+>> The second approach handles both my concern of not having 'undefined'
+>> and is in line with your usage of 1.0.0 for VERSION.
+>>
+>> What do you think?
+>
+> While your second solution adds quite a bit of additional logic in
+> MESSAGE just for the sake of toolchain-external, I don't really have a
+> better suggestion right now. Or should we turn all these external
+> toolchains into individual packages, which become providers for what
+> would really become a virtual toolchain-external package? I'm not sure
+> of the benefit, though.
 
-On 2013-11-02 22:37 +0100, Stanislav Vasic spake thusly:
-> This patch adds an option for external Linaro toolchains
-> which allows buildroot to copy gconv libs to target.
+I also think the second approach of creating individual external
+toolchain packages is overkill.
 
-We have another, more generic patch in the making:
-    http://patchwork.ozlabs.org/patch/357067/
+I don't think that the MESSAGE solution adds a lot of complexity: the
+current definition is:
+MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION)
+$(1)$(TERM_RESET)"
+and this would become something like:
+MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME)
+$($(PKG)_EXTRA_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
 
-which I'm still working on:
-    https://www.gitorious.org/buildroot/buildroot/commit/9a86575442f9861fa5a4777798fc84b999a12f7f
+where FOO_EXTRA_NAME is a new variabel (name to be discussed) that can
+be set by any package (not only toolchain-external) if appropriate.
+This variable is default empty.
 
-and which should supersed this patch.
+This is not too complex, right?
 
-As such, I marked this patch superseded in the pathwork.
+In any case, I suggest we drop this patch from the series for now.
 
-> Also exports GCONV_PATH if folder exists on target.
-> That is needed because some programs (eg. XBMC) dont
-> see gconv libs if GCONV_PATH is not exported.
-
-I haven't seen the need to export GCONV_PATH when running my XBMC,
-neither did Maxime.
-
-What is the reason for exporting GCONV_PATH, if the gconv libs are
-properly installed in /usr/lib/gconv ?
-
-Is it because Linaro toolchains install them in
-libc/usr/lib/arm-linux-gnueabihf/gconv ?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Stanislav Vasic <svlasic@gmail.com>
-> ---
->  system/skeleton/etc/profile                        |  6 ++++++
->  toolchain/helpers.mk                               | 12 ++++++++++++
->  toolchain/toolchain-external/Config.in             |  6 ++++++
->  toolchain/toolchain-external/toolchain-external.mk |  4 ++++
->  4 files changed, 28 insertions(+)
-> 
-> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-> index 31d3180..d7fef65 100644
-> --- a/system/skeleton/etc/profile
-> +++ b/system/skeleton/etc/profile
-> @@ -8,6 +8,12 @@ export PATH=\
->  /usr/bin/X11:\
->  /usr/local/bin
->  
-> +# If gconv folder exists, export GCONV_PATH
-> +
-> +if [ -d /usr/lib/gconv ]; then
-> +    export GCONV_PATH = /usr/lib/gconv
-> +fi
-> +
->  # If running interactively, then:
->  if [ "$PS1" ]; then
->  
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index a8944ce..a778cef 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -83,6 +83,18 @@ copy_toolchain_lib_root = \
->   \
->  	echo -n
->  
-> +# Function for Linaro toolchains (EABIhf) that copies gconv libs to target
-> +# Expects 1 param:
-> +# $1: toolchain root
-> +copy_toolchain_gconv = \
-> +    BASE_DIR="$(strip $1)"; \
-> +    if [ -d $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv ] ; then \
-> +	mkdir -p $(TARGET_DIR)/usr/lib/gconv ; \
-> +	cp -r $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv/* $(TARGET_DIR)/usr/lib/gconv ; \
-> +    fi; \
-> + \
-> +    echo -n
-> +
->  #
->  # Copy the full external toolchain sysroot directory to the staging
->  # dir. The operation of this function is rendered a little bit
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 48b5865..fc328b1 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -864,6 +864,12 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
->  	bool
->  	select BR2_TOOLCHAIN_USES_MUSL
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV
-> +	bool "Copy GCONV libraries to target"
-> +	depends on BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07 \
-> +	    || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08 \
-> +	    || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
-> +
->  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->  
->  choice
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index d41cc7c..c1a3dc7 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -496,6 +496,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
->  			echo "Could not find gdbserver in external toolchain" ; \
->  			exit 1 ; \
->  		fi ; \
-> +	fi; \
-> +	if test "$(BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV)" = "y" ; then \
-> +		$(call MESSAGE,"Copying external toolchain gconv to target...") ; \
-> +		$(call copy_toolchain_gconv,$${SYSROOT_DIR}) ; \
->  	fi
->  endef
->  
-> -- 
-> 1.8.3.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+Thomas
