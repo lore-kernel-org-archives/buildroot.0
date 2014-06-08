@@ -1,11 +1,12 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 8 Jun 2014 12:45:47 +0200
-Subject: [Buildroot] [PATCH v12 02/32] xbmc: add host-gettext dependency
-In-Reply-To: <20140607212554.GA10718@free.fr>
-References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
- <1402144292-27837-3-git-send-email-bernd.kuhls@t-online.de>
- <20140607212554.GA10718@free.fr>
-Message-ID: <CAGduivxo_ShPUGMUsoBOnWkhs9B7w3=PuoOZY_7B=z+AhmUvbQ@mail.gmail.com>
+Date: Sun, 8 Jun 2014 12:48:49 +0200
+Subject: [Buildroot] [PATCH v6 2/4] xbmc: fix missing libraries from
+	rpi-userland
+In-Reply-To: <20140605192711.GF3553@free.fr>
+References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+ <1401923053-30292-3-git-send-email-s.martin49@gmail.com>
+ <20140605192711.GF3553@free.fr>
+Message-ID: <CAGduivy=_FUstYQZLhO6R-YBRXKYaErEYYhMNMHkSC6kdFet8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,60 +17,67 @@ Hi all,
 
 Tested-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
 
-On Sat, Jun 7, 2014 at 11:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Bernd, All,
+On Thu, Jun 5, 2014 at 9:27 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Samuel, All,
 >
-> On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
->> AUTOPOINT=/bin/true does not work anymore since
->> https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
+> On 2014-06-05 01:04 +0200, Samuel Martin spake thusly:
+>> When rpi-userland libraries are built as shared-objects, not all needed
+>> libraries are passed in the LD_FLAGS, leading to failure at linkage.
 >>
->> config.status: error: cannot find input file: `Makefile.in'
->> configure: error: Submodule lib/cpluff failed to configure
+>> To avoid this issue, set the LIBS variable content in accordance with the
+>> INCLUDES variable value.
 >>
->> This will be needed for 13.0 Gotham.
+>> The commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf currently works
+>> around this issue by forcing rpi-userland to be statically linked,
+>> whereas it is actually a LIBS flags problem in xbmc package.
 >>
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> A follow-up patch fixes rpi-userland package.
+>>
+>> Reported-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
 > Regards,
 > Yann E. MORIN.
 >
 >> ---
->>  package/xbmc/xbmc.mk |    4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> changes v5 -> v6:
+>> - rebase
+>>
+>> changes v4 -> v5:
+>> - rebase
+>> - extend commit message
+>>
+>> changes v3 -> v4:
+>> - rebase
+>>
+>> changes v2 -> v3:
+>> - new patch
+>> ---
+>>  package/xbmc/xbmc.mk | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
 >>
 >> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
->> index c7a4607..d8b9508 100644
+>> index c7a4607..8c0146e 100644
 >> --- a/package/xbmc/xbmc.mk
 >> +++ b/package/xbmc/xbmc.mk
->> @@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
->>  # called TexturePacker. It is responsible to take all the images used in the
->>  # GUI and pack them in a blob.
->>  # http://wiki.xbmc.org/index.php?title=TexturePacker
->> -XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
->> +XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
->>  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
->>       libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
->>       libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
->> @@ -133,7 +133,7 @@ endif
+>> @@ -53,7 +53,8 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+>>  XBMC_DEPENDENCIES += rpi-userland
+>>  XBMC_CONF_OPT += --with-platform=raspberry-pi --enable-player=omxplayer
+>>  XBMC_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
+>> -     -I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
+>> +     -I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
+>> +     LIBS="-lvcos -lvchostif"
+>>  endif
 >>
->>  # Add HOST_DIR to PATH for codegenerator.mk to find swig
->>  define XBMC_BOOTSTRAP
->> -     cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
->> +     cd $(@D) && PATH=$(BR_PATH) ./bootstrap
->>  endef
->>  XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
->>
+>>  ifeq ($(BR2_PACKAGE_DBUS),y)
 >> --
->> 1.7.10.4
+>> 2.0.0
 >>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 > --
 > .-----------------.--------------------.------------------.--------------------.
@@ -78,7 +86,3 @@ On Sat, Jun 7, 2014 at 11:25 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 > '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
