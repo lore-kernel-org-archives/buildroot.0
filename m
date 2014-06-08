@@ -1,43 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:33:02 +0200
-Subject: [Buildroot] [Patch v2 0/1] systemd: bump to v213
-In-Reply-To: <1401918049-10503-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1401918049-10503-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140608153302.2cc49ded@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Jun 2014 15:39:53 +0200
+Subject: [Buildroot] [PATCH v12 01/32] toolchain: add option to copy the
+ gconv libraries
+In-Reply-To: <20140608151517.55e59312@free-electrons.com>
+References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+ <1402144292-27837-2-git-send-email-bernd.kuhls@t-online.de>
+ <20140608151517.55e59312@free-electrons.com>
+Message-ID: <20140608133953.GD3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Thomas, All,
 
-On Wed,  4 Jun 2014 23:40:48 +0200, Eric Le Bihan wrote:
-> This patch bumps systemd to v213.
+On 2014-06-08 15:15 +0200, Thomas Petazzoni spake thusly:
+> On Sat,  7 Jun 2014 14:31:01 +0200, Bernd Kuhls wrote:
 > 
-> This version features systemd-timesyncd, a SNTP daemon, which is useful on
-> machines without a RTC, like Raspberry Pi.
+> > +config BR2_COPY_GCONV_LIBS
+> > +	bool "copy gconv libs"
+> > +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> 
+> A few comments about this patch:
+> 
+>  - I dislike the name of the option. Maybe it should be
+>    BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY or something like that.
+> 
+>  - There should be a sub-option or something to copy only a subset of
+>    the gconv library, with a sane, default set of gconv libraries.
+>    Maybe with a choice "copy all" / "copy a selection".
+> 
+>  - Packages that needs gconv libraries should select this option.
 
-Applied, thanks.
+OK, OK, and OK. Will do.
 
-> Note that in order to have systemd and this daemon to run properly, some
-> changes to /var, /run and /etc/resolv.conf in the target skeleton should be
-> made. This can be done in a post-build script (see
-> https://github.com/elebihan/buildroot-ext-elb/commit/557d5df324db4ec12d1b98bed7c1a899eb24bdb6
-> for an example).
+Regards,
+Yann E. MORIN.
 
-I think we should find a way of making this automatic. I believe it is
-quite related to something we've discussed last week with Maxime: maybe
-the skeleton should become a proper package, and should be freed from
-everything Busybox-specific. Then, we can have additional
-skeleton-busybox and skeleton-systemd packages, or some other mechanism
-to introduce the specificities needed by these init systems (maybe
-directly in the busybox and systemd packages).
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
