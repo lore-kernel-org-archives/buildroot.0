@@ -1,72 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 18:39:40 +0200
-Subject: [Buildroot] [PATCH 07/11] toolchain-external: bump Linaro
- AArch64 toolchain to 2014.05
-In-Reply-To: <1401619668-28062-8-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1401619668-28062-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140608163940.GK3266@free.fr>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Sun, 08 Jun 2014 18:40:06 +0200
+Subject: [Buildroot] [PATCH 2/2] package/trace-cmd: bump to version 2.3.2
+In-Reply-To: <20140608152243.48fd5c25@free-electrons.com>
+References: <1402006038-8840-1-git-send-email-romain.naour@openwide.fr>	<1402006038-8840-2-git-send-email-romain.naour@openwide.fr>
+ <20140608152243.48fd5c25@free-electrons.com>
+Message-ID: <539491E6.4080709@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Thomas,
 
-On 2014-06-01 12:47 +0200, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  toolchain/toolchain-external/Config.in             | 2 +-
->  toolchain/toolchain-external/toolchain-external.mk | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Le 08/06/2014 15:22, Thomas Petazzoni a ?crit :
+> Dear Romain Naour,
 > 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index dcdd383..8fca01a 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -782,7 +782,7 @@ config BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
->  	  http://wiki.xilinx.com/mb-gnu-tools
->  
->  config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
-> -	bool "Linaro AArch64 14.02"
-> +	bool "Linaro AArch64 14.05"
->  	depends on BR2_aarch64
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on !BR2_PREFER_STATIC_LIB
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 8185c89..a6c4061 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -351,8 +351,8 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sources.buildroot.net/
->  TOOLCHAIN_EXTERNAL_SOURCE = microblaze-unknown-linux-gnu.tgz
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
-> -TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.02/components/toolchain/binaries/
-> -TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.8-2014.02_linux.tar.xz
-> +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/binaries/
-> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.05_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS),y)
->  TOOLCHAIN_EXTERNAL_SITE = https://googledrive.com/host/0BwnS5DMB0YQ6bDhPZkpOYVFhbk0/musl-1.0.0/
-> -- 
-> 1.9.3
+> On Fri,  6 Jun 2014 00:07:18 +0200, Romain Naour wrote:
+>> The first patch "use-pkg-config-instead-of-python-config" has been applied upstream.
+>>
+>> The flag _GNU_SOURCE is now always defined in Makefile, so it can be removed from trace-cmd.mk
+>>
+>> CPPFLAGS are appended to CFLAGS and are used to add extra flags, but the flag _LARGEFILE64_SOURCE
+>> in TARGET_CPPFLAGS is already defined in source files, which causes a build error.
+>> CPPFLAGS are cleared before passing them to the trace-cmd Makefile.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Please wrap your commit message properly.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Sure, sorry for that :-/
+
+> 
+>>  # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
+>>  # redefining it on the command line causes build problems.
+>> -TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
+>> +TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
+>> +
+>> +# trace-cmd use CPPFLAGS to add some extra flags.
+>> +# But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
+>> +# that causes build problems.
+>> +TRACE_CMD_CPPFLAGS = ""
+> 
+> And therefore why don't you use the same strategy as the one used for
+> CFLAGS, by filtering out the -D_LARGEFILE64_SOURCE ?
+
+That's what I did at first, but I wasn't sure since CPPFLAGS and CFLAGS add the
+same set of flags.
+
+Ok, I will send a v2 with that fixed.
+
+Best regards,
+Romain
