@@ -1,46 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jun 2014 16:03:50 +0200
-Subject: [Buildroot] [PATCH 6/9] graph-depends: document the 'transitive'
-	variable
-In-Reply-To: <cover.1402236171.git.yann.morin.1998@free.fr>
-References: <cover.1402236171.git.yann.morin.1998@free.fr>
-Message-ID: <33d46f82ca02a0c4f1d5696581dc66522c7a0218.1402236171.git.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  8 Jun 2014 14:04:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140608140456.86DBA9CF1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-Although unnecessary (we already have initialisation via the parser),
-initialise the 'transitive' option, and document it at the same time.
+--- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-08 14:04:55 UTC ---
+Not tested, but as $ORIGIN seems to be interpreted by make as ${O}RIGIN, then I
+guess using $$ORIGIN would work correctly, or if you prefer $${ORIGIN}.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
+This moves the responsibility of the correct escaping to the user, but as
+Samuel said there is no easy solution.
 
----
-Changes v3 -> v4:
-  - fix commit log s/max_depth/transitive/  (Thomas)
----
- support/scripts/graph-depends | 3 +++
- 1 file changed, 3 insertions(+)
+Once cleared out, we should document this in the manual though...
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 0dafd77..07b9c22 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -37,6 +37,9 @@ mode = 0
- # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
- max_depth = 0
- 
-+# Whether to draw the transitive dependencies
-+transitive = True
-+
- parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
- parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
