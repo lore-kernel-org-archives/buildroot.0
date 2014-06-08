@@ -1,86 +1,35 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Sun, 8 Jun 2014 07:57:48 -0500
-Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion
- and internal variables
-In-Reply-To: <CAHXCMMJuUfxqVJe8HWe5j5hH3GKNUyf_76RM3Wej2=1c+KehMQ@mail.gmail.com>
-References: <bug-7172-163@https.bugs.busybox.net/>
- <20140608070329.A41679CEEE@busybox.osuosl.org>
- <20140608053821.1c486f66@core2quad.morethan.org>
- <CAHXCMMJuUfxqVJe8HWe5j5hH3GKNUyf_76RM3Wej2=1c+KehMQ@mail.gmail.com>
-Message-ID: <20140608075748.12ce3c94@core2quad.morethan.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 15:08:52 +0200
+Subject: [Buildroot] [PATCH v12 00/32] xbmc: bump version to 13.1
+In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140608150852.70ca0d09@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 8 Jun 2014 13:24:13 +0200
-Samuel Martin <s.martin49@gmail.com> wrote:
+Dear Bernd Kuhls,
 
-> > Hmm...
-> > I guess I should add a selection to build host-patchelf to BR.
-> > Someone else out there might need it, even if they don't need
-> > ld.so token expansion in runpath and/or rpath.
-> >
-> > Thanks for taking the time to check this out.
-> > Might have to mark it as: "Can't be fixed" in the bug tracker.
-> >  
-> 
-> BTW, why do you need to tweak RPATH in the target fs? What is your
-> use-case? (just curious ;-])
-> 
-> Buildroot builds and installs everything consistently, so libraries
-> get installed in /lib and /usr/lib, and binaries do not have any
-> RPATH.
-> 
-> Usually, one needs RPATH when some binaries needs libraries that are
-> not installed in the default locations.
-> Some others solutions are:
-> 1) set the LD_LIBRARY_PATH in the binary environment;
-> 2) add the additional paths in some
-> $(TARGET_DIR)/etc/ld.so.conf.d/*.conf files.
->
+I've applied:
 
-After-market feature supplements for consumer devices. 
-In this case, the Amazon Kindle e-book readers:
-http://www.mobileread.com/forums/forumdisplay.php?f=150 (as: knc1)
-Specifically, the project-of-the-moment:
-https://bitbucket.org/twobob/kual-system
-See: ARMhf on the Kindle(s) at the first link above.
+a0d0abc16024153f0e1e18166e71a58b4eae08cb xbmc-addon-xvdr: bump to a version compatible with XBMC Gotham
+f40f440563a6887e018303ff2142e31cac331b91 xbmc-pvr-addons: bump to a version compatible with XBMC Gotham
+5c71e4fe1dd3925fa8dbc343fcd67fb97a0f214f xbmc: bump version to 13.1
+bd10d26439a2304e4e94bf28df70c01f362e5d0b mesa3d: Bump version to 10.2.1, fix xa build
+acf15e042f02d2da71a7a7da4801df51eb50cf35 xbmc: hdmi cec supports needs udev for device scanning
+5bfdf2aa50e800f45d19f88044c701b74dc1a2ad xbmc: add host-yasm dependency for MMX/64bit archs
+a1116a3250fdfbd55295ad0f820f6d0c59baccde xbmc: add host-nasm dependency
+e0bb1a68d49ce816da4816e3160ffe75cb520412 xbmc: add host-gettext dependency
 
-Requirements (limitations, opportunities to stretch mind, etc):
+from this series. I'll continue to go through the series today and
+tomorrow.
 
-* Do not disturb Amazon/Lab126 system image.
-** Limited storage space for changes
-** Causes end-users no end of grief when a vendor update is issued
-** No Kernel / u-boot updates allowed - outside of end-user skills
+Thanks,
 
-* End-user additions to reside in user accessible storage (same
-storage used by books)
-** Its FAT32 (no sym-links)
-** Supplement the vendors old (pre-GPLv3) soft-float system and
-applications with a modern hard-float system and applications. 
-(devices more recent than the Kindle Keyboard are Cortex-A{8,9}).
-
-The Buildroot related issue-of-the-moment:
-
-BR2_TARGET_LDFLAGS="-Wl,--dynamic-linker=/mnt/us/extensions/system/lib/ld-linux-armhf.so.3,-rpath=/mnt/us/extensions/system/lib,--enable-new-dtags"
-
-But:
-
-BR2_TARGET_LDFLAGS="-Wl,--dynamic-linker=/mnt/us/extensions/system/lib/ld-linux-armhf.so.3,-rpath=${ORIGIN}/../lib/${CPU},--enable-new-dtags"
-
-Might well be useful in our simplified FHS extension layout.
-
-- - - -
-
-If you own a Kindle (grayscale) e-book reader - give some of our stuff
-a try.  (Hint: Start with the KUAL application launcher.)
-
-We (the Mobileread developer community) have done everything from change
-the battery graphic to a percentage display;
-upto and including speaker independent voice recognition reader control.
-
-A real "busman's holiday" for embedded firmware developers.  ;)
-
-Mike
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
