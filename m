@@ -1,83 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 18:34:00 +0200
-Subject: [Buildroot] [PATCH v3] faifa: new package
-In-Reply-To: <1401284346-2929-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1401284346-2929-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140608183400.5c399805@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Jun 2014 18:37:02 +0200
+Subject: [Buildroot] [PATCH 06/11] toolchain-external: bump Linaro ARMeb
+ toolchain to 2014.04
+In-Reply-To: <1401619668-28062-7-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401619668-28062-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140608163702.GJ3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Thomas, All,
 
-On Wed, 28 May 2014 15:39:06 +0200, Maxime Hadjinlian wrote:
+On 2014-06-01 12:47 +0200, Thomas Petazzoni spake thusly:
+> For some reason, there is no ARMeb toolchain available in the 2014.05
+> Linaro release.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-> diff --git a/package/faifa/Config.in b/package/faifa/Config.in
-> new file mode 100644
-> index 0000000..99abaab
-> --- /dev/null
-> +++ b/package/faifa/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_FAIFA
-> +	bool "faifa"
-> +	select BR2_PACKAGE_LIBPCAP
-> +	help
-> +	  Faifa can configure any Intellon-based Power Line Communication device
-> +	  using Intellon INT5000 and INT6000 series chips (6000 and 6300 chips). It
-> +	  supports all Intellon-specific management and control frames as well as
-> +	  standard management frames.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-These lines are too long and had to be wrapped to a shorter length.
+Regards,
+Yann E. MORIN.
 
-I had to add a !BR2_PREFER_STATIC_LIB dependency, because this package
-always builds a shared library.
+> ---
+>  toolchain/toolchain-external/Config.in             | 6 +++---
+>  toolchain/toolchain-external/toolchain-external.mk | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index 54a94f8..dcdd383 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -33,7 +33,7 @@ comment "Linaro toolchains available for Cortex-A + EABIhf"
+>  	depends on !BR2_PREFER_STATIC_LIB
+>  
+>  config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+> -	bool "Linaro armeb 2014.02"
+> +	bool "Linaro armeb 2014.04"
+>  	depends on BR2_armeb
+>  	depends on BR2_GCC_TARGET_ARCH = "armv7-a"
+>  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> @@ -46,8 +46,8 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+>  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+>  	help
+>  	  Linaro toolchain for the ARM big endian architecture. It
+> -	  uses Linaro GCC 2014.01 (based on gcc 4.8), Linaro GDB
+> -	  2013.10 (based on GDB 7.6), eglibc 2.18, Binutils 2013.11
+> +	  uses Linaro GCC 2014.04 (based on gcc 4.8), Linaro GDB
+> +	  2014.04 (based on GDB 7.6), eglibc 2.19, Binutils 2014.04
+>  	  (based on 2.24). It generates code that runs on all Cortex-A
+>  	  profile devices, but tuned for the Cortex-A9. The code
+>  	  generated is Thumb 2, with the hard floating point calling
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index ba1690b..8185c89 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -280,8 +280,8 @@ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.05/components/toolchain/
+>  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.05_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
+> -TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.02/components/toolchain/binaries/
+> -TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.02_linux.tar.xz
+> +TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
+> +TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
+>  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-
-> +FAIFA_VERSION = aa0b5f90b89a9fd1533137b68ebf85f5437aba53
-> +FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
-> +FAIFA_INSTALL_STAGING = YES
-> +FAIFA_DEPENDENCIES = libpcap
-> +FAIFA_LICENSE = GPLv2
-
-GPLv2+.
-
-> +FAIFA_LICENSE_FILES = COPYING
-> +
-> +define FAIFA_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +FAIFA_PRE_CONFIGURE_HOOKS += FAIFA_RUN_AUTOGEN
-
-I've added a comment above this to explain what's going on, and added
-the missing host-autoconf dependency.
-
-> +
-> +define FAIFA_INSTALL_TARGET_CMDS
-> +    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +        PREFIX=/usr \
-> +        STRIP=/bin/true \
-> +        DESTDIR=$(TARGET_DIR) \
-> +        install
-> +endef
-> +
-> +define FAIFA_INSTALL_STAGING_CMDS
-> +    $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-> +        PREFIX=/usr \
-> +        STRIP=/bin/true \
-> +        DESTDIR=$(STAGING_DIR) \
-> +        install
-> +endef
-
-The indentation was wrong, it should use tabs.
-
-Committed with those issues fixed.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
