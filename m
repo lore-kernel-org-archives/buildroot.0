@@ -1,40 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:43:22 +0200
-Subject: [Buildroot] [git commit] graph-depends: document the 'transitive'
-	variable
-Message-ID: <20140608145131.9175C9CB8D@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 16:43:17 +0200
+Subject: [Buildroot] [git commit] graph-depends: add option to set the
+	colours
+Message-ID: <20140608145131.8B6C89CF25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a2db6d19322b46968e63df06b562ec0cbaa2d0c
+commit: http://git.buildroot.net/buildroot/commit/?id=61dbf4d30684b766731b9a7e09bbaec62874c772
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Although unnecessary (we already have initialisation via the parser),
-initialise the 'transitive' option, and document it at the same time.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Francois Perrad <fperrad@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
+ support/scripts/graph-depends |   23 ++++++++++++++++++++---
+ 1 files changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 0dafd77..07b9c22 100755
+index 2b46040..0dafd77 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -37,6 +37,9 @@ mode = 0
- # Limit drawing the dependency graph to this depth. 0 means 'no limit'.
- max_depth = 0
- 
-+# Whether to draw the transitive dependencies
-+transitive = True
-+
- parser = argparse.ArgumentParser(description="Graph pacakges dependencies")
- parser.add_argument("--package", '-p', metavar="PACKAGE",
+@@ -42,6 +42,12 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
                      help="Graph the dependencies of PACKAGE")
+ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
+                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
++parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
++                    default="lightblue,grey,gainsboro",
++                    help="Comma-separated list of the three colours to use" \
++                       + " to draw the top-level package, the target" \
++                       + " packages, and the host packages, in this order." \
++                       + " Defaults to: 'lightblue,grey,gainsboro'")
+ parser.add_argument("--transitive", dest="transitive", action='store_true',
+                     default=True)
+ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+@@ -58,6 +64,17 @@ max_depth = args.depth
+ 
+ transitive = args.transitive
+ 
++# Get the colours: we need exactly three colours,
++# so no need not split more than 4
++# We'll let 'dot' validate the colours...
++colours = args.colours.split(',',4)
++if len(colours) != 3:
++    sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
++    sys.exit(1)
++root_colour = colours[0]
++target_colour = colours[1]
++host_colour = colours[2]
++
+ allpkgs = []
+ 
+ # Execute the "make show-targets" command to get the list of the main
+@@ -250,14 +267,14 @@ def print_attrs(pkg):
+     else:
+         label = pkg
+     if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
+-        color = 'lightblue'
++        color = root_colour
+     else:
+         if pkg.startswith('host') \
+         or pkg.startswith('toolchain') \
+         or pkg.startswith('rootfs'):
+-            color = 'gainsboro'
++            color = host_colour
+         else:
+-            color = 'grey'
++            color = target_colour
+     print "%s [label = \"%s\"]" % (name, label)
+     print "%s [color=%s,style=filled]" % (name, color)
+ 
