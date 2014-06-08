@@ -1,35 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:08:52 +0200
-Subject: [Buildroot] [PATCH v12 00/32] xbmc: bump version to 13.1
-In-Reply-To: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140608150852.70ca0d09@free-electrons.com>
+Date: Sun, 8 Jun 2014 14:58:10 +0200
+Subject: [Buildroot] [git commit] xbmc: add host-gettext dependency
+Message-ID: <20140608130901.8AD349CE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=e0bb1a68d49ce816da4816e3160ffe75cb520412
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I've applied:
+AUTOPOINT=/bin/true does not work anymore since
+https://github.com/xbmc/xbmc/commit/42017cba7a62a0cf16896b061a25a25d392e1e46
 
-a0d0abc16024153f0e1e18166e71a58b4eae08cb xbmc-addon-xvdr: bump to a version compatible with XBMC Gotham
-f40f440563a6887e018303ff2142e31cac331b91 xbmc-pvr-addons: bump to a version compatible with XBMC Gotham
-5c71e4fe1dd3925fa8dbc343fcd67fb97a0f214f xbmc: bump version to 13.1
-bd10d26439a2304e4e94bf28df70c01f362e5d0b mesa3d: Bump version to 10.2.1, fix xa build
-acf15e042f02d2da71a7a7da4801df51eb50cf35 xbmc: hdmi cec supports needs udev for device scanning
-5bfdf2aa50e800f45d19f88044c701b74dc1a2ad xbmc: add host-yasm dependency for MMX/64bit archs
-a1116a3250fdfbd55295ad0f820f6d0c59baccde xbmc: add host-nasm dependency
-e0bb1a68d49ce816da4816e3160ffe75cb520412 xbmc: add host-gettext dependency
+config.status: error: cannot find input file: `Makefile.in'
+configure: error: Submodule lib/cpluff failed to configure
 
-from this series. I'll continue to go through the series today and
-tomorrow.
+This will be needed for 13.0 Gotham.
 
-Thanks,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Maxime Hadjinlian" <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xbmc/xbmc.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index c7a4607..d8b9508 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -12,7 +12,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # called TexturePacker. It is responsible to take all the images used in the
+ # GUI and pack them in a blob.
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+-XBMC_DEPENDENCIES = host-gawk host-gperf host-infozip host-lzo host-sdl_image host-swig
++XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+@@ -133,7 +133,7 @@ endif
+ 
+ # Add HOST_DIR to PATH for codegenerator.mk to find swig
+ define XBMC_BOOTSTRAP
+-	cd $(@D) && PATH=$(BR_PATH) AUTOPOINT=/bin/true ./bootstrap
++	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+ endef
+ XBMC_PRE_CONFIGURE_HOOKS += XBMC_BOOTSTRAP
+ 
