@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:35:24 +0200
-Subject: [Buildroot] [PATCH 1/1] Improve support of OpenGL for
- BeagleBone Black
-In-Reply-To: <1401636127-20618-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1401636127-20618-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20140608163524.6fc64df5@free-electrons.com>
+Date: Sun, 8 Jun 2014 16:35:46 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_01_01
+In-Reply-To: <1401812044-11578-1-git-send-email-hadrien.boutteville@gmail.com>
+References: <1401812044-11578-1-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <20140608163546.2e68294c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,24 +12,18 @@ To: buildroot@busybox.net
 
 Dear Hadrien Boutteville,
 
-On Sun,  1 Jun 2014 17:22:07 +0200, Hadrien Boutteville wrote:
-> Make ti-gfx working on BeagleBone Black by adding an ugly necessary
-> patch to the kernel wich fix:
-> pvrsrvkm: Unknown symbol v7_dma_map_area
-> pvrsrvkm: Unknown symbol v7_dma_flush_range
-> 
-> Add drivers to the default kernel config used in beaglebone_defconfig
-> to enable the framebuffer.
+On Tue,  3 Jun 2014 18:14:04 +0200, Hadrien Boutteville wrote:
+> Note that SDK 5_01_01_01 only support EABIhf.
 > 
 > Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 > ---
->  board/beaglebone/linux-3.12.config                 | 11 ++++++-
->  ...cache-flush-management-symbols-when-MULTI.patch | 34 ++++++++++++++++++++++
->  configs/beaglebone_defconfig                       |  1 +
->  3 files changed, 45 insertions(+), 1 deletion(-)
->  create mode 100644 board/beaglebone/patches/linux/linux-0001-arm-Export-cache-flush-management-symbols-when-MULTI.patch
+>  package/ti-gfx/Config.in | 7 ++++---
+>  package/ti-gfx/ti-gfx.mk | 8 +-------
+>  2 files changed, 5 insertions(+), 10 deletions(-)
 
-Applied, thanks.
+Can you fix according to Yann's comments?
+
+Thanks,
 
 Thomas
 -- 
