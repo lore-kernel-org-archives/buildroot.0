@@ -1,53 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 14:59:27 +0200
-Subject: [Buildroot] [git commit] xbmc: add host-yasm dependency for
-	MMX/64bit archs
-Message-ID: <20140608130901.B6EC99B261@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 15:11:47 +0200
+Subject: [Buildroot] [PATCH v6 0/4] rpi-userland/xbmc fixes
+In-Reply-To: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140608151147.4d574c69@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5bfdf2aa50e800f45d19f88044c701b74dc1a2ad
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-Fixes error during xbmc configure:
+On Thu,  5 Jun 2014 01:04:09 +0200, Samuel Martin wrote:
 
-yasm not found, use --disable-yasm for a crippled build
+> Samuel Martin (3):
+>   xbmc: fix missing libraries from rpi-userland
+>   rpi-userland: add patch fix missing libvcilcs install rules
+>   rpi-userland: cleanup *_CONF_OPT
+> 
+> Yann E. MORIN (1):
+>   package/libcec: fix missing libraries from rpi-userland
 
-If you think configure made a mistake, make sure you are using the latest
-version from Git.  If the latest version fails, report the problem to the
-ffmpeg-user at ffmpeg.org mailing list or IRC #ffmpeg on irc.freenode.net.
-Include the log file "config.log" produced by configure as this will help
-solving the problem.
-configure: error: Submodule lib/ffmpeg failed to configure
+Series applied, thanks.
 
-This will be needed for 13.0 Gotham.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xbmc/xbmc.mk |    7 +++++++
- 1 files changed, 7 insertions(+), 0 deletions(-)
-
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 3522802..ffe573f 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -21,6 +21,13 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
- # xbmc at i386 depends on nasm
- XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
- 
-+# ffmpeg depends on yasm on MMX archs
-+# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
-+# yasm as dependency for x86_64, even if BR2_x86_generic=y
-+ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
-+XBMC_DEPENDENCIES += host-yasm
-+endif
-+
- XBMC_CONF_ENV = \
- 	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
- 	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
