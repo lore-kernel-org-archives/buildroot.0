@@ -1,44 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:46:32 +0200
-Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
- relocatable one
-In-Reply-To: <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
-References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
- <20140608145430.0125bb29@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
-Message-ID: <20140608154632.1f6f13a6@free-electrons.com>
+Date: Sun, 8 Jun 2014 15:48:05 +0200
+Subject: [Buildroot] [git commit] package/xbmc: use poweroff to poweroff the
+	RPi
+Message-ID: <20140608134811.9EF4A9CB8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Noam Camus,
+commit: http://git.buildroot.net/buildroot/commit/?id=04be2f426ff89a1306fb2c8160c142b4c910efc4
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 8 Jun 2014 13:16:01 +0000, Noam Camus wrote:
+Using "poweroff" instead of "halt" has the side advantage of flashing
+the "ACT" LED 10 times (@ ~1Hz) to instruct the user when it is safe
+to unplug the power supply.
 
-> I wish to contribute.
-> However my organization security rules are not allowing me to send
-> directly with send-email outside our organization.
-> 
-> So I send-email to myself and only through outlook and exchange
-> server I can forward the email to buildroot.
-> 
-> Isn't there a way to send a patch as file?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/xbmc/br-xbmc |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-No, it has to be sent inline, because it's an integral part of our
-review process to have patches sent inline, so that people can comment.
-
-If your company IT department is unable to understand which tools the
-company engineers need to properly contribute to open-source
-communities, I'd say you should create a GMail account, and use that as
-the SMTP server to send your e-mail. I believe that's what a lot of
-people do when they have to work in hostile environments.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/xbmc/br-xbmc b/package/xbmc/br-xbmc
+index 922b511..fee5d51 100755
+--- a/package/xbmc/br-xbmc
++++ b/package/xbmc/br-xbmc
+@@ -26,8 +26,8 @@ while [ ${LOOP} -eq 1 ]; do
+     ret=$?
+     case "${ret}" in
+         0)  ;;
+-        64) halt;   LOOP=0;;
+-        66) reboot; LOOP=0;;
++        64) poweroff; LOOP=0;;
++        66) reboot;   LOOP=0;;
+         *)  # Crash
+             sleep 1
+             ;;
