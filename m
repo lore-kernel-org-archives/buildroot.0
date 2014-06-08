@@ -1,78 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 15:07:02 +0200
-Subject: [Buildroot] [git commit] xbmc-addon-xvdr: bump to a version
-	compatible with XBMC Gotham
-Message-ID: <20140608130901.D677C9CE78@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 15:05:51 +0200
+Subject: [Buildroot] [git commit] xbmc: bump version to 13.1
+Message-ID: <20140608130901.C99709B261@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a0d0abc16024153f0e1e18166e71a58b4eae08cb
+commit: http://git.buildroot.net/buildroot/commit/?id=5c71e4fe1dd3925fa8dbc343fcd67fb97a0f214f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Removed patch applied upstream.
-
-[Thomas: fix typo noticed by Yann.]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../xbmc-addon-xvdr-0001-foreign-automake.patch    |   28 --------------------
- package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk         |    7 +++--
- 2 files changed, 4 insertions(+), 31 deletions(-)
+ package/xbmc/Config.in |    1 +
+ package/xbmc/xbmc.mk   |    8 +++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch b/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-deleted file mode 100644
-index 0f49dcf..0000000
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr-0001-foreign-automake.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--commit 846b0b5a8b559f94dffadf5b2f95ca845b6ba9f1
--Author: Yann E. MORIN <yann.morin.1998@free.fr>
--Date:   Wed Mar 26 07:45:58 2014 +0100
--
--    configure: set the foreign flag
--    
--    This is required since we do not bundle the necessary files (NEWS,
--    INSTALL et al.) Setting it in configure.in is needed to be able
--    to run autoreconf (in lieu of the weird autogen.sh)
--    
--    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--Patch accepted upstream in master:
--    https://github.com/pipelka/xbmc-addon-xvdr/commit/84e5860f488e67a3a3386c779f9a56adeb3dc220
--
--diff --git a/configure.in b/configure.in
--index 6e692e1..7be0d18 100755
----- a/configure.in
--+++ b/configure.in
--@@ -12,7 +12,7 @@ AC_CANONICAL_HOST
-- AC_CANONICAL_TARGET
-- 
-- dnl Setup for automake
---AM_INIT_AUTOMAKE
--+AM_INIT_AUTOMAKE([foreign])
-- 
-- dnl Check for tools
-- 
-diff --git a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-index 28c90f7..a4d9624 100644
---- a/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-+++ b/package/xbmc-addon-xvdr/xbmc-addon-xvdr.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 52bf0cd..592fdc1 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBUNGIF
+ 	select BR2_PACKAGE_LIBVORBIS
+ 	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
+ 	select BR2_PACKAGE_LZO
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index b6cf145..ca605a4 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--# This cset is on the branch 'xbmc-frodo'
--# When XBMC is updated, then this should be updated to the corresponding branch
--XBMC_ADDON_XVDR_VERSION = acd4e145fc3220cf708aaf40d895904732dce2c7
-+# This cset is on master. When a Gotham branch is made, we should
-+# follow it, as incompatible changes in the plugins API can happen
-+# on the master branch.
-+XBMC_ADDON_XVDR_VERSION = 82b5093ad33847f97a978cb620c9a87d2dbcf7eb
- XBMC_ADDON_XVDR_SITE = $(call github,pipelka,xbmc-addon-xvdr,$(XBMC_ADDON_XVDR_VERSION))
- XBMC_ADDON_XVDR_LICENSE = GPLv2+
- XBMC_ADDON_XVDR_LICENSE_FILES = COPYING
+-XBMC_VERSION = 12.3-Frodo
+-XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
++XBMC_VERSION = 13.1-Gotham
++XBMC_SOURCE = $(XBMC_VERSION).tar.gz
++XBMC_SITE = https://github.com/xbmc/xbmc/archive
+ XBMC_LICENSE = GPLv2
+ XBMC_LICENSE_FILES = LICENSE.GPL
+ # XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+@@ -15,7 +16,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+ 	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+-	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
++	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ 
+ # xbmc at i386 depends on nasm
+@@ -37,6 +38,7 @@ XBMC_CONF_ENV = \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+ 
+ XBMC_CONF_OPT +=  \
++	--with-arch=$(BR2_ARCH) \
+ 	--disable-alsa \
+ 	--disable-crystalhd \
+ 	--disable-debug \
