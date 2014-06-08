@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 13:07:34 +0200
-Subject: [Buildroot] [PATCH v12 06/32] xbmc: hdmi cec supports needs
- udev for device scanning
-In-Reply-To: <1402144292-27837-7-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 8 Jun 2014 13:09:06 +0200
+Subject: [Buildroot] [PATCH v12 07/32] xbmc: bump version to 13.1
+In-Reply-To: <1402144292-27837-8-git-send-email-bernd.kuhls@t-online.de>
 References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
- <1402144292-27837-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140608110734.GB15981@free.fr>
+ <1402144292-27837-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140608110906.GC15981@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +14,8 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
-> libcec support in xbmc compiles without udev being linked to libcec,
-> but it is useless because xbmc uses libcec?s udev support for scanning
-> connected CEC devices since:
-> https://github.com/xbmc/xbmc/commit/59171c7a030f8a9c913abbce931967a6a8ff6897
-> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -29,44 +24,55 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/xbmc/Config.in |    5 +++--
->  package/xbmc/xbmc.mk   |    2 +-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  package/xbmc/Config.in |    1 +
+>  package/xbmc/xbmc.mk   |    8 +++++---
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 > 
 > diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-> index 4db7378..52bf0cd 100644
+> index 52bf0cd..592fdc1 100644
 > --- a/package/xbmc/Config.in
 > +++ b/package/xbmc/Config.in
-> @@ -98,13 +98,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
->  config BR2_PACKAGE_XBMC_LIBCEC
->  	bool "hdmi cec"
->  	depends on !BR2_PREFER_STATIC_LIB # libcec
-> +	depends on BR2_PACKAGE_HAS_UDEV
->  	select BR2_PACKAGE_LIBCEC
->  	help
->  	  Enable CEC (Consumer Electronics Control) support.
->  	  Select this if you want XBMC to support HDMI CEC.
->  
-> -comment "hdmi cec support needs a toolchain w/ dynamic library"
-> -	depends on BR2_PREFER_STATIC_LIB
-> +comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
-> +	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
->  
->  config BR2_PACKAGE_XBMC_LIBMICROHTTPD
->  	bool "web server"
+> @@ -35,6 +35,7 @@ menuconfig BR2_PACKAGE_XBMC
+>  	select BR2_PACKAGE_LIBUNGIF
+>  	select BR2_PACKAGE_LIBVORBIS
+>  	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_LIBXSLT
+>  	select BR2_PACKAGE_LZO
+>  	select BR2_PACKAGE_NCURSES
+>  	select BR2_PACKAGE_OPENSSL
 > diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index acbdb91..9f44c34 100644
+> index 9f44c34..b9ff001 100644
 > --- a/package/xbmc/xbmc.mk
 > +++ b/package/xbmc/xbmc.mk
-> @@ -131,7 +131,7 @@ XBMC_CONF_OPT += --disable-avahi
->  endif
+> @@ -4,8 +4,9 @@
+>  #
+>  ################################################################################
 >  
->  ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
-> -XBMC_DEPENDENCIES += libcec
-> +XBMC_DEPENDENCIES += libcec udev
->  XBMC_CONF_OPT += --enable-libcec
->  else
->  XBMC_CONF_OPT += --disable-libcec
+> -XBMC_VERSION = 12.3-Frodo
+> -XBMC_SITE = $(call github,xbmc,xbmc,$(XBMC_VERSION))
+> +XBMC_VERSION = 13.1-Gotham
+> +XBMC_SOURCE = $(XBMC_VERSION).tar.gz
+> +XBMC_SITE = https://github.com/xbmc/xbmc/archive
+>  XBMC_LICENSE = GPLv2
+>  XBMC_LICENSE_FILES = LICENSE.GPL
+>  # XBMC needs host-sdl_image (and therefore host-sdl) for a host tools it builds
+> @@ -15,7 +16,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+>  XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+>  XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+>  	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
+> -	libogg libplist libpng libsamplerate libungif libvorbis libxml2 lzo ncurses \
+> +	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+>  	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+>  
+>  # xbmc at i386 depends on nasm
+> @@ -37,6 +38,7 @@ XBMC_CONF_ENV = \
+>  	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+>  
+>  XBMC_CONF_OPT +=  \
+> +	--with-arch=$(BR2_ARCH) \
+>  	--disable-alsa \
+>  	--disable-crystalhd \
+>  	--disable-debug \
 > -- 
 > 1.7.10.4
 > 
