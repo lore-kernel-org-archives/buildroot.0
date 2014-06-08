@@ -1,74 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:43:17 +0200
-Subject: [Buildroot] [git commit] graph-depends: add option to set the
-	colours
-Message-ID: <20140608145131.8B6C89CF25@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 16:43:36 +0200
+Subject: [Buildroot] [git commit] manual: document the new graph-depends
+	options
+Message-ID: <20140608145131.A86FB9CB8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=61dbf4d30684b766731b9a7e09bbaec62874c772
+commit: http://git.buildroot.net/buildroot/commit/?id=c67423c331333a0c94fbe6af8658dda0ffef967e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |   23 ++++++++++++++++++++---
- 1 files changed, 20 insertions(+), 3 deletions(-)
+ docs/manual/common-usage.txt |   11 ++++++++++-
+ 1 files changed, 10 insertions(+), 1 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 2b46040..0dafd77 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -42,6 +42,12 @@ parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
- parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
-                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
-+parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
-+                    default="lightblue,grey,gainsboro",
-+                    help="Comma-separated list of the three colours to use" \
-+                       + " to draw the top-level package, the target" \
-+                       + " packages, and the host packages, in this order." \
-+                       + " Defaults to: 'lightblue,grey,gainsboro'")
- parser.add_argument("--transitive", dest="transitive", action='store_true',
-                     default=True)
- parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-@@ -58,6 +64,17 @@ max_depth = args.depth
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 16a1351..eb83990 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -94,6 +94,8 @@ to +make+ or set in the environment:
+   default), or +png+.
+ * +BR2_GRAPH_DEPS_OPTS+ to pass extra options to the dependency graph; see
+   xref:graph-depends[] for the accepted options
++* +BR2_GRAPH_DOT_OPTS+ is passed verbatim as options to the +dot+ utility to
++  draw the dependency graph.
  
- transitive = args.transitive
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
+@@ -204,8 +206,15 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+ * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
+   default, +0+, means no limit.
  
-+# Get the colours: we need exactly three colours,
-+# so no need not split more than 4
-+# We'll let 'dot' validate the colours...
-+colours = args.colours.split(',',4)
-+if len(colours) != 3:
-+    sys.stderr.write("Error: incorrect colour list '%s'\n" % args.colours)
-+    sys.exit(1)
-+root_colour = colours[0]
-+target_colour = colours[1]
-+host_colour = colours[2]
++* +--transitive+, +--no-transitive+, to draw (or not) the transitive
++  dependencies. The default is to draw transitive dependencies.
 +
- allpkgs = []
++* +--colours R,T,H+, the comma-separated list of colours to draw the
++  root package (+R+), the target packages (+T+) and the host packages
++  (+H+). Defaults to: +lightblue,grey,gainsboro+
++
+ --------------------------------
+-BR2_GRAPH_DEPS_OPTS='-d 3' make graph-depends
++BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
+ --------------------------------
  
- # Execute the "make show-targets" command to get the list of the main
-@@ -250,14 +267,14 @@ def print_attrs(pkg):
-     else:
-         label = pkg
-     if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
--        color = 'lightblue'
-+        color = root_colour
-     else:
-         if pkg.startswith('host') \
-         or pkg.startswith('toolchain') \
-         or pkg.startswith('rootfs'):
--            color = 'gainsboro'
-+            color = host_colour
-         else:
--            color = 'grey'
-+            color = target_colour
-     print "%s [label = \"%s\"]" % (name, label)
-     print "%s [color=%s,style=filled]" % (name, color)
- 
+ === Graphing the build duration
