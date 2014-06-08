@@ -1,101 +1,78 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Sun, 8 Jun 2014 05:38:21 -0500
-Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion
- and internal variables
-In-Reply-To: <20140608070329.A41679CEEE@busybox.osuosl.org>
-References: <bug-7172-163@https.bugs.busybox.net/>
- <20140608070329.A41679CEEE@busybox.osuosl.org>
-Message-ID: <20140608053821.1c486f66@core2quad.morethan.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Jun 2014 12:44:53 +0200
+Subject: [Buildroot] [PATCH v12 04/32] xbmc: add host-yasm dependency
+ for MMX/64bit archs
+In-Reply-To: <1402144292-27837-5-git-send-email-bernd.kuhls@t-online.de>
+References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
+ <1402144292-27837-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140608104453.GA15981@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  8 Jun 2014 07:03:29 +0000 (UTC)
-bugzilla at busybox.net wrote:
+Bernd, All,
 
-> https://bugs.busybox.net/show_bug.cgi?id=7172
+On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
+> Fixes error during xbmc configure:
 > 
-> --- Comment #1 from Samuel Martin <s.martin49@gmail.com> 2014-06-08
-> 07:03:28 UTC --- Mike,
+> yasm not found, use --disable-yasm for a crippled build
 > 
-> (In reply to comment #0)
-> > Ref:  man ld.so
-> > 
-> > Example:
-> > In menu -> tool chain -> Target Linker Options (BR2_TARGET_LDFLAGS)
-> > to: -Wl,-rpath='$ORIGIN/../lib'
-> > (A relative path from executable to pathname of its required
-> > libraries. The example in ld.so manual.).
-> > 
-> > Build BusyBox (which honors BR_TARGET_LDFLAGS, not everything does).
-> > 
-> > Use: readelf -dl on the resulting binary and find an entry similar
-> > to: 0x0000000f (RPATH)                      Library rpath:
-> > [outputRIGIN/../lib]
-> > 
-> > Where the $O of $ORIGIN has been expanded to an internal value by
-> > the time the content of BR2_TARGET_LDFLAGS is seen by the compiler.
+> If you think configure made a mistake, make sure you are using the latest
+> version from Git.  If the latest version fails, report the problem to the
+> ffmpeg-user at ffmpeg.org mailing list or IRC #ffmpeg on irc.freenode.net.
+> Include the log file "config.log" produced by configure as this will help
+> solving the problem.
+> configure: error: Submodule lib/ffmpeg failed to configure
 > 
-> Unfortunately, there is no trivial solution. This bug comes from the
-> interaction between Buildroot and the packages' build-systems
-> (especially those based on autotools).
+> This will be needed for 13.0 Gotham.
 > 
-> I mean there no easy way to correctly escape "$ORIGIN" in makefiles
-> (form Buildroot and the package itself) or/and in sh scripts.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+> ---
+>  package/xbmc/xbmc.mk |    7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index 3522802..ffe573f 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -21,6 +21,13 @@ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+>  # xbmc at i386 depends on nasm
+>  XBMC_DEPENDENCIES += $(if $(BR2_i386),host-nasm)
+>  
+> +# ffmpeg depends on yasm on MMX archs
+> +# xbmc configure passes $(BR2_ARCH) to ffmpeg configure which adds
+> +# yasm as dependency for x86_64, even if BR2_x86_generic=y
 
-Grumble.
-But I half-way expected that finding.
-;)
+Yes, all x86_64 have MMX.
 
-> > 
-> > This was when using the Buildroot generation of a toolchain.
-> > Other toolchain selections not tested.
+Regards,
+Yann E. MORIN.
+
+> +ifneq ($(BR2_X86_CPU_HAS_MMX)$(BR2_x86_64),)
+> +XBMC_DEPENDENCIES += host-yasm
+> +endif
+> +
+>  XBMC_CONF_ENV = \
+>  	PYTHON_VERSION="$(PYTHON_VERSION_MAJOR)" \
+>  	PYTHON_LDFLAGS="-lpython$(PYTHON_VERSION_MAJOR) -lpthread -ldl -lutil -lm" \
+> -- 
+> 1.7.10.4
 > 
-> The toolchain has nothing to do with this issue.
-> 
-> 
-> From the couple of experiments I run, the only reliable solution to
-> correctly set RPATH is using chrpath or patchelf at the end of the
-> build.
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-That (patchelf ref:
-http://anonscm.debian.org/gitweb/?p=collab-maint/patchelf.git;a=summary
-http://nixos.org/patchelf.html)
-was going to be my 'temporary' work-around.
-
-Along with a post-build script to munge things as required.
-
-Not so temporary now I guess.
-
-- - - -
-
-There is an alternative, for people who only need a very few
-binaries built - -
-Set 'Target Linker Options' to a long string, longer than they
-will need, and after build hex-edit the binaries to the required 
-string.
-
-But that gets tiring real soon.  ;)
-And some packages are ignoring 'Target Linker Options' anyway.
-So even with this method, people would still need patchelf.
-
-- - - -
-
-Hmm...
-I guess I should add a selection to build host-patchelf to BR.
-Someone else out there might need it, even if they don't need
-ld.so token expansion in runpath and/or rpath.
-
-Thanks for taking the time to check this out.
-Might have to mark it as: "Can't be fixed" in the bug tracker.
-
-Mike
-> 
-> Regards,
-> 
-> Samuel
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
