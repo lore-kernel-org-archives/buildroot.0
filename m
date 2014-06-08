@@ -1,159 +1,147 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:27:17 +0200
-Subject: [Buildroot] [PATCH v5] canfestival: new package
-In-Reply-To: <1397986492-7870-1-git-send-email-s.martin49@gmail.com>
-References: <1397986492-7870-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140608162717.614d7ba6@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 8 Jun 2014 16:29:45 +0200
+Subject: [Buildroot] [PATCH 1 of 7 v3] infra: consistently use double
+ dollar signs inside inner-xxx-targets
+In-Reply-To: <20140607104959.70b268b8@free-electrons.com>
+References: <patchbomb.1402085576@localhost>
+ <b1861ead49778767b075.1402085577@localhost>
+ <20140607104959.70b268b8@free-electrons.com>
+Message-ID: <CAAXf6LXgYEvcWKxFry8GR8sfC64K2iMEuQLZPBf9YWTXd-eVCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Hi Thomas,
 
-On Sun, 20 Apr 2014 11:34:52 +0200, Samuel Martin wrote:
+On Sat, Jun 7, 2014 at 10:49 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Fri, 06 Jun 2014 22:12:57 +0200, Thomas De Schampheleire wrote:
+>
+>> In some cases, this would potentially cause circular references, in
+>> particular when the value of HOST_FOO_VAR would be obtained from the
+>> corresponding FOO_VAR if HOST_FOO_VAR is not defined. In these cases, a test
+>> is added to check for a host package (the only case where such constructions
+>> are relevant; these are not circular).
+>
+> I'm not sure to understand this part really well.
+>
+>>  ifndef $(2)_LIBTOOL_PATCH
+>>   ifdef $(3)_LIBTOOL_PATCH
+>> -  $(2)_LIBTOOL_PATCH = $($(3)_LIBTOOL_PATCH)
+>> +  $(2)_LIBTOOL_PATCH = $$($(3)_LIBTOOL_PATCH)
+>>   else
+>>    $(2)_LIBTOOL_PATCH ?= YES
+>>   endif
+>
+> In this chunk, we are defining HOST_FOO_BAR depending on FOO_BAR, and
+> it's not enclosed in a ifeq ($(4),host) test.
 
-> diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
-> new file mode 100644
-> index 0000000..4fe72de
-> --- /dev/null
-> +++ b/package/canfestival/Config.in
-> @@ -0,0 +1,102 @@
-> +config BR2_PACKAGE_CANFESTIVAL
-> +	bool "CanFestival"
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm
+This construct behaves as follows:
+For target packages: $(2) == $(3) == FOO
+    ifndef FOO_BAR
+     ifdef FOO_BAR
+      FOO_BAR = $(FOO_BAR)
+     else
+      FOO_BAR = default_value
+     endif
+    endif
 
-According to the .mk file, the package depends on the Linux kernel, so
-the dependencies should be added here, as well as a comment.
+This means that if FOO_BAR is set explicitly (in the .mk file),
+nothing is changed.
+If FOO_BAR is not set explicitly, the above code will set the default value.
 
-However, after testing, it turns out that the package does not always
-depend on the Linux kernel. It depends on which timer driver you
-select, and which driver you select. Therefore, it looks like this
-package needs a bit more work.
+For host packages: $(2) = HOST_FOO, $(3) = FOO
+    ifndef HOST_FOO_BAR
+     ifdef FOO_BAR
+      HOST_FOO_BAR = $(FOO_BAR)
+     else
+      HOST_FOO_BAR = default_value
+     endif
+    endif
 
-> +	help
-> +	  CanFestival is an OpenSource CANOpen framework, licensed with GPLv2
-> +	  and LGPLv2.
+This means that if HOST_FOO_BAR is set explicitly, nothing is changed.
+If HOST_FOO_BAR is not set explicitly, and FOO_BAR is set explicitly,
+HOST_FOO_BAR gets this (target) FOO_BAR value. If FOO_BAR (the target
+value) is also not set, then HOST_FOO_BAR gets the default value.
 
-"licensed with" -> "licensed under"
+An test on $(ifeq $(4),host) around the entire construct is not OK, as
+the default value is also applicable for the target case. If there
+were no default value, the extra check could be added but is not
+really needed.
 
-License is LGPLv2.1+, not LGPLv2.
+See below for the interpretation of the ?= construct...
 
-I couldn't spot the GPLv2 parts.
+>
+> But here:
+>
+>> +ifeq ($(4),host)
+>> + $(2)_AUTORECONF_OPT ?= $$($(3)_AUTORECONF_OPT)
+>> +endif
+>
+> and here:
+>
+>> -$(2)_DEPENDENCIES ?= $(filter-out host-automake host-autoconf host-libtool \
+>> +ifeq ($(4),host)
+>> +$(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
+>>                               host-toolchain $(1),\
+>
+> You're adding this ifeq ($(4),host). Can you explain a little bit more
+> what the problem is, and why it isn't solved in the same way in all
+> places?
 
-> +config BR2_PACKAGE_CANFESTIVAL_PEAK_LINUX
-> +	bool "peak_linux"
-> +	help
-> +	  PeakSystem CAN support (requires kernel driver and libpcan from
-> +	  PeakSystem).
+In this case the (original) construct is:
+Target case:
+    FOO_BAR ?= $(FOO_BAR)
 
-And so, will it build under Buildroot ? It's better to only create
-options for things you tested / can test, instead of trying to support
-everything.
+Host case:
+    HOST_FOO_BAR ?= $(FOO_BAR)
 
-> diff --git a/package/canfestival/canfestival-0001-now-honor-DESTDIR.patch b/package/canfestival/canfestival-0001-now-honor-DESTDIR.patch
-> new file mode 100644
-> index 0000000..7448bd6
-> --- /dev/null
-> +++ b/package/canfestival/canfestival-0001-now-honor-DESTDIR.patch
-> @@ -0,0 +1,787 @@
-> +From 9b76c8c97344472bc58e38cc28f734687d1a2aab Mon Sep 17 00:00:00 2001
-> +From: Samuel Martin <s.martin49@gmail.com>
-> +Date: Fri, 27 Dec 2013 19:01:02 +0100
-> +Subject: [PATCH] now honor DESTDIR
-> +
-> +Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+For the target case there would be a circular reference, and the
+statement doesn't make sense anyway.
+To solve this, an extra check $(ifeq $(4),host) is really needed.
+For the host case, if HOST_FOO_BAR is not yet set, it is set equal to
+the value of FOO_BAR. FOO_BAR may or may not be set previously: there
+is no default value at play here.
 
-Please submit upstream :-)
+A very important thing to understand here, construct (a)
+    HOST_FOO_BAR ?= $(FOO_BAR)
+is not equivalent to (b)
+    ifndef HOST_FOO_BAR
+      HOST_FOO_BAR = $(FOO_BAR)
+    endif
 
-> diff --git a/package/canfestival/canfestival.mk b/package/canfestival/canfestival.mk
-> new file mode 100644
-> index 0000000..a9576ae
-> --- /dev/null
-> +++ b/package/canfestival/canfestival.mk
-> @@ -0,0 +1,54 @@
-> +################################################################################
-> +#
-> +# canfestival
-> +#
-> +################################################################################
-> +
-> +# Revision 789:
-> +CANFESTIVAL_VERSION = a82d867e7850
-> +CANFESTIVAL_SOURCE = $(CANFESTIVAL_VERSION).tar.bz2
-> +CANFESTIVAL_SITE = http://dev.automforge.net/CanFestival-3/archive
-> +CANFESTIVAL_DEPENDENCIES = linux
+because 'ifdef' checks for a *non-empty value* while '?=' checks for
+*set or not set*.
+Since the .mk can have a statement like:
+    FOO_PATCH = blaat.patch
+    HOST_FOO_PATCH =
+the second form (b) above will still set HOST_FOO_BAR to FOO_BAR which
+is not what we want.
 
-That's the dependency I was referring to.
 
-> +# Runtime code is licensed LGPLv2, whereas accompanying developer tools and few
-> +# drivers (virtual_kernel, lincan and copcican_linux) are licensed GPLv2.
-> +CANFESTIVAL_LICENSE = LGPLv2.1, GPLv2
+I hope the above is more clear to you, please let me know.
 
-It's LGPLv2.1+ and probably GPLv2+. Also, augment the license
-informations with something such as:
+It is clear that the code is non-trivial, but I don't know if and how
+we should document all this.
+What do you think?
+Do also let me know if you expect changes in the patch or commit
+message to make any of this clear.
 
-	LGPLv2.1+ (runtime), GPLv2+ (developer tools, some drivers)
+>
+> Other than that, I looked through the patch and couldn't spot any other
+> thing that looked problematic or raised questions.
+>
+> Thanks for doing this work, quite certainly a bit boring to do, but
+> definitely very useful! We'll have to be careful in the future when
+> changes are made to the 'inner' functions, but I'm sure you'll be there
+> to point out the mistakes made in patches contributed by others!
 
-> +CANFESTIVAL_LICENSE_FILES = COPYING, LICENCE
+In exchange, I'll expect suitable worshiping and gifts at the
+Buildroot Developer meeting next February ;-)
 
-Fields are space separated, not comma separated.
-
-> +CANFESTIVAL_INSTALL_STAGING = YES
-> +CANFESTIVAL_INSTALLED-y = src drivers
-> +CANFESTIVAL_INSTALLED-$(BR2_PACKAGE_CANFESTIVAL_INSTALL_EXAMPLES) += examples
-> +
-> +define CANFESTIVAL_CONFIGURE_CMDS
-> +	cd $(@D) && \
-> +		$(TARGET_CONFIGURE_OPTS) ./configure \
-> +		--target=unix \
-> +		--arch=$(BR2_ARCH) \
-> +		--kerneldir=$(LINUX_DIR) \
-> +		--timers=unix \
-> +		--binutils=$(TARGET_CROSS) \
-> +		--cc="$(TARGET_CC)" \
-> +		--cxx="$(TARGET_CC)" \
-> +		--ld="$(TARGET_CC)" \
-> +		--prefix=/usr \
-> +		--can=$(BR2_PACKAGE_CANFESTIVAL_DRIVER) \
-> +		$(call qstrip,$(BR2_PACKAGE_CANFESTIVAL_ADDITIONAL_OPTIONS))
-> +endef
-> +
-> +define CANFESTIVAL_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
-> +endef
-> +
-> +define CANFESTIVAL_INSTALL_TARGET_CMDS
-> +	for d in $(CANFESTIVAL_INSTALLED-y) ; do \
-> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$$d install \
-> +			DESTDIR=$(TARGET_DIR) ; \
-
-Add "|| exit 1" after calling make, so that if one make fails, it
-exits the loop.
-
-> +	done
-> +endef
-> +
-> +define CANFESTIVAL_INSTALL_STAGING_CMDS
-> +	for d in $(CANFESTIVAL_INSTALLED-y) ; do \
-> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$$d install \
-> +			DESTDIR=$(STAGING_DIR) ; \
-
-Same.
-
-> +	done
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Add a comment above CONFIGURE_CMDS to explain why we're not using the
-autotools here.
-
-Thanks!
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
