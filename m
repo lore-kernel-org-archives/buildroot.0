@@ -1,171 +1,118 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 18:44:19 +0200
-Subject: [Buildroot] [PATCH 09/11] toolchain-external: add CodeSourcery
- MIPS 2014.05, remove 2012.09
-In-Reply-To: <1401619668-28062-10-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1401619668-28062-10-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140608164419.GL3266@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 18:44:57 +0200
+Subject: [Buildroot] [git commit] package/trace-cmd: bump to version 2.3.2
+Message-ID: <20140608164616.682969CF36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=a4277731ee406bb817c796593644d469c3445a74
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-06-01 12:47 +0200, Thomas Petazzoni spake thusly:
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The first patch "use-pkg-config-instead-of-python-config" has been applied
+upstream.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The flag _GNU_SOURCE is now always defined in Makefile, so it can be removed
+from trace-cmd.mk
 
-Sometimes, git-diff is too smart. It detects multiple small adds/removes
-instead of one big remove and one big add. More complex to review... :-/
+CPPFLAGS are appended to CFLAGS and are used to add extra flags, but the flag
+_LARGEFILE64_SOURCE in TARGET_CPPFLAGS is already defined in source files,
+which causes a build error. As for CFLAGS, we fix this by filtering out our
+definition of _LARGEFILE64_SOURCE from the CPPFLAGS before passing them to the
+trace-cmd Makefile.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...h => trace-cmd-0001-Fix-ptrace-detection.patch} |    0
+ ...e-use-pkg-config-instead-of-python-config.patch |   43 --------------------
+ package/trace-cmd/trace-cmd.mk                     |   10 ++++-
+ 3 files changed, 8 insertions(+), 45 deletions(-)
 
-> ---
->  toolchain/toolchain-external/Config.in             | 40 +++++++++++-----------
->  toolchain/toolchain-external/toolchain-external.mk |  6 ++--
->  2 files changed, 23 insertions(+), 23 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 527ff04..3331b69 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -190,8 +190,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
->  
->  	  This toolchain uses software-floating point.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-> -	bool "Sourcery CodeBench MIPS 2013.11"
-> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-> +	bool "Sourcery CodeBench MIPS 2014.05"
->  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on !BR2_MIPS_NABI32
-> @@ -200,12 +200,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
->  	help
->  	  Sourcery CodeBench toolchain for the MIPS architecture, from
-> -	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-> -	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
-> -	  3.11. It has support for the following variants:
-> +	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-> +	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers
-> +	  3.13. It has support for the following variants:
->  	    - MIPS32 O32 big endian glibc
->  	      Select a MIPS generic core
->  	      Disable BR2_SOFT_FLOAT
-> @@ -259,8 +259,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
->  	    - MIPS32 little endian soft float uclibc
->  	      Not usable in Buildroot yet.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
-> -	bool "Sourcery CodeBench MIPS 2013.05"
-> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-> +	bool "Sourcery CodeBench MIPS 2013.11"
->  	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on !BR2_MIPS_NABI32
-> @@ -269,12 +269,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
->  	help
->  	  Sourcery CodeBench toolchain for the MIPS architecture, from
-> -	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-> -	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-> -	  3.8.2. It has support for the following variants:
-> +	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-> +	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
-> +	  3.11. It has support for the following variants:
->  	    - MIPS32 O32 big endian glibc
->  	      Select a MIPS generic core
->  	      Disable BR2_SOFT_FLOAT
-> @@ -328,9 +328,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
->  	    - MIPS32 little endian soft float uclibc
->  	      Not usable in Buildroot yet.
->  
-> -config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
-> -	bool "Sourcery CodeBench MIPS 2012.09"
-> -	depends on BR2_mips || BR2_mipsel
-> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
-> +	bool "Sourcery CodeBench MIPS 2013.05"
-> +	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
->  	depends on !BR2_MIPS_NABI32
->  	depends on !BR2_PREFER_STATIC_LIB
-> @@ -338,12 +338,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->  	select BR2_INSTALL_LIBSTDCPP
->  	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-> +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
->  	help
->  	  Sourcery CodeBench toolchain for the MIPS architecture, from
-> -	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
-> -	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-> -	  3.5.4. It has support for the following variants:
-> +	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-> +	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-> +	  3.8.2. It has support for the following variants:
->  	    - MIPS32 O32 big endian glibc
->  	      Select a MIPS generic core
->  	      Disable BR2_SOFT_FLOAT
-> @@ -877,9 +877,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->  	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
->  	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
->  	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
-> -	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
->  	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
->  	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-> +	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
->  	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
->  	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
->  	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 47273d3..50e8dca 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -283,15 +283,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
->  TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
-> -else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
-> -TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
-> -TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
->  TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
->  TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
-> +TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
-> +TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
->  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
->  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
->  TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-> -- 
-> 1.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/trace-cmd/trace-cmd-0002-Fix-ptrace-detection.patch b/package/trace-cmd/trace-cmd-0001-Fix-ptrace-detection.patch
+similarity index 100%
+rename from package/trace-cmd/trace-cmd-0002-Fix-ptrace-detection.patch
+rename to package/trace-cmd/trace-cmd-0001-Fix-ptrace-detection.patch
+diff --git a/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch b/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
+deleted file mode 100644
+index 6fed42c..0000000
+--- a/package/trace-cmd/trace-cmd-0001-Makefile-use-pkg-config-instead-of-python-config.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-
+-trace-cmd use python-config to find out which headers
+-and libraries should be used to link against the Python libraries.
+-By default, python-config returns paths that are inappropriate for
+-cross-compilation.
+-
+-Add PYTHON_VERS to build trace-cmd with python2 or python3
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- Makefile | 8 +++++---
+- 1 file changed, 5 insertions(+), 3 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 83329ca..23b70d8 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -80,8 +80,10 @@ ifndef NO_PYTHON
+- PYTHON		:= ctracecmd.so
+- PYTHON_GUI	:= ctracecmd.so ctracecmdgui.so
+-
+-+PYTHON_VERS ?= python
+-+
+- # Can build python?
+--ifeq ($(shell sh -c "python-config --includes > /dev/null 2>&1 && echo y"), y)
+-+ifeq ($(shell sh -c "pkg-config --cflags $(PYTHON_VERS) > /dev/null 2>&1 && echo y"), y)
+- 	PYTHON_PLUGINS := plugin_python.so
+- 	BUILD_PYTHON := $(PYTHON) $(PYTHON_PLUGINS)
+- 	PYTHON_SO_INSTALL := ctracecmd.install
+-@@ -546,8 +548,8 @@ clean:
+-
+- ##### PYTHON STUFF #####
+-
+--PYTHON_INCLUDES = `python-config --includes`
+--PYTHON_LDFLAGS = `python-config --ldflags` \
+-+PYTHON_INCLUDES = `pkg-config --cflags $(PYTHON_VERS)`
+-+PYTHON_LDFLAGS = `pkg-config --libs $(PYTHON_VERS)` \
+- 		$(shell python -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('LINKFORSHARED')")
+- PYGTK_CFLAGS = `pkg-config --cflags pygtk-2.0`
+-
+---
+-1.8.4
+-
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 9a1ba71..02836ce 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRACE_CMD_VERSION = trace-cmd-v2.2.1
++TRACE_CMD_VERSION = trace-cmd-v2.3.2
+ TRACE_CMD_SITE = $(BR2_KERNEL_MIRROR)/scm/linux/kernel/git/rostedt/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+ TRACE_CMD_INSTALL_STAGING = YES
+@@ -25,11 +25,17 @@ endif
+ 
+ # trace-cmd already defines _LARGEFILE64_SOURCE when necessary,
+ # redefining it on the command line causes build problems.
+-TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS)) -D_GNU_SOURCE
++TRACE_CMD_CFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CFLAGS))
++
++# trace-cmd use CPPFLAGS to add some extra flags.
++# But like for CFLAGS, $(TARGET_CPPFLAGS) contains _LARGEFILE64_SOURCE
++# that causes build problems.
++TRACE_CMD_CPPFLAGS = $(filter-out -D_LARGEFILE64_SOURCE,$(TARGET_CPPFLAGS))
+ 
+ define TRACE_CMD_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) \
+ 		CFLAGS="$(TRACE_CMD_CFLAGS)" \
++		CPPFLAGS="$(TRACE_CMD_CPPFLAGS)" \
+ 		$(TRACE_CMD_MAKE_OPTS) \
+ 		-C $(@D) all
+ endef
