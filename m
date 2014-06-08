@@ -1,104 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 17:08:36 +0200
-Subject: [Buildroot] [git commit] support/scripts: prepare handling virtual
-	packages in generated lists
-Message-ID: <20140608151244.4A9589CAB5@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 17:11:47 +0200
+Subject: [Buildroot] [git commit] docs/manual: add the virtual packages list
+Message-ID: <20140608151244.7627A9CF25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e49d4f0c378960e3895381eea78ada48cca310fb
+commit: http://git.buildroot.net/buildroot/commit/?id=07c642b735d03b83c31824afe0aa2bd6d31699b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Prepare to tell apart real packages from virtual packages.
+Add the list of virtual packages as an appendix to the manual.
 
-Currently, the code implicitly recognises only real packages, and
-discards virtual packages, because of the heuristic used to recognise
-whether a symbol is a package:
+Also reference this list from appropriate locations elsewhere in
+the manual:
 
-  - for real package:
-    - symbols  : BR2_PACKAGE_FOO
-    - .mk files: foo.mk
-  - for virtual packages:
-    - symbols  : BR2_PACKAGE_HAS_FOO
-    - .mk files: foo.mk
+  - in section 7.2.2. "Config.in file", after the existing explanations
+    on dependencies on target and toolchain options, on a linux kernel,
+    and on udev /dev management,
 
-The current heuristic is to check for each symbol if a corresponding .mk
-file exists, by stripping 'BR2_PACKAGE_' from the beginning of the symbol,
-converting the result to lowercase, and checking if a .mk file exists.
-
-So, as a side effect, it completely misses the virtual packages [*], which
-is pretty nice since we get a list with only real packages that the user
-can indeed select and see in the menuconfig.
-
-[*] Except for 'cryptodev' and 'jpeg' which are both virtual packages and
-normal packages. Except they are not normal packages, they are used to
-display a choice of the implementation to use. This case will be fixed in
-follow-up patches.
-
-Since we'll soon need to also output the table of virtual packages, we
-need to teach the _is_package() function to recognise them as well.
-
-This patch is the first step into that direction: it introduces a new
-function _is_real_package() that is just a wrapper to _is_package(), which
-gains a new parameter, being the type of packages to filter on.
-
-No behavioural change is made in this patch, it is just a preparatory
-patch.
+  - in section 7.2.10. "Infrastructure for virtual packages", in the
+    provider Config.in and .mk explanations, to have the list of existing
+    symbols to select (in Config.in) and packages to provide (in .mk).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/gen-manual-lists.py |   12 +++++++++---
- 1 files changed, 9 insertions(+), 3 deletions(-)
+ docs/manual/adding-packages-directory.txt |   10 ++++++++++
+ docs/manual/adding-packages-virtual.txt   |    6 ++++++
+ docs/manual/appendix.txt                  |    8 ++++++++
+ 3 files changed, 24 insertions(+), 0 deletions(-)
 
-diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index b33fcf0..e234ef1 100644
---- a/support/scripts/gen-manual-lists.py
-+++ b/support/scripts/gen-manual-lists.py
-@@ -183,14 +183,14 @@ class Buildroot:
-         'target-packages': {
-             'filename': "package-list",
-             'root_menu': "Target packages",
--            'filter': "_is_package",
-+            'filter': "_is_real_package",
-             'sorted': True,
-             'sub_menu': True,
-         },
-         'host-packages': {
-             'filename': "host-package-list",
-             'root_menu': "Host utilities",
--            'filter': "_is_package",
-+            'filter': "_is_real_package",
-             'sorted': True,
-             'sub_menu': False,
-         },
-@@ -238,11 +238,14 @@ class Buildroot:
-         return bool([ symbol for x in symbol.get_referenced_symbols()
-             if x.get_name().startswith(self._deprecated.get_name()) ])
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 070718e..69b012c 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -298,6 +298,16 @@ management, use this format:
+ foo needs udev /dev management and a toolchain w/ featA, featB, featC
+ --------------------------
  
--    def _is_package(self, symbol):
-+    def _is_package(self, symbol, type='real'):
-         """ Return True if the symbol is a package or a host package, otherwise
-         False.
- 
-         :param symbol:  The symbol to check
-+        :param type:    Limit to 'real' or 'virtual' types of packages,
-+                        with 'real' being the default.
-+                        Note: only 'real' is (implictly) handled for now
- 
-         """
-         if not self.re_pkg_prefix.match(symbol.get_name()):
-@@ -280,6 +283,9 @@ class Buildroot:
-                 return True
-         return False
- 
-+    def _is_real_package(self, symbol):
-+        return self._is_package(symbol, 'real')
++==== Dependencies on features provided by virtual packages
 +
-     def _get_pkg_name(self, symbol):
-         """ Return the package name of the specified symbol.
++Some features can be provided by more than one package, such as the
++openGL libraries.
++
++See xref:virtual-package-tutorial[] for more on the virtual packages.
++
++See xref:virtual-package-list[] for the symbols to depend on if your package
++depends on a feature provided by a virtual package.
++
+ === The +.mk+ file
+ 
+ [[adding-packages-mk]]
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+index 6326bb5..a5f17a2 100644
+--- a/docs/manual/adding-packages-virtual.txt
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -83,6 +83,9 @@ On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
+ set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
+ provider, but only if it is selected.
+ 
++See xref:virtual-package-list[] for the symbols to select if you implement
++a new provider for an existing virtual package.
++
+ ==== Provider's +.mk+ file
+ 
+ The +.mk+ file should also declare an additional variable
+@@ -96,6 +99,9 @@ packages it is an implementation of:
+ Of course, do not forget to add the proper build and runtime dependencies for
+ this package!
+ 
++See xref:virtual-package-list[] for the names of virtual packages to provide
++if you implement a new provider for an existing virtual package.
++
+ ==== Notes on depending on a virtual package
+ 
+ When adding a package that requires a certain +FEATURE+ provided by a virtual
+diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
+index 35328c6..3f95551 100644
+--- a/docs/manual/appendix.txt
++++ b/docs/manual/appendix.txt
+@@ -14,6 +14,14 @@ include::makeusers-syntax.txt[]
+ 
+ include::package-list.txt[]
+ 
++[[virtual-package-list]]
++== List of virtual packages
++
++These are the virtual packages known to +Buildroot+, with the
++corresponding symbols and providers.
++
++include::virtual-package-list.txt[]
++
+ [[host-package-list]]
+ == List of host utilities available in Buildroot
  
