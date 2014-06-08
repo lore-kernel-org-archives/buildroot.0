@@ -1,104 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jun 2014 16:03:49 +0200
-Subject: [Buildroot] [PATCH 0/9 v4] graph-depends improvements (branch
-	yem/graphs)
-Message-ID: <cover.1402236171.git.yann.morin.1998@free.fr>
+Date: Sun,  8 Jun 2014 16:03:45 +0200
+Subject: [Buildroot] [PATCH 1/9] graph-depends: refactor with more colors
+In-Reply-To: <cover.1402236171.git.yann.morin.1998@free.fr>
+References: <cover.1402236171.git.yann.morin.1998@free.fr>
+Message-ID: <399111322cd88f42509ef9569f3b0de7fe51e711.1402236171.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+From: Francois Perrad <fperrad@gmail.com>
 
-Hello All!
+Do not use the same colors for toolchain, host and target packages.
 
-This series brings a few improvements to the graph-depends utility:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998 at free.fr rephrase commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/scripts/graph-depends | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-  - add option to remove transitive dependencies
-  - add option to pas arbitrary args to the dot utility
-  - cleanup and re-arrange the code
-
-This series is open for discusion, especially on how we pass options to
-the graph generators:
-
-  - support/scripts/graph-depends: needs to know whether to generate
-    transitive dependencies or not, and how deep to limit the dependencies
-
-  - the 'dot' utility: needs to know whether to graph top-down or
-    left-right (or whatever), the type of graph (tree, circle...) and
-    so on...
-
-Currently, environment variables are used, but that is not in the tastes
-of some (me including), but I can't see a better way.
-
-Peter suggested using kconfig knobs, but it does not scale when you want
-different settings for different graphs (e.g, different depth level for
-different packages).
-
-Samuel suggested using a config file, but it has the same issues as the
-kconfig options. He also suggested pasing a single environment variable,
-but that does not work since some options are for graph-depends shile
-others are for dot.
-
-So I went for adding a new variable to pass options to dot.
-
-
-Changes v3 -> v4:
-  - include Fran?ois' host-package colours  (Fran?ois)
-  - fix commit log  (Thomas)
-  - add option for colours, add to manual
-
-Changes v2 -> v3:
-  - pythonise even further the handling of --depth  (Samuel)
-  - rename BR2_GRAPH_DEPTH to BR2_GRAPH_DEPS_OPTS
-  - introduce BR2_GRAPH_DOT_OPTS
-  - update manual accordingly
-
-Changes v1 -> v2:
-  - complete rewrite, split into a series
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit ed1182641812986f529b2150635f1e93c799a419:
-
-  xserver_xorg-server: add support for xtensa architecture (2014-06-08 15:51:00 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/graphs
-
-for you to fetch changes up to fa5477ea2ced52b952961623097578564a7247b6:
-
-  manual: document the new graph-depends options (2014-06-08 15:58:27 +0200)
-
-----------------------------------------------------------------
-Francois Perrad (1):
-      graph-depends: refactor with more colors
-
-Yann E. MORIN (8):
-      graphs: add option to remove transitive dependencies in dependency graph
-      graphs-depends: merge redundant-dependencies elimination
-      graph-depends: handle the depth argument in a more pythonic way
-      graph-depends: add option to set the colours
-      graph-depends: document the 'transitive' variable
-      graph-depends: rename the mode constants
-      graph-depends: add option to pass arbitrary dot options
-      manual: document the new graph-depends options
-
- Makefile                      |   2 +-
- docs/manual/common-usage.txt  |  11 ++-
- package/pkg-generic.mk        |   2 +-
- support/scripts/graph-depends | 161 +++++++++++++++++++++++++++---------------
- 4 files changed, 115 insertions(+), 61 deletions(-)
-
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index e2a5e1e..443ac7d 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -222,15 +222,22 @@ for dep in dependencies:
+ 
+ # Print the attributes of a node: label and fill-color
+ def print_attrs(pkg):
++    name = pkg_node_name(pkg)
+     if pkg == 'all':
+-        print "all [label = \"ALL\"]"
+-        print "all [color=lightblue,style=filled]"
+-        return
+-    print "%s [label = \"%s\"]" % (pkg_node_name(pkg), pkg)
+-    if mode == PKG_MODE and pkg == rootpkg:
+-        print "%s [color=lightblue,style=filled]" % pkg_node_name(rootpkg)
++        label = 'ALL'
++    else:
++        label = pkg
++    if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
++        color = 'lightblue'
+     else:
+-        print "%s [color=grey,style=filled]" % pkg_node_name(pkg)
++        if pkg.startswith('host') \
++        or pkg.startswith('toolchain') \
++        or pkg.startswith('rootfs'):
++            color = 'gainsboro'
++        else:
++            color = 'grey'
++    print "%s [label = \"%s\"]" % (name, label)
++    print "%s [color=%s,style=filled]" % (name, color)
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(depth, pkg):
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
