@@ -1,113 +1,80 @@
-From: Noam Camus <noamc@ezchip.com>
-Date: Sun, 8 Jun 2014 12:50:03 +0000
-Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
-	relocatable one
-Message-ID: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Jun 2014 14:50:12 +0200
+Subject: [Buildroot] [PATCH v6 4/4] rpi-userland: cleanup *_CONF_OPT
+In-Reply-To: <1401923053-30292-5-git-send-email-s.martin49@gmail.com>
+References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
+ <1401923053-30292-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140608125012.GC3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please review below patch
+Samuel, All,
 
-> -----Original Message-----
-> From: Noam Camus [mailto:noamc at ezchip.com]
-> Sent: Sunday, June 08, 2014 3:45 PM
-> To: Noam Camus
-> Cc: Tal Zilcer
-> Subject: [PATCH 1/1] toolchain-buildroot: create a relocatable one
+On 2014-06-05 01:04 +0200, Samuel Martin spake thusly:
+> This change reverts the commit 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf
+> because rpi-userland is correctly built whatever the value of the
+> BUILD_SHARED_LIBS CMake flags.
 > 
-> From: Tal Zilcer <talz@ezchip.com>
+> The cset 5e3b1f31b3f82e3b163567f10d7131c9d649a2cf originally intends to
+> fix linkage/runtime failure in xbmc package because of missing flags in
+> xbmc LIBS env. var. This has been fixed in the previous patch.
 > 
-> This adds ability so that pre built buildroot toolchain and GDB can be
-> used by others in different computers without the need to build them
-> again.
+> So, for rpi-userland package, BUILD_SHARED_LIBS does no longer need to
+> be forced to OFF, and can safely be driven by the CMake infrastructure.
+
+Fixes:
+    http://autobuild.buildroot.net/results/6f3/6f36ad6a78d9c0e204d617ec6d15e7b577542c28/
+    http://autobuild.buildroot.net/results/789/789fd88c66f898d0a2fd22acc27e9378dd4147af/
+    http://autobuild.buildroot.net/results/588/58823900673d4b5304255c1c08ad529c262dd1ee/
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > 
-> Note: the toolchain/GDB is still depended on native libraries.
-> 
-> Signed-off-by: Tal Zilcer <talz@ezchip.com>
-> Signed-off-by: Noam Camus <noamc@ezchip.com>
 > ---
->  package/expat/expat.mk                  |    4 ++++
->  package/gmp/gmp.mk                      |    4 ++++
->  package/mpc/mpc.mk                      |    4 ++++
->  package/mpfr/mpfr.mk                    |    4 ++++
->  toolchain/toolchain-buildroot/Config.in |    8 ++++++++
->  5 files changed, 24 insertions(+), 0 deletions(-)
+> changes v5 -> v6:
+> - rebase
 > 
-> diff --git a/package/expat/expat.mk b/package/expat/expat.mk index
-> 4c37ba2..c9af121 100644
-> --- a/package/expat/expat.mk
-> +++ b/package/expat/expat.mk
-> @@ -13,5 +13,9 @@ EXPAT_DEPENDENCIES = host-pkgconf  EXPAT_LICENSE = MIT
-> EXPAT_LICENSE_FILES = COPYING
+> changes v4 -> v5:
+> - rebase
+> - extend commit log (ThomasP)
 > 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
-> +HOST_EXPAT_CONF_OPT = --disable-shared
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk index
-> f71a210..12502da 100644
-> --- a/package/gmp/gmp.mk
-> +++ b/package/gmp/gmp.mk
-> @@ -12,5 +12,9 @@ GMP_LICENSE = LGPLv3+
->  GMP_LICENSE_FILES = COPYING.LESSERv3
->  GMP_DEPENDENCIES = host-m4
+> changes v3 -> v4:
+> - rebase
 > 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
-> +HOST_GMP_CONF_OPT = --disable-shared
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk index
-> 81ee5f0..436e86a 100644
-> --- a/package/mpc/mpc.mk
-> +++ b/package/mpc/mpc.mk
-> @@ -11,5 +11,9 @@ MPC_LICENSE_FILES = COPYING.LESSER  MPC_INSTALL_STAGING
-> = YES  MPC_DEPENDENCIES = gmp mpfr
+> changes v2 -> v3:
+> - new patch
+> ---
+>  package/rpi-userland/rpi-userland.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
-> +HOST_MPC_CONF_OPT = --disable-shared
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk index
-> 52d88fe..7093cf6 100644
-> --- a/package/mpfr/mpfr.mk
-> +++ b/package/mpfr/mpfr.mk
-> @@ -13,5 +13,9 @@ MPFR_INSTALL_STAGING = YES  MPFR_DEPENDENCIES = gmp
-> MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index 8b225ba..2de6b92 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -9,7 +9,7 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+>  RPI_USERLAND_LICENSE = BSD-3c
+>  RPI_USERLAND_LICENSE_FILES = LICENCE
+>  RPI_USERLAND_INSTALL_STAGING = YES
+> -RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS=OFF
+> +RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
+>  
+>  RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+>  
+> -- 
+> 2.0.0
 > 
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
-> +HOST_MPFR_CONF_OPT = --disable-shared
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/toolchain/toolchain-buildroot/Config.in
-> b/toolchain/toolchain-buildroot/Config.in
-> index eef9f9c..a66f816 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -18,6 +18,14 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
-> 
->  	  If you're not sure, just leave the default "buildroot" value.
-> 
-> +config BR2_TOOLCHAIN_BUILDROOT_STATIC
-> +	bool "static toolchain"
-> +	help
-> +	  This option builds toolchain and gdb with static libraries
-> +	  of mpc,mpfr,gmp, and expat.
-> +	  It enable one to copy toolchain around to different directory
-> +	  and even to another machine. Now toolchain is relocatable, enjoy.
-> +
->  source "package/linux-headers/Config.in.host"
-> 
->  choice
-> --
-> 1.7.1
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
