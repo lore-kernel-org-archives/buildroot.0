@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jun 2014 16:03:52 +0200
-Subject: [Buildroot] [PATCH 8/9] graph-depends: add option to pass arbitrary
-	dot options
+Date: Sun,  8 Jun 2014 16:03:53 +0200
+Subject: [Buildroot] [PATCH 9/9] manual: document the new graph-depends
+	options
 In-Reply-To: <cover.1402236171.git.yann.morin.1998@free.fr>
 References: <cover.1402236171.git.yann.morin.1998@free.fr>
-Message-ID: <c170ff34d446d657fee51b187ae9a222e9e5e38c.1402236171.git.yann.morin.1998@free.fr>
+Message-ID: <fa5477ea2ced52b952961623097578564a7247b6.1402236171.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,48 +13,44 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Kids nowaday seem to prefer a left-to-right drawing rather than the
-more conventional and historical top-down drawing.
-
-Rather than multiply the number of environment variables, just add
-a single one where the user can pass arbitrary dot options, such as:
-
-    make BR2_GRAPH_DOT_OPTS=-Grankdir=LR graph-depends
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- Makefile               | 2 +-
- package/pkg-generic.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/common-usage.txt | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 0b4264a..08696f7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -675,7 +675,7 @@ graph-depends:
- 	@cd "$(CONFIG_DIR)"; \
- 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
- 	|tee $(O)/graphs/$(@).dot \
--	|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
-+	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 16a1351..eb83990 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -94,6 +94,8 @@ to +make+ or set in the environment:
+   default), or +png+.
+ * +BR2_GRAPH_DEPS_OPTS+ to pass extra options to the dependency graph; see
+   xref:graph-depends[] for the accepted options
++* +BR2_GRAPH_DOT_OPTS+ is passed verbatim as options to the +dot+ utility to
++  draw the dependency graph.
  
- else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ An example that uses config files located in the toplevel directory and
+ in your $HOME:
+@@ -204,8 +206,15 @@ The +graph-depends+ behaviour can be controlled by setting options in the
+ * +--depth N+, +-d N+, to limit the dependency depth to +N+ levels. The
+   default, +0+, means no limit.
  
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 5116ed9..c6c367c 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -533,7 +533,7 @@ $(1)-graph-depends:
- 			@cd "$(CONFIG_DIR)"; \
- 			$(TOPDIR)/support/scripts/graph-depends -p $(1) $(BR2_GRAPH_DEPS_OPTS) \
- 			|tee $(O)/graphs/$$(@).dot \
--			|dot -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
-+			|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(O)/graphs/$$(@).$(BR_GRAPH_OUT)
++* +--transitive+, +--no-transitive+, to draw (or not) the transitive
++  dependencies. The default is to draw transitive dependencies.
++
++* +--colours R,T,H+, the comma-separated list of colours to draw the
++  root package (+R+), the target packages (+T+) and the host packages
++  (+H+). Defaults to: +lightblue,grey,gainsboro+
++
+ --------------------------------
+-BR2_GRAPH_DEPS_OPTS='-d 3' make graph-depends
++BR2_GRAPH_DEPS_OPTS='-d 3 --no-transitive --colours=red,green,blue' make graph-depends
+ --------------------------------
  
- $(1)-dirclean:		$$($(2)_TARGET_DIRCLEAN)
- 
+ === Graphing the build duration
 -- 
 1.8.3.2
