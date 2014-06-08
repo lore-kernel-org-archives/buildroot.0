@@ -1,32 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 16:35:46 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: bump to version 5_01_01_01
-In-Reply-To: <1401812044-11578-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1401812044-11578-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20140608163546.2e68294c@free-electrons.com>
+Date: Sun, 8 Jun 2014 16:42:58 +0200
+Subject: [Buildroot] [git commit] graph-depends: refactor with more colors
+Message-ID: <20140608145131.6BC009CF1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hadrien Boutteville,
+commit: http://git.buildroot.net/buildroot/commit/?id=b689264d38053c1fdcce69607debefb56632a769
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  3 Jun 2014 18:14:04 +0200, Hadrien Boutteville wrote:
-> Note that SDK 5_01_01_01 only support EABIhf.
-> 
-> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-> ---
->  package/ti-gfx/Config.in | 7 ++++---
->  package/ti-gfx/ti-gfx.mk | 8 +-------
->  2 files changed, 5 insertions(+), 10 deletions(-)
+Do not use the same colors for toolchain, host and target packages.
 
-Can you fix according to Yann's comments?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[yann.morin.1998 at free.fr rephrase commit log]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/scripts/graph-depends |   21 ++++++++++++++-------
+ 1 files changed, 14 insertions(+), 7 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index e2a5e1e..443ac7d 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -222,15 +222,22 @@ for dep in dependencies:
+ 
+ # Print the attributes of a node: label and fill-color
+ def print_attrs(pkg):
++    name = pkg_node_name(pkg)
+     if pkg == 'all':
+-        print "all [label = \"ALL\"]"
+-        print "all [color=lightblue,style=filled]"
+-        return
+-    print "%s [label = \"%s\"]" % (pkg_node_name(pkg), pkg)
+-    if mode == PKG_MODE and pkg == rootpkg:
+-        print "%s [color=lightblue,style=filled]" % pkg_node_name(rootpkg)
++        label = 'ALL'
++    else:
++        label = pkg
++    if pkg == 'all' or (mode == PKG_MODE and pkg == rootpkg):
++        color = 'lightblue'
+     else:
+-        print "%s [color=grey,style=filled]" % pkg_node_name(pkg)
++        if pkg.startswith('host') \
++        or pkg.startswith('toolchain') \
++        or pkg.startswith('rootfs'):
++            color = 'gainsboro'
++        else:
++            color = 'grey'
++    print "%s [label = \"%s\"]" % (name, label)
++    print "%s [color=%s,style=filled]" % (name, color)
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(depth, pkg):
