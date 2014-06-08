@@ -1,57 +1,124 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Sun, 8 Jun 2014 16:00:34 -0500
-Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to
- target
-In-Reply-To: <20140608192043.GQ3266@free.fr>
-References: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
- <20140608192043.GQ3266@free.fr>
-Message-ID: <20140608160034.5e603bf7@core2quad.morethan.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 8 Jun 2014 23:27:52 +0200
+Subject: [Buildroot] [PATCHv2 2/6] gettext: remove support for
+ gettext-tools on target
+In-Reply-To: <1401654214-19384-3-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401654214-19384-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140608212752.GS3266@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 8 Jun 2014 21:20:43 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Thomas, All,
 
-> All this multi-arch stuff is so utterly broken, and there is not even
-> a real use-case for it. Not even a Debian developper I talked to,
-> which was involved in the mess, was able to explain what the reason
-> was, that was not already covered by existing mechanisms. That's a
-> shame...
->
-rant
+On 2014-06-01 22:23 +0200, Thomas Petazzoni spake thusly:
+> This commit removes the BR2_PACKAGE_GETTEXT_TOOLS option, which could
+> be used to install gettext tools on the target. This is not needed,
+> because Buildroot is not designed to provide a full development
+> environment on the target, and gettext translation files should be
+> processed on the build machine, using the host gettext tools.
+> 
+> Remove this option will allow to optimize the build time of gettext on
+> the target, by only building the gettext runtime libraries.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Tested-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
 
-You mean this sort of c...?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-     11193:   file=libc.so.6 [0];  needed by ./busybox [0]
-     11193:   find library=libc.so.6 [0]; searching
-     11193:    search path=../lib/tls/v7l/neon/vfp:../lib/tls/v7l/neon:../lib/tls/v7l/vfp:../lib/tls/v7l:../lib/tls/neon/vfp:../lib/tls/neon:../lib/tls/vfp:../lib/tls:../lib/v7l/neon/vfp:../lib/v7l/neon:../lib/v7l/vfp:../lib/v7l:../lib/neon/vfp:../lib/neon:../li
-b/vfp:../lib          (RUNPATH from file ./busybox)
-     11193:     trying file=../lib/tls/v7l/neon/vfp/libc.so.6
-     11193:     trying file=../lib/tls/v7l/neon/libc.so.6
-     11193:     trying file=../lib/tls/v7l/vfp/libc.so.6
-     11193:     trying file=../lib/tls/v7l/libc.so.6
-     11193:     trying file=../lib/tls/neon/vfp/libc.so.6
-     11193:     trying file=../lib/tls/neon/libc.so.6
-     11193:     trying file=../lib/tls/vfp/libc.so.6
-     11193:     trying file=../lib/tls/libc.so.6
-     11193:     trying file=../lib/v7l/neon/vfp/libc.so.6
-     11193:     trying file=../lib/v7l/neon/libc.so.6
-     11193:     trying file=../lib/v7l/vfp/libc.so.6
-     11193:     trying file=../lib/v7l/libc.so.6
-     11193:     trying file=../lib/neon/vfp/libc.so.6
-     11193:     trying file=../lib/neon/libc.so.6
-     11193:     trying file=../lib/vfp/libc.so.6
-     11193:     trying file=../lib/libc.so.6
+Regards,
+Yann E. MORIN.
 
-From one of today's builds of glibc-2.19 for a Cortex-A8.
-The &$#^&^ loader is looking everywhere except under the bed.
+> ---
+>  Config.in.legacy           | 12 ++++++++++++
+>  package/gettext/Config.in  | 14 --------------
+>  package/gettext/gettext.mk |  4 ----
+>  3 files changed, 12 insertions(+), 18 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 00661db..50f7363 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -99,6 +99,18 @@ comment "----------------------------------------------------"
+>  endif
+>  
+>  ###############################################################################
+> +comment "Legacy options removed in 2014.08"
+> +
+> +config BR2_PACKAGE_GETTEXT_TOOLS
+> +	bool "support for gettext-tools on target has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The option to install the gettext utilities on the target
+> +	  has been removed. This is not necessary as Buildroot is not
+> +	  designed to provide a full development environment on the
+> +	  target. gettext tools should be used on the build machine
+> +	  instead.
+> +
+>  comment "Legacy options removed in 2014.05"
+>  
+>  config BR2_PACKAGE_EVTEST_CAPTURE
+> diff --git a/package/gettext/Config.in b/package/gettext/Config.in
+> index d33dd3a..158b14e 100644
+> --- a/package/gettext/Config.in
+> +++ b/package/gettext/Config.in
+> @@ -13,20 +13,6 @@ config BR2_PACKAGE_GETTEXT
+>  
+>  	  http://www.gnu.org/software/gettext/
+>  
+> -if BR2_PACKAGE_GETTEXT
+> -
+> -config BR2_PACKAGE_GETTEXT_TOOLS
+> -	bool "Install gettext tools"
+> -	depends on BR2_USE_MMU # fork()
+> -	depends on BR2_LARGEFILE
+> -	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> -	help
+> -	  This option allows to install the complete gettext suite in
+> -	  the target filesystem. This is typically not useful for
+> -	  correct operation of programs.
+> -
+> -endif
+> -
+>  comment "gettext needs a toolchain w/ wchar"
+>  	depends on BR2_NEEDS_GETTEXT
+>  	depends on !BR2_USE_WCHAR
+> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+> index b5efa76..52a72db 100644
+> --- a/package/gettext/gettext.mk
+> +++ b/package/gettext/gettext.mk
+> @@ -46,16 +46,12 @@ ifeq ($(BR2_ENABLE_LOCALE),)
+>  GETTEXT_CONF_OPT += --enable-nls
+>  endif
+>  
+> -# When the gettext tools are not enabled in the configuration, we only
+> -# install libintl to the target.
+> -ifeq ($(BR2_PACKAGE_GETTEXT_TOOLS),)
+>  # When static libs are preferred the .so files aren't created
+>  ifeq ($(BR2_PREFER_STATIC_LIB),)
+>  define GETTEXT_INSTALL_TARGET_CMDS
+>  	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
+>  endef
+>  endif
+> -endif # GETTEXT_TOOLS = n
+>  
+>  # Disable interactive confirmation in host gettextize for package fixups
+>  define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Only one (the last) of the sixteen is where I told the loader to look.
-Sure am glad that someone thinks they know better than I where I put
-libc.
-
-/rant
-Mike
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
