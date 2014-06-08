@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 13:50:32 +0200
-Subject: [Buildroot] [git commit] mdadm: bump to version 3.3.1
-Message-ID: <20140608115048.E07869CABC@busybox.osuosl.org>
+Date: Sun, 8 Jun 2014 13:50:17 +0200
+Subject: [Buildroot] [git commit] spawn-fcgi: bump to version 1.6.4
+Message-ID: <20140608115048.D87399CF06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=468ddf2d131a7c54a6d173a2cf95b7d8b1a94cc9
+commit: http://git.buildroot.net/buildroot/commit/?id=7d48b6aeae11e5313ca41aaf2d0fbccb5575be60
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mdadm/mdadm.mk |    2 +-
+ package/spawn-fcgi/spawn-fcgi.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index c1491a4..b258881 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
+diff --git a/package/spawn-fcgi/spawn-fcgi.mk b/package/spawn-fcgi/spawn-fcgi.mk
+index 670daf7..d3f8c99 100644
+--- a/package/spawn-fcgi/spawn-fcgi.mk
++++ b/package/spawn-fcgi/spawn-fcgi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MDADM_VERSION = 3.3
-+MDADM_VERSION = 3.3.1
- MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
- MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
- MDADM_LICENSE = GPLv2+
+-SPAWN_FCGI_VERSION = 1.6.3
++SPAWN_FCGI_VERSION = 1.6.4
+ SPAWN_FCGI_SITE = http://www.lighttpd.net/download
+ SPAWN_FCGI_SOURCE = spawn-fcgi-$(SPAWN_FCGI_VERSION).tar.bz2
+ SPAWN_FCGI_LICENSE = BSD-3c
