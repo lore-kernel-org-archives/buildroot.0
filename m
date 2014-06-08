@@ -1,45 +1,68 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 8 Jun 2014 18:44:20 +0300
-Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create
-	a	relocatable one
-In-Reply-To: <884EA965490E3C4D8E66AEF41E9802502528F6@ezex10.ezchip.com>
-References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
- <20140608145430.0125bb29@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
- <20140608154632.1f6f13a6@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E9802502528F6@ezex10.ezchip.com>
-Message-ID: <20140608154420.GF4074@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 17:53:51 +0200
+Subject: [Buildroot] [git commit] sshpass: new package
+Message-ID: <20140608155416.952FA9CF25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Noam,
+commit: http://git.buildroot.net/buildroot/commit/?id=ffe60b1bfa062ae73f0db65c44ebd1781722cced
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jun 08, 2014 at 03:27:38PM +0000, Noam Camus wrote:
-> > If your company IT department is unable to understand which tools the
-> > company engineers need to properly contribute to open-source communities,
-> > I'd say you should create a GMail account, and use that as the SMTP server
-> > to send your e-mail. I believe that's what a lot of people do when they
-> > have to work in hostile environments.
-> 
-> [Noam Camus] Do I need to subscribe again with my gmail account?
-> Is adding to command line --smtp-server=smtp.gmail.com is enough?
-> What about the user name in gmail?
-> Any working example somewhere under doc?
+[Thomas: add MMU dependency, fix license to GPLv2+.]
 
-See the EXAMPLE section of the git-send-email(1) man page (online at 
-http://git-scm.com/docs/git-send-email).
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in          |    1 +
+ package/sshpass/Config.in  |    9 +++++++++
+ package/sshpass/sshpass.mk |   12 ++++++++++++
+ 3 files changed, 22 insertions(+), 0 deletions(-)
 
-You git username need not be the same as your gmail account. The former is 
-defined under the [user] git configuration section with the 'name' and 'email' 
-parameters. The latter is defined under the [sendemail] section as described 
-in the manual page I referred to above.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/Config.in b/package/Config.in
+index 1706197..763f148 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1010,6 +1010,7 @@ source "package/spawn-fcgi/Config.in"
+ source "package/spice/Config.in"
+ source "package/spice-protocol/Config.in"
+ source "package/squid/Config.in"
++source "package/sshpass/Config.in"
+ source "package/strongswan/Config.in"
+ source "package/stunnel/Config.in"
+ source "package/tcpdump/Config.in"
+diff --git a/package/sshpass/Config.in b/package/sshpass/Config.in
+new file mode 100644
+index 0000000..24e4629
+--- /dev/null
++++ b/package/sshpass/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_SSHPASS
++	bool "sshpass"
++	depends on BR2_USE_MMU # fork()
++	help
++	  Sshpass is a tool for non-interactivly performing
++	  password authentication with SSH's so called
++	  "interactive keyboard password authentication".
++
++	  http://sshpass.sourceforge.net
+diff --git a/package/sshpass/sshpass.mk b/package/sshpass/sshpass.mk
+new file mode 100644
+index 0000000..7344ca6
+--- /dev/null
++++ b/package/sshpass/sshpass.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# sshpass
++#
++################################################################################
++
++SSHPASS_VERSION = 1.05
++SSHPASS_SITE = http://downloads.sourceforge.net/project/sshpass/sshpass/$(SSHPASS_VERSION)
++SSHPASS_LICENSE = GPLv2+
++SSHPASS_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
