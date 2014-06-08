@@ -1,58 +1,113 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 8 Jun 2014 14:48:14 +0200
-Subject: [Buildroot] [PATCH v6 1/4] package/libcec: fix missing
- libraries from rpi-userland
-In-Reply-To: <1401923053-30292-2-git-send-email-s.martin49@gmail.com>
-References: <1401923053-30292-1-git-send-email-s.martin49@gmail.com>
- <1401923053-30292-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAGduivy2QnX6OHAkN4vxh29GAY5LY=3cV+uTRFaT9_DUXeaG_Q@mail.gmail.com>
+From: Noam Camus <noamc@ezchip.com>
+Date: Sun, 8 Jun 2014 12:50:03 +0000
+Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
+	relocatable one
+Message-ID: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Please review below patch
 
-This time on the right patch :)
-
-Tested-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-
-On Thu, Jun 5, 2014 at 1:04 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> When rpi-userland libraries are built as shared-objects, not all needed
-> libraries are passed in the LD_FLAGS, leading to failure at linkage.
->
-> To avoid this issue, set the LIBS variable content in accordance with
-> INCLUDES variable value.
->
-> This is needed because libcec does not use pkg-config to look for the
-> ldflags needed for -lbcm_host, even though bcm_host provides a .pc
-> file (even a correct one!)
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Samuel Martin <s.martin49@gmail.com>
+> -----Original Message-----
+> From: Noam Camus [mailto:noamc at ezchip.com]
+> Sent: Sunday, June 08, 2014 3:45 PM
+> To: Noam Camus
+> Cc: Tal Zilcer
+> Subject: [PATCH 1/1] toolchain-buildroot: create a relocatable one
+> 
+> From: Tal Zilcer <talz@ezchip.com>
+> 
+> This adds ability so that pre built buildroot toolchain and GDB can be
+> used by others in different computers without the need to build them
+> again.
+> 
+> Note: the toolchain/GDB is still depended on native libraries.
+> 
+> Signed-off-by: Tal Zilcer <talz@ezchip.com>
+> Signed-off-by: Noam Camus <noamc@ezchip.com>
 > ---
->  package/libcec/libcec.mk | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-> index 0aabb06..ad919fc 100644
-> --- a/package/libcec/libcec.mk
-> +++ b/package/libcec/libcec.mk
-> @@ -26,6 +26,7 @@ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
->  LIBCEC_CONF_OPT = --enable-rpi \
->     --with-rpi-include-path=$(STAGING_DIR)/usr/include
->  LIBCEC_DEPENDENCIES += rpi-userland
-> +LIBCEC_CONF_ENV += LIBS="-lvcos -lvchostif"
->  else
->  LIBCEC_CONF_OPT = --disable-rpi
->  endif
+>  package/expat/expat.mk                  |    4 ++++
+>  package/gmp/gmp.mk                      |    4 ++++
+>  package/mpc/mpc.mk                      |    4 ++++
+>  package/mpfr/mpfr.mk                    |    4 ++++
+>  toolchain/toolchain-buildroot/Config.in |    8 ++++++++
+>  5 files changed, 24 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/expat/expat.mk b/package/expat/expat.mk index
+> 4c37ba2..c9af121 100644
+> --- a/package/expat/expat.mk
+> +++ b/package/expat/expat.mk
+> @@ -13,5 +13,9 @@ EXPAT_DEPENDENCIES = host-pkgconf  EXPAT_LICENSE = MIT
+> EXPAT_LICENSE_FILES = COPYING
+> 
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
+> +HOST_EXPAT_CONF_OPT = --disable-shared
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk index
+> f71a210..12502da 100644
+> --- a/package/gmp/gmp.mk
+> +++ b/package/gmp/gmp.mk
+> @@ -12,5 +12,9 @@ GMP_LICENSE = LGPLv3+
+>  GMP_LICENSE_FILES = COPYING.LESSERv3
+>  GMP_DEPENDENCIES = host-m4
+> 
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
+> +HOST_GMP_CONF_OPT = --disable-shared
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk index
+> 81ee5f0..436e86a 100644
+> --- a/package/mpc/mpc.mk
+> +++ b/package/mpc/mpc.mk
+> @@ -11,5 +11,9 @@ MPC_LICENSE_FILES = COPYING.LESSER  MPC_INSTALL_STAGING
+> = YES  MPC_DEPENDENCIES = gmp mpfr
+> 
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
+> +HOST_MPC_CONF_OPT = --disable-shared
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk index
+> 52d88fe..7093cf6 100644
+> --- a/package/mpfr/mpfr.mk
+> +++ b/package/mpfr/mpfr.mk
+> @@ -13,5 +13,9 @@ MPFR_INSTALL_STAGING = YES  MPFR_DEPENDENCIES = gmp
+> MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+> 
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_STATIC),y)
+> +HOST_MPFR_CONF_OPT = --disable-shared
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/toolchain/toolchain-buildroot/Config.in
+> b/toolchain/toolchain-buildroot/Config.in
+> index eef9f9c..a66f816 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -18,6 +18,14 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+> 
+>  	  If you're not sure, just leave the default "buildroot" value.
+> 
+> +config BR2_TOOLCHAIN_BUILDROOT_STATIC
+> +	bool "static toolchain"
+> +	help
+> +	  This option builds toolchain and gdb with static libraries
+> +	  of mpc,mpfr,gmp, and expat.
+> +	  It enable one to copy toolchain around to different directory
+> +	  and even to another machine. Now toolchain is relocatable, enjoy.
+> +
+>  source "package/linux-headers/Config.in.host"
+> 
+>  choice
 > --
-> 2.0.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 1.7.1
