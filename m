@@ -1,30 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 17:23:39 +0200
-Subject: [Buildroot] [PATCH] perl: removes useless files in target tree
-In-Reply-To: <1401821218-5716-1-git-send-email-francois.perrad@gadz.org>
-References: <1401821218-5716-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140608172339.083abcd0@free-electrons.com>
+From: Noam Camus <noamc@ezchip.com>
+Date: Sun, 8 Jun 2014 15:27:38 +0000
+Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create
+	a	relocatable one
+In-Reply-To: <20140608154632.1f6f13a6@free-electrons.com>
+References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
+ <20140608145430.0125bb29@free-electrons.com>
+ <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
+ <20140608154632.1f6f13a6@free-electrons.com>
+Message-ID: <884EA965490E3C4D8E66AEF41E9802502528F6@ezex10.ezchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
-
-On Tue,  3 Jun 2014 20:46:58 +0200, Francois Perrad wrote:
-> $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE contains include files.
-> *.bs & .packlist files come with perl or perl/cpan packages.
+> If your company IT department is unable to understand which tools the
+> company engineers need to properly contribute to open-source communities,
+> I'd say you should create a GMail account, and use that as the SMTP server
+> to send your e-mail. I believe that's what a lot of people do when they
+> have to work in hostile environments.
 > 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  Makefile | 3 +++
->  1 file changed, 3 insertions(+)
 
-Applied, thanks!
+[Noam Camus] Do I need to subscribe again with my gmail account?
+Is adding to command line --smtp-server=smtp.gmail.com is enough?
+What about the user name in gmail?
+Any working example somewhere under doc?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Noam
