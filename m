@@ -1,107 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jun 2014 16:15:17 +0200
-Subject: [Buildroot] [PATCH 11/11] docs/manual: add the virtual packages list
-In-Reply-To: <cover.1402236631.git.yann.morin.1998@free.fr>
-References: <cover.1402236631.git.yann.morin.1998@free.fr>
-Message-ID: <e5d675da25e21b9b647172b947977d45da55c3eb.1402236631.git.yann.morin.1998@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  8 Jun 2014 14:21:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140608142143.D858E9CF0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-Add the list of virtual packages as an appendix to the manual.
+--- Comment #3 from Mike Z <minimod@morethan.org> 2014-06-08 14:21:43 UTC ---
+(In reply to comment #2)
+> Not tested, but as $ORIGIN seems to be interpreted by make as ${O}RIGIN, then I
+> guess using $$ORIGIN would work correctly, or if you prefer $${ORIGIN}.
+> 
+> This moves the responsibility of the correct escaping to the user, but as
+> Samuel said there is no easy solution.
+> 
+> Once cleared out, we should document this in the manual though...
+>
 
-Also reference this list from appropriate locations elsewhere in
-the manual:
+Sounds worth trying, will test and post (here) the results.
 
-  - in section 7.2.2. "Config.in file", after the existing explanations
-    on dependencies on target and toolchain options, on a linux kernel,
-    and on udev /dev management,
+It is a rare use case, needing to get the ld.so tokens in BR_TARGET_LDFLAGS
+to show up in the compiler command line as intended, but a valid one.
 
-  - in section 7.2.10. "Infrastructure for virtual packages", in the
-    provider Config.in and .mk explanations, to have the list of existing
-    symbols to select (in Config.in) and packages to provide (in .mk).
+At the moment, the busybox package honors the setting of the 
+"Target Linker Options" set in the config UI and the Lua package doesn't.
+So those will be my test cases.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
+(and maybe fix the Lua package at the same time.)
 
----
-Note: a pre-rendered version of the manual with these modifications is
-available at:
-    http://ymorin.is-a-geek.org/download/tmp/buildroot/virtual-pacakges/manual/manual.html
----
- docs/manual/adding-packages-directory.txt | 10 ++++++++++
- docs/manual/adding-packages-virtual.txt   |  6 ++++++
- docs/manual/appendix.txt                  |  8 ++++++++
- 3 files changed, 24 insertions(+)
+Mike
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 070718e..69b012c 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -298,6 +298,16 @@ management, use this format:
- foo needs udev /dev management and a toolchain w/ featA, featB, featC
- --------------------------
- 
-+==== Dependencies on features provided by virtual packages
-+
-+Some features can be provided by more than one package, such as the
-+openGL libraries.
-+
-+See xref:virtual-package-tutorial[] for more on the virtual packages.
-+
-+See xref:virtual-package-list[] for the symbols to depend on if your package
-+depends on a feature provided by a virtual package.
-+
- === The +.mk+ file
- 
- [[adding-packages-mk]]
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-index 6326bb5..a5f17a2 100644
---- a/docs/manual/adding-packages-virtual.txt
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -83,6 +83,9 @@ On line 3, we select +BR2_PACKAGE_HAS_SOMETHING_VIRTUAL+, and on line 11, we
- set the value of +BR2_PACKAGE_PROVIDES_SOMETHING_VIRTUAL+ to the name of the
- provider, but only if it is selected.
- 
-+See xref:virtual-package-list[] for the symbols to select if you implement
-+a new provider for an existing virtual package.
-+
- ==== Provider's +.mk+ file
- 
- The +.mk+ file should also declare an additional variable
-@@ -96,6 +99,9 @@ packages it is an implementation of:
- Of course, do not forget to add the proper build and runtime dependencies for
- this package!
- 
-+See xref:virtual-package-list[] for the names of virtual packages to provide
-+if you implement a new provider for an existing virtual package.
-+
- ==== Notes on depending on a virtual package
- 
- When adding a package that requires a certain +FEATURE+ provided by a virtual
-diff --git a/docs/manual/appendix.txt b/docs/manual/appendix.txt
-index 35328c6..3f95551 100644
---- a/docs/manual/appendix.txt
-+++ b/docs/manual/appendix.txt
-@@ -14,6 +14,14 @@ include::makeusers-syntax.txt[]
- 
- include::package-list.txt[]
- 
-+[[virtual-package-list]]
-+== List of virtual packages
-+
-+These are the virtual packages known to +Buildroot+, with the
-+corresponding symbols and providers.
-+
-+include::virtual-package-list.txt[]
-+
- [[host-package-list]]
- == List of host utilities available in Buildroot
- 
 -- 
-1.8.3.2
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
