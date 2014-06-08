@@ -1,169 +1,111 @@
-From: Stanislav Vlasic <svlasic@gmail.com>
-Date: Sun, 8 Jun 2014 20:18:10 +0200
-Subject: [Buildroot] [PATCH 1/1] Option to copy Linaro gconv libs to
-	target
-In-Reply-To: <20140608172310.GO3266@free.fr>
-References: <1383428236-3842-1-git-send-email-svlasic@gmail.com>
- <20140608172310.GO3266@free.fr>
-Message-ID: <CADYw_J+TWZWFa6vA=arnLymR46xwXpT56qOu9vQig2mar1v0rg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun,  8 Jun 2014 18:18:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140608181827.365369CF1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-if GCONV_PATH is not exported, xbmc doesn't see it and decoding subtitles
-or whatever which have special characters (eg cp1250) fails. Also, w/o
-gconv libs XBMC 13.0+ doesn't draw menus etc. I exported GCONV_PATH in xbmc
-startup script, but I guess exporting it in profile would also work.
+--- Comment #8 from Mike Z <minimod@morethan.org> 2014-06-08 18:18:26 UTC ---
+(In reply to comment #7)
+> (In reply to comment #6)
+> > (In reply to comment #5)
+> > > Is what you wrote here correct? (No copy paste error?) Case one and two are
+> > > identical?
+> > > Have you tried four dollar signs? Depending on how things are parsed it may be
+> > > needed...
+> > >
+> > 
+> > Yup - not what I expected either.*
+> > 
+> > Will recheck for cockpit error here and the $$$$ case.
+> 
+> Well, I've already spent hours trying to figure out the right escape
+> sequence... in vain :-(
+> 
+> I even ended up with some mad sequences of '$' and '\'.
+> [1] is just an example of the dirty things I tried! My advice: don't go there
+> ;-).
+> 
+> To me, escaping '$' is a dead end (or at least, really hard, except fo
+> CMake-based packages) because of:
+> - the make/shell escape character is '$' vs. '\';
+> - the unpredictable (or hard-to-predict) level/number of make/shell nested,
+> even for packages using the autotools (Makefile + libtool + ... + custom
+> commands).
+> 
+> That's why I end up thinking that a solution based on chrpath or patchelf is
+> the only sane way of handling the '$ORIGIN' support in RPATH (for both target
+> and host packages).
+> 
+> BTW, this is part of the "relocatable SDK" item, which is somewhere in my todo
+> list. I have a couple of branches (maybe more than just a couple) in my github
+> in which I test things from time to time, and that one day, I should gather and
+> post a real RFC.
+> 
+> 
+> [1]
+> https://github.com/tSed/buildroot/commit/7d53fe664afd3c98b3609994c5bf2addf2f4f692
 
+Agreed - add host-patchelf to the packages and let some's post-build
+script deal with this.
 
-On Sun, Jun 8, 2014 at 7:23 PM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+If your working on a relocatable toolchain - note that your going to
+have to diddle glibc and its support binaries also.
 
-> Stanislav, All,
->
-> On 2013-11-02 22:37 +0100, Stanislav Vasic spake thusly:
-> > This patch adds an option for external Linaro toolchains
-> > which allows buildroot to copy gconv libs to target.
->
-> We have another, more generic patch in the making:
->     http://patchwork.ozlabs.org/patch/357067/
->
-> which I'm still working on:
->
-> https://www.gitorious.org/buildroot/buildroot/commit/9a86575442f9861fa5a4777798fc84b999a12f7f
->
-> and which should supersed this patch.
->
-> As such, I marked this patch superseded in the pathwork.
->
-> > Also exports GCONV_PATH if folder exists on target.
-> > That is needed because some programs (eg. XBMC) dont
-> > see gconv libs if GCONV_PATH is not exported.
->
-> I haven't seen the need to export GCONV_PATH when running my XBMC,
-> neither did Maxime.
->
-> What is the reason for exporting GCONV_PATH, if the gconv libs are
-> properly installed in /usr/lib/gconv ?
->
-> Is it because Linaro toolchains install them in
-> libc/usr/lib/arm-linux-gnueabihf/gconv ?
->
-> Regards,
-> Yann E. MORIN.
->
-> > Signed-off-by: Stanislav Vasic <svlasic@gmail.com>
-> > ---
-> >  system/skeleton/etc/profile                        |  6 ++++++
-> >  toolchain/helpers.mk                               | 12 ++++++++++++
-> >  toolchain/toolchain-external/Config.in             |  6 ++++++
-> >  toolchain/toolchain-external/toolchain-external.mk |  4 ++++
-> >  4 files changed, 28 insertions(+)
-> >
-> > diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-> > index 31d3180..d7fef65 100644
-> > --- a/system/skeleton/etc/profile
-> > +++ b/system/skeleton/etc/profile
-> > @@ -8,6 +8,12 @@ export PATH=\
-> >  /usr/bin/X11:\
-> >  /usr/local/bin
-> >
-> > +# If gconv folder exists, export GCONV_PATH
-> > +
-> > +if [ -d /usr/lib/gconv ]; then
-> > +    export GCONV_PATH = /usr/lib/gconv
-> > +fi
-> > +
-> >  # If running interactively, then:
-> >  if [ "$PS1" ]; then
-> >
-> > diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> > index a8944ce..a778cef 100644
-> > --- a/toolchain/helpers.mk
-> > +++ b/toolchain/helpers.mk
-> > @@ -83,6 +83,18 @@ copy_toolchain_lib_root = \
-> >   \
-> >       echo -n
-> >
-> > +# Function for Linaro toolchains (EABIhf) that copies gconv libs to
-> target
-> > +# Expects 1 param:
-> > +# $1: toolchain root
-> > +copy_toolchain_gconv = \
-> > +    BASE_DIR="$(strip $1)"; \
-> > +    if [ -d $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv ] ; then \
-> > +     mkdir -p $(TARGET_DIR)/usr/lib/gconv ; \
-> > +     cp -r $${BASE_DIR}usr/lib/arm-linux-gnueabihf/gconv/*
-> $(TARGET_DIR)/usr/lib/gconv ; \
-> > +    fi; \
-> > + \
-> > +    echo -n
-> > +
-> >  #
-> >  # Copy the full external toolchain sysroot directory to the staging
-> >  # dir. The operation of this function is rendered a little bit
-> > diff --git a/toolchain/toolchain-external/Config.in
-> b/toolchain/toolchain-external/Config.in
-> > index 48b5865..fc328b1 100644
-> > --- a/toolchain/toolchain-external/Config.in
-> > +++ b/toolchain/toolchain-external/Config.in
-> > @@ -864,6 +864,12 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL
-> >       bool
-> >       select BR2_TOOLCHAIN_USES_MUSL
-> >
-> > +config BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV
-> > +     bool "Copy GCONV libraries to target"
-> > +     depends on BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_07 \
-> > +         || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_08 \
-> > +         || BR2_TOOLCHAIN_EXTERNAL_LINARO_2013_09
-> > +
-> >  if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
-> >
-> >  choice
-> > diff --git a/toolchain/toolchain-external/toolchain-external.mk
-> b/toolchain/toolchain-external/toolchain-external.mk
-> > index d41cc7c..c1a3dc7 100644
-> > --- a/toolchain/toolchain-external/toolchain-external.mk
-> > +++ b/toolchain/toolchain-external/toolchain-external.mk
-> > @@ -496,6 +496,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
-> >                       echo "Could not find gdbserver in external
-> toolchain" ; \
-> >                       exit 1 ; \
-> >               fi ; \
-> > +     fi; \
-> > +     if test "$(BR2_TOOLCHAIN_EXTERNAL_LINARO_GCONV)" = "y" ; then \
-> > +             $(call MESSAGE,"Copying external toolchain gconv to
-> target...") ; \
-> > +             $(call copy_toolchain_gconv,$${SYSROOT_DIR}) ; \
-> >       fi
-> >  endef
-> >
-> > --
-> > 1.8.3.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->       |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
-> conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140608/3324f4a3/attachment-0001.html>
+- - -
+
+But as requested earlier - the additional tests for the record:
+
+The earlier ${ORIGIN} and &&{ORIGIN} cases **ARE** the same result.
+
+Four $ case: $$$${ORIGIN}/../lib
+
+ 0x0000000f (RPATH)                      Library rpath: [27445{ORIGIN}/../lib]
+ 0x0000001d (RUNPATH)                    Library runpath:
+[27445{ORIGIN}/../lib]
+
+These are out-of-tree builds -
+'/home/mszick/kA8/.' is the contents of $O
+
+Single $ case: $ORIGIN/../lib
+
+ 0x0000000f (RPATH)                      Library rpath:
+[/home/mszick/kA8/.RIGIN/../lib]
+ 0x0000001d (RUNPATH)                    Library runpath:
+[/home/mszick/kA8/.RIGIN/../lib]
+
+Double $ case $$ORIGIN/../lib
+
+ 0x0000000f (RPATH)                      Library rpath: [/../lib]
+ 0x0000001d (RUNPATH)                    Library runpath: [/../lib]
+
+Triple $ case $$$ORIGIN/../lib
+
+ 0x0000000f (RPATH)                      Library rpath:
+[home/mszick/kA8/.RIGIN/../lib]
+ 0x0000001d (RUNPATH)                    Library runpath:
+[home/mszick/kA8/.RIGIN/../lib]
+
+Quad $ case $$$$ORIGIN/../lib
+
+ 0x0000000f (RPATH)                      Library rpath: [3092ORIGIN/../lib]
+ 0x0000001d (RUNPATH)                    Library runpath: [3092ORIGIN/../lib]
+
+The only pattern I see here is odd/even $ count.
+
+PS: 
+rpath and runpath can be relative paths (in glibc-2.19 at least).
+but the path is resolved relative to cwd, not executable's location.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
