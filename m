@@ -1,47 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jun 2014 15:39:53 +0200
-Subject: [Buildroot] [PATCH v12 01/32] toolchain: add option to copy the
- gconv libraries
-In-Reply-To: <20140608151517.55e59312@free-electrons.com>
-References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
- <1402144292-27837-2-git-send-email-bernd.kuhls@t-online.de>
- <20140608151517.55e59312@free-electrons.com>
-Message-ID: <20140608133953.GD3266@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 8 Jun 2014 15:46:32 +0200
+Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
+ relocatable one
+In-Reply-To: <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
+References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
+ <20140608145430.0125bb29@free-electrons.com>
+ <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
+Message-ID: <20140608154632.1f6f13a6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Noam Camus,
 
-On 2014-06-08 15:15 +0200, Thomas Petazzoni spake thusly:
-> On Sat,  7 Jun 2014 14:31:01 +0200, Bernd Kuhls wrote:
-> 
-> > +config BR2_COPY_GCONV_LIBS
-> > +	bool "copy gconv libs"
-> > +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> 
-> A few comments about this patch:
-> 
->  - I dislike the name of the option. Maybe it should be
->    BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY or something like that.
-> 
->  - There should be a sub-option or something to copy only a subset of
->    the gconv library, with a sane, default set of gconv libraries.
->    Maybe with a choice "copy all" / "copy a selection".
-> 
->  - Packages that needs gconv libraries should select this option.
+On Sun, 8 Jun 2014 13:16:01 +0000, Noam Camus wrote:
 
-OK, OK, and OK. Will do.
+> I wish to contribute.
+> However my organization security rules are not allowing me to send
+> directly with send-email outside our organization.
+> 
+> So I send-email to myself and only through outlook and exchange
+> server I can forward the email to buildroot.
+> 
+> Isn't there a way to send a patch as file?
 
-Regards,
-Yann E. MORIN.
+No, it has to be sent inline, because it's an integral part of our
+review process to have patches sent inline, so that people can comment.
 
+If your company IT department is unable to understand which tools the
+company engineers need to properly contribute to open-source
+communities, I'd say you should create a GMail account, and use that as
+the SMTP server to send your e-mail. I believe that's what a lot of
+people do when they have to work in hostile environments.
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
