@@ -1,68 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 8 Jun 2014 17:09:38 +0200
-Subject: [Buildroot] [git commit] support/scripts: do not display virtual
+Date: Sun, 8 Jun 2014 17:08:36 +0200
+Subject: [Buildroot] [git commit] support/scripts: prepare handling virtual
 	packages in generated lists
-Message-ID: <20140608151244.565669CF25@busybox.osuosl.org>
+Message-ID: <20140608151244.4A9589CAB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f93edd823fb020721ba84dcecbac37c668260b8f
+commit: http://git.buildroot.net/buildroot/commit/?id=e49d4f0c378960e3895381eea78ada48cca310fb
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If a package has both a 'real' and a 'virtual' definition, consider it
-is a virtual package and do not display it in the generated package list.
+Prepare to tell apart real packages from virtual packages.
 
-This is the case for jpeg and cryptodev, that are virtual packages, but
-also real (but empty) packages used to provide a prompt to enable/disable
-a choice to select an implementation. In this case, we do not want to
-list the virtual packages, but only their implementations.
+Currently, the code implicitly recognises only real packages, and
+discards virtual packages, because of the heuristic used to recognise
+whether a symbol is a package:
 
-So, consider packages that are both real and virtual as virtual packages.
+  - for real package:
+    - symbols  : BR2_PACKAGE_FOO
+    - .mk files: foo.mk
+  - for virtual packages:
+    - symbols  : BR2_PACKAGE_HAS_FOO
+    - .mk files: foo.mk
+
+The current heuristic is to check for each symbol if a corresponding .mk
+file exists, by stripping 'BR2_PACKAGE_' from the beginning of the symbol,
+converting the result to lowercase, and checking if a .mk file exists.
+
+So, as a side effect, it completely misses the virtual packages [*], which
+is pretty nice since we get a list with only real packages that the user
+can indeed select and see in the menuconfig.
+
+[*] Except for 'cryptodev' and 'jpeg' which are both virtual packages and
+normal packages. Except they are not normal packages, they are used to
+display a choice of the implementation to use. This case will be fixed in
+follow-up patches.
+
+Since we'll soon need to also output the table of virtual packages, we
+need to teach the _is_package() function to recognise them as well.
+
+This patch is the first step into that direction: it introduces a new
+function _is_real_package() that is just a wrapper to _is_package(), which
+gains a new parameter, being the type of packages to filter on.
+
+No behavioural change is made in this patch, it is just a preparatory
+patch.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/gen-manual-lists.py |   21 +++++++++++++++++++--
- 1 files changed, 19 insertions(+), 2 deletions(-)
+ support/scripts/gen-manual-lists.py |   12 +++++++++---
+ 1 files changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
-index e234ef1..a3b5aea 100644
+index b33fcf0..e234ef1 100644
 --- a/support/scripts/gen-manual-lists.py
 +++ b/support/scripts/gen-manual-lists.py
-@@ -279,13 +279,30 @@ class Buildroot:
-                     pkg_list.append(re.sub(r"(.*?)\.mk", r"\1", file_))
-             setattr(self, "_package_list", pkg_list)
-         for pkg in getattr(self, "_package_list"):
--            if pattern.match(pkg):
--                return True
-+            if type == 'real':
-+                if pattern.match(pkg) and not self._exists_virt_symbol(pkg):
-+                    return True
+@@ -183,14 +183,14 @@ class Buildroot:
+         'target-packages': {
+             'filename': "package-list",
+             'root_menu': "Target packages",
+-            'filter': "_is_package",
++            'filter': "_is_real_package",
+             'sorted': True,
+             'sub_menu': True,
+         },
+         'host-packages': {
+             'filename': "host-package-list",
+             'root_menu': "Host utilities",
+-            'filter': "_is_package",
++            'filter': "_is_real_package",
+             'sorted': True,
+             'sub_menu': False,
+         },
+@@ -238,11 +238,14 @@ class Buildroot:
+         return bool([ symbol for x in symbol.get_referenced_symbols()
+             if x.get_name().startswith(self._deprecated.get_name()) ])
+ 
+-    def _is_package(self, symbol):
++    def _is_package(self, symbol, type='real'):
+         """ Return True if the symbol is a package or a host package, otherwise
+         False.
+ 
+         :param symbol:  The symbol to check
++        :param type:    Limit to 'real' or 'virtual' types of packages,
++                        with 'real' being the default.
++                        Note: only 'real' is (implictly) handled for now
+ 
+         """
+         if not self.re_pkg_prefix.match(symbol.get_name()):
+@@ -280,6 +283,9 @@ class Buildroot:
+                 return True
          return False
  
-     def _is_real_package(self, symbol):
-         return self._is_package(symbol, 'real')
- 
-+    def _exists_virt_symbol(self, pkg_name):
-+        """ Return True if a symbol exists that defines the package as
-+        a virtual package, False otherwise
-+
-+        :param pkg_name:    The name of the package, for which to check if
-+                            a symbol exists defining it as a virtual package
-+
-+        """
-+        virt_pattern = "BR2_PACKAGE_HAS_" + pkg_name + "$"
-+        virt_pattern = re.sub("_", ".", virt_pattern)
-+        virt_pattern = re.compile(virt_pattern, re.IGNORECASE)
-+        for sym in self.config:
-+            if virt_pattern.match(sym.get_name()):
-+                return True
-+        return False
++    def _is_real_package(self, symbol):
++        return self._is_package(symbol, 'real')
 +
      def _get_pkg_name(self, symbol):
          """ Return the package name of the specified symbol.
