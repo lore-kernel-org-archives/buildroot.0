@@ -1,91 +1,95 @@
-From: Javier Domingo Cansino <javierdo1@gmail.com>
-Date: Mon,  9 Jun 2014 21:58:07 +0200
-Subject: [Buildroot] [PATCH 1/1] Rewriting instructions to generate a
-	zedboard image to make it really verbose
-Message-ID: <1402343887-12278-1-git-send-email-javierdo1@gmail.com>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Mon, 9 Jun 2014 15:10:32 -0500
+Subject: [Buildroot] [UNSURE]Re:  autoconf caching
+In-Reply-To: <CAB0FRst_Vp6Dq43Jeogo820TXOsU7u101CJOOu26G2XEa4k0Pg@mail.gmail.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+ <20140605224222.0184a9b7@free-electrons.com>
+ <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
+ <20140606091548.53f07f90@free-electrons.com>
+ <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+ <20140607110432.3e52d064@free-electrons.com>
+ <CAB0FRst_Vp6Dq43Jeogo820TXOsU7u101CJOOu26G2XEa4k0Pg@mail.gmail.com>
+Message-ID: <CAE9DZURuLUrvh2HgM9YmnZmrsb9YOkAn+nmiJaTOC8YQgtTsug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Jun 8, 2014 at 3:19 AM, Fran?ois Perrad <francois.perrad@gadz.org>
+wrote:
 
-Signed-off-by: Javier Domingo Cansino <javierdo1@gmail.com>
----
- board/avnet/zedboard/readme.txt |   51 +++++++++++++++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 10 deletions(-)
+> 2014-06-07 11:04 GMT+02:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+> > Dear Dallas Clement,
+> >
+> > On Fri, 6 Jun 2014 11:14:15 -0500, Dallas Clement wrote:
+> >
+> >> Hi Thomas.  Thanks very much for looking at my configuration.  I think
+> you
+> >> certainly nailed it.
+> >> I have a lot of packages, and perl and mysql especially are taking a
+> long
+> >> time.  My build recipes
+> >> for both of these are a year or two out of date.  In fact, my perl
+> recipe
+> >> is still using qemu to build
+> >> instead of perl cross.  Hopefully updating this recipe will help some,
+> >> though as you pointed out
+> >> it is still using MAKE1.
+> >
+> > Right. I'll send a separate e-mail to Fran?ois Perrad about this (our
+> > Perl guy), because it seems like other build systems are building Perl
+> > in parallel.
+> >
+>
+> The build of perl with qemu takes very very long time.
+> The build of perl with perl-cross takes the same time as Linux Kernel
+> for example.
+> Parallel build with perl-cross seems not supported (this needs a
+> confirmation of Alex Suykov, the author of perl-cross).
+>
+> Fran?ois
+>
+> >> Yep, very speedy SSDs and 64 GB for RAM.  Because of all the
+> serialization
+> >> in this build process,
+> >> building from a large ram disk seems to make little difference.
+> >
+> > Right. So you have a good build configuration, there's not much we can
+> > do here.
+> >
+> >> > There is another thing that strikes out in your configuration: there
+> >> > are many packages that we don't have in Buildroot, and that don't seem
+> >> > to be specific to your company or project. What about submitting your
+> >> > new packages upstream?
+> >>
+> >> Yes, I can certainly do that.  There's a lot here.  Much of it is
+> obscure.
+> >> Please let me know which ones you are most
+> >> interested in.
+> >
+> > Could you make a list of the packages that you've added, and that are
+> > open-source? I'm pretty sure a majority of them could potentially be
+> > useful to have in Buildroot.
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Free Electrons
+> > Embedded Linux, Kernel and Android engineering
+> > http://free-electrons.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index efd076f..575c285 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -5,26 +5,57 @@ System-On-Chip.
- Zedboard information including schematics, reference designs, and manuals are
- available from http://www.zedboard.org .
- 
--To boot the Zedboard using a buildroot generated image copy the following files
--to the sdcard:
--	zynq-zed.dtb -> devicetree.dtb
--	rootfs.cpio.gz.uboot -> uramdisk.image.gz
--	uImage -> uImage
--	boot.bin -> boot.bin
-+The firmware releases for the Xilinx Zynq silicons depend on Xilinx some propietary tools or code. This dependency has been reduced to a pair of source files available in the regular Xilinx SDK.
- 
--U-Boot SPL Support
---------------
-+You will need this files from Xilinx tree to generate the later listed files:
-+	ps7_init.c
-+	ps7_init.h
-+
-+You will need the following files from output/images:
-+	zynq-zed.dtb
-+	rootfs.cpio.uboot
-+	uImage
-+	u-boot.img
-+	boot.bin
-+
-+
-+uboot.bin  -- U-Boot SPL Support
-+--------------------------------
- 
- Due to licensing issues, the files ps7_init.c/h are not able to be
- distributed with the U-Boot source code.  These files are required to make a
- boot.bin file.
- 
--If you already have the Xilinx tools installed, the follwing sequence will
-+If you already have the Xilinx tools installed, the following sequence will
- unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
- 
- make zedboard_defconfig
- make uboot-patch
- cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
--output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
-+output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
-+
-+Now that you patched the uboot files, you will be capable of compiling the
-+buildroot:
-+
- make
- 
-+
-+Resulting system
-+----------------
-+The SD card should be filled like the following, in a FAT32 partition at the
-+beggining of the device:
-+	/boot.bin
-+	/devicetree.dtb
-+	/uImage
-+	/uramdisk.image.gz
-+	/u-boot.img
-+
-+
-+All needed files can be taken from output/images/
-+
-+boot.bin, uImage and u-boot.img are direct copies of the same files
-+available on output/images/
-+
-+devicetree.dtb is just zynq-zed.dtb renamed.
-+
-+uramdisk.image.gz is rootfs.cpio.uboot renamed
--- 
-1.7.10.4
+The build-time histograms in buildroot now are so cool!  The three biggest
+hogs in my rootfs are perl, icu, and xerces, all of which are MAKE1, and
+the lion's share of this time is compilation.  It would sure help me a lot
+if we could somehow get these guys to parallel make.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140609/6d7270df/attachment.html>
