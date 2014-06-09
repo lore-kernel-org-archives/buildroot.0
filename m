@@ -1,33 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 11:54:02 +0200
-Subject: [Buildroot] [git commit] isl: remove INSTALL_STAGING = YES
-Message-ID: <20140609095505.ACF549CF77@busybox.osuosl.org>
+Date: Mon, 9 Jun 2014 11:57:10 +0200
+Subject: [Buildroot] [PATCH v6 2/3] cloog: new package
+In-Reply-To: <BLU436-SMTP138DD11D602CDEACC161440A8320@phx.gbl>
+References: <1400528893-4483-1-git-send-email-scjthm@live.com>
+ <BLU436-SMTP138DD11D602CDEACC161440A8320@phx.gbl>
+Message-ID: <20140609115710.3799c3c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=422060e6a11ccee8949677ecfbde56fbae36a8f7
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Steve Thomas,
 
-The package is host-only, so there's no point in specifying
-INSTALL_STAGING = YES.
+On Mon, 19 May 2014 19:48:12 +0000, Steve Thomas wrote:
+> CLooG is a free software and library to generate code for scanning
+> Z-polyhedra.
+> 
+> cloog is needed for the optional graphite optimisations that are
+> supported by gcc since version 4.5. Therefore this package is required
+> for the toolchain to support graphite.
+> 
+> Graphite optimisations primarily involve loop blocking flattening and
+> interchage so are probably of mimimal use in an embedded system where
+> small sizes are favoured.
+> 
+> cloog depends on isl.
+> 
+> Signed-off-by: Steve Thomas <scjthm@live.com>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/isl/isl.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+Patch applied, with a few changes, see below.
 
-diff --git a/package/isl/isl.mk b/package/isl/isl.mk
-index 40e023f..2a630a4 100644
---- a/package/isl/isl.mk
-+++ b/package/isl/isl.mk
-@@ -12,7 +12,6 @@ ISL_SOURCE = isl-$(ISL_VERSION).tar.bz2
- ISL_SITE = http://isl.gforge.inria.fr/
- ISL_LICENSE = MIT
- ISL_LICENSE_FILES = LICENSE
--ISL_INSTALL_STAGING = YES
- ISL_DEPENDENCIES = gmp
- 
- # Our libtool patch doesn't apply, and since this package is only
+> +CLOOG_VERSION = 0.18.1
+
+Bumped to 0.18.2. I had to add a patch adding missing CMake-related
+files.
+
+> +CLOOG_SITE = http://www.bastoul.net/cloog/pages/download/
+> +CLOOG_INSTALL_STAGING = YES
+
+Dropped, it's a host-only package.
+
+> +CLOOG_LICENSE = LGPLv2.1
+
+License is LGPLv2.1+
+
+> +CLOOG_LICENSE_FILES = LICENSE
+
+This file did not exist in 0.18.2.
+
+> +CLOOG_DEPENDENCIES = gmp isl
+> +
+> +HOST_CLOOG_CONF_OPT = --with-isl=system --with-polylib=no
+> +
+> +$(eval $(host-autotools-package))
+
+Like for isl, I also had to disable the libtool patch.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
