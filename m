@@ -1,40 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 15:32:56 +0200
-Subject: [Buildroot] [PATCH 5/5] pinentry: new package
-In-Reply-To: <1402062269-57018-6-git-send-email-Vincent.Riera@imgtec.com>
-References: <1402062269-57018-1-git-send-email-Vincent.Riera@imgtec.com>
- <1402062269-57018-6-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140609153256.0ecb03ef@free-electrons.com>
+Date: Mon, 9 Jun 2014 15:34:38 +0200
+Subject: [Buildroot] [RFC/PATCH] linux: add external initramfs options
+In-Reply-To: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
+References: <1401138097-11024-1-git-send-email-guido@vanguardiasur.com.ar>
+Message-ID: <20140609153438.0de69bcb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Guido Mart?nez,
 
-On Fri, 6 Jun 2014 14:44:29 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-> Reviewed-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in            |    1 +
->  package/pinentry/Config.in   |   53 ++++++++++++++++++++++++++++++++++++++++++
->  package/pinentry/pinentry.mk |   47 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 101 insertions(+), 0 deletions(-)
->  create mode 100644 package/pinentry/Config.in
->  create mode 100644 package/pinentry/pinentry.mk
+On Mon, 26 May 2014 18:01:37 -0300, Guido Mart?nez wrote:
+> This patch allows building the kernel with an external initramfs. This
+> is useful in cases where one wants to generate the kernel and rootfs
+> with BR, and the kernel needs to contain an initramfs different to the
+> rootfs.
+> 
+> The path specified can be a cpio archive or a directory, just like
+> the kernel config. The path is specified w.r.t. BRs topdir, and made
+> absolute since the kernel builds in another directory.
+> 
+> Signed-off-by: Guido Mart?nez <guido@vanguardiasur.com.ar>
 
-Applied, after fixing a few issues:
+Since I agree with the feedback from Arnout, I'll mark this as Rejected
+in patchwork. There's no point in duplicating each and every kernel
+configuration option at the Buildroot level. Just make sure to tune
+your kernel configuration properly, and pass it to Buildroot as the
+kernel configuration file.
 
-    [Thomas:
-     - fix license version: the license is GPLv2+, not GPLv2
-     - make sure the ncurses backend is selected if none of the other
-       backends are selected.
-     - add dependency on libiconv of the curses and gtk2 backends, needed
-       in !locale configurations.]
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
