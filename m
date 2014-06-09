@@ -1,146 +1,320 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 11:27:04 +0200
-Subject: [Buildroot] [git commit] uclibc: add patches to fix MIPS __SIGRTMAX
-	and SIG127
-Message-ID: <20140609092752.27D2F9CB8D@busybox.osuosl.org>
+Date: Mon, 9 Jun 2014 11:26:23 +0200
+Subject: [Buildroot] [git commit] uclibc: add patch to fix arch specific
+	eventfd defs
+Message-ID: <20140609092752.1E0069CDF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54ba2704b07cacacb9247540a660c667fd5ffdd5
+commit: http://git.buildroot.net/buildroot/commit/?id=d712a018dddbccf6f80e1ecfc3e08385d36bfebc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add two uClibc 0.9.33.2 patches which fix issues relating to high signal
-number handling on MIPS.
+Add uClibc 0.9.33.2 patch to fix arch specific eventfd definitions,
+particularly EFD_NONBLOCK. The definition in sys/eventfd.h was 04000
+(0x800), however MIPS uses 0200 (0x80). This resulted in QEMU built for
+MIPS hanging at various points until input is received due to a blocking
+poll of stdin.
 
-The first patch (0056) fixes _NSIG (and as a result __SIGRTMAX) to match
-glibc. This fixes GDB on MIPS with uClibc, which cannot handle
-__SIGRTMAX == 128 and emits the error:
-GDB bug: target.c (gdb_signal_from_host): unrecognized real-time signal
-This patch is from uClibc commit 2da958760f79 (MIPS: set _NSIG to
-128, not 129. This matches glibc.) and applies without conflicts.
-
-The second patch (0057) fixes the wait status macros to correctly
-interpret status 0x007f on MIPS (other arches don't have signal 127).
-This patch is from uClibc commit 4a96b9486871 (bits/waitstatus.h:
-correctly interpret status 0x007f on MIPS) and applies without
-conflicts.
+The patch is a backport of uClibc commit fd355bc1dbcb (eventfd.h: Use
+new "bits/" scheme for arch-specific flags). The only conflict was minor
+in Makefile.in.
 
 Signed-off-by: James Hogan <james.hogan@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-_NSIG-to-128-not-129.-This-matches-glibc.patch |   43 ++++++++++++++++
- ...atus.h-correctly-interpret-status-0x007f-.patch |   54 ++++++++++++++++++++
- 2 files changed, 97 insertions(+), 0 deletions(-)
+ ...se-new-bits-scheme-for-arch-specific-flag.patch |  284 ++++++++++++++++++++
+ 1 files changed, 284 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch b/package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch
+diff --git a/package/uclibc/0.9.33.2/uclibc-0055-Use-new-bits-scheme-for-arch-specific-flag.patch b/package/uclibc/0.9.33.2/uclibc-0055-Use-new-bits-scheme-for-arch-specific-flag.patch
 new file mode 100644
-index 0000000..c6bd051
+index 0000000..3d966ff
 --- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0056-MIPS-set-_NSIG-to-128-not-129.-This-matches-glibc.patch
-@@ -0,0 +1,43 @@
-+From 2da958760f798224065508431787e3a83b7fe2ae Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Fri, 28 Jun 2013 21:59:54 +0200
-+Subject: [PATCH-0.9.33] MIPS: set _NSIG to 128, not 129. This matches glibc.
++++ b/package/uclibc/0.9.33.2/uclibc-0055-Use-new-bits-scheme-for-arch-specific-flag.patch
+@@ -0,0 +1,284 @@
++From c1a78badec59b1ebd303ace8257ca86fa1e14acb Mon Sep 17 00:00:00 2001
++From: Hiroaki KAWAI <kawai@stratosphere.co.jp>
++Date: Fri, 19 Apr 2013 10:09:35 +0900
++Subject: [PATCH-0.9.33] eventfd.h: Use new "bits/" scheme for arch-specific flags
 +
-+Prompted by lkml discussion of a MIPS bug where sending
-+signal 128 was found to be able to crash the machine :/
++As in timerfd.h, eventfd.h needs arch-specific definition files.
++alpha, mips and sparc needs separate file, all the other arch
++will use common definition.
 +
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++This problem is already fixed in glibc.
++
++Also sanitize and provide bits for hppa.
++Make sure not to install the new bits/eventfd unless eventfd support is
++enabled.
++
++Signed-off-by: Hiroaki KAWAI <kawai@stratosphere.co.jp>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
 +---
-+ libc/sysdeps/linux/mips/bits/signum.h | 17 +++++++++++++++--
-+ 1 file changed, 15 insertions(+), 2 deletions(-)
++ Makefile.in                              |  1 +
++ libc/sysdeps/linux/alpha/bits/eventfd.h  | 31 +++++++++++++++++++++++++++++++
++ libc/sysdeps/linux/common/bits/eventfd.h | 31 +++++++++++++++++++++++++++++++
++ libc/sysdeps/linux/common/sys/eventfd.h  | 25 +++++++++++++------------
++ libc/sysdeps/linux/hppa/bits/eventfd.h   | 32 ++++++++++++++++++++++++++++++++
++ libc/sysdeps/linux/mips/bits/eventfd.h   | 31 +++++++++++++++++++++++++++++++
++ libc/sysdeps/linux/sparc/bits/eventfd.h  | 31 +++++++++++++++++++++++++++++++
++ 7 files changed, 170 insertions(+), 12 deletions(-)
++ create mode 100644 libc/sysdeps/linux/alpha/bits/eventfd.h
++ create mode 100644 libc/sysdeps/linux/common/bits/eventfd.h
++ create mode 100644 libc/sysdeps/linux/hppa/bits/eventfd.h
++ create mode 100644 libc/sysdeps/linux/mips/bits/eventfd.h
++ create mode 100644 libc/sysdeps/linux/sparc/bits/eventfd.h
 +
-+diff --git a/libc/sysdeps/linux/mips/bits/signum.h b/libc/sysdeps/linux/mips/bits/signum.h
-+index cf9b834..e83250e 100644
-+--- a/libc/sysdeps/linux/mips/bits/signum.h
-++++ b/libc/sysdeps/linux/mips/bits/signum.h
-+@@ -53,7 +53,20 @@
-+ #define SIGXCPU		30	/* CPU limit exceeded (4.2 BSD).  */
-+ #define SIGXFSZ		31	/* File size limit exceeded (4.2 BSD).  */
-+ 
-+-/* Biggest signal number + 1 (including real-time signals).  */
-+-#define _NSIG		129
-++/* MIPS is special by having 128 signals.
-++ * All (?) other architectures have at most 64 signals.
-++ * Having 128 signals is problematic because signal nos are 1-based
-++ * and last signal number is then 128.
-++ * This plays havoc with WIFSIGNALED and WCOREDUMP in waitpid status word,
-++ * when process dies from signal 128.
-++ * Linux kernel 3.9 accepts signal 128, with awful results :/
-++ * It is being fixed.
-++ *
-++ * glibc (accidentally?) papers over this issue by declaring _NSIG to be 128,
-++ * not 129 (despite claiming that _NSIG is "biggest signal number + 1"
-++ * in the comment above that definition). We follow suit.
-++ * Note that this results in __SIGRTMAX == 127. It is intended.
-++ */
-++#define _NSIG		128
-+ 
-+ #endif	/* <signal.h> included.  */
-+-- 
-+1.8.1.2
-+
-diff --git a/package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch b/package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch
-new file mode 100644
-index 0000000..d5922f6
---- /dev/null
-+++ b/package/uclibc/0.9.33.2/uclibc-0057-bits-waitstatus.h-correctly-interpret-status-0x007f-.patch
-@@ -0,0 +1,54 @@
-+From 4a96b948687166da26a6c327e6c6733ad2336c5c Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Thu, 18 Jul 2013 21:57:06 +0200
-+Subject: [PATCH-0.9.33] bits/waitstatus.h: correctly interpret status 0x007f on
-+ MIPS
-+
-+On other architectures exit status of 0x007f is not possible,
-+they don't have signal 127.
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+---
-+ libc/sysdeps/linux/common/bits/waitstatus.h | 16 ++++++++++++----
-+ 1 file changed, 12 insertions(+), 4 deletions(-)
-+
-+diff --git a/libc/sysdeps/linux/common/bits/waitstatus.h b/libc/sysdeps/linux/common/bits/waitstatus.h
-+index 45d0fd3..33f39a8 100644
-+--- a/libc/sysdeps/linux/common/bits/waitstatus.h
-++++ b/libc/sysdeps/linux/common/bits/waitstatus.h
-+@@ -24,7 +24,7 @@
-+ /* Everything extant so far uses these same bits.  */
-+ 
-+ 
-+-/* If WIFEXITED(STATUS), the low-order 8 bits of the status.  */
-++/* If WIFEXITED(STATUS), the low-order 8 bits of exit(N).  */
-+ #define	__WEXITSTATUS(status)	(((status) & 0xff00) >> 8)
-+ 
-+ /* If WIFSIGNALED(STATUS), the terminating signal.  */
-+@@ -36,12 +36,20 @@
-+ /* Nonzero if STATUS indicates normal termination.  */
-+ #define	__WIFEXITED(status)	(__WTERMSIG(status) == 0)
-+ 
-+-/* Nonzero if STATUS indicates termination by a signal.  */
-+-#define __WIFSIGNALED(status) \
-+-  (((signed char) (((status) & 0x7f) + 1) >> 1) > 0)
-++/* Nonzero if STATUS indicates termination by a signal.
-++ * Note that status 0x007f is "died from signal 127", not "stopped by signal 0".
-++ * This does happen on MIPS.
-++ * The comparison is "< 0xff", not "< 0x7f", because WCOREDUMP bit (0x80)
-++ * can be set too.
-++ */
-++#define	__WIFSIGNALED(status)	(((unsigned)((status) & 0xffff) - 1U) < 0xffU)
-+ 
-+ /* Nonzero if STATUS indicates the child is stopped.  */
-++#if !defined(__mips__)
-+ #define	__WIFSTOPPED(status)	(((status) & 0xff) == 0x7f)
-++#else
-++#define	__WIFSTOPPED(status)	(((status) & 0xff) == 0x7f && ((status) & 0xff00))
++diff --git a/Makefile.in b/Makefile.in
++index 9ba590d..633358f 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -271,6 +271,7 @@ HEADERS_RM-$(UCLIBC_HAS_WORDEXP)             += wordexp.h
++ HEADERS_RM-$(UCLIBC_HAS_XATTR)               += sys/xattr.h
++ HEADERS_RM-$(UCLIBC_HAS_XLOCALE)             += xlocale.h
++ HEADERS_RM-$(UCLIBC_LINUX_SPECIFIC)          += sys/eventfd.h sys/fsuid.h \
+++	bits/eventfd.h \
++ 	bits/inotify.h \
++ 	sys/inotify.h \
++ 	sys/kdaemon.h \
++diff --git a/libc/sysdeps/linux/alpha/bits/eventfd.h b/libc/sysdeps/linux/alpha/bits/eventfd.h
++new file mode 100644
++index 0000000..b5a7e41
++--- /dev/null
+++++ b/libc/sysdeps/linux/alpha/bits/eventfd.h
++@@ -0,0 +1,31 @@
+++/* Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_SYS_EVENTFD_H
+++# error "Never use <bits/eventfd.h> directly; include <sys/eventfd.h> instead."
 ++#endif
+++
+++/* Flags for eventfd.  */
+++enum
+++  {
+++    EFD_SEMAPHORE = 000000001,
+++#define EFD_SEMAPHORE EFD_SEMAPHORE
+++    EFD_CLOEXEC   = 010000000,
+++#define EFD_CLOEXEC EFD_CLOEXEC
+++    EFD_NONBLOCK  = 000000004
+++#define EFD_NONBLOCK EFD_NONBLOCK
+++  };
++diff --git a/libc/sysdeps/linux/common/bits/eventfd.h b/libc/sysdeps/linux/common/bits/eventfd.h
++new file mode 100644
++index 0000000..ef49c61
++--- /dev/null
+++++ b/libc/sysdeps/linux/common/bits/eventfd.h
++@@ -0,0 +1,31 @@
+++/* Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_SYS_EVENTFD_H
+++# error "Never use <bits/eventfd.h> directly; include <sys/eventfd.h> instead."
+++#endif
+++
+++/* Flags for eventfd.  */
+++enum
+++  {
+++    EFD_SEMAPHORE = 00000001,
+++#define EFD_SEMAPHORE EFD_SEMAPHORE
+++    EFD_CLOEXEC = 02000000,
+++#define EFD_CLOEXEC EFD_CLOEXEC
+++    EFD_NONBLOCK = 00004000
+++#define EFD_NONBLOCK EFD_NONBLOCK
+++  };
++diff --git a/libc/sysdeps/linux/common/sys/eventfd.h b/libc/sysdeps/linux/common/sys/eventfd.h
++index 311f803..8686355 100644
++--- a/libc/sysdeps/linux/common/sys/eventfd.h
+++++ b/libc/sysdeps/linux/common/sys/eventfd.h
++@@ -1,4 +1,4 @@
++-/* Copyright (C) 2007, 2008, 2009 Free Software Foundation, Inc.
+++/* Copyright (C) 2007-2013 Free Software Foundation, Inc.
++    This file is part of the GNU C Library.
 + 
-+ /* Nonzero if STATUS indicates the child continued after a stop.  We only
-+    define this if <bits/waitflags.h> provides the WCONTINUED flag bit.  */
++    The GNU C Library is free software; you can redistribute it and/or
++@@ -21,21 +21,12 @@
++ 
++ #include <stdint.h>
++ 
+++/* Get the platform-dependent flags.  */
+++#include <bits/eventfd.h>
++ 
++ /* Type for event counter.  */
++ typedef uint64_t eventfd_t;
++ 
++-/* Flags for signalfd.  */
++-enum
++-  {
++-    EFD_SEMAPHORE = 1,
++-#define EFD_SEMAPHORE EFD_SEMAPHORE
++-    EFD_CLOEXEC = 02000000,
++-#define EFD_CLOEXEC EFD_CLOEXEC
++-    EFD_NONBLOCK = 04000
++-#define EFD_NONBLOCK EFD_NONBLOCK
++-  };
++-
++ 
++ __BEGIN_DECLS
++ 
++@@ -43,6 +34,16 @@ __BEGIN_DECLS
++    value to COUNT.  */
++ extern int eventfd (int __count, int __flags) __THROW;
++ 
+++#if 0 /* not (yet) implemented in uClibc */
+++
+++/* Read event counter and possibly wait for events.  */
+++extern int eventfd_read (int __fd, eventfd_t *__value);
+++
+++/* Increment event counter.  */
+++extern int eventfd_write (int __fd, eventfd_t __value);
+++
+++#endif
+++
++ __END_DECLS
++ 
++ #endif /* sys/eventfd.h */
++diff --git a/libc/sysdeps/linux/hppa/bits/eventfd.h b/libc/sysdeps/linux/hppa/bits/eventfd.h
++new file mode 100644
++index 0000000..6182c07
++--- /dev/null
+++++ b/libc/sysdeps/linux/hppa/bits/eventfd.h
++@@ -0,0 +1,32 @@
+++/* Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library.  If not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_SYS_EVENTFD_H
+++# error "Never use <bits/eventfd.h> directly; include <sys/eventfd.h> instead."
+++#endif
+++
+++/* Flags for signalfd.  */
+++enum
+++  {
+++    EFD_SEMAPHORE = 000000001,
+++#define EFD_SEMAPHORE EFD_SEMAPHORE
+++    EFD_CLOEXEC   = 010000000,
+++#define EFD_CLOEXEC EFD_CLOEXEC
+++/* the below value looks suspicious, should be 000200004 for consistency */
+++    EFD_NONBLOCK  = 00200004 /* HPUX has separate NDELAY & NONBLOCK */
+++#define EFD_NONBLOCK EFD_NONBLOCK
+++  };
++diff --git a/libc/sysdeps/linux/mips/bits/eventfd.h b/libc/sysdeps/linux/mips/bits/eventfd.h
++new file mode 100644
++index 0000000..17b2f46
++--- /dev/null
+++++ b/libc/sysdeps/linux/mips/bits/eventfd.h
++@@ -0,0 +1,31 @@
+++/* Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_SYS_EVENTFD_H
+++# error "Never use <bits/eventfd.h> directly; include <sys/eventfd.h> instead."
+++#endif
+++
+++/* Flags for eventfd.  */
+++enum
+++  {
+++    EFD_SEMAPHORE = 00000001,
+++#define EFD_SEMAPHORE EFD_SEMAPHORE
+++    EFD_CLOEXEC = 02000000,
+++#define EFD_CLOEXEC EFD_CLOEXEC
+++    EFD_NONBLOCK = 00000200
+++#define EFD_NONBLOCK EFD_NONBLOCK
+++  };
++diff --git a/libc/sysdeps/linux/sparc/bits/eventfd.h b/libc/sysdeps/linux/sparc/bits/eventfd.h
++new file mode 100644
++index 0000000..bed9f09
++--- /dev/null
+++++ b/libc/sysdeps/linux/sparc/bits/eventfd.h
++@@ -0,0 +1,31 @@
+++/* Copyright (C) 2007-2013 Free Software Foundation, Inc.
+++   This file is part of the GNU C Library.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <http://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_SYS_EVENTFD_H
+++# error "Never use <bits/eventfd.h> directly; include <sys/eventfd.h> instead."
+++#endif
+++
+++/* Flags for eventfd.  */
+++enum
+++  {
+++    EFD_SEMAPHORE = 1,
+++#define EFD_SEMAPHORE EFD_SEMAPHORE
+++    EFD_CLOEXEC = 0x400000,
+++#define EFD_CLOEXEC EFD_CLOEXEC
+++    EFD_NONBLOCK = 0x004000
+++#define EFD_NONBLOCK EFD_NONBLOCK
+++  };
 +-- 
 +1.8.1.2
 +
