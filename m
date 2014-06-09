@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Jun 2014 23:49:28 +0200
-Subject: [Buildroot] [RFCv1 1/4] toolchain-external: split target
- installation from staging installation
-In-Reply-To: <1402177567-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Jun 2014 00:02:41 +0200
+Subject: [Buildroot] [RFCv1 2/4] pkg-generic: add step_pkg_size global
+ instrumentation hook
+In-Reply-To: <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1402177567-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140609214928.GJ3512@free.fr>
+ <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140609220241.GK3512@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,115 +15,95 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-06-07 23:46 +0200, Thomas Petazzoni spake thusly:
-> Currently, all the installation work of the toolchain-external package
-> is done during the install-staging step. However, in order to be able
-> to properly collect the size added by each package to the target
-> filesystem, we need to make sure that toolchain-external installs its
-> files to $(TARGET_DIR) during the install-target step.
+> This patch adds a global instrumentation hook that collects the list
+> of files installed in $(TARGET_DIR) by each package, and stores this
+> list into a file called $(BUILD_DIR)/<pkgname>.filelist. It can later
+> be used to determine the size contribution of each package to the
+> target root filesystem.
 > 
+> The only limitation is that if a file is installed by a package A, and
+> then overriden by a file from package B, the file will only be listed
+> in $(BUILD_DIR)/A.filelist as it is the first time we will see the
+> file.
+
+If we really wanted to account for the realy package, we'd have to
+somehow notice that a pacakge did change the content of a file.
+
+So, we would need to run sha1sum on all the files in the pre-step and
+the post step. Any differing line would mean a new file, or a changed
+file.
+
+See below for a proposed storage solution.
+
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Tested with a ARM code sourcery toolchain, and a custom toolchain.
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-But see my comment below...
-
 > ---
->  toolchain/toolchain-external/toolchain-external.mk | 36 +++++++++++++++++-----
->  1 file changed, 29 insertions(+), 7 deletions(-)
+>  package/pkg-generic.mk | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 > 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index c73cc4a..45926cf 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -551,7 +551,7 @@ endif
->  #                       considered when searching libraries for copy
->  #                       to the target filesystem.
->  
-> -define TOOLCHAIN_EXTERNAL_INSTALL_CORE
-> +define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
->  	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
->  	if test -z "$${SYSROOT_DIR}" ; then \
->  		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-> @@ -576,8 +576,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
->  			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
->  		done ; \
->  	fi ; \
-> -	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
-> -	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR}) ; \
->  	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
->  		$(call MESSAGE,"Copying gdbserver") ; \
->  		gdbserver_found=0 ; \
-> @@ -595,6 +593,26 @@ define TOOLCHAIN_EXTERNAL_INSTALL_CORE
->  	fi
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 5116ed9..069653e 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -55,6 +55,30 @@ define step_time
 >  endef
+>  GLOBAL_INSTRUMENTATION_HOOKS += step_time
 >  
-> +define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+> +# Package size steps
+> +define step_pkg_size_start
+> +	echo "PKG SIZE START $(1)"
+> +	(cd $(TARGET_DIR) ; find . -type f) | sort > \
+> +		$(BUILD_DIR)/$(1).tmp_filelist_before
 
-Maybe the code from here...
+At first, I wondered if we should not store those files in the packages'
+own build directory (along with the .stamp files.)
 
-> +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-> +	if test -z "$${SYSROOT_DIR}" ; then \
-> +		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-> +		exit 1 ; \
-> +	fi ; \
-> +	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> +	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> +	SUPPORT_LIB_DIR="" ; \
-> +	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-> +		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-> +		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
-> +			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-> +		fi ; \
-> +	fi ; \
-> +	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+But then I went back to thinking about the second-package-to-install-a-file
+issue raised in the commit log.
 
-... to here could be moved to a common function, so it can be shared
-between the staging and target functions?
+So, say we are able to determine what files a pacakge installs or modify
+(using the sah1, for example.) Then we could just store that list in a
+single file, that gets appended to package after package, and which
+format would be:
 
-Otherwise, I'm afraid we might miss changing one or the other if we need
-to make some changes.
+package-name <TAB> path/to/file
+package-name <TAB> path/to/other/file
+other-package <TAB> path/to/third/file
+pther-package <TAB> path/to/file             <-- override
 
-But granted, that might not be that easy... In which case a big fat
-warning above each block, to remind to keep the other in sync, would be
-needed.
+That way, the python script has only one file to scan, which is sorted
+by build-order, and the script can detect overwritten files, and even
+report that, while still accounting the size to the real pacakge that
+installed the file that will end up in the target.
+
+Of course, using sha1 would slow the build quite a bit.
+
+Thoughts?
 
 Regards,
 Yann E. MORIN.
 
-> +	$(call MESSAGE,"Copying external toolchain sysroot to staging...") ; \
-> +	$(call copy_toolchain_sysroot,$${SYSROOT_DIR},$${ARCH_SYSROOT_DIR},$${ARCH_SUBDIR},$${ARCH_LIB_DIR},$${SUPPORT_LIB_DIR})
 > +endef
 > +
->  # Special installation target used on the Blackfin architecture when
->  # FDPIC is not the primary binary format being used, but the user has
->  # nonetheless requested the installation of the FDPIC libraries to the
-> @@ -685,15 +703,19 @@ define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
->  	fi
->  endef
->  
-> +define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+> +define step_pkg_size_end
+> +	echo "PKG SIZE END $(1)"
+> +	(cd $(TARGET_DIR); find . -type f) | sort > \
+> +		$(BUILD_DIR)/$(1).tmp_filelist_after
+> +	diff -u $(BUILD_DIR)/$(1).tmp_filelist_before $(BUILD_DIR)/$(1).tmp_filelist_after | \
+> +		grep '^\+\./' | sed 's%^\+%%' > $(BUILD_DIR)/$(1).filelist
+> +	$(RM) -f $(BUILD_DIR)/$(1).tmp_filelist_before \
+> +		$(BUILD_DIR)/$(1).tmp_filelist_after
 > +endef
 > +
->  # Even though we're installing things in both the staging, the host
->  # and the target directory, we do everything within the
->  # install-staging step, arbitrarily.
-> -define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-> -	$(TOOLCHAIN_EXTERNAL_INSTALL_CORE)
-> +define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
-> -	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-> -	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
->  endef
->  
->  $(eval $(generic-package))
+> +define step_pkg_size
+> +	$(if $(filter install-target,$(2)),\
+> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
+> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
+> +endef
+> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+> +
+>  # User-supplied script
+>  define step_user
+>  	@$(foreach user_hook, $(BR2_INSTRUMENTATION_SCRIPTS), \
 > -- 
 > 2.0.0
 > 
