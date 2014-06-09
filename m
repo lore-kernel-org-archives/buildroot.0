@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 18:53:03 +0200
-Subject: [Buildroot] psplash and systemd
-In-Reply-To: <5395D4CA.9060606@gmail.com>
-References: <537C657F.4090106@ebo-enterprises.com> <20140521192928.GA3672@ned>
- <20140609142734.32d58a30@free-electrons.com>
- <5395D4CA.9060606@gmail.com>
-Message-ID: <20140609185303.799e3396@free-electrons.com>
+From: Will Wagner <will_wagner@carallon.com>
+Date: Mon, 09 Jun 2014 17:58:29 +0100
+Subject: [Buildroot] Qt5Declarative examples
+Message-ID: <5395E7B5.1050604@carallon.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Tom Deblauwe,
+Hello,
 
-On Mon, 09 Jun 2014 17:37:46 +0200, Tom Deblauwe wrote:
+Just started taking a look at Qt5Declarative and noticed that examples 
+aren't being built/installed.
 
-> I also have added some basic support to choose the .png image you want 
-> as a bootscreen. I had to install in ubuntu "libgdk-pixbuf2.0-dev" to 
-> have the "gdk-pixbuf-csource" utility which the generate header script 
-> uses. Probably there is a better buildroot-specific way but I provide 
-> the patch as a start.
+Having looked at the .mk files it is easy to conditionally build the 
+examples depending on qt5base config option about examples, but I'm 
+unsure how best to do the install target step.
 
-Thanks for your patch. To get the gdk-pixbuf-csource tool in Buildroot,
-you simply need to make your package depend on host-gdk-pixbuf.
+In Qt5Base it just does:
+cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/* 
+$(TARGET_DIR)/usr/lib/qt/examples
+to install examples from staging.
 
-It would be good to take the systemd psplash patch and your patch,
-create proper commit logs, and submit them using git send-email. See
-http://buildroot.org/downloads/manual/manual.html#submitting-patches
-for details. Your contribution would be much appreciated!
+This would also work for Qt5Declarative but it seems like a poor 
+solution to just copy and paste the same code.
 
-Thanks!
+Can anyone think of a better way of doing this? Perhaps define something 
+in qt5.mk and use that in both qt5base and qt5declarative?
 
-Thomas
+If I can come up with anything neat I'll submit a patch.
+
+Regards
+Will
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+------------------------------------------------------------------------
+Will Wagner                                     will_wagner at carallon.com
+Development Manager                      Office Tel: +44 (0)20 7471 9224
+Carallon Ltd, Studio G20, Shepherds Building, Rockley Rd, London W14 0DA
+------------------------------------------------------------------------
