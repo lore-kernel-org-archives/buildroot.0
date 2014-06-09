@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Jun 2014 00:02:41 +0200
-Subject: [Buildroot] [RFCv1 2/4] pkg-generic: add step_pkg_size global
- instrumentation hook
-In-Reply-To: <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Jun 2014 00:06:33 +0200
+Subject: [Buildroot] [RFCv1 3/4] support/scripts: add graph-size script
+In-Reply-To: <1402177567-8021-4-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140609220241.GK3512@free.fr>
+ <1402177567-8021-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140609220633.GL3512@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,95 +14,204 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2014-06-07 23:46 +0200, Thomas Petazzoni spake thusly:
-> This patch adds a global instrumentation hook that collects the list
-> of files installed in $(TARGET_DIR) by each package, and stores this
-> list into a file called $(BUILD_DIR)/<pkgname>.filelist. It can later
-> be used to determine the size contribution of each package to the
-> target root filesystem.
+> This new script uses the data collected by the step_pkg_size
+> instrumentation hook to generate a pie chart of the size contribution
+> of each package to the target root filesystem. To achieve this, it
+> looks at each file in $(TARGET_DIR), and using the <pkgname>.filelist
+> information collected by the step_pkg_size hook, it determines to
+> which package the file belongs. It is therefore able to give the size
+> installed by each package.
 > 
-> The only limitation is that if a file is installed by a package A, and
-> then overriden by a file from package B, the file will only be listed
-> in $(BUILD_DIR)/A.filelist as it is the first time we will see the
-> file.
-
-If we really wanted to account for the realy package, we'd have to
-somehow notice that a pacakge did change the content of a file.
-
-So, we would need to run sha1sum on all the files in the pre-step and
-the post step. Any differing line would mean a new file, or a changed
-file.
-
-See below for a proposed storage solution.
-
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/pkg-generic.mk | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5116ed9..069653e 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -55,6 +55,30 @@ define step_time
->  endef
->  GLOBAL_INSTRUMENTATION_HOOKS += step_time
->  
-> +# Package size steps
-> +define step_pkg_size_start
-> +	echo "PKG SIZE START $(1)"
-> +	(cd $(TARGET_DIR) ; find . -type f) | sort > \
-> +		$(BUILD_DIR)/$(1).tmp_filelist_before
 
-At first, I wondered if we should not store those files in the packages'
-own build directory (along with the .stamp files.)
+Well, I won't really review this Python code, since I can't be said to
+be a Python expert! ;-)
 
-But then I went back to thinking about the second-package-to-install-a-file
-issue raised in the commit log.
+However, with my proposal in patch 2/4, that script might need some big
+overhaul, so I doubt it would be a usefull review anyway.
 
-So, say we are able to determine what files a pacakge installs or modify
-(using the sah1, for example.) Then we could just store that list in a
-single file, that gets appended to package after package, and which
-format would be:
-
-package-name <TAB> path/to/file
-package-name <TAB> path/to/other/file
-other-package <TAB> path/to/third/file
-pther-package <TAB> path/to/file             <-- override
-
-That way, the python script has only one file to scan, which is sorted
-by build-order, and the script can detect overwritten files, and even
-report that, while still accounting the size to the real pacakge that
-installed the file that will end up in the target.
-
-Of course, using sha1 would slow the build quite a bit.
-
-Thoughts?
+Still, with my proposal, we should pass the list file as an argument to
+this script. That would allow one to store the list file, and regenerate
+the graphs later on.
 
 Regards,
 Yann E. MORIN.
 
-> +endef
+> ---
+>  support/scripts/graph-size | 164 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 164 insertions(+)
+>  create mode 100755 support/scripts/graph-size
+> 
+> diff --git a/support/scripts/graph-size b/support/scripts/graph-size
+> new file mode 100755
+> index 0000000..5f7fe58
+> --- /dev/null
+> +++ b/support/scripts/graph-size
+> @@ -0,0 +1,164 @@
+> +#!/usr/bin/env python
 > +
-> +define step_pkg_size_end
-> +	echo "PKG SIZE END $(1)"
-> +	(cd $(TARGET_DIR); find . -type f) | sort > \
-> +		$(BUILD_DIR)/$(1).tmp_filelist_after
-> +	diff -u $(BUILD_DIR)/$(1).tmp_filelist_before $(BUILD_DIR)/$(1).tmp_filelist_after | \
-> +		grep '^\+\./' | sed 's%^\+%%' > $(BUILD_DIR)/$(1).filelist
-> +	$(RM) -f $(BUILD_DIR)/$(1).tmp_filelist_before \
-> +		$(BUILD_DIR)/$(1).tmp_filelist_after
-> +endef
+> +# Copyright (C) 2014 by Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > +
-> +define step_pkg_size
-> +	$(if $(filter install-target,$(2)),\
-> +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
-> +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
-> +endef
-> +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
+> +# This program is free software; you can redistribute it and/or modify
+> +# it under the terms of the GNU General Public License as published by
+> +# the Free Software Foundation; either version 2 of the License, or
+> +# (at your option) any later version.
+> +#
+> +# This program is distributed in the hope that it will be useful,
+> +# but WITHOUT ANY WARRANTY; without even the implied warranty of
+> +# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+> +# General Public License for more details.
+> +#
+> +# You should have received a copy of the GNU General Public License
+> +# along with this program; if not, write to the Free Software
+> +# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 > +
->  # User-supplied script
->  define step_user
->  	@$(foreach user_hook, $(BR2_INSTRUMENTATION_SCRIPTS), \
+> +# This script draws a pie chart of the size used by each package in
+> +# the target filesystem.
+> +
+> +import sys
+> +import os.path
+> +import argparse
+> +import matplotlib.font_manager as fm
+> +import matplotlib.pyplot as plt
+> +
+> +colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
+> +          '#0068b5', '#f28e00', '#940084', '#97c000']
+> +
+> +#
+> +# This function parses one .filelist file (which lists the files
+> +# installed by a particular package), and returns a Python list of the
+> +# file paths installed by the package.
+> +#
+> +# pkgf: path to the .filelist file
+> +#
+> +def handle_pkg(pkgf):
+> +    files = []
+> +    with open(pkgf) as f:
+> +        for l in f.readlines():
+> +            files.append(l.strip().replace("./", ""))
+> +    return files
+> +
+> +#
+> +# This function returns the list of files present in the skeleton,
+> +# with the exception of the .empty files. It is used to create a fake
+> +# entry in the dictionary of files installed by each package, emulated
+> +# the presence of a skeleton package.
+> +#
+> +def handle_skeleton():
+> +    skeleton_files = []
+> +    for root, _, files in os.walk("system/skeleton"):
+> +        for f in files:
+> +            if f == ".empty":
+> +                continue
+> +            frelpath = os.path.relpath(os.path.join(root, f), "system/skeleton")
+> +            skeleton_files.append(frelpath)
+> +    return skeleton_files
+> +
+> +#
+> +# This function returns a dict where each key is the name of a
+> +# package, and the value is a list of the files installed by this
+> +# package.
+> +#
+> +# builddir: path to the Buildroot output directory
+> +#
+> +def build_package_dict(builddir):
+> +    pkgdict = {}
+> +    # Parse all the .filelist files generated by the package
+> +    # installation process
+> +    filelist = os.listdir(os.path.join(builddir, "build"))
+> +    for file in filelist:
+> +        (_, ext) = os.path.splitext(file)
+> +        if ext != ".filelist":
+> +            continue
+> +        pkgname = file.replace(".filelist", "")
+> +        pkgdict[pkgname] = handle_pkg(os.path.join(builddir, "build", file))
+> +    # Add a special fake entry for the files installed by the skeleton
+> +    pkgdict['skeleton'] = handle_skeleton()
+> +    return pkgdict
+> +
+> +#
+> +# This function looks into the 'pkgdict' dictionary (as generated by
+> +# build_package_dict) to see which package has installed the file 'f',
+> +# and returns the name of that package.
+> +#
+> +def find_file(pkgdict, f):
+> +    for (p, flist) in pkgdict.iteritems():
+> +        if f in flist:
+> +            return p
+> +    return None
+> +
+> +#
+> +# This function build a dictionary that contains the name of a package
+> +# as key, and the size of the files installed by this package as the
+> +# value.
+> +#
+> +def build_package_size(builddir):
+> +    pkgdict = build_package_dict(builddir)
+> +    pkgsize = {}
+> +
+> +    for root, _, files in os.walk(os.path.join(builddir, "target")):
+> +        for f in files:
+> +            fpath = os.path.join(root, f)
+> +            if os.path.islink(fpath):
+> +                continue
+> +            frelpath = os.path.relpath(fpath, os.path.join(builddir, "target"))
+> +            pkg = find_file(pkgdict, frelpath)
+> +            if pkg is None:
+> +                print "WARNING: %s is not part of any package" % frelpath
+> +                pkg = "unknown"
+> +            if pkg in pkgsize:
+> +                pkgsize[pkg] += os.path.getsize(fpath)
+> +            else:
+> +                pkgsize[pkg] = os.path.getsize(fpath)
+> +
+> +    return pkgsize
+> +
+> +#
+> +# Given a dict returned by build_package_size(), this function
+> +# generates a pie chart of the size installed by each package.
+> +#
+> +def draw_graph(pkgsize, outputf):
+> +    total = 0
+> +    for (p, sz) in pkgsize.iteritems():
+> +        total += sz
+> +    labels = []
+> +    values = []
+> +    other_value = 0
+> +    for (p, sz) in pkgsize.iteritems():
+> +        if sz < (total * 0.01):
+> +            other_value += sz
+> +        else:
+> +            labels.append(p)
+> +            values.append(sz)
+> +    labels.append("Other")
+> +    values.append(other_value)
+> +
+> +    plt.figure()
+> +    patches, texts, autotexts = plt.pie(values, labels=labels,
+> +                                        autopct='%1.1f%%', shadow=True,
+> +                                        colors=colors)
+> +    # Reduce text size
+> +    proptease = fm.FontProperties()
+> +    proptease.set_size('xx-small')
+> +    plt.setp(autotexts, fontproperties=proptease)
+> +    plt.setp(texts, fontproperties=proptease)
+> +
+> +    plt.title('Size per package')
+> +    plt.savefig(outputf)
+> +
+> +parser = argparse.ArgumentParser(description='Draw build time graphs')
+> +
+> +parser.add_argument("--builddir", '-i', metavar="BUILDDIR",
+> +                    help="Buildroot output directory")
+> +parser.add_argument("--output", '-o', metavar="OUTPUT", required=True,
+> +                    help="Output file (.pdf or .png extension)")
+> +args = parser.parse_args()
+> +
+> +
+> +ps = build_package_size(args.builddir)
+> +draw_graph(ps, args.output)
+> +
 > -- 
 > 2.0.0
 > 
