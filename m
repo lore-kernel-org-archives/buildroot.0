@@ -1,47 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 14:42:05 +0200
-Subject: [Buildroot] [PATCH 1/1] sispmctl: new package
-In-Reply-To: <1401375933-23332-1-git-send-email-phil@zankapfel.net>
-References: <1401375933-23332-1-git-send-email-phil@zankapfel.net>
-Message-ID: <20140609144205.3dd41ead@free-electrons.com>
+Date: Mon, 9 Jun 2014 14:42:43 +0200
+Subject: [Buildroot] [git commit] package/libbsd: needs an (e)glibc toolchain
+Message-ID: <20140609124725.5F5DF9CF77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Phil Eichinger,
+commit: http://git.buildroot.net/buildroot/commit/?id=1e6ea2d112d5d2a0a830b13e41bae9fb1e99c4da
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 29 May 2014 17:05:33 +0200, Phil Eichinger wrote:
-> 
-> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
-> ---
->  package/Config.in            |    1 +
->  package/sispmctl/Config.in   |   11 +++++++++++
->  package/sispmctl/sispmctl.mk |   17 +++++++++++++++++
->  3 files changed, 29 insertions(+)
->  create mode 100644 package/sispmctl/Config.in
->  create mode 100644 package/sispmctl/sispmctl.mk
+libbsd needs support for .init_array and checks for a
+glibc >= 2.4 since .init_array was introduced at around
+that time.
 
-Thanks, I've applied your patch, after making a small number of
-changes. Here is the list of changes I made:
+uClibc claims to be a glibc-compatible toolchain, but it
+only impersonates a glibc-2.2.
 
-    [Thomas:
-     - Add missing select of BR2_PACKAGE_LIBUSB, since
-       BR2_PACKAGE_LIBUSB_COMPAT depends on it
-     - Add missing thread dependency, since libusb requires threads.
-     - Add missing wide-char dependency. Without wide char support,
-       sispmctl doesn't build.
-     - Rewrap the Config.in help text, and remove trailing whitespaces.
-     - License is GPLv2+, not GPLv2.
-     - Remove --disable-dependency-tracking from <pkg>_CONF_OPT. That's a
-       global, standard, autoconf option, and there's no reason to pass it
-       at the per-package level.]
+Just disable libbsd on uClibc.
 
-Thanks a lot for your contribution!
+Fixes:
+    http://autobuild.buildroot.net/results/e94/e949d8fabeeecc74bd1c324c516e0b4938c99dbc/
+    http://autobuild.buildroot.net/results/d3e/d3e1b70fb91571efacbe32af2cd12d055508f5ac/
+    http://autobuild.buildroot.net/results/b19/b19d24dbf9d05d86d839349695da45d548705b25/
+    [...]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libbsd/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 8c90aa1..e22226a 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBBSD
+ 	# architectures: arm, m68k, x86 (and alpha, but we don't care.)
+ 	depends on ( BR2_i386 || BR2_x86_64 )
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  This library provides useful functions commonly found on BSD
+ 	  systems, and lacking on others like GNU systems, thus making
+@@ -13,6 +14,6 @@ config BR2_PACKAGE_LIBBSD
+ 
+ 	  http://libbsd.freedesktop.org/
+ 
+-comment "libbsd needs a toolchain w/ threads"
++comment "libbsd needs an (e)glibc toolchain w/ threads"
+ 	depends on ( BR2_i386 || BR2_x86_64 )
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
