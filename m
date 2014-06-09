@@ -1,217 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Jun 2014 00:26:19 +0200
-Subject: [Buildroot] [PATCHv2 3/6] gettext: optimize build time
-In-Reply-To: <1401654214-19384-4-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1401654214-19384-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1401654214-19384-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140608222619.GU3266@free.fr>
+From: Anders Darander <anders.darander@gmail.com>
+Date: Mon, 9 Jun 2014 08:07:19 +0200
+Subject: [Buildroot] new TI kernel version for beaglebone black
+In-Reply-To: <538AE6B7.8030202@gmx.net>
+References: <5388F5A2.1080008@ethertek.ca>
+	<538AE6B7.8030202@gmx.net>
+Message-ID: <CAE4k23_Gjq+OmuibdpstJJYiF0fuFg-0MVYa2eOQxykiE-5RGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 1 June 2014 10:39, Peter K?mmel <syntheticpp@gmx.net> wrote:
+> On 30.05.2014 23:18, Dan Pattison wrote:
+>> In buildroot I used make beaglebone_defconfig.
+>> Under the Kernel menu, Custom Git repository is selected.
+>> The git URL is https://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
+>
+>
+> BTW, does someone know how this repository relates to
+> https://git.kernel.org/cgit/linux/kernel/git/arm/arm-soc.git?
 
-On 2014-06-01 22:23 +0200, Thomas Petazzoni spake thusly:
-> This commit significantly reduces the build time of host-gettext and
-> gettext, by using the capacity of gettext to handle build things in a
-> certain subdirectory:
-> 
->  - For the host variant of gettext, we only need the gettext-tools,
->    available in the directory of the same name in the gettext sources.
-> 
->  - For the target variant of gettext, we only need the gettext library
->    libintl, available in the gettext-runtime directory in the gettext
->    sources.
-> 
-> So by using appropriate values of GETTEXT_SUBDIR and
-> HOST_GETTEXT_SUBDIR, we only build what's necessary. Moreover, by
-> manually patching gettext-tools/Makefile.in and
-> gettext-runtime/Makefile.in, we make sure to not build and install
-> things like examples, documentation and so on.
-> 
-> In addition to this, these changes avoid the need to autoreconfigure
-> the gettext package, which was particularly long.
-> 
-> Thanks to these changes, the build time of gettext goes from 1 minutes
-> and 37 seconds to just 24 seconds, and the build of host-gettext goes
-> from 2 minutes and 18 seconds to 1 minute and 13 seconds.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Tested-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
+The arm-soc.git repository is the integration repository controlled
+the by maintainers
+of the arm architecture in the Linux kernel. Thus, this is the last
+step before getting your
+patches into the mainline kernel. (Linus pulls from arm-soc.git among
+other repos).
 
-On my machine, I got these results:
+The TI repo is were TI themselves develops (at least it's the
+externally visible point) the
+kernels for their own SoC's and BSP's. This means that normally you'll
+have better SoC
+support (support for more peripherals) in the vendor tree (i.e. the TI
+repo). However,
+you can'? be sure that when (if) support for these peripherals goes
+into the mainline kernel,
+that their interface will always be exactly the same as in the TI
+repo. The review process
+for the mainline kernel might require further changes, that's
+currently not reflected in the
+TI repo.
 
-                  Before patch    After patch   Improvement
-    gettext:        2min 39s          38s         x 4.18
-    host-gettext:   3min 41s       1min 51s       x 1.99
+> Is the ti-linux-kernel repository _THE_ reference for TI kernels or
+> are there better starting points?
+>
+> When looking for kernel sources also the Arago projects pops up and
+> for sure Linaro.
 
-Woot! :-)
+Arago is one of TI's embedded distributions. Currently it's a layer
+for OpenEmbedded.
 
-Not counting the fact that host-automake, host-autoconf, host-libtool,
-and host-m4 are no longer needed!
+Then there's also the paches that you can find in
+https://github.com/beagleboard/kernel. This
+is yet another kernel for the SoC's in the Beagle* family of boards.
+Instead of keeping a patched
+kernel in this repo, they're keeping a set of patches to be applied to
+a mainline kernel. This repo,
+and their 3.8 branch is likely what you want if you need support for
+capemgr etc.
 
-I got the same set of libraries and utilities in the staging and target.
+Personally, unless I need some specific perifpheral that I can only
+get from a certain tree, I usually
+prefer mainline kernels. In this specific case, I've mostly been using
+the TI repository (as you can
+guess from my occasional updates to the beaglebone_defconfig).
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Does someone have a link or an explanation how all these repositories
+> relate?
+> That would be great!
 
-Regards,
-Yann E. MORIN.
+Well, not a link but a short summary of what I've learned playing
+around with primarily the BeagleBone,
+but also a number of other TI SoC's.
 
-> ---
->  .../gettext-03-option-to-disable-tools.patch       | 42 ----------------------
->  .../gettext/gettext-04-remove-examples-tests.patch | 20 -----------
->  package/gettext/gettext.mk                         | 26 ++++++++------
->  3 files changed, 16 insertions(+), 72 deletions(-)
->  delete mode 100644 package/gettext/gettext-03-option-to-disable-tools.patch
->  delete mode 100644 package/gettext/gettext-04-remove-examples-tests.patch
-> 
-> diff --git a/package/gettext/gettext-03-option-to-disable-tools.patch b/package/gettext/gettext-03-option-to-disable-tools.patch
-> deleted file mode 100644
-> index 24a9996..0000000
-> --- a/package/gettext/gettext-03-option-to-disable-tools.patch
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -Add a --disable-tools option
-> -
-> -This patch adds a --disable-tools option that allows to disable the
-> -compilation of the gettext tools, which may not be necessary on a
-> -small embedded Linux system.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -
-> -Index: b/configure.ac
-> -===================================================================
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -37,6 +37,10 @@
-> - 
-> - dnl Checks for library functions.
-> - 
-> -+AC_ARG_ENABLE([tools], [--disable-tools  do not build tools],
-> -+		       [enable_tools=$enableval], [enable_tools=yes])
-> -+AM_CONDITIONAL([ENABLE_TOOLS], [test "$enable_tools" = "yes"])
-> -+
-> - AC_CONFIG_SUBDIRS([gettext-runtime gettext-tools])
-> - 
-> - dnl Ensure that "configure --help" lists all the command line options that
-> -Index: b/Makefile.am
-> -===================================================================
-> ---- a/Makefile.am
-> -+++ b/Makefile.am
-> -@@ -20,7 +20,13 @@
-> - ACLOCAL = build-aux/fixaclocal @ACLOCAL@
-> - ACLOCAL_AMFLAGS = -I m4
-> - 
-> --SUBDIRS = gnulib-local gettext-runtime gettext-tools
-> -+if ENABLE_TOOLS
-> -+TOOLS_SUBDIR = gettext-tools
-> -+else
-> -+TOOLS_SUBDIR =
-> -+endif
-> -+
-> -+SUBDIRS = gnulib-local gettext-runtime $(TOOLS_SUBDIR)
-> - 
-> - EXTRA_DIST = \
-> -   version.sh DEPENDENCIES PACKAGING HACKING ChangeLog.0 autogen.sh \
-> diff --git a/package/gettext/gettext-04-remove-examples-tests.patch b/package/gettext/gettext-04-remove-examples-tests.patch
-> deleted file mode 100644
-> index f7d88d9..0000000
-> --- a/package/gettext/gettext-04-remove-examples-tests.patch
-> +++ /dev/null
-> @@ -1,20 +0,0 @@
-> -Disable tests and examples
-> -
-> -This patch disables the gettext-tools tests and examples, which are
-> -generally not necessary.
-> -
-> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> -
-> -Index: b/gettext-tools/Makefile.am
-> -===================================================================
-> ---- a/gettext-tools/Makefile.am
-> -+++ b/gettext-tools/Makefile.am
-> -@@ -20,7 +20,7 @@
-> - ACLOCAL = ../build-aux/fixaclocal @ACLOCAL@
-> - ACLOCAL_AMFLAGS = -I m4 -I ../gettext-runtime/m4 -I ../m4 -I gnulib-m4 -I libgrep/gnulib-m4 -I libgettextpo/gnulib-m4
-> - 
-> --SUBDIRS = doc intl gnulib-lib libgrep src libgettextpo po projects styles misc man m4 tests gnulib-tests examples
-> -+SUBDIRS = doc intl gnulib-lib libgrep src libgettextpo po projects styles misc man m4
-> - 
-> - EXTRA_DIST = misc/DISCLAIM
-> - MOSTLYCLEANFILES = core *.stackdump
-> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-> index 52a72db..948ab9d 100644
-> --- a/package/gettext/gettext.mk
-> +++ b/package/gettext/gettext.mk
-> @@ -9,7 +9,6 @@ GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
->  GETTEXT_INSTALL_STAGING = YES
->  GETTEXT_LICENSE = GPLv2+
->  GETTEXT_LICENSE_FILES = COPYING
-> -GETTEXT_AUTORECONF = YES
->  
->  GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
->  HOST_GETTEXT_DEPENDENCIES = # we don't want the libiconv dependency
-> @@ -23,8 +22,7 @@ GETTEXT_CONF_OPT += \
->  	--disable-native-java \
->  	--disable-csharp \
->  	--disable-relocatable \
-> -	--without-emacs \
-> -	--disable-tools
-> +	--without-emacs
->  
->  HOST_GETTEXT_CONF_OPT = \
->  	--disable-libasprintf \
-> @@ -37,6 +35,21 @@ HOST_GETTEXT_CONF_OPT = \
->  	--disable-relocatable \
->  	--without-emacs
->  
-> +# For the target version, we only need the runtime, and for the host
-> +# version, we only need the tools.
-> +GETTEXT_SUBDIR = gettext-runtime
-> +HOST_GETTEXT_SUBDIR = gettext-tools
-> +
-> +# Disable the build of documentation and examples of gettext-tools,
-> +# and the build of documentation and tests of gettext-runtime.
-> +define HOST_GETTEXT_DISABLE_UNNEEDED
-> +	$(SED) '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/examples$$//' $(@D)/gettext-tools/Makefile.in
-> +	$(SED) '/^SUBDIRS/s/ doc //;/^SUBDIRS/s/tests$$//' $(@D)/gettext-runtime/Makefile.in
-> +endef
-> +
-> +GETTEXT_POST_PATCH_HOOKS += HOST_GETTEXT_DISABLE_UNNEEDED
-> +HOST_GETTEXT_POST_PATCH_HOOKS += HOST_GETTEXT_DISABLE_UNNEEDED
-> +
->  # Force build with NLS support, otherwise libintl is not built
->  # This is needed because some packages (eg. libglib2) requires
->  # locales, but do not properly depend on BR2_ENABLE_LOCALE, and
-> @@ -46,13 +59,6 @@ ifeq ($(BR2_ENABLE_LOCALE),)
->  GETTEXT_CONF_OPT += --enable-nls
->  endif
->  
-> -# When static libs are preferred the .so files aren't created
-> -ifeq ($(BR2_PREFER_STATIC_LIB),)
-> -define GETTEXT_INSTALL_TARGET_CMDS
-> -	cp -dpf $(STAGING_DIR)/usr/lib/libintl*.so* $(TARGET_DIR)/usr/lib/
-> -endef
-> -endif
-> -
->  # Disable interactive confirmation in host gettextize for package fixups
->  define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
->  	$(SED) '/read dummy/d' $(HOST_DIR)/usr/bin/gettextize
-> -- 
-> 1.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Cheers,
+Anders
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Anders Darander
+EPO guidelines 1978: "If the contribution to the known art resides
+solely in a computer program then the subject matter is not
+patentable in whatever manner it may be presented in the claims."
