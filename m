@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 11:57:10 +0200
-Subject: [Buildroot] [PATCH v6 2/3] cloog: new package
-In-Reply-To: <BLU436-SMTP138DD11D602CDEACC161440A8320@phx.gbl>
+Date: Mon, 9 Jun 2014 11:58:40 +0200
+Subject: [Buildroot] [PATCH v6 3/3] Add an BR2_GCC_ENABLE_GRAPHITE flag
+ for the buildroot toolchain
+In-Reply-To: <BLU436-SMTP1389119D64FEA33BF25D8E5A8320@phx.gbl>
 References: <1400528893-4483-1-git-send-email-scjthm@live.com>
- <BLU436-SMTP138DD11D602CDEACC161440A8320@phx.gbl>
-Message-ID: <20140609115710.3799c3c3@free-electrons.com>
+ <BLU436-SMTP1389119D64FEA33BF25D8E5A8320@phx.gbl>
+Message-ID: <20140609115840.745671e0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +14,51 @@ To: buildroot@busybox.net
 
 Dear Steve Thomas,
 
-On Mon, 19 May 2014 19:48:12 +0000, Steve Thomas wrote:
-> CLooG is a free software and library to generate code for scanning
-> Z-polyhedra.
+On Mon, 19 May 2014 19:48:13 +0000, Steve Thomas wrote:
+> The gcc graphite optimisations such as loop-interchange, blocking
+> and loop-flattening, also known as graphite are an optional feature of
+> gcc that is very well supported since about gcc version 4.5.
 > 
-> cloog is needed for the optional graphite optimisations that are
-> supported by gcc since version 4.5. Therefore this package is required
-> for the toolchain to support graphite.
-> 
-> Graphite optimisations primarily involve loop blocking flattening and
-> interchage so are probably of mimimal use in an embedded system where
-> small sizes are favoured.
-> 
-> cloog depends on isl.
+> This patch adds support for graphite for the toolchain as an optional
+> flag for versions 4.8 onwards as an optional flag, that is disabled by
+> default.
 > 
 > Signed-off-by: Steve Thomas <scjthm@live.com>
 
 Patch applied, with a few changes, see below.
 
-> +CLOOG_VERSION = 0.18.1
+> +config BR2_GCC_SUPPORTS_GRAPHITE
+> +   bool
 
-Bumped to 0.18.2. I had to add a patch adding missing CMake-related
-files.
+Indentation should be one tab.
 
-> +CLOOG_SITE = http://www.bastoul.net/cloog/pages/download/
-> +CLOOG_INSTALL_STAGING = YES
+And of course I've added the BR2_GCC_ENABLE_GRAPHITE option, otherwise
+your patch wouldn't work.
 
-Dropped, it's a host-only package.
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 32219cc..8a35dbd 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -156,6 +156,16 @@ HOST_GCC_COMMON_DEPENDENCIES += host-mpc
+>  HOST_GCC_COMMON_CONF_OPT += --with-mpc=$(HOST_DIR)/usr
+>  endif
+>  
+> +ifeq ($(BR2_GCC_ENABLE_GRAPHITE),y)
+> +HOST_GCC_COMMON_DEPENDENCIES += \
+> +   host-isl \
+> +   host-cloog
 
-> +CLOOG_LICENSE = LGPLv2.1
+Used a single line.
 
-License is LGPLv2.1+
-
-> +CLOOG_LICENSE_FILES = LICENSE
-
-This file did not exist in 0.18.2.
-
-> +CLOOG_DEPENDENCIES = gmp isl
 > +
-> +HOST_CLOOG_CONF_OPT = --with-isl=system --with-polylib=no
-> +
-> +$(eval $(host-autotools-package))
+> +#This is needed as with-isl doesn't work
+> +HOST_GCC_COMMON_CONF_OPT += \
+> +   --disable-isl-version-check
 
-Like for isl, I also had to disable the libtool patch.
+Here, --with-isl and --with-cloog are working perfectly fine, as well
+as --without-isl and --without-cloog, so I've used them.
+
+Can you test if the latest master works for you?
 
 Thanks!
 
