@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  9 Jun 2014 08:30:33 -0300
-Subject: [Buildroot] [PATCH 1/3] toolchain: add 3.15 choice for headers
-Message-ID: <1402313435-9013-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon,  9 Jun 2014 08:30:34 -0300
+Subject: [Buildroot] [PATCH 2/3] linux-headers: add 3.15.x series
+In-Reply-To: <1402313435-9013-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1402313435-9013-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1402313435-9013-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,44 +12,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- toolchain/toolchain-common.in          | 5 +++++
- toolchain/toolchain-external/Config.in | 4 ++++
- 2 files changed, 9 insertions(+)
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1573e00..6720c7d 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -180,10 +180,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d22b1ce..8b55954 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,7 +5,7 @@ comment "Kernel Header Options"
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
+ choice
+ 	prompt "Kernel Headers"
+-	default BR2_KERNEL_HEADERS_3_14
++	default BR2_KERNEL_HEADERS_3_15
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+@@ -56,6 +56,10 @@ choice
+ 		bool "Linux 3.14.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 
++	config BR2_KERNEL_HEADERS_3_15
++		bool "Linux 3.15.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
 +
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "3.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
- 	default "3.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	default "3.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	default "3.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index f4a5ccf..aa21f22 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -1018,6 +1018,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -77,6 +81,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
  
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_15
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
 +	bool "3.15.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
 +
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14
  	bool "3.14.x"
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+@@ -154,4 +162,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.12.21"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+ 	default "3.14.6"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15"		if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 1.8.5.5
