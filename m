@@ -1,36 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 14:29:00 +0200
-Subject: [Buildroot] [PATCH] Revert "package/weston: libxkbcommon is
- optional"
-In-Reply-To: <1402316139-7639-1-git-send-email-yann.morin.1998@free.fr>
-References: <1402316139-7639-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140609142900.42a4cd34@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 9 Jun 2014 14:32:22 +0200
+Subject: [Buildroot] [PATCH] package/libbsd: needs an (e)glibc toolchain
+In-Reply-To: <20140609142351.47e08090@free-electrons.com>
+References: <1402309581-18430-1-git-send-email-yann.morin.1998@free.fr>
+ <20140609142351.47e08090@free-electrons.com>
+Message-ID: <20140609123222.GD3512@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Thomas, All,
 
-On Mon,  9 Jun 2014 14:15:39 +0200, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2014-06-09 14:23 +0200, Thomas Petazzoni spake thusly:
+> On Mon,  9 Jun 2014 12:26:21 +0200, Yann E. MORIN wrote:
 > 
-> This reverts commit cf1c2eb19d3eeddca04013cfa7b2107530abf054.
+> > -comment "libbsd needs a toolchain w/ threads"
+> > +comment "libbsd needs an (e)glibc toolchain w/ threads"
+> >  	depends on ( BR2_i386 || BR2_x86_64 )
+> > -	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > +	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
 > 
-> xkbcommon is still needed for the clients. There's no point in disabling
-> the clients, or weston is unusable (as packaged in Buildroot.)
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  package/weston/Config.in | 11 +----------
->  package/weston/weston.mk |  9 +--------
->  2 files changed, 2 insertions(+), 18 deletions(-)
+> Is it possible to have a glibc toolchain without threads? I think no.
+> In this case, what is our policy? Should we keep both the glibc and
+> thread dependencies?
 
-Applied after adding the relevant autobuilder reference. Thanks!
+Indeed, Buildroot considers glibc toolchains have threads.
 
-Thomas
+Just for this commit, I would not care we remove the threads dependency,
+since it is implicit with glibc.
+
+However, as I said, libbsd is an Nth-level dependency of QEMU, which I
+am still p[lanning on submitting. Having static qemu-user programs is
+very usefull to run foreign chroots, and is only possible with uClibc,
+so I will have to fix that issue at some point in time. And keeping the
+threads dependency will just be a warning to me at that point.
+
+But for now, do as you prefer. It should be pretty easy to pinpoint
+build failures at that time. ;-)
+
+Do you want me to respin?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
