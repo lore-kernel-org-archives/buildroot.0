@@ -1,145 +1,162 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 15:40:28 +0200
-Subject: [Buildroot] [git commit] toolchain-external: add CodeSourcery MIPS
-	2014.05, remove 2012.09
-Message-ID: <20140609134342.1A70E9CF7A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 9 Jun 2014 16:04:06 +0200
+Subject: [Buildroot] [PATCH 1/2] package/tvheadend: Properly disable
+ internal fetch of dvb-data
+In-Reply-To: <1402311383-31619-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1402311383-31619-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140609140406.GE3512@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8b832193af32c63704c311e7e60bccf2f125bdf2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- toolchain/toolchain-external/Config.in             |   40 ++++++++++----------
- toolchain/toolchain-external/toolchain-external.mk |    6 +-
- 2 files changed, 23 insertions(+), 23 deletions(-)
+On 2014-06-09 12:56 +0200, Bernd Kuhls spake thusly:
+> Fixes
+> http://autobuild.buildroot.net/results/a8a/a8a8e39d57b14f1a59c8e6322b511c761442ee3c/
+> http://autobuild.buildroot.net/results/227/2278a078af5cc2e9f36661ad11e70b7692481266/
+> 
+> Instead of patching the buildsystem just use the included option --disable-
+> dvbscan, therefore remove tvheadend-001-no-auto-download-dvbscans.patch
+> 
+> This should also point tvheadend to the right place for the dvb data according
+> to src/input/mpegts/scanfile.c:
+> 
+>   #if ENABLE_DVBSCAN
+>     path = "data/dvb-scan";
+>   #else
+>     path = "/usr/share/dvb";
+>   #endif
+> 
+> and the resulting binary:
+> 
+> strings tvheadend | grep "dvb-scan\|share\/dvb"
+> /usr/share/dvb
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index e33268b..07973aa 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -190,8 +190,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE_201109
- 
- 	  This toolchain uses software-floating point.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
--	bool "Sourcery CodeBench MIPS 2013.11"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
-+	bool "Sourcery CodeBench MIPS 2014.05"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -200,12 +200,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
--	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
--	  3.11. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.8.3, binutils 2.24.51, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.7.50, kernel headers
-+	  3.13. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -259,8 +259,8 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
--	bool "Sourcery CodeBench MIPS 2013.05"
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-+	bool "Sourcery CodeBench MIPS 2013.11"
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
-@@ -269,12 +269,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
--	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
--	  3.8.2. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.8.1, binutils 2.23.52, glibc
-+	  2.18, uClibc 0.9.30 and gdb 7.6.50, kernel headers
-+	  3.11. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -328,9 +328,9 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	    - MIPS32 little endian soft float uclibc
- 	      Not usable in Buildroot yet.
- 
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
--	bool "Sourcery CodeBench MIPS 2012.09"
--	depends on BR2_mips || BR2_mipsel
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
-+	bool "Sourcery CodeBench MIPS 2013.05"
-+	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_MIPS_NABI32
- 	depends on !BR2_PREFER_STATIC_LIB
-@@ -338,12 +338,12 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
- 	help
- 	  Sourcery CodeBench toolchain for the MIPS architecture, from
--	  Mentor Graphics. It uses gcc 4.7.2, binutils 2.23.51, glibc
--	  2.16, uClibc 0.9.30 and gdb 7.4.50, kernel headers
--	  3.5.4. It has support for the following variants:
-+	  Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52, glibc
-+	  2.17, uClibc 0.9.30 and gdb 7.4.50, kernel headers
-+	  3.8.2. It has support for the following variants:
- 	    - MIPS32 O32 big endian glibc
- 	      Select a MIPS generic core
- 	      Disable BR2_SOFT_FLOAT
-@@ -877,9 +877,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "microblazeel-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEEL_V2
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_14_3
- 	default "microblaze-unknown-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_XILINX_MICROBLAZEBE_V2
--	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305
- 	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311
-+	default "mips-linux-gnu"         if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index a6c4061..7f1f128 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -283,15 +283,15 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.04/components/toolchain/binaries/
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.8-2014.04_linux.tar.xz
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
--else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201209),y)
--TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
--TOOLCHAIN_EXTERNAL_SOURCE = mips-2012.09-99-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.05-66-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201311),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = mips-2013.11-36-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS201405),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/mips-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE = mips-2014.05-27-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/nios2-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = sourceryg++-2013.05-43-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .../tvheadend-001-no-auto-download-dvbscans.patch  |   65 --------------------
+>  package/tvheadend/tvheadend.mk                     |    7 +--
+>  2 files changed, 1 insertion(+), 71 deletions(-)
+>  delete mode 100644 package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+> 
+> diff --git a/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch b/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+> deleted file mode 100644
+> index 18bff39..0000000
+> --- a/package/tvheadend/tvheadend-001-no-auto-download-dvbscans.patch
+> +++ /dev/null
+> @@ -1,65 +0,0 @@
+> -Do not download transponder data as part of the build
+> -
+> -If dvb-scan is enabled, tvheadend will download the transponders data
+> -from the dvb-apps package. This does not play well with buildroot.
+> -
+> -Instead, we rely on the dvb-apps package to install those files, so
+> -it is no longer needed to install those as part of tvheadend.
+> -
+> -Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> -
+> -diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/configure tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/configure
+> ---- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/configure	2014-03-07 21:44:39.000000000 +0100
+> -+++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/configure	2014-03-09 14:44:09.350095543 +0100
+> -@@ -272,15 +272,16 @@
+> - #
+> - # DVB scan
+> - #
+> --if enabled dvbscan; then
+> --  printf "${TAB}" "fetching dvb-scan files ..."
+> --  "${ROOTDIR}/support/getmuxlist"
+> --  if [ $? -ne 0 ]; then
+> --    echo "fail"
+> --    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+> --  fi
+> --  echo "ok"
+> --fi
+> -+# For buildroot, we already installed those files via the dvb-apps package
+> -+#if enabled dvbscan; then
+> -+#  printf "${TAB}" "fetching dvb-scan files ..."
+> -+#  "${ROOTDIR}/support/getmuxlist"
+> -+#  if [ $? -ne 0 ]; then
+> -+#    echo "fail"
+> -+#    die "Failed to fetch dvb-scan data (use --disable-dvbscan)"
+> -+#  fi
+> -+#  echo "ok"
+> -+#fi
+> - 
+> - #
+> - # epoll
+> -diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+> ---- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-07 21:44:39.000000000 +0100
+> -+++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:44:09.350095543 +0100
+> -@@ -255,7 +255,7 @@
+> - SRCS-${CONFIG_BUNDLE}     += bundle.c
+> - BUNDLES-yes               += docs/html docs/docresources src/webui/static
+> - BUNDLES-yes               += data/conf
+> --BUNDLES-${CONFIG_DVBSCAN} += data/dvb-scan
+> -+#BUNDLES-${CONFIG_DVBSCAN} += data/dvb-scan
+> - BUNDLES                    = $(BUNDLES-yes)
+> - 
+> - #
+> -diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/support/posix.mk tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/support/posix.mk
+> ---- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/support/posix.mk	2014-03-07 21:44:39.000000000 +0100
+> -+++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/support/posix.mk	2014-03-09 14:44:09.350095543 +0100
+> -@@ -17,6 +17,10 @@
+> - 
+> - 	find ${DESTDIR}${datadir}/tvheadend -name .git -exec rm -rf {} \; &>/dev/null || /bin/true
+> - 
+> -+	mkdir -p ${DESTDIR}${datadir}/tvheadend/data
+> -+	rm -f ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+> -+	ln -sf /usr/share/dvb ${DESTDIR}${datadir}/tvheadend/data/dvb-scan
+> -+
+> - uninstall:
+> - 	rm -f ${DESTDIR}${bindir}/tvheadend
+> - 	rm -f ${DESTDIR}${mandir}/man1/tvheadend.1
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index f0bb834..86166cd 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -14,12 +14,6 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
+>  TVHEADEND_DEPENDENCIES += avahi
+>  endif
+>  
+> -#----------------------------------------------------------------------------
+> -# tvheadend is a little smuggler and thief! ;-)
+> -# During the ./configure, it downloads some files from the dtv-scan-tables
+> -# package, so it has a list of pre-scanned tunner configurations.
+> -# For buildroot, we add a patch that avoids doing that, but uses the
+> -# scan files installed by the dtv-scan-tables package
+>  TVHEADEND_DEPENDENCIES += dtv-scan-tables
+>  
+>  define TVHEADEND_CONFIGURE_CMDS
+> @@ -31,6 +25,7 @@ define TVHEADEND_CONFIGURE_CMDS
+>  	 --arch="$(ARCH)"			\
+>  	 --cpu="$(BR2_GCC_TARGET_CPU)"		\
+>  	 --python="$(HOST_DIR)/usr/bin/python"	\
+> +	 --disable-dvbscan			\
+>  	)
+>  endef
+>  
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
