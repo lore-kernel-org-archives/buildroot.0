@@ -1,43 +1,30 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 9 Jun 2014 23:13:43 +0200
-Subject: [Buildroot] How to provide one default skeleton per init system?
-Message-ID: <20140609211341.GB10459@ned>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  9 Jun 2014 18:15:31 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
+Message-ID: <1402348531-27886-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-To properly use systemd as init system, some modifications should be performed
-on the default skeleton. This can be done via an overlay and a post-build
-script, as done in [1]. However, it would be best for Buildroot users to have
-it done automatically, as noted per ThomasP and MaximeH [2]. This brings forth
-the idea of having one target skeleton per init system.
-
-IHMO, there are two solutions for implementing it:
-
-a) Move system/skeleton to system/skeleton/busybox, then add
-   system/skeleton/systemd, and maybe system/skeleton/sysv. The menu in
-   system/Config.in will be updated to select BR2_ROOTFS_SKELETON_BUSYBOX,
-   or BR2_ROOTFS_SKELETON_CUSTOM.
-b) Add a new virtual package: target-skeleton, with some providers:
-   target-skeleton-busybox, target-skeleton-systemd and
-   target-skeleton-custom (path to the custom skeleton would be handled in the
-   configuration menu).
-
-Solution A is the quickest and less intrusive to implement, but it can only
-copy the files of the skeleton, not perform the additional operations from the
-post-build script. So solution B seems the best.
-
-But if a new package target-skeleton is added, what would be the dependency
-chain? Would `make target-skeleton-rebuild` rebuild... the whole rootfs?
-
-Comments and ideas welcomed!
-
-Best regards,
-ELB
-
-[1] https://github.com/elebihan/buildroot-ext-elb/tree/master/overlays/base-systemd
-[2] http://lists.busybox.net/pipermail/buildroot/2014-June/098738.html
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8b55954..82778cc 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -153,7 +153,7 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.2.59"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.92"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-- 
+1.8.5.5
