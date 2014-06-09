@@ -1,35 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 15:06:13 +0200
-Subject: [Buildroot] [git commit] lsof: do not remove WIDECHARINCL definition
-Message-ID: <20140609130707.E70A99CF7F@busybox.osuosl.org>
+Date: Mon, 9 Jun 2014 15:07:23 +0200
+Subject: [Buildroot] [PATCH] lsof: do not remove WIDECHARINCL definition
+In-Reply-To: <1399042764-22388-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1399042764-22388-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <20140609150723.4d0ad996@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=566a7bef7ca59e064d1ffc4ba6e84bf35fbc9384
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Beno?t Th?baudeau,
 
-WIDECHARINCL is enabled by HASWIDECHAR, so removing its definition if
-BR2_USE_WCHAR is not set is useless.
+On Fri,  2 May 2014 16:59:23 +0200, Beno?t Th?baudeau wrote:
+> WIDECHARINCL is enabled by HASWIDECHAR, so removing its definition if
+> BR2_USE_WCHAR is not set is useless.
+> 
+> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+> ---
+>  package/lsof/lsof.mk | 2 --
+>  1 file changed, 2 deletions(-)
 
-Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lsof/lsof.mk |    2 --
- 1 files changed, 0 insertions(+), 2 deletions(-)
+Applied, thanks.
 
-diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
-index ccef3fb..dcdb7cf 100644
---- a/package/lsof/lsof.mk
-+++ b/package/lsof/lsof.mk
-@@ -27,8 +27,6 @@ ifeq ($(BR2_USE_WCHAR),)
- define LSOF_CONFIGURE_WCHAR_FIXUPS
- 	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' \
- 		$(@D)/machine.h
--	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' \
--		$(@D)/machine.h
- endef
- endif
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
