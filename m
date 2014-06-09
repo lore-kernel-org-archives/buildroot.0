@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 9 Jun 2014 16:04:24 +0200
-Subject: [Buildroot] [PATCH 2/2] package/tvheadend: Bump version
-In-Reply-To: <1402311383-31619-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1402311383-31619-1-git-send-email-bernd.kuhls@t-online.de>
- <1402311383-31619-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140609140424.GF3512@free.fr>
+Date: Mon, 9 Jun 2014 16:04:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: Add optional
+ dependency to libiconv
+In-Reply-To: <1402313033-31085-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1402313033-31085-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140609140456.GG3512@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,55 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2014-06-09 12:56 +0200, Bernd Kuhls spake thusly:
+On 2014-06-09 13:23 +0200, Bernd Kuhls spake thusly:
+> To get reproducable builds depend on libiconv if needed.
+> 
+> tvheadend configure either shows
+> 
+>   checking for cc libiconv ...                      fail
+> 
+> or
+> 
+>   checking for cc libiconv ...                      ok
+> 
+> depending on the presence of libiconv, and gets linked
+> 
+> output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/tvheadend | grep NEEDED | grep iconv
+>  0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+> 
+> Tested with minimal defconfig
+> 
+> BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+> BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+> BR2_PACKAGE_LIBICONV=y
+> BR2_PACKAGE_TVHEADEND=y
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/tvheadend/tvheadend.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/tvheadend/tvheadend.mk |    4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index 86166cd..c582c07 100644
+> index c582c07..4d0a16d 100644
 > --- a/package/tvheadend/tvheadend.mk
 > +++ b/package/tvheadend/tvheadend.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> @@ -14,6 +14,10 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
+>  TVHEADEND_DEPENDENCIES += avahi
+>  endif
 >  
-> -TVHEADEND_VERSION = 0ebca1b3dbb6a18d8adcf66a32b5922ce769b9b5
-> +TVHEADEND_VERSION = fd24558503967375d0b9058ac2a4c594de971cd2
->  TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
->  TVHEADEND_LICENSE = GPLv3+
->  TVHEADEND_LICENSE_FILES = LICENSE.md
+> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> +TVHEADEND_DEPENDENCIES += libiconv
+> +endif
+> +
+>  TVHEADEND_DEPENDENCIES += dtv-scan-tables
+>  
+>  define TVHEADEND_CONFIGURE_CMDS
 > -- 
 > 1.7.10.4
 > 
