@@ -1,35 +1,43 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 09 Jun 2014 23:12:19 +0200
-Subject: [Buildroot] Patch: qt5webkitexamples
-In-Reply-To: <20140607184839.33bfa8e0@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 7 Jun 2014 18:48:39 +0200")
-References: <1402067773.64897.YahooMailNeo@web172303.mail.ir2.yahoo.com>
- <20140607122338.33ab44ce@free-electrons.com>
- <1402138061.2503.YahooMailNeo@web172304.mail.ir2.yahoo.com>
- <20140607184839.33bfa8e0@free-electrons.com>
-Message-ID: <87lht5lrd8.fsf@dell.be.48ers.dk>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 9 Jun 2014 23:13:43 +0200
+Subject: [Buildroot] How to provide one default skeleton per init system?
+Message-ID: <20140609211341.GB10459@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi!
 
-Hi,
+To properly use systemd as init system, some modifications should be performed
+on the default skeleton. This can be done via an overlay and a post-build
+script, as done in [1]. However, it would be best for Buildroot users to have
+it done automatically, as noted per ThomasP and MaximeH [2]. This brings forth
+the idea of having one target skeleton per init system.
 
- >> Anyway, I'm not complaining or trying to teach you something. Just
- >> sharing my opinion. I've seen BR is actually on GitHub, but it's 2
- >> months behind the current developments. Is that a "dead" idea or
- >> lack of interest/time ?
+IHMO, there are two solutions for implementing it:
 
- > It's just that I haven't automated the task of updating our Github
- > clone, so I only do it from time to time.
+a) Move system/skeleton to system/skeleton/busybox, then add
+   system/skeleton/systemd, and maybe system/skeleton/sysv. The menu in
+   system/Config.in will be updated to select BR2_ROOTFS_SKELETON_BUSYBOX,
+   or BR2_ROOTFS_SKELETON_CUSTOM.
+b) Add a new virtual package: target-skeleton, with some providers:
+   target-skeleton-busybox, target-skeleton-systemd and
+   target-skeleton-custom (path to the custom skeleton would be handled in the
+   configuration menu).
 
-It would be good if you could add a cronjob to do it daily or so (or I
-can do it if you prefer). Is there an easy way to inform users that this
-is just a mirror and we would like contributors to use the mailing list
-instead of the github features?
+Solution A is the quickest and less intrusive to implement, but it can only
+copy the files of the skeleton, not perform the additional operations from the
+post-build script. So solution B seems the best.
 
--- 
-Bye, Peter Korsgaard
+But if a new package target-skeleton is added, what would be the dependency
+chain? Would `make target-skeleton-rebuild` rebuild... the whole rootfs?
+
+Comments and ideas welcomed!
+
+Best regards,
+ELB
+
+[1] https://github.com/elebihan/buildroot-ext-elb/tree/master/overlays/base-systemd
+[2] http://lists.busybox.net/pipermail/buildroot/2014-June/098738.html
