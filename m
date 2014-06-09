@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 15:00:13 +0200
-Subject: [Buildroot] [PATCH 2/5] libksba: new package
-In-Reply-To: <1402062269-57018-3-git-send-email-Vincent.Riera@imgtec.com>
-References: <1402062269-57018-1-git-send-email-Vincent.Riera@imgtec.com>
- <1402062269-57018-3-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20140609150013.546d73eb@free-electrons.com>
+Date: Mon, 9 Jun 2014 15:06:13 +0200
+Subject: [Buildroot] [git commit] lsof: do not remove WIDECHARINCL definition
+Message-ID: <20140609130707.E70A99CF7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: http://git.buildroot.net/buildroot/commit/?id=566a7bef7ca59e064d1ffc4ba6e84bf35fbc9384
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 6 Jun 2014 14:44:26 +0100, Vicente Olivert Riera wrote:
+WIDECHARINCL is enabled by HASWIDECHAR, so removing its definition if
+BR2_USE_WCHAR is not set is useless.
 
-> +LIBKSBA_VERSION = 1.3.0
-> +LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
-> +LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
-> +LIBKSBA_LICENSE = Mixture of GPL and LGPL licenses
-> +LIBKSBA_LICENSE_FILES = COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lsof/lsof.mk |    2 --
+ 1 files changed, 0 insertions(+), 2 deletions(-)
 
-Thanks to the details available in the AUTHORS file, I've made the
-LIBKSBA_LICENSE value a bit more useful, and I've added the AUTHORS
-file to LIBKSBA_LICENSE_FILES.
-
-Applied with those changes, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index ccef3fb..dcdb7cf 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -27,8 +27,6 @@ ifeq ($(BR2_USE_WCHAR),)
+ define LSOF_CONFIGURE_WCHAR_FIXUPS
+ 	$(SED) 's,^#define[[:space:]]*HASWIDECHAR.*,#undef HASWIDECHAR,' \
+ 		$(@D)/machine.h
+-	$(SED) 's,^#define[[:space:]]*WIDECHARINCL.*,,' \
+-		$(@D)/machine.h
+ endef
+ endif
+ 
