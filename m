@@ -1,38 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 18:48:58 +0200
-Subject: [Buildroot] problem while installing uImage
-In-Reply-To: <CAL-BCze5gR9YBDXWZURiOXJ5x1UnD1=AFCvCh2O63v85QmCrNQ@mail.gmail.com>
-References: <CAL-BCze5gR9YBDXWZURiOXJ5x1UnD1=AFCvCh2O63v85QmCrNQ@mail.gmail.com>
-Message-ID: <20140609184858.52da6d0a@free-electrons.com>
+Date: Mon, 9 Jun 2014 18:53:03 +0200
+Subject: [Buildroot] psplash and systemd
+In-Reply-To: <5395D4CA.9060606@gmail.com>
+References: <537C657F.4090106@ebo-enterprises.com> <20140521192928.GA3672@ned>
+ <20140609142734.32d58a30@free-electrons.com>
+ <5395D4CA.9060606@gmail.com>
+Message-ID: <20140609185303.799e3396@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Digesh Patel,
+Dear Tom Deblauwe,
 
-On Mon, 9 Jun 2014 22:04:53 +0530, Digesh Patel wrote:
+On Mon, 09 Jun 2014 17:37:46 +0200, Tom Deblauwe wrote:
 
->  i am getting problem with buildroot created uImage when i am installing it
-> to the mpc8313erdb powerpc board. i enabled all things which i needed by
-> giving 'make menuconfig' after that i cross compiled with the builroot
-> created toolchain.uImage was created.it is installing properly but at the
-> booting time it is giving error.
-> Can any one suggest me what is the problem? is it buildroot problem ?
-> i am using buildroot 2014.02 and linux kernel is v3.0
+> I also have added some basic support to choose the .png image you want 
+> as a bootscreen. I had to install in ubuntu "libgdk-pixbuf2.0-dev" to 
+> have the "gdk-pixbuf-csource" utility which the generate header script 
+> uses. Probably there is a better buildroot-specific way but I provide 
+> the patch as a start.
 
-Please provide:
+Thanks for your patch. To get the gdk-pixbuf-csource tool in Buildroot,
+you simply need to make your package depend on host-gdk-pixbuf.
 
- 1/ Your complete boot log, including the U-Boot environment (i.e the
-    output of the "printenv" command in U-Boot).
+It would be good to take the systemd psplash patch and your patch,
+create proper commit logs, and submit them using git send-email. See
+http://buildroot.org/downloads/manual/manual.html#submitting-patches
+for details. Your contribution would be much appreciated!
 
- 2/ Your complete Buildroot .config file.
-
-Without these details, it is impossible to help you, you're not giving
-enough informations.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
