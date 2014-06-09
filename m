@@ -1,32 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 9 Jun 2014 19:59:42 +0200
-Subject: [Buildroot] [git commit] libcgicc: bump to version 3.2.15
-Message-ID: <20140609175953.9985D9CF25@busybox.osuosl.org>
+From: Sven Neumann <neumann@teufel.de>
+Date: Mon, 9 Jun 2014 21:40:38 +0200
+Subject: [Buildroot] [PATCH] wpa_supplicant: fix
+ BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG option
+In-Reply-To: <20140608174217.5a398419@free-electrons.com>
+Message-ID: <60797240-5752@local.teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=04807fc26fb43518f79829a616034b4f1acce11b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libcgicc/libcgicc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/libcgicc/libcgicc.mk b/package/libcgicc/libcgicc.mk
-index 945c435..d146dab 100644
---- a/package/libcgicc/libcgicc.mk
-+++ b/package/libcgicc/libcgicc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> , 6/8/2014 5:42 PM:
+Dear Sven Neumann, 
  
--LIBCGICC_VERSION = 3.2.14
-+LIBCGICC_VERSION = 3.2.15
- LIBCGICC_SITE = $(BR2_GNU_MIRROR)/cgicc
- LIBCGICC_SOURCE = cgicc-$(LIBCGICC_VERSION).tar.gz
- LIBCGICC_LICENSE = LGPLv3+ (library), GFDL1.2+ (docs)
+On Fri, ?6 Jun 2014 10:16:23 +0200, Sven Neumann wrote: 
+> Signed-off-by: Sven Neumann <neumann@teufel.de> 
+> --- 
+> ?package/wpa_supplicant/wpa_supplicant.mk | 4 +--- 
+> ?1 file changed, 1 insertion(+), 3 deletions(-) 
+ 
+Applied, thanks! 
+ 
+You may also want to apply this to the stable branch as the option is broken in the 2014.05 release. If you already did so, then please ignore this mail.
+
+
+Regards,
+Sven
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140609/a1e34c98/attachment.html>
