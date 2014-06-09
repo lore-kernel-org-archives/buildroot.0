@@ -1,82 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  9 Jun 2014 14:15:39 +0200
-Subject: [Buildroot] [PATCH] Revert "package/weston: libxkbcommon is
-	optional"
-Message-ID: <1402316139-7639-1-git-send-email-yann.morin.1998@free.fr>
+Date: Mon, 9 Jun 2014 14:19:45 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-06-08
+In-Reply-To: <CAB0FRstzCmA3=7w_KrLZ=5fATHWo6fKzsfk4ok_JLQuzh=bdag@mail.gmail.com>
+References: <20140609063010.9CF93101624@stock.ovh.net>
+ <20140609100709.GA3512@free.fr>
+ <CAB0FRstzCmA3=7w_KrLZ=5fATHWo6fKzsfk4ok_JLQuzh=bdag@mail.gmail.com>
+Message-ID: <20140609121945.GC3512@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fran?ois, All,
 
-This reverts commit cf1c2eb19d3eeddca04013cfa7b2107530abf054.
+On 2014-06-09 14:04 +0200, Fran?ois Perrad spake thusly:
+> 2014-06-09 12:07 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> > On 2014-06-09 08:30 +0200, Thomas Petazzoni spake thusly:
+> >>     xtensa |               cosmo-14.03.04-1 | NOK | http://autobuild.buildroot.net/results/511193d2c43ced35fada333c8b2d13a7f096fb10/
+> >
+> > Did something change in the luarocks infra ?
+> >     gzip: cosmo-14.03.04.tar.gz: not in gzip format
+> >     tar: This does not look like a tar archive
+> >     tar: Exiting with failure status due to previous errors
+> >
+> > Fran?ois ?
+> 
+> No change with luarocks infra, just a problem with a rock.
+> I've notified this problem to the LuaRocks mailing list,
+> see http://sourceforge.net/p/luarocks/mailman/message/32431219/
 
-xkbcommon is still needed for the clients. There's no point in disabling
-the clients, or weston is unusable (as packaged in Buildroot.)
+OK, good. Thanks for the feedback! :-)
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/weston/Config.in | 11 +----------
- package/weston/weston.mk |  9 +--------
- 2 files changed, 2 insertions(+), 18 deletions(-)
+Should we do something special in the meantime, like disabling cosmo in
+the menuconfig?
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 96ebdf1..aaef405 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -5,6 +5,7 @@ comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
- config BR2_PACKAGE_WESTON
- 	bool "weston"
- 	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_LIBPNG
-@@ -28,16 +29,6 @@ config BR2_PACKAGE_WESTON
- 
- if BR2_PACKAGE_WESTON
- 
--config BR2_PACKAGE_WESTON_HW_KBD
--	bool "enable keyboard support"
--	default y
--	select BR2_PACKAGE_LIBXKBCOMMON
--	help
--	  Say 'y' here if you plan on using a keyboard.
--
--	  Only say 'n' if you're going to use a virtual keyboard or any other
--	  input method.
--
- # Helper to make sure at least one compositor is selected.
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 325cfc7..ed0707b 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -10,7 +10,7 @@ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
--WESTON_DEPENDENCIES = host-pkgconf wayland pixman libpng \
-+WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
- 	jpeg mtdev udev cairo
- 
- WESTON_CONF_OPT = \
-@@ -25,13 +25,6 @@ WESTON_CONF_OPT = \
- 	--disable-weston-launch \
- 	--disable-colord
- 
--ifeq ($(BR2_PACKAGE_WESTON_HW_KBD),y)
--WESTON_DEPENDENCIES += libxkbcommon
--WESTON_CONF_OPT += --enable-xkbcommon
--else
--WESTON_CONF_OPT += --disable-xkbcommon
--endif
--
- ifeq ($(BR2_PACKAGE_LIBINPUT),y)
- WESTON_DEPENDENCIES += libinput
- WESTON_CONF_OPT += --enable-libinput-backend
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
