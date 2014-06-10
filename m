@@ -1,42 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 21:47:57 +0200
-Subject: [Buildroot] Upgrading my defconfig
-In-Reply-To: <CAE9DZUS6HUUFpt-Rm-WONCcx5_4y+F+8TtcPFYzuNCfiraq83Q@mail.gmail.com>
-References: <CAE9DZUS6HUUFpt-Rm-WONCcx5_4y+F+8TtcPFYzuNCfiraq83Q@mail.gmail.com>
-Message-ID: <20140610214757.75cd4ec7@free-electrons.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Tue, 10 Jun 2014 21:57:37 +0200
+Subject: [Buildroot] [PATCH v2 1/1] ti-gfx: bump to version 5_01_01_01
+ if EABIhf is used
+In-Reply-To: <20140610214610.03f16f6c@free-electrons.com>
+References: <1402427667-26813-1-git-send-email-hadrien.boutteville@gmail.com>
+ <20140610214610.03f16f6c@free-electrons.com>
+Message-ID: <53976331.70801@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dallas Clement,
+Thomas,
 
-On Tue, 10 Jun 2014 11:11:24 -0500, Dallas Clement wrote:
-> Hi All,  Would someone kindly guide me through the steps of upgrading my
-> defconfig?  It's a few years out of date.  I've upgraded the rest of
-> buildroot itself, and when I try to save my defconfig the makefile
-> complains bitterly:
+On Tue, 10 Jun 2014 21:46:10 +0200, Thomas Petazzoni wrote:
+> On Tue, 10 Jun 2014 21:14:27 +0200, Hadrien Boutteville wrote:
 > 
-> $ make savedefconfig
-> Makefile.legacy:12: *** "You have legacy configuration in your .config!
-> Please check your configuration.".  Stop.
+>> +# SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if we can't
+>> +# use it.
+> 
+> The wording is a bit confusing here: you say that "we downgrade to
+> 5_01_00_01 if we can't use it", which to me doesn't make much sense, as
+> we downgrade to something we can't use :-)
 
-I know you replied to your own e-mail, but for the record: this means
-your configuration has old Buildroot options that have been removed
-since then. You should therefore run "make menuconfig", and look into
-the "Legacy options" submenu to see which old options you're using.
-Buildroot wants you to disable them manually so that you're aware of
-their disappearance, and you have some help on how to migrate to the
-new name of the option if applicable.
+Erf, yes, in rereading this is actually not clear. I wanted to refer to
+EABIhf with "it". I have to fix that.
 
-We should probably change the error message here to something more
-explanatory.
+>>  ifeq ($(BR2_ARM_EABIHF),y)
+>> +TI_GFX_VERSION = 5_01_01_01
+>>  TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+>>  else
+>> +TI_GFX_VERSION = 5_01_00_01
+>>  TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
+>>  endif
+>>  
+>> +TI_GFX_SO_VERSION = 1.10.2359475
+> 
+> Is the TI_GFX_SO_VERSION the same between both versions of ti-gfx?
 
-Best regards,
+Yes.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+
+Hadrien
