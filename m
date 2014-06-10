@@ -1,87 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Jun 2014 22:08:31 +0200
-Subject: [Buildroot] [PATCH 0/12 v7] Some download-related changes
- (branch yem/check-downloads)
-In-Reply-To: <CAAXf6LWP75NohFWXmHU4o4xh4jnDJZqe6_9+rpyN1+zeumnqrw@mail.gmail.com>
-References: <cover.1402260012.git.yann.morin.1998@free.fr>
- <CAAXf6LWP75NohFWXmHU4o4xh4jnDJZqe6_9+rpyN1+zeumnqrw@mail.gmail.com>
-Message-ID: <20140610200831.GC3561@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Jun 2014 22:11:11 +0200
+Subject: [Buildroot] [PATCH 2/3] tclap: new package
+In-Reply-To: <1402412526-24844-3-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1402412526-24844-3-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20140610221111.5181dcb3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+Dear Matt Weber,
 
-On 2014-06-10 21:44 +0200, Thomas De Schampheleire spake thusly:
-> On Sun, Jun 8, 2014 at 10:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> [..]
-> > Yann E. MORIN (12):
-> >       Makefile: add BR2_DL_DIR to EXTRA_ENV
-> >       pkg-infra: also set PKGDIR for the download step
-> >       pkg-infra: move the git download helper to a script
-> >       pkg-infra: move the svn download helper to a script
-> >       pkg-infra: move the cvs download helper to a script
-> >       pkg-infra: move the hg download helper to a script
-> >       pkg-infra: move the wget download helper to a script
-> >       pkg-infra: move the bzr download helper to a script
-> >       pkg-infra: don't use DL_DIR as scratchpad for temporary downloads
-> >       pkg-infra: add possiblity to check downloaded files against known hashes
-> >       manual: add documentation about packages' hashes
-> >       package/ca-certificates: add tarball's hashes
-> >
-> >  docs/manual/adding-packages-directory.txt    | 66 ++++++++++++++++++++++
-> >  package/Makefile.in                          |  1 +
-> >  package/ca-certificates/ca-certificates.hash |  3 +
-> >  package/pkg-download.mk                      | 83 ++++++++++++----------------
-> >  package/pkg-generic.mk                       |  1 +
-> >  support/download/bzr                         | 34 ++++++++++++
-> >  support/download/check-hash                  | 77 ++++++++++++++++++++++++++
-> >  support/download/cvs                         | 40 ++++++++++++++
-> >  support/download/git                         | 50 +++++++++++++++++
-> >  support/download/hg                          | 38 +++++++++++++
-> >  support/download/svn                         | 37 +++++++++++++
-> >  support/download/wget                        | 32 +++++++++++
-> >  12 files changed, 413 insertions(+), 49 deletions(-)
-> >  create mode 100644 package/ca-certificates/ca-certificates.hash
-> >  create mode 100755 support/download/bzr
-> >  create mode 100755 support/download/check-hash
-> >  create mode 100755 support/download/cvs
-> >  create mode 100755 support/download/git
-> >  create mode 100755 support/download/hg
-> >  create mode 100755 support/download/svn
-> >  create mode 100755 support/download/wget
-> 
-> Is there any particular reason why the scp and localfiles method was
-> not split to a separate file like the others?
-> One could think this is because they are oneliners, but so is the bzr method...
+On Tue, 10 Jun 2014 08:02:05 -0700, Matt Weber wrote:
 
-There's no real reason. Initially, the series was to check the download
-hashes; it then spiraled out to englobe the helper scripts, but still
-with the ultimate goal of checking the hashes.
+> diff --git a/package/tclap/Config.in b/package/tclap/Config.in
+> new file mode 100644
+> index 0000000..e50704b
+> --- /dev/null
+> +++ b/package/tclap/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_TCLAP
+> +	bool "tclap"
 
-So I was, like, is there a reason to check hashes of locally or
-scp-retrieved packages? My own answer was, no, there's no reason.
+This package needs C++ support, so the appropriate 'depends on' +
+comment is needed.
 
-But I don;t mind converting them, of course. It's just it was not the
-initial goal of the series, so I overlookjed them.
+> +	help
+> +	  This is a small, flexible library that provides a simple interface for
+> +	  defining and accessing command line arguments. It was intially inspired
 
-But in retrospect, we should convert them, if at least to handle the
-multiple downloads in parallel and avoiding two builds to step on each
-others' feet...
+intially -> initially.
 
-I'll do.
+> +	  by the user friendly CLAP libary. The difference is that this library is
+> +	  templatized, so the argument class is type independent. Type independence
+> +	  avoids identical-except-for-type objects, such as IntArg, FloatArg, and
+> +	  StringArg. While the library is not strictly compliant with the GNU or
+> +	  POSIX standards, it is close.
 
-PS. Thanks for the other review, too, I'll fix. :-)
+Please check lines do not exceed 72 chars.
 
-Regards,
-Yann E. MORIN.
+> +	  http://tclap.sourceforge.net/
+> diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
+> new file mode 100644
+> index 0000000..268b90b
+> --- /dev/null
+> +++ b/package/tclap/tclap.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# tclap
+> +#
+> +################################################################################
+> +
+> +TCLAP_VERSION = 1.2.1
+> +TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
+> +TCLAP_SOURCE = tclap-$(TCLAP_VERSION).tar.gz
 
+Not needed, that's the default.
+
+> +TCLAP_LICENSE = MIT
+> +TCLAP_LICENSE_FILES = COPYING
+> +
+> +TCLAP_INSTALL_STAGING = YES
+> +TCLAP_INSTALL_TARGET = NO
+
+A short comment that explains why INSTALL_TARGET = NO is useful. Just
+say it's a pure C++ template library, only made of headers.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
