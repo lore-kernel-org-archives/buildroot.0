@@ -1,61 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 22:22:44 +0200
-Subject: [Buildroot] [PATCH 1/1] simicsfs: new package
-In-Reply-To: <1402412534-24929-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1402412534-24929-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20140610222244.1bb0858e@free-electrons.com>
+Date: Tue, 10 Jun 2014 22:33:58 +0200
+Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
+ "target-finalize" rule
+In-Reply-To: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140610223358.69a70e6e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Dear Fabio Porcedda,
 
-On Tue, 10 Jun 2014 08:02:14 -0700, Matt Weber wrote:
+On Tue, 10 Jun 2014 10:52:47 +0200, Fabio Porcedda wrote:
 
-> --- /dev/null
-> +++ b/package/simicsfs/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_SIMICSFS
-> +	bool "simicsfs"
+>  target-finalize: $(TARGETS)
+>  	@$(call MESSAGE,"Finalizing target directory")
+> +	$(TARGET_FINALIZE_GENERIC_SECURETTY)
+> +	$(TARGET_FINALIZE_GENERIC_HOSTNAME)
+> +	$(TARGET_FINALIZE_GENERIC_ISSUE)
+> +	$(TARGET_FINALIZE_ROOT_PASSWD)
+> +	$(TARGET_FINALIZE_GENERIC_GETTY)
+> +	$(TARGET_FINALIZE_GENERIC_REMOUNT_RW)
 
-We need a "depends on BR2_LINUX_KERNEL" here.
+I agree with the principle, but I'd like to have a better
+implementation, which is really long overdue to stop cluttering
+target-finalize with more and more crap. Could we implement
+target-finalize as just:
 
-> +	help
-> +	  A kernel driver that provides access to a host computer's local
-> +	  filesystem when the target is executing within a SIMICS simulation.
-> +
-> +	  http://www.cs.sfu.ca/~fedorova/Tech/simics-guides-3.0.26/simics-user-guide-unix/topic33.html
-> diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
-> new file mode 100644
-> index 0000000..c266f68
-> --- /dev/null
-> +++ b/package/simicsfs/simicsfs.mk
-> @@ -0,0 +1,21 @@
-> +###############################################################################
-> +#
-> +# simicsfs
-> +#
-> +###############################################################################
-> +
-> +SIMICSFS_VERSION = 1.17
-> +SIMICSFS_SITE = https://download.simics.net/pub/
-> +SIMICSFS_LICENSE = GPLv2+
-> +SIMICSFS_LICENSE_FILES = hostfs.h
-> +SIMICSFS_DEPENDENCIES = linux
-> +
-> +define SIMICSFS_BUILD_CMDS
-> +        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
+target-finalize: $(TARGETS)
+	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$(call $(hook),end,$(1),$($(PKG)_NAME))$(sep))
+
+And then:
+
+> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+> +define TARGET_FINALIZE_GENERIC_SECURETTY
+>  	grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
+>  		echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
 > +endef
-> +
-> +define SIMICSFS_INSTALL_TARGET_CMDS
-> +        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
-> +endef
-> +
-> +$(eval $(generic-package))
 
-Other than that, looks good.
+TARGET_FINALIZE_HOOKS += TARGET_FINALIZE_GENERIC_SECURETTY
+
+Then we can also use this to move the Python, Perl and other
+package-specific target-finalize logic down to the specific packages.
+Of course, I'm not asking you to do all of this work. But at least,
+post a patch introducing the TARGET_FINALIZE_HOOKS, and use it for
+those targets you were converting in your original patch.
+
+We should go towards *removing* stuff from the main Makefile, not
+adding more :-)
+
+Thanks!
 
 Thomas
 -- 
