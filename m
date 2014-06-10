@@ -1,46 +1,95 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Tue, 10 Jun 2014 21:57:37 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ti-gfx: bump to version 5_01_01_01
- if EABIhf is used
-In-Reply-To: <20140610214610.03f16f6c@free-electrons.com>
-References: <1402427667-26813-1-git-send-email-hadrien.boutteville@gmail.com>
- <20140610214610.03f16f6c@free-electrons.com>
-Message-ID: <53976331.70801@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Jun 2014 22:01:05 +0200
+Subject: [Buildroot] [PATCH 1/3] fmlib: new package
+In-Reply-To: <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20140610220105.59a27d38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Dear Matt Weber,
 
-On Tue, 10 Jun 2014 21:46:10 +0200, Thomas Petazzoni wrote:
-> On Tue, 10 Jun 2014 21:14:27 +0200, Hadrien Boutteville wrote:
-> 
->> +# SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if we can't
->> +# use it.
-> 
-> The wording is a bit confusing here: you say that "we downgrade to
-> 5_01_00_01 if we can't use it", which to me doesn't make much sense, as
-> we downgrade to something we can't use :-)
+On Tue, 10 Jun 2014 08:02:04 -0700, Matt Weber wrote:
 
-Erf, yes, in rereading this is actually not clear. I wanted to refer to
-EABIhf with "it". I have to fix that.
+> diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
+> new file mode 100644
+> index 0000000..43f7aa3
+> --- /dev/null
+> +++ b/package/fmlib/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_FMLIB
+> +	bool "fmlib"
+> +	depends on BR2_powerpc_e500mc
 
->>  ifeq ($(BR2_ARM_EABIHF),y)
->> +TI_GFX_VERSION = 5_01_01_01
->>  TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
->>  else
->> +TI_GFX_VERSION = 5_01_00_01
->>  TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
->>  endif
->>  
->> +TI_GFX_SO_VERSION = 1.10.2359475
-> 
-> Is the TI_GFX_SO_VERSION the same between both versions of ti-gfx?
+If your package has 'linux' in its dependencies, then it should
+'depends on BR2_LINUX_KERNEL' here, and have a comment about this. See
+package/freescale-imx/imx-lib/Config.in for an example.
 
-Yes.
+> +	help
+> +	  The Frame Manager library provides an API on top of the Frame Manager driver
+> +	  ioctl calls, that provides a user space application with a simple way
+> +	  to configure driver parameters and PCD (parse - classify - distribute) rules.
+
+I think the lines are too long here. Wrap to 72 max.
+
+> +FMLIB_VERSION = fsl-sdk-v1.5-rc3
+> +FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
+> +FMLIB_LICENSE = BSD-c3
+
+We actually use BSD-3c and not BSD-c3. Also, the license should
+actually be:
+
+	BSD-3c or GPLv2+
+
+See the COPYING file of the project for details.
+
+> +FMLIB_LICENSE_FILES = COPYING
+> +FMLIB_DEPENDENCIES = linux
+> +FMLIB_INSTALL_STAGING = YES
+> +FMLIB_INSTALL_TARGET = NO
+
+Please add a comment above this like:
+
+# This package installs a static library only, so there's nothing to
+# install to the target
+
+> +FMLIB_MAKE_OPTS = \
+> +	CC="$(TARGET_CC)" \
+> +	CROSS_COMPILE="$(TARGET_CROSS)" \
+> +	KERNEL_SRC="$(LINUX_DIR)" \
+> +	PREFIX="$(STAGING_DIR)/usr"
+> +
+> +ifeq ($(BR2_powerpc_e500mc), y)
+
+No space between , and y
+
+> +	FMLIB_ARCHTYPE = ppce500mc
+> +endif
+
+That being said, since the package can only be enabled on ppce500mc, do
+we really need this condition? Or maybe you're making the thing a bit
+more future proof to support the other variants?
+
+> +define FMLIB_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) libfm-$(FMLIB_ARCHTYPE).a
+> +endef
+> +
+> +define FMLIB_INSTALL_STAGING_CMDS
+> +	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Other than that, looks good. Care to fix and resend?
 
 Thanks,
 
-Hadrien
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
