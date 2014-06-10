@@ -1,82 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Jun 2014 23:41:26 +0200
-Subject: [Buildroot] [PATCH 0/12 v7] Some download-related changes
- (branch yem/check-downloads)
-In-Reply-To: <20140610200831.GC3561@free.fr>
-References: <cover.1402260012.git.yann.morin.1998@free.fr>
- <CAAXf6LWP75NohFWXmHU4o4xh4jnDJZqe6_9+rpyN1+zeumnqrw@mail.gmail.com>
- <20140610200831.GC3561@free.fr>
-Message-ID: <20140610214126.GD3561@free.fr>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Tue, 10 Jun 2014 23:50:38 +0200
+Subject: [Buildroot] [PATCH v3 1/1] ti-gfx: bump to version 5_01_01_01 if
+	EABIhf is used
+Message-ID: <1402437038-28396-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas DS, All,
+SDK 5_01_01_01 only support EABIhf so 5_01_00_01 is still used if
+EABIhf is not available.
 
-On 2014-06-10 22:08 +0200, Yann E. MORIN spake thusly:
-> On 2014-06-10 21:44 +0200, Thomas De Schampheleire spake thusly:
-> > On Sun, Jun 8, 2014 at 10:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > [..]
-> > > Yann E. MORIN (12):
-> > >       Makefile: add BR2_DL_DIR to EXTRA_ENV
-> > >       pkg-infra: also set PKGDIR for the download step
-> > >       pkg-infra: move the git download helper to a script
-> > >       pkg-infra: move the svn download helper to a script
-> > >       pkg-infra: move the cvs download helper to a script
-> > >       pkg-infra: move the hg download helper to a script
-> > >       pkg-infra: move the wget download helper to a script
-> > >       pkg-infra: move the bzr download helper to a script
-> > >       pkg-infra: don't use DL_DIR as scratchpad for temporary downloads
-> > >       pkg-infra: add possiblity to check downloaded files against known hashes
-> > >       manual: add documentation about packages' hashes
-> > >       package/ca-certificates: add tarball's hashes
-> > >
-> > >  docs/manual/adding-packages-directory.txt    | 66 ++++++++++++++++++++++
-> > >  package/Makefile.in                          |  1 +
-> > >  package/ca-certificates/ca-certificates.hash |  3 +
-> > >  package/pkg-download.mk                      | 83 ++++++++++++----------------
-> > >  package/pkg-generic.mk                       |  1 +
-> > >  support/download/bzr                         | 34 ++++++++++++
-> > >  support/download/check-hash                  | 77 ++++++++++++++++++++++++++
-> > >  support/download/cvs                         | 40 ++++++++++++++
-> > >  support/download/git                         | 50 +++++++++++++++++
-> > >  support/download/hg                          | 38 +++++++++++++
-> > >  support/download/svn                         | 37 +++++++++++++
-> > >  support/download/wget                        | 32 +++++++++++
-> > >  12 files changed, 413 insertions(+), 49 deletions(-)
-> > >  create mode 100644 package/ca-certificates/ca-certificates.hash
-> > >  create mode 100755 support/download/bzr
-> > >  create mode 100755 support/download/check-hash
-> > >  create mode 100755 support/download/cvs
-> > >  create mode 100755 support/download/git
-> > >  create mode 100755 support/download/hg
-> > >  create mode 100755 support/download/svn
-> > >  create mode 100755 support/download/wget
-> > 
-> > Is there any particular reason why the scp and localfiles method was
-> > not split to a separate file like the others?
-> > One could think this is because they are oneliners, but so is the bzr method...
-> 
-> There's no real reason. Initially, the series was to check the download
-> hashes; it then spiraled out to englobe the helper scripts, but still
-> with the ultimate goal of checking the hashes.
-> 
-> So I was, like, is there a reason to check hashes of locally or
-> scp-retrieved packages? My own answer was, no, there's no reason.
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+---
+Changes v2 -> v3:
+  - comment was not clear (Thomas)
 
-And yet, I've converted them over to check the hashes... Weird... :-/
+Changes v1 -> v2:
+  - bump to 5_01_01_01 only if EABIhf is used as we still need to
+    support softfp (Yann)
+---
+ package/ti-gfx/ti-gfx.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Conversion to script helpers in progress. Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index 324e19c..4e83f1e 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -4,15 +4,17 @@
+ #
+ ################################################################################
+ 
+-TI_GFX_VERSION = 5_01_00_01
+-TI_GFX_SO_VERSION = 1.10.2359475
+-
++# SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if EABIhf is
++# not available.
+ ifeq ($(BR2_ARM_EABIHF),y)
++TI_GFX_VERSION = 5_01_01_01
+ TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+ else
++TI_GFX_VERSION = 5_01_00_01
+ TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
+ endif
+ 
++TI_GFX_SO_VERSION = 1.10.2359475
+ TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
+ TI_GFX_LICENSE = Technology / Software Publicly Available
+ TI_GFX_LICENSE_FILES = TSPA.txt
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.0
