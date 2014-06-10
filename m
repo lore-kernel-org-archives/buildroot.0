@@ -1,44 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 11:52:12 +0200
-Subject: [Buildroot] How to provide one default skeleton per init system?
-In-Reply-To: <20140610080123.GF9791@lukather>
-References: <20140609211341.GB10459@ned>
-	<20140610080123.GF9791@lukather>
-Message-ID: <20140610115212.4f63938b@free-electrons.com>
+From: cem akpolat <akpolatcem@gmail.com>
+Date: Tue, 10 Jun 2014 11:53:36 +0200
+Subject: [Buildroot] Some files to be copied to root file systems such
+ as openvpn keys, conf
+In-Reply-To: <CAMm5YqotyZ9y6c3vFXME+rh860RiB1X0RUFE=10k40yrzbM+fg@mail.gmail.com>
+References: <CAMm5YqqvikddPNUdaj9t6pPFJXqcmQkDR3qFHfi8Uot1wVHgPg@mail.gmail.com>
+ <CAHXCMMJsvZUPqtFwtKC=ZgSiNmwJ0A3_MYn=Fn0hbgi9iiz8Zg@mail.gmail.com>
+ <CAMm5YqotyZ9y6c3vFXME+rh860RiB1X0RUFE=10k40yrzbM+fg@mail.gmail.com>
+Message-ID: <CAMm5YqpZ1dV02==G=ZHEc3NUFD5UHGrUq7yTEzLQODQh1YfetQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Ripard,
+Hi Samuel,
 
-On Tue, 10 Jun 2014 10:01:23 +0200, Maxime Ripard wrote:
+The way that you explained is quite logical, however, I want to ask at that
+point what is the main reason behind the creation of the "Root Overlay",
+because for all packages and files , it is clearly seen that your defined
+method will work. for instance I can easily create a package called
+"toBeInstalledToRootFs" and then put all of them under this folder along
+with an appropriate Makefile.
 
-> > a) Move system/skeleton to system/skeleton/busybox, then add
-> >    system/skeleton/systemd, and maybe system/skeleton/sysv. The menu in
-> >    system/Config.in will be updated to select BR2_ROOTFS_SKELETON_BUSYBOX,
-> >    or BR2_ROOTFS_SKELETON_CUSTOM.
-> > b) Add a new virtual package: target-skeleton, with some providers:
-> >    target-skeleton-busybox, target-skeleton-systemd and
-> >    target-skeleton-custom (path to the custom skeleton would be handled in the
-> >    configuration menu).
-> 
-> And you also have:
-> 
->   c) Move the files in the skeleton at the package level. Each package
->      would be providing whatever file it needs and is not shared by
->      all the init systems.
-
-I don't think (b) and (c) are mutually exclusive actually. We can
-have a "skeleton" package that installs all the files that are common
-to all situations, and then have busybox, systemd and sysvinit install
-the files that they need.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best Regards,
+Cem
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140610/5d04bd5e/attachment.html>
