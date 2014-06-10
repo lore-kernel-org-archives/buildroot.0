@@ -1,27 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Jun 2014 12:09:53 +0000 (UTC)
-Subject: [Buildroot] [Bug 7184] supervisord depends on libxml2 implicitly
-In-Reply-To: <bug-7184-163@https.bugs.busybox.net/>
-References: <bug-7184-163@https.bugs.busybox.net/>
-Message-ID: <20140610120953.666229C49F@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 10 Jun 2014 09:17:27 -0300
+Subject: [Buildroot] [PATCH] xterm: bump to version 306
+Message-ID: <1402402647-13287-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7184
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/xterm/xterm.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-10 12:09:53 UTC ---
-I made a build for qemu with only supervisord, and during boot I get another
-error:
-
-Starting supervisord: Traceback (most recent call last):
-  File "/usr/bin/supervisord", line 5, in <module>
-    from pkg_resources import load_entry_point
-ImportError: No module named pkg_resources
-
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index ec8251f..ceb5d76 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XTERM_VERSION = 278
++XTERM_VERSION = 306
+ XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
+ XTERM_SITE = ftp://invisible-island.net/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.5.5
