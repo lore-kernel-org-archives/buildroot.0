@@ -1,89 +1,64 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jun 2014 08:02:04 -0700
-Subject: [Buildroot] [PATCH 1/3] fmlib: new package
-In-Reply-To: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 10 Jun 2014 16:00:23 +0000
+Subject: [Buildroot] [PATCH] uclibc: prevent rebuilding after
+	installation to staging
+In-Reply-To: <1401913653-23804-1-git-send-email-abrodkin@synopsys.com>
+References: <1401913653-23804-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <1402416022.1656.2.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/Config.in       |    1 +
- package/fmlib/Config.in |    9 +++++++++
- package/fmlib/fmlib.mk  |   33 +++++++++++++++++++++++++++++++++
- 3 files changed, 43 insertions(+)
- create mode 100644 package/fmlib/Config.in
- create mode 100644 package/fmlib/fmlib.mk
+Hi all,
 
-diff --git a/package/Config.in b/package/Config.in
-index 1706197..60118ea 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -715,6 +715,7 @@ source "package/c-ares/Config.in"
- source "package/cppzmq/Config.in"
- source "package/czmq/Config.in"
- source "package/filemq/Config.in"
-+source "package/fmlib/Config.in"
- source "package/glib-networking/Config.in"
- source "package/libcgi/Config.in"
- source "package/libcgicc/Config.in"
-diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
-new file mode 100644
-index 0000000..43f7aa3
---- /dev/null
-+++ b/package/fmlib/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_FMLIB
-+	bool "fmlib"
-+	depends on BR2_powerpc_e500mc
-+	help
-+	  The Frame Manager library provides an API on top of the Frame Manager driver
-+	  ioctl calls, that provides a user space application with a simple way
-+	  to configure driver parameters and PCD (parse - classify - distribute) rules.
-+
-+	  http://git.freescale.com/git/cgit.cgi/ppc/sdk/fmlib.git/tree/README
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-new file mode 100644
-index 0000000..b2dedaa
---- /dev/null
-+++ b/package/fmlib/fmlib.mk
-@@ -0,0 +1,33 @@
-+#############################################################
-+#
-+# fmlib
-+#
-+#############################################################
-+
-+FMLIB_VERSION = fsl-sdk-v1.5-rc3
-+FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
-+FMLIB_LICENSE = BSD-c3
-+FMLIB_LICENSE_FILES = COPYING
-+FMLIB_DEPENDENCIES = linux
-+FMLIB_INSTALL_STAGING = YES
-+FMLIB_INSTALL_TARGET = NO
-+
-+FMLIB_MAKE_OPTS = \
-+	CC="$(TARGET_CC)" \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	KERNEL_SRC="$(LINUX_DIR)" \
-+	PREFIX="$(STAGING_DIR)/usr"
-+
-+ifeq ($(BR2_powerpc_e500mc), y)
-+	FMLIB_ARCHTYPE = ppce500mc
-+endif
-+
-+define FMLIB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) libfm-$(FMLIB_ARCHTYPE).a
-+endef
-+
-+define FMLIB_INSTALL_STAGING_CMDS
-+	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.7.9.5
+On Thu, 2014-06-05 at 00:27 +0400, Alexey Brodkin wrote:
+> Currently we configure uClibc to use kernel headers from "staging" folder with
+> KERNEL_HEADERS="$(STAGING_DIR)/usr/include". This path is added to include
+> search path of uClibc build system in Rules.mak "CFLAGS += -I$(KERNEL_HEADERS)".
+> 
+> At the same time on uClibc installation to "staging" we point to the same
+> location "$(STAGING_DIR)/usr" (headers effectively go in "usr/include").
+> 
+> So after every installation to "staging" dependences get touched (even though we
+> copy the same headers every time) and so we may see lots of sources in uClibc
+> get rebuilt.
+> 
+> This has 2 consequences:
+> 1. Longer build time - becase even on ordinary buildroot build uClibc is built
+> twice. On "uclibc building" and on "uclibc installation to target".
+> 
+> 2. Symbols in libuClibc built initially (that is later installed in
+> "staging/sysroot") are situated with different offset compared to second build
+> (later copied in "target"). This happens because as described above only part
+> of sources get rebuilt and then on final linkage object files are linked in
+> different order.
+> 
+> And (2) leads to problems on remote rebugging: gdbserver reports offsets that
+> correspond to pointless assembly in libuClibc on host.
+> 
+> Here's how it looks like.
+> 
+> Before this patch:
+> $ cd ~/br2_output/i586/target/lib
+> $ i586-buildroot-linux-uclibc-readelf -s libuClibc-0.9.33.2.so | grep kill
+>    423: 0000c42c    54 FUNC    GLOBAL DEFAULT    7 kill
+> 
+> $ cd ~/br2_output/i586/staging/lib
+> $ i586-buildroot-linux-uclibc-readelf -s libuClibc-0.9.33.2.so | grep kill
+>    423: 0000b518    54 FUNC    GLOBAL DEFAULT    7 kill
+> 
+> After this patch:
+> $ cd ~/br2_output/i586/target/lib
+> $ i586-buildroot-linux-uclibc-readelf -s libuClibc-0.9.33.2.so | grep kill
+>    423: 0000b518    54 FUNC    GLOBAL DEFAULT    7 kill
+> 
+> $ cd ~/br2_output/i586/staging/lib
+> $ i586-buildroot-linux-uclibc-readelf -s libuClibc-0.9.33.2.so | grep kill
+>    423: 0000b518    54 FUNC    GLOBAL DEFAULT    7 kill
+
+Any thoughts on this one?
+
+Regards,
+Alexey
