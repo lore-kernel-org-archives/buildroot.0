@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 22:21:48 +0200
-Subject: [Buildroot] [PATCH 3/3] fmc: new package
-In-Reply-To: <1402412526-24844-4-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1402412526-24844-4-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20140610222148.3ad9a8e7@free-electrons.com>
+Date: Tue, 10 Jun 2014 22:22:44 +0200
+Subject: [Buildroot] [PATCH 1/1] simicsfs: new package
+In-Reply-To: <1402412534-24929-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1402412534-24929-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20140610222244.1bb0858e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +12,50 @@ To: buildroot@busybox.net
 
 Dear Matt Weber,
 
-On Tue, 10 Jun 2014 08:02:06 -0700, Matt Weber wrote:
+On Tue, 10 Jun 2014 08:02:14 -0700, Matt Weber wrote:
 
-> diff --git a/package/fmc/Config.in b/package/fmc/Config.in
-> new file mode 100644
-> index 0000000..9530756
 > --- /dev/null
-> +++ b/package/fmc/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_FMC
-> +	bool "fmc"
-> +	depends on BR2_powerpc_e500mc
-> +	select BR2_PACKAGE_TCLAP
+> +++ b/package/simicsfs/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_SIMICSFS
+> +	bool "simicsfs"
 
-Propagate the C++ dependency of tclap here.
+We need a "depends on BR2_LINUX_KERNEL" here.
 
-> +	select BR2_PACKAGE_LIBXML2
-> +	select BR2_PACKAGE_FMLIB
 > +	help
-> +	  The Frame Manager Configuration tool is a software package whose primary
-> +	  purpose is converting Parse-Classify-Police-Distribute (PCD) descriptions of
-> +	  network packets flow into hardware configuration. The tool provides an
-> +	  abstraction layer between the end customer's vision of the PCD task
-> +	  definition and real hardware implementation.
-
-Length of lines too long. It would be good to mention that it's
-specific to Freescale PowerPC machines at the beginning of the
-description.
-
+> +	  A kernel driver that provides access to a host computer's local
+> +	  filesystem when the target is executing within a SIMICS simulation.
 > +
-> +	  http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
-> diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+> +	  http://www.cs.sfu.ca/~fedorova/Tech/simics-guides-3.0.26/simics-user-guide-unix/topic33.html
+> diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
 > new file mode 100644
-> index 0000000..513a8ef
+> index 0000000..c266f68
 > --- /dev/null
-> +++ b/package/fmc/fmc.mk
-> @@ -0,0 +1,31 @@
+> +++ b/package/simicsfs/simicsfs.mk
+> @@ -0,0 +1,21 @@
 > +###############################################################################
 > +#
-> +# fmc
+> +# simicsfs
 > +#
 > +###############################################################################
 > +
-> +FMC_VERSION = fsl-sdk-v1.5-rc3
-> +FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-> +FMC_LICENSE = MIT
-> +FMC_LICENSE_FILES = COPYING
-> +FMC_DEPENDENCIES = libxml2 tclap fmlib
+> +SIMICSFS_VERSION = 1.17
+> +SIMICSFS_SITE = https://download.simics.net/pub/
+> +SIMICSFS_LICENSE = GPLv2+
+> +SIMICSFS_LICENSE_FILES = hostfs.h
+> +SIMICSFS_DEPENDENCIES = linux
 > +
-> +FMC_MAKE_OPTS = \
-> +	CC="$(TARGET_CC)" \
-> +	CXX="$(TARGET_CXX)" \
-> +	FMD_USPACE_HEADER_PATH="$(STAGING_DIR)/usr/include/fmd" \
-> +	FMD_USPACE_LIB_PATH="$(STAGING_DIR)/usr/lib" \
-> +	LIBXML2_HEADER_PATH="$(STAGING_DIR)/usr/include/libxml2" \
-> +	TCLAP_HEADER_PATH="$(STAGING_DIR)/usr/include"
-> +
-> +define FMC_BUILD_CMDS
-> +	# The linking step has dependency issues so using MAKE1
-> +	$(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
+> +define SIMICSFS_BUILD_CMDS
+> +        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
 > +endef
 > +
-> +define FMC_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/source/fmc $(TARGET_DIR)/usr/sbin/fmc
-> +	cp -dr --no-preserve=ownership $(@D)/etc/fmc $(TARGET_DIR)/etc/
+> +define SIMICSFS_INSTALL_TARGET_CMDS
+> +        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
+> +endef
+> +
+> +$(eval $(generic-package))
 
-Do we need this --no-preserve=ownership here? We usually use:
-
-	cp -dpfr
-
-in Buildroot.
+Other than that, looks good.
 
 Thomas
 -- 
