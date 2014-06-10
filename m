@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 12:21:21 +0200
+Date: Tue, 10 Jun 2014 12:23:10 +0200
 Subject: [Buildroot] Some files to be copied to root file systems such
  as openvpn keys, conf
-In-Reply-To: <CAMm5YqpZ1dV02==G=ZHEc3NUFD5UHGrUq7yTEzLQODQh1YfetQ@mail.gmail.com>
+In-Reply-To: <CAHXCMM+8D+waazrj2S6sU=T5y=3JjGD6A_=veV-zk548_uO-Dg@mail.gmail.com>
 References: <CAMm5YqqvikddPNUdaj9t6pPFJXqcmQkDR3qFHfi8Uot1wVHgPg@mail.gmail.com>
  <CAHXCMMJsvZUPqtFwtKC=ZgSiNmwJ0A3_MYn=Fn0hbgi9iiz8Zg@mail.gmail.com>
  <CAMm5YqotyZ9y6c3vFXME+rh860RiB1X0RUFE=10k40yrzbM+fg@mail.gmail.com>
  <CAMm5YqpZ1dV02==G=ZHEc3NUFD5UHGrUq7yTEzLQODQh1YfetQ@mail.gmail.com>
-Message-ID: <20140610122121.27bfb286@free-electrons.com>
+ <CAHXCMM+8D+waazrj2S6sU=T5y=3JjGD6A_=veV-zk548_uO-Dg@mail.gmail.com>
+Message-ID: <20140610122310.0c3caa20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Samuel Martin,
 
-On Tue, 10 Jun 2014 11:53:36 +0200, cem akpolat wrote:
+On Tue, 10 Jun 2014 12:06:44 +0200, Samuel Martin wrote:
 
-> The way that you explained is quite logical, however, I want to ask at that
-> point what is the main reason behind the creation of the "Root Overlay",
-> because for all packages and files , it is clearly seen that your defined
-> method will work. for instance I can easily create a package called
-> "toBeInstalledToRootFs" and then put all of them under this folder along
-> with an appropriate Makefile.
+> AFAIK, there is no way to set permissions on files outside a package's
+> *.mk files :-(
 
-The reason for having the "rootfs overlay" feature was simply to
-factorize what a lot of people were doing in their post-build script:
-copy a entire overlay of files to $(TARGET_DIR). Just like the
-post-build script, it may not address *all* use-cases, but it certainly
-address a good number of use cases.
+Huh? I guess you should have a look at the BR2_ROOTFS_DEVICE_TABLE
+option then. It is precisely meant to allow that: set file permissions.
 
-I believe you can continue to use the rootfs overlay mechanism to copy
-your files, and set use a custom permission table to adjust their
-permission when the root filesystem image is created. It's probably
-better than creating a complete package just for your files.
+I know the name of the option is not really appropriate (we kept it as
+is for backward compatibility reasons), but the prompt and description
+are pretty clear:
 
-Thanks,
+config BR2_ROOTFS_DEVICE_TABLE
+        string "Path to the permission tables"
+        default "system/device_table.txt"
+        help
+          Specify a space-separated list of permission table locations,
+          that will be passed to the makedevs utility to assign
+          correct owners and permissions on various files in the
+          target filesystem.
+
+          See package/makedevs/README for details on the usage and
+          syntax of these files.
+
+Best regards,
 
 Thomas
 -- 
