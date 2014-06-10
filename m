@@ -1,40 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 11:48:14 +0200
-Subject: [Buildroot] Some files to be copied to root file systems such
- as	openvpn keys, conf
-In-Reply-To: <279642119.17500579.1402392817223.JavaMail.root@openwide.fr>
-References: <CAMm5YqqvikddPNUdaj9t6pPFJXqcmQkDR3qFHfi8Uot1wVHgPg@mail.gmail.com>
- <279642119.17500579.1402392817223.JavaMail.root@openwide.fr>
-Message-ID: <20140610114814.62cace46@free-electrons.com>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Tue, 10 Jun 2014 11:48:30 +0200
+Subject: [Buildroot] [v6] canfestival: new package
+In-Reply-To: <1402246400-22382-1-git-send-email-s.martin49@gmail.com>
+References: <1402246400-22382-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140610094830.GA15791@zinosat.dyndns.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Rosen,
+Hi Samuel,
 
-On Tue, 10 Jun 2014 11:33:37 +0200 (CEST), Jeremy Rosen wrote:
-> 
-> All file ownership are given to root in the fakeroot container,
-> 
-> the fakeroot container is applied after the overlay
-> 
-> 
-> So, (assuming I understant correctly what's going on) you don't neet to have these files owned by root in the overlay. Ownership will be changed while the final image is built
+On Sun, Jun 08, 2014 at 06:53:20PM +0200, Samuel Martin wrote:
+> -
+> -config BR2_PACKAGE_CANFESTIVAL_PEAK_LINUX
+> -	bool "peak_linux"
+> -	help
+> -	  PeakSystem CAN support (requires kernel driver and libpcan from
+> -	  PeakSystem).
+> -
+> -	  http://www.peak-system.com/linux/
+> +# AnaGate CAN(duo) driver [1] and PeakSystem CAN support [2] are not
+> +# available (not packaged in BUildroot)
 
-Could you please learn about the usual rules about replying on mailing
-lists, and make sure to not top-post, and to use an e-mail that wraps
-lines to a reasonable length.
+extremely minor typo: BUildroot -> Buildroot
 
-As a hint, I would suggest to not use Zimbra as your e-mail client,
-from what I've seen all the people using it can only send e-mails
-improperly formatted.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+regards,
+Davide
