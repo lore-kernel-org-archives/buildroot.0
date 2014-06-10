@@ -1,84 +1,50 @@
-From: Toshi Morita <toshi@peernova.com>
-Date: Tue, 10 Jun 2014 12:06:26 -0700
-Subject: [Buildroot] gdbserver compile problem on buildroot-2014.05
-In-Reply-To: <01e3093b-3486-4712-bb9b-229de05f51e0@email.android.com>
-References: <CANFXpYNT98nofVkVCZqt5giFpf2YJeVt8OKBqaka=s0pMo1Row@mail.gmail.com>
- <01e3093b-3486-4712-bb9b-229de05f51e0@email.android.com>
-Message-ID: <CANFXpYNUssB_VnnOrxQMY=UzbozcEO=CPG8jyw7FU=io9r-Knw@mail.gmail.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Tue, 10 Jun 2014 21:14:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] ti-gfx: bump to version 5_01_01_01 if
+	EABIhf is used
+Message-ID: <1402427667-26813-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-.config file (renamed) is attached.
+SDK 5_01_01_01 only support EABIhf so 5_01_00_01 is still used if
+EABIhf is not available.
 
-Toshi
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+---
+Changes v1 -> v2:
+  - bump to 5_01_01_01 only if EABIhf is used as we still need to
+    support softfp (Yann)
+---
+ package/ti-gfx/ti-gfx.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-
-
-On Tue, Jun 10, 2014 at 11:44 AM, Thomas De Schampheleire <
-patrickdepinguin@gmail.com> wrote:
-
-> Toshi Morita <toshi@peernova.com> schreef:
-> >I'm using buildroot-2014.05, and gdbserver seems to have compile problems.
-> >Any suggestions on what to look at?
-> >
-> >/home/tm/buildroot/buildroot-2014.05/output/host/usr/bin/
-> >arm-buildroot-linux-uclibcgnueabi-gcc -c -pipe -Os     -I. -I.
-> >-I./../common -I./../regformats -I./../../include -I./../gnulib/import
-> >-Ibuild-gnulib-gdbserver/import -Wall -Wdeclaration-after-statement
-> >-Wpointer-arith -Wformat-nonliteral -Wno-char-subscripts  thread-db.c
-> >In file included from thread-db.c:30:0:
-> >./../common/gdb_thread_db.h:124:3: error: unknown type name ?uint32_t?
-> >./../common/gdb_thread_db.h:215:5: error: unknown type name ?uintptr_t?
-> >./../common/gdb_thread_db.h:285:3: error: unknown type name ?intptr_t?
-> >./../common/gdb_thread_db.h:286:3: error: unknown type name ?intptr_t?
-> >thread-db.c: In function ?find_one_thread?:
-> >thread-db.c:315:6: error: ?struct lwp_info? has no member named ?th?
-> >thread-db.c: In function ?attach_thread?:
-> >thread-db.c:340:6: error: ?struct lwp_info? has no member named ?th?
-> >thread-db.c: In function ?thread_db_get_tls_address?:
-> >thread-db.c:513:47: error: ?struct lwp_info? has no member named ?th?
-> >thread-db.c: In function ?try_thread_db_load_from_sdir?:
-> >thread-db.c:708:30: error: ?LIBTHREAD_DB_SO? undeclared (first use in this
-> >function)
-> >thread-db.c:708:30: note: each undeclared identifier is reported only once
-> >for each function it appears in
-> >thread-db.c: In function ?try_thread_db_load_from_dir?:
-> >thread-db.c:719:29: error: ?LIBTHREAD_DB_SO? undeclared (first use in this
-> >function)
-> >thread-db.c: In function ?thread_db_load_search?:
-> >thread-db.c:748:41: error: ?LIBTHREAD_DB_SEARCH_PATH? undeclared (first
-> use
-> >in this function)
-> >thread-db.c: In function ?thread_db_handle_monitor_command?:
-> >thread-db.c:971:7: error: ?LIBTHREAD_DB_SEARCH_PATH? undeclared (first use
-> >in this function)
-> >thread-db.c: In function ?try_thread_db_load_from_sdir?:
-> >thread-db.c:709:1: warning: control reaches end of non-void function
-> >[-Wreturn-type]
-> >make[1]: *** [thread-db.o] Error 1
-> >make[1]: Leaving directory `/home/tm/buildroot/buildroot-
-> >2014.05/output/build/gdb-7.5.1/gdb/gdbserver'
-> >make: ***
-> [/home/tm/buildroot/buildroot-2014.05/output/build/gdb-7.5.1/.stamp_built]
-> >Error 2
-> >tm at tm-VirtualBox:~/buildroot/buildroot-2014.05$
->
-> Please provide your .config file, without it we cannot help you.
->
-> Best regards
-> Thomas
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140610/3eead6d9/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: config.visible
-Type: application/octet-stream
-Size: 44102 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140610/3eead6d9/attachment-0001.obj>
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index 324e19c..53aa846 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -4,15 +4,17 @@
+ #
+ ################################################################################
+ 
+-TI_GFX_VERSION = 5_01_00_01
+-TI_GFX_SO_VERSION = 1.10.2359475
+-
++# SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if we can't
++# use it.
+ ifeq ($(BR2_ARM_EABIHF),y)
++TI_GFX_VERSION = 5_01_01_01
+ TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+ else
++TI_GFX_VERSION = 5_01_00_01
+ TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
+ endif
+ 
++TI_GFX_SO_VERSION = 1.10.2359475
+ TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
+ TI_GFX_LICENSE = Technology / Software Publicly Available
+ TI_GFX_LICENSE_FILES = TSPA.txt
+-- 
+2.0.0
