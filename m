@@ -1,69 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 10 Jun 2014 18:49:29 +0200
-Subject: [Buildroot] [RFCv1 1/4] toolchain-external: split target
- installation from staging installation
-In-Reply-To: <20140610100446.2adc73c4@free-electrons.com>
+Date: Tue, 10 Jun 2014 18:58:40 +0200
+Subject: [Buildroot] [RFCv1 2/4] pkg-generic: add step_pkg_size global
+ instrumentation hook
+In-Reply-To: <3156840.4l9buZIenR@sagittea>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1402177567-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140609214928.GJ3512@free.fr>
- <20140610100446.2adc73c4@free-electrons.com>
-Message-ID: <20140610164929.GA3561@free.fr>
+ <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140609220241.GK3512@free.fr> <3156840.4l9buZIenR@sagittea>
+Message-ID: <20140610165840.GB3561@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+J?r?me, All,
 
-On 2014-06-10 10:04 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 9 Jun 2014 23:49:28 +0200, Yann E. MORIN wrote:
-> > > +define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+On 2014-06-10 18:20 +0200, J?r?me Pouiller spake thusly:
+> On Tuesday 10 June 2014 00:02:41 Yann E. MORIN wrote:
+> > Thomas, All,
 > > 
-> > Maybe the code from here...
+> > On 2014-06-07 23:46 +0200, Thomas Petazzoni spake thusly:
+> > > This patch adds a global instrumentation hook that collects the list
+> > > of files installed in $(TARGET_DIR) by each package, and stores this
+> > > list into a file called $(BUILD_DIR)/<pkgname>.filelist. It can later
+> > > be used to determine the size contribution of each package to the
+> > > target root filesystem.
+> > > 
+> > > The only limitation is that if a file is installed by a package A, and
+> > > then overriden by a file from package B, the file will only be listed
+> > > in $(BUILD_DIR)/A.filelist as it is the first time we will see the
+> > > file.
 > > 
-> > > +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
-> > > +	if test -z "$${SYSROOT_DIR}" ; then \
-> > > +		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-> > > +		exit 1 ; \
-> > > +	fi ; \
-> > > +	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> > > +	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> > > +	SUPPORT_LIB_DIR="" ; \
-> > > +	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-> > > +		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-> > > +		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
-> > > +			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-> > > +		fi ; \
-> > > +	fi ; \
-> > > +	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+> > If we really wanted to account for the realy package, we'd have to
+> > somehow notice that a pacakge did change the content of a file.
 > > 
-> > ... to here could be moved to a common function, so it can be shared
-> > between the staging and target functions?
-> 
-> How do you suggest this to be done? The problem is that we need those
-> variables to be defined within the shell block that follows. I don't
-> see any easy way to factorize that. Or maybe I should just take this
-> opportunity, and move some of this crap into a helper shell script,
-> which will avoid these horrible shell blocks with lots of quoting and
-> backslashes.
+> > So, we would need to run sha1sum on all the files in the pre-step and
+> > the post step. Any differing line would mean a new file, or a changed
+> > file.
+> I did something similar in the past. I used inotify to follow modification 
+> done on TARGET_DIR. It was fast and detect overwritten files.
 
-Hay, I said: "that might not be that easy..." ;-)
+I've been playing with inotify too, and it is not really up to the task.
+I was able to overload the "wait queue" very easily, and missed some
+events (sometimes a lot of them), when the build was creating/changing a
+lot of files in rapid-fire.
 
-Fact is, I was just pointing out the code duplication, code which is not
-trivial, and there is an opportunity for those two part to diverge if we
-are not careful.
+I was able to overcome the "wait-queue" limitation by increasing the
+number of queueable events, but that requires root access, but not
+everyone can be root on their machine (think shared build farms), and
+the defaults are quite low.
 
-I don't know how we could do that sanely (without too much of double- or
-quadruple-dollar signs all over...) I can have  look at it, if you want.
+> Handling build interruption was a little tricky, but results was corrects.
 
-Maybe a big fat comment is all we really need here.
-
-In the end, this is just an RFC, and there's room for improvements. ;-)
-But that sure would be a very nice addition to Buildroot! :-)
+That's also an issue I see, and I don't think we want to go into too
+complex a setting.
 
 Regards,
-Yann e. MORIN.
+Yann E. MORIN.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
