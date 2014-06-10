@@ -1,50 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 12:23:10 +0200
-Subject: [Buildroot] Some files to be copied to root file systems such
- as openvpn keys, conf
-In-Reply-To: <CAHXCMM+8D+waazrj2S6sU=T5y=3JjGD6A_=veV-zk548_uO-Dg@mail.gmail.com>
-References: <CAMm5YqqvikddPNUdaj9t6pPFJXqcmQkDR3qFHfi8Uot1wVHgPg@mail.gmail.com>
- <CAHXCMMJsvZUPqtFwtKC=ZgSiNmwJ0A3_MYn=Fn0hbgi9iiz8Zg@mail.gmail.com>
- <CAMm5YqotyZ9y6c3vFXME+rh860RiB1X0RUFE=10k40yrzbM+fg@mail.gmail.com>
- <CAMm5YqpZ1dV02==G=ZHEc3NUFD5UHGrUq7yTEzLQODQh1YfetQ@mail.gmail.com>
- <CAHXCMM+8D+waazrj2S6sU=T5y=3JjGD6A_=veV-zk548_uO-Dg@mail.gmail.com>
-Message-ID: <20140610122310.0c3caa20@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 10 Jun 2014 10:36:41 +0000 (UTC)
+Subject: [Buildroot] [Bug 7178] New: NTPd package cannot sync time without a
+ proper ntp.conf
+Message-ID: <bug-7178-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+https://bugs.busybox.net/show_bug.cgi?id=7178
 
-On Tue, 10 Jun 2014 12:06:44 +0200, Samuel Martin wrote:
+           Summary: NTPd package cannot sync time without a proper
+                    ntp.conf
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: angelo.compagnucci at gmail.com
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> AFAIK, there is no way to set permissions on files outside a package's
-> *.mk files :-(
 
-Huh? I guess you should have a look at the BR2_ROOTFS_DEVICE_TABLE
-option then. It is precisely meant to allow that: set file permissions.
+NTPd cannot sync time without proper ntp.conf file.
 
-I know the name of the option is not really appropriate (we kept it as
-is for backward compatibility reasons), but the prompt and description
-are pretty clear:
+This patch provides a minimal configuration file for correct time syncing, it
+adds the -g flag to ntpd to adjust time also with big offsets and remove the
+deprecated use of ntpdate command for initial time syncing because unnecessary.
 
-config BR2_ROOTFS_DEVICE_TABLE
-        string "Path to the permission tables"
-        default "system/device_table.txt"
-        help
-          Specify a space-separated list of permission table locations,
-          that will be passed to the makedevs utility to assign
-          correct owners and permissions on various files in the
-          target filesystem.
-
-          See package/makedevs/README for details on the usage and
-          syntax of these files.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
