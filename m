@@ -1,48 +1,74 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 10 Jun 2014 18:42:31 +0200
-Subject: [Buildroot] [RFCv1 2/4] pkg-generic: add step_pkg_size global
-	instrumentation hook
-In-Reply-To: <20140609220241.GK3512@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 10 Jun 2014 18:49:29 +0200
+Subject: [Buildroot] [RFCv1 1/4] toolchain-external: split target
+ installation from staging installation
+In-Reply-To: <20140610100446.2adc73c4@free-electrons.com>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <20140609220241.GK3512@free.fr>
-Message-ID: <1513126.kpHDXik0HV@sagittea>
+ <1402177567-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20140609214928.GJ3512@free.fr>
+ <20140610100446.2adc73c4@free-electrons.com>
+Message-ID: <20140610164929.GA3561@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Thomas, All,
 
-On Tuesday 10 June 2014 00:02:41 Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2014-06-07 23:46 +0200, Thomas Petazzoni spake thusly:
-> > This patch adds a global instrumentation hook that collects the list
-> > of files installed in $(TARGET_DIR) by each package, and stores this
-> > list into a file called $(BUILD_DIR)/<pkgname>.filelist. It can later
-> > be used to determine the size contribution of each package to the
-> > target root filesystem.
+On 2014-06-10 10:04 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 9 Jun 2014 23:49:28 +0200, Yann E. MORIN wrote:
+> > > +define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
 > > 
-> > The only limitation is that if a file is installed by a package A, and
-> > then overriden by a file from package B, the file will only be listed
-> > in $(BUILD_DIR)/A.filelist as it is the first time we will see the
-> > file.
+> > Maybe the code from here...
+> > 
+> > > +	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+> > > +	if test -z "$${SYSROOT_DIR}" ; then \
+> > > +		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+> > > +		exit 1 ; \
+> > > +	fi ; \
+> > > +	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> > > +	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> > > +	SUPPORT_LIB_DIR="" ; \
+> > > +	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+> > > +		LIBSTDCPP_A_LOCATION=$$(LANG=C $(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+> > > +		if [ -e "$${LIBSTDCPP_A_LOCATION}" ]; then \
+> > > +			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+> > > +		fi ; \
+> > > +	fi ; \
+> > > +	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+> > 
+> > ... to here could be moved to a common function, so it can be shared
+> > between the staging and target functions?
 > 
-> If we really wanted to account for the realy package, we'd have to
-> somehow notice that a pacakge did change the content of a file.
-> 
-> So, we would need to run sha1sum on all the files in the pre-step and
-> the post step. Any differing line would mean a new file, or a changed
-> file.
-I did something similar in the past. I used inotify to follow modification 
-done on TARGET_DIR. It was fast and detect overwritten files.
+> How do you suggest this to be done? The problem is that we need those
+> variables to be defined within the shell block that follows. I don't
+> see any easy way to factorize that. Or maybe I should just take this
+> opportunity, and move some of this crap into a helper shell script,
+> which will avoid these horrible shell blocks with lots of quoting and
+> backslashes.
 
-Stopping inotify process when build was interrupted was a little tricky, but 
-results was corrects.
+Hay, I said: "that might not be that easy..." ;-)
+
+Fact is, I was just pointing out the code duplication, code which is not
+trivial, and there is an opportunity for those two part to diverge if we
+are not careful.
+
+I don't know how we could do that sanely (without too much of double- or
+quadruple-dollar signs all over...) I can have  look at it, if you want.
+
+Maybe a big fat comment is all we really need here.
+
+In the end, this is just an RFC, and there's room for improvements. ;-)
+But that sure would be a very nice addition to Buildroot! :-)
+
+Regards,
+Yann e. MORIN.
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
