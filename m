@@ -1,95 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 22:01:05 +0200
-Subject: [Buildroot] [PATCH 1/3] fmlib: new package
-In-Reply-To: <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20140610220105.59a27d38@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 10 Jun 2014 22:08:31 +0200
+Subject: [Buildroot] [PATCH 0/12 v7] Some download-related changes
+ (branch yem/check-downloads)
+In-Reply-To: <CAAXf6LWP75NohFWXmHU4o4xh4jnDJZqe6_9+rpyN1+zeumnqrw@mail.gmail.com>
+References: <cover.1402260012.git.yann.morin.1998@free.fr>
+ <CAAXf6LWP75NohFWXmHU4o4xh4jnDJZqe6_9+rpyN1+zeumnqrw@mail.gmail.com>
+Message-ID: <20140610200831.GC3561@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Thomas DS, All,
 
-On Tue, 10 Jun 2014 08:02:04 -0700, Matt Weber wrote:
+On 2014-06-10 21:44 +0200, Thomas De Schampheleire spake thusly:
+> On Sun, Jun 8, 2014 at 10:43 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [..]
+> > Yann E. MORIN (12):
+> >       Makefile: add BR2_DL_DIR to EXTRA_ENV
+> >       pkg-infra: also set PKGDIR for the download step
+> >       pkg-infra: move the git download helper to a script
+> >       pkg-infra: move the svn download helper to a script
+> >       pkg-infra: move the cvs download helper to a script
+> >       pkg-infra: move the hg download helper to a script
+> >       pkg-infra: move the wget download helper to a script
+> >       pkg-infra: move the bzr download helper to a script
+> >       pkg-infra: don't use DL_DIR as scratchpad for temporary downloads
+> >       pkg-infra: add possiblity to check downloaded files against known hashes
+> >       manual: add documentation about packages' hashes
+> >       package/ca-certificates: add tarball's hashes
+> >
+> >  docs/manual/adding-packages-directory.txt    | 66 ++++++++++++++++++++++
+> >  package/Makefile.in                          |  1 +
+> >  package/ca-certificates/ca-certificates.hash |  3 +
+> >  package/pkg-download.mk                      | 83 ++++++++++++----------------
+> >  package/pkg-generic.mk                       |  1 +
+> >  support/download/bzr                         | 34 ++++++++++++
+> >  support/download/check-hash                  | 77 ++++++++++++++++++++++++++
+> >  support/download/cvs                         | 40 ++++++++++++++
+> >  support/download/git                         | 50 +++++++++++++++++
+> >  support/download/hg                          | 38 +++++++++++++
+> >  support/download/svn                         | 37 +++++++++++++
+> >  support/download/wget                        | 32 +++++++++++
+> >  12 files changed, 413 insertions(+), 49 deletions(-)
+> >  create mode 100644 package/ca-certificates/ca-certificates.hash
+> >  create mode 100755 support/download/bzr
+> >  create mode 100755 support/download/check-hash
+> >  create mode 100755 support/download/cvs
+> >  create mode 100755 support/download/git
+> >  create mode 100755 support/download/hg
+> >  create mode 100755 support/download/svn
+> >  create mode 100755 support/download/wget
+> 
+> Is there any particular reason why the scp and localfiles method was
+> not split to a separate file like the others?
+> One could think this is because they are oneliners, but so is the bzr method...
 
-> diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
-> new file mode 100644
-> index 0000000..43f7aa3
-> --- /dev/null
-> +++ b/package/fmlib/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_FMLIB
-> +	bool "fmlib"
-> +	depends on BR2_powerpc_e500mc
+There's no real reason. Initially, the series was to check the download
+hashes; it then spiraled out to englobe the helper scripts, but still
+with the ultimate goal of checking the hashes.
 
-If your package has 'linux' in its dependencies, then it should
-'depends on BR2_LINUX_KERNEL' here, and have a comment about this. See
-package/freescale-imx/imx-lib/Config.in for an example.
+So I was, like, is there a reason to check hashes of locally or
+scp-retrieved packages? My own answer was, no, there's no reason.
 
-> +	help
-> +	  The Frame Manager library provides an API on top of the Frame Manager driver
-> +	  ioctl calls, that provides a user space application with a simple way
-> +	  to configure driver parameters and PCD (parse - classify - distribute) rules.
+But I don;t mind converting them, of course. It's just it was not the
+initial goal of the series, so I overlookjed them.
 
-I think the lines are too long here. Wrap to 72 max.
+But in retrospect, we should convert them, if at least to handle the
+multiple downloads in parallel and avoiding two builds to step on each
+others' feet...
 
-> +FMLIB_VERSION = fsl-sdk-v1.5-rc3
-> +FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
-> +FMLIB_LICENSE = BSD-c3
+I'll do.
 
-We actually use BSD-3c and not BSD-c3. Also, the license should
-actually be:
+PS. Thanks for the other review, too, I'll fix. :-)
 
-	BSD-3c or GPLv2+
+Regards,
+Yann E. MORIN.
 
-See the COPYING file of the project for details.
-
-> +FMLIB_LICENSE_FILES = COPYING
-> +FMLIB_DEPENDENCIES = linux
-> +FMLIB_INSTALL_STAGING = YES
-> +FMLIB_INSTALL_TARGET = NO
-
-Please add a comment above this like:
-
-# This package installs a static library only, so there's nothing to
-# install to the target
-
-> +FMLIB_MAKE_OPTS = \
-> +	CC="$(TARGET_CC)" \
-> +	CROSS_COMPILE="$(TARGET_CROSS)" \
-> +	KERNEL_SRC="$(LINUX_DIR)" \
-> +	PREFIX="$(STAGING_DIR)/usr"
-> +
-> +ifeq ($(BR2_powerpc_e500mc), y)
-
-No space between , and y
-
-> +	FMLIB_ARCHTYPE = ppce500mc
-> +endif
-
-That being said, since the package can only be enabled on ppce500mc, do
-we really need this condition? Or maybe you're making the thing a bit
-more future proof to support the other variants?
-
-> +define FMLIB_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) libfm-$(FMLIB_ARCHTYPE).a
-> +endef
-> +
-> +define FMLIB_INSTALL_STAGING_CMDS
-> +	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Other than that, looks good. Care to fix and resend?
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
