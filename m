@@ -1,30 +1,43 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Tue, 10 Jun 2014 11:48:30 +0200
-Subject: [Buildroot] [v6] canfestival: new package
-In-Reply-To: <1402246400-22382-1-git-send-email-s.martin49@gmail.com>
-References: <1402246400-22382-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140610094830.GA15791@zinosat.dyndns.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 10 Jun 2014 11:50:04 +0200
+Subject: [Buildroot] How to provide one default skeleton per init system?
+In-Reply-To: <CAGduivxeet2u3KqTZfNYPy7bi6ddtmYYLovc5b_cNLvFuNz0pA@mail.gmail.com>
+References: <20140609211341.GB10459@ned>
+ <CAGduivxeet2u3KqTZfNYPy7bi6ddtmYYLovc5b_cNLvFuNz0pA@mail.gmail.com>
+Message-ID: <20140610115004.63c68d6a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Samuel,
+Dear Maxime Hadjinlian,
 
-On Sun, Jun 08, 2014 at 06:53:20PM +0200, Samuel Martin wrote:
-> -
-> -config BR2_PACKAGE_CANFESTIVAL_PEAK_LINUX
-> -	bool "peak_linux"
-> -	help
-> -	  PeakSystem CAN support (requires kernel driver and libpcan from
-> -	  PeakSystem).
-> -
-> -	  http://www.peak-system.com/linux/
-> +# AnaGate CAN(duo) driver [1] and PeakSystem CAN support [2] are not
-> +# available (not packaged in BUildroot)
+On Tue, 10 Jun 2014 09:21:39 +0200, Maxime Hadjinlian wrote:
 
-extremely minor typo: BUildroot -> Buildroot
+> > But if a new package target-skeleton is added, what would be the dependency
+> > chain? Would `make target-skeleton-rebuild` rebuild... the whole rootfs?
+> >
+> Actually the package that I have introduced after discussing it with
+> Thomas Petazzoni was a package called initscripts and busybox/systemv
+> only depends on it. This way, when you chose an init system, it will
+> copy the files to the target directory.
+> 
+> This seems to be less intrusive as the end users would not even notice
+> (except the disappearance of the init.d folder when systemd is
+> chosen).
+> 
+> If you have any comments regarding this idea, they are welcomed.
+> I'll try and send this patch tonight so we can discuss on the idea
+> with some code.
 
-regards,
-Davide
+After thinking more about it, I believe it would be even better to have
+the whole skeleton as a package. This way, everything installed to
+$(TARGET_DIR) comes from a package, and things like my "graph-size"
+script do not need to special case the skeleton.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
