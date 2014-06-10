@@ -1,78 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 10 Jun 2014 22:11:11 +0200
-Subject: [Buildroot] [PATCH 2/3] tclap: new package
-In-Reply-To: <1402412526-24844-3-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1402412526-24844-3-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20140610221111.5181dcb3@free-electrons.com>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Tue, 10 Jun 2014 15:21:47 -0500
+Subject: [Buildroot] Upgrading my defconfig
+In-Reply-To: <20140610214757.75cd4ec7@free-electrons.com>
+References: <CAE9DZUS6HUUFpt-Rm-WONCcx5_4y+F+8TtcPFYzuNCfiraq83Q@mail.gmail.com>
+ <20140610214757.75cd4ec7@free-electrons.com>
+Message-ID: <CAE9DZURTf+ojW1aiqcq9F4Nmf9ozkfVMDqdYV8bmU6y1yw81ng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+On Tue, Jun 10, 2014 at 2:47 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-On Tue, 10 Jun 2014 08:02:05 -0700, Matt Weber wrote:
+> Dear Dallas Clement,
+>
+> On Tue, 10 Jun 2014 11:11:24 -0500, Dallas Clement wrote:
+> > Hi All,  Would someone kindly guide me through the steps of upgrading my
+> > defconfig?  It's a few years out of date.  I've upgraded the rest of
+> > buildroot itself, and when I try to save my defconfig the makefile
+> > complains bitterly:
+> >
+> > $ make savedefconfig
+> > Makefile.legacy:12: *** "You have legacy configuration in your .config!
+> > Please check your configuration.".  Stop.
+>
+> I know you replied to your own e-mail, but for the record: this means
+> your configuration has old Buildroot options that have been removed
+> since then. You should therefore run "make menuconfig", and look into
+> the "Legacy options" submenu to see which old options you're using.
+> Buildroot wants you to disable them manually so that you're aware of
+> their disappearance, and you have some help on how to migrate to the
+> new name of the option if applicable.
+>
+> We should probably change the error message here to something more
+> explanatory.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
 
-> diff --git a/package/tclap/Config.in b/package/tclap/Config.in
-> new file mode 100644
-> index 0000000..e50704b
-> --- /dev/null
-> +++ b/package/tclap/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_TCLAP
-> +	bool "tclap"
+> We should probably change the error message here to something more
+> explanatory.
 
-This package needs C++ support, so the appropriate 'depends on' +
-comment is needed.
+Actually, the "make menuconfig" "Legacy options" were quite helpful in
+identifying the legacy options.
+My vexing problem was that I had old Config.in and .mk files from other
+packages that were referring to
+BR2_MYSQL_CLIENT.  And thus it was not enough to just clean up my defconfig
+file alone.  I had to
+replace those references with BR2_MYSQL and things work swimmingly now.
 
-> +	help
-> +	  This is a small, flexible library that provides a simple interface for
-> +	  defining and accessing command line arguments. It was intially inspired
-
-intially -> initially.
-
-> +	  by the user friendly CLAP libary. The difference is that this library is
-> +	  templatized, so the argument class is type independent. Type independence
-> +	  avoids identical-except-for-type objects, such as IntArg, FloatArg, and
-> +	  StringArg. While the library is not strictly compliant with the GNU or
-> +	  POSIX standards, it is close.
-
-Please check lines do not exceed 72 chars.
-
-> +	  http://tclap.sourceforge.net/
-> diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
-> new file mode 100644
-> index 0000000..268b90b
-> --- /dev/null
-> +++ b/package/tclap/tclap.mk
-> @@ -0,0 +1,16 @@
-> +################################################################################
-> +#
-> +# tclap
-> +#
-> +################################################################################
-> +
-> +TCLAP_VERSION = 1.2.1
-> +TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
-> +TCLAP_SOURCE = tclap-$(TCLAP_VERSION).tar.gz
-
-Not needed, that's the default.
-
-> +TCLAP_LICENSE = MIT
-> +TCLAP_LICENSE_FILES = COPYING
-> +
-> +TCLAP_INSTALL_STAGING = YES
-> +TCLAP_INSTALL_TARGET = NO
-
-A short comment that explains why INSTALL_TARGET = NO is useful. Just
-say it's a pure C++ template library, only made of headers.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks for the help.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140610/46e6b55f/attachment.html>
