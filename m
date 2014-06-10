@@ -1,32 +1,26 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Jun 2014 13:22:08 +0000 (UTC)
-Subject: [Buildroot] [Bug 7154] Local uClibc config file gets overwritten
- using make uclibc-update-config
-In-Reply-To: <bug-7154-163@https.bugs.busybox.net/>
-References: <bug-7154-163@https.bugs.busybox.net/>
-Message-ID: <20140610132208.3A0489CFB1@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 10 Jun 2014 15:35:27 +0200
+Subject: [Buildroot] [PATCHv2] bind: security bump to version 9.9.5
+In-Reply-To: <1402395505-6937-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 10 Jun 2014 07:18:25 -0300")
+References: <1402395505-6937-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <874mzslwf4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7154
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #1 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-10 13:22:07 UTC ---
-Bug confirmed.
-Procedure is:
+ > Fixes CVE-2014-0591 (a crafted query against an NSEC3-signed zone can
+ > crash BIND).
+ > The 9.9.x series is the new ESV vesion, 9.6.x has been retired.
+ > Also cleanup the initscript while at it.
 
-make uclibc-menuconfig   (make a change)
-(change is reflected in output/build/uclibc-.../.config)
-make uclibc-update-config
-(cp custom.config output/build/uclibc-.../.config, overwriting last change)
-(do configuration actions)
-(cp output/build/uclibc-.../.config custom.config)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Problem may be present for busybox and linux too...
+Committed, thanks.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
