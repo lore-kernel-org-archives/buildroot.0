@@ -1,8 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Jun 2014 11:19:32 +0000 (UTC)
-Subject: [Buildroot] [Bug 7184] New: supervisord depends on libxml2
-	implicitly
-Message-ID: <bug-7184-163@https.bugs.busybox.net/>
+Date: Tue, 10 Jun 2014 11:26:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 7184] supervisord depends on libxml2 implicitly
+In-Reply-To: <bug-7184-163@https.bugs.busybox.net/>
+References: <bug-7184-163@https.bugs.busybox.net/>
+Message-ID: <20140610112620.8EECF9CFB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,26 +12,10 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=7184
 
-           Summary: supervisord depends on libxml2 implicitly
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: sebastian at himberger.de
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
-
-
-When using supervisord without libxml2 it complains because it can not use the
-python xml module. apparently python needs libxml2 present to build the xml
-module but happily builds without it and also works (as long as you dont use
-the module). I would suggest either adding libxml2 to python or the supervisord
-package as a dependency since supervisord fails to start without xml support.
+--- Comment #1 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-10 11:26:20 UTC ---
+Thanks for the report.
+Can you provide the steps to reproduce? Is running 'supervisord' without
+parameters sufficient? Any additional steps?
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
