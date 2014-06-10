@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 10 Jun 2014 07:13:47 -0300
-Subject: [Buildroot] [PATCH] bind: security bump to version 9.9.5
-Message-ID: <1402395227-18336-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 10 Jun 2014 07:18:25 -0300
+Subject: [Buildroot] [PATCHv2] bind: security bump to version 9.9.5
+Message-ID: <1402395505-6937-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,8 +18,8 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  package/bind/Config.in                   |  5 +--
  package/bind/S81named                    | 45 ++++++-------------
  package/bind/bind-01-disable-tests.patch | 26 ++++++++---
- package/bind/bind.mk                     | 77 +++++++++++++++++++++-----------
- 4 files changed, 87 insertions(+), 66 deletions(-)
+ package/bind/bind.mk                     | 76 +++++++++++++++++++++-----------
+ 4 files changed, 86 insertions(+), 66 deletions(-)
 
 diff --git a/package/bind/Config.in b/package/bind/Config.in
 index 047f682..4f65e1c 100644
@@ -151,10 +151,10 @@ index 9c3d52e..181b229 100644
 + 
   @BIND9_MAKE_RULES@
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 862be1b..a06d0d4 100644
+index 862be1b..0a611ea 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -4,26 +4,37 @@
+@@ -4,26 +4,36 @@
  #
  ################################################################################
  
@@ -187,8 +187,7 @@ index 862be1b..a06d0d4 100644
  		--with-randomdev=/dev/urandom \
 -		--enable-epoll --with-libtool
 +		--enable-epoll --with-libtool \
-+		--with-gssapi=no --enable-rrl \
-+		--with-dzl-mysql=$(STAGING_DIR)/usr
++		--with-gssapi=no --enable-rrl
 +
 +ifeq ($(BR2_PACKAGE_LIBCAP),y)
 +	BIND_CONF_OPT += --enable-linux-caps
@@ -203,7 +202,7 @@ index 862be1b..a06d0d4 100644
  	BIND_DEPENDENCIES += libxml2
  else
  	BIND_CONF_OPT += --with-libxml2=no
-@@ -31,36 +42,52 @@ endif
+@@ -31,36 +41,52 @@ endif
  
  ifeq ($(BR2_PACKAGE_OPENSSL),y)
  	BIND_DEPENDENCIES += openssl
