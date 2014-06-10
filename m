@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jun 2014 08:02:06 -0700
-Subject: [Buildroot] [PATCH 3/3] fmc: new package
+Date: Tue, 10 Jun 2014 08:02:04 -0700
+Subject: [Buildroot] [PATCH 1/3] fmlib: new package
 In-Reply-To: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1402412526-24844-4-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,79 +12,76 @@ To: buildroot@busybox.net
 
 Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in     |    1 +
- package/fmc/Config.in |   14 ++++++++++++++
- package/fmc/fmc.mk    |   31 +++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
- create mode 100644 package/fmc/Config.in
- create mode 100644 package/fmc/fmc.mk
+ package/Config.in       |    1 +
+ package/fmlib/Config.in |    9 +++++++++
+ package/fmlib/fmlib.mk  |   33 +++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+ create mode 100644 package/fmlib/Config.in
+ create mode 100644 package/fmlib/fmlib.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ac3af6b..f874eaf 100644
+index 1706197..60118ea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -918,6 +918,7 @@ source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
-+source "package/fmc/Config.in
- source "package/foomatic-filters/Config.in"
- source "package/fping/Config.in"
- source "package/gesftpserver/Config.in"
-diff --git a/package/fmc/Config.in b/package/fmc/Config.in
+@@ -715,6 +715,7 @@ source "package/c-ares/Config.in"
+ source "package/cppzmq/Config.in"
+ source "package/czmq/Config.in"
+ source "package/filemq/Config.in"
++source "package/fmlib/Config.in"
+ source "package/glib-networking/Config.in"
+ source "package/libcgi/Config.in"
+ source "package/libcgicc/Config.in"
+diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
 new file mode 100644
-index 0000000..9530756
+index 0000000..43f7aa3
 --- /dev/null
-+++ b/package/fmc/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_FMC
-+	bool "fmc"
++++ b/package/fmlib/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FMLIB
++	bool "fmlib"
 +	depends on BR2_powerpc_e500mc
-+	select BR2_PACKAGE_TCLAP
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_FMLIB
 +	help
-+	  The Frame Manager Configuration tool is a software package whose primary
-+	  purpose is converting Parse-Classify-Police-Distribute (PCD) descriptions of
-+	  network packets flow into hardware configuration. The tool provides an
-+	  abstraction layer between the end customer's vision of the PCD task
-+	  definition and real hardware implementation.
++	  The Frame Manager library provides an API on top of the Frame Manager driver
++	  ioctl calls, that provides a user space application with a simple way
++	  to configure driver parameters and PCD (parse - classify - distribute) rules.
 +
-+	  http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
++	  http://git.freescale.com/git/cgit.cgi/ppc/sdk/fmlib.git/tree/README
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
 new file mode 100644
-index 0000000..513a8ef
+index 0000000..b2dedaa
 --- /dev/null
-+++ b/package/fmc/fmc.mk
-@@ -0,0 +1,31 @@
-+###############################################################################
++++ b/package/fmlib/fmlib.mk
+@@ -0,0 +1,33 @@
++#############################################################
 +#
-+# fmc
++# fmlib
 +#
-+###############################################################################
++#############################################################
 +
-+FMC_VERSION = fsl-sdk-v1.5-rc3
-+FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-+FMC_LICENSE = MIT
-+FMC_LICENSE_FILES = COPYING
-+FMC_DEPENDENCIES = libxml2 tclap fmlib
++FMLIB_VERSION = fsl-sdk-v1.5-rc3
++FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
++FMLIB_LICENSE = BSD-c3
++FMLIB_LICENSE_FILES = COPYING
++FMLIB_DEPENDENCIES = linux
++FMLIB_INSTALL_STAGING = YES
++FMLIB_INSTALL_TARGET = NO
 +
-+FMC_MAKE_OPTS = \
++FMLIB_MAKE_OPTS = \
 +	CC="$(TARGET_CC)" \
-+	CXX="$(TARGET_CXX)" \
-+	FMD_USPACE_HEADER_PATH="$(STAGING_DIR)/usr/include/fmd" \
-+	FMD_USPACE_LIB_PATH="$(STAGING_DIR)/usr/lib" \
-+	LIBXML2_HEADER_PATH="$(STAGING_DIR)/usr/include/libxml2" \
-+	TCLAP_HEADER_PATH="$(STAGING_DIR)/usr/include"
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	KERNEL_SRC="$(LINUX_DIR)" \
++	PREFIX="$(STAGING_DIR)/usr"
 +
-+define FMC_BUILD_CMDS
-+	# The linking step has dependency issues so using MAKE1
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
++ifeq ($(BR2_powerpc_e500mc), y)
++	FMLIB_ARCHTYPE = ppce500mc
++endif
++
++define FMLIB_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) libfm-$(FMLIB_ARCHTYPE).a
 +endef
 +
-+define FMC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/source/fmc $(TARGET_DIR)/usr/sbin/fmc
-+	cp -dr --no-preserve=ownership $(@D)/etc/fmc $(TARGET_DIR)/etc/
++define FMLIB_INSTALL_STAGING_CMDS
++	$(FMLIB_MAKE_ENV) $(MAKE) $(FMLIB_MAKE_OPTS) -C $(@D) install-libfm-$(FMLIB_ARCHTYPE)
 +endef
 +
 +$(eval $(generic-package))
