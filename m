@@ -1,69 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Jun 2014 13:56:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 7154] Local uClibc config file gets overwritten
- using make uclibc-update-config
-In-Reply-To: <bug-7154-163@https.bugs.busybox.net/>
-References: <bug-7154-163@https.bugs.busybox.net/>
-Message-ID: <20140610135604.6A7C89CFB1@busybox.osuosl.org>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 10 Jun 2014 08:02:14 -0700
+Subject: [Buildroot] [PATCH 1/1] simicsfs: new package
+Message-ID: <1402412534-24929-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7154
 
---- Comment #2 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-10 13:56:04 UTC ---
-(In reply to comment #0)
-[..]
-> 
-> For me deleting the .stamp_configured file in the uclibc-menuconfig entry of
-> the makefile seems not to be a good idea.
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/Config.in            |    1 +
+ package/simicsfs/Config.in   |    5 +++++
+ package/simicsfs/simicsfs.mk |   21 +++++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/simicsfs/Config.in
+ create mode 100644 package/simicsfs/simicsfs.mk
 
-This is done so that the uclibc build is correctly restarted, taking into
-account some of the configuration changes we make on the fly.
-
-The following patch solves the problem, but I'm not sure this is acceptable.
-It moves the initial copy of the config file outside of the
-UCLIBC_SETUP_DOT_CONFIG variable, so that this variable can be re-used from the
-uclibc-update-config target. Because this variable relies on $(@D) we need it
-to be run for a target inside the UCLIBC_DIR, so the patch introduces a new
-.stamp_config_file_fixed step.
-
-tdescham at argentina ~/repo/contrib/buildroot-patchwork $ hg diff
-diff -r a3b89cb15e8f package/uclibc/uclibc.mk
---- a/package/uclibc/uclibc.mk  Mon Jun 09 10:43:55 2014 +0200
-+++ b/package/uclibc/uclibc.mk  Tue Jun 10 15:52:36 2014 +0200
-@@ -414,7 +414,6 @@
-        HOSTCC="$(HOSTCC)"
-
- define UCLIBC_SETUP_DOT_CONFIG
--       $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
-        $(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
-        $(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
-        $(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
-@@ -454,6 +453,7 @@
- endef
-
- define UCLIBC_CONFIGURE_CMDS
-+       $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
-        $(UCLIBC_SETUP_DOT_CONFIG)
-        $(MAKE1) -C $(UCLIBC_DIR) \
-                $(UCLIBC_MAKE_FLAGS) \
-@@ -553,7 +553,10 @@
-
- $(eval $(generic-package))
-
--uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
-+$(UCLIBC_DIR)/.stamp_config_file_fixed:
-+       $(UCLIBC_SETUP_DOT_CONFIG)
+diff --git a/package/Config.in b/package/Config.in
+index 8385433..a757286 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -144,6 +144,7 @@ source "package/mmc-utils/Config.in"
+ source "package/mtools/Config.in"
+ source "package/nfs-utils/Config.in"
+ source "package/ntfs-3g/Config.in"
++source "package/simicsfs/Config.in"
+ source "package/squashfs/Config.in"
+ source "package/sshfs/Config.in"
+ source "package/sunxi-tools/Config.in"
+diff --git a/package/simicsfs/Config.in b/package/simicsfs/Config.in
+new file mode 100644
+index 0000000..8ec4e77
+--- /dev/null
++++ b/package/simicsfs/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SIMICSFS
++	bool "simicsfs"
++	help
++	  A kernel driver that provides access to a host computer's local
++	  filesystem when the target is executing within a SIMICS simulation.
 +
-+uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_file_fixed
-        cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
-
- # Before uClibc is built, we must have the second stage cross-compiler
-
++	  http://www.cs.sfu.ca/~fedorova/Tech/simics-guides-3.0.26/simics-user-guide-unix/topic33.html
+diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
+new file mode 100644
+index 0000000..c266f68
+--- /dev/null
++++ b/package/simicsfs/simicsfs.mk
+@@ -0,0 +1,21 @@
++###############################################################################
++#
++# simicsfs
++#
++###############################################################################
++
++SIMICSFS_VERSION = 1.17
++SIMICSFS_SITE = https://download.simics.net/pub/
++SIMICSFS_LICENSE = GPLv2+
++SIMICSFS_LICENSE_FILES = hostfs.h
++SIMICSFS_DEPENDENCIES = linux
++
++define SIMICSFS_BUILD_CMDS
++        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
++endef
++
++define SIMICSFS_INSTALL_TARGET_CMDS
++        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
++endef
++
++$(eval $(generic-package))
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.7.9.5
