@@ -1,7 +1,7 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 11 Jun 2014 23:21:30 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix AM_PATH_LIBGCRYPT not found
-Message-ID: <1402521690-29474-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Wed, 11 Jun 2014 23:26:22 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: fix AM_PATH_LIBGCRYPT not found
+Message-ID: <1402521982-31067-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,7 +27,6 @@ not acceptable, the required file is added to the m4 directory.
 
 Fixes: http://autobuild.buildroot.net/results/1524d346fa17749e2ae62e063b9cfdd0de95c76a/
 Fixes: http://autobuild.buildroot.net/results/10bcd92437eaa27eb61f8281c93efcb53d555e35/
-
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
  ...systemd-04-fix-am-path-libgcrypt-no-found.patch | 145 +++++++++++++++++++++
@@ -185,5 +184,5 @@ index 0000000..2287ac5
 ++  AC_SUBST(LIBGCRYPT_CFLAGS)
 ++  AC_SUBST(LIBGCRYPT_LIBS)
 ++])
---
+-- 
 1.9.3
