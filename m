@@ -1,55 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Jun 2014 20:56:54 +0200
-Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Depend on
-	xfont_font-util
-Message-ID: <1402513014-4636-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 11 Jun 2014 21:12:23 +0200
+Subject: [Buildroot] [PATCH 0 of 6 v4] infra: fix dollar signs;
+ remove some undefined versions
+Message-ID: <patchbomb.1402513943@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build error:
->>> xserver_xorg-server 1.15.1 Autoreconfiguring
-configure.ac:51: error: must install font-util 1.1 or later before running autoconf/autogen
 
-Tested with minimal defconfig
+This patch series fixes the double sign problem in the inner-xxx-targets
+(see description in the patch itself), and makes the following semi-related
+changes:
+- convert toolchain and toolchain-buildroot package to virtual-package
+- change makedevs and mkpasswd to have a 'buildroot' version
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
-BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
-BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_XBMC=y
-BR2_PACKAGE_XBMC_ADDON_XVDR=y
-BR2_PACKAGE_XBMC_PVR_ADDONS=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
-BR2_PACKAGE_EUDEV=y
+The changes are related in the sense that the double dollar signs were
+needed to correctly implement the subsequent patches.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+I think that the series is ready to be merged now, with Reviews/Acks on all
+patches.
+
+As follow-up I plan to do something about the toolchain-external version
+which is still 'undefined', and add some extra comments in pkg-generic.mk.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 9a998a2..2c99a00 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -13,6 +13,7 @@ XSERVER_XORG_SERVER_AUTORECONF = YES
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
- XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
- XSERVER_XORG_SERVER_DEPENDENCIES = 	\
-+	xfont_font-util			\
- 	xutil_util-macros 		\
- 	xlib_libXfont 			\
- 	xlib_libX11 			\
--- 
-1.7.10.4
+v4: rebase, remove change to toolchain-external from this series
+v3: rebase and implement comments on first patch
+v2: increase consistency of rules (first two patches)
