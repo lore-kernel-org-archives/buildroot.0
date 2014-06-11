@@ -1,95 +1,65 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 11 Jun 2014 22:55:02 +0200
-Subject: [Buildroot] [PATCH 1/1] psplash: install systemd services
-Message-ID: <1402520102-24548-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 11 Jun 2014 23:01:31 +0200
+Subject: [Buildroot] [PATCH] hdparm: prevent package makefile from
+ stripping the hdparm binary
+In-Reply-To: <1402519589-29908-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1402519589-29908-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140611210131.GA27579@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch provides service files for using psplash on embedded devices
-running systemd:
+Thomas, All,
 
-- psplash-start.service: start psplash.
-- psplash-quit.service: kill psplash when reaching multi-user.target
+On 2014-06-11 22:46 +0200, Thomas Petazzoni spake thusly:
+> Packages shouldn't strip executables by themselves, so that Buildroot
+> controls whether stripping should occur or not. This also fixes the
+> build on Blackfin FLAT where stripping actually doesn't work because
+> stripping FLAT binaries is not supported.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/7d4/7d4e59c96928a06db5091235bf2eacf462ba8a21/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-The following kernel command line options should also be set:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-  systemd.show_status=0 quiet splash
+Regards,
+Yann E. MORIN.
 
-The option "systemd.show_status=0" is required, because, unlike Plymouth,
-psplash does not have real systemd integration, i.e. it will not perform:
+> ---
+>  package/hdparm/hdparm.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
+> index 1a200fb..0ca3c39 100644
+> --- a/package/hdparm/hdparm.mk
+> +++ b/package/hdparm/hdparm.mk
+> @@ -12,7 +12,8 @@ HDPARM_LICENSE_FILES = LICENSE.TXT
+>  define HDPARM_BUILD_CMDS
+>  	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+>  		CFLAGS="$(TARGET_CFLAGS)" \
+> -		LDFLAGS="$(TARGET_LDFLAGS)"
+> +		LDFLAGS="$(TARGET_LDFLAGS)" \
+> +		STRIP=/bin/true
+>  endef
+>  
+>  define HDPARM_INSTALL_TARGET_CMDS
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  kill(1, SIGRTMIN + 21);
-
-Note that no progress messages will be printed on the splash screen.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/psplash/psplash-quit.service  | 11 +++++++++++
- package/psplash/psplash-start.service | 11 +++++++++++
- package/psplash/psplash.mk            | 14 ++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/psplash/psplash-quit.service
- create mode 100644 package/psplash/psplash-start.service
-
-diff --git a/package/psplash/psplash-quit.service b/package/psplash/psplash-quit.service
-new file mode 100644
-index 0000000..14bd499
---- /dev/null
-+++ b/package/psplash/psplash-quit.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Terminate Psplash Boot Screen
-+After=psplash-start.service
-+
-+[Service]
-+Type=oneshot
-+ExecStart=/usr/bin/psplash-write QUIT
-+TimeoutSec=20
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/psplash/psplash-start.service b/package/psplash/psplash-start.service
-new file mode 100644
-index 0000000..2de3cfc
---- /dev/null
-+++ b/package/psplash/psplash-start.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Starts Psplash Boot screen
-+Wants=systemd-vconsole-setup.service
-+After=systemd-vconsole-setup.service systemd-udev-trigger.service systemd-udevd.service
-+DefaultDependencies=no
-+
-+[Service]
-+ExecStart=/usr/bin/psplash -n
-+
-+[Install]
-+WantedBy=sysinit.target
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 83b6f79..b756266 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -9,4 +9,18 @@ PSPLASH_SITE = git://git.yoctoproject.org/psplash
- PSPLASH_LICENSE = GPLv2+
- PSPLASH_AUTORECONF = YES
- 
-+define PSPLASH_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
-+		$(TARGET_DIR)/etc/systemd/system/psplash-start.service
-+	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
-+	ln -sf  ../psplash-start.service \
-+		 $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/
-+
-+	$(INSTALL) -D -m 644 package/psplash/psplash-quit.service \
-+		$(TARGET_DIR)/etc/systemd/system/psplash-quit.service
-+	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf  ../psplash-quit.service \
-+		 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+endef
-+
- $(eval $(autotools-package))
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
