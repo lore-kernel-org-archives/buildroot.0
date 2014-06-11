@@ -1,50 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Jun 2014 20:06:56 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d: depend on udev
-In-Reply-To: <20140611200020.352797b8@free-electrons.com>
-References: <1402508508-437-1-git-send-email-bernd.kuhls@t-online.de>
- <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de>
- <20140611175236.GC3472@free.fr>
- <20140611200020.352797b8@free-electrons.com>
-Message-ID: <20140611180656.GE3472@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 11 Jun 2014 20:56:54 +0200
+Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Depend on
+	xfont_font-util
+Message-ID: <1402513014-4636-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes build error:
+>>> xserver_xorg-server 1.15.1 Autoreconfiguring
+configure.ac:51: error: must install font-util 1.1 or later before running autoconf/autogen
 
-On 2014-06-11 20:00 +0200, Thomas Petazzoni spake thusly:
-> Dear Yann E. MORIN,
-> 
-> On Wed, 11 Jun 2014 19:52:36 +0200, Yann E. MORIN wrote:
-> 
-> > This is a stop-gap fix until we have a proper libudev package.
-> > This shoudl be independent from the previous patches, so can go in
-> > as-is:
-> 
-> Then why was it sent as the last patch of the series?
+Tested with minimal defconfig
 
-Because Bernd changed the meaning of _HAS_UDEV to mean "has a libudev".
+BR2_x86_64=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_TOOLCHAIN_BUILDROOT_INET_RPC=y
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_XBMC_ADDON_XVDR=y
+BR2_PACKAGE_XBMC_PVR_ADDONS=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
+BR2_PACKAGE_EUDEV=y
 
-But since that's not what we want, but we need a quick fix, we can still
-apply that patch as-is to quickly stop the build-failure bleeding in the
-autobuilders.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Then (later!), when we have settled on this libudev thinggy, we can
-switch mesa to use the new libudev.
-
-But in the mean time, this patch still applies and still makes sense
-without the rest of the series.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 9a998a2..2c99a00 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -13,6 +13,7 @@ XSERVER_XORG_SERVER_AUTORECONF = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
++	xfont_font-util			\
+ 	xutil_util-macros 		\
+ 	xlib_libXfont 			\
+ 	xlib_libX11 			\
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
