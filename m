@@ -1,72 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Jun 2014 23:54:25 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-06-08
-In-Reply-To: <20140611214744.GD2825@ned>
-References: <20140609063010.9CF93101624@stock.ovh.net>
- <20140609211036.GA10459@ned>
- <20140611105653.4e25ec3c@free-electrons.com>
- <20140611210457.GA2825@ned> <20140611211303.GB27579@free.fr>
- <20140611214744.GD2825@ned>
-Message-ID: <20140611215425.GD27579@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 12 Jun 2014 00:16:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xserver_xorg-server: Depends on
+	host-xfont_font-util
+Message-ID: <1402524987-24727-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, Thomas, Peter, All,
+Fixes build error:
+>>> xserver_xorg-server 1.15.1 Autoreconfiguring
+configure.ac:51: error: must install font-util 1.1 or later before running autoconf/autogen
 
-Thomas, Peter, you input is requested, below...
+Tested with minimal defconfig
 
-On 2014-06-11 23:47 +0200, Eric Le Bihan spake thusly:
-> On Wed, Jun 11, 2014 at 11:13:03PM +0200, Yann E. MORIN wrote:
-> > On 2014-06-11 23:04 +0200, Eric Le Bihan spake thusly:
-> > > On Wed, Jun 11, 2014 at 10:56:53AM +0200, Thomas Petazzoni wrote:
-> > > > On Mon, 9 Jun 2014 23:10:36 +0200, Eric Le Bihan wrote:
-> > > > > - We are stuck with autoreconf, as it is needed to solve the `ln --relative`
-> > > > >   issue via a patch, which will not be accepted by upstream [8].
-> > > >
-> > > > If we're stuck with autoreconf due to a patch that will not be accepted
-> > > > upstream, then I would suggest that we move away from autoreconf, and
-> > > > turn this patch into something that changes Makefile.in and configure
-> > > > directly, with a good explanation in the patch description.
-> > > >
-> > > > Hopefully, ln implementations in distributions will be upgraded, and at
-> > > > some time, we'll be able to drop the patch.
-> > > Maybe there will be a backport of coreutils for Debian Wheezy ;-)
-> > > >
-> > > > The drawback with this solution is that if we want to create/backport
-> > > > other systemd patches that require autoreconf, then we're screwed. So
-> > > > maybe carrying our copy of libgcrypt.m4 as a patch in systemd sources is
-> > > > the easiest solution here.
-> > > I think this is the more future-proof solution. I'll post a patch implementing
-> > > this.
-> >
-> > Can we just use the ln wrapper as suggested in the referenced thread?
->
-> Should it be provided by the systemd package or should we create a new one?
-> Are there other packages that require such wrappers?
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
 
-I think if we go that route, we should just bundle it in Buildroot, and
-always install it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: - depend on host-xfont_font-util instead of xfont_font-util (Thomas)
+    - provide reduced defconfig for testing
 
-After all, all this wrapper does is look for --relative in the
-arguments, and if found, emulates it; otherwise, it just calls to the
-real ln.
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Sounds reasonable to me (although I did not look too closely if the
-script was entirely correct.)
-
-But I'd like input from Thomas and Peter on that one.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 9a998a2..050dee6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -54,6 +54,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xkeyboard-config		\
+ 	pixman 				\
+ 	mcookie 			\
++	host-xfont_font-util		\
+ 	host-pkgconf
+ 
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
