@@ -1,34 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 11 Jun 2014 09:55:56 -0300
-Subject: [Buildroot] [PATCH] libcap-ng: security bump to version 0.7.4
-Message-ID: <1402491356-2889-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 11 Jun 2014 15:02:06 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: Add optional
+	dependency to libiconv
+Message-ID: <1402491726-3830-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-3215.
+To get reproducable builds depend on libiconv if needed.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+tvheadend configure either shows
+
+  checking for cc libiconv ...                      fail
+
+or
+
+  checking for cc libiconv ...                      ok
+
+depending on the presence of libiconv, and gets linked
+
+output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/tvheadend | grep NEEDED | grep iconv
+ 0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
+
+Please note that libiconv is not a hard-dependency.
+
+Tested with minimal defconfig
+
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=y
+BR2_PACKAGE_LIBICONV=y
+BR2_PACKAGE_TVHEADEND=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcap-ng/libcap-ng.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2: resend with added note about optional dependency (Peter)
 
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index 53c7ee7..bdcb418 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+ package/tvheadend/tvheadend.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index c582c07..4d0a16d 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -14,6 +14,10 @@ ifeq ($(BR2_PACKAGE_AVAHI),y)
+ TVHEADEND_DEPENDENCIES += avahi
+ endif
  
--LIBCAP_NG_VERSION = 0.7.3
--LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng/
-+LIBCAP_NG_VERSION = 0.7.4
-+LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
- LIBCAP_NG_LICENSE = GPLv2+ LGPLv2.1+
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
- LIBCAP_NG_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++TVHEADEND_DEPENDENCIES += libiconv
++endif
++
+ TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 
+ define TVHEADEND_CONFIGURE_CMDS
 -- 
-1.8.5.5
+1.7.10.4
