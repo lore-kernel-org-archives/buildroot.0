@@ -1,32 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jun 2014 14:29:41 +0200
-Subject: [Buildroot] [git commit] radvd: bump to version 1.12
-Message-ID: <20140611123750.7E5BF9CB8D@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2014 14:45:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: Add optional
+	dependency to libiconv
+In-Reply-To: <XnsA34990F24E603berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
+ Kuhls's message of "Wed, 11 Jun 2014 14:14:55 +0200")
+References: <1402313033-31085-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140609195850.2317401f@free-electrons.com>
+ <XnsA34990F24E603berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <877g4nipi0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11e0d9333ccd1ee50997be2b86c40f7633c7e5f9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/radvd/radvd.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+ > @public.gmane.org> wrote in news:20140609195850.2317401f at free-electrons.com:
 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index e82774e..3aec4f3 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RADVD_VERSION = 1.10.0
-+RADVD_VERSION = 1.12
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
- RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
+ >> You need libiconv because your toolchain does not have locale support.
+ >> Therefore, your Config.in should have something like:
+ >> 
+ >> select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ >> 
+ >> see all the other examples in Buildroot.
+
+ > Hi,
+
+ > libiconv is not a hard-dependency of tvheadend so I thought enabling libiconv 
+ > in the !BR2_ENABLE_LOCALE case is not necessary here.
+
+Ahh, so it's just an optional dependency it CAN use if available? Then
+the patch is fine.
+
+Somehow I don't see it anymore in patchwork though?
+
+-- 
+Bye, Peter Korsgaard
