@@ -1,24 +1,36 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2014 11:18:32 +0200
-Subject: [Buildroot] [V2 2/2] perl-cross: bump to version 0.8.5
-In-Reply-To: <1398356762-12486-2-git-send-email-francois.perrad@gadz.org>
- (Francois Perrad's message of "Thu, 24 Apr 2014 18:26:02 +0200")
-References: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
- <1398356762-12486-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <87a99jkdnb.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Jun 2014 11:18:44 +0200
+Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
+ "target-finalize" rule
+In-Reply-To: <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
+References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140610223358.69a70e6e@free-electrons.com>
+ <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
+Message-ID: <20140611111844.2952ecac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+Dear Fabio Porcedda,
 
- > The perl-cross tarball allows to patch the Perl distribution (in a _POST_EXTRACT_HOOKS).
- > The github helper gives a copy of the project which allows to build this tarball.
- > So, the github helper can not be used here.
+On Wed, 11 Jun 2014 11:14:38 +0200, Fabio Porcedda wrote:
 
-Committed with the description adjusted, thanks.
+> > We should go towards *removing* stuff from the main Makefile, not
+> > adding more :-)
+> 
+> Using hooks was my initial proposition but Arnout suggested the above
+> solution and you and Perer liked it.
+> Have you changed your mind about using hooks?
 
+Ah. I don't remember. Do you have a pointer to this discussion? I'd
+like to see what were the arguments back then :-)
+
+Thanks, and sorry for the change in position.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
