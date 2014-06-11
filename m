@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2014 12:53:29 +0200
-Subject: [Buildroot] [PATCH 1/2] znc: add patch to add missing <time.h>
-	inclusions
-In-Reply-To: <1402434092-25323-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 10 Jun 2014 23:01:31 +0200")
-References: <1402434092-25323-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87wqcniuom.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Jun 2014 12:53:44 +0200
+Subject: [Buildroot] [PATCH] flann: disable with the problematic NIOS II
+	toolchain
+In-Reply-To: <1402435660-6095-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 10 Jun 2014 23:27:40 +0200")
+References: <1402435660-6095-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87sinbiuo7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > With certain toolchains, znc fails to build due to missing <time.h>
- > inclusions. This commit fixes that by adding a patch that adds those
- > missing inclusions.
-
  > Fixes:
+ >   http://autobuild.buildroot.org/results/062/0620bf8d60aa57949cede0c5b3920ef5446fe98b/
 
- >   http://autobuild.buildroot.net/results/86e/86e5e76a6ccc1396cd84107af63cdaa0ce1dfbee/
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Committed both, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
