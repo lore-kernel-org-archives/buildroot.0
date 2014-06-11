@@ -1,44 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jun 2014 23:03:48 +0200
-Subject: [Buildroot] [git commit] hdparm: prevent package makefile from
-	stripping the hdparm binary
-Message-ID: <20140611210500.36A4A9CFCA@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 11 Jun 2014 23:04:58 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-06-08
+In-Reply-To: <20140611105653.4e25ec3c@free-electrons.com>
+References: <20140609063010.9CF93101624@stock.ovh.net>
+ <20140609211036.GA10459@ned>
+ <20140611105653.4e25ec3c@free-electrons.com>
+Message-ID: <20140611210457.GA2825@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=11dbb615338cd768acc2c3138064ddf557e9b60b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi!
+On Wed, Jun 11, 2014 at 10:56:53AM +0200, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Mon, 9 Jun 2014 23:10:36 +0200, Eric Le Bihan wrote:
+>
+> > - We are stuck with autoreconf, as it is needed to solve the `ln --relative`
+> >   issue via a patch, which will not be accepted by upstream [8].
+>
+> If we're stuck with autoreconf due to a patch that will not be accepted
+> upstream, then I would suggest that we move away from autoreconf, and
+> turn this patch into something that changes Makefile.in and configure
+> directly, with a good explanation in the patch description.
+>
+> Hopefully, ln implementations in distributions will be upgraded, and at
+> some time, we'll be able to drop the patch.
+Maybe there will be a backport of coreutils for Debian Wheezy ;-)
+>
+> The drawback with this solution is that if we want to create/backport
+> other systemd patches that require autoreconf, then we're screwed. So
+> maybe carrying our copy of libgcrypt.m4 as a patch in systemd sources is
+> the easiest solution here.
+I think this is the more future-proof solution. I'll post a patch implementing
+this.
 
-Packages shouldn't strip executables by themselves, so that Buildroot
-controls whether stripping should occur or not. This also fixes the
-build on Blackfin FLAT where stripping actually doesn't work because
-stripping FLAT binaries is not supported.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/7d4/7d4e59c96928a06db5091235bf2eacf462ba8a21/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/hdparm/hdparm.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
-
-diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-index 1a200fb..0ca3c39 100644
---- a/package/hdparm/hdparm.mk
-+++ b/package/hdparm/hdparm.mk
-@@ -12,7 +12,8 @@ HDPARM_LICENSE_FILES = LICENSE.TXT
- define HDPARM_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
- 		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)"
-+		LDFLAGS="$(TARGET_LDFLAGS)" \
-+		STRIP=/bin/true
- endef
- 
- define HDPARM_INSTALL_TARGET_CMDS
+Best regards,
+ELB
