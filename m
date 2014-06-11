@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2014 22:33:42 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: add systemd service file
-In-Reply-To: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
-References: <1400620611-7625-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140611223342.6d8f9291@free-electrons.com>
+Date: Wed, 11 Jun 2014 22:34:47 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: add network unit file
+In-Reply-To: <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
+References: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
+Message-ID: <20140611223447.1d5e7a65@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +13,72 @@ To: buildroot@busybox.net
 
 Eric,
 
-As our systemd person, could you review this patch, and give your
-comments and/or Acked-by/Reviewed-by as appropriate?
+As our systemd person, could you have a look at this patch, and give
+your comments and/or Acked-by/Reviewed-by as appropriate?
 
-Thanks,
+Thanks!
 
 Thomas
 
-On Tue, 20 May 2014 23:16:51 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - add '-w' (wait) to pg_ctl start command (to ensure pid
->     file generation)
-> ---
->  package/postgresql/postgresql.mk      |  8 ++++++++
->  package/postgresql/postgresql.service | 24 ++++++++++++++++++++++++
->  2 files changed, 32 insertions(+)
->  create mode 100644 package/postgresql/postgresql.service
+On Mon, 27 Jan 2014 17:54:57 -0800, Ivan Sergeev wrote:
+> Add and enable a systemd unit file to bring up or down network with ifup /
+> ifdown, analogous to the skeleton/etc/init.d/S40network init script.
 > 
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index b331737..cf4700a 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -58,4 +58,12 @@ define POSTGRESQL_INSTALL_INIT_SYSV
->  		$(TARGET_DIR)/etc/init.d/S50postgresql
->  endef
->  
-> +define POSTGRESQL_INSTALL_INIT_SYSTEMD
-> +        $(INSTALL) -D -m 644 package/postgresql/postgresql.service \
-> +                $(TARGET_DIR)/etc/systemd/system/postgresql.service
-> +        mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +        ln -fs ../postgresql.service \
-> +                $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/postgresql.service
-> +endef
-> +
->  $(eval $(autotools-package))
-> diff --git a/package/postgresql/postgresql.service b/package/postgresql/postgresql.service
+> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+> ---
+>  package/systemd/network.service | 21 +++++++++++++++++++++
+>  package/systemd/systemd.mk      |  9 +++++++++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 package/systemd/network.service
+> 
+> diff --git a/package/systemd/network.service b/package/systemd/network.service
 > new file mode 100644
-> index 0000000..4a96258
+> index 0000000..0d77bb8
 > --- /dev/null
-> +++ b/package/postgresql/postgresql.service
-> @@ -0,0 +1,24 @@
+> +++ b/package/systemd/network.service
+> @@ -0,0 +1,21 @@
 > +[Unit]
-> +Description=PostgreSQL database server
-> +After=network.target
+> +Description=Network Connectivity
+> +Wants=network.target
+> +Before=network.target
 > +
 > +[Service]
-> +Type=forking
+> +Type=oneshot
+> +RemainAfterExit=yes
 > +
-> +# start timeout disabled because initdb may run a little
-> +# longer (eg. 5 minutes on RaspberryPi)
-> +TimeoutStartSec=0
+> +# lo is brought up earlier, which will cause the upcoming "ifup -a" to fail
+> +# with exit code 1, due to an "ip: RTNETLINK answers: File exists" error during
+> +# its "ip addr add ..." command, subsequently causing this unit to fail even
+> +# though it is a benign error. Flushing the lo address with the command below
+> +# before ifup prevents this failure.
+> +ExecStart=/sbin/ip addr flush dev lo
 > +
-> +User=postgres
-> +Group=postgres
-> +
-> +SyslogIdentifier=postgres
-> +PIDFile=/var/lib/pgsql/postmaster.pid
-> +
-> +ExecStartPre=/bin/sh -c "if [ ! -f /var/lib/pgsql/PG_VERSION ]; then /usr/bin/pg_ctl initdb -D /var/lib/pgsql; fi"
-> +ExecStart=/usr/bin/pg_ctl start -D /var/lib/pgsql -w -l /var/lib/pgsql/logfile
-> +ExecReload=/usr/bin/pg_ctl reload -D /var/lib/pgsql
-> +ExecStop=/usr/bin/pg_ctl stop -D /var/lib/pgsql -m fast
+> +ExecStart=/sbin/ifup -a
+> +ExecStop=/sbin/ifdown -a
 > +
 > +[Install]
 > +WantedBy=multi-user.target
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index a5dc8e5..a99c0da 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -72,7 +72,16 @@ define SYSTEMD_INSTALL_TTY_HOOK
+>  	ln -fs ../../../../usr/lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+>  endef
+>  
+> +define SYSTEMD_INSTALL_NETWORK_HOOK
+> +	$(INSTALL) -D -m 644 package/systemd/network.service \
+> +		$(TARGET_DIR)/etc/systemd/system/network.service
+> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> +	ln -fs ../network.service \
+> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
+> +endef
+> +
+>  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>  	SYSTEMD_INSTALL_TTY_HOOK \
+> +	SYSTEMD_INSTALL_NETWORK_HOOK
+>  
+>  $(eval $(autotools-package))
 
 
 
