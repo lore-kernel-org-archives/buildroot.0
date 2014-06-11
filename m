@@ -1,95 +1,102 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Jun 2014 23:08:44 +0200
-Subject: [Buildroot] [PATCH v13 11/19] xdriver_xf86-video-intel: Bump
-	version to 2.99.911
+Date: Wed, 11 Jun 2014 23:08:43 +0200
+Subject: [Buildroot] [PATCH v13 10/19] libglew: new package
 In-Reply-To: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402520932-26672-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402520932-26672-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-video-intel/Config.in   |    5 ++--
- .../xdriver_xf86-video-intel.mk                    |   27 +++++++++++++++-----
- 2 files changed, 24 insertions(+), 8 deletions(-)
+ package/Config.in          |    1 +
+ package/libglew/Config.in  |   19 +++++++++++++++++++
+ package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew.mk
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 69a9e78..bba7cd1 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -3,12 +3,13 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
- 	  Intel video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..52b493f 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
+diff --git a/package/Config.in b/package/Config.in
+index 072739c..43e142d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -594,6 +594,7 @@ menu "Graphics"
+ 	source "package/libgail/Config.in"
+ 	source "package/libgeotiff/Config.in"
+ 	source "package/libglade/Config.in"
++	source "package/libglew/Config.in"
+ 	source "package/libglu/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libpng/Config.in"
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+new file mode 100644
+index 0000000..67c49d4
+--- /dev/null
++++ b/package/libglew/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBGLEW
++	bool "libglew"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XLIB_LIBXMU
++	help
++	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
++	  extension loading library. GLEW provides efficient run-time mechanisms
++	  for determining which OpenGL extensions are supported on the target
++	  platform. OpenGL core and extension functionality is exposed in a
++	  single header file.
 +
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,21 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
++	  http://glew.sourceforge.net
 +
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d xproto_xf86driproto
-+else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --disable-dri
-+endif
- 
- $(eval $(autotools-package))
++comment "libglew depends on X.org and needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+new file mode 100644
+index 0000000..48ecf97
+--- /dev/null
++++ b/package/libglew/libglew.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# libglew
++#
++################################################################################
++
++LIBGLEW_VERSION = 1.10.0
++LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
++LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_LICENSE = MIT
++LIBGLEW_LICENSE_FILES = LICENSE.txt
++LIBGLEW_INSTALL_STAGING = YES
++LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
++
++# using $TARGET_CONFIGURE_OPTS breaks compilation
++define LIBGLEW_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
++		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
++		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
++		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++endef
++
++define LIBGLEW_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++define LIBGLEW_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
