@@ -1,91 +1,145 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Jun 2014 18:42:55 +0200
-Subject: [Buildroot] [PATCH v12 15/32] mesa3d: dri2 does not need udev
- support
-In-Reply-To: <1402144292-27837-16-git-send-email-bernd.kuhls@t-online.de>
-References: <1402144292-27837-1-git-send-email-bernd.kuhls@t-online.de>
- <1402144292-27837-16-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140611164255.GA3472@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Jun 2014 18:32:36 +0200
+Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
+ "target-finalize" rule
+In-Reply-To: <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
+References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140610223358.69a70e6e@free-electrons.com>
+ <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
+Message-ID: <539884A4.5060705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
-
-On 2014-06-07 14:31 +0200, Bernd Kuhls spake thusly:
-> http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=b959fd9674938e127a34d42d34b903e3a9ae7ad9
-> "The loader infrastructure for everything but DRI2 requires that udev be present"
+On 06/11/14 11:14, Fabio Porcedda wrote:
+> Hi Thomas,
+> thanks for reviewing the patch.
 > 
-> Check for udev only for dri3.
+> On Tue, Jun 10, 2014 at 10:33 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Fabio Porcedda,
+>>
+>> On Tue, 10 Jun 2014 10:52:47 +0200, Fabio Porcedda wrote:
+>>
+>>>  target-finalize: $(TARGETS)
+>>>       @$(call MESSAGE,"Finalizing target directory")
+>>> +     $(TARGET_FINALIZE_GENERIC_SECURETTY)
+>>> +     $(TARGET_FINALIZE_GENERIC_HOSTNAME)
+>>> +     $(TARGET_FINALIZE_GENERIC_ISSUE)
+>>> +     $(TARGET_FINALIZE_ROOT_PASSWD)
+>>> +     $(TARGET_FINALIZE_GENERIC_GETTY)
+>>> +     $(TARGET_FINALIZE_GENERIC_REMOUNT_RW)
+>>
+>> I agree with the principle, but I'd like to have a better
+>> implementation, which is really long overdue to stop cluttering
+>> target-finalize with more and more crap. Could we implement
+>> target-finalize as just:
+>>
+>> target-finalize: $(TARGETS)
+>>         $(foreach hook,$(TARGET_FINALIZE_HOOKS),$(call $(hook),end,$(1),$($(PKG)_NAME))$(sep))
 
-The git-tree of mesa3d requires that either libudev or sysfs be present:
-    http://cgit.freedesktop.org/mesa/mesa/commit/?id=85b6f36ca5238dd3fec7c5fcacb8b7074ce53c8e
+ I like this idea. Though it should actually be
 
-So it is now possible to use --enable-sysfs instead of requiring
-libudev.so.
+$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
 
-That's a pity this is not in mesa-10.2.1, and the patch is a bit too
-large to back-port, IMHO.
+(the call is redundant, the end is redundant, and $(1) and $(PKG) are not
+available).
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../mesa3d-0002-dri2-does-not-need-udev.patch      |   25 ++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
+>>
+>> And then:
+>>
+>>> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+>>> +define TARGET_FINALIZE_GENERIC_SECURETTY
+>>>       grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
+>>>               echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
+>>> +endef
+>>
+>> TARGET_FINALIZE_HOOKS += TARGET_FINALIZE_GENERIC_SECURETTY
+>>
+>> Then we can also use this to move the Python, Perl and other
+>> package-specific target-finalize logic down to the specific packages.
+>> Of course, I'm not asking you to do all of this work. But at least,
+>> post a patch introducing the TARGET_FINALIZE_HOOKS, and use it for
+>> those targets you were converting in your original patch.
+>>
+>> We should go towards *removing* stuff from the main Makefile, not
+>> adding more :-)
 > 
-> diff --git a/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch b/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
-> new file mode 100644
-> index 0000000..88c6861
-> --- /dev/null
-> +++ b/package/mesa3d/mesa3d-0002-dri2-does-not-need-udev.patch
-> @@ -0,0 +1,25 @@
-> +http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=b959fd9674938e127a34d42d34b903e3a9ae7ad9
-> +"The loader infrastructure for everything but DRI2 requires that udev be present"
-> +
-> +Check for udev only for dri3.
-> +
-> +Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=75212#c5
+> Using hooks was my initial proposition but Arnout suggested the above
+> solution and you and Perer liked it.
+> Have you changed your mind about using hooks?
 
-Unfortunately, upstream is not too keen on applying this patch.
+ Actually, your initial proposition was:
 
-So, I think we should revisit your libudev package. I'll go comment
-there.
+-target-purgelocales:
++target-purgelocales: $(filter-out target-purgelocales,$(TARGETS))
 
-Regards,
-Yann E. MORIN.
+ And my comment was that I don't like this splitting of target-finalize over
+several make targets. It is that remark that lead to the thread below.
 
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +diff -uNr Mesa-10.2.0-rc1.org/configure.ac Mesa-10.2.0-rc1/configure.ac
-> +--- Mesa-10.2.0-rc1.org/configure.ac	2014-05-03 02:17:23.000000000 +0200
-> ++++ Mesa-10.2.0-rc1/configure.ac	2014-05-07 19:51:54.187921825 +0200
-> +@@ -998,11 +998,11 @@
-> +         DEFINES="$DEFINES -DHAVE_ALIAS"
-> +         if test "x$enable_dri3" = xyes; then
-> +             DEFINES="$DEFINES -DHAVE_DRI3"
-> +-        fi
-> + 
-> +         if test "x$have_libudev" != xyes; then
-> +             AC_MSG_ERROR([libudev-dev required for building DRI])
-> +         fi
-> ++        fi
-> + 
-> +         case "$host_cpu" in
-> +         powerpc* | sparc*)
-> -- 
-> 1.7.10.4
+ With the hooks, you'll still have a single target-finalize rule that performs
+all the finalization and that simply depends on $(TARGETS).
+
+ Regards,
+ Arnout
+
+
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> This is a copy of the previous thread:
+> On Mon, Apr 28, 2014 at 6:10 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Peter, Arnout,
+>>
+>> On Mon, 28 Apr 2014 11:36:15 +0200, Peter Korsgaard wrote:
+>>
+>>>  >  My personal preference is to have a single rule (e.g. target-finalize)
+>>>  > that performs everything that is post-targets and pre-rootfs. There isn't
+>>>  > much that needs to be done so parallelisation doesn't make sense. And I
+>>>  > think it's much easier to understand which steps are executed and in
+>>>  > which order if they are all put together in a single rule rather than
+>>>  > spread out over several.
+>>>
+>>>  >  To make things more readable, we can put the commands into separate
+>>>  > variables. For instance:
+>>>
+>>>  > define TARGET_PURGE_LOCALES
+>>>  >    rm -f $(LOCALE_WHITELIST)
+>>>  >    ...
+>>>  > endef
+>>>
+>>>  > define TARGET_PURGE_DEVFILES
+>>>  >    rm -rf $(TARGET_DIR)/usr/include ...
+>>>  > ...
+>>>  > endef
+>>>
+>>>  > ifneq ($(BR2_PACKAGE_GDB),y)
+>>>  > define TARGET_PURGE_GDB
+>>>  >         rm -rf $(TARGET_DIR)/usr/share/gdb
+>>>  > endef
+>>>  > endif
+>>>
+>>>  > target-finalize: $(TARGETS)
+>>>  >    $(TARGET_PURGE_LOCALES)
+>>>  >    $(TARGET_PURGE_DEVFILES)
+>>>  >    $(TARGET_PURGE_GDB)
+>>>  >    $(TARGET_PURGE_DOC)
+>>>  > ...
+>>>
+>>> Yes, that looks nice and clear to me too.
+>>
+>> Yes, agreed, this looks a lot nicer than a long chain of targets that
+>> simply depend on each other to avoid any parallelization.
+> 
+> Best regards
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
