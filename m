@@ -1,57 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2014 22:16:18 +0200
-Subject: [Buildroot] [PATCH v3] u-boot: allow to pass a custom
- configuration file
-In-Reply-To: <1399904527-8159-1-git-send-email-eric.jarrige@armadeus.org>
-References: <1399904527-8159-1-git-send-email-eric.jarrige@armadeus.org>
-Message-ID: <20140611221618.5b224a1e@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2014 22:17:26 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d: depend on udev
+In-Reply-To: <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Wed, 11 Jun 2014 19:41:48 +0200")
+References: <1402508508-437-1-git-send-email-bernd.kuhls@t-online.de>
+ <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87k38ngq09.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Jarrige,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Mon, 12 May 2014 16:22:07 +0200, Eric Jarrige wrote:
-> Add an option BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE that makes it possible
-> to override the configuration options in the board header file. This
-> avoids the need for manipulating the board header file with sed hacks
-> like is currently done for the BR2_TARGET_UBOOT_NETWORK settings.
-> 
-> Note that this option does not make it possible to add a new board to
-> U-Boot. That still has to be done by patching the source.
-> 
-> Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
+ > checking for LIBUDEV... no
+ > configure: error: libudev-dev required for building DRI
 
-We just had a discussion on IRC with Peter Korsgaard, and he also
-doesn't like much this solution:
+ > Fixes
+ > http://autobuild.buildroot.net/results/16d/16d12b986051db884eae86e9658e6c4fc0f28885/
 
-22:16 < Jacmet> kos_tom: I also don't like 348092
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-He hasn't expressed the details on IRC, but I believe he shares similar
-concerns to mine, i.e:
+Committed, thanks.
 
-"""
-I must say I'm still unconvinced by this patch. In U-Boot, the
-configuration is completely mixed with the definition of the board, and
-defining a board does not only require adding a file in
-include/configs/, but also adding an entry in boards.cfg.
-
-Therefore, I really believe that people willing to customize their
-U-Boot board or configuration should instead carry a patch against
-U-Boot instead of using this non-standard solution.
-"""
-
-Of course, if Peter has different/other reasons, I'm sure he will
-give more details in this thread.
-
-As a consequence, I'm marking the patch as Rejected in patchwork.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
