@@ -1,98 +1,62 @@
-From: Massimo Callegari <massimocallegari@yahoo.it>
-Date: Wed, 11 Jun 2014 12:05:20 +0200
-Subject: [Buildroot] [PATCH 1/1] New package: qt5webkitexamples
-Message-ID: <1402481120-13154-1-git-send-email-massimocallegari@yahoo.it>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 11 Jun 2014 13:15:09 +0300
+Subject: [Buildroot] [PATCH] e2fsprogs: fix static build against external
+	libblkid
+Message-ID: <72ae71741da36e003dd68da3677c6ce987df25a4.1402481709.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+http://autobuild.buildroot.net/results/0159246b52659508a4bbba4126ab27b28a2b2e2c/
 
-Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/qt5/Config.in                              |  1 +
- package/qt5/qt5webkitexamples/Config.in            | 12 +++++++
- package/qt5/qt5webkitexamples/qt5webkitexamples.mk | 40 ++++++++++++++++++++++
- 3 files changed, 53 insertions(+)
- create mode 100644 package/qt5/qt5webkitexamples/Config.in
- create mode 100644 package/qt5/qt5webkitexamples/qt5webkitexamples.mk
+ ...n-fix-external-libblkid-test-for-static-l.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index efdd9d4..024fa94 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -40,6 +40,7 @@ source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5webkit/Config.in"
-+source "package/qt5/qt5webkitexamples/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
- source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5webkitexamples/Config.in b/package/qt5/qt5webkitexamples/Config.in
+diff --git a/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch b/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
 new file mode 100644
-index 0000000..18cb476
+index 000000000000..65d6c4c024bc
 --- /dev/null
-+++ b/package/qt5/qt5webkitexamples/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_QT5WEBKITEXAMPLES
-+	bool "qt5webkit examples"
-+	depends on BR2_PACKAGE_QT5WEBKIT
-+	depends on BR2_PACKAGE_QT5XMLPATTERNS
-+	select BR2_PACKAGE_QT5BASE_EXAMPLES
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++++ b/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
+@@ -0,0 +1,34 @@
++From b52e76432fe23490b891884f3a66504101c2a5bd Mon Sep 17 00:00:00 2001
++Message-Id: <b52e76432fe23490b891884f3a66504101c2a5bd.1402480818.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 11 Jun 2014 12:56:15 +0300
++Subject: [PATCH] configure.in: fix external libblkid test for static link
 +
-+	  This package corresponds to the qt5webkit examples module.
++External libblkid needs -luuid when linking statically. Use pkg-config to
++determine it correctly. Adding --static doesn't hurt even for dynamic
++linking.
 +
-+	  http://qt-project.org
-diff --git a/package/qt5/qt5webkitexamples/qt5webkitexamples.mk b/package/qt5/qt5webkitexamples/qt5webkitexamples.mk
-new file mode 100644
-index 0000000..435f114
---- /dev/null
-+++ b/package/qt5/qt5webkitexamples/qt5webkitexamples.mk
-@@ -0,0 +1,40 @@
-+################################################################################
-+#
-+# qt5webkitexamples
-+#
-+################################################################################
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
 +
-+QT5WEBKITEXAMPLES_VERSION = $(QT5_VERSION)
-+QT5WEBKITEXAMPLES_SITE = $(QT5_SITE)
-+QT5WEBKITEXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKITEXAMPLES_VERSION).tar.xz
-+QT5WEBKITEXAMPLES_DEPENDENCIES = qt5webkit
-+QT5WEBKITEXAMPLES_INSTALL_STAGING = YES
++Patch status: sent upstream: http://patchwork.ozlabs.org/patch/358584/
 +
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5WEBKITEXAMPLES_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5script.
-+else
-+QT5WEBKITEXAMPLES_LICENSE = Commercial license
-+QT5WEBKITEXAMPLES_REDISTRIBUTE = NO
-+endif
++ configure.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+define QT5WEBKITEXAMPLES_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
++diff --git a/configure.in b/configure.in
++index 448a2926776a..ec6068320878 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -551,7 +551,7 @@ then
++ 		[LIBBLKID=`$PKG_CONFIG --libs blkid`;
++ 		 STATIC_LIBBLKID=`$PKG_CONFIG --static --libs blkid`],
++ 		[AC_MSG_ERROR([external blkid library not found])],
++-		[$LIBBLKID])
+++		[`$PKG_CONFIG --static --libs blkid`])
++ 	BLKID_CMT=#
++ 	AC_MSG_RESULT([Disabling private blkid library])
++ else
++-- 
++2.0.0
 +
-+define QT5WEBKITEXAMPLES_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5WEBKITEXAMPLES_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
-+define QT5WEBKITEXAMPLES_INSTALL_TARGET_CMDS
-+	cp -af $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
-+    cp -af $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
-+endef
-+
-+$(eval $(generic-package))
 -- 
-1.8.1.2
+2.0.0
