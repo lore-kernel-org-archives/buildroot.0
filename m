@@ -1,80 +1,68 @@
-From: Massimo Callegari <massimocallegari@yahoo.it>
-Date: Wed, 11 Jun 2014 11:21:57 +0100 (BST)
-Subject: [Buildroot] ICU 51.2 bus error
-In-Reply-To: <20140609184755.54864d4b@free-electrons.com>
-References: <1402328606.59886.YahooMailNeo@web172305.mail.ir2.yahoo.com>
- <20140609184755.54864d4b@free-electrons.com>
-Message-ID: <1402482117.58318.YahooMailNeo@web172306.mail.ir2.yahoo.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Jun 2014 07:39:39 -0300
+Subject: [Buildroot] [PATCH] dhcp: bump to version 4.1-ESV-R9
+Message-ID: <1402483179-17307-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again. Just a quick update on this.
-I tried a lot of flags/configurations and none worked. Unfortunately I haven't been able to obtain a proper core file to debug what's really going on with ICU.
-I tried to build versions 52.1 and 53.1 and got the same bus error result.
+Also install the SysV initscripts from the proper hook.
+Since the scripts check for the proper files to be present there's no
+need to exclude them according to options since they won't try to start
+anything.
 
-So I went back in the past and tried version 4.8.1.1 (taken from Buildroot 2013-08) ... and it works !
-I might try versions 49 and 50, at least to identify the version that started to cause the issue I'm having.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dhcp/dhcp.mk | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-For now, since ICU is not vital for what I have to do (QtWebKit), I'm happy I've found one version working.
-
-Regards,
-Massimo
-
-
->________________________________
-> Da: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->A: Massimo Callegari <massimocallegari@yahoo.it> 
->Cc: "buildroot at busybox.net" <buildroot@busybox.net> 
->Inviato: Luned? 9 Giugno 2014 18:47
->Oggetto: Re: [Buildroot] ICU 51.2 bus error
-> 
->
->Dear Massimo Callegari,
->
->On Mon, 9 Jun 2014 16:43:26 +0100 (BST), Massimo Callegari wrote:
->
->> I'm having a serious issue with ICU 51.2 on a MIPS platform.
->> Everything builds fine but anyone using ICU at runtime gets a misterious "bus error" fault.
->> At first I thought it was my Qt 5.3.0 build, but then I realized even the simple "icuinfo" tool fails with the same error.
->> The root filesystem is mounted on NFS but I hope that's not the cause.
->> 
->> 
->> I enclose a strace run of the icuinfo command at the end of this email.
->> From the trace it seems the lookup of file "/usr/lib/icu/icuplugins51.txt" is the cause of all the evil, but I tried to manually create it and nothing changes.
->> I double checked on my PC and it doesn't even exist, even though the icuinfo command works properly.
->> 
->> I'm afraid this is a cross-compilation thing, but I can't figure out myself what it might be.
->> Does anyone have any idea or is able to find the issue from the trace below ?
->
->First of all, thanks for your report!
->
->Could you run "ulimit -c unlimited" on your target, and then your
->command? It will generate a "core" file that you can transfer on your
->development machine, and then do:
->
->??? ./host/usr/mips-<blabla>-gdb -c core target/usr/bin/icuinfo
->
->and then run the "backtrace" command in gdb, to see where the crash
->occurred.
->
->
->
->
->
->Thanks!
->
->Thomas
->-- 
->Thomas Petazzoni, CTO, Free Electrons
->Embedded Linux, Kernel and Android engineering
->http://free-electrons.com
->
->
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140611/e98411f5/attachment.html>
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 3885bba..1044f89 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DHCP_VERSION = 4.1-ESV-R8
++DHCP_VERSION = 4.1-ESV-R9
+ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = ISC
+@@ -31,8 +31,6 @@ define DHCP_INSTALL_SERVER
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+ 	$(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
+-	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-server \
+-		$(TARGET_DIR)/etc/init.d/S80dhcp-server
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
+ endef
+@@ -44,8 +42,6 @@ define DHCP_INSTALL_RELAY
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+ 	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
+ 		$(TARGET_DIR)/usr/sbin/dhcrelay
+-	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-relay \
+-		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
+ endef
+ endif
+ 
+@@ -62,6 +58,14 @@ define DHCP_INSTALL_CLIENT
+ endef
+ endif
+ 
++# Options don't matter, scripts won't start if binaries aren't there
++define DHCP_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-server \
++		$(TARGET_DIR)/etc/init.d/S80dhcp-server
++	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-relay \
++		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
++endef
++
+ define DHCP_INSTALL_TARGET_CMDS
+ 	$(DHCP_INSTALL_RELAY)
+ 	$(DHCP_INSTALL_SERVER)
+-- 
+1.8.5.5
