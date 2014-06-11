@@ -1,33 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2014 22:08:37 +0200
-Subject: [Buildroot] [PATCH 2/2] docs: Added referenc to EUPL
-In-Reply-To: <1401005324-10428-1-git-send-email-oli.vogt.pub01@gmail.com>
-References: <1401005324-10428-1-git-send-email-oli.vogt.pub01@gmail.com>
-Message-ID: <20140611220837.6becde2b@free-electrons.com>
+Date: Wed, 11 Jun 2014 22:16:18 +0200
+Subject: [Buildroot] [PATCH v3] u-boot: allow to pass a custom
+ configuration file
+In-Reply-To: <1399904527-8159-1-git-send-email-eric.jarrige@armadeus.org>
+References: <1399904527-8159-1-git-send-email-eric.jarrige@armadeus.org>
+Message-ID: <20140611221618.5b224a1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear oli vogt,
+Dear Eric Jarrige,
 
-On Sun, 25 May 2014 20:08:44 +1200, oli vogt wrote:
-> The first European Union Public Licence
+On Mon, 12 May 2014 16:22:07 +0200, Eric Jarrige wrote:
+> Add an option BR2_TARGET_UBOOT_CUSTOM_CONFIG_FILE that makes it possible
+> to override the configuration options in the board header file. This
+> avoids the need for manipulating the board header file with sed hacks
+> like is currently done for the BR2_TARGET_UBOOT_NETWORK settings.
 > 
-> Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
-> ---
->  docs/manual/legal-notice.txt | 3 +++
->  1 file changed, 3 insertions(+)
+> Note that this option does not make it possible to add a new board to
+> U-Boot. That still has to be done by patching the source.
+> 
+> Signed-off-by: Eric Jarrige <eric.jarrige@armadeus.org>
 
-Thanks for your patch. However, the feedback is that the patch is not
-correct (not following the SPDX code for the EUPL license) and that we
-prefer to wait to have one patch using this license to mention it in
-our documentation.
+We just had a discussion on IRC with Peter Korsgaard, and he also
+doesn't like much this solution:
 
-I'll therefore mark your patch as Rejected in our patchwork system.
+22:16 < Jacmet> kos_tom: I also don't like 348092
 
-Thanks!
+He hasn't expressed the details on IRC, but I believe he shares similar
+concerns to mine, i.e:
+
+"""
+I must say I'm still unconvinced by this patch. In U-Boot, the
+configuration is completely mixed with the definition of the board, and
+defining a board does not only require adding a file in
+include/configs/, but also adding an entry in boards.cfg.
+
+Therefore, I really believe that people willing to customize their
+U-Boot board or configuration should instead carry a patch against
+U-Boot instead of using this non-standard solution.
+"""
+
+Of course, if Peter has different/other reasons, I'm sure he will
+give more details in this thread.
+
+As a consequence, I'm marking the patch as Rejected in patchwork.
+
+Thanks,
 
 Thomas
 -- 
