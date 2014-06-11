@@ -1,11 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jun 2014 21:00:48 -0500
-Subject: [Buildroot] [PATCH 3/3] fmc: new package
-In-Reply-To: <20140610222148.3ad9a8e7@free-electrons.com>
+Date: Tue, 10 Jun 2014 21:03:22 -0500
+Subject: [Buildroot] [PATCH 2/3] tclap: new package
+In-Reply-To: <20140610221111.5181dcb3@free-electrons.com>
 References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1402412526-24844-4-git-send-email-matthew.weber@rockwellcollins.com>
- <20140610222148.3ad9a8e7@free-electrons.com>
-Message-ID: <CANQCQpbvOgFhcOpu2V3UWnvDaYhjctydGY4yrLVf4Q8p1vzT4Q@mail.gmail.com>
+ <1402412526-24844-3-git-send-email-matthew.weber@rockwellcollins.com>
+ <20140610221111.5181dcb3@free-electrons.com>
+Message-ID: <CANQCQpYOrNEFP=TpzjJk8AcHS1B3+ek+fgEKJtYiE93Fq=1EZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,86 +14,75 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Tue, Jun 10, 2014 at 3:21 PM, Thomas Petazzoni
+On Tue, Jun 10, 2014 at 3:11 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Matt Weber,
 >
-> On Tue, 10 Jun 2014 08:02:06 -0700, Matt Weber wrote:
+> On Tue, 10 Jun 2014 08:02:05 -0700, Matt Weber wrote:
 >
->> diff --git a/package/fmc/Config.in b/package/fmc/Config.in
+>> diff --git a/package/tclap/Config.in b/package/tclap/Config.in
 >> new file mode 100644
->> index 0000000..9530756
+>> index 0000000..e50704b
 >> --- /dev/null
->> +++ b/package/fmc/Config.in
->> @@ -0,0 +1,14 @@
->> +config BR2_PACKAGE_FMC
->> +     bool "fmc"
->> +     depends on BR2_powerpc_e500mc
->> +     select BR2_PACKAGE_TCLAP
+>> +++ b/package/tclap/Config.in
+>> @@ -0,0 +1,12 @@
+>> +config BR2_PACKAGE_TCLAP
+>> +     bool "tclap"
 >
-> Propagate the C++ dependency of tclap here.
-
-Agreed.
-
+> This package needs C++ support, so the appropriate 'depends on' +
+> comment is needed.
 >
->> +     select BR2_PACKAGE_LIBXML2
->> +     select BR2_PACKAGE_FMLIB
 >> +     help
->> +       The Frame Manager Configuration tool is a software package whose primary
->> +       purpose is converting Parse-Classify-Police-Distribute (PCD) descriptions of
->> +       network packets flow into hardware configuration. The tool provides an
->> +       abstraction layer between the end customer's vision of the PCD task
->> +       definition and real hardware implementation.
+>> +       This is a small, flexible library that provides a simple interface for
+>> +       defining and accessing command line arguments. It was intially inspired
 >
-> Length of lines too long. It would be good to mention that it's
-> specific to Freescale PowerPC machines at the beginning of the
-> description.
-
-Agreed.
+> intially -> initially.
+Agree.
 
 >
->> +
->> +       http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
->> diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
+>> +       by the user friendly CLAP libary. The difference is that this library is
+>> +       templatized, so the argument class is type independent. Type independence
+>> +       avoids identical-except-for-type objects, such as IntArg, FloatArg, and
+>> +       StringArg. While the library is not strictly compliant with the GNU or
+>> +       POSIX standards, it is close.
+>
+> Please check lines do not exceed 72 chars.
+Agree.
+
+>
+>> +       http://tclap.sourceforge.net/
+>> diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
 >> new file mode 100644
->> index 0000000..513a8ef
+>> index 0000000..268b90b
 >> --- /dev/null
->> +++ b/package/fmc/fmc.mk
->> @@ -0,0 +1,31 @@
->> +###############################################################################
+>> +++ b/package/tclap/tclap.mk
+>> @@ -0,0 +1,16 @@
+>> +################################################################################
 >> +#
->> +# fmc
+>> +# tclap
 >> +#
->> +###############################################################################
+>> +################################################################################
 >> +
->> +FMC_VERSION = fsl-sdk-v1.5-rc3
->> +FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
->> +FMC_LICENSE = MIT
->> +FMC_LICENSE_FILES = COPYING
->> +FMC_DEPENDENCIES = libxml2 tclap fmlib
->> +
->> +FMC_MAKE_OPTS = \
->> +     CC="$(TARGET_CC)" \
->> +     CXX="$(TARGET_CXX)" \
->> +     FMD_USPACE_HEADER_PATH="$(STAGING_DIR)/usr/include/fmd" \
->> +     FMD_USPACE_LIB_PATH="$(STAGING_DIR)/usr/lib" \
->> +     LIBXML2_HEADER_PATH="$(STAGING_DIR)/usr/include/libxml2" \
->> +     TCLAP_HEADER_PATH="$(STAGING_DIR)/usr/include"
->> +
->> +define FMC_BUILD_CMDS
->> +     # The linking step has dependency issues so using MAKE1
->> +     $(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
->> +endef
->> +
->> +define FMC_INSTALL_TARGET_CMDS
->> +     $(INSTALL) -D -m 0755 $(@D)/source/fmc $(TARGET_DIR)/usr/sbin/fmc
->> +     cp -dr --no-preserve=ownership $(@D)/etc/fmc $(TARGET_DIR)/etc/
+>> +TCLAP_VERSION = 1.2.1
+>> +TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
+>> +TCLAP_SOURCE = tclap-$(TCLAP_VERSION).tar.gz
 >
-> Do we need this --no-preserve=ownership here? We usually use:
+> Not needed, that's the default.
+Sure.
 
-No, will update to cp -dpfr.
+>
+>> +TCLAP_LICENSE = MIT
+>> +TCLAP_LICENSE_FILES = COPYING
+>> +
+>> +TCLAP_INSTALL_STAGING = YES
+>> +TCLAP_INSTALL_TARGET = NO
+>
+> A short comment that explains why INSTALL_TARGET = NO is useful. Just
+> say it's a pure C++ template library, only made of headers.
+Sure.
 
 <snip>
+
 
 -- 
 Matthew L Weber / Sr Software Engineer / Platform Software
