@@ -1,222 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Jun 2014 23:32:46 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: fix AM_PATH_LIBGCRYPT not found
-In-Reply-To: <1402521982-31067-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1402521982-31067-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140611213246.GC27579@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Jun 2014 21:36:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140611213659.E93039CFBE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-On 2014-06-11 23:26 +0200, Eric Le Bihan spake thusly:
-> This patch installs a copy of libgcrypt.m4 from the libgcrypt source tarball
-> to systemd m4 directory.
-> 
-> Libgcrypt uses a custom m4 macro and not pkg-config to check if the
-> development files are available. Though libgcrypt support is optional in
-> systemd, this macro should be available whenever autoreconf is used,
-> otherwise the re-configuration will fail with:
-> 
->   configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
-> 
-> The call to autoreconf is required, as it is needed by the patch which
-> solves the `ln --relative` issue.
-> 
-> As asking the user to install the development package of libgcrypt on
-> the host machine or adding libgcrypt as a build dependency to systemd is
-> not acceptable, the required file is added to the m4 directory.
-> 
-> Fixes: http://autobuild.buildroot.net/results/1524d346fa17749e2ae62e063b9cfdd0de95c76a/
-> Fixes: http://autobuild.buildroot.net/results/10bcd92437eaa27eb61f8281c93efcb53d555e35/
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+--- Comment #11 from Mike Z <minimod@morethan.org> 2014-06-11 21:36:58 UTC ---
+Printing the shell significant character(s) into a variable is confirmed
+to work at the manual entry shell level.
 
-OK, so let me sum up the thing:
-  - we can't use autoreconf because of 'ln --relative' which is not
-    available everywhere
-  - if we could use autoreconf, we would not need this gcrupt.m4 stuff
+The Cliff's Notes example:
 
-So, why not use the ln wrapper mentienned there:
-    https://www.mail-archive.com/systemd-devel at lists.freedesktop.org/msg18770.html
+bin # export INT=`printf '%s'
+'/mnt/us/extensions/system/lib/ld-linux-armhf.so.3'`
+bin # echo $INT
+/mnt/us/extensions/system/lib/ld-linux-armhf.so.3
+core2quad bin # patchelf --set-interpreter $INT busybox
 
-so we can autoreconf, and not need this gcrypt.m4 ?
+bin # export LIB=`printf '%s' '$' 'ORIGIN/../lib' '$' 'ORIGIN/../usr/lib'`
+bin # echo $LIB
+$ORIGIN/../lib:$ORIGIN/../usr/lib
+bin # patchelf --set-rpath $LIB busybox
 
-Unless I mised something...
+====
 
-Regards,
-Yann E. MORIN.
+bin # readelf -dl busybox
+- - - -
+Dynamic section at offset 0x13a180 contains 24 entries:
+  Tag        Type                         Name/Value
+ 0x0000001d (RUNPATH)                    Library runpath:
+[$ORIGIN/../lib:$ORIGIN/../usr/lib]
 
-> ---
->  ...systemd-04-fix-am-path-libgcrypt-no-found.patch | 145 +++++++++++++++++++++
->  1 file changed, 145 insertions(+)
->  create mode 100644 package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch
-> 
-> diff --git a/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch b/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch
-> new file mode 100644
-> index 0000000..2287ac5
-> --- /dev/null
-> +++ b/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch
-> @@ -0,0 +1,145 @@
-> +Fix AM_PATH_LIBGCRYPT not found
-> +
-> +This patch installs a copy of libgcrypt.m4 from the libgcrypt source tarball
-> +to systemd m4 directory.
-> +
-> +Libgcrypt uses a custom m4 macro and not pkg-config to check if the
-> +development files are available. Though libgcrypt support is optional in
-> +systemd, this macro should be available whenever autoreconf is used, otherwise
-> +the re-configuration will fail with:
-> +
-> +  configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
-> +
-> +As asking the user to install the development package of libgcrypt on the host
-> +machine or adding libgcrypt as a build dependency to systemd is not
-> +acceptable, the required file is added to the m4 directory.
-> +
-> +Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> +Index: systemd-213/m4/libgcrypt.m4
-> +===================================================================
-> +--- /dev/null	1970-01-01 00:00:00.000000000 +0000
-> ++++ systemd-213/m4/libgcrypt.m4	2014-06-11 10:41:11.749305509 +0200
-> +@@ -0,0 +1,123 @@
-> ++dnl Autoconf macros for libgcrypt
-> ++dnl       Copyright (C) 2002, 2004 Free Software Foundation, Inc.
-> ++dnl
-> ++dnl This file is free software; as a special exception the author gives
-> ++dnl unlimited permission to copy and/or distribute it, with or without
-> ++dnl modifications, as long as this notice is preserved.
-> ++dnl
-> ++dnl This file is distributed in the hope that it will be useful, but
-> ++dnl WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-> ++dnl implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> ++
-> ++
-> ++dnl AM_PATH_LIBGCRYPT([MINIMUM-VERSION,
-> ++dnl                   [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ]]])
-> ++dnl Test for libgcrypt and define LIBGCRYPT_CFLAGS and LIBGCRYPT_LIBS.
-> ++dnl MINIMUN-VERSION is a string with the version number optionalliy prefixed
-> ++dnl with the API version to also check the API compatibility. Example:
-> ++dnl a MINIMUN-VERSION of 1:1.2.5 won't pass the test unless the installed
-> ++dnl version of libgcrypt is at least 1.2.5 *and* the API number is 1.  Using
-> ++dnl this features allows to prevent build against newer versions of libgcrypt
-> ++dnl with a changed API.
-> ++dnl
-> ++AC_DEFUN([AM_PATH_LIBGCRYPT],
-> ++[ AC_ARG_WITH(libgcrypt-prefix,
-> ++            AC_HELP_STRING([--with-libgcrypt-prefix=PFX],
-> ++                           [prefix where LIBGCRYPT is installed (optional)]),
-> ++     libgcrypt_config_prefix="$withval", libgcrypt_config_prefix="")
-> ++  if test x$libgcrypt_config_prefix != x ; then
-> ++     if test x${LIBGCRYPT_CONFIG+set} != xset ; then
-> ++        LIBGCRYPT_CONFIG=$libgcrypt_config_prefix/bin/libgcrypt-config
-> ++     fi
-> ++  fi
-> ++
-> ++  AC_PATH_TOOL(LIBGCRYPT_CONFIG, libgcrypt-config, no)
-> ++  tmp=ifelse([$1], ,1:1.2.0,$1)
-> ++  if echo "$tmp" | grep ':' >/dev/null 2>/dev/null ; then
-> ++     req_libgcrypt_api=`echo "$tmp"     | sed 's/\(.*\):\(.*\)/\1/'`
-> ++     min_libgcrypt_version=`echo "$tmp" | sed 's/\(.*\):\(.*\)/\2/'`
-> ++  else
-> ++     req_libgcrypt_api=0
-> ++     min_libgcrypt_version="$tmp"
-> ++  fi
-> ++
-> ++  AC_MSG_CHECKING(for LIBGCRYPT - version >= $min_libgcrypt_version)
-> ++  ok=no
-> ++  if test "$LIBGCRYPT_CONFIG" != "no" ; then
-> ++    req_major=`echo $min_libgcrypt_version | \
-> ++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
-> ++    req_minor=`echo $min_libgcrypt_version | \
-> ++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
-> ++    req_micro=`echo $min_libgcrypt_version | \
-> ++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
-> ++    libgcrypt_config_version=`$LIBGCRYPT_CONFIG --version`
-> ++    major=`echo $libgcrypt_config_version | \
-> ++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
-> ++    minor=`echo $libgcrypt_config_version | \
-> ++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
-> ++    micro=`echo $libgcrypt_config_version | \
-> ++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
-> ++    if test "$major" -gt "$req_major"; then
-> ++        ok=yes
-> ++    else
-> ++        if test "$major" -eq "$req_major"; then
-> ++            if test "$minor" -gt "$req_minor"; then
-> ++               ok=yes
-> ++            else
-> ++               if test "$minor" -eq "$req_minor"; then
-> ++                   if test "$micro" -ge "$req_micro"; then
-> ++                     ok=yes
-> ++                   fi
-> ++               fi
-> ++            fi
-> ++        fi
-> ++    fi
-> ++  fi
-> ++  if test $ok = yes; then
-> ++    AC_MSG_RESULT([yes ($libgcrypt_config_version)])
-> ++  else
-> ++    AC_MSG_RESULT(no)
-> ++  fi
-> ++  if test $ok = yes; then
-> ++     # If we have a recent libgcrypt, we should also check that the
-> ++     # API is compatible
-> ++     if test "$req_libgcrypt_api" -gt 0 ; then
-> ++        tmp=`$LIBGCRYPT_CONFIG --api-version 2>/dev/null || echo 0`
-> ++        if test "$tmp" -gt 0 ; then
-> ++           AC_MSG_CHECKING([LIBGCRYPT API version])
-> ++           if test "$req_libgcrypt_api" -eq "$tmp" ; then
-> ++             AC_MSG_RESULT([okay])
-> ++           else
-> ++             ok=no
-> ++             AC_MSG_RESULT([does not match. want=$req_libgcrypt_api got=$tmp])
-> ++           fi
-> ++        fi
-> ++     fi
-> ++  fi
-> ++  if test $ok = yes; then
-> ++    LIBGCRYPT_CFLAGS=`$LIBGCRYPT_CONFIG --cflags`
-> ++    LIBGCRYPT_LIBS=`$LIBGCRYPT_CONFIG --libs`
-> ++    ifelse([$2], , :, [$2])
-> ++    if test x"$host" != x ; then
-> ++      libgcrypt_config_host=`$LIBGCRYPT_CONFIG --host 2>/dev/null || echo none`
-> ++      if test x"$libgcrypt_config_host" != xnone ; then
-> ++        if test x"$libgcrypt_config_host" != x"$host" ; then
-> ++  AC_MSG_WARN([[
-> ++***
-> ++*** The config script $LIBGCRYPT_CONFIG was
-> ++*** built for $libgcrypt_config_host and thus may not match the
-> ++*** used host $host.
-> ++*** You may want to use the configure option --with-libgcrypt-prefix
-> ++*** to specify a matching config script.
-> ++***]])
-> ++        fi
-> ++      fi
-> ++    fi
-> ++  else
-> ++    LIBGCRYPT_CFLAGS=""
-> ++    LIBGCRYPT_LIBS=""
-> ++    ifelse([$3], , :, [$3])
-> ++  fi
-> ++  AC_SUBST(LIBGCRYPT_CFLAGS)
-> ++  AC_SUBST(LIBGCRYPT_LIBS)
-> ++])
-> -- 
-> 1.9.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+====
+
+[root at kindle root]# echo $PATH
+/mnt/us/extensions/system/bin:/usr/local/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/python/bin
+
+[root at kindle root]# LD_DEBUG=libs busybox
+     27571:     find library=libc.so.6 [0]; searching
+- - - -
+     27571:     calling init: /mnt/us/extensions/system/bin/../lib/libc.so.6
+- - - -
+BusyBox v1.22.1 (2014-06-11 02:23:01 CDT) multi-call binary.
+BusyBox is copyrighted by many authors between 1998-2012.
+etc.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
