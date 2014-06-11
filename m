@@ -1,60 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jun 2014 13:11:08 +0200
-Subject: [Buildroot] [git commit] faifa: remove useless CFLAGS
-	-Wno-unused-result
-Message-ID: <20140611111743.43D969B9C3@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 11 Jun 2014 08:33:15 -0300
+Subject: [Buildroot] [PATCH] openntpd: add SysV initscript and user
+Message-ID: <1402486395-15125-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a07498decf4f550b4e5a2955985e993f950147f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add the _ntp user that the daemon requires to work in any way.
+Add a SysV-style initscript as well, but not with '-s' (set time
+immediately after startup) because it can make the boot process stall
+for a few seconds if there's no proper network connectivity/dns setup.
+Make ntp and openntpd mutually exclusive since they overstep each other.
 
-Fixes
-http://autobuild.buildroot.net/results/961/9614d13769bfdc908e12e3242e7e07630dd08869/
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...aifa-001-Makefile.in-Remove-useless-flags.patch |   31 ++++++++++++++++++++
- 1 files changed, 31 insertions(+), 0 deletions(-)
+ package/openntpd/Config.in   |  4 ++--
+ package/openntpd/S49ntp      | 25 +++++++++++++++++++++++++
+ package/openntpd/openntpd.mk |  9 +++++++++
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+ create mode 100755 package/openntpd/S49ntp
 
-diff --git a/package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch b/package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch
-new file mode 100644
-index 0000000..027215f
+diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
+index 4dd9a29..a8ef807 100644
+--- a/package/openntpd/Config.in
++++ b/package/openntpd/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_OPENNTPD
+ 	bool "openntpd"
+-	# fork()
+-	depends on BR2_USE_MMU
++	depends on BR2_USE_MMU # fork ()
++	depends on !BR2_PACKAGE_NTP # conflicting binaries
+ 	help
+ 	  OpenNTPD is an easy to use implementation of the Network Time
+ 	  Protocol. It provides the ability to sync the local clock
+diff --git a/package/openntpd/S49ntp b/package/openntpd/S49ntp
+new file mode 100755
+index 0000000..99e0f68
 --- /dev/null
-+++ b/package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch
-@@ -0,0 +1,31 @@
-+From 7ad829ab77821f87be9bb26801924aa40936f18f Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Tue, 10 Jun 2014 23:42:17 +0200
-+Subject: [PATCH] Makefile.in: Remove useless flags
++++ b/package/openntpd/S49ntp
+@@ -0,0 +1,25 @@
++#!/bin/sh
 +
-+This flags doesn't hide any warnings and as such doesn't have any
-+purposes.
++[ -x /usr/sbin/ntpd ] || exit 0
++[ -f /etc/ntpd.conf ] || exit 0
 +
-+On a plus note, it allow the build with a blackfin toolchain.
++case "$1" in
++	start)
++		echo -n "Starting openntpd: "
++		start-stop-daemon -S -x /usr/sbin/ntpd
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	stop)
++		echo -n "Stopping openntpd: "
++		start-stop-daemon -K -x /usr/sbin/ntpd
++		[ $? == 0 ] && echo "OK" || echo "FAIL"
++		;;
++	restart)
++		"$0" stop
++		sleep 1
++		"$0" start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+index f0e4f19..0fe6179 100644
+--- a/package/openntpd/openntpd.mk
++++ b/package/openntpd/openntpd.mk
+@@ -10,4 +10,13 @@ OPENNTPD_CONF_OPT = --with-builtin-arc4random --disable-strip
+ OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
+ OPENNTPD_LICENSE_FILES = LICENCE
+ 
++define OPENNTPD_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/openntpd/S49ntp \
++		$(TARGET_DIR)/etc/init.d/S49ntp
++endef
 +
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+---
-+ Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++define OPENNTPD_USERS
++_ntp -1 _ntp -1 * - - - Network Time Protocol daemon
++endef
 +
-+diff --git a/Makefile.in b/Makefile.in
-+index 3814d5c..ba65bee 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -13,7 +13,7 @@
-+ 
-+ CC	= @CC@
-+ STRIP	?= $(CROSS)strip
-+-CFLAGS	= @CFLAGS@ -Wno-unused-result
-++CFLAGS	= @CFLAGS@
-+ INSTALL	= @INSTALL@
-+ LIBS	= @LIBS@
-+ 
-+-- 
-+2.0.0.rc2
-+
+ $(eval $(autotools-package))
+-- 
+1.8.5.5
