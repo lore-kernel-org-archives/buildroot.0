@@ -1,33 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2014 19:44:15 +0200
-Subject: [Buildroot] [PATCH] pinentry: qt4 backend requires the Qt GUI module
-Message-ID: <1402508655-7123-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Jun 2014 19:49:14 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d: depend on udev
+In-Reply-To: <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1402508508-437-1-git-send-email-bernd.kuhls@t-online.de>
+ <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140611194914.2529d991@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Dear Bernd Kuhls,
 
-  http://autobuild.buildroot.org/results/1d8/1d8a8ff1880549b2e2a24cc175dced1a51245cde/
+On Wed, 11 Jun 2014 19:41:48 +0200, Bernd Kuhls wrote:
+> checking for LIBUDEV... no
+> configure: error: libudev-dev required for building DRI
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/16d/16d12b986051db884eae86e9658e6c4fc0f28885/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/Config.in |    5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pinentry/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Is this patch independent from PATCH 2/3 ? I'd like the mesa3d problem
+to be fixed now, regardless of the split between libudev and the daemon
+in eudev. The split between libudev and the daemon in eudev is an
+improvement, while the mesa3d build failure affecting the autobuilders
+since the past 3 days is a significant regression that we should handle
+in priority.
 
-diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
-index b163735..ae70257 100644
---- a/package/pinentry/Config.in
-+++ b/package/pinentry/Config.in
-@@ -44,6 +44,7 @@ config BR2_PACKAGE_PINENTRY_QT4
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# select qt
- 	select BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT_GUI_MODULE
- 	help
- 	  The pinentry-qt4 tool
- 
+I know that Yann is also working on this issue, I'm not sure how much
+in sync both of you are.
+
+Thanks!
+
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
