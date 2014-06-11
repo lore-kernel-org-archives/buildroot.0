@@ -1,36 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Jun 2014 11:09:40 +0200
-Subject: [Buildroot] [PATCH 1/1] fetchmail: Update project URL after
-	shutdown of berlios.de
-References: <1402065903-2779-1-git-send-email-bernd.kuhls@t-online.de>
- <20140607122430.25898775@free-electrons.com>
-Message-ID: <XnsA3497189B6274berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2014 11:18:14 +0200
+Subject: [Buildroot] [V2 1/2] pkg-perl: fix for Perl XS packages
+	configured by Makefile.PL
+In-Reply-To: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Thu, 24 Apr 2014 18:26:01 +0200")
+References: <1398356762-12486-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87egyvkdnt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20140607122430.25898775 at free-electrons.com: 
->> -       http://sourceforge.net/projects/fetchmail/
->> +       http://www.fetchmail.info/
-> 
-> How is moving from SourceForge to some other place related to the
-> shutdown of berlios.de?
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Hi,
+ > ExtUtils::MakeMaker adds all the header files used by the perl as
+ > dependencies to the generated Makefile. This means that the generated
+ > Makefile will depend on the system's header files.
 
-originally the project was hosted on berlios.de. Due to its closure I 
-mentioned sf.net as project page for the time being until the fetchmail 
-project moved its official site[1] to a new location. This happened 
-meanwhile, therefore the patch ;)
+ > Usually this is not a problem, because when building the target package,
+ > these header files will indeed be found in $(STAGING_DIR). However, some
+ > distro's add an extra header file to the system's perl. This header is
+ > also included in the generated Makefile, which makes the build fail
+ > because it doesn't exist in $(STAGING_DIR).
 
-traceroute www.fetchmail.info
-[...]
-10  vhost.sourceforge.net (216.34.181.97)
+ > As a work-around, explicitly create this header file in $(STAGING_DIR).
+ > It doesn't hurt to create it even if the system perl doesn't need it.
 
-Regards, Bernd
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-[1] http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/79738/focus=79748
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
