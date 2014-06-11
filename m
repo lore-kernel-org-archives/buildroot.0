@@ -1,139 +1,60 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Tue, 10 Jun 2014 20:15:50 -0700
-Subject: [Buildroot] [PATCH 1/1] Rewriting instructions to generate a
- zedboard image to make it really verbose
-In-Reply-To: <1402343887-12278-1-git-send-email-javierdo1@gmail.com>
-References: <1402343887-12278-1-git-send-email-javierdo1@gmail.com>
-Message-ID: <CAEBucnBM6RtYxopUvo8dggJYY5s_3qrAjDUOv9SuGz2W76R3Uw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 11 Jun 2014 06:16:14 +0300
+Subject: [Buildroot] [PATCH 1/1] Add support for gold linker and LTO for
+ GCC.
+In-Reply-To: <BLU436-SMTP187DA10D0CB5B02F7E271EEA8280@phx.gbl>
+References: <BLU436-SMTP187DA10D0CB5B02F7E271EEA8280@phx.gbl>
+Message-ID: <20140611031614.GT4074@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Javier,
+Hi Steve,
 
-Please see the comments inline.
-
-On Mon, Jun 9, 2014 at 12:58 PM, Javier Domingo Cansino
-<javierdo1@gmail.com> wrote:
->
-> Signed-off-by: Javier Domingo Cansino <javierdo1@gmail.com>
+On Tue, Jun 10, 2014 at 10:13:24PM +0000, Steve Thomas wrote:
+> Link Time Optimisations (LTO) from GCC needs the linker plugin. It also
+> needs support from the tools, in particular the archiver (AR) to
+> properly form archives that can be used by the linker.  The linker needs
+> to support the plugin also.
+> 
+> This patch changes the linker from BFD to GOLD and wraps the ar, nm and
+> ranlib utilities with a wrapper that calls the gcc-wrapper version that
+> call the actual utilities with an additional argument. This is a
+> temporary measure until the GCC versions supoort this properly and saves
+> having to modify a few hundres packages.
+> 
+> Signed-off-by: Steve Thomas <scjthm@live.com>
 > ---
->  board/avnet/zedboard/readme.txt |   51 +++++++++++++++++++++++++++++++--------
->  1 file changed, 41 insertions(+), 10 deletions(-)
->
-> diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-> index efd076f..575c285 100644
-> --- a/board/avnet/zedboard/readme.txt
-> +++ b/board/avnet/zedboard/readme.txt
-> @@ -5,26 +5,57 @@ System-On-Chip.
->  Zedboard information including schematics, reference designs, and manuals are
->  available from http://www.zedboard.org .
->
-> -To boot the Zedboard using a buildroot generated image copy the following files
-> -to the sdcard:
-> -       zynq-zed.dtb -> devicetree.dtb
-> -       rootfs.cpio.gz.uboot -> uramdisk.image.gz
-> -       uImage -> uImage
-> -       boot.bin -> boot.bin
-> +The firmware releases for the Xilinx Zynq silicons depend on Xilinx some propietary tools or code. This dependency has been reduced to a pair of source files available in the regular Xilinx SDK.
+>  package/binutils/Config.in.host         |  4 ++++
+>  package/binutils/binutils.mk            | 12 +++++++++++
+>  package/gcc/4.8.3/950-lto-support.patch | 35 +++++++++++++++++++++++++++++++++
+>  package/gcc/4.9.0/950-lto-support.patch | 35 +++++++++++++++++++++++++++++++++
+>  package/gcc/Config.in.host              | 19 +++++++++++-------
+>  package/gcc/gcc-initial/gcc-initial.mk  | 18 +++++++++++++++++
+>  package/gcc/gcc.mk                      | 11 +++++++++++
+>  toolchain/toolchain-buildroot/Config.in | 11 +++++++++++
+>  8 files changed, 138 insertions(+), 7 deletions(-)
+>  create mode 100644 package/gcc/4.8.3/950-lto-support.patch
+>  create mode 100644 package/gcc/4.9.0/950-lto-support.patch
+> 
+> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> index 08540a3..a6e5ba6 100644
+> --- a/package/binutils/Config.in.host
+> +++ b/package/binutils/Config.in.host
+> @@ -1,5 +1,8 @@
+>  comment "Binutils Options"
+>  
+> +config BR2_BINUTILS_SUPPORTS_GOLD
+> +	bool "binutils 2.24"
 
-Possibly the following is better:
+Are you sure this needs to be user selectable? The comment string looks 
+confusing, anyway.
 
-The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
-on some proprietary code.  This dependency has consists of a pair of
-files available from in a Xilinx SDK installation.
-
-> -U-Boot SPL Support
-> --------------
-> +You will need this files from Xilinx tree to generate the later listed files:
-You will need these files from a Xilinx SDK installation to generate
-the U-Boot firmware.
-> +       ps7_init.c
-> +       ps7_init.h
-> +
-> +You will need the following files from output/images:
-Buildroot will create the following files and place them in the
-<output>/images directory.
-> +       zynq-zed.dtb
-> +       rootfs.cpio.uboot
-> +       uImage
-> +       u-boot.img
-> +       boot.bin
-> +
-> +
-> +uboot.bin  -- U-Boot SPL Support
-uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
-
-> +--------------------------------
->
->  Due to licensing issues, the files ps7_init.c/h are not able to be
->  distributed with the U-Boot source code.  These files are required to make a
->  boot.bin file.
->
-> -If you already have the Xilinx tools installed, the follwing sequence will
-> +If you already have the Xilinx tools installed, the following sequence will
->  unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
->
->  make zedboard_defconfig
->  make uboot-patch
->  cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
-> -output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
-> +output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
-> +
-> +Now that you patched the uboot files, you will be capable of compiling the
-> +buildroot:
-
-After copying these files into the U-Boot source tree, you can
-continue the build by:
-
-> +
->  make
->
-
-It would be good to add the following notice:
-
-While the build will successfully complete without the ps7_init.*
-files,  the uboot.bin file generated by this configuration will not
-function properly on the Zedboard.  Therefore, it is imperative that
-the ps7_init.* files be copied into the U-Boot source tree any time
-the clean, or uboot-dirclean targets are made.
-
-> +
-> +Resulting system
-> +----------------
-> +The SD card should be filled like the following, in a FAT32 partition at the
-> +beggining of the device:
-A FAT32 partition should be created at the beginning of the SD Card
-and the following files should be installed:
-> +       /boot.bin
-> +       /devicetree.dtb
-> +       /uImage
-> +       /uramdisk.image.gz
-> +       /u-boot.img
-> +
-> +
-> +All needed files can be taken from output/images/
-> +
-> +boot.bin, uImage and u-boot.img are direct copies of the same files
-> +available on output/images/
-> +
-> +devicetree.dtb is just zynq-zed.dtb renamed.
-> +
-> +uramdisk.image.gz is rootfs.cpio.uboot renamed
-> --
-> 1.7.10.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Thanks,
-Spenser
+baruch
 
 -- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
