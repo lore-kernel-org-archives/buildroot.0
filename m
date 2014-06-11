@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Jun 2014 23:08:39 +0200
-Subject: [Buildroot] [PATCH v13 06/19] libva-intel-driver: new package
+Date: Wed, 11 Jun 2014 23:08:40 +0200
+Subject: [Buildroot] [PATCH v13 07/19] ffmpeg: Add libva support
 In-Reply-To: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402520932-26672-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402520932-26672-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,84 +12,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                                |    1 +
- package/libva-intel-driver/Config.in             |   19 ++++++++++++++
- package/libva-intel-driver/libva-intel-driver.mk |   29 ++++++++++++++++++++++
- 3 files changed, 49 insertions(+)
- create mode 100644 package/libva-intel-driver/Config.in
- create mode 100644 package/libva-intel-driver/libva-intel-driver.mk
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 9b3d2d1..3fcb6ae 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -604,6 +604,7 @@ menu "Graphics"
- 	source "package/libsvgtiny/Config.in"
- 	source "package/libungif/Config.in"
- 	source "package/libva/Config.in"
-+	source "package/libva-intel-driver/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opengl/Config.in"
- 	source "package/pango/Config.in"
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-new file mode 100644
-index 0000000..89a3264
---- /dev/null
-+++ b/package/libva-intel-driver/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_LIBVA_INTEL_DRIVER
-+	bool "libva-intel-driver"
-+	select BR2_PACKAGE_LIBVA
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
-+	depends on BR2_LARGEFILE # libdrm
-+	help
-+	  VA-API back-end driver for Intel graphics chips
-+
-+	  https://01.org/linuxgraphics/community/vaapi
-+
-+comment "libva intel driver needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_i386 || BR2_x86_64
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-new file mode 100644
-index 0000000..5ada9f1
---- /dev/null
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# libva-intel-driver
-+#
-+################################################################################
-+
-+LIBVA_INTEL_DRIVER_VERSION = 1.3.1
-+LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
-+LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
-+LIBVA_INTEL_DRIVER_LICENSE = MIT
-+LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
-+LIBVA_INTEL_DRIVER_AUTORECONF = YES
-+LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-x11
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5510b80..39fe815 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
 +else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-x11
++FFMPEG_CONF_OPT += --disable-vaapi
 +endif
 +
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBVA_DEPENDENCIES += wayland
-+LIBVA_INTEL_DRIVER_CONF_OPT += --enable-wayland
-+else
-+LIBVA_INTEL_DRIVER_CONF_OPT += --disable-wayland
-+endif
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
