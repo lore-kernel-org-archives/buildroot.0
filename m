@@ -1,64 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jun 2014 11:13:22 +0200
-Subject: [Buildroot] [git commit] pkg-perl: fix for Perl XS packages
-	configured by Makefile.PL
-Message-ID: <20140611092236.9826D9CFBE@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Wed, 11 Jun 2014 11:24:00 +0200
+Subject: [Buildroot] [PATCH] Makefile: target-purgelocales: add
+	dependencies
+In-Reply-To: <20140428181038.6d83619a@skate>
+References: <1398356679-1438-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140424184136.572de3d0@skate>
+ <CAHkwnC8p7E8inhY7w+WiFcsZ-_mO26rdTFB8xKvgDrG2bSj0Uw@mail.gmail.com>
+ <535DEBEC.80605@mind.be> <87tx9dx0c0.fsf@dell.be.48ers.dk>
+ <20140428181038.6d83619a@skate>
+Message-ID: <CAHkwnC9N7=7L_hbN1JUmTmugdmCDX0aEvJW+u0CayWWa6c4RQQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e037db345e09241a6a88d22886aa45a165f39dc8
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, Apr 28, 2014 at 6:10 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Peter, Arnout,
+>
+> On Mon, 28 Apr 2014 11:36:15 +0200, Peter Korsgaard wrote:
+>
+>>  >  My personal preference is to have a single rule (e.g. target-finalize)
+>>  > that performs everything that is post-targets and pre-rootfs. There isn't
+>>  > much that needs to be done so parallelisation doesn't make sense. And I
+>>  > think it's much easier to understand which steps are executed and in
+>>  > which order if they are all put together in a single rule rather than
+>>  > spread out over several.
+>>
+>>  >  To make things more readable, we can put the commands into separate
+>>  > variables. For instance:
+>>
+>>  > define TARGET_PURGE_LOCALES
+>>  >    rm -f $(LOCALE_WHITELIST)
+>>  >    ...
+>>  > endef
+>>
+>>  > define TARGET_PURGE_DEVFILES
+>>  >    rm -rf $(TARGET_DIR)/usr/include ...
+>>  > ...
+>>  > endef
+>>
+>>  > ifneq ($(BR2_PACKAGE_GDB),y)
+>>  > define TARGET_PURGE_GDB
+>>  >         rm -rf $(TARGET_DIR)/usr/share/gdb
+>>  > endef
+>>  > endif
+>>
+>>  > target-finalize: $(TARGETS)
+>>  >    $(TARGET_PURGE_LOCALES)
+>>  >    $(TARGET_PURGE_DEVFILES)
+>>  >    $(TARGET_PURGE_GDB)
+>>  >    $(TARGET_PURGE_DOC)
+>>  > ...
+>>
+>> Yes, that looks nice and clear to me too.
+>
+> Yes, agreed, this looks a lot nicer than a long chain of targets that
+> simply depend on each other to avoid any parallelization.
 
-ExtUtils::MakeMaker adds all the header files used by the perl as
-dependencies to the generated Makefile. This means that the generated
-Makefile will depend on the system's header files.
+Just to let you know, I've sent a patch following the above idea:
+http://patchwork.ozlabs.org/patch/357792/
 
-Usually this is not a problem, because when building the target package,
-these header files will indeed be found in $(STAGING_DIR). However, some
-distro's add an extra header file to the system's perl. This header is
-also included in the generated Makefile, which makes the build fail
-because it doesn't exist in $(STAGING_DIR).
-
-As a work-around, explicitly create this header file in $(STAGING_DIR).
-It doesn't hurt to create it even if the system perl doesn't need it.
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/perl/perl.mk |   21 +++++++++++++++++++++
- 1 files changed, 21 insertions(+), 0 deletions(-)
-
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 51aeb14..64ad7d3 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -94,4 +94,25 @@ define PERL_INSTALL_TARGET_CMDS
- 	$(MAKE1) -C $(@D) DESTDIR="$(TARGET_DIR)" install.perl
- endef
- 
-+# perl infra: fix for Perl XS packages configured by Makefile.PL
-+#
-+# ExtUtils::MakeMaker adds all the header files used by the perl as
-+# dependencies to the generated Makefile. This means that the generated
-+# Makefile will depend on the system's header files.
-+#
-+# Usually this is not a problem, because when building the target package,
-+# these header files will indeed be found in $(STAGING_DIR). However, some
-+# distro's add an extra header file to the system's perl. This header is
-+# also included in the generated Makefile, which makes the build fail
-+# because it doesn't exist in $(STAGING_DIR).
-+#
-+# As a work-around, explicitly create this header file in $(STAGING_DIR).
-+# It doesn't hurt to create it even if the system perl doesn't need it.
-+#
-+define PERL_ADD_PATCHLEVEL_DEBIAN_H
-+	touch $(STAGING_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE/patchlevel-debian.h
-+endef
-+
-+PERL_POST_INSTALL_STAGING_HOOKS += PERL_ADD_PATCHLEVEL_DEBIAN_H
-+
- $(eval $(generic-package))
+Best regards
+-- 
+Fabio Porcedda
