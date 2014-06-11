@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 11 Jun 2014 19:52:36 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/mesa3d: depend on udev
-In-Reply-To: <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 11 Jun 2014 19:57:45 +0200
+Subject: [Buildroot] [PATCH v2 0/3] WIP: package/eudev: Split libudev
+ and daemon
+In-Reply-To: <1402508508-437-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402508508-437-1-git-send-email-bernd.kuhls@t-online.de>
- <1402508508-437-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140611175236.GC3472@free.fr>
+Message-ID: <20140611175745.GD3472@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,55 +14,44 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2014-06-11 19:41 +0200, Bernd Kuhls spake thusly:
-> checking for LIBUDEV... no
-> configure: error: libudev-dev required for building DRI
+> in order to support a growing number of packages[1] depending on libudev,
+> even when /dev is not managed by systemd/eudev, it is necessary to
+> provide libudev as a stand-alone solution for systems which have
+> BR2_ROOTFS_DEVICE_CREATION_STATIC=y.
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/16d/16d12b986051db884eae86e9658e6c4fc0f28885/
+> This patch series
+> - bumps eudev to 1.7
+> - integrates my older libudev package into eudev
+> - fixes mesa3d build error
+
+> Still to be discussed:
+> - should we keep BR2_PACKAGE_HAS_UDEV which now means libudev, and
+> - introduce BR2_PACKAGE_HAS_UDEV_DAEMON for packages needing the daemon, or
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> - introduce BR2_PACKAGE_HAS_LIBUDEV and switch many packages over to this option
 
-This is a stop-gap fix until we have a proper libudev package.
-This shoudl be independent from the previous patches, so can go in
-as-is:
+Nope, the other way around.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We want to keep _HAS_UDEV to still mean "has a udev daemon", to support
+legacy .config files.
+
+We can introduce a new _HAS_LIBUDEV however.
+
+And... I am working on this. I know you are present on IRC, but since
+you do not seem to look at your IRC client (or it is not notifying you
+when we ping you), it's difficult to synchronise with you.
+
+As I said in my reply to your previous libudev patch:
+  "I'll have a look at it tonight (UTC+2)." (which is basically "now").
+  "I'll see what I can come up with."
+
+Of course, we appreciate your new submission, hopefully it will make my
+life easier. ;-)
+
+Thanks!
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/mesa3d/Config.in |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index fc96cc5..d3ded82 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -10,6 +10,7 @@ menuconfig BR2_PACKAGE_MESA3D
->  	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
->  	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
-> +	depends on BR2_PACKAGE_HAS_UDEV
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_LARGEFILE
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> @@ -125,6 +126,6 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
->  
->  endif # BR2_PACKAGE_MESA3D
->  
-> -comment "mesa3d needs a toolchain w/ C++, largefile, NPTL"
-> +comment "mesa3d needs udev /dev management and a toolchain w/ C++, largefile, NPTL"
->  	depends on !BR2_LARGEFILE || !BR2_INSTALL_LIBSTDCPP || \
-> -		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_PACKAGE_HAS_UDEV
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
