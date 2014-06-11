@@ -1,40 +1,54 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2014 14:45:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: Add optional
-	dependency to libiconv
-In-Reply-To: <XnsA34990F24E603berndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Wed, 11 Jun 2014 14:14:55 +0200")
-References: <1402313033-31085-1-git-send-email-bernd.kuhls@t-online.de>
- <20140609195850.2317401f@free-electrons.com>
- <XnsA34990F24E603berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <877g4nipi0.fsf@dell.be.48ers.dk>
+Date: Wed, 11 Jun 2014 14:53:45 +0200
+Subject: [Buildroot] [PATCH] e2fsprogs: fix static build against
+	external libblkid
+In-Reply-To: <20140611123159.GX4074@tarshish> (Baruch Siach's message of "Wed, 
+ 11 Jun 2014 15:31:59 +0300")
+References: <72ae71741da36e003dd68da3677c6ce987df25a4.1402481709.git.baruch@tkos.co.il>
+ <871tuvk9bj.fsf@dell.be.48ers.dk> <20140611123159.GX4074@tarshish>
+Message-ID: <8738fbip46.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
- > @public.gmane.org> wrote in news:20140609195850.2317401f at free-electrons.com:
+Hi,
 
- >> You need libiconv because your toolchain does not have locale support.
- >> Therefore, your Config.in should have something like:
+ >> > +Patch status: sent upstream: http://patchwork.ozlabs.org/patch/358584/
+ >> > +
+ >> > + configure.in | 2 +-
+ >> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> > +
+ >> > +diff --git a/configure.in b/configure.in
+ >> > +index 448a2926776a..ec6068320878 100644
+ >> > +--- a/configure.in
+ >> > ++++ b/configure.in
+ >> > +@@ -551,7 +551,7 @@ then
+ >> > + 		[LIBBLKID=`$PKG_CONFIG --libs blkid`;
+ >> > + 		 STATIC_LIBBLKID=`$PKG_CONFIG --static --libs blkid`],
+ >> > + 		[AC_MSG_ERROR([external blkid library not found])],
+ >> > +-		[$LIBBLKID])
+ >> > ++		[`$PKG_CONFIG --static --libs blkid`])
  >> 
- >> select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- >> 
- >> see all the other examples in Buildroot.
+ >> Why not '[$STATIC_LIBBLKID])' instead of rerunning pkg-config?
 
- > Hi,
+ > Quoting the autoconf manual:
 
- > libiconv is not a hard-dependency of tvheadend so I thought enabling libiconv 
- > in the !BR2_ENABLE_LOCALE case is not necessary here.
+ > AC_CHECK_LIB (LIBRARY, FUNCTION, [ACTION-IF-FOUND],
+ > 		  [ACTION-IF-NOT-FOUND], [OTHER-LIBRARIES])
 
-Ahh, so it's just an optional dependency it CAN use if available? Then
-the patch is fine.
+ > So, if I understand correctly, $STATIC_LIBBLKID in [ACTION-IF-FOUND] gets 
+ > defined only after the test has run successfully.
 
-Somehow I don't see it anymore in patchwork though?
+Sorry, you're right - I misread the patch. It should arguably still pass
+$LIBBLKID so the user can pass extra libraries, but looking at the
+configure script I see it clears it just above, so it cannot be used
+anyway.
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
