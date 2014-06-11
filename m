@@ -1,88 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 11 Jun 2014 22:34:47 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: add network unit file
-In-Reply-To: <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
-References: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
- <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
-Message-ID: <20140611223447.1d5e7a65@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 11 Jun 2014 22:34:57 +0200
+Subject: [Buildroot] [PATCH] infra: indent the Config.in source-ing of
+	packages
+In-Reply-To: <1399584943-26869-1-git-send-email-arnout@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 8 May 2014 23:35:43 +0200")
+References: <1399584943-26869-1-git-send-email-arnout@mind.be>
+Message-ID: <87y4x3famm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-As our systemd person, could you have a look at this patch, and give
-your comments and/or Acked-by/Reviewed-by as appropriate?
+ > This makes sure that a patch adding a package shows in which menu the
+ > package is added.
 
-Thanks!
+ > Before this commit, the patch has something like this:
+ >> diff --git a/package/Config.in b/package/Config.in
+ >> index 7800f23..433312e 100644
+ >> --- a/package/Config.in
+ >> +++ b/package/Config.in
+ >> @@ -864,6 +864,7 @@ source "package/googlefontdirectory/Config.in"
+ >> source "package/haveged/Config.in"
+ >> source "package/mcrypt/Config.in"
+ >> source "package/mobile-broadband-provider-info/Config.in"
+ >> +source "package/mypackage/Config.in"
+ >> source "package/shared-mime-info/Config.in"
+ >> source "package/snowball-init/Config.in"
+ >> source "package/sound-theme-borealis/Config.in"
 
-Thomas
+ > [> added to avoid git-am recognizing this as the patch]
 
-On Mon, 27 Jan 2014 17:54:57 -0800, Ivan Sergeev wrote:
-> Add and enable a systemd unit file to bring up or down network with ifup /
-> ifdown, analogous to the skeleton/etc/init.d/S40network init script.
-> 
-> Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
-> ---
->  package/systemd/network.service | 21 +++++++++++++++++++++
->  package/systemd/systemd.mk      |  9 +++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 package/systemd/network.service
-> 
-> diff --git a/package/systemd/network.service b/package/systemd/network.service
-> new file mode 100644
-> index 0000000..0d77bb8
-> --- /dev/null
-> +++ b/package/systemd/network.service
-> @@ -0,0 +1,21 @@
-> +[Unit]
-> +Description=Network Connectivity
-> +Wants=network.target
-> +Before=network.target
-> +
-> +[Service]
-> +Type=oneshot
-> +RemainAfterExit=yes
-> +
-> +# lo is brought up earlier, which will cause the upcoming "ifup -a" to fail
-> +# with exit code 1, due to an "ip: RTNETLINK answers: File exists" error during
-> +# its "ip addr add ..." command, subsequently causing this unit to fail even
-> +# though it is a benign error. Flushing the lo address with the command below
-> +# before ifup prevents this failure.
-> +ExecStart=/sbin/ip addr flush dev lo
-> +
-> +ExecStart=/sbin/ifup -a
-> +ExecStop=/sbin/ifdown -a
-> +
-> +[Install]
-> +WantedBy=multi-user.target
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index a5dc8e5..a99c0da 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -72,7 +72,16 @@ define SYSTEMD_INSTALL_TTY_HOOK
->  	ln -fs ../../../../usr/lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
->  endef
->  
-> +define SYSTEMD_INSTALL_NETWORK_HOOK
-> +	$(INSTALL) -D -m 644 package/systemd/network.service \
-> +		$(TARGET_DIR)/etc/systemd/system/network.service
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> +	ln -fs ../network.service \
-> +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
-> +endef
-> +
->  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->  	SYSTEMD_INSTALL_TTY_HOOK \
-> +	SYSTEMD_INSTALL_NETWORK_HOOK
->  
->  $(eval $(autotools-package))
+ > After this commit, the function marker shows in which menu the new
+ > package was added:
+ >> diff --git a/package/Config.in b/package/Config.in
+ >> index b1111c8..7e6e1a4 100644
+ >> --- a/package/Config.in
+ >> +++ b/package/Config.in
+ >> @@ -864,6 +864,7 @@ menu "Miscellaneous"
+ >> source "package/haveged/Config.in"
+ >> source "package/mcrypt/Config.in"
+ >> source "package/mobile-broadband-provider-info/Config.in"
+ >> +	source "package/mypackage/Config.in"
+ >> source "package/shared-mime-info/Config.in"
+ >> source "package/snowball-init/Config.in"
+ >> source "package/sound-theme-borealis/Config.in"
 
+ > To keep things consistent, this is done for Config.in.host there, even
+ > though we don't have sub-menus there at the moment.
 
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ > Obviously, this patch is very fragile: it will be broken if any new
+ > package is added. Therefore, please don't apply it as is, but use:
+ > sed -i "/^source/s//$(printf \\t)source/" package/Config.in package/Config.in.host
+ > (printf for easy cut&paste).
+ > Verify that nothing important changed with
+ > git diff --ignore-all-change
+
+Committed (regenerated), thanks!
 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
