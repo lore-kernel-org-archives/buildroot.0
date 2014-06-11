@@ -1,9 +1,9 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jun 2014 19:50:30 -0700
-Subject: [Buildroot] [PATCH v2 3/3] fmc: new package
+Date: Tue, 10 Jun 2014 19:50:29 -0700
+Subject: [Buildroot] [PATCH v2 2/3] tclap: new package
 In-Reply-To: <1402455030-18008-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1402455030-18008-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1402455030-18008-3-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1402455030-18008-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,90 +14,76 @@ Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
 
 Changes v1 -> v2:
-   - Fixed line wrap and mentioned fsl ppc in the description (Thomas P)
-   - Added depends on c++ lib (Thomas P)
-   - Updated cp to use dpfr args instead of noownership (Thomas P)
+   - Added depend on c++ stdlib (Thomas P)
+   - Fixed description line length and word spelling (Thomas P)
+   - Removed define of source archive file name as it's default
+     (Thomas P)
+   - Added description about not installing to target and that
+     this pkg is a set of template headers (Thomas P)
 ---
- package/Config.in     |    1 +
- package/fmc/Config.in |   19 +++++++++++++++++++
- package/fmc/fmc.mk    |   31 +++++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+)
- create mode 100644 package/fmc/Config.in
- create mode 100644 package/fmc/fmc.mk
+ package/Config.in       |    1 +
+ package/tclap/Config.in |   17 +++++++++++++++++
+ package/tclap/tclap.mk  |   16 ++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/tclap/Config.in
+ create mode 100644 package/tclap/tclap.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ac3af6b..f874eaf 100644
+index 60118ea..ac3af6b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -918,6 +918,7 @@ source "package/dnsmasq/Config.in"
- source "package/dropbear/Config.in"
- source "package/ebtables/Config.in"
- source "package/ethtool/Config.in"
-+source "package/fmc/Config.in
- source "package/foomatic-filters/Config.in"
- source "package/fping/Config.in"
- source "package/gesftpserver/Config.in"
-diff --git a/package/fmc/Config.in b/package/fmc/Config.in
+@@ -856,6 +856,7 @@ source "package/pcre/Config.in"
+ source "package/popt/Config.in"
+ source "package/readline/Config.in"
+ source "package/slang/Config.in"
++source "package/tclap/Config.in"
+ endmenu
+ 
+ endmenu
+diff --git a/package/tclap/Config.in b/package/tclap/Config.in
 new file mode 100644
-index 0000000..35de28e
+index 0000000..8c6296f
 --- /dev/null
-+++ b/package/fmc/Config.in
-@@ -0,0 +1,19 @@
-+comment "fmc needs a toolchain w/ C++"
++++ b/package/tclap/Config.in
+@@ -0,0 +1,17 @@
++comment "tclap needs a toolchain w/ C++"
 +	depends on !BR2_INSTALL_LIBSTDCPP
 +
-+config BR2_PACKAGE_FMC
-+	bool "fmc"
-+	depends on BR2_powerpc_e500mc
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_TCLAP
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_FMLIB
++config BR2_PACKAGE_TCLAP
++	bool "tclap"
++	depends BR2_INSTALL_LIBSTDCPP
 +	help
-+	  The Frame Manager Configuration tool is Freescale PowerPC platform
-+	  software package whose primary purpose is converting
-+	  Parse-Classify-Police-Distribute (PCD) descriptions of network
-+	  packets flow into hardware configuration. The tool provides an
-+	  abstraction layer between the end customer's vision of the PCD task
-+	  definition and real hardware implementation.
++	  This is a small, flexible library that provides a simple interface
++	  for defining and accessing command line arguments. It was initially
++	  inspired by the user friendly CLAP libary. The difference is that
++	  this library is templatized, so the argument class is type
++	  independent. Type independence avoids identical-except-for-type
++	  objects, such as IntArg, FloatArg, and StringArg. While the library
++	  is not strictly compliant with the GNU or POSIX standards, it is
++	  close.
 +
-+	  http://cache.freescale.com/files/32bit/doc/app_note/AN4760.pdf
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
++	  http://tclap.sourceforge.net/
+diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
 new file mode 100644
-index 0000000..f9091c0
+index 0000000..807f247
 --- /dev/null
-+++ b/package/fmc/fmc.mk
-@@ -0,0 +1,31 @@
-+###############################################################################
++++ b/package/tclap/tclap.mk
+@@ -0,0 +1,16 @@
++################################################################################
 +#
-+# fmc
++# tclap
 +#
-+###############################################################################
++################################################################################
 +
-+FMC_VERSION = fsl-sdk-v1.5-rc3
-+FMC_SITE = git://git.freescale.com/ppc/sdk/fmc.git
-+FMC_LICENSE = MIT
-+FMC_LICENSE_FILES = COPYING
-+FMC_DEPENDENCIES = libxml2 tclap fmlib
++TCLAP_VERSION = 1.2.1
++TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
++TCLAP_LICENSE = MIT
++TCLAP_LICENSE_FILES = COPYING
++TCLAP_INSTALL_STAGING = YES
 +
-+FMC_MAKE_OPTS = \
-+	CC="$(TARGET_CC)" \
-+	CXX="$(TARGET_CXX)" \
-+	FMD_USPACE_HEADER_PATH="$(STAGING_DIR)/usr/include/fmd" \
-+	FMD_USPACE_LIB_PATH="$(STAGING_DIR)/usr/lib" \
-+	LIBXML2_HEADER_PATH="$(STAGING_DIR)/usr/include/libxml2" \
-+	TCLAP_HEADER_PATH="$(STAGING_DIR)/usr/include"
++# This package is a pure C++ template library, only made of headers.
++TCLAP_INSTALL_TARGET = NO
 +
-+define FMC_BUILD_CMDS
-+	# The linking step has dependency issues so using MAKE1
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(FMC_MAKE_OPTS) -C $(@D)/source
-+endef
-+
-+define FMC_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/source/fmc $(TARGET_DIR)/usr/sbin/fmc
-+	cp -dpfr $(@D)/etc/fmc $(TARGET_DIR)/etc/
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 1.7.9.5
