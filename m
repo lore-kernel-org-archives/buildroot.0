@@ -1,70 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jun 2014 12:50:11 +0200
-Subject: [Buildroot] [git commit] dhcp: bump to version 4.1-ESV-R9
-Message-ID: <20140611111743.08E839CFA0@busybox.osuosl.org>
+Date: Wed, 11 Jun 2014 12:55:41 +0200
+Subject: [Buildroot] [git commit] ti-gfx: bump to version 5_01_01_01 if
+	EABIhf is used
+Message-ID: <20140611111743.38B959B9C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a39cb252dc9dae1cb66141e107195d93454a9301
+commit: http://git.buildroot.net/buildroot/commit/?id=e4b4c33cf891c153a9dbc662bef594e1c5d1f3a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also install the SysV initscripts from the proper hook.
-Since the scripts check for the proper files to be present there's no
-need to exclude them according to options since they won't try to start
-anything.
+SDK 5_01_01_01 only support EABIhf so 5_01_00_01 is still used if
+EABIhf is not available.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcp/dhcp.mk |   14 +++++++++-----
- 1 files changed, 9 insertions(+), 5 deletions(-)
+ package/ti-gfx/ti-gfx.mk |    8 +++++---
+ 1 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 3885bba..1044f89 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/ti-gfx/ti-gfx.mk b/package/ti-gfx/ti-gfx.mk
+index 324e19c..4e83f1e 100644
+--- a/package/ti-gfx/ti-gfx.mk
++++ b/package/ti-gfx/ti-gfx.mk
+@@ -4,15 +4,17 @@
  #
  ################################################################################
  
--DHCP_VERSION = 4.1-ESV-R8
-+DHCP_VERSION = 4.1-ESV-R9
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
-@@ -31,8 +31,6 @@ define DHCP_INSTALL_SERVER
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
- 	$(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
--	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-server \
--		$(TARGET_DIR)/etc/init.d/S80dhcp-server
- 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
- 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
- endef
-@@ -44,8 +42,6 @@ define DHCP_INSTALL_RELAY
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
- 	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
- 		$(TARGET_DIR)/usr/sbin/dhcrelay
--	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-relay \
--		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
- endef
+-TI_GFX_VERSION = 5_01_00_01
+-TI_GFX_SO_VERSION = 1.10.2359475
+-
++# SDK 5_01_01_01 only support EABIhf so we downgrade to 5_01_00_01 if EABIhf is
++# not available.
+ ifeq ($(BR2_ARM_EABIHF),y)
++TI_GFX_VERSION = 5_01_01_01
+ TI_GFX_SOURCE = Graphics_SDK_setuplinux_hardfp_$(TI_GFX_VERSION).bin
+ else
++TI_GFX_VERSION = 5_01_00_01
+ TI_GFX_SOURCE = Graphics_SDK_setuplinux_softfp_$(TI_GFX_VERSION).bin
  endif
  
-@@ -62,6 +58,14 @@ define DHCP_INSTALL_CLIENT
- endef
- endif
- 
-+# Options don't matter, scripts won't start if binaries aren't there
-+define DHCP_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-server \
-+		$(TARGET_DIR)/etc/init.d/S80dhcp-server
-+	$(INSTALL) -m 0755 -D package/dhcp/S80dhcp-relay \
-+		$(TARGET_DIR)/etc/init.d/S80dhcp-relay
-+endef
-+
- define DHCP_INSTALL_TARGET_CMDS
- 	$(DHCP_INSTALL_RELAY)
- 	$(DHCP_INSTALL_SERVER)
++TI_GFX_SO_VERSION = 1.10.2359475
+ TI_GFX_SITE = http://downloads.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/gfxsdk/$(TI_GFX_VERSION)/exports/
+ TI_GFX_LICENSE = Technology / Software Publicly Available
+ TI_GFX_LICENSE_FILES = TSPA.txt
