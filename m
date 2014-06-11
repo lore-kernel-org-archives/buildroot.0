@@ -1,7 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 12 Jun 2014 01:40:08 +0200
-Subject: [Buildroot] [PATCH 0/5 RFC] Introduce libudev (branch yem/libudev)
-Message-ID: <cover.1402529398.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/5 RFC] package/eudev: remove the prompt
+In-Reply-To: <cover.1402529398.git.yann.morin.1998@free.fr>
+References: <cover.1402529398.git.yann.morin.1998@free.fr>
+Message-ID: <19d4922545f58b8ef5beede8251cf9612aa8fd9e.1402529398.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,76 +12,126 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Hello All!
+The package eudev depends on DEVICE_CREATION_DYNAMIC_EUDEV, and
+is also selected by DEVICE_CREATION_DYNAMIC_EUDEV.
 
-Big fat warning: this is only an RFC for now!
+This means that:
+  - eudev is not visible when DEVICE_CREATION_DYNAMIC_EUDEV is not set
+  - eudev is visible but forced when DEVICE_CREATION_DYNAMIC_EUDEV is set
 
-This series introduces the possibility to just build and install libudev,
-without requiring that the /dev management be handled by eudev or systemd.
+As a consequence, eudev is never user-selectable.
 
-A lot of packages that have a dependency on udev, in fact only require a
-libudev, not anudev daemon. That's the case for e.g. libinput, libcec,
-mesa3d...
+Since the user already made the decision to use eudev in the /dev
+management choice, there is no point in showing the eudev package at all
+in the menuconfig.
 
-The series starts with two cleanup patches, to remove the prompts of eudev
-and systemd, since they are never user-selectable; a bit of cleanup is
-done in the dependencies as well.
+Just remove the prompt.
 
-The two following patches add a new virtual package 'libudev', and the
-'udev' virtual package is made a provider for this new virtual package.
+Also remove the comments, since anyway the user can't do anything about it.
 
-Finally, the fifth patch 'upgrades' the existing eudev package with the
-possibility to only install libudev if needed. This is the tricky part,
-and is explained in the commit log. More details can be added in a future
-respin of the series.
+Although not strictly required, we anyway keep the dependencies expressed
+in eudev, to explain where they come from (fork, util-linux...), so it is
+explicit their duplication in the .dev management choice entry comes from
+eudev itself. So, update the comments there.
 
-No package has so far been converted to depend on libudev instead of just
-udev. This is relatively trivial, but I would prefer we agree on the above
-first. And it is late here, so let's just spin what I have for now! ;-)
+Also, move the help text to the /dev macnagement choice, so the user has
+a chance to look at it! ;-)
 
-On your keyboards, get set, ready... Comment! :-)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/eudev/Config.in | 30 +++++++++---------------------
+ system/Config.in        | 21 ++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 26 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 11dbb615338cd768acc2c3138064ddf557e9b60b:
-
-  hdparm: prevent package makefile from stripping the hdparm binary (2014-06-11 23:03:48 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git 
-
-for you to fetch changes up to 972a759982e4bdbd069e2f1fb6a213aa9f829c29:
-
-  package/eudev: split udev/libudev (2014-06-12 01:29:49 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      package/eudev: remove the prompt
-      package/systemd: remove prompt
-      package/libudev: new virtual package
-      package/udev: is a provider for libudev
-      package/eudev: split udev/libudev
-
- package/Config.in          |  3 +-
- package/eudev/Config.in    | 66 +++++++++++++++++++++++++++-------------
- package/eudev/eudev.mk     | 46 +++++++++++++++++++++++++---
- package/libudev/Config.in  |  6 ++++
- package/libudev/libudev.mk |  7 +++++
- package/systemd/Config.in  | 53 +++++++++++---------------------
- package/udev/Config.in     |  4 +++
- package/udev/udev.mk       |  2 ++
- system/Config.in           | 76 +++++++++++++++++++++++++++++++++++++---------
- 9 files changed, 187 insertions(+), 76 deletions(-)
- create mode 100644 package/libudev/Config.in
- create mode 100644 package/libudev/libudev.mk
-
+diff --git a/package/eudev/Config.in b/package/eudev/Config.in
+index 40ff721..b204a90 100644
+--- a/package/eudev/Config.in
++++ b/package/eudev/Config.in
+@@ -1,7 +1,13 @@
++# Note: being prompt-less, and selected in the /dev management choice,
++# it is not needed to have dependencies on this symbol, since the
++# choice entry already have those dependencies.
++# However, it seems more logical to have the dependencies listed here,
++# so it is easier to uderstand why we have those, and duplicate them in
++# the choice entry.
++
+ config BR2_PACKAGE_EUDEV
+-	bool "eudev"
++	bool
+ 	depends on !BR2_avr32 # no epoll_create1
+-	depends on BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	depends on BR2_USE_MMU # uses fork()
+ 	depends on BR2_LARGEFILE # util-linux
+ 	depends on BR2_USE_WCHAR # util-linux
+@@ -10,14 +16,6 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_KMOD
+-	help
+-	  Userspace device daemon. This is a standalone version,
+-	  independent of systemd. It is a fork maintained by Gentoo.
+-
+-	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
+-	  and inotify.
+-
+-	  http://github.com/gentoo/eudev/
+ 
+ if BR2_PACKAGE_EUDEV
+ 
+@@ -25,18 +23,8 @@ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "eudev"
+ 
+ config BR2_PACKAGE_EUDEV_RULES_GEN
+-	bool "enable rules generator"
++	bool "eudev rules generator"
+ 	help
+ 	  Enable persistent rules generator
+ 
+ endif
+-
+-comment "eudev needs eudev /dev management"
+-	depends on !BR2_avr32
+-	depends on BR2_USE_MMU
+-	depends on !BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+-
+-comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
+-	depends on !BR2_avr32
+-	depends on BR2_USE_MMU
+-	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || BR2_PREFER_STATIC_LIB
+diff --git a/system/Config.in b/system/Config.in
+index 53bca53..2305de2 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -124,12 +124,23 @@ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV
+ 
+ config BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV
+ 	bool "Dynamic using eudev"
+-	depends on !BR2_avr32 # eudev
+-	depends on BR2_LARGEFILE
+-	depends on BR2_USE_WCHAR
+-	depends on !BR2_PREFER_STATIC_LIB
+-	depends on BR2_USE_MMU # eudev
++	depends on !BR2_avr32 # eudev (no epoll_create1)
++	depends on BR2_USE_MMU # eudev (fork)
++	depends on BR2_LARGEFILE # eudev (util-linux)
++	depends on BR2_USE_WCHAR # eudev (util-linux)
++	depends on !BR2_PREFER_STATIC_LIB # eudev
+ 	select BR2_PACKAGE_EUDEV
++	help
++	  Userspace device daemon. This is a standalone version,
++	  independent of systemd. It is a fork maintained by Gentoo.
++
++	  eudev requires a Linux kernel >= 2.6.34: it relies on devtmpfs
++	  and inotify.
++
++	  You can further configure systemd in:
++	    Target packages --> Hardware handling
++
++	  http://github.com/gentoo/eudev/
+ 
+ comment "eudev needs a toolchain w/ largefile, wchar, dynamic library"
+ 	depends on !BR2_avr32 # eudev
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
