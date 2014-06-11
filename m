@@ -1,54 +1,42 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 11 Jun 2014 14:53:45 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: fix static build against
-	external libblkid
-In-Reply-To: <20140611123159.GX4074@tarshish> (Baruch Siach's message of "Wed, 
- 11 Jun 2014 15:31:59 +0300")
-References: <72ae71741da36e003dd68da3677c6ce987df25a4.1402481709.git.baruch@tkos.co.il>
- <871tuvk9bj.fsf@dell.be.48ers.dk> <20140611123159.GX4074@tarshish>
-Message-ID: <8738fbip46.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 11 Jun 2014 14:54:35 +0200
+Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
+ "target-finalize" rule
+In-Reply-To: <CAHkwnC9RPGoZcp4bqffN5yCnWRJoeRxKFf72JmrwwAFr3jCnyg@mail.gmail.com>
+References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140610223358.69a70e6e@free-electrons.com>
+ <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
+ <20140611111844.2952ecac@free-electrons.com>
+ <CAHkwnC9RPGoZcp4bqffN5yCnWRJoeRxKFf72JmrwwAFr3jCnyg@mail.gmail.com>
+Message-ID: <20140611145435.40a60312@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Dear Fabio Porcedda,
 
-Hi,
+On Wed, 11 Jun 2014 11:21:38 +0200, Fabio Porcedda wrote:
 
- >> > +Patch status: sent upstream: http://patchwork.ozlabs.org/patch/358584/
- >> > +
- >> > + configure.in | 2 +-
- >> > + 1 file changed, 1 insertion(+), 1 deletion(-)
- >> > +
- >> > +diff --git a/configure.in b/configure.in
- >> > +index 448a2926776a..ec6068320878 100644
- >> > +--- a/configure.in
- >> > ++++ b/configure.in
- >> > +@@ -551,7 +551,7 @@ then
- >> > + 		[LIBBLKID=`$PKG_CONFIG --libs blkid`;
- >> > + 		 STATIC_LIBBLKID=`$PKG_CONFIG --static --libs blkid`],
- >> > + 		[AC_MSG_ERROR([external blkid library not found])],
- >> > +-		[$LIBBLKID])
- >> > ++		[`$PKG_CONFIG --static --libs blkid`])
- >> 
- >> Why not '[$STATIC_LIBBLKID])' instead of rerunning pkg-config?
+> > Ah. I don't remember. Do you have a pointer to this discussion? I'd
+> > like to see what were the arguments back then :-)
+> 
+> Sure: http://lists.busybox.net/pipermail/buildroot/2014-April/095052.html
 
- > Quoting the autoconf manual:
+Ok, I see now. The problem I have with the reasoning we used during
+this discussion is that we only thought of those "global"
+target-finalize tasks. But there are also plenty of more
+package-specific ones, such as cleaning up unneeded Python things, or
+unneeded Perl things. A hook mechanism would allow to move these
+individual bits of logic down to the package needing them.
 
- > AC_CHECK_LIB (LIBRARY, FUNCTION, [ACTION-IF-FOUND],
- > 		  [ACTION-IF-NOT-FOUND], [OTHER-LIBRARIES])
+It's true that I admit it would be less easy to read and understand
+that a complete list of all target-finalize tasks. So if Peter and
+Arnout prefer the explicit list, I'm fine.
 
- > So, if I understand correctly, $STATIC_LIBBLKID in [ACTION-IF-FOUND] gets 
- > defined only after the test has run successfully.
-
-Sorry, you're right - I misread the patch. It should arguably still pass
-$LIBBLKID so the user can pass extra libraries, but looking at the
-configure script I see it clears it just above, so it cannot be used
-anyway.
-
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
