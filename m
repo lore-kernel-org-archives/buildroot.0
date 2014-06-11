@@ -1,88 +1,100 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jun 2014 21:03:22 -0500
-Subject: [Buildroot] [PATCH 2/3] tclap: new package
-In-Reply-To: <20140610221111.5181dcb3@free-electrons.com>
+Date: Tue, 10 Jun 2014 21:06:40 -0500
+Subject: [Buildroot] [PATCH 1/3] fmlib: new package
+In-Reply-To: <20140610220105.59a27d38@free-electrons.com>
 References: <1402412526-24844-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1402412526-24844-3-git-send-email-matthew.weber@rockwellcollins.com>
- <20140610221111.5181dcb3@free-electrons.com>
-Message-ID: <CANQCQpYOrNEFP=TpzjJk8AcHS1B3+ek+fgEKJtYiE93Fq=1EZg@mail.gmail.com>
+ <1402412526-24844-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <20140610220105.59a27d38@free-electrons.com>
+Message-ID: <CANQCQpZeHHZAwm5nrdfC4ehMrusc8wV3Sxqjthio8imP1q-vcQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Thomas, thanks for the review.
 
-On Tue, Jun 10, 2014 at 3:11 PM, Thomas Petazzoni
+On Tue, Jun 10, 2014 at 3:01 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Dear Matt Weber,
 >
-> On Tue, 10 Jun 2014 08:02:05 -0700, Matt Weber wrote:
+> On Tue, 10 Jun 2014 08:02:04 -0700, Matt Weber wrote:
 >
->> diff --git a/package/tclap/Config.in b/package/tclap/Config.in
+>> diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
 >> new file mode 100644
->> index 0000000..e50704b
+>> index 0000000..43f7aa3
 >> --- /dev/null
->> +++ b/package/tclap/Config.in
->> @@ -0,0 +1,12 @@
->> +config BR2_PACKAGE_TCLAP
->> +     bool "tclap"
+>> +++ b/package/fmlib/Config.in
+>> @@ -0,0 +1,9 @@
+>> +config BR2_PACKAGE_FMLIB
+>> +     bool "fmlib"
+>> +     depends on BR2_powerpc_e500mc
 >
-> This package needs C++ support, so the appropriate 'depends on' +
-> comment is needed.
+> If your package has 'linux' in its dependencies, then it should
+> 'depends on BR2_LINUX_KERNEL' here, and have a comment about this. See
+> package/freescale-imx/imx-lib/Config.in for an example.
+Agree.
+
 >
 >> +     help
->> +       This is a small, flexible library that provides a simple interface for
->> +       defining and accessing command line arguments. It was intially inspired
+>> +       The Frame Manager library provides an API on top of the Frame Manager driver
+>> +       ioctl calls, that provides a user space application with a simple way
+>> +       to configure driver parameters and PCD (parse - classify - distribute) rules.
 >
-> intially -> initially.
+> I think the lines are too long here. Wrap to 72 max.
 Agree.
 
 >
->> +       by the user friendly CLAP libary. The difference is that this library is
->> +       templatized, so the argument class is type independent. Type independence
->> +       avoids identical-except-for-type objects, such as IntArg, FloatArg, and
->> +       StringArg. While the library is not strictly compliant with the GNU or
->> +       POSIX standards, it is close.
+>> +FMLIB_VERSION = fsl-sdk-v1.5-rc3
+>> +FMLIB_SITE = git://git.freescale.com/ppc/sdk/fmlib.git
+>> +FMLIB_LICENSE = BSD-c3
 >
-> Please check lines do not exceed 72 chars.
-Agree.
+> We actually use BSD-3c and not BSD-c3. Also, the license should
+> actually be:
+>
+>         BSD-3c or GPLv2+
+Good catch.
 
 >
->> +       http://tclap.sourceforge.net/
->> diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
->> new file mode 100644
->> index 0000000..268b90b
->> --- /dev/null
->> +++ b/package/tclap/tclap.mk
->> @@ -0,0 +1,16 @@
->> +################################################################################
->> +#
->> +# tclap
->> +#
->> +################################################################################
->> +
->> +TCLAP_VERSION = 1.2.1
->> +TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
->> +TCLAP_SOURCE = tclap-$(TCLAP_VERSION).tar.gz
+> See the COPYING file of the project for details.
 >
-> Not needed, that's the default.
+>> +FMLIB_LICENSE_FILES = COPYING
+>> +FMLIB_DEPENDENCIES = linux
+>> +FMLIB_INSTALL_STAGING = YES
+>> +FMLIB_INSTALL_TARGET = NO
+>
+> Please add a comment above this like:
+>
+> # This package installs a static library only, so there's nothing to
+> # install to the target
 Sure.
 
 >
->> +TCLAP_LICENSE = MIT
->> +TCLAP_LICENSE_FILES = COPYING
+>> +FMLIB_MAKE_OPTS = \
+>> +     CC="$(TARGET_CC)" \
+>> +     CROSS_COMPILE="$(TARGET_CROSS)" \
+>> +     KERNEL_SRC="$(LINUX_DIR)" \
+>> +     PREFIX="$(STAGING_DIR)/usr"
 >> +
->> +TCLAP_INSTALL_STAGING = YES
->> +TCLAP_INSTALL_TARGET = NO
+>> +ifeq ($(BR2_powerpc_e500mc), y)
 >
-> A short comment that explains why INSTALL_TARGET = NO is useful. Just
-> say it's a pure C++ template library, only made of headers.
+> No space between , and y
 Sure.
+
+>
+>> +     FMLIB_ARCHTYPE = ppce500mc
+>> +endif
+>
+> That being said, since the package can only be enabled on ppce500mc, do
+> we really need this condition? Or maybe you're making the thing a bit
+> more future proof to support the other variants?
+(future proof)  I don't have the necessary target configurations to
+test more then the
+ppce500mc configuration at this point.  However it is capable of
+building a number
+of ppc and ppc64 libs.
 
 <snip>
-
 
 -- 
 Matthew L Weber / Sr Software Engineer / Platform Software
