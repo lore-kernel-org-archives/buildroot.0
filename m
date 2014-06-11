@@ -1,40 +1,25 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 11 Jun 2014 21:17:47 +0200
-Subject: [Buildroot] [PATCH] supervisor: add runtime dependency on
-	python-setuptools
-Message-ID: <7514f33bf3a507a044a5.1402514267@localhost>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 11 Jun 2014 19:18:56 +0000 (UTC)
+Subject: [Buildroot] [Bug 7184] supervisord depends on libxml2 implicitly
+In-Reply-To: <bug-7184-163@https.bugs.busybox.net/>
+References: <bug-7184-163@https.bugs.busybox.net/>
+Message-ID: <20140611191856.DD3929CFBB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-supervisor has a runtime dependency on python-setuptools which was not
-expressed in its Config.in file. When running supervisor without setuptools,
-one gets:
+https://bugs.busybox.net/show_bug.cgi?id=7184
 
-Starting supervisord: Traceback (most recent call last):
-  File "/usr/bin/supervisord", line 5, in <module>
-    from pkg_resources import load_entry_point
-ImportError: No module named pkg_resources
+--- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-11 19:18:56 UTC ---
+A patch fixing the dependency on python-setuptools was sent to the list: 
+http://patchwork.ozlabs.org/patch/358871/
 
-Partially fixes bug #7184 (https://bugs.busybox.net/show_bug.cgi?id=7184)
+Please let me know if there is another problem according to you, or all is
+fixed now. Thanks.
 
-Reported-by: Sebastian Himberger <sebastian@himberger.de>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
----
- package/supervisor/Config.in |  1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff -r a3b89cb15e8f -r 7514f33bf3a5 package/supervisor/Config.in
---- a/package/supervisor/Config.in	Mon Jun 09 10:43:55 2014 +0200
-+++ b/package/supervisor/Config.in	Wed Jun 11 21:15:11 2014 +0200
-@@ -2,6 +2,7 @@
- 	bool "supervisor"
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON_MELD3
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime dependency
- 	help
- 	  A client/server system that allows its users to control a
- 	  number of processes on UNIX-like operating systems.
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
