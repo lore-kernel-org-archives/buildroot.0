@@ -1,42 +1,72 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 11 Jun 2014 23:04:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-06-08
-In-Reply-To: <20140611105653.4e25ec3c@free-electrons.com>
-References: <20140609063010.9CF93101624@stock.ovh.net>
- <20140609211036.GA10459@ned>
- <20140611105653.4e25ec3c@free-electrons.com>
-Message-ID: <20140611210457.GA2825@ned>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 11 Jun 2014 23:08:34 +0200
+Subject: [Buildroot] [PATCH v13 01/19] mesa3d: Depend on xorg meta package
+	instead of xserver_xorg-server
+In-Reply-To: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402520932-26672-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On Wed, Jun 11, 2014 at 10:56:53AM +0200, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Mon, 9 Jun 2014 23:10:36 +0200, Eric Le Bihan wrote:
->
-> > - We are stuck with autoreconf, as it is needed to solve the `ln --relative`
-> >   issue via a patch, which will not be accepted by upstream [8].
->
-> If we're stuck with autoreconf due to a patch that will not be accepted
-> upstream, then I would suggest that we move away from autoreconf, and
-> turn this patch into something that changes Makefile.in and configure
-> directly, with a good explanation in the patch description.
->
-> Hopefully, ln implementations in distributions will be upgraded, and at
-> some time, we'll be able to drop the patch.
-Maybe there will be a backport of coreutils for Debian Wheezy ;-)
->
-> The drawback with this solution is that if we want to create/backport
-> other systemd patches that require autoreconf, then we're screwed. So
-> maybe carrying our copy of libgcrypt.m4 as a patch in systemd sources is
-> the easiest solution here.
-I think this is the more future-proof solution. I'll post a patch implementing
-this.
+mesa3d does not depend on the xorg server as such, only on X libraries.
 
-Best regards,
-ELB
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in |    8 ++++----
+ package/mesa3d/mesa3d.mk |    4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e698b3e..2e761a4 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -62,10 +62,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
+-comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
+-	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
++comment "DRI drivers need X.Org and a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
+ 
+-if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
++if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+ 
+ comment "DRI drivers"
+ 
+@@ -92,7 +92,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
+-endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
++endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+ 
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1a61af8..8685cb8 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -25,7 +25,7 @@ MESA3D_DEPENDENCIES = \
+ 	host-xutil_makedepend \
+ 	libdrm
+ 
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+ 	xproto_dri2proto \
+@@ -100,7 +100,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland
+ MESA3D_EGL_PLATFORMS += wayland
+ endif
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_EGL_PLATFORMS += x11
+ endif
+ MESA3D_CONF_OPT += \
+-- 
+1.7.10.4
