@@ -1,59 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 11 Jun 2014 21:36:59 +0000 (UTC)
-Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
- internal variables
-In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
-References: <bug-7172-163@https.bugs.busybox.net/>
-Message-ID: <20140611213659.E93039CFBE@busybox.osuosl.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 11 Jun 2014 23:47:45 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-06-08
+In-Reply-To: <20140611211303.GB27579@free.fr>
+References: <20140609063010.9CF93101624@stock.ovh.net>
+ <20140609211036.GA10459@ned>
+ <20140611105653.4e25ec3c@free-electrons.com>
+ <20140611210457.GA2825@ned> <20140611211303.GB27579@free.fr>
+Message-ID: <20140611214744.GD2825@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7172
+Hi!
+On Wed, Jun 11, 2014 at 11:13:03PM +0200, Yann E. MORIN wrote:
+> Eric, All,
+>
+> On 2014-06-11 23:04 +0200, Eric Le Bihan spake thusly:
+> > On Wed, Jun 11, 2014 at 10:56:53AM +0200, Thomas Petazzoni wrote:
+> > > On Mon, 9 Jun 2014 23:10:36 +0200, Eric Le Bihan wrote:
+> > > > - We are stuck with autoreconf, as it is needed to solve the `ln --relative`
+> > > >   issue via a patch, which will not be accepted by upstream [8].
+> > >
+> > > If we're stuck with autoreconf due to a patch that will not be accepted
+> > > upstream, then I would suggest that we move away from autoreconf, and
+> > > turn this patch into something that changes Makefile.in and configure
+> > > directly, with a good explanation in the patch description.
+> > >
+> > > Hopefully, ln implementations in distributions will be upgraded, and at
+> > > some time, we'll be able to drop the patch.
+> > Maybe there will be a backport of coreutils for Debian Wheezy ;-)
+> > >
+> > > The drawback with this solution is that if we want to create/backport
+> > > other systemd patches that require autoreconf, then we're screwed. So
+> > > maybe carrying our copy of libgcrypt.m4 as a patch in systemd sources is
+> > > the easiest solution here.
+> > I think this is the more future-proof solution. I'll post a patch implementing
+> > this.
+>
+> Can we just use the ln wrapper as suggested in the referenced thread?
+Should it be provided by the systemd package or should we create a new one?
+Are there other packages that require such wrappers?
 
---- Comment #11 from Mike Z <minimod@morethan.org> 2014-06-11 21:36:58 UTC ---
-Printing the shell significant character(s) into a variable is confirmed
-to work at the manual entry shell level.
-
-The Cliff's Notes example:
-
-bin # export INT=`printf '%s'
-'/mnt/us/extensions/system/lib/ld-linux-armhf.so.3'`
-bin # echo $INT
-/mnt/us/extensions/system/lib/ld-linux-armhf.so.3
-core2quad bin # patchelf --set-interpreter $INT busybox
-
-bin # export LIB=`printf '%s' '$' 'ORIGIN/../lib' '$' 'ORIGIN/../usr/lib'`
-bin # echo $LIB
-$ORIGIN/../lib:$ORIGIN/../usr/lib
-bin # patchelf --set-rpath $LIB busybox
-
-====
-
-bin # readelf -dl busybox
-- - - -
-Dynamic section at offset 0x13a180 contains 24 entries:
-  Tag        Type                         Name/Value
- 0x0000001d (RUNPATH)                    Library runpath:
-[$ORIGIN/../lib:$ORIGIN/../usr/lib]
-
-====
-
-[root at kindle root]# echo $PATH
-/mnt/us/extensions/system/bin:/usr/local/bin:/bin:/usr/bin:/usr/sbin:/sbin:/usr/local/python/bin
-
-[root at kindle root]# LD_DEBUG=libs busybox
-     27571:     find library=libc.so.6 [0]; searching
-- - - -
-     27571:     calling init: /mnt/us/extensions/system/bin/../lib/libc.so.6
-- - - -
-BusyBox v1.22.1 (2014-06-11 02:23:01 CDT) multi-call binary.
-BusyBox is copyrighted by many authors between 1998-2012.
-etc.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+ELB
