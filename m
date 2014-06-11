@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Jun 2014 23:08:51 +0200
-Subject: [Buildroot] [PATCH v13 18/19] xbmc: Add option for Goom screensaver
+Date: Wed, 11 Jun 2014 23:08:48 +0200
+Subject: [Buildroot] [PATCH v13 15/19] xbmc: Add lame support
 In-Reply-To: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402520932-26672-19-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402520932-26672-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |    9 +++++++++
- package/xbmc/xbmc.mk   |    6 ++++++
- 2 files changed, 15 insertions(+)
+ package/xbmc/xbmc.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 08b0a0f..a31788c 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -194,6 +194,15 @@ config BR2_PACKAGE_XBMC_WAVPACK
- 	  Enable WAV input support.
- 	  Select this if you want to play back WV files.
- 
-+config BR2_PACKAGE_XBMC_GOOM
-+	bool "goom screensaver"
-+	depends on BR2_PACKAGE_XBMC_GL
-+	help
-+	  Enable goom screensaver
-+
-+comment "goom needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_XBMC_GL
-+
- comment "XBMC addons"
- 
- source "package/xbmc-addon-xvdr/Config.in"
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index ea01c4c..8b9bcca 100644
+index 426e94d..4f2dd92 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -183,6 +183,12 @@ ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
- XBMC_DEPENDENCIES += libtheora
+@@ -79,6 +79,13 @@ else
+ XBMC_CONF_OPT += --disable-alsa
  endif
  
-+ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
-+XBMC_CONF_OPT += --enable-goom
++ifeq ($(BR2_PACKAGE_LAME),y)
++XBMC_DEPENDENCIES += lame
++XBMC_CONF_OPT += --enable-libmp3lame
 +else
-+XBMC_CONF_OPT += --disable-goom
++XBMC_CONF_OPT += --disable-libmp3lame
 +endif
 +
- # Add HOST_DIR to PATH for codegenerator.mk to find swig
- define XBMC_BOOTSTRAP
- 	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
+ XBMC_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
+ 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
 -- 
 1.7.10.4
