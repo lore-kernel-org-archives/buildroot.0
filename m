@@ -1,146 +1,95 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 11 Jun 2014 23:08:38 +0200
-Subject: [Buildroot] [PATCH v13 05/19] libva: new package
+Date: Wed, 11 Jun 2014 23:08:44 +0200
+Subject: [Buildroot] [PATCH v13 11/19] xdriver_xf86-video-intel: Bump
+	version to 2.99.911
 In-Reply-To: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1402520932-26672-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1402520932-26672-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1402520932-26672-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- add necessary dependencies
+- add -D_GNU_SOURCE to avoid getline compilation error
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/Config.in                             |    1 +
- package/libva/Config.in                       |   18 ++++++++
- package/libva/libva-0001-no_test_decode.patch |   17 ++++++++
- package/libva/libva.mk                        |   56 +++++++++++++++++++++++++
- 4 files changed, 92 insertions(+)
- create mode 100644 package/libva/Config.in
- create mode 100644 package/libva/libva-0001-no_test_decode.patch
- create mode 100644 package/libva/libva.mk
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |    5 ++--
+ .../xdriver_xf86-video-intel.mk                    |   27 +++++++++++++++-----
+ 2 files changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 35e088d..9b3d2d1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -603,6 +603,7 @@ menu "Graphics"
- 	source "package/libsvg-cairo/Config.in"
- 	source "package/libsvgtiny/Config.in"
- 	source "package/libungif/Config.in"
-+	source "package/libva/Config.in"
- 	source "package/opencv/Config.in"
- 	source "package/opengl/Config.in"
- 	source "package/pango/Config.in"
-diff --git a/package/libva/Config.in b/package/libva/Config.in
-new file mode 100644
-index 0000000..9d63b52
---- /dev/null
-+++ b/package/libva/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_LIBVA
-+	bool "libva"
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm/libpthread-stubs
-+	depends on BR2_LARGEFILE # libdrm
-+	help
-+	  The main motivation for VA-API (Video Acceleration API) is to enable
-+	  hardware accelerated video decode/encode at various entry-points (VLD,
-+	  IDCT, Motion Compensation etc.) for the prevailing coding standards
-+	  today (MPEG-2, MPEG-4 ASP/H.263, MPEG-4 AVC/H.264, and VC-1/VMW3).
+diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
+index 69a9e78..bba7cd1 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/Config.in
++++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
+@@ -3,12 +3,13 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
+ 	depends on (BR2_i386 || BR2_x86_64)
+ 	depends on BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
++	select BR2_PACKAGE_XLIB_LIBXRANDR
++	select BR2_PACKAGE_XLIB_LIBXTST
+ 	help
+ 	  Intel video driver
+ 
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 332de54..52b493f 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -4,18 +4,18 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
+-XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
 +
-+	  http://www.freedesktop.org/wiki/Software/vaapi/
++# this fixes a getline-related compilation in src/sna/kgem.c
++XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+-	--enable-dri \
+-	--enable-kms-only \
+ 	--disable-xvmc \
+-	--disable-ums-only \
+ 	--enable-sna \
+ 	--disable-uxa \
+ 	--disable-glamor \
+@@ -23,6 +23,21 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+ 	--disable-dga \
+ 	--disable-async-swap
+ 
+-XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
++	libdrm \
++	xlib_libXcomposite \
++	xlib_libXrandr \
++	xlib_libXtst \
++	xlib_libpciaccess \
++	xproto_fontsproto \
++	xproto_xproto \
++	xserver_xorg-server
 +
-+comment "libva needs a toolchain w/ largefile, threads"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libva/libva-0001-no_test_decode.patch b/package/libva/libva-0001-no_test_decode.patch
-new file mode 100644
-index 0000000..0f0d786
---- /dev/null
-+++ b/package/libva/libva-0001-no_test_decode.patch
-@@ -0,0 +1,17 @@
-+mpeg2vldemo is the only file requiring cxx support. It is not needed for
-+buildroot, so disable its compilation to avoid depending on cxx.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr libva-1.3.0.org/test/Makefile.am libva-1.3.0/test/Makefile.am
-+--- libva-1.3.0.org/test/Makefile.am	2014-03-24 05:49:46.000000000 +0100
-++++ libva-1.3.0/test/Makefile.am	2014-04-26 18:12:25.644390292 +0200
-+@@ -20,7 +20,7 @@
-+ # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-+ # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-+ 
-+-SUBDIRS = common decode encode vainfo
-++SUBDIRS = common encode vainfo
-+ 
-+ if USE_X11
-+ SUBDIRS += basic putsurface
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-new file mode 100644
-index 0000000..85fd712
---- /dev/null
-+++ b/package/libva/libva.mk
-@@ -0,0 +1,56 @@
-+################################################################################
-+#
-+# libva
-+#
-+################################################################################
-+
-+LIBVA_VERSION = 1.3.1
-+LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
-+LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
-+LIBVA_LICENSE = MIT
-+LIBVA_LICENSE_FILES = COPYING
-+LIBVA_AUTORECONF = YES
-+LIBVA_INSTALL_STAGING = YES
-+LIBVA_DEPENDENCIES = host-pkgconf libdrm
-+
-+# libdrm is a hard-dependency
-+LIBVA_CONF_OPT = \
-+	--enable-drm \
-+	--disable-dummy-driver \
-+	--with-drivers-path="/usr/lib/va"
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
-+LIBVA_DEPENDENCIES += mesa3d
-+LIBVA_CONF_OPT += --enable-glx
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --enable-dri
++XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d xproto_xf86driproto
 +else
-+LIBVA_CONF_OPT += --disable-glx
++XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --disable-dri
 +endif
-+
-+ifeq ($(BR2_PACKAGE_XORG7),y)
-+LIBVA_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
-+LIBVA_CONF_OPT += --enable-x11
-+else
-+LIBVA_CONF_OPT += --disable-x11
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+LIBVA_DEPENDENCIES += wayland
-+LIBVA_CONF_OPT += --enable-wayland
-+else
-+LIBVA_CONF_OPT += --disable-wayland
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-+LIBVA_DEPENDENCIES += libegl
-+LIBVA_CONF_OPT += --enable-egl
-+else
-+LIBVA_CONF_OPT += --disable-egl
-+endif
-+
-+# Autoreconf requires an m4 directory to exist
-+define LIBVA_PATCH_M4
-+	mkdir -p $(@D)/m4
-+endef
-+LIBVA_POST_PATCH_HOOKS += LIBVA_PATCH_M4
-+
-+$(eval $(autotools-package))
+ 
+ $(eval $(autotools-package))
 -- 
 1.7.10.4
