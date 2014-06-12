@@ -1,43 +1,76 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 12 Jun 2014 10:05:41 +0200
-Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
- "target-finalize" rule
-In-Reply-To: <20140612095615.1a20e62e@free-electrons.com>
-References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
- <20140610223358.69a70e6e@free-electrons.com>
- <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
- <539884A4.5060705@mind.be>
- <CAHkwnC-dnWUJf=QR-6DEBwmkEoOoUuwDAWRj0EcQt5Cx8fOX0Q@mail.gmail.com>
- <CAHkwnC_exQsbt7e9CJrzO6FA8HQGjJMWmVOkevUxjSYpHbdvJw@mail.gmail.com>
- <20140612095615.1a20e62e@free-electrons.com>
-Message-ID: <CAHkwnC9BWE=Mt2d8wqFK6pyzW99QFtuvFC=mixfh+tbpgzCYwQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 12 Jun 2014 10:09:45 +0200
+Subject: [Buildroot] [PATCH v3 1/1] xserver_xorg-server: Fix race condition
+	when installing man pages
+Message-ID: <1402560585-10801-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 12, 2014 at 9:56 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Thu, 12 Jun 2014 09:32:39 +0200, Fabio Porcedda wrote:
->
->> I think it's best to use PURGE_LOCALES_HOOK instead of TARGET_PURGE_LOCALES.
->
-> I think one of the concern with the hook thing was that the hooks would
-> be spread all over the Buildroot tree. To mitigate this concern, maybe
-> we could have a naming convention for those hooks that they should all
-> start with TARGET_FINALIZE_<something>, like
-> TARGET_FINALIZE_PURGE_LOCALES ?
+Reproduced the bug using BR2_JLEVEL=16
 
-Ok fine, i like it, maybe using TARGET_FINALIZE_HOOK_PURGE_LOCALES is
-too verbose?
+Fixes race condition by disabling parallel make in man/
 
-> This way, we can more easily grep through the tree those hooks?
+http://autobuild.buildroot.net/results/11e/11ece737078ca8da2fee4249432148675b4e630e/
+http://autobuild.buildroot.net/results/a95/a952932b832ee3296d6c225c7a9df408ca3eef9f/
 
-Sure.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: To autoreconf host-xfont_font-util is needed
+v2: Patch man/Makefile.am to disable parallel make instead of removing man/
+    from SUBDIRS in Makefile.am
 
-Best regards
+ .../xserver_xorg-server-400-fix-man.patch           |   19 +++++++++++++++++++
+ .../xserver_xorg-server/xserver_xorg-server.mk      |    2 ++
+ 2 files changed, 21 insertions(+)
+ create mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
+new file mode 100644
+index 0000000..bde5ed6
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
+@@ -0,0 +1,19 @@
++Fix race condition when installing man page
++
++Fixes
++http://autobuild.buildroot.net/results/11e/11ece737078ca8da2fee4249432148675b4e630e/
++http://autobuild.buildroot.net/results/a95/a952932b832ee3296d6c225c7a9df408ca3eef9f/
++
++Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=79396
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr xorg-server-1.15.1.org/man/Makefile.am xorg-server-1.15.1/man/Makefile.am
++--- xorg-server-1.15.1.org/man/Makefile.am	2014-03-22 06:37:53.000000000 +0100
+++++ xorg-server-1.15.1/man/Makefile.am	2014-05-29 09:27:48.808356591 +0200
++@@ -4,3 +4,5 @@
++ 
++ include $(top_srcdir)/manpages.am
++ appman_PRE = Xserver.man
+++
+++.NOTPARALLEL:
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index cae3ba0..050dee6 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -9,6 +9,7 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
++XSERVER_XORG_SERVER_AUTORECONF = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+@@ -53,6 +54,7 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xkeyboard-config		\
+ 	pixman 				\
+ 	mcookie 			\
++	host-xfont_font-util		\
+ 	host-pkgconf
+ 
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
 -- 
-Fabio Porcedda
+1.7.10.4
