@@ -1,51 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jun 2014 10:23:39 +0200
-Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
- "target-finalize" rule
-In-Reply-To: <CAHkwnC9BWE=Mt2d8wqFK6pyzW99QFtuvFC=mixfh+tbpgzCYwQ@mail.gmail.com>
-References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
- <20140610223358.69a70e6e@free-electrons.com>
- <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
- <539884A4.5060705@mind.be>
- <CAHkwnC-dnWUJf=QR-6DEBwmkEoOoUuwDAWRj0EcQt5Cx8fOX0Q@mail.gmail.com>
- <CAHkwnC_exQsbt7e9CJrzO6FA8HQGjJMWmVOkevUxjSYpHbdvJw@mail.gmail.com>
- <20140612095615.1a20e62e@free-electrons.com>
- <CAHkwnC9BWE=Mt2d8wqFK6pyzW99QFtuvFC=mixfh+tbpgzCYwQ@mail.gmail.com>
-Message-ID: <20140612102339.29e14cf3@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 12 Jun 2014 10:46:41 +0200
+Subject: [Buildroot] [git commit] dnsmasq: static linking with lua doesn't
+	need -ldl
+Message-ID: <20140612084948.CBAE59CFD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+commit: http://git.buildroot.net/buildroot/commit/?id=cbf2ae296ed08bee10945e9ca95459adbf793c67
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 12 Jun 2014 10:05:41 +0200, Fabio Porcedda wrote:
+Fixes http://autobuild.buildroot.net/results/77e/77e4123a3ddc934efedf4b09adc2436421ee70b3/
 
-> > I think one of the concern with the hook thing was that the hooks would
-> > be spread all over the Buildroot tree. To mitigate this concern, maybe
-> > we could have a naming convention for those hooks that they should all
-> > start with TARGET_FINALIZE_<something>, like
-> > TARGET_FINALIZE_PURGE_LOCALES ?
-> 
-> Ok fine, i like it, maybe using TARGET_FINALIZE_HOOK_PURGE_LOCALES is
-> too verbose?
+liblua only uses libdl when dynamic linking is used, and certain toolchains
+(E.G.  bfin) doesn't provide a libdl - So only link against it if it is
+needed.
 
-If anything, the "HOOK" should be at the end. Not sure it's needed
-though if we have all variables prefixed by TARGET_FINALIZE_<something>.
+At the same time change it pass the library in LIBS instead of LDFLAGS so it
+ends up at the end of the linker cmdline.
 
-That being said, now that I can think of it, we can anyway always grep
-all the hooks by grepping for "TARGET_FINALIZE_HOOKS", which will
-return all files doing:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dnsmasq/dnsmasq.mk |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
 
-TARGET_FINALIZE_HOOKS += <something>
-
-So in the end, the name of make function being registered doesn't
-matter much, but still for consistency, I think it's good to have a
-common prefix for all of them.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index dd15994..71d2f30 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -55,7 +55,11 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+ 	DNSMASQ_DEPENDENCIES += lua
+-	DNSMASQ_MAKE_OPT += LDFLAGS+="-ldl"
++
++# liblua uses dlopen when dynamically linked
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
++	DNSMASQ_MAKE_OPT += LIBS="-ldl"
++endif
+ 
+ define DNSMASQ_ENABLE_LUA
+ 	$(SED) 's/lua5.1/lua/g' $(DNSMASQ_DIR)/Makefile
