@@ -1,80 +1,61 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 12 Jun 2014 14:05:32 +0200
-Subject: [Buildroot] [PATCH] faifa: Bump version
-Message-ID: <1402574732-23438-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 12 Jun 2014 14:54:24 +0200
+Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
+ "target-finalize" rule
+In-Reply-To: <20140612102339.29e14cf3@free-electrons.com>
+References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>	<20140610223358.69a70e6e@free-electrons.com>	<CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>	<539884A4.5060705@mind.be>	<CAHkwnC-dnWUJf=QR-6DEBwmkEoOoUuwDAWRj0EcQt5Cx8fOX0Q@mail.gmail.com>	<CAHkwnC_exQsbt7e9CJrzO6FA8HQGjJMWmVOkevUxjSYpHbdvJw@mail.gmail.com>	<20140612095615.1a20e62e@free-electrons.com>	<CAHkwnC9BWE=Mt2d8wqFK6pyzW99QFtuvFC=mixfh+tbpgzCYwQ@mail.gmail.com>
+ <20140612102339.29e14cf3@free-electrons.com>
+Message-ID: <5399A300.6080708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A tag has been created, so we should uses it.
-This bump of version integrates the patch we had so there is no need for
-it anymore.
+On 06/12/14 10:23, Thomas Petazzoni wrote:
+> Dear Fabio Porcedda,
+> 
+> On Thu, 12 Jun 2014 10:05:41 +0200, Fabio Porcedda wrote:
+> 
+>>> I think one of the concern with the hook thing was that the hooks would
+>>> be spread all over the Buildroot tree. To mitigate this concern, maybe
+>>> we could have a naming convention for those hooks that they should all
+>>> start with TARGET_FINALIZE_<something>, like
+>>> TARGET_FINALIZE_PURGE_LOCALES ?
+>>
+>> Ok fine, i like it, maybe using TARGET_FINALIZE_HOOK_PURGE_LOCALES is
+>> too verbose?
+> 
+> If anything, the "HOOK" should be at the end. Not sure it's needed
+> though if we have all variables prefixed by TARGET_FINALIZE_<something>.
+> 
+> That being said, now that I can think of it, we can anyway always grep
+> all the hooks by grepping for "TARGET_FINALIZE_HOOKS", which will
+> return all files doing:
+> 
+> TARGET_FINALIZE_HOOKS += <something>
+> 
+> So in the end, the name of make function being registered doesn't
+> matter much, but still for consistency, I think it's good to have a
+> common prefix for all of them.
 
-Also, with this tag, faifa changed it's license to BSD-3c.
+ Well, the main reason to use the hooks approach is to be able to spread it out
+over different makefiles, and in particular to be able to do package-specific
+target-finalize things. Therefore, the hooks themselves should be named
+<PKGNAME>_FOO_BAR.
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- ...aifa-001-Makefile.in-Remove-useless-flags.patch | 31 ----------------------
- package/faifa/faifa.mk                             |  4 +--
- 2 files changed, 2 insertions(+), 33 deletions(-)
- delete mode 100644 package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch
+ Also, for the hooks that are currently in use, we don't usually include HOOK in
+the name.
 
-diff --git a/package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch b/package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch
-deleted file mode 100644
-index 027215f..0000000
---- a/package/faifa/faifa-001-Makefile.in-Remove-useless-flags.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 7ad829ab77821f87be9bb26801924aa40936f18f Mon Sep 17 00:00:00 2001
--From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
--Date: Tue, 10 Jun 2014 23:42:17 +0200
--Subject: [PATCH] Makefile.in: Remove useless flags
--
--This flags doesn't hide any warnings and as such doesn't have any
--purposes.
--
--On a plus note, it allow the build with a blackfin toolchain.
--
--Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-----
-- Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 3814d5c..ba65bee 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -13,7 +13,7 @@
-- 
-- CC	= @CC@
-- STRIP	?= $(CROSS)strip
---CFLAGS	= @CFLAGS@ -Wno-unused-result
--+CFLAGS	= @CFLAGS@
-- INSTALL	= @INSTALL@
-- LIBS	= @LIBS@
-- 
---- 
--2.0.0.rc2
--
-diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
-index c83b02a..a2a2a56 100644
---- a/package/faifa/faifa.mk
-+++ b/package/faifa/faifa.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--FAIFA_VERSION = aa0b5f90b89a9fd1533137b68ebf85f5437aba53
-+FAIFA_VERSION = v0.1
- FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
- FAIFA_INSTALL_STAGING = YES
- FAIFA_DEPENDENCIES = libpcap host-autoconf
--FAIFA_LICENSE = GPLv2+
-+FAIFA_LICENSE = BSD-3c
- FAIFA_LICENSE_FILES = COPYING
- 
- FAIFA_MAKE_OPT += GIT_REV=$(FAIFA_VERSION)
+
+ Regards,
+ Arnout
+
+
 -- 
-2.0.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
