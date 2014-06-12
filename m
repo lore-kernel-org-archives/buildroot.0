@@ -1,51 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Jun 2014 19:05:11 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: fix AM_PATH_LIBGCRYPT not found
-In-Reply-To: <20140612091528.6d8f0c76@free-electrons.com>
-References: <1402521982-31067-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140611213246.GC27579@free.fr>
- <20140612091528.6d8f0c76@free-electrons.com>
-Message-ID: <20140612170511.GA3502@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 12 Jun 2014 20:46:52 +0200
+Subject: [Buildroot] [PATCH] gcc 4.8.x does not compile a working kernel
+ for sparc
+In-Reply-To: <20140612165138.GA12634@waldemar-brodkorb.de>
+References: <20140612165138.GA12634@waldemar-brodkorb.de>
+Message-ID: <20140612204652.4aae736f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Waldemar Brodkorb,
 
-On 2014-06-12 09:15 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 11 Jun 2014 23:32:46 +0200, Yann E. MORIN wrote:
-> > OK, so let me sum up the thing:
-> >   - we can't use autoreconf because of 'ln --relative' which is not
-> >     available everywhere
-> >   - if we could use autoreconf, we would not need this gcrupt.m4 stuff
+On Thu, 12 Jun 2014 18:51:38 +0200, Waldemar Brodkorb wrote:
+> Since the switch to 4.8.x as default, the qemu-sparc target is broken.
+> For a gcc bug report see here:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60624
 > 
-> No, the opposite. We need to autoreconf to be able to patch our the 'ln
-> --relative' calls. And to be able to autoreconf, we need this
-> libgcrypt.m4 stuff.
+> Switch back to gcc 4.7.x as default for sparc.
 > 
-> To me, hacking around the 'ln --relative' problem is not a proper
-> solution. Because the next time we need a patch for systemd that
-> requires autoreconf (like if we backport a fix from upstream or another
-> change), then we will be back to the current situation where autoreconf
-> cannot be done with libgcrypt.m4.
-> 
-> So I agree with the solution proposed by Eric here to bundle the
-> libgcrypt.m4 file.
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/gcc/Config.in.host |    1 +
+>  1 file changed, 1 insertion(+)
 
-OK, I'm fine with the solution. I was just pointing out that an
-alternative existed, wihch looked less ugly to me. But OK.
+If gcc 4.8.x is indeed broken on sparc, shouldn't we completely prevent
+the selection of 4.8.x on SPARC ?
 
-I'll take some time to do a proper review on this patch a bit later.
+Have you tested 4.9.x ?
 
-Regards,
-Yann E. MORIN.
+Thanks for the report and patch!
 
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
