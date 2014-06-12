@@ -1,38 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jun 2014 18:18:41 +0200
-Subject: [Buildroot] problems with make graph-build on x86_64
-In-Reply-To: <CAE9DZUSiaY35a4xLcMA2f=4ERrxuR7Kt2xhOFs9J0tvWh-4+Rg@mail.gmail.com>
-References: <CAE9DZURkabAJ50=Upw9vuzDFsRnMLRoKBuKGLm_=V4Fn+4f-bw@mail.gmail.com>
- <20140612173557.3788d08d@free-electrons.com>
- <CAE9DZUSiaY35a4xLcMA2f=4ERrxuR7Kt2xhOFs9J0tvWh-4+Rg@mail.gmail.com>
-Message-ID: <20140612181841.7ff4a2f6@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Thu, 12 Jun 2014 18:51:38 +0200
+Subject: [Buildroot] [PATCH] gcc 4.8.x does not compile a working kernel for
+	sparc
+Message-ID: <20140612165138.GA12634@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dallas Clement,
+Since the switch to 4.8.x as default, the qemu-sparc target is broken.
+For a gcc bug report see here:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60624
 
-On Thu, 12 Jun 2014 10:48:37 -0500, Dallas Clement wrote:
+Switch back to gcc 4.7.x as default for sparc.
 
-> > What version of matplotlib do you have?
-> 
-> python-matplotlib.x86_64        0.99.1.2-1.el6
-> @anaconda-RedHatEnterpriseLinux-201301301459.x86_64/6.4
-> python-matplotlib-tk.x86_64     0.99.1.2-1.el6
-> rhel-6-server-optional-rpms
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/gcc/Config.in.host |    1 +
+ 1 file changed, 1 insertion(+)
 
-Might be a too old version. I would suggest you to create a simple
-example of a matplotlib application on this system, and see if you're
-able to generate a PDF/PNG graph. If yes, give us your source code so
-that we can compare with the more recent versions of matplotlib and see
-if a backward compatible solution is possible.
-
-Thanks,
-
-Thomas
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index b6d4b5e..ecb98fc 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -10,6 +10,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+ 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
++	default BR2_GCC_VERSION_4_7_X if BR2_sparc
+ 	default BR2_GCC_VERSION_4_8_X if BR2_aarch64
+ 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_4_9_X if BR2_microblaze || BR2_powerpc64le
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
