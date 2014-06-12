@@ -1,77 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 12 Jun 2014 01:40:10 +0200
-Subject: [Buildroot] [PATCH 3/5 RFC] package/libudev: new virtual package
-In-Reply-To: <cover.1402529398.git.yann.morin.1998@free.fr>
-References: <cover.1402529398.git.yann.morin.1998@free.fr>
-Message-ID: <717c786f6c9c9ff13610a56bba61aa9a8b22d8cb.1402529398.git.yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 12 Jun 2014 06:05:23 +0300
+Subject: [Buildroot] [PATCH 1/1] Add support for gold linker and LTO for
+ GCC.
+In-Reply-To: <SNT146-W9705D7538E5C63461FC6CA82B0@phx.gbl>
+References: <BLU436-SMTP187DA10D0CB5B02F7E271EEA8280@phx.gbl>
+ <20140611031614.GT4074@tarshish>
+ <SNT146-W9705D7538E5C63461FC6CA82B0@phx.gbl>
+Message-ID: <20140612030522.GZ4074@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Hi Stephen,
 
-Not all packages that currently depend on udev really need an udev
-daemon; most may only require a libudev.so to be available. For
-example, libcec, mesa3d...
+Please keep the list on Cc.
 
-Currently, we conflate udev and libudev into a single virtual package.
+On Wed, Jun 11, 2014 at 11:35:12PM +0100, Stephen Thomas wrote:
 
-Introduce a new virtual package 'libudev' that packages can select if
-they provide libudev.so (obviously, systemd and eudev are such packages)
-and which packages can depend on if they just need libudev.so and not an
-udev daemon.
+> > > diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> > > index 08540a3..a6e5ba6 100644
+> > > --- a/package/binutils/Config.in.host
+> > > +++ b/package/binutils/Config.in.host
+> > > @@ -1,5 +1,8 @@
+> > >  comment "Binutils Options"
+> > >  
+> > > +config BR2_BINUTILS_SUPPORTS_GOLD
+> > > +	bool "binutils 2.24"
+> > 
+> > Are you sure this needs to be user selectable? The comment string looks 
+> > confusing, anyway.
+>
+> No I don't think so. I have a question that I haven't been able to find the 
+> answer to. Has anyone had the linker plugin working with BFD? There was 
+> meant to be support for this somewhere, I remember reading somewhere.
 
-Note: only the virtual package is added for now, providers and users
-will be converted in followup patches.
+Maybe someone on the list knows the answer.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/Config.in          | 1 +
- package/libudev/Config.in  | 6 ++++++
- package/libudev/libudev.mk | 7 +++++++
- 3 files changed, 14 insertions(+)
- create mode 100644 package/libudev/Config.in
- create mode 100644 package/libudev/libudev.mk
+baruch
 
-diff --git a/package/Config.in b/package/Config.in
-index 35e088d..6555e08 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -636,6 +636,7 @@ menu "Hardware handling"
- 	source "package/libraw1394/Config.in"
- 	source "package/libserial/Config.in"
- 	source "package/libsoc/Config.in"
-+	source "package/libudev/Config.in"
- 	source "package/libusb/Config.in"
- 	source "package/libusb-compat/Config.in"
- 	source "package/libv4l/Config.in"
-diff --git a/package/libudev/Config.in b/package/libudev/Config.in
-new file mode 100644
-index 0000000..2745fcc
---- /dev/null
-+++ b/package/libudev/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HAS_LIBUDEV
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_LIBUDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
-+	string
-diff --git a/package/libudev/libudev.mk b/package/libudev/libudev.mk
-new file mode 100644
-index 0000000..af1b3dd
---- /dev/null
-+++ b/package/libudev/libudev.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# libudev
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
 -- 
-1.8.3.2
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
