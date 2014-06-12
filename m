@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 12 Jun 2014 09:08:22 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-06-08
-In-Reply-To: <20140611215425.GD27579@free.fr>
-References: <20140609063010.9CF93101624@stock.ovh.net>
- <20140609211036.GA10459@ned>
- <20140611105653.4e25ec3c@free-electrons.com>
- <20140611210457.GA2825@ned> <20140611211303.GB27579@free.fr>
- <20140611214744.GD2825@ned> <20140611215425.GD27579@free.fr>
-Message-ID: <20140612090822.1e5a9e58@free-electrons.com>
+Date: Thu, 12 Jun 2014 09:10:04 +0200
+Subject: [Buildroot] psplash and systemd
+In-Reply-To: <20140611211821.GB2825@ned>
+References: <537C657F.4090106@ebo-enterprises.com> <20140521192928.GA3672@ned>
+ <20140609142734.32d58a30@free-electrons.com>
+ <20140611211821.GB2825@ned>
+Message-ID: <20140612091004.182d10d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Eric Le Bihan,
 
-On Wed, 11 Jun 2014 23:54:25 +0200, Yann E. MORIN wrote:
+On Wed, 11 Jun 2014 23:18:21 +0200, Eric Le Bihan wrote:
 
-> > Should it be provided by the systemd package or should we create a new one?
-> > Are there other packages that require such wrappers?
-> 
-> I think if we go that route, we should just bundle it in Buildroot, and
-> always install it.
-> 
-> After all, all this wrapper does is look for --relative in the
-> arguments, and if found, emulates it; otherwise, it just calls to the
-> real ln.
-> 
-> Sounds reasonable to me (although I did not look too closely if the
-> script was entirely correct.)
-> 
-> But I'd like input from Thomas and Peter on that one.
+> > Can you submit this patch properly, i.e with git send-email, so that it
+> > can be applied?
+> I posted a proper patch.
 
-Well, I'm not sure I want to include a wrapper that will wrap *all* ln
-calls, just for the sake of fixing one package. I probably prefer to
-patch that package only.
+Ok, found at http://patchwork.ozlabs.org/patch/358888/.
+
+> As for adding progress report from systemd to
+> psplash, this would require a patch to src/core/manager.c in systemd to write
+> to psplash socket.
+
+Ok.
+
+> BTW, maybe we should provide a patch to set the default image with the famous
+> Buildroot hard hat, to replace the "POKY" theme...
+
+Indeed, that would be good to have.
+
+Thanks!
 
 Thomas
 -- 
