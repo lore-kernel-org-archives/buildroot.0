@@ -1,51 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jun 2014 14:59:52 +0200
-Subject: [Buildroot] [git commit] Makefile: test if dot exists before using
-	it in graph-depends
-Message-ID: <20140613130011.818779CFB7@busybox.osuosl.org>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Fri, 13 Jun 2014 08:00:24 -0500
+Subject: [Buildroot] [PATCH 10/11] toolchain-external: add CodeSourcery
+ PowerPC 2012.03
+In-Reply-To: <1401619668-28062-11-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1401619668-28062-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1401619668-28062-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAMQcK5LQn8=UOZ_hUww-D8W3gmfimfuqs_Gf1qyLs22q8mNnLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=664f2707246a53669f91a83d9cc094c26e3848f3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All
 
-The 'graph-depends' logic uses the 'dot' program from Graphviz to draw
-the dependency graph, but it doesn't check its existence before
-starting the generation of the graph, which can lead to user confusion
-as reported in:
+On Sun, Jun 1, 2014 at 5:47 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> However, this toolchain is only usable for e500v2 with the SPE ABI.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  toolchain/toolchain-external/Config.in             | 19 +++++++++++++++++++
+>  toolchain/toolchain-external/toolchain-external.mk |  3 +++
+>  2 files changed, 22 insertions(+)
+>
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index 3331b69..7d086ef 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -416,6 +416,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+>           from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
+>           glibc 2.17, gdb 7.4.50 and kernel headers 3.7.0.
+>
+> +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
+> +       bool "Sourcery CodeBench PowerPC 2012.03"
+> +       depends on BR2_powerpc
+> +       depends on BR2_powerpc_SPE
+> +       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> +       depends on !BR2_PREFER_STATIC_LIB
+> +       select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+> +       select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> +       select BR2_INSTALL_LIBSTDCPP
+> +       select BR2_HOSTARCH_NEEDS_IA32_LIBS
+> +       select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+> +       help
+> +         Sourcery CodeBench toolchain for the PowerPC architecture,
+> +         from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
+> +         glibc 2.15, gdb 7.2.50 and kernel headers 3.2.10. It has
+> +         support for the following variants:
+> +           - e500v2 glibc, SPE, 32 bits
+> +
+>  config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+>         bool "Sourcery CodeBench PowerPC 2011.03"
+>         depends on BR2_powerpc
+> @@ -883,6 +901,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>         default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+>         default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+>         default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+> +       default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
+>         default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+>         default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+>         default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 50e8dca..163428f 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -302,6 +302,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
+>  TOOLCHAIN_EXTERNAL_SOURCE = freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
+> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203),y)
+> +TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
 
- http://lists.busybox.net/pipermail/buildroot/2014-June/099278.html
+With the website changed to
+http://sourcery.mentor.com/public/gnu_toolchain/powerpc-mentor-linux-gnu/
+as you noted, this can receive this:
 
-With this commit, we first test if the 'dot' program is available, and
-if it's not, we error out with a clear error message:
+Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 
-$ make graph-depends
-ERROR: The 'dot' program from Graphviz is needed for graph-depends
-make: *** [graph-depends] Error 1
-
-[Peter: send error message to stderr instead]
-Reported-by: Dallas Clement <dallas.a.clement@gmail.com>
-Cc: Dallas Clement <dallas.a.clement@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 5501068..14fca2b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -674,6 +674,8 @@ graph-build: $(O)/build/build-time.log
- 				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
- 
- graph-depends:
-+	@dot -? >/dev/null 2>&1 || \
-+		(echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1)
- 	@$(INSTALL) -d $(O)/graphs
- 	@cd "$(CONFIG_DIR)"; \
- 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+> +TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
+>  else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103),y)
+>  TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu/
+>  TOOLCHAIN_EXTERNAL_SOURCE = renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
