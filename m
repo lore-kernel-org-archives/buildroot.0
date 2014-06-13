@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:02:32 +0200
-Subject: [Buildroot] [PATCH 08/20 RFC] package/eudev: is a provider for
+Date: Sat, 14 Jun 2014 01:02:33 +0200
+Subject: [Buildroot] [PATCH 09/20 RFC] package/systemd: is a provider for
 	libudev
 In-Reply-To: <cover.1402699915.git.yann.morin.1998@free.fr>
 References: <cover.1402699915.git.yann.morin.1998@free.fr>
-Message-ID: <fa599b60a512154e33b26a3ac3dccfa12f0c4518.1402699915.git.yann.morin.1998@free.fr>
+Message-ID: <f570cc620485afe9faea2b482310b88e3404cc33.1402699915.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,44 +16,44 @@ From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/eudev/Config.in | 4 ++++
- package/eudev/eudev.mk  | 2 +-
+ package/systemd/Config.in  | 4 ++++
+ package/systemd/systemd.mk | 2 +-
  2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index b204a90..db72e95 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_EUDEV
- 	depends on BR2_LARGEFILE # util-linux
- 	depends on BR2_USE_WCHAR # util-linux
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 7ff36cc..97de4dc 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -26,6 +26,7 @@ config BR2_PACKAGE_SYSTEMD
  	depends on !BR2_PREFER_STATIC_LIB # kmod
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ 	depends on BR2_USE_MMU # dbus
 +	select BR2_PACKAGE_HAS_LIBUDEV
  	select BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-@@ -19,6 +20,9 @@ config BR2_PACKAGE_EUDEV
+ 	select BR2_PACKAGE_DBUS # runtime dependency only
+ 	select BR2_PACKAGE_LIBCAP
+@@ -39,6 +40,9 @@ if BR2_PACKAGE_SYSTEMD
  
- if BR2_PACKAGE_EUDEV
+ menu "systemd"
  
 +config BR2_PACKAGE_PROVIDES_LIBUDEV
-+	default "eudev"
++	default "systemd"
 +
  config BR2_PACKAGE_PROVIDES_UDEV
- 	default "eudev"
+ 	default "systemd"
  
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index 5f1525c..f837aa4 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -25,7 +25,7 @@ EUDEV_CONF_OPT =		\
- 	--enable-libkmod
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 6de7887..b968d0b 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -17,7 +17,7 @@ SYSTEMD_DEPENDENCIES = \
+ 	kmod \
+ 	host-gperf
  
- EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
--EUDEV_PROVIDES = udev
-+EUDEV_PROVIDES = libudev udev
+-SYSTEMD_PROVIDES = udev
++SYSTEMD_PROVIDES = libudev udev
+ SYSTEMD_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_EUDEV_RULES_GEN),y)
- EUDEV_CONF_OPT += --enable-rule_generator
+ # Make sure that systemd will always be built after busybox so that we have
 -- 
 1.8.3.2
