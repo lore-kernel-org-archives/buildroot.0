@@ -1,56 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 13 Jun 2014 11:15:39 -0300
-Subject: [Buildroot] [PATCH] dialog: bump to version 1.2-20140219
-Message-ID: <1402668939-1372-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 13 Jun 2014 16:55:17 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140613111216.1fdae121@free-electrons.com>
+References: <20140613063010.B26041011DE@stock.ovh.net>
+ <20140613111216.1fdae121@free-electrons.com>
+Message-ID: <20140613145515.GA15237@rmm-p1267483>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a homepage.
-Ditch custom install target commands, they're not needed.
+Hi!
+On Fri, Jun 13, 2014 at 11:12:16AM +0200, Thomas Petazzoni wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dialog/Config.in | 2 ++
- package/dialog/dialog.mk | 6 +-----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+[...]
 
-diff --git a/package/dialog/Config.in b/package/dialog/Config.in
-index c7cd8a4..929ab46 100644
---- a/package/dialog/Config.in
-+++ b/package/dialog/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_DIALOG
- 	  types of dialog boxes from shell scripts.  This allows a developer
- 	  of a script to interact with the user in a much friendlier manner.
- 
-+	  http://invisible-island.net/dialog/dialog.html
-+
- comment "dialog needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index e2ce09b..6dc9066 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DIALOG_VERSION = 1.1-20111020
-+DIALOG_VERSION = 1.2-20140219
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = ftp://invisible-island.net/dialog
- DIALOG_CONF_OPT = --with-ncurses
-@@ -17,8 +17,4 @@ ifneq ($(BR2_ENABLE_LOCALE),y)
- DIALOG_DEPENDENCIES += libiconv
- endif
- 
--define DIALOG_INSTALL_TARGET_CMDS
--	$(INSTALL) -c $(@D)/dialog $(TARGET_DIR)/usr/bin/dialog
--endef
--
- $(eval $(autotools-package))
--- 
-1.8.5.5
+> On Fri, 13 Jun 2014 08:30:10 +0200 (CEST), Thomas Petazzoni wrote:
+
+> >    powerpc |                    systemd-213 | NOK | http://autobuild.buildroot.net/results/4b00d517c17cfcd29359e63423f15ac5331096b2/
+> >       i686 |                    systemd-213 | NOK | http://autobuild.buildroot.net/results/33e1447949d13bccc4076b69f902432e2131cc1c/
+>
+> Will be fixed by http://patchwork.ozlabs.org/patch/358913/.
+This patch will only fix http://autobuild.buildroot.net/results/4b00d517c17cfcd29359e63423f15ac5331096b2/.
+
+The error in http://autobuild.buildroot.net/results/33e1447949d13bccc4076b69f902432e2131cc1c/ is:
+
+  src/libsystemd/sd-rtnl/rtnl-types.c:70:10: error: 'IFLA_VLAN_PROTOCOL'
+  undeclared here (not in a function)
+           [IFLA_VLAN_PROTOCOL]    = { .type = NLA_U16 },
+
+IFLA_VLAN_PROTOCOL was introduced in Linux 3.10. I'll post a patch updating
+the kernel headers needs for systemd.
+
+Best regards,
+ELB
