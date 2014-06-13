@@ -1,44 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jun 2014 22:32:37 +0200
-Subject: [Buildroot] [git commit] systemd: needs kernel headers >= 3.10
-Message-ID: <20140613203259.293CA99EAC@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 13 Jun 2014 22:57:51 +0200
+Subject: [Buildroot] [PATCH v2] gcc 4.8.x does not compile a working
+	kernel for sparc
+In-Reply-To: <20140613170047.GA10615@waldemar-brodkorb.de> (Waldemar
+ Brodkorb's message of "Fri, 13 Jun 2014 19:00:48 +0200")
+References: <20140613170047.GA10615@waldemar-brodkorb.de>
+Message-ID: <87ppiccysw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2277c2d4e268f492379e6b7f8951b76970ff4c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
-Systemd needs a toolchain with kernel headers >= 3.10, as it needs
-IFLA_VLAN_PROTOCOL from linux/if_link.h.
+ > Since the switch to 4.8.x as default, the qemu-sparc target is broken.
+ > For a gcc bug report see here:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60624
 
-Fixes: http://autobuild.buildroot.net/results/33e/33e1447949d13bccc4076b69f902432e2131cc1c
+ > Switch back to gcc 4.7.x as default for sparc.
+ > Disable 4.8/4.9 as suggested by Thomas Petazzoni.
+ > I even disabled gcc snapshot, it works right now, because
+ > it is an old 4.8.0 snapshot by default, but as soon as this is updated
+ > sparc build will break.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/Config.in |    6 +++---
- 1 files changed, 3 insertions(+), 3 deletions(-)
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/system/Config.in b/system/Config.in
-index 53bca53..1be7e5d 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -96,12 +96,12 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PREFER_STATIC_LIB
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment 'systemd needs an (e)glibc toolchain, headers >= 3.8'
-+comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
--		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8)
-+		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
- 	bool "None"
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
