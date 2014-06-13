@@ -1,48 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2014 14:35:32 +0200
-Subject: [Buildroot] [PATCH] graphs/depends: do not draw transitive
-	dependencis by default
-In-Reply-To: <1402352936-21264-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 10 Jun 2014 00:28:56 +0200")
-References: <1402352936-21264-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87oaxxdm23.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Jun 2014 14:38:49 +0200
+Subject: [Buildroot] [git commit] package/minidlna: Always depend on
+	host-gettext
+Message-ID: <20140613124035.850199CFB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=9243374346fb58c22bc34de8643dc39b213a275a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > The transitive dependencies make the graphs barely readable for large
- > configs, with a large number of packages.
+Fixes
+http://autobuild.buildroot.net/results/7d1/7d10e2c13a1caf61b8bd18b85e5e5af50e5e7c48/
 
- > So, just switch to not drawing the transitive dependencies by default.
+checking for msgfmt... no
 
- > By popular demand... ;-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/minidlna/minidlna.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc; Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  docs/manual/common-usage.txt  | 2 +-
- >  support/scripts/graph-depends | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
-
- > diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
- > index eb83990..71fe5a3 100644
- > --- a/docs/manual/common-usage.txt
- > +++ b/docs/manual/common-usage.txt
- > @@ -207,7 +207,7 @@ The +graph-depends+ behaviour can be controlled by setting options in the
- >    default, +0+, means no limit.
+diff --git a/package/minidlna/minidlna.mk b/package/minidlna/minidlna.mk
+index e1e2f3d..78652c3 100644
+--- a/package/minidlna/minidlna.mk
++++ b/package/minidlna/minidlna.mk
+@@ -10,7 +10,7 @@ MINIDLNA_LICENSE = GPLv2 BSD-3c
+ MINIDLNA_LICENSE_FILES = COPYING LICENCE.miniupnpd
  
- >  * +--transitive+, +--no-transitive+, to draw (or not) the transitive
- > -  dependencies. The default is to draw transitive dependencies.
- > +  dependencies. The default is not to draw transitive dependencies.
-
-I'm not a native speaker, but I think it should be '.. is to not draw'.
-
-Committed with that (and the commit title) fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ MINIDLNA_DEPENDENCIES = \
+-	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext host-gettext) \
++	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext \
+ 	ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite \
+ 	host-xutil_makedepend
+ 
