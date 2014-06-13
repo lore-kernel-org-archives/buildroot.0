@@ -1,94 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jun 2014 15:09:38 +0200
-Subject: [Buildroot] [git commit] util-linux: fix installation of shared
-	libraries to not mess with pure static lib
-Message-ID: <20140613131057.C17989CFB2@busybox.osuosl.org>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 13 Jun 2014 16:38:12 +0300
+Subject: [Buildroot] [PATCH] qt5: fix legal info
+Message-ID: <1402666692-9805-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=07908c9145d8427c7cebaa72fedd69885e00d42e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Even when compiled with --enable-static --disable-shared, util-linux
-creates some incorrect libuuid.so, libblkid.so and libmount.so
-symbolic links, which confuses the compiler which thinks that a shared
-library is available. This causes some build issues such as:
-
-  http://autobuild.buildroot.org/results/990/9909d198ce14969d0e9d29a34fcc33f0ef79220d/
-
-This commit fixes that by adding a patch to util-linux that fixes this
-issue. The patch has been submitted upstream at
-http://article.gmane.org/gmane.linux.utilities.util-linux-ng/9262.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 ---
- .../util-linux-004-support-static-lib-build.patch  |   57 ++++++++++++++++++++
- 1 files changed, 57 insertions(+), 0 deletions(-)
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk | 4 +---
+ package/qt5/qt5multimedia/qt5multimedia.mk             | 4 +---
+ package/qt5/qt5svg/qt5svg.mk                           | 3 +--
+ package/qt5/qt5webkit/qt5webkit.mk                     | 8 +++-----
+ 4 files changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/package/util-linux/util-linux-004-support-static-lib-build.patch b/package/util-linux/util-linux-004-support-static-lib-build.patch
-new file mode 100644
-index 0000000..f49c6e5
---- /dev/null
-+++ b/package/util-linux/util-linux-004-support-static-lib-build.patch
-@@ -0,0 +1,57 @@
-+Only move shared libraries to /lib if they exists
-+
-+In several Makemodule.am, there is a install-exec-hook-<library>
-+target whose role is to move the shared library from /usr/lib to /lib,
-+while keeping a symbolic link /usr/lib/libuuid.so ->
-+../../lib/<library>.so.<version>.
-+
-+However, when util-linux is built with --enable-static
-+--disable-shared (as is needed on noMMU platforms that don't support
-+shared libraries), no <library>.so is built, but the
-+install-exec-hook-libuuid creates an invalid /usr/lib/<library>.so
-+symbolic link, pointing to ../../lib (yes, the directory). This causes
-+troubles later one when other libraries/programs are compiled with
-+-l<library>, as gcc thinks a shared library is available because
-+there's a file named /usr/lib/<library>.so.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/libuuid/src/Makemodule.am
-+===================================================================
-+--- a/libuuid/src/Makemodule.am
-++++ b/libuuid/src/Makemodule.am
-+@@ -44,7 +44,7 @@
-+ 
-+ # move lib from $(usrlib_execdir) to $(libdir) if needed
-+ install-exec-hook-libuuid:
-+-	if test "$(usrlib_execdir)" != "$(libdir)"; then \
-++	if test "$(usrlib_execdir)" != "$(libdir)" -a -f "$(DESTDIR)$(usrlib_execdir)/libuuid.so"; then \
-+ 		mkdir -p $(DESTDIR)$(libdir); \
-+ 		mv $(DESTDIR)$(usrlib_execdir)/libuuid.so.* $(DESTDIR)$(libdir); \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libuuid.so); \
-+Index: b/libmount/src/Makemodule.am
-+===================================================================
-+--- a/libmount/src/Makemodule.am
-++++ b/libmount/src/Makemodule.am
-+@@ -123,7 +123,7 @@
-+ 
-+ # move lib from $(usrlib_execdir) to $(libdir) if needed
-+ install-exec-hook-libmount:
-+-	if test "$(usrlib_execdir)" != "$(libdir)"; then \
-++	if test "$(usrlib_execdir)" != "$(libdir)" -a -f "$(DESTDIR)$(usrlib_execdir)/libmount.so"; then \
-+ 		mkdir -p $(DESTDIR)$(libdir); \
-+ 		mv $(DESTDIR)$(usrlib_execdir)/libmount.so.* $(DESTDIR)$(libdir); \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libmount.so); \
-+Index: b/libblkid/src/Makemodule.am
-+===================================================================
-+--- a/libblkid/src/Makemodule.am
-++++ b/libblkid/src/Makemodule.am
-+@@ -220,7 +220,7 @@
-+ 
-+ # move lib from $(usrlib_execdir) to $(libdir) if needed
-+ install-exec-hook-libblkid:
-+-	if test "$(usrlib_execdir)" != "$(libdir)"; then \
-++	if test "$(usrlib_execdir)" != "$(libdir)" -a -f "$(DESTDIR)$(usrlib_execdir)/libblkid.so"; then \
-+ 		mkdir -p $(DESTDIR)$(libdir); \
-+ 		mv $(DESTDIR)$(usrlib_execdir)/libblkid.so.* $(DESTDIR)$(libdir); \
-+ 		so_img_name=$$(readlink $(DESTDIR)$(usrlib_execdir)/libblkid.so); \
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+index 036cf21..2c3f66a 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+@@ -12,9 +12,7 @@ QT5GRAPHICALEFFECTS_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5GRAPHICALEFFECTS_LICENSE = LGPLv2.1 or GPLv3.0
+-# Here we would like to get license files from qt5base, but qt5base
+-# may not be extracted at the time we get the legal-info for
+-# qt5script.
++QT5GRAPHICALEFFECTS_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+ QT5GRAPHICALEFFECTS_LICENSE = Commercial license
+ QT5GRAPHICALEFFECTS_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index e7ac562..5eef543 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -12,9 +12,7 @@ QT5MULTIMEDIA_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5MULTIMEDIA_LICENSE = LGPLv2.1 or GPLv3.0
+-# Here we would like to get license files from qt5base, but qt5base
+-# may not be extracted at the time we get the legal-info for
+-# qt5script.
++QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+ QT5MULTIMEDIA_LICENSE = Commercial license
+ QT5MULTIMEDIA_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index da981f4..a768acb 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -12,8 +12,7 @@ QT5SVG_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT5SVG_LICENSE = LGPLv2.1 or GPLv3.0
+-# Here we would like to get license files from qt5base, but qt5base
+-# may not be extracted at the time we get the legal-info for qt5svg.
++QT5SVG_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt
+ else
+ QT5SVG_LICENSE = Commercial license
+ QT5SVG_REDISTRIBUTE = NO
+diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+index 33b775d..08c30be 100644
+--- a/package/qt5/qt5webkit/qt5webkit.mk
++++ b/package/qt5/qt5webkit/qt5webkit.mk
+@@ -11,14 +11,12 @@ QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf host-bison host-fle
+ QT5WEBKIT_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5WEBKIT_LICENSE = LGPLv2.1 or GPLv3.0
+-# Here we would like to get license files from qt5base, but qt5base
+-# may not be extracted at the time we get the legal-info for
+-# qt5script.
++QT5WEBKIT_LICENSE = LGPLv2+, MIT
+ else
+-QT5WEBKIT_LICENSE = Commercial license
++QT5WEBKIT_LICENSE = LGPLv2+, MIT, Commercial license
+ QT5WEBKIT_REDISTRIBUTE = NO
+ endif
++QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1 Source/WebKit/LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+ QT5WEBKIT_DEPENDENCIES += xlib_libXext xlib_libXrender
+-- 
+1.9.1
