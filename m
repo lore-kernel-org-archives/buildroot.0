@@ -1,65 +1,147 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 13 Jun 2014 11:23:14 +0200
-Subject: [Buildroot] autoconf caching
-In-Reply-To: <CAE9DZURzUZzenZMwfciAWQgQXFp7fbSg1wPHcJc54SCsmuUdhQ@mail.gmail.com>
-References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
- <20140605224222.0184a9b7@free-electrons.com>
- <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
- <20140606091548.53f07f90@free-electrons.com>
- <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
- <20140606113148.464ff3c8@core2quad.morethan.org>
- <CAE9DZUTpc3+jAZKNi8mrDDTmZDyZUQ1Z_-aymUP6h743buZqRw@mail.gmail.com>
- <CAHkwnC8ZyLMTLeHH2CVDS__EQFU0bYcWWb12ppygreRDU70PPg@mail.gmail.com>
- <CAE9DZURzUZzenZMwfciAWQgQXFp7fbSg1wPHcJc54SCsmuUdhQ@mail.gmail.com>
-Message-ID: <CAHkwnC8ud8QUt85XbHJfUnMvjXGbvWGtDqg_SuTyV_QJt2OUEw@mail.gmail.com>
+From: Javier Domingo Cansino <javierdo1@gmail.com>
+Date: Fri, 13 Jun 2014 11:28:21 +0200
+Subject: [Buildroot] [PATCH 1/1] Rewriting instructions to generate a
+ zedboard image to make it really verbose
+In-Reply-To: <CAEBucnBM6RtYxopUvo8dggJYY5s_3qrAjDUOv9SuGz2W76R3Uw@mail.gmail.com>
+References: <1402343887-12278-1-git-send-email-javierdo1@gmail.com>
+ <CAEBucnBM6RtYxopUvo8dggJYY5s_3qrAjDUOv9SuGz2W76R3Uw@mail.gmail.com>
+Message-ID: <CALZVap=5oybSOBAJuB5UD1Sc3NQUCYB2rR8rjCE_AG7+0Q02UA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 11, 2014 at 7:41 PM, Dallas Clement
-<dallas.a.clement@gmail.com> wrote:
-> On Tue, Jun 10, 2014 at 4:32 AM, Fabio Porcedda <fabio.porcedda@gmail.com>
-> wrote:
+I have this in task list, I still didn't have any spare time, but I will do it.
+
+Cheers,
+Javier Domingo Cansino
+
+
+2014-06-11 5:15 GMT+02:00 Spenser Gilliland <spenser@gillilanding.com>:
+> Javier,
+>
+> Please see the comments inline.
+>
+> On Mon, Jun 9, 2014 at 12:58 PM, Javier Domingo Cansino
+> <javierdo1@gmail.com> wrote:
 >>
->> On Fri, Jun 6, 2014 at 6:45 PM, Dallas Clement
->> <dallas.a.clement@gmail.com> wrote:
->> > On Fri, Jun 6, 2014 at 11:31 AM, Mike Zick <minimod@morethan.org> wrote:
-<snip>
->> > This is a good idea.  I think I've exhausted most of the other options
->> > except for
->> > commenting out .NOTPARALLEL in the top-level make.  If that doesn't
->> > help,
->> > I will definitely try breaking things up.  Thanks for the tip.
+>> Signed-off-by: Javier Domingo Cansino <javierdo1@gmail.com>
+>> ---
+>>  board/avnet/zedboard/readme.txt |   51 +++++++++++++++++++++++++++++++--------
+>>  1 file changed, 41 insertions(+), 10 deletions(-)
 >>
->> Please let me know if you have any issue using top-level parallel make.
->> I'm curently testing it and ironing it out.
+>> diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
+>> index efd076f..575c285 100644
+>> --- a/board/avnet/zedboard/readme.txt
+>> +++ b/board/avnet/zedboard/readme.txt
+>> @@ -5,26 +5,57 @@ System-On-Chip.
+>>  Zedboard information including schematics, reference designs, and manuals are
+>>  available from http://www.zedboard.org .
 >>
->> Best regards
+>> -To boot the Zedboard using a buildroot generated image copy the following files
+>> -to the sdcard:
+>> -       zynq-zed.dtb -> devicetree.dtb
+>> -       rootfs.cpio.gz.uboot -> uramdisk.image.gz
+>> -       uImage -> uImage
+>> -       boot.bin -> boot.bin
+>> +The firmware releases for the Xilinx Zynq silicons depend on Xilinx some propietary tools or code. This dependency has been reduced to a pair of source files available in the regular Xilinx SDK.
+>
+> Possibly the following is better:
+>
+> The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
+> on some proprietary code.  This dependency has consists of a pair of
+> files available from in a Xilinx SDK installation.
+>
+>> -U-Boot SPL Support
+>> --------------
+>> +You will need this files from Xilinx tree to generate the later listed files:
+> You will need these files from a Xilinx SDK installation to generate
+> the U-Boot firmware.
+>> +       ps7_init.c
+>> +       ps7_init.h
+>> +
+>> +You will need the following files from output/images:
+> Buildroot will create the following files and place them in the
+> <output>/images directory.
+>> +       zynq-zed.dtb
+>> +       rootfs.cpio.uboot
+>> +       uImage
+>> +       u-boot.img
+>> +       boot.bin
+>> +
+>> +
+>> +uboot.bin  -- U-Boot SPL Support
+> uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
+>
+>> +--------------------------------
+>>
+>>  Due to licensing issues, the files ps7_init.c/h are not able to be
+>>  distributed with the U-Boot source code.  These files are required to make a
+>>  boot.bin file.
+>>
+>> -If you already have the Xilinx tools installed, the follwing sequence will
+>> +If you already have the Xilinx tools installed, the following sequence will
+>>  unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
+>>
+>>  make zedboard_defconfig
+>>  make uboot-patch
+>>  cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
+>> -output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
+>> +output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
+>> +
+>> +Now that you patched the uboot files, you will be capable of compiling the
+>> +buildroot:
+>
+> After copying these files into the U-Boot source tree, you can
+> continue the build by:
+>
+>> +
+>>  make
+>>
+>
+> It would be good to add the following notice:
+>
+> While the build will successfully complete without the ps7_init.*
+> files,  the uboot.bin file generated by this configuration will not
+> function properly on the Zedboard.  Therefore, it is imperative that
+> the ps7_init.* files be copied into the U-Boot source tree any time
+> the clean, or uboot-dirclean targets are made.
+>
+>> +
+>> +Resulting system
+>> +----------------
+>> +The SD card should be filled like the following, in a FAT32 partition at the
+>> +beggining of the device:
+> A FAT32 partition should be created at the beginning of the SD Card
+> and the following files should be installed:
+>> +       /boot.bin
+>> +       /devicetree.dtb
+>> +       /uImage
+>> +       /uramdisk.image.gz
+>> +       /u-boot.img
+>> +
+>> +
+>> +All needed files can be taken from output/images/
+>> +
+>> +boot.bin, uImage and u-boot.img are direct copies of the same files
+>> +available on output/images/
+>> +
+>> +devicetree.dtb is just zynq-zed.dtb renamed.
+>> +
+>> +uramdisk.image.gz is rootfs.cpio.uboot renamed
 >> --
->> Fabio Porcedda
+>> 1.7.10.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 >
+> Thanks,
+> Spenser
 >
->> Please let me know if you have any issue using top-level parallel make.
->> I'm curently testing it and ironing it out.
->
-> So far, no serious issues.  It uncovered some hidden dependencies.  But I
-> was warned about this.  ;)
->
-> Surprisingly, it did not speed up my build times at all.  Perhaps this is
-> due
-> to a complex dependency graph.
-
-Can you please send the graphs made by "make graph-depends" and
-"make graph-build" for both serial and parallel and the output of the
-time commands, i mean just the time command output not the complete
-log:
-"time make" and "time make BR2_JLEVEL= -j$((`getconf _NPROCESSORS_ONLN`+1))"?
-
-It's best if you don't attach those files to the email but use some
-other way, e.g. dropbox.
-
-Best regards
--- 
-Fabio Porcedda
+> --
+> Spenser Gilliland
+> Computer Engineer
+> Doctoral Candidate
