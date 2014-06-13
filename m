@@ -1,61 +1,46 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 13 Jun 2014 10:31:30 +0200
-Subject: [Buildroot] [PATCH 2/2] network-manager: add terminal based UI
-	support
-In-Reply-To: <1402648290-9967-1-git-send-email-yegorslists@googlemail.com>
-References: <1402648290-9967-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1402648290-9967-2-git-send-email-yegorslists@googlemail.com>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 13 Jun 2014 11:54:48 +0300
+Subject: [Buildroot] Qt5Declarative examples
+In-Reply-To: <5395E7B5.1050604@carallon.com>
+References: <5395E7B5.1050604@carallon.com>
+Message-ID: <201406131154.48198.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Monday 09 June 2014 19:58:29 Will Wagner wrote:
+> Hello,
 
-NM provides a newt based UI. One can create, modify and delete NM
-connections via this interface.
+Hi,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/network-manager/Config.in          | 6 ++++++
- package/network-manager/network-manager.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+> Just started taking a look at Qt5Declarative and noticed that examples
+> aren't being built/installed.
+> 
+> Having looked at the .mk files it is easy to conditionally build the
+> examples depending on qt5base config option about examples, but I'm
+> unsure how best to do the install target step.
+> 
+> In Qt5Base it just does:
+> cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/*
+> $(TARGET_DIR)/usr/lib/qt/examples
+> to install examples from staging.
+> 
+> This would also work for Qt5Declarative but it seems like a poor
+> solution to just copy and paste the same code.
+> 
+> Can anyone think of a better way of doing this? Perhaps define something
+> in qt5.mk and use that in both qt5base and qt5declarative?
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 4503f3a..b7f223e 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -30,6 +30,12 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 
- if BR2_PACKAGE_NETWORK_MANAGER
- 
-+config BR2_PACKAGE_NETWORK_MANAGER_TUI
-+	bool "nmtui support"
-+	select BR2_PACKAGE_NEWT
-+	help
-+	  This option enables terminal based UI
-+
- config BR2_PACKAGE_NETWORK_MANAGER_MODEM_MANAGER
- 	bool "modem-manager support"
- 	select BR2_PACKAGE_MODEM_MANAGER
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 47c91d5..282e1e5 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -34,6 +34,13 @@ NETWORK_MANAGER_CONF_OPT = \
- 		--disable-ifupdown \
- 		--disable-ifnet
- 
-+ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_TUI),y)
-+	NETWORK_MANAGER_DEPENDENCIES += newt
-+	NETWORK_MANAGER_CONF_OPT += --with-nmtui=yes
-+else
-+	NETWORK_MANAGER_CONF_OPT += --with-nmtui=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_PPPD),y)
- 	NETWORK_MANAGER_DEPENDENCIES += pppd
- 	NETWORK_MANAGER_CONF_OPT += --enable-ppp
--- 
-1.8.1.2
+You can have a look at qt5enginio and qt5websockets packages. They are
+installing their examples if BR2_PACKAGE_QT5BASE_EXAMPLES.
+
+There are 3 directories you need to copy for qt5declarative. Following lines will be enough
+to copy all of them:
+
+cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/qml* $(TARGET_DIR)/usr/lib/qt/examples/
+cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/quick $(TARGET_DIR)/usr/lib/qt/examples/
+
+Regards,
+Fatih
