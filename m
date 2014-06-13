@@ -1,38 +1,29 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 13 Jun 2014 14:24:29 +0200
-Subject: [Buildroot] [PATCH 1/1] psplash: install systemd services
-In-Reply-To: <1402520102-24548-1-git-send-email-eric.le.bihan.dev@free.fr>
- (Eric Le Bihan's message of "Wed, 11 Jun 2014 22:55:02 +0200")
-References: <1402520102-24548-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <87wqcldmki.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Jun 2014 14:31:35 +0200
+Subject: [Buildroot] [PATCH v2 1/1] simicsfs: new package
+In-Reply-To: <1402453184-4851-1-git-send-email-matthew.weber@rockwellcollins.com>
+ (Matt Weber's message of "Tue, 10 Jun 2014 19:19:44 -0700")
+References: <1402453184-4851-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <87sin9dm8o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Eric" == Eric Le Bihan <eric.le.bihan.dev@free.fr> writes:
+>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
 
- > This patch provides service files for using psplash on embedded devices
- > running systemd:
+ > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
- > - psplash-start.service: start psplash.
- > - psplash-quit.service: kill psplash when reaching multi-user.target
+Committed with the upstream url changed to http as wget complains here
+about the certificate, thanks:
 
- > The following kernel command line options should also be set:
-
- >   systemd.show_status=0 quiet splash
-
- > The option "systemd.show_status=0" is required, because, unlike Plymouth,
- > psplash does not have real systemd integration, i.e. it will not perform:
-
- >   kill(1, SIGRTMIN + 21);
-
- > Note that no progress messages will be printed on the splash screen.
-
- > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
-Committed, thanks.
+>>> simicsfs 1.17 Downloading
+--2014-06-13 14:27:54--  https://download.simics.net/pub/simicsfs-1.17.tar.gz
+Resolving download.simics.net (download.simics.net)... 192.124.127.195
+Connecting to download.simics.net (download.simics.net)|192.124.127.195|:4 .. connected.
+ERROR: The certificate of ?download.simics.net? is not trusted.
+ERROR: The certificate of ?download.simics.net? hasn't got a known issuer.
 
 -- 
 Bye, Peter Korsgaard
