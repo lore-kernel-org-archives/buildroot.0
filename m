@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:02:38 +0200
-Subject: [Buildroot] [PATCH 14/20 RFC] package/libinput: needs libudev,
-	not a udev daemon
+Date: Sat, 14 Jun 2014 01:02:40 +0200
+Subject: [Buildroot] [PATCH 16/20 RFC] package/mesa3d: depends on libudev,
+	not udev
 In-Reply-To: <cover.1402699915.git.yann.morin.1998@free.fr>
 References: <cover.1402699915.git.yann.morin.1998@free.fr>
-Message-ID: <01b7b1d592494f5d1e758299dc767730cc5e238a.1402699915.git.yann.morin.1998@free.fr>
+Message-ID: <e623bd3fd72faf81d9f1bace6f97ad7c75dd39ed.1402699915.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +13,40 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-libinput is happy enough with just a libudev, and does
-not require a udev daemon.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libinput/Config.in   | 5 +----
- package/libinput/libinput.mk | 2 +-
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/mesa3d/Config.in | 2 +-
+ package/mesa3d/mesa3d.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-index 14e4e70..4445ade 100644
---- a/package/libinput/Config.in
-+++ b/package/libinput/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBINPUT
- 	bool "libinput"
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index e698b3e..d912db5 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
+ 	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
 -	depends on BR2_PACKAGE_HAS_UDEV
 +	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_LIBEVDEV
- 	select BR2_PACKAGE_MTDEV
- 	help
-@@ -12,6 +12,3 @@ config BR2_PACKAGE_LIBINPUT
- 	  set of functionality that users expect.
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1a61af8..ca35eb9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -93,8 +93,8 @@ MESA3D_CONF_OPT += --enable-opengl
  
- 	  http://freedesktop.org/wiki/Software/libinput/
--
--comment "libinput needs udev /dev management"
--	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index b52101a..3f225cc 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -10,7 +10,7 @@ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
- LIBINPUT_LICENSE_FILES = COPYING
- 
--LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-+LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev libudev
- LIBINPUT_INSTALL_STAGING = YES
- 
- # Tests need fork, so just disable them everywhere.
+ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL),y)
+ MESA3D_PROVIDES += libegl
+-# egl depends on gbm, gbm depends on udev
+-MESA3D_DEPENDENCIES += udev
++# egl depends on gbm, gbm depends on libudev
++MESA3D_DEPENDENCIES += libudev
+ MESA3D_EGL_PLATFORMS = drm
+ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland
 -- 
 1.8.3.2
