@@ -1,76 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Jun 2014 18:57:28 +0200
-Subject: [Buildroot] [PATCH] freescale-imx: bump version to 3.10.17-1.0.0
-In-Reply-To: <CADCpmyNrJ88qi2bCvmB719pLDUhwpEJCJ5TqEoVLjARNOOELvQ@mail.gmail.com>
-References: <1402615435-21137-1-git-send-email-bisson.gary@gmail.com>
- <20140613161454.GA3496@free.fr>
- <CADCpmyNrJ88qi2bCvmB719pLDUhwpEJCJ5TqEoVLjARNOOELvQ@mail.gmail.com>
-Message-ID: <20140613165728.GB3496@free.fr>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 13 Jun 2014 19:00:48 +0200
+Subject: [Buildroot] [PATCH v2] gcc 4.8.x does not compile a working kernel
+	for sparc
+Message-ID: <20140613170047.GA10615@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Garry, All,
+Since the switch to 4.8.x as default, the qemu-sparc target is broken.
+For a gcc bug report see here:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60624
 
-On 2014-06-13 09:51 -0700, Gary Bisson spake thusly:
-> On Fri, Jun 13, 2014 at 9:14 AM, Yann E. MORIN <yann.morin.1998@free.fr>
-> wrote:
-> > On 2014-06-12 16:23 -0700, Gary Bisson spake thusly:
-> > > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> >
-> > NAK.
-> >
-> > With 3.10.17, imx-lib no longer bundles the VPU code, which is now
-> > provided in a separate package, imx-vpu.
-> 
-> My bad, I've only checked that it built and that the GPU examples were
-> running fine.
+Switch back to gcc 4.7.x as default for sparc.
+Disable 4.8/4.9 as suggested by Thomas Petazzoni.
+I even disabled gcc snapshot, it works right now, because
+it is an old 4.8.0 snapshot by default, but as soon as this is updated
+sparc build will break.
 
-Yep, that's OK. :-)
-Reviews are there to help find out this kind of issue. No worries! ;-)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/gcc/Config.in.host |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Could you (briefly) explain in your commit log (after the '---' line) how
-you did the test, so it is easy to reproduce? Something like:
-
-    package/freescale-imx: bump version
-
-    Blabla commit log
-
-    Signed-off-by: you
-
-    ---
-    GPU tests are runnign fine, with just running:
-        blabla-freescale-demo-program --some-option
-    VPU tests not done, for lack of need.
-
-Thanks! :-)
-
-> > See chapter "Version by SoC Hierarchy" from:
-> >     https://freescale.github.io/doc/release-notes/1.6/
-> >
-> > So, bumping to 3.10.17 would need adding the imx-vpu package first.
-> >
-> > Then, libfslvpuwrap should be made dependent on imx-vpu instead of
-> > imx-lib, obviously. To be noted, the version of libfslvpuwrap will not
-> > be aligned to the other imx components.
-> >
-> 
-> Would you recommend removing the generic FREESCALE_IMX_VERSION in order to
-> specify a version for each component? Or would you prefer adding a new
-> variable just for the libslvpuwrap?
-
-The latter: just keep the common version for all components, and just
-specify the specific version for libfslvpuwrap.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 3bdfffc..309750c 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -10,6 +10,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+ 	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
++	default BR2_GCC_VERSION_4_7_X if BR2_sparc
+ 	default BR2_GCC_VERSION_4_8_X if BR2_aarch64
+ 	default BR2_GCC_VERSION_4_8_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_4_9_X if BR2_microblaze || BR2_powerpc64le
+@@ -61,7 +62,7 @@ choice
+ 		bool "gcc 4.7.x"
+ 
+ 	config BR2_GCC_VERSION_4_8_X
+-		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_powerpc64le
++		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_powerpc64le && !BR2_sparc
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		bool "gcc 4.8.x"
+@@ -72,13 +73,13 @@ choice
+ 		bool "gcc 4.8-arc"
+ 
+ 	config BR2_GCC_VERSION_4_9_X
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
+ 		select BR2_GCC_NEEDS_MPC
+ 		select BR2_GCC_SUPPORTS_GRAPHITE
+ 		bool "gcc 4.9.x"
+ 
+ 	config BR2_GCC_VERSION_SNAP
+-		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8
++		depends on !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
+ 		select BR2_GCC_NEEDS_MPC
+ 		# musl patches only for gcc 4.7+
+ 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
