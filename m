@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:11:35 +0200
-Subject: [Buildroot] [PATCH 01/14] Makefile: add BR2_DL_DIR to EXTRA_ENV
+Date: Sat, 14 Jun 2014 01:11:36 +0200
+Subject: [Buildroot] [PATCH 02/14] pkg-infra: also set PKGDIR for the
+	download step
 In-Reply-To: <cover.1402700788.git.yann.morin.1998@free.fr>
 References: <cover.1402700788.git.yann.morin.1998@free.fr>
-Message-ID: <e346ef61dc8c002f8703cf205861612bca2312db.1402700788.git.yann.morin.1998@free.fr>
+Message-ID: <9012e84c99b609246ccae7d7d144f23673654109.1402700788.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,26 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Also export BR2_DL_DIR for incoming download helper scripts.
+This will be needed to get the hash file, to check the
+downloaded files.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/Makefile.in | 1 +
+ package/pkg-generic.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 0233506..97053ba 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -305,6 +305,7 @@ HOST_MAKE_ENV=PATH=$(BR_PATH) \
- # post-images)
- EXTRA_ENV=\
- 	PATH=$(BR_PATH) \
-+	BR2_DL_DIR=$(BR2_DL_DIR) \
- 	BUILD_DIR=$(BUILD_DIR)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index ccd7f3b..5293a7a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -574,6 +574,7 @@ $$($(2)_TARGET_PATCH):			RAWNAME=$(patsubst host-%,%,$(1))
+ $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_EXTRACT):		PKG=$(2)
+ $$($(2)_TARGET_SOURCE):			PKG=$(2)
++$$($(2)_TARGET_SOURCE):			PKGDIR=$(pkgdir)
+ $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
  
- ################################################################################
+ # Compute the name of the Kconfig option that correspond to the
 -- 
 1.8.3.2
