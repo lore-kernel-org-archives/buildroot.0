@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:11:42 +0200
-Subject: [Buildroot] [PATCH 08/14] pkg-infra: move the bzr download helper
-	to a script
+Date: Sat, 14 Jun 2014 01:11:44 +0200
+Subject: [Buildroot] [PATCH 10/14] pkg-infra: move the cp (aka localfiles)
+	download helper to a script
 In-Reply-To: <cover.1402700788.git.yann.morin.1998@free.fr>
 References: <cover.1402700788.git.yann.morin.1998@free.fr>
-Message-ID: <f3d889b19a435245ce6cf3f331d4342e17a99f4e.1402700788.git.yann.morin.1998@free.fr>
+Message-ID: <f5a78af0071593e25e047e51c430b9b2114f7de8.1402700788.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,57 +18,55 @@ complex, so move it to a shell script.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk |  4 ++--
- support/download/bzr    | 19 +++++++++++++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100755 support/download/bzr
+ package/pkg-download.mk |  5 +++--
+ support/download/cp     | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+ create mode 100755 support/download/cp
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index b495bbb..e0dda39 100644
+index 33cab27..5864dd3 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -11,7 +11,7 @@
- export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
- export SVN := $(call qstrip,$(BR2_SVN))
- export CVS := $(call qstrip,$(BR2_CVS))
--BZR := $(call qstrip,$(BR2_BZR))
-+export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
+@@ -16,7 +16,7 @@ export GIT := $(call qstrip,$(BR2_GIT))
  export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
- SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
-@@ -101,7 +101,7 @@ endef
+ export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+-LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
++export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- define DOWNLOAD_BZR
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
-+	$(EXTRA_ENV) support/download/bzr $($(PKG)_SITE) $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE)
+ # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+ # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+@@ -192,7 +192,8 @@ endef
+ 
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
++	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
++					 $(DL_DIR)
  endef
  
- define SOURCE_CHECK_BZR
-diff --git a/support/download/bzr b/support/download/bzr
+ define SOURCE_CHECK_LOCALFILES
+diff --git a/support/download/cp b/support/download/cp
 new file mode 100755
-index 0000000..68121f4
+index 0000000..d820846
 --- /dev/null
-+++ b/support/download/bzr
-@@ -0,0 +1,19 @@
++++ b/support/download/cp
+@@ -0,0 +1,16 @@
 +#!/bin/sh
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for bzr
++# Download helper for cp
 +# Call it with:
-+#   $1: bzr repo
-+#   $2: bzr revision
-+#   $3: output file
++#   $1: source file
++#   $2: output file
 +# And this environment:
-+#   BZR       : the bzr command to call
-+#   BR2_DL_DIR: path to Buildroot's download dir
++#   LOCALFILES: the cp command to call
 +
-+repo="${1}"
-+rev="${2}"
-+output="${3}"
++source="${1}"
++output="${2}"
 +
-+${BZR} export "${output}" "${repo}" -r "${rev}"
++${LOCALFILES} "${source}" "${output}"
 -- 
 1.8.3.2
