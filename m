@@ -1,58 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jun 2014 22:30:46 +0200
-Subject: [Buildroot] [git commit] dialog: bump to version 1.2-20140219
-Message-ID: <20140613203259.1FC729CFBB@busybox.osuosl.org>
+Date: Fri, 13 Jun 2014 22:32:37 +0200
+Subject: [Buildroot] [git commit] systemd: needs kernel headers >= 3.10
+Message-ID: <20140613203259.293CA99EAC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=99fb167f5af5354629d7561261a69874ef8c1e95
+commit: http://git.buildroot.net/buildroot/commit/?id=c2277c2d4e268f492379e6b7f8951b76970ff4c0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a homepage.
-Ditch custom install target commands, they're not needed.
+Systemd needs a toolchain with kernel headers >= 3.10, as it needs
+IFLA_VLAN_PROTOCOL from linux/if_link.h.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes: http://autobuild.buildroot.net/results/33e/33e1447949d13bccc4076b69f902432e2131cc1c
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dialog/Config.in |    2 ++
- package/dialog/dialog.mk |    6 +-----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ system/Config.in |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dialog/Config.in b/package/dialog/Config.in
-index c7cd8a4..929ab46 100644
---- a/package/dialog/Config.in
-+++ b/package/dialog/Config.in
-@@ -11,6 +11,8 @@ config BR2_PACKAGE_DIALOG
- 	  types of dialog boxes from shell scripts.  This allows a developer
- 	  of a script to interact with the user in a much friendlier manner.
- 
-+	  http://invisible-island.net/dialog/dialog.html
-+
- comment "dialog needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/system/Config.in b/system/Config.in
+index 53bca53..1be7e5d 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -96,12 +96,12 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
  	depends on BR2_USE_MMU
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index e2ce09b..6dc9066 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	depends on !BR2_PREFER_STATIC_LIB
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 	select BR2_PACKAGE_SYSTEMD
  
--DIALOG_VERSION = 1.1-20111020
-+DIALOG_VERSION = 1.2-20140219
- DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = ftp://invisible-island.net/dialog
- DIALOG_CONF_OPT = --with-ncurses
-@@ -17,8 +17,4 @@ ifneq ($(BR2_ENABLE_LOCALE),y)
- DIALOG_DEPENDENCIES += libiconv
- endif
+-comment 'systemd needs an (e)glibc toolchain, headers >= 3.8'
++comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
+ 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
+-		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8)
++		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
  
--define DIALOG_INSTALL_TARGET_CMDS
--	$(INSTALL) -c $(@D)/dialog $(TARGET_DIR)/usr/bin/dialog
--endef
--
- $(eval $(autotools-package))
+ config BR2_INIT_NONE
+ 	bool "None"
