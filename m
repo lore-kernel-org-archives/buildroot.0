@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:11:44 +0200
-Subject: [Buildroot] [PATCH 10/14] pkg-infra: move the cp (aka localfiles)
-	download helper to a script
+Date: Sat, 14 Jun 2014 01:11:43 +0200
+Subject: [Buildroot] [PATCH 09/14] pkg-infra: move the scp download helper
+	to a script
 In-Reply-To: <cover.1402700788.git.yann.morin.1998@free.fr>
 References: <cover.1402700788.git.yann.morin.1998@free.fr>
-Message-ID: <f5a78af0071593e25e047e51c430b9b2114f7de8.1402700788.git.yann.morin.1998@free.fr>
+Message-ID: <c78e7d5b05b0174225f8b36aaabe4f7212716f78.1402700788.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,54 +19,54 @@ complex, so move it to a shell script.
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
  package/pkg-download.mk |  5 +++--
- support/download/cp     | 16 ++++++++++++++++
+ support/download/scp    | 16 ++++++++++++++++
  2 files changed, 19 insertions(+), 2 deletions(-)
- create mode 100755 support/download/cp
+ create mode 100755 support/download/scp
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 33cab27..5864dd3 100644
+index e0dda39..33cab27 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -16,7 +16,7 @@ export GIT := $(call qstrip,$(BR2_GIT))
+@@ -14,7 +14,7 @@ export CVS := $(call qstrip,$(BR2_CVS))
+ export BZR := $(call qstrip,$(BR2_BZR))
+ export GIT := $(call qstrip,$(BR2_GIT))
  export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
- export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+-SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
++export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
  SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
--LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
-+export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
- # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
-@@ -192,7 +192,8 @@ endef
- 
- define DOWNLOAD_LOCALFILES
+@@ -147,7 +147,8 @@ endef
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
  	test -e $(DL_DIR)/$(2) || \
--		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
-+	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
-+					 $(DL_DIR)
+-	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
++	$(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
++					  $(DL_DIR)/$(2)
  endef
  
- define SOURCE_CHECK_LOCALFILES
-diff --git a/support/download/cp b/support/download/cp
+ define SOURCE_CHECK_SCP
+diff --git a/support/download/scp b/support/download/scp
 new file mode 100755
-index 0000000..d820846
+index 0000000..9f8a4f0
 --- /dev/null
-+++ b/support/download/cp
++++ b/support/download/scp
 @@ -0,0 +1,16 @@
 +#!/bin/sh
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for cp
++# Download helper for scp
 +# Call it with:
-+#   $1: source file
++#   $1: URL
 +#   $2: output file
 +# And this environment:
-+#   LOCALFILES: the cp command to call
++#   SCP       : the scp command to call
 +
-+source="${1}"
++url="${1}"
 +output="${2}"
 +
-+${LOCALFILES} "${source}" "${output}"
++${SCP} "${url}" "${output}"
 -- 
 1.8.3.2
