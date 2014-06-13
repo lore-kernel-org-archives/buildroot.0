@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:02:36 +0200
-Subject: [Buildroot] [PATCH 12/20 RFC] package/libcec: needs libudev,
+Date: Sat, 14 Jun 2014 01:02:39 +0200
+Subject: [Buildroot] [PATCH 15/20 RFC] package/libusb: needs libudev,
 	not a udev daemon
 In-Reply-To: <cover.1402699915.git.yann.morin.1998@free.fr>
 References: <cover.1402699915.git.yann.morin.1998@free.fr>
-Message-ID: <d063b08a5cb278d84fcdd031906cd9f2faf3ac8f.1402699915.git.yann.morin.1998@free.fr>
+Message-ID: <9f0792f43adcbd3a24dff51ed67fdb466d971e2e.1402699915.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,29 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-libcec is happy enough with just a libudev, which it uses to
-enumerate CEC devices, and does not require a udev daemon.
-
-Propagate the new dependency to XBMC.
+libusb is happy enough with just a libudev, and does
+not require a udev daemon.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.mk | 4 ++--
- package/xbmc/Config.in   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libusb/libusb.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index ad919fc..49e4dbd 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -18,8 +18,8 @@ ifeq ($(BR2_PACKAGE_LOCKDEV),y)
- LIBCEC_DEPENDENCIES += lockdev
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 417b2ce..6e1c6a5 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -21,8 +21,9 @@ ifeq ($(BR2_avr32),y)
+ LIBUSB_CONF_OPT += --disable-timerfd
  endif
  
 -ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
--LIBCEC_DEPENDENCIES += udev
+-LIBUSB_DEPENDENCIES += udev
 +ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
-+LIBCEC_DEPENDENCIES += libudev
++LIBUSB_CONF_OPT += --enable-udev
++LIBUSB_DEPENDENCIES += libudev
+ else
+ LIBUSB_CONF_OPT += --disable-udev
  endif
- 
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 592fdc1..db888ac 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -99,14 +99,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
--	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV # libcec
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want XBMC to support HDMI CEC.
- 
--comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
-+comment "hdmi cec support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	bool "web server"
 -- 
 1.8.3.2
