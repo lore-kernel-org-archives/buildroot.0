@@ -1,51 +1,48 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 13 Jun 2014 14:15:22 +0200
-Subject: [Buildroot] rsync forces configure step
-In-Reply-To: <20140613140908.532d1852@free-electrons.com>
-References: <1f09233e5be11d75394054a20c4631cd@openmailbox.org>
- <20140613140908.532d1852@free-electrons.com>
-Message-ID: <CAHkwnC-S=+Wq7aKdXTY4Nzdk8rS29MGOS9x2jxH713Tn4pfBNA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Jun 2014 14:17:19 +0200
+Subject: [Buildroot] [PATCH] Makefile: test if dot exists before using it in
+	graph-depends
+Message-ID: <1402661839-319-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 13, 2014 at 2:09 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear C?dric Marie,
->
-> On Fri, 13 Jun 2014 10:54:20 +0200, C?dric Marie wrote:
->
->> I have recently upgraded from Buildroot 2014.02 to 2014.05, and I have
->> noticed that some developments related to top-level parallel build have
->> resulted in a small change of behaviour, which I would consider as a
->> regression.
->>
->> When a package is used in rsync mode, make <pkg>-rebuild also forces the
->> configure step.
->>
->> This has been introduced by this commit:
->> http://git.buildroot.net/buildroot/commit/package/pkg-generic.mk?id=6c5c08b854e4490697076ae3c5a9c587d8672c63
->> ... and this line in particular:
->> $$($(2)_TARGET_CONFIGURE): $$($(2)_TARGET_RSYNC)
->>
->> I believe the right way to support parallel build without forcing the
->> configure step in case of rsync, is to use an order-only prerequisite
->> (with a pipe):
->> $$($(2)_TARGET_CONFIGURE): | $$($(2)_TARGET_RSYNC)
->>
->> I have checked this correction successfully.
->
-> This indeed seems correct. I've Cc'ed Fabio who is working on the
-> top-level parallel build feature, I guess he'll have a look and give
-> you more feedback and/or send a patch fixing this issue.
->
-> Thanks a lot for the report!
+The 'graph-depends' logic uses the 'dot' program from Graphviz to draw
+the dependency graph, but it doesn't check its existence before
+starting the generation of the graph, which can lead to user confusion
+as reported in:
 
-Hi all,
-thanks for reporting the issue, I will check it and send a patch to fix it.
+ http://lists.busybox.net/pipermail/buildroot/2014-June/099278.html
 
-Best regards
+With this commit, we first test if the 'dot' program is available, and
+if it's not, we error out with a clear error message:
+
+$ make graph-depends
+ERROR: The 'dot' program from Graphviz is needed for graph-depends
+make: *** [graph-depends] Error 1
+
+Reported-by: Dallas Clement <dallas.a.clement@gmail.com>
+Cc: Dallas Clement <dallas.a.clement@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 5501068..db8fd15 100644
+--- a/Makefile
++++ b/Makefile
+@@ -674,6 +674,8 @@ graph-build: $(O)/build/build-time.log
+ 				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
+ 
+ graph-depends:
++	@dot -? >/dev/null 2>&1 || \
++		(echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends"; exit 1)
+ 	@$(INSTALL) -d $(O)/graphs
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
 -- 
-Fabio Porcedda
+2.0.0
