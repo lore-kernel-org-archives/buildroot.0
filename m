@@ -1,95 +1,117 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jun 2014 14:38:50 +0200
-Subject: [Buildroot] [git commit] psplash: install systemd services
-Message-ID: <20140613124035.A8F1799E72@busybox.osuosl.org>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Fri, 13 Jun 2014 15:47:31 +0300
+Subject: [Buildroot] [PATCH 1/1] New package: qt5webkitexamples
+In-Reply-To: <1402481120-13154-1-git-send-email-massimocallegari@yahoo.it>
+References: <1402481120-13154-1-git-send-email-massimocallegari@yahoo.it>
+Message-ID: <201406131547.31164.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cd18e2acee9d492c2debfd8fb4573e2407b71795
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-This patch provides service files for using psplash on embedded devices
-running systemd:
+On Wednesday 11 June 2014 13:05:20 Massimo Callegari wrote:
+> Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
+> ---
+>  package/qt5/Config.in                              |  1 +
+>  package/qt5/qt5webkitexamples/Config.in            | 12 +++++++
+>  package/qt5/qt5webkitexamples/qt5webkitexamples.mk | 40
+> ++++++++++++++++++++++ 3 files changed, 53 insertions(+)
+>  create mode 100644 package/qt5/qt5webkitexamples/Config.in
+>  create mode 100644 package/qt5/qt5webkitexamples/qt5webkitexamples.mk
 
-- psplash-start.service: start psplash.
-- psplash-quit.service: kill psplash when reaching multi-user.target
+I think the name should be qt5webkit-examples. Better to keep it closer to the 
+original name.
 
-The following kernel command line options should also be set:
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index efdd9d4..024fa94 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -40,6 +40,7 @@ source "package/qt5/qt5sensors/Config.in"
+>  source "package/qt5/qt5serialport/Config.in"
+>  source "package/qt5/qt5svg/Config.in"
+>  source "package/qt5/qt5webkit/Config.in"
+> +source "package/qt5/qt5webkitexamples/Config.in"
+>  source "package/qt5/qt5websockets/Config.in"
+>  source "package/qt5/qt5x11extras/Config.in"
+>  source "package/qt5/qt5xmlpatterns/Config.in"
+> diff --git a/package/qt5/qt5webkitexamples/Config.in
+> b/package/qt5/qt5webkitexamples/Config.in new file mode 100644
+> index 0000000..18cb476
+> --- /dev/null
+> +++ b/package/qt5/qt5webkitexamples/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_QT5WEBKITEXAMPLES
+> +	bool "qt5webkit examples"
 
-  systemd.show_status=0 quiet splash
+What about hiding this menu entry and making this package default if 
+BR2_PACKAGE_QT5BASE_EXAMPLES?
 
-The option "systemd.show_status=0" is required, because, unlike Plymouth,
-psplash does not have real systemd integration, i.e. it will not perform:
+> +	depends on BR2_PACKAGE_QT5WEBKIT
+> +	depends on BR2_PACKAGE_QT5XMLPATTERNS
+> +	select BR2_PACKAGE_QT5BASE_EXAMPLES
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  This package corresponds to the qt5webkit examples module.
+> +
+> +	  http://qt-project.org
+> diff --git a/package/qt5/qt5webkitexamples/qt5webkitexamples.mk
+> b/package/qt5/qt5webkitexamples/qt5webkitexamples.mk new file mode 100644
+> index 0000000..435f114
+> --- /dev/null
+> +++ b/package/qt5/qt5webkitexamples/qt5webkitexamples.mk
+> @@ -0,0 +1,40 @@
+> +##########################################################################
+> ###### +#
+> +# qt5webkitexamples
+> +#
+> +##########################################################################
+> ###### +
+> +QT5WEBKITEXAMPLES_VERSION = $(QT5_VERSION)
+> +QT5WEBKITEXAMPLES_SITE = $(QT5_SITE)
+> +QT5WEBKITEXAMPLES_SOURCE =
+> qtwebkit-examples-opensource-src-$(QT5WEBKITEXAMPLES_VERSION).tar.xz
+> +QT5WEBKITEXAMPLES_DEPENDENCIES = qt5webkit
 
-  kill(1, SIGRTMIN + 21);
+Add qt5xmlpatterns here.
 
-Note that no progress messages will be printed on the splash screen.
+> +QT5WEBKITEXAMPLES_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> +QT5WEBKITEXAMPLES_LICENSE = LGPLv2.1 or GPLv3.0
+> +# Here we would like to get license files from qt5base, but qt5base
+> +# may not be extracted at the time we get the legal-info for
+> +# qt5script.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/psplash/psplash-quit.service  |   11 +++++++++++
- package/psplash/psplash-start.service |   11 +++++++++++
- package/psplash/psplash.mk            |   14 ++++++++++++++
- 3 files changed, 36 insertions(+), 0 deletions(-)
+Copy/paste error: qt5script -> qt5webkit-examples
 
-diff --git a/package/psplash/psplash-quit.service b/package/psplash/psplash-quit.service
-new file mode 100644
-index 0000000..14bd499
---- /dev/null
-+++ b/package/psplash/psplash-quit.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Terminate Psplash Boot Screen
-+After=psplash-start.service
-+
-+[Service]
-+Type=oneshot
-+ExecStart=/usr/bin/psplash-write QUIT
-+TimeoutSec=20
-+
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/psplash/psplash-start.service b/package/psplash/psplash-start.service
-new file mode 100644
-index 0000000..2de3cfc
---- /dev/null
-+++ b/package/psplash/psplash-start.service
-@@ -0,0 +1,11 @@
-+[Unit]
-+Description=Starts Psplash Boot screen
-+Wants=systemd-vconsole-setup.service
-+After=systemd-vconsole-setup.service systemd-udev-trigger.service systemd-udevd.service
-+DefaultDependencies=no
-+
-+[Service]
-+ExecStart=/usr/bin/psplash -n
-+
-+[Install]
-+WantedBy=sysinit.target
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 83b6f79..b756266 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -9,4 +9,18 @@ PSPLASH_SITE = git://git.yoctoproject.org/psplash
- PSPLASH_LICENSE = GPLv2+
- PSPLASH_AUTORECONF = YES
- 
-+define PSPLASH_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/psplash/psplash-start.service \
-+		$(TARGET_DIR)/etc/systemd/system/psplash-start.service
-+	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
-+	ln -sf  ../psplash-start.service \
-+		 $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/
-+
-+	$(INSTALL) -D -m 644 package/psplash/psplash-quit.service \
-+		$(TARGET_DIR)/etc/systemd/system/psplash-quit.service
-+	$(INSTALL) -d $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf  ../psplash-quit.service \
-+		 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/
-+endef
-+
- $(eval $(autotools-package))
+> +else
+> +QT5WEBKITEXAMPLES_LICENSE = Commercial license
+> +QT5WEBKITEXAMPLES_REDISTRIBUTE = NO
+> +endif
+> +
+> +define QT5WEBKITEXAMPLES_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+> +endef
+> +
+> +define QT5WEBKITEXAMPLES_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QT5WEBKITEXAMPLES_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> +endef
+> +
+> +define QT5WEBKITEXAMPLES_INSTALL_TARGET_CMDS
+> +	cp -af $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
+> +    cp -af $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
+
+This line uses spaces instead of tab.
+
+> +endef
+> +
+> +$(eval $(generic-package))
