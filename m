@@ -1,56 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Jun 2014 19:17:04 +0200
-Subject: [Buildroot] [PATCH 1/2] manual: add prerequisites for graph
-	generation
-In-Reply-To: <1402679208-8304-1-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 13 Jun 2014 19:55:44 +0200
+Subject: [Buildroot] [PATCH 2/2] Makefile: test if "dot" exists in
+ graph-build and <pkg>-graph-depends
+In-Reply-To: <1402679208-8304-2-git-send-email-fabio.porcedda@gmail.com>
 References: <1402679208-8304-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140613171704.GE3496@free.fr>
+ <1402679208-8304-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140613195544.21c8a1c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Dear Fabio Porcedda,
 
-On 2014-06-13 19:06 +0200, Fabio Porcedda spake thusly:
-> Add "graphviz" and "python-matplotlib" as prerequisites for graph
-> generation.
-> 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Reported-by: Dallas Clement <dallas.a.clement@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  docs/manual/prerequisite.txt | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-> index c5d5442..ffe86dd 100644
-> --- a/docs/manual/prerequisite.txt
-> +++ b/docs/manual/prerequisite.txt
-> @@ -77,3 +77,7 @@ development context (further details: refer to xref:download-infra[]).
->  ** +w3m+
->  ** +python+ with the +argparse+ module (automatically present in 2.7+ and 3.2+)
->  ** +dblatex+ (required for the pdf manual only)
+On Fri, 13 Jun 2014 19:06:48 +0200, Fabio Porcedda wrote:
+
+> -graph-build: $(O)/build/build-time.log
+> +graph-prerequisites:
+> +	@dot -? >/dev/null 2>&1 || \
+> +		(echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1)
 > +
-> +* Graph generation tools:
-> +** +graphviz+
+> +graph-build: $(O)/build/build-time.log graph-prerequisites
 
-graphviz is only for the graph-depends.
+This is wrong: graph-build does not need the dot program, it's just a
+Python script that uses matplotlib.
 
-Regards,
-Yann E. MORIN.
+Best regards,
 
-> +** +python-matplotlib+ to use 'graph-build'
-> -- 
-> 2.0.0
-> 
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
