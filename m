@@ -1,42 +1,32 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 13 Jun 2014 17:35:57 +0200
-Subject: [Buildroot] [PATCH] systemd: needs kernel headers >= 3.10
-Message-ID: <1402673757-14223-1-git-send-email-eric.le.bihan.dev@free.fr>
+Date: Fri, 13 Jun 2014 17:42:43 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: add network unit file
+In-Reply-To: <20140611223447.1d5e7a65@free-electrons.com>
+References: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
+ <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
+ <20140611223447.1d5e7a65@free-electrons.com>
+Message-ID: <20140613154242.GB15237@rmm-p1267483>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Systemd needs a toolchain with kernel headers >= 3.10, as it needs
-IFLA_VLAN_PROTOCOL from linux/if_link.h.
+Thomas, Ivan,
 
-Fixes: http://autobuild.buildroot.net/results/33e/33e1447949d13bccc4076b69f902432e2131cc1c
+On Wed, Jun 11, 2014 at 10:34:47PM +0200, Thomas Petazzoni wrote:
+> Eric,
+>
+> As our systemd person, could you have a look at this patch, and give
+> your comments and/or Acked-by/Reviewed-by as appropriate?
+>
+I've tested the patch. It is OK, but I made some modifications:
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- system/Config.in |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+- rebase
+- the new network.service is not installed if systemd-networkd is selected, as
+  they conflict.
 
-diff --git a/system/Config.in b/system/Config.in
-index 53bca53..1be7e5d 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -96,12 +96,12 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PREFER_STATIC_LIB
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
- 	select BR2_PACKAGE_SYSTEMD
- 
--comment 'systemd needs an (e)glibc toolchain, headers >= 3.8'
-+comment 'systemd needs an (e)glibc toolchain, headers >= 3.10'
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC \
--		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8)
-+		&& BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10)
- 
- config BR2_INIT_NONE
- 	bool "None"
--- 
-1.7.10.4
+The updated version can be found at http://patchwork.ozlabs.org/patch/359561/.
+
+Best regards,
+ELB
