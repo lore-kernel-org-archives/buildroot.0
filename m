@@ -1,111 +1,78 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 13 Jun 2014 21:21:45 +0200
-Subject: [Buildroot] [PATCH] kernel headers: remove deprecated version 3.8
-Message-ID: <bf13a7c05006c4236c99.1402687305@localhost>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Jun 2014 22:01:51 +0200
+Subject: [Buildroot] [git commit] haserl: bump 0.9.x version
+Message-ID: <20140613200236.78B559CFBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kernel headers version 3.8.x has been deprecated since 2013.08 and thus can
-be removed in 2014.08.
-An automatic selection of 3.9.x headers is performed in the legacy menu.
-Existing automatic selections of 3.8.x headers are modified to select
-3.9.x.
+commit: http://git.buildroot.net/buildroot/commit/?id=f86ec0b67f147d23928091f27529c5fd47ef5f02
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As this patch removes the last occurrence of BR2_DEPRECATED_SINCE_2013_08,
-the symbol is removed too.
+Fixes a number of security issues and adds support for PUT/DELETE. From the
+release mail:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+<snip>
+Stephen R??ttger reported a number of security bugs, the most serious of
+which is a potential heap overflow in sliding_buffer.c (file uploads).
+There is a potential for remote code execution.
 
+At the same time, I've made an *experimental* change to allow RESTful
+API's possible:
+
+* PUT and DELETE methods are handled by the POST and GET handlers.
+* For mostly historical reasons, data on the URI is still called
+GET.<var>, and data in the body is named POST.<var>
+* If the Content-Type is not "application/x-www-form-urlencoded", Haserl
+won't try to urldecode the POST contents - it will just put the body in
+POST.body verbatim.
+</snip>
+
+The lua handling now uses pkg-config, so adjust the code to match.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in                            |   4 ----
- Config.in.legacy                     |  16 +++++++++++++---
- package/linux-headers/Config.in.host |   6 ------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/haserl/Config.in |    2 +-
+ package/haserl/haserl.mk |   12 ++++++++++--
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-diff -r 3ccc293b055d -r bf13a7c05006 Config.in
---- a/Config.in	Wed Jun 11 17:24:02 2014 +0200
-+++ b/Config.in	Fri Jun 13 21:19:33 2014 +0200
-@@ -280,10 +280,6 @@
+diff --git a/package/haserl/Config.in b/package/haserl/Config.in
+index bfe1df8..680e280 100644
+--- a/package/haserl/Config.in
++++ b/package/haserl/Config.in
+@@ -41,4 +41,4 @@ endif
+ config BR2_PACKAGE_HASERL_VERSION
+ 	string
+ 	default "0.8.0"		if BR2_PACKAGE_HASERL_VERSION_0_8_X
+-	default "0.9.30"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
++	default "0.9.33"	if BR2_PACKAGE_HASERL_VERSION_0_9_X
+diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
+index 56240c7..4b46f04 100644
+--- a/package/haserl/haserl.mk
++++ b/package/haserl/haserl.mk
+@@ -12,13 +12,21 @@ HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
+ endif
+ HASERL_LICENSE = GPLv2
+ HASERL_LICENSE_FILES = COPYING
++HASERL_DEPENDENCIES = host-pkgconf
  
- if BR2_DEPRECATED
- 
--config BR2_DEPRECATED_SINCE_2013_08
--	bool
--	default y
--
- config BR2_DEPRECATED_SINCE_2013_11
- 	bool
- 	default y
-diff -r 3ccc293b055d -r bf13a7c05006 Config.in.legacy
---- a/Config.in.legacy	Wed Jun 11 17:24:02 2014 +0200
-+++ b/Config.in.legacy	Fri Jun 13 21:19:33 2014 +0200
-@@ -101,6 +101,16 @@
- ###############################################################################
- comment "Legacy options removed in 2014.08"
- 
-+config BR2_KERNEL_HEADERS_3_8
-+	bool "kernel headers version 3.8.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_9
-+	select BR2_LEGACY
-+	help
-+	  Version 3.8.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.9.x of the headers have been
-+	  automatically selected in your configuration.
+ ifeq ($(BR2_PACKAGE_HASERL_WITH_LUA),y)
+-	HASERL_CONF_OPT += --with-lua=$(STAGING_DIR) \
+-		--with-lua-headers=$(STAGING_DIR)
++	HASERL_CONF_OPT += --with-lua
+ 	HASERL_DEPENDENCIES += lua host-lua
 +
- config BR2_PACKAGE_GETTEXT_TOOLS
- 	bool "support for gettext-tools on target has been removed"
- 	select BR2_LEGACY
-@@ -131,7 +141,7 @@
++# liblua uses dlopen when dynamically linked
++ifneq ($(BR2_PREFER_STATIC_LIB),y)
++	HASERL_CONF_ENV += LIBS="-ldl"
++endif
++
+ 	# lua2c is built for host, so needs to find host libs/headers
+ 	HASERL_MAKE_OPT += lua2c_LDFLAGS='$(HOST_CFLAGS) $(HOST_LDFLAGS)'
++else
++	HASERL_CONF_OPT += --without-lua
+ endif
  
- config BR2_KERNEL_HEADERS_3_6
- 	bool "kernel headers version 3.6.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_8
-+	select BR2_KERNEL_HEADERS_3_9
- 	select BR2_LEGACY
- 	help
- 	  Version 3.6.x of the Linux kernel headers have been deprecated
-@@ -141,7 +151,7 @@
- 
- config BR2_KERNEL_HEADERS_3_7
- 	bool "kernel headers version 3.7.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_8
-+	select BR2_KERNEL_HEADERS_3_9
- 	select BR2_LEGACY
- 	help
- 	  Version 3.7.x of the Linux kernel headers have been deprecated
-@@ -326,7 +336,7 @@
- 
- config BR2_KERNEL_HEADERS_3_5
- 	bool "kernel headers version 3.5.x are no longer supported"
--	select BR2_KERNEL_HEADERS_3_8
-+	select BR2_KERNEL_HEADERS_3_9
- 	select BR2_LEGACY
- 	help
- 	  Version 3.5.x of the Linux kernel headers have been deprecated
-diff -r 3ccc293b055d -r bf13a7c05006 package/linux-headers/Config.in.host
---- a/package/linux-headers/Config.in.host	Wed Jun 11 17:24:02 2014 +0200
-+++ b/package/linux-headers/Config.in.host	Fri Jun 13 21:19:33 2014 +0200
-@@ -26,11 +26,6 @@
- 		depends on !BR2_arc
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
- 
--	config BR2_KERNEL_HEADERS_3_8
--		bool "Linux 3.8.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2013_08 && !BR2_arc
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
--
- 	config BR2_KERNEL_HEADERS_3_9
- 		bool "Linux 3.9.x kernel headers"
- 		depends on BR2_DEPRECATED_SINCE_2013_11
-@@ -155,7 +150,6 @@
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.92"	if BR2_KERNEL_HEADERS_3_4
--	default "3.8.13"	if BR2_KERNEL_HEADERS_3_8
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
- 	default "3.10.42"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ define HASERL_REMOVE_EXAMPLES
