@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 13 Jun 2014 17:44:09 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: add network unit file
-In-Reply-To: <20140613154242.GB15237@rmm-p1267483>
-References: <CAPyrzo0q7Y3Tf1LOaCe4LK78a7sZrVdToLfnzp4Tc4kow=-nKA@mail.gmail.com>
- <1390874097-25597-1-git-send-email-vsergeev@kumunetworks.com>
- <20140611223447.1d5e7a65@free-electrons.com>
- <20140613154242.GB15237@rmm-p1267483>
-Message-ID: <20140613174409.351c8b0b@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Fri, 13 Jun 2014 17:50:34 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140613170726.4db5e1cf@free-electrons.com>
+References: <20140613063010.B26041011DE@stock.ovh.net>
+ <20140613111216.1fdae121@free-electrons.com>
+ <20140613145515.GA15237@rmm-p1267483>
+ <20140613170726.4db5e1cf@free-electrons.com>
+Message-ID: <20140613155033.GC15237@rmm-p1267483>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+On Fri, Jun 13, 2014 at 05:07:26PM +0200, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Fri, 13 Jun 2014 16:55:17 +0200, Eric Le Bihan wrote:
+>
+> > > Will be fixed by http://patchwork.ozlabs.org/patch/358913/.
+> > This patch will only fix http://autobuild.buildroot.net/results/4b00d517c17cfcd29359e63423f15ac5331096b2/.
+> >
+> > The error in http://autobuild.buildroot.net/results/33e1447949d13bccc4076b69f902432e2131cc1c/ is:
+> >
+> >   src/libsystemd/sd-rtnl/rtnl-types.c:70:10: error: 'IFLA_VLAN_PROTOCOL'
+> >   undeclared here (not in a function)
+> >            [IFLA_VLAN_PROTOCOL]    = { .type = NLA_U16 },
+> >
+> > IFLA_VLAN_PROTOCOL was introduced in Linux 3.10. I'll post a patch updating
+> > the kernel headers needs for systemd.
+>
+> Ah, yes, right. Crazy that kernel headers as recent as 3.10 are needed
+> to build systemd...
+Systemd clearly misses some #ifdef's in some places to keep decent
+build requirements...
 
-On Fri, 13 Jun 2014 17:42:43 +0200, Eric Le Bihan wrote:
-
-> I've tested the patch. It is OK, but I made some modifications:
-> 
-> - rebase
-> - the new network.service is not installed if systemd-networkd is selected, as
->   they conflict.
-> 
-> The updated version can be found at http://patchwork.ozlabs.org/patch/359561/.
-
-Thanks, I've marked Ivan's patch as superseded in patchwork.
-
-Thanks a lot for working on this!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards,
+ELB
