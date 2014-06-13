@@ -1,79 +1,190 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 13 Jun 2014 14:38:50 +0200
-Subject: [Buildroot] [git commit] simicsfs: new package
-Message-ID: <20140613124035.B0D5B99E72@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] systemd: fix AM_PATH_LIBGCRYPT not found
+Message-ID: <20140613124035.9E9D099E72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7e867725acf2f5aedca60985ee530d1530792f78
+commit: http://git.buildroot.net/buildroot/commit/?id=70e349930d48c542f301c93f342973633c804391
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: use http url as wget complains about certificate]
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This patch installs a copy of libgcrypt.m4 from the libgcrypt source tarball
+to systemd m4 directory.
+
+Libgcrypt uses a custom m4 macro and not pkg-config to check if the
+development files are available. Though libgcrypt support is optional in
+systemd, this macro should be available whenever autoreconf is used,
+otherwise the re-configuration will fail with:
+
+  configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
+
+The call to autoreconf is required, as it is needed by the patch which
+solves the `ln --relative` issue.
+
+As asking the user to install the development package of libgcrypt on
+the host machine or adding libgcrypt as a build dependency to systemd is
+not acceptable, the required file is added to the m4 directory.
+
+Fixes: http://autobuild.buildroot.net/results/1524d346fa17749e2ae62e063b9cfdd0de95c76a/
+Fixes: http://autobuild.buildroot.net/results/10bcd92437eaa27eb61f8281c93efcb53d555e35/
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in            |    1 +
- package/simicsfs/Config.in   |   11 +++++++++++
- package/simicsfs/simicsfs.mk |   21 +++++++++++++++++++++
- 3 files changed, 33 insertions(+), 0 deletions(-)
+ ...systemd-04-fix-am-path-libgcrypt-no-found.patch |  145 ++++++++++++++++++++
+ 1 files changed, 145 insertions(+), 0 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 35e088d..88705f8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -151,6 +151,7 @@ menu "Filesystem and flash utilities"
- 	source "package/mtools/Config.in"
- 	source "package/nfs-utils/Config.in"
- 	source "package/ntfs-3g/Config.in"
-+	source "package/simicsfs/Config.in"
- 	source "package/squashfs/Config.in"
- 	source "package/sshfs/Config.in"
- 	source "package/sunxi-tools/Config.in"
-diff --git a/package/simicsfs/Config.in b/package/simicsfs/Config.in
+diff --git a/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch b/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch
 new file mode 100644
-index 0000000..12b05c1
+index 0000000..2287ac5
 --- /dev/null
-+++ b/package/simicsfs/Config.in
-@@ -0,0 +1,11 @@
-+comment "simicsfs needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
++++ b/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch
+@@ -0,0 +1,145 @@
++Fix AM_PATH_LIBGCRYPT not found
 +
-+config BR2_PACKAGE_SIMICSFS
-+	bool "simicsfs"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  A kernel driver that provides access to a host computer's local
-+	  filesystem when the target is executing within a SIMICS simulation.
++This patch installs a copy of libgcrypt.m4 from the libgcrypt source tarball
++to systemd m4 directory.
 +
-+	  http://www.cs.sfu.ca/~fedorova/Tech/simics-guides-3.0.26/simics-user-guide-unix/topic33.html
-diff --git a/package/simicsfs/simicsfs.mk b/package/simicsfs/simicsfs.mk
-new file mode 100644
-index 0000000..425f000
---- /dev/null
-+++ b/package/simicsfs/simicsfs.mk
-@@ -0,0 +1,21 @@
-+###############################################################################
-+#
-+# simicsfs
-+#
-+###############################################################################
++Libgcrypt uses a custom m4 macro and not pkg-config to check if the
++development files are available. Though libgcrypt support is optional in
++systemd, this macro should be available whenever autoreconf is used, otherwise
++the re-configuration will fail with:
 +
-+SIMICSFS_VERSION = 1.17
-+SIMICSFS_SITE = http://download.simics.net/pub/
-+SIMICSFS_LICENSE = GPLv2+
-+SIMICSFS_LICENSE_FILES = hostfs.h
-+SIMICSFS_DEPENDENCIES = linux
++  configure.ac:616: warning: macro 'AM_PATH_LIBGCRYPT' not found in library
 +
-+define SIMICSFS_BUILD_CMDS
-+        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
-+endef
++As asking the user to install the development package of libgcrypt on the host
++machine or adding libgcrypt as a build dependency to systemd is not
++acceptable, the required file is added to the m4 directory.
 +
-+define SIMICSFS_INSTALL_TARGET_CMDS
-+        $(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) INSTALL_MOD_PATH=$(TARGET_DIR) modules_install
-+endef
-+
-+$(eval $(generic-package))
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Index: systemd-213/m4/libgcrypt.m4
++===================================================================
++--- /dev/null	1970-01-01 00:00:00.000000000 +0000
+++++ systemd-213/m4/libgcrypt.m4	2014-06-11 10:41:11.749305509 +0200
++@@ -0,0 +1,123 @@
+++dnl Autoconf macros for libgcrypt
+++dnl       Copyright (C) 2002, 2004 Free Software Foundation, Inc.
+++dnl
+++dnl This file is free software; as a special exception the author gives
+++dnl unlimited permission to copy and/or distribute it, with or without
+++dnl modifications, as long as this notice is preserved.
+++dnl
+++dnl This file is distributed in the hope that it will be useful, but
+++dnl WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
+++dnl implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+++
+++
+++dnl AM_PATH_LIBGCRYPT([MINIMUM-VERSION,
+++dnl                   [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND ]]])
+++dnl Test for libgcrypt and define LIBGCRYPT_CFLAGS and LIBGCRYPT_LIBS.
+++dnl MINIMUN-VERSION is a string with the version number optionalliy prefixed
+++dnl with the API version to also check the API compatibility. Example:
+++dnl a MINIMUN-VERSION of 1:1.2.5 won't pass the test unless the installed
+++dnl version of libgcrypt is at least 1.2.5 *and* the API number is 1.  Using
+++dnl this features allows to prevent build against newer versions of libgcrypt
+++dnl with a changed API.
+++dnl
+++AC_DEFUN([AM_PATH_LIBGCRYPT],
+++[ AC_ARG_WITH(libgcrypt-prefix,
+++            AC_HELP_STRING([--with-libgcrypt-prefix=PFX],
+++                           [prefix where LIBGCRYPT is installed (optional)]),
+++     libgcrypt_config_prefix="$withval", libgcrypt_config_prefix="")
+++  if test x$libgcrypt_config_prefix != x ; then
+++     if test x${LIBGCRYPT_CONFIG+set} != xset ; then
+++        LIBGCRYPT_CONFIG=$libgcrypt_config_prefix/bin/libgcrypt-config
+++     fi
+++  fi
+++
+++  AC_PATH_TOOL(LIBGCRYPT_CONFIG, libgcrypt-config, no)
+++  tmp=ifelse([$1], ,1:1.2.0,$1)
+++  if echo "$tmp" | grep ':' >/dev/null 2>/dev/null ; then
+++     req_libgcrypt_api=`echo "$tmp"     | sed 's/\(.*\):\(.*\)/\1/'`
+++     min_libgcrypt_version=`echo "$tmp" | sed 's/\(.*\):\(.*\)/\2/'`
+++  else
+++     req_libgcrypt_api=0
+++     min_libgcrypt_version="$tmp"
+++  fi
+++
+++  AC_MSG_CHECKING(for LIBGCRYPT - version >= $min_libgcrypt_version)
+++  ok=no
+++  if test "$LIBGCRYPT_CONFIG" != "no" ; then
+++    req_major=`echo $min_libgcrypt_version | \
+++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\1/'`
+++    req_minor=`echo $min_libgcrypt_version | \
+++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\2/'`
+++    req_micro=`echo $min_libgcrypt_version | \
+++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)/\3/'`
+++    libgcrypt_config_version=`$LIBGCRYPT_CONFIG --version`
+++    major=`echo $libgcrypt_config_version | \
+++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\1/'`
+++    minor=`echo $libgcrypt_config_version | \
+++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
+++    micro=`echo $libgcrypt_config_version | \
+++               sed 's/\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\).*/\3/'`
+++    if test "$major" -gt "$req_major"; then
+++        ok=yes
+++    else
+++        if test "$major" -eq "$req_major"; then
+++            if test "$minor" -gt "$req_minor"; then
+++               ok=yes
+++            else
+++               if test "$minor" -eq "$req_minor"; then
+++                   if test "$micro" -ge "$req_micro"; then
+++                     ok=yes
+++                   fi
+++               fi
+++            fi
+++        fi
+++    fi
+++  fi
+++  if test $ok = yes; then
+++    AC_MSG_RESULT([yes ($libgcrypt_config_version)])
+++  else
+++    AC_MSG_RESULT(no)
+++  fi
+++  if test $ok = yes; then
+++     # If we have a recent libgcrypt, we should also check that the
+++     # API is compatible
+++     if test "$req_libgcrypt_api" -gt 0 ; then
+++        tmp=`$LIBGCRYPT_CONFIG --api-version 2>/dev/null || echo 0`
+++        if test "$tmp" -gt 0 ; then
+++           AC_MSG_CHECKING([LIBGCRYPT API version])
+++           if test "$req_libgcrypt_api" -eq "$tmp" ; then
+++             AC_MSG_RESULT([okay])
+++           else
+++             ok=no
+++             AC_MSG_RESULT([does not match. want=$req_libgcrypt_api got=$tmp])
+++           fi
+++        fi
+++     fi
+++  fi
+++  if test $ok = yes; then
+++    LIBGCRYPT_CFLAGS=`$LIBGCRYPT_CONFIG --cflags`
+++    LIBGCRYPT_LIBS=`$LIBGCRYPT_CONFIG --libs`
+++    ifelse([$2], , :, [$2])
+++    if test x"$host" != x ; then
+++      libgcrypt_config_host=`$LIBGCRYPT_CONFIG --host 2>/dev/null || echo none`
+++      if test x"$libgcrypt_config_host" != xnone ; then
+++        if test x"$libgcrypt_config_host" != x"$host" ; then
+++  AC_MSG_WARN([[
+++***
+++*** The config script $LIBGCRYPT_CONFIG was
+++*** built for $libgcrypt_config_host and thus may not match the
+++*** used host $host.
+++*** You may want to use the configure option --with-libgcrypt-prefix
+++*** to specify a matching config script.
+++***]])
+++        fi
+++      fi
+++    fi
+++  else
+++    LIBGCRYPT_CFLAGS=""
+++    LIBGCRYPT_LIBS=""
+++    ifelse([$3], , :, [$3])
+++  fi
+++  AC_SUBST(LIBGCRYPT_CFLAGS)
+++  AC_SUBST(LIBGCRYPT_LIBS)
+++])
