@@ -1,33 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 10:02:42 +0200
-Subject: [Buildroot] [PATCH v2] gcc 4.8.x does not compile a working
- kernel for sparc
-In-Reply-To: <20140614071542.GY4197@waldemar-brodkorb.de>
-References: <20140613170047.GA10615@waldemar-brodkorb.de>
- <87lht0cynw.fsf@dell.be.48ers.dk>
- <20140614071542.GY4197@waldemar-brodkorb.de>
-Message-ID: <20140614100242.24cfa09e@free-electrons.com>
+Date: Sat, 14 Jun 2014 10:16:06 +0200
+Subject: [Buildroot] [PATCH] dialog: bump to version 1.2-20140219
+In-Reply-To: <1402668939-1372-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1402668939-1372-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140614101606.63faccd6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Gustavo Zacarias,
 
-On Sat, 14 Jun 2014 09:15:42 +0200, Waldemar Brodkorb wrote:
+On Fri, 13 Jun 2014 11:15:39 -0300, Gustavo Zacarias wrote:
+> Add a homepage.
+> Ditch custom install target commands, they're not needed.
 
-> I have no idea. I asked about the price of a leon3 evaluation board
-> in the past, but 1000 euro was to high for me. The simulators are
-> non-free, so I could not try these. Do you have hardware or a
-> license for leon simulators? Who has added support for these
-> systems?
+Apparently, this update is causing some build issues, see
+http://autobuild.buildroot.org/results/411/411f6171e972eab4486143dedbfd078136886ab0/build-end.log.
+There are paths to the host library used when linking a target
+application:
 
-You should talk with Konrad Eisele <konrad@gaisler.com>, who added the
-Leon Sparc support in Buildroot, and sent a couple of patches around
-this topic in the past.
+/scratch/peko/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc -o dialog dialog.o -L. -ldialog -Wl,-rpath,/scratch/peko/host/usr/lib   -L/scratch/peko/host/usr/lib -Wl,-rpath,/scratch/peko/host/usr/lib -Wl,-rpath,/scratch/peko/host/lib -lncurses -lm -lncurses 
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
