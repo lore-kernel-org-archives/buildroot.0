@@ -1,24 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 14 Jun 2014 19:43:43 +0000 (UTC)
-Subject: [Buildroot] [Bug 5750] Doing a Buildroot build from /usr doesn't
-	work
-In-Reply-To: <bug-5750-163@https.bugs.busybox.net/>
-References: <bug-5750-163@https.bugs.busybox.net/>
-Message-ID: <20140614194343.41CB29CFDF@busybox.osuosl.org>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 14 Jun 2014 21:50:19 +0200
+Subject: [Buildroot] Help about gstreamer h264 in buildroot
+In-Reply-To: <20140614141451.6780163c@free-electrons.com>
+References: <539C13BA.5000106@gmail.com>
+ <20140614141451.6780163c@free-electrons.com>
+Message-ID: <539CA77B.1050000@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5750
+Il 14/06/2014 14:14, Thomas Petazzoni ha scritto:
+> I tried building your configuration, and here it fails with a 
+> different issue:
+>
+> .obj/qeglfshooks_pi.o: In function 
+> `QEglFSPiHooks::destroyNativeWindow(void*)': 
+> qeglfshooks_pi.cpp:(.text+0x2c): undefined reference to 
+> `vc_dispmanx_update_start' qeglfshooks_pi.cpp:(.text+0x38): undefined 
+> reference to 
 
---- Comment #11 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-14 19:43:43 UTC ---
-Created attachment 5450
-  --> https://bugs.busybox.net/attachment.cgi?id=5450
-alternative patch
+How is it possible?
+Shouldn't the same configuration lead to the same output?
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+
+> That's an issue with the RPi OpenGL implementation, I think we have 
+> had a couple of similar failures in the autobuilders. Maxime, Yann, 
+> any suggestion? Thomas 
+
+
+Well, given that this currently doesn't work in buildroot, is there 
+another way to play an mp4/h264 video from Qt5?
+
+Thanks!
+Marco
