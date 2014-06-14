@@ -1,44 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:10:08 +0200
-Subject: [Buildroot] [git commit] pkg-virtual: simplify definition of
-	FOO_VERSION to 'virtual'
-Message-ID: <20140614171145.A54C39CB10@busybox.osuosl.org>
+Date: Sat, 14 Jun 2014 19:10:13 +0200
+Subject: [Buildroot] [git commit] toolchain/toolchain-buildroot: migrate to
+	virtual package infrastructure
+Message-ID: <20140614171145.AAD859CFE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f6fc9abd10ea00df53dcaea0083063a1e3433150
+commit: http://git.buildroot.net/buildroot/commit/?id=9a8ec9195c4f035dfb315267c2da92cc4b6e96a3
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As mentioned in the e-mail accompanying the introduction of the pkg-virtual
-infrastructure [1], the definition of FOO_VERSION is 'strange'.
+This patch migrates the toolchain and toolchain-buildroot packages to the
+virtual package infrastructure, causing the log messages to change from:
 
-After the cleanup of single/double dollar signs in inner-generic-package,
-the special construction in pkg-virtual is no longer needed and can be
-simplified.
+>>> toolchain undefined Downloading
+>>> toolchain undefined Extracting
+...
+
+to
+
+>>> toolchain virtual Downloading
+>>> toolchain virtual Extracting
+...
+
+and similar for 'toolchain-buildroot', simply because it looks nicer.
+
+At the same time, the directory names also become toolchain-virtual,
+toolchain-buildroot-virtual instead of the corresponding 'undefined'
+variants.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-[1] http://lists.busybox.net/pipermail/buildroot/2014-April/093670.html
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-virtual.mk |    3 +--
- 1 files changed, 1 insertions(+), 2 deletions(-)
+ .../toolchain-buildroot/toolchain-buildroot.mk     |    4 +---
+ toolchain/toolchain/toolchain.mk                   |    4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 56e2d04..f5d7567 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -45,8 +45,7 @@ endif
- $(2)_SOURCE =
+diff --git a/toolchain/toolchain-buildroot/toolchain-buildroot.mk b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+index 853baf8..b30cc33 100644
+--- a/toolchain/toolchain-buildroot/toolchain-buildroot.mk
++++ b/toolchain/toolchain-buildroot/toolchain-buildroot.mk
+@@ -4,8 +4,6 @@
+ #
+ ################################################################################
  
- # Fake a version string, so it looks nicer in the build log
--$(3)_VERSION = virtual
--HOST_$(3)_VERSION = virtual
-+$(2)_VERSION = virtual
+-TOOLCHAIN_BUILDROOT_SOURCE =
+-
+ BR_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
  
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES
+ # Triggering the build of the host-gcc-final will automatically do the
+@@ -16,4 +14,4 @@ TOOLCHAIN_BUILDROOT_DEPENDENCIES = host-gcc-final
+ 
+ TOOLCHAIN_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+-$(eval $(generic-package))
++$(eval $(virtual-package))
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index 7241fe7..c22713b 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -4,8 +4,6 @@
+ #
+ ################################################################################
+ 
+-TOOLCHAIN_SOURCE =
+-
+ ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+ TOOLCHAIN_DEPENDENCIES += toolchain-buildroot
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+@@ -14,6 +12,6 @@ endif
+ 
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+-$(eval $(generic-package))
++$(eval $(virtual-package))
+ 
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
