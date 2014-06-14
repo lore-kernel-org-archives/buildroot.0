@@ -1,31 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:08:48 +0200
-Subject: [Buildroot] [git commit] tclap: fix syntax error in Config.in
-Message-ID: <20140614170925.676CF9AD59@busybox.osuosl.org>
+Date: Sat, 14 Jun 2014 19:10:08 +0200
+Subject: [Buildroot] [git commit] pkg-virtual: simplify definition of
+	FOO_VERSION to 'virtual'
+Message-ID: <20140614171145.A54C39CB10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a71f1875b44fff0d4cb89d9009dca0512784683c
+commit: http://git.buildroot.net/buildroot/commit/?id=f6fc9abd10ea00df53dcaea0083063a1e3433150
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+As mentioned in the e-mail accompanying the introduction of the pkg-virtual
+infrastructure [1], the definition of FOO_VERSION is 'strange'.
+
+After the cleanup of single/double dollar signs in inner-generic-package,
+the special construction in pkg-virtual is no longer needed and can be
+simplified.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+[1] http://lists.busybox.net/pipermail/buildroot/2014-April/093670.html
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tclap/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/pkg-virtual.mk |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
 
-diff --git a/package/tclap/Config.in b/package/tclap/Config.in
-index 8c6296f..667117d 100644
---- a/package/tclap/Config.in
-+++ b/package/tclap/Config.in
-@@ -3,7 +3,7 @@ comment "tclap needs a toolchain w/ C++"
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 56e2d04..f5d7567 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -45,8 +45,7 @@ endif
+ $(2)_SOURCE =
  
- config BR2_PACKAGE_TCLAP
- 	bool "tclap"
--	depends BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  This is a small, flexible library that provides a simple interface
- 	  for defining and accessing command line arguments. It was initially
+ # Fake a version string, so it looks nicer in the build log
+-$(3)_VERSION = virtual
+-HOST_$(3)_VERSION = virtual
++$(2)_VERSION = virtual
+ 
+ # This must be repeated from inner-generic-package, otherwise we get an empty
+ # _DEPENDENCIES
