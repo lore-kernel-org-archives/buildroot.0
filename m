@@ -1,41 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 10:01:07 +0200
-Subject: [Buildroot] [PATCH 0/20 v2 RFC] Introduce libudev (branch
- yem/libudev)
-In-Reply-To: <cover.1402699915.git.yann.morin.1998@free.fr>
-References: <cover.1402699915.git.yann.morin.1998@free.fr>
-Message-ID: <20140614100107.20b3c3be@free-electrons.com>
+Date: Sat, 14 Jun 2014 10:02:42 +0200
+Subject: [Buildroot] [PATCH v2] gcc 4.8.x does not compile a working
+ kernel for sparc
+In-Reply-To: <20140614071542.GY4197@waldemar-brodkorb.de>
+References: <20140613170047.GA10615@waldemar-brodkorb.de>
+ <87lht0cynw.fsf@dell.be.48ers.dk>
+ <20140614071542.GY4197@waldemar-brodkorb.de>
+Message-ID: <20140614100242.24cfa09e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Bernd,
+Dear Waldemar Brodkorb,
 
-On Sat, 14 Jun 2014 01:02:39 +0200, Yann E. MORIN wrote:
+On Sat, 14 Jun 2014 09:15:42 +0200, Waldemar Brodkorb wrote:
 
-> Big fat warning: this is only an RFC for now!
-> 
-> This series introduces the possibility to just build and install libudev,
-> without requiring that the /dev management be handled by eudev or systemd.
-> 
-> A lot of packages that have a dependency on udev, in fact only require a
-> libudev, not anudev daemon. That's the case for e.g. libinput, libcec,
-> mesa3d...
+> I have no idea. I asked about the price of a leon3 evaluation board
+> in the past, but 1000 euro was to high for me. The simulators are
+> non-free, so I could not try these. Do you have hardware or a
+> license for leon simulators? Who has added support for these
+> systems?
 
-To be honest, I am far from being a udev expert, but I have a question
-about the rationale behind a libudev-only configuration.
-
-I thought that udev was a daemon running in the background, receiving
-events from the kernel through a netlink socket when devices
-appear/disappear, and then keeping a sort of "database" of available
-devices. On top of that, libudev was a client library that allows
-application to talk to the udev daemon to query which devices are
-available/not available and their characteristics. With this picture in
-mind, I fail to see how libudev can be useful with the udev daemon. So
-surely, my picture of how udev works is broken, but I'd be interested
-in hearing more on how libudev without the udev daemon can be useful.
+You should talk with Konrad Eisele <konrad@gaisler.com>, who added the
+Leon Sparc support in Buildroot, and sent a couple of patches around
+this topic in the past.
 
 Thanks!
 
