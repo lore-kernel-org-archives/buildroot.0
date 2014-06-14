@@ -1,30 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:02:12 +0200
-Subject: [Buildroot] [git commit] fetchmail: Update project URL after
-	shutdown of berlios.de
-Message-ID: <20140614170218.E1AF49CFE5@busybox.osuosl.org>
+Date: Sat, 14 Jun 2014 19:03:07 +0200
+Subject: [Buildroot] [PATCH 1/1] fetchmail: Update project URL after
+ shutdown of berlios.de
+In-Reply-To: <XnsA3497189B6274berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1402065903-2779-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140607122430.25898775@free-electrons.com>
+ <XnsA3497189B6274berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140614190307.1cfffee1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f90eaf866b56f4230c28e794ac5bc02f9ecff596
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fetchmail/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Wed, 11 Jun 2014 11:09:40 +0200, Bernd Kuhls wrote:
 
-diff --git a/package/fetchmail/Config.in b/package/fetchmail/Config.in
-index 3419821..1eb0359 100644
---- a/package/fetchmail/Config.in
-+++ b/package/fetchmail/Config.in
-@@ -9,4 +9,4 @@ config BR2_PACKAGE_FETCHMAIL
- 	  Fetchmail - the mail-retrieval daemon
- 	  Client daemon to move mail from POP and IMAP to your local computer
- 
--	  http://sourceforge.net/projects/fetchmail/
-+	  http://www.fetchmail.info/
+> originally the project was hosted on berlios.de. Due to its closure I 
+> mentioned sf.net as project page for the time being until the fetchmail 
+> project moved its official site[1] to a new location. This happened 
+> meanwhile, therefore the patch ;)
+
+Ok, thanks, applied. As usual, your commit logs are often too short and
+do not give enough context/details. It would be nice to make them a
+little bit more verbose.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
