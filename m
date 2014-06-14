@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:54:53 +0200
-Subject: [Buildroot] [PATCH v3 1/2] infra: Add generic check_prog_host
- function
-In-Reply-To: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Sat, 14 Jun 2014 19:55:56 +0200
+Subject: [Buildroot] [PATCH v3 2/2] classpath: Use generic check for
+ host program
+In-Reply-To: <1399157144-4112-2-git-send-email-maxime.hadjinlian@gmail.com>
 References: <1399157144-4112-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140614195453.585cd58f@free-electrons.com>
+ <1399157144-4112-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140614195556.0044c8dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,21 @@ To: buildroot@busybox.net
 
 Dear Maxime Hadjinlian,
 
-On Sun,  4 May 2014 00:45:43 +0200, Maxime Hadjinlian wrote:
-> Avoid copy/pasting the same block of code to check if a program is
-> available on the host machine.
+On Sun,  4 May 2014 00:45:44 +0200, Maxime Hadjinlian wrote:
+> Remove the specific check that was done in dependencies.sh to use the
+> generic one that were introduced by the previous patch.
+> 
+> Also, introduce, BR2_NEEDS_HOST_JAVAC and BR2_NEEDS_HOST_JAR as it is
+> needed by classpath.
 > 
 > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 > ---
 > Changes v2 -> v3:
->     - None
+>     - Fix commit log
 > Changes v1 -> v2:
->     - Remove the introduction of BR2_NEEDS_HOST_JAVAC &
->       BR2_NEEDS_HOST_JAR to add them in the classpath patch. (Thomas De
->       Schampheleire)
+>     - Add the introduction of BR2_NEEDS_HOST_JAVAC & BR2_NEEDS_HOST_JAR
+>       in this patch instead of the previous one.
 
 Applied, thanks.
 
