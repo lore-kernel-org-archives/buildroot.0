@@ -1,23 +1,67 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 14 Jun 2014 22:09:30 +0200
-Subject: [Buildroot] Patchwork cleanup #10: triaging proposal
-In-Reply-To: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
-References: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
-Message-ID: <f6f9d02d-6380-44bb-bc4f-58912a0f1f8b@email.android.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Sat, 14 Jun 2014 22:57:47 +0200
+Subject: [Buildroot] [PATCH 1/1] libtirpc : always include svc_auth_none
+Message-ID: <1402779467-13505-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> schreef:
-(...)
->
->qemu: add to host utilities menu
->Frank Hunleth <fhunleth@troodon-software.com>
->http://patchwork.ozlabs.org/patch/299014
->
->A accept
+This function is needed in rpcbind >= 0.2.1
+without this patch the linking of rpcbind > 0.2.1 will fail.
+(based on http://www.spinics.net/lists/linux-nfs/msg27277.html )
 
-Irc feedback from Thomas P: if we apply this patch
- then we should also apply http://patchwork.ozlabs.org/patch/319108/
+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+---
+ ...btirpc-0011-always-include-svc_auth_none.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch
+
+diff --git a/package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch b/package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch
+new file mode 100644
+index 0000000..66c660c
+--- /dev/null
++++ b/package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch
+@@ -0,0 +1,39 @@
++From 02c9f3898e4189bb0ec817d492b36da6de31abf8 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@skynet.be>
++Date: Sat, 14 Jun 2014 22:02:59 +0200
++Subject: [PATCH 1/1] always include svc_auth_none
++
++(needed by rpcbind >=0.2.1 )
++
++Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
++---
++ src/Makefile.am | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index bd276cf..a6313b7 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -48,16 +48,15 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
++         getrpcport.c mt_misc.c pmap_clnt.c pmap_getmaps.c pmap_getport.c \
++         pmap_prot.c pmap_prot2.c pmap_rmt.c rpc_prot.c rpc_commondata.c \
++         rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
++-        rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_generic.c \
++-        svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c
+++        rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
+++        svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c
++ 
++ ## XDR
++ libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c xdr_mem.c xdr_reference.c xdr_stdio.c
++ 
++ ## Secure-RPC
++ if GSS
++-    libtirpc_la_SOURCES += auth_gss.c authgss_prot.c svc_auth_gss.c \
++-		svc_auth_none.c
+++    libtirpc_la_SOURCES += auth_gss.c authgss_prot.c svc_auth_gss.c
++     libtirpc_la_LDFLAGS += $(GSSGLUE_LIBS)
++     libtirpc_la_CFLAGS = -DHAVE_RPCSEC_GSS $(GSSGLUE_CFLAGS)
++ endif
++-- 
++2.0.0
++
+-- 
+2.0.0
