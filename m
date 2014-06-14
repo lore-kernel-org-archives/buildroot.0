@@ -1,53 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Jun 2014 05:52:31 +0200
-Subject: [Buildroot] libcec needs to be patched to provide a correct
-	libcec.pc
-References: <20140613212754.GB16169@free.fr>
-Message-ID: <XnsA34C3BC43515berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 14 Jun 2014 06:49:15 +0200
+Subject: [Buildroot] [PATCH] kernel headers: remove deprecated version
+	3.8
+In-Reply-To: <8738f8eenn.fsf@dell.be.48ers.dk>
+References: <bf13a7c05006c4236c99.1402687305@localhost>
+ <8738f8eenn.fsf@dell.be.48ers.dk>
+Message-ID: <2c99e7d1-68f6-4ef2-a425-e80024e472ae@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Peter Korsgaard <jacmet@uclibc.org> schreef:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+>
+> > Kernel headers version 3.8.x has been deprecated since 2013.08 and thus can
+> > be removed in 2014.08.
+> > An automatic selection of 3.9.x headers is performed in the legacy menu.
+> > Existing automatic selections of 3.8.x headers are modified to select
+> > 3.9.x.
+>
+> > As this patch removes the last occurrence of BR2_DEPRECATED_SINCE_2013_08,
+> > the symbol is removed too.
+>
+> > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+>Committed, thanks.
+>
+>It didn't apply to HEAD (because of the version bumps of last
+>wednesday), so I had to fix up the patch manually.
+>
+>Please consider rebasing your patches before submitting.
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20140613212754.GB16169 at free.fr:
+Sorry, I usually do but seems I forgot it this time...
 
-> Can you elaborate a bit on why and how we should patch libcec.pc,
-> please?
-
-when libcec finds libudev during configure 
-output/staging/usr/lib/pkgconfig/libcec.pc will contain
-
-Requires:  udev
-
-When xbmc configure searches for libcec it finds this requirement and tries 
-to find udev.pc, which fails when only libudev is present:
-
-checking for UDEV... yes
-configure: == libusb disabled. ==
-checking for CEC... no
-configure: error: == libcec disabled. CEC adapter support will not be 
-available. ==
-
-xbmc/config.log shows:
-
-configure:29084: $PKG_CONFIG --exists --print-errors "libcec >= 2.1.0"
-Package udev was not found in the pkg-config search path.
-Perhaps you should add the directory containing `udev.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'udev' found
-
-So we need to patch libcec/configure.ac in line 237 from 
-
-REQUIRES="$REQUIRES udev"
-
-to
-
-REQUIRES="$REQUIRES libudev"
-
-to make xbmc happy.
-
-Regards, Bernd
+Thanks,
+Thomas
