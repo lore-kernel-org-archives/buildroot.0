@@ -1,50 +1,49 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sat, 14 Jun 2014 11:19:54 +0200
-Subject: [Buildroot] Help about gstreamer h264 in buildroot
-Message-ID: <539C13BA.5000106@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 14 Jun 2014 12:05:21 +0200
+Subject: [Buildroot] [PATCH 0/20 v2 RFC] Introduce libudev (branch
+ yem/libudev)
+In-Reply-To: <20140614100107.20b3c3be@free-electrons.com>
+References: <cover.1402699915.git.yann.morin.1998@free.fr>
+ <20140614100107.20b3c3be@free-electrons.com>
+Message-ID: <20140614100521.GA3503@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I'm trying to play mp4 h264 video files on a RPi.
-Attached there is the .config file.
-When I try to play such a file I get this error:
+Thomas, All,
 
-Warning: "No decoder available for type 'video/x-h264, 
-stream-format=(string)avc, alignment=(string)au, level=(string)4, 
-profile=(string)main, 
-codec_data=(buffer)014d4028ffe10016274d4028a9180f0044fcb8035010101b6c2b5ef7c04001000428de09c8, 
-width=(int)1920, height=(int)1080, framerate=(fraction)25/1, 
-pixel-aspect-ratio=(fraction)1/1, parsed=(boolean)true'."
-Error: "Your GStreamer installation is missing a plug-in."
+On 2014-06-14 10:01 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 14 Jun 2014 01:02:39 +0200, Yann E. MORIN wrote:
+> 
+> > Big fat warning: this is only an RFC for now!
+> > 
+> > This series introduces the possibility to just build and install libudev,
+> > without requiring that the /dev management be handled by eudev or systemd.
+> > 
+> > A lot of packages that have a dependency on udev, in fact only require a
+> > libudev, not anudev daemon. That's the case for e.g. libinput, libcec,
+> > mesa3d...
+> 
+> To be honest, I am far from being a udev expert, but I have a question
+> about the rationale behind a libudev-only configuration.
 
-Anyway I selected (and checked with gst-inspect) the x264parse plugin 
-(from bad- ones).
-After a search on the web it seems I need also the gst-ffmpeg but this 
-requires libavcodec which cannot compile:
+It is my understanding that libudev is not used to talk to a udev
+daemon, but is used to present a view of sysfs, instead of leaving
+all application reinvent their own walking of /sys, and libudev also
+provides monitoring of devices:
+    http://www.signal11.us/oss/udev/
 
-libavcodec/arm/ac3dsp_armv6.S: Assembler messages:
-libavcodec/arm/ac3dsp_armv6.S:40: Error: selected processor does not 
-support ARM mode `movw r8,#0x1fe0'
+Now, how libudev and a udev daemon play together, I have no idea. ;-)
 
+Regards,
+Yann E. MORIN.
 
-I was working on a 2014.05-git-00366-gba25b12-dirty version.
-I tried on a newer one (2014.08-git-00302-g712414c) but there is the 
-same error.
-
-What am I missing?
-
-Thanks!
-Marco
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/xml
-Size: 53179 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140614/6604f687/attachment.wsdl>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
