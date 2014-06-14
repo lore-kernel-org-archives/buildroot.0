@@ -1,60 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:10:01 +0200
-Subject: [Buildroot] [git commit] infra: add comment describing
-	single/double dollar-sign rules
-Message-ID: <20140614171145.9F17399EC1@busybox.osuosl.org>
+Date: Sat, 14 Jun 2014 19:10:18 +0200
+Subject: [Buildroot] [git commit] makedevs: change version from 'undefined'
+	to 'buildroot-$(BR2_VERSION)'
+Message-ID: <20140614171145.B1CD69CFE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7742d073a434b07a72cdef5bf0eb81572e6c3a8c
+commit: http://git.buildroot.net/buildroot/commit/?id=ad406f612744151834c738183162ce557b75e41e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As the rules with respect to variable and function references and the need
-for single or double dollar signs are not trivial, add a comment in
-pkg-generic.mk describing them.
+The sources of the makedevs package are shipped with Buildroot, rather than
+downloaded from an external location. As a result, no explicit version is
+defined, causing build messages and build directory to show 'undefined' as
+version.
+
+This patch sets the version for makedevs to 'buildroot-$(BR2_VERSION), which
+would for example expand to 'buildroot-2014.05'.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-generic.mk |   23 +++++++++++++++++++++++
- 1 files changed, 23 insertions(+), 0 deletions(-)
+ package/makedevs/makedevs.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3821d33..457d873 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -269,6 +269,29 @@ endef
- #  argument 3 is the uppercase package name, without the HOST_ prefix
- #             for host packages
- #  argument 4 is the type (target or host)
-+#
-+# Note about variable and function references: inside all blocks that are
-+# evaluated with $(eval), which includes all 'inner-xxx-package' blocks,
-+# specific rules apply with respect to variable and function references.
-+# - Numbered variables (parameters to the block) can be referenced with a single
-+#   dollar sign: $(1), $(2), $(3), etc.
-+# - pkgdir and pkgname should be referenced with a single dollar sign too. These
-+#   functions rely on 'the most recently parsed makefile' which is supposed to
-+#   be the package .mk file. If we defer the evaluation of these functions using
-+#   double dollar signs, then they may be evaluated too late, when other
-+#   makefiles have already been parsed. One specific case is when $$(pkgdir) is
-+#   assigned to a variable using deferred evaluation with '=' and this variable
-+#   is used in a target rule outside the eval'ed inner block. In this case, the
-+#   pkgdir will be that of the last makefile parsed by buildroot, which is not
-+#   the expected value. This mechanism is for example used for the TARGET_PATCH
-+#   rule.
-+# - All other variables should be referenced with a double dollar sign:
-+#   $$(TARGET_DIR), $$($(2)_VERSION), etc. Also all make functions should be
-+#   referenced with a double dollar sign: $$(subst), $$(call), $$(filter-out),
-+#   etc. This rule ensures that these variables and functions are only expanded
-+#   during the $(eval) step, and not earlier. Otherwise, unintuitive and
-+#   undesired behavior occurs with respect to these variables and functions.
-+#
- ################################################################################
+diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
+index ff91c4a..7210dc6 100644
+--- a/package/makedevs/makedevs.mk
++++ b/package/makedevs/makedevs.mk
+@@ -8,6 +8,8 @@
+ MAKEDEVS_SOURCE =
+ HOST_MAKEDEVS_SOURCE =
  
- define inner-generic-package
++MAKEDEVS_VERSION = buildroot-$(BR2_VERSION)
++
+ define MAKEDEVS_BUILD_CMDS
+ 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
+ 		package/makedevs/makedevs.c -o $(@D)/makedevs
