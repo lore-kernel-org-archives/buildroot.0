@@ -1,35 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:03:07 +0200
-Subject: [Buildroot] [PATCH 1/1] fetchmail: Update project URL after
- shutdown of berlios.de
-In-Reply-To: <XnsA3497189B6274berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1402065903-2779-1-git-send-email-bernd.kuhls@t-online.de>
- <20140607122430.25898775@free-electrons.com>
- <XnsA3497189B6274berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20140614190307.1cfffee1@free-electrons.com>
+Date: Sat, 14 Jun 2014 19:04:50 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add CodeSourcery
+	PowerPC 2012.03
+Message-ID: <20140614170507.DAC829CFE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=20d4ba91c5ed42b07c1e82b2095c0cc312deb0c7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Jun 2014 11:09:40 +0200, Bernd Kuhls wrote:
+However, this toolchain is only usable for e500v2 with the SPE ABI.
 
-> originally the project was hosted on berlios.de. Due to its closure I 
-> mentioned sf.net as project page for the time being until the fetchmail 
-> project moved its official site[1] to a new location. This happened 
-> meanwhile, therefore the patch ;)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+---
+ toolchain/toolchain-external/Config.in             |   19 +++++++++++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |    3 +++
+ 2 files changed, 22 insertions(+), 0 deletions(-)
 
-Ok, thanks, applied. As usual, your commit logs are often too short and
-do not give enough context/details. It would be nice to make them a
-little bit more verbose.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 6f3c75e..d369f9c 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -416,6 +416,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	  from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
+ 	  glibc 2.17, gdb 7.4.50 and kernel headers 3.7.0.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
++	bool "Sourcery CodeBench PowerPC 2012.03"
++	depends on BR2_powerpc
++	depends on BR2_powerpc_SPE
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_PREFER_STATIC_LIB
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++	help
++	  Sourcery CodeBench toolchain for the PowerPC architecture,
++	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
++	  glibc 2.15, gdb 7.2.50 and kernel headers 3.2.10. It has
++	  support for the following variants:
++	    - e500v2 glibc, SPE, 32 bits
++
+ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
+ 	bool "Sourcery CodeBench PowerPC 2011.03"
+ 	depends on BR2_powerpc
+@@ -901,6 +919,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
+ 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
++	default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
+ 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index ae08a03..10ae089 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -302,6 +302,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
++else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203),y)
++TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-mentor-linux-gnu/
++TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu/
+ TOOLCHAIN_EXTERNAL_SOURCE = renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
