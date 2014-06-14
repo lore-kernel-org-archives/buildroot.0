@@ -1,137 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 23:37:16 +0200
-Subject: [Buildroot] [PATCH 1/1] libtirpc : always include svc_auth_none
-In-Reply-To: <8D427F050DB04548AD6DA7733E2188A1@JohanW7>
-References: <1402779467-13505-1-git-send-email-sagaert.johan@skynet.be>
- <20140614210407.GE3503@free.fr>
- <8D427F050DB04548AD6DA7733E2188A1@JohanW7>
-Message-ID: <20140614213716.GF3503@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Jun 2014 00:34:43 +0200
+Subject: [Buildroot] Help about gstreamer h264 in buildroot
+In-Reply-To: <539CA77B.1050000@gmail.com>
+References: <539C13BA.5000106@gmail.com>
+ <20140614141451.6780163c@free-electrons.com>
+ <539CA77B.1050000@gmail.com>
+Message-ID: <20140615003443.1f6c8f98@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sagaert, All,
+Dear Marco Trapanese,
 
-On 2014-06-14 23:27 +0200, Sagaert Johan spake thusly:
-> On 2014-06-14 22:57 +0200, Sagaert Johan spake thusly:
-> > This function is needed in rpcbind >= 0.2.1 without this patch the 
-> > linking of rpcbind > 0.2.1 will fail.
-> > (based on http://www.spinics.net/lists/linux-nfs/msg27277.html )
-> 
-> > Does that fix an autobuilder issue? If so, please add:
-> Not that I know of, its just needed before I can bump rpcbind to version 0.2.1
-> I have a few other patches ready to bump rpcbind to 0.2.1, reworked the patches
-> and added a post install hook to add an rpcbind startup script to /etc/init.d
+On Sat, 14 Jun 2014 21:50:19 +0200, Marco Trapanese wrote:
 
-> >    Fixes:
-> >        http://autobuild.b.n/results/XXX/SHA1
+> > .obj/qeglfshooks_pi.o: In function 
+> > `QEglFSPiHooks::destroyNativeWindow(void*)': 
+> > qeglfshooks_pi.cpp:(.text+0x2c): undefined reference to 
+> > `vc_dispmanx_update_start' qeglfshooks_pi.cpp:(.text+0x38): undefined 
+> > reference to 
 > 
-> What do I need to look for here : http://autobuild.buildroot.net ?
+> How is it possible?
+> Shouldn't the same configuration lead to the same output?
 
-http://autobuild.buildroot.net contains all the logs of the autobuilders
-that Thomas and Peter run continously. We get a bit over 100 builds per
-day, and we can quickly find build failures.
+Two possibilities:
 
-For each build, there is the .config, the end of the build-log and a
-few other files, so it is easy to reproduce a build error.
+ 1/ We're not using exactly the same Buildroot version, so that might
+    affect the build.
 
-Since your patch looked like it was fixing such an issue, I was
-wondering if you had spotted a build failure you fixed with this
-patch. But it seems like not.
+ 2/ Sometimes, the host environment has some impact on the build.
+    Buildroot tries to avoid this as much as possible, but the
+    cross-compilation is never fully guaranteed from being isolated of
+    the host machine configuration.
 
-Regards,
-Yann E. MORIN.
+> > That's an issue with the RPi OpenGL implementation, I think we have 
+> > had a couple of similar failures in the autobuilders. Maxime, Yann, 
+> > any suggestion? Thomas 
+> 
+> Well, given that this currently doesn't work in buildroot, is there 
+> another way to play an mp4/h264 video from Qt5?
 
-> Regards Johan
-> 
-> > Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> > ---
-> >  ...btirpc-0011-always-include-svc_auth_none.patch | 39 
-> > ++++++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> >  create mode 100644 
-> > package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch
-> > 
-> > diff --git 
-> > a/package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch 
-> > b/package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patch
-> > new file mode 100644
-> > index 0000000..66c660c
-> > --- /dev/null
-> > +++ b/package/libtirpc/libtirpc-0011-always-include-svc_auth_none.patc
-> > +++ h
-> > @@ -0,0 +1,39 @@
-> > +From 02c9f3898e4189bb0ec817d492b36da6de31abf8 Mon Sep 17 00:00:00 
-> > +2001
-> > +From: Sagaert Johan <sagaert.johan@skynet.be>
-> > +Date: Sat, 14 Jun 2014 22:02:59 +0200
-> > +Subject: [PATCH 1/1] always include svc_auth_none
-> > +
-> > +(needed by rpcbind >=0.2.1 )
-> > +
-> > +Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> 
-> Since you use the patch as-is, you should keep the authorship of the patch, and just add your own SoB line.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > +---
-> > + src/Makefile.am | 7 +++----
-> > + 1 file changed, 3 insertions(+), 4 deletions(-)
-> > +
-> > +diff --git a/src/Makefile.am b/src/Makefile.am index bd276cf..a6313b7 
-> > +100644
-> > +--- a/src/Makefile.am
-> > ++++ b/src/Makefile.am
-> > +@@ -48,16 +48,15 @@ libtirpc_la_SOURCES = auth_none.c auth_unix.c authunix_prot.c bindresvport.c cln
-> > +         getrpcport.c mt_misc.c pmap_clnt.c pmap_getmaps.c pmap_getport.c \
-> > +         pmap_prot.c pmap_prot2.c pmap_rmt.c rpc_prot.c rpc_commondata.c \
-> > +         rpc_callmsg.c rpc_generic.c rpc_soc.c rpcb_clnt.c rpcb_prot.c \
-> > +-        rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_generic.c \
-> > +-        svc_raw.c svc_run.c svc_simple.c svc_vc.c getpeereid.c
-> > ++        rpcb_st_xdr.c svc.c svc_auth.c svc_dg.c svc_auth_unix.c svc_auth_none.c \
-> > ++        svc_generic.c svc_raw.c svc_run.c svc_simple.c svc_vc.c 
-> > ++ getpeereid.c
-> > + 
-> > + ## XDR
-> > + libtirpc_la_SOURCES += xdr.c xdr_rec.c xdr_array.c xdr_float.c 
-> > + xdr_mem.c xdr_reference.c xdr_stdio.c
-> > + 
-> > + ## Secure-RPC
-> > + if GSS
-> > +-    libtirpc_la_SOURCES += auth_gss.c authgss_prot.c svc_auth_gss.c \
-> > +-		svc_auth_none.c
-> > ++    libtirpc_la_SOURCES += auth_gss.c authgss_prot.c svc_auth_gss.c
-> > +     libtirpc_la_LDFLAGS += $(GSSGLUE_LIBS)
-> > +     libtirpc_la_CFLAGS = -DHAVE_RPCSEC_GSS $(GSSGLUE_CFLAGS)  endif
-> > +--
-> > +2.0.0
-> > +
-> > --
-> > 2.0.0
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' 
-> | conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> 
+I think we should rather fix the problems :)
 
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
