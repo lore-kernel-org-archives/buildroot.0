@@ -1,122 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jun 2014 01:11:47 +0200
-Subject: [Buildroot] [PATCH 13/14] manual: add documentation about packages'
-	hashes
-In-Reply-To: <cover.1402700788.git.yann.morin.1998@free.fr>
-References: <cover.1402700788.git.yann.morin.1998@free.fr>
-Message-ID: <4159227dade3380a31aebd4eb886e80096e65f58.1402700788.git.yann.morin.1998@free.fr>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Fri, 13 Jun 2014 19:52:15 -0500
+Subject: [Buildroot] autoconf caching
+In-Reply-To: <CAHkwnC8ud8QUt85XbHJfUnMvjXGbvWGtDqg_SuTyV_QJt2OUEw@mail.gmail.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+ <20140605224222.0184a9b7@free-electrons.com>
+ <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
+ <20140606091548.53f07f90@free-electrons.com>
+ <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+ <20140606113148.464ff3c8@core2quad.morethan.org>
+ <CAE9DZUTpc3+jAZKNi8mrDDTmZDyZUQ1Z_-aymUP6h743buZqRw@mail.gmail.com>
+ <CAHkwnC8ZyLMTLeHH2CVDS__EQFU0bYcWWb12ppygreRDU70PPg@mail.gmail.com>
+ <CAE9DZURzUZzenZMwfciAWQgQXFp7fbSg1wPHcJc54SCsmuUdhQ@mail.gmail.com>
+ <CAHkwnC8ud8QUt85XbHJfUnMvjXGbvWGtDqg_SuTyV_QJt2OUEw@mail.gmail.com>
+Message-ID: <CAE9DZUQhgXHBpRQX1Gzde3x4uOgXTHdqS3=b2pc7f6KCdD1jPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Fri, Jun 13, 2014 at 4:23 AM, Fabio Porcedda <fabio.porcedda@gmail.com>
+wrote:
 
-Although md5 is, for legacy reasons, a supported hash type,
-it is not documented on purpose, since it is now known to
-be weak.
+> On Wed, Jun 11, 2014 at 7:41 PM, Dallas Clement
+> <dallas.a.clement@gmail.com> wrote:
+> > On Tue, Jun 10, 2014 at 4:32 AM, Fabio Porcedda <
+> fabio.porcedda at gmail.com>
+> > wrote:
+> >>
+> >> On Fri, Jun 6, 2014 at 6:45 PM, Dallas Clement
+> >> <dallas.a.clement@gmail.com> wrote:
+> >> > On Fri, Jun 6, 2014 at 11:31 AM, Mike Zick <minimod@morethan.org>
+> wrote:
+> <snip>
+> >> > This is a good idea.  I think I've exhausted most of the other options
+> >> > except for
+> >> > commenting out .NOTPARALLEL in the top-level make.  If that doesn't
+> >> > help,
+> >> > I will definitely try breaking things up.  Thanks for the tip.
+> >>
+> >> Please let me know if you have any issue using top-level parallel make.
+> >> I'm curently testing it and ironing it out.
+> >>
+> >> Best regards
+> >> --
+> >> Fabio Porcedda
+> >
+> >
+> >> Please let me know if you have any issue using top-level parallel make.
+> >> I'm curently testing it and ironing it out.
+> >
+> > So far, no serious issues.  It uncovered some hidden dependencies.  But I
+> > was warned about this.  ;)
+> >
+> > Surprisingly, it did not speed up my build times at all.  Perhaps this is
+> > due
+> > to a complex dependency graph.
+>
+> Can you please send the graphs made by "make graph-depends" and
+> "make graph-build" for both serial and parallel and the output of the
+> time commands, i mean just the time command output not the complete
+> log:
+> "time make" and "time make BR2_JLEVEL= -j$((`getconf
+> _NPROCESSORS_ONLN`+1))"?
+>
+> It's best if you don't attach those files to the email but use some
+> other way, e.g. dropbox.
+>
+> Best regards
+> --
+> Fabio Porcedda
+>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Fabio, I have some good news!  I had commented out the .NOTPARALLEL in the
+top-level
+makefile earlier, but I was not setting BR2_JLEVEL correctly, as I was
+doing so from
+a wrapper makefile.  Anyhow, parallel building is working for me now after
+fixing my mistake.
+When I started this journey, my build times were about 1 hour and 50
+minutes.  After
+enabling ccache they were reduced to about 1 hour.  With parallel package
+building,
+all 8 of my CPU cores are near 100% the whole time, and build times are now
+only 14 minutes!!!
 
----
-Changes v6 -> v7:
-  - use single-line title  (Samuel)
----
- docs/manual/adding-packages-directory.txt | 66 +++++++++++++++++++++++++++++++
- support/download/check-hash               |  1 +
- 2 files changed, 67 insertions(+)
+You are a beautiful man!  Thank you for all you have done to get this
+working.
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 69b012c..c2f0a1a 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -357,3 +357,69 @@ different way, using different infrastructures:
- 
- Further formatting details: see xref:writing-rules-mk[the writing
- rules].
-+
-+[[adding-packages-hash]]
-+=== The +.hash+ file
-+
-+Optionally, you can add a third file, named +libfoo.hash+, that contains
-+the hashes of the downloaded files for the +libfoo+ package.
-+
-+The hashes stored in that file are used to validate the integrity of the
-+downloaded files.
-+
-+The format of this file is one line for each file for which to check the
-+hash, each line being space-separated, with these three fields:
-+
-+* the type of hash, one of:
-+** +sha1+, +sha224+, +sha256+, +sha384+, +sha512+
-+* the hash of the file:
-+** for +sha1+, 40 hexadecimal characters
-+** for +sha224+, 56 hexadecimal characters
-+** for +sha256+, 64 hexadecimal characters
-+** for +sha384+, 96 hexadecimal characters
-+** for +sha512+, 128 hexadecimal characters
-+* the name of the file, without any directory component
-+
-+Lines starting with a +#+ sign are considered comments, and ignored. Empty
-+lines are ignored.
-+
-+There can be more than one hash for a single file, each on its own line. In
-+this case, all hashes must match.
-+
-+Ideally, the hashes stored in this file should match the hashes published by
-+upstream, e.g. on their website, in the e-mail announcement... If upstream
-+provides more than one type of hash (say, +sha1+ and +sha512+), then it is
-+best to add all those hashes in the +.hash+ file. If upstream does not
-+provide any hash, then compute at least one yourself, and mention this in a
-+comment line above the hashes.
-+
-+*Note:* the number of spaces does not matter, so one can use spaces to
-+properly align the different fields.
-+
-+The example below defines a +sha1+ and a +sha256+ published by upstream for
-+the main +libfoo-1.2.3.tar.bz2+ tarball, plus two locally-computed hashes,
-+a +sha256+ for a downloaded patch, and a +sha1+ for a downloaded binary blob:
-+
-+----
-+# Hashes from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.{sha1,sha256}:
-+sha1   486fb55c3efa71148fe07895fd713ea3a5ae343a                         libfoo-1.2.3.tar.bz2
-+sha256 efc8103cc3bcb06bda6a781532d12701eb081ad83e8f90004b39ab81b65d4369 libfoo-1.2.3.tar.bz2
-+
-+# No upstream hashes for the following:
-+sha256 ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9 libfoo-fix-blabla.patch
-+sha1   2d608f3c318c6b7557d551a5a09314f03452f1a1                         libfoo-data.bin
-+----
-+
-+If the +.hash+ file is present, and it contains one or more hashes for a
-+downloaded file, the hash(es) computed by Buildroot (after download) must
-+match the hash(es) stored in the +.hash+ file. If one or more hashes do
-+not match, Buildroot considers this an error, deletes the downloaded file,
-+and aborts.
-+
-+If the +.hash+ file is present, but it does not contain a hash for a
-+downloaded file, no check is done for that file. If you set the
-+environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
-+there is no hash for a downloaded file, Buildroot considers this an
-+error, deletes the downloaded file, and aborts.
-+
-+If the +.hash+ file is missing, then no check is done at all.
-diff --git a/support/download/check-hash b/support/download/check-hash
-index b13aad9..07799bb 100755
---- a/support/download/check-hash
-+++ b/support/download/check-hash
-@@ -22,6 +22,7 @@ check_one_hash() {
-     _known="${2}"
-     _file="${3}"
- 
-+    # Note: md5 is supported, but undocumented on purpose.
-     # Note: sha3 is not supported, since there is currently no implementation
-     #       (the NIST has yet to publish the parameters).
-     case "${_h}" in
--- 
-1.8.3.2
+p.s.  If you still want me to collect the graphs, and time comparison for
+parallel vs
+not parallel, please let me know.  I also have more testing to do to verify
+that there
+are no unexpected run-time errors due to parallel building.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140613/12170b91/attachment.html>
