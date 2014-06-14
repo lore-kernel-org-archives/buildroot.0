@@ -1,74 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 19:04:50 +0200
-Subject: [Buildroot] [git commit] toolchain-external: add CodeSourcery
-	PowerPC 2012.03
-Message-ID: <20140614170507.DAC829CFE5@busybox.osuosl.org>
+Date: Sat, 14 Jun 2014 19:05:38 +0200
+Subject: [Buildroot] [git commit] libdrm: Add menu option to install the
+	test programs
+Message-ID: <20140614170553.9FF5E9CFE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=20d4ba91c5ed42b07c1e82b2095c0cc312deb0c7
+commit: http://git.buildroot.net/buildroot/commit/?id=e6e14a71b74f16902ff0a073c44b4f00a4e5c06a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-However, this toolchain is only usable for e500v2 with the SPE ABI.
+The libdrm has a bunch of useful test programs. Add an option to pass
+the configure option to install them.
 
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 ---
- toolchain/toolchain-external/Config.in             |   19 +++++++++++++++++++
- toolchain/toolchain-external/toolchain-external.mk |    3 +++
- 2 files changed, 22 insertions(+), 0 deletions(-)
+ package/libdrm/Config.in |    5 +++++
+ package/libdrm/libdrm.mk |    4 ++++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 6f3c75e..d369f9c 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -416,6 +416,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	  from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
- 	  glibc 2.17, gdb 7.4.50 and kernel headers 3.7.0.
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index e6a7a42..9acc908 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -10,6 +10,11 @@ config BR2_PACKAGE_LIBDRM
  
-+config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
-+	bool "Sourcery CodeBench PowerPC 2012.03"
-+	depends on BR2_powerpc
-+	depends on BR2_powerpc_SPE
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_HOSTARCH_NEEDS_IA32_LIBS
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ if BR2_PACKAGE_LIBDRM
+ 
++config BR2_PACKAGE_LIBDRM_INSTALL_TESTS
++	bool "Install test programs"
 +	help
-+	  Sourcery CodeBench toolchain for the PowerPC architecture,
-+	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
-+	  glibc 2.15, gdb 7.2.50 and kernel headers 3.2.10. It has
-+	  support for the following variants:
-+	    - e500v2 glibc, SPE, 32 bits
++	  This option allows to install the libdrm test programs.
 +
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
- 	bool "Sourcery CodeBench PowerPC 2011.03"
- 	depends on BR2_powerpc
-@@ -901,6 +919,7 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "nios2-linux-gnu"        if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009
- 	default "powerpc-linux-gnu"      if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103
-+	default "powerpc-mentor-linux-gnu" if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201203
- 	default "sh-linux-gnu"           if BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201209
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index ae08a03..10ae089 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -302,6 +302,9 @@ TOOLCHAIN_EXTERNAL_SOURCE = freescale-2010.09-55-powerpc-linux-gnu-i686-pc-linux
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = freescale-2011.03-38-powerpc-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203),y)
-+TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/powerpc-mentor-linux-gnu/
-+TOOLCHAIN_EXTERNAL_SOURCE = mentor-2012.03-71-powerpc-mentor-linux-gnu-i686-pc-linux-gnu.tar.bz2
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH201103),y)
- TOOLCHAIN_EXTERNAL_SITE = http://sourcery.mentor.com/public/gnu_toolchain/sh-linux-gnu/
- TOOLCHAIN_EXTERNAL_SOURCE = renesas-2011.03-37-sh-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ menu "DRM Drivers"
+ 
+ config BR2_PACKAGE_LIBDRM_INTEL
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index b3e4d7a..d912d6d 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -69,4 +69,8 @@ else
+ LIBDRM_CONF_OPT += --disable-udev
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM_INSTALL_TESTS),y)
++LIBDRM_CONF_OPT += --enable-install-test-programs
++endif
++
+ $(eval $(autotools-package))
