@@ -1,58 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 14 Jun 2014 08:30:10 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-13
-Message-ID: <20140614063010.AA19C100ED6@stock.ovh.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 14 Jun 2014 09:06:10 +0200
+Subject: [Buildroot] Java Runtime JRE mipsel uclibc
+In-Reply-To: <E868AA1F-46ED-480D-AA22-5DBD76CED6C3@gmail.com>
+References: <E868AA1F-46ED-480D-AA22-5DBD76CED6C3@gmail.com>
+Message-ID: <20140614070610.GX4197@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-06-13
-===============================
+Hi,
+wreuven at gmail.com wrote,
 
-        success : 103
-       failures : 15 
-       timeouts : 0  
-          TOTAL : 118
+> Can anyone suggest a good way to build a JRE to run with the JamVM
+> I created using buildroot? I need Java 1.7 and the optimal JRE
+> would be OpenJDK 7 headless but any advice is welcome. My target
+> is uclibc on mipsel.
 
-Classification of failures by reason
-====================================
+You have four options:
+1. you port OpenJDK7 package to buildroot
+2. you use OpenADK for your embedded system build, which
+   includes OpenJDK7
+3. you use OpenEmbedded which should have OpenJDK7
+4. you just create OpenJDK7 with either OpenADK or OpenEmbedded and
+   use the binaries for your buildroot build
 
-                       nbd-3.8 | 2 
-                pinentry-0.8.3 | 1 
-                     make-3.82 | 1 
-              gstreamer1-1.2.4 | 1 
-                   lcdapi-v0.4 | 1 
-                oprofile-0.9.9 | 1 
-                    faifa-v0.1 | 1 
-               alsa-lib-1.0.26 | 1 
-                gptfdisk-0.8.6 | 1 
-                    bind-9.9.5 | 1 
-dvb-apps-3d43b280298c39a67d... | 1 
-                 gnuplot-4.6.2 | 1 
-                  msmtp-1.4.32 | 1 
-              lm-sensors-3.3.5 | 1 
+Be aware of the fact, that uClibc is highly configurable, so that
+a binary created with another system might fail to work on your
+target, because of ABI or version mismatches.
 
-Detail of failures
-===================
+root at openadk:/ # uname -a                                                      
+Linux openadk 3.15.0 #2 Fri Jun 13 23:21:25 CEST 2014 mips GNU/Linux
+root at openadk:/ # java HelloWorld                                               
+HelloWorld
+root at openadk:/ # java -version
+file $(whjava version "1.7.0_55"
+OpenJDK Runtime Environment (IcedTea 2.4.7) (Debian build
+1.7.0_55-b14)
+OpenJDK Zero VM (build 24.51-b03, interpreted mode)
+root at openadk:/ # file $(which java)
+/usr/bin/java: symbolic link to `../lib/jvm/jre/bin/java'
+root at openadk:/ # file /usr/lib/jvm/jre/bin/java
+/usr/lib/jvm/jre/bin/java: ELF 32-bit LSB executable, MIPS, MIPS32
+version 1 (SYSV), dynamically linked (uses shared libs), stripped
 
-   powerpc |                alsa-lib-1.0.26 | NOK | http://autobuild.buildroot.net/results/a30a1b9e43192f6613936c83b4bca4e2fadf7f20/
-    xtensa |                     bind-9.9.5 | NOK | http://autobuild.buildroot.net/results/44e7e52e6a420b264ce8b1c44be8ba5c2a057444/
-      bfin | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/569a7f2c68243b46eac224c305adccc233ae72ff/
-       arm |                     faifa-v0.1 | NOK | http://autobuild.buildroot.net/results/6e602c39dff1965e3b1aaac5e32bad16828d0897/
-      bfin |                  gnuplot-4.6.2 | NOK | http://autobuild.buildroot.net/results/251f65b232ab3844152bc8bcef0bf82bd710232d/
-      bfin |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/3cfbfaedcf7e6e881407da8af39ad8be83054be5/
-     avr32 |               gstreamer1-1.2.4 | NOK | http://autobuild.buildroot.net/results/461a67543d9245786e1b1ebfa52be6577c15cf59/
-      bfin |                    lcdapi-v0.4 | NOK | http://autobuild.buildroot.net/results/407bbc0f1ffab2860930edf17e632311d76a8f00/
-      bfin |               lm-sensors-3.3.5 | NOK | http://autobuild.buildroot.net/results/24fbbaf8c520ed27bc54798401f3dc45923e067d/
-      bfin |                      make-3.82 | NOK | http://autobuild.buildroot.net/results/0af54be9328e316778851297fd2c02ab16dbff43/
-      bfin |                   msmtp-1.4.32 | NOK | http://autobuild.buildroot.net/results/eabde613cfd522d9862f69909ab12ee8d8c7b1bd/
-     avr32 |                        nbd-3.8 | NOK | http://autobuild.buildroot.net/results/ce4d003f27de9773ab88257984a631064aeefc01/
-     avr32 |                        nbd-3.8 | NOK | http://autobuild.buildroot.net/results/0be598b1b856153587d54c1078e22d69787ba7a3/
-       arm |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/a2cdc6bc4537ea9957598006daa1f84d81b29ce5/
-   powerpc |                 pinentry-0.8.3 | NOK | http://autobuild.buildroot.net/results/ac362b99f5ef20e051143a4b0f159f8534711199/
+For an example qemu-image to test your java application, try this
+one:
+http://www.openadk.org/qemu-mips/qemu-mips-initramfspiggyback-kernel
 
+start with:
+qemu-system-mipsel -M malta -nographic -device e1000,netdev=adk0 \
+-netdev user,id=adk0 -kernel qemu-mips-initramfspiggyback-kernel
 
--- 
-http://autobuild.buildroot.net
+Is the buildroot project interested in OpenJDK7?
+
+best regards
+        Waldemar
