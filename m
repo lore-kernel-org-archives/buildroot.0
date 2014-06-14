@@ -1,59 +1,59 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 14 Jun 2014 09:06:10 +0200
-Subject: [Buildroot] Java Runtime JRE mipsel uclibc
-In-Reply-To: <E868AA1F-46ED-480D-AA22-5DBD76CED6C3@gmail.com>
-References: <E868AA1F-46ED-480D-AA22-5DBD76CED6C3@gmail.com>
-Message-ID: <20140614070610.GX4197@waldemar-brodkorb.de>
+Date: Sat, 14 Jun 2014 09:15:42 +0200
+Subject: [Buildroot] [PATCH v2] gcc 4.8.x does not compile a working
+	kernel for sparc
+In-Reply-To: <87lht0cynw.fsf@dell.be.48ers.dk>
+References: <20140613170047.GA10615@waldemar-brodkorb.de>
+ <87lht0cynw.fsf@dell.be.48ers.dk>
+Message-ID: <20140614071542.GY4197@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-wreuven at gmail.com wrote,
+Hi Peter,
+Peter Korsgaard wrote,
 
-> Can anyone suggest a good way to build a JRE to run with the JamVM
-> I created using buildroot? I need Java 1.7 and the optimal JRE
-> would be OpenJDK 7 headless but any advice is welcome. My target
-> is uclibc on mipsel.
+> >>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+> 
+>  > Since the switch to 4.8.x as default, the qemu-sparc target is broken.
+>  > For a gcc bug report see here:
+>  > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60624
+> 
+>  > Switch back to gcc 4.7.x as default for sparc.
+>  > Disable 4.8/4.9 as suggested by Thomas Petazzoni.
+>  > I even disabled gcc snapshot, it works right now, because
+>  > it is an old 4.8.0 snapshot by default, but as soon as this is updated
+>  > sparc build will break.
+> 
+>  > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+>  > ---
+>  >  package/gcc/Config.in.host |    7 ++++---
+>  >  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+>  > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+>  > index 3bdfffc..309750c 100644
+>  > --- a/package/gcc/Config.in.host
+>  > +++ b/package/gcc/Config.in.host
+>  > @@ -10,6 +10,7 @@ choice
+>  >  	prompt "GCC compiler Version"
+>  >  	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
+>  >  	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
+>  > +	default BR2_GCC_VERSION_4_7_X if BR2_sparc
+> 
+> On a related note, this was presumably for the v8 variant? 
 
-You have four options:
-1. you port OpenJDK7 package to buildroot
-2. you use OpenADK for your embedded system build, which
-   includes OpenJDK7
-3. you use OpenEmbedded which should have OpenJDK7
-4. you just create OpenJDK7 with either OpenADK or OpenEmbedded and
-   use the binaries for your buildroot build
+Yes.
 
-Be aware of the fact, that uClibc is highly configurable, so that
-a binary created with another system might fail to work on your
-target, because of ABI or version mismatches.
+> Do you know
+> if we still need to stick to gcc 4.4.x for the leon variants?
 
-root at openadk:/ # uname -a                                                      
-Linux openadk 3.15.0 #2 Fri Jun 13 23:21:25 CEST 2014 mips GNU/Linux
-root at openadk:/ # java HelloWorld                                               
-HelloWorld
-root at openadk:/ # java -version
-file $(whjava version "1.7.0_55"
-OpenJDK Runtime Environment (IcedTea 2.4.7) (Debian build
-1.7.0_55-b14)
-OpenJDK Zero VM (build 24.51-b03, interpreted mode)
-root at openadk:/ # file $(which java)
-/usr/bin/java: symbolic link to `../lib/jvm/jre/bin/java'
-root at openadk:/ # file /usr/lib/jvm/jre/bin/java
-/usr/lib/jvm/jre/bin/java: ELF 32-bit LSB executable, MIPS, MIPS32
-version 1 (SYSV), dynamically linked (uses shared libs), stripped
-
-For an example qemu-image to test your java application, try this
-one:
-http://www.openadk.org/qemu-mips/qemu-mips-initramfspiggyback-kernel
-
-start with:
-qemu-system-mipsel -M malta -nographic -device e1000,netdev=adk0 \
--netdev user,id=adk0 -kernel qemu-mips-initramfspiggyback-kernel
-
-Is the buildroot project interested in OpenJDK7?
+I have no idea. I asked about the price of a leon3 evaluation board
+in the past, but 1000 euro was to high for me. The simulators are
+non-free, so I could not try these. Do you have hardware or a
+license for leon simulators? Who has added support for these
+systems?
 
 best regards
-        Waldemar
+ Waldemar
