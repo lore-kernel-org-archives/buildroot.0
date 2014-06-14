@@ -1,59 +1,64 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 14 Jun 2014 09:15:42 +0200
-Subject: [Buildroot] [PATCH v2] gcc 4.8.x does not compile a working
-	kernel for sparc
-In-Reply-To: <87lht0cynw.fsf@dell.be.48ers.dk>
-References: <20140613170047.GA10615@waldemar-brodkorb.de>
- <87lht0cynw.fsf@dell.be.48ers.dk>
-Message-ID: <20140614071542.GY4197@waldemar-brodkorb.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 14 Jun 2014 09:57:43 +0200
+Subject: [Buildroot] autoconf caching
+In-Reply-To: <CAE9DZUQhgXHBpRQX1Gzde3x4uOgXTHdqS3=b2pc7f6KCdD1jPg@mail.gmail.com>
+References: <CAE9DZUT8+z0NF5O6sh=y4svCfQW0bh1Zt4r7OM9fe9nYvk-O0w@mail.gmail.com>
+ <20140605224222.0184a9b7@free-electrons.com>
+ <CAE9DZURmNL1iOcY4UR4CrDkg5DOT46-yy-e1+Ftax1_W0faing@mail.gmail.com>
+ <20140606091548.53f07f90@free-electrons.com>
+ <CAE9DZURp2teR8p5WP3OQEZyZ71qD=8U97q03cRd0yHbTsz8FwA@mail.gmail.com>
+ <20140606113148.464ff3c8@core2quad.morethan.org>
+ <CAE9DZUTpc3+jAZKNi8mrDDTmZDyZUQ1Z_-aymUP6h743buZqRw@mail.gmail.com>
+ <CAHkwnC8ZyLMTLeHH2CVDS__EQFU0bYcWWb12ppygreRDU70PPg@mail.gmail.com>
+ <CAE9DZURzUZzenZMwfciAWQgQXFp7fbSg1wPHcJc54SCsmuUdhQ@mail.gmail.com>
+ <CAHkwnC8ud8QUt85XbHJfUnMvjXGbvWGtDqg_SuTyV_QJt2OUEw@mail.gmail.com>
+ <CAE9DZUQhgXHBpRQX1Gzde3x4uOgXTHdqS3=b2pc7f6KCdD1jPg@mail.gmail.com>
+Message-ID: <20140614095743.4b60810d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
-Peter Korsgaard wrote,
+Dear Dallas Clement,
 
-> >>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
-> 
->  > Since the switch to 4.8.x as default, the qemu-sparc target is broken.
->  > For a gcc bug report see here:
->  > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60624
-> 
->  > Switch back to gcc 4.7.x as default for sparc.
->  > Disable 4.8/4.9 as suggested by Thomas Petazzoni.
->  > I even disabled gcc snapshot, it works right now, because
->  > it is an old 4.8.0 snapshot by default, but as soon as this is updated
->  > sparc build will break.
-> 
->  > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
->  > ---
->  >  package/gcc/Config.in.host |    7 ++++---
->  >  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
->  > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
->  > index 3bdfffc..309750c 100644
->  > --- a/package/gcc/Config.in.host
->  > +++ b/package/gcc/Config.in.host
->  > @@ -10,6 +10,7 @@ choice
->  >  	prompt "GCC compiler Version"
->  >  	default BR2_GCC_VERSION_4_4_X if BR2_sparc_sparchfleon || BR2_sparc_sparchfleonv8 || BR2_sparc_sparcsfleon || BR2_sparc_sparcsfleonv8
->  >  	default BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 if BR2_avr32
->  > +	default BR2_GCC_VERSION_4_7_X if BR2_sparc
-> 
-> On a related note, this was presumably for the v8 variant? 
+(Seems like your e-mail client has major issues with line wrapping).
 
-Yes.
+On Fri, 13 Jun 2014 19:52:15 -0500, Dallas Clement wrote:
 
-> Do you know
-> if we still need to stick to gcc 4.4.x for the leon variants?
+> Fabio, I have some good news!  I had commented out the .NOTPARALLEL
+> in the top-level
+> makefile earlier, but I was not setting BR2_JLEVEL correctly, as I was
+> doing so from
+> a wrapper makefile.  Anyhow, parallel building is working for me now
+> after fixing my mistake.
+> When I started this journey, my build times were about 1 hour and 50
+> minutes.  After
+> enabling ccache they were reduced to about 1 hour.  With parallel
+> package building,
+> all 8 of my CPU cores are near 100% the whole time, and build times
+> are now only 14 minutes!!!
+> 
+> You are a beautiful man!  Thank you for all you have done to get this
+> working.
 
-I have no idea. I asked about the price of a leon3 evaluation board
-in the past, but 1000 euro was to high for me. The simulators are
-non-free, so I could not try these. Do you have hardware or a
-license for leon simulators? Who has added support for these
-systems?
+That's indeed a very significant improvement. However, be careful that
+using top-level parallel builds makes builds non-reproducible: we do
+not guarantee that from one build to the other you'll get the same
+result. You might even get failures sometimes, and then success. Or the
+other way around. That's why we don't allow top-level parallel build by
+default.
 
-best regards
- Waldemar
+Unfortunately, the only way to fix this is to have per-package sysroot,
+and doing this will involve a lot more preparation work before starting
+the build of each package, which will certainly reduce the benefit of
+top-level parallel build. That's something that needs to be worked on,
+but it's far from being a trivial problem.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
