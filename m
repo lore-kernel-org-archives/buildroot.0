@@ -1,66 +1,28 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 15 Jun 2014 18:59:21 +0200
-Subject: [Buildroot] [PATCH 2/2] perl-mojolicious: new package
-In-Reply-To: <1402851561-23157-1-git-send-email-francois.perrad@gadz.org>
-References: <1402851561-23157-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1402851561-23157-2-git-send-email-francois.perrad@gadz.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 15 Jun 2014 17:54:23 +0000 (UTC)
+Subject: [Buildroot] [Bug 7208] Glibc C++ aplications crash if they use
+	exceptions.
+In-Reply-To: <bug-7208-163@https.bugs.busybox.net/>
+References: <bug-7208-163@https.bugs.busybox.net/>
+Message-ID: <20140615175423.367039CFC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                            |  1 +
- package/perl-mojolicious/Config.in           |  6 ++++++
- package/perl-mojolicious/perl-mojolicious.mk | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/perl-mojolicious/Config.in
- create mode 100644 package/perl-mojolicious/perl-mojolicious.mk
+https://bugs.busybox.net/show_bug.cgi?id=7208
 
-diff --git a/package/Config.in b/package/Config.in
-index f43e985..5e16ffa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -423,6 +423,7 @@ endif
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
-+source "package/perl-mojolicious/Config.in"
- endmenu
- endif
- 	source "package/php/Config.in"
-diff --git a/package/perl-mojolicious/Config.in b/package/perl-mojolicious/Config.in
-new file mode 100644
-index 0000000..8c9c25a
---- /dev/null
-+++ b/package/perl-mojolicious/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS
-+	bool "perl-mojolicious"
-+	help
-+	  Real-time web framework
-+	  
-+	  http://mojolicio.us
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-new file mode 100644
-index 0000000..e4ced7e
---- /dev/null
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-mojolicious
-+#
-+################################################################################
-+
-+PERL_MOJOLICIOUS_VERSION = 5.07
-+PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
-+PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI/
-+PERL_MOJOLICIOUS_DEPENDENCIES = perl 
-+PERL_MOJOLICIOUS_LICENSE = artistic_2
-+
-+$(eval $(perl-package))
+--- Comment #5 from Krzysztof Wrzalik <kwrzalik@gmail.com> 2014-06-15 17:54:22 UTC ---
+The difference between compiling with -static-libgcc seems to boil down to the
+following function:
+
+_Unwind_Find_FDE
+
+When compiled with -statlic-libgcc the function invocation ends up in glibc.
+When -static-libgcc is not given, then this function is located in libgcc.
+
 -- 
-1.9.1
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
