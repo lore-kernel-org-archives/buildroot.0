@@ -1,57 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 15 Jun 2014 16:11:19 +0200
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <20140615124216.2c3c1428@free-electrons.com>
-References: <20140615063014.70ACF100EAC@stock.ovh.net>
- <20140615122040.6effbc93@free-electrons.com>
- <01b1dd01-35b7-40d8-bb70-56a33e20f1a6@email.android.com>
- <20140615124216.2c3c1428@free-electrons.com>
-Message-ID: <CAAXf6LUiX3JRwr-cWKNG55ip2bnUAO91v+WBPG=n_dnT0mxZyw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 15 Jun 2014 14:12:55 +0000 (UTC)
+Subject: [Buildroot] [Bug 7184] supervisord depends on libxml2 implicitly
+In-Reply-To: <bug-7184-163@https.bugs.busybox.net/>
+References: <bug-7184-163@https.bugs.busybox.net/>
+Message-ID: <20140615141255.8814F8A4D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=7184
 
-On Sun, Jun 15, 2014 at 12:42 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sun, 15 Jun 2014 12:36:44 +0200, Thomas De Schampheleire wrote:
->
->> Could you clarify why we need a timeout in the first place? Have
->> there been occurrences of builds that get stuck (in a loop or
->> otherwise)? According to me, it doesn't matter that a build takes ten
->> hours for a given configuration, as long as it progresses and doesn't
->> get stuck...
->
-> The reason a timeout was introduced is because there used to be an old
-> PowerPC toolchain in which 'ld' had a bug, and this bug caused ld to
-> enter an infinite loop, consuming 100% of the CPU forever, when linking
-> a specific piece of code. There have been occurrences where my build
-> server has remained stuck for several days in this infinite loop before
-> I realized that the builds were no longer occurring, and figured out
-> what was going on.
->
-> I don't think we still have this toolchain tested in the current
-> configurations, but the timeout mechanism has remained in place, and I
-> believe it's still possible to have similar issues in the future.
->
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-If we can agree that the situation is rare, than we could keep things
-simple and make the timeout relatively large, say 10 hours. This
-reduces the false positives due to big configurations, but still
-prevent endless builds. In the good cases, no timeout is effectively
-present and all builds can run to completion. In the exceptional bad
-case of an endless loop, there is a large penalty of 10 hours (or
-whatever the timeout value) but since this should only happen
-exceptionally it is acceptable. These situations should be
-investigated in detail anyway and resolved shortly after (ideally).
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
 
-The other solutions you proposed have their value too, but make things
-more complex while not really necessary IMO.
+--- Comment #6 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-15 14:12:54 UTC ---
+Problem assumed fixed with commit
+http://git.buildroot.org/buildroot/commit/?id=c3e3b2a20848a610040411bd00d8f1d7912e284c,
+please reopen if there is still something wrong.
 
-Best regards,
-Thomas
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
