@@ -1,109 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jun 2014 22:37:26 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: add option to copy the gconv
-	libraries
-Message-ID: <1402864646-14963-1-git-send-email-yann.morin.1998@free.fr>
+Date: Sun, 15 Jun 2014 23:06:17 +0200
+Subject: [Buildroot] [PATCH 04/20 RFC] support/gen-manual-lists.py:
+ rework generating the virtual package list
+In-Reply-To: <CAHXCMM+yNGSNEpSwz6BxkCyKo9Kwi3ERyoYGnuNZ9c=KDgNh7g@mail.gmail.com>
+References: <cover.1402699915.git.yann.morin.1998@free.fr>
+ <0f4e35d86197b6262e55421a724267d92f642c96.1402699915.git.yann.morin.1998@free.fr>
+ <CAHXCMM+yNGSNEpSwz6BxkCyKo9Kwi3ERyoYGnuNZ9c=KDgNh7g@mail.gmail.com>
+Message-ID: <20140615210617.GE3568@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Samuel, All,
 
-The gconv libraries are used to translate between different character
-sets (charsets).
+On 2014-06-15 22:18 +0200, Samuel Martin spake thusly:
+> On Sat, Jun 14, 2014 at 1:02 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[--SNIP a lot of typoes--]
 
-In (e)glibc they are implemented by the internal implemenation of
-iconv, called gconv, and are provided as dlopen-able libraries.
+OK, will fix all of those.
 
-Some packages need them to present text to the user (eg. XBMC Gotham).
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  support/scripts/gen-manual-lists.py | 88 +++++++++++++++++++++++++++++++------
+> >  1 file changed, 74 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+> > index 95c10dc..837cd66 100644
+> > --- a/support/scripts/gen-manual-lists.py
+> > +++ b/support/scripts/gen-manual-lists.py
+[--SNIP yet another bunch of typoes--]
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+OK, will fix.
 
----
-Changes v1->v2:
-  - add option to install only a select list of gconv libs (Thomas)
-  - rename the option (Thomas)
+> > +                if parent_pkg is not None:
+> > +                    providers_syms_w_opts.append( (parent_pkg,sym) )
+> space after ','
 
-Now the patch is on the list, I won't loose it again! :-)
+I was wondering what was the coding rule when an argument is a tuple.
+Usually, we do not have a space after anopening brace, or before a
+closing brace. But it looks strange when the (only) arg is a tuple.
 
----
- Makefile                      | 18 ++++++++++++++++++
- toolchain/toolchain-common.in | 22 ++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+Should I write:
+    .append( (parent_pkg, sym) )
+or:
+    .append((parent_pkg, sym))
+?
 
-diff --git a/Makefile b/Makefile
-index 14fca2b..e01f40b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -395,6 +395,9 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- ifneq ($(GENERATE_LOCALE),)
- TARGETS += target-generatelocales
- endif
-+ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
-+TARGETS += target-copygconvlibs
-+endif
- endif
- 
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
-@@ -623,6 +626,21 @@ target-generatelocales: host-localedef toolchain
- 	done
- endif
- 
-+GCONV_LIBS = $(call qstrip,$(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST))
-+
-+target-copygconvlibs:
-+	$(Q)$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/gconv-modules \
-+				  $(TARGET_DIR)/usr/lib/gconv/gconv-modules
-+	$(Q)if [ -z "$(GCONV_LIBS)" ]; then \
-+		$(INSTALL) -m 0644 $(STAGING_DIR)/usr/lib/gconv/*.so \
-+				   $(TARGET_DIR)/usr/lib/gconv; \
-+	else \
-+		for l in $(GCONV_LIBS); do \
-+			$(INSTALL) -m 0644 -D $(STAGING_DIR)/usr/lib/gconv/$${l}.so \
-+					      $(TARGET_DIR)/usr/lib/gconv/$${l}.so; \
-+		done; \
-+	fi
-+
- target-post-image: $(TARGETS_ROOTFS) target-finalize
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index a91d247..13de9e5 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -77,6 +77,28 @@ config BR2_GENERATE_LOCALE
- 	  specified, UTF-8 is assumed. Examples of locales: en_US,
- 	  fr_FR.UTF-8.
- 
-+config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
-+	bool "Copy gconv libraries"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  The gconv libraries are used to convert between different
-+	  character sets (charsets).
-+
-+	  Say 'y' if you need to store and/or display different charsets.
-+
-+config BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_LIST
-+	string "Gconv libraries to copy"
-+	depends on BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY
-+	help
-+	  Set to the list of gconv libraries to copy.
-+	  Leave empty to copy all gconv libraries.
-+
-+	  Specify only the basename of the libraries, leave
-+	  out the .so extension. Eg.:
-+	    IBM850 ISO8859-15 UNICODE
-+
-+	  Note: the full set of gconv libs are ~8MiB (on ARM).
-+
- # glibc and eglibc directly include gettext, so a separatly compiled
- # gettext isn't needed and shouldn't be built to avoid conflicts. Some
- # packages always need gettext, other packages only need gettext when
+> > +            # Finally, complete with the list of providers without option
+> > +            for p in providers_syms:
+> > +                if p in seen:
+> > +                    continue
+> > +                _p = re.sub(r"^BR2_PACKAGE_(.*)", r"\1", p.get_name()).lower()
+> > +                providers_str.append(_p)
+> hum... here, you _p is the low-case symbol name (without the
+> BR2_PACKAGE_ prefix), not exactly the package name (e.g. for
+> rpi-userland, you get "rpi_userland",= instead of "rpi-userland"). Or
+> am I missing something?
+
+Doh. That's right... Good catch. I'll (try to) fix that.
+
+> > +
+> > +            return providers_str
+> > +
+> > +        # This functions return a list of all symbols that have a prompt,
+> > +        # and that 'select' the given symbol
+> > +        def _get_selecting_symbols_with_prompt(symbol):
+> It's a bit weird to have the definition of this function after you use
+> it  (in the previous on), but python allows this ;-)
+
+Well, do we want all functions to be defined before (code-wise) we call
+them, or do we prefer to have the important functions come first?
+
+I usually tend to the latter. But I'll move the functions.
+
+Thank you for the reviews! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.3.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
