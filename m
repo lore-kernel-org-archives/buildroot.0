@@ -1,64 +1,57 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 15 Jun 2014 16:06:23 +0200
-Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
- relocatable one
-In-Reply-To: <20140615121602.GC4064@tarshish>
-References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
- <20140608145430.0125bb29@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
- <20140608154632.1f6f13a6@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E9802502528F6@ezex10.ezchip.com>
- <20140608154420.GF4074@tarshish>
- <884EA965490E3C4D8E66AEF41E980250256965@ezex10.ezchip.com>
- <20140615121602.GC4064@tarshish>
-Message-ID: <CAAXf6LUH1JmV3uM_B1meUxCt5BnTzYpxz25GXuydHDNXPBeyaA@mail.gmail.com>
+Date: Sun, 15 Jun 2014 16:11:19 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140615124216.2c3c1428@free-electrons.com>
+References: <20140615063014.70ACF100EAC@stock.ovh.net>
+ <20140615122040.6effbc93@free-electrons.com>
+ <01b1dd01-35b7-40d8-bb70-56a33e20f1a6@email.android.com>
+ <20140615124216.2c3c1428@free-electrons.com>
+Message-ID: <CAAXf6LUiX3JRwr-cWKNG55ip2bnUAO91v+WBPG=n_dnT0mxZyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 15, 2014 at 2:16 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Noam,
->
-> On Sun, Jun 15, 2014 at 11:46:03AM +0000, Noam Camus wrote:
->> > See the EXAMPLE section of the git-send-email(1) man page (online at
->> > http://git-scm.com/docs/git-send-email).
->>
->> I followed EXAMPLE section but /usr/libexec/git-core/git-send-email always
->> complains:
->> Unable to initialize SMTP properly. Check config and use --smtp-debug. VALUES: server=smtp.gmail.com encryption=tls maildomain=xxx.ezchip.com Debug=0 port=587 at /usr/libexec/git-core/git-send-email line 1041.
->>
->> This is Net::SMTP->new() that always returns NULL.
->> I used CPAN to install latest Net::SMTP.
->>
->> Any ideas?
->
-> Your friendly corporate firewall might be blocking outgoing traffic to port
-> 587. Try doing 'telnet smtp.gmail.com 587'. If you get timeout, this is most
-> likely the reason. Your best options is to talk to your IT department to let
-> you access to outgoing port 587. If that fails I can think of two workarounds:
->
-> 1. Use an external server you can control from withing your corporate network
->    (SSH would be best, though I guess your firewall blocks SSH as well)
->
-> 2. Tunnel SMTP over HTTP somehow. This is quite ugly.
->
-> Others on this list may have better solutions for this frustrating problem.
+Hi Thomas,
 
-If it's purely a proxy problem, then you can use socat to let smtp go
-through the tunnel.
-Set up git to use localhost as smtp server, and a port of your choice,
-for example 10587, and set up a socat instance:
+On Sun, Jun 15, 2014 at 12:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Sun, 15 Jun 2014 12:36:44 +0200, Thomas De Schampheleire wrote:
+>
+>> Could you clarify why we need a timeout in the first place? Have
+>> there been occurrences of builds that get stuck (in a loop or
+>> otherwise)? According to me, it doesn't matter that a build takes ten
+>> hours for a given configuration, as long as it progresses and doesn't
+>> get stuck...
+>
+> The reason a timeout was introduced is because there used to be an old
+> PowerPC toolchain in which 'ld' had a bug, and this bug caused ld to
+> enter an infinite loop, consuming 100% of the CPU forever, when linking
+> a specific piece of code. There have been occurrences where my build
+> server has remained stuck for several days in this infinite loop before
+> I realized that the builds were no longer occurring, and figured out
+> what was going on.
+>
+> I don't think we still have this toolchain tested in the current
+> configurations, but the timeout mechanism has remained in place, and I
+> believe it's still possible to have similar issues in the future.
+>
 
-socat TCP4-LISTEN:$localport,reuseaddr,fork
-PROXY:$proxy:$remotehost:$remoteport,proxyport=$proxyport,resolve
+If we can agree that the situation is rare, than we could keep things
+simple and make the timeout relatively large, say 10 hours. This
+reduces the false positives due to big configurations, but still
+prevent endless builds. In the good cases, no timeout is effectively
+present and all builds can run to completion. In the exceptional bad
+case of an endless loop, there is a large penalty of 10 hours (or
+whatever the timeout value) but since this should only happen
+exceptionally it is acceptable. These situations should be
+investigated in detail anyway and resolved shortly after (ideally).
 
-where localport=10587, remotehost=smtp.gmail.com, remoteport=587,
-proxy=proxy.yourcompany.com proxyport=8080 (whatever is the right port
-for your proxy)
-
-Same trick can be used to forward IRC through the proxy.
+The other solutions you proposed have their value too, but make things
+more complex while not really necessary IMO.
 
 Best regards,
 Thomas
