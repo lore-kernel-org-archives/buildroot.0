@@ -1,32 +1,29 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 15 Jun 2014 09:48:32 +0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Jun 2014 08:54:24 +0200
 Subject: [Buildroot] [PATCH 1/2] wpa_supplicant: disable for avr32
-Message-ID: <8a8b1c998ef9cf581c4e0b442da6f3e18e3c57bb.1402814913.git.baruch@tkos.co.il>
+In-Reply-To: <8a8b1c998ef9cf581c4e0b442da6f3e18e3c57bb.1402814913.git.baruch@tkos.co.il>
+References: <8a8b1c998ef9cf581c4e0b442da6f3e18e3c57bb.1402814913.git.baruch@tkos.co.il>
+Message-ID: <20140615085424.46c9a5b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/209/20908f479b33c1e2952622f5e8ad6b60d58af693/
+Dear Baruch Siach,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/wpa_supplicant/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Sun, 15 Jun 2014 09:48:32 +0300, Baruch Siach wrote:
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 5cb3f1b..1fb7008 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_WPA_SUPPLICANT
- 	bool "wpa_supplicant"
- 	help
-+	depends on !BR2_avr32 # no epoll_create1
- 	  WPA supplicant for secure wireless networks
- 
- 	  http://hostap.epitest.fi/wpa_supplicant/
+>  config BR2_PACKAGE_WPA_SUPPLICANT
+>  	bool "wpa_supplicant"
+>  	help
+> +	depends on !BR2_avr32 # no epoll_create1
+
+With this change, isn't the "depends on" thing part of the help text? I
+believe it should appear before the help section.
+
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
