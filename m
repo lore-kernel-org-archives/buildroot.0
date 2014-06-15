@@ -1,202 +1,64 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Sun, 15 Jun 2014 15:56:37 +0200
-Subject: [Buildroot] [PATCH] configs: add lego_ev3_defconfig
-Message-ID: <1402840597-485-1-git-send-email-vincent.stehle@laposte.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 15 Jun 2014 16:06:23 +0200
+Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
+ relocatable one
+In-Reply-To: <20140615121602.GC4064@tarshish>
+References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
+ <20140608145430.0125bb29@free-electrons.com>
+ <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
+ <20140608154632.1f6f13a6@free-electrons.com>
+ <884EA965490E3C4D8E66AEF41E9802502528F6@ezex10.ezchip.com>
+ <20140608154420.GF4074@tarshish>
+ <884EA965490E3C4D8E66AEF41E980250256965@ezex10.ezchip.com>
+ <20140615121602.GC4064@tarshish>
+Message-ID: <CAAXf6LUH1JmV3uM_B1meUxCt5BnTzYpxz25GXuydHDNXPBeyaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add initial support for the Lego Mindstorms EV3 programmable brick.
+On Sun, Jun 15, 2014 at 2:16 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Noam,
+>
+> On Sun, Jun 15, 2014 at 11:46:03AM +0000, Noam Camus wrote:
+>> > See the EXAMPLE section of the git-send-email(1) man page (online at
+>> > http://git-scm.com/docs/git-send-email).
+>>
+>> I followed EXAMPLE section but /usr/libexec/git-core/git-send-email always
+>> complains:
+>> Unable to initialize SMTP properly. Check config and use --smtp-debug. VALUES: server=smtp.gmail.com encryption=tls maildomain=xxx.ezchip.com Debug=0 port=587 at /usr/libexec/git-core/git-send-email line 1041.
+>>
+>> This is Net::SMTP->new() that always returns NULL.
+>> I used CPAN to install latest Net::SMTP.
+>>
+>> Any ideas?
+>
+> Your friendly corporate firewall might be blocking outgoing traffic to port
+> 587. Try doing 'telnet smtp.gmail.com 587'. If you get timeout, this is most
+> likely the reason. Your best options is to talk to your IT department to let
+> you access to outgoing port 587. If that fails I can think of two workarounds:
+>
+> 1. Use an external server you can control from withing your corporate network
+>    (SSH would be best, though I guess your firewall blocks SSH as well)
+>
+> 2. Tunnel SMTP over HTTP somehow. This is quite ugly.
+>
+> Others on this list may have better solutions for this frustrating problem.
 
-The Lego Mindstorms EV3 brick comprises a Texas Instruments AM1808 SoC, with
-an ARM 926EJ-S main processor running at 300 MHz.
-https://en.wikipedia.org/wiki/Lego_Mindstorms_EV3
+If it's purely a proxy problem, then you can use socat to let smtp go
+through the tunnel.
+Set up git to use localhost as smtp server, and a port of your choice,
+for example 10587, and set up a socat instance:
 
-This configuration uses the Linux kernel of the ev3dev project.
-https://github.com/mindboards/ev3sources
+socat TCP4-LISTEN:$localport,reuseaddr,fork
+PROXY:$proxy:$remotehost:$remoteport,proxyport=$proxyport,resolve
 
-More info is available in the board/lego/ev3/readme.txt file, shamelessly
-documented in the same way as the SoCkit folks did.
+where localport=10587, remotehost=smtp.gmail.com, remoteport=587,
+proxy=proxy.yourcompany.com proxyport=8080 (whatever is the right port
+for your proxy)
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
----
- board/lego/ev3/readme.txt  | 135 +++++++++++++++++++++++++++++++++++++++++++++
- configs/lego_ev3_defconfig |  23 ++++++++
- 2 files changed, 158 insertions(+)
- create mode 100644 board/lego/ev3/readme.txt
- create mode 100644 configs/lego_ev3_defconfig
+Same trick can be used to forward IRC through the proxy.
 
-diff --git a/board/lego/ev3/readme.txt b/board/lego/ev3/readme.txt
-new file mode 100644
-index 0000000..3c0bd2e
---- /dev/null
-+++ b/board/lego/ev3/readme.txt
-@@ -0,0 +1,135 @@
-+Lego Mindstorms EV3
-+
-+Intro
-+=====
-+
-+This is the buildroot basic board support for the Lego Mindstorms EV3
-+programmable brick. No support for sensors and drivers is provided for the
-+moment.
-+
-+The Lego Mindstorms EV3 brick comprises a Texas Instruments AM1808 SoC, with
-+an ARM 926EJ-S main processor running at 300 MHz.
-+See:
-+- https://en.wikipedia.org/wiki/Lego_Mindstorms_EV3
-+- http://www.lego.com/en-us/mindstorms/products/ev3/31313-mindstorms-ev3/
-+- http://www.ti.com/product/am1808
-+
-+The buildroot configuration uses the Linux kernel of the ev3dev project.
-+See:
-+- http://botbench.com/blog/2013/07/31/lego-mindstorms-ev3-source-code-available/
-+- https://github.com/mindboards/ev3sources
-+
-+Note that the EV3 configuration uses gcc 4.7, as the boot is broken with gcc
-+4.8.
-+
-+How it works
-+============
-+
-+Boot process :
-+--------------
-+
-+The u-boot on-board the EV3 brick has provision to boot a Linux kernel from the
-+external ?SD card. It will try to load a uImage from the first ?SD card
-+partition, which must be formatted with a FAT filesystem.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+The lego_ev3_defconfig configuration provides basic support to boot on the Lego
-+Mindstorms EV3 programmable brick:
-+
-+  $ make lego_ev3_defconfig
-+
-+Build everything
-+----------------
-+
-+Note: you will need to have access to the network, since Buildroot will
-+download the packages' sources.
-+
-+  $ make
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    ??? rootfs.ext2
-+    ??? rootfs.ext3 -> rootfs.ext2
-+    ??? uImage
-+
-+
-+Prepare your SDcard
-+===================
-+
-+The following ?SD card layout is recommended:
-+
-+- First partition formated with a FAT filesystem, containing the uImage.
-+- Second partition formatted as ext2 or ext3, containing the root filesystem.
-+
-+Create the SDcard partition table
-+----------------------------------
-+
-+Determine the device associated to the SD card :
-+
-+  $ cat /proc/partitions
-+
-+Let's assume it is /dev/mmcblk0 :
-+
-+  $ sudo fdisk /dev/mmcblk0
-+
-+Delete all previous partitions by creating a new disklabel with 'o', then
-+create the new partition table, using these options, pressing enter after each
-+one:
-+
-+  * n p 1 2048 +10M t c
-+  * n p 2 22528 +256M
-+
-+Using the 'p' option, the SD card's partition must look like this :
-+
-+Device          Boot  Start     End  Blocks  Id System
-+/dev/mmcblk0p1         2048   22527   10240   c  W95 FAT32 (LBA)
-+/dev/mmcblk0p2        22528  546815  262144  83  Linux
-+
-+Then write the partition table using 'w' and exit.
-+
-+Make partition one a DOS partition :
-+
-+  $ sudo mkfs.vfat /dev/mmcblk0p1
-+
-+Install the binaries to the SDcard
-+----------------------------------
-+
-+Remember your binaries are located in output/images/, go inside that directory :
-+
-+  $ cd output/images
-+
-+Copy the Linux kernel:
-+
-+  $ sudo mkdir /mnt/sdcard
-+  $ sudo mount /dev/mmcblk0p1 /mnt/sdcard
-+  $ sudo cp uImage /mnt/sdcard
-+  $ sudo umount /mnt/sdcard
-+
-+Copy the rootfs :
-+
-+  $ sudo dd if=rootfs.ext3 of=/dev/mmcblk0p2 bs=1M
-+  $ sync
-+
-+It's Done!
-+
-+Finish
-+======
-+
-+Eject your ?SD card, insert it in your Lego EV3, and power it up.
-+
-+To have a serial console, you will need a proper USB to Lego serial port
-+adapter plugged into the EV3 sensors port 1.
-+See:
-+- http://botbench.com/blog/2013/08/15/ev3-creating-console-cable/
-+- http://botbench.com/blog/2013/08/05/mindsensors-ev3-usb-console-adapter/
-+
-+The serial port config to use is 115200/8-N-1.
-diff --git a/configs/lego_ev3_defconfig b/configs/lego_ev3_defconfig
-new file mode 100644
-index 0000000..c7bf857
---- /dev/null
-+++ b/configs/lego_ev3_defconfig
-@@ -0,0 +1,23 @@
-+# architecture
-+BR2_arm=y
-+BR2_arm926t=y
-+
-+# toolchain
-+# Use gcc 4.7, as gcc 4.8 breaks the boot.
-+BR2_GCC_VERSION_4_7_X=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mindboards/ev3dev-kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v3.3.0-2-ev3dev_0"
-+BR2_LINUX_KERNEL_DEFCONFIG="ev3dev"
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_3=y
-+# BR2_TARGET_ROOTFS_TAR is not set
--- 
-2.0.0
+Best regards,
+Thomas
