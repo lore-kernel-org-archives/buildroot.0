@@ -1,28 +1,23 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 15 Jun 2014 17:54:23 +0000 (UTC)
-Subject: [Buildroot] [Bug 7208] Glibc C++ aplications crash if they use
-	exceptions.
-In-Reply-To: <bug-7208-163@https.bugs.busybox.net/>
-References: <bug-7208-163@https.bugs.busybox.net/>
-Message-ID: <20140615175423.367039CFC7@busybox.osuosl.org>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 15 Jun 2014 21:35:10 +0200
+Subject: [Buildroot] [PATCH 02/20 RFC] support/gen-manual-lists.py:
+ remove unneeded arg in private function
+In-Reply-To: <456c6906000c887ce50d430e4d8ca10e52a0d237.1402699915.git.yann.morin.1998@free.fr>
+References: <cover.1402699915.git.yann.morin.1998@free.fr>
+ <456c6906000c887ce50d430e4d8ca10e52a0d237.1402699915.git.yann.morin.1998@free.fr>
+Message-ID: <CAHXCMMJM9nMhNVo7Rjw3ATazVOqdCwNdMRrSVTawstnproQWGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7208
+On Sat, Jun 14, 2014 at 1:02 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> No need to pass as argument to a function, members of the class it's in.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Samuel Martin <s.martin49@gmail.com>
 
---- Comment #5 from Krzysztof Wrzalik <kwrzalik@gmail.com> 2014-06-15 17:54:22 UTC ---
-The difference between compiling with -static-libgcc seems to boil down to the
-following function:
-
-_Unwind_Find_FDE
-
-When compiled with -statlic-libgcc the function invocation ends up in glibc.
-When -static-libgcc is not given, then this function is located in libgcc.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Acked-by: Samuel Martin <s.martin49@gmail.com>
