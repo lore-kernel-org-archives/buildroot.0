@@ -1,78 +1,66 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 15 Jun 2014 10:29:22 +0000 (UTC)
-Subject: [Buildroot] [Bug 7208] New: Glibc C++ aplications crash if they use
-	exceptions.
-Message-ID: <bug-7208-163@https.bugs.busybox.net/>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 15 Jun 2014 12:36:44 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140615122040.6effbc93@free-electrons.com>
+References: <20140615063014.70ACF100EAC@stock.ovh.net>
+ <20140615122040.6effbc93@free-electrons.com>
+Message-ID: <01b1dd01-35b7-40d8-bb70-56a33e20f1a6@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7208
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Hello all,
+>
+>Over the next few days, I'll try to do a quick analysis of the build
+>failures, to let you know which build failures are "real", and which
+>build failures are caused by issues in the autobuilder infrastructure.
+>
+>On Sun, 15 Jun 2014 08:30:14 +0200 (CEST), Thomas Petazzoni wrote:
+>
+>>    powerpc |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/b62615a2d933f2b69c8b402d0134c72675a7e527/
+>
+>Still the libstdc++ static linking issue.
+>
+>>       i686 |                  cairo-1.12.10 | TIM | http://autobuild.buildroot.net/results/211fbc0aee997139a7a9d65b4776e02a5b294b4e/
+>
+>Timeout on my private server. It seems like this server is by an order
+>of magnitude slower than the Free Electrons build server, and that
+>therefore the timeout  of 4 hours is not appropriate for builds that
+>can have up to 30% of the packages enabled. For example, this private
+>server needs 20 minutes to build libglib2 (which seems very long, not
+>sure what's going on there).
+>
+>I'm looking for suggestions on this, because I'm sure other people
+>testing the autobuild-run script will have similar problems, as they
+>will not all have 8 cores monsters with 32 GB of RAM and fast I/O.
+>There are two possible directions:
+>
+> * Make the timeout configurable, so that people can adjust it to their
+>   configuration to avoid false positives as much as possible.
+>
+> * Make the timeout a per-package timeout. However, that requires
+>   having a process running in parallel to the build to monitor the
+>   progress of the build. Not impossible, but requires a bit of
+>   additional logic in autobuild-run.
+>
+> * Make the KCONFIG_PROBABILITY configurable. My statistics lessons are
+>   way too much in the past, but I'm wondering if having different
+>   KCONFIG_PROBABILITY in the various builders is not going to make the
+>   statistic of failed vs. success builds a bit meaningless. If one
+>   machine runs with a low KCONFIG_PROBABILITY, this machine will do a
+>   lot of small builds, and small builds have a much higher chance of
+>   being successful than bigger builds. Therefore, such a machine could
+>   easily reach a very high success rate of builds, compared to a
+>   machine running with a higher KCONFIG_PROBABILITY value. Thoughts on
+>   this? Or people better in statistics than me to confirm or infirm my
+>   reasoning?
+>
 
-           Summary: Glibc C++ aplications crash if they use exceptions.
-           Product: buildroot
-           Version: 2014.05
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: critical
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: kwrzalik at gmail.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+Could you clarify why we need a timeout in the first place? Have there been occurrences of builds that get stuck (in a loop or otherwise)?
+According to me, it doesn't matter that a build takes ten hours for a given configuration, as long as it progresses and doesn't get stuck...
 
-
-I'm using a toolchain with glibc and the following simple program crashes:
-
-#include <cstdio>
-
-int main() {
-  try {
-    throw 42;
-  } catch (int x) {
-    printf("catch %d\n", x);
-  }
-}
-
-with the following backtrace:
-
-#0  0xb7747a92 in ?? () from /lib/ld-linux.so.2
-#1  0xb74ac6b8 in raise () from /lib/libc.so.6
-#2  0xb74adbae in abort () from /lib/libc.so.6
-#3  0xb763903a in ?? () from /lib/libgcc_s.so.1
-#4  0xb763936b in _Unwind_RaiseException () from /lib/libgcc_s.so.1
-#5  0xb76d0304 in __cxa_throw () from /usr/lib/libstdc++.so.6
-#6  0x080486c1 in main ()
-
-when run on the host with proper ld-linux.so and run paths the stack trace is
-as follows:
-
-#0  0xb7fdc424 in __kernel_vsyscall ()
-#1  0xb7d4073f in raise () from
-/opt/gnl/usr/i686-gnl-linux-gnu/sysroot/lib/libc.so.6
-#2  0xb7d41c5e in abort () from
-/opt/gnl/usr/i686-gnl-linux-gnu/sysroot/lib/libc.so.6
-#3  0xb7ecf0d9 in uw_init_context_1 (context=context at entry=0xbfffe680,
-outer_cfa=outer_cfa at entry=0xbfffe860, outer_ra=0xb7f66424
-<__cxxabiv1::__cxa_throw(void*, std:
-:type_info*, void (*)(void*))+97>) at ../../../libgcc/unwind-dw2.c:1567
-#4  0xb7ecf40a in _Unwind_RaiseException (exc=0x804a048) at
-../../../libgcc/unwind.inc:88
-#5  0xb7f66424 in __cxxabiv1::__cxa_throw (obj=0x804a068, tinfo=0x8049e50
-<_ZTIi@@CXXABI_1.3>, dest=0x0) at
-../../../../libstdc++-v3/libsupc++/eh_throw.cc:82
-#6  0x08048924 in main () at dupa.cpp:8
-
-
-In the discussion with tom_kos and wbx on IRC we managed to pin the problem
-libgcc_s.so. The problem only appears when linking with dynamic libgcc_s.so. If
-the program is compiled with -static-libgcc it runs correctly.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Thomas
