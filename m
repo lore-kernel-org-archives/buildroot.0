@@ -1,136 +1,825 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 15 Jun 2014 15:33:49 +0200
-Subject: [Buildroot] [PATCH 2/2] configs: add defconfig for the Atmel
-	SAMA5D3 Xplained board
-In-Reply-To: <1402839229-13076-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1402839229-13076-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1402839229-13076-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Jun 2014 15:33:48 +0200
+Subject: [Buildroot] [PATCH 1/2] at91bootstrap3: bump to v3.6.2
+Message-ID: <1402839229-13076-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+In preparation to add support for the SAMA5D3 Xplained board, this
+commit bumps the version of the at91bootstrap3 bootloader to
+v3.6.2. While doing this, it also:
+
+ - Allows this bootloader on Cortex-A5 based platforms, since SAMA5D3
+   are based on Cortex-A5.
+
+ - Removes a patch that no longer applies, and which has been taken
+   into account in at91bootstrap3 upstream.
+
+ - Switches to the upstream Github location as the source.
+
+ - Updates the installation commands to match upstream changes in the
+   installation process.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/atmel/xplained/readme.txt  | 73 ++++++++++++++++++++++++++++++++++++++++
- configs/atmel_xplained_defconfig | 28 +++++++++++++++
- 2 files changed, 101 insertions(+)
- create mode 100644 board/atmel/xplained/readme.txt
- create mode 100644 configs/atmel_xplained_defconfig
+ boot/at91bootstrap3/Config.in                      |   2 +-
+ .../at91bootstrap3-u-boot-relocation-fix.patch     | 747 ---------------------
+ boot/at91bootstrap3/at91bootstrap3.mk              |   8 +-
+ 3 files changed, 4 insertions(+), 753 deletions(-)
+ delete mode 100644 boot/at91bootstrap3/at91bootstrap3-u-boot-relocation-fix.patch
 
-diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
-new file mode 100644
-index 0000000..e29a116
---- /dev/null
-+++ b/board/atmel/xplained/readme.txt
-@@ -0,0 +1,73 @@
-+Atmel SAMA5D3 Xplained board
-+============================
-+
-+This document explains how to set up a basic Buildroot system on the
-+Atmel SAMA5D3 Xplained board, whose main site is
-+http://www.atmel.com/tools/ATSAMA5D3-XPLD.aspx. Additional details can
-+also be found on the http://www.at91.com/linux4sam/bin/view/Linux4SAM/
-+web site.
-+
-+Note that the default Buildroot configuration is prepared to boot from
-+an SD card: the first stage bootloader, second stage bootloader,
-+kernel image and root filesystem are all located on the SD card. Some
-+adjustements in the bootloader configuration will be needed to boot
-+from NAND flash.
-+
-+Configuring and building Buildroot
-+----------------------------------
-+
-+  make atmel_xplained_defconfig
-+  make
-+
-+Preparing the SD card
-+---------------------
-+
-+The SD card must be partitionned with at least two partitions: one
-+FAT16 partition for the bootloaders, kernel image and Device Tree
-+blob, and one ext4 partition for the root filesystem. To partition the
-+SD card:
-+
-+sudo sfdisk -uM /dev/mmcblk0 <<EOF
-+,64,6
-+;
-+EOF
-+
-+This creates a 64 MB partition for the FAT16 filesystem (type 6) and
-+uses the rest for the ext4 filesystem used for the root filesystem.
-+
-+Then, format both partitions:
-+
-+sudo mkfs.msdos -n boot /dev/mmcblk0p1
-+sudo mkfs.ext4 -L rootfs -O ^huge_file /dev/mmcblk0p2
-+
-+ Note: the -O ^huge_file option is needed to avoid enabling the huge
-+ files features of ext4 (to support files larges than 2 TB), which
-+ needs the kernel option CONFIG_LBDAF to be enabled.
-+
-+Mount both partitions (if not done automatically by your system):
-+
-+sudo mount /dev/mmcblk0p1 /media/boot
-+sudo mount /dev/mmcblk0p2 /media/rootfs
-+
-+Copy the bootloaders, kernel image and Device Tree blob to the first
-+partition:
-+
-+cp output/images/sama5d3_xplained-sdcardboot-uboot-3.6.2.bin /media/boot/boot.bin
-+cp output/images/u-boot.bin /media/boot/u-boot.bin
-+cp output/images/zImage /media/boot/zImage
-+cp output/images/at91-sama5d3_xplained.dtb /media/boot/at91-sama5d3_xplained.dtb
-+
-+Extract the root filesystem to the second partition:
-+
-+sudo tar -C /media/rootfs -xf output/images/rootfs.tar
-+
-+Unmount both partitions:
-+
-+sudo umount /media/boot
-+sudo umount /media/rootfs
-+
-+Insert your SD card in your Xplained board, and enjoy. The default
-+U-Boot environment will properly load the kernel and Device Tree blob
-+from the first partition of the SD card, so everything works
-+automatically.
-+
-diff --git a/configs/atmel_xplained_defconfig b/configs/atmel_xplained_defconfig
-new file mode 100644
-index 0000000..8c06489
---- /dev/null
-+++ b/configs/atmel_xplained_defconfig
-@@ -0,0 +1,28 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a5=y
-+
-+# Toolchain configuration
-+BR2_ARM_EABIHF=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.15"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
-+
-+# Kernel configuration
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
-+
-+# First stage bootloader
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
-+
-+# Second stage bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_mmc"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2014.04"
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index 110f808..8ac40ed 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_TARGET_AT91BOOTSTRAP3
+-	depends on BR2_arm926t
++	depends on BR2_arm926t || BR2_cortex_a5
+ 	bool "AT91 Bootstrap 3"
+ 	help
+ 	  AT91Bootstrap is a first level bootloader for the Atmel AT91
+diff --git a/boot/at91bootstrap3/at91bootstrap3-u-boot-relocation-fix.patch b/boot/at91bootstrap3/at91bootstrap3-u-boot-relocation-fix.patch
+deleted file mode 100644
+index 62bbd2a..0000000
+--- a/boot/at91bootstrap3/at91bootstrap3-u-boot-relocation-fix.patch
++++ /dev/null
+@@ -1,747 +0,0 @@
+-Every AT91SAM plaforms were broken between 2010.12 and 2011.03 because
+-of the relocation changes.
+-
+-We have to get JUMP_ADDR consistent with what is used by u-boot
+-(CONFIG_SYS_TEXT_BASE).
+-
+-I also chose to "repartition" the dataflash. u-boot is now living at
+-0x4000, letting 16kB for the bootstrap. We also have to increase the
+-IMG_SIZE as u-boot as grown larger than the default value.
+-As requested on the u-boot ML, we assume that it could be up to 512kB
+-big.
+-
+-It means that now, you have to flash your kernel at 0x0008C000 instead
+-of 0x00042000. And so you also have to load it from that address from
+-u-boot.
+-
+-Then, remember that you could decrease IMG_SIZE to boot faster.
+-
+-Signed-off-by: Alexandre Belloni <alexandre.belloni@piout.net>
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/board/afeb9260/afeb9260_defconfig b/board/afeb9260/afeb9260_defconfig
+---- a/board/afeb9260/afeb9260_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/afeb9260/afeb9260_defconfig	2012-07-25 20:52:17.967694276 +0100
+-@@ -97,9 +97,9 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+- # CONFIG_DEBUG is not set
+-diff -Nurp a/board/at91cap9adk/at91cap9adk_defconfig b/board/at91cap9adk/at91cap9adk_defconfig
+---- a/board/at91cap9adk/at91cap9adk_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91cap9adk/at91cap9adk_defconfig	2012-07-25 20:52:30.603693814 +0100
+-@@ -96,8 +96,8 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91cap9adk/at91cap9df_defconfig b/board/at91cap9adk/at91cap9df_defconfig
+---- a/board/at91cap9adk/at91cap9df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91cap9adk/at91cap9df_defconfig	2012-07-25 20:52:23.807694041 +0100
+-@@ -96,8 +96,8 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91cap9adk/at91cap9f_defconfig b/board/at91cap9adk/at91cap9f_defconfig
+---- a/board/at91cap9adk/at91cap9f_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91cap9adk/at91cap9f_defconfig	2012-07-25 21:25:20.839605245 +0100
+-@@ -72,7 +72,7 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+- CONFIG_IMG_ADDRESS="0x00008000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91cap9stk/at91cap9stk_defconfig b/board/at91cap9stk/at91cap9stk_defconfig
+---- a/board/at91cap9stk/at91cap9stk_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91cap9stk/at91cap9stk_defconfig	2012-07-25 20:52:59.663692456 +0100
+-@@ -96,8 +96,8 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91cap9stk/at91cap9stkdf_defconfig b/board/at91cap9stk/at91cap9stkdf_defconfig
+---- a/board/at91cap9stk/at91cap9stkdf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91cap9stk/at91cap9stkdf_defconfig	2012-07-25 20:52:52.255692671 +0100
+-@@ -96,8 +96,8 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91cap9stk/at91cap9stkf_defconfig b/board/at91cap9stk/at91cap9stkf_defconfig
+---- a/board/at91cap9stk/at91cap9stkf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91cap9stk/at91cap9stkf_defconfig	2012-07-25 21:25:35.235605140 +0100
+-@@ -72,7 +72,7 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+- CONFIG_IMG_ADDRESS="0x00008000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9260ek/at91sam9260dfc_defconfig b/board/at91sam9260ek/at91sam9260dfc_defconfig
+---- a/board/at91sam9260ek/at91sam9260dfc_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9260ek/at91sam9260dfc_defconfig	2012-07-25 20:35:23.259739521 +0100
+-@@ -97,9 +97,9 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+- # CONFIG_DEBUG is not set
+-diff -Nurp a/board/at91sam9260ek/at91sam9260df_defconfig b/board/at91sam9260ek/at91sam9260df_defconfig
+---- a/board/at91sam9260ek/at91sam9260df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9260ek/at91sam9260df_defconfig	2012-07-25 20:34:19.231742964 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- # CONFIG_DEBUG is not set
+-diff -Nurp a/board/at91sam9260ek/at91sam9260ek_defconfig b/board/at91sam9260ek/at91sam9260ek_defconfig
+---- a/board/at91sam9260ek/at91sam9260ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9260ek/at91sam9260ek_defconfig	2012-07-25 20:32:17.711747794 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- # CONFIG_DEBUG is not set
+-diff -Nurp a/board/at91sam9260ek/at91sam9260nf_defconfig b/board/at91sam9260ek/at91sam9260nf_defconfig
+---- a/board/at91sam9260ek/at91sam9260nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9260ek/at91sam9260nf_defconfig	2012-07-25 21:25:57.079604719 +0100
+-@@ -87,8 +87,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- # CONFIG_DEBUG is not set
+-diff -Nurp a/board/at91sam9261ek/at91sam9261dfc_defconfig b/board/at91sam9261ek/at91sam9261dfc_defconfig
+---- a/board/at91sam9261ek/at91sam9261dfc_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9261ek/at91sam9261dfc_defconfig	2012-07-25 20:37:07.515735228 +0100
+-@@ -97,9 +97,9 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9261ek/at91sam9261df_defconfig b/board/at91sam9261ek/at91sam9261df_defconfig
+---- a/board/at91sam9261ek/at91sam9261df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9261ek/at91sam9261df_defconfig	2012-07-25 20:36:44.351735615 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9261ek/at91sam9261ek_defconfig b/board/at91sam9261ek/at91sam9261ek_defconfig
+---- a/board/at91sam9261ek/at91sam9261ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9261ek/at91sam9261ek_defconfig	2012-07-25 20:36:09.111737459 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9261ek/at91sam9261nf_defconfig b/board/at91sam9261ek/at91sam9261nf_defconfig
+---- a/board/at91sam9261ek/at91sam9261nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9261ek/at91sam9261nf_defconfig	2012-07-25 21:24:45.843607437 +0100
+-@@ -86,8 +86,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9263ek/at91sam9263dfc_defconfig b/board/at91sam9263ek/at91sam9263dfc_defconfig
+---- a/board/at91sam9263ek/at91sam9263dfc_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9263ek/at91sam9263dfc_defconfig	2012-07-25 20:38:55.555730059 +0100
+-@@ -100,9 +100,9 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9263ek/at91sam9263df_defconfig b/board/at91sam9263ek/at91sam9263df_defconfig
+---- a/board/at91sam9263ek/at91sam9263df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9263ek/at91sam9263df_defconfig	2012-07-25 20:38:37.395730195 +0100
+-@@ -105,11 +105,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x2006b000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9263ek/at91sam9263ek_defconfig b/board/at91sam9263ek/at91sam9263ek_defconfig
+---- a/board/at91sam9263ek/at91sam9263ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9263ek/at91sam9263ek_defconfig	2012-07-25 20:38:08.379732395 +0100
+-@@ -105,11 +105,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x2006b000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9263ek/at91sam9263nf_defconfig b/board/at91sam9263ek/at91sam9263nf_defconfig
+---- a/board/at91sam9263ek/at91sam9263nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9263ek/at91sam9263nf_defconfig	2012-07-25 21:25:39.195605069 +0100
+-@@ -89,8 +89,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x2006b000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g10ek/at91sam9g10df_defconfig b/board/at91sam9g10ek/at91sam9g10df_defconfig
+---- a/board/at91sam9g10ek/at91sam9g10df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g10ek/at91sam9g10df_defconfig	2012-07-25 20:40:18.087726292 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20068000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g10ek/at91sam9g10ek_defconfig b/board/at91sam9g10ek/at91sam9g10ek_defconfig
+---- a/board/at91sam9g10ek/at91sam9g10ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g10ek/at91sam9g10ek_defconfig	2012-07-25 20:39:53.543727636 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20068000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g10ek/at91sam9g10nf_defconfig b/board/at91sam9g10ek/at91sam9g10nf_defconfig
+---- a/board/at91sam9g10ek/at91sam9g10nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g10ek/at91sam9g10nf_defconfig	2012-07-25 21:25:28.975605503 +0100
+-@@ -86,8 +86,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20068000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g20ek/at91sam9g20dfc_defconfig b/board/at91sam9g20ek/at91sam9g20dfc_defconfig
+---- a/board/at91sam9g20ek/at91sam9g20dfc_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g20ek/at91sam9g20dfc_defconfig	2012-07-25 20:41:48.275722343 +0100
+-@@ -97,9 +97,9 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g20ek/at91sam9g20df_defconfig b/board/at91sam9g20ek/at91sam9g20df_defconfig
+---- a/board/at91sam9g20ek/at91sam9g20df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g20ek/at91sam9g20df_defconfig	2012-07-25 20:42:07.091721310 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g20ek/at91sam9g20ek_defconfig b/board/at91sam9g20ek/at91sam9g20ek_defconfig
+---- a/board/at91sam9g20ek/at91sam9g20ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g20ek/at91sam9g20ek_defconfig	2012-07-25 20:41:23.179723541 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g20ek/at91sam9g20nf_defconfig b/board/at91sam9g20ek/at91sam9g20nf_defconfig
+---- a/board/at91sam9g20ek/at91sam9g20nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g20ek/at91sam9g20nf_defconfig	2012-07-25 21:25:49.291603975 +0100
+-@@ -87,8 +87,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x20058000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9g45ek/at91sam9g45df_defconfig b/board/at91sam9g45ek/at91sam9g45df_defconfig
+---- a/board/at91sam9g45ek/at91sam9g45df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g45ek/at91sam9g45df_defconfig	2012-07-25 20:47:46.055707221 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9g45ek/at91sam9g45ek_defconfig b/board/at91sam9g45ek/at91sam9g45ek_defconfig
+---- a/board/at91sam9g45ek/at91sam9g45ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g45ek/at91sam9g45ek_defconfig	2012-07-25 20:47:02.303708341 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9g45ek/at91sam9g45nf_defconfig b/board/at91sam9g45ek/at91sam9g45nf_defconfig
+---- a/board/at91sam9g45ek/at91sam9g45nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g45ek/at91sam9g45nf_defconfig	2012-07-25 21:25:24.547605601 +0100
+-@@ -86,7 +86,7 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9g45ekes/at91sam9g45dfes_defconfig b/board/at91sam9g45ekes/at91sam9g45dfes_defconfig
+---- a/board/at91sam9g45ekes/at91sam9g45dfes_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g45ekes/at91sam9g45dfes_defconfig	2012-07-25 20:47:33.895706968 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9g45ekes/at91sam9g45ekes_defconfig b/board/at91sam9g45ekes/at91sam9g45ekes_defconfig
+---- a/board/at91sam9g45ekes/at91sam9g45ekes_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g45ekes/at91sam9g45ekes_defconfig	2012-07-25 20:46:49.043708951 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9g45ekes/at91sam9g45nfes_defconfig b/board/at91sam9g45ekes/at91sam9g45nfes_defconfig
+---- a/board/at91sam9g45ekes/at91sam9g45nfes_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9g45ekes/at91sam9g45nfes_defconfig	2012-07-25 21:25:44.823604805 +0100
+-@@ -86,7 +86,7 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9m10ek/at91sam9m10df_defconfig b/board/at91sam9m10ek/at91sam9m10df_defconfig
+---- a/board/at91sam9m10ek/at91sam9m10df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9m10ek/at91sam9m10df_defconfig	2012-07-25 20:44:34.975714928 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9m10ek/at91sam9m10ek_defconfig b/board/at91sam9m10ek/at91sam9m10ek_defconfig
+---- a/board/at91sam9m10ek/at91sam9m10ek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9m10ek/at91sam9m10ek_defconfig	2012-07-25 20:43:34.543717453 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9m10ek/at91sam9m10nf_defconfig b/board/at91sam9m10ek/at91sam9m10nf_defconfig
+---- a/board/at91sam9m10ek/at91sam9m10nf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9m10ek/at91sam9m10nf_defconfig	2012-07-25 21:21:40.419615800 +0100
+-@@ -86,7 +86,7 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9m10ekes/at91sam9m10dfes_defconfig b/board/at91sam9m10ekes/at91sam9m10dfes_defconfig
+---- a/board/at91sam9m10ekes/at91sam9m10dfes_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9m10ekes/at91sam9m10dfes_defconfig	2012-07-25 20:44:18.687715650 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9m10ekes/at91sam9m10ekes_defconfig b/board/at91sam9m10ekes/at91sam9m10ekes_defconfig
+---- a/board/at91sam9m10ekes/at91sam9m10ekes_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9m10ekes/at91sam9m10ekes_defconfig	2012-07-25 20:43:57.255716814 +0100
+-@@ -102,10 +102,10 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9m10ekes/at91sam9m10nfes_defconfig b/board/at91sam9m10ekes/at91sam9m10nfes_defconfig
+---- a/board/at91sam9m10ekes/at91sam9m10nfes_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9m10ekes/at91sam9m10nfes_defconfig	2012-07-25 21:26:10.179603831 +0100
+-@@ -86,7 +86,7 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+-+CONFIG_IMG_SIZE="0x00080000"
+- CONFIG_JUMP_ADDR="0x73F00000"
+- CONFIG_GLBDRV_ADDR="0x7006b000"
+- # CONFIG_LONG_TEST is not set
+-diff -Nurp a/board/at91sam9n12ek/at91sam9n12df_defconfig b/board/at91sam9n12ek/at91sam9n12df_defconfig
+---- a/board/at91sam9n12ek/at91sam9n12df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9n12ek/at91sam9n12df_defconfig	2012-07-25 20:52:40.675693207 +0100
+-@@ -107,7 +107,7 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+- CONFIG_IMG_SIZE="0x00050000"
+-diff -Nurp a/board/at91sam9rlek/at91sam9rldf_defconfig b/board/at91sam9rlek/at91sam9rldf_defconfig
+---- a/board/at91sam9rlek/at91sam9rldf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9rlek/at91sam9rldf_defconfig	2012-07-25 20:48:53.183703493 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x2006b000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9rlek/at91sam9rlek_defconfig b/board/at91sam9rlek/at91sam9rlek_defconfig
+---- a/board/at91sam9rlek/at91sam9rlek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9rlek/at91sam9rlek_defconfig	2012-07-25 20:48:29.659704460 +0100
+-@@ -102,11 +102,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x2006b000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9rlek/at91sam9rlnf_defconfig b/board/at91sam9rlek/at91sam9rlnf_defconfig
+---- a/board/at91sam9rlek/at91sam9rlnf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9rlek/at91sam9rlnf_defconfig	2012-07-25 21:24:49.335607485 +0100
+-@@ -85,8 +85,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x2006b000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9x5ek/at91sam9x5df_defconfig b/board/at91sam9x5ek/at91sam9x5df_defconfig
+---- a/board/at91sam9x5ek/at91sam9x5df_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9x5ek/at91sam9x5df_defconfig	2012-07-25 20:52:45.375693059 +0100
+-@@ -106,7 +106,7 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+- CONFIG_IMG_SIZE="0x00050000"
+-diff -Nurp a/board/at91sam9xeek/at91sam9xedfc_defconfig b/board/at91sam9xeek/at91sam9xedfc_defconfig
+---- a/board/at91sam9xeek/at91sam9xedfc_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9xeek/at91sam9xedfc_defconfig	2012-07-25 20:50:10.643699991 +0100
+-@@ -96,9 +96,9 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_APP_CHECK=y
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9xeek/at91sam9xedf_defconfig b/board/at91sam9xeek/at91sam9xedf_defconfig
+---- a/board/at91sam9xeek/at91sam9xedf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9xeek/at91sam9xedf_defconfig	2012-07-25 20:50:26.967699568 +0100
+-@@ -103,11 +103,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x23F00000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9xeek/at91sam9xeek_defconfig b/board/at91sam9xeek/at91sam9xeek_defconfig
+---- a/board/at91sam9xeek/at91sam9xeek_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9xeek/at91sam9xeek_defconfig	2012-07-25 20:49:46.131699600 +0100
+-@@ -103,11 +103,11 @@ CONFIG_LOAD_UBOOT=y
+- # CONFIG_LOAD_64KB is not set
+- # CONFIG_LOAD_1MB is not set
+- # CONFIG_LOAD_4MB is not set
+--CONFIG_IMG_ADDRESS="0x00008400"
+-+CONFIG_IMG_ADDRESS="0x00004000"
+- CONFIG_SETTING_ADDRESS="0x00408400"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x23F00000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+-diff -Nurp a/board/at91sam9xeek/at91sam9xenf_defconfig b/board/at91sam9xeek/at91sam9xenf_defconfig
+---- a/board/at91sam9xeek/at91sam9xenf_defconfig	2011-11-18 08:13:09.000000000 +0000
+-+++ b/board/at91sam9xeek/at91sam9xenf_defconfig	2012-07-25 21:26:05.627603826 +0100
+-@@ -88,8 +88,8 @@ CONFIG_LOAD_UBOOT=y
+- CONFIG_IMG_ADDRESS="0x00020000"
+- CONFIG_SETTING_ADDRESS="0x01FE0000"
+- CONFIG_SETTING_SIZE="0x00001000"
+--CONFIG_IMG_SIZE="0x00040000"
+--CONFIG_JUMP_ADDR="0x23F00000"
+-+CONFIG_IMG_SIZE="0x00080000"
+-+CONFIG_JUMP_ADDR="0x21F00000"
+- CONFIG_GLBDRV_ADDR="0x23F00000"
+- # CONFIG_LONG_TEST is not set
+- CONFIG_DEBUG=y
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 4f74b1d..07df75d 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -4,10 +4,8 @@
+ #
+ ################################################################################
+ 
+-AT91BOOTSTRAP3_VERSION = 3.2
+-AT91BOOTSTRAP3_SITE = \
+-	ftp://www.at91.com/pub/at91bootstrap/AT91Bootstrap$(AT91BOOTSTRAP3_VERSION)
+-AT91BOOTSTRAP3_SOURCE = at91bootstrap_9n12.tar.gz
++AT91BOOTSTRAP3_VERSION = v3.6.2
++AT91BOOTSTRAP3_SITE = $(call github,linux4sam,at91bootstrap,$(AT91BOOTSTRAP3_VERSION))
+ 
+ AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+ AT91BOOTSTRAP3_INSTALL_TARGET = NO
+@@ -47,7 +45,7 @@ define AT91BOOTSTRAP3_BUILD_CMDS
+ endef
+ 
+ define AT91BOOTSTRAP3_INSTALL_IMAGES_CMDS
+-	$(MAKE) $(AT91BOOTSTRAP3_MAKE_OPT) -C $(@D) bootstrap
++	cp $(@D)/binaries/*.bin $(BINARIES_DIR)
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.0.0
