@@ -1,33 +1,37 @@
 From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Sun, 15 Jun 2014 15:05:16 +0200
-Subject: [Buildroot] [PATCH 1/1] prevent selecting portmap when rpcbind is
-	selected.
-Message-ID: <1402837516-6202-1-git-send-email-sagaert.johan@skynet.be>
+Date: Sun, 15 Jun 2014 15:32:37 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] rpcbind : add startup script
+Message-ID: <1402839157-10710-1-git-send-email-sagaert.johan@skynet.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-portmap and rpcbind must not be selected at the same time.
-Users should use rpcbind in favor of the deprecated portmap. 
+rpcbind must be started at boot time.
+Without this any nfs mount will fail.
 
 Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 ---
- package/portmap/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+v2: reworked using INSTALL_INIT_SYSV hook
 
-diff --git a/package/portmap/Config.in b/package/portmap/Config.in
-index fa7eaf1..f17d9aa 100644
---- a/package/portmap/Config.in
-+++ b/package/portmap/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PORTMAP
- 	bool "portmap"
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on !BR2_PACKAGE_RPCBIND
- 	help
- 	  The standard portmapper for RPC services.
+ package/rpcbind/rpcbind.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+index 19bdace..a313030 100644
+--- a/package/rpcbind/rpcbind.mk
++++ b/package/rpcbind/rpcbind.mk
+@@ -15,4 +15,10 @@ RPCBIND_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
+ RPCBIND_DEPENDENCIES += libtirpc
  
++define RPCBIND_INSTALL_INIT_SYSV
++	[ -f $(TARGET_DIR)/etc/init.d/S30rpcbind ] || \
++		$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
++			$(TARGET_DIR)/etc/init.d/S30rpcbind
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.0.0
