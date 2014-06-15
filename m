@@ -1,52 +1,53 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 15 Jun 2014 15:16:02 +0300
-Subject: [Buildroot] FW: [PATCH 1/1] toolchain-buildroot: create a
- relocatable one
-In-Reply-To: <884EA965490E3C4D8E66AEF41E980250256965@ezex10.ezchip.com>
-References: <884EA965490E3C4D8E66AEF41E9802502525C8@ezex10.ezchip.com>
- <20140608145430.0125bb29@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E980250252659@ezex10.ezchip.com>
- <20140608154632.1f6f13a6@free-electrons.com>
- <884EA965490E3C4D8E66AEF41E9802502528F6@ezex10.ezchip.com>
- <20140608154420.GF4074@tarshish>
- <884EA965490E3C4D8E66AEF41E980250256965@ezex10.ezchip.com>
-Message-ID: <20140615121602.GC4064@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 15 Jun 2014 14:43:08 +0200
+Subject: [Buildroot] [PATCH 1/1] rpcbind : add startup script
+In-Reply-To: <1402832300-17147-1-git-send-email-sagaert.johan@skynet.be>
+References: <1402832300-17147-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20140615144308.6763b930@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Noam,
+Dear Sagaert Johan,
 
-On Sun, Jun 15, 2014 at 11:46:03AM +0000, Noam Camus wrote:
-> > See the EXAMPLE section of the git-send-email(1) man page (online at
-> > http://git-scm.com/docs/git-send-email).
->
-> I followed EXAMPLE section but /usr/libexec/git-core/git-send-email always 
-> complains:
-> Unable to initialize SMTP properly. Check config and use --smtp-debug. VALUES: server=smtp.gmail.com encryption=tls maildomain=xxx.ezchip.com Debug=0 port=587 at /usr/libexec/git-core/git-send-email line 1041.
+On Sun, 15 Jun 2014 13:38:20 +0200, Sagaert Johan wrote:
+> rpcbind must be started at boot time.
+> Without this any nfs mount will fail.
 > 
-> This is Net::SMTP->new() that always returns NULL.
-> I used CPAN to install latest Net::SMTP.
-> 
-> Any ideas?
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-Your friendly corporate firewall might be blocking outgoing traffic to port 
-587. Try doing 'telnet smtp.gmail.com 587'. If you get timeout, this is most 
-likely the reason. Your best options is to talk to your IT department to let 
-you access to outgoing port 587. If that fails I can think of two workarounds:
+Thanks!
 
-1. Use an external server you can control from withing your corporate network 
-   (SSH would be best, though I guess your firewall blocks SSH as well)
+> diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
+> index 19bdace..6a946f9 100644
+> --- a/package/rpcbind/rpcbind.mk
+> +++ b/package/rpcbind/rpcbind.mk
+> @@ -15,4 +15,12 @@ RPCBIND_CONF_ENV += \
+>  	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/tirpc/"
+>  RPCBIND_DEPENDENCIES += libtirpc
+>  
+> +define RPCBIND_INSTALL_STARTUP_SCRIPT
+> +	[ -f $(TARGET_DIR)/etc/init.d/S30rpcbind ] || \
+> +		$(INSTALL) -m 0755 -D package/rpcbind/S30rpcbind \
+> +			$(TARGET_DIR)/etc/init.d/S30rpcbind
+> +endef
+> +
+> +RPCBIND_POST_INSTALL_TARGET_HOOKS += RPCBIND_INSTALL_STARTUP_SCRIPT
 
-2. Tunnel SMTP over HTTP somehow. This is quite ugly.
+This should instead be using the <pkg>_INIT_SYSV mechanism, see the
+Buildroot manual.
 
-Others on this list may have better solutions for this frustrating problem.
+Also, since you said portmap and rpcbind cannot be used simultaneously,
+I think it would be good to reflect this in the dependencies. So, in a
+separate patch, adding a "depends on !BR2_PACKAGE_RPCBIND" in portmap
+would probably be good to have.
 
-baruch
+Thanks!
 
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
