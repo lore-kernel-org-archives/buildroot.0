@@ -1,36 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jun 2014 15:23:31 -0300
-Subject: [Buildroot] [PATCH 3/3] netatalk: add support for ACLs
-In-Reply-To: <1402943011-12166-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1402943011-12166-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1402943011-12166-3-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 16 Jun 2014 20:45:17 +0200
+Subject: [Buildroot] [PATCH 1/2] support/script/scancpan: populates
+ Config.in with homepage
+In-Reply-To: <1402851561-23157-1-git-send-email-francois.perrad@gadz.org>
+References: <1402851561-23157-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <539F3B3D.9000401@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/netatalk/netatalk.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+On 06/15/14 18:59, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index ab628a4..e976990 100644
---- a/package/netatalk/netatalk.mk
-+++ b/package/netatalk/netatalk.mk
-@@ -29,6 +29,12 @@ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
- 	--with-dtrace=no \
- 	--with-mysql-config=no
- 
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+	NETATALK_DEPENDENCIES += acl
-+else
-+	NETATALK_CONF_OPT += --with-acls=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_AVAHI)$(BR2_PACKAGE_DBUS),yy)
- 	NETATALK_DEPENDENCIES += avahi
- 	NETATALK_CONF_OPT += --enable-zeroconf=$(STAGING_DIR)/usr
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> ---
+>  support/scripts/scancpan | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+> index d8723f3..bf0aaa5 100755
+> --- a/support/scripts/scancpan
+> +++ b/support/scripts/scancpan
+> @@ -577,6 +577,7 @@ while (my ($distname, $dist) = each %dist) {
+>      mkdir $dirname unless -d $dirname;
+>      if ($need_target{$distname} && ($force || !-f $cfgname)) {
+>          my $abstract = $dist->{abstract};
+> +        my $homepage = $dist->{resources}->{homepage} || qq{https://metacpan.org/release/${distname}};
+>          say qq{write ${cfgname}} unless $quiet;
+>          open my $fh, q{>}, $cfgname;
+>          say {$fh} qq{config BR2_PACKAGE_${brname}};
+> @@ -585,8 +586,10 @@ while (my ($distname, $dist) = each %dist) {
+>              my $brdep = brname( fsname( $dep ) );
+>              say {$fh} qq{\tselect BR2_PACKAGE_${brdep}};
+>          }
+> -        say {$fh} qq{\thelp} if $abstract;
+> +        say {$fh} qq{\thelp};
+>          say {$fh} qq{\t  ${abstract}} if $abstract;
+> +        say {$fh} qq{\t  } if $abstract;
+> +        say {$fh} qq{\t  ${homepage}};
+>          close $fh;
+>      }
+>      if ($force || !-f $mkname) {
+> 
+
+
 -- 
-1.8.5.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
