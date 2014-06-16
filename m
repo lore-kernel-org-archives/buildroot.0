@@ -1,105 +1,59 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Sun, 15 Jun 2014 23:31:45 -0700
-Subject: [Buildroot] [PATCH] imx6sabresd: bump kernel version to 3.10.17
-In-Reply-To: <20140615110126.GB3568@free.fr>
-References: <1402615551-21352-1-git-send-email-bisson.gary@gmail.com>
- <20140615110126.GB3568@free.fr>
-Message-ID: <CADCpmyPUXAcwFF8tPr8VzhCyQDgLXA+uwa6NRFuKcS9ajJwezw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 16 Jun 2014 07:17:54 +0200
+Subject: [Buildroot] [PATCH 5 of 7 v3] toolchain-external: change
+ version from 'undefined' to 'virtual'
+In-Reply-To: <CAAXf6LX4zN1bYaxdskq9Evc5uT2Rw2ip-U7Dqf78bOOXiQgf4A@mail.gmail.com>
+References: <patchbomb.1402085576@localhost>
+ <640c5d9c5ac14d442207.1402085581@localhost>
+ <20140607105728.469dd87d@free-electrons.com>
+ <CAAXf6LX4nfHkyBe_G3eQSBTHr67SWb37TFEOL=0q+vZ1DMmdtA@mail.gmail.com>
+ <20140608181033.29a00966@free-electrons.com>
+ <CAAXf6LX4zN1bYaxdskq9Evc5uT2Rw2ip-U7Dqf78bOOXiQgf4A@mail.gmail.com>
+Message-ID: <539E7E02.307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+On 06/08/14 19:23, Thomas De Schampheleire wrote:
+[snip]
+> I don't think that the MESSAGE solution adds a lot of complexity: the
+> current definition is:
+> MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION)
+> $(1)$(TERM_RESET)"
+> and this would become something like:
+> MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME)
+> $($(PKG)_EXTRA_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
 
-On Sun, Jun 15, 2014 at 4:01 AM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+ Small fix: one of the spaces around $(PKG)_EXTRA_NAME should be removed.
+Otherwise we have two spaces in the usual case. The extra name should then be
+defined with an embedded space:
 
-> Gary, All,
->
-> On 2014-06-12 16:25 -0700, Gary Bisson spake thusly:
-> > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
->
-> Do not forget to resend these three kernel-bumps when the imx packages
-> are updated, since bumping the kernel will only be possible after the
-> userland has been updated (I am not sure an 'old' imx userland can talk
-> to a 'newer' imx kernel).
->
-
-No problem, it makes complete sense. I'll try to submit something this week
-for the freescale-imx package.
-As a side note, current userland package (3.5.7) does not match the kernel
-version (3.0.35) which causes seg fault on GPU apps (cf. Vivante examples).
-
-Thanks!
-Gary
+TOOLCHAIN_EXTERNAL_EXTRA_NAME = Sourcery$(space)
 
 
-> I've marked your four changes as "Changes Requested" in the patchwork.
->
-> Thanks! :-)
->
-> Regards,
-> Yann E. MORIN.
->
-> > ---
-> >  configs/freescale_imx6sabresd_defconfig | 12 ++++++++----
-> >  1 file changed, 8 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/configs/freescale_imx6sabresd_defconfig
-> b/configs/freescale_imx6sabresd_defconfig
-> > index 368e00b..16e4d0b 100644
-> > --- a/configs/freescale_imx6sabresd_defconfig
-> > +++ b/configs/freescale_imx6sabresd_defconfig
-> > @@ -9,15 +9,19 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> >  BR2_LINUX_KERNEL=y
-> >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://
-> git.freescale.com/imx/linux-2.6-imx.git"
-> > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
-> > -BR2_LINUX_KERNEL_DEFCONFIG="imx6"
-> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-> > +BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-> > +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
-> >
-> >  # filesystem
-> >  BR2_TARGET_ROOTFS_EXT2=y
-> >
-> >  # bootloader
-> >  BR2_TARGET_UBOOT=y
-> > -BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabresd"
-> > +BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
-> > +BR2_TARGET_UBOOT_FORMAT_IMX=y
-> >  BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> >  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://
-> git.freescale.com/imx/uboot-imx.git"
-> > -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
-> > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-> > --
-> > 2.0.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->       |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
-> is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
-> conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140615/a67744a4/attachment.html>
+ Regards,
+ Arnout
+
+> 
+> where FOO_EXTRA_NAME is a new variabel (name to be discussed) that can
+> be set by any package (not only toolchain-external) if appropriate.
+> This variable is default empty.
+> 
+> This is not too complex, right?
+> 
+> In any case, I suggest we drop this patch from the series for now.
+> 
+> Best regards,
+> Thomas
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
