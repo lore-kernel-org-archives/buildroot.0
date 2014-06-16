@@ -1,67 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 16 Jun 2014 07:35:40 +0200
-Subject: [Buildroot] [git commit] hdparm: prevent package makefile from
- stripping the hdparm binary
-In-Reply-To: <20140611210500.36A4A9CFCA@busybox.osuosl.org>
-References: <20140611210500.36A4A9CFCA@busybox.osuosl.org>
-Message-ID: <539E822C.5040708@mind.be>
+Date: Mon, 16 Jun 2014 08:00:50 +0200
+Subject: [Buildroot] Problem with Languages Busybox
+In-Reply-To: <CAEex6OREg7DJBsawCM_Gto_hk3VUyieLTcBz=sCRZpQ7BPL=Mg@mail.gmail.com>
+References: <CAEex6OREg7DJBsawCM_Gto_hk3VUyieLTcBz=sCRZpQ7BPL=Mg@mail.gmail.com>
+Message-ID: <539E8812.8050608@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/11/14 23:03, Peter Korsgaard wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=11dbb615338cd768acc2c3138064ddf557e9b60b
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 06/12/14 22:15, Correa Romero, Julian wrote:
+> Hello, I am new at this.
 > 
-> Packages shouldn't strip executables by themselves, so that Buildroot
-> controls whether stripping should occur or not. This also fixes the
-> build on Blackfin FLAT where stripping actually doesn't work because
-> stripping FLAT binaries is not supported.
+> I built a system with buildroot-2014.02 glibc and buildroot toolchain, I have
+> problems with my language that is Spanish when I press the letter ?, ?, ?, ?, ?,
+> ? or ? it appears on the terminal  (arg: 1). I did the loadkmap < es.bin. if the
+> file has this characters also they aren't showed.
 > 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/7d4/7d4e59c96928a06db5091235bf2eacf462ba8a21/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/hdparm/hdparm.mk |    3 ++-
->  1 files changed, 2 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/hdparm/hdparm.mk b/package/hdparm/hdparm.mk
-> index 1a200fb..0ca3c39 100644
-> --- a/package/hdparm/hdparm.mk
-> +++ b/package/hdparm/hdparm.mk
-> @@ -12,7 +12,8 @@ HDPARM_LICENSE_FILES = LICENSE.TXT
->  define HDPARM_BUILD_CMDS
->  	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
->  		CFLAGS="$(TARGET_CFLAGS)" \
-> -		LDFLAGS="$(TARGET_LDFLAGS)"
-> +		LDFLAGS="$(TARGET_LDFLAGS)" \
-> +		STRIP=/bin/true
+> What can I do to give support to the language?
 
- Perhaps for consistency we should rename $(TARGET_CROSS)strip to
-$(TARGET_CROSS)real-strip and symlink $(TARGET_CROSS)strip to /bin/true?
+ First of all, I'm surprised you don't have this on your host machine, since
+this is normal bash behaviour.
 
- While looking at this, I also notice that in some cases we _do_ pass the real
-strip, e.g. in fltk, qt (but not qt5). I guess that's historical accident?
+ From the bash manual:
+
+  convert-meta (On)
+     If set to On, readline will convert characters with the eighth bit set to
+an ASCII key sequence by stripping the eighth bit and prefixing an escape
+character (in effect, using escape as the meta prefix).
+
+
+ Since ? in UTF-8 is encoded as 0xc3 0xb1, this sequence is interpreted by bash
+as M-C M-1. M-C is not bound to anything by default so is ignored. M-1 is bound
+to digit-argument.
+
+ So to solve this problem, add the following to your .inputrc:
+
+set convert-meta Off
+
+
+ Note that bash will still expand these characters to escape sequences, but it
+should be sufficient for typing file names. Read the man page to find out how to
+solve _that_ issue.
+
 
  Regards,
  Arnout
-
->  endef
->  
->  define HDPARM_INSTALL_TARGET_CMDS
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
