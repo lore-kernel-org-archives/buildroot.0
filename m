@@ -1,10 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 16 Jun 2014 09:47:20 +0200
-Subject: [Buildroot] [git commit] fmlib: new package
-In-Reply-To: <20140614170014.8268A9CFE5@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 14 Jun 2014 18:55:18 +0200")
-References: <20140614170014.8268A9CFE5@busybox.osuosl.org>
-Message-ID: <874mzlcn3r.fsf@dell.be.48ers.dk>
+Date: Mon, 16 Jun 2014 09:49:21 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add CodeSourcery
+	PowerPC 2012.03
+In-Reply-To: <20140614170507.DAC829CFE5@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 14 Jun 2014 19:04:50 +0200")
+References: <20140614170507.DAC829CFE5@busybox.osuosl.org>
+Message-ID: <87zjhdb8fy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,46 +14,45 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > commit: http://git.buildroot.net/buildroot/commit/?id=68d35f7d92d40f8d470751269e6ee9e398b15a1e
+ > commit: http://git.buildroot.net/buildroot/commit/?id=20d4ba91c5ed42b07c1e82b2095c0cc312deb0c7
  > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+ > However, this toolchain is only usable for e500v2 with the SPE ABI.
+
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
  > ---
- >  package/Config.in       |    1 +
- >  package/fmlib/Config.in |   14 ++++++++++++++
- >  package/fmlib/fmlib.mk  |   36 ++++++++++++++++++++++++++++++++++++
- >  3 files changed, 51 insertions(+), 0 deletions(-)
+ >  toolchain/toolchain-external/Config.in             |   19 +++++++++++++++++++
+ >  toolchain/toolchain-external/toolchain-external.mk |    3 +++
+ >  2 files changed, 22 insertions(+), 0 deletions(-)
 
- > diff --git a/package/Config.in b/package/Config.in
- > index 88705f8..b29763c 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -718,6 +718,7 @@ menu "Networking"
- >  	source "package/cppzmq/Config.in"
- >  	source "package/czmq/Config.in"
- >  	source "package/filemq/Config.in"
- > +	source "package/fmlib/Config.in"
- >  	source "package/glib-networking/Config.in"
- >  	source "package/libcgi/Config.in"
- >  	source "package/libcgicc/Config.in"
- > diff --git a/package/fmlib/Config.in b/package/fmlib/Config.in
- > new file mode 100644
- > index 0000000..f9b09c6
- > --- /dev/null
- > +++ b/package/fmlib/Config.in
- > @@ -0,0 +1,14 @@
- > +comment "fmlib needs a Linux kernel to be built"
- > +	depends on !BR2_LINUX_KERNEL
+ > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+ > index 6f3c75e..d369f9c 100644
+ > --- a/toolchain/toolchain-external/Config.in
+ > +++ b/toolchain/toolchain-external/Config.in
+ > @@ -416,6 +416,24 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII201305
+ >  	  from Mentor Graphics. It uses gcc 4.7.3, binutils 2.23.52,
+ >  	  glibc 2.17, gdb 7.4.50 and kernel headers 3.7.0.
+ 
+ > +config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201203
+ > +	bool "Sourcery CodeBench PowerPC 2012.03"
+ > +	depends on BR2_powerpc
+ > +	depends on BR2_powerpc_SPE
+ > +	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ > +	depends on !BR2_PREFER_STATIC_LIB
+ > +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ > +	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ > +	select BR2_INSTALL_LIBSTDCPP
+ > +	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ > +	help
+ > +	  Sourcery CodeBench toolchain for the PowerPC architecture,
+ > +	  from Mentor Graphics. It uses gcc 4.6.3, binutils 2.21.53,
+ > +	  glibc 2.15, gdb 7.2.50 and kernel headers 3.2.10. It has
+ > +	  support for the following variants:
+ > +	    - e500v2 glibc, SPE, 32 bits
 
-This should only be visible if BR2_powerpc_e500mc. Will fix now (and for
-fmc as well).
-
- > +
- > +config BR2_PACKAGE_FMLIB
- > +	bool "fmlib"
- > +	depends on BR2_powerpc_e500mc
- > +	depends on BR2_LINUX_KERNEL
+Should it then not depend on BR2_powerpc_8548?
 
 -- 
 Bye, Peter Korsgaard
