@@ -1,58 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Jun 2014 09:18:18 +0200
-Subject: [Buildroot] [PATCH 5 of 7 v3] toolchain-external: change
- version from 'undefined' to 'virtual'
-In-Reply-To: <CAAXf6LX4zN1bYaxdskq9Evc5uT2Rw2ip-U7Dqf78bOOXiQgf4A@mail.gmail.com>
-References: <patchbomb.1402085576@localhost>
- <640c5d9c5ac14d442207.1402085581@localhost>
- <20140607105728.469dd87d@free-electrons.com>
- <CAAXf6LX4nfHkyBe_G3eQSBTHr67SWb37TFEOL=0q+vZ1DMmdtA@mail.gmail.com>
- <20140608181033.29a00966@free-electrons.com>
- <CAAXf6LX4zN1bYaxdskq9Evc5uT2Rw2ip-U7Dqf78bOOXiQgf4A@mail.gmail.com>
-Message-ID: <20140616091818.034ba824@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 16 Jun 2014 09:20:59 +0200
+Subject: [Buildroot] [PATCH] uclibc: prevent rebuilding after
+	installation to staging
+In-Reply-To: <1402901025.3115.1.camel@abrodkin-8560l.internal.synopsys.com>
+ (Alexey Brodkin's message of "Mon, 16 Jun 2014 06:43:45 +0000")
+References: <1401913653-23804-1-git-send-email-abrodkin@synopsys.com>
+ <1402416022.1656.2.camel@abrodkin-8560l.internal.synopsys.com>
+ <87sinck1uj.fsf@dell.be.48ers.dk>
+ <1402901025.3115.1.camel@abrodkin-8560l.internal.synopsys.com>
+Message-ID: <87ha3lcobo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-On Sun, 8 Jun 2014 19:23:09 +0200, Thomas De Schampheleire wrote:
+ > Dear Peter,
 
-> I also think the second approach of creating individual external
-> toolchain packages is overkill.
+ >> > Any thoughts on this one?
+ >> 
+ >> Sorry, I haven't had time to review it yet. It certainly sounds good. I
+ >> will get back to you later today or tomorrow.
+ >> 
 
-I actually don't know. The current toolchain-external/Config.in and
-toolchain-external/toolchain-external.mk are very long, splitting them
-wouldn't be that bad. I'd like to think a bit more about this, and see
-if a solution with individual packages wouldn't actually be better.
+ > Please pardon me for this reminder but I'm wondering if you were able to
+ > try this patch?
 
-For example, one thing that the external toolchain stuff doesn't handle
-today is fetching the source code for the toolchain.
+I'm really sorry, but real life got in the way. I'll test it now.
 
-> I don't think that the MESSAGE solution adds a lot of complexity: the
-> current definition is:
-> MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION)
-> $(1)$(TERM_RESET)"
-> and this would become something like:
-> MESSAGE     = echo "$(TERM_BOLD)>>> $($(PKG)_NAME)
-> $($(PKG)_EXTRA_NAME) $($(PKG)_VERSION) $(1)$(TERM_RESET)"
-> 
-> where FOO_EXTRA_NAME is a new variabel (name to be discussed) that can
-> be set by any package (not only toolchain-external) if appropriate.
-> This variable is default empty.
-> 
-> This is not too complex, right?
-
-It's not really whether it's complex or not: it's a feature that is
-added to the core, common infrastructure, to solve the problem of just
-one package. If we do this for each and every need of each single
-package, the infrastructure is going to become an awful pile of crap,
-and that's what I'd like to avoid.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard 
