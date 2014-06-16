@@ -1,62 +1,71 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 16 Jun 2014 22:49:33 +0200
-Subject: [Buildroot] [PATCH] systemd: add network unit file
-In-Reply-To: <20140614184206.20e44592@free-electrons.com>
-References: <1402673735-14109-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140614184206.20e44592@free-electrons.com>
-Message-ID: <20140616204933.GA29444@ned>
+Date: Mon, 16 Jun 2014 22:52:32 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: rework network.service installation
+Message-ID: <1402951952-31334-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On Sat, Jun 14, 2014 at 06:42:06PM +0200, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Fri, 13 Jun 2014 17:35:35 +0200, Eric Le Bihan wrote:
-> > From: Ivan Sergeev <vsergeev@kumunetworks.com>
-> >
-> > Add and enable a systemd unit file to bring up or down network with ifup /
-> > ifdown, analogous to the skeleton/etc/init.d/S40network init script.
-> >
-> > Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
-> > [eric.le.bihan.dev at free.fr:
-> >   - rebase
-> >   - install service only if systemd-networkd is not selected]
-> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> > ---
-> >  package/systemd/network.service |   21 +++++++++++++++++++++
-> >  package/systemd/systemd.mk      |   12 ++++++++++++
-> >  2 files changed, 33 insertions(+)
-> >  create mode 100644 package/systemd/network.service
->
-> Applied, thanks. However, I have a comment/question, below.
->
->
-> > +define SYSTEMD_INSTALL_NETWORK_HOOK
-> > +	$(INSTALL) -D -m 644 package/systemd/network.service \
-> > +		$(TARGET_DIR)/etc/systemd/system/network.service
-> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-> > +	ln -fs ../network.service \
-> > +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
-> > +endef
-> > +
-> >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
-> >  	SYSTEMD_INSTALL_INIT_HOOK \
-> >  	SYSTEMD_INSTALL_TTY_HOOK \
-> >  	SYSTEMD_INSTALL_MACHINEID_HOOK \
-> >  	SYSTEMD_SANITIZE_PATH_IN_UNITS
-> >
-> > +ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
-> > +SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_INSTALL_NETWORK_HOOK
-> > +endif
->
-> I'm wondering why we're not using the <pkg>_INIT_SYSTEMD mechanism here.
-Good suggestion! I'll send a patch with the weird
-"SYSTEMD_INSTALL_INIT_SYSTEMD" and the cosmetic fix suggested by Yann E.
-Morin.
+The installation of the network.service file is now performed via the
+<pkg>_INIT_SYSTEMD mechanism instead of an installation hook.
 
-Best regards,
-ELB
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/systemd/systemd.mk | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index f3874db..97fa61a 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -101,6 +101,13 @@ ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+ SYSTEMD_CONF_OPT += --enable-networkd
+ else
+ SYSTEMD_CONF_OPT += --disable-networkd
++define SYSTEMD_INSTALL_SERVICE_NETWORK
++	$(INSTALL) -D -m 644 package/systemd/network.service \
++		$(TARGET_DIR)/etc/systemd/system/network.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../network.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
++endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+@@ -145,28 +152,20 @@ define SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
+ endef
+ 
+-define SYSTEMD_INSTALL_NETWORK_HOOK
+-	$(INSTALL) -D -m 644 package/systemd/network.service \
+-		$(TARGET_DIR)/etc/systemd/system/network.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../network.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
+-endef
+-
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_TTY_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
+-SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_INSTALL_NETWORK_HOOK
+-endif
+-
+ define SYSTEMD_USERS
+ 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
+ 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+ 	$(SYSTEMD_USER_TIMESYNC)
+ endef
+ 
++define SYSTEMD_INSTALL_INIT_SYSTEMD
++	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
++endef
++
+ $(eval $(autotools-package))
+-- 
+1.9.3
