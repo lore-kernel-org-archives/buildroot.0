@@ -1,31 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jun 2014 09:43:41 +0000 (UTC)
-Subject: [Buildroot] [Bug 7208] Glibc C++ aplications crash if they use
-	exceptions.
-In-Reply-To: <bug-7208-163@https.bugs.busybox.net/>
-References: <bug-7208-163@https.bugs.busybox.net/>
-Message-ID: <20140616094341.20A149D00A@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Jun 2014 08:28:27 -0300
+Subject: [Buildroot] [PATCH] libusb: bump to version 1.0.19
+Message-ID: <1402918107-10225-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7208
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libusb/libusb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-06-16 09:43:40 UTC ---
-(In reply to comment #9)
-> IMHO a good solution would be to make patches conditional in some cases, e.g.
-> only use 900-musl-support.patch if C library is selected to musl. I guess it
-> would require quite amount of work thought...
-
-That's certainly a solution, but I wouldn't qualify it as a good solution. We
-try really hard to avoid having conditional patches.
-
-Though, as a temporary solution it would certainly be acceptable. This problem
-is a major bug in Buildroot 2014.05, and we have to solve it somehow.
-
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 417b2ce..7e0f877 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).18
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).19
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = http://downloads.sourceforge.net/project/libusb/libusb-$(LIBUSB_VERSION_MAJOR)/libusb-$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPLv2.1+
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+1.8.5.5
