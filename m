@@ -1,105 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 16 Jun 2014 18:11:10 +0300
-Subject: [Buildroot] [PATCH] dbus: bump to version 1.8.4
-Message-ID: <e24aaf292d128202d29697218e443af417b6e053.1402931470.git.baruch@tkos.co.il>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Mon, 16 Jun 2014 17:19:31 +0200 (CEST)
+Subject: [Buildroot] Sourcery Codebench standard edition
+In-Reply-To: <1111022260.18094075.1402928168412.JavaMail.root@openwide.fr>
+Message-ID: <84042763.18097561.1402931971145.JavaMail.root@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream removed support for libxml2 as xml backend, select expat
-unconditionally.
+Hi all,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/dbus/Config.in | 23 +----------------------
- package/dbus/dbus.mk   | 13 +++----------
- 2 files changed, 4 insertions(+), 32 deletions(-)
+Someone has already tried to use Sourcery CodeBench standard edition with Buildroot ?
+(I guess not since it don't work as is ;-) )
+I'm using buildroot 2013.08, but I think problems remain in the latest version.
 
-diff --git a/package/dbus/Config.in b/package/dbus/Config.in
-index 97c9ee9acce6..653f7482f693 100644
---- a/package/dbus/Config.in
-+++ b/package/dbus/Config.in
-@@ -3,33 +3,12 @@ config BR2_PACKAGE_DBUS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# uses fork()
- 	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_EXPAT
- 	help
- 	  The D-Bus message bus system.
- 
- 	  http://www.freedesktop.org/wiki/Software/dbus
- 
--if BR2_PACKAGE_DBUS
--
--choice
--	prompt "XML library to use"
--	default BR2_DBUS_EXPAT
--	help
--	  Select the XML library to use with D-Bus. Select Expat
--	  unless you have specific reasons for using libxml2 as
--	  Expat is significant smaller.
--
--	config BR2_DBUS_EXPAT
--		bool "Expat"
--		select BR2_PACKAGE_EXPAT
--
--	config BR2_DBUS_LIBXML2
--		bool "libxml2"
--		select BR2_PACKAGE_LIBXML2
--
--endchoice
--
--endif
--
- comment "dbus needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 4bcc9538a9db..f8824eee55c2 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_VERSION = 1.6.18
-+DBUS_VERSION = 1.8.4
- DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFLv2.1 GPLv2+
- DBUS_LICENSE_FILES = COPYING
-@@ -14,7 +14,7 @@ define DBUS_PERMISSIONS
- /usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
- endef
- 
--DBUS_DEPENDENCIES = host-pkgconf
-+DBUS_DEPENDENCIES = host-pkgconf expat
- 
- DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
- DBUS_CONF_OPT = --with-dbus-user=dbus \
-@@ -27,6 +27,7 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
- 		--disable-static \
- 		--disable-dnotify \
- 		--localstatedir=/var \
-+		--with-xml=expat \
- 		--with-system-socket=/var/run/dbus/system_bus_socket \
- 		--with-system-pid-file=/var/run/messagebus.pid
- 
-@@ -43,14 +44,6 @@ ifeq ($(BR2_microblaze),y)
- DBUS_CONF_OPT += --disable-inotify
- endif
- 
--ifeq ($(BR2_DBUS_EXPAT),y)
--DBUS_CONF_OPT += --with-xml=expat
--DBUS_DEPENDENCIES += expat
--else
--DBUS_CONF_OPT += --with-xml=libxml
--DBUS_DEPENDENCIES += libxml2
--endif
--
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- DBUS_CONF_OPT += --with-x
- DBUS_DEPENDENCIES += xlib_libX11
--- 
-2.0.0
+I had several issue with the external-toolchain wrapper, since this toolchain need the -msgxx-glibc flag in CFLAGS.
+
+Here is what I have done:
+1) Add this new toolchain as external toolchain in ext-tool.mk:
+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86_201405),y)
+#TOOLCHAIN_EXTERNAL_SITE = no public download site
+TOOLCHAIN_EXTERNAL_SOURCE = ia32-2014.05-08-i686-pc-linux-gnu-i386-linux.tar.bz2
+TOOLCHAIN_EXTERNAL_CFLAGS += -msgxx-glibbc
+
+2) The sysroot directory can't be deducted from "gcc -print-file-name=libc.a" without -msgxx-glibc,
+so I added $(TOOLCHAIN_EXTERNAL_CFLAGS) in ext-toolchain-checked and ext-toolchain-installed target.
+(file ext-tool.mk)
+
+3) Then, I had a link issue since the specific directory "sgxx-glibc" from toolchain's sysroot wasn't copied to Buildroot's sysroot:
+"cannot find crt1.o no such file or directory "
+I added a rsync in copy_toolchain_sysroot helper to copy "sgxx-glibc"
+
+4) Now, I can build some target packages but I have links issues with some packages (ncurses, util-linux, can-utils, e2fsprogs)
+And, last but not least, I can't build a kernel Linux (It's a pity)
+
+All build fine with the latest (but quite old now) Sourcery CodeBench x86/x86_64 2012.09 toolchain.
+
+Any ideas ?
+
+Best regards,
+Romain Naour
