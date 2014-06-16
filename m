@@ -1,81 +1,62 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jun 2014 17:03:54 -0300
-Subject: [Buildroot] [PATCH 2/2] php-geoip: new package
-In-Reply-To: <1402949034-20509-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1402949034-20509-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1402949034-20509-2-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 16 Jun 2014 22:49:33 +0200
+Subject: [Buildroot] [PATCH] systemd: add network unit file
+In-Reply-To: <20140614184206.20e44592@free-electrons.com>
+References: <1402673735-14109-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140614184206.20e44592@free-electrons.com>
+Message-ID: <20140616204933.GA29444@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in              |  1 +
- package/php-geoip/Config.in    |  8 ++++++++
- package/php-geoip/php-geoip.mk | 26 ++++++++++++++++++++++++++
- 3 files changed, 35 insertions(+)
- create mode 100644 package/php-geoip/Config.in
- create mode 100644 package/php-geoip/php-geoip.mk
+Hi!
+On Sat, Jun 14, 2014 at 06:42:06PM +0200, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Fri, 13 Jun 2014 17:35:35 +0200, Eric Le Bihan wrote:
+> > From: Ivan Sergeev <vsergeev@kumunetworks.com>
+> >
+> > Add and enable a systemd unit file to bring up or down network with ifup /
+> > ifdown, analogous to the skeleton/etc/init.d/S40network init script.
+> >
+> > Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
+> > [eric.le.bihan.dev at free.fr:
+> >   - rebase
+> >   - install service only if systemd-networkd is not selected]
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> >  package/systemd/network.service |   21 +++++++++++++++++++++
+> >  package/systemd/systemd.mk      |   12 ++++++++++++
+> >  2 files changed, 33 insertions(+)
+> >  create mode 100644 package/systemd/network.service
+>
+> Applied, thanks. However, I have a comment/question, below.
+>
+>
+> > +define SYSTEMD_INSTALL_NETWORK_HOOK
+> > +	$(INSTALL) -D -m 644 package/systemd/network.service \
+> > +		$(TARGET_DIR)/etc/systemd/system/network.service
+> > +	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+> > +	ln -fs ../network.service \
+> > +		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
+> > +endef
+> > +
+> >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+> >  	SYSTEMD_INSTALL_INIT_HOOK \
+> >  	SYSTEMD_INSTALL_TTY_HOOK \
+> >  	SYSTEMD_INSTALL_MACHINEID_HOOK \
+> >  	SYSTEMD_SANITIZE_PATH_IN_UNITS
+> >
+> > +ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
+> > +SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_INSTALL_NETWORK_HOOK
+> > +endif
+>
+> I'm wondering why we're not using the <pkg>_INIT_SYSTEMD mechanism here.
+Good suggestion! I'll send a patch with the weird
+"SYSTEMD_INSTALL_INIT_SYSTEMD" and the cosmetic fix suggested by Yann E.
+Morin.
 
-diff --git a/package/Config.in b/package/Config.in
-index e435a11..f0c5bd1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -429,6 +429,7 @@ endif
- if BR2_PACKAGE_PHP
- if !BR2_PREFER_STATIC_LIB
- menu "External php extensions"
-+	source "package/php-geoip/Config.in"
- 	source "package/php-gnupg/Config.in"
- 	source "package/php-imagick/Config.in"
- 	source "package/php-ssh2/Config.in"
-diff --git a/package/php-geoip/Config.in b/package/php-geoip/Config.in
-new file mode 100644
-index 0000000..adb2046
---- /dev/null
-+++ b/package/php-geoip/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PHP_GEOIP
-+	bool "php-geoip"
-+	depends on BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_GEOIP
-+	help
-+	  PHP GeoIP-based IP address mapper to geographical places.
-+
-+	  http://pecl.php.net/package/geoip
-diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
-new file mode 100644
-index 0000000..99f74e0
---- /dev/null
-+++ b/package/php-geoip/php-geoip.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# php-geoip
-+#
-+################################################################################
-+
-+PHP_GEOIP_VERSION = 1.1.0
-+PHP_GEOIP_SOURCE = geoip-$(PHP_GEOIP_VERSION).tgz
-+PHP_GEOIP_SITE = http://pecl.php.net/get
-+PHP_GEOIP_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-geoip=$(STAGING_DIR)/usr
-+# phpize does the autoconf magic
-+PHP_GEOIP_DEPENDENCIES = geoip php host-autoconf
-+PHP_GEOIP_LICENSE = PHP
-+PHP_GEOIP_LICENSE_FILES = LICENSE
-+
-+define PHP_GEOIP_PHPIZE
-+	(cd $(@D); \
-+		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
-+		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
-+		$(STAGING_DIR)/usr/bin/phpize)
-+endef
-+
-+PHP_GEOIP_PRE_CONFIGURE_HOOKS += PHP_GEOIP_PHPIZE
-+
-+$(eval $(autotools-package))
--- 
-1.8.5.5
+Best regards,
+ELB
