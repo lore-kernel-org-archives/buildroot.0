@@ -1,56 +1,71 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jun 2014 17:03:32 -0300
-Subject: [Buildroot] [PATCH] msgpack: disable for ARC
-Message-ID: <1402949012-19434-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 16 Jun 2014 17:03:53 -0300
+Subject: [Buildroot] [PATCH 1/2] geoip: new package
+Message-ID: <1402949034-20509-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-msgpack uses the __sync_fetch_and_add() atomic primitive that is not
-available for ARC. Fixes:
-http://autobuild.buildroot.net/results/829/8292e67354602738cae12d8ebea83b513ba35482/
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/msgpack/Config.in        | 2 ++
- package/python-msgpack/Config.in | 2 ++
- 2 files changed, 4 insertions(+)
+ package/Config.in       |  1 +
+ package/geoip/Config.in | 11 +++++++++++
+ package/geoip/geoip.mk  | 15 +++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/geoip/Config.in
+ create mode 100644 package/geoip/geoip.mk
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index daa4fdd..b380c58 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc # atomic builtins
- 	help
- 	  MessagePack is an efficient binary serialization format.
- 
-@@ -11,3 +12,4 @@ config BR2_PACKAGE_MSGPACK
- 
- comment "msgpack needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index 2075ee6..c4b68a3 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
-+	depends on !BR2_arc # msgpack - atomic builtins
- 	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -14,3 +15,4 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- comment "python-msgpack needs a toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc
+diff --git a/package/Config.in b/package/Config.in
+index 9231c45..e435a11 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -720,6 +720,7 @@ menu "Networking"
+ 	source "package/filemq/Config.in"
+ 	source "package/fmlib/Config.in"
+ 	source "package/glib-networking/Config.in"
++	source "package/geoip/Config.in"
+ 	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcurl/Config.in"
+diff --git a/package/geoip/Config.in b/package/geoip/Config.in
+new file mode 100644
+index 0000000..a198a31
+--- /dev/null
++++ b/package/geoip/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_GEOIP
++	bool "geoip"
++	help
++	  GeoIP is a C library that enables the user to find geographical
++	  and network information of an IP address.
++	  To use this library, you need to download MaxMind's free GeoLite or
++	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
++	  directory in uncompressed form.
++	  Note that GeoIP2 / GeoLite2 are not supported by this library.
++
++	  https://github.com/maxmind/geoip-api-c
+diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+new file mode 100644
+index 0000000..fde07cb
+--- /dev/null
++++ b/package/geoip/geoip.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# geoip
++#
++################################################################################
++
++GEOIP_VERSION = 1.6.0
++GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
++GEOIP_SITE = $(call github,maxmind,geoip-api-c,v$(GEOIP_VERSION))
++GEOIP_AUTORECONF = YES
++GEOIP_INSTALL_STAGING = YES
++GEOIP_LICENSE = LGPLv2.1+
++GEOIP_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
 1.8.5.5
