@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jun 2014 10:50:34 -0300
-Subject: [Buildroot] [PATCH 4/6] openocd: switch homepage now that berlios
-	is gone
+Date: Mon, 16 Jun 2014 10:50:35 -0300
+Subject: [Buildroot] [PATCH 5/6] ngircd: switch site now that berlios is gone
 In-Reply-To: <1402926636-3556-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1402926636-3556-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1402926636-3556-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1402926636-3556-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openocd/Config.in | 2 +-
+ package/ngircd/ngircd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openocd/Config.in b/package/openocd/Config.in
-index fc13977..7f96ef8 100644
---- a/package/openocd/Config.in
-+++ b/package/openocd/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENOCD
- 	help
- 	  OpenOCD - Open On-Chip Debugger
+diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
+index 13313a7..2eb89af 100644
+--- a/package/ngircd/ngircd.mk
++++ b/package/ngircd/ngircd.mk
+@@ -6,7 +6,7 @@
  
--	  http://openocd.berlios.de/web/
-+	  http://openocd.sourceforge.net/
- 
- if BR2_PACKAGE_OPENOCD
- 
+ NGIRCD_VERSION = 20.3
+ NGIRCD_SOURCE = ngircd-$(NGIRCD_VERSION).tar.xz
+-NGIRCD_SITE = ftp://ftp.berlios.de/pub/ngircd/
++NGIRCD_SITE = http://arthur.barton.de/pub/ngircd/
+ NGIRCD_DEPENDENCIES = zlib
+ NGIRCD_LICENSE = GPLv2+
+ NGIRCD_LICENSE_FILES = COPYING
 -- 
 1.8.5.5
