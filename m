@@ -1,83 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 16 Jun 2014 08:30:13 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-15
-Message-ID: <20140616063013.D3655100F70@stock.ovh.net>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Sun, 15 Jun 2014 23:31:45 -0700
+Subject: [Buildroot] [PATCH] imx6sabresd: bump kernel version to 3.10.17
+In-Reply-To: <20140615110126.GB3568@free.fr>
+References: <1402615551-21352-1-git-send-email-bisson.gary@gmail.com>
+ <20140615110126.GB3568@free.fr>
+Message-ID: <CADCpmyPUXAcwFF8tPr8VzhCyQDgLXA+uwa6NRFuKcS9ajJwezw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-06-15
-===============================
+Hi Yann, all,
 
-        success : 104
-       failures : 23 
-       timeouts : 9  
-          TOTAL : 136
+On Sun, Jun 15, 2014 at 4:01 AM, Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
 
-Classification of failures by reason
-====================================
+> Gary, All,
+>
+> On 2014-06-12 16:25 -0700, Gary Bisson spake thusly:
+> > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+>
+> Do not forget to resend these three kernel-bumps when the imx packages
+> are updated, since bumping the kernel will only be possible after the
+> userland has been updated (I am not sure an 'old' imx userland can talk
+> to a 'newer' imx kernel).
+>
 
-             lttng-tools-2.4.1 | 3 
-  toolchain-external-undefined | 3 
-                    sdl-1.2.15 | 3 
-                  boost-1.55.0 | 2 
-                oprofile-0.9.9 | 2 
-                 cairo-1.12.10 | 2 
-                  snmppp-3.3.4 | 2 
-make: *** [install-shlibs] ... | 1 
-dvb-apps-3d43b280298c39a67d... | 1 
-                  libtasn1-3.6 | 1 
-                busybox-1.22.1 | 1 
-                 libssh2-1.4.3 | 1 
-                 cdrkit-1.1.11 | 1 
-               libglib2-2.38.2 | 1 
-                cegui06-0.6.2b | 1 
-               polarssl-1.2.10 | 1 
-          host-libglib2-2.38.2 | 1 
-                       unknown | 1 
-   400K .......... ..p11-ki... | 1 
-                      gd-2.1.0 | 1 
-                python-nfc-212 | 1 
-                   lcdapi-v0.4 | 1 
+No problem, it makes complete sense. I'll try to submit something this week
+for the freescale-imx package.
+As a side note, current userland package (3.5.7) does not match the kernel
+version (3.0.35) which causes seg fault on GPU apps (cf. Vivante examples).
 
-Detail of failures
-===================
-
-    x86_64 |    400K .......... ..p11-ki... | TIM | http://autobuild.buildroot.net/results/324e6d3145ab1f09d986810ad44fe78a09a6ad49/
-    x86_64 |                   boost-1.55.0 | NOK | http://autobuild.buildroot.net/results/820996fdb3568862067d9bc46e5790f8221fdb76/
-      mips |                   boost-1.55.0 | NOK | http://autobuild.buildroot.net/results/0cc1a00e617dfea6ce4cc6c1f488311e113a869e/
-       arm |                 busybox-1.22.1 | TIM | http://autobuild.buildroot.net/results/8016553c0078877ff3f3476603d0ebe04cc63327/
-       arm |                  cairo-1.12.10 | TIM | http://autobuild.buildroot.net/results/a2dbb959d8fa0138c9f3033a7a2691c27511aa53/
-      bfin |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/138395591725bffb91f5684f7c25689062e3b5c3/
-    mipsel |                  cdrkit-1.1.11 | NOK | http://autobuild.buildroot.net/results/dd76bc9e1cebc8487803cbd4eb2830517ebd8eb0/
-       arm |                 cegui06-0.6.2b | TIM | http://autobuild.buildroot.net/results/36829fa223d71921e8c8192425fab155de0fdbf9/
-      bfin | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/b51ff5a2282badb90e1f91788cbbf63c3623ebd2/
-      bfin |                       gd-2.1.0 | NOK | http://autobuild.buildroot.net/results/f06a25326e8e6266938e1616ebd67373a0b81116/
-   powerpc |           host-libglib2-2.38.2 | TIM | http://autobuild.buildroot.net/results/1f0baed2b7d31b4ff4087fd0228fdbc33828d621/
-       arm |                    lcdapi-v0.4 | NOK | http://autobuild.buildroot.net/results/d131d58f3cac59d7cd90d2804a8104a4ea1e65bd/
-    x86_64 |                libglib2-2.38.2 | TIM | http://autobuild.buildroot.net/results/f8882599abf81c460d0ce2fa5e7d1f4c704327c7/
-     nios2 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/5fb451a690037c6e50e82edb7c12a59f1226484f/
-       arm |                   libtasn1-3.6 | TIM | http://autobuild.buildroot.net/results/49d57df8fdcf00b7f8a774f595356bf685ca96bb/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/b03b01a2dd89dd4fd4c7829d5342df8f1e209ce1/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/e8aa688fa6b37ac04251a19c5baba1a1e8bb482f/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/d11708b9935298ca25726dfd385215095727bc2d/
-  mips64el | make: *** [install-shlibs] ... | TIM | http://autobuild.buildroot.net/results/e5c2cdfcf5f338a5cc302ec2e09dd058c411cae3/
-       arm |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/279517ff9096bf99ba4315872dd66b6cbb32e828/
-     avr32 |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/01f535ac784d449f6b309840c5a980e403ff43e1/
-       arm |                polarssl-1.2.10 | NOK | http://autobuild.buildroot.net/results/c886ae05388f8fa4028668296b5c601d1edc10d4/
-   powerpc |                 python-nfc-212 | NOK | http://autobuild.buildroot.net/results/2ff000de23d38a8804b23cdbfafcd32f9263f67e/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/24fb8a1d8f622f3b73c894f25abbf16215404e19/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/0121fd964857423433083a1bb10053ebd13f2327/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/b666857df8facc7b14d587b4a1911fb2cf269f7d/
-      bfin |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/3b6ce1ebc8e02100001fc57e95b9ca8710b43a39/
-      bfin |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/56d3464ea4a7c7359b6c5d5fc0233ec8abc36043/
-       arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/f6b9eae7f4d5026d1b63ba4b9a90509c0373e292/
-       arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/abd1a354de15709731c72de123b04266c4260287/
-       arm |   toolchain-external-undefined | NOK | http://autobuild.buildroot.net/results/609ddbd2614dd067307477c2463b72fcf5956ea1/
-      i686 |                        unknown | TIM | http://autobuild.buildroot.net/results/5712427b0f0751628eb942f4ee5d132688df6552/
+Thanks!
+Gary
 
 
--- 
-http://autobuild.buildroot.net
+> I've marked your four changes as "Changes Requested" in the patchwork.
+>
+> Thanks! :-)
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > ---
+> >  configs/freescale_imx6sabresd_defconfig | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/configs/freescale_imx6sabresd_defconfig
+> b/configs/freescale_imx6sabresd_defconfig
+> > index 368e00b..16e4d0b 100644
+> > --- a/configs/freescale_imx6sabresd_defconfig
+> > +++ b/configs/freescale_imx6sabresd_defconfig
+> > @@ -9,15 +9,19 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> >  BR2_LINUX_KERNEL=y
+> >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://
+> git.freescale.com/imx/linux-2.6-imx.git"
+> > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
+> > -BR2_LINUX_KERNEL_DEFCONFIG="imx6"
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+> > +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+> > +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
+> >
+> >  # filesystem
+> >  BR2_TARGET_ROOTFS_EXT2=y
+> >
+> >  # bootloader
+> >  BR2_TARGET_UBOOT=y
+> > -BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabresd"
+> > +BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+> > +BR2_TARGET_UBOOT_FORMAT_IMX=y
+> >  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> >  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://
+> git.freescale.com/imx/uboot-imx.git"
+> > -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
+> > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+> > --
+> > 2.0.0
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>       |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140615/a67744a4/attachment.html>
