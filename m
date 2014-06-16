@@ -1,66 +1,56 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 16 Jun 2014 21:35:57 +0200
-Subject: [Buildroot] [v2 2/2] perl-mojolicious: new package
-In-Reply-To: <1402947357-6359-1-git-send-email-francois.perrad@gadz.org>
-References: <1402947357-6359-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1402947357-6359-3-git-send-email-francois.perrad@gadz.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 16 Jun 2014 17:03:32 -0300
+Subject: [Buildroot] [PATCH] msgpack: disable for ARC
+Message-ID: <1402949012-19434-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/Config.in                            |  1 +
- package/perl-mojolicious/Config.in           |  6 ++++++
- package/perl-mojolicious/perl-mojolicious.mk | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/perl-mojolicious/Config.in
- create mode 100644 package/perl-mojolicious/perl-mojolicious.mk
+msgpack uses the __sync_fetch_and_add() atomic primitive that is not
+available for ARC. Fixes:
+http://autobuild.buildroot.net/results/829/8292e67354602738cae12d8ebea83b513ba35482/
 
-diff --git a/package/Config.in b/package/Config.in
-index f43e985..5e16ffa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -423,6 +423,7 @@ endif
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
-+source "package/perl-mojolicious/Config.in"
- endmenu
- endif
- 	source "package/php/Config.in"
-diff --git a/package/perl-mojolicious/Config.in b/package/perl-mojolicious/Config.in
-new file mode 100644
-index 0000000..766d109
---- /dev/null
-+++ b/package/perl-mojolicious/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS
-+	bool "perl-mojolicious"
-+	help
-+	  Real-time web framework
-+
-+	  http://mojolicio.us
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-new file mode 100644
-index 0000000..e4ced7e
---- /dev/null
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-mojolicious
-+#
-+################################################################################
-+
-+PERL_MOJOLICIOUS_VERSION = 5.07
-+PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
-+PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI/
-+PERL_MOJOLICIOUS_DEPENDENCIES = perl 
-+PERL_MOJOLICIOUS_LICENSE = artistic_2
-+
-+$(eval $(perl-package))
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/msgpack/Config.in        | 2 ++
+ package/python-msgpack/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index daa4fdd..b380c58 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_arc # atomic builtins
+ 	help
+ 	  MessagePack is an efficient binary serialization format.
+ 
+@@ -11,3 +12,4 @@ config BR2_PACKAGE_MSGPACK
+ 
+ comment "msgpack needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_arc
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index 2075ee6..c4b68a3 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
++	depends on !BR2_arc # msgpack - atomic builtins
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -14,3 +15,4 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ comment "python-msgpack needs a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_arc
 -- 
-1.9.1
+1.8.5.5
