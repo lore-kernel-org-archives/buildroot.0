@@ -1,41 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jun 2014 22:29:19 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.15.1
-In-Reply-To: <1402968559-21426-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1402968559-21426-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1402968559-21426-2-git-send-email-gustavo@zacarias.com.ar>
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Tue, 17 Jun 2014 13:21:47 +0800
+Subject: [Buildroot] [PATCH 7/7 v3] Add powerpc64 petitboot defconfig
+In-Reply-To: <1402982507.183937.570365596242.0.gpush@pablo>
+Message-ID: <1402982507.186219.497008212672.7.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+A simple defconfig for building a petitboot-based bootloader for
+powerpc64 machines.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 73af0bf..ece48a7 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.15"
-+	bool "3.15.1"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.15.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-1.8.5.5
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+
+---
+ configs/powerpc64_petitboot_defconfig |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/configs/powerpc64_petitboot_defconfig b/configs/powerpc64_petitboot_defconfig
+new file mode 100644
+index 0000000..fa629ab
+--- /dev/null
++++ b/configs/powerpc64_petitboot_defconfig
+@@ -0,0 +1,17 @@
++BR2_powerpc64=y
++BR2_GENERATE_LOCALE="en_US.UTF-8"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
++BR2_TARGET_GENERIC_GETTY_PORT="hvc0"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_BNX2X=y
++BR2_PACKAGE_LINUX_FIRMWARE_CXGB4=y
++BR2_PACKAGE_NCURSES_WCHAR=y
++BR2_PACKAGE_DROPBEAR=y
++# BR2_PACKAGE_DROPBEAR_SERVER is not set
++BR2_PACKAGE_ETHTOOL=y
++BR2_PACKAGE_NETCAT=y
++BR2_PACKAGE_RSYNC=y
++BR2_PACKAGE_PETITBOOT=y
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_XZ=y
