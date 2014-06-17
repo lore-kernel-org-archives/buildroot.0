@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 16:44:09 -0300
-Subject: [Buildroot] [PATCH 2/2] opus-tools: bump to version 0.1.9
-In-Reply-To: <1403034249-17668-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403034249-17668-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403034249-17668-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Jun 2014 16:59:15 -0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 3.14.2
+Message-ID: <1403035155-24320-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +10,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opus-tools/opus-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../btrfs-progs-0001-no-documentation.patch           | 19 +++++++++++++++++++
+ package/btrfs-progs/btrfs-progs.mk                    |  2 +-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+ create mode 100644 package/btrfs-progs/btrfs-progs-0001-no-documentation.patch
 
-diff --git a/package/opus-tools/opus-tools.mk b/package/opus-tools/opus-tools.mk
-index 06dc5d4..e314eef 100644
---- a/package/opus-tools/opus-tools.mk
-+++ b/package/opus-tools/opus-tools.mk
+diff --git a/package/btrfs-progs/btrfs-progs-0001-no-documentation.patch b/package/btrfs-progs/btrfs-progs-0001-no-documentation.patch
+new file mode 100644
+index 0000000..cdda671
+--- /dev/null
++++ b/package/btrfs-progs/btrfs-progs-0001-no-documentation.patch
+@@ -0,0 +1,19 @@
++Disable documentation build/install, it needs asciidoc
++and we don't use it anyway.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura btrfs-progs-v3.14.2.orig/Makefile btrfs-progs-v3.14.2/Makefile
++--- btrfs-progs-v3.14.2.orig/Makefile	2014-05-29 21:56:59.000000000 -0300
+++++ btrfs-progs-v3.14.2/Makefile	2014-06-17 16:53:29.404520306 -0300
++@@ -57,8 +57,8 @@
++ btrfs_fragment_libs = -lgd -lpng -ljpeg -lfreetype
++ 
++ SUBDIRS =
++-BUILDDIRS = $(patsubst %,build-%,$(SUBDIRS)) build-Documentation
++-INSTALLDIRS = $(patsubst %,install-%,$(SUBDIRS)) install-Documentation
+++BUILDDIRS = $(patsubst %,build-%,$(SUBDIRS))
+++INSTALLDIRS = $(patsubst %,install-%,$(SUBDIRS))
++ CLEANDIRS = $(patsubst %,clean-%,$(SUBDIRS))
++ 
++ .PHONY: $(SUBDIRS)
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 415ded2..9ee44ad 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPUS_TOOLS_VERSION = 0.1.8
-+OPUS_TOOLS_VERSION = 0.1.9
- OPUS_TOOLS_SITE = http://downloads.xiph.org/releases/opus
- OPUS_TOOLS_LICENSE = BSD-2c
- OPUS_TOOLS_LICENSE_FILES = COPYING
+-BTRFS_PROGS_VERSION = 3.14.1
++BTRFS_PROGS_VERSION = 3.14.2
+ BTRFS_PROGS_SITE = https://www.kernel.org/pub/linux/kernel/people/mason/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = acl attr e2fsprogs lzo util-linux zlib
 -- 
 1.8.5.5
