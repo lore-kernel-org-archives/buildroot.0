@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 11:39:22 -0300
-Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
-Message-ID: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Jun 2014 11:39:23 -0300
+Subject: [Buildroot] [PATCHv2 2/2] php-geoip: new package
+In-Reply-To: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403015963-27278-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,61 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in       |  1 +
- package/geoip/Config.in | 11 +++++++++++
- package/geoip/geoip.mk  | 15 +++++++++++++++
- 3 files changed, 27 insertions(+)
- create mode 100644 package/geoip/Config.in
- create mode 100644 package/geoip/geoip.mk
+ package/Config.in              |  1 +
+ package/php-geoip/Config.in    |  8 ++++++++
+ package/php-geoip/php-geoip.mk | 26 ++++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+)
+ create mode 100644 package/php-geoip/Config.in
+ create mode 100644 package/php-geoip/php-geoip.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 9231c45..d9bd23d 100644
+index d9bd23d..8bdbe4c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -719,6 +719,7 @@ menu "Networking"
- 	source "package/czmq/Config.in"
- 	source "package/filemq/Config.in"
- 	source "package/fmlib/Config.in"
-+	source "package/geoip/Config.in"
- 	source "package/glib-networking/Config.in"
- 	source "package/libcgi/Config.in"
- 	source "package/libcgicc/Config.in"
-diff --git a/package/geoip/Config.in b/package/geoip/Config.in
+@@ -429,6 +429,7 @@ endif
+ if BR2_PACKAGE_PHP
+ if !BR2_PREFER_STATIC_LIB
+ menu "External php extensions"
++	source "package/php-geoip/Config.in"
+ 	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
+ 	source "package/php-ssh2/Config.in"
+diff --git a/package/php-geoip/Config.in b/package/php-geoip/Config.in
 new file mode 100644
-index 0000000..a198a31
+index 0000000..adb2046
 --- /dev/null
-+++ b/package/geoip/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_GEOIP
-+	bool "geoip"
++++ b/package/php-geoip/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PHP_GEOIP
++	bool "php-geoip"
++	depends on BR2_PACKAGE_PHP
++	select BR2_PACKAGE_GEOIP
 +	help
-+	  GeoIP is a C library that enables the user to find geographical
-+	  and network information of an IP address.
-+	  To use this library, you need to download MaxMind's free GeoLite or
-+	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
-+	  directory in uncompressed form.
-+	  Note that GeoIP2 / GeoLite2 are not supported by this library.
++	  PHP GeoIP-based IP address mapper to geographical places.
 +
-+	  https://github.com/maxmind/geoip-api-c
-diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
++	  http://pecl.php.net/package/geoip
+diff --git a/package/php-geoip/php-geoip.mk b/package/php-geoip/php-geoip.mk
 new file mode 100644
-index 0000000..fde07cb
+index 0000000..99f74e0
 --- /dev/null
-+++ b/package/geoip/geoip.mk
-@@ -0,0 +1,15 @@
++++ b/package/php-geoip/php-geoip.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# geoip
++# php-geoip
 +#
 +################################################################################
 +
-+GEOIP_VERSION = 1.6.0
-+GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
-+GEOIP_SITE = $(call github,maxmind,geoip-api-c,v$(GEOIP_VERSION))
-+GEOIP_AUTORECONF = YES
-+GEOIP_INSTALL_STAGING = YES
-+GEOIP_LICENSE = LGPLv2.1+
-+GEOIP_LICENSE_FILES = COPYING
++PHP_GEOIP_VERSION = 1.1.0
++PHP_GEOIP_SOURCE = geoip-$(PHP_GEOIP_VERSION).tgz
++PHP_GEOIP_SITE = http://pecl.php.net/get
++PHP_GEOIP_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-geoip=$(STAGING_DIR)/usr
++# phpize does the autoconf magic
++PHP_GEOIP_DEPENDENCIES = geoip php host-autoconf
++PHP_GEOIP_LICENSE = PHP
++PHP_GEOIP_LICENSE_FILES = LICENSE
++
++define PHP_GEOIP_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
++
++PHP_GEOIP_PRE_CONFIGURE_HOOKS += PHP_GEOIP_PHPIZE
 +
 +$(eval $(autotools-package))
 -- 
