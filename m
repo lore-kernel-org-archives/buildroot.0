@@ -1,126 +1,48 @@
-From: Will Newton <will.newton@gmail.com>
-Date: Tue, 17 Jun 2014 08:59:48 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-06-16
-In-Reply-To: <20140617063016.0CF6C1010D3@stock.ovh.net>
-References: <20140617063016.0CF6C1010D3@stock.ovh.net>
-Message-ID: <CAFbHwiTmwZdVzedke4+iWmvTBxsfvJVWaPnavVDfB+vkk6v7qA@mail.gmail.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Tue, 17 Jun 2014 10:20:58 +0200
+Subject: [Buildroot] [PATCH 1/2] manual: add prerequisites for graph
+	generation
+In-Reply-To: <20140613171704.GE3496@free.fr>
+References: <1402679208-8304-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140613171704.GE3496@free.fr>
+Message-ID: <CAHkwnC8b7DgTmUCcJyD816Gavprkd3i2rms+_bcVdzEZTBMgWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 17, 2014 at 7:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2014-06-16
-> ===============================
+On Fri, Jun 13, 2014 at 7:17 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Fabio, All,
 >
->         success : 99
->        failures : 26
->        timeouts : 11
->           TOTAL : 136
+> On 2014-06-13 19:06 +0200, Fabio Porcedda spake thusly:
+>> Add "graphviz" and "python-matplotlib" as prerequisites for graph
+>> generation.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> Reported-by: Dallas Clement <dallas.a.clement@gmail.com>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+>> ---
+>>  docs/manual/prerequisite.txt | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+>> index c5d5442..ffe86dd 100644
+>> --- a/docs/manual/prerequisite.txt
+>> +++ b/docs/manual/prerequisite.txt
+>> @@ -77,3 +77,7 @@ development context (further details: refer to xref:download-infra[]).
+>>  ** +w3m+
+>>  ** +python+ with the +argparse+ module (automatically present in 2.7+ and 3.2+)
+>>  ** +dblatex+ (required for the pdf manual only)
+>> +
+>> +* Graph generation tools:
+>> +** +graphviz+
 >
-> Classification of failures by reason
-> ====================================
->
->                     sdl-1.2.15 | 3
->                       qt-4.8.6 | 2
->                 keyutils-1.5.5 | 2
->                  haserl-0.9.33 | 2
-> make: *** [core-dependencie... | 2
->             host-omniorb-4.1.6 | 1
->                  msgpack-0.5.4 | 1
->                    perl-5.18.2 | 1
->               libsvgtiny-12121 | 1
->              armadillo-4.000.4 | 1
->              berkeleydb-5.3.28 | 1
->            host-cmake-2.8.12.2 | 1
->                  clapack-3.2.1 | 1
->               host-bison-3.0.2 | 1
->                     ola-0.8.33 | 1
->                 libmpeg2-0.5.1 | 1
->                        unknown | 1
->                      nut-2.7.2 | 1
-> dvb-apps-3d43b280298c39a67d... | 1
->                 host-gdb-7.6.2 | 1
->                 libcurl-7.37.0 | 1
->                   libnl-3.2.24 | 1
->                  cairo-1.12.10 | 1
->                  dmalloc-5.4.3 | 1
->               host-erlang-17.0 | 1
-> checking for unsetenv... ho... | 1
->                  binutils-2.21 | 1
->                 oprofile-0.9.9 | 1
->                      apr-1.4.8 | 1
->                   boost-1.55.0 | 1
->                 pinentry-0.8.3 | 1
->
-> Detail of failures
-> ===================
->
->     xtensa |                      apr-1.4.8 | TIM | http://autobuild.buildroot.net/results/89230dbd7dcb954ea3ded53102d688ba3fd9061d/
->        arm |              armadillo-4.000.4 | NOK | http://autobuild.buildroot.net/results/543b13d601290767717bbe99cc4346017958e12f/
+> graphviz is only for the graph-depends.
 
-armadillo does not seem to support PREFER_STATIC_LIB (tries to link
-shared lib with a static libblas).
+Thanks, fixed.
 
->       i686 |              berkeleydb-5.3.28 | TIM | http://autobuild.buildroot.net/results/13009ca02f2f55c0798dc7f22655b1bd9860bccd/
->    powerpc |                  binutils-2.21 | NOK | http://autobuild.buildroot.net/results/6ec18ae04c5a161031d15696e656795004ef713f/
->    powerpc |                   boost-1.55.0 | TIM | http://autobuild.buildroot.net/results/969675dc9ab90ac9dc493671bd93b4ea30629915/
->     mipsel |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/9f6480e898a0c122fce638ed70dd61461802c0e5/
->     x86_64 | checking for unsetenv... ho... | TIM | http://autobuild.buildroot.net/results/d6b8e86ff28bd1828fe51d2886947058c5daeabe/
->      avr32 |                  clapack-3.2.1 | TIM | http://autobuild.buildroot.net/results/05c60c3e6cab3c6713dbacf0a8e08d4331c91af5/
->    powerpc |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/cad0b0a0675917f2d2150c414e2fa4f9da0416e9/
->       bfin | dvb-apps-3d43b280298c39a67d... | NOK | http://autobuild.buildroot.net/results/683dbbc6e13a9e6084ade17863b8c6ba849b2106/
->       mips |                  haserl-0.9.33 | NOK | http://autobuild.buildroot.net/results/6a6fc1c56c79ad6b30c875ddb444082a8cf0a0cb/
->   mips64el |                  haserl-0.9.33 | NOK | http://autobuild.buildroot.net/results/1fc4d586ef8e4fa574c8704dc306e170f94cb14e/
->    aarch64 |               host-bison-3.0.2 | TIM | http://autobuild.buildroot.net/results/f37ec72cd623c6000596f4c2f25da3b28dab0954/
->       mips |            host-cmake-2.8.12.2 | TIM | http://autobuild.buildroot.net/results/7a67cb23c3ffe177dd482d2b7080d33864d5a44d/
->   mips64el |               host-erlang-17.0 | NOK | http://autobuild.buildroot.net/results/77cf4cd819d5800b747346520569681c8b0ab15e/
->       i486 |                 host-gdb-7.6.2 | NOK | http://autobuild.buildroot.net/results/f8112564e40e59a03d591d970428eaaeec01532f/
->        arm |             host-omniorb-4.1.6 | TIM | http://autobuild.buildroot.net/results/db5c87296760ec491c24701d1c01b12b2810871c/
->       i486 |                 keyutils-1.5.5 | NOK | http://autobuild.buildroot.net/results/0b0b6b60c2d2dcad8d470682bb58e2a57acd1cf0/
->     mipsel |                 keyutils-1.5.5 | NOK | http://autobuild.buildroot.net/results/8316ab201ccc2b785f07a981ec22c4981c0a2744/
->       bfin |                 libcurl-7.37.0 | NOK | http://autobuild.buildroot.net/results/0acddde8909637eca44be749b7b657c3643a1cf2/
->    powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/e2b31fb2dfbbf7778a889e959647771cf749ed37/
->       i686 |                   libnl-3.2.24 | TIM | http://autobuild.buildroot.net/results/ff4f358227b280e38ce6cbbb92fe7485e965b686/
->     xtensa |               libsvgtiny-12121 | NOK | http://autobuild.buildroot.net/results/5feca450d70a8de48fa2463e55c9e84db5d755b0/
->        arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/9c64d8cb5a3f498df4f9da499efb2eab497760d2/
->        arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/3a80414ad5b9ee41beab42d53d0b377518c38921/
->        arc |                  msgpack-0.5.4 | NOK | http://autobuild.buildroot.net/results/8292e67354602738cae12d8ebea83b513ba35482/
->     x86_64 |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/8ee145dddaf3fc2695ba0889eaf829c04a2f3c82/
->        arm |                     ola-0.8.33 | NOK | http://autobuild.buildroot.net/results/2acdb9cfc3fdcfcd57d27cc4ebe776b5788af4c7/
-
-Build system issue?
-
-make[3]: Nothing to be done for `install-exec-am'.
- /bin/mkdir -p '/scratch/peko/target/usr/share/man/man1'
- /usr/bin/install -c -m 644 ola_artnet.1 ola_dev_info.1
-ola_dmxconsole.1 ola_dmxmonitor.1 ola_e131.1 ola_patch.1
-ola_set_priority.1 ola_streaming_client.1 ola_uni_info.1 ola_usbpro.1
-olad.1 '/scratch/peko/target/usr/share/man/man1'
-make[3]: Leaving directory `/scratch/peko/build/ola-0.8.33/man'
-make[2]: Leaving directory `/scratch/peko/build/ola-0.8.33/man'
-Making install in doxygen
-/bin/bash: fork: Cannot allocate memory
-make[1]: *** [install-recursive] Error 1
-
->      avr32 |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/5579f73b1d892c14793ac24b25d84447572518d7/
->        arm |                    perl-5.18.2 | TIM | http://autobuild.buildroot.net/results/0e12edfa26563168dadbdc084d5c7a082ec105c2/
->       mips |                 pinentry-0.8.3 | NOK | http://autobuild.buildroot.net/results/6be109ccedec603a67cebdb31b55865dcce0e128/
->       sh4a |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/3e60fae0d3d64367753b65f8dd0a8dd1cf70a620/
->     x86_64 |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/69ffbfec9415cdc795d95d03a78796d8a6ebbb13/
->    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/c6191fb4b87524f484a9f8d6c9b3edf5fb636e46/
->    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/b2c01b7cbf07d0010a7d9c26c7beb395f3d21bc4/
->    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/4ec0cfd97064f81ea827296650090321877bc103/
->        arm |                        unknown | TIM | http://autobuild.buildroot.net/results/94cb967615c5087be09985c5abb397e4c09d310e/
->
->
-> --
-> http://autobuild.buildroot.net
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Best regards
+-- 
+Fabio Porcedda
