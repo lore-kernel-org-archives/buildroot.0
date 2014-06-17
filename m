@@ -1,36 +1,80 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 17 Jun 2014 15:58:24 +0200
-Subject: [Buildroot] How to handle custom kernel config
-In-Reply-To: <53A045EC.4030107@gmail.com>
-References: <53A04483.9030601@gmail.com>
- <CAGm1_ktpFoYZSu2Yjd_hNpiHbySLv8FPrHtJ91DQv4iNmthYHg@mail.gmail.com>
- <53A045EC.4030107@gmail.com>
-Message-ID: <CAGm1_kvcZDk_ke4OVgx1dO6_qWOhff7LupEKj42kgiq0Fyog6w@mail.gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 17 Jun 2014 16:23:47 +0200
+Subject: [Buildroot] [PATCH 1/2] geoip: new package
+In-Reply-To: <1402949034-20509-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1402949034-20509-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <53A04F73.2070808@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 17, 2014 at 3:43 PM, Marco Trapanese
-<marcotrapanese@gmail.com> wrote:
-> Il 17/06/2014 15:40, Yegor Yefremov ha scritto:
->
->> As soon as you're happy with your new .config in the build directory,
->> you just manually overwrite your board/sub_directory/linux.config Yegor
->
->
-> Ok, so I should do the following:
->
-> 1) copy the custom file to .config
 
-This step will be made by Buildroot, when you first compile the kernel
-or perhaps if you invoke make linux-reconfigure. Your custom .config
-will be copied to output/build/linux-xxx
+Hi Gustavo,
 
-> 2) edit that with make linux-menuconfig
-> 3) copy back the .config to custom file
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>   package/Config.in       |  1 +
+>   package/geoip/Config.in | 11 +++++++++++
+>   package/geoip/geoip.mk  | 15 +++++++++++++++
+>   3 files changed, 27 insertions(+)
+>   create mode 100644 package/geoip/Config.in
+>   create mode 100644 package/geoip/geoip.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9231c45..e435a11 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -720,6 +720,7 @@ menu "Networking"
+>   	source "package/filemq/Config.in"
+>   	source "package/fmlib/Config.in"
+>   	source "package/glib-networking/Config.in"
+> +	source "package/geoip/Config.in"
 
-Other step are correct.
+This should be alphabetically ordered.
 
-Yegor
+Regards,
+Jerzy
+
+>   	source "package/libcgi/Config.in"
+>   	source "package/libcgicc/Config.in"
+>   	source "package/libcurl/Config.in"
+> diff --git a/package/geoip/Config.in b/package/geoip/Config.in
+> new file mode 100644
+> index 0000000..a198a31
+> --- /dev/null
+> +++ b/package/geoip/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_GEOIP
+> +	bool "geoip"
+> +	help
+> +	  GeoIP is a C library that enables the user to find geographical
+> +	  and network information of an IP address.
+> +	  To use this library, you need to download MaxMind's free GeoLite or
+> +	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
+> +	  directory in uncompressed form.
+> +	  Note that GeoIP2 / GeoLite2 are not supported by this library.
+> +
+> +	  https://github.com/maxmind/geoip-api-c
+> diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+> new file mode 100644
+> index 0000000..fde07cb
+> --- /dev/null
+> +++ b/package/geoip/geoip.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# geoip
+> +#
+> +################################################################################
+> +
+> +GEOIP_VERSION = 1.6.0
+> +GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
+> +GEOIP_SITE = $(call github,maxmind,geoip-api-c,v$(GEOIP_VERSION))
+> +GEOIP_AUTORECONF = YES
+> +GEOIP_INSTALL_STAGING = YES
+> +GEOIP_LICENSE = LGPLv2.1+
+> +GEOIP_LICENSE_FILES = COPYING
+> +
+> +$(eval $(autotools-package))
