@@ -1,219 +1,113 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Tue, 17 Jun 2014 13:21:47 +0800
-Subject: [Buildroot] [PATCH 6/7 v3] package/petitboot: Add petitboot,
- the userspace bootloader
+Subject: [Buildroot] [PATCH 0/7 v3] Enable a buildroot-based petitboot
+	bootloader
 In-Reply-To: <1402982507.183937.570365596242.0.gpush@pablo>
-Message-ID: <1402982507.185942.882894195923.6.gpush@pablo>
+Message-ID: <1402982507.183937.570365596242.0.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change adds the petitboot package, a bootloader that exists in
-userspace, and uses the kexec facility to boot into a new kernel.
+Hi all,
 
-We add a little extra infrastructure to get things integrated into a
-buildroot environment:
+The following series allows us to build a petitboot-based bootloader
+using buildroot.
 
- - scripts to make kexec work with busybox init, for a clean shutdown
+Petitboot is a kexec-based bootloader; by plumbing together a few linux
+utilities, we can implement a bootloader in userspace, using standard
+Linux drivers for hardware support. There's a bit of background of
+petitboot in my recent linux.conf.au talk:
 
- - udev rules to get removable event notifications, and start the
-   petitboot UI processes
+ http://mirror.linux.org.au/linux.conf.au/2014/Thursday/89-Petitboot_doing_interesting_things_in_your_bootloader_-_Jeremy_Kerr.mp4
+ 
+And the project homepage:
 
- - startup scripts for the device-discovery process
+ https://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
 
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+My primary target here is powerpc machines (and this series adds a
+defconfig to do a powerpc petitboot build), but I've also been able to
+get most of petitboot working when built as an EFI stub on x86 machines
+(we still need some platform-specific bits in petitboot for proper
+configuration persistence).
+
+While most of this series is fairly straightforward, there are a few
+items that might need a little more attention:
+
+ - At the moment, I'm using my local repo for petitboot sources; it may
+   be better to wait until everything is merged upstream. Upstream is
+   still active, and I don't think this should take long.
+
+ - We add wide-char support for ncurses; this seems to be working okay,
+   but could do with a little review.
+
+ - I still need a couple of tweaks to the target system (/etc/locale and
+   /etc/inittab). At the moment, I'm carrying a change that introduces
+   an overlay for these two files, but that's not suitable for upstream
+   use:
+
+     http://git.ozlabs.org/?p=buildroot;a=commitdiff;h=582c47a4
+   
+   Is there any way I can provide updates to these files? The changes
+   aren't board-specific; they're due to petitboot expecting to own
+   the default consoles for UIs. Or is there a better way to do this?
+
+This series is also available in my git tree, at:
+
+  git://git.ozlabs.org/~jk/buildroot/
+
+- in the petitboot branch. Note that that branch includes the overlay
+too, which isn't intended for upstream.
+
+Also, I'd like to give a big thanks to the buildroot developers; being
+able to re-roll an entire system with one command has made petitboot
+development *significantly* easier. Also, thanks to Thomas for the nudge
+to send these changes upstream!
+
+Please let me know if you have questions/comments/etc.
+
+Changes since v2:
+
+ - petitboot: is now autoreconfable, so drop the custom autoconf 
+   tomfoolery
+
+ - powerpc-utils, kexec-lite: Update upstream versions
+
+ - petitboot: use updated UDEV configuration options
+
+ - resync with package/Config.in changes
+
+ - drop already-merged changes
+
+Changes since v1, based on feedback:
+
+ - drobbear: we only want a config option to disable the server,
+   instead of both client and server
+
+ - ncurses: use NCURSES_LIBS-y
+
+ - busybox: fix HOOK_DIR glob expansion
+
+ - powerpc-utils, kexec-lite, petitboot: update upstream versions
+
+ - petitboot: add dependencies
+
+ - all: unified headers, now using full git SHAs
+
+ - dtc: Added patch to update to 1.4.0
+
+Cheers,
+
+
+Jeremy
 
 ---
- package/Config.in                            |    1 
- package/petitboot/Config.in                  |   21 +++++++
- package/petitboot/S14silence-console         |    9 +++
- package/petitboot/S15pb-discover             |   23 +++++++
- package/petitboot/kexec-restart              |    8 ++
- package/petitboot/petitboot-console-ui.rules |    5 +
- package/petitboot/petitboot.mk               |   57 +++++++++++++++++++
- package/petitboot/removable-event-poll.rules |    4 +
- 8 files changed, 128 insertions(+)
-
-diff --git a/package/Config.in b/package/Config.in
-index b0d4d47..a769d33 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1116,6 +1116,7 @@ endif
- 	source "package/ncdu/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-+	source "package/petitboot/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/polkit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/petitboot/Config.in b/package/petitboot/Config.in
-new file mode 100644
-index 0000000..d1e1783
---- /dev/null
-+++ b/package/petitboot/Config.in
-@@ -0,0 +1,21 @@
-+config BR2_PACKAGE_PETITBOOT
-+	bool "petitboot"
-+	# petitboot needs udev /dev management
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PANEL
-+	select BR2_PACKAGE_NCURSES_TARGET_FORM
-+	select BR2_PACKAGE_NCURSES_TARGET_MENU
-+	# run-time dependency only
-+	select BR2_PACKAGE_KEXEC_LITE if !BR2_PACKAGE_KEXEC
-+	# run-time dependency only
-+	select BR2_PACKAGE_POWERPC_UTILS if BR2_powerpc || BR2_powerpc64
-+	# run-time dependency only
-+	select BR2_PACKAGE_IPRUTILS if BR2_powerpc || BR2_powerpc64
-+	help
-+	  Petitboot is a small kexec-based bootloader
-+
-+	  http://www.kernel.org/pub/linux/kernel/people/geoff/petitboot/petitboot.html
-+
-+comment "petitboot requires udev to be enabled"
-+	depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/petitboot/S14silence-console b/package/petitboot/S14silence-console
-new file mode 100755
-index 0000000..6570200
---- /dev/null
-+++ b/package/petitboot/S14silence-console
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+
-+case "$1" in
-+    start)
-+        echo 0 0 7 0 > /proc/sys/kernel/printk
-+        ;;
-+esac
-+
-+exit 0
-diff --git a/package/petitboot/S15pb-discover b/package/petitboot/S15pb-discover
-new file mode 100755
-index 0000000..ebdf944
---- /dev/null
-+++ b/package/petitboot/S15pb-discover
-@@ -0,0 +1,23 @@
-+#!/bin/sh
-+
-+LOGFILE=/var/log/petitboot/pb-discover.log
-+PIDFILE=/var/run/petitboot.pid
-+
-+case "$1" in
-+    start)
-+        ulimit -c unlimited
-+        mkdir -p $(dirname $LOGFILE)
-+        PATH=/usr/bin:/usr/sbin:/bin:/sbin pb-discover -l $LOGFILE &
-+        echo $! > $PIDFILE
-+        ;;
-+    stop)
-+        pid=$(cat $PIDFILE)
-+        [ -n "$pid" ] && kill -TERM $pid
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop}"
-+        exit 1
-+        ;;
-+esac
-+
-+exit 0
-diff --git a/package/petitboot/kexec-restart b/package/petitboot/kexec-restart
-new file mode 100755
-index 0000000..0175e76
---- /dev/null
-+++ b/package/petitboot/kexec-restart
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+/usr/sbin/kexec -f -e
-+
-+while :
-+do
-+    sleep 1
-+done
-diff --git a/package/petitboot/petitboot-console-ui.rules b/package/petitboot/petitboot-console-ui.rules
-new file mode 100644
-index 0000000..7464856
---- /dev/null
-+++ b/package/petitboot/petitboot-console-ui.rules
-@@ -0,0 +1,5 @@
-+
-+# spawn a petitboot UI on common user-visible interface devices
-+SUBSYSTEM=="tty", KERNEL=="hvc*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name vt100"
-+SUBSYSTEM=="tty", KERNEL=="tty0", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name vt100"
-+SUBSYSTEM=="tty", KERNEL=="ttyS*", RUN+="/usr/libexec/petitboot/pb-console --getty --detach -- -n -i 0 $name vt100"
-diff --git a/package/petitboot/petitboot.mk b/package/petitboot/petitboot.mk
-new file mode 100644
-index 0000000..1bbf522
---- /dev/null
-+++ b/package/petitboot/petitboot.mk
-@@ -0,0 +1,57 @@
-+################################################################################
-+#
-+# petitboot
-+#
-+################################################################################
-+
-+PETITBOOT_VERSION = 509fca5ca2733a741521ae4332400d54d95ee073
-+PETITBOOT_SITE = git://ozlabs.org/~jk/petitboot
-+PETITBOOT_DEPENDENCIES = ncurses udev host-bison host-flex
-+PETITBOOT_LICENSE = GPLv2
-+PETITBOOT_LICENSE_FILES = COPYING
-+
-+PETITBOOT_AUTORECONF = YES
-+PETITBOOT_AUTORECONF_OPT = -i
-+PETITBOOT_CONF_OPT += --with-ncurses --without-twin-x11 --without-twin-fbdev \
-+	      --localstatedir=/var \
-+	      HOST_PROG_KEXEC=/usr/sbin/kexec \
-+	      HOST_PROG_SHUTDOWN=/usr/libexec/petitboot/bb-kexec-reboot \
-+	      $(if $(BR2_PACKAGE_BUSYBOX),--with-tftp=busybox)
-+
-+ifdef PETITBOOT_DEBUG
-+PETITBOOT_CONF_OPT += --enable-debug
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+PETITBOOT_CONF_OPT += --with-ncursesw MENU_LIB=-lmenuw FORM_LIB=-lformw
-+endif
-+
-+PETITBOOT_PRE_CONFIGURE_HOOKS += PETITBOOT_PRE_CONFIGURE_BOOTSTRAP
-+
-+define PETITBOOT_POST_INSTALL
-+	$(INSTALL) -D -m 0755 $(@D)/utils/bb-kexec-reboot \
-+		$(TARGET_DIR)/usr/libexec/petitboot
-+	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/petitboot/boot.d
-+	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/01-create-default-dtb \
-+		$(TARGET_DIR)/etc/petitboot/boot.d/
-+	$(INSTALL) -D -m 0755 $(@D)/utils/hooks/20-set-stdout \
-+		$(TARGET_DIR)/etc/petitboot/boot.d/
-+
-+	$(INSTALL) -D -m 0755 package/petitboot/S14silence-console \
-+		$(TARGET_DIR)/etc/init.d/
-+	$(INSTALL) -D -m 0755 package/petitboot/S15pb-discover \
-+		$(TARGET_DIR)/etc/init.d/
-+	$(INSTALL) -D -m 0755 package/petitboot/kexec-restart \
-+		$(TARGET_DIR)/usr/sbin/
-+	$(INSTALL) -D -m 0755 package/petitboot/petitboot-console-ui.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+	$(INSTALL) -D -m 0755 package/petitboot/removable-event-poll.rules \
-+		$(TARGET_DIR)/etc/udev/rules.d/
-+
-+	ln -sf /usr/sbin/pb-udhcpc \
-+		$(TARGET_DIR)/usr/share/udhcpc/default.script.d/
-+endef
-+
-+PETITBOOT_POST_INSTALL_TARGET_HOOKS += PETITBOOT_POST_INSTALL
-+
-+$(eval $(autotools-package))
-diff --git a/package/petitboot/removable-event-poll.rules b/package/petitboot/removable-event-poll.rules
-new file mode 100644
-index 0000000..b736aef
---- /dev/null
-+++ b/package/petitboot/removable-event-poll.rules
-@@ -0,0 +1,4 @@
-+
-+# petitboot needs notification for media change events on removable devices,
-+# which we only get if we've set the poll_msecs sysfs attribute.
-+ACTION!="remove", ATTR{removable}=="1", ATTR{events_poll_msecs}="2000"
+Jeremy Kerr (7):
+      package/busybox: Add facility for DHCP hooks
+      package/dropbear: Add separate configuration option for dropbear server
+      package/ncurses: Allow building wide char support
+      package/powerpc-utils: Add powerpc hardware utilities
+      package/kexec-lite: Add a package for the kexec-lite tools
+      package/petitboot: Add petitboot, the userspace bootloader
+      Add powerpc64 petitboot defconfig
