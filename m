@@ -1,40 +1,29 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 17 Jun 2014 15:46:43 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-06-16
-In-Reply-To: <20140617063016.0CF6C1010D3@stock.ovh.net>
-References: <20140617063016.0CF6C1010D3@stock.ovh.net>
-Message-ID: <CAMo8Bf+7XJ+X5fLihmj5hrZZJzGtOkX1niEUgkQGLys+pUFrJQ@mail.gmail.com>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Tue, 17 Jun 2014 14:54:58 +0200
+Subject: [Buildroot] Help about gstreamer h264 in buildroot
+In-Reply-To: <20140615003443.1f6c8f98@free-electrons.com>
+References: <539C13BA.5000106@gmail.com>	<20140614141451.6780163c@free-electrons.com>	<539CA77B.1050000@gmail.com>
+ <20140615003443.1f6c8f98@free-electrons.com>
+Message-ID: <53A03AA2.9000404@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 17, 2014 at 10:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->     xtensa |               libsvgtiny-12121 | NOK | http://autobuild.buildroot.net/results/5feca450d70a8de48fa2463e55c9e84db5d755b0/
-
-Doesn't look xtensa-specific, couldn't reproduce it, but looks like
-it's missing something like this:
-
-svgtiny: create BUILDDIR before $(BUILDDIR)/src_colors.c
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
---- libsvgtiny-12121/src/Makefile.orig  2014-06-17 15:30:21.765311434 +0400
-+++ libsvgtiny-12121/src/Makefile       2014-06-17 15:29:56.569909931 +0400
-@@ -3,7 +3,7 @@
-
- SOURCES := $(SOURCES) $(BUILDDIR)/src_colors.c
-
--$(BUILDDIR)/src_colors.c: src/colors.gperf
-+$(BUILDDIR)/src_colors.c: src/colors.gperf $(BUILDDIR)/stamp
-        $(VQ)$(ECHO) "   GPERF: $<"
-        $(Q)gperf --output-file=$@.tmp $<
- # Hack for GCC 4.2 compatibility (gperf 3.0.4 solves this properly)
+Il 15/06/2014 00:34, Thomas Petazzoni ha scritto:
+> Well, given that this currently doesn't work in buildroot, is there
+> another way to play an mp4/h264 video from Qt5?
+> I think we should rather fix the problems :)
 
 
--- 
-Thanks.
--- Max
+Hi Thomas,
+I appreciate a lot your efforts, anyway I have to ask you any news 
+because Thursday I must show my project and if I can't play mp4 h264 
+video with buildroot I have to rely on another distro.
+
+Of course I don't request anything! It's just to know if it's easy 
+enough to fix, otherwise I need to restart from scratch another time.
+
+Thanks!
+Marco
