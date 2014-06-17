@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 14:39:16 -0300
-Subject: [Buildroot] [PATCH] argus: bump to vanilla version 3.0.6.1
-Message-ID: <1403026756-11908-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Jun 2014 14:55:00 -0300
+Subject: [Buildroot] [PATCHv2] argus: bump to vanilla version 3.6.0.1
+Message-ID: <1403027700-14160-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,26 @@ care about bailing out properly.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/argus/Config.in                            |    6 +
+ package/argus/Config.in                            |    7 +
  package/argus/argus-0001-drop-susv3-legacy.patch   | 1460 ++++++++++++++++++++
  .../argus/argus-3.0.0.rc.34-00-susv3-legacy.patch  | 1278 -----------------
  .../argus-3.0.0.rc.34-01-use-pcap-header.patch     |   27 -
  package/argus/argus.mk                             |   23 +-
- 5 files changed, 1477 insertions(+), 1317 deletions(-)
+ 5 files changed, 1478 insertions(+), 1317 deletions(-)
  create mode 100644 package/argus/argus-0001-drop-susv3-legacy.patch
  delete mode 100644 package/argus/argus-3.0.0.rc.34-00-susv3-legacy.patch
  delete mode 100644 package/argus/argus-3.0.0.rc.34-01-use-pcap-header.patch
 
 diff --git a/package/argus/Config.in b/package/argus/Config.in
-index 6728ae7..8e1dbd1 100644
+index 6728ae7..fe28c77 100644
 --- a/package/argus/Config.in
 +++ b/package/argus/Config.in
-@@ -1,7 +1,13 @@
+@@ -1,7 +1,14 @@
  config BR2_PACKAGE_ARGUS
  	bool "argus"
 +	depends on BR2_INET_IPV6
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
  	select BR2_PACKAGE_LIBPCAP
 +	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	help
