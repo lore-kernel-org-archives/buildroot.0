@@ -1,44 +1,36 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 16:16:00 -0300
-Subject: [Buildroot] [PATCH] olsr: bump to version 0.6.6.2
-Message-ID: <1403032560-30064-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Jun 2014 16:43:26 -0300
+Subject: [Buildroot] [PATCH] vlc: security bump to version 2.1.4
+Message-ID: <1403034206-17578-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also make the menu entry less melodramatic.
+Fixes CVE-2014-1684: The ASF_ReadObject_file_properties function in
+modules/demux/asf/libasf.c in the ASF Demuxer in VideoLAN VLC Media
+Player before 2.1.3 allows remote attackers to cause a denial of service
+(divide-by-zero error and crash) via a zero minimum and maximum data
+packet size in an ASF file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/olsr/Config.in | 2 +-
- package/olsr/olsr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/olsr/Config.in b/package/olsr/Config.in
-index 0090643..707191a 100644
---- a/package/olsr/Config.in
-+++ b/package/olsr/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_OLSR
--	bool "OLSR mesh networking Daemon"
-+	bool "olsrd"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INET_IPV6
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/olsr/olsr.mk b/package/olsr/olsr.mk
-index 3b7310e..1051d18 100644
---- a/package/olsr/olsr.mk
-+++ b/package/olsr/olsr.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 6eb7eea..6c4677a 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- OLSR_VERSION_MAJOR = 0.6
--OLSR_VERSION = $(OLSR_VERSION_MAJOR).6.1
-+OLSR_VERSION = $(OLSR_VERSION_MAJOR).6.2
- OLSR_SOURCE = olsrd-$(OLSR_VERSION).tar.bz2
- OLSR_SITE = http://www.olsr.org/releases/$(OLSR_VERSION_MAJOR)
- OLSR_PLUGINS = arprefresh bmf dot_draw dyn_gw dyn_gw_plain httpinfo jsoninfo \
+-VLC_VERSION = 2.1.2
++VLC_VERSION = 2.1.4
+ VLC_SITE = http://download.videolan.org/pub/videolan/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+ LGPLv2.1+
 -- 
 1.8.5.5
