@@ -1,36 +1,41 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Tue, 17 Jun 2014 11:14:07 +0200
-Subject: [Buildroot] [PATCH 2/2] Makefile: test if "dot" exists in
- graph-build and <pkg>-graph-depends
-In-Reply-To: <20140613195544.21c8a1c0@free-electrons.com>
-References: <1402679208-8304-1-git-send-email-fabio.porcedda@gmail.com>
- <1402679208-8304-2-git-send-email-fabio.porcedda@gmail.com>
- <20140613195544.21c8a1c0@free-electrons.com>
-Message-ID: <CAHkwnC8zLNeNAvtWGeJFA2CJS0UnX6-+Hmwk6Dvd6OmMr5n27Q@mail.gmail.com>
+Date: Tue, 17 Jun 2014 11:33:53 +0200
+Subject: [Buildroot] [PATCH 1/2] manual: add requirements for graph
+	generation
+Message-ID: <1402997634-2783-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jun 13, 2014 at 7:55 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Fri, 13 Jun 2014 19:06:48 +0200, Fabio Porcedda wrote:
->
->> -graph-build: $(O)/build/build-time.log
->> +graph-prerequisites:
->> +     @dot -? >/dev/null 2>&1 || \
->> +             (echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1)
->> +
->> +graph-build: $(O)/build/build-time.log graph-prerequisites
->
-> This is wrong: graph-build does not need the dot program, it's just a
-> Python script that uses matplotlib.
+Add "graphviz" and "python-matplotlib" as requirements for graph
+generation.
 
-Thanks, fixed.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Reported-by: Dallas Clement <dallas.a.clement@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
 
-Best regards
+Notes:
+    v2:
+     - specify that "graphviz" is needed only for graph-depends (Yann)
+
+ docs/manual/prerequisite.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index c5d5442..30970d2 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -77,3 +77,7 @@ development context (further details: refer to xref:download-infra[]).
+ ** +w3m+
+ ** +python+ with the +argparse+ module (automatically present in 2.7+ and 3.2+)
+ ** +dblatex+ (required for the pdf manual only)
++
++* Graph generation tools:
++** +graphviz+ to use 'graph-depends' and '<pkg>-graph-depends'
++** +python-matplotlib+ to use 'graph-build'
 -- 
-Fabio Porcedda
+2.0.0
