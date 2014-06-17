@@ -1,34 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 16 Jun 2014 19:54:56 -0300
-Subject: [Buildroot] [PATCH] freerdp: bump to version 1.0.2
-Message-ID: <1402959296-15423-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 16 Jun 2014 22:29:18 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 14,
+	15}.x series
+Message-ID: <1402968559-21426-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And switch to github helper.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freerdp/freerdp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index e92067c..90ede04 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FREERDP_VERSION = 1.0.1
--FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
-+FREERDP_VERSION = 1.0.2
-+FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = openssl zlib \
- 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
- FREERDP_LICENSE = Apache-2.0
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7b674bb..0a4e00c 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.93"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.94"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.43"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.44"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.22"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.7"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15"		if BR2_KERNEL_HEADERS_3_15
++	default "3.14.8"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.1"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 1.8.5.5
