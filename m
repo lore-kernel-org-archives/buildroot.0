@@ -1,68 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 17 Jun 2014 13:00:25 +0200
-Subject: [Buildroot] [ANNOUNCE] Autobuilder script available,
- join the autobuilder effort!
-In-Reply-To: <CAAXf6LWy4ysqMhrQ=FMZszUoyYzd_711VfCCgSUTO_WwTQ8vbA@mail.gmail.com>
-References: <20140614212341.5306ead8@free-electrons.com>
- <CAAXf6LWy4ysqMhrQ=FMZszUoyYzd_711VfCCgSUTO_WwTQ8vbA@mail.gmail.com>
-Message-ID: <20140617130025.664a1df6@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Tue, 17 Jun 2014 15:46:43 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-06-16
+In-Reply-To: <20140617063016.0CF6C1010D3@stock.ovh.net>
+References: <20140617063016.0CF6C1010D3@stock.ovh.net>
+Message-ID: <CAMo8Bf+7XJ+X5fLihmj5hrZZJzGtOkX1niEUgkQGLys+pUFrJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+On Tue, Jun 17, 2014 at 10:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+>     xtensa |               libsvgtiny-12121 | NOK | http://autobuild.buildroot.net/results/5feca450d70a8de48fa2463e55c9e84db5d755b0/
 
-On Tue, 17 Jun 2014 12:24:53 +0200, Thomas De Schampheleire wrote:
+Doesn't look xtensa-specific, couldn't reproduce it, but looks like
+it's missing something like this:
 
-> First of all thanks a lot for making this available!
+svgtiny: create BUILDDIR before $(BUILDDIR)/src_colors.c
 
-And thanks a lot to you for being apparently the first person to test
-the script. Again, please be tolerant with my horrible Python skills
-exposed throughout the script :)
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+--- libsvgtiny-12121/src/Makefile.orig  2014-06-17 15:30:21.765311434 +0400
++++ libsvgtiny-12121/src/Makefile       2014-06-17 15:29:56.569909931 +0400
+@@ -3,7 +3,7 @@
 
-> I am currently testing the script, and hope to get permission to run
-> it during the night on one or more work machines.
-> I had to make one modification currently: since we are behind a
-> firewall, running 'git' directly is not possible, but I need to use a
-> wrapper script. I added this:
-> 
-> +try:
-> +    gitcmd = os.environ['GIT']
-> +except KeyError:
-> +    gitcmd = 'git'
-> 
-> at the top of the script, and replaced all direct occurrences of 'git'
-> with gitcmd.
-> This allows me to run 'GIT=git-wrapper autobuild-run'.
-> 
-> I used an environment variable because it seemed superfluous to add a
-> configuration variable for it, but if you prefer I can do that too.
+ SOURCES := $(SOURCES) $(BUILDDIR)/src_colors.c
 
-I don't have a very strong preference here. Perhaps having it defined
-in the configuration file would be better, as it is more similar to
-what we do for the other configuration parameters?
+-$(BUILDDIR)/src_colors.c: src/colors.gperf
++$(BUILDDIR)/src_colors.c: src/colors.gperf $(BUILDDIR)/stamp
+        $(VQ)$(ECHO) "   GPERF: $<"
+        $(Q)gperf --output-file=$@.tmp $<
+ # Hack for GCC 4.2 compatibility (gperf 3.0.4 solves this properly)
 
-Do not hesitate to send me patches, the Git repository is at
-git://git.busybox.net/buildroot-test.
 
-> Is there an easy way to get a web interface like that on
-> autobuild.buildroot.org, for the locally created builds? This would
-> make it easy to inspect the results while testing (for example to see
-> that some host package like 'bzr' needed to be installed, ...).
-
-Well, the autobuild.buildroot.org interface is itself available in
-git://git.busybox.net/buildroot-test. However, setting it up will
-require a bit of configuration (PHP, MySQL + one database). You could
-then submit your builds to your own autobuilder instance for testing,
-and then decide to switch to the main autobuilder instance at
-autobuild.buildroot.org once you believe things are stable enough.
-
-Thanks again for your feedback!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
