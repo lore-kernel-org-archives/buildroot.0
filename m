@@ -1,59 +1,96 @@
 From: Jeremy Kerr <jk@ozlabs.org>
 Date: Tue, 17 Jun 2014 13:21:47 +0800
-Subject: [Buildroot] [PATCH 1/7 v3] package/busybox: Add facility for DHCP
-	hooks
+Subject: [Buildroot] [PATCH 3/7 v3] package/ncurses: Allow building wide
+	char support
 In-Reply-To: <1402982507.183937.570365596242.0.gpush@pablo>
-Message-ID: <1402982507.184367.599670173206.1.gpush@pablo>
+Message-ID: <1402982507.184990.682485888591.3.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The (u)dhcpc hook installed by the busybox package configures the
-network and exits. If we want to do anything further with a DHCP lease,
-we'd have to replace the script entirely.
-
-This change introduces a .d directory for hooks (based on the script
-filename), which are executed after the interface configuration. This
-allows packages to drop a script file in the .d directory to perform
-actions on DHCP events.
-
-We'll use this in a later change to notify petitboot of DHCP boot
-information.
+Allow ncurses to be configured with wide char support; this causes the
+libraries to be built with the 'w' suffix (eg libncursesw.so,
+libmenuw.so, etc), so we need to create a few symlinks.
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- package/busybox/busybox.mk    |    2 ++
- package/busybox/udhcpc.script |    6 ++++++
- 2 files changed, 8 insertions(+)
+ package/ncurses/Config.in  |    6 ++++++
+ package/ncurses/ncurses.mk |   24 ++++++++++++++++++++++--
+ 2 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index c368b80..bddeb63 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -222,6 +222,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
- 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
- 			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
-+		$(INSTALL) -m 755 -d \
-+			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
- 	fi
- 	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
- 	$(BUSYBOX_INSTALL_MDEV_CONF)
-diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-index e23d1f1..50c52e6 100755
---- a/package/busybox/udhcpc.script
-+++ b/package/busybox/udhcpc.script
-@@ -64,4 +64,10 @@ case "$1" in
- 		;;
- esac
+diff --git a/package/ncurses/Config.in b/package/ncurses/Config.in
+index e8ab710..b90ec9e 100644
+--- a/package/ncurses/Config.in
++++ b/package/ncurses/Config.in
+@@ -10,6 +10,12 @@ config BR2_PACKAGE_NCURSES
  
-+HOOK_DIR="$0.d"
-+for hook in "${HOOK_DIR}/"*; do
-+    [ -f "${hook}" -a -x "${hook}" ] || continue
-+    "${hook}" "${@}"
-+done
+ if BR2_PACKAGE_NCURSES
+ 
++config BR2_PACKAGE_NCURSES_WCHAR
++	bool "enable wide char support"
++	depends on BR2_USE_WCHAR
++	help
++	  Enable wide char & UTF-8 support in ncurses libraries
 +
- exit 0
+ config BR2_PACKAGE_NCURSES_TARGET_PANEL
+ 	bool "ncurses libpanel in target"
+ 	help
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 4bba8f1..bd2aac0 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -12,7 +12,7 @@ HOST_NCURSES_DEPENDENCIES =
+ NCURSES_PROGS = clear infocmp tabs tic toe tput tset
+ NCURSES_LICENSE = MIT with advertising clause
+ NCURSES_LICENSE_FILES = README
+-NCURSES_CONFIG_SCRIPTS = ncurses5-config
++NCURSES_CONFIG_SCRIPTS = ncurses$(NCURSES_LIB_SUFFIX)5-config
+ 
+ NCURSES_CONF_OPT = \
+ 	$(if $(BR2_PREFER_STATIC_LIB),--without-shared,--with-shared) \
+@@ -36,6 +36,24 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ 	NCURSES_DEPENDENCIES += busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++NCURSES_CONF_OPT += --enable-widec
++NCURSES_LIB_SUFFIX = w
++
++define NCURSES_LINK_LIBS
++	for lib in $(NCURSES_LIBS-y); do \
++		ln -sf $${lib}$(NCURSES_LIB_SUFFIX).so \
++			$(1)/usr/lib/$${lib}.so; \
++	done
++endef
++
++NCURSES_LINK_TARGET_LIBS =  $(call NCURSES_LINK_LIBS, $(TARGET_DIR))
++NCURSES_LINK_STAGING_LIBS =  $(call NCURSES_LINK_LIBS, $(STAGING_DIR))
++
++NCURSES_POST_INSTALL_STAGING_HOOKS += NCURSES_LINK_STAGING_LIBS
++
++endif
++
+ NCURSES_LIBS-y = libncurses
+ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_MENU) += libmenu
+ NCURSES_LIBS-$(BR2_PACKAGE_NCURSES_TARGET_PANEL) += libpanel
+@@ -56,7 +74,8 @@ endef
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+ define NCURSES_INSTALL_TARGET_LIBS
+ 	for lib in $(NCURSES_LIBS-y); do \
+-		cp -dpf $(NCURSES_DIR)/lib/$${lib}.so* $(TARGET_DIR)/usr/lib/; \
++		cp -dpf $(NCURSES_DIR)/lib/$${lib}$(NCURSES_LIB_SUFFIX).so* \
++			$(TARGET_DIR)/usr/lib/; \
+ 	done
+ endef
+ endif
+@@ -74,6 +93,7 @@ endif
+ define NCURSES_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+ 	$(NCURSES_INSTALL_TARGET_LIBS)
++	$(NCURSES_LINK_TARGET_LIBS)
+ 	$(NCURSES_INSTALL_TARGET_PROGS)
+ 	ln -snf /usr/share/terminfo $(TARGET_DIR)/usr/lib/terminfo
+ 	mkdir -p $(TARGET_DIR)/usr/share/terminfo/x
