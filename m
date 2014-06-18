@@ -1,21 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2014 14:22:29 +0200
-Subject: [Buildroot] [PATCH] libsoc: bump to 0.6.2
-In-Reply-To: <1403010661-16061-1-git-send-email-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Tue, 17 Jun 2014 15:11:01
- +0200")
-References: <1403010661-16061-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <87oaxq2yre.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Jun 2014 14:22:50 +0200
+Subject: [Buildroot] [PATCH 1/2] stunnel: bump to version 5.02
+In-Reply-To: <1403016052-27524-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 17 Jun 2014 11:40:51 -0300")
+References: <1403016052-27524-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k38e2yqt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
