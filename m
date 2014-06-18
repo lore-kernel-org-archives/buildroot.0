@@ -1,30 +1,48 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed, 18 Jun 2014 12:12:41 -0400
-Subject: [Buildroot] [PATCH] genimage: bump to version 6
-Message-ID: <1403107961-16768-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Wed, 18 Jun 2014 18:19:02 +0200
+Subject: [Buildroot] [PATCH 0/3] Bump packages before adding libgtk3
+Message-ID: <1403108345-12404-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- package/genimage/genimage.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello all,
 
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index e9ad52e..07d1e0c 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GENIMAGE_VERSION        = 4
-+GENIMAGE_VERSION        = 6
- GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
- GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
+I'm currently packaging libgtk3 (work in progress, patch soon), and
+this series bumps pango and libglib2 as it is necessary for libgtk3, and
+add Freetype support to Cairo.
+
+This series is juste compiled-tested, so it's mostly an RFC. I will do
+running tests with libgtk3 and libgtk2.
+
+Regards,
+
+Hadrien
+
+Hadrien Boutteville (3):
+  libglib2: bump to version 2.40.0
+  pango: bump to version 1.36.3
+  cairo: add freetype dependency for freetype support
+
+ package/cairo/cairo.mk                             |   7 +
+ ...ror-format-string-errors-from-mismatched-.patch |  56 ---
+ package/libglib2/libglib2-0002-no-gtk-doc.patch    |  11 +
+ package/libglib2/libglib2.mk                       |   4 +-
+ package/pango/Config.in                            |   1 +
+ package/pango/pango-0001-no-tests.patch            |  21 +
+ package/pango/pango-0002-no-gtk-doc.patch          |  11 +
+ package/pango/pango-no-const-return.patch          | 475 ---------------------
+ package/pango/pango-no-tests.patch                 |  22 -
+ package/pango/pango.mk                             |  19 +-
+ 10 files changed, 63 insertions(+), 564 deletions(-)
+ delete mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+ create mode 100644 package/libglib2/libglib2-0002-no-gtk-doc.patch
+ create mode 100644 package/pango/pango-0001-no-tests.patch
+ create mode 100644 package/pango/pango-0002-no-gtk-doc.patch
+ delete mode 100644 package/pango/pango-no-const-return.patch
+ delete mode 100644 package/pango/pango-no-tests.patch
+
 -- 
 2.0.0
