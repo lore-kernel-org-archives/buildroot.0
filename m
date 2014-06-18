@@ -1,58 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 14:20:27 +0200
-Subject: [Buildroot] [git commit] msgpack: disable for ARC
-Message-ID: <20140618123420.585EA9D041@busybox.osuosl.org>
+Date: Wed, 18 Jun 2014 14:22:15 +0200
+Subject: [Buildroot] [git commit] libsoc: bump to 0.6.2
+Message-ID: <20140618123420.75E1E9D044@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1e330a88b92b8fea5ff3cdfeb62cbb4576b383b1
+commit: http://git.buildroot.net/buildroot/commit/?id=ad4d18bb18506caf2d9cbbdb24be7e656cd82d3b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-msgpack uses the __sync_fetch_and_add() atomic primitive that is not
-available for ARC. Fixes:
-http://autobuild.buildroot.net/results/829/8292e67354602738cae12d8ebea83b513ba35482/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/msgpack/Config.in        |    2 ++
- package/python-msgpack/Config.in |    2 ++
- 2 files changed, 4 insertions(+), 0 deletions(-)
+ package/libsoc/libsoc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index daa4fdd..b380c58 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc # atomic builtins
- 	help
- 	  MessagePack is an efficient binary serialization format.
+diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
+index d1a55e7..85a22da 100644
+--- a/package/libsoc/libsoc.mk
++++ b/package/libsoc/libsoc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-@@ -11,3 +12,4 @@ config BR2_PACKAGE_MSGPACK
- 
- comment "msgpack needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index 2075ee6..c4b68a3 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
-+	depends on !BR2_arc # msgpack - atomic builtins
- 	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -14,3 +15,4 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- comment "python-msgpack needs a toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_arc
+-LIBSOC_VERSION = 0.6.1
++LIBSOC_VERSION = 0.6.2
+ LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
+ LIBSOC_LICENSE = LGPLv2.1
+ LIBSOC_LICENSE_FILES = COPYING
