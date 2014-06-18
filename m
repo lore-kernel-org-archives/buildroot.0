@@ -1,11 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2014 14:01:20 +0200
-Subject: [Buildroot] [PATCH] blackfin: 2012R1 toolchain is gone,
-	remove kludges
-In-Reply-To: <1403043799-7683-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 17 Jun 2014 19:23:19 -0300")
-References: <1403043799-7683-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bntq5svj.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Jun 2014 14:02:49 +0200
+Subject: [Buildroot] [PATCH 1/4] vim: bump to version 7.4-333
+In-Reply-To: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 17 Jun 2014 22:11:10 -0300")
+References: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877g4e5st2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Remove ADI toolchain 2012R1 package kludges since that version is gone
- > since the last bump.
-
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Ahh, even better ;)
-
-Committed, thanks.
+Committed all 4, thanks.
 
 -- 
 Bye, Peter Korsgaard
