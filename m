@@ -1,41 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 14:21:45 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 14,
-	15}.x series
-Message-ID: <20140618123420.66E269D041@busybox.osuosl.org>
+Date: Wed, 18 Jun 2014 14:06:18 +0200
+Subject: [Buildroot] [git commit] dbus: bump to version 1.8.4
+Message-ID: <20140618123420.30EE09D041@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=219aadcc0f4a1fb67da9dd9d45e42f73bd8e8ab7
+commit: http://git.buildroot.net/buildroot/commit/?id=fd37dcc6048efab1a8a00d69b18f08871ecabda4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Upstream removed support for libxml2 as xml backend, select expat
+unconditionally.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/dbus/Config.in |   23 +----------------------
+ package/dbus/dbus.mk   |   13 +++----------
+ 2 files changed, 4 insertions(+), 32 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7b674bb..0a4e00c 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.93"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.94"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.43"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.44"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.22"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.7"	if BR2_KERNEL_HEADERS_3_14
--	default "3.15"		if BR2_KERNEL_HEADERS_3_15
-+	default "3.14.8"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.15.1"	if BR2_KERNEL_HEADERS_3_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/dbus/Config.in b/package/dbus/Config.in
+index 97c9ee9..653f748 100644
+--- a/package/dbus/Config.in
++++ b/package/dbus/Config.in
+@@ -3,33 +3,12 @@ config BR2_PACKAGE_DBUS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  The D-Bus message bus system.
+ 
+ 	  http://www.freedesktop.org/wiki/Software/dbus
+ 
+-if BR2_PACKAGE_DBUS
+-
+-choice
+-	prompt "XML library to use"
+-	default BR2_DBUS_EXPAT
+-	help
+-	  Select the XML library to use with D-Bus. Select Expat
+-	  unless you have specific reasons for using libxml2 as
+-	  Expat is significant smaller.
+-
+-	config BR2_DBUS_EXPAT
+-		bool "Expat"
+-		select BR2_PACKAGE_EXPAT
+-
+-	config BR2_DBUS_LIBXML2
+-		bool "libxml2"
+-		select BR2_PACKAGE_LIBXML2
+-
+-endchoice
+-
+-endif
+-
+ comment "dbus needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 4bcc953..f8824ee 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.6.18
++DBUS_VERSION = 1.8.4
+ DBUS_SITE = http://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFLv2.1 GPLv2+
+ DBUS_LICENSE_FILES = COPYING
+@@ -14,7 +14,7 @@ define DBUS_PERMISSIONS
+ /usr/libexec/dbus-daemon-launch-helper f 4755 0 0 - - - - -
+ endef
+ 
+-DBUS_DEPENDENCIES = host-pkgconf
++DBUS_DEPENDENCIES = host-pkgconf expat
+ 
+ DBUS_CONF_ENV = ac_cv_have_abstract_sockets=yes
+ DBUS_CONF_OPT = --with-dbus-user=dbus \
+@@ -27,6 +27,7 @@ DBUS_CONF_OPT = --with-dbus-user=dbus \
+ 		--disable-static \
+ 		--disable-dnotify \
+ 		--localstatedir=/var \
++		--with-xml=expat \
+ 		--with-system-socket=/var/run/dbus/system_bus_socket \
+ 		--with-system-pid-file=/var/run/messagebus.pid
+ 
+@@ -43,14 +44,6 @@ ifeq ($(BR2_microblaze),y)
+ DBUS_CONF_OPT += --disable-inotify
+ endif
+ 
+-ifeq ($(BR2_DBUS_EXPAT),y)
+-DBUS_CONF_OPT += --with-xml=expat
+-DBUS_DEPENDENCIES += expat
+-else
+-DBUS_CONF_OPT += --with-xml=libxml
+-DBUS_DEPENDENCIES += libxml2
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ DBUS_CONF_OPT += --with-x
+ DBUS_DEPENDENCIES += xlib_libX11
