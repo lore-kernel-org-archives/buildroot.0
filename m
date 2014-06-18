@@ -1,22 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2014 14:05:36 +0200
-Subject: [Buildroot] [PATCH 1/6] gpsd: switch homepage now that berlios
-	is gone
-In-Reply-To: <1402926636-3556-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 16 Jun 2014 10:50:31 -0300")
-References: <1402926636-3556-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87tx7i4e3z.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Jun 2014 14:10:10 +0200
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.8.4
+In-Reply-To: <e24aaf292d128202d29697218e443af417b6e053.1402931470.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 16 Jun 2014 18:11:10 +0300")
+References: <e24aaf292d128202d29697218e443af417b6e053.1402931470.git.baruch@tkos.co.il>
+Message-ID: <87ppi64dwd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Upstream removed support for libxml2 as xml backend, select expat
+ > unconditionally.
 
-Committed all 6, thanks.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
