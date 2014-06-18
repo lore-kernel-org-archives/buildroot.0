@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 14:22:15 +0200
-Subject: [Buildroot] [git commit] libsoc: bump to 0.6.2
-Message-ID: <20140618123420.75E1E9D044@busybox.osuosl.org>
+Date: Wed, 18 Jun 2014 14:21:00 +0200
+Subject: [Buildroot] [git commit] freerdp: bump to version 1.0.2
+Message-ID: <20140618123420.6012C9D043@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ad4d18bb18506caf2d9cbbdb24be7e656cd82d3b
+commit: http://git.buildroot.net/buildroot/commit/?id=0dafb509e545204235f774e4a71762c6772c2b68
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+And switch to github helper.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsoc/libsoc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/freerdp/freerdp.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsoc/libsoc.mk b/package/libsoc/libsoc.mk
-index d1a55e7..85a22da 100644
---- a/package/libsoc/libsoc.mk
-+++ b/package/libsoc/libsoc.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index e92067c..90ede04 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSOC_VERSION = 0.6.1
-+LIBSOC_VERSION = 0.6.2
- LIBSOC_SITE = $(call github,jackmitch,libsoc,$(LIBSOC_VERSION))
- LIBSOC_LICENSE = LGPLv2.1
- LIBSOC_LICENSE_FILES = COPYING
+-FREERDP_VERSION = 1.0.1
+-FREERDP_SITE = https://github.com/downloads/FreeRDP/FreeRDP
++FREERDP_VERSION = 1.0.2
++FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
+ FREERDP_DEPENDENCIES = openssl zlib \
+ 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
+ FREERDP_LICENSE = Apache-2.0
