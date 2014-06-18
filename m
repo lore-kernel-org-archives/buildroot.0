@@ -1,39 +1,191 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Wed, 18 Jun 2014 10:12:10 -0400
-Subject: [Buildroot] [PATCH v2] manual: (faq-boot-hang-after-starting) fix
-	config entries
-Message-ID: <1403100730-21215-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 18 Jun 2014 11:26:53 -0300
+Subject: [Buildroot] [PATCH 1/2] libnspr: security bump to version 4.10.6
+Message-ID: <1403101614-2262-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
----
- docs/manual/faq-troubleshooting.txt | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Fixes CVE-2014-1545 - Mozilla Netscape Portable Runtime (NSPR) before
+4.10.6 allows remote attackers to execute arbitrary code or cause a
+denial of service (out-of-bounds write) via vectors involving the
+sprintf and console functions.
 
-diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
-index 2fdb530..26c8460 100644
---- a/docs/manual/faq-troubleshooting.txt
-+++ b/docs/manual/faq-troubleshooting.txt
-@@ -19,11 +19,11 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnspr/libnspr-0001-nios2.patch      | 15 +++---
+ package/libnspr/libnspr-0002-microblaze.patch | 15 +++---
+ package/libnspr/libnspr-0003-aarch64.patch    | 74 ---------------------------
+ package/libnspr/libnspr.mk                    |  4 +-
+ 4 files changed, 18 insertions(+), 90 deletions(-)
+ delete mode 100644 package/libnspr/libnspr-0003-aarch64.patch
+
+diff --git a/package/libnspr/libnspr-0001-nios2.patch b/package/libnspr/libnspr-0001-nios2.patch
+index cffb2ef..4fc6551 100644
+--- a/package/libnspr/libnspr-0001-nios2.patch
++++ b/package/libnspr/libnspr-0001-nios2.patch
+@@ -1,11 +1,12 @@
+ Add Nios-II support
  
- then it means that your system is running, but didn't start a shell on
- the serial console. In order to have the system start a shell on your
--serial console, you have to go into the Buildroot configuration, +System
--configuration+, and modify +Port to run a getty (login prompt) on+ and
--+Baudrate to use+ as appropriate. This will automatically tune the
--+/etc/inittab+ file of the generated system so that a shell starts on
--the correct serial port.
-+serial console, you have to go into the Buildroot configuration, in 
-++System configuration+, modify +Run a getty (login prompt) after boot+ 
-+and set the appropriate port and baud rate in the +getty options+ 
-+submenu. This will automatically tune the +/etc/inittab+ file of the 
-+generated system so that a shell starts on the correct serial port.
++[Gustavo: update for nspr 4.10.6]
+ Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
  
- [[faq-no-compiler-on-target]]
- == Why is there no compiler on the target?
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:29.332138283 -0300
+-@@ -914,6 +914,51 @@
++diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/include/md/_linux.cfg
++--- nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:22.447502521 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:32.746850581 -0300
++@@ -924,6 +924,51 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+@@ -57,9 +58,9 @@ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:33.245138154 -0300
++diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.h nspr-4.10.6/nspr/pr/include/md/_linux.h
++--- nspr-4.10.6.orig/nspr/pr/include/md/_linux.h	2014-06-18 10:26:22.446502487 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.h	2014-06-18 10:26:32.747850615 -0300
+ @@ -55,6 +55,8 @@
+  #define _PR_SI_ARCHITECTURE "avr32"
+  #elif defined(__m32r__)
+diff --git a/package/libnspr/libnspr-0002-microblaze.patch b/package/libnspr/libnspr-0002-microblaze.patch
+index 93a0be5..30b17f3 100644
+--- a/package/libnspr/libnspr-0002-microblaze.patch
++++ b/package/libnspr/libnspr-0002-microblaze.patch
+@@ -1,11 +1,12 @@
+ Add Microblaze support
+ 
++[Gustavo: update for nspr 4.10.6]
+ Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ 
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:29.332138283 -0300
+-@@ -914,6 +914,56 @@
++diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/include/md/_linux.cfg
++--- nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg	2014-06-18 10:29:15.816361425 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:59.908768508 -0300
++@@ -969,6 +969,56 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+@@ -62,9 +63,9 @@ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h
+---- libnspr-4.9.6.orig/mozilla/nsprpub/pr/include/md/_linux.h	2014-01-10 14:39:20.674107805 -0600
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2014-01-10 14:44:04.442112985 -0600
++diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.h nspr-4.10.6/nspr/pr/include/md/_linux.h
++--- nspr-4.10.6.nios2/nspr/pr/include/md/_linux.h	2014-06-18 10:29:15.817361459 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.h	2014-06-18 10:26:59.909768537 -0300
+ @@ -55,6 +55,8 @@
+  #define _PR_SI_ARCHITECTURE "avr32"
+  #elif defined(__m32r__)
+diff --git a/package/libnspr/libnspr-0003-aarch64.patch b/package/libnspr/libnspr-0003-aarch64.patch
+deleted file mode 100644
+index a5e23ed..0000000
+--- a/package/libnspr/libnspr-0003-aarch64.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-Add AArch64 support
+-
+-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+-
+-Index: b/mozilla/nsprpub/pr/include/md/_linux.cfg
+-===================================================================
+---- a/mozilla/nsprpub/pr/include/md/_linux.cfg
+-+++ b/mozilla/nsprpub/pr/include/md/_linux.cfg
+-@@ -1009,6 +1009,52 @@
+- #define PR_BYTES_PER_WORD_LOG2   2
+- #define PR_BYTES_PER_DWORD_LOG2  3
+- 
+-+#elif defined(__aarch64__)
+-+
+-+#define IS_LITTLE_ENDIAN 1
+-+#undef  IS_BIG_ENDIAN
+-+#define IS_64
+-+
+-+#define PR_BYTES_PER_BYTE   1
+-+#define PR_BYTES_PER_SHORT  2
+-+#define PR_BYTES_PER_INT    4
+-+#define PR_BYTES_PER_INT64  8
+-+#define PR_BYTES_PER_LONG   8
+-+#define PR_BYTES_PER_FLOAT  4
+-+#define PR_BYTES_PER_DOUBLE 8
+-+#define PR_BYTES_PER_WORD   8
+-+#define PR_BYTES_PER_DWORD  8
+-+
+-+#define PR_BITS_PER_BYTE    8
+-+#define PR_BITS_PER_SHORT   16
+-+#define PR_BITS_PER_INT     32
+-+#define PR_BITS_PER_INT64   64
+-+#define PR_BITS_PER_LONG    64
+-+#define PR_BITS_PER_FLOAT   32
+-+#define PR_BITS_PER_DOUBLE  64
+-+#define PR_BITS_PER_WORD    64
+-+
+-+#define PR_BITS_PER_BYTE_LOG2   3
+-+#define PR_BITS_PER_SHORT_LOG2  4
+-+#define PR_BITS_PER_INT_LOG2    5
+-+#define PR_BITS_PER_INT64_LOG2  6
+-+#define PR_BITS_PER_LONG_LOG2   6
+-+#define PR_BITS_PER_FLOAT_LOG2  5
+-+#define PR_BITS_PER_DOUBLE_LOG2 6
+-+#define PR_BITS_PER_WORD_LOG2   6
+-+
+-+#define PR_ALIGN_OF_SHORT   2
+-+#define PR_ALIGN_OF_INT     4
+-+#define PR_ALIGN_OF_LONG    8
+-+#define PR_ALIGN_OF_INT64   8
+-+#define PR_ALIGN_OF_FLOAT   4
+-+#define PR_ALIGN_OF_DOUBLE  8
+-+#define PR_ALIGN_OF_POINTER 8
+-+#define PR_ALIGN_OF_WORD    8
+-+
+-+#define PR_BYTES_PER_WORD_LOG2  3
+-+#define PR_BYTES_PER_DWORD_LOG2 3
+-+
+- #else
+- 
+- #error "Unknown CPU architecture"
+-Index: b/mozilla/nsprpub/pr/include/md/_linux.h
+-===================================================================
+---- a/mozilla/nsprpub/pr/include/md/_linux.h
+-+++ b/mozilla/nsprpub/pr/include/md/_linux.h
+-@@ -59,6 +59,8 @@
+- #define _PR_SI_ARCHITECTURE "microblaze"
+- #elif defined(nios2)
+- #define _PR_SI_ARCHITECTURE "nios2"
+-+#elif defined(__aarch64__)
+-+#define _PR_SI_ARCHITECTURE "aarch64"
+- #else
+- #error "Unknown CPU architecture"
+- #endif
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 5aa9bdc..3f4b783 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBNSPR_VERSION = 4.9.6
++LIBNSPR_VERSION = 4.10.6
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
+-LIBNSPR_SUBDIR = mozilla/nsprpub
++LIBNSPR_SUBDIR = nspr
+ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONFIG_SCRIPTS = nspr-config
+ LIBNSPR_LICENSE = MPLv2.0
 -- 
-2.0.0
+1.8.5.5
