@@ -1,42 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 14:11:14 +0200
-Subject: [Buildroot] [git commit] netatalk: bump to version 3.1.2
-Message-ID: <20140618123420.4060A9D041@busybox.osuosl.org>
+Date: Wed, 18 Jun 2014 14:19:58 +0200
+Subject: [Buildroot] [git commit] netatalk: add support for ACLs
+Message-ID: <20140618123420.50C239D041@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=51275918423f5069f07af9fc0daa946f4f952b14
+commit: http://git.buildroot.net/buildroot/commit/?id=eba9e55baef7fc3c7b3600bf755ecfdb7604b6d1
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netatalk/netatalk.mk |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/netatalk/netatalk.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
 diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
-index e5e5c6b..1285af2 100644
+index f13fdf3..2786f92 100644
 --- a/package/netatalk/netatalk.mk
 +++ b/package/netatalk/netatalk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -29,6 +29,12 @@ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+ 	--with-dtrace=no \
+ 	--with-mysql-config=no
  
--NETATALK_VERSION = 3.0.8
-+NETATALK_VERSION = 3.1.2
- NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
- NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
- NETATALK_AUTORECONF = YES
-@@ -27,7 +27,8 @@ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
- 	--without-kerberos \
- 	--without-pam \
- 	--with-libevent=no \
--	--with-dtrace=no
-+	--with-dtrace=no \
-+	--with-mysql-config=no
- 
- ifeq ($(BR2_PACKAGE_CUPS),y)
- 	NETATALK_DEPENDENCIES += cups
++ifeq ($(BR2_PACKAGE_ACL),y)
++	NETATALK_DEPENDENCIES += acl
++else
++	NETATALK_CONF_OPT += --with-acls=no
++endif
++
+ ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+ 	NETATALK_DEPENDENCIES += avahi
+ 	NETATALK_CONF_OPT += --enable-zeroconf=$(STAGING_DIR)/usr
