@@ -1,39 +1,33 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 22:11:13 -0300
-Subject: [Buildroot] [PATCH 4/4] kbd: bump to version 1.15.5
-In-Reply-To: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403053873-21190-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 17 Jun 2014 22:18:39 -0300
+Subject: [Buildroot] [Patch v3] dcmtk: new package
+In-Reply-To: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
+References: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
+Message-ID: <53A0E8EF.2090309@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/kbd/kbd.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On 06/17/2014 09:05 PM, William Frost wrote:
 
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index ea14b8c..0655613 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--KBD_VERSION = 1.15.2
-+KBD_VERSION = 1.15.5
- KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
- KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
-+KBD_CONF_OPT = --disable-vlock
-+KBD_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- KBD_LICENSE = GPLv2+
- KBD_LICENSE_FILES = COPYING
- 
--KBD_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
--
- $(eval $(autotools-package))
--- 
-1.8.5.5
+> +config BR2_PACKAGE_DCMTK
+> +	bool "dcmtk"
+> +	help
+> +	  DCMTK is a collection of libraries and applications implementing 
+> +	  large parts the DICOM standard. It includes software for examining, 
+> +	  constructing and converting DICOM image files, handling offline 
+> +	  media, sending and receiving images over a network connection, as 
+> +	  well as demonstrative image storage and worklist servers. DCMTK is 
+> +	  is written in a mixture of ANSI C and C++. It comes in complete 
+> +	  source code and is made available as "open source" software.
+> +
+> +	  http://dicom.offis.de/dcmtk.php.en
+
+Hi.
+It seems the c++ part is mandatory, so it should depend on
+BR2_INSTALL_LIBSTDCPP (and add a comment when it's not available, see
+package/msgpack/Config.in for an example).
+Also there's trailing whitespace in the help text.
+Regards.
