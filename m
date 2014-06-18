@@ -1,91 +1,185 @@
-From: William Frost <tsmrnd0@gmail.com>
-Date: Wed, 18 Jun 2014 09:05:19 +0900
-Subject: [Buildroot] [Patch v3] dcmtk: new package
-Message-ID: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 17 Jun 2014 22:11:10 -0300
+Subject: [Buildroot] [PATCH 1/4] vim: bump to version 7.4-333
+Message-ID: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[PATCH] Changes v2 -> v3:  (suggested by Thomas De Schampheleire):   
- - removed version selection option, only stable release is used    
- - added an empty new line between the comment header and the first
-   variable definition
- - fixed license file reference    
- - reduced and cleaning DCMTK_CFLAGS and DCMTK_CXXFLAGS declarations
- - removed DCMTK_INSTALL_STAGING_OPT and DCMTK_INSTALL_TARGET_OPT
- - unconditionally use --with-zlib
- - removed duplicated build commands
-
-Signed-off-by: William Frost <tsmrnd0@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in       |  1 +
- package/dcmtk/Config.in | 12 ++++++++++++
- package/dcmtk/dcmtk.mk  | 23 +++++++++++++++++++++++
- 3 files changed, 36 insertions(+)
- create mode 100644 package/dcmtk/Config.in
- create mode 100644 package/dcmtk/dcmtk.mk
+ package/vim/Config.in                    |   7 +-
+ package/vim/vim-0001-fix-nls-check.patch | 120 -------------------------------
+ package/vim/vim.mk                       |   4 +-
+ 3 files changed, 8 insertions(+), 123 deletions(-)
+ delete mode 100644 package/vim/vim-0001-fix-nls-check.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 07fd166..b88c0b0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -568,6 +568,7 @@ endmenu
- menu "Graphics"
- source "package/atk/Config.in"
- source "package/cairo/Config.in"
-+source "package/dcmtk/Config.in"
- source "package/fltk/Config.in"
- source "package/fontconfig/Config.in"
- source "package/freetype/Config.in"
-diff --git a/package/dcmtk/Config.in b/package/dcmtk/Config.in
-new file mode 100644
-index 0000000..0800c72
---- /dev/null
-+++ b/package/dcmtk/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_DCMTK
-+	bool "dcmtk"
-+	help
-+	  DCMTK is a collection of libraries and applications implementing 
-+	  large parts the DICOM standard. It includes software for examining, 
-+	  constructing and converting DICOM image files, handling offline 
-+	  media, sending and receiving images over a network connection, as 
-+	  well as demonstrative image storage and worklist servers. DCMTK is 
-+	  is written in a mixture of ANSI C and C++. It comes in complete 
-+	  source code and is made available as "open source" software.
+diff --git a/package/vim/Config.in b/package/vim/Config.in
+index 6f24da9..8a5c214 100644
+--- a/package/vim/Config.in
++++ b/package/vim/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_VIM
+ 	bool "vim"
+ 	depends on BR2_USE_MMU # uses fork()
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
+ 	help
+@@ -15,6 +16,10 @@ config BR2_PACKAGE_VIM_RUNTIME
+ 	default y
+ 	help
+ 	  Install VIM runtime (syntax highlighing + macros).
+-	  This option adds about 15MB of data to /usr/share/
++	  This option adds about 11MB of data to /usr/share/
+ 
+ endif
 +
-+	  http://dicom.offis.de/dcmtk.php.en
-\ No newline at end of file
-diff --git a/package/dcmtk/dcmtk.mk b/package/dcmtk/dcmtk.mk
-new file mode 100644
-index 0000000..ae2c265
---- /dev/null
-+++ b/package/dcmtk/dcmtk.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# dcmtk
-+#
-+################################################################################
-+
-+DCMTK_VERSION = $(call qstrip,"3.6.0")
-+DCMTK_SITE = http://dicom.offis.de/download/dcmtk/dcmtk360
-+
-+DCMTK_LICENSE = BSD
-+DCMTK_LICENSE_FILES = COPYRIGHT
-+DCMTK_INSTALL_STAGING = YES
-+
-+DCMTK_CFLAGS = $(TARGET_CFLAGS) -O -Wall
-+DCMTK_CXXFLAGS = $(TARGET_CXXFLAGS) -O  -Wall
-+DCMTK_CONF_OPT = \
-+	--disable-rpath --with-zlib \
-+	ac_cv_my_c_rightshift_unsigned=no
-+
-+DCMTK_CONF_ENV = ARFLAGS=cru
-+DCMTK_MAKE_OPT	= DESTDIR=$(STAGING_DIR) install-lib
-+
-+$(eval $(autotools-package))
++comment "vim needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
++	depends on BR2_USE_MMU
+diff --git a/package/vim/vim-0001-fix-nls-check.patch b/package/vim/vim-0001-fix-nls-check.patch
+deleted file mode 100644
+index ce58549..0000000
+--- a/package/vim/vim-0001-fix-nls-check.patch
++++ /dev/null
+@@ -1,120 +0,0 @@
+-configure: use minimal LIBS during gettext check
+-
+-In some configurations, vim fails to link correctly with messages such as:
+-edit.c:(.text+0x1614): undefined reference to `libintl_gettext'
+-
+-In particular, this has been seen by the buildroot autobuilds (see [1]) but
+-has also been reported at [2] and [3].
+-
+-In the bad case, the configure script says:
+-checking for NLS... gettext() works
+-In the good case, it says:
+-checking for NLS... gettext() works with -lintl
+-
+-In the bad case, the system has libelf, vim detects that and takes it along
+-in $LIBS. Libelf needs libintl on this system, and so linking the test
+-program with -lelf will automatically take -lintl too. This causes configure
+-to think gettext() does not need libintl, while in reality it does.
+-
+-In the good case, libelf is not present and thus not used. The first
+-configure test for gettext fails, and then configure retries with -lintl
+-(which succeeds).
+-
+-Until now, there isn't really a problem. In both cases, you could link
+-correctly. In the 'bad' case, libintl is implicitly taken through libelf, in
+-the second case it is explicitly taken.
+-
+-The real problem occurs because configure also tests whether the linker
+-supports --as-needed and uses it when possible, instead of the link.sh
+-script. However, --as-needed seems to cause libintl NOT to be taken in the
+-bad case, causing the undefined references to libintl_gettext.
+-
+-This patch changes the configure script so that the gettext check does not
+-use additional libraries such as libelf. The test program is linked either
+-with nothing, or with libintl alone. This will cause libintl to
+-be added explicitly to LIBS, when needed.
+-
+-[1] http://autobuild.buildroot.net/results/21b5a910e6a27fa1cb12d0002ffed7e6ed9d6c83/
+-[2] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-November/243930.html
+-[3] http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-May/234184.html
+-
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-Upstream-status: accepted (http://article.gmane.org/gmane.editors.vim.devel/43528)
+-
+----
+- src/auto/configure |  11 ++++++-----
+- src/configure.in   |  13 +++++++++----
+- 2 files changed, 15 insertions(+), 9 deletions(-)
+-
+-diff --git a/src/auto/configure b/src/auto/configure
+---- a/src/auto/configure
+-+++ b/src/auto/configure
+-@@ -12271,6 +12271,8 @@ fi
+-   if test -f po/Makefile; then
+-     have_gettext="no"
+-     if test -n "$MSGFMT"; then
+-+      olibs=$LIBS
+-+      LIBS=""
+-       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- #include <libintl.h>
+-@@ -12284,10 +12286,9 @@ gettext("Test");
+- _ACEOF
+- if ac_fn_c_try_link "$LINENO"; then :
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() works" >&5
+--$as_echo "gettext() works" >&6; }; have_gettext="yes"
+--else
+--  olibs=$LIBS
+--	  LIBS="$LIBS -lintl"
+-+$as_echo "gettext() works" >&6; }; have_gettext="yes"; LIBS=$olibs;
+-+else
+-+	  LIBS="-lintl"
+- 	  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+- #include <libintl.h>
+-@@ -12301,7 +12302,7 @@ gettext("Test");
+- _ACEOF
+- if ac_fn_c_try_link "$LINENO"; then :
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() works with -lintl" >&5
+--$as_echo "gettext() works with -lintl" >&6; }; have_gettext="yes"
+-+$as_echo "gettext() works with -lintl" >&6; }; have_gettext="yes"; LIBS="$olibs -lintl";
+- else
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: gettext() doesn't work" >&5
+- $as_echo "gettext() doesn't work" >&6; };
+-diff --git a/src/configure.in b/src/configure.in
+---- a/src/configure.in
+-+++ b/src/configure.in
+-@@ -3484,6 +3484,9 @@ if test "$MANDEF" = "man -s"; then
+- fi
+- 
+- dnl Check if gettext() is working and if it needs -lintl
+-+dnl We take care to base this on an empty LIBS: on some systems libelf would be
+-+dnl in LIBS and implicitly take along libintl. The final LIBS would then not
+-+dnl contain libintl, and the link step would fail due to -Wl,--as-needed.
+- AC_MSG_CHECKING(--disable-nls argument)
+- AC_ARG_ENABLE(nls,
+- 	[  --disable-nls           Don't support NLS (gettext()).], ,
+-@@ -3502,16 +3505,18 @@ if test "$enable_nls" = "yes"; then
+-   if test -f po/Makefile; then
+-     have_gettext="no"
+-     if test -n "$MSGFMT"; then
+-+      olibs=$LIBS
+-+      LIBS=""
+-       AC_TRY_LINK(
+- 	[#include <libintl.h>],
+- 	[gettext("Test");],
+--	AC_MSG_RESULT([gettext() works]); have_gettext="yes",
+--	  olibs=$LIBS
+--	  LIBS="$LIBS -lintl"
+-+	AC_MSG_RESULT([gettext() works]); have_gettext="yes"; LIBS=$olibs,
+-+	  LIBS="-lintl"
+- 	  AC_TRY_LINK(
+- 	      [#include <libintl.h>],
+- 	      [gettext("Test");],
+--	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes",
+-+	      AC_MSG_RESULT([gettext() works with -lintl]); have_gettext="yes";
+-+	      LIBS="$olibs -lintl",
+- 	      AC_MSG_RESULT([gettext() doesn't work]);
+- 	      LIBS=$olibs))
+-     else
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index e86d7b1..cc24316 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -6,8 +6,8 @@
+ 
+ VIM_SITE = https://vim.googlecode.com/hg
+ VIM_SITE_METHOD = hg
+-# 7.3 release patchlevel 762
+-VIM_VERSION = 699f8d8f096d
++# 7.4 release patchlevel 333
++VIM_VERSION = 8ae50e3ef8bf
+ VIM_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ VIM_SUBDIR = src
+ VIM_CONF_ENV = vim_cv_toupper_broken=no \
 -- 
-1.8.1.4
+1.8.5.5
