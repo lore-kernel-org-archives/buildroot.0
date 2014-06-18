@@ -1,71 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jun 2014 10:51:39 +0200
-Subject: [Buildroot] [ANNOUNCE] Autobuilder script available,
- join the autobuilder effort!
-In-Reply-To: <CAAXf6LU6nesDDXVMDDyHeOHR4A-YB_=KCwfbCs50BTM2bNgE_w@mail.gmail.com>
-References: <20140614212341.5306ead8@free-electrons.com>
- <CAAXf6LWy4ysqMhrQ=FMZszUoyYzd_711VfCCgSUTO_WwTQ8vbA@mail.gmail.com>
- <20140617130025.664a1df6@free-electrons.com>
- <CAAXf6LVfQJvMQjHdvD+M_3HVLtD=h_bVoq=x8UP1WrPDYGc_Uw@mail.gmail.com>
- <20140618102531.34c6f3ea@free-electrons.com>
- <CAAXf6LU6nesDDXVMDDyHeOHR4A-YB_=KCwfbCs50BTM2bNgE_w@mail.gmail.com>
-Message-ID: <20140618105139.640b3a1f@free-electrons.com>
+From: Sven Neumann <neumann@teufel.de>
+Date: Wed, 18 Jun 2014 11:23:30 +0200
+Subject: [Buildroot] [PATCH] Makefile: do not purge locale-archive from
+	target
+Message-ID: <1403083410-4278-1-git-send-email-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+The rules to purge unwanted locales from the target also removed
+the locale-archive file from /usr/lib/locale which contains the
+locale definitions explicitly generated for the target.
 
-On Wed, 18 Jun 2014 10:47:48 +0200, Thomas De Schampheleire wrote:
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> > [environment-variables]
-> > BR2_GIT = ...
-> > BR2_FOO = ...
-> >
-> > and then the script makes sure to pass all these variables in the
-> > environment when calling make on Buildroot.
-> 
-> Ok, this is indeed better.
-> It's probably easier (for parsing) to let the user specify one
-> 'environment' string that contains
-> "BR2_GIT=xxx BR2_FOO=yyy"
-> than having separate config settings for possibly unknown options.
-
-Right, even better.
-
-> > Wouldn't it be simpler to simply kill the build process when the time
-> > happens? So you have a cronjob that starts autobuild-run at 7 PM or 8
-> > PM in the evening, and another one that kills autobuild-run at 7 AM or
-> > 8 AM. I've tried to handle killing only the main autobuild-run script
-> > and make sure it kills the building sub-processes, but it doesn't work
-> > completely well so far. It needs to be investigated.
-> 
-> It's easier, but it has the downside that the ongoing build at the
-> time of the kill is always lost (no results available). In the case it
-> happens to be a long build of two hours, it's a pity to lose these
-> results if the 'stop-time' is not very strict.
-
-That's true, but I find this thing really use-case specific. For
-example, maybe on week-ends you will be able to let the builds run even
-during day time? So we need to make the script more complex to handle
-this possibility, while cron is the perfect tool to do this kind of
-thing.
-
-*However* we could add something like a signal sent to the script that
-tells it to stop the builds when they are finished. Either a Unix
-signal like SIGUSR1, or the creation of a specific file in a specific
-location, or something like that. When the script receives this signal,
-it knows it should stop itself at the end of the current build. But the
-mechanism to generate this signal (cronjob or whatever) remains
-external to the script.
-
-What do you think?
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 14fca2b..d7590ef 100644
+--- a/Makefile
++++ b/Makefile
+@@ -516,7 +516,7 @@ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+ 
+ define TARGET_PURGE_LOCALES
+ 	rm -f $(LOCALE_WHITELIST)
+-	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
++	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+ 
+ 	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
+ 	do \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
