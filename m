@@ -1,11 +1,11 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 18 Jun 2014 23:17:55 +0200
-Subject: [Buildroot] [PATCH 1/5] legal-info: extract even
- no-redistribute packages
-In-Reply-To: <0a92bc2be59aa08b015e19b86ce31b8767bdbf43.1402758331.git.yann.morin.1998@free.fr>
+Date: Wed, 18 Jun 2014 23:22:12 +0200
+Subject: [Buildroot] [PATCH 2/5] legal-info: save license files even for
+ local or overriden packages
+In-Reply-To: <e6c494b7efb767ef68fbefdd95b13c515a9d24c9.1402758331.git.yann.morin.1998@free.fr>
 References: <cover.1402758331.git.yann.morin.1998@free.fr>
- <0a92bc2be59aa08b015e19b86ce31b8767bdbf43.1402758331.git.yann.morin.1998@free.fr>
-Message-ID: <53A20203.8040406@lucaceresoli.net>
+ <e6c494b7efb767ef68fbefdd95b13c515a9d24c9.1402758331.git.yann.morin.1998@free.fr>
+Message-ID: <53A20304.8000801@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,85 +17,23 @@ Dear Yann,
 Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> Currently, if a package is marked _REDISTRIBUTE = NO, then legal-info
-> will not try to extract it first.
+> Even if we do not save the sources for local or overrident packages because
+
+s/overrident/overridden/
+
+> it is too complex, we can still quite easily save the license files.
 >
-> If that package also declares some _LICENSE_FILES, legal-info fails
-> if it is the only action we're trying to run:
+> Also, having the license files is a very important part of complying with
+> the licenses.
 >
->      $ cat defconfig
->      BR2_INIT_NONE=y
->      BR2_PACKAGE_LIBFSLCODEC=y
->      $ make BR2_DEFCONFIG=$(pwd)/defconfig defconfig
->      $ make libfslcodec-legal-info
->      /bin/sh: /home/ymorin/dev/buildroot/O/legal-info/licenses.txt: No such file or directory
->      make[1]: *** [libfslcodec-legal-info] Error 1
-
-Note that the present patchset does not solve _this_ error.
-
-The error that your patchset _does_ solve is:
-
-   $ make BR2_DL_DIR=~/src legal-info-prepare libfslcodec-legal-info
-   >>>   Collecting legal info
-   cat: 
-/home/murray/devel/buildroot-test/output/build/libfslcodec-3.5.7-1.0.0/EULA: 
-No such file or directory
-   make: *** [libfslcodec-legal-info] Error 1
-   $
-
-
-The error that you reported due to the fact that output/legal-info has
-not been created yet.
-
-Workaround:
-$ make BR2_DL_DIR=~/src legal-info-prepare libfslcodec-legal-info
-                         ^^^^^^^^^^^^^^^^^^
-
-This is not related to your patches, and it's due to the fact that
-the legal-info stuff is meant to be executed only from its top-level
-target:
-   $ make legal-info
-which in turn runs:
-  - legal-info-clean, which removes the entire legal-info subdir;
-  - legal-info-prepare, which creates dirs and prepares skeleton files
-    and the manifest heading;
-  - <pkg>-legal-info, which fills the skeleton files.
-
-Maybe this could be fixed by making all $(1)-legal-info targets depend
-on legal-info-clean and then legal-info-prepare.
-If it works it would be a nice improvement, although mostly visible
-when testing the legal infra. For real cases I don't see a big point in
-running anything else than `make legal-info`.
-
->
-> Fix this by always having legal-info extract the archives if one or
-> more _LICENSE_FILES are specified.
->
-> We do this for all types of packages: overriden, local or 'normal'
+> Move the copy of license files out of the non-local, non-overriden package
 
 s/overriden/overridden/
 
-> remote packages. Even though we do not save the sources for the
-> overriden or local packages, we need to save their licensing info,
-
-Ditto.
-
-> so we need to extract them.
+> case, but still in the case where packages have a _SOURCE defined, to
+> avoid catching packages bundled in Buildroot (eg. mkpasswd et al.)
 >
-> This implies that we now need to explicitly add PKG-source as a dependency
-> of legal-info for packages we want to save (ie. redistributable, non-local
-> and non-overriden packages).
-
-Said this way, it looks like we're adding a dependency. Instead we are
-changing the dependence from PKG-extract to PKG-source, which is one
-step less (-extract implies -source), so bottom line we are removing a
-dependency.
-
-Better explained IMO:
-  This implies that we now need only PKG-source, not PKG-extract anymore,
-  as a dependency of legal-info for packages we want to save (.....).
-
->
+> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
@@ -104,56 +42,64 @@ Better explained IMO:
 >
 > ---
 > Changes v4 -> v5:
->    - my usual s/pacakge/package/
->
-> Changes v3 -> v4:
->    - legal-info needs to depend on PKG-source when it needs to save a
->      package's tarball
->
-> Changes v2 -> v3:
->    - don't include source URL of no-redistribute, or overriden, or local
->      packages in the manifest
->
-> Changes v1 -> v2:
->    - this is not fixing the autobuilders failure it was written to fix,
->      so remove the references to such build failures  (Thomas P)
->    - also extract overriden and local packages  (Fabio)
+>    - avoid warning for packages bundled in Buildroot  (Luca)
+>    - the change is not a bout non-redistributable packages, but about
+>      local and overriden packages
 > ---
->   package/pkg-generic.mk | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
+>   package/pkg-generic.mk | 25 +++++++++++++++----------
+>   1 file changed, 15 insertions(+), 10 deletions(-)
 >
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index ccd7f3b..eb3ec9f 100644
+> index eb3ec9f..a978e63 100644
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -595,11 +595,18 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
->   endif
->   $(2)_MANIFEST_LICENSE_FILES ?= not saved
+> @@ -619,17 +619,12 @@ $(1)-legal-info:
+>   	$(foreach hook,$($(2)_PRE_LEGAL_INFO_HOOKS),$(call $(hook))$(sep))
+>   ifneq ($(call qstrip,$$($(2)_SOURCE)),)
 >
-> +# If the package declares _LICENSE_FILES, we need to extract it,
-> +# for overriden, local or normal remote packages alike, whether
+> -ifeq ($$($(2)_SITE_METHOD),local)
+> -# Packages without a tarball: don't save and warn
+> -	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
+> -
+> -else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+> -	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
+> -
+> -else
+> -# Other packages
+> -
+>   # Save license files if defined
+> +# We save the license files for any kind of package: normal, local,
+> +# overriden, or non-redistributable alike.
 
-Ditto.
+s/overriden/overridden/
 
-> +# we want to redistribute it or not.
-> +ifneq ($$($(2)_LICENSE_FILES),)
-> +$(1)-legal-info: $(1)-extract
-> +endif
+> +# The reason to save license files even for no-redistribute packages
+> +# is that the license still applies to the files distributed as part
+> +# of the rootfs, even if the sources are not themselves redistributed.
+>   ifeq ($(call qstrip,$$($(2)_LICENSE_FILES)),)
+>   	@$(call legal-license-nofiles,$$($(2)_RAWNAME),$(call UPPERCASE,$(4)))
+>   	@$(call legal-warning-pkg,$$($(2)_RAWNAME),cannot save license ($(2)_LICENSE_FILES not defined))
+> @@ -640,6 +635,16 @@ else
+>   	@$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$(F),$$($(2)_DIR)/$$(F),$(call UPPERCASE,$(4)))$$(sep))
+>   endif # license files
+>
+> +ifeq ($$($(2)_SITE_METHOD),local)
+> +# Packages without a tarball: don't save and warn
+> +	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),local)
+> +
+> +else ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+> +	@$(call legal-warning-pkg-savednothing,$$($(2)_RAWNAME),override)
+> +
+> +else
+> +# Other packages
 > +
 >   ifeq ($$($(2)_REDISTRIBUTE),YES)
->   ifneq ($$($(2)_SITE_METHOD),local)
->   ifneq ($$($(2)_SITE_METHOD),override)
-> -# Packages that have a tarball need it downloaded and extracted beforehand
-> -$(1)-legal-info: $(1)-extract $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
-> +# We need to download the package archive if we are to save it
-> +$(1)-legal-info: $(1)-source $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4)))
->   $(2)_MANIFEST_TARBALL = $$($(2)_SOURCE)
->   endif
->   endif
+>   # Copy the source tarball (just hardlink if possible)
+>   	@cp -l $(DL_DIR)/$$($(2)_SOURCE) $(REDIST_SOURCES_DIR_$(call UPPERCASE,$(4))) 2>/dev/null || \
 >
 
 With the above fixed, and once rebased on top of master, and since I'm
-OK with all of the very few code lines you touched:
+OK with the actual code changes:
 Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 [Quick test on top of e00c631ef4aa, will test again once rebased]
