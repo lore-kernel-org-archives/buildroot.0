@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 22:11:12 -0300
-Subject: [Buildroot] [PATCH 3/4] sysstat: bump to version 11.0.0
+Date: Tue, 17 Jun 2014 22:11:13 -0300
+Subject: [Buildroot] [PATCH 4/4] kbd: bump to version 1.15.5
 In-Reply-To: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403053873-21190-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403053873-21190-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403053873-21190-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,28 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/sysstat/sysstat.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kbd/kbd.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 23486b6..8365087 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index ea14b8c..0655613 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--SYSSTAT_VERSION = 10.2.1
-+SYSSTAT_VERSION = 11.0.0
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.bz2
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPT = --disable-man-group --disable-sensors
+-KBD_VERSION = 1.15.2
++KBD_VERSION = 1.15.5
+ KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
+ KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
++KBD_CONF_OPT = --disable-vlock
++KBD_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+ KBD_LICENSE = GPLv2+
+ KBD_LICENSE_FILES = COPYING
+ 
+-KBD_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+-
+ $(eval $(autotools-package))
 -- 
 1.8.5.5
