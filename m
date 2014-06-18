@@ -1,35 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 13:55:07 +0200
-Subject: [Buildroot] [git commit] haserl: bump 0.9.x version
-In-Reply-To: <20140615152633.GG4064@tarshish> (Baruch Siach's message of "Sun, 
- 15 Jun 2014 18:26:33 +0300")
-References: <20140613200236.78B559CFBC@busybox.osuosl.org>
- <20140615152633.GG4064@tarshish>
-Message-ID: <87ha3i77qc.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 18 Jun 2014 13:56:04 +0200
+Subject: [Buildroot] [PATCH] vlc: security bump to version 2.1.4
+In-Reply-To: <1403034206-17578-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 17 Jun 2014 16:43:26 -0300")
+References: <1403034206-17578-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2e677or.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Hi Peter, all,
- > On Fri, Jun 13, 2014 at 10:01:51PM +0200, Peter Korsgaard wrote:
- >> commit: http://git.buildroot.net/buildroot/commit/?id=f86ec0b67f147d23928091f27529c5fd47ef5f02
- >> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> Fixes a number of security issues and adds support for PUT/DELETE. From the
- >> release mail:
- >> 
- >> <snip>
- >> Stephen R??ttger reported a number of security bugs, the most serious of
+ > Fixes CVE-2014-1684: The ASF_ReadObject_file_properties function in
+ > modules/demux/asf/libasf.c in the ASF Demuxer in VideoLAN VLC Media
+ > Player before 2.1.3 allows remote attackers to cause a denial of service
+ > (divide-by-zero error and crash) via a zero minimum and maximum data
+ > packet size in an ASF file.
 
- > Is it possible to send commit messages with charset=utf-8 to make these '??' 
- > characters readable? Both post-receive-email and multimail from git's 
- > contrib/hooks/ directory support utf-8 by default.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Yes, I will check with the osuosl.org guys.
+Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard 
+Bye, Peter Korsgaard
