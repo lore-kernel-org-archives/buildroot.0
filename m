@@ -1,41 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jun 2014 08:27:41 +0200
-Subject: [Buildroot] [Patch v3] dcmtk: new package
-In-Reply-To: <53A0E9AF.1020604@gmail.com>
-References: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
- <53A0E9AF.1020604@gmail.com>
-Message-ID: <20140618082741.68a86b8b@free-electrons.com>
+Date: Wed, 18 Jun 2014 08:29:07 +0200
+Subject: [Buildroot] [PATCH] blackfin: 2012R1 toolchain is gone,
+ remove kludges
+In-Reply-To: <1403043799-7683-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403043799-7683-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140618082907.47523381@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear William Frost,
+Dear Gustavo Zacarias,
 
-On Wed, 18 Jun 2014 10:21:51 +0900, William Frost wrote:
-> Sorry for the delay but I'm still having problems with git send-email. 
-> This is quite new to me.
-> I test:
-> git send-email --to tsmrnd0 at gmail.com *.patch
-> and I'm able to receive the email. but when I
-> git send-email --to buildroot at busybox.net *.patch
-> I don't see my email on the mailling list, but it is on the sent email.
-> I'm really sorry for using thunderbird again.
+On Tue, 17 Jun 2014 19:23:19 -0300, Gustavo Zacarias wrote:
+> Remove ADI toolchain 2012R1 package kludges since that version is gone
+> since the last bump.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Your e-mail sent with git send-email was perfectly received on the
-mailing list:
-
-From: William Frost <tsmrnd0@gmail.com>
-To: buildroot at busybox.net
-Subject: [Buildroot] [Patch v3] dcmtk: new package
-Date: Wed, 18 Jun 2014 09:05:19 +0900
-Sender: buildroot-bounces at busybox.net
-X-Mailer: git-send-email 1.8.1.4
-
-Best regards,
-
-Thomas
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
