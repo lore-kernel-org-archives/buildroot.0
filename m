@@ -1,37 +1,104 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed, 18 Jun 2014 20:21:59 +0400
-Subject: [Buildroot] [PATCH 1/2] strace: add serial number to existing patch
-	file names
+Date: Wed, 18 Jun 2014 20:22:00 +0400
+Subject: [Buildroot] [PATCH 2/2] strace: fix ptrace {PEEK,
+	POKE}USER arguments decoding on xtensa
 In-Reply-To: <1403108520-26869-1-git-send-email-jcmvbkbc@gmail.com>
 References: <1403108520-26869-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <1403108520-26869-2-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1403108520-26869-3-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Backported from: 57fac759ca0945f5608ed6a2228c697f8fb67cd6
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- ...ile-syscalls.patch => strace-01-fix-disabled-largefile-syscalls.patch} | 0
- ...peeksiginfo_args.patch => strace-02-fix-ptrace_peeksiginfo_args.patch} | 0
- .../{strace-update-configure.patch => strace-03-update-configure.patch}   | 0
- 3 files changed, 0 insertions(+), 0 deletions(-)
- rename package/strace/{strace-fix-disabled-largefile-syscalls.patch => strace-01-fix-disabled-largefile-syscalls.patch} (100%)
- rename package/strace/{strace-fix-ptrace_peeksiginfo_args.patch => strace-02-fix-ptrace_peeksiginfo_args.patch} (100%)
- rename package/strace/{strace-update-configure.patch => strace-03-update-configure.patch} (100%)
+ ...xtensa-sort-values-in-struct_user_offsets.patch | 76 ++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch
 
-diff --git a/package/strace/strace-fix-disabled-largefile-syscalls.patch b/package/strace/strace-01-fix-disabled-largefile-syscalls.patch
-similarity index 100%
-rename from package/strace/strace-fix-disabled-largefile-syscalls.patch
-rename to package/strace/strace-01-fix-disabled-largefile-syscalls.patch
-diff --git a/package/strace/strace-fix-ptrace_peeksiginfo_args.patch b/package/strace/strace-02-fix-ptrace_peeksiginfo_args.patch
-similarity index 100%
-rename from package/strace/strace-fix-ptrace_peeksiginfo_args.patch
-rename to package/strace/strace-02-fix-ptrace_peeksiginfo_args.patch
-diff --git a/package/strace/strace-update-configure.patch b/package/strace/strace-03-update-configure.patch
-similarity index 100%
-rename from package/strace/strace-update-configure.patch
-rename to package/strace/strace-03-update-configure.patch
+diff --git a/package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch b/package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch
+new file mode 100644
+index 0000000..0ef038d
+--- /dev/null
++++ b/package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch
+@@ -0,0 +1,76 @@
++From 57fac759ca0945f5608ed6a2228c697f8fb67cd6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 18 Jun 2014 06:04:06 +0400
++Subject: [PATCH] xtensa: sort values in struct_user_offsets
++
++Otherwise ptrace syscall argument decoding is wrong:
++  ptrace(PTRACE_PEEKUSER, 296, syscall_nr, [0x4048eb]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, syscall_nr, [0x3fa6cd30]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, syscall_nr, [0x8040676d]) = 0
++instead of
++  ptrace(PTRACE_PEEKUSER, 296, pc, [0x4048eb]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, a1, [0x3fa6cd30]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, a0, [0x8040676d]) = 0
++
++* process.c (struct_user_offsets) [XTENSA]: Sort values.
++---
++Backported from: 57fac759ca0945f5608ed6a2228c697f8fb67cd6
++
++ process.c | 34 +++++++++++++++++-----------------
++ 1 file changed, 17 insertions(+), 17 deletions(-)
++
++diff --git a/process.c b/process.c
++index a880f9e..2cd0f01 100644
++--- a/process.c
+++++ b/process.c
++@@ -1865,6 +1865,23 @@ const struct xlat struct_user_offsets[] = {
++ 	{ 4*33, "sr" },
++ #endif
++ #ifdef XTENSA
+++	{ REG_A_BASE,           "a0"            },
+++	{ REG_A_BASE+1,         "a1"            },
+++	{ REG_A_BASE+2,         "a2"            },
+++	{ REG_A_BASE+3,         "a3"            },
+++	{ REG_A_BASE+4,         "a4"            },
+++	{ REG_A_BASE+5,         "a5"            },
+++	{ REG_A_BASE+6,         "a6"            },
+++	{ REG_A_BASE+7,         "a7"            },
+++	{ REG_A_BASE+8,         "a8"            },
+++	{ REG_A_BASE+9,         "a9"            },
+++	{ REG_A_BASE+10,        "a10"           },
+++	{ REG_A_BASE+11,        "a11"           },
+++	{ REG_A_BASE+12,        "a12"           },
+++	{ REG_A_BASE+13,        "a13"           },
+++	{ REG_A_BASE+14,        "a14"           },
+++	{ REG_A_BASE+15,        "a15"           },
+++	{ REG_PC,               "pc"            },
++ 	{ SYSCALL_NR,           "syscall_nr"    },
++ 	{ REG_AR_BASE,          "ar0"           },
++ 	{ REG_AR_BASE+1,        "ar1"           },
++@@ -1937,23 +1954,6 @@ const struct xlat struct_user_offsets[] = {
++ 	{ REG_WB,               "wb"            },
++ 	{ REG_WS,               "ws"            },
++ 	{ REG_PS,               "ps"            },
++-	{ REG_PC,               "pc"            },
++-	{ REG_A_BASE,           "a0"            },
++-	{ REG_A_BASE+1,         "a1"            },
++-	{ REG_A_BASE+2,         "a2"            },
++-	{ REG_A_BASE+3,         "a3"            },
++-	{ REG_A_BASE+4,         "a4"            },
++-	{ REG_A_BASE+5,         "a5"            },
++-	{ REG_A_BASE+6,         "a6"            },
++-	{ REG_A_BASE+7,         "a7"            },
++-	{ REG_A_BASE+8,         "a8"            },
++-	{ REG_A_BASE+9,         "a9"            },
++-	{ REG_A_BASE+10,        "a10"           },
++-	{ REG_A_BASE+11,        "a11"           },
++-	{ REG_A_BASE+12,        "a12"           },
++-	{ REG_A_BASE+13,        "a13"           },
++-	{ REG_A_BASE+14,        "a14"           },
++-	{ REG_A_BASE+15,        "a15"           },
++ #endif
++ 
++ 	/* Other fields in "struct user" */
++-- 
++1.8.1.4
++
 -- 
 1.8.1.4
