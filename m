@@ -1,72 +1,59 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 19 Jun 2014 01:16:18 +0200
-Subject: [Buildroot] [PATCH] gst-ffmpeg: fix build on armv6 without thumb2
-	(e.g. RaspberryPi)
-Message-ID: <1403133378-28417-1-git-send-email-arnout@mind.be>
+From: Romain Naour <romain.naour@openwide.fr>
+Date: Thu, 19 Jun 2014 01:22:23 +0200
+Subject: [Buildroot] Sourcery Codebench standard edition
+Message-ID: <53A21F2F.8010603@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Marco Trapanese <marcotrapanese@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-I only build-tested this - Marco, please test it properly. Although, you
-probably don't even use ac3 so the failing code won't be executed.
+Hi all,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...3_01-arm-avoid-using-the-movw-instruction.patch | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+Le 16/06/2014 17:19, Romain Naour a ?crit :
+> Hi all,
+> 
+> Someone has already tried to use Sourcery CodeBench standard edition with Buildroot ?
+> (I guess not since it don't work as is ;-) )
+> I'm using buildroot 2013.08, but I think problems remain in the latest version.
+> 
+> I had several issue with the external-toolchain wrapper, since this toolchain need the -msgxx-glibc flag in CFLAGS.
 
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
-new file mode 100644
-index 0000000..288dc3d
---- /dev/null
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
-@@ -0,0 +1,41 @@
-+Date: Mon, 1 Aug 2011 20:21:04 +0300
-+Subject: [libavcodec] arm: Avoid using the movw instruction needlessly
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=utf8
-+Content-Transfer-Encoding: 8bit
-+
-+This fixes building for ARM11 without Thumb2.
-+
-+Signed-off-by: Martin Storsj? <martin@martin.st>
-+
-+[Arnout: backported to gst-ffmpeg, from ffmpeg 9a83adaf3]
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S |    4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
-+index d3058ff..b6aee86 100644
-+--- a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
-++++ b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
-+@@ -37,7 +37,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
-+         ldrb            r10, [r4], #1
-+ 1:
-+         ldrsh           r9,  [r0], #2                   @ mask[band]
-+-        movw            r8,  #0x1fe0
-++        mov             r8,  #0xff0
-+         sub             r9,  r9,  r12                   @   - snr_offset
-+         mov             r11, r10
-+         ldrb            r10, [r4], #1                   @ band_start_tab[band++]
-+@@ -44,7 +44,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
-+         subs            r9,  r9,  r5                    @   - floor
-+         movlt           r9,  #0
-+         cmp             r10, r3                         @   - end
-+-        and             r9,  r9,  r8                    @   & 0x1fe0
-++        and             r9,  r9,  r8, lsl #1            @   & 0x1fe0
-+         subgt           r8,  r3,  r11
-+         suble           r8,  r10, r11
-+         add             r9,  r9,  r5                    @   + floor => m
-+--
-+1.7.10.4
-+
--- 
-2.0.0
+Ok, I can use the Sourcery Codebench standard but I did some hack in
+toolchain-external.mk and helper.mk
+
+The first problem is that the main sysroot can't be found with this toolchain
+because "-print-file-name=libc.a" don't work as expected:
+$./i686-pc-linux-gnu-gcc -print-file-name=libc.a
+libc.a
+The path to libc.a is not returned, we have only the file name (which is useless...)
+So the toolchain check fail because $PWD/libc.a is used as SYSROOT_DIR
+
+Compared to light version (and all other toolchain):
+$./i686-pc-linux-gnu-gcc -print-file-name=libc.a
+Full/path/to/i686-pc-linux-gnu/libc/usr/lib/libc.a
+
+Here is what we need to do:
+$./i686-pc-linux-gnu-gcc -msgxx-glibc -print-file-name=libc.a
+Full/path/to/i686-pc-linux-gnu/libc/sgxx-glibc/usr/lib/libc.a
+
+(The flag "-msgxx-glibc" is given by BR2_TARGET_OPTIMIZATION as config option)
+
+But we have only the "ARCH_SYSROOT_DIR" not the "SYSROOT_DIR"...
+To find the main sysroot, I added a test on SYSROOT_DIR (if is a directory) then
+I filterout the path to remove the last element.
+
+Then the check "check_glibc" fail because ld-linux*.so.* or ld.so.* are not
+found since maxdepth = 2. It is fixed with maxdepth = 3.
+
+Sourcery toolchain support rpc feature but the check_glibc_rpc_feature fail
+because it look at the main sysroot.
+We need to look at the ARCH_SYSROOT_DIR to find rpc.h
+It is fixed by adding a second argument which is used to pass the
+ARCH_SYSROOT_DIR to check_glibc_rpc_feature.
+
+I'will send a patch to show all the trick,
+Any comments are welcome :)
+
+Best regards,
+Romain Naour
