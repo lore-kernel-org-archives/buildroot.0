@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 18 Jun 2014 14:03:23 +0200
-Subject: [Buildroot] [PATCH] libusb: bump to version 1.0.19
-In-Reply-To: <1402918107-10225-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 16 Jun 2014 08:28:27 -0300")
-References: <1402918107-10225-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738f25ss4.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Jun 2014 14:03:41 +0200
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2014.06.13
+In-Reply-To: <1402922543-19794-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 16 Jun 2014 09:42:23 -0300")
+References: <1402922543-19794-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y4wu4e76.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
