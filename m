@@ -1,131 +1,91 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 17 Jun 2014 19:23:19 -0300
-Subject: [Buildroot] [PATCH] blackfin: 2012R1 toolchain is gone,
-	remove kludges
-Message-ID: <1403043799-7683-1-git-send-email-gustavo@zacarias.com.ar>
+From: William Frost <tsmrnd0@gmail.com>
+Date: Wed, 18 Jun 2014 09:05:19 +0900
+Subject: [Buildroot] [Patch v3] dcmtk: new package
+Message-ID: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove ADI toolchain 2012R1 package kludges since that version is gone
-since the last bump.
+[PATCH] Changes v2 -> v3:  (suggested by Thomas De Schampheleire):   
+ - removed version selection option, only stable release is used    
+ - added an empty new line between the comment header and the first
+   variable definition
+ - fixed license file reference    
+ - reduced and cleaning DCMTK_CFLAGS and DCMTK_CXXFLAGS declarations
+ - removed DCMTK_INSTALL_STAGING_OPT and DCMTK_INSTALL_TARGET_OPT
+ - unconditionally use --with-zlib
+ - removed duplicated build commands
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: William Frost <tsmrnd0@gmail.com>
 ---
- package/libtirpc/Config.in | 6 ++----
- package/openpgm/Config.in  | 1 -
- package/popt/popt.mk       | 2 +-
- package/rpcbind/Config.in  | 6 ++----
- package/zeromq/Config.in   | 1 -
- package/zyre/Config.in     | 6 ++----
- 6 files changed, 7 insertions(+), 15 deletions(-)
+ package/Config.in       |  1 +
+ package/dcmtk/Config.in | 12 ++++++++++++
+ package/dcmtk/dcmtk.mk  | 23 +++++++++++++++++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 package/dcmtk/Config.in
+ create mode 100644 package/dcmtk/dcmtk.mk
 
-diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
-index a6759e7..a8e6dd3 100644
---- a/package/libtirpc/Config.in
-+++ b/package/libtirpc/Config.in
-@@ -5,8 +5,7 @@ config BR2_PACKAGE_LIBTIRPC
- 	# don't need to propagate this dependency to reverse
- 	# dependencies of libtirpc for which native RPC support can be
- 	# used instead of libtirpc.
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
--		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Libtirpc is a port of Sun's Transport-Independent RPC
-@@ -15,6 +14,5 @@ config BR2_PACKAGE_LIBTIRPC
- 	  http://sourceforge.net/projects/libtirpc/
- 
- comment "libtirpc needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
--		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
-index a9d0cc8..dc66367 100644
---- a/package/openpgm/Config.in
-+++ b/package/openpgm/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_OPENPGM
- 	depends on !BR2_avr32
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INET_IPV6
- 	depends on BR2_USE_WCHAR
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 9f2d070..f3ef43f 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -16,7 +16,7 @@ POPT_CONF_ENV = ac_cv_va_copy=yes
- # The external Blackfin toolchains have <glob.h>, but not all the
- # necessary uClibc options for glob functions, so we force disable the
- # usage of the glob functions for these toolchains.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2)$(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1),y)
- POPT_CONF_ENV += ac_cv_header_glob_h=no
- endif
- 
-diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
-index e02fb95..2a79bdc 100644
---- a/package/rpcbind/Config.in
-+++ b/package/rpcbind/Config.in
-@@ -6,8 +6,7 @@ config BR2_PACKAGE_RPCBIND
- 	select BR2_PACKAGE_LIBTIRPC
- 	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
- 	# support, needed for libtirpc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
--		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	# fork()
- 	depends on BR2_USE_MMU
- 	help
-@@ -15,7 +14,6 @@ config BR2_PACKAGE_RPCBIND
- 	  into universal addresses.
- 
- comment "rpcbind needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
--		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index a02f4ab..778a503 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -34,7 +34,6 @@ config BR2_PACKAGE_ZEROMQ_PGM
- 	depends on !BR2_avr32 # openpgm
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # openpgm
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # openpgm
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1 # openpgm
- 	select BR2_PACKAGE_OPENPGM
- 	help
- 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
-diff --git a/package/zyre/Config.in b/package/zyre/Config.in
-index 31e1d6f..fbfc6f9 100644
---- a/package/zyre/Config.in
-+++ b/package/zyre/Config.in
-@@ -8,8 +8,7 @@ config BR2_PACKAGE_ZYRE
- 	depends on BR2_USE_MMU # filemq -> czmq
- 	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
- 	# support, needed by filemq -> czmq
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
--		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	select BR2_PACKAGE_FILEMQ
- 	help
- 	  An open-source framework for proximity-based peer-to-peer
-@@ -19,7 +18,6 @@ config BR2_PACKAGE_ZYRE
- 
- comment "zyre needs a toolchain w/ C++, IPv6, largefile, wchar, threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 && \
--		!BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R1
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
- 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/Config.in b/package/Config.in
+index 07fd166..b88c0b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -568,6 +568,7 @@ endmenu
+ menu "Graphics"
+ source "package/atk/Config.in"
+ source "package/cairo/Config.in"
++source "package/dcmtk/Config.in"
+ source "package/fltk/Config.in"
+ source "package/fontconfig/Config.in"
+ source "package/freetype/Config.in"
+diff --git a/package/dcmtk/Config.in b/package/dcmtk/Config.in
+new file mode 100644
+index 0000000..0800c72
+--- /dev/null
++++ b/package/dcmtk/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_DCMTK
++	bool "dcmtk"
++	help
++	  DCMTK is a collection of libraries and applications implementing 
++	  large parts the DICOM standard. It includes software for examining, 
++	  constructing and converting DICOM image files, handling offline 
++	  media, sending and receiving images over a network connection, as 
++	  well as demonstrative image storage and worklist servers. DCMTK is 
++	  is written in a mixture of ANSI C and C++. It comes in complete 
++	  source code and is made available as "open source" software.
++
++	  http://dicom.offis.de/dcmtk.php.en
+\ No newline at end of file
+diff --git a/package/dcmtk/dcmtk.mk b/package/dcmtk/dcmtk.mk
+new file mode 100644
+index 0000000..ae2c265
+--- /dev/null
++++ b/package/dcmtk/dcmtk.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# dcmtk
++#
++################################################################################
++
++DCMTK_VERSION = $(call qstrip,"3.6.0")
++DCMTK_SITE = http://dicom.offis.de/download/dcmtk/dcmtk360
++
++DCMTK_LICENSE = BSD
++DCMTK_LICENSE_FILES = COPYRIGHT
++DCMTK_INSTALL_STAGING = YES
++
++DCMTK_CFLAGS = $(TARGET_CFLAGS) -O -Wall
++DCMTK_CXXFLAGS = $(TARGET_CXXFLAGS) -O  -Wall
++DCMTK_CONF_OPT = \
++	--disable-rpath --with-zlib \
++	ac_cv_my_c_rightshift_unsigned=no
++
++DCMTK_CONF_ENV = ARFLAGS=cru
++DCMTK_MAKE_OPT	= DESTDIR=$(STAGING_DIR) install-lib
++
++$(eval $(autotools-package))
 -- 
-1.8.5.5
+1.8.1.4
