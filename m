@@ -1,26 +1,30 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 18 Jun 2014 18:00:50 +0200
-Subject: [Buildroot] [PATCH 0/5 v5] legal-info: extract packages to get
-	license files (branch yem/legal)
-In-Reply-To: <20140615104224.GA3568@free.fr>
-References: <cover.1402758331.git.yann.morin.1998@free.fr>
- <20140615104224.GA3568@free.fr>
-Message-ID: <55b193e1-c947-4ff6-af00-3ec8e075564d@email.android.com>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Wed, 18 Jun 2014 12:12:41 -0400
+Subject: [Buildroot] [PATCH] genimage: bump to version 6
+Message-ID: <1403107961-16768-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->All,
->
->On 2014-06-14 17:10 +0200, Yann E. MORIN spake thusly:
->> Here is a series that fixes the legal-info infra:
->
->Forgt this series for now, it causes a hell of a mess to rebase ontop
->of the recent $$ changes. 
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+---
+ package/genimage/genimage.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You wanted dollars, now you'll have to deal with them!
-
-;-)
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index e9ad52e..07d1e0c 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION        = 4
++GENIMAGE_VERSION        = 6
+ GENIMAGE_SOURCE         = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE           = http://www.pengutronix.de/software/genimage/download/
+ GENIMAGE_DEPENDENCIES   = host-pkgconf libconfuse
+-- 
+2.0.0
