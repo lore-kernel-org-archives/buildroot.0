@@ -1,80 +1,55 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 18 Jun 2014 22:33:53 +0200
-Subject: [Buildroot] [v2 2/2] perl-mojolicious: new package
-In-Reply-To: <1402947357-6359-3-git-send-email-francois.perrad@gadz.org>
-References: <1402947357-6359-1-git-send-email-francois.perrad@gadz.org>
- <1402947357-6359-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <53A1F7B1.9060104@mind.be>
+Date: Wed, 18 Jun 2014 23:01:30 +0200
+Subject: [Buildroot] How to handle custom kernel config
+In-Reply-To: <CAGm1_kvcZDk_ke4OVgx1dO6_qWOhff7LupEKj42kgiq0Fyog6w@mail.gmail.com>
+References: <53A04483.9030601@gmail.com>
+ <CAGm1_ktpFoYZSu2Yjd_hNpiHbySLv8FPrHtJ91DQv4iNmthYHg@mail.gmail.com>
+ <53A045EC.4030107@gmail.com>
+ <CAGm1_kvcZDk_ke4OVgx1dO6_qWOhff7LupEKj42kgiq0Fyog6w@mail.gmail.com>
+Message-ID: <53A1FE2A.5060908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/06/14 21:35, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                            |  1 +
->  package/perl-mojolicious/Config.in           |  6 ++++++
->  package/perl-mojolicious/perl-mojolicious.mk | 13 +++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/perl-mojolicious/Config.in
->  create mode 100644 package/perl-mojolicious/perl-mojolicious.mk
+On 17/06/14 15:58, Yegor Yefremov wrote:
+> On Tue, Jun 17, 2014 at 3:43 PM, Marco Trapanese
+> <marcotrapanese@gmail.com> wrote:
+>> Il 17/06/2014 15:40, Yegor Yefremov ha scritto:
+>>
+>>> As soon as you're happy with your new .config in the build directory,
+>>> you just manually overwrite your board/sub_directory/linux.config Yegor
+>>
+>>
+>> Ok, so I should do the following:
+>>
+>> 1) copy the custom file to .config
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index f43e985..5e16ffa 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -423,6 +423,7 @@ endif
->  	source "package/perl/Config.in"
->  if BR2_PACKAGE_PERL
->  menu "Perl libraries/modules"
-> +source "package/perl-mojolicious/Config.in"
->  endmenu
->  endif
->  	source "package/php/Config.in"
-> diff --git a/package/perl-mojolicious/Config.in b/package/perl-mojolicious/Config.in
-> new file mode 100644
-> index 0000000..766d109
-> --- /dev/null
-> +++ b/package/perl-mojolicious/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_MOJOLICIOUS
-> +	bool "perl-mojolicious"
-> +	help
-> +	  Real-time web framework
-> +
-> +	  http://mojolicio.us
-> diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-> new file mode 100644
-> index 0000000..e4ced7e
-> --- /dev/null
-> +++ b/package/perl-mojolicious/perl-mojolicious.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# perl-mojolicious
-> +#
-> +################################################################################
-> +
-> +PERL_MOJOLICIOUS_VERSION = 5.07
-> +PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
-> +PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI/
-> +PERL_MOJOLICIOUS_DEPENDENCIES = perl 
+> This step will be made by Buildroot, when you first compile the kernel
+> or perhaps if you invoke make linux-reconfigure. Your custom .config
+> will be copied to output/build/linux-xxx
+> 
+>> 2) edit that with make linux-menuconfig
+>> 3) copy back the .config to custom file
 
- There's still trailing whitespace here.
+ This step can be done with the command
 
-> +PERL_MOJOLICIOUS_LICENSE = artistic_2
+make linux-update-defconfig
 
- artistic_2 is not in our list of licenses, and is also not a format that we
-would typically use.  We already have pv with Artistic-2.0, which is also what
-is used by spdx.
 
  Regards,
  Arnout
 
-> +
-> +$(eval $(perl-package))
+> 
+> Other step are correct.
+> 
+> Yegor
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > 
 
 
