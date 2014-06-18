@@ -1,141 +1,197 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 23:58:25 +0200
-Subject: [Buildroot] [git commit] libnss: security bump to version 3.16.1
-Message-ID: <20140618220023.6ADAC9D046@busybox.osuosl.org>
+Date: Wed, 18 Jun 2014 23:57:54 +0200
+Subject: [Buildroot] [git commit] libnspr: security bump to version 4.10.6
+Message-ID: <20140618220023.5E0909D046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=286cbaf328d6dc04daa487c09f4bc8616b9bbef6
+commit: http://git.buildroot.net/buildroot/commit/?id=449a71f559a4a11fcc89a237bbbb857218409b3b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-
-CVE-2014-1492 - The cert_TestHostName function in lib/certdb/certdb.c in
-the certificate-checking implementation in Mozilla Network Security
-Services (NSS) before 3.16 accepts a wildcard character that is embedded
-in an internationalized domain name's U-label, which might allow
-man-in-the-middle attackers to spoof SSL servers via a crafted
-certificate.
-
-CVE-2014-1491 - Mozilla Network Security Services (NSS) before 3.15.4,
-as used in Mozilla Firefox before 27.0, Firefox ESR 24.x before 24.3,
-Thunderbird before 24.3, SeaMonkey before 2.24, and other products, does
-not properly restrict public values in Diffie-Hellman key exchanges,
-which makes it easier for remote attackers to bypass cryptographic
-protection mechanisms in ticket handling by leveraging use of a certain
-value.
-
-CVE-2014-1490 - Race condition in libssl in Mozilla Network Security
-Services (NSS) before 3.15.4, as used in Mozilla Firefox before 27.0,
-Firefox ESR 24.x before 24.3, Thunderbird before 24.3, SeaMonkey before
-2.24, and other products, allows remote attackers to cause a denial of
-service (use-after-free) or possibly have unspecified other impact via
-vectors involving a resumption handshake that triggers incorrect
-replacement of a session ticket.
-
-CVE-2013-1740 - The ssl_Do1stHandshake function in sslsecur.c in libssl
-in Mozilla Network Security Services (NSS) before 3.15.4, when the TLS
-False Start feature is enabled, allows man-in-the-middle attackers to
-spoof SSL servers by using an arbitrary X.509 certificate during certain
-handshake traffic.
+Fixes CVE-2014-1545 - Mozilla Netscape Portable Runtime (NSPR) before
+4.10.6 allows remote attackers to execute arbitrary code or cause a
+denial of service (out-of-bounds write) via vectors involving the
+sprintf and console functions.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...cross.patch => libnss-0001-cross-compile.patch} |    9 +++++----
- ...ibnss-uclibc.patch => libnss-0002-uclibc.patch} |    9 +++++----
- package/libnss/libnss.mk                           |   11 +++++------
- 3 files changed, 15 insertions(+), 14 deletions(-)
+ package/libnspr/libnspr-0001-nios2.patch      |   15 +++--
+ package/libnspr/libnspr-0002-microblaze.patch |   15 +++--
+ package/libnspr/libnspr-0003-aarch64.patch    |   74 -------------------------
+ package/libnspr/libnspr.mk                    |    6 +-
+ 4 files changed, 19 insertions(+), 91 deletions(-)
 
-diff --git a/package/libnss/libnss-cross.patch b/package/libnss/libnss-0001-cross-compile.patch
-similarity index 65%
-rename from package/libnss/libnss-cross.patch
-rename to package/libnss/libnss-0001-cross-compile.patch
-index 8a5cd10..3259116 100644
---- a/package/libnss/libnss-cross.patch
-+++ b/package/libnss/libnss-0001-cross-compile.patch
-@@ -1,14 +1,15 @@
--
- This patch allows us to set a value for the cross compiler via TARGETCC without
- setting CC on the command line. CC is used for host tools as well as cross
- compiled code so we cannot define it on the command line without breaking
- the host tools build.
- 
-+[Gustavo: update for nss 3.16.1]
- Signed-off-by: Will Newton <will.newton@imgtec.com>
- 
----- libnss-3.12.9.old/mozilla/security/coreconf/Linux.mk	2011-03-01 10:31:21.517847183 +0000
--+++ libnss-3.12.9/mozilla/security/coreconf/Linux.mk	2011-03-01 10:33:42.688648237 +0000
--@@ -46,9 +46,13 @@
-+diff -Nura nss-3.16.1.orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.mk
-+--- nss-3.16.1.orig/nss/coreconf/Linux.mk	2014-06-18 10:34:30.503996123 -0300
-++++ nss-3.16.1/nss/coreconf/Linux.mk	2014-06-18 10:35:02.233068390 -0300
-+@@ -16,9 +16,13 @@
-  	IMPL_STRATEGY = _PTH
-  endif
-  
-diff --git a/package/libnss/libnss-uclibc.patch b/package/libnss/libnss-0002-uclibc.patch
-similarity index 50%
-rename from package/libnss/libnss-uclibc.patch
-rename to package/libnss/libnss-0002-uclibc.patch
-index 17e8080..b81db93 100644
---- a/package/libnss/libnss-uclibc.patch
-+++ b/package/libnss/libnss-0002-uclibc.patch
+diff --git a/package/libnspr/libnspr-0001-nios2.patch b/package/libnspr/libnspr-0001-nios2.patch
+index cffb2ef..4fc6551 100644
+--- a/package/libnspr/libnspr-0001-nios2.patch
++++ b/package/libnspr/libnspr-0001-nios2.patch
 @@ -1,11 +1,12 @@
--
- uCLibc does not define RTLD_NOLOAD.
+ Add Nios-II support
  
-+[Gustavo: update for nss 3.16.1]
- Signed-off-by: Will Newton <will.newton@imgtec.com>
++[Gustavo: update for nspr 4.10.6]
+ Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
  
----- nss-3.12.9.old/mozilla/security/nss/lib/freebl/stubs.c	2011-07-08 13:32:54.964338355 +0100
--+++ nss-3.12.9/mozilla/security/nss/lib/freebl/stubs.c	2011-07-08 13:33:57.255337490 +0100
--@@ -535,6 +535,11 @@
-+diff -Nura nss-3.16.1.orig/nss/lib/freebl/stubs.c nss-3.16.1/nss/lib/freebl/stubs.c
-+--- nss-3.16.1.orig/nss/lib/freebl/stubs.c	2014-06-18 10:34:30.529997002 -0300
-++++ nss-3.16.1/nss/lib/freebl/stubs.c	2014-06-18 10:36:25.508882650 -0300
-+@@ -594,6 +594,11 @@
-      return SECSuccess;
-  }
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:29.332138283 -0300
+-@@ -914,6 +914,51 @@
++diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/include/md/_linux.cfg
++--- nspr-4.10.6.orig/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:22.447502521 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:32.746850581 -0300
++@@ -924,6 +924,51 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
   
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index dcbf8bb..47b78df 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,15 +4,14 @@
+@@ -57,9 +58,9 @@ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2013-11-10 21:15:33.245138154 -0300
++diff -Nura nspr-4.10.6.orig/nspr/pr/include/md/_linux.h nspr-4.10.6/nspr/pr/include/md/_linux.h
++--- nspr-4.10.6.orig/nspr/pr/include/md/_linux.h	2014-06-18 10:26:22.446502487 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.h	2014-06-18 10:26:32.747850615 -0300
+ @@ -55,6 +55,8 @@
+  #define _PR_SI_ARCHITECTURE "avr32"
+  #elif defined(__m32r__)
+diff --git a/package/libnspr/libnspr-0002-microblaze.patch b/package/libnspr/libnspr-0002-microblaze.patch
+index 93a0be5..30b17f3 100644
+--- a/package/libnspr/libnspr-0002-microblaze.patch
++++ b/package/libnspr/libnspr-0002-microblaze.patch
+@@ -1,11 +1,12 @@
+ Add Microblaze support
+ 
++[Gustavo: update for nspr 4.10.6]
+ Signed-off-by: Spenser Gilliland <spenser@gillilanding.com>
+ 
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg
+---- libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:04.556139100 -0300
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.cfg	2013-11-10 21:15:29.332138283 -0300
+-@@ -914,6 +914,56 @@
++diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg nspr-4.10.6/nspr/pr/include/md/_linux.cfg
++--- nspr-4.10.6.nios2/nspr/pr/include/md/_linux.cfg	2014-06-18 10:29:15.816361425 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.cfg	2014-06-18 10:26:59.908768508 -0300
++@@ -969,6 +969,56 @@
+  #define PR_BYTES_PER_WORD_LOG2   2
+  #define PR_BYTES_PER_DWORD_LOG2  3
+  
+@@ -62,9 +63,9 @@ diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.cfg libnspr-4.
+  #else
+  
+  #error "Unknown CPU architecture"
+-diff -Naur libnspr-4.9.6-ori/mozilla/nsprpub/pr/include/md/_linux.h libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h
+---- libnspr-4.9.6.orig/mozilla/nsprpub/pr/include/md/_linux.h	2014-01-10 14:39:20.674107805 -0600
+-+++ libnspr-4.9.6/mozilla/nsprpub/pr/include/md/_linux.h	2014-01-10 14:44:04.442112985 -0600
++diff -Nura nspr-4.10.6.nios2/nspr/pr/include/md/_linux.h nspr-4.10.6/nspr/pr/include/md/_linux.h
++--- nspr-4.10.6.nios2/nspr/pr/include/md/_linux.h	2014-06-18 10:29:15.817361459 -0300
+++++ nspr-4.10.6/nspr/pr/include/md/_linux.h	2014-06-18 10:26:59.909768537 -0300
+ @@ -55,6 +55,8 @@
+  #define _PR_SI_ARCHITECTURE "avr32"
+  #elif defined(__m32r__)
+diff --git a/package/libnspr/libnspr-0003-aarch64.patch b/package/libnspr/libnspr-0003-aarch64.patch
+deleted file mode 100644
+index a5e23ed..0000000
+--- a/package/libnspr/libnspr-0003-aarch64.patch
++++ /dev/null
+@@ -1,74 +0,0 @@
+-Add AArch64 support
+-
+-Signed-off-by: Alexander Khryukin <alexander@mezon.ru>
+-
+-Index: b/mozilla/nsprpub/pr/include/md/_linux.cfg
+-===================================================================
+---- a/mozilla/nsprpub/pr/include/md/_linux.cfg
+-+++ b/mozilla/nsprpub/pr/include/md/_linux.cfg
+-@@ -1009,6 +1009,52 @@
+- #define PR_BYTES_PER_WORD_LOG2   2
+- #define PR_BYTES_PER_DWORD_LOG2  3
+- 
+-+#elif defined(__aarch64__)
+-+
+-+#define IS_LITTLE_ENDIAN 1
+-+#undef  IS_BIG_ENDIAN
+-+#define IS_64
+-+
+-+#define PR_BYTES_PER_BYTE   1
+-+#define PR_BYTES_PER_SHORT  2
+-+#define PR_BYTES_PER_INT    4
+-+#define PR_BYTES_PER_INT64  8
+-+#define PR_BYTES_PER_LONG   8
+-+#define PR_BYTES_PER_FLOAT  4
+-+#define PR_BYTES_PER_DOUBLE 8
+-+#define PR_BYTES_PER_WORD   8
+-+#define PR_BYTES_PER_DWORD  8
+-+
+-+#define PR_BITS_PER_BYTE    8
+-+#define PR_BITS_PER_SHORT   16
+-+#define PR_BITS_PER_INT     32
+-+#define PR_BITS_PER_INT64   64
+-+#define PR_BITS_PER_LONG    64
+-+#define PR_BITS_PER_FLOAT   32
+-+#define PR_BITS_PER_DOUBLE  64
+-+#define PR_BITS_PER_WORD    64
+-+
+-+#define PR_BITS_PER_BYTE_LOG2   3
+-+#define PR_BITS_PER_SHORT_LOG2  4
+-+#define PR_BITS_PER_INT_LOG2    5
+-+#define PR_BITS_PER_INT64_LOG2  6
+-+#define PR_BITS_PER_LONG_LOG2   6
+-+#define PR_BITS_PER_FLOAT_LOG2  5
+-+#define PR_BITS_PER_DOUBLE_LOG2 6
+-+#define PR_BITS_PER_WORD_LOG2   6
+-+
+-+#define PR_ALIGN_OF_SHORT   2
+-+#define PR_ALIGN_OF_INT     4
+-+#define PR_ALIGN_OF_LONG    8
+-+#define PR_ALIGN_OF_INT64   8
+-+#define PR_ALIGN_OF_FLOAT   4
+-+#define PR_ALIGN_OF_DOUBLE  8
+-+#define PR_ALIGN_OF_POINTER 8
+-+#define PR_ALIGN_OF_WORD    8
+-+
+-+#define PR_BYTES_PER_WORD_LOG2  3
+-+#define PR_BYTES_PER_DWORD_LOG2 3
+-+
+- #else
+- 
+- #error "Unknown CPU architecture"
+-Index: b/mozilla/nsprpub/pr/include/md/_linux.h
+-===================================================================
+---- a/mozilla/nsprpub/pr/include/md/_linux.h
+-+++ b/mozilla/nsprpub/pr/include/md/_linux.h
+-@@ -59,6 +59,8 @@
+- #define _PR_SI_ARCHITECTURE "microblaze"
+- #elif defined(nios2)
+- #define _PR_SI_ARCHITECTURE "nios2"
+-+#elif defined(__aarch64__)
+-+#define _PR_SI_ARCHITECTURE "aarch64"
+- #else
+- #error "Unknown CPU architecture"
+- #endif
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 5aa9bdc..7eedbbe 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.14.5
-+LIBNSS_VERSION = 3.16.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
--LIBNSS_SUBDIR = mozilla/security
--LIBNSS_DISTDIR = mozilla/dist
-+LIBNSS_DISTDIR = dist
- LIBNSS_INSTALL_STAGING = YES
- LIBNSS_DEPENDENCIES = libnspr sqlite zlib
- LIBNSS_LICENSE = MPLv2.0
--LIBNSS_LICENSE_FILES = mozilla/security/nss/COPYING
-+LIBNSS_LICENSE_FILES = nss/COPYING
+-LIBNSPR_VERSION = 4.9.6
++LIBNSPR_VERSION = 4.10.6
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src/
+-LIBNSPR_SUBDIR = mozilla/nsprpub
++LIBNSPR_SUBDIR = nspr
+ LIBNSPR_INSTALL_STAGING = YES
+ LIBNSPR_CONFIG_SCRIPTS = nspr-config
+ LIBNSPR_LICENSE = MPLv2.0
+-LIBNSPR_LICENSE_FILES = mozilla/nsprpub/LICENSE
++LIBNSPR_LICENSE_FILES = nspr/LICENSE
  
- LIBNSS_BUILD_VARS = MOZILLA_CLIENT=1 \
- 		NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
-@@ -39,12 +38,12 @@ endif
- 
- 
- define LIBNSS_BUILD_CMDS
--	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_coreconf \
-+	$(MAKE1) -C $(@D)/nss coreconf \
- 			SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 			DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 			CHECKLOC= \
- 			$(LIBNSS_BUILD_VARS)
--	$(MAKE1) -C $(@D)/$(LIBNSS_SUBDIR)/nss build_dbm all \
-+	$(MAKE1) -C $(@D)/nss lib/dbm all \
- 			SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 			DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 			CHECKLOC= \
+ # Set the host CFLAGS and LDFLAGS so NSPR does not guess wrongly
+ LIBNSPR_CONF_ENV = HOST_CFLAGS="-g -O2" \
