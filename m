@@ -1,26 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 18 Jun 2014 12:45:59 -0300
-Subject: [Buildroot] [PATCHv2] argus: bump to vanilla version 3.6.0.1
-In-Reply-To: <53A1A70F.8040101@trzebnica.net>
-References: <1403027700-14160-1-git-send-email-gustavo@zacarias.com.ar>
- <53A1A70F.8040101@trzebnica.net>
-Message-ID: <53A1B437.5020701@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 18 Jun 2014 18:00:50 +0200
+Subject: [Buildroot] [PATCH 0/5 v5] legal-info: extract packages to get
+	license files (branch yem/legal)
+In-Reply-To: <20140615104224.GA3568@free.fr>
+References: <cover.1402758331.git.yann.morin.1998@free.fr>
+ <20140615104224.GA3568@free.fr>
+Message-ID: <55b193e1-c947-4ff6-af00-3ec8e075564d@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/18/2014 11:49 AM, Jerzy Grzegorek wrote:
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>All,
+>
+>On 2014-06-14 17:10 +0200, Yann E. MORIN spake thusly:
+>> Here is a series that fixes the legal-info infra:
+>
+>Forgt this series for now, it causes a hell of a mess to rebase ontop
+>of the recent $$ changes. 
 
-> Hi Gustavo,
-> 
-> The title should be  ...version 3.0.6.1
-> 
-> Regards,
-> Jerzy
+You wanted dollars, now you'll have to deal with them!
 
-It's already committed.
-Also next time try not to top-post, and most important, not quote the
-whole (and irrelevant) mail body, specially since it was huge.
-Regards.
+;-)
