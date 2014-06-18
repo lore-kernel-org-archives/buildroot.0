@@ -1,11 +1,11 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 18 Jun 2014 23:25:06 +0200
-Subject: [Buildroot] [PATCH 3/5] legal-info: add a comment about what
- packages we save the tarballs of
-In-Reply-To: <406f594430b168c7553033b561da7a89c3cdaa70.1402758331.git.yann.morin.1998@free.fr>
+Date: Wed, 18 Jun 2014 23:38:40 +0200
+Subject: [Buildroot] [PATCH 5/5] legal-info: properly error out on
+ missing license file
+In-Reply-To: <8c742a7155e0b24c14ae90f7be00c1043eceb848.1402758331.git.yann.morin.1998@free.fr>
 References: <cover.1402758331.git.yann.morin.1998@free.fr>
- <406f594430b168c7553033b561da7a89c3cdaa70.1402758331.git.yann.morin.1998@free.fr>
-Message-ID: <53A203B2.7070105@lucaceresoli.net>
+ <8c742a7155e0b24c14ae90f7be00c1043eceb848.1402758331.git.yann.morin.1998@free.fr>
+Message-ID: <53A206E0.9000506@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,43 +17,48 @@ Dear Yann,
 Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
-> As the legal-info infra only (rightfully) saves the tarballs of packages
-> that:
->    - we want to redistribute,
->    - and are not local,
->    - and are not overriden,
->
-> add a comment stating so.
->
-> This should clarify the code-block, which although trivial to read,
-> was not easy to interpret without thinking thouroughly about it.
+> When saving the license files, if a declared license file is missing,
+> print a proper error message, instead of the sometime-criptic error
+> message from 'cp'.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+>
 > ---
->   package/pkg-generic.mk | 3 +++
->   1 file changed, 3 insertions(+)
+> Note: when I wrote this back in March 2014, I had a concrete example of
+> a criptic error message (the name of the license did not make it obvious
+> we were saving a license file?), but today I can't remember what it was
+> exactly.
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index a978e63..d16908a 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -602,6 +602,9 @@ ifneq ($$($(2)_LICENSE_FILES),)
->   $(1)-legal-info: $(1)-extract
->   endif
->
-> +# We only save the sources of packages we want to redistribute, that are
-> +# non-local, and non-overriden. So only store, in the manifest, the tarball
-> +# name of those packages.
->   ifeq ($$($(2)_REDISTRIBUTE),YES)
->   ifneq ($$($(2)_SITE_METHOD),local)
->   ifneq ($$($(2)_SITE_METHOD),override)
->
+> Since I believe showing a properly-formatted error message to the user
+> is anyway a good thing, I kept that patch. Feel free to ditch it if you
+> don't like it.
 
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+I may be missing something, but I wonder what cryptic error you had
+seen. I tried removing a license file and got, before your patch:
+
+   cat: 
+/home/murray/devel/buildroot-test/output/build/busybox-1.22.1/LICENSE: 
+No such file or directory
+
+Except for the "cat: " prefix, it's quite understandable IMHO.
+
+With your patch applied:
+
+   ERROR: busybox: license file LICENSE not found
+
+This is much more concise, but gives a less info about where the
+LICENSE file should be found. To the inexperienced user, the path might
+be a useful hint.
+OTOH, the "ERROR: busybox: " prefix is very informative.
+
+How about changing your message to:
+   ERROR: busybox: license file LICENSE not found in /.../busybox-1.22.1/
+or
+   ERROR: busybox: license file /.../busybox-1.22.1/LICENSE not found
 
 -- 
 Luca
