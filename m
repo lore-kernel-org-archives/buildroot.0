@@ -1,40 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jun 2014 14:10:24 +0200
-Subject: [Buildroot] [git commit] knock: bump to version 0.7
-Message-ID: <20140618123420.3888C9D041@busybox.osuosl.org>
+Date: Wed, 18 Jun 2014 14:11:14 +0200
+Subject: [Buildroot] [git commit] netatalk: bump to version 3.1.2
+Message-ID: <20140618123420.4060A9D041@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=116f050273d3b4dac3c3831c5a8ace097a2b04c4
+commit: http://git.buildroot.net/buildroot/commit/?id=51275918423f5069f07af9fc0daa946f4f952b14
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump knock to version 0.7 and switch away from a git snapshot, it's
-nicer and avoids the need to autoreconf.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/knock/knock.mk |    5 ++---
- 1 files changed, 2 insertions(+), 3 deletions(-)
+ package/netatalk/netatalk.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index e4a3d3c..8d2b41e 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -4,11 +4,10 @@
+diff --git a/package/netatalk/netatalk.mk b/package/netatalk/netatalk.mk
+index e5e5c6b..1285af2 100644
+--- a/package/netatalk/netatalk.mk
++++ b/package/netatalk/netatalk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KNOCK_VERSION = 7ce33cd553800f48f16b3bb70b9cd0f1310d2c18
--KNOCK_SITE = $(call github,jvinet,knock,$(KNOCK_VERSION))
-+KNOCK_VERSION = 0.7
-+KNOCK_SITE = http://www.zeroflux.org/proj/knock/files
- KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
--KNOCK_AUTORECONF = YES
- KNOCK_DEPENDENCIES = libpcap
+-NETATALK_VERSION = 3.0.8
++NETATALK_VERSION = 3.1.2
+ NETATALK_SITE = http://downloads.sourceforge.net/project/netatalk/netatalk/$(NETATALK_VERSION)
+ NETATALK_SOURCE = netatalk-$(NETATALK_VERSION).tar.bz2
+ NETATALK_AUTORECONF = YES
+@@ -27,7 +27,8 @@ NETATALK_CONF_OPT += --with-cnid-cdb-backend \
+ 	--without-kerberos \
+ 	--without-pam \
+ 	--with-libevent=no \
+-	--with-dtrace=no
++	--with-dtrace=no \
++	--with-mysql-config=no
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_CUPS),y)
+ 	NETATALK_DEPENDENCIES += cups
