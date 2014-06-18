@@ -1,74 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 19 Jun 2014 01:13:11 +0200
-Subject: [Buildroot] Help about gstreamer h264 in buildroot
-In-Reply-To: <539C13BA.5000106@gmail.com>
-References: <539C13BA.5000106@gmail.com>
-Message-ID: <53A21D07.6040108@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 19 Jun 2014 01:16:18 +0200
+Subject: [Buildroot] [PATCH] gst-ffmpeg: fix build on armv6 without thumb2
+	(e.g. RaspberryPi)
+Message-ID: <1403133378-28417-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/06/14 11:19, Marco Trapanese wrote:
-> Hello,
-> I'm trying to play mp4 h264 video files on a RPi.
-> Attached there is the .config file.
-> When I try to play such a file I get this error:
-> 
-> Warning: "No decoder available for type 'video/x-h264,
-> stream-format=(string)avc, alignment=(string)au, level=(string)4,
-> profile=(string)main,
-> codec_data=(buffer)014d4028ffe10016274d4028a9180f0044fcb8035010101b6c2b5ef7c04001000428de09c8,
-> width=(int)1920, height=(int)1080, framerate=(fraction)25/1,
-> pixel-aspect-ratio=(fraction)1/1, parsed=(boolean)true'."
-> Error: "Your GStreamer installation is missing a plug-in."
-> 
-> Anyway I selected (and checked with gst-inspect) the x264parse plugin (from bad-
-> ones).
-> After a search on the web it seems I need also the gst-ffmpeg but this requires
-> libavcodec which cannot compile:
-> 
-> libavcodec/arm/ac3dsp_armv6.S: Assembler messages:
-> libavcodec/arm/ac3dsp_armv6.S:40: Error: selected processor does not support ARM
-> mode `movw r8,#0x1fe0'
+Cc: Marco Trapanese <marcotrapanese@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+I only build-tested this - Marco, please test it properly. Although, you
+probably don't even use ac3 so the failing code won't be executed.
 
- This is a bug in gst-ffmpeg's libavcodec: we explicitly pass
---enable-armv6 --disable-armv6t2
-to configure, but it still uses armv6t2 instructions (movw with 16-bit immediate).
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...3_01-arm-avoid-using-the-movw-instruction.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
 
- The upstream ffmpeg patch that fixes it is in
-http://git.videolan.org/?p=ffmpeg.git;a=commit;h=9a83adaf346bc5e38183427b2bd11084c11d1c8b
-
- I'll post a patch in a minute.
-
- Regards,
- Arnout
-
-> 
-> 
-> I was working on a 2014.05-git-00366-gba25b12-dirty version.
-> I tried on a newer one (2014.08-git-00302-g712414c) but there is the same error.
-> 
-> What am I missing?
-> 
-> Thanks!
-> Marco
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+new file mode 100644
+index 0000000..288dc3d
+--- /dev/null
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+@@ -0,0 +1,41 @@
++Date: Mon, 1 Aug 2011 20:21:04 +0300
++Subject: [libavcodec] arm: Avoid using the movw instruction needlessly
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf8
++Content-Transfer-Encoding: 8bit
++
++This fixes building for ARM11 without Thumb2.
++
++Signed-off-by: Martin Storsj? <martin@martin.st>
++
++[Arnout: backported to gst-ffmpeg, from ffmpeg 9a83adaf3]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
++index d3058ff..b6aee86 100644
++--- a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
+++++ b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
++@@ -37,7 +37,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
++         ldrb            r10, [r4], #1
++ 1:
++         ldrsh           r9,  [r0], #2                   @ mask[band]
++-        movw            r8,  #0x1fe0
+++        mov             r8,  #0xff0
++         sub             r9,  r9,  r12                   @   - snr_offset
++         mov             r11, r10
++         ldrb            r10, [r4], #1                   @ band_start_tab[band++]
++@@ -44,7 +44,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
++         subs            r9,  r9,  r5                    @   - floor
++         movlt           r9,  #0
++         cmp             r10, r3                         @   - end
++-        and             r9,  r9,  r8                    @   & 0x1fe0
+++        and             r9,  r9,  r8, lsl #1            @   & 0x1fe0
++         subgt           r8,  r3,  r11
++         suble           r8,  r10, r11
++         add             r9,  r9,  r5                    @   + floor => m
++--
++1.7.10.4
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.0
