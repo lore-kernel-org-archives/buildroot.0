@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 18 Jun 2014 08:26:52 +0200
+Date: Wed, 18 Jun 2014 08:27:41 +0200
 Subject: [Buildroot] [Patch v3] dcmtk: new package
-In-Reply-To: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
+In-Reply-To: <53A0E9AF.1020604@gmail.com>
 References: <1403049919-3275-1-git-send-email-tsmrnd0@gmail.com>
-Message-ID: <20140618082652.2da74ca0@free-electrons.com>
+ <53A0E9AF.1020604@gmail.com>
+Message-ID: <20140618082741.68a86b8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,103 +13,27 @@ To: buildroot@busybox.net
 
 Dear William Frost,
 
-On Wed, 18 Jun 2014 09:05:19 +0900, William Frost wrote:
-> [PATCH] Changes v2 -> v3:  (suggested by Thomas De Schampheleire):   
->  - removed version selection option, only stable release is used    
->  - added an empty new line between the comment header and the first
->    variable definition
->  - fixed license file reference    
->  - reduced and cleaning DCMTK_CFLAGS and DCMTK_CXXFLAGS declarations
->  - removed DCMTK_INSTALL_STAGING_OPT and DCMTK_INSTALL_TARGET_OPT
->  - unconditionally use --with-zlib
->  - removed duplicated build commands
+On Wed, 18 Jun 2014 10:21:51 +0900, William Frost wrote:
+> Sorry for the delay but I'm still having problems with git send-email. 
+> This is quite new to me.
+> I test:
+> git send-email --to tsmrnd0 at gmail.com *.patch
+> and I'm able to receive the email. but when I
+> git send-email --to buildroot at busybox.net *.patch
+> I don't see my email on the mailling list, but it is on the sent email.
+> I'm really sorry for using thunderbird again.
 
-All this text should not go into the commit log (otherwise it remains
-forever in the git history of the project). Instead, such changelog
-information should be...
+Your e-mail sent with git send-email was perfectly received on the
+mailing list:
 
-> 
-> Signed-off-by: William Frost <tsmrnd0@gmail.com>
-> ---
+From: William Frost <tsmrnd0@gmail.com>
+To: buildroot at busybox.net
+Subject: [Buildroot] [Patch v3] dcmtk: new package
+Date: Wed, 18 Jun 2014 09:05:19 +0900
+Sender: buildroot-bounces at busybox.net
+X-Mailer: git-send-email 1.8.1.4
 
-... here, i.e after the "---", or in a separate cover letter e-mail
-(see the Buildroot manual for more details about this).
-
-> +++ b/package/dcmtk/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_DCMTK
-> +	bool "dcmtk"
-> +	help
-> +	  DCMTK is a collection of libraries and applications implementing 
-> +	  large parts the DICOM standard. It includes software for examining, 
-> +	  constructing and converting DICOM image files, handling offline 
-> +	  media, sending and receiving images over a network connection, as 
-> +	  well as demonstrative image storage and worklist servers. DCMTK is 
-> +	  is written in a mixture of ANSI C and C++. It comes in complete 
-> +	  source code and is made available as "open source" software.
-> +
-> +	  http://dicom.offis.de/dcmtk.php.en
-> \ No newline at end of file
-
-There a missing newline at end of file, no?
-
-> diff --git a/package/dcmtk/dcmtk.mk b/package/dcmtk/dcmtk.mk
-> new file mode 100644
-> index 0000000..ae2c265
-> --- /dev/null
-> +++ b/package/dcmtk/dcmtk.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# dcmtk
-> +#
-> +################################################################################
-> +
-> +DCMTK_VERSION = $(call qstrip,"3.6.0")
-
-Huh, why would we have this qstrip here? Why not just:
-
-DCMTK_VERSION = 3.6.0
-
-> +DCMTK_SITE = http://dicom.offis.de/download/dcmtk/dcmtk360
-> +
-> +DCMTK_LICENSE = BSD
-> +DCMTK_LICENSE_FILES = COPYRIGHT
-> +DCMTK_INSTALL_STAGING = YES
-> +
-> +DCMTK_CFLAGS = $(TARGET_CFLAGS) -O -Wall
-> +DCMTK_CXXFLAGS = $(TARGET_CXXFLAGS) -O  -Wall
-
-These definitions are useless. <pkg>_CFLAGS and <pkg>_CXXFLAGS are not
-used by the package infrastructure.
-
-> +DCMTK_CONF_OPT = \
-> +	--disable-rpath --with-zlib \
-
-One line per option:
-
-DCMTK_CONF_OPT = \
-	--disable-rpath \
-	--with-zlib
-
-> +	ac_cv_my_c_rightshift_unsigned=no
-
-This should be in DCMTK_CONF_ENV.
-
-> +DCMTK_CONF_ENV = ARFLAGS=cru
-
-Maybe a short comment explaining why it's needed would be useful.
-
-> +DCMTK_MAKE_OPT	= DESTDIR=$(STAGING_DIR) install-lib
-
-Useless spaces before the equal sign. Also, this should be:
-
-DCMTK_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-lib
-
-Thought in this case, I wonder why we don't have a similar thing for
-the target installation.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
