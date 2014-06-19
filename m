@@ -1,72 +1,38 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 19 Jun 2014 12:06:57 +0200
-Subject: [Buildroot] [PATCH] system: move system.mk recipes inside the
- "target-finalize" rule
-In-Reply-To: <5399A300.6080708@mind.be>
-References: <1402390367-25418-1-git-send-email-fabio.porcedda@gmail.com>
- <20140610223358.69a70e6e@free-electrons.com>
- <CAHkwnC8N3v9ULfbqUeyjtCnb3Cpd6y=PPnwgjXBwSme6hywM5w@mail.gmail.com>
- <539884A4.5060705@mind.be>
- <CAHkwnC-dnWUJf=QR-6DEBwmkEoOoUuwDAWRj0EcQt5Cx8fOX0Q@mail.gmail.com>
- <CAHkwnC_exQsbt7e9CJrzO6FA8HQGjJMWmVOkevUxjSYpHbdvJw@mail.gmail.com>
- <20140612095615.1a20e62e@free-electrons.com>
- <CAHkwnC9BWE=Mt2d8wqFK6pyzW99QFtuvFC=mixfh+tbpgzCYwQ@mail.gmail.com>
- <20140612102339.29e14cf3@free-electrons.com> <5399A300.6080708@mind.be>
-Message-ID: <CAHkwnC_-nDxfa5a-DvYzpLvnwCnoofTS+pN=n2rsv3Le=SMFHQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 19 Jun 2014 07:26:48 -0300
+Subject: [Buildroot] [PATCH] tcpreplay: use pcap-config
+Message-ID: <1403173608-15736-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 12, 2014 at 2:54 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 06/12/14 10:23, Thomas Petazzoni wrote:
->> Dear Fabio Porcedda,
->>
->> On Thu, 12 Jun 2014 10:05:41 +0200, Fabio Porcedda wrote:
->>
->>>> I think one of the concern with the hook thing was that the hooks would
->>>> be spread all over the Buildroot tree. To mitigate this concern, maybe
->>>> we could have a naming convention for those hooks that they should all
->>>> start with TARGET_FINALIZE_<something>, like
->>>> TARGET_FINALIZE_PURGE_LOCALES ?
->>>
->>> Ok fine, i like it, maybe using TARGET_FINALIZE_HOOK_PURGE_LOCALES is
->>> too verbose?
->>
->> If anything, the "HOOK" should be at the end. Not sure it's needed
->> though if we have all variables prefixed by TARGET_FINALIZE_<something>.
->>
->> That being said, now that I can think of it, we can anyway always grep
->> all the hooks by grepping for "TARGET_FINALIZE_HOOKS", which will
->> return all files doing:
->>
->> TARGET_FINALIZE_HOOKS += <something>
->>
->> So in the end, the name of make function being registered doesn't
->> matter much, but still for consistency, I think it's good to have a
->> common prefix for all of them.
->
->  Well, the main reason to use the hooks approach is to be able to spread it out
-> over different makefiles, and in particular to be able to do package-specific
-> target-finalize things. Therefore, the hooks themselves should be named
-> <PKGNAME>_FOO_BAR.
->
->  Also, for the hooks that are currently in use, we don't usually include HOOK in
-> the name.
+Since other libs can be pulled in by libpcap switch to using
+pcap-config, it's the correct way and simpler. Fixes:
+http://autobuild.buildroot.net/results/c02/c023bacd35e9ef1addeb881cd3d572f97f9b4b56/
 
-Following what we usually done for hooks, i'm going to call it:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/tcpreplay/tcpreplay.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-PURGE_LOCALES
-
-SYSTEM_GENERIC_SECURETTY
-SYSTEM_GENERIC_HOSTNAME
-...
-
-BTW: Wouldn't better to change the usual name we use for hooks, maybe
-adding "_HOOK" at the end of name?
-I've found only four hooks that have "HOOK" in the name.
-
-Best regards
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index 2ee224e..0f2f2e6 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -15,10 +15,8 @@ TCPREPLAY_CONF_ENV = \
+ TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
+ TCPREPLAY_DEPENDENCIES = libpcap
+ 
+-# libpcap may depend on symbols in libdbus-1 and libusb as well
+-TCPREPLAY_LIBS = -lpcap \
+-	$(if $(BR2_PACKAGE_DBUS),-ldbus-1) \
+-	$(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
++# libpcap may depend on symbols in other libs
++TCPREPLAY_LIBS = $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --libs)
+ TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)' \
+ 	LIBS="$(TCPREPLAY_LIBS)"
+ 
 -- 
-Fabio Porcedda
+1.8.5.5
