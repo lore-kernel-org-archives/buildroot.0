@@ -1,38 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 19 Jun 2014 07:26:48 -0300
-Subject: [Buildroot] [PATCH] tcpreplay: use pcap-config
-Message-ID: <1403173608-15736-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 19 Jun 2014 14:37:04 +0200
+Subject: [Buildroot] [PATCH 0/3] Bump packages before adding libgtk3
+In-Reply-To: <20140619080247.GA10736@pc-eric>
+References: <1403108345-12404-1-git-send-email-hadrien.boutteville@gmail.com>
+ <20140619080247.GA10736@pc-eric>
+Message-ID: <20140619143704.14a3fa8e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since other libs can be pulled in by libpcap switch to using
-pcap-config, it's the correct way and simpler. Fixes:
-http://autobuild.buildroot.net/results/c02/c023bacd35e9ef1addeb881cd3d572f97f9b4b56/
+Dear Eric Le Bihan,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/tcpreplay/tcpreplay.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On Thu, 19 Jun 2014 10:02:49 +0200, Eric Le Bihan wrote:
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 2ee224e..0f2f2e6 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -15,10 +15,8 @@ TCPREPLAY_CONF_ENV = \
- TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
- TCPREPLAY_DEPENDENCIES = libpcap
- 
--# libpcap may depend on symbols in libdbus-1 and libusb as well
--TCPREPLAY_LIBS = -lpcap \
--	$(if $(BR2_PACKAGE_DBUS),-ldbus-1) \
--	$(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
-+# libpcap may depend on symbols in other libs
-+TCPREPLAY_LIBS = $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --libs)
- TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)' \
- 	LIBS="$(TCPREPLAY_LIBS)"
- 
+> I also have a WIP packaging for libgtk3 [1]
+
+Aah, ok. Then please sync with Hadrien on how to upstream this and
+avoid duplicated work.
+
+>, but I have not sent the
+> patch because libgtk3 depends on at-spi2-core. This package performs
+> some non-cross-compilable checks in its configure script via this m4
+> macro, defined in acinclude.m4:
+> 
+>   DBIND_CHECK_ALIGNOF(dbus_bool_t)
+> 
+> It fails when cross-compiling because it relies on AC_TRY_RUN() [2].
+> 
+> The only (ugly) solution I found was hardcoding some values depending
+> on the architecture [3]:
+> 
+>   ifeq ($(BR2_i386), y)
+>   AT_SPI2_CORE_CONF_ENV = ac_cv_alignof_char=1 \
+>   	ac_cv_alignof_double=4 \
+>   	ac_cv_alignof_dbind_pointer=4 \
+>   	ac_cv_alignof_dbind_struct=1 \
+>   	ac_cv_alignof_dbus_bool_t=4 \
+>   	ac_cv_alignof_dbus_int16_t=2 \
+>   	ac_cv_alignof_dbus_int32_t=4 \
+>   	ac_cv_alignof_dbus_int64_t=4
+>   endif
+> 
+> How do you deal with this problem?
+
+AC_CHECK_ALIGNOF() ?
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
