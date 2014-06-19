@@ -1,62 +1,84 @@
 From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Thu, 19 Jun 2014 18:13:36 +0200
-Subject: [Buildroot] [PATCH 1/2] icu: Delete inapropriate flag at link
-Message-ID: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
+Date: Thu, 19 Jun 2014 18:13:37 +0200
+Subject: [Buildroot] [PATCH 2/2] devmem2: fix output when
+	_FILE_OFFSET_BITS=64
+In-Reply-To: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <1403194417-19986-2-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
+From: Colin Didier <colin.didier@devialet.com>
 
-Theses flags may cause libicudata to not be loaded on ARM EABIHF
-because it would be built for ARM EABI only.
+When built with _FILE_OFFSET_BITS=64, off_t becomes an long long int
+and was printed as an unsigned int which lead to a garbled output.
 
+Signed-off-by: Colin Didier <colin.didier@devialet.com>
 Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
-Cc: Thomas Petazzoni  <thomas.petazzoni@free-electrons.com>
 ---
- .../icu/icu-004-link-icudata-as-data-only.patch    | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/icu/icu-004-link-icudata-as-data-only.patch
+ .../devmem2-0001-be-coherent-in-type-usage.patch   | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/devmem2/devmem2-0001-be-coherent-in-type-usage.patch
 
-diff --git a/package/icu/icu-004-link-icudata-as-data-only.patch b/package/icu/icu-004-link-icudata-as-data-only.patch
+diff --git a/package/devmem2/devmem2-0001-be-coherent-in-type-usage.patch b/package/devmem2/devmem2-0001-be-coherent-in-type-usage.patch
 new file mode 100644
-index 0000000..b69cec1
+index 0000000..14c99a2
 --- /dev/null
-+++ b/package/icu/icu-004-link-icudata-as-data-only.patch
-@@ -0,0 +1,32 @@
-+From d5d0c4bb7cc9aa4a132ec0bea13255aee50c1cf9 Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
-+Date: Fri, 6 Jun 2014 14:55:58 +0200
-+Subject: [PATCH] link icudata as data only
++++ b/package/devmem2/devmem2-0001-be-coherent-in-type-usage.patch
+@@ -0,0 +1,49 @@
++From 15eae3dbb3d6824a0fd478e2ce0fe879496bb72c Mon Sep 17 00:00:00 2001
++From: Colin Didier <colin.didier@devialet.com>
++Date: Thu, 19 Jun 2014 16:58:19 +0200
++Subject: [PATCH] be coherent in type usage
 +
-+This patch came straight from Debian.
-+It fix a trouble when libicudata would not respect some flags and would
-+for example end up being built for ARM EABI instead of ARM EABIHF
++- no need to use off_t because it is read from strtoul()
++- print unsigned int type correctly
 +
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
++When built with _FILE_OFFSET_BITS=64, off_t becomes an long long int
++and was printed as an unsigned int which lead to a garbled output.
++
++Signed-off-by: Colin Didier <colin.didier@devialet.com>
 +---
-+ source/config/mh-linux | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ devmem2.c | 7 +++----
++ 1 file changed, 3 insertions(+), 4 deletions(-)
 +
-+diff --git a/source/config/mh-linux b/source/config/mh-linux
-+index 531a3b2..5a2a7c4 100644
-+--- a/source/config/mh-linux
-++++ b/source/config/mh-linux
-+@@ -21,7 +21,9 @@ LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN
-+ LD_RPATH_PRE = -Wl,-rpath,
++diff --git a/devmem2.c b/devmem2.c
++index 7732ecb..1ae06ef 100644
++--- a/devmem2.c
+++++ b/devmem2.c
++@@ -58,8 +58,7 @@
++ int main(int argc, char **argv) {
++     int fd;
++     void *map_base, *virt_addr;
++-	unsigned long read_result, writeval;
++-	off_t target;
+++	unsigned long target, read_result, writeval;
++ 	int access_type = 'w';
 +
-+ ## These are the library specific LDFLAGS
-+-LDFLAGSICUDT=-nodefaultlibs -nostdlib
-++#LDFLAGSICUDT=-nodefaultlibs -nostdlib
-++# Debian change: linking icudata as data only causes too many problems.
-++LDFLAGSICUDT=
++ 	if(argc < 2) {
++@@ -101,7 +100,7 @@ int main(int argc, char **argv) {
++ 			fprintf(stderr, "Illegal data type '%c'.\n", access_type);
++ 			exit(2);
++ 	}
++-    printf("Value at address 0x%X (%p): 0x%X\n", target, virt_addr, read_result);
+++    printf("Value@address 0x%lX (%p): 0x%lX\n", target, virt_addr, read_result);
++     fflush(stdout);
 +
-+ ## Compiler switch to embed a library name
-+ # The initial tab in the next line is to prevent icu-config from reading it.
++ 	if(argc > 3) {
++@@ -120,7 +119,7 @@ int main(int argc, char **argv) {
++ 				read_result = *((unsigned long *) virt_addr);
++ 				break;
++ 		}
++-		printf("Written 0x%X; readback 0x%X\n", writeval, read_result);
+++		printf("Written 0x%lX; readback 0x%lX\n", writeval, read_result);
++ 		fflush(stdout);
++ 	}
++
 +--
-+2.0.0.rc2
++2.0.0
 +
 --
 2.0.0
