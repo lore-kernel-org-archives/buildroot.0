@@ -1,46 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 19 Jun 2014 23:25:42 +0200
-Subject: [Buildroot] [PATCH 1/1] Adding pifmrds package
-In-Reply-To: <1403210695-7526-1-git-send-email-limpens@gmail.com>
-References: <1403210695-7526-1-git-send-email-limpens@gmail.com>
-Message-ID: <20140619212542.GE3534@free.fr>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Thu, 19 Jun 2014 23:27:12 +0200
+Subject: [Buildroot] [PATCH v2 0/3] Bump packages before adding libgtk3
+Message-ID: <1403213235-16624-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Hello all,
 
-I forgot a few things...
+I'm currently packaging libgtk3 (work in progress, patch soon), and
+this series bumps pango and libglib2 as it is necessary for libgtk3, and
+add Freetype support to Cairo.
 
-On 2014-06-19 22:44 +0200, Eric Limpens spake thusly:
-> Signed-off-by: Eric Limpens <limpens@gmail.com>
-[--SNIP--]
-> diff --git a/package/pifmrds/pifmrds.mk b/package/pifmrds/pifmrds.mk
-> new file mode 100644
-> index 0000000..5a91089
-> --- /dev/null
-> +++ b/package/pifmrds/pifmrds.mk
-> @@ -0,0 +1,18 @@
-> +PIFMRDS_VERSION = c67306ea9b8d827f45e0d90279d367e97119bcb1
-> +PIFMRDS_SITE = $(call github,ChristopheJacquet,PiFmRds,$(PIFMRDS_VERSION))
-> +PIFMRDS_INSTALL_TARGET = YES
-> +PIFMRDS_AUTORECONF = YES
-> +PIFMRDS_DEPENDENCIES += libsndfile
-
-You forgot the licensing terms:
-
-    PIFMRDS_LICENSE = GPLv3+
-    PIFMRDS_LICENSE_FILES = LICENSE
+This series is juste compiled-tested, so it's mostly an RFC. I will do
+running tests with libgtk3 and libgtk2.
 
 Regards,
-Yann E. MORIN.
+
+Hadrien
+
+---
+Changes v1 -> v2:
+  - add comments to patches inside Buildroot (Thomas De S.)
+---
+
+Hadrien Boutteville (3):
+  libglib2: bump to version 2.40.0
+  pango: bump to version 1.36.3
+  cairo: add freetype dependency for freetype support
+
+ package/cairo/cairo.mk                             |   7 +
+ ...ror-format-string-errors-from-mismatched-.patch |  56 ---
+ package/libglib2/libglib2-0002-no-gtk-doc.patch    |  11 +
+ package/libglib2/libglib2.mk                       |   4 +-
+ package/pango/Config.in                            |   1 +
+ package/pango/pango-0001-no-tests.patch            |  21 +
+ package/pango/pango-0002-no-gtk-doc.patch          |  11 +
+ package/pango/pango-no-const-return.patch          | 475 ---------------------
+ package/pango/pango-no-tests.patch                 |  22 -
+ package/pango/pango.mk                             |  19 +-
+ 10 files changed, 63 insertions(+), 564 deletions(-)
+ delete mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+ create mode 100644 package/libglib2/libglib2-0002-no-gtk-doc.patch
+ create mode 100644 package/pango/pango-0001-no-tests.patch
+ create mode 100644 package/pango/pango-0002-no-gtk-doc.patch
+ delete mode 100644 package/pango/pango-no-const-return.patch
+ delete mode 100644 package/pango/pango-no-tests.patch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.0
