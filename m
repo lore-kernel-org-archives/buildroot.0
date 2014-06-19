@@ -1,40 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jun 2014 13:19:37 +0200
-Subject: [Buildroot] [git commit] tcpreplay: use pcap-config
-Message-ID: <20140619155933.60B689D057@busybox.osuosl.org>
+Date: Thu, 19 Jun 2014 17:50:39 +0200
+Subject: [Buildroot] [git commit] kmod: bump version
+Message-ID: <20140619155933.6E1789D045@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b117ba41f1396f9aa5ee28dac8519ff6613cfd56
+commit: http://git.buildroot.net/buildroot/commit/?id=c85db1ed49ee102ceefa6273c833c3b61104e5b6
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since other libs can be pulled in by libpcap switch to using
-pcap-config, it's the correct way and simpler. Fixes:
-http://autobuild.buildroot.net/results/c02/c023bacd35e9ef1addeb881cd3d572f97f9b4b56/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcpreplay/tcpreplay.mk |    6 ++----
- 1 files changed, 2 insertions(+), 4 deletions(-)
+ package/kmod/kmod.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index 2ee224e..0f2f2e6 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -15,10 +15,8 @@ TCPREPLAY_CONF_ENV = \
- TCPREPLAY_CONF_OPT = --with-libpcap=$(STAGING_DIR)/usr
- TCPREPLAY_DEPENDENCIES = libpcap
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index 7cc2d65..a60b4c0 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# libpcap may depend on symbols in libdbus-1 and libusb as well
--TCPREPLAY_LIBS = -lpcap \
--	$(if $(BR2_PACKAGE_DBUS),-ldbus-1) \
--	$(if $(BR2_PACKAGE_LIBUSB),-lusb-1.0)
-+# libpcap may depend on symbols in other libs
-+TCPREPLAY_LIBS = $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --libs)
- TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close='$(TCPREPLAY_LIBS)' \
- 	LIBS="$(TCPREPLAY_LIBS)"
- 
+-KMOD_VERSION = 17
++KMOD_VERSION = 18
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod/
+ KMOD_INSTALL_STAGING = YES
