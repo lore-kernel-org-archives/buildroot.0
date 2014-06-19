@@ -1,81 +1,105 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 19 Jun 2014 21:42:29 +0200
-Subject: [Buildroot] [PATCH 3 of 3] pkgconf: don't double prefix lib/include
- paths with sysroot
-In-Reply-To: <patchbomb.1403206946@localhost>
-References: <patchbomb.1403206946@localhost>
-Message-ID: <5790ded0a7870de50d29.1403206949@localhost>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 19 Jun 2014 22:10:47 +0200
+Subject: [Buildroot] [PATCH] Makefile: document make <package>-dirclean
+In-Reply-To: <409511316.213968.1403203738913.JavaMail.root@mail>
+References: <20140619182648.GB3534@free.fr>
+ <409511316.213968.1403203738913.JavaMail.root@mail>
+Message-ID: <20140619201047.GC3534@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A .pc file could contain statements of the form:
-    -L/usr/lib
-but also:
-    -L/path/to/sysroot/usr/lib
+Vivien, All,
 
-The latter form typically occurs when the dependency was configured with a
-statement like --with-xxx=$(STAGING_DIR)/usr.
+On 2014-06-19 14:48 -0400, Vivien Didelot spake thusly:
+> > > @@ -849,6 +849,7 @@ help:
+> > >  	@echo '  toolchain              - build toolchain'
+> > >  	@echo '  <package>-rebuild      - force recompile <package>'
+> > >  	@echo '  <package>-reconfigure  - force reconfigure <package>'
+> > > +	@echo '  <package>-dirclean     - remove the whole <package>
+> > > build directory'
+[--SNIP--]
+> > I believe we should only document the _very important_ commands in
+> > the
+> > 'make help' text, and direct the user to the manual for the others.
+> 
+> Having only a portion of commands is confusing.
+> 
+> I would say, either put every package commands in `make help` or
+> no `make <package>-foo` commands at all.
 
-pkgconf only expects the first form, and prefixes it with the specified
-sysroot. However, this strategy would result in a double sysroot in the
-second case:
-    -L/path/to/sysroot/path/to/sysroot/usr/lib
+Well, I think we should still document a few important, usefull actions;
+see below.
 
-This patch checks for the presence of the sysroot in the specified -L or -I
-directives, and only adds the sysroot when not already present.
+> > E.g.
+> > something like:
+> > 
+> >     $ make help
+> >     [...]
+> >     Build:
+> >       all                    - make world
+> >       toolchain              - build toolchain
+> >       <package>-rebuild      - force recompile <package>
+> >       <package>-reconfigure  - force reconfigure <package>
+> >       <package>-graph-depends    - generate graph of the dependency
+> >       tree for package
+> >         See the manual
+> >         [http://buildroot.net/downloads/manual/manual.html] for
+> >         the complete list of per-package build actions.
+> 
+> I'd remove the <package>-* command from `make help` and point to the
+> in-tree documentation instead (docs/manual/rebuilding-packages.txt).
 
-Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
+Note: everything in docs/manual/ is the source of the (on-line) manual.
+Although readable as-is, it only gets really properly readable once
+rendered into the manual.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+So, I would not point to the content of docs/manual/ but to the on-line
+manual, instead.
 
----
- package/pkgconf/pkgconf-02-fix-double-sysroot.patch |  40 +++++++++++++++
- 1 files changed, 40 insertions(+), 0 deletions(-)
+> That'd look like:
+> 
+>     $ make help
+>     [...]
+>     Build:
+>       all (or "world"?)      - make world
+>       toolchain              - build toolchain
+>       <package>              - compile only <package>
+>       <package>-<action>     - See the manual [docs/manual/rebuilding-packages.txt]
+>                                for the list of per-package build actions.
+>     [...]
+> 
+> What do you think?
 
-diff -r 9bbc6f00bb24 -r 5790ded0a787 package/pkgconf/pkgconf-02-fix-double-sysroot.patch
---- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/package/pkgconf/pkgconf-02-fix-double-sysroot.patch	Thu Jun 19 21:16:17 2014 +0200
-@@ -0,0 +1,40 @@
-+pkgconf: don't double prefix lib/include paths with sysroot
-+
-+A .pc file could contain statements of the form:
-+    -L/usr/lib
-+but also:
-+    -L/path/to/sysroot/usr/lib
-+
-+The latter form typically occurs when the dependency was configured with a
-+statement like --with-xxx=$(STAGING_DIR)/usr.
-+
-+pkgconf only expects the first form, and prefixes it with the specified
-+sysroot. However, this strategy would result in a double sysroot in the
-+second case:
-+    -L/path/to/sysroot/path/to/sysroot/usr/lib
-+
-+This patch checks for the presence of the sysroot in the specified -L or -I
-+directives, and only adds the sysroot when not already present.
-+
-+Upstream-status: will be submitted
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+
-+---
-+ main.c |  3 ++-
-+ 1 files changed, 2 insertions(+), 1 deletions(-)
-+
-+
-+diff -r 16865d81819f -r 9d8e1737687f main.c
-+--- a/main.c	Mon Jun 16 19:47:52 2014 +0200
-++++ b/main.c	Mon Jun 16 19:48:15 2014 +0200
-+@@ -82,7 +82,8 @@
-+ 	{
-+ 	case 'L':
-+ 	case 'I':
-+-		return sysroot_dir;
-++		if (strncmp(sysroot_dir, frag->data, strlen(sysroot_dir)) != 0)
-++			return sysroot_dir;
-+ 	default:
-+ 		break;
-+ 	}
+'world' is an internal goal. The entry point is the 'all' gaol, and also the
+default goal if no other is specified. I think we should not document
+'world'.
+
+Adding '<package>' is OK, but we should keep 'rebuild', 'reconfigure'
+and 'graph-depends':
+  - we want to prominently advertise the mere existence of 'graph-depends'
+    to the unsuspecting user,
+  - 'rebuild' and 'reconfigure' are important enough so we probably want
+    to maintain them.
+
+With those three acting as a template, and the pointer to the manual,
+the user should (hopefully) easily:
+  - find the other actions (from the manual)
+  - remember how to toggle those actions (by memory and pattern matching
+    with the actions visible in the 'make help' output)
+
+But I usually suck at designing user-centric UI. One could say I'm a
+weird, uncommon user with a tortured, twisted mind. ;-]
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
