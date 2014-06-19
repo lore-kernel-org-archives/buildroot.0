@@ -1,31 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jun 2014 08:27:04 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain: Add support for Sourcery
- Codebench Standard
-In-Reply-To: <1403133748-17745-1-git-send-email-romain.naour@openwide.fr>
-References: <1403133748-17745-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <20140619082704.5cda9923@free-electrons.com>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Thu, 19 Jun 2014 09:35:00 +0200
+Subject: [Buildroot] libgstmediaplayer
+In-Reply-To: <53A27332.6040509@gmail.com>
+References: <53A27332.6040509@gmail.com>
+Message-ID: <53A292A4.8040800@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
 
-On Thu, 19 Jun 2014 01:22:28 +0200, Romain Naour wrote:
-> Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+I try to answer by myself: it won't work because gt5 supports only 
+gstreamer 0.1. I rebuilding all with gstreamer 0.1.
 
-Thanks. Could you improve a bit the commit log to explain *why* those
-changes are needed? I don't have access to the Sourcery Codebench
-Standard toolchains (though I'm trying to arrange that), so I can't
-review the patch since I have no idea what are the differences between
-the Standard toolchains and the Lite toolchains.
+By the way it seems changing the two lines in 
+libavcodec/arm/ac3dsp_armv6.S as suggested by Arnout Vandecappelle did 
+the trick. Now libavcodec is compiling.
 
-Thanks,
+Regards
+Marco
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+
+Il 19/06/2014 07:20, Marco Trapanese ha scritto:
+> Hello,
+> in order to enable the QtMultimedia module and to avoid this error 
+> message:
+>
+> [ defaultServiceProvider::requestService(): no service found for - 
+> "org.qt-project.qt.mediaplayer" ]
+>
+> it needs to compile libgstmediaplayer.so.
+>
+>
+> I'm not able to find which buildroot package I have to select in order 
+> to compile that library!
+> I was expecting it should be built after selecting Qt5 > Extra options 
+> > gstreamer.
+>
+> Thanks in advance
+> Marco
+>
