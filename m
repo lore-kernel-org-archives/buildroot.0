@@ -1,24 +1,103 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 19 Jun 2014 17:59:13 +0200
-Subject: [Buildroot] [PATCH 0/2] strace: fix ptrace {PEEK,
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Jun 2014 17:58:54 +0200
+Subject: [Buildroot] [git commit] strace: fix ptrace {PEEK,
 	POKE}USER arguments decoding on xtensa
-In-Reply-To: <1403108520-26869-1-git-send-email-jcmvbkbc@gmail.com> (Max
- Filippov's message of "Wed, 18 Jun 2014 20:21:58 +0400")
-References: <1403108520-26869-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <874mzg28mm.fsf@dell.be.48ers.dk>
+Message-ID: <20140619155933.890689D045@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=27a1f09f7b931cac504f7713b844ef56d0444917
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi,
- > this series adds serial numbers to existing strace patches and backports
- > an xtensa-specific fix for {PEEK,POKE}USER register number decoding.
+Backported from: 57fac759ca0945f5608ed6a2228c697f8fb67cd6
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...xtensa-sort-values-in-struct_user_offsets.patch |   76 ++++++++++++++++++++
+ 1 files changed, 76 insertions(+), 0 deletions(-)
 
-Committed series, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch b/package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch
+new file mode 100644
+index 0000000..0ef038d
+--- /dev/null
++++ b/package/strace/strace-04-xtensa-sort-values-in-struct_user_offsets.patch
+@@ -0,0 +1,76 @@
++From 57fac759ca0945f5608ed6a2228c697f8fb67cd6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Wed, 18 Jun 2014 06:04:06 +0400
++Subject: [PATCH] xtensa: sort values in struct_user_offsets
++
++Otherwise ptrace syscall argument decoding is wrong:
++  ptrace(PTRACE_PEEKUSER, 296, syscall_nr, [0x4048eb]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, syscall_nr, [0x3fa6cd30]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, syscall_nr, [0x8040676d]) = 0
++instead of
++  ptrace(PTRACE_PEEKUSER, 296, pc, [0x4048eb]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, a1, [0x3fa6cd30]) = 0
++  ptrace(PTRACE_PEEKUSER, 296, a0, [0x8040676d]) = 0
++
++* process.c (struct_user_offsets) [XTENSA]: Sort values.
++---
++Backported from: 57fac759ca0945f5608ed6a2228c697f8fb67cd6
++
++ process.c | 34 +++++++++++++++++-----------------
++ 1 file changed, 17 insertions(+), 17 deletions(-)
++
++diff --git a/process.c b/process.c
++index a880f9e..2cd0f01 100644
++--- a/process.c
+++++ b/process.c
++@@ -1865,6 +1865,23 @@ const struct xlat struct_user_offsets[] = {
++ 	{ 4*33, "sr" },
++ #endif
++ #ifdef XTENSA
+++	{ REG_A_BASE,           "a0"            },
+++	{ REG_A_BASE+1,         "a1"            },
+++	{ REG_A_BASE+2,         "a2"            },
+++	{ REG_A_BASE+3,         "a3"            },
+++	{ REG_A_BASE+4,         "a4"            },
+++	{ REG_A_BASE+5,         "a5"            },
+++	{ REG_A_BASE+6,         "a6"            },
+++	{ REG_A_BASE+7,         "a7"            },
+++	{ REG_A_BASE+8,         "a8"            },
+++	{ REG_A_BASE+9,         "a9"            },
+++	{ REG_A_BASE+10,        "a10"           },
+++	{ REG_A_BASE+11,        "a11"           },
+++	{ REG_A_BASE+12,        "a12"           },
+++	{ REG_A_BASE+13,        "a13"           },
+++	{ REG_A_BASE+14,        "a14"           },
+++	{ REG_A_BASE+15,        "a15"           },
+++	{ REG_PC,               "pc"            },
++ 	{ SYSCALL_NR,           "syscall_nr"    },
++ 	{ REG_AR_BASE,          "ar0"           },
++ 	{ REG_AR_BASE+1,        "ar1"           },
++@@ -1937,23 +1954,6 @@ const struct xlat struct_user_offsets[] = {
++ 	{ REG_WB,               "wb"            },
++ 	{ REG_WS,               "ws"            },
++ 	{ REG_PS,               "ps"            },
++-	{ REG_PC,               "pc"            },
++-	{ REG_A_BASE,           "a0"            },
++-	{ REG_A_BASE+1,         "a1"            },
++-	{ REG_A_BASE+2,         "a2"            },
++-	{ REG_A_BASE+3,         "a3"            },
++-	{ REG_A_BASE+4,         "a4"            },
++-	{ REG_A_BASE+5,         "a5"            },
++-	{ REG_A_BASE+6,         "a6"            },
++-	{ REG_A_BASE+7,         "a7"            },
++-	{ REG_A_BASE+8,         "a8"            },
++-	{ REG_A_BASE+9,         "a9"            },
++-	{ REG_A_BASE+10,        "a10"           },
++-	{ REG_A_BASE+11,        "a11"           },
++-	{ REG_A_BASE+12,        "a12"           },
++-	{ REG_A_BASE+13,        "a13"           },
++-	{ REG_A_BASE+14,        "a14"           },
++-	{ REG_A_BASE+15,        "a15"           },
++ #endif
++ 
++ 	/* Other fields in "struct user" */
++-- 
++1.8.1.4
++
