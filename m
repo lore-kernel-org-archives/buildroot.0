@@ -1,51 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 19 Jun 2014 14:37:04 +0200
-Subject: [Buildroot] [PATCH 0/3] Bump packages before adding libgtk3
-In-Reply-To: <20140619080247.GA10736@pc-eric>
-References: <1403108345-12404-1-git-send-email-hadrien.boutteville@gmail.com>
- <20140619080247.GA10736@pc-eric>
-Message-ID: <20140619143704.14a3fa8e@free-electrons.com>
+Date: Thu, 19 Jun 2014 14:40:22 +0200
+Subject: [Buildroot] [ANNOUNCE] Autobuilder script available,
+ join the autobuilder effort!
+In-Reply-To: <CAAXf6LXqEH7qu_u_XkWcGODETc5wv8WsRxUyAAASoH8kTmObkQ@mail.gmail.com>
+References: <20140614212341.5306ead8@free-electrons.com>
+ <CAAXf6LWy4ysqMhrQ=FMZszUoyYzd_711VfCCgSUTO_WwTQ8vbA@mail.gmail.com>
+ <20140617130025.664a1df6@free-electrons.com>
+ <CAAXf6LVfQJvMQjHdvD+M_3HVLtD=h_bVoq=x8UP1WrPDYGc_Uw@mail.gmail.com>
+ <20140618102531.34c6f3ea@free-electrons.com>
+ <CAAXf6LXqEH7qu_u_XkWcGODETc5wv8WsRxUyAAASoH8kTmObkQ@mail.gmail.com>
+Message-ID: <20140619144022.54520011@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Dear Thomas De Schampheleire,
 
-On Thu, 19 Jun 2014 10:02:49 +0200, Eric Le Bihan wrote:
+On Wed, 18 Jun 2014 13:51:27 +0200, Thomas De Schampheleire wrote:
 
-> I also have a WIP packaging for libgtk3 [1]
+> In the mean time another such issue popped up, here is the output:
+> 
+> make: Entering directory `/repo/tdescham/autobuild/workdir/instance-0/buildroot'
+> package/luajit/luajit.mk:67: *** Configuration error: both "luajit"
+> and "lua" are selected as providers for virtual package
+> "luainterpreter". Only one provider can be selected at a time. Please
+> fix your configuration.  Stop.
+> make: Leaving directory `/repo/tdescham/autobuild/workdir/instance-0/buildroot'
+> [Wed, 18 Jun 2014 13:42:43] ERROR: cannot savedefconfig
 
-Aah, ok. Then please sync with Hadrien on how to upstream this and
-avoid duplicated work.
+Weird, why is this error happening at "savedefconfig" time ?
 
->, but I have not sent the
-> patch because libgtk3 depends on at-spi2-core. This package performs
-> some non-cross-compilable checks in its configure script via this m4
-> macro, defined in acinclude.m4:
-> 
->   DBIND_CHECK_ALIGNOF(dbus_bool_t)
-> 
-> It fails when cross-compiling because it relies on AC_TRY_RUN() [2].
-> 
-> The only (ugly) solution I found was hardcoding some values depending
-> on the architecture [3]:
-> 
->   ifeq ($(BR2_i386), y)
->   AT_SPI2_CORE_CONF_ENV = ac_cv_alignof_char=1 \
->   	ac_cv_alignof_double=4 \
->   	ac_cv_alignof_dbind_pointer=4 \
->   	ac_cv_alignof_dbind_struct=1 \
->   	ac_cv_alignof_dbus_bool_t=4 \
->   	ac_cv_alignof_dbus_int16_t=2 \
->   	ac_cv_alignof_dbus_int32_t=4 \
->   	ac_cv_alignof_dbus_int64_t=4
->   endif
-> 
-> How do you deal with this problem?
+> We already talked about such problems before, did you already have a
+> solution implemented in the original autobuild instance?
 
-AC_CHECK_ALIGNOF() ?
+No, I did not implement anything like that in the original autobuild
+instance, so I'm wondering why I don't see the problem. Maybe it gets
+ignored by improper error checking or something.
 
 Thomas
 -- 
