@@ -1,76 +1,71 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Fri, 20 Jun 2014 15:57:37 -0500
-Subject: [Buildroot] [PATCH 1/1] atftp: new package
-Message-ID: <1403297857-3987-1-git-send-email-ryan.barnett@rockwellcollins.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Jun 2014 23:01:46 +0200
+Subject: [Buildroot] [PATCH 1/5] freescale-imx: bump to version
+	3.10.17-1.0.0
+In-Reply-To: <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
+References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
+ <1403150639-29382-2-git-send-email-bisson.gary@gmail.com>
+ <20140619162009.GA3534@free.fr>
+ <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
+Message-ID: <20140620210146.GB26745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
----
- package/Config.in       |    1 +
- package/atftp/Config.in |    9 +++++++++
- package/atftp/atftp.mk  |   22 ++++++++++++++++++++++
- 3 files changed, 32 insertions(+)
- create mode 100644 package/atftp/Config.in
- create mode 100644 package/atftp/atftp.mk
+Gary, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index f43e985..cd78ccb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -895,6 +895,7 @@ menu "Networking applications"
- 	source "package/argus/Config.in"
- 	source "package/arptables/Config.in"
- 	source "package/autossh/Config.in"
-+	source "package/atftp/Config.in"
- 	source "package/avahi/Config.in"
- 	source "package/axel/Config.in"
- 	source "package/bcusdk/Config.in"
-diff --git a/package/atftp/Config.in b/package/atftp/Config.in
-new file mode 100644
-index 0000000..65c14d8
---- /dev/null
-+++ b/package/atftp/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_ATFTP
-+	bool "atftp"
-+	help
-+	  atftp is a client/server implementation of the TFTP
-+	  protocol that implements RFCs 1350, 2090, 2347, 2348,
-+	  and 2349. The server is multi-threaded and the client
-+	  presents a friendly interface using libreadline.
-+
-+	  http://sourceforge.net/projects/atftp/
-diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
-new file mode 100644
-index 0000000..27fa0df
---- /dev/null
-+++ b/package/atftp/atftp.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# atftp
-+#
-+################################################################################
-+
-+ATFTP_VERSION  = 0.7.1
-+ATFTP_SITE = http://sourceforge.net/projects/atftp/files/
-+ATFTP_LICENSE = GPLv2
-+ATFTP_LICENSE_FILES = LICENSE
-+
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+ATFTP_DEPENDENCIES += readline
-+ATFTP_CONF_OPT += --enable-libreadline
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PCRE),y)
-+ATFTP_DEPENDENCIES += pcre
-+ATFTP_CONF_OPT += --enable-libpcre
-+endif
-+
-+$(eval $(autotools-package))
+On 2014-06-19 19:40 -0700, Gary Bisson spake thusly:
+> > > diff --git
+> > a/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+> > b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+> > > new file mode 100644
+> > > index 0000000..b73a959
+> > > --- /dev/null
+> > > +++
+> > b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+> > > @@ -0,0 +1,21 @@
+> > > +[PATCH] fix IOSystemInit failure
+> >
+> > Please provide a more detailed comit log. Why do we need this?
+> >
+> 
+> As I said in the first patch I used the nitrogen6x to do my testing, there
+> is one "big" difference between freescale and boundary kernel which is the
+> memory split (2G/2G for FSL, 3G/1G for Boundary). Clearly the VPU code has
+> only been tested on Freescale kernels because there is no way it works on
+> kernel with the latter splitting. The VPU init function returns an error if
+> the allocated buffer address is < 0 which does not make any sense. Instead
+> the test should be against MAP_FAILED (-1). Only after that patch I've been
+> able to get the VPU decoding working. I will change the -1 into MAP_FAILED
+> for the next patch.
+
+OK, I see. You should also repeat this in the patch description, like:
+
+    vpu-io: fix IOSystemInit failure
+
+    There is one "big" difference between freescale and boundary kernel
+    which is the memory split (2G/2G for FSL, 3G/1G for Boundary).
+
+    Clearly the VPU code has only been tested on Freescale kernels
+    because there is no way it works on kernel with the latter
+    splitting. The VPU init function returns an error if the allocated
+    buffer address is < 0, which happens with the 3G/1G split.
+
+    Fix the test by checking against MAP_FAILED instead.
+
+    Signed-off-by: You <you@there>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.7.9.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
