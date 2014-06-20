@@ -1,325 +1,359 @@
-From: Steve Thomas <scjthm@live.com>
-Date: Thu, 19 Jun 2014 22:55:23 +0000
-Subject: [Buildroot] [PATCH 1/1] [PATCH v2 1/1] Add support for gold linker
-	and LTO for GCC.
-Message-ID: <BLU436-SMTP186D00E2AE794694F2CA956A8130@phx.gbl>
+From: Gary Bisson <bisson.gary@gmail.com>
+Date: Thu, 19 Jun 2014 19:40:56 -0700
+Subject: [Buildroot] [PATCH 1/5] freescale-imx: bump to version
+	3.10.17-1.0.0
+In-Reply-To: <20140619162009.GA3534@free.fr>
+References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
+ <1403150639-29382-2-git-send-email-bisson.gary@gmail.com>
+ <20140619162009.GA3534@free.fr>
+Message-ID: <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link Time Optimisations (LTO) from GCC needs the linker plugin. It also
-needs support from the tools, in particular the archiver (AR) to
-properly form archives that can be used by the linker.  The linker needs
-to support the plugin also.
+Hi Yann,
 
-This patch changes the linker from BFD to GOLD and wraps the ar, nm and
-ranlib utilities with a wrapper that calls the gcc-wrapper version that
-call the actual utilities with an additional argument. This is a
-temporary measure until the binutils supoort LTO natively.
+Thanks for all the feedback! My comments below.
 
-Changes v1 -> v2:
-    - removed unecessary configuration option for binutils
-    - added siginging off to patches.
-    - cleaned up formatting and added missing comments.
+On Thu, Jun 19, 2014 at 9:20 AM, Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
 
-Signed-off-by: Steve Thomas <scjthm@live.com>
----
- package/binutils/Config.in.host         |  1 +
- package/binutils/binutils.mk            | 28 ++++++++++++-----
- package/gcc/4.8.3/950-lto-support.patch | 54 +++++++++++++++++++++++++++++++++
- package/gcc/4.9.0/950-lto-support.patch | 54 +++++++++++++++++++++++++++++++++
- package/gcc/Config.in.host              |  2 ++
- package/gcc/gcc-initial/gcc-initial.mk  | 18 +++++++++++
- package/gcc/gcc.mk                      | 11 +++++++
- toolchain/toolchain-buildroot/Config.in | 25 +++++++++++++++
- 8 files changed, 185 insertions(+), 8 deletions(-)
- create mode 100644 package/gcc/4.8.3/950-lto-support.patch
- create mode 100644 package/gcc/4.9.0/950-lto-support.patch
+> Gary, All,
+>
+> On 2014-06-18 21:03 -0700, Gary Bisson spake thusly:
+> > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+>
+> Please, provide a detailed commit log.
+>
+> This patch does more than 'just' bumping the version, since it:
+>   - bumps the version,
+>   - adds a new package (imx-vpu),
+>   - changes the build commands of imx-libs,
+>   - breaks libfslvpuwrap as it changed versionning scheme.
+>
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 08540a3..de7f29a 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -42,6 +42,7 @@ choice
- 
- 	config BR2_BINUTILS_VERSION_2_24
- 		depends on !BR2_avr32
-+		select BR2_BINUTILS_SUPPORTS_GOLD
- 		bool "binutils 2.24"
- 
- endchoice
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 9cc4d28..dcca490 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -44,10 +44,10 @@ endif
- 
- # We need to specify host & target to avoid breaking ARM EABI
- BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
--		--host=$(GNU_TARGET_NAME) \
--		--target=$(GNU_TARGET_NAME) \
--		--enable-install-libiberty \
--		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-+	--host=$(GNU_TARGET_NAME) \
-+	--target=$(GNU_TARGET_NAME) \
-+	--enable-install-libiberty \
-+	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
- # Install binutils after busybox to prefer full-blown utilities
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-@@ -57,10 +57,22 @@ endif
- # "host" binutils should actually be "cross"
- # We just keep the convention of "host utility" for now
- HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
--			--target=$(GNU_TARGET_NAME) \
--			--disable-shared --enable-static \
--			--with-sysroot=$(STAGING_DIR) \
--			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-+	--target=$(GNU_TARGET_NAME) \
-+	--disable-shared --enable-static \
-+	--with-sysroot=$(STAGING_DIR) \
-+	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
-+
-+# disable ld explicitely and use ld.gold exclusively
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GOLD),y)
-+HOST_BINUTILS_CONF_OPT += \
-+	--enable-plugins \
-+	--enable-gold \
-+	--disable-ld
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LTO),y)
-+HOST_BINUTILS_CONF_OPT += --enable-lto
-+endif
- 
- # We just want libbfd and libiberty, not the full-blown binutils in staging
- define BINUTILS_INSTALL_STAGING_CMDS
-diff --git a/package/gcc/4.8.3/950-lto-support.patch b/package/gcc/4.8.3/950-lto-support.patch
-new file mode 100644
-index 0000000..fd34801
---- /dev/null
-+++ b/package/gcc/4.8.3/950-lto-support.patch
-@@ -0,0 +1,54 @@
-+Add support for Link Time Optimisations (LTO)
-+
-+The link time optimisations cause the compiler optimisations
-+to take place during linking rather than during compilation.
-+
-+Simply using the archiver (AR) on a number of object files
-+doesn't work because the certain LTO specific symbols are 
-+not handled properly.
-+
-+The GCC solution is to create a wrapper around ar, nm and 
-+ranlib, called ar-gcc, rm-gcc and ranlib-gcc, and to call 
-+these from the various project makefiles. For a complete
-+LTO build, changing the makefiles that don't take AR from 
-+the environment is not really practical. This is a temporary
-+solution until the actual tools, provided by binutils
-+will correctly handle LTO objects.
-+
-+Signed-off-by: Steve Thomas <sjthm@live.com>
-+
-+--- a/gcc/gcc-ar.c	2014-04-29 23:54:09.387237442 +0000
-++++ b/gcc/gcc-ar.c	2014-04-29 23:52:35.184336991 +0000
-+@@ -123,6 +126,7 @@
-+ int 
-+ main (int ac, char **av)
-+ {
-++  char real_exe_bin_name[256];
-+   const char *exe_name;
-+   char *plugin;
-+   int k, status, err;
-+@@ -143,20 +147,12 @@
-+     }
-+ 
-+   /* Find the wrapped binutils program.  */
-+-  exe_name = find_a_file (&target_path, PERSONALITY, X_OK);
-++  exe_name = find_a_file (&target_path, PERSONALITY "-bin", X_OK);
-+   if (!exe_name)
-+     {
-+-      const char *real_exe_name = PERSONALITY;
-+-#ifdef CROSS_DIRECTORY_STRUCTURE
-+-      real_exe_name = concat (target_machine, "-", PERSONALITY, NULL);
-+-#endif
-+-      exe_name = find_a_file (&path, real_exe_name, X_OK);
-+-      if (!exe_name)
-+-	{
-+-	  fprintf (stderr, "%s: Cannot find binary '%s'\n", av[0],
-+-		   real_exe_name);
-+-	  exit (1);
-+-	}
-++      exe_name = real_exe_bin_name;
-++      strcpy(real_exe_bin_name, av[0]);
-++      strcat(real_exe_bin_name, "-bin");
-+     }
-+ 
-+   /* Create new command line with plugin */
-diff --git a/package/gcc/4.9.0/950-lto-support.patch b/package/gcc/4.9.0/950-lto-support.patch
-new file mode 100644
-index 0000000..fd34801
---- /dev/null
-+++ b/package/gcc/4.9.0/950-lto-support.patch
-@@ -0,0 +1,54 @@
-+Add support for Link Time Optimisations (LTO)
-+
-+The link time optimisations cause the compiler optimisations
-+to take place during linking rather than during compilation.
-+
-+Simply using the archiver (AR) on a number of object files
-+doesn't work because the certain LTO specific symbols are 
-+not handled properly.
-+
-+The GCC solution is to create a wrapper around ar, nm and 
-+ranlib, called ar-gcc, rm-gcc and ranlib-gcc, and to call 
-+these from the various project makefiles. For a complete
-+LTO build, changing the makefiles that don't take AR from 
-+the environment is not really practical. This is a temporary
-+solution until the actual tools, provided by binutils
-+will correctly handle LTO objects.
-+
-+Signed-off-by: Steve Thomas <sjthm@live.com>
-+
-+--- a/gcc/gcc-ar.c	2014-04-29 23:54:09.387237442 +0000
-++++ b/gcc/gcc-ar.c	2014-04-29 23:52:35.184336991 +0000
-+@@ -123,6 +126,7 @@
-+ int 
-+ main (int ac, char **av)
-+ {
-++  char real_exe_bin_name[256];
-+   const char *exe_name;
-+   char *plugin;
-+   int k, status, err;
-+@@ -143,20 +147,12 @@
-+     }
-+ 
-+   /* Find the wrapped binutils program.  */
-+-  exe_name = find_a_file (&target_path, PERSONALITY, X_OK);
-++  exe_name = find_a_file (&target_path, PERSONALITY "-bin", X_OK);
-+   if (!exe_name)
-+     {
-+-      const char *real_exe_name = PERSONALITY;
-+-#ifdef CROSS_DIRECTORY_STRUCTURE
-+-      real_exe_name = concat (target_machine, "-", PERSONALITY, NULL);
-+-#endif
-+-      exe_name = find_a_file (&path, real_exe_name, X_OK);
-+-      if (!exe_name)
-+-	{
-+-	  fprintf (stderr, "%s: Cannot find binary '%s'\n", av[0],
-+-		   real_exe_name);
-+-	  exit (1);
-+-	}
-++      exe_name = real_exe_bin_name;
-++      strcpy(real_exe_bin_name, av[0]);
-++      strcat(real_exe_bin_name, "-bin");
-+     }
-+ 
-+   /* Create new command line with plugin */
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index fde1b90..c79a102 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -64,6 +64,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_powerpc64le && !BR2_sparc
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-+		select BR2_GCC_SUPPORTS_GOLD
- 		bool "gcc 4.8.x"
- 
- 	config BR2_GCC_VERSION_4_8_ARC
-@@ -75,6 +76,7 @@ choice
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
-+		select BR2_GCC_SUPPORTS_GOLD
- 		bool "gcc 4.9.x"
- 
- 	config BR2_GCC_VERSION_SNAP
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index bc5ad26..717bbfd 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -40,4 +40,22 @@ HOST_GCC_INITIAL_CONF_ENV = \
- HOST_GCC_INITIAL_MAKE_OPT = all-gcc
- HOST_GCC_INITIAL_INSTALL_OPT = install-gcc
- 
-+# Create LTO aware wrappers for ar, nm and ranlib if they are not present.
-+# The wrappers just add a linker plugin option and support LTO and non-LTO objects.
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GOLD),y)
-+define HOST_GCC_INSTALL_WRAPPERS
-+        for i in ar nm ranlib ; do \
-+			_tmp=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-$${i}; \
-+	        if [ ! -f "$${_tmp}-bin" ] ; then \
-+				mv $${_tmp} $${_tmp}-bin; \
-+				cp -dpf $$(echo $${_tmp} | sed 's:-[^-]*$$:-gcc&:') $${_tmp}; \
-+				ln -f $${_tmp}-bin $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/$${i}-bin; \
-+				ln -f $${_tmp} $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/bin/$${i}; \
-+			fi; \
-+        done; \
-+		ln -fs $(HOST_DIR)/usr/libexec $(HOST_DIR)/usr/$(GNU_TARGET_NAME)/libexec
-+endef
-+HOST_GCC_INITIAL_POST_INSTALL_HOOKS += HOST_GCC_INSTALL_WRAPPERS
-+endif
-+
- $(eval $(host-autotools-package))
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5b60bc3..6980fa8 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -213,6 +213,17 @@ ifneq ($(GCC_TARGET_MODE),)
- HOST_GCC_COMMON_CONF_OPT += --with-mode=$(GCC_TARGET_MODE)
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_GOLD),y)
-+HOST_GCC_COMMON_CONF_OPT += \
-+           --enable-plugins \
-+           --enable-gold \
-+           --disable-ld
-+endif
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_LTO),y)
-+HOST_GCC_COMMON_CONF_OPT += --enable-lto
-+endif
-+
- # Branding works on >= 4.3
- ifneq ($(findstring x4.2.,x$(GCC_VERSION)),x4.2.)
- HOST_GCC_COMMON_CONF_OPT += \
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index eef9f9c..1aa1ee6 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -100,6 +100,31 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
- 	default "glibc"  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
-+config BR2_TOOLCHAIN_BUILDROOT_GOLD
-+	bool "GOLD linker (experimental)"
-+	depends on BR2_BINUTILS_SUPPORTS_GOLD
-+	depends on BR2_GCC_SUPPORTS_GOLD
-+	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64
-+	help
-+	  This option selects the gold ELF only linker from the
-+	  binutils package. This is currently in beta. This
-+	  option will only build and install the gold linker.
-+
-+	  http://sourceware.org/binutils/
-+
-+
-+config BR2_TOOLCHAIN_BUILDROOT_LTO
-+	bool "Link Time Optimisations (LTO) (experimental)"
-+	depends on BR2_TOOLCHAIN_BUILDROOT_GOLD
-+	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64
-+	help
-+	  This option builds GCC with suppport for Link Time
-+	  Optimisation (LTO). To enable this option you must be using
-+	  gold as the linker and enable the use of the linker plugin
-+	  by compiling with the -fuse-linker-plugin flag.
-+
-+	  http://gcc.gnu.org/wiki/LinkTimeOptimization
-+
- source "package/uclibc/Config.in"
- source "package/glibc/Config.in"
- source "package/binutils/Config.in.host"
--- 
-2.0.0
+Next time I'll try to be more talkative ;-)
+
+
+>
+> I have a few comments for each parts, see below.
+>
+> I'm a bit sceptic as to whether we should introduce imx-vpu in this
+> patch, or introduce it with its own patch... Peter, what's your opinion?
+>
+
+I almost made it in 2/3 commits, as the new package was implied by the
+change of version I figured it'd be ok. But it makes sense to separate the
+bump from the inside packages modifications.
+
+
+>
+> > diff --git a/package/freescale-imx/freescale-imx.mk
+> b/package/freescale-imx/freescale-imx.mk
+> > index 39ffa8a..843ba61 100644
+> > --- a/package/freescale-imx/freescale-imx.mk
+> > +++ b/package/freescale-imx/freescale-imx.mk
+> > @@ -4,7 +4,7 @@
+> >  #
+> >
+>  ################################################################################
+> >
+> > -FREESCALE_IMX_VERSION = 3.5.7-1.0.0
+> > +FREESCALE_IMX_VERSION = 3.10.17-1.0.0
+>
+> This change breaks libfslvpuwrap, because it does not exist in this new
+> version.
+>
+> I think it would be better to bump libfslvpywrap before this bump, or at
+> least:
+>  1- change libfslvpuwrap to use its own version string (3.5.7-1.0.0)
+>  2- bump the freescale packages (this patch) to 3.10.17-1.0.0
+>  3- bump libfslvpuwrap to its own version number.
+>
+> It might even make sense to do patch 2+3 together...
+>
+
+Ok will re-order and separate those commits.
+
+
+>
+> >  FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
+> >
+> >  include $(sort $(wildcard package/freescale-imx/*/*.mk))
+> > diff --git a/package/freescale-imx/imx-lib/imx-lib.mk
+> b/package/freescale-imx/imx-lib/imx-lib.mk
+> > index 4f605d7..253ed31 100644
+> > --- a/package/freescale-imx/imx-lib/imx-lib.mk
+> > +++ b/package/freescale-imx/imx-lib/imx-lib.mk
+> > @@ -6,18 +6,19 @@
+> >
+> >  IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
+> >  IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
+> > -IMX_LIB_LICENSE = Freescale License (vpu), LGPLv2.1+ (the rest)
+> > +IMX_LIB_LICENSE = LGPLv2.1+
+> >  IMX_LIB_LICENSE_FILES = EULA
+> > -IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).bin
+> > +IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).tar.gz
+>
+> Yeah! They switched! :-)
+>
+> >  IMX_LIB_INSTALL_STAGING = YES
+> >
+> >  # imx-lib needs access to imx-specific kernel headers
+> >  IMX_LIB_DEPENDENCIES += linux
+> >  IMX_LIB_INCLUDE = \
+> > +     -I$(LINUX_DIR)/include/uapi \
+> > +     -I$(LINUX_DIR)/include \
+> >       -I$(LINUX_DIR)/drivers/mxc/security/rng/include \
+> > -     -I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
+> > -     -idirafter $(LINUX_DIR)/include
+> > +     -I$(LINUX_DIR)/drivers/mxc/security/sahara2/include
+>
+> This change is dubious. We really do want the include dirs from the
+> kernel to only come _after_ the standard search dirs, hence the existing
+> -idirafter directive.
+>
+> Searching in the kernel dir is ugly, because those are non-sanitised
+> headers, and we do favour headers from the toolchain (which are
+> userland-clean) over those from the kernel tree.
+>
+> Also, I think only using the uapi include dir should be enough.
+>
+
+My bad, I actually just applied the same parameters as the Yocto recipe
+without even thinking about the -idirafter (which I didn't know). I will
+remove it.
+
+
+>
+> > diff --git a/package/freescale-imx/imx-vpu/Config.in
+> b/package/freescale-imx/imx-vpu/Config.in
+> > new file mode 100644
+> > index 0000000..e3e5823
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-vpu/Config.in
+> > @@ -0,0 +1,53 @@
+> > +comment "imx-vpu needs an imx-specific Linux kernel to be built"
+> > +     depends on BR2_arm && !BR2_LINUX_KERNEL
+> > +
+> > +config BR2_PACKAGE_IMX_VPU
+> > +     bool "imx-vpu"
+> > +     depends on BR2_LINUX_KERNEL
+> > +     depends on BR2_arm # Only relevant for i.MX
+> > +     help
+> > +       Library of userspace helpers specific for the Freescale i.MX
+> > +       platform. It wraps the kernel interfaces for the i.MX platform
+> > +       Video Processing Unit (VPU) driver. It requires a kernel that
+> > +       includes the i.MX specific headers to be built.
+> > +
+> > +       This library is provided by Freescale as-is and doesn't have
+> > +       an upstream.
+> > +
+> > +if BR2_PACKAGE_IMX_VPU
+> > +choice
+> > +     prompt "i.MX platform"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX25_3STACK
+> > +     bool "imx25-3stack"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX27ADS
+> > +     bool "imx27ads"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX37_3STACK
+> > +     bool "imx37-3stack"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX50
+> > +     bool "imx50"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX51
+> > +     bool "imx51"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX53
+> > +     bool "imx53"
+> > +
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM_IMX6Q
+> > +     bool "imx6q"
+> > +
+> > +endchoice
+>
+> We already have this choice in the imx-lib package:
+>   - if it no longer relevant to imx-lib, just remove it from imx-lib
+>     and keep it in imx-vpu
+>   - if it is still valide for imx-lib, then we should make it a common
+>     choice, valid for both imx-lib and imx-vpu.
+>
+> In the latter case, you'd have to move it into:
+>     package/freescale-imx/Config.in
+>
+> Rename options so they are no longer imx-lib specific, and use those
+> new options both in imx-lib and imx-vpu. The new names could be somethng
+> like (for example, with i.MX6Q):
+>     BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+>
+>
+Makes sense, it looked weird in the menu to be able to select imx6q for
+imx-lib and something else for imx-vpu. FYI, imx-lib still needs the
+differentiation between the iMX platforms (IPU etc...)
+
+
+> Also applies to the following block, of course:
+>
+> > +config BR2_PACKAGE_IMX_VPU_PLATFORM
+> > +     string
+> > +     default "IMX25_3STACK" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX25_3STACK
+> > +     default "IMX27ADS" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX27ADS
+> > +     default "IMX37_3STACK" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX37_3STACK
+> > +     default "IMX50" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX50
+> > +     default "IMX51" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX51
+> > +     default "IMX53" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX53
+> > +     default "IMX6Q" if BR2_PACKAGE_IMX_VPU_PLATFORM_IMX6Q
+> > +endif
+> > diff --git
+> a/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+> b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+> > new file mode 100644
+> > index 0000000..b73a959
+> > --- /dev/null
+> > +++
+> b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+> > @@ -0,0 +1,21 @@
+> > +[PATCH] fix IOSystemInit failure
+>
+> Please provide a more detailed comit log. Why do we need this?
+>
+
+As I said in the first patch I used the nitrogen6x to do my testing, there
+is one "big" difference between freescale and boundary kernel which is the
+memory split (2G/2G for FSL, 3G/1G for Boundary). Clearly the VPU code has
+only been tested on Freescale kernels because there is no way it works on
+kernel with the latter splitting. The VPU init function returns an error if
+the allocated buffer address is < 0 which does not make any sense. Instead
+the test should be against MAP_FAILED (-1). Only after that patch I've been
+able to get the VPU decoding working. I will change the -1 into MAP_FAILED
+for the next patch.
+
+
+>
+> > +Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+> > +---
+> > + vpu/vpu_io.c | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/vpu/vpu_io.c b/vpu/vpu_io.c
+> > +index 8cbb571..14759da 100644
+> > +--- a/vpu/vpu_io.c
+> > ++++ b/vpu/vpu_io.c
+> > +@@ -265,7 +265,7 @@ int IOSystemInit(void *callback)
+> > +             goto err;
+> > +     }
+> > +
+> > +-    if (IOGetVirtMem(&bit_work_addr) <= 0)
+> > ++    if (IOGetVirtMem(&bit_work_addr) == -1)
+> > +             goto err;
+> > + #endif
+> > +     UnlockVpu(vpu_semap);
+> > +
+> > diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk
+> b/package/freescale-imx/imx-vpu/imx-vpu.mk
+> > new file mode 100644
+> > index 0000000..fb72203
+> > --- /dev/null
+> > +++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+> > @@ -0,0 +1,57 @@
+> >
+> +################################################################################
+> > +#
+> > +# imx-vpu
+> > +#
+> >
+> +################################################################################
+> > +
+> > +IMX_VPU_VERSION = $(FREESCALE_IMX_VERSION)
+> > +IMX_VPU_SITE    = $(FREESCALE_IMX_SITE)
+> > +IMX_VPU_LICENSE = Freescale License
+> > +IMX_VPU_LICENSE_FILES = EULA
+> > +IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+> > +
+> > +IMX_VPU_INSTALL_STAGING = YES
+> > +
+> > +# imx-vpu needs access to imx-specific kernel headers
+> > +IMX_VPU_DEPENDENCIES += linux
+> > +IMX_VPU_INCLUDE = \
+> > +     -I$(LINUX_DIR)/include/uapi \
+> > +     -I$(LINUX_DIR)/include
+>
+> Again, I believe this should be -idirafter instead of -I .
+>
+
+Same as above, will fix it.
+
+
+>
+> > +IMX_VPU_MAKE_ENV = \
+> > +     $(TARGET_MAKE_ENV) \
+> > +     $(TARGET_CONFIGURE_OPTS) \
+> > +     CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+> > +     PLATFORM=$(BR2_PACKAGE_IMX_VPU_PLATFORM) \
+> > +     INCLUDE="$(IMX_VPU_INCLUDE)"
+> > +
+> > +# The archive is a shell-self-extractor of a bzipped tar. It happens
+> > +# to extract in the correct directory (imx-vpu-x.y.z)
+> > +# The --force makes sure it doesn't fail if the source dir already
+> exists.
+> > +# The --auto-accept skips the license check - not needed for us
+> > +# because we have legal-info
+> > +# Since there's a EULA in the bin file, extract it to imx-vpu-x.y.z/EULA
+> > +#
+> > +define IMX_VPU_EXTRACT_CMDS
+> > +     awk 'BEGIN      { start=0; } \
+> > +          /^EOEULA/  { start = 0; } \
+> > +                     { if (start) print; } \
+> > +          /<<EOEULA/ { start=1; }'\
+> > +         $(DL_DIR)/$(IMX_VPU_SOURCE) > $(@D)/EULA
+> > +     cd $(BUILD_DIR); \
+> > +     sh $(DL_DIR)/$(IMX_VPU_SOURCE) --force --auto-accept
+> > +endef
+> > +
+> > +define IMX_VPU_BUILD_CMDS
+> > +     $(IMX_VPU_MAKE_ENV) $(MAKE1) -C $(@D)
+> > +endef
+> > +
+> > +define IMX_VPU_INSTALL_STAGING_CMDS
+> > +     $(IMX_VPU_MAKE_ENV) $(MAKE1) -C $(@D) DEST_DIR=$(STAGING_DIR)
+> install
+> > +endef
+> > +
+> > +define IMX_VPU_INSTALL_TARGET_CMDS
+> > +     $(IMX_VPU_MAKE_ENV) $(MAKE1) -C $(@D) DEST_DIR=$(TARGET_DIR)
+> install
+> > +endef
+> > +
+> > +$(eval $(generic-package))
+>
+> Otherwise, looks good.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.-
+> -------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>       |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There
+> is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+> conspiracy.  |
+> '------------------------------^-------^------------------^-
+> -------------------'
+
+
+Thanks,
+Gary
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140619/786584ce/attachment.html>
