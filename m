@@ -1,87 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Jun 2014 22:07:14 +0200
-Subject: [Buildroot] [PATCH] graph-depends: fix when $(O) is a relative
- path
-In-Reply-To: <20140620200457.GA3543@free.fr>
-References: <1403129424-27129-1-git-send-email-arnout@mind.be>
- <20140620200457.GA3543@free.fr>
-Message-ID: <53A49472.4050109@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 20 Jun 2014 22:07:33 +0200
+Subject: [Buildroot] [PATCH] Makefile: document make <package>-dirclean
+In-Reply-To: <53A3FEA0.1030503@lucaceresoli.net>
+References: <20140619182648.GB3534@free.fr>
+ <409511316.213968.1403203738913.JavaMail.root@mail>
+ <20140619201047.GC3534@free.fr> <53A3FEA0.1030503@lucaceresoli.net>
+Message-ID: <20140620200733.GC3543@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/06/14 22:04, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2014-06-19 00:10 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> The graph-depends commands cd into the CONFIG_DIR and run the script
->> from there. However, this means that when $(O) is a relative path, it
->> will no longer be correct.  Therefore, use $(BASE_DIR) instead of $(O).
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> Tested with this sequence:
->     cd buildroot
->     make manual-html
->     make O=../br.build-1 manual-html
->     cd ..
->     make -C buildroot O=../br.build-2 manual-html
->     make -C buildroot O=$(pwd)/br.build-3
->     mkdir br.build-4
->     cd br.build-4
->     make defconfig   (to create the Makefile wrapper)
->     make manual-html
+Luca, All,
 
- Call me stupid, but why is it relevant to test this patch with manual-html?
+On 2014-06-20 11:28 +0200, Luca Ceresoli spake thusly:
+> Dear Yann,
+> 
+> Yann E. MORIN wrote:
+> >Vivien, All,
+> >
+> [...]
+> >
+> >But I usually suck at designing user-centric UI. One could say I'm a
+> >weird, uncommon user with a tortured, twisted mind. ;-]
+> 
+> Come on Yann, you're able to say that more concisely:
+> 
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |
+>            ^^^^^^^^^^^^^^^^
 
- Regards,
- Arnout
+Hehe! :-)
 
-> 
-> All generate the HTML manual, and a cursory look does not show any
-> diference.
-> 
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>  Makefile | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/Makefile b/Makefile
->> index 5c82355..dd350b6 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -676,8 +676,8 @@ graph-depends:
->>  	@$(INSTALL) -d $(O)/graphs
->>  	@cd "$(CONFIG_DIR)"; \
->>  	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
->> -	|tee $(O)/graphs/$(@).dot \
->> -	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
->> +	|tee $(BASE_DIR)/graphs/$(@).dot \
->> +	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
->>  
->>  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->>  
->> -- 
->> 2.0.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+I'll look at your reviews on the legal stuff tonight.
 
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
