@@ -1,55 +1,110 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 20 Jun 2014 22:33:59 +0200
-Subject: [Buildroot] [PATCH] support: graph-depends requires Python 2
-In-Reply-To: <1403206215-5562-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1403206215-5562-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <53A49AB7.2080508@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 20 Jun 2014 22:34:07 +0200
+Subject: [Buildroot] [PATCH] graph-depends.py: support python3
+Message-ID: <1403296447-24706-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/06/14 21:30, Vivien Didelot wrote:
-> Python 3 becomes the default version on some distributions (such as
-> Archlinux), while they all (Debian, Ubuntu, Arch, Fedora, etc.) define a
-> python2 symlink for consistency.
+This patch is the result of 2to3.
 
- Is that also true for old RHEL? Those beasts offer 10 years of support so you
-get really really old ones out there...
+In addition, universal_newlines=True is added to the Popen calls. In
+python3, this makes sure that the output is decoded so that we get a
+string instead of a buffer object.
 
- It would be better to just make the script python3-compliant. Probably just a
-matter of adding brackets around the print statements -- patch follows.
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/scripts/graph-depends | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
- Regards,
- Arnout
-
-> 
-> Let's specify it in the graph-depends script to make it clear that it
-> requires the version 2 of Python to work.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> ---
->  support/scripts/graph-depends | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index e2a5e1e..e323e3f 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python
-> +#!/usr/bin/python2
->  
->  # Usage (the graphviz package must be installed in your distribution)
->  #  ./support/scripts/graph-depends [-p package-name] > test.dot
-> 
-
-
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 29f271a..58401a2 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -82,7 +82,7 @@ allpkgs = []
+ def get_targets():
+     sys.stderr.write("Getting targets\n")
+     cmd = ["make", "-s", "show-targets"]
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0].strip()
+     if p.returncode != 0:
+         return None
+@@ -98,7 +98,7 @@ def get_depends(pkgs):
+     cmd = ["make", "-s" ]
+     for pkg in pkgs:
+         cmd.append("%s-show-depends" % pkg)
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0]
+     if p.returncode != 0:
+         sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+@@ -203,7 +203,7 @@ elif mode == MODE_PKG:
+ # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+ dict_deps = {}
+ for dep in dependencies:
+-    if not dict_deps.has_key(dep[0]):
++    if dep[0] not in dict_deps:
+         dict_deps[dep[0]] = []
+     dict_deps[dep[0]].append(dep[1])
+ 
+@@ -211,7 +211,7 @@ for dep in dependencies:
+ # transitive) of pkg2, dependencies being listed in the deps
+ # dictionary. Returns False otherwise.
+ def is_dep(pkg,pkg2,deps):
+-    if deps.has_key(pkg2):
++    if pkg2 in deps:
+         for p in deps[pkg2]:
+             if pkg == p:
+                 return True
+@@ -248,10 +248,10 @@ def remove_toolchain_deps(pkg,deps):
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+ def remove_extra_deps(deps):
+-    for pkg in deps.keys():
++    for pkg in list(deps.keys()):
+         if not pkg == 'all':
+             deps[pkg] = remove_toolchain_deps(pkg,deps)
+-    for pkg in deps.keys():
++    for pkg in list(deps.keys()):
+         if not transitive or pkg == 'all':
+             deps[pkg] = remove_transitive_deps(pkg,deps)
+     return deps
+@@ -274,8 +274,8 @@ def print_attrs(pkg):
+             color = host_colour
+         else:
+             color = target_colour
+-    print "%s [label = \"%s\"]" % (name, label)
+-    print "%s [color=%s,style=filled]" % (name, color)
++    print("%s [label = \"%s\"]" % (name, label))
++    print("%s [color=%s,style=filled]" % (name, color))
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(depth, pkg):
+@@ -283,17 +283,17 @@ def print_pkg_deps(depth, pkg):
+         return
+     done_deps.append(pkg)
+     print_attrs(pkg)
+-    if not dict_deps.has_key(pkg):
++    if pkg not in dict_deps:
+         return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+-            print "%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d))
++            print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
+             print_pkg_deps(depth+1, d)
+ 
+ # Start printing the graph data
+-print "digraph G {"
++print("digraph G {")
+ 
+ done_deps = []
+ print_pkg_deps(0, rootpkg)
+ 
+-print "}"
++print("}")
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+2.0.0
