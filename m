@@ -1,87 +1,134 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Jun 2014 23:28:20 +0200
-Subject: [Buildroot] [PATCH 2/2] Makefile: test if "dot" exists in
- "<pkg>-graph-depends"
-In-Reply-To: <1402997634-2783-2-git-send-email-fabio.porcedda@gmail.com>
-References: <1402997634-2783-1-git-send-email-fabio.porcedda@gmail.com>
- <1402997634-2783-2-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140620212820.GE26745@free.fr>
+From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Date: Fri, 20 Jun 2014 17:36:26 -0400 (EDT)
+Subject: [Buildroot] [PATCH] graph-depends.py: support python3
+In-Reply-To: <1403296447-24706-1-git-send-email-arnout@mind.be>
+Message-ID: <1133175477.273342.1403300186442.JavaMail.root@mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Reviewed-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
-On 2014-06-17 11:33 +0200, Fabio Porcedda spake thusly:
-> To be able to check the "dot" command availability in
-> "<pkg>-graph-depends" move the check to the "graph-depends-requirements" rule.
-> Also don't use a subshell for the exit command to be sure that the error
-> will be returned by the shell.
+But there's also support/scripts/graph-build-time and support/scripts/xorg-release.
+There are some calls to the Python executable in docs/manual as well.
+
+Vivien
+
+----- Mail original -----
+> De: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> ?: buildroot at buildroot.org
+> Cc: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>, "Vivien Didelot" <vivien.didelot@savoirfairelinux.com>
+> Envoy?: Vendredi 20 Juin 2014 16:34:07
+> Objet: [PATCH] graph-depends.py: support python3
 > 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+> This patch is the result of 2to3.
+> 
+> In addition, universal_newlines=True is added to the Popen calls. In
+> python3, this makes sure that the output is decoded so that we get a
+> string instead of a buffer object.
+> 
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
+>  support/scripts/graph-depends | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
 > 
-> Notes:
->     v2:
->      - Remove the check for graph-build (Yann and Thomas)
->      - Remove the previuous code for checking the "dot"
->        command avaiability (Yann)
->      - Don't use a subshell (Yann)
-> 
->  Makefile               | 6 ++++--
->  package/pkg-generic.mk | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 86acbbf..a27502b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -669,9 +669,11 @@ graph-build: $(O)/build/build-time.log
->  				   --output=$(O)/graphs/build.pie-$(t).$(BR_GRAPH_OUT) \
->  				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
+> diff --git a/support/scripts/graph-depends
+> b/support/scripts/graph-depends
+> index 29f271a..58401a2 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -82,7 +82,7 @@ allpkgs = []
+>  def get_targets():
+>      sys.stderr.write("Getting targets\n")
+>      cmd = ["make", "-s", "show-targets"]
+> -    p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+> stderr=subprocess.PIPE)
+> +    p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+> stderr=subprocess.PIPE, universal_newlines=True)
+>      output = p.communicate()[0].strip()
+>      if p.returncode != 0:
+>          return None
+> @@ -98,7 +98,7 @@ def get_depends(pkgs):
+>      cmd = ["make", "-s" ]
+>      for pkg in pkgs:
+>          cmd.append("%s-show-depends" % pkg)
+> -    p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+> stderr=subprocess.PIPE)
+> +    p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+> stderr=subprocess.PIPE, universal_newlines=True)
+>      output = p.communicate()[0]
+>      if p.returncode != 0:
+>          sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+> @@ -203,7 +203,7 @@ elif mode == MODE_PKG:
+>  # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+>  dict_deps = {}
+>  for dep in dependencies:
+> -    if not dict_deps.has_key(dep[0]):
+> +    if dep[0] not in dict_deps:
+>          dict_deps[dep[0]] = []
+>      dict_deps[dep[0]].append(dep[1])
 >  
-> -graph-depends:
-> +graph-depends-requirements:
->  	@dot -? >/dev/null 2>&1 || \
-> -		(echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1)
-> +		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
-> +
-> +graph-depends: graph-depends-requirements
->  	@$(INSTALL) -d $(O)/graphs
->  	@cd "$(CONFIG_DIR)"; \
->  	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 457d873..4a011cc 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -556,7 +556,7 @@ endif
->  $(1)-show-depends:
->  			@echo $$($(2)_FINAL_DEPENDENCIES)
+> @@ -211,7 +211,7 @@ for dep in dependencies:
+>  # transitive) of pkg2, dependencies being listed in the deps
+>  # dictionary. Returns False otherwise.
+>  def is_dep(pkg,pkg2,deps):
+> -    if deps.has_key(pkg2):
+> +    if pkg2 in deps:
+>          for p in deps[pkg2]:
+>              if pkg == p:
+>                  return True
+> @@ -248,10 +248,10 @@ def remove_toolchain_deps(pkg,deps):
+>  # This functions trims down the dependency list of all packages.
+>  # It applies in sequence all the dependency-elimination methods.
+>  def remove_extra_deps(deps):
+> -    for pkg in deps.keys():
+> +    for pkg in list(deps.keys()):
+>          if not pkg == 'all':
+>              deps[pkg] = remove_toolchain_deps(pkg,deps)
+> -    for pkg in deps.keys():
+> +    for pkg in list(deps.keys()):
+>          if not transitive or pkg == 'all':
+>              deps[pkg] = remove_transitive_deps(pkg,deps)
+>      return deps
+> @@ -274,8 +274,8 @@ def print_attrs(pkg):
+>              color = host_colour
+>          else:
+>              color = target_colour
+> -    print "%s [label = \"%s\"]" % (name, label)
+> -    print "%s [color=%s,style=filled]" % (name, color)
+> +    print("%s [label = \"%s\"]" % (name, label))
+> +    print("%s [color=%s,style=filled]" % (name, color))
 >  
-> -$(1)-graph-depends:
-> +$(1)-graph-depends: graph-depends-requirements
->  			@$$(INSTALL) -d $$(O)/graphs
->  			@cd "$$(CONFIG_DIR)"; \
->  			$$(TOPDIR)/support/scripts/graph-depends -p $(1) $$(BR2_GRAPH_DEPS_OPTS) \
-> -- 
+>  # Print the dependency graph of a package
+>  def print_pkg_deps(depth, pkg):
+> @@ -283,17 +283,17 @@ def print_pkg_deps(depth, pkg):
+>          return
+>      done_deps.append(pkg)
+>      print_attrs(pkg)
+> -    if not dict_deps.has_key(pkg):
+> +    if pkg not in dict_deps:
+>          return
+>      if max_depth == 0 or depth < max_depth:
+>          for d in dict_deps[pkg]:
+> -            print "%s -> %s" % (pkg_node_name(pkg),
+> pkg_node_name(d))
+> +            print("%s -> %s" % (pkg_node_name(pkg),
+> pkg_node_name(d)))
+>              print_pkg_deps(depth+1, d)
+>  
+>  # Start printing the graph data
+> -print "digraph G {"
+> +print("digraph G {")
+>  
+>  done_deps = []
+>  print_pkg_deps(0, rootpkg)
+>  
+> -print "}"
+> +print("}")
+> --
 > 2.0.0
 > 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> 
