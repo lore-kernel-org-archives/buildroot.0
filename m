@@ -1,58 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Jun 2014 22:12:02 +0200
-Subject: [Buildroot] [PATCH] Makefile: document make <package>-dirclean
-In-Reply-To: <20140620121154.39a88ecb@free-electrons.com>
-References: <20140619182648.GB3534@free.fr>
- <409511316.213968.1403203738913.JavaMail.root@mail>
- <20140619201047.GC3534@free.fr>
- <CAAXf6LXBfosgS1dBZtx8ZMp_bEsxeyALNSOnMAEt7aS-nXpVMg@mail.gmail.com>
- <20140620121154.39a88ecb@free-electrons.com>
-Message-ID: <20140620201202.GD3543@free.fr>
+Date: Fri, 20 Jun 2014 22:14:11 +0200
+Subject: [Buildroot] [PATCH] graph-depends: fix when $(O) is a relative
+ path
+In-Reply-To: <53A49472.4050109@mind.be>
+References: <1403129424-27129-1-git-send-email-arnout@mind.be>
+ <20140620200457.GA3543@free.fr> <53A49472.4050109@mind.be>
+Message-ID: <20140620201411.GE3543@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, Vivien, All,
+Arnout, All,
 
-On 2014-06-20 12:11 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 20 Jun 2014 11:40:10 +0200, Thomas De Schampheleire wrote:
+On 2014-06-20 22:07 +0200, Arnout Vandecappelle spake thusly:
+> On 20/06/14 22:04, Yann E. MORIN wrote:
+> > Arnout, All,
+> > 
+> > On 2014-06-19 00:10 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> >> The graph-depends commands cd into the CONFIG_DIR and run the script
+> >> from there. However, this means that when $(O) is a relative path, it
+> >> will no longer be correct.  Therefore, use $(BASE_DIR) instead of $(O).
+> >>
+> >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > 
+> > Tested with this sequence:
+> >     cd buildroot
+> >     make manual-html
+> >     make O=../br.build-1 manual-html
+> >     cd ..
+> >     make -C buildroot O=../br.build-2 manual-html
+> >     make -C buildroot O=$(pwd)/br.build-3
+> >     mkdir br.build-4
+> >     cd br.build-4
+> >     make defconfig   (to create the Makefile wrapper)
+> >     make manual-html
 > 
-> > According to me, foo-dirclean is much more useful to the typical user
-> > than foo-rebuild or foo-reconfigure.
-> 
-> I agree.
-> 
-> > The latter two actions are
-> > typically used for OVERRIDE_SRCDIR only, right? While -dirclean can be
-> > used for any kind of (mis)action you performed.
-> 
-> Well, I also use -rebuild and -reconfigure when I directly hack into
-> output/build/<pkg>-<version>/ to do a quick test.
+>  Call me stupid, but why is it relevant to test this patch with manual-html?
 
-Well, I must really be a "different" kind of person, then, as I use
--reconfigure and -rebuild quite agressively (especially with
-OVERRIDE_SRC_DIR), but just use plain: rm -rf b<TAB>pac<TAB> (which
-expands in the shell to build/package-version/ ) to do the -dirclean
-stuff; that's so much faster! ;-)
+Err... Hmm... Well...
 
-> > So while I agree that some make targets should be listed to make sure
-> > the unsuspecting user is aware that they exist, dirclean would
-> > definitely be a part of this list, while rebuild/reconfigure need not
-> > necessarily IMO.
-> 
-> True.
-> 
-> > Maybe we should create a list of all the possible targets (here in
-> > this thread I mean) and then decide case-by-case if it's necessary to
-> > list them in 'make help' or not?
-> 
-> Another possible solution would be to have a <pkg>-help target that
-> lists all targets that are possible on a package, and then the main
-> "make help" only references that.
+OK, back to the shell I am... ;-)
 
-OK, I like that. :-)
+Sorry, sorry, sorry...
 
 Regards,
 Yann E. MORIN.
