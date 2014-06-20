@@ -1,57 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Jun 2014 22:14:11 +0200
-Subject: [Buildroot] [PATCH] graph-depends: fix when $(O) is a relative
- path
-In-Reply-To: <53A49472.4050109@mind.be>
-References: <1403129424-27129-1-git-send-email-arnout@mind.be>
- <20140620200457.GA3543@free.fr> <53A49472.4050109@mind.be>
-Message-ID: <20140620201411.GE3543@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 20 Jun 2014 22:33:59 +0200
+Subject: [Buildroot] [PATCH] support: graph-depends requires Python 2
+In-Reply-To: <1403206215-5562-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1403206215-5562-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <53A49AB7.2080508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+On 19/06/14 21:30, Vivien Didelot wrote:
+> Python 3 becomes the default version on some distributions (such as
+> Archlinux), while they all (Debian, Ubuntu, Arch, Fedora, etc.) define a
+> python2 symlink for consistency.
 
-On 2014-06-20 22:07 +0200, Arnout Vandecappelle spake thusly:
-> On 20/06/14 22:04, Yann E. MORIN wrote:
-> > Arnout, All,
-> > 
-> > On 2014-06-19 00:10 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> >> The graph-depends commands cd into the CONFIG_DIR and run the script
-> >> from there. However, this means that when $(O) is a relative path, it
-> >> will no longer be correct.  Therefore, use $(BASE_DIR) instead of $(O).
-> >>
-> >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > 
-> > Tested with this sequence:
-> >     cd buildroot
-> >     make manual-html
-> >     make O=../br.build-1 manual-html
-> >     cd ..
-> >     make -C buildroot O=../br.build-2 manual-html
-> >     make -C buildroot O=$(pwd)/br.build-3
-> >     mkdir br.build-4
-> >     cd br.build-4
-> >     make defconfig   (to create the Makefile wrapper)
-> >     make manual-html
+ Is that also true for old RHEL? Those beasts offer 10 years of support so you
+get really really old ones out there...
+
+ It would be better to just make the script python3-compliant. Probably just a
+matter of adding brackets around the print statements -- patch follows.
+
+ Regards,
+ Arnout
+
 > 
->  Call me stupid, but why is it relevant to test this patch with manual-html?
+> Let's specify it in the graph-depends script to make it clear that it
+> requires the version 2 of Python to work.
+> 
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> ---
+>  support/scripts/graph-depends | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+> index e2a5e1e..e323e3f 100755
+> --- a/support/scripts/graph-depends
+> +++ b/support/scripts/graph-depends
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python
+> +#!/usr/bin/python2
+>  
+>  # Usage (the graphviz package must be installed in your distribution)
+>  #  ./support/scripts/graph-depends [-p package-name] > test.dot
+> 
 
-Err... Hmm... Well...
-
-OK, back to the shell I am... ;-)
-
-Sorry, sorry, sorry...
-
-Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
