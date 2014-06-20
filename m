@@ -1,38 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Jun 2014 22:07:33 +0200
+Date: Fri, 20 Jun 2014 22:12:02 +0200
 Subject: [Buildroot] [PATCH] Makefile: document make <package>-dirclean
-In-Reply-To: <53A3FEA0.1030503@lucaceresoli.net>
+In-Reply-To: <20140620121154.39a88ecb@free-electrons.com>
 References: <20140619182648.GB3534@free.fr>
  <409511316.213968.1403203738913.JavaMail.root@mail>
- <20140619201047.GC3534@free.fr> <53A3FEA0.1030503@lucaceresoli.net>
-Message-ID: <20140620200733.GC3543@free.fr>
+ <20140619201047.GC3534@free.fr>
+ <CAAXf6LXBfosgS1dBZtx8ZMp_bEsxeyALNSOnMAEt7aS-nXpVMg@mail.gmail.com>
+ <20140620121154.39a88ecb@free-electrons.com>
+Message-ID: <20140620201202.GD3543@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Thomas?, Vivien, All,
 
-On 2014-06-20 11:28 +0200, Luca Ceresoli spake thusly:
-> Dear Yann,
+On 2014-06-20 12:11 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 20 Jun 2014 11:40:10 +0200, Thomas De Schampheleire wrote:
 > 
-> Yann E. MORIN wrote:
-> >Vivien, All,
-> >
-> [...]
-> >
-> >But I usually suck at designing user-centric UI. One could say I'm a
-> >weird, uncommon user with a tortured, twisted mind. ;-]
+> > According to me, foo-dirclean is much more useful to the typical user
+> > than foo-rebuild or foo-reconfigure.
 > 
-> Come on Yann, you're able to say that more concisely:
+> I agree.
 > 
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |
->            ^^^^^^^^^^^^^^^^
+> > The latter two actions are
+> > typically used for OVERRIDE_SRCDIR only, right? While -dirclean can be
+> > used for any kind of (mis)action you performed.
+> 
+> Well, I also use -rebuild and -reconfigure when I directly hack into
+> output/build/<pkg>-<version>/ to do a quick test.
 
-Hehe! :-)
+Well, I must really be a "different" kind of person, then, as I use
+-reconfigure and -rebuild quite agressively (especially with
+OVERRIDE_SRC_DIR), but just use plain: rm -rf b<TAB>pac<TAB> (which
+expands in the shell to build/package-version/ ) to do the -dirclean
+stuff; that's so much faster! ;-)
 
-I'll look at your reviews on the legal stuff tonight.
+> > So while I agree that some make targets should be listed to make sure
+> > the unsuspecting user is aware that they exist, dirclean would
+> > definitely be a part of this list, while rebuild/reconfigure need not
+> > necessarily IMO.
+> 
+> True.
+> 
+> > Maybe we should create a list of all the possible targets (here in
+> > this thread I mean) and then decide case-by-case if it's necessary to
+> > list them in 'make help' or not?
+> 
+> Another possible solution would be to have a <pkg>-help target that
+> lists all targets that are possible on a package, and then the main
+> "make help" only references that.
+
+OK, I like that. :-)
 
 Regards,
 Yann E. MORIN.
