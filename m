@@ -1,25 +1,26 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 20 Jun 2014 09:37:51 +0200
+From: Heiko Abraham <abrahamh@web.de>
+Date: Fri, 20 Jun 2014 10:15:23 +0200
 Subject: [Buildroot] [RFC] FIT image support
-In-Reply-To: <CAGm1_ksPaQp8gOWdC4jPhSu87x2GxigywM0QFLWa6WF9Lrbs1w@mail.gmail.com>
-References: <CAGm1_ksPaQp8gOWdC4jPhSu87x2GxigywM0QFLWa6WF9Lrbs1w@mail.gmail.com>
-Message-ID: <CAGm1_ktuAjUOqumy7Qv_rMj=zhy0m9P9HPRg4Vg38Qt3f5e_9Q@mail.gmail.com>
+Message-ID: <020ED860-5D2B-4035-8799-5B8189C66BDC@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 19, 2014 at 5:38 PM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
+Hi Yegor,
+
+On Thu, 19 Jun 2014 17:38:16 +0200, Yegor Yefremov wrote:
 > What would be the best approach to support FIT images, i.e. kernel
 > image + DTB + initramfs in one file?
 
-FIT slides: http://elinux.org/images/f/f4/Elc2013_Fernandes.pdf
+FIT-Images can be complex. See uboot documentation. You need your your own *.its file 
+(match requirements like sign, hash, configs). Note that your uboot config must enable 
+the required features, like CONFIG_FIT_SIGNATURE, CONFIG_RSA, ...
 
-Some caveats: http://lists.denx.de/pipermail/u-boot/2014-May/179909.html
+My approach is:
+- add own patch for uboot to enable FIT-image support for target
+- create your own *.its file  (with sections for kernel, dtb and ramdisk)
+- use the buildroot post-script to create the FIT-image (using uboot-mkimage) 
 
-So the simplest workaround would be to copy *.its file to
-output/images and then invoke mkimage
-
-Yegor
+Heiko
