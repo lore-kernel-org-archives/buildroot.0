@@ -1,22 +1,102 @@
-From: Javier Domingo Cansino <javierdo1@gmail.com>
-Date: Sat, 21 Jun 2014 00:39:09 +0200
-Subject: [Buildroot] [PATCH 1/1] Rewriting instructions to generate a
- zedboard image to make it really verbose
-In-Reply-To: <CALZVap=5oybSOBAJuB5UD1Sc3NQUCYB2rR8rjCE_AG7+0Q02UA@mail.gmail.com>
-References: <1402343887-12278-1-git-send-email-javierdo1@gmail.com>
- <CAEBucnBM6RtYxopUvo8dggJYY5s_3qrAjDUOv9SuGz2W76R3Uw@mail.gmail.com>
- <CALZVap=5oybSOBAJuB5UD1Sc3NQUCYB2rR8rjCE_AG7+0Q02UA@mail.gmail.com>
-Message-ID: <CALZVapmACJsYjR+Vuf618ziV41K03Mq+kAbr4LsL1AcdNiP6YQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 21 Jun 2014 01:09:31 +0200
+Subject: [Buildroot] [PATCH 1 of 3 v2] infra: support buildroot being
+ located in /usr
+In-Reply-To: <2969a1777632f4df4615.1403291464@localhost>
+References: <patchbomb.1403291463@localhost>
+ <2969a1777632f4df4615.1403291464@localhost>
+Message-ID: <53A4BF2B.1000405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I promise I followed all the steps, but seems like I didn't put the
-correct In-Reply-To: header or something like that. The result is
-http://patchwork.ozlabs.org/patch/362361/
+On 20/06/14 21:11, Thomas De Schampheleire wrote:
+> pkg-generic and pkg-autotools both perform sed replacements of /usr to
+> $(STAGING_DIR)/usr, in .pc and .la files respectively. However, if buildroot
+> itself is located in /usr, then STAGING_DIR also starts with /usr, and naive
+> replacements of '/usr' can result in paths of the form:
+>     /usr/buildroot/.../sysroot/usr/buildroot/.../sysroot/...
+> 
+> This patch makes the replacements more careful, by first replacing the known
+> paths BASE_DIR and STAGING_DIR to tokens, then performing the actual
+> replacement, and finally replacing the tokens with the corresponding paths.
+> 
+> Additionally it removes the unnecessary making of a backup copy in
+> pkg-autotools.
+> 
+> Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
+> 
+> Partially-based-on-a-patch-from: Ben Stoltz <benstoltz@gmail.com>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+> v2: s/Jeremy Kerr/Ben Stoltz/
+> 
+>  package/pkg-autotools.mk |   8 ++++++--
+>  package/pkg-generic.mk   |  10 +++++++---
+>  2 files changed, 13 insertions(+), 5 deletions(-)
+> 
+> diff -r a59338f65a46 -r 2969a1777632 package/pkg-autotools.mk
+> --- a/package/pkg-autotools.mk	Wed Jun 18 20:22:00 2014 +0400
+> +++ b/package/pkg-autotools.mk	Fri Jun 20 21:09:35 2014 +0200
+> @@ -268,8 +268,12 @@
+>  define $(2)_INSTALL_STAGING_CMDS
+>  	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+>  	for i in $$$$(find $$(STAGING_DIR)/usr/lib* -name "*.la"); do \
+> -		cp -f $$$$i $$$$i~; \
+> -		$$(SED) "s:\(['= ]\)/usr:\\1$$(STAGING_DIR)/usr:g" $$$$i; \
+> +		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+> +			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
 
-Cheers!
+ STAGING_DIR contains BASE_DIR, so this second expression will never match
+anymore, no? It would match if you swap the two expressions, but there is not
+much reason I think.
 
-Javier Domingo Cansino
+ But don't let that stop this patch. So:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+> +			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+> +			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+> +			-e "s:@BASE_DIR@:$$(BASE_DIR):g" \
+> +			$$$$i; \
+>  	done
+>  endef
+>  endif
+> diff -r a59338f65a46 -r 2969a1777632 package/pkg-generic.mk
+> --- a/package/pkg-generic.mk	Wed Jun 18 20:22:00 2014 +0400
+> +++ b/package/pkg-generic.mk	Fri Jun 20 21:09:35 2014 +0200
+> @@ -201,9 +201,13 @@
+>  	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+>  	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+>  		$(call MESSAGE,"Fixing package configuration files") ;\
+> -			$(SED)  "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
+> -				-e "s,-I/usr/,-I$(STAGING_DIR)/usr/,g" \
+> -				-e "s,-L/usr/,-L$(STAGING_DIR)/usr/,g" \
+> +			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+> +				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
+> +				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+> +				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+> +				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+> +				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
+> +				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+>  				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+>  	fi
+>  	$(Q)touch $@
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
