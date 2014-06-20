@@ -1,71 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 20 Jun 2014 23:01:46 +0200
-Subject: [Buildroot] [PATCH 1/5] freescale-imx: bump to version
-	3.10.17-1.0.0
-In-Reply-To: <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
-References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
- <1403150639-29382-2-git-send-email-bisson.gary@gmail.com>
- <20140619162009.GA3534@free.fr>
- <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
-Message-ID: <20140620210146.GB26745@free.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 20 Jun 2014 16:03:34 -0500
+Subject: [Buildroot] [ANNOUNCE] Autobuilder script available,
+ join the autobuilder effort!
+In-Reply-To: <20140614212341.5306ead8@free-electrons.com>
+References: <20140614212341.5306ead8@free-electrons.com>
+Message-ID: <CANQCQpaOQD73SWyE5QSv1CVb8DG1MggsAxdzkb5yy7J9DhANTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+Thomas, wanted to thank you for making this available.  Here's some
+initial feedback.
 
-On 2014-06-19 19:40 -0700, Gary Bisson spake thusly:
-> > > diff --git
-> > a/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
-> > b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
-> > > new file mode 100644
-> > > index 0000000..b73a959
-> > > --- /dev/null
-> > > +++
-> > b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
-> > > @@ -0,0 +1,21 @@
-> > > +[PATCH] fix IOSystemInit failure
-> >
-> > Please provide a more detailed comit log. Why do we need this?
-> >
-> 
-> As I said in the first patch I used the nitrogen6x to do my testing, there
-> is one "big" difference between freescale and boundary kernel which is the
-> memory split (2G/2G for FSL, 3G/1G for Boundary). Clearly the VPU code has
-> only been tested on Freescale kernels because there is no way it works on
-> kernel with the latter splitting. The VPU init function returns an error if
-> the allocated buffer address is < 0 which does not make any sense. Instead
-> the test should be against MAP_FAILED (-1). Only after that patch I've been
-> able to get the VPU decoding working. I will change the -1 into MAP_FAILED
-> for the next patch.
+On Sat, Jun 14, 2014 at 2:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+<snip>
+>
+> Getting started
+> ===============
+>
+>
+> To get started, you can simply run it with:
+>
+>   ./autobuild-run --ninstances 2 --njobs 3
+>
+I seem to get the following output.  It looks like the build is right
+before the spot where it is doing the initial "make
+O=./instance-#/output -C ./buildroot".  If I manually go into the
+instance#/output folder and do a "make", things seem to look like
+they're working as expected (building packages/downloading archives,
+etc).  So my theory is something in my shell environment or the fact
+I'm using python2.6 with that subprocess.....  One thing I noticed
+when I got this error was that the resulting logfile in the output
+folder is empty.  I added a test write to this file before line 327
+and I saw what I wrote.  So it looks like the subprocess isn't getting
+called successfully.  Since I'm going to run the script on a newer
+server that has python2.7, this email is probably just a FYI and I'll
+retest once I'm setup to test on that server.
 
-OK, I see. You should also repeat this in the patch description, like:
+Process Process-1:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/multiprocessing/process.py", line 232, in _bootstrap
+    self.run()
+  File "/usr/lib/python2.6/multiprocessing/process.py", line 88, in run
+    self._target(*self._args, **self._kwargs)
+  File "./autobuild-run", line 437, in run_instance
+    ret = do_build(instance, instance_log)
+  File "./autobuild-run", line 327, in do_build
+    stdout=f, stderr=f)
+  File "/usr/lib/python2.6/subprocess.py", line 480, in call
+    return Popen(*popenargs, **kwargs).wait()
+  File "/usr/lib/python2.6/subprocess.py", line 633, in __init__
+    errread, errwrite)
+  File "/usr/lib/python2.6/subprocess.py", line 1139, in _execute_child
+    raise child_exception
+OSError: [Errno 2] No such file or directory
 
-    vpu-io: fix IOSystemInit failure
+>
+>
+<snip>
 
-    There is one "big" difference between freescale and boundary kernel
-    which is the memory split (2G/2G for FSL, 3G/1G for Boundary).
-
-    Clearly the VPU code has only been tested on Freescale kernels
-    because there is no way it works on kernel with the latter
-    splitting. The VPU init function returns an error if the allocated
-    buffer address is < 0, which happens with the 3G/1G split.
-
-    Fix the test by checking against MAP_FAILED instead.
-
-    Signed-off-by: You <you@there>
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+Thanks!
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Matthew L Weber / Sr Software Engineer / Platform Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+Phone: 319-295-7349
+matthew.weber at rockwellcollins.com
+www.rockwellcollins.com
