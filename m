@@ -1,75 +1,51 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Fri, 20 Jun 2014 20:44:29 -0700
-Subject: [Buildroot] [PATCH 1/5] freescale-imx: bump to version
-	3.10.17-1.0.0
-In-Reply-To: <20140620210146.GB26745@free.fr>
-References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
- <1403150639-29382-2-git-send-email-bisson.gary@gmail.com>
- <20140619162009.GA3534@free.fr>
- <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
- <20140620210146.GB26745@free.fr>
-Message-ID: <53A4FF9D.2020909@boundarydevices.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Jun 2014 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-20
+Message-ID: <20140621063009.1AA8A100C47@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann and Gary,
+Build statistics for 2014-06-20
+===============================
 
-On 06/20/2014 02:01 PM, Yann E. MORIN wrote:
-> Gary, All,
-> 
-> On 2014-06-19 19:40 -0700, Gary Bisson spake thusly:
->>>> diff --git
->>> a/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
->>> b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
->>>> new file mode 100644
->>>> index 0000000..b73a959
->>>> --- /dev/null
->>>> +++
->>> b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
->>>> @@ -0,0 +1,21 @@
->>>> +[PATCH] fix IOSystemInit failure
->>>
->>> Please provide a more detailed comit log. Why do we need this?
->>>
->>
->> As I said in the first patch I used the nitrogen6x to do my testing, there
->> is one "big" difference between freescale and boundary kernel which is the
->> memory split (2G/2G for FSL, 3G/1G for Boundary). Clearly the VPU code has
->> only been tested on Freescale kernels because there is no way it works on
->> kernel with the latter splitting. The VPU init function returns an error if
->> the allocated buffer address is < 0 which does not make any sense. Instead
->> the test should be against MAP_FAILED (-1). Only after that patch I've been
->> able to get the VPU decoding working. I will change the -1 into MAP_FAILED
->> for the next patch.
+        success : 103
+       failures : 10 
+       timeouts : 1  
+          TOTAL : 114
 
-Nice catch. I do think this should be split into a separate patch
-though.
+Classification of failures by reason
+====================================
 
-A quick scan of this code shows that there are four other places
-that have the test for IOGetVirtMem() <= 0.
+               qt5webkit-5.3.0 | 1 
+                 webkit-1.11.5 | 1 
+               audiofile-0.3.6 | 1 
+                 dmalloc-5.4.3 | 1 
+           xapp_bdftopcf-1.0.4 | 1 
+               host-orc-0.4.19 | 1 
+                    sdl-1.2.15 | 1 
+                 inadyn-1.99.9 | 1 
+                  snmppp-3.3.4 | 1 
+make: *** [core-dependencie... | 1 
+                poppler-0.24.4 | 1 
 
-> 
-> OK, I see. You should also repeat this in the patch description, like:
-> 
->     vpu-io: fix IOSystemInit failure
-> 
->     There is one "big" difference between freescale and boundary kernel
->     which is the memory split (2G/2G for FSL, 3G/1G for Boundary).
-> 
->     Clearly the VPU code has only been tested on Freescale kernels
->     because there is no way it works on kernel with the latter
->     splitting. The VPU init function returns an error if the allocated
->     buffer address is < 0, which happens with the 3G/1G split.
-> 
->     Fix the test by checking against MAP_FAILED instead.
-> 
->     Signed-off-by: You <you@there>
-> 
-> Thanks! :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Detail of failures
+===================
+
+     avr32 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/0d726f34591a64d96eb0d4f51c355fbc3de5a748/
+      bfin |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/c910bdd26807317b74b82e0891f146e5c8f976d4/
+   powerpc |                host-orc-0.4.19 | NOK | http://autobuild.buildroot.net/results/de2499b4af1c291b30112138cdffee1cbb2889ed/
+       arm |                  inadyn-1.99.9 | NOK | http://autobuild.buildroot.net/results/4c30efe08a28b86603e77e9c50d94eb03c7ab7e3/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/2a397481b8c9fa2e2b7028e1847fd0cd1787d61d/
+      bfin |                 poppler-0.24.4 | NOK | http://autobuild.buildroot.net/results/1ff39febb06e51da79e0e5fc572f1bdb0424cd3f/
+       arm |                qt5webkit-5.3.0 | TIM | http://autobuild.buildroot.net/results/5b4586e61fed1497a301b4eac5f6f870a17ad66a/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/02e67720d8f2185612beb2fc7e184041ee0f8e4e/
+      bfin |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/76250630c508cb332bd5588cc3e430fce2ea40c7/
+       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/e975399eec8c15db89da3b59f7e52b64133d580c/
+microblazeel |            xapp_bdftopcf-1.0.4 | NOK | http://autobuild.buildroot.net/results/6d1c1c4f2bfa1f55fb6b839e09873d0de1818897/
+
+
+-- 
+http://autobuild.buildroot.net
