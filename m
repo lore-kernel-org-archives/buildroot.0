@@ -1,50 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jun 2014 19:56:56 +0200
-Subject: [Buildroot] [PATCH 1/1] packages: fix the header package name
-In-Reply-To: <1403300466-24924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1403300466-24924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140621195656.6ad08587@free-electrons.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Sat, 21 Jun 2014 22:50:53 +0200
+Subject: [Buildroot] [Patch v2 1/1] systemd: rework network/tty units
+	installation
+Message-ID: <1403383853-7490-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+The installation of the network.service and serial-getty.service unit
+files are now performed via the <pkg>_INIT_SYSTEMD mechanism instead of
+an installation hook.
 
-On Fri, 20 Jun 2014 23:41:06 +0200, Jerzy Grzegorek wrote:
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/systemd/systemd.mk | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
 
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index a0077d2..6f5c53f 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -1,6 +1,6 @@
->  ################################################################################
->  #
-> -# glibc/eglibc
-> +# (e)glibc
-
-I'd prefer to stick with "glibc/eglibc" here. We're anyway going to
-remove eglibc support soon, since eglibc 2.19 was the latest release
-and the project has been declared dead.
-
-
-> diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
-> index dd6814e..fcb8599 100644
-> --- a/package/x11r7/xlib_libICE/xlib_libICE.mk
-> +++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
-> @@ -1,6 +1,6 @@
->  ################################################################################
->  #
-> -# xlib_libICE
-> +# xlib_libice
-
-I really don't agree with all those changes to lower-case here. The
-package uses capital letters in its name, so it's better for the header
-to have the same capitalization.
-
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index f3874db..1a606cd 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -101,6 +101,13 @@ ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+ SYSTEMD_CONF_OPT += --enable-networkd
+ else
+ SYSTEMD_CONF_OPT += --disable-networkd
++define SYSTEMD_INSTALL_SERVICE_NETWORK
++	$(INSTALL) -D -m 644 package/systemd/network.service \
++		$(TARGET_DIR)/etc/systemd/system/network.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../network.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
++endef
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+@@ -131,11 +138,6 @@ define SYSTEMD_INSTALL_INIT_HOOK
+ 	ln -fs ../../../lib/systemd/system/multi-user.target $(TARGET_DIR)/etc/systemd/system/default.target
+ endef
+ 
+-define SYSTEMD_INSTALL_TTY_HOOK
+-	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
+-	ln -fs ../../../../lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
+-endef
+-
+ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+@@ -145,28 +147,26 @@ define SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
+ endef
+ 
+-define SYSTEMD_INSTALL_NETWORK_HOOK
+-	$(INSTALL) -D -m 644 package/systemd/network.service \
+-		$(TARGET_DIR)/etc/systemd/system/network.service
+-	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+-	ln -fs ../network.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
+-endef
+-
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_TTY_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+ 	SYSTEMD_SANITIZE_PATH_IN_UNITS
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),)
+-SYSTEMD_POST_INSTALL_TARGET_HOOKS += SYSTEMD_INSTALL_NETWORK_HOOK
+-endif
+-
+ define SYSTEMD_USERS
+ 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
+ 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
+ 	$(SYSTEMD_USER_TIMESYNC)
+ endef
+ 
++define SYSTEMD_INSTALL_SERVICE_TTY
++	rm -f $(TARGET_DIR)/etc/systemd/system/getty.target.wants/getty at tty1.service
++	ln -fs ../../../../lib/systemd/system/serial-getty at .service $(TARGET_DIR)/etc/systemd/system/getty.target.wants/serial-getty@$(BR2_TARGET_GENERIC_GETTY_PORT).service
++endef
++
++define SYSTEMD_INSTALL_INIT_SYSTEMD
++	$(SYSTEMD_INSTALL_SERVICE_TTY)
++	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
++endef
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
