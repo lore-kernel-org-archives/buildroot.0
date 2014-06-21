@@ -1,65 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 21 Jun 2014 01:48:48 +0200
-Subject: [Buildroot] [PATCH v2 3/3] Makefile: do not add to targets
-	common dependencies
-In-Reply-To: <1403252778-19761-4-git-send-email-fabio.porcedda@gmail.com>
-References: <1403252778-19761-1-git-send-email-fabio.porcedda@gmail.com>
- <1403252778-19761-4-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <53A4C860.7090601@mind.be>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Fri, 20 Jun 2014 20:44:29 -0700
+Subject: [Buildroot] [PATCH 1/5] freescale-imx: bump to version
+	3.10.17-1.0.0
+In-Reply-To: <20140620210146.GB26745@free.fr>
+References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
+ <1403150639-29382-2-git-send-email-bisson.gary@gmail.com>
+ <20140619162009.GA3534@free.fr>
+ <CADCpmyNGmM_FoGGoiDS640wjjrQfNkMBsdf+HBfpFgn9aAptKw@mail.gmail.com>
+ <20140620210146.GB26745@free.fr>
+Message-ID: <53A4FF9D.2020909@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/06/14 10:26, Fabio Porcedda wrote:
-> Remove the rule that add common dependencies to every targets in the
-> "TARGETS" variable because all those targets are packages that use the package
-> framework that already add common dependencies.
+Hi Yann and Gary,
 
- There are still two targets that don't:
-
-- target-generatelocales - should probably be converted to a
-TARGET_FINALIZE_HOOK as well;
-
-- toolchain-eclipse-register - doesn't need to depend on anything I think, but
-anyway could also be converted to a TARGET_FINALIZE_HOOK.
-
-
- So neither of these are really critical.
-
- Also, you forgot you Sob.
-
-
- Regards,
- Arnout
-
-> ---
->  Makefile | 4 ----
->  1 file changed, 4 deletions(-)
+On 06/20/2014 02:01 PM, Yann E. MORIN wrote:
+> Gary, All,
 > 
-> diff --git a/Makefile b/Makefile
-> index 9de4806..c028cf8 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -433,10 +433,6 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  
-> -# Add base dependencies to all targets even on those not based on the
-> -# package framework.
-> -$(TARGETS): dirs prepare dependencies
-> -
->  world: target-post-image
->  
->  .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+> On 2014-06-19 19:40 -0700, Gary Bisson spake thusly:
+>>>> diff --git
+>>> a/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+>>> b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+>>>> new file mode 100644
+>>>> index 0000000..b73a959
+>>>> --- /dev/null
+>>>> +++
+>>> b/package/freescale-imx/imx-vpu/imx-vpu-0001-fix-IOSystemInit-failure.patch
+>>>> @@ -0,0 +1,21 @@
+>>>> +[PATCH] fix IOSystemInit failure
+>>>
+>>> Please provide a more detailed comit log. Why do we need this?
+>>>
+>>
+>> As I said in the first patch I used the nitrogen6x to do my testing, there
+>> is one "big" difference between freescale and boundary kernel which is the
+>> memory split (2G/2G for FSL, 3G/1G for Boundary). Clearly the VPU code has
+>> only been tested on Freescale kernels because there is no way it works on
+>> kernel with the latter splitting. The VPU init function returns an error if
+>> the allocated buffer address is < 0 which does not make any sense. Instead
+>> the test should be against MAP_FAILED (-1). Only after that patch I've been
+>> able to get the VPU decoding working. I will change the -1 into MAP_FAILED
+>> for the next patch.
+
+Nice catch. I do think this should be split into a separate patch
+though.
+
+A quick scan of this code shows that there are four other places
+that have the test for IOGetVirtMem() <= 0.
+
 > 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+> OK, I see. You should also repeat this in the patch description, like:
+> 
+>     vpu-io: fix IOSystemInit failure
+> 
+>     There is one "big" difference between freescale and boundary kernel
+>     which is the memory split (2G/2G for FSL, 3G/1G for Boundary).
+> 
+>     Clearly the VPU code has only been tested on Freescale kernels
+>     because there is no way it works on kernel with the latter
+>     splitting. The VPU init function returns an error if the allocated
+>     buffer address is < 0, which happens with the 3G/1G split.
+> 
+>     Fix the test by checking against MAP_FAILED instead.
+> 
+>     Signed-off-by: You <you@there>
+> 
+> Thanks! :-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
