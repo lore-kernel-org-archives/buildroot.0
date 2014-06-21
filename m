@@ -1,48 +1,43 @@
-From: Marco Trapanese <marcotrapanese@gmail.com>
-Date: Sat, 21 Jun 2014 18:23:12 +0200
-Subject: [Buildroot] Help about gstreamer h264 in buildroot
-In-Reply-To: <53A58757.8030701@gmail.com>
-References: <539C13BA.5000106@gmail.com>	<20140614141451.6780163c@free-electrons.com>	<53A566AE.7020800@gmail.com>
- <20140621150459.267bce66@free-electrons.com> <53A58757.8030701@gmail.com>
-Message-ID: <53A5B170.2070401@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 21 Jun 2014 18:59:09 +0200
+Subject: [Buildroot] [PATCH 2 of 3 v2] qt5: support buildroot being
+ located in /usr
+In-Reply-To: <53A4C052.1050105@mind.be>
+References: <patchbomb.1403291463@localhost>
+ <6e90b5d192055fdb9550.1403291465@localhost>
+ <53A4C052.1050105@mind.be>
+Message-ID: <20140621185909.22016e05@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 21/06/2014 15:23, Marco Trapanese ha scritto:
-> So I'm just wondering if it is possible to know which combination of 
-> kernel/buildroot version leads to a working environment with basic 
-> packages. For my current project based upon RPi I need only:
->
-> - common utility: ssh (dropbear or openssh), lighttpd, etc (no problem 
-> here!)
-> - Qt5 (all modules, egl platform)
-> - gstreamer with mp3, mp4 h264 and qtmultimedia support
+Dear Arnout Vandecappelle,
 
+On Sat, 21 Jun 2014 01:14:26 +0200, Arnout Vandecappelle wrote:
 
-I'm close to find a working solution.
-Attached there is the current .config file.
+>  Now that I see the two patches next to each other: why is this hook needed?
+> It's already done by the generic staging-install target, no? ThomasP carries the
+> blame for this, so putting him in Cc...
 
-Qt5 is working
-QtMultimedia is working
-gstreamer for mp3 decoding is working
+I don't think I should be blamed for this actually :-)
 
-I can't play only mp4 video files. GStreamer tells me there are no video 
-sinks available.
+The generic staging-install fixup of .la files is only part of
+the autotools-package infrastructure, because it's related to libtool,
+which is normally used in combination with the rest of the autotools.
 
-Which buildroot package contains a gstreamer video sink that works 
-without X (egl/gles) ?
+However, qt5* packages are all generic-packages, so the "generic"
+staging-install fixup of .la files doesn't apply for these packages.
 
-Thanks again
-Marco
+That being said, we could certainly make the .la fixup logic a common
+macro, which could be used by both the autotools-package
+infrastructure, and some other packages as well.
 
+Best regards,
 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/xml
-Size: 53785 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140621/0c4c1a5c/attachment.wsdl>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
