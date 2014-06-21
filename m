@@ -1,130 +1,67 @@
-From: Spenser Gilliland <spenser@gillilanding.com>
-Date: Sat, 21 Jun 2014 00:58:41 -0700
-Subject: [Buildroot] [PATCH v2] Rewriting instructions to generate a
- zedboard image to be really verbose
-In-Reply-To: <1403303331-14450-1-git-send-email-javierdo1@gmail.com>
-References: <1402343887-12278-1-git-send-email-javierdo1@gmail.com>
- <1403303331-14450-1-git-send-email-javierdo1@gmail.com>
-Message-ID: <CAEBucnCgdFa8cxpabxfnZpsPtz4xoNwgoimxnnYY35jSkg_2+Q@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 21 Jun 2014 11:04:22 +0200
+Subject: [Buildroot] [PATCH 1 of 3 v2] infra: support buildroot being
+ located in /usr
+In-Reply-To: <53A4BF2B.1000405@mind.be>
+References: <patchbomb.1403291463@localhost>
+ <2969a1777632f4df4615.1403291464@localhost>
+ <53A4BF2B.1000405@mind.be>
+Message-ID: <CAAXf6LUkH-0ODtGpk2--fbknnjCFeoMUNAC28S+wKrg7nedUYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Javier,
+On Sat, Jun 21, 2014 at 1:09 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 20/06/14 21:11, Thomas De Schampheleire wrote:
+>> pkg-generic and pkg-autotools both perform sed replacements of /usr to
+>> $(STAGING_DIR)/usr, in .pc and .la files respectively. However, if buildroot
+>> itself is located in /usr, then STAGING_DIR also starts with /usr, and naive
+>> replacements of '/usr' can result in paths of the form:
+>>     /usr/buildroot/.../sysroot/usr/buildroot/.../sysroot/...
+>>
+>> This patch makes the replacements more careful, by first replacing the known
+>> paths BASE_DIR and STAGING_DIR to tokens, then performing the actual
+>> replacement, and finally replacing the tokens with the corresponding paths.
+>>
+>> Additionally it removes the unnecessary making of a backup copy in
+>> pkg-autotools.
+>>
+>> Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
+>>
+>> Partially-based-on-a-patch-from: Ben Stoltz <benstoltz@gmail.com>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>> v2: s/Jeremy Kerr/Ben Stoltz/
+>>
+>>  package/pkg-autotools.mk |   8 ++++++--
+>>  package/pkg-generic.mk   |  10 +++++++---
+>>  2 files changed, 13 insertions(+), 5 deletions(-)
+>>
+>> diff -r a59338f65a46 -r 2969a1777632 package/pkg-autotools.mk
+>> --- a/package/pkg-autotools.mk        Wed Jun 18 20:22:00 2014 +0400
+>> +++ b/package/pkg-autotools.mk        Fri Jun 20 21:09:35 2014 +0200
+>> @@ -268,8 +268,12 @@
+>>  define $(2)_INSTALL_STAGING_CMDS
+>>       $$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+>>       for i in $$$$(find $$(STAGING_DIR)/usr/lib* -name "*.la"); do \
+>> -             cp -f $$$$i $$$$i~; \
+>> -             $$(SED) "s:\(['= ]\)/usr:\\1$$(STAGING_DIR)/usr:g" $$$$i; \
+>> +             $$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+>> +                     -e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
+>
+>  STAGING_DIR contains BASE_DIR, so this second expression will never match
+> anymore, no? It would match if you swap the two expressions, but there is not
+> much reason I think.
 
-On Fri, Jun 20, 2014 at 3:28 PM, Javier Domingo Cansino
-<javierdo1@gmail.com> wrote:
-> ---
-> Changes v1 -> v2:
->   - Rewrote messages as suggested by spenser
-> ---
->  board/avnet/zedboard/readme.txt |   62 ++++++++++++++++++++++++++++++++-------
->  1 file changed, 52 insertions(+), 10 deletions(-)
->
-> diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-> index efd076f..28f4846 100644
-> --- a/board/avnet/zedboard/readme.txt
-> +++ b/board/avnet/zedboard/readme.txt
-> @@ -5,26 +5,68 @@ System-On-Chip.
->  Zedboard information including schematics, reference designs, and manuals are
->  available from http://www.zedboard.org .
->
-> -To boot the Zedboard using a buildroot generated image copy the following files
-> -to the sdcard:
-> -       zynq-zed.dtb -> devicetree.dtb
-> -       rootfs.cpio.gz.uboot -> uramdisk.image.gz
-> -       uImage -> uImage
-> -       boot.bin -> boot.bin
-> +The U-Boot firmware for the Xilinx Zynq All Programmable SoC depends
-> +on some propietary code. This dependency consists of a pair of
-> +files are available from the Xilinx SDK installation.
->
-> -U-Boot SPL Support
-> --------------
-> +You will need this files from Xilinx SDK installation to generate
-
-This -> these
-
-> +the U-Boot firmware:
-> +       ps7_init.c
-> +       ps7_init.h
-> +
-> +Buildroot will create the following files and place them in the
-> +<output>/images directory.
-> +       zynq-zed.dtb
-> +       rootfs.cpio.uboot
-> +       uImage
-> +       u-boot.img
-> +       boot.bin
-> +
-> +
-> +uboot.bin  -- U-Boot SPL w/ Xilinx boot.bin wrapper
-> +---------------------------------------------------
->
->  Due to licensing issues, the files ps7_init.c/h are not able to be
->  distributed with the U-Boot source code.  These files are required to make a
->  boot.bin file.
->
-> -If you already have the Xilinx tools installed, the follwing sequence will
-> +If you already have the Xilinx tools installed, the following sequence will
->  unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
->
->  make zedboard_defconfig
->  make uboot-patch
->  cp ${XILINX}/ISE_DS/EDK/sw/lib/hwplatform_templates/zed_hw_platform/ps7_init.{c,h} \
-> -output/build/uboot-xilinx-v2014.1/boards/xilinx/zynq/
-> +output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
-> +
-> +After copying these files into the U-Boot source tree, you can
-> +continue the build with:
-> +
->  make
->
-> +*Notice*
-> +While the build will successfully complete without the ps7_init.*
-> +files,  the uboot.bin file generated by this configuration will not
-> +function properly on the Zedboard.  Therefore, it is imperative that
-> +the ps7_init.* files be copied into the U-Boot source tree any time
-> +the clean, or uboot-dirclean targets are made.
-> +
-> +
-> +Resulting system
-> +----------------
-> +A FAT32 partition should be created at the beggining of the SD Card
-> +and the following files should be installed:
-> +       /boot.bin
-> +       /devicetree.dtb
-> +       /uImage
-> +       /uramdisk.image.gz
-> +       /u-boot.img
-> +
-> +
-> +All needed files can be taken from output/images/
-> +
-> +boot.bin, uImage and u-boot.img are direct copies of the same files
-> +available on output/images/
-> +
-> +devicetree.dtb is just zynq-zed.dtb renamed.
-> +
-> +uramdisk.image.gz is rootfs.cpio.uboot renamed
-> --
-> 1.7.10.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Otherwise, looks good to me.  Peter if you could apply this with the
-small grammar fix above; it would help the documentation for users of
-the Zedboard.
+I originally had the STAGING_DIR token alone, but it caused a problem
+still. Then I took over the BASE_DIR expression from Ben Stoltz'
+patch, which also kept the STAGING_DIR.
+I think you are right that only the BASE_DIR replacement is needed.
+After all, this is where the problematic /usr is. I will try this out
+for simplicity's sake...
 
 Thanks,
-Spenser
-
--- 
-Spenser Gilliland
-Computer Engineer
-Doctoral Candidate
+Thomas
