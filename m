@@ -1,97 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jun 2014 19:14:59 +0200
-Subject: [Buildroot] [PATCH 1/2] icu: Delete inapropriate flag at link
-In-Reply-To: <53A4A737.9070304@mind.be>
-References: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
- <53A4A737.9070304@mind.be>
-Message-ID: <20140621191459.7a124206@free-electrons.com>
+Date: Sat, 21 Jun 2014 19:20:52 +0200
+Subject: [Buildroot] [ANNOUNCE] Autobuilder script available,
+ join the autobuilder effort!
+In-Reply-To: <CANQCQpaOQD73SWyE5QSv1CVb8DG1MggsAxdzkb5yy7J9DhANTQ@mail.gmail.com>
+References: <20140614212341.5306ead8@free-electrons.com>
+ <CANQCQpaOQD73SWyE5QSv1CVb8DG1MggsAxdzkb5yy7J9DhANTQ@mail.gmail.com>
+Message-ID: <20140621192052.3bd3a17f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Dear Matthew Weber,
 
-On Fri, 20 Jun 2014 23:27:19 +0200, Arnout Vandecappelle wrote:
+Thanks for your report!
 
->  I don't see how -nostdlib -nodefaultlibs could have that effect - especially in
-> buildroot, where we always force the abi. Do you have an example configuration
-> where this happens?
+On Fri, 20 Jun 2014 16:03:34 -0500, Matthew Weber wrote:
 
-Yes:
+> I seem to get the following output.  It looks like the build is right
+> before the spot where it is doing the initial "make
+> O=./instance-#/output -C ./buildroot".  If I manually go into the
+> instance#/output folder and do a "make", things seem to look like
+> they're working as expected (building packages/downloading archives,
+> etc).  So my theory is something in my shell environment or the fact
+> I'm using python2.6 with that subprocess.....  One thing I noticed
+> when I got this error was that the resulting logfile in the output
+> folder is empty.  I added a test write to this file before line 327
+> and I saw what I wrote.  So it looks like the subprocess isn't getting
+> called successfully.  Since I'm going to run the script on a newer
+> server that has python2.7, this email is probably just a FYI and I'll
+> retest once I'm setup to test on that server.
 
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_ARM_EABIHF=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_ICU=y
+The builds on the Free Electrons build server are running inside an old
+Debian chroot which also uses Python 2.6 (2.6.6 to be exact), and it's
+working fine.
 
-With this configuration, all libraries are properly built EABIhf. For
-example, libicutu.so:
+> Process Process-1:
+> Traceback (most recent call last):
+>   File "/usr/lib/python2.6/multiprocessing/process.py", line 232, in _bootstrap
+>     self.run()
+>   File "/usr/lib/python2.6/multiprocessing/process.py", line 88, in run
+>     self._target(*self._args, **self._kwargs)
+>   File "./autobuild-run", line 437, in run_instance
+>     ret = do_build(instance, instance_log)
+>   File "./autobuild-run", line 327, in do_build
+>     stdout=f, stderr=f)
 
-$ LANG=C arm-linux-gnueabihf-readelf -A output/target/usr/lib/libicutu.so.51.2 
-Attribute Section: aeabi
-File Attributes
-  Tag_CPU_name: "7-A"
-  Tag_CPU_arch: v7
-  Tag_CPU_arch_profile: Application
-  Tag_ARM_ISA_use: Yes
-  Tag_THUMB_ISA_use: Thumb-2
-  Tag_FP_arch: VFPv3-D16
-  Tag_ABI_PCS_wchar_t: 4
-  Tag_ABI_FP_rounding: Needed
-  Tag_ABI_FP_denormal: Needed
-  Tag_ABI_FP_exceptions: Needed
-  Tag_ABI_FP_number_model: IEEE 754
-  Tag_ABI_align_needed: 8-byte
-  Tag_ABI_align_preserved: 8-byte, except leaf SP
-  Tag_ABI_enum_size: int
-  Tag_ABI_HardFP_use: SP and DP
-  Tag_ABI_VFP_args: VFP registers
-  Tag_CPU_unaligned_access: v6
-  Tag_Virtualization_use: TrustZone
-
-However, libicudata.so is not built properly:
-
-$ LANG=C arm-linux-gnueabihf-readelf -A output/target/usr/lib/libicudata.so.51.2 
-Attribute Section: aeabi
-File Attributes
-  Tag_CPU_name: "Cortex-A8"
-  Tag_CPU_arch: v7
-  Tag_CPU_arch_profile: Application
-  Tag_ARM_ISA_use: Yes
-  Tag_THUMB_ISA_use: Thumb-2
-  Tag_FP_arch: VFPv3-D16
-  Tag_Virtualization_use: TrustZone
-
-I was actually with Maxime in Paris a couple of weeks ago to debug this
-issue. He had a Qt application that was not starting properly due to
-this problem, because the dynamic library loader was refusing to load
-the libicudata library. After applying the patch for Debian to remove
-the problematic flags and rebuilding icu, we were able to start his Qt
-application with no problem.
-
-Also, the Debian changelog is pretty clear about what they've done, and
-explicitly mentions the armhf problem. From
-http://metadata.ftp-master.debian.org/changelogs//main/i/icu/icu_52.1-3_changelog:
-
-icu (4.8.1.1-2) unstable; urgency=low
-
-  * debian/patches/icudata-stdlibs.patch: Link stdlibs to libicudata so we
-    get reasonably sane ELF headers on armhf.  Thanks Adam Conrad
-    <adconrad@ubuntu.com>.  (Closes: #653457)
-
- -- Jay Berkenbilt <qjb@debian.org>  Wed, 04 Jan 2012 09:52:11 -0500
-
-See also https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=653457 for
-more details.
-
-Hopefully, these details will be enough to justify the patch. Though I
-agree with you that Maxime's description of the patch should have been
-more detailed.
-
-Best regards,
+Are you sure you're using the latest version of the script? The code at
+lines 327 and 437 do not match what your exception stack is showing.
+But I'm a bit surprised, because I don't think I've made any changes to
+the script since I made the public announcement on the Buildroot
+mailing list.
 
 Thomas
 -- 
