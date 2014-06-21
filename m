@@ -1,51 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jun 2014 08:30:09 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-20
-Message-ID: <20140621063009.1AA8A100C47@stock.ovh.net>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 21 Jun 2014 08:27:15 +0200
+Subject: [Buildroot] [PATCH] gst-ffmpeg: fix build on armv6 without
+ thumb2 (e.g. RaspberryPi)
+In-Reply-To: <20140620200620.GB3543@free.fr>
+References: <1403133378-28417-1-git-send-email-arnout@mind.be>
+ <20140620200620.GB3543@free.fr>
+Message-ID: <53A525C3.70408@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-06-20
-===============================
 
-        success : 103
-       failures : 10 
-       timeouts : 1  
-          TOTAL : 114
+I confirm I've already successfully built gst--ffmpeg with those changes.
+Today I'm going to test if it works either ;-)
 
-Classification of failures by reason
-====================================
-
-               qt5webkit-5.3.0 | 1 
-                 webkit-1.11.5 | 1 
-               audiofile-0.3.6 | 1 
-                 dmalloc-5.4.3 | 1 
-           xapp_bdftopcf-1.0.4 | 1 
-               host-orc-0.4.19 | 1 
-                    sdl-1.2.15 | 1 
-                 inadyn-1.99.9 | 1 
-                  snmppp-3.3.4 | 1 
-make: *** [core-dependencie... | 1 
-                poppler-0.24.4 | 1 
-
-Detail of failures
-===================
-
-     avr32 |                audiofile-0.3.6 | NOK | http://autobuild.buildroot.net/results/0d726f34591a64d96eb0d4f51c355fbc3de5a748/
-      bfin |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/c910bdd26807317b74b82e0891f146e5c8f976d4/
-   powerpc |                host-orc-0.4.19 | NOK | http://autobuild.buildroot.net/results/de2499b4af1c291b30112138cdffee1cbb2889ed/
-       arm |                  inadyn-1.99.9 | NOK | http://autobuild.buildroot.net/results/4c30efe08a28b86603e77e9c50d94eb03c7ab7e3/
-       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/2a397481b8c9fa2e2b7028e1847fd0cd1787d61d/
-      bfin |                 poppler-0.24.4 | NOK | http://autobuild.buildroot.net/results/1ff39febb06e51da79e0e5fc572f1bdb0424cd3f/
-       arm |                qt5webkit-5.3.0 | TIM | http://autobuild.buildroot.net/results/5b4586e61fed1497a301b4eac5f6f870a17ad66a/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/02e67720d8f2185612beb2fc7e184041ee0f8e4e/
-      bfin |                   snmppp-3.3.4 | NOK | http://autobuild.buildroot.net/results/76250630c508cb332bd5588cc3e430fce2ea40c7/
-       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/e975399eec8c15db89da3b59f7e52b64133d580c/
-microblazeel |            xapp_bdftopcf-1.0.4 | NOK | http://autobuild.buildroot.net/results/6d1c1c4f2bfa1f55fb6b839e09873d0de1818897/
+Thanks!
+Marco
 
 
--- 
-http://autobuild.buildroot.net
+Il 20/06/2014 22:06, Yann E. MORIN ha scritto:
+> Arnout, All,
+>
+> On 2014-06-19 01:16 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> Cc: Marco Trapanese <marcotrapanese@gmail.com>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> ---
+>> I only build-tested this - Marco, please test it properly. Although, you
+>> probably don't even use ac3 so the failing code won't be executed.
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Patch is indeed the one from upstream! ;-)
+>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>>   ...3_01-arm-avoid-using-the-movw-instruction.patch | 41 ++++++++++++++++++++++
+>>   1 file changed, 41 insertions(+)
+>>   create mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+>>
+>> diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+>> new file mode 100644
+>> index 0000000..288dc3d
+>> --- /dev/null
+>> +++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+>> @@ -0,0 +1,41 @@
+>> +Date: Mon, 1 Aug 2011 20:21:04 +0300
+>> +Subject: [libavcodec] arm: Avoid using the movw instruction needlessly
+>> +MIME-Version: 1.0
+>> +Content-Type: text/plain; charset=utf8
+>> +Content-Transfer-Encoding: 8bit
+>> +
+>> +This fixes building for ARM11 without Thumb2.
+>> +
+>> +Signed-off-by: Martin Storsj? <martin@martin.st>
+>> +
+>> +[Arnout: backported to gst-ffmpeg, from ffmpeg 9a83adaf3]
+>> +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>> +---
+>> + gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S |    4 ++--
+>> + 1 file changed, 2 insertions(+), 2 deletions(-)
+>> +
+>> +diff --git a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
+>> +index d3058ff..b6aee86 100644
+>> +--- a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
+>> ++++ b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
+>> +@@ -37,7 +37,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
+>> +         ldrb            r10, [r4], #1
+>> + 1:
+>> +         ldrsh           r9,  [r0], #2                   @ mask[band]
+>> +-        movw            r8,  #0x1fe0
+>> ++        mov             r8,  #0xff0
+>> +         sub             r9,  r9,  r12                   @   - snr_offset
+>> +         mov             r11, r10
+>> +         ldrb            r10, [r4], #1                   @ band_start_tab[band++]
+>> +@@ -44,7 +44,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
+>> +         subs            r9,  r9,  r5                    @   - floor
+>> +         movlt           r9,  #0
+>> +         cmp             r10, r3                         @   - end
+>> +-        and             r9,  r9,  r8                    @   & 0x1fe0
+>> ++        and             r9,  r9,  r8, lsl #1            @   & 0x1fe0
+>> +         subgt           r8,  r3,  r11
+>> +         suble           r8,  r10, r11
+>> +         add             r9,  r9,  r5                    @   + floor => m
+>> +--
+>> +1.7.10.4
+>> +
+>> -- 
+>> 2.0.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
