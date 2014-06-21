@@ -1,92 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jun 2014 19:54:42 +0200
-Subject: [Buildroot] [PATCH 1/1] atftp: new package
-In-Reply-To: <1403297857-3987-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1403297857-3987-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <20140621195442.79deacf5@free-electrons.com>
+Date: Sat, 21 Jun 2014 19:56:56 +0200
+Subject: [Buildroot] [PATCH 1/1] packages: fix the header package name
+In-Reply-To: <1403300466-24924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1403300466-24924-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140621195656.6ad08587@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ryan Barnett,
+Dear Jerzy Grzegorek,
 
-Thanks, but there are a couple of issues with the package. See below.
+On Fri, 20 Jun 2014 23:41:06 +0200, Jerzy Grzegorek wrote:
 
-On Fri, 20 Jun 2014 15:57:37 -0500, Ryan Barnett wrote:
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index a0077d2..6f5c53f 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -1,6 +1,6 @@
+>  ################################################################################
+>  #
+> -# glibc/eglibc
+> +# (e)glibc
 
-> diff --git a/package/atftp/Config.in b/package/atftp/Config.in
-> new file mode 100644
-> index 0000000..65c14d8
-> --- /dev/null
-> +++ b/package/atftp/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_ATFTP
-> +	bool "atftp"
+I'd prefer to stick with "glibc/eglibc" here. We're anyway going to
+remove eglibc support soon, since eglibc 2.19 was the latest release
+and the project has been declared dead.
 
-This package needs IPv6 support and thread support in the toolchain, so
-you should add the relevant dependencies.
 
-> +	help
-> +	  atftp is a client/server implementation of the TFTP
-> +	  protocol that implements RFCs 1350, 2090, 2347, 2348,
-> +	  and 2349. The server is multi-threaded and the client
-> +	  presents a friendly interface using libreadline.
-> +
-> +	  http://sourceforge.net/projects/atftp/
+> diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+> index dd6814e..fcb8599 100644
+> --- a/package/x11r7/xlib_libICE/xlib_libICE.mk
+> +++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+> @@ -1,6 +1,6 @@
+>  ################################################################################
+>  #
+> -# xlib_libICE
+> +# xlib_libice
 
-... and comment here.
-
-> diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
-> new file mode 100644
-> index 0000000..27fa0df
-> --- /dev/null
-> +++ b/package/atftp/atftp.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# atftp
-> +#
-> +################################################################################
-> +
-> +ATFTP_VERSION  = 0.7.1
-> +ATFTP_SITE = http://sourceforge.net/projects/atftp/files/
-> +ATFTP_LICENSE = GPLv2
-
-The license is actually GPLv2+.
-
-> +ATFTP_LICENSE_FILES = LICENSE
-> +
-> +ifeq ($(BR2_PACKAGE_READLINE),y)
-> +ATFTP_DEPENDENCIES += readline
-> +ATFTP_CONF_OPT += --enable-libreadline
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_PCRE),y)
-> +ATFTP_DEPENDENCIES += pcre
-> +ATFTP_CONF_OPT += --enable-libpcre
-> +endif
-
-For both of those cases, it'd be good to have an 'else' clause that
-does the appropriate --disable-<foo>.
-
-Also, adding --disable-libwrap and --disable-mtftp would be nice, so
-that these features don't get mistakenly enabled.
-
-Another problem is that the package fails to build on Blackfin (at
-least Blackfin FLAT), because it doesn't link atftp against
-libpthread. A patch like this is needed to the Makefile.am:
-
--atftp_LDADD      = $(LIBTERMCAP) $(LIBREADLINE)
-+atftp_LDADD      = $(LIBTERMCAP) $(LIBREADLINE) $(LIBPTHREAD)
-
-Probably the problem can be reproduce on ARM by doing a pure static
-build, but I haven't tested.
-
-Can you fix those issues and submit a v2 ?
-
-Thanks a lot!
+I really don't agree with all those changes to lower-case here. The
+package uses capital letters in its name, so it's better for the header
+to have the same capitalization.
 
 Thomas
 -- 
