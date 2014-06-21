@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 21 Jun 2014 19:35:55 +0200
-Subject: [Buildroot] [PATCH] torsmo: needs mmu
-In-Reply-To: <1403362773-32343-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403362773-32343-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140621193555.1c35ed98@free-electrons.com>
+Date: Sat, 21 Jun 2014 19:38:07 +0200
+Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.9-3
+Message-ID: <20140621173818.E65AD9D06F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=8d24201f4b943b7a1edd9a16c97155f1a2efda59
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Jun 2014 11:59:33 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/28f/28ffabf47643dfdb646ec98a56978db75fc84c05/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/torsmo/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/imagemagick/imagemagick.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a6f3f45..6d6d5de 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 6.8.9-2
++IMAGEMAGICK_VERSION = 6.8.9-3
+ IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+ # The official ImageMagick site only keeps the latest versions
+ # available, which is annoying. Use an alternate site that keeps all
