@@ -1,67 +1,85 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 21 Jun 2014 11:04:22 +0200
-Subject: [Buildroot] [PATCH 1 of 3 v2] infra: support buildroot being
- located in /usr
-In-Reply-To: <53A4BF2B.1000405@mind.be>
-References: <patchbomb.1403291463@localhost>
- <2969a1777632f4df4615.1403291464@localhost>
- <53A4BF2B.1000405@mind.be>
-Message-ID: <CAAXf6LUkH-0ODtGpk2--fbknnjCFeoMUNAC28S+wKrg7nedUYg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 21 Jun 2014 12:06:33 +0200
+Subject: [Buildroot] [PATCH 2/2] Change Makefile into a crosscompile
+ friendly version
+In-Reply-To: <53A4B2C2.4070107@mind.be>
+References: <1403215223-10871-1-git-send-email-limpens@gmail.com>
+ <1403215223-10871-2-git-send-email-limpens@gmail.com>
+ <53A4B2C2.4070107@mind.be>
+Message-ID: <20140621100633.GA3501@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 21, 2014 at 1:09 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 20/06/14 21:11, Thomas De Schampheleire wrote:
->> pkg-generic and pkg-autotools both perform sed replacements of /usr to
->> $(STAGING_DIR)/usr, in .pc and .la files respectively. However, if buildroot
->> itself is located in /usr, then STAGING_DIR also starts with /usr, and naive
->> replacements of '/usr' can result in paths of the form:
->>     /usr/buildroot/.../sysroot/usr/buildroot/.../sysroot/...
->>
->> This patch makes the replacements more careful, by first replacing the known
->> paths BASE_DIR and STAGING_DIR to tokens, then performing the actual
->> replacement, and finally replacing the tokens with the corresponding paths.
->>
->> Additionally it removes the unnecessary making of a backup copy in
->> pkg-autotools.
->>
->> Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
->>
->> Partially-based-on-a-patch-from: Ben Stoltz <benstoltz@gmail.com>
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>
->> ---
->> v2: s/Jeremy Kerr/Ben Stoltz/
->>
->>  package/pkg-autotools.mk |   8 ++++++--
->>  package/pkg-generic.mk   |  10 +++++++---
->>  2 files changed, 13 insertions(+), 5 deletions(-)
->>
->> diff -r a59338f65a46 -r 2969a1777632 package/pkg-autotools.mk
->> --- a/package/pkg-autotools.mk        Wed Jun 18 20:22:00 2014 +0400
->> +++ b/package/pkg-autotools.mk        Fri Jun 20 21:09:35 2014 +0200
->> @@ -268,8 +268,12 @@
->>  define $(2)_INSTALL_STAGING_CMDS
->>       $$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
->>       for i in $$$$(find $$(STAGING_DIR)/usr/lib* -name "*.la"); do \
->> -             cp -f $$$$i $$$$i~; \
->> -             $$(SED) "s:\(['= ]\)/usr:\\1$$(STAGING_DIR)/usr:g" $$$$i; \
->> +             $$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
->> +                     -e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
->
->  STAGING_DIR contains BASE_DIR, so this second expression will never match
-> anymore, no? It would match if you swap the two expressions, but there is not
-> much reason I think.
+Arnout, Eric, All,
 
-I originally had the STAGING_DIR token alone, but it caused a problem
-still. Then I took over the BASE_DIR expression from Ben Stoltz'
-patch, which also kept the STAGING_DIR.
-I think you are right that only the BASE_DIR replacement is needed.
-After all, this is where the problematic /usr is. I will try this out
-for simplicity's sake...
+On 2014-06-21 00:16 +0200, Arnout Vandecappelle spake thusly:
+>  If this patch fixes a build issue, then it should be squashed with the previous
+> patch. You can do that by doing 'git rebase -i origin/master' and then replacing
+> the 'pick' of this patch with 'fixup'.
 
-Thanks,
-Thomas
+Yep, Eric said on IRC he made a mistake when sending the patches.
+
+> On 20/06/14 00:00, Eric Limpens wrote:
+> > Signed-off-by: Eric Limpens <limpens@gmail.com>
+> > ---
+> >  ...ifmrds-000-Makefile-crosscompile-friendly.patch | 25 ++++++++++++++++++++++
+> >  1 file changed, 25 insertions(+)
+> >  create mode 100644 package/pifmrds/pifmrds-000-Makefile-crosscompile-friendly.patch
+> > 
+> > diff --git a/package/pifmrds/pifmrds-000-Makefile-crosscompile-friendly.patch b/package/pifmrds/pifmrds-000-Makefile-crosscompile-friendly.patch
+> > new file mode 100644
+> > index 0000000..8b8cd49
+> > --- /dev/null
+> > +++ b/package/pifmrds/pifmrds-000-Makefile-crosscompile-friendly.patch
+> > @@ -0,0 +1,25 @@
+> 
+>  The patch should start with a description, like a normal commit message. This
+> description should also contain your Signed-off-by tag (its meaning is different
+> because it implies publication under the upstream's GPLv3 license, not under
+> buildroot's GPLv2 license).
+> 
+>  Also, it would be good to upstream this patch.
+> 
+> 
+> > +diff -purN PiFmRds-c67306ea9b8d827f45e0d90279d367e97119bcb1/src/Makefile pifmrds-c67306ea9b8d827f45e0d90279d367e97119bcb1/src/Makefile
+> > +--- PiFmRds-c67306ea9b8d827f45e0d90279d367e97119bcb1/src/Makefile	2014-05-04 18:21:40.000000000 +0200
+> > ++++ pifmrds-c67306ea9b8d827f45e0d90279d367e97119bcb1/src/Makefile	2014-06-19 21:21:14.220328601 +0200
+> > +@@ -1,20 +1,8 @@
+> > +-CC = gcc
+> > +-STD_CFLAGS = -Wall -std=gnu99 -c -g -O3
+> > +-
+> > +-# Enable ARM-specific options only on ARM, and compilation of the app only on ARM
+> > +-UNAME := $(shell uname -m)
+> > +-
+> > +-ifeq ($(UNAME), armv6l)
+> > +-	CFLAGS = $(STD_CFLAGS) -march=armv6 -mtune=arm1176jzf-s -mfloat-abi=hard -mfpu=vfp -ffast-math
+> > ++all:	app rds_wav
+> > + 
+> > + app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+> > + 	$(CC) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+> 
+>  Actually, moving this outside the condition and adding the 'all' target is all
+> that is really necessary to make cross-compilation possible. The rest maybe
+> makes it nicer, but is not really necessary. It also won't be acceptable
+> upstream because it makes native compilation more difficult.
+
+I think we do not want the Makefile to override the CFLAGS. Buildroot
+already pases appropriate CFLAGS, and keeping the ones above would be
+only confusing, especially since it forces the float ABI and use of the
+VFP.
+
+Maybe we should however carry the -ffast-math flag, however.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
