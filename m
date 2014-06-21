@@ -1,58 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 21 Jun 2014 18:03:44 +0200
-Subject: [Buildroot] [PATCH v3] package/pifmrds: new package
-In-Reply-To: <1403366300-29035-1-git-send-email-yann.morin.1998@free.fr>
-References: <1403366300-29035-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140621160344.GA21004@free.fr>
+From: Marco Trapanese <marcotrapanese@gmail.com>
+Date: Sat, 21 Jun 2014 18:23:12 +0200
+Subject: [Buildroot] Help about gstreamer h264 in buildroot
+In-Reply-To: <53A58757.8030701@gmail.com>
+References: <539C13BA.5000106@gmail.com>	<20140614141451.6780163c@free-electrons.com>	<53A566AE.7020800@gmail.com>
+ <20140621150459.267bce66@free-electrons.com> <53A58757.8030701@gmail.com>
+Message-ID: <53A5B170.2070401@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eric, All,
+Il 21/06/2014 15:23, Marco Trapanese ha scritto:
+> So I'm just wondering if it is possible to know which combination of 
+> kernel/buildroot version leads to a working environment with basic 
+> packages. For my current project based upon RPi I need only:
+>
+> - common utility: ssh (dropbear or openssh), lighttpd, etc (no problem 
+> here!)
+> - Qt5 (all modules, egl platform)
+> - gstreamer with mp3, mp4 h264 and qtmultimedia support
 
-On 2014-06-21 17:58 +0200, Yann E. MORIN spake thusly:
-> From: Eric Limpens <limpens@gmail.com>
-> 
-> We needs three little patches:
->   - one to make the existing Makefile cross-compile friendly
->   - one to pass the LDFLAGS at link time
->   - one to add a missing include
-> 
-> Signed-off-by: Eric Limpens <limpens@gmail.com>
-> [yann.morin.1998 at free.fr: add .mk header; cleanup and split the
->  Makefile patch, add missing include; add comments to all patches]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[--SNIP--]
-> diff --git a/package/pifmrds/Config.in b/package/pifmrds/Config.in
-> new file mode 100644
-> index 0000000..60d01b1
-> --- /dev/null
-> +++ b/package/pifmrds/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PIFMRDS
-> +	bool "pifmrds"
-> +	depends on BR2_arm
-> +	depends on BR2_LARGEFILE #libsndfile
-> +	select BR2_PACKAGE_LIBSNDFILE
-> +	help
-> +	  pifmrds, FM-RDS transmitter using the Raspberry Pi's PWM
-> +
-> +	  https://github.com/ChristopheJacquet/PiFmRds
-> +
-> +comment "pifmrds needs a toolchain w/ largefile"
-> +	depends on !BR2_LARGEFILE
 
-Sigh, I forgot to add 'depends on BR2_arm' here too...
+I'm close to find a working solution.
+Attached there is the current .config file.
 
-Regards,
-Yann E. MORIN.
+Qt5 is working
+QtMultimedia is working
+gstreamer for mp3 decoding is working
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I can't play only mp4 video files. GStreamer tells me there are no video 
+sinks available.
+
+Which buildroot package contains a gstreamer video sink that works 
+without X (egl/gles) ?
+
+Thanks again
+Marco
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/xml
+Size: 53785 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140621/0c4c1a5c/attachment.wsdl>
