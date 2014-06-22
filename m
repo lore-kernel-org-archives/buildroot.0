@@ -1,35 +1,61 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 22 Jun 2014 20:23:16 +0300
-Subject: [Buildroot] [PATCH] knock: fix static build
-Message-ID: <642cb02624e2ab6997d7ed7f3a92bc368d69f8e0.1403457796.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Jun 2014 19:24:33 +0200
+Subject: [Buildroot] [git commit] Makefile: test if "dot" exists in
+	"<pkg>-graph-depends"
+Message-ID: <20140622172441.065359D04E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pcap-config to determine link dependencies of libpcap.
+commit: http://git.buildroot.net/buildroot/commit/?id=d3c1c647ff9b45d8664036e2003bd5ebaa3f9ccd
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/1eb/1eb877ebd9469c9261bf114fc7733819ae3fd562/
+To be able to check the "dot" command availability in
+"<pkg>-graph-depends" move the check to the "graph-depends-requirements" rule.
+Also don't use a subshell for the exit command to be sure that the error
+will be returned by the shell.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/knock/knock.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ Makefile               |    6 ++++--
+ package/pkg-generic.mk |    2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 8d2b41e859f4..682d0316c402 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -10,4 +10,8 @@ KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
- KNOCK_DEPENDENCIES = libpcap
+diff --git a/Makefile b/Makefile
+index 14fca2b..4fe370a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -673,9 +673,11 @@ graph-build: $(O)/build/build-time.log
+ 				   --output=$(O)/graphs/build.pie-$(t).$(BR_GRAPH_OUT) \
+ 				   $(if $(BR2_GRAPH_ALT),--alternate-colors)$(sep))
  
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+KNOCK_CONF_OPT = LIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
-+endif
+-graph-depends:
++graph-depends-requirements:
+ 	@dot -? >/dev/null 2>&1 || \
+-		(echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1)
++		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
 +
- $(eval $(autotools-package))
--- 
-2.0.0
++graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(O)/graphs
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 457d873..4a011cc 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -556,7 +556,7 @@ endif
+ $(1)-show-depends:
+ 			@echo $$($(2)_FINAL_DEPENDENCIES)
+ 
+-$(1)-graph-depends:
++$(1)-graph-depends: graph-depends-requirements
+ 			@$$(INSTALL) -d $$(O)/graphs
+ 			@cd "$$(CONFIG_DIR)"; \
+ 			$$(TOPDIR)/support/scripts/graph-depends -p $(1) $$(BR2_GRAPH_DEPS_OPTS) \
