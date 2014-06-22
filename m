@@ -1,67 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 19:03:31 +0200
-Subject: [Buildroot] [git commit] dhcpcd: fix build with ccache
-Message-ID: <20140622171521.E0C2B9D04E@busybox.osuosl.org>
+Date: Sun, 22 Jun 2014 19:05:18 +0200
+Subject: [Buildroot] [git commit] graph-depends.py: support python3
+Message-ID: <20140622171522.04EDC9D009@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fbb3837c43802deee002db58452cbad290216275
+commit: http://git.buildroot.net/buildroot/commit/?id=63454b1c07b033c258451e06978da2514bb05361
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After the bump to dhcpcd 6.4.0, building dhcpcd with ccache fails at the
-configure step:
+This patch is the result of 2to3.
 
-Using compiler .. <buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc
-<buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc is not an executable
-make: *** [<buildroot>/output/build/dhcpcd-6.4.0/.stamp_configured] Error 1
+In addition, universal_newlines=True is added to the Popen calls. In
+python3, this makes sure that the output is decoded so that we get a
+string instead of a buffer object.
 
-This patch backports an upstream patch to fix this issue.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch |   32 ++++++++++++++++++++
- 1 files changed, 32 insertions(+), 0 deletions(-)
+ support/scripts/graph-depends |   24 ++++++++++++------------
+ 1 files changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch b/package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch
-new file mode 100644
-index 0000000..c162306
---- /dev/null
-+++ b/package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch
-@@ -0,0 +1,32 @@
-+configure: support builds using ccache
-+
-+The configure script checks whether CC is executable by means of a check
-+'type $CC'. However, when using ccache, CC is normally set to "ccache gcc"
-+(using the appropriate paths). Such a compound string is not recognized by
-+type, however, and thus configure bails out.
-+
-+This patch changes the check 'type $CC' with a compile test.
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-+
-+Upstream status: another implementation was submitted, modified by
-+maintainer Roy, then simplified based on my suggestion. This patch is a fold
-+of the two upstream patches:
-+http://roy.marples.name/projects/dhcpcd/info/5f4bf91142fceac502c478886aeb5079a184bb43
-+http://roy.marples.name/projects/dhcpcd/info/26bc10be2405659bdf31d690a72d377d6b67ebd4
-+
-+diff -r 66c8bdc88858 configure
-+--- a/configure	Sat Jun 21 16:54:30 2014 +0200
-++++ b/configure	Sun Jun 22 15:20:25 2014 +0200
-+@@ -272,8 +272,9 @@
-+ fi
-+ 
-+ echo "Using compiler .. $CC"
-+-if ! type "$CC" >/dev/null 2>&1; then
-+-	echo "$CC is not an executable"
-++if ! echo "int main(void) { return 0; }" | $CC -x c -o /dev/null - 2>/dev/null
-++then
-++	echo "$CC does not create executables"
-+ 	exit 1
-+ fi
-+ [ "$CC" != cc ] && echo "CC=	$CC" >>$CONFIG_MK
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 29f271a..58401a2 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -82,7 +82,7 @@ allpkgs = []
+ def get_targets():
+     sys.stderr.write("Getting targets\n")
+     cmd = ["make", "-s", "show-targets"]
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0].strip()
+     if p.returncode != 0:
+         return None
+@@ -98,7 +98,7 @@ def get_depends(pkgs):
+     cmd = ["make", "-s" ]
+     for pkg in pkgs:
+         cmd.append("%s-show-depends" % pkg)
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0]
+     if p.returncode != 0:
+         sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+@@ -203,7 +203,7 @@ elif mode == MODE_PKG:
+ # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
+ dict_deps = {}
+ for dep in dependencies:
+-    if not dict_deps.has_key(dep[0]):
++    if dep[0] not in dict_deps:
+         dict_deps[dep[0]] = []
+     dict_deps[dep[0]].append(dep[1])
+ 
+@@ -211,7 +211,7 @@ for dep in dependencies:
+ # transitive) of pkg2, dependencies being listed in the deps
+ # dictionary. Returns False otherwise.
+ def is_dep(pkg,pkg2,deps):
+-    if deps.has_key(pkg2):
++    if pkg2 in deps:
+         for p in deps[pkg2]:
+             if pkg == p:
+                 return True
+@@ -248,10 +248,10 @@ def remove_toolchain_deps(pkg,deps):
+ # This functions trims down the dependency list of all packages.
+ # It applies in sequence all the dependency-elimination methods.
+ def remove_extra_deps(deps):
+-    for pkg in deps.keys():
++    for pkg in list(deps.keys()):
+         if not pkg == 'all':
+             deps[pkg] = remove_toolchain_deps(pkg,deps)
+-    for pkg in deps.keys():
++    for pkg in list(deps.keys()):
+         if not transitive or pkg == 'all':
+             deps[pkg] = remove_transitive_deps(pkg,deps)
+     return deps
+@@ -274,8 +274,8 @@ def print_attrs(pkg):
+             color = host_colour
+         else:
+             color = target_colour
+-    print "%s [label = \"%s\"]" % (name, label)
+-    print "%s [color=%s,style=filled]" % (name, color)
++    print("%s [label = \"%s\"]" % (name, label))
++    print("%s [color=%s,style=filled]" % (name, color))
+ 
+ # Print the dependency graph of a package
+ def print_pkg_deps(depth, pkg):
+@@ -283,17 +283,17 @@ def print_pkg_deps(depth, pkg):
+         return
+     done_deps.append(pkg)
+     print_attrs(pkg)
+-    if not dict_deps.has_key(pkg):
++    if pkg not in dict_deps:
+         return
+     if max_depth == 0 or depth < max_depth:
+         for d in dict_deps[pkg]:
+-            print "%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d))
++            print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
+             print_pkg_deps(depth+1, d)
+ 
+ # Start printing the graph data
+-print "digraph G {"
++print("digraph G {")
+ 
+ done_deps = []
+ print_pkg_deps(0, rootpkg)
+ 
+-print "}"
++print("}")
