@@ -1,56 +1,116 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Jun 2014 00:40:49 +0200
-Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
-In-Reply-To: <53A759EB.8090702@zacarias.com.ar>
-References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
- <20140622215442.4c060328@free-electrons.com>
- <53A759EB.8090702@zacarias.com.ar>
-Message-ID: <20140622224049.GF21768@free.fr>
+Date: Mon, 23 Jun 2014 00:41:28 +0200
+Subject: [Buildroot] [PATCH] package/libeXosip2: fix build for static linking
+Message-ID: <1403476888-22256-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-06-22 19:34 -0300, Gustavo Zacarias spake thusly:
-> On 06/22/2014 04:54 PM, Thomas Petazzoni wrote:
-> 
-> >> +	  GeoIP is a C library that enables the user to find geographical
-> >> +	  and network information of an IP address.
-> >> +	  To use this library, you need to download MaxMind's free GeoLite or
-> >> +	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
-> >> +	  directory in uncompressed form.
-> > 
-> > Wouldn't it make sense to create a package for the free database, so
-> > that GeoIP can be useful out of the box?
-> 
-> As the current infra is right now, not really, even with fixes i
-> wouldn't go for it.
-> That's because the tarball naming is fixed (no hash, timestamp or
-> anything) and they change at least daily, so an old
-> sources.buildroot.net copy/mirror could be really old.
-> Even if we can say "don't mirror it" the same can happen to people with
-> their local copy.
+Add a new patch to use pkg-config to detect openssl.
 
-Then would it make sense to package geoipudate instead, either or both
-as a target and/or a host package:
-    https://github.com/maxmind/geoipupdate
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-    The GeoIP Update program performs automatic updates of GeoIP2 and
-    GeoIP Legacy binary databases.
+---
+To be noted: we're direly lagging behind on libeXosip2: we're at
+version 3.6.0, which is at least two years old. There's now a 4.1.0
+release. If time permits, I'll tackle this bump...
+---
+ ...ch => libeXosip2-0000-fix-non-ipv6-build.patch} |  0
+ ...ip2-0001-use-pkg-config-to-detect-openssl.patch | 62 ++++++++++++++++++++++
+ package/libeXosip2/libeXosip2.mk                   |  3 ++
+ 3 files changed, 65 insertions(+)
+ rename package/libeXosip2/{libeXosip2-fix-non-ipv6-build.patch => libeXosip2-0000-fix-non-ipv6-build.patch} (100%)
+ create mode 100644 package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch
 
-That way, the user can get it with a post-build script, and/or a
-cron-like job on the target, to be up-to-date.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libeXosip2/libeXosip2-fix-non-ipv6-build.patch b/package/libeXosip2/libeXosip2-0000-fix-non-ipv6-build.patch
+similarity index 100%
+rename from package/libeXosip2/libeXosip2-fix-non-ipv6-build.patch
+rename to package/libeXosip2/libeXosip2-0000-fix-non-ipv6-build.patch
+diff --git a/package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch b/package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch
+new file mode 100644
+index 0000000..91683d6
+--- /dev/null
++++ b/package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch
+@@ -0,0 +1,62 @@
++configure: use pkg-config to find openssl
++
++The current check is broken for static linking, since it the openssl
++libs need to be linked against libz, which is missing in the link
++command when doing a static build:
++    http://autobuild.buildroot.net/results/787/787cd9992b00d8008641af208f5fb7c4afb40b06/build-end.log
++
++Instead of trying convoluted tests to decide what additional libs
++are required, just delegate this job to pkg-config.
++
++At the same time, fix a few legacy, deprecated constructs in favour
++of their new counterparts.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: submitted, but no public mailing list (sent to the
++mail documented in: http://www.antisip.com/doc/exosip2/index.html )
++
++diff -durN libeXosip2-3.6.0.orig/configure.in libeXosip2-3.6.0/configure.in
++--- libeXosip2-3.6.0.orig/configure.in	2014-06-22 23:58:26.549487427 +0200
+++++ libeXosip2-3.6.0/configure.in	2014-06-22 23:59:12.822008499 +0200
++@@ -44,7 +44,7 @@
++ AC_CONFIG_AUX_DIR(scripts)
++ AC_CONFIG_HEADERS(config.h)
++ AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
++-AM_ACLOCAL_INCLUDE(scripts)
+++AC_CONFIG_MACRO_DIR([scripts])
++ 
++ AC_CANONICAL_HOST
++ 
++@@ -371,13 +371,15 @@
++ 
++ AC_ARG_ENABLE(openssl,
++ 	[  --enable-openssl        enable support for openssl],
++-	enable_openssl=$enableval,enable_openssl="yes")
+++	enable_openssl=$enableval,enable_openssl="auto")
++ 
++-if test "$enable_openssl" = "yes" ; then
++-	AC_CHECK_HEADERS(openssl/ssl.h)
++-	AC_CHECK_LIB(ssl,SSL_CTX_new,[EXOSIP_LIB="$EXOSIP_LIB -lssl"])
++-	AC_CHECK_LIB(crypto,X509_get_issuer_name,[EXOSIP_LIB="$EXOSIP_LIB -lcrypto"])
++-fi
+++AS_IF([test "$enable_openssl" = "yes" -o "$enable_openssl" = "auto"],
+++      [PKG_CHECK_MODULES([SSL], [openssl],
+++                         [EXOSIP_LIB="$EXOSIP_LIB $SSL_LIBS"],
+++                         [AS_IF([test "$enable_openssl" = "yes"],
+++                                [AC_MSG_ERROR([can not find openssl])])
+++                         ])
+++      ])
++ 
++ AC_ARG_ENABLE(srvrec,
++ 	[  --enable-srvrec         enable support for SRV records DNS queries (yes) ],
++diff -durN build/libeXosip2-3.6.0.orig/Makefile.am build/libeXosip2-3.6.0/Makefile.am
++--- libeXosip2-3.6.0.orig/Makefile.am	2014-06-23 00:14:25.328226745 +0200
+++++ libeXosip2-3.6.0/Makefile.am	2014-06-23 00:14:38.296371236 +0200
++@@ -1,4 +1,4 @@
++-
+++ACLOCAL_AMFLAGS = -I scripts
++ EXTRA_DIST = README autogen.sh
++ 
++ SUBDIRS = scripts platform src include tools help
+diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
+index 6abdaab..e1f2497 100644
+--- a/package/libeXosip2/libeXosip2.mk
++++ b/package/libeXosip2/libeXosip2.mk
+@@ -12,6 +12,9 @@ LIBEXOSIP2_LICENSE_FILES = COPYING
+ 
+ LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
+ 
++# We are touching configure.in and Makefile.am with one of our patch
++LIBEXOSIP2_AUTORECONF = YES
++
+ ifeq ($(BR2_arc),y)
+ # toolchain __arc__ define conflicts with libeXosip2 source
+ LIBEXOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
