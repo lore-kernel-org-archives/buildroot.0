@@ -1,50 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 22:04:13 +0200
-Subject: [Buildroot] [git commit] legal-info: add a comment about what
-	packages we save the tarballs of
-Message-ID: <20140622200420.C56C69D06D@busybox.osuosl.org>
+Date: Sun, 22 Jun 2014 22:03:57 +0200
+Subject: [Buildroot] [PATCH 2/4] legal-info: save license files even for
+ local or overridden packages
+In-Reply-To: <4970d4e28d1f96838b0f62c52852ea9d531faec2.1403439879.git.yann.morin.1998@free.fr>
+References: <cover.1403439879.git.yann.morin.1998@free.fr>
+ <4970d4e28d1f96838b0f62c52852ea9d531faec2.1403439879.git.yann.morin.1998@free.fr>
+Message-ID: <20140622220357.4fe19757@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1da3f17477329cb46846d6392abcc6b4a6c1e084
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-As the legal-info infra only (rightfully) saves the tarballs of packages
-that:
-  - we want to redistribute,
-  - and are not local,
-  - and are not overriden,
+On Sun, 22 Jun 2014 14:41:13 +0200, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Even if we do not save the sources for local or overridden packages because
+> it is too complex, we can still quite easily save the license files.
+> 
+> Also, having the license files is a very important part of complying with
+> the licenses.
+> 
+> Move the copy of license files out of the non-local, non-overridden package
+> case, but still in the case where packages have a _SOURCE defined, to
+> avoid catching packages bundled in Buildroot (eg. mkpasswd et al.)
+> 
+> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-add a comment stating so.
+Applied, thanks.
 
-This should clarify the code-block, which although trivial to read,
-was not easy to interpret without thinking thouroughly about it.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-generic.mk |    3 +++
- 1 files changed, 3 insertions(+), 0 deletions(-)
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b113684..851ae0f 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -627,6 +627,9 @@ ifneq ($$($(2)_LICENSE_FILES),)
- $(1)-legal-info: $(1)-extract
- endif
- 
-+# We only save the sources of packages we want to redistribute, that are
-+# non-local, and non-overriden. So only store, in the manifest, the tarball
-+# name of those packages.
- ifeq ($$($(2)_REDISTRIBUTE),YES)
- ifneq ($$($(2)_SITE_METHOD),local)
- ifneq ($$($(2)_SITE_METHOD),override)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
