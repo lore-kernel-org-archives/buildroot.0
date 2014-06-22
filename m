@@ -1,68 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 19:04:00 +0200
-Subject: [Buildroot] [git commit] libhid: fix for nommu
-Message-ID: <20140622171521.E9B2A9D009@busybox.osuosl.org>
+Date: Sun, 22 Jun 2014 19:18:41 +0200
+Subject: [Buildroot] [git commit] gst-ffmpeg: fix build on armv6 without
+	thumb2 (e.g. RaspberryPi)
+Message-ID: <20140622171907.7E40E9D04E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=41f641d037e5b439aa649b542a3cbb0327a64062
+commit: http://git.buildroot.net/buildroot/commit/?id=929180d1b899f93467b8833f4b08b6dd20ff298d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make it accept uclinux in the tuple as linux. Fixes:
-http://autobuild.buildroot.net/results/07f/07f2a560d9915ff7bad830be11f95aa856ce0e73/
+[Thomas: rename existing patch and the one added by Arnout to follow
+the patch naming convention.]
 
-Upstream seems dead with the last commit in svn being 5+ years ago and
-with some recent patches in the mailing list just sitting there.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Marco Trapanese <marcotrapanese@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...libhid-0001-dont-fiddle-with-debug-flags.patch} |    0
- ...tch => libhid-0002-no-newline-in-ldflags.patch} |    0
- package/libhid/libhid-0003-uclinux.patch           |   27 ++++++++++++++++++++
- 3 files changed, 27 insertions(+), 0 deletions(-)
+ ....13_gcc47.patch => gst-ffmpeg-0001-gcc47.patch} |    0
+ ...0002-arm-avoid-using-the-movw-instruction.patch |   41 ++++++++++++++++++++
+ 2 files changed, 41 insertions(+), 0 deletions(-)
 
-diff --git a/package/libhid/libhid-dont-fiddle-with-debug-flags.patch b/package/libhid/libhid-0001-dont-fiddle-with-debug-flags.patch
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_gcc47.patch b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0001-gcc47.patch
 similarity index 100%
-rename from package/libhid/libhid-dont-fiddle-with-debug-flags.patch
-rename to package/libhid/libhid-0001-dont-fiddle-with-debug-flags.patch
-diff --git a/package/libhid/libhid-no-newline-in-ldflags.patch b/package/libhid/libhid-0002-no-newline-in-ldflags.patch
-similarity index 100%
-rename from package/libhid/libhid-no-newline-in-ldflags.patch
-rename to package/libhid/libhid-0002-no-newline-in-ldflags.patch
-diff --git a/package/libhid/libhid-0003-uclinux.patch b/package/libhid/libhid-0003-uclinux.patch
+rename from package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_gcc47.patch
+rename to package/gstreamer/gst-ffmpeg/gst-ffmpeg-0001-gcc47.patch
+diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0002-arm-avoid-using-the-movw-instruction.patch b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0002-arm-avoid-using-the-movw-instruction.patch
 new file mode 100644
-index 0000000..cb3c452
+index 0000000..288dc3d
 --- /dev/null
-+++ b/package/libhid/libhid-0003-uclinux.patch
-@@ -0,0 +1,27 @@
-+Good old 'uclinux is also linux'
++++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg-0002-arm-avoid-using-the-movw-instruction.patch
+@@ -0,0 +1,41 @@
++Date: Mon, 1 Aug 2011 20:21:04 +0300
++Subject: [libavcodec] arm: Avoid using the movw instruction needlessly
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf8
++Content-Transfer-Encoding: 8bit
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++This fixes building for ARM11 without Thumb2.
 +
-+diff -Nura libhid-0.2.16.orig/configure.ac libhid-0.2.16/configure.ac
-+--- libhid-0.2.16.orig/configure.ac	2014-06-22 09:35:50.277261742 -0300
-++++ libhid-0.2.16/configure.ac	2014-06-22 09:36:10.688951947 -0300
-+@@ -80,6 +80,7 @@
-+ 
-+ MD_CONF_DEBUGGING
-+ MD_CONF_COMPILER
-++AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "uclinux")
-+ AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
-+ AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
-+ AM_CONDITIONAL(OS_SOLARIS, test "$MD_OS" = "solaris")
-+diff -Nura libhid-0.2.16.orig/m4/md_check_os.m4 libhid-0.2.16/m4/md_check_os.m4
-+--- libhid-0.2.16.orig/m4/md_check_os.m4	2014-06-22 09:35:50.275261675 -0300
-++++ libhid-0.2.16/m4/md_check_os.m4	2014-06-22 09:46:17.651475891 -0300
-+@@ -3,7 +3,7 @@
-+     AC_CANONICAL_HOST
-+     AC_MSG_CHECKING(for target OS)
-+     case $host in
-+-      *-linux*)
-++      *-linux*|*-uclinux*)
-+         AC_DEFINE(OS_LINUX, [], [define to 1 if building for Linux])
-+         AC_SUBST(OS_LINUX)
-+         MD_OS=linux
++Signed-off-by: Martin Storsj?? <martin@martin.st>
++
++[Arnout: backported to gst-ffmpeg, from ffmpeg 9a83adaf3]
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S |    4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
++index d3058ff..b6aee86 100644
++--- a/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
+++++ b/gst-libs/ext/libav/libavcodec/arm/ac3dsp_armv6.S
++@@ -37,7 +37,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
++         ldrb            r10, [r4], #1
++ 1:
++         ldrsh           r9,  [r0], #2                   @ mask[band]
++-        movw            r8,  #0x1fe0
+++        mov             r8,  #0xff0
++         sub             r9,  r9,  r12                   @   - snr_offset
++         mov             r11, r10
++         ldrb            r10, [r4], #1                   @ band_start_tab[band++]
++@@ -44,7 +44,7 @@ function ff_ac3_bit_alloc_calc_bap_armv6, export=1
++         subs            r9,  r9,  r5                    @   - floor
++         movlt           r9,  #0
++         cmp             r10, r3                         @   - end
++-        and             r9,  r9,  r8                    @   & 0x1fe0
+++        and             r9,  r9,  r8, lsl #1            @   & 0x1fe0
++         subgt           r8,  r3,  r11
++         suble           r8,  r10, r11
++         add             r9,  r9,  r5                    @   + floor => m
++--
++1.7.10.4
++
