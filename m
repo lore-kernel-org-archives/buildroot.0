@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 19:03:49 +0200
-Subject: [Buildroot] [PATCH] dhcpcd: fix build with ccache
-In-Reply-To: <d3257052bc958700588f.1403443612@localhost>
-References: <d3257052bc958700588f.1403443612@localhost>
-Message-ID: <20140622190349.132ab9f2@free-electrons.com>
+Date: Sun, 22 Jun 2014 19:04:23 +0200
+Subject: [Buildroot] [PATCH] libhid: fix for nommu
+In-Reply-To: <1403441509-27982-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403441509-27982-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140622190423.0072c0cd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Gustavo Zacarias,
 
-On Sun, 22 Jun 2014 15:26:52 +0200, Thomas De Schampheleire wrote:
-> After the bump to dhcpcd 6.4.0, building dhcpcd with ccache fails at the
-> configure step:
+On Sun, 22 Jun 2014 09:51:49 -0300, Gustavo Zacarias wrote:
+> Make it accept uclinux in the tuple as linux. Fixes:
+> http://autobuild.buildroot.net/results/07f/07f2a560d9915ff7bad830be11f95aa856ce0e73/
 > 
-> Using compiler .. <buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc
-> <buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc is not an executable
-> make: *** [<buildroot>/output/build/dhcpcd-6.4.0/.stamp_configured] Error 1
+> Upstream seems dead with the last commit in svn being 5+ years ago and
+> with some recent patches in the mailing list just sitting there.
 > 
-> This patch backports an upstream patch to fix this issue.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Applied, thanks.
 
