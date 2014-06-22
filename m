@@ -1,40 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 20:30:59 +0200
-Subject: [Buildroot] [PATCH] imagemagick: Enable for host
-In-Reply-To: <53A71225.3000201@bergerie>
-References: <1402902112-12487-1-git-send-email-vincent.stehle@laposte.net>
- <20140622191436.7d432cbe@free-electrons.com>
- <53A71225.3000201@bergerie>
-Message-ID: <20140622203059.5a5f28a2@free-electrons.com>
+Date: Sun, 22 Jun 2014 20:35:49 +0200
+Subject: [Buildroot] [git commit] geoip: new package
+Message-ID: <20140622183610.C37809D05C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent,
+commit: http://git.buildroot.net/buildroot/commit/?id=11fda42896f532a2d28070faa5c3c7ac4ccfb853
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Jun 2014 19:28:05 +0200, Vincent wrote:
+[Thomas: slightly reformat the Config.in help text. Add the 'LICENSE'
+file to GEOIP_LICENSE_FILES.]
 
-> > we expect the patch adding the host package to be
-> > submitted alongside the patch adding the target package needing it,
-> > so that there is no "unneeded" host package.
-> 
-> Ah! I did not know about that rule. It makes sense, indeed.
-> 
-> I am trying to package ev3sources, which needs convert at build time. 
-> I'll re-submit this host-imagemagick patch alongside, then.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in       |    1 +
+ package/geoip/Config.in |   14 ++++++++++++++
+ package/geoip/geoip.mk  |   15 +++++++++++++++
+ 3 files changed, 30 insertions(+), 0 deletions(-)
 
-Ok, no problem. Indeed, host-imagemagick will be perfectly fine when
-submitted alongside the ev3sources package.
-
-In the mean time, I'll mark your patch as "Changes requested" in
-patchwork.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 1264053..4718719 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -720,6 +720,7 @@ menu "Networking"
+ 	source "package/czmq/Config.in"
+ 	source "package/filemq/Config.in"
+ 	source "package/fmlib/Config.in"
++	source "package/geoip/Config.in"
+ 	source "package/glib-networking/Config.in"
+ 	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+diff --git a/package/geoip/Config.in b/package/geoip/Config.in
+new file mode 100644
+index 0000000..739a8da
+--- /dev/null
++++ b/package/geoip/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_GEOIP
++	bool "geoip"
++	help
++	  GeoIP is a C library that enables the user to find
++	  geographical and network information of an IP address.
++
++	  To use this library, you need to download MaxMind's free
++	  GeoLite or commercial GeoIP binary databases into the
++	  target's /usr/share/GeoIP directory in uncompressed form.
++
++	  Note that GeoIP2 / GeoLite2 are not supported by this
++	  library.
++
++	  https://github.com/maxmind/geoip-api-c
+diff --git a/package/geoip/geoip.mk b/package/geoip/geoip.mk
+new file mode 100644
+index 0000000..bbfa014
+--- /dev/null
++++ b/package/geoip/geoip.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# geoip
++#
++################################################################################
++
++GEOIP_VERSION = 1.6.0
++GEOIP_SOURCE = GeoIP-$(GEOIP_VERSION).tar.gz
++GEOIP_SITE = $(call github,maxmind,geoip-api-c,v$(GEOIP_VERSION))
++GEOIP_AUTORECONF = YES
++GEOIP_INSTALL_STAGING = YES
++GEOIP_LICENSE = LGPLv2.1+
++GEOIP_LICENSE_FILES = LICENSE COPYING
++
++$(eval $(autotools-package))
