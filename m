@@ -1,64 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Jun 2014 18:38:47 +0200
-Subject: [Buildroot] [PATCH] faifa: needs threads
-In-Reply-To: <1403440065-19554-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403440065-19554-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140622163847.GA18122@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Jun 2014 18:52:33 +0200
+Subject: [Buildroot] [PATCH 1 of 5 RFC] uclibc: menuconfig: take into
+ account initial settings from config file
+In-Reply-To: <97d74ccbe054d9a16465.1403444740@localhost>
+References: <patchbomb.1403444739@localhost>
+ <97d74ccbe054d9a16465.1403444740@localhost>
+Message-ID: <20140622185233.0d553f8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Dear Thomas De Schampheleire,
 
-On 2014-06-22 09:27 -0300, Gustavo Zacarias spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/a93/a93395c656169e0f08f471f12bc05f29c9ea2976/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Sun, 22 Jun 2014 15:45:40 +0200, Thomas De Schampheleire wrote:
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>  uclibc-menuconfig: uclibc-patch
+> +	$(UCLIBC_COPY_DOT_CONFIG)
 
-Regards,
-Yann E. MORIN.
+But then if I repeatedly do several uclibc-menuconfig to adjust the
+configuration, before restarting the build, I'm going to loose my
+changes, no?
 
-> ---
->  package/faifa/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/faifa/Config.in b/package/faifa/Config.in
-> index 2acd505..23133b7 100644
-> --- a/package/faifa/Config.in
-> +++ b/package/faifa/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_FAIFA
->  	bool "faifa"
->  	select BR2_PACKAGE_LIBPCAP
->  	depends on !BR2_PREFER_STATIC_LIB
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	help
->  	  Faifa can configure any Intellon-based Power Line
->  	  Communication device using Intellon INT5000 and INT6000
-> @@ -11,5 +12,5 @@ config BR2_PACKAGE_FAIFA
->  
->  	  https://dev.open-plc.org
->  
-> -comment "faifa needs a toolchain w/ dynamic library"
-> -	depends on BR2_PREFER_STATIC_LIB
-> +comment "faifa needs a toolchain w/ dynamic library, threads"
-> +	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
-> -- 
-> 1.8.5.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Say that UCLIBC_CONFIG_FILE=package/uclibc/uclibc-0.9.33.x.config, and
+the following sequence of event:
 
+ 1/ Make uclibc-menuconfig. The $(UCLIBC_CONFIG_FILE) gets copied to
+    $(BUILD_DIR)/uclibc-<version>/.config.
+
+    I make a change in the uClibc configuration. It gets saved as
+    $(BUILD_DIR)/uclibc-<version>/.config.
+
+ 2/ I do make uclibc-menuconfig again, because I forgot something. The
+    $(UCLIBC_CONFIG_FILE) gets copied to
+    $(BUILD_DIR)/uclibc-<version>/.config. I've lost the change I've
+    made in step (1).
+
+Am I missing something?
+
+Best regards,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
