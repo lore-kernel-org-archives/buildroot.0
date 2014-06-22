@@ -1,32 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 22 Jun 2014 19:34:19 -0300
-Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
-In-Reply-To: <20140622215442.4c060328@free-electrons.com>
-References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
- <20140622215442.4c060328@free-electrons.com>
-Message-ID: <53A759EB.8090702@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Jun 2014 00:37:24 +0200
+Subject: [Buildroot] [PATCH] openntpd: add SysV initscript and user
+In-Reply-To: <53A75985.4040604@zacarias.com.ar>
+References: <1402486395-15125-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140622172319.GA21768@free.fr> <53A75985.4040604@zacarias.com.ar>
+Message-ID: <20140622223724.GE21768@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/22/2014 04:54 PM, Thomas Petazzoni wrote:
+Gustavo, All,
 
->> +	  GeoIP is a C library that enables the user to find geographical
->> +	  and network information of an IP address.
->> +	  To use this library, you need to download MaxMind's free GeoLite or
->> +	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
->> +	  directory in uncompressed form.
+On 2014-06-22 19:32 -0300, Gustavo Zacarias spake thusly:
+> On 06/22/2014 02:23 PM, Yann E. MORIN wrote:
 > 
-> Wouldn't it make sense to create a package for the free database, so
-> that GeoIP can be useful out of the box?
+> > Any reason why you name the user and group with a leading '_' ?
+> 
+> Because the code says so, and it's not configurable.
+> The group just to keep consistency.
 
-As the current infra is right now, not really, even with fixes i
-wouldn't go for it.
-That's because the tarball naming is fixed (no hash, timestamp or
-anything) and they change at least daily, so an old
-sources.buildroot.net copy/mirror could be really old.
-Even if we can say "don't mirror it" the same can happen to people with
-their local copy.
-Regards.
+Ok, that should be noted as a comment above the user definition, I
+guess.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
