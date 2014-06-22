@@ -1,43 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 19:04:40 +0200
-Subject: [Buildroot] [git commit] faifa: needs threads
-Message-ID: <20140622171521.F0F2C9D009@busybox.osuosl.org>
+Date: Sun, 22 Jun 2014 19:04:00 +0200
+Subject: [Buildroot] [git commit] libhid: fix for nommu
+Message-ID: <20140622171521.E9B2A9D009@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=28cee8101d4c2ec7549f8ec4893409449717983b
+commit: http://git.buildroot.net/buildroot/commit/?id=41f641d037e5b439aa649b542a3cbb0327a64062
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/a93/a93395c656169e0f08f471f12bc05f29c9ea2976/
+Make it accept uclinux in the tuple as linux. Fixes:
+http://autobuild.buildroot.net/results/07f/07f2a560d9915ff7bad830be11f95aa856ce0e73/
+
+Upstream seems dead with the last commit in svn being 5+ years ago and
+with some recent patches in the mailing list just sitting there.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/faifa/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ ...libhid-0001-dont-fiddle-with-debug-flags.patch} |    0
+ ...tch => libhid-0002-no-newline-in-ldflags.patch} |    0
+ package/libhid/libhid-0003-uclinux.patch           |   27 ++++++++++++++++++++
+ 3 files changed, 27 insertions(+), 0 deletions(-)
 
-diff --git a/package/faifa/Config.in b/package/faifa/Config.in
-index 2acd505..23133b7 100644
---- a/package/faifa/Config.in
-+++ b/package/faifa/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FAIFA
- 	bool "faifa"
- 	select BR2_PACKAGE_LIBPCAP
- 	depends on !BR2_PREFER_STATIC_LIB
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Faifa can configure any Intellon-based Power Line
- 	  Communication device using Intellon INT5000 and INT6000
-@@ -11,5 +12,5 @@ config BR2_PACKAGE_FAIFA
- 
- 	  https://dev.open-plc.org
- 
--comment "faifa needs a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB
-+comment "faifa needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libhid/libhid-dont-fiddle-with-debug-flags.patch b/package/libhid/libhid-0001-dont-fiddle-with-debug-flags.patch
+similarity index 100%
+rename from package/libhid/libhid-dont-fiddle-with-debug-flags.patch
+rename to package/libhid/libhid-0001-dont-fiddle-with-debug-flags.patch
+diff --git a/package/libhid/libhid-no-newline-in-ldflags.patch b/package/libhid/libhid-0002-no-newline-in-ldflags.patch
+similarity index 100%
+rename from package/libhid/libhid-no-newline-in-ldflags.patch
+rename to package/libhid/libhid-0002-no-newline-in-ldflags.patch
+diff --git a/package/libhid/libhid-0003-uclinux.patch b/package/libhid/libhid-0003-uclinux.patch
+new file mode 100644
+index 0000000..cb3c452
+--- /dev/null
++++ b/package/libhid/libhid-0003-uclinux.patch
+@@ -0,0 +1,27 @@
++Good old 'uclinux is also linux'
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura libhid-0.2.16.orig/configure.ac libhid-0.2.16/configure.ac
++--- libhid-0.2.16.orig/configure.ac	2014-06-22 09:35:50.277261742 -0300
+++++ libhid-0.2.16/configure.ac	2014-06-22 09:36:10.688951947 -0300
++@@ -80,6 +80,7 @@
++ 
++ MD_CONF_DEBUGGING
++ MD_CONF_COMPILER
+++AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "uclinux")
++ AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
++ AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
++ AM_CONDITIONAL(OS_SOLARIS, test "$MD_OS" = "solaris")
++diff -Nura libhid-0.2.16.orig/m4/md_check_os.m4 libhid-0.2.16/m4/md_check_os.m4
++--- libhid-0.2.16.orig/m4/md_check_os.m4	2014-06-22 09:35:50.275261675 -0300
+++++ libhid-0.2.16/m4/md_check_os.m4	2014-06-22 09:46:17.651475891 -0300
++@@ -3,7 +3,7 @@
++     AC_CANONICAL_HOST
++     AC_MSG_CHECKING(for target OS)
++     case $host in
++-      *-linux*)
+++      *-linux*|*-uclinux*)
++         AC_DEFINE(OS_LINUX, [], [define to 1 if building for Linux])
++         AC_SUBST(OS_LINUX)
++         MD_OS=linux
