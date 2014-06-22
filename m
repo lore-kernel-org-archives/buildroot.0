@@ -1,113 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 19:05:18 +0200
-Subject: [Buildroot] [git commit] graph-depends.py: support python3
-Message-ID: <20140622171522.04EDC9D009@busybox.osuosl.org>
+Date: Sun, 22 Jun 2014 19:04:40 +0200
+Subject: [Buildroot] [git commit] faifa: needs threads
+Message-ID: <20140622171521.F0F2C9D009@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63454b1c07b033c258451e06978da2514bb05361
+commit: http://git.buildroot.net/buildroot/commit/?id=28cee8101d4c2ec7549f8ec4893409449717983b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch is the result of 2to3.
+Fixes:
+http://autobuild.buildroot.net/results/a93/a93395c656169e0f08f471f12bc05f29c9ea2976/
 
-In addition, universal_newlines=True is added to the Popen calls. In
-python3, this makes sure that the output is decoded so that we get a
-string instead of a buffer object.
-
-Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |   24 ++++++++++++------------
- 1 files changed, 12 insertions(+), 12 deletions(-)
+ package/faifa/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 29f271a..58401a2 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -82,7 +82,7 @@ allpkgs = []
- def get_targets():
-     sys.stderr.write("Getting targets\n")
-     cmd = ["make", "-s", "show-targets"]
--    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-     output = p.communicate()[0].strip()
-     if p.returncode != 0:
-         return None
-@@ -98,7 +98,7 @@ def get_depends(pkgs):
-     cmd = ["make", "-s" ]
-     for pkg in pkgs:
-         cmd.append("%s-show-depends" % pkg)
--    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-     output = p.communicate()[0]
-     if p.returncode != 0:
-         sys.stderr.write("Error getting dependencies %s\n" % pkgs)
-@@ -203,7 +203,7 @@ elif mode == MODE_PKG:
- # Make the dependencies a dictionnary { 'pkg':[dep1, dep2, ...] }
- dict_deps = {}
- for dep in dependencies:
--    if not dict_deps.has_key(dep[0]):
-+    if dep[0] not in dict_deps:
-         dict_deps[dep[0]] = []
-     dict_deps[dep[0]].append(dep[1])
+diff --git a/package/faifa/Config.in b/package/faifa/Config.in
+index 2acd505..23133b7 100644
+--- a/package/faifa/Config.in
++++ b/package/faifa/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FAIFA
+ 	bool "faifa"
+ 	select BR2_PACKAGE_LIBPCAP
+ 	depends on !BR2_PREFER_STATIC_LIB
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Faifa can configure any Intellon-based Power Line
+ 	  Communication device using Intellon INT5000 and INT6000
+@@ -11,5 +12,5 @@ config BR2_PACKAGE_FAIFA
  
-@@ -211,7 +211,7 @@ for dep in dependencies:
- # transitive) of pkg2, dependencies being listed in the deps
- # dictionary. Returns False otherwise.
- def is_dep(pkg,pkg2,deps):
--    if deps.has_key(pkg2):
-+    if pkg2 in deps:
-         for p in deps[pkg2]:
-             if pkg == p:
-                 return True
-@@ -248,10 +248,10 @@ def remove_toolchain_deps(pkg,deps):
- # This functions trims down the dependency list of all packages.
- # It applies in sequence all the dependency-elimination methods.
- def remove_extra_deps(deps):
--    for pkg in deps.keys():
-+    for pkg in list(deps.keys()):
-         if not pkg == 'all':
-             deps[pkg] = remove_toolchain_deps(pkg,deps)
--    for pkg in deps.keys():
-+    for pkg in list(deps.keys()):
-         if not transitive or pkg == 'all':
-             deps[pkg] = remove_transitive_deps(pkg,deps)
-     return deps
-@@ -274,8 +274,8 @@ def print_attrs(pkg):
-             color = host_colour
-         else:
-             color = target_colour
--    print "%s [label = \"%s\"]" % (name, label)
--    print "%s [color=%s,style=filled]" % (name, color)
-+    print("%s [label = \"%s\"]" % (name, label))
-+    print("%s [color=%s,style=filled]" % (name, color))
+ 	  https://dev.open-plc.org
  
- # Print the dependency graph of a package
- def print_pkg_deps(depth, pkg):
-@@ -283,17 +283,17 @@ def print_pkg_deps(depth, pkg):
-         return
-     done_deps.append(pkg)
-     print_attrs(pkg)
--    if not dict_deps.has_key(pkg):
-+    if pkg not in dict_deps:
-         return
-     if max_depth == 0 or depth < max_depth:
-         for d in dict_deps[pkg]:
--            print "%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d))
-+            print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
-             print_pkg_deps(depth+1, d)
- 
- # Start printing the graph data
--print "digraph G {"
-+print("digraph G {")
- 
- done_deps = []
- print_pkg_deps(0, rootpkg)
- 
--print "}"
-+print("}")
+-comment "faifa needs a toolchain w/ dynamic library"
+-	depends on BR2_PREFER_STATIC_LIB
++comment "faifa needs a toolchain w/ dynamic library, threads"
++	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
