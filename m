@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 22 Jun 2014 13:52:22 +0000 (UTC)
+Date: Sun, 22 Jun 2014 13:52:49 +0000 (UTC)
 Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
  internal variables
 In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
 References: <bug-7172-163@https.bugs.busybox.net/>
-Message-ID: <20140622135222.5EBB09D05C@busybox.osuosl.org>
+Message-ID: <20140622135249.A58529D05C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,7 +17,10 @@ Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Target Milestone|---                         |2014.08
+   Target Milestone|2014.08                     |---
+
+--- Comment #12 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-22 13:52:49 UTC ---
+(sorry incorrect bug for milestone)
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
