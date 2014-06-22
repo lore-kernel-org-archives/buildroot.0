@@ -1,37 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 21:53:35 +0200
-Subject: [Buildroot] [git commit] knock: fix static build
-Message-ID: <20140622195344.AB7C79D063@busybox.osuosl.org>
+Date: Sun, 22 Jun 2014 21:54:42 +0200
+Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
+In-Reply-To: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140622215442.4c060328@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b64a06d7b70bd7b160826bf9b97e60e18171913d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Use pcap-config to determine link dependencies of libpcap.
+On Tue, 17 Jun 2014 11:39:22 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/Config.in       |  1 +
+>  package/geoip/Config.in | 11 +++++++++++
+>  package/geoip/geoip.mk  | 15 +++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/geoip/Config.in
+>  create mode 100644 package/geoip/geoip.mk
 
-Fixes:
-http://autobuild.buildroot.net/results/1eb/1eb877ebd9469c9261bf114fc7733819ae3fd562/
+Thanks, applied. One comment below.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/knock/knock.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+> +	  GeoIP is a C library that enables the user to find geographical
+> +	  and network information of an IP address.
+> +	  To use this library, you need to download MaxMind's free GeoLite or
+> +	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
+> +	  directory in uncompressed form.
 
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 8d2b41e..682d031 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -10,4 +10,8 @@ KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
- KNOCK_DEPENDENCIES = libpcap
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+KNOCK_CONF_OPT = LIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
-+endif
-+
- $(eval $(autotools-package))
+Wouldn't it make sense to create a package for the free database, so
+that GeoIP can be useful out of the box?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
