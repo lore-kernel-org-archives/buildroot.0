@@ -1,62 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Jun 2014 19:23:19 +0200
-Subject: [Buildroot] [PATCH] openntpd: add SysV initscript and user
-In-Reply-To: <1402486395-15125-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1402486395-15125-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140622172319.GA21768@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 22 Jun 2014 20:23:16 +0300
+Subject: [Buildroot] [PATCH] knock: fix static build
+Message-ID: <642cb02624e2ab6997d7ed7f3a92bc368d69f8e0.1403457796.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All
+Use pcap-config to determine link dependencies of libpcap.
 
-On 2014-06-11 08:33 -0300, Gustavo Zacarias spake thusly:
-> Add the _ntp user that the daemon requires to work in any way.
-> Add a SysV-style initscript as well, but not with '-s' (set time
-> immediately after startup) because it can make the boot process stall
-> for a few seconds if there's no proper network connectivity/dns setup.
-> Make ntp and openntpd mutually exclusive since they overstep each other.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[--SNIP--]
-> diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-> index f0e4f19..0fe6179 100644
-> --- a/package/openntpd/openntpd.mk
-> +++ b/package/openntpd/openntpd.mk
-> @@ -10,4 +10,13 @@ OPENNTPD_CONF_OPT = --with-builtin-arc4random --disable-strip
->  OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
->  OPENNTPD_LICENSE_FILES = LICENCE
->  
-> +define OPENNTPD_INSTALL_INIT_SYSV
-> +	$(INSTALL) -m 0755 -D package/openntpd/S49ntp \
-> +		$(TARGET_DIR)/etc/init.d/S49ntp
-> +endef
-> +
-> +define OPENNTPD_USERS
-> +_ntp -1 _ntp -1 * - - - Network Time Protocol daemon
+Fixes:
+http://autobuild.buildroot.net/results/1eb/1eb877ebd9469c9261bf114fc7733819ae3fd562/
 
-Any reason why you name the user and group with a leading '_' ?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/knock/knock.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +
->  $(eval $(autotools-package))
-> -- 
-> 1.8.5.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/knock/knock.mk b/package/knock/knock.mk
+index 8d2b41e859f4..682d0316c402 100644
+--- a/package/knock/knock.mk
++++ b/package/knock/knock.mk
+@@ -10,4 +10,8 @@ KNOCK_LICENSE = GPLv2+
+ KNOCK_LICENSE_FILES = COPYING
+ KNOCK_DEPENDENCIES = libpcap
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++KNOCK_CONF_OPT = LIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
++endif
++
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.0
