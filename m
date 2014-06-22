@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 19:19:40 +0200
-Subject: [Buildroot] [PATCH] gst-ffmpeg: fix build on armv6 without
- thumb2 (e.g. RaspberryPi)
-In-Reply-To: <1403133378-28417-1-git-send-email-arnout@mind.be>
-References: <1403133378-28417-1-git-send-email-arnout@mind.be>
-Message-ID: <20140622191940.7e905db5@free-electrons.com>
+Date: Sun, 22 Jun 2014 19:21:31 +0200
+Subject: [Buildroot] [git commit] manual: (faq-boot-hang-after-starting) fix
+	config entries
+Message-ID: <20140622172136.B207B9D04E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: http://git.buildroot.net/buildroot/commit/?id=9ab109869fe1758e47c75edd16b20af1db05e1fc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Jun 2014 01:16:18 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> Cc: Marco Trapanese <marcotrapanese@gmail.com>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> I only build-tested this - Marco, please test it properly. Although, you
-> probably don't even use ac3 so the failing code won't be executed.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...3_01-arm-avoid-using-the-movw-instruction.patch | 41 ++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/gstreamer/gst-ffmpeg/gst-ffmpeg-0.10.13_01-arm-avoid-using-the-movw-instruction.patch
+Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/faq-troubleshooting.txt |   10 +++++-----
+ 1 files changed, 5 insertions(+), 5 deletions(-)
 
-Thanks, applied. In the process, I've renamed the existing patch and
-your patch to follow the patch naming convention.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/faq-troubleshooting.txt b/docs/manual/faq-troubleshooting.txt
+index 2fdb530..26c8460 100644
+--- a/docs/manual/faq-troubleshooting.txt
++++ b/docs/manual/faq-troubleshooting.txt
+@@ -19,11 +19,11 @@ Starting dropbear sshd: generating rsa key... generating dsa key... OK
+ 
+ then it means that your system is running, but didn't start a shell on
+ the serial console. In order to have the system start a shell on your
+-serial console, you have to go into the Buildroot configuration, +System
+-configuration+, and modify +Port to run a getty (login prompt) on+ and
+-+Baudrate to use+ as appropriate. This will automatically tune the
+-+/etc/inittab+ file of the generated system so that a shell starts on
+-the correct serial port.
++serial console, you have to go into the Buildroot configuration, in 
+++System configuration+, modify +Run a getty (login prompt) after boot+ 
++and set the appropriate port and baud rate in the +getty options+ 
++submenu. This will automatically tune the +/etc/inittab+ file of the 
++generated system so that a shell starts on the correct serial port.
+ 
+ [[faq-no-compiler-on-target]]
+ == Why is there no compiler on the target?
