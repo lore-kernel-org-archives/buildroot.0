@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 22:03:57 +0200
-Subject: [Buildroot] [PATCH 2/4] legal-info: save license files even for
- local or overridden packages
-In-Reply-To: <4970d4e28d1f96838b0f62c52852ea9d531faec2.1403439879.git.yann.morin.1998@free.fr>
+Date: Sun, 22 Jun 2014 22:04:29 +0200
+Subject: [Buildroot] [PATCH 3/4] legal-info: add a comment about what
+ packages we save the tarballs of
+In-Reply-To: <d7b60854f85ee35d8bf21c60987fc0e34d4a059e.1403439879.git.yann.morin.1998@free.fr>
 References: <cover.1403439879.git.yann.morin.1998@free.fr>
- <4970d4e28d1f96838b0f62c52852ea9d531faec2.1403439879.git.yann.morin.1998@free.fr>
-Message-ID: <20140622220357.4fe19757@free-electrons.com>
+ <d7b60854f85ee35d8bf21c60987fc0e34d4a059e.1403439879.git.yann.morin.1998@free.fr>
+Message-ID: <20140622220429.3bbd4698@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,27 +14,29 @@ To: buildroot@busybox.net
 
 Dear Yann E. MORIN,
 
-On Sun, 22 Jun 2014 14:41:13 +0200, Yann E. MORIN wrote:
+On Sun, 22 Jun 2014 14:41:14 +0200, Yann E. MORIN wrote:
 > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > 
-> Even if we do not save the sources for local or overridden packages because
-> it is too complex, we can still quite easily save the license files.
+> As the legal-info infra only (rightfully) saves the tarballs of packages
+> that:
+>   - we want to redistribute,
+>   - and are not local,
+>   - and are not overriden,
 > 
-> Also, having the license files is a very important part of complying with
-> the licenses.
+> add a comment stating so.
 > 
-> Move the copy of license files out of the non-local, non-overridden package
-> case, but still in the case where packages have a _SOURCE defined, to
-> avoid catching packages bundled in Buildroot (eg. mkpasswd et al.)
+> This should clarify the code-block, which although trivial to read,
+> was not easy to interpret without thinking thouroughly about it.
 > 
-> Reported-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Luca Ceresoli <luca@lucaceresoli.net>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
 > Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  package/pkg-generic.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied, thanks.
 
