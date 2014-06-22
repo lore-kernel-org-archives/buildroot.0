@@ -1,50 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Jun 2014 19:04:56 +0200
-Subject: [Buildroot] [PATCH] package/knock: fix static build with libusb
-Message-ID: <1403456696-8122-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Jun 2014 19:05:56 +0200
+Subject: [Buildroot] [PATCH] graph-depends.py: support python3
+In-Reply-To: <1403296447-24706-1-git-send-email-arnout@mind.be>
+References: <1403296447-24706-1-git-send-email-arnout@mind.be>
+Message-ID: <20140622190556.4061c186@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-knock depends on libpcap, that has an optional dependency on libusb.
-Alas, libpcap does not install a .pc file, so knock does not know
-that it should link with -lusb-1.0.
+On Fri, 20 Jun 2014 22:34:07 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> This patch is the result of 2to3.
+> 
+> In addition, universal_newlines=True is added to the Popen calls. In
+> python3, this makes sure that the output is decoded so that we get a
+> string instead of a buffer object.
+> 
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  support/scripts/graph-depends | 24 ++++++++++++------------
+>  1 file changed, 12 insertions(+), 12 deletions(-)
 
-When linking dynamically, this is not an issue, since the linker does
-follow the DT_NEEDED tags of libpcap, and thus pulls libusb-1.0 in at
-the same time. And since linusb uses threads, libpthread is pulled in
-as well.
+Applied, thanks!
 
-However, when linking statically, all of this fails.
-
-Fix that by telling knock's ./configure what libraries to link with
-when doing a static build and libusb is enabled.
-
-Fixes:
-    http://autobuild.buildroot.net/results/1eb/1eb877ebd9469c9261bf114fc7733819ae3fd562/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/knock/knock.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 8d2b41e..ace23fa 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -10,4 +10,8 @@ KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
- KNOCK_DEPENDENCIES = libpcap
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB)$(BR2_PACKAGE_LIBUSB),yy)
-+KNOCK_CONF_OPT = LIBS="-lusb-1.0 -pthread"
-+endif
-+
- $(eval $(autotools-package))
+Thomas
 -- 
-1.8.3.2
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
