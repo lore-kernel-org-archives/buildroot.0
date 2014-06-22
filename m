@@ -1,37 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 22 Jun 2014 15:45:43 +0200
-Subject: [Buildroot] [PATCH 4 of 5 RFC] busybox: menuconfig: take into
- account initial settings from config file
-In-Reply-To: <patchbomb.1403444739@localhost>
-References: <patchbomb.1403444739@localhost>
-Message-ID: <5dc5438c0108ca503012.1403444743@localhost>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 22 Jun 2014 13:52:08 +0000 (UTC)
+Subject: [Buildroot] [Bug 7154] Local uClibc config file gets overwritten
+ using make uclibc-update-config
+In-Reply-To: <bug-7154-163@https.bugs.busybox.net/>
+References: <bug-7154-163@https.bugs.busybox.net/>
+Message-ID: <20140622135208.84BEB9D05C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When busybox-menuconfig is executed from a clean repo, and a custom
-configuration file was set, then these custom settings are ignored and
-busybox starts from the default configuration.
+https://bugs.busybox.net/show_bug.cgi?id=7154
 
-This patch adds an explicit copy of the custom config file to the menuconfig
-target to fix 'make clean busybox-menuconfig'.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         AssignedTo|unassigned at buildroot.uclibc |patrickdepinguin at gmail.com
+                   |.org                        |
 
----
- package/busybox/busybox.mk |  1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+--- Comment #3 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-22 13:52:07 UTC ---
+RFC patch series submitted at:
+http://patchwork.ozlabs.org/patch/362557/
+http://patchwork.ozlabs.org/patch/362560/
+http://patchwork.ozlabs.org/patch/362558/
+http://patchwork.ozlabs.org/patch/362561/
+http://patchwork.ozlabs.org/patch/362559/
 
-diff -r 6bb6b3f59fd5 -r 5dc5438c0108 package/busybox/busybox.mk
---- a/package/busybox/busybox.mk	Sun Jun 22 15:29:01 2014 +0200
-+++ b/package/busybox/busybox.mk	Sun Jun 22 15:33:49 2014 +0200
-@@ -232,6 +232,7 @@
- $(eval $(generic-package))
- 
- busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
-+	$(BUSYBOX_COPY_CONFIG)
- 	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
- 		$(subst busybox-,,$@)
- 	rm -f $(BUSYBOX_DIR)/.stamp_built
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
