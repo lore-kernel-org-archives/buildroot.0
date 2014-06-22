@@ -1,69 +1,61 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 22 Jun 2014 09:51:49 -0300
-Subject: [Buildroot] [PATCH] libhid: fix for nommu
-Message-ID: <1403441509-27982-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 22 Jun 2014 15:26:52 +0200
+Subject: [Buildroot] [PATCH] dhcpcd: fix build with ccache
+Message-ID: <d3257052bc958700588f.1403443612@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make it accept uclinux in the tuple as linux. Fixes:
-http://autobuild.buildroot.net/results/07f/07f2a560d9915ff7bad830be11f95aa856ce0e73/
+After the bump to dhcpcd 6.4.0, building dhcpcd with ccache fails at the
+configure step:
 
-Upstream seems dead with the last commit in svn being 5+ years ago and
-with some recent patches in the mailing list just sitting there.
+Using compiler .. <buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc
+<buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc is not an executable
+make: *** [<buildroot>/output/build/dhcpcd-6.4.0/.stamp_configured] Error 1
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This patch backports an upstream patch to fix this issue.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- ...libhid-0001-dont-fiddle-with-debug-flags.patch} |  0
- ...tch => libhid-0002-no-newline-in-ldflags.patch} |  0
- package/libhid/libhid-0003-uclinux.patch           | 27 ++++++++++++++++++++++
- 3 files changed, 27 insertions(+)
- rename package/libhid/{libhid-dont-fiddle-with-debug-flags.patch => libhid-0001-dont-fiddle-with-debug-flags.patch} (100%)
- rename package/libhid/{libhid-no-newline-in-ldflags.patch => libhid-0002-no-newline-in-ldflags.patch} (100%)
- create mode 100644 package/libhid/libhid-0003-uclinux.patch
+ package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch |  32 ++++++++++++++
+ 1 files changed, 32 insertions(+), 0 deletions(-)
 
-diff --git a/package/libhid/libhid-dont-fiddle-with-debug-flags.patch b/package/libhid/libhid-0001-dont-fiddle-with-debug-flags.patch
-similarity index 100%
-rename from package/libhid/libhid-dont-fiddle-with-debug-flags.patch
-rename to package/libhid/libhid-0001-dont-fiddle-with-debug-flags.patch
-diff --git a/package/libhid/libhid-no-newline-in-ldflags.patch b/package/libhid/libhid-0002-no-newline-in-ldflags.patch
-similarity index 100%
-rename from package/libhid/libhid-no-newline-in-ldflags.patch
-rename to package/libhid/libhid-0002-no-newline-in-ldflags.patch
-diff --git a/package/libhid/libhid-0003-uclinux.patch b/package/libhid/libhid-0003-uclinux.patch
-new file mode 100644
-index 0000000..cb3c452
---- /dev/null
-+++ b/package/libhid/libhid-0003-uclinux.patch
-@@ -0,0 +1,27 @@
-+Good old 'uclinux is also linux'
+diff -r a59338f65a46 -r d3257052bc95 package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch	Sun Jun 22 15:22:35 2014 +0200
+@@ -0,0 +1,32 @@
++configure: support builds using ccache
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++The configure script checks whether CC is executable by means of a check
++'type $CC'. However, when using ccache, CC is normally set to "ccache gcc"
++(using the appropriate paths). Such a compound string is not recognized by
++type, however, and thus configure bails out.
 +
-+diff -Nura libhid-0.2.16.orig/configure.ac libhid-0.2.16/configure.ac
-+--- libhid-0.2.16.orig/configure.ac	2014-06-22 09:35:50.277261742 -0300
-++++ libhid-0.2.16/configure.ac	2014-06-22 09:36:10.688951947 -0300
-+@@ -80,6 +80,7 @@
++This patch changes the check 'type $CC' with a compile test.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++
++Upstream status: another implementation was submitted, modified by
++maintainer Roy, then simplified based on my suggestion. This patch is a fold
++of the two upstream patches:
++http://roy.marples.name/projects/dhcpcd/info/5f4bf91142fceac502c478886aeb5079a184bb43
++http://roy.marples.name/projects/dhcpcd/info/26bc10be2405659bdf31d690a72d377d6b67ebd4
++
++diff -r 66c8bdc88858 configure
++--- a/configure	Sat Jun 21 16:54:30 2014 +0200
+++++ b/configure	Sun Jun 22 15:20:25 2014 +0200
++@@ -272,8 +272,9 @@
++ fi
 + 
-+ MD_CONF_DEBUGGING
-+ MD_CONF_COMPILER
-++AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "uclinux")
-+ AM_CONDITIONAL(OS_LINUX, test "$MD_OS" = "linux")
-+ AM_CONDITIONAL(OS_BSD, test "$MD_OS" = "bsd")
-+ AM_CONDITIONAL(OS_SOLARIS, test "$MD_OS" = "solaris")
-+diff -Nura libhid-0.2.16.orig/m4/md_check_os.m4 libhid-0.2.16/m4/md_check_os.m4
-+--- libhid-0.2.16.orig/m4/md_check_os.m4	2014-06-22 09:35:50.275261675 -0300
-++++ libhid-0.2.16/m4/md_check_os.m4	2014-06-22 09:46:17.651475891 -0300
-+@@ -3,7 +3,7 @@
-+     AC_CANONICAL_HOST
-+     AC_MSG_CHECKING(for target OS)
-+     case $host in
-+-      *-linux*)
-++      *-linux*|*-uclinux*)
-+         AC_DEFINE(OS_LINUX, [], [define to 1 if building for Linux])
-+         AC_SUBST(OS_LINUX)
-+         MD_OS=linux
--- 
-1.8.5.5
++ echo "Using compiler .. $CC"
++-if ! type "$CC" >/dev/null 2>&1; then
++-	echo "$CC is not an executable"
+++if ! echo "int main(void) { return 0; }" | $CC -x c -o /dev/null - 2>/dev/null
+++then
+++	echo "$CC does not create executables"
++ 	exit 1
++ fi
++ [ "$CC" != cc ] && echo "CC=	$CC" >>$CONFIG_MK
