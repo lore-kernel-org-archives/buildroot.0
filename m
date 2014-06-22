@@ -1,32 +1,40 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Sun, 22 Jun 2014 19:38:55 +0200
-Subject: [Buildroot] [PATCH v2 1/3] libglib2: bump to version 2.40.0
-In-Reply-To: <53A4B406.9060802@mind.be>
-References: <1403214158-16862-1-git-send-email-hadrien.boutteville@gmail.com>
- <1403214158-16862-2-git-send-email-hadrien.boutteville@gmail.com>
- <53A4B406.9060802@mind.be>
-Message-ID: <53A714AF.3080301@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 22 Jun 2014 20:30:59 +0200
+Subject: [Buildroot] [PATCH] imagemagick: Enable for host
+In-Reply-To: <53A71225.3000201@bergerie>
+References: <1402902112-12487-1-git-send-email-vincent.stehle@laposte.net>
+ <20140622191436.7d432cbe@free-electrons.com>
+ <53A71225.3000201@bergerie>
+Message-ID: <20140622203059.5a5f28a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Vincent,
 
-On Sat, 21 Jun 2014 00:21:58 +0200, Arnout Vandecappelle wrote:
-> On 19/06/14 23:42, Hadrien Boutteville wrote:
->> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Sun, 22 Jun 2014 19:28:05 +0200, Vincent wrote:
+
+> > we expect the patch adding the host package to be
+> > submitted alongside the patch adding the target package needing it,
+> > so that there is no "unneeded" host package.
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Ah! I did not know about that rule. It makes sense, indeed.
 > 
->  It would be better if you explicitly mention the removed patch in the commit
-> message.
+> I am trying to package ev3sources, which needs convert at build time. 
+> I'll re-submit this host-imagemagick patch alongside, then.
 
-OK, I will do in a next version of the series.
+Ok, no problem. Indeed, host-imagemagick will be perfectly fine when
+submitted alongside the ev3sources package.
 
-Thanks,
+In the mean time, I'll mark your patch as "Changes requested" in
+patchwork.
 
-Hadrien
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
