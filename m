@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 22:28:43 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] rpcbind : add startup script
-In-Reply-To: <1402839157-10710-1-git-send-email-sagaert.johan@skynet.be>
-References: <1402839157-10710-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20140622222843.7dadc9bc@free-electrons.com>
+Date: Sun, 22 Jun 2014 22:29:25 +0200
+Subject: [Buildroot] [git commit] wpa_supplicant: disable for avr32
+Message-ID: <20140622202943.4A8BD9D063@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+commit: http://git.buildroot.net/buildroot/commit/?id=815e4063f762c02aff1242bf220af60bc1737292
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 15 Jun 2014 15:32:37 +0200, Sagaert Johan wrote:
-> rpcbind must be started at boot time.
-> Without this any nfs mount will fail.
-> 
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
-> v2: reworked using INSTALL_INIT_SYSV hook
-> 
->  package/rpcbind/rpcbind.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+Fixes:
+http://autobuild.buildroot.net/results/209/20908f479b33c1e2952622f5e8ad6b60d58af693/
 
-Where is the startup script itself?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/wpa_supplicant/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 5cb3f1b..81c61ac 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WPA_SUPPLICANT
+ 	bool "wpa_supplicant"
++	depends on !BR2_avr32 # no epoll_create1
+ 	help
+ 	  WPA supplicant for secure wireless networks
+ 
