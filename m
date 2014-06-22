@@ -1,56 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 22 Jun 2014 16:46:25 +0200
-Subject: [Buildroot] [PATCH 5 of 5 RFC] busybox: update-config: preserve
- freshly configured settings
-In-Reply-To: <b84b5b9c-4658-449d-a6cf-005a0e2373a1@email.android.com>
-References: <patchbomb.1403444739@localhost>
- <7e80ee0110a2066c2afe.1403444744@localhost>
- <20140622141416.GF3509@free.fr>
- <b84b5b9c-4658-449d-a6cf-005a0e2373a1@email.android.com>
-Message-ID: <20140622144625.GG3509@free.fr>
+Date: Sun, 22 Jun 2014 18:38:47 +0200
+Subject: [Buildroot] [PATCH] faifa: needs threads
+In-Reply-To: <1403440065-19554-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403440065-19554-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140622163847.GA18122@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Gustavo, All,
 
-On 2014-06-22 16:22 +0200, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >On 2014-06-22 15:45 +0200, Thomas De Schampheleire spake thusly:
-> >> In the sequence:
-> >> 
-> >> make busybox-menuconfig
-> >> make busybox-update-config
-> >> 
-> >> the freshly configured settings from the menuconfig are lost during the
-> >> update-config step. This is because update-config depends on the configure
-> >> step, which starts by copying the config file to the build directory.
-> >> 
-> >> Instead, stop depending on the configure step from update-config, and
-> >> explicitly call the needed commands before actually copying the config file.
-> >> 
-> >> This has the added bonus that 'busybox-update-config' no longer needs the
-> >> toolchain to be available, which makes:
-> >>     make clean busybox-menuconfig busybox-update-config
-> >> much faster and user-friendly.
-> >> 
-> >> This is a corrolary of bug #7154 https://bugs.busybox.net/show_bug.cgi?id=7154
-> >> 
-> >> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-[--SNIP--]
-> Thanks for the review and tests. So it seems you are fine with the approach?
+On 2014-06-22 09:27 -0300, Gustavo Zacarias spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/a93/a93395c656169e0f08f471f12bc05f29c9ea2976/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-It looks Ok to me. We do need these new behaviours.
-
-As for the code, I only marked it Reviewed-by for what it means. I am
-not not sure enough to mak it Acked-by, although I don't see a better
-way to do it. Thomas and Peter have a better understanding on all this
-stuff, so I'll leave the last call to them. ;-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/faifa/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/faifa/Config.in b/package/faifa/Config.in
+> index 2acd505..23133b7 100644
+> --- a/package/faifa/Config.in
+> +++ b/package/faifa/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_FAIFA
+>  	bool "faifa"
+>  	select BR2_PACKAGE_LIBPCAP
+>  	depends on !BR2_PREFER_STATIC_LIB
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	help
+>  	  Faifa can configure any Intellon-based Power Line
+>  	  Communication device using Intellon INT5000 and INT6000
+> @@ -11,5 +12,5 @@ config BR2_PACKAGE_FAIFA
+>  
+>  	  https://dev.open-plc.org
+>  
+> -comment "faifa needs a toolchain w/ dynamic library"
+> -	depends on BR2_PREFER_STATIC_LIB
+> +comment "faifa needs a toolchain w/ dynamic library, threads"
+> +	depends on BR2_PREFER_STATIC_LIB || !BR2_TOOLCHAIN_HAS_THREADS
+> -- 
+> 1.8.5.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
