@@ -1,39 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 22 Jun 2014 21:54:42 +0200
-Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
-In-Reply-To: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140622215442.4c060328@free-electrons.com>
+Date: Sun, 22 Jun 2014 21:54:58 +0200
+Subject: [Buildroot] [PATCH] knock: fix static build
+In-Reply-To: <642cb02624e2ab6997d7ed7f3a92bc368d69f8e0.1403457796.git.baruch@tkos.co.il>
+References: <642cb02624e2ab6997d7ed7f3a92bc368d69f8e0.1403457796.git.baruch@tkos.co.il>
+Message-ID: <20140622215458.50582c5f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Baruch Siach,
 
-On Tue, 17 Jun 2014 11:39:22 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Sun, 22 Jun 2014 20:23:16 +0300, Baruch Siach wrote:
+> Use pcap-config to determine link dependencies of libpcap.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/1eb/1eb877ebd9469c9261bf114fc7733819ae3fd562/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/Config.in       |  1 +
->  package/geoip/Config.in | 11 +++++++++++
->  package/geoip/geoip.mk  | 15 +++++++++++++++
->  3 files changed, 27 insertions(+)
->  create mode 100644 package/geoip/Config.in
->  create mode 100644 package/geoip/geoip.mk
+>  package/knock/knock.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Thanks, applied. One comment below.
-
-> +	  GeoIP is a C library that enables the user to find geographical
-> +	  and network information of an IP address.
-> +	  To use this library, you need to download MaxMind's free GeoLite or
-> +	  commercial GeoIP binary databases into the target's /usr/share/GeoIP
-> +	  directory in uncompressed form.
-
-Wouldn't it make sense to create a package for the free database, so
-that GeoIP can be useful out of the box?
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
