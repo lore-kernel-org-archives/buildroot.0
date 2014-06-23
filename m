@@ -1,63 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Jun 2014 07:32:18 +0200
-Subject: [Buildroot] [PATCH] graph-depends.py: support python3
-In-Reply-To: <1133175477.273342.1403300186442.JavaMail.root@mail>
-References: <1133175477.273342.1403300186442.JavaMail.root@mail>
-Message-ID: <53A7BBE2.5050603@mind.be>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 23 Jun 2014 11:14:03 +0200
+Subject: [Buildroot] [PATCH v2 1/3] Makefile: target-finalize: add
+	TARGET_FINALIZE_HOOKS
+In-Reply-To: <53A4C196.3060800@mind.be>
+References: <1403252778-19761-1-git-send-email-fabio.porcedda@gmail.com>
+ <1403252778-19761-2-git-send-email-fabio.porcedda@gmail.com>
+ <53A4C196.3060800@mind.be>
+Message-ID: <CAHkwnC85aJyCdojijcmak=A+Z_TH9Vj_xdqsrXNmkiRj=HRD2Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 20/06/14 23:36, Vivien Didelot wrote:
-> Reviewed-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> 
-> But there's also support/scripts/graph-build-time and support/scripts/xorg-release.
-> There are some calls to the Python executable in docs/manual as well.
+On Sat, Jun 21, 2014 at 1:19 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 20/06/14 10:26, Fabio Porcedda wrote:
+>> Add TARGET_FINALIZE_HOOKS to the "target-finalize" rule to be able to
+>> add to it commands as needed.
+>> This is useful for having a nicer output because commands are executed
+>> after the "target-finalize" initial message, also it is useful to ensure
+>> an executing order even when top-level parallel makefile is being used.
+>
+>  This commit message suggests that the patch would just add the call to the
+> hooks, not actually changing the purge-locales implementation (which would be a
+> separate patch).
+>
+>  For me, it doesn't have to a be a separate patch, but at least that additional
+> change should be mentioned in the commit message.
 
- True, but let's take it one step at a time :-)
+Ok, i will add at the end:
 
+Also convert "TARGET_PURGE_LOCALES" to a hook that use
+"TARGET_FINALIZE_HOOKS".
 
- Regards,
- Arnout
-
-
- BTW, list policy says that you shouldn't top-post. So you would put your
-Reviewed-by tag below my Sob, i.e...
-
-> 
-> Vivien
-> 
-> ----- Mail original -----
->> De: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
->> ?: buildroot at buildroot.org
->> Cc: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>, "Vivien Didelot" <vivien.didelot@savoirfairelinux.com>
->> Envoy?: Vendredi 20 Juin 2014 16:34:07
->> Objet: [PATCH] graph-depends.py: support python3
->>
->> This patch is the result of 2to3.
->>
->> In addition, universal_newlines=True is added to the Popen calls. In
->> python3, this makes sure that the output is decoded so that we get a
->> string instead of a buffer object.
->>
->> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-... here
-
- Also, for a long mail, remove the irrelevant part of the quotation, e.g. like this:
-
->> ---
->>  support/scripts/graph-depends | 24 ++++++++++++------------
->>  1 file changed, 12 insertions(+), 12 deletions(-)
-[snip]
-
+Thanks && BR
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Fabio Porcedda
