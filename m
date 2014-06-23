@@ -1,43 +1,86 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 23 Jun 2014 13:59:51 -0300
-Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
-In-Reply-To: <20140623163845.GA3400@free.fr>
-References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
- <20140622215442.4c060328@free-electrons.com>
- <53A759EB.8090702@zacarias.com.ar> <20140622224049.GF21768@free.fr>
- <53A75D10.8050708@zacarias.com.ar> <20140623163845.GA3400@free.fr>
-Message-ID: <53A85D07.3070802@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 23 Jun 2014 19:03:50 +0200
+Subject: [Buildroot] [PATCH] graph-depends: fix when $(O) is a relative
+ path
+In-Reply-To: <53A7BB14.4060804@mind.be>
+References: <1403129424-27129-1-git-send-email-arnout@mind.be>
+ <20140620205532.GA26745@free.fr> <53A7BB14.4060804@mind.be>
+Message-ID: <20140623170350.GB3400@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/23/2014 01:38 PM, Yann E. MORIN wrote:
+Arnout, All,
 
->> Geoipupdate is for commercial users AFAIK, i have no such access/account
->> to test the package. You need to configure a maxmind user/password to
->> make it work, it's not an out-of-the-box experience.
+On 2014-06-23 07:28 +0200, Arnout Vandecappelle spake thusly:
+> On 20/06/14 22:55, Yann E. MORIN wrote:
+> > On 2014-06-19 00:10 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> >> The graph-depends commands cd into the CONFIG_DIR and run the script
+> >> from there. However, this means that when $(O) is a relative path, it
+> >> will no longer be correct.  Therefore, use $(BASE_DIR) instead of $(O).
+> >>
+> >> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> > I tried with thisscript, and did not notice any difference between the
+> > two runs, one with master, the second with the patch applied:
+[--SNIP long script--]
+>  First of all, for me all these cases succeed both with and without the patch.
+
+You mean all the 6 cases do work for you? Weird.
+
+I don't see how it can work, since calling this
+    make -C buildroot O=somewhere goal
+
+will not have the --no-print-directory option, and thus make would print
+its usual "Entering/Leaving directory blabla" which confuses
+graph-depends.py
+
+There is not much we can do about that, since our out-of-tree Makefile
+wrapper is never called.
+
+Even worse, if you do
+    make -C buildroot O=somewhere defconfig
+    make -C somewhere graph-depends
+
+then even though we do use our Makefile wrapper in this case, the
+--no-print-directory option is not used! So make would still print its
+"Entering/Leaving directory blabla" (and thus graph-depends will get
+confused.)
+
+> Using any other combination of . and .. a $(O)
+> triggers the problem. So try
 > 
-> Well, I don't see where the problem lies. There's nothing that prevents
-> us from packaging geoipupdate, even if it requires a runtime
-> configuration with a login+password.
+> do_prep br-7
+> make -C br-7 O=./br.build-7 defconfig
+> make -C br-7 O=./br.build-7 graph-depends
+
+OK, that's a use-case I was missing.
+
+>  The graph-depends will fail with:
 > 
-> That's basically the same as for a webserver: we do package more than
-> one webserver, but the user is still responsible for providing the
-> content of the server-root.
+> tee: br.build-7/graphs/graph-depends.dot: No such file or directory
+> Getting targets
+> Getting dependencies for ['host-binutils', 'host-gmp', 'host-mpc', 'host-mpfr',
+> 'uclibc', 'host-fakeroot', 'host-gcc-final', 'host-makedevs',
+> 'toolchain-buildroot', 'toolchain', 'busybox', 'rootfs-tar']
+> Getting dependencies for ['host-m4', 'linux-headers', 'host-gcc-initial']
+> br.build-7/graphs/graph-depends.pdf: No such file or directory
+> Makefile:677: recipe for target 'graph-depends' failed
+> make: *** [graph-depends] Error 1
 
-I disagree a bit there, but then people are free to do what they like,
-like shipping a probably toughly-licensed user/pass combination in
-plaintext in a firmware which someone else can pick up and use let's say
-in shady terms :)
-It's mostly intended for servers where access is restricted and that
-wouldn't happen normally.
+OK, it fails here, too, but your patch does not change anything: it
+fails without your patch, and it fails with your patch applied.
 
->> Someone who has might be interested to make it though.
-> 
-> I agree with you on that. ;-)
+I'm using make-3.81, if that shall be a differentiator.
 
-I like to test new packages a bit, and getting the help just doesn't
-feel like a proper test, hence my reluctance ;)
-Regards.
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
