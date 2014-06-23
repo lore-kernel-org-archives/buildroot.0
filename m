@@ -1,48 +1,63 @@
-From: Thierry Bultel <thierry.bultel@wanadoo.fr>
-Date: Mon, 23 Jun 2014 17:15:29 +0200
-Subject: [Buildroot] lttng does not start
-Message-ID: <53A84491.9030105@wanadoo.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Jun 2014 18:17:15 +0200
+Subject: [Buildroot] [PATCH] graph-build-time: support python3
+In-Reply-To: <1403533417-21463-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1403533417-21463-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <53A8530B.6060601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On 23/06/14 16:23, Vivien Didelot wrote:
+> This patch is the result of 2to3.
+> 
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
-I am using lttng (2.4.1), target is ARM Cortex A9; compiler is the
-buildroot one (gcc-4.7.3)
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ (with Python 2.7.7 and Python 3.4.1)
 
-lttng fails to start:
 
-[root at buildroot ~]# lttng create
-Session auto-19700319-135920 created.
-Traces will be written in /root/lttng-traces/auto-19700319-135920
-[root at buildroot~]# lttng enable-event --kernel --all
-PERROR [5831/5915]: wait: Success (in run_as_clone() at runas.c:243)
-Error: Trace directory creation error
-Error: Events: Kernel create session failed (channel channel0, session
-auto-19700319-135920)
+ Regards,
+ Arnout
 
-My analysis show that lttng attempts to create the trace directory, when
-"lttng enable-event" is called.
-To do so, it uses a slave thread that performs a kind of "mkdir -p" ,
-that thread is spawned via a call to "clone"
-and the father waits for it via "waitpid".
+> ---
+>  support/scripts/graph-build-time | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
+> index 8ef065f..524c30d 100755
+> --- a/support/scripts/graph-build-time
+> +++ b/support/scripts/graph-build-time
+> @@ -80,16 +80,16 @@ class Package:
+>              self.steps_start[step] = time
+>          else:
+>              self.steps_end[step] = time
+> -        if self.steps_start.has_key(step) and self.steps_end.has_key(step):
+> +        if step in self.steps_start and step in self.steps_end:
+>              self.steps_duration[step] = self.steps_end[step] - self.steps_start[step]
+>  
+>      def get_duration(self, step=None):
+>          if step is None:
+>              duration = 0
+> -            for step in self.steps_duration.keys():
+> +            for step in list(self.steps_duration.keys()):
+>                  duration += self.steps_duration[step]
+>              return duration
+> -        if self.steps_duration.has_key(step):
+> +        if step in self.steps_duration:
+>              return self.steps_duration[step]
+>          return 0
+>  
+> 
 
-When the slave returns, waitpid sais it is not completed. Added a little
-code to shows that the thread
-is killed with SIGSEGV at the time it calls "return"
 
-Changing it to call "exit" instead makes it a little better, but other
-numerous errors come when
-calling "lttng start"
-
-Did anyone encounter such an issue ?
-
-Best regards
-Thierry Bultel
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140623/8abdaae7/attachment.html>
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
