@@ -1,52 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 23 Jun 2014 19:35:44 +0200
-Subject: [Buildroot] [PATCH] package/perl-mojolicious: bump to 5.08
-In-Reply-To: <CAB0FRstxBpfBcoyojk3j_fPhJdaVfRz2gOZXWdiCGdBviF16TQ@mail.gmail.com>
-References: <1403471757-19622-1-git-send-email-yann.morin.1998@free.fr>
- <CAB0FRstxBpfBcoyojk3j_fPhJdaVfRz2gOZXWdiCGdBviF16TQ@mail.gmail.com>
-Message-ID: <20140623173544.GC3400@free.fr>
+Date: Mon, 23 Jun 2014 19:42:21 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-perl: use Backpan to get perl modules
+Message-ID: <1403545341-24506-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-On 2014-06-23 19:29 +0200, Fran?ois Perrad spake thusly:
-> 2014-06-22 23:15 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >
-> > Since CPAN only ever keeps the latest version for download, CPAN now has
-> > only 5.08, so us packaging the 5.07 is causing autobuild failures
-> >     http://autobuild.buildroot.net/results/358/358f531f2db90b9bc3b1e4e2158c68d2bf6587fc/
-> >
-> > Bump to the latest version.
-> 
-> The author of Mojolicious remove very quickly older versions from
-> CPAN. It is not a usual policy.
+Old versions of some perl modules are aggressively pruned by their
+authors, up to the point that only the latest version is available
+for some modules.
 
-Ah, OK. Thanks for the clarification.
+OF course, that does not play very well for us, since we'd soon trip
+on missing upstream versions.
 
-> So, I think that the best way for this module is to move to Backpan
-> site which contains all releases.
-> 
-> PERL_MOJOLICIOUS_SITE = http://backpan.perl.org/authors/id/S/SR/SRI/
+As suggested br Fran?ois, switch over to using Backpan, that provides
+all the versions (including current ones) of all the modules for an
+apparently unlimited time (there are modules dating back 2005, at
+least.)
 
-If backpan has all the versions of all modules (including the current
-versions), shouldn't we point $(BR2_CPAN_MIRROR) to default to backpan,
-then? I'll send a new patch doing so. You can still NAK it when it
-arrives. ;-)
+Fixes:
+    http://autobuild.buildroot.net/results/a95/a95064fbffc35d16e78dbb1e73c5bbfc262b8338/
+    http://autobuild.buildroot.net/results/81c/81c00bd737ec37b7b44c1c3a4e1ca29b6d1281d2/
+    http://autobuild.buildroot.net/results/5ce/5cebc74580c8a34bb63d82a7591269c9403e95af/
+    [...]
 
-Fran?ois, apart from this issue, is the bump still valid?
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+---
+ Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/Config.in b/Config.in
+index bf1ca86..05f709d 100644
+--- a/Config.in
++++ b/Config.in
+@@ -242,7 +242,7 @@ config BR2_LUAROCKS_MIRROR
+ 
+ config BR2_CPAN_MIRROR
+ 	string "CPAN mirror (Perl packages)"
+-	default "http://search.cpan.org/CPAN"
++	default "http://backpan.perl.org/"
+ 	help
+ 	  CPAN (Comprehensive Perl Archive Network) is a repository
+ 	  of Perl packages. It has multiple software mirrors scattered
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.3.2
