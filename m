@@ -1,39 +1,44 @@
-From: Patrick Noffke <patrick@noffke.me>
-Date: Mon, 23 Jun 2014 14:43:22 -0500
-Subject: [Buildroot] Qt 5.3.0 fails to build with eglfs (ti-glx) enabled,
-	ARM platform (beaglebone black)
-In-Reply-To: <4081522.HPB2TGLcVe@localhost.localdomain>
-References: <4081522.HPB2TGLcVe@localhost.localdomain>
-Message-ID: <3591081.u5CTo5tRRS@localhost.localdomain>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 23 Jun 2014 22:11:24 +0200
+Subject: [Buildroot] [PATCH 2/2] graph-depends: remove unnecessary redirect
+	of stderr
+In-Reply-To: <1403554284-4935-1-git-send-email-arnout@mind.be>
+References: <1403554284-4935-1-git-send-email-arnout@mind.be>
+Message-ID: <1403554284-4935-2-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday, June 23, 2014 02:10:50 PM Patrick Noffke wrote:
-> Hello,
-> 
-> I'm trying to build Qt 5.3.0 within buildroot, using the ti-gfx package and
-> starting with the beaglebone black defconfig.
-> 
-> The build fails when trying to link libQt5Widgets.5.3.0.  This page
-> (https://codereview.qt-project.org/#/c/79783/) made me think I might have
-> success by enabling neon, which I did by editing the qt5base-0002-mkspecs-
-> files.patch file as follows:
-> 
-> +QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS} -mfpu=neon -march=armv7-a
-> +QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS} -mfpu=neon
-> -march=armv7-a +CONFIG                 += nostrip neon
-> 
-> but it fails the same way with or without these changes.
-> 
-> Has anyone else had this issue or found some way around it?  Portions of my
-> build log follow.
-> 
+It hides any error messages reported by make.
 
-I found the problem thanks to this page (http://comments.gmane.org/gmane.linux.embedded.yocto.meta-freescale/8682).  I had to remove libQt5* from output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ support/scripts/graph-depends | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Hope this helps someone else!
-
-Patrick
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 52c16ce..1ecfeda 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -82,7 +82,7 @@ allpkgs = []
+ def get_targets():
+     sys.stderr.write("Getting targets\n")
+     cmd = ["make", "-s", "--no-print-directory", "show-targets"]
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0].strip()
+     if p.returncode != 0:
+         return None
+@@ -98,7 +98,7 @@ def get_depends(pkgs):
+     cmd = ["make", "-s", "--no-print-directory" ]
+     for pkg in pkgs:
+         cmd.append("%s-show-depends" % pkg)
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0]
+     if p.returncode != 0:
+         sys.stderr.write("Error getting dependencies %s\n" % pkgs)
+-- 
+2.0.0
