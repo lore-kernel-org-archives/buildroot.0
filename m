@@ -1,51 +1,25 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 23 Jun 2014 23:13:42 +0200
-Subject: [Buildroot] [PATCH 2/2] graph-depends: remove unnecessary
- redirect of stderr
-In-Reply-To: <20140623204230.GA3572@free.fr>
-References: <1403554284-4935-1-git-send-email-arnout@mind.be>
- <1403554284-4935-2-git-send-email-arnout@mind.be>
- <20140623204230.GA3572@free.fr>
-Message-ID: <CAHXCMM+RVG=AUAgBWEX9CTmTaPEbZGGrQzaoTNqaU5TNssSaRA@mail.gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 23 Jun 2014 23:19:56 +0200
+Subject: [Buildroot] [PATCH] perl-mojolicious: bump to version 5.08
+In-Reply-To: <1403548997-9688-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Mon, 23 Jun 2014 20:43:17 +0200")
+References: <1403548997-9688-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <877g47z5kz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Yann, all,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Mon, Jun 23, 2014 at 10:42 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Arnout, All,
->
-> On 2014-06-23 22:11 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> It hides any error messages reported by make.
->>
->> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
-> Not sure what the test-case for that one would be, but it looks sane.
+ > - switch to BackPan in order to prevent build breakage
+ > (like http://autobuild.buildroot.net/results/358/358f531f2db90b9bc3b1e4e2158c68d2bf6587fc/)
+ > - add license file
 
-A test-case is when checking the graph-depends script using:
-----
-$ python3 ./support/script/graph-depends -p <foo>
-Getting dependencies for ['<foo>']
-Error getting dependencies ['<foo>']
-----
-after a rebase (and with some legacy option selected), sadly fails
-with no clue at all in the output to help understanding what is wrong
-:-(
-I had to fire up pdb ;-)
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-But that true, who else uses the graph-depends script outside the BR
-make wrapper? ;-)
-
->
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Acked-by: Samuel Martin <s.martin49@gmail.com>
-Tested-by: Samuel Martin <s.martin49@gmail.com>
-
-Regards,
+Committed, thanks.
 
 -- 
-Samuel
+Bye, Peter Korsgaard
