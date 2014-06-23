@@ -1,56 +1,50 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Jun 2014 18:17:15 +0200
-Subject: [Buildroot] [PATCH] graph-build-time: support python3
-In-Reply-To: <1403533417-21463-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1403533417-21463-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <53A8530B.6060601@mind.be>
+Date: Mon, 23 Jun 2014 18:38:27 +0200
+Subject: [Buildroot] [PATCH] openntpd: add SysV initscript and user
+In-Reply-To: <53A75C23.1090603@zacarias.com.ar>
+References: <1402486395-15125-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140622172319.GA21768@free.fr> <53A75985.4040604@zacarias.com.ar>
+ <20140622223724.GE21768@free.fr> <53A75C23.1090603@zacarias.com.ar>
+Message-ID: <53A85803.4040900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/06/14 16:23, Vivien Didelot wrote:
-> This patch is the result of 2to3.
+On 23/06/14 00:43, Gustavo Zacarias wrote:
+> On 06/22/2014 07:37 PM, Yann E. MORIN wrote:
 > 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+>>>> Any reason why you name the user and group with a leading '_' ?
+>>>
+>>> Because the code says so, and it's not configurable.
+>>> The group just to keep consistency.
+>>
+>> Ok, that should be noted as a comment above the user definition, I
+>> guess.
+> 
+> Why?
+> We don't document these details for systemd or other packages, why
+> should we here?
+> I think the _USERS variable is explicit enough as documentation.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (with Python 2.7.7 and Python 3.4.1)
+ Also, it is explicit in the commit message. So I agree that the patch is OK as
+is. Well, putting a comment wouldn't hurt of course.
+
+ So anyway:
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
-> ---
->  support/scripts/graph-build-time | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> Regards.
 > 
-> diff --git a/support/scripts/graph-build-time b/support/scripts/graph-build-time
-> index 8ef065f..524c30d 100755
-> --- a/support/scripts/graph-build-time
-> +++ b/support/scripts/graph-build-time
-> @@ -80,16 +80,16 @@ class Package:
->              self.steps_start[step] = time
->          else:
->              self.steps_end[step] = time
-> -        if self.steps_start.has_key(step) and self.steps_end.has_key(step):
-> +        if step in self.steps_start and step in self.steps_end:
->              self.steps_duration[step] = self.steps_end[step] - self.steps_start[step]
->  
->      def get_duration(self, step=None):
->          if step is None:
->              duration = 0
-> -            for step in self.steps_duration.keys():
-> +            for step in list(self.steps_duration.keys()):
->                  duration += self.steps_duration[step]
->              return duration
-> -        if self.steps_duration.has_key(step):
-> +        if step in self.steps_duration:
->              return self.steps_duration[step]
->          return 0
->  
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 
