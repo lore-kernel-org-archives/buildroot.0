@@ -1,109 +1,97 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Jun 2014 14:34:24 +0200
-Subject: [Buildroot] [PATCH v2 3/3] Makefile: do not add to targets
-	common dependencies
-In-Reply-To: <CAHkwnC8OEjEchUSmgXeVpwg6jiPc1WCt4YF4CmPGJZwBrBVTxA@mail.gmail.com>
-References: <1403252778-19761-1-git-send-email-fabio.porcedda@gmail.com>
- <1403252778-19761-4-git-send-email-fabio.porcedda@gmail.com>
- <53A4C860.7090601@mind.be>
- <CAHkwnC8OEjEchUSmgXeVpwg6jiPc1WCt4YF4CmPGJZwBrBVTxA@mail.gmail.com>
-Message-ID: <53A81ED0.5070309@mind.be>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Mon, 23 Jun 2014 09:18:45 -0500
+Subject: [Buildroot] [PATCH 1/1] atftp: new package
+In-Reply-To: <20140621195442.79deacf5@free-electrons.com>
+References: <1403297857-3987-1-git-send-email-ryan.barnett@rockwellcollins.com>
+ <20140621195442.79deacf5@free-electrons.com>
+Message-ID: <CAMQcK5+ybhTX8H17wkuANb9J4ZUjMdDR2PuA9nD0VN08nOxAqg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/06/14 11:51, Fabio Porcedda wrote:
-> On Sat, Jun 21, 2014 at 1:48 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 20/06/14 10:26, Fabio Porcedda wrote:
->>> Remove the rule that add common dependencies to every targets in the
->>> "TARGETS" variable because all those targets are packages that use the package
->>> framework that already add common dependencies.
-> 
-> I will update the description with a better description:
-> 
-> Remove the rule that add common dependencies to every targets in the
-> "TARGETS" variable because all those targets are packages that use the
-> package framework or they depends on targets that use the package
-> framework, because the package framework already add common dependencies
-> this rule it's useless.
+Thomas,
 
- Several spelling issues here; corrected text:
+On Sat, Jun 21, 2014 at 12:54 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Ryan Barnett,
+>
+> Thanks, but there are a couple of issues with the package. See below.
+>
+> On Fri, 20 Jun 2014 15:57:37 -0500, Ryan Barnett wrote:
+>
+>> diff --git a/package/atftp/Config.in b/package/atftp/Config.in
+>> new file mode 100644
+>> index 0000000..65c14d8
+>> --- /dev/null
+>> +++ b/package/atftp/Config.in
+>> @@ -0,0 +1,9 @@
+>> +config BR2_PACKAGE_ATFTP
+>> +     bool "atftp"
+>
+> This package needs IPv6 support and thread support in the toolchain, so
+> you should add the relevant dependencies.
+>
+>> +     help
+>> +       atftp is a client/server implementation of the TFTP
+>> +       protocol that implements RFCs 1350, 2090, 2347, 2348,
+>> +       and 2349. The server is multi-threaded and the client
+>> +       presents a friendly interface using libreadline.
+>> +
+>> +       http://sourceforge.net/projects/atftp/
+>
+> ... and comment here.
+>
+>> diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
+>> new file mode 100644
+>> index 0000000..27fa0df
+>> --- /dev/null
+>> +++ b/package/atftp/atftp.mk
+>> @@ -0,0 +1,22 @@
+>> +################################################################################
+>> +#
+>> +# atftp
+>> +#
+>> +################################################################################
+>> +
+>> +ATFTP_VERSION  = 0.7.1
+>> +ATFTP_SITE = http://sourceforge.net/projects/atftp/files/
+>> +ATFTP_LICENSE = GPLv2
+>
+> The license is actually GPLv2+.
+>
+>> +ATFTP_LICENSE_FILES = LICENSE
+>> +
+>> +ifeq ($(BR2_PACKAGE_READLINE),y)
+>> +ATFTP_DEPENDENCIES += readline
+>> +ATFTP_CONF_OPT += --enable-libreadline
+>> +endif
+>> +
+>> +ifeq ($(BR2_PACKAGE_PCRE),y)
+>> +ATFTP_DEPENDENCIES += pcre
+>> +ATFTP_CONF_OPT += --enable-libpcre
+>> +endif
+>
+> For both of those cases, it'd be good to have an 'else' clause that
+> does the appropriate --disable-<foo>.
+>
+> Also, adding --disable-libwrap and --disable-mtftp would be nice, so
+> that these features don't get mistakenly enabled.
+>
+> Another problem is that the package fails to build on Blackfin (at
+> least Blackfin FLAT), because it doesn't link atftp against
+> libpthread. A patch like this is needed to the Makefile.am:
+>
+> -atftp_LDADD      = $(LIBTERMCAP) $(LIBREADLINE)
+> +atftp_LDADD      = $(LIBTERMCAP) $(LIBREADLINE) $(LIBPTHREAD)
+>
+> Probably the problem can be reproduce on ARM by doing a pure static
+> build, but I haven't tested.
+>
+> Can you fix those issues and submit a v2 ?
 
-Remove the rule that adds common dependencies to every target in the
-"TARGETS" variable, because all those targets are packages that use the
-package infrastructure or they depend on targets that use the package
-infrastructure. The package infrastructure already adds common dependencies.
-Therefore, this rule is useless.
+Yes I will send an updated patch shortly with all of your suggestions.
 
-
-> 
->>  There are still two targets that don't:
->>
->> - target-generatelocales - should probably be converted to a
->> TARGET_FINALIZE_HOOK as well;
-> 
-> I will do:
-> 
-> ifneq ($(GENERATE_LOCALE),)
-> TARGETS+=host-localedef
-
- Spaces around +=
-
- Otherwise it's perfect.
-
-> define GENERATE_LOCALE_HOOK
-> ...
-> endif
-> TARGET_FINALIZE_HOOKS += GENERATE_LOCALE_HOOK
-> endif
-> 
->> - toolchain-eclipse-register - doesn't need to depend on anything I think, but
->> anyway could also be converted to a TARGET_FINALIZE_HOOK.
-> 
-> It depends on the toolchain target, but the toolchain is always built
-> so it's safe to convert to a hook.
-
- Actually, the toolchain is not always built, e.g. 'make host-foo' will not
-build it. Also if you haven't selected any target package, it won't be built.
-But that's a bit far-fetched I guess.
-
- And anyway, the toolchain-eclipse-register target doesn't really depend on the
-toolchain - it just creates a file that refers to it. Right?
-
-> 
->>
->>  So neither of these are really critical.
-> 
-> The only advantage to convert those targets to hooks is for consistency?
-
- Indeed.
-
-> 
-> BTW: Both of those targets depends on the toolchain target that use
-> the package framework so they have already the common dependencies.
-
- Indeed.
-
-
- Regards,
- Arnout
-
-
-> 
->>  Also, you forgot you Sob.
-> 
-> Yes, thanks.
-> 
-> BR
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thanks,
+-Ryan
