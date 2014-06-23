@@ -1,64 +1,68 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 23 Jun 2014 19:50:53 +0200
-Subject: [Buildroot] [PATCH] package/perl-mojolicious: bump to 5.08
-In-Reply-To: <20140623173544.GC3400@free.fr>
-References: <1403471757-19622-1-git-send-email-yann.morin.1998@free.fr>
- <CAB0FRstxBpfBcoyojk3j_fPhJdaVfRz2gOZXWdiCGdBviF16TQ@mail.gmail.com>
- <20140623173544.GC3400@free.fr>
-Message-ID: <CAB0FRsvxYB=UWssrJSThtVnC4Js6_tjrMOozhr-KPg_4eSw8JQ@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 23 Jun 2014 20:14:45 +0200
+Subject: [Buildroot] [PATCH 2/3] perl-net-ssleay: new package
+In-Reply-To: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
+References: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1403547286-8858-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-06-23 19:35 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Fran?ois, All,
->
-> On 2014-06-23 19:29 +0200, Fran?ois Perrad spake thusly:
->> 2014-06-22 23:15 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
->> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> >
->> > Since CPAN only ever keeps the latest version for download, CPAN now has
->> > only 5.08, so us packaging the 5.07 is causing autobuild failures
->> >     http://autobuild.buildroot.net/results/358/358f531f2db90b9bc3b1e4e2158c68d2bf6587fc/
->> >
->> > Bump to the latest version.
->>
->> The author of Mojolicious remove very quickly older versions from
->> CPAN. It is not a usual policy.
->
-> Ah, OK. Thanks for the clarification.
->
->> So, I think that the best way for this module is to move to Backpan
->> site which contains all releases.
->>
->> PERL_MOJOLICIOUS_SITE = http://backpan.perl.org/authors/id/S/SR/SRI/
->
-> If backpan has all the versions of all modules (including the current
-> versions), shouldn't we point $(BR2_CPAN_MIRROR) to default to backpan,
-> then? I'll send a new patch doing so. You can still NAK it when it
-> arrives. ;-)
->
-> Fran?ois, apart from this issue, is the bump still valid?http://cpansearch.perl.org/src/SRI/Mojolicious-5.08/Changes
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                          |  1 +
+ package/perl-net-ssleay/Config.in          |  7 +++++++
+ package/perl-net-ssleay/perl-net-ssleay.mk | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/perl-net-ssleay/Config.in
+ create mode 100644 package/perl-net-ssleay/perl-net-ssleay.mk
 
-The bump to 5.08 is valid (for few days, see the actual delay between
-two releases in
-http://cpansearch.perl.org/src/SRI/Mojolicious-5.08/Changes).
-
-I prefer that we use Backpan only the package Mojolicious. The use of
-Backpan must stay unusual.
-
-Fran?ois
-
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index 498630f..fb04014 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -424,6 +424,7 @@ endif
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-mojolicious/Config.in"
++	source "package/perl-net-ssleay/Config.in"
+ endmenu
+ endif
+ 	source "package/php/Config.in"
+diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
+new file mode 100644
+index 0000000..bc219b0
+--- /dev/null
++++ b/package/perl-net-ssleay/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_NET_SSLEAY
++	bool "perl-net-ssleay"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Perl extension for using OpenSSL
++
++	  https://metacpan.org/release/Net-SSLeay
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+new file mode 100644
+index 0000000..413fdf0
+--- /dev/null
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-net-ssleay
++#
++################################################################################
++
++PERL_NET_SSLEAY_VERSION = 1.64
++PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
++PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM/
++PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
++PERL_NET_SSLEAY_LICENSE = OpenSSL
++PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
++
++$(eval $(perl-package))
+-- 
+1.9.1
