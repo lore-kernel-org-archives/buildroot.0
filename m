@@ -1,31 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 23 Jun 2014 18:41:47 +0200
-Subject: [Buildroot] [Patch v3 1/1] systemd: rework network/tty units
- installation
-In-Reply-To: <1403517126-5776-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1403517126-5776-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <53A858CB.2060109@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 23 Jun 2014 13:59:51 -0300
+Subject: [Buildroot] [PATCHv2 1/2] geoip: new package
+In-Reply-To: <20140623163845.GA3400@free.fr>
+References: <1403015963-27278-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140622215442.4c060328@free-electrons.com>
+ <53A759EB.8090702@zacarias.com.ar> <20140622224049.GF21768@free.fr>
+ <53A75D10.8050708@zacarias.com.ar> <20140623163845.GA3400@free.fr>
+Message-ID: <53A85D07.3070802@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/06/14 11:52, Eric Le Bihan wrote:
-> The installation of the network.service and serial-getty.service unit
-> files are now performed via the <pkg>_INIT_SYSTEMD mechanism instead of
-> an installation hook.
+On 06/23/2014 01:38 PM, Yann E. MORIN wrote:
+
+>> Geoipupdate is for commercial users AFAIK, i have no such access/account
+>> to test the package. You need to configure a maxmind user/password to
+>> make it work, it's not an out-of-the-box experience.
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Well, I don't see where the problem lies. There's nothing that prevents
+> us from packaging geoipupdate, even if it requires a runtime
+> configuration with a login+password.
+> 
+> That's basically the same as for a webserver: we do package more than
+> one webserver, but the user is still responsible for providing the
+> content of the server-root.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+I disagree a bit there, but then people are free to do what they like,
+like shipping a probably toughly-licensed user/pass combination in
+plaintext in a firmware which someone else can pick up and use let's say
+in shady terms :)
+It's mostly intended for servers where access is restricted and that
+wouldn't happen normally.
 
-[snip]
+>> Someone who has might be interested to make it though.
+> 
+> I agree with you on that. ;-)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+I like to test new packages a bit, and getting the help just doesn't
+feel like a proper test, hence my reluctance ;)
+Regards.
