@@ -1,64 +1,185 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 23 Jun 2014 08:30:12 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-22
-Message-ID: <20140623063012.36B36100EB3@stock.ovh.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 23 Jun 2014 07:28:52 +0200
+Subject: [Buildroot] [PATCH] graph-depends: fix when $(O) is a relative
+ path
+In-Reply-To: <20140620205532.GA26745@free.fr>
+References: <1403129424-27129-1-git-send-email-arnout@mind.be>
+ <20140620205532.GA26745@free.fr>
+Message-ID: <53A7BB14.4060804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-06-22
-===============================
+On 20/06/14 22:55, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2014-06-19 00:10 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> The graph-depends commands cd into the CONFIG_DIR and run the script
+>> from there. However, this means that when $(O) is a relative path, it
+>> will no longer be correct.  Therefore, use $(BASE_DIR) instead of $(O).
+>>
+>> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> Suddenly I realised that something must be wrong with this patch.
+> $(O) is always expected to be relative the buildroot tree, not the
+> current directory:
+>     http://nightly.buildroot.org/#_building_out_of_tree
+> 
+>     ---8<---
+>     Note: the O path can be either an absolute or a relative path, but
+>     if it?s passed as a relative path, it is important to note that it is
+>     interpreted relative to the main Buildroot source directory, not the
+>     current working directory.
+>     ---8<---
+> 
+> So I fail to see what case this patch is supposed to fix.
+> 
+> I tried with thisscript, and did not notice any difference between the
+> two runs, one with master, the second with the patch applied:
+> 
+>     #!/bin/sh
+>     set -e
+> 
+>     BR="${HOME}/cache/upstream/buildroot"
+>     rm -rf br*
+> 
+>     do_prep() {
+>         local dir="${1}"
+>         (
+>             git clone "${BR}" "${dir}"
+>             cd "${dir}"
+>             git pwam 361761   # Comment-out to use master
+>         )
+>     }
+> 
+>     echo '======== In-tree'
+>     do_prep br-1
+>     cd br-1
+>     make defconfig
+>     make graph-depends
+>     cd ..
+> 
+>     echo '======== Out-of-tree, called out of top-dir, relative'
+>     do_prep br-2
+>     mkdir br.build-2
+>     make -C br-2 O=../br.build-2 defconfig
+>     make -C br-2 O=../br.build-2 graph-depends
+> 
+>     echo '======== Out-of-tree, called from top-dir, relative'
+>     do_prep br-3
+>     mkdir br.build-3
+>     cd br-3
+>     make O=../br.build-3 defconfig
+>     make O=../br.build-3 graph-depends
+>     cd ..
+> 
+>     echo '======== Out-of-tree, called from O-dir, absolute'
+>     do_prep br-4
+>     mkdir br.build-4
+>     cd br.build-4
+>     make -C ../br-4 O=$(pwd) defconfig
+>     make graph-depends
+>     cd ..
+> 
+>     echo '======== Out-of-tree, called out of top-dir, absolute '
+>     do_prep br-5
+>     mkdir br.build-5
+>     make -C br-4 O=$(pwd)/br.build-5 defconfig
+>     make -C br-4 O=$(pwd)/br.build-5 graph-depends
+> 
+>     echo '======== Out-of-tree, called fromother dir, absolute-relative'
+>     do_prep br-6
+>     mkdir br.build-6.1
+>     mkdir br.build-6.2
+>     cd br.build-6.1
+>     make -C ../br-6 O=$(pwd)/../br.build-6.2 defconfig
+>     make -C ../br-6 O=$(pwd)/../br.build-6.2 graph-depends
+>     cd ..
+> 
+> In both cases (with or without the patch), cases 1, 3 and 4 succeed,
+> while cases 2, 5 and 6 fail.
+> 
+> What case(s) did I miss?
 
-        success : 98 
-       failures : 19 
-       timeouts : 0  
-          TOTAL : 117
+ First of all, for me all these cases succeed both with and without the patch.
 
-Classification of failures by reason
-====================================
+ Unfortunately, the example you took happens to work by accident:
 
-                    faifa-v0.1 | 2 
-       directfb-examples-1.6.0 | 2 
-                oprofile-0.9.9 | 2 
-                  zeromq-4.0.4 | 1 
-                libmpeg2-0.5.1 | 1 
-                 libedje-1.7.7 | 1 
-          enlightenment-0.17.3 | 1 
-                      icu-51.2 | 1 
-                     knock-0.7 | 1 
-             lttng-tools-2.4.1 | 1 
-                 cairo-1.12.10 | 1 
-              libeXosip2-3.6.0 | 1 
-                   squid-3.4.5 | 1 
-         perl-mojolicious-5.07 | 1 
-                 libhid-0.2.16 | 1 
-                 haserl-0.9.33 | 1 
+$ make -n O=../br.build graph-depends
+dot -? >/dev/null 2>&1 || \
+        (echo "ERROR: The 'dot' program from Graphviz is needed for
+graph-depends" >&2; exit 1)
+/usr/bin/install -d ../br.build/graphs
+cd "../br.build"; \
+/home/arnout/src/buildroot/support/scripts/graph-depends  \
+|tee ../br.build/graphs/graph-depends.dot \
+|dot  -Tpdf -o ../br.build/graphs/graph-depends.pdf
 
-Detail of failures
-===================
 
-       arm |                  cairo-1.12.10 | NOK | http://autobuild.buildroot.net/results/82e359b486c3a67f74c3e66a65c4e913cacac54f/
-      bfin |        directfb-examples-1.6.0 | NOK | http://autobuild.buildroot.net/results/70940ad34c1a5ce13ea94e3ea3153bcdcc53c982/
-      bfin |        directfb-examples-1.6.0 | NOK | http://autobuild.buildroot.net/results/86ddc57733bbbe543b9be1a4637014426ab16d04/
-   powerpc |           enlightenment-0.17.3 | NOK | http://autobuild.buildroot.net/results/dc337197f634197d9a74661e9ab174281faa5570/
-       arm |                     faifa-v0.1 | NOK | http://autobuild.buildroot.net/results/a93395c656169e0f08f471f12bc05f29c9ea2976/
-       arm |                     faifa-v0.1 | NOK | http://autobuild.buildroot.net/results/a364fe73b979f1e60a3d8cb252eaeaa8ec043dc0/
-    xtensa |                  haserl-0.9.33 | NOK | http://autobuild.buildroot.net/results/04e54aad64702963ec349d08816fdb294c3ed1ea/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/0ffc8d88f6d4409c757ff47a970116409ecb1ff1/
-       arm |                      knock-0.7 | NOK | http://autobuild.buildroot.net/results/1eb877ebd9469c9261bf114fc7733819ae3fd562/
-    mipsel |                  libedje-1.7.7 | NOK | http://autobuild.buildroot.net/results/a7c6d4dd336312bcf7a00e38bba20106d6d73aef/
-       arm |               libeXosip2-3.6.0 | NOK | http://autobuild.buildroot.net/results/787cd9992b00d8008641af208f5fb7c4afb40b06/
-      bfin |                  libhid-0.2.16 | NOK | http://autobuild.buildroot.net/results/b06da90e018057992d7b5623a7943a1c662d3b34/
-   powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/bc33b86d782a9cec80debe2ff3697dfb51c55859/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/8bc9513f0c8a915176e13cdcec6d839c473569d3/
-     avr32 |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/3b3eb7b3860dfe29e78d44c3496d63de1b5b4fce/
-     avr32 |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/1e1ea2cfecf2ce9a4c5fa20c1b45dc8943d641d8/
-      i686 |          perl-mojolicious-5.07 | NOK | http://autobuild.buildroot.net/results/358f531f2db90b9bc3b1e4e2158c68d2bf6587fc/
-       arc |                    squid-3.4.5 | NOK | http://autobuild.buildroot.net/results/51a7eed5f005057c5252bde0f6e202017ee4b2ef/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/709b28d90613cd0e50d1b4c72fedb2c2faba3f83/
+ Since we cd into ../br.build and then resolve $(O) as ../br.build, it just
+happens to be the same directory. Using any other combination of . and .. a $(O)
+triggers the problem. So try
+
+do_prep br-7
+make -C br-7 O=./br.build-7 defconfig
+make -C br-7 O=./br.build-7 graph-depends
+
+ The graph-depends will fail with:
+
+tee: br.build-7/graphs/graph-depends.dot: No such file or directory
+Getting targets
+Getting dependencies for ['host-binutils', 'host-gmp', 'host-mpc', 'host-mpfr',
+'uclibc', 'host-fakeroot', 'host-gcc-final', 'host-makedevs',
+'toolchain-buildroot', 'toolchain', 'busybox', 'rootfs-tar']
+Getting dependencies for ['host-m4', 'linux-headers', 'host-gcc-initial']
+br.build-7/graphs/graph-depends.pdf: No such file or directory
+Makefile:677: recipe for target 'graph-depends' failed
+make: *** [graph-depends] Error 1
+
+
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> ---
+>>  Makefile | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 5c82355..dd350b6 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -676,8 +676,8 @@ graph-depends:
+>>  	@$(INSTALL) -d $(O)/graphs
+>>  	@cd "$(CONFIG_DIR)"; \
+>>  	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+>> -	|tee $(O)/graphs/$(@).dot \
+>> -	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(O)/graphs/$(@).$(BR_GRAPH_OUT)
+>> +	|tee $(BASE_DIR)/graphs/$(@).dot \
+>> +	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(BASE_DIR)/graphs/$(@).$(BR_GRAPH_OUT)
+>>  
+>>  else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+>>  
+>> -- 
+>> 2.0.0
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
