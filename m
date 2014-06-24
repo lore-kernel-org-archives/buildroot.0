@@ -1,70 +1,75 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 24 Jun 2014 11:36:29 +0200
-Subject: [Buildroot] dtb or dtsi ?
-In-Reply-To: <CAHvj1qbZWcdUvq7du=Xo2KXpA_WjXvPr8+wg61niR7TeLVToRw@mail.gmail.com>
-References: <CAHvj1qbZWcdUvq7du=Xo2KXpA_WjXvPr8+wg61niR7TeLVToRw@mail.gmail.com>
-Message-ID: <CAAXf6LXV=jRqpCpx5FU31cNVcVXe_wNK6ut6GvWQzOF1bcrbLA@mail.gmail.com>
+From: Sven Neumann <neumann@teufel.de>
+Date: Tue, 24 Jun 2014 14:01:43 +0200
+Subject: [Buildroot] [PATCH] Makefile: do not purge locale-archive from
+ target
+In-Reply-To: <20140622222751.07fb50a7@free-electrons.com>
+References: <1403083410-4278-1-git-send-email-neumann@teufel.de>
+ <20140622222751.07fb50a7@free-electrons.com>
+Message-ID: <1403611303.18201.21.camel@sven>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bruce,
+Hi,
 
-On Tue, Jun 24, 2014 at 11:22 AM, bruce bushby <bruce.bushby@gmail.com> wrote:
-> Hi
->
->
-> Apologies if these are junior/lazy questions....but I've been struggling for
-> 5 days now :(
->
-> What is the difference between "dtb" and "dtsi"?
->
+On So, 2014-06-22 at 22:27 +0200, Thomas Petazzoni wrote:
 
-dtb = device tree blob
-dts = device tree source
-dtsi = like dts, but I think the 'i' is to indicate that this file is
-supposed to be included in another dts(i) file.
+> On Wed, 18 Jun 2014 11:23:30 +0200, Sven Neumann wrote:
+> > The rules to purge unwanted locales from the target also removed
+> > the locale-archive file from /usr/lib/locale which contains the
+> > locale definitions explicitly generated for the target.
+> > 
+> > Signed-off-by: Sven Neumann <neumann@teufel.de>
+> > ---
+> >  Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/Makefile b/Makefile
+> > index 14fca2b..d7590ef 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -516,7 +516,7 @@ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+> >  
+> >  define TARGET_PURGE_LOCALES
+> >  	rm -f $(LOCALE_WHITELIST)
+> > -	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
+> > +	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+> 
+> Hum, right, but isn't 'locale-archive' an archive of many locales?
+> Shouldn't we get rid of the locales we don't want from this archive?
 
-The dtb is the compiled version of the dts(i).
+Well, as far as I can see only the locales selected by
+BR2_GENERATE_LOCALE should have been generated into the archive. So I
+don't think it makes sense to purge locales from this archive. It would
+be possible to do this though using "locale-def --delete-from-archiv".
 
->
-> I find that buildroot appends ".dtb" to the name defined by:
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME
->
-> rather then append "dtsi"  ...what am I missing?
->
->
-> I feel I should be using
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20.dtsi"
+> Which toolchain have you used to get a locale-archive file?
 
-You should set a 'dts' file here, not dtsi. The dtsi is supposed to be
-included from a toplevel dts file, and there exist make rules to
-convert dts->dtb but not dtsi->dtb.
-Note: the compilation step is done by dtc (device tree compiler).
-
->
->
-> make[1]: Entering directory
-> `/disk/software/drone/buildroot/output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee'
-> make[2]: *** No rule to make target `arch/arm/boot/dts/sun7i-a20.dtb'.
-> Stop.
-> make[1]: *** [sun7i-a20.dtb] Error 2
->
->
->
-
-You should find/create the proper .dts file instead, then this step will work.
+glibc 2.18
 
 
->  ....Do I still need "fex" if i am using "dts"?
+Greetings,
+Sven
 
-I suppose not. According to wikipedia fex is a proprietary alternative
-to device trees, and so you shouldn't need both. I haven't worked with
-fex nor allwinner before.
+-- 
+Sven Neumann
+Senior System Architect
 
+Lautsprecher Teufel GmbH
+Gewerbehof B?lowbogen, Aufgang D1
+B?lowstr. 66
+10783 Berlin
+Germany
 
+Direkt   +49 (0) 30 / 300 930-153
+Telefon  +49 (0) 30 / 300 930-0
 
-Best regards,
-Thomas
+neumann at teufel.de
+
+Registernummer HRB 20271 beim Amtsgericht Berlin-Charlottenburg
+Gesch?ftsf?hrer: J?rgen Schneider, Edgar van Velzen
+Umsatzsteuer-ID: DE136745959
+
+www.teufel.de - www.teufelaudio.com - www.raumfeld.com
