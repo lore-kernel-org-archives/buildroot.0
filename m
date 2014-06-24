@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:48 -0300
-Subject: [Buildroot] [PATCH 42/54] transmission: add license information
+Date: Tue, 24 Jun 2014 15:55:49 -0300
+Subject: [Buildroot] [PATCH 43/54] uclibc: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-42-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-43-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/transmission/transmission.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/uclibc/uclibc.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 37cc58b..f9fb9f8 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -15,10 +15,11 @@ TRANSMISSION_DEPENDENCIES = \
- 	openssl \
- 	zlib
- TRANSMISSION_AUTORECONF = YES
--
- TRANSMISSION_CONF_OPT = \
- 	--disable-libnotify \
- 	--enable-lightweight
-+TRANSMISSION_LICENSE = GPLv2 or GPLv3
-+TRANSMISSION_LICENSE_FILES = COPYING
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 4394030..19eb484 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -6,6 +6,8 @@
  
- ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
- 	TRANSMISSION_CONF_OPT += --enable-utp
+ UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+ UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
++UCLIBC_LICENSE = LGPLv2.1+
++UCLIBC_LICENSE_FILES = COPYING.LIB
+ 
+ ifeq ($(BR2_UCLIBC_VERSION_SNAPSHOT),y)
+ UCLIBC_SITE = http://www.uclibc.org/downloads/snapshots
 -- 
 1.8.5.5
