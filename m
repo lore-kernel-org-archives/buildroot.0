@@ -1,159 +1,139 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Tue, 24 Jun 2014 09:34:20 +0200
-Subject: [Buildroot] [PATCH v2 1/1] packages: fix the header package name
-Message-ID: <1403595261-29410-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Tue, 24 Jun 2014 10:22:47 +0100
+Subject: [Buildroot] dtb or dtsi ?
+Message-ID: <CAHvj1qbZWcdUvq7du=Xo2KXpA_WjXvPr8+wg61niR7TeLVToRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to the documentation:
-
-"Header: The file starts with a header. It contains the module name,
-preferably in lowercase, enclosed between separators made of 80 hashes."
-
-This patch makes the appropriate changes.
+Hi
 
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
-Changes v1 -> v2:
-  - remove from taking into account:   (ThomasP)
-    glibc.mk
-    package/x11r7/*
+Apologies if these are junior/lazy questions....but I've been struggling
+for 5 days now :(
 
- package/dbus-cpp/dbus-cpp.mk                       |    2 +-
- package/ktap/ktap.mk                               |    2 +-
- package/libnetfilter_acct/libnetfilter_acct.mk     |    2 +-
- .../libnetfilter_conntrack.mk                      |    2 +-
- .../libnetfilter_cthelper/libnetfilter_cthelper.mk |    2 +-
- .../libnetfilter_cttimeout.mk                      |    2 +-
- package/libnetfilter_log/libnetfilter_log.mk       |    2 +-
- package/libnetfilter_queue/libnetfilter_queue.mk   |    2 +-
- package/procps-ng/procps-ng.mk                     |    2 +-
- package/snmppp/snmppp.mk                           |    2 +-
- 10 files changed, 10 insertions(+), 10 deletions(-)
+What is the difference between "dtb" and "dtsi"?
 
-diff --git a/package/dbus-cpp/dbus-cpp.mk b/package/dbus-cpp/dbus-cpp.mk
-index 4cf6d18..03f9742 100644
---- a/package/dbus-cpp/dbus-cpp.mk
-+++ b/package/dbus-cpp/dbus-cpp.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# dbus-c++
-+# dbus-cpp
- #
- ################################################################################
- 
-diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
-index 2c73138..0c2652d 100644
---- a/package/ktap/ktap.mk
-+++ b/package/ktap/ktap.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# ktap, script-based dynamic tracing tool
-+# ktap
- #
- ################################################################################
- 
-diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
-index 615d46e..5adb6e0 100644
---- a/package/libnetfilter_acct/libnetfilter_acct.mk
-+++ b/package/libnetfilter_acct/libnetfilter_acct.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# libnetfilter-acct
-+# libnetfilter_acct
- #
- ################################################################################
- 
-diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-index fc3462d..df037b9 100644
---- a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-+++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# libnetfilter-conntrack
-+# libnetfilter_conntrack
- #
- ################################################################################
- 
-diff --git a/package/libnetfilter_cthelper/libnetfilter_cthelper.mk b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
-index 2cac8a2..00388a5 100644
---- a/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
-+++ b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# libnetfilter-cthelper
-+# libnetfilter_cthelper
- #
- ################################################################################
- 
-diff --git a/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk b/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
-index cf55255..d85a8d2 100644
---- a/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
-+++ b/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# libnetfilter-cttimeout
-+# libnetfilter_cttimeout
- #
- ################################################################################
- 
-diff --git a/package/libnetfilter_log/libnetfilter_log.mk b/package/libnetfilter_log/libnetfilter_log.mk
-index 1c642d2..a448c54 100644
---- a/package/libnetfilter_log/libnetfilter_log.mk
-+++ b/package/libnetfilter_log/libnetfilter_log.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# libnetfilter-log
-+# libnetfilter_log
- #
- ################################################################################
- 
-diff --git a/package/libnetfilter_queue/libnetfilter_queue.mk b/package/libnetfilter_queue/libnetfilter_queue.mk
-index 59a4458..d788fd1 100644
---- a/package/libnetfilter_queue/libnetfilter_queue.mk
-+++ b/package/libnetfilter_queue/libnetfilter_queue.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# libnetfilter-queue
-+# libnetfilter_queue
- #
- ################################################################################
- 
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 9227cc4..7628c21 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# procps
-+# procps-ng
- #
- ################################################################################
- 
-diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
-index 57c4962..5391e10 100644
---- a/package/snmppp/snmppp.mk
-+++ b/package/snmppp/snmppp.mk
-@@ -1,6 +1,6 @@
- ################################################################################
- #
--# snmp++
-+# snmppp
- #
- ################################################################################
- 
--- 
-1.7.9.5
+
+I find that buildroot appends ".dtb" to the name defined by:
+BR2_LINUX_KERNEL_INTREE_DTS_NAME
+
+rather then append "dtsi"  ...what am I missing?
+
+
+I feel I should be using
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20.dtsi"
+
+
+make[1]: Entering directory
+`/disk/software/drone/buildroot/output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee'
+make[2]: *** No rule to make target `arch/arm/boot/dts/sun7i-a20.dtb'.
+ Stop.
+make[1]: *** [sun7i-a20.dtb] Error 2
+
+
+
+ ....Do I still need "fex" if i am using "dts"?
+
+Running a find through an egrep shows a wild combination of dtb & dts files
+together with various combinations of "d.pre.tmp"
+
+
+[bruce at core buildroot]$ find . -name "*sun7i*" | egrep -i
+"fex|dtb|dts|defconfig"
+./output/images/sun7i-a20-olinuxino-micro.dtb
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/sun7i-a20-i12-tvbox.dts
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/sun7i-a20-olinuxino-micro.dtb
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/.sun7i-a20-olinuxino-micro.dtb.cmd
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/sun7i-a20-cubieboard2.dts
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/sun7i-a20-olinuxino-micro.dts
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/.sun7i-a20-olinuxino-micro.dtb.d.dtc.tmp
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/.sun7i-a20-olinuxino-micro.dtb.dts.tmp
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/sun7i-a20.dtsi
+./output/build/linux-a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee/arch/arm/boot/dts/.sun7i-a20-olinuxino-micro.dtb.d.pre.tmp
+./output/build/linux-headers-3.15.1/arch/arm/boot/dts/sun7i-a20-cubieboard2.dts
+./output/build/linux-headers-3.15.1/arch/arm/boot/dts/sun7i-a20-olinuxino-micro.dts
+./output/build/linux-headers-3.15.1/arch/arm/boot/dts/sun7i-a20-cubietruck.dts
+./output/build/linux-headers-3.15.1/arch/arm/boot/dts/sun7i-a20.dtsi
+[bruce at core buildroot]$
+
+
+
+Any ideas how I force buildroot to use my custom kernel for the kernel
+headers? So far I've tried:
+BR2_KERNEL_HEADERS_SNAP=y
+BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+
+
+
+Thanks
+Bruce
+
+
+
+My a20-som_defconfig:
+(I copied cubieboard2_defconfig,  thank you Carlo Caione!!!)
+
+# Architecture
+BR2_arm=y
+BR2_cortex_a7=y
+
+# System configuration
+BR2_TARGET_GENERIC_HOSTNAME="A20-SOM"
+BR2_TARGET_GENERIC_ISSUE="Welcome to A20-SOM"
+BR2_TARGET_GENERIC_GETTY=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20-som/post-build.sh"
+
+# Toolchain
+BR2_STRIP_sstrip=n
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_INET_IPV6=n
+
+
+# Additional tools
+BR2_PACKAGE_HOST_SUNXI_TOOLS=y
+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+BR2_PACKAGE_SUNXI_TOOLS=y
+BR2_PACKAGE_SUNXI_BOARDS=y
+BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_micro.fex"
+
+# Kernel headers
+#BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+#BR2_KERNEL_HEADERS_SNAP=y
+
+
+# Kernel (master: 3.16.0 rc2)
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_VERSION="master"
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/torvalds/linux.git"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a497c3ba1d97fc69c1e78e7b96435ba8c2cb42ee"
+BR2_LINUX_KERNEL_PATCH="board/olimex/a20-som/kernel-patches/"
+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+BR2_LINUX_KERNEL_APPENDED_DTB=y
+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-olinuxino-micro"
+#BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20"
+
+
+# Bootloaders (sunxi-next uboot provides PSCI for SMP )
+BR2_TARGET_UBOOT=y
+BR2_TARGET_UBOOT_BOARDNAME="Cubieboard2"
+BR2_TARGET_UBOOT_CUSTOM_GIT=y
+BR2_TARGET_UBOOT_VERSION="sunxi-next"
+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="
+https://github.com/jwrdegoede/u-boot-sunxi.git"
+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="257ae94e88ff27dbd92018f17cd22b16b585e67d"
+BR2_TARGET_UBOOT_FORMAT_BIN=y
+BR2_TARGET_UBOOT_SPL=y
+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140624/fe7fc9bb/attachment.html>
