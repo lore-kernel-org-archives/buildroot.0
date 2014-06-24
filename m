@@ -1,54 +1,76 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 24 Jun 2014 15:05:56 +0200
-Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size
- installed by each package
-In-Reply-To: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <53A977B4.70205@lucaceresoli.net>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 24 Jun 2014 15:18:25 +0200
+Subject: [Buildroot] [PATCH] linux target name might be not equal linux file
+	name
+Message-ID: <20140624131825.GA29718@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+For example the upcoming qemu-xtensa patch is using this feature,
+where the target is called "zImage", but the resulting kernel name
+is "Image.elf".
 
-sorry for jumping in late, but I have a question about this patchset.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ linux/Config.in |    6 ++++++
+ linux/linux.mk  |   10 ++++++----
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-Thomas Petazzoni wrote:
-> Hello,
->
-> I gave a training this week, and one of the question I had was how to
-> analyze the size of the things that are present on the root
-> filesystem. And I thought that Buildroot was lacking a tool to help
-> with this. Therefore, the following set of commits implement a script
-> that generates a pie chart of the size contribution of each package to
-> the target root filesystem.
-
-Nice feature!
-
->
-> To see an example of the generated pie chart, see:
->
->    http://free-electrons.com/~thomas/pub/buildroot/graph-size.pdf
->
-> The implementation consists in adding a global instrumentation hook
-> that registers which files are installed by each package. A limitation
-> of the current implementation is that when a file is installed by a
-> package A and then overriden by package B, the mechanism will assume
-> the file was installed by package A. Suggestions to welcome on how to
-> solve this in a reasonably simple way.
-
-It's very well possible that I'm missing something, but I don't get why
-you need to save the list of all installed files.
-
-Can't you just save the whole rootfs size before and after installation?
-It can be simply computer by 'du -bs $(TARGET_DIR)', and it's way
-easier to parse later. It would also take into account the change of
-size for overwritten files, for free.
-
-Of course your approach collects more information, but I don't see
-these extra info used in the final graph.
-
+diff --git a/linux/Config.in b/linux/Config.in
+index ece48a7..0f4337f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -244,6 +244,12 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	  Specify the kernel make target to build the kernel that you
+ 	  need.
+ 
++config BR2_LINUX_KERNEL_IMAGE_NAME
++	string "Kernel image name"
++	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
++	help
++	  Specify the kernel filename.
++
+ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+ 	string "load address (for 3.7+ multi-platform image)"
+ 	depends on BR2_arm || BR2_armeb
+diff --git a/linux/linux.mk b/linux/linux.mk
+index bd3f2ac..1e7d2e2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -80,8 +80,10 @@ endif
+ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+-LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
++LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
++LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+ else
++LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+ LINUX_IMAGE_NAME = uImage
+ else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
+@@ -259,7 +261,7 @@ endif
+ define LINUX_BUILD_CMDS
+ 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+ 		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
+@@ -331,8 +333,8 @@ endif
+ # been generated in $(BINARIES_DIR)/rootfs.cpio.
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+-	# Build the kernel.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	# Build the kernel. for custom kernels make target may be unequal to kernel file name
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
 -- 
-Luca
+1.7.10.4
