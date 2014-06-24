@@ -1,49 +1,155 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Jun 2014 15:26:02 +0200
-Subject: [Buildroot] [git commit] network-manager: needs kernel headers v3.7
-Message-ID: <20140624133505.812ED9D09E@busybox.osuosl.org>
+Date: Tue, 24 Jun 2014 15:35:47 +0200
+Subject: [Buildroot] [git commit] packages: fix the header package name
+Message-ID: <20140624133628.483329D09E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79b483d0d343d67005e2bb29685e5975ee8261f9
+commit: http://git.buildroot.net/buildroot/commit/?id=07630c4ca66d05af4de3a2a6f6ef5cbe66aaa1b9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NetworkManager uses struct ifla_vxlan_port_range that was introduced in kernel
-version 3.7.
+According to the documentation:
 
-Fixes:
-http://autobuild.buildroot.net/results/6f2/6f214e3206ad0b12c633a7632c1e32c369e447ff/
+"Header: The file starts with a header. It contains the module name,
+preferably in lowercase, enclosed between separators made of 80 hashes."
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+This patch makes the appropriate changes.
+
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/Config.in |    5 +++--
- 1 files changed, 3 insertions(+), 2 deletions(-)
+ package/dbus-cpp/dbus-cpp.mk                       |    2 +-
+ package/ktap/ktap.mk                               |    2 +-
+ package/libnetfilter_acct/libnetfilter_acct.mk     |    2 +-
+ .../libnetfilter_conntrack.mk                      |    2 +-
+ .../libnetfilter_cthelper/libnetfilter_cthelper.mk |    2 +-
+ .../libnetfilter_cttimeout.mk                      |    2 +-
+ package/libnetfilter_log/libnetfilter_log.mk       |    2 +-
+ package/libnetfilter_queue/libnetfilter_queue.mk   |    2 +-
+ package/procps-ng/procps-ng.mk                     |    2 +-
+ package/snmppp/snmppp.mk                           |    2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index b7f223e..0ed6ca5 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
- 	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_GNUTLS
-@@ -51,9 +52,9 @@ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
- 	  This option enables support for PPPD daemon
- endif
+diff --git a/package/dbus-cpp/dbus-cpp.mk b/package/dbus-cpp/dbus-cpp.mk
+index 4cf6d18..03f9742 100644
+--- a/package/dbus-cpp/dbus-cpp.mk
++++ b/package/dbus-cpp/dbus-cpp.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# dbus-c++
++# dbus-cpp
+ #
+ ################################################################################
  
--comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, largefile, wchar, threads"
-+comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, largefile, wchar, threads, headers >= 3.7"
- 	depends on !BR2_avr32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_PACKAGE_HAS_UDEV
-+		!BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+diff --git a/package/ktap/ktap.mk b/package/ktap/ktap.mk
+index 2c73138..0c2652d 100644
+--- a/package/ktap/ktap.mk
++++ b/package/ktap/ktap.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# ktap, script-based dynamic tracing tool
++# ktap
+ #
+ ################################################################################
+ 
+diff --git a/package/libnetfilter_acct/libnetfilter_acct.mk b/package/libnetfilter_acct/libnetfilter_acct.mk
+index 615d46e..5adb6e0 100644
+--- a/package/libnetfilter_acct/libnetfilter_acct.mk
++++ b/package/libnetfilter_acct/libnetfilter_acct.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libnetfilter-acct
++# libnetfilter_acct
+ #
+ ################################################################################
+ 
+diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+index fc3462d..df037b9 100644
+--- a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
++++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libnetfilter-conntrack
++# libnetfilter_conntrack
+ #
+ ################################################################################
+ 
+diff --git a/package/libnetfilter_cthelper/libnetfilter_cthelper.mk b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
+index 2cac8a2..00388a5 100644
+--- a/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
++++ b/package/libnetfilter_cthelper/libnetfilter_cthelper.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libnetfilter-cthelper
++# libnetfilter_cthelper
+ #
+ ################################################################################
+ 
+diff --git a/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk b/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
+index cf55255..d85a8d2 100644
+--- a/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
++++ b/package/libnetfilter_cttimeout/libnetfilter_cttimeout.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libnetfilter-cttimeout
++# libnetfilter_cttimeout
+ #
+ ################################################################################
+ 
+diff --git a/package/libnetfilter_log/libnetfilter_log.mk b/package/libnetfilter_log/libnetfilter_log.mk
+index 1c642d2..a448c54 100644
+--- a/package/libnetfilter_log/libnetfilter_log.mk
++++ b/package/libnetfilter_log/libnetfilter_log.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libnetfilter-log
++# libnetfilter_log
+ #
+ ################################################################################
+ 
+diff --git a/package/libnetfilter_queue/libnetfilter_queue.mk b/package/libnetfilter_queue/libnetfilter_queue.mk
+index 59a4458..d788fd1 100644
+--- a/package/libnetfilter_queue/libnetfilter_queue.mk
++++ b/package/libnetfilter_queue/libnetfilter_queue.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# libnetfilter-queue
++# libnetfilter_queue
+ #
+ ################################################################################
+ 
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 9227cc4..7628c21 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# procps
++# procps-ng
+ #
+ ################################################################################
+ 
+diff --git a/package/snmppp/snmppp.mk b/package/snmppp/snmppp.mk
+index 57c4962..5391e10 100644
+--- a/package/snmppp/snmppp.mk
++++ b/package/snmppp/snmppp.mk
+@@ -1,6 +1,6 @@
+ ################################################################################
+ #
+-# snmp++
++# snmppp
+ #
+ ################################################################################
+ 
