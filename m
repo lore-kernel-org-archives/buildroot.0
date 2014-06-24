@@ -1,110 +1,171 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Jun 2014 18:01:37 +0200
-Subject: [Buildroot] [PATCH] linux target name might be not equal linux
- file name
-In-Reply-To: <20140624131825.GA29718@waldemar-brodkorb.de>
-References: <20140624131825.GA29718@waldemar-brodkorb.de>
-Message-ID: <53A9A0E1.9080707@mind.be>
+Date: Tue, 24 Jun 2014 18:15:47 +0200
+Subject: [Buildroot] [PATCH] add default config for qemu-system-xtensa
+In-Reply-To: <20140624131914.GA29732@waldemar-brodkorb.de>
+References: <20140624131914.GA29732@waldemar-brodkorb.de>
+Message-ID: <53A9A433.10407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/06/14 15:18, Waldemar Brodkorb wrote:
-> For example the upcoming qemu-xtensa patch is using this feature,
-> where the target is called "zImage", but the resulting kernel name
-> is "Image.elf".
+On 24/06/14 15:19, Waldemar Brodkorb wrote:
+> Tested with Qemu 2.0.0.
+> Overlay is from
+> https://github.com/jcmvbkbc/xtensa-toolchain-build/tree/master/overlays
+> 
+> Many thanks to Max Filippov <jcmvbkbc@gmail.com> for his extended help
+> and kernel config examples.
+> 
+> A small kernel patch is required, because mkimage does not contain
+> support for Xtensa and the uImage target is failing. Redboot is unused
+> so disable it, too.
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  linux/Config.in |    6 ++++++
->  linux/linux.mk  |   10 ++++++----
->  2 files changed, 12 insertions(+), 4 deletions(-)
+>  .../xtensa-lx60/disable-redboot-and-uboot.patch    |   12 +++++++
+>  board/qemu/xtensa-lx60/linux-3.15.config           |   35 ++++++++++++++++++++
+>  board/qemu/xtensa-lx60/readme.txt                  |    7 ++++
+>  board/qemu/xtensa-lx60/xtensa_dc232b.tar           |  Bin 0 -> 747520 bytes
+
+ Ugh, that's ugly... But the only thing we have I guess.
+
+>  configs/qemu_xtensa_lx60_defconfig                 |   24 ++++++++++++++
+>  5 files changed, 78 insertions(+)
+>  create mode 100644 board/qemu/xtensa-lx60/disable-redboot-and-uboot.patch
+>  create mode 100644 board/qemu/xtensa-lx60/linux-3.15.config
+>  create mode 100644 board/qemu/xtensa-lx60/readme.txt
+>  create mode 100644 board/qemu/xtensa-lx60/xtensa_dc232b.tar
+>  create mode 100644 configs/qemu_xtensa_lx60_defconfig
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index ece48a7..0f4337f 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -244,6 +244,12 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
->  	  Specify the kernel make target to build the kernel that you
->  	  need.
->  
-> +config BR2_LINUX_KERNEL_IMAGE_NAME
-> +	string "Kernel image name"
-> +	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+> diff --git a/board/qemu/xtensa-lx60/disable-redboot-and-uboot.patch b/board/qemu/xtensa-lx60/disable-redboot-and-uboot.patch
+> new file mode 100644
+> index 0000000..a4d8ce0
+> --- /dev/null
+> +++ b/board/qemu/xtensa-lx60/disable-redboot-and-uboot.patch
 
- This should default to BR2_LINUX_KERNEL_TARGET_NAME.
+ The patch should have a filename according to the patch naming convention, e.g.
 
- However, it's probably better to leave the default to an empty string, and add
-default handling in the .mk file.
+linux-0001-disable-redboot-and-uboot.patch
 
- That default behaviour should also be described in the help text then.
+ Also, the patch should have a description and a Signed-off-by line.
 
-> +	help
-> +	  Specify the kernel filename.
+> @@ -0,0 +1,12 @@
+> +diff -Nur linux-3.15.orig/arch/xtensa/boot/Makefile linux-3.15/arch/xtensa/boot/Makefile
+> +--- linux-3.15.orig/arch/xtensa/boot/Makefile	2014-06-08 20:19:54.000000000 +0200
+> ++++ linux-3.15/arch/xtensa/boot/Makefile	2014-06-14 20:07:15.206091165 +0200
+> +@@ -23,7 +23,7 @@
+> + 
+> + bootdir-$(CONFIG_XTENSA_PLATFORM_ISS)	 += boot-elf
+> + bootdir-$(CONFIG_XTENSA_PLATFORM_XT2000) += boot-redboot boot-elf boot-uboot
+> +-bootdir-$(CONFIG_XTENSA_PLATFORM_XTFPGA) += boot-redboot boot-elf boot-uboot
+> ++bootdir-$(CONFIG_XTENSA_PLATFORM_XTFPGA) += boot-elf
+> + 
+> + zImage Image: $(bootdir-y)
+> + 
+> diff --git a/board/qemu/xtensa-lx60/linux-3.15.config b/board/qemu/xtensa-lx60/linux-3.15.config
+> new file mode 100644
+> index 0000000..279a745
+> --- /dev/null
+> +++ b/board/qemu/xtensa-lx60/linux-3.15.config
+> @@ -0,0 +1,35 @@
+> +# CONFIG_SWAP is not set
+> +CONFIG_BLK_DEV_INITRD=y
+> +CONFIG_INITRAMFS_SOURCE="/home/wbx/br/output/images/rootfs.cpio"
+
+ Better to strip this from the saved defconfig.
+
+> +CONFIG_XTENSA_VARIANT_DC232B=y
+> +# CONFIG_INITIALIZE_XTENSA_MMU_INSIDE_VMLINUX is not set
+> +CONFIG_XTENSA_PLATFORM_XTFPGA=y
+> +CONFIG_CMDLINE_BOOL=y
+> +CONFIG_CMDLINE="console=ttyS0,38400"
+> +# CONFIG_COMPACTION is not set
+> +# CONFIG_BOUNCE is not set
+> +# CONFIG_CROSS_MEMORY_ATTACH is not set
+> +# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+> +CONFIG_NET=y
+> +CONFIG_PACKET=y
+> +CONFIG_UNIX=y
+> +CONFIG_INET=y
+> +# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+> +# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+> +# CONFIG_INET_XFRM_MODE_BEET is not set
+> +# CONFIG_INET_LRO is not set
+> +# CONFIG_INET_DIAG is not set
+> +# CONFIG_IPV6 is not set
+> +# CONFIG_WIRELESS is not set
+> +CONFIG_DEVTMPFS=y
+> +CONFIG_DEVTMPFS_MOUNT=y
+> +CONFIG_NETDEVICES=y
+> +# CONFIG_WLAN is not set
+> +CONFIG_SERIAL_8250=y
+> +# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
+> +CONFIG_SERIAL_8250_CONSOLE=y
+> +# CONFIG_HW_RANDOM is not set
+> +# CONFIG_HWMON is not set
+> +# CONFIG_VGA_CONSOLE is not set
+> +# CONFIG_S32C1I_SELFTEST is not set
+> +CONFIG_LD_NO_RELAX=y
+> diff --git a/board/qemu/xtensa-lx60/readme.txt b/board/qemu/xtensa-lx60/readme.txt
+> new file mode 100644
+> index 0000000..0bfed90
+> --- /dev/null
+> +++ b/board/qemu/xtensa-lx60/readme.txt
+> @@ -0,0 +1,7 @@
+> +Run the emulation with:
 > +
->  config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
->  	string "load address (for 3.7+ multi-platform image)"
->  	depends on BR2_arm || BR2_armeb
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index bd3f2ac..1e7d2e2 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -80,8 +80,10 @@ endif
->  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
->  
->  ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
-> -LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-> +LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
-> +LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
->  else
-> +LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
+> + qemu-system-xtensa -M lx60 -cpu dc232b -monitor null -nographic -kernel output/images/Image.elf
+> +
+> +The login prompt will appear in the terminal that started Qemu.
+> +
+> +Tested with QEMU 2.0.0
+> diff --git a/board/qemu/xtensa-lx60/xtensa_dc232b.tar b/board/qemu/xtensa-lx60/xtensa_dc232b.tar
+[snip]
+> diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+> new file mode 100644
+> index 0000000..70da439
+> --- /dev/null
+> +++ b/configs/qemu_xtensa_lx60_defconfig
+> @@ -0,0 +1,24 @@
+> +# Architecture
+> +BR2_xtensa=y
+> +BR2_XTENSA_CUSTOM=y
+> +BR2_XTENSA_CUSTOM_NAME="dc232b"
+> +BR2_XTENSA_CORE_NAME="lx60"
+> +BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
+> +
+> +# System
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +
+> +# Filesystem
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_ROOTFS_INITRAMFS=y
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.1"
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-3.15.config"
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> +BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
 
- Although perfectly valid, it looks a bit strange to define the contents of the
-right hand side of the assignment below the assignment statement...
+ Since this patch relies on the other one you sent, you should send the two
+patches as a series. That makes the dependency explicit to the maintainers, so
+they don't accidentally commit the second patch without committing the first one
+first.
 
- Anyway, for the default handling it would probably be more convenient to add
-the following (untested!) after the BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM condition.
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
+> +BR2_LINUX_KERNEL_PATCH="board/qemu/xtensa-lx60/disable-redboot-and-uboot.patch"
 
-ifeq ($(LINUX_TARGET_NAME),)
-LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
-endif
-
-
->  ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
->  LINUX_IMAGE_NAME = uImage
->  else ifeq ($(BR2_LINUX_KERNEL_APPENDED_UIMAGE),y)
-> @@ -259,7 +261,7 @@ endif
->  define LINUX_BUILD_CMDS
->  	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
->  		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
->  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
->  		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
->  	fi
-> @@ -331,8 +333,8 @@ endif
->  # been generated in $(BINARIES_DIR)/rootfs.cpio.
->  $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
->  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
-> -	# Build the kernel.
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-> +	# Build the kernel. for custom kernels make target may be unequal to kernel file name
-
- [minor] I think this comment is a bit out of place here. Also, currently it is
-just for custom kernels but that may change in the future.
+ We're migrating to using BR2_GLOBAL_PATCH_DIR instead. I think we should avoid
+the package-specific patch options for new configs.
 
 
  Regards,
  Arnout
-
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
->  	$(LINUX_APPEND_DTB)
->  	# Copy the kernel image to its final destination
->  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
