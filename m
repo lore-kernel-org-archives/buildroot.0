@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:33 -0300
-Subject: [Buildroot] [PATCH 27/54] pango: add license information
+Date: Tue, 24 Jun 2014 15:55:34 -0300
+Subject: [Buildroot] [PATCH 28/54] proxychains-ng: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-27-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-28-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pango/pango.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/proxychains-ng/proxychains-ng.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 31d92ba..7e5f9a7 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -6,11 +6,12 @@
+diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
+index 7c2ffbf..5415f04 100644
+--- a/package/proxychains-ng/proxychains-ng.mk
++++ b/package/proxychains-ng/proxychains-ng.mk
+@@ -7,6 +7,8 @@
+ PROXYCHAINS_NG_VERSION = 4.6
+ PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
+ PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
++PROXYCHAINS_NG_LICENSE = GPLv2+
++PROXYCHAINS_NG_LICENSE_FILES =  COPYING
  
- PANGO_VERSION_MAJOR = 1.28
- PANGO_VERSION = $(PANGO_VERSION_MAJOR).4
--
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.bz2
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
- PANGO_INSTALL_STAGING = YES
-+PANGO_LICENSE = LGPLv2+
-+PANGO_LICENSE_FILES = COPYING
- 
- PANGO_CONF_ENV = ac_cv_func_posix_getpwuid_r=yes glib_cv_stack_grows=no \
- 		glib_cv_uscore=no ac_cv_func_strtod=yes \
+ define PROXYCHAINS_NG_CONFIGURE_CMDS
+ 	cd $(@D) && \
 -- 
 1.8.5.5
