@@ -1,42 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jun 2014 18:42:44 +0200
-Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size
- installed by each package
-In-Reply-To: <53A9A7E2.7040906@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 24 Jun 2014 18:53:08 +0200
+Subject: [Buildroot] [RFCv1 2/4] pkg-generic: add step_pkg_size global
+ instrumentation hook
+In-Reply-To: <53A9A92A.7030509@mind.be>
 References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53A977B4.70205@lucaceresoli.net> <53A9A7E2.7040906@mind.be>
-Message-ID: <20140624184244.174eac0e@free-electrons.com>
+ <1402177567-8021-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <53A9A92A.7030509@mind.be>
+Message-ID: <20140624165308.GC3478@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, Arnout,
+Arnout, All,
 
-On Tue, 24 Jun 2014 18:31:30 +0200, Arnout Vandecappelle wrote:
-
-> > Of course your approach collects more information, but I don't see
-> > these extra info used in the final graph.
+On 2014-06-24 18:36 +0200, Arnout Vandecappelle spake thusly:
+> On 07/06/14 23:46, Thomas Petazzoni wrote:
+> > This patch adds a global instrumentation hook that collects the list
+> > of files installed in $(TARGET_DIR) by each package, and stores this
+> > list into a file called $(BUILD_DIR)/<pkgname>.filelist. It can later
+> > be used to determine the size contribution of each package to the
+> > target root filesystem.
+> > 
+> > The only limitation is that if a file is installed by a package A, and
+> > then overriden by a file from package B, the file will only be listed
+> > in $(BUILD_DIR)/A.filelist as it is the first time we will see the
+> > file.
+> > 
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  package/pkg-generic.mk | 24 ++++++++++++++++++++++++
+> >  1 file changed, 24 insertions(+)
+> > 
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 5116ed9..069653e 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -55,6 +55,30 @@ define step_time
+> >  endef
+> >  GLOBAL_INSTRUMENTATION_HOOKS += step_time
+> >  
+> > +# Package size steps
+> > +define step_pkg_size_start
+> > +	echo "PKG SIZE START $(1)"
+> > +	(cd $(TARGET_DIR) ; find . -type f) | sort > \
+> > +		$(BUILD_DIR)/$(1).tmp_filelist_before
+> > +endef
+> > +
+> > +define step_pkg_size_end
+> > +	echo "PKG SIZE END $(1)"
+> > +	(cd $(TARGET_DIR); find . -type f) | sort > \
+> > +		$(BUILD_DIR)/$(1).tmp_filelist_after
+> > +	diff -u $(BUILD_DIR)/$(1).tmp_filelist_before $(BUILD_DIR)/$(1).tmp_filelist_after | \
+> > +		grep '^\+\./' | sed 's%^\+%%' > $(BUILD_DIR)/$(1).filelist
+> > +	$(RM) -f $(BUILD_DIR)/$(1).tmp_filelist_before \
+> > +		$(BUILD_DIR)/$(1).tmp_filelist_after
+> > +endef
+> > +
+> > +define step_pkg_size
+> > +	$(if $(filter install-target,$(2)),\
+> > +		$(if $(filter start,$(1)),$(call step_pkg_size_start,$(3))) \
+> > +		$(if $(filter end,$(1)),$(call step_pkg_size_end,$(3))))
+> > +endef
+> > +GLOBAL_INSTRUMENTATION_HOOKS += step_pkg_size
 > 
->  The reason is explained a bit further in that cover letter: we only do
-> stripping and removing of redundant stuff in the finalize step, so calculating
-> the size before that doesn't make much sense.
+>  Since these instrumentation steps are relatively expensive (especially for
+> large builds with many small packages), I would prefer to only enable this after
+> setting some environment variable or config option or similar.
 
-Exactly.
+Ideally, I would like an entry in the menuconfig (probably in the "build
+options" sub-menu):
 
->  The alternative of repeating the finalize step after each package doesn't sound
-> very attractive either.
+    [*] Graphs and intrumentation  --->
+        *** Graphs ***
+        [ ] Packages' installed size
+        [ ] Packages' build time
+        [ ] Packages' dependencies
+        [ ] Global dependencies
+        *** Instrumentation ***
+        [ ] Check RPATH
+        [ ] Check for overwritten files
 
-Indeed. Doing all the stripping and removal of unneeded stuff involves
-a lot of 'find' invocations on the entire output/target directory,
-which we probably don't want to repeat over and over again at the end
-of the target installation step of each package.
+Thus, all relevant information would be automatically generated. Of
+course, some can be generated on-demand (eg. the dependencies graphs),
+while others 
 
-Best regards,
+(Note: the rpath check I'm currently working on, and the overwriting
+check would be relatively easy to implement I guess; but that's just an
+example.)
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
