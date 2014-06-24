@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:13 -0300
-Subject: [Buildroot] [PATCH 07/54] libevent: add license information
+Date: Tue, 24 Jun 2014 15:55:14 -0300
+Subject: [Buildroot] [PATCH 08/54] libfreefare: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libevent/libevent.mk | 2 ++
+ package/libfreefare/libfreefare.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-index 14ebf72..ec1ec5a 100644
---- a/package/libevent/libevent.mk
-+++ b/package/libevent/libevent.mk
-@@ -8,6 +8,8 @@ LIBEVENT_VERSION = 2.0.21
- LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
- LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
- LIBEVENT_INSTALL_STAGING = YES
-+LIBEVENT_LICENSE = BSD-3c
-+LIBEVENT_LICENSE_FILES = LICENSE
+diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+index 362cab2..27a3b34 100644
+--- a/package/libfreefare/libfreefare.mk
++++ b/package/libfreefare/libfreefare.mk
+@@ -7,6 +7,8 @@
+ LIBFREEFARE_VERSION = 0.3.4
+ LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
+ LIBFREEFARE_DEPENDENCIES = libnfc openssl
++LIBFREEFARE_LICENSE = LGPLv3+
++LIBFREEFARE_LICENSE_FILES = COPYING
  
- define LIBEVENT_REMOVE_PYSCRIPT
- 	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+ # openssl needs zlib even if the libfreefare example itself doesn't
 -- 
 1.8.5.5
