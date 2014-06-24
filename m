@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:38 -0300
-Subject: [Buildroot] [PATCH 32/54] python-pygame: add license information
+Date: Tue, 24 Jun 2014 15:55:39 -0300
+Subject: [Buildroot] [PATCH 33/54] rubix: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-32-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-33-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-pygame/python-pygame.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/rubix/rubix.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
-index 2278a5c..51f1c20 100644
---- a/package/python-pygame/python-pygame.mk
-+++ b/package/python-pygame/python-pygame.mk
-@@ -7,10 +7,12 @@
- # stable 1.9.1 release requires V4L which has been wiped out of recent Linux
- # kernels, so use latest mercurial revision until next stable release is out.
- PYTHON_PYGAME_VERSION = f0bb4a4b365d
--PYTHON_PYGAME_SOURCE  = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
-+PYTHON_PYGAME_SOURCE = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
- PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
- PYTHON_PYGAME_SITE_METHOD = hg
- PYTHON_PYGAME_SETUP_TYPE = distutils
-+PYTHON_PYGAME_LICENSE = LGPLv2.1+
-+PYTHON_PYGAME_LICENSE_FILES = LGPL
+diff --git a/package/rubix/rubix.mk b/package/rubix/rubix.mk
+index 732f807..5427830 100644
+--- a/package/rubix/rubix.mk
++++ b/package/rubix/rubix.mk
+@@ -8,6 +8,8 @@ RUBIX_VERSION = 1.0.5
+ RUBIX_SOURCE = rubix-$(RUBIX_VERSION).tar.bz2
+ RUBIX_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/Rubix
+ RUBIX_INSTALL_TARGET_OPT = GAMESDIR=$(TARGET_DIR)/usr/games install
++RUBIX_LICENSE = Public Domain
++RUBIX_LICENSE_FILES = LICENCE
  
- ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
- PYTHON_PYGAME_OPT_DEPENDS += sdl_image
+ RUBIX_MAKE_OPT = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
+ 
 -- 
 1.8.5.5
