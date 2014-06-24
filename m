@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Jun 2014 00:13:51 +0200
-Subject: [Buildroot] [PATCH 12/54] libhid: add license information
-In-Reply-To: <1403636160-11807-12-git-send-email-gustavo@zacarias.com.ar>
-References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-12-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140624221351.GN31767@free.fr>
+Date: Wed, 25 Jun 2014 00:18:13 +0200
+Subject: [Buildroot] [PATCHv2] libevent: add license information
+In-Reply-To: <1403647830-11924-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403647830-11924-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140624221813.GO31767@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +12,35 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
+On 2014-06-24 19:10 -0300, Gustavo Zacarias spake thusly:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libevent/libevent.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+> index 14ebf72..73be502 100644
+> --- a/package/libevent/libevent.mk
+> +++ b/package/libevent/libevent.mk
+> @@ -8,6 +8,8 @@ LIBEVENT_VERSION = 2.0.21
+>  LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+>  LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
+>  LIBEVENT_INSTALL_STAGING = YES
+> +LIBEVENT_LICENSE = BSD-3c, OpenBSD
 
-COPYING OK, yadda yadda... ;-)
+I was going to say: Sorry, but you forgot "MIT".
+But it looks like it applies only to Windows builds, so not used on
+Linux.
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/libhid/libhid.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
-> index 30501d5..469a607 100644
-> --- a/package/libhid/libhid.mk
-> +++ b/package/libhid/libhid.mk
-> @@ -9,6 +9,8 @@ LIBHID_SITE = http://sources.buildroot.net/
->  LIBHID_DEPENDENCIES = libusb-compat libusb
->  LIBHID_INSTALL_STAGING = YES
->  LIBHID_AUTORECONF = YES
-> +LIBHID_LICENSE = GPLv2
-> +LIBHID_LICENSE_FILES = COPYING
->  # configure runs libusb-config for cflags/ldflags. Ensure it picks up
->  # the target version
->  LIBHID_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
+> +LIBEVENT_LICENSE_FILES = LICENSE
+>  
+>  define LIBEVENT_REMOVE_PYSCRIPT
+>  	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
 > -- 
 > 1.8.5.5
 > 
