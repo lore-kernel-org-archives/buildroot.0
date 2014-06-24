@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:36 -0300
-Subject: [Buildroot] [PATCH 30/54] python-dpkt: add license information
+Date: Tue, 24 Jun 2014 15:55:37 -0300
+Subject: [Buildroot] [PATCH 31/54] python-mad: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-30-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-31-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-dpkt/python-dpkt.mk | 6 ++++--
+ package/python-mad/python-mad.mk | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-dpkt/python-dpkt.mk b/package/python-dpkt/python-dpkt.mk
-index 0b3dc11..fb630fb 100644
---- a/package/python-dpkt/python-dpkt.mk
-+++ b/package/python-dpkt/python-dpkt.mk
-@@ -5,8 +5,10 @@
+diff --git a/package/python-mad/python-mad.mk b/package/python-mad/python-mad.mk
+index 1b3cb75..a476fe1 100644
+--- a/package/python-mad/python-mad.mk
++++ b/package/python-mad/python-mad.mk
+@@ -5,9 +5,11 @@
  ################################################################################
  
- PYTHON_DPKT_VERSION = 1.7
--PYTHON_DPKT_SOURCE  = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
--PYTHON_DPKT_SITE    = http://dpkt.googlecode.com/files
-+PYTHON_DPKT_SOURCE = dpkt-$(PYTHON_DPKT_VERSION).tar.gz
-+PYTHON_DPKT_SITE = http://dpkt.googlecode.com/files
- PYTHON_DPKT_SETUP_TYPE = distutils
-+PYTHON_DPKT_LICENSE = BSD-3c
-+PYTHON_DPKT_LICENSE_FILES = LICENSE
+ PYTHON_MAD_VERSION = 0.6
+-PYTHON_MAD_SOURCE  = pymad-$(PYTHON_MAD_VERSION).tar.gz
+-PYTHON_MAD_SITE    = http://spacepants.org/src/pymad/download/
++PYTHON_MAD_SOURCE = pymad-$(PYTHON_MAD_VERSION).tar.gz
++PYTHON_MAD_SITE = http://spacepants.org/src/pymad/download/
+ PYTHON_MAD_SETUP_TYPE = distutils
++PYTHON_MAD_LICENSE = GPLv2+
++PYTHON_MAD_LICENSE_FILES = COPYING
  
- $(eval $(python-package))
+ PYTHON_MAD_DEPENDENCIES = libmad
+ 
 -- 
 1.8.5.5
