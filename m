@@ -1,33 +1,30 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 16:13:35 -0300
-Subject: [Buildroot] [PATCH 02/54] irda-utils: add license information
-In-Reply-To: <20140624191214.GA31767@free.fr>
-References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-2-git-send-email-gustavo@zacarias.com.ar>
- <20140624191214.GA31767@free.fr>
-Message-ID: <53A9CDDF.5090506@zacarias.com.ar>
+Date: Tue, 24 Jun 2014 16:15:23 -0300
+Subject: [Buildroot] [PATCH 1/2] irda-utils: add license information
+Message-ID: <1403637324-13994-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/24/2014 04:12 PM, Yann E. MORIN wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/irda-utils/irda-utils.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Gustavo, All,
-> 
-> On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
->> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
->> ---
->>  package/gtkperf/gtkperf.mk       | 2 ++
->>  package/irda-utils/irda-utils.mk | 2 ++
-> 
-> Maybe this should have been two patches? ;-)
-> 
-> Hey, I can understand how repetitive this taks must have been. ;-)
-> 
-> Regards,
-> Yann E. MORIN.
-
-Ouch, yes, shit happens.
-Regards.
+diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
+index 4be80d7..e4958e5 100644
+--- a/package/irda-utils/irda-utils.mk
++++ b/package/irda-utils/irda-utils.mk
+@@ -6,6 +6,8 @@
+ 
+ IRDA_UTILS_VERSION = 0.9.18
+ IRDA_UTILS_SITE = http://downloads.sourceforge.net/project/irda/irda-utils/$(IRDA_UTILS_VERSION)
++IRDA_UTILS_LICENSE = GPLv2+
++IRDA_UTILS_LICENSE_FILES = man/COPYING
+ 
+ IRDA_UTILS_CFLAGS = $(TARGET_CFLAGS) -I.
+ ifeq ($(BR2_USE_MMU),)
+-- 
+1.8.5.5
