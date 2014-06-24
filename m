@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Jun 2014 23:49:40 +0200
-Subject: [Buildroot] [PATCH 07/54] libevent: add license information
-In-Reply-To: <1403636160-11807-7-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 24 Jun 2014 23:51:09 +0200
+Subject: [Buildroot] [PATCH 06/54] liesmtp: add license information
+In-Reply-To: <1403636160-11807-6-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-7-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140624214940.GF31767@free.fr>
+ <1403636160-11807-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140624215109.GG31767@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,28 @@ Gustavo, All,
 
 On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libevent/libevent.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
-> index 14ebf72..ec1ec5a 100644
-> --- a/package/libevent/libevent.mk
-> +++ b/package/libevent/libevent.mk
-> @@ -8,6 +8,8 @@ LIBEVENT_VERSION = 2.0.21
->  LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
->  LIBEVENT_SITE = https://github.com/downloads/libevent/libevent
->  LIBEVENT_INSTALL_STAGING = YES
-> +LIBEVENT_LICENSE = BSD-3c
 
-The LICENSE file refer to at least those three licenses:
-  - the BSD-3c license
-  - the "OpenBSD" license
-  - the MIT license
+BTW, small typo in the subject:  s/liesmtp/libesmtp/
 
 Regards,
 Yann E. MORIN.
 
-> +LIBEVENT_LICENSE_FILES = LICENSE
+> ---
+>  package/libesmtp/libesmtp.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
+> index f3f5611..cad2e27 100644
+> --- a/package/libesmtp/libesmtp.mk
+> +++ b/package/libesmtp/libesmtp.mk
+> @@ -10,5 +10,7 @@ LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
+>  LIBESMTP_INSTALL_STAGING = YES
+>  LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
+>  LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
+> +LIBESMTP_LICENSE = GPLv2+ (examples), LGPLv2.1+ (library)
+> +LIBESMTP_LICENSE_FILES = COPYING COPYING.LIB
 >  
->  define LIBEVENT_REMOVE_PYSCRIPT
->  	rm $(TARGET_DIR)/usr/bin/event_rpcgen.py
+>  $(eval $(autotools-package))
 > -- 
 > 1.8.5.5
 > 
