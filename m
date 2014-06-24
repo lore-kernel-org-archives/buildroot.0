@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Jun 2014 07:21:13 +0200
-Subject: [Buildroot] [PATCH 1/3] support/script/cpan: improve Makefile
- generation
-In-Reply-To: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
+Date: Tue, 24 Jun 2014 07:22:46 +0200
+Subject: [Buildroot] [PATCH 2/3] perl-net-ssleay: new package
+In-Reply-To: <1403547286-8858-2-git-send-email-francois.perrad@gadz.org>
 References: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <53A90AC9.5060403@mind.be>
+ <1403547286-8858-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <53A90B26.2080609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,64 +12,66 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 23/06/14 20:14, Francois Perrad wrote:
-> - remove trailing space after perl when it's the only dependency
-> - license: substitution of perl name by BR name
-> - add a tabulation before source
-> 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 
  Regards,
  Arnout
 
 > ---
->  support/scripts/scancpan | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  package/Config.in                          |  1 +
+>  package/perl-net-ssleay/Config.in          |  7 +++++++
+>  package/perl-net-ssleay/perl-net-ssleay.mk | 14 ++++++++++++++
+>  3 files changed, 22 insertions(+)
+>  create mode 100644 package/perl-net-ssleay/Config.in
+>  create mode 100644 package/perl-net-ssleay/perl-net-ssleay.mk
 > 
-> diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-> index 4be4754..348b7cc 100755
-> --- a/support/scripts/scancpan
-> +++ b/support/scripts/scancpan
-> @@ -598,14 +598,17 @@ while (my ($distname, $dist) = each %dist) {
->          # the scheme is not used, because the job is done by the BR download infrastructure
->          # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
->          my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
-> -        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
-> +        my $dependencies = join q{ }, qw( perl ),
-> +                                      map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
->                                        map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
->          my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
->                                                                                    @{$deps_runtime{$distname}} );
->          my $license = ref $dist->{license} eq 'ARRAY'
->                      ? join q{ or }, @{$dist->{license}}
->                      : $dist->{license};
-> -        $license = q{Artistic or GPLv1+} if $license eq q{perl_5};
-> +        $license =~ s|artistic_2|Artistic-2.0|;
-> +        $license =~ s|openssl|OpenSSL|;
-> +        $license =~ s|perl_5|Artistic or GPLv1+|;
->          say qq{write ${mkname}} unless $quiet;
->          open my $fh, q{>}, $mkname;
->          say {$fh} qq{################################################################################};
-> @@ -617,7 +620,7 @@ while (my ($distname, $dist) = each %dist) {
->          say {$fh} qq{${brname}_VERSION = ${version}};
->          say {$fh} qq{${brname}_SOURCE = ${distname}-\$(${brname}_VERSION).${suffix}};
->          say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
-> -        say {$fh} qq{${brname}_DEPENDENCIES = perl ${dependencies}} if $need_target{$distname};
-> +        say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname};
->          say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname};
->          say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
->          say {$fh} qq{};
-> @@ -640,7 +643,7 @@ if (-f $cfgname) {
->  
->  foreach my $distname (keys %need_target) {
->      my $fsname = fsname( $distname );
-> -    $pkg{qq{source "package/${fsname}/Config.in"}} = 1;
-> +    $pkg{qq{\tsource "package/${fsname}/Config.in"}} = 1;
->  }
->  
->  say qq{${cfgname} must contain the following lines:};
+> diff --git a/package/Config.in b/package/Config.in
+> index 498630f..fb04014 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -424,6 +424,7 @@ endif
+>  if BR2_PACKAGE_PERL
+>  menu "Perl libraries/modules"
+>  	source "package/perl-mojolicious/Config.in"
+> +	source "package/perl-net-ssleay/Config.in"
+>  endmenu
+>  endif
+>  	source "package/php/Config.in"
+> diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
+> new file mode 100644
+> index 0000000..bc219b0
+> --- /dev/null
+> +++ b/package/perl-net-ssleay/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PERL_NET_SSLEAY
+> +	bool "perl-net-ssleay"
+> +	select BR2_PACKAGE_OPENSSL
+> +	help
+> +	  Perl extension for using OpenSSL
+> +
+> +	  https://metacpan.org/release/Net-SSLeay
+> diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+> new file mode 100644
+> index 0000000..413fdf0
+> --- /dev/null
+> +++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# perl-net-ssleay
+> +#
+> +################################################################################
+> +
+> +PERL_NET_SSLEAY_VERSION = 1.64
+> +PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+> +PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM/
+> +PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
+> +PERL_NET_SSLEAY_LICENSE = OpenSSL
+> +PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(perl-package))
 > 
 
 
