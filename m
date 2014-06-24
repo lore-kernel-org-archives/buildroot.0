@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:58 -0300
-Subject: [Buildroot] [PATCH 52/54] protobuf-c: update license information
+Date: Tue, 24 Jun 2014 15:55:59 -0300
+Subject: [Buildroot] [PATCH 53/54] ti-utils: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-52-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-53-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/protobuf-c/protobuf-c.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/ti-utils/ti-utils.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index da0b139..7cfc2e1 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -12,6 +12,7 @@ PROTOBUF_C_MAKE = $(MAKE1)
- PROTOBUF_C_CONF_OPT = --disable-protoc
- PROTOBUF_C_INSTALL_STAGING = YES
- PROTOBUF_C_LICENSE = BSD-3c
-+PROTOBUF_C_LICENSE_FILES = LICENSE
- PROTOBUF_C_AUTORECONF = YES
- HOST_PROTOBUF_C_AUTORECONF = YES
+diff --git a/package/ti-utils/ti-utils.mk b/package/ti-utils/ti-utils.mk
+index 1d1c1e6..c0a3663 100644
+--- a/package/ti-utils/ti-utils.mk
++++ b/package/ti-utils/ti-utils.mk
+@@ -7,6 +7,8 @@
+ TI_UTILS_VERSION = 06dbdb2727354b5f3ad7c723897f40051fddee49
+ TI_UTILS_SITE = $(call github,gxk,ti-utils,$(TI_UTILS_VERSION))
+ TI_UTILS_DEPENDENCIES = libnl
++TI_UTILS_LICENSE = BSD-3c
++TI_UTILS_LICENSE_FILES = COPYING
  
+ define TI_UTILS_BUILD_CMDS
+ 	$(MAKE1) NFSROOT="$(STAGING_DIR)" \
 -- 
 1.8.5.5
