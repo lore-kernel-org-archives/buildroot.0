@@ -1,39 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 24 Jun 2014 22:11:00 +0200
-Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size
- installed by each package
-In-Reply-To: <53A9D769.20000@lucaceresoli.net>
-References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53A977B4.70205@lucaceresoli.net> <53A9A7E2.7040906@mind.be>
- <53A9D769.20000@lucaceresoli.net>
-Message-ID: <20140624221100.4d6a2a56@free-electrons.com>
+Date: Tue, 24 Jun 2014 22:19:48 +0200
+Subject: [Buildroot] [PATCH 04/54] leafpad: add license information
+In-Reply-To: <1403636160-11807-4-git-send-email-gustavo@zacarias.com.ar>
+References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
+ <1403636160-11807-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140624221948.7fda4885@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear Gustavo Zacarias,
 
-On Tue, 24 Jun 2014 21:54:17 +0200, Luca Ceresoli wrote:
+On Tue, 24 Jun 2014 15:55:10 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/leafpad/leafpad.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-> >   The reason is explained a bit further in that cover letter: we only do
-> > stripping and removing of redundant stuff in the finalize step, so calculating
-> > the size before that doesn't make much sense.
-> 
-> Aaah, yes, stripping! Of course! I was sure there is a good reason...
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Well really it's not only stripping. It's all the things that
-target-finalize is doing: stripping of course, but also removing .h
-files, .a files, documentation, unneeded locales, and more.
-
-Therefore, my approach was more to really only at the files that are in
-output/target/ (and their size) at the end of the build and then try to
-match the packages they are coming from.
-
-Best regards,
-
-Thomas
+(verified existence of COPYING file, checked that license is indeed
+GPLv2+ by looking at a few random source files.)
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
