@@ -1,27 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 24 Jun 2014 15:28:09 +0200
-Subject: [Buildroot] [PATCH] network-manager: needs kernel headers v3.7
-In-Reply-To: <1b7e8e772cec11466a7edf7844111326e2f29014.1403589519.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 24 Jun 2014 08:58:39 +0300")
-References: <1b7e8e772cec11466a7edf7844111326e2f29014.1403589519.git.baruch@tkos.co.il>
-Message-ID: <87y4wmxwra.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 24 Jun 2014 10:31:00 -0300
+Subject: [Buildroot] [PATCH] radvd: bump to version 1.13
+Message-ID: <1403616660-21830-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/radvd/radvd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > NetworkManager uses struct ifla_vxlan_port_range that was introduced in kernel
- > version 3.7.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/6f2/6f214e3206ad0b12c633a7632c1e32c369e447ff/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 3aec4f3..5958d91 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RADVD_VERSION = 1.12
++RADVD_VERSION = 1.13
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
