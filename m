@@ -1,68 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Jun 2014 18:26:32 +0200
-Subject: [Buildroot] [RFCv1 0/4] Generating a graph of the size
- installed by each package
-In-Reply-To: <53A977B4.70205@lucaceresoli.net>
-References: <1402177567-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <53A977B4.70205@lucaceresoli.net>
-Message-ID: <20140624162632.GA3478@free.fr>
+Date: Tue, 24 Jun 2014 18:28:25 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-perl: use Backpan to get perl
+ modules
+In-Reply-To: <53A90984.3040502@mind.be>
+References: <1403545341-24506-1-git-send-email-yann.morin.1998@free.fr>
+ <53A90984.3040502@mind.be>
+Message-ID: <20140624162825.GB3478@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Arnout, All,
 
-On 2014-06-24 15:05 +0200, Luca Ceresoli spake thusly:
-> Thomas Petazzoni wrote:
-[--SNIP--]
-> >To see an example of the generated pie chart, see:
-> >
-> >   http://free-electrons.com/~thomas/pub/buildroot/graph-size.pdf
-> >
-> >The implementation consists in adding a global instrumentation hook
-> >that registers which files are installed by each package. A limitation
-> >of the current implementation is that when a file is installed by a
-> >package A and then overriden by package B, the mechanism will assume
-> >the file was installed by package A. Suggestions to welcome on how to
-> >solve this in a reasonably simple way.
+On 2014-06-24 07:15 +0200, Arnout Vandecappelle spake thusly:
+> On 23/06/14 19:42, Yann E. MORIN wrote:
+> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > 
+> > Old versions of some perl modules are aggressively pruned by their
+> > authors, up to the point that only the latest version is available
+> > for some modules.
+> > 
+> > OF course, that does not play very well for us, since we'd soon trip
+> > on missing upstream versions.
+> > 
+> > As suggested br Fran?ois, switch over to using Backpan, that provides
+> > all the versions (including current ones) of all the modules for an
+> > apparently unlimited time (there are modules dating back 2005, at
+> > least.)
+> > 
+> > Fixes:
+> >     http://autobuild.buildroot.net/results/a95/a95064fbffc35d16e78dbb1e73c5bbfc262b8338/
+> >     http://autobuild.buildroot.net/results/81c/81c00bd737ec37b7b44c1c3a4e1ca29b6d1281d2/
+> >     http://autobuild.buildroot.net/results/5ce/5cebc74580c8a34bb63d82a7591269c9403e95af/
+> >     [...]
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+> > ---
+> >  Config.in | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/Config.in b/Config.in
+> > index bf1ca86..05f709d 100644
+> > --- a/Config.in
+> > +++ b/Config.in
+> > @@ -242,7 +242,7 @@ config BR2_LUAROCKS_MIRROR
+> >  
+> >  config BR2_CPAN_MIRROR
+> >  	string "CPAN mirror (Perl packages)"
+> > -	default "http://search.cpan.org/CPAN"
+> > +	default "http://backpan.perl.org/"
+> >  	help
+> >  	  CPAN (Comprehensive Perl Archive Network) is a repository
+> >  	  of Perl packages. It has multiple software mirrors scattered
+> > 
 > 
-> It's very well possible that I'm missing something, but I don't get why
-> you need to save the list of all installed files.
-> 
-> Can't you just save the whole rootfs size before and after installation?
-> It can be simply computer by 'du -bs $(TARGET_DIR)', and it's way
-> easier to parse later. It would also take into account the change of
-> size for overwritten files, for free.
-> 
-> Of course your approach collects more information, but I don't see
-> these extra info used in the final graph.
+>  I think it would be good to add the backpan explanation to the help text here.
+> Otherwise, people may just configure a local CPAN mirror without understanding
+> the consequences.
 
-What is important is not the installed size, but the actual size on the
-target.
-
-The binaries installed are not stripped at instll time, but later, just
-before making the target images.
-
-Thus, you want to wait for just before generationg the target image, but
-just after stripping binaries, to compute the actual size of each
-packages.
-
-So, what the patches basically does is:
-  - record for each package what files are installed
-  - just after stripping, get the size of each file,
-  - assign the size to the package that installed that file
-
-Of course, as Thomas says, if two packages install the same file, the
-first pacakge will be credited with the size of this file, not the last
-package.
-
-Overcoming this would not be trivial (but not impossible either.) This
-can be refined in later interations of the patchset; we just need to
-come up with a simple-enough heuristic. Storing sha1s of each file
-before install, and comparign after install is a solution, but it is a
-bit more involved than just diffing the output of 'find -type f'.
+Well, this is moot, since this patch has been rejected, after the
+comment by Fran?ois (as a reply to my earlier patch, see:
+http://lists.busybox.net/pipermail/buildroot/2014-June/100038.html )
 
 Regards,
 Yann E. MORIN.
