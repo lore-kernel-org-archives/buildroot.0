@@ -1,64 +1,77 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Jun 2014 07:15:48 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-perl: use Backpan to get perl
-	modules
-In-Reply-To: <1403545341-24506-1-git-send-email-yann.morin.1998@free.fr>
-References: <1403545341-24506-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <53A90984.3040502@mind.be>
+Date: Tue, 24 Jun 2014 07:21:13 +0200
+Subject: [Buildroot] [PATCH 1/3] support/script/cpan: improve Makefile
+ generation
+In-Reply-To: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
+References: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <53A90AC9.5060403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/06/14 19:42, Yann E. MORIN wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 23/06/14 20:14, Francois Perrad wrote:
+> - remove trailing space after perl when it's the only dependency
+> - license: substitution of perl name by BR name
+> - add a tabulation before source
 > 
-> Old versions of some perl modules are aggressively pruned by their
-> authors, up to the point that only the latest version is available
-> for some modules.
-> 
-> OF course, that does not play very well for us, since we'd soon trip
-> on missing upstream versions.
-> 
-> As suggested br Fran?ois, switch over to using Backpan, that provides
-> all the versions (including current ones) of all the modules for an
-> apparently unlimited time (there are modules dating back 2005, at
-> least.)
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/a95/a95064fbffc35d16e78dbb1e73c5bbfc262b8338/
->     http://autobuild.buildroot.net/results/81c/81c00bd737ec37b7b44c1c3a4e1ca29b6d1281d2/
->     http://autobuild.buildroot.net/results/5ce/5cebc74580c8a34bb63d82a7591269c9403e95af/
->     [...]
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Fran?ois Perrad <francois.perrad@gadz.org>
-> ---
->  Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Config.in b/Config.in
-> index bf1ca86..05f709d 100644
-> --- a/Config.in
-> +++ b/Config.in
-> @@ -242,7 +242,7 @@ config BR2_LUAROCKS_MIRROR
->  
->  config BR2_CPAN_MIRROR
->  	string "CPAN mirror (Perl packages)"
-> -	default "http://search.cpan.org/CPAN"
-> +	default "http://backpan.perl.org/"
->  	help
->  	  CPAN (Comprehensive Perl Archive Network) is a repository
->  	  of Perl packages. It has multiple software mirrors scattered
-> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
- I think it would be good to add the backpan explanation to the help text here.
-Otherwise, people may just configure a local CPAN mirror without understanding
-the consequences.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
+
+> ---
+>  support/scripts/scancpan | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+> index 4be4754..348b7cc 100755
+> --- a/support/scripts/scancpan
+> +++ b/support/scripts/scancpan
+> @@ -598,14 +598,17 @@ while (my ($distname, $dist) = each %dist) {
+>          # the scheme is not used, because the job is done by the BR download infrastructure
+>          # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
+>          my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
+> -        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
+> +        my $dependencies = join q{ }, qw( perl ),
+> +                                      map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
+>                                        map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
+>          my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
+>                                                                                    @{$deps_runtime{$distname}} );
+>          my $license = ref $dist->{license} eq 'ARRAY'
+>                      ? join q{ or }, @{$dist->{license}}
+>                      : $dist->{license};
+> -        $license = q{Artistic or GPLv1+} if $license eq q{perl_5};
+> +        $license =~ s|artistic_2|Artistic-2.0|;
+> +        $license =~ s|openssl|OpenSSL|;
+> +        $license =~ s|perl_5|Artistic or GPLv1+|;
+>          say qq{write ${mkname}} unless $quiet;
+>          open my $fh, q{>}, $mkname;
+>          say {$fh} qq{################################################################################};
+> @@ -617,7 +620,7 @@ while (my ($distname, $dist) = each %dist) {
+>          say {$fh} qq{${brname}_VERSION = ${version}};
+>          say {$fh} qq{${brname}_SOURCE = ${distname}-\$(${brname}_VERSION).${suffix}};
+>          say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
+> -        say {$fh} qq{${brname}_DEPENDENCIES = perl ${dependencies}} if $need_target{$distname};
+> +        say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname};
+>          say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname};
+>          say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
+>          say {$fh} qq{};
+> @@ -640,7 +643,7 @@ if (-f $cfgname) {
+>  
+>  foreach my $distname (keys %need_target) {
+>      my $fsname = fsname( $distname );
+> -    $pkg{qq{source "package/${fsname}/Config.in"}} = 1;
+> +    $pkg{qq{\tsource "package/${fsname}/Config.in"}} = 1;
+>  }
+>  
+>  say qq{${cfgname} must contain the following lines:};
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
