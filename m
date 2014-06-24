@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Jun 2014 23:51:09 +0200
-Subject: [Buildroot] [PATCH 06/54] liesmtp: add license information
-In-Reply-To: <1403636160-11807-6-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 24 Jun 2014 23:52:56 +0200
+Subject: [Buildroot] [PATCH 08/54] libfreefare: add license information
+In-Reply-To: <1403636160-11807-8-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-6-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140624215109.GG31767@free.fr>
+ <1403636160-11807-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140624215256.GH31767@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,28 +15,30 @@ Gustavo, All,
 
 On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libfreefare/libfreefare.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+> index 362cab2..27a3b34 100644
+> --- a/package/libfreefare/libfreefare.mk
+> +++ b/package/libfreefare/libfreefare.mk
+> @@ -7,6 +7,8 @@
+>  LIBFREEFARE_VERSION = 0.3.4
+>  LIBFREEFARE_SITE = http://libfreefare.googlecode.com/files
+>  LIBFREEFARE_DEPENDENCIES = libnfc openssl
+> +LIBFREEFARE_LICENSE = LGPLv3+
 
-BTW, small typo in the subject:  s/liesmtp/libesmtp/
+The COPYING file has an exeption, so I believe this should be:
+    LIBFREEFARE_LICENSE = LGPLv3+ with exception
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/libesmtp/libesmtp.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libesmtp/libesmtp.mk b/package/libesmtp/libesmtp.mk
-> index f3f5611..cad2e27 100644
-> --- a/package/libesmtp/libesmtp.mk
-> +++ b/package/libesmtp/libesmtp.mk
-> @@ -10,5 +10,7 @@ LIBESMTP_SITE = http://www.stafford.uklinux.net/libesmtp
->  LIBESMTP_INSTALL_STAGING = YES
->  LIBESMTP_CONFIG_SCRIPTS = libesmtp-config
->  LIBESMTP_DEPENDENCIES = $(if $(BR2_PACKAGE_OPENSSL),openssl)
-> +LIBESMTP_LICENSE = GPLv2+ (examples), LGPLv2.1+ (library)
-> +LIBESMTP_LICENSE_FILES = COPYING COPYING.LIB
+> +LIBFREEFARE_LICENSE_FILES = COPYING
 >  
->  $(eval $(autotools-package))
+>  ifeq ($(BR2_PREFER_STATIC_LIB),y)
+>  # openssl needs zlib even if the libfreefare example itself doesn't
 > -- 
 > 1.8.5.5
 > 
