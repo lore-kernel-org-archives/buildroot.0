@@ -1,68 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 24 Jun 2014 15:34:33 +0200
-Subject: [Buildroot] [git commit] network-manager: bump version
-Message-ID: <20140624133505.87F039D000@busybox.osuosl.org>
+Date: Tue, 24 Jun 2014 15:26:02 +0200
+Subject: [Buildroot] [git commit] network-manager: needs kernel headers v3.7
+Message-ID: <20140624133505.812ED9D09E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=116a8e1b032a85e8c4378cca113110bcb218b158
+commit: http://git.buildroot.net/buildroot/commit/?id=79b483d0d343d67005e2bb29685e5975ee8261f9
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch is now upstream.
+NetworkManager uses struct ifla_vxlan_port_range that was introduced in kernel
+version 3.7.
 
+Fixes:
+http://autobuild.buildroot.net/results/6f2/6f214e3206ad0b12c633a7632c1e32c369e447ff/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-nm-dispatcher-explicitly-add-gio-gio.h.patch |   28 --------------------
- package/network-manager/network-manager.mk         |    2 +-
- 2 files changed, 1 insertions(+), 29 deletions(-)
+ package/network-manager/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager-0001-nm-dispatcher-explicitly-add-gio-gio.h.patch b/package/network-manager/network-manager-0001-nm-dispatcher-explicitly-add-gio-gio.h.patch
-deleted file mode 100644
-index 94ab7c2..0000000
---- a/package/network-manager/network-manager-0001-nm-dispatcher-explicitly-add-gio-gio.h.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From c1bc880ec9708d6de9ae3fc42d77874279ab87b6 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Wed, 11 Jun 2014 12:01:53 +0200
--Subject: [PATCH] nm-dispatcher: explicitly add gio/gio.h
--
--Without this header Buildroot's build complains about unknown
--types like GFile etc.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- src/nm-dispatcher.c |    1 +
-- 1 files changed, 1 insertions(+), 0 deletions(-)
--
--diff --git a/src/nm-dispatcher.c b/src/nm-dispatcher.c
--index 7a0c8de..336b91f 100644
----- a/src/nm-dispatcher.c
--+++ b/src/nm-dispatcher.c
--@@ -20,6 +20,7 @@
--  */
-- 
-- #include <glib.h>
--+#include <gio/gio.h>
-- #include <string.h>
-- 
-- #include "nm-dispatcher.h"
---- 
--1.7.7
--
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 282e1e5..3555f00 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index b7f223e..0ed6ca5 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
+@@ -51,9 +52,9 @@ config BR2_PACKAGE_NETWORK_MANAGER_PPPD
+ 	  This option enables support for PPPD daemon
+ endif
  
- NETWORK_MANAGER_VERSION_MAJOR = 0.9
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).9.95
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).9.98
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+-comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, largefile, wchar, threads"
++comment "NetworkManager needs udev /dev management and a toolchain w/ IPv6, largefile, wchar, threads, headers >= 3.7"
+ 	depends on !BR2_avr32
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INET_IPV6 || !BR2_LARGEFILE || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_PACKAGE_HAS_UDEV
++		!BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
