@@ -1,111 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 23 Jun 2014 23:52:29 +0200
-Subject: [Buildroot] [git commit] package/libeXosip2: fix build for static
-	linking
-Message-ID: <20140623215314.5A6689D09B@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 24 Jun 2014 07:15:48 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-perl: use Backpan to get perl
+	modules
+In-Reply-To: <1403545341-24506-1-git-send-email-yann.morin.1998@free.fr>
+References: <1403545341-24506-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <53A90984.3040502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb59306c38a4e69db780777262f26a9fd50c77e3
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 23/06/14 19:42, Yann E. MORIN wrote:
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Old versions of some perl modules are aggressively pruned by their
+> authors, up to the point that only the latest version is available
+> for some modules.
+> 
+> OF course, that does not play very well for us, since we'd soon trip
+> on missing upstream versions.
+> 
+> As suggested br Fran?ois, switch over to using Backpan, that provides
+> all the versions (including current ones) of all the modules for an
+> apparently unlimited time (there are modules dating back 2005, at
+> least.)
+> 
+> Fixes:
+>     http://autobuild.buildroot.net/results/a95/a95064fbffc35d16e78dbb1e73c5bbfc262b8338/
+>     http://autobuild.buildroot.net/results/81c/81c00bd737ec37b7b44c1c3a4e1ca29b6d1281d2/
+>     http://autobuild.buildroot.net/results/5ce/5cebc74580c8a34bb63d82a7591269c9403e95af/
+>     [...]
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Fran?ois Perrad <francois.perrad@gadz.org>
+> ---
+>  Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Config.in b/Config.in
+> index bf1ca86..05f709d 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -242,7 +242,7 @@ config BR2_LUAROCKS_MIRROR
+>  
+>  config BR2_CPAN_MIRROR
+>  	string "CPAN mirror (Perl packages)"
+> -	default "http://search.cpan.org/CPAN"
+> +	default "http://backpan.perl.org/"
+>  	help
+>  	  CPAN (Comprehensive Perl Archive Network) is a repository
+>  	  of Perl packages. It has multiple software mirrors scattered
+> 
 
-Add a new patch to use pkg-config to detect openssl.
+ I think it would be good to add the backpan explanation to the help text here.
+Otherwise, people may just configure a local CPAN mirror without understanding
+the consequences.
 
-[Peter: fix minor typos in description]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ch => libeXosip2-0000-fix-non-ipv6-build.patch} |    0
- ...ip2-0001-use-pkg-config-to-detect-openssl.patch |   62 ++++++++++++++++++++
- package/libeXosip2/libeXosip2.mk                   |    3 +
- 3 files changed, 65 insertions(+), 0 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/libeXosip2/libeXosip2-fix-non-ipv6-build.patch b/package/libeXosip2/libeXosip2-0000-fix-non-ipv6-build.patch
-similarity index 100%
-rename from package/libeXosip2/libeXosip2-fix-non-ipv6-build.patch
-rename to package/libeXosip2/libeXosip2-0000-fix-non-ipv6-build.patch
-diff --git a/package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch b/package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch
-new file mode 100644
-index 0000000..69e349f
---- /dev/null
-+++ b/package/libeXosip2/libeXosip2-0001-use-pkg-config-to-detect-openssl.patch
-@@ -0,0 +1,62 @@
-+configure: use pkg-config to find openssl
-+
-+The current check is broken for static linking, since the openssl
-+libs need to be linked against libz, which is missing in the link
-+command when doing a static build:
-+    http://autobuild.buildroot.net/results/787/787cd9992b00d8008641af208f5fb7c4afb40b06/build-end.log
-+
-+Instead of trying convoluted tests to decide what additional libs
-+are required, just delegate this job to pkg-config.
-+
-+At the same time, fix a few legacy, deprecated constructs in favour
-+of their new counterparts.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Upstream status: submitted, but no public mailing list (sent to the
-+mail documented in: http://www.antisip.com/doc/exosip2/index.html )
-+
-+diff -durN libeXosip2-3.6.0.orig/configure.in libeXosip2-3.6.0/configure.in
-+--- libeXosip2-3.6.0.orig/configure.in	2014-06-22 23:58:26.549487427 +0200
-++++ libeXosip2-3.6.0/configure.in	2014-06-22 23:59:12.822008499 +0200
-+@@ -44,7 +44,7 @@
-+ AC_CONFIG_AUX_DIR(scripts)
-+ AC_CONFIG_HEADERS(config.h)
-+ AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
-+-AM_ACLOCAL_INCLUDE(scripts)
-++AC_CONFIG_MACRO_DIR([scripts])
-+ 
-+ AC_CANONICAL_HOST
-+ 
-+@@ -371,13 +371,15 @@
-+ 
-+ AC_ARG_ENABLE(openssl,
-+ 	[  --enable-openssl        enable support for openssl],
-+-	enable_openssl=$enableval,enable_openssl="yes")
-++	enable_openssl=$enableval,enable_openssl="auto")
-+ 
-+-if test "$enable_openssl" = "yes" ; then
-+-	AC_CHECK_HEADERS(openssl/ssl.h)
-+-	AC_CHECK_LIB(ssl,SSL_CTX_new,[EXOSIP_LIB="$EXOSIP_LIB -lssl"])
-+-	AC_CHECK_LIB(crypto,X509_get_issuer_name,[EXOSIP_LIB="$EXOSIP_LIB -lcrypto"])
-+-fi
-++AS_IF([test "$enable_openssl" = "yes" -o "$enable_openssl" = "auto"],
-++      [PKG_CHECK_MODULES([SSL], [openssl],
-++                         [EXOSIP_LIB="$EXOSIP_LIB $SSL_LIBS"],
-++                         [AS_IF([test "$enable_openssl" = "yes"],
-++                                [AC_MSG_ERROR([can not find openssl])])
-++                         ])
-++      ])
-+ 
-+ AC_ARG_ENABLE(srvrec,
-+ 	[  --enable-srvrec         enable support for SRV records DNS queries (yes) ],
-+diff -durN build/libeXosip2-3.6.0.orig/Makefile.am build/libeXosip2-3.6.0/Makefile.am
-+--- libeXosip2-3.6.0.orig/Makefile.am	2014-06-23 00:14:25.328226745 +0200
-++++ libeXosip2-3.6.0/Makefile.am	2014-06-23 00:14:38.296371236 +0200
-+@@ -1,4 +1,4 @@
-+-
-++ACLOCAL_AMFLAGS = -I scripts
-+ EXTRA_DIST = README autogen.sh
-+ 
-+ SUBDIRS = scripts platform src include tools help
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index 6abdaab..8683046 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -12,6 +12,9 @@ LIBEXOSIP2_LICENSE_FILES = COPYING
- 
- LIBEXOSIP2_DEPENDENCIES = host-pkgconf libosip2
- 
-+# We are touching configure.in and Makefile.am with one of our patches
-+LIBEXOSIP2_AUTORECONF = YES
-+
- ifeq ($(BR2_arc),y)
- # toolchain __arc__ define conflicts with libeXosip2 source
- LIBEXOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
