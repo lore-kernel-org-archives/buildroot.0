@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:17 -0300
-Subject: [Buildroot] [PATCH 11/54] libgtk2: add license information
+Date: Tue, 24 Jun 2014 15:55:18 -0300
+Subject: [Buildroot] [PATCH 12/54] libhid: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-12-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libgtk2/libgtk2.mk | 2 ++
+ package/libhid/libhid.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index cadca63..2ba9469 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -11,6 +11,8 @@ LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
- LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_INSTALL_STAGING = YES
- LIBGTK2_INSTALL_TARGET = YES
-+LIBGTK2_LICENSE = LGPLv2+
-+LIBGTK2_LICENSE_FILES = COPYING
- 
- LIBGTK2_AUTORECONF = YES
- 
+diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
+index 30501d5..469a607 100644
+--- a/package/libhid/libhid.mk
++++ b/package/libhid/libhid.mk
+@@ -9,6 +9,8 @@ LIBHID_SITE = http://sources.buildroot.net/
+ LIBHID_DEPENDENCIES = libusb-compat libusb
+ LIBHID_INSTALL_STAGING = YES
+ LIBHID_AUTORECONF = YES
++LIBHID_LICENSE = GPLv2
++LIBHID_LICENSE_FILES = COPYING
+ # configure runs libusb-config for cflags/ldflags. Ensure it picks up
+ # the target version
+ LIBHID_CONF_ENV = PATH=$(STAGING_DIR)/usr/bin:$(BR_PATH)
 -- 
 1.8.5.5
