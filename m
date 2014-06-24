@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:42 -0300
-Subject: [Buildroot] [PATCH 36/54] socketcand: add license information
+Date: Tue, 24 Jun 2014 15:55:43 -0300
+Subject: [Buildroot] [PATCH 37/54] squashfs: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-36-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-37-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/socketcand/socketcand.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/squashfs/squashfs.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
-index fdba96e..51aa224 100644
---- a/package/socketcand/socketcand.mk
-+++ b/package/socketcand/socketcand.mk
-@@ -7,6 +7,7 @@
- SOCKETCAND_VERSION = 274e4e44107f6138a29bbc4e20f9fbd2a7d4dab1
- SOCKETCAND_SITE = $(call github,dschanoeh,socketcand,$(SOCKETCAND_VERSION))
- SOCKETCAND_AUTORECONF = YES
-+SOCKETCAND_LICENSE = BSD-3c or GPLv2
+diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
+index aaf568c..58dcb62 100644
+--- a/package/squashfs/squashfs.mk
++++ b/package/squashfs/squashfs.mk
+@@ -7,6 +7,8 @@
+ SQUASHFS_VERSION = 4.3
+ SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
+ SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
++SQUASHFS_LICENSE = GPLv2+
++SQUASHFS_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
- SOCKETCAND_DEPENDENCIES = libconfig
+ # no libattr in BR
+ SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
 -- 
 1.8.5.5
