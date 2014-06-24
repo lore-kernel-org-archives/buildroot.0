@@ -1,39 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 24 Jun 2014 20:06:40 +0200
-Subject: [Buildroot] [PATCH 1/2] icu: Delete inapropriate flag at link
-In-Reply-To: <20140621191459.7a124206@free-electrons.com>
-References: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>	<53A4A737.9070304@mind.be>
- <20140621191459.7a124206@free-electrons.com>
-Message-ID: <53A9BE30.1030901@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 24 Jun 2014 20:35:07 +0200
+Subject: [Buildroot] [PATCH 1 of 5 RFC] uclibc: menuconfig: take into
+ account initial settings from config file
+In-Reply-To: <CANxTyt5ZXLgZ43QYu4BN6TPrxjX-qME=XMVL_mFw5oCUe5R3XA@mail.gmail.com>
+References: <patchbomb.1403444739@localhost>
+ <97d74ccbe054d9a16465.1403444740@localhost>
+ <20140622185233.0d553f8d@free-electrons.com>
+ <f2f7913c-0555-46d8-9e41-9a8099a8c683@email.android.com>
+ <CANxTyt5VxZd9gKc7Ft-3UDxyWSSsb+iP3vrAVd1m=6vr54KPgA@mail.gmail.com>
+ <CAAXf6LVLsBq1Mh2eN+48SV0aYq_tBM-ZnRFSL=UTLReAxySNSg@mail.gmail.com>
+ <CANxTyt5ZXLgZ43QYu4BN6TPrxjX-qME=XMVL_mFw5oCUe5R3XA@mail.gmail.com>
+Message-ID: <CAAXf6LXVFYfPxEN8HPs6KDBC6x67TnF-9NhPeZ-eMrN1NQuttw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/06/14 19:14, Thomas Petazzoni wrote:
-[snip]
-> See also https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=653457 for
-> more details.
+Hi Danomi,
 
- That reference (and the failing config) indeed helps. Therefore:
+On Sun, Jun 22, 2014 at 9:07 PM, Danomi Manchego
+<danomimanchego123@gmail.com> wrote:
+> On Sun, Jun 22, 2014 at 2:52 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> Hi Danomi,
+>>
+>> On Sun, Jun 22, 2014 at 7:29 PM, Danomi Manchego
+>> <danomimanchego123@gmail.com> wrote:
+>>> How about moving the XXX_COPY_CONFIG to the top of the
+>>> .stamp_config_file_fixed actions, and then make xxxx-menuconfig update
+>>> on that too?
+>>>
+>>> That might be nicer than, say, changing the added COPY in the
+>>> xxxx-menuconfig to a "[ -f $(XXXX_BUILD_CONFIG) ] ||
+>>> $(XXXX_COPY_CONFIG)"
+>>
+>> I'm not sure I fully get what you mean, can you elaborate?
+>
+> I was actually looking more at the busybox mods than the uclibc mods.
+> The busybox .stamp_config_file_fixed target doesn't do the COPY
+> action.   My thinking is that the COPY only needs to be done once; so
+> using a stamp target that runs the XXXX_COPY_CONFIG seems suitable.
+> Then all the make targets that did a COPY, and the targets that you're
+> patching to do a COPY, can instead depend on such a stamp.  The
+> .stamp_config_file_fixed targets seem like good candidates - have the
+> COPY done once before any other targets that assume it's been done,
+> and then don't do it again.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+The copy cannot be added to the config_file_fixed target, because we
+need a separate target that does _not_ do a copy, to be used from the
+update_config target...
 
-
- Regards,
- Arnout
-
-> 
-> Hopefully, these details will be enough to justify the patch. Though I
-> agree with you that Maxime's description of the patch should have been
-> more detailed.
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Best regards,
+Thomas
