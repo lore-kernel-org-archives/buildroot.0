@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:31 -0300
-Subject: [Buildroot] [PATCH 25/54] open2300: add license information
+Date: Tue, 24 Jun 2014 15:55:32 -0300
+Subject: [Buildroot] [PATCH 26/54] openocd: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-25-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-26-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/open2300/open2300.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/openocd/openocd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/open2300/open2300.mk b/package/open2300/open2300.mk
-index a89c9a2..307fffe 100644
---- a/package/open2300/open2300.mk
-+++ b/package/open2300/open2300.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
+diff --git a/package/openocd/openocd.mk b/package/openocd/openocd.mk
+index ac3cd77..24ac0ca 100644
+--- a/package/openocd/openocd.mk
++++ b/package/openocd/openocd.mk
+@@ -7,6 +7,8 @@
+ OPENOCD_VERSION = 0.5.0
+ OPENOCD_SOURCE = openocd-$(OPENOCD_VERSION).tar.bz2
+ OPENOCD_SITE = http://downloads.sourceforge.net/project/openocd/openocd/$(OPENOCD_VERSION)
++OPENOCD_LICENSE = GPLv2+
++OPENOCD_LICENSE_FILES = COPYING
  
--OPEN2300_SITE        = http://www.lavrsen.dk/svn/open2300/trunk/
-+OPEN2300_SITE = http://www.lavrsen.dk/svn/open2300/trunk/
- OPEN2300_SITE_METHOD = svn
--OPEN2300_VERSION     = 12
-+OPEN2300_VERSION = 12
-+OPEN2300_LICENSE = GPLv2
-+OPEN2300_LICENSE_FILES = COPYING
- 
- OPEN2300_BINS = open2300 dump2300 log2300 fetch2300 wu2300 cw2300 history2300 \
- 		histlog2300 bin2300 xml2300 light2300 interval2300 minmax2300
+ OPENOCD_AUTORECONF = YES
+ OPENOCD_CONF_OPT = \
 -- 
 1.8.5.5
