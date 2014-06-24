@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 24 Jun 2014 15:55:37 -0300
-Subject: [Buildroot] [PATCH 31/54] python-mad: add license information
+Date: Tue, 24 Jun 2014 15:55:38 -0300
+Subject: [Buildroot] [PATCH 32/54] python-pygame: add license information
 In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403636160-11807-31-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403636160-11807-32-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/python-mad/python-mad.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/python-pygame/python-pygame.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-mad/python-mad.mk b/package/python-mad/python-mad.mk
-index 1b3cb75..a476fe1 100644
---- a/package/python-mad/python-mad.mk
-+++ b/package/python-mad/python-mad.mk
-@@ -5,9 +5,11 @@
- ################################################################################
+diff --git a/package/python-pygame/python-pygame.mk b/package/python-pygame/python-pygame.mk
+index 2278a5c..51f1c20 100644
+--- a/package/python-pygame/python-pygame.mk
++++ b/package/python-pygame/python-pygame.mk
+@@ -7,10 +7,12 @@
+ # stable 1.9.1 release requires V4L which has been wiped out of recent Linux
+ # kernels, so use latest mercurial revision until next stable release is out.
+ PYTHON_PYGAME_VERSION = f0bb4a4b365d
+-PYTHON_PYGAME_SOURCE  = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
++PYTHON_PYGAME_SOURCE = pygame-$(PYTHON_PYGAME_VERSION).tar.gz
+ PYTHON_PYGAME_SITE = https://bitbucket.org/pygame/pygame
+ PYTHON_PYGAME_SITE_METHOD = hg
+ PYTHON_PYGAME_SETUP_TYPE = distutils
++PYTHON_PYGAME_LICENSE = LGPLv2.1+
++PYTHON_PYGAME_LICENSE_FILES = LGPL
  
- PYTHON_MAD_VERSION = 0.6
--PYTHON_MAD_SOURCE  = pymad-$(PYTHON_MAD_VERSION).tar.gz
--PYTHON_MAD_SITE    = http://spacepants.org/src/pymad/download/
-+PYTHON_MAD_SOURCE = pymad-$(PYTHON_MAD_VERSION).tar.gz
-+PYTHON_MAD_SITE = http://spacepants.org/src/pymad/download/
- PYTHON_MAD_SETUP_TYPE = distutils
-+PYTHON_MAD_LICENSE = GPLv2+
-+PYTHON_MAD_LICENSE_FILES = COPYING
- 
- PYTHON_MAD_DEPENDENCIES = libmad
- 
+ ifeq ($(BR2_PACKAGE_PYTHON_PYGAME_IMAGE),y)
+ PYTHON_PYGAME_OPT_DEPENDS += sdl_image
 -- 
 1.8.5.5
