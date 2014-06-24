@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 24 Jun 2014 23:33:44 +0200
-Subject: [Buildroot] [PATCH 01/54] gvfs: add license information
-In-Reply-To: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 24 Jun 2014 23:35:59 +0200
+Subject: [Buildroot] [PATCH 03/54] kexec: add license information
+In-Reply-To: <1403636160-11807-3-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140624213344.GB31767@free.fr>
+ <1403636160-11807-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140624213559.GC31767@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +16,7 @@ Gustavo, All,
 On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I looked at random files: most have a license header refering to
-LGPLv2+, while some do not have this header. The COPYING file is
-here.
+COPYING is indeed GPLv2. Files seem to all be missing a license header.
 
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
@@ -25,22 +24,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/gvfs/gvfs.mk | 2 ++
+>  package/kexec/kexec.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-> index dbf234e..58707aa 100644
-> --- a/package/gvfs/gvfs.mk
-> +++ b/package/gvfs/gvfs.mk
-> @@ -10,6 +10,8 @@ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
->  GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
->  GVFS_INSTALL_STAGING = YES
->  GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info
-> +GVFS_LICENSE = LGPLv2+
-> +GVFS_LICENSE = COPYING
+> diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+> index 9787038..609825a 100644
+> --- a/package/kexec/kexec.mk
+> +++ b/package/kexec/kexec.mk
+> @@ -7,6 +7,8 @@
+>  KEXEC_VERSION = 2.0.7
+>  KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+>  KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+> +KEXEC_LICENSE = GPLv2
+> +KEXEC_LICENSE_FILES = COPYING
 >  
->  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
->  # build system from searching the host paths.
+>  ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
+>  KEXEC_CONF_OPT += --with-zlib
 > -- 
 > 1.8.5.5
 > 
