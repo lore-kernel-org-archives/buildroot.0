@@ -1,113 +1,97 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Jun 2014 07:37:29 +0200
-Subject: [Buildroot] [PATCH] whois: new package
-In-Reply-To: <1403644615-11634-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403644615-11634-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <53AA6019.5010703@mind.be>
+Date: Wed, 25 Jun 2014 08:16:24 +0200
+Subject: [Buildroot] [PATCH 1 of 5 RFC] uclibc: menuconfig: take into
+ account initial settings from config file
+In-Reply-To: <97d74ccbe054d9a16465.1403444740@localhost>
+References: <patchbomb.1403444739@localhost>
+ <97d74ccbe054d9a16465.1403444740@localhost>
+Message-ID: <53AA6938.80303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/06/14 23:16, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Still, two small remarks...
-
-> ---
->  package/Config.in       |  1 +
->  package/whois/Config.in |  7 +++++++
->  package/whois/whois.mk  | 40 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 48 insertions(+)
->  create mode 100644 package/whois/Config.in
->  create mode 100644 package/whois/whois.mk
+On 22/06/14 15:45, Thomas De Schampheleire wrote:
+> When uclibc-menuconfig is executed from a clean repo, and a custom
+> configuration file was set, then these custom settings are ignored and
+> uclibc starts from the default configuration.
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index b839512..838e822 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1047,6 +1047,7 @@ endif
->  	source "package/vtun/Config.in"
->  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/wget/Config.in"
-> +	source "package/whois/Config.in"
->  endif
->  	source "package/wireless-regdb/Config.in"
->  	source "package/wireless_tools/Config.in"
-> diff --git a/package/whois/Config.in b/package/whois/Config.in
-> new file mode 100644
-> index 0000000..40b6590
-> --- /dev/null
-> +++ b/package/whois/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_WHOIS
-> +	bool "whois"
-> +	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-> +	help
-> +	  Improved whois client.
-> +
-> +	  http://www.linux.it/~md/software/
-> diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-> new file mode 100644
-> index 0000000..24f5167
-> --- /dev/null
-> +++ b/package/whois/whois.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# whois
-> +#
-> +################################################################################
-> +
-> +WHOIS_VERSION = 5.1.3
-> +WHOIS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/w/whois
-> +WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
-> +# busybox whois is very bad so step on it
-
- I don't think there's a need for such emotional comments :-)
-
-> +WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-> +WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
-> +WHOIS_MAKE_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-> +WHOIS_LICENSE = GPLv2+
-> +WHOIS_LICENSE_FILES = COPYING
-> +
-> +ifeq ($(BR2_NEEDS_GETTEXT),y)
-> +WHOIS_DEPENDENCIES += gettext
-> +WHOIS_MAKE_OPT += LIBS="-lintl"
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> +WHOIS_DEPENDENCIES += libiconv
-> +WHOIS_MAKE_ENV += HAVE_ICONV=1
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBIDN),y)
-> +WHOIS_DEPENDENCIES += libidn
-> +WHOIS_MAKE_ENV += HAVE_LIBIDN=1
-> +endif
-> +
-> +define WHOIS_BUILD_CMDS
-> +	$(WHOIS_MAKE_ENV) $(MAKE) $(WHOIS_MAKE_OPT) -C $(@D)
+> This patch adds an explicit copy of the custom config file to the menuconfig
+> target to fix 'make clean uclibc-menuconfig'.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+>  package/uclibc/uclibc.mk |  7 ++++++-
+>  1 files changed, 6 insertions(+), 1 deletions(-)
+> 
+> diff -r 5ea6db6a0838 -r 97d74ccbe054 package/uclibc/uclibc.mk
+> --- a/package/uclibc/uclibc.mk	Fri Jun 20 23:38:46 2014 +0200
+> +++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
+> @@ -413,8 +413,11 @@
+>  	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
+>  	HOSTCC="$(HOSTCC)"
+>  
+> +define UCLIBC_COPY_DOT_CONFIG
+> +	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
 > +endef
 > +
-> +define WHOIS_INSTALL_TARGET_CMDS
-> +	$(WHOIS_MAKE_ENV) $(MAKE) BASEDIR="$(TARGET_DIR)" install -C $(@D)
+>  define UCLIBC_SETUP_DOT_CONFIG
+> -	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+>  	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
+>  	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
+>  	$(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
+> @@ -454,6 +457,7 @@
+>  endef
+>  
+>  define UCLIBC_CONFIGURE_CMDS
+> +	$(UCLIBC_COPY_DOT_CONFIG)
+>  	$(UCLIBC_SETUP_DOT_CONFIG)
+>  	$(MAKE1) -C $(UCLIBC_DIR) \
+>  		$(UCLIBC_MAKE_FLAGS) \
+> @@ -543,6 +547,7 @@
+>  endef
+>  
+>  uclibc-menuconfig: uclibc-patch
+> +	$(UCLIBC_COPY_DOT_CONFIG)
+>  	$(MAKE1) -C $(UCLIBC_DIR) \
+>  		$(UCLIBC_MAKE_FLAGS) \
+>  		PREFIX=$(STAGING_DIR) \
 
- Isn't it better to include $(WHOIS_MAKE_OPT) here as well? Just in case the
-package decides to recompile something during installation...
+ In order to cover all requirements, I think we should rely on real dependencies
+here. Something like:
+
+uclibc-menuconfig: $(UCLIBC_DIR)/.config
+	$(MAKE1) -C $(UCLIBC_DIR) ...
+	$(UCLIBC_FIXUP_DOT_CONFIG)
+
+$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) uclibc-patch
+	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@)
+	$(MAKE1) -C $(UCLIBC_DIR) ... oldconfig
+	$(UCLIBC_FIXUP_DOT_CONFIG)
+
+uclibc-configure: $(UCLIBC_DIR)/.config
+
+
+(I renamed SETUP_DOT_CONFIG to FIXUP_DOT_CONFIG which I think is more accurate.)
+
+
+ This is obviously just a skeleton, but you can see where I'm going... The
+important thing is:
+
+- all config targets depend on .config
+- .config depends on the the CONFIG_FILE
+- all config targets and .config itself call to FIXUP_DOT_CONFIG
 
 
  Regards,
  Arnout
 
-
-> +endef
-> +
-> +$(eval $(generic-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 
