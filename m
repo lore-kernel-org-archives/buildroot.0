@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Jun 2014 22:40:17 +0200
-Subject: [Buildroot] [PATCH 05/54] libart: add license information
-In-Reply-To: <1403636160-11807-5-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:11 -0300")
+Date: Wed, 25 Jun 2014 22:40:59 +0200
+Subject: [Buildroot] [PATCH 06/54] liesmtp: add license information
+In-Reply-To: <1403636160-11807-6-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:12 -0300")
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-5-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87simsvi32.fsf@dell.be.48ers.dk>
+ <1403636160-11807-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87oaxgvi1w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,7 +16,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed with subject fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
