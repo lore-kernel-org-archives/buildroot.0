@@ -1,72 +1,129 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jun 2014 22:30:40 +0200
-Subject: [Buildroot] [git commit] libnftnl: bump to version 1.0.2
-Message-ID: <20140625203128.C45EA9D0A7@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 25 Jun 2014 21:16:55 +0200
+Subject: [Buildroot] [PATCH V5 1/2] google-breakpad: new package
+In-Reply-To: <1403702174-23850-2-git-send-email-pascal.huerst@gmail.com>
+References: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>
+ <1403702174-23850-2-git-send-email-pascal.huerst@gmail.com>
+Message-ID: <53AB2027.4090900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=74924f719dd7bcb4f7c9522bc67bbf5f8c236c35
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/06/14 15:16, Pascal Huerst wrote:
+> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
+> ---
+>  package/Config.in                          |  1 +
+>  package/google-breakpad/Config.in          | 19 +++++++++++++++++++
+>  package/google-breakpad/google-breakpad.mk | 17 +++++++++++++++++
+>  3 files changed, 37 insertions(+)
+>  create mode 100644 package/google-breakpad/Config.in
+>  create mode 100644 package/google-breakpad/google-breakpad.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index c46c0ec..392ae40 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -54,6 +54,7 @@ menu "Debugging, profiling and benchmark"
+>  	source "package/duma/Config.in"
+>  	source "package/fio/Config.in"
+>  	source "package/gdb/Config.in"
+> +	source "package/google-breakpad/Config.in"
+>  	source "package/iozone/Config.in"
+>  	source "package/kexec/Config.in"
+>  	source "package/ktap/Config.in"
+> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+> new file mode 100644
+> index 0000000..fa1e8d9
+> --- /dev/null
+> +++ b/package/google-breakpad/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_GOOGLE_BREAKPAD
+> +	bool "google-breakpad"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...001-configure-uclinux-is-also-linux-nommu.patch |   26 --------------------
- package/libnftnl/libnftnl.mk                       |    4 +--
- 2 files changed, 1 insertions(+), 29 deletions(-)
+ Too long, the line should be split after mips.
 
-diff --git a/package/libnftnl/libnftnl-0001-configure-uclinux-is-also-linux-nommu.patch b/package/libnftnl/libnftnl-0001-configure-uclinux-is-also-linux-nommu.patch
-deleted file mode 100644
-index 52d81dd..0000000
---- a/package/libnftnl/libnftnl-0001-configure-uclinux-is-also-linux-nommu.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 71773664f9e7c15bb71ca07fcf9be9efc95abe44 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 3 Jun 2014 16:42:45 -0300
--Subject: [PATCH] configure: uclinux is also linux (nommu)
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 255e457..35287f9 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -35,7 +35,7 @@ AC_DISABLE_STATIC
-- LT_INIT
-- CHECK_GCC_FVISIBILITY
-- case "$host" in
---*-*-linux*) ;;
--+*-*-linux* | *-*-uclinux*) ;;
-- *) AC_MSG_ERROR([Linux only, dude!]);;
-- esac
-- 
---- 
--1.8.5.5
--
-diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
-index c0e8b94..1ceb547 100644
---- a/package/libnftnl/libnftnl.mk
-+++ b/package/libnftnl/libnftnl.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--LIBNFTNL_VERSION = 1.0.1
-+LIBNFTNL_VERSION = 1.0.2
- LIBNFTNL_SITE = http://netfilter.org/projects/libnftnl/files
- LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
- LIBNFTNL_LICENSE = GPLv2+
- LIBNFTNL_LICENSE_FILES = COPYING
- LIBNFTNL_INSTALL_STAGING = YES
--# For uclinux support patch
--LIBNFTNL_AUTORECONF = YES
- LIBNFTNL_DEPENDENCIES = host-pkgconf libmnl
- 
- ifeq ($(BR2_PACKAGE_LIBNFTNL_JSON),y)
+> +	help
+> +	  Google-Breakpad is a library and tool suite that allows you to distribute 
+> +	  an application to users with compiler-provided debugging information 
+> +	  removed, record crashes in compact "minidump" files, send them back to 
+> +	  your server, and produce C and C++ stack traces from these minidumps. 
+> +	  Breakpad can also write minidumps on request for programs that have not 
+> +	  crashed. 	 
+
+ I think these lines are also too long to display on an 80-char display (it
+should be wrapped at 72 chars IIRC, where the tab counts for 8 chars).
+
+ Also, there should be no whitespace at the end of the lines.
+
+ I would also mention in the help text that this installs the host tools in
+$(HOST_DIR)/usr/bin and list the host tools.
+
+ If I understand correctly, for the target, we just build the (static) client
+library, which should be linked and enabled explicitly by applications that want
+to make use of breakpad. Is that correct? If yes, perhaps it's better to clarify
+that in the help text as well.
+
+
+> +
+> +	  You may want to set BR2_ENABLE_DEBUG, in order to get useful results.
+> +
+> +	  http://code.google.com/p/google-breakpad/
+> +
+> +comment "google-breakpad requires an (e)glibc toolchain w/ C++ enabled"
+> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_USES_GLIBC)
+
+ Here you should repeat the arch dependencies.
+
+> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+> new file mode 100644
+> index 0000000..e5b69c0
+> --- /dev/null
+> +++ b/package/google-breakpad/google-breakpad.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# google-breakpad
+> +#
+> +################################################################################
+> +
+> +GOOGLE_BREAKPAD_VERSION = 1320
+
+ Any particular reason to take a 2-month old commit?
+
+> +GOOGLE_BREAKPAD_SITE = http://google-breakpad.googlecode.com/svn/trunk
+> +GOOGLE_BREAKPAD_SITE_METHOD = svn
+> +GOOGLE_BREAKPAD_CONF_OPT = --disable-processor --disable-tools
+> +GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
+> +GOOGLE_BREAKPAD_INSTALL_STAGING = YES
+
+ There is nothing to install on the target, right? So I'd expect
+
+GOOGLE_BREAKPAD_INSTALL_TARGET = NO
+
+> +GOOGLE_BREAKPAD_LICENSE = BSD-3c
+> +GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(host-autotools-package))
+> +$(eval $(autotools-package))
+
+ We normally put the host-package after the target-package.
+
+
+ Regards,
+ Arnout
+
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
