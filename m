@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Jun 2014 23:04:23 +0200
-Subject: [Buildroot] [PATCH 22/54] ndisc6: add license information
-In-Reply-To: <1403636160-11807-22-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:28 -0300")
+Date: Wed, 25 Jun 2014 23:07:11 +0200
+Subject: [Buildroot] [PATCH 23/54] netplug: add license information
+In-Reply-To: <1403636160-11807-23-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:29 -0300")
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-22-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87zjh0snu0.fsf@dell.be.48ers.dk>
+ <1403636160-11807-23-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vbrosnpc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
