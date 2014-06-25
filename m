@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Jun 2014 21:16:55 +0200
-Subject: [Buildroot] [PATCH V5 1/2] google-breakpad: new package
-In-Reply-To: <1403702174-23850-2-git-send-email-pascal.huerst@gmail.com>
+Date: Wed, 25 Jun 2014 22:31:20 +0200
+Subject: [Buildroot] [PATCH V5 2/2] google-breakpad: integration into
+ Makefile and Config.in
+In-Reply-To: <1403702174-23850-3-git-send-email-pascal.huerst@gmail.com>
 References: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>
- <1403702174-23850-2-git-send-email-pascal.huerst@gmail.com>
-Message-ID: <53AB2027.4090900@mind.be>
+ <1403702174-23850-3-git-send-email-pascal.huerst@gmail.com>
+Message-ID: <53AB3198.9010908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,109 +15,180 @@ To: buildroot@busybox.net
 On 25/06/14 15:16, Pascal Huerst wrote:
 > Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
 > ---
->  package/Config.in                          |  1 +
->  package/google-breakpad/Config.in          | 19 +++++++++++++++++++
->  package/google-breakpad/google-breakpad.mk | 17 +++++++++++++++++
->  3 files changed, 37 insertions(+)
->  create mode 100644 package/google-breakpad/Config.in
->  create mode 100644 package/google-breakpad/google-breakpad.mk
+>  Config.in                           | 14 ++++++++++++++
+>  Makefile                            |  5 +++++
+>  package/google-breakpad/Config.in   |  5 ++++-
+>  package/google-breakpad/gen-syms.sh | 25 +++++++++++++++++++++++++
+>  4 files changed, 48 insertions(+), 1 deletion(-)
+>  create mode 100755 package/google-breakpad/gen-syms.sh
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index c46c0ec..392ae40 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -54,6 +54,7 @@ menu "Debugging, profiling and benchmark"
->  	source "package/duma/Config.in"
->  	source "package/fio/Config.in"
->  	source "package/gdb/Config.in"
-> +	source "package/google-breakpad/Config.in"
->  	source "package/iozone/Config.in"
->  	source "package/kexec/Config.in"
->  	source "package/ktap/Config.in"
-> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-> new file mode 100644
-> index 0000000..fa1e8d9
-> --- /dev/null
-> +++ b/package/google-breakpad/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_GOOGLE_BREAKPAD
-> +	bool "google-breakpad"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-> +	depends on BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> diff --git a/Config.in b/Config.in
+> index bf1ca86..4f2bd32 100644
+> --- a/Config.in
+> +++ b/Config.in
+> @@ -480,6 +480,20 @@ config BR2_OPTIMIZE_S
+>  
+>  endchoice
+>  
+> +config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
 
- Too long, the line should be split after mips.
+ I don't really like the name of this option. What do you think of
+BR2_GOOGLE_BREAKPAD_GENSYMS_PATTERNS ?
 
+> +	string "executables and libraries to be used by google-breakpad"
+> +	depends on BR2_PACKAGE_GOOGLE_BREAKPAD
+
+ Hm, this is counter-intuitive, though honestly I don't know how to improve it.
+The user would first have to go to the target packages and select google
+breakpad, and then return to the Build options menu at the top to set the patterns.
+
+ Actually, this symbol could be defined inside the google-breakpad/Config.in,
+no? Though you probably got a comment before that that is not the right place :-)
+
+> +	default ""
 > +	help
-> +	  Google-Breakpad is a library and tool suite that allows you to distribute 
-> +	  an application to users with compiler-provided debugging information 
-> +	  removed, record crashes in compact "minidump" files, send them back to 
-> +	  your server, and produce C and C++ stack traces from these minidumps. 
-> +	  Breakpad can also write minidumps on request for programs that have not 
-> +	  crashed. 	 
+> +	  You may specify a space-separated list of binaries and libraries
+> +	  with full paths relative to $(TARGET_DIR) of which debug symbols 
 
- I think these lines are also too long to display on an 80-char display (it
-should be wrapped at 72 chars IIRC, where the tab counts for 8 chars).
+ Again trailing whitespace and line-wrapping.
 
- Also, there should be no whitespace at the end of the lines.
+ I think this text is slightly better:
 
- I would also mention in the help text that this installs the host tools in
-$(HOST_DIR)/usr/bin and list the host tools.
+	  You may specify a space-separated list of glob patterns of binaries
+	  and libraries of which debug symbols will be dumped for further use
+	  with google breakpad. Th patterns are evaluated relative to
+	  $(TARGET_DIR).
 
- If I understand correctly, for the target, we just build the (static) client
-library, which should be linked and enabled explicitly by applications that want
-to make use of breakpad. Is that correct? If yes, perhaps it's better to clarify
-that in the help text as well.
-
-
+> +	  will be dumped for further use with google breakpad.
 > +
-> +	  You may want to set BR2_ENABLE_DEBUG, in order to get useful results.
+> +	  A directory structure that can be used by minidump-stackwalk will
+> +	  be created at:
 > +
-> +	  http://code.google.com/p/google-breakpad/
+> +	  $(STAGING_DIR)/usr/share/google-breakpad-symbols
 > +
-> +comment "google-breakpad requires an (e)glibc toolchain w/ C++ enabled"
-> +	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_USES_GLIBC)
+>  config BR2_ENABLE_SSP
+>  	bool "build code with Stack Smashing Protection"
+>  	depends on BR2_TOOLCHAIN_HAS_SSP
+> diff --git a/Makefile b/Makefile
+> index 4fe370a..300e86e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -553,6 +553,11 @@ endif
+>  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+>  	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
+>  endif
+> +ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+> +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+> +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
 
- Here you should repeat the arch dependencies.
+ To be more compatible with Fabio's series that reworks this part of the
+infrastructure, it's better to define this as a new variable which is called
+here. That will make it easier to resolve the conflict between these two series.
+Fabio's series will also make it possible to define this completely inside the
+google-breakpad.mk.
 
-> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-> new file mode 100644
-> index 0000000..e5b69c0
+ If the config variable contains a glob pattern, then this will be evaluated
+here (relative to the buildroot directory). Usually that will fail so it will be
+passed unexpanded, but perhaps it's safer to explicitly turn off globbing.
+
+ Together with my other suggestions, this would become:
+
+ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+GOOGLE_BREAKPAD_INCLUDE_FILES = $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
+ifneq ($(GOOGLE_BREAKPAD_INCLUDE_FILES),)
+# BR2_GOOGLE_BREAKPAD_INCLUDE_FILES may include glob files, so turn off globbing
+define GOOGLE_BREAKPAD_GEN_SYMS
+	$(Q)set -o noglob; \
+	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh \
+		$(STAGING_DIR) $(TARGET_DIR) $(GOOGLE_BREAKPAD_INCLUDE_FILES)
+endef
+endif
+endif
+
+> +endif
+> +
+>  	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+>  	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
+>  	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
+> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+> index fa1e8d9..99dc7a1 100644
+> --- a/package/google-breakpad/Config.in
+> +++ b/package/google-breakpad/Config.in
+> @@ -11,7 +11,10 @@ config BR2_PACKAGE_GOOGLE_BREAKPAD
+>  	  Breakpad can also write minidumps on request for programs that have not 
+>  	  crashed. 	 
+>  
+> -	  You may want to set BR2_ENABLE_DEBUG, in order to get useful results.
+> +	  Add all binaries and libraries you want to debug by google-breakpad to 
+
+ Trailing whitespace again. Also, I'd write
+
+	  Add all binaries and libraries that link with the google-breakpad
+	  client library and that you want to debug with minidump-stackwalk
+	  to BR2_GOOGLE_BREAKPAD_INCLUDE_FILES.
+
+> +	  BR2_GOOGLE_BREAKPAD_INCLUDE_FILES.
+> +
+> +	  You may also want to set BR2_ENABLE_DEBUG, in order to get useful results.
+>  
+>  	  http://code.google.com/p/google-breakpad/
+>  
+> diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
+> new file mode 100755
+> index 0000000..d890752
 > --- /dev/null
-> +++ b/package/google-breakpad/google-breakpad.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# google-breakpad
-> +#
-> +################################################################################
+> +++ b/package/google-breakpad/gen-syms.sh
+> @@ -0,0 +1,25 @@
+> +#!/bin/sh
+> +STAGING_DIR="${1}"
+> +TARGET_DIR="${2}"
+> +shift 2
 > +
-> +GOOGLE_BREAKPAD_VERSION = 1320
-
- Any particular reason to take a 2-month old commit?
-
-> +GOOGLE_BREAKPAD_SITE = http://google-breakpad.googlecode.com/svn/trunk
-> +GOOGLE_BREAKPAD_SITE_METHOD = svn
-> +GOOGLE_BREAKPAD_CONF_OPT = --disable-processor --disable-tools
-> +GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
-> +GOOGLE_BREAKPAD_INSTALL_STAGING = YES
-
- There is nothing to install on the target, right? So I'd expect
-
-GOOGLE_BREAKPAD_INSTALL_TARGET = NO
-
-> +GOOGLE_BREAKPAD_LICENSE = BSD-3c
-> +GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+> +SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
+> +rm -rf "${SYMBOLS_DIR}"
+> +mkdir -p "${SYMBOLS_DIR}/tmp"
 > +
-> +$(eval $(host-autotools-package))
-> +$(eval $(autotools-package))
+> +for FILE in $(eval ls "${TARGET_DIR}/${@}"); do
 
- We normally put the host-package after the target-package.
+ This does not really work: if one of the patterns matches a directory, the
+directory will still be listed. So you have to use ls -d.
+
+ However, I think the following is easier to understand, even if it's more wordy:
+
+for PATTERN in "$@"; do
+	for FILE in ${TARGET_DIR}/${PATTERN}; do
+		...
+	done
+done
+
+> +	if [ -d "${FILE}" ]; then
+> +		printf "Error: '%s' is a directory\n" "${FILE}" >&2
+> +		exit 1
+> +	fi
+> +	if dump_syms "${FILE}" > "${SYMBOLS_DIR}/tmp/tmp.sym" 2>/dev/null; then
+
+ Do we really want to redirect stderr here?
+
+ Why do you put tmp.sym in a subdirectory, and not straignt into ${SYMBOLS_DIR}?
+
+> +		HASH=$(head -n1 "${SYMBOLS_DIR}/tmp/tmp.sym" | cut -d ' ' -f 4);
+> +		FILENAME=$(basename "$FILE");
+
+ I don't know if it is the official buildroot policy, but recently I've seen
+most scripts use "${FILE##*/}" instead of basename.
 
 
  Regards,
  Arnout
 
+> +		mkdir -p "${SYMBOLS_DIR}/${FILENAME}/${HASH}"
+> +		mv "${SYMBOLS_DIR}/tmp/tmp.sym" "${SYMBOLS_DIR}/${FILENAME}/${HASH}/${FILENAME}.sym";
+> +	else
+> +		printf "Error dumping symbols for: '%s'\n" "${FILE}" >&2
+> +		exit 1
+> +	fi
+> +done
+> +rm -rf "${SYMBOLS_DIR}/tmp"
 > 
 
 
