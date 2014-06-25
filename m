@@ -1,38 +1,50 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 25 Jun 2014 22:47:57 +0200
-Subject: [Buildroot] [PATCH 12/54] libhid: add license information
-In-Reply-To: <1403636160-11807-12-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:18 -0300")
+Date: Wed, 25 Jun 2014 22:50:08 +0200
+Subject: [Buildroot] [PATCH 13/54] libical: add license information
+In-Reply-To: <20140624222117.GP31767@free.fr> (Yann E. MORIN's message of
+ "Wed, 25 Jun 2014 00:21:17 +0200")
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-12-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877g44vhqa.fsf@dell.be.48ers.dk>
+ <1403636160-11807-13-git-send-email-gustavo@zacarias.com.ar>
+ <20140624222117.GP31767@free.fr>
+Message-ID: <8738esvhmn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/libhid/libhid.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+ > On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
+ >> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- > diff --git a/package/libhid/libhid.mk b/package/libhid/libhid.mk
- > index 30501d5..469a607 100644
- > --- a/package/libhid/libhid.mk
- > +++ b/package/libhid/libhid.mk
- > @@ -9,6 +9,8 @@ LIBHID_SITE = http://sources.buildroot.net/
- >  LIBHID_DEPENDENCIES = libusb-compat libusb
- >  LIBHID_INSTALL_STAGING = YES
- >  LIBHID_AUTORECONF = YES
- > +LIBHID_LICENSE = GPLv2
- > +LIBHID_LICENSE_FILES = COPYING
+ > LICENSE file, random files, yadda yadda... 
 
-There's actually also a hidparsers/COPYING with some trivial
-differences, and those files are explicitly marked as GPLv2+, but I
-guess libhid as a whole is just GPLv2 - So I guess it is ok.
+ > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ > But see below...
+
+ >> ---
+ >> package/libical/libical.mk | 2 ++
+ >> 1 file changed, 2 insertions(+)
+ >> 
+ >> diff --git a/package/libical/libical.mk b/package/libical/libical.mk
+ >> index cdee006..4025627 100644
+ >> --- a/package/libical/libical.mk
+ >> +++ b/package/libical/libical.mk
+ >> @@ -7,5 +7,7 @@
+ >> LIBICAL_VERSION = 0.48
+ >> LIBICAL_SITE = http://downloads.sourceforge.net/project/freeassociation/libical/libical-$(LIBICAL_VERSION)
+ >> LIBICAL_INSTALL_STAGING = YES
+ >> +LIBICAL_LICENSE = MPLv1.0 or LGPLv2.1
+ >> +LIBICAL_LICENSE_FILES = LICENSE
+
+ > There's also a COPYING file, which content appear to be the exact same
+ > as the LICENSE file. So, OK to get only one of them. I'd have prefered
+ > COPYING, but that's equally equal. ;-)
+
+LICENSE has a few extra lines clarifying the license, so I'll leave it
+like this.
 
 Committed, thanks.
 
