@@ -1,43 +1,66 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 25 Jun 2014 15:02:29 +0200
-Subject: [Buildroot] Raspberry Pi: recommendations for web kiosk
-Message-ID: <CAAXf6LXK64M-BO3V-K6e_27m7UhYOe3N01oXBSVfF6NUdqrARA@mail.gmail.com>
+From: Pascal Huerst <pascal.huerst@gmail.com>
+Date: Wed, 25 Jun 2014 15:16:12 +0200
+Subject: [Buildroot] [PATCH V5 0/2] google-breakpad: new package
+Message-ID: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Changes v4 -> v5 (All suggested by Yann E. MORIN)
+	Fixed some typo
+	Reorganized patch structure
+	  which parts belong to 'new package' and which parts belong to
+	  'intergration into Makefile and Config.in'
+	Changed and Rewrote gen-symy.sh - script
+	  Passing $(EXTRA_ENV)
+	  Adapted a proposed solution from Yann E. MORIN, which
+	  uses ls instead of find commands
+	Made better descriptions for users in:
+	  Config.in
+	  package/google-breakpad/Config.in
 
-We currently use a Raspberry Pi as a simple web-wall. It cycles every
-two minutes between two (non-local) web pages, one of which contains a
-few iframes.
+Changes v3 -> v4
+	Fixed minor issue in google-breakpad_gen-syms.sh
+	  Had to remove -print from find command
 
-While this can hardly be called a resource-intensive task, the
-Raspberry Pi by no means performs this fluently. The pages load
-relatively slow, and administration tasks on this pi also suffer from
-hickups.
+Changes v2 -> v3 (All suggested by thomas.petazzoni at free-electrons.com)
+        Removed dependency of BR2_ENABLE_DEBUG, but added comment,
+          that this flag might have to be set in order to use breakpad
+          properly.
+        Removed "find -name ..." for libs and binaries by generic patterns,
+          such as "*.so" and so forth. This will never work properly. Instead
+          I added a list to insert libs and binaries, that will be symbol-
+          dumped and prepared for breakpad (see Config.in patch v3 2/2)
+        Changed storage path for dumps from: $(TARGET_DIR).. to
+          $(STAGING_DIR)/usr/share/google-breakpad-symbols/
+        Removed most logic from Makefile. Added script instead, which is
+          called by Makefile
+        Added dependency for compatible targets: ARM, i386, MIPS...
+        Set fixed version for checkout (instead of head)
+        Fixed typos, and some minor mistakes
 
-The pi currently contains a raspbian image (not done by me, I swear!
-:-) ) and uses chromium in kiosk mode to display the web pages.
+Changes v1 -> v2 (All suggested by maxime.hadjinlian at gmail.com)
+        Added dependency from BR2_ENABLE_DEBUG
+        Removed symbolstore.py -> Its all done in Makefile now
+        Removed new Target -> It in target-finalize before stripping now
+        Added LICENSE and LICENSE_FILE to *.mk
 
-My basic question is: can I expect to get better performance by
-setting up a custom buildroot image, or is rpi so poor in performance,
-even for this mundane task?
-Which packages should I select to achieve this?
+Pascal Huerst (2):
+  google-breakpad: new package
+  google-breakpad: integration into Makefile and Config.in
 
-Do I need an X.org or not really?
-If X.org is needed, does 'Kdrive / tinyX' work on rpi, or should I
-select modular x.org, and how do these compare.
-(as you notice, I have never set up embedded boards with graphical stuff).
+ Config.in                                  | 14 ++++++++++++++
+ Makefile                                   |  5 +++++
+ package/Config.in                          |  1 +
+ package/google-breakpad/Config.in          | 22 ++++++++++++++++++++++
+ package/google-breakpad/gen-syms.sh        | 25 +++++++++++++++++++++++++
+ package/google-breakpad/google-breakpad.mk | 17 +++++++++++++++++
+ 6 files changed, 84 insertions(+)
+ create mode 100644 package/google-breakpad/Config.in
+ create mode 100755 package/google-breakpad/gen-syms.sh
+ create mode 100644 package/google-breakpad/google-breakpad.mk
 
-Which browser should/could I use? Preferably something that can run in
-fullscreen mode as this is a kiosk-like board.
-
-Is rpi-userland needed / recommended? How would I benefit from it?
-
-Any other recommendations/tips are welcome too, of course.
-
-Thanks,
-Thomas
+-- 
+1.9.3
