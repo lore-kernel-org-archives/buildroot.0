@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Jun 2014 21:50:14 +0200
-Subject: [Buildroot] [PATCH 19/54] libv4l: add license information
-In-Reply-To: <1403636160-11807-19-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 25 Jun 2014 21:51:35 +0200
+Subject: [Buildroot] [PATCH 18/54] libsysfs: add license information
+In-Reply-To: <53AB26EF.7010003@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-19-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140625195014.GE3489@free.fr>
+ <1403636160-11807-18-git-send-email-gustavo@zacarias.com.ar>
+ <20140625194159.GD3489@free.fr> <53AB26EF.7010003@zacarias.com.ar>
+Message-ID: <20140625195135.GF3489@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +14,36 @@ To: buildroot@busybox.net
 
 Gustavo, All,
 
-On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Small typo, see below...
-
-> ---
->  package/libv4l/libv4l.mk | 2 ++
->  1 file changed, 2 insertions(+)
+On 2014-06-25 16:45 -0300, Gustavo Zacarias spake thusly:
+> On 06/25/2014 04:41 PM, Yann E. MORIN wrote:
 > 
-> diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-> index f62a4b6..56523d0 100644
-> --- a/package/libv4l/libv4l.mk
-> +++ b/package/libv4l/libv4l.mk
-> @@ -10,6 +10,8 @@ LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils/
->  LIBV4L_INSTALL_STAGING = YES
->  LIBV4L_MAKE_OPTS = PREFIX=/usr
->  LIBV4L_DEPENDENCIES = jpeg
-> +LIBV4L_LICENSE = GPLv2+ (utiltiies), LGPLv2.1+ (libraries)
+> >> +LIBSYSFS_LICENSE = GPLv2 (utilities), LGPLv2.1+ (library)
+> >> +LIBSYSFS_LICENSE_FILES = cmd/GPL lib/LGPL
+> > 
+> > I would also add the COPYING file at the root of the package:
+> > 
+> >     The commands and utilities under the "test" directory are licensed under the
+> >     GNU General Public License (GPL) Version 2, June 1991. The full text of the
+> >     GPL is located at:
+> > 
+> >     sysfsutils/cmd/GPL
+> > 
+> >     The sysfs library is licensed under the GNU Lesser Public License (LGPL)
+> >     Version 2.1, February 1999. The full text of the LGPL is located at:
+> > 
+> >     sysfsutils/lib/LGPL 
+> > 
+> > Regards,
+> > Yann E. MORIN.
+> 
+> But COPYING is confusing and a half-truth, that's why i avoided it.
+> If you look at the source under cmd/ that's also just GPL, and it's not
+> under "test", by the COPYING terms one could consider them LGPL.
 
-utiltiies -> utilities
-
-
-> +LIBV4L_LICENSE_FILES = COPYING COPYING.LIB
-
-There's also:
-    lib/libv4l1/libv4l1-kernelcode-license.txt
-
-since libv4l1 includes GPLv2-licensed code from the Linux kernel, but
-libv4l1 is tiself LGPLV2.1+.
-
-If the end-user believes this is not needed, he can still trash this
-file out of his compliance archive. However, we should install it into
-legal-info.
+OK.
 
 Regards,
 Yann E. MORIN.
-
->  LIBV4L_DIRS_y += lib
->  LIBV4L_DIRS_$(BR2_PACKAGE_LIBV4L_DECODE_TM6000)	+= utils/libv4l2util utils/decode_tm6000
-> -- 
-> 1.8.5.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
