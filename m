@@ -1,34 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jun 2014 16:40:10 +0200
-Subject: [Buildroot] [git commit] bind: bump to version 9.9.5-p1
-Message-ID: <20140625151003.5AD349D096@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 25 Jun 2014 15:41:54 -0300
+Subject: [Buildroot] [PATCH] gnupg: security bump to version 1.4.17
+Message-ID: <1403721714-14795-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ee6e435f1b603b36ebf49d1ef4e4c91aa02e38c0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes runtime issues when built with gcc 4.9
+Fixes CVE-2014-4617: The do_uncompress function in g10/compress.c in
+GnuPG 1.x before 1.4.17 and 2.x before 2.0.24 allows context-dependent
+attackers to cause a denial of service (infinite loop) via malformed
+compressed packets, as demonstrated by an a3 01 5b ff byte sequence.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/gnupg/gnupg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0a611ea..d6707d2 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index c334ac6..4c96967 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.9.5
-+BIND_VERSION = 9.9.5-P1
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+-GNUPG_VERSION = 1.4.16
++GNUPG_VERSION = 1.4.17
+ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG_LICENSE = GPLv3+
+-- 
+1.8.5.5
