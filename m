@@ -1,61 +1,62 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 25 Jun 2014 21:24:15 +0200
-Subject: [Buildroot] [PATCH 0 of 5 RFC] uclibc/busybox: fix handling of
- configuration file
-In-Reply-To: <53AA66F5.3090706@mind.be>
-References: <patchbomb.1403444739@localhost> <53AA66F5.3090706@mind.be>
-Message-ID: <CAAXf6LXoqTxwUj1VgqBrv=TWQ2vZ1gbm3wiCsqM8gfeyxxJ77Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 25 Jun 2014 21:34:24 +0200
+Subject: [Buildroot] [PATCH 16/54] librsvg: add license information
+In-Reply-To: <1403636160-11807-16-git-send-email-gustavo@zacarias.com.ar>
+References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
+ <1403636160-11807-16-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140625193424.GB3489@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Gustavo, All,
 
-On Wed, Jun 25, 2014 at 8:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi Thomas,
->
-> On 22/06/14 15:45, Thomas De Schampheleire wrote:
->>
->> This patch series reworks the uclibc/busybox config file handling, based on
->> following requirements:
->>
->> - neither foo-menuconfig nor foo-update-config should have a dependency on
->>   the toolchain (which means we cannot depend on foo-configure)
->> - 'clean foo-menuconfig' should start from the specified (custom) config
->>   file
->> - 'foo-menuconfig foo-update-config' should preserve the changes made in the
->>   menuconfig step (this problem is reported for uclibc with bug #7154
->>   (https://bugs.busybox.net/show_bug.cgi?id=7154).
->
->  I agree with these requirements. With of course the additional requirement
-> mentioned by ThomasP:
->
-> - 'make foo-menuconfig; make foo-menuconfig' should preserve the changes made in
-> the menuconfig step.
+On 2014-06-24 15:55 -0300, Gustavo Zacarias spake thusly:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/librsvg/librsvg.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+> index 9385fe9..86dce41 100644
+> --- a/package/librsvg/librsvg.mk
+> +++ b/package/librsvg/librsvg.mk
+> @@ -10,6 +10,8 @@ LIBRSVG_SITE = http://ftp.gnome.org/pub/GNOME/sources/librsvg/$(LIBRSVG_VERSION_
+>  LIBRSVG_INSTALL_STAGING = YES
+>  LIBRSVG_CONF_OPT = --disable-tools
+>  LIBRSVG_DEPENDENCIES = libxml2 cairo pango libglib2 gdk-pixbuf
+> +LIBRSVG_LICENSE = LGPLv2+
 
-And additionally:
+We will have to be *extra* carefull when we bump this: there is one file
+that is LGPLv2.1+ in the current master, so the result would be LGPLV2.1+,
+I think:
+    https://git.gnome.org/browse/librsvg/tree/rsvg-xml.c
 
-- 'make clean foo-update-config' should copy the initial file, do any
-fixups, and then save the config
+But since we only package the 2.26, this file is not yet present. So:
 
->
->  However, I think it would be better to add infrastructure for kconfig packages,
-> instead of repeating the work for uclibc, busybox, linux and barebox. I was
-> thinking along the lines of:
->
-> $(eval $(generic-package))
->
-> LINUX_KCONFIG_TARGETS = menuconfig xconfig gconfig nconfig
-> LINUX_HAS_DEFCONFIG = YES
->
-> $(eval $(kconfig-package))
->
->
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-This sounds like a very interesting idea, I'll explore it further in
-the context of this patch series.
+Regards,
+Yann E. MORIN.
 
-Best regards,
-Thomas
+> +LIBRSVG_LICENSE_FILES = COPYING.LIB
+>  
+>  # If we have Gtk2, let's build it first to benefit from librsvg Gtk
+>  # support.
+> -- 
+> 1.8.5.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
