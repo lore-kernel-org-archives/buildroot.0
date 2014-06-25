@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 25 Jun 2014 21:52:39 +0200
-Subject: [Buildroot] [PATCH 18/54] libsysfs: add license information
-In-Reply-To: <1403636160-11807-18-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 25 Jun 2014 22:08:31 +0200
+Subject: [Buildroot] [PATCH 20/54] lsuio: add license information
+In-Reply-To: <1403636160-11807-20-git-send-email-gustavo@zacarias.com.ar>
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-18-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140625195239.GG3489@free.fr>
+ <1403636160-11807-20-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140625200831.GH3489@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,19 +22,19 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/libsysfs/libsysfs.mk | 2 ++
+>  package/lsuio/lsuio.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/libsysfs/libsysfs.mk b/package/libsysfs/libsysfs.mk
-> index 6bd3c5c..fb0310f 100644
-> --- a/package/libsysfs/libsysfs.mk
-> +++ b/package/libsysfs/libsysfs.mk
-> @@ -8,5 +8,7 @@ LIBSYSFS_VERSION = 2.1.0
->  LIBSYSFS_SITE = http://downloads.sourceforge.net/project/linux-diag/sysfsutils/$(LIBSYSFS_VERSION)
->  LIBSYSFS_SOURCE = sysfsutils-$(LIBSYSFS_VERSION).tar.gz
->  LIBSYSFS_INSTALL_STAGING = YES
-> +LIBSYSFS_LICENSE = GPLv2 (utilities), LGPLv2.1+ (library)
-> +LIBSYSFS_LICENSE_FILES = cmd/GPL lib/LGPL
+> diff --git a/package/lsuio/lsuio.mk b/package/lsuio/lsuio.mk
+> index 4e4f592..5f8a965 100644
+> --- a/package/lsuio/lsuio.mk
+> +++ b/package/lsuio/lsuio.mk
+> @@ -6,5 +6,7 @@
+>  
+>  LSUIO_VERSION = 0.2.0
+>  LSUIO_SITE = http://www.osadl.org/projects/downloads/UIO/user
+> +LSUIO_LICENSE = GPLv2
+> +LSUIO_LICENSE_FILES = COPYING
 >  
 >  $(eval $(autotools-package))
 > -- 
