@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jun 2014 22:39:44 +0200
-Subject: [Buildroot] [git commit] leafpad: add license information
-Message-ID: <20140625211213.B18DC9D0C3@busybox.osuosl.org>
+Date: Wed, 25 Jun 2014 22:56:28 +0200
+Subject: [Buildroot] [git commit] libsysfs: add license information
+Message-ID: <20140625211214.074209D0C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=73992f1680c4ad395e545738fe7c3d01aff494d8
+commit: http://git.buildroot.net/buildroot/commit/?id=88c65328dd1fbfb0ceaab8adea804d4774e49511
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/leafpad/leafpad.mk |    2 ++
+ package/libsysfs/libsysfs.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
-index b533ea0..6366cab 100644
---- a/package/leafpad/leafpad.mk
-+++ b/package/leafpad/leafpad.mk
-@@ -7,5 +7,7 @@
- LEAFPAD_VERSION = 0.8.18
- LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
- LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
-+LEAFPAD_LICENSE = GPLv2+
-+LEAFPAD_LICENSE_FILES = COPYING
+diff --git a/package/libsysfs/libsysfs.mk b/package/libsysfs/libsysfs.mk
+index 6bd3c5c..fb0310f 100644
+--- a/package/libsysfs/libsysfs.mk
++++ b/package/libsysfs/libsysfs.mk
+@@ -8,5 +8,7 @@ LIBSYSFS_VERSION = 2.1.0
+ LIBSYSFS_SITE = http://downloads.sourceforge.net/project/linux-diag/sysfsutils/$(LIBSYSFS_VERSION)
+ LIBSYSFS_SOURCE = sysfsutils-$(LIBSYSFS_VERSION).tar.gz
+ LIBSYSFS_INSTALL_STAGING = YES
++LIBSYSFS_LICENSE = GPLv2 (utilities), LGPLv2.1+ (library)
++LIBSYSFS_LICENSE_FILES = cmd/GPL lib/LGPL
  
  $(eval $(autotools-package))
