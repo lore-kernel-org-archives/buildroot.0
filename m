@@ -1,97 +1,71 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 25 Jun 2014 08:16:24 +0200
-Subject: [Buildroot] [PATCH 1 of 5 RFC] uclibc: menuconfig: take into
- account initial settings from config file
-In-Reply-To: <97d74ccbe054d9a16465.1403444740@localhost>
+Date: Wed, 25 Jun 2014 08:06:45 +0200
+Subject: [Buildroot] [PATCH 0 of 5 RFC] uclibc/busybox: fix handling of
+ configuration file
+In-Reply-To: <patchbomb.1403444739@localhost>
 References: <patchbomb.1403444739@localhost>
- <97d74ccbe054d9a16465.1403444740@localhost>
-Message-ID: <53AA6938.80303@mind.be>
+Message-ID: <53AA66F5.3090706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Thomas,
+
 On 22/06/14 15:45, Thomas De Schampheleire wrote:
-> When uclibc-menuconfig is executed from a clean repo, and a custom
-> configuration file was set, then these custom settings are ignored and
-> uclibc starts from the default configuration.
 > 
-> This patch adds an explicit copy of the custom config file to the menuconfig
-> target to fix 'make clean uclibc-menuconfig'.
+> This patch series reworks the uclibc/busybox config file handling, based on
+> following requirements:
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> ---
->  package/uclibc/uclibc.mk |  7 ++++++-
->  1 files changed, 6 insertions(+), 1 deletions(-)
-> 
-> diff -r 5ea6db6a0838 -r 97d74ccbe054 package/uclibc/uclibc.mk
-> --- a/package/uclibc/uclibc.mk	Fri Jun 20 23:38:46 2014 +0200
-> +++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
-> @@ -413,8 +413,11 @@
->  	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
->  	HOSTCC="$(HOSTCC)"
->  
-> +define UCLIBC_COPY_DOT_CONFIG
-> +	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
-> +endef
-> +
->  define UCLIBC_SETUP_DOT_CONFIG
-> -	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
->  	$(call UCLIBC_OPT_SET,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D))
->  	$(call UCLIBC_OPT_SET,TARGET_$(UCLIBC_TARGET_ARCH),y,$(@D))
->  	$(call UCLIBC_OPT_SET,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D))
-> @@ -454,6 +457,7 @@
->  endef
->  
->  define UCLIBC_CONFIGURE_CMDS
-> +	$(UCLIBC_COPY_DOT_CONFIG)
->  	$(UCLIBC_SETUP_DOT_CONFIG)
->  	$(MAKE1) -C $(UCLIBC_DIR) \
->  		$(UCLIBC_MAKE_FLAGS) \
-> @@ -543,6 +547,7 @@
->  endef
->  
->  uclibc-menuconfig: uclibc-patch
-> +	$(UCLIBC_COPY_DOT_CONFIG)
->  	$(MAKE1) -C $(UCLIBC_DIR) \
->  		$(UCLIBC_MAKE_FLAGS) \
->  		PREFIX=$(STAGING_DIR) \
+> - neither foo-menuconfig nor foo-update-config should have a dependency on
+>   the toolchain (which means we cannot depend on foo-configure)
+> - 'clean foo-menuconfig' should start from the specified (custom) config
+>   file
+> - 'foo-menuconfig foo-update-config' should preserve the changes made in the
+>   menuconfig step (this problem is reported for uclibc with bug #7154
+>   (https://bugs.busybox.net/show_bug.cgi?id=7154).
 
- In order to cover all requirements, I think we should rely on real dependencies
-here. Something like:
+ I agree with these requirements. With of course the additional requirement
+mentioned by ThomasP:
 
-uclibc-menuconfig: $(UCLIBC_DIR)/.config
-	$(MAKE1) -C $(UCLIBC_DIR) ...
-	$(UCLIBC_FIXUP_DOT_CONFIG)
+- 'make foo-menuconfig; make foo-menuconfig' should preserve the changes made in
+the menuconfig step.
 
-$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) uclibc-patch
-	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@)
-	$(MAKE1) -C $(UCLIBC_DIR) ... oldconfig
-	$(UCLIBC_FIXUP_DOT_CONFIG)
+ However, I think it would be better to add infrastructure for kconfig packages,
+instead of repeating the work for uclibc, busybox, linux and barebox. I was
+thinking along the lines of:
 
-uclibc-configure: $(UCLIBC_DIR)/.config
+$(eval $(generic-package))
 
+LINUX_KCONFIG_TARGETS = menuconfig xconfig gconfig nconfig
+LINUX_HAS_DEFCONFIG = YES
 
-(I renamed SETUP_DOT_CONFIG to FIXUP_DOT_CONFIG which I think is more accurate.)
+$(eval $(kconfig-package))
 
-
- This is obviously just a skeleton, but you can see where I'm going... The
-important thing is:
-
-- all config targets depend on .config
-- .config depends on the the CONFIG_FILE
-- all config targets and .config itself call to FIXUP_DOT_CONFIG
 
 
  Regards,
  Arnout
 
+> 
+> The series currently covers uclibc and busybox only, while the problem seems
+> to be present for linux too. It is submitted as an RFC for this reason, as
+> I'm unsure if there are comments on the approach.
+> 
+> Thanks for your feedback...
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+>  package/busybox/busybox.mk |  28 +++++++++++++++++++---------
+>  package/uclibc/uclibc.mk   |  16 +++++++++++++---
+>  2 files changed, 32 insertions(+), 12 deletions(-)
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 > 
 
 
