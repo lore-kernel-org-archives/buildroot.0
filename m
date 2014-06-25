@@ -1,33 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 25 Jun 2014 22:42:18 +0200
-Subject: [Buildroot] [git commit] libgail: add license information
-Message-ID: <20140625211213.C34579D0C3@busybox.osuosl.org>
+Date: Wed, 25 Jun 2014 22:32:55 +0200
+Subject: [Buildroot] [git commit] irda-utils: add license information
+Message-ID: <20140625211213.99C889D0C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5e9b9934aae3834efb6b47e95ee8e48e0b85119a
+commit: http://git.buildroot.net/buildroot/commit/?id=d5b7d145c84dfaa45e281683e22763aa2c8f9412
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgail/libgail.mk |    2 ++
+ package/irda-utils/irda-utils.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libgail/libgail.mk b/package/libgail/libgail.mk
-index 3034b41..02b2735 100644
---- a/package/libgail/libgail.mk
-+++ b/package/libgail/libgail.mk
-@@ -10,6 +10,8 @@ LIBGAIL_SOURCE = gail-$(LIBGAIL_VERSION).tar.bz2
- LIBGAIL_SITE = http://ftp.gnome.org/pub/gnome/sources/gail/$(LIBGAIL_VERSION_MAJOR)
- LIBGAIL_AUTORECONF = YES
- LIBGAIL_INSTALL_STAGING = YES
-+LIBGAIL_LICENSE = LGPLv2+
-+LIBGAIL_LICENSE_FILES = COPYING
+diff --git a/package/irda-utils/irda-utils.mk b/package/irda-utils/irda-utils.mk
+index 4be80d7..e4958e5 100644
+--- a/package/irda-utils/irda-utils.mk
++++ b/package/irda-utils/irda-utils.mk
+@@ -6,6 +6,8 @@
  
- ifneq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- LIBGAIL_CONF_OPT += --disable-x
+ IRDA_UTILS_VERSION = 0.9.18
+ IRDA_UTILS_SITE = http://downloads.sourceforge.net/project/irda/irda-utils/$(IRDA_UTILS_VERSION)
++IRDA_UTILS_LICENSE = GPLv2+
++IRDA_UTILS_LICENSE_FILES = man/COPYING
+ 
+ IRDA_UTILS_CFLAGS = $(TARGET_CFLAGS) -I.
+ ifeq ($(BR2_USE_MMU),)
