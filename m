@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:30 -0300
-Subject: [Buildroot] [PATCH 02/53] bonnie: add license information
+Date: Thu, 26 Jun 2014 16:20:31 -0300
+Subject: [Buildroot] [PATCH 03/53] bsdiff: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/bonnie/bonnie.mk | 2 ++
+ package/bsdiff/bsdiff.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/bonnie/bonnie.mk b/package/bonnie/bonnie.mk
-index 9c576b6..b584b2a 100644
---- a/package/bonnie/bonnie.mk
-+++ b/package/bonnie/bonnie.mk
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index ce6455c..7d2b296 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
 @@ -7,6 +7,8 @@
- BONNIE_VERSION = 1.03e
- BONNIE_SOURCE = bonnie++-$(BONNIE_VERSION).tgz
- BONNIE_SITE = http://www.coker.com.au/bonnie++/
-+BONNIE_LICENSE = GPLv2
-+BONNIE_LICENSE_FILES = copyright.txt
+ BSDIFF_VERSION = 4.3
+ BSDIFF_SITE = http://www.daemonology.net/bsdiff
+ BSDIFF_DEPENDENCIES = bzip2
++BSDIFF_LICENSE = BSD-2c
++BSDIFF_LICENSE_FILES = bsdiff.c
  
- define BONNIE_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 755 $(@D)/bonnie++ $(TARGET_DIR)/usr/sbin/bonnie++
+ define BSDIFF_BUILD_CMDS
+ 	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
 -- 
 1.8.5.5
