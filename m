@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:48 -0300
-Subject: [Buildroot] [PATCH 20/53] input-tools: add license information
+Date: Thu, 26 Jun 2014 16:20:49 -0300
+Subject: [Buildroot] [PATCH 21/53] ipkg: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-20-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-21-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/input-tools/input-tools.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/ipkg/ipkg.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
-index 7c3fe4e..ae3f7d2 100644
---- a/package/input-tools/input-tools.mk
-+++ b/package/input-tools/input-tools.mk
-@@ -5,9 +5,11 @@
- ################################################################################
+diff --git a/package/ipkg/ipkg.mk b/package/ipkg/ipkg.mk
+index b9cba58..10ef207 100644
+--- a/package/ipkg/ipkg.mk
++++ b/package/ipkg/ipkg.mk
+@@ -7,5 +7,7 @@
+ IPKG_VERSION = 0.99.163
+ IPKG_SITE = http://www.handhelds.org/download/packages/ipkg
+ IPKG_INSTALL_STAGING = YES
++IPKG_LICENSE = GPLv2+
++IPKG_LICENSE_FILES = COPYING
  
- INPUT_TOOLS_VERSION = 20051019
--INPUT_TOOLS_SOURCE  = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
--INPUT_TOOLS_PATCH   = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
--INPUT_TOOLS_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
-+INPUT_TOOLS_SOURCE = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
-+INPUT_TOOLS_PATCH = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
-+INPUT_TOOLS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
-+INPUT_TOOLS_LICENSE = GPLv2+
-+INPUT_TOOLS_LICENSE_FILES = utils/Makefile
- 
- INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
- INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSCAL)       += jscal
+ $(eval $(autotools-package))
 -- 
 1.8.5.5
