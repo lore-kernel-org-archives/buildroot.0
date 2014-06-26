@@ -1,47 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 07:05:31 -0300
-Subject: [Buildroot] [PATCH] whois: add extra libs for libiconv
-Message-ID: <1403777131-3592-1-git-send-email-gustavo@zacarias.com.ar>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 26 Jun 2014 12:29:11 +0200
+Subject: [Buildroot] [PATCH] Add target-clean makefile target
+Message-ID: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The main makefile doesn't check/do anything about linking properly, so
-add -liconv to LIBS when it's used. Fixes:
-http://autobuild.buildroot.net/results/7e5/7e551efacfa16b9e1915748a2f66fd1021d5bb49/
+This makefile target wipes the target folder and forces buildroot into rebuild it.
+It's useful when you have changed the list of packages and the target
+tree remains out of sync keeping old installed packages no longer needed.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/whois/whois.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 91450f6..4c40481 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -10,17 +10,19 @@ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
--WHOIS_MAKE_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-+WHOIS_MAKE_OPT = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-+	LIBS="$(WHOIS_EXTRA_LIBS)"
- WHOIS_LICENSE = GPLv2+
- WHOIS_LICENSE_FILES = COPYING
+diff --git a/Makefile b/Makefile
+index 14fca2b..83dceb7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -835,6 +835,11 @@ clean:
+ 		$(BUILD_DIR) $(BASE_DIR)/staging \
+ 		$(LEGAL_INFO_DIR)
  
- ifeq ($(BR2_NEEDS_GETTEXT),y)
- WHOIS_DEPENDENCIES += gettext
--WHOIS_MAKE_OPT += LIBS="-lintl"
-+WHOIS_EXTRA_LIBS += -lintl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- WHOIS_DEPENDENCIES += libiconv
-+WHOIS_EXTRA_LIBS += -liconv
- WHOIS_MAKE_ENV += HAVE_ICONV=1
- endif
- 
++target-clean:
++	rm -rf $(TARGET_DIR)
++	find $(BUILD_DIR) -name ".stamp_target_installed" -exec rm {} \;
++	rm $(BUILD_DIR)/.root
++
+ distclean: clean
+ ifeq ($(DL_DIR),$(TOPDIR)/dl)
+ 	rm -rf $(DL_DIR)
+@@ -848,6 +853,7 @@ help:
+ 	@echo 'Cleaning:'
+ 	@echo '  clean                  - delete all files created by build'
+ 	@echo '  distclean              - delete all non-source files (including .config)'
++	@echo '  target-clean           - delete all target files and forces reinstall'
+ 	@echo
+ 	@echo 'Build:'
+ 	@echo '  all                    - make world'
 -- 
-1.8.5.5
+2.0.0
