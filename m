@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Jun 2014 13:27:41 +0200
-Subject: [Buildroot] [PATCH 31/54] python-mad: add license information
-In-Reply-To: <1403636160-11807-31-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:37 -0300")
+Date: Thu, 26 Jun 2014 13:50:21 +0200
+Subject: [Buildroot] [PATCH 32/54] python-pygame: add license information
+In-Reply-To: <1403636160-11807-32-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:38 -0300")
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-31-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87oaxfrjv6.fsf@dell.be.48ers.dk>
+ <1403636160-11807-32-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k383rite.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
