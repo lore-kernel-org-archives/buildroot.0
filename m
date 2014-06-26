@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:29 -0300
-Subject: [Buildroot] [PATCH 01/53] blackbox: add license information
-Message-ID: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 26 Jun 2014 16:20:30 -0300
+Subject: [Buildroot] [PATCH 02/53] bonnie: add license information
+In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,26 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/blackbox/blackbox.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/bonnie/bonnie.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/blackbox/blackbox.mk b/package/blackbox/blackbox.mk
-index ce8f06e..b7b9726 100644
---- a/package/blackbox/blackbox.mk
-+++ b/package/blackbox/blackbox.mk
-@@ -7,11 +7,11 @@
- BLACKBOX_VERSION = 0.70.1
- BLACKBOX_SOURCE = blackbox-$(BLACKBOX_VERSION).tar.bz2
- BLACKBOX_SITE = http://downloads.sourceforge.net/project/blackboxwm/blackboxwm/Blackbox%20$(BLACKBOX_VERSION)
--
- BLACKBOX_CONF_OPT = --x-includes=$(STAGING_DIR)/usr/include/X11 \
- 		--x-libraries=$(STAGING_DIR)/usr/lib
--
- BLACKBOX_DEPENDENCIES = xlib_libX11
-+BLACKBOX_LICENSE = MIT
-+BLACKBOX_LICENSE_FILES = LICENSE
+diff --git a/package/bonnie/bonnie.mk b/package/bonnie/bonnie.mk
+index 9c576b6..b584b2a 100644
+--- a/package/bonnie/bonnie.mk
++++ b/package/bonnie/bonnie.mk
+@@ -7,6 +7,8 @@
+ BONNIE_VERSION = 1.03e
+ BONNIE_SOURCE = bonnie++-$(BONNIE_VERSION).tgz
+ BONNIE_SITE = http://www.coker.com.au/bonnie++/
++BONNIE_LICENSE = GPLv2
++BONNIE_LICENSE_FILES = copyright.txt
  
- ifneq ($(BR2_ENABLE_LOCALE),y)
- BLACKBOX_DEPENDENCIES += libiconv
+ define BONNIE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 755 $(@D)/bonnie++ $(TARGET_DIR)/usr/sbin/bonnie++
 -- 
 1.8.5.5
