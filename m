@@ -1,37 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Jun 2014 09:47:28 +0200
-Subject: [Buildroot] [PATCH 28/54] proxychains-ng: add license
-	information
-In-Reply-To: <1403636160-11807-28-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:34 -0300")
-References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-28-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871tucru27.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 26 Jun 2014 13:27:00 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-06-25
+In-Reply-To: <20140626063519.GQ4155@tarshish>
+References: <20140626063011.68A1B1011DF@stock.ovh.net>
+ <20140626063519.GQ4155@tarshish>
+Message-ID: <CAMo8BfKzjF4CsbgZZKw_orUOBkTNLKTS2q__OeSu7fugNr1zPg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Hi Baruch,
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/proxychains-ng/proxychains-ng.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+On Thu, Jun 26, 2014 at 10:35 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> On Thu, Jun 26, 2014 at 08:30:11AM +0200, Thomas Petazzoni wrote:
+>>     xtensa |                   dhcpcd-6.4.0 | NOK | http://autobuild.buildroot.net/results/ecbba5682e3a8065f3cf3e0a9670c2febc71949a/
+>
+> This is strange. It seems like xtensa toolchains don't like /dev/null as
+> output file:
+>
+> $ .../output/host/usr/bin/xtensa-buildroot-linux-uclibc-gcc -o /dev/null test.c
+> .../output/host/usr/lib/gcc/xtensa-buildroot-linux-uclibc/4.8.3/../../../../xtensa-buildroot-linux-uclibc/bin/ld: Final link failed: File truncated
+>
+> Toolchains for other architectures are just fine with /dev/null. Any Idea?
 
- > diff --git a/package/proxychains-ng/proxychains-ng.mk b/package/proxychains-ng/proxychains-ng.mk
- > index 7c2ffbf..5415f04 100644
- > --- a/package/proxychains-ng/proxychains-ng.mk
- > +++ b/package/proxychains-ng/proxychains-ng.mk
- > @@ -7,6 +7,8 @@
- >  PROXYCHAINS_NG_VERSION = 4.6
- >  PROXYCHAINS_NG_SOURCE = proxychains-$(PROXYCHAINS_NG_VERSION).tar.bz2
- >  PROXYCHAINS_NG_SITE = http://downloads.sourceforge.net/project/proxychains-ng
- > +PROXYCHAINS_NG_LICENSE = GPLv2+
- > +PROXYCHAINS_NG_LICENSE_FILES =  COPYING
-
-Dropped the extra space before COPYING and committed, thanks.
+Not yet, looking at it.
 
 -- 
-Bye, Peter Korsgaard
+Thanks.
+-- Max
