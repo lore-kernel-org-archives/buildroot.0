@@ -1,9 +1,10 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:21:18 -0300
-Subject: [Buildroot] [PATCH 50/53] udpcast: add license information
+Date: Thu, 26 Jun 2014 16:21:19 -0300
+Subject: [Buildroot] [PATCH 51/53] webrtc-audio-processing: add license
+	information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-50-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-51-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/udpcast/udpcast.mk | 2 ++
+ package/webrtc-audio-processing/webrtc-audio-processing.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/udpcast/udpcast.mk b/package/udpcast/udpcast.mk
-index 786a88e..0cd3b27 100644
---- a/package/udpcast/udpcast.mk
-+++ b/package/udpcast/udpcast.mk
-@@ -7,6 +7,8 @@
- UDPCAST_VERSION = 20120424
- UDPCAST_SITE = http://www.udpcast.linux.lu/download
- UDPCAST_DEPENDENCIES = host-m4
-+UDPCAST_LICENSE = BSD-2c, GPLv2
-+UDPCAST_LICENSE_FILES = COPYING
+diff --git a/package/webrtc-audio-processing/webrtc-audio-processing.mk b/package/webrtc-audio-processing/webrtc-audio-processing.mk
+index 9f76cba..69f7f01 100644
+--- a/package/webrtc-audio-processing/webrtc-audio-processing.mk
++++ b/package/webrtc-audio-processing/webrtc-audio-processing.mk
+@@ -8,6 +8,8 @@ WEBRTC_AUDIO_PROCESSING_VERSION = 0.1
+ WEBRTC_AUDIO_PROCESSING_SOURCE = webrtc-audio-processing-$(WEBRTC_AUDIO_PROCESSING_VERSION).tar.xz
+ WEBRTC_AUDIO_PROCESSING_SITE = http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
+ WEBRTC_AUDIO_PROCESSING_INSTALL_STAGING = YES
++WEBRTC_AUDIO_PROCESSING_LICENSE = BSD-3c
++WEBRTC_AUDIO_PROCESSING_LICENSE_FILES = COPYING
  
- define UDPCAST_REMOVE_UDP_SENDER
- 	rm -f $(TARGET_DIR)/usr/sbin/udp-sender
+ ifeq ($(BR2_SOFT_FLOAT),y)
+ WEBRTC_AUDIO_PROCESSING_CONF_OPT += --with-ns-mode=fixed
 -- 
 1.8.5.5
