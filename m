@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:21:02 -0300
-Subject: [Buildroot] [PATCH 34/53] libyaml: add license information
+Date: Thu, 26 Jun 2014 16:21:03 -0300
+Subject: [Buildroot] [PATCH 35/53] lite: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-34-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-35-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libyaml/libyaml.mk | 2 ++
+ package/lite/lite.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index 28ed77a..0a42742 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
-@@ -8,5 +8,7 @@ LIBYAML_VERSION = 0.1.6
- LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
- LIBYAML_SITE = http://pyyaml.org/download/libyaml/
- LIBYAML_INSTALL_STAGING = YES
-+LIBYAML_LICENSE = MIT
-+LIBYAML_LICENSE_FILES = LICENSE
+diff --git a/package/lite/lite.mk b/package/lite/lite.mk
+index 1784d1f..ca971c1 100644
+--- a/package/lite/lite.mk
++++ b/package/lite/lite.mk
+@@ -11,6 +11,8 @@ LITE_INSTALL_STAGING = YES
+ LITE_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
+ LITE_CONF_ENV = DFB_CFLAGS=-I$(STAGING_DIR)/usr/include/directfb
+ LITE_DEPENDENCIES = directfb
++LITE_LICENSE = LGPLv2.1+
++LITE_LICENSE_FILES = COPYING
  
- $(eval $(autotools-package))
+ define LITE_FINALIZE_INSTALL
+ 	$(INSTALL) -d $(TARGET_DIR)/usr/share/LiTE/examples/
 -- 
 1.8.5.5
