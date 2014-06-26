@@ -1,23 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Jun 2014 16:36:36 +0200
-Subject: [Buildroot] [PATCH 35/54] shared-mime-info: add license
-	information
-In-Reply-To: <1403636160-11807-35-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:41 -0300")
-References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-35-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87oaxfpwjv.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Jun 2014 16:34:26 +0200
+Subject: [Buildroot] [git commit] sane-backends: add license information
+Message-ID: <20140626143652.B88709D0D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=cafb9d5089d3cba1309d4e43ef803e48e3d54b62
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sane-backends/sane-backends.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sane-backends/sane-backends.mk b/package/sane-backends/sane-backends.mk
+index 52c5aa7..6a6fa0b 100644
+--- a/package/sane-backends/sane-backends.mk
++++ b/package/sane-backends/sane-backends.mk
+@@ -7,6 +7,8 @@
+ SANE_BACKENDS_VERSION = 1.0.22
+ SANE_BACKENDS_SITE = http://sources.buildroot.net/
+ SANE_BACKENDS_CONFIG_SCRIPTS = sane-config
++SANE_BACKENDS_LICENSE = GPLv2+
++SANE_BACKENDS_LICENSE_FILES = COPYING
+ 
+ ifeq ($(BR2_PACKAGE_LIBUSB),y)
+ SANE_BACKENDS_DEPENDENCIES += libusb
