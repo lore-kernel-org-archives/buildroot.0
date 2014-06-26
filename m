@@ -1,73 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 26 Jun 2014 18:30:25 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-download: fix svn download for
- deleted path
-In-Reply-To: <1403788659-1936-1-git-send-email-ryan.barnett@rockwellcollins.com>
-References: <1403788659-1936-1-git-send-email-ryan.barnett@rockwellcollins.com>
-Message-ID: <20140626163025.GA32283@free.fr>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 26 Jun 2014 19:01:28 +0200
+Subject: [Buildroot] Raspberry Pi: recommendations for web kiosk
+In-Reply-To: <CAAXf6LUR=nSyh3GPk037uYUOE3hRngWmrj+YOxiQe6RD75TRBw@mail.gmail.com>
+References: <CAAXf6LXK64M-BO3V-K6e_27m7UhYOe3N01oXBSVfF6NUdqrARA@mail.gmail.com>
+ <20140626124257.GA13409@rmm-p1267483>
+ <CAAXf6LUR=nSyh3GPk037uYUOE3hRngWmrj+YOxiQe6RD75TRBw@mail.gmail.com>
+Message-ID: <20140626170127.GA3742@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+On Thu, Jun 26, 2014 at 03:15:25PM +0200, Thomas De Schampheleire wrote:
+> Hi Eric,
+>
+> On Thu, Jun 26, 2014 at 2:42 PM, Eric Le Bihan
+> <eric.le.bihan.dev@free.fr> wrote:
+> > Hi!
+> > On Wed, Jun 25, 2014 at 03:02:29PM +0200, Thomas De Schampheleire wrote:
+> >> Hi,
+> >>
+> >> We currently use a Raspberry Pi as a simple web-wall. It cycles every
+> >> two minutes between two (non-local) web pages, one of which contains a
+> >> few iframes.
+> >>
+> >> While this can hardly be called a resource-intensive task, the
+> >> Raspberry Pi by no means performs this fluently. The pages load
+> >> relatively slow, and administration tasks on this pi also suffer from
+> >> hickups.
+> >>
+> >> The pi currently contains a raspbian image (not done by me, I swear!
+> >> :-) ) and uses chromium in kiosk mode to display the web pages.
+> >>
+> >> My basic question is: can I expect to get better performance by
+> >> setting up a custom buildroot image, or is rpi so poor in performance,
+> >> even for this mundane task?
+> >> Which packages should I select to achieve this?
+> >>
+> >> Do I need an X.org or not really?
+> >> If X.org is needed, does 'Kdrive / tinyX' work on rpi, or should I
+> >> select modular x.org, and how do these compare.
+> >> (as you notice, I have never set up embedded boards with graphical stuff).
+> >>
+> >> Which browser should/could I use? Preferably something that can run in
+> >> fullscreen mode as this is a kiosk-like board.
+> >>
+> >> Is rpi-userland needed / recommended? How would I benefit from it?
+> >>
+> >> Any other recommendations/tips are welcome too, of course.
+> > Just my two cents: how about using a custom application based on QtWebkit with
+> > EGLFS [1]?
+> >
+>
+> This is not a commercial product, but rather an internal information
+> screen used on the workfloor. So writing custom applications, which I
+> assume is quite some work, is not acceptable. I am hoping for a more
+> or less out-of-the-box solution...
+Well, thanks to QML and QtWebkit, that is pretty doable. I hacked a quick
+example at https://github.com/elebihan/webkiosk, inspired by the Qt examples.
 
-On 2014-06-26 08:17 -0500, Ryan Barnett spake thusly:
-> If a SVN path has been deleted in a future revision, downloading a
-> package's source will fail using 'svn checkout -r'. Fix using
-> URL at REV syntax since the SVN command will then verify the path at the
-> specified version. Without using the URL at REV syntax, the SVN command
-> will attempt to verify the path exists on the the HEAD revision before
-> checking out the path at the specified revision.
-> 
-> Error seen if SVN path has been deleted in HEAD using svn checkout -r:
->   svn: E160013: '/svn/path/' path not found
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+AFAIK, running it with the '-platform eglfs' option should do the trick (not
+tested, my RPi is out of order :-( )
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-download.mk |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 4cfb913..e07fd1b 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -145,14 +145,14 @@ endef
->  define DOWNLOAD_SVN
->  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
->  	(pushd $(DL_DIR) > /dev/null && \
-> -	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-> +	$(SVN) export $($(PKG)_SITE)@$($(PKG)_DL_VERSION) $($(PKG)_DL_DIR) && \
->  	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
->  	rm -rf $($(PKG)_DL_DIR) && \
->  	popd > /dev/null)
->  endef
->  
->  define SOURCE_CHECK_SVN
-> -  $(SVN) ls $($(PKG)_SITE) > /dev/null
-> +  $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
->  endef
->  
->  define SHOW_EXTERNAL_DEPS_SVN
-> -- 
-> 1.7.9.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards,
+ELB
