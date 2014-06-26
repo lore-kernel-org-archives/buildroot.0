@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 26 Jun 2014 17:02:12 +0200
-Subject: [Buildroot] [PATCH 38/54] sredird: add license information
-In-Reply-To: <1403636160-11807-38-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:44 -0300")
+Date: Thu, 26 Jun 2014 17:02:49 +0200
+Subject: [Buildroot] [PATCH 39/54] statserial: add license information
+In-Reply-To: <1403636160-11807-39-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:45 -0300")
 References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-38-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bntfpvd7.fsf@dell.be.48ers.dk>
+ <1403636160-11807-39-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <877g43pvc6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
