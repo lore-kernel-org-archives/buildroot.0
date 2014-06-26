@@ -1,49 +1,49 @@
-From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-Date: Thu, 26 Jun 2014 08:17:39 -0500
-Subject: [Buildroot] [PATCH 1/1] pkg-download: fix svn download for deleted
-	path
-Message-ID: <1403788659-1936-1-git-send-email-ryan.barnett@rockwellcollins.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 26 Jun 2014 17:45:20 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-06-25
+In-Reply-To: <CAMo8BfKzjF4CsbgZZKw_orUOBkTNLKTS2q__OeSu7fugNr1zPg@mail.gmail.com>
+References: <20140626063011.68A1B1011DF@stock.ovh.net>
+ <20140626063519.GQ4155@tarshish>
+ <CAMo8BfKzjF4CsbgZZKw_orUOBkTNLKTS2q__OeSu7fugNr1zPg@mail.gmail.com>
+Message-ID: <CAMo8BfKdyq=Sw84=Z=yZL4fjVDzpvLWMf=E22od=5cUDs9396g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If a SVN path has been deleted in a future revision, downloading a
-package's source will fail using 'svn checkout -r'. Fix using
-URL at REV syntax since the SVN command will then verify the path at the
-specified version. Without using the URL at REV syntax, the SVN command
-will attempt to verify the path exists on the the HEAD revision before
-checking out the path at the specified revision.
+On Thu, Jun 26, 2014 at 1:27 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> Hi Baruch,
+>
+> On Thu, Jun 26, 2014 at 10:35 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> On Thu, Jun 26, 2014 at 08:30:11AM +0200, Thomas Petazzoni wrote:
+>>>     xtensa |                   dhcpcd-6.4.0 | NOK | http://autobuild.buildroot.net/results/ecbba5682e3a8065f3cf3e0a9670c2febc71949a/
+>>
+>> This is strange. It seems like xtensa toolchains don't like /dev/null as
+>> output file:
+>>
+>> $ .../output/host/usr/bin/xtensa-buildroot-linux-uclibc-gcc -o /dev/null test.c
+>> .../output/host/usr/lib/gcc/xtensa-buildroot-linux-uclibc/4.8.3/../../../../xtensa-buildroot-linux-uclibc/bin/ld: Final link failed: File truncated
+>>
+>> Toolchains for other architectures are just fine with /dev/null. Any Idea?
 
-Error seen if SVN path has been deleted in HEAD using svn checkout -r:
-  svn: E160013: '/svn/path/' path not found
+It wants to read back just written .xt.lit.plt section to rearrange it
+a bit in the
+following call chain:
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
----
- package/pkg-download.mk |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+main
+  ldwrite
+    bfd_elf_final_link
+      elf_xtensa_finish_dynamic_sections
+        elf_xtensa_combine_prop_entries
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 4cfb913..e07fd1b 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -145,14 +145,14 @@ endef
- define DOWNLOAD_SVN
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
- 	(pushd $(DL_DIR) > /dev/null && \
--	$(SVN) export -r $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_DL_DIR) && \
-+	$(SVN) export $($(PKG)_SITE)@$($(PKG)_DL_VERSION) $($(PKG)_DL_DIR) && \
- 	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
- 	rm -rf $($(PKG)_DL_DIR) && \
- 	popd > /dev/null)
- endef
- 
- define SOURCE_CHECK_SVN
--  $(SVN) ls $($(PKG)_SITE) > /dev/null
-+  $(SVN) ls $($(PKG)_SITE)@$($(PKG)_DL_VERSION) > /dev/null
- endef
- 
- define SHOW_EXTERNAL_DEPS_SVN
+and obviously fails. This only happens when the result is dynamic object,
+static linking completes successfully.
+I don't see why this might be considered invalid behaviour, and rather
+think that
+the check in the dhcpcd configure script is wrong.
+
 -- 
-1.7.9.5
+Thanks.
+-- Max
