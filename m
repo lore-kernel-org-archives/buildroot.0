@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:44 -0300
-Subject: [Buildroot] [PATCH 16/53] glib-networking: add license information
+Date: Thu, 26 Jun 2014 16:20:45 -0300
+Subject: [Buildroot] [PATCH 17/53] grantlee: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-16-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-17-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,29 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/glib-networking/glib-networking.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/grantlee/grantlee.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index fa6e20f..b7d7867 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -8,14 +8,14 @@ GLIB_NETWORKING_VERSION_MAJOR = 2.36
- GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).2
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
--
- GLIB_NETWORKING_INSTALL_STAGING = YES
--
- GLIB_NETWORKING_DEPENDENCIES = \
- 	$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) \
- 	host-pkgconf \
- 	host-intltool \
- 	libglib2
-+GLIB_NETWORKING_LICENSE = LGPLv2+
-+GLIB_NETWORKING_LICENSE_FILES = COPYING
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index 2ad5888..f5347ae 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -8,5 +8,7 @@ GRANTLEE_VERSION = 0.2.0
+ GRANTLEE_SITE = http://downloads.grantlee.org
+ GRANTLEE_INSTALL_STAGING = YES
+ GRANTLEE_DEPENDENCIES =  qt
++GRANTLEE_LICENSE = LGPLv2.1+
++GRANTLEE_LICENSE_FILES = COPYING.LIB
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- GLIB_NETWORKING_DEPENDENCIES += gnutls
+ $(eval $(cmake-package))
 -- 
 1.8.5.5
