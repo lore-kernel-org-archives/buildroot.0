@@ -1,10 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:47 -0300
-Subject: [Buildroot] [PATCH 19/53] gtk2-theme-hicolor: add license
-	information
+Date: Thu, 26 Jun 2014 16:20:48 -0300
+Subject: [Buildroot] [PATCH 20/53] input-tools: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-19-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-20-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,27 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/input-tools/input-tools.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk b/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
-index ae677f7..24c5959 100644
---- a/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
-+++ b/package/gtk2-themes/gtk2-theme-hicolor/gtk2-theme-hicolor.mk
-@@ -7,7 +7,8 @@
- GTK2_THEME_HICOLOR_VERSION = 0.10
- GTK2_THEME_HICOLOR_SOURCE = hicolor-icon-theme-$(GTK2_THEME_HICOLOR_VERSION).tar.gz
- GTK2_THEME_HICOLOR_SITE = http://icon-theme.freedesktop.org/releases/
--
- GTK2_THEME_HICOLOR_DEPENDENCIES = libgtk2
-+GTK2_THEME_HICOLOR_LICENSE = GPLv2
-+GTK2_THEME_HICOLOR_LICENSE_FILES = COPYING
+diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
+index 7c3fe4e..ae3f7d2 100644
+--- a/package/input-tools/input-tools.mk
++++ b/package/input-tools/input-tools.mk
+@@ -5,9 +5,11 @@
+ ################################################################################
  
- $(eval $(autotools-package))
+ INPUT_TOOLS_VERSION = 20051019
+-INPUT_TOOLS_SOURCE  = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
+-INPUT_TOOLS_PATCH   = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
+-INPUT_TOOLS_SITE    = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
++INPUT_TOOLS_SOURCE = joystick_$(INPUT_TOOLS_VERSION).orig.tar.gz
++INPUT_TOOLS_PATCH = joystick_$(INPUT_TOOLS_VERSION)-5.diff.gz
++INPUT_TOOLS_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/j/joystick/
++INPUT_TOOLS_LICENSE = GPLv2+
++INPUT_TOOLS_LICENSE_FILES = utils/Makefile
+ 
+ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH) += inputattach
+ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSCAL)       += jscal
 -- 
 1.8.5.5
