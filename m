@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:36 -0300
-Subject: [Buildroot] [PATCH 08/53] elftosb: add license information
+Date: Thu, 26 Jun 2014 16:20:37 -0300
+Subject: [Buildroot] [PATCH 09/53] explorercanvas: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/elftosb/elftosb.mk | 2 ++
+ package/explorercanvas/explorercanvas.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/elftosb/elftosb.mk b/package/elftosb/elftosb.mk
-index 9b825a0..ac9aa32 100644
---- a/package/elftosb/elftosb.mk
-+++ b/package/elftosb/elftosb.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/explorercanvas/explorercanvas.mk b/package/explorercanvas/explorercanvas.mk
+index 1d9363d..c360e96 100644
+--- a/package/explorercanvas/explorercanvas.mk
++++ b/package/explorercanvas/explorercanvas.mk
+@@ -7,6 +7,8 @@
+ EXPLORERCANVAS_VERSION = r3
+ EXPLORERCANVAS_SITE = http://explorercanvas.googlecode.com/files/
+ EXPLORERCANVAS_SOURCE = excanvas_$(EXPLORERCANVAS_VERSION).zip
++EXPLORERCANVAS_LICENSE = Apache-2.0
++EXPLORERCANVAS_LICENSE_FILES = COPYING
  
- ELFTOSB_VERSION = 10.12.01
- ELFTOSB_SITE = http://repository.timesys.com/buildsources/e/elftosb/elftosb-$(ELFTOSB_VERSION)
-+ELFTOSB_LICENSE = BSD-3c
-+ELFTOSB_LICENSE_FILES = COPYING
- 
- define HOST_ELFTOSB_BUILD_CMDS
- 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+ define EXPLORERCANVAS_EXTRACT_CMDS
+ 	unzip -d $(@D) $(DL_DIR)/$(EXPLORERCANVAS_SOURCE)
 -- 
 1.8.5.5
