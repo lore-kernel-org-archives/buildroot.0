@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:33 -0300
-Subject: [Buildroot] [PATCH 05/53] devmem2: add license information
+Date: Thu, 26 Jun 2014 16:20:34 -0300
+Subject: [Buildroot] [PATCH 06/53] dfu-util: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/devmem2/devmem2.mk | 2 ++
+ package/dfu-util/dfu-util.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/devmem2/devmem2.mk b/package/devmem2/devmem2.mk
-index ab111e1..7f0594e 100644
---- a/package/devmem2/devmem2.mk
-+++ b/package/devmem2/devmem2.mk
-@@ -7,6 +7,8 @@
- DEVMEM2_SITE = http://free-electrons.com/pub/mirror
- DEVMEM2_SOURCE = devmem2.c
- DEVMEM2_VERSION = 1
-+DEVMEM2_LICENSE = GPLv2+
-+DEVMEM2_LICENSE_FILES = devmem2.c
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index c58c347..e960a92 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -6,6 +6,8 @@
  
- define DEVMEM2_EXTRACT_CMDS
- 	cp $(DL_DIR)/$($(PKG)_SOURCE) $(@D)/
+ DFU_UTIL_VERSION = 0.6
+ DFU_UTIL_SITE = http://dfu-util.gnumonks.org/releases/
++DFU_UTIL_LICENSE = GPLv2+
++DFU_UTIL_LICENSE_FILES = COPYING
+ 
+ HOST_DFU_UTIL_DEPENDENCIES = host-libusb
+ 
 -- 
 1.8.5.5
