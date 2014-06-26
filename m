@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:21:07 -0300
-Subject: [Buildroot] [PATCH 39/53] pcmanfm: add license information
+Date: Thu, 26 Jun 2014 16:21:08 -0300
+Subject: [Buildroot] [PATCH 40/53] prboom: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-39-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-40-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/pcmanfm/pcmanfm.mk | 2 ++
+ package/prboom/prboom.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
-index 80eedd4..7e47f52 100644
---- a/package/pcmanfm/pcmanfm.mk
-+++ b/package/pcmanfm/pcmanfm.mk
-@@ -9,5 +9,7 @@ PCMANFM_SITE = http://downloads.sourceforge.net/project/pcmanfm/pcmanfm-legacy%2
- PCMANFM_CONF_OPT = --disable-hal
- PCMANFM_DEPENDENCIES = host-pkgconf libgtk2 gamin startup-notification xlib_libX11
- PCMANFM_AUTORECONF = YES
-+PCMANFM_LICENSE = GPLv2
-+PCMANFM_LICENSE_FILES = COPYING
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index 1da08ce..55973d6 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -8,6 +8,8 @@ PRBOOM_VERSION = 2.5.0
+ PRBOOM_SITE = http://downloads.sourceforge.net/project/prboom/prboom%20stable/$(PRBOOM_VERSION)
+ PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
+ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
++PRBOOM_LICENSE = GPLv2+
++PRBOOM_LICENSE_FILES = COPYING
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
 -- 
 1.8.5.5
