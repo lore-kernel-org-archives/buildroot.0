@@ -1,45 +1,22 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 26 Jun 2014 12:29:11 +0200
-Subject: [Buildroot] [PATCH] Add target-clean makefile target
-Message-ID: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Jun 2014 13:06:54 +0200
+Subject: [Buildroot] [PATCH 30/54] python-dpkt: add license information
+In-Reply-To: <1403636160-11807-30-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:36 -0300")
+References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
+ <1403636160-11807-30-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87simsq69d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This makefile target wipes the target folder and forces buildroot into rebuild it.
-It's useful when you have changed the list of packages and the target
-tree remains out of sync keeping old installed packages no longer needed.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/Makefile b/Makefile
-index 14fca2b..83dceb7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -835,6 +835,11 @@ clean:
- 		$(BUILD_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR)
- 
-+target-clean:
-+	rm -rf $(TARGET_DIR)
-+	find $(BUILD_DIR) -name ".stamp_target_installed" -exec rm {} \;
-+	rm $(BUILD_DIR)/.root
-+
- distclean: clean
- ifeq ($(DL_DIR),$(TOPDIR)/dl)
- 	rm -rf $(DL_DIR)
-@@ -848,6 +853,7 @@ help:
- 	@echo 'Cleaning:'
- 	@echo '  clean                  - delete all files created by build'
- 	@echo '  distclean              - delete all non-source files (including .config)'
-+	@echo '  target-clean           - delete all target files and forces reinstall'
- 	@echo
- 	@echo 'Build:'
- 	@echo '  all                    - make world'
+Committed, thanks.
+
 -- 
-2.0.0
+Bye, Peter Korsgaard
