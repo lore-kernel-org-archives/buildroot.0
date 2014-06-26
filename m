@@ -1,32 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Jun 2014 16:33:42 +0200
-Subject: [Buildroot] [git commit] rubix: add license information
-Message-ID: <20140626143652.B1D3B9D0C4@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 26 Jun 2014 17:00:25 +0200
+Subject: [Buildroot] [PATCH 36/54] socketcand: add license information
+In-Reply-To: <1403636160-11807-36-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:55:42 -0300")
+References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
+ <1403636160-11807-36-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87k383pvg6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a69e26ac73fe14b968edbca752b12c44959f2394
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/rubix/rubix.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/socketcand/socketcand.mk | 1 +
+ >  1 file changed, 1 insertion(+)
 
-diff --git a/package/rubix/rubix.mk b/package/rubix/rubix.mk
-index 732f807..5427830 100644
---- a/package/rubix/rubix.mk
-+++ b/package/rubix/rubix.mk
-@@ -8,6 +8,8 @@ RUBIX_VERSION = 1.0.5
- RUBIX_SOURCE = rubix-$(RUBIX_VERSION).tar.bz2
- RUBIX_SITE = http://mirror.egtvedt.no/avr32linux.org/twiki/pub/Main/Rubix
- RUBIX_INSTALL_TARGET_OPT = GAMESDIR=$(TARGET_DIR)/usr/games install
-+RUBIX_LICENSE = Public Domain
-+RUBIX_LICENSE_FILES = LICENCE
- 
- RUBIX_MAKE_OPT = CC="$(TARGET_CC)" XINC="-I$(STAGING_DIR)/usr/include/X11" XLIB="-L$(STAGING_DIR)/usr/lib -lX11"
- 
+ > diff --git a/package/socketcand/socketcand.mk b/package/socketcand/socketcand.mk
+ > index fdba96e..51aa224 100644
+ > --- a/package/socketcand/socketcand.mk
+ > +++ b/package/socketcand/socketcand.mk
+ > @@ -7,6 +7,7 @@
+ >  SOCKETCAND_VERSION = 274e4e44107f6138a29bbc4e20f9fbd2a7d4dab1
+ >  SOCKETCAND_SITE = $(call github,dschanoeh,socketcand,$(SOCKETCAND_VERSION))
+ >  SOCKETCAND_AUTORECONF = YES
+ > +SOCKETCAND_LICENSE = BSD-3c or GPLv2
+
+While not a true license file, I think it makes sense to point
+_LICENSE_FILES to socketcand.c as it has all the needed details.
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
