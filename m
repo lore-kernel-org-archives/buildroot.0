@@ -1,41 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 17:01:44 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.15.2
-In-Reply-To: <1403812904-11302-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403812904-11302-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403812904-11302-2-git-send-email-gustavo@zacarias.com.ar>
+From: Ivan Sergeev <vsergeev@kumunetworks.com>
+Date: Thu, 26 Jun 2014 13:30:29 -0700
+Subject: [Buildroot] [PATCH 1/1] opkg: bump to version 0.2.2 and update
+	upstream url
+Message-ID: <1403814629-4007-1-git-send-email-vsergeev@kumunetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/opkg/opkg.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ece48a7..ac3245d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index c57bd7f..56db604e 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.15.1"
-+	bool "3.15.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.15.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.15.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-OPKG_VERSION = v0.2.0
+-OPKG_SOURCE = $(OPKG_VERSION).tar.bz2
+-OPKG_SITE = https://bitbucket.org/opkg/opkg/get
++OPKG_VERSION = v0.2.2
++OPKG_SITE = git://git.yoctoproject.org/opkg
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ OPKG_DEPENDENCIES = host-pkgconf
+ OPKG_LICENSE = GPLv2+
 -- 
-1.8.5.5
+2.0.0
