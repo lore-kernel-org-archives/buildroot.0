@@ -1,22 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 27 Jun 2014 08:57:41 +0200
-Subject: [Buildroot] [PATCH 54/54] metacity: add license information
-In-Reply-To: <1403636160-11807-54-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 24 Jun 2014 15:56:00 -0300")
-References: <1403636160-11807-1-git-send-email-gustavo@zacarias.com.ar>
- <1403636160-11807-54-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a98yn8ka.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 26 Jun 2014 23:03:13 +0200
+Subject: [Buildroot] [git commit] avrdude: add license information
+Message-ID: <20140627070642.469F79D0F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=d1f545004bf0533064363d87c2d7c71e7acf7435
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/avrdude/avrdude.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index b45baaf..7876c1d 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -14,6 +14,8 @@ AVRDUDE_SUBDIR = avrdude
+ AVRDUDE_AUTORECONF = YES
+ AVRDUDE_DEPENDENCIES = libelf libusb libusb-compat ncurses \
+ 	host-flex host-bison
++AVRDUDE_LICENSE = GPLv2+
++AVRDUDE_LICENSE_FILES = avrdude/COPYING
+ 
+ ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+ AVRDUDE_DEPENDENCIES += libftdi
