@@ -1,67 +1,74 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 26 Jun 2014 19:01:28 +0200
-Subject: [Buildroot] Raspberry Pi: recommendations for web kiosk
-In-Reply-To: <CAAXf6LUR=nSyh3GPk037uYUOE3hRngWmrj+YOxiQe6RD75TRBw@mail.gmail.com>
-References: <CAAXf6LXK64M-BO3V-K6e_27m7UhYOe3N01oXBSVfF6NUdqrARA@mail.gmail.com>
- <20140626124257.GA13409@rmm-p1267483>
- <CAAXf6LUR=nSyh3GPk037uYUOE3hRngWmrj+YOxiQe6RD75TRBw@mail.gmail.com>
-Message-ID: <20140626170127.GA3742@ned>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 26 Jun 2014 21:45:24 +0400
+Subject: [Buildroot] [PATCH] dhcpcd: fix build with ccache
+In-Reply-To: <d3257052bc958700588f.1403443612@localhost>
+References: <d3257052bc958700588f.1403443612@localhost>
+Message-ID: <CAMo8BfL+StF+xmjn_xvdT+Hp7LauXWS-uBR9DLs9omv65-RYQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 26, 2014 at 03:15:25PM +0200, Thomas De Schampheleire wrote:
-> Hi Eric,
->
-> On Thu, Jun 26, 2014 at 2:42 PM, Eric Le Bihan
-> <eric.le.bihan.dev@free.fr> wrote:
-> > Hi!
-> > On Wed, Jun 25, 2014 at 03:02:29PM +0200, Thomas De Schampheleire wrote:
-> >> Hi,
-> >>
-> >> We currently use a Raspberry Pi as a simple web-wall. It cycles every
-> >> two minutes between two (non-local) web pages, one of which contains a
-> >> few iframes.
-> >>
-> >> While this can hardly be called a resource-intensive task, the
-> >> Raspberry Pi by no means performs this fluently. The pages load
-> >> relatively slow, and administration tasks on this pi also suffer from
-> >> hickups.
-> >>
-> >> The pi currently contains a raspbian image (not done by me, I swear!
-> >> :-) ) and uses chromium in kiosk mode to display the web pages.
-> >>
-> >> My basic question is: can I expect to get better performance by
-> >> setting up a custom buildroot image, or is rpi so poor in performance,
-> >> even for this mundane task?
-> >> Which packages should I select to achieve this?
-> >>
-> >> Do I need an X.org or not really?
-> >> If X.org is needed, does 'Kdrive / tinyX' work on rpi, or should I
-> >> select modular x.org, and how do these compare.
-> >> (as you notice, I have never set up embedded boards with graphical stuff).
-> >>
-> >> Which browser should/could I use? Preferably something that can run in
-> >> fullscreen mode as this is a kiosk-like board.
-> >>
-> >> Is rpi-userland needed / recommended? How would I benefit from it?
-> >>
-> >> Any other recommendations/tips are welcome too, of course.
-> > Just my two cents: how about using a custom application based on QtWebkit with
-> > EGLFS [1]?
-> >
->
-> This is not a commercial product, but rather an internal information
-> screen used on the workfloor. So writing custom applications, which I
-> assume is quite some work, is not acceptable. I am hoping for a more
-> or less out-of-the-box solution...
-Well, thanks to QML and QtWebkit, that is pretty doable. I hacked a quick
-example at https://github.com/elebihan/webkiosk, inspired by the Qt examples.
+Hi,
 
-AFAIK, running it with the '-platform eglfs' option should do the trick (not
-tested, my RPi is out of order :-( )
+On Sun, Jun 22, 2014 at 5:26 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> After the bump to dhcpcd 6.4.0, building dhcpcd with ccache fails at the
+> configure step:
+>
+> Using compiler .. <buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc
+> <buildroot>/output/host/usr/bin/ccache <buildroot>/output/host/usr/bin/i686-pc-linux-gnu-gcc is not an executable
+> make: *** [<buildroot>/output/build/dhcpcd-6.4.0/.stamp_configured] Error 1
+>
+> This patch backports an upstream patch to fix this issue.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+>  package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch |  32 ++++++++++++++
+>  1 files changed, 32 insertions(+), 0 deletions(-)
+>
+> diff -r a59338f65a46 -r d3257052bc95 package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch
+> --- /dev/null   Thu Jan 01 00:00:00 1970 +0000
+> +++ b/package/dhcpcd/dhcpcd-0001-fix-build-with-ccache.patch    Sun Jun 22 15:22:35 2014 +0200
+> @@ -0,0 +1,32 @@
+> +configure: support builds using ccache
+> +
+> +The configure script checks whether CC is executable by means of a check
+> +'type $CC'. However, when using ccache, CC is normally set to "ccache gcc"
+> +(using the appropriate paths). Such a compound string is not recognized by
+> +type, however, and thus configure bails out.
+> +
+> +This patch changes the check 'type $CC' with a compile test.
+> +
+> +Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> +
+> +Upstream status: another implementation was submitted, modified by
+> +maintainer Roy, then simplified based on my suggestion. This patch is a fold
+> +of the two upstream patches:
+> +http://roy.marples.name/projects/dhcpcd/info/5f4bf91142fceac502c478886aeb5079a184bb43
+> +http://roy.marples.name/projects/dhcpcd/info/26bc10be2405659bdf31d690a72d377d6b67ebd4
+> +
+> +diff -r 66c8bdc88858 configure
+> +--- a/configure        Sat Jun 21 16:54:30 2014 +0200
+> ++++ b/configure        Sun Jun 22 15:20:25 2014 +0200
+> +@@ -272,8 +272,9 @@
+> + fi
+> +
+> + echo "Using compiler .. $CC"
+> +-if ! type "$CC" >/dev/null 2>&1; then
+> +-      echo "$CC is not an executable"
+> ++if ! echo "int main(void) { return 0; }" | $CC -x c -o /dev/null - 2>/dev/null
 
-Best regards,
-ELB
+This test fails when executed with otherwise working gcc for xtensa,
+at the linking step linker needs to be able to read the object it creates.
+Please see the following thread:
+http://comments.gmane.org/gmane.comp.lib.uclibc.buildroot/87809
+
+The first quoted fix applied alone works just fine, so I'd suggest reverting the
+simplification part of this fix.
+
+-- 
+Thanks.
+-- Max
