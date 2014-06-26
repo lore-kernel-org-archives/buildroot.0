@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:54 -0300
-Subject: [Buildroot] [PATCH 26/53] libconfuse: add license information
+Date: Thu, 26 Jun 2014 16:20:55 -0300
+Subject: [Buildroot] [PATCH 27/53] libedit: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-26-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-27-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libconfuse/libconfuse.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libedit/libedit.mk | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 66cabd3..8a0d80f 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -9,6 +9,8 @@ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
- LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
- LIBCONFUSE_INSTALL_STAGING = YES
- LIBCONFUSE_CONF_OPT = --disable-rpath
-+LIBCONFUSE_LICENSE = ISC
-+LIBCONFUSE_LICENSE_FILES = src/confuse.c
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index 0ff418a..927626f 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -4,13 +4,15 @@
+ #
+ ################################################################################
+ 
+-LIBEDIT_VERSION         = 20130712-3.1
+-LIBEDIT_SITE            = http://www.thrysoee.dk/editline/
++LIBEDIT_VERSION = 20130712-3.1
++LIBEDIT_SITE = http://www.thrysoee.dk/editline/
+ LIBEDIT_INSTALL_STAGING = YES
+-LIBEDIT_DEPENDENCIES    = ncurses
++LIBEDIT_DEPENDENCIES = ncurses
++LIBEDIT_LICENSE = BSD-3c
++LIBEDIT_LICENSE_FILES = COPYING
+ 
+ # We're patching configure.ac
+-LIBEDIT_AUTORECONF      = YES
++LIBEDIT_AUTORECONF = YES
+ 
+ # Doesn't really support !wchar, but support is disabled otherwise
+ LIBEDIT_CONF_OPT += --enable-widec
+@@ -19,7 +21,7 @@ LIBEDIT_CONF_OPT += --enable-widec
+ # with __progname; otherwise, some features are disabled, as if libbsd was
+ # missing entirely.
+ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+-LIBEDIT_DEPENDENCIES   += libbsd
++LIBEDIT_DEPENDENCIES += libbsd
+ endif
  
  $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
 1.8.5.5
