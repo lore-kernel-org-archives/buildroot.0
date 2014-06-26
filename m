@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:21:01 -0300
-Subject: [Buildroot] [PATCH 33/53] libmms: add license information
+Date: Thu, 26 Jun 2014 16:21:02 -0300
+Subject: [Buildroot] [PATCH 34/53] libyaml: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-33-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-34-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libmms/libmms.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libyaml/libyaml.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
-index 405729f..445da7f 100644
---- a/package/libmms/libmms.mk
-+++ b/package/libmms/libmms.mk
-@@ -6,9 +6,9 @@
- 
- LIBMMS_VERSION = 0.6.2
- LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
--
- LIBMMS_INSTALL_STAGING = YES
--
- LIBMMS_DEPENDENCIES = host-pkgconf libglib2
-+LIBMMS_LICENSE = LGPLv2.1
-+LIBMMS_LICENSE_FILES = COPYING.LIB
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index 28ed77a..0a42742 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
+@@ -8,5 +8,7 @@ LIBYAML_VERSION = 0.1.6
+ LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
+ LIBYAML_SITE = http://pyyaml.org/download/libyaml/
+ LIBYAML_INSTALL_STAGING = YES
++LIBYAML_LICENSE = MIT
++LIBYAML_LICENSE_FILES = LICENSE
  
  $(eval $(autotools-package))
 -- 
