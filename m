@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:56 -0300
-Subject: [Buildroot] [PATCH 28/53] liberation: add license information
+Date: Thu, 26 Jun 2014 16:20:57 -0300
+Subject: [Buildroot] [PATCH 29/53] libev: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-28-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-29-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/liberation/liberation.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/libev/libev.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
-index ac387fd..815aeba 100644
---- a/package/liberation/liberation.mk
-+++ b/package/liberation/liberation.mk
-@@ -7,8 +7,10 @@
- LIBERATION_VERSION = 1.06.0.20100721
- LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
- LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
--
- LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
-+# Bump to 2.x changes license!!
-+LIBERATION_LICENSE = GPLv2 with exceptions
-+LIBERATION_LICENSE_FILES = License.txt
+diff --git a/package/libev/libev.mk b/package/libev/libev.mk
+index 1742231..11c788d 100644
+--- a/package/libev/libev.mk
++++ b/package/libev/libev.mk
+@@ -7,5 +7,7 @@
+ LIBEV_VERSION = 4.11
+ LIBEV_SITE = http://dist.schmorp.de/libev/
+ LIBEV_INSTALL_STAGING = YES
++LIBEV_LICENSE = BSD-2c or GPLv2+
++LIBEV_LICENSE_FILES = LICENSE
  
- ifeq ($(BR2_PACKAGE_LIBERATION_MONO),y)
- define LIBERATION_INSTALL_MONO
+ $(eval $(autotools-package))
 -- 
 1.8.5.5
