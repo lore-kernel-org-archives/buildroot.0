@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:55 -0300
-Subject: [Buildroot] [PATCH 27/53] libedit: add license information
+Date: Thu, 26 Jun 2014 16:20:56 -0300
+Subject: [Buildroot] [PATCH 28/53] liberation: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-27-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-28-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libedit/libedit.mk | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ package/liberation/liberation.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-index 0ff418a..927626f 100644
---- a/package/libedit/libedit.mk
-+++ b/package/libedit/libedit.mk
-@@ -4,13 +4,15 @@
- #
- ################################################################################
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index ac387fd..815aeba 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -7,8 +7,10 @@
+ LIBERATION_VERSION = 1.06.0.20100721
+ LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+-
+ LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
++# Bump to 2.x changes license!!
++LIBERATION_LICENSE = GPLv2 with exceptions
++LIBERATION_LICENSE_FILES = License.txt
  
--LIBEDIT_VERSION         = 20130712-3.1
--LIBEDIT_SITE            = http://www.thrysoee.dk/editline/
-+LIBEDIT_VERSION = 20130712-3.1
-+LIBEDIT_SITE = http://www.thrysoee.dk/editline/
- LIBEDIT_INSTALL_STAGING = YES
--LIBEDIT_DEPENDENCIES    = ncurses
-+LIBEDIT_DEPENDENCIES = ncurses
-+LIBEDIT_LICENSE = BSD-3c
-+LIBEDIT_LICENSE_FILES = COPYING
- 
- # We're patching configure.ac
--LIBEDIT_AUTORECONF      = YES
-+LIBEDIT_AUTORECONF = YES
- 
- # Doesn't really support !wchar, but support is disabled otherwise
- LIBEDIT_CONF_OPT += --enable-widec
-@@ -19,7 +21,7 @@ LIBEDIT_CONF_OPT += --enable-widec
- # with __progname; otherwise, some features are disabled, as if libbsd was
- # missing entirely.
- ifeq ($(BR2_PACKAGE_LIBBSD),y)
--LIBEDIT_DEPENDENCIES   += libbsd
-+LIBEDIT_DEPENDENCIES += libbsd
- endif
- 
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBERATION_MONO),y)
+ define LIBERATION_INSTALL_MONO
 -- 
 1.8.5.5
