@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Jun 2014 17:00:56 +0200
-Subject: [Buildroot] [git commit] squashfs: add license information
-Message-ID: <20140626151144.3D8E49D0D5@busybox.osuosl.org>
+Date: Thu, 26 Jun 2014 17:06:52 +0200
+Subject: [Buildroot] [git commit] transmission: add license information
+Message-ID: <20140626151144.624E59D018@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=13c860202727da415333e4840e9b26faec2731df
+commit: http://git.buildroot.net/buildroot/commit/?id=576cdb78e915e4cae40bd1e2de87c350f641d043
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: also mention openssl exception]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squashfs/squashfs.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/transmission/transmission.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/squashfs/squashfs.mk b/package/squashfs/squashfs.mk
-index aaf568c..58dcb62 100644
---- a/package/squashfs/squashfs.mk
-+++ b/package/squashfs/squashfs.mk
-@@ -7,6 +7,8 @@
- SQUASHFS_VERSION = 4.3
- SQUASHFS_SOURCE = squashfs$(SQUASHFS_VERSION).tar.gz
- SQUASHFS_SITE = http://downloads.sourceforge.net/project/squashfs/squashfs/squashfs$(SQUASHFS_VERSION)
-+SQUASHFS_LICENSE = GPLv2+
-+SQUASHFS_LICENSE_FILES = COPYING
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 37cc58b..07a76ab 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -15,10 +15,11 @@ TRANSMISSION_DEPENDENCIES = \
+ 	openssl \
+ 	zlib
+ TRANSMISSION_AUTORECONF = YES
+-
+ TRANSMISSION_CONF_OPT = \
+ 	--disable-libnotify \
+ 	--enable-lightweight
++TRANSMISSION_LICENSE = GPLv2 or GPLv3 with OpenSSL exception
++TRANSMISSION_LICENSE_FILES = COPYING
  
- # no libattr in BR
- SQUASHFS_MAKE_ARGS = XATTR_SUPPORT=0
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_UTP),y)
+ 	TRANSMISSION_CONF_OPT += --enable-utp
