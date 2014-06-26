@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 26 Jun 2014 16:20:35 -0300
-Subject: [Buildroot] [PATCH 07/53] eeprog: add license information
+Date: Thu, 26 Jun 2014 16:20:36 -0300
+Subject: [Buildroot] [PATCH 08/53] elftosb: add license information
 In-Reply-To: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1403810481-10025-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1403810481-10025-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/eeprog/eeprog.mk | 2 ++
+ package/elftosb/elftosb.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/eeprog/eeprog.mk b/package/eeprog/eeprog.mk
-index e1dd9b5..93aeb5e 100644
---- a/package/eeprog/eeprog.mk
-+++ b/package/eeprog/eeprog.mk
+diff --git a/package/elftosb/elftosb.mk b/package/elftosb/elftosb.mk
+index 9b825a0..ac9aa32 100644
+--- a/package/elftosb/elftosb.mk
++++ b/package/elftosb/elftosb.mk
 @@ -6,6 +6,8 @@
  
- EEPROG_VERSION = 0.7.6
- EEPROG_SITE = http://www.codesink.org/download
-+EEPROG_LICENSE = GPLv2+
-+EEPROG_LICENSE_FILES = eeprog.c
+ ELFTOSB_VERSION = 10.12.01
+ ELFTOSB_SITE = http://repository.timesys.com/buildsources/e/elftosb/elftosb-$(ELFTOSB_VERSION)
++ELFTOSB_LICENSE = BSD-3c
++ELFTOSB_LICENSE_FILES = COPYING
  
- define EEPROG_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ define HOST_ELFTOSB_BUILD_CMDS
+ 	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
 -- 
 1.8.5.5
