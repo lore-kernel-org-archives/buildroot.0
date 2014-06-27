@@ -1,85 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jun 2014 13:08:04 +0200
-Subject: [Buildroot] [git commit] qt5: bump to 5.3.1
-Message-ID: <20140627111029.827F39D0E2@busybox.osuosl.org>
+Date: Fri, 27 Jun 2014 13:05:33 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 14,
+	15}.x series
+Message-ID: <20140627111029.709A79D0E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9c169981c3fcab95c284c42e81bca16caf3950e3
+commit: http://git.buildroot.net/buildroot/commit/?id=a4ffb8428731350db3f540e77f0154c19c5c69aa
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove upstreamed patch.
-
-Signed-off-by: Fatih A????c?? <fatih.asici@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5.mk                                 |    2 +-
- ...ck-for-QtGui-before-building-the-examples.patch |   46 --------------------
- 2 files changed, 1 insertions(+), 47 deletions(-)
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index c897496..44e5af0 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -1,5 +1,5 @@
- QT5_VERSION_MAJOR = 5.3
--QT5_VERSION = $(QT5_VERSION_MAJOR).0
-+QT5_VERSION = $(QT5_VERSION_MAJOR).1
- QT5_SITE = http://download.qt-project.org/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules/
- include $(sort $(wildcard package/qt5/*/*.mk))
- 
-diff --git a/package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch b/package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch
-deleted file mode 100644
-index b269740..0000000
---- a/package/qt5/qt5script/qt5script-0001-Check-for-QtGui-before-building-the-examples.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--qt5script: Check for QtGui before building the examples
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--From e4453c92ee41943a3a1d67a725804a44e747f64e Mon Sep 17 00:00:00 2001
--From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Date: Wed, 16 Apr 2014 12:19:17 +0100
--Subject: [PATCH] qtscript: Check for QtGui before building the examples
--
--qsdbg and marshal examples need QtGui module. If QtGui is not installed
--they fail to compile.
--
--Change-Id: I1af6a8b39a0848c8208fe94a26ee57409dfd9b41
--Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Reviewed-by: Allan Sandfeld Jensen <allan.jensen@digia.com>
-----
-- examples/script/script.pro | 9 ++++-----
-- 1 file changed, 4 insertions(+), 5 deletions(-)
--
--diff --git a/examples/script/script.pro b/examples/script/script.pro
--index 3e1eae6..cc97233 100644
----- a/examples/script/script.pro
--+++ b/examples/script/script.pro
--@@ -1,7 +1,7 @@
-- TEMPLATE = subdirs
---SUBDIRS = \
---    customclass \
---    qsdbg
--+SUBDIRS = customclass
--+
--+qtHaveModule(gui): SUBDIRS += qsdbg
-- 
-- qtHaveModule(widgets) {
--     SUBDIRS += \
--@@ -22,8 +22,7 @@ qtHaveModule(widgets) {
-- }
-- 
-- !wince {
---    SUBDIRS += \
---        marshal
--+    qtHaveModule(gui): SUBDIRS += marshal
-- }
-- 
-- maemo5: CONFIG += qt_example
---- 
--1.9.1
--
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 1665aad..3d2094a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.94"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.95"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.44"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.45"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.23"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.8"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.1"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.9"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.2"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
