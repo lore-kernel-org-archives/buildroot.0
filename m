@@ -1,43 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 27 Jun 2014 10:17:50 -0300
-Subject: [Buildroot] [PATCH] php: security bump to version 5.5.14
-Message-ID: <1403875070-601-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 27 Jun 2014 16:08:53 +0200
+Subject: [Buildroot] [PATCH] lzo: security bump to version 2.07
+In-Reply-To: <20140627112652.GC4155@tarshish> (Baruch Siach's message of "Fri, 
+ 27 Jun 2014 14:26:52 +0300")
+References: <b7658f620fcbca547e5aa330bec28c862e8d59b2.1403843549.git.baruch@tkos.co.il>
+ <87wqc2lif0.fsf@dell.be.48ers.dk> <20140627112652.GC4155@tarshish>
+Message-ID: <877g42la16.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-CVE-2014-3981 - insecure temporary file use in the configure script.
-CVE-2014-0207 - cdf_read_short_sector insufficient boundary check.
-CVE-2014-3478 - mconvert incorrect handling of truncated pascal string
-size.
-CVE-2014-3479 - cdf_check_stream_offset insufficient boundary check.
-CVE-2014-3480 - cdf_count_chain insufficient boundary check.
-CVE-2014-3487 - cdf_read_property_info insufficient boundary check.
-CVE-2014-4049 - Fix potential segfault in dns_get_record().
-CVE-2014-3515 - unserialize() SPL ArrayObject / SPLObjectStorage Type
-Confusion.
+ >> > +# Make libtool patch apply
+ >> > +LZO_AUTORECONF = YES
+ >> 
+ >> Why? Please explain.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/php.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Otherwise libtool patching fails:
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index a878800..8ac5d86 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.5.13
-+PHP_VERSION = 5.5.14
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+ >>>> lzo 2.07 Patching libtool
+
+ > Applying buildroot-libtool-v2.4.patch using patch: patching file ltmain.sh
+ > Hunk #1 FAILED at 1416.
+ > Hunk #2 FAILED at 2962.
+ > Hunk #3 succeeded at 7964 with fuzz 2 (offset 1281 lines).
+ > Hunk #4 succeeded at 10554 (offset 1297 lines).
+ > 2 out of 4 hunks FAILED -- saving rejects to file ltmain.sh.rej
+ > Patch failed!  Please fix buildroot-libtool-v2.4.patch!
+
+ > Should I rephrase the comment?
+
+Yes, please. I guess it is because it uses a too new libtool version?
+
 -- 
-1.8.5.5
+Bye, Peter Korsgaard
