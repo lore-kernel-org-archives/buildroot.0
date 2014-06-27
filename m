@@ -1,72 +1,142 @@
 From: Gary Bisson <bisson.gary@gmail.com>
-Date: Thu, 26 Jun 2014 22:24:46 -0700
-Subject: [Buildroot] [PATCH v2 03/11] freescale-imx: update imx-lib package
+Date: Thu, 26 Jun 2014 22:24:47 -0700
+Subject: [Buildroot] [PATCH v2 04/11] freescale-imx: change platform choice
+	to be common
 In-Reply-To: <1403846694-21974-1-git-send-email-bisson.gary@gmail.com>
 References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
  <1403846694-21974-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <1403846694-21974-4-git-send-email-bisson.gary@gmail.com>
+Message-ID: <1403846694-21974-5-git-send-email-bisson.gary@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-imx-lib no longer includes VPU code and therefore is now free from Freescale
-License.
+that way all the packages can inherit from that information plus the
+Vivante package will only be available for iMX6Q platforms.
 
 Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 ---
- package/freescale-imx/imx-lib/imx-lib.mk | 23 +++--------------------
- 1 file changed, 3 insertions(+), 20 deletions(-)
+ package/freescale-imx/Config.in          | 47 ++++++++++++++++++++++++++++++--
+ package/freescale-imx/imx-lib/Config.in  | 37 -------------------------
+ package/freescale-imx/imx-lib/imx-lib.mk |  2 +-
+ 3 files changed, 46 insertions(+), 40 deletions(-)
 
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index 7c22f79..0626a74 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -1,8 +1,51 @@
+-menu "Freescale i.MX libraries"
++menuconfig BR2_PACKAGE_FREESCALE_IMX
++	bool "Freescale i.MX libraries"
+ 	depends on BR2_arm
++	help
++	  Those packages provide hardware acceleration for GPU or VPU, hardware
++	  optimization or some hardware tools for Freescale i.MX platforms.
++
++if BR2_PACKAGE_FREESCALE_IMX
++choice
++	prompt "i.MX platform"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
++	bool "imx25-3stack"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	bool "imx27ads"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
++	bool "imx37-3stack"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
++	bool "imx50"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	bool "imx51"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	bool "imx53"
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	bool "imx6q"
++
++endchoice
++
++config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
++	string
++	default "IMX25_3STACK" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
++	default "IMX27ADS" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
++	default "IMX37_3STACK" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
++	default "IMX50" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
++	default "IMX51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
++	default "IMX53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
++	default "IMX6Q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ 
+ source "package/freescale-imx/imx-lib/Config.in"
+ source "package/freescale-imx/firmware-imx/Config.in"
++if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ source "package/freescale-imx/gpu-viv-bin-mx6q/Config.in"
++endif
+ 
+-endmenu
++endif
+diff --git a/package/freescale-imx/imx-lib/Config.in b/package/freescale-imx/imx-lib/Config.in
+index 444060b..3b0f7a9 100644
+--- a/package/freescale-imx/imx-lib/Config.in
++++ b/package/freescale-imx/imx-lib/Config.in
+@@ -14,40 +14,3 @@ config BR2_PACKAGE_IMX_LIB
+ 	  This library is provided by Freescale as-is and doesn't have
+ 	  an upstream.
+ 
+-if BR2_PACKAGE_IMX_LIB
+-choice
+-	prompt "i.MX platform"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
+-	bool "imx25-3stack"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
+-	bool "imx27ads"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
+-	bool "imx37-3stack"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
+-	bool "imx50"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
+-	bool "imx51"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
+-	bool "imx53"
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
+-	bool "imx6q"
+-
+-endchoice
+-
+-config BR2_PACKAGE_IMX_LIB_PLATFORM
+-	string
+-	default "IMX25_3STACK" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX25_3STACK
+-	default "IMX27ADS" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX27ADS
+-	default "IMX37_3STACK" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX37_3STACK
+-	default "IMX50" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX50
+-	default "IMX51" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX51
+-	default "IMX53" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX53
+-	default "IMX6Q" if BR2_PACKAGE_IMX_LIB_PLATFORM_IMX6Q
+-endif
 diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index 4f605d7..2a94430 100644
+index 2a94430..0d66759 100644
 --- a/package/freescale-imx/imx-lib/imx-lib.mk
 +++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -6,9 +6,9 @@
- 
- IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
- IMX_LIB_SITE    = $(FREESCALE_IMX_SITE)
--IMX_LIB_LICENSE = Freescale License (vpu), LGPLv2.1+ (the rest)
-+IMX_LIB_LICENSE = LGPLv2.1+
- IMX_LIB_LICENSE_FILES = EULA
--IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).bin
-+IMX_LIB_SOURCE = imx-lib-$(IMX_LIB_VERSION).tar.gz
- 
- IMX_LIB_INSTALL_STAGING = YES
- 
-@@ -17,7 +17,7 @@ IMX_LIB_DEPENDENCIES += linux
- IMX_LIB_INCLUDE = \
- 	-I$(LINUX_DIR)/drivers/mxc/security/rng/include \
- 	-I$(LINUX_DIR)/drivers/mxc/security/sahara2/include \
--	-idirafter $(LINUX_DIR)/include
-+	-idirafter $(LINUX_DIR)/include/uapi
- 
- IMX_LIB_MAKE_ENV = \
+@@ -23,7 +23,7 @@ IMX_LIB_MAKE_ENV = \
  	$(TARGET_MAKE_ENV) \
-@@ -26,23 +26,6 @@ IMX_LIB_MAKE_ENV = \
- 	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 	CROSS_COMPILE="$(CCACHE) $(TARGET_CROSS)" \
+-	PLATFORM=$(BR2_PACKAGE_IMX_LIB_PLATFORM) \
++	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM) \
  	INCLUDE="$(IMX_LIB_INCLUDE)"
  
--# The archive is a shell-self-extractor of a bzipped tar. It happens
--# to extract in the correct directory (imx-lib-x.y.z)
--# The --force makes sure it doesn't fail if the source dir already exists.
--# The --auto-accept skips the license check - not needed for us
--# because we have legal-info
--# Since there's a EULA in the bin file, extract it to imx-lib-x.y.z/EULA
--#
--define IMX_LIB_EXTRACT_CMDS
--	awk 'BEGIN      { start=0; } \
--	     /^EOEULA/  { start = 0; } \
--	                { if (start) print; } \
--	     /<<EOEULA/ { start=1; }'\
--	    $(DL_DIR)/$(IMX_LIB_SOURCE) > $(@D)/EULA
--	cd $(BUILD_DIR); \
--	sh $(DL_DIR)/$(IMX_LIB_SOURCE) --force --auto-accept
--endef
--
  define IMX_LIB_BUILD_CMDS
- 	$(IMX_LIB_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
 -- 
 2.0.0
