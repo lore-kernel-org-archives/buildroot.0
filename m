@@ -1,41 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jun 2014 13:05:41 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 3.15.2
-Message-ID: <20140627111029.7976E9D0E2@busybox.osuosl.org>
+Date: Fri, 27 Jun 2014 13:09:22 +0200
+Subject: [Buildroot] [git commit] radvd: fix build against older glibc
+Message-ID: <20140627111029.8C6739D0E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a4389879cbace71635484be5be7cea47345b3764
+commit: http://git.buildroot.net/buildroot/commit/?id=e92fb1f90f1b51cd111105d86c058fdca6f3434a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+clock_gettime() requires -lrt when linking against glibc older than 2.17.
+
+Fixes:
+http://autobuild.buildroot.net/results/e07/e07dd9a82ae4c8778b6901b9bd777f5affb9293a/
+
+[Peter: add comment in .mk as well]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/radvd/radvd.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ece48a7..ac3245d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index 5958d91..a42d858 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -8,6 +8,8 @@ RADVD_VERSION = 1.13
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
++# clock_gettime() requires -lrt when linking against glibc older than 2.17
++RADVD_CONF_ENV = LIBS=-lrt
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.15.1"
-+	bool "3.15.2"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.15.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.15.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ define RADVD_INSTALL_INITSCRIPT
+ 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
