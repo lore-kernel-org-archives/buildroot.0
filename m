@@ -1,60 +1,54 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 27 Jun 2014 20:26:00 +0400
-Subject: [Buildroot] [PATCH v2] uclibc: enable parallel building of libraries
-Message-ID: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 27 Jun 2014 20:30:29 +0200
+Subject: [Buildroot] How to control kernel header version?
+In-Reply-To: <CAHvj1qaaXv6dGD6do7oED=uNKMpwZMFwOOdyjhGHC0J8KxykiA@mail.gmail.com>
+References: <CAHvj1qaaXv6dGD6do7oED=uNKMpwZMFwOOdyjhGHC0J8KxykiA@mail.gmail.com>
+Message-ID: <20140627203029.338fcaf7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The use of MAKE1 for uClibc dates back 10 years:
+Hello,
 
-commit 8e5fb3fb4ab09b4dc04fe7cb3f7becce6514117b
-Author: Eric Andersen <andersen@codepoet.org>
-Date:   Sat Dec 11 13:01:10 2004 +0000
+On Fri, 27 Jun 2014 11:37:30 +0100, bruce bushby wrote:
 
-    Add initial BR2_JLEVEL support, with some exceptions for apps that
-    have broken 'make -j' support
+> # Kernel headers
+> #BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+> 
+> # Kernel
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_VERSION="master"
+> BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/torvalds/linux.git"
+> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3493860c76eb4e5b222f1016d1458615afac9fc4"
+> BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+> BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+> BR2_LINUX_KERNEL_APPENDED_UIMAGE=n
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_APPENDED_DTB=n
+> BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-pcduino3.dts"
+> 
+> 
+> I think the current master is 3.16.0-rc3 .... but I keep seeing buildroot
+> downloading linux-headers-3.15.1 (current stable)
+> 
+> Is there a way to force using the headers from the the same source as
+> "KERNEL_CUSTOM_REPO" ?
 
-Since that time there were lots of improvements in uClibc that seem to allow
-parallel building of libs finally.
+No, not at this time. But using the 3.15 kernel headers is perfectly
+fine if you actually run a 3.15, 3.16 or any other later kernel
+version. So generally, people use a moderately recent, but not
+necessarily latest kernel version of the kernel headers, as there's no
+need for the kernel headers to match the kernel version. They only need
+to be at least older or of the same version.
 
-Unfortunately uClibc tests have dependences on previously built files,
-that's why tests left with MAKE1.
+Best regards,
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-In v2 uClibc tests are left with MAKE1 because there're strict
-dependences.
----
- package/uclibc/uclibc.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index b42fe55..28a8a08 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -494,13 +494,13 @@ endef
- endif
- 
- define UCLIBC_BUILD_CMDS
--	$(MAKE1) -C $(@D) \
-+	$(MAKE) -C $(@D) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX= \
- 		DEVEL_PREFIX=/ \
- 		RUNTIME_PREFIX=/ \
- 		all
--	$(MAKE1) -C $(@D)/utils \
-+	$(MAKE) -C $(@D)/utils \
- 		PREFIX=$(HOST_DIR) \
- 		HOSTCC="$(HOSTCC)" hostutils
- 	$(UCLIBC_BUILD_TEST_SUITE)
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
