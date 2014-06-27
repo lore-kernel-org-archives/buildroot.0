@@ -1,50 +1,30 @@
-From: bruce bushby <bruce.bushby@gmail.com>
-Date: Fri, 27 Jun 2014 11:37:30 +0100
-Subject: [Buildroot] How to control kernel header version?
-Message-ID: <CAHvj1qaaXv6dGD6do7oED=uNKMpwZMFwOOdyjhGHC0J8KxykiA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Jun 2014 08:00:24 -0300
+Subject: [Buildroot] [PATCH] libtasn1: bump to version 4.0
+Message-ID: <1403866824-28345-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libtasn1/libtasn1.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I wanted to ask how I can control kernel header version? I've tried various
-configs but so far I can't prevent buildroot using the latest "stable"
-version of kernel headers.
-
-
-My kernel config is:
-
-# Kernel headers
-#BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
-
-# Kernel
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_VERSION="master"
-BR2_LINUX_KERNEL_CUSTOM_GIT=y
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/torvalds/linux.git"
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3493860c76eb4e5b222f1016d1458615afac9fc4"
-BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-BR2_LINUX_KERNEL_APPENDED_UIMAGE=n
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_APPENDED_DTB=n
-BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-pcduino3.dts"
-
-
-I think the current master is 3.16.0-rc3 .... but I keep seeing buildroot
-downloading linux-headers-3.15.1 (current stable)
-
-Is there a way to force using the headers from the the same source as
-"KERNEL_CUSTOM_REPO" ?
-
-
-
-Thanks
-Bruce
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140627/940b8c2b/attachment.html>
+diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
+index d95578a..84297cb 100644
+--- a/package/libtasn1/libtasn1.mk
++++ b/package/libtasn1/libtasn1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTASN1_VERSION = 3.6
++LIBTASN1_VERSION = 4.0
+ LIBTASN1_SITE = http://ftp.gnu.org/gnu/libtasn1
+ LIBTASN1_DEPENDENCIES = host-bison
+ LIBTASN1_LICENSE = GPLv3+ LGPLv2.1+
+-- 
+1.8.5.5
