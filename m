@@ -1,53 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jun 2014 20:30:29 +0200
-Subject: [Buildroot] How to control kernel header version?
-In-Reply-To: <CAHvj1qaaXv6dGD6do7oED=uNKMpwZMFwOOdyjhGHC0J8KxykiA@mail.gmail.com>
-References: <CAHvj1qaaXv6dGD6do7oED=uNKMpwZMFwOOdyjhGHC0J8KxykiA@mail.gmail.com>
-Message-ID: <20140627203029.338fcaf7@free-electrons.com>
+Date: Fri, 27 Jun 2014 20:32:24 +0200
+Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable
+ CF?
+In-Reply-To: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
+References: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
+Message-ID: <20140627203224.1149e36a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Lennart Ramberg,
 
-On Fri, 27 Jun 2014 11:37:30 +0100, bruce bushby wrote:
+On Fri, 27 Jun 2014 12:32:03 +0200, Lennart Ramberg wrote:
 
-> # Kernel headers
-> #BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+> I am struggling with making a grub 2-bootable Compact Flash for a BIOS
+> based PC target.
+> The closest I came so far in the target machine is:
+>   grub rescue >
 > 
-> # Kernel
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_VERSION="master"
-> BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/torvalds/linux.git"
-> BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3493860c76eb4e5b222f1016d1458615afac9fc4"
-> BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
-> BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
-> BR2_LINUX_KERNEL_APPENDED_UIMAGE=n
-> BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> BR2_LINUX_KERNEL_APPENDED_DTB=n
-> BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-pcduino3.dts"
-> 
-> 
-> I think the current master is 3.16.0-rc3 .... but I keep seeing buildroot
-> downloading linux-headers-3.15.1 (current stable)
-> 
-> Is there a way to force using the headers from the the same source as
-> "KERNEL_CUSTOM_REPO" ?
+> Then I found 'grub-bios-setup' as a possibly better alternative, but got
+> stuck as below.
+> Is grub-bios-setup the way to go at all?
 
-No, not at this time. But using the 3.15 kernel headers is perfectly
-fine if you actually run a 3.15, 3.16 or any other later kernel
-version. So generally, people use a moderately recent, but not
-necessarily latest kernel version of the kernel headers, as there's no
-need for the kernel headers to match the kernel version. They only need
-to be at least older or of the same version.
+Have you checked the detailed instructions available in the help text
+of the grub2 package (accessible through xconfig/menuconfig) ? From the
+help text:
+
+          Notes on using Grub2 for BIOS-based platforms
+          =============================================
+
+          1. Create a disk image
+             dd if=/dev/zero of=disk.img bs=1M count=32
+          2. Partition it (either legacy or GPT style partitions work)
+             cfdisk disk.img
+              - Create one partition, type Linux, for the root
+                filesystem. The only constraint is to make sure there
+                is enough free space *before* the first partition to
+                store Grub2. Leaving 1 MB of free space is safe.
+          3. Setup loop device and loop partitions
+             sudo losetup -f disk.img
+             sudo partx -a disk.img
+          4. Prepare the root partition
+             sudo mkfs.ext3 -L root /dev/loop0p1
+             sudo mount /dev/loop0p1 /mnt
+             sudo tar -C /mnt -xf output/images/rootfs.tar
+             sudo umount /mnt
+          5. Install Grub2
+             ./output/host/usr/sbin/grub-bios-setup \
+                        -b ./output/host/usr/lib/grub/i386-pc/boot.img \
+                        -c ./output/images/grub.img -d . /dev/loop0
+          6. Your disk.img is ready!
+
+Of course, this help text is about creating a disk image, but it should
+apply (with minor changes) to a real device.
+
+Let me know if that works for you!
 
 Best regards,
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
