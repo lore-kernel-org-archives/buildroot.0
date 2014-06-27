@@ -1,10 +1,10 @@
 From: Fabio Porcedda <fabio.porcedda@telit.com>
-Date: Fri, 27 Jun 2014 14:15:55 +0200
-Subject: [Buildroot] [PATCH v3 1/5] Makefile: target-finalize: add
-	TARGET_FINALIZE_HOOKS
+Date: Fri, 27 Jun 2014 14:15:56 +0200
+Subject: [Buildroot] [PATCH v3 2/5] system: convert "system.mk" recipes to
+	"target-finalize" hooks
 In-Reply-To: <1403871359-18849-1-git-send-email-fabio.porcedda@telit.com>
 References: <1403871359-18849-1-git-send-email-fabio.porcedda@telit.com>
-Message-ID: <1403871359-18849-2-git-send-email-fabio.porcedda@telit.com>
+Message-ID: <1403871359-18849-3-git-send-email-fabio.porcedda@telit.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,142 @@ To: buildroot@busybox.net
 
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-Add TARGET_FINALIZE_HOOKS to the "target-finalize" rule to be able to
-add to it commands as needed.
-This is useful for having a nicer output because commands are executed
-after the "target-finalize" initial message, also it is useful to ensure
-an executing order even when top-level parallel makefile is being used.
-
-Also convert "TARGET_PURGE_LOCALES" to a hook that uses
-"TARGET_FINALIZE_HOOKS".
+Convert "system.mk" recipes to "target-finalize" hooks in order to:
+- Ensure an ordering even if top-level parallel make is being used.
+- Execute "system.mk" commands after the "target-finalize" initial message
+  is printed so they can be clearly distinguished from packages
+  building.
 
 Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 
 Notes:
     v3:
-     - Add in the description a note about TARGET_PURGE_LOCALES (Arnout)
-     - Add Reviewed-by: Arnout
+     - Shortened hooks names: SYSTEM_GENERIC_* -> SYSTEM_*
+     - use a common name for hooks variants: SYSTEM_REMOUNT_RW &
+       SYSTEM_GETTY (Arnout)
+    
+    v2:
+     - use hooks
 
- Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ system/system.mk | 80 ++++++++++++++++++++++++++++++--------------------------
+ 1 file changed, 43 insertions(+), 37 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index af694b9..3e845f6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -513,7 +513,7 @@ ifeq ($(BR2_ENABLE_LOCALE_PURGE),y)
- LOCALE_WHITELIST = $(BUILD_DIR)/locales.nopurge
- LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+diff --git a/system/system.mk b/system/system.mk
+index 01a6c3a..b614615 100644
+--- a/system/system.mk
++++ b/system/system.mk
+@@ -7,68 +7,74 @@ TARGET_GENERIC_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRAT
+ TARGET_GENERIC_GETTY_TERM = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_TERM))
+ TARGET_GENERIC_GETTY_OPTIONS = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_OPTIONS))
  
--define TARGET_PURGE_LOCALES
-+define PURGE_LOCALES
- 	rm -f $(LOCALE_WHITELIST)
- 	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
+-target-generic-securetty:
++ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
++define SYSTEM_SECURETTY
+ 	grep -q '^$(TARGET_GENERIC_GETTY_PORT)$$' $(TARGET_DIR)/etc/securetty || \
+ 		echo '$(TARGET_GENERIC_GETTY_PORT)' >> $(TARGET_DIR)/etc/securetty
++endef
++TARGET_FINALIZE_HOOKS += SYSTEM_SECURETTY
++endif
  
-@@ -525,13 +525,14 @@ define TARGET_PURGE_LOCALES
- 		done; \
- 	done
- endef
-+TARGET_FINALIZE_HOOKS += PURGE_LOCALES
+-target-generic-hostname:
++ifneq ($(TARGET_GENERIC_HOSTNAME),)
++define SYSTEM_HOSTNAME
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(TARGET_GENERIC_HOSTNAME)" > $(TARGET_DIR)/etc/hostname
+ 	$(SED) '$$a \127.0.1.1\t$(TARGET_GENERIC_HOSTNAME)' \
+ 		-e '/^127.0.1.1/d' $(TARGET_DIR)/etc/hosts
++endef
++TARGET_FINALIZE_HOOKS += SYSTEM_HOSTNAME
++endif
+ 
+-target-generic-issue:
++ifneq ($(TARGET_GENERIC_ISSUE),)
++define SYSTEM_ISSUE
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	echo "$(TARGET_GENERIC_ISSUE)" > $(TARGET_DIR)/etc/issue
++endef
++TARGET_FINALIZE_HOOKS += SYSTEM_ISSUE
++endif
+ 
+ ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
+-target-root-passwd: host-mkpasswd
++TARGETS += host-mkpasswd
  endif
+-target-root-passwd:
++
++ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
++
++define SYSTEM_ROOT_PASSWD
+ 	[ -n "$(TARGET_GENERIC_ROOT_PASSWD)" ] && \
+ 		TARGET_GENERIC_ROOT_PASSWD_HASH=$$($(MKPASSWD) -m "$(TARGET_GENERIC_PASSWD_METHOD)" "$(TARGET_GENERIC_ROOT_PASSWD)"); \
+ 	$(SED) "s,^root:[^:]*:,root:$$TARGET_GENERIC_ROOT_PASSWD_HASH:," $(TARGET_DIR)/etc/shadow
++endef
++TARGET_FINALIZE_HOOKS += SYSTEM_ROOT_PASSWD
  
- $(TARGETS_ROOTFS): target-finalize
+-target-generic-getty-busybox:
+-	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+-		$(TARGET_DIR)/etc/inittab
+-
++ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
++ifeq ($(BR2_PACKAGE_SYSVINIT),y)
+ # In sysvinit inittab, the "id" must not be longer than 4 bytes, so we
+ # skip the "tty" part and keep only the remaining.
+-target-generic-getty-sysvinit:
++define SYSTEM_GETTY
+ 	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(shell echo $(TARGET_GENERIC_GETTY_PORT) | tail -c+4)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
+ 		$(TARGET_DIR)/etc/inittab
++endef
++else
++# Add getty to busybox inittab
++define SYSTEM_GETTY
++	$(SED) '/# GENERIC_SERIAL$$/s~^.*#~$(TARGET_GENERIC_GETTY_PORT)::respawn:/sbin/getty -L $(TARGET_GENERIC_GETTY_OPTIONS) $(TARGET_GENERIC_GETTY_PORT) $(TARGET_GENERIC_GETTY_BAUDRATE) $(TARGET_GENERIC_GETTY_TERM) #~' \
++		$(TARGET_DIR)/etc/inittab
++endef
++endif
++TARGET_FINALIZE_HOOKS += SYSTEM_GETTY
++endif
  
- target-finalize: $(TARGETS)
- 	@$(call MESSAGE,"Finalizing target directory")
--	$(TARGET_PURGE_LOCALES)
-+	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
- 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
- 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+ # Find commented line, if any, and remove leading '#'s
+-target-generic-do-remount-rw:
++define SYSTEM_REMOUNT_RW
+ 	$(SED) '/^#.*# REMOUNT_ROOTFS_RW$$/s~^#\+~~' $(TARGET_DIR)/etc/inittab
+-
++endef
++else
+ # Find uncommented line, if any, and add a leading '#'
+-target-generic-dont-remount-rw:
++define SYSTEM_REMOUNT_RW
+ 	$(SED) '/^[^#].*# REMOUNT_ROOTFS_RW$$/s~^~#~' $(TARGET_DIR)/etc/inittab
+-
+-ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+-TARGETS += target-generic-securetty
+-endif
+-
+-ifneq ($(TARGET_GENERIC_HOSTNAME),)
+-TARGETS += target-generic-hostname
+-endif
+-
+-ifneq ($(TARGET_GENERIC_ISSUE),)
+-TARGETS += target-generic-issue
++endef
+ endif
++TARGET_FINALIZE_HOOKS += SYSTEM_REMOUNT_RW
+ 
+-ifeq ($(BR2_ROOTFS_SKELETON_DEFAULT),y)
+-TARGETS += target-root-passwd
+-
+-ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+-TARGETS += target-generic-getty-$(if $(BR2_PACKAGE_SYSVINIT),sysvinit,busybox)
+-endif
+-
+-ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
+-TARGETS += target-generic-do-remount-rw
+-else
+-TARGETS += target-generic-dont-remount-rw
+-endif
+-endif
++endif # BR2_ROOTFS_SKELETON_DEFAULT
 -- 
 2.0.0
