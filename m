@@ -1,50 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 27 Jun 2014 18:19:37 -0300
-Subject: [Buildroot] [PATCH] jquery-validation: bump to version 1.12.0
-Message-ID: <1403903977-21512-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Jun 2014 00:01:26 +0200
+Subject: [Buildroot] Glibc LD_LIBRARAY_PATH error
+In-Reply-To: <CAMhj5sakLa9ROf4RVO2N1rhRx+4du=j3X8OL5rLVRAUQRnFS+Q@mail.gmail.com>
+References: <CAMhj5sakLa9ROf4RVO2N1rhRx+4du=j3X8OL5rLVRAUQRnFS+Q@mail.gmail.com>
+Message-ID: <20140628000126.4bfd6329@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch homepage and upstream source, add license file (just mentions
-it's under MIT, better than none). Also fixes:
-http://autobuild.buildroot.net/results/a2e/a2ed2efe09b12612247a21c5fa3c129f58c9afd8/
+Dear Panahi Parsa,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/jquery-validation/Config.in            | 2 +-
- package/jquery-validation/jquery-validation.mk | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+On Sat, 28 Jun 2014 00:58:31 +0430, Panahi Parsa wrote:
 
-diff --git a/package/jquery-validation/Config.in b/package/jquery-validation/Config.in
-index 2a764c1..ab2ee26 100644
---- a/package/jquery-validation/Config.in
-+++ b/package/jquery-validation/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_JQUERY_VALIDATION
- 	  your existing forms, while making all kinds of
- 	  customizations to fit your application really easy.
- 
--	  http://bassistance.de/jquery-plugins/jquery-plugin-validation/
-+	  http://jqueryvalidation.org/
-diff --git a/package/jquery-validation/jquery-validation.mk b/package/jquery-validation/jquery-validation.mk
-index a39560b..ca8cbdc 100644
---- a/package/jquery-validation/jquery-validation.mk
-+++ b/package/jquery-validation/jquery-validation.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--JQUERY_VALIDATION_VERSION = 1.11.1
--JQUERY_VALIDATION_SITE = http://jquery.bassistance.de/validate
-+JQUERY_VALIDATION_VERSION = 1.12.0
-+JQUERY_VALIDATION_SITE = http://jqueryvalidation.org/files
- JQUERY_VALIDATION_SOURCE = jquery-validation-$(JQUERY_VALIDATION_VERSION).zip
- JQUERY_VALIDATION_LICENSE = MIT
-+JQUERY_VALIDATION_LICENSE_FILES = README.md
- 
- define JQUERY_VALIDATION_EXTRACT_CMDS
- 	unzip -d $(@D) $(DL_DIR)/$(JQUERY_VALIDATION_SOURCE)
+> *** These auxiliary programs are missing or incompatible versions: makeinfo
+> autoconf
+> *** some features will be disabled.
+> *** Check the INSTALL file for required versions.
+> checking LD_LIBRARY_PATH variable... contains current directory
+> configure: error:
+> *** LD_LIBRARY_PATH shouldn't contain the current directory when
+> *** building glibc. Please change the environment variable
+> *** and run configure again.
+> make: ***
+> [/home/parsa/Software/Buildroot/buildroot/output/build/glibc-2.18/.stamp_configured]
+> Error 1
+> 
+> parsa at parsa-System-Product-Name:~/Software/Buildroot/buildroot$
+> 
+> It seems that I should change LD_LIBARAY_PATH to include glibc environment
+> variables !! Since I'm new to buildroot I don't know how I should do this.
+> 
+> Is there some one who can tell me the steps to solve this problem ?
+
+Can you post the output of the "env" command in the terminal you used
+Buildroot?
+
+Best regards,
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
