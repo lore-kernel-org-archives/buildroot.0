@@ -1,80 +1,50 @@
-From: Lennart Ramberg <ramberg.lennart@gmail.com>
-Date: Fri, 27 Jun 2014 12:32:03 +0200
-Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable CF?
-Message-ID: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
+From: bruce bushby <bruce.bushby@gmail.com>
+Date: Fri, 27 Jun 2014 11:37:30 +0100
+Subject: [Buildroot] How to control kernel header version?
+Message-ID: <CAHvj1qaaXv6dGD6do7oED=uNKMpwZMFwOOdyjhGHC0J8KxykiA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I am struggling with making a grub 2-bootable Compact Flash for a BIOS
-based PC target.
-The closest I came so far in the target machine is:
-  grub rescue >
+Hi
 
-Then I found 'grub-bios-setup' as a possibly better alternative, but got
-stuck as below.
-Is grub-bios-setup the way to go at all?
+I wanted to ask how I can control kernel header version? I've tried various
+configs but so far I can't prevent buildroot using the latest "stable"
+version of kernel headers.
+
+
+My kernel config is:
+
+# Kernel headers
+#BR2_LINUX_KERNEL_SAME_AS_HEADERS=y
+
+# Kernel
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_VERSION="master"
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/torvalds/linux.git"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="3493860c76eb4e5b222f1016d1458615afac9fc4"
+BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
+BR2_LINUX_KERNEL_APPENDED_UIMAGE=n
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_APPENDED_DTB=n
+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-pcduino3.dts"
+
+
+I think the current master is 3.16.0-rc3 .... but I keep seeing buildroot
+downloading linux-headers-3.15.1 (current stable)
+
+Is there a way to force using the headers from the the same source as
+"KERNEL_CUSTOM_REPO" ?
+
+
+
 Thanks
-Lennart
-
-I'm using the stable buildroot-2014.05.
-After make menuconfig and make my output/images/ contain
-  bzImage
-  grub.img
-  rootfs.ext2
-  rootfs.ext3 link
-  rootfs.tar
-
-and what I have done is: (Target CF put in the host in an USB CF-adapter,
-sdX=sdc in my case.)
-sudo fdisk /dev/sdX    and created one primary partition 1GB.
-sudo mke2fs -j -m 0 /dev/sdX1
-sudo tune2fs -c0 -i0 /dev/sdX1
-
-sudo tar -xvf output/images/rootfs.tar -C
-/media/lennart/30bdb69e-d518-4a8c-8b12-70fe8481dae7/
-sudo grub-install /dev/sdX
-Installation finished. No error reported.
-
-Putting that in the target machine only brought me to 'grub rescue >', so I
-tried grub-bios-setup, but got stuck on 'device.map':
-
-lennart at OptiPlex ~/buildroot-2014.05 $
-./output/host/usr/sbin/grub-bios-setup -b
-./output/host/usr/lib/grub/i386-pc/boot.img -c ./output/images/grub.img -d
-. /dev/sdc -v
-./output/host/usr/sbin/grub-bios-setup: info: cannot open
-`/boot/grub/device.map': No such file or directory.
-./output/host/usr/sbin/grub-bios-setup: info: Looking for /dev/sdc.
-./output/host/usr/sbin/grub-bios-setup: info: /dev/sdc is a parent of
-/dev/sdc.
-./output/host/usr/sbin/grub-bios-setup: info: Looking for /dev/sdc.
-./output/host/usr/sbin/grub-bios-setup: info: /dev/sdc is a parent of
-/dev/sdc.
-./output/host/usr/sbin/grub-bios-setup: info: transformed OS device
-`/dev/sdc' into GRUB device `hostdisk//dev/sdc'.
-./output/host/usr/sbin/grub-bios-setup: info: getting the size of
-././output/host/usr/lib/grub/i386-pc/boot.img.
-./output/host/usr/sbin/grub-bios-setup: info: reading
-././output/host/usr/lib/grub/i386-pc/boot.img.
-./output/host/usr/sbin/grub-bios-setup: info: getting the size of
-././output/host/usr/lib/grub/i386-pc/boot.img.
-./output/host/usr/sbin/grub-bios-setup: info: getting the size of
-././output/images/grub.img.
-./output/host/usr/sbin/grub-bios-setup: info: reading
-././output/images/grub.img.
-./output/host/usr/sbin/grub-bios-setup: info: getting the size of
-././output/images/grub.img.
-./output/host/usr/sbin/grub-bios-setup: info: root is `(null)', dest is
-`hostdisk//dev/sdc'.
-./output/host/usr/sbin/grub-bios-setup: info: Opening dest.
-./output/host/usr/sbin/grub-bios-setup: error: disk `hostdisk//dev/sdc' not
-found.
-lennart at OptiPlex ~/buildroot-2014.05 $
----
+Bruce
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140627/408f629d/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140627/940b8c2b/attachment.html>
