@@ -1,66 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 27 Jun 2014 20:32:24 +0200
-Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable
- CF?
-In-Reply-To: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
-References: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
-Message-ID: <20140627203224.1149e36a@free-electrons.com>
+Date: Fri, 27 Jun 2014 20:36:13 +0200
+Subject: [Buildroot] [PATCH] lzo: security bump to version 2.07
+In-Reply-To: <877g42la16.fsf@dell.be.48ers.dk>
+References: <b7658f620fcbca547e5aa330bec28c862e8d59b2.1403843549.git.baruch@tkos.co.il>
+ <87wqc2lif0.fsf@dell.be.48ers.dk> <20140627112652.GC4155@tarshish>
+ <877g42la16.fsf@dell.be.48ers.dk>
+Message-ID: <20140627203613.09a7b284@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lennart Ramberg,
+Dear Peter Korsgaard,
 
-On Fri, 27 Jun 2014 12:32:03 +0200, Lennart Ramberg wrote:
+On Fri, 27 Jun 2014 16:08:53 +0200, Peter Korsgaard wrote:
 
-> I am struggling with making a grub 2-bootable Compact Flash for a BIOS
-> based PC target.
-> The closest I came so far in the target machine is:
->   grub rescue >
+>  >>>> lzo 2.07 Patching libtool
 > 
-> Then I found 'grub-bios-setup' as a possibly better alternative, but got
-> stuck as below.
-> Is grub-bios-setup the way to go at all?
+>  > Applying buildroot-libtool-v2.4.patch using patch: patching file ltmain.sh
+>  > Hunk #1 FAILED at 1416.
+>  > Hunk #2 FAILED at 2962.
+>  > Hunk #3 succeeded at 7964 with fuzz 2 (offset 1281 lines).
+>  > Hunk #4 succeeded at 10554 (offset 1297 lines).
+>  > 2 out of 4 hunks FAILED -- saving rejects to file ltmain.sh.rej
+>  > Patch failed!  Please fix buildroot-libtool-v2.4.patch!
+> 
+>  > Should I rephrase the comment?
+> 
+> Yes, please. I guess it is because it uses a too new libtool version?
 
-Have you checked the detailed instructions available in the help text
-of the grub2 package (accessible through xconfig/menuconfig) ? From the
-help text:
+The libtool script bundled with this package uses "libtool 2.4.2.418",
+which we have identified (with Hadrien) as requiring a different patch
+that other libtool versions, including libtool 2.4.2. That's something
+we will try to work out with Hadrien.
 
-          Notes on using Grub2 for BIOS-based platforms
-          =============================================
+Thanks,
 
-          1. Create a disk image
-             dd if=/dev/zero of=disk.img bs=1M count=32
-          2. Partition it (either legacy or GPT style partitions work)
-             cfdisk disk.img
-              - Create one partition, type Linux, for the root
-                filesystem. The only constraint is to make sure there
-                is enough free space *before* the first partition to
-                store Grub2. Leaving 1 MB of free space is safe.
-          3. Setup loop device and loop partitions
-             sudo losetup -f disk.img
-             sudo partx -a disk.img
-          4. Prepare the root partition
-             sudo mkfs.ext3 -L root /dev/loop0p1
-             sudo mount /dev/loop0p1 /mnt
-             sudo tar -C /mnt -xf output/images/rootfs.tar
-             sudo umount /mnt
-          5. Install Grub2
-             ./output/host/usr/sbin/grub-bios-setup \
-                        -b ./output/host/usr/lib/grub/i386-pc/boot.img \
-                        -c ./output/images/grub.img -d . /dev/loop0
-          6. Your disk.img is ready!
-
-Of course, this help text is about creating a disk image, but it should
-apply (with minor changes) to a real device.
-
-Let me know if that works for you!
-
-Best regards,
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
