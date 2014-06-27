@@ -1,48 +1,63 @@
-From: Fabio Porcedda <fabio.porcedda@telit.com>
-Date: Fri, 27 Jun 2014 14:15:59 +0200
-Subject: [Buildroot] [PATCH v3 5/5] Makefile: do not add to targets common
-	dependencies
-In-Reply-To: <1403871359-18849-1-git-send-email-fabio.porcedda@telit.com>
-References: <1403871359-18849-1-git-send-email-fabio.porcedda@telit.com>
-Message-ID: <1403871359-18849-6-git-send-email-fabio.porcedda@telit.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 27 Jun 2014 14:17:32 +0200
+Subject: [Buildroot] [PATCH] uclibc: enable multiple jobs for building
+In-Reply-To: <1403870844-15258-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Fri, 27 Jun 2014 16:07:24 +0400")
+References: <1403870844-15258-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87bntelf6r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Remove the rule that adds common dependencies to every target in the
-"TARGETS" variable, because all those targets are packages that use the
-package infrastructure or they depend on targets that use the package
-infrastructure. The package infrastructure already adds common
-dependencies.  Therefore, this rule is useless.
+ > For some reason uClibc got built with only 1 job (MAKE1).
+ > Compilation with multiple jobs on modern multi-threaded host CPUs allows to save
+ > significant amount of time on toolchain building.
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-Notes:
-    v3:
-     - improved the description (Arnout)
+ > Cc: Anton Kolesov <akolesov@synopsys.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  package/uclibc/uclibc.mk | 6 +++---
+ >  1 file changed, 3 insertions(+), 3 deletions(-)
 
- Makefile | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 95ad1f4..4f8f00f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -420,10 +420,6 @@ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ > diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+ > index b42fe55..3957960 100644
+ > --- a/package/uclibc/uclibc.mk
+ > +++ b/package/uclibc/uclibc.mk
+ > @@ -484,7 +484,7 @@ endef
  
- prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ >  ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
+ >  define UCLIBC_BUILD_TEST_SUITE
+ > -	$(MAKE1) -C $(@D)/test \
+ > +	$(MAKE) -C $(@D)/test \
+ >  		$(UCLIBC_MAKE_FLAGS) \
+ >  		ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
+ >  		UCLIBC_ONLY=1 \
+ > @@ -494,13 +494,13 @@ endef
+ >  endif
  
--# Add base dependencies to all targets even on those not based on the
--# package framework.
--$(TARGETS): dirs prepare dependencies
--
- world: target-post-image
- 
- .PHONY: all world toolchain dirs clean distclean source outputmakefile \
+ >  define UCLIBC_BUILD_CMDS
+ > -	$(MAKE1) -C $(@D) \
+ > +	$(MAKE) -C $(@D) \
+
+The use of MAKE1 for uClibc dates back 10 years:
+
+commit 8e5fb3fb4ab09b4dc04fe7cb3f7becce6514117b
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Sat Dec 11 13:01:10 2004 +0000
+
+    Add initial BR2_JLEVEL support, with some exceptions for apps that
+    have broken 'make -j' support
+
+So it could very well have been fixed upstream since then. How have you
+tested it?
+
 -- 
-2.0.0
+Bye, Peter Korsgaard 
