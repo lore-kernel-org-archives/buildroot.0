@@ -1,63 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 27 Jun 2014 14:17:32 +0200
-Subject: [Buildroot] [PATCH] uclibc: enable multiple jobs for building
-In-Reply-To: <1403870844-15258-1-git-send-email-abrodkin@synopsys.com> (Alexey
- Brodkin's message of "Fri, 27 Jun 2014 16:07:24 +0400")
-References: <1403870844-15258-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <87bntelf6r.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Jun 2014 10:17:50 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.5.14
+Message-ID: <1403875070-601-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+Fixes:
 
- > For some reason uClibc got built with only 1 job (MAKE1).
- > Compilation with multiple jobs on modern multi-threaded host CPUs allows to save
- > significant amount of time on toolchain building.
+CVE-2014-3981 - insecure temporary file use in the configure script.
+CVE-2014-0207 - cdf_read_short_sector insufficient boundary check.
+CVE-2014-3478 - mconvert incorrect handling of truncated pascal string
+size.
+CVE-2014-3479 - cdf_check_stream_offset insufficient boundary check.
+CVE-2014-3480 - cdf_count_chain insufficient boundary check.
+CVE-2014-3487 - cdf_read_property_info insufficient boundary check.
+CVE-2014-4049 - Fix potential segfault in dns_get_record().
+CVE-2014-3515 - unserialize() SPL ArrayObject / SPLObjectStorage Type
+Confusion.
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Cc: Anton Kolesov <akolesov@synopsys.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  package/uclibc/uclibc.mk | 6 +++---
- >  1 file changed, 3 insertions(+), 3 deletions(-)
-
- > diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
- > index b42fe55..3957960 100644
- > --- a/package/uclibc/uclibc.mk
- > +++ b/package/uclibc/uclibc.mk
- > @@ -484,7 +484,7 @@ endef
+diff --git a/package/php/php.mk b/package/php/php.mk
+index a878800..8ac5d86 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
- >  define UCLIBC_BUILD_TEST_SUITE
- > -	$(MAKE1) -C $(@D)/test \
- > +	$(MAKE) -C $(@D)/test \
- >  		$(UCLIBC_MAKE_FLAGS) \
- >  		ARCH_CFLAGS=-I$(STAGING_DIR)/usr/include \
- >  		UCLIBC_ONLY=1 \
- > @@ -494,13 +494,13 @@ endef
- >  endif
- 
- >  define UCLIBC_BUILD_CMDS
- > -	$(MAKE1) -C $(@D) \
- > +	$(MAKE) -C $(@D) \
-
-The use of MAKE1 for uClibc dates back 10 years:
-
-commit 8e5fb3fb4ab09b4dc04fe7cb3f7becce6514117b
-Author: Eric Andersen <andersen@codepoet.org>
-Date:   Sat Dec 11 13:01:10 2004 +0000
-
-    Add initial BR2_JLEVEL support, with some exceptions for apps that
-    have broken 'make -j' support
-
-So it could very well have been fixed upstream since then. How have you
-tested it?
-
+-PHP_VERSION = 5.5.13
++PHP_VERSION = 5.5.14
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
 -- 
-Bye, Peter Korsgaard 
+1.8.5.5
