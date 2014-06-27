@@ -1,56 +1,37 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 27 Jun 2014 20:42:09 +0200
-Subject: [Buildroot] [PATCH] libndp: bump to 1.3
-Message-ID: <1403894529-5909-1-git-send-email-yegorslists@googlemail.com>
+From: Ivan Sergeev <vsergeev@kumunetworks.com>
+Date: Fri, 27 Jun 2014 12:40:35 -0700
+Subject: [Buildroot] [PATCH v2 1/1] opkg: bump to version 0.2.2 and update
+	upstream url
+In-Reply-To: <20140627082349.50341f05@free-electrons.com>
+References: <20140627082349.50341f05@free-electrons.com>
+Message-ID: <1403898035-25202-1-git-send-email-vsergeev@kumunetworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove upstreamed patch.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
 ---
- package/libndp/libndp-01-missing-stdarg-include.patch | 16 ----------------
- package/libndp/libndp.mk                              |  2 +-
- 2 files changed, 1 insertion(+), 17 deletions(-)
- delete mode 100644 package/libndp/libndp-01-missing-stdarg-include.patch
+ package/opkg/opkg.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libndp/libndp-01-missing-stdarg-include.patch b/package/libndp/libndp-01-missing-stdarg-include.patch
-deleted file mode 100644
-index e10848e..0000000
---- a/package/libndp/libndp-01-missing-stdarg-include.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--Add missing <stdarg.h> include for va_list
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/include/ndp.h
--===================================================================
----- a/include/ndp.h
--+++ b/include/ndp.h
--@@ -20,6 +20,7 @@
-- #ifndef _NDP_H_
-- #define _NDP_H_
-- 
--+#include <stdarg.h>
-- #include <stdbool.h>
-- #include <netinet/in.h>
-- 
-diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-index 55d172b..2f11a07 100644
---- a/package/libndp/libndp.mk
-+++ b/package/libndp/libndp.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index c57bd7f..883ef64 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBNDP_VERSION = v1.2
-+LIBNDP_VERSION = v1.3
- LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
- LIBNDP_LICENSE = LGPLv2.1+
- LIBNDP_LICENSE_FILES = COPYING
+-OPKG_VERSION = v0.2.0
+-OPKG_SOURCE = $(OPKG_VERSION).tar.bz2
+-OPKG_SITE = https://bitbucket.org/opkg/opkg/get
++OPKG_VERSION = v0.2.2
++OPKG_SITE = http://git.yoctoproject.org/git/opkg
++OPKG_SITE_METHOD = git
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ OPKG_DEPENDENCIES = host-pkgconf
+ OPKG_LICENSE = GPLv2+
 -- 
-1.8.3.2
+2.0.0
