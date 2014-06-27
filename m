@@ -1,32 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 26 Jun 2014 23:07:36 +0200
-Subject: [Buildroot] [git commit] freerdp: fix typo in license information
-Message-ID: <20140627070642.5070E9D0D2@busybox.osuosl.org>
+Date: Fri, 27 Jun 2014 08:54:45 +0200
+Subject: [Buildroot] [git commit] protobuf-c: update license information
+Message-ID: <20140627070642.79A2D9D0D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=be95d3a3ffe94a196219d210ccf452a14e83fa5c
+commit: http://git.buildroot.net/buildroot/commit/?id=dc33ee97c65fc666a4a867f47337f8a1c08b81ec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: license is BSD-2c]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freerdp/freerdp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/protobuf-c/protobuf-c.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 90ede04..26688aa 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -9,7 +9,7 @@ FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = openssl zlib \
- 	xlib_libX11 xlib_libXt xlib_libXext xlib_libXcursor
- FREERDP_LICENSE = Apache-2.0
--FREEDRP_LICENSE_FILES = LICENSE
-+FREERDP_LICENSE_FILES = LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index da0b139..5795598 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -11,7 +11,8 @@ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+ PROTOBUF_C_MAKE = $(MAKE1)
+ PROTOBUF_C_CONF_OPT = --disable-protoc
+ PROTOBUF_C_INSTALL_STAGING = YES
+-PROTOBUF_C_LICENSE = BSD-3c
++PROTOBUF_C_LICENSE = BSD-2c
++PROTOBUF_C_LICENSE_FILES = LICENSE
+ PROTOBUF_C_AUTORECONF = YES
+ HOST_PROTOBUF_C_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_CUPS),y)
- FREERDP_CONF_OPT += -DWITH_CUPS=ON
