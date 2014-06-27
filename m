@@ -1,37 +1,40 @@
-From: Ivan Sergeev <vsergeev@kumunetworks.com>
-Date: Fri, 27 Jun 2014 12:40:35 -0700
-Subject: [Buildroot] [PATCH v2 1/1] opkg: bump to version 0.2.2 and update
-	upstream url
-In-Reply-To: <20140627082349.50341f05@free-electrons.com>
-References: <20140627082349.50341f05@free-electrons.com>
-Message-ID: <1403898035-25202-1-git-send-email-vsergeev@kumunetworks.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 27 Jun 2014 17:09:26 -0300
+Subject: [Buildroot] [PATCH] liboauth: bump to version 1.0.3
+Message-ID: <1403899766-32567-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
----
- package/opkg/opkg.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Add license information as well.
+It could be "or GPL" as well but since we link to openssl that's a murky path
+as stated in the README so just leave it at MIT.
 
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index c57bd7f..883ef64 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/liboauth/liboauth.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/liboauth/liboauth.mk b/package/liboauth/liboauth.mk
+index 6ade856..d247068 100644
+--- a/package/liboauth/liboauth.mk
++++ b/package/liboauth/liboauth.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--OPKG_VERSION = v0.2.0
--OPKG_SOURCE = $(OPKG_VERSION).tar.bz2
--OPKG_SITE = https://bitbucket.org/opkg/opkg/get
-+OPKG_VERSION = v0.2.2
-+OPKG_SITE = http://git.yoctoproject.org/git/opkg
-+OPKG_SITE_METHOD = git
- # Uses PKG_CHECK_MODULES() in configure.ac
- OPKG_DEPENDENCIES = host-pkgconf
- OPKG_LICENSE = GPLv2+
+-LIBOAUTH_VERSION = 0.9.6
++LIBOAUTH_VERSION = 1.0.3
+ LIBOAUTH_SITE = http://liboauth.sourceforge.net/pool
+ LIBOAUTH_INSTALL_STAGING = YES
+-
+ LIBOAUTH_DEPENDENCIES += host-pkgconf openssl
++LIBOAUTH_LICENSE = MIT
++LIBOAUTH_LICENSE_FILES = COPYING.MIT
+ 
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ LIBOAUTH_DEPENDENCIES += libcurl
 -- 
-2.0.0
+1.8.5.5
