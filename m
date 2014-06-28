@@ -1,106 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jun 2014 22:08:56 +0200
-Subject: [Buildroot] Patchwork cleanup #10: triaging proposal
-In-Reply-To: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
-References: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
-Message-ID: <20140628220856.5fa5db8b@free-electrons.com>
+Date: Sat, 28 Jun 2014 23:52:18 +0200
+Subject: [Buildroot] [PATCH 0/5] Misc updates: libffi, python, gettext
+Message-ID: <1403992343-29665-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Hello,
 
-On Sat, 14 Jun 2014 22:02:31 +0200, Thomas De Schampheleire wrote:
+This set of patches bump libffi to version 3.1, and Python to version
+2.7.7, and does a number of small related updates.
 
-> Triage proposal for this (short) session:
-> 
-> qemu: add to host utilities menu
-> Frank Hunleth <fhunleth@troodon-software.com>
-> http://patchwork.ozlabs.org/patch/299014
-> 
-> A accept
-
-If this gets applied, it needs to go together with
-http://patchwork.ozlabs.org/patch/319108/. However, I'd like to see a
-solution that merges the existing qemu package with the qemu-system
-package proposed by Gustavo.
-
-> mono runtime porting to buildroot
-> Alexander Varnin <fenixk19@mail.ru>
-> http://patchwork.ozlabs.org/patch/299488
-> 
-> B reject/superseded
-> There is a newer patch that not only adds the runtime part, but also
-> the host part, see http://patchwork.ozlabs.org/patch/351871/
-> For the same reason, I already marked
-> http://patchwork.ozlabs.org/patch/323246/ as Superseded.
-
-ACK, so this has already been done, and you don't need more feedback
-about 299488, right?
-
-> udev: Set the default action to "add" in the startup script
-> Paul Cercueil <paul@crapouillou.net>
-> http://patchwork.ozlabs.org/patch/301972
-> 
-> C unsure: I asked for more feedback on this patch from the community
-> but no feedback yet. I don't know if this is correct or not.
-
-Same thing here. Unfortunately, Paul rarely gives any feedback about
-the patches he posts, so they often become abandoned in patchwork. Not
-much we can do about it, unfortunately.
-
-> [1/2] uclibc: add a missing function member to siginfo.h
-> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> http://patchwork.ozlabs.org/patch/308384
-> 
-> Based on the feedback from Thomas Petazzoni on this patch, I would say:
-> B reject
-
-Well, maybe we should just apply it, and make rt-tests available on
-mips/uclibc for internal toolchains, and keep it disabled for external
-toolchains. Unfortunately, in the autobuilders, we mainly test external
-toolchains, so we're not giving to test rt-tests much. So I still have
-a mixed opinion about such patches. But the uClibc release process is
-dead...
-
-> [2/2] uclibc: Make __SIGEV_PAD_SIZE to take __WORDSIZE into account
-> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> http://patchwork.ozlabs.org/patch/308383
-> 
-> I would guess the same decision as the previous patch applies here:
-> B reject
-
-Yeah, same problem. Maybe my previous opinion is wrong, and we should
-just patch Buildroot's uClibc as needed, and not exclude all
-problematic packages from being used with an external uClibc toolchain.
-
-> [2/2] package: add paragui package
-> H Hartley Sweeten <hsweeten@visionengravers.com>
-> http://patchwork.ozlabs.org/patch/309336
-> 
-> Although this package could use a good review because it has some
-> issues, in general we accept new packages so I would mark this as
-> A accept
-
-To be honest, I started having a look at this package, and I continue
-to believe that's it's a totally unmaintained GUI toolkit, with very
-few users, and apparently not a very strong effort to push it from the
-original contributor. So I'd prefer to simply reject the patch.
-
-> [v2,1/1] gst-ffmpeg: add option for LGPL build
-> Danomi Manchego <danomimanchego123@gmail.com>
-> http://patchwork.ozlabs.org/patch/312360
-> 
-> I assume this should be
-> A accept
-> but the patch needs review and testing I think.
-
-No opinion on this one, I don't do much gst stuff.
+Best regards,
 
 Thomas
+
+Thomas Petazzoni (5):
+  libffi: bump to 3.1
+  libffi: remove some header files installed in /usr/lib in the target
+  python: bump to Python 2.7.7
+  python: do not install the IDLE editor
+  gettext: remove useless ABOUT-NLS file
+
+ package/gettext/gettext.mk                         |   7 +
+ package/libffi/libffi-003-fix-typo.patch           |  41 ++
+ ...Add-missing-GNU-stack-markings-in-win32.S.patch |  36 ++
+ .../libffi-005-Fix-paths-in-libffi.pc.in.patch     |  46 ++
+ package/libffi/libffi-arc-01-Add-ARC-support.patch | 560 ---------------------
+ .../libffi-arc-02-Rebuild-for-ARC-additions.patch  | 262 ----------
+ .../libffi/libffi-arc-03-arc-Fix-build-error.patch |  43 --
+ package/libffi/libffi.mk                           |   8 +-
+ ...python-004-sysconfigdata-install-location.patch |   6 +-
+ .../python/python-005-pyc-pyo-conditional.patch    |   2 +-
+ .../python-006-cross-compile-getaddrinfo.patch     |   2 +-
+ package/python/python-007-disable-extensions.patch |   4 +-
+ package/python/python-010-fix-python-config.patch  |  39 +-
+ .../python/python-011-remove-python-symlink.patch  |   9 +-
+ package/python/python-013-fix-readline-6.3.patch   |  34 --
+ .../python/python-100-optional-test-modules.patch  |  25 +-
+ package/python/python-101-optional-pydoc.patch     |  12 +-
+ package/python/python-102-optional-2to3.patch      |  16 +-
+ package/python/python-103-optional-sqlite.patch    |  14 +-
+ package/python/python-104-optional-tk.patch        |  20 +-
+ package/python/python-105-optional-curses.patch    |   8 +-
+ package/python/python-106-optional-expat.patch     |  12 +-
+ .../python/python-107-optional-codecs-cjk.patch    |   2 +-
+ package/python/python-108-optional-nis.patch       |   2 +-
+ .../python/python-109-optional-unicodedata.patch   |   2 +-
+ package/python/python-110-optional-db.patch        |  14 +-
+ package/python/python-111-optional-ssl.patch       |   2 +-
+ package/python/python-112-optional-bzip2.patch     |   2 +-
+ package/python/python-113-optional-zlib.patch      |   2 +-
+ package/python/python-114-remove-idle-editor.patch |  43 ++
+ package/python/python.mk                           |   3 +-
+ 31 files changed, 282 insertions(+), 996 deletions(-)
+ create mode 100644 package/libffi/libffi-003-fix-typo.patch
+ create mode 100644 package/libffi/libffi-004-Add-missing-GNU-stack-markings-in-win32.S.patch
+ create mode 100644 package/libffi/libffi-005-Fix-paths-in-libffi.pc.in.patch
+ delete mode 100644 package/libffi/libffi-arc-01-Add-ARC-support.patch
+ delete mode 100644 package/libffi/libffi-arc-02-Rebuild-for-ARC-additions.patch
+ delete mode 100644 package/libffi/libffi-arc-03-arc-Fix-build-error.patch
+ delete mode 100644 package/python/python-013-fix-readline-6.3.patch
+ create mode 100644 package/python/python-114-remove-idle-editor.patch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
