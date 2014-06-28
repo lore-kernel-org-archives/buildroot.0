@@ -1,75 +1,112 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 28 Jun 2014 17:44:20 +0200
-Subject: [Buildroot] Glibc LD_LIBRARAY_PATH error
-In-Reply-To: <CAMhj5sYLbx5_4-qQhtpsYO6+fewS+tU1sDSDB9qn1CqJ-QoyiQ@mail.gmail.com>
-References: <CAMhj5sakLa9ROf4RVO2N1rhRx+4du=j3X8OL5rLVRAUQRnFS+Q@mail.gmail.com>
- <20140628000126.4bfd6329@free-electrons.com>
- <CAMhj5sZkdpe+mrTzvxqrwK=-tOoyG4nvobM48PJJpw3oFcb5CA@mail.gmail.com>
- <20140628083612.167f7b88@free-electrons.com>
- <CAMhj5sbiKrQ7PkbrxXr=CK34x2LA2bFu95asfCv8iKS5UtEMiQ@mail.gmail.com>
- <20140628162843.41a203d7@free-electrons.com>
- <CAMhj5saaeT9uoHNk2CZLf8da=ds8Zr0r2va15GFdZwrqxe0ENA@mail.gmail.com>
- <CAMhj5sYLbx5_4-qQhtpsYO6+fewS+tU1sDSDB9qn1CqJ-QoyiQ@mail.gmail.com>
-Message-ID: <20140628174420.2fd3ed86@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sat, 28 Jun 2014 20:45:00 +0200
+Subject: [Buildroot] Patchwork cleanup #10: triaging proposal
+In-Reply-To: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
+References: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
+Message-ID: <CAAXf6LVsP9HMwg2Su6V7yVcd8phmTd=wx25p+NtZ43aVHr3fOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Panahi Parsa,
+All,
 
-On Sat, 28 Jun 2014 20:06:30 +0430, Panahi Parsa wrote:
+On Sat, Jun 14, 2014 at 10:02 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi all,
+>
+> This is the first part of patchwork cleanup session #10.
+>
+> Quick recap:
+> - in this mail, a decision for a number of patches (exact number can
+> vary) is already proposed. Buildroot developers should provide
+> feedback stating their agreement/disagreement with this proposed
+> decision.
+>
+> - patches are triaged into four categories:
+>     A. We want this patch and someone should refresh and resend it.
+>     B. We don't want this patch as it goes against Buildroot principles.
+>     C. We're not sure and want to know if the submitter is still
+> interested in pursuing this patch.
+>     D. We accept the problem that the patch is fixing, but the patch
+> can't be integrated in its current state. More work is needed, for
+> example on the core buildroot infrastructure. Therefore, the patch
+> will be added to the buildroot TODO list.
+>
+> - after the brief agreement/disagreement phase, patch submitters are
+> notified and get two weeks to provide feedback and/or fight the
+> decision. Patchwork is already updated at the beginning of these two
+> weeks, but closed patches can always be reopened.
+>
+> - during this two week cool-off period, new cleanup sessions can already start.
+>
+>
+> Triage proposal for this (short) session:
+>
+> qemu: add to host utilities menu
+> Frank Hunleth <fhunleth@troodon-software.com>
+> http://patchwork.ozlabs.org/patch/299014
+>
+> A accept
+>
+>
+> mono runtime porting to buildroot
+> Alexander Varnin <fenixk19@mail.ru>
+> http://patchwork.ozlabs.org/patch/299488
+>
+> B reject/superseded
+> There is a newer patch that not only adds the runtime part, but also
+> the host part, see http://patchwork.ozlabs.org/patch/351871/
+> For the same reason, I already marked
+> http://patchwork.ozlabs.org/patch/323246/ as Superseded.
+>
+>
+> udev: Set the default action to "add" in the startup script
+> Paul Cercueil <paul@crapouillou.net>
+> http://patchwork.ozlabs.org/patch/301972
+>
+> C unsure: I asked for more feedback on this patch from the community
+> but no feedback yet. I don't know if this is correct or not.
+>
+>
+> [1/2] uclibc: add a missing function member to siginfo.h
+> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> http://patchwork.ozlabs.org/patch/308384
+>
+> Based on the feedback from Thomas Petazzoni on this patch, I would say:
+> B reject
+>
+>
+> [2/2] uclibc: Make __SIGEV_PAD_SIZE to take __WORDSIZE into account
+> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> http://patchwork.ozlabs.org/patch/308383
+>
+> I would guess the same decision as the previous patch applies here:
+> B reject
+>
+>
+> [2/2] package: add paragui package
+> H Hartley Sweeten <hsweeten@visionengravers.com>
+> http://patchwork.ozlabs.org/patch/309336
+>
+> Although this package could use a good review because it has some
+> issues, in general we accept new packages so I would mark this as
+> A accept
+>
+>
+> [v2,1/1] gst-ffmpeg: add option for LGPL build
+> Danomi Manchego <danomimanchego123@gmail.com>
+> http://patchwork.ozlabs.org/patch/312360
+>
+> I assume this should be
+> A accept
+> but the patch needs review and testing I think.
+>
 
-> my problem was solved by your solution I mean using "unset LD_LIBRARY_PATH"
 
-Ok. I'm not sure why we don't simply unset the LD_LIBRARY_PATH from our
-main Makefile. Probably we should just do it.
-
-> solved the problem now I have 5 files in my output/images folder.
-> 1). bzImage  2) grub.img   3)  rootfs.cpio    4). rootfs.iso9660
->  5)rootfs.tar
-
-Right.
-
-> I've configured buildroot for making a custom linux image for Corei7 and I
-> expected to give me only one .iso file and not 5 different files !!
-
-Well, the tarball has been created because your configuration has the
-tarball image enabled. The other files are normal: bzImage is the
-kernel image, grub.img is the bootloader, rootfs.cpio is the root
-filesystem as cpio, and rootfs.iso9660 is the final ISO image, which
-bundles the kernel image and root filesystem.
-
->  The
-> .iso file size as you've said in your lecture on youtube is only 16 MByte
-> and not 700 MB like ubuntu official releases. Now I got stuck in a dizzy
-> state about build root :
-> 
-> 1). Does burning rootfs.iso9660  into a DVD and running it from my DVD ROM
-> install my customized ubuntu or I should do something else ?
-
-How can you believe a system generated by Buildroot will install a
-"customized ubuntu". Buildroot has nothing to do with Ubuntu, Buildroot
-is meant to build from source highly customized embedded Linux systems.
-The minimal system only has Busybox (shell and basic command line
-utilities). Any other component you may want has to be enabled in "make
-menuconfig".
-
-> 2). I want to have a small graphic environment like the one used in
-> Angstrom Distribution is it possible to have that in build root ?
-
-We have packages for X.org and Matchbox, which is what Angstrom is
-using. You'll have to enable them in "make menuconfig". Though be aware
-that Buildroot is not a tool that builds systems that work out of the
-box: it merely builds all the packages needed, but there is often some
-configuration files and other specific customization needed to make
-everything work properly on a given hardware platform.
+Your feedback on this triaging proposal is still welcome.
+If no further feedback, I will proceed with the triaging as above...
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
