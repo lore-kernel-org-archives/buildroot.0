@@ -1,112 +1,106 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 28 Jun 2014 20:45:00 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 28 Jun 2014 22:08:56 +0200
 Subject: [Buildroot] Patchwork cleanup #10: triaging proposal
 In-Reply-To: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
 References: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
-Message-ID: <CAAXf6LVsP9HMwg2Su6V7yVcd8phmTd=wx25p+NtZ43aVHr3fOw@mail.gmail.com>
+Message-ID: <20140628220856.5fa5db8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Dear Thomas De Schampheleire,
 
-On Sat, Jun 14, 2014 at 10:02 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> Hi all,
->
-> This is the first part of patchwork cleanup session #10.
->
-> Quick recap:
-> - in this mail, a decision for a number of patches (exact number can
-> vary) is already proposed. Buildroot developers should provide
-> feedback stating their agreement/disagreement with this proposed
-> decision.
->
-> - patches are triaged into four categories:
->     A. We want this patch and someone should refresh and resend it.
->     B. We don't want this patch as it goes against Buildroot principles.
->     C. We're not sure and want to know if the submitter is still
-> interested in pursuing this patch.
->     D. We accept the problem that the patch is fixing, but the patch
-> can't be integrated in its current state. More work is needed, for
-> example on the core buildroot infrastructure. Therefore, the patch
-> will be added to the buildroot TODO list.
->
-> - after the brief agreement/disagreement phase, patch submitters are
-> notified and get two weeks to provide feedback and/or fight the
-> decision. Patchwork is already updated at the beginning of these two
-> weeks, but closed patches can always be reopened.
->
-> - during this two week cool-off period, new cleanup sessions can already start.
->
->
+On Sat, 14 Jun 2014 22:02:31 +0200, Thomas De Schampheleire wrote:
+
 > Triage proposal for this (short) session:
->
+> 
 > qemu: add to host utilities menu
 > Frank Hunleth <fhunleth@troodon-software.com>
 > http://patchwork.ozlabs.org/patch/299014
->
+> 
 > A accept
->
->
+
+If this gets applied, it needs to go together with
+http://patchwork.ozlabs.org/patch/319108/. However, I'd like to see a
+solution that merges the existing qemu package with the qemu-system
+package proposed by Gustavo.
+
 > mono runtime porting to buildroot
 > Alexander Varnin <fenixk19@mail.ru>
 > http://patchwork.ozlabs.org/patch/299488
->
+> 
 > B reject/superseded
 > There is a newer patch that not only adds the runtime part, but also
 > the host part, see http://patchwork.ozlabs.org/patch/351871/
 > For the same reason, I already marked
 > http://patchwork.ozlabs.org/patch/323246/ as Superseded.
->
->
+
+ACK, so this has already been done, and you don't need more feedback
+about 299488, right?
+
 > udev: Set the default action to "add" in the startup script
 > Paul Cercueil <paul@crapouillou.net>
 > http://patchwork.ozlabs.org/patch/301972
->
+> 
 > C unsure: I asked for more feedback on this patch from the community
 > but no feedback yet. I don't know if this is correct or not.
->
->
+
+Same thing here. Unfortunately, Paul rarely gives any feedback about
+the patches he posts, so they often become abandoned in patchwork. Not
+much we can do about it, unfortunately.
+
 > [1/2] uclibc: add a missing function member to siginfo.h
 > Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > http://patchwork.ozlabs.org/patch/308384
->
+> 
 > Based on the feedback from Thomas Petazzoni on this patch, I would say:
 > B reject
->
->
+
+Well, maybe we should just apply it, and make rt-tests available on
+mips/uclibc for internal toolchains, and keep it disabled for external
+toolchains. Unfortunately, in the autobuilders, we mainly test external
+toolchains, so we're not giving to test rt-tests much. So I still have
+a mixed opinion about such patches. But the uClibc release process is
+dead...
+
 > [2/2] uclibc: Make __SIGEV_PAD_SIZE to take __WORDSIZE into account
 > Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > http://patchwork.ozlabs.org/patch/308383
->
+> 
 > I would guess the same decision as the previous patch applies here:
 > B reject
->
->
+
+Yeah, same problem. Maybe my previous opinion is wrong, and we should
+just patch Buildroot's uClibc as needed, and not exclude all
+problematic packages from being used with an external uClibc toolchain.
+
 > [2/2] package: add paragui package
 > H Hartley Sweeten <hsweeten@visionengravers.com>
 > http://patchwork.ozlabs.org/patch/309336
->
+> 
 > Although this package could use a good review because it has some
 > issues, in general we accept new packages so I would mark this as
 > A accept
->
->
+
+To be honest, I started having a look at this package, and I continue
+to believe that's it's a totally unmaintained GUI toolkit, with very
+few users, and apparently not a very strong effort to push it from the
+original contributor. So I'd prefer to simply reject the patch.
+
 > [v2,1/1] gst-ffmpeg: add option for LGPL build
 > Danomi Manchego <danomimanchego123@gmail.com>
 > http://patchwork.ozlabs.org/patch/312360
->
+> 
 > I assume this should be
 > A accept
 > but the patch needs review and testing I think.
->
 
+No opinion on this one, I don't do much gst stuff.
 
-Your feedback on this triaging proposal is still welcome.
-If no further feedback, I will proceed with the triaging as above...
-
-Best regards,
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
