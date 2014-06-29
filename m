@@ -1,44 +1,212 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 29 Jun 2014 21:04:06 +0200
-Subject: [Buildroot] [PATCH v2 00/11] freescale: update userspace
-	packages
-In-Reply-To: <1403846694-21974-1-git-send-email-bisson.gary@gmail.com>
-References: <1403150639-29382-1-git-send-email-bisson.gary@gmail.com>
- <1403846694-21974-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <20140629190406.GC30509@free.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Sun, 29 Jun 2014 23:18:26 +0400
+Subject: [Buildroot] [PATCH] uclibc: fix tests building in uClibc 0.9.33.2
+Message-ID: <1404069506-13826-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+Following patches are required for successful bulding of uClibc built-int tests
+(BR2_UCLIBC_INSTALL_TEST_SUITE=y):
 
-On 2014-06-26 22:24 -0700, Gary Bisson spake thusly:
-> Here is the rework which I hope covers all the previous remarks. This time I tried to be more talkative in every patch but here is a summary:
->  1- first libfslvpuwrap gets independent as suggested
->  2- simply bump FREESCALE_IMX_VERSION to 3.10.17-1.0.0
->  3- update imx-lib: using idirafter just for uapi folder + remove unnecessary EULA
->  4- make the platform choice as a common option: made BR2_PACKAGE_FREESCALE_IMX a menuconfig not to get BR2_PACKAGE_FREESCALE_IMX_PLATFORM set in every config.
->  5- just adding the imx-vpu package from Freescale with no modification but using idirafter for uapi folder only
->  6- bump libfslvpuwrap: now depends on imx-vpu
->  7- bump libfslcodec: nothing special
->  8- bump libfslparser: same
->  9- gst-fsl-plugins: now depends on imx-vpu as well
->  10/11- fix imx-vpu for the IOGetVirtMem in case of a 3G/1G split: I finally decided not to go with the MAP_FAILED as the return value is an int. I think using -1 is as clear and avoids useless cast. That function could have been written in a simpler way but I didn't want to change the code too much.
+1.
+uclibc-0059-test-cater-for-config.patch
+http://git.uclibc.org/uClibc/commit/test?id=7598eeaa1defa2884adaa890bb115c493d69cc35
 
-Great work!
+2.
+uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+http://git.uclibc.org/uClibc/commit/test?id=931e8391565323ed2e589c83b83a7345813a5514
 
-I still have a few comments on this series, but I'll do the changes and
-repost an updated version.
+3.
+uclibc-0060-test-Fix-math-c-dependency.patch
+http://git.uclibc.org/uClibc/commit/test/math?id=a20a91ad7c042c46e4a2adee6d03315f857f9985
 
-Regards,
-Yann E. MORIN.
+All mentioned patches must be removed as obsolete on bumping uClibc to the next
+release.
 
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+---
+ ...58-test-tls-fix-build-with-newer-binutils.patch | 37 ++++++++++
+ .../uclibc-0059-test-cater-for-config.patch        | 81 ++++++++++++++++++++++
+ .../uclibc-0060-test-Fix-math-c-dependency.patch   | 30 ++++++++
+ 3 files changed, 148 insertions(+)
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0059-test-cater-for-config.patch
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0060-test-Fix-math-c-dependency.patch
+
+diff --git a/package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch b/package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+new file mode 100644
+index 0000000..04dfb1e
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+@@ -0,0 +1,37 @@
++From 931e8391565323ed2e589c83b83a7345813a5514 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 02 Oct 2013 07:08:29 +0000
++Subject: test: tls: fix build with newer binutils
++
++Fix the following build failures:
++
++ld: tst-tls10.o: undefined reference to symbol 'f2a'
++ld: tst-tls12.o: undefined reference to symbol 'a1'
++
++binutils ld defaults to --no-copy-dt-needed-entries since version 2.22. Add
++library dependencies explicitly.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++(limited to 'test')
++
++diff --git a/test/tls/Makefile.in b/test/tls/Makefile.in
++index 875c607..7ab4e2a 100644
++--- a/test/tls/Makefile.in
+++++ b/test/tls/Makefile.in
++@@ -102,9 +102,9 @@ LDFLAGS_tst-tls6 := -ldl
++ LDFLAGS_tst-tls7 := -ldl
++ LDFLAGS_tst-tls8 := -ldl
++ LDFLAGS_tst-tls9 := -ldl
++-LDFLAGS_tst-tls10 := -Wl,-rpath-link=. tst-tlsmod8.so
++-LDFLAGS_tst-tls11 := -Wl,-rpath-link=. tst-tlsmod10.so
++-LDFLAGS_tst-tls12 := -Wl,-rpath-link=. tst-tlsmod12.so
+++LDFLAGS_tst-tls10 := -Wl,-rpath-link=. tst-tlsmod8.so tst-tlsmod7.so
+++LDFLAGS_tst-tls11 := -Wl,-rpath-link=. tst-tlsmod9.so tst-tlsmod10.so
+++LDFLAGS_tst-tls12 := -Wl,-rpath-link=. tst-tlsmod11.so tst-tlsmod12.so
++ LDFLAGS_tst-tls13 := -ldl -Wl,-rpath-link=.
++ LDFLAGS_tst-tls14 := -ldl -Wl,-rpath-link=. tst-tlsmod14a.so
++ LDFLAGS_tst-tls15 := -ldl -Wl,-rpath-link=.
++--
++cgit v0.9.1
+diff --git a/package/uclibc/0.9.33.2/uclibc-0059-test-cater-for-config.patch b/package/uclibc/0.9.33.2/uclibc-0059-test-cater-for-config.patch
+new file mode 100644
+index 0000000..f44c92c
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0059-test-cater-for-config.patch
+@@ -0,0 +1,81 @@
++From 7598eeaa1defa2884adaa890bb115c493d69cc35 Mon Sep 17 00:00:00 2001
++From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++Date: Sat, 23 Feb 2013 06:39:41 +0000
++Subject: test: cater for config
++
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++(limited to 'test')
++
++diff --git a/test/math/Makefile.in b/test/math/Makefile.in
++index e76cbdb..beef650 100644
++--- a/test/math/Makefile.in
+++++ b/test/math/Makefile.in
++@@ -1,14 +1,16 @@
++ # uClibc math tests
++ # Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
++ 
++-TESTS := basic-test tst-definitions test-fpucw test-float test-ifloat test-double test-idouble \
++-    rint signgam ilogb
++ # gamma (removed from TESTS, need to add "small errors are ok" machinery there)
++-ifeq ($(UCLIBC_HAS_LONG_DOUBLE_MATH),y)
++-TESTS += test-ldouble test-ildoubl compile_test c99_test
+++TESTS_DISABLED := gamma
+++ifeq ($(UCLIBC_HAS_LONG_DOUBLE_MATH),)
+++TESTS_DISABLED += test-ldouble test-ildoubl compile_test c99_test
++ else
++ CFLAGS_basic-test := -DNO_LONG_DOUBLE
++ endif
+++ifeq ($(DO_C99_MATH),)
+++TESTS_DISABLED += test-float test-ifloat test-double test-idouble rint signgam ilogb
+++endif
++ 
++ DODIFF_rint     := 1
++ DODIFF_signgam  := 1
++diff --git a/test/misc/Makefile.in b/test/misc/Makefile.in
++index 9b74d22..52a3e71 100644
++--- a/test/misc/Makefile.in
+++++ b/test/misc/Makefile.in
++@@ -4,6 +4,7 @@
++ TESTS_DISABLED := outb tst-fnmatch bug-glob1 tst-gnuglob
++ ifeq  ($(UCLIBC_HAS_LFS),)
++ TESTS_DISABLED += dirent64
+++TESTS_DISABLED += tst-statfs # assuming host has LFS on
++ endif
++ CFLAGS_dirent64 := -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
++ 
++diff --git a/test/misc/tst-statfs.c b/test/misc/tst-statfs.c
++index 44ab3aa..b8b4229 100644
++--- a/test/misc/tst-statfs.c
+++++ b/test/misc/tst-statfs.c
++@@ -1,5 +1,3 @@
++-#define _FILE_OFFSET_BITS 64
++-
++ #include <sys/vfs.h>
++ #include <errno.h>
++ #include <stdio.h>
++diff --git a/test/misc/tst-statvfs.c b/test/misc/tst-statvfs.c
++index c1e8fde..4b67719 100644
++--- a/test/misc/tst-statvfs.c
+++++ b/test/misc/tst-statvfs.c
++@@ -1,5 +1,3 @@
++-#define _FILE_OFFSET_BITS 64
++-
++ #include <sys/statvfs.h>
++ #include <errno.h>
++ #include <stdio.h>
++diff --git a/test/unistd/Makefile.in b/test/unistd/Makefile.in
++index 24b9a37..cfef22e 100644
++--- a/test/unistd/Makefile.in
+++++ b/test/unistd/Makefile.in
++@@ -5,7 +5,7 @@ ifeq ($(UCLIBC_HAS_LFS),)
++ TESTS_DISABLED := tst-preadwrite64 tst-posix_fallocate64
++ endif
++ ifeq ($(UCLIBC_HAS_ADVANCED_REALTIME),)
++-TESTS_DISABLED := tst-posix_fallocate
+++TESTS_DISABLED += tst-posix_fallocate
++ endif
++ OPTS_getopt      := -abcXXX -9
++ OPTS_getopt_long := --add XXX --delete YYY --verbose
++--
++cgit v0.9.1
+diff --git a/package/uclibc/0.9.33.2/uclibc-0060-test-Fix-math-c-dependency.patch b/package/uclibc/0.9.33.2/uclibc-0060-test-Fix-math-c-dependency.patch
+new file mode 100644
+index 0000000..c6ee47d
+--- /dev/null
++++ b/package/uclibc/0.9.33.2/uclibc-0060-test-Fix-math-c-dependency.patch
+@@ -0,0 +1,30 @@
++From a20a91ad7c042c46e4a2adee6d03315f857f9985 Mon Sep 17 00:00:00 2001
++From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++Date: Tue, 18 Feb 2014 23:30:28 +0100
++Subject: [PATCH] test: Fix math .c dependency
++
++When explicitly running the compile target we were missing a dependency
++to generate the libm-test.c.
++
++Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
++---
++ test/math/Makefile.in | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/test/math/Makefile.in b/test/math/Makefile.in
++index beef650..0285b66 100644
++--- a/test/math/Makefile.in
+++++ b/test/math/Makefile.in
++@@ -25,7 +25,8 @@ EXTRA_LDFLAGS   := -lm
++ 
++ PERL := /usr/bin/perl
++ 
++-$(TESTS): libm-test.c
+++MDEPS := $(wildcard test-*.c)
+++$(MDEPS): libm-test.c
++ 
++ libm-test.c: libm-test-ulps-$(TARGET_ARCH) libm-test.inc gen-libm-test.pl
++ 	$(Q)$(PERL) ./gen-libm-test.pl -u libm-test-ulps-$(TARGET_ARCH) ./libm-test.inc -o "." 2>&1 > /dev/null
++-- 
++1.9.3
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.3
