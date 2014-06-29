@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 13:20:29 +0200
-Subject: [Buildroot] [PATCH v2] uclibc: enable parallel building of
- libraries
-In-Reply-To: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>
-References: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140629132029.0d46a1d0@free-electrons.com>
+Date: Sun, 29 Jun 2014 13:22:55 +0200
+Subject: [Buildroot] [PATCH 1 of 3 v3] infra: support buildroot being
+ located in /usr
+In-Reply-To: <CAAXf6LXOnWc=BBjHEwB9os8qYYNy6STkKUqK+pteyqdT4m=X6A@mail.gmail.com>
+References: <patchbomb.1403362906@localhost>
+ <f9dbe1c9d761945aaf97.1403362907@localhost>
+ <20140629123926.5a17535c@free-electrons.com>
+ <CAAXf6LXOnWc=BBjHEwB9os8qYYNy6STkKUqK+pteyqdT4m=X6A@mail.gmail.com>
+Message-ID: <20140629132255.14eb325b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+Dear Thomas De Schampheleire,
 
-On Fri, 27 Jun 2014 20:26:00 +0400, Alexey Brodkin wrote:
-> The use of MAKE1 for uClibc dates back 10 years:
-> 
-> commit 8e5fb3fb4ab09b4dc04fe7cb3f7becce6514117b
-> Author: Eric Andersen <andersen@codepoet.org>
-> Date:   Sat Dec 11 13:01:10 2004 +0000
-> 
->     Add initial BR2_JLEVEL support, with some exceptions for apps that
->     have broken 'make -j' support
-> 
-> Since that time there were lots of improvements in uClibc that seem to allow
-> parallel building of libs finally.
-> 
-> Unfortunately uClibc tests have dependences on previously built files,
-> that's why tests left with MAKE1.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+On Sun, 29 Jun 2014 13:07:25 +0200, Thomas De Schampheleire wrote:
 
-Applied, thanks!
+> > I've applied this patch, after adding the explanation comment proposed
+> > by Arnout. However, I haven't implemented the other possible
+> > improvements suggested by Arnout, which I believe can be proposed as
+> > followup patches.
+> 
+> Yesterday I started implementing these changes and the test build just
+> finished successfully.
+> I will submit the delta now...
+
+Ah, sorry about that. Since the patches were OK as is, I thought it was
+better to apply the current patches and do the rest as followup patches.
 
 Thomas
 -- 
