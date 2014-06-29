@@ -1,33 +1,43 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sun, 29 Jun 2014 09:59:47 +0000
-Subject: [Buildroot] [PATCH v2] uclibc: enable parallel building of
- libraries
-In-Reply-To: <CAAXf6LU3yfD-6mUJ+smNhVDyChPCFv53s7PPVFJYm0A6cdGMgw@mail.gmail.com>
-References: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>,
- <CAAXf6LU3yfD-6mUJ+smNhVDyChPCFv53s7PPVFJYm0A6cdGMgw@mail.gmail.com>
-Message-ID: <4881796E12491D4BB15146FE0209CE6464B4B7C8@DE02WEMBXB.internal.synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 29 Jun 2014 12:01:25 +0200
+Subject: [Buildroot] [git commit] lzo: security bump to version 2.07
+Message-ID: <20140629100143.E7D949D107@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: http://git.buildroot.net/buildroot/commit/?id=7001f391eef299634615e8a3b7db02d03c94ee27
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> There are other occurrences of MAKE1 in uclibc.mak: for the oldconfig
-> step (in SETUP_DOT_CONFIG), configure commands, installation commands,
-> and menuconfig step.
-> I think these should be replaced by MAKE too (and tested, of course).
+Fixes CVE-2014-4607.
 
-I did notice there're many more MAKE1 in use.
+[Thomas: fix small typo in comment.]
 
-But knowing unfortunate fate of uClibc in terms of parallel building I wanted to do minimal changes that still make significant difference in Buildroot usage (i.e. make building faster).
-The most time consuming process is uClibc building itself and I made it parallel - that shortens uClibc significantly.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lzo/lzo.mk |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
 
-As for other invocations of MAKE1 IMHO there's not much sense in use of parallel make for configuration like "oldconfig" and friends (not much things here are compiled) or "install" (where we only have file copy operations and that's why I don't expect any gain in speed if we run them in parallel).
-
-So I'd prefer to proceed with incremental changes. Once parallel build is proven for all arches by autobuilder (which may disclose issues on arches I haven't try the change yet - I did tests for ARC and x86) we may consider more changes (note I already found that built-in tests won't build in parallel).
-
-What do you think?
-
--Alexey
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 10107fe..e9e0b3f 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -4,11 +4,14 @@
+ #
+ ################################################################################
+ 
+-LZO_VERSION = 2.06
++LZO_VERSION = 2.07
+ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPLv2+
+ LZO_LICENSE_FILES = COPYING
+ LZO_INSTALL_STAGING = YES
++# Our libtool patch does not apply to bundled ltmain.sh since it's too new.
++# Run autoreconf to regenerate ltmain.sh.
++LZO_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
