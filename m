@@ -1,121 +1,80 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Sun, 29 Jun 2014 21:35:37 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: bump to version 214
-Message-ID: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 29 Jun 2014 21:37:46 +0200
+Subject: [Buildroot] [PATCH] uclibc: fix tests building in uClibc
+	0.9.33.2
+In-Reply-To: <1404069506-13826-1-git-send-email-abrodkin@synopsys.com>
+References: <1404069506-13826-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <0565f572-9253-4d0c-992b-6de65c123f83@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps systemd to version 214.
+Alexey Brodkin <Alexey.Brodkin@synopsys.com> schreef:
+>Following patches are required for successful bulding of uClibc built-int tests
+>(BR2_UCLIBC_INSTALL_TEST_SUITE=y):
+>
+>1.
+>uclibc-0059-test-cater-for-config.patch
+>http://git.uclibc.org/uClibc/commit/test?id=7598eeaa1defa2884adaa890bb115c493d69cc35
+>
+>2.
+>uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+>http://git.uclibc.org/uClibc/commit/test?id=931e8391565323ed2e589c83b83a7345813a5514
+>
+>3.
+>uclibc-0060-test-Fix-math-c-dependency.patch
+>http://git.uclibc.org/uClibc/commit/test/math?id=a20a91ad7c042c46e4a2adee6d03315f857f9985
+>
+>All mentioned patches must be removed as obsolete on bumping uClibc to the next
+>release.
+>
+>Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+>
+>Cc: Anton Kolesov <akolesov@synopsys.com>
+>Cc: Peter Korsgaard <peter@korsgaard.com>
+>Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+>---
+> ...58-test-tls-fix-build-with-newer-binutils.patch | 37 ++++++++++
+> .../uclibc-0059-test-cater-for-config.patch        | 81 ++++++++++++++++++++++
+> .../uclibc-0060-test-Fix-math-c-dependency.patch   | 30 ++++++++
+> 3 files changed, 148 insertions(+)
+> create mode 100644 package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+> create mode 100644 package/uclibc/0.9.33.2/uclibc-0059-test-cater-for-config.patch
+> create mode 100644 package/uclibc/0.9.33.2/uclibc-0060-test-Fix-math-c-dependency.patch
+>
+>diff --git a/package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch b/package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+>new file mode 100644
+>index 0000000..04dfb1e
+>--- /dev/null
+>+++ b/package/uclibc/0.9.33.2/uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
+>@@ -0,0 +1,37 @@
+>+From 931e8391565323ed2e589c83b83a7345813a5514 Mon Sep 17 00:00:00 2001
+>+From: Baruch Siach <baruch@tkos.co.il>
+>+Date: Wed, 02 Oct 2013 07:08:29 +0000
+>+Subject: test: tls: fix build with newer binutils
+>+
+>+Fix the following build failures:
+>+
+>+ld: tst-tls10.o: undefined reference to symbol 'f2a'
+>+ld: tst-tls12.o: undefined reference to symbol 'a1'
+>+
+>+binutils ld defaults to --no-copy-dt-needed-entries since version 2.22. Add
+>+library dependencies explicitly.
+>+
+>+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>+Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+>+---
+>+(limited to 'test')
 
-Changes:
+When taking patches via a git web interface, it's important to check the full patch, not limited to a particular file or subdirectory, as is the case here. You can do that by browsing up the file hierarchy once a revision is selected, or do manual editing of the url remove the path.
 
-- add new users: systemd-bus-proxy, systemd-network and systemd-resolve.
-- remove gtk-doc patch, as it is no longer needed.
-- force kmod path when configuring.
-- remove attr build dependency.
+This is because there may be changes in other places for this patch...
 
-Besides:
+Same comment on the other patches added...
 
-- /var/lock no longer needs to be a symlink to /run, as systemd, via
-  tmpfiles.d, will automatically create a symlink to /run/lock at
-  runtime.
-- when using systemd-networkd, /etc/resolv.conf should now be a symlink
-  to /run/systemd/resolve/resolv.conf.
-
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...ystemd-03-fix-am-path-libgcrypt-no-found.patch} |  0
- package/systemd/systemd-03-fix-no-gtk-doc.patch    | 23 ----------------------
- package/systemd/systemd.mk                         | 11 +++++++++--
- 3 files changed, 9 insertions(+), 25 deletions(-)
- rename package/systemd/{systemd-04-fix-am-path-libgcrypt-no-found.patch => systemd-03-fix-am-path-libgcrypt-no-found.patch} (100%)
- delete mode 100644 package/systemd/systemd-03-fix-no-gtk-doc.patch
-
-diff --git a/package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch b/package/systemd/systemd-03-fix-am-path-libgcrypt-no-found.patch
-similarity index 100%
-rename from package/systemd/systemd-04-fix-am-path-libgcrypt-no-found.patch
-rename to package/systemd/systemd-03-fix-am-path-libgcrypt-no-found.patch
-diff --git a/package/systemd/systemd-03-fix-no-gtk-doc.patch b/package/systemd/systemd-03-fix-no-gtk-doc.patch
-deleted file mode 100644
-index dc236a7..0000000
---- a/package/systemd/systemd-03-fix-no-gtk-doc.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Fix deactivation of gtk-doc
--
--The tarball contains the Makefile for building documentation with gtk-doc,
--Unfortunately the AM_CONDITIONAL variable is not the correct one, which
--results in an error when running autoreconf.
--
--This patch fixes this issue.
--
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-----
--Index: systemd-213/docs/gtk-doc.make
--===================================================================
----- systemd-213.orig/docs/gtk-doc.make	2014-02-14 09:27:47.000000000 +0100
--+++ systemd-213/docs/gtk-doc.make	2014-06-04 15:20:11.976845074 +0200
--@@ -267,7 +267,7 @@
-- #
-- # Require gtk-doc when making dist
-- #
---if HAVE_GTK_DOC
--+if ENABLE_GTK_DOC
-- dist-check-gtkdoc: docs
-- else
-- dist-check-gtkdoc:
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 95e7214..947bc92 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSTEMD_VERSION = 213
-+SYSTEMD_VERSION = 214
- SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
- SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
- SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
-@@ -50,6 +50,9 @@ SYSTEMD_CONF_OPT += \
- 	--disable-dbus \
- 	--without-python
- 
-+SYSTEMD_CONF_ENV = \
-+	ac_cv_path_KMOD=/usr/bin/kmod
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
- SYSTEMD_CONF_OPT += --enable-compat-libs
- else
-@@ -65,7 +68,6 @@ endif
- 
- ifeq ($(BR2_PACKAGE_ATTR),y)
- SYSTEMD_CONF_OPT += --enable-attr
--SYSTEMD_DEPENDENCIES += attr
- else
- SYSTEMD_CONF_OPT += --disable-attr
- endif
-@@ -99,6 +101,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPT += --enable-networkd
-+define SYSTEMD_USER_TIMESYNC
-+	systemd-network -1 systemd-network -1 * - - - Network Manager
-+endef
- else
- SYSTEMD_CONF_OPT += --disable-networkd
- define SYSTEMD_INSTALL_SERVICE_NETWORK
-@@ -155,6 +160,8 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- define SYSTEMD_USERS
- 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
- 	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
-+	systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
-+	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
- 	$(SYSTEMD_USER_TIMESYNC)
- endef
- 
--- 
-1.9.3
+Best regards,
+Thomas
