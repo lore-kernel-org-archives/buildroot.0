@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 10:41:19 +0200
-Subject: [Buildroot] [git commit] php: security bump to version 5.5.14
-Message-ID: <20140629084431.0CBC99D090@busybox.osuosl.org>
+Date: Sun, 29 Jun 2014 10:44:00 +0200
+Subject: [Buildroot] [git commit] graph-depends: remove unnecessary redirect
+	of stderr
+Message-ID: <20140629084431.362419CDAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=67aaef1cb2080cfa7b0b50be8e01cf1c799a511b
+commit: http://git.buildroot.net/buildroot/commit/?id=cfb6bf5ee91183291c91e960c9f57e846fdcd231
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+It hides any error messages reported by make.
 
-CVE-2014-3981 - insecure temporary file use in the configure script.
-CVE-2014-0207 - cdf_read_short_sector insufficient boundary check.
-CVE-2014-3478 - mconvert incorrect handling of truncated pascal string
-size.
-CVE-2014-3479 - cdf_check_stream_offset insufficient boundary check.
-CVE-2014-3480 - cdf_count_chain insufficient boundary check.
-CVE-2014-3487 - cdf_read_property_info insufficient boundary check.
-CVE-2014-4049 - Fix potential segfault in dns_get_record().
-CVE-2014-3515 - unserialize() SPL ArrayObject / SPLObjectStorage Type
-Confusion.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ support/scripts/graph-depends |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index a878800..8ac5d86 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.5.13
-+PHP_VERSION = 5.5.14
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
+index 52c16ce..1ecfeda 100755
+--- a/support/scripts/graph-depends
++++ b/support/scripts/graph-depends
+@@ -82,7 +82,7 @@ allpkgs = []
+ def get_targets():
+     sys.stderr.write("Getting targets\n")
+     cmd = ["make", "-s", "--no-print-directory", "show-targets"]
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0].strip()
+     if p.returncode != 0:
+         return None
+@@ -98,7 +98,7 @@ def get_depends(pkgs):
+     cmd = ["make", "-s", "--no-print-directory" ]
+     for pkg in pkgs:
+         cmd.append("%s-show-depends" % pkg)
+-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
++    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, universal_newlines=True)
+     output = p.communicate()[0]
+     if p.returncode != 0:
+         sys.stderr.write("Error getting dependencies %s\n" % pkgs)
