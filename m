@@ -1,40 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 16:39:45 +0200
-Subject: [Buildroot] [git commit] lzo: bump to version 2.08
-Message-ID: <20140629144039.0D4D29D106@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 29 Jun 2014 16:47:27 +0200
+Subject: [Buildroot] [PATCH] infra: simplify .la/.pc fixup commands
+In-Reply-To: <20140629161538.35a3c17c@free-electrons.com>
+References: <6d38fb9f8bb567d8a4a2.1404044185@localhost>
+ <20140629161538.35a3c17c@free-electrons.com>
+Message-ID: <26ee94e3-9322-47ba-881d-d48edc8d6568@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01012167dffccc8a82f3a0f712a842e217f7b466
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Dear Thomas De Schampheleire,
+>
+>On Sun, 29 Jun 2014 14:16:25 +0200, Thomas De Schampheleire wrote:
+>
+>> The commands fixing up .la and .pc files in the pkg-generic and
+>> pkg-autotools infrastructures can be simplified a little, since STAGING_DIR
+>> already contains BASE_DIR.
+>
+>Is this assumption really correct? If the user decides to move
+>$(HOST_DIR) in some custom location using BR2_HOST_DIR, it also means
+>that $(STAGING_DIR) is moved to this custom location. So you can have a
+>case where:
+>
+>	BASE_DIR = /home/joe/buildroot/output
+>	HOST_DIR = /opt/arm-build
+>	STAGING_DIR = /opt/arm-build/usr/arm-unknown-linux-uclibcgnueabi/sysroot/
+>
+>No ?
 
-According to the LZO website: "LZO 2.08 has been released: small
-update that corrects some reported build problems.". And indeed it
-fixes the failed compiler conformance tests that have been observed on
-the autobuilders.
+Hmm, ok, but I'm this case the already applied patch is not complete either and we should go back to v2 I think... I'll resubmit...
 
-Fixes:
+...and I blame Arnout ;-)
 
-  http://autobuild.buildroot.org/results/1e8/1e8e826c4463c9dd3aa5ddb95f08b9564d10a75d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/lzo/lzo.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-index e9e0b3f..9f0729a 100644
---- a/package/lzo/lzo.mk
-+++ b/package/lzo/lzo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LZO_VERSION = 2.07
-+LZO_VERSION = 2.08
- LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
- LZO_LICENSE = GPLv2+
- LZO_LICENSE_FILES = COPYING
+Best regards,
+Thomas
