@@ -1,35 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 16:56:42 +0200
-Subject: [Buildroot] [PATCH v3 2/5] system: convert "system.mk" recipes
- to "target-finalize" hooks
-In-Reply-To: <1403871359-18849-3-git-send-email-fabio.porcedda@telit.com>
-References: <1403871359-18849-1-git-send-email-fabio.porcedda@telit.com>
- <1403871359-18849-3-git-send-email-fabio.porcedda@telit.com>
-Message-ID: <20140629165642.055f2e88@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 29 Jun 2014 12:05:03 -0300
+Subject: [Buildroot] [PATCH] lsof: bump to version 4.87
+Message-ID: <1404054303-11800-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+And install to /usr/bin/lsof rather than /bin/lsof otherwise we still
+keep busybox lsof.
 
-On Fri, 27 Jun 2014 14:15:56 +0200, Fabio Porcedda wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/lsof/{lsof-4.85-makefile.patch => lsof-0001-makefile.patch}   | 0
+ package/lsof/{lsof-4.85-noportmap.patch => lsof-0001-noportmap.patch} | 0
+ ...sof-4.85-override-cflags.patch => lsof-0003-override-cflags.patch} | 0
+ ...susvlegacy-funcs.patch => lsof-0004-remove-susvlegacy-funcs.patch} | 0
+ package/lsof/lsof.mk                                                  | 4 ++--
+ 5 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/lsof/{lsof-4.85-makefile.patch => lsof-0001-makefile.patch} (100%)
+ rename package/lsof/{lsof-4.85-noportmap.patch => lsof-0001-noportmap.patch} (100%)
+ rename package/lsof/{lsof-4.85-override-cflags.patch => lsof-0003-override-cflags.patch} (100%)
+ rename package/lsof/{lsof-4.85-remove-susvlegacy-funcs.patch => lsof-0004-remove-susvlegacy-funcs.patch} (100%)
 
->  ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
-> -target-root-passwd: host-mkpasswd
-> +TARGETS += host-mkpasswd
-
-Actually, I was wondering how this could work in the context of
-top-level parallel build, but looking more closely, target-finalize has
-$(TARGETS) in its dependencies, so we indeed have the guarantee that
-host-mkpasswd will be built before the SYSTEM_ROOT_PASSWD hook is
-executed.
-
-So in fact, I don't have any comment about PATCH 2 :-)
-
-Thomas
+diff --git a/package/lsof/lsof-4.85-makefile.patch b/package/lsof/lsof-0001-makefile.patch
+similarity index 100%
+rename from package/lsof/lsof-4.85-makefile.patch
+rename to package/lsof/lsof-0001-makefile.patch
+diff --git a/package/lsof/lsof-4.85-noportmap.patch b/package/lsof/lsof-0001-noportmap.patch
+similarity index 100%
+rename from package/lsof/lsof-4.85-noportmap.patch
+rename to package/lsof/lsof-0001-noportmap.patch
+diff --git a/package/lsof/lsof-4.85-override-cflags.patch b/package/lsof/lsof-0003-override-cflags.patch
+similarity index 100%
+rename from package/lsof/lsof-4.85-override-cflags.patch
+rename to package/lsof/lsof-0003-override-cflags.patch
+diff --git a/package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch b/package/lsof/lsof-0004-remove-susvlegacy-funcs.patch
+similarity index 100%
+rename from package/lsof/lsof-4.85-remove-susvlegacy-funcs.patch
+rename to package/lsof/lsof-0004-remove-susvlegacy-funcs.patch
+diff --git a/package/lsof/lsof.mk b/package/lsof/lsof.mk
+index dcdb7cf..285bd47 100644
+--- a/package/lsof/lsof.mk
++++ b/package/lsof/lsof.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LSOF_VERSION = 4.85
++LSOF_VERSION = 4.87
+ LSOF_SOURCE = lsof_$(LSOF_VERSION).tar.bz2
+ LSOF_SITE = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/
+ LSOF_LICENSE = lsof license
+@@ -58,7 +58,7 @@ define LSOF_BUILD_CMDS
+ endef
+ 
+ define LSOF_INSTALL_TARGET_CMDS
+-	$(INSTALL) -D -m 755 $(@D)/lsof $(TARGET_DIR)/bin/lsof
++	$(INSTALL) -D -m 755 $(@D)/lsof $(TARGET_DIR)/usr/bin/lsof
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
