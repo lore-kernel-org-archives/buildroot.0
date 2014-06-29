@@ -1,34 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 29 Jun 2014 13:03:04 +0000 (UTC)
-Subject: [Buildroot] [Bug 5750] Doing a Buildroot build from /usr doesn't
-	work
-In-Reply-To: <bug-5750-163@https.bugs.busybox.net/>
-References: <bug-5750-163@https.bugs.busybox.net/>
-Message-ID: <20140629130304.A1A4A9D10A@busybox.osuosl.org>
+Date: Sun, 29 Jun 2014 13:14:27 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140629131427.2A9F19CFC7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5750
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
+--- Comment #13 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-29 13:14:26 UTC ---
+Mike, 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|                            |FIXED
+Would you care to send patches to the mailing list to implement these changes?
+In a first step, the 'Now' comment, and then the alternative you proposed.
+Having the changes on the mailing list will facilitate the discussion and
+review, as few developers look at the bug comments.
 
---- Comment #13 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-06-29 13:03:02 UTC ---
-Slightly modified patches now accepted, so marking bug as fixed.
-See commits:
-http://git.buildroot.org/buildroot/commit/?id=7701fc53d19be7cab8bddba72046a39e8421fd9e
-http://git.buildroot.org/buildroot/commit/?id=9580c178e55b90c456096bb553f0cd0e26eff6a1
-http://git.buildroot.org/buildroot/commit/?id=17eaa5d3ab1982a89c82e603484edbed8f712e16
-
-
-Hooray for closing this very old bug!
+Thanks, Thomas
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
