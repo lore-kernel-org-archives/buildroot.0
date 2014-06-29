@@ -1,35 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 12:48:33 +0200
-Subject: [Buildroot] [PATCH 1/2] icu: Delete inapropriate flag at link
-In-Reply-To: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <20140629124833.501df1ee@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 29 Jun 2014 13:07:25 +0200
+Subject: [Buildroot] [PATCH 1 of 3 v3] infra: support buildroot being
+ located in /usr
+In-Reply-To: <20140629123926.5a17535c@free-electrons.com>
+References: <patchbomb.1403362906@localhost>
+ <f9dbe1c9d761945aaf97.1403362907@localhost>
+ <20140629123926.5a17535c@free-electrons.com>
+Message-ID: <CAAXf6LXOnWc=BBjHEwB9os8qYYNy6STkKUqK+pteyqdT4m=X6A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Maxime Hadjinlian,
+Hi Thomas,
 
-On Thu, 19 Jun 2014 18:13:36 +0200, Maxime Hadjinlian wrote:
-> From: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
-> 
-> Theses flags may cause libicudata to not be loaded on ARM EABIHF
-> because it would be built for ARM EABI only.
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
-> Cc: Thomas Petazzoni  <thomas.petazzoni@free-electrons.com>
-> ---
->  .../icu/icu-004-link-icudata-as-data-only.patch    | 32 ++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/icu/icu-004-link-icudata-as-data-only.patch
+On Sun, Jun 29, 2014 at 12:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Sat, 21 Jun 2014 17:01:47 +0200, Thomas De Schampheleire wrote:
+>> pkg-generic and pkg-autotools both perform sed replacements of /usr to
+>> $(STAGING_DIR)/usr, in .pc and .la files respectively. However, if buildroot
+>> itself is located in /usr, then STAGING_DIR also starts with /usr, and naive
+>> replacements of '/usr' can result in paths of the form:
+>>     /usr/buildroot/.../sysroot/usr/buildroot/.../sysroot/...
+>>
+>> This patch makes the replacements more careful, by first replacing the known
+>> paths BASE_DIR and STAGING_DIR to tokens, then performing the actual
+>> replacement, and finally replacing the tokens with the corresponding paths.
+>>
+>> Additionally it removes the unnecessary making of a backup copy in
+>> pkg-autotools.
+>>
+>> Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
+>>
+>> Partially-based-on-a-patch-from: Ben Stoltz <benstoltz@gmail.com>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> I've applied this patch, after adding the explanation comment proposed
+> by Arnout. However, I haven't implemented the other possible
+> improvements suggested by Arnout, which I believe can be proposed as
+> followup patches.
 
-Thanks, patch applied, after adding more details following the
-discussion with Arnout.
+Yesterday I started implementing these changes and the test build just
+finished successfully.
+I will submit the delta now...
 
+Thanks for applying!
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
