@@ -1,95 +1,45 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 29 Jun 2014 12:39:06 -0300
-Subject: [Buildroot] [PATCH] ftop: new package
-Message-ID: <1404056346-997-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 29 Jun 2014 17:42:22 +0200
+Subject: [Buildroot] [PATCH] infra: simplify .la/.pc fixup commands
+In-Reply-To: <20140629164849.737e8c26@free-electrons.com>
+References: <6d38fb9f8bb567d8a4a2.1404044185@localhost>
+ <20140629161538.35a3c17c@free-electrons.com>
+ <26ee94e3-9322-47ba-881d-d48edc8d6568@email.android.com>
+ <20140629164849.737e8c26@free-electrons.com>
+Message-ID: <db45345a-04e3-4b00-95dc-361c43d347c6@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/Config.in                     |  1 +
- package/ftop/Config.in                | 12 ++++++++++++
- package/ftop/ftop-0001-overflow.patch | 17 +++++++++++++++++
- package/ftop/ftop.mk                  | 13 +++++++++++++
- 4 files changed, 43 insertions(+)
- create mode 100644 package/ftop/Config.in
- create mode 100644 package/ftop/ftop-0001-overflow.patch
- create mode 100644 package/ftop/ftop.mk
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>Dear Thomas De Schampheleire,
+>
+>On Sun, 29 Jun 2014 16:47:27 +0200, Thomas De Schampheleire wrote:
+>
+>> >Is this assumption really correct? If the user decides to move
+>> >$(HOST_DIR) in some custom location using BR2_HOST_DIR, it also means
+>> >that $(STAGING_DIR) is moved to this custom location. So you can have a
+>> >case where:
+>> >
+>> >	BASE_DIR = /home/joe/buildroot/output
+>> >	HOST_DIR = /opt/arm-build
+>> >	STAGING_DIR = /opt/arm-build/usr/arm-unknown-linux-uclibcgnueabi/sysroot/
+>> >
+>> >No ?
+>> 
+>> Hmm, ok, but I'm this case the already applied patch is not complete either and we should go back to v2 I think... I'll resubmit...
+>> 
+>> ...and I blame Arnout ;-)
+>
+>Well, I don't know, I haven't tested nor mentally executed your sed
+>expressions with the use case above in mind, so I don't know if the
+>patch is actually broken or not. But if you assume that STAGING_DIR is
+>a subdir of BASE_DIR, I believe it's not a valid assumption, as
+>explained above.
 
-diff --git a/package/Config.in b/package/Config.in
-index 4a8832f..1282c8a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1122,6 +1122,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- 	source "package/cpuload/Config.in"
- 	source "package/dsp-tools/Config.in"
-+	source "package/ftop/Config.in"
- 	source "package/htop/Config.in"
- 	source "package/iprutils/Config.in"
- 	source "package/keyutils/Config.in"
-diff --git a/package/ftop/Config.in b/package/ftop/Config.in
-new file mode 100644
-index 0000000..878574f
---- /dev/null
-+++ b/package/ftop/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FTOP
-+	bool "ftop"
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Ftop is to files what top is to processes.
-+	  The progress of all open files and file systems can be monitored.
-+
-+	  https://code.google.com/p/ftop/
-+
-+comment "ftop needs a toolchain w/ largefile"
-+        depends on !BR2_LARGEFILE
-diff --git a/package/ftop/ftop-0001-overflow.patch b/package/ftop/ftop-0001-overflow.patch
-new file mode 100644
-index 0000000..a3a27c3
---- /dev/null
-+++ b/package/ftop/ftop-0001-overflow.patch
-@@ -0,0 +1,17 @@
-+Set tmp_buf and rate_buf to something ridiculously high to fix a buffer
-+overflow when COLUMNS is large. - JeR
-+
-+(Taken from gentoo portage)
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/src/ftop.c	2009-02-16 07:00:00.000000000 +0100
-++++ b/src/ftop.c	2013-09-06 14:42:41.788852952 +0200
-+@@ -736,7 +736,7 @@
-+ {
-+     size_t i, j, bytes, bar_total;
-+     char more_procs_ch, more_files_ch, expanded_ch;
-+-    char tmp_buf[80], rate_buf[80];
-++    char tmp_buf[2048], rate_buf[2048];
-+     char *tmp_str;
-+     snapshot *s, *s_prev;
-+     file_info *tmp_file;
-diff --git a/package/ftop/ftop.mk b/package/ftop/ftop.mk
-new file mode 100644
-index 0000000..2220317
---- /dev/null
-+++ b/package/ftop/ftop.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# ftop
-+#
-+################################################################################
-+
-+FTOP_VERSION = 1.0
-+FTOP_SITE = http://ftop.googlecode.com/files/
-+FTOP_DEPENDENCIES = ncurses
-+FTOP_LICENSE = GPLv3+
-+FTOP_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-1.8.5.5
+I think the patch is effectively broken due to this assumption. I will send a more detailed mail later with some sed commands on examples. This should clarify things...
+
+Best regards,
+Thomas
