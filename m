@@ -1,47 +1,60 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sun, 29 Jun 2014 16:48:19 +0000
-Subject: [Buildroot] [PATCH v2] uclibc: enable parallel building of
- libraries
-In-Reply-To: <CAAXf6LV3ecayevWGt2QJ5Xw6VAkgcTuixOUGNgt3oqgGRynrBw@mail.gmail.com>
-References: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>
- <CAAXf6LU3yfD-6mUJ+smNhVDyChPCFv53s7PPVFJYm0A6cdGMgw@mail.gmail.com>
- <4881796E12491D4BB15146FE0209CE6464B4B7C8@DE02WEMBXB.internal.synopsys.com>
- <CAAXf6LV3ecayevWGt2QJ5Xw6VAkgcTuixOUGNgt3oqgGRynrBw@mail.gmail.com>
-Message-ID: <1404060498.7954.8.camel@abrodkin-8560l>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 29 Jun 2014 20:57:03 +0200
+Subject: [Buildroot] [PATCH] blackbox: deprecate package due to dead
+ upstream
+In-Reply-To: <1404057878-28939-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1404057878-28939-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140629185703.GA30509@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas, All,
 
-On Sun, 2014-06-29 at 14:43 +0200, Thomas De Schampheleire wrote:
+On 2014-06-29 18:04 +0200, Thomas Petazzoni spake thusly:
+> There has been no Blackbox release since 2005, which indicates that
+> the upstream project is dead. Since there are many other maintained
+> and alive window manager projects around, I'd like to nominate
+> Blackbox for deprecation.
 > 
-> Sure, we can wait a short while before enabling $(MAKE) for the other
-> targets. But I think we should certainly do it, because the buildroot
-> default is $(MAKE) not $(MAKE1). So using $(MAKE1) should only be done
-> if there are good reason.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/blackbox/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> One particular reason that I want to go for $(MAKE) is for the
-> menuconfig target, as I'm working on a kconfig-package infrastructure
-> that will line up the kconfig handling in busybox, uclibc, linux, ...
-> Since uclibc uses MAKE1 here, it deviates from the other packages
-> using kconfig, posing a problem for commonalization in
-> kconfig-package.
+> diff --git a/package/blackbox/Config.in b/package/blackbox/Config.in
+> index e908655..8b61c73 100644
+> --- a/package/blackbox/Config.in
+> +++ b/package/blackbox/Config.in
+> @@ -3,6 +3,8 @@ config BR2_PACKAGE_BLACKBOX
+>  	depends on BR2_PACKAGE_XORG7
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_USE_MMU # fork()
+> +	# upstream dead since 2005
+> +	depends on BR2_DEPRECATED_SINCE_2014_08
+>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>  	select BR2_PACKAGE_XLIB_LIBX11
+>  	help
+> -- 
+> 2.0.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Makes perfect sense!
-If this topic is important for you may I ask you to remind me about it
-in a while if I forget to do/test/post mentioned changes in coming
-weeks?
-
-It's not a rocket science but mostly a matter of testing how changes
-impact building. Even with this patch (which is already applied - kudos
-to Thomas P) I faced troubles trying to build uClibc tests: for x86 due
-to pretty old uClibc I had to find and apply this patch:
-====
-test: tls: fix build with newer binutils
-http://git.uclibc.org/uClibc/commit/test?id=931e8391565323ed2e589c83b83a7345813a5514
-====
-
--Alexey
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
