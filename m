@@ -1,63 +1,79 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 29 Jun 2014 14:54:42 +0300
-Subject: [Buildroot] [PATCH v2] lzo: security bump to version 2.07
-In-Reply-To: <20140629064513.7a946d43@core2quad.morethan.org>
-References: <178793dde59515317a045893c8e0c090be510fcf.1404017271.git.baruch@tkos.co.il>
- <20140629064513.7a946d43@core2quad.morethan.org>
-Message-ID: <20140629115442.GC4425@tarshish>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 29 Jun 2014 14:16:25 +0200
+Subject: [Buildroot] [PATCH] infra: simplify .la/.pc fixup commands
+Message-ID: <6d38fb9f8bb567d8a4a2.1404044185@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mike,
+The commands fixing up .la and .pc files in the pkg-generic and
+pkg-autotools infrastructures can be simplified a little, since STAGING_DIR
+already contains BASE_DIR.
 
-On Sun, Jun 29, 2014 at 06:45:13AM -0500, Mike Zick wrote:
-> On Sun, 29 Jun 2014 07:47:51 +0300
-> Baruch Siach <baruch@tkos.co.il> wrote:
-> 
-> > Fixes CVE-2014-4607.
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> > v2:
-> >    Rephrase the comment explaining the need for AUTORECONF (Peter).
-> > ---
-> >  package/lzo/lzo.mk | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
-> > index 10107fea3be3..3b348a3eff30 100644
-> > --- a/package/lzo/lzo.mk
-> > +++ b/package/lzo/lzo.mk
-> > @@ -4,11 +4,14 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -LZO_VERSION = 2.06
-> > +LZO_VERSION = 2.07
-> >  LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
-> >  LZO_LICENSE = GPLv2+
-> >  LZO_LICENSE_FILES = COPYING
-> >  LZO_INSTALL_STAGING = YES
-> > +# Out libtool patch does not apply to bundled ltmain.sh since it's too new.
-> s/out/our/
+Additionally, this patch rewords the comment in pkg-autotools that explains
+the replacements.
 
-Thomas has fixed this when applying the patch.
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-> Two things mentioned in sentence, which of them is "too new"?
-> 
->  try: "Our libtool patch is too new to apply to the bundled ltmain.sh"
+---
+ package/pkg-autotools.mk |  19 ++++++++-----------
+ package/pkg-generic.mk   |   7 +++----
+ 2 files changed, 11 insertions(+), 15 deletions(-)
 
-Actually this is the other way around. ltmain.sh is new and our patch doesn't 
-apply anymore. The lzo bump patch as already been applied (commit 
-7001f391eef29). Is it worth a follow-up patch?
-
-Thanks for reviewing,
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff -r 4d6d2ac6a601 -r 6d38fb9f8bb5 package/pkg-autotools.mk
+--- a/package/pkg-autotools.mk	Thu Jun 19 18:13:36 2014 +0200
++++ b/package/pkg-autotools.mk	Sun Jun 29 13:44:48 2014 +0200
+@@ -267,25 +267,22 @@
+ # Most autotools packages install libtool .la files alongside any
+ # installed libraries. These .la files sometimes refer to paths
+ # relative to the sysroot, which libtool will interpret as absolute
+-# paths to host libraries instead of the target libraries. Since we
+-# configure with --prefix=/usr, such absolute paths start with
+-# /usr. So we add $(STAGING_DIR) in front of any path that starts with
+-# /usr.
++# paths to host libraries instead of the target libraries. Since this
++# is not what we want, these paths are fixed by prefixing them with
++# $(STAGING_DIR).  As we configure with --prefix=/usr, this fix
++# needs to be applied to any path that starts with /usr.
+ #
+ # To protect against the case that the output directory itself is
+ # under /usr, we first substitute away any occurences of the output
+-# directory to @BASE_DIR at .
++# directory as @BASE_DIR at .
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+-	for i in $$$$(find $$(STAGING_DIR)/usr/lib* -name "*.la"); do \
++	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs \
+ 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+-			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+-			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+-			-e "s:@BASE_DIR@:$$(BASE_DIR):g" \
+-			$$$$i; \
+-	done
++			-e "s:\(['= ]\)/usr:\\1$$(STAGING_DIR)/usr:g" \
++			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
+ endef
+ endif
+ 
+diff -r 4d6d2ac6a601 -r 6d38fb9f8bb5 package/pkg-generic.mk
+--- a/package/pkg-generic.mk	Thu Jun 19 18:13:36 2014 +0200
++++ b/package/pkg-generic.mk	Sun Jun 29 13:44:48 2014 +0200
+@@ -202,10 +202,9 @@
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(call MESSAGE,"Fixing package configuration files") ;\
+ 			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+-				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+-				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+-				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+-				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
++				-e "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
++				-e "s,-I/usr/,-I$(STAGING_DIR)/usr/,g" \
++				-e "s,-L/usr/,-L$(STAGING_DIR)/usr/,g" \
+ 				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
