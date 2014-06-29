@@ -1,66 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 10:50:10 +0200
-Subject: [Buildroot] [git commit] perl-xml-sax-base: new package
-Message-ID: <20140629085038.63F439BBA3@busybox.osuosl.org>
+Date: Sun, 29 Jun 2014 10:45:25 +0200
+Subject: [Buildroot] [git commit] support/script/cpan: improve Makefile
+	generation
+Message-ID: <20140629085038.3FBD59BBA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d413117c41f72621f3dc854f8e55c1b793b64f4a
+commit: http://git.buildroot.net/buildroot/commit/?id=6b8376d8f08b35789717b48e7f5a8fdec088530d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Thomas: split from the original patch of Francois.]
+- remove trailing space after perl when it's the only dependency
+- license: substitution of perl name by BR name
+- add a tabulation before source
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                              |    1 +
- package/perl-xml-sax-base/Config.in            |    6 ++++++
- package/perl-xml-sax-base/perl-xml-sax-base.mk |   13 +++++++++++++
- 3 files changed, 20 insertions(+), 0 deletions(-)
+ support/scripts/scancpan |   11 +++++++----
+ 1 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 4c62f82..927f133 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -426,6 +426,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
- 	source "package/perl-xml-namespacesupport/Config.in"
-+	source "package/perl-xml-sax-base/Config.in"
- endmenu
- endif
- 	source "package/php/Config.in"
-diff --git a/package/perl-xml-sax-base/Config.in b/package/perl-xml-sax-base/Config.in
-new file mode 100644
-index 0000000..2ad25ac
---- /dev/null
-+++ b/package/perl-xml-sax-base/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_XML_SAX_BASE
-+	bool "perl-xml-sax-base"
-+	help
-+	  Base class for SAX Drivers and Filters
-+
-+	  https://metacpan.org/release/XML-SAX-Base
-diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.mk b/package/perl-xml-sax-base/perl-xml-sax-base.mk
-new file mode 100644
-index 0000000..0e8c67b
---- /dev/null
-+++ b/package/perl-xml-sax-base/perl-xml-sax-base.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-xml-sax-base
-+#
-+################################################################################
-+
-+PERL_XML_SAX_BASE_VERSION = 1.08
-+PERL_XML_SAX_BASE_SOURCE = XML-SAX-Base-$(PERL_XML_SAX_BASE_VERSION).tar.gz
-+PERL_XML_SAX_BASE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM/
-+PERL_XML_SAX_BASE_DEPENDENCIES = perl
-+PERL_XML_SAX_BASE_LICENSE = Artistic or GPLv1+
-+
-+$(eval $(perl-package))
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index 4be4754..348b7cc 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -598,14 +598,17 @@ while (my ($distname, $dist) = each %dist) {
+         # the scheme is not used, because the job is done by the BR download infrastructure
+         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
+         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
+-        my $dependencies = join q{ }, map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
++        my $dependencies = join q{ }, qw( perl ),
++                                      map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
+                                       map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
+         my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
+                                                                                   @{$deps_runtime{$distname}} );
+         my $license = ref $dist->{license} eq 'ARRAY'
+                     ? join q{ or }, @{$dist->{license}}
+                     : $dist->{license};
+-        $license = q{Artistic or GPLv1+} if $license eq q{perl_5};
++        $license =~ s|artistic_2|Artistic-2.0|;
++        $license =~ s|openssl|OpenSSL|;
++        $license =~ s|perl_5|Artistic or GPLv1+|;
+         say qq{write ${mkname}} unless $quiet;
+         open my $fh, q{>}, $mkname;
+         say {$fh} qq{################################################################################};
+@@ -617,7 +620,7 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{${brname}_VERSION = ${version}};
+         say {$fh} qq{${brname}_SOURCE = ${distname}-\$(${brname}_VERSION).${suffix}};
+         say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
+-        say {$fh} qq{${brname}_DEPENDENCIES = perl ${dependencies}} if $need_target{$distname};
++        say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname};
+         say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname};
+         say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
+         say {$fh} qq{};
+@@ -640,7 +643,7 @@ if (-f $cfgname) {
+ 
+ foreach my $distname (keys %need_target) {
+     my $fsname = fsname( $distname );
+-    $pkg{qq{source "package/${fsname}/Config.in"}} = 1;
++    $pkg{qq{\tsource "package/${fsname}/Config.in"}} = 1;
+ }
+ 
+ say qq{${cfgname} must contain the following lines:};
