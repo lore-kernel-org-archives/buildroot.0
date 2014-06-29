@@ -1,69 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 12:36:18 +0200
-Subject: [Buildroot] [PATCH V5 2/2] google-breakpad: integration into
- Makefile and Config.in
-In-Reply-To: <53AB3198.9010908@mind.be>
-References: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>
- <1403702174-23850-3-git-send-email-pascal.huerst@gmail.com>
- <53AB3198.9010908@mind.be>
-Message-ID: <20140629123618.407b95f5@free-electrons.com>
+Date: Sun, 29 Jun 2014 12:38:17 +0200
+Subject: [Buildroot] [git commit] infra: support buildroot being located in
+	/usr
+Message-ID: <20140629103846.8AABD9D106@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Pascal,
+commit: http://git.buildroot.net/buildroot/commit/?id=7701fc53d19be7cab8bddba72046a39e8421fd9e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 Jun 2014 22:31:20 +0200, Arnout Vandecappelle wrote:
+pkg-generic and pkg-autotools both perform sed replacements of /usr to
+$(STAGING_DIR)/usr, in .pc and .la files respectively. However, if buildroot
+itself is located in /usr, then STAGING_DIR also starts with /usr, and naive
+replacements of '/usr' can result in paths of the form:
+    /usr/buildroot/.../sysroot/usr/buildroot/.../sysroot/...
 
-> > +config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
-> 
->  I don't really like the name of this option. What do you think of
-> BR2_GOOGLE_BREAKPAD_GENSYMS_PATTERNS ?
+This patch makes the replacements more careful, by first replacing the known
+paths BASE_DIR and STAGING_DIR to tokens, then performing the actual
+replacement, and finally replacing the tokens with the corresponding paths.
 
-I think this explains some of your comments below: Pascal's patch only
-support listing complete file names in
-BR2_GOOGLE_BREAKPAD_INCLUDE_FILES, while you apparently thought his
-intention was to support file patterns. It indeed seems like a good
-idea, but it's clearly a different thing.
+Additionally it removes the unnecessary making of a backup copy in
+pkg-autotools.
 
-> > +	string "executables and libraries to be used by google-breakpad"
-> > +	depends on BR2_PACKAGE_GOOGLE_BREAKPAD
-> 
->  Hm, this is counter-intuitive, though honestly I don't know how to improve it.
-> The user would first have to go to the target packages and select google
-> breakpad, and then return to the Build options menu at the top to set the patterns.
-> 
->  Actually, this symbol could be defined inside the google-breakpad/Config.in,
-> no? Though you probably got a comment before that that is not the right place :-)
+Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
 
-Yeah, that's tricky. We could turn it into a "select", but then
-everybody will always see this option related to google-breakpad in the
-Build options. So I believe the solution of using a 'depends on' is
-still the most appropriate solution. Maybe a little piece of
-documentation should be added in the Buildroot manual to explain how
-the Google Breakpad integration works?
+[Thomas: improve pkg-autotools.mk by including the explanation comment
+proposed by Arnout.]
 
-However, I don't really like the prompt. Maybe it should be:
+Partially-based-on-a-patch-from: Ben Stoltz <benstoltz@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-autotools.mk |   19 +++++++++++++++++--
+ package/pkg-generic.mk   |    9 ++++++---
+ 2 files changed, 23 insertions(+), 5 deletions(-)
 
-	[ ] Enable Google Breakpad support
-	   () List of binaries to extract symbols from
-
-> > +ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
-> > +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
-> > +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
-> 
->  To be more compatible with Fabio's series that reworks this part of the
-> infrastructure, it's better to define this as a new variable which is called
-> here. That will make it easier to resolve the conflict between these two series.
-> Fabio's series will also make it possible to define this completely inside the
-> google-breakpad.mk.
-
-Yes, having it all in the google-breakpad.mk seems like a good idea.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index e27ec1f..8527314 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -264,12 +264,27 @@ endif
+ # Staging installation step. Only define it if not already defined by
+ # the package .mk file.
+ #
++# Most autotools packages install libtool .la files alongside any
++# installed libraries. These .la files sometimes refer to paths
++# relative to the sysroot, which libtool will interpret as absolute
++# paths to host libraries instead of the target libraries. Since we
++# configure with --prefix=/usr, such absolute paths start with
++# /usr. So we add $(STAGING_DIR) in front of any path that starts with
++# /usr.
++#
++# To protect against the case that the output directory itself is
++# under /usr, we first substitute away any occurences of the output
++# directory to @BASE_DIR at .
++#
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+ 	for i in $$$$(find $$(STAGING_DIR)/usr/lib* -name "*.la"); do \
+-		cp -f $$$$i $$$$i~; \
+-		$$(SED) "s:\(['= ]\)/usr:\\1$$(STAGING_DIR)/usr:g" $$$$i; \
++		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
++			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
++			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
++			-e "s:@BASE_DIR@:$$(BASE_DIR):g" \
++			$$$$i; \
+ 	done
+ endef
+ endif
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 78fe134..54193d2 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -201,9 +201,12 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_STAGING_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(call MESSAGE,"Fixing package configuration files") ;\
+-			$(SED)  "s,^\(exec_\)\?prefix=.*,\1prefix=$(STAGING_DIR)/usr,g" \
+-				-e "s,-I/usr/,-I$(STAGING_DIR)/usr/,g" \
+-				-e "s,-L/usr/,-L$(STAGING_DIR)/usr/,g" \
++			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
++				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
++				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
++				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
++				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
++				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+ 				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+ 	fi
+ 	$(Q)touch $@
