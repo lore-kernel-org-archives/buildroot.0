@@ -1,73 +1,73 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 29 Jun 2014 10:07:45 +0200
-Subject: [Buildroot] [PATCH v2] uclibc: enable parallel building of
-	libraries
-In-Reply-To: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>
-References: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <CAAXf6LU3yfD-6mUJ+smNhVDyChPCFv53s7PPVFJYm0A6cdGMgw@mail.gmail.com>
+Date: Sun, 29 Jun 2014 10:13:28 +0200
+Subject: [Buildroot] [PATCH 0 of 5 RFC] uclibc/busybox: fix handling of
+ configuration file
+In-Reply-To: <CAAXf6LXoqTxwUj1VgqBrv=TWQ2vZ1gbm3wiCsqM8gfeyxxJ77Q@mail.gmail.com>
+References: <patchbomb.1403444739@localhost> <53AA66F5.3090706@mind.be>
+ <CAAXf6LXoqTxwUj1VgqBrv=TWQ2vZ1gbm3wiCsqM8gfeyxxJ77Q@mail.gmail.com>
+Message-ID: <CAAXf6LVC9vDUTiCmL0wGt4eHkeQYRO1CihoPJUx8eOzpf9keJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexey,
+On Wed, Jun 25, 2014 at 9:24 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> Hi Arnout,
+>
+> On Wed, Jun 25, 2014 at 8:06 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi Thomas,
+>>
+>> On 22/06/14 15:45, Thomas De Schampheleire wrote:
+>>>
+>>> This patch series reworks the uclibc/busybox config file handling, based on
+>>> following requirements:
+>>>
+>>> - neither foo-menuconfig nor foo-update-config should have a dependency on
+>>>   the toolchain (which means we cannot depend on foo-configure)
+>>> - 'clean foo-menuconfig' should start from the specified (custom) config
+>>>   file
+>>> - 'foo-menuconfig foo-update-config' should preserve the changes made in the
+>>>   menuconfig step (this problem is reported for uclibc with bug #7154
+>>>   (https://bugs.busybox.net/show_bug.cgi?id=7154).
+>>
+>>  I agree with these requirements. With of course the additional requirement
+>> mentioned by ThomasP:
+>>
+>> - 'make foo-menuconfig; make foo-menuconfig' should preserve the changes made in
+>> the menuconfig step.
+>
+> And additionally:
+>
+> - 'make clean foo-update-config' should copy the initial file, do any
+> fixups, and then save the config
+>
+>>
+>>  However, I think it would be better to add infrastructure for kconfig packages,
+>> instead of repeating the work for uclibc, busybox, linux and barebox. I was
+>> thinking along the lines of:
+>>
+>> $(eval $(generic-package))
+>>
+>> LINUX_KCONFIG_TARGETS = menuconfig xconfig gconfig nconfig
+>> LINUX_HAS_DEFCONFIG = YES
+>>
+>> $(eval $(kconfig-package))
+>>
+>>
+>
+> This sounds like a very interesting idea, I'll explore it further in
+> the context of this patch series.
 
-On Fri, Jun 27, 2014 at 6:26 PM, Alexey Brodkin
-<Alexey.Brodkin@synopsys.com> wrote:
-> The use of MAKE1 for uClibc dates back 10 years:
->
-> commit 8e5fb3fb4ab09b4dc04fe7cb3f7becce6514117b
-> Author: Eric Andersen <andersen@codepoet.org>
-> Date:   Sat Dec 11 13:01:10 2004 +0000
->
->     Add initial BR2_JLEVEL support, with some exceptions for apps that
->     have broken 'make -j' support
->
-> Since that time there were lots of improvements in uClibc that seem to allow
-> parallel building of libs finally.
->
-> Unfortunately uClibc tests have dependences on previously built files,
-> that's why tests left with MAKE1.
->
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
->
-> Cc: Anton Kolesov <akolesov@synopsys.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
-> In v2 uClibc tests are left with MAKE1 because there're strict
-> dependences.
-> ---
->  package/uclibc/uclibc.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index b42fe55..28a8a08 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -494,13 +494,13 @@ endef
->  endif
->
->  define UCLIBC_BUILD_CMDS
-> -       $(MAKE1) -C $(@D) \
-> +       $(MAKE) -C $(@D) \
->                 $(UCLIBC_MAKE_FLAGS) \
->                 PREFIX= \
->                 DEVEL_PREFIX=/ \
->                 RUNTIME_PREFIX=/ \
->                 all
-> -       $(MAKE1) -C $(@D)/utils \
-> +       $(MAKE) -C $(@D)/utils \
->                 PREFIX=$(HOST_DIR) \
->                 HOSTCC="$(HOSTCC)" hostutils
->         $(UCLIBC_BUILD_TEST_SUITE)
+I'm working on this now, but I wonder which is the right approach wrt
+the organization of the patch series:
 
-There are other occurrences of MAKE1 in uclibc.mak: for the oldconfig
-step (in SETUP_DOT_CONFIG), configure commands, installation commands,
-and menuconfig step.
-I think these should be replaced by MAKE too (and tested, of course).
+- first line up linux, busybox, uclibc in the way they handle the
+kconfig stuff, then extract this to a kconfig-package framework
+- or first introduce a kconfig-package framework with the 'right'
+handling, then convert each of linux, busybox, uclibc in subsequent
+patches?
 
-Best regards,
+Thanks,
 Thomas
