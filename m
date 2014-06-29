@@ -1,22 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 10:42:26 +0200
-Subject: [Buildroot] [PATCH] dhcpcd: refer to the actual homepage
-In-Reply-To: <db491d6194f2cef434deb3ae566fbd67beb140df.1403806219.git.baruch@tkos.co.il>
-References: <db491d6194f2cef434deb3ae566fbd67beb140df.1403806219.git.baruch@tkos.co.il>
-Message-ID: <20140629104226.0f5423a3@free-electrons.com>
+Date: Sun, 29 Jun 2014 10:43:17 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-download: fix svn download for
+ deleted path
+In-Reply-To: <1403788659-1936-1-git-send-email-ryan.barnett@rockwellcollins.com>
+References: <1403788659-1936-1-git-send-email-ryan.barnett@rockwellcollins.com>
+Message-ID: <20140629104317.2a750a1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Dear Ryan Barnett,
 
-On Thu, 26 Jun 2014 21:10:19 +0300, Baruch Siach wrote:
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+On Thu, 26 Jun 2014 08:17:39 -0500, Ryan Barnett wrote:
+> If a SVN path has been deleted in a future revision, downloading a
+> package's source will fail using 'svn checkout -r'. Fix using
+> URL at REV syntax since the SVN command will then verify the path at the
+> specified version. Without using the URL at REV syntax, the SVN command
+> will attempt to verify the path exists on the the HEAD revision before
+> checking out the path at the specified revision.
+> 
+> Error seen if SVN path has been deleted in HEAD using svn checkout -r:
+>   svn: E160013: '/svn/path/' path not found
+> 
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 > ---
->  package/dhcpcd/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/pkg-download.mk |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
