@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 10:45:47 +0200
-Subject: [Buildroot] [PATCH 1/3] support/script/cpan: improve Makefile
- generation
-In-Reply-To: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
+Date: Sun, 29 Jun 2014 10:46:37 +0200
+Subject: [Buildroot] [PATCH 2/3] perl-net-ssleay: new package
+In-Reply-To: <1403547286-8858-2-git-send-email-francois.perrad@gadz.org>
 References: <1403547286-8858-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140629104547.2b32ef12@free-electrons.com>
+ <1403547286-8858-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140629104637.4fc6a89b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +13,15 @@ To: buildroot@busybox.net
 
 Dear Francois Perrad,
 
-On Mon, 23 Jun 2014 20:14:44 +0200, Francois Perrad wrote:
-> - remove trailing space after perl when it's the only dependency
-> - license: substitution of perl name by BR name
-> - add a tabulation before source
-> 
+On Mon, 23 Jun 2014 20:14:45 +0200, Francois Perrad wrote:
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  support/scripts/scancpan | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  package/Config.in                          |  1 +
+>  package/perl-net-ssleay/Config.in          |  7 +++++++
+>  package/perl-net-ssleay/perl-net-ssleay.mk | 14 ++++++++++++++
+>  3 files changed, 22 insertions(+)
+>  create mode 100644 package/perl-net-ssleay/Config.in
+>  create mode 100644 package/perl-net-ssleay/perl-net-ssleay.mk
 
 Applied, thanks!
 
