@@ -1,232 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 16:07:10 +0200
-Subject: [Buildroot] [PATCH] [Patch v4] dcmtk: new package
-In-Reply-To: <1403055183-3910-1-git-send-email-tsmrnd0@gmail.com>
-References: <1403055183-3910-1-git-send-email-tsmrnd0@gmail.com>
-Message-ID: <20140629160710.0fd91b1a@free-electrons.com>
+Date: Sun, 29 Jun 2014 13:20:07 +0200
+Subject: [Buildroot] [git commit] uclibc: enable parallel building of
+	libraries
+Message-ID: <20140629140732.AF8F69D10A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear William Frost,
+commit: http://git.buildroot.net/buildroot/commit/?id=8862ca3bc8974dfff3f48e9901811427b67a4ebe
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this patch. Unfortunately, it still contain a number of
-issues, some minor, other more important.
+The use of MAKE1 for uClibc dates back 10 years:
 
-First, the title of your patch. Apparently, you did some change to add
-[Patch v4] in the title, which is completely unnecessary. You should
-instead simply use:
+commit 8e5fb3fb4ab09b4dc04fe7cb3f7becce6514117b
+Author: Eric Andersen <andersen@codepoet.org>
+Date:   Sat Dec 11 13:01:10 2004 +0000
 
-	git format-patch --subject-prefix="PATCH v4" HEAD^
+    Add initial BR2_JLEVEL support, with some exceptions for apps that
+    have broken 'make -j' support
 
-to generate the patch to be sent to the mailing list. This will take
-care of generating the proper [...] part of the patch title.
+Since that time there were lots of improvements in uClibc that seem to allow
+parallel building of libs finally.
 
-On Wed, 18 Jun 2014 10:33:03 +0900, William Frost wrote:
-> [PATCH] Changes v3 -> v4:  (suggested by Gustavo Zacarias):
->  - removed trailing whitespaces in the help text
->  - added a comment indicating that dcmtk depends on BR2_INSTALL_LIBSTDCPP
+Unfortunately uClibc tests have dependences on previously built files,
+that's why tests left with MAKE1.
 
-As I've already said, this should *not* be part of the commit log. It
-should instead be...
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-> 
-> Signed-off-by: William Frost <tsmrnd0@gmail.com>
-> ---
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-here, or part of a separate cover letter. Please read
-http://buildroot.org/downloads/manual/manual.html#submitting-patches
-carefully to know how to submit patches.
-
->  package/Config.in       |  1 +
->  package/dcmtk/Config.in | 15 +++++++++++++++
->  package/dcmtk/dcmtk.mk  | 23 +++++++++++++++++++++++
->  3 files changed, 39 insertions(+)
->  create mode 100644 package/dcmtk/Config.in
->  create mode 100644 package/dcmtk/dcmtk.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 07fd166..b88c0b0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -568,6 +568,7 @@ endmenu
->  menu "Graphics"
->  source "package/atk/Config.in"
->  source "package/cairo/Config.in"
-> +source "package/dcmtk/Config.in"
->  source "package/fltk/Config.in"
->  source "package/fontconfig/Config.in"
->  source "package/freetype/Config.in"
-> diff --git a/package/dcmtk/Config.in b/package/dcmtk/Config.in
-> new file mode 100644
-> index 0000000..d11bc12
-> --- /dev/null
-> +++ b/package/dcmtk/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_DCMTK
-> +	bool "dcmtk"
-
-Your package needs C++, so you lack a:
-
-	depends on BR2_INSTALL_LIBSTDCPP
-
-here.
-
-> +	help
-> +	  DCMTK is a collection of libraries and applications implementing
-> +	  large parts the DICOM standard. It includes software for examining,
-> +	  constructing and converting DICOM image files, handling offline
-> +	  media, sending and receiving images over a network connection, as
-> +	  well as demonstrative image storage and worklist servers. DCMTK is
-> +	  is written in a mixture of ANSI C and C++. It comes in complete
-> +	  source code and is made available as "open source" software.
-
-Please wrap the help text to a shorter length (72 characters).
-
-> +	  http://dicom.offis.de/dcmtk.php.en
-> +
-> +comment "dcmtk needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> \ No newline at end of file
-
-There should be a new line at the end of the file.
-
-> diff --git a/package/dcmtk/dcmtk.mk b/package/dcmtk/dcmtk.mk
-> new file mode 100644
-> index 0000000..ae2c265
-> --- /dev/null
-> +++ b/package/dcmtk/dcmtk.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# dcmtk
-> +#
-> +################################################################################
-> +
-> +DCMTK_VERSION = $(call qstrip,"3.6.0")
-
-Just do:
-
-DCMTK_VERSION = 3.6.0
-
-there's absolutely no point in declaring a variable with quotes to
-remove them right after by calling the 'qstrip' function. It's like
-doing 2 + 0 + 0 + 0 + 0 + 0 instead of just using 2.
-
-> +DCMTK_SITE = http://dicom.offis.de/download/dcmtk/dcmtk360
-> +
-> +DCMTK_LICENSE = BSD
-
-BSD-3c
-
-> +DCMTK_LICENSE_FILES = COPYRIGHT
-> +DCMTK_INSTALL_STAGING = YES
-> +
-> +DCMTK_CFLAGS = $(TARGET_CFLAGS) -O -Wall
-> +DCMTK_CXXFLAGS = $(TARGET_CXXFLAGS) -O  -Wall
-
-These two variables are useless. They do not exist in the package
-infrastructure, and since they are not used below, they do not serve
-any purpose.
-
-> +DCMTK_CONF_OPT = \
-> +	--disable-rpath --with-zlib \
-> +	ac_cv_my_c_rightshift_unsigned=no
-> +
-> +DCMTK_CONF_ENV = ARFLAGS=cru
-
-This is all mixed up, and makes confusion between configure options and
-configure variables. Please change to:
-
-DCMTK_CONF_OPT = \
-	--disable-rpath \
-	--with-zlib
-
-# We define ac_cv_my_c_rightshift_unsigned, because the configure
-# script has an AC_TRY_RUN test that is unsuitable for
-# cross-compilation. All sane architectures have signed right-shifting,
-# so we make the assumption that all architectures supported by
-# Buildroot have this behavior.
-#
-# The configure script only checks if AR is "ar" to decide to pass the
-# cru ARFLAGS. In cross-compilation mode AR is "<prefix>-ar", so the
-# configure script test doesn't work. Work around this by explicitly
-# passing the appropriate ARFLAGS.
-
-DCMTK_CONF_ENV = \
-	ac_cv_my_c_rightshift_unsigned=no \
-	ARFLAGS=cru
-
-> +DCMTK_MAKE_OPT	= DESTDIR=$(STAGING_DIR) install-lib
-
-This really shouldn't be used. If something special is needed at
-install time, use INSTALL_TARGET_OPT or INSTALL_STAGING_OPT. But
-clearly, using DESTDIR=$(STAGING_DIR) for all steps including the
-target installation step doesn't make sense.
-
-Also, there are more serious problems with the package:
-
- * It does not build with uClibc, due to issues around isnan() and
-   finite(). I tried a bit to fix them, but what the DCMTK code is
-   doing with math functions is quite scary and I didn't had the time
-   to dive into all the details. Errors are:
-
-ofstd.cc: In function ?int my_isinf(double)?:
-ofstd.cc:218:21: error: ?finite? was not declared in this scope
-ofstd.cc:218:37: error: ?isnan? was not declared in this scope
-
-   Note that uClibc support is not mandatory, so if you're not
-   interested in building this package with uClibc, you can add a glibc
-   dependency to your package.
-
- * It also does not build with glibc, with the following output:
-
-../../ofstd/include/dcmtk/ofstd/ofoset.h:149:34: error: 'Resize' was
-not declared in this scope, and no declarations were found by
-argument-dependent lookup at the point of instantiation [-fpermissive]
-Resize( this->size * 2 );
-
- * The configure script mistakenly detects some host libraries, such as
-   libxml2 in my case, and therefore uses incorrect header path:
-
-cc1plus: warning: include location "/usr/include/libxml2" is unsafe for cross-compilation [-Wpoison-system-directories]
-
-   To avoid that, you should have a look at *all* the configure script
-   options related to optional libraries that DCMTK can use, and either
-   disable their usage, or support their usage in your dcmtk.mk file.
-   So either:
-
-DCMTK_CONF_OPT = \
-	--without-openssl \
-	--without-zlib \
-	--without-libtiff \
-	--without-libpng \
-	--without-libxml \
-	--without-libwrap \
-	--without-libsndfile
-
-   Or, if you want to support the libraries, for each library,
-   something like:
-
-ifeq ($(BR2_PACKAGE_<library>),y)
-DCMTK_CONF_OPT += --with-<library> --with-<library>inc=$(STAGING_DIR)
-DCMTK_DEPENDENCIES += <library>
-else
-DCMTK_CONF_OPT += --without-<library>
-endif
-
-   These solutions will ensure that the DCMTK configure script will not
-   mistakenly thing a certain library is installed due to it being
-   available on the build machine.
-
-Could you fix those issues and resend?
-
-Thanks,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 70705a2..8337bb6 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -482,13 +482,13 @@ endef
+ endif
+ 
+ define UCLIBC_BUILD_CMDS
+-	$(MAKE1) -C $(@D) \
++	$(MAKE) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX= \
+ 		DEVEL_PREFIX=/ \
+ 		RUNTIME_PREFIX=/ \
+ 		all
+-	$(MAKE1) -C $(@D)/utils \
++	$(MAKE) -C $(@D)/utils \
+ 		PREFIX=$(HOST_DIR) \
+ 		HOSTCC="$(HOSTCC)" hostutils
+ 	$(UCLIBC_BUILD_TEST_SUITE)
