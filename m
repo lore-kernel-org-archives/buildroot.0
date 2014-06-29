@@ -1,43 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 16:31:08 +0200
-Subject: [Buildroot] [PATCH 2/2] devmem2: fix output when
- _FILE_OFFSET_BITS=64
-In-Reply-To: <20140629124348.56fc4864@free-electrons.com>
-References: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
- <1403194417-19986-2-git-send-email-maxime.hadjinlian@gmail.com>
- <20140629124348.56fc4864@free-electrons.com>
-Message-ID: <20140629163108.6cb6be2b@free-electrons.com>
+Date: Sun, 29 Jun 2014 16:39:45 +0200
+Subject: [Buildroot] [git commit] lzo: bump to version 2.08
+Message-ID: <20140629144039.0D4D29D106@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: http://git.buildroot.net/buildroot/commit/?id=01012167dffccc8a82f3a0f712a842e217f7b466
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Jun 2014 12:43:48 +0200, Thomas Petazzoni wrote:
-> Dear Maxime Hadjinlian,
-> 
-> On Thu, 19 Jun 2014 18:13:37 +0200, Maxime Hadjinlian wrote:
-> > From: Colin Didier <colin.didier@devialet.com>
-> > 
-> > When built with _FILE_OFFSET_BITS=64, off_t becomes an long long int
-> > and was printed as an unsigned int which lead to a garbled output.
-> > 
-> > Signed-off-by: Colin Didier <colin.didier@devialet.com>
-> > Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
-> 
-> Applied, thanks.
+According to the LZO website: "LZO 2.08 has been released: small
+update that corrects some reported build problems.". And indeed it
+fixes the failed compiler conformance tests that have been observed on
+the autobuilders.
 
-And the patch you provided against devmem did not apply... see
-http://autobuild.buildroot.org/results/c45/c45eb706fb35ffc87fede777c3d20479a90872ae/build-end.log.
-Looks like some whitespace issue, I've fixed that up, but it seems like
-something is screwed in your setup to format or send patches.
+Fixes:
 
-Thanks,
+  http://autobuild.buildroot.org/results/1e8/1e8e826c4463c9dd3aa5ddb95f08b9564d10a75d/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lzo/lzo.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index e9e0b3f..9f0729a 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LZO_VERSION = 2.07
++LZO_VERSION = 2.08
+ LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+ LZO_LICENSE = GPLv2+
+ LZO_LICENSE_FILES = COPYING
