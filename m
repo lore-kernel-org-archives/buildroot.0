@@ -1,54 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 10:43:37 +0200
-Subject: [Buildroot] [git commit] graph-depends: support calling from
-	recursive make
-Message-ID: <20140629084431.2AFBD9CDAB@busybox.osuosl.org>
+Date: Sun, 29 Jun 2014 10:41:19 +0200
+Subject: [Buildroot] [git commit] php: security bump to version 5.5.14
+Message-ID: <20140629084431.0CBC99D090@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b82f66cf404ef74509212de0d035737c75c5e6d6
+commit: http://git.buildroot.net/buildroot/commit/?id=67aaef1cb2080cfa7b0b50be8e01cf1c799a511b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The graph-depends script calls make. If the outer make was called
-recursively, or if it was called with '-C <somedir>', then the
-environment will contain "MAKEFLAGS=w --". Therefore, the recursive
-make prints 'Entering' and 'Leaving' messages, which clobbers the
-output for dot.
+Fixes:
 
-To avoid this, add "--no-print-directory" to the recursive make
-arguments. Since we require GNU make 3.81, we can be sure that this
-option is available.
+CVE-2014-3981 - insecure temporary file use in the configure script.
+CVE-2014-0207 - cdf_read_short_sector insufficient boundary check.
+CVE-2014-3478 - mconvert incorrect handling of truncated pascal string
+size.
+CVE-2014-3479 - cdf_check_stream_offset insufficient boundary check.
+CVE-2014-3480 - cdf_count_chain insufficient boundary check.
+CVE-2014-3487 - cdf_read_property_info insufficient boundary check.
+CVE-2014-4049 - Fix potential segfault in dns_get_record().
+CVE-2014-3515 - unserialize() SPL ArrayObject / SPLObjectStorage Type
+Confusion.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/php/php.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index 58401a2..52c16ce 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -81,7 +81,7 @@ allpkgs = []
- # list is used as the starting point for full dependency graphs
- def get_targets():
-     sys.stderr.write("Getting targets\n")
--    cmd = ["make", "-s", "show-targets"]
-+    cmd = ["make", "-s", "--no-print-directory", "show-targets"]
-     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
-     output = p.communicate()[0].strip()
-     if p.returncode != 0:
-@@ -95,7 +95,7 @@ def get_targets():
- # dependencies formatted as a Python dictionary.
- def get_depends(pkgs):
-     sys.stderr.write("Getting dependencies for %s\n" % pkgs)
--    cmd = ["make", "-s" ]
-+    cmd = ["make", "-s", "--no-print-directory" ]
-     for pkg in pkgs:
-         cmd.append("%s-show-depends" % pkg)
-     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+diff --git a/package/php/php.mk b/package/php/php.mk
+index a878800..8ac5d86 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.5.13
++PHP_VERSION = 5.5.14
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
