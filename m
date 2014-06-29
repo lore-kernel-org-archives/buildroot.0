@@ -1,42 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 12:41:16 +0200
-Subject: [Buildroot] [PATCH 3 of 3 v3] pkgconf: don't double prefix
- lib/include paths with sysroot
-In-Reply-To: <5aefddc71a6fc227c718.1403362909@localhost>
-References: <patchbomb.1403362906@localhost>
- <5aefddc71a6fc227c718.1403362909@localhost>
-Message-ID: <20140629124116.033bfeb8@free-electrons.com>
+Date: Sun, 29 Jun 2014 12:43:48 +0200
+Subject: [Buildroot] [PATCH 2/2] devmem2: fix output when
+ _FILE_OFFSET_BITS=64
+In-Reply-To: <1403194417-19986-2-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1403194417-19986-1-git-send-email-maxime.hadjinlian@gmail.com>
+ <1403194417-19986-2-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20140629124348.56fc4864@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Dear Maxime Hadjinlian,
 
-On Sat, 21 Jun 2014 17:01:49 +0200, Thomas De Schampheleire wrote:
-> A .pc file could contain statements of the form:
->     -L/usr/lib
-> but also:
->     -L/path/to/sysroot/usr/lib
+On Thu, 19 Jun 2014 18:13:37 +0200, Maxime Hadjinlian wrote:
+> From: Colin Didier <colin.didier@devialet.com>
 > 
-> The latter form typically occurs when the dependency was configured with a
-> statement like --with-xxx=$(STAGING_DIR)/usr.
+> When built with _FILE_OFFSET_BITS=64, off_t becomes an long long int
+> and was printed as an unsigned int which lead to a garbled output.
 > 
-> pkgconf only expects the first form, and prefixes it with the specified
-> sysroot. However, this strategy would result in a double sysroot in the
-> second case:
->     -L/path/to/sysroot/path/to/sysroot/usr/lib
-> 
-> This patch checks for the presence of the sysroot in the specified -L or -I
-> directives, and only adds the sysroot when not already present.
-> 
-> Partially fixes bug #5750 (https://bugs.busybox.net/show_bug.cgi?id=5750)
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Colin Didier <colin.didier@devialet.com>
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@devialet.com>
 
-Applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
