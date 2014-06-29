@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 10:32:05 +0200
-Subject: [Buildroot] [PATCH] jquery-validation: bump to version 1.12.0
-In-Reply-To: <1403903977-21512-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1403903977-21512-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140629103205.385c304d@free-electrons.com>
+Date: Sun, 29 Jun 2014 10:32:46 +0200
+Subject: [Buildroot] [PATCH] libndp: bump to 1.3
+In-Reply-To: <1403894529-5909-1-git-send-email-yegorslists@googlemail.com>
+References: <1403894529-5909-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20140629103246.5e00bed8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Yegor Yefremov,
 
-On Fri, 27 Jun 2014 18:19:37 -0300, Gustavo Zacarias wrote:
-> Switch homepage and upstream source, add license file (just mentions
-> it's under MIT, better than none). Also fixes:
-> http://autobuild.buildroot.net/results/a2e/a2ed2efe09b12612247a21c5fa3c129f58c9afd8/
+On Fri, 27 Jun 2014 20:42:09 +0200, Yegor Yefremov wrote:
+> Remove upstreamed patch.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/jquery-validation/Config.in            | 2 +-
->  package/jquery-validation/jquery-validation.mk | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  package/libndp/libndp-01-missing-stdarg-include.patch | 16 ----------------
+>  package/libndp/libndp.mk                              |  2 +-
+>  2 files changed, 1 insertion(+), 17 deletions(-)
+>  delete mode 100644 package/libndp/libndp-01-missing-stdarg-include.patch
 
 Applied, thanks.
 
