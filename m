@@ -1,40 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 29 Jun 2014 13:44:05 +0200
-Subject: [Buildroot] [PATCH 1 of 3 v3] infra: support buildroot being
- located in /usr
-In-Reply-To: <20140629132255.14eb325b@free-electrons.com>
-References: <patchbomb.1403362906@localhost>
- <f9dbe1c9d761945aaf97.1403362907@localhost>
- <20140629123926.5a17535c@free-electrons.com>
- <CAAXf6LXOnWc=BBjHEwB9os8qYYNy6STkKUqK+pteyqdT4m=X6A@mail.gmail.com>
- <20140629132255.14eb325b@free-electrons.com>
-Message-ID: <CAAXf6LV1vL-f05LMw3yXJB8B9SqauOzEaPTWnSWPM6s5ppLWQg@mail.gmail.com>
+From: Mike Zick <minimod@morethan.org>
+Date: Sun, 29 Jun 2014 06:45:13 -0500
+Subject: [Buildroot] [PATCH v2] lzo: security bump to version 2.07
+In-Reply-To: <178793dde59515317a045893c8e0c090be510fcf.1404017271.git.baruch@tkos.co.il>
+References: <178793dde59515317a045893c8e0c090be510fcf.1404017271.git.baruch@tkos.co.il>
+Message-ID: <20140629064513.7a946d43@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 29, 2014 at 1:22 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sun, 29 Jun 2014 13:07:25 +0200, Thomas De Schampheleire wrote:
->
->> > I've applied this patch, after adding the explanation comment proposed
->> > by Arnout. However, I haven't implemented the other possible
->> > improvements suggested by Arnout, which I believe can be proposed as
->> > followup patches.
->>
->> Yesterday I started implementing these changes and the test build just
->> finished successfully.
->> I will submit the delta now...
->
-> Ah, sorry about that. Since the patches were OK as is, I thought it was
-> better to apply the current patches and do the rest as followup patches.
+On Sun, 29 Jun 2014 07:47:51 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-No problem at all. I should have mentioned that I would rework
-yesterday, my fault.
+> Fixes CVE-2014-4607.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2:
+>    Rephrase the comment explaining the need for AUTORECONF (Peter).
+> ---
+>  package/lzo/lzo.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+> index 10107fea3be3..3b348a3eff30 100644
+> --- a/package/lzo/lzo.mk
+> +++ b/package/lzo/lzo.mk
+> @@ -4,11 +4,14 @@
+>  #
+>  ################################################################################
+>  
+> -LZO_VERSION = 2.06
+> +LZO_VERSION = 2.07
+>  LZO_SITE = http://www.oberhumer.com/opensource/lzo/download
+>  LZO_LICENSE = GPLv2+
+>  LZO_LICENSE_FILES = COPYING
+>  LZO_INSTALL_STAGING = YES
+> +# Out libtool patch does not apply to bundled ltmain.sh since it's too new.
+s/out/our/
 
-Best regards,
-Thomas
+Two things mentioned in sentence, which of them is "too new"?
+
+ try: "Our libtool patch is too new to apply to the bundled ltmain.sh"
+
+> +# Run autoreconf to regenerate ltmain.sh.
+> +LZO_AUTORECONF = YES
+>  
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
