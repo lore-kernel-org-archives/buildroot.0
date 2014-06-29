@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 29 Jun 2014 11:56:27 +0200
-Subject: [Buildroot] [PATCH v3] package/pifmrds: new package
-In-Reply-To: <1403366300-29035-1-git-send-email-yann.morin.1998@free.fr>
-References: <1403366300-29035-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140629115627.0adb4f49@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Sun, 29 Jun 2014 09:59:47 +0000
+Subject: [Buildroot] [PATCH v2] uclibc: enable parallel building of
+ libraries
+In-Reply-To: <CAAXf6LU3yfD-6mUJ+smNhVDyChPCFv53s7PPVFJYm0A6cdGMgw@mail.gmail.com>
+References: <1403886360-32033-1-git-send-email-abrodkin@synopsys.com>,
+ <CAAXf6LU3yfD-6mUJ+smNhVDyChPCFv53s7PPVFJYm0A6cdGMgw@mail.gmail.com>
+Message-ID: <4881796E12491D4BB15146FE0209CE6464B4B7C8@DE02WEMBXB.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Hi Thomas,
 
-On Sat, 21 Jun 2014 17:58:20 +0200, Yann E. MORIN wrote:
-> From: Eric Limpens <limpens@gmail.com>
-> 
-> We needs three little patches:
->   - one to make the existing Makefile cross-compile friendly
->   - one to pass the LDFLAGS at link time
->   - one to add a missing include
-> 
-> Signed-off-by: Eric Limpens <limpens@gmail.com>
-> [yann.morin.1998 at free.fr: add .mk header; cleanup and split the
->  Makefile patch, add missing include; add comments to all patches]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> There are other occurrences of MAKE1 in uclibc.mak: for the oldconfig
+> step (in SETUP_DOT_CONFIG), configure commands, installation commands,
+> and menuconfig step.
+> I think these should be replaced by MAKE too (and tested, of course).
 
-Applied, thanks! I've fixed the BR2_arm dependency, and I've renumbered
-the patches to start from 0001 and not 0000.
+I did notice there're many more MAKE1 in use.
 
-Thanks,
+But knowing unfortunate fate of uClibc in terms of parallel building I wanted to do minimal changes that still make significant difference in Buildroot usage (i.e. make building faster).
+The most time consuming process is uClibc building itself and I made it parallel - that shortens uClibc significantly.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+As for other invocations of MAKE1 IMHO there's not much sense in use of parallel make for configuration like "oldconfig" and friends (not much things here are compiled) or "install" (where we only have file copy operations and that's why I don't expect any gain in speed if we run them in parallel).
+
+So I'd prefer to proceed with incremental changes. Once parallel build is proven for all arches by autobuilder (which may disclose issues on arches I haven't try the change yet - I did tests for ARC and x86) we may consider more changes (note I already found that built-in tests won't build in parallel).
+
+What do you think?
+
+-Alexey
