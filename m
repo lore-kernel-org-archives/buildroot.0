@@ -1,33 +1,54 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sun, 29 Jun 2014 19:45:30 +0000
-Subject: [Buildroot] [PATCH] uclibc: fix tests building in uClibc
-	0.9.33.2
-In-Reply-To: <0565f572-9253-4d0c-992b-6de65c123f83@email.android.com>
-References: <1404069506-13826-1-git-send-email-abrodkin@synopsys.com>
- <0565f572-9253-4d0c-992b-6de65c123f83@email.android.com>
-Message-ID: <1404071129.7954.11.camel@abrodkin-8560l>
+From: Mike Zick <minimod@morethan.org>
+Date: Sun, 29 Jun 2014 14:46:38 -0500
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion
+ and internal variables
+In-Reply-To: <20140629131427.2A9F19CFC7@busybox.osuosl.org>
+References: <bug-7172-163@https.bugs.busybox.net/>
+ <20140629131427.2A9F19CFC7@busybox.osuosl.org>
+Message-ID: <20140629144638.66b520d4@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Sun, 29 Jun 2014 13:14:27 +0000 (UTC)
+bugzilla at busybox.net wrote:
 
-On Sun, 2014-06-29 at 21:37 +0200, Thomas De Schampheleire wrote:
-> When taking patches via a git web interface, it's important to check the full patch, not limited to a particular file or subdirectory, as is the case here. You can do that by browsing up the file hierarchy once a revision is selected, or do manual editing of the url remove the path.
+> https://bugs.busybox.net/show_bug.cgi?id=7172
 > 
-> This is because there may be changes in other places for this patch...
+> --- Comment #13 from Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> 2014-06-29 13:14:26 UTC --- Mike, 
 > 
-> Same comment on the other patches added...
+> Would you care to send patches to the mailing list to implement these
+> changes? In a first step, the 'Now' comment, 
+>
 
-Thanks for this warning.
-I did notice this strange behavior earlier so this time I double-checked
-if patches are complete.
+The 'Now" comment is just a text message edit -
+that is within my paygrade to handle.  ;)
 
-Moreover the best proof of concept is successful build :)
+And maybe an addition to the "known bugs" in the manual.
+I think this one will be around for a long time.
 
-References to gitweb I put just for convenience of next
-users/developers.
+> and then the alternative
+> you proposed. Having the changes on the mailing list will facilitate
+> the discussion and review, as few developers look at the bug comments.
+> 
 
--Alexey
+The "fix" (work-a-round) of assigning the output of a:
+ "printf '%s' '$' 'ORIGIN' ... "
+I was using, was in a post image build script (outside of Buildroot).
+(I no longer need an '$ORIGIN' - changed my planning to not need it.)
+
+I don't know the "Make" equivalent, nor where in the infrastructure
+the change needs to be made.
+
+Something way outside of my paygrade I am afraid.
+
+That will have to wait for someone very familiar with the BR
+infrastructure to have a long lasting attack of boredom and
+free time.
+
+Mike
+> Thanks, Thomas
+> 
