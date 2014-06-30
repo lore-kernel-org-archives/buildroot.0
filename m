@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Jul 2014 00:26:23 +0200
-Subject: [Buildroot] [PATCH 05/14] pkg-infra: move the cvs download helper
-	to a script
+Date: Tue,  1 Jul 2014 00:26:24 +0200
+Subject: [Buildroot] [PATCH 06/14] pkg-infra: move the hg download helper to
+	a script
 In-Reply-To: <cover.1404167061.git.yann.morin.1998@free.fr>
 References: <cover.1404167061.git.yann.morin.1998@free.fr>
-Message-ID: <9eb781417281d608c4a71700a48a7e1d7f5e2474.1404167061.git.yann.morin.1998@free.fr>
+Message-ID: <a5aef17b7daaa8fd2aff97f646aa9b15094a5f97.1404167061.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,73 +16,74 @@ complex, so move it to a shell script.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+[tested a particular scenario that used to fail, when the 'hg archive'
+step is interrupted, now working fine]
 ---
- package/pkg-download.mk | 11 ++++-------
- support/download/cvs    | 27 +++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+), 7 deletions(-)
- create mode 100755 support/download/cvs
+ package/pkg-download.mk | 11 +++--------
+ support/download/hg     | 25 +++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 8 deletions(-)
+ create mode 100755 support/download/hg
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index e823f68..9f3afac 100644
+index 9f3afac..3290b6b 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -10,7 +10,7 @@
- # Download method commands
- WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
- export SVN := $(call qstrip,$(BR2_SVN))
--CVS := $(call qstrip,$(BR2_CVS))
-+export CVS := $(call qstrip,$(BR2_CVS))
+@@ -13,7 +13,7 @@ export SVN := $(call qstrip,$(BR2_SVN))
+ export CVS := $(call qstrip,$(BR2_CVS))
  BZR := $(call qstrip,$(BR2_BZR))
  export GIT := $(call qstrip,$(BR2_GIT))
- HG := $(call qstrip,$(BR2_HG)) $(QUIET)
-@@ -114,12 +114,9 @@ endef
+-HG := $(call qstrip,$(BR2_HG)) $(QUIET)
++export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+ SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+@@ -161,13 +161,8 @@ endef
  
- define DOWNLOAD_CVS
+ define DOWNLOAD_HG
  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
 -	(pushd $(DL_DIR) > /dev/null && \
--	$(CVS) -z3 -d:pserver:anonymous@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
--		co -d $($(PKG)_BASE_NAME) -r :$($(PKG)_DL_VERSION) -P $($(PKG)_RAWNAME) && \
--	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
+-	rm -rf $($(PKG)_BASE_NAME) && \
+-	$(HG) clone --noupdate --rev $($(PKG)_DL_VERSION) $($(PKG)_SITE) $($(PKG)_BASE_NAME) && \
+-	$(HG) archive --repository $($(PKG)_BASE_NAME) --type tgz --prefix $($(PKG)_BASE_NAME)/ \
+-	              --rev $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE) && \
 -	rm -rf $($(PKG)_DL_DIR) && \
 -	popd > /dev/null)
-+	$(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
-+					  $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
++	$(EXTRA_ENV) support/download/hg $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
 +					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
  endef
  
- # Not all CVS servers support ls/rls, use login to see if we can connect
-diff --git a/support/download/cvs b/support/download/cvs
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+diff --git a/support/download/hg b/support/download/hg
 new file mode 100755
-index 0000000..06b8647
+index 0000000..70b49cf
 --- /dev/null
-+++ b/support/download/cvs
-@@ -0,0 +1,27 @@
++++ b/support/download/hg
+@@ -0,0 +1,25 @@
 +#!/bin/sh
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for cvs
++# Download helper for hg
 +# Call it with:
-+#   $1: cvs repo
-+#   $2: cvs revision
-+#   $3: package's name (eg. foobar)
-+#   $4: package's basename (eg. foobar-1.2.3)
-+#   $5: output file
++#   $1: hg repo
++#   $2: hg cset
++#   $3: package's basename (eg. foobar-1.2.3)
++#   $4: output file
 +# And this environment:
-+#   CVS       : the cvs command to call
++#   HG        : the hg command to call
 +#   BR2_DL_DIR: path to Buildroot's download dir
 +
 +repo="${1}"
-+rev="${2}"
-+rawname="${3}"
-+basename="${4}"
-+output="${5}"
++cset="${2}"
++basename="${3}"
++output="${4}"
 +
 +cd "${BR2_DL_DIR}"
-+${CVS} -z3 -d":pserver:anonymous@${repo}" \
-+       co -d "${basename}" -r ":${rev}" -P "${rawname}"
-+tar czf "${output}" "${basename}"
++${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
++${HG} archive --repository "${basename}" --type tgz --prefix "${basename}" \
++              --rev "${cset}" "${output}"
 +rm -rf "${basename}"
 -- 
 1.9.1
