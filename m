@@ -1,400 +1,193 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Jul 2014 00:26:29 +0200
-Subject: [Buildroot] [PATCH 11/14] pkg-infra: don't use DL_DIR as scratchpad
-	for temporary downloads
+Date: Tue,  1 Jul 2014 00:26:30 +0200
+Subject: [Buildroot] [PATCH 12/14] pkg-infra: add possiblity to check
+	downloaded files against known hashes
 In-Reply-To: <cover.1404167061.git.yann.morin.1998@free.fr>
 References: <cover.1404167061.git.yann.morin.1998@free.fr>
-Message-ID: <411f011145e1194c3f07baa1cdffb6f69b8b1969.1404167061.git.yann.morin.1998@free.fr>
+Message-ID: <851f7ea39c778965d1e46bf6cabb723265d34eaf.1404167061.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DL_DIR can be a very precious place for some users: they use it to store
-all the downloaded archives to share across all their Buildroot (and
-maybe non-Buildroot) builds.
+Some of the packages that Buildroot might build are sensitive packages,
+related to security: openssl, dropbear, ca-certificates...
 
-We do not want to trash this location with our temporary downloads (e.g.
-git, Hg, svn, cvs repository clones/checkouts, or wget, bzr tep tarballs).
+Some of those packages are downloaded over plain http, because there is
+no way to get them over a secure channel, such as https.
 
-Turns out that we already have some kind of scratchpad, the BUILD_DIR.
-Although it is not really a disposable location, that's the best we have
-so far.
+In these dark times of pervasive surveillance, the potential for harm that
+a tampered-with package could generate, we may want to check the integrity
+of those sensitive packages.
 
-Also, we create the temporary tarballs with mktemp using the final tarrball,
-as template, since we want the temporary to be on the same filesystem as
-the final location, so the 'mv' is just a plain, atomic rename(2), and we
-are not left with a half-copied file as the final location.
+So, each package may now provide a list of hashes for all files that needs
+to be downloaded, and Buildroot will just fail if any downloaded file does
+not match its known hash, in which case it is removed.
 
-Using mktemp ensures all temp file names are unique, so it allows for
-parallel downloads from different build dirs at the same time, without
-cloberring each downloads.
-
-Note: we're using neither ${TMP} nor ${TMPDIR} since they are shared
-locations, sometime with little place (eg. tmpfs), and some of the
-repositories we clone/checkout can be very big.
+Hashes can be any of the md5, sha1 or sha2 variants, and will be checked
+even if the file was pre-downloaded.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Baruch Siach <baruch@tkos.co.il>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-[tested a particular scenario that used to fail: two separate builds
-using a shared DL_DIR, ccache enabled, so that they run almost
-synchronously. These would download the same file at the same time,
-corrupting each other. With the patches in this series, all works
-fine.]
 
 ---
-Change v7 -> v8:
-  - use a cleaner and saner code path to detect errors
-  - convert the cp and scp helpers, too  (Thomas DS)
+Changes v7 -> v8
+  - expand MITM to its full-length meaning  (Thomas DS)
+  - typo  (Thomas DS)
 
-Changes v6 -> v7:
-  - drop leftovers from a previous attempt in bzr  (Thomas)
+Changes v4 -> v5:
+  - fix detection of comments and empty lines
 
-Changes v5 -> v6:
-  - ensure we can do parallel downloads from multiple build-dirs  (Thomas)
-
-Changes v4 -> v5
-  - explain why we create the temp files where we create them  (Arnout)
-
-Changes v3 -> v4:
-  - remove spurious bump in package/fis  (Samuel)
 ---
- support/download/bzr  | 25 ++++++++++++++++++++++---
- support/download/cp   | 12 +++++++++++-
- support/download/cvs  | 34 +++++++++++++++++++++++++++-------
- support/download/git  | 33 ++++++++++++++++++++++++++-------
- support/download/hg   | 35 ++++++++++++++++++++++++++++-------
- support/download/scp  | 14 +++++++++++++-
- support/download/svn  | 33 ++++++++++++++++++++++++++-------
- support/download/wget | 26 ++++++++++++++++++++------
- 8 files changed, 173 insertions(+), 39 deletions(-)
+Note: this is not a bullet-proof solution, since Buildroot may itself be
+compromised. But since we do sign our releases, then we secure the list of
+hashes at the same time. Only random snapshots from the repository may be
+at risk of tampering, although this is highly doubtfull, given how git
+stores its data.
+---
+ package/pkg-download.mk     | 20 ++++++++++--
+ support/download/check-hash | 76 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 93 insertions(+), 3 deletions(-)
+ create mode 100755 support/download/check-hash
 
-diff --git a/support/download/bzr b/support/download/bzr
-index 68121f4..2a927d6 100755
---- a/support/download/bzr
-+++ b/support/download/bzr
-@@ -9,11 +9,30 @@ set -e
- #   $2: bzr revision
- #   $3: output file
- # And this environment:
--#   BZR       : the bzr command to call
--#   BR2_DL_DIR: path to Buildroot's download dir
-+#   BZR      : the bzr command to call
-+#   BUILD_DIR: path to Buildroot's build dir
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index d3cd0c1..7f208d5 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -58,6 +58,17 @@ domainseparator=$(if $(1),$(1),/)
+ # github(user,package,version): returns site of GitHub repository
+ github = https://github.com/$(1)/$(2)/archive/$(3)
  
- repo="${1}"
- rev="${2}"
- output="${3}"
++# Helper for checking a tarball's checksum
++# If the hash does not match, remove the incorrect file
++# $(1): the path to the file with the hashes
++# $(2): the full path to the file to check
++define VERIFY_HASH
++	if ! support/download/check-hash $(1) $(2); then \
++		rm -f $(2); \
++		exit 1; \
++	fi
++endef
++
+ ################################################################################
+ # The DOWNLOAD_* helpers are in charge of getting a working copy
+ # of the source repository for their corresponding SCM,
+@@ -148,7 +159,8 @@ endef
+ define DOWNLOAD_SCP
+ 	test -e $(DL_DIR)/$(2) || \
+ 	$(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
+-					  $(DL_DIR)/$(2)
++					  $(DL_DIR)/$(2) && \
++	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
  
--${BZR} export "${output}" "${repo}" -r "${rev}"
-+tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
+ define SOURCE_CHECK_SCP
+@@ -179,7 +191,8 @@ endef
+ 
+ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2)
++	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
++	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+ 
+ define SOURCE_CHECK_WGET
+@@ -193,7 +206,8 @@ endef
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+ 	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
+-					 $(DL_DIR)
++					 $(DL_DIR) && \
++	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+ 
+ define SOURCE_CHECK_LOCALFILES
+diff --git a/support/download/check-hash b/support/download/check-hash
+new file mode 100755
+index 0000000..b13aad9
+--- /dev/null
++++ b/support/download/check-hash
+@@ -0,0 +1,76 @@
++#!/bin/sh
++set -e
 +
-+# Play tic-tac-toe with temp files
-+# - first, we download to a trashable location (the build-dir)
-+# - the we move to a temp file in the final location, so it is
-+#   on the same filesystem as the final file
-+# - finally, we atomically rename to the final file
++# Helper to check a file matches its known hash
++# Call it with:
++#   $1: the full path to the file to check
++#   $2: the path of the file containing all the the expected hashes
 +
-+ret=1
-+if ${BZR} export "${tmp_dl}" "${repo}" -r "${rev}"; then
-+    if mv "${tmp_dl}" "${tmp_output}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
-+    fi
++h_file="${1}"
++file="${2}"
++
++# Does the hash-file exist?
++if [ ! -f "${h_file}" ]; then
++    exit 0
 +fi
 +
-+# Cleanup
-+rm -f "${tmp_dl}" "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/cp b/support/download/cp
-index d820846..eeb5856 100755
---- a/support/download/cp
-+++ b/support/download/cp
-@@ -13,4 +13,14 @@ set -e
- source="${1}"
- output="${2}"
- 
--${LOCALFILES} "${source}" "${output}"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
++# Check one hash for a file
++# $1: known hash
++# $2: file (full path)
++check_one_hash() {
++    _h="${1}"
++    _known="${2}"
++    _file="${3}"
 +
-+ret=1
-+if ${LOCALFILES} "${source}" "${tmp_output}"; then
-+    mv "${tmp_output}" "${output}"
-+    ret=0
-+fi
++    # Note: sha3 is not supported, since there is currently no implementation
++    #       (the NIST has yet to publish the parameters).
++    case "${_h}" in
++        md5|sha1)                       ;;
++        sha224|sha256|sha384|sha512)    ;;
++        *) # Unknown hash, exit with error
++            printf "ERROR: unknown hash '%s' for '%s'\n"  \
++                   "${_h}" "${_file##*/}" >&2
++            exit 1
++            ;;
++    esac
 +
-+# Cleanup
-+rm -f "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/cvs b/support/download/cvs
-index 06b8647..ee32958 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -11,8 +11,8 @@ set -e
- #   $4: package's basename (eg. foobar-1.2.3)
- #   $5: output file
- # And this environment:
--#   CVS       : the cvs command to call
--#   BR2_DL_DIR: path to Buildroot's download dir
-+#   CVS      : the cvs command to call
-+#   BUILD_DIR: path to Buildroot's build dir
- 
- repo="${1}"
- rev="${2}"
-@@ -20,8 +20,28 @@ rawname="${3}"
- basename="${4}"
- output="${5}"
- 
--cd "${BR2_DL_DIR}"
--${CVS} -z3 -d":pserver:anonymous@${repo}" \
--       co -d "${basename}" -r ":${rev}" -P "${rawname}"
--tar czf "${output}" "${basename}"
--rm -rf "${basename}"
-+repodir="${basename}.tmp-cvs-checkout"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
++    # Do the hashes match?
++    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
++    if [ "${_hash}" = "${_known}" ]; then
++        printf "%s: OK (%s: %s)\n" "${_file##*/}" "${_h}" "${_hash}"
++        return 0
++    fi
 +
-+cd "${BUILD_DIR}"
-+# Remove leftovers from a previous failed run
-+rm -rf "${repodir}"
++    printf "ERROR: %s has wrong %s hash:\n" "${_file##*/}" "${_h}" >&2
++    printf "ERROR: expected: %s\n" "${_known}" >&2
++    printf "ERROR: got     : %s\n" "${_hash}" >&2
++    printf "ERROR: Incomplete download, or man-in-the-middle (MITM) attack\n" >&2
 +
-+# Play tic-tac-toe with temp files
-+# - first, we download to a trashable location (the build-dir)
-+# - then we create a temporary tarball in the final location, so it is
-+#   on the same filesystem as the final file
-+# - finally, we atomically rename to the final file
++    exit 1
++}
 +
-+ret=1
-+if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
-+           co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
-+    if tar czf "${tmp_output}" "${repodir}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
++# Do we know one or more hashes for that file?
++nb_checks=0
++while read t h f; do
++    case "${t}" in
++        ''|'#'*)
++            # Skip comments and empty lines
++            continue
++            ;;
++        *)
++            if [ "${f}" = "${file##*/}" ]; then
++                check_one_hash "${t}" "${h}" "${file}"
++                : $((nb_checks++))
++            fi
++            ;;
++    esac
++done <"${h_file}"
++
++if [ ${nb_checks} -eq 0 ]; then
++    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
++        printf "ERROR: No hash found for %s\n" "${file}" >&2
++        exit 1
++    else
++        printf "WARNING: No hash found for %s\n" "${file}" >&2
 +    fi
 +fi
-+
-+# Cleanup
-+rm -rf "${repodir}" "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/git b/support/download/git
-index 96db3a9..79ce15e 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -10,15 +10,28 @@ set -e
- #   $3: package's basename (eg. foobar-1.2.3)
- #   $4: output file
- # And this environment:
--#   BR2_DL_DIR: path to Buildroot's download dir
--#   GIT       : the git command to call
-+#   GIT      : the git command to call
-+#   BUILD_DIR: path to Buildroot's build dir
- 
- repo="${1}"
- cset="${2}"
- basename="${3}"
- output="${4}"
- 
--repodir="${BR2_DL_DIR}/${basename}"
-+repodir="${basename}.tmp-git-checkout"
-+tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
-+
-+# Play tic-tac-toe with temp files
-+# - first, we download to a trashable location (the build-dir)
-+# - then we create the uncomporessed tarball in tht same trashable location
-+# - then we create a temporary compressed tarball in the final location, so
-+#   it is on the same filesystem as the final file
-+# - finally, we atomically rename to the final file
-+
-+cd "${BUILD_DIR}"
-+# Remove leftovers from a previous failed run
-+rm -rf "${repodir}"
- 
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
-@@ -28,10 +41,16 @@ else
-     ${GIT} clone --bare "${repo}" "${repodir}"
- fi
- 
-+ret=1
- pushd "${repodir}"
--${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
--gzip -c "${output}.tmp" >"${output}"
--rm -f "${output}.tmp"
-+if ${GIT} archive --prefix="${basename}/" -o "${tmp_tar}" \
-+                  --format=tar "${cset}"; then
-+    if gzip -c "${tmp_tar}" >"${tmp_output}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
-+    fi
-+fi
- popd
- 
--rm -rf "${repodir}"
-+rm -rf "${repodir}" "${tmp_tar}" "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/hg b/support/download/hg
-index 70b49cf..1568ff0 100755
---- a/support/download/hg
-+++ b/support/download/hg
-@@ -10,16 +10,37 @@ set -e
- #   $3: package's basename (eg. foobar-1.2.3)
- #   $4: output file
- # And this environment:
--#   HG        : the hg command to call
--#   BR2_DL_DIR: path to Buildroot's download dir
-+#   HG       : the hg command to call
-+#   BUILD_DIR: path to Buildroot's build dir
- 
- repo="${1}"
- cset="${2}"
- basename="${3}"
- output="${4}"
- 
--cd "${BR2_DL_DIR}"
--${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
--${HG} archive --repository "${basename}" --type tgz --prefix "${basename}" \
--              --rev "${cset}" "${output}"
--rm -rf "${basename}"
-+repodir="${basename}.tmp-hg-checkout"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
-+
-+cd "${BUILD_DIR}"
-+# Remove leftovers from a previous failed run
-+rm -rf "${repodir}"
-+
-+# Play tic-tac-toe with temp files
-+# - first, we download to a trashable location (the build-dir)
-+# - then we create a temporary tarball in the final location, so it is
-+#   on the same filesystem as the final file
-+# - finally, we atomically rename to the final file
-+
-+ret=1
-+if ${HG} clone --noupdate --rev "${cset}" "${repo}" "${repodir}"; then
-+    if ${HG} archive --repository "${repodir}" --type tgz \
-+                     --prefix "${basename}" --rev "${cset}" \
-+                     "${tmp_output}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
-+    fi
-+fi
-+
-+# Cleanup
-+rm -rf "${repodir}" "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/scp b/support/download/scp
-index 9f8a4f0..e9ca013 100755
---- a/support/download/scp
-+++ b/support/download/scp
-@@ -12,5 +12,17 @@ set -e
- 
- url="${1}"
- output="${2}"
-+tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
--${SCP} "${url}" "${output}"
-+ret=1
-+if ${SCP} "${url}" "${tmp_dl}"; then
-+    if mv "${tmp_dl}" "${tmp_output}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
-+    fi
-+fi
-+
-+# Cleanup
-+rm -f "${tmp_dl}" "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/svn b/support/download/svn
-index 717fad3..258e676 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -10,16 +10,35 @@ set -e
- #   $3: package's basename (eg. foobar-1.2.3)
- #   $4: output file
- # And this environment:
--#   SVN       : the svn command to call
--#   BR2_DL_DIR: path to Buildroot's download dir
-+#   SVN      : the svn command to call
-+#   BUILD_DIR: path to Buildroot's build dir
- 
- repo="${1}"
- rev="${2}"
- basename="${3}"
- output="${4}"
- 
--pushd "${BR2_DL_DIR}"
--${SVN} export "${repo}@${rev}" "${basename}"
--tar czf "${output}" "${basename}"
--rm -rf "${basename}"
--popd
-+repodir="${basename}.tmp-svn-checkout"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
-+
-+cd "${BUILD_DIR}"
-+# Remove leftovers from a previous failed run
-+rm -rf "${repodir}"
-+
-+# Play tic-tac-toe with temp files
-+# - first, we download to a trashable location (the build-dir)
-+# - then we create a temporary tarball in the final location, so it is
-+#   on the same filesystem as the final file
-+# - finally, we atomically rename to the final file
-+
-+ret=1
-+if ${SVN} export "${repo}@${rev}" "${repodir}"; then
-+    if tar czf "${tmp_output}" "${repodir}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
-+    fi
-+fi
-+
-+# Cleanup
-+rm -rf "${repodir}" "${tmp_output}"
-+exit ${ret}
-diff --git a/support/download/wget b/support/download/wget
-index 7865517..f1a8f92 100755
---- a/support/download/wget
-+++ b/support/download/wget
-@@ -8,14 +8,28 @@ set -e
- #   $1: URL
- #   $2: output file
- # And this environment:
--#   WGET      : the wget command to call
-+#   WGET     : the wget command to call
-+#   BUILD_DIR: path to Buildroot's build dir
- 
- url="${1}"
- output="${2}"
- 
--if ${WGET} -O "${output}.tmp" "${url}"; then
--    mv "${output}.tmp" "${output}"
--else
--    rm -f "${output}.tmp"
--    exit 1
-+tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
-+
-+# Play tic-tac-toe with temp files
-+# - first, we download to a trashable location (the build-dir)
-+# - then we copy to a temporary tarball in the final location, so it is
-+#   on the same filesystem as the final file
-+# - finally, we atomically rename to the final file
-+
-+ret=1
-+if ${WGET} -O "${tmp_dl}" "${url}"; then
-+    if mv "${tmp_dl}" "${tmp_output}"; then
-+        mv "${tmp_output}" "${output}"
-+        ret=0
-+    fi
- fi
-+
-+rm -f "${tmp_dl}" "${tmp_output}"
-+exit ${ret}
 -- 
 1.9.1
