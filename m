@@ -1,49 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 30 Jun 2014 23:52:10 +0200
-Subject: [Buildroot] [PATCH 10/14] package/gst-fsl-plugins: add default
-	platform
+Date: Mon, 30 Jun 2014 23:52:11 +0200
+Subject: [Buildroot] [PATCH 11/14] imx6sabresd: bump kernel version to
+	3.10.17
 In-Reply-To: <cover.1404164261.git.yann.morin.1998@free.fr>
 References: <cover.1404164261.git.yann.morin.1998@free.fr>
-Message-ID: <8542e6ddeccf7d8f18f45069198e0939d4a1535a.1404164261.git.yann.morin.1998@free.fr>
+Message-ID: <1b176c80d826872e094e1fafcf5efbaa520ff2f2.1404164261.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set the default platform for gst-fsl-plugins, based on the one choosen
-as the generic Freescale i.MX platform.
+From: Gary Bisson <bisson.gary@gmail.com>
 
-We can't use only this generic platform choice, as gst-fsl-plugins has
-support for more platforms.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gary Bisson <bisson.gary@gmail.com>
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 Cc: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-
 ---
-Note: this is a tentative patch, I would not care if it is dropped.
----
- package/gstreamer/gst-fsl-plugins/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ configs/freescale_imx6sabresd_defconfig | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
-index fc0184e..309e745 100644
---- a/package/gstreamer/gst-fsl-plugins/Config.in
-+++ b/package/gstreamer/gst-fsl-plugins/Config.in
-@@ -33,6 +33,13 @@ config BR2_PACKAGE_GST_FSL_PLUGINS
- if BR2_PACKAGE_GST_FSL_PLUGINS
- choice
- 	prompt "i.MX platform"
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX25 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX27 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX37 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX37_3STACK
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX50 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX50
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX51 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX53 if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
-+	default BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX6  if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+diff --git a/configs/freescale_imx6sabresd_defconfig b/configs/freescale_imx6sabresd_defconfig
+index 368e00b..16e4d0b 100644
+--- a/configs/freescale_imx6sabresd_defconfig
++++ b/configs/freescale_imx6sabresd_defconfig
+@@ -9,15 +9,19 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx6"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
  
- config BR2_PACKAGE_GST_FSL_PLUGINS_PLATFORM_MX233
- 	bool "imx233"
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ 
+ # bootloader
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabresd"
++BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
 -- 
 1.9.1
