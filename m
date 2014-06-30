@@ -1,39 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jun 2014 11:49:33 +0200
-Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable
- CF?
-In-Reply-To: <CAEzGmjCgQmFhN9fuc_2z-Aj37k42Oyg4YmshkYbjy+pLAkFmEw@mail.gmail.com>
-References: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
- <20140627203224.1149e36a@free-electrons.com>
- <CAEzGmjCgQmFhN9fuc_2z-Aj37k42Oyg4YmshkYbjy+pLAkFmEw@mail.gmail.com>
-Message-ID: <20140630114933.33262a25@free-electrons.com>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 30 Jun 2014 11:51:28 +0200
+Subject: [Buildroot] [PATCH] infra: fix "<pkg>-rebuild" when using rsync
+	source feature
+Message-ID: <1404121888-7966-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lennart Ramberg,
+Because the configure stamp file depends on the rsync stamp file,
+removing it by the "<pkg>-clean-for-rebuild" rule trigger the configure
+step. To avoid triggering the configure step use an order-only dependency.
 
-On Mon, 30 Jun 2014 10:23:06 +0200, Lennart Ramberg wrote:
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Reported-by: C?dric Marie <cedric.marie@openmailbox.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-generic.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> Thank you Thomas,
-> 
-> It helped to use sudo :-)
-> to get rid of that annoying
-> "cannot open `/boot/grub/device.map': No such file or directory."
-> 
-> Now, putting the thus created CF in the target system brings me (only) to:
-> grub>
-> 
-> Should I expect to automatically have come further?
-
-Yes, it should show the menu thanks to the configuration file. What
-exact steps have you followed to put the root filesystem and Grub on
-your Compact Flash?
-
-Thomas
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 54193d2..3c05a94 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -544,7 +544,10 @@ else
+ #  source, by rsyncing
+ #  depends
+ #  configure
+-$$($(2)_TARGET_CONFIGURE):	$$($(2)_TARGET_RSYNC)
++
++# Use an order-only dependency so the "<pkg>-clean-for-rebuild" rule
++# can remove the stamp file without triggering the configure step.
++$$($(2)_TARGET_CONFIGURE): | $$($(2)_TARGET_RSYNC)
+ 
+ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
