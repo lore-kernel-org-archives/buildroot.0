@@ -1,94 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jun 2014 13:48:54 +0200
-Subject: [Buildroot] [git commit] ftop: new package
-Message-ID: <20140630120027.A60879D122@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 30 Jun 2014 14:02:16 +0200
+Subject: [Buildroot] [PATCH 1/1] libssh2: fix library search path issues
+ when zlib support enabled
+In-Reply-To: <f8abef86a41446e6ac7848dfa49e9842@VMSMBX02.gpi.pri>
+References: <1403878684-11934-1-git-send-email-acoffignal@geral.com>
+ <20140629163016.41256df2@free-electrons.com>
+ <f8abef86a41446e6ac7848dfa49e9842@VMSMBX02.gpi.pri>
+Message-ID: <20140630140216.49d73fa4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=82c9989691287668d30d3fd37281af7ed106b69f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Alexandre,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                     |    1 +
- package/ftop/Config.in                |   12 ++++++++++++
- package/ftop/ftop-0001-overflow.patch |   17 +++++++++++++++++
- package/ftop/ftop.mk                  |   13 +++++++++++++
- 4 files changed, 43 insertions(+), 0 deletions(-)
+On Mon, 30 Jun 2014 11:43:06 +0000, COFFIGNAL Alexandre wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index d7e1acc..3f3b8d2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1118,6 +1118,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- 	source "package/cpuload/Config.in"
- 	source "package/dsp-tools/Config.in"
-+	source "package/ftop/Config.in"
- 	source "package/htop/Config.in"
- 	source "package/iprutils/Config.in"
- 	source "package/keyutils/Config.in"
-diff --git a/package/ftop/Config.in b/package/ftop/Config.in
-new file mode 100644
-index 0000000..878574f
---- /dev/null
-+++ b/package/ftop/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FTOP
-+	bool "ftop"
-+	depends on BR2_LARGEFILE
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Ftop is to files what top is to processes.
-+	  The progress of all open files and file systems can be monitored.
-+
-+	  https://code.google.com/p/ftop/
-+
-+comment "ftop needs a toolchain w/ largefile"
-+        depends on !BR2_LARGEFILE
-diff --git a/package/ftop/ftop-0001-overflow.patch b/package/ftop/ftop-0001-overflow.patch
-new file mode 100644
-index 0000000..a3a27c3
---- /dev/null
-+++ b/package/ftop/ftop-0001-overflow.patch
-@@ -0,0 +1,17 @@
-+Set tmp_buf and rate_buf to something ridiculously high to fix a buffer
-+overflow when COLUMNS is large. - JeR
-+
-+(Taken from gentoo portage)
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/src/ftop.c	2009-02-16 07:00:00.000000000 +0100
-++++ b/src/ftop.c	2013-09-06 14:42:41.788852952 +0200
-+@@ -736,7 +736,7 @@
-+ {
-+     size_t i, j, bytes, bar_total;
-+     char more_procs_ch, more_files_ch, expanded_ch;
-+-    char tmp_buf[80], rate_buf[80];
-++    char tmp_buf[2048], rate_buf[2048];
-+     char *tmp_str;
-+     snapshot *s, *s_prev;
-+     file_info *tmp_file;
-diff --git a/package/ftop/ftop.mk b/package/ftop/ftop.mk
-new file mode 100644
-index 0000000..2220317
---- /dev/null
-+++ b/package/ftop/ftop.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# ftop
-+#
-+################################################################################
-+
-+FTOP_VERSION = 1.0
-+FTOP_SITE = http://ftop.googlecode.com/files/
-+FTOP_DEPENDENCIES = ncurses
-+FTOP_LICENSE = GPLv3+
-+FTOP_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+> Yes this issue occurs only when  zlib-dev is installed in host system. (if I rename /usr/lib/libz.so in my host system, compilation works perfectly)  
+> 
+> Here compile error (without patch )
+> 
+> libtool: link: /bin/grep -E -e "^libssh2_.*" ".libs/libssh2.exp" > ".libs/libssh2.expT"
+> libtool: link: mv -f ".libs/libssh2.expT" ".libs/libssh2.exp"
+> libtool: link: echo "{ global:" > .libs/libssh2.ver
+> libtool: link:  cat .libs/libssh2.exp | sed -e "s/\(.*\)/\1;/" >> .libs/libssh2.ver
+> libtool: link:  echo "local: *; };" >> .libs/libssh2.ver
+> libtool: link:  /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc -shared  -fPIC -DPIC  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -Wl,-rpath -Wl,/home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -L/home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lssl -lcrypto -L/usr/lib -lz  -Os   -Wl,-soname -Wl,libssh2.so.1 -Wl,-version-script -Wl,.libs/libssh2.ver -o .libs/libssh2.so.1.0.1
+> /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.8.3/../../../../arm-linux-gnueabihf/bin/ld: cannot find /usr/lib/libc_nonshared.a
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [libssh2.la] Erreur 1
+> make[3]: quittant le r?pertoire ? /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3/src ?
+> make[2]: *** [all] Erreur 2
+> make[2]: quittant le r?pertoire ? /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3/src ?
+> make[1]: *** [all-recursive] Erreur 1
+> make[1]: quittant le r?pertoire ? /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3 ?
+> make: *** [/home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3/.stamp_built] Erreur 2
+> 
+> In this log, we can see link option : -L /usr/lib/ -lz  , that breaks compilation.
+
+Thanks for getting back with those details. I'm surprised to not be
+able to reproduce the issue, even though zlib-dev is installed on my
+system as well. Could you post the contents of
+output/build/libssh2-1.4.3/config.log ? Even though I agree with your
+patch, I'd like to understand why the configure script is not picking
+up first the cross-compiled zlib instead of the host zlib.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
