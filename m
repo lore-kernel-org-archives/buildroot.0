@@ -1,47 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jun 2014 18:10:40 +0200
-Subject: [Buildroot] [PATCH] uclibc: disable parallel build for uClibc
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 30 Jun 2014 20:16:53 +0400
+Subject: [Buildroot] [PATCH v2] uclibc: disable parallel build for uClibc
 	0.9.31
-In-Reply-To: <1404144079.3117.9.camel@abrodkin-8560l.internal.synopsys.com>
-References: <1404138620-7929-1-git-send-email-abrodkin@synopsys.com>
- <20140630164216.601d4429@free-electrons.com>
- <1404144079.3117.9.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <20140630181040.64ad21b6@free-electrons.com>
+Message-ID: <1404145013-7553-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+This is only required for uClibc 0.9.31 and this veriosn is only used by
+AVR32 so could be safely removed together with AVR32.
 
-On Mon, 30 Jun 2014 16:01:19 +0000, Alexey Brodkin wrote:
+Even 0.9.32 builds well in parallel (at least on x86) so IMHO there's no need
+in >= 0.9.33, just disable for a particular broken version.
 
-> On Mon, 2014-06-30 at 16:42 +0200, Thomas Petazzoni wrote:
-> > Sorry to nitpick, but I'd prefer to use UCLIBC_MAKE as the variable
-> > name. We use <PKG>_<SOMETHING> for all variables, so it would make more
-> > sense to do the same.
-> 
-> Ok I didn't think about this concept - just used whatever first appeared
-> in my mind. So will use UCLIBC_MAKE - makes sense.
-> 
-> > >  define UCLIBC_BUILD_CMDS
-> > > -	$(MAKE) -C $(@D) \
-> > > +	$(MAKE_UCLIBC) -C $(@D) \
-> > 
-> > Your original patch changing MAKE1 -> MAKE changed two places, and
-> > you're changing only one place here. To be sure, we should probably
-> > change back both places, no?
-> 
-> I do see that host utilities were built perfectly fine in parallel mode
-> then why do more changes than needed?
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
-Ok, fine with me.
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-Thanks,
+---
+In v2 I replaced MAKE_UCLIBC  with UCLIBC_MAKE as suggested by Thomas.
+---
+ package/uclibc/uclibc.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 28a8a08..caa5553 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -493,8 +493,20 @@ define UCLIBC_BUILD_TEST_SUITE
+ endef
+ endif
+ 
++# In uClibc 0.9.31 parallel building is broken so we have to disable it
++# Fortunately uClibc 0.9.31 is only used by AVR32 and in its turn AVR32 is
++# about to be removed from buildroot.
++#
++# So as soon as AVR32 is removed please revert this patch so instead of
++# UCLIBC_MAKE normal "MAKE" is used in UCLIBC_BUILD_CMDS
++ifeq ($(BR2_UCLIBC_VERSION_0_9_31),y)
++	UCLIBC_MAKE = $(MAKE1)
++else
++	UCLIBC_MAKE = $(MAKE)
++endif
++
+ define UCLIBC_BUILD_CMDS
+-	$(MAKE) -C $(@D) \
++	$(UCLIBC_MAKE) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX= \
+ 		DEVEL_PREFIX=/ \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.3
