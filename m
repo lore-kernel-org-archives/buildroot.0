@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Jul 2014 00:26:26 +0200
-Subject: [Buildroot] [PATCH 08/14] pkg-infra: move the bzr download helper
+Date: Tue,  1 Jul 2014 00:26:27 +0200
+Subject: [Buildroot] [PATCH 09/14] pkg-infra: move the scp download helper
 	to a script
 In-Reply-To: <cover.1404167061.git.yann.morin.1998@free.fr>
 References: <cover.1404167061.git.yann.morin.1998@free.fr>
-Message-ID: <7eb47398f146f3d4a0163a9fc02ee9e04297567a.1404167061.git.yann.morin.1998@free.fr>
+Message-ID: <44de367b5fd40f793cc57569c9d6895a86e39133.1404167061.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,57 +16,55 @@ complex, so move it to a shell script.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk |  4 ++--
- support/download/bzr    | 19 +++++++++++++++++++
- 2 files changed, 21 insertions(+), 2 deletions(-)
- create mode 100755 support/download/bzr
+ package/pkg-download.mk |  5 +++--
+ support/download/scp    | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+ create mode 100755 support/download/scp
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7554582..e420b05 100644
+index e420b05..eec91b8 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -11,7 +11,7 @@
- export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
- export SVN := $(call qstrip,$(BR2_SVN))
- export CVS := $(call qstrip,$(BR2_CVS))
--BZR := $(call qstrip,$(BR2_BZR))
-+export BZR := $(call qstrip,$(BR2_BZR))
+@@ -14,7 +14,7 @@ export CVS := $(call qstrip,$(BR2_CVS))
+ export BZR := $(call qstrip,$(BR2_BZR))
  export GIT := $(call qstrip,$(BR2_GIT))
  export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
- SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
-@@ -101,7 +101,7 @@ endef
+-SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
++export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+ LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- define DOWNLOAD_BZR
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(BZR) export $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) -r $($(PKG)_DL_VERSION)
-+	$(EXTRA_ENV) support/download/bzr $($(PKG)_SITE) $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE)
+@@ -147,7 +147,8 @@ endef
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
++	$(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
++					  $(DL_DIR)/$(2)
  endef
  
- define SOURCE_CHECK_BZR
-diff --git a/support/download/bzr b/support/download/bzr
+ define SOURCE_CHECK_SCP
+diff --git a/support/download/scp b/support/download/scp
 new file mode 100755
-index 0000000..68121f4
+index 0000000..9f8a4f0
 --- /dev/null
-+++ b/support/download/bzr
-@@ -0,0 +1,19 @@
++++ b/support/download/scp
+@@ -0,0 +1,16 @@
 +#!/bin/sh
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for bzr
++# Download helper for scp
 +# Call it with:
-+#   $1: bzr repo
-+#   $2: bzr revision
-+#   $3: output file
++#   $1: URL
++#   $2: output file
 +# And this environment:
-+#   BZR       : the bzr command to call
-+#   BR2_DL_DIR: path to Buildroot's download dir
++#   SCP       : the scp command to call
 +
-+repo="${1}"
-+rev="${2}"
-+output="${3}"
++url="${1}"
++output="${2}"
 +
-+${BZR} export "${output}" "${repo}" -r "${rev}"
++${SCP} "${url}" "${output}"
 -- 
 1.9.1
