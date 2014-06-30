@@ -1,55 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 30 Jun 2014 14:02:16 +0200
-Subject: [Buildroot] [PATCH 1/1] libssh2: fix library search path issues
- when zlib support enabled
-In-Reply-To: <f8abef86a41446e6ac7848dfa49e9842@VMSMBX02.gpi.pri>
-References: <1403878684-11934-1-git-send-email-acoffignal@geral.com>
- <20140629163016.41256df2@free-electrons.com>
- <f8abef86a41446e6ac7848dfa49e9842@VMSMBX02.gpi.pri>
-Message-ID: <20140630140216.49d73fa4@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 30 Jun 2014 14:05:25 +0200
+Subject: [Buildroot] [PATCH] graph-depends: add missing -show-depends
+ targets in Makefile
+In-Reply-To: <20140630135851.139091e8@free-electrons.com>
+References: <179177855010c6804e72.1404126915@localhost>
+ <20140630135851.139091e8@free-electrons.com>
+Message-ID: <CAAXf6LVw+rjJnAvRdynYMrkvnDMYkh7F6-D9Tiy9gVEq9UL-nA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexandre,
+On Mon, Jun 30, 2014 at 1:58 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Mon, 30 Jun 2014 13:15:15 +0200, Thomas De Schampheleire wrote:
+>> When running 'make graph-depends' on a configuration selecting
+>> toolchain-eclipse-register or target-generatelocales, the command fails:
+>>
+>>   make[1]: *** No rule to make target `target-generatelocales-show-depends'.
+>>   Stop.
+>>
+>> This patch adds the missing -show-depends targets.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>>  Makefile |  6 ++++++
+>>  1 files changed, 6 insertions(+), 0 deletions(-)
+>>
+>> diff -r 4d6d2ac6a601 -r 179177855010 Makefile
+>> --- a/Makefile        Thu Jun 19 18:13:36 2014 +0200
+>> +++ b/Makefile        Mon Jun 30 13:11:11 2014 +0200
+>> @@ -621,6 +621,9 @@
+>>                       -i $${inputfile} -f $${charmap} \
+>>                       $${locale} ; \
+>>       done
+>> +
+>> +target-generatelocales-show-depends:
+>> +     @echo host-localedef toolchain
+>>  endif
+>>
+>>  target-post-image: $(TARGETS_ROOTFS) target-finalize
+>> @@ -631,6 +634,9 @@
+>>  toolchain-eclipse-register: toolchain
+>>       ./support/scripts/eclipse-register-toolchain `readlink -f $(O)` $(notdir $(TARGET_CROSS)) $(BR2_ARCH)
+>>
+>> +toolchain-eclipse-register-show-depends:
+>> +     @echo toolchain
+>> +
+>>  source: $(TARGETS_SOURCE) $(HOST_SOURCE)
+>
+> Your tree is not up-to-date, both of these targets have been converted
+> to TARGET_FINALIZE_HOOKS, so the problem you're seeing shouldn't occur
+> I believe. Am I missing something?
 
-On Mon, 30 Jun 2014 11:43:06 +0000, COFFIGNAL Alexandre wrote:
+Grumbl, yes this seems to have been committed yesterday after I last synced.
+Nevermind then, I'll mark the patch as Rejected in patchwork.
 
-> Yes this issue occurs only when  zlib-dev is installed in host system. (if I rename /usr/lib/libz.so in my host system, compilation works perfectly)  
-> 
-> Here compile error (without patch )
-> 
-> libtool: link: /bin/grep -E -e "^libssh2_.*" ".libs/libssh2.exp" > ".libs/libssh2.expT"
-> libtool: link: mv -f ".libs/libssh2.expT" ".libs/libssh2.exp"
-> libtool: link: echo "{ global:" > .libs/libssh2.ver
-> libtool: link:  cat .libs/libssh2.exp | sed -e "s/\(.*\)/\1;/" >> .libs/libssh2.ver
-> libtool: link:  echo "local: *; };" >> .libs/libssh2.ver
-> libtool: link:  /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/usr/bin/arm-linux-gnueabihf-gcc -shared  -fPIC -DPIC  .libs/channel.o .libs/comp.o .libs/crypt.o .libs/hostkey.o .libs/kex.o .libs/mac.o .libs/misc.o .libs/packet.o .libs/publickey.o .libs/scp.o .libs/session.o .libs/sftp.o .libs/userauth.o .libs/transport.o .libs/version.o .libs/knownhost.o .libs/agent.o .libs/openssl.o .libs/libgcrypt.o .libs/pem.o .libs/keepalive.o .libs/global.o   -Wl,-rpath -Wl,/home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -L/home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -lssl -lcrypto -L/usr/lib -lz  -Os   -Wl,-soname -Wl,libssh2.so.1 -Wl,-version-script -Wl,.libs/libssh2.ver -o .libs/libssh2.so.1.0.1
-> /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/4.8.3/../../../../arm-linux-gnueabihf/bin/ld: cannot find /usr/lib/libc_nonshared.a
-> collect2: error: ld returned 1 exit status
-> make[3]: *** [libssh2.la] Erreur 1
-> make[3]: quittant le r?pertoire ? /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3/src ?
-> make[2]: *** [all] Erreur 2
-> make[2]: quittant le r?pertoire ? /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3/src ?
-> make[1]: *** [all-recursive] Erreur 1
-> make[1]: quittant le r?pertoire ? /home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3 ?
-> make: *** [/home/alexandre/Documents/Projets/Clients/ICE/Src/ice-buildroot-imx6/buildroot/output/build/libssh2-1.4.3/.stamp_built] Erreur 2
-> 
-> In this log, we can see link option : -L /usr/lib/ -lz  , that breaks compilation.
-
-Thanks for getting back with those details. I'm surprised to not be
-able to reproduce the issue, even though zlib-dev is installed on my
-system as well. Could you post the contents of
-output/build/libssh2-1.4.3/config.log ? Even though I agree with your
-patch, I'd like to understand why the configure script is not picking
-up first the cross-compiled zlib instead of the host zlib.
-
-Thanks,
-
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
