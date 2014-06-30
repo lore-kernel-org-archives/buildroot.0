@@ -1,59 +1,57 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 30 Jun 2014 20:16:53 +0400
-Subject: [Buildroot] [PATCH v2] uclibc: disable parallel build for uClibc
-	0.9.31
-Message-ID: <1404145013-7553-1-git-send-email-abrodkin@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 30 Jun 2014 17:28:12 +0100
+Subject: [Buildroot] [PATCH] dbus: use -pthread instead of -lpthread
+Message-ID: <1404145692-47530-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is only required for uClibc 0.9.31 and this veriosn is only used by
-AVR32 so could be safely removed together with AVR32.
+This fixes a problem in other packages when they link against dbus. For
+instance, with the dnsmasq package:
 
-Even 0.9.32 builds well in parallel (at least on x86) so IMHO there's no need
-in >= 0.9.33, just disable for a particular broken version.
+/buildroot/output/host/usr/bin/mipsel-ctng-linux-uclibc-gcc --static
+-lidn  -o dnsmasq cache.o rfc1035.o util.o option.o forward.o network.o
+dnsmasq.o dhcp.o lease.o rfc2131.o netlink.o dbus.o bpf.o helper.o
+tftp.o log.o conntrack.o dhcp6.o rfc3315.o dhcp-common.o outpacket.o
+radv.o slaac.o auth.o ipset.o domain.o dnssec.o blockdata.o
+-L/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib
+-ldbus-1 -lpthread
+-L/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib
+-lidn -liconv
+-L/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib
+-llua -lm     -Wl,-Bstatic -lhogweed
+-L/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib
+-lnettle -lgmp   -Wl,-Bdynamic -Wl,-Bstatic -lgmp -Wl,-Bdynamic
+/buildroot/output/host/usr/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libpthread.a(init.os):
+In function `__pthread_initialize_minimal_internal':
+init.c:(.text+0x26c): undefined reference to `__libc_setup_tls'
+collect2: error: ld returned 1 exit status
+make[2]: *** [dnsmasq] Error 1
+make[2]: Leaving directory
+`/buildroot/output/build/dnsmasq-2.71/src'
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Fixes:
+  http://autobuild.buildroot.net/results/7cd/7cdab3b6f74dbfde965300a51e58a377ba30602b/
 
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
-In v2 I replaced MAKE_UCLIBC  with UCLIBC_MAKE as suggested by Thomas.
----
- package/uclibc/uclibc.mk | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ package/dbus/dbus.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 28a8a08..caa5553 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -493,8 +493,20 @@ define UCLIBC_BUILD_TEST_SUITE
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index fc446b1..0c8fcf3 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -35,7 +35,7 @@ define DBUS_USERS
  endef
+ 
+ ifeq ($(BR2_PREFER_STATIC_LIB),y)
+-DBUS_CONF_OPT += LIBS='-lpthread'
++DBUS_CONF_OPT += LIBS='-pthread'
  endif
  
-+# In uClibc 0.9.31 parallel building is broken so we have to disable it
-+# Fortunately uClibc 0.9.31 is only used by AVR32 and in its turn AVR32 is
-+# about to be removed from buildroot.
-+#
-+# So as soon as AVR32 is removed please revert this patch so instead of
-+# UCLIBC_MAKE normal "MAKE" is used in UCLIBC_BUILD_CMDS
-+ifeq ($(BR2_UCLIBC_VERSION_0_9_31),y)
-+	UCLIBC_MAKE = $(MAKE1)
-+else
-+	UCLIBC_MAKE = $(MAKE)
-+endif
-+
- define UCLIBC_BUILD_CMDS
--	$(MAKE) -C $(@D) \
-+	$(UCLIBC_MAKE) -C $(@D) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX= \
- 		DEVEL_PREFIX=/ \
+ ifeq ($(BR2_microblaze),y)
 -- 
-1.9.3
+1.7.1
