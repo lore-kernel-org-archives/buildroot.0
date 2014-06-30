@@ -1,35 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 30 Jun 2014 23:34:41 +0200
-Subject: [Buildroot] [git commit] python-simplejson: security bump to
-	version 3.5.3
-Message-ID: <20140630213727.E7A139D120@busybox.osuosl.org>
+Date: Mon, 30 Jun 2014 23:34:49 +0200
+Subject: [Buildroot] [git commit] parted: fix nommu build
+Message-ID: <20140630213728.07F4F9D0C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a660373f2c3d8dd7f4b0fbc61c8e40143e14f5cd
+commit: http://git.buildroot.net/buildroot/commit/?id=ea7061f40e04f6a475705a579529978de1b9cc91
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No CVE assigned, see https://github.com/simplejson/simplejson/issues/98
+Add patch to accept uclinux in the tuple, and also disable dynamic libs
+for static scenarios. Fixes:
+http://autobuild.buildroot.net/results/d9a/d9a9baf0c1bfdb7f7d03ebed084a80ef3001c86d/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-simplejson/python-simplejson.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ ...ed-002-configure.ac-uclinux-is-also-linux.patch |   33 ++++++++++++++++++++
+ package/parted/parted.mk                           |    6 +++
+ 2 files changed, 39 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index eb6287a..3045b4e 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/parted/parted-002-configure.ac-uclinux-is-also-linux.patch b/package/parted/parted-002-configure.ac-uclinux-is-also-linux.patch
+new file mode 100644
+index 0000000..b2119bc
+--- /dev/null
++++ b/package/parted/parted-002-configure.ac-uclinux-is-also-linux.patch
+@@ -0,0 +1,33 @@
++From b3958317c5ee2940e7024bec2e7f288b5a6a26c3 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Mon, 30 Jun 2014 10:09:04 -0300
++Subject: [PATCH] configure.ac: uclinux is also linux
++
++uclinux is used in the tuple for some noMMU linux builds like Blackfin
++FLAT output, so accept it as linux too.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ configure.ac | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 436d0e2..50ad478 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -58,10 +58,10 @@ AM_SILENT_RULES([yes]) # make --enable-silent-rules the default.
++ 
++ AC_CANONICAL_HOST
++ case "$host_os" in
++-	linux*) OS=linux ;;
+++	linux*|uclinux*) OS=linux ;;
++ 	gnu*)	OS=gnu ;;
++ 	beos*)	OS=beos ;;
++-	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
+++	*)	AC_MSG_ERROR([Unknown or unsupported OS "$host_os".  Only "linux", "uclinux", "gnu" and "beos" are supported in this version of GNU Parted.]) ;;
++ esac
++ AC_SUBST([OS])
++ 
++-- 
++1.8.5.5
++
+diff --git a/package/parted/parted.mk b/package/parted/parted.mk
+index 15e37a8..fd82684 100644
+--- a/package/parted/parted.mk
++++ b/package/parted/parted.mk
+@@ -9,6 +9,8 @@ PARTED_SOURCE = parted-$(PARTED_VERSION).tar.xz
+ PARTED_SITE = $(BR2_GNU_MIRROR)/parted
+ PARTED_DEPENDENCIES = util-linux
+ PARTED_INSTALL_STAGING = YES
++# For uclinux patch
++PARTED_AUTORECONF = YES
+ PARTED_LICENSE = GPLv3+
+ PARTED_LICENSE_FILES = COPYING
  
--PYTHON_SIMPLEJSON_VERSION = 3.3.1
-+PYTHON_SIMPLEJSON_VERSION = 3.5.3
- PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
- PYTHON_SIMPLEJSON_SITE = http://pypi.python.org/packages/source/s/simplejson/
- PYTHON_SIMPLEJSON_LICENSE = MIT
+@@ -26,6 +28,10 @@ else
+ PARTED_CONF_OPT += --disable-device-mapper
+ endif
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++PARTED_CONF_OPT += --disable-dynamic-loading
++endif
++
+ HOST_PARTED_DEPENDENCIES = host-util-linux
+ HOST_PARTED_CONF_OPT += \
+ 	--without-readline \
