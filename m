@@ -1,193 +1,120 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  1 Jul 2014 00:26:30 +0200
-Subject: [Buildroot] [PATCH 12/14] pkg-infra: add possiblity to check
-	downloaded files against known hashes
+Date: Tue,  1 Jul 2014 00:26:31 +0200
+Subject: [Buildroot] [PATCH 13/14] manual: add documentation about packages'
+	hashes
 In-Reply-To: <cover.1404167061.git.yann.morin.1998@free.fr>
 References: <cover.1404167061.git.yann.morin.1998@free.fr>
-Message-ID: <851f7ea39c778965d1e46bf6cabb723265d34eaf.1404167061.git.yann.morin.1998@free.fr>
+Message-ID: <3664088ad6a362bc963227146fbcb2366ad3d629.1404167061.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of the packages that Buildroot might build are sensitive packages,
-related to security: openssl, dropbear, ca-certificates...
-
-Some of those packages are downloaded over plain http, because there is
-no way to get them over a secure channel, such as https.
-
-In these dark times of pervasive surveillance, the potential for harm that
-a tampered-with package could generate, we may want to check the integrity
-of those sensitive packages.
-
-So, each package may now provide a list of hashes for all files that needs
-to be downloaded, and Buildroot will just fail if any downloaded file does
-not match its known hash, in which case it is removed.
-
-Hashes can be any of the md5, sha1 or sha2 variants, and will be checked
-even if the file was pre-downloaded.
+Although md5 is, for legacy reasons, a supported hash type,
+it is not documented on purpose, since it is now known to
+be weak.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Baruch Siach <baruch@tkos.co.il>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Changes v7 -> v8
-  - expand MITM to its full-length meaning  (Thomas DS)
-  - typo  (Thomas DS)
-
-Changes v4 -> v5:
-  - fix detection of comments and empty lines
-
+Changes v6 -> v7:
+  - use single-line title  (Samuel)
 ---
-Note: this is not a bullet-proof solution, since Buildroot may itself be
-compromised. But since we do sign our releases, then we secure the list of
-hashes at the same time. Only random snapshots from the repository may be
-at risk of tampering, although this is highly doubtfull, given how git
-stores its data.
----
- package/pkg-download.mk     | 20 ++++++++++--
- support/download/check-hash | 76 +++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 93 insertions(+), 3 deletions(-)
- create mode 100755 support/download/check-hash
+ docs/manual/adding-packages-directory.txt | 66 +++++++++++++++++++++++++++++++
+ support/download/check-hash               |  1 +
+ 2 files changed, 67 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index d3cd0c1..7f208d5 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -58,6 +58,17 @@ domainseparator=$(if $(1),$(1),/)
- # github(user,package,version): returns site of GitHub repository
- github = https://github.com/$(1)/$(2)/archive/$(3)
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index 69b012c..c2f0a1a 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -357,3 +357,69 @@ different way, using different infrastructures:
  
-+# Helper for checking a tarball's checksum
-+# If the hash does not match, remove the incorrect file
-+# $(1): the path to the file with the hashes
-+# $(2): the full path to the file to check
-+define VERIFY_HASH
-+	if ! support/download/check-hash $(1) $(2); then \
-+		rm -f $(2); \
-+		exit 1; \
-+	fi
-+endef
+ Further formatting details: see xref:writing-rules-mk[the writing
+ rules].
 +
- ################################################################################
- # The DOWNLOAD_* helpers are in charge of getting a working copy
- # of the source repository for their corresponding SCM,
-@@ -148,7 +159,8 @@ endef
- define DOWNLOAD_SCP
- 	test -e $(DL_DIR)/$(2) || \
- 	$(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
--					  $(DL_DIR)/$(2)
-+					  $(DL_DIR)/$(2) && \
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_SCP
-@@ -179,7 +191,8 @@ endef
- 
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2)
-+	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_WGET
-@@ -193,7 +206,8 @@ endef
- define DOWNLOAD_LOCALFILES
- 	test -e $(DL_DIR)/$(2) || \
- 	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
--					 $(DL_DIR)
-+					 $(DL_DIR) && \
-+	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
- endef
- 
- define SOURCE_CHECK_LOCALFILES
++[[adding-packages-hash]]
++=== The +.hash+ file
++
++Optionally, you can add a third file, named +libfoo.hash+, that contains
++the hashes of the downloaded files for the +libfoo+ package.
++
++The hashes stored in that file are used to validate the integrity of the
++downloaded files.
++
++The format of this file is one line for each file for which to check the
++hash, each line being space-separated, with these three fields:
++
++* the type of hash, one of:
++** +sha1+, +sha224+, +sha256+, +sha384+, +sha512+
++* the hash of the file:
++** for +sha1+, 40 hexadecimal characters
++** for +sha224+, 56 hexadecimal characters
++** for +sha256+, 64 hexadecimal characters
++** for +sha384+, 96 hexadecimal characters
++** for +sha512+, 128 hexadecimal characters
++* the name of the file, without any directory component
++
++Lines starting with a +#+ sign are considered comments, and ignored. Empty
++lines are ignored.
++
++There can be more than one hash for a single file, each on its own line. In
++this case, all hashes must match.
++
++Ideally, the hashes stored in this file should match the hashes published by
++upstream, e.g. on their website, in the e-mail announcement... If upstream
++provides more than one type of hash (say, +sha1+ and +sha512+), then it is
++best to add all those hashes in the +.hash+ file. If upstream does not
++provide any hash, then compute at least one yourself, and mention this in a
++comment line above the hashes.
++
++*Note:* the number of spaces does not matter, so one can use spaces to
++properly align the different fields.
++
++The example below defines a +sha1+ and a +sha256+ published by upstream for
++the main +libfoo-1.2.3.tar.bz2+ tarball, plus two locally-computed hashes,
++a +sha256+ for a downloaded patch, and a +sha1+ for a downloaded binary blob:
++
++----
++# Hashes from: http://www.foosoftware.org/download/libfoo-1.2.3.tar.bz2.{sha1,sha256}:
++sha1   486fb55c3efa71148fe07895fd713ea3a5ae343a                         libfoo-1.2.3.tar.bz2
++sha256 efc8103cc3bcb06bda6a781532d12701eb081ad83e8f90004b39ab81b65d4369 libfoo-1.2.3.tar.bz2
++
++# No upstream hashes for the following:
++sha256 ff52101fb90bbfc3fe9475e425688c660f46216d7e751c4bbdb1dc85cdccacb9 libfoo-fix-blabla.patch
++sha1   2d608f3c318c6b7557d551a5a09314f03452f1a1                         libfoo-data.bin
++----
++
++If the +.hash+ file is present, and it contains one or more hashes for a
++downloaded file, the hash(es) computed by Buildroot (after download) must
++match the hash(es) stored in the +.hash+ file. If one or more hashes do
++not match, Buildroot considers this an error, deletes the downloaded file,
++and aborts.
++
++If the +.hash+ file is present, but it does not contain a hash for a
++downloaded file, no check is done for that file. If you set the
++environment variable +BR2_ENFORCE_CHECK_HASH+ to a non-empty value, and
++there is no hash for a downloaded file, Buildroot considers this an
++error, deletes the downloaded file, and aborts.
++
++If the +.hash+ file is missing, then no check is done at all.
 diff --git a/support/download/check-hash b/support/download/check-hash
-new file mode 100755
-index 0000000..b13aad9
---- /dev/null
+index b13aad9..07799bb 100755
+--- a/support/download/check-hash
 +++ b/support/download/check-hash
-@@ -0,0 +1,76 @@
-+#!/bin/sh
-+set -e
-+
-+# Helper to check a file matches its known hash
-+# Call it with:
-+#   $1: the full path to the file to check
-+#   $2: the path of the file containing all the the expected hashes
-+
-+h_file="${1}"
-+file="${2}"
-+
-+# Does the hash-file exist?
-+if [ ! -f "${h_file}" ]; then
-+    exit 0
-+fi
-+
-+# Check one hash for a file
-+# $1: known hash
-+# $2: file (full path)
-+check_one_hash() {
-+    _h="${1}"
-+    _known="${2}"
-+    _file="${3}"
-+
-+    # Note: sha3 is not supported, since there is currently no implementation
-+    #       (the NIST has yet to publish the parameters).
-+    case "${_h}" in
-+        md5|sha1)                       ;;
-+        sha224|sha256|sha384|sha512)    ;;
-+        *) # Unknown hash, exit with error
-+            printf "ERROR: unknown hash '%s' for '%s'\n"  \
-+                   "${_h}" "${_file##*/}" >&2
-+            exit 1
-+            ;;
-+    esac
-+
-+    # Do the hashes match?
-+    _hash=$( ${_h}sum "${_file}" |cut -d ' ' -f 1 )
-+    if [ "${_hash}" = "${_known}" ]; then
-+        printf "%s: OK (%s: %s)\n" "${_file##*/}" "${_h}" "${_hash}"
-+        return 0
-+    fi
-+
-+    printf "ERROR: %s has wrong %s hash:\n" "${_file##*/}" "${_h}" >&2
-+    printf "ERROR: expected: %s\n" "${_known}" >&2
-+    printf "ERROR: got     : %s\n" "${_hash}" >&2
-+    printf "ERROR: Incomplete download, or man-in-the-middle (MITM) attack\n" >&2
-+
-+    exit 1
-+}
-+
-+# Do we know one or more hashes for that file?
-+nb_checks=0
-+while read t h f; do
-+    case "${t}" in
-+        ''|'#'*)
-+            # Skip comments and empty lines
-+            continue
-+            ;;
-+        *)
-+            if [ "${f}" = "${file##*/}" ]; then
-+                check_one_hash "${t}" "${h}" "${file}"
-+                : $((nb_checks++))
-+            fi
-+            ;;
-+    esac
-+done <"${h_file}"
-+
-+if [ ${nb_checks} -eq 0 ]; then
-+    if [ -n "${BR2_ENFORCE_CHECK_HASH}" ]; then
-+        printf "ERROR: No hash found for %s\n" "${file}" >&2
-+        exit 1
-+    else
-+        printf "WARNING: No hash found for %s\n" "${file}" >&2
-+    fi
-+fi
+@@ -22,6 +22,7 @@ check_one_hash() {
+     _known="${2}"
+     _file="${3}"
+ 
++    # Note: md5 is supported, but undocumented on purpose.
+     # Note: sha3 is not supported, since there is currently no implementation
+     #       (the NIST has yet to publish the parameters).
+     case "${_h}" in
 -- 
 1.9.1
