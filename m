@@ -1,112 +1,106 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Mon, 30 Jun 2014 09:44:33 +0200
-Subject: [Buildroot] Patchwork cleanup #10: triaging proposal
-In-Reply-To: <20140628220856.5fa5db8b@free-electrons.com>
-References: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
- <20140628220856.5fa5db8b@free-electrons.com>
-Message-ID: <53B11561.5030705@crapouillou.net>
+From: Lennart Ramberg <ramberg.lennart@gmail.com>
+Date: Mon, 30 Jun 2014 10:23:06 +0200
+Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable
+	CF?
+In-Reply-To: <20140627203224.1149e36a@free-electrons.com>
+References: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
+ <20140627203224.1149e36a@free-electrons.com>
+Message-ID: <CAEzGmjCgQmFhN9fuc_2z-Aj37k42Oyg4YmshkYbjy+pLAkFmEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Thank you Thomas,
 
-On 06/28/2014 10:08 PM, Thomas Petazzoni wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sat, 14 Jun 2014 22:02:31 +0200, Thomas De Schampheleire wrote:
->
->> Triage proposal for this (short) session:
->>
->> qemu: add to host utilities menu
->> Frank Hunleth <fhunleth@troodon-software.com>
->> http://patchwork.ozlabs.org/patch/299014
->>
->> A accept
->
-> If this gets applied, it needs to go together with
-> http://patchwork.ozlabs.org/patch/319108/. However, I'd like to see a
-> solution that merges the existing qemu package with the qemu-system
-> package proposed by Gustavo.
->
->> mono runtime porting to buildroot
->> Alexander Varnin <fenixk19@mail.ru>
->> http://patchwork.ozlabs.org/patch/299488
->>
->> B reject/superseded
->> There is a newer patch that not only adds the runtime part, but also
->> the host part, see http://patchwork.ozlabs.org/patch/351871/
->> For the same reason, I already marked
->> http://patchwork.ozlabs.org/patch/323246/ as Superseded.
->
-> ACK, so this has already been done, and you don't need more feedback
-> about 299488, right?
->
->> udev: Set the default action to "add" in the startup script
->> Paul Cercueil <paul@crapouillou.net>
->> http://patchwork.ozlabs.org/patch/301972
->>
->> C unsure: I asked for more feedback on this patch from the community
->> but no feedback yet. I don't know if this is correct or not.
->
-> Same thing here. Unfortunately, Paul rarely gives any feedback about
-> the patches he posts, so they often become abandoned in patchwork. Not
-> much we can do about it, unfortunately.
->
+It helped to use sudo :-)
+to get rid of that annoying
+"cannot open `/boot/grub/device.map': No such file or directory."
 
-Sorry about that :/ I don't have internet at home anymore for more than 
-one month now so it's not ideal. I will double-check this patch tomorrow 
-to be sure that the fix belongs there.
+Now, putting the thus created CF in the target system brings me (only) to:
+grub>
 
->> [1/2] uclibc: add a missing function member to siginfo.h
->> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> http://patchwork.ozlabs.org/patch/308384
->>
->> Based on the feedback from Thomas Petazzoni on this patch, I would say:
->> B reject
+Should I expect to automatically have come further?
+
+--Details:---
+I had disabled 'Run getty login prompt after boot'.
+I selected to 'Install kernel image to /boot in target'.
+So, my /boot contains only the directory grub and bzImage.
+and /boot/grub contains only grub.cfg, which looks like:
+
+grub.cfg:
+set default="0"
+set timeout="5"
+
+menuentry "Buildroot" {
+    linux /bzImage root=/dev/sda1 console=tty1
+}
+--End Details.-----
+
+Regards
+Lennart
+
+
+
+On Fri, Jun 27, 2014 at 8:32 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Lennart Ramberg,
 >
-> Well, maybe we should just apply it, and make rt-tests available on
-> mips/uclibc for internal toolchains, and keep it disabled for external
-> toolchains. Unfortunately, in the autobuilders, we mainly test external
-> toolchains, so we're not giving to test rt-tests much. So I still have
-> a mixed opinion about such patches. But the uClibc release process is
-> dead...
+> On Fri, 27 Jun 2014 12:32:03 +0200, Lennart Ramberg wrote:
 >
->> [2/2] uclibc: Make __SIGEV_PAD_SIZE to take __WORDSIZE into account
->> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> http://patchwork.ozlabs.org/patch/308383
->>
->> I would guess the same decision as the previous patch applies here:
->> B reject
+> > I am struggling with making a grub 2-bootable Compact Flash for a BIOS
+> > based PC target.
+> > The closest I came so far in the target machine is:
+> >   grub rescue >
+> >
+> > Then I found 'grub-bios-setup' as a possibly better alternative, but got
+> > stuck as below.
+> > Is grub-bios-setup the way to go at all?
 >
-> Yeah, same problem. Maybe my previous opinion is wrong, and we should
-> just patch Buildroot's uClibc as needed, and not exclude all
-> problematic packages from being used with an external uClibc toolchain.
+> Have you checked the detailed instructions available in the help text
+> of the grub2 package (accessible through xconfig/menuconfig) ? From the
+> help text:
 >
->> [2/2] package: add paragui package
->> H Hartley Sweeten <hsweeten@visionengravers.com>
->> http://patchwork.ozlabs.org/patch/309336
->>
->> Although this package could use a good review because it has some
->> issues, in general we accept new packages so I would mark this as
->> A accept
+>           Notes on using Grub2 for BIOS-based platforms
+>           =============================================
 >
-> To be honest, I started having a look at this package, and I continue
-> to believe that's it's a totally unmaintained GUI toolkit, with very
-> few users, and apparently not a very strong effort to push it from the
-> original contributor. So I'd prefer to simply reject the patch.
+>           1. Create a disk image
+>              dd if=/dev/zero of=disk.img bs=1M count=32
+>           2. Partition it (either legacy or GPT style partitions work)
+>              cfdisk disk.img
+>               - Create one partition, type Linux, for the root
+>                 filesystem. The only constraint is to make sure there
+>                 is enough free space *before* the first partition to
+>                 store Grub2. Leaving 1 MB of free space is safe.
+>           3. Setup loop device and loop partitions
+>              sudo losetup -f disk.img
+>              sudo partx -a disk.img
+>           4. Prepare the root partition
+>              sudo mkfs.ext3 -L root /dev/loop0p1
+>              sudo mount /dev/loop0p1 /mnt
+>              sudo tar -C /mnt -xf output/images/rootfs.tar
+>              sudo umount /mnt
+>           5. Install Grub2
+>              ./output/host/usr/sbin/grub-bios-setup \
+>                         -b ./output/host/usr/lib/grub/i386-pc/boot.img \
+>                         -c ./output/images/grub.img -d . /dev/loop0
+>           6. Your disk.img is ready!
 >
->> [v2,1/1] gst-ffmpeg: add option for LGPL build
->> Danomi Manchego <danomimanchego123@gmail.com>
->> http://patchwork.ozlabs.org/patch/312360
->>
->> I assume this should be
->> A accept
->> but the patch needs review and testing I think.
+> Of course, this help text is about creating a disk image, but it should
+> apply (with minor changes) to a real device.
 >
-> No opinion on this one, I don't do much gst stuff.
+> Let me know if that works for you!
 >
-> Thomas
+> Best regards,
 >
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140630/80da00f0/attachment.html>
