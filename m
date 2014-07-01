@@ -1,40 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 22:15:09 +0200
-Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
-In-Reply-To: <CAAXf6LVdbcEWFWPa_4QfpS3Od7bRsVDieb1odmdNmiEN+3ZGVg@mail.gmail.com>
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAXf6LVdbcEWFWPa_4QfpS3Od7bRsVDieb1odmdNmiEN+3ZGVg@mail.gmail.com>
-Message-ID: <20140701221509.26996537@free-electrons.com>
+Date: Tue, 1 Jul 2014 22:16:15 +0200
+Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable
+ CF?
+In-Reply-To: <7556076.bIs51ja7gL@sagittea>
+References: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
+ <1430516.W2oeO2VcYf@sagittea>
+ <CAEzGmjCaiBrTF6ze16xta95-9n19Yd6HzRsR-W_pTKTppej0Dg@mail.gmail.com>
+ <7556076.bIs51ja7gL@sagittea>
+Message-ID: <20140701221615.6c6b53cb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+J?r?me, Lennart,
 
-On Tue, 1 Jul 2014 20:35:13 +0200, Thomas De Schampheleire wrote:
+On Tue, 01 Jul 2014 21:56:19 +0200, J?r?me Pouiller wrote:
 
-> While I have no trouble at all with the deprecation of avr32, the
-> timeline you propose deviates from the usual deprecation timeline.
-> When I introduced the BR2_DEPRECATED_SINCE_XXXX symbols, we proposed
-> to take one year (four buildroot releases) as deprecation time, so
-> deprecating avr32 2014.08 would mean being able to remove it by
-> 2015.08.
+> > Thanks for your quick reactions to my complaint.
+> > I regret to say though, that I can't test any patch until I have found a
+> > 'Patching for .. eh.. dummies', or similar.
+> > I.e. I have not yet learned how to apply a patch :-(
+> If you use git, save mail containing patch as a file and use 
 > 
-> I'm ok with explicitly stating the removal happening already in
-> 2014.11, contrary to the usual timeline, provided there is a consensus
-> with other buildroot developers.
+>   git am PATH_TO_SAVED_MAIL_CONTAINING_PATCH
 
-Yes, I know that the proposed timeline for the removal of AVR32 support
-deviates from the usual guideline of a one-year notice. However, AVR32
-has become such a pain to maintain, with apparently no users caring
-about it, that I don't feel like supporting that for one more year. I
-agree that there should be a consensus amongst the Buildroot developers
-about this, so I'm hoping to collect a bunch of Acked-by on this patch.
+Or, to apply directly J?r?me's patch from the Buildroot patchwork:
 
-Thanks,
+ cd buildroot/
+ curl http://patchwork.ozlabs.org/patch/366158/mbox/ | git am
+
+Best regards,
 
 Thomas
 -- 
