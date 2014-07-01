@@ -1,38 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jul 2014 00:37:07 +0200
-Subject: [Buildroot] [git commit] rt-test: add license information
-Message-ID: <20140701224922.6125F9D12D@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 00:02:21 +0200
+Subject: [Buildroot] [git commit] nss-mdns: add license information
+Message-ID: <20140701224922.2F7D89D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=076375eb2df2073a33a3e98bf37789e57e99d48c
+commit: http://git.buildroot.net/buildroot/commit/?id=be16ba8edcddc2e317ae86299731d13c45801397
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter; fix variable name typo]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rt-tests/rt-tests.mk |    6 ++++--
- 1 files changed, 4 insertions(+), 2 deletions(-)
+ package/nss-mdns/nss-mdns.mk |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
-index e6455d5..bee4782 100644
---- a/package/rt-tests/rt-tests.mk
-+++ b/package/rt-tests/rt-tests.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
+diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
+index 30a0a73..ee10085 100644
+--- a/package/nss-mdns/nss-mdns.mk
++++ b/package/nss-mdns/nss-mdns.mk
+@@ -6,8 +6,9 @@
  
--RT_TESTS_SITE    = http://snapshot.debian.org/archive/debian/20111202T222101Z/pool/main/r/rt-tests/
-+RT_TESTS_SITE = http://snapshot.debian.org/archive/debian/20111202T222101Z/pool/main/r/rt-tests/
- RT_TESTS_VERSION = 0.83
--RT_TESTS_SOURCE  = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
-+RT_TESTS_SOURCE = rt-tests_$(RT_TESTS_VERSION).orig.tar.gz
-+RT_TESTS_LICENSE = GPLv2+
-+RT_TESTS_LICENSE_FILES = COPYING
+ NSS_MDNS_VERSION = 0.10
+ NSS_MDNS_SITE = http://0pointer.de/lennart/projects/nss-mdns
+-
+-NSS_MDNS_CONF_OPT += --localstatedir=/var
++NSS_MDNS_CONF_OPT = --localstatedir=/var
++NSS_MDNS_LICENSE = LGPLv2.1+
++NSS_MDNS_LICENSE_FILES = LICENSE
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- RT_TESTS_DEPENDENCIES = python
+ define NSS_MDNS_INSTALL_CONFIG
+ 	sed -r -i -e 's/^(hosts:[[:space:]]+).*/\1files mdns4_minimal [NOTFOUND=return] dns mdns4/' \
