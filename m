@@ -1,60 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 15:00:18 +0200
-Subject: [Buildroot] [git commit] perl-xml-libxml: fix build
-Message-ID: <20140701130717.C1EA19D12D@busybox.osuosl.org>
+Date: Tue, 1 Jul 2014 15:04:04 +0200
+Subject: [Buildroot] [git commit] uclibc: disable parallel build for uClibc
+	0.9.31
+Message-ID: <20140701130717.C91749D11E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42ecaf45dc372de1bbdfd3ca120c17e981ebac33
+commit: http://git.buildroot.net/buildroot/commit/?id=4a530b6ed312a69dabdc98a1e10795238fd4d1e2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-see http://autobuild.buildroot.net/results/f80/f809c99ce4db80e64ca46865fcd9b75b0dcc1fcd/
+This is only required for uClibc 0.9.31 and this veriosn is only used by
+AVR32 so could be safely removed together with AVR32.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Even 0.9.32 builds well in parallel (at least on x86) so IMHO there's no need
+in >= 0.9.33, just disable for a particular broken version.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../perl-xml-libxml-01-Makefile-PL.patch           |   18 ++++++++++++++++++
- package/perl-xml-libxml/perl-xml-libxml.mk         |    5 +++++
- 2 files changed, 23 insertions(+), 0 deletions(-)
+ package/uclibc/uclibc.mk |   14 +++++++++++++-
+ 1 files changed, 13 insertions(+), 1 deletions(-)
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml-01-Makefile-PL.patch b/package/perl-xml-libxml/perl-xml-libxml-01-Makefile-PL.patch
-new file mode 100644
-index 0000000..ce2724c
---- /dev/null
-+++ b/package/perl-xml-libxml/perl-xml-libxml-01-Makefile-PL.patch
-@@ -0,0 +1,18 @@
-+fake check_lib for cross-compilation
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -84,8 +84,7 @@
-+ # -------------------------------------------------------------------------- #
-+ # -------------------------------------------------------------------------- #
-+ 
-+-use lib qw(inc);
-+-use Devel::CheckLib;
-++sub check_lib { return 1; }
-+ 
-+ # Prompt the user here for any paths and other configuration
-+ 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index 60a8633..31ff06e 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
-@@ -11,4 +11,9 @@ PERL_XML_LIBXML_DEPENDENCIES = perl zlib libxml2 perl-xml-sax perl-xml-namespace
- PERL_XML_LIBXML_LICENSE = Artistic or GPLv1+
- PERL_XML_LIBXML_LICENSE_FILES = LICENSE
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 8337bb6..e20f92f 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -481,8 +481,20 @@ define UCLIBC_BUILD_TEST_SUITE
+ endef
+ endif
  
-+PERL_XML_LIBXML_CONF_OPT = \
-+	LIBS="-L $(STAGING_DIR)/usr/lib" \
-+	INC="-I $(STAGING_DIR)/usr/include/libxml2" \
-+	NO_THREADS
++# In uClibc 0.9.31 parallel building is broken so we have to disable it
++# Fortunately uClibc 0.9.31 is only used by AVR32 and in its turn AVR32 is
++# about to be removed from buildroot.
++#
++# So as soon as AVR32 is removed please revert this patch so instead of
++# UCLIBC_MAKE normal "MAKE" is used in UCLIBC_BUILD_CMDS
++ifeq ($(BR2_UCLIBC_VERSION_0_9_31),y)
++	UCLIBC_MAKE = $(MAKE1)
++else
++	UCLIBC_MAKE = $(MAKE)
++endif
 +
- $(eval $(perl-package))
+ define UCLIBC_BUILD_CMDS
+-	$(MAKE) -C $(@D) \
++	$(UCLIBC_MAKE) -C $(@D) \
+ 		$(UCLIBC_MAKE_FLAGS) \
+ 		PREFIX= \
+ 		DEVEL_PREFIX=/ \
