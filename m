@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 23:18:45 +0200
-Subject: [Buildroot] [git commit] fconfig: add license information
-Message-ID: <20140701224921.7BA5F9D12D@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 00:30:55 +0200
+Subject: [Buildroot] [git commit] prboom: add license information
+Message-ID: <20140701224922.3D6E19D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=662e2e748da62cc98e0eae9bd3f47e0b344a2f4b
+commit: http://git.buildroot.net/buildroot/commit/?id=d559501cdb01e85b6353fae631df7b7282c6d24c
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fconfig/fconfig.mk |    2 ++
+ package/prboom/prboom.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/fconfig/fconfig.mk b/package/fconfig/fconfig.mk
-index 2288e79..ee741d7 100644
---- a/package/fconfig/fconfig.mk
-+++ b/package/fconfig/fconfig.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index 1da08ce..55973d6 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -8,6 +8,8 @@ PRBOOM_VERSION = 2.5.0
+ PRBOOM_SITE = http://downloads.sourceforge.net/project/prboom/prboom%20stable/$(PRBOOM_VERSION)
+ PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
+ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
++PRBOOM_LICENSE = GPLv2+
++PRBOOM_LICENSE_FILES = COPYING
  
- FCONFIG_VERSION = 20080329
- FCONFIG_SITE = http://andrzejekiert.ovh.org/software/fconfig/
-+FCONFIG_LICENSE = GPLv2+
-+FCONFIG_LICENSE_FILES = fconfig.c
- 
- define FCONFIG_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
