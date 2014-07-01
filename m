@@ -1,30 +1,18 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 20:12:11 +0200
-Subject: [Buildroot] rpcbind & portmap and nfs extra hints.
-In-Reply-To: <B3E015034CA14BF9A830C4AE5D7E9269@JohanW7>
-References: <B3E015034CA14BF9A830C4AE5D7E9269@JohanW7>
-Message-ID: <20140701201211.7c84f1c3@free-electrons.com>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 1 Jul 2014 20:14:05 +0200
+Subject: [Buildroot] luna eclipse plugin
+Message-ID: <721AF07C74644451ADBDD65AA954043E@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+ 
+ Hi
 
-On Tue, 1 Jul 2014 20:08:00 +0200, Sagaert Johan wrote:
+ I tried the http://buildroot.org/downloads/eclipse/kepler-sr2/ plugin in the current luna release
+and it seems to work, not sure if it may need some tweaking but this looks to work as required. 
 
->  It seems you don't need portmap or rpcbind if you mount an nfs share with the -o onlock option.
->  Without the -o nolock you need some rpc locking system like portmap or rpcbind.
-> 
->  Should this info be put somewhere in the help of the menu options ?
 
-I'm not really sure where it would belong to. We could indicate that in
-the portmap and rpcbind help text, but it wouldn't help users trying to
-do NFS mounts and not knowing about portmap/rpcbind.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Sagaert Johan
