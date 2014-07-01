@@ -1,40 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 22:16:15 +0200
-Subject: [Buildroot] Is grub-bios-setup the way to go to make a bootable
- CF?
-In-Reply-To: <7556076.bIs51ja7gL@sagittea>
-References: <CAEzGmjD9xC59mSjgPAr2GeB15cUwaExp7KfjbRyRMFVHD=92+g@mail.gmail.com>
- <1430516.W2oeO2VcYf@sagittea>
- <CAEzGmjCaiBrTF6ze16xta95-9n19Yd6HzRsR-W_pTKTppej0Dg@mail.gmail.com>
- <7556076.bIs51ja7gL@sagittea>
-Message-ID: <20140701221615.6c6b53cb@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 01 Jul 2014 17:20:37 -0300
+Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
+In-Reply-To: <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <53B31815.9010602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, Lennart,
+On 07/01/2014 03:03 PM, Thomas Petazzoni wrote:
 
-On Tue, 01 Jul 2014 21:56:19 +0200, J?r?me Pouiller wrote:
-
-> > Thanks for your quick reactions to my complaint.
-> > I regret to say though, that I can't test any patch until I have found a
-> > 'Patching for .. eh.. dummies', or similar.
-> > I.e. I have not yet learned how to apply a patch :-(
-> If you use git, save mail containing patch as a file and use 
+> The AVR32 architecture from Atmel is obsolete since a long time, not
+> supported upstream in most of the toolchain components (requires a
+> special version of gcc, an old version of uClibc, etc.). Until
+> February, Simon Dawson was making an excellent job at maintaining
+> AVR32 in Buildroot, and fixing all the issues caused by this
+> architecture. However, Simon focus has changed, and despite his call
+> for a new maintainer for AVR32 in Buildroot, nobody stepped up.
 > 
->   git am PATH_TO_SAVED_MAIL_CONTAINING_PATCH
+> The issue of maintaining AVR32 is becoming worse and worse, so this
+> patch proposes to deprecate it for 2014.08, but keeping the support
+> around, to remove it for sure in 2014.11.
+> 
+> Cc: Simon Dawson <spdawson@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Or, to apply directly J?r?me's patch from the Buildroot patchwork:
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
- cd buildroot/
- curl http://patchwork.ozlabs.org/patch/366158/mbox/ | git am
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+In this case in particular this is not something new and it's being
+decaying for quite a while with nobody stepping up.
+With old toolchain components bitroting it's been a while since i've
+been able to build a toolchain for avr32, much less test anything for it.
+Regards.
