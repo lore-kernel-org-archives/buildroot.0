@@ -1,45 +1,77 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 01 Jul 2014 18:03:16 -0300
-Subject: [Buildroot] [PATCH 00/10] Proposals of deprecation/removal,
- mainly affecting toolchain
-In-Reply-To: <20140701224916.0a11ba13@free-electrons.com>
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>	<53B3073B.8090005@zacarias.com.ar>	<20140701221326.3ca5279f@free-electrons.com>	<53B31C82.6070608@zacarias.com.ar>
- <20140701224916.0a11ba13@free-electrons.com>
-Message-ID: <53B32214.2070009@zacarias.com.ar>
+From: Mike Zick <minimod@morethan.org>
+Date: Tue, 1 Jul 2014 16:09:04 -0500
+Subject: [Buildroot] Glibc LD_LIBRARAY_PATH error
+In-Reply-To: <20140701220703.0fa13b8a@free-electrons.com>
+References: <CAMhj5sakLa9ROf4RVO2N1rhRx+4du=j3X8OL5rLVRAUQRnFS+Q@mail.gmail.com>
+ <20140628000126.4bfd6329@free-electrons.com>
+ <CAMhj5sZkdpe+mrTzvxqrwK=-tOoyG4nvobM48PJJpw3oFcb5CA@mail.gmail.com>
+ <20140628083612.167f7b88@free-electrons.com>
+ <CAMhj5sbiKrQ7PkbrxXr=CK34x2LA2bFu95asfCv8iKS5UtEMiQ@mail.gmail.com>
+ <20140628162843.41a203d7@free-electrons.com>
+ <CAMhj5saaeT9uoHNk2CZLf8da=ds8Zr0r2va15GFdZwrqxe0ENA@mail.gmail.com>
+ <CAMhj5sYLbx5_4-qQhtpsYO6+fewS+tU1sDSDB9qn1CqJ-QoyiQ@mail.gmail.com>
+ <20140628174420.2fd3ed86@free-electrons.com>
+ <53B2F9E1.7080609@mind.be>
+ <20140701220703.0fa13b8a@free-electrons.com>
+Message-ID: <20140701160904.34c80062@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/2014 05:49 PM, Thomas Petazzoni wrote:
+On Tue, 1 Jul 2014 22:07:03 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-> I've got some hardware here, so I could do some testing. On the
-> Blackfin side, I continue to remain highly disappointed by the lack of
-> help/support from ADI, despite the numerous requests I made to them,
-> and the fact that they use Buildroot as their official build system.
+> Dear Arnout Vandecappelle,
+> 
+> On Tue, 01 Jul 2014 20:11:45 +0200, Arnout Vandecappelle wrote:
+> 
+> > >> > my problem was solved by your solution I mean using "unset
+> > >> > LD_LIBRARY_PATH"
+> > > Ok. I'm not sure why we don't simply unset the LD_LIBRARY_PATH
+> > > from our main Makefile. Probably we should just do it.
+> > 
+> >  I could imagine an ancient build host where the developer has to
+> > build his own python2.7 or other buildroot-dependencies. Not really
+> > realistic, though, because then the executable should just set its
+> > DT_RPATH/DT_RUNPATH.
+> 
+> Yes.
+> 
+> >  Also, we already have a check for LD_LIBRARY_PATH in
+> > dependencies.sh. It just doesn't check for empty path elements,
+> > only for . path elements.
+> 
+> Well, the idea would be to get rid of this check entirely, and replace
+> it by a simple unexport in the main Makefile.
+> 
 
-This ^ i had in mind when writing about upstream help.
-And them doing patches that just switch fork() with vfork() without any
-proper context, which will make things build but never work in a
-proper/how they were intended way.
+What about the (I would hope, unusual) case where a user needs those
+LD_LIBRARY_PATH settings to run a POST_**_SCRIPT ?
 
-> Hopefully this is the type of issues that will get resolved with 4.9.1
-> or 4.9.2.
+- - - -
 
-Yes, build breakage mostly so i'd expect the same.
+Even a further out use case -
+The applications requiring a LD_LIBRARY_PATH setting, where the
+application(s) are used in a POST_**_SCRIPT, but the source isn't
+available to build-in the appropriate DT_RUNPATH/DT_RPATH?
 
-> I don't know. Which architectures are in this situation right now?
-> AVR32 for sure. Blackfin is also an architecture for which we don't
-> have a lot of contribution from either ADI or direct Blackfin users.
-> Any other architecture? We can't expect for all architectures to have
-> direct upstream collaboration, not all companies necessarily care about
-> Buildroot.
+For this second use case -
+How about putting a "host-patchelf" target in the host tools list?
 
-Well going back to the first point, if they don't care and use it like
-ADI that's shortsightedness to me.
-As always if they upstream their stuff then most of the time they don't
-need to care.
-Regarding noMMU, blackfin may indirectly benefit from ARM Cortex-M if it
-picks up pace - i.e. more people working at solving issues with it.
-Regards.
+This would allow the use case #2 above user to build the tool to
+fix their host application to not require a LD_LIBRARY_PATH setting.
+
+Note: 
+In my few weeks of use; 
+I have not been able to break ARM binaries with patchelf-0.8
+regardless of the current documentation that claims ARM isn't
+fully supported.
+
+Mike
+> What do you think?
+> 
+> Best regards,
+> 
+> Thomas
