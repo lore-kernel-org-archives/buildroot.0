@@ -1,18 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 01 Jul 2014 09:52:47 -0300
-Subject: [Buildroot] [PATCH 3/3] sox: new package
-In-Reply-To: <87tx71gs2d.fsf@dell.be.48ers.dk>
-References: <1403919534-28847-1-git-send-email-gustavo@zacarias.com.ar>	<1403919534-28847-3-git-send-email-gustavo@zacarias.com.ar>
- <87tx71gs2d.fsf@dell.be.48ers.dk>
-Message-ID: <53B2AF1F.9060602@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Jul 2014 14:59:05 +0200
+Subject: [Buildroot] [PATCH 0/5] Misc updates: libffi, python, gettext
+In-Reply-To: <1403992343-29665-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sat, 28 Jun 2014 23:52:18 +0200")
+References: <1403992343-29665-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87pphpgrqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/2014 09:51 AM, Peter Korsgaard wrote:
-> Any specific reason to unconditionally disable ffmpeg support?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Yes, it uses old API calls that aren't supported with our current version.
-Regards.
+ > Hello,
+ > This set of patches bump libffi to version 3.1, and Python to version
+ > 2.7.7, and does a number of small related updates.
+
+Committed all 5, thanks.
+
+-- 
+Bye, Peter Korsgaard
