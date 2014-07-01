@@ -1,27 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 23:28:18 +0200
-Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Bump version to
- 1.15.2
-In-Reply-To: <1404246904-2989-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1404246904-2989-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140701232818.7d54ffab@free-electrons.com>
+Date: Tue, 1 Jul 2014 23:36:14 +0200
+Subject: [Buildroot] [PATCH 0/14 v3] freescale: update userspace
+ packages (branch yem/fsl-imx)
+In-Reply-To: <cover.1404164261.git.yann.morin.1998@free.fr>
+References: <cover.1404164261.git.yann.morin.1998@free.fr>
+Message-ID: <20140701233614.44585682@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Yann, Gary, Peter,
 
-On Tue,  1 Jul 2014 22:35:04 +0200, Bernd Kuhls wrote:
+On Mon, 30 Jun 2014 23:52:10 +0200, Yann E. MORIN wrote:
+
+> Gary Bisson (12):
+>       freescale-imx: bump to version 3.10.17-1.0.0
+>       freescale-imx: update imx-lib package
+>       freescale-imx: change platform choice to be common
+>       package/gpu-viv-bin-mx6q: only available for i.MX6Q
+>       freescale-imx: add imx-vpu package
+>       libfslvpuwrap: bump to version 1.0.46
+>       libfslcodec: bump to version 3.0.11
+>       libfslparser: bump to version 3.0.11
+>       gst-fsl-plugins: bump to version 3.0.11
+>       imx6sabresd: bump kernel version to 3.10.17
+>       imx6sololiteevk: bump kernel version to 3.10.17
+>       nitrogen6x: bump kernel version to 3.10.17
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xserver_xorg-server/xserver_xorg-server.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Yann E. MORIN (2):
+>       package/gst-fsl-plugins: add default platform
+>       defconfig/wandboard: update kernel + bootlaoder
+
+For the entire series:
 
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
+I believe Gary and Yann have done a great work on this, and that we
+should merge this sooner rather than later, so that if any other fix or
+improvement is needed, it can be done through follow-up patches. So I'd
+like to see these patches being applied soon.
+
+Thanks,
+
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
