@@ -1,78 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jul 2014 13:04:00 +0200
-Subject: [Buildroot] [PATCH] pwgen: new package
-In-Reply-To: <1404175445-4316-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 30 Jun 2014 21:44:05 -0300")
-References: <1404175445-4316-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ionhibmn.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Jul 2014 13:22:01 +0200
+Subject: [Buildroot] [PATCH v4] Add support for Congatec QMX6
+In-Reply-To: <1404207479-2058-1-git-send-email-sho@relinux.de>
+References: <1404207479-2058-1-git-send-email-sho@relinux.de>
+Message-ID: <20140701132201.6d72f846@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Dear Stephan Hoffmann,
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/Config.in       |  1 +
- >  package/pwgen/Config.in |  7 +++++++
- >  package/pwgen/pwgen.mk  | 12 ++++++++++++
- >  3 files changed, 20 insertions(+)
- >  create mode 100644 package/pwgen/Config.in
- >  create mode 100644 package/pwgen/pwgen.mk
+On Tue,  1 Jul 2014 11:37:59 +0200, Stephan Hoffmann wrote:
 
- > diff --git a/package/Config.in b/package/Config.in
- > index 1282c8a..9900271 100644
- > --- a/package/Config.in
- > +++ b/package/Config.in
- > @@ -1137,6 +1137,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- >  	source "package/procps-ng/Config.in"
- >  	source "package/psmisc/Config.in"
- >  endif
- > +	source "package/pwgen/Config.in"
- >  	source "package/quota/Config.in"
- >  if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- >  	source "package/rsyslog/Config.in"
- > diff --git a/package/pwgen/Config.in b/package/pwgen/Config.in
- > new file mode 100644
- > index 0000000..7bbc1d6
- > --- /dev/null
- > +++ b/package/pwgen/Config.in
- > @@ -0,0 +1,7 @@
- > +config BR2_PACKAGE_PWGEN
- > +	bool "pwgen"
- > +	help
- > +	  Pwgen is a small, GPL'ed password generator which creates passwords
- > +	  which can be easily memorized by a human.
- > +
- > +	  http://sourceforge.net/projects/pwgen/
- > diff --git a/package/pwgen/pwgen.mk b/package/pwgen/pwgen.mk
- > new file mode 100644
- > index 0000000..f0e66d2
- > --- /dev/null
- > +++ b/package/pwgen/pwgen.mk
- > @@ -0,0 +1,12 @@
- > +################################################################################
- > +#
- > +# pwgen
- > +#
- > +################################################################################
- > +
- > +PWGEN_VERSION = 2.06
- > +PWGEN_SITE = http://downloads.sourceforge.net/project/pwgen/pwgen/$(PWGEN_VERSION)
- > +PWGEN_LICENSE = GPLv2
+> diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
+> new file mode 100644
+> index 0000000..4a83b29
+> --- /dev/null
+> +++ b/configs/qmx6_defconfig
+> @@ -0,0 +1,13 @@
+> +BR2_arm=y
+> +BR2_cortex_a9=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
+> +BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_3=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 
-While not a real copyright file, I think we should point people to
-debian/copyright, so I've added that as _LICENSE_FILES.
- > +
- > +$(eval $(autotools-package))
- > +$(eval $(host-autotools-package))
+This looks pretty good to me, but we generally also build U-Boot (or
+any other relevant bootloader) as part of the defconfig. Do you think
+it's possible to do it for this platform?
 
-I don't have a problem with adding a user visible option under host
-utilities, please send a followup patch adding it.
+Best regards,
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
