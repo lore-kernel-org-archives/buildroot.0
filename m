@@ -1,38 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 23:43:01 +0200
-Subject: [Buildroot] [git commit] liblog4c-localtime: add license information
-Message-ID: <20140701224922.037F39D12D@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 00:00:17 +0200
+Subject: [Buildroot] [git commit] lshw: add license information
+Message-ID: <20140701224922.298349D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=516c174ee18af5eeb3b4929e4c9564726461bec6
+commit: http://git.buildroot.net/buildroot/commit/?id=0393ba891ce48c67c211c9c0e24b9d84095a2447
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liblog4c-localtime/liblog4c-localtime.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/lshw/lshw.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/liblog4c-localtime/liblog4c-localtime.mk b/package/liblog4c-localtime/liblog4c-localtime.mk
-index f2b851d..666cc87 100644
---- a/package/liblog4c-localtime/liblog4c-localtime.mk
-+++ b/package/liblog4c-localtime/liblog4c-localtime.mk
-@@ -5,11 +5,13 @@
- ################################################################################
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index cc00347..ee15350 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -6,6 +6,8 @@
  
- LIBLOG4C_LOCALTIME_VERSION = v1.0
--LIBLOG4C_LOCALTIME_SITE    = $(call github,rcmadruga,log4c-localtime,$(LIBLOG4C_LOCALTIME_VERSION))
-+LIBLOG4C_LOCALTIME_SITE = $(call github,rcmadruga,log4c-localtime,$(LIBLOG4C_LOCALTIME_VERSION))
- LIBLOG4C_LOCALTIME_INSTALL_STAGING = YES
- LIBLOG4C_LOCALTIME_CONF_OPT = --disable-expattest
- LIBLOG4C_LOCALTIME_DEPENDENCIES = expat
- LIBLOG4C_LOCALTIME_CONFIG_SCRIPTS = log4c-config
-+LIBLOG4C_LOCALTIME_LICENSE = LGPLv2.1
-+LIBLOG4C_LOCALTIME_LICENSE_FILES = COPYING
+ LSHW_VERSION = B.02.16
+ LSHW_SITE = http://ezix.org/software/files
++LSHW_LICENSE = GPLv2
++LSHW_LICENSE_FILES = COPYING
  
- define LIBLOG4C_LOCALTIME_FIX_CONFIGURE_PERMS
- 	chmod +x $(@D)/configure
+ LSHW_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_ENABLE_LOCALE),)
