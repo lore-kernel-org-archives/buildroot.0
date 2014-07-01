@@ -1,48 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 15:16:31 +0200
-Subject: [Buildroot] [git commit] binutils: disable makeinfo
-Message-ID: <20140701141340.0C16D9D090@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  1 Jul 2014 11:17:03 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.4.6
+Message-ID: <1404224223-24973-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0c7db694ac1292167ffc23f372dd1af1918e312b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-makeinfo is known to cause problems when building old texi files with more
-recent host makeinfo.
-
-In particular binutils-2.18 won't build on Fedora 20 without this change.
-
-Even though more up to date binutils does build without this change there's
-no guaranty it will with bump of host makeinfo in the future.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/binutils/binutils.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+ package/squid/squid.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 9cc4d28..77d0751 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -49,6 +49,11 @@ BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 		--enable-install-libiberty \
- 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 4d0f516..6c36c61 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# Don't build documentation. It takes up extra space / build time,
-+# and sometimes needs specific makeinfo versions to work
-+BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
-+HOST_BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
-+
- # Install binutils after busybox to prefer full-blown utilities
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- BINUTILS_DEPENDENCIES += busybox
+ SQUID_VERSION_MAJOR = 3.4
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).5
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).6
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+-- 
+1.8.5.5
