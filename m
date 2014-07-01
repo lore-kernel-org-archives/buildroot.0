@@ -1,30 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jul 2014 00:31:34 +0200
-Subject: [Buildroot] [git commit] python-nfc: add license information
-Message-ID: <20140701224922.45F569D12D@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 00:39:00 +0200
+Subject: [Buildroot] [git commit] thttpd: add license information
+Message-ID: <20140701224922.7647D9D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1bafbcca553c52f2c81cf6dbebf14d16514c0859
+commit: http://git.buildroot.net/buildroot/commit/?id=05d42db84bdc3f32ab0ceefa564f0a79e964c712
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-nfc/python-nfc.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/thttpd/thttpd.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-nfc/python-nfc.mk b/package/python-nfc/python-nfc.mk
-index 4c14a17..87db577 100644
---- a/package/python-nfc/python-nfc.mk
-+++ b/package/python-nfc/python-nfc.mk
-@@ -9,5 +9,6 @@ PYTHON_NFC_SITE = https://launchpad.net/nfcpy
- PYTHON_NFC_SITE_METHOD = bzr
- PYTHON_NFC_DEPENDENCIES = libusb libusb-compat
- PYTHON_NFC_SETUP_TYPE = distutils
-+PYTHON_NFC_LICENSE = EUPLv1.1+
+diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
+index f4797fa..7be264a 100644
+--- a/package/thttpd/thttpd.mk
++++ b/package/thttpd/thttpd.mk
+@@ -8,6 +8,8 @@ THTTPD_VERSION = 2.25b
+ THTTPD_SOURCE = thttpd_$(THTTPD_VERSION).orig.tar.gz
+ THTTPD_PATCH = thttpd_$(THTTPD_VERSION)-11.diff.gz
+ THTTPD_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/t/thttpd/
++THTTPD_LICENSE = BSD-2c
++THTTPD_LICENSE_FILES = thttpd.c
  
- $(eval $(python-package))
+ ifneq ($(THTTPD_PATCH),)
+ define THTTPD_DEBIAN_PATCHES
