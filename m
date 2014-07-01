@@ -1,32 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 23:34:00 +0200
-Subject: [Buildroot] [git commit] libconfuse: add license information
-Message-ID: <20140701224921.DAE749D12D@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 00:39:39 +0200
+Subject: [Buildroot] [git commit] tinyhttpd: add license information
+Message-ID: <20140701224922.7C0A19D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b33f4e98183e09e4b724aa2d64df0fbcfa002b37
+commit: http://git.buildroot.net/buildroot/commit/?id=4eb83a5efb04efcd0aa8b5c7ffaf1b74ad176631
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libconfuse/libconfuse.mk |    2 ++
+ package/tinyhttpd/tinyhttpd.mk |    2 ++
  1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 66cabd3..8a0d80f 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -9,6 +9,8 @@ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
- LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
- LIBCONFUSE_INSTALL_STAGING = YES
- LIBCONFUSE_CONF_OPT = --disable-rpath
-+LIBCONFUSE_LICENSE = ISC
-+LIBCONFUSE_LICENSE_FILES = src/confuse.c
+diff --git a/package/tinyhttpd/tinyhttpd.mk b/package/tinyhttpd/tinyhttpd.mk
+index 1a809f6..ec47fd9 100644
+--- a/package/tinyhttpd/tinyhttpd.mk
++++ b/package/tinyhttpd/tinyhttpd.mk
+@@ -6,6 +6,8 @@
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ TINYHTTPD_VERSION = 0.1.0
+ TINYHTTPD_SITE = http://downloads.sourceforge.net/project/tinyhttpd/tinyhttpd%20source/tinyhttpd%20$(TINYHTTPD_VERSION)
++TINYHTTPD_LICENSE = GPL
++TINYHTTPD_LICENSE_FILES = README
+ 
+ define TINYHTTPD_BUILD_CMDS
+ 	$(MAKE) -C $(@D) CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
