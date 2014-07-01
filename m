@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jul 2014 00:32:48 +0200
-Subject: [Buildroot] [git commit] read-edid: add license information
-Message-ID: <20140701224922.4CF7A9D12D@busybox.osuosl.org>
+Date: Tue, 1 Jul 2014 23:55:41 +0200
+Subject: [Buildroot] [git commit] libmms: add license information
+Message-ID: <20140701224922.0F50F9D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=59ffa187c648751d1cae2a14c47eb9c3c84ee376
+commit: http://git.buildroot.net/buildroot/commit/?id=c8dc3422126951637e005eca39aafdc89c6ca200
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: license is LGPLv2.1+]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/read-edid/read-edid.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libmms/libmms.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/read-edid/read-edid.mk b/package/read-edid/read-edid.mk
-index 02d80d0..0cc576d 100644
---- a/package/read-edid/read-edid.mk
-+++ b/package/read-edid/read-edid.mk
-@@ -6,6 +6,8 @@
+diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
+index 405729f..01c8d67 100644
+--- a/package/libmms/libmms.mk
++++ b/package/libmms/libmms.mk
+@@ -6,9 +6,9 @@
  
- READ_EDID_VERSION = 1.4.2
- READ_EDID_SITE = http://www.polypux.org/projects/read-edid/
-+READ_EDID_LICENSE = GPLv2
-+READ_EDID_LICENSE_FILES = COPYING
+ LIBMMS_VERSION = 0.6.2
+ LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
+-
+ LIBMMS_INSTALL_STAGING = YES
+-
+ LIBMMS_DEPENDENCIES = host-pkgconf libglib2
++LIBMMS_LICENSE = LGPLv2.1+
++LIBMMS_LICENSE_FILES = COPYING.LIB
  
- define READ_EDID_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ $(eval $(autotools-package))
