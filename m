@@ -1,1083 +1,783 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 14:52:40 +0200
-Subject: [Buildroot] [git commit] libffi: bump to 3.1
-Message-ID: <20140701125921.92D899D125@busybox.osuosl.org>
+Date: Tue, 1 Jul 2014 14:57:00 +0200
+Subject: [Buildroot] [git commit] python: bump to Python 2.7.7
+Message-ID: <20140701125921.AE5399CDAB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5f1fa660eab275dc25cf5c9de4befbcbf01a0baa
+commit: http://git.buildroot.net/buildroot/commit/?id=4d9ae3daf608f1a1ee4afe8e69043b5a06443a37
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Status of the patches:
+Status of patches:
 
- - libffi-001-Fix-installation-location-of-libffi.patch, preserved.
- - libffi-002-Fix-use-of-compact-eh-frames-on-MIPS.patch, preserved
- - libffi-arc-01-Add-ARC-support.patch, removed, ARC support was
-   merged upstream as of commit b082e15091961373c03d10ed0251f619ebb6ed76.
- - libffi-arc-02-Rebuild-for-ARC-additions.patch, removed, this patch
-   was merged upstream as of commit
-   0f8690a84c874ec09a090c8c6adfb93c594acac6.
- - libffi-003-fix-typo.patch, added, reported on the upstream mailing
-   list as being necessary, will be part of the next 3.1.1 release.
- - libffi-004-Add-missing-GNU-stack-markings-in-win32.S.patch, same
-   status as patch 003.
- - libffi-005-Fix-paths-in-libffi.pc.in.patch, same status as patch
-   003.
-
-The 3.1 release adds support for a number of architectures: ARC
-support, ppc64le support, NIOS II support. See
-https://sourceware.org/ml/libffi-announce/2014/msg00000.html for
-details.
+ - python-013-fix-readline-6.3.patch is removed, as it was a backport
+   from an upstream fix.
+ - all other patches are updated, with no special changes other than
+   solving minor conflicts.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libffi/libffi-003-fix-typo.patch           |   41 ++
- ...Add-missing-GNU-stack-markings-in-win32.S.patch |   36 ++
- .../libffi-005-Fix-paths-in-libffi.pc.in.patch     |   46 ++
- package/libffi/libffi-arc-01-Add-ARC-support.patch |  560 --------------------
- .../libffi-arc-02-Rebuild-for-ARC-additions.patch  |  262 ---------
- .../libffi/libffi-arc-03-arc-Fix-build-error.patch |   43 --
- package/libffi/libffi.mk                           |    2 +-
- 7 files changed, 124 insertions(+), 866 deletions(-)
+ ...python-004-sysconfigdata-install-location.patch |    6 ++--
+ .../python/python-005-pyc-pyo-conditional.patch    |    2 +-
+ .../python-006-cross-compile-getaddrinfo.patch     |    2 +-
+ package/python/python-007-disable-extensions.patch |    4 +-
+ package/python/python-010-fix-python-config.patch  |   39 +++++++++++---------
+ .../python/python-011-remove-python-symlink.patch  |    9 +++--
+ package/python/python-013-fix-readline-6.3.patch   |   34 -----------------
+ .../python/python-100-optional-test-modules.patch  |   25 ++++++++-----
+ package/python/python-101-optional-pydoc.patch     |   12 +++---
+ package/python/python-102-optional-2to3.patch      |   16 ++++----
+ package/python/python-103-optional-sqlite.patch    |   14 ++++----
+ package/python/python-104-optional-tk.patch        |   20 +++++------
+ package/python/python-105-optional-curses.patch    |    8 ++--
+ package/python/python-106-optional-expat.patch     |   12 +++---
+ .../python/python-107-optional-codecs-cjk.patch    |    2 +-
+ package/python/python-108-optional-nis.patch       |    2 +-
+ .../python/python-109-optional-unicodedata.patch   |    2 +-
+ package/python/python-110-optional-db.patch        |   14 ++++----
+ package/python/python-111-optional-ssl.patch       |    2 +-
+ package/python/python-112-optional-bzip2.patch     |    2 +-
+ package/python/python-113-optional-zlib.patch      |    2 +-
+ package/python/python.mk                           |    2 +-
+ 22 files changed, 102 insertions(+), 129 deletions(-)
 
-diff --git a/package/libffi/libffi-003-fix-typo.patch b/package/libffi/libffi-003-fix-typo.patch
-new file mode 100644
-index 0000000..f20804b
---- /dev/null
-+++ b/package/libffi/libffi-003-fix-typo.patch
-@@ -0,0 +1,41 @@
-+From cbc5a3c0200aa6c2cf8d6798d69a21501557c83f Mon Sep 17 00:00:00 2001
-+From: Ryan Hill <rhill@gentoo.org>
-+Date: Sat, 31 May 2014 08:26:34 -0400
-+Subject: [PATCH 05/10] Fix typo
-+
-+This patch was borrowed from upstream, commit
-+cbc5a3c0200aa6c2cf8d6798d69a21501557c83f, and will be part of the next
-+3.1.1 release.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ include/ffi.h.in | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/ffi.h.in b/include/ffi.h.in
-+index 93c776f..70c6179 100644
-+--- a/include/ffi.h.in
-++++ b/include/ffi.h.in
-+@@ -1,5 +1,5 @@
-+ /* -----------------------------------------------------------------*-C-*-
-+-   libffi @VERSION@ - Copyright (c) 2011 Anthony Green
-++   libffi @VERSION@ - Copyright (c) 2011, 2014 Anthony Green
-+                     - Copyright (c) 1996-2003, 2007, 2008 Red Hat, Inc.
-+ 
-+    Permission is hereby granted, free of charge, to any person
-+@@ -221,10 +221,10 @@ typedef struct {
-+ #endif
-+ } ffi_cif;
-+ 
-+-#if HAVE_LONG_DOUBLE_VARIANT
-++#if @HAVE_LONG_DOUBLE_VARIANT@
-+ /* Used to adjust size/alignment of ffi types.  */
-+ void ffi_prep_types (ffi_abi abi);
-+-# endif
-++#endif
-+ 
-+ /* Used internally, but overridden by some architectures */
-+ ffi_status ffi_prep_cif_core(ffi_cif *cif,
-+-- 
-+2.0.0
-+
-diff --git a/package/libffi/libffi-004-Add-missing-GNU-stack-markings-in-win32.S.patch b/package/libffi/libffi-004-Add-missing-GNU-stack-markings-in-win32.S.patch
-new file mode 100644
-index 0000000..6097287
---- /dev/null
-+++ b/package/libffi/libffi-004-Add-missing-GNU-stack-markings-in-win32.S.patch
-@@ -0,0 +1,36 @@
-+From 978c9540154d320525488db1b7049277122f736d Mon Sep 17 00:00:00 2001
-+From: Samuli Suominen <ssuominen@gentoo.org>
-+Date: Sat, 31 May 2014 08:53:10 -0400
-+Subject: [PATCH 06/10] Add missing GNU stack markings in win32.S
-+
-+This patch was borrowed from upstream, commit
-+978c9540154d320525488db1b7049277122f736d, and will be part of the next
-+3.1.1 release.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ src/x86/win32.S | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/x86/win32.S b/src/x86/win32.S
-+index daf0e79..e42baf2 100644
-+--- a/src/x86/win32.S
-++++ b/src/x86/win32.S
-+@@ -1,5 +1,6 @@
-+ /* -----------------------------------------------------------------------
-+-   win32.S - Copyright (c) 1996, 1998, 2001, 2002, 2009  Red Hat, Inc.
-++   win32.S - Copyright (c) 2014  Anthony Green
-++	     Copyright (c) 1996, 1998, 2001, 2002, 2009  Red Hat, Inc.
-+ 	     Copyright (c) 2001  John Beniton
-+ 	     Copyright (c) 2002  Ranjit Mathew
-+ 	     Copyright (c) 2009  Daniel Witte
-+@@ -1304,3 +1305,6 @@ L_ffi_closure_SYSV_inner$stub:
-+ 
-+ #endif /* !_MSC_VER */
-+ 
-++#if defined __ELF__ && defined __linux__
-++	.section	.note.GNU-stack,"", at progbits
-++#endif
-+-- 
-+2.0.0
-+
-diff --git a/package/libffi/libffi-005-Fix-paths-in-libffi.pc.in.patch b/package/libffi/libffi-005-Fix-paths-in-libffi.pc.in.patch
-new file mode 100644
-index 0000000..fd110a6
---- /dev/null
-+++ b/package/libffi/libffi-005-Fix-paths-in-libffi.pc.in.patch
-@@ -0,0 +1,46 @@
-+From ad0d1d239afc7ad09203847793dcc020856d1035 Mon Sep 17 00:00:00 2001
-+From: Samuli Suominen <ssuominen@gentoo.org>
-+Date: Thu, 12 Jun 2014 06:30:21 -0400
-+Subject: [PATCH 09/10] Fix paths in libffi.pc.in
-+
-+This patch was borrowed from upstream, commit
-+ad0d1d239afc7ad09203847793dcc020856d1035, and will be part of the next
-+3.1.1 release.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ configure.ac | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4f7fe3f..bbc1a9d 100644
+diff --git a/package/python/python-004-sysconfigdata-install-location.patch b/package/python/python-004-sysconfigdata-install-location.patch
+index 940dde7..2a5e4f4 100644
+--- a/package/python/python-004-sysconfigdata-install-location.patch
++++ b/package/python/python-004-sysconfigdata-install-location.patch
+@@ -31,7 +31,7 @@ Index: b/Makefile.pre.in
+  
+  # Build the shared modules
+  # Under GNU make, MAKEFLAGS are sorted and normalized; the 's' for
+-@@ -965,7 +968,7 @@
++@@ -969,7 +972,7 @@
+  		else	true; \
+  		fi; \
+  	done
+@@ -40,7 +40,7 @@ Index: b/Makefile.pre.in
+  	do \
+  		if test -x $$i; then \
+  			$(INSTALL_SCRIPT) $$i $(DESTDIR)$(LIBDEST); \
+-@@ -975,6 +978,11 @@
++@@ -979,6 +982,11 @@
+  			echo $(INSTALL_DATA) $$i $(LIBDEST); \
+  		fi; \
+  	done
+@@ -52,7 +52,7 @@ Index: b/Makefile.pre.in
+  	@for d in $(LIBSUBDIRS); \
+  	do \
+  		a=$(srcdir)/Lib/$$d; \
+-@@ -1299,7 +1307,7 @@
++@@ -1303,7 +1311,7 @@
+  		Modules/Setup Modules/Setup.local Modules/Setup.config \
+  		Modules/ld_so_aix Modules/python.exp Misc/python.pc
+  	-rm -f python*-gdb.py
+diff --git a/package/python/python-005-pyc-pyo-conditional.patch b/package/python/python-005-pyc-pyo-conditional.patch
+index aa3b330..fbcdaa6 100644
+--- a/package/python/python-005-pyc-pyo-conditional.patch
++++ b/package/python/python-005-pyc-pyo-conditional.patch
+@@ -2,7 +2,7 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -1013,24 +1013,32 @@
++@@ -1017,24 +1017,32 @@
+  		$(INSTALL_DATA) $(srcdir)/Modules/xxmodule.c \
+  			$(DESTDIR)$(LIBDEST)/distutils/tests ; \
+  	fi
+diff --git a/package/python/python-006-cross-compile-getaddrinfo.patch b/package/python/python-006-cross-compile-getaddrinfo.patch
+index 2c8248f..b16c7e9 100644
+--- a/package/python/python-006-cross-compile-getaddrinfo.patch
++++ b/package/python/python-006-cross-compile-getaddrinfo.patch
+@@ -2,7 +2,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -3337,7 +3337,7 @@
++@@ -3330,7 +3330,7 @@
+  
+  AC_MSG_RESULT($ac_cv_buggy_getaddrinfo)
+  
+diff --git a/package/python/python-007-disable-extensions.patch b/package/python/python-007-disable-extensions.patch
+index c03f84c..10b0a7c 100644
+--- a/package/python/python-007-disable-extensions.patch
++++ b/package/python/python-007-disable-extensions.patch
+@@ -19,7 +19,7 @@ Index: b/Makefile.pre.in
+  		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
+  
+  # Build static library
+-@@ -1154,7 +1157,8 @@
++@@ -1158,7 +1161,8 @@
+  # Install the dynamically loadable modules
+  # This goes into $(exec_prefix)
+  sharedinstall: sharedmods
+@@ -33,7 +33,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2275,6 +2275,8 @@
++@@ -2268,6 +2268,8 @@
+  
+  AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+  
+diff --git a/package/python/python-010-fix-python-config.patch b/package/python/python-010-fix-python-config.patch
+index f093d91..9e35de6 100644
+--- a/package/python/python-010-fix-python-config.patch
++++ b/package/python/python-010-fix-python-config.patch
+@@ -6,10 +6,11 @@ on the sysconfig import that usually leads to bad data/results.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
+---- Python-2.7.6.orig/configure.ac	2014-02-25 12:48:16.726535439 -0300
+-+++ Python-2.7.6/configure.ac	2014-02-25 12:49:00.992176462 -0300
+-@@ -868,6 +868,7 @@
++Index: b/configure.ac
++===================================================================
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -590,11 +590,11 @@ AC_ARG_ENABLE(purify-safety,
-+ if test "x$GCC" = "xyes"; then
-+   if test -n "$with_cross_host" &&
-+      test x"$with_cross_host" != x"no"; then
-+-    toolexecdir='$(exec_prefix)/$(target_alias)'
-+-    toolexeclibdir='$(toolexecdir)/lib'
-++    toolexecdir="${exec_prefix}"/'$(target_alias)'
-++    toolexeclibdir="${toolexecdir}"/lib
-+   else
-+-    toolexecdir='$(libdir)/gcc-lib/$(target_alias)'
-+-    toolexeclibdir='$(libdir)'
-++    toolexecdir="${libdir}"/gcc-lib/'$(target_alias)'
-++    toolexeclibdir="${libdir}"
-+   fi
-+   multi_os_directory=`$CC $CFLAGS -print-multi-os-directory`
-+   case $multi_os_directory in
-+@@ -603,7 +603,7 @@ if test "x$GCC" = "xyes"; then
-+   esac
-+   AC_SUBST(toolexecdir)
-+ else
-+-  toolexeclibdir='$(libdir)'
-++  toolexeclibdir="${libdir}"
-+ fi
-+ AC_SUBST(toolexeclibdir)
-+ 
-+-- 
-+2.0.0
-+
-diff --git a/package/libffi/libffi-arc-01-Add-ARC-support.patch b/package/libffi/libffi-arc-01-Add-ARC-support.patch
++@@ -879,6 +879,7 @@
+  
+  # Other platforms follow
+  if test $enable_shared = "yes"; then
+@@ -17,7 +18,7 @@ diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
+    AC_DEFINE(Py_ENABLE_SHARED, 1, [Defined if Python is built as a shared library.])
+    case $ac_sys_system in
+      BeOS*)
+-@@ -928,6 +929,7 @@
++@@ -939,6 +940,7 @@
+  
+    esac
+  else # shared is disabled
+@@ -25,7 +26,7 @@ diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
+    case $ac_sys_system in
+      CYGWIN*)
+            BLDLIBRARY='$(LIBRARY)'
+-@@ -1905,6 +1907,9 @@
++@@ -1909,6 +1911,9 @@
+  AC_SUBST(BLDSHARED)
+  AC_SUBST(CCSHARED)
+  AC_SUBST(LINKFORSHARED)
+@@ -35,7 +36,7 @@ diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
+  # SO is the extension of shared libraries `(including the dot!)
+  # -- usually .so, .sl on HP-UX, .dll on Cygwin
+  AC_MSG_CHECKING(SO)
+-@@ -4529,7 +4534,7 @@
++@@ -4550,7 +4555,7 @@
+  AC_MSG_RESULT(done)
+  
+  # generate output files
+@@ -44,10 +45,11 @@ diff -Nura Python-2.7.6.orig/configure.ac Python-2.7.6/configure.ac
+  AC_CONFIG_FILES([Modules/ld_so_aix], [chmod +x Modules/ld_so_aix])
+  AC_OUTPUT
+  
+-diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
+---- Python-2.7.6.orig/Makefile.pre.in	2014-02-25 12:48:16.611533773 -0300
+-+++ Python-2.7.6/Makefile.pre.in	2014-02-25 12:49:00.993176482 -0300
+-@@ -161,7 +161,7 @@
++Index: b/Makefile.pre.in
++===================================================================
++--- a/Makefile.pre.in
+++++ b/Makefile.pre.in
++@@ -163,7 +163,7 @@
+  SUBDIRSTOO=	Include Lib Misc Demo
+  
+  # Files and directories to be distributed
+@@ -56,7 +58,7 @@ diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
+  DISTFILES=	README ChangeLog $(CONFIGFILES)
+  DISTDIRS=	$(SUBDIRS) $(SUBDIRSTOO) Ext-dummy
+  DIST=		$(DISTFILES) $(DISTDIRS)
+-@@ -405,7 +405,7 @@
++@@ -407,7 +407,7 @@
+  
+  # Default target
+  all:		build_all
+@@ -65,7 +67,7 @@ diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
+  
+  # Compile a binary with gcc profile guided optimization.
+  profile-opt:
+-@@ -1045,10 +1045,12 @@
++@@ -1068,10 +1068,12 @@
+  	fi; \
+  	cd $(srcdir)/Lib/$(PLATDIR); $(RUNSHARED) ./regen
+  
+@@ -80,7 +82,7 @@ diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
+  
+  # Install the include files
+  INCLDIRSTOMAKE=$(INCLUDEDIR) $(CONFINCLUDEDIR) $(INCLUDEPY) $(CONFINCLUDEPY)
+-@@ -1107,7 +1109,7 @@
++@@ -1130,7 +1132,7 @@
+  	$(INSTALL_SCRIPT) $(srcdir)/Modules/makesetup $(DESTDIR)$(LIBPL)/makesetup
+  	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
+  	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(VERSION)-config
+@@ -89,7 +91,7 @@ diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
+  	@if [ -s Modules/python.exp -a \
+  		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
+  		echo; echo "Installing support files for building shared extension modules on AIX:"; \
+-@@ -1287,6 +1289,7 @@
++@@ -1311,6 +1313,7 @@
+  		config.cache config.log pyconfig.h Modules/config.c
+  	-rm -rf build platform
+  	-rm -rf $(PYTHONFRAMEWORKDIR)
+@@ -97,9 +99,10 @@ diff -Nura Python-2.7.6.orig/Makefile.pre.in Python-2.7.6/Makefile.pre.in
+  
+  # Make things extra clean, before making a distribution:
+  # remove all generated files, even Makefile[.pre]
+-diff -Nura Python-2.7.6.orig/Misc/python-config.sh.in Python-2.7.6/Misc/python-config.sh.in
+---- Python-2.7.6.orig/Misc/python-config.sh.in	1969-12-31 21:00:00.000000000 -0300
+-+++ Python-2.7.6/Misc/python-config.sh.in	2014-02-25 12:49:00.993176482 -0300
++Index: b/Misc/python-config.sh.in
++===================================================================
++--- /dev/null
+++++ b/Misc/python-config.sh.in
+ @@ -0,0 +1,102 @@
+ +#!/bin/sh
+ +
+diff --git a/package/python/python-011-remove-python-symlink.patch b/package/python/python-011-remove-python-symlink.patch
+index a9b1daa..af0a296 100644
+--- a/package/python/python-011-remove-python-symlink.patch
++++ b/package/python/python-011-remove-python-symlink.patch
+@@ -6,10 +6,11 @@ python symlink points to.
+ 
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ 
+-diff -purN a/Makefile.pre.in b/Makefile.pre.in
+---- a/Makefile.pre.in	2014-03-02 17:56:56.529132499 +0100
+-+++ b/Makefile.pre.in	2014-03-02 19:24:02.346491849 +0100
+-@@ -857,17 +857,10 @@ $(DESTSHARED):
++Index: b/Makefile.pre.in
++===================================================================
++--- a/Makefile.pre.in
+++++ b/Makefile.pre.in
++@@ -858,17 +858,10 @@
+  #  $(PYTHON) -> python2 -> python$(VERSION))
+  # Also create equivalent chains for other installed files
+  bininstall:	altbininstall
+diff --git a/package/python/python-013-fix-readline-6.3.patch b/package/python/python-013-fix-readline-6.3.patch
 deleted file mode 100644
-index c39a3e7..0000000
---- a/package/libffi/libffi-arc-01-Add-ARC-support.patch
+index 97ae45c..0000000
+--- a/package/python/python-013-fix-readline-6.3.patch
 +++ /dev/null
-@@ -1,560 +0,0 @@
--From 5a2352c476b501ecbd3c7ef3ef3e02c24ce5a449 Mon Sep 17 00:00:00 2001
--From: Mischa Jonker <mjonker@synopsys.com>
--Date: Mon, 10 Jun 2013 16:19:33 +0200
--Subject: [PATCH 1/3] Add ARC support
+@@ -1,34 +0,0 @@
+-fix readline extension compilation against readline 6.3
 -
--This adds support for the ARC architecture to libffi. DesignWare ARC
--is a family of processors from Synopsys, Inc.
+-readline 6.3 removed some typedefs that had been deprecated for some time, but
+-Python 2.7.6 still uses them and therefore fails to build the readline
+-extension when it is enabled. This issue has been addressed in the Python bug
+-tracker here: http://bugs.python.org/issue20374. The patch below is based on
+-the readline_func_cast.patch patch uploaded there. Also see
+-http://lists.gnu.org/archive/html/bug-readline/2014-03/msg00003.html for more
+-information.
 -
--This patch has been tested on a little-endian system and passes
--the testsuite.
+-This patch should be removed with the next Python 2.7 release, which should
+-include the fix.
 -
--Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-----
-- Makefile.am         |   6 +-
-- README              |   1 +
-- configure.ac        |   5 +
-- src/arc/arcompact.S | 135 ++++++++++++++++++++++++++
-- src/arc/ffi.c       | 268 ++++++++++++++++++++++++++++++++++++++++++++++++++++
-- src/arc/ffitarget.h |  53 +++++++++++
-- 6 files changed, 467 insertions(+), 1 deletion(-)
-- create mode 100644 src/arc/arcompact.S
-- create mode 100644 src/arc/ffi.c
-- create mode 100644 src/arc/ffitarget.h
+-Signed-off-by: Ivan Sergeev <vsergeev@kumunetworks.com>
 -
--diff --git a/Makefile.am b/Makefile.am
--index bf0156f..b57b2a8 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -9,7 +9,8 @@ SUBDIRS = include testsuite man
-- EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host	\
-- 	 src/aarch64/ffi.c src/aarch64/ffitarget.h src/aarch64/sysv.S	\
-- 	 build-ios.sh src/alpha/ffi.c src/alpha/osf.S			\
---	 src/alpha/ffitarget.h src/arm/ffi.c src/arm/sysv.S		\
--+	 src/alpha/ffitarget.h src/arc/ffi.c src/arc/arcompact.S	\
--+	 src/arc/ffitarget.h src/arm/ffi.c src/arm/sysv.S		\
-- 	 src/arm/ffitarget.h src/avr32/ffi.c src/avr32/sysv.S		\
-- 	 src/avr32/ffitarget.h src/cris/ffi.c src/cris/sysv.S		\
-- 	 src/cris/ffitarget.h src/ia64/ffi.c src/ia64/ffitarget.h	\
--@@ -170,6 +171,9 @@ endif
-- if AARCH64
-- nodist_libffi_la_SOURCES += src/aarch64/sysv.S src/aarch64/ffi.c
-- endif
--+if ARC
--+nodist_libffi_la_SOURCES += src/arc/sysv.S src/arc/ffi.c
--+endif
-- if ARM
-- nodist_libffi_la_SOURCES += src/arm/sysv.S src/arm/ffi.c
-- if FFI_EXEC_TRAMPOLINE_TABLE
--diff --git a/README b/README
--index 19156fe..d8e4e9e 100644
----- a/README
--+++ b/README
--@@ -54,6 +54,7 @@ tested:
-- | AArch64         | Linux            | GCC                     |
-- | Alpha           | Linux            | GCC                     |
-- | Alpha           | Tru64            | GCC                     |
--+| ARC             | Linux            | GCC                     |
-- | ARM             | Linux            | GCC                     |
-- | ARM             | iOS              | GCC                     |
-- | AVR32           | Linux            | GCC                     |
--diff --git a/configure.ac b/configure.ac
--index 0dc0675..a26cb46 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -77,6 +77,10 @@ case "$host" in
-- 	HAVE_LONG_DOUBLE='defined(__LONG_DOUBLE_128__)'
-- 	;;
-- 
--+  arc*-*-*)
--+	TARGET=ARC; TARGETDIR=arc
--+	;;
--+
--   arm*-*-*)
-- 	TARGET=ARM; TARGETDIR=arm
-- 	;;
--@@ -289,6 +293,7 @@ AM_CONDITIONAL(POWERPC_AIX, test x$TARGET = xPOWERPC_AIX)
-- AM_CONDITIONAL(POWERPC_DARWIN, test x$TARGET = xPOWERPC_DARWIN)
-- AM_CONDITIONAL(POWERPC_FREEBSD, test x$TARGET = xPOWERPC_FREEBSD)
-- AM_CONDITIONAL(AARCH64, test x$TARGET = xAARCH64)
--+AM_CONDITIONAL(ARC, test x$TARGET = xARC)
-- AM_CONDITIONAL(ARM, test x$TARGET = xARM)
-- AM_CONDITIONAL(AVR32, test x$TARGET = xAVR32)
-- AM_CONDITIONAL(LIBFFI_CRIS, test x$TARGET = xLIBFFI_CRIS)
--diff --git a/src/arc/arcompact.S b/src/arc/arcompact.S
--new file mode 100644
--index 0000000..03715fd
----- /dev/null
--+++ b/src/arc/arcompact.S
--@@ -0,0 +1,135 @@
--+/* -----------------------------------------------------------------------
--+   arcompact.S - Copyright (c) 2013 Synposys, Inc. (www.synopsys.com)
--+   
--+   ARCompact Foreign Function Interface 
--+
--+   Permission is hereby granted, free of charge, to any person obtaining
--+   a copy of this software and associated documentation files (the
--+   ``Software''), to deal in the Software without restriction, including
--+   without limitation the rights to use, copy, modify, merge, publish,
--+   distribute, sublicense, and/or sell copies of the Software, and to
--+   permit persons to whom the Software is furnished to do so, subject to
--+   the following conditions:
--+
--+   The above copyright notice and this permission notice shall be included
--+   in all copies or substantial portions of the Software.
--+
--+   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
--+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
--+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
--+   IN NO EVENT SHALL RENESAS TECHNOLOGY BE LIABLE FOR ANY CLAIM, DAMAGES OR
--+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
--+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
--+   OTHER DEALINGS IN THE SOFTWARE.
--+   ----------------------------------------------------------------------- */
--+
--+#define LIBFFI_ASM
--+#include <fficonfig.h>
--+#include <ffi.h>
--+#ifdef HAVE_MACHINE_ASM_H
--+#include <machine/asm.h>
--+#else
--+#define CNAME(x) x
--+#define ENTRY(x) .globl CNAME(x)` .type CNAME(x),%function` CNAME(x):
--+#endif
--+
--+.text
--+
--+        /* R0:   ffi_prep_args */
--+        /* R1:   &ecif */
--+        /* R2:   cif->bytes */
--+        /* R3:   fig->flags */
--+        /* R4:   ecif.rvalue */
--+        /* R5:   fn */
--+ENTRY(ffi_call_ARCompact)
--+        /* Save registers.  */
--+        st.a       fp, [sp, -4]        /* fp + 20, fp */
--+        push_s     blink               /* fp + 16, blink */
--+        st.a       r4, [sp, -4]        /* fp + 12, ecif.rvalue */
--+        push_s     r3                  /* fp +  8, fig->flags */
--+        st.a       r5, [sp, -4]        /* fp +  4, fn */
--+        push_s     r2                  /* fp +  0, cif->bytes */
--+        mov        fp, sp
--+
--+        /* Make room for all of the new args.  */
--+        sub        sp, sp, r2
--+
--+        /* Place all of the ffi_prep_args in position.  */
--+        /* ffi_prep_args(char *stack, extended_cif *ecif) */
--+        /* R1 already set.  */
--+
--+        /* And call.  */
--+        jl_s.d     [r0]
--+        mov_s      r0, sp
--+
--+        ld.ab      r12, [fp, 4]        /* cif->bytes */
--+        ld.ab      r11, [fp, 4]        /* fn */
--+
--+        /* Move first 8 parameters in registers...  */
--+        ld_s       r0, [sp]
--+        ld_s       r1, [sp, 4]
--+        ld_s       r2, [sp, 8]
--+        ld_s       r3, [sp, 12]
--+        ld         r4, [sp, 16]
--+        ld         r5, [sp, 20]
--+        ld         r6, [sp, 24]
--+        ld         r7, [sp, 28]
--+
--+        /* ...and adjust the stack.  */
--+        min        r12, r12, 32
--+
--+        /* Call the function.  */
--+        jl.d       [r11]
--+        add        sp, sp, r12 
--+
--+        mov        sp, fp        
--+        pop_s      r3        /* fig->flags, return type */
--+        pop_s      r2        /* ecif.rvalue, pointer for return value */
--+
--+        /* If the return value pointer is NULL, assume no return value.  */
--+        breq.d     r2, 0, epilogue
--+        pop_s      blink
--+
--+        /* Return INT.  */
--+        brne       r3, FFI_TYPE_INT, return_double
--+        b.d        epilogue
--+        st_s       r0, [r2]        
--+
--+return_double:
--+        brne       r3, FFI_TYPE_DOUBLE, epilogue
--+        st_s       r0, [r2]        
--+        st_s       r1, [r2,4]
--+
--+epilogue:
--+        j_s.d      [blink]
--+        ld.ab      fp, [sp, 4]
--+
--+ENTRY(ffi_closure_ARCompact)
--+        st.a       r0, [sp, -32]
--+        st_s       r1, [sp, 4]
--+        st_s       r2, [sp, 8]
--+        st_s       r3, [sp, 12]
--+        st         r4, [sp, 16]
--+        st         r5, [sp, 20]
--+        st         r6, [sp, 24]
--+        st         r7, [sp, 28]
--+
--+        /* pointer to arguments */
--+        mov_s      r2, sp
--+
--+        /* return value goes here */
--+        sub        sp, sp, 8
--+        mov_s      r1, sp
--+
--+        push_s     blink
--+        
--+        bl.d       ffi_closure_inner_ARCompact
--+        mov_s      r0, r8                /* codeloc, set by trampoline */
--+
--+        pop_s      blink
--+
--+        /* set return value to r1:r0 */
--+        pop_s      r0
--+        pop_s      r1
--+        j_s.d      [blink]
--+        add_s      sp, sp, 32
--diff --git a/src/arc/ffi.c b/src/arc/ffi.c
--new file mode 100644
--index 0000000..32f82a7
----- /dev/null
--+++ b/src/arc/ffi.c
--@@ -0,0 +1,268 @@
--+/* -----------------------------------------------------------------------
--+   ffi.c - Copyright (c) 2013  Synopsys, Inc. (www.synopsys.com)
--+   
--+   ARC Foreign Function Interface 
--+
--+   Permission is hereby granted, free of charge, to any person obtaining
--+   a copy of this software and associated documentation files (the
--+   ``Software''), to deal in the Software without restriction, including
--+   without limitation the rights to use, copy, modify, merge, publish,
--+   distribute, sublicense, and/or sell copies of the Software, and to
--+   permit persons to whom the Software is furnished to do so, subject to
--+   the following conditions:
--+
--+   The above copyright notice and this permission notice shall be included
--+   in all copies or substantial portions of the Software.
--+
--+   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
--+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
--+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
--+   IN NO EVENT SHALL RENESAS TECHNOLOGY BE LIABLE FOR ANY CLAIM, DAMAGES OR
--+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
--+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
--+   OTHER DEALINGS IN THE SOFTWARE.
--+   ----------------------------------------------------------------------- */
--+
--+#include <ffi.h>
--+#include <ffi_common.h>
--+
--+#include <stdlib.h>
--+#include <stdint.h>
--+
--+#include <sys/cachectl.h>
--+
--+/* for little endian ARC, the code is in fact stored as mixed endian for
--+   performance reasons */
--+#if __BIG_ENDIAN__
--+#define CODE_ENDIAN(x) (x)
--+#else
--+#define CODE_ENDIAN(x) ( (((uint32_t) (x)) << 16) | (((uint32_t) (x)) >> 16))
--+#endif
--+
--+/* ffi_prep_args is called by the assembly routine once stack
--+   space has been allocated for the function's arguments.  */
--+
--+void
--+ffi_prep_args (char *stack, extended_cif * ecif)
--+{
--+  unsigned int i;
--+  int tmp;
--+  void **p_argv;
--+  char *argp;
--+  ffi_type **p_arg;
--+
--+  tmp = 0;
--+  argp = stack;
--+
--+  if (ecif->cif->rtype->type == FFI_TYPE_STRUCT)
--+    {
--+      *(void **) argp = ecif->rvalue;
--+      argp += 4;
--+    }
--+
--+  p_argv = ecif->avalue;
--+
--+  for (i = ecif->cif->nargs, p_arg = ecif->cif->arg_types;
--+       (i != 0); i--, p_arg++)
--+    {
--+      size_t z;
--+      int alignment;
--+
--+      /* align alignment to 4 */
--+      alignment = (((*p_arg)->alignment - 1) | 3) + 1;
--+
--+      /* Align if necessary.  */
--+      if ((alignment - 1) & (unsigned) argp)
--+	argp = (char *) ALIGN (argp, alignment);
--+
--+      z = (*p_arg)->size;
--+      if (z < sizeof (int))
--+	{
--+	  z = sizeof (int);
--+
--+	  switch ((*p_arg)->type)
--+	    {
--+	    case FFI_TYPE_SINT8:
--+	      *(signed int *) argp = (signed int) *(SINT8 *) (*p_argv);
--+	      break;
--+
--+	    case FFI_TYPE_UINT8:
--+	      *(unsigned int *) argp = (unsigned int) *(UINT8 *) (*p_argv);
--+	      break;
--+
--+	    case FFI_TYPE_SINT16:
--+	      *(signed int *) argp = (signed int) *(SINT16 *) (*p_argv);
--+	      break;
--+
--+	    case FFI_TYPE_UINT16:
--+	      *(unsigned int *) argp = (unsigned int) *(UINT16 *) (*p_argv);
--+	      break;
--+
--+	    case FFI_TYPE_STRUCT:
--+	      memcpy (argp, *p_argv, (*p_arg)->size);
--+	      break;
--+
--+	    default:
--+	      FFI_ASSERT (0);
--+	    }
--+	}
--+      else if (z == sizeof (int))
--+	{
--+	  *(unsigned int *) argp = (unsigned int) *(UINT32 *) (*p_argv);
--+	}
--+      else
--+	{
--+	  if ((*p_arg)->type == FFI_TYPE_STRUCT)
--+	    {
--+	      memcpy (argp, *p_argv, z);
--+	    }
--+	  else
--+	    {
--+	      /* Double or long long 64bit.  */
--+	      memcpy (argp, *p_argv, z);
--+	    }
--+	}
--+      p_argv++;
--+      argp += z;
--+    }
--+
--+  return;
--+}
--+
--+/* Perform machine dependent cif processing.  */
--+ffi_status
--+ffi_prep_cif_machdep (ffi_cif * cif)
--+{
--+  /* Set the return type flag.  */
--+  switch (cif->rtype->type)
--+    {
--+    case FFI_TYPE_VOID:
--+      cif->flags = (unsigned) cif->rtype->type;
--+      break;
--+
--+    case FFI_TYPE_STRUCT:
--+      cif->flags = (unsigned) cif->rtype->type;
--+      break;
--+
--+    case FFI_TYPE_SINT64:
--+    case FFI_TYPE_UINT64:
--+    case FFI_TYPE_DOUBLE:
--+      cif->flags = FFI_TYPE_DOUBLE;
--+      break;
--+
--+    case FFI_TYPE_FLOAT:
--+    default:
--+      cif->flags = FFI_TYPE_INT;
--+      break;
--+    }
--+
--+  return FFI_OK;
--+}
--+
--+extern void ffi_call_ARCompact (void (*)(char *, extended_cif *),
--+				extended_cif *, unsigned, unsigned,
--+				unsigned *, void (*fn) (void));
--+
--+void
--+ffi_call (ffi_cif * cif, void (*fn) (void), void *rvalue, void **avalue)
--+{
--+  extended_cif ecif;
--+
--+  ecif.cif = cif;
--+  ecif.avalue = avalue;
--+
--+  /* If the return value is a struct and we don't have
--+     a return value address then we need to make one.  */
--+  if ((rvalue == NULL) && (cif->rtype->type == FFI_TYPE_STRUCT))
--+    {
--+      ecif.rvalue = alloca (cif->rtype->size);
--+    }
--+  else
--+    ecif.rvalue = rvalue;
--+
--+  switch (cif->abi)
--+    {
--+    case FFI_ARCOMPACT:
--+      ffi_call_ARCompact (ffi_prep_args, &ecif, cif->bytes,
--+			  cif->flags, ecif.rvalue, fn);
--+      break;
--+
--+    default:
--+      FFI_ASSERT (0);
--+      break;
--+    }
--+}
--+
--+int
--+ffi_closure_inner_ARCompact (ffi_closure * closure, void *rvalue,
--+			     ffi_arg * args)
--+{
--+  void **arg_area, **p_argv;
--+  ffi_cif *cif = closure->cif;
--+  char *argp = (char *) args;
--+  ffi_type **p_argt;
--+  int i;
--+
--+  arg_area = (void **) alloca (cif->nargs * sizeof (void *));
--+
--+  /* handle hidden argument */
--+  if (cif->flags == FFI_TYPE_STRUCT)
--+    {
--+      rvalue = *(void **) argp;
--+      argp += 4;
--+    }
--+
--+  p_argv = arg_area;
--+
--+  for (i = 0, p_argt = cif->arg_types; i < cif->nargs;
--+       i++, p_argt++, p_argv++)
--+    {
--+      size_t z;
--+      int alignment;
--+
--+      /* align alignment to 4 */
--+      alignment = (((*p_argt)->alignment - 1) | 3) + 1;
--+
--+      /* Align if necessary.  */
--+      if ((alignment - 1) & (unsigned) argp)
--+	argp = (char *) ALIGN (argp, alignment);
--+
--+      z = (*p_argt)->size;
--+      *p_argv = (void *) argp;
--+      argp += z;
--+    }
--+
--+  (closure->fun) (cif, rvalue, arg_area, closure->user_data);
--+
--+  return cif->flags;
--+}
--+
--+extern void ffi_closure_ARCompact (void);
--+
--+ffi_status
--+ffi_prep_closure_loc (ffi_closure * closure, ffi_cif * cif,
--+		      void (*fun) (ffi_cif *, void *, void **, void *),
--+		      void *user_data, void *codeloc)
--+{
--+  uint32_t *tramp = (uint32_t *) & (closure->tramp[0]);
--+
--+  switch (cif->abi)
--+    {
--+    case FFI_ARCOMPACT:
--+      FFI_ASSERT (tramp == codeloc);
--+      tramp[0] = CODE_ENDIAN (0x200a1fc0);	/* mov r8, pcl  */
--+      tramp[1] = CODE_ENDIAN (0x20200f80);	/* j [long imm] */
--+      tramp[2] = CODE_ENDIAN (ffi_closure_ARCompact);
--+      break;
--+
--+    default:
--+      return FFI_BAD_ABI;
--+    }
--+
--+  closure->cif = cif;
--+  closure->fun = fun;
--+  closure->user_data = user_data;
--+  cacheflush (codeloc, FFI_TRAMPOLINE_SIZE, BCACHE);
--+
--+  return FFI_OK;
--+}
--diff --git a/src/arc/ffitarget.h b/src/arc/ffitarget.h
--new file mode 100644
--index 0000000..bf8311b
----- /dev/null
--+++ b/src/arc/ffitarget.h
--@@ -0,0 +1,53 @@
--+/* -----------------------------------------------------------------------
--+   ffitarget.h - Copyright (c) 2012  Anthony Green
--+                 Copyright (c) 2013  Synopsys, Inc. (www.synopsys.com)
--+   Target configuration macros for ARC.
--+
--+   Permission is hereby granted, free of charge, to any person obtaining
--+   a copy of this software and associated documentation files (the
--+   ``Software''), to deal in the Software without restriction, including
--+   without limitation the rights to use, copy, modify, merge, publish,
--+   distribute, sublicense, and/or sell copies of the Software, and to
--+   permit persons to whom the Software is furnished to do so, subject to
--+   the following conditions:
--+
--+   The above copyright notice and this permission notice shall be included
--+   in all copies or substantial portions of the Software.
--+
--+   THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS
--+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
--+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
--+   IN NO EVENT SHALL RENESAS TECHNOLOGY BE LIABLE FOR ANY CLAIM, DAMAGES OR
--+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
--+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
--+   OTHER DEALINGS IN THE SOFTWARE.
--+
--+   ----------------------------------------------------------------------- */
--+
--+#ifndef LIBFFI_TARGET_H
--+#define LIBFFI_TARGET_H
--+
--+#ifndef LIBFFI_H
--+#error "Please do not include ffitarget.h directly into your source.  Use ffi.h instead."
--+#endif
--+
--+/* ---- Generic type definitions ----------------------------------------- */
--+
--+#ifndef LIBFFI_ASM
--+typedef unsigned long ffi_arg;
--+typedef signed long ffi_sarg;
--+
--+typedef enum ffi_abi
--+{
--+  FFI_FIRST_ABI = 0,
--+  FFI_ARCOMPACT,
--+  FFI_LAST_ABI,
--+  FFI_DEFAULT_ABI = FFI_ARCOMPACT
--+} ffi_abi;
--+#endif
--+
--+#define FFI_CLOSURES 		1
--+#define FFI_TRAMPOLINE_SIZE	12
--+#define FFI_NATIVE_RAW_API 	0
--+
--+#endif
---- 
--1.9.0
--
-diff --git a/package/libffi/libffi-arc-02-Rebuild-for-ARC-additions.patch b/package/libffi/libffi-arc-02-Rebuild-for-ARC-additions.patch
-deleted file mode 100644
-index a8b1dec..0000000
---- a/package/libffi/libffi-arc-02-Rebuild-for-ARC-additions.patch
-+++ /dev/null
-@@ -1,262 +0,0 @@
--From 234414f2c9d32e9fd94d15f94871837210dbab04 Mon Sep 17 00:00:00 2001
--From: Anthony Green <green@moxielogic.com>
--Date: Tue, 2 Jul 2013 15:54:40 -0400
--Subject: [PATCH 2/3] Rebuild for ARC additions
--
-----
-- Makefile.in | 96 +++++++++++++++++++++++++++++++++++++------------------------
-- configure   | 18 ++++++++++++
-- 2 files changed, 76 insertions(+), 38 deletions(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index 4b6abe5..be425d8 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -72,20 +72,21 @@ target_triplet = @target@
-- @POWERPC_DARWIN_TRUE at am__append_18 = src/powerpc/ffi_darwin.c src/powerpc/darwin.S src/powerpc/darwin_closure.S
-- @POWERPC_FREEBSD_TRUE at am__append_19 = src/powerpc/ffi.c src/powerpc/sysv.S src/powerpc/ppc_closure.S
-- @AARCH64_TRUE at am__append_20 = src/aarch64/sysv.S src/aarch64/ffi.c
--- at ARM_TRUE@am__append_21 = src/arm/sysv.S src/arm/ffi.c
--- at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__append_22 = src/arm/trampoline.S
--- at AVR32_TRUE@am__append_23 = src/avr32/sysv.S src/avr32/ffi.c
--- at LIBFFI_CRIS_TRUE@am__append_24 = src/cris/sysv.S src/cris/ffi.c
--- at FRV_TRUE@am__append_25 = src/frv/eabi.S src/frv/ffi.c
--- at S390_TRUE@am__append_26 = src/s390/sysv.S src/s390/ffi.c
--- at X86_64_TRUE@am__append_27 = src/x86/ffi64.c src/x86/unix64.S src/x86/ffi.c src/x86/sysv.S
--- at SH_TRUE@am__append_28 = src/sh/sysv.S src/sh/ffi.c
--- at SH64_TRUE@am__append_29 = src/sh64/sysv.S src/sh64/ffi.c
--- at PA_LINUX_TRUE@am__append_30 = src/pa/linux.S src/pa/ffi.c
--- at PA_HPUX_TRUE@am__append_31 = src/pa/hpux32.S src/pa/ffi.c
--- at TILE_TRUE@am__append_32 = src/tile/tile.S src/tile/ffi.c
--- at XTENSA_TRUE@am__append_33 = src/xtensa/sysv.S src/xtensa/ffi.c
--- at METAG_TRUE@am__append_34 = src/metag/sysv.S src/metag/ffi.c
--+ at ARC_TRUE@am__append_21 = src/arc/sysv.S src/arc/ffi.c
--+ at ARM_TRUE@am__append_22 = src/arm/sysv.S src/arm/ffi.c
--+ at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__append_23 = src/arm/trampoline.S
--+ at AVR32_TRUE@am__append_24 = src/avr32/sysv.S src/avr32/ffi.c
--+ at LIBFFI_CRIS_TRUE@am__append_25 = src/cris/sysv.S src/cris/ffi.c
--+ at FRV_TRUE@am__append_26 = src/frv/eabi.S src/frv/ffi.c
--+ at S390_TRUE@am__append_27 = src/s390/sysv.S src/s390/ffi.c
--+ at X86_64_TRUE@am__append_28 = src/x86/ffi64.c src/x86/unix64.S src/x86/ffi.c src/x86/sysv.S
--+ at SH_TRUE@am__append_29 = src/sh/sysv.S src/sh/ffi.c
--+ at SH64_TRUE@am__append_30 = src/sh64/sysv.S src/sh64/ffi.c
--+ at PA_LINUX_TRUE@am__append_31 = src/pa/linux.S src/pa/ffi.c
--+ at PA_HPUX_TRUE@am__append_32 = src/pa/hpux32.S src/pa/ffi.c
--+ at TILE_TRUE@am__append_33 = src/tile/tile.S src/tile/ffi.c
--+ at XTENSA_TRUE@am__append_34 = src/xtensa/sysv.S src/xtensa/ffi.c
--+ at METAG_TRUE@am__append_35 = src/metag/sysv.S src/metag/ffi.c
-- subdir = .
-- DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
-- 	$(srcdir)/Makefile.in $(srcdir)/doc/stamp-vti \
--@@ -183,21 +184,22 @@ am_libffi_la_OBJECTS = src/prep_cif.lo src/types.lo src/raw_api.lo \
-- @POWERPC_FREEBSD_TRUE@	src/powerpc/sysv.lo \
-- @POWERPC_FREEBSD_TRUE@	src/powerpc/ppc_closure.lo
-- @AARCH64_TRUE at am__objects_20 = src/aarch64/sysv.lo src/aarch64/ffi.lo
--- at ARM_TRUE@am__objects_21 = src/arm/sysv.lo src/arm/ffi.lo
--- at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__objects_22 = src/arm/trampoline.lo
--- at AVR32_TRUE@am__objects_23 = src/avr32/sysv.lo src/avr32/ffi.lo
--- at LIBFFI_CRIS_TRUE@am__objects_24 = src/cris/sysv.lo src/cris/ffi.lo
--- at FRV_TRUE@am__objects_25 = src/frv/eabi.lo src/frv/ffi.lo
--- at S390_TRUE@am__objects_26 = src/s390/sysv.lo src/s390/ffi.lo
--- at X86_64_TRUE@am__objects_27 = src/x86/ffi64.lo src/x86/unix64.lo \
--+ at ARC_TRUE@am__objects_21 = src/arc/sysv.lo src/arc/ffi.lo
--+ at ARM_TRUE@am__objects_22 = src/arm/sysv.lo src/arm/ffi.lo
--+ at ARM_TRUE@@FFI_EXEC_TRAMPOLINE_TABLE_TRUE at am__objects_23 = src/arm/trampoline.lo
--+ at AVR32_TRUE@am__objects_24 = src/avr32/sysv.lo src/avr32/ffi.lo
--+ at LIBFFI_CRIS_TRUE@am__objects_25 = src/cris/sysv.lo src/cris/ffi.lo
--+ at FRV_TRUE@am__objects_26 = src/frv/eabi.lo src/frv/ffi.lo
--+ at S390_TRUE@am__objects_27 = src/s390/sysv.lo src/s390/ffi.lo
--+ at X86_64_TRUE@am__objects_28 = src/x86/ffi64.lo src/x86/unix64.lo \
-- @X86_64_TRUE@	src/x86/ffi.lo src/x86/sysv.lo
--- at SH_TRUE@am__objects_28 = src/sh/sysv.lo src/sh/ffi.lo
--- at SH64_TRUE@am__objects_29 = src/sh64/sysv.lo src/sh64/ffi.lo
--- at PA_LINUX_TRUE@am__objects_30 = src/pa/linux.lo src/pa/ffi.lo
--- at PA_HPUX_TRUE@am__objects_31 = src/pa/hpux32.lo src/pa/ffi.lo
--- at TILE_TRUE@am__objects_32 = src/tile/tile.lo src/tile/ffi.lo
--- at XTENSA_TRUE@am__objects_33 = src/xtensa/sysv.lo src/xtensa/ffi.lo
--- at METAG_TRUE@am__objects_34 = src/metag/sysv.lo src/metag/ffi.lo
--+ at SH_TRUE@am__objects_29 = src/sh/sysv.lo src/sh/ffi.lo
--+ at SH64_TRUE@am__objects_30 = src/sh64/sysv.lo src/sh64/ffi.lo
--+ at PA_LINUX_TRUE@am__objects_31 = src/pa/linux.lo src/pa/ffi.lo
--+ at PA_HPUX_TRUE@am__objects_32 = src/pa/hpux32.lo src/pa/ffi.lo
--+ at TILE_TRUE@am__objects_33 = src/tile/tile.lo src/tile/ffi.lo
--+ at XTENSA_TRUE@am__objects_34 = src/xtensa/sysv.lo src/xtensa/ffi.lo
--+ at METAG_TRUE@am__objects_35 = src/metag/sysv.lo src/metag/ffi.lo
-- nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
-- 	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
-- 	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
--@@ -209,17 +211,17 @@ nodist_libffi_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
-- 	$(am__objects_24) $(am__objects_25) $(am__objects_26) \
-- 	$(am__objects_27) $(am__objects_28) $(am__objects_29) \
-- 	$(am__objects_30) $(am__objects_31) $(am__objects_32) \
---	$(am__objects_33) $(am__objects_34)
--+	$(am__objects_33) $(am__objects_34) $(am__objects_35)
-- libffi_la_OBJECTS = $(am_libffi_la_OBJECTS) \
-- 	$(nodist_libffi_la_OBJECTS)
-- libffi_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-- 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-- 	$(libffi_la_LDFLAGS) $(LDFLAGS) -o $@
-- libffi_convenience_la_LIBADD =
---am__objects_35 = src/prep_cif.lo src/types.lo src/raw_api.lo \
--+am__objects_36 = src/prep_cif.lo src/types.lo src/raw_api.lo \
-- 	src/java_raw_api.lo src/closures.lo
---am_libffi_convenience_la_OBJECTS = $(am__objects_35)
---am__objects_36 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
--+am_libffi_convenience_la_OBJECTS = $(am__objects_36)
--+am__objects_37 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
-- 	$(am__objects_4) $(am__objects_5) $(am__objects_6) \
-- 	$(am__objects_7) $(am__objects_8) $(am__objects_9) \
-- 	$(am__objects_10) $(am__objects_11) $(am__objects_12) \
--@@ -230,8 +232,8 @@ am__objects_36 = $(am__objects_1) $(am__objects_2) $(am__objects_3) \
-- 	$(am__objects_25) $(am__objects_26) $(am__objects_27) \
-- 	$(am__objects_28) $(am__objects_29) $(am__objects_30) \
-- 	$(am__objects_31) $(am__objects_32) $(am__objects_33) \
---	$(am__objects_34)
---nodist_libffi_convenience_la_OBJECTS = $(am__objects_36)
--+	$(am__objects_34) $(am__objects_35)
--+nodist_libffi_convenience_la_OBJECTS = $(am__objects_37)
-- libffi_convenience_la_OBJECTS = $(am_libffi_convenience_la_OBJECTS) \
-- 	$(nodist_libffi_convenience_la_OBJECTS)
-- DEFAULT_INCLUDES = -I. at am__isrc@
--@@ -471,7 +473,8 @@ SUBDIRS = include testsuite man
-- EXTRA_DIST = LICENSE ChangeLog.v1 ChangeLog.libgcj configure.host	\
-- 	 src/aarch64/ffi.c src/aarch64/ffitarget.h src/aarch64/sysv.S	\
-- 	 build-ios.sh src/alpha/ffi.c src/alpha/osf.S			\
---	 src/alpha/ffitarget.h src/arm/ffi.c src/arm/sysv.S		\
--+	 src/alpha/ffitarget.h src/arc/ffi.c src/arc/arcompact.S	\
--+	 src/arc/ffitarget.h src/arm/ffi.c src/arm/sysv.S		\
-- 	 src/arm/ffitarget.h src/avr32/ffi.c src/avr32/sysv.S		\
-- 	 src/avr32/ffitarget.h src/cris/ffi.c src/cris/sysv.S		\
-- 	 src/cris/ffitarget.h src/ia64/ffi.c src/ia64/ffitarget.h	\
--@@ -571,7 +574,7 @@ nodist_libffi_la_SOURCES = $(am__append_1) $(am__append_2) \
-- 	$(am__append_24) $(am__append_25) $(am__append_26) \
-- 	$(am__append_27) $(am__append_28) $(am__append_29) \
-- 	$(am__append_30) $(am__append_31) $(am__append_32) \
---	$(am__append_33) $(am__append_34)
--+	$(am__append_33) $(am__append_34) $(am__append_35)
-- libffi_convenience_la_SOURCES = $(libffi_la_SOURCES)
-- nodist_libffi_convenience_la_SOURCES = $(nodist_libffi_la_SOURCES)
-- LTLDFLAGS = $(shell $(SHELL) $(top_srcdir)/libtool-ldflags $(LDFLAGS))
--@@ -843,6 +846,16 @@ src/aarch64/sysv.lo: src/aarch64/$(am__dirstamp) \
-- 	src/aarch64/$(DEPDIR)/$(am__dirstamp)
-- src/aarch64/ffi.lo: src/aarch64/$(am__dirstamp) \
-- 	src/aarch64/$(DEPDIR)/$(am__dirstamp)
--+src/arc/$(am__dirstamp):
--+	@$(MKDIR_P) src/arc
--+	@: > src/arc/$(am__dirstamp)
--+src/arc/$(DEPDIR)/$(am__dirstamp):
--+	@$(MKDIR_P) src/arc/$(DEPDIR)
--+	@: > src/arc/$(DEPDIR)/$(am__dirstamp)
--+src/arc/sysv.lo: src/arc/$(am__dirstamp) \
--+	src/arc/$(DEPDIR)/$(am__dirstamp)
--+src/arc/ffi.lo: src/arc/$(am__dirstamp) \
--+	src/arc/$(DEPDIR)/$(am__dirstamp)
-- src/arm/$(am__dirstamp):
-- 	@$(MKDIR_P) src/arm
-- 	@: > src/arm/$(am__dirstamp)
--@@ -970,6 +983,8 @@ mostlyclean-compile:
-- 	-rm -f src/aarch64/*.lo
-- 	-rm -f src/alpha/*.$(OBJEXT)
-- 	-rm -f src/alpha/*.lo
--+	-rm -f src/arc/*.$(OBJEXT)
--+	-rm -f src/arc/*.lo
-- 	-rm -f src/arm/*.$(OBJEXT)
-- 	-rm -f src/arm/*.lo
-- 	-rm -f src/avr32/*.$(OBJEXT)
--@@ -1026,6 +1041,8 @@ distclean-compile:
-- @AMDEP_TRUE@@am__include@ @am__quote at src/aarch64/$(DEPDIR)/sysv.Plo at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at src/alpha/$(DEPDIR)/ffi.Plo at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at src/alpha/$(DEPDIR)/osf.Plo at am__quote@
--+ at AMDEP_TRUE@@am__include@ @am__quote at src/arc/$(DEPDIR)/ffi.Plo at am__quote@
--+ at AMDEP_TRUE@@am__include@ @am__quote at src/arc/$(DEPDIR)/sysv.Plo at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at src/arm/$(DEPDIR)/ffi.Plo at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at src/arm/$(DEPDIR)/sysv.Plo at am__quote@
-- @AMDEP_TRUE@@am__include@ @am__quote at src/arm/$(DEPDIR)/trampoline.Plo at am__quote@
--@@ -1144,6 +1161,7 @@ clean-libtool:
-- 	-rm -rf src/.libs src/_libs
-- 	-rm -rf src/aarch64/.libs src/aarch64/_libs
-- 	-rm -rf src/alpha/.libs src/alpha/_libs
--+	-rm -rf src/arc/.libs src/arc/_libs
-- 	-rm -rf src/arm/.libs src/arm/_libs
-- 	-rm -rf src/avr32/.libs src/avr32/_libs
-- 	-rm -rf src/bfin/.libs src/bfin/_libs
--@@ -1714,6 +1732,8 @@ distclean-generic:
-- 	-rm -f src/aarch64/$(am__dirstamp)
-- 	-rm -f src/alpha/$(DEPDIR)/$(am__dirstamp)
-- 	-rm -f src/alpha/$(am__dirstamp)
--+	-rm -f src/arc/$(DEPDIR)/$(am__dirstamp)
--+	-rm -f src/arc/$(am__dirstamp)
-- 	-rm -f src/arm/$(DEPDIR)/$(am__dirstamp)
-- 	-rm -f src/arm/$(am__dirstamp)
-- 	-rm -f src/avr32/$(DEPDIR)/$(am__dirstamp)
--@@ -1768,7 +1788,7 @@ clean-am: clean-aminfo clean-generic clean-libtool \
-- 
-- distclean: distclean-recursive
-- 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
---	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/metag/$(DEPDIR) src/microblaze/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/tile/$(DEPDIR) src/x86/$(DEPDIR) src/xtensa/$(DEPDIR)
--+	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arc/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/metag/$(DEPDIR) src/microblaze/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/tile/$(DEPDIR) src/x86/$(DEPDIR) src/xtensa/$(DEPDIR)
-- 	-rm -f Makefile
-- distclean-am: clean-am distclean-compile distclean-generic \
-- 	distclean-hdr distclean-libtool distclean-tags
--@@ -1907,7 +1927,7 @@ installcheck-am:
-- maintainer-clean: maintainer-clean-recursive
-- 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-- 	-rm -rf $(top_srcdir)/autom4te.cache
---	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/metag/$(DEPDIR) src/microblaze/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/tile/$(DEPDIR) src/x86/$(DEPDIR) src/xtensa/$(DEPDIR)
--+	-rm -rf src/$(DEPDIR) src/aarch64/$(DEPDIR) src/alpha/$(DEPDIR) src/arc/$(DEPDIR) src/arm/$(DEPDIR) src/avr32/$(DEPDIR) src/bfin/$(DEPDIR) src/cris/$(DEPDIR) src/frv/$(DEPDIR) src/ia64/$(DEPDIR) src/m32r/$(DEPDIR) src/m68k/$(DEPDIR) src/metag/$(DEPDIR) src/microblaze/$(DEPDIR) src/mips/$(DEPDIR) src/moxie/$(DEPDIR) src/pa/$(DEPDIR) src/powerpc/$(DEPDIR) src/s390/$(DEPDIR) src/sh/$(DEPDIR) src/sh64/$(DEPDIR) src/sparc/$(DEPDIR) src/tile/$(DEPDIR) src/x86/$(DEPDIR) src/xtensa/$(DEPDIR)
-- 	-rm -f Makefile
-- maintainer-clean-am: distclean-am maintainer-clean-aminfo \
-- 	maintainer-clean-generic maintainer-clean-vti
--diff --git a/configure b/configure
--index 4b04db7..495389d 100755
----- a/configure
--+++ b/configure
--@@ -673,6 +673,8 @@ AVR32_FALSE
-- AVR32_TRUE
-- ARM_FALSE
-- ARM_TRUE
--+ARC_FALSE
--+ARC_TRUE
-- AARCH64_FALSE
-- AARCH64_TRUE
-- POWERPC_FREEBSD_FALSE
--@@ -13299,6 +13301,10 @@ case "$host" in
-- 	HAVE_LONG_DOUBLE='defined(__LONG_DOUBLE_128__)'
-- 	;;
-- 
--+  arc*-*-*)
--+	TARGET=ARC; TARGETDIR=arc
--+	;;
--+
--   arm*-*-*)
-- 	TARGET=ARM; TARGETDIR=arm
-- 	;;
--@@ -13651,6 +13657,14 @@ else
--   AARCH64_FALSE=
-- fi
-- 
--+ if test x$TARGET = xARC; then
--+  ARC_TRUE=
--+  ARC_FALSE='#'
--+else
--+  ARC_TRUE='#'
--+  ARC_FALSE=
--+fi
--+
--  if test x$TARGET = xARM; then
--   ARM_TRUE=
--   ARM_FALSE='#'
--@@ -15087,6 +15101,10 @@ if test -z "${AARCH64_TRUE}" && test -z "${AARCH64_FALSE}"; then
--   as_fn_error $? "conditional \"AARCH64\" was never defined.
-- Usually this means the macro was only invoked conditionally." "$LINENO" 5
-- fi
--+if test -z "${ARC_TRUE}" && test -z "${ARC_FALSE}"; then
--+  as_fn_error $? "conditional \"ARC\" was never defined.
--+Usually this means the macro was only invoked conditionally." "$LINENO" 5
--+fi
-- if test -z "${ARM_TRUE}" && test -z "${ARM_FALSE}"; then
--   as_fn_error $? "conditional \"ARM\" was never defined.
-- Usually this means the macro was only invoked conditionally." "$LINENO" 5
---- 
--1.9.0
--
-diff --git a/package/libffi/libffi-arc-03-arc-Fix-build-error.patch b/package/libffi/libffi-arc-03-arc-Fix-build-error.patch
-deleted file mode 100644
-index 081fc1e..0000000
---- a/package/libffi/libffi-arc-03-arc-Fix-build-error.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 5a1bbc8511464f073cb2e79d5aa9ea0395139541 Mon Sep 17 00:00:00 2001
--From: Mischa Jonker <mjonker@synopsys.com>
--Date: Mon, 8 Jul 2013 15:51:36 +0200
--Subject: [PATCH 3/3] arc: Fix build error
--
--One part of the patch for ARC support was missing in the upstreamed
--version.
--
--Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-----
-- Makefile.am | 2 +-
-- Makefile.in | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index b57b2a8..19ead77 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -172,7 +172,7 @@ if AARCH64
-- nodist_libffi_la_SOURCES += src/aarch64/sysv.S src/aarch64/ffi.c
-- endif
-- if ARC
---nodist_libffi_la_SOURCES += src/arc/sysv.S src/arc/ffi.c
--+nodist_libffi_la_SOURCES += src/arc/arcompact.S src/arc/ffi.c
-- endif
-- if ARM
-- nodist_libffi_la_SOURCES += src/arm/sysv.S src/arm/ffi.c
--diff --git a/Makefile.in b/Makefile.in
--index be425d8..44c2551 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -852,7 +852,7 @@ src/arc/$(am__dirstamp):
-- src/arc/$(DEPDIR)/$(am__dirstamp):
-- 	@$(MKDIR_P) src/arc/$(DEPDIR)
-- 	@: > src/arc/$(DEPDIR)/$(am__dirstamp)
---src/arc/sysv.lo: src/arc/$(am__dirstamp) \
--+src/arc/arcompact.lo: src/arc/$(am__dirstamp) \
-- 	src/arc/$(DEPDIR)/$(am__dirstamp)
-- src/arc/ffi.lo: src/arc/$(am__dirstamp) \
-- 	src/arc/$(DEPDIR)/$(am__dirstamp)
---- 
--1.9.0
--
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 7463547..dc7132d 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -4,7 +4,7 @@
- #
+-diff -purN python-2.7.6.orig/Modules/readline.c python-2.7.6/Modules/readline.c
+---- python-2.7.6.orig/Modules/readline.c	2014-04-16 13:40:17.566874715 -0700
+-+++ python-2.7.6/Modules/readline.c	2014-04-16 13:37:15.421231983 -0700
+-@@ -911,12 +911,12 @@ setup_readline(void)
+-     rl_bind_key_in_map ('\t', rl_complete, emacs_meta_keymap);
+-     rl_bind_key_in_map ('\033', rl_complete, emacs_meta_keymap);
+-     /* Set our hook functions */
+--    rl_startup_hook = (Function *)on_startup_hook;
+-+    rl_startup_hook = on_startup_hook;
+- #ifdef HAVE_RL_PRE_INPUT_HOOK
+--    rl_pre_input_hook = (Function *)on_pre_input_hook;
+-+    rl_pre_input_hook = on_pre_input_hook;
+- #endif
+-     /* Set our completion function */
+--    rl_attempted_completion_function = (CPPFunction *)flex_complete;
+-+    rl_attempted_completion_function = flex_complete;
+-     /* Set Python word break characters */
+-     completer_word_break_characters =
+-         rl_completer_word_break_characters =
+diff --git a/package/python/python-100-optional-test-modules.patch b/package/python/python-100-optional-test-modules.patch
+index a5f7545..ff9c914 100644
+--- a/package/python/python-100-optional-test-modules.patch
++++ b/package/python/python-100-optional-test-modules.patch
+@@ -15,16 +15,17 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -934,23 +934,40 @@
++@@ -928,26 +928,42 @@
+  	plat-mac/lib-scriptpackages/SystemEvents \
+  	plat-mac/lib-scriptpackages/Terminal
+  PLATMACPATH=:plat-mac:plat-mac/lib-scriptpackages
+ -LIBSUBDIRS=	lib-tk lib-tk/test lib-tk/test/test_tkinter \
+ -		lib-tk/test/test_ttk site-packages test test/audiodata test/data \
+--		test/cjkencodings test/decimaltestdata test/xmltestdata test/subprocessdata \
++-		test/cjkencodings test/decimaltestdata test/xmltestdata \
++-		test/imghdrdata \
++-		test/subprocessdata \
+ -		test/tracedmodules \
+-+LIBSUBDIRS=	lib-tk \
+-+		site-packages \
+++LIBSUBDIRS=	lib-tk site-packages \
+  		encodings compiler hotshot \
+ -		email email/mime email/test email/test/data \
+ -		json json/tests \
+@@ -32,14 +33,16 @@ Index: b/Makefile.pre.in
+ -		logging bsddb bsddb/test csv importlib wsgiref \
+ -		lib2to3 lib2to3/fixes lib2to3/pgen2 lib2to3/tests \
+ -		lib2to3/tests/data lib2to3/tests/data/fixers lib2to3/tests/data/fixers/myfixes \
+--		ctypes ctypes/test ctypes/macholib idlelib idlelib/Icons \
++-		ctypes ctypes/test ctypes/macholib \
++-		idlelib idlelib/Icons idlelib/idle_test \
+ -		distutils distutils/command distutils/tests $(XMLLIBSUBDIRS) \
+ +		email email/mime \
+ +		json \
+ +		sqlite3 \
+ +		logging bsddb csv importlib wsgiref \
+ +		lib2to3 lib2to3/fixes lib2to3/pgen2 \
+-+		ctypes  ctypes/macholib idlelib idlelib/Icons \
+++		ctypes ctypes/macholib \
+++		idlelib idlelib/Icons \
+ +		distutils distutils/command $(XMLLIBSUBDIRS) \
+  		multiprocessing multiprocessing/dummy \
+ -		unittest unittest/test \
+@@ -48,9 +51,10 @@ Index: b/Makefile.pre.in
+  		curses pydoc_data $(MACHDEPS)
+ +
+ +TESTSUBDIRS = lib-tk/test lib-tk/test/test_tkinter \
+-+	lib-tk/test/test_ttk \
+-+	test test/audiodata test/data \
+-+	test/cjkencodings test/decimaltestdata test/xmltestdata test/subprocessdata \
+++	lib-tk/test/test_ttk test test/audiodata test/data \
+++	test/cjkencodings test/decimaltestdata test/xmltestdata \
+++	test/imghdrdata \
+++	test/subprocessdata \
+ +	test/tracedmodules \
+ +	email/test email/test/data \
+ +	json/tests \
+@@ -59,6 +63,7 @@ Index: b/Makefile.pre.in
+ +	lib2to3/tests \
+ +	lib2to3/tests/data lib2to3/tests/data/fixers lib2to3/tests/data/fixers/myfixes \
+ +	ctypes/test \
+++	idlelib/idle_test \
+ +	distutils/tests \
+ +	unittest/test
+ +
+@@ -73,7 +78,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2614,6 +2614,12 @@
++@@ -2612,6 +2612,12 @@
+  fi
+  
+  
+diff --git a/package/python/python-101-optional-pydoc.patch b/package/python/python-101-optional-pydoc.patch
+index c9b05bd..7518b5e 100644
+--- a/package/python/python-101-optional-pydoc.patch
++++ b/package/python/python-101-optional-pydoc.patch
+@@ -16,7 +16,7 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -947,7 +947,7 @@
++@@ -941,7 +941,7 @@
+  		multiprocessing multiprocessing/dummy \
+  		unittest \
+  		lib-old \
+@@ -24,8 +24,8 @@ Index: b/Makefile.pre.in
+ +		curses $(MACHDEPS)
+  
+  TESTSUBDIRS = lib-tk/test lib-tk/test/test_tkinter \
+- 	lib-tk/test/test_ttk \
+-@@ -968,6 +968,10 @@
++ 	lib-tk/test/test_ttk test test/audiodata test/data \
++@@ -964,6 +964,10 @@
+  LIBSUBDIRS += $(TESTSUBDIRS)
+  endif
+  
+@@ -40,7 +40,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2613,6 +2613,11 @@
++@@ -2611,6 +2611,11 @@
+        AC_CHECK_FUNCS(pthread_atfork)
+  fi
+  
+@@ -56,7 +56,7 @@ Index: b/setup.py
+ ===================================================================
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -2205,6 +2205,12 @@
++@@ -2217,6 +2217,12 @@
+      # turn off warnings when deprecated modules are imported
+      import warnings
+      warnings.filterwarnings("ignore",category=DeprecationWarning)
+@@ -69,7 +69,7 @@ Index: b/setup.py
+      setup(# PyPI Metadata (PEP 301)
+            name = "Python",
+            version = sys.version.split()[0],
+-@@ -2225,9 +2231,7 @@
++@@ -2237,9 +2243,7 @@
+            ext_modules=[Extension('_struct', ['_struct.c'])],
+  
+            # Scripts to install
+diff --git a/package/python/python-102-optional-2to3.patch b/package/python/python-102-optional-2to3.patch
+index 586b24b..3503f8c 100644
+--- a/package/python/python-102-optional-2to3.patch
++++ b/package/python/python-102-optional-2to3.patch
+@@ -16,24 +16,24 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -941,7 +941,6 @@
++@@ -934,7 +934,6 @@
+  		json \
+  		sqlite3 \
+  		logging bsddb csv importlib wsgiref \
+ -		lib2to3 lib2to3/fixes lib2to3/pgen2 \
+- 		ctypes  ctypes/macholib idlelib idlelib/Icons \
++ 		ctypes ctypes/macholib \
++ 		idlelib idlelib/Icons \
+  		distutils distutils/command $(XMLLIBSUBDIRS) \
+- 		multiprocessing multiprocessing/dummy \
+-@@ -958,8 +957,6 @@
++@@ -953,8 +952,6 @@
+  	json/tests \
+  	sqlite3/test \
+  	bsddb/test \
+ -	lib2to3/tests \
+ -	lib2to3/tests/data lib2to3/tests/data/fixers lib2to3/tests/data/fixers/myfixes \
+  	ctypes/test \
++ 	idlelib/idle_test \
+  	distutils/tests \
+- 	unittest/test
+-@@ -972,6 +969,14 @@
++@@ -968,6 +965,14 @@
+  LIBSUBDIRS += pydoc_data
+  endif
+  
+@@ -52,7 +52,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2625,6 +2625,12 @@
++@@ -2623,6 +2623,12 @@
+  	AS_HELP_STRING([--disable-test-modules], [disable test modules]),
+  	[ TEST_MODULES="${enableval}" ], [ TEST_MODULES=yes ])
+  
+@@ -69,7 +69,7 @@ Index: b/setup.py
+ ===================================================================
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -2206,10 +2206,11 @@
++@@ -2218,10 +2218,11 @@
+      import warnings
+      warnings.filterwarnings("ignore",category=DeprecationWarning)
+  
+diff --git a/package/python/python-103-optional-sqlite.patch b/package/python/python-103-optional-sqlite.patch
+index a20afc7..a75acc8 100644
+--- a/package/python/python-103-optional-sqlite.patch
++++ b/package/python/python-103-optional-sqlite.patch
+@@ -12,7 +12,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2613,6 +2613,15 @@
++@@ -2611,6 +2611,15 @@
+        AC_CHECK_FUNCS(pthread_atfork)
+  fi
+  
+@@ -32,23 +32,23 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -939,7 +939,6 @@
++@@ -932,7 +932,6 @@
+  		encodings compiler hotshot \
+  		email email/mime \
+  		json \
+ -		sqlite3 \
+  		logging bsddb csv importlib wsgiref \
+- 		ctypes  ctypes/macholib idlelib idlelib/Icons \
+- 		distutils distutils/command $(XMLLIBSUBDIRS) \
+-@@ -955,7 +954,6 @@
++ 		ctypes ctypes/macholib \
++ 		idlelib idlelib/Icons \
++@@ -950,7 +949,6 @@
+  	test/tracedmodules \
+  	email/test email/test/data \
+  	json/tests \
+ -	sqlite3/test \
+  	bsddb/test \
+  	ctypes/test \
+- 	distutils/tests \
+-@@ -977,6 +975,11 @@
++ 	idlelib/idle_test \
++@@ -973,6 +971,11 @@
+  		lib2to3/tests/data/fixers/myfixes
+  endif
+  
+diff --git a/package/python/python-104-optional-tk.patch b/package/python/python-104-optional-tk.patch
+index 3e0dd16..2e469ab 100644
+--- a/package/python/python-104-optional-tk.patch
++++ b/package/python/python-104-optional-tk.patch
+@@ -12,28 +12,26 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -934,8 +934,7 @@
++@@ -928,7 +928,7 @@
+  	plat-mac/lib-scriptpackages/SystemEvents \
+  	plat-mac/lib-scriptpackages/Terminal
+  PLATMACPATH=:plat-mac:plat-mac/lib-scriptpackages
+--LIBSUBDIRS=	lib-tk \
+--		site-packages \
++-LIBSUBDIRS=	lib-tk site-packages \
+ +LIBSUBDIRS=	site-packages \
+  		encodings compiler hotshot \
+  		email email/mime \
+  		json \
+-@@ -947,9 +946,7 @@
++@@ -941,8 +941,7 @@
+  		lib-old \
+  		curses $(MACHDEPS)
+  
+ -TESTSUBDIRS = lib-tk/test lib-tk/test/test_tkinter \
+--	lib-tk/test/test_ttk \
+--	test test/audiodata test/data \
++-	lib-tk/test/test_ttk test test/audiodata test/data \
+ +TESTSUBDIRS = test test/audiodata test/data \
+- 	test/cjkencodings test/decimaltestdata test/xmltestdata test/subprocessdata \
+- 	test/tracedmodules \
+- 	email/test email/test/data \
+-@@ -980,6 +977,12 @@
++ 	test/cjkencodings test/decimaltestdata test/xmltestdata \
++ 	test/imghdrdata \
++ 	test/subprocessdata \
++@@ -976,6 +975,12 @@
+  TESTSUBDIRS += sqlite3/test
+  endif
+  
+@@ -50,7 +48,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2622,6 +2622,15 @@
++@@ -2620,6 +2620,15 @@
+     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
+  fi
+  
+diff --git a/package/python/python-105-optional-curses.patch b/package/python/python-105-optional-curses.patch
+index 2ae4989..384cad3 100644
+--- a/package/python/python-105-optional-curses.patch
++++ b/package/python/python-105-optional-curses.patch
+@@ -12,7 +12,7 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -944,7 +944,7 @@
++@@ -939,7 +939,7 @@
+  		multiprocessing multiprocessing/dummy \
+  		unittest \
+  		lib-old \
+@@ -20,8 +20,8 @@ Index: b/Makefile.pre.in
+ +		$(MACHDEPS)
+  
+  TESTSUBDIRS = test test/audiodata test/data \
+- 	test/cjkencodings test/decimaltestdata test/xmltestdata test/subprocessdata \
+-@@ -983,6 +983,10 @@
++ 	test/cjkencodings test/decimaltestdata test/xmltestdata \
++@@ -981,6 +981,10 @@
+  	      lib-tk/test/test_ttk
+  endif
+  
+@@ -36,7 +36,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2631,6 +2631,15 @@
++@@ -2629,6 +2629,15 @@
+     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _tkinter"
+  fi
+  
+diff --git a/package/python/python-106-optional-expat.patch b/package/python/python-106-optional-expat.patch
+index 9eee2cd..c1de887 100644
+--- a/package/python/python-106-optional-expat.patch
++++ b/package/python/python-106-optional-expat.patch
+@@ -19,16 +19,16 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -940,7 +940,7 @@
+- 		json \
++@@ -935,7 +935,7 @@
+  		logging bsddb csv importlib wsgiref \
+- 		ctypes  ctypes/macholib idlelib idlelib/Icons \
++ 		ctypes ctypes/macholib \
++ 		idlelib idlelib/Icons \
+ -		distutils distutils/command $(XMLLIBSUBDIRS) \
+ +		distutils distutils/command \
+  		multiprocessing multiprocessing/dummy \
+  		unittest \
+  		lib-old \
+-@@ -987,6 +987,10 @@
++@@ -985,6 +985,10 @@
+  LIBSUBDIRS += curses
+  endif
+  
+@@ -43,7 +43,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2278,13 +2278,21 @@
++@@ -2276,13 +2276,21 @@
+  AC_SUBST(DISABLED_EXTENSIONS)
+  
+  # Check for use of the system expat library
+@@ -74,7 +74,7 @@ Index: b/setup.py
+ ===================================================================
+ --- a/setup.py
+ +++ b/setup.py
+-@@ -1457,7 +1457,7 @@
++@@ -1469,7 +1469,7 @@
+          #
+          # More information on Expat can be found at www.libexpat.org.
+          #
+diff --git a/package/python/python-107-optional-codecs-cjk.patch b/package/python/python-107-optional-codecs-cjk.patch
+index 1b3acac..ad1d41f 100644
+--- a/package/python/python-107-optional-codecs-cjk.patch
++++ b/package/python/python-107-optional-codecs-cjk.patch
+@@ -10,7 +10,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2630,6 +2630,12 @@
++@@ -2628,6 +2628,12 @@
+     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
+  fi
+  
+diff --git a/package/python/python-108-optional-nis.patch b/package/python/python-108-optional-nis.patch
+index 8749dfc..bac49ff 100644
+--- a/package/python/python-108-optional-nis.patch
++++ b/package/python/python-108-optional-nis.patch
+@@ -13,7 +13,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2636,6 +2636,12 @@
++@@ -2634,6 +2634,12 @@
+      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _codecs_kr _codecs_jp _codecs_cn _codecs_tw _codecs_hk"
+    	  fi])
+  
+diff --git a/package/python/python-109-optional-unicodedata.patch b/package/python/python-109-optional-unicodedata.patch
+index 2d78818..af9a28e 100644
+--- a/package/python/python-109-optional-unicodedata.patch
++++ b/package/python/python-109-optional-unicodedata.patch
+@@ -10,7 +10,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2642,6 +2642,12 @@
++@@ -2640,6 +2640,12 @@
+      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
+    	  fi])
+  
+diff --git a/package/python/python-110-optional-db.patch b/package/python/python-110-optional-db.patch
+index a3e5fe8..ff1979e 100644
+--- a/package/python/python-110-optional-db.patch
++++ b/package/python/python-110-optional-db.patch
+@@ -16,24 +16,24 @@ Index: b/Makefile.pre.in
+ ===================================================================
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+-@@ -938,7 +938,7 @@
++@@ -932,7 +932,7 @@
+  		encodings compiler hotshot \
+  		email email/mime \
+  		json \
+ -		logging bsddb csv importlib wsgiref \
+ +		logging csv importlib wsgiref \
+- 		ctypes  ctypes/macholib idlelib idlelib/Icons \
++ 		ctypes ctypes/macholib \
++ 		idlelib idlelib/Icons \
+  		distutils distutils/command \
+- 		multiprocessing multiprocessing/dummy \
+-@@ -951,7 +951,6 @@
++@@ -948,7 +948,6 @@
+  	test/tracedmodules \
+  	email/test email/test/data \
+  	json/tests \
+ -	bsddb/test \
+  	ctypes/test \
++ 	idlelib/idle_test \
+  	distutils/tests \
+- 	unittest/test
+-@@ -991,6 +990,11 @@
++@@ -989,6 +988,11 @@
+  LIBSUBDIRS += $(XMLLIBSUBDIRS)
+  endif
+  
+@@ -49,7 +49,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2642,6 +2642,28 @@
++@@ -2640,6 +2640,28 @@
+      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
+    	  fi])
+  
+diff --git a/package/python/python-111-optional-ssl.patch b/package/python/python-111-optional-ssl.patch
+index 8d4599d..cde6bb6 100644
+--- a/package/python/python-111-optional-ssl.patch
++++ b/package/python/python-111-optional-ssl.patch
+@@ -10,7 +10,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2642,6 +2642,12 @@
++@@ -2640,6 +2640,12 @@
+      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
+    	  fi])
+  
+diff --git a/package/python/python-112-optional-bzip2.patch b/package/python/python-112-optional-bzip2.patch
+index ba7dbaa..1b139bf 100644
+--- a/package/python/python-112-optional-bzip2.patch
++++ b/package/python/python-112-optional-bzip2.patch
+@@ -9,7 +9,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2648,6 +2648,12 @@
++@@ -2646,6 +2646,12 @@
+      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
+    	  fi])
+  
+diff --git a/package/python/python-113-optional-zlib.patch b/package/python/python-113-optional-zlib.patch
+index 19f100b..e98265f 100644
+--- a/package/python/python-113-optional-zlib.patch
++++ b/package/python/python-113-optional-zlib.patch
+@@ -9,7 +9,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2654,6 +2654,12 @@
++@@ -2652,6 +2652,12 @@
+              DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} bz2"
+           fi])
+  
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 8a2ba65..c005712 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBFFI_VERSION = 3.0.13
-+LIBFFI_VERSION = 3.1
- LIBFFI_SITE    = ftp://sourceware.org/pub/libffi/
- LIBFFI_LICENSE = MIT
- LIBFFI_LICENSE_FILES = LICENSE
+ PYTHON_VERSION_MAJOR = 2.7
+-PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).6
++PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).7
+ PYTHON_SOURCE        = Python-$(PYTHON_VERSION).tar.xz
+ PYTHON_SITE          = http://python.org/ftp/python/$(PYTHON_VERSION)
+ PYTHON_LICENSE       = Python software foundation license v2, others
