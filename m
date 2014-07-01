@@ -1,51 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 23:36:14 +0200
-Subject: [Buildroot] [PATCH 0/14 v3] freescale: update userspace
- packages (branch yem/fsl-imx)
-In-Reply-To: <cover.1404164261.git.yann.morin.1998@free.fr>
-References: <cover.1404164261.git.yann.morin.1998@free.fr>
-Message-ID: <20140701233614.44585682@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Jul 2014 23:55:13 +0200
+Subject: [Buildroot] [PATCH 33/53] libmms: add license information
+In-Reply-To: <1403810481-10025-33-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 26 Jun 2014 16:21:01 -0300")
+References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
+ <1403810481-10025-33-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ha30eoce.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Gary, Peter,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Mon, 30 Jun 2014 23:52:10 +0200, Yann E. MORIN wrote:
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/libmms/libmms.mk | 4 ++--
+ >  1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Gary Bisson (12):
->       freescale-imx: bump to version 3.10.17-1.0.0
->       freescale-imx: update imx-lib package
->       freescale-imx: change platform choice to be common
->       package/gpu-viv-bin-mx6q: only available for i.MX6Q
->       freescale-imx: add imx-vpu package
->       libfslvpuwrap: bump to version 1.0.46
->       libfslcodec: bump to version 3.0.11
->       libfslparser: bump to version 3.0.11
->       gst-fsl-plugins: bump to version 3.0.11
->       imx6sabresd: bump kernel version to 3.10.17
->       imx6sololiteevk: bump kernel version to 3.10.17
->       nitrogen6x: bump kernel version to 3.10.17
-> 
-> Yann E. MORIN (2):
->       package/gst-fsl-plugins: add default platform
->       defconfig/wandboard: update kernel + bootlaoder
+ > diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
+ > index 405729f..445da7f 100644
+ > --- a/package/libmms/libmms.mk
+ > +++ b/package/libmms/libmms.mk
+ > @@ -6,9 +6,9 @@
+ 
+ >  LIBMMS_VERSION = 0.6.2
+ >  LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
+ > -
+ >  LIBMMS_INSTALL_STAGING = YES
+ > -
+ >  LIBMMS_DEPENDENCIES = host-pkgconf libglib2
+ > +LIBMMS_LICENSE = LGPLv2.1
+ > +LIBMMS_LICENSE_FILES = COPYING.LIB
 
-For the entire series:
+It's not really clear, but I think this should be LGPLv2.1+.
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Some files are copied from xine (which is GPLv2+), and README.LICENSE
+just states that it is relicensed as LGPL, but all source files contain
+the '(at your option) any later version' text (and GPL or LGPL header).
 
-I believe Gary and Yann have done a great work on this, and that we
-should merge this sooner rather than later, so that if any other fix or
-improvement is needed, it can be done through follow-up patches. So I'd
-like to see these patches being applied soon.
+So I've changed this to '+' and committed, thanks.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
