@@ -1,77 +1,47 @@
-From: Mike Zick <minimod@morethan.org>
-Date: Tue, 1 Jul 2014 16:09:04 -0500
-Subject: [Buildroot] Glibc LD_LIBRARAY_PATH error
-In-Reply-To: <20140701220703.0fa13b8a@free-electrons.com>
-References: <CAMhj5sakLa9ROf4RVO2N1rhRx+4du=j3X8OL5rLVRAUQRnFS+Q@mail.gmail.com>
- <20140628000126.4bfd6329@free-electrons.com>
- <CAMhj5sZkdpe+mrTzvxqrwK=-tOoyG4nvobM48PJJpw3oFcb5CA@mail.gmail.com>
- <20140628083612.167f7b88@free-electrons.com>
- <CAMhj5sbiKrQ7PkbrxXr=CK34x2LA2bFu95asfCv8iKS5UtEMiQ@mail.gmail.com>
- <20140628162843.41a203d7@free-electrons.com>
- <CAMhj5saaeT9uoHNk2CZLf8da=ds8Zr0r2va15GFdZwrqxe0ENA@mail.gmail.com>
- <CAMhj5sYLbx5_4-qQhtpsYO6+fewS+tU1sDSDB9qn1CqJ-QoyiQ@mail.gmail.com>
- <20140628174420.2fd3ed86@free-electrons.com>
- <53B2F9E1.7080609@mind.be>
- <20140701220703.0fa13b8a@free-electrons.com>
-Message-ID: <20140701160904.34c80062@core2quad.morethan.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Jul 2014 23:26:48 +0200
+Subject: [Buildroot] [PATCH] libv4l: Bump version to 1.0.1
+In-Reply-To: <1404076714-1174-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1404076714-1174-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20140701232648.33bc4483@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 1 Jul 2014 22:07:03 +0200
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+Dear Ezequiel Garcia,
 
-> Dear Arnout Vandecappelle,
-> 
-> On Tue, 01 Jul 2014 20:11:45 +0200, Arnout Vandecappelle wrote:
-> 
-> > >> > my problem was solved by your solution I mean using "unset
-> > >> > LD_LIBRARY_PATH"
-> > > Ok. I'm not sure why we don't simply unset the LD_LIBRARY_PATH
-> > > from our main Makefile. Probably we should just do it.
-> > 
-> >  I could imagine an ancient build host where the developer has to
-> > build his own python2.7 or other buildroot-dependencies. Not really
-> > realistic, though, because then the executable should just set its
-> > DT_RPATH/DT_RUNPATH.
-> 
-> Yes.
-> 
-> >  Also, we already have a check for LD_LIBRARY_PATH in
-> > dependencies.sh. It just doesn't check for empty path elements,
-> > only for . path elements.
-> 
-> Well, the idea would be to get rid of this check entirely, and replace
-> it by a simple unexport in the main Makefile.
-> 
+On Sun, 29 Jun 2014 18:18:34 -0300, Ezequiel Garcia wrote:
 
-What about the (I would hope, unusual) case where a user needs those
-LD_LIBRARY_PATH settings to run a POST_**_SCRIPT ?
+> -config BR2_PACKAGE_LIBV4L_V4L2_CTL
+> -	bool "v4l2-ctl"
+> -	depends on BR2_INSTALL_LIBSTDCPP
+> +config BR2_PACKAGE_LIBV4L_JPEG
+> +	bool "JPEG support"
 
-- - - -
+I think there needs to be a justification as to why we want a
+sub-option to enable jpeg support, as opposed to have it directly
+handled as an optional dependency in the .mk file by testing
+BR2_PACKAGE_JPEG.
 
-Even a further out use case -
-The applications requiring a LD_LIBRARY_PATH setting, where the
-application(s) are used in a POST_**_SCRIPT, but the source isn't
-available to build-in the appropriate DT_RUNPATH/DT_RPATH?
+> -comment "libv4l needs a toolchain w/ largefile, threads"
+> +comment "libv4l needs a toolchain w/ largefile, threads and C++"
+>  	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_INSTALL_LIBSTDCPP
 
-For this second use case -
-How about putting a "host-patchelf" target in the host tools list?
+The main problem is here, you should use:
 
-This would allow the use case #2 above user to build the tool to
-fix their host application to not require a LD_LIBRARY_PATH setting.
+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
 
-Note: 
-In my few weeks of use; 
-I have not been able to break ARM binaries with patchelf-0.8
-regardless of the current documentation that claims ARM isn't
-fully supported.
+Otherwise, the comment will not get displayed in the proper situations.
 
-Mike
-> What do you think?
-> 
-> Best regards,
-> 
-> Thomas
+Can you fix that up and resend?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
