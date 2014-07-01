@@ -1,32 +1,30 @@
-From: Alexander Potashev <a.potashev@geoscan.aero>
-Date: Tue, 01 Jul 2014 14:12:44 +0400
-Subject: [Buildroot] [PATCH] wget: Depends on libuuid
-In-Reply-To: <20140701100727.GN4425@tarshish>
-References: <1404206129-27696-1-git-send-email-a.potashev@geoscan.aero>
- <2414587.c08SQIiSAD@aspotashev> <20140701100727.GN4425@tarshish>
-Message-ID: <5869200.uCiIhCFC8h@aspotashev>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  1 Jul 2014 07:22:23 -0300
+Subject: [Buildroot] [PATCH 1/2] fftw: bump to version 3.3.4
+Message-ID: <1404210144-5425-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/fftw/fftw.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-? ?????? ?? 1 ???? 2014 13:07:27 ?? ????????:
-> On Tue, Jul 01, 2014 at 01:55:35PM +0400, Alexander Potashev wrote:
-> > Looks good, although one could argue if keeping *_DEPENDENCIES up-to-date
-> > is important when we also have dependency assurance in Config.in.
-> 
-> No. These are two different levels of dependencies. Config.in 'select'
-> determines which packages are to be built. You need this for mandatory
-> dependencies. The per package $(PKG)_DEPENDENCIES determines the ORDER of
-> the build. $(PKG)_DEPENDENCIES should list both mandatory AND optional
-> dependencies to get a reproducible result.
-
-Thanks for clarification! Now I see the change suggested by Thomas is 
-important.
-
+diff --git a/package/fftw/fftw.mk b/package/fftw/fftw.mk
+index d0af752..3b302df 100644
+--- a/package/fftw/fftw.mk
++++ b/package/fftw/fftw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFTW_VERSION = 3.3.3
++FFTW_VERSION = 3.3.4
+ FFTW_SITE = http://www.fftw.org
+ FFTW_INSTALL_STAGING = YES
+ FFTW_LICENSE = GPLv2+
 -- 
-Regards,
-Alexander Potashev
+1.8.5.5
