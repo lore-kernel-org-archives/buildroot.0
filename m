@@ -1,31 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jul 2014 12:57:08 +0200
-Subject: [Buildroot] [PATCH] libnss: don't use target CFLAGS with host
-	toolchain
-In-Reply-To: <5585048eb205b5d13b8ddc27a12a329aaa956408.1404185816.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 1 Jul 2014 06:36:56 +0300")
-References: <5585048eb205b5d13b8ddc27a12a329aaa956408.1404185816.git.baruch@tkos.co.il>
-Message-ID: <87mwctiby3.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  1 Jul 2014 07:57:52 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 14,
+	15}.x series
+Message-ID: <1404212273-7445-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > The OPTIMIZER variable is used to construct CFLAGS for host toolchain.
- > This breaks the build since we set it to TARGET_CFLAGS, and these may not be
- > supported by host toolchain. Augment the cross-compile patch to handle
- > OPTIMIZER so that we can initialize it to TARGET_OPTIMIZER, and override it
- > when used with host toolchain.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/3f1/3f1afc1b58cb6fe53c438b55f169e2a78238806d/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3d2094a..747d9c1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.95"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.96"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.45"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.46"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.23"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.9"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.2"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.10"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.3"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
