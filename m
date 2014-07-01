@@ -1,119 +1,64 @@
-From: Sagaert Johan <sagaert.johan@skynet.be>
-Date: Thu, 1 May 2014 01:05:17 +0200
-Subject: [Buildroot] (resend) [PATCH 1/1 v4] qdecoder : new package
-Message-ID: <164F12A856D344AD995957EB8CD930C7@JohanW7>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 30 Jun 2014 21:44:05 -0300
+Subject: [Buildroot] [PATCH] pwgen: new package
+Message-ID: <1404175445-4316-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-qDecoder is a powerful CGI library.
-Features:
-   Supports parsing a request encoded by GET/POST method
-   Supports parsing multipart/form-data encoding.(in-memory and direct disk)
-   Supports COOKIE handling.
-   Supports Session management.
-   Supports FastCGI
-
-Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v2:	Changed License to BSD-2
-v3:	Removed QDECODER_CONF_OPT and created makefile.in patch
-v4:	Renamed the patch to qdecoder-0001-install-header-and-lib-in-staging-directory.patch
+ package/Config.in       |  1 +
+ package/pwgen/Config.in |  7 +++++++
+ package/pwgen/pwgen.mk  | 12 ++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/pwgen/Config.in
+ create mode 100644 package/pwgen/pwgen.mk
 
- package/Config.in                                  |  1 +
- package/qdecoder/Config.in                         |  7 ++++++
- ...stall-header-and-lib-in-staging-directory.patch | 28 ++++++++++++++++++++++
- package/qdecoder/qdecoder.mk                       | 14 +++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/qdecoder/Config.in  create mode 100644
-package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
- create mode 100644 package/qdecoder/qdecoder.mk
-
-diff --git a/package/Config.in b/package/Config.in index abfc3cc..998f990 100644
+diff --git a/package/Config.in b/package/Config.in
+index 1282c8a..9900271 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -765,6 +765,7 @@ source "package/nss-mdns/Config.in"
- source "package/omniorb/Config.in"
- source "package/openpgm/Config.in"
- source "package/ortp/Config.in"
-+source "package/qdecoder/Config.in"
- source "package/rtmpdump/Config.in"
- source "package/slirp/Config.in"
- source "package/snmppp/Config.in"
-diff --git a/package/qdecoder/Config.in b/package/qdecoder/Config.in new file mode 100644 index 0000000..2bd2a2f
---- /dev/null
-+++ b/package/qdecoder/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QDECODER
-+	bool "qdecoder"
-+	help
-+	  qDecoder is a simple and powerful CGI library
-+	  for the C/C++ programming language.
-+
-+	  http://www.qdecoder.org/wiki/qdecoder
-diff --git a/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
-b/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-directory.patch
+@@ -1137,6 +1137,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/procps-ng/Config.in"
+ 	source "package/psmisc/Config.in"
+ endif
++	source "package/pwgen/Config.in"
+ 	source "package/quota/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/rsyslog/Config.in"
+diff --git a/package/pwgen/Config.in b/package/pwgen/Config.in
 new file mode 100644
-index 0000000..c044b6d
+index 0000000..7bbc1d6
 --- /dev/null
-+++ b/package/qdecoder/qdecoder-0001-install-header-and-lib-in-staging-d
-+++ irectory.patch
-@@ -0,0 +1,28 @@
-+From 75e16fd73af6b2f8c0149dacb9c7be7e7123b449 Mon Sep 17 00:00:00 2001
-+From: Sagaert Johan <sagaert.johan@skynet.be>
-+Date: Sat, 26 Apr 2014 19:05:55 +0200
-+Subject: [PATCH 1/1] install header and lib in staging directory
++++ b/package/pwgen/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PWGEN
++	bool "pwgen"
++	help
++	  Pwgen is a small, GPL'ed password generator which creates passwords
++	  which can be easily memorized by a human.
 +
-+Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-+---
-+ src/Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/Makefile.in b/src/Makefile.in index 2688038..b2bf836 
-+100644
-+--- a/src/Makefile.in
-++++ b/src/Makefile.in
-+@@ -43,8 +43,8 @@ SLIBNAME	= lib${PRGNAME}.so
-+ SLIBREALNAME	= ${SLIBNAME}.${SLIBVERSION}
-+ 
-+ ## System library directory
-+-LIBDIR		= @libdir@
-+-HEADERDIR	= @includedir@
-++LIBDIR = $(STAGING_DIR)/usr/lib
-++HEADERDIR =$(STAGING_DIR)/usr/include
-+ 
-+ ## Which compiler & options for release
-+ CC		= @CC@
-+--
-+1.9.2
-+
-diff --git a/package/qdecoder/qdecoder.mk b/package/qdecoder/qdecoder.mk new file mode 100644 index 0000000..30fbcb3
++	  http://sourceforge.net/projects/pwgen/
+diff --git a/package/pwgen/pwgen.mk b/package/pwgen/pwgen.mk
+new file mode 100644
+index 0000000..f0e66d2
 --- /dev/null
-+++ b/package/qdecoder/qdecoder.mk
-@@ -0,0 +1,14 @@
-+#######################################################################
-+#########
++++ b/package/pwgen/pwgen.mk
+@@ -0,0 +1,12 @@
++################################################################################
 +#
-+# qdecoder
++# pwgen
 +#
-+#######################################################################
-+#########
++################################################################################
 +
-+QDECODER_VERSION = r12.0.5
-+QDECODER_SITE = $(call github,wolkykim,qdecoder,$(QDECODER_VERSION))
-+QDECODER_LICENSE = GPL
-+QDECODER_LICENSE_FILES = COPYING
-+
-+QDECODER_INSTALL_STAGING = YES
++PWGEN_VERSION = 2.06
++PWGEN_SITE = http://downloads.sourceforge.net/project/pwgen/pwgen/$(PWGEN_VERSION)
++PWGEN_LICENSE = GPLv2
 +
 +$(eval $(autotools-package))
---
-1.9.2
-
-_______________________________________________
-buildroot mailing list
-buildroot at busybox.net
-http://lists.busybox.net/mailman/listinfo/buildroot
++$(eval $(host-autotools-package))
+-- 
+1.8.5.5
