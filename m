@@ -1,56 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jul 2014 19:39:16 +0200
-Subject: [Buildroot] [PATCH] grub2: fix a few minor issues in help text
-Message-ID: <1404236356-4595-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Tue,  1 Jul 2014 19:49:47 +0200
+Subject: [Buildroot] [PATCH v3] grub2: Specify boot partition
+Message-ID: <1404236987-21979-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The help text of grub2 explains the detailed steps to create a disk
-image with grub2 installed on it. However, the steps for the
-BIOS-based systems have a few minor issues fixed by this patch:
+Since boot partition was not specified, grub tools try to detect it
+automatically. This patch add an option to force it.
 
- - When calling partx to get the partitions detected, we should do it
-   on the /dev/loop0 block device, and not on the underlying disk.img
-   image file.
- - The grub-bios-setup utility must be called as root to work properly
-   on /dev/loop0.
- - The steps to cleanup the partx and loop device were missing.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- boot/grub2/Config.in | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+v2 -> v3:
+ * Make parenthesis around partition name implicit
+
+v1 -> v2:
+ * Rewrite help for BR2_TARGET_GRUB2_BOOT_PARTITION option
+ * Don't show BR2_TARGET_GRUB2_BOOT_PARTITION if EFI is selected
+ * Rewrite log message
+
+ boot/grub2/Config.in | 13 +++++++++++++
+ boot/grub2/grub2.mk  | 10 ++++++----
+ 2 files changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index b37e024..c6c47b7 100644
+index b37e024..5e7ccd2 100644
 --- a/boot/grub2/Config.in
 +++ b/boot/grub2/Config.in
-@@ -24,17 +24,20 @@ config BR2_TARGET_GRUB2
- 		store Grub2. Leaving 1 MB of free space is safe.
- 	  3. Setup loop device and loop partitions
- 	     sudo losetup -f disk.img
--	     sudo partx -a disk.img
-+	     sudo partx -a /dev/loop0
- 	  4. Prepare the root partition
- 	     sudo mkfs.ext3 -L root /dev/loop0p1
- 	     sudo mount /dev/loop0p1 /mnt
- 	     sudo tar -C /mnt -xf output/images/rootfs.tar
- 	     sudo umount /mnt
- 	  5. Install Grub2
--	     ./output/host/usr/sbin/grub-bios-setup \
-+	     sudo ./output/host/usr/sbin/grub-bios-setup \
- 			-b ./output/host/usr/lib/grub/i386-pc/boot.img \
- 			-c ./output/images/grub.img -d . /dev/loop0
--	  6. Your disk.img is ready!
-+	  6. Cleanup loop device
-+	     sudo partx -d /dev/loop0
-+	     sudo losetup -d /dev/loop0
-+	  7. Your disk.img is ready!
+@@ -111,6 +111,19 @@ config BR2_TARGET_GRUB2_X86_64_EFI
  
- 	  To test your BIOS image in Qemu:
+ endchoice
  
++if BR2_TARGET_GRUB2_I386_PC
++
++config BR2_TARGET_GRUB2_BOOT_PARTITION
++	string "boot partition"
++	default "hd0,msdos1"
++	help
++	  Specify the partition where the /boot/grub/grub.cfg file is
++	  located. Use 'hd0,msdos1' for the first partition of the
++	  first disk if using a legacy partition table, or 'hd0,gpt1'
++	  if using GPT partition table.
++
++endif # BR2_TARGET_GRUB2_I386_PC
++
+ config BR2_TARGET_GRUB2_BUILTIN_MODULES
+ 	string "builtin modules"
+ 	default "boot linux ext2 fat part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 50f93ee..db0b4e1 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -11,9 +11,14 @@ GRUB2_LICENSE = GPLv3+
+ GRUB2_LICENSE_FILES = COPYING
+ GRUB2_DEPENDENCIES = host-bison host-flex
+ 
++GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
++GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
++GRUB2_BOOT_PARTITION = $(call qstrip,$(BR2_TARGET_GRUB2_BOOT_PARTITION))
++
+ ifeq ($(BR2_TARGET_GRUB2_I386_PC),y)
+ GRUB2_IMAGE = $(BINARIES_DIR)/grub.img
+ GRUB2_CFG = $(TARGET_DIR)/boot/grub/grub.cfg
++GRUB2_PREFIX = ($(GRUB2_BOOT_PARTITION))/boot/grub
+ GRUB2_TUPLE = i386-pc
+ GRUB2_TARGET = i386
+ GRUB2_PLATFORM = pc
+@@ -33,9 +38,6 @@ GRUB2_TARGET = x86_64
+ GRUB2_PLATFORM = efi
+ endif
+ 
+-GRUB2_BUILTIN_MODULES = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES))
+-GRUB2_BUILTIN_CONFIG = $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_CONFIG))
+-
+ # Grub2 is kind of special: it considers CC, LD and so on to be the
+ # tools to build the native tools (i.e to be executed on the build
+ # machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS to
+@@ -71,7 +73,7 @@ define GRUB2_IMAGE_INSTALLATION
+ 		-d $(HOST_DIR)/usr/lib/grub/$(GRUB2_TUPLE) \
+ 		-O $(GRUB2_TUPLE) \
+ 		-o $(GRUB2_IMAGE) \
+-		$(if $(GRUB2_PREFIX),-p $(GRUB2_PREFIX)) \
++		-p "$(GRUB2_PREFIX)" \
+ 		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
+ 		$(GRUB2_BUILTIN_MODULES)
+ 	mkdir -p $(dir $(GRUB2_CFG))
 -- 
 2.0.0
