@@ -1,25 +1,21 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 1 Jul 2014 10:27:05 +0000
-Subject: [Buildroot] [PATCH] uclibc: clean-up test suite build command
-In-Reply-To: <20140630200719.1339a6ed@free-electrons.com>
-References: <1404149181-18586-1-git-send-email-abrodkin@synopsys.com>
- <20140630200719.1339a6ed@free-electrons.com>
-Message-ID: <1404210425.3921.1.camel@abrodkin-8560l.internal.synopsys.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Jul 2014 12:55:26 +0200
+Subject: [Buildroot] [PATCH 1/2] fftw: bump to version 3.3.4
+In-Reply-To: <1404210144-5425-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 1 Jul 2014 07:22:23 -0300")
+References: <1404210144-5425-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87vbrhic0x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Mon, 2014-06-30 at 20:07 +0200, Thomas Petazzoni wrote:
-> Unfortunately, unless this cleaned-up version brings significant
-> benefits, I believe the best option is to keep things as is until AVR32
-> support is really deprecated and removed from Buildroot, so that we can
-> drop support for 0.9.31.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-That's fine for me. Anyways patch is published and at any point anybody
-may apply it whether local or even upstream.
+Committed, thanks.
 
--Alexey
+-- 
+Bye, Peter Korsgaard
