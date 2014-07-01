@@ -1,22 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 01 Jul 2014 07:06:42 -0300
-Subject: [Buildroot] [PATCH] pwgen: new package
-In-Reply-To: <20140701095044.GM4425@tarshish>
-References: <1404175445-4316-1-git-send-email-gustavo@zacarias.com.ar>
- <20140701095044.GM4425@tarshish>
-Message-ID: <53B28832.2020107@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 1 Jul 2014 13:07:27 +0300
+Subject: [Buildroot] [PATCH] wget: Depends on libuuid
+In-Reply-To: <2414587.c08SQIiSAD@aspotashev>
+References: <1404206129-27696-1-git-send-email-a.potashev@geoscan.aero>
+ <20140701113549.1d3f2569@free-electrons.com>
+ <2414587.c08SQIiSAD@aspotashev>
+Message-ID: <20140701100727.GN4425@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/2014 06:50 AM, Baruch Siach wrote:
+Hi Alexander,
+On Tue, Jul 01, 2014 at 01:55:35PM +0400, Alexander Potashev wrote:
+> ? ?????? ?? 1 ???? 2014 11:35:49 ???????????? Thomas Petazzoni ???????:
+> > However, it indeed seems to be a possible optional dependency of wget,
+> > in which case what you want is the following addition in wget.mk:
+> > 
+> > ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+> > WGET_DEPENDENCIES += util-linux
+> > endif
+> 
+> Looks good, although one could argue if keeping *_DEPENDENCIES up-to-date is 
+> important when we also have dependency assurance in Config.in.
 
-> What is the host version for?
+No. These are two different levels of dependencies. Config.in 'select' 
+determines which packages are to be built. You need this for mandatory 
+dependencies. The per package $(PKG)_DEPENDENCIES determines the ORDER of the 
+build. $(PKG)_DEPENDENCIES should list both mandatory AND optional 
+dependencies to get a reproducible result.
 
-Hi, i personally use it to generate random usable non-dictionary
-passwords in post build scripts and some custom packages.
-It can go if it's not deemed useful and i'll just keep a separate patch
-for that (or add a host utilites entries for that).
-Regards.
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
