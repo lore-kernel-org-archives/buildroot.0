@@ -1,47 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 13:22:01 +0200
-Subject: [Buildroot] [PATCH v4] Add support for Congatec QMX6
-In-Reply-To: <1404207479-2058-1-git-send-email-sho@relinux.de>
-References: <1404207479-2058-1-git-send-email-sho@relinux.de>
-Message-ID: <20140701132201.6d72f846@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Jul 2014 13:29:57 +0200
+Subject: [Buildroot] [PATCH] wget: Depends on libuuid
+In-Reply-To: <5869200.uCiIhCFC8h@aspotashev> (Alexander Potashev's message of
+ "Tue, 01 Jul 2014 14:12:44 +0400")
+References: <1404206129-27696-1-git-send-email-a.potashev@geoscan.aero>
+ <2414587.c08SQIiSAD@aspotashev> <20140701100727.GN4425@tarshish>
+ <5869200.uCiIhCFC8h@aspotashev>
+Message-ID: <87bnt9iafe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stephan Hoffmann,
+>>>>> "Alexander" == Alexander Potashev <a.potashev@geoscan.aero> writes:
 
-On Tue,  1 Jul 2014 11:37:59 +0200, Stephan Hoffmann wrote:
+ > Hi Baruch,
+ > ? ?????? ?? 1 ???? 2014 13:07:27 ?? ????????:
+ >> On Tue, Jul 01, 2014 at 01:55:35PM +0400, Alexander Potashev wrote:
+ >> > Looks good, although one could argue if keeping *_DEPENDENCIES up-to-date
+ >> > is important when we also have dependency assurance in Config.in.
+ >> 
+ >> No. These are two different levels of dependencies. Config.in 'select'
+ >> determines which packages are to be built. You need this for mandatory
+ >> dependencies. The per package $(PKG)_DEPENDENCIES determines the ORDER of
+ >> the build. $(PKG)_DEPENDENCIES should list both mandatory AND optional
+ >> dependencies to get a reproducible result.
 
-> diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-> new file mode 100644
-> index 0000000..4a83b29
-> --- /dev/null
-> +++ b/configs/qmx6_defconfig
-> @@ -0,0 +1,13 @@
-> +BR2_arm=y
-> +BR2_cortex_a9=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
-> +BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_3=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ > Thanks for clarification! Now I see the change suggested by Thomas is 
+ > important.
 
-This looks pretty good to me, but we generally also build U-Boot (or
-any other relevant bootloader) as part of the defconfig. Do you think
-it's possible to do it for this platform?
+Great, I've committed a patch adding the optional libuuid
+depency. Thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
