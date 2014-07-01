@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jul 2014 20:03:01 +0200
-Subject: [Buildroot] [PATCH 02/10] binutils: switch mips/mipsel/sh to
-	binutils 2.21.1 by default
+Date: Tue,  1 Jul 2014 20:03:00 +0200
+Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
 In-Reply-To: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1404237789-15563-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For some reason, mips, mipsel and sh use binutils 2.21 as their
-default version. Even though it would be nice to bump that to a much
-newer version, we can safely assume that we can bump the default
-version for those architecture to 2.21.1, which will allow the removal
-of binutils 2.21.
+The AVR32 architecture from Atmel is obsolete since a long time, not
+supported upstream in most of the toolchain components (requires a
+special version of gcc, an old version of uClibc, etc.). Until
+February, Simon Dawson was making an excellent job at maintaining
+AVR32 in Buildroot, and fixing all the issues caused by this
+architecture. However, Simon focus has changed, and despite his call
+for a new maintainer for AVR32 in Buildroot, nobody stepped up.
 
+The issue of maintaining AVR32 is becoming worse and worse, so this
+patch proposes to deprecate it for 2014.08, but keeping the support
+around, to remove it for sure in 2014.11.
+
+Cc: Simon Dawson <spdawson@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/binutils/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 08540a3..acb3933 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -3,7 +3,7 @@ comment "Binutils Options"
- choice
- 	prompt "Binutils Version"
- 	depends on !BR2_arc
--	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
-+	default BR2_BINUTILS_VERSION_2_21_1 if (BR2_mips || BR2_mipsel || BR2_sh)
- 	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
- 	default BR2_BINUTILS_VERSION_2_22
+diff --git a/arch/Config.in b/arch/Config.in
+index 1f60f81..77fae7a 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -56,6 +56,12 @@ config BR2_aarch64
+ config BR2_avr32
+ 	bool "AVR32"
+ 	select BR2_SOFT_FLOAT
++	# This architecture is obsolete and complicated to maintain to
++	# do the lack of upstream support in the major toolchain
++	# components. If you're interested by AVR32, contact the
++	# Buildroot community. Otherwise, its support will be removed
++	# in 2014.11.
++	depends on BR2_DEPRECATED_SINCE_2014_08
  	help
+ 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+ 	  Atmel.
 -- 
 2.0.0
