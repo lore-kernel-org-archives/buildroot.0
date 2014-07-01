@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jul 2014 00:30:55 +0200
-Subject: [Buildroot] [git commit] prboom: add license information
-Message-ID: <20140701224922.3D6E19D12D@busybox.osuosl.org>
+Date: Tue, 1 Jul 2014 23:33:21 +0200
+Subject: [Buildroot] [git commit] libargtable2: add license information
+Message-ID: <20140701224921.D53909D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d559501cdb01e85b6353fae631df7b7282c6d24c
+commit: http://git.buildroot.net/buildroot/commit/?id=0ebc5b28d7c6afc4d948db9e640851a1cbe253a0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/prboom/prboom.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libargtable2/libargtable2.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index 1da08ce..55973d6 100644
---- a/package/prboom/prboom.mk
-+++ b/package/prboom/prboom.mk
-@@ -8,6 +8,8 @@ PRBOOM_VERSION = 2.5.0
- PRBOOM_SITE = http://downloads.sourceforge.net/project/prboom/prboom%20stable/$(PRBOOM_VERSION)
- PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
- PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
-+PRBOOM_LICENSE = GPLv2+
-+PRBOOM_LICENSE_FILES = COPYING
+diff --git a/package/libargtable2/libargtable2.mk b/package/libargtable2/libargtable2.mk
+index cdd6236..48c70cb 100644
+--- a/package/libargtable2/libargtable2.mk
++++ b/package/libargtable2/libargtable2.mk
+@@ -7,11 +7,12 @@
+ LIBARGTABLE2_VERSION = 13
+ LIBARGTABLE2_SOURCE = argtable2-$(LIBARGTABLE2_VERSION).tar.gz
+ LIBARGTABLE2_SITE = http://downloads.sourceforge.net/project/argtable/argtable/argtable-2.13
+-
+ LIBARGTABLE2_INSTALL_STAGING = YES
+ LIBARGTABLE2_CONF_OPT = --disable-example \
+ 		--disable-kernel-module \
+ 		--enable-lib \
+ 		--enable-util
++LIBARGTABLE2_LICENSE = LGPLv2+
++LIBARGTABLE2_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- PRBOOM_DEPENDENCIES += libpng
+ $(eval $(autotools-package))
