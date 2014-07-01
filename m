@@ -1,31 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 15:05:53 +0200
-Subject: [Buildroot] [git commit] perl: remove documentation in target tree
-Message-ID: <20140701130717.DB8D29D11E@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 01 Jul 2014 15:12:08 +0200
+Subject: [Buildroot] [PATCH] pwgen: add host utilities menu entry
+In-Reply-To: <1404214923-27568-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 1 Jul 2014 08:42:03 -0300")
+References: <1404214923-27568-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqbxfck7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4d1824f367af2f39a979b68dbf645a6e33979cfe
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/Config.in.host       | 1 +
+ >  package/pwgen/Config.in.host | 7 +++++++
+ >  2 files changed, 8 insertions(+)
+ >  create mode 100644 package/pwgen/Config.in.host
 
-diff --git a/Makefile b/Makefile
-index 8912791..b3bd91e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -577,6 +577,7 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
- endif
- 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
-+	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
+ > diff --git a/package/Config.in.host b/package/Config.in.host
+ > index 08b8064..dce1a2d 100644
+ > --- a/package/Config.in.host
+ > +++ b/package/Config.in.host
+ > @@ -13,6 +13,7 @@ menu "Host utilities"
+ >  	source "package/omap-u-boot-utils/Config.in.host"
+ >  	source "package/openocd/Config.in.host"
+ >  	source "package/parted/Config.in.host"
+ > +	source "package/pwgen/Config.in.host"
+ >  	source "package/qemu-system/Config.in.host"
+
+Yes, I'll get to that some time ;)
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
