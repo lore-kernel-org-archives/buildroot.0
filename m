@@ -1,43 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 1 Jul 2014 20:35:13 +0200
-Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
-In-Reply-To: <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 1 Jul 2014 20:36:14 +0200
+Subject: [Buildroot] [PATCH 00/10] Proposals of deprecation/removal,
+ mainly affecting toolchain
+In-Reply-To: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAXf6LVdbcEWFWPa_4QfpS3Od7bRsVDieb1odmdNmiEN+3ZGVg@mail.gmail.com>
+Message-ID: <20140701183614.GZ3981@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
+Thomas Petazzoni wrote,
+> Hello,
+> 
+> This set of patches proposes a certain number of deprecation or
+> removal. They are mostly independent from each other:
+> 
+>  - Deprecation of the AVR32 architecture.
+>  - Removal of old binutils versions
+>  - Removal of uClibc 0.9.32.1
+>  - Removal of gcc 4.3.x and 4.6.x
+>  - Removal of gdb 7.4 and 7.5
+>  - Removal of busybox version selection
+> 
+> Let me know what you think about those various proposals.
 
-On Tue, Jul 1, 2014 at 8:03 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The AVR32 architecture from Atmel is obsolete since a long time, not
-> supported upstream in most of the toolchain components (requires a
-> special version of gcc, an old version of uClibc, etc.). Until
-> February, Simon Dawson was making an excellent job at maintaining
-> AVR32 in Buildroot, and fixing all the issues caused by this
-> architecture. However, Simon focus has changed, and despite his call
-> for a new maintainer for AVR32 in Buildroot, nobody stepped up.
->
-> The issue of maintaining AVR32 is becoming worse and worse, so this
-> patch proposes to deprecate it for 2014.08, but keeping the support
-> around, to remove it for sure in 2014.11.
->
+I would even suggest to switch binutils to 2.24 as default.
+I had no problems with 2.24 for a long time on different
+architectures. It is not so problematic as gcc, where I am more
+conservative, too.
 
-While I have no trouble at all with the deprecation of avr32, the
-timeline you propose deviates from the usual deprecation timeline.
-When I introduced the BR2_DEPRECATED_SINCE_XXXX symbols, we proposed
-to take one year (four buildroot releases) as deprecation time, so
-deprecating avr32 2014.08 would mean being able to remove it by
-2015.08.
-
-I'm ok with explicitly stating the removal happening already in
-2014.11, contrary to the usual timeline, provided there is a consensus
-with other buildroot developers.
-
-Best regards,
-Thomas
+best regards
+ Waldemar
