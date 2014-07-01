@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 23:36:24 +0200
-Subject: [Buildroot] [git commit] liberation: add license information
-Message-ID: <20140701224921.E5ED19D12D@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 00:30:28 +0200
+Subject: [Buildroot] [git commit] pcmanfm: add license information
+Message-ID: <20140701224922.3627D9D12D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6a50f3206456e2fa2b7bbb016ce4e256350a2953
+commit: http://git.buildroot.net/buildroot/commit/?id=b4ae7ab614cb637eaa595e7032ddcc0a3bd35152
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter: license is GPLv2+]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liberation/liberation.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
+ package/pcmanfm/pcmanfm.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
-index ac387fd..815aeba 100644
---- a/package/liberation/liberation.mk
-+++ b/package/liberation/liberation.mk
-@@ -7,8 +7,10 @@
- LIBERATION_VERSION = 1.06.0.20100721
- LIBERATION_SITE = http://www.fedorahosted.org/releases/l/i/liberation-fonts
- LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
--
- LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
-+# Bump to 2.x changes license!!
-+LIBERATION_LICENSE = GPLv2 with exceptions
-+LIBERATION_LICENSE_FILES = License.txt
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index 80eedd4..d4636b1 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
+@@ -9,5 +9,7 @@ PCMANFM_SITE = http://downloads.sourceforge.net/project/pcmanfm/pcmanfm-legacy%2
+ PCMANFM_CONF_OPT = --disable-hal
+ PCMANFM_DEPENDENCIES = host-pkgconf libgtk2 gamin startup-notification xlib_libX11
+ PCMANFM_AUTORECONF = YES
++PCMANFM_LICENSE = GPLv2+
++PCMANFM_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_PACKAGE_LIBERATION_MONO),y)
- define LIBERATION_INSTALL_MONO
+ $(eval $(autotools-package))
