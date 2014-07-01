@@ -1,89 +1,93 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 01 Jul 2014 08:09:45 +0200
-Subject: [Buildroot] [PATCH 1 of 5 RFC] uclibc: menuconfig: take into
- account initial settings from config file
-In-Reply-To: <CAAXf6LVkiOswF-Hb=QGLH7rrNyX4S+bH1dU1rde+HWomn-dL8Q@mail.gmail.com>
-References: <patchbomb.1403444739@localhost>
- <97d74ccbe054d9a16465.1403444740@localhost> <53AA6938.80303@mind.be>
- <CAAXf6LVkiOswF-Hb=QGLH7rrNyX4S+bH1dU1rde+HWomn-dL8Q@mail.gmail.com>
-Message-ID: <53B250A9.9000707@mind.be>
+Date: Tue, 01 Jul 2014 08:19:38 +0200
+Subject: [Buildroot] [PATCH V5 2/2] google-breakpad: integration into
+ Makefile and Config.in
+In-Reply-To: <20140629123618.407b95f5@free-electrons.com>
+References: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>	<1403702174-23850-3-git-send-email-pascal.huerst@gmail.com>	<53AB3198.9010908@mind.be>
+ <20140629123618.407b95f5@free-electrons.com>
+Message-ID: <53B252FA.4050100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/06/14 21:31, Thomas De Schampheleire wrote:
-> Hi Arnout, all,
+On 29/06/14 12:36, Thomas Petazzoni wrote:
+> Arnout, Pascal,
 > 
-> On Wed, Jun 25, 2014 at 8:16 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
->>  In order to cover all requirements, I think we should rely on real dependencies
->> here. Something like:
->>
->> uclibc-menuconfig: $(UCLIBC_DIR)/.config
->>         $(MAKE1) -C $(UCLIBC_DIR) ...
->>         $(UCLIBC_FIXUP_DOT_CONFIG)
->>
->> $(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) uclibc-patch
->>         $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@)
->>         $(MAKE1) -C $(UCLIBC_DIR) ... oldconfig
->>         $(UCLIBC_FIXUP_DOT_CONFIG)
->>
->> uclibc-configure: $(UCLIBC_DIR)/.config
->>
->>
->> (I renamed SETUP_DOT_CONFIG to FIXUP_DOT_CONFIG which I think is more accurate.)
->>
->>
->>  This is obviously just a skeleton, but you can see where I'm going... The
->> important thing is:
->>
->> - all config targets depend on .config
->> - .config depends on the the CONFIG_FILE
->> - all config targets and .config itself call to FIXUP_DOT_CONFIG
->>
+> On Wed, 25 Jun 2014 22:31:20 +0200, Arnout Vandecappelle wrote:
 > 
-> FYI, my plan for this patch series is to first fix all issues for
-> uclibc, then extract that to a kconfig-package, then convert busybox,
-> barebox, linux to this kconfig-package, one by one.
+>>> +config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
+>>
+>>  I don't really like the name of this option. What do you think of
+>> BR2_GOOGLE_BREAKPAD_GENSYMS_PATTERNS ?
 > 
-> With respect to the skeleton above: you moved the FIXUP_DOT_CONFIG to
-> the .config and menuconfig target. If a user manually edits .config
-> (or copies over a new file) then these fixups will not be applied. I
-> think they should be applied nevertheless, so moving the fixup to the
-> configure command and letting configure depend on .config makes more
-> sense to me.
+> I think this explains some of your comments below: Pascal's patch only
+> support listing complete file names in
+> BR2_GOOGLE_BREAKPAD_INCLUDE_FILES, while you apparently thought his
+> intention was to support file patterns. It indeed seems like a good
+> idea, but it's clearly a different thing.
+
+ My bad, I was reviewing this patch side-by-side with the comments on v4 and the
+script looked a bit like what was proposed by Yann in his review so I assumed
+that it would include support for glob patterns. Personally I don't really see
+this as a requirement.
+
 > 
-> Would you agree?
+>>> +	string "executables and libraries to be used by google-breakpad"
+>>> +	depends on BR2_PACKAGE_GOOGLE_BREAKPAD
+>>
+>>  Hm, this is counter-intuitive, though honestly I don't know how to improve it.
+>> The user would first have to go to the target packages and select google
+>> breakpad, and then return to the Build options menu at the top to set the patterns.
+>>
+>>  Actually, this symbol could be defined inside the google-breakpad/Config.in,
+>> no? Though you probably got a comment before that that is not the right place :-)
+> 
+> Yeah, that's tricky. We could turn it into a "select", but then
+> everybody will always see this option related to google-breakpad in the
+> Build options. So I believe the solution of using a 'depends on' is
+> still the most appropriate solution. Maybe a little piece of
+> documentation should be added in the Buildroot manual to explain how
+> the Google Breakpad integration works?
+> 
+> However, I don't really like the prompt. Maybe it should be:
+> 
+> 	[ ] Enable Google Breakpad support
+> 	   () List of binaries to extract symbols from
 
- I don't really agree that we should care about a user manually overwriting
-.config (so _not_ using a 'make xxxconfig'. However, if we can support that, so
-much the better of course.
-
- Moving the fixup to the configure step has the disadvantage that there is a
-difference between:
-
-make clean; make uclibc-menuconfig; make uclibc-update-defconfig
-
-and
-
-make clean; make uclibc-menuconfig; make; make uclibc-update-defconfig
-
-(the first case will not have the fixups applied, the second case does).
-
- Also, with 'make clean; make uclibc-menuconfig' you'll won't see the result of
-the fixups in your menuconfig, which is pretty strange. Especially for e.g.
-linux-menuconfig, because 'make clean; make linux-menuconfig' would give you the
-config options for i386 instead of your target...
+ If it is done in that way, then it really should be in the google breakpad
+package and not in the toolchain menu...
 
 
- That said, it doesn't hurt to just put the fixups everywhere: in the .config
-target, in the -menuconfig target, and in the PRE_CONFIGURE_HOOKS.
+ However, thinking a bit more about this: the dependency on the target package
+is not correct. There's a dependency on the host package because the host tools
+are used, but it's the responsibility of whatever package is linking against the
+static library to also depend on the target package.
 
+ So in that case, it is indeed best to keep it in the toolchain menu, remove the
+dependency on the target package, but add a boolean config option to enable
+breakpad to begin with.
 
  Regards,
  Arnout
+
+
+> 
+>>> +ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+>>> +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+>>> +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
+>>
+>>  To be more compatible with Fabio's series that reworks this part of the
+>> infrastructure, it's better to define this as a new variable which is called
+>> here. That will make it easier to resolve the conflict between these two series.
+>> Fabio's series will also make it possible to define this completely inside the
+>> google-breakpad.mk.
+> 
+> Yes, having it all in the google-breakpad.mk seems like a good idea.
+> 
+> Thomas
+> 
 
 
 -- 
