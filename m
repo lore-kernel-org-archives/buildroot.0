@@ -1,32 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 12:55:20 +0200
-Subject: [Buildroot] [git commit] imagemagick: bump to version 6.8.9-5
-Message-ID: <20140701113220.DCDA19D0B9@busybox.osuosl.org>
+Date: Tue, 1 Jul 2014 13:28:33 +0200
+Subject: [Buildroot] [git commit] wget: add optional libuuid dependency
+Message-ID: <20140701113221.087139D128@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c526bbd4fdecf60af2f5baee19e0dd2778d1bae
+commit: http://git.buildroot.net/buildroot/commit/?id=faa9e1a6bb3e81a75484367d29b542abac69c4e0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reported-by: Alexander Potashev <a.potashev@geoscan.aero>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/wget/wget.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 6d6d5de..b713f98 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index a8d9f61..56ccfb5 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -37,6 +37,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ 	WGET_DEPENDENCIES += openssl
+ endif
  
--IMAGEMAGICK_VERSION = 6.8.9-3
-+IMAGEMAGICK_VERSION = 6.8.9-5
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- # The official ImageMagick site only keeps the latest versions
- # available, which is annoying. Use an alternate site that keeps all
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++	WGET_DEPENDENCIES += util-linux
++endif
++
+ # --with-ssl is default
+ ifneq ($(BR2_PACKAGE_GNUTLS),y)
+ ifneq ($(BR2_PACKAGE_OPENSSL),y)
