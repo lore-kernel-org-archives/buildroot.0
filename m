@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 01 Jul 2014 23:55:13 +0200
-Subject: [Buildroot] [PATCH 33/53] libmms: add license information
-In-Reply-To: <1403810481-10025-33-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 26 Jun 2014 16:21:01 -0300")
+Date: Wed, 02 Jul 2014 00:30:17 +0200
+Subject: [Buildroot] [PATCH 39/53] pcmanfm: add license information
+In-Reply-To: <1403810481-10025-39-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 26 Jun 2014 16:21:07 -0300")
 References: <1403810481-10025-1-git-send-email-gustavo@zacarias.com.ar>
- <1403810481-10025-33-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87ha30eoce.fsf@dell.be.48ers.dk>
+ <1403810481-10025-39-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d2doempy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,31 +16,25 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  > ---
- >  package/libmms/libmms.mk | 4 ++--
- >  1 file changed, 2 insertions(+), 2 deletions(-)
+ >  package/pcmanfm/pcmanfm.mk | 2 ++
+ >  1 file changed, 2 insertions(+)
 
- > diff --git a/package/libmms/libmms.mk b/package/libmms/libmms.mk
- > index 405729f..445da7f 100644
- > --- a/package/libmms/libmms.mk
- > +++ b/package/libmms/libmms.mk
- > @@ -6,9 +6,9 @@
- 
- >  LIBMMS_VERSION = 0.6.2
- >  LIBMMS_SITE = http://downloads.sourceforge.net/project/libmms/libmms/$(LIBMMS_VERSION)
- > -
- >  LIBMMS_INSTALL_STAGING = YES
- > -
- >  LIBMMS_DEPENDENCIES = host-pkgconf libglib2
- > +LIBMMS_LICENSE = LGPLv2.1
- > +LIBMMS_LICENSE_FILES = COPYING.LIB
+ > diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+ > index 80eedd4..7e47f52 100644
+ > --- a/package/pcmanfm/pcmanfm.mk
+ > +++ b/package/pcmanfm/pcmanfm.mk
+ > @@ -9,5 +9,7 @@ PCMANFM_SITE = http://downloads.sourceforge.net/project/pcmanfm/pcmanfm-legacy%2
+ >  PCMANFM_CONF_OPT = --disable-hal
+ >  PCMANFM_DEPENDENCIES = host-pkgconf libgtk2 gamin startup-notification xlib_libX11
+ >  PCMANFM_AUTORECONF = YES
+ > +PCMANFM_LICENSE = GPLv2
+ > +PCMANFM_LICENSE_FILES = COPYING
 
-It's not really clear, but I think this should be LGPLv2.1+.
+Several of the source files, including the implementation of the about
+box contains the '(at your option) any later version' text, so I think
+this should be GPLv2+.
 
-Some files are copied from xine (which is GPLv2+), and README.LICENSE
-just states that it is relicensed as LGPL, but all source files contain
-the '(at your option) any later version' text (and GPL or LGPL header).
-
-So I've changed this to '+' and committed, thanks.
+Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
