@@ -1,3837 +1,702 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  1 Jul 2014 20:03:09 +0200
-Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
+Date: Tue,  1 Jul 2014 20:03:08 +0200
+Subject: [Buildroot] [PATCH 09/10] gdb: remove versions 7.4 and 7.5
 In-Reply-To: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1404237789-15563-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit removes the version selection for the busybox
-package. Busybox is very well maintained, and bugs are typically fixed
-in a timely fashion. Moreover, regressions are fairly unlikely in this
-very stable and well-tested tool.
-
-Therefore, there isn't a very compelling reason to have a version
-selection for Busybox since we don't accept such a version selection
-for the vast majority of other packages, unless there is a strong
-reason to do so.
-
-Consequently, this commit:
-
- * Removes the 1.19.4, 1.20.2 and 1.21.1 Busybox versions, patches and
-   default configuration file.
-
- * Moves the 1.22.1 patches from package/busybox/1.22.1 to just
-   package/busybox/ like all other packages.
-
- * Renames the default 1.22.1 configuration file to just
-   busybox.config.
-
- * Adapts the busybox.mk makefile to encode the current version to
-   use.
-
- * Adds appropriate options to Config.in.legacy. However, even though
-   the BR2_BUSYBOX_VERSION_1_22_X is removed, we don't add a
-   Config.in.legacy option for it, since it would cause a legacy
-   warning for virtually *all* users as most people are currently
-   using 1.22.x.
+We already default to 7.6 for all architectures (except AVR32, ARC and
+Microblaze that have their specific versions), and we have added 7.7
+recently.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy                                   |   24 +
- package/busybox/1.19.4/busybox-1.19.4-udhcp.patch  |  164 ----
- .../busybox/1.20.2/busybox-1.20.2-kernel_ver.patch |   25 -
- package/busybox/1.20.2/busybox-1.20.2-ntpd.patch   |   11 -
- .../1.20.2/busybox-1.20.2-pkg-config-selinux.patch |   67 --
- .../1.20.2/busybox-1.20.2-sys-resource.patch       |  123 ---
- ...01-libbb-use-poll.h-instead-of-sys-poll.h.patch |   32 -
- ...onfig-include-linux-if_slip.h-instead-of-.patch |   33 -
- ...libiproute-use-linux-if_packet.h-instead-.patch |   36 -
- package/busybox/Config.in                          |   37 +-
- ...ibiproute-use-linux-if_packet.h-instead-.patch} |    0
- ...patch => busybox-0002-busybox-1.22.1-ash.patch} |    0
- ...atch => busybox-0003-busybox-1.22.1-date.patch} |    0
- ...ch => busybox-0004-busybox-1.22.1-iplink.patch} |    0
- ....patch => busybox-0005-busybox-1.22.1-nc.patch} |    0
- package/busybox/busybox-1.19.x.config              | 1013 -------------------
- package/busybox/busybox-1.20.x.config              | 1024 -------------------
- package/busybox/busybox-1.21.x.config              | 1030 --------------------
- .../{busybox-1.22.x.config => busybox.config}      |    0
- package/busybox/busybox.mk                         |    7 +-
- 20 files changed, 26 insertions(+), 3600 deletions(-)
- delete mode 100644 package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
- delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
- delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
- delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
- delete mode 100644 package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
- delete mode 100644 package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
- delete mode 100644 package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
- delete mode 100644 package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
- rename package/busybox/{1.22.1/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch => busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch} (100%)
- rename package/busybox/{1.22.1/0002-busybox-1.22.1-ash.patch => busybox-0002-busybox-1.22.1-ash.patch} (100%)
- rename package/busybox/{1.22.1/0003-busybox-1.22.1-date.patch => busybox-0003-busybox-1.22.1-date.patch} (100%)
- rename package/busybox/{1.22.1/0004-busybox-1.22.1-iplink.patch => busybox-0004-busybox-1.22.1-iplink.patch} (100%)
- rename package/busybox/{1.22.1/0005-busybox-1.22.1-nc.patch => busybox-0005-busybox-1.22.1-nc.patch} (100%)
- delete mode 100644 package/busybox/busybox-1.19.x.config
- delete mode 100644 package/busybox/busybox-1.20.x.config
- delete mode 100644 package/busybox/busybox-1.21.x.config
- rename package/busybox/{busybox-1.22.x.config => busybox.config} (100%)
+ Config.in.legacy                                   |  18 +-
+ package/gdb/7.4.1/00_all_ptrace_setsiginfo.patch   | 314 ---------------------
+ package/gdb/7.4.1/05_all_readline-headers.patch    |  42 ---
+ .../gdb-100-xtensa-fix-linux-ptrace-includes.patch |  60 ----
+ .../7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch |  42 ---
+ .../gdb-100-xtensa-fix-linux-ptrace-includes.patch |  60 ----
+ .../7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch |  42 ---
+ package/gdb/Config.in.host                         |  10 -
+ 8 files changed, 16 insertions(+), 572 deletions(-)
+ delete mode 100644 package/gdb/7.4.1/00_all_ptrace_setsiginfo.patch
+ delete mode 100644 package/gdb/7.4.1/05_all_readline-headers.patch
+ delete mode 100644 package/gdb/7.4.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
+ delete mode 100644 package/gdb/7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
+ delete mode 100644 package/gdb/7.5.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
+ delete mode 100644 package/gdb/7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index dad359e..54b2f14 100644
+index 1c5a45f..dad359e 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -184,6 +184,30 @@ config BR2_GDB_VERSION_7_5
- 	  The 7.5 version of gdb has been removed. Use a newer version
- 	  instead.
+@@ -170,6 +170,20 @@ config BR2_GCC_VERSION_4_6_X
+ 	  The 4.6.x version of gcc has been removed. Use a newer
+ 	  version instead.
  
-+config BR2_BUSYBOX_VERSION_1_19_X
-+	bool "busybox version selection has been removed"
++config BR2_GDB_VERSION_7_4
++	bool "gdb 7.4 has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The possibility of selecting the Busybox version has been
-+	  removed. Use the latest version provided by the Busybox
-+	  package instead.
++	  The 7.4 version of gdb has been removed. Use a newer version
++	  instead.
 +
-+config BR2_BUSYBOX_VERSION_1_20_X
-+	bool "busybox version selection has been removed"
++config BR2_GDB_VERSION_7_5
++	bool "gdb 7.5 has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The possibility of selecting the Busybox version has been
-+	  removed. Use the latest version provided by the Busybox
-+	  package instead.
-+
-+config BR2_BUSYBOX_VERSION_1_21_X
-+	bool "busybox version selection has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The possibility of selecting the Busybox version has been
-+	  removed. Use the latest version provided by the Busybox
-+	  package instead.
++	  The 7.5 version of gdb has been removed. Use a newer version
++	  instead.
 +
  ###############################################################################
  comment "Legacy options removed in 2014.05"
  
-diff --git a/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch b/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
+@@ -388,7 +402,7 @@ config BR2_KERNEL_HEADERS_3_5
+ 
+ config BR2_GDB_VERSION_7_2
+ 	bool "gdb 7.2.x is no longer supported"
+-	select BR2_GDB_VERSION_7_5
++	select BR2_GDB_VERSION_7_6
+ 	select BR2_LEGACY
+ 	help
+ 	  Version 7.2.x of gdb has been deprecated for more than four
+@@ -397,7 +411,7 @@ config BR2_GDB_VERSION_7_2
+ 
+ config BR2_GDB_VERSION_7_3
+ 	bool "gdb 7.3.x is no longer supported"
+-	select BR2_GDB_VERSION_7_5
++	select BR2_GDB_VERSION_7_6
+ 	select BR2_LEGACY
+ 	help
+ 	  Version 7.3.x of gdb has been deprecated for more than four
+diff --git a/package/gdb/7.4.1/00_all_ptrace_setsiginfo.patch b/package/gdb/7.4.1/00_all_ptrace_setsiginfo.patch
 deleted file mode 100644
-index 94d5f34..0000000
---- a/package/busybox/1.19.4/busybox-1.19.4-udhcp.patch
+index 81a92db..0000000
+--- a/package/gdb/7.4.1/00_all_ptrace_setsiginfo.patch
 +++ /dev/null
-@@ -1,164 +0,0 @@
----- busybox-1.19.4/networking/udhcp/common.c
--+++ busybox-1.19.4-udhcp/networking/udhcp/common.c
--@@ -29,16 +29,16 @@ const struct dhcp_optflag dhcp_optflags[
-- //	{ OPTION_IP | OPTION_LIST                 , 0x07 }, /* DHCP_LOG_SERVER    */
-- //	{ OPTION_IP | OPTION_LIST                 , 0x08 }, /* DHCP_COOKIE_SERVER */
-- 	{ OPTION_IP | OPTION_LIST                 , 0x09 }, /* DHCP_LPR_SERVER    */
---	{ OPTION_STRING               | OPTION_REQ, 0x0c }, /* DHCP_HOST_NAME     */
--+	{ OPTION_STRING_HOST          | OPTION_REQ, 0x0c }, /* DHCP_HOST_NAME     */
-- 	{ OPTION_U16                              , 0x0d }, /* DHCP_BOOT_SIZE     */
---	{ OPTION_STRING               | OPTION_REQ, 0x0f }, /* DHCP_DOMAIN_NAME   */
--+	{ OPTION_STRING_HOST          | OPTION_REQ, 0x0f }, /* DHCP_DOMAIN_NAME   */
-- 	{ OPTION_IP                               , 0x10 }, /* DHCP_SWAP_SERVER   */
-- 	{ OPTION_STRING                           , 0x11 }, /* DHCP_ROOT_PATH     */
-- 	{ OPTION_U8                               , 0x17 }, /* DHCP_IP_TTL        */
-- 	{ OPTION_U16                              , 0x1a }, /* DHCP_MTU           */
-- 	{ OPTION_IP                   | OPTION_REQ, 0x1c }, /* DHCP_BROADCAST     */
-- 	{ OPTION_IP_PAIR | OPTION_LIST            , 0x21 }, /* DHCP_ROUTES        */
---	{ OPTION_STRING                           , 0x28 }, /* DHCP_NIS_DOMAIN    */
--+	{ OPTION_STRING_HOST                      , 0x28 }, /* DHCP_NIS_DOMAIN    */
-- 	{ OPTION_IP | OPTION_LIST                 , 0x29 }, /* DHCP_NIS_SERVER    */
-- 	{ OPTION_IP | OPTION_LIST     | OPTION_REQ, 0x2a }, /* DHCP_NTP_SERVER    */
-- 	{ OPTION_IP | OPTION_LIST                 , 0x2c }, /* DHCP_WINS_SERVER   */
--@@ -46,7 +46,7 @@ const struct dhcp_optflag dhcp_optflags[
-- 	{ OPTION_IP                               , 0x36 }, /* DHCP_SERVER_ID     */
-- 	{ OPTION_STRING                           , 0x38 }, /* DHCP_ERR_MESSAGE   */
-- //TODO: must be combined with 'sname' and 'file' handling:
---	{ OPTION_STRING                           , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
--+	{ OPTION_STRING_HOST                      , 0x42 }, /* DHCP_TFTP_SERVER_NAME */
-- 	{ OPTION_STRING                           , 0x43 }, /* DHCP_BOOT_FILE     */
-- //TODO: not a string, but a set of LASCII strings:
-- //	{ OPTION_STRING                           , 0x4D }, /* DHCP_USER_CLASS    */
--@@ -143,6 +143,7 @@ const uint8_t dhcp_option_lengths[] ALIG
-- 	[OPTION_IP_PAIR] = 8,
-- //	[OPTION_BOOLEAN] = 1,
-- 	[OPTION_STRING] =  1,  /* ignored by udhcp_str2optset */
--+	[OPTION_STRING_HOST] = 1,  /* ignored by udhcp_str2optset */
-- #if ENABLE_FEATURE_UDHCP_RFC3397
-- 	[OPTION_DNS_STRING] = 1,  /* ignored by both udhcp_str2optset and xmalloc_optname_optval */
-- 	[OPTION_SIP_SERVERS] = 1,
--@@ -411,7 +412,9 @@ static NOINLINE void attach_option(
-- 			/* actually 255 is ok too, but adding a space can overlow it */
+@@ -1,314 +0,0 @@
+-fix from upstream for building with newer kernel headers
+-
+-From a7f9ca9cb797d653dc7919538e1dfa0c26010331 Mon Sep 17 00:00:00 2001
+-From: tschwinge <tschwinge>
+-Date: Wed, 21 Mar 2012 13:43:50 +0000
+-Subject: [PATCH] struct siginfo vs. siginfo_t
+-
+-gdb/
+-	* amd64-linux-nat.c (amd64_linux_siginfo_fixup): Use siginfo_t instead
+-	of struct siginfo.
+-	* arm-linux-nat.c (arm_linux_stopped_data_address): Likewise.
+-	* ia64-linux-nat.c (ia64_linux_stopped_data_address): Likewise.
+-	* linux-nat.c (linux_nat_siginfo_fixup, siginfo_fixup)
+-	(linux_xfer_siginfo, linux_nat_set_siginfo_fixup)
+-	(linux_nat_get_siginfo): Likewise.
+-	* linux-nat.h (struct lwp_info, linux_nat_set_siginfo_fixup)
+-	(linux_nat_get_siginfo): Likewise.
+-	* linux-tdep.c (linux_get_siginfo_type): Likewise.
+-	* ppc-linux-nat.c (ppc_linux_stopped_data_address): Likewise.
+-	* procfs.c (gdb_siginfo_t): Likewise.
+-
+-gdbserver/
+-	* linux-arm-low.c (arm_stopped_by_watchpoint): Use siginfo_t instead of
+-	struct siginfo.
+-	* linux-low.c (siginfo_fixup, linux_xfer_siginfo): Likewise.
+-	* linux-x86-low.c (x86_siginfo_fixup): Likewise.
+-	* linux-low.h: Include <signal.h>.
+-	(struct siginfo): Remove forward declaration.
+-	(struct linux_target_ops) <siginfo_fixup>: Use siginfo_t instead of
+-	struct siginfo.
+----
+- gdb/ChangeLog                 |   15 +++++++++++++++
+- gdb/amd64-linux-nat.c         |    4 ++--
+- gdb/arm-linux-nat.c           |    2 +-
+- gdb/gdbserver/ChangeLog       |   11 +++++++++++
+- gdb/gdbserver/linux-arm-low.c |    2 +-
+- gdb/gdbserver/linux-low.c     |   10 +++++-----
+- gdb/gdbserver/linux-low.h     |    5 ++---
+- gdb/gdbserver/linux-x86-low.c |    4 ++--
+- gdb/ia64-linux-nat.c          |    2 +-
+- gdb/linux-nat.c               |   16 ++++++++--------
+- gdb/linux-nat.h               |    6 +++---
+- gdb/ppc-linux-nat.c           |    2 +-
+- gdb/procfs.c                  |    2 +-
+- 13 files changed, 53 insertions(+), 28 deletions(-)
+-
+-diff --git a/gdb/amd64-linux-nat.c b/gdb/amd64-linux-nat.c
+-index f954483..5ebba3a 100644
+---- a/gdb/amd64-linux-nat.c
+-+++ b/gdb/amd64-linux-nat.c
+-@@ -731,13 +731,13 @@ siginfo_from_compat_siginfo (siginfo_t *to, compat_siginfo_t *from)
+-    INF.  */
 - 
-- 			existing->data = xrealloc(existing->data, OPT_DATA + 1 + old_len + length);
---			if ((optflag->flags & OPTION_TYPE_MASK) == OPTION_STRING) {
--+			if ((optflag->flags & OPTION_TYPE_MASK) == OPTION_STRING
--+			 || (optflag->flags & OPTION_TYPE_MASK) == OPTION_STRING_HOST
--+			) {
-- 				/* add space separator between STRING options in a list */
-- 				existing->data[OPT_DATA + old_len] = ' ';
-- 				old_len++;
--@@ -475,6 +478,7 @@ int FAST_FUNC udhcp_str2optset(const cha
-- 				retval = udhcp_str2nip(val, buffer + 4);
-- 			break;
-- 		case OPTION_STRING:
--+		case OPTION_STRING_HOST:
-- #if ENABLE_FEATURE_UDHCP_RFC3397
-- 		case OPTION_DNS_STRING:
-- #endif
----- busybox-1.19.4/networking/udhcp/common.h
--+++ busybox-1.19.4-udhcp/networking/udhcp/common.h
--@@ -80,6 +80,9 @@ enum {
-- 	OPTION_IP = 1,
-- 	OPTION_IP_PAIR,
-- 	OPTION_STRING,
--+	/* Opts of STRING_HOST type will be sanitized before they are passed
--+	 * to udhcpc script's environment: */
--+	OPTION_STRING_HOST,
-- //	OPTION_BOOLEAN,
-- 	OPTION_U8,
-- 	OPTION_U16,
----- busybox-1.19.4/networking/udhcp/dhcpc.c
--+++ busybox-1.19.4-udhcp/networking/udhcp/dhcpc.c
--@@ -101,6 +101,7 @@ static const uint8_t len_of_option_as_st
-- 	[OPTION_IP_PAIR         ] = sizeof("255.255.255.255 ") * 2,
-- 	[OPTION_STATIC_ROUTES   ] = sizeof("255.255.255.255/32 255.255.255.255 "),
-- 	[OPTION_STRING          ] = 1,
--+	[OPTION_STRING_HOST     ] = 1,
-- #if ENABLE_FEATURE_UDHCP_RFC3397
-- 	[OPTION_DNS_STRING      ] = 1, /* unused */
-- 	/* Hmmm, this severely overestimates size if SIP_SERVERS option
--@@ -135,6 +136,63 @@ static int mton(uint32_t mask)
-- 	return i;
+- static int
+--amd64_linux_siginfo_fixup (struct siginfo *native, gdb_byte *inf, int direction)
+-+amd64_linux_siginfo_fixup (siginfo_t *native, gdb_byte *inf, int direction)
+- {
+-   /* Is the inferior 32-bit?  If so, then do fixup the siginfo
+-      object.  */
+-   if (gdbarch_addr_bit (get_frame_arch (get_current_frame ())) == 32)
+-     {
+--      gdb_assert (sizeof (struct siginfo) == sizeof (compat_siginfo_t));
+-+      gdb_assert (sizeof (siginfo_t) == sizeof (compat_siginfo_t));
+- 
+-       if (direction == 0)
+- 	compat_siginfo_from_siginfo ((struct compat_siginfo *) inf, native);
+-diff --git a/gdb/arm-linux-nat.c b/gdb/arm-linux-nat.c
+-index c5ce21c..f9f6ba5 100644
+---- a/gdb/arm-linux-nat.c
+-+++ b/gdb/arm-linux-nat.c
+-@@ -1137,7 +1137,7 @@ arm_linux_remove_watchpoint (CORE_ADDR addr, int len, int rw,
+- static int
+- arm_linux_stopped_data_address (struct target_ops *target, CORE_ADDR *addr_p)
+- {
+--  struct siginfo *siginfo_p = linux_nat_get_siginfo (inferior_ptid);
+-+  siginfo_t *siginfo_p = linux_nat_get_siginfo (inferior_ptid);
+-   int slot = siginfo_p->si_errno;
+- 
+-   /* This must be a hardware breakpoint.  */
+-diff --git a/gdb/gdbserver/linux-arm-low.c b/gdb/gdbserver/linux-arm-low.c
+-index ff2437d..01208ef 100644
+---- a/gdb/gdbserver/linux-arm-low.c
+-+++ b/gdb/gdbserver/linux-arm-low.c
+-@@ -631,7 +631,7 @@ static int
+- arm_stopped_by_watchpoint (void)
+- {
+-   struct lwp_info *lwp = get_thread_lwp (current_inferior);
+--  struct siginfo siginfo;
+-+  siginfo_t siginfo;
+- 
+-   /* We must be able to set hardware watchpoints.  */
+-   if (arm_linux_get_hw_watchpoint_count () == 0)
+-diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
+-index d2d4c1d..4734f15 100644
+---- a/gdb/gdbserver/linux-low.c
+-+++ b/gdb/gdbserver/linux-low.c
+-@@ -4779,7 +4779,7 @@ linux_qxfer_osdata (const char *annex,
+-    layout of the inferiors' architecture.  */
+- 
+- static void
+--siginfo_fixup (struct siginfo *siginfo, void *inf_siginfo, int direction)
+-+siginfo_fixup (siginfo_t *siginfo, void *inf_siginfo, int direction)
+- {
+-   int done = 0;
+- 
+-@@ -4791,9 +4791,9 @@ siginfo_fixup (struct siginfo *siginfo, void *inf_siginfo, int direction)
+-   if (!done)
+-     {
+-       if (direction == 1)
+--	memcpy (siginfo, inf_siginfo, sizeof (struct siginfo));
+-+	memcpy (siginfo, inf_siginfo, sizeof (siginfo_t));
+-       else
+--	memcpy (inf_siginfo, siginfo, sizeof (struct siginfo));
+-+	memcpy (inf_siginfo, siginfo, sizeof (siginfo_t));
+-     }
 - }
 - 
--+/* Check if a given label represents a valid DNS label
--+ * Return pointer to the first character after the label upon success,
--+ * NULL otherwise.
--+ * See RFC1035, 2.3.1
--+ */
--+/* We don't need to be particularly anal. For example, allowing _, hyphen
--+ * at the end, or leading and trailing dots would be ok, since it
--+ * can't be used for attacks. (Leading hyphen can be, if someone uses
--+ * cmd "$hostname"
--+ * in the script: then hostname may be treated as an option)
--+ */
--+static const char *valid_domain_label(const char *label)
--+{
--+	unsigned char ch;
--+	unsigned pos = 0;
--+
--+	for (;;) {
--+		ch = *label;
--+		if ((ch|0x20) < 'a' || (ch|0x20) > 'z') {
--+			if (pos == 0) {
--+				/* label must begin with letter */
--+				return NULL;
--+			}
--+			if (ch < '0' || ch > '9') {
--+				if (ch == '\0' || ch == '.')
--+					return label;
--+				/* DNS allows only '-', but we are more permissive */
--+				if (ch != '-' && ch != '_')
--+					return NULL;
--+			}
--+		}
--+		label++;
--+		pos++;
--+		//Do we want this?
--+		//if (pos > 63) /* NS_MAXLABEL; labels must be 63 chars or less */
--+		//	return NULL;
--+	}
--+}
--+
--+/* Check if a given name represents a valid DNS name */
--+/* See RFC1035, 2.3.1 */
--+static int good_hostname(const char *name)
--+{
--+	//const char *start = name;
--+
--+	for (;;) {
--+		name = valid_domain_label(name);
--+		if (!name)
--+			return 0;
--+		if (!name[0])
--+			return 1;
--+			//Do we want this?
--+			//return ((name - start) < 1025); /* NS_MAXDNAME */
--+		name++;
--+	}
--+}
--+
-- /* Create "opt_name=opt_value" string */
-- static NOINLINE char *xmalloc_optname_optval(uint8_t *option, const struct dhcp_optflag *optflag, const char *opt_name)
+-@@ -4802,8 +4802,8 @@ linux_xfer_siginfo (const char *annex, unsigned char *readbuf,
+- 		    unsigned const char *writebuf, CORE_ADDR offset, int len)
 - {
--@@ -185,8 +243,11 @@ static NOINLINE char *xmalloc_optname_op
-- 			break;
-- 		}
-- 		case OPTION_STRING:
--+		case OPTION_STRING_HOST:
-- 			memcpy(dest, option, len);
-- 			dest[len] = '\0';
--+			if (type == OPTION_STRING_HOST && !good_hostname(dest))
--+				safe_strncpy(dest, "bad", len);
-- 			return ret;	 /* Short circuit this case */
-- 		case OPTION_STATIC_ROUTES: {
-- 			/* Option binary format:
--@@ -314,6 +375,7 @@ static char **fill_envp(struct dhcp_pack
-- 	/* +1 element for each option, +2 for subnet option: */
-- 	if (packet) {
-- 		/* note: do not search for "pad" (0) and "end" (255) options */
--+//TODO: change logic to scan packet _once_
-- 		for (i = 1; i < 255; i++) {
-- 			temp = udhcp_get_option(packet, i);
-- 			if (temp) {
-diff --git a/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch b/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
-deleted file mode 100644
-index 456fb08..0000000
---- a/package/busybox/1.20.2/busybox-1.20.2-kernel_ver.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
----- busybox-1.20.2/libbb/kernel_version.c
--+++ busybox-1.20.2-kernel_ver/libbb/kernel_version.c
--@@ -20,18 +20,15 @@
-- int FAST_FUNC get_linux_version_code(void)
-- {
-- 	struct utsname name;
---	char *s;
--+	char *s, *t;
-- 	int i, r;
+-   int pid;
+--  struct siginfo siginfo;
+--  char inf_siginfo[sizeof (struct siginfo)];
+-+  siginfo_t siginfo;
+-+  char inf_siginfo[sizeof (siginfo_t)];
 - 
---	if (uname(&name) == -1) {
---		bb_perror_msg("can't get system information");
---		return 0;
---	}
+-   if (current_inferior == NULL)
+-     return -1;
+-diff --git a/gdb/gdbserver/linux-low.h b/gdb/gdbserver/linux-low.h
+-index 677d261..3aeae70 100644
+---- a/gdb/gdbserver/linux-low.h
+-+++ b/gdb/gdbserver/linux-low.h
+-@@ -20,6 +20,7 @@
+- #ifdef HAVE_THREAD_DB_H
+- #include <thread_db.h>
+- #endif
+-+#include <signal.h>
+- 
+- #include "gdb_proc_service.h"
+- 
+-@@ -46,8 +47,6 @@ struct regset_info
+- extern struct regset_info target_regsets[];
+- #endif
+- 
+--struct siginfo;
 --
--+	uname(&name); /* never fails */
-- 	s = name.release;
-- 	r = 0;
-- 	for (i = 0; i < 3; i++) {
---		r = r * 256 + atoi(strtok(s, "."));
--+		t = strtok(s, ".");
--+		r = r * 256 + (t ? atoi(t) : 0);
-- 		s = NULL;
-- 	}
-- 	return r;
-diff --git a/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch b/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
-deleted file mode 100644
-index 17fc0b1..0000000
---- a/package/busybox/1.20.2/busybox-1.20.2-ntpd.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- busybox-1.20.2/networking/ntpd.c
--+++ busybox-1.20.2-ntpd/networking/ntpd.c
--@@ -1840,7 +1840,7 @@ recv_and_process_client_pkt(void /*int f
-- 
-- 	/* Build a reply packet */
-- 	memset(&msg, 0, sizeof(msg));
---	msg.m_status = G.stratum < MAXSTRAT ? G.ntp_status : LI_ALARM;
--+	msg.m_status = G.stratum < MAXSTRAT ? (G.ntp_status & LI_MASK) : LI_ALARM;
-- 	msg.m_status |= (query_status & VERSION_MASK);
-- 	msg.m_status |= ((query_status & MODE_MASK) == MODE_CLIENT) ?
-- 			 MODE_SERVER : MODE_SYM_PAS;
-diff --git a/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch b/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
-deleted file mode 100644
-index f39250c..0000000
---- a/package/busybox/1.20.2/busybox-1.20.2-pkg-config-selinux.patch
-+++ /dev/null
-@@ -1,67 +0,0 @@
--From b1cec5003b73080a8aa7ea277621bf1c71c3e8d6 Mon Sep 17 00:00:00 2001
--From: Mike Frysinger <vapier@gentoo.org>
--Date: Sat, 20 Oct 2012 15:01:26 -0400
--Subject: [PATCH] build system: use pkg-config to look up selinux libs
--
--Newer versions of libselinux has started linking against more libs.
--Rather than continuing hardcoding things, switch to using pkg-config
--to query for its dependencies.
--
--Signed-off-by: Mike Frysinger <vapier@gentoo.org>
-----
-- Makefile       |  1 +
-- Makefile.flags | 12 +++++++++++-
-- 2 files changed, 12 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index fccde4a..3a0a5e1 100644
----- a/Makefile
--+++ b/Makefile
--@@ -297,6 +297,7 @@ NM		= $(CROSS_COMPILE)nm
-- STRIP		= $(CROSS_COMPILE)strip
-- OBJCOPY		= $(CROSS_COMPILE)objcopy
-- OBJDUMP		= $(CROSS_COMPILE)objdump
--+PKG_CONFIG	?= $(CROSS_COMPILE)pkg-config
-- AWK		= awk
-- GENKSYMS	= scripts/genksyms/genksyms
-- DEPMOD		= /sbin/depmod
--diff --git a/Makefile.flags b/Makefile.flags
--index c43c8dc..15dcc1f 100644
----- a/Makefile.flags
--+++ b/Makefile.flags
--@@ -74,6 +74,12 @@ ARCH_FPIC ?= -fpic
-- ARCH_FPIE ?= -fpie
-- ARCH_PIE ?= -pie
-- 
--+# Usage: $(eval $(call pkg_check_modules,VARIABLE-PREFIX,MODULES))
--+define pkg_check_modules
--+$(1)_CFLAGS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --cflags $(2))
--+$(1)_LIBS := $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs $(2))
--+endef
--+
-- ifeq ($(CONFIG_BUILD_LIBBUSYBOX),y)
-- # on i386: 14% smaller libbusybox.so
-- # (code itself is 9% bigger, we save on relocs/PLT/GOT)
--@@ -85,6 +91,7 @@ endif
-- 
-- ifeq ($(CONFIG_STATIC),y)
-- CFLAGS_busybox += -static
--+PKG_CONFIG_FLAGS += --static
-- endif
-- 
-- ifeq ($(CONFIG_PIE),y)
--@@ -127,7 +134,10 @@ LDLIBS += pam pam_misc pthread
-- endif
-- 
-- ifeq ($(CONFIG_SELINUX),y)
---LDLIBS += selinux sepol
--+SELINUX_PC_MODULES = libselinux libsepol
--+$(eval $(call pkg_check_modules,SELINUX,$(SELINUX_PC_MODULES)))
--+CPPFLAGS += $(SELINUX_CFLAGS)
--+LDLIBS += $(if $(SELINUX_LIBS),$(SELINUX_LIBS:-l%=%),$(SELINUX_PC_MODULES:lib%=%))
-- endif
-- 
-- ifeq ($(CONFIG_EFENCE),y)
---- 
--1.7.12
--
-diff --git a/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch b/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
-deleted file mode 100644
-index 7b18500..0000000
---- a/package/busybox/1.20.2/busybox-1.20.2-sys-resource.patch
-+++ /dev/null
-@@ -1,123 +0,0 @@
--From 5a5dfcad6ba96d12d68bd7b39279215a8fee70d3 Mon Sep 17 00:00:00 2001
--From: Tias Guns <tias@ulyssis.org>
--Date: Sun, 10 Jun 2012 14:19:01 +0200
--Subject: [PATCH] inetd: fix build failure in Android
--
--Signed-off-by: Tias Guns <tias@ulyssis.org>
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
--(cherry picked from commit 64f763b42a43cbf36e401690ff6767c25575e520)
-----
-- networking/inetd.c | 1 +
-- 1 file changed, 1 insertion(+)
---- 
--1.7.12
--
--From 246ea72843d5b7e9d4cd902dc5e9d71359196303 Mon Sep 17 00:00:00 2001
--From: Mike Frysinger <vapier@gentoo.org>
--Date: Thu, 5 Jul 2012 23:19:09 -0400
--Subject: [PATCH] include sys/resource.h where needed
--
--We use functions from sys/resource.h in misc applets, but don't include
--the header.  This breaks building with newer glibc versions, so add the
--include where needed.
--
--Signed-off-by: Mike Frysinger <vapier@gentoo.org>
--(cherry picked from commit c5fe9f7b723f949457263ef8e22ab807d5b549ce)
-----
-- loginutils/passwd.c      | 1 +
-- miscutils/time.c         | 1 +
-- networking/inetd.c       | 1 +
-- networking/ntpd.c        | 1 +
-- networking/ntpd_simple.c | 1 +
-- runit/chpst.c            | 1 +
-- shell/shell_common.c     | 1 +
-- 7 files changed, 7 insertions(+)
--
--diff --git a/loginutils/passwd.c b/loginutils/passwd.c
--index b83db00..a7006f0 100644
----- a/loginutils/passwd.c
--+++ b/loginutils/passwd.c
--@@ -15,6 +15,7 @@
-- 
-- #include "libbb.h"
-- #include <syslog.h>
--+#include <sys/resource.h> /* setrlimit */
-- 
-- static void nuke_str(char *str)
+- struct process_info_private
 - {
--diff --git a/miscutils/time.c b/miscutils/time.c
--index 945f15f..ffed386 100644
----- a/miscutils/time.c
--+++ b/miscutils/time.c
--@@ -16,6 +16,7 @@
-- //usage:     "\n	-v	Verbose"
+-   /* Arch-specific additions.  */
+-@@ -109,7 +108,7 @@ struct linux_target_ops
+-      Returns true if any conversion was done; false otherwise.
+-      If DIRECTION is 1, then copy from INF to NATIVE.
+-      If DIRECTION is 0, copy from NATIVE to INF.  */
+--  int (*siginfo_fixup) (struct siginfo *native, void *inf, int direction);
+-+  int (*siginfo_fixup) (siginfo_t *native, void *inf, int direction);
 - 
-- #include "libbb.h"
--+#include <sys/resource.h> /* getrusage */
+-   /* Hook to call when a new process is created or attached to.
+-      If extra per-process architecture-specific data is needed,
+-diff --git a/gdb/gdbserver/linux-x86-low.c b/gdb/gdbserver/linux-x86-low.c
+-index ed1f8a8..b466b5d 100644
+---- a/gdb/gdbserver/linux-x86-low.c
+-+++ b/gdb/gdbserver/linux-x86-low.c
+-@@ -918,13 +918,13 @@ siginfo_from_compat_siginfo (siginfo_t *to, compat_siginfo_t *from)
+-    INF.  */
 - 
-- /* Information on the resources used by a child process.  */
-- typedef struct {
--diff --git a/networking/inetd.c b/networking/inetd.c
--index 1308d74..00baf69 100644
----- a/networking/inetd.c
--+++ b/networking/inetd.c
--@@ -165,6 +165,8 @@
-- //usage:     "\n		(default: 0 - disabled)"
+- static int
+--x86_siginfo_fixup (struct siginfo *native, void *inf, int direction)
+-+x86_siginfo_fixup (siginfo_t *native, void *inf, int direction)
+- {
+- #ifdef __x86_64__
+-   /* Is the inferior 32-bit?  If so, then fixup the siginfo object.  */
+-   if (register_size (0) == 4)
+-     {
+--      if (sizeof (struct siginfo) != sizeof (compat_siginfo_t))
+-+      if (sizeof (siginfo_t) != sizeof (compat_siginfo_t))
+- 	fatal ("unexpected difference in siginfo");
 - 
-- #include <syslog.h>
--+#include <sys/resource.h> /* setrlimit */
--+#include <sys/socket.h> /* un.h may need this */
-- #include <sys/un.h>
+-       if (direction == 0)
+-diff --git a/gdb/ia64-linux-nat.c b/gdb/ia64-linux-nat.c
+-index 8773195..19b827f 100644
+---- a/gdb/ia64-linux-nat.c
+-+++ b/gdb/ia64-linux-nat.c
+-@@ -637,7 +637,7 @@ static int
+- ia64_linux_stopped_data_address (struct target_ops *ops, CORE_ADDR *addr_p)
+- {
+-   CORE_ADDR psr;
+--  struct siginfo *siginfo_p;
+-+  siginfo_t *siginfo_p;
+-   struct regcache *regcache = get_current_regcache ();
 - 
-- #include "libbb.h"
--diff --git a/networking/ntpd.c b/networking/ntpd.c
--index 603801e..b885215 100644
----- a/networking/ntpd.c
--+++ b/networking/ntpd.c
--@@ -46,6 +46,7 @@
-- #include "libbb.h"
-- #include <math.h>
-- #include <netinet/ip.h> /* For IPTOS_LOWDELAY definition */
--+#include <sys/resource.h> /* setpriority */
-- #include <sys/timex.h>
-- #ifndef IPTOS_LOWDELAY
-- # define IPTOS_LOWDELAY 0x10
--diff --git a/networking/ntpd_simple.c b/networking/ntpd_simple.c
--index 4ad44e4..1b7c66b 100644
----- a/networking/ntpd_simple.c
--+++ b/networking/ntpd_simple.c
--@@ -7,6 +7,7 @@
--  */
-- #include "libbb.h"
-- #include <netinet/ip.h> /* For IPTOS_LOWDELAY definition */
--+#include <sys/resource.h> /* setpriority */
-- #ifndef IPTOS_LOWDELAY
-- # define IPTOS_LOWDELAY 0x10
+-   siginfo_p = linux_nat_get_siginfo (inferior_ptid);
+-diff --git a/gdb/linux-nat.c b/gdb/linux-nat.c
+-index f80c0c1..d81d55e 100644
+---- a/gdb/linux-nat.c
+-+++ b/gdb/linux-nat.c
+-@@ -188,7 +188,7 @@ static void (*linux_nat_prepare_to_resume) (struct lwp_info *);
+- /* The method to call, if any, when the siginfo object needs to be
+-    converted between the layout returned by ptrace, and the layout in
+-    the architecture of the inferior.  */
+--static int (*linux_nat_siginfo_fixup) (struct siginfo *,
+-+static int (*linux_nat_siginfo_fixup) (siginfo_t *,
+- 				       gdb_byte *,
+- 				       int);
+- 
+-@@ -4232,7 +4232,7 @@ linux_nat_mourn_inferior (struct target_ops *ops)
+-    layout of the inferiors' architecture.  */
+- 
+- static void
+--siginfo_fixup (struct siginfo *siginfo, gdb_byte *inf_siginfo, int direction)
+-+siginfo_fixup (siginfo_t *siginfo, gdb_byte *inf_siginfo, int direction)
+- {
+-   int done = 0;
+- 
+-@@ -4244,9 +4244,9 @@ siginfo_fixup (struct siginfo *siginfo, gdb_byte *inf_siginfo, int direction)
+-   if (!done)
+-     {
+-       if (direction == 1)
+--	memcpy (siginfo, inf_siginfo, sizeof (struct siginfo));
+-+	memcpy (siginfo, inf_siginfo, sizeof (siginfo_t));
+-       else
+--	memcpy (inf_siginfo, siginfo, sizeof (struct siginfo));
+-+	memcpy (inf_siginfo, siginfo, sizeof (siginfo_t));
+-     }
+- }
+- 
+-@@ -4256,8 +4256,8 @@ linux_xfer_siginfo (struct target_ops *ops, enum target_object object,
+- 		    const gdb_byte *writebuf, ULONGEST offset, LONGEST len)
+- {
+-   int pid;
+--  struct siginfo siginfo;
+--  gdb_byte inf_siginfo[sizeof (struct siginfo)];
+-+  siginfo_t siginfo;
+-+  gdb_byte inf_siginfo[sizeof (siginfo_t)];
+- 
+-   gdb_assert (object == TARGET_OBJECT_SIGNAL_INFO);
+-   gdb_assert (readbuf || writebuf);
+-@@ -5266,7 +5266,7 @@ linux_nat_set_new_thread (struct target_ops *t,
+-    inferior.  */
+- void
+- linux_nat_set_siginfo_fixup (struct target_ops *t,
+--			     int (*siginfo_fixup) (struct siginfo *,
+-+			     int (*siginfo_fixup) (siginfo_t *,
+- 						   gdb_byte *,
+- 						   int))
+- {
+-@@ -5285,7 +5285,7 @@ linux_nat_set_prepare_to_resume (struct target_ops *t,
+- }
+- 
+- /* Return the saved siginfo associated with PTID.  */
+--struct siginfo *
+-+siginfo_t *
+- linux_nat_get_siginfo (ptid_t ptid)
+- {
+-   struct lwp_info *lp = find_lwp_pid (ptid);
+-diff --git a/gdb/linux-nat.h b/gdb/linux-nat.h
+-index c9878d9..d87f0cf 100644
+---- a/gdb/linux-nat.h
+-+++ b/gdb/linux-nat.h
+-@@ -78,7 +78,7 @@ struct lwp_info
+- 
+-   /* Non-zero si_signo if this LWP stopped with a trap.  si_addr may
+-      be the address of a hardware watchpoint.  */
+--  struct siginfo siginfo;
+-+  siginfo_t siginfo;
+- 
+-   /* STOPPED_BY_WATCHPOINT is non-zero if this LWP stopped with a data
+-      watchpoint trap.  */
+-@@ -184,7 +184,7 @@ void linux_nat_set_new_thread (struct target_ops *, void (*) (struct lwp_info *)
+-    that ptrace returns, and the layout in the architecture of the
+-    inferior.  */
+- void linux_nat_set_siginfo_fixup (struct target_ops *,
+--				  int (*) (struct siginfo *,
+-+				  int (*) (siginfo_t *,
+- 					   gdb_byte *,
+- 					   int));
+- 
+-@@ -198,7 +198,7 @@ void linux_nat_set_prepare_to_resume (struct target_ops *,
+- void linux_nat_switch_fork (ptid_t new_ptid);
+- 
+- /* Return the saved siginfo associated with PTID.  */
+--struct siginfo *linux_nat_get_siginfo (ptid_t ptid);
+-+siginfo_t *linux_nat_get_siginfo (ptid_t ptid);
+- 
+- /* Compute and return the processor core of a given thread.  */
+- int linux_nat_core_of_thread_1 (ptid_t ptid);
+-diff --git a/gdb/ppc-linux-nat.c b/gdb/ppc-linux-nat.c
+-index 1bd157b..9bd11fd 100644
+---- a/gdb/ppc-linux-nat.c
+-+++ b/gdb/ppc-linux-nat.c
+-@@ -2218,7 +2218,7 @@ ppc_linux_thread_exit (struct thread_info *tp, int silent)
+- static int
+- ppc_linux_stopped_data_address (struct target_ops *target, CORE_ADDR *addr_p)
+- {
+--  struct siginfo *siginfo_p;
+-+  siginfo_t *siginfo_p;
+- 
+-   siginfo_p = linux_nat_get_siginfo (inferior_ptid);
+- 
+-diff --git a/gdb/procfs.c b/gdb/procfs.c
+-index 903621d..cb4bc7c 100644
+---- a/gdb/procfs.c
+-+++ b/gdb/procfs.c
+-@@ -266,7 +266,7 @@ typedef struct sigaction gdb_sigaction_t;
+- #ifdef HAVE_PR_SIGINFO64_T
+- typedef pr_siginfo64_t gdb_siginfo_t;
+- #else
+--typedef struct siginfo gdb_siginfo_t;
+-+typedef siginfo_t gdb_siginfo_t;
 - #endif
--diff --git a/runit/chpst.c b/runit/chpst.c
--index ac296ba..ed72c8b 100644
----- a/runit/chpst.c
--+++ b/runit/chpst.c
--@@ -91,6 +91,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- //usage:     "\n			a SIGXCPU after N seconds"
 - 
-- #include "libbb.h"
--+#include <sys/resource.h> /* getrlimit */
-- 
-- /*
-- Five applets here: chpst, envdir, envuidgid, setuidgid, softlimit.
--diff --git a/shell/shell_common.c b/shell/shell_common.c
--index 51c92d6..780e27e 100644
----- a/shell/shell_common.c
--+++ b/shell/shell_common.c
--@@ -18,6 +18,7 @@
--  */
-- #include "libbb.h"
-- #include "shell_common.h"
--+#include <sys/resource.h> /* getrlimit */
-- 
-- const char defifsvar[] ALIGN1 = "IFS= \t\n";
-- 
+- /* On mips-irix, praddset and prdelset are defined in such a way that
 --- 
--1.7.12
+-1.7.9.7
 -
-diff --git a/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch b/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
+diff --git a/package/gdb/7.4.1/05_all_readline-headers.patch b/package/gdb/7.4.1/05_all_readline-headers.patch
 deleted file mode 100644
-index 0a39d56..0000000
---- a/package/busybox/1.21.1/0001-libbb-use-poll.h-instead-of-sys-poll.h.patch
+index e65adf6..0000000
+--- a/package/gdb/7.4.1/05_all_readline-headers.patch
 +++ /dev/null
-@@ -1,32 +0,0 @@
--From 676452a92d1fc4f85e8d89930d7729197c031026 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 5 Oct 2013 15:51:56 +0200
--Subject: [PATCH 1/3] libbb: use <poll.h> instead of <sys/poll.h>
--
--As the pol() manpage recommends, include the <poll.h> header instead
--of <sys/poll.h>. This allows to get rid of gazillions of warnings when
--building BusyBox against the musl C library, which prints a warning
--when the internal header <sys/poll.h> is included directly instead of
--the <poll.h> header.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- include/libbb.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/libbb.h b/include/libbb.h
--index e520060..f03f454 100644
----- a/include/libbb.h
--+++ b/include/libbb.h
--@@ -37,7 +37,7 @@
-- #include <libgen.h> /* dirname,basename */
-- #undef basename
-- #define basename dont_use_basename
---#include <sys/poll.h>
--+#include <poll.h>
-- #include <sys/ioctl.h>
-- #include <sys/mman.h>
-- #include <sys/socket.h>
---- 
--1.8.1.2
--
-diff --git a/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch b/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
-deleted file mode 100644
-index ed35719..0000000
---- a/package/busybox/1.21.1/0002-network-ifconfig-include-linux-if_slip.h-instead-of-.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 5eae213031a3ef88fe8d9d0a387f44264ea635cc Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 5 Oct 2013 15:53:16 +0200
--Subject: [PATCH 2/3] network/ifconfig: include <linux/if_slip.h> instead of
-- <net/if_slip.h>
--
--The musl C library doesn't provide the <net/if_slip.h> since userspace
--applications can just as well use the <linux/if_slip.h> kernel header.
--
--This commit fixes the build of the ifconfig applet with the musl C
--library.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- networking/ifconfig.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/networking/ifconfig.c b/networking/ifconfig.c
--index 782374b..c90ed6b 100644
----- a/networking/ifconfig.c
--+++ b/networking/ifconfig.c
--@@ -56,7 +56,7 @@
+@@ -1,42 +0,0 @@
+---- a/readline/complete.c
+-+++ b/readline/complete.c
+-@@ -25,6 +25,11 @@
+- #  include <config.h>
 - #endif
 - 
-- #if ENABLE_FEATURE_IFCONFIG_SLIP
---# include <net/if_slip.h>
--+# include <linux/if_slip.h>
+-+#ifdef HAVE_WCHAR_H /* wcwidth() */
+-+# define _GNU_SOURCE
+-+# include <wchar.h>
+-+#endif
+-+
+- #include <sys/types.h>
+- #include <fcntl.h>
+- #if defined (HAVE_SYS_FILE_H)
+---- a/readline/display.c
+-+++ b/readline/display.c
+-@@ -25,6 +25,11 @@
+- #  include <config.h>
 - #endif
 - 
-- /* I don't know if this is needed for busybox or not.  Anyone? */
---- 
--1.8.1.2
--
-diff --git a/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
-deleted file mode 100644
-index 7b74656..0000000
---- a/package/busybox/1.21.1/0003-networking-libiproute-use-linux-if_packet.h-instead-.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From d4fec31889ad660a58dab633c511221feb66e817 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 5 Oct 2013 15:55:06 +0200
--Subject: [PATCH 3/3] networking/libiproute: use <linux/if_packet.h> instead of
-- <net/if_packet.h>
--
--The musl C library doesn't provide the <net/if_packet.h> since the
--corresponding kernel headers <linux/if_packet.h> already provides the
--necessary definitions. Replacing <net/if_packet.h> by
--<linux/if_packet.h> also removes the need to include
--<netpacket/packet.h>
--
--This commit fixes the build of iplink with the musl C library.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- networking/libiproute/iplink.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/networking/libiproute/iplink.c b/networking/libiproute/iplink.c
--index bad2017..32ccb1c 100644
----- a/networking/libiproute/iplink.c
--+++ b/networking/libiproute/iplink.c
--@@ -5,8 +5,7 @@
--  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
--  */
-- #include <net/if.h>
---#include <net/if_packet.h>
---#include <netpacket/packet.h>
--+#include <linux/if_packet.h>
-- #include <netinet/if_ether.h>
+-+#ifdef HAVE_WCHAR_H /* wcwidth() */
+-+# define _GNU_SOURCE
+-+# include <wchar.h>
+-+#endif
+-+
+- #include <sys/types.h>
 - 
-- #include "ip_common.h"  /* #include "libbb.h" is inside */
+- #if defined (HAVE_UNISTD_H)
+---- a/readline/mbutil.c
+-+++ b/readline/mbutil.c
+-@@ -25,6 +25,11 @@
+- #  include <config.h>
+- #endif
+- 
+-+#ifdef HAVE_WCHAR_H /* wcwidth() */
+-+# define _GNU_SOURCE
+-+# include <wchar.h>
+-+#endif
+-+
+- #include <sys/types.h>
+- #include <fcntl.h>
+- #include "posixjmp.h"
+diff --git a/package/gdb/7.4.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch b/package/gdb/7.4.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
+deleted file mode 100644
+index 3b391d0..0000000
+--- a/package/gdb/7.4.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From e671835b7afc90b3ff201b79f07a6fb67797bc5c Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Mon, 20 Jan 2014 09:53:12 +0200
+-Subject: [PATCH] gdb: xtensa: fix linux ptrace includes
+-
+-Currently, xtensa code using the Linux ptrace interface only include
+-sys/ptrace.h.  This file comes from the C library (glibc and uClibc,
+-at least), and includes a declaration of the ptrace() functions, along
+-with some cross architecture constants that are mostly copied from the
+-file located at include/uapi/linux/ptrace.h in recent Linux kernels.
+-
+-For xtensa specific constants like PTRACE_GETXTREGS and
+-PTRACE_SETXTREGS the asm/ptrace.h include from the Linux kernel UAPI
+-is needed.  The code in gdbserver xtensa specific part doesn't call
+-ptrace() directly, so we can remove the unneeded sys/ptrace.h include.
+-The gdb xtensa specific code needs both headers, since it calls
+-ptrace().
+-
+-gdb/
+-	* xtensa-linux-nat.c: Include asm/ptrace.h.
+-
+-gdb/gdbserver/
+-	* linux-xtensa-low.c: Include asm/ptrace.h instead of
+-	sys/ptrace.h.
+----
+-Backported from: e671835b7afc90b3ff201b79f07a6fb67797bc5c
+-Changes to Changelog files are dropped.
+-
+- gdb/gdbserver/linux-xtensa-low.c | 2 +-
+- gdb/xtensa-linux-nat.c           | 1 +
+- 2 files changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
+-index 7db97a9..479b65b 100644
+---- a/gdb/gdbserver/linux-xtensa-low.c
+-+++ b/gdb/gdbserver/linux-xtensa-low.c
+-@@ -24,7 +24,7 @@
+- void init_registers_xtensa (void);
+- extern const struct target_desc *tdesc_xtensa;
+- 
+--#include <sys/ptrace.h>
+-+#include <asm/ptrace.h>
+- #include <xtensa-config.h>
+- 
+- #include "xtensa-xtregs.c"
+-diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
+-index 2372e79..9340c62 100644
+---- a/gdb/xtensa-linux-nat.c
+-+++ b/gdb/xtensa-linux-nat.c
+-@@ -36,6 +36,7 @@
+- #include <fcntl.h>
+- #include <sys/procfs.h>
+- #include <sys/ptrace.h>
+-+#include <asm/ptrace.h>
+- 
+- #include "gregset.h"
+- #include "xtensa-tdep.h"
 --- 
--1.8.1.2
+-1.8.1.4
 -
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index a356863..f2f2990 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -11,44 +11,9 @@ config BR2_PACKAGE_BUSYBOX
- 
- if BR2_PACKAGE_BUSYBOX
- 
--choice
--	prompt "BusyBox Version"
--	default BR2_BUSYBOX_VERSION_1_22_X
--	help
--	  Select the version of BusyBox you wish to use.
--
--	config BR2_BUSYBOX_VERSION_1_19_X
--		bool "BusyBox 1.19.x"
--		depends on BR2_DEPRECATED_SINCE_2014_02
--
--	config BR2_BUSYBOX_VERSION_1_20_X
--		bool "BusyBox 1.20.x"
--
--	config BR2_BUSYBOX_VERSION_1_21_X
--		bool "BusyBox 1.21.x"
--
--	config BR2_BUSYBOX_VERSION_1_22_X
--		bool "BusyBox 1.22.x"
--
--	config BR2_PACKAGE_BUSYBOX_SNAPSHOT
--		bool "daily snapshot"
--
--endchoice
--
--config BR2_BUSYBOX_VERSION
--	string
--	default "1.19.4"	if BR2_BUSYBOX_VERSION_1_19_X
--	default "1.20.2"	if BR2_BUSYBOX_VERSION_1_20_X
--	default "1.21.1"	if BR2_BUSYBOX_VERSION_1_21_X
--	default "1.22.1"	if BR2_BUSYBOX_VERSION_1_22_X
--
- config BR2_PACKAGE_BUSYBOX_CONFIG
- 	string "BusyBox configuration file to use?"
--	default "package/busybox/busybox-1.21.x.config" if BR2_PACKAGE_BUSYBOX_SNAPSHOT
--	default "package/busybox/busybox-1.19.x.config" if BR2_BUSYBOX_VERSION_1_19_X
--	default "package/busybox/busybox-1.20.x.config" if BR2_BUSYBOX_VERSION_1_20_X
--	default "package/busybox/busybox-1.21.x.config" if BR2_BUSYBOX_VERSION_1_21_X
--	default "package/busybox/busybox-1.22.x.config" if BR2_BUSYBOX_VERSION_1_22_X
-+	default "package/busybox/busybox.config"
- 	help
- 	  Some people may wish to use their own modified BusyBox configuration
- 	  file, and will specify their config file location with this option.
-diff --git a/package/busybox/1.22.1/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch b/package/busybox/busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-similarity index 100%
-rename from package/busybox/1.22.1/0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-rename to package/busybox/busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
-diff --git a/package/busybox/1.22.1/0002-busybox-1.22.1-ash.patch b/package/busybox/busybox-0002-busybox-1.22.1-ash.patch
-similarity index 100%
-rename from package/busybox/1.22.1/0002-busybox-1.22.1-ash.patch
-rename to package/busybox/busybox-0002-busybox-1.22.1-ash.patch
-diff --git a/package/busybox/1.22.1/0003-busybox-1.22.1-date.patch b/package/busybox/busybox-0003-busybox-1.22.1-date.patch
-similarity index 100%
-rename from package/busybox/1.22.1/0003-busybox-1.22.1-date.patch
-rename to package/busybox/busybox-0003-busybox-1.22.1-date.patch
-diff --git a/package/busybox/1.22.1/0004-busybox-1.22.1-iplink.patch b/package/busybox/busybox-0004-busybox-1.22.1-iplink.patch
-similarity index 100%
-rename from package/busybox/1.22.1/0004-busybox-1.22.1-iplink.patch
-rename to package/busybox/busybox-0004-busybox-1.22.1-iplink.patch
-diff --git a/package/busybox/1.22.1/0005-busybox-1.22.1-nc.patch b/package/busybox/busybox-0005-busybox-1.22.1-nc.patch
-similarity index 100%
-rename from package/busybox/1.22.1/0005-busybox-1.22.1-nc.patch
-rename to package/busybox/busybox-0005-busybox-1.22.1-nc.patch
-diff --git a/package/busybox/busybox-1.19.x.config b/package/busybox/busybox-1.19.x.config
+diff --git a/package/gdb/7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch b/package/gdb/7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
 deleted file mode 100644
-index 08e14c7..0000000
---- a/package/busybox/busybox-1.19.x.config
+index b5f5bdf..0000000
+--- a/package/gdb/7.4.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
 +++ /dev/null
-@@ -1,1013 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Busybox version: 1.19.0
--# Tue Aug 23 11:28:35 2011
--#
--CONFIG_HAVE_DOT_CONFIG=y
+@@ -1,42 +0,0 @@
+-From 54bff650843cacd3c17a0afdb0fe32e15e1b65b0 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 22 Jan 2014 15:02:29 +0200
+-Subject: [PATCH] gdb: xtensa: fix on 64-bit hosts
 -
--#
--# Busybox Settings
--#
+-On 64-bit hosts unsigned long is 64 bit.  Use uint32_t instead.
 -
--#
--# General Configuration
--#
--CONFIG_DESKTOP=y
--# CONFIG_EXTRA_COMPAT is not set
--CONFIG_INCLUDE_SUSv2=y
--# CONFIG_USE_PORTABLE_CODE is not set
--CONFIG_PLATFORM_LINUX=y
--CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
--# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
--# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
--CONFIG_SHOW_USAGE=y
--CONFIG_FEATURE_VERBOSE_USAGE=y
--# CONFIG_FEATURE_COMPRESS_USAGE is not set
--CONFIG_FEATURE_INSTALLER=y
--# CONFIG_INSTALL_NO_USR is not set
--# CONFIG_LOCALE_SUPPORT is not set
--# CONFIG_UNICODE_SUPPORT is not set
--# CONFIG_UNICODE_USING_LOCALE is not set
--# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
--CONFIG_SUBST_WCHAR=0
--CONFIG_LAST_SUPPORTED_WCHAR=0
--# CONFIG_UNICODE_COMBINING_WCHARS is not set
--# CONFIG_UNICODE_WIDE_WCHARS is not set
--# CONFIG_UNICODE_BIDI_SUPPORT is not set
--# CONFIG_UNICODE_NEUTRAL_TABLE is not set
--# CONFIG_UNICODE_PRESERVE_BROKEN is not set
--CONFIG_LONG_OPTS=y
--CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
--CONFIG_FEATURE_UTMP=y
--CONFIG_FEATURE_WTMP=y
--# CONFIG_FEATURE_PIDFILE is not set
--CONFIG_FEATURE_SUID=y
--# CONFIG_FEATURE_SUID_CONFIG is not set
--# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
--# CONFIG_SELINUX is not set
--# CONFIG_FEATURE_PREFER_APPLETS is not set
--CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
--CONFIG_FEATURE_SYSLOG=y
--# CONFIG_FEATURE_HAVE_RPC is not set
+-gdb/
+-2014-01-22  Baruch Siach  <baruch@tkos.co.il>
 -
--#
--# Build Options
--#
--# CONFIG_STATIC is not set
--# CONFIG_PIE is not set
--# CONFIG_NOMMU is not set
--# CONFIG_BUILD_LIBBUSYBOX is not set
--# CONFIG_FEATURE_INDIVIDUAL is not set
--# CONFIG_FEATURE_SHARED_BUSYBOX is not set
--# CONFIG_LFS is not set
--CONFIG_CROSS_COMPILER_PREFIX=""
--CONFIG_EXTRA_CFLAGS=""
+-	* xtensa-tdep.h (xtensa_elf_greg_t): Change type to uint32_t.
+----
+-Backported from: 54bff650843cacd3c17a0afdb0fe32e15e1b65b0
+-Changes to Changelog files are dropped and #include <stdint.h> is added.
 -
--#
--# Debugging Options
--#
--# CONFIG_DEBUG is not set
--# CONFIG_DEBUG_PESSIMIZE is not set
--# CONFIG_WERROR is not set
--CONFIG_NO_DEBUG_LIB=y
--# CONFIG_DMALLOC is not set
--# CONFIG_EFENCE is not set
+- gdb/xtensa-tdep.h | 3 +-
+- 1 file changed, 2 insertion(+), 1 deletion(-)
 -
--#
--# Installation Options ("make install" behavior)
--#
--CONFIG_INSTALL_APPLET_SYMLINKS=y
--# CONFIG_INSTALL_APPLET_HARDLINKS is not set
--# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
--# CONFIG_INSTALL_APPLET_DONT is not set
--# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
--# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
--# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
--CONFIG_PREFIX="./_install"
+-diff --git a/gdb/xtensa-tdep.h b/gdb/xtensa-tdep.h
+-index 968b9d2..d7ba562 100644
+---- a/gdb/xtensa-tdep.h
+-+++ b/gdb/xtensa-tdep.h
+-@@ -17,6 +17,7 @@
+-    You should have received a copy of the GNU General Public License
+-    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- 
+-+#include <stdint.h>
+- 
+- /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
+-    whenever the "tdep" structure changes in an incompatible way.  */
+-@@ -84,7 +84,7 @@ typedef enum
+- /* Xtensa ELF core file register set representation ('.reg' section).
+-    Copied from target-side ELF header <xtensa/elf.h>.  */
+- 
+--typedef unsigned long xtensa_elf_greg_t;
+-+typedef uint32_t xtensa_elf_greg_t;
+- 
+- typedef struct
+- {
+--- 
+-1.8.1.4
 -
--#
--# Busybox Library Tuning
--#
--# CONFIG_FEATURE_SYSTEMD is not set
--CONFIG_FEATURE_RTMINMAX=y
--CONFIG_PASSWORD_MINLEN=6
--CONFIG_MD5_SIZE_VS_SPEED=2
--# CONFIG_FEATURE_FAST_TOP is not set
--# CONFIG_FEATURE_ETC_NETWORKS is not set
--CONFIG_FEATURE_USE_TERMIOS=y
--CONFIG_FEATURE_EDITING=y
--CONFIG_FEATURE_EDITING_MAX_LEN=1024
--CONFIG_FEATURE_EDITING_VI=y
--CONFIG_FEATURE_EDITING_HISTORY=999
--CONFIG_FEATURE_EDITING_SAVEHISTORY=y
--CONFIG_FEATURE_REVERSE_SEARCH=y
--CONFIG_FEATURE_TAB_COMPLETION=y
--# CONFIG_FEATURE_USERNAME_COMPLETION is not set
--CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
--# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
--CONFIG_FEATURE_NON_POSIX_CP=y
--# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
--CONFIG_FEATURE_COPYBUF_KB=4
--CONFIG_FEATURE_SKIP_ROOTFS=y
--CONFIG_MONOTONIC_SYSCALL=y
--CONFIG_IOCTL_HEX2STR_ERROR=y
--CONFIG_FEATURE_HWIB=y
--
--#
--# Applets
--#
--
--#
--# Archival Utilities
--#
--# CONFIG_FEATURE_SEAMLESS_XZ is not set
--# CONFIG_FEATURE_SEAMLESS_LZMA is not set
--# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
--# CONFIG_FEATURE_SEAMLESS_GZ is not set
--# CONFIG_FEATURE_SEAMLESS_Z is not set
--CONFIG_AR=y
--# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
--CONFIG_FEATURE_AR_CREATE=y
--CONFIG_BUNZIP2=y
--# CONFIG_BZIP2 is not set
--CONFIG_CPIO=y
--# CONFIG_FEATURE_CPIO_O is not set
--# CONFIG_FEATURE_CPIO_P is not set
--# CONFIG_DPKG is not set
--# CONFIG_DPKG_DEB is not set
--# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
--CONFIG_GUNZIP=y
--CONFIG_GZIP=y
--# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
--# CONFIG_LZOP is not set
--# CONFIG_LZOP_COMPR_HIGH is not set
--# CONFIG_RPM2CPIO is not set
--# CONFIG_RPM is not set
--CONFIG_TAR=y
--CONFIG_FEATURE_TAR_CREATE=y
--# CONFIG_FEATURE_TAR_AUTODETECT is not set
--CONFIG_FEATURE_TAR_FROM=y
--# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
--# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
--CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
--CONFIG_FEATURE_TAR_LONG_OPTIONS=y
--CONFIG_FEATURE_TAR_TO_COMMAND=y
--# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
--# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
--# CONFIG_FEATURE_TAR_SELINUX is not set
--# CONFIG_UNCOMPRESS is not set
--CONFIG_UNLZMA=y
--# CONFIG_FEATURE_LZMA_FAST is not set
--CONFIG_LZMA=y
--CONFIG_UNXZ=y
--CONFIG_XZ=y
--CONFIG_UNZIP=y
--
--#
--# Coreutils
--#
--CONFIG_BASENAME=y
--CONFIG_CAT=y
--CONFIG_DATE=y
--CONFIG_FEATURE_DATE_ISOFMT=y
--# CONFIG_FEATURE_DATE_NANO is not set
--CONFIG_FEATURE_DATE_COMPAT=y
--CONFIG_ID=y
--# CONFIG_GROUPS is not set
--CONFIG_TEST=y
--CONFIG_FEATURE_TEST_64=y
--CONFIG_TOUCH=y
--CONFIG_TR=y
--CONFIG_FEATURE_TR_CLASSES=y
--CONFIG_FEATURE_TR_EQUIV=y
--# CONFIG_BASE64 is not set
--CONFIG_WHO=y
--# CONFIG_USERS is not set
--# CONFIG_CAL is not set
--CONFIG_CATV=y
--CONFIG_CHGRP=y
--CONFIG_CHMOD=y
--CONFIG_CHOWN=y
--# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
--CONFIG_CHROOT=y
--CONFIG_CKSUM=y
--# CONFIG_COMM is not set
--CONFIG_CP=y
--# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
--CONFIG_CUT=y
--CONFIG_DD=y
--CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
--# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
--CONFIG_FEATURE_DD_IBS_OBS=y
--CONFIG_DF=y
--# CONFIG_FEATURE_DF_FANCY is not set
--CONFIG_DIRNAME=y
--CONFIG_DOS2UNIX=y
--CONFIG_UNIX2DOS=y
--CONFIG_DU=y
--CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
--CONFIG_ECHO=y
--CONFIG_FEATURE_FANCY_ECHO=y
--CONFIG_ENV=y
--# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
--# CONFIG_EXPAND is not set
--# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
--CONFIG_EXPR=y
--CONFIG_EXPR_MATH_SUPPORT_64=y
--CONFIG_FALSE=y
--CONFIG_FOLD=y
--# CONFIG_FSYNC is not set
--CONFIG_HEAD=y
--CONFIG_FEATURE_FANCY_HEAD=y
--CONFIG_HOSTID=y
--CONFIG_INSTALL=y
--CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
--CONFIG_LN=y
--CONFIG_LOGNAME=y
--CONFIG_LS=y
--CONFIG_FEATURE_LS_FILETYPES=y
--CONFIG_FEATURE_LS_FOLLOWLINKS=y
--CONFIG_FEATURE_LS_RECURSIVE=y
--CONFIG_FEATURE_LS_SORTFILES=y
--CONFIG_FEATURE_LS_TIMESTAMPS=y
--CONFIG_FEATURE_LS_USERNAME=y
--CONFIG_FEATURE_LS_COLOR=y
--CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
--CONFIG_MD5SUM=y
--CONFIG_MKDIR=y
--CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
--CONFIG_MKFIFO=y
--CONFIG_MKNOD=y
--CONFIG_MV=y
--CONFIG_FEATURE_MV_LONG_OPTIONS=y
--CONFIG_NICE=y
--CONFIG_NOHUP=y
--CONFIG_OD=y
--CONFIG_PRINTENV=y
--CONFIG_PRINTF=y
--CONFIG_PWD=y
--CONFIG_READLINK=y
--CONFIG_FEATURE_READLINK_FOLLOW=y
--CONFIG_REALPATH=y
--CONFIG_RM=y
--CONFIG_RMDIR=y
--# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
--CONFIG_SEQ=y
--CONFIG_SHA1SUM=y
--CONFIG_SHA256SUM=y
--CONFIG_SHA512SUM=y
--CONFIG_SLEEP=y
--# CONFIG_FEATURE_FANCY_SLEEP is not set
--# CONFIG_FEATURE_FLOAT_SLEEP is not set
--CONFIG_SORT=y
--CONFIG_FEATURE_SORT_BIG=y
--# CONFIG_SPLIT is not set
--# CONFIG_FEATURE_SPLIT_FANCY is not set
--# CONFIG_STAT is not set
--# CONFIG_FEATURE_STAT_FORMAT is not set
--CONFIG_STTY=y
--# CONFIG_SUM is not set
--CONFIG_SYNC=y
--# CONFIG_TAC is not set
--CONFIG_TAIL=y
--CONFIG_FEATURE_FANCY_TAIL=y
--CONFIG_TEE=y
--CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
--CONFIG_TRUE=y
--CONFIG_TTY=y
--CONFIG_UNAME=y
--# CONFIG_UNEXPAND is not set
--# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
--CONFIG_UNIQ=y
--CONFIG_USLEEP=y
--CONFIG_UUDECODE=y
--CONFIG_UUENCODE=y
--CONFIG_WC=y
--# CONFIG_FEATURE_WC_LARGE is not set
--CONFIG_WHOAMI=y
--CONFIG_YES=y
--
--#
--# Common options for cp and mv
--#
--CONFIG_FEATURE_PRESERVE_HARDLINKS=y
--
--#
--# Common options for ls, more and telnet
--#
--CONFIG_FEATURE_AUTOWIDTH=y
--
--#
--# Common options for df, du, ls
--#
--CONFIG_FEATURE_HUMAN_READABLE=y
--
--#
--# Common options for md5sum, sha1sum, sha256sum, sha512sum
--#
--CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
--
--#
--# Console Utilities
--#
--CONFIG_CHVT=y
--# CONFIG_FGCONSOLE is not set
--CONFIG_CLEAR=y
--CONFIG_DEALLOCVT=y
--CONFIG_DUMPKMAP=y
--# CONFIG_KBD_MODE is not set
--CONFIG_LOADFONT=y
--CONFIG_LOADKMAP=y
--CONFIG_OPENVT=y
--CONFIG_RESET=y
--CONFIG_RESIZE=y
--CONFIG_FEATURE_RESIZE_PRINT=y
--CONFIG_SETCONSOLE=y
--# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
--# CONFIG_SETFONT is not set
--# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
--CONFIG_DEFAULT_SETFONT_DIR=""
--CONFIG_SETKEYCODES=y
--CONFIG_SETLOGCONS=y
--# CONFIG_SHOWKEY is not set
--
--#
--# Common options for loadfont and setfont
--#
--CONFIG_FEATURE_LOADFONT_PSF2=y
--CONFIG_FEATURE_LOADFONT_RAW=y
--
--#
--# Debian Utilities
--#
--CONFIG_MKTEMP=y
--CONFIG_PIPE_PROGRESS=y
--CONFIG_RUN_PARTS=y
--CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
--# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
--CONFIG_START_STOP_DAEMON=y
--CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
--CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
--CONFIG_WHICH=y
--
--#
--# Editors
--#
--CONFIG_PATCH=y
--CONFIG_VI=y
--CONFIG_FEATURE_VI_MAX_LEN=4096
--CONFIG_FEATURE_VI_8BIT=y
--CONFIG_FEATURE_VI_COLON=y
--CONFIG_FEATURE_VI_YANKMARK=y
--CONFIG_FEATURE_VI_SEARCH=y
--# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
--CONFIG_FEATURE_VI_USE_SIGNALS=y
--CONFIG_FEATURE_VI_DOT_CMD=y
--CONFIG_FEATURE_VI_READONLY=y
--CONFIG_FEATURE_VI_SETOPTS=y
--CONFIG_FEATURE_VI_SET=y
--CONFIG_FEATURE_VI_WIN_RESIZE=y
--CONFIG_FEATURE_VI_ASK_TERMINAL=y
--CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
--CONFIG_AWK=y
--# CONFIG_FEATURE_AWK_LIBM is not set
--CONFIG_CMP=y
--CONFIG_DIFF=y
--# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
--CONFIG_FEATURE_DIFF_DIR=y
--# CONFIG_ED is not set
--CONFIG_SED=y
--CONFIG_FEATURE_ALLOW_EXEC=y
--
--#
--# Finding Utilities
--#
--CONFIG_FIND=y
--CONFIG_FEATURE_FIND_PRINT0=y
--CONFIG_FEATURE_FIND_MTIME=y
--CONFIG_FEATURE_FIND_MMIN=y
--CONFIG_FEATURE_FIND_PERM=y
--CONFIG_FEATURE_FIND_TYPE=y
--CONFIG_FEATURE_FIND_XDEV=y
--CONFIG_FEATURE_FIND_MAXDEPTH=y
--CONFIG_FEATURE_FIND_NEWER=y
--# CONFIG_FEATURE_FIND_INUM is not set
--CONFIG_FEATURE_FIND_EXEC=y
--CONFIG_FEATURE_FIND_USER=y
--CONFIG_FEATURE_FIND_GROUP=y
--CONFIG_FEATURE_FIND_NOT=y
--CONFIG_FEATURE_FIND_DEPTH=y
--CONFIG_FEATURE_FIND_PAREN=y
--CONFIG_FEATURE_FIND_SIZE=y
--CONFIG_FEATURE_FIND_PRUNE=y
--# CONFIG_FEATURE_FIND_DELETE is not set
--CONFIG_FEATURE_FIND_PATH=y
--CONFIG_FEATURE_FIND_REGEX=y
--# CONFIG_FEATURE_FIND_CONTEXT is not set
--# CONFIG_FEATURE_FIND_LINKS is not set
--CONFIG_GREP=y
--CONFIG_FEATURE_GREP_EGREP_ALIAS=y
--CONFIG_FEATURE_GREP_FGREP_ALIAS=y
--CONFIG_FEATURE_GREP_CONTEXT=y
--CONFIG_XARGS=y
--# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
--CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
--CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
--CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
--
--#
--# Init Utilities
--#
--# CONFIG_BOOTCHARTD is not set
--# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
--# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
--CONFIG_HALT=y
--# CONFIG_FEATURE_CALL_TELINIT is not set
--CONFIG_TELINIT_PATH=""
--CONFIG_INIT=y
--CONFIG_FEATURE_USE_INITTAB=y
--CONFIG_FEATURE_KILL_REMOVED=y
--CONFIG_FEATURE_KILL_DELAY=0
--CONFIG_FEATURE_INIT_SCTTY=y
--CONFIG_FEATURE_INIT_SYSLOG=y
--CONFIG_FEATURE_EXTRA_QUIET=y
--# CONFIG_FEATURE_INIT_COREDUMPS is not set
--CONFIG_FEATURE_INITRD=y
--CONFIG_INIT_TERMINAL_TYPE="linux"
--CONFIG_MESG=y
--CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
--
--#
--# Login/Password Management Utilities
--#
--# CONFIG_ADD_SHELL is not set
--# CONFIG_REMOVE_SHELL is not set
--CONFIG_FEATURE_SHADOWPASSWDS=y
--# CONFIG_USE_BB_PWD_GRP is not set
--# CONFIG_USE_BB_SHADOW is not set
--CONFIG_USE_BB_CRYPT=y
--# CONFIG_USE_BB_CRYPT_SHA is not set
--CONFIG_ADDUSER=y
--# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
--# CONFIG_FEATURE_CHECK_NAMES is not set
--CONFIG_FIRST_SYSTEM_ID=100
--CONFIG_LAST_SYSTEM_ID=999
--CONFIG_ADDGROUP=y
--# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
--# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
--CONFIG_DELUSER=y
--CONFIG_DELGROUP=y
--# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
--CONFIG_GETTY=y
--CONFIG_LOGIN=y
--# CONFIG_PAM is not set
--# CONFIG_LOGIN_SCRIPTS is not set
--CONFIG_FEATURE_NOLOGIN=y
--CONFIG_FEATURE_SECURETTY=y
--CONFIG_PASSWD=y
--CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
--# CONFIG_CRYPTPW is not set
--# CONFIG_CHPASSWD is not set
--CONFIG_SU=y
--CONFIG_FEATURE_SU_SYSLOG=y
--CONFIG_FEATURE_SU_CHECKS_SHELLS=y
--CONFIG_SULOGIN=y
--CONFIG_VLOCK=y
--
--#
--# Linux Ext2 FS Progs
--#
--CONFIG_CHATTR=y
--CONFIG_FSCK=y
--CONFIG_LSATTR=y
--# CONFIG_TUNE2FS is not set
--
--#
--# Linux Module Utilities
--#
--# CONFIG_MODINFO is not set
--# CONFIG_MODPROBE_SMALL is not set
--# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
--# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
--CONFIG_INSMOD=y
--CONFIG_RMMOD=y
--CONFIG_LSMOD=y
--CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
--CONFIG_MODPROBE=y
--# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
--# CONFIG_DEPMOD is not set
--
--#
--# Options common to multiple modutils
--#
--# CONFIG_FEATURE_2_4_MODULES is not set
--# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
--# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
--# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
--# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
--# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
--# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
--CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
--CONFIG_FEATURE_MODUTILS_ALIAS=y
--CONFIG_FEATURE_MODUTILS_SYMBOLS=y
--CONFIG_DEFAULT_MODULES_DIR="/lib/modules"
--CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
--
--#
--# Linux System Utilities
--#
--# CONFIG_BLOCKDEV is not set
--# CONFIG_REV is not set
--# CONFIG_ACPID is not set
--# CONFIG_FEATURE_ACPID_COMPAT is not set
--CONFIG_BLKID=y
--# CONFIG_FEATURE_BLKID_TYPE is not set
--CONFIG_DMESG=y
--CONFIG_FEATURE_DMESG_PRETTY=y
--CONFIG_FBSET=y
--CONFIG_FEATURE_FBSET_FANCY=y
--CONFIG_FEATURE_FBSET_READMODE=y
--CONFIG_FDFLUSH=y
--CONFIG_FDFORMAT=y
--# CONFIG_FDISK is not set
--# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
--# CONFIG_FEATURE_FDISK_WRITABLE is not set
--# CONFIG_FEATURE_AIX_LABEL is not set
--# CONFIG_FEATURE_SGI_LABEL is not set
--# CONFIG_FEATURE_SUN_LABEL is not set
--# CONFIG_FEATURE_OSF_LABEL is not set
--# CONFIG_FEATURE_GPT_LABEL is not set
--# CONFIG_FEATURE_FDISK_ADVANCED is not set
--# CONFIG_FINDFS is not set
--# CONFIG_FLOCK is not set
--CONFIG_FREERAMDISK=y
--# CONFIG_FSCK_MINIX is not set
--# CONFIG_MKFS_EXT2 is not set
--# CONFIG_MKFS_MINIX is not set
--# CONFIG_FEATURE_MINIX2 is not set
--# CONFIG_MKFS_REISER is not set
--# CONFIG_MKFS_VFAT is not set
--CONFIG_GETOPT=y
--CONFIG_FEATURE_GETOPT_LONG=y
--CONFIG_HEXDUMP=y
--# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
--# CONFIG_HD is not set
--CONFIG_HWCLOCK=y
--CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
--CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
--CONFIG_IPCRM=y
--CONFIG_IPCS=y
--CONFIG_LOSETUP=y
--CONFIG_LSPCI=y
--CONFIG_LSUSB=y
--CONFIG_MDEV=y
--CONFIG_FEATURE_MDEV_CONF=y
--CONFIG_FEATURE_MDEV_RENAME=y
--# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
--CONFIG_FEATURE_MDEV_EXEC=y
--# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
--CONFIG_MKSWAP=y
--# CONFIG_FEATURE_MKSWAP_UUID is not set
--CONFIG_MORE=y
--CONFIG_MOUNT=y
--# CONFIG_FEATURE_MOUNT_FAKE is not set
--# CONFIG_FEATURE_MOUNT_VERBOSE is not set
--# CONFIG_FEATURE_MOUNT_HELPERS is not set
--# CONFIG_FEATURE_MOUNT_LABEL is not set
--# CONFIG_FEATURE_MOUNT_NFS is not set
--CONFIG_FEATURE_MOUNT_CIFS=y
--CONFIG_FEATURE_MOUNT_FLAGS=y
--CONFIG_FEATURE_MOUNT_FSTAB=y
--CONFIG_PIVOT_ROOT=y
--CONFIG_RDATE=y
--# CONFIG_RDEV is not set
--CONFIG_READPROFILE=y
--# CONFIG_RTCWAKE is not set
--# CONFIG_SCRIPT is not set
--# CONFIG_SCRIPTREPLAY is not set
--CONFIG_SETARCH=y
--CONFIG_SWAPONOFF=y
--# CONFIG_FEATURE_SWAPON_PRI is not set
--CONFIG_SWITCH_ROOT=y
--CONFIG_UMOUNT=y
--CONFIG_FEATURE_UMOUNT_ALL=y
--
--#
--# Common options for mount/umount
--#
--CONFIG_FEATURE_MOUNT_LOOP=y
--CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
--# CONFIG_FEATURE_MTAB_SUPPORT is not set
--CONFIG_VOLUMEID=y
--
--#
--# Filesystem/Volume identification
--#
--# CONFIG_FEATURE_VOLUMEID_EXT is not set
--# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
--# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
--# CONFIG_FEATURE_VOLUMEID_FAT is not set
--# CONFIG_FEATURE_VOLUMEID_HFS is not set
--# CONFIG_FEATURE_VOLUMEID_JFS is not set
--# CONFIG_FEATURE_VOLUMEID_XFS is not set
--# CONFIG_FEATURE_VOLUMEID_NTFS is not set
--# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
--# CONFIG_FEATURE_VOLUMEID_UDF is not set
--# CONFIG_FEATURE_VOLUMEID_LUKS is not set
--# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
--# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
--# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
--# CONFIG_FEATURE_VOLUMEID_SYSV is not set
--# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
--# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
--
--#
--# Miscellaneous Utilities
--#
--# CONFIG_CONSPY is not set
--CONFIG_LESS=y
--CONFIG_FEATURE_LESS_MAXLINES=9999999
--CONFIG_FEATURE_LESS_BRACKETS=y
--CONFIG_FEATURE_LESS_FLAGS=y
--# CONFIG_FEATURE_LESS_MARKS is not set
--CONFIG_FEATURE_LESS_REGEXP=y
--# CONFIG_FEATURE_LESS_WINCH is not set
--# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
--# CONFIG_FEATURE_LESS_DASHCMD is not set
--# CONFIG_FEATURE_LESS_LINENUMS is not set
--# CONFIG_NANDWRITE is not set
--# CONFIG_NANDDUMP is not set
--CONFIG_SETSERIAL=y
--# CONFIG_UBIATTACH is not set
--# CONFIG_UBIDETACH is not set
--# CONFIG_UBIMKVOL is not set
--# CONFIG_UBIRMVOL is not set
--# CONFIG_UBIRSVOL is not set
--# CONFIG_UBIUPDATEVOL is not set
--# CONFIG_ADJTIMEX is not set
--# CONFIG_BBCONFIG is not set
--# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
--# CONFIG_BEEP is not set
--CONFIG_FEATURE_BEEP_FREQ=0
--CONFIG_FEATURE_BEEP_LENGTH_MS=0
--# CONFIG_CHAT is not set
--# CONFIG_FEATURE_CHAT_NOFAIL is not set
--# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
--# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
--# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
--# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
--# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
--# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
--CONFIG_CHRT=y
--CONFIG_CROND=y
--# CONFIG_FEATURE_CROND_D is not set
--# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
--CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
--CONFIG_CRONTAB=y
--CONFIG_DC=y
--# CONFIG_FEATURE_DC_LIBM is not set
--# CONFIG_DEVFSD is not set
--# CONFIG_DEVFSD_MODLOAD is not set
--# CONFIG_DEVFSD_FG_NP is not set
--# CONFIG_DEVFSD_VERBOSE is not set
--# CONFIG_FEATURE_DEVFS is not set
--CONFIG_DEVMEM=y
--CONFIG_EJECT=y
--# CONFIG_FEATURE_EJECT_SCSI is not set
--# CONFIG_FBSPLASH is not set
--# CONFIG_FLASHCP is not set
--# CONFIG_FLASH_LOCK is not set
--# CONFIG_FLASH_UNLOCK is not set
--# CONFIG_FLASH_ERASEALL is not set
--# CONFIG_IONICE is not set
--# CONFIG_INOTIFYD is not set
--CONFIG_LAST=y
--CONFIG_FEATURE_LAST_SMALL=y
--# CONFIG_FEATURE_LAST_FANCY is not set
--CONFIG_HDPARM=y
--CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
--# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
--# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
--CONFIG_MAKEDEVS=y
--# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
--CONFIG_FEATURE_MAKEDEVS_TABLE=y
--# CONFIG_MAN is not set
--CONFIG_MICROCOM=y
--CONFIG_MOUNTPOINT=y
--CONFIG_MT=y
--# CONFIG_RAIDAUTORUN is not set
--# CONFIG_READAHEAD is not set
--# CONFIG_RFKILL is not set
--CONFIG_RUNLEVEL=y
--# CONFIG_RX is not set
--CONFIG_SETSID=y
--CONFIG_STRINGS=y
--# CONFIG_TASKSET is not set
--# CONFIG_FEATURE_TASKSET_FANCY is not set
--CONFIG_TIME=y
--# CONFIG_TIMEOUT is not set
--# CONFIG_TTYSIZE is not set
--# CONFIG_VOLNAME is not set
--# CONFIG_WALL is not set
--CONFIG_WATCHDOG=y
--
--#
--# Networking Utilities
--#
--CONFIG_NAMEIF=y
--# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
--# CONFIG_NBDCLIENT is not set
--# CONFIG_NC is not set
--# CONFIG_NC_SERVER is not set
--# CONFIG_NC_EXTRA is not set
--# CONFIG_NC_110_COMPAT is not set
--CONFIG_PING=y
--# CONFIG_PING6 is not set
--CONFIG_FEATURE_FANCY_PING=y
--# CONFIG_WHOIS is not set
--# CONFIG_FEATURE_IPV6 is not set
--# CONFIG_FEATURE_UNIX_LOCAL is not set
--# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
--# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
--# CONFIG_ARP is not set
--CONFIG_ARPING=y
--# CONFIG_BRCTL is not set
--# CONFIG_FEATURE_BRCTL_FANCY is not set
--# CONFIG_FEATURE_BRCTL_SHOW is not set
--CONFIG_DNSD=y
--CONFIG_ETHER_WAKE=y
--# CONFIG_FAKEIDENTD is not set
--# CONFIG_FTPD is not set
--# CONFIG_FEATURE_FTP_WRITE is not set
--# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
--# CONFIG_FTPGET is not set
--# CONFIG_FTPPUT is not set
--# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
--CONFIG_HOSTNAME=y
--# CONFIG_HTTPD is not set
--# CONFIG_FEATURE_HTTPD_RANGES is not set
--# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
--# CONFIG_FEATURE_HTTPD_SETUID is not set
--# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
--# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
--# CONFIG_FEATURE_HTTPD_CGI is not set
--# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
--# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
--# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
--# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
--# CONFIG_FEATURE_HTTPD_PROXY is not set
--# CONFIG_FEATURE_HTTPD_GZIP is not set
--CONFIG_IFCONFIG=y
--CONFIG_FEATURE_IFCONFIG_STATUS=y
--CONFIG_FEATURE_IFCONFIG_SLIP=y
--CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
--CONFIG_FEATURE_IFCONFIG_HW=y
--# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
--# CONFIG_IFENSLAVE is not set
--# CONFIG_IFPLUGD is not set
--CONFIG_IFUPDOWN=y
--CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
--CONFIG_FEATURE_IFUPDOWN_IP=y
--# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
--# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
--CONFIG_FEATURE_IFUPDOWN_IPV4=y
--# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
--CONFIG_FEATURE_IFUPDOWN_MAPPING=y
--# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
--CONFIG_INETD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
--# CONFIG_FEATURE_INETD_RPC is not set
--CONFIG_IP=y
--CONFIG_FEATURE_IP_ADDRESS=y
--CONFIG_FEATURE_IP_LINK=y
--CONFIG_FEATURE_IP_ROUTE=y
--CONFIG_FEATURE_IP_TUNNEL=y
--CONFIG_FEATURE_IP_RULE=y
--CONFIG_FEATURE_IP_SHORT_FORMS=y
--# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
--CONFIG_IPADDR=y
--CONFIG_IPLINK=y
--CONFIG_IPROUTE=y
--CONFIG_IPTUNNEL=y
--CONFIG_IPRULE=y
--# CONFIG_IPCALC is not set
--# CONFIG_FEATURE_IPCALC_FANCY is not set
--# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
--CONFIG_NETSTAT=y
--# CONFIG_FEATURE_NETSTAT_WIDE is not set
--# CONFIG_FEATURE_NETSTAT_PRG is not set
--CONFIG_NSLOOKUP=y
--# CONFIG_NTPD is not set
--# CONFIG_FEATURE_NTPD_SERVER is not set
--# CONFIG_PSCAN is not set
--CONFIG_ROUTE=y
--# CONFIG_SLATTACH is not set
--# CONFIG_TCPSVD is not set
--CONFIG_TELNET=y
--CONFIG_FEATURE_TELNET_TTYPE=y
--CONFIG_FEATURE_TELNET_AUTOLOGIN=y
--# CONFIG_TELNETD is not set
--# CONFIG_FEATURE_TELNETD_STANDALONE is not set
--# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
--CONFIG_TFTP=y
--# CONFIG_TFTPD is not set
--
--#
--# Common options for tftp/tftpd
--#
--CONFIG_FEATURE_TFTP_GET=y
--CONFIG_FEATURE_TFTP_PUT=y
--CONFIG_FEATURE_TFTP_BLOCKSIZE=y
--# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
--# CONFIG_TFTP_DEBUG is not set
--CONFIG_TRACEROUTE=y
--# CONFIG_TRACEROUTE6 is not set
--# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
--# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
--# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
--# CONFIG_TUNCTL is not set
--# CONFIG_FEATURE_TUNCTL_UG is not set
--# CONFIG_UDHCPD is not set
--# CONFIG_DHCPRELAY is not set
--# CONFIG_DUMPLEASES is not set
--# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
--# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
--CONFIG_DHCPD_LEASES_FILE=""
--CONFIG_UDHCPC=y
--CONFIG_FEATURE_UDHCPC_ARPING=y
--# CONFIG_FEATURE_UDHCP_PORT is not set
--CONFIG_UDHCP_DEBUG=0
--# CONFIG_FEATURE_UDHCP_RFC3397 is not set
--CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
--CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
--# CONFIG_UDPSVD is not set
--CONFIG_VCONFIG=y
--CONFIG_WGET=y
--CONFIG_FEATURE_WGET_STATUSBAR=y
--CONFIG_FEATURE_WGET_AUTHENTICATION=y
--CONFIG_FEATURE_WGET_LONG_OPTIONS=y
--CONFIG_FEATURE_WGET_TIMEOUT=y
--# CONFIG_ZCIP is not set
--
--#
--# Print Utilities
--#
--# CONFIG_LPD is not set
--# CONFIG_LPR is not set
--# CONFIG_LPQ is not set
--
--#
--# Mail Utilities
--#
--# CONFIG_MAKEMIME is not set
--CONFIG_FEATURE_MIME_CHARSET=""
--# CONFIG_POPMAILDIR is not set
--# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
--# CONFIG_REFORMIME is not set
--# CONFIG_FEATURE_REFORMIME_COMPAT is not set
--# CONFIG_SENDMAIL is not set
--
--#
--# Process Utilities
--#
--# CONFIG_IOSTAT is not set
--# CONFIG_MPSTAT is not set
--# CONFIG_NMETER is not set
--# CONFIG_PMAP is not set
--# CONFIG_POWERTOP is not set
--# CONFIG_PSTREE is not set
--# CONFIG_PWDX is not set
--# CONFIG_SMEMCAP is not set
--CONFIG_UPTIME=y
--# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
--CONFIG_FREE=y
--CONFIG_FUSER=y
--CONFIG_KILL=y
--CONFIG_KILLALL=y
--CONFIG_KILLALL5=y
--# CONFIG_PGREP is not set
--CONFIG_PIDOF=y
--CONFIG_FEATURE_PIDOF_SINGLE=y
--CONFIG_FEATURE_PIDOF_OMIT=y
--# CONFIG_PKILL is not set
--CONFIG_PS=y
--CONFIG_FEATURE_PS_WIDE=y
--# CONFIG_FEATURE_PS_TIME is not set
--# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
--# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
--CONFIG_RENICE=y
--CONFIG_BB_SYSCTL=y
--CONFIG_TOP=y
--CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
--CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
--# CONFIG_FEATURE_TOP_SMP_CPU is not set
--# CONFIG_FEATURE_TOP_DECIMALS is not set
--# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
--# CONFIG_FEATURE_TOPMEM is not set
--# CONFIG_FEATURE_SHOW_THREADS is not set
--CONFIG_WATCH=y
--
--#
--# Runit Utilities
--#
--# CONFIG_RUNSV is not set
--# CONFIG_RUNSVDIR is not set
--# CONFIG_FEATURE_RUNSVDIR_LOG is not set
--# CONFIG_SV is not set
--CONFIG_SV_DEFAULT_SERVICE_DIR=""
--# CONFIG_SVLOGD is not set
--# CONFIG_CHPST is not set
--# CONFIG_SETUIDGID is not set
--# CONFIG_ENVUIDGID is not set
--# CONFIG_ENVDIR is not set
--# CONFIG_SOFTLIMIT is not set
--# CONFIG_CHCON is not set
--# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
--# CONFIG_GETENFORCE is not set
--# CONFIG_GETSEBOOL is not set
--# CONFIG_LOAD_POLICY is not set
--# CONFIG_MATCHPATHCON is not set
--# CONFIG_RESTORECON is not set
--# CONFIG_RUNCON is not set
--# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
--# CONFIG_SELINUXENABLED is not set
--# CONFIG_SETENFORCE is not set
--# CONFIG_SETFILES is not set
--# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
--# CONFIG_SETSEBOOL is not set
--# CONFIG_SESTATUS is not set
--
--#
--# Shells
--#
--CONFIG_ASH=y
--CONFIG_ASH_BASH_COMPAT=y
--CONFIG_ASH_IDLE_TIMEOUT=y
--CONFIG_ASH_JOB_CONTROL=y
--CONFIG_ASH_ALIAS=y
--# CONFIG_ASH_GETOPTS is not set
--CONFIG_ASH_BUILTIN_ECHO=y
--CONFIG_ASH_BUILTIN_PRINTF=y
--CONFIG_ASH_BUILTIN_TEST=y
--CONFIG_ASH_CMDCMD=y
--# CONFIG_ASH_MAIL is not set
--CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
--CONFIG_ASH_RANDOM_SUPPORT=y
--CONFIG_ASH_EXPAND_PRMT=y
--# CONFIG_CTTYHACK is not set
--# CONFIG_HUSH is not set
--# CONFIG_HUSH_BASH_COMPAT is not set
--# CONFIG_HUSH_BRACE_EXPANSION is not set
--# CONFIG_HUSH_HELP is not set
--# CONFIG_HUSH_INTERACTIVE is not set
--# CONFIG_HUSH_SAVEHISTORY is not set
--# CONFIG_HUSH_JOB is not set
--# CONFIG_HUSH_TICK is not set
--# CONFIG_HUSH_IF is not set
--# CONFIG_HUSH_LOOPS is not set
--# CONFIG_HUSH_CASE is not set
--# CONFIG_HUSH_FUNCTIONS is not set
--# CONFIG_HUSH_LOCAL is not set
--# CONFIG_HUSH_RANDOM_SUPPORT is not set
--# CONFIG_HUSH_EXPORT_N is not set
--# CONFIG_HUSH_MODE_X is not set
--# CONFIG_MSH is not set
--CONFIG_FEATURE_SH_IS_ASH=y
--# CONFIG_FEATURE_SH_IS_HUSH is not set
--# CONFIG_FEATURE_SH_IS_NONE is not set
--# CONFIG_FEATURE_BASH_IS_ASH is not set
--# CONFIG_FEATURE_BASH_IS_HUSH is not set
--CONFIG_FEATURE_BASH_IS_NONE=y
--CONFIG_SH_MATH_SUPPORT=y
--# CONFIG_SH_MATH_SUPPORT_64 is not set
--CONFIG_FEATURE_SH_EXTRA_QUIET=y
--# CONFIG_FEATURE_SH_STANDALONE is not set
--# CONFIG_FEATURE_SH_NOFORK is not set
--# CONFIG_FEATURE_SH_HISTFILESIZE is not set
--
--#
--# System Logging Utilities
--#
--CONFIG_SYSLOGD=y
--CONFIG_FEATURE_ROTATE_LOGFILE=y
--CONFIG_FEATURE_REMOTE_LOG=y
--# CONFIG_FEATURE_SYSLOGD_DUP is not set
--# CONFIG_FEATURE_SYSLOGD_CFG is not set
--CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=256
--# CONFIG_FEATURE_IPC_SYSLOG is not set
--CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
--# CONFIG_LOGREAD is not set
--# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
--CONFIG_KLOGD=y
--CONFIG_FEATURE_KLOGD_KLOGCTL=y
--CONFIG_LOGGER=y
-diff --git a/package/busybox/busybox-1.20.x.config b/package/busybox/busybox-1.20.x.config
+diff --git a/package/gdb/7.5.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch b/package/gdb/7.5.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
 deleted file mode 100644
-index 085d43c..0000000
---- a/package/busybox/busybox-1.20.x.config
+index 3b391d0..0000000
+--- a/package/gdb/7.5.1/gdb-100-xtensa-fix-linux-ptrace-includes.patch
 +++ /dev/null
-@@ -1,1024 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Busybox version: 1.20.0
--# Sun Apr 22 10:09:56 2012
--#
--CONFIG_HAVE_DOT_CONFIG=y
+@@ -1,60 +0,0 @@
+-From e671835b7afc90b3ff201b79f07a6fb67797bc5c Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Mon, 20 Jan 2014 09:53:12 +0200
+-Subject: [PATCH] gdb: xtensa: fix linux ptrace includes
 -
--#
--# Busybox Settings
--#
+-Currently, xtensa code using the Linux ptrace interface only include
+-sys/ptrace.h.  This file comes from the C library (glibc and uClibc,
+-at least), and includes a declaration of the ptrace() functions, along
+-with some cross architecture constants that are mostly copied from the
+-file located at include/uapi/linux/ptrace.h in recent Linux kernels.
 -
--#
--# General Configuration
--#
--CONFIG_DESKTOP=y
--# CONFIG_EXTRA_COMPAT is not set
--CONFIG_INCLUDE_SUSv2=y
--# CONFIG_USE_PORTABLE_CODE is not set
--CONFIG_PLATFORM_LINUX=y
--CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
--# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
--# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
--CONFIG_SHOW_USAGE=y
--CONFIG_FEATURE_VERBOSE_USAGE=y
--# CONFIG_FEATURE_COMPRESS_USAGE is not set
--CONFIG_FEATURE_INSTALLER=y
--# CONFIG_INSTALL_NO_USR is not set
--# CONFIG_LOCALE_SUPPORT is not set
--# CONFIG_UNICODE_SUPPORT is not set
--# CONFIG_UNICODE_USING_LOCALE is not set
--# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
--CONFIG_SUBST_WCHAR=0
--CONFIG_LAST_SUPPORTED_WCHAR=0
--# CONFIG_UNICODE_COMBINING_WCHARS is not set
--# CONFIG_UNICODE_WIDE_WCHARS is not set
--# CONFIG_UNICODE_BIDI_SUPPORT is not set
--# CONFIG_UNICODE_NEUTRAL_TABLE is not set
--# CONFIG_UNICODE_PRESERVE_BROKEN is not set
--CONFIG_LONG_OPTS=y
--CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
--CONFIG_FEATURE_UTMP=y
--CONFIG_FEATURE_WTMP=y
--# CONFIG_FEATURE_PIDFILE is not set
--CONFIG_FEATURE_SUID=y
--# CONFIG_FEATURE_SUID_CONFIG is not set
--# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
--# CONFIG_SELINUX is not set
--# CONFIG_FEATURE_PREFER_APPLETS is not set
--CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
--CONFIG_FEATURE_SYSLOG=y
--# CONFIG_FEATURE_HAVE_RPC is not set
+-For xtensa specific constants like PTRACE_GETXTREGS and
+-PTRACE_SETXTREGS the asm/ptrace.h include from the Linux kernel UAPI
+-is needed.  The code in gdbserver xtensa specific part doesn't call
+-ptrace() directly, so we can remove the unneeded sys/ptrace.h include.
+-The gdb xtensa specific code needs both headers, since it calls
+-ptrace().
 -
--#
--# Build Options
--#
--# CONFIG_STATIC is not set
--# CONFIG_PIE is not set
--# CONFIG_NOMMU is not set
--# CONFIG_BUILD_LIBBUSYBOX is not set
--# CONFIG_FEATURE_INDIVIDUAL is not set
--# CONFIG_FEATURE_SHARED_BUSYBOX is not set
--# CONFIG_LFS is not set
--CONFIG_CROSS_COMPILER_PREFIX=""
--CONFIG_SYSROOT=""
--CONFIG_EXTRA_CFLAGS=""
--CONFIG_EXTRA_LDFLAGS=""
--CONFIG_EXTRA_LDLIBS=""
+-gdb/
+-	* xtensa-linux-nat.c: Include asm/ptrace.h.
 -
--#
--# Debugging Options
--#
--# CONFIG_DEBUG is not set
--# CONFIG_DEBUG_PESSIMIZE is not set
--# CONFIG_WERROR is not set
--CONFIG_NO_DEBUG_LIB=y
--# CONFIG_DMALLOC is not set
--# CONFIG_EFENCE is not set
+-gdb/gdbserver/
+-	* linux-xtensa-low.c: Include asm/ptrace.h instead of
+-	sys/ptrace.h.
+----
+-Backported from: e671835b7afc90b3ff201b79f07a6fb67797bc5c
+-Changes to Changelog files are dropped.
 -
--#
--# Installation Options ("make install" behavior)
--#
--CONFIG_INSTALL_APPLET_SYMLINKS=y
--# CONFIG_INSTALL_APPLET_HARDLINKS is not set
--# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
--# CONFIG_INSTALL_APPLET_DONT is not set
--# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
--# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
--# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
--CONFIG_PREFIX="./_install"
+- gdb/gdbserver/linux-xtensa-low.c | 2 +-
+- gdb/xtensa-linux-nat.c           | 1 +
+- 2 files changed, 2 insertions(+), 1 deletion(-)
 -
--#
--# Busybox Library Tuning
--#
--# CONFIG_FEATURE_SYSTEMD is not set
--CONFIG_FEATURE_RTMINMAX=y
--CONFIG_PASSWORD_MINLEN=6
--CONFIG_MD5_SMALL=1
--# CONFIG_FEATURE_FAST_TOP is not set
--# CONFIG_FEATURE_ETC_NETWORKS is not set
--CONFIG_FEATURE_USE_TERMIOS=y
--CONFIG_FEATURE_EDITING=y
--CONFIG_FEATURE_EDITING_MAX_LEN=1024
--CONFIG_FEATURE_EDITING_VI=y
--CONFIG_FEATURE_EDITING_HISTORY=999
--CONFIG_FEATURE_EDITING_SAVEHISTORY=y
--# CONFIG_FEATURE_EDITING_SAVE_ON_EXIT is not set
--CONFIG_FEATURE_REVERSE_SEARCH=y
--CONFIG_FEATURE_TAB_COMPLETION=y
--# CONFIG_FEATURE_USERNAME_COMPLETION is not set
--CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
--# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
--CONFIG_FEATURE_NON_POSIX_CP=y
--# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
--CONFIG_FEATURE_COPYBUF_KB=4
--CONFIG_FEATURE_SKIP_ROOTFS=y
--CONFIG_MONOTONIC_SYSCALL=y
--CONFIG_IOCTL_HEX2STR_ERROR=y
--CONFIG_FEATURE_HWIB=y
+-diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
+-index 7db97a9..479b65b 100644
+---- a/gdb/gdbserver/linux-xtensa-low.c
+-+++ b/gdb/gdbserver/linux-xtensa-low.c
+-@@ -24,7 +24,7 @@
+- void init_registers_xtensa (void);
+- extern const struct target_desc *tdesc_xtensa;
+- 
+--#include <sys/ptrace.h>
+-+#include <asm/ptrace.h>
+- #include <xtensa-config.h>
+- 
+- #include "xtensa-xtregs.c"
+-diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
+-index 2372e79..9340c62 100644
+---- a/gdb/xtensa-linux-nat.c
+-+++ b/gdb/xtensa-linux-nat.c
+-@@ -36,6 +36,7 @@
+- #include <fcntl.h>
+- #include <sys/procfs.h>
+- #include <sys/ptrace.h>
+-+#include <asm/ptrace.h>
+- 
+- #include "gregset.h"
+- #include "xtensa-tdep.h"
+--- 
+-1.8.1.4
 -
--#
--# Applets
--#
--
--#
--# Archival Utilities
--#
--# CONFIG_FEATURE_SEAMLESS_XZ is not set
--# CONFIG_FEATURE_SEAMLESS_LZMA is not set
--# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
--# CONFIG_FEATURE_SEAMLESS_GZ is not set
--# CONFIG_FEATURE_SEAMLESS_Z is not set
--CONFIG_AR=y
--# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
--CONFIG_FEATURE_AR_CREATE=y
--CONFIG_BUNZIP2=y
--# CONFIG_BZIP2 is not set
--CONFIG_CPIO=y
--# CONFIG_FEATURE_CPIO_O is not set
--# CONFIG_FEATURE_CPIO_P is not set
--# CONFIG_DPKG is not set
--# CONFIG_DPKG_DEB is not set
--# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
--CONFIG_GUNZIP=y
--CONFIG_GZIP=y
--# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
--CONFIG_GZIP_FAST=0
--# CONFIG_LZOP is not set
--# CONFIG_LZOP_COMPR_HIGH is not set
--# CONFIG_RPM2CPIO is not set
--# CONFIG_RPM is not set
--CONFIG_TAR=y
--CONFIG_FEATURE_TAR_CREATE=y
--# CONFIG_FEATURE_TAR_AUTODETECT is not set
--CONFIG_FEATURE_TAR_FROM=y
--# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
--# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
--CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
--CONFIG_FEATURE_TAR_LONG_OPTIONS=y
--CONFIG_FEATURE_TAR_TO_COMMAND=y
--# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
--# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
--# CONFIG_FEATURE_TAR_SELINUX is not set
--# CONFIG_UNCOMPRESS is not set
--CONFIG_UNLZMA=y
--# CONFIG_FEATURE_LZMA_FAST is not set
--CONFIG_LZMA=y
--CONFIG_UNXZ=y
--CONFIG_XZ=y
--CONFIG_UNZIP=y
--
--#
--# Coreutils
--#
--CONFIG_BASENAME=y
--CONFIG_CAT=y
--CONFIG_DATE=y
--CONFIG_FEATURE_DATE_ISOFMT=y
--# CONFIG_FEATURE_DATE_NANO is not set
--CONFIG_FEATURE_DATE_COMPAT=y
--CONFIG_HOSTID=y
--CONFIG_ID=y
--# CONFIG_GROUPS is not set
--CONFIG_TEST=y
--CONFIG_FEATURE_TEST_64=y
--CONFIG_TOUCH=y
--CONFIG_FEATURE_TOUCH_SUSV3=y
--CONFIG_TR=y
--CONFIG_FEATURE_TR_CLASSES=y
--CONFIG_FEATURE_TR_EQUIV=y
--# CONFIG_BASE64 is not set
--CONFIG_WHO=y
--# CONFIG_USERS is not set
--# CONFIG_CAL is not set
--CONFIG_CATV=y
--CONFIG_CHGRP=y
--CONFIG_CHMOD=y
--CONFIG_CHOWN=y
--# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
--CONFIG_CHROOT=y
--CONFIG_CKSUM=y
--# CONFIG_COMM is not set
--CONFIG_CP=y
--# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
--CONFIG_CUT=y
--CONFIG_DD=y
--CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
--# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
--CONFIG_FEATURE_DD_IBS_OBS=y
--CONFIG_DF=y
--# CONFIG_FEATURE_DF_FANCY is not set
--CONFIG_DIRNAME=y
--CONFIG_DOS2UNIX=y
--CONFIG_UNIX2DOS=y
--CONFIG_DU=y
--CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
--CONFIG_ECHO=y
--CONFIG_FEATURE_FANCY_ECHO=y
--CONFIG_ENV=y
--# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
--# CONFIG_EXPAND is not set
--# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
--CONFIG_EXPR=y
--CONFIG_EXPR_MATH_SUPPORT_64=y
--CONFIG_FALSE=y
--CONFIG_FOLD=y
--# CONFIG_FSYNC is not set
--CONFIG_HEAD=y
--CONFIG_FEATURE_FANCY_HEAD=y
--CONFIG_INSTALL=y
--CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
--CONFIG_LN=y
--CONFIG_LOGNAME=y
--CONFIG_LS=y
--CONFIG_FEATURE_LS_FILETYPES=y
--CONFIG_FEATURE_LS_FOLLOWLINKS=y
--CONFIG_FEATURE_LS_RECURSIVE=y
--CONFIG_FEATURE_LS_SORTFILES=y
--CONFIG_FEATURE_LS_TIMESTAMPS=y
--CONFIG_FEATURE_LS_USERNAME=y
--CONFIG_FEATURE_LS_COLOR=y
--CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
--CONFIG_MD5SUM=y
--CONFIG_MKDIR=y
--CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
--CONFIG_MKFIFO=y
--CONFIG_MKNOD=y
--CONFIG_MV=y
--CONFIG_FEATURE_MV_LONG_OPTIONS=y
--CONFIG_NICE=y
--CONFIG_NOHUP=y
--CONFIG_OD=y
--CONFIG_PRINTENV=y
--CONFIG_PRINTF=y
--CONFIG_PWD=y
--CONFIG_READLINK=y
--CONFIG_FEATURE_READLINK_FOLLOW=y
--CONFIG_REALPATH=y
--CONFIG_RM=y
--CONFIG_RMDIR=y
--# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
--CONFIG_SEQ=y
--CONFIG_SHA1SUM=y
--CONFIG_SHA256SUM=y
--CONFIG_SHA512SUM=y
--CONFIG_SLEEP=y
--# CONFIG_FEATURE_FANCY_SLEEP is not set
--# CONFIG_FEATURE_FLOAT_SLEEP is not set
--CONFIG_SORT=y
--CONFIG_FEATURE_SORT_BIG=y
--# CONFIG_SPLIT is not set
--# CONFIG_FEATURE_SPLIT_FANCY is not set
--# CONFIG_STAT is not set
--# CONFIG_FEATURE_STAT_FORMAT is not set
--CONFIG_STTY=y
--# CONFIG_SUM is not set
--CONFIG_SYNC=y
--# CONFIG_TAC is not set
--CONFIG_TAIL=y
--CONFIG_FEATURE_FANCY_TAIL=y
--CONFIG_TEE=y
--CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
--CONFIG_TRUE=y
--CONFIG_TTY=y
--CONFIG_UNAME=y
--# CONFIG_UNEXPAND is not set
--# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
--CONFIG_UNIQ=y
--CONFIG_USLEEP=y
--CONFIG_UUDECODE=y
--CONFIG_UUENCODE=y
--CONFIG_WC=y
--# CONFIG_FEATURE_WC_LARGE is not set
--CONFIG_WHOAMI=y
--CONFIG_YES=y
--
--#
--# Common options for cp and mv
--#
--CONFIG_FEATURE_PRESERVE_HARDLINKS=y
--
--#
--# Common options for ls, more and telnet
--#
--CONFIG_FEATURE_AUTOWIDTH=y
--
--#
--# Common options for df, du, ls
--#
--CONFIG_FEATURE_HUMAN_READABLE=y
--
--#
--# Common options for md5sum, sha1sum, sha256sum, sha512sum
--#
--CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
--
--#
--# Console Utilities
--#
--CONFIG_CHVT=y
--# CONFIG_FGCONSOLE is not set
--CONFIG_CLEAR=y
--CONFIG_DEALLOCVT=y
--CONFIG_DUMPKMAP=y
--# CONFIG_KBD_MODE is not set
--CONFIG_LOADFONT=y
--CONFIG_LOADKMAP=y
--CONFIG_OPENVT=y
--CONFIG_RESET=y
--CONFIG_RESIZE=y
--CONFIG_FEATURE_RESIZE_PRINT=y
--CONFIG_SETCONSOLE=y
--# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
--# CONFIG_SETFONT is not set
--# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
--CONFIG_DEFAULT_SETFONT_DIR=""
--CONFIG_SETKEYCODES=y
--CONFIG_SETLOGCONS=y
--# CONFIG_SHOWKEY is not set
--
--#
--# Common options for loadfont and setfont
--#
--CONFIG_FEATURE_LOADFONT_PSF2=y
--CONFIG_FEATURE_LOADFONT_RAW=y
--
--#
--# Debian Utilities
--#
--CONFIG_MKTEMP=y
--CONFIG_PIPE_PROGRESS=y
--CONFIG_RUN_PARTS=y
--CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
--# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
--CONFIG_START_STOP_DAEMON=y
--CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
--CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
--CONFIG_WHICH=y
--
--#
--# Editors
--#
--CONFIG_PATCH=y
--CONFIG_VI=y
--CONFIG_FEATURE_VI_MAX_LEN=4096
--CONFIG_FEATURE_VI_8BIT=y
--CONFIG_FEATURE_VI_COLON=y
--CONFIG_FEATURE_VI_YANKMARK=y
--CONFIG_FEATURE_VI_SEARCH=y
--# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
--CONFIG_FEATURE_VI_USE_SIGNALS=y
--CONFIG_FEATURE_VI_DOT_CMD=y
--CONFIG_FEATURE_VI_READONLY=y
--CONFIG_FEATURE_VI_SETOPTS=y
--CONFIG_FEATURE_VI_SET=y
--CONFIG_FEATURE_VI_WIN_RESIZE=y
--CONFIG_FEATURE_VI_ASK_TERMINAL=y
--CONFIG_FEATURE_VI_OPTIMIZE_CURSOR=y
--CONFIG_AWK=y
--# CONFIG_FEATURE_AWK_LIBM is not set
--CONFIG_CMP=y
--CONFIG_DIFF=y
--# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
--CONFIG_FEATURE_DIFF_DIR=y
--# CONFIG_ED is not set
--CONFIG_SED=y
--CONFIG_FEATURE_ALLOW_EXEC=y
--
--#
--# Finding Utilities
--#
--CONFIG_FIND=y
--CONFIG_FEATURE_FIND_PRINT0=y
--CONFIG_FEATURE_FIND_MTIME=y
--CONFIG_FEATURE_FIND_MMIN=y
--CONFIG_FEATURE_FIND_PERM=y
--CONFIG_FEATURE_FIND_TYPE=y
--CONFIG_FEATURE_FIND_XDEV=y
--CONFIG_FEATURE_FIND_MAXDEPTH=y
--CONFIG_FEATURE_FIND_NEWER=y
--# CONFIG_FEATURE_FIND_INUM is not set
--CONFIG_FEATURE_FIND_EXEC=y
--CONFIG_FEATURE_FIND_USER=y
--CONFIG_FEATURE_FIND_GROUP=y
--CONFIG_FEATURE_FIND_NOT=y
--CONFIG_FEATURE_FIND_DEPTH=y
--CONFIG_FEATURE_FIND_PAREN=y
--CONFIG_FEATURE_FIND_SIZE=y
--CONFIG_FEATURE_FIND_PRUNE=y
--# CONFIG_FEATURE_FIND_DELETE is not set
--CONFIG_FEATURE_FIND_PATH=y
--CONFIG_FEATURE_FIND_REGEX=y
--# CONFIG_FEATURE_FIND_CONTEXT is not set
--# CONFIG_FEATURE_FIND_LINKS is not set
--CONFIG_GREP=y
--CONFIG_FEATURE_GREP_EGREP_ALIAS=y
--CONFIG_FEATURE_GREP_FGREP_ALIAS=y
--CONFIG_FEATURE_GREP_CONTEXT=y
--CONFIG_XARGS=y
--# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
--CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
--CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
--CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
--
--#
--# Init Utilities
--#
--# CONFIG_BOOTCHARTD is not set
--# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
--# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
--CONFIG_HALT=y
--# CONFIG_FEATURE_CALL_TELINIT is not set
--CONFIG_TELINIT_PATH=""
--CONFIG_INIT=y
--CONFIG_FEATURE_USE_INITTAB=y
--CONFIG_FEATURE_KILL_REMOVED=y
--CONFIG_FEATURE_KILL_DELAY=0
--CONFIG_FEATURE_INIT_SCTTY=y
--CONFIG_FEATURE_INIT_SYSLOG=y
--CONFIG_FEATURE_EXTRA_QUIET=y
--# CONFIG_FEATURE_INIT_COREDUMPS is not set
--CONFIG_FEATURE_INITRD=y
--CONFIG_INIT_TERMINAL_TYPE="linux"
--CONFIG_MESG=y
--CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
--
--#
--# Login/Password Management Utilities
--#
--# CONFIG_ADD_SHELL is not set
--# CONFIG_REMOVE_SHELL is not set
--CONFIG_FEATURE_SHADOWPASSWDS=y
--# CONFIG_USE_BB_PWD_GRP is not set
--# CONFIG_USE_BB_SHADOW is not set
--CONFIG_USE_BB_CRYPT=y
--# CONFIG_USE_BB_CRYPT_SHA is not set
--CONFIG_ADDUSER=y
--# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
--# CONFIG_FEATURE_CHECK_NAMES is not set
--CONFIG_FIRST_SYSTEM_ID=100
--CONFIG_LAST_SYSTEM_ID=999
--CONFIG_ADDGROUP=y
--# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
--# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
--CONFIG_DELUSER=y
--CONFIG_DELGROUP=y
--# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
--CONFIG_GETTY=y
--CONFIG_LOGIN=y
--# CONFIG_LOGIN_SESSION_AS_CHILD is not set
--# CONFIG_PAM is not set
--# CONFIG_LOGIN_SCRIPTS is not set
--CONFIG_FEATURE_NOLOGIN=y
--CONFIG_FEATURE_SECURETTY=y
--CONFIG_PASSWD=y
--CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
--# CONFIG_CRYPTPW is not set
--# CONFIG_CHPASSWD is not set
--CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
--CONFIG_SU=y
--CONFIG_FEATURE_SU_SYSLOG=y
--CONFIG_FEATURE_SU_CHECKS_SHELLS=y
--CONFIG_SULOGIN=y
--CONFIG_VLOCK=y
--
--#
--# Linux Ext2 FS Progs
--#
--CONFIG_CHATTR=y
--CONFIG_FSCK=y
--CONFIG_LSATTR=y
--# CONFIG_TUNE2FS is not set
--
--#
--# Linux Module Utilities
--#
--# CONFIG_MODINFO is not set
--# CONFIG_MODPROBE_SMALL is not set
--# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
--# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
--CONFIG_INSMOD=y
--CONFIG_RMMOD=y
--CONFIG_LSMOD=y
--CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
--CONFIG_MODPROBE=y
--# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
--# CONFIG_DEPMOD is not set
--
--#
--# Options common to multiple modutils
--#
--# CONFIG_FEATURE_2_4_MODULES is not set
--# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
--# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
--# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
--# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
--# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
--# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
--CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
--CONFIG_FEATURE_MODUTILS_ALIAS=y
--CONFIG_FEATURE_MODUTILS_SYMBOLS=y
--CONFIG_DEFAULT_MODULES_DIR="/lib/modules"
--CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
--
--#
--# Linux System Utilities
--#
--# CONFIG_BLOCKDEV is not set
--CONFIG_MDEV=y
--CONFIG_FEATURE_MDEV_CONF=y
--CONFIG_FEATURE_MDEV_RENAME=y
--# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
--CONFIG_FEATURE_MDEV_EXEC=y
--# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
--# CONFIG_REV is not set
--# CONFIG_ACPID is not set
--# CONFIG_FEATURE_ACPID_COMPAT is not set
--CONFIG_BLKID=y
--# CONFIG_FEATURE_BLKID_TYPE is not set
--CONFIG_DMESG=y
--CONFIG_FEATURE_DMESG_PRETTY=y
--CONFIG_FBSET=y
--CONFIG_FEATURE_FBSET_FANCY=y
--CONFIG_FEATURE_FBSET_READMODE=y
--CONFIG_FDFLUSH=y
--CONFIG_FDFORMAT=y
--# CONFIG_FDISK is not set
--# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
--# CONFIG_FEATURE_FDISK_WRITABLE is not set
--# CONFIG_FEATURE_AIX_LABEL is not set
--# CONFIG_FEATURE_SGI_LABEL is not set
--# CONFIG_FEATURE_SUN_LABEL is not set
--# CONFIG_FEATURE_OSF_LABEL is not set
--# CONFIG_FEATURE_GPT_LABEL is not set
--# CONFIG_FEATURE_FDISK_ADVANCED is not set
--# CONFIG_FINDFS is not set
--# CONFIG_FLOCK is not set
--CONFIG_FREERAMDISK=y
--# CONFIG_FSCK_MINIX is not set
--# CONFIG_MKFS_EXT2 is not set
--# CONFIG_MKFS_MINIX is not set
--# CONFIG_FEATURE_MINIX2 is not set
--# CONFIG_MKFS_REISER is not set
--# CONFIG_MKFS_VFAT is not set
--CONFIG_GETOPT=y
--CONFIG_FEATURE_GETOPT_LONG=y
--CONFIG_HEXDUMP=y
--# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
--# CONFIG_HD is not set
--CONFIG_HWCLOCK=y
--CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
--CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
--CONFIG_IPCRM=y
--CONFIG_IPCS=y
--CONFIG_LOSETUP=y
--CONFIG_LSPCI=y
--CONFIG_LSUSB=y
--CONFIG_MKSWAP=y
--# CONFIG_FEATURE_MKSWAP_UUID is not set
--CONFIG_MORE=y
--CONFIG_MOUNT=y
--# CONFIG_FEATURE_MOUNT_FAKE is not set
--# CONFIG_FEATURE_MOUNT_VERBOSE is not set
--# CONFIG_FEATURE_MOUNT_HELPERS is not set
--# CONFIG_FEATURE_MOUNT_LABEL is not set
--# CONFIG_FEATURE_MOUNT_NFS is not set
--CONFIG_FEATURE_MOUNT_CIFS=y
--CONFIG_FEATURE_MOUNT_FLAGS=y
--CONFIG_FEATURE_MOUNT_FSTAB=y
--CONFIG_PIVOT_ROOT=y
--CONFIG_RDATE=y
--# CONFIG_RDEV is not set
--CONFIG_READPROFILE=y
--# CONFIG_RTCWAKE is not set
--# CONFIG_SCRIPT is not set
--# CONFIG_SCRIPTREPLAY is not set
--CONFIG_SETARCH=y
--CONFIG_SWAPONOFF=y
--# CONFIG_FEATURE_SWAPON_PRI is not set
--CONFIG_SWITCH_ROOT=y
--CONFIG_UMOUNT=y
--CONFIG_FEATURE_UMOUNT_ALL=y
--
--#
--# Common options for mount/umount
--#
--CONFIG_FEATURE_MOUNT_LOOP=y
--CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
--# CONFIG_FEATURE_MTAB_SUPPORT is not set
--CONFIG_VOLUMEID=y
--
--#
--# Filesystem/Volume identification
--#
--# CONFIG_FEATURE_VOLUMEID_EXT is not set
--# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
--# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
--# CONFIG_FEATURE_VOLUMEID_FAT is not set
--# CONFIG_FEATURE_VOLUMEID_HFS is not set
--# CONFIG_FEATURE_VOLUMEID_JFS is not set
--# CONFIG_FEATURE_VOLUMEID_XFS is not set
--# CONFIG_FEATURE_VOLUMEID_NTFS is not set
--# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
--# CONFIG_FEATURE_VOLUMEID_UDF is not set
--# CONFIG_FEATURE_VOLUMEID_LUKS is not set
--# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
--# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
--# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
--# CONFIG_FEATURE_VOLUMEID_SYSV is not set
--# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
--# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
--
--#
--# Miscellaneous Utilities
--#
--# CONFIG_CONSPY is not set
--CONFIG_LESS=y
--CONFIG_FEATURE_LESS_MAXLINES=9999999
--CONFIG_FEATURE_LESS_BRACKETS=y
--CONFIG_FEATURE_LESS_FLAGS=y
--# CONFIG_FEATURE_LESS_MARKS is not set
--CONFIG_FEATURE_LESS_REGEXP=y
--# CONFIG_FEATURE_LESS_WINCH is not set
--# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
--# CONFIG_FEATURE_LESS_DASHCMD is not set
--# CONFIG_FEATURE_LESS_LINENUMS is not set
--# CONFIG_NANDWRITE is not set
--# CONFIG_NANDDUMP is not set
--CONFIG_SETSERIAL=y
--# CONFIG_UBIATTACH is not set
--# CONFIG_UBIDETACH is not set
--# CONFIG_UBIMKVOL is not set
--# CONFIG_UBIRMVOL is not set
--# CONFIG_UBIRSVOL is not set
--# CONFIG_UBIUPDATEVOL is not set
--# CONFIG_ADJTIMEX is not set
--# CONFIG_BBCONFIG is not set
--# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
--# CONFIG_BEEP is not set
--CONFIG_FEATURE_BEEP_FREQ=0
--CONFIG_FEATURE_BEEP_LENGTH_MS=0
--# CONFIG_CHAT is not set
--# CONFIG_FEATURE_CHAT_NOFAIL is not set
--# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
--# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
--# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
--# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
--# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
--# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
--CONFIG_CHRT=y
--CONFIG_CROND=y
--# CONFIG_FEATURE_CROND_D is not set
--# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
--CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
--CONFIG_CRONTAB=y
--CONFIG_DC=y
--# CONFIG_FEATURE_DC_LIBM is not set
--# CONFIG_DEVFSD is not set
--# CONFIG_DEVFSD_MODLOAD is not set
--# CONFIG_DEVFSD_FG_NP is not set
--# CONFIG_DEVFSD_VERBOSE is not set
--# CONFIG_FEATURE_DEVFS is not set
--CONFIG_DEVMEM=y
--CONFIG_EJECT=y
--# CONFIG_FEATURE_EJECT_SCSI is not set
--# CONFIG_FBSPLASH is not set
--# CONFIG_FLASHCP is not set
--# CONFIG_FLASH_LOCK is not set
--# CONFIG_FLASH_UNLOCK is not set
--# CONFIG_FLASH_ERASEALL is not set
--# CONFIG_IONICE is not set
--# CONFIG_INOTIFYD is not set
--CONFIG_LAST=y
--CONFIG_FEATURE_LAST_SMALL=y
--# CONFIG_FEATURE_LAST_FANCY is not set
--CONFIG_HDPARM=y
--CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
--# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
--# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
--CONFIG_MAKEDEVS=y
--# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
--CONFIG_FEATURE_MAKEDEVS_TABLE=y
--# CONFIG_MAN is not set
--CONFIG_MICROCOM=y
--CONFIG_MOUNTPOINT=y
--CONFIG_MT=y
--# CONFIG_RAIDAUTORUN is not set
--# CONFIG_READAHEAD is not set
--# CONFIG_RFKILL is not set
--CONFIG_RUNLEVEL=y
--# CONFIG_RX is not set
--CONFIG_SETSID=y
--CONFIG_STRINGS=y
--# CONFIG_TASKSET is not set
--# CONFIG_FEATURE_TASKSET_FANCY is not set
--CONFIG_TIME=y
--# CONFIG_TIMEOUT is not set
--# CONFIG_TTYSIZE is not set
--# CONFIG_VOLNAME is not set
--# CONFIG_WALL is not set
--CONFIG_WATCHDOG=y
--
--#
--# Networking Utilities
--#
--CONFIG_NAMEIF=y
--# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
--# CONFIG_NBDCLIENT is not set
--# CONFIG_NC is not set
--# CONFIG_NC_SERVER is not set
--# CONFIG_NC_EXTRA is not set
--# CONFIG_NC_110_COMPAT is not set
--CONFIG_PING=y
--# CONFIG_PING6 is not set
--CONFIG_FEATURE_FANCY_PING=y
--# CONFIG_WHOIS is not set
--# CONFIG_FEATURE_IPV6 is not set
--# CONFIG_FEATURE_UNIX_LOCAL is not set
--# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
--# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
--# CONFIG_ARP is not set
--CONFIG_ARPING=y
--# CONFIG_BRCTL is not set
--# CONFIG_FEATURE_BRCTL_FANCY is not set
--# CONFIG_FEATURE_BRCTL_SHOW is not set
--CONFIG_DNSD=y
--CONFIG_ETHER_WAKE=y
--# CONFIG_FAKEIDENTD is not set
--# CONFIG_FTPD is not set
--# CONFIG_FEATURE_FTP_WRITE is not set
--# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
--# CONFIG_FTPGET is not set
--# CONFIG_FTPPUT is not set
--# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
--CONFIG_HOSTNAME=y
--# CONFIG_HTTPD is not set
--# CONFIG_FEATURE_HTTPD_RANGES is not set
--# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
--# CONFIG_FEATURE_HTTPD_SETUID is not set
--# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
--# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
--# CONFIG_FEATURE_HTTPD_CGI is not set
--# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
--# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
--# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
--# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
--# CONFIG_FEATURE_HTTPD_PROXY is not set
--# CONFIG_FEATURE_HTTPD_GZIP is not set
--CONFIG_IFCONFIG=y
--CONFIG_FEATURE_IFCONFIG_STATUS=y
--CONFIG_FEATURE_IFCONFIG_SLIP=y
--CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
--CONFIG_FEATURE_IFCONFIG_HW=y
--# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
--# CONFIG_IFENSLAVE is not set
--# CONFIG_IFPLUGD is not set
--CONFIG_IFUPDOWN=y
--CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
--CONFIG_FEATURE_IFUPDOWN_IP=y
--# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
--# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
--CONFIG_FEATURE_IFUPDOWN_IPV4=y
--# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
--CONFIG_FEATURE_IFUPDOWN_MAPPING=y
--# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
--CONFIG_INETD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
--# CONFIG_FEATURE_INETD_RPC is not set
--CONFIG_IP=y
--CONFIG_FEATURE_IP_ADDRESS=y
--CONFIG_FEATURE_IP_LINK=y
--CONFIG_FEATURE_IP_ROUTE=y
--CONFIG_FEATURE_IP_TUNNEL=y
--CONFIG_FEATURE_IP_RULE=y
--CONFIG_FEATURE_IP_SHORT_FORMS=y
--# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
--CONFIG_IPADDR=y
--CONFIG_IPLINK=y
--CONFIG_IPROUTE=y
--CONFIG_IPTUNNEL=y
--CONFIG_IPRULE=y
--# CONFIG_IPCALC is not set
--# CONFIG_FEATURE_IPCALC_FANCY is not set
--# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
--CONFIG_NETSTAT=y
--# CONFIG_FEATURE_NETSTAT_WIDE is not set
--# CONFIG_FEATURE_NETSTAT_PRG is not set
--CONFIG_NSLOOKUP=y
--# CONFIG_NTPD is not set
--# CONFIG_FEATURE_NTPD_SERVER is not set
--# CONFIG_PSCAN is not set
--CONFIG_ROUTE=y
--# CONFIG_SLATTACH is not set
--# CONFIG_TCPSVD is not set
--CONFIG_TELNET=y
--CONFIG_FEATURE_TELNET_TTYPE=y
--CONFIG_FEATURE_TELNET_AUTOLOGIN=y
--# CONFIG_TELNETD is not set
--# CONFIG_FEATURE_TELNETD_STANDALONE is not set
--# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
--CONFIG_TFTP=y
--# CONFIG_TFTPD is not set
--
--#
--# Common options for tftp/tftpd
--#
--CONFIG_FEATURE_TFTP_GET=y
--CONFIG_FEATURE_TFTP_PUT=y
--CONFIG_FEATURE_TFTP_BLOCKSIZE=y
--# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
--# CONFIG_TFTP_DEBUG is not set
--CONFIG_TRACEROUTE=y
--# CONFIG_TRACEROUTE6 is not set
--# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
--# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
--# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
--# CONFIG_TUNCTL is not set
--# CONFIG_FEATURE_TUNCTL_UG is not set
--# CONFIG_UDHCPC6 is not set
--# CONFIG_UDHCPD is not set
--# CONFIG_DHCPRELAY is not set
--# CONFIG_DUMPLEASES is not set
--# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
--# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
--CONFIG_DHCPD_LEASES_FILE=""
--CONFIG_UDHCPC=y
--CONFIG_FEATURE_UDHCPC_ARPING=y
--# CONFIG_FEATURE_UDHCP_PORT is not set
--CONFIG_UDHCP_DEBUG=0
--# CONFIG_FEATURE_UDHCP_RFC3397 is not set
--CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
--CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
--# CONFIG_UDPSVD is not set
--CONFIG_VCONFIG=y
--CONFIG_WGET=y
--CONFIG_FEATURE_WGET_STATUSBAR=y
--CONFIG_FEATURE_WGET_AUTHENTICATION=y
--CONFIG_FEATURE_WGET_LONG_OPTIONS=y
--CONFIG_FEATURE_WGET_TIMEOUT=y
--# CONFIG_ZCIP is not set
--
--#
--# Print Utilities
--#
--# CONFIG_LPD is not set
--# CONFIG_LPR is not set
--# CONFIG_LPQ is not set
--
--#
--# Mail Utilities
--#
--# CONFIG_MAKEMIME is not set
--CONFIG_FEATURE_MIME_CHARSET=""
--# CONFIG_POPMAILDIR is not set
--# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
--# CONFIG_REFORMIME is not set
--# CONFIG_FEATURE_REFORMIME_COMPAT is not set
--# CONFIG_SENDMAIL is not set
--
--#
--# Process Utilities
--#
--# CONFIG_IOSTAT is not set
--CONFIG_LSOF=y
--# CONFIG_MPSTAT is not set
--# CONFIG_NMETER is not set
--# CONFIG_PMAP is not set
--# CONFIG_POWERTOP is not set
--# CONFIG_PSTREE is not set
--# CONFIG_PWDX is not set
--# CONFIG_SMEMCAP is not set
--CONFIG_UPTIME=y
--# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
--CONFIG_FREE=y
--CONFIG_FUSER=y
--CONFIG_KILL=y
--CONFIG_KILLALL=y
--CONFIG_KILLALL5=y
--# CONFIG_PGREP is not set
--CONFIG_PIDOF=y
--CONFIG_FEATURE_PIDOF_SINGLE=y
--CONFIG_FEATURE_PIDOF_OMIT=y
--# CONFIG_PKILL is not set
--CONFIG_PS=y
--# CONFIG_FEATURE_PS_WIDE is not set
--# CONFIG_FEATURE_PS_LONG is not set
--# CONFIG_FEATURE_PS_TIME is not set
--# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
--# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
--CONFIG_RENICE=y
--CONFIG_BB_SYSCTL=y
--CONFIG_TOP=y
--CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
--CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
--# CONFIG_FEATURE_TOP_SMP_CPU is not set
--# CONFIG_FEATURE_TOP_DECIMALS is not set
--# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
--# CONFIG_FEATURE_TOPMEM is not set
--# CONFIG_FEATURE_SHOW_THREADS is not set
--CONFIG_WATCH=y
--
--#
--# Runit Utilities
--#
--# CONFIG_RUNSV is not set
--# CONFIG_RUNSVDIR is not set
--# CONFIG_FEATURE_RUNSVDIR_LOG is not set
--# CONFIG_SV is not set
--CONFIG_SV_DEFAULT_SERVICE_DIR=""
--# CONFIG_SVLOGD is not set
--# CONFIG_CHPST is not set
--# CONFIG_SETUIDGID is not set
--# CONFIG_ENVUIDGID is not set
--# CONFIG_ENVDIR is not set
--# CONFIG_SOFTLIMIT is not set
--# CONFIG_CHCON is not set
--# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
--# CONFIG_GETENFORCE is not set
--# CONFIG_GETSEBOOL is not set
--# CONFIG_LOAD_POLICY is not set
--# CONFIG_MATCHPATHCON is not set
--# CONFIG_RESTORECON is not set
--# CONFIG_RUNCON is not set
--# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
--# CONFIG_SELINUXENABLED is not set
--# CONFIG_SETENFORCE is not set
--# CONFIG_SETFILES is not set
--# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
--# CONFIG_SETSEBOOL is not set
--# CONFIG_SESTATUS is not set
--
--#
--# Shells
--#
--CONFIG_ASH=y
--CONFIG_ASH_BASH_COMPAT=y
--CONFIG_ASH_IDLE_TIMEOUT=y
--CONFIG_ASH_JOB_CONTROL=y
--CONFIG_ASH_ALIAS=y
--# CONFIG_ASH_GETOPTS is not set
--CONFIG_ASH_BUILTIN_ECHO=y
--CONFIG_ASH_BUILTIN_PRINTF=y
--CONFIG_ASH_BUILTIN_TEST=y
--CONFIG_ASH_CMDCMD=y
--# CONFIG_ASH_MAIL is not set
--CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
--CONFIG_ASH_RANDOM_SUPPORT=y
--CONFIG_ASH_EXPAND_PRMT=y
--# CONFIG_CTTYHACK is not set
--# CONFIG_HUSH is not set
--# CONFIG_HUSH_BASH_COMPAT is not set
--# CONFIG_HUSH_BRACE_EXPANSION is not set
--# CONFIG_HUSH_HELP is not set
--# CONFIG_HUSH_INTERACTIVE is not set
--# CONFIG_HUSH_SAVEHISTORY is not set
--# CONFIG_HUSH_JOB is not set
--# CONFIG_HUSH_TICK is not set
--# CONFIG_HUSH_IF is not set
--# CONFIG_HUSH_LOOPS is not set
--# CONFIG_HUSH_CASE is not set
--# CONFIG_HUSH_FUNCTIONS is not set
--# CONFIG_HUSH_LOCAL is not set
--# CONFIG_HUSH_RANDOM_SUPPORT is not set
--# CONFIG_HUSH_EXPORT_N is not set
--# CONFIG_HUSH_MODE_X is not set
--# CONFIG_MSH is not set
--CONFIG_FEATURE_SH_IS_ASH=y
--# CONFIG_FEATURE_SH_IS_HUSH is not set
--# CONFIG_FEATURE_SH_IS_NONE is not set
--# CONFIG_FEATURE_BASH_IS_ASH is not set
--# CONFIG_FEATURE_BASH_IS_HUSH is not set
--CONFIG_FEATURE_BASH_IS_NONE=y
--CONFIG_SH_MATH_SUPPORT=y
--# CONFIG_SH_MATH_SUPPORT_64 is not set
--CONFIG_FEATURE_SH_EXTRA_QUIET=y
--# CONFIG_FEATURE_SH_STANDALONE is not set
--# CONFIG_FEATURE_SH_NOFORK is not set
--# CONFIG_FEATURE_SH_HISTFILESIZE is not set
--
--#
--# System Logging Utilities
--#
--CONFIG_SYSLOGD=y
--CONFIG_FEATURE_ROTATE_LOGFILE=y
--CONFIG_FEATURE_REMOTE_LOG=y
--# CONFIG_FEATURE_SYSLOGD_DUP is not set
--# CONFIG_FEATURE_SYSLOGD_CFG is not set
--CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=256
--# CONFIG_FEATURE_IPC_SYSLOG is not set
--CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
--# CONFIG_LOGREAD is not set
--# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
--CONFIG_KLOGD=y
--CONFIG_FEATURE_KLOGD_KLOGCTL=y
--CONFIG_LOGGER=y
-diff --git a/package/busybox/busybox-1.21.x.config b/package/busybox/busybox-1.21.x.config
+diff --git a/package/gdb/7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch b/package/gdb/7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
 deleted file mode 100644
-index fbae26e..0000000
---- a/package/busybox/busybox-1.21.x.config
+index b5f5bdf..0000000
+--- a/package/gdb/7.5.1/gdb-101-xtensa-fix-on-64-bit-hosts.patch
 +++ /dev/null
-@@ -1,1030 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Busybox version: 1.21.0
--# Mon Jan 21 18:54:12 2013
--#
--CONFIG_HAVE_DOT_CONFIG=y
+@@ -1,42 +0,0 @@
+-From 54bff650843cacd3c17a0afdb0fe32e15e1b65b0 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 22 Jan 2014 15:02:29 +0200
+-Subject: [PATCH] gdb: xtensa: fix on 64-bit hosts
 -
--#
--# Busybox Settings
--#
+-On 64-bit hosts unsigned long is 64 bit.  Use uint32_t instead.
 -
--#
--# General Configuration
--#
--CONFIG_DESKTOP=y
--# CONFIG_EXTRA_COMPAT is not set
--CONFIG_INCLUDE_SUSv2=y
--# CONFIG_USE_PORTABLE_CODE is not set
--CONFIG_PLATFORM_LINUX=y
--CONFIG_FEATURE_BUFFERS_USE_MALLOC=y
--# CONFIG_FEATURE_BUFFERS_GO_ON_STACK is not set
--# CONFIG_FEATURE_BUFFERS_GO_IN_BSS is not set
--CONFIG_SHOW_USAGE=y
--CONFIG_FEATURE_VERBOSE_USAGE=y
--# CONFIG_FEATURE_COMPRESS_USAGE is not set
--CONFIG_FEATURE_INSTALLER=y
--# CONFIG_INSTALL_NO_USR is not set
--# CONFIG_LOCALE_SUPPORT is not set
--# CONFIG_UNICODE_SUPPORT is not set
--# CONFIG_UNICODE_USING_LOCALE is not set
--# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
--CONFIG_SUBST_WCHAR=0
--CONFIG_LAST_SUPPORTED_WCHAR=0
--# CONFIG_UNICODE_COMBINING_WCHARS is not set
--# CONFIG_UNICODE_WIDE_WCHARS is not set
--# CONFIG_UNICODE_BIDI_SUPPORT is not set
--# CONFIG_UNICODE_NEUTRAL_TABLE is not set
--# CONFIG_UNICODE_PRESERVE_BROKEN is not set
--CONFIG_LONG_OPTS=y
--CONFIG_FEATURE_DEVPTS=y
--CONFIG_FEATURE_CLEAN_UP=y
--CONFIG_FEATURE_UTMP=y
--CONFIG_FEATURE_WTMP=y
--# CONFIG_FEATURE_PIDFILE is not set
--CONFIG_PID_FILE_PATH=""
--CONFIG_FEATURE_SUID=y
--# CONFIG_FEATURE_SUID_CONFIG is not set
--# CONFIG_FEATURE_SUID_CONFIG_QUIET is not set
--# CONFIG_SELINUX is not set
--# CONFIG_FEATURE_PREFER_APPLETS is not set
--CONFIG_BUSYBOX_EXEC_PATH="/proc/self/exe"
--CONFIG_FEATURE_SYSLOG=y
--# CONFIG_FEATURE_HAVE_RPC is not set
+-gdb/
+-2014-01-22  Baruch Siach  <baruch@tkos.co.il>
 -
--#
--# Build Options
--#
--# CONFIG_STATIC is not set
--# CONFIG_PIE is not set
--# CONFIG_NOMMU is not set
--# CONFIG_BUILD_LIBBUSYBOX is not set
--# CONFIG_FEATURE_INDIVIDUAL is not set
--# CONFIG_FEATURE_SHARED_BUSYBOX is not set
--# CONFIG_LFS is not set
--CONFIG_CROSS_COMPILER_PREFIX=""
--CONFIG_SYSROOT=""
--CONFIG_EXTRA_CFLAGS=""
--CONFIG_EXTRA_LDFLAGS=""
--CONFIG_EXTRA_LDLIBS=""
+-	* xtensa-tdep.h (xtensa_elf_greg_t): Change type to uint32_t.
+----
+-Backported from: 54bff650843cacd3c17a0afdb0fe32e15e1b65b0
+-Changes to Changelog files are dropped and #include <stdint.h> is added.
 -
--#
--# Debugging Options
--#
--# CONFIG_DEBUG is not set
--# CONFIG_DEBUG_PESSIMIZE is not set
--# CONFIG_WERROR is not set
--CONFIG_NO_DEBUG_LIB=y
--# CONFIG_DMALLOC is not set
--# CONFIG_EFENCE is not set
+- gdb/xtensa-tdep.h | 3 +-
+- 1 file changed, 2 insertion(+), 1 deletion(-)
 -
--#
--# Installation Options ("make install" behavior)
--#
--CONFIG_INSTALL_APPLET_SYMLINKS=y
--# CONFIG_INSTALL_APPLET_HARDLINKS is not set
--# CONFIG_INSTALL_APPLET_SCRIPT_WRAPPERS is not set
--# CONFIG_INSTALL_APPLET_DONT is not set
--# CONFIG_INSTALL_SH_APPLET_SYMLINK is not set
--# CONFIG_INSTALL_SH_APPLET_HARDLINK is not set
--# CONFIG_INSTALL_SH_APPLET_SCRIPT_WRAPPER is not set
--CONFIG_PREFIX="./_install"
+-diff --git a/gdb/xtensa-tdep.h b/gdb/xtensa-tdep.h
+-index 968b9d2..d7ba562 100644
+---- a/gdb/xtensa-tdep.h
+-+++ b/gdb/xtensa-tdep.h
+-@@ -17,6 +17,7 @@
+-    You should have received a copy of the GNU General Public License
+-    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- 
+-+#include <stdint.h>
+- 
+- /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
+-    whenever the "tdep" structure changes in an incompatible way.  */
+-@@ -84,7 +84,7 @@ typedef enum
+- /* Xtensa ELF core file register set representation ('.reg' section).
+-    Copied from target-side ELF header <xtensa/elf.h>.  */
+- 
+--typedef unsigned long xtensa_elf_greg_t;
+-+typedef uint32_t xtensa_elf_greg_t;
+- 
+- typedef struct
+- {
+--- 
+-1.8.1.4
 -
--#
--# Busybox Library Tuning
--#
--# CONFIG_FEATURE_SYSTEMD is not set
--CONFIG_FEATURE_RTMINMAX=y
--CONFIG_PASSWORD_MINLEN=6
--CONFIG_MD5_SMALL=1
--CONFIG_SHA3_SMALL=1
--# CONFIG_FEATURE_FAST_TOP is not set
--# CONFIG_FEATURE_ETC_NETWORKS is not set
--CONFIG_FEATURE_USE_TERMIOS=y
--CONFIG_FEATURE_EDITING=y
--CONFIG_FEATURE_EDITING_MAX_LEN=1024
--CONFIG_FEATURE_EDITING_VI=y
--CONFIG_FEATURE_EDITING_HISTORY=999
--CONFIG_FEATURE_EDITING_SAVEHISTORY=y
--# CONFIG_FEATURE_EDITING_SAVE_ON_EXIT is not set
--CONFIG_FEATURE_REVERSE_SEARCH=y
--CONFIG_FEATURE_TAB_COMPLETION=y
--# CONFIG_FEATURE_USERNAME_COMPLETION is not set
--CONFIG_FEATURE_EDITING_FANCY_PROMPT=y
--# CONFIG_FEATURE_EDITING_ASK_TERMINAL is not set
--CONFIG_FEATURE_NON_POSIX_CP=y
--# CONFIG_FEATURE_VERBOSE_CP_MESSAGE is not set
--CONFIG_FEATURE_COPYBUF_KB=4
--CONFIG_FEATURE_SKIP_ROOTFS=y
--CONFIG_MONOTONIC_SYSCALL=y
--CONFIG_IOCTL_HEX2STR_ERROR=y
--CONFIG_FEATURE_HWIB=y
--
--#
--# Applets
--#
--
--#
--# Archival Utilities
--#
--# CONFIG_FEATURE_SEAMLESS_XZ is not set
--# CONFIG_FEATURE_SEAMLESS_LZMA is not set
--# CONFIG_FEATURE_SEAMLESS_BZ2 is not set
--# CONFIG_FEATURE_SEAMLESS_GZ is not set
--# CONFIG_FEATURE_SEAMLESS_Z is not set
--CONFIG_AR=y
--# CONFIG_FEATURE_AR_LONG_FILENAMES is not set
--CONFIG_FEATURE_AR_CREATE=y
--CONFIG_BUNZIP2=y
--# CONFIG_BZIP2 is not set
--CONFIG_CPIO=y
--# CONFIG_FEATURE_CPIO_O is not set
--# CONFIG_FEATURE_CPIO_P is not set
--# CONFIG_DPKG is not set
--# CONFIG_DPKG_DEB is not set
--# CONFIG_FEATURE_DPKG_DEB_EXTRACT_ONLY is not set
--CONFIG_GUNZIP=y
--CONFIG_GZIP=y
--# CONFIG_FEATURE_GZIP_LONG_OPTIONS is not set
--CONFIG_GZIP_FAST=0
--# CONFIG_LZOP is not set
--# CONFIG_LZOP_COMPR_HIGH is not set
--# CONFIG_RPM2CPIO is not set
--# CONFIG_RPM is not set
--CONFIG_TAR=y
--CONFIG_FEATURE_TAR_CREATE=y
--# CONFIG_FEATURE_TAR_AUTODETECT is not set
--CONFIG_FEATURE_TAR_FROM=y
--# CONFIG_FEATURE_TAR_OLDGNU_COMPATIBILITY is not set
--# CONFIG_FEATURE_TAR_OLDSUN_COMPATIBILITY is not set
--CONFIG_FEATURE_TAR_GNU_EXTENSIONS=y
--CONFIG_FEATURE_TAR_LONG_OPTIONS=y
--CONFIG_FEATURE_TAR_TO_COMMAND=y
--# CONFIG_FEATURE_TAR_UNAME_GNAME is not set
--# CONFIG_FEATURE_TAR_NOPRESERVE_TIME is not set
--# CONFIG_FEATURE_TAR_SELINUX is not set
--# CONFIG_UNCOMPRESS is not set
--CONFIG_UNLZMA=y
--# CONFIG_FEATURE_LZMA_FAST is not set
--CONFIG_LZMA=y
--CONFIG_UNXZ=y
--CONFIG_XZ=y
--CONFIG_UNZIP=y
--
--#
--# Coreutils
--#
--CONFIG_BASENAME=y
--CONFIG_CAT=y
--CONFIG_DATE=y
--CONFIG_FEATURE_DATE_ISOFMT=y
--# CONFIG_FEATURE_DATE_NANO is not set
--CONFIG_FEATURE_DATE_COMPAT=y
--CONFIG_HOSTID=y
--CONFIG_ID=y
--# CONFIG_GROUPS is not set
--CONFIG_TEST=y
--CONFIG_FEATURE_TEST_64=y
--CONFIG_TOUCH=y
--CONFIG_FEATURE_TOUCH_SUSV3=y
--CONFIG_TR=y
--CONFIG_FEATURE_TR_CLASSES=y
--CONFIG_FEATURE_TR_EQUIV=y
--# CONFIG_BASE64 is not set
--CONFIG_WHO=y
--# CONFIG_USERS is not set
--# CONFIG_CAL is not set
--CONFIG_CATV=y
--CONFIG_CHGRP=y
--CONFIG_CHMOD=y
--CONFIG_CHOWN=y
--# CONFIG_FEATURE_CHOWN_LONG_OPTIONS is not set
--CONFIG_CHROOT=y
--CONFIG_CKSUM=y
--# CONFIG_COMM is not set
--CONFIG_CP=y
--# CONFIG_FEATURE_CP_LONG_OPTIONS is not set
--CONFIG_CUT=y
--CONFIG_DD=y
--CONFIG_FEATURE_DD_SIGNAL_HANDLING=y
--# CONFIG_FEATURE_DD_THIRD_STATUS_LINE is not set
--CONFIG_FEATURE_DD_IBS_OBS=y
--CONFIG_DF=y
--# CONFIG_FEATURE_DF_FANCY is not set
--CONFIG_DIRNAME=y
--CONFIG_DOS2UNIX=y
--CONFIG_UNIX2DOS=y
--CONFIG_DU=y
--CONFIG_FEATURE_DU_DEFAULT_BLOCKSIZE_1K=y
--CONFIG_ECHO=y
--CONFIG_FEATURE_FANCY_ECHO=y
--CONFIG_ENV=y
--# CONFIG_FEATURE_ENV_LONG_OPTIONS is not set
--# CONFIG_EXPAND is not set
--# CONFIG_FEATURE_EXPAND_LONG_OPTIONS is not set
--CONFIG_EXPR=y
--CONFIG_EXPR_MATH_SUPPORT_64=y
--CONFIG_FALSE=y
--CONFIG_FOLD=y
--# CONFIG_FSYNC is not set
--CONFIG_HEAD=y
--CONFIG_FEATURE_FANCY_HEAD=y
--CONFIG_INSTALL=y
--CONFIG_FEATURE_INSTALL_LONG_OPTIONS=y
--CONFIG_LN=y
--CONFIG_LOGNAME=y
--CONFIG_LS=y
--CONFIG_FEATURE_LS_FILETYPES=y
--CONFIG_FEATURE_LS_FOLLOWLINKS=y
--CONFIG_FEATURE_LS_RECURSIVE=y
--CONFIG_FEATURE_LS_SORTFILES=y
--CONFIG_FEATURE_LS_TIMESTAMPS=y
--CONFIG_FEATURE_LS_USERNAME=y
--CONFIG_FEATURE_LS_COLOR=y
--CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
--CONFIG_MD5SUM=y
--CONFIG_MKDIR=y
--CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
--CONFIG_MKFIFO=y
--CONFIG_MKNOD=y
--CONFIG_MV=y
--CONFIG_FEATURE_MV_LONG_OPTIONS=y
--CONFIG_NICE=y
--CONFIG_NOHUP=y
--CONFIG_OD=y
--CONFIG_PRINTENV=y
--CONFIG_PRINTF=y
--CONFIG_PWD=y
--CONFIG_READLINK=y
--CONFIG_FEATURE_READLINK_FOLLOW=y
--CONFIG_REALPATH=y
--CONFIG_RM=y
--CONFIG_RMDIR=y
--# CONFIG_FEATURE_RMDIR_LONG_OPTIONS is not set
--CONFIG_SEQ=y
--CONFIG_SHA1SUM=y
--CONFIG_SHA256SUM=y
--CONFIG_SHA512SUM=y
--CONFIG_SHA3SUM=y
--CONFIG_SLEEP=y
--# CONFIG_FEATURE_FANCY_SLEEP is not set
--# CONFIG_FEATURE_FLOAT_SLEEP is not set
--CONFIG_SORT=y
--CONFIG_FEATURE_SORT_BIG=y
--# CONFIG_SPLIT is not set
--# CONFIG_FEATURE_SPLIT_FANCY is not set
--# CONFIG_STAT is not set
--# CONFIG_FEATURE_STAT_FORMAT is not set
--CONFIG_STTY=y
--# CONFIG_SUM is not set
--CONFIG_SYNC=y
--# CONFIG_TAC is not set
--CONFIG_TAIL=y
--CONFIG_FEATURE_FANCY_TAIL=y
--CONFIG_TEE=y
--CONFIG_FEATURE_TEE_USE_BLOCK_IO=y
--CONFIG_TRUE=y
--CONFIG_TTY=y
--CONFIG_UNAME=y
--# CONFIG_UNEXPAND is not set
--# CONFIG_FEATURE_UNEXPAND_LONG_OPTIONS is not set
--CONFIG_UNIQ=y
--CONFIG_USLEEP=y
--CONFIG_UUDECODE=y
--CONFIG_UUENCODE=y
--CONFIG_WC=y
--# CONFIG_FEATURE_WC_LARGE is not set
--CONFIG_WHOAMI=y
--CONFIG_YES=y
--
--#
--# Common options for cp and mv
--#
--CONFIG_FEATURE_PRESERVE_HARDLINKS=y
--
--#
--# Common options for ls, more and telnet
--#
--CONFIG_FEATURE_AUTOWIDTH=y
--
--#
--# Common options for df, du, ls
--#
--CONFIG_FEATURE_HUMAN_READABLE=y
--
--#
--# Common options for md5sum, sha1sum, sha256sum, sha512sum, sha3sum
--#
--CONFIG_FEATURE_MD5_SHA1_SUM_CHECK=y
--
--#
--# Console Utilities
--#
--CONFIG_CHVT=y
--# CONFIG_FGCONSOLE is not set
--CONFIG_CLEAR=y
--CONFIG_DEALLOCVT=y
--CONFIG_DUMPKMAP=y
--# CONFIG_KBD_MODE is not set
--CONFIG_LOADFONT=y
--CONFIG_LOADKMAP=y
--CONFIG_OPENVT=y
--CONFIG_RESET=y
--CONFIG_RESIZE=y
--CONFIG_FEATURE_RESIZE_PRINT=y
--CONFIG_SETCONSOLE=y
--# CONFIG_FEATURE_SETCONSOLE_LONG_OPTIONS is not set
--# CONFIG_SETFONT is not set
--# CONFIG_FEATURE_SETFONT_TEXTUAL_MAP is not set
--CONFIG_DEFAULT_SETFONT_DIR=""
--CONFIG_SETKEYCODES=y
--CONFIG_SETLOGCONS=y
--# CONFIG_SHOWKEY is not set
--
--#
--# Common options for loadfont and setfont
--#
--CONFIG_FEATURE_LOADFONT_PSF2=y
--CONFIG_FEATURE_LOADFONT_RAW=y
--
--#
--# Debian Utilities
--#
--CONFIG_MKTEMP=y
--CONFIG_PIPE_PROGRESS=y
--CONFIG_RUN_PARTS=y
--CONFIG_FEATURE_RUN_PARTS_LONG_OPTIONS=y
--# CONFIG_FEATURE_RUN_PARTS_FANCY is not set
--CONFIG_START_STOP_DAEMON=y
--CONFIG_FEATURE_START_STOP_DAEMON_FANCY=y
--CONFIG_FEATURE_START_STOP_DAEMON_LONG_OPTIONS=y
--CONFIG_WHICH=y
--
--#
--# Editors
--#
--CONFIG_PATCH=y
--CONFIG_VI=y
--CONFIG_FEATURE_VI_MAX_LEN=4096
--CONFIG_FEATURE_VI_8BIT=y
--CONFIG_FEATURE_VI_COLON=y
--CONFIG_FEATURE_VI_YANKMARK=y
--CONFIG_FEATURE_VI_SEARCH=y
--# CONFIG_FEATURE_VI_REGEX_SEARCH is not set
--CONFIG_FEATURE_VI_USE_SIGNALS=y
--CONFIG_FEATURE_VI_DOT_CMD=y
--CONFIG_FEATURE_VI_READONLY=y
--CONFIG_FEATURE_VI_SETOPTS=y
--CONFIG_FEATURE_VI_SET=y
--CONFIG_FEATURE_VI_WIN_RESIZE=y
--CONFIG_FEATURE_VI_ASK_TERMINAL=y
--CONFIG_AWK=y
--# CONFIG_FEATURE_AWK_LIBM is not set
--CONFIG_CMP=y
--CONFIG_DIFF=y
--# CONFIG_FEATURE_DIFF_LONG_OPTIONS is not set
--CONFIG_FEATURE_DIFF_DIR=y
--# CONFIG_ED is not set
--CONFIG_SED=y
--CONFIG_FEATURE_ALLOW_EXEC=y
--
--#
--# Finding Utilities
--#
--CONFIG_FIND=y
--CONFIG_FEATURE_FIND_PRINT0=y
--CONFIG_FEATURE_FIND_MTIME=y
--CONFIG_FEATURE_FIND_MMIN=y
--CONFIG_FEATURE_FIND_PERM=y
--CONFIG_FEATURE_FIND_TYPE=y
--CONFIG_FEATURE_FIND_XDEV=y
--CONFIG_FEATURE_FIND_MAXDEPTH=y
--CONFIG_FEATURE_FIND_NEWER=y
--# CONFIG_FEATURE_FIND_INUM is not set
--CONFIG_FEATURE_FIND_EXEC=y
--CONFIG_FEATURE_FIND_USER=y
--CONFIG_FEATURE_FIND_GROUP=y
--CONFIG_FEATURE_FIND_NOT=y
--CONFIG_FEATURE_FIND_DEPTH=y
--CONFIG_FEATURE_FIND_PAREN=y
--CONFIG_FEATURE_FIND_SIZE=y
--CONFIG_FEATURE_FIND_PRUNE=y
--# CONFIG_FEATURE_FIND_DELETE is not set
--CONFIG_FEATURE_FIND_PATH=y
--CONFIG_FEATURE_FIND_REGEX=y
--# CONFIG_FEATURE_FIND_CONTEXT is not set
--# CONFIG_FEATURE_FIND_LINKS is not set
--CONFIG_GREP=y
--CONFIG_FEATURE_GREP_EGREP_ALIAS=y
--CONFIG_FEATURE_GREP_FGREP_ALIAS=y
--CONFIG_FEATURE_GREP_CONTEXT=y
--CONFIG_XARGS=y
--# CONFIG_FEATURE_XARGS_SUPPORT_CONFIRMATION is not set
--CONFIG_FEATURE_XARGS_SUPPORT_QUOTES=y
--CONFIG_FEATURE_XARGS_SUPPORT_TERMOPT=y
--CONFIG_FEATURE_XARGS_SUPPORT_ZERO_TERM=y
--
--#
--# Init Utilities
--#
--# CONFIG_BOOTCHARTD is not set
--# CONFIG_FEATURE_BOOTCHARTD_BLOATED_HEADER is not set
--# CONFIG_FEATURE_BOOTCHARTD_CONFIG_FILE is not set
--CONFIG_HALT=y
--# CONFIG_FEATURE_CALL_TELINIT is not set
--CONFIG_TELINIT_PATH=""
--CONFIG_INIT=y
--CONFIG_FEATURE_USE_INITTAB=y
--CONFIG_FEATURE_KILL_REMOVED=y
--CONFIG_FEATURE_KILL_DELAY=0
--CONFIG_FEATURE_INIT_SCTTY=y
--CONFIG_FEATURE_INIT_SYSLOG=y
--CONFIG_FEATURE_EXTRA_QUIET=y
--# CONFIG_FEATURE_INIT_COREDUMPS is not set
--CONFIG_FEATURE_INITRD=y
--CONFIG_INIT_TERMINAL_TYPE="linux"
--CONFIG_MESG=y
--CONFIG_FEATURE_MESG_ENABLE_ONLY_GROUP=y
--
--#
--# Login/Password Management Utilities
--#
--# CONFIG_ADD_SHELL is not set
--# CONFIG_REMOVE_SHELL is not set
--CONFIG_FEATURE_SHADOWPASSWDS=y
--# CONFIG_USE_BB_PWD_GRP is not set
--# CONFIG_USE_BB_SHADOW is not set
--CONFIG_USE_BB_CRYPT=y
--# CONFIG_USE_BB_CRYPT_SHA is not set
--CONFIG_ADDUSER=y
--# CONFIG_FEATURE_ADDUSER_LONG_OPTIONS is not set
--# CONFIG_FEATURE_CHECK_NAMES is not set
--CONFIG_FIRST_SYSTEM_ID=100
--CONFIG_LAST_SYSTEM_ID=999
--CONFIG_ADDGROUP=y
--# CONFIG_FEATURE_ADDGROUP_LONG_OPTIONS is not set
--# CONFIG_FEATURE_ADDUSER_TO_GROUP is not set
--CONFIG_DELUSER=y
--CONFIG_DELGROUP=y
--# CONFIG_FEATURE_DEL_USER_FROM_GROUP is not set
--CONFIG_GETTY=y
--CONFIG_LOGIN=y
--# CONFIG_LOGIN_SESSION_AS_CHILD is not set
--# CONFIG_PAM is not set
--# CONFIG_LOGIN_SCRIPTS is not set
--CONFIG_FEATURE_NOLOGIN=y
--CONFIG_FEATURE_SECURETTY=y
--CONFIG_PASSWD=y
--CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
--# CONFIG_CRYPTPW is not set
--# CONFIG_CHPASSWD is not set
--CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
--CONFIG_SU=y
--CONFIG_FEATURE_SU_SYSLOG=y
--CONFIG_FEATURE_SU_CHECKS_SHELLS=y
--CONFIG_SULOGIN=y
--CONFIG_VLOCK=y
--
--#
--# Linux Ext2 FS Progs
--#
--CONFIG_CHATTR=y
--CONFIG_FSCK=y
--CONFIG_LSATTR=y
--# CONFIG_TUNE2FS is not set
--
--#
--# Linux Module Utilities
--#
--# CONFIG_MODINFO is not set
--# CONFIG_MODPROBE_SMALL is not set
--# CONFIG_FEATURE_MODPROBE_SMALL_OPTIONS_ON_CMDLINE is not set
--# CONFIG_FEATURE_MODPROBE_SMALL_CHECK_ALREADY_LOADED is not set
--CONFIG_INSMOD=y
--CONFIG_RMMOD=y
--CONFIG_LSMOD=y
--CONFIG_FEATURE_LSMOD_PRETTY_2_6_OUTPUT=y
--CONFIG_MODPROBE=y
--# CONFIG_FEATURE_MODPROBE_BLACKLIST is not set
--# CONFIG_DEPMOD is not set
--
--#
--# Options common to multiple modutils
--#
--# CONFIG_FEATURE_2_4_MODULES is not set
--# CONFIG_FEATURE_INSMOD_TRY_MMAP is not set
--# CONFIG_FEATURE_INSMOD_VERSION_CHECKING is not set
--# CONFIG_FEATURE_INSMOD_KSYMOOPS_SYMBOLS is not set
--# CONFIG_FEATURE_INSMOD_LOADINKMEM is not set
--# CONFIG_FEATURE_INSMOD_LOAD_MAP is not set
--# CONFIG_FEATURE_INSMOD_LOAD_MAP_FULL is not set
--CONFIG_FEATURE_CHECK_TAINTED_MODULE=y
--CONFIG_FEATURE_MODUTILS_ALIAS=y
--CONFIG_FEATURE_MODUTILS_SYMBOLS=y
--CONFIG_DEFAULT_MODULES_DIR="/lib/modules"
--CONFIG_DEFAULT_DEPMOD_FILE="modules.dep"
--
--#
--# Linux System Utilities
--#
--# CONFIG_BLOCKDEV is not set
--CONFIG_MDEV=y
--CONFIG_FEATURE_MDEV_CONF=y
--CONFIG_FEATURE_MDEV_RENAME=y
--# CONFIG_FEATURE_MDEV_RENAME_REGEXP is not set
--CONFIG_FEATURE_MDEV_EXEC=y
--# CONFIG_FEATURE_MDEV_LOAD_FIRMWARE is not set
--# CONFIG_REV is not set
--# CONFIG_ACPID is not set
--# CONFIG_FEATURE_ACPID_COMPAT is not set
--CONFIG_BLKID=y
--# CONFIG_FEATURE_BLKID_TYPE is not set
--CONFIG_DMESG=y
--CONFIG_FEATURE_DMESG_PRETTY=y
--CONFIG_FBSET=y
--CONFIG_FEATURE_FBSET_FANCY=y
--CONFIG_FEATURE_FBSET_READMODE=y
--CONFIG_FDFLUSH=y
--CONFIG_FDFORMAT=y
--# CONFIG_FDISK is not set
--# CONFIG_FDISK_SUPPORT_LARGE_DISKS is not set
--# CONFIG_FEATURE_FDISK_WRITABLE is not set
--# CONFIG_FEATURE_AIX_LABEL is not set
--# CONFIG_FEATURE_SGI_LABEL is not set
--# CONFIG_FEATURE_SUN_LABEL is not set
--# CONFIG_FEATURE_OSF_LABEL is not set
--# CONFIG_FEATURE_GPT_LABEL is not set
--# CONFIG_FEATURE_FDISK_ADVANCED is not set
--# CONFIG_FINDFS is not set
--# CONFIG_FLOCK is not set
--CONFIG_FREERAMDISK=y
--# CONFIG_FSCK_MINIX is not set
--# CONFIG_MKFS_EXT2 is not set
--# CONFIG_MKFS_MINIX is not set
--# CONFIG_FEATURE_MINIX2 is not set
--# CONFIG_MKFS_REISER is not set
--# CONFIG_MKFS_VFAT is not set
--CONFIG_GETOPT=y
--CONFIG_FEATURE_GETOPT_LONG=y
--CONFIG_HEXDUMP=y
--# CONFIG_FEATURE_HEXDUMP_REVERSE is not set
--# CONFIG_HD is not set
--CONFIG_HWCLOCK=y
--CONFIG_FEATURE_HWCLOCK_LONG_OPTIONS=y
--CONFIG_FEATURE_HWCLOCK_ADJTIME_FHS=y
--CONFIG_IPCRM=y
--CONFIG_IPCS=y
--CONFIG_LOSETUP=y
--CONFIG_LSPCI=y
--CONFIG_LSUSB=y
--CONFIG_MKSWAP=y
--# CONFIG_FEATURE_MKSWAP_UUID is not set
--CONFIG_MORE=y
--CONFIG_MOUNT=y
--# CONFIG_FEATURE_MOUNT_FAKE is not set
--# CONFIG_FEATURE_MOUNT_VERBOSE is not set
--# CONFIG_FEATURE_MOUNT_HELPERS is not set
--# CONFIG_FEATURE_MOUNT_LABEL is not set
--# CONFIG_FEATURE_MOUNT_NFS is not set
--CONFIG_FEATURE_MOUNT_CIFS=y
--CONFIG_FEATURE_MOUNT_FLAGS=y
--CONFIG_FEATURE_MOUNT_FSTAB=y
--CONFIG_PIVOT_ROOT=y
--CONFIG_RDATE=y
--# CONFIG_RDEV is not set
--CONFIG_READPROFILE=y
--# CONFIG_RTCWAKE is not set
--# CONFIG_SCRIPT is not set
--# CONFIG_SCRIPTREPLAY is not set
--CONFIG_SETARCH=y
--CONFIG_SWAPONOFF=y
--# CONFIG_FEATURE_SWAPON_PRI is not set
--CONFIG_SWITCH_ROOT=y
--CONFIG_UMOUNT=y
--CONFIG_FEATURE_UMOUNT_ALL=y
--
--#
--# Common options for mount/umount
--#
--CONFIG_FEATURE_MOUNT_LOOP=y
--CONFIG_FEATURE_MOUNT_LOOP_CREATE=y
--# CONFIG_FEATURE_MTAB_SUPPORT is not set
--CONFIG_VOLUMEID=y
--
--#
--# Filesystem/Volume identification
--#
--CONFIG_FEATURE_VOLUMEID_EXT=y
--# CONFIG_FEATURE_VOLUMEID_BTRFS is not set
--# CONFIG_FEATURE_VOLUMEID_REISERFS is not set
--CONFIG_FEATURE_VOLUMEID_FAT=y
--CONFIG_FEATURE_VOLUMEID_EXFAT=y
--# CONFIG_FEATURE_VOLUMEID_HFS is not set
--# CONFIG_FEATURE_VOLUMEID_JFS is not set
--# CONFIG_FEATURE_VOLUMEID_XFS is not set
--# CONFIG_FEATURE_VOLUMEID_NILFS is not set
--# CONFIG_FEATURE_VOLUMEID_NTFS is not set
--# CONFIG_FEATURE_VOLUMEID_ISO9660 is not set
--# CONFIG_FEATURE_VOLUMEID_UDF is not set
--# CONFIG_FEATURE_VOLUMEID_LUKS is not set
--# CONFIG_FEATURE_VOLUMEID_LINUXSWAP is not set
--# CONFIG_FEATURE_VOLUMEID_CRAMFS is not set
--# CONFIG_FEATURE_VOLUMEID_ROMFS is not set
--# CONFIG_FEATURE_VOLUMEID_SQUASHFS is not set
--# CONFIG_FEATURE_VOLUMEID_SYSV is not set
--# CONFIG_FEATURE_VOLUMEID_OCFS2 is not set
--# CONFIG_FEATURE_VOLUMEID_LINUXRAID is not set
--
--#
--# Miscellaneous Utilities
--#
--# CONFIG_CONSPY is not set
--CONFIG_LESS=y
--CONFIG_FEATURE_LESS_MAXLINES=9999999
--CONFIG_FEATURE_LESS_BRACKETS=y
--CONFIG_FEATURE_LESS_FLAGS=y
--# CONFIG_FEATURE_LESS_MARKS is not set
--CONFIG_FEATURE_LESS_REGEXP=y
--# CONFIG_FEATURE_LESS_WINCH is not set
--# CONFIG_FEATURE_LESS_ASK_TERMINAL is not set
--# CONFIG_FEATURE_LESS_DASHCMD is not set
--# CONFIG_FEATURE_LESS_LINENUMS is not set
--# CONFIG_NANDWRITE is not set
--# CONFIG_NANDDUMP is not set
--CONFIG_SETSERIAL=y
--# CONFIG_UBIATTACH is not set
--# CONFIG_UBIDETACH is not set
--# CONFIG_UBIMKVOL is not set
--# CONFIG_UBIRMVOL is not set
--# CONFIG_UBIRSVOL is not set
--# CONFIG_UBIUPDATEVOL is not set
--# CONFIG_ADJTIMEX is not set
--# CONFIG_BBCONFIG is not set
--# CONFIG_FEATURE_COMPRESS_BBCONFIG is not set
--# CONFIG_BEEP is not set
--CONFIG_FEATURE_BEEP_FREQ=0
--CONFIG_FEATURE_BEEP_LENGTH_MS=0
--# CONFIG_CHAT is not set
--# CONFIG_FEATURE_CHAT_NOFAIL is not set
--# CONFIG_FEATURE_CHAT_TTY_HIFI is not set
--# CONFIG_FEATURE_CHAT_IMPLICIT_CR is not set
--# CONFIG_FEATURE_CHAT_SWALLOW_OPTS is not set
--# CONFIG_FEATURE_CHAT_SEND_ESCAPES is not set
--# CONFIG_FEATURE_CHAT_VAR_ABORT_LEN is not set
--# CONFIG_FEATURE_CHAT_CLR_ABORT is not set
--CONFIG_CHRT=y
--CONFIG_CROND=y
--# CONFIG_FEATURE_CROND_D is not set
--# CONFIG_FEATURE_CROND_CALL_SENDMAIL is not set
--CONFIG_FEATURE_CROND_DIR="/var/spool/cron"
--CONFIG_CRONTAB=y
--CONFIG_DC=y
--# CONFIG_FEATURE_DC_LIBM is not set
--# CONFIG_DEVFSD is not set
--# CONFIG_DEVFSD_MODLOAD is not set
--# CONFIG_DEVFSD_FG_NP is not set
--# CONFIG_DEVFSD_VERBOSE is not set
--# CONFIG_FEATURE_DEVFS is not set
--CONFIG_DEVMEM=y
--CONFIG_EJECT=y
--# CONFIG_FEATURE_EJECT_SCSI is not set
--# CONFIG_FBSPLASH is not set
--# CONFIG_FLASHCP is not set
--# CONFIG_FLASH_LOCK is not set
--# CONFIG_FLASH_UNLOCK is not set
--# CONFIG_FLASH_ERASEALL is not set
--# CONFIG_IONICE is not set
--# CONFIG_INOTIFYD is not set
--CONFIG_LAST=y
--CONFIG_FEATURE_LAST_SMALL=y
--# CONFIG_FEATURE_LAST_FANCY is not set
--CONFIG_HDPARM=y
--CONFIG_FEATURE_HDPARM_GET_IDENTITY=y
--# CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_DRIVE_RESET is not set
--# CONFIG_FEATURE_HDPARM_HDIO_TRISTATE_HWIF is not set
--# CONFIG_FEATURE_HDPARM_HDIO_GETSET_DMA is not set
--CONFIG_MAKEDEVS=y
--# CONFIG_FEATURE_MAKEDEVS_LEAF is not set
--CONFIG_FEATURE_MAKEDEVS_TABLE=y
--# CONFIG_MAN is not set
--CONFIG_MICROCOM=y
--CONFIG_MOUNTPOINT=y
--CONFIG_MT=y
--# CONFIG_RAIDAUTORUN is not set
--# CONFIG_READAHEAD is not set
--# CONFIG_RFKILL is not set
--CONFIG_RUNLEVEL=y
--# CONFIG_RX is not set
--CONFIG_SETSID=y
--CONFIG_STRINGS=y
--# CONFIG_TASKSET is not set
--# CONFIG_FEATURE_TASKSET_FANCY is not set
--CONFIG_TIME=y
--# CONFIG_TIMEOUT is not set
--# CONFIG_TTYSIZE is not set
--# CONFIG_VOLNAME is not set
--# CONFIG_WALL is not set
--CONFIG_WATCHDOG=y
--
--#
--# Networking Utilities
--#
--CONFIG_NAMEIF=y
--# CONFIG_FEATURE_NAMEIF_EXTENDED is not set
--# CONFIG_NBDCLIENT is not set
--# CONFIG_NC is not set
--# CONFIG_NC_SERVER is not set
--# CONFIG_NC_EXTRA is not set
--# CONFIG_NC_110_COMPAT is not set
--CONFIG_PING=y
--# CONFIG_PING6 is not set
--CONFIG_FEATURE_FANCY_PING=y
--# CONFIG_WHOIS is not set
--# CONFIG_FEATURE_IPV6 is not set
--# CONFIG_FEATURE_UNIX_LOCAL is not set
--# CONFIG_FEATURE_PREFER_IPV4_ADDRESS is not set
--# CONFIG_VERBOSE_RESOLUTION_ERRORS is not set
--# CONFIG_ARP is not set
--CONFIG_ARPING=y
--# CONFIG_BRCTL is not set
--# CONFIG_FEATURE_BRCTL_FANCY is not set
--# CONFIG_FEATURE_BRCTL_SHOW is not set
--CONFIG_DNSD=y
--CONFIG_ETHER_WAKE=y
--# CONFIG_FAKEIDENTD is not set
--# CONFIG_FTPD is not set
--# CONFIG_FEATURE_FTP_WRITE is not set
--# CONFIG_FEATURE_FTPD_ACCEPT_BROKEN_LIST is not set
--# CONFIG_FTPGET is not set
--# CONFIG_FTPPUT is not set
--# CONFIG_FEATURE_FTPGETPUT_LONG_OPTIONS is not set
--CONFIG_HOSTNAME=y
--# CONFIG_HTTPD is not set
--# CONFIG_FEATURE_HTTPD_RANGES is not set
--# CONFIG_FEATURE_HTTPD_USE_SENDFILE is not set
--# CONFIG_FEATURE_HTTPD_SETUID is not set
--# CONFIG_FEATURE_HTTPD_BASIC_AUTH is not set
--# CONFIG_FEATURE_HTTPD_AUTH_MD5 is not set
--# CONFIG_FEATURE_HTTPD_CGI is not set
--# CONFIG_FEATURE_HTTPD_CONFIG_WITH_SCRIPT_INTERPR is not set
--# CONFIG_FEATURE_HTTPD_SET_REMOTE_PORT_TO_ENV is not set
--# CONFIG_FEATURE_HTTPD_ENCODE_URL_STR is not set
--# CONFIG_FEATURE_HTTPD_ERROR_PAGES is not set
--# CONFIG_FEATURE_HTTPD_PROXY is not set
--# CONFIG_FEATURE_HTTPD_GZIP is not set
--CONFIG_IFCONFIG=y
--CONFIG_FEATURE_IFCONFIG_STATUS=y
--CONFIG_FEATURE_IFCONFIG_SLIP=y
--CONFIG_FEATURE_IFCONFIG_MEMSTART_IOADDR_IRQ=y
--CONFIG_FEATURE_IFCONFIG_HW=y
--# CONFIG_FEATURE_IFCONFIG_BROADCAST_PLUS is not set
--# CONFIG_IFENSLAVE is not set
--# CONFIG_IFPLUGD is not set
--CONFIG_IFUPDOWN=y
--CONFIG_IFUPDOWN_IFSTATE_PATH="/var/run/ifstate"
--CONFIG_FEATURE_IFUPDOWN_IP=y
--# CONFIG_FEATURE_IFUPDOWN_IP_BUILTIN is not set
--# CONFIG_FEATURE_IFUPDOWN_IFCONFIG_BUILTIN is not set
--CONFIG_FEATURE_IFUPDOWN_IPV4=y
--# CONFIG_FEATURE_IFUPDOWN_IPV6 is not set
--CONFIG_FEATURE_IFUPDOWN_MAPPING=y
--# CONFIG_FEATURE_IFUPDOWN_EXTERNAL_DHCP is not set
--CONFIG_INETD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_ECHO=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DISCARD=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_TIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_DAYTIME=y
--CONFIG_FEATURE_INETD_SUPPORT_BUILTIN_CHARGEN=y
--# CONFIG_FEATURE_INETD_RPC is not set
--CONFIG_IP=y
--CONFIG_FEATURE_IP_ADDRESS=y
--CONFIG_FEATURE_IP_LINK=y
--CONFIG_FEATURE_IP_ROUTE=y
--CONFIG_FEATURE_IP_TUNNEL=y
--CONFIG_FEATURE_IP_RULE=y
--CONFIG_FEATURE_IP_SHORT_FORMS=y
--# CONFIG_FEATURE_IP_RARE_PROTOCOLS is not set
--CONFIG_IPADDR=y
--CONFIG_IPLINK=y
--CONFIG_IPROUTE=y
--CONFIG_IPTUNNEL=y
--CONFIG_IPRULE=y
--# CONFIG_IPCALC is not set
--# CONFIG_FEATURE_IPCALC_FANCY is not set
--# CONFIG_FEATURE_IPCALC_LONG_OPTIONS is not set
--CONFIG_NETSTAT=y
--# CONFIG_FEATURE_NETSTAT_WIDE is not set
--# CONFIG_FEATURE_NETSTAT_PRG is not set
--CONFIG_NSLOOKUP=y
--# CONFIG_NTPD is not set
--# CONFIG_FEATURE_NTPD_SERVER is not set
--# CONFIG_PSCAN is not set
--CONFIG_ROUTE=y
--# CONFIG_SLATTACH is not set
--# CONFIG_TCPSVD is not set
--CONFIG_TELNET=y
--CONFIG_FEATURE_TELNET_TTYPE=y
--CONFIG_FEATURE_TELNET_AUTOLOGIN=y
--# CONFIG_TELNETD is not set
--# CONFIG_FEATURE_TELNETD_STANDALONE is not set
--# CONFIG_FEATURE_TELNETD_INETD_WAIT is not set
--CONFIG_TFTP=y
--# CONFIG_TFTPD is not set
--
--#
--# Common options for tftp/tftpd
--#
--CONFIG_FEATURE_TFTP_GET=y
--CONFIG_FEATURE_TFTP_PUT=y
--CONFIG_FEATURE_TFTP_BLOCKSIZE=y
--# CONFIG_FEATURE_TFTP_PROGRESS_BAR is not set
--# CONFIG_TFTP_DEBUG is not set
--CONFIG_TRACEROUTE=y
--# CONFIG_TRACEROUTE6 is not set
--# CONFIG_FEATURE_TRACEROUTE_VERBOSE is not set
--# CONFIG_FEATURE_TRACEROUTE_SOURCE_ROUTE is not set
--# CONFIG_FEATURE_TRACEROUTE_USE_ICMP is not set
--# CONFIG_TUNCTL is not set
--# CONFIG_FEATURE_TUNCTL_UG is not set
--# CONFIG_UDHCPC6 is not set
--# CONFIG_UDHCPD is not set
--# CONFIG_DHCPRELAY is not set
--# CONFIG_DUMPLEASES is not set
--# CONFIG_FEATURE_UDHCPD_WRITE_LEASES_EARLY is not set
--# CONFIG_FEATURE_UDHCPD_BASE_IP_ON_MAC is not set
--CONFIG_DHCPD_LEASES_FILE=""
--CONFIG_UDHCPC=y
--CONFIG_FEATURE_UDHCPC_ARPING=y
--# CONFIG_FEATURE_UDHCP_PORT is not set
--CONFIG_UDHCP_DEBUG=0
--# CONFIG_FEATURE_UDHCP_RFC3397 is not set
--CONFIG_FEATURE_UDHCP_8021Q=y
--CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
--CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
--CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
--# CONFIG_UDPSVD is not set
--CONFIG_VCONFIG=y
--CONFIG_WGET=y
--CONFIG_FEATURE_WGET_STATUSBAR=y
--CONFIG_FEATURE_WGET_AUTHENTICATION=y
--CONFIG_FEATURE_WGET_LONG_OPTIONS=y
--CONFIG_FEATURE_WGET_TIMEOUT=y
--# CONFIG_ZCIP is not set
--
--#
--# Print Utilities
--#
--# CONFIG_LPD is not set
--# CONFIG_LPR is not set
--# CONFIG_LPQ is not set
--
--#
--# Mail Utilities
--#
--# CONFIG_MAKEMIME is not set
--CONFIG_FEATURE_MIME_CHARSET=""
--# CONFIG_POPMAILDIR is not set
--# CONFIG_FEATURE_POPMAILDIR_DELIVERY is not set
--# CONFIG_REFORMIME is not set
--# CONFIG_FEATURE_REFORMIME_COMPAT is not set
--# CONFIG_SENDMAIL is not set
--
--#
--# Process Utilities
--#
--# CONFIG_IOSTAT is not set
--CONFIG_LSOF=y
--# CONFIG_MPSTAT is not set
--# CONFIG_NMETER is not set
--# CONFIG_PMAP is not set
--# CONFIG_POWERTOP is not set
--# CONFIG_PSTREE is not set
--# CONFIG_PWDX is not set
--# CONFIG_SMEMCAP is not set
--CONFIG_TOP=y
--CONFIG_FEATURE_TOP_CPU_USAGE_PERCENTAGE=y
--CONFIG_FEATURE_TOP_CPU_GLOBAL_PERCENTS=y
--# CONFIG_FEATURE_TOP_SMP_CPU is not set
--# CONFIG_FEATURE_TOP_DECIMALS is not set
--# CONFIG_FEATURE_TOP_SMP_PROCESS is not set
--# CONFIG_FEATURE_TOPMEM is not set
--CONFIG_UPTIME=y
--# CONFIG_FEATURE_UPTIME_UTMP_SUPPORT is not set
--CONFIG_FREE=y
--CONFIG_FUSER=y
--CONFIG_KILL=y
--CONFIG_KILLALL=y
--CONFIG_KILLALL5=y
--# CONFIG_PGREP is not set
--CONFIG_PIDOF=y
--CONFIG_FEATURE_PIDOF_SINGLE=y
--CONFIG_FEATURE_PIDOF_OMIT=y
--# CONFIG_PKILL is not set
--CONFIG_PS=y
--# CONFIG_FEATURE_PS_WIDE is not set
--# CONFIG_FEATURE_PS_LONG is not set
--# CONFIG_FEATURE_PS_TIME is not set
--# CONFIG_FEATURE_PS_ADDITIONAL_COLUMNS is not set
--# CONFIG_FEATURE_PS_UNUSUAL_SYSTEMS is not set
--CONFIG_RENICE=y
--CONFIG_BB_SYSCTL=y
--# CONFIG_FEATURE_SHOW_THREADS is not set
--CONFIG_WATCH=y
--
--#
--# Runit Utilities
--#
--# CONFIG_RUNSV is not set
--# CONFIG_RUNSVDIR is not set
--# CONFIG_FEATURE_RUNSVDIR_LOG is not set
--# CONFIG_SV is not set
--CONFIG_SV_DEFAULT_SERVICE_DIR=""
--# CONFIG_SVLOGD is not set
--# CONFIG_CHPST is not set
--# CONFIG_SETUIDGID is not set
--# CONFIG_ENVUIDGID is not set
--# CONFIG_ENVDIR is not set
--# CONFIG_SOFTLIMIT is not set
--# CONFIG_CHCON is not set
--# CONFIG_FEATURE_CHCON_LONG_OPTIONS is not set
--# CONFIG_GETENFORCE is not set
--# CONFIG_GETSEBOOL is not set
--# CONFIG_LOAD_POLICY is not set
--# CONFIG_MATCHPATHCON is not set
--# CONFIG_RESTORECON is not set
--# CONFIG_RUNCON is not set
--# CONFIG_FEATURE_RUNCON_LONG_OPTIONS is not set
--# CONFIG_SELINUXENABLED is not set
--# CONFIG_SETENFORCE is not set
--# CONFIG_SETFILES is not set
--# CONFIG_FEATURE_SETFILES_CHECK_OPTION is not set
--# CONFIG_SETSEBOOL is not set
--# CONFIG_SESTATUS is not set
--
--#
--# Shells
--#
--CONFIG_ASH=y
--CONFIG_ASH_BASH_COMPAT=y
--CONFIG_ASH_IDLE_TIMEOUT=y
--CONFIG_ASH_JOB_CONTROL=y
--CONFIG_ASH_ALIAS=y
--# CONFIG_ASH_GETOPTS is not set
--CONFIG_ASH_BUILTIN_ECHO=y
--CONFIG_ASH_BUILTIN_PRINTF=y
--CONFIG_ASH_BUILTIN_TEST=y
--CONFIG_ASH_CMDCMD=y
--# CONFIG_ASH_MAIL is not set
--CONFIG_ASH_OPTIMIZE_FOR_SIZE=y
--CONFIG_ASH_RANDOM_SUPPORT=y
--CONFIG_ASH_EXPAND_PRMT=y
--# CONFIG_CTTYHACK is not set
--# CONFIG_HUSH is not set
--# CONFIG_HUSH_BASH_COMPAT is not set
--# CONFIG_HUSH_BRACE_EXPANSION is not set
--# CONFIG_HUSH_HELP is not set
--# CONFIG_HUSH_INTERACTIVE is not set
--# CONFIG_HUSH_SAVEHISTORY is not set
--# CONFIG_HUSH_JOB is not set
--# CONFIG_HUSH_TICK is not set
--# CONFIG_HUSH_IF is not set
--# CONFIG_HUSH_LOOPS is not set
--# CONFIG_HUSH_CASE is not set
--# CONFIG_HUSH_FUNCTIONS is not set
--# CONFIG_HUSH_LOCAL is not set
--# CONFIG_HUSH_RANDOM_SUPPORT is not set
--# CONFIG_HUSH_EXPORT_N is not set
--# CONFIG_HUSH_MODE_X is not set
--# CONFIG_MSH is not set
--CONFIG_FEATURE_SH_IS_ASH=y
--# CONFIG_FEATURE_SH_IS_HUSH is not set
--# CONFIG_FEATURE_SH_IS_NONE is not set
--# CONFIG_FEATURE_BASH_IS_ASH is not set
--# CONFIG_FEATURE_BASH_IS_HUSH is not set
--CONFIG_FEATURE_BASH_IS_NONE=y
--CONFIG_SH_MATH_SUPPORT=y
--# CONFIG_SH_MATH_SUPPORT_64 is not set
--CONFIG_FEATURE_SH_EXTRA_QUIET=y
--# CONFIG_FEATURE_SH_STANDALONE is not set
--# CONFIG_FEATURE_SH_NOFORK is not set
--# CONFIG_FEATURE_SH_HISTFILESIZE is not set
--
--#
--# System Logging Utilities
--#
--CONFIG_SYSLOGD=y
--CONFIG_FEATURE_ROTATE_LOGFILE=y
--CONFIG_FEATURE_REMOTE_LOG=y
--# CONFIG_FEATURE_SYSLOGD_DUP is not set
--# CONFIG_FEATURE_SYSLOGD_CFG is not set
--CONFIG_FEATURE_SYSLOGD_READ_BUFFER_SIZE=256
--# CONFIG_FEATURE_IPC_SYSLOG is not set
--CONFIG_FEATURE_IPC_SYSLOG_BUFFER_SIZE=0
--# CONFIG_LOGREAD is not set
--# CONFIG_FEATURE_LOGREAD_REDUCED_LOCKING is not set
--# CONFIG_FEATURE_KMSG_SYSLOG is not set
--CONFIG_KLOGD=y
--CONFIG_FEATURE_KLOGD_KLOGCTL=y
--CONFIG_LOGGER=y
-diff --git a/package/busybox/busybox-1.22.x.config b/package/busybox/busybox.config
-similarity index 100%
-rename from package/busybox/busybox-1.22.x.config
-rename to package/busybox/busybox.config
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index c368b80..d7bfd0e 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,13 +4,8 @@
- #
- ################################################################################
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index d5954f2..cbc1361 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -27,14 +27,6 @@ choice
+ 		depends on BR2_avr32
+ 		bool "gdb 6.7.1-avr32-2.1.5"
  
--ifeq ($(BR2_PACKAGE_BUSYBOX_SNAPSHOT),y)
--BUSYBOX_VERSION = snapshot
--BUSYBOX_SITE = http://www.busybox.net/downloads/snapshots
--else
--BUSYBOX_VERSION = $(call qstrip,$(BR2_BUSYBOX_VERSION))
-+BUSYBOX_VERSION = 1.22.1
- BUSYBOX_SITE = http://www.busybox.net/downloads
--endif
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPLv2
- BUSYBOX_LICENSE_FILES = LICENSE
+-	config BR2_GDB_VERSION_7_4
+-		bool "gdb 7.4.x"
+-		depends on !BR2_powerpc64le
+-
+-	config BR2_GDB_VERSION_7_5
+-		bool "gdb 7.5.x"
+-		depends on !BR2_powerpc64le
+-
+ 	config BR2_GDB_VERSION_7_6
+ 		bool "gdb 7.6.x"
+ 		depends on !BR2_powerpc64le
+@@ -54,7 +46,5 @@ config BR2_GDB_VERSION
+                                    (!BR2_PACKAGE_HOST_GDB && BR2_avr32)
+ 	default "arc-4.8-R3" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+-	default "7.4.1"    if BR2_GDB_VERSION_7_4
+-	default "7.5.1"    if BR2_GDB_VERSION_7_5
+ 	default "7.6.2"    if BR2_GDB_VERSION_7_6 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.7.1"    if BR2_GDB_VERSION_7_7 || BR2_powerpc64le
 -- 
 2.0.0
