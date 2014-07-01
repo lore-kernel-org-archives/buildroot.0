@@ -1,18 +1,18 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 1 Jul 2014 12:32:00 +0300
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Jul 2014 11:35:49 +0200
 Subject: [Buildroot] [PATCH] wget: Depends on libuuid
 In-Reply-To: <1404206129-27696-1-git-send-email-a.potashev@geoscan.aero>
 References: <1404206129-27696-1-git-send-email-a.potashev@geoscan.aero>
-Message-ID: <20140701093200.GL4425@tarshish>
+Message-ID: <20140701113549.1d3f2569@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexander,
+Dear Alexander Potashev,
 
-On Tue, Jul 01, 2014 at 01:15:29PM +0400, Alexander Potashev wrote:
+On Tue,  1 Jul 2014 13:15:29 +0400, Alexander Potashev wrote:
 > Signed-off-by: Alexander Potashev <a.potashev@geoscan.aero>
 > ---
 >  package/wget/Config.in | 2 ++
@@ -28,17 +28,24 @@ On Tue, Jul 01, 2014 at 01:15:29PM +0400, Alexander Potashev wrote:
 >  	depends on BR2_USE_WCHAR
 > +	select BR2_PACKAGE_UTIL_LINUX
 > +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-
-Care to explain why this is needed?
-
-Also, you forgot to copy here the BR2_LARGEFILE dependency of util-linux.
-
-baruch
-
 >  	help
 >  	  Network utility to retrieve files from http, https and ftp.
 
+I don't think libuuid is a mandatory dependency of wget, and if it was,
+your patch would not be sufficient, because it does not add
+'util-linux' to WGET_DEPENDENCIES.
+
+However, it indeed seems to be a possible optional dependency of wget,
+in which case what you want is the following addition in wget.mk:
+
+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+WGET_DEPENDENCIES += util-linux
+endif
+
+Best regards,
+
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
