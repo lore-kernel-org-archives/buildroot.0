@@ -1,85 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  1 Jul 2014 06:36:56 +0300
-Subject: [Buildroot] [PATCH] libnss: don't use target CFLAGS with host
-	toolchain
-Message-ID: <5585048eb205b5d13b8ddc27a12a329aaa956408.1404185816.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  1 Jul 2014 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-06-30
+Message-ID: <20140701063009.D2AEC101311@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The OPTIMIZER variable is used to construct CFLAGS for host toolchain.
-This breaks the build since we set it to TARGET_CFLAGS, and these may not be
-supported by host toolchain. Augment the cross-compile patch to handle
-OPTIMIZER so that we can initialize it to TARGET_OPTIMIZER, and override it
-when used with host toolchain.
+Build statistics for 2014-06-30
+===============================
 
-Fixes:
-http://autobuild.buildroot.net/results/3f1/3f1afc1b58cb6fe53c438b55f169e2a78238806d/
+        success : 83 
+       failures : 18 
+       timeouts : 3  
+          TOTAL : 104
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libnss/libnss-0001-cross-compile.patch | 26 +++++++++++++++++++++++---
- package/libnss/libnss.mk                       |  3 ++-
- 2 files changed, 25 insertions(+), 4 deletions(-)
+Classification of failures by reason
+====================================
 
-diff --git a/package/libnss/libnss-0001-cross-compile.patch b/package/libnss/libnss-0001-cross-compile.patch
-index 3259116f130a..31de71bc5add 100644
---- a/package/libnss/libnss-0001-cross-compile.patch
-+++ b/package/libnss/libnss-0001-cross-compile.patch
-@@ -4,11 +4,12 @@ compiled code so we cannot define it on the command line without breaking
- the host tools build.
- 
- [Gustavo: update for nss 3.16.1]
-+[baruch: add OPTIMIZER handling]
- Signed-off-by: Will Newton <will.newton@imgtec.com>
- 
--diff -Nura nss-3.16.1.orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.mk
----- nss-3.16.1.orig/nss/coreconf/Linux.mk	2014-06-18 10:34:30.503996123 -0300
--+++ nss-3.16.1/nss/coreconf/Linux.mk	2014-06-18 10:35:02.233068390 -0300
-+diff -Nuar nss-3.16.1-orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.mk
-+--- nss-3.16.1-orig/nss/coreconf/Linux.mk	2014-05-02 06:27:18.000000000 +0300
-++++ nss-3.16.1/nss/coreconf/Linux.mk	2014-07-01 02:38:18.701480512 +0300
- @@ -16,9 +16,13 @@
-  	IMPL_STRATEGY = _PTH
-  endif
-@@ -26,3 +27,22 @@ diff -Nura nss-3.16.1.orig/nss/coreconf/Linux.mk nss-3.16.1/nss/coreconf/Linux.m
-  
-  DEFAULT_COMPILER = gcc
-  
-+@@ -125,6 +129,7 @@
-+ endif
-+ endif
-+ 
-++OPTIMIZER = $(TARGET_OPTIMIZER)
-+ 
-+ ifeq ($(USE_PTHREADS),1)
-+ OS_PTHREAD = -lpthread 
-+diff -Nuar nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile nss-3.16.1/nss/coreconf/nsinstall/Makefile
-+--- nss-3.16.1-orig/nss/coreconf/nsinstall/Makefile	2014-05-02 06:27:18.000000000 +0300
-++++ nss-3.16.1/nss/coreconf/nsinstall/Makefile	2014-07-01 02:38:48.102185011 +0300
-+@@ -31,6 +31,7 @@
-+ 
-+ ifdef NATIVE_FLAGS
-+ OS_CFLAGS=$(NATIVE_FLAGS)
-++OPTIMIZER=
-+ endif
-+ 
-+ include $(DEPTH)/coreconf/rules.mk
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 47b78df72cea..1f0ea53a49ad 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -47,7 +47,8 @@ define LIBNSS_BUILD_CMDS
- 			SOURCE_MD_DIR=$(@D)/$(LIBNSS_DISTDIR) \
- 			DIST=$(@D)/$(LIBNSS_DISTDIR) \
- 			CHECKLOC= \
--			$(LIBNSS_BUILD_VARS) OPTIMIZER="$(TARGET_CFLAGS)"
-+			$(LIBNSS_BUILD_VARS) TARGET_OPTIMIZER="$(TARGET_CFLAGS)" \
-+			NATIVE_FLAGS="$(HOST_CFLAGS)"
- endef
- 
- define LIBNSS_INSTALL_STAGING_CMDS
+        perl-xml-libxml-2.0116 | 4 
+                    sdl-1.2.15 | 2 
+          perl-net-ssleay-1.64 | 2 
+                  opencv-2.4.2 | 1 
+                 qt5base-5.3.1 | 1 
+                  cppcms-1.0.4 | 1 
+                oprofile-0.9.9 | 1 
+                libiscsi-1.6.0 | 1 
+                    parted-3.1 | 1 
+             util-linux-2.24.2 | 1 
+                 libnss-3.16.1 | 1 
+make: *** [core-dependencie... | 1 
+                       unknown | 1 
+                 omniorb-4.1.6 | 1 
+make: *** wait: No child pr... | 1 
+       opentyrian-2.1.20130907 | 1 
+
+Detail of failures
+===================
+
+   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/16e17b0e140e4554968f8230a2d45294ee0afb5e/
+       arc |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/92d9cc2dcbbbe24dc61bf50c9fd10d593d1f7a80/
+   powerpc |                  libnss-3.16.1 | NOK | http://autobuild.buildroot.net/results/3f1afc1b58cb6fe53c438b55f169e2a78238806d/
+       arm | make: *** wait: No child pr... | TIM | http://autobuild.buildroot.net/results/e8f660cd5a4e57be1353bfdbfb1bc9d708225896/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/ded56d6e94f88d918db96f388d0d5b60e0d37ac7/
+      bfin |                  omniorb-4.1.6 | NOK | http://autobuild.buildroot.net/results/f4c191bbf8d1a5e96302679faa0498c26177dcf1/
+       arm |                   opencv-2.4.2 | TIM | http://autobuild.buildroot.net/results/f9e8864f490a579ab2828d13d8056a3d68c42d85/
+      bfin |        opentyrian-2.1.20130907 | NOK | http://autobuild.buildroot.net/results/ff14ff8a6888c8f9e766994573cf4d470a21de38/
+     avr32 |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/cbd93f8d11daacdeaed972893298e597ee760529/
+      bfin |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/d9a9baf0c1bfdb7f7d03ebed084a80ef3001c86d/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/6e7cdd8ab55d229293a664fdca6d0828b8c81c70/
+   powerpc |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/805c2ec54ec8dbf208beffb10f6bf820d65895ee/
+      i486 |         perl-xml-libxml-2.0116 | NOK | http://autobuild.buildroot.net/results/f2a2b7bad37fd4635cbedb838d126466b4364f40/
+       arm |         perl-xml-libxml-2.0116 | NOK | http://autobuild.buildroot.net/results/a17449c0e6f32b40fbb42142261c01bc7f96025d/
+   powerpc |         perl-xml-libxml-2.0116 | NOK | http://autobuild.buildroot.net/results/f436e35aa7815acd687d901deb394a652558be0b/
+   powerpc |         perl-xml-libxml-2.0116 | NOK | http://autobuild.buildroot.net/results/3029835c551c0fcb976f6e2574cad6d7b158df21/
+       arm |                  qt5base-5.3.1 | NOK | http://autobuild.buildroot.net/results/62f4eb3820cc0f2b6228f8ebb80bbcf5196afa9b/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/3567a30dd2492f2b55c0c4c40892311a1d4d3e84/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/5d236211fecb7fee5321c7271046665d22da6c85/
+       arm |                        unknown | TIM | http://autobuild.buildroot.net/results/967519ae3b966625115e75273b20d5d922b2ef7f/
+     nios2 |              util-linux-2.24.2 | NOK | http://autobuild.buildroot.net/results/bd3f5219948c925b33d5a15ebc136e577cfdd4bc/
+
+
 -- 
-2.0.0
+http://autobuild.buildroot.net
