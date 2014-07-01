@@ -1,44 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Jul 2014 23:26:48 +0200
-Subject: [Buildroot] [PATCH] libv4l: Bump version to 1.0.1
-In-Reply-To: <1404076714-1174-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1404076714-1174-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20140701232648.33bc4483@free-electrons.com>
+Date: Tue, 1 Jul 2014 23:27:41 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bump to version 214
+In-Reply-To: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140701232741.2059539a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+Dear Eric Le Bihan,
 
-On Sun, 29 Jun 2014 18:18:34 -0300, Ezequiel Garcia wrote:
+On Sun, 29 Jun 2014 21:35:37 +0200, Eric Le Bihan wrote:
+> This patch bumps systemd to version 214.
+> 
+> Changes:
+> 
+> - add new users: systemd-bus-proxy, systemd-network and systemd-resolve.
+> - remove gtk-doc patch, as it is no longer needed.
+> - force kmod path when configuring.
+> - remove attr build dependency.
+> 
+> Besides:
+> 
+> - /var/lock no longer needs to be a symlink to /run, as systemd, via
+>   tmpfiles.d, will automatically create a symlink to /run/lock at
+>   runtime.
+> - when using systemd-networkd, /etc/resolv.conf should now be a symlink
+>   to /run/systemd/resolve/resolv.conf.
+> 
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  ...ystemd-03-fix-am-path-libgcrypt-no-found.patch} |  0
+>  package/systemd/systemd-03-fix-no-gtk-doc.patch    | 23 ----------------------
+>  package/systemd/systemd.mk                         | 11 +++++++++--
+>  3 files changed, 9 insertions(+), 25 deletions(-)
+>  rename package/systemd/{systemd-04-fix-am-path-libgcrypt-no-found.patch => systemd-03-fix-am-path-libgcrypt-no-found.patch} (100%)
+>  delete mode 100644 package/systemd/systemd-03-fix-no-gtk-doc.patch
 
-> -config BR2_PACKAGE_LIBV4L_V4L2_CTL
-> -	bool "v4l2-ctl"
-> -	depends on BR2_INSTALL_LIBSTDCPP
-> +config BR2_PACKAGE_LIBV4L_JPEG
-> +	bool "JPEG support"
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-I think there needs to be a justification as to why we want a
-sub-option to enable jpeg support, as opposed to have it directly
-handled as an optional dependency in the .mk file by testing
-BR2_PACKAGE_JPEG.
-
-> -comment "libv4l needs a toolchain w/ largefile, threads"
-> +comment "libv4l needs a toolchain w/ largefile, threads and C++"
->  	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-
-The main problem is here, you should use:
-
-	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-
-Otherwise, the comment will not get displayed in the proper situations.
-
-Can you fix that up and resend?
-
-Thanks a lot!
+(I don't know much about systemd, but the changes look good to me, and
+I trust Eric when it comes to systemd stuff and I know he'll be around
+to fix stuff if bad things happen.)
 
 Thomas
 -- 
