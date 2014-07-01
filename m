@@ -1,58 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 15:04:04 +0200
-Subject: [Buildroot] [git commit] uclibc: disable parallel build for uClibc
-	0.9.31
-Message-ID: <20140701130717.C91749D11E@busybox.osuosl.org>
+Date: Tue, 1 Jul 2014 15:05:53 +0200
+Subject: [Buildroot] [git commit] perl: remove documentation in target tree
+Message-ID: <20140701130717.DB8D29D11E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4a530b6ed312a69dabdc98a1e10795238fd4d1e2
+commit: http://git.buildroot.net/buildroot/commit/?id=4d1824f367af2f39a979b68dbf645a6e33979cfe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is only required for uClibc 0.9.31 and this veriosn is only used by
-AVR32 so could be safely removed together with AVR32.
-
-Even 0.9.32 builds well in parallel (at least on x86) so IMHO there's no need
-in >= 0.9.33, just disable for a particular broken version.
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk |   14 +++++++++++++-
- 1 files changed, 13 insertions(+), 1 deletions(-)
+ Makefile |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 8337bb6..e20f92f 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -481,8 +481,20 @@ define UCLIBC_BUILD_TEST_SUITE
- endef
+diff --git a/Makefile b/Makefile
+index 8912791..b3bd91e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -577,6 +577,7 @@ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+ 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
  endif
- 
-+# In uClibc 0.9.31 parallel building is broken so we have to disable it
-+# Fortunately uClibc 0.9.31 is only used by AVR32 and in its turn AVR32 is
-+# about to be removed from buildroot.
-+#
-+# So as soon as AVR32 is removed please revert this patch so instead of
-+# UCLIBC_MAKE normal "MAKE" is used in UCLIBC_BUILD_CMDS
-+ifeq ($(BR2_UCLIBC_VERSION_0_9_31),y)
-+	UCLIBC_MAKE = $(MAKE1)
-+else
-+	UCLIBC_MAKE = $(MAKE)
-+endif
-+
- define UCLIBC_BUILD_CMDS
--	$(MAKE) -C $(@D) \
-+	$(UCLIBC_MAKE) -C $(@D) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX= \
- 		DEVEL_PREFIX=/ \
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
++	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+ 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
+ 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
