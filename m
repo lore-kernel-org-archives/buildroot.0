@@ -1,83 +1,62 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 02 Jul 2014 08:09:25 +0200
-Subject: [Buildroot] [PATCH] grub2: fix a few minor issues in help text
-In-Reply-To: <1404236356-4595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1404236356-4595-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <10481671.PAqJ3h0H0Y@sagittea>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed,  2 Jul 2014 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-01
+Message-ID: <20140702063009.4715D1017F9@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 01 July 2014 19:39:16 Thomas Petazzoni wrote:
-> The help text of grub2 explains the detailed steps to create a disk
-> image with grub2 installed on it. However, the steps for the
-> BIOS-based systems have a few minor issues fixed by this patch:
-> 
->  - When calling partx to get the partitions detected, we should do it
->    on the /dev/loop0 block device, and not on the underlying disk.img
->    image file.
->  - The grub-bios-setup utility must be called as root to work properly
->    on /dev/loop0.
->  - The steps to cleanup the partx and loop device were missing.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  boot/grub2/Config.in | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-> index b37e024..c6c47b7 100644
-> --- a/boot/grub2/Config.in
-> +++ b/boot/grub2/Config.in
-> @@ -24,17 +24,20 @@ config BR2_TARGET_GRUB2
->  		store Grub2. Leaving 1 MB of free space is safe.
->  	  3. Setup loop device and loop partitions
->  	     sudo losetup -f disk.img
-> -	     sudo partx -a disk.img
-> +	     sudo partx -a /dev/loop0
->  	  4. Prepare the root partition
->  	     sudo mkfs.ext3 -L root /dev/loop0p1
->  	     sudo mount /dev/loop0p1 /mnt
->  	     sudo tar -C /mnt -xf output/images/rootfs.tar
->  	     sudo umount /mnt
->  	  5. Install Grub2
-> -	     ./output/host/usr/sbin/grub-bios-setup \
-> +	     sudo ./output/host/usr/sbin/grub-bios-setup \
->  			-b ./output/host/usr/lib/grub/i386-pc/boot.img \
->  			-c ./output/images/grub.img -d . /dev/loop0
-> -	  6. Your disk.img is ready!
-> +	  6. Cleanup loop device
-> +	     sudo partx -d /dev/loop0
-> +	     sudo losetup -d /dev/loop0
-> +	  7. Your disk.img is ready!
-> 
->  	  To test your BIOS image in Qemu:
-Just a remark for people who dislike to call sudo in their build 
-scripts:
+Build statistics for 2014-07-01
+===============================
 
-genimage can be used to create disk image. Installing grub using 
-genimage is the tricky part. It can be done using :
+        success : 42 
+       failures : 21 
+       timeouts : 1  
+          TOTAL : 64 
 
-        partition boot {
-                in-partition-table = "no"
-                image = "path_to_boot.img"
-                offset = 0
-                size = 512
-        }
-        partition grub {
-                 in-partition-table = "no"
-                 image = "path_to_grub.img"
-                 offset = 512
-        }
+Classification of failures by reason
+====================================
 
-The result is not byte to byte identical to result using 
-grub-bios-setup (why?) but it seems it does not matter.
+             host-python-2.7.7 | 6 
+          perl-net-ssleay-1.64 | 5 
+                       nbd-3.8 | 3 
+        perl-xml-libxml-2.0116 | 1 
+                    sdl-1.2.15 | 1 
+                oprofile-0.9.9 | 1 
+                 libnss-3.16.1 | 1 
+                     crda-3.13 | 1 
+               log4cplus-1.1.2 | 1 
+    xserver_xorg-server-1.15.1 | 1 
+                       unknown | 1 
 
+Detail of failures
+===================
+
+      bfin |                      crda-3.13 | NOK | http://autobuild.buildroot.net/results/d752a8d53ad9219b60113075c91c4dcc3e4027c1/
+   powerpc |              host-python-2.7.7 | NOK | http://autobuild.buildroot.net/results/145a44c9e86a130300f5f354b817df738b345cfd/
+   powerpc |              host-python-2.7.7 | NOK | http://autobuild.buildroot.net/results/9a405a215d84f0d4cb74f22afa5bc541c8f30a0e/
+   powerpc |              host-python-2.7.7 | NOK | http://autobuild.buildroot.net/results/75f2819fc2a624ffdcdc64c117a45b823543b8bd/
+   powerpc |              host-python-2.7.7 | NOK | http://autobuild.buildroot.net/results/e833b46b6df95de46df2ae06a515f9a4825acbe3/
+   powerpc |              host-python-2.7.7 | NOK | http://autobuild.buildroot.net/results/2a7d0e9aa3de78d87b75d2461eeb430d781e9c99/
+   powerpc |              host-python-2.7.7 | NOK | http://autobuild.buildroot.net/results/11a5420d9125795539992cf341fc0aa3c1baee7e/
+   powerpc |                  libnss-3.16.1 | NOK | http://autobuild.buildroot.net/results/81019bf21a3199ac962c986b96e26ee25f34a0a8/
+      bfin |                log4cplus-1.1.2 | NOK | http://autobuild.buildroot.net/results/993aca3f4719afaa4b37524f9136fb8cdc53a066/
+     avr32 |                        nbd-3.8 | NOK | http://autobuild.buildroot.net/results/eb94b4d7847577c59a2407c9d0f5537e811c8e95/
+     avr32 |                        nbd-3.8 | NOK | http://autobuild.buildroot.net/results/38eec8197052de6fbe55249202d60d17fd3a3c69/
+     avr32 |                        nbd-3.8 | NOK | http://autobuild.buildroot.net/results/c206cc2e6a7aa838d9d6513e3576f44c2a88288d/
+     avr32 |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/82bee28b25d2419a78ee46f1c66a1eb27b144c6a/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/e0381e3a2e5558ab60da109fb82b0d25d71cbbf9/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/e471df933dfedb7b82defff6fc542a43bd599561/
+   powerpc |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/bedff01b5ba556a9b4ff32370c9a24cdca7f39c2/
+      sh4a |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/bd7728ac922996ed0ebca16cf008bc39e8cbeb39/
+   aarch64 |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/7e42ac880cbafa36c3f4f7ce0c948e1ba6cccc46/
+   powerpc |         perl-xml-libxml-2.0116 | NOK | http://autobuild.buildroot.net/results/c4762d6c39ae8a898235dd0c5191d925f6751b29/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/6c8c3cb19a6f98f6f27986b671d48ee092fdf7cc/
+       arc |                        unknown | TIM | http://autobuild.buildroot.net/results/a951ef04665c3d11453a40b1fc368946788ac256/
+   powerpc |     xserver_xorg-server-1.15.1 | NOK | http://autobuild.buildroot.net/results/1f25f744771fbb5124dca4563d79ea92cbfd72a3/
 
 
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+http://autobuild.buildroot.net
