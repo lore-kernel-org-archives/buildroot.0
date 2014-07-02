@@ -1,68 +1,132 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 2 Jul 2014 22:37:48 +0200
-Subject: [Buildroot] [PATCH 03/14] pkg-infra: move the git download
- helper to a script
-In-Reply-To: <20140702223122.72ccaf58@free-electrons.com>
-References: <cover.1404167061.git.yann.morin.1998@free.fr>
- <c270e9e49dbc69c08629893f7c5e8fa952e37da7.1404167061.git.yann.morin.1998@free.fr>
- <87fvijbx17.fsf@dell.be.48ers.dk>
- <20140702174430.3f1377ce@free-electrons.com>
- <CAAXf6LVZrM5ZUkAxvGPRuupq3f6_jWU+V6e=0-11UVd9XA1GKQ@mail.gmail.com>
- <20140702192243.20920b70@free-electrons.com>
- <CAAXf6LVqeyzx3oq7croUX+x0U7YeBBhmF5LSYCXyYX9+7M9RNw@mail.gmail.com>
- <20140702223122.72ccaf58@free-electrons.com>
-Message-ID: <20140702203748.GC9383@free.fr>
+Date: Wed,  2 Jul 2014 23:11:26 +0200
+Subject: [Buildroot] [PATCH 0/12 v10] Some download-related changes (branch
+	yem/check-downloads)
+Message-ID: <cover.1404335385.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+Hello All!
 
-On 2014-07-02 22:31 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 2 Jul 2014 19:31:08 +0200, Thomas De Schampheleire wrote:
-> > > Ah, ok, thanks for the clarification. However that doesn't explain why
-> > > the temporary repo in $(DL_DIR) is not being removed. That's a
-> > > regression compared to the original code in the .mk file, no?
-> > 
-> > Patch 11 does:
-> > 
-> > -rm -rf "${repodir}"
-> > +rm -rf "${repodir}" "${tmp_tar}" "${tmp_output}"
-> > +exit ${ret}
-> > 
-> > and
-> > 
-> > -repodir="${BR2_DL_DIR}/${basename}"
-> > +repodir="${basename}.tmp-git-checkout"
-> > +tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-> > +tmp_output="$( mktemp "${output}.XXXXXX" )"
-> > 
-> > So from the code (haven't verified this now) there is no repo at all
-> > in DL_DIR, so that repo does not need to be removed. The repo $repodir
-> > _is_ removed, including all of the other temporary stuff tmp_tar and
-> > tmp_output.
-> > 
-> > Peter, did you test this with all patches applied?
-> 
-> I think what Peter complains about is that with just PATCH 03/14
-> applied, the Git download method no longer works properly as it leaves
-> the repo in $(DL_DIR).
-> 
-> The fact that this problem may or may not get solved by a later patch
-> in the series is more-or-less irrelevant here:
+This series contains those download-related changes:
 
-Agreed. If that patch changes the behaviour, it is incorrect.
+  - Patches 1..8  : move download helpers to shell scripts, one
+    such script for each download helper
 
-> Peter is just saying
-> that the series is not perfectly bisectable, and he stopped reviewing
-> when he saw an issue in PATCH 03/14.
+  - Patch   9     : don't use DL_DIR as scratchpad for temporary VCS
+    checkouts, since DL_DIR is a precious location
 
-And I do not see this issue...
+  - Patches 10..11: check hashes of downloaded files, to ensure the
+    files are genuine (with doc)
+
+  - Patch   12    : add hashes for ca-certificates
+
+Hashes for more packages (eg. openssh, openssh, dropbear...) can be
+added at a later step.
+
+
+Changes v9 -> v10:
+  - use /bin/bash instead of /bin/sh, since we use bashisms  (Peter)
+  - drop patches already applied  (Peter)
+
+Changes v8 -> v9:
+  - include change by Ryan about svn peg-revision
+  - rebase on top of master after the crazy $$ springling ;-)
+
+Changes v7 -> v8:
+  - convert scp and localfiles  (Thomas DS, Peter)
+  - typoes, expand MITM  (Thomas DS)
+  - use a cleaner and saner code path to detect errors in helpers
+
+Changes v6 -> v7:
+  - use single-line title in manual  (Samuel)
+  - use leftover cruft in bzr helper  (Thomas)
+
+Changes v5 -> v6:
+  - ensure we can run multiple parallel downloads from different build
+    dirs with the same BR2_DL_DIR  (Thomas)
+  - also convert bzr
+  - fix for stray failed downloads
+
+Changes v4 -> v5:
+  - update ca-certificates hashes after version bump
+  - fix detection of comments and empty lines in .hash file
+  - rebase on top of master
+
+Changes v3 -> v4:
+  - enhance the manual, typoes  (Gustavo, Samuel, Thomas DS)
+  - remove spurious test bump on package/fis  (Samuel)
+
+Changes v2 -> v3:
+  - avoid partial downloads  (Thomas DS)
+  - store hash-type in .hash file  (Gustavo)
+  - typoes  (Samuel, Gustavo)
+  - add possibility to treat missing hashes as an error
+
+Changes v1 -> v2:
+  - don't do any behavioural change when switching to shell scripts,
+    just reproduce exactly what was in the Makefile  (Luca, Arnout)
+  - support more than one hash algorithm  (Arnout, Gustavo)
+  - typoes  (Luca, Baruch)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 2d4fd5d358966b9959a0ea9f93daa3a08c6068e7:
+
+  pkg-infra: also set PKGDIR for the download step (2014-07-02 17:16:14 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/check-downloads
+
+for you to fetch changes up to 6c119c59e1be7918d55ec414cec18f32ed7844b6:
+
+  package/ca-certificates: add tarball's hashes (2014-07-02 23:04:19 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (12):
+      pkg-infra: move the git download helper to a script
+      pkg-infra: move the svn download helper to a script
+      pkg-infra: move the cvs download helper to a script
+      pkg-infra: move the hg download helper to a script
+      pkg-infra: move the wget download helper to a script
+      pkg-infra: move the bzr download helper to a script
+      pkg-infra: move the scp download helper to a script
+      pkg-infra: move the cp (aka localfiles) download helper to a script
+      pkg-infra: don't use DL_DIR as scratchpad for temporary downloads
+      pkg-infra: add possiblity to check downloaded files against known hashes
+      manual: add documentation about packages' hashes
+      package/ca-certificates: add tarball's hashes
+
+ docs/manual/adding-packages-directory.txt    | 66 +++++++++++++++++++++
+ package/ca-certificates/ca-certificates.hash |  3 +
+ package/pkg-download.mk                      | 89 ++++++++++++----------------
+ support/download/bzr                         | 38 ++++++++++++
+ support/download/check-hash                  | 77 ++++++++++++++++++++++++
+ support/download/cp                          | 26 ++++++++
+ support/download/cvs                         | 47 +++++++++++++++
+ support/download/git                         | 56 +++++++++++++++++
+ support/download/hg                          | 46 ++++++++++++++
+ support/download/scp                         | 28 +++++++++
+ support/download/svn                         | 44 ++++++++++++++
+ support/download/wget                        | 35 +++++++++++
+ 12 files changed, 504 insertions(+), 51 deletions(-)
+ create mode 100644 package/ca-certificates/ca-certificates.hash
+ create mode 100755 support/download/bzr
+ create mode 100755 support/download/check-hash
+ create mode 100755 support/download/cp
+ create mode 100755 support/download/cvs
+ create mode 100755 support/download/git
+ create mode 100755 support/download/hg
+ create mode 100755 support/download/scp
+ create mode 100755 support/download/svn
+ create mode 100755 support/download/wget
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
