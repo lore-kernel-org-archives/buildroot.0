@@ -1,108 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 02 Jul 2014 07:30:38 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: bump to version 214
-In-Reply-To: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <53B398FE.9030200@mind.be>
+Date: Wed, 02 Jul 2014 08:18:08 +0200
+Subject: [Buildroot] [PATCH 1/1] libssh2: fix library search path issues
+ when zlib support enabled
+In-Reply-To: <53B1590D.9040606@geral.com>
+References: <1403878684-11934-1-git-send-email-acoffignal@geral.com>
+ <20140629163016.41256df2@free-electrons.com>
+ <f8abef86a41446e6ac7848dfa49e9842@VMSMBX02.gpi.pri>
+ <20140630140216.49d73fa4@free-electrons.com> <53B1590D.9040606@geral.com>
+Message-ID: <53B3A420.2090900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/06/14 21:35, Eric Le Bihan wrote:
-> This patch bumps systemd to version 214.
+On 30/06/14 14:33, Alexandre COFFIGNAL wrote:
+> Thomas,
 > 
-> Changes:
-> 
-> - add new users: systemd-bus-proxy, systemd-network and systemd-resolve.
-> - remove gtk-doc patch, as it is no longer needed.
-> - force kmod path when configuring.
-> - remove attr build dependency.
-> 
-> Besides:
-> 
-> - /var/lock no longer needs to be a symlink to /run, as systemd, via
->   tmpfiles.d, will automatically create a symlink to /run/lock at
->   runtime.
-> - when using systemd-networkd, /etc/resolv.conf should now be a symlink
->   to /run/systemd/resolve/resolv.conf.
+> here contents of output/build/libssh2-1.4.3/config.log  :
 
- So, maybe the systemd package should make sure that this is the case? In a
-post-install hook for instance?
 
-> 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-[snip]
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 95e7214..947bc92 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSTEMD_VERSION = 213
-> +SYSTEMD_VERSION = 214
->  SYSTEMD_SITE = http://www.freedesktop.org/software/systemd/
->  SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
->  SYSTEMD_LICENSE = LGPLv2.1+; GPLv2+ for udev; MIT-like license for few source files listed in README
-> @@ -50,6 +50,9 @@ SYSTEMD_CONF_OPT += \
->  	--disable-dbus \
->  	--without-python
->  
-> +SYSTEMD_CONF_ENV = \
-> +	ac_cv_path_KMOD=/usr/bin/kmod
+ The log doesn't give much interesting information.
 
- Since we would normally expect this to point into $(HOST_DIR), I think there
-should be a comment here.
+ However, I see in the configure script at line 14539:
 
-> +
->  ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
->  SYSTEMD_CONF_OPT += --enable-compat-libs
->  else
-> @@ -65,7 +68,6 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_ATTR),y)
->  SYSTEMD_CONF_OPT += --enable-attr
-> -SYSTEMD_DEPENDENCIES += attr
+    eval additional_libdir=\"$libdir\"
 
- Uh? How is it possible to do --enable-attr without depending on attr? Run-time
-dependency only? Then this should be explained in a comment.
+and a bit lower, at line 14616:
 
->  else
->  SYSTEMD_CONF_OPT += --disable-attr
->  endif
-> @@ -99,6 +101,9 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
->  SYSTEMD_CONF_OPT += --enable-networkd
-> +define SYSTEMD_USER_TIMESYNC
+            dir="$additional_libdir"
+                                    if test -n "$acl_shlibext"; then
+              if test -f "$dir/$libname$shrext"; then
+                found_dir="$dir"
+                found_so="$dir/$libname$shrext"
 
- I don't suppose timesync and networkd are mutually exclusive, so this should be
-SYSTEMD_USER_NETWORK and it should be added to SYSTEMD_USERS, below.
+ Since libdir is /usr/lib, it will indeed find libz there.
 
+ I guess, Thomas, that on your machine, libz.so is in /usr/lib64 so configure
+doesn't find it there.
+
+
+ But basically that means this configure script is truly broken, not just for
+libz but for any use of AC_LIB_HAVE_LINKFLAGS...
+
+
+ Perhaps AUTORECONF will help?
 
  Regards,
  Arnout
-
-
-> +	systemd-network -1 systemd-network -1 * - - - Network Manager
-> +endef
->  else
->  SYSTEMD_CONF_OPT += --disable-networkd
->  define SYSTEMD_INSTALL_SERVICE_NETWORK
-> @@ -155,6 +160,8 @@ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->  define SYSTEMD_USERS
->  	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
->  	systemd-journal-gateway -1 systemd-journal-gateway -1 * /var/log/journal - - Journal Gateway
-> +	systemd-resolve -1 systemd-resolve -1 * - - - Network Name Resolution Manager
-> +	systemd-bus-proxy -1 systemd-bus-proxy -1 * - - - Proxy D-Bus messages to/from a bus
->  	$(SYSTEMD_USER_TIMESYNC)
->  endef
->  
-> 
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
