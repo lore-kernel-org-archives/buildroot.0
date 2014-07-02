@@ -1,40 +1,36 @@
-From: Markos Chandras <Markos.Chandras@imgtec.com>
-Date: Wed, 2 Jul 2014 08:51:16 +0100
-Subject: [Buildroot] Binutils version used on MIPS
-In-Reply-To: <20140701201445.3caa5150@free-electrons.com>
-References: <20140701201445.3caa5150@free-electrons.com>
-Message-ID: <53B3B9F4.9010800@imgtec.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 2 Jul 2014 10:55:24 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-07-01
+In-Reply-To: <20140702094513.6ec730f0@free-electrons.com>
+References: <20140702063009.4715D1017F9@stock.ovh.net>
+ <20140702094513.6ec730f0@free-electrons.com>
+Message-ID: <20140702075524.GD9025@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/01/2014 07:14 PM, Thomas Petazzoni wrote:
-> Vicente, Markos,
-> 
-> For the MIPS architecture, the current default binutils version in the
-> Buildroot internal toolchain backend is 2.21:
-> 
->         prompt "Binutils Version"
->         depends on !BR2_arc
->         default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
->         default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
->         default BR2_BINUTILS_VERSION_2_22
-> 
-> Do you know if there's a good reason to keep using 2.21, as opposed to
-> a more recent version such as 2.23 or 2.24 ? It would be good to have a
-> little bit of testing done with binutils 2.23 or 2.24 and if it's
-> successful, bump the default version used on MIPS.
-> 
-> Thanks!
-> 
-> Thomas
-> 
 Hi Thomas,
 
-No good reason and thanks for noticing. We will send a patch to use the
-latest one by default.
+On Wed, Jul 02, 2014 at 09:45:13AM +0200, Thomas Petazzoni wrote:
+> >    powerpc |                  libnss-3.16.1 | NOK | http://autobuild.buildroot.net/results/81019bf21a3199ac962c986b96e26ee25f34a0a8/
+> 
+> Usage of target cflags when building things for the host:
+> 
+> cc1: error: unrecognized command line option "-mabi=spe"
+> cc1: error: unrecognized command line option "-mfloat-gprs=double"
+> as: unrecognized option '-me500x2'
+> 
+> Someone to look into that?
+
+This should be fixed by 
+http://git.buildroot.net/buildroot/commit/?id=ea7bb05c7b3e7a4e45ff1dc5fdedb6b073d62619.
+
+baruch
 
 -- 
-markos
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
