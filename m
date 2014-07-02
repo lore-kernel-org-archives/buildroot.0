@@ -1,60 +1,35 @@
-From: Pascal Huerst <pascal.huerst@gmail.com>
-Date: Wed, 02 Jul 2014 14:59:34 +0200
-Subject: [Buildroot] [PATCH V5 1/2] google-breakpad: new package
-In-Reply-To: <20140629123043.5bbe78c7@free-electrons.com>
-References: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>	<1403702174-23850-2-git-send-email-pascal.huerst@gmail.com>
- <20140629123043.5bbe78c7@free-electrons.com>
-Message-ID: <53B40236.3010400@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 02 Jul 2014 10:01:38 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-07-01
+In-Reply-To: <20140702094513.6ec730f0@free-electrons.com>
+References: <20140702063009.4715D1017F9@stock.ovh.net>
+ <20140702094513.6ec730f0@free-electrons.com>
+Message-ID: <53B402B2.30600@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas, all
+On 07/02/2014 04:45 AM, Thomas Petazzoni wrote:
 
-On 29.06.2014 12:30, Thomas Petazzoni wrote:
-> On Wed, 25 Jun 2014 15:16:13 +0200, Pascal Huerst wrote:
->> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
->> ---
->>  package/Config.in                          |  1 +
->>  package/google-breakpad/Config.in          | 19 +++++++++++++++++++
->>  package/google-breakpad/google-breakpad.mk | 17 +++++++++++++++++
->>  3 files changed, 37 insertions(+)
->>  create mode 100644 package/google-breakpad/Config.in
->>  create mode 100644 package/google-breakpad/google-breakpad.mk
+> Hello,
 > 
-> Thanks, I've applied your patch, after making some changes according to
-> Arnout comments. From the commit log:
+> On Wed,  2 Jul 2014 08:30:09 +0200 (CEST), Thomas Petazzoni wrote:
 > 
->     [Thomas:
->      - Introduce a BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS Config.in
->        symbol to be able to easily propagate the architecture
->        dependencies.
->      - Wrap the help text, add some more details as suggested by Arnout.
->      - Propagate the architecture dependencies to the comment, as
->        suggested by Arnout.
->      - Remove the dependency of google-breakpad on host-google-breakpad,
->        since it's not needed.
->      - Add <pkg>_TARGET = NO, because google-breakpad only installs a
->        static library, so installation to staging is sufficient.
->      - Reorder autotools-package/host-autotools-package invocations, as
->        suggested by Arnout.]
+>>       bfin |                      crda-3.13 | NOK | http://autobuild.buildroot.net/results/d752a8d53ad9219b60113075c91c4dcc3e4027c1/
+> 
+> This thing is trying to build a shared library even though we have
+> BR2_PREFER_STATIC_LIB=y.
 
-Glad to hear that! And thank you for fixing up some Issues!
+Patch sent disabling it for static.
 
-> Also, could you explain why you're passing --disable-processor when
-> building the target package google-breakpad?
+>>    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/6c8c3cb19a6f98f6f27986b671d48ee092fdf7cc/
+> 
+> Compiler issue. I don't see any other solution than adding an exclusion
+> in the autobuilder script. Yann, Gustavo, any idea?
 
-I made the assumption, that one will always do the debugging on the host
-and that processor-tools such as minidump-stackwalk are not needed on
-the target.
+That looks like PR60155, i'll run some tests.
 
-> For the second patch adding the core support for google-breakpad, there
-> is still some on-going discussion, so I believe it's not ready to be
-> applied yet.
-
-Yes. I will have a look into that afterwards.
-
-Thanks,
-Pascal
+Regards.
