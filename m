@@ -1,34 +1,40 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Jul 2014 00:00:03 +0200
-Subject: [Buildroot] [PATCH 04/12] pkg-infra: move the hg download
-	helper to a script
-In-Reply-To: <6b5a06b442d56a213e393111187fd0ae6c7280b9.1404335385.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 2 Jul 2014 23:11:22 +0200")
-References: <cover.1404335385.git.yann.morin.1998@free.fr>
- <6b5a06b442d56a213e393111187fd0ae6c7280b9.1404335385.git.yann.morin.1998@free.fr>
-Message-ID: <87pphna0bg.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Jul 2014 00:01:14 +0200
+Subject: [Buildroot] [PATCH v3] use default binutils for sh architecture
+In-Reply-To: <20140702153153.GA29927@waldemar-brodkorb.de>
+References: <20140702153153.GA29927@waldemar-brodkorb.de>
+Message-ID: <20140703000114.011a24ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Dear Waldemar Brodkorb,
 
- > Maintaining the download helpers in the Makefile has proved to be a bit
- > complex, so move it to a shell script.
+On Wed, 2 Jul 2014 17:31:53 +0200, Waldemar Brodkorb wrote:
+> Tested toolchain compiles with binutils 2.22 and 2.24.
+> Result tested in Qemu 2.0.0. (only little endian version
+> tested)
+> 
+> ---
+>  Changes v2 -> v3:
+>    - sync with upstream changes
+>  Changes v1 -> v2:
+>    - split binutils and kernel patch (requested via #buildroot)
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/binutils/Config.in.host |    1 -
+>  1 file changed, 1 deletion(-)
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Reviewed-by: Samuel Martin <s.martin49@gmail.com>
- > Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
- > [tested a particular scenario that used to fail, when the 'hg archive'
- > step is interrupted, now working fine]
+Your Signed-off-by line is misplaced, it should be before the first
+'---', otherwise it gets stripped by git when applying.
 
- > ---
- > Changes v9 -> v10:
- >   - use bash as shell  (Peter)
+Thanks,
 
-Committed, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
