@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Jul 2014 09:40:05 -0300
-Subject: [Buildroot] [PATCH 07/13] opencv: add license information
+Date: Wed,  2 Jul 2014 09:40:06 -0300
+Subject: [Buildroot] [PATCH 08/13] musepack: add license information
 In-Reply-To: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404304811-27480-7-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1404304811-27480-8-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/opencv/opencv.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/musepack/musepack.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 3fcba80..464a95a 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -5,9 +5,11 @@
- ################################################################################
+diff --git a/package/musepack/musepack.mk b/package/musepack/musepack.mk
+index ce2d17e..80bc26b 100644
+--- a/package/musepack/musepack.mk
++++ b/package/musepack/musepack.mk
+@@ -10,5 +10,7 @@ MUSEPACK_SOURCE = musepack_src_$(MUSEPACK_VERSION).tar.gz
+ MUSEPACK_DEPENDENCIES = libcuefile libreplaygain
+ MUSEPACK_INSTALL_STAGING = YES
+ MUSEPACK_MAKE = $(MAKE1)
++MUSEPACK_LICENSE = BSD-3c (*mpcdec), LGPLv2.1+ (*mpcenc)
++MUSEPACK_LICENSE_FILES = libmpcdec/COPYING libmpcenc/quant.c
  
- OPENCV_VERSION = 2.4.2
--OPENCV_SITE    = http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_VERSION)
--OPENCV_SOURCE  = OpenCV-$(OPENCV_VERSION).tar.bz2
-+OPENCV_SITE = http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_VERSION)
-+OPENCV_SOURCE = OpenCV-$(OPENCV_VERSION).tar.bz2
- OPENCV_INSTALL_STAGING = YES
-+OPENCV_LICENSE = BSD-3c
-+OPENCV_LICENSE_FILES = doc/license.txt
- 
- OPENCV_CONF_OPT += \
- 	-DBUILD_WITH_STATIC_CRT=OFF                                  \
+ $(eval $(cmake-package))
 -- 
 1.8.5.5
