@@ -1,111 +1,161 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 02 Jul 2014 08:47:33 +0200
-Subject: [Buildroot] Glibc LD_LIBRARAY_PATH error
-In-Reply-To: <20140701160904.34c80062@core2quad.morethan.org>
-References: <CAMhj5sakLa9ROf4RVO2N1rhRx+4du=j3X8OL5rLVRAUQRnFS+Q@mail.gmail.com>
- <20140628000126.4bfd6329@free-electrons.com>
- <CAMhj5sZkdpe+mrTzvxqrwK=-tOoyG4nvobM48PJJpw3oFcb5CA@mail.gmail.com>
- <20140628083612.167f7b88@free-electrons.com>
- <CAMhj5sbiKrQ7PkbrxXr=CK34x2LA2bFu95asfCv8iKS5UtEMiQ@mail.gmail.com>
- <20140628162843.41a203d7@free-electrons.com>
- <CAMhj5saaeT9uoHNk2CZLf8da=ds8Zr0r2va15GFdZwrqxe0ENA@mail.gmail.com>
- <CAMhj5sYLbx5_4-qQhtpsYO6+fewS+tU1sDSDB9qn1CqJ-QoyiQ@mail.gmail.com>
- <20140628174420.2fd3ed86@free-electrons.com> <53B2F9E1.7080609@mind.be>
- <20140701220703.0fa13b8a@free-electrons.com>
- <20140701160904.34c80062@core2quad.morethan.org>
-Message-ID: <53B3AB05.7050503@mind.be>
+From: Stephan Hoffmann <sho@relinux.de>
+Date: Wed, 02 Jul 2014 09:01:03 +0200
+Subject: [Buildroot] [PATCH 1/1] beaglebone: better support for starting
+ and creating images
+In-Reply-To: <5395B898.3090505@gmail.com>
+References: <1394799202-15980-1-git-send-email-marcin.jabrzyk@gmail.com>
+ <5383879D.80503@relinux.de> <5395B898.3090505@gmail.com>
+Message-ID: <53B3AE2F.1020607@relinux.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/07/14 23:09, Mike Zick wrote:
-> On Tue, 1 Jul 2014 22:07:03 +0200
-> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
->> Dear Arnout Vandecappelle,
->>
->> On Tue, 01 Jul 2014 20:11:45 +0200, Arnout Vandecappelle wrote:
->>
->>>>>> my problem was solved by your solution I mean using "unset
->>>>>> LD_LIBRARY_PATH"
->>>> Ok. I'm not sure why we don't simply unset the LD_LIBRARY_PATH
->>>> from our main Makefile. Probably we should just do it.
+Hello community,
+
+is there really no interest in this patch?
+
+I personally think it would be a great improvement for beaglebone
+support, but do not feel suficiently familiar with buildrooot to apply
+Acked-by.
+
+Kind regards
+
+Stephan
+
+Am 09.06.2014 15:37, schrieb Marcin Jabrzyk:
+> Tried it one more time and it works fine for master.
+>
+> Tested-by: Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
+>
+> W dniu 26.05.2014 20:27, Stephan Hoffmann pisze:
+>> Am 14.03.2014 13:13, schrieb Marcin Jabrzyk:
+>>> - Added short readme file with description of first steps how to start.
+>>> - Added uEnv.txt so the board can start from SDCard
+>>> - Added post-image.sh script to copy included uEnv.txt to output/images
 >>>
->>>  I could imagine an ancient build host where the developer has to
->>> build his own python2.7 or other buildroot-dependencies. Not really
->>> realistic, though, because then the executable should just set its
->>> DT_RPATH/DT_RUNPATH.
->>
->> Yes.
->>
->>>  Also, we already have a check for LD_LIBRARY_PATH in
->>> dependencies.sh. It just doesn't check for empty path elements,
->>> only for . path elements.
->>
->> Well, the idea would be to get rid of this check entirely, and replace
->> it by a simple unexport in the main Makefile.
->>
-> 
-> What about the (I would hope, unusual) case where a user needs those
-> LD_LIBRARY_PATH settings to run a POST_**_SCRIPT ?
-> 
-> - - - -
-> 
-> Even a further out use case -
-> The applications requiring a LD_LIBRARY_PATH setting, where the
-> application(s) are used in a POST_**_SCRIPT, but the source isn't
-> available to build-in the appropriate DT_RUNPATH/DT_RPATH?
-
- To be honest, I think that use case is so far out that we don't need to
-consider it, and anyway the user has two easy solutions:
-
-- don't use a POST_**_SCRIPT but wrap something around the Makefile;
-
-- create a wrapper for the binaries that require LD_LIBRARY_PATH (like java apps
-typically do).
-
-> 
-> For this second use case -
-> How about putting a "host-patchelf" target in the host tools list?
-
- You wouldn't want to patch an out-of-buildroot-tree tool on every build
-invocation, would you? Especially since that tool is probably in some shared,
-non-writable place...
-
-
- Regards,
- Arnout
-
-> 
-> This would allow the use case #2 above user to build the tool to
-> fix their host application to not require a LD_LIBRARY_PATH setting.
-> 
-> Note: 
-> In my few weeks of use; 
-> I have not been able to break ARM binaries with patchelf-0.8
-> regardless of the current documentation that claims ARM isn't
-> fully supported.
-> 
-> Mike
->> What do you think?
->>
->> Best regards,
->>
->> Thomas
-> 
+>>> Signed-off-by: Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
+>> Tested-by: Stephan Hoffmann <sho@relinux.de>
+>>> ---
+>> The patch still applies to the current HEAD. I tested it with both
+>> BeagleBone and BeagleBoneBlack as described in the readme file.
+>>>  board/beaglebone/post-image.sh |  6 ++++
+>>>  board/beaglebone/readme.txt    | 62 ++++++++++++++++++++++++++++++++++++++++++
+>>>  board/beaglebone/uEnv.txt      |  3 ++
+>>>  configs/beaglebone_defconfig   |  1 +
+>>>  4 files changed, 72 insertions(+)
+>>>  create mode 100755 board/beaglebone/post-image.sh
+>>>  create mode 100644 board/beaglebone/readme.txt
+>>>  create mode 100644 board/beaglebone/uEnv.txt
+>>>
+>>> diff --git a/board/beaglebone/post-image.sh b/board/beaglebone/post-image.sh
+>>> new file mode 100755
+>>> index 0000000..7441d07
+>>> --- /dev/null
+>>> +++ b/board/beaglebone/post-image.sh
+>>> @@ -0,0 +1,6 @@
+>>> +#!/bin/sh
+>>> +# post-image.sh for BeagleBone
+>>> +# 2014, Marcin Jabrzyk <marcin.jabrzyk@gmail.com>
+>>> +
+>>> +# copy the uEnv.txt to the output/images directory
+>>> +cp board/beaglebone/uEnv.txt $BINARIES_DIR/uEnv.txt
+>>> diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+>>> new file mode 100644
+>>> index 0000000..dc44751
+>>> --- /dev/null
+>>> +++ b/board/beaglebone/readme.txt
+>>> @@ -0,0 +1,62 @@
+>>> +BeagleBone
+>>> +
+>>> +Intro
+>>> +=====
+>>> +To be able to use BeagleBone board with the images generated by
+>>> +Buildroot, you have prepare the SDCard.
+>>> +
+>>> +How to build it
+>>> +===============
+>>> +
+>>> +  $ make beaglebone_defconfig
+>>> +
+>>> +Then you can edit the build options using
+>>> +  
+>>> +  $ make menuconfig
+>>> +  
+>>> +Compile all and build rootfs image:
+>>> +  
+>>> +  $ make
+>>> +
+>>> +Result of the build
+>>> +-------------------
+>>> +
+>>> +After building, you should get a tree like this:
+>>> +
+>>> +  output/images/                                                                                                                                                                                   
+>>> +  ??? am335x-boneblack.dtb                                                                                                                                                                         
+>>> +  ??? am335x-bone.dtb
+>>> +  ??? MLO
+>>> +  ??? rootfs.ext2
+>>> +  ??? u-boot.img
+>>> +  ??? uEnv.txt
+>>> +  ??? zImage
+>>> +
+>>> +
+>>> +Prepare you SDCard
+>>> +==================
+>>> +
+>>> +You need to prepare first partition in fat32 and marked as bootable,
+>>> +and second where you will write rootfs.
+>>> +
+>>> +Copy the files to boot partition
+>>> +
+>>> +  $ cp MLO u-boot.img zImage uEnv.txt *.dtb /media/zzzzz
+>>> +  
+>>> +where /media/zzzzz is the mount point
+>>> +Then you need to write the rootfs image onto SDCard:
+>>> +
+>>> +  # dd if=rootfs.ext2 of=/dev/xxxxx
+>>> +  
+>>> +where /dev/xxxxx is the second partition. Use:
+>>> +  
+>>> +  # fdisk -l 
+>>> +  
+>>> +to check for correct one.
+>>> +
+>>> +Finish
+>>> +======
+>>> +
+>>> +Unmount all mounted SDCard partitions and insert the card to BeagleBone.
+>>> +Hold the "BOOT" button and apply power. Then release the "BOOT" button. 
+>>> +The output is available on the serial console.
+>>> \ No newline at end of file
+>>> diff --git a/board/beaglebone/uEnv.txt b/board/beaglebone/uEnv.txt
+>>> new file mode 100644
+>>> index 0000000..68d6e23
+>>> --- /dev/null
+>>> +++ b/board/beaglebone/uEnv.txt
+>>> @@ -0,0 +1,3 @@
+>>> +bootpart=0:1
+>>> +bootdir=
+>>> +uenvcmd=run loaduimage;run loadramdisk;run findfdt;run loadfdt;run ramboot 
+>>> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+>>> index 3181c66..b2052f4 100644
+>>> --- a/configs/beaglebone_defconfig
+>>> +++ b/configs/beaglebone_defconfig
+>>> @@ -8,6 +8,7 @@ BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
+>>>  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+>>>  BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+>>>  # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+>>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
+>>>  
+>>>  # filesystem
+>>>  BR2_PACKAGE_AM33X_CM3=y
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
