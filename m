@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Jul 2014 09:40:09 -0300
-Subject: [Buildroot] [PATCH 11/13] libraw: add license information
+Date: Wed,  2 Jul 2014 09:40:10 -0300
+Subject: [Buildroot] [PATCH 12/13] lesstif: add license information
 In-Reply-To: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404304811-27480-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1404304811-27480-12-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libraw/libraw.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/lesstif/lesstif.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index bd52cc0..6720edc 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
-@@ -7,10 +7,11 @@
- LIBRAW_VERSION = 0.13.4
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data/
+diff --git a/package/lesstif/lesstif.mk b/package/lesstif/lesstif.mk
+index 5115107..cd17087 100644
+--- a/package/lesstif/lesstif.mk
++++ b/package/lesstif/lesstif.mk
+@@ -4,14 +4,15 @@
+ #
+ ################################################################################
+ LESSTIF_VERSION = 0.95.2
+-LESSTIF_SOURCE  = lesstif-$(LESSTIF_VERSION).tar.bz2
+-LESSTIF_SITE    = http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
++LESSTIF_SOURCE = lesstif-$(LESSTIF_VERSION).tar.bz2
++LESSTIF_SITE = http://downloads.sourceforge.net/project/lesstif/lesstif/$(LESSTIF_VERSION)
+ LESSTIF_INSTALL_STAGING = YES
+ LESSTIF_DEPENDENCIES = \
+ 	xlib_libXt \
+ 	xlib_libXext \
+ 	freetype
 -
- LIBRAW_INSTALL_STAGING = YES
- LIBRAW_CONF_OPT += --disable-examples --disable-lcms \
- 			--disable-openmp --disable-demosaic-pack-gpl2 \
- 			--disable-demosaic-pack-gpl3
-+LIBRAW_LICENSE = LGPLv2.1 or CDDL 1.0 or LibRaw Software License 27032010
-+LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL LICENSE.LibRaw.pdf
- 
- $(eval $(autotools-package))
++LESSTIF_LICENSE = LGPLv2+
++LESSTIF_LICENSE_FILES = COPYING.LIB
+ LESSTIF_CONF_OPT = \
+ 	--with-gnu-ld \
+ 	--with-freetype-config=$(STAGING_DIR)/usr/bin/freetype-config \
 -- 
 1.8.5.5
