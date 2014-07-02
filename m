@@ -1,32 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jul 2014 17:12:18 +0200
-Subject: [Buildroot] [git commit] libjpeg: bump to version 9a
-Message-ID: <20140702151502.B1BA79D144@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 17:10:59 +0200
+Subject: [Buildroot] [git commit] crda: needs dynamic library support
+Message-ID: <20140702151502.A998C9D145@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b5dd08573e059c112b351f0a83392ad809370f1b
+commit: http://git.buildroot.net/buildroot/commit/?id=7c08fa935f55d108e20834e6b4bba664e1d2d408
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+http://autobuild.buildroot.net/results/d75/d752a8d53ad9219b60113075c91c4dcc3e4027c1/
+
+Even if the build system were fixed to deal with that it's only really
+useful for systemd/udev scenarios with require dynamic libs as well.
+For static scenarios people should look at using
+CONFIG_CFG80211_INTERNAL_REGDB in the kernel.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjpeg/libjpeg.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/crda/Config.in |    5 +++--
+ 1 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index dc38a7c..33106fa 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/crda/Config.in b/package/crda/Config.in
+index 0e0eb7f..f67ea77 100644
+--- a/package/crda/Config.in
++++ b/package/crda/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_CRDA
+ 	bool "crda"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl
++	depends on !BR2_PREFER_STATIC_LIB
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBNL
+ 	# regdb is a runtime dependency
+@@ -17,6 +18,6 @@ config BR2_PACKAGE_CRDA
  
--LIBJPEG_VERSION = 8d
-+LIBJPEG_VERSION = 9a
- LIBJPEG_SITE = http://www.ijg.org/files/
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = jpeg-license (BSD-3c-like)
+ 	  http://linuxwireless.org/en/developers/Regulatory/CRDA
+ 
+-comment "crda needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "crda needs a toolchain w/ threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_PREFER_STATIC_LIB
+ 	depends on !BR2_nios2
