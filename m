@@ -1,31 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Jul 2014 23:28:13 +0200
-Subject: [Buildroot] [git commit] ipkg: add license information
-Message-ID: <20140701224921.BB90A9D12D@busybox.osuosl.org>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Tue, 1 Jul 2014 23:35:17 -0300
+Subject: [Buildroot] [PATCH] libv4l: Bump version to 1.0.1
+In-Reply-To: <20140701232648.33bc4483@free-electrons.com>
+References: <1404076714-1174-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20140701232648.33bc4483@free-electrons.com>
+Message-ID: <20140702023516.GB995@arch.cereza>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a216d1a43e5ee2a3e82683976babc0852b9ccda9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01 Jul 11:26 PM, Thomas Petazzoni wrote:
+> On Sun, 29 Jun 2014 18:18:34 -0300, Ezequiel Garcia wrote:
+> 
+> > -config BR2_PACKAGE_LIBV4L_V4L2_CTL
+> > -	bool "v4l2-ctl"
+> > -	depends on BR2_INSTALL_LIBSTDCPP
+> > +config BR2_PACKAGE_LIBV4L_JPEG
+> > +	bool "JPEG support"
+> 
+> I think there needs to be a justification as to why we want a
+> sub-option to enable jpeg support, as opposed to have it directly
+> handled as an optional dependency in the .mk file by testing
+> BR2_PACKAGE_JPEG.
+> 
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ipkg/ipkg.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+That could work, as long as we have a comment to show the dependency
+in the menu. Otherwise, I don't like to "hide" this from a user wanting
+to enable or disable this.
 
-diff --git a/package/ipkg/ipkg.mk b/package/ipkg/ipkg.mk
-index b9cba58..10ef207 100644
---- a/package/ipkg/ipkg.mk
-+++ b/package/ipkg/ipkg.mk
-@@ -7,5 +7,7 @@
- IPKG_VERSION = 0.99.163
- IPKG_SITE = http://www.handhelds.org/download/packages/ipkg
- IPKG_INSTALL_STAGING = YES
-+IPKG_LICENSE = GPLv2+
-+IPKG_LICENSE_FILES = COPYING
- 
- $(eval $(autotools-package))
+> > -comment "libv4l needs a toolchain w/ largefile, threads"
+> > +comment "libv4l needs a toolchain w/ largefile, threads and C++"
+> >  	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
+> > +	depends on !BR2_INSTALL_LIBSTDCPP
+> 
+> The main problem is here, you should use:
+> 
+> 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> 
+> Otherwise, the comment will not get displayed in the proper situations.
+> 
+> Can you fix that up and resend?
+> 
+
+No problem.
+
+-- 
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
