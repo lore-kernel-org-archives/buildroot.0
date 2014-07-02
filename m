@@ -1,87 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Jul 2014 23:54:16 +0200
-Subject: [Buildroot] [git commit] pkg-infra: move the cvs download helper to
-	a script
-Message-ID: <20140702220913.E7E259D091@busybox.osuosl.org>
+Date: Thu, 3 Jul 2014 00:07:57 +0200
+Subject: [Buildroot] [git commit] pkg-infra: move the cp (aka localfiles)
+	download helper to a script
+Message-ID: <20140702220914.20CA49D091@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f4526c053f700cad5783476e009173827e803f56
+commit: http://git.buildroot.net/buildroot/commit/?id=283b8b7feaccbe23decc69c2b3300b2a2d74d02d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Maintaining the download helpers in the Makefile has proved to be a bit
 complex, so move it to a shell script.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-download.mk |   11 ++++-------
- support/download/cvs    |   27 +++++++++++++++++++++++++++
- 2 files changed, 31 insertions(+), 7 deletions(-)
+ package/pkg-download.mk |    5 +++--
+ support/download/cp     |   16 ++++++++++++++++
+ 2 files changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index e823f68..9f3afac 100644
+index eec91b8..d3cd0c1 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -10,7 +10,7 @@
- # Download method commands
- WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
- export SVN := $(call qstrip,$(BR2_SVN))
--CVS := $(call qstrip,$(BR2_CVS))
-+export CVS := $(call qstrip,$(BR2_CVS))
- BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- HG := $(call qstrip,$(BR2_HG)) $(QUIET)
-@@ -114,12 +114,9 @@ endef
+@@ -16,7 +16,7 @@ export GIT := $(call qstrip,$(BR2_GIT))
+ export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+ export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+ SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
+-LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
++export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- define DOWNLOAD_CVS
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	(pushd $(DL_DIR) > /dev/null && \
--	$(CVS) -z3 -d:pserver:anonymous@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
--		co -d $($(PKG)_BASE_NAME) -r :$($(PKG)_DL_VERSION) -P $($(PKG)_RAWNAME) && \
--	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
--	rm -rf $($(PKG)_DL_DIR) && \
--	popd > /dev/null)
-+	$(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
-+					  $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
-+					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
+ # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
+ # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
+@@ -192,7 +192,8 @@ endef
+ 
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-		$(LOCALFILES) $(call stripurischeme,$(call qstrip,$(1))) $(DL_DIR)
++	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
++					 $(DL_DIR)
  endef
  
- # Not all CVS servers support ls/rls, use login to see if we can connect
-diff --git a/support/download/cvs b/support/download/cvs
+ define SOURCE_CHECK_LOCALFILES
+diff --git a/support/download/cp b/support/download/cp
 new file mode 100755
-index 0000000..60787a6
+index 0000000..3e9f548
 --- /dev/null
-+++ b/support/download/cvs
-@@ -0,0 +1,27 @@
++++ b/support/download/cp
+@@ -0,0 +1,16 @@
 +#!/bin/bash
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for cvs
++# Download helper for cp
 +# Call it with:
-+#   $1: cvs repo
-+#   $2: cvs revision
-+#   $3: package's name (eg. foobar)
-+#   $4: package's basename (eg. foobar-1.2.3)
-+#   $5: output file
++#   $1: source file
++#   $2: output file
 +# And this environment:
-+#   CVS       : the cvs command to call
-+#   BR2_DL_DIR: path to Buildroot's download dir
++#   LOCALFILES: the cp command to call
 +
-+repo="${1}"
-+rev="${2}"
-+rawname="${3}"
-+basename="${4}"
-+output="${5}"
++source="${1}"
++output="${2}"
 +
-+cd "${BR2_DL_DIR}"
-+${CVS} -z3 -d":pserver:anonymous@${repo}" \
-+       co -d "${basename}" -r ":${rev}" -P "${rawname}"
-+tar czf "${output}" "${basename}"
-+rm -rf "${basename}"
++${LOCALFILES} "${source}" "${output}"
