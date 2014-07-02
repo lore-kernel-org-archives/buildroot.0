@@ -1,12 +1,12 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Jul 2014 00:03:40 +0200
-Subject: [Buildroot] [PATCH 05/12] pkg-infra: move the wget download
+Date: Thu, 03 Jul 2014 00:06:51 +0200
+Subject: [Buildroot] [PATCH 06/12] pkg-infra: move the bzr download
 	helper to a script
-In-Reply-To: <08a203d2db883eac1f2efe7c7a6b131d4dc883c8.1404335385.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Wed, 2 Jul 2014 23:11:23 +0200")
+In-Reply-To: <d3992a2cbad0cd02447ce1be186540d030a2ac50.1404335385.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 2 Jul 2014 23:11:24 +0200")
 References: <cover.1404335385.git.yann.morin.1998@free.fr>
- <08a203d2db883eac1f2efe7c7a6b131d4dc883c8.1404335385.git.yann.morin.1998@free.fr>
-Message-ID: <87lhsba05f.fsf@dell.be.48ers.dk>
+ <d3992a2cbad0cd02447ce1be186540d030a2ac50.1404335385.git.yann.morin.1998@free.fr>
+Message-ID: <87ha2za004.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,7 +19,6 @@ To: buildroot@busybox.net
  > complex, so move it to a shell script.
 
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 
  > ---
  > Changes v9 -> v10:
