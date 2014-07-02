@@ -1,33 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 02 Jul 2014 21:51:11 +0200
-Subject: [Buildroot] Binutils version used on MIPS
-In-Reply-To: <20140702174647.4021cc92@free-electrons.com> (Thomas Petazzoni's
- message of "Wed, 2 Jul 2014 17:46:47 +0200")
-References: <20140701201445.3caa5150@free-electrons.com>
- <53B3B9F4.9010800@imgtec.com> <87simjbx8x.fsf@dell.be.48ers.dk>
- <20140702174647.4021cc92@free-electrons.com>
-Message-ID: <87bnt7bkuo.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Jul 2014 22:15:17 +0200
+Subject: [Buildroot] [Patch v3 1/1] systemd: rework network/tty units
+ installation
+In-Reply-To: <20140702174859.GA755@rmm-p1267483>
+References: <1403517126-5776-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140629105512.0670fc4e@free-electrons.com>
+ <20140702174859.GA755@rmm-p1267483>
+Message-ID: <20140702221517.0590f17c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Dear Eric Le Bihan,
 
-Hi,
+On Wed, 2 Jul 2014 19:49:00 +0200, Eric Le Bihan wrote:
 
- >> Time has perhaps come to move to 2.23 or 2.24, I don't really know.
+> Looking back, converting the fixup of getty service from an post installation
+> hook to a service installation was not a good idea, after all.
+> 
+> $(PKG)_INSTALL_INIT_SYSTEMD is performed before installing the package itself
+> in the target directory via $(PKG)_INSTALL_TARGET_CMDS. So the fixup will fail
+> trying to delete a file that has not been installed yet... (D'Oh! I should
+> have cleaned my build directory...).
+> 
+> I will send a patch reverting this part.
 
- > Right, but Vicente patch simply removes the usage of a special version
- > for MIPS, so MIPS now just uses whatever is the default version used
- > for all architectures in Buildroot. Which I think is the right thing to
- > do, unless there are special reasons to use a different version than
- > the default one (such as AVR32 need of an old version, or
- > Microblaze/PowerPC64LE need of a new version).
+Hum, right, I don't know if a fixup of a file belongs to
+<pkg>_INSTALL_INIT_SYSTEMD. But the fact that <pkg>_INSTALL_INIT_<foo>
+gets executed *before* the package is installed to the target looks a
+bit weird. Is there a reason for that?
 
-Yes, I completely agree, my comment was in regard to the references to
-2.23 / 2.24.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
