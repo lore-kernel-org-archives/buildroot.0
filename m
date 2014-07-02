@@ -1,44 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 02 Jul 2014 23:12:25 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-07-01
-References: <20140702063009.4715D1017F9@stock.ovh.net>
- <20140702094513.6ec730f0@free-electrons.com>
-Message-ID: <XnsA35EEC130C64AberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 02 Jul 2014 23:42:41 +0200
+Subject: [Buildroot] [PATCH 03/14] pkg-infra: move the git download
+	helper to a script
+In-Reply-To: <20140702203748.GC9383@free.fr> (Yann E. MORIN's message of "Wed, 
+ 2 Jul 2014 22:37:48 +0200")
+References: <cover.1404167061.git.yann.morin.1998@free.fr>
+ <c270e9e49dbc69c08629893f7c5e8fa952e37da7.1404167061.git.yann.morin.1998@free.fr>
+ <87fvijbx17.fsf@dell.be.48ers.dk>
+ <20140702174430.3f1377ce@free-electrons.com>
+ <CAAXf6LVZrM5ZUkAxvGPRuupq3f6_jWU+V6e=0-11UVd9XA1GKQ@mail.gmail.com>
+ <20140702192243.20920b70@free-electrons.com>
+ <CAAXf6LVqeyzx3oq7croUX+x0U7YeBBhmF5LSYCXyYX9+7M9RNw@mail.gmail.com>
+ <20140702223122.72ccaf58@free-electrons.com>
+ <20140702203748.GC9383@free.fr>
+Message-ID: <877g3vbfou.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20140702094513.6ec730f0 at free-electrons.com: 
-
->>    powerpc |     xserver_xorg-server-1.15.1 | NOK |
->>    http://autobuild.buildroot.net/results/1f25f744771fbb5124dca4563d79ea
->>    92cbfd72a3/ 
-> 
-> Bernd, despite the commit
-> http://git.buildroot.net/buildroot/commit/?id=e244eb12dfc50bb56167d5fdaef
-> 3aac52b0ff6a3 being merged, we still see a parallel installation issue
-> here it seems. 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
 Hi,
 
-unlike the time when I created the patch you mentioned (still no feedback on 
-upstream bugzilla for it btw.) I can not reproduce the build error today, 
-even with BR2_JLEVEL=128 :(
+ >> I think what Peter complains about is that with just PATCH 03/14
+ >> applied, the Git download method no longer works properly as it leaves
+ >> the repo in $(DL_DIR).
 
-Currently I am investigating the necessity to keep "install-data" in 
-XSERVER_XORG_SERVER_INSTALL_STAGING_OPT, maybe calling both "install install-
-data" causes the build error... This was introduced in 2008
+Indeed.
 
-http://git.buildroot.net/buildroot/commit/package/x11r7/xserver_xorg-
-server/xserver_xorg-server.mk?id=d4e56ff4dc8a0528550eb8503956bdcddb2fe516
+ >> The fact that this problem may or may not get solved by a later patch
+ >> in the series is more-or-less irrelevant here:
 
-and might not be needed anymore. Currently I am comparing the build results 
-with and without the "install-data" make target. This will take some time 
-because of the various options the package provides ;)
+ > Agreed. If that patch changes the behaviour, it is incorrect.
 
-Regards, Bernd
+ >> Peter is just saying
+ >> that the series is not perfectly bisectable, and he stopped reviewing
+ >> when he saw an issue in PATCH 03/14.
+
+ > And I do not see this issue...
+
+Sorry, I got confused. The problem actually turned out to be the use of
+pushd/popd with a /bin/sh, on here /bin/sh is dash which doesn't support
+it.
+
+The fix is to use !#/bin/bash
+
+-- 
+Bye, Peter Korsgaard
