@@ -1,153 +1,61 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Wed,  2 Jul 2014 19:20:05 +0200
-Subject: [Buildroot] [PATCH] infra: Add a way to apply patches using git
-Message-ID: <1404321605-20073-1-git-send-email-jezz@sysmic.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Jul 2014 19:22:43 +0200
+Subject: [Buildroot] [PATCH 03/14] pkg-infra: move the git download
+ helper to a script
+In-Reply-To: <CAAXf6LVZrM5ZUkAxvGPRuupq3f6_jWU+V6e=0-11UVd9XA1GKQ@mail.gmail.com>
+References: <cover.1404167061.git.yann.morin.1998@free.fr>
+ <c270e9e49dbc69c08629893f7c5e8fa952e37da7.1404167061.git.yann.morin.1998@free.fr>
+ <87fvijbx17.fsf@dell.be.48ers.dk>
+ <20140702174430.3f1377ce@free-electrons.com>
+ <CAAXf6LVZrM5ZUkAxvGPRuupq3f6_jWU+V6e=0-11UVd9XA1GKQ@mail.gmail.com>
+Message-ID: <20140702192243.20920b70@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This option is mainly used for package developpers. When activated,
-Buildroot will automaticaly create a git repository for each package
-it extract. Initial version is tagged as `upstream'. Next, during
-patch step, git is used instead of patch. BTW, patches are easier
-to modify/fix/rebase/cherry-pick/upstream. Once satisfied with
-changes, developper may use
-    git format-patch -o $TOPDIR/package/$PKG upstream
-to save its patches to Buildroot.
+Dear Thomas De Schampheleire,
 
-Notice this option should be compatible with `guilt' (a clone of
-`quilt')
+On Wed, 2 Jul 2014 19:19:42 +0200, Thomas De Schampheleire wrote:
 
-Notice you can also use this feature for a specific package using
-    make BR2_USE_GIT_TO_PATCH=y $PKG-dirclean $PKG-patch
+> >> Thanks. I've verified that the (non-gzip'ed) tarball is identical to
+> >> what we had before, but I noticed that we no longer delete the temporary
+> >> repo in DL_DIR.
+> >>
+> >> Did you do that change on purpose? I don't think we want to keep it, do
+> >> we?
+> >
+> >Hum, I'm confused, didn't we say that we should no longer do any
+> >temporary thing in $(DL_DIR) in order to allow parallel builds of
+> >separate Buildroot instances to not mess up with each other? I think we
+> >said that the process should be:
+> >
+> > 1/ Clone the repo in $(BUILD_DIR)
+> > 2/ Create the tarball of the repo in $(BUILD_DIR)
+> > 3/ Move the tarball from $(BUILD_DIR) to $(DL_DIR) with a temporary
+> >    unique file name.
+> > 4/ Rename the tarball in $(DL_DIR) to its final name
+> >
+> >Steps (3) and (4) are separated so that if $(DL_DIR) and $(BUILD_DIR)
+> >are in separate filesystems, the rename to the final name remains an
+> >atomic operation.
+> >
+> >And yes, the git download helper from Yann doesn't seem to implement
+> >this logic (or I got lost with the variable names, which is very
+> >possible).
+> 
+> This patch (3/14) only moves the existing logic to a separate script,
+> just like for the other helpers. Later patches in the same series
+> improve the logic. In particular, not using DL_DIR as scratchpad is
+> implemented in patch 11/14 http://patchwork.ozlabs.org/patch/365791/
 
-Current known limitations:
-  - If a patch cannot be handled by `git am', we use `git apply`. In
-    this case, patch description is not reported in commit message.
-  - When patch is handled with `git apply`, subject used may not be
-    perfect (it is extracted from patch filename)
-  - `git format-patch' does not prefix patch files with name of package.
-  - If upstream was downloaded with git, we may also run
-    `git remote add $($(PKG)_SITE)' during git repository creation
+Ah, ok, thanks for the clarification. However that doesn't explain why
+the temporary repo in $(DL_DIR) is not being removed. That's a
+regression compared to the original code in the .mk file, no?
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
- Config.in                        | 18 ++++++++++++++++++
- Makefile                         |  4 ++++
- package/pkg-generic.mk           |  7 +++++++
- support/scripts/apply-patches.sh | 29 +++++++++++++++++++++++++++--
- 4 files changed, 56 insertions(+), 2 deletions(-)
-
-diff --git a/Config.in b/Config.in
-index 50968fb..3645fe4 100644
---- a/Config.in
-+++ b/Config.in
-@@ -541,6 +541,24 @@ config BR2_GLOBAL_PATCH_DIR
- 	  Otherwise, if the directory <global-patch-dir>/<packagename> exists,
- 	  then all *.patch files in the directory will be applied.
- 
-+config BR2_USE_GIT_TO_PATCH
-+	bool "use git repositories to handle patches"
-+	help
-+	  This option is mainly used for package developpers. When activated,
-+	  Buildroot will automaticaly create a git repository for each package
-+	  it extract. Initial version is tagged as `upstream'. Next, during
-+	  patch step, git is used instead of patch. BTW, patches are easier
-+	  to modify/fix/rebase/cherry-pick/upstream. Once satisfied with 
-+	  changes, developper may use
-+	      git format-patch -o $TOPDIR/package/$PKG upstream
-+	  to save its patches to Buildroot.
-+
-+	  Notice this option should be compatible with `guilt' (a clone of
-+	  `quilt')
-+
-+	  Notice you can also use this feature for a specific package using
-+	      make BR2_USE_GIT_TO_PATCH=y $PKG-dirclean $PKG-patch
-+
- endmenu
- 
- source "toolchain/Config.in"
-diff --git a/Makefile b/Makefile
-index b3bd91e..b35e5a6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -177,6 +177,10 @@ ifeq ($(filter $(noconfig_targets),$(MAKECMDGOALS)),)
- -include $(BR2_CONFIG)
- endif
- 
-+# apply-patches.sh rely on this varaible to know git should be used instead 
-+# of patch
-+export BR2_USE_GIT_TO_PATCH
-+
- # To put more focus on warnings, be less verbose as default
- # Use 'make V=1' to see the full commands
- ifdef V
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index ab1f8d2..86368cc 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -108,6 +108,13 @@ $(BUILD_DIR)/%/.stamp_extracted:
- # some packages have messed up permissions inside
- 	$(Q)chmod -R +rw $(@D)
- 	$(foreach hook,$($(PKG)_POST_EXTRACT_HOOKS),$(call $(hook))$(sep))
-+ifeq ($(BR2_USE_GIT_TO_PATCH),y)
-+	$(Q)cd $(@D) ; \
-+	git init ; \
-+	git add . > /dev/null ; \
-+	git commit -m "$($(PKG)_RAWNAME) $($(PKG)_VERSION)" > /dev/null ; \
-+	git tag upstream
-+endif
- 	$(Q)touch $@
- 	@$(call step_end,extract)
- 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 37f2d81..0524b9a 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -84,8 +84,28 @@ function apply_patch {
- 	exit 1
-     fi
-     echo $patch >> ${builddir}/.applied_patches_list
--    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
--    if [ $? != 0 ] ; then
-+    if [[ -n "$BR2_USE_GIT_TO_PATCH" && -e "${builddir}/.git" ]]; then
-+        abspatch=$(readlink -f "${path}/$patch")
-+        pushd ${builddir} > /dev/null
-+        ${uncomp} "$abspatch" | git am --reject > /dev/null
-+        RET=$?
-+        if [[ $RET != 0 ]]; then
-+            ${uncomp} "$abspatch" | git apply --index --reject - > /dev/null
-+            RET=$?
-+            if [[ $RET == 0 ]]; then
-+                # This regexp is far to be perfect
-+                pkgname=$(echo ${builddir} | sed 's/^.*\///; s/-[0-9\.]\+$//;')
-+                msg="$(echo ${patch} | sed "s/^.*\///; s/^$pkgname-//;  s/^[0-9\.]\+-//; s/\.[a-zA-Z]*\$//; y/-/ /;")"
-+                git commit -m "$msg" > /dev/null
-+                RET=$?
-+            fi
-+        fi
-+        popd > /dev/null
-+    else
-+        ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
-+        RET=$?
-+    fi
-+    if [ $RET != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
- 	exit 1
-     fi
-@@ -121,6 +141,11 @@ function scan_patchdir {
- 
- scan_patchdir "$patchdir" "$patchpattern"
- 
-+if [[ -n "$BR2_USE_GIT_TO_PATCH" && ! -e "${builddir}/.git" ]]; then
-+    echo "BR2_USE_GIT_TO_PATCH supplied but git repository not found."
-+    echo "Falling back to classical patch method."
-+fi
-+
- # Check for rejects...
- if [ "`find $builddir/ '(' -name '*.rej' -o -name '.*.rej' ')' -print`" ] ; then
-     echo "Aborting.  Reject files found."
+Thomas
 -- 
-2.0.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
