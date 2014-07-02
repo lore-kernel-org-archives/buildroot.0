@@ -1,69 +1,113 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Jul 2014 00:07:12 +0200
-Subject: [Buildroot] [git commit] pkg-infra: move the scp download helper to
+Date: Wed, 2 Jul 2014 23:47:13 +0200
+Subject: [Buildroot] [git commit] pkg-infra: move the git download helper to
 	a script
-Message-ID: <20140702220914.17FA89D091@busybox.osuosl.org>
+Message-ID: <20140702220913.D71DA9D144@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=54adff55d5759c6b5143165e6ffe1e12e402161d
+commit: http://git.buildroot.net/buildroot/commit/?id=95a572282e871fdbf5caef2492793ab0fcc61882
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Maintaining the download helpers in the Makefile has proved to be a bit
-complex, so move it to a shell script.
+The git download helper is getting a bit more complex. Fixing it in the
+Makefile when it breaks (like the recent breakage with a non-existing
+sha1-cset) proves to be challenging, to say the least.
 
+Move it into a shell script in support/download/git, which will make
+it much easier to read, maintain, fix and enhance in the future.
+
+[Peter: redirect pushd/popd output to /dev/null]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-download.mk |    5 +++--
- support/download/scp    |   16 ++++++++++++++++
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ package/pkg-download.mk |   17 +++--------------
+ support/download/git    |   37 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 14 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index e420b05..eec91b8 100644
+index e07fd1b..c848f6a 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -14,7 +14,7 @@ export CVS := $(call qstrip,$(BR2_CVS))
- export BZR := $(call qstrip,$(BR2_BZR))
- export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
--SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
-+export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
+@@ -12,7 +12,7 @@ WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
+ SVN := $(call qstrip,$(BR2_SVN))
+ CVS := $(call qstrip,$(BR2_CVS))
+ BZR := $(call qstrip,$(BR2_BZR))
+-GIT := $(call qstrip,$(BR2_GIT))
++export GIT := $(call qstrip,$(BR2_GIT))
+ HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+ SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
  SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
- LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
-@@ -147,7 +147,8 @@ endef
- # to prepend the path with a slash: scp://[user@]host:/absolutepath
- define DOWNLOAD_SCP
- 	test -e $(DL_DIR)/$(2) || \
--	$(SCP) '$(call stripurischeme,$(call qstrip,$(1)))' $(DL_DIR)/$(2)
-+	$(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
-+					  $(DL_DIR)/$(2)
+@@ -84,19 +84,8 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ # problems
+ define DOWNLOAD_GIT
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	(pushd $(DL_DIR) > /dev/null && \
+-	 ((test "`git ls-remote $($(PKG)_SITE) $($(PKG)_DL_VERSION)`" && \
+-	   echo "Doing shallow clone" && \
+-	   $(GIT) clone --depth 1 -b $($(PKG)_DL_VERSION) --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME)) || \
+-	  (echo "Doing full clone" && \
+-	   $(GIT) clone --bare $($(PKG)_SITE) $($(PKG)_BASE_NAME))) && \
+-	pushd $($(PKG)_BASE_NAME) > /dev/null && \
+-	$(GIT) archive --format=tar --prefix=$($(PKG)_BASE_NAME)/ -o $(DL_DIR)/.$($(PKG)_SOURCE).tmp $($(PKG)_DL_VERSION) && \
+-	gzip -c $(DL_DIR)/.$($(PKG)_SOURCE).tmp > $(DL_DIR)/$($(PKG)_SOURCE) && \
+-	rm -f $(DL_DIR)/.$($(PKG)_SOURCE).tmp && \
+-	popd > /dev/null && \
+-	rm -rf $($(PKG)_DL_DIR) && \
+-	popd > /dev/null)
++	$(EXTRA_ENV) support/download/git $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
++					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
  endef
  
- define SOURCE_CHECK_SCP
-diff --git a/support/download/scp b/support/download/scp
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+diff --git a/support/download/git b/support/download/git
 new file mode 100755
-index 0000000..2997927
+index 0000000..5397096
 --- /dev/null
-+++ b/support/download/scp
-@@ -0,0 +1,16 @@
++++ b/support/download/git
+@@ -0,0 +1,37 @@
 +#!/bin/bash
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for scp
++# Download helper for git
 +# Call it with:
-+#   $1: URL
-+#   $2: output file
++#   $1: git repo
++#   $2: git cset
++#   $3: package's basename (eg. foobar-1.2.3)
++#   $4: output file
 +# And this environment:
-+#   SCP       : the scp command to call
++#   BR2_DL_DIR: path to Buildroot's download dir
++#   GIT       : the git command to call
 +
-+url="${1}"
-+output="${2}"
++repo="${1}"
++cset="${2}"
++basename="${3}"
++output="${4}"
 +
-+${SCP} "${url}" "${output}"
++repodir="${BR2_DL_DIR}/${basename}"
++
++if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
++    printf "Doing shallow clone\n"
++    ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"
++else
++    printf "Doing full clone\n"
++    ${GIT} clone --bare "${repo}" "${repodir}"
++fi
++
++pushd "${repodir}" >/dev/null
++${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
++gzip -c "${output}.tmp" >"${output}"
++rm -f "${output}.tmp"
++popd >/dev/null
++
++rm -rf "${repodir}"
