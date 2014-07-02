@@ -1,114 +1,82 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Wed, 02 Jul 2014 11:01:54 +0200
-Subject: [Buildroot] Patchwork cleanup #10: triaging proposal
-In-Reply-To: <20140628220856.5fa5db8b@free-electrons.com>
-References: <CAAXf6LX2ma3KGuJvskRdLapnev6S2_honVsYaQ5RCzkizbs9OQ@mail.gmail.com>
- <20140628220856.5fa5db8b@free-electrons.com>
-Message-ID: <53B3CA82.8030408@crapouillou.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 2 Jul 2014 11:04:05 +0200
+Subject: [Buildroot] Raspberry Pi: recommendations for web kiosk
+In-Reply-To: <20140626170127.GA3742@ned>
+References: <CAAXf6LXK64M-BO3V-K6e_27m7UhYOe3N01oXBSVfF6NUdqrARA@mail.gmail.com>
+ <20140626124257.GA13409@rmm-p1267483>
+ <CAAXf6LUR=nSyh3GPk037uYUOE3hRngWmrj+YOxiQe6RD75TRBw@mail.gmail.com>
+ <20140626170127.GA3742@ned>
+Message-ID: <CAAXf6LXiNMEjoN1Pv=2Qu73oJgc+jCsEizAFo1=WV+V57b27WQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hi Eric,
 
-On 06/28/2014 10:08 PM, Thomas Petazzoni wrote:
-> Dear Thomas De Schampheleire,
->
-> On Sat, 14 Jun 2014 22:02:31 +0200, Thomas De Schampheleire wrote:
->
->> Triage proposal for this (short) session:
+On Thu, Jun 26, 2014 at 7:01 PM, Eric Le Bihan
+<eric.le.bihan.dev@free.fr> wrote:
+> On Thu, Jun 26, 2014 at 03:15:25PM +0200, Thomas De Schampheleire wrote:
+>> Hi Eric,
 >>
->> qemu: add to host utilities menu
->> Frank Hunleth <fhunleth@troodon-software.com>
->> http://patchwork.ozlabs.org/patch/299014
+>> On Thu, Jun 26, 2014 at 2:42 PM, Eric Le Bihan
+>> <eric.le.bihan.dev@free.fr> wrote:
+>> > Hi!
+>> > On Wed, Jun 25, 2014 at 03:02:29PM +0200, Thomas De Schampheleire wrote:
+>> >> Hi,
+>> >>
+>> >> We currently use a Raspberry Pi as a simple web-wall. It cycles every
+>> >> two minutes between two (non-local) web pages, one of which contains a
+>> >> few iframes.
+>> >>
+>> >> While this can hardly be called a resource-intensive task, the
+>> >> Raspberry Pi by no means performs this fluently. The pages load
+>> >> relatively slow, and administration tasks on this pi also suffer from
+>> >> hickups.
+>> >>
+>> >> The pi currently contains a raspbian image (not done by me, I swear!
+>> >> :-) ) and uses chromium in kiosk mode to display the web pages.
+>> >>
+>> >> My basic question is: can I expect to get better performance by
+>> >> setting up a custom buildroot image, or is rpi so poor in performance,
+>> >> even for this mundane task?
+>> >> Which packages should I select to achieve this?
+>> >>
+>> >> Do I need an X.org or not really?
+>> >> If X.org is needed, does 'Kdrive / tinyX' work on rpi, or should I
+>> >> select modular x.org, and how do these compare.
+>> >> (as you notice, I have never set up embedded boards with graphical stuff).
+>> >>
+>> >> Which browser should/could I use? Preferably something that can run in
+>> >> fullscreen mode as this is a kiosk-like board.
+>> >>
+>> >> Is rpi-userland needed / recommended? How would I benefit from it?
+>> >>
+>> >> Any other recommendations/tips are welcome too, of course.
+>> > Just my two cents: how about using a custom application based on QtWebkit with
+>> > EGLFS [1]?
+>> >
 >>
->> A accept
+>> This is not a commercial product, but rather an internal information
+>> screen used on the workfloor. So writing custom applications, which I
+>> assume is quite some work, is not acceptable. I am hoping for a more
+>> or less out-of-the-box solution...
+> Well, thanks to QML and QtWebkit, that is pretty doable. I hacked a quick
+> example at https://github.com/elebihan/webkiosk, inspired by the Qt examples.
 >
-> If this gets applied, it needs to go together with
-> http://patchwork.ozlabs.org/patch/319108/. However, I'd like to see a
-> solution that merges the existing qemu package with the qemu-system
-> package proposed by Gustavo.
->
->> mono runtime porting to buildroot
->> Alexander Varnin <fenixk19@mail.ru>
->> http://patchwork.ozlabs.org/patch/299488
->>
->> B reject/superseded
->> There is a newer patch that not only adds the runtime part, but also
->> the host part, see http://patchwork.ozlabs.org/patch/351871/
->> For the same reason, I already marked
->> http://patchwork.ozlabs.org/patch/323246/ as Superseded.
->
-> ACK, so this has already been done, and you don't need more feedback
-> about 299488, right?
->
->> udev: Set the default action to "add" in the startup script
->> Paul Cercueil <paul@crapouillou.net>
->> http://patchwork.ozlabs.org/patch/301972
->>
->> C unsure: I asked for more feedback on this patch from the community
->> but no feedback yet. I don't know if this is correct or not.
+> AFAIK, running it with the '-platform eglfs' option should do the trick (not
+> tested, my RPi is out of order :-( )
 >
 
-So I verified it today, and I can say for sure that the patch is valid. 
-Without it, all the udev rules specified with the ACTION="add" token 
-(which are meant to be executed when the corresponding module is loaded) 
-are never executed, as the default action is set to ACTION="change".
+Is this a QT4 or QT5 project?
+I enabled qt5 in buildroot, together with the qt5webkit and qt5quick1
+packages, and then ran qmake in your webkiosk project. However, 'qml'
+and 'quick' modules are not found.
+How is this supposed to work?
 
+Looking at the sources in qt5quick1, I don't see any reference to the
+installation of a 'quick' module, only of 'declarative'.
 
-> Same thing here. Unfortunately, Paul rarely gives any feedback about
-> the patches he posts, so they often become abandoned in patchwork. Not
-> much we can do about it, unfortunately.
->
->> [1/2] uclibc: add a missing function member to siginfo.h
->> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> http://patchwork.ozlabs.org/patch/308384
->>
->> Based on the feedback from Thomas Petazzoni on this patch, I would say:
->> B reject
->
-> Well, maybe we should just apply it, and make rt-tests available on
-> mips/uclibc for internal toolchains, and keep it disabled for external
-> toolchains. Unfortunately, in the autobuilders, we mainly test external
-> toolchains, so we're not giving to test rt-tests much. So I still have
-> a mixed opinion about such patches. But the uClibc release process is
-> dead...
->
->> [2/2] uclibc: Make __SIGEV_PAD_SIZE to take __WORDSIZE into account
->> Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> http://patchwork.ozlabs.org/patch/308383
->>
->> I would guess the same decision as the previous patch applies here:
->> B reject
->
-> Yeah, same problem. Maybe my previous opinion is wrong, and we should
-> just patch Buildroot's uClibc as needed, and not exclude all
-> problematic packages from being used with an external uClibc toolchain.
->
->> [2/2] package: add paragui package
->> H Hartley Sweeten <hsweeten@visionengravers.com>
->> http://patchwork.ozlabs.org/patch/309336
->>
->> Although this package could use a good review because it has some
->> issues, in general we accept new packages so I would mark this as
->> A accept
->
-> To be honest, I started having a look at this package, and I continue
-> to believe that's it's a totally unmaintained GUI toolkit, with very
-> few users, and apparently not a very strong effort to push it from the
-> original contributor. So I'd prefer to simply reject the patch.
->
->> [v2,1/1] gst-ffmpeg: add option for LGPL build
->> Danomi Manchego <danomimanchego123@gmail.com>
->> http://patchwork.ozlabs.org/patch/312360
->>
->> I assume this should be
->> A accept
->> but the patch needs review and testing I think.
->
-> No opinion on this one, I don't do much gst stuff.
->
-> Thomas
->
+Thanks,
+Thomas
