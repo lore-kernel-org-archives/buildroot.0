@@ -1,49 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Jul 2014 17:46:47 +0200
-Subject: [Buildroot] Binutils version used on MIPS
-In-Reply-To: <87simjbx8x.fsf@dell.be.48ers.dk>
-References: <20140701201445.3caa5150@free-electrons.com>
- <53B3B9F4.9010800@imgtec.com> <87simjbx8x.fsf@dell.be.48ers.dk>
-Message-ID: <20140702174647.4021cc92@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed,  2 Jul 2014 15:55:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 7262] New: Generating locale en_US.UTF-8 fails on
+ 64bit fedora linux host
+Message-ID: <bug-7262-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+https://bugs.busybox.net/show_bug.cgi?id=7262
 
-On Wed, 02 Jul 2014 17:23:26 +0200, Peter Korsgaard wrote:
+           Summary: Generating locale en_US.UTF-8 fails on 64bit fedora
+                    linux host
+           Product: buildroot
+           Version: 2014.05
+          Platform: PC
+        OS/Version: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+        AssignedTo: unassigned at buildroot.uclibc.org
+        ReportedBy: normen.bolling at teufel.de
+                CC: buildroot at uclibc.org
+   Estimated Hours: 0.0
 
-> FYI, the current (arch independent) default binutils version is 2.22,
-> not 2.24.
-> 
-> We moved from 2.21 to 2.22 back in october:
-> 
-> commit 9777dbedb012f68e54e14f9567d9dc0187d53b17
-> Author: Peter Korsgaard <peter@korsgaard.com>
-> Date:   Sun Oct 6 23:45:10 2013 +0200
-> 
->     binutils: default to 2.22
->     
->     2.21.1 is getting quite old, the linker issues with 2.22 seems to be
->     (mostly?) sorted out by now and armhf needs 2.22+, so let's bump the
->     default version.
->     
->     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> 
-> 
-> Time has perhaps come to move to 2.23 or 2.24, I don't really know.
 
-Right, but Vicente patch simply removes the usage of a special version
-for MIPS, so MIPS now just uses whatever is the default version used
-for all architectures in Buildroot. Which I think is the right thing to
-do, unless there are special reasons to use a different version than
-the default one (such as AVR32 need of an old version, or
-Microblaze/PowerPC64LE need of a new version).
+Hi there,
 
-Thomas
+on my fedora20 64bit linux PC the build process stopped with the following
+error:
+
+  Generating locale en_US.UTF-8
+  cannot create temporary file: No such file or directory
+  make: *** [target-generatelocales] Error 1
+
+=> Corresponding Makefile target: "target-generatelocales"
+
+Manually creation of a symbolic link "lib64" in the directory
+"buildroot/output/target/usr" solved the problem:
+
+ls -oga ~/git/buildroot/output/target/usr
+
+total 44
+drwxr-xr-x.  7  4096 Jul  2 17:30 .
+drwxr-xr-x. 20  4096 Jul  2 17:30 ..
+drwxr-xr-x.  2  4096 Jul  2 17:30 bin
+drwxr-xr-x. 10 20480 Jul  2 17:30 lib
+lrwxrwxrwx.  1     3 Jul  2 15:53 lib32 -> lib
+lrwxrwxrwx.  1     3 Jul  2 17:24 lib64 -> lib
+drwxr-xr-x.  3  4096 Jul  2 17:30 libexec
+drwxr-xr-x.  2  4096 Jul  2 17:30 sbin
+drwxr-xr-x. 15  4096 Jul  2 17:30 share
+
+Cheers,
+Normen Bolling
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
