@@ -1,35 +1,278 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 02 Jul 2014 10:01:38 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-07-01
-In-Reply-To: <20140702094513.6ec730f0@free-electrons.com>
-References: <20140702063009.4715D1017F9@stock.ovh.net>
- <20140702094513.6ec730f0@free-electrons.com>
-Message-ID: <53B402B2.30600@zacarias.com.ar>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 2 Jul 2014 15:04:36 +0200
+Subject: [Buildroot] [PATCH] use default binutils for sh architecture
+Message-ID: <20140702130436.GA25646@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/02/2014 04:45 AM, Thomas Petazzoni wrote:
+Update Kernel to 3.15.x. Boot tested with Qemu 2.0.0
+for Binutils 2.22 and 2.24 build.
 
-> Hello,
-> 
-> On Wed,  2 Jul 2014 08:30:09 +0200 (CEST), Thomas Petazzoni wrote:
-> 
->>       bfin |                      crda-3.13 | NOK | http://autobuild.buildroot.net/results/d752a8d53ad9219b60113075c91c4dcc3e4027c1/
-> 
-> This thing is trying to build a shared library even though we have
-> BR2_PREFER_STATIC_LIB=y.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ board/qemu/sh4-r2d/linux-3.15.config |   96 ++++++++++++++++++++++++++++++++++
+ board/qemu/sh4-r2d/linux-3.2.config  |   96 ----------------------------------
+ board/qemu/sh4-r2d/readme.txt        |    2 +-
+ configs/qemu_sh4_r2d_defconfig       |    9 +---
+ package/binutils/Config.in.host      |    1 -
+ 5 files changed, 99 insertions(+), 105 deletions(-)
+ create mode 100644 board/qemu/sh4-r2d/linux-3.15.config
+ delete mode 100644 board/qemu/sh4-r2d/linux-3.2.config
 
-Patch sent disabling it for static.
-
->>    powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/6c8c3cb19a6f98f6f27986b671d48ee092fdf7cc/
-> 
-> Compiler issue. I don't see any other solution than adding an exclusion
-> in the autobuilder script. Yann, Gustavo, any idea?
-
-That looks like PR60155, i'll run some tests.
-
-Regards.
+diff --git a/board/qemu/sh4-r2d/linux-3.15.config b/board/qemu/sh4-r2d/linux-3.15.config
+new file mode 100644
+index 0000000..5fc878c
+--- /dev/null
++++ b/board/qemu/sh4-r2d/linux-3.15.config
+@@ -0,0 +1,96 @@
++CONFIG_EXPERIMENTAL=y
++CONFIG_SYSVIPC=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_MODULES=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_CPU_SUBTYPE_SH7751R=y
++CONFIG_MEMORY_START=0x0c000000
++CONFIG_FLATMEM_MANUAL=y
++CONFIG_SH_RTS7751R2D=y
++CONFIG_RTS7751R2D_PLUS=y
++CONFIG_HEARTBEAT=y
++CONFIG_PCI=y
++CONFIG_HOTPLUG_PCI=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_LRO is not set
++# CONFIG_IPV6 is not set
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_FW_LOADER=m
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_ATA=y
++CONFIG_PATA_PLATFORM=y
++CONFIG_NETDEVICES=y
++CONFIG_8139CP=y
++# CONFIG_WLAN is not set
++CONFIG_INPUT_FF_MEMLESS=m
++# CONFIG_INPUT_MOUSEDEV is not set
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_SH_SCI=y
++CONFIG_SERIAL_SH_SCI_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_SPI=y
++CONFIG_SPI_SH_SCI=y
++CONFIG_MFD_SM501=y
++CONFIG_VIDEO_OUTPUT_CONTROL=m
++CONFIG_FB=y
++CONFIG_FB_SH_MOBILE_LCDC=m
++CONFIG_FB_SH_MOBILE_HDMI=m
++CONFIG_FB_SM501=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++# CONFIG_LOGO_LINUX_CLUT224 is not set
++# CONFIG_LOGO_SUPERH_MONO is not set
++# CONFIG_LOGO_SUPERH_VGA16 is not set
++CONFIG_SOUND=y
++CONFIG_SND_YMFPCI=m
++CONFIG_SOUND_PRIME=m
++CONFIG_HID_A4TECH=y
++CONFIG_HID_APPLE=y
++CONFIG_HID_BELKIN=y
++CONFIG_HID_CHERRY=y
++CONFIG_HID_CHICONY=y
++CONFIG_HID_CYPRESS=y
++CONFIG_HID_EZKEY=y
++CONFIG_HID_GYRATION=y
++CONFIG_HID_LOGITECH=y
++CONFIG_HID_MICROSOFT=y
++CONFIG_HID_MONTEREY=y
++CONFIG_HID_PANTHERLORD=y
++CONFIG_HID_PETALYNX=y
++CONFIG_HID_SAMSUNG=y
++CONFIG_HID_SONY=y
++CONFIG_HID_SUNPLUS=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_LIBUSUAL=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_R9701=y
++CONFIG_EXT2_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_MINIX_FS=y
++CONFIG_NLS_CODEPAGE_932=y
++CONFIG_DEBUG_FS=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_CRC_T10DIF=y
+diff --git a/board/qemu/sh4-r2d/linux-3.2.config b/board/qemu/sh4-r2d/linux-3.2.config
+deleted file mode 100644
+index 5fc878c..0000000
+--- a/board/qemu/sh4-r2d/linux-3.2.config
++++ /dev/null
+@@ -1,96 +0,0 @@
+-CONFIG_EXPERIMENTAL=y
+-CONFIG_SYSVIPC=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_SLAB=y
+-CONFIG_PROFILING=y
+-CONFIG_OPROFILE=y
+-CONFIG_MODULES=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_CPU_SUBTYPE_SH7751R=y
+-CONFIG_MEMORY_START=0x0c000000
+-CONFIG_FLATMEM_MANUAL=y
+-CONFIG_SH_RTS7751R2D=y
+-CONFIG_RTS7751R2D_PLUS=y
+-CONFIG_HEARTBEAT=y
+-CONFIG_PCI=y
+-CONFIG_HOTPLUG_PCI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-# CONFIG_INET_LRO is not set
+-# CONFIG_IPV6 is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_FW_LOADER=m
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_ATA=y
+-CONFIG_PATA_PLATFORM=y
+-CONFIG_NETDEVICES=y
+-CONFIG_8139CP=y
+-# CONFIG_WLAN is not set
+-CONFIG_INPUT_FF_MEMLESS=m
+-# CONFIG_INPUT_MOUSEDEV is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_SH_SCI=y
+-CONFIG_SERIAL_SH_SCI_CONSOLE=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_SPI=y
+-CONFIG_SPI_SH_SCI=y
+-CONFIG_MFD_SM501=y
+-CONFIG_VIDEO_OUTPUT_CONTROL=m
+-CONFIG_FB=y
+-CONFIG_FB_SH_MOBILE_LCDC=m
+-CONFIG_FB_SH_MOBILE_HDMI=m
+-CONFIG_FB_SM501=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_LOGO=y
+-# CONFIG_LOGO_LINUX_MONO is not set
+-# CONFIG_LOGO_LINUX_VGA16 is not set
+-# CONFIG_LOGO_LINUX_CLUT224 is not set
+-# CONFIG_LOGO_SUPERH_MONO is not set
+-# CONFIG_LOGO_SUPERH_VGA16 is not set
+-CONFIG_SOUND=y
+-CONFIG_SND_YMFPCI=m
+-CONFIG_SOUND_PRIME=m
+-CONFIG_HID_A4TECH=y
+-CONFIG_HID_APPLE=y
+-CONFIG_HID_BELKIN=y
+-CONFIG_HID_CHERRY=y
+-CONFIG_HID_CHICONY=y
+-CONFIG_HID_CYPRESS=y
+-CONFIG_HID_EZKEY=y
+-CONFIG_HID_GYRATION=y
+-CONFIG_HID_LOGITECH=y
+-CONFIG_HID_MICROSOFT=y
+-CONFIG_HID_MONTEREY=y
+-CONFIG_HID_PANTHERLORD=y
+-CONFIG_HID_PETALYNX=y
+-CONFIG_HID_SAMSUNG=y
+-CONFIG_HID_SONY=y
+-CONFIG_HID_SUNPLUS=y
+-CONFIG_USB=y
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_LIBUSUAL=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_R9701=y
+-CONFIG_EXT2_FS=y
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_MINIX_FS=y
+-CONFIG_NLS_CODEPAGE_932=y
+-CONFIG_DEBUG_FS=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRC_T10DIF=y
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 73dce14..5d770b4 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index b27d9ec..a6e5850 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -10,11 +10,6 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.2 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.2.55"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_2=y
+-
+ # The kernel wants to use the -m4-nofpu option to make sure that it
+ # doesn't use floating point operations.
+ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+@@ -22,7 +17,7 @@ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.55"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.3"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.15.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 08540a3..a58fe93 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -3,7 +3,6 @@ comment "Binutils Options"
+ choice
+ 	prompt "Binutils Version"
+ 	depends on !BR2_arc
+-	default BR2_BINUTILS_VERSION_2_21 if (BR2_mips || BR2_mipsel || BR2_sh)
+ 	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
+ 	default BR2_BINUTILS_VERSION_2_22
+ 	help
+-- 
+1.7.10.4
