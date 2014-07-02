@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Jul 2014 09:40:02 -0300
-Subject: [Buildroot] [PATCH 04/13] texinfo: add license information
+Date: Wed,  2 Jul 2014 09:40:03 -0300
+Subject: [Buildroot] [PATCH 05/13] setserial: add license information
 In-Reply-To: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404304811-27480-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1404304811-27480-5-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,29 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/texinfo/texinfo.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/setserial/setserial.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-index 7064e12..afb3bca 100644
---- a/package/texinfo/texinfo.mk
-+++ b/package/texinfo/texinfo.mk
-@@ -10,5 +10,7 @@
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index f8d0a4b..9f28216 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
  
- TEXINFO_VERSION = 4.13a
- TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
-+TEXINFO_LICENSE = GPLv3+
-+TEXINFO_LICENSE_FILES = COPYING
+-SETSERIAL_VERSION            = 2.17
+-SETSERIAL_PATCH              = setserial_2.17-45.3.diff.gz
+-SETSERIAL_SOURCE             = setserial_$(SETSERIAL_VERSION).orig.tar.gz
+-SETSERIAL_SITE               = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial/
++SETSERIAL_VERSION = 2.17
++SETSERIAL_PATCH = setserial_2.17-45.3.diff.gz
++SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
++SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial/
++SETSERIAL_LICENSE = GPLv2
++SETSERIAL_LICENSE_FILES = debian/copyright
  
- $(eval $(host-autotools-package))
+ define SETSERIAL_APPLY_DEBIAN_PATCHES
+ 	# Touching gorhack.h is needed for the Debian patch 18 to work
 -- 
 1.8.5.5
