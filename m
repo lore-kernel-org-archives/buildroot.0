@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Jul 2014 00:00:15 +0200
-Subject: [Buildroot] [git commit] pkg-infra: move the wget download helper
-	to a script
-Message-ID: <20140702220914.03DFE9D091@busybox.osuosl.org>
+Date: Wed, 2 Jul 2014 23:54:16 +0200
+Subject: [Buildroot] [git commit] pkg-infra: move the cvs download helper to
+	a script
+Message-ID: <20140702220913.E7E259D091@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4bee7629eeb524b774357f57fbe53f136ae812c0
+commit: http://git.buildroot.net/buildroot/commit/?id=f4526c053f700cad5783476e009173827e803f56
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Maintaining the download helpers in the Makefile has proved to be a bit
@@ -19,67 +19,69 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-download.mk |   13 +++----------
- support/download/wget   |   21 +++++++++++++++++++++
- 2 files changed, 24 insertions(+), 10 deletions(-)
+ package/pkg-download.mk |   11 ++++-------
+ support/download/cvs    |   27 +++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+), 7 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 3290b6b..7554582 100644
+index e823f68..9f3afac 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -8,7 +8,7 @@
- ################################################################################
- 
+@@ -10,7 +10,7 @@
  # Download method commands
--WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
-+export WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
+ WGET := $(call qstrip,$(BR2_WGET)) $(QUIET)
  export SVN := $(call qstrip,$(BR2_SVN))
- export CVS := $(call qstrip,$(BR2_CVS))
+-CVS := $(call qstrip,$(BR2_CVS))
++export CVS := $(call qstrip,$(BR2_CVS))
  BZR := $(call qstrip,$(BR2_BZR))
-@@ -175,17 +175,10 @@ define SHOW_EXTERNAL_DEPS_HG
-   echo $($(PKG)_SOURCE)
+ export GIT := $(call qstrip,$(BR2_GIT))
+ HG := $(call qstrip,$(BR2_HG)) $(QUIET)
+@@ -114,12 +114,9 @@ endef
+ 
+ define DOWNLOAD_CVS
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	(pushd $(DL_DIR) > /dev/null && \
+-	$(CVS) -z3 -d:pserver:anonymous@$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+-		co -d $($(PKG)_BASE_NAME) -r :$($(PKG)_DL_VERSION) -P $($(PKG)_RAWNAME) && \
+-	$(TAR) czf $($(PKG)_SOURCE) $($(PKG)_BASE_NAME)/ && \
+-	rm -rf $($(PKG)_DL_DIR) && \
+-	popd > /dev/null)
++	$(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
++					  $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
++					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
  endef
  
--# Download a file using wget. Only download the file if it doesn't
--# already exist in the download directory. If the download fails,
--# remove the file (because wget -O creates a 0-byte file even if the
--# download fails).  To handle an interrupted download as well, download
--# to a temporary file first.  The temporary file will be overwritten
--# the next time the download is tried.
-+
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	($(WGET) -O $(DL_DIR)/$(2).tmp '$(call qstrip,$(1))' && \
--	 mv $(DL_DIR)/$(2).tmp $(DL_DIR)/$(2)) || \
--	(rm -f $(DL_DIR)/$(2).tmp ; exit 1)
-+	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2)
- endef
- 
- define SOURCE_CHECK_WGET
-diff --git a/support/download/wget b/support/download/wget
+ # Not all CVS servers support ls/rls, use login to see if we can connect
+diff --git a/support/download/cvs b/support/download/cvs
 new file mode 100755
-index 0000000..91ffd10
+index 0000000..60787a6
 --- /dev/null
-+++ b/support/download/wget
-@@ -0,0 +1,21 @@
++++ b/support/download/cvs
+@@ -0,0 +1,27 @@
 +#!/bin/bash
 +
 +# We want to catch any command failure, and exit immediately
 +set -e
 +
-+# Download helper for wget
++# Download helper for cvs
 +# Call it with:
-+#   $1: URL
-+#   $2: output file
++#   $1: cvs repo
++#   $2: cvs revision
++#   $3: package's name (eg. foobar)
++#   $4: package's basename (eg. foobar-1.2.3)
++#   $5: output file
 +# And this environment:
-+#   WGET      : the wget command to call
++#   CVS       : the cvs command to call
++#   BR2_DL_DIR: path to Buildroot's download dir
 +
-+url="${1}"
-+output="${2}"
++repo="${1}"
++rev="${2}"
++rawname="${3}"
++basename="${4}"
++output="${5}"
 +
-+if ${WGET} -O "${output}.tmp" "${url}"; then
-+    mv "${output}.tmp" "${output}"
-+else
-+    rm -f "${output}.tmp"
-+    exit 1
-+fi
++cd "${BR2_DL_DIR}"
++${CVS} -z3 -d":pserver:anonymous@${repo}" \
++       co -d "${basename}" -r ":${rev}" -P "${rawname}"
++tar czf "${output}" "${basename}"
++rm -rf "${basename}"
