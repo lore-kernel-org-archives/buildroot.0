@@ -1,62 +1,42 @@
-From: Simon Dawson <spdawson@gmail.com>
-Date: Wed,  2 Jul 2014 18:40:20 +0100
-Subject: [Buildroot] [PATCH] zyre: remove spurious dependency on filemq
-Message-ID: <1404322820-20409-1-git-send-email-spdawson@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Wed, 2 Jul 2014 19:49:00 +0200
+Subject: [Buildroot] [Patch v3 1/1] systemd: rework network/tty units
+ installation
+In-Reply-To: <20140629105512.0670fc4e@free-electrons.com>
+References: <1403517126-5776-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140629105512.0670fc4e@free-electrons.com>
+Message-ID: <20140702174859.GA755@rmm-p1267483>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zyre doesn't actually depend on filemq; it just needs czmq and zeromq
+On Sun, Jun 29, 2014 at 10:55:12AM +0200, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+>
+> On Mon, 23 Jun 2014 11:52:06 +0200, Eric Le Bihan wrote:
+> > The installation of the network.service and serial-getty.service unit
+> > files are now performed via the <pkg>_INIT_SYSTEMD mechanism instead of
+> > an installation hook.
+> >
+> > Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > ---
+> >  package/systemd/systemd.mk | 35 +++++++++++++++++------------------
+> >  1 file changed, 17 insertions(+), 18 deletions(-)
+>
+> Applied, thanks!
+>
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
----
- package/zyre/Config.in | 17 +++++++++--------
- package/zyre/zyre.mk   |  2 +-
- 2 files changed, 10 insertions(+), 9 deletions(-)
+Looking back, converting the fixup of getty service from an post installation
+hook to a service installation was not a good idea, after all.
 
-diff --git a/package/zyre/Config.in b/package/zyre/Config.in
-index fbfc6f9..86fff35 100644
---- a/package/zyre/Config.in
-+++ b/package/zyre/Config.in
-@@ -1,15 +1,16 @@
- config BR2_PACKAGE_ZYRE
- 	bool "zyre"
--	depends on BR2_INSTALL_LIBSTDCPP # filemq
--	depends on BR2_INET_IPV6 # filemq
--	depends on BR2_LARGEFILE # filemq
--	depends on BR2_USE_WCHAR # filemq
--	depends on BR2_TOOLCHAIN_HAS_THREADS # filemq
--	depends on BR2_USE_MMU # filemq -> czmq
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_LARGEFILE # zeromq
-+	depends on BR2_USE_WCHAR # zeromq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_USE_MMU # czmq
- 	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
--	# support, needed by filemq -> czmq
-+	# support, needed by czmq
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
--	select BR2_PACKAGE_FILEMQ
-+	select BR2_PACKAGE_CZMQ
-+	select BR2_PACKAGE_ZEROMQ
- 	help
- 	  An open-source framework for proximity-based peer-to-peer
- 	  applications.
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index 66952aa..77302b1 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -9,7 +9,7 @@ ZYRE_SITE = $(call github,zeromq,zyre,$(ZYRE_VERSION))
- ZYRE_LICENSE = LGPLv3+
- ZYRE_LICENSE_FILES = COPYING COPYING.LESSER
- ZYRE_INSTALL_STAGING = YES
--ZYRE_DEPENDENCIES = filemq
-+ZYRE_DEPENDENCIES = czmq zeromq
- ZYRE_AUTORECONF = YES
- 
- define ZYRE_CREATE_CONFIG_DIR
--- 
-1.9.1
+$(PKG)_INSTALL_INIT_SYSTEMD is performed before installing the package itself
+in the target directory via $(PKG)_INSTALL_TARGET_CMDS. So the fixup will fail
+trying to delete a file that has not been installed yet... (D'Oh! I should
+have cleaned my build directory...).
+
+I will send a patch reverting this part.
+
+Best regards,
+ELB
