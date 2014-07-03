@@ -1,96 +1,61 @@
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Thu, 03 Jul 2014 11:57:27 +0800
-Subject: [Buildroot] [RFC,
-	PATCH] toolchain: separate c++ compiler from libstdc++ presence
-Message-ID: <1404359847.56223.159017096333.1.gpush@pablo>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  3 Jul 2014 08:30:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-02
+Message-ID: <20140703063012.4FA97101718@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We may want a c++ compiler, but no libstdc++ on the system. For example,
-firmware that isn't linked with the system libstdc++. These packages can
-depend on BR2_CPP instead of BR2_INSTALL_LIBSTDCPP.
+Build statistics for 2014-07-02
+===============================
 
-Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+        success : 94 
+       failures : 18 
+       timeouts : 1  
+          TOTAL : 113
 
----
- package/Makefile.in                |    2 +-
- package/gcc/Config.in.host         |   14 +++++++++++---
- package/gcc/gcc-final/gcc-final.mk |    2 +-
- toolchain/toolchain-common.in      |    4 ++++
- 4 files changed, 17 insertions(+), 5 deletions(-)
+Classification of failures by reason
+====================================
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 0233506..e8de29f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -361,7 +361,7 @@ else
- DISABLE_IPV6= --disable-ipv6
- endif
- 
--ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-+ifneq ($(BR2_CPP),y)
- TARGET_CONFIGURE_OPTS+=CXX=false
- endif
- 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index fde1b90..693ff5f 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -126,13 +126,21 @@ config BR2_EXTRA_GCC_CONFIG_OPTIONS
- 	  initial, gcc intermediate and gcc final passes.
- 
- config BR2_TOOLCHAIN_BUILDROOT_CXX
--	bool "Enable C++ support"
--	select BR2_INSTALL_LIBSTDCPP
-+	bool "Enable C++ compiler support"
-+	select BR2_CPP
- 	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && \
- 		     BR2_TOOLCHAIN_BUILDROOT_LOCALE)
- 	help
- 	  Enable this option if you want your toolchain to support the
--	  C++ language and you want C++ libraries to be installed on
-+	  C++ language.
-+
-+config BR2_TOOLCHAIN_BUILDROOT_LIBSTDCPP
-+	bool "Install C++ libraries"
-+	default y
-+	select BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
-+	help
-+	  Enable this option if you want C++ libraries to be installed on
- 	  your target system.
- 
- comment "C++ support broken in uClibc with locale enabled with gcc 4.2"
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 622dcf2..d277064 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -43,7 +43,7 @@ endef
- 
- # Languages supported by the cross-compiler
- GCC_FINAL_CROSS_LANGUAGES-y = c
--GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
-+GCC_FINAL_CROSS_LANGUAGES-$(BR2_CPP) += c++
- GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_FORTRAN) += fortran
- GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_OBJC)    += objc
- GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index a91d247..24edce3 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -26,8 +26,12 @@ config BR2_USE_WCHAR
- config BR2_ENABLE_LOCALE
- 	bool
- 
-+config BR2_CPP
-+	bool
-+
- config BR2_INSTALL_LIBSTDCPP
- 	bool
-+	select BR2_CPP
- 
- config BR2_TOOLCHAIN_HAS_THREADS
- 	bool
+                    sdl-1.2.15 | 4 
+                    fltk-1.3.2 | 3 
+make: *** [core-dependencie... | 2 
+                 webkit-1.11.5 | 1 
+                   systemd-213 | 1 
+snappy-1ff9be9b8fafc8528ca9... | 1 
+                oprofile-0.9.9 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+          google-breakpad-1320 | 1 
+          perl-net-ssleay-1.64 | 1 
+           xapp_bdftopcf-1.0.4 | 1 
+                    parted-3.1 | 1 
+                   lcdapi-v0.4 | 1 
+
+Detail of failures
+===================
+
+    xtensa |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/a6562012192a96c565e4b844d9804d8abaef1fa8/
+    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/0d0955b5b5875835481342ff765a4b056bfb553c/
+      mips |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/7919fbe45826182bd04309517b43eb71de93ec0f/
+  mips64el |           google-breakpad-1320 | NOK | http://autobuild.buildroot.net/results/e0acfc8c289cfe2513f06193ba74e71ebfc377ba/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/c8953fc46028e574cd343174ba57a66514621c69/
+      bfin |                    lcdapi-v0.4 | NOK | http://autobuild.buildroot.net/results/7491be18636f33828cc7e5d44a2978f46ca5eaff/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/228690645b8cce2c33e23380b3681695122eab98/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/4d861f2979b7a432c410b4adf492825fe85047b6/
+       arm |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/ec8a4814575eaf86d233514b97d7a8cb7babdbb4/
+       arm |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/d4f51796170a17c2c4d411aae2d704885c742a6b/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/135867ef85535863e3647cc5fb82accb6f77612c/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/cd76ffd6f4752ade5eab2623aafd7701c214e8bb/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/f5c36837dbc92bee25833e5665844cd84e53d305/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/5fd6e9c5c39f2989e54f8e99c29b0944746f2321/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/1b4c04c3be8c393631c2d98b05f534cfaee95e84/
+      i686 | snappy-1ff9be9b8fafc8528ca9... | NOK | http://autobuild.buildroot.net/results/ff98c0881aa229aa54b7ec78d36118aa231fdf1b/
+       arm |                    systemd-213 | NOK | http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
+      i686 |                  webkit-1.11.5 | TIM | http://autobuild.buildroot.net/results/b5464098d892e611aec5880811ddecec25b8b26c/
+microblazeel |            xapp_bdftopcf-1.0.4 | NOK | http://autobuild.buildroot.net/results/a526e98cab473910178682ef37f74462aa5b4b0f/
+
+
+-- 
+http://autobuild.buildroot.net
