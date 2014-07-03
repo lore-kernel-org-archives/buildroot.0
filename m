@@ -1,34 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Jul 2014 17:00:39 -0300
-Subject: [Buildroot] [PATCH 4/4] cryptodev-linux: fix license information
-In-Reply-To: <1404417639-5879-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1404417639-5879-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404417639-5879-4-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Jul 2014 22:15:14 +0200
+Subject: [Buildroot] [PATCH] fltk: fix build failure with newer jpeg
+	libraries
+In-Reply-To: <1404403305-22479-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 3 Jul 2014 13:01:45 -0300")
+References: <1404403305-22479-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wqbu6vxp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/cryptodev-linux/cryptodev-linux.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 7ec327e..03e3126 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -8,8 +8,8 @@ CRYPTODEV_LINUX_VERSION = 1.6
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
- CRYPTODEV_LINUX_DEPENDENCIES = linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
--CRYPTODEV_LICENSE = GPLv2+
--CRYPTODEV_LICENSE_FILES = COPYING
-+CRYPTODEV_LINUX_LICENSE = GPLv2+
-+CRYPTODEV_LINUX_LICENSE_FILES = COPYING
- 
- define CRYPTODEV_LINUX_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+ > Fixes:
+ > http://autobuild.buildroot.net/results/978/9786ab41117fbe760e4e8ae40ccf37af55813728/
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.8.5.5
+Bye, Peter Korsgaard
