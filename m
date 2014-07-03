@@ -1,49 +1,93 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 3 Jul 2014 00:31:48 +0200
-Subject: [Buildroot] [Patch v3 1/1] systemd: rework network/tty units
- installation
-In-Reply-To: <20140702221517.0590f17c@free-electrons.com>
-References: <1403517126-5776-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140629105512.0670fc4e@free-electrons.com>
- <20140702174859.GA755@rmm-p1267483>
- <20140702221517.0590f17c@free-electrons.com>
-Message-ID: <20140702223148.GA18307@ned>
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Thu, 03 Jul 2014 11:56:54 +0800
+Subject: [Buildroot] [RFC,
+ PATCH] Separate target-building make targets from image-building
+ make targets
+Message-ID: <1404359814.133100.832244865806.1.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 02, 2014 at 10:15:17PM +0200, Thomas Petazzoni wrote:
-> Dear Eric Le Bihan,
->
-> On Wed, 2 Jul 2014 19:49:00 +0200, Eric Le Bihan wrote:
->
-> > Looking back, converting the fixup of getty service from an post installation
-> > hook to a service installation was not a good idea, after all.
-> >
-> > $(PKG)_INSTALL_INIT_SYSTEMD is performed before installing the package itself
-> > in the target directory via $(PKG)_INSTALL_TARGET_CMDS. So the fixup will fail
-> > trying to delete a file that has not been installed yet... (D'Oh! I should
-> > have cleaned my build directory...).
-> >
-> > I will send a patch reverting this part.
->
-> Hum, right, I don't know if a fixup of a file belongs to
-> <pkg>_INSTALL_INIT_SYSTEMD. But the fact that <pkg>_INSTALL_INIT_<foo>
-> gets executed *before* the package is installed to the target looks a
-> bit weird. Is there a reason for that?
+Currently, it's not possible to have dependencies from an image-building
+target to a rootfs-building target.
 
-From package/pkg-generic.mk at line 227:
+For example, the boot-wrapper-aarch64 package uses the kernel build as
+an input file. It supplies a dependency on 'linux', but this will break
+if we're using BR2_TARGET_ROOTFS_INITRAMFS - the wrapper will include
+the first kernel build, not the rebuild (which contains the embedded
+initramfs).
 
-	$(if $(BR2_INIT_SYSTEMD),\
-		$($(PKG)_INSTALL_INIT_SYSTEMD))
-	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
-		$($(PKG)_INSTALL_INIT_SYSV))
-	+$($(PKG)_INSTALL_TARGET_CMDS)
-	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+This means we'd need to express a dependency from the target build to
+the image build. However, if we do something like:
 
-I see no harm in swapping these lines...
+-BOOT_WRAPPER_AARCH64_DEPENDENCIES   = linux
++BOOT_WRAPPER_AARCH64_DEPENDENCIES   = linux26-rebuild-with-initramfs
 
-Best regards,
-ELB
+- then we get a circular dependency, because boot-wrapper-aarch64 is in
+the TARGETS list, which linux26-rebuild-with-initramfs depends on.
+
+This change splits the possible targets into two separate lists,
+TARGET_TARGETS (dependencies for building the target dir) and
+IMAGE_TARGETS (dependencies for building images). We keep TARGETS as a
+list of everything, and use TARGET_TARGETS for the rootfs-finalize
+target.
+
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+
+---
+ Makefile               |    6 ++++--
+ package/pkg-generic.mk |    8 ++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 0bf709f..708ab19 100644
+--- a/Makefile
++++ b/Makefile
+@@ -294,6 +294,8 @@ unexport TERMINFO
+ GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
+ 
+ TARGETS :=
++TARGET_TARGETS :=
++IMAGE_TARGETS :=
+ 
+ # silent mode requested?
+ QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
+@@ -531,7 +533,7 @@ endif
+ 
+ $(TARGETS_ROOTFS): target-finalize
+ 
+-target-finalize: $(TARGETS)
++target-finalize: $(TARGET_TARGETS)
+ 	@$(call MESSAGE,"Finalizing target directory")
+ 	$(TARGET_PURGE_LOCALES)
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+@@ -624,7 +626,7 @@ target-generatelocales: host-localedef toolchain
+ 	done
+ endif
+ 
+-target-post-image: $(TARGETS_ROOTFS) target-finalize
++target-post-image: $(TARGETS_ROOTFS) $(IMAGE_TARGETS) target-finalize
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 32a9457..ede1656 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -681,6 +681,14 @@ endif
+ 
+ TARGETS += $(1)
+ 
++ifneq ($$($(2)_INSTALL_STAGING)$$($(2)_INSTALL_TARGET),NONO)
++TARGET_TARGETS += $(1)
++endif
++
++ifeq ($$($(2)_INSTALL_IMAGES),YES)
++IMAGE_TARGETS  += $(1)
++endif
++
+ ifneq ($$($(2)_PERMISSIONS),)
+ PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+ endif
