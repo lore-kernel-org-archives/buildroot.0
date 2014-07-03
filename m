@@ -1,64 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Jul 2014 16:30:36 +0200
-Subject: [Buildroot] [git commit] zyre: remove spurious dependency on filemq
-Message-ID: <20140703143459.110B59CE74@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Jul 2014 16:42:06 +0200
+Subject: [Buildroot] Incorrect ABI setting on ubuntu 14.04LTS
+In-Reply-To: <CAFRxoJnfkQ1xZDd_Q5h_qzWXkrsJCdUTBv6APB6VvFFH1ad20g@mail.gmail.com>
+References: <CAFRxoJn5x=5YbSCOsMu7XB1PS2Dv2=fyih7nrwMmde0YtveeTQ@mail.gmail.com>
+ <20140703092010.GO9025@tarshish> <20140703092420.GP9025@tarshish>
+ <20140703113316.3100783a@free-electrons.com>
+ <CAFRxoJnfkQ1xZDd_Q5h_qzWXkrsJCdUTBv6APB6VvFFH1ad20g@mail.gmail.com>
+Message-ID: <20140703164206.40a17ed0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=f56f4da887971f299ebea4f1e806a9b2eaf3ce38
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Marco Pastorelli,
 
-zyre doesn't actually depend on filemq; it just needs czmq and zeromq
+On Thu, 3 Jul 2014 16:27:14 +0200, Marco Pastorelli wrote:
 
-Signed-off-by: Simon Dawson <spdawson@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zyre/Config.in |   17 +++++++++--------
- package/zyre/zyre.mk   |    2 +-
- 2 files changed, 10 insertions(+), 9 deletions(-)
+> here's the output:
+> 
+> $ echo 'int main(void) {}' |
+> ./output/host/opt/ext-toolchain/bin/arm-linux-gnueabihf-gcc -x c -o
+> /dev/null -
+> /mnt/ocz-vector/projects/bb-buildroot-2014.05/output/host/opt/ext-toolchain/bin/../libexec/gcc/arm-linux-gnueabihf/4.8.3/cc1:
+> error while loading shared libraries: libz.so.1: cannot open shared object
+> file: No such file or directory
 
-diff --git a/package/zyre/Config.in b/package/zyre/Config.in
-index fbfc6f9..86fff35 100644
---- a/package/zyre/Config.in
-+++ b/package/zyre/Config.in
-@@ -1,15 +1,16 @@
- config BR2_PACKAGE_ZYRE
- 	bool "zyre"
--	depends on BR2_INSTALL_LIBSTDCPP # filemq
--	depends on BR2_INET_IPV6 # filemq
--	depends on BR2_LARGEFILE # filemq
--	depends on BR2_USE_WCHAR # filemq
--	depends on BR2_TOOLCHAIN_HAS_THREADS # filemq
--	depends on BR2_USE_MMU # filemq -> czmq
-+	depends on BR2_INSTALL_LIBSTDCPP # zeromq
-+	depends on BR2_INET_IPV6 # zeromq
-+	depends on BR2_LARGEFILE # zeromq
-+	depends on BR2_USE_WCHAR # zeromq
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-+	depends on BR2_USE_MMU # czmq
- 	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
--	# support, needed by filemq -> czmq
-+	# support, needed by czmq
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
--	select BR2_PACKAGE_FILEMQ
-+	select BR2_PACKAGE_CZMQ
-+	select BR2_PACKAGE_ZEROMQ
- 	help
- 	  An open-source framework for proximity-based peer-to-peer
- 	  applications.
-diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-index 013299e..661dddc 100644
---- a/package/zyre/zyre.mk
-+++ b/package/zyre/zyre.mk
-@@ -9,7 +9,7 @@ ZYRE_SITE = $(call github,zeromq,zyre,$(ZYRE_VERSION))
- ZYRE_LICENSE = LGPLv3+
- ZYRE_LICENSE_FILES = COPYING COPYING.LESSER
- ZYRE_INSTALL_STAGING = YES
--ZYRE_DEPENDENCIES = filemq
-+ZYRE_DEPENDENCIES = czmq zeromq
- ZYRE_AUTORECONF = YES
- 
- define ZYRE_CREATE_CONFIG_DIR
+apt-get install zlib1g:i386
+
+is what you need.
+
+I think we need to add a check for this to tell the user in a clearer
+way.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
