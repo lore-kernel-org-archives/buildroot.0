@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jul 2014 11:33:16 +0200
-Subject: [Buildroot] Incorrect ABI setting on ubuntu 14.04LTS
-In-Reply-To: <20140703092420.GP9025@tarshish>
-References: <CAFRxoJn5x=5YbSCOsMu7XB1PS2Dv2=fyih7nrwMmde0YtveeTQ@mail.gmail.com>
- <20140703092010.GO9025@tarshish> <20140703092420.GP9025@tarshish>
-Message-ID: <20140703113316.3100783a@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  3 Jul 2014 12:35:57 +0300
+Subject: [Buildroot] [PATCH] toolchain/helpers.mk: update check_arm_abi
+	comment
+Message-ID: <cb98e542722d29f05ba0d9e3fae43c1a6cefbd0d.1404380157.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Since commit b2e88073dbf (toolchain: check ARM EABI vs. EABIhf for external
+toolchains), check_arm_abi accepts a second parameter. Update the comment
+accordingly.
 
-On Thu, 3 Jul 2014 12:24:20 +0300, Baruch Siach wrote:
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ toolchain/helpers.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > What is the output of:
-> > 
-> > echo 'int main(void) {}' | arm-linux-gnueabihf-gcc -x c -o /dev/null
-> >
-> > on the problematic machine?
-> 
-> Forgot a dash. The command should be:
-> 
-> echo 'int main(void) {}' | arm-linux-gnueabihf-gcc -x c -o /dev/null -
-
-You should maybe indicate that this has to be done with the
-arm-linux-gnueabihf-gcc compiler downloaded and installed by Buildroot,
-so:
-
-	./output/host/opt/ext-toolchain/bin/arm-linux-gnueabihf-gcc
-
-Thomas
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 81e02b713284..c85968054012 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -288,6 +288,7 @@ check_uclibc = \
+ # configuration of the external toolchain.
+ #
+ # $1: cross-gcc path
++# $2: cross-readelf path
+ #
+ check_arm_abi = \
+ 	__CROSS_CC=$(strip $1) ; \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
