@@ -1,35 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jul 2014 11:37:19 +0200
-Subject: [Buildroot] [PATCH] toolchain/helpers.mk: update check_arm_abi
-	comment
-In-Reply-To: <cb98e542722d29f05ba0d9e3fae43c1a6cefbd0d.1404380157.git.baruch@tkos.co.il>
-References: <cb98e542722d29f05ba0d9e3fae43c1a6cefbd0d.1404380157.git.baruch@tkos.co.il>
-Message-ID: <20140703113719.5c07dd61@free-electrons.com>
+From: Robert Larsen <robert@the-playground.dk>
+Date: Thu, 03 Jul 2014 12:40:27 +0200
+Subject: [Buildroot] Filesystem being corrupted
+Message-ID: <53B5331B.9030703@the-playground.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi list
 
-On Thu,  3 Jul 2014 12:35:57 +0300, Baruch Siach wrote:
-> Since commit b2e88073dbf (toolchain: check ARM EABI vs. EABIhf for external
-> toolchains), check_arm_abi accepts a second parameter. Update the comment
-> accordingly.
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  toolchain/helpers.mk | 1 +
->  1 file changed, 1 insertion(+)
+I am having a problem with my root filesystem being corrupted.
+When I halt a newly built system (simply log in and execute 'halt') get
+this message:
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---------------------------------------------------------------
+# halt
+The system is going down NOW!
+Sent SIGTERM to all processes
+Sent SIGKILL to all processes
+Requesting system halt
+Flash device refused suspend due to active operation (state 20)
+Flash device refused suspend due to active operation (state 20)
+reboot: System halted
+---------------------------------------------------------------
 
-Thanks!
+Then when I restart it I get:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+---------------------------------------------------------------
+....
+Starting network...
+EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 625
+EXT2-fs (mmcblk0): error: remounting filesystem read-only
+Generating RSA Key...
+No user exists for uid 0
+EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 627
+EXT2-fs (mmcblk0): error: remounting filesystem read-only
+Generating DSA Key...
+
+No user exists for uid 0
+EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 629
+EXT2-fs (mmcblk0): error: remounting filesystem read-only
+Generating ECDSA Key...
+
+No user exists for uid 0
+EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 631
+EXT2-fs (mmcblk0): error: remounting filesystem read-only
+Generating ed25519 Key...
+
+No user exists for uid 0
+Starting sshd: Privilege separation user sshd does not exist
+OK
+
+ARM Testing System
+arm-testing login:
+---------------------------------------------------------------
+
+I start it with this command:
+sudo qemu-system-arm -M vexpress-a9 -m 512 -kernel zImage  -sd
+rootfs.ext2 -append "root=/dev/mmcblk0 rw physmap.enabled=0
+console=ttyAMA0" -net tap -net nic -net
+user,hostfwd=tcp:0.0.0.0:2222-:22 -nographic
+
+Any ideas as to what has happened and how to fix it?
+You can view my buildroot config file here:
+http://www.the-playground.dk/buildroot_config.txt
+
+Robert
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 246 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140703/d561c064/attachment.asc>
