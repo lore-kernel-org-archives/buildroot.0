@@ -1,26 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jul 2014 20:13:53 +0200
-Subject: [Buildroot] [PATCH] perl-net-ssleay: fix build
-In-Reply-To: <87mwcq8q9o.fsf@dell.be.48ers.dk>
-References: <1404394272-5894-1-git-send-email-francois.perrad@gadz.org>
- <87mwcq8q9o.fsf@dell.be.48ers.dk>
-Message-ID: <20140703201353.794455ac@free-electrons.com>
+Date: Thu, 3 Jul 2014 20:14:54 +0200
+Subject: [Buildroot] [PATCH] toolchain/helpers.mk: don't discard
+ check_arm_abi stderr
+In-Reply-To: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
+References: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
+Message-ID: <20140703201454.427afda1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Fran?ois,
+Dear Baruch Siach,
 
-On Thu, 03 Jul 2014 16:34:43 +0200, Peter Korsgaard wrote:
-> >>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
-> 
->  > add $(2)_CONV_ENV in perl infrastructure
-> 
-> Please send that as a seperate patch.
+On Thu,  3 Jul 2014 19:32:58 +0300, Baruch Siach wrote:
+> Since we are only need to know whether the compiler runs successfully, and
 
-And update the Buildroot documentation accordingly :-)
+s/are//
+
+> stderr is empty for the success case, there is no need to redirect stderr to
+> /dev/null. Moreover, stderr output of the failing case reveals valuable
+> information on the real failure reason.
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thanks!
 
 Thomas
 -- 
