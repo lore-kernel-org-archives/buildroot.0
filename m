@@ -1,54 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Jul 2014 13:01:45 -0300
-Subject: [Buildroot] [PATCH] fltk: fix build failure with newer jpeg
-	libraries
-Message-ID: <1404403305-22479-1-git-send-email-gustavo@zacarias.com.ar>
+From: Marco Pastorelli <mpastorelli@gmail.com>
+Date: Thu, 3 Jul 2014 18:06:12 +0200
+Subject: [Buildroot] Incorrect ABI setting on ubuntu 14.04LTS
+In-Reply-To: <20140703150914.GT9025@tarshish>
+References: <CAFRxoJn5x=5YbSCOsMu7XB1PS2Dv2=fyih7nrwMmde0YtveeTQ@mail.gmail.com>
+ <20140703092010.GO9025@tarshish> <20140703092420.GP9025@tarshish>
+ <20140703113316.3100783a@free-electrons.com>
+ <CAFRxoJnfkQ1xZDd_Q5h_qzWXkrsJCdUTBv6APB6VvFFH1ad20g@mail.gmail.com>
+ <20140703164206.40a17ed0@free-electrons.com>
+ <20140703145401.GS9025@tarshish>
+ <20140703165750.3529d265@free-electrons.com>
+ <20140703150914.GT9025@tarshish>
+Message-ID: <CAFRxoJnfo0cXjFxg+6MATY2jbn+Adh=iU63RhFKR0aPktpxFRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/978/9786ab41117fbe760e4e8ae40ccf37af55813728/
+Baurch, Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/fltk/fltk-02-jpeg-9.patch | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/fltk/fltk-02-jpeg-9.patch
+the problem is fixed, thank you so much!
 
-diff --git a/package/fltk/fltk-02-jpeg-9.patch b/package/fltk/fltk-02-jpeg-9.patch
-new file mode 100644
-index 0000000..11ae85e
---- /dev/null
-+++ b/package/fltk/fltk-02-jpeg-9.patch
-@@ -0,0 +1,26 @@
-+From http://www.fltk.org/str.php?L2920
-+However it's not yet applied apparently until bundled jpeg is upgraded.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura fltk-1.3.2.orig/src/Fl_JPEG_Image.cxx fltk-1.3.2/src/Fl_JPEG_Image.cxx
-+--- fltk-1.3.2.orig/src/Fl_JPEG_Image.cxx	2014-07-03 12:56:27.731197463 -0300
-++++ fltk-1.3.2/src/Fl_JPEG_Image.cxx	2014-07-03 12:56:57.907218257 -0300
-+@@ -155,7 +155,7 @@
-+   
-+   jpeg_create_decompress(&dinfo);
-+   jpeg_stdio_src(&dinfo, fp);
-+-  jpeg_read_header(&dinfo, 1);
-++  jpeg_read_header(&dinfo, TRUE);
-+   
-+   dinfo.quantize_colors      = (boolean)FALSE;
-+   dinfo.out_color_space      = JCS_RGB;
-+@@ -333,7 +333,7 @@
-+   
-+   jpeg_create_decompress(&dinfo);
-+   jpeg_mem_src(&dinfo, data);
-+-  jpeg_read_header(&dinfo, 1);
-++  jpeg_read_header(&dinfo, TRUE);
-+   
-+   dinfo.quantize_colors      = (boolean)FALSE;
-+   dinfo.out_color_space      = JCS_RGB;
--- 
-1.8.5.5
+Marco.
+
+2014-07-03 17:09 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+
+> Hi Thomas,
+>
+> On Thu, Jul 03, 2014 at 04:57:50PM +0200, Thomas Petazzoni wrote:
+> > On Thu, 3 Jul 2014 17:54:01 +0300, Baruch Siach wrote:
+> > > > > $ echo 'int main(void) {}' |
+> > > > > ./output/host/opt/ext-toolchain/bin/arm-linux-gnueabihf-gcc -x c -o
+> > > > > /dev/null -
+> > > > >
+> /mnt/ocz-vector/projects/bb-buildroot-2014.05/output/host/opt/ext-toolchain/bin/../libexec/gcc/arm-linux-gnueabihf/4.8.3/cc1:
+> > > > > error while loading shared libraries: libz.so.1: cannot open
+> shared object
+> > > > > file: No such file or directory
+> > > >
+> > > > apt-get install zlib1g:i386
+> > > >
+> > > > is what you need.
+> > >
+> > > I'm afraid Ubuntu 10.04 was not multi-arch enabled. That's why I
+> suggested
+> > > ia32-libs instead.
+> >
+> > Marco reported using 14.04 LTS.
+>
+> Right, of course. Sorry for the noise.
+>
+> Related to this: why do we redirect stderr of the compiler invocation to
+> /dev/null in check_arm_abi? We are not interested in the output itself as
+> we
+> only check whether the compiler runs successfully. When the test succeeds
+> it
+> should not output anything. Whereas in the failing case the output is very
+> interesting.
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140703/bd1fadea/attachment.html>
