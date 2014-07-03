@@ -1,77 +1,39 @@
-From: Robert Larsen <robert@the-playground.dk>
-Date: Thu, 03 Jul 2014 12:40:27 +0200
-Subject: [Buildroot] Filesystem being corrupted
-Message-ID: <53B5331B.9030703@the-playground.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Jul 2014 13:21:19 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bump to version 214
+In-Reply-To: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <20140703132119.014619c0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi list
+Dear Eric Le Bihan,
 
-I am having a problem with my root filesystem being corrupted.
-When I halt a newly built system (simply log in and execute 'halt') get
-this message:
+On Sun, 29 Jun 2014 21:35:37 +0200, Eric Le Bihan wrote:
 
----------------------------------------------------------------
-# halt
-The system is going down NOW!
-Sent SIGTERM to all processes
-Sent SIGKILL to all processes
-Requesting system halt
-Flash device refused suspend due to active operation (state 20)
-Flash device refused suspend due to active operation (state 20)
-reboot: System halted
----------------------------------------------------------------
+> +SYSTEMD_CONF_ENV = \
+> +	ac_cv_path_KMOD=/usr/bin/kmod
 
-Then when I restart it I get:
+I just got a report from "nroach44" on IRC (Cc'ed to this e-mail) that
+this chunk is actually also needed with systemd 213. From the IRC
+discussions:
 
----------------------------------------------------------------
-....
-Starting network...
-EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 625
-EXT2-fs (mmcblk0): error: remounting filesystem read-only
-Generating RSA Key...
-No user exists for uid 0
-EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 627
-EXT2-fs (mmcblk0): error: remounting filesystem read-only
-Generating DSA Key...
+13:16 < NRoach44> kmod is being put in /usr/bin
+13:17 < NRoach44> when systemd trys to run it from /bin
+13:18 < kos_tom> with which version of systemd are you seeing this kmod issue?
+13:18 < NRoach44> 213
 
-No user exists for uid 0
-EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 629
-EXT2-fs (mmcblk0): error: remounting filesystem read-only
-Generating ECDSA Key...
+So I obviously pointed "nroach44" to your 214 systemd bump patch, but I
+believe that since the kmod issue exists with systemd 213, the chunk
+above should probably be part of a separate patch.
 
-No user exists for uid 0
-EXT2-fs (mmcblk0): error: ext2_lookup: deleted inode referenced: 631
-EXT2-fs (mmcblk0): error: remounting filesystem read-only
-Generating ed25519 Key...
+Thanks!
 
-No user exists for uid 0
-Starting sshd: Privilege separation user sshd does not exist
-OK
-
-ARM Testing System
-arm-testing login:
----------------------------------------------------------------
-
-I start it with this command:
-sudo qemu-system-arm -M vexpress-a9 -m 512 -kernel zImage  -sd
-rootfs.ext2 -append "root=/dev/mmcblk0 rw physmap.enabled=0
-console=ttyAMA0" -net tap -net nic -net
-user,hostfwd=tcp:0.0.0.0:2222-:22 -nographic
-
-Any ideas as to what has happened and how to fix it?
-You can view my buildroot config file here:
-http://www.the-playground.dk/buildroot_config.txt
-
-Robert
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 246 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140703/d561c064/attachment.asc>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
