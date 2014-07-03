@@ -1,58 +1,97 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 3 Jul 2014 17:32:33 +0300
-Subject: [Buildroot] Incorrect ABI setting on ubuntu 14.04LTS
-In-Reply-To: <CAFRxoJnfkQ1xZDd_Q5h_qzWXkrsJCdUTBv6APB6VvFFH1ad20g@mail.gmail.com>
-References: <CAFRxoJn5x=5YbSCOsMu7XB1PS2Dv2=fyih7nrwMmde0YtveeTQ@mail.gmail.com>
- <20140703092010.GO9025@tarshish> <20140703092420.GP9025@tarshish>
- <20140703113316.3100783a@free-electrons.com>
- <CAFRxoJnfkQ1xZDd_Q5h_qzWXkrsJCdUTBv6APB6VvFFH1ad20g@mail.gmail.com>
-Message-ID: <20140703143233.GR9025@tarshish>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 03 Jul 2014 16:34:43 +0200
+Subject: [Buildroot] [PATCH] perl-net-ssleay: fix build
+In-Reply-To: <1404394272-5894-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Thu, 3 Jul 2014 15:31:12 +0200")
+References: <1404394272-5894-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <87mwcq8q9o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Marco,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Thu, Jul 03, 2014 at 04:27:14PM +0200, Marco Pastorelli wrote:
-> Thanks guys for the valuable help!
-> 
-> here's the output:
-> 
-> $ echo 'int main(void) {}' |
-> ./output/host/opt/ext-toolchain/bin/arm-linux-gnueabihf-gcc -x c -o
-> /dev/null -
-> /mnt/ocz-vector/projects/bb-buildroot-2014.05/output/host/opt/ext-toolchain/bin/../libexec/gcc/arm-linux-gnueabihf/4.8.3/cc1:
-> error while loading shared libraries: libz.so.1: cannot open shared object
-> file: No such file or directory
+ > add $(2)_CONV_ENV in perl infrastructure
 
-I guess your host lacks a 32bit version of libz. Try installing the ia32-libs 
-package.
+Please send that as a seperate patch.
 
-baruch
+ > see http://autobuild.buildroot.net/results/135/135867ef85535863e3647cc5fb82accb6f77612c/
 
-> 2014-07-03 11:33 GMT+02:00 Thomas Petazzoni <
-> thomas.petazzoni at free-electrons.com>:
-> > On Thu, 3 Jul 2014 12:24:20 +0300, Baruch Siach wrote:
-> >
-> > > > What is the output of:
-> > > >
-> > > > echo 'int main(void) {}' | arm-linux-gnueabihf-gcc -x c -o /dev/null
-> > > >
-> > > > on the problematic machine?
-> > >
-> > > Forgot a dash. The command should be:
-> > >
-> > > echo 'int main(void) {}' | arm-linux-gnueabihf-gcc -x c -o /dev/null -
-> >
-> > You should maybe indicate that this has to be done with the
-> > arm-linux-gnueabihf-gcc compiler downloaded and installed by Buildroot,
-> > so:
-> >
-> >         ./output/host/opt/ext-toolchain/bin/arm-linux-gnueabihf-gcc
+
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > ---
+ >  package/perl-net-ssleay/perl-net-ssleay.mk | 7 +++++++
+ >  package/pkg-perl.mk                        | 4 ++++
+ >  2 files changed, 11 insertions(+)
+
+ > diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+ > index 413fdf0..48ff715 100644
+ > --- a/package/perl-net-ssleay/perl-net-ssleay.mk
+ > +++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+ > @@ -11,4 +11,11 @@ PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
+ >  PERL_NET_SSLEAY_LICENSE = OpenSSL
+ >  PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
+ 
+ > +PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
+ > +
+ > +define PERL_NET_SSLEAY_FIX_MAKEFILE
+ > +	$(SED) 's/^LDDLFLAGS =.*/LDDLFLAGS = -shared/' $(@D)/Makefile
+
+What about BR2_PREFER_STATIC_LIB builds?
+
+Looking at the build failure, the problem seems to be about a mix of
+host and target flags (E.G. the -L/usr/lib), rather than anything about
+static/shared linking.
+
+ > +endef
+ > +PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
+ > +
+ >  $(eval $(perl-package))
+ > diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+ > index 5cfdc77..8c45001 100644
+ > --- a/package/pkg-perl.mk
+ > +++ b/package/pkg-perl.mk
+ > @@ -49,6 +49,7 @@ ifeq ($(4),target)
+ >  # Configure package for target
+ >  define $(2)_CONFIGURE_CMDS
+ >  	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ > +		$$($(2)_CONF_ENV) \
+ >  		PERL_MM_USE_DEFAULT=1 \
+ >  		perl Build.PL \
+ >  			--config ar="$$(TARGET_AR)" \
+ > @@ -69,6 +70,7 @@ define $(2)_CONFIGURE_CMDS
+ >  			--install_path libdoc=/usr/share/man/man3 \
+ >  			$$($(2)_CONF_OPT); \
+ >  	else \
+ > +		$$($(2)_CONF_ENV) \
+ >  		PERL_MM_USE_DEFAULT=1 \
+ >  		PERL_AUTOINSTALL=--skipdeps \
+ >  		perl Makefile.PL \
+ > @@ -95,12 +97,14 @@ else
+ >  # Configure package for host
+ >  define $(2)_CONFIGURE_CMDS
+ >  	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ > +		$$($(2)_CONF_ENV) \
+ >  		PERL_MM_USE_DEFAULT=1 \
+ >  		perl Build.PL \
+ >  			--install_base $$(HOST_DIR)/usr \
+ >  			--installdirs vendor \
+ >  			$$($(2)_CONF_OPT); \
+ >  	else \
+ > +		$$($(2)_CONF_ENV) \
+ >  		PERL_MM_USE_DEFAULT=1 \
+ >  		PERL_AUTOINSTALL=--skipdeps \
+ >  		perl Makefile.PL \
+ > -- 
+ > 1.9.1
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
