@@ -1,39 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jul 2014 13:21:19 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: bump to version 214
-In-Reply-To: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140703132119.014619c0@free-electrons.com>
+From: Nathaniel Roach <nroach44@gmail.com>
+Date: Thu, 03 Jul 2014 19:36:50 +0800
+Subject: [Buildroot] systed-remount-fs rootfs issue
+Message-ID: <53B54052.6040900@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+Hi!
 
-On Sun, 29 Jun 2014 21:35:37 +0200, Eric Le Bihan wrote:
+I'm trying to get buildroot working on an x86_64 machine (pentium d) and
+I was having some trouble getting root as rw. I've found that even if /
+is set to mount rw in fstab, systemd-remount-fs doesn't mount it as rw
+(as from what I've read it should).
 
-> +SYSTEMD_CONF_ENV = \
-> +	ac_cv_path_KMOD=/usr/bin/kmod
-
-I just got a report from "nroach44" on IRC (Cc'ed to this e-mail) that
-this chunk is actually also needed with systemd 213. From the IRC
-discussions:
-
-13:16 < NRoach44> kmod is being put in /usr/bin
-13:17 < NRoach44> when systemd trys to run it from /bin
-13:18 < kos_tom> with which version of systemd are you seeing this kmod issue?
-13:18 < NRoach44> 213
-
-So I obviously pointed "nroach44" to your 214 systemd bump patch, but I
-believe that since the kmod issue exists with systemd 213, the chunk
-above should probably be part of a separate patch.
+I have however, got rw on root by adding "rw" to the kernel command line.
 
 Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 880 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140703/b7d2e53b/attachment.asc>
