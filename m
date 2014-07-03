@@ -1,85 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Jul 2014 23:33:25 +0200
-Subject: [Buildroot] [git commit] freetype: fix double installation
-Message-ID: <20140703213741.D3F909D150@busybox.osuosl.org>
+Date: Thu, 3 Jul 2014 23:36:42 +0200
+Subject: [Buildroot] [git commit] dbus-python: bump to version 1.2.0
+Message-ID: <20140703213741.DD4D09D14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=cc5b8e72308f523b3826ada5fe7009b722bf9a79
+commit: http://git.buildroot.net/buildroot/commit/?id=94423c82518aba5dbe9bfa25200822f82ecfd670
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Eric_L on IRC reported that the following strange behavior: the first
-installation of freetype works, and then each time you do "make
-freetype-dirclean freetype", it fails and works alternatively, in a
-fully reproducible manner.
-
-After some investigation, it turns out that the problem is caused by
-the creation of the symbolic link /usr/include/freetype2/freetype ->
-/usr/include/freetype2 for backward compatibility reasons by
-freetype.mk, in a post-staging installation hook. As the symbolic link
-is created *after* the installation, the first installation works
-fine. However, the second installation fails because the freetype
-build system does:
-
- ./builds/unix/mkinstalldirs \
-         /home/thomas/projets/buildroot/output/target/usr/include/freetype2/config
-  [...]
- rm -f /home/thomas/projets/buildroot/output/target/usr/include/freetype2/freetype/config/*
- rmdir /home/thomas/projets/buildroot/output/target/usr/include/freetype2/freetype/config
-  [...]
- /usr/bin/install -c -m 644 ./builds/unix/ftconfig.h               \
-       /home/thomas/projets/buildroot/output/target/usr/include/freetype2/config/ftconfig.h
-
-This last line fails, because due to the symbolic link mentioned above, the
-command 'rmdir
-/home/thomas/projets/buildroot/output/target/usr/include/freetype2/freetype/config'
-has in fact the consequence of deleting the 'config' directory created
-by the mkinstalldirs command.
-
-The proposed solution to solve this problem is to remove the symbolic link
-in a pre-install hook, run the installation, and restore the symbolic link.
-
-[Peter: minor tweaks to commit message / comment]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.mk |   18 ++++++++++++++++--
- 1 files changed, 16 insertions(+), 2 deletions(-)
+ ...us-python-0001-fix-python-configure-check.patch |   27 ++++++++++++++++++
+ .../dbus-python-fix-python-configure-check.patch   |   30 --------------------
+ package/dbus-python/dbus-python.mk                 |    2 +-
+ 3 files changed, 28 insertions(+), 31 deletions(-)
 
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index a6ae0a0..19dbd86 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
-@@ -70,12 +70,26 @@ define FREETYPE_FIX_CONFIG_FILE_LIBS
- endef
- FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
- 
--# Version 2.5.1 reorganized headers out of freetype2/freetype
--# It's unexpected for some packages so symlink it until it spreads upstream
-+# Version 2.5.1 reorganized headers out of freetype2/freetype.
-+# It is unexpected for some packages so symlink it until it spreads
-+# upstream. Note that we also have to remove the symlink prior to the
-+# installation process, because the installation process of freetype
-+# removes usr/include/Freetype2/freetype/config, before installing
-+# something in usr/include/Freetype2/config/ which no longer exists
-+# due to the symbolic link.
-+define FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
-+	$(RM) -f $(STAGING_DIR)/usr/include/freetype2/freetype
-+endef
-+FREETYPE_PRE_INSTALL_STAGING_HOOKS += FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
- define FREETYPE_FIX_FREETYPE_INCLUDE
- 	ln -sf . $(STAGING_DIR)/usr/include/freetype2/freetype
- endef
- FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_FREETYPE_INCLUDE
+diff --git a/package/dbus-python/dbus-python-0001-fix-python-configure-check.patch b/package/dbus-python/dbus-python-0001-fix-python-configure-check.patch
+new file mode 100644
+index 0000000..2df4da8
+--- /dev/null
++++ b/package/dbus-python/dbus-python-0001-fix-python-configure-check.patch
+@@ -0,0 +1,27 @@
++Python: add am_cv_python_includes to override runtime python-config check
++[Gustavo: update for dbus-python 1.2.0]
 +
-+define HOST_FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
-+	$(RM) -f $(HOST_DIR)/usr/include/freetype2/freetype
-+endef
-+HOST_FREETYPE_PRE_INSTALL_HOOKS += FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
- define HOST_FREETYPE_FIX_FREETYPE_INCLUDE
- 	ln -sf . $(HOST_DIR)/usr/include/freetype2/freetype
- endef
++diff -Nura dbus-python-1.2.0.orig/configure dbus-python-1.2.0/configure
++--- dbus-python-1.2.0.orig/configure	2013-05-08 04:48:42.000000000 -0300
+++++ dbus-python-1.2.0/configure	2014-07-03 16:54:25.922727033 -0300
++@@ -11762,6 +11762,12 @@
++ else
++     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Python headers using $PYTHON-config --includes" >&5
++ $as_echo_n "checking for Python headers using $PYTHON-config --includes... " >&6; }
+++if test "${am_cv_python_includes+set}" = set; then
+++  $as_echo_n "(cached) $ECHO_C" >&6
+++  PYTHON_INCLUDES=${am_cv_python_includes}
+++  { $as_echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
+++$as_echo_t "${ECHO_T}$PYTHON_INCLUDES" >&6; }
+++else
++   PYTHON_INCLUDES=`$PYTHON-config --includes`
++   if test $? = 0; then
++     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON_INCLUDES" >&5
++@@ -11781,6 +11787,7 @@
++ $as_echo "$PYTHON_INCLUDES" >&6; }
++   fi
++ fi
+++fi
++ 
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether those headers are sufficient" >&5
++ $as_echo_n "checking whether those headers are sufficient... " >&6; }
+diff --git a/package/dbus-python/dbus-python-fix-python-configure-check.patch b/package/dbus-python/dbus-python-fix-python-configure-check.patch
+deleted file mode 100644
+index 30eeb48..0000000
+--- a/package/dbus-python/dbus-python-fix-python-configure-check.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-Python: add am_cv_python_includes to override runtime python-config check
+----
+- configure |    7 +++++++
+- 1 file changed, 7 insertions(+)
+-
+-Index: dbus-python-0.83.0/configure
+-===================================================================
+---- dbus-python-0.83.0.orig/configure
+-+++ dbus-python-0.83.0/configure
+-@@ -10176,6 +10176,12 @@
+- 
+- { echo "$as_me:$LINENO: checking for Python headers using $PYTHON-config --includes" >&5
+- echo $ECHO_N "checking for Python headers using $PYTHON-config --includes... $ECHO_C" >&6; }
+-+if test "${am_cv_python_includes+set}" = set; then
+-+  echo $ECHO_N "(cached) $ECHO_C" >&6
+-+  PYTHON_INCLUDES=${am_cv_python_includes}
+-+  { echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
+-+echo "${ECHO_T}$PYTHON_INCLUDES" >&6; }
+-+else
+- PYTHON_INCLUDES=`$PYTHON-config --includes`
+- if test $? = 0; then
+-   { echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
+-@@ -10194,6 +10200,7 @@
+-   { echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
+- echo "${ECHO_T}$PYTHON_INCLUDES" >&6; }
+- fi
+-+fi
+- 
+- { echo "$as_me:$LINENO: checking whether those headers are sufficient" >&5
+- echo $ECHO_N "checking whether those headers are sufficient... $ECHO_C" >&6; }
+diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
+index 4dd3d8c..930eb2c 100644
+--- a/package/dbus-python/dbus-python.mk
++++ b/package/dbus-python/dbus-python.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_PYTHON_VERSION = 0.83.0
++DBUS_PYTHON_VERSION = 1.2.0
+ DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python/
+ DBUS_PYTHON_INSTALL_STAGING = YES
+ DBUS_PYTHON_LICENSE = MIT
