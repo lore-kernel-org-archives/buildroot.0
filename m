@@ -1,39 +1,45 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Thu,  3 Jul 2014 18:53:26 +0200
-Subject: [Buildroot] [v2 3/3] perl-net-ssleay: fix build
-In-Reply-To: <1404406406-9209-1-git-send-email-francois.perrad@gadz.org>
-References: <1404406406-9209-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1404406406-9209-3-git-send-email-francois.perrad@gadz.org>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu,  3 Jul 2014 18:57:33 +0200
+Subject: [Buildroot] [PATCH 0/6] systemd improvements
+Message-ID: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the following error occurs after the previous patch
-    arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-shared '
+Hi!
 
-so, force LDDLFLAGS without quote
+This series contains the following improvements for systemd:
 
-note: previously LDDLFLAGS was correct
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-net-ssleay/perl-net-ssleay.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ - fix systemd support in dbus.
+ - fix kmod path in service files.
+ - bump version to 214.
+ - new hook to fix /var, /run.
+ - enable network time synchronization if selected.
 
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 7e4c194..48ff715 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -13,4 +13,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
- 
- PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
- 
-+define PERL_NET_SSLEAY_FIX_MAKEFILE
-+	$(SED) 's/^LDDLFLAGS =.*/LDDLFLAGS = -shared/' $(@D)/Makefile
-+endef
-+PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
-+
- $(eval $(perl-package))
--- 
-1.9.1
+It takes into account the various suggestions from ThomasP and Arnout and
+supersedes the previous bump patch.
+
+Best regards,
+ELB
+
+Eric Le Bihan (6):
+  dbus: enable systemd support
+  systemd: revert getty service installation
+  systemd: fix path for kmod in service files
+  systemd: bump to version 214
+  systemd: add hook to fix /run, /var
+  systemd: install timesync service if selected
+
+ package/dbus/Config.in                             |    1 +
+ package/dbus/dbus.mk                               |    9 +++-
+ ...ystemd-03-fix-am-path-libgcrypt-no-found.patch} |    0
+ package/systemd/systemd-03-fix-no-gtk-doc.patch    |   23 --------
+ package/systemd/systemd.mk                         |   56 +++++++++++++-------
+ 5 files changed, 46 insertions(+), 43 deletions(-)
+ rename package/systemd/{systemd-04-fix-am-path-libgcrypt-no-found.patch => systemd-03-fix-am-path-libgcrypt-no-found.patch} (100%)
+ delete mode 100644 package/systemd/systemd-03-fix-no-gtk-doc.patch
+
+--
+1.7.10.4
