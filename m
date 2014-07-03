@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Jul 2014 17:00:37 -0300
-Subject: [Buildroot] [PATCH 2/4] bootutils: add license information
+Date: Thu,  3 Jul 2014 17:00:38 -0300
+Subject: [Buildroot] [PATCH 3/4] cloop: add license information
 In-Reply-To: <1404417639-5879-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1404417639-5879-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404417639-5879-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1404417639-5879-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/bootutils/bootutils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/cloop/cloop.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/bootutils/bootutils.mk b/package/bootutils/bootutils.mk
-index caee2fd..014df8f 100644
---- a/package/bootutils/bootutils.mk
-+++ b/package/bootutils/bootutils.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index adbd69a..fb0bdf3 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -7,6 +7,8 @@
+ CLOOP_VERSION = 2.634-1
+ CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.gz
+ CLOOP_SITE = http://debian-knoppix.alioth.debian.org/packages/sources/cloop
++CLOOP_LICENSE = GPLv2
++CLOOP_LICENSE_FILES = README
  
- BOOTUTILS_VERSION = 1.0.0
- BOOTUTILS_SITE = http://downloads.sourceforge.net/project/bootutils/Stable/v$(BOOTUTILS_VERSION)
--
- BOOTUTILS_CONF_OPT = --prefix=/ --exec-prefix=/
-+BOOTUTILS_LICENSE = GPLv2+
+ HOST_CLOOP_DEPENDENCIES = host-zlib
  
- $(eval $(autotools-package))
 -- 
 1.8.5.5
