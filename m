@@ -1,37 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jul 2014 18:19:46 +0200
-Subject: [Buildroot] Incorrect ABI setting on ubuntu 14.04LTS
-In-Reply-To: <20140703150914.GT9025@tarshish>
-References: <CAFRxoJn5x=5YbSCOsMu7XB1PS2Dv2=fyih7nrwMmde0YtveeTQ@mail.gmail.com>
- <20140703092010.GO9025@tarshish> <20140703092420.GP9025@tarshish>
- <20140703113316.3100783a@free-electrons.com>
- <CAFRxoJnfkQ1xZDd_Q5h_qzWXkrsJCdUTBv6APB6VvFFH1ad20g@mail.gmail.com>
- <20140703164206.40a17ed0@free-electrons.com>
- <20140703145401.GS9025@tarshish>
- <20140703165750.3529d265@free-electrons.com>
- <20140703150914.GT9025@tarshish>
-Message-ID: <20140703181946.697c2ff8@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  3 Jul 2014 19:32:58 +0300
+Subject: [Buildroot] [PATCH] toolchain/helpers.mk: don't discard
+	check_arm_abi stderr
+Message-ID: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Since we are only need to know whether the compiler runs successfully, and
+stderr is empty for the success case, there is no need to redirect stderr to
+/dev/null. Moreover, stderr output of the failing case reveals valuable
+information on the real failure reason.
 
-On Thu, 3 Jul 2014 18:09:14 +0300, Baruch Siach wrote:
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ toolchain/helpers.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Related to this: why do we redirect stderr of the compiler invocation to 
-> /dev/null in check_arm_abi? We are not interested in the output itself as we 
-> only check whether the compiler runs successfully. When the test succeeds it 
-> should not output anything. Whereas in the failing case the output is very 
-> interesting.
-
-Indeed, would make sense to not redirect stderr to give more clue to
-the user about what's going on.
-
-Thomas
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index c85968054012..8eb71efc19eb 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -298,7 +298,7 @@ check_arm_abi = \
+ 		echo "External toolchain uses the unsuported OABI" ; \
+ 		exit 1 ; \
+ 	fi ; \
+-	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - 2>/dev/null; then \
++	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o /dev/null - ; then \
+ 		abistr_$(BR2_ARM_EABI)='EABI'; \
+ 		abistr_$(BR2_ARM_EABIHF)='EABIhf'; \
+ 		echo "Incorrect ABI setting: $${abistr_y} selected, but toolchain is incompatible"; \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
