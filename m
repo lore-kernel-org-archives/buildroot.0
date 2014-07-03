@@ -1,61 +1,106 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu,  3 Jul 2014 08:30:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-02
-Message-ID: <20140703063012.4FA97101718@stock.ovh.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 03 Jul 2014 07:42:29 +0200
+Subject: [Buildroot] [PATCH] infra: /usr support: STAGING_DIR can be
+	outside BASE_DIR
+In-Reply-To: <4f110d39879dacbf50a8.1404135990@localhost>
+References: <4f110d39879dacbf50a8.1404135990@localhost>
+Message-ID: <53B4ED45.1070704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-07-02
-===============================
+On 30/06/14 15:46, Thomas De Schampheleire wrote:
+> If the user sets a custom BR2_HOST_DIR, then STAGING_DIR is not under
+> BASE_DIR. The .pc/.la file fixup commands incorrectly made this assumption
+> and thus should be corrected.
+> 
+> Additionally, this patch rewords the comment in pkg-autotools that explains
+> the replacements.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+>  package/pkg-autotools.mk |  23 ++++++++++++-----------
+>  package/pkg-generic.mk   |   5 +++--
 
-        success : 94 
-       failures : 18 
-       timeouts : 1  
-          TOTAL : 113
+ Doesn't QT5_LA_PRL_FILES_FIXUP need this as well?
 
-Classification of failures by reason
-====================================
+ Also, perhaps you should mention in the commit message the for -> xargs change.
 
-                    sdl-1.2.15 | 4 
-                    fltk-1.3.2 | 3 
-make: *** [core-dependencie... | 2 
-                 webkit-1.11.5 | 1 
-                   systemd-213 | 1 
-snappy-1ff9be9b8fafc8528ca9... | 1 
-                oprofile-0.9.9 | 1 
-host-gdb-6be65fb56ea6694a92... | 1 
-          google-breakpad-1320 | 1 
-          perl-net-ssleay-1.64 | 1 
-           xapp_bdftopcf-1.0.4 | 1 
-                    parted-3.1 | 1 
-                   lcdapi-v0.4 | 1 
 
-Detail of failures
-===================
+ Regards,
+ Arnout
 
-    xtensa |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/a6562012192a96c565e4b844d9804d8abaef1fa8/
-    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/0d0955b5b5875835481342ff765a4b056bfb553c/
-      mips |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/7919fbe45826182bd04309517b43eb71de93ec0f/
-  mips64el |           google-breakpad-1320 | NOK | http://autobuild.buildroot.net/results/e0acfc8c289cfe2513f06193ba74e71ebfc377ba/
-microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/c8953fc46028e574cd343174ba57a66514621c69/
-      bfin |                    lcdapi-v0.4 | NOK | http://autobuild.buildroot.net/results/7491be18636f33828cc7e5d44a2978f46ca5eaff/
-       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/228690645b8cce2c33e23380b3681695122eab98/
-       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/4d861f2979b7a432c410b4adf492825fe85047b6/
-       arm |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/ec8a4814575eaf86d233514b97d7a8cb7babdbb4/
-       arm |                     parted-3.1 | NOK | http://autobuild.buildroot.net/results/d4f51796170a17c2c4d411aae2d704885c742a6b/
-       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/135867ef85535863e3647cc5fb82accb6f77612c/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/cd76ffd6f4752ade5eab2623aafd7701c214e8bb/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/f5c36837dbc92bee25833e5665844cd84e53d305/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/5fd6e9c5c39f2989e54f8e99c29b0944746f2321/
-   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/1b4c04c3be8c393631c2d98b05f534cfaee95e84/
-      i686 | snappy-1ff9be9b8fafc8528ca9... | NOK | http://autobuild.buildroot.net/results/ff98c0881aa229aa54b7ec78d36118aa231fdf1b/
-       arm |                    systemd-213 | NOK | http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
-      i686 |                  webkit-1.11.5 | TIM | http://autobuild.buildroot.net/results/b5464098d892e611aec5880811ddecec25b8b26c/
-microblazeel |            xapp_bdftopcf-1.0.4 | NOK | http://autobuild.buildroot.net/results/a526e98cab473910178682ef37f74462aa5b4b0f/
+
+>  2 files changed, 15 insertions(+), 13 deletions(-)
+> 
+> diff -r 5471dd6af081 -r 4f110d39879d package/pkg-autotools.mk
+> --- a/package/pkg-autotools.mk	Sun Jun 29 12:39:06 2014 -0300
+> +++ b/package/pkg-autotools.mk	Mon Jun 30 15:46:20 2014 +0200
+> @@ -267,25 +267,26 @@
+>  # Most autotools packages install libtool .la files alongside any
+>  # installed libraries. These .la files sometimes refer to paths
+>  # relative to the sysroot, which libtool will interpret as absolute
+> -# paths to host libraries instead of the target libraries. Since we
+> -# configure with --prefix=/usr, such absolute paths start with
+> -# /usr. So we add $(STAGING_DIR) in front of any path that starts with
+> -# /usr.
+> +# paths to host libraries instead of the target libraries. Since this
+> +# is not what we want, these paths are fixed by prefixing them with
+> +# $(STAGING_DIR).  As we configure with --prefix=/usr, this fix
+> +# needs to be applied to any path that starts with /usr.
+>  #
+> -# To protect against the case that the output directory itself is
+> -# under /usr, we first substitute away any occurences of the output
+> -# directory to @BASE_DIR at .
+> +# To protect against the case that the output or staging directories
+> +# themselves are under /usr, we first substitute away any occurrences
+> +# of these directories as @BASE_DIR@ and @STAGING_DIR at . Note that
+> +# STAGING_DIR can be outside BASE_DIR when the user sets BR2_HOST_DIR
+> +# to a custom value.
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+>  	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+> -	for i in $$$$(find $$(STAGING_DIR)/usr/lib* -name "*.la"); do \
+> +	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs \
+>  		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+> +			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
+>  			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+>  			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+> -			-e "s:@BASE_DIR@:$$(BASE_DIR):g" \
+> -			$$$$i; \
+> -	done
+> +			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
+>  endef
+>  endif
+>  
+> diff -r 5471dd6af081 -r 4f110d39879d package/pkg-generic.mk
+> --- a/package/pkg-generic.mk	Sun Jun 29 12:39:06 2014 -0300
+> +++ b/package/pkg-generic.mk	Mon Jun 30 15:46:20 2014 +0200
+> @@ -202,9 +202,10 @@
+>  	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+>  		$(call MESSAGE,"Fixing package configuration files") ;\
+>  			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+> +				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
+>  				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+> -				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+> -				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+> +				-e "s,-I/usr/,-I at STAGING_DIR/usr/,g" \
+> +				-e "s,-L/usr/,-L at STAGING_DIR/usr/,g" \
+>  				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
+>  				-e "s, at BASE_DIR@,$(BASE_DIR),g" \
+>  				$(addprefix $(STAGING_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ;\
+> 
+> 
 
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
