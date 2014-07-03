@@ -1,79 +1,107 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 3 Jul 2014 22:26:23 +0200
-Subject: [Buildroot] [PATCH] freetype: fix double installation
-In-Reply-To: <1404418764-3455-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1404418764-3455-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140703202623.GA23331@free.fr>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Thu, 3 Jul 2014 23:07:14 +0200
+Subject: [Buildroot] Raspberry Pi: recommendations for web kiosk
+In-Reply-To: <CAAXf6LXiNMEjoN1Pv=2Qu73oJgc+jCsEizAFo1=WV+V57b27WQ@mail.gmail.com>
+References: <CAAXf6LXK64M-BO3V-K6e_27m7UhYOe3N01oXBSVfF6NUdqrARA@mail.gmail.com>
+ <20140626124257.GA13409@rmm-p1267483>
+ <CAAXf6LUR=nSyh3GPk037uYUOE3hRngWmrj+YOxiQe6RD75TRBw@mail.gmail.com>
+ <20140626170127.GA3742@ned>
+ <CAAXf6LXiNMEjoN1Pv=2Qu73oJgc+jCsEizAFo1=WV+V57b27WQ@mail.gmail.com>
+Message-ID: <20140703210713.GA22181@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Wed, Jul 02, 2014 at 11:04:05AM +0200, Thomas De Schampheleire wrote:
+> Hi Eric,
+>
+> On Thu, Jun 26, 2014 at 7:01 PM, Eric Le Bihan
+> <eric.le.bihan.dev@free.fr> wrote:
+> > On Thu, Jun 26, 2014 at 03:15:25PM +0200, Thomas De Schampheleire wrote:
+> >> Hi Eric,
+> >>
+> >> On Thu, Jun 26, 2014 at 2:42 PM, Eric Le Bihan
+> >> <eric.le.bihan.dev@free.fr> wrote:
+> >> > Hi!
+> >> > On Wed, Jun 25, 2014 at 03:02:29PM +0200, Thomas De Schampheleire wrote:
+> >> >> Hi,
+> >> >>
+> >> >> We currently use a Raspberry Pi as a simple web-wall. It cycles every
+> >> >> two minutes between two (non-local) web pages, one of which contains a
+> >> >> few iframes.
+> >> >>
+> >> >> While this can hardly be called a resource-intensive task, the
+> >> >> Raspberry Pi by no means performs this fluently. The pages load
+> >> >> relatively slow, and administration tasks on this pi also suffer from
+> >> >> hickups.
+> >> >>
+> >> >> The pi currently contains a raspbian image (not done by me, I swear!
+> >> >> :-) ) and uses chromium in kiosk mode to display the web pages.
+> >> >>
+> >> >> My basic question is: can I expect to get better performance by
+> >> >> setting up a custom buildroot image, or is rpi so poor in performance,
+> >> >> even for this mundane task?
+> >> >> Which packages should I select to achieve this?
+> >> >>
+> >> >> Do I need an X.org or not really?
+> >> >> If X.org is needed, does 'Kdrive / tinyX' work on rpi, or should I
+> >> >> select modular x.org, and how do these compare.
+> >> >> (as you notice, I have never set up embedded boards with graphical stuff).
+> >> >>
+> >> >> Which browser should/could I use? Preferably something that can run in
+> >> >> fullscreen mode as this is a kiosk-like board.
+> >> >>
+> >> >> Is rpi-userland needed / recommended? How would I benefit from it?
+> >> >>
+> >> >> Any other recommendations/tips are welcome too, of course.
+> >> > Just my two cents: how about using a custom application based on QtWebkit with
+> >> > EGLFS [1]?
+> >> >
+> >>
+> >> This is not a commercial product, but rather an internal information
+> >> screen used on the workfloor. So writing custom applications, which I
+> >> assume is quite some work, is not acceptable. I am hoping for a more
+> >> or less out-of-the-box solution...
+> > Well, thanks to QML and QtWebkit, that is pretty doable. I hacked a quick
+> > example at https://github.com/elebihan/webkiosk, inspired by the Qt examples.
+> >
+> > AFAIK, running it with the '-platform eglfs' option should do the trick (not
+> > tested, my RPi is out of order :-( )
+> >
+>
+> Is this a QT4 or QT5 project?
+> I enabled qt5 in buildroot, together with the qt5webkit and qt5quick1
+> packages, and then ran qmake in your webkiosk project. However, 'qml'
+> and 'quick' modules are not found.
+> How is this supposed to work?
 
-On 2014-07-03 22:19 +0200, Thomas Petazzoni spake thusly:
-[--SNIP--]
-> The proposed solution to solve this problem is to remove the symbolic
-> in a pre-install hook, run the installation, and restore the symbolic
-> link.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+It's a Qt5 project. I added a package for webkiosk in my external
+customization for Buildroot [1], as well as a configuration for building an
+image for RPi (demo_webkiosk_rpi_defconfig). The "elebihan/qt5wayland" branch
+of my Buildroot repo [2] should be used, because a patch is needed to build
+qt5base with EGLFS support [3].
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Though the program runs smoothly on x86 and the build is successful, executing
+the program on the target ends up with a black screen... The command used is:
 
-Regards,
-Yann E. MORIN.
+  $ webkiosk -platform eglfs
 
-> ---
->  package/freetype/freetype.mk | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-> index a6ae0a0..b267806 100644
-> --- a/package/freetype/freetype.mk
-> +++ b/package/freetype/freetype.mk
-> @@ -70,12 +70,26 @@ define FREETYPE_FIX_CONFIG_FILE_LIBS
->  endef
->  FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_CONFIG_FILE_LIBS
->  
-> -# Version 2.5.1 reorganized headers out of freetype2/freetype
-> -# It's unexpected for some packages so symlink it until it spreads upstream
-> +# Version 2.5.1 reorganized headers out of freetype2/freetype It's
-> +# unexpected for some packages so symlink it until it spreads
-> +# upstream. Note that we also have to remove the symlink prior to the
-> +# installation process, because the installation process of freetype
-> +# removes usr/include/Freetype2/freetype/config, before installing
-> +# something in usr/include/Freetype2/config/ which no longer exists
-> +# due to the symbolic link.
-> +define FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
-> +	$(RM) -f $(STAGING_DIR)/usr/include/freetype2/freetype
-> +endef
-> +FREETYPE_PRE_INSTALL_STAGING_HOOKS += FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
->  define FREETYPE_FIX_FREETYPE_INCLUDE
->  	ln -sf . $(STAGING_DIR)/usr/include/freetype2/freetype
->  endef
->  FREETYPE_POST_INSTALL_STAGING_HOOKS += FREETYPE_FIX_FREETYPE_INCLUDE
-> +
-> +define HOST_FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
-> +	$(RM) -f $(HOST_DIR)/usr/include/freetype2/freetype
-> +endef
-> +HOST_FREETYPE_PRE_INSTALL_HOOKS += FREETYPE_REMOVE_FREETYPE_INCLUDE_SYMLINK
->  define HOST_FREETYPE_FIX_FREETYPE_INCLUDE
->  	ln -sf . $(HOST_DIR)/usr/include/freetype2/freetype
->  endef
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+I'll investigate as soon as I'll understand why I can not use my USB keyboard
+and the Ethernet connection as the same time (D'Oh! Not convenient for
+debugging)...
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Looking at the sources in qt5quick1, I don't see any reference to the
+> installation of a 'quick' module, only of 'declarative'.
+>
+> Thanks,
+> Thomas
+
+Best regards,
+ELB
+
+[1] https://github.com/elebihan/buildroot-ext-elb
+[2] https://github.com/elebihan/buildroot/tree/elebihan/qt5wayland
+[3] https://github.com/elebihan/buildroot/commit/9593273c4341ccfce5b0d8667e00c06db0b00fc4
