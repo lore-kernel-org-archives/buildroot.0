@@ -1,50 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Jul 2014 20:20:12 +0200
-Subject: [Buildroot] [v2 3/3] perl-net-ssleay: fix build
-In-Reply-To: <1404406406-9209-3-git-send-email-francois.perrad@gadz.org>
-References: <1404406406-9209-1-git-send-email-francois.perrad@gadz.org>
- <1404406406-9209-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140703202012.580a0f68@free-electrons.com>
+Date: Thu, 3 Jul 2014 20:22:42 +0200
+Subject: [Buildroot] Filesystem being corrupted
+In-Reply-To: <53B567C2.2070502@the-playground.dk>
+References: <53B5331B.9030703@the-playground.dk>
+ <53B54CEC.5070803@zacarias.com.ar>
+ <53B55511.8030706@the-playground.dk>
+ <53B567C2.2070502@the-playground.dk>
+Message-ID: <20140703202242.223b38ab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Robert Larsen,
 
-See: this patch has exactly the same title as the previous one. That's
-a good indication that the title is not sufficiently distinctive.
-
-On Thu,  3 Jul 2014 18:53:26 +0200, Francois Perrad wrote:
-> the following error occurs after the previous patch
->     arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-shared '
+On Thu, 03 Jul 2014 16:25:06 +0200, Robert Larsen wrote:
+> On 07/03/2014 03:05 PM, Robert Larsen wrote:
+> > On 07/03/2014 02:30 PM, Gustavo Zacarias wrote:
+> >> Any reason in particular to stick with vexpress?
+> > Not really, that was what I was used to. I'll try versatile.
+> >
+> Hmm, building with versatile defconfig hangs qemu. I tried both '-M
+> versatilepb' and '-M versatileab'
+> Both hang after this message:
 > 
-> so, force LDDLFLAGS without quote
+> Uncompressing Linux... done, booting the kernel.
 > 
-> note: previously LDDLFLAGS was correct
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-net-ssleay/perl-net-ssleay.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-> index 7e4c194..48ff715 100644
-> --- a/package/perl-net-ssleay/perl-net-ssleay.mk
-> +++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-> @@ -13,4 +13,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
->  
->  PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
->  
-> +define PERL_NET_SSLEAY_FIX_MAKEFILE
-> +	$(SED) 's/^LDDLFLAGS =.*/LDDLFLAGS = -shared/' $(@D)/Makefile
-> +endef
-> +PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
 
-What about BR2_PREFER_STATIC_LIB=y configurations, as Peter asked in
-the review of your initial patch?
+Most likely incorrect kernel configuration.
 
-Thanks!
+You should start with the qemu_arm_versatile_defconfig available in
+Buildroot, which uses a correct kernel configuration.
+
+Best regards,
 
 Thomas
 -- 
