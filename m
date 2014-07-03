@@ -1,36 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Jul 2014 16:50:42 -0300
-Subject: [Buildroot] [PATCH 2/2] dbus-glib: security bump to version 0.102
-In-Reply-To: <1404417042-28116-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1404417042-28116-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404417042-28116-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 3 Jul 2014 21:56:09 +0200
+Subject: [Buildroot] [PATCH] infra: /usr support: STAGING_DIR can be
+	outside BASE_DIR
+In-Reply-To: <53B4ED45.1070704@mind.be>
+References: <4f110d39879dacbf50a8.1404135990@localhost>
+ <53B4ED45.1070704@mind.be>
+Message-ID: <CAAXf6LVYdSLa9HjixAhmfC3odYHc8uSDNn-B5drW21Xwk+ikFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2013-0292 (dbus-glib message sender privilege escalation).
+On Thu, Jul 3, 2014 at 7:42 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 30/06/14 15:46, Thomas De Schampheleire wrote:
+>> If the user sets a custom BR2_HOST_DIR, then STAGING_DIR is not under
+>> BASE_DIR. The .pc/.la file fixup commands incorrectly made this assumption
+>> and thus should be corrected.
+>>
+>> Additionally, this patch rewords the comment in pkg-autotools that explains
+>> the replacements.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> ---
+>>  package/pkg-autotools.mk |  23 ++++++++++++-----------
+>>  package/pkg-generic.mk   |   5 +++--
+>
+>  Doesn't QT5_LA_PRL_FILES_FIXUP need this as well?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/dbus-glib/dbus-glib.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yes indeed, and the above patch is broken for pkg-generic too. I'll
+fix and resubmit...
 
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index 5af7884..aa44bcb 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DBUS_GLIB_VERSION = 0.98
--DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib/
-+DBUS_GLIB_VERSION = 0.102
-+DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
- DBUS_GLIB_INSTALL_STAGING = YES
- DBUS_GLIB_LICENSE = AFLv2.1 GPLv2+
- DBUS_GLIB_LICENSE_FILES = COPYING
--- 
-1.8.5.5
+>
+>  Also, perhaps you should mention in the commit message the for -> xargs change.
+
+Will do.
+
+Thanks!
+Thomas
