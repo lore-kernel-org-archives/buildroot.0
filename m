@@ -1,93 +1,96 @@
 From: Jeremy Kerr <jk@ozlabs.org>
-Date: Thu, 03 Jul 2014 11:56:54 +0800
+Date: Thu, 03 Jul 2014 11:57:27 +0800
 Subject: [Buildroot] [RFC,
- PATCH] Separate target-building make targets from image-building
- make targets
-Message-ID: <1404359814.133100.832244865806.1.gpush@pablo>
+	PATCH] toolchain: separate c++ compiler from libstdc++ presence
+Message-ID: <1404359847.56223.159017096333.1.gpush@pablo>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, it's not possible to have dependencies from an image-building
-target to a rootfs-building target.
-
-For example, the boot-wrapper-aarch64 package uses the kernel build as
-an input file. It supplies a dependency on 'linux', but this will break
-if we're using BR2_TARGET_ROOTFS_INITRAMFS - the wrapper will include
-the first kernel build, not the rebuild (which contains the embedded
-initramfs).
-
-This means we'd need to express a dependency from the target build to
-the image build. However, if we do something like:
-
--BOOT_WRAPPER_AARCH64_DEPENDENCIES   = linux
-+BOOT_WRAPPER_AARCH64_DEPENDENCIES   = linux26-rebuild-with-initramfs
-
-- then we get a circular dependency, because boot-wrapper-aarch64 is in
-the TARGETS list, which linux26-rebuild-with-initramfs depends on.
-
-This change splits the possible targets into two separate lists,
-TARGET_TARGETS (dependencies for building the target dir) and
-IMAGE_TARGETS (dependencies for building images). We keep TARGETS as a
-list of everything, and use TARGET_TARGETS for the rootfs-finalize
-target.
+We may want a c++ compiler, but no libstdc++ on the system. For example,
+firmware that isn't linked with the system libstdc++. These packages can
+depend on BR2_CPP instead of BR2_INSTALL_LIBSTDCPP.
 
 Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
 
 ---
- Makefile               |    6 ++++--
- package/pkg-generic.mk |    8 ++++++++
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/Makefile.in                |    2 +-
+ package/gcc/Config.in.host         |   14 +++++++++++---
+ package/gcc/gcc-final/gcc-final.mk |    2 +-
+ toolchain/toolchain-common.in      |    4 ++++
+ 4 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 0bf709f..708ab19 100644
---- a/Makefile
-+++ b/Makefile
-@@ -294,6 +294,8 @@ unexport TERMINFO
- GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
- 
- TARGETS :=
-+TARGET_TARGETS :=
-+IMAGE_TARGETS :=
- 
- # silent mode requested?
- QUIET := $(if $(findstring s,$(MAKEFLAGS)),-q)
-@@ -531,7 +533,7 @@ endif
- 
- $(TARGETS_ROOTFS): target-finalize
- 
--target-finalize: $(TARGETS)
-+target-finalize: $(TARGET_TARGETS)
- 	@$(call MESSAGE,"Finalizing target directory")
- 	$(TARGET_PURGE_LOCALES)
- 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
-@@ -624,7 +626,7 @@ target-generatelocales: host-localedef toolchain
- 	done
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 0233506..e8de29f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -361,7 +361,7 @@ else
+ DISABLE_IPV6= --disable-ipv6
  endif
  
--target-post-image: $(TARGETS_ROOTFS) target-finalize
-+target-post-image: $(TARGETS_ROOTFS) $(IMAGE_TARGETS) target-finalize
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 32a9457..ede1656 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -681,6 +681,14 @@ endif
- 
- TARGETS += $(1)
- 
-+ifneq ($$($(2)_INSTALL_STAGING)$$($(2)_INSTALL_TARGET),NONO)
-+TARGET_TARGETS += $(1)
-+endif
-+
-+ifeq ($$($(2)_INSTALL_IMAGES),YES)
-+IMAGE_TARGETS  += $(1)
-+endif
-+
- ifneq ($$($(2)_PERMISSIONS),)
- PACKAGES_PERMISSIONS_TABLE += $$($(2)_PERMISSIONS)$$(sep)
+-ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
++ifneq ($(BR2_CPP),y)
+ TARGET_CONFIGURE_OPTS+=CXX=false
  endif
+ 
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index fde1b90..693ff5f 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -126,13 +126,21 @@ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+ 	  initial, gcc intermediate and gcc final passes.
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_CXX
+-	bool "Enable C++ support"
+-	select BR2_INSTALL_LIBSTDCPP
++	bool "Enable C++ compiler support"
++	select BR2_CPP
+ 	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && \
+ 		     BR2_TOOLCHAIN_BUILDROOT_LOCALE)
+ 	help
+ 	  Enable this option if you want your toolchain to support the
+-	  C++ language and you want C++ libraries to be installed on
++	  C++ language.
++
++config BR2_TOOLCHAIN_BUILDROOT_LIBSTDCPP
++	bool "Install C++ libraries"
++	default y
++	select BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
++	help
++	  Enable this option if you want C++ libraries to be installed on
+ 	  your target system.
+ 
+ comment "C++ support broken in uClibc with locale enabled with gcc 4.2"
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 622dcf2..d277064 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -43,7 +43,7 @@ endef
+ 
+ # Languages supported by the cross-compiler
+ GCC_FINAL_CROSS_LANGUAGES-y = c
+-GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_CPP) += c++
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_FORTRAN) += fortran
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_OBJC)    += objc
+ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index a91d247..24edce3 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -26,8 +26,12 @@ config BR2_USE_WCHAR
+ config BR2_ENABLE_LOCALE
+ 	bool
+ 
++config BR2_CPP
++	bool
++
+ config BR2_INSTALL_LIBSTDCPP
+ 	bool
++	select BR2_CPP
+ 
+ config BR2_TOOLCHAIN_HAS_THREADS
+ 	bool
