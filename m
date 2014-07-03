@@ -1,22 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 03 Jul 2014 21:47:59 +0200
-Subject: [Buildroot] [PATCH] dbus: security bump to version 1.8.6
-In-Reply-To: <aefb1bf605de265d9a814352986c060c7d87b5d6.1404399408.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 3 Jul 2014 17:56:48 +0300")
-References: <aefb1bf605de265d9a814352986c060c7d87b5d6.1404399408.git.baruch@tkos.co.il>
-Message-ID: <871tu28brk.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Jul 2014 16:50:41 -0300
+Subject: [Buildroot] [PATCH 1/2] dbus-glib: add license information
+Message-ID: <1404417042-28116-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/dbus-glib/dbus-glib.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Fixes: CVE-2014-3532, CVE-2014-3533.
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index ca1df22..5af7884 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -7,6 +7,8 @@
+ DBUS_GLIB_VERSION = 0.98
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib/
+ DBUS_GLIB_INSTALL_STAGING = YES
++DBUS_GLIB_LICENSE = AFLv2.1 GPLv2+
++DBUS_GLIB_LICENSE_FILES = COPYING
+ 
+ DBUS_GLIB_CONF_ENV = ac_cv_have_abstract_sockets=yes \
+ 		ac_cv_func_posix_getpwnam_r=yes \
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
