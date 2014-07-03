@@ -1,132 +1,81 @@
-From: Stephan Hoffmann <sho@relinux.de>
-Date: Thu,  3 Jul 2014 10:46:22 +0200
-Subject: [Buildroot] [PATCH v5] Add support for Congatec QMX6
-Message-ID: <1404377182-13435-1-git-send-email-sho@relinux.de>
+From: Marco Pastorelli <mpastorelli@gmail.com>
+Date: Thu, 3 Jul 2014 11:05:02 +0200
+Subject: [Buildroot] Incorrect ABI setting on ubuntu 14.04LTS
+Message-ID: <CAFRxoJn5x=5YbSCOsMu7XB1PS2Dv2=fyih7nrwMmde0YtveeTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for the iMX6 based conga-QMX6 family of Qseven modules.
+Hi everybody,
 
-This patch is based on Linux 3.0.35 from Congatec's kernel reporitory
+I'm using buildroot 2014.05 to compile a BSP for a beaglebone. I'm using
+linaro toolchain 2014.02
 
-Signed-off-by: Stephan Hoffmann <sho@relinux.de>
----
-There has been a similar patch set from
-Lahoudere Fabien <fabien.lahoudere@openwide.fr> last year adding a patch
-to the freescale kernel repository, but it seems more logical to me to
-start from the board manufacturer's repo (which might not have been
-availeable at that time).
+If I compile with ubuntu 12.04LTS everything works fine.
+When I compile exactly the same project with another PC running ubuntu
+14.04LTS I run into this error:
 
-Changes v1 -> v2
-  - fix whitespace errors
+>>> toolchain-external undefined Configuring
+Incorrect ABI setting: EABIhf selected, but toolchain is incompatible
 
-Changes v2 -> v3
-  Fixes according to Peter Korsgaard's review
-  - removed unneeded boot options
-  - fix post build script
-  - add host uboot tools to defconfig
-  - fix readme.txt
-  - remove cpio from defconfig
+Does anybody knows which could be the problem?
 
-Changes v3 -> v5
-  Forgotten fix according to Peter Korsgaard's review
-  - lock kernel version for toolchain to match kernel
----
- board/congatec/qmx6/6q_bootscript.txt |  2 ++
- board/congatec/qmx6/post-build.sh     |  7 +++++++
- board/congatec/qmx6/readme.txt        | 36 +++++++++++++++++++++++++++++++++++
- configs/qmx6_defconfig                | 14 ++++++++++++++
- 4 files changed, 59 insertions(+)
- create mode 100644 board/congatec/qmx6/6q_bootscript.txt
- create mode 100755 board/congatec/qmx6/post-build.sh
- create mode 100644 board/congatec/qmx6/readme.txt
- create mode 100644 configs/qmx6_defconfig
+Thanks!
+Marco.
 
-diff --git a/board/congatec/qmx6/6q_bootscript.txt b/board/congatec/qmx6/6q_bootscript.txt
-new file mode 100644
-index 0000000..1382220
---- /dev/null
-+++ b/board/congatec/qmx6/6q_bootscript.txt
-@@ -0,0 +1,2 @@
-+set bootargs console=ttymxc1,115200 root=/dev/mmcblk0p1 rootwait consoleblank=0
-+${fs}load mmc ${disk}:1 10800000 /boot/uImage && bootm 10800000 ; echo "Error loading kernel image"
-diff --git a/board/congatec/qmx6/post-build.sh b/board/congatec/qmx6/post-build.sh
-new file mode 100755
-index 0000000..5fc52b0
---- /dev/null
-+++ b/board/congatec/qmx6/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+
-+TARGET_DIR=$1
-+BOARD_DIR="$(dirname $0)"
-+MKIMAGE=mkimage
-+
-+$MKIMAGE -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
-diff --git a/board/congatec/qmx6/readme.txt b/board/congatec/qmx6/readme.txt
-new file mode 100644
-index 0000000..d2e0dca
---- /dev/null
-+++ b/board/congatec/qmx6/readme.txt
-@@ -0,0 +1,36 @@
-+This is the minimal buildroot support for the Congatec QMX6 Qseven CoM
-+
-+conga-QMX6 is based on the freescale iMX6 SoC. For more information please
-+have a look at http://www.congatec.com/products/qseven/conga-qmx6.html
-+
-+The configuration is based on the currently latest kernel release from
-+Congatec's git repository which is based on 3.0.35. The bootloader u-boot
-+is preconfigured on the CPU module and does not need to be replaced.
-+
-+To build the default configuration you only have to:
-+
-+	make qmx6_defconfig && make
-+
-+You will need a microSD card of sufficient size and the first or only
-+partition configured as Linux type.
-+
-+To transfer the system to the card do:
-+
-+	$ sudo dd if=output/images/rootfs.ext2 of=/dev/sdX1
-+
-+You can optionally extend the filesystem size to the whole partition:
-+
-+	$ sudo resize2fs /dev/sdX1
-+
-+You can also update the card image without completely rewriting it:
-+
-+	$ sudo mount /dev/sdX1 /mnt
-+	$ sudo tar xf output/images/rootfs.tar -C /mnt
-+	$ sudo umount /mnt
-+
-+Connect a terminal program to the rs232 connector marked "CONSOLE"
-+with baudrate set to 115200, insert the microSD card into the socket
-+on the CPU module and power the board to watch the system boot.
-+
-+Booting from the SD card slot on the base board is currently not
-+supported.
-diff --git a/configs/qmx6_defconfig b/configs/qmx6_defconfig
-new file mode 100644
-index 0000000..fd88e9c
---- /dev/null
-+++ b/configs/qmx6_defconfig
-@@ -0,0 +1,14 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_KERNEL_HEADERS_3_0=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/congatec/qmx6/post-build.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://git.congatec.com/arm/qmx6_kernel.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0_QMX6_R1.1.2"
-+BR2_LINUX_KERNEL_DEFCONFIG="qmx6"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_3=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--- 
-2.0.0
+PS: hereafter the main config keys
+
+BR2_HAVE_DOT_CONFIG=y
+BR2_HOSTARCH_NEEDS_IA32_LIBS=y
+
+BR2_arm=y
+BR2_ARCH="arm"
+BR2_ENDIAN="LITTLE"
+BR2_GCC_TARGET_ARCH="armv7-a"
+BR2_GCC_TARGET_ABI="aapcs-linux"
+BR2_GCC_TARGET_CPU="cortex-a8"
+BR2_GCC_TARGET_FPU="vfpv3-d16"
+BR2_GCC_TARGET_FLOAT_ABI="hard"
+BR2_GCC_TARGET_MODE="arm"
+BR2_ARM_CPU_HAS_NEON=y
+BR2_ARM_CPU_HAS_VFPV2=y
+BR2_ARM_CPU_HAS_VFPV3=y
+BR2_ARM_CPU_HAS_THUMB2=y
+BR2_cortex_a8=y
+BR2_ARM_EABIHF=y
+BR2_ARM_FPU_VFPV3D16=y
+BR2_ARM_INSTRUCTIONS_ARM_CHOICE=y
+BR2_ARM_INSTRUCTIONS_ARM=y
+
+BR2_TOOLCHAIN=y
+BR2_TOOLCHAIN_USES_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_2014_02=y
+
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_PREFIX="arm-linux-gnueabihf"
+BR2_TOOLCHAIN_EXTERNAL_GLIBC=y
+BR2_LARGEFILE=y
+BR2_INET_IPV6=y
+BR2_TOOLCHAIN_HAS_GCC_BUG_58854=y
+BR2_TOOLCHAIN_HAS_NATIVE_RPC=y
+BR2_USE_WCHAR=y
+BR2_ENABLE_LOCALE=y
+BR2_INSTALL_LIBSTDCPP=y
+BR2_TOOLCHAIN_HAS_THREADS=y
+BR2_TOOLCHAIN_HAS_THREADS_DEBUG=y
+BR2_TOOLCHAIN_HAS_THREADS_NPTL=y
+BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS=y
+BR2_TOOLCHAIN_HAS_SSP=y
+BR2_GENERATE_LOCALE=""
+BR2_USE_MMU=y
+BR2_TARGET_OPTIMIZATION="-pipe"
+BR2_TARGET_LDFLAGS=""
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1=y
+BR2_TOOLCHAIN_HEADERS_AT_LEAST="3.1"
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140703/cbd38fd4/attachment.html>
