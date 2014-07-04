@@ -1,27 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Jul 2014 14:02:59 -0300
-Subject: [Buildroot] [PATCH 0/2] ncursesw package fixes
-Message-ID: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  4 Jul 2014 14:03:00 -0300
+Subject: [Buildroot] [PATCH 1/2] nano: enable ncursesw support
+In-Reply-To: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1404493381-24414-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series fixes issues with packages when ncurses is built with widechar
-support. This depends on the not-yet-applied patch from Jeremy Kerr
-[package/ncurses: Allow building wide char support] to be of any real use,
-however they shouldn't break anything if that's not applied since the
-conditions are the same for ncurses without wchar.
+Enable support for ncurses widechar by specifying the proper
+ncursesw-config when it's enabled, otherwise keep the old trick in place
+when it's not to avoid automatically picking up the host/distro one.
 
-Gustavo Zacarias (2):
-  nano: enable ncursesw support
-  statserial: don't link against legacy curses
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nano/nano.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
- package/nano/nano.mk                                |  9 +++++++--
- package/statserial/statserial-01-ncurses-link.patch | 16 ++++++++++++++++
- 2 files changed, 23 insertions(+), 2 deletions(-)
- create mode 100644 package/statserial/statserial-01-ncurses-link.patch
-
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 2b6df3a..130fe83 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -9,11 +9,16 @@ NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = http://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
+-NANO_MAKE_ENV = CURSES_LIB="-lncurses"
+ NANO_CONF_OPT = --without-slang
+-NANO_CONF_ENV = ac_cv_prog_NCURSESW_CONFIG=false
+ NANO_DEPENDENCIES = ncurses
+ 
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++	NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG="$(STAGING_DIR)/usr/bin/ncursesw5-config"
++else
++	NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG=false
++	NANO_MAKE_ENV += CURSES_LIB="-lncurses"
++endif
++
+ ifeq ($(BR2_PACKAGE_FILE),y)
+ 	NANO_DEPENDENCIES += file
+ else
 -- 
 1.8.5.5
