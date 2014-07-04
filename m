@@ -1,25 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jul 2014 15:39:10 +0200
-Subject: [Buildroot] [PATCH] lxc: bump to version 1.0.4
-In-Reply-To: <1404480931-5227-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Jul 2014 10:35:31 -0300")
-References: <1404480931-5227-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8738eh6y69.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jul 2014 15:57:48 +0200
+Subject: [Buildroot] [PATCH v2] infra: /usr support: STAGING_DIR can be
+	outside BASE_DIR
+In-Reply-To: <a6e2d2ad27e8a662e8db.1404417523@localhost> (Thomas De
+ Schampheleire's message of "Thu, 03 Jul 2014 21:58:43 +0200")
+References: <a6e2d2ad27e8a662e8db.1404417523@localhost>
+Message-ID: <87y4w95iqr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > Also switch to new homepage and github download, and specify distro
- > variant since host distro != target distro and sample configs for each
- > case aren't useful anyway.
- > It sometimes failed to autodetect because some of the tests can't be
- > executed when cross compiling (happened on gentoo host).
+ > If the user sets a custom BR2_HOST_DIR, then STAGING_DIR is not under
+ > BASE_DIR. The .pc/.la file fixup commands incorrectly made this assumption
+ > and thus should be corrected.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Additionally, this patch:
+ > - rewords the comment in pkg-autotools that explains the replacements.
+ > - removes a for statement in favor of xargs
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+ > ---
+ > v2:
+ > - update commit message with for->xargs change (Arnout)
+ > - apply fix to qt5.mk (Arnout)
+ > - fix bad change in pkg-generic.mk (missing @)
 
 Committed, thanks.
 
