@@ -1,44 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Jul 2014 14:03:01 -0300
-Subject: [Buildroot] [PATCH 2/2] statserial: don't link against legacy curses
-In-Reply-To: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404493381-24414-3-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 04 Jul 2014 21:25:19 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: bump to version 214
+In-Reply-To: <20140703132119.014619c0@free-electrons.com>
+References: <1404070537-14255-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140703132119.014619c0@free-electrons.com>
+Message-ID: <53B6FF9F.9020107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link against libncurses instead of the legacy libcurses.
+On 03/07/14 13:21, Thomas Petazzoni wrote:
+> Dear Eric Le Bihan,
+> 
+> On Sun, 29 Jun 2014 21:35:37 +0200, Eric Le Bihan wrote:
+> 
+>> +SYSTEMD_CONF_ENV = \
+>> +	ac_cv_path_KMOD=/usr/bin/kmod
+> 
+> I just got a report from "nroach44" on IRC (Cc'ed to this e-mail) that
+> this chunk is actually also needed with systemd 213. From the IRC
+> discussions:
+> 
+> 13:16 < NRoach44> kmod is being put in /usr/bin
+> 13:17 < NRoach44> when systemd trys to run it from /bin
+> 13:18 < kos_tom> with which version of systemd are you seeing this kmod issue?
+> 13:18 < NRoach44> 213
+> 
+> So I obviously pointed "nroach44" to your 214 systemd bump patch, but I
+> believe that since the kmod issue exists with systemd 213, the chunk
+> above should probably be part of a separate patch.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/statserial/statserial-01-ncurses-link.patch | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/statserial/statserial-01-ncurses-link.patch
+ This is probably a symptom of systemd moving to the everything-in-/usr
+filesystem layout [1]. So we can expect more of that in the future.
 
-diff --git a/package/statserial/statserial-01-ncurses-link.patch b/package/statserial/statserial-01-ncurses-link.patch
-new file mode 100644
-index 0000000..b1c41e6
---- /dev/null
-+++ b/package/statserial/statserial-01-ncurses-link.patch
-@@ -0,0 +1,16 @@
-+Link to libncurses instead of the legacy libcurses.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura statserial-1.1.orig/Makefile statserial-1.1/Makefile
-+--- statserial-1.1.orig/Makefile	2014-07-04 12:47:41.279440415 -0300
-++++ statserial-1.1/Makefile	2014-07-04 12:47:47.948665740 -0300
-+@@ -10,7 +10,7 @@
-+ LDFLAGS = -s -N
-+ 
-+ statserial:	statserial.o
-+-	$(LD) $(LDFLAGS) -o statserial statserial.o -lcurses
-++	$(LD) $(LDFLAGS) -o statserial statserial.o -lncurses
-+ 
-+ statserial.o: statserial.c
-+ 	$(CC) $(CFLAGS) -c statserial.c
+ This everything-in-/usr actually doesn't sound like a bad idea. TLDR: move
+everything in /bin and /lib to /usr/bin and /usr/lib, and make symlinks /bin ->
+/usr/bin etc. Would be really trivial for us to implement.
+
+
+ Regards,
+ Arnout
+
+
+[1] http://www.freedesktop.org/wiki/Software/systemd/TheCaseForTheUsrMerge/
+
+
 -- 
-1.8.5.5
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
