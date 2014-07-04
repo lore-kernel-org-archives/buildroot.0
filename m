@@ -1,10 +1,10 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jul 2014 15:39:04 +0200
-Subject: [Buildroot] [PATCH] lz4: security bump to r119
-In-Reply-To: <1404480467-687-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 4 Jul 2014 10:27:47 -0300")
-References: <1404480467-687-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877g3t6y6f.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jul 2014 15:39:10 +0200
+Subject: [Buildroot] [PATCH] lxc: bump to version 1.0.4
+In-Reply-To: <1404480931-5227-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 4 Jul 2014 10:35:31 -0300")
+References: <1404480931-5227-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8738eh6y69.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Fixes issue 134 - https://code.google.com/p/lz4/issues/detail?id=134
- > AKA CVE-2014-4611.
+ > Also switch to new homepage and github download, and specify distro
+ > variant since host distro != target distro and sample configs for each
+ > case aren't useful anyway.
+ > It sometimes failed to autodetect because some of the tests can't be
+ > executed when cross compiling (happened on gentoo host).
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
