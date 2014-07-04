@@ -1,110 +1,24 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Fri,  4 Jul 2014 18:11:19 +0200
-Subject: [Buildroot] [PATCH v2] qt5: Add an option to select default platform
-Message-ID: <1404490279-9272-1-git-send-email-jezz@sysmic.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 04 Jul 2014 18:16:56 +0200
+Subject: [Buildroot] Buildroot presentation at ELC-E
+Message-ID: <53B6D378.8000007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Whithout this path, default platform is automaticaly set (generally
-set to "eglfs" as defined in
-qt5base/mkspecs/devices/common/linux_device_pre.conf:1). This choice
-is not always what the user would like. Thus, user have to manually
-appends "-platform <BACKEND>" to command line when running any qt5
-application.
+ Hi all,
 
-This patch allows user to choose default platform explicitly.
+ Has anybody submitted a presentation proposal for something around Buildroot
+for ELC-E this year? If not, I'll cook something up.
 
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
----
-v2:
-  * Fix typo in "minimal".
-  * Add help for options minimal and offscreen. I didn't find any 
-    documentation about offscreen. So, description of this option 
-    is my understanding of sources.
-
- package/qt5/qt5base/Config.in  | 49 ++++++++++++++++++++++++++++++++++++++++++
- package/qt5/qt5base/qt5base.mk |  6 ++++++
- 2 files changed, 55 insertions(+)
-
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 70ddcd3..196099f 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -144,6 +144,55 @@ config BR2_PACKAGE_QT5BASE_EGLFS
- comment "eglfs backend available if OpenGLES and EGL are enabled"
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
- 
-+choice
-+	prompt "default graphical platform"
-+	default BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
-+	help
-+	  Notice you may choose platform at runtime using -platform (-platform
-+	  help to get list of compiled platforms).
-+
-+config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
-+	bool "minimal"
-+	help
-+	  Dummy platform allowing user to launch graphical application without
-+	  any real graphical backend
-+
-+config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_OFFSCREEN
-+	bool "offscreen"
-+	help
-+	  Similar to "minimal". However, if compiled with OpenGL, with backend
-+	  allows to allocate offscreen OpenGL contexts.
-+
-+config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_LINUXFB
-+	bool "linuxfb"
-+	depends on BR2_PACKAGE_QT5BASE_LINUXFB
-+
-+comment 'linuxfb needs linuxfb support enabled'
-+	depends on !BR2_PACKAGE_QT5BASE_LINUXFB
-+
-+config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_DIRECTFB
-+	bool "directfb"
-+	depends on BR2_PACKAGE_QT5BASE_DIRECTFB
-+
-+comment 'directfb needs directfb support enabled'
-+	depends on !BR2_PACKAGE_QT5BASE_DIRECTFB
-+
-+config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_XCB
-+	bool "xcb"
-+	depends on BR2_PACKAGE_QT5BASE_XCB
-+
-+comment 'xcb needs X.org XCB support enabled'
-+	depends on !BR2_PACKAGE_QT5BASE_XCB
-+
-+config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_EGLFS
-+	bool "eglfs"
-+	depends on BR2_PACKAGE_QT5BASE_EGLFS
-+
-+comment 'eglfs needs eglfs support enabled'
-+	depends on !BR2_PACKAGE_QT5BASE_EGLFS
-+
-+endchoice
-+
- config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
- 	bool "print support module"
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 618251e..77912e7 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -96,6 +96,12 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-xcb
- endif
- 
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL),-qpa minimal)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_OFFSCREEN),-qpa offscreen)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_LINUXFB),-qpa linuxfb)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_XCB),-qpa xcb)
-+QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_EGLFS),-qpa eglfs)
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
- QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
- QT5BASE_DEPENDENCIES   += libgles libegl
+ Regards,
+ Arnout
 -- 
-2.0.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
