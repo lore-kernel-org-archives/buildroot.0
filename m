@@ -1,28 +1,39 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jul 2014 23:22:04 +0200
-Subject: [Buildroot] [PATCH] toolchain/helpers.mk: don't discard
-	check_arm_abi stderr
-In-Reply-To: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 3 Jul 2014 19:32:58 +0300")
-References: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
-Message-ID: <87vbrc4y6b.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jul 2014 23:24:59 +0200
+Subject: [Buildroot] Filesystem being corrupted
+In-Reply-To: <53B66E3C.6090004@the-playground.dk> (Robert Larsen's message of
+ "Fri, 04 Jul 2014 11:05:00 +0200")
+References: <53B5331B.9030703@the-playground.dk>
+ <53B54CEC.5070803@zacarias.com.ar>
+ <53B55511.8030706@the-playground.dk>
+ <53B567C2.2070502@the-playground.dk>
+ <20140703202242.223b38ab@free-electrons.com>
+ <53B66E3C.6090004@the-playground.dk>
+Message-ID: <87r4204y1g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Robert" == Robert Larsen <robert@the-playground.dk> writes:
 
- > Since we are only need to know whether the compiler runs successfully, and
- > stderr is empty for the success case, there is no need to redirect stderr to
- > /dev/null. Moreover, stderr output of the failing case reveals valuable
- > information on the real failure reason.
+ > On 07/03/2014 08:22 PM, Thomas Petazzoni wrote:
+ >> You should start with the qemu_arm_versatile_defconfig available in
+ >> Buildroot, which uses a correct kernel configuration.
+ > That was the one I used, and I didn't change a thing in the kernel
+ > config :-(
 
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > The only thing changed between my vexpress and new build is this:
 
-Committed, thanks.
+ > 322c322
+ > < BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+ > ---
+ >> BR2_LINUX_KERNEL_DEFCONFIG="versatile"
+
+But are you using the qemu_arm_versatile *BUILDROOT* defconfig? That one
+E.G. uses a custom Linux defconfig
+(board/qemu/arm-versatile/linux-3.13.config)
 
 -- 
 Bye, Peter Korsgaard
