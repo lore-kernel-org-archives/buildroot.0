@@ -1,48 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 4 Jul 2014 13:02:52 +0200
-Subject: [Buildroot] [PATCH] qt5: Add an option to select default
- platform
-In-Reply-To: <1404466571-27586-1-git-send-email-jezz@sysmic.org>
-References: <1404466571-27586-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20140704130252.004c593d@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Fri, 04 Jul 2014 15:11:21 +0200
+Subject: [Buildroot] [PATCH] pinentry: Some toolchains need -pthread in
+	the linker command line
+In-Reply-To: <1403000593-31387-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Tue, 17 Jun 2014 11:23:13 +0100")
+References: <1403000593-31387-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87bnt56zgm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
-On Fri,  4 Jul 2014 11:36:11 +0200, J?r?me Pouiller wrote:
+ > Some toolchains, like Sourcery Codebench 2013.05, need -pthread to be
+ > added to the linker command line when linking pinentry-qt.
 
-> +choice
-> +	prompt "default graphical platform"
-> +	default BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
-> +	help
-> +	  Notice you may choose platform at runtime using -platform (-platform
-> +	  help to get list of compiled platforms).
-> +
-> +config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
-> +	bool "minimal"
+ > Fixes:
+ >    http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
 
-Maybe some help text would be appropriate here...
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
 
-> +
-> +config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_OFFSCREEN
-> +	bool "offscreen"
+Committed, thanks.
 
-... and here, to describe what those platforms are.
-
-Are they actually useful in practice? What do they do?
-
-> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL),-qpa minimalb)
-
-is "minimalb" intended here, as opposed to "minimal"?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
