@@ -1,103 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Jul 2014 23:36:42 +0200
-Subject: [Buildroot] [git commit] dbus-python: bump to version 1.2.0
-Message-ID: <20140703213741.DD4D09D14E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  4 Jul 2014 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-03
+Message-ID: <20140704063009.1FF2F101282@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=94423c82518aba5dbe9bfa25200822f82ecfd670
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Build statistics for 2014-07-03
+===============================
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...us-python-0001-fix-python-configure-check.patch |   27 ++++++++++++++++++
- .../dbus-python-fix-python-configure-check.patch   |   30 --------------------
- package/dbus-python/dbus-python.mk                 |    2 +-
- 3 files changed, 28 insertions(+), 31 deletions(-)
+        success : 43 
+       failures : 12 
+       timeouts : 1  
+          TOTAL : 56 
 
-diff --git a/package/dbus-python/dbus-python-0001-fix-python-configure-check.patch b/package/dbus-python/dbus-python-0001-fix-python-configure-check.patch
-new file mode 100644
-index 0000000..2df4da8
---- /dev/null
-+++ b/package/dbus-python/dbus-python-0001-fix-python-configure-check.patch
-@@ -0,0 +1,27 @@
-+Python: add am_cv_python_includes to override runtime python-config check
-+[Gustavo: update for dbus-python 1.2.0]
-+
-+diff -Nura dbus-python-1.2.0.orig/configure dbus-python-1.2.0/configure
-+--- dbus-python-1.2.0.orig/configure	2013-05-08 04:48:42.000000000 -0300
-++++ dbus-python-1.2.0/configure	2014-07-03 16:54:25.922727033 -0300
-+@@ -11762,6 +11762,12 @@
-+ else
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Python headers using $PYTHON-config --includes" >&5
-+ $as_echo_n "checking for Python headers using $PYTHON-config --includes... " >&6; }
-++if test "${am_cv_python_includes+set}" = set; then
-++  $as_echo_n "(cached) $ECHO_C" >&6
-++  PYTHON_INCLUDES=${am_cv_python_includes}
-++  { $as_echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
-++$as_echo_t "${ECHO_T}$PYTHON_INCLUDES" >&6; }
-++else
-+   PYTHON_INCLUDES=`$PYTHON-config --includes`
-+   if test $? = 0; then
-+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON_INCLUDES" >&5
-+@@ -11781,6 +11787,7 @@
-+ $as_echo "$PYTHON_INCLUDES" >&6; }
-+   fi
-+ fi
-++fi
-+ 
-+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether those headers are sufficient" >&5
-+ $as_echo_n "checking whether those headers are sufficient... " >&6; }
-diff --git a/package/dbus-python/dbus-python-fix-python-configure-check.patch b/package/dbus-python/dbus-python-fix-python-configure-check.patch
-deleted file mode 100644
-index 30eeb48..0000000
---- a/package/dbus-python/dbus-python-fix-python-configure-check.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Python: add am_cv_python_includes to override runtime python-config check
-----
-- configure |    7 +++++++
-- 1 file changed, 7 insertions(+)
--
--Index: dbus-python-0.83.0/configure
--===================================================================
----- dbus-python-0.83.0.orig/configure
--+++ dbus-python-0.83.0/configure
--@@ -10176,6 +10176,12 @@
-- 
-- { echo "$as_me:$LINENO: checking for Python headers using $PYTHON-config --includes" >&5
-- echo $ECHO_N "checking for Python headers using $PYTHON-config --includes... $ECHO_C" >&6; }
--+if test "${am_cv_python_includes+set}" = set; then
--+  echo $ECHO_N "(cached) $ECHO_C" >&6
--+  PYTHON_INCLUDES=${am_cv_python_includes}
--+  { echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
--+echo "${ECHO_T}$PYTHON_INCLUDES" >&6; }
--+else
-- PYTHON_INCLUDES=`$PYTHON-config --includes`
-- if test $? = 0; then
--   { echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
--@@ -10194,6 +10200,7 @@
--   { echo "$as_me:$LINENO: result: $PYTHON_INCLUDES" >&5
-- echo "${ECHO_T}$PYTHON_INCLUDES" >&6; }
-- fi
--+fi
-- 
-- { echo "$as_me:$LINENO: checking whether those headers are sufficient" >&5
-- echo $ECHO_N "checking whether those headers are sufficient... $ECHO_C" >&6; }
-diff --git a/package/dbus-python/dbus-python.mk b/package/dbus-python/dbus-python.mk
-index 4dd3d8c..930eb2c 100644
---- a/package/dbus-python/dbus-python.mk
-+++ b/package/dbus-python/dbus-python.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_PYTHON_VERSION = 0.83.0
-+DBUS_PYTHON_VERSION = 1.2.0
- DBUS_PYTHON_SITE = http://dbus.freedesktop.org/releases/dbus-python/
- DBUS_PYTHON_INSTALL_STAGING = YES
- DBUS_PYTHON_LICENSE = MIT
+Classification of failures by reason
+====================================
+
+                    fltk-1.3.2 | 3 
+          perl-net-ssleay-1.64 | 2 
+snappy-1ff9be9b8fafc8528ca9... | 1 
+                busybox-1.22.1 | 1 
+           heirloom-mailx-12.5 | 1 
+                       unknown | 1 
+                pinentry-0.8.3 | 1 
+                  zeromq-4.0.4 | 1 
+                    sdl-1.2.15 | 1 
+make: *** [core-dependencie... | 1 
+
+Detail of failures
+===================
+
+       arc |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/6bb90d3f2b840a1faacf152a1d93a909a2dc98d3/
+       sh4 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/9786ab41117fbe760e4e8ae40ccf37af55813728/
+       arm |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/378ec9b387bb65b0893f8f7a0a6563ca62425fac/
+   powerpc |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/e73903bb72cd663d94cf5d982db2e7727e9da67a/
+   powerpc |            heirloom-mailx-12.5 | NOK | http://autobuild.buildroot.net/results/cad8669f4338ab07f6a66aaebc9bd6c9e94620cf/
+       arm | make: *** [core-dependencie... | NOK | http://autobuild.buildroot.net/results/ed8b917778cafcd4eb061cf17b0d1b8e255f0de7/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/fc5a9c18a850c2947e6806d0479ee52ae067a76b/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/52c3f2c1cc4d26236b8a948f2e0432caeac3ff54/
+    x86_64 |                 pinentry-0.8.3 | NOK | http://autobuild.buildroot.net/results/064b2b69664e6c2b720800dffbbd3d12c695eae4/
+   powerpc |                     sdl-1.2.15 | NOK | http://autobuild.buildroot.net/results/dd34cc023d91d56360cc70aedbd3311c813f8020/
+      bfin | snappy-1ff9be9b8fafc8528ca9... | NOK | http://autobuild.buildroot.net/results/e1ce0c1cdd0139208dddaa8f2441ab0e3ab2385e/
+       arm |                        unknown | TIM | http://autobuild.buildroot.net/results/36979b5702d3c8a2f807d3ec7431ec4cb88753e5/
+      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/74e29cf0d3c9d3e67a9e361e4b8e11fa50452475/
+
+
+-- 
+http://autobuild.buildroot.net
