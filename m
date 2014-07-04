@@ -1,38 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Jul 2014 23:51:35 +0200
-Subject: [Buildroot] [git commit] toolchain/helpers.mk: update check_arm_abi
-	comment
-Message-ID: <20140704215155.C669D9D181@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 5 Jul 2014 00:15:22 +0200
+Subject: [Buildroot] [PATCH 1/4] pkg-infra: don't use DL_DIR as
+ scratchpad for temporary downloads
+In-Reply-To: <87ionc4xkl.fsf@dell.be.48ers.dk>
+References: <cover.1404416102.git.yann.morin.1998@free.fr>
+ <b8b52d0b281975ef0005ff0fe7c2313dbb42e540.1404416102.git.yann.morin.1998@free.fr>
+ <87ionc4xkl.fsf@dell.be.48ers.dk>
+Message-ID: <20140704221522.GB18673@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=40ff839bc499580d605f6ac3cf019c3af768085b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Since commit b2e88073dbf (toolchain: check ARM EABI vs. EABIhf for external
-toolchains), check_arm_abi accepts a second parameter. Update the comment
-accordingly.
+On 2014-07-04 23:35 +0200, Peter Korsgaard spake thusly:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > DL_DIR can be a very precious place for some users: they use it to store
+>  > all the downloaded archives to share across all their Buildroot (and
+>  > maybe non-Buildroot) builds.
+> 
+>  > We do not want to trash this location with our temporary downloads (e.g.
+>  > git, Hg, svn, cvs repository clones/checkouts, or wget, bzr tep tarballs).
+> 
+>  > Turns out that we already have some kind of scratchpad, the BUILD_DIR.
+>  > Although it is not really a disposable location, that's the best we have
+>  > so far.
+> 
+>  > Also, we create the temporary tarballs with mktemp using the final tarrball,
+> 
+> s/tarrball/tarball/
+> 
+>  > ---
+>  > Change v7 -> v8:
+>  >   - use a cleaner and saner code path to detect errors
+>  >   - convert the cp and scp helpers, too  (Thomas DS)
+> 
+> Committed, thanks.
+> 
+> I think it would be good to either delay the creation of tmp_output
+> until just before it it used and/or cleanup on errors to not end up with
+> a bunch of odd named temporary files in DL_DIR, but that can be added
+> later.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- toolchain/helpers.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+As discussed on IRC: "yeah, probably, yes."
+I'll cook up a patch.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index c8c645a..8eb71ef 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -288,6 +288,7 @@ check_uclibc = \
- # configuration of the external toolchain.
- #
- # $1: cross-gcc path
-+# $2: cross-readelf path
- #
- check_arm_abi = \
- 	__CROSS_CC=$(strip $1) ; \
+Thanks.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
