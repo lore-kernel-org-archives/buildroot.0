@@ -1,29 +1,33 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jul 2014 15:11:21 +0200
-Subject: [Buildroot] [PATCH] pinentry: Some toolchains need -pthread in
-	the linker command line
-In-Reply-To: <1403000593-31387-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Tue, 17 Jun 2014 11:23:13 +0100")
-References: <1403000593-31387-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87bnt56zgm.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  4 Jul 2014 10:27:47 -0300
+Subject: [Buildroot] [PATCH] lz4: security bump to r119
+Message-ID: <1404480467-687-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+Fixes issue 134 - https://code.google.com/p/lz4/issues/detail?id=134
+AKA CVE-2014-4611.
 
- > Some toolchains, like Sourcery Codebench 2013.05, need -pthread to be
- > added to the linker command line when linking pinentry-qt.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/lz4/lz4.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes:
- >    http://autobuild.buildroot.net/results/6be/6be109ccedec603a67cebdb31b55865dcce0e128/
-
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Reviewed-by: Markos Chandras <Markos.Chandras@imgtec.com>
-
-Committed, thanks.
-
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index a089b0e..819cc54 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = r117
++LZ4_VERSION = r119
+ LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2c
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
