@@ -1,36 +1,110 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri,  4 Jul 2014 17:56:26 +0200
-Subject: [Buildroot] [PATCH 3/3] exim: generate the user with automatic uid
-In-Reply-To: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
-References: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1404489386-7523-4-git-send-email-luca@lucaceresoli.net>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Fri,  4 Jul 2014 18:11:19 +0200
+Subject: [Buildroot] [PATCH v2] qt5: Add an option to select default platform
+Message-ID: <1404490279-9272-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the exim username is configurable it is more likely that
-other packages generate a conflicting user. Switch to automatic uid
-generation to avoid any problem.
+Whithout this path, default platform is automaticaly set (generally
+set to "eglfs" as defined in
+qt5base/mkspecs/devices/common/linux_device_pre.conf:1). This choice
+is not always what the user would like. Thus, user have to manually
+appends "-platform <BACKEND>" to command line when running any qt5
+application.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+This patch allows user to choose default platform explicitly.
+
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 ---
- package/exim/exim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2:
+  * Fix typo in "minimal".
+  * Add help for options minimal and offscreen. I didn't find any 
+    documentation about offscreen. So, description of this option 
+    is my understanding of sources.
 
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 163861b..18745ac 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -93,7 +93,7 @@ define EXIM_INSTALL_TARGET_CMDS
- endef
+ package/qt5/qt5base/Config.in  | 49 ++++++++++++++++++++++++++++++++++++++++++
+ package/qt5/qt5base/qt5base.mk |  6 ++++++
+ 2 files changed, 55 insertions(+)
+
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 70ddcd3..196099f 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -144,6 +144,55 @@ config BR2_PACKAGE_QT5BASE_EGLFS
+ comment "eglfs backend available if OpenGLES and EGL are enabled"
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
  
- define EXIM_USERS
--$(call qstrip,$(BR2_PACKAGE_EXIM_USER)) 88 mail 8 * - - - exim
-+$(call qstrip,$(BR2_PACKAGE_EXIM_USER)) -1 mail 8 * - - - exim
- endef
++choice
++	prompt "default graphical platform"
++	default BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
++	help
++	  Notice you may choose platform at runtime using -platform (-platform
++	  help to get list of compiled platforms).
++
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
++	bool "minimal"
++	help
++	  Dummy platform allowing user to launch graphical application without
++	  any real graphical backend
++
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_OFFSCREEN
++	bool "offscreen"
++	help
++	  Similar to "minimal". However, if compiled with OpenGL, with backend
++	  allows to allocate offscreen OpenGL contexts.
++
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_LINUXFB
++	bool "linuxfb"
++	depends on BR2_PACKAGE_QT5BASE_LINUXFB
++
++comment 'linuxfb needs linuxfb support enabled'
++	depends on !BR2_PACKAGE_QT5BASE_LINUXFB
++
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_DIRECTFB
++	bool "directfb"
++	depends on BR2_PACKAGE_QT5BASE_DIRECTFB
++
++comment 'directfb needs directfb support enabled'
++	depends on !BR2_PACKAGE_QT5BASE_DIRECTFB
++
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_XCB
++	bool "xcb"
++	depends on BR2_PACKAGE_QT5BASE_XCB
++
++comment 'xcb needs X.org XCB support enabled'
++	depends on !BR2_PACKAGE_QT5BASE_XCB
++
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_EGLFS
++	bool "eglfs"
++	depends on BR2_PACKAGE_QT5BASE_EGLFS
++
++comment 'eglfs needs eglfs support enabled'
++	depends on !BR2_PACKAGE_QT5BASE_EGLFS
++
++endchoice
++
+ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+ 	bool "print support module"
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 618251e..77912e7 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -96,6 +96,12 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-xcb
+ endif
  
- define EXIM_INSTALL_INIT_SYSV
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL),-qpa minimal)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_OFFSCREEN),-qpa offscreen)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_LINUXFB),-qpa linuxfb)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_XCB),-qpa xcb)
++QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_EGLFS),-qpa eglfs)
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+ QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
+ QT5BASE_DEPENDENCIES   += libgles libegl
 -- 
-1.9.1
+2.0.0
