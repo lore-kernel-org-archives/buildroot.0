@@ -1,41 +1,48 @@
-From: Fabio Porcedda <fabio.porcedda@telit.com>
-Date: Fri, 4 Jul 2014 11:36:16 +0200
-Subject: [Buildroot] [PATCH v3 2/5] system: convert "system.mk" recipes
- to "target-finalize" hooks
-In-Reply-To: <20140629165642.055f2e88@free-electrons.com>
-References: <1403871359-18849-1-git-send-email-fabio.porcedda@telit.com>
- <1403871359-18849-3-git-send-email-fabio.porcedda@telit.com>
- <20140629165642.055f2e88@free-electrons.com>
-Message-ID: <CAHkwnC-aPKapiOBpeZJmhViTPXFDfoCz=mu6x33qvJ7_tiCKpg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Jul 2014 13:02:52 +0200
+Subject: [Buildroot] [PATCH] qt5: Add an option to select default
+ platform
+In-Reply-To: <1404466571-27586-1-git-send-email-jezz@sysmic.org>
+References: <1404466571-27586-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20140704130252.004c593d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 29, 2014 at 4:56 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
->
-> On Fri, 27 Jun 2014 14:15:56 +0200, Fabio Porcedda wrote:
->
->>  ifneq ($(TARGET_GENERIC_ROOT_PASSWD),)
->> -target-root-passwd: host-mkpasswd
->> +TARGETS += host-mkpasswd
->
-> Actually, I was wondering how this could work in the context of
-> top-level parallel build, but looking more closely, target-finalize has
-> $(TARGETS) in its dependencies, so we indeed have the guarantee that
-> host-mkpasswd will be built before the SYSTEM_ROOT_PASSWD hook is
-> executed.
->
-> So in fact, I don't have any comment about PATCH 2 :-)
+Dear J?r?me Pouiller,
 
-Yes, it's exactly as you said.
+On Fri,  4 Jul 2014 11:36:11 +0200, J?r?me Pouiller wrote:
 
-Adding a dependency to TARGETS it's like adding to an hypothetical
-TARGET_FINALIZE_DEPENDENCIES variable.
+> +choice
+> +	prompt "default graphical platform"
+> +	default BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
+> +	help
+> +	  Notice you may choose platform at runtime using -platform (-platform
+> +	  help to get list of compiled platforms).
+> +
+> +config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL
+> +	bool "minimal"
 
-BR
+Maybe some help text would be appropriate here...
+
+> +
+> +config BR2_PACKAGE_QT5BASE_DEFAULT_QPA_OFFSCREEN
+> +	bool "offscreen"
+
+... and here, to describe what those platforms are.
+
+Are they actually useful in practice? What do they do?
+
+> +QT5BASE_CONFIGURE_OPTS += $(if $(BR2_PACKAGE_QT5BASE_DEFAULT_QPA_MINIMAL),-qpa minimalb)
+
+is "minimalb" intended here, as opposed to "minimal"?
+
+Thanks!
+
+Thomas
 -- 
-Fabio Porcedda
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
