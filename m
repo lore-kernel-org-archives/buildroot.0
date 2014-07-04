@@ -1,24 +1,28 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 04 Jul 2014 23:20:42 +0200
-Subject: [Buildroot] Buildroot presentation at ELC-E
-In-Reply-To: <53B6D378.8000007@mind.be> (Arnout Vandecappelle's message of
- "Fri, 04 Jul 2014 18:16:56 +0200")
-References: <53B6D378.8000007@mind.be>
-Message-ID: <87zjgo4y8l.fsf@dell.be.48ers.dk>
+Date: Fri, 04 Jul 2014 23:22:04 +0200
+Subject: [Buildroot] [PATCH] toolchain/helpers.mk: don't discard
+	check_arm_abi stderr
+In-Reply-To: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 3 Jul 2014 19:32:58 +0300")
+References: <2ffa51c027dd4f292dbaa1c0bc898100beda5695.1404405178.git.baruch@tkos.co.il>
+Message-ID: <87vbrc4y6b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- >  Hi all,
- >  Has anybody submitted a presentation proposal for something around Buildroot
- > for ELC-E this year? If not, I'll cook something up.
+ > Since we are only need to know whether the compiler runs successfully, and
+ > stderr is empty for the success case, there is no need to redirect stderr to
+ > /dev/null. Moreover, stderr output of the failing case reveals valuable
+ > information on the real failure reason.
 
-I atleast haven't. It would be very good if you could send in a
-proposal.
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
