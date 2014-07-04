@@ -1,32 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Jul 2014 23:16:47 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.12.x series
-Message-ID: <20140704215107.D32E09D181@busybox.osuosl.org>
+Date: Fri, 4 Jul 2014 23:40:55 +0200
+Subject: [Buildroot] [git commit] package/ca-certificates: add tarball's
+	hashes
+Message-ID: <20140704215108.1C85C9D181@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e9568520814d666b41e19e43a02d13235bd15f93
+commit: http://git.buildroot.net/buildroot/commit/?id=0b2264d3d4a0c53917c6f64ae1d7e10b613e59de
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ca-certificates contains sensitive security-related information,
+and we want to ensure the archive that we download has not been
+compromised.
+
+Add the sha1 and sha256 hashes from Debian's packaging.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Martin Bark <martin@barkynet.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ca-certificates/ca-certificates.hash |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 747d9c1..e6629b0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -153,7 +153,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
- 	default "3.10.46"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
--	default "3.12.23"	if BR2_KERNEL_HEADERS_3_12
-+	default "3.12.24"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
- 	default "3.14.10"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.15.3"	if BR2_KERNEL_HEADERS_3_15
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+new file mode 100644
+index 0000000..bcd0723
+--- /dev/null
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -0,0 +1,3 @@
++# hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
++sha1   ad57a45f0422fafd78a2e8191e5204f2306cc91b                         ca-certificates_20140223.tar.xz
++sha256 815b7cd97200b0d76450bb3e7d9b65997ac494ab6467b17369f65b2ef94bcb0c ca-certificates_20140223.tar.xz
