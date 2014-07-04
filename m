@@ -1,46 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Jul 2014 14:03:00 -0300
-Subject: [Buildroot] [PATCH 1/2] nano: enable ncursesw support
+Date: Fri,  4 Jul 2014 14:03:01 -0300
+Subject: [Buildroot] [PATCH 2/2] statserial: don't link against legacy curses
 In-Reply-To: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1404493381-24414-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1404493381-24414-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable support for ncurses widechar by specifying the proper
-ncursesw-config when it's enabled, otherwise keep the old trick in place
-when it's not to avoid automatically picking up the host/distro one.
+Link against libncurses instead of the legacy libcurses.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nano/nano.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/statserial/statserial-01-ncurses-link.patch | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/statserial/statserial-01-ncurses-link.patch
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 2b6df3a..130fe83 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -9,11 +9,16 @@ NANO_VERSION = $(NANO_VERSION_MAJOR).2
- NANO_SITE = http://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
--NANO_MAKE_ENV = CURSES_LIB="-lncurses"
- NANO_CONF_OPT = --without-slang
--NANO_CONF_ENV = ac_cv_prog_NCURSESW_CONFIG=false
- NANO_DEPENDENCIES = ncurses
- 
-+ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
-+	NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG="$(STAGING_DIR)/usr/bin/ncursesw5-config"
-+else
-+	NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG=false
-+	NANO_MAKE_ENV += CURSES_LIB="-lncurses"
-+endif
+diff --git a/package/statserial/statserial-01-ncurses-link.patch b/package/statserial/statserial-01-ncurses-link.patch
+new file mode 100644
+index 0000000..b1c41e6
+--- /dev/null
++++ b/package/statserial/statserial-01-ncurses-link.patch
+@@ -0,0 +1,16 @@
++Link to libncurses instead of the legacy libcurses.
 +
- ifeq ($(BR2_PACKAGE_FILE),y)
- 	NANO_DEPENDENCIES += file
- else
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura statserial-1.1.orig/Makefile statserial-1.1/Makefile
++--- statserial-1.1.orig/Makefile	2014-07-04 12:47:41.279440415 -0300
+++++ statserial-1.1/Makefile	2014-07-04 12:47:47.948665740 -0300
++@@ -10,7 +10,7 @@
++ LDFLAGS = -s -N
++ 
++ statserial:	statserial.o
++-	$(LD) $(LDFLAGS) -o statserial statserial.o -lcurses
+++	$(LD) $(LDFLAGS) -o statserial statserial.o -lncurses
++ 
++ statserial.o: statserial.c
++ 	$(CC) $(CFLAGS) -c statserial.c
 -- 
 1.8.5.5
