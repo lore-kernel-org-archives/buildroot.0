@@ -1,30 +1,34 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun,  6 Jul 2014 00:04:12 +0200
-Subject: [Buildroot] [PATCH] network-manager: bump to 0.9.10.0
-Message-ID: <1404597852-17000-1-git-send-email-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat,  5 Jul 2014 20:34:01 -0300
+Subject: [Buildroot] [PATCH] lxc: disable lua and python
+Message-ID: <1404603241-20187-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/network-manager/network-manager.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Also conditionally disable bash if bash isn't built. Fixes:
+http://autobuild.buildroot.net/results/8ea/8ea1d682706ba5fee27a64008bb7237d53120e9b/
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 932ce8f..bee06cc 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/lxc/lxc.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index b251b14..abb0a1b 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -11,6 +11,8 @@ LXC_LICENSE_FILES = COPYING
+ LXC_DEPENDENCIES = libcap host-pkgconf
+ # configure not shipped
+ LXC_AUTORECONF = YES
+-LXC_CONF_OPT = --disable-apparmor --with-distro=buildroot
++LXC_CONF_OPT = --disable-apparmor --with-distro=buildroot \
++	--disable-lua --disable-python \
++	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
  
- NETWORK_MANAGER_VERSION_MAJOR = 0.9
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).9.98
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10.0
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+ $(eval $(autotools-package))
 -- 
-1.8.3.2
+1.8.5.5
