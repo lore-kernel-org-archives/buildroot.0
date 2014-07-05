@@ -1,43 +1,30 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sat,  5 Jul 2014 18:08:02 -0300
-Subject: [Buildroot] [PATCH] libnl: Move the pthread dependency menu comment
-Message-ID: <1404594482-17618-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun,  6 Jul 2014 00:04:12 +0200
+Subject: [Buildroot] [PATCH] network-manager: bump to 0.9.10.0
+Message-ID: <1404597852-17000-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order for this comment to be properly displayer, it must be moved to be
-at the end of the file.
-
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/libnl/Config.in | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/network-manager/network-manager.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnl/Config.in b/package/libnl/Config.in
-index 1173278..74a2e79 100644
---- a/package/libnl/Config.in
-+++ b/package/libnl/Config.in
-@@ -6,9 +6,6 @@ config BR2_PACKAGE_LIBNL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 932ce8f..bee06cc 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	  http://people.suug.ch/~tgr/libnl/
- 
--comment "libnl needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
- if BR2_PACKAGE_LIBNL
- 
- config BR2_PACKAGE_LIBNL_TOOLS
-@@ -20,5 +17,7 @@ config BR2_PACKAGE_LIBNL_TOOLS
- 
- comment "libnl tools need a toolchain w/ dynamic library"
- 	depends on BR2_PREFER_STATIC_LIB
--
- endif
-+
-+comment "libnl needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ NETWORK_MANAGER_VERSION_MAJOR = 0.9
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).9.98
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10.0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
-1.9.1
+1.8.3.2
