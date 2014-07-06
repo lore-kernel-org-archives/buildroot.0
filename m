@@ -1,122 +1,183 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Jul 2014 23:27:14 +0200
-Subject: [Buildroot] [PATCH 3/5] support/download: simplify the local-files
-	helper
+Date: Sun,  6 Jul 2014 23:27:15 +0200
+Subject: [Buildroot] [PATCH 4/5] support/download: only create final temp
+	file when needed
 In-Reply-To: <cover.1404681878.git.yann.morin.1998@free.fr>
 References: <cover.1404681878.git.yann.morin.1998@free.fr>
-Message-ID: <bbb8dd812cfbb3025d3796494ce7304f16c6ab6a.1404681878.git.yann.morin.1998@free.fr>
+Message-ID: <399c6d6d31d5b3dbe337ce97bb18c3e19f224422.1404681878.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the local-files download helper behaves like all the other
-download helpers, by first copying into the BUILD_DIR, then to
-BR2_DL_DIR, and then rename the final file.
+Create the temp file in the final location only when it is needed.
 
-This does two copies, for the sake of using the LOCALFILES command.
+This avoids the nasty experience of seeing lots of temp files in
+BR2_DL_DIR, that would linger around in case the downloads fails.
 
-Just get rid of the intermediate copy to BUILD_DIR. Instead, directly
-copy to the final temp file and rename that.
+Add a comment on why we don;t clean-up after git.
 
-This does a single copy, but we lose the file access mode, so we just
-reinstate them (in case it's a self-extracting executable used in a
-br2-external package, for example.)
-
+Reported-by: Peter Korsgaard <jacmet@uclibc.org>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
 ---
-One may argue that we could just do a symlink dest -> source. But
-if source is on a network mount, it may vanish any time (eg. when
-undocking your laptop for example ;-) ). So we really need to do a
-copy.
----
- Config.in               |  4 ----
- Config.in.legacy        | 11 +++++++++++
- package/pkg-download.mk |  1 -
- support/download/cp     | 13 ++++++-------
- 4 files changed, 17 insertions(+), 12 deletions(-)
+ support/download/bzr  | 2 +-
+ support/download/cvs  | 2 +-
+ support/download/git  | 6 ++++--
+ support/download/hg   | 2 +-
+ support/download/scp  | 2 +-
+ support/download/svn  | 2 +-
+ support/download/wget | 2 +-
+ 7 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 50968fb..9e81d77 100644
---- a/Config.in
-+++ b/Config.in
-@@ -71,10 +71,6 @@ config BR2_CVS
- 	string "CVS command"
- 	default "cvs"
+diff --git a/support/download/bzr b/support/download/bzr
+index f86fa82..a2cb440 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -17,7 +17,6 @@ rev="${2}"
+ output="${3}"
  
--config BR2_LOCALFILES
--	string "Local files retrieval command"
--	default "cp"
--
- config BR2_SCP
- 	string "Secure copy (scp) command"
- 	default "scp"
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a2c7846..aa49806 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -101,6 +101,17 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2014.08"
+ tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
  
-+config BR2_LOCALFILES
-+	string "Local files retrieval command has been removed"
-+	help
-+	  The option to specify how to copy local files has been removed.
-+	  It is now handled by a helper script in support/download/cp.
-+
-+config BR2_LOCALFILES_WRAP
-+	bool
-+	default y if BR2_LOCALFILES != ""
-+	select BR2_LEGACY
-+
- config BR2_KERNEL_HEADERS_3_8
- 	bool "kernel headers version 3.8.x are no longer supported"
- 	select BR2_KERNEL_HEADERS_3_9
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7f208d5..fb52ae0 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -16,7 +16,6 @@ export GIT := $(call qstrip,$(BR2_GIT))
- export HG := $(call qstrip,$(BR2_HG)) $(QUIET)
- export SCP := $(call qstrip,$(BR2_SCP)) $(QUIET)
- SSH := $(call qstrip,$(BR2_SSH)) $(QUIET)
--export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- 
- # Default spider mode is 'DOWNLOAD'. Other possible values are 'SOURCE_CHECK'
- # used by the _source-check target and 'SHOW_EXTERNAL_DEPS', used by the
-diff --git a/support/download/cp b/support/download/cp
-index e73159b..e1e7337 100755
---- a/support/download/cp
-+++ b/support/download/cp
-@@ -8,20 +8,19 @@ set -e
- #   $1: source file
- #   $2: output file
- # And this environment:
--#   LOCALFILES: the cp command to call
-+#   (nothing special)
- 
- source="${1}"
- output="${2}"
- 
--tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
- tmp_output="$( mktemp "${output}.XXXXXX" )"
+ # Play tic-tac-toe with temp files
+ # - first, we download to a trashable location (the build-dir)
+@@ -27,6 +26,7 @@ tmp_output="$( mktemp "${output}.XXXXXX" )"
  
  ret=1
--if ${LOCALFILES} "${source}" "${tmp_dl}"; then
--    if cat "${tmp_dl}" >"${tmp_output}"; then
--        mv "${tmp_output}" "${output}"
--        ret=0
--    fi
-+if cat "${source}" >"${tmp_output}"; then
-+    mode="$( stat -c '%a' "${source}" )"
-+    chmod "${mode}" "${tmp_output}"
-+    mv "${tmp_output}" "${output}"
-+    ret=0
- fi
+ if ${BZR} export --format=tgz "${tmp_dl}" "${repo}" -r "${rev}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if cat "${tmp_dl}" >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
+diff --git a/support/download/cvs b/support/download/cvs
+index a8ab080..22863d8 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -21,7 +21,6 @@ basename="${4}"
+ output="${5}"
  
- # Cleanup
+ repodir="${basename}.tmp-cvs-checkout"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ cd "${BUILD_DIR}"
+ # Remove leftovers from a previous failed run
+@@ -36,6 +35,7 @@ rm -rf "${repodir}"
+ ret=1
+ if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
+            co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if tar czf - "${repodir}" >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
+diff --git a/support/download/git b/support/download/git
+index b0031e5..d3fcdaf 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -19,8 +19,6 @@ basename="${3}"
+ output="${4}"
+ 
+ repodir="${basename}.tmp-git-checkout"
+-tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ # Play tic-tac-toe with temp files
+ # - first, we download to a trashable location (the build-dir)
+@@ -33,6 +31,8 @@ cd "${BUILD_DIR}"
+ # Remove leftovers from a previous failed run
+ rm -rf "${repodir}"
+ 
++# Upon failure, git cleans behind itself, so no need to catch failures here.
++# The only case when git would not clean up, is if it gets killed with SIGKILL.
+ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+     ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"
+@@ -43,8 +43,10 @@ fi
+ 
+ ret=1
+ pushd "${repodir}" >/dev/null
++tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+ if ${GIT} archive --prefix="${basename}/" --format=tar "${cset}" \
+                   >"${tmp_tar}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if gzip -c "${tmp_tar}" >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
+diff --git a/support/download/hg b/support/download/hg
+index 8b36db9..7e5c9eb 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -19,7 +19,6 @@ basename="${3}"
+ output="${4}"
+ 
+ repodir="${basename}.tmp-hg-checkout"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ cd "${BUILD_DIR}"
+ # Remove leftovers from a previous failed run
+@@ -33,6 +32,7 @@ rm -rf "${repodir}"
+ 
+ ret=1
+ if ${HG} clone --noupdate --rev "${cset}" "${repo}" "${repodir}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if ${HG} archive --repository "${repodir}" --type tgz \
+                      --prefix "${basename}" --rev "${cset}" \
+                      - >"${tmp_output}"; then
+diff --git a/support/download/scp b/support/download/scp
+index e16ece5..1cc18de 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -13,10 +13,10 @@ set -e
+ url="${1}"
+ output="${2}"
+ tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ ret=1
+ if ${SCP} "${url}" "${tmp_dl}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if cat "${tmp_dl}" >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
+diff --git a/support/download/svn b/support/download/svn
+index 259d3ed..232d887 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -19,7 +19,6 @@ basename="${3}"
+ output="${4}"
+ 
+ repodir="${basename}.tmp-svn-checkout"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ cd "${BUILD_DIR}"
+ # Remove leftovers from a previous failed run
+@@ -33,6 +32,7 @@ rm -rf "${repodir}"
+ 
+ ret=1
+ if ${SVN} export "${repo}@${rev}" "${repodir}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if tar czf - "${repodir}" >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
+diff --git a/support/download/wget b/support/download/wget
+index 0f71108..e961d71 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -15,7 +15,6 @@ url="${1}"
+ output="${2}"
+ 
+ tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ # Play tic-tac-toe with temp files
+ # - first, we download to a trashable location (the build-dir)
+@@ -25,6 +24,7 @@ tmp_output="$( mktemp "${output}.XXXXXX" )"
+ 
+ ret=1
+ if ${WGET} -O "${tmp_dl}" "${url}"; then
++    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if cat "${tmp_dl}" >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
 -- 
 1.9.1
