@@ -1,49 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Jul 2014 15:45:47 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: do the package install before
-	installing init files
-Message-ID: <1404654347-1261-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 06 Jul 2014 16:23:04 +0200
+Subject: [Buildroot] [PATCH] infra: fix autotools .la fixing when no .la
+	files are present
+Message-ID: <297a83abd0584662acb7.1404656584@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The init hooks may reference files installed by the package. For
-example, when a package installs systemd unit files, and wants them
-enabled/disabled by default, the init hokk may move/symlink/rename the
-unit files.
+Commit 6f638ea9c9c7bacc646430a74ad3dd2740eae676 ("infra: /usr support:
+STAGING_DIR can be outside BASE_DIR") changed a for-construct around 'sed
+-i' in a 'find | xargs sed -i'. However, if the find returns no results,
+sed complains with:
+    '/bin/sed: no input files'
 
-Currently, the init hooks are called before the package is installed,
-thus breaking the use-case above.
+Since a for construct is not very nice to handle this case, this commit
+changes the 'find | xargs sed -i' into 'find -exec sed -i'.
 
-Just inverse the install orderr, so that a package is installed before
-its init hooks are called.
+Reported-by: Rohit Kumar <rkthebest@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Fixes: http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-autotools.mk |  8 ++++++--
+ 1 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b7f50a5..bc8a12e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -228,11 +228,11 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_start,install-target)
- 	@$(call MESSAGE,"Installing to target")
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
-+	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(if $(BR2_INIT_SYSTEMD),\
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
--	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
--- 
-1.9.1
+diff -r c8ed6565ea09 -r 297a83abd058 package/pkg-autotools.mk
+--- a/package/pkg-autotools.mk	Thu Jul 03 12:35:57 2014 +0300
++++ b/package/pkg-autotools.mk	Sun Jul 06 16:19:04 2014 +0200
+@@ -277,16 +277,20 @@
+ # of these directories as @BASE_DIR@ and @STAGING_DIR at . Note that
+ # STAGING_DIR can be outside BASE_DIR when the user sets BR2_HOST_DIR
+ # to a custom value.
++# We use 'find ... -exec sed' instead of 'find ... | xargs sed' because
++# find may return no results and 'sed -i' requires at least one input
++# file.
+ #
+ ifndef $(2)_INSTALL_STAGING_CMDS
+ define $(2)_INSTALL_STAGING_CMDS
+ 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
+-	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs \
++	find $$(STAGING_DIR)/usr/lib* -name "*.la" -exec \
+ 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
+ 			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
+ 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+ 			-e "s:@STAGING_DIR@:$$(STAGING_DIR):g" \
+-			-e "s:@BASE_DIR@:$$(BASE_DIR):g"
++			-e "s:@BASE_DIR@:$$(BASE_DIR):g" \
++		{} \;
+ endef
+ endif
+ 
