@@ -1,183 +1,245 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Jul 2014 23:27:15 +0200
-Subject: [Buildroot] [PATCH 4/5] support/download: only create final temp
-	file when needed
+Date: Sun,  6 Jul 2014 23:27:16 +0200
+Subject: [Buildroot] [PATCH 5/5] support/download: rationalise naming and
+	use of the temporary files
 In-Reply-To: <cover.1404681878.git.yann.morin.1998@free.fr>
 References: <cover.1404681878.git.yann.morin.1998@free.fr>
-Message-ID: <399c6d6d31d5b3dbe337ce97bb18c3e19f224422.1404681878.git.yann.morin.1998@free.fr>
+Message-ID: <68fe3038dcc98bd803b0fe01a3d26cf95be97d4b.1404681878.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Create the temp file in the final location only when it is needed.
+Currently, we have temporary files to store 'downloaded' files or
+repositories, and they all are created using 'mktemp .XXXXXX'.
+Also, temporary repositories are named in a inconsistent manner.
 
-This avoids the nasty experience of seeing lots of temp files in
-BR2_DL_DIR, that would linger around in case the downloads fails.
+This poses a problem in case something goes wrong: it is not possible
+to easily see what temp file corresponds to what attempted download.
 
-Add a comment on why we don;t clean-up after git.
+Make all this a bit more homogeneous:
+  - name the temporary files and directories after the final file,
+    with this mktemp pattern:   ${BUILD_DIR}/.${output##*/}.XXXXXX
 
-Reported-by: Peter Korsgaard <jacmet@uclibc.org>
+This ensures it is easy to correlate a temp file or dir to the
+associated download attempt.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 ---
- support/download/bzr  | 2 +-
- support/download/cvs  | 2 +-
- support/download/git  | 6 ++++--
- support/download/hg   | 2 +-
- support/download/scp  | 2 +-
- support/download/svn  | 2 +-
- support/download/wget | 2 +-
- 7 files changed, 10 insertions(+), 8 deletions(-)
+Notes:
+  - I was not able to test those helpers, because we have no package
+    using them: cp, cvs, scp;
+  - I tested bzr with our sole package using bazaar, so corner cases
+    might spring to our attention at unexpected times;
+  - the cvs helper uses a little trick, due to the fact that cvs is
+    so ancient it has never learned the ability to generate archives
+    on its own.
+
+Tested with this defconfig, which exercises all possible helpers:
+    BR2_x86_i686=y
+    BR2_TOOLCHAIN_EXTERNAL=y            # wget
+    BR2_PACKAGE_DVB_APPS=y              # hg
+    BR2_PACKAGE_DTV_SCAN_TABLES=y       # git
+    BR2_PACKAGE_FIS=y                   # svn
+    BR2_PACKAGE_PYTHON=y                # wget, needed for pynfc:
+    BR2_PACKAGE_PYTHON_NFC=y            # bzr
+---
+ support/download/bzr  |  3 +--
+ support/download/cvs  | 19 +++++++++++--------
+ support/download/git  | 11 ++++-------
+ support/download/hg   |  7 +------
+ support/download/scp  |  4 +++-
+ support/download/svn  | 10 +++-------
+ support/download/wget |  3 +--
+ 7 files changed, 24 insertions(+), 33 deletions(-)
 
 diff --git a/support/download/bzr b/support/download/bzr
-index f86fa82..a2cb440 100755
+index a2cb440..ff01bff 100755
 --- a/support/download/bzr
 +++ b/support/download/bzr
-@@ -17,7 +17,6 @@ rev="${2}"
+@@ -16,8 +16,6 @@ repo="${1}"
+ rev="${2}"
  output="${3}"
  
- tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-
  # Play tic-tac-toe with temp files
  # - first, we download to a trashable location (the build-dir)
-@@ -27,6 +26,7 @@ tmp_output="$( mktemp "${output}.XXXXXX" )"
+ # - the we move to a temp file in the final location, so it is
+@@ -25,6 +23,7 @@ tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+ # - finally, we atomically rename to the final file
  
  ret=1
++tmp_dl="$( mktemp "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
  if ${BZR} export --format=tgz "${tmp_dl}" "${repo}" -r "${rev}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
+     tmp_output="$( mktemp "${output}.XXXXXX" )"
      if cat "${tmp_dl}" >"${tmp_output}"; then
-         mv "${tmp_output}" "${output}"
-         ret=0
 diff --git a/support/download/cvs b/support/download/cvs
-index a8ab080..22863d8 100755
+index 22863d8..57beba7 100755
 --- a/support/download/cvs
 +++ b/support/download/cvs
-@@ -21,7 +21,6 @@ basename="${4}"
+@@ -20,28 +20,31 @@ rawname="${3}"
+ basename="${4}"
  output="${5}"
  
- repodir="${basename}.tmp-cvs-checkout"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
- cd "${BUILD_DIR}"
- # Remove leftovers from a previous failed run
-@@ -36,6 +35,7 @@ rm -rf "${repodir}"
- ret=1
- if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
-            co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
-     if tar czf - "${repodir}" >"${tmp_output}"; then
-         mv "${tmp_output}" "${output}"
-         ret=0
-diff --git a/support/download/git b/support/download/git
-index b0031e5..d3fcdaf 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -19,8 +19,6 @@ basename="${3}"
- output="${4}"
- 
- repodir="${basename}.tmp-git-checkout"
--tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
+-repodir="${basename}.tmp-cvs-checkout"
+-
+-cd "${BUILD_DIR}"
+-# Remove leftovers from a previous failed run
+-rm -rf "${repodir}"
+-
  # Play tic-tac-toe with temp files
  # - first, we download to a trashable location (the build-dir)
-@@ -33,6 +31,8 @@ cd "${BUILD_DIR}"
- # Remove leftovers from a previous failed run
- rm -rf "${repodir}"
+ # - then we create a temporary tarball in the final location, so it is
+ #   on the same filesystem as the final file
+ # - finally, we atomically rename to the final file
  
-+# Upon failure, git cleans behind itself, so no need to catch failures here.
-+# The only case when git would not clean up, is if it gets killed with SIGKILL.
++# Since cvs by itself is not capable of generating archives, we use
++# a little trick of tar, to transform the filenames as they are being
++# added to the archive, by replacing the leadin '.' with the basename
++# of the package. Note: basename is just that, a basename, so it does
++# not contain any '/', so we need not escape them for the transform
++# expression.
++
+ ret=1
++repodir="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+ if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
+            co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
+     tmp_output="$( mktemp "${output}.XXXXXX" )"
+-    if tar czf - "${repodir}" >"${tmp_output}"; then
++    if tar czf - -C "${repodir}" --transform "s/^\./${basename}/;" . \
++           >"${tmp_output}"; then
+         mv "${tmp_output}" "${output}"
+         ret=0
+     fi
+ fi
+ 
+ # Cleanup
+-rm -rf "${repodir}" "${tmp_output}"
++rm -rf "${tmpdir}" "${tmp_output}"
+ exit ${ret}
+diff --git a/support/download/git b/support/download/git
+index d3fcdaf..011c055 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -18,8 +18,6 @@ cset="${2}"
+ basename="${3}"
+ output="${4}"
+ 
+-repodir="${basename}.tmp-git-checkout"
+-
+ # Play tic-tac-toe with temp files
+ # - first, we download to a trashable location (the build-dir)
+ # - then we create the uncomporessed tarball in tht same trashable location
+@@ -27,12 +25,11 @@ repodir="${basename}.tmp-git-checkout"
+ #   it is on the same filesystem as the final file
+ # - finally, we atomically rename to the final file
+ 
++# Upon failure, git cleans behind itself, so no need to catch failures
++# here. The only case when git would not clean up, is if it gets killed
++# with SIGKILL, which is user-initiated, so we let the user handle that.
+ cd "${BUILD_DIR}"
+-# Remove leftovers from a previous failed run
+-rm -rf "${repodir}"
+-
+-# Upon failure, git cleans behind itself, so no need to catch failures here.
+-# The only case when git would not clean up, is if it gets killed with SIGKILL.
++repodir="$( mktemp -d ".${output##*/}.XXXXXX" )"
  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
      printf "Doing shallow clone\n"
      ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"
-@@ -43,8 +43,10 @@ fi
- 
- ret=1
- pushd "${repodir}" >/dev/null
-+tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
- if ${GIT} archive --prefix="${basename}/" --format=tar "${cset}" \
-                   >"${tmp_tar}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
-     if gzip -c "${tmp_tar}" >"${tmp_output}"; then
-         mv "${tmp_output}" "${output}"
-         ret=0
 diff --git a/support/download/hg b/support/download/hg
-index 8b36db9..7e5c9eb 100755
+index 7e5c9eb..104d034 100755
 --- a/support/download/hg
 +++ b/support/download/hg
-@@ -19,7 +19,6 @@ basename="${3}"
+@@ -18,12 +18,6 @@ cset="${2}"
+ basename="${3}"
  output="${4}"
  
- repodir="${basename}.tmp-hg-checkout"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
- cd "${BUILD_DIR}"
- # Remove leftovers from a previous failed run
-@@ -33,6 +32,7 @@ rm -rf "${repodir}"
- 
- ret=1
- if ${HG} clone --noupdate --rev "${cset}" "${repo}" "${repodir}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
-     if ${HG} archive --repository "${repodir}" --type tgz \
-                      --prefix "${basename}" --rev "${cset}" \
-                      - >"${tmp_output}"; then
-diff --git a/support/download/scp b/support/download/scp
-index e16ece5..1cc18de 100755
---- a/support/download/scp
-+++ b/support/download/scp
-@@ -13,10 +13,10 @@ set -e
- url="${1}"
- output="${2}"
- tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
- ret=1
- if ${SCP} "${url}" "${tmp_dl}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
-     if cat "${tmp_dl}" >"${tmp_output}"; then
-         mv "${tmp_output}" "${output}"
-         ret=0
-diff --git a/support/download/svn b/support/download/svn
-index 259d3ed..232d887 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -19,7 +19,6 @@ basename="${3}"
- output="${4}"
- 
- repodir="${basename}.tmp-svn-checkout"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
- cd "${BUILD_DIR}"
- # Remove leftovers from a previous failed run
-@@ -33,6 +32,7 @@ rm -rf "${repodir}"
- 
- ret=1
- if ${SVN} export "${repo}@${rev}" "${repodir}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
-     if tar czf - "${repodir}" >"${tmp_output}"; then
-         mv "${tmp_output}" "${output}"
-         ret=0
-diff --git a/support/download/wget b/support/download/wget
-index 0f71108..e961d71 100755
---- a/support/download/wget
-+++ b/support/download/wget
-@@ -15,7 +15,6 @@ url="${1}"
- output="${2}"
- 
- tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
- 
+-repodir="${basename}.tmp-hg-checkout"
+-
+-cd "${BUILD_DIR}"
+-# Remove leftovers from a previous failed run
+-rm -rf "${repodir}"
+-
  # Play tic-tac-toe with temp files
  # - first, we download to a trashable location (the build-dir)
-@@ -25,6 +24,7 @@ tmp_output="$( mktemp "${output}.XXXXXX" )"
+ # - then we create a temporary tarball in the final location, so it is
+@@ -31,6 +25,7 @@ rm -rf "${repodir}"
+ # - finally, we atomically rename to the final file
  
  ret=1
- if ${WGET} -O "${tmp_dl}" "${url}"; then
-+    tmp_output="$( mktemp "${output}.XXXXXX" )"
++repodir="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+ if ${HG} clone --noupdate --rev "${cset}" "${repo}" "${repodir}"; then
+     tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if ${HG} archive --repository "${repodir}" --type tgz \
+diff --git a/support/download/scp b/support/download/scp
+index 1cc18de..192508b 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -12,9 +12,11 @@ set -e
+ 
+ url="${1}"
+ output="${2}"
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
++tmp_dl="$( mktemp "${BUILD_DIR}/.${output##*/}..XXXXXX" )"
+ 
+ ret=1
++# Note: it looks like scp does not unlink the destination,
++# which is what we want (observed by stracing scp.)
+ if ${SCP} "${url}" "${tmp_dl}"; then
+     tmp_output="$( mktemp "${output}.XXXXXX" )"
      if cat "${tmp_dl}" >"${tmp_output}"; then
+diff --git a/support/download/svn b/support/download/svn
+index 232d887..db98143 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -18,12 +18,6 @@ rev="${2}"
+ basename="${3}"
+ output="${4}"
+ 
+-repodir="${basename}.tmp-svn-checkout"
+-
+-cd "${BUILD_DIR}"
+-# Remove leftovers from a previous failed run
+-rm -rf "${repodir}"
+-
+ # Play tic-tac-toe with temp files
+ # - first, we download to a trashable location (the build-dir)
+ # - then we create a temporary tarball in the final location, so it is
+@@ -31,7 +25,9 @@ rm -rf "${repodir}"
+ # - finally, we atomically rename to the final file
+ 
+ ret=1
+-if ${SVN} export "${repo}@${rev}" "${repodir}"; then
++cd "${BUILD_DIR}"
++repodir="$( mktemp -d ".${output##*/}.XXXXXX" )"
++if ${SVN} export --force "${repo}@${rev}" "${repodir}"; then
+     tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if tar czf - "${repodir}" >"${tmp_output}"; then
          mv "${tmp_output}" "${output}"
-         ret=0
+diff --git a/support/download/wget b/support/download/wget
+index e961d71..9bb6700 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -14,8 +14,6 @@ set -e
+ url="${1}"
+ output="${2}"
+ 
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-
+ # Play tic-tac-toe with temp files
+ # - first, we download to a trashable location (the build-dir)
+ # - then we copy to a temporary tarball in the final location, so it is
+@@ -23,6 +21,7 @@ tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+ # - finally, we atomically rename to the final file
+ 
+ ret=1
++tmp_dl="$( mktemp "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+ if ${WGET} -O "${tmp_dl}" "${url}"; then
+     tmp_output="$( mktemp "${output}.XXXXXX" )"
+     if cat "${tmp_dl}" >"${tmp_output}"; then
 -- 
 1.9.1
