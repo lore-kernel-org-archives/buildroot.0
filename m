@@ -1,51 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Jul 2014 22:25:24 +0200
-Subject: [Buildroot] [git commit] pkg-infra: do the package install before
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Sun, 06 Jul 2014 22:26:31 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: do the package install before
 	installing init files
-Message-ID: <20140706202629.6DD6E9D17F@busybox.osuosl.org>
+In-Reply-To: <1404654347-1261-1-git-send-email-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sun, 6 Jul 2014 15:45:47 +0200")
+References: <1404654347-1261-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <87fvie2pzc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ea0f52fc3fca5e5ba3ea5cd46033df2f53e9b5a5
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-The init hooks may reference files installed by the package. For
-example, when a package installs systemd unit files, and wants them
-enabled/disabled by default, the init hook may move/symlink/rename the
-unit files.
+ > The init hooks may reference files installed by the package. For
+ > example, when a package installs systemd unit files, and wants them
+ > enabled/disabled by default, the init hokk may move/symlink/rename the
+ > unit files.
 
-Currently, the init hooks are called before the package is installed,
-thus breaking the use-case above.
+ > Currently, the init hooks are called before the package is installed,
+ > thus breaking the use-case above.
 
-Just inverse the install order, so that a package is installed before
-its init hooks are called.
+ > Just inverse the install orderr, so that a package is installed before
+ > its init hooks are called.
 
-Fixes: http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
+ > Fixes: http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b7f50a5..bc8a12e 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -228,11 +228,11 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 	@$(call step_start,install-target)
- 	@$(call MESSAGE,"Installing to target")
- 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
-+	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(if $(BR2_INIT_SYSTEMD),\
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
--	+$($(PKG)_INSTALL_TARGET_CMDS)
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+Makes sense - Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
