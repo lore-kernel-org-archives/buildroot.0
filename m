@@ -1,36 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Jul 2014 22:52:30 +0200
-Subject: [Buildroot] [git commit] lxc: disable lua and python
-Message-ID: <20140706222325.047279D18F@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 06 Jul 2014 20:29:11 -0300
+Subject: [Buildroot] [PATCH] lxc: disable lua and python
+In-Reply-To: <87oax22rks.fsf@dell.be.48ers.dk>
+References: <1404603241-20187-1-git-send-email-gustavo@zacarias.com.ar>
+ <87oax22rks.fsf@dell.be.48ers.dk>
+Message-ID: <53B9DBC7.10407@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=aa9a1a8de21839d44316d62bd57a5b4b6474ef80
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/06/2014 04:52 PM, Peter Korsgaard wrote:
 
-Also conditionally disable bash if bash isn't built. Fixes:
-http://autobuild.buildroot.net/results/8ea/8ea1d682706ba5fee27a64008bb7237d53120e9b/
+> Committed, thanks.
+> 
+> Any reason to not enable this support if lua/python is enabled?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lxc/lxc.mk |    4 +++-
- 1 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index b251b14..abb0a1b 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -11,6 +11,8 @@ LXC_LICENSE_FILES = COPYING
- LXC_DEPENDENCIES = libcap host-pkgconf
- # configure not shipped
- LXC_AUTORECONF = YES
--LXC_CONF_OPT = --disable-apparmor --with-distro=buildroot
-+LXC_CONF_OPT = --disable-apparmor --with-distro=buildroot \
-+	--disable-lua --disable-python \
-+	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
- 
- $(eval $(autotools-package))
+Well, it breaks :)
+Being an autotools package and sharing that with python infra is not
+straightforward, it would require patching to not build/install the
+python bits in the main build and doing so in separate steps with python
+workarounds/love - it's probably better to just make it an option in the
+python extensions menu as python-lxc.
+And it didn't have that feature before, the bump being related to not
+building on a gentoo distro/chroot, the autobuilders just didn't pick it
+up because they're based on debian.
+Regards.
