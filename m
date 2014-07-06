@@ -1,37 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Jul 2014 08:30:06 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-05
-Message-ID: <20140706063007.0EE6F100E97@stock.ovh.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  6 Jul 2014 15:45:47 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: do the package install before
+	installing init files
+Message-ID: <1404654347-1261-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-07-05
-===============================
+The init hooks may reference files installed by the package. For
+example, when a package installs systemd unit files, and wants them
+enabled/disabled by default, the init hokk may move/symlink/rename the
+unit files.
 
-        success : 19 
-       failures : 6  
-       timeouts : 0  
-          TOTAL : 25 
+Currently, the init hooks are called before the package is installed,
+thus breaking the use-case above.
 
-Classification of failures by reason
-====================================
+Just inverse the install orderr, so that a package is installed before
+its init hooks are called.
 
-             xlib_libXft-2.3.1 | 5 
-                     lxc-1.0.4 | 1 
+Fixes: http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
 
-Detail of failures
-===================
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-       arm |                      lxc-1.0.4 | NOK | http://autobuild.buildroot.net/results/8ea1d682706ba5fee27a64008bb7237d53120e9b/
-   powerpc |              xlib_libXft-2.3.1 | NOK | http://autobuild.buildroot.net/results/038e944ea05687dcd377a0a6303357ac5219c13a/
-   powerpc |              xlib_libXft-2.3.1 | NOK | http://autobuild.buildroot.net/results/b12989ec1c57f8cf3a2f743cc94de082692b7de6/
-   powerpc |              xlib_libXft-2.3.1 | NOK | http://autobuild.buildroot.net/results/f255f64c210b04368069f80402da8afaecb9464b/
-   powerpc |              xlib_libXft-2.3.1 | NOK | http://autobuild.buildroot.net/results/a335fde2f5ab1b6b92ffd037964e7cb317acb22b/
-   powerpc |              xlib_libXft-2.3.1 | NOK | http://autobuild.buildroot.net/results/d66e80b5caab1661e1661922933a963c989d02cc/
-
-
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b7f50a5..bc8a12e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -228,11 +228,11 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
++	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(if $(BR2_INIT_SYSTEMD),\
+ 		$($(PKG)_INSTALL_INIT_SYSTEMD))
+ 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+ 		$($(PKG)_INSTALL_INIT_SYSV))
+-	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
 -- 
-http://autobuild.buildroot.net
+1.9.1
