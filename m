@@ -1,45 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 6 Jul 2014 22:22:52 +0200
-Subject: [Buildroot] [git commit] infra: fix autotools .la fixing when no
-	.la files are present
-Message-ID: <20140706202334.6B51A9CE4B@busybox.osuosl.org>
+Date: Sun, 6 Jul 2014 22:25:24 +0200
+Subject: [Buildroot] [git commit] pkg-infra: do the package install before
+	installing init files
+Message-ID: <20140706202629.6DD6E9D17F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=18a0e073507e03eaba80c25017f9f28bd830a48a
+commit: http://git.buildroot.net/buildroot/commit/?id=ea0f52fc3fca5e5ba3ea5cd46033df2f53e9b5a5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 6f638ea9c9c7bacc646430a74ad3dd2740eae676 ("infra: /usr support:
-STAGING_DIR can be outside BASE_DIR") changed a for-construct around 'sed
--i' in a 'find | xargs sed -i'. However, if the find returns no results,
-sed complains with:
-    '/bin/sed: no input files'
+The init hooks may reference files installed by the package. For
+example, when a package installs systemd unit files, and wants them
+enabled/disabled by default, the init hook may move/symlink/rename the
+unit files.
 
-This commit adds the extra parameter -r / --no-run-if-empty to the xargs
-call, effectively fixing this problem case.
+Currently, the init hooks are called before the package is installed,
+thus breaking the use-case above.
 
-Reported-by: Rohit Kumar <rkthebest@gmail.com>
-Fix-suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Just inverse the install order, so that a package is installed before
+its init hooks are called.
+
+Fixes: http://autobuild.buildroot.net/results/5b03174318d8a6dc3112053ff141b70a90869c20/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-autotools.mk |    2 +-
+ package/pkg-generic.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 432b27f..ddff9bf 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -281,7 +281,7 @@ endif
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_INSTALL_STAGING_OPT) -C $$($$(PKG)_SRCDIR)
--	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs \
-+	find $$(STAGING_DIR)/usr/lib* -name "*.la" | xargs --no-run-if-empty \
- 		$$(SED) "s:$$(BASE_DIR):@BASE_DIR@:g" \
- 			-e "s:$$(STAGING_DIR):@STAGING_DIR@:g" \
- 			-e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index b7f50a5..bc8a12e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -228,11 +228,11 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	@$(call step_start,install-target)
+ 	@$(call MESSAGE,"Installing to target")
+ 	$(foreach hook,$($(PKG)_PRE_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
++	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(if $(BR2_INIT_SYSTEMD),\
+ 		$($(PKG)_INSTALL_INIT_SYSTEMD))
+ 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+ 		$($(PKG)_INSTALL_INIT_SYSV))
+-	+$($(PKG)_INSTALL_TARGET_CMDS)
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
