@@ -1,72 +1,95 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 07 Jul 2014 18:46:12 +0200
-Subject: [Buildroot] [PATCH 6/6] systemd: install timesync service if
- selected
-In-Reply-To: <1404406659-31109-7-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1404406659-31109-7-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <53BACED4.3000706@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Jul 2014 23:53:50 +0200
+Subject: [Buildroot] [PATCH 4/5] support/download: only create final
+ temp file when needed
+In-Reply-To: <53BAC5FA.50004@mind.be>
+References: <cover.1404681878.git.yann.morin.1998@free.fr>
+ <399c6d6d31d5b3dbe337ce97bb18c3e19f224422.1404681878.git.yann.morin.1998@free.fr>
+ <53BAC5FA.50004@mind.be>
+Message-ID: <20140707215350.GD3806@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/07/14 18:57, Eric Le Bihan wrote:
-> If support for systemd-timesyncd is selected, install the associated
-> service.
+Arnout, All,
+
+On 2014-07-07 18:08 +0200, Arnout Vandecappelle spake thusly:
+> On 06/07/14 23:27, Yann E. MORIN wrote:
+> > Create the temp file in the final location only when it is needed.
+> > 
+> > This avoids the nasty experience of seeing lots of temp files in
+> > BR2_DL_DIR, that would linger around in case the downloads fails.
 > 
-> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/systemd/systemd.mk |    6 ++++++
->  1 file changed, 6 insertions(+)
+>  It would also help to add a
 > 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 2da65e6..3454e43 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -112,6 +112,11 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
->  SYSTEMD_CONF_OPT += --enable-timesyncd
-> +define SYSTEMD_INSTALL_SERVICE_TIMESYNC
-> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
-> +	ln -sf ../../../../lib/systemd/system/systemd-timesyncd.service \
-> +		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service
-> +endef
-
- Not for this patch, but perhaps a cleaner way to do this would be to add
-
-SYSTEMD_INSTALL_INIT_SYSTEMD += $(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
-
-instead having the list explicit below? Or wouldn't that work because there is
-no separator between networkd and timesync?
-
-
- Regards,
- Arnout
-
->  else
->  SYSTEMD_CONF_OPT += --disable-timesyncd
->  endif
-> @@ -180,6 +185,7 @@ endef
->  
->  define SYSTEMD_INSTALL_INIT_SYSTEMD
->  	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
-> +	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
->  endef
->  
->  $(eval $(autotools-package))
+> trap "rm -f ${tmp_dl}" EXIT HUP INT QUIT TERM
 > 
+> which also removes the need of doing the rm at the end. Of course, that trap is
+> still racy (interrupt between mktemp and trap).
+> 
+>  But with the two temporary variables, adding a trap becomes even more
+> difficult. Unless that part is refactored into a separate helper script of
+> course :-)
 
+Yep, added to the list of TODO. ;-)
+
+> > Add a comment on why we don;t clean-up after git.
+> 
+>  Typo in don;t
+
+Yep, already fixed.
+
+[--SNIP--]
+> > diff --git a/support/download/git b/support/download/git
+> > index b0031e5..d3fcdaf 100755
+> > --- a/support/download/git
+> > +++ b/support/download/git
+> > @@ -19,8 +19,6 @@ basename="${3}"
+> >  output="${4}"
+> >  
+> >  repodir="${basename}.tmp-git-checkout"
+> 
+>  (not related to this patch) It's actually not a checkout, it's a bare clone.
+
+And it's being renamed in a later patch.
+
+> > -tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+> > -tmp_output="$( mktemp "${output}.XXXXXX" )"
+> >  
+> >  # Play tic-tac-toe with temp files
+> >  # - first, we download to a trashable location (the build-dir)
+> > @@ -33,6 +31,8 @@ cd "${BUILD_DIR}"
+> >  # Remove leftovers from a previous failed run
+> >  rm -rf "${repodir}"
+> >  
+> > +# Upon failure, git cleans behind itself, so no need to catch failures here.
+> > +# The only case when git would not clean up, is if it gets killed with SIGKILL.
+> 
+>  I think the SIGKILL is reason enough to do the rm explicitly in the script. Of
+> course, this is only valid if you use the trap, otherwise you never reach the rm
+
+Well, SIGKILL is not catchable. That's the main selling point of SIGKILL.
+;-)
+
+> (due to 'set -e').
+
+Well, 'set -e' only kicks in for the final 'mv', since all other
+commands and conditions in an if statement.
+
+Also, I'm not a big fan of traps, although I can be abusing them from
+time to time.
+
+But OK, I'll add this to the TODO...
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
