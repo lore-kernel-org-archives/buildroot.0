@@ -1,40 +1,41 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jul 2014 19:49:44 +0200
-Subject: [Buildroot]
- =?utf-8?q?=5BANNOUNCE=5D_Registration_for_Buildroot_D?=
- =?utf-8?q?evelopers_Meeting_in_D=C3=BCsseldorf?=
-In-Reply-To: <20140707192456.14ad3bbf@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 7 Jul 2014 19:24:56 +0200")
-References: <20140707192456.14ad3bbf@free-electrons.com>
-Message-ID: <87pphh12kn.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 7 Jul 2014 19:44:45 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 14,
+	15}.x series
+Message-ID: <20140707175015.522BB9D1BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=70b09292e5419cde1338dd75e9aff90fabf0c2a6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello,
- > As we have announced back in February, the next Buildroot Developers
- > Meeting will take place on October 11-12 in D?sseldorf, Germany, right
- > before the Embedded Linux Conference Europe.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
- > Since we are now starting to plan the logistics for our meeting, we
- > would like to get an idea of the number of participants to the meeting.
- > Therefore, the registration is open at
- > http://elinux.org/Buildroot:DeveloperDaysELCE2014#Participants.
-
- > If you are interested in participating, please register by adding your
- > name on the Wiki page (or let me know if you don't have an elinux.org
- > wiki account and I'll add your name). The meeting is open to all
- > Buildroot developers, there is no registration fee. If you're thinking
- > of coming but not yet sure, please let us know as well, we'll register
- > you as a tentative participant.
-
- > Thanks for your participation!
-
-Indeed, thanks for getting the ball rolling - I've added myself.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e6629b0..36e09ec 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.96"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.97"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.46"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.47"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.24"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.10"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.3"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.11"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.4"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
