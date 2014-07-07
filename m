@@ -1,52 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Jul 2014 16:33:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 7268] New: python 2.7 compilation issue
-Message-ID: <bug-7268-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 7 Jul 2014 18:35:02 +0200
+Subject: [Buildroot] [PATCH 14/14] defconfig/wandboard: update kernel +
+	bootlaoder
+In-Reply-To: <53BABB2B.8090207@gmail.com>
+References: <cover.1404164261.git.yann.morin.1998@free.fr>
+ <cf148e58a53cf0c55c12e211c4367363bdf1dc0f.1404164261.git.yann.morin.1998@free.fr>
+ <53BABB2B.8090207@gmail.com>
+Message-ID: <20140707163502.GB3806@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7268
+Hadrien, All,
 
-           Summary: python 2.7 compilation issue
-           Product: buildroot
-           Version: unspecified
-          Platform: PC
-        OS/Version: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-        AssignedTo: unassigned at buildroot.uclibc.org
-        ReportedBy: buildroot-2014 at inbox.com
-                CC: buildroot at uclibc.org
-   Estimated Hours: 0.0
+On 2014-07-07 17:22 +0200, Hadrien Boutteville spake thusly:
+> There is a typo in the commit title : "bootloader" ;-).
 
+OK.
 
-Hi,
+> On Mon, 30 Jun 2014 23:52:14 +0200, Yann E. Morin wrote:
+> [...]
+> >  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> >  BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.imx"
+> 
+> Is it still necessary to specify this custom name instead of using
+> BR2_TARGET_UBOOT_FORMAT_IMX ?
 
-I am trying to build python for an x86_64 target. 
+Ah, indeed. I merely hand-edited the defconfig to set the new versions.
 
-I am using fresh sources of buildroot (exactly the git revision
-5ac8f8ce10027ac8285a7e9cec16e74aa38ee2c1).
+Will adapt before re-spinning.
 
-To achieve that, I go through following steps :
-- make defconfig
-- in Target Options, change Target Architecture to x86_64 / generic
-- in Toolchain, change C Library to glibc
-- in Target Packages / Interpreter languages and scripting, enable python
-- make
-
-The following tarball encloses configuration file and make output.
-
-It seems host part of python build goes well. Target part, however, fails
-building "struct" module (I'm not a python expert... so I may be wrong).
-
-Thanks
+Regards,
+Yann E. MORIN.
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
