@@ -1,54 +1,41 @@
 From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Mon, 07 Jul 2014 17:07:54 +0200
-Subject: [Buildroot] [PATCH 0/14 v3] freescale: update userspace
- packages (branch yem/fsl-imx)
-In-Reply-To: <cover.1404164261.git.yann.morin.1998@free.fr>
+Date: Mon, 07 Jul 2014 17:22:19 +0200
+Subject: [Buildroot] [PATCH 14/14] defconfig/wandboard: update kernel +
+	bootlaoder
+In-Reply-To: <cf148e58a53cf0c55c12e211c4367363bdf1dc0f.1404164261.git.yann.morin.1998@free.fr>
 References: <cover.1404164261.git.yann.morin.1998@free.fr>
-Message-ID: <53BAB7CA.9000603@gmail.com>
+ <cf148e58a53cf0c55c12e211c4367363bdf1dc0f.1404164261.git.yann.morin.1998@free.fr>
+Message-ID: <53BABB2B.8090207@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary, Yann,
+Hello Yann,
 
-On Mon, 30 Jun 2014 23:52:10 +0200, Yann E. Morin wrote:
-> This series updates the Freescale userland components to the latest
-> available (stable) versions:
-> 
->  1     : bump the global freescale version
->  2..5  : adapt packages to the new version
->  6..9  : bump packages which version does not follow the global version
->  10    : tentative patch to re-use the generic i.MX platform in
->          gst-fsl-plugins
->  11..14: bump a few iMX defconfigs
-> 
-> Although I did some changes to Gary's initial submission, I only did
-> mostly cosmetic changes, so the following should still apply:
-> 
->     ---8<---
->     Same as last time, testing has been done on a Nitrogen6x using the
->     kernel patch committed previously.
-> 
->     GPU test (gpu-viv-bin-mx6q):
->     # cd /usr/share/examples/viv_samples/vdk/
->     # ./tutorial7
-> 
->     VPU test (libfslvpuwrap, libfslcodec, gst-fsl-plugins, imx-vpu):
->     # VSALPHA=1 gst-launch-0.10 filesrc location=trailer_1080p_h264_mp3.avi \
->                                 ! avidemux ! vpudec ! mfw_isink
->     ---8<---
+There is a typo in the commit title : "bootloader" ;-).
 
-Gary, did you have time to test this series? When I tested your previous
-series I was able to run some tutorialX demo programs, but they was
-quite weird and ugly (black and white with strips), and now I can't run
-anything with this series.
-I didn't test the VPU for now.
+On Mon, 30 Jun 2014 23:52:14 +0200, Yann E. Morin wrote:
+[...]
+>  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+>  BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.imx"
 
-If it works for you, could you provide a defconfig so that I can look
-what I'm missing?
+Is it still necessary to specify this custom name instead of using
+BR2_TARGET_UBOOT_FORMAT_IMX ?
 
-Thanks,
+>  BR2_TARGET_UBOOT_ENVIMAGE=y
+> @@ -16,7 +16,7 @@ BR2_TARGET_UBOOT_ENVIMAGE_SOURCE="board/wandboard/uboot-env.txt"
+>  BR2_TARGET_UBOOT_ENVIMAGE_SIZE="0x2000"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://repo.or.cz/wandboard.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="86429847b5152f040f190015faedcac49b243328"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/wandboard-org/linux"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="9d567e4f285e80bc332e79f0636259bc05a4ee3b"
+>  BR2_LINUX_KERNEL_DEFCONFIG="wandboard"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+
+Regards,
 
 Hadrien
