@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 07 Jul 2014 19:46:42 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 3.15.4
-In-Reply-To: <1404730858-15147-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 7 Jul 2014 08:00:58 -0300")
-References: <1404730858-15147-1-git-send-email-gustavo@zacarias.com.ar>
- <1404730858-15147-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y4w512pp.fsf@dell.be.48ers.dk>
+Date: Mon, 07 Jul 2014 19:47:08 +0200
+Subject: [Buildroot] [PATCH] lxc: disable lua and python
+In-Reply-To: <53B9DBC7.10407@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Sun, 06 Jul 2014 20:29:11 -0300")
+References: <1404603241-20187-1-git-send-email-gustavo@zacarias.com.ar>
+ <87oax22rks.fsf@dell.be.48ers.dk> <53B9DBC7.10407@zacarias.com.ar>
+Message-ID: <87tx6t12oz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +14,23 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > On 07/06/2014 04:52 PM, Peter Korsgaard wrote:
+ >> Committed, thanks.
+ >> 
+ >> Any reason to not enable this support if lua/python is enabled?
 
-Committed, thanks.
+ > Well, it breaks :)
+ > Being an autotools package and sharing that with python infra is not
+ > straightforward, it would require patching to not build/install the
+ > python bits in the main build and doing so in separate steps with python
+ > workarounds/love - it's probably better to just make it an option in the
+ > python extensions menu as python-lxc.
+ > And it didn't have that feature before, the bump being related to not
+ > building on a gentoo distro/chroot, the autobuilders just didn't pick it
+ > up because they're based on debian.
+
+Ok, thanks. It would be good to have that kind of info in the commit
+message.
 
 -- 
 Bye, Peter Korsgaard
