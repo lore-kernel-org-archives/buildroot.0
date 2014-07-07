@@ -1,37 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jul 2014 10:20:39 +0200
-Subject: [Buildroot] Buildroot presentation at ELC-E
-In-Reply-To: <53BA4D33.2070809@mind.be>
-References: <53B6D378.8000007@mind.be>
- <20140707093104.150fbd50@free-electrons.com>
- <53BA4D33.2070809@mind.be>
-Message-ID: <20140707102039.7c7ccd52@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  7 Jul 2014 08:00:57 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{4, 10, 14,
+	15}.x series
+Message-ID: <1404730858-15147-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On Mon, 07 Jul 2014 09:33:07 +0200, Arnout Vandecappelle wrote:
-
-> > I'm planning on submitting something about Buildroot for ELC-E this
-> > year. I don't think that it should prevent anyone else from doing other
-> > submissions, it's good to have several submissions about Buildroot, it
-> > will allow the program committee to chose between several proposals, or
-> > pick several Buildroot talks for the program.
-> 
->  Well, like Yann, I don't really have a particular topic in mind, but I do think
-> it's important that there is a buildroot presentation. That's why I was asking.
-> 
->  So if you're submitting something, I don't have to :-)
-
-Well, I still believe it's good to have several proposals about
-Buildroot, it will give some choice to the program committee.
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e6629b0..36e09ec 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.96"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.97"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.46"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.47"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.24"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.10"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.3"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.11"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.4"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
