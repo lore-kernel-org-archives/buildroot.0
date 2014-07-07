@@ -1,138 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 07 Jul 2014 18:08:26 +0200
-Subject: [Buildroot] [PATCH 4/5] support/download: only create final
- temp file when needed
-In-Reply-To: <399c6d6d31d5b3dbe337ce97bb18c3e19f224422.1404681878.git.yann.morin.1998@free.fr>
-References: <cover.1404681878.git.yann.morin.1998@free.fr>
- <399c6d6d31d5b3dbe337ce97bb18c3e19f224422.1404681878.git.yann.morin.1998@free.fr>
-Message-ID: <53BAC5FA.50004@mind.be>
+Date: Mon, 07 Jul 2014 18:31:38 +0200
+Subject: [Buildroot] [PATCH 1/6] dbus: enable systemd support
+In-Reply-To: <1404406659-31109-2-git-send-email-eric.le.bihan.dev@free.fr>
+References: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1404406659-31109-2-git-send-email-eric.le.bihan.dev@free.fr>
+Message-ID: <53BACB6A.602@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/07/14 23:27, Yann E. MORIN wrote:
-> Create the temp file in the final location only when it is needed.
+On 03/07/14 18:57, Eric Le Bihan wrote:
+> Enable systemd support if systemd is selected as init system (require
+> systemd compatibility libraries).
 > 
-> This avoids the nasty experience of seeing lots of temp files in
-> BR2_DL_DIR, that would linger around in case the downloads fails.
-
- It would also help to add a
-
-trap "rm -f ${tmp_dl}" EXIT HUP INT QUIT TERM
-
-which also removes the need of doing the rm at the end. Of course, that trap is
-still racy (interrupt between mktemp and trap).
-
- But with the two temporary variables, adding a trap becomes even more
-difficult. Unless that part is refactored into a separate helper script of
-course :-)
-
-> 
-> Add a comment on why we don;t clean-up after git.
-
- Typo in don;t
-
-> 
-> Reported-by: Peter Korsgaard <jacmet@uclibc.org>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 > ---
->  support/download/bzr  | 2 +-
->  support/download/cvs  | 2 +-
->  support/download/git  | 6 ++++--
->  support/download/hg   | 2 +-
->  support/download/scp  | 2 +-
->  support/download/svn  | 2 +-
->  support/download/wget | 2 +-
->  7 files changed, 10 insertions(+), 8 deletions(-)
+>  package/dbus/Config.in |    1 +
+>  package/dbus/dbus.mk   |    9 +++++++--
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/support/download/bzr b/support/download/bzr
-> index f86fa82..a2cb440 100755
-> --- a/support/download/bzr
-> +++ b/support/download/bzr
-> @@ -17,7 +17,6 @@ rev="${2}"
->  output="${3}"
+> diff --git a/package/dbus/Config.in b/package/dbus/Config.in
+> index 653f748..7d49ce5 100644
+> --- a/package/dbus/Config.in
+> +++ b/package/dbus/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_DBUS
+>  	# uses fork()
+>  	depends on BR2_USE_MMU
+>  	select BR2_PACKAGE_EXPAT
+> +	select BR2_PACKAGE_SYSTEMD_COMPAT if BR2_INIT_SYSTEMD
+>  	help
+>  	  The D-Bus message bus system.
 >  
->  tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-> -tmp_output="$( mktemp "${output}.XXXXXX" )"
+> diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+> index 0c8fcf3..de699fc 100644
+> --- a/package/dbus/dbus.mk
+> +++ b/package/dbus/dbus.mk
+> @@ -50,8 +50,13 @@ else
+>  DBUS_CONF_OPT += --without-x
+>  endif
 >  
->  # Play tic-tac-toe with temp files
->  # - first, we download to a trashable location (the build-dir)
-> @@ -27,6 +26,7 @@ tmp_output="$( mktemp "${output}.XXXXXX" )"
->  
->  ret=1
->  if ${BZR} export --format=tgz "${tmp_dl}" "${repo}" -r "${rev}"; then
-> +    tmp_output="$( mktemp "${output}.XXXXXX" )"
->      if cat "${tmp_dl}" >"${tmp_output}"; then
->          mv "${tmp_output}" "${output}"
->          ret=0
-> diff --git a/support/download/cvs b/support/download/cvs
-> index a8ab080..22863d8 100755
-> --- a/support/download/cvs
-> +++ b/support/download/cvs
-> @@ -21,7 +21,6 @@ basename="${4}"
->  output="${5}"
->  
->  repodir="${basename}.tmp-cvs-checkout"
-> -tmp_output="$( mktemp "${output}.XXXXXX" )"
->  
->  cd "${BUILD_DIR}"
->  # Remove leftovers from a previous failed run
-> @@ -36,6 +35,7 @@ rm -rf "${repodir}"
->  ret=1
->  if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
->             co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
-> +    tmp_output="$( mktemp "${output}.XXXXXX" )"
->      if tar czf - "${repodir}" >"${tmp_output}"; then
->          mv "${tmp_output}" "${output}"
->          ret=0
-> diff --git a/support/download/git b/support/download/git
-> index b0031e5..d3fcdaf 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -19,8 +19,6 @@ basename="${3}"
->  output="${4}"
->  
->  repodir="${basename}.tmp-git-checkout"
+> -ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+> -DBUS_CONF_OPT += --with-systemdsystemunitdir=/lib/systemd/system
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +DBUS_CONF_OPT += \
+> +	--enable-systemd \
+> +	--with-systemdsystemunitdir=/lib/systemd/system
 
- (not related to this patch) It's actually not a checkout, it's a bare clone.
+ Doesn't systemd.pc specify this correctly?
 
-> -tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-> -tmp_output="$( mktemp "${output}.XXXXXX" )"
->  
->  # Play tic-tac-toe with temp files
->  # - first, we download to a trashable location (the build-dir)
-> @@ -33,6 +31,8 @@ cd "${BUILD_DIR}"
->  # Remove leftovers from a previous failed run
->  rm -rf "${repodir}"
->  
-> +# Upon failure, git cleans behind itself, so no need to catch failures here.
-> +# The only case when git would not clean up, is if it gets killed with SIGKILL.
 
- I think the SIGKILL is reason enough to do the rm explicitly in the script. Of
-course, this is only valid if you use the trap, otherwise you never reach the rm
-(due to 'set -e').
-
+ Otherwise, looks good to me.
 
  Regards,
  Arnout
 
->  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
->      printf "Doing shallow clone\n"
->      ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"
-> @@ -43,8 +43,10 @@ fi
+> +DBUS_DEPENDENCIES += systemd
+> +else
+> +DBUS_CONF_OPT += --disable-systemd
+>  endif
 >  
->  ret=1
->  pushd "${repodir}" >/dev/null
-> +tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
->  if ${GIT} archive --prefix="${basename}/" --format=tar "${cset}" \
->                    >"${tmp_tar}"; then
-> +    tmp_output="$( mktemp "${output}.XXXXXX" )"
->      if gzip -c "${tmp_tar}" >"${tmp_output}"; then
->          mv "${tmp_output}" "${output}"
->          ret=0
-[snip]
+>  # fix rebuild (dbus makefile errors out if /var/lib/dbus is a symlink)
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
