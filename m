@@ -1,103 +1,54 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon,  7 Jul 2014 18:21:54 +0400
-Subject: [Buildroot] [PATCH] ARC: disable packages that require atomic
-	builtins
-Message-ID: <1404742914-21583-1-git-send-email-abrodkin@synopsys.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Mon, 07 Jul 2014 17:07:54 +0200
+Subject: [Buildroot] [PATCH 0/14 v3] freescale: update userspace
+ packages (branch yem/fsl-imx)
+In-Reply-To: <cover.1404164261.git.yann.morin.1998@free.fr>
+References: <cover.1404164261.git.yann.morin.1998@free.fr>
+Message-ID: <53BAB7CA.9000603@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In particular libtirpc is reported to be broken here: http://autobuild.buildroot.net/results/6bb90d3f2b840a1faacf152a1d93a909a2dc98d3
+Hello Gary, Yann,
 
-"rpcbind" in its turn selects "libtirpc", so it's required to disable it as well
+On Mon, 30 Jun 2014 23:52:10 +0200, Yann E. Morin wrote:
+> This series updates the Freescale userland components to the latest
+> available (stable) versions:
+> 
+>  1     : bump the global freescale version
+>  2..5  : adapt packages to the new version
+>  6..9  : bump packages which version does not follow the global version
+>  10    : tentative patch to re-use the generic i.MX platform in
+>          gst-fsl-plugins
+>  11..14: bump a few iMX defconfigs
+> 
+> Although I did some changes to Gary's initial submission, I only did
+> mostly cosmetic changes, so the following should still apply:
+> 
+>     ---8<---
+>     Same as last time, testing has been done on a Nitrogen6x using the
+>     kernel patch committed previously.
+> 
+>     GPU test (gpu-viv-bin-mx6q):
+>     # cd /usr/share/examples/viv_samples/vdk/
+>     # ./tutorial7
+> 
+>     VPU test (libfslvpuwrap, libfslcodec, gst-fsl-plugins, imx-vpu):
+>     # VSALPHA=1 gst-launch-0.10 filesrc location=trailer_1080p_h264_mp3.avi \
+>                                 ! avidemux ! vpudec ! mfw_isink
+>     ---8<---
 
-As it is seen from http://autobuild.buildroot.org/results/3bd/3bda860a269dd9a4e38533cc9350892c68102618
-"zeromq" also uses "___sync_add_and_fetch_2" & "___sync_fetch_and_add_2" in
-"libpgm" so need to disable it.
+Gary, did you have time to test this series? When I tested your previous
+series I was able to run some tutorialX demo programs, but they was
+quite weird and ugly (black and white with strips), and now I can't run
+anything with this series.
+I didn't test the VPU for now.
 
-And finally "zyre" selects "zeromq" so we disable it for ARC too.
+If it works for you, could you provide a defconfig so that I can look
+what I'm missing?
 
-signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Thanks,
 
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libtirpc/Config.in | 2 ++
- package/rpcbind/Config.in  | 2 ++
- package/zeromq/Config.in   | 1 +
- package/zyre/Config.in     | 2 ++
- 4 files changed, 7 insertions(+)
-
-diff --git a/package/libtirpc/Config.in b/package/libtirpc/Config.in
-index a8e6dd3..4fb3eeb 100644
---- a/package/libtirpc/Config.in
-+++ b/package/libtirpc/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBTIRPC
- 	# dependencies of libtirpc for which native RPC support can be
- 	# used instead of libtirpc.
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
-+	depends on !BR2_arc # atomic builtins
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Libtirpc is a port of Sun's Transport-Independent RPC
-@@ -16,3 +17,4 @@ config BR2_PACKAGE_LIBTIRPC
- comment "libtirpc needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_arc
-diff --git a/package/rpcbind/Config.in b/package/rpcbind/Config.in
-index 2a79bdc..136553a 100644
---- a/package/rpcbind/Config.in
-+++ b/package/rpcbind/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_RPCBIND
- 	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
- 	# support, needed for libtirpc
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
-+	depends on !BR2_arc # atomic builtins @libtirpc
- 	# fork()
- 	depends on BR2_USE_MMU
- 	help
-@@ -16,4 +17,5 @@ config BR2_PACKAGE_RPCBIND
- comment "rpcbind needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_arc
- 	depends on BR2_USE_MMU
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index 778a503..5382c98 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -34,6 +34,7 @@ config BR2_PACKAGE_ZEROMQ_PGM
- 	depends on !BR2_avr32 # openpgm
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2013R1 # openpgm
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2 # openpgm
-+	depends on !BR2_arc # atomic builtins
- 	select BR2_PACKAGE_OPENPGM
- 	help
- 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
-diff --git a/package/zyre/Config.in b/package/zyre/Config.in
-index 86fff35..d955b0e 100644
---- a/package/zyre/Config.in
-+++ b/package/zyre/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_ZYRE
- 	# uClibc toolchains provided by ADI don't have AI_ADDRCONFIG
- 	# support, needed by czmq
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
-+	depends on !BR2_arc # atomic builtins @zeromq
- 	select BR2_PACKAGE_CZMQ
- 	select BR2_PACKAGE_ZEROMQ
- 	help
-@@ -19,6 +20,7 @@ config BR2_PACKAGE_ZYRE
- 
- comment "zyre needs a toolchain w/ C++, IPv6, largefile, wchar, threads"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_arc
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX_2012R2
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_INET_IPV6 && BR2_LARGEFILE \
- 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
--- 
-1.9.3
+Hadrien
