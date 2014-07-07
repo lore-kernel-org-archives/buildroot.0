@@ -1,48 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Jul 2014 21:01:21 +0200
-Subject: [Buildroot]
- =?utf-8?q?=5BANNOUNCE=5D_Registration_for_Buildroot_D?=
- =?utf-8?q?evelopers_Meeting_in_D=C3=BCsseldorf?=
-In-Reply-To: <87pphh12kn.fsf@dell.be.48ers.dk>
-References: <20140707192456.14ad3bbf@free-electrons.com>
- <87pphh12kn.fsf@dell.be.48ers.dk>
-Message-ID: <20140707210121.3894521a@free-electrons.com>
+Date: Mon, 7 Jul 2014 21:06:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freetype: Fix removal of wrong
+ include/freetype2/freetype link by host-freetype
+In-Reply-To: <1404554542-2165-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1404554542-2165-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140707210646.175c8ba2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Bernd Kuhls,
 
-On Mon, 07 Jul 2014 19:49:44 +0200, Peter Korsgaard wrote:
+On Sat,  5 Jul 2014 12:02:22 +0200, Bernd Kuhls wrote:
+> Broken by http://git.buildroot.net/buildroot/commit/package/freetype/freetype.mk?id=cc5b8e72308f523b3826ada5fe7009b722bf9a79
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/b77/b770d495115f25f182463eb4623cf9ee0a0f5d68/
+> http://autobuild.buildroot.net/results/5b4/5b449a9120d4ece020e22c36299489e80ab094b9/
+> http://autobuild.buildroot.net/results/fb9/fb9ec94fc4e2dcdf894ec774bd1e5809611c56fb/
+> http://autobuild.buildroot.net/results/b12/b12989ec1c57f8cf3a2f743cc94de082692b7de6/
+> http://autobuild.buildroot.net/results/f25/f255f64c210b04368069f80402da8afaecb9464b/
+> http://autobuild.buildroot.net/results/d66/d66e80b5caab1661e1661922933a963c989d02cc/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/freetype/freetype.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
->  > As we have announced back in February, the next Buildroot Developers
->  > Meeting will take place on October 11-12 in D?sseldorf, Germany, right
->  > before the Embedded Linux Conference Europe.
-> 
->  > Since we are now starting to plan the logistics for our meeting, we
->  > would like to get an idea of the number of participants to the meeting.
->  > Therefore, the registration is open at
->  > http://elinux.org/Buildroot:DeveloperDaysELCE2014#Participants.
-> 
->  > If you are interested in participating, please register by adding your
->  > name on the Wiki page (or let me know if you don't have an elinux.org
->  > wiki account and I'll add your name). The meeting is open to all
->  > Buildroot developers, there is no registration fee. If you're thinking
->  > of coming but not yet sure, please let us know as well, we'll register
->  > you as a tentative participant.
-> 
->  > Thanks for your participation!
-> 
-> Indeed, thanks for getting the ball rolling - I've added myself.
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Good. So far, I'm mainly trying to figure out whether we need a
-real meeting room or whether we can just meet in some hotel lobby/room
-in an informal way. I asked for a quotation today for a meeting room in
-D?sseldorf and the proposal I have is 520 EUR/day, so it would cost
-1040 EUR for both days. Any company willing to sponsor that? Of course,
-I'll try to find some more affordable alternatives.
+Peter, could you apply this quickly, it fixes all the compilation
+issues that are currently affecting the autobuilders due to my earlier
+freetype patch.
+
+Thanks Bernd for sending this fix!
 
 Best regards,
 
