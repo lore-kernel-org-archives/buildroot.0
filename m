@@ -1,74 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  7 Jul 2014 23:44:34 +0200
-Subject: [Buildroot] [PATCH 0/6 v2] Cleanups in download helpers (branch
-	yem/check-downloads)
-Message-ID: <cover.1404769268.git.yann.morin.1998@free.fr>
+Date: Mon,  7 Jul 2014 23:44:33 +0200
+Subject: [Buildroot] [PATCH 2/6 v2] support/download: fix the git helper
+In-Reply-To: <cover.1404769268.git.yann.morin.1998@free.fr>
+References: <cover.1404769268.git.yann.morin.1998@free.fr>
+Message-ID: <b0bdeb224c0dab926128a93fe7ddf31d4a3b67ac.1404769268.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+When switching the git helper over to a shell script, a special case was
+not carried over: in case the remote has the required reference, we
+attempt a shallow clone, using --depth 1. However, this is not supported
+when the remote is accessed with the http protocol.
 
-This series is a follow-up to the previous download series, and brings in:
-  - fixes the git and bzr helpers
-  - fixes a potential race in parallel downloads
-  - simplifies the localfiles helper
-  - postpones creating temp files/dirs only at the point they are needed
-  - cleanups and harmonises the naming of temp files/dirs
+Therefore, the download fails.
 
+What happened before the conversion to a shell script was that the helper
+in the Makefile would fallback to doing a full-clone.
 
-Changes v1 -> v2:
-  - fix the git helper
-  - add the git comment in a single patch
-  - fix left-overs in the cvs helper
-  - fix double-dot typo in scp helper
-  - harmoise the svn and cvs helpers wrt. tar options
+This is the case and behaviour that were lost in the conversion.
 
+To avoid making the script too complex, we only attempt a full clone if
+needed. And we decide that a full clone is needed by default; we decide
+it is unnecessary if the remote has the needed reference *and* the
+shallow clone was successful.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/download/git | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-
-The following changes since commit 1473c8c4c819aa5b544eb2d9368c510ada3ec6c0:
-
-  linux: bump default to version 3.15.4 (2014-07-07 19:44:52 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/check-downloads
-
-for you to fetch changes up to b16d43fcd8082ce3444c04e8db2ef2e896b40834:
-
-  support/download: rationalise naming and use of the temporary files (2014-07-07 22:08:06 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      support/download: fix the bzr helper
-      support/download: fix the git helper
-      support/download: properly use temp files
-      support/download: simplify the local-files helper
-      support/download: only create final temp file when needed
-      support/download: rationalise naming and use of the temporary files
-
- Config.in               |  4 ----
- Config.in.legacy        | 11 +++++++++++
- package/pkg-download.mk |  1 -
- support/download/bzr    |  9 ++++-----
- support/download/cp     |  6 ++++--
- support/download/cvs    | 19 +++++++++++--------
- support/download/git    | 26 ++++++++++++++------------
- support/download/hg     | 11 +++--------
- support/download/scp    |  8 +++++---
- support/download/svn    | 21 ++++++++++++---------
- support/download/wget   |  7 +++----
- 11 files changed, 67 insertions(+), 56 deletions(-)
-
+diff --git a/support/download/git b/support/download/git
+index badb491..116e5a9 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -33,10 +33,14 @@ cd "${BUILD_DIR}"
+ # Remove leftovers from a previous failed run
+ rm -rf "${repodir}"
+ 
++git_done=0
+ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+-    ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"
+-else
++    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"; then
++        git_done=1
++    fi
++fi
++if [ ${git_done} -eq 0 ]; then
+     printf "Doing full clone\n"
+     ${GIT} clone --bare "${repo}" "${repodir}"
+ fi
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
