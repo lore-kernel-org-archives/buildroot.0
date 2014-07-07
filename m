@@ -1,29 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 06 Jul 2014 20:29:11 -0300
-Subject: [Buildroot] [PATCH] lxc: disable lua and python
-In-Reply-To: <87oax22rks.fsf@dell.be.48ers.dk>
-References: <1404603241-20187-1-git-send-email-gustavo@zacarias.com.ar>
- <87oax22rks.fsf@dell.be.48ers.dk>
-Message-ID: <53B9DBC7.10407@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 07 Jul 2014 07:56:47 +0200
+Subject: [Buildroot] [PATCH v5] Add support for Congatec QMX6
+In-Reply-To: <1404377182-13435-1-git-send-email-sho@relinux.de> (Stephan
+ Hoffmann's message of "Thu, 3 Jul 2014 10:46:22 +0200")
+References: <1404377182-13435-1-git-send-email-sho@relinux.de>
+Message-ID: <87bnt13e5c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/06/2014 04:52 PM, Peter Korsgaard wrote:
+>>>>> "Stephan" == Stephan Hoffmann <sho@relinux.de> writes:
 
-> Committed, thanks.
-> 
-> Any reason to not enable this support if lua/python is enabled?
+ > Add support for the iMX6 based conga-QMX6 family of Qseven modules.
+ > This patch is based on Linux 3.0.35 from Congatec's kernel reporitory
 
-Well, it breaks :)
-Being an autotools package and sharing that with python infra is not
-straightforward, it would require patching to not build/install the
-python bits in the main build and doing so in separate steps with python
-workarounds/love - it's probably better to just make it an option in the
-python extensions menu as python-lxc.
-And it didn't have that feature before, the bump being related to not
-building on a gentoo distro/chroot, the autobuilders just didn't pick it
-up because they're based on debian.
-Regards.
+ > Signed-off-by: Stephan Hoffmann <sho@relinux.de>
+ > ---
+ > There has been a similar patch set from
+ > Lahoudere Fabien <fabien.lahoudere@openwide.fr> last year adding a patch
+ > to the freescale kernel repository, but it seems more logical to me to
+ > start from the board manufacturer's repo (which might not have been
+ > availeable at that time).
+
+ > Changes v1 -> v2
+ >   - fix whitespace errors
+
+ > Changes v2 -> v3
+ >   Fixes according to Peter Korsgaard's review
+ >   - removed unneeded boot options
+ >   - fix post build script
+ >   - add host uboot tools to defconfig
+ >   - fix readme.txt
+ >   - remove cpio from defconfig
+
+ > Changes v3 -> v5
+ >   Forgotten fix according to Peter Korsgaard's review
+ >   - lock kernel version for toolchain to match kernel
+
+ > +++ b/board/congatec/qmx6/post-build.sh
+ > @@ -0,0 +1,7 @@
+ > +#!/bin/sh
+ > +
+ > +TARGET_DIR=$1
+ > +BOARD_DIR="$(dirname $0)"
+ > +MKIMAGE=mkimage
+ > +
+ > +$MKIMAGE -A arm -O linux -T script -C none -a 0 -e 0 -n "boot script" -d $BOARD_DIR/6q_bootscript.txt $TARGET_DIR/6q_bootscript
+
+Now that mkimage is in the path this MKIMAGE variable isn't needed (and
+imho doesn't help readability), so I've dropped that and wrapped the
+line.
+
+Committed with that minor change, thanks.
+
+-- 
+Bye, Peter Korsgaard
