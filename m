@@ -1,28 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon,  7 Jul 2014 13:06:44 +0000 (UTC)
-Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
- internal variables
-In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
-References: <bug-7172-163@https.bugs.busybox.net/>
-Message-ID: <20140707130644.B50C49D1BC@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Mon, 07 Jul 2014 16:05:15 +0200
+Subject: [Buildroot] systed-remount-fs rootfs issue
+In-Reply-To: <53B54052.6040900@gmail.com>
+References: <53B54052.6040900@gmail.com>
+Message-ID: <2088985.2aUruBLr1Y@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7172
+Hello Nathaniel,
 
---- Comment #14 from Mike Z <minimod@morethan.org> 2014-07-07 13:06:43 UTC ---
-Ah, phooey, forgot to reply to the bug discussion thread.
+On Thursday 03 July 2014 19:36:50 Nathaniel Roach wrote:
+> Hi!
+> 
+> I'm trying to get buildroot working on an x86_64 machine (pentium d) and
+> I was having some trouble getting root as rw. I've found that even if /
+> is set to mount rw in fstab, systemd-remount-fs doesn't mount it as rw
+> (as from what I've read it should).
+In order to help you, can you provide a few additional information?
 
-The 'shell' code work around example can be found here:
-http://www.mobileread.com/forums/showthread.php?p=2848930&postcount=18
+Does systemctl report remount-rootfs.service as failed? What happens if you 
+try to remount your filesystem manually (by doing "mount -o remount,rw /")? 
 
-I do not have the required knowledge of Buildroot infrastructure to
-find where / how to incorporate that into the system properly.
+What is type of your filesystem? NFS?
+
+Is your mount command is provided by busybox?
+
+(I have already found some issues with NFS and busybox mount command)
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+J?r?me Pouiller - Sysmic
+Expert Linux embarqu?
