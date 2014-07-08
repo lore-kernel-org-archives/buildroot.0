@@ -1,39 +1,37 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jul 2014 23:27:50 +0200
-Subject: [Buildroot] [PATCH 2/6 v2] support/download: fix the git helper
-In-Reply-To: <b0bdeb224c0dab926128a93fe7ddf31d4a3b67ac.1404769268.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 7 Jul 2014 23:44:33 +0200")
-References: <cover.1404769268.git.yann.morin.1998@free.fr>
- <b0bdeb224c0dab926128a93fe7ddf31d4a3b67ac.1404769268.git.yann.morin.1998@free.fr>
-Message-ID: <87wqbnwnft.fsf@dell.be.48ers.dk>
+Date: Tue, 08 Jul 2014 23:33:01 +0200
+Subject: [Buildroot] [PATCH] dvb-apps: fix static only build
+In-Reply-To: <1404848465-25296-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 8 Jul 2014 21:41:05 +0200")
+References: <1404848465-25296-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87simbwn76.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > When switching the git helper over to a shell script, a special case was
- > not carried over: in case the remote has the required reference, we
- > attempt a shallow clone, using --depth 1. However, this is not supported
- > when the remote is accessed with the http protocol.
+ > This commit makes dvb-apps behave properly in a static-only build. It
+ > passes the static=1 variable to the Makefile, and adds a patch that
+ > fixes the Makefile to not build .so libraries when static=1.
 
- > Therefore, the download fails.
+ > Fixes:
 
- > What happened before the conversion to a shell script was that the helper
- > in the Makefile would fallback to doing a full-clone.
+ >   http://autobuild.buildroot.org/results/3db/3dbfa7b692d4b123b3ba6b55c84df12818273554/
 
- > This is the case and behaviour that were lost in the conversion.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- > To avoid making the script too complex, we only attempt a full clone if
- > needed. And we decide that a full clone is needed by default; we decide
- > it is unnecessary if the remote has the needed reference *and* the
- > shallow clone was successful.
+ > +++ b/package/dvb-apps/dvb-apps.mk
+ > @@ -15,19 +15,26 @@ DVB_APPS_DEPENDENCIES = libiconv
+ >  DVB_APPS_LDLIBS += -liconv
+ >  endif
+ 
+ > +DVB_APPS_MAKE_OPTS = V=1
+ > +
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Committed, thanks.
+Committed with this removed as pointed out by Yann, thanks.
 
 -- 
 Bye, Peter Korsgaard
