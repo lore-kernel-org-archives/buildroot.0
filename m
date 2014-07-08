@@ -1,94 +1,32 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Tue, 8 Jul 2014 09:31:30 -0700
-Subject: [Buildroot] [PATCH 0/14 v3] freescale: update userspace
-	packages (branch yem/fsl-imx)
-In-Reply-To: <53BBFEFD.6070609@gmail.com>
-References: <cover.1404164261.git.yann.morin.1998@free.fr>
- <53BAB7CA.9000603@gmail.com>
- <CADCpmyOEGFGsuExD4mskncbqRJBxDoHy6CbqtyZ0TRjEKGqjNQ@mail.gmail.com>
- <CADCpmyPmcqdGYG1oHVPRag_5D_us5mb6xu_+GKpjHnG7ftF0ig@mail.gmail.com>
- <53BBFEFD.6070609@gmail.com>
-Message-ID: <CADCpmyMum0qiC-JY4En=5uU4U25XQqWD9OW0Vt61HyDJTkfc_w@mail.gmail.com>
+From: Henry Margies <henry.margies@gmail.com>
+Date: Tue, 8 Jul 2014 17:43:31 +0100
+Subject: [Buildroot] [PATCH 1/1] Build Python with tzset support
+In-Reply-To: <20140708162840.5983803f@free-electrons.com>
+References: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
+ <20140708162840.5983803f@free-electrons.com>
+Message-ID: <6B5AC78D-66CA-4C7D-AF6C-B2B9C181FA65@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hadrien,
+Hi Thomas,
 
-On Tue, Jul 8, 2014 at 7:23 AM, Hadrien Boutteville <
-hadrien.boutteville@gmail.com> wrote:
+thanks for the review.
 
-> Hi Gary,
->
-> On Mon, 7 Jul 2014 23:46:46 -0700, Gary Bisson wrote:
-> [...]
-> >
-> >         Gary, did you have time to test this series? When I tested your
-> >         previous
-> >         series I was able to run some tutorialX demo programs, but they
-> was
-> >         quite weird and ugly (black and white with strips), and now I
-> >         can't run
-> >         anything with this series.
-> >         I didn't test the VPU for now.
-> >
-> >         If it works for you, could you provide a defconfig so that I can
-> >         look
-> >         what I'm missing?
-> >
-> >
-> >     The latest series I've tested is my PATCHv2 one, I will do it on
-> >     Yann's asap but in the meantime here is the defconfig I was using.
-> >     When you say it is not working, could you tell me more (nothing on
-> >     the screen, seg fault etc..)?
->
-> tutorialX demos just return immediately (nothing on the screen, no
-> messages) and es_20 demos (vv_launcher ant tutorialX_es20) segfault.
->
->
-Usually OpenGL applications return or segfault when there is a mismatch
-between the kernel driver and the libraries. Make sure to have the 3.10.17
-kernel as well as the 3.10.17 libs.
+On 8 Jul 2014, at 15:28, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> However, it would be nice to also submit a similar patch for the
+> python3 package. Also, we should really audit all the AC_RUN_IFELSE()
+> invocation from Python configure.ac script to see which cache variables
+> should be prefilled from the pyhon{3,}.mk.
+
+I will create and send a separate patch for Python3 tomorrow. I just tried it on my test system and it works ok. The tzset-check is actually the same in Python 2.7 and 3.
+
+And I also agree that it would be nice to check the configure script, pity it is such a long one :) I?ll have a look tomorrow to see if I can spot anything obvious.
 
 
-> >     Do you see the FPS average on the serial output? (at least tutorial7
-> >     is printing that info)
->
-> I did with v2 series, but not with v3.
->
-> >     Could you send your dmesg?
-> >     What platform are you using?
-> >     What kind of display?
->
-> I'm testing on a Wandboard rev. A0 with an HDMI display. I will try on a
-> Sabre as soon as possible too.
->
-> I don't have a dmesg log right now.
->
-> > I confirm that GPU works fine using Yann's branch yem/fsl-imx. Please
-> > find attached the config I've used for both kernel and buildroot.
->
-> OK, great news! So I missed something. I will look at your configs and
-> try a new build, thank you.
->
-> > Regarding VPU test, I was running out of time but I'm confident this
-> > will work as well, gst-inspect reports fsl plugins properly (I was just
-> > missing the actual media file at the time of the testing). I'll try it
-> > tomorrow and let you know if any issue, otherwise consider it working.
-> > As before I was using a nitrogen6x, this time with a HDMI monitor but
-> > previous tests have been run on LVDS display.
-> > Let me know if you need more information.
->
-> Thanks!
->
-> Hadrien
->
-> I did test the VPU this morning and everything's fine as well.
 
-Thanks,
-Gary
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140708/8ec13115/attachment.html>
+Best regards,
+
+Henry
