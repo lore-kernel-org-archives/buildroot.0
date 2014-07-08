@@ -1,8 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 8 Jul 2014 21:07:09 +0200
-Subject: [Buildroot] xserver_xorg-server-1.15.1 crash on RaspberryPi
- when compiled with gcc-4.9
-Message-ID: <trinity-85a887f6-62ec-4c0f-b107-52865f650cae-1404846429392@3capp-gmx-bs18>
+Date: Tue, 8 Jul 2014 21:30:30 +0200
+Subject: [Buildroot] [PATCH] ghostscript-fonts: new package
+Message-ID: <trinity-3615ecec-e749-4e66-bc23-7071373ddf63-1404847829908@3capp-gmx-bs18>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,39 +10,64 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-On Tue, Jul 08, 2014 at 12:02:07AM +0200, Thomas Petazzoni wrote:
+On Sat, Jun 14, 2014 at 08:56:22PM +0200, Thomas Petazzoni wrote:
 > Dear Peter Seiderer,
 > 
-> On Sat, 7 Jun 2014 23:58:58 +0200, Peter Seiderer wrote:
+> On Sun,  8 Jun 2014 00:47:15 +0200, Peter Seiderer wrote:
 > 
-> > running xserver (driver fbdev) on RaspberryPi crashes when compiled with gcc-4.9 (-Os).
-> > 
-> > Steps to reproduce (with buildroot-2014.05 release and additonal dillo package):
+> >  comment "X libraries and helper libraries"
+> >  source "package/dejavu/Config.in"
+> > +source "package/ghostscript-fonts/Config.in"
+> >  source "package/liberation/Config.in"
+> >  source "package/libsexy/Config.in"
+> >  source "package/x11r7/xkeyboard-config/Config.in"
 > 
-> > Program received signal SIGSEGV, Segmentation fault.
-> > fbGlyphs (op=<optimized out>, pSrc=0x1, pDst=0x4, maskFormat=0x3b9d90, xSrc=0, ySrc=0, nlist=6, list=0xbefff490, glyphs=0x1)
-> >     at fbpict.c:140
-> > 140                 glyph = *glyphs++;
-> > (gdb) p glyphs
-> > $1 = (GlyphPtr *) 0x1
-> 
-> Thanks for the report. I wanted to let you know that I'm also seeing
-> the issue here, while testing the gtk-demo application under Xfbdev on
-> Qemu/ARM. I am also building with a gcc 4.9.x based toolchain, the
-> Linaro 14.05 toolchain. I haven't tested yet to rebuild with gcc 4.8.x
-> to see the difference.
-> 
-> Have you investigated the problem a bit more? Does it look like a
-> compiler issue?
+> The package looks good, but I'm wondering if "X libraries and helper
+> libraries" is really the right places for fonts. I'm pretty sure
+> liberation fonts are usable outside of X.org. Regarding
+> ghostscript-fonts, I am not sure what programs are using them.
 
-I tried to reduce the failing function or produce a stand alone testcase, but failed to do so...
+Dillo was requesting some ghostscript and DejaVu fonts as default fonts...
 
-I think there is nothing special (or wrong) in the fbGlyps function (and compiles bugfree with many compilers/architectures), so I think this hints to consider a compiler bug..., but wanted a second
-opinion before reporting as a gcc bug...
+I think it was Qt5/gui module with fontconfig enabled (and without X installation)
+which needed the Liberation fonts for text rendering...
+
+> Depending on that, the package could be visible at a different location
+> in menuconfig.
+> 
+
+Yes, here three suggestions:
+
+a) add new 'Target packages -> Fonts' menu entry
+b) add new 'Target packages -> Libraries -> Fonts' menu entry
+c) add new 'Target packages -> Graphic libraries/Fonts' submenu entry
+
+There is another font provider 'Google font directory' found at
+'Target packages -> Miscellaneous'...
+
+> Also:
+> 
+>  * Could you post an updated version on top of master. The entire
+>    package/Config.in file has changed in terms of indentation.
+
+O.k. will do...
+
+> 
+>  * This patch makes the assumption the dejavu package is applied, but
+>    both patches are not part of the same series. So either make the
+>    patches independent of each other (in separate branches on your
+>    side), or post both of them together as a series.
+
+O.k. will provide as patchset...
 
 Regards,
 Peter
 
+> 
+> The rest of the package looks good to me, it's really just this
+> location in menuconfig that annoys me a bit.
+> 
+> Maybe other developers will have some suggestions on this?
 > 
 > Thanks,
 > 
