@@ -1,156 +1,121 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  8 Jul 2014 10:51:06 -0300
-Subject: [Buildroot] [PATCH] mpd: fix build failures with gcc 4.9.x
-Message-ID: <1404827466-13584-1-git-send-email-gustavo@zacarias.com.ar>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Tue,  8 Jul 2014 15:57:03 +0200
+Subject: [Buildroot] [RFC 0/9] Add libgtk3 and bump webkit to version 2.4.3
+Message-ID: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Sagaert Johan in the mailing list mpd 0.18.x fails to
-build with gcc 4.9.x
-Patch status: sent upstream.
+Hello all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This series mainly does two things: add libgtk3 and bump webkit.
+
+ - 1..5: requirements and dependencies for libgtk3
+ - 6: add libgtk3
+ - 7: bump webkit
+ - 8: is required by Midori
+ - 9: bump Midori to test WebKit 2.4.3
+
+For now, only X11 support is done and tested for both libgtk3 and webkit.
+Wayland support will be done later.
+
+Tests:
+
+* All is compiled-tested (with GTK+2 and GTK+3 for WebKit and Midori).
+* Running tests were done for libgtk3 (with gtk3-demo) and Midori GTK+2 with
+  WebKit GTK+2 and webkit1 (on Qemu and BeagleBone Black).
+
+For testing you will need GCC 4.8 because WebKit needs at least version 4.8 (see
+commit message) and X.org needs a version lesser than 4.9 (see this issue:
+http://lists.busybox.net/pipermail/buildroot/2014-June/098679.html).
+
+There is still a weird problem with WebKit: parallel make with Make 3.81 results
+in a make hang on:
+  CXXLD libWebCoreSVG.la
+This is reproducible.
+
+You can find a defconfig for Qemu here: 
+http://bpaste.net/show/fR3jDhQPmtUHPYpGoiUn/
+
+Best regards,
+
+Hadrien
+
 ---
- ...fileDecoderPlugin-fix-build-failure-due-t.patch | 26 ++++++++++++++++++++++
- ...ecoderPlugin-fix-build-failure-due-to-mis.patch | 26 ++++++++++++++++++++++
- ...lient-fix-build-failure-due-to-missing-st.patch | 26 ++++++++++++++++++++++
- ...laylistPlugin-fix-build-failure-due-to-mi.patch | 26 ++++++++++++++++++++++
- 4 files changed, 104 insertions(+)
- create mode 100644 package/mpd/mpd-0001-decoder-AudiofileDecoderPlugin-fix-build-failure-due-t.patch
- create mode 100644 package/mpd/mpd-0002-decoder-OpusDecoderPlugin-fix-build-failure-due-to-mis.patch
- create mode 100644 package/mpd/mpd-0003-output-HttpdClient-fix-build-failure-due-to-missing-st.patch
- create mode 100644 package/mpd/mpd-0004-playlist-PlsPlaylistPlugin-fix-build-failure-due-to-mi.patch
 
-diff --git a/package/mpd/mpd-0001-decoder-AudiofileDecoderPlugin-fix-build-failure-due-t.patch b/package/mpd/mpd-0001-decoder-AudiofileDecoderPlugin-fix-build-failure-due-t.patch
-new file mode 100644
-index 0000000..b4c5753
---- /dev/null
-+++ b/package/mpd/mpd-0001-decoder-AudiofileDecoderPlugin-fix-build-failure-due-t.patch
-@@ -0,0 +1,26 @@
-+From 58c9d0c314119a571862b21b2f4e4bf7bbe88a57 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 8 Jul 2014 10:39:12 -0300
-+Subject: [PATCH 1/4] decoder/AudiofileDecoderPlugin: fix build failure due to
-+ missing stdio.h include
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/decoder/AudiofileDecoderPlugin.cxx | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/decoder/AudiofileDecoderPlugin.cxx b/src/decoder/AudiofileDecoderPlugin.cxx
-+index ab3557e..92223f2 100644
-+--- a/src/decoder/AudiofileDecoderPlugin.cxx
-++++ b/src/decoder/AudiofileDecoderPlugin.cxx
-+@@ -31,6 +31,7 @@
-+ #include <af_vfs.h>
-+ 
-+ #include <assert.h>
-++#include <stdio.h>
-+ 
-+ /* pick 1020 since its devisible for 8,16,24, and 32-bit audio */
-+ #define CHUNK_SIZE		1020
-+-- 
-+1.8.5.5
-+
-diff --git a/package/mpd/mpd-0002-decoder-OpusDecoderPlugin-fix-build-failure-due-to-mis.patch b/package/mpd/mpd-0002-decoder-OpusDecoderPlugin-fix-build-failure-due-to-mis.patch
-new file mode 100644
-index 0000000..fa68fd8
---- /dev/null
-+++ b/package/mpd/mpd-0002-decoder-OpusDecoderPlugin-fix-build-failure-due-to-mis.patch
-@@ -0,0 +1,26 @@
-+From 66f19e78a5b8e7b7aefd807218edafcf55ccee55 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 8 Jul 2014 10:39:38 -0300
-+Subject: [PATCH 2/4] decoder/OpusDecoderPlugin: fix build failure due to
-+ missing stdio.h include
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/decoder/OpusDecoderPlugin.cxx | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/decoder/OpusDecoderPlugin.cxx b/src/decoder/OpusDecoderPlugin.cxx
-+index f3d7b34..01ea368 100644
-+--- a/src/decoder/OpusDecoderPlugin.cxx
-++++ b/src/decoder/OpusDecoderPlugin.cxx
-+@@ -40,6 +40,7 @@
-+ #include <glib.h>
-+ 
-+ #include <string.h>
-++#include <stdio.h>
-+ 
-+ static constexpr opus_int32 opus_sample_rate = 48000;
-+ 
-+-- 
-+1.8.5.5
-+
-diff --git a/package/mpd/mpd-0003-output-HttpdClient-fix-build-failure-due-to-missing-st.patch b/package/mpd/mpd-0003-output-HttpdClient-fix-build-failure-due-to-missing-st.patch
-new file mode 100644
-index 0000000..232c0ff
---- /dev/null
-+++ b/package/mpd/mpd-0003-output-HttpdClient-fix-build-failure-due-to-missing-st.patch
-@@ -0,0 +1,26 @@
-+From 5f18d45f9583e521e2b2c18b055c4dab7ce126cf Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 8 Jul 2014 10:40:18 -0300
-+Subject: [PATCH 3/4] output/HttpdClient: fix build failure due to missing
-+ stdio.h include
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/output/HttpdClient.cxx | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/output/HttpdClient.cxx b/src/output/HttpdClient.cxx
-+index 8e13fda..dc33705 100644
-+--- a/src/output/HttpdClient.cxx
-++++ b/src/output/HttpdClient.cxx
-+@@ -30,6 +30,7 @@
-+ 
-+ #include <assert.h>
-+ #include <string.h>
-++#include <stdio.h>
-+ 
-+ HttpdClient::~HttpdClient()
-+ {
-+-- 
-+1.8.5.5
-+
-diff --git a/package/mpd/mpd-0004-playlist-PlsPlaylistPlugin-fix-build-failure-due-to-mi.patch b/package/mpd/mpd-0004-playlist-PlsPlaylistPlugin-fix-build-failure-due-to-mi.patch
-new file mode 100644
-index 0000000..73b3f0b
---- /dev/null
-+++ b/package/mpd/mpd-0004-playlist-PlsPlaylistPlugin-fix-build-failure-due-to-mi.patch
-@@ -0,0 +1,26 @@
-+From 4181473f66349ceb53f2d4e967f399932b3efa39 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 8 Jul 2014 10:40:50 -0300
-+Subject: [PATCH 4/4] playlist/PlsPlaylistPlugin: fix build failure due to
-+ missing stdio.h include
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ src/playlist/PlsPlaylistPlugin.cxx | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/playlist/PlsPlaylistPlugin.cxx b/src/playlist/PlsPlaylistPlugin.cxx
-+index 99be3ad..7b5c882 100644
-+--- a/src/playlist/PlsPlaylistPlugin.cxx
-++++ b/src/playlist/PlsPlaylistPlugin.cxx
-+@@ -31,6 +31,7 @@
-+ #include <glib.h>
-+ 
-+ #include <string>
-++#include <stdio.h>
-+ 
-+ static constexpr Domain pls_domain("pls");
-+ 
-+-- 
-+1.8.5.5
-+
+Hadrien Boutteville (9):
+  libglib2: bump to version 2.40.0
+  pango: bump to version 1.36.3
+  cairo: add freetype and gobject support
+  at-spi2-core: new package
+  at-spi2-atk: new package
+  libgtk3: new package
+  webkit: bump to version 2.4.3
+  libsoup: add libsoup-gnome support
+  midori: bump to version 0.5.8
+
+ package/Config.in                                  |    3 +
+ package/at-spi2-atk/Config.in                      |   16 +
+ package/at-spi2-atk/at-spi2-atk.mk                 |   19 +
+ package/at-spi2-core/Config.in                     |   17 +
+ ...se-AC_CHECK_ALIGNOF-instead-of-custom-DBI.patch |   79 ++
+ package/at-spi2-core/at-spi2-core.mk               |   24 +
+ package/cairo/cairo.mk                             |   14 +
+ ...ror-format-string-errors-from-mismatched-.patch |   56 -
+ package/libglib2/libglib2-0002-no-gtk-doc.patch    |   25 +
+ package/libglib2/libglib2.mk                       |    4 +-
+ package/libgtk3/Config.in                          |   47 +
+ package/libgtk3/libgtk3-0001-no-gtk-doc.patch      |   11 +
+ .../libgtk3-0002-add-file-introspection-m4.patch   |  100 ++
+ package/libgtk3/libgtk3.mk                         |  184 +++
+ package/libsoup/Config.in                          |    5 +
+ package/libsoup/libsoup.mk                         |    8 +-
+ package/midori/Config.in                           |   15 +-
+ .../midori-0001-remove-libnotify-dependency.patch  |   27 +
+ package/midori/midori.mk                           |   51 +-
+ package/pango/Config.in                            |    1 +
+ package/pango/pango-0001-no-tests.patch            |   27 +
+ package/pango/pango-0002-no-gtk-doc.patch          |   25 +
+ package/pango/pango-no-const-return.patch          |  475 -------
+ package/pango/pango-no-tests.patch                 |   22 -
+ package/pango/pango.mk                             |   19 +-
+ package/webkit/Config.in                           |   16 +-
+ ...ebkit-0001-build-fix-for-32-bit-autotools.patch |   34 -
+ .../webkit-0002-build-fix-for-gtklauncher.patch    |   51 -
+ .../webkit/webkit-0003-detect-harfbuzz-icu.patch   |   28 -
+ package/webkit/webkit-0004-disable-docrebase.patch |   27 -
+ package/webkit/webkit-0005-disable-tests.patch     |   80 --
+ package/webkit/webkit-0006-execinfo_h.patch        |   20 -
+ package/webkit/webkit-0007-mips-dfg.patch          | 1490 --------------------
+ package/webkit/webkit-0008-support-bison-3.0.patch |   22 -
+ package/webkit/webkit.mk                           |   67 +-
+ 35 files changed, 711 insertions(+), 2398 deletions(-)
+ create mode 100644 package/at-spi2-atk/Config.in
+ create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
+ create mode 100644 package/at-spi2-core/Config.in
+ create mode 100644 package/at-spi2-core/at-spi2-core-0001-configure-use-AC_CHECK_ALIGNOF-instead-of-custom-DBI.patch
+ create mode 100644 package/at-spi2-core/at-spi2-core.mk
+ delete mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+ create mode 100644 package/libglib2/libglib2-0002-no-gtk-doc.patch
+ create mode 100644 package/libgtk3/Config.in
+ create mode 100644 package/libgtk3/libgtk3-0001-no-gtk-doc.patch
+ create mode 100644 package/libgtk3/libgtk3-0002-add-file-introspection-m4.patch
+ create mode 100644 package/libgtk3/libgtk3.mk
+ create mode 100644 package/midori/midori-0001-remove-libnotify-dependency.patch
+ create mode 100644 package/pango/pango-0001-no-tests.patch
+ create mode 100644 package/pango/pango-0002-no-gtk-doc.patch
+ delete mode 100644 package/pango/pango-no-const-return.patch
+ delete mode 100644 package/pango/pango-no-tests.patch
+ delete mode 100644 package/webkit/webkit-0001-build-fix-for-32-bit-autotools.patch
+ delete mode 100644 package/webkit/webkit-0002-build-fix-for-gtklauncher.patch
+ delete mode 100644 package/webkit/webkit-0003-detect-harfbuzz-icu.patch
+ delete mode 100644 package/webkit/webkit-0004-disable-docrebase.patch
+ delete mode 100644 package/webkit/webkit-0005-disable-tests.patch
+ delete mode 100644 package/webkit/webkit-0006-execinfo_h.patch
+ delete mode 100644 package/webkit/webkit-0007-mips-dfg.patch
+ delete mode 100644 package/webkit/webkit-0008-support-bison-3.0.patch
+
 -- 
-1.8.5.5
+2.0.1
