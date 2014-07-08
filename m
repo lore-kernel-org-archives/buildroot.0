@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jul 2014 00:13:23 +0200
-Subject: [Buildroot] [PATCH 12/13] lesstif: add license information
-In-Reply-To: <1404304811-27480-12-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:10 -0300")
+Date: Wed, 09 Jul 2014 00:23:37 +0200
+Subject: [Buildroot] [PATCH 13/13] dmraid: add license information
+In-Reply-To: <1404304811-27480-13-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:11 -0300")
 References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
- <1404304811-27480-12-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egxvv6rg.fsf@dell.be.48ers.dk>
+ <1404304811-27480-13-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a98jv6ae.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,26 @@ To: buildroot@busybox.net
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/dmraid/dmraid.mk | 2 ++
+ >  1 file changed, 2 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+ > index 412c903..612f560 100644
+ > --- a/package/dmraid/dmraid.mk
+ > +++ b/package/dmraid/dmraid.mk
+ > @@ -12,6 +12,8 @@ DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
+ >  DMRAID_MAKE = $(MAKE1)
+ >  DMRAID_INSTALL_STAGING = YES
+ >  DMRAID_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
+ > +DMRAID_LICENSE = GPLv2+, LGPLv2.1
+ > +DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE_LGPL
+
+I actually don't see any LGPL references in the sources - And looking at
+other distributions, they have also classified it as GPLv2+, so I've
+dropped the LGPL part and instead added 'LICENSE' to _LICENSE_FILES.
+
+Committed with those changes, thanks.
 
 -- 
 Bye, Peter Korsgaard
