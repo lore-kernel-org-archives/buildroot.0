@@ -1,243 +1,358 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jul 2014 13:56:42 +0200
-Subject: [Buildroot] [git commit] python: bump to version 2.7.8
-Message-ID: <20140708115758.4AD429D1CA@busybox.osuosl.org>
+Date: Tue, 8 Jul 2014 13:56:45 +0200
+Subject: [Buildroot] [git commit] python3: bump to version 3.4.1
+Message-ID: <20140708115758.595C29D11A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=63c735b60a992aa5a97aba859ca8a5ba05e6af16
+commit: http://git.buildroot.net/buildroot/commit/?id=a5dcdf370630c7d9cc7eef02b8424802e779cacc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The different patches are just refreshed to apply without fuzz, there
-are no changes/conflicts.
+A few minor updates on the patches were needed to resolve some
+conflicts on the main Makefile.pre.in file, in the list of modules to
+build/install.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...python-004-sysconfigdata-install-location.patch |    2 +-
- .../python-006-cross-compile-getaddrinfo.patch     |    2 +-
- package/python/python-007-disable-extensions.patch |    2 +-
- .../python/python-009-no-termcap-host-path.patch   |    2 +-
- package/python/python-010-fix-python-config.patch  |    6 +++---
- .../python/python-100-optional-test-modules.patch  |    2 +-
- package/python/python-101-optional-pydoc.patch     |    6 +++---
- package/python/python-102-optional-2to3.patch      |    4 ++--
- package/python/python-103-optional-sqlite.patch    |    2 +-
- package/python/python-104-optional-tk.patch        |    2 +-
- package/python/python-105-optional-curses.patch    |    2 +-
- package/python/python-106-optional-expat.patch     |    4 ++--
- .../python/python-107-optional-codecs-cjk.patch    |    2 +-
- package/python/python-108-optional-nis.patch       |    2 +-
- .../python/python-109-optional-unicodedata.patch   |    2 +-
- package/python/python-110-optional-db.patch        |    2 +-
- package/python/python-111-optional-ssl.patch       |    2 +-
- package/python/python-112-optional-bzip2.patch     |    2 +-
- package/python/python-113-optional-zlib.patch      |    2 +-
- package/python/python-114-remove-idle-editor.patch |    2 +-
- package/python/python.mk                           |    2 +-
- 21 files changed, 27 insertions(+), 27 deletions(-)
+ ...ython3-003-sysconfigdata-install-location.patch |    2 +-
+ .../python3-006-cross-compile-getaddrinfo.patch    |    2 +-
+ .../python3/python3-007-disable-extensions.patch   |    2 +-
+ .../python3-100-optional-test-modules.patch        |   20 ++++++++++--------
+ package/python3/python3-101-optional-pydoc.patch   |   14 ++++++------
+ package/python3/python3-102-optional-2to3.patch    |   22 ++++++++++----------
+ package/python3/python3-103-optional-sqlite.patch  |   21 +++++++++----------
+ package/python3/python3-104-optional-tk.patch      |    8 +++---
+ package/python3/python3-105-optional-curses.patch  |    6 ++--
+ package/python3/python3-106-optional-expat.patch   |    6 ++--
+ .../python3/python3-107-optional-codecs-cjk.patch  |    2 +-
+ package/python3/python3-108-optional-nis.patch     |    2 +-
+ .../python3/python3-109-optional-unicodedata.patch |    2 +-
+ package/python3/python3-110-optional-idle.patch    |    6 ++--
+ package/python3/python3.mk                         |    2 +-
+ 15 files changed, 59 insertions(+), 58 deletions(-)
 
-diff --git a/package/python/python-004-sysconfigdata-install-location.patch b/package/python/python-004-sysconfigdata-install-location.patch
-index 2a5e4f4..e053de3 100644
---- a/package/python/python-004-sysconfigdata-install-location.patch
-+++ b/package/python/python-004-sysconfigdata-install-location.patch
+diff --git a/package/python3/python3-003-sysconfigdata-install-location.patch b/package/python3/python3-003-sysconfigdata-install-location.patch
+index af796d4..1f230d4 100644
+--- a/package/python3/python3-003-sysconfigdata-install-location.patch
++++ b/package/python3/python3-003-sysconfigdata-install-location.patch
 @@ -52,7 +52,7 @@ Index: b/Makefile.pre.in
   	@for d in $(LIBSUBDIRS); \
   	do \
   		a=$(srcdir)/Lib/$$d; \
--@@ -1303,7 +1311,7 @@
-+@@ -1304,7 +1312,7 @@
-  		Modules/Setup Modules/Setup.local Modules/Setup.config \
-  		Modules/ld_so_aix Modules/python.exp Misc/python.pc
-  	-rm -f python*-gdb.py
-diff --git a/package/python/python-006-cross-compile-getaddrinfo.patch b/package/python/python-006-cross-compile-getaddrinfo.patch
-index b16c7e9..ff05095 100644
---- a/package/python/python-006-cross-compile-getaddrinfo.patch
-+++ b/package/python/python-006-cross-compile-getaddrinfo.patch
-@@ -2,7 +2,7 @@ Index: b/configure.ac
+-@@ -1513,7 +1521,7 @@
++@@ -1514,7 +1522,7 @@
+  	find build -name 'fficonfig.h' -exec rm -f {} ';' || true
+  	find build -name '*.py' -exec rm -f {} ';' || true
+  	find build -name '*.py[co]' -exec rm -f {} ';' || true
+diff --git a/package/python3/python3-006-cross-compile-getaddrinfo.patch b/package/python3/python3-006-cross-compile-getaddrinfo.patch
+index 512a534..7347be5 100644
+--- a/package/python3/python3-006-cross-compile-getaddrinfo.patch
++++ b/package/python3/python3-006-cross-compile-getaddrinfo.patch
+@@ -10,7 +10,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -3330,7 +3330,7 @@
-+@@ -3343,7 +3343,7 @@
+-@@ -3423,7 +3423,7 @@
++@@ -3412,7 +3412,7 @@
   
   AC_MSG_RESULT($ac_cv_buggy_getaddrinfo)
   
-diff --git a/package/python/python-007-disable-extensions.patch b/package/python/python-007-disable-extensions.patch
-index 10b0a7c..40ed6df 100644
---- a/package/python/python-007-disable-extensions.patch
-+++ b/package/python/python-007-disable-extensions.patch
-@@ -33,7 +33,7 @@ Index: b/configure.ac
+diff --git a/package/python3/python3-007-disable-extensions.patch b/package/python3/python3-007-disable-extensions.patch
+index 462fed4..63c06b1 100644
+--- a/package/python3/python3-007-disable-extensions.patch
++++ b/package/python3/python3-007-disable-extensions.patch
+@@ -73,7 +73,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2268,6 +2268,8 @@
-+@@ -2281,6 +2281,8 @@
+-@@ -2360,6 +2360,8 @@
++@@ -2349,6 +2349,8 @@
   
   AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
   
-diff --git a/package/python/python-009-no-termcap-host-path.patch b/package/python/python-009-no-termcap-host-path.patch
-index 7df8a32..fadc7b3 100644
---- a/package/python/python-009-no-termcap-host-path.patch
-+++ b/package/python/python-009-no-termcap-host-path.patch
-@@ -7,7 +7,7 @@ Index: b/setup.py
- ===================================================================
- --- a/setup.py
- +++ b/setup.py
--@@ -760,12 +760,9 @@
-+@@ -762,12 +762,9 @@
-                  pass # Issue 7384: Already linked against curses or tinfo.
-              elif curses_library:
-                  readline_libs.append(curses_library)
-diff --git a/package/python/python-010-fix-python-config.patch b/package/python/python-010-fix-python-config.patch
-index 9e35de6..97ff157 100644
---- a/package/python/python-010-fix-python-config.patch
-+++ b/package/python/python-010-fix-python-config.patch
-@@ -26,7 +26,7 @@ Index: b/configure.ac
-    case $ac_sys_system in
-      CYGWIN*)
-            BLDLIBRARY='$(LIBRARY)'
--@@ -1909,6 +1911,9 @@
-+@@ -1915,6 +1917,9 @@
-  AC_SUBST(BLDSHARED)
-  AC_SUBST(CCSHARED)
-  AC_SUBST(LINKFORSHARED)
-@@ -36,7 +36,7 @@ Index: b/configure.ac
-  # SO is the extension of shared libraries `(including the dot!)
-  # -- usually .so, .sl on HP-UX, .dll on Cygwin
-  AC_MSG_CHECKING(SO)
--@@ -4550,7 +4555,7 @@
-+@@ -4563,7 +4568,7 @@
-  AC_MSG_RESULT(done)
-  
-  # generate output files
-@@ -91,7 +91,7 @@ Index: b/Makefile.pre.in
-  	@if [ -s Modules/python.exp -a \
-  		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
-  		echo; echo "Installing support files for building shared extension modules on AIX:"; \
--@@ -1311,6 +1313,7 @@
-+@@ -1312,6 +1314,7 @@
-  		config.cache config.log pyconfig.h Modules/config.c
-  	-rm -rf build platform
-  	-rm -rf $(PYTHONFRAMEWORKDIR)
-diff --git a/package/python/python-100-optional-test-modules.patch b/package/python/python-100-optional-test-modules.patch
-index ff9c914..33bc5f8 100644
---- a/package/python/python-100-optional-test-modules.patch
-+++ b/package/python/python-100-optional-test-modules.patch
-@@ -78,7 +78,7 @@ Index: b/configure.ac
+diff --git a/package/python3/python3-100-optional-test-modules.patch b/package/python3/python3-100-optional-test-modules.patch
+index 6b52509..f6214d0 100644
+--- a/package/python3/python3-100-optional-test-modules.patch
++++ b/package/python3/python3-100-optional-test-modules.patch
+@@ -42,16 +42,16 @@ Index: b/Makefile.pre.in
+ +		curses pydoc_data $(MACHDEPS)
+ +
+ +TESTSUBDIRS = 	tkinter/test tkinter/test/test_tkinter tkinter/test/test_ttk \
+-+		test test/test_asyncio ctypes/test \
+++		test test/test_asyncio \
+ +		test/test_email test/test_email/data \
+ +		test/test_json \
+  		test/audiodata \
+  		test/capath test/data \
+  		test/cjkencodings test/decimaltestdata test/xmltestdata \
+-@@ -1148,28 +1170,20 @@
+- 		test/namespace_pkgs/project3/parent/child \
+-                 test/namespace_pkgs/module_and_namespace_package \
+-                 test/namespace_pkgs/module_and_namespace_package/a_test \
++@@ -1148,28 +1170,22 @@
++ 		test/test_importlib/namespace_pkgs/project3/parent/child \
++                 test/test_importlib/namespace_pkgs/module_and_namespace_package \
++                 test/test_importlib/namespace_pkgs/module_and_namespace_package/a_test \
+ -		asyncio \
+ -		test/test_asyncio \
+ -		collections concurrent concurrent/futures encodings \
+@@ -61,6 +61,7 @@ Index: b/Makefile.pre.in
+ -		sqlite3 sqlite3/test \
+ -		logging csv wsgiref urllib \
+ -		lib2to3 lib2to3/fixes lib2to3/pgen2 lib2to3/tests \
+++		sqlite3/test \
+ +		lib2to3/tests \
+  		lib2to3/tests/data lib2to3/tests/data/fixers \
+  		lib2to3/tests/data/fixers/myfixes \
+@@ -68,7 +69,9 @@ Index: b/Makefile.pre.in
+ -		idlelib idlelib/Icons idlelib/idle_test \
+ -		distutils distutils/command distutils/tests $(XMLLIBSUBDIRS) \
+ -		importlib test/test_importlib test/test_importlib/builtin \
+-+		sqlite3/test idlelib/idle_test \
+++		ctypes/test \
+++		idlelib/idle_test \
+++		distutils/tests \
+ +		test/test_importlib test/test_importlib/builtin \
+  		test/test_importlib/extension test/test_importlib/frozen \
+  		test/test_importlib/import_ test/test_importlib/source \
+@@ -77,8 +80,7 @@ Index: b/Makefile.pre.in
+ -		unittest unittest/test unittest/test/testmock \
+ -		venv venv/scripts venv/scripts/posix \
+ -		curses pydoc_data $(MACHDEPS)
+-+		unittest/test unittest/test/testmock \
+-+		distutils/tests
+++		unittest/test unittest/test/testmock
+ +
+ +ifeq (@TEST_MODULES@,yes)
+ +LIBSUBDIRS += $(TESTSUBDIRS)
+@@ -91,7 +93,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2612,6 +2612,12 @@
-+@@ -2625,6 +2625,12 @@
+-@@ -2667,6 +2667,12 @@
++@@ -2656,6 +2656,12 @@
   fi
   
   
-diff --git a/package/python/python-101-optional-pydoc.patch b/package/python/python-101-optional-pydoc.patch
-index 7518b5e..cb8631a 100644
---- a/package/python/python-101-optional-pydoc.patch
-+++ b/package/python/python-101-optional-pydoc.patch
-@@ -40,7 +40,7 @@ Index: b/configure.ac
+diff --git a/package/python3/python3-101-optional-pydoc.patch b/package/python3/python3-101-optional-pydoc.patch
+index 331c842..ddd5468 100644
+--- a/package/python3/python3-101-optional-pydoc.patch
++++ b/package/python3/python3-101-optional-pydoc.patch
+@@ -34,10 +34,10 @@ Index: b/Makefile.pre.in
+ +		curses $(MACHDEPS)
+  
+  TESTSUBDIRS = 	tkinter/test tkinter/test/test_tkinter tkinter/test/test_ttk \
+- 		test test/test_asyncio ctypes/test \
+-@@ -1180,6 +1182,10 @@
+- 		unittest/test unittest/test/testmock \
+- 		distutils/tests
++ 		test test/test_asyncio \
++@@ -1182,6 +1184,10 @@
++ 		test/test_importlib/import_ test/test_importlib/source \
++ 		unittest/test unittest/test/testmock
+  
+ +ifeq (@PYDOC@,yes)
+ +LIBSUBDIRS += pydoc_data
+@@ -50,7 +50,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2611,6 +2611,11 @@
-+@@ -2624,6 +2624,11 @@
+-@@ -2666,6 +2666,11 @@
++@@ -2655,6 +2655,11 @@
         AC_CHECK_FUNCS(pthread_atfork)
   fi
   
-@@ -56,7 +56,7 @@ Index: b/setup.py
+@@ -66,7 +66,7 @@ Index: b/setup.py
  ===================================================================
  --- a/setup.py
  +++ b/setup.py
--@@ -2217,6 +2217,12 @@
-+@@ -2219,6 +2219,12 @@
+-@@ -2182,6 +2182,12 @@
++@@ -2203,6 +2203,12 @@
       # turn off warnings when deprecated modules are imported
       import warnings
       warnings.filterwarnings("ignore",category=DeprecationWarning)
-@@ -69,7 +69,7 @@ Index: b/setup.py
+@@ -79,7 +79,7 @@ Index: b/setup.py
       setup(# PyPI Metadata (PEP 301)
             name = "Python",
             version = sys.version.split()[0],
--@@ -2237,9 +2243,7 @@
-+@@ -2239,9 +2245,7 @@
-            ext_modules=[Extension('_struct', ['_struct.c'])],
+-@@ -2206,8 +2212,7 @@
++@@ -2227,8 +2233,7 @@
+            # If you change the scripts installed here, you also need to
+            # check the PyBuildScripts command above, and change the links
+            # created by the bininstall target in Makefile.pre.in
+diff --git a/package/python3/python3-102-optional-2to3.patch b/package/python3/python3-102-optional-2to3.patch
+index facf6e1..a23584f 100644
+--- a/package/python3/python3-102-optional-2to3.patch
++++ b/package/python3/python3-102-optional-2to3.patch
+@@ -34,17 +34,17 @@ Index: b/Makefile.pre.in
+  		ctypes ctypes/macholib \
+  		idlelib idlelib/Icons \
+  		distutils distutils/command $(XMLLIBSUBDIRS) \
+-@@ -1172,9 +1173,6 @@
+- 		test/namespace_pkgs/project3/parent/child \
+-                 test/namespace_pkgs/module_and_namespace_package \
+-                 test/namespace_pkgs/module_and_namespace_package/a_test \
++@@ -1173,9 +1174,6 @@
++                 test/test_importlib/namespace_pkgs/module_and_namespace_package \
++                 test/test_importlib/namespace_pkgs/module_and_namespace_package/a_test \
++ 		sqlite3/test \
+ -		lib2to3/tests \
+ -		lib2to3/tests/data lib2to3/tests/data/fixers \
+ -		lib2to3/tests/data/fixers/myfixes \
+- 		sqlite3/test idlelib/idle_test \
+- 		test/test_importlib test/test_importlib/builtin \
+- 		test/test_importlib/extension test/test_importlib/frozen \
+-@@ -1186,6 +1184,14 @@
++ 		ctypes/test \
++ 		idlelib/idle_test \
++ 		distutils/tests \
++@@ -1188,6 +1186,14 @@
+  LIBSUBDIRS += pydoc_data
+  endif
   
-            # Scripts to install
-diff --git a/package/python/python-102-optional-2to3.patch b/package/python/python-102-optional-2to3.patch
-index 3503f8c..0d23ca3 100644
---- a/package/python/python-102-optional-2to3.patch
-+++ b/package/python/python-102-optional-2to3.patch
-@@ -52,7 +52,7 @@ Index: b/configure.ac
- ===================================================================
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2623,6 +2623,12 @@
-+@@ -2636,6 +2636,12 @@
-  	AS_HELP_STRING([--disable-test-modules], [disable test modules]),
-  	[ TEST_MODULES="${enableval}" ], [ TEST_MODULES=yes ])
-  
-@@ -69,7 +69,7 @@ Index: b/setup.py
+@@ -59,7 +59,7 @@ Index: b/Makefile.pre.in
+  ifeq (@TEST_MODULES@,yes)
+  LIBSUBDIRS += $(TESTSUBDIRS)
+  endif
+-@@ -1281,10 +1287,12 @@
++@@ -1283,10 +1289,12 @@
+  		-d $(LIBDEST)/site-packages -f $(STDLIB_CACHE_FLAGS) \
+  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+  endif
+@@ -76,7 +76,7 @@ Index: b/setup.py
  ===================================================================
  --- a/setup.py
  +++ b/setup.py
--@@ -2218,10 +2218,11 @@
-+@@ -2220,10 +2220,11 @@
+-@@ -2183,10 +2183,11 @@
++@@ -2204,10 +2204,11 @@
       import warnings
       warnings.filterwarnings("ignore",category=DeprecationWarning)
   
-diff --git a/package/python/python-103-optional-sqlite.patch b/package/python/python-103-optional-sqlite.patch
-index a75acc8..1e17530 100644
---- a/package/python/python-103-optional-sqlite.patch
-+++ b/package/python/python-103-optional-sqlite.patch
+@@ -94,7 +94,7 @@ Index: b/configure.ac
+ ===================================================================
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -2678,6 +2678,12 @@
++@@ -2667,6 +2667,12 @@
+  	AS_HELP_STRING([--disable-test-modules], [disable test modules]),
+  	[ TEST_MODULES="${enableval}" ], [ TEST_MODULES=yes ])
+  
+diff --git a/package/python3/python3-103-optional-sqlite.patch b/package/python3/python3-103-optional-sqlite.patch
+index eb8d242..e444301 100644
+--- a/package/python3/python3-103-optional-sqlite.patch
++++ b/package/python3/python3-103-optional-sqlite.patch
 @@ -12,7 +12,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2611,6 +2611,15 @@
-+@@ -2624,6 +2624,15 @@
+-@@ -2666,6 +2666,15 @@
++@@ -2655,6 +2655,15 @@
         AC_CHECK_FUNCS(pthread_atfork)
   fi
   
-diff --git a/package/python/python-104-optional-tk.patch b/package/python/python-104-optional-tk.patch
-index 2e469ab..298c91d 100644
---- a/package/python/python-104-optional-tk.patch
-+++ b/package/python/python-104-optional-tk.patch
+@@ -40,16 +40,15 @@ Index: b/Makefile.pre.in
+  		logging csv wsgiref urllib \
+  		ctypes ctypes/macholib \
+  		idlelib idlelib/Icons \
+-@@ -1173,7 +1172,7 @@
+- 		test/namespace_pkgs/project3/parent/child \
+-                 test/namespace_pkgs/module_and_namespace_package \
+-                 test/namespace_pkgs/module_and_namespace_package/a_test \
+--		sqlite3/test idlelib/idle_test \
+-+		idlelib/idle_test \
+- 		test/test_importlib test/test_importlib/builtin \
+- 		test/test_importlib/extension test/test_importlib/frozen \
+- 		test/test_importlib/import_ test/test_importlib/source \
+-@@ -1192,6 +1191,11 @@
++@@ -1173,7 +1172,6 @@
++ 		test/test_importlib/namespace_pkgs/project3/parent/child \
++                 test/test_importlib/namespace_pkgs/module_and_namespace_package \
++                 test/test_importlib/namespace_pkgs/module_and_namespace_package/a_test \
++-		sqlite3/test \
++ 		ctypes/test \
++ 		idlelib/idle_test \
++ 		distutils/tests \
++@@ -1194,6 +1192,11 @@
+  	lib2to3/tests/data/fixers/myfixes
+  endif
+  
+diff --git a/package/python3/python3-104-optional-tk.patch b/package/python3/python3-104-optional-tk.patch
+index 32e2bee..0d15fe1 100644
+--- a/package/python3/python3-104-optional-tk.patch
++++ b/package/python3/python3-104-optional-tk.patch
+@@ -26,12 +26,12 @@ Index: b/Makefile.pre.in
+  		curses $(MACHDEPS)
+  
+ -TESTSUBDIRS = 	tkinter/test tkinter/test/test_tkinter tkinter/test/test_ttk \
+--		test test/test_asyncio ctypes/test \
+-+TESTSUBDIRS = 	test test/test_asyncio ctypes/test \
++-		test test/test_asyncio \
+++TESTSUBDIRS = 	test test/test_asyncio \
+  		test/test_email test/test_email/data \
+  		test/test_json \
+  		test/audiodata \
+-@@ -1196,6 +1195,12 @@
++@@ -1197,6 +1196,12 @@
+  TESTSUBDIRS += sqlite3/test
+  endif
+  
 @@ -48,7 +48,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2620,6 +2620,15 @@
-+@@ -2633,6 +2633,15 @@
+-@@ -2675,6 +2675,15 @@
++@@ -2664,6 +2664,15 @@
      DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
   fi
   
-diff --git a/package/python/python-105-optional-curses.patch b/package/python/python-105-optional-curses.patch
-index 384cad3..00f2266 100644
---- a/package/python/python-105-optional-curses.patch
-+++ b/package/python/python-105-optional-curses.patch
+diff --git a/package/python3/python3-105-optional-curses.patch b/package/python3/python3-105-optional-curses.patch
+index 75e2558..8e63908 100644
+--- a/package/python3/python3-105-optional-curses.patch
++++ b/package/python3/python3-105-optional-curses.patch
+@@ -19,9 +19,9 @@ Index: b/Makefile.pre.in
+ -		curses $(MACHDEPS)
+ +		$(MACHDEPS)
+  
+- TESTSUBDIRS = 	test test/test_asyncio ctypes/test \
++ TESTSUBDIRS = 	test test/test_asyncio \
+  		test/test_email test/test_email/data \
+-@@ -1201,6 +1201,10 @@
++@@ -1202,6 +1202,10 @@
+  	tkinter/test/test_ttk
+  endif
+  
 @@ -36,7 +36,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2629,6 +2629,15 @@
-+@@ -2642,6 +2642,15 @@
+-@@ -2684,6 +2684,15 @@
++@@ -2673,6 +2673,15 @@
      DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _tkinter"
   fi
   
-diff --git a/package/python/python-106-optional-expat.patch b/package/python/python-106-optional-expat.patch
-index c1de887..d80dee4 100644
---- a/package/python/python-106-optional-expat.patch
-+++ b/package/python/python-106-optional-expat.patch
+diff --git a/package/python3/python3-106-optional-expat.patch b/package/python3/python3-106-optional-expat.patch
+index 80da939..ce1eb2a 100644
+--- a/package/python3/python3-106-optional-expat.patch
++++ b/package/python3/python3-106-optional-expat.patch
+@@ -28,7 +28,7 @@ Index: b/Makefile.pre.in
+  		importlib \
+  		turtledemo \
+  		multiprocessing multiprocessing/dummy \
+-@@ -1205,6 +1205,10 @@
++@@ -1206,6 +1206,10 @@
+  LIBSUBDIRS += curses
+  endif
+  
 @@ -43,7 +43,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2276,13 +2276,21 @@
-+@@ -2289,13 +2289,21 @@
+-@@ -2363,13 +2363,21 @@
++@@ -2352,13 +2352,21 @@
   AC_SUBST(DISABLED_EXTENSIONS)
   
   # Check for use of the system expat library
@@ -245,125 +360,91 @@ index c1de887..d80dee4 100644
  ===================================================================
  --- a/setup.py
  +++ b/setup.py
--@@ -1469,7 +1469,7 @@
-+@@ -1471,7 +1471,7 @@
+-@@ -1396,7 +1396,7 @@
++@@ -1417,7 +1417,7 @@
           #
           # More information on Expat can be found at www.libexpat.org.
           #
-diff --git a/package/python/python-107-optional-codecs-cjk.patch b/package/python/python-107-optional-codecs-cjk.patch
-index ad1d41f..132b4bd 100644
---- a/package/python/python-107-optional-codecs-cjk.patch
-+++ b/package/python/python-107-optional-codecs-cjk.patch
+diff --git a/package/python3/python3-107-optional-codecs-cjk.patch b/package/python3/python3-107-optional-codecs-cjk.patch
+index f9d377d..0f261fc 100644
+--- a/package/python3/python3-107-optional-codecs-cjk.patch
++++ b/package/python3/python3-107-optional-codecs-cjk.patch
 @@ -10,7 +10,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2628,6 +2628,12 @@
-+@@ -2641,6 +2641,12 @@
+-@@ -2683,6 +2683,12 @@
++@@ -2672,6 +2672,12 @@
      DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _sqlite3"
   fi
   
-diff --git a/package/python/python-108-optional-nis.patch b/package/python/python-108-optional-nis.patch
-index bac49ff..12aa2f1 100644
---- a/package/python/python-108-optional-nis.patch
-+++ b/package/python/python-108-optional-nis.patch
+diff --git a/package/python3/python3-108-optional-nis.patch b/package/python3/python3-108-optional-nis.patch
+index 7ec5b19..de6057c 100644
+--- a/package/python3/python3-108-optional-nis.patch
++++ b/package/python3/python3-108-optional-nis.patch
 @@ -13,7 +13,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2634,6 +2634,12 @@
-+@@ -2647,6 +2647,12 @@
-      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _codecs_kr _codecs_jp _codecs_cn _codecs_tw _codecs_hk"
-    	  fi])
+-@@ -2689,6 +2689,12 @@
++@@ -2678,6 +2678,12 @@
+  		DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} _codecs_kr _codecs_jp _codecs_cn _codecs_tw _codecs_hk _codecs_iso2022"
+  	fi])
   
-diff --git a/package/python/python-109-optional-unicodedata.patch b/package/python/python-109-optional-unicodedata.patch
-index af9a28e..99a0daa 100644
---- a/package/python/python-109-optional-unicodedata.patch
-+++ b/package/python/python-109-optional-unicodedata.patch
+diff --git a/package/python3/python3-109-optional-unicodedata.patch b/package/python3/python3-109-optional-unicodedata.patch
+index 4b671ed..46e9a6f 100644
+--- a/package/python3/python3-109-optional-unicodedata.patch
++++ b/package/python3/python3-109-optional-unicodedata.patch
 @@ -10,7 +10,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2640,6 +2640,12 @@
-+@@ -2653,6 +2653,12 @@
+-@@ -2695,6 +2695,12 @@
++@@ -2684,6 +2684,12 @@
       	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
     	  fi])
   
-diff --git a/package/python/python-110-optional-db.patch b/package/python/python-110-optional-db.patch
-index ff1979e..baee963 100644
---- a/package/python/python-110-optional-db.patch
-+++ b/package/python/python-110-optional-db.patch
-@@ -49,7 +49,7 @@ Index: b/configure.ac
+diff --git a/package/python3/python3-110-optional-idle.patch b/package/python3/python3-110-optional-idle.patch
+index f657cbd..4d5e70b 100644
+--- a/package/python3/python3-110-optional-idle.patch
++++ b/package/python3/python3-110-optional-idle.patch
+@@ -33,7 +33,7 @@ Index: b/Makefile.pre.in
+  		distutils distutils/command \
+  		importlib \
+  		turtledemo \
+-@@ -1209,6 +1210,10 @@
++@@ -1210,6 +1211,10 @@
+  LIBSUBDIRS += $(XMLLIBSUBDIRS)
+  endif
+  
+@@ -48,7 +48,7 @@ Index: b/configure.ac
  ===================================================================
  --- a/configure.ac
  +++ b/configure.ac
--@@ -2640,6 +2640,28 @@
-+@@ -2653,6 +2653,28 @@
-      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
-    	  fi])
+-@@ -2737,6 +2737,12 @@
++@@ -2726,6 +2726,12 @@
+  	AS_HELP_STRING([--disable-lib2to3], [disable lib2to3]),
+  	[ LIB2TO3="${enableval}" ], [ LIB2TO3=yes ])
   
-diff --git a/package/python/python-111-optional-ssl.patch b/package/python/python-111-optional-ssl.patch
-index cde6bb6..5b20747 100644
---- a/package/python/python-111-optional-ssl.patch
-+++ b/package/python/python-111-optional-ssl.patch
-@@ -10,7 +10,7 @@ Index: b/configure.ac
- ===================================================================
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2640,6 +2640,12 @@
-+@@ -2653,6 +2653,12 @@
-      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} nis"
-    	  fi])
-  
-diff --git a/package/python/python-112-optional-bzip2.patch b/package/python/python-112-optional-bzip2.patch
-index 1b139bf..eeb3303 100644
---- a/package/python/python-112-optional-bzip2.patch
-+++ b/package/python/python-112-optional-bzip2.patch
-@@ -9,7 +9,7 @@ Index: b/configure.ac
- ===================================================================
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2646,6 +2646,12 @@
-+@@ -2659,6 +2659,12 @@
-      	     DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} ssl"
-    	  fi])
-  
-diff --git a/package/python/python-113-optional-zlib.patch b/package/python/python-113-optional-zlib.patch
-index e98265f..b93c983 100644
---- a/package/python/python-113-optional-zlib.patch
-+++ b/package/python/python-113-optional-zlib.patch
-@@ -9,7 +9,7 @@ Index: b/configure.ac
- ===================================================================
- --- a/configure.ac
- +++ b/configure.ac
--@@ -2652,6 +2652,12 @@
-+@@ -2665,6 +2665,12 @@
-              DISABLED_EXTENSIONS="${DISABLED_EXTENSIONS} bz2"
-           fi])
-  
-diff --git a/package/python/python-114-remove-idle-editor.patch b/package/python/python-114-remove-idle-editor.patch
-index 0f73677..9aba15c 100644
---- a/package/python/python-114-remove-idle-editor.patch
-+++ b/package/python/python-114-remove-idle-editor.patch
-@@ -32,7 +32,7 @@ Index: b/setup.py
+@@ -65,7 +65,7 @@ Index: b/setup.py
  ===================================================================
  --- a/setup.py
  +++ b/setup.py
--@@ -2218,7 +2218,7 @@
-+@@ -2220,7 +2220,7 @@
+-@@ -2183,11 +2183,13 @@
++@@ -2204,11 +2204,13 @@
       import warnings
       warnings.filterwarnings("ignore",category=DeprecationWarning)
   
-diff --git a/package/python/python.mk b/package/python/python.mk
-index 532e120..cb54e3e 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 80ad88e..98fc31b 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- PYTHON_VERSION_MAJOR = 2.7
--PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).7
-+PYTHON_VERSION       = $(PYTHON_VERSION_MAJOR).8
- PYTHON_SOURCE        = Python-$(PYTHON_VERSION).tar.xz
- PYTHON_SITE          = http://python.org/ftp/python/$(PYTHON_VERSION)
- PYTHON_LICENSE       = Python software foundation license v2, others
+ PYTHON3_VERSION_MAJOR = 3.4
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = http://python.org/ftp/python/$(PYTHON3_VERSION)
+ 
