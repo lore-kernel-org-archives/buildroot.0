@@ -1,25 +1,38 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jul 2014 15:23:44 +0200
-Subject: [Buildroot] [PATCH] php: fix phar build failure for CLI
-In-Reply-To: <1404824443-5326-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 8 Jul 2014 10:00:43 -0300")
-References: <1404824443-5326-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lhs4x9un.fsf@dell.be.48ers.dk>
+From: Henry Margies <henry.margies@gmail.com>
+Date: Tue,  8 Jul 2014 14:23:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Build Python with tzset support
+Message-ID: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+This patch adds support for time.tzset() in Python 2.7.
 
- > Disable the phar command-line tool since it requires php to pack itself
- > up. Fixes build failure for CLI (or CLI+CGI) variants of php.
- > Hardly useful for embedded scenarios.
+The Python configure script sets ac_cv_working_tzset to 'no' when
+cross compiling, although it should be available and work with all 
+toolchains supported by Buildroot (?).
+The patch below pre-sets the variable so that time.tzset() works.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Henry Margies <henry.margies@gmail.com>
+---
+ package/python/python.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-Committed, thanks.
-
+diff --git a/package/python/python.mk b/package/python/python.mk
+index cb54e3e..b237848 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -121,7 +121,8 @@ endif
+ PYTHON_CONF_ENV += \
+ 	ac_cv_have_long_long_format=yes \
+ 	ac_cv_file__dev_ptmx=yes \
+-	ac_cv_file__dev_ptc=yes
++	ac_cv_file__dev_ptc=yes \
++	ac_cv_working_tzset=yes
+ 
+ PYTHON_CONF_OPT += \
+ 	--without-cxx-main 	\
 -- 
-Bye, Peter Korsgaard
+1.7.2.5
