@@ -1,26 +1,34 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  8 Jul 2014 20:20:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 7268] python 2.7 compilation issue on a
- Debian/Ubuntu host with multiarch support
-In-Reply-To: <bug-7268-163@https.bugs.busybox.net/>
-References: <bug-7268-163@https.bugs.busybox.net/>
-Message-ID: <20140708202050.CB25F9D1CF@busybox.osuosl.org>
+Date: Tue,  8 Jul 2014 21:06:57 +0000 (UTC)
+Subject: [Buildroot] [Bug 7250] Cannot build with -std=c++11
+In-Reply-To: <bug-7250-163@https.bugs.busybox.net/>
+References: <bug-7250-163@https.bugs.busybox.net/>
+Message-ID: <20140708210657.C966E9D1D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7268
+https://bugs.busybox.net/show_bug.cgi?id=7250
 
---- Comment #13 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-07-08 20:20:50 UTC ---
-Patch for python posted at http://patchwork.ozlabs.org/patch/368000/, and patch
-for python3 posted at http://patchwork.ozlabs.org/patch/368001/.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Thanks a lot David for your bug report and investigation! Once the patches are
-merged by Peter, we'll mark this bug as fixed. Of course, it would be good if
-you could formally test the patches, and give your Tested-by on the patches if
-their work for you.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Attachment #5498|0                           |1
+        is obsolete|                            |
+
+--- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-07-08 21:06:57 UTC ---
+Created attachment 5510
+  --> https://bugs.busybox.net/attachment.cgi?id=5510
+Patch to fix the issue for gcc 4.8
+
+This time, here is a Buildroot patch that fixes the issue. Could you test it?
+I'm currently build-testing it (and similar patches for gcc 4.7 and 4.9) with
+gcc4.7/uclibc, gcc4.8/uclibc, gcc4.9/uclibc and gcc4.8/glibc.
+
+Thanks!
 
 -- 
 Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
