@@ -1,83 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Jul 2014 21:51:01 +0200
-Subject: [Buildroot] [PATCH] dvb-apps: fix static only build
-In-Reply-To: <1404848465-25296-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1404848465-25296-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140708195101.GA4384@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  8 Jul 2014 22:17:52 +0200
+Subject: [Buildroot] [PATCH 1/2] python: improve impermeability to build
+	environment and error handling
+Message-ID: <1404850673-13439-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+This commit mainly fixes bug #7268 by improving the impermeability to
+the build environment by making sure some host environment header
+paths do not leak into the target build. The investigation was done by
+David <buildroot-2014@inbox.com>. This is done by not calling the
+add_multiarch_paths() function of setup.py when we're cross-compiling,
+a change made in the newly introduced
+python-013-dont-add-multiarch-path.patch.
 
-On 2014-07-08 21:41 +0200, Thomas Petazzoni spake thusly:
-> This commit makes dvb-apps behave properly in a static-only build. It
-> passes the static=1 variable to the Makefile, and adds a patch that
-> fixes the Makefile to not build .so libraries when static=1.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/3db/3dbfa7b692d4b123b3ba6b55c84df12818273554/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[--SNIP--]
-> diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
-> index 98ff7eb..edf88f3 100644
-> --- a/package/dvb-apps/dvb-apps.mk
-> +++ b/package/dvb-apps/dvb-apps.mk
-> @@ -15,19 +15,26 @@ DVB_APPS_DEPENDENCIES = libiconv
->  DVB_APPS_LDLIBS += -liconv
->  endif
->  
-> +DVB_APPS_MAKE_OPTS = V=1
+In addition to this, another patch is added to make sure the build is
+aborted when one of the Python module fails to build. This is done in
+python-014-abort-on-failed-modules.patch. Without this, the Python
+setup.py script simply logs which module failed to build, but doesn't
+abort, so it's hard to notice when there is a problem.
 
-I think we should just get rid of that, no?
-It's my fault it is present; we should not use it.
+Cc: David <buildroot-2014@inbox.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../python-013-dont-add-multiarch-path.patch       | 27 ++++++++++++++++++++++
+ .../python-014-abort-on-failed-modules.patch       | 21 +++++++++++++++++
+ 2 files changed, 48 insertions(+)
+ create mode 100644 package/python/python-013-dont-add-multiarch-path.patch
+ create mode 100644 package/python/python-014-abort-on-failed-modules.patch
 
-Otherwise:
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
-> +DVB_APPS_MAKE_OPTS += static=1
-> +endif
-> +
->  DVB_APPS_INSTALL_STAGING = YES
->  
->  define DVB_APPS_BUILD_CMDS
->  	$(TARGET_CONFIGURE_OPTS) LDLIBS="$(DVB_APPS_LDLIBS)" \
-> -		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) V=1
-> +		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) \
-> +		$(DVB_APPS_MAKE_OPTS)
->  endef
->  
->  define DVB_APPS_INSTALL_STAGING_CMDS
-> -	$(MAKE) -C $(@D) V=1 DESTDIR=$(STAGING_DIR) install
-> +	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
->  endef
->  
->  define DVB_APPS_INSTALL_TARGET_CMDS
-> -	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
-> +	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python/python-013-dont-add-multiarch-path.patch b/package/python/python-013-dont-add-multiarch-path.patch
+new file mode 100644
+index 0000000..0ab38ac
+--- /dev/null
++++ b/package/python/python-013-dont-add-multiarch-path.patch
+@@ -0,0 +1,27 @@
++Don't add multiarch paths
++
++The add_multiarch_paths() function leads, in certain build
++environments, to the addition of host header paths to the CFLAGS,
++which is not appropriate for cross-compilation. This patch fixes that
++by simply removing the call to add_multiarch_paths() when we're
++cross-compiling.
++
++Investigation done by David <buildroot-2014@inbox.com>.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -454,9 +454,9 @@
++         if not cross_compiling:
++             add_dir_to_list(self.compiler.library_dirs, '/usr/local/lib')
++             add_dir_to_list(self.compiler.include_dirs, '/usr/local/include')
+++            self.add_multiarch_paths()
++         if cross_compiling:
++             self.add_gcc_paths()
++-        self.add_multiarch_paths()
++ 
++         # Add paths specified in the environment variables LDFLAGS and
++         # CPPFLAGS for header and library files.
+diff --git a/package/python/python-014-abort-on-failed-modules.patch b/package/python/python-014-abort-on-failed-modules.patch
+new file mode 100644
+index 0000000..2031e20
+--- /dev/null
++++ b/package/python/python-014-abort-on-failed-modules.patch
+@@ -0,0 +1,21 @@
++Abort on failed module build
++
++When building a Python module fails, the setup.py script currently
++doesn't exit with an error, and simply continues. This is not a really
++nice behavior, so this patch changes setup.py to abort with an error,
++so that the build issue is clearly noticeable.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/setup.py
++===================================================================
++--- a/setup.py
+++++ b/setup.py
++@@ -281,6 +281,7 @@
++             print "Failed to build these modules:"
++             print_three_column(failed)
++             print
+++            sys.exit(1)
++ 
++     def build_extension(self, ext):
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.0
