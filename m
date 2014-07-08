@@ -1,42 +1,35 @@
-From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Tue, 8 Jul 2014 10:04:06 -0400 (EDT)
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Jul 2014 16:10:02 +0200
 Subject: [Buildroot] [PATCH v2] configs: add defconfig for TS-5x00 SBCs
-In-Reply-To: <87tx6sxdai.fsf@dell.be.48ers.dk>
-Message-ID: <139363858.36511.1404828246906.JavaMail.root@mail>
+In-Reply-To: <139363858.36511.1404828246906.JavaMail.root@mail> (Vivien
+ Didelot's message of "Tue, 8 Jul 2014 10:04:06 -0400 (EDT)")
+References: <139363858.36511.1404828246906.JavaMail.root@mail>
+Message-ID: <87ha2sx7ph.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Vivien" == Vivien Didelot <vivien.didelot@savoirfairelinux.com> writes:
 
->  > +Signed-off-by: Vivien Didelot
->  > <vivien.didelot@savoirfairelinux.com>
-> 
-> Has this been sent upstream? I don't see it in linux-next.
+ > Hi Peter,
+ >> > +Signed-off-by: Vivien Didelot
+ >> > <vivien.didelot@savoirfairelinux.com>
+ >> 
+ >> Has this been sent upstream? I don't see it in linux-next.
 
-Not yet, I'm actually writing an RFC to discuss about the driver
-naming ("ts5500" vs. "ts5x00"). Should I remove it in the meantime?
+ > Not yet, I'm actually writing an RFC to discuss about the driver
+ > naming ("ts5500" vs. "ts5x00"). Should I remove it in the meantime?
 
->  > +Technologic Systems TS-5x00 serie of x86-based Single Board
->  > Computers.
-> 
-> I've stripped a bunch of trailing spaces here.
+No, it's ok - Lets wait until you get feedback from upstream.
 
-True, I'm using :set fo+=w in vim for .txt files,
-but I understand this might be unwanted under source control.
 
-> And added explicit
-> 
-> BR2_i386=y
-> BR2_x86_i586=y
-> 
-> even though they are the current default values, for documentation /
-> if we ever change the defaults.
+ >> Committed with these minor changes, thanks.
 
-It's better like this, indeed.
+ > Thanks!
 
-> Committed with these minor changes, thanks.
+You're welcome, thanks for contributing!
 
-Thanks!
+-- 
+Bye, Peter Korsgaard
