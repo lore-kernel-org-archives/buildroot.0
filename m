@@ -1,68 +1,25 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 8 Jul 2014 15:05:47 +0200
-Subject: [Buildroot] [PATCH 5/6] systemd: add hook to fix /run, /var
-In-Reply-To: <53BACE48.2070603@mind.be>
-References: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
- <1404406659-31109-6-git-send-email-eric.le.bihan.dev@free.fr>
- <53BACE48.2070603@mind.be>
-Message-ID: <20140708130546.GA25364@rmm-p1267483>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Jul 2014 15:23:44 +0200
+Subject: [Buildroot] [PATCH] php: fix phar build failure for CLI
+In-Reply-To: <1404824443-5326-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Tue, 8 Jul 2014 10:00:43 -0300")
+References: <1404824443-5326-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lhs4x9un.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On Mon, Jul 07, 2014 at 06:43:52PM +0200, Arnout Vandecappelle wrote:
-> On 03/07/14 18:57, Eric Le Bihan wrote:
-> > Add a post installation hook to fix target runtime data directories
-> > /var/{lock,run,tmp} and /run. Theses directories will be populated by
-> > systemd according to the configuration files from /usr/lib/tmpfiles.d.
->
->  I don't understand why this is needed, or how this can work...
->
->  Currently, /run, /var/run, /var/lock, and /var/tmp are all symlinks to /tmp
-> where a tmpfs is mounted. I would expect that this is OK for systemd.
->
->  With this change, /run no longer links to /tmp, but it becomes a directory on
-> the rootfs. So unless systemd mounts a tmpfs on /run, this won't work at all.
-> And on my Debian sid system which uses systemd, I see that /run is mounted in
-> /init in the initramfs, so before systemd is started. We don't do that in
-> buildroot, so how can this work?
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-When started, systemd will mount /run as tmpfs. Search for mount_table in
-src/core/mount-setup.c in the source tree to see all the mount operations
-performed.
+ > Disable the phar command-line tool since it requires php to pack itself
+ > up. Fixes build failure for CLI (or CLI+CGI) variants of php.
+ > Hardly useful for embedded scenarios.
 
-Once running, systemd will start the service systemd-tmpfiles [1], which is in
-charge of populating the volatile and temporary files and directories,
-according to configuration files [2] located in /usr/lib/tmpfiles.d/.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-The link from /run to /var/run is mentioned in var.conf:
+Committed, thanks.
 
-  L /var/run - - - - ../run
-
-/var/tmp is handled from tmp.conf:
-
-  d /tmp 1777 root root 10d
-  d /var/tmp 1777 root root 30d
-
-/var/lock is handled from legacy.conf
-
-  L /var/lock - - - - ../run/lock
-
-And I've just noticed etc.conf will handle the creation of the symlink for
-/etc/resolv.conf, so I can simplify my post installation hook :-)
-
-  L /etc/resolv.conf - - - - ../run/systemd/resolve/resolv.conf
-
-We can see that for /var/run and /var/tmp, the types 'd' and 'L' are used,
-which means that if the directories/symlinks exist (created by the target
-skeleton), systemd-tmpfiles will not touch them. /var/run not being a symlink
-to /run made systemd-networkd not work properly on my system.
-
-Best regards,
-ELB
-
-[1] http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
-[2] http://www.freedesktop.org/software/systemd/man/tmpfiles.d.html
+-- 
+Bye, Peter Korsgaard
