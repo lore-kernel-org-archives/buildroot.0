@@ -1,27 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 08 Jul 2014 17:37:58 +0200
-Subject: [Buildroot] [PATCHv4] librtlsdr: new package
-In-Reply-To: <1404248425-27941-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 1 Jul 2014 23:00:25 +0200")
-References: <1404248425-27941-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87d2dfyi7d.fsf@dell.be.48ers.dk>
+Date: Tue, 08 Jul 2014 17:38:07 +0200
+Subject: [Buildroot] [PATCH 01/13] legal-info: depend on patch rather
+	than extract
+In-Reply-To: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:39:59 -0300")
+References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878uo3yi74.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > From: Jason Pruitt <jrspruitt@gmail.com>
- > librtlsdr is a library and software for using a Realtek RTL2832U based
- > DVB-T dongle as a cheap SDR.
+ > Switch legal-info generation dependency to patch rather than extract
+ > so we can use debian/copyright from debian-maintained packages,
+ > because the *orig* file alone doesn't contain the appropiate file.
 
- > [Thomas: change license to GPLv2+, reword help text for the detach
- > driver option.]
-
- > Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
