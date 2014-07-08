@@ -1,36 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Jul 2014 23:22:44 +0200
-Subject: [Buildroot] autobuild-run update
-Message-ID: <20140708232244.39817a4c@free-electrons.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Tue, 08 Jul 2014 23:27:50 +0200
+Subject: [Buildroot] [PATCH 2/6 v2] support/download: fix the git helper
+In-Reply-To: <b0bdeb224c0dab926128a93fe7ddf31d4a3b67ac.1404769268.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 7 Jul 2014 23:44:33 +0200")
+References: <cover.1404769268.git.yann.morin.1998@free.fr>
+ <b0bdeb224c0dab926128a93fe7ddf31d4a3b67ac.1404769268.git.yann.morin.1998@free.fr>
+Message-ID: <87wqbnwnft.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-I've pushed a few updates to the autobuild-run script:
+ > When switching the git helper over to a shell script, a special case was
+ > not carried over: in case the remote has the required reference, we
+ > attempt a shallow clone, using --depth 1. However, this is not supported
+ > when the remote is accessed with the http protocol.
 
-  autobuild-run: don't try to build XBMC
-  http://git.buildroot.net/buildroot-test/commit/?id=8a7fc81cd82ce408e6818ad64b8ab6aab83a30c4
+ > Therefore, the download fails.
 
-  autobuild-run: do not build lttng-tools with toolchains affected by PR58854
-  http://git.buildroot.net/buildroot-test/commit/?id=ec03a70a7428005219e23fd4c837ac80b3988a89
+ > What happened before the conversion to a shell script was that the helper
+ > in the Makefile would fallback to doing a full-clone.
 
-  autobuild-run: do not build sdl with toolchains affected by PR60155
-  http://git.buildroot.net/buildroot-test/commit/?id=9336e1725e586cd6037e7f61d25dfd089f0d13e5
+ > This is the case and behaviour that were lost in the conversion.
 
-I've updated the script on the Free Electrons build server with those
-updates. However, while doing so, a few failed builds were generated
-and are visible in the http://autobuild.buildroot.org output. It looks
-like the autobuild-run script needs some improvements to handle clean
-termination of builds. Contributions welcome.
+ > To avoid making the script too complex, we only attempt a full clone if
+ > needed. And we decide that a full clone is needed by default; we decide
+ > it is unnecessary if the remote has the needed reference *and* the
+ > shallow clone was successful.
 
-Best regards,
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
