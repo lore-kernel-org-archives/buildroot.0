@@ -1,24 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 08 Jul 2014 19:04:56 -0300
-Subject: [Buildroot] [PATCH 09/13] makedevs: add license information
-In-Reply-To: <87tx6rv7b0.fsf@dell.be.48ers.dk>
-References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>	<1404304811-27480-9-git-send-email-gustavo@zacarias.com.ar>
- <87tx6rv7b0.fsf@dell.be.48ers.dk>
-Message-ID: <53BC6B08.5070805@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Wed, 09 Jul 2014 00:08:00 +0200
+Subject: [Buildroot] [PATCH 11/13] libraw: add license information
+In-Reply-To: <1404304811-27480-11-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:09 -0300")
+References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
+ <1404304811-27480-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87ion7v70f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/08/2014 07:01 PM, Peter Korsgaard wrote:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-> Why? It has a GPLv2 header and is part of Buildroot, so it should be
-> GPLv2. It doesn't really matter though as the legal-info doesn't do
-> anything when the packages doesn't have a _SOURCE.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/libraw/libraw.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
 
-True, it's GPL, probably floating letter syndrome after looking at so
-many licenses.
-Well, it does nothing but it should since there are other sources in the
-tree that are likely not GPL (example: mcookie).
-Regards.
+ > diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+ > index bd52cc0..6720edc 100644
+ > --- a/package/libraw/libraw.mk
+ > +++ b/package/libraw/libraw.mk
+ > @@ -7,10 +7,11 @@
+ >  LIBRAW_VERSION = 0.13.4
+ >  LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+ >  LIBRAW_SITE = http://www.libraw.org/data/
+ > -
+ >  LIBRAW_INSTALL_STAGING = YES
+ >  LIBRAW_CONF_OPT += --disable-examples --disable-lcms \
+ >  			--disable-openmp --disable-demosaic-pack-gpl2 \
+ >  			--disable-demosaic-pack-gpl3
+ > +LIBRAW_LICENSE = LGPLv2.1 or CDDL 1.0 or LibRaw Software License 27032010
+ > +LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL LICENSE.LibRaw.pdf
+
+README gives a nice overview, so I've added that as well and committed,
+thanks.
+
+-- 
+Bye, Peter Korsgaard
