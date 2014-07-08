@@ -1,40 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jul 2014 23:46:22 +0200
-Subject: [Buildroot] [git commit] setserial: add license information
-Message-ID: <20140708222427.E75AB9D1CF@busybox.osuosl.org>
+Date: Tue, 8 Jul 2014 23:44:24 +0200
+Subject: [Buildroot] [git commit] texinfo: add license information
+Message-ID: <20140708222427.E0C699D1CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d8e8c65741edeae780cd34ddad74eeec5589aa8
+commit: http://git.buildroot.net/buildroot/commit/?id=4950a35a40f879cb207a2f3e1f62f099b21bbb17
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/setserial/setserial.mk |   10 ++++++----
- 1 files changed, 6 insertions(+), 4 deletions(-)
+ package/texinfo/texinfo.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index f8d0a4b..9f28216 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
+diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
+index 7064e12..afb3bca 100644
+--- a/package/texinfo/texinfo.mk
++++ b/package/texinfo/texinfo.mk
+@@ -10,5 +10,7 @@
  
--SETSERIAL_VERSION            = 2.17
--SETSERIAL_PATCH              = setserial_2.17-45.3.diff.gz
--SETSERIAL_SOURCE             = setserial_$(SETSERIAL_VERSION).orig.tar.gz
--SETSERIAL_SITE               = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial/
-+SETSERIAL_VERSION = 2.17
-+SETSERIAL_PATCH = setserial_2.17-45.3.diff.gz
-+SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
-+SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20131001T214925Z/pool/main/s/setserial/
-+SETSERIAL_LICENSE = GPLv2
-+SETSERIAL_LICENSE_FILES = debian/copyright
+ TEXINFO_VERSION = 4.13a
+ TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
++TEXINFO_LICENSE = GPLv3+
++TEXINFO_LICENSE_FILES = COPYING
  
- define SETSERIAL_APPLY_DEBIAN_PATCHES
- 	# Touching gorhack.h is needed for the Debian patch 18 to work
+ $(eval $(host-autotools-package))
