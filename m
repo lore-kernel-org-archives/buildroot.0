@@ -1,37 +1,24 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jul 2014 00:04:26 +0200
-Subject: [Buildroot] [PATCH 10/13] linux-fusion: add license information
-In-Reply-To: <1404304811-27480-10-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:08 -0300")
-References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
- <1404304811-27480-10-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pphfv76d.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 08 Jul 2014 19:04:56 -0300
+Subject: [Buildroot] [PATCH 09/13] makedevs: add license information
+In-Reply-To: <87tx6rv7b0.fsf@dell.be.48ers.dk>
+References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>	<1404304811-27480-9-git-send-email-gustavo@zacarias.com.ar>
+ <87tx6rv7b0.fsf@dell.be.48ers.dk>
+Message-ID: <53BC6B08.5070805@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 07/08/2014 07:01 PM, Peter Korsgaard wrote:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/linux-fusion/linux-fusion.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+> Why? It has a GPLv2 header and is part of Buildroot, so it should be
+> GPLv2. It doesn't really matter though as the legal-info doesn't do
+> anything when the packages doesn't have a _SOURCE.
 
- > diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
- > index 635e07f..120ad95 100644
- > --- a/package/linux-fusion/linux-fusion.mk
- > +++ b/package/linux-fusion/linux-fusion.mk
- > @@ -8,6 +8,8 @@ LINUX_FUSION_VERSION = 9.0.2
- >  LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
- >  LINUX_FUSION_INSTALL_STAGING = YES
- >  LINUX_FUSION_DEPENDENCIES = linux
- > +LINUX_FUSION_LICENSE = LGPLv2+
- > +LINUX_FUSION_LICENSE_FILES = debian/copyright
-
-That file (and others) state GPLv2+, so I've changed it to that and
-committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+True, it's GPL, probably floating letter syndrome after looking at so
+many licenses.
+Well, it does nothing but it should since there are other sources in the
+tree that are likely not GPL (example: mcookie).
+Regards.
