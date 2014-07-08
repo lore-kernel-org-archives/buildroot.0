@@ -1,121 +1,136 @@
 From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Tue,  8 Jul 2014 15:57:03 +0200
-Subject: [Buildroot] [RFC 0/9] Add libgtk3 and bump webkit to version 2.4.3
-Message-ID: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
+Date: Tue,  8 Jul 2014 15:57:04 +0200
+Subject: [Buildroot] [RFC 1/9] libglib2: bump to version 2.40.0
+In-Reply-To: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
+References: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <1404827832-1101-2-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Remove patch because it is applied upstream in this version.
 
-This series mainly does two things: add libgtk3 and bump webkit.
-
- - 1..5: requirements and dependencies for libgtk3
- - 6: add libgtk3
- - 7: bump webkit
- - 8: is required by Midori
- - 9: bump Midori to test WebKit 2.4.3
-
-For now, only X11 support is done and tested for both libgtk3 and webkit.
-Wayland support will be done later.
-
-Tests:
-
-* All is compiled-tested (with GTK+2 and GTK+3 for WebKit and Midori).
-* Running tests were done for libgtk3 (with gtk3-demo) and Midori GTK+2 with
-  WebKit GTK+2 and webkit1 (on Qemu and BeagleBone Black).
-
-For testing you will need GCC 4.8 because WebKit needs at least version 4.8 (see
-commit message) and X.org needs a version lesser than 4.9 (see this issue:
-http://lists.busybox.net/pipermail/buildroot/2014-June/098679.html).
-
-There is still a weird problem with WebKit: parallel make with Make 3.81 results
-in a make hang on:
-  CXXLD libWebCoreSVG.la
-This is reproducible.
-
-You can find a defconfig for Qemu here: 
-http://bpaste.net/show/fR3jDhQPmtUHPYpGoiUn/
-
-Best regards,
-
-Hadrien
-
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-
-Hadrien Boutteville (9):
-  libglib2: bump to version 2.40.0
-  pango: bump to version 1.36.3
-  cairo: add freetype and gobject support
-  at-spi2-core: new package
-  at-spi2-atk: new package
-  libgtk3: new package
-  webkit: bump to version 2.4.3
-  libsoup: add libsoup-gnome support
-  midori: bump to version 0.5.8
-
- package/Config.in                                  |    3 +
- package/at-spi2-atk/Config.in                      |   16 +
- package/at-spi2-atk/at-spi2-atk.mk                 |   19 +
- package/at-spi2-core/Config.in                     |   17 +
- ...se-AC_CHECK_ALIGNOF-instead-of-custom-DBI.patch |   79 ++
- package/at-spi2-core/at-spi2-core.mk               |   24 +
- package/cairo/cairo.mk                             |   14 +
- ...ror-format-string-errors-from-mismatched-.patch |   56 -
- package/libglib2/libglib2-0002-no-gtk-doc.patch    |   25 +
- package/libglib2/libglib2.mk                       |    4 +-
- package/libgtk3/Config.in                          |   47 +
- package/libgtk3/libgtk3-0001-no-gtk-doc.patch      |   11 +
- .../libgtk3-0002-add-file-introspection-m4.patch   |  100 ++
- package/libgtk3/libgtk3.mk                         |  184 +++
- package/libsoup/Config.in                          |    5 +
- package/libsoup/libsoup.mk                         |    8 +-
- package/midori/Config.in                           |   15 +-
- .../midori-0001-remove-libnotify-dependency.patch  |   27 +
- package/midori/midori.mk                           |   51 +-
- package/pango/Config.in                            |    1 +
- package/pango/pango-0001-no-tests.patch            |   27 +
- package/pango/pango-0002-no-gtk-doc.patch          |   25 +
- package/pango/pango-no-const-return.patch          |  475 -------
- package/pango/pango-no-tests.patch                 |   22 -
- package/pango/pango.mk                             |   19 +-
- package/webkit/Config.in                           |   16 +-
- ...ebkit-0001-build-fix-for-32-bit-autotools.patch |   34 -
- .../webkit-0002-build-fix-for-gtklauncher.patch    |   51 -
- .../webkit/webkit-0003-detect-harfbuzz-icu.patch   |   28 -
- package/webkit/webkit-0004-disable-docrebase.patch |   27 -
- package/webkit/webkit-0005-disable-tests.patch     |   80 --
- package/webkit/webkit-0006-execinfo_h.patch        |   20 -
- package/webkit/webkit-0007-mips-dfg.patch          | 1490 --------------------
- package/webkit/webkit-0008-support-bison-3.0.patch |   22 -
- package/webkit/webkit.mk                           |   67 +-
- 35 files changed, 711 insertions(+), 2398 deletions(-)
- create mode 100644 package/at-spi2-atk/Config.in
- create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
- create mode 100644 package/at-spi2-core/Config.in
- create mode 100644 package/at-spi2-core/at-spi2-core-0001-configure-use-AC_CHECK_ALIGNOF-instead-of-custom-DBI.patch
- create mode 100644 package/at-spi2-core/at-spi2-core.mk
+ ...ror-format-string-errors-from-mismatched-.patch | 56 ----------------------
+ package/libglib2/libglib2-0002-no-gtk-doc.patch    | 25 ++++++++++
+ package/libglib2/libglib2.mk                       |  4 +-
+ 3 files changed, 27 insertions(+), 58 deletions(-)
  delete mode 100644 package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
  create mode 100644 package/libglib2/libglib2-0002-no-gtk-doc.patch
- create mode 100644 package/libgtk3/Config.in
- create mode 100644 package/libgtk3/libgtk3-0001-no-gtk-doc.patch
- create mode 100644 package/libgtk3/libgtk3-0002-add-file-introspection-m4.patch
- create mode 100644 package/libgtk3/libgtk3.mk
- create mode 100644 package/midori/midori-0001-remove-libnotify-dependency.patch
- create mode 100644 package/pango/pango-0001-no-tests.patch
- create mode 100644 package/pango/pango-0002-no-gtk-doc.patch
- delete mode 100644 package/pango/pango-no-const-return.patch
- delete mode 100644 package/pango/pango-no-tests.patch
- delete mode 100644 package/webkit/webkit-0001-build-fix-for-32-bit-autotools.patch
- delete mode 100644 package/webkit/webkit-0002-build-fix-for-gtklauncher.patch
- delete mode 100644 package/webkit/webkit-0003-detect-harfbuzz-icu.patch
- delete mode 100644 package/webkit/webkit-0004-disable-docrebase.patch
- delete mode 100644 package/webkit/webkit-0005-disable-tests.patch
- delete mode 100644 package/webkit/webkit-0006-execinfo_h.patch
- delete mode 100644 package/webkit/webkit-0007-mips-dfg.patch
- delete mode 100644 package/webkit/webkit-0008-support-bison-3.0.patch
 
+diff --git a/package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch b/package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
+deleted file mode 100644
+index 9b87d9d..0000000
+--- a/package/libglib2/0001-gio-Fix-Werror-format-string-errors-from-mismatched-.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 0167c3340d8201dca8e9031b61703bbc5ed6ce33 Mon Sep 17 00:00:00 2001
+-From: Jan Schmidt <thaytan@noraisin.net>
+-Date: Wed, 25 Sep 2013 19:22:26 +1000
+-Subject: [PATCH] gio: Fix -Werror format string errors from mismatched ints.
+-
+-Upstream-Status: Backport
+-
+----
+- gio/gdbusmessage.c | 8 ++++----
+- gio/gdbusprivate.c | 4 ++--
+- 2 files changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
+-index ac233a3..ad77aa6 100644
+---- a/gio/gdbusmessage.c
+-+++ b/gio/gdbusmessage.c
+-@@ -3468,10 +3468,10 @@ g_dbus_message_print (GDBusMessage *message,
+-                                           statbuf.st_mode);
+-                   g_string_append_printf (fs, "%s" "ino=%" G_GUINT64_FORMAT, fs->len > 0 ? "," : "",
+-                                           (guint64) statbuf.st_ino);
+--                  g_string_append_printf (fs, "%s" "uid=%d", fs->len > 0 ? "," : "",
+--                                          statbuf.st_uid);
+--                  g_string_append_printf (fs, "%s" "gid=%d", fs->len > 0 ? "," : "",
+--                                          statbuf.st_gid);
+-+                  g_string_append_printf (fs, "%s" "uid=%u", fs->len > 0 ? "," : "",
+-+                                          (guint) statbuf.st_uid);
+-+                  g_string_append_printf (fs, "%s" "gid=%u", fs->len > 0 ? "," : "",
+-+                                          (guint) statbuf.st_gid);
+-                   g_string_append_printf (fs, "%s" "rdev=%d:%d", fs->len > 0 ? "," : "",
+-                                           major (statbuf.st_rdev), minor (statbuf.st_rdev));
+-                   g_string_append_printf (fs, "%s" "size=%" G_GUINT64_FORMAT, fs->len > 0 ? "," : "",
+-diff --git a/gio/gdbusprivate.c b/gio/gdbusprivate.c
+-index 0e5bef2..785a0c0 100644
+---- a/gio/gdbusprivate.c
+-+++ b/gio/gdbusprivate.c
+-@@ -2155,7 +2155,7 @@ write_message_print_transport_debug (gssize bytes_written,
+-   _g_dbus_debug_print_lock ();
+-   g_print ("========================================================================\n"
+-            "GDBus-debug:Transport:\n"
+--           "  >>>> WROTE %" G_GSIZE_FORMAT " bytes of message with serial %d and\n"
+-+           "  >>>> WROTE %" G_GSSIZE_FORMAT " bytes of message with serial %d and\n"
+-            "       size %" G_GSIZE_FORMAT " from offset %" G_GSIZE_FORMAT " on a %s\n",
+-            bytes_written,
+-            g_dbus_message_get_serial (data->message),
+-@@ -2206,7 +2206,7 @@ read_message_print_transport_debug (gssize bytes_read,
+-     _g_dbus_debug_print_lock ();
+-   g_print ("========================================================================\n"
+-            "GDBus-debug:Transport:\n"
+--           "  <<<< READ %" G_GSIZE_FORMAT " bytes of message with serial %d and\n"
+-+           "  <<<< READ %" G_GSSIZE_FORMAT " bytes of message with serial %d and\n"
+-            "       size %d to offset %" G_GSIZE_FORMAT " from a %s\n",
+-            bytes_read,
+-            serial,
+--- 
+-1.8.3.1
+-
+diff --git a/package/libglib2/libglib2-0002-no-gtk-doc.patch b/package/libglib2/libglib2-0002-no-gtk-doc.patch
+new file mode 100644
+index 0000000..926a263
+--- /dev/null
++++ b/package/libglib2/libglib2-0002-no-gtk-doc.patch
+@@ -0,0 +1,25 @@
++Same patch as for systemd in commit
++7144f2f04b705538a893e538a6b851f536f433b6:
++
++Fix deactivation of gtk-doc
++
++The tarball contains the Makefile for building documentation with gtk-doc,
++Unfortunately the AM_CONDITIONAL variable is not the correct one, which
++results in an error when running autoreconf.
++
++This patch fixes this issue.
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
++
++--- a/gtk-doc.make
+++++ b/gtk-doc.make
++@@ -267,7 +267,7 @@
++ #
++ # Require gtk-doc when making dist
++ #
++-if HAVE_GTK_DOC
+++if ENABLE_GTK_DOC
++ dist-check-gtkdoc: docs
++ else
++ dist-check-gtkdoc:
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 8df7c55..255b85d 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBGLIB2_VERSION_MAJOR = 2.38
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).2
++LIBGLIB2_VERSION_MAJOR = 2.40
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPLv2+
 -- 
 2.0.1
