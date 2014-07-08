@@ -1,36 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue,  8 Jul 2014 21:06:57 +0000 (UTC)
-Subject: [Buildroot] [Bug 7250] Cannot build with -std=c++11
-In-Reply-To: <bug-7250-163@https.bugs.busybox.net/>
-References: <bug-7250-163@https.bugs.busybox.net/>
-Message-ID: <20140708210657.C966E9D1D1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Jul 2014 23:22:44 +0200
+Subject: [Buildroot] autobuild-run update
+Message-ID: <20140708232244.39817a4c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7250
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+I've pushed a few updates to the autobuild-run script:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #5498|0                           |1
-        is obsolete|                            |
+  autobuild-run: don't try to build XBMC
+  http://git.buildroot.net/buildroot-test/commit/?id=8a7fc81cd82ce408e6818ad64b8ab6aab83a30c4
 
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-07-08 21:06:57 UTC ---
-Created attachment 5510
-  --> https://bugs.busybox.net/attachment.cgi?id=5510
-Patch to fix the issue for gcc 4.8
+  autobuild-run: do not build lttng-tools with toolchains affected by PR58854
+  http://git.buildroot.net/buildroot-test/commit/?id=ec03a70a7428005219e23fd4c837ac80b3988a89
 
-This time, here is a Buildroot patch that fixes the issue. Could you test it?
-I'm currently build-testing it (and similar patches for gcc 4.7 and 4.9) with
-gcc4.7/uclibc, gcc4.8/uclibc, gcc4.9/uclibc and gcc4.8/glibc.
+  autobuild-run: do not build sdl with toolchains affected by PR60155
+  http://git.buildroot.net/buildroot-test/commit/?id=9336e1725e586cd6037e7f61d25dfd089f0d13e5
 
-Thanks!
+I've updated the script on the Free Electrons build server with those
+updates. However, while doing so, a few failed builds were generated
+and are visible in the http://autobuild.buildroot.org output. It looks
+like the autobuild-run script needs some improvements to handle clean
+termination of builds. Contributions welcome.
 
+Best regards,
+
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
