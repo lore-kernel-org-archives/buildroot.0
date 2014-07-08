@@ -1,31 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jul 2014 23:44:24 +0200
-Subject: [Buildroot] [git commit] texinfo: add license information
-Message-ID: <20140708222427.E0C699D1CF@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 08 Jul 2014 19:26:39 -0300
+Subject: [Buildroot] [PATCH 13/13] dmraid: add license information
+In-Reply-To: <87a98jv6ae.fsf@dell.be.48ers.dk>
+References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>	<1404304811-27480-13-git-send-email-gustavo@zacarias.com.ar>
+ <87a98jv6ae.fsf@dell.be.48ers.dk>
+Message-ID: <53BC701F.9070707@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4950a35a40f879cb207a2f3e1f62f099b21bbb17
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/08/2014 07:23 PM, Peter Korsgaard wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/texinfo/texinfo.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+> I actually don't see any LGPL references in the sources - And looking at
+> other distributions, they have also classified it as GPLv2+, so I've
+> dropped the LGPL part and instead added 'LICENSE' to _LICENSE_FILES.
+> 
+> Committed with those changes, thanks.
 
-diff --git a/package/texinfo/texinfo.mk b/package/texinfo/texinfo.mk
-index 7064e12..afb3bca 100644
---- a/package/texinfo/texinfo.mk
-+++ b/package/texinfo/texinfo.mk
-@@ -10,5 +10,7 @@
- 
- TEXINFO_VERSION = 4.13a
- TEXINFO_SITE = $(BR2_GNU_MIRROR)/texinfo
-+TEXINFO_LICENSE = GPLv3+
-+TEXINFO_LICENSE_FILES = COPYING
- 
- $(eval $(host-autotools-package))
+I tried to err on the safe side on this one since it's mentioned in
+LICENSE and the LGPL COPYING is shipped as well.
+There's probably an exception somewhere when linking to the libs,
+however we don't use it that way so just GPL is probably fine.
+Regards.
