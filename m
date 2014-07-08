@@ -1,31 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jul 2014 23:47:43 +0200
-Subject: [Buildroot] [git commit] quota: add license information
-Message-ID: <20140708222427.EDE269D1CF@busybox.osuosl.org>
+Date: Wed, 9 Jul 2014 00:23:43 +0200
+Subject: [Buildroot] [git commit] dmraid: add license information
+Message-ID: <20140708222428.2464D9D1CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ab3e8f3447115d4115214b34f931375d9756e10c
+commit: http://git.buildroot.net/buildroot/commit/?id=13f8c39294a6ddac22c887d3c374e869b466c769
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+[Peter; license is GPLv2+, drop LGPL, add LICENSE file]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quota/quota.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ package/dmraid/dmraid.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 4febb50..1cc96d7 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -8,6 +8,7 @@ QUOTA_VERSION = 4.00
- QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(QUOTA_VERSION)
- QUOTA_DEPENDENCIES = host-gettext
- QUOTA_AUTORECONF = YES
-+QUOTA_LICENSE = GPLv2+
+diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
+index 412c903..baeca36 100644
+--- a/package/dmraid/dmraid.mk
++++ b/package/dmraid/dmraid.mk
+@@ -12,6 +12,8 @@ DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
+ DMRAID_MAKE = $(MAKE1)
+ DMRAID_INSTALL_STAGING = YES
+ DMRAID_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
++DMRAID_LICENSE = GPLv2
++DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE
  
- QUOTA_CFLAGS = $(TARGET_CFLAGS)
- QUOTA_LDFLAGS = $(TARGET_LDFLAGS)
+ DMRAID_DEPENDENCIES = lvm2
+ 
