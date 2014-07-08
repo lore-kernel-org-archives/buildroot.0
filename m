@@ -1,32 +1,47 @@
-From: Henry Margies <henry.margies@gmail.com>
-Date: Tue, 8 Jul 2014 17:43:31 +0100
-Subject: [Buildroot] [PATCH 1/1] Build Python with tzset support
-In-Reply-To: <20140708162840.5983803f@free-electrons.com>
-References: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
- <20140708162840.5983803f@free-electrons.com>
-Message-ID: <6B5AC78D-66CA-4C7D-AF6C-B2B9C181FA65@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue,  8 Jul 2014 17:04:15 +0000 (UTC)
+Subject: [Buildroot] [Bug 7268] python 2.7 compilation issue on a
+ Debian/Ubuntu host with multiarch support
+In-Reply-To: <bug-7268-163@https.bugs.busybox.net/>
+References: <bug-7268-163@https.bugs.busybox.net/>
+Message-ID: <20140708170415.A0FB19D1D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=7268
 
-thanks for the review.
+David <buildroot-2014@inbox.com> changed:
 
-On 8 Jul 2014, at 15:28, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> However, it would be nice to also submit a similar patch for the
-> python3 package. Also, we should really audit all the AC_RUN_IFELSE()
-> invocation from Python configure.ac script to see which cache variables
-> should be prefilled from the pyhon{3,}.mk.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|python 2.7 compilation      |python 2.7 compilation
+                   |issue                       |issue on a Debian/Ubuntu
+                   |                            |host with multiarch support
 
-I will create and send a separate patch for Python3 tomorrow. I just tried it on my test system and it works ok. The tzset-check is actually the same in Python 2.7 and 3.
+--- Comment #10 from David <buildroot-2014@inbox.com> 2014-07-08 17:04:14 UTC ---
+Hi,
 
-And I also agree that it would be nice to check the configure script, pity it is such a long one :) I?ll have a look tomorrow to see if I can spot anything obvious.
+I finally got the bug. Your input about wrong paths really helped me and saved
+me a lot of time, thanks a lot for this.
 
+In fact, the main setup.py script has a "add_multiarch_paths" function that
+adapts standard paths to multiarch requirements. For some reason, it adds host
+/usr/include/x86_64-linux-gnu to include paths for the target python build. 
 
+I add a patch that makes multiarch management process available only if python
+is not being cross-compiled. I do not know if multiarch really makes sense in
+the case of buildroot. This patch fixes my compilation issue, but it may break
+something for a different architecture, so I hope someone with a lot more
+experience about python and buildroot architectures than me will read this
+patch.
 
-Best regards,
+Thanks a lot again
+David
 
-Henry
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
