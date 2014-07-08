@@ -1,95 +1,54 @@
-From: Sylvain LG <forum@sylvainlegourr.com>
-Date: Tue, 8 Jul 2014 19:44:30 +0200
-Subject: [Buildroot] Buildroot + Raspberry Pi B: eth0 issue
-Message-ID: <CAK9TtU2fZB9t0rBnbJHLkHgA4w0sA_kkdtHQV9iwQh5GCquYXQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 8 Jul 2014 21:07:09 +0200
+Subject: [Buildroot] xserver_xorg-server-1.15.1 crash on RaspberryPi
+ when compiled with gcc-4.9
+Message-ID: <trinity-85a887f6-62ec-4c0f-b107-52865f650cae-1404846429392@3capp-gmx-bs18>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Thomas,
 
-I've built a Raspberry Pi B system with Buildroot (board/raspberry).
+On Tue, Jul 08, 2014 at 12:02:07AM +0200, Thomas Petazzoni wrote:
+> Dear Peter Seiderer,
+> 
+> On Sat, 7 Jun 2014 23:58:58 +0200, Peter Seiderer wrote:
+> 
+> > running xserver (driver fbdev) on RaspberryPi crashes when compiled with gcc-4.9 (-Os).
+> > 
+> > Steps to reproduce (with buildroot-2014.05 release and additonal dillo package):
+> 
+> > Program received signal SIGSEGV, Segmentation fault.
+> > fbGlyphs (op=<optimized out>, pSrc=0x1, pDst=0x4, maskFormat=0x3b9d90, xSrc=0, ySrc=0, nlist=6, list=0xbefff490, glyphs=0x1)
+> >     at fbpict.c:140
+> > 140                 glyph = *glyphs++;
+> > (gdb) p glyphs
+> > $1 = (GlyphPtr *) 0x1
+> 
+> Thanks for the report. I wanted to let you know that I'm also seeing
+> the issue here, while testing the gtk-demo application under Xfbdev on
+> Qemu/ARM. I am also building with a gcc 4.9.x based toolchain, the
+> Linaro 14.05 toolchain. I haven't tested yet to rebuild with gcc 4.8.x
+> to see the difference.
+> 
+> Have you investigated the problem a bit more? Does it look like a
+> compiler issue?
 
-At first boot, network was fine. But after a reboot command, eth0 is not up
-at boot and fails with this error:
+I tried to reduce the failing function or produce a stand alone testcase, but failed to do so...
 
-Starting network...
-> [    2.046886] usb 1-1.1: new high-speed USB device number 3 using dwc_otg
-> ip: SIOCGIFFLAGS: No such device
-
-
-
-Here comes some logs related to USB from dmesg command:
-
-[    1.686999] usb 1-1: New USB device found, idVendor=0424, idProduct=9514
-> [    1.692085] usb 1-1: New USB device strings: Mfr=0, Product=0,
-> SerialNumber=0
-> [    1.724300] hub 1-1:1.0: USB hub found
-> [    1.744644] hub 1-1:1.0: 5 ports detected
-> [    2.046886] usb 1-1.1: new high-speed USB device number 3 using dwc_otg
-> [    2.167046] usb 1-1.1: New USB device found, idVendor=0424,
-> idProduct=ec00
-> [    2.167064] usb 1-1.1: New USB device strings: Mfr=0, Product=0,
-> SerialNumber=0
-> [    2.174908] smsc95xx v1.0.4
-> [    2.233745] smsc95xx 1-1.1:1.0 eth0: register 'smsc95xx' at
-> usb-bcm2708_usb-1.1, smsc95xx USB 2.0 Ethernet, b8:27:eb:85:b6:d9
-> [    2.316718] usb 1-1.3: new low-speed USB device number 4 using dwc_otg
-> [    2.453202] usb 1-1.3: New USB device found, idVendor=04f2,
-> idProduct=0833
-> [    2.460841] usb 1-1.3: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=0
-> [    2.467372] usb 1-1.3: Product: USB Keyboard
-> [    2.473219] usb 1-1.3: Manufacturer: CHICONY
-> [    2.499820] input: CHICONY USB Keyboard as
-> /devices/platform/bcm2708_usb/usb1/1-1/1-1.3/1-1.3:1.0/input/input0
-> [    2.510780] hid-generic 0003:04F2:0833.0001: input: USB HID v1.11
-> Keyboard [CHICONY USB Keyboard] on usb-bcm2708_usb-1.3/input0
-> [    2.558928] input: CHICONY USB Keyboard as
-> /devices/platform/bcm2708_usb/usb1/1-1/1-1.3/1-1.3:1.1/input/input1
-> [    2.565652] hid-generic 0003:04F2:0833.0002: input: USB HID v1.11
-> Device [CHICONY USB Keyboard] on usb-bcm2708_usb-1.3/input1
-
-
-
-/etc/network/interfaces:
-
-auto lo
-> iface lo inet loopback
-> auto eth0
-> iface eth0 inet dhcp
-
-
-
-If I log into the system, I can use the command ifup eth0 and it works!
-
-# ifup eth0
-> [   52.499521] smsc95xx 1-1.1:1.0 eth0: hardware isn't capable of remote
-> wakeup
-> udhcpc (v1.22.1) stared
-> Sending discover...
-> [   54.039128] smsc95xx 1-1.1:1.0 eth0: link up, 100Mbps, full-duplex, lpa
-> 0xCDE1
-> Sending discover...
-> Sending select for 192.168.1.230...
-> Lease of 192.168.1.230 obtained, lease time 300
-> deleting routers
-> adding dns 192.168.1.1
-> #
-
- If I shutdown the system, it may work at boot time... or not, after
-several retries.
-ifup eth0 works everytime by hand.
-
-
-What do you think about it?
-It seems to me that hardware is not yet detected at network init time.
+I think there is nothing special (or wrong) in the fbGlyps function (and compiles bugfree with many compilers/architectures), so I think this hints to consider a compiler bug..., but wanted a second
+opinion before reporting as a gcc bug...
 
 Regards,
+Peter
 
-Sylvain
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140708/9881862a/attachment.html>
+> 
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
