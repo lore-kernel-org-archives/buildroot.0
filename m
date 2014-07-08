@@ -1,11 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jul 2014 00:01:39 +0200
-Subject: [Buildroot] [PATCH 09/13] makedevs: add license information
-In-Reply-To: <1404304811-27480-9-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:07 -0300")
+Date: Wed, 09 Jul 2014 00:04:26 +0200
+Subject: [Buildroot] [PATCH 10/13] linux-fusion: add license information
+In-Reply-To: <1404304811-27480-10-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:08 -0300")
 References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
- <1404304811-27480-9-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87tx6rv7b0.fsf@dell.be.48ers.dk>
+ <1404304811-27480-10-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pphfv76d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +16,22 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  > ---
- >  package/makedevs/makedevs.mk | 1 +
- >  1 file changed, 1 insertion(+)
+ >  package/linux-fusion/linux-fusion.mk | 2 ++
+ >  1 file changed, 2 insertions(+)
 
- > diff --git a/package/makedevs/makedevs.mk b/package/makedevs/makedevs.mk
- > index 7210dc6..6ca688c 100644
- > --- a/package/makedevs/makedevs.mk
- > +++ b/package/makedevs/makedevs.mk
- > @@ -9,6 +9,7 @@ MAKEDEVS_SOURCE =
- >  HOST_MAKEDEVS_SOURCE =
- 
- >  MAKEDEVS_VERSION = buildroot-$(BR2_VERSION)
- > +MAKEDEVS_LICENSE = LGPLv2
+ > diff --git a/package/linux-fusion/linux-fusion.mk b/package/linux-fusion/linux-fusion.mk
+ > index 635e07f..120ad95 100644
+ > --- a/package/linux-fusion/linux-fusion.mk
+ > +++ b/package/linux-fusion/linux-fusion.mk
+ > @@ -8,6 +8,8 @@ LINUX_FUSION_VERSION = 9.0.2
+ >  LINUX_FUSION_SITE = http://directfb.org/downloads/Core/linux-fusion
+ >  LINUX_FUSION_INSTALL_STAGING = YES
+ >  LINUX_FUSION_DEPENDENCIES = linux
+ > +LINUX_FUSION_LICENSE = LGPLv2+
+ > +LINUX_FUSION_LICENSE_FILES = debian/copyright
 
-Why? It has a GPLv2 header and is part of Buildroot, so it should be
-GPLv2. It doesn't really matter though as the legal-info doesn't do
-anything when the packages doesn't have a _SOURCE.
+That file (and others) state GPLv2+, so I've changed it to that and
+committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
