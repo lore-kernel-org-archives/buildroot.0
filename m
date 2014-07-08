@@ -1,37 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jul 2014 17:38:15 +0200
-Subject: [Buildroot] [git commit] legal-info: depend on patch rather than
-	extract
-Message-ID: <20140708153829.769669D1C7@busybox.osuosl.org>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Tue, 08 Jul 2014 18:02:05 +0200
+Subject: [Buildroot] [RFC 9/9] midori: bump to version 0.5.8
+In-Reply-To: <1404827832-1101-10-git-send-email-hadrien.boutteville@gmail.com>
+References: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
+ <1404827832-1101-10-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <53BC15FD.4000209@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0fbba2cef24421552d21112e845cf9603a32a816
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello all,
 
-Switch legal-info generation dependency to patch rather than extract
-so we can use debian/copyright from debian-maintained packages,
-because the *orig* file alone doesn't contain the appropiate file.
+On Tue,  8 Jul 2014 15:57:12 +0200, Hadrien Boutteville wrote:
+[...]
+> +ifeq ($(BR2_PACKAGE_GTK3),y)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-generic.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Argh! I made a mistake in a last minute untested modification... It's of
+course BR2_PACKAGE_LIBGTK3.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index bc8a12e..2bd4466 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -629,7 +629,7 @@ $(2)_MANIFEST_LICENSE_FILES ?= not saved
- # for overriden, local or normal remote packages alike, whether
- # we want to redistribute it or not.
- ifneq ($$($(2)_LICENSE_FILES),)
--$(1)-legal-info: $(1)-extract
-+$(1)-legal-info: $(1)-patch
- endif
- 
- # We only save the sources of packages we want to redistribute, that are
+> +# The actual WebKit logic in Buildroot enable webkit2 when WebKit uses GTK+3
+> +MIDORI_CONF_OPT += \
+> +	-DUSE_GTK3=ON \
+> +	-DHALF_BRO_INCOM_WEBKIT2=ON
+> +MIDORI_DEPENDENCIES += libgtk3
+> +else
+> +MIDORI_DEPENDENCIES += libgtk2
+> +endif
+>  
+> -define MIDORI_INSTALL_TARGET_CMDS
+> -       (cd $(@D); $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) install)
+> +define MIDORI_EXTRACT_CMDS
+> +	$(call suitable-extractor,$(MIDORI_SOURCE)) $(DL_DIR)/$(MIDORI_SOURCE) \
+> +		| $(TAR) $(TAR_STRIP_COMPONENTS)=0 -C $(@D) $(TAR_OPTIONS) -
+>  endef
+>  
+> -$(eval $(generic-package))
+> +$(eval $(cmake-package))
+> 
+
+Regards,
+
+Hadrien
