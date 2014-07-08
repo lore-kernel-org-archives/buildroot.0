@@ -1,48 +1,21 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  8 Jul 2014 08:00:48 -0300
-Subject: [Buildroot] [PATCH] php: add option for phar builtin extension
-Message-ID: <1404817248-20587-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 08 Jul 2014 08:41:31 -0300
+Subject: [Buildroot] mpd build error
+In-Reply-To: <65C3B8A7B8C54F1AB53C66387CFA90E3@JohanW7>
+References: <65C3B8A7B8C54F1AB53C66387CFA90E3@JohanW7>
+Message-ID: <53BBD8EB.3050300@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/php/Config.ext | 5 +++++
- package/php/php.mk     | 3 ++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+On 07/08/2014 07:07 AM, Sagaert Johan wrote:
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index abf4993..ff9a6ad 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -31,6 +31,11 @@ config BR2_PACKAGE_PHP_EXT_BZIP2
- 	help
- 	  bzip2 read/write support
- 
-+config BR2_PACKAGE_PHP_EXT_PHAR
-+	bool "phar"
-+	help
-+	  PHP Archive support
-+
- config BR2_PACKAGE_PHP_EXT_ZIP
- 	bool "zip"
- 	select BR2_PACKAGE_ZLIB
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 8ac5d86..4d3aa7d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -73,7 +73,8 @@ PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_FILTER),--enable-filter) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_CALENDAR),--enable-calendar) \
- 		$(if $(BR2_PACKAGE_PHP_EXT_FILEINFO),--enable-fileinfo) \
--		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath)
-+		$(if $(BR2_PACKAGE_PHP_EXT_BCMATH),--enable-bcmath) \
-+		$(if $(BR2_PACKAGE_PHP_EXT_PHAR),--enable-phar)
- 
- ifeq ($(BR2_PACKAGE_PHP_EXT_OPENSSL),y)
- 	PHP_CONF_OPT += --with-openssl=$(STAGING_DIR)/usr
--- 
-1.8.5.5
+> Strange I tried one of the qemu_arm builds with mpd and that one was ok.
+
+Hi.
+Blame gcc 4.9.x :)
+Actually it's more likely a mpd source issue, i'll look into it, but
+going to the default 4.8.x will fix it for you.
+Regards.
