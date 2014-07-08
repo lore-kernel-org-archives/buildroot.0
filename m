@@ -1,78 +1,87 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 8 Jul 2014 21:30:30 +0200
-Subject: [Buildroot] [PATCH] ghostscript-fonts: new package
-Message-ID: <trinity-3615ecec-e749-4e66-bc23-7071373ddf63-1404847829908@3capp-gmx-bs18>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue,  8 Jul 2014 21:41:05 +0200
+Subject: [Buildroot] [PATCH] dvb-apps: fix static only build
+Message-ID: <1404848465-25296-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This commit makes dvb-apps behave properly in a static-only build. It
+passes the static=1 variable to the Makefile, and adds a patch that
+fixes the Makefile to not build .so libraries when static=1.
 
-On Sat, Jun 14, 2014 at 08:56:22PM +0200, Thomas Petazzoni wrote:
-> Dear Peter Seiderer,
-> 
-> On Sun,  8 Jun 2014 00:47:15 +0200, Peter Seiderer wrote:
-> 
-> >  comment "X libraries and helper libraries"
-> >  source "package/dejavu/Config.in"
-> > +source "package/ghostscript-fonts/Config.in"
-> >  source "package/liberation/Config.in"
-> >  source "package/libsexy/Config.in"
-> >  source "package/x11r7/xkeyboard-config/Config.in"
-> 
-> The package looks good, but I'm wondering if "X libraries and helper
-> libraries" is really the right places for fonts. I'm pretty sure
-> liberation fonts are usable outside of X.org. Regarding
-> ghostscript-fonts, I am not sure what programs are using them.
+Fixes:
 
-Dillo was requesting some ghostscript and DejaVu fonts as default fonts...
+  http://autobuild.buildroot.org/results/3db/3dbfa7b692d4b123b3ba6b55c84df12818273554/
 
-I think it was Qt5/gui module with fontconfig enabled (and without X installation)
-which needed the Liberation fonts for text rendering...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../dvb-apps-0003-support-static-only-build.patch    | 20 ++++++++++++++++++++
+ package/dvb-apps/dvb-apps.mk                         | 13 ++++++++++---
+ 2 files changed, 30 insertions(+), 3 deletions(-)
+ create mode 100644 package/dvb-apps/dvb-apps-0003-support-static-only-build.patch
 
-> Depending on that, the package could be visible at a different location
-> in menuconfig.
-> 
-
-Yes, here three suggestions:
-
-a) add new 'Target packages -> Fonts' menu entry
-b) add new 'Target packages -> Libraries -> Fonts' menu entry
-c) add new 'Target packages -> Graphic libraries/Fonts' submenu entry
-
-There is another font provider 'Google font directory' found at
-'Target packages -> Miscellaneous'...
-
-> Also:
-> 
->  * Could you post an updated version on top of master. The entire
->    package/Config.in file has changed in terms of indentation.
-
-O.k. will do...
-
-> 
->  * This patch makes the assumption the dejavu package is applied, but
->    both patches are not part of the same series. So either make the
->    patches independent of each other (in separate branches on your
->    side), or post both of them together as a series.
-
-O.k. will provide as patchset...
-
-Regards,
-Peter
-
-> 
-> The rest of the package looks good to me, it's really just this
-> location in menuconfig that annoys me a bit.
-> 
-> Maybe other developers will have some suggestions on this?
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/dvb-apps/dvb-apps-0003-support-static-only-build.patch b/package/dvb-apps/dvb-apps-0003-support-static-only-build.patch
+new file mode 100644
+index 0000000..236f1a3
+--- /dev/null
++++ b/package/dvb-apps/dvb-apps-0003-support-static-only-build.patch
+@@ -0,0 +1,20 @@
++Make.rules: don't build .so libraries when static=1
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++
++Index: b/Make.rules
++===================================================================
++--- a/Make.rules
+++++ b/Make.rules
++@@ -9,7 +9,11 @@
++ CFLAGS_LIB ?= -fPIC
++ CFLAGS += $(CFLAGS_LIB)
++ 
+++ifeq ($(static),1)
+++libraries = $(lib_name).a
+++else
++ libraries = $(lib_name).so $(lib_name).a
+++endif
++ 
++ .PHONY: library
++ 
+diff --git a/package/dvb-apps/dvb-apps.mk b/package/dvb-apps/dvb-apps.mk
+index 98ff7eb..edf88f3 100644
+--- a/package/dvb-apps/dvb-apps.mk
++++ b/package/dvb-apps/dvb-apps.mk
+@@ -15,19 +15,26 @@ DVB_APPS_DEPENDENCIES = libiconv
+ DVB_APPS_LDLIBS += -liconv
+ endif
+ 
++DVB_APPS_MAKE_OPTS = V=1
++
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++DVB_APPS_MAKE_OPTS += static=1
++endif
++
+ DVB_APPS_INSTALL_STAGING = YES
+ 
+ define DVB_APPS_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) LDLIBS="$(DVB_APPS_LDLIBS)" \
+-		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) V=1
++		$(MAKE) -C $(@D) CROSS_ROOT=$(STAGING_DIR) \
++		$(DVB_APPS_MAKE_OPTS)
+ endef
+ 
+ define DVB_APPS_INSTALL_STAGING_CMDS
+-	$(MAKE) -C $(@D) V=1 DESTDIR=$(STAGING_DIR) install
++	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) install
+ endef
+ 
+ define DVB_APPS_INSTALL_TARGET_CMDS
+-	$(MAKE) -C $(@D) V=1 DESTDIR=$(TARGET_DIR) install
++	$(MAKE) -C $(@D) $(DVB_APPS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+2.0.0
