@@ -1,40 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jul 2014 00:23:37 +0200
-Subject: [Buildroot] [PATCH 13/13] dmraid: add license information
-In-Reply-To: <1404304811-27480-13-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 2 Jul 2014 09:40:11 -0300")
-References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>
- <1404304811-27480-13-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a98jv6ae.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 8 Jul 2014 23:41:33 +0200
+Subject: [Buildroot] [git commit] usbmount: add license information
+Message-ID: <20140708222427.D2F459D1CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=c1188bca2d5879e50efe082b14a26dc2aed5cca9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  package/dmraid/dmraid.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/usbmount/usbmount.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
- > diff --git a/package/dmraid/dmraid.mk b/package/dmraid/dmraid.mk
- > index 412c903..612f560 100644
- > --- a/package/dmraid/dmraid.mk
- > +++ b/package/dmraid/dmraid.mk
- > @@ -12,6 +12,8 @@ DMRAID_SUBDIR = $(DMRAID_VERSION)/dmraid
- >  DMRAID_MAKE = $(MAKE1)
- >  DMRAID_INSTALL_STAGING = YES
- >  DMRAID_INSTALL_TARGET_OPT = DESTDIR=$(TARGET_DIR) install
- > +DMRAID_LICENSE = GPLv2+, LGPLv2.1
- > +DMRAID_LICENSE_FILES = $(DMRAID_SUBDIR)/LICENSE_GPL $(DMRAID_SUBDIR)/LICENSE_LGPL
-
-I actually don't see any LGPL references in the sources - And looking at
-other distributions, they have also classified it as GPLv2+, so I've
-dropped the LGPL part and instead added 'LICENSE' to _LICENSE_FILES.
-
-Committed with those changes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/usbmount/usbmount.mk b/package/usbmount/usbmount.mk
+index 89662b2..ca165fa 100644
+--- a/package/usbmount/usbmount.mk
++++ b/package/usbmount/usbmount.mk
+@@ -8,6 +8,8 @@ USBMOUNT_VERSION = 0.0.22
+ USBMOUNT_SOURCE = usbmount_$(USBMOUNT_VERSION).tar.gz
+ USBMOUNT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/u/usbmount
+ USBMOUNT_DEPENDENCIES = udev lockfile-progs
++USBMOUNT_LICENSE = BSD-2c
++USBMOUNT_LICENSE_FILES = debian/copyright
+ 
+ define USBMOUNT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/usbmount $(TARGET_DIR)/usr/share/usbmount/usbmount
