@@ -1,91 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Jul 2014 14:16:51 +0200
-Subject: [Buildroot] [git commit] openntpd: add SysV initscript and user
-Message-ID: <20140708121816.673359D1C8@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  8 Jul 2014 10:00:43 -0300
+Subject: [Buildroot] [PATCH] php: fix phar build failure for CLI
+Message-ID: <1404824443-5326-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fb6c286697c5f579759fd279ea421667755700ef
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add the _ntp user that the daemon requires to work in any way.
-Add a SysV-style initscript as well, but not with '-s' (set time
-immediately after startup) because it can make the boot process stall
-for a few seconds if there's no proper network connectivity/dns setup.
-Make ntp and openntpd mutually exclusive since they overstep each other.
+Disable the phar command-line tool since it requires php to pack itself
+up. Fixes build failure for CLI (or CLI+CGI) variants of php.
+Hardly useful for embedded scenarios.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openntpd/Config.in   |    4 ++--
- package/openntpd/S49ntp      |   25 +++++++++++++++++++++++++
- package/openntpd/openntpd.mk |    9 +++++++++
- 3 files changed, 36 insertions(+), 2 deletions(-)
+ package/php/php-03-disable-pharcmd.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/php/php-03-disable-pharcmd.patch
 
-diff --git a/package/openntpd/Config.in b/package/openntpd/Config.in
-index 4dd9a29..a8ef807 100644
---- a/package/openntpd/Config.in
-+++ b/package/openntpd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_OPENNTPD
- 	bool "openntpd"
--	# fork()
--	depends on BR2_USE_MMU
-+	depends on BR2_USE_MMU # fork ()
-+	depends on !BR2_PACKAGE_NTP # conflicting binaries
- 	help
- 	  OpenNTPD is an easy to use implementation of the Network Time
- 	  Protocol. It provides the ability to sync the local clock
-diff --git a/package/openntpd/S49ntp b/package/openntpd/S49ntp
-new file mode 100755
-index 0000000..99e0f68
+diff --git a/package/php/php-03-disable-pharcmd.patch b/package/php/php-03-disable-pharcmd.patch
+new file mode 100644
+index 0000000..d4a8464
 --- /dev/null
-+++ b/package/openntpd/S49ntp
-@@ -0,0 +1,25 @@
-+#!/bin/sh
++++ b/package/php/php-03-disable-pharcmd.patch
+@@ -0,0 +1,26 @@
++Disable the 'phar' command-line tool build/installation since it requires
++php to run and pack up phar itself in phar format. This would require
++a host-php instance and really probably nobody needs the phar tool
++on the target.
 +
-+[ -x /usr/sbin/ntpd ] || exit 0
-+[ -f /etc/ntpd.conf ] || exit 0
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 +
-+case "$1" in
-+	start)
-+		echo -n "Starting openntpd: "
-+		start-stop-daemon -S -x /usr/sbin/ntpd
-+		[ $? == 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	stop)
-+		echo -n "Stopping openntpd: "
-+		start-stop-daemon -K -x /usr/sbin/ntpd
-+		[ $? == 0 ] && echo "OK" || echo "FAIL"
-+		;;
-+	restart)
-+		"$0" stop
-+		sleep 1
-+		"$0" start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart}"
-+		;;
-+esac
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index f0e4f19..0fe6179 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -10,4 +10,13 @@ OPENNTPD_CONF_OPT = --with-builtin-arc4random --disable-strip
- OPENNTPD_LICENSE = MIT-like, BSD-2c, BSD-3c
- OPENNTPD_LICENSE_FILES = LICENCE
- 
-+define OPENNTPD_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/openntpd/S49ntp \
-+		$(TARGET_DIR)/etc/init.d/S49ntp
-+endef
-+
-+define OPENNTPD_USERS
-+_ntp -1 _ntp -1 * - - - Network Time Protocol daemon
-+endef
-+
- $(eval $(autotools-package))
++diff -Nura php-5.5.14.orig/configure php-5.5.14/configure
++--- php-5.5.14.orig/configure	2014-07-08 09:52:52.657753194 -0300
+++++ php-5.5.14/configure	2014-07-08 09:53:07.610243933 -0300
++@@ -112930,13 +112930,8 @@
++ INLINE_CFLAGS="$INLINE_CFLAGS $standard_libtool_flag"
++ CXXFLAGS="$CXXFLAGS $standard_libtool_flag"
++ 
++-if test "$PHP_PHAR" != "no" && test "$PHP_CLI" != "no"; then
++-  pharcmd=pharcmd
++-  pharcmd_install=install-pharcmd
++-else
++-  pharcmd=
++-  pharcmd_install=
++-fi;
+++pharcmd=
+++pharcmd_install=
++ 
++ all_targets="$lcov_target \$(OVERALL_TARGET) \$(PHP_MODULES) \$(PHP_ZEND_EX) \$(PHP_BINARIES) $pharcmd"
++ install_targets="$install_sapi $install_modules $install_binaries install-build install-headers install-programs $install_pear $pharcmd_install"
+-- 
+1.8.5.5
