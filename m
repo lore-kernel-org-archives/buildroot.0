@@ -1,30 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed,  9 Jul 2014 08:56:50 +0000 (UTC)
-Subject: [Buildroot] [Bug 7268] python 2.7 compilation issue on a
- Debian/Ubuntu host with multiarch support
-In-Reply-To: <bug-7268-163@https.bugs.busybox.net/>
-References: <bug-7268-163@https.bugs.busybox.net/>
-Message-ID: <20140709085650.2F3079D1E2@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Wed, 09 Jul 2014 11:05:26 +0200
+Subject: [Buildroot] Is it possible to override a package from git?
+In-Reply-To: <53BCF033.8050006@lucaceresoli.net>
+References: <CAFRxoJ=iMsDdd3x5bGxkoyQ=rmeEMUKVaaBEOA16Kt8FBWc89w@mail.gmail.com>
+ <53BCF033.8050006@lucaceresoli.net>
+Message-ID: <2308540.DVG8UuBffz@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7268
+Hello Luca, Marco,
 
---- Comment #14 from David Bachelart <david.bachelart@bbright.com> 2014-07-09 08:56:48 UTC ---
-Hi Thomas,
+On Wednesday 09 July 2014 09:33:07 Luca Ceresoli wrote:
+[...]
+> However, when you build the next time, Buildroot will already find
+> <mypkg>-master.tar.gz in the downloaded sourced directory and will not
+> download it again. So before building you have to remove that archive
+> (or the whole download directory).
+> 
+> You'll also need to remove the output/build/<mypkg>-master/ directory,
+> or Buildroot will think it already has the sources for the "master"
+> version extracted and won't extract them again.
+> 
+> In a nutshell, if you're building in-tree:
+>    rm -f <my_download_dir>/<mypkg>-master.tar.gz            [*]
+>    make my_defconfig
+>    make <MYPKG>_VERSION=master <mypkg>-dirclean all
+You may avoid ths complexity by retreiving commit id of HEAD (also work for 
+branches):
 
-I managed to compile python 2.7 and python 3 using your patches.
+  ID=$(git ls-remote <GIT_REPO> HEAD | cut -f 1)
+  make my_defconfig
+  make <MYPKG>_VERSION=$ID all
 
-Please forgive me, I'm not familiar with the "Tested-by" thing... How would you
-do that ?
 
-Thanks
-David
+
 
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
