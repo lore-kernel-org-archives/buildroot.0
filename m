@@ -1,43 +1,39 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 9 Jul 2014 16:45:36 +0000
-Subject: [Buildroot] [PATCH] uclibc: fix tests building in uClibc
-	0.9.33.2
-In-Reply-To: <0565f572-9253-4d0c-992b-6de65c123f83@email.android.com>
-References: <1404069506-13826-1-git-send-email-abrodkin@synopsys.com>
- <0565f572-9253-4d0c-992b-6de65c123f83@email.android.com>
-Message-ID: <1404924336.4553.24.camel@abrodkin-8560l.internal.synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Jul 2014 14:20:53 -0300
+Subject: [Buildroot] [PATCH 1/2] mpd: remove redundant depends
+Message-ID: <1404926454-3860-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Peter,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mpd/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-
-On Sun, 2014-06-29 at 21:37 +0200, Thomas De Schampheleire wrote:
-> Alexey Brodkin <Alexey.Brodkin@synopsys.com> schreef:
-> >Following patches are required for successful bulding of uClibc built-int tests
-> >(BR2_UCLIBC_INSTALL_TEST_SUITE=y):
-> >
-> >1.
-> >uclibc-0059-test-cater-for-config.patch
-> >http://git.uclibc.org/uClibc/commit/test?id=7598eeaa1defa2884adaa890bb115c493d69cc35
-> >
-> >2.
-> >uclibc-0058-test-tls-fix-build-with-newer-binutils.patch
-> >http://git.uclibc.org/uClibc/commit/test?id=931e8391565323ed2e589c83b83a7345813a5514
-> >
-> >3.
-> >uclibc-0060-test-Fix-math-c-dependency.patch
-> >http://git.uclibc.org/uClibc/commit/test/math?id=a20a91ad7c042c46e4a2adee6d03315f857f9985
-> >
-> >All mentioned patches must be removed as obsolete on bumping uClibc to the next
-> >release.
-> >
-> >Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-
-Any chance to get it applied?
-This allows people compile uClibc tests so IMHO is useful.
-
--Alexey
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 1bf7ad1..6f201aa 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -27,7 +27,6 @@ config BR2_PACKAGE_MPD_ALSA
+ 	select BR2_PACKAGE_ALSA_LIB
+ 	select BR2_PACKAGE_ALSA_LIB_PCM
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	help
+ 	  Enable alsa output support.
+ 
+@@ -46,9 +45,7 @@ config BR2_PACKAGE_MPD_AUDIOFILE
+ 
+ config BR2_PACKAGE_MPD_PULSEAUDIO
+ 	bool "pulseaudio"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
+ 	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
+-	depends on BR2_USE_MMU # pulseaudio
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	help
+ 	  Enable pulseaudio output support.
+-- 
+1.8.5.5
