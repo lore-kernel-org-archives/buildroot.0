@@ -1,44 +1,41 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 09 Jul 2014 11:05:26 +0200
-Subject: [Buildroot] Is it possible to override a package from git?
-In-Reply-To: <53BCF033.8050006@lucaceresoli.net>
-References: <CAFRxoJ=iMsDdd3x5bGxkoyQ=rmeEMUKVaaBEOA16Kt8FBWc89w@mail.gmail.com>
- <53BCF033.8050006@lucaceresoli.net>
-Message-ID: <2308540.DVG8UuBffz@sagittea>
+From: Pascal Huerst <pascal.huerst@gmail.com>
+Date: Wed, 09 Jul 2014 11:39:17 +0200
+Subject: [Buildroot] [PATCH V5 2/2] google-breakpad: integration into
+ Makefile and Config.in
+In-Reply-To: <20140629123618.407b95f5@free-electrons.com>
+References: <1403702174-23850-1-git-send-email-pascal.huerst@gmail.com>	<1403702174-23850-3-git-send-email-pascal.huerst@gmail.com>	<53AB3198.9010908@mind.be>
+ <20140629123618.407b95f5@free-electrons.com>
+Message-ID: <53BD0DC5.50501@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Luca, Marco,
+Hey Thomas, Arnout, all
 
-On Wednesday 09 July 2014 09:33:07 Luca Ceresoli wrote:
-[...]
-> However, when you build the next time, Buildroot will already find
-> <mypkg>-master.tar.gz in the downloaded sourced directory and will not
-> download it again. So before building you have to remove that archive
-> (or the whole download directory).
+-- snip --
+
+> However, I don't really like the prompt. Maybe it should be:
 > 
-> You'll also need to remove the output/build/<mypkg>-master/ directory,
-> or Buildroot will think it already has the sources for the "master"
-> version extracted and won't extract them again.
+> 	[ ] Enable Google Breakpad support
+> 	   () List of binaries to extract symbols from
 > 
-> In a nutshell, if you're building in-tree:
->    rm -f <my_download_dir>/<mypkg>-master.tar.gz            [*]
->    make my_defconfig
->    make <MYPKG>_VERSION=master <mypkg>-dirclean all
-You may avoid ths complexity by retreiving commit id of HEAD (also work for 
-branches):
+>>> +ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+>>> +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+>>> +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
+>>
+>>  To be more compatible with Fabio's series that reworks this part of the
+>> infrastructure, it's better to define this as a new variable which is called
+>> here. That will make it easier to resolve the conflict between these two series.
+>> Fabio's series will also make it possible to define this completely inside the
+>> google-breakpad.mk.
 
-  ID=$(git ls-remote <GIT_REPO> HEAD | cut -f 1)
-  make my_defconfig
-  make <MYPKG>_VERSION=$ID all
+Can you give me a hint, on how this should be done then?
 
+> Yes, having it all in the google-breakpad.mk seems like a good idea.
+> 
+> Thomas
+> 
 
-
-
--- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Pascal
