@@ -1,36 +1,25 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jul 2014 09:12:03 +0200
-Subject: [Buildroot] [PATCH] ARC: disable packages that require atomic
-	builtins
-In-Reply-To: <1404883158.4553.6.camel@abrodkin-8560l.internal.synopsys.com>
- (Alexey Brodkin's message of "Wed, 9 Jul 2014 05:19:19 +0000")
-References: <1404742914-21583-1-git-send-email-abrodkin@synopsys.com>
- <53BAC241.9070808@mind.be>
- <1404883158.4553.6.camel@abrodkin-8560l.internal.synopsys.com>
-Message-ID: <87wqbnt398.fsf@dell.be.48ers.dk>
+From: Marco Pastorelli <mpastorelli@gmail.com>
+Date: Wed, 9 Jul 2014 09:13:09 +0200
+Subject: [Buildroot] Is it possible to override a package from git?
+Message-ID: <CAFRxoJ=iMsDdd3x5bGxkoyQ=rmeEMUKVaaBEOA16Kt8FBWc89w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+Hi everybody,
 
-Hi,
+I fetch my personal packages from my git repo specifying the tag.
+Now I would like to set up a nightly build system, so I need to download
+the HEAD of my packages repo instead of a specific tag.
 
- > I see that dependencies list is getting longer and longer.
+Is there a way to override the tag?
 
- > In coming days we're about to release a new version of tools for ARC and
- > as a part of this upcoming release we'll enable atomic operations by
- > default for ARC. This should immediately fix all those previously broken
- > packages.
+Thanks,
+Best regards.
 
- > So I'd prefer to wait for mentioned update and if it works as we expect
- > there will be no need in fixing more packages... moreover we'll need to
- > re-enable packages we already disabled like "jack2", "msgpack" and some
- > others.
-
-Ok, that sounds great!
-
--- 
-Bye, Peter Korsgaard
+Marco.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140709/8565ea17/attachment.html>
