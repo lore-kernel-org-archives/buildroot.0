@@ -1,57 +1,73 @@
-From: Henry Margies <henry.margies@gmail.com>
-Date: Wed,  9 Jul 2014 11:38:59 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Build Python with tzset support
-In-Reply-To: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
-References: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
-Message-ID: <1404902339-25481-1-git-send-email-henry.margies@gmail.com>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Wed,  9 Jul 2014 12:38:24 +0200
+Subject: [Buildroot] [PATCH 1/1] ccrypt: new package
+Message-ID: <1404902304-10124-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for time.tzset() in Python2.7 and Python3.
+ccrypt is a utility for encrypting and decrypting files and streams.
 
-The Python configure script sets ac_cv_working_tzset to 'no' when
-cross compiling, although it should be available and work with all 
-toolchains supported by Buildroot (?).
-The patch below pre-sets the variable so that time.tzset() works.
-
-
-Signed-off-by: Henry Margies <henry.margies@gmail.com>
+Signed-off-by: David Bachelart <david.bachelart@bbright.com>
 ---
-Changes v1 -> v2:
- - added similar patch for Python3
+ package/Config.in        |    1 +
+ package/ccrypt/Config.in |    6 ++++++
+ package/ccrypt/ccrypt.mk |   20 ++++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 package/ccrypt/Config.in
+ create mode 100644 package/ccrypt/ccrypt.mk
 
- package/python/python.mk   |    3 ++-
- package/python3/python3.mk |    1 +
- 2 files changed, 3 insertions(+), 1 deletions(-)
-
-diff --git a/package/python/python.mk b/package/python/python.mk
-index cb54e3e..b237848 100644
---- a/package/python/python.mk
-+++ b/package/python/python.mk
-@@ -121,7 +121,8 @@ endif
- PYTHON_CONF_ENV += \
- 	ac_cv_have_long_long_format=yes \
- 	ac_cv_file__dev_ptmx=yes \
--	ac_cv_file__dev_ptc=yes
-+	ac_cv_file__dev_ptc=yes \
-+	ac_cv_working_tzset=yes
- 
- PYTHON_CONF_OPT += \
- 	--without-cxx-main 	\
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 98fc31b..1591ac9 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -96,6 +96,7 @@ PYTHON3_CONF_ENV += \
- 	ac_cv_have_long_long_format=yes \
- 	ac_cv_file__dev_ptmx=yes \
- 	ac_cv_file__dev_ptc=yes \
-+	ac_cv_working_tzset=yes
- 
- PYTHON3_CONF_OPT += \
- 	--without-ensurepip	\
+diff --git a/package/Config.in b/package/Config.in
+index f30c25f..c626968 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1094,6 +1094,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ endif
+ comment "Utilities"
+ 	source "package/at/Config.in"
++	source "package/ccrypt/Config.in"
+ 	source "package/dialog/Config.in"
+ 	source "package/dtach/Config.in"
+ 	source "package/file/Config.in"
+diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
+new file mode 100644
+index 0000000..99c4d47
+--- /dev/null
++++ b/package/ccrypt/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CCRYPT
++        bool "ccrypt"
++        help
++          ccrypt is a utility for encrypting and decrypting files and streams.
++
++          http://ccrypt.sourceforge.net/
+diff --git a/package/ccrypt/ccrypt.mk b/package/ccrypt/ccrypt.mk
+new file mode 100644
+index 0000000..51696c0
+--- /dev/null
++++ b/package/ccrypt/ccrypt.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# ccrypt
++#
++################################################################################
++
++CCRYPT_VERSION = 1.10
++CCRYPT_SOURCE = ccrypt-$(CCRYPT_VERSION).tar.gz
++CCRYPT_SITE = http://ccrypt.sourceforge.net/download/
++
++CCRYPT_INSTALL_STAGING = NO
++CCRYPT_INSTALL_TARGET = YES
++CCRYPT_CONF_OPT = 
++
++CCRYPT_LICENSE = GPLv2
++CCRYPT_LICENSE_FILES = COPYING
++
++CCRYPT_DEPENDENCIES = 
++
++$(eval $(autotools-package))
 -- 
-1.7.2.5
+1.7.10.4
