@@ -1,34 +1,89 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Jul 2014 09:13:17 -0300
-Subject: [Buildroot] [PATCH] openvpn: disable plugins for static builds
-Message-ID: <1404907997-24307-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 9 Jul 2014 15:14:57 +0300
+Subject: [Buildroot] [PATCH 1/1] ccrypt: new package
+In-Reply-To: <1404906938-7965-1-git-send-email-david.bachelart@bbright.com>
+References: <1404906938-7965-1-git-send-email-david.bachelart@bbright.com>
+Message-ID: <20140709121457.GI3003@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/082/08295cdcb3d14198bc7fbddec89d6fead946afba/
+Hi David,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openvpn/openvpn.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Thanks for following up.
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 3cb78a5..d2c408b 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -10,7 +10,8 @@ OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
- OPENVPN_LICENSE = GPLv2
- OPENVPN_LICENSE_FILES = COPYRIGHT.GPL
--OPENVPN_CONF_OPT = --disable-plugin-auth-pam --enable-iproute2
-+OPENVPN_CONF_OPT = --disable-plugin-auth-pam --enable-iproute2 \
-+	$(if $(BR2_PREFER_STATIC_LIB),--disable-plugins)
- OPENVPN_CONF_ENV = IFCONFIG=/sbin/ifconfig \
- 	NETSTAT=/bin/netstat \
- 	ROUTE=/sbin/route
+When sending a new version of a patch we usually mark this in the subject line 
+with [PATCH v2]. You can use the --subject-prefix parameter of 'git 
+format-patch' to do this. Something like:
+
+	git format-patch --subject-prefix='PATCH v2' ...
+
+For git version 1.8.2 and later this can be reduced to 'git format-patch -v2'
+
+One more comment below.
+
+On Wed, Jul 09, 2014 at 01:55:38PM +0200, David Bachelart wrote:
+> ccrypt is a utility for encrypting and decrypting files and streams.
+> 
+> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+> ---
+>  package/Config.in        |    1 +
+>  package/ccrypt/Config.in |    6 ++++++
+>  package/ccrypt/ccrypt.mk |   12 ++++++++++++
+>  3 files changed, 19 insertions(+)
+>  create mode 100644 package/ccrypt/Config.in
+>  create mode 100644 package/ccrypt/ccrypt.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index f30c25f..c626968 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1094,6 +1094,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  endif
+>  comment "Utilities"
+>  	source "package/at/Config.in"
+> +	source "package/ccrypt/Config.in"
+>  	source "package/dialog/Config.in"
+>  	source "package/dtach/Config.in"
+>  	source "package/file/Config.in"
+> diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
+> new file mode 100644
+> index 0000000..99c4d47
+> --- /dev/null
+> +++ b/package/ccrypt/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_CCRYPT
+> +        bool "ccrypt"
+> +        help
+> +          ccrypt is a utility for encrypting and decrypting files and streams.
+> +
+> +          http://ccrypt.sourceforge.net/
+> diff --git a/package/ccrypt/ccrypt.mk b/package/ccrypt/ccrypt.mk
+> new file mode 100644
+> index 0000000..a32f149
+> --- /dev/null
+> +++ b/package/ccrypt/ccrypt.mk
+> @@ -0,0 +1,12 @@
+> +################################################################################
+> +#
+> +# ccrypt
+> +#
+> +################################################################################
+> +
+> +CCRYPT_VERSION = 1.10
+> +CCRYPT_SITE = http://ccrypt.sourceforge.net/download/
+> +
+> +CCRYPT_LICENSE = GPLv2+
+
+CCRYPT_LICENSE_FILES is missing.
+
+> +$(eval $(autotools-package))
+
+baruch
+
 -- 
-1.8.5.5
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
