@@ -1,31 +1,34 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Wed, 09 Jul 2014 16:57:00 +0200
-Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Fix race condition
-	when installing man pages, 2nd try
-In-Reply-To: <XnsA365A6B0A90EFberndkuhlsPkbjNfxxIA@bernd-kuhls.de> (Bernd
- Kuhls's message of "Wed, 09 Jul 2014 16:23:11 +0200")
-References: <1404569546-12346-1-git-send-email-bernd.kuhls@t-online.de>
- <87k37mu0i5.fsf@dell.be.48ers.dk>
- <XnsA365A6B0A90EFberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <87oawyshqb.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 9 Jul 2014 16:57:18 +0200
+Subject: [Buildroot] [git commit] xserver_xorg-server: drop
+	host-xfont_font-util dependency
+Message-ID: <20140709145833.CBC299D1E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: http://git.buildroot.net/buildroot/commit/?id=de7c42fdf4536299dc6ffa5515603c17cdaffa24
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> What does this have to do with $SUBJECT? If it isn't needed, then it
- >> should be removed in a seperate commit (with a proper description why).
+This is no longer needed now that e244eb12d (xserver_xorg-server: Fix race
+condition when installing man pages) has been reverted.
 
- > Hi,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
- > host-xfont_font-util was added with xserver_xorg-server-400-fix-man.patch 
- > because it was needed to autoreconf xserver_xorg-server, which is not 
- > necessary anymore, see the link I quoted above.
-
-Ahh - Sorry, I missed that - Will fix.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index ece528c..779c46d 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -52,7 +52,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xkeyboard-config		\
+ 	pixman 				\
+ 	mcookie 			\
+-	host-xfont_font-util		\
+ 	host-pkgconf
+ 
+ XSERVER_XORG_SERVER_CONF_OPT = --disable-config-hal \
