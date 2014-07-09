@@ -1,20 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 08 Jul 2014 19:28:48 -0300
-Subject: [Buildroot] [PATCH 09/13] makedevs: add license information
-In-Reply-To: <8761j7v63j.fsf@dell.be.48ers.dk>
-References: <1404304811-27480-1-git-send-email-gustavo@zacarias.com.ar>	<1404304811-27480-9-git-send-email-gustavo@zacarias.com.ar>	<87tx6rv7b0.fsf@dell.be.48ers.dk>
- <53BC6B08.5070805@zacarias.com.ar> <8761j7v63j.fsf@dell.be.48ers.dk>
-Message-ID: <53BC70A0.7040300@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 9 Jul 2014 05:19:19 +0000
+Subject: [Buildroot] [PATCH] ARC: disable packages that require atomic
+ builtins
+In-Reply-To: <53BAC241.9070808@mind.be>
+References: <1404742914-21583-1-git-send-email-abrodkin@synopsys.com>
+ <53BAC241.9070808@mind.be>
+Message-ID: <1404883158.4553.6.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/08/2014 07:27 PM, Peter Korsgaard wrote:
+Hi Arnout,
 
-> Hmm, yes - Is there really not an upstream for mcookie?
 
-I didn't try to track it down, header says it's Public Domain, but that
-wouldn't make it GPL :)
-Regards.
+On Mon, 2014-07-07 at 17:52 +0200, Arnout Vandecappelle wrote:
+>  What about the other packages that use zeromq? cppzmq, czmq, filemq, mongrel2,
+> php-zmq, python-pyzmq, zmqpp?
+
+I see that dependencies list is getting longer and longer.
+
+In coming days we're about to release a new version of tools for ARC and
+as a part of this upcoming release we'll enable atomic operations by
+default for ARC. This should immediately fix all those previously broken
+packages.
+
+So I'd prefer to wait for mentioned update and if it works as we expect
+there will be no need in fixing more packages... moreover we'll need to
+re-enable packages we already disabled like "jack2", "msgpack" and some
+others.
+
+Regards,
+Alexey
