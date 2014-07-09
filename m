@@ -1,58 +1,55 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 09 Jul 2014 09:33:07 +0200
-Subject: [Buildroot] Is it possible to override a package from git?
-In-Reply-To: <CAFRxoJ=iMsDdd3x5bGxkoyQ=rmeEMUKVaaBEOA16Kt8FBWc89w@mail.gmail.com>
-References: <CAFRxoJ=iMsDdd3x5bGxkoyQ=rmeEMUKVaaBEOA16Kt8FBWc89w@mail.gmail.com>
-Message-ID: <53BCF033.8050006@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Jul 2014 09:45:10 +0200
+Subject: [Buildroot] [PATCH 2/5] support/download: properly use temp
+ files
+In-Reply-To: <20140707213802.GC3806@free.fr>
+References: <cover.1404681878.git.yann.morin.1998@free.fr>
+ <3c2e529b6f9c542dba662b08b54f844f275e23ee.1404681878.git.yann.morin.1998@free.fr>
+ <53BA3A1A.1000307@mind.be> <20140707213802.GC3806@free.fr>
+Message-ID: <20140709094510.50159656@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marco,
+Yann, Arnout,
 
-Marco Pastorelli wrote:
-> Hi everybody,
->
-> I fetch my personal packages from my git repo specifying the tag.
-> Now I would like to set up a nightly build system, so I need to download
-> the HEAD of my packages repo instead of a specific tag.
->
-> Is there a way to override the tag?
+On Mon, 7 Jul 2014 23:38:02 +0200, Yann E. MORIN wrote:
 
-You can, although this requires some manual tweaking because it is not
-typical.
+> >  Not really related to this patch, but why do we need this ${tmp_dl} to begin
+> > with? Especially since we're already "occupying" a tempfile in DL_DIR anyway.
+> 
+> The idea was not to pollute BR2_DL_DIR, in case the download fails.
+> Hence this dance:
+>   - download to a disposable area (BUILD_DIR);
+>   - move to a temp file in BR2_DL_DIR;
+>   - atomically rename to the final file.
 
-It is not typical because Buildroot is generally meant to perform
-reproducible builds. So it is usual to fetch a tag or SHA-1 from git
-repos.
+And also because $(DL_DIR) and $(BUILD_DIR) might be on different
+filesystems, so the rename/move of the file from $(BUILD_DIR) (where it
+was downloaded) to $(DL_DIR) may not be atomic. Hence the idea is to:
 
-However in a nightly build system it can make sense.
+ - Download in $(BUILD_DIR)
 
-To do that, you should set <MYPKG>_VERSION to a branch name. For
-example <MYPKG>_VERSION=master.
+ - Move to a temporary file in $(DL_DIR). This operation may not be
+   atomic if $(DL_DIR) is not on the same filesystem as $(BUILD_DIR)
 
-You can do it also on the command line, without touching your source
-code:
-   make my_defconfig
-   make <MYPKG>_VERSION=master
+ - Finally rename the temporary file to the expected file name in
+   $(DL_DIR). Since we're in the same directory, it's guaranteed to be
+   atomic.
 
-This will fetch the top of the master branch, not a specific tag.
+This allows to ensure that when the final file appears in $(DL_DIR),
+we're sure the download is finished, and that therefore concurrently
+executing Buildroot instances will either not see the downloaded file,
+or see a fully completed downloaded file.
 
-However, when you build the next time, Buildroot will already find
-<mypkg>-master.tar.gz in the downloaded sourced directory and will not
-download it again. So before building you have to remove that archive
-(or the whole download directory).
+Or am I missing the point of the discussion here?
 
-You'll also need to remove the output/build/<mypkg>-master/ directory,
-or Buildroot will think it already has the sources for the "master"
-version extracted and won't extract them again.
+Thanks,
 
-In a nutshell, if you're building in-tree:
-   rm -f <my_download_dir>/<mypkg>-master.tar.gz            [*]
-   make my_defconfig
-   make <MYPKG>_VERSION=master <mypkg>-dirclean all
-
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
