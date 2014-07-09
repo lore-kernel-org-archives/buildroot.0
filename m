@@ -1,41 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 9 Jul 2014 17:22:42 +0300
-Subject: [Buildroot] ping not working in a glibc based buildroot
-In-Reply-To: <53BD4395.5050306@scalemp.com>
-References: <53BD4395.5050306@scalemp.com>
-Message-ID: <20140709142242.GK3003@tarshish>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 09 Jul 2014 16:23:11 +0200
+Subject: [Buildroot] [PATCH 1/1] xserver_xorg-server: Fix race condition
+	when installing man pages, 2nd try
+References: <1404569546-12346-1-git-send-email-bernd.kuhls@t-online.de>
+ <87k37mu0i5.fsf@dell.be.48ers.dk>
+Message-ID: <XnsA365A6B0A90EFberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Eial,
+Peter Korsgaard <jacmet@uclibc.org> wrote in
+news:87k37mu0i5.fsf at dell.be.48ers.dk: 
 
-On Wed, Jul 09, 2014 at 04:28:53PM +0300, Eial Czerwacki wrote:
-> Greetings,
+>>>>>> "Bernd" == Bernd Kuhls
+>>>>>> <bernd.kuhls@t-online.de> writes: 
 > 
-> I've built a root using buildroot-2014.05 with busybox and glibc.
-> after that I've mounted the image and chroot into it. I've tried to ping
-> my desktop and I get this:
-> # ping eial
-> ping: bad address 'eial'
+> > This patch reverts my previous attempt to fix this hard-to-catch race
+> > condition 
+> > http://git.buildroot.net/buildroot/commit/package/x11r7/xserver_xorg-se
+> > rver?id=e244eb12dfc50bb56167d5fdaef3aac52b0ff6a3 
 > 
-> but when I'm trying the same from the host computer (where the image is
-> mounted) I get this:
-> [root at cluster1 ~]# ping eial
-> PING eial (10.100.0.120) 56(84) bytes of data.
-> 64 bytes from eial (10.100.0.120): icmp_seq=1 ttl=64 time=0.227 ms
-> 64 bytes from eial (10.100.0.120): icmp_seq=2 ttl=64 time=0.198 ms
+> ...
 > 
-> any ideas what can be the issue and how to solve it?
+> > @@ -54,7 +52,6 @@ XSERVER_XORG_SERVER_DEPENDENCIES =      \
+> >       xkeyboard-config          \
+> >       pixman                     \
+> >       mcookie                \
+> > -     host-xfont_font-util          \
+> >       host-pkgconf
+> 
+> 
+> What does this have to do with $SUBJECT? If it isn't needed, then it
+> should be removed in a seperate commit (with a proper description why).
 
-This is most likely a name server configuration issue. Can you compare the 
-content of your host /etc/resolv.conf to that of your chroot?
+Hi,
 
-baruch
+host-xfont_font-util was added with xserver_xorg-server-400-fix-man.patch 
+because it was needed to autoreconf xserver_xorg-server, which is not 
+necessary anymore, see the link I quoted above.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards, Bernd
