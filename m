@@ -1,109 +1,120 @@
-From: David Bachelart <david.bachelart@bbright.com>
-Date: Wed, 9 Jul 2014 14:34:29 +0200
-Subject: [Buildroot] [PATCH 1/1] ccrypt: new package
-In-Reply-To: <20140709121457.GI3003@tarshish>
-References: <1404906938-7965-1-git-send-email-david.bachelart@bbright.com>
- <20140709121457.GI3003@tarshish>
-Message-ID: <CAJeZidKsYxMj5mJ6zzrmeuDG2856g8R7aE=Wx+TKuGFky_CBAg@mail.gmail.com>
+From: Massimo Callegari <massimocallegari@yahoo.it>
+Date: Wed, 9 Jul 2014 13:50:33 +0100
+Subject: [Buildroot] [PATCH 1/1] New package: qt5webkit-examples
+Message-ID: <1404910233.13566.YahooMailNeo@web172305.mail.ir2.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ok
+Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
+---
+?package/qt5/qt5webkit-examples/Config.in ? ? ? ? ? | 10 +++++
+?.../qt5webkit-examples-0001-build.patch ? ? ? ? ? ?| 21 ++++++++++
+?.../qt5/qt5webkit-examples/qt5webkit-examples.mk ? | 46 ++++++++++++++++++++++
+?3 files changed, 77 insertions(+)
+?create mode 100644 package/qt5/qt5webkit-examples/Config.in
+?create mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
+?create mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
 
-Thanks !
-
-David
-
-
-2014-07-09 14:14 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-
-> Hi David,
->
-> Thanks for following up.
->
-> When sending a new version of a patch we usually mark this in the subject
-> line
-> with [PATCH v2]. You can use the --subject-prefix parameter of 'git
-> format-patch' to do this. Something like:
->
->         git format-patch --subject-prefix='PATCH v2' ...
->
-> For git version 1.8.2 and later this can be reduced to 'git format-patch
-> -v2'
->
-> One more comment below.
->
-> On Wed, Jul 09, 2014 at 01:55:38PM +0200, David Bachelart wrote:
-> > ccrypt is a utility for encrypting and decrypting files and streams.
-> >
-> > Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> > ---
-> >  package/Config.in        |    1 +
-> >  package/ccrypt/Config.in |    6 ++++++
-> >  package/ccrypt/ccrypt.mk |   12 ++++++++++++
-> >  3 files changed, 19 insertions(+)
-> >  create mode 100644 package/ccrypt/Config.in
-> >  create mode 100644 package/ccrypt/ccrypt.mk
-> >
-> > diff --git a/package/Config.in b/package/Config.in
-> > index f30c25f..c626968 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1094,6 +1094,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> >  endif
-> >  comment "Utilities"
-> >       source "package/at/Config.in"
-> > +     source "package/ccrypt/Config.in"
-> >       source "package/dialog/Config.in"
-> >       source "package/dtach/Config.in"
-> >       source "package/file/Config.in"
-> > diff --git a/package/ccrypt/Config.in b/package/ccrypt/Config.in
-> > new file mode 100644
-> > index 0000000..99c4d47
-> > --- /dev/null
-> > +++ b/package/ccrypt/Config.in
-> > @@ -0,0 +1,6 @@
-> > +config BR2_PACKAGE_CCRYPT
-> > +        bool "ccrypt"
-> > +        help
-> > +          ccrypt is a utility for encrypting and decrypting files and
-> streams.
-> > +
-> > +          http://ccrypt.sourceforge.net/
-> > diff --git a/package/ccrypt/ccrypt.mk b/package/ccrypt/ccrypt.mk
-> > new file mode 100644
-> > index 0000000..a32f149
-> > --- /dev/null
-> > +++ b/package/ccrypt/ccrypt.mk
-> > @@ -0,0 +1,12 @@
-> >
-> +################################################################################
-> > +#
-> > +# ccrypt
-> > +#
-> >
-> +################################################################################
-> > +
-> > +CCRYPT_VERSION = 1.10
-> > +CCRYPT_SITE = http://ccrypt.sourceforge.net/download/
-> > +
-> > +CCRYPT_LICENSE = GPLv2+
->
-> CCRYPT_LICENSE_FILES is missing.
->
-> > +$(eval $(autotools-package))
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
+diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
+new file mode 100644
+index 0000000..2840733
+--- /dev/null
++++ b/package/qt5/qt5webkit-examples/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
++bool "qt5webkit examples"
++depends on BR2_PACKAGE_QT5WEBKIT
++help
++ ?Qt is a cross-platform application and UI framework for
++ ?developers using C++.
++
++ ?This package corresponds to the qt5webkit examples module.
++
++ ?http://qt-project.org
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
+new file mode 100644
+index 0000000..0ff6784
+--- /dev/null
++++ b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
+@@ -0,0 +1,21 @@
++diff -Naur a/examples/webkitwidgets/webkitwidgets.pro b/examples/webkitwidgets/webkitwidgets.pro
++--- a/examples/webkitwidgets/webkitwidgets.pro2014-06-19 12:08:33.000000000 +0200
+++++ b/examples/webkitwidgets/webkitwidgets.pro2014-07-09 14:14:20.247975538 +0200
++@@ -8,5 +8,6 @@
++ ? ? ? ? ? ? framecapture \
++ ? ? ? ? ? ? browser \
++ ? ? ? ? ? ? embedded \
++- ? ? ? ? ? ?scroller \
++- ? ? ? ? ? ?xmlpatterns
+++ ? ? ? ? ? ?scroller
+++ ? ? ? ? ? ?
+++qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
++diff -Naur a/qtwebkit-examples.pro b/qtwebkit-examples.pro
++--- a/qtwebkit-examples.pro2014-06-19 12:08:33.000000000 +0200
+++++ b/qtwebkit-examples.pro2014-07-09 14:14:09.095975663 +0200
++@@ -3,3 +3,4 @@
++ load(qt_parts)
++?
++ SUBDIRS += doc
+++SUBDIRS += examples
++\ Manca newline alla fine del file
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+new file mode 100644
+index 0000000..fd66941
+--- /dev/null
++++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# qt5webkitexamples
++#
++################################################################################
++
++QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
++QT5WEBKIT_EXAMPLES_SITE = $(QT5_SITE)
++QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_EXAMPLES_VERSION).tar.xz
++QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5webkit
++QT5WEBKIT_EXAMPLES_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5WEBKIT_EXAMPLES_LICENSE = LGPLv2.1 or GPLv3.0
++# Here we would like to get license files from qt5base, but qt5base
++# may not be extracted at the time we get the legal-info for
++# qt5webkitexamples.
++else
++QT5WEBKIT_EXAMPLES_LICENSE = Commercial license
++QT5WEBKIT_EXAMPLES_REDISTRIBUTE = NO
++endif
++
++define QT5WEBKIT_EXAMPLES_CONFIGURE_CMDS
++(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5WEBKIT_EXAMPLES_BUILD_CMDS
++$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
++$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE), y)
++define QT5WEBKIT_EXAMPLES_INSTALL_QML
++ ? ?cp -af $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
++endef
++endif
++
++define QT5WEBKIT_EXAMPLES_INSTALL_TARGET_CMDS
++ ? ?cp -af $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
++ ? ?$(QT5WEBKIT_EXAMPLES_INSTALL_QML)
++endef
++
++$(eval $(generic-package))
+--?
+1.8.1.2
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140709/9a9d4d44/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140709/eded0400/attachment.html>
