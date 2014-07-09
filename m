@@ -1,34 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Jul 2014 15:44:42 +0200
-Subject: [Buildroot] [git commit] cryptodev-linux: fix license information
-Message-ID: <20140709134616.73A789CF0D@busybox.osuosl.org>
+Date: Wed, 9 Jul 2014 15:27:28 +0200
+Subject: [Buildroot] [git commit] xserver_xorg-server: Fix race condition
+	when installing man pages, 2nd try
+Message-ID: <20140709134616.45BF89CF0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e30dc8e75f415c5488de96f11bfdaac0e5b00450
+commit: http://git.buildroot.net/buildroot/commit/?id=c266edec82c66187110e75dff581bfff178c5305
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Should fix the still present bug:
+http://autobuild.buildroot.net/results/045/04514bc9a8d1aad8ddd7af4f0fd8c16edd2e89a9/
+http://autobuild.buildroot.net/results/1f2/1f25f744771fbb5124dca4563d79ea92cbfd72a3/
+
+This patch reverts my previous attempt to fix this hard-to-catch race condition
+http://git.buildroot.net/buildroot/commit/package/x11r7/xserver_xorg-server?id=e244eb12dfc50bb56167d5fdaef3aac52b0ff6a3
+
+and removes make target install-data from _INSTALL_STAGING_OPT, which was
+introduced in 2008:
+http://git.buildroot.net/buildroot/commit/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk?id=d4e56ff4dc8a0528550eb8503956bdcddb2fe516
+
+Comparing the content of STAGING_DIR with and without "make install-data" showed
+no difference so I assume that is it no longer necessary to explicitly call this
+make target as the normal install target takes care of everything.
+
+The race condition occurs because "make install" and "make install-data" both
+install usr/share/man/man1/Xserver.1
+
+[Peter: don't remove host-xfont_font-util]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptodev-linux/cryptodev-linux.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ .../xserver_xorg-server-400-fix-man.patch          |   19 -------------------
+ .../xserver_xorg-server/xserver_xorg-server.mk     |    2 --
+ 2 files changed, 0 insertions(+), 21 deletions(-)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 7ec327e..03e3126 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -8,8 +8,8 @@ CRYPTODEV_LINUX_VERSION = 1.6
- CRYPTODEV_LINUX_SITE = http://download.gna.org/cryptodev-linux
- CRYPTODEV_LINUX_DEPENDENCIES = linux
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
--CRYPTODEV_LICENSE = GPLv2+
--CRYPTODEV_LICENSE_FILES = COPYING
-+CRYPTODEV_LINUX_LICENSE = GPLv2+
-+CRYPTODEV_LINUX_LICENSE_FILES = COPYING
- 
- define CRYPTODEV_LINUX_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KERNEL_DIR=$(LINUX_DIR)
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
+deleted file mode 100644
+index bde5ed6..0000000
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Fix race condition when installing man page
+-
+-Fixes
+-http://autobuild.buildroot.net/results/11e/11ece737078ca8da2fee4249432148675b4e630e/
+-http://autobuild.buildroot.net/results/a95/a952932b832ee3296d6c225c7a9df408ca3eef9f/
+-
+-Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=79396
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr xorg-server-1.15.1.org/man/Makefile.am xorg-server-1.15.1/man/Makefile.am
+---- xorg-server-1.15.1.org/man/Makefile.am	2014-03-22 06:37:53.000000000 +0100
+-+++ xorg-server-1.15.1/man/Makefile.am	2014-05-29 09:27:48.808356591 +0200
+-@@ -4,3 +4,5 @@
+- 
+- include $(top_srcdir)/manpages.am
+- appman_PRE = Xserver.man
+-+
+-+.NOTPARALLEL:
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 2471c71..ece528c 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -9,9 +9,7 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
+ XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
+ XSERVER_XORG_SERVER_LICENSE = MIT
+ XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
+-XSERVER_XORG_SERVER_AUTORECONF = YES
+ XSERVER_XORG_SERVER_INSTALL_STAGING = YES
+-XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
+ XSERVER_XORG_SERVER_DEPENDENCIES = 	\
+ 	xutil_util-macros 		\
+ 	xlib_libXfont 			\
