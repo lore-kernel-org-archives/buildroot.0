@@ -1,79 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Jul 2014 15:27:28 +0200
-Subject: [Buildroot] [git commit] xserver_xorg-server: Fix race condition
-	when installing man pages, 2nd try
-Message-ID: <20140709134616.45BF89CF0D@busybox.osuosl.org>
+Date: Wed, 9 Jul 2014 15:42:52 +0200
+Subject: [Buildroot] [git commit] cloop: add license information
+Message-ID: <20140709134616.634619CF0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c266edec82c66187110e75dff581bfff178c5305
+commit: http://git.buildroot.net/buildroot/commit/?id=178d56c186dfa45b217ffa5bfb6b704f8f9ba448
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Should fix the still present bug:
-http://autobuild.buildroot.net/results/045/04514bc9a8d1aad8ddd7af4f0fd8c16edd2e89a9/
-http://autobuild.buildroot.net/results/1f2/1f25f744771fbb5124dca4563d79ea92cbfd72a3/
-
-This patch reverts my previous attempt to fix this hard-to-catch race condition
-http://git.buildroot.net/buildroot/commit/package/x11r7/xserver_xorg-server?id=e244eb12dfc50bb56167d5fdaef3aac52b0ff6a3
-
-and removes make target install-data from _INSTALL_STAGING_OPT, which was
-introduced in 2008:
-http://git.buildroot.net/buildroot/commit/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk?id=d4e56ff4dc8a0528550eb8503956bdcddb2fe516
-
-Comparing the content of STAGING_DIR with and without "make install-data" showed
-no difference so I assume that is it no longer necessary to explicitly call this
-make target as the normal install target takes care of everything.
-
-The race condition occurs because "make install" and "make install-data" both
-install usr/share/man/man1/Xserver.1
-
-[Peter: don't remove host-xfont_font-util]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Peter: clarify that advancecomp is GPLv2+, add COPYING]
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../xserver_xorg-server-400-fix-man.patch          |   19 -------------------
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 --
- 2 files changed, 0 insertions(+), 21 deletions(-)
+ package/cloop/cloop.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
-deleted file mode 100644
-index bde5ed6..0000000
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-400-fix-man.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--Fix race condition when installing man page
--
--Fixes
--http://autobuild.buildroot.net/results/11e/11ece737078ca8da2fee4249432148675b4e630e/
--http://autobuild.buildroot.net/results/a95/a952932b832ee3296d6c225c7a9df408ca3eef9f/
--
--Patch sent upstream: https://bugs.freedesktop.org/show_bug.cgi?id=79396
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr xorg-server-1.15.1.org/man/Makefile.am xorg-server-1.15.1/man/Makefile.am
----- xorg-server-1.15.1.org/man/Makefile.am	2014-03-22 06:37:53.000000000 +0100
--+++ xorg-server-1.15.1/man/Makefile.am	2014-05-29 09:27:48.808356591 +0200
--@@ -4,3 +4,5 @@
-- 
-- include $(top_srcdir)/manpages.am
-- appman_PRE = Xserver.man
--+
--+.NOTPARALLEL:
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 2471c71..ece528c 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -9,9 +9,7 @@ XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
- XSERVER_XORG_SERVER_LICENSE_FILES = COPYING
--XSERVER_XORG_SERVER_AUTORECONF = YES
- XSERVER_XORG_SERVER_INSTALL_STAGING = YES
--XSERVER_XORG_SERVER_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install install-data
- XSERVER_XORG_SERVER_DEPENDENCIES = 	\
- 	xutil_util-macros 		\
- 	xlib_libXfont 			\
+diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
+index adbd69a..c36a2ad 100644
+--- a/package/cloop/cloop.mk
++++ b/package/cloop/cloop.mk
+@@ -7,6 +7,8 @@
+ CLOOP_VERSION = 2.634-1
+ CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.gz
+ CLOOP_SITE = http://debian-knoppix.alioth.debian.org/packages/sources/cloop
++CLOOP_LICENSE = GPLv2 (module), GPLv2+ (advancecomp)
++CLOOP_LICENSE_FILES = README advancecomp-1.15/COPYING
+ 
+ HOST_CLOOP_DEPENDENCIES = host-zlib
+ 
