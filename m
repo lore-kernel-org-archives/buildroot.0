@@ -1,29 +1,30 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Jul 2014 14:42:06 +0200
-Subject: [Buildroot] [PATCH 02/10] binutils: switch mips/mipsel/sh to
-	binutils 2.21.1 by default
-In-Reply-To: <1404237789-15563-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 1 Jul 2014 20:03:01 +0200")
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <8761j5qtb5.fsf@dell.be.48ers.dk>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Thu, 10 Jul 2014 14:45:24 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5base: fix typo
+Message-ID: <1404996324-16570-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+---
+ package/qt5/qt5base/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > For some reason, mips, mipsel and sh use binutils 2.21 as their
- > default version. Even though it would be nice to bump that to a much
- > newer version, we can safely assume that we can bump the default
- > version for those architecture to 2.21.1, which will allow the removal
- > of binutils 2.21.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-This is obsoleted by the patches moving mips and sh to the default
-version, so I've marked this as superseeded in pw.
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 70ddcd3..24e5902 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -126,7 +126,7 @@ config BR2_PACKAGE_QT5BASE_DIRECTFB
+ config BR2_PACKAGE_QT5BASE_XCB
+ 	bool "X.org XCB support"
+ 	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_LIBX11
++	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_LIBXCB
+ 	select BR2_PACKAGE_XCB_UTIL_IMAGE
+ 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
 -- 
-Bye, Peter Korsgaard
+2.0.1
