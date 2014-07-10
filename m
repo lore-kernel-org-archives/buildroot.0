@@ -1,39 +1,47 @@
-From: Eric Nelson <eric.nelson@boundarydevices.com>
-Date: Thu, 10 Jul 2014 11:35:47 -0700
-Subject: [Buildroot] Boundary U-Boot files (was [PATCH] nitrogen6x:
-	include .dtb files...)
-In-Reply-To: <CADCpmyOL9bGFzjKe-4NRZ2Fwm7o-q8jzJ+u0McyfQeWqbPZyQA@mail.gmail.com>
-References: <a913d991bd0534d192982537a25388705c80c728.1404164261.git.yann.morin.1998@free.fr>	<1405012684-30163-1-git-send-email-eric.nelson@boundarydevices.com>	<20140710172818.GE28300@free.fr>
- <CADCpmyOL9bGFzjKe-4NRZ2Fwm7o-q8jzJ+u0McyfQeWqbPZyQA@mail.gmail.com>
-Message-ID: <53BEDD03.9030103@boundarydevices.com>
+From: lee choon gay <choongay@yahoo.com>
+Date: Thu, 10 Jul 2014 05:05:57 -0700
+Subject: [Buildroot] About Buildroot+Qt+Qemu
+In-Reply-To: <1404915107.70432.YahooMailBasic@web141706.mail.bf1.yahoo.com>
+Message-ID: <1404993957.81297.YahooMailBasic@web141702.mail.bf1.yahoo.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the ping, Gary.
+Hi.
+I finally found a solution.
+It is Qemu issue (my mistake in fact).
+To execute Qemu to run Qt example, the command below is needed - add the "-usbdevice tablet".
 
-On 07/10/2014 11:22 AM, Gary Bisson wrote:
-> Eric, All,
-> 
-> What about the bootloader configuration? I know the same bootloader will
-> work the same for sabrelite and nitrogen6q. However for the max and dl
-> versions I guess need another config as the DCD table will be different.
-> Do we want to create other defconfigs?
-> 
+qemu-system-i386 -kernel /path/to/kernel/bzImage -initrd /path/to/filesystem/rootfs.cpio -usbdevice tablet
 
-As our boards don't require U-Boot to be built in order to
-craft a filesystem (U-Boot runs from SPI NOR), we could simply
-remove the build target.
+Thanks.
 
-At the very least, we should probably find a way to rename the U-Boot
-binary (u-boot.imx) to make it clear that the one built is for
-the Quad-Core/1GiB variant.
+--------------------------------------------
+On Wed, 7/9/14, lee choon gay <choongay@yahoo.com> wrote:
 
-I'll try to craft a way of doing this.
-
-Regards,
-
-
-Eric
+ Subject: About Buildroot+Qt+Qemu
+ To: buildroot at busybox.net
+ Date: Wednesday, July 9, 2014, 10:11 AM
+ 
+ Hi.
+ I am beginner for the tools stated above.
+ I am currently using Buildroot 2014.05, Released May 31st,
+ 2014 to build kernel linux-3.14.4 with qt-4.8.6 for arch
+ i386/variant i686.
+ Then execute the bzImage using Qemu.
+ Inside Qemu, I execute ./sliders -qws, I can see the GUI
+ perfectly and able to type using keyboard.
+ The problem is I cannot control the mouse (even the mouse
+ pointer seems moving - pointer appear at coordinate 0,0 and
+ disappear at other coordinates).
+ I can't do anything with the mouse, can't click widget.
+ 
+ I am running out of idea. I tried with vnc, directfb and
+ etc, but still can't solve the problem, other problems show
+ up. 
+ Any body can help me on this?
+ 
+ Thank you very much.
+ 
