@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 11:29:12 +0200
-Subject: [Buildroot] [git commit] rsync: bump to version 3.1.1
-Message-ID: <20140710093732.DA0699D1F2@busybox.osuosl.org>
+Date: Thu, 10 Jul 2014 11:29:25 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 14,
+	15}.x series
+Message-ID: <20140710093732.E54C69D1A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7d1047e915c14879fe273488c7ce7c3a37971100
+commit: http://git.buildroot.net/buildroot/commit/?id=8f48272418182dd21d03e42767d0a671e040ac6b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rsync/rsync.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/linux-headers/Config.in.host |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
-index d0ceaa9..7855595 100644
---- a/package/rsync/rsync.mk
-+++ b/package/rsync/rsync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RSYNC_VERSION = 3.1.0
-+RSYNC_VERSION = 3.1.1
- RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
- RSYNC_LICENSE = GPLv3+
- RSYNC_LICENSE_FILES = COPYING
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 36e09ec..50c4da5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.60"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.97"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.98"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.47"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.48"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.24"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.11"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.4"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.12"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.5"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
