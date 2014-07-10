@@ -1,34 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 22:05:55 +0200
-Subject: [Buildroot] [git commit] arch: avr32 should only get removed for
-	the 2015.02 release
-Message-ID: <20140710200628.DA6C29D1F5@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Jul 2014 17:10:32 -0300
+Subject: [Buildroot] [PATCH] ncmpc: bump to version 0.23
+Message-ID: <1405023032-26585-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c2444e94ce625452ddb030d1cf6e90466ee96ef0
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As discussed on the list.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- arch/Config.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/ncmpc/ncmpc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 77fae7a..9cd85a5 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -60,7 +60,7 @@ config BR2_avr32
- 	# do the lack of upstream support in the major toolchain
- 	# components. If you're interested by AVR32, contact the
- 	# Buildroot community. Otherwise, its support will be removed
--	# in 2014.11.
-+	# by the 2015.02 release.
- 	depends on BR2_DEPRECATED_SINCE_2014_08
- 	help
- 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 21ac0ae..c006af2 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).21
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).23
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.gz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+ NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+-- 
+1.8.5.5
