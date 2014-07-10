@@ -1,30 +1,47 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Thu, 10 Jul 2014 14:45:24 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5base: fix typo
-Message-ID: <1404996324-16570-1-git-send-email-hadrien.boutteville@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Jul 2014 14:55:47 +0200
+Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
+In-Reply-To: <87egxtqtp6.fsf@dell.be.48ers.dk>
+References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87egxtqtp6.fsf@dell.be.48ers.dk>
+Message-ID: <20140710145547.7ec1ddcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
----
- package/qt5/qt5base/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Peter,
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index 70ddcd3..24e5902 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -126,7 +126,7 @@ config BR2_PACKAGE_QT5BASE_DIRECTFB
- config BR2_PACKAGE_QT5BASE_XCB
- 	bool "X.org XCB support"
- 	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_LIBXCB
- 	select BR2_PACKAGE_XCB_UTIL_IMAGE
- 	select BR2_PACKAGE_XCB_UTIL_KEYSYMS
+On Thu, 10 Jul 2014 14:33:41 +0200, Peter Korsgaard wrote:
+
+>  > diff --git a/arch/Config.in b/arch/Config.in
+>  > index 1f60f81..77fae7a 100644
+>  > --- a/arch/Config.in
+>  > +++ b/arch/Config.in
+>  > @@ -56,6 +56,12 @@ config BR2_aarch64
+>  >  config BR2_avr32
+>  >  	bool "AVR32"
+>  >  	select BR2_SOFT_FLOAT
+>  > +	# This architecture is obsolete and complicated to maintain to
+>  > +	# do the lack of upstream support in the major toolchain
+>  > +	# components. If you're interested by AVR32, contact the
+>  > +	# Buildroot community. Otherwise, its support will be removed
+>  > +	# in 2014.11.
+>  > +	depends on BR2_DEPRECATED_SINCE_2014_08
+> 
+> I agree that we should get rid of avr32, but I can also follow Thomas'
+> input about the normal deprecation cycle.
+> 
+> With summer holidays coming up, chances are that people might miss it
+> from the 2014.08 relase notes - Perhaps a compromise would be to only
+> remove it by 2015.02?
+
+Sure, that's fine with me.
+
+Thomas
 -- 
-2.0.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
