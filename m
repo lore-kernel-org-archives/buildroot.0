@@ -1,42 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 16:59:40 +0200
-Subject: [Buildroot] [git commit] inadyn: not available for static
-Message-ID: <20140710150058.25A9F9C46A@busybox.osuosl.org>
+Date: Thu, 10 Jul 2014 16:49:36 +0200
+Subject: [Buildroot] [git commit] arch: deprecate the AVR32 architecture
+Message-ID: <20140710150058.176F09C46A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a27d7f2f6d21d0a4d6d43069a50ee57871c2f35f
+commit: http://git.buildroot.net/buildroot/commit/?id=01efcf84fe48060a1cfb5b154842e9670d11d979
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-inadyn isn't static-build friendly, even if we pull in the libz link
-line for the failure stated below it'll fail when trying to link to
-libdl and using dlopen for the plugins. Fixes:
-http://autobuild.buildroot.net/results/1a1/1a1a184e8248e5c51fa730d0c9721fe67a9c84a4/
+The AVR32 architecture from Atmel is obsolete since a long time, not
+supported upstream in most of the toolchain components (requires a
+special version of gcc, an old version of uClibc, etc.). Until
+February, Simon Dawson was making an excellent job at maintaining
+AVR32 in Buildroot, and fixing all the issues caused by this
+architecture. However, Simon focus has changed, and despite his call
+for a new maintainer for AVR32 in Buildroot, nobody stepped up.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The issue of maintaining AVR32 is becoming worse and worse, so this
+patch proposes to deprecate it for 2014.08, but keeping the support
+around, to remove it for sure in 2014.11.
+
+Cc: Simon Dawson <spdawson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/inadyn/Config.in |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+ arch/Config.in |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
-index a2dfa74..a436111 100644
---- a/package/inadyn/Config.in
-+++ b/package/inadyn/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_INADYN
- 	bool "inadyn"
- 	depends on BR2_USE_MMU # Uses fork()
-+	depends on !BR2_PREFER_STATIC_LIB # dlopen()
+diff --git a/arch/Config.in b/arch/Config.in
+index 1f60f81..77fae7a 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -56,6 +56,12 @@ config BR2_aarch64
+ config BR2_avr32
+ 	bool "AVR32"
+ 	select BR2_SOFT_FLOAT
++	# This architecture is obsolete and complicated to maintain to
++	# do the lack of upstream support in the major toolchain
++	# components. If you're interested by AVR32, contact the
++	# Buildroot community. Otherwise, its support will be removed
++	# in 2014.11.
++	depends on BR2_DEPRECATED_SINCE_2014_08
  	help
- 	  INADYN is a free DynDNS client. It gives the possibility
- 	  to have your own fixed hostname registered on the internet,
- 	  although your IP might be changing.
- 
- 	  https://github.com/troglobit/inadyn
-+
-+comment "inadyn needs a toolchain w/ dynamic library"
-+        depends on BR2_PREFER_STATIC_LIB
+ 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+ 	  Atmel.
