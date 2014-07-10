@@ -1,35 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 14:39:40 +0200
-Subject: [Buildroot] [git commit] use default binutils for sh architecture
-Message-ID: <20140710124059.A07539D1F2@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Jul 2014 09:40:37 -0300
+Subject: [Buildroot] [PATCH] inadyn: not available for static
+Message-ID: <1404996037-12695-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26974bf6a7c94c0c44722fe072182cfcc49bdb6e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+inadyn isn't static-build friendly, even if we pull in the libz link
+line for the failure stated below it'll fail when trying to link to
+libdl and using dlopen for the plugins. Fixes:
+http://autobuild.buildroot.net/results/1a1/1a1a184e8248e5c51fa730d0c9721fe67a9c84a4/
 
-Tested toolchain compiles with binutils 2.22 and 2.24.
-Result tested in Qemu 2.0.0. (only little endian version
-tested)
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/binutils/Config.in.host |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/inadyn/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index bc21f5e..a58fe93 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -3,7 +3,6 @@ comment "Binutils Options"
- choice
- 	prompt "Binutils Version"
- 	depends on !BR2_arc
--	default BR2_BINUTILS_VERSION_2_21 if BR2_sh
- 	default BR2_BINUTILS_VERSION_2_24 if BR2_microblaze || BR2_powerpc64le
- 	default BR2_BINUTILS_VERSION_2_22
+diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
+index a2dfa74..a436111 100644
+--- a/package/inadyn/Config.in
++++ b/package/inadyn/Config.in
+@@ -1,9 +1,13 @@
+ config BR2_PACKAGE_INADYN
+ 	bool "inadyn"
+ 	depends on BR2_USE_MMU # Uses fork()
++	depends on !BR2_PREFER_STATIC_LIB # dlopen()
  	help
+ 	  INADYN is a free DynDNS client. It gives the possibility
+ 	  to have your own fixed hostname registered on the internet,
+ 	  although your IP might be changing.
+ 
+ 	  https://github.com/troglobit/inadyn
++
++comment "inadyn needs a toolchain w/ dynamic library"
++        depends on BR2_PREFER_STATIC_LIB
+-- 
+1.8.5.5
