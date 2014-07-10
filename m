@@ -1,62 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Jul 2014 08:30:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-09
-Message-ID: <20140710063011.128EE100F3B@stock.ovh.net>
+From: IoriBranford . <ioribranford@gmail.com>
+Date: Thu, 10 Jul 2014 02:38:44 -0400
+Subject: [Buildroot] [rpi-userland] Trying to dlopen libGLESv2,
+ can't resolve libEGL function symbols
+Message-ID: <CABqEe+mvMi6aLkCbc1_0XZMN-RX7c9MNMYQOoPU5yc7KY6_iAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-07-09
-===============================
+I'm trying out embedded Linux dev by making a Raspberry Pi system dedicated
+to running SDL2 (http://libsdl.org/) applications.
+Buildroot is checked out at 2014.05, except package/rpi-userland is checked
+out at HEAD for the latest fix.
 
-        success : 105
-       failures : 19 
-       timeouts : 0  
-          TOTAL : 124
+So far, I've created a rough SDL2 package (attached) and built a
+functioning system (my config changes also attached) with a test app
+("witchfire") added via an overlay.
+But the test app fails very early in running. Looking through SDL2 source,
+it is when it tries to dlopen libGLESv2 with RTLD_NOW|RTLD_LOCAL.
 
-Classification of failures by reason
-====================================
+It cannot resolve symbols of certain libEGL functions used within
+libGLESv2.
+# witchfire
+...
+witchfire: symbol 'rpc_begin': can't resolve symbol
+witchfire: symbol 'rpc_send_ctrl_end': can't resolve symbol
+witchfire: symbol 'khrn_platform_free': can't resolve symbol
+witchfire: symbol 'khrn_platform_malloc': can't resolve symbol
+witchfire: symbol 'platform_memcpy': can't resolve symbol
+witchfire: symbol 'rpc_recv': can't resolve symbol
+witchfire: symbol 'rpc_send_ctrl_begin': can't resolve symbol
+witchfire: symbol 'rpc_end': can't resolve symbol
+witchfire: symbol 'rpc_send_ctrl_write': can't resolve symbol
+CRITICAL: Could not initialize OpenGL / GLES library
 
-          perl-net-ssleay-1.64 | 4 
-                  zeromq-4.0.4 | 3 
-               libcuefile-r475 | 1 
-          google-breakpad-1320 | 1 
-                libmpeg2-0.5.1 | 1 
-                busybox-1.22.1 | 1 
-            host-python3-3.4.1 | 1 
-           heirloom-mailx-12.5 | 1 
-              lm-sensors-3.3.5 | 1 
-                 webkit-1.11.5 | 1 
-                 libssh2-1.4.3 | 1 
-                    ncmpc-0.21 | 1 
-                 openvpn-2.3.4 | 1 
-                 dmalloc-5.4.3 | 1 
+(They are in libEGL according to
+$(RPI_USERLAND_TRUNK)/interface/khronos/CMakeLists.txt)
 
-Detail of failures
-===================
+I believe readelf -s on the target libEGL shows that they are there:
+$ output/host/usr/bin/arm-raspberry-linux-uclibcgnueabihf-readelf -s
+output/target/usr/lib/libEGL.so | grep rpc
+     9: 00012378    20 FUNC    GLOBAL DEFAULT    8 rpc_begin
+    28: 000129b4    52 FUNC    GLOBAL DEFAULT    8 rpc_send_bulk
+    62: 00012b5c     4 FUNC    GLOBAL DEFAULT    8 rpc_use
+    76: 0001220c    40 FUNC    GLOBAL DEFAULT    8 khclient_rpc_init
+    94: 00012310   104 FUNC    GLOBAL DEFAULT    8 rpc_send_ctrl_end
+   128: 0001357c     4 FUNC    GLOBAL DEFAULT    8 platform_term_rpc
+   198: 00013578     4 FUNC    GLOBAL DEFAULT    8 platform_init_rpc
+   214: 00012268    32 FUNC    GLOBAL DEFAULT    8 rpc_send_ctrl_longest
+   235: 0001256c   924 FUNC    GLOBAL DEFAULT    8 rpc_recv
+   290: 00012aec   108 FUNC    GLOBAL DEFAULT    8 rpc_high_priority_begin
+   316: 000129e8   152 FUNC    GLOBAL DEFAULT    8 rpc_send_ctrl_begin
+   324: 00012b60     4 FUNC    GLOBAL DEFAULT    8 rpc_release
+   343: 00012a80   108 FUNC    GLOBAL DEFAULT    8 rpc_high_priority_end
+   353: 00012908   172 FUNC    GLOBAL DEFAULT    8 rpc_send_bulk_gather
+   367: 00012b64   412 FUNC    GLOBAL DEFAULT    8 rpc_call8_makecurrent
+   400: 00012b58     4 FUNC    GLOBAL DEFAULT    8 rpc_flush
+   429: 0001238c    20 FUNC    GLOBAL DEFAULT    8 rpc_end
+   455: 00012288   136 FUNC    GLOBAL DEFAULT    8 rpc_send_ctrl_write
+   466: 00012234    52 FUNC    GLOBAL DEFAULT    8 rpc_term
 
-       arc |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/f5d372794db78803e78dc23a631bbcd26986d1f8/
-      bfin |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/e00d1552c2b3517b33b45a691b982e7b21342766/
-  mips64el |           google-breakpad-1320 | NOK | http://autobuild.buildroot.net/results/5a6e0fd643c5b036535d6287778d050d525fa850/
-       arm |            heirloom-mailx-12.5 | NOK | http://autobuild.buildroot.net/results/bd2ace877f5fc296b6c086ff64a2755a117e0a39/
-      sh4a |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/788163cfae3513e8dede0a53019a8df31ef862db/
-      bfin |                libcuefile-r475 | NOK | http://autobuild.buildroot.net/results/1a4e04ee904ce82fb0dd18129aae3eee76840b8d/
-   powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/a1906348062ab0725ee6696a765f54c78640e1c4/
-     nios2 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/a135e5139c181a940393ffb287a4f8d2b27ef0c6/
-       arm |               lm-sensors-3.3.5 | NOK | http://autobuild.buildroot.net/results/06c197263e4939d6adc4877e152f602a69df751d/
-       arm |                     ncmpc-0.21 | NOK | http://autobuild.buildroot.net/results/d8bb2da1079b8062430599976b0a236a4dafbd2d/
-       arm |                  openvpn-2.3.4 | NOK | http://autobuild.buildroot.net/results/08295cdcb3d14198bc7fbddec89d6fead946afba/
-       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/6686a01cf4ac68f405e71ef9519f963e339f008a/
-       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/123a6eac9ac83fca7bba8a0d5624ca37573beab8/
-       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/44ac9994b6df4d3d352ae3686191429656f41c6a/
-       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/f33ca89e3df379457239858c9af18c29ed0b3d32/
-       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/c2f2fd935058800b79a027bba7abe09fe4ced5fd/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/36931cd5062b9bc64e6e27f70c85ce8c630815e9/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/2a9d9c332a206fdb46bc8ba022c74d23082a6312/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/27eeea6794c7ef9bd6bbd28375e2af5d42fd93d2/
+readelf -d on the target libGLESv2 shows it is aware of the dependency:
+$ output/host/usr/bin/arm-raspberry-linux-uclibcgnueabihf-readelf -d
+output/target/usr/lib/libGLESv2.so
 
+Dynamic section at offset 0x14208 contains 33 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libEGL.so]
+ 0x00000001 (NEEDED)                     Shared library: [libkhrn_client.so]
+ 0x00000001 (NEEDED)                     Shared library: [libvcos.so]
+ 0x00000001 (NEEDED)                     Shared library: [libbcm_host.so]
+ 0x00000001 (NEEDED)                     Shared library: [libvchostif.so]
+ 0x00000001 (NEEDED)                     Shared library: [libpthread.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [librt.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libvchiq_arm.so]
+ 0x00000001 (NEEDED)                     Shared library:
+[libvcfiled_check.so]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.0]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+...
 
--- 
-http://autobuild.buildroot.net
+My expertise runs thin here, so, I don't see where else the issue could be.
+Hopefully someone can help?
+Thanks.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140710/8d492571/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: defconfig
+Type: application/octet-stream
+Size: 972 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140710/8d492571/attachment.obj>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: package-sdl2.tar
+Type: application/x-tar
+Size: 8192 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140710/8d492571/attachment.tar>
