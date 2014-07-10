@@ -1,30 +1,41 @@
-From: Eial Czerwacki <eial@scalemp.com>
-Date: Thu, 10 Jul 2014 16:02:42 +0300
-Subject: [Buildroot] ping not working in a glibc based buildroot
-In-Reply-To: <20140710145619.5925fa1b@free-electrons.com>
-References: <53BD4395.5050306@scalemp.com>	<20140709142242.GK3003@tarshish>	<53BD5452.6030902@scalemp.com>	<53BD55E2.7070507@zacarias.com.ar>	<53BD576F.1060008@scalemp.com>	<53BE83E8.2010906@scalemp.com>	<20140710142322.188e88ed@free-electrons.com>	<53BE887E.7070606@scalemp.com>
- <20140710145619.5925fa1b@free-electrons.com>
-Message-ID: <53BE8EF2.9000306@scalemp.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Jul 2014 10:07:27 -0300
+Subject: [Buildroot] [PATCH] atftp: fix static linking
+Message-ID: <1404997647-12843-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Greeting Thomas,
+Openssl uses libz hence pull it in, also needs to explicitly link
+against libpthread. Fixes:
+http://autobuild.buildroot.net/results/259/2592612be38a2c1dde21b44be2ecf25d1cc5211a/
 
-On 07/10/2014 03:56 PM, Thomas Petazzoni wrote:
-> Dear Eial Czerwacki,
->
-> On Thu, 10 Jul 2014 15:35:10 +0300, Eial Czerwacki wrote:
->
->> pinging an ip works, the problem is when I use an machine alias.
-> Then indeed your /etc/resolv.conf is wrong.
->
-> Thomas
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/atftp/atftp.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I copied the resolv.conf from my desktop to the remote machine and tried
-to run ping, the problem still persists.
-are there any specific libs that might be needed?
-
-Eial.
+diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
+index 1d6a7c3..a018b9d 100644
+--- a/package/atftp/atftp.mk
++++ b/package/atftp/atftp.mk
+@@ -9,10 +9,15 @@ ATFTP_SITE = http://sourceforge.net/projects/atftp/files/
+ ATFTP_LICENSE = GPLv2+
+ ATFTP_LICENSE_FILES = LICENSE
+ ATFTP_CONF_OPT = --disable-libwrap --disable-mtftp
++# For static we need to explicitly link against libpthread
++ATFTP_LIBS = -lpthread
++ATFTP_CONF_ENV = LIBS="$(ATFTP_LIBS)"
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ ATFTP_DEPENDENCIES += readline
+ ATFTP_CONF_OPT += --enable-libreadline
++# For static, readline links with ncurses
++ATFTP_LIBS += -lncurses
+ else
+ ATFTP_CONF_OPT += --disable-libreadline
+ endif
+-- 
+1.8.5.5
