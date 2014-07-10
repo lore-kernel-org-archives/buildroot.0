@@ -1,41 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 11:29:30 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 3.15.5
-Message-ID: <20140710093732.ECC009D1A3@busybox.osuosl.org>
+Date: Thu, 10 Jul 2014 11:34:54 +0200
+Subject: [Buildroot] [git commit] mpd: add twolame support
+Message-ID: <20140710093733.13D049D1F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef764bb960da2205f9fe0704e3cde01ecf9584cb
+commit: http://git.buildroot.net/buildroot/commit/?id=325dce5f9776799a9e0dcd1f9f981f6468531202
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Now that there's a twolame package we can add support for it in mpd.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/mpd/Config.in |   10 ++++++++++
+ package/mpd/mpd.mk    |    5 +++++
+ 2 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b797799..0a13b13 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 489b49d..b491126 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -184,6 +184,16 @@ config BR2_PACKAGE_MPD_TREMOR
+ 	  Enable vorbis input support.
+ 	  Select this if you want to play back OGG files on softfloat targets.
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.15.4"
-+	bool "3.15.5"
++config BR2_PACKAGE_MPD_TWOLAME
++	bool "twolame"
++	depends on BR2_LARGEFILE # twolame -> libsndfile
++	select BR2_PACKAGE_TWOLAME
++	help
++	  Enable TwoLAME mp2 encoding.
++
++comment "twolame support needs a toolchain w/ largefile"
++        depends on !BR2_LARGEFILE
++
+ config BR2_PACKAGE_MPD_VORBIS
+ 	bool "vorbis"
+ 	select BR2_PACKAGE_LIBOGG
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 2f0b37e..21eb08e 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -132,6 +132,11 @@ MPD_DEPENDENCIES += tremor
+ MPD_CONF_OPT += --with-tremor
+ endif
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.15.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.15.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
++ifeq ($(BR2_PACKAGE_MPD_TWOLAME),y)
++MPD_DEPENDENCIES += twolame
++MPD_CONF_OPT += --enable-twolame-encoder
++endif
++
+ ifeq ($(BR2_PACKAGE_MPD_WAVPACK),y)
+ MPD_DEPENDENCIES += wavpack
+ else
