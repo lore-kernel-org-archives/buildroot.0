@@ -1,44 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Jul 2014 14:55:47 +0200
-Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
-In-Reply-To: <87egxtqtp6.fsf@dell.be.48ers.dk>
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87egxtqtp6.fsf@dell.be.48ers.dk>
-Message-ID: <20140710145547.7ec1ddcf@free-electrons.com>
+Date: Thu, 10 Jul 2014 14:56:19 +0200
+Subject: [Buildroot] ping not working in a glibc based buildroot
+In-Reply-To: <53BE887E.7070606@scalemp.com>
+References: <53BD4395.5050306@scalemp.com> <20140709142242.GK3003@tarshish>
+ <53BD5452.6030902@scalemp.com> <53BD55E2.7070507@zacarias.com.ar>
+ <53BD576F.1060008@scalemp.com> <53BE83E8.2010906@scalemp.com>
+ <20140710142322.188e88ed@free-electrons.com>
+ <53BE887E.7070606@scalemp.com>
+Message-ID: <20140710145619.5925fa1b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Dear Eial Czerwacki,
 
-On Thu, 10 Jul 2014 14:33:41 +0200, Peter Korsgaard wrote:
+On Thu, 10 Jul 2014 15:35:10 +0300, Eial Czerwacki wrote:
 
->  > diff --git a/arch/Config.in b/arch/Config.in
->  > index 1f60f81..77fae7a 100644
->  > --- a/arch/Config.in
->  > +++ b/arch/Config.in
->  > @@ -56,6 +56,12 @@ config BR2_aarch64
->  >  config BR2_avr32
->  >  	bool "AVR32"
->  >  	select BR2_SOFT_FLOAT
->  > +	# This architecture is obsolete and complicated to maintain to
->  > +	# do the lack of upstream support in the major toolchain
->  > +	# components. If you're interested by AVR32, contact the
->  > +	# Buildroot community. Otherwise, its support will be removed
->  > +	# in 2014.11.
->  > +	depends on BR2_DEPRECATED_SINCE_2014_08
-> 
-> I agree that we should get rid of avr32, but I can also follow Thomas'
-> input about the normal deprecation cycle.
-> 
-> With summer holidays coming up, chances are that people might miss it
-> from the 2014.08 relase notes - Perhaps a compromise would be to only
-> remove it by 2015.02?
+> pinging an ip works, the problem is when I use an machine alias.
 
-Sure, that's fine with me.
+Then indeed your /etc/resolv.conf is wrong.
 
 Thomas
 -- 
