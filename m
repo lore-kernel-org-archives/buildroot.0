@@ -1,146 +1,82 @@
-From: Massimo Callegari <massimocallegari@yahoo.it>
-Date: Thu, 10 Jul 2014 09:33:30 +0100
-Subject: [Buildroot] [PATCH 1/1] New package: qt5webkit-examples
-Message-ID: <1404981210.77420.YahooMailNeo@web172303.mail.ir2.yahoo.com>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Jul 2014 10:52:34 +0200
+Subject: [Buildroot] [PATCH v2] libv4l: Bump version to 1.0.1
+In-Reply-To: <1404594460-17564-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ (Ezequiel Garcia's message of "Sat, 5 Jul 2014 18:07:40 -0300")
+References: <1404594460-17564-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <87ha2psii5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-- formatted?qt5webkit-examples-0001-build.patch as requested
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
+ > Quite some work has been done from 0.8.3 to 1.0.1, and as a result
+ > this commit is very intrusive. The biggest change is the move to an
+ > autotools package.
 
-Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
----
-?package/qt5/Config.in ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?| ?1 +
-?package/qt5/qt5webkit-examples/Config.in ? ? ? ? ? | 10 +++++
-?.../qt5webkit-examples-0001-build.patch ? ? ? ? ? ?| 30 ++++++++++++++
-?.../qt5/qt5webkit-examples/qt5webkit-examples.mk ? | 46 ++++++++++++++++++++++
-?4 files changed, 87 insertions(+)
-?create mode 100644 package/qt5/qt5webkit-examples/Config.in
-?create mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
-?create mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+ > Then, the options that enable utilities individually have been deprecated
+ > and moved to Config.in.legacy. Instead, we introduce new option to select
+ > either all the utilities. This change loses granularity in favor of
+ > maintainability.
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index efdd9d4..1f6920a 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -40,6 +40,7 @@ source "package/qt5/qt5sensors/Config.in"
-?source "package/qt5/qt5serialport/Config.in"
-?source "package/qt5/qt5svg/Config.in"
-?source "package/qt5/qt5webkit/Config.in"
-+source "package/qt5/qt5webkit-examples/Config.in"
-?source "package/qt5/qt5websockets/Config.in"
-?source "package/qt5/qt5x11extras/Config.in"
-?source "package/qt5/qt5xmlpatterns/Config.in"
-diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
-new file mode 100644
-index 0000000..2840733
---- /dev/null
-+++ b/package/qt5/qt5webkit-examples/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
-+bool "qt5webkit examples"
-+depends on BR2_PACKAGE_QT5WEBKIT
-+help
-+ ?Qt is a cross-platform application and UI framework for
-+ ?developers using C++.
-+
-+ ?This package corresponds to the qt5webkit examples module.
-+
-+ ?http://qt-project.org
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
-new file mode 100644
-index 0000000..4877102
---- /dev/null
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
-@@ -0,0 +1,30 @@
-+This patch improves the qt5webkit examples build for 2 aspects:
-+
-+# Allows to build even if qt5base examples are not enabled
-+# Builds xmlpatterns example only if the qt5xmlpattern package has been built
-+
-+Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
-+
-+Index: b/examples/webkitwidgets/webkitwidgets.pro
-+===================================================================
-+--- /dev/null
-++++ b/examples/webkitwidgets/webkitwidgets.pro
-+@@ -8,5 +8,6 @@
-+ ? ? ? ? ? ? framecapture \
-+ ? ? ? ? ? ? browser \
-+ ? ? ? ? ? ? embedded \
-+- ? ? ? ? ? ?scroller \
-+- ? ? ? ? ? ?xmlpatterns
-++ ? ? ? ? ? ?scroller
-++ ? ? ? ? ? ?
-++qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
-+Index: b/qtwebkit-examples.pro
-+===================================================================
-+--- /dev/null
-++++ b/qtwebkit-examples.pro
-+@@ -3,3 +3,4 @@
-+ load(qt_parts)
-+?
-+ SUBDIRS += doc
-++SUBDIRS += examples
-+
-diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-new file mode 100644
-index 0000000..fd66941
---- /dev/null
-+++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# qt5webkitexamples
-+#
-+################################################################################
-+
-+QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
-+QT5WEBKIT_EXAMPLES_SITE = $(QT5_SITE)
-+QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_EXAMPLES_VERSION).tar.xz
-+QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5webkit
-+QT5WEBKIT_EXAMPLES_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5WEBKIT_EXAMPLES_LICENSE = LGPLv2.1 or GPLv3.0
-+# Here we would like to get license files from qt5base, but qt5base
-+# may not be extracted at the time we get the legal-info for
-+# qt5webkitexamples.
-+else
-+QT5WEBKIT_EXAMPLES_LICENSE = Commercial license
-+QT5WEBKIT_EXAMPLES_REDISTRIBUTE = NO
-+endif
-+
-+define QT5WEBKIT_EXAMPLES_CONFIGURE_CMDS
-+(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5WEBKIT_EXAMPLES_BUILD_CMDS
-+$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
-+$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+endef
-+
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE), y)
-+define QT5WEBKIT_EXAMPLES_INSTALL_QML
-+ ? ?cp -af $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
-+endef
-+endif
-+
-+define QT5WEBKIT_EXAMPLES_INSTALL_TARGET_CMDS
-+ ? ?cp -af $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
-+ ? ?$(QT5WEBKIT_EXAMPLES_INSTALL_QML)
-+endef
-+
-+$(eval $(generic-package))
---?
-1.8.1.2
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140710/8869399e/attachment.html>
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > ---
+ > Changes from v1:
+ >   * Addressed Thomas' comments: removed the JPEG option and fixed the
+ >     menu comment.
+
+ > Changes from RFC v1:
+ >  * Moved to PATCH as suggested by Thomas
+ >  * Added a required dependency on toolchain C++ support
+ >  * Added support to enable/disable JPEG support
+ >  * Changed packages description based on v4l-utils.spec
+
+ >  Config.in.legacy                                   | 40 ++++++++++++++
+ >  package/libv4l/Config.in                           | 62 +++++-----------------
+ >  ...1-fixup-lfs-mismatch-in-preload-libraries.patch | 44 +++++++++++++++
+ >  package/libv4l/libv4l-01-largefile.patch           | 39 --------------
+ >  .../libv4l-02-use-openat-when-available.patch      | 34 ------------
+ >  package/libv4l/libv4l.mk                           | 46 ++++++----------
+ >  6 files changed, 113 insertions(+), 152 deletions(-)
+ >  create mode 100644 package/libv4l/libv4l-0001-fixup-lfs-mismatch-in-preload-libraries.patch
+ >  delete mode 100644 package/libv4l/libv4l-01-largefile.patch
+ >  delete mode 100644 package/libv4l/libv4l-02-use-openat-when-available.patch
+
+ > diff --git a/Config.in.legacy b/Config.in.legacy
+ > index a2c7846..dc93f86 100644
+ > --- a/Config.in.legacy
+ > +++ b/Config.in.legacy
+ > @@ -128,6 +128,46 @@ config BR2_PACKAGE_PROCPS
+ >  	help
+ >  	  The procps package has been replaced by the equivalent procps-ng.
+ 
+ > +config BR2_PACKAGE_LIBV4L_DECODE_TM6000
+
+I'm wondering if it wouldn't be better to rename the package to
+V4L_UTILS like upstream and put it under hardware handling - But ok,
+that can be done later.
+
+ > +++ b/package/libv4l/libv4l.mk
+ > @@ -4,42 +4,26 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LIBV4L_VERSION = 0.8.9
+ > +LIBV4L_VERSION = 1.0.1
+ >  LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ >  LIBV4L_SITE = http://linuxtv.org/downloads/v4l-utils/
+ >  LIBV4L_INSTALL_STAGING = YES
+ > -LIBV4L_MAKE_OPTS = PREFIX=/usr
+ > -LIBV4L_DEPENDENCIES = jpeg
+
+The configure script uses pkg-config, so we need to add host-pkgconf. It
+also needs argp handling, so we need to select and use argp-standalone
+when building on uClibc.
+
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
