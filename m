@@ -1,57 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Jul 2014 18:32:32 +0200
-Subject: [Buildroot] [PATCH 1/1] bzip2: install shared library for the
- host
-In-Reply-To: <1404993626-32112-1-git-send-email-david.bachelart@bbright.com>
-References: <1404993626-32112-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20140710163232.GD28300@free.fr>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Thu, 10 Jul 2014 10:18:04 -0700
+Subject: [Buildroot] [PATCH] nitrogen6x: include .dtb files for compatible
+	variants
+In-Reply-To: <a913d991bd0534d192982537a25388705c80c728.1404164261.git.yann.morin.1998@free.fr>
+References: <a913d991bd0534d192982537a25388705c80c728.1404164261.git.yann.morin.1998@free.fr>
+Message-ID: <1405012684-30163-1-git-send-email-eric.nelson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David, All,
+The Boundary Devices Nitrogen6X comes in a number of variants
+with different processors, and the kernel and userspace is
+compatible with the SABRE Lite (BD-SL-i.MX6), Nitrogen6_Lite,
+and Nitrogen6_Max boards.
 
-On 2014-07-10 14:00 +0200, David Bachelart spake thusly:
-> libbz2.so was explicitly built for the host, but was not installed. Install it.
-> 
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
+This patch adds support for these boards through the
+corresponding .dtb files.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+---
+ configs/nitrogen6x_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/bzip2/bzip2.mk |    2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-> index fcddb55..7584694 100644
-> --- a/package/bzip2/bzip2.mk
-> +++ b/package/bzip2/bzip2.mk
-> @@ -61,6 +61,8 @@ endef
->  define HOST_BZIP2_INSTALL_CMDS
->  	$(HOST_MAKE_ENV) \
->  		$(MAKE) PREFIX=$(HOST_DIR)/usr -C $(@D) install
-> +	$(HOST_MAKE_ENV) \
-> +		$(MAKE) -f Makefile-libbz2_so PREFIX=$(HOST_DIR)/usr -C $(@D) install
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index da2a7e8..04db23a 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -26,4 +26,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-nitrogen6x"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_max imx6dl-nitrogen6x imx6q-nitrogen6_max imx6q-nitrogen6x imx6q-sabrelite"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
