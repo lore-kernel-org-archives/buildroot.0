@@ -1,47 +1,48 @@
-From: lee choon gay <choongay@yahoo.com>
-Date: Thu, 10 Jul 2014 05:05:57 -0700
-Subject: [Buildroot] About Buildroot+Qt+Qemu
-In-Reply-To: <1404915107.70432.YahooMailBasic@web141706.mail.bf1.yahoo.com>
-Message-ID: <1404993957.81297.YahooMailBasic@web141702.mail.bf1.yahoo.com>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Thu, 10 Jul 2014 11:45:23 -0700
+Subject: [Buildroot] i.MX 3.10.17 updates
+Message-ID: <53BEDF43.9020401@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi.
-I finally found a solution.
-It is Qemu issue (my mistake in fact).
-To execute Qemu to run Qt example, the command below is needed - add the "-usbdevice tablet".
+Hi all,
 
-qemu-system-i386 -kernel /path/to/kernel/bzImage -initrd /path/to/filesystem/rootfs.cpio -usbdevice tablet
+Thanks for all of your work on this.
 
-Thanks.
+I've been able to validate the GPU portions of this, but
+I'm struggling a bit with the VPU and gstreamer.
 
---------------------------------------------
-On Wed, 7/9/14, lee choon gay <choongay@yahoo.com> wrote:
+Using roughly Gary's configuration, I had trouble using
+playbin2 or gplay loading the Freescale software codecs:
 
- Subject: About Buildroot+Qt+Qemu
- To: buildroot at busybox.net
- Date: Wednesday, July 9, 2014, 10:11 AM
- 
- Hi.
- I am beginner for the tools stated above.
- I am currently using Buildroot 2014.05, Released May 31st,
- 2014 to build kernel linux-3.14.4 with qt-4.8.6 for arch
- i386/variant i686.
- Then execute the bzImage using Qemu.
- Inside Qemu, I execute ./sliders -qws, I can see the GUI
- perfectly and able to type using keyboard.
- The problem is I cannot control the mouse (even the mouse
- pointer seems moving - pointer appear at coordinate 0,0 and
- disappear at other coordinates).
- I can't do anything with the mouse, can't click widget.
- 
- I am running out of idea. I tried with vnc, directfb and
- etc, but still can't solve the problem, other problems show
- up. 
- Any body can help me on this?
- 
- Thank you very much.
- 
+(gst-plugin-scanner:157): GStreamer-WARNING **: Failed to load plugin
+'/usr/lib/gstreamer-0.10/libmfw_gst_mpeg4aspdec.so':
+lib_MPEG4ASP_dec_arm11_elinux.so.1: cannot open shared object file: No
+such file or directory
+
+After messing around with the toolchain, I found that listing
+directories (usr/lib/imx-mm/audio-codec and video-codec) allowed
+the plugins to load.
+
+After that, I'm still having trouble getting playback to work:
+
+	# gplay tears_of_steel_1080p.webm
+	playbin2 is employed!
+	fsl_player_init(): Successfully initialize!
+	fsl_player_set_media_location(): filename=tears_of_steel_1080p.webm
+	[Stopped  ][Vol=01][00:00:00/00:00:00][fps:0]state change failed from 2
+to 4
+	get GST_MESSAGE_ELEMENT missing-plugin, type=(string)decoder,
+detail=(GstCaps)video/webm, name=(string)"WebM\ demuxer";
+try to play failed
+
+Can one of you post your config file, toolchain details, and
+type of video you're able to play?
+
+Please advise,
+
+
+Eric
