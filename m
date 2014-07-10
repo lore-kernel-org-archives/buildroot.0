@@ -1,68 +1,192 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Jul 2014 17:59:47 +0200
-Subject: [Buildroot] [PATCH 2/5] support/download: properly use temp
-	files
-In-Reply-To: <20140709094510.50159656@free-electrons.com>
-References: <cover.1404681878.git.yann.morin.1998@free.fr>
- <3c2e529b6f9c542dba662b08b54f844f275e23ee.1404681878.git.yann.morin.1998@free.fr>
- <53BA3A1A.1000307@mind.be> <20140707213802.GC3806@free.fr>
- <20140709094510.50159656@free-electrons.com>
-Message-ID: <20140710155947.GB28300@free.fr>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 10 Jul 2014 20:25:13 +0400
+Subject: [Buildroot] [PATCH] binutils: fix xtensa ld segfault on linking
+	linux modules
+Message-ID: <1405009513-23772-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+This fixes the following build error reproducible with any linux kernel
+module built with a recent buildroot toolchain:
 
-On 2014-07-09 09:45 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 7 Jul 2014 23:38:02 +0200, Yann E. MORIN wrote:
-> 
-> > >  Not really related to this patch, but why do we need this ${tmp_dl} to begin
-> > > with? Especially since we're already "occupying" a tempfile in DL_DIR anyway.
-> > 
-> > The idea was not to pollute BR2_DL_DIR, in case the download fails.
-> > Hence this dance:
-> >   - download to a disposable area (BUILD_DIR);
-> >   - move to a temp file in BR2_DL_DIR;
-> >   - atomically rename to the final file.
-> 
-> And also because $(DL_DIR) and $(BUILD_DIR) might be on different
-> filesystems, so the rename/move of the file from $(BUILD_DIR) (where it
-> was downloaded) to $(DL_DIR) may not be atomic. Hence the idea is to:
-> 
->  - Download in $(BUILD_DIR)
-> 
->  - Move to a temporary file in $(DL_DIR). This operation may not be
->    atomic if $(DL_DIR) is not on the same filesystem as $(BUILD_DIR)
-> 
->  - Finally rename the temporary file to the expected file name in
->    $(DL_DIR). Since we're in the same directory, it's guaranteed to be
->    atomic.
-> 
-> This allows to ensure that when the final file appears in $(DL_DIR),
-> we're sure the download is finished, and that therefore concurrently
-> executing Buildroot instances will either not see the downloaded file,
-> or see a fully completed downloaded file.
-> 
-> Or am I missing the point of the discussion here?
+  LD [M]  fs/jbd2/jbd2.ko
+  /bin/sh: line 1: 12069 Segmentation fault
+  buildroot/host/usr/bin/xtensa-buildroot-linux-uclibc-ld -r --no-relax
+  -T linux/scripts/module-common.lds --build-id
+  -o fs/jbd2/jbd2.ko fs/jbd2/jbd2.o fs/jbd2/jbd2.mod.o
 
-Not as far as I'm concerned.
+Backported from: e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...ix-ld-segfault-when-linking-linux-modules.patch | 47 ++++++++++++++++++++++
+ ...ix-ld-segfault-when-linking-linux-modules.patch | 47 ++++++++++++++++++++++
+ ...ix-ld-segfault-when-linking-linux-modules.patch | 47 ++++++++++++++++++++++
+ 3 files changed, 141 insertions(+)
+ create mode 100644 package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+ create mode 100644 package/binutils/2.23.2/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+ create mode 100644 package/binutils/2.24/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
 
-Except that Arnout's (and Peter's) concerns where that the way I
-implemented that was not optimal, and I used convoluted constructs to
-achieve this non-cluttering and atomicity.
-
-I have to re-write my copy! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch b/package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+new file mode 100644
+index 0000000..6a0846e
+--- /dev/null
++++ b/package/binutils/2.22/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+@@ -0,0 +1,47 @@
++From e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 10 Jul 2014 01:47:33 +0400
++Subject: [PATCH] Fix xtensa ld segfault when linking linux modules
++
++is_inconsistent_linkonce_section makes an assumption that section name
++that starts with ".gnu.linkonce.prop." has one more dot in its suffix.
++However gas generates such section name by insertion of "prop." right
++after ".gnu.linkonce." part of the name of the original section. So, for
++section named ".gnu.linkonce.this_module" corresponding property section
++name does not satisfy the assumption. Such section names are common in
++linux modules. This bug was exposed by the patch "a35d5e8 Fix alignment
++for the first section frag on xtensa", that makes gas produce property
++section for each section that has ".align" directive in it.
++
++Use suffix that immediately follows ".gnu.linkonce.prop." when there are
++no more dots following it.
++
++2014-07-10  Max Filippov  <jcmvbkbc@gmail.com>
++
++ld/
++    * emultempl/xtensaelf.em (is_inconsistent_linkonce_section):
++    correctly handle missing dot in section name after
++    ".gnu.linkonce.prop.".
++---
++Backported from: e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2
++Changes to ld/ChangeLog file are dropped.
++
++ ld/emultempl/xtensaelf.em | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ld/emultempl/xtensaelf.em b/ld/emultempl/xtensaelf.em
++index 151eea4..948d18d 100644
++--- a/ld/emultempl/xtensaelf.em
+++++ b/ld/emultempl/xtensaelf.em
++@@ -1310,7 +1310,7 @@ is_inconsistent_linkonce_section (asection *sec)
++      for Tensilica's XCC compiler.  */
++   name = sec_name + linkonce_len;
++   if (CONST_STRNEQ (name, "prop."))
++-    name = strchr (name + 5, '.') + 1;
+++    name = strchr (name + 5, '.') ? strchr (name + 5, '.') + 1 : name + 5;
++   else if (name[1] == '.'
++ 	   && (name[0] == 'p' || name[0] == 'e' || name[0] == 'h'))
++     name += 2;
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.23.2/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch b/package/binutils/2.23.2/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+new file mode 100644
+index 0000000..6a0846e
+--- /dev/null
++++ b/package/binutils/2.23.2/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+@@ -0,0 +1,47 @@
++From e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 10 Jul 2014 01:47:33 +0400
++Subject: [PATCH] Fix xtensa ld segfault when linking linux modules
++
++is_inconsistent_linkonce_section makes an assumption that section name
++that starts with ".gnu.linkonce.prop." has one more dot in its suffix.
++However gas generates such section name by insertion of "prop." right
++after ".gnu.linkonce." part of the name of the original section. So, for
++section named ".gnu.linkonce.this_module" corresponding property section
++name does not satisfy the assumption. Such section names are common in
++linux modules. This bug was exposed by the patch "a35d5e8 Fix alignment
++for the first section frag on xtensa", that makes gas produce property
++section for each section that has ".align" directive in it.
++
++Use suffix that immediately follows ".gnu.linkonce.prop." when there are
++no more dots following it.
++
++2014-07-10  Max Filippov  <jcmvbkbc@gmail.com>
++
++ld/
++    * emultempl/xtensaelf.em (is_inconsistent_linkonce_section):
++    correctly handle missing dot in section name after
++    ".gnu.linkonce.prop.".
++---
++Backported from: e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2
++Changes to ld/ChangeLog file are dropped.
++
++ ld/emultempl/xtensaelf.em | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ld/emultempl/xtensaelf.em b/ld/emultempl/xtensaelf.em
++index 151eea4..948d18d 100644
++--- a/ld/emultempl/xtensaelf.em
+++++ b/ld/emultempl/xtensaelf.em
++@@ -1310,7 +1310,7 @@ is_inconsistent_linkonce_section (asection *sec)
++      for Tensilica's XCC compiler.  */
++   name = sec_name + linkonce_len;
++   if (CONST_STRNEQ (name, "prop."))
++-    name = strchr (name + 5, '.') + 1;
+++    name = strchr (name + 5, '.') ? strchr (name + 5, '.') + 1 : name + 5;
++   else if (name[1] == '.'
++ 	   && (name[0] == 'p' || name[0] == 'e' || name[0] == 'h'))
++     name += 2;
++-- 
++1.8.1.4
++
+diff --git a/package/binutils/2.24/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch b/package/binutils/2.24/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+new file mode 100644
+index 0000000..6a0846e
+--- /dev/null
++++ b/package/binutils/2.24/903-xtensa-fix-ld-segfault-when-linking-linux-modules.patch
+@@ -0,0 +1,47 @@
++From e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 10 Jul 2014 01:47:33 +0400
++Subject: [PATCH] Fix xtensa ld segfault when linking linux modules
++
++is_inconsistent_linkonce_section makes an assumption that section name
++that starts with ".gnu.linkonce.prop." has one more dot in its suffix.
++However gas generates such section name by insertion of "prop." right
++after ".gnu.linkonce." part of the name of the original section. So, for
++section named ".gnu.linkonce.this_module" corresponding property section
++name does not satisfy the assumption. Such section names are common in
++linux modules. This bug was exposed by the patch "a35d5e8 Fix alignment
++for the first section frag on xtensa", that makes gas produce property
++section for each section that has ".align" directive in it.
++
++Use suffix that immediately follows ".gnu.linkonce.prop." when there are
++no more dots following it.
++
++2014-07-10  Max Filippov  <jcmvbkbc@gmail.com>
++
++ld/
++    * emultempl/xtensaelf.em (is_inconsistent_linkonce_section):
++    correctly handle missing dot in section name after
++    ".gnu.linkonce.prop.".
++---
++Backported from: e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2
++Changes to ld/ChangeLog file are dropped.
++
++ ld/emultempl/xtensaelf.em | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ld/emultempl/xtensaelf.em b/ld/emultempl/xtensaelf.em
++index 151eea4..948d18d 100644
++--- a/ld/emultempl/xtensaelf.em
+++++ b/ld/emultempl/xtensaelf.em
++@@ -1310,7 +1310,7 @@ is_inconsistent_linkonce_section (asection *sec)
++      for Tensilica's XCC compiler.  */
++   name = sec_name + linkonce_len;
++   if (CONST_STRNEQ (name, "prop."))
++-    name = strchr (name + 5, '.') + 1;
+++    name = strchr (name + 5, '.') ? strchr (name + 5, '.') + 1 : name + 5;
++   else if (name[1] == '.'
++ 	   && (name[0] == 'p' || name[0] == 'e' || name[0] == 'h'))
++     name += 2;
++-- 
++1.8.1.4
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.1.4
