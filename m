@@ -1,66 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Jul 2014 23:18:05 +0200
-Subject: [Buildroot] ping not working in a glibc based buildroot
-In-Reply-To: <53BEA249.3020808@scalemp.com>
-References: <20140710142322.188e88ed@free-electrons.com>
- <53BE887E.7070606@scalemp.com>
- <20140710145619.5925fa1b@free-electrons.com>
- <53BE8EF2.9000306@scalemp.com>
- <20140710153435.6b2ab536@free-electrons.com>
- <53BE97D3.5090009@scalemp.com>
- <20140710160659.18c3af57@free-electrons.com>
- <53BE9FA5.9070002@scalemp.com>
- <20140710161645.1ad0e468@free-electrons.com>
- <53BEA249.3020808@scalemp.com>
-Message-ID: <20140710211805.GI28300@free.fr>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Thu, 10 Jul 2014 23:20:09 +0200
+Subject: [Buildroot] i.MX 3.10.17 updates
+In-Reply-To: <53BEDF43.9020401@boundarydevices.com>
+References: <53BEDF43.9020401@boundarydevices.com>
+Message-ID: <3890233.PnazMluvBb@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Eial, All,
+Hello Eric,
 
-On 2014-07-10 17:25 +0300, Eial Czerwacki spake thusly:
-> On 07/10/2014 05:16 PM, Thomas Petazzoni wrote:
-> > Dear Eial Czerwacki,
-> >
-> > On Thu, 10 Jul 2014 17:13:57 +0300, Eial Czerwacki wrote:
-> >
-> >> I've added libnss_dns-2.18.so to the img and libresolv.so and it seems
-> >> to be working.
-> >> the files are missing because I work in a kinda limited size.
-> > So you removed them manually? I'd like to understand what happened, to
-> > fix Buildroot if needed.
-> >
-> >> do I need the other libnss_*.so files?
-> > By default, we only copy libnss_dns (to do DNS resolution) and
-> > libnss_files (to do /etc/hosts based resolution), and we don't copy the
-> > other libnss_* libraries, which are used for more advanced name
-> > resolution that are generally not used on most embedded systems.
-> >
-> > See 'man nsswitch.conf' for more details.
-> >
-> > Best regards,
-> >
-> > Thomas
-> I see, as I don't use /etc/hosts, I think I don't need libnss_files.
+On Thursday 10 July 2014 11:45:23 Eric Nelson wrote:
+> Hi all,
+> 
+> Thanks for all of your work on this.
+> 
+> I've been able to validate the GPU portions of this, but
+> I'm struggling a bit with the VPU and gstreamer.
+> 
+> Using roughly Gary's configuration, I had trouble using
+> playbin2 or gplay loading the Freescale software codecs:
+> 
+> (gst-plugin-scanner:157): GStreamer-WARNING **: Failed to load plugin
+> '/usr/lib/gstreamer-0.10/libmfw_gst_mpeg4aspdec.so':
+> lib_MPEG4ASP_dec_arm11_elinux.so.1: cannot open shared object file: No
+> such file or directory
+This error is produced only during first launch, when gstreamer build its 
+plugin cache. Problem may continue to exist even if this error does not 
+appear. You have to remove ~/.gstreamer-0.10 to force cache rebuild. Can you 
+check this error does no more appear event after removing ~/.gstreamer-0.10?
 
-The NSS libraries are not used only to provide DNS resolving.
+If error appears, you may add this to /etc/ld.so.conf:
+ /usr/lib/imx-mm/audio-codec
+ /usr/lib/imx-mm/video-codec
+ /usr/lib/imx-mm/parser
 
-They are used to do any kind of name lookups:
-  - IP <-> hostname mapping (as already mentioned),
-  - UID <-> username mapping,
-  - gid <-> group name mapping,
-  - and a bunch more. See the complete list:  man nsswitch.conf
+and retry. 
 
-Regards,
-Yann E. MORIN.
+> After messing around with the toolchain, I found that listing
+> directories (usr/lib/imx-mm/audio-codec and video-codec) allowed
+> the plugins to load.
+> 
+> After that, I'm still having trouble getting playback to work:
+> 
+> 	# gplay tears_of_steel_1080p.webm
+> 	playbin2 is employed!
+> 	fsl_player_init(): Successfully initialize!
+> 	fsl_player_set_media_location(): filename=tears_of_steel_1080p.webm
+> 	[Stopped  ][Vol=01][00:00:00/00:00:00][fps:0]state change failed from 2
+> to 4
+> 	get GST_MESSAGE_ELEMENT missing-plugin, type=(string)decoder,
+> detail=(GstCaps)video/webm, name=(string)"WebM\ demuxer";
+> try to play failed
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
