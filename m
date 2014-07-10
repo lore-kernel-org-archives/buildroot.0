@@ -1,28 +1,39 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 10 Jul 2014 22:48:20 +0300
-Subject: [Buildroot] [PATCH v3] update default configuration to Linux
- 3.15.x
-In-Reply-To: <20140710190321.GA25738@waldemar-brodkorb.de>
-References: <20140710190321.GA25738@waldemar-brodkorb.de>
-Message-ID: <20140710194820.GZ3003@tarshish>
+From: Eric Nelson <eric.nelson@boundarydevices.com>
+Date: Thu, 10 Jul 2014 12:54:37 -0700
+Subject: [Buildroot] i.MX 3.10.17 updates
+In-Reply-To: <CADCpmyOhiNWv31pdUi5=Q3n-vD9jiFO_8d3v61ZqAa6yaxLy9A@mail.gmail.com>
+References: <53BEDF43.9020401@boundarydevices.com>	<726E1478A66AD646A8419562133B4C3D0EB71DFB@mxadeneo.adeneo-embedded.us>
+ <CADCpmyOhiNWv31pdUi5=Q3n-vD9jiFO_8d3v61ZqAa6yaxLy9A@mail.gmail.com>
+Message-ID: <53BEEF7D.4020208@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Thanks Gary,
 
-On Thu, Jul 10, 2014 at 09:03:21PM +0200, Waldemar Brodkorb wrote:
-> Result tested with Qemu 2.0.0 without issues.
-> Old SCI problems are fixed in Qemu.
+On 07/10/2014 12:01 PM, Gary Bisson wrote:
+> Resend my e-mail with the correct e-mail address so the mailing-list can
+> see it:
+> 
+> On Thu, Jul 10, 2014 at 11:53 AM, BISSON Gary
+> <gbisson at adeneo-embedded.us <mailto:gbisson@adeneo-embedded.us>> wrote:
+> 
+>     Hi Eric,
+> 
+>     Please find attached both my buildroot and my kernel config.
+>     I was using a code sourcery 2013.05 toolchain for my testing.
+>     Regarding GStreamer, might just be a missing plugin not necessarily
+>     related to the fsl one. Hope my config will help.
+> 
 
-Subject should be prefixed with "qemu/sh4-r2d:" to clarify the scope of this 
-kernel configuration update.
+This is the config I started with, so I suspect that you'll also have
+difficulties playing video.
 
-baruch
+Hadrien and Yann, have you been able to validate video encode/decode?
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards,
+
+
+Eric
