@@ -1,62 +1,149 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Thu, 10 Jul 2014 23:20:09 +0200
-Subject: [Buildroot] i.MX 3.10.17 updates
-In-Reply-To: <53BEDF43.9020401@boundarydevices.com>
-References: <53BEDF43.9020401@boundarydevices.com>
-Message-ID: <3890233.PnazMluvBb@sagittea>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Jul 2014 19:39:20 -0300
+Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.42.11
+Message-ID: <1405031960-4690-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ..._CFLAGS-add-includes-when-cross-compiling.patch | 29 ------------------
+ ...2fsck-fix-Makefile-dependency-for-quota.o.patch | 32 --------------------
+ ...n-fix-external-libblkid-test-for-static-l.patch | 34 ----------------------
+ package/e2fsprogs/e2fsprogs.mk                     |  2 +-
+ 4 files changed, 1 insertion(+), 96 deletions(-)
+ delete mode 100644 package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
+ delete mode 100644 package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch
+ delete mode 100644 package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
 
-On Thursday 10 July 2014 11:45:23 Eric Nelson wrote:
-> Hi all,
-> 
-> Thanks for all of your work on this.
-> 
-> I've been able to validate the GPU portions of this, but
-> I'm struggling a bit with the VPU and gstreamer.
-> 
-> Using roughly Gary's configuration, I had trouble using
-> playbin2 or gplay loading the Freescale software codecs:
-> 
-> (gst-plugin-scanner:157): GStreamer-WARNING **: Failed to load plugin
-> '/usr/lib/gstreamer-0.10/libmfw_gst_mpeg4aspdec.so':
-> lib_MPEG4ASP_dec_arm11_elinux.so.1: cannot open shared object file: No
-> such file or directory
-This error is produced only during first launch, when gstreamer build its 
-plugin cache. Problem may continue to exist even if this error does not 
-appear. You have to remove ~/.gstreamer-0.10 to force cache rebuild. Can you 
-check this error does no more appear event after removing ~/.gstreamer-0.10?
-
-If error appears, you may add this to /etc/ld.so.conf:
- /usr/lib/imx-mm/audio-codec
- /usr/lib/imx-mm/video-codec
- /usr/lib/imx-mm/parser
-
-and retry. 
-
-> After messing around with the toolchain, I found that listing
-> directories (usr/lib/imx-mm/audio-codec and video-codec) allowed
-> the plugins to load.
-> 
-> After that, I'm still having trouble getting playback to work:
-> 
-> 	# gplay tears_of_steel_1080p.webm
-> 	playbin2 is employed!
-> 	fsl_player_init(): Successfully initialize!
-> 	fsl_player_set_media_location(): filename=tears_of_steel_1080p.webm
-> 	[Stopped  ][Vol=01][00:00:00/00:00:00][fps:0]state change failed from 2
-> to 4
-> 	get GST_MESSAGE_ELEMENT missing-plugin, type=(string)decoder,
-> detail=(GstCaps)video/webm, name=(string)"WebM\ demuxer";
-> try to play failed
-
-
+diff --git a/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch b/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
+deleted file mode 100644
+index 2aa86aa..0000000
+--- a/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 2d9bfcc82b986f9da203270fd4059041bb7f1983 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 3 Jun 2014 18:51:07 -0300
+-Subject: [PATCH] e2fsprogs: Add INCLUDES to BUILD_CFLAGS when cross-compiling
+-
+-We need $INCLUDES in BUILD_CFLAGS otherwise cross-compilation is broken
+-now that util/subst.c uses config.h (from commit 2873927d15).
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- configure.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.in b/configure.in
+-index 448a292..8bac870 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -1382,7 +1382,7 @@ if test $cross_compiling = no; then
+-    BUILD_CFLAGS="$CFLAGS $CPPFLAGS $INCLUDES -DHAVE_CONFIG_H"
+-    BUILD_LDFLAGS="$LDFLAGS"
+- else
+--   BUILD_CFLAGS=
+-+   BUILD_CFLAGS="$INCLUDES -DHAVE_CONFIG_H"
+-    BUILD_LDFLAGS=
+- fi
+- AC_SUBST(BUILD_CFLAGS)
+---
+-1.8.5.5
+-
+diff --git a/package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch b/package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch
+deleted file mode 100644
+index 1e3f20d..0000000
+--- a/package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 5c15bf5f978bae01f1ca3cbe6414ab1d355a6adf Mon Sep 17 00:00:00 2001
+-From: Theodore Ts'o <tytso@mit.edu>
+-Date: Thu, 22 May 2014 18:52:27 -0400
+-Subject: [PATCH] e2fsck: fix Makefile dependency for quota.o
+-
+-Signed-off-by: "Theodore Ts'o" <tytso@mit.edu>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- e2fsck/Makefile.in | 10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-diff --git a/e2fsck/Makefile.in b/e2fsck/Makefile.in
+-index 4b10f6f..f773fea 100644
+---- a/e2fsck/Makefile.in
+-+++ b/e2fsck/Makefile.in
+-@@ -552,3 +552,13 @@ logfile.o: $(srcdir)/logfile.c $(top_builddir)/lib/config.h \
+-  $(top_srcdir)/lib/quota/dqblk_v2.h $(top_srcdir)/lib/quota/quotaio_tree.h \
+-  $(top_srcdir)/lib/../e2fsck/dict.h
+- prof_err.o: prof_err.c
+-+quota.o: $(srcdir)/quota.c $(top_builddir)/lib/config.h \
+-+ $(top_builddir)/lib/dirpaths.h $(srcdir)/e2fsck.h \
+-+ $(top_srcdir)/lib/ext2fs/ext2_fs.h $(top_builddir)/lib/ext2fs/ext2_types.h \
+-+ $(top_srcdir)/lib/ext2fs/ext2fs.h $(top_srcdir)/lib/ext2fs/ext3_extents.h \
+-+ $(top_srcdir)/lib/et/com_err.h $(top_srcdir)/lib/ext2fs/ext2_io.h \
+-+ $(top_builddir)/lib/ext2fs/ext2_err.h \
+-+ $(top_srcdir)/lib/ext2fs/ext2_ext_attr.h $(top_srcdir)/lib/ext2fs/bitops.h \
+-+ $(srcdir)/profile.h prof_err.h $(top_srcdir)/lib/quota/quotaio.h \
+-+ $(top_srcdir)/lib/quota/dqblk_v2.h $(top_srcdir)/lib/quota/quotaio_tree.h \
+-+ $(top_srcdir)/lib/../e2fsck/dict.h $(srcdir)/problem.h
+--- 
+-1.8.5.5
+-
+diff --git a/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch b/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
+deleted file mode 100644
+index 65d6c4c..0000000
+--- a/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From b52e76432fe23490b891884f3a66504101c2a5bd Mon Sep 17 00:00:00 2001
+-Message-Id: <b52e76432fe23490b891884f3a66504101c2a5bd.1402480818.git.baruch@tkos.co.il>
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 11 Jun 2014 12:56:15 +0300
+-Subject: [PATCH] configure.in: fix external libblkid test for static link
+-
+-External libblkid needs -luuid when linking statically. Use pkg-config to
+-determine it correctly. Adding --static doesn't hurt even for dynamic
+-linking.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-
+-Patch status: sent upstream: http://patchwork.ozlabs.org/patch/358584/
+-
+- configure.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.in b/configure.in
+-index 448a2926776a..ec6068320878 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -551,7 +551,7 @@ then
+- 		[LIBBLKID=`$PKG_CONFIG --libs blkid`;
+- 		 STATIC_LIBBLKID=`$PKG_CONFIG --static --libs blkid`],
+- 		[AC_MSG_ERROR([external blkid library not found])],
+--		[$LIBBLKID])
+-+		[`$PKG_CONFIG --static --libs blkid`])
+- 	BLKID_CMT=#
+- 	AC_MSG_RESULT([Disabling private blkid library])
+- else
+--- 
+-2.0.0
+-
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index fa0191f..bb87433 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.42.10
++E2FSPROGS_VERSION = 1.42.11
+ E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+1.8.5.5
