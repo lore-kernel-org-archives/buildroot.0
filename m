@@ -1,40 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Jul 2014 09:40:37 -0300
-Subject: [Buildroot] [PATCH] inadyn: not available for static
-Message-ID: <1404996037-12695-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Jul 2014 14:42:06 +0200
+Subject: [Buildroot] [PATCH 02/10] binutils: switch mips/mipsel/sh to
+	binutils 2.21.1 by default
+In-Reply-To: <1404237789-15563-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 1 Jul 2014 20:03:01 +0200")
+References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1404237789-15563-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <8761j5qtb5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-inadyn isn't static-build friendly, even if we pull in the libz link
-line for the failure stated below it'll fail when trying to link to
-libdl and using dlopen for the plugins. Fixes:
-http://autobuild.buildroot.net/results/1a1/1a1a184e8248e5c51fa730d0c9721fe67a9c84a4/
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/inadyn/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > For some reason, mips, mipsel and sh use binutils 2.21 as their
+ > default version. Even though it would be nice to bump that to a much
+ > newer version, we can safely assume that we can bump the default
+ > version for those architecture to 2.21.1, which will allow the removal
+ > of binutils 2.21.
 
-diff --git a/package/inadyn/Config.in b/package/inadyn/Config.in
-index a2dfa74..a436111 100644
---- a/package/inadyn/Config.in
-+++ b/package/inadyn/Config.in
-@@ -1,9 +1,13 @@
- config BR2_PACKAGE_INADYN
- 	bool "inadyn"
- 	depends on BR2_USE_MMU # Uses fork()
-+	depends on !BR2_PREFER_STATIC_LIB # dlopen()
- 	help
- 	  INADYN is a free DynDNS client. It gives the possibility
- 	  to have your own fixed hostname registered on the internet,
- 	  although your IP might be changing.
- 
- 	  https://github.com/troglobit/inadyn
-+
-+comment "inadyn needs a toolchain w/ dynamic library"
-+        depends on BR2_PREFER_STATIC_LIB
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+This is obsoleted by the patches moving mips and sh to the default
+version, so I've marked this as superseeded in pw.
 -- 
-1.8.5.5
+Bye, Peter Korsgaard
