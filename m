@@ -1,58 +1,37 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Jul 2014 14:33:41 +0200
-Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
-In-Reply-To: <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 1 Jul 2014 20:03:00 +0200")
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87egxtqtp6.fsf@dell.be.48ers.dk>
+From: Eial Czerwacki <eial@scalemp.com>
+Date: Thu, 10 Jul 2014 15:35:10 +0300
+Subject: [Buildroot] ping not working in a glibc based buildroot
+In-Reply-To: <20140710142322.188e88ed@free-electrons.com>
+References: <53BD4395.5050306@scalemp.com>	<20140709142242.GK3003@tarshish>	<53BD5452.6030902@scalemp.com>	<53BD55E2.7070507@zacarias.com.ar>	<53BD576F.1060008@scalemp.com>	<53BE83E8.2010906@scalemp.com>
+ <20140710142322.188e88ed@free-electrons.com>
+Message-ID: <53BE887E.7070606@scalemp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Greetings Thomas
 
- > The AVR32 architecture from Atmel is obsolete since a long time, not
- > supported upstream in most of the toolchain components (requires a
- > special version of gcc, an old version of uClibc, etc.). Until
- > February, Simon Dawson was making an excellent job at maintaining
- > AVR32 in Buildroot, and fixing all the issues caused by this
- > architecture. However, Simon focus has changed, and despite his call
- > for a new maintainer for AVR32 in Buildroot, nobody stepped up.
+On 07/10/2014 03:23 PM, Thomas Petazzoni wrote:
+> Dear Eial Czerwacki,
+>
+> On Thu, 10 Jul 2014 15:15:36 +0300, Eial Czerwacki wrote:
+>
+>>> did you mean /usr/share/udhcpc/default.script?
+>> I've looked into the resolv.conf of the actual boot (not chroot) and I
+>> saw the domain bad issue (bug #3979), applying it gave me valid domain
+>> again in resolv.conf but problem still persists.
+>>
+>> it is like udhcpc cannot find the dns servers. am I right? where do we
+>> set dns?
+> In /etc/resolv.conf.
+>
+> But before worrying about DNS, check that your network settings are
+> correct by pinging using directly the IP address of a machine on the
+> same network.
+>
+> Thomas
+pinging an ip works, the problem is when I use an machine alias.
 
- > The issue of maintaining AVR32 is becoming worse and worse, so this
- > patch proposes to deprecate it for 2014.08, but keeping the support
- > around, to remove it for sure in 2014.11.
-
- > Cc: Simon Dawson <spdawson@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  arch/Config.in | 6 ++++++
- >  1 file changed, 6 insertions(+)
-
- > diff --git a/arch/Config.in b/arch/Config.in
- > index 1f60f81..77fae7a 100644
- > --- a/arch/Config.in
- > +++ b/arch/Config.in
- > @@ -56,6 +56,12 @@ config BR2_aarch64
- >  config BR2_avr32
- >  	bool "AVR32"
- >  	select BR2_SOFT_FLOAT
- > +	# This architecture is obsolete and complicated to maintain to
- > +	# do the lack of upstream support in the major toolchain
- > +	# components. If you're interested by AVR32, contact the
- > +	# Buildroot community. Otherwise, its support will be removed
- > +	# in 2014.11.
- > +	depends on BR2_DEPRECATED_SINCE_2014_08
-
-I agree that we should get rid of avr32, but I can also follow Thomas'
-input about the normal deprecation cycle.
-
-With summer holidays coming up, chances are that people might miss it
-from the 2014.08 relase notes - Perhaps a compromise would be to only
-remove it by 2015.02?
-
--- 
-Bye, Peter Korsgaard
+Eial
