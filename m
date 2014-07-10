@@ -1,13 +1,11 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Thu, 10 Jul 2014 16:52:03 +0200
-Subject: [Buildroot] [PATCH 01/10] arch: deprecate the AVR32 architecture
-In-Reply-To: <20140710145547.7ec1ddcf@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 10 Jul 2014 14:55:47 +0200")
+Date: Thu, 10 Jul 2014 16:57:58 +0200
+Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
+In-Reply-To: <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 1 Jul 2014 20:03:09 +0200")
 References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <87egxtqtp6.fsf@dell.be.48ers.dk>
- <20140710145547.7ec1ddcf@free-electrons.com>
-Message-ID: <87sim9nu5o.fsf@dell.be.48ers.dk>
+ <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87oawxntvt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,28 +14,42 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ > This commit removes the version selection for the busybox
+ > package. Busybox is very well maintained, and bugs are typically fixed
+ > in a timely fashion. Moreover, regressions are fairly unlikely in this
+ > very stable and well-tested tool.
 
- >> >  config BR2_avr32
- >> >  	bool "AVR32"
- >> >  	select BR2_SOFT_FLOAT
- >> > +	# This architecture is obsolete and complicated to maintain to
- >> > +	# do the lack of upstream support in the major toolchain
- >> > +	# components. If you're interested by AVR32, contact the
- >> > +	# Buildroot community. Otherwise, its support will be removed
- >> > +	# in 2014.11.
- >> > +	depends on BR2_DEPRECATED_SINCE_2014_08
- >> 
- >> I agree that we should get rid of avr32, but I can also follow Thomas'
- >> input about the normal deprecation cycle.
- >> 
- >> With summer holidays coming up, chances are that people might miss it
- >> from the 2014.08 relase notes - Perhaps a compromise would be to only
- >> remove it by 2015.02?
+ > Therefore, there isn't a very compelling reason to have a version
+ > selection for Busybox since we don't accept such a version selection
+ > for the vast majority of other packages, unless there is a strong
+ > reason to do so.
 
- > Sure, that's fine with me.
+ > Consequently, this commit:
 
-Ok, committed with the comment adjusted for 2015.02, thanks.
+ >  * Removes the 1.19.4, 1.20.2 and 1.21.1 Busybox versions, patches and
+ >    default configuration file.
+
+ >  * Moves the 1.22.1 patches from package/busybox/1.22.1 to just
+ >    package/busybox/ like all other packages.
+
+ >  * Renames the default 1.22.1 configuration file to just
+ >    busybox.config.
+
+ >  * Adapts the busybox.mk makefile to encode the current version to
+ >    use.
+
+ >  * Adds appropriate options to Config.in.legacy. However, even though
+ >    the BR2_BUSYBOX_VERSION_1_22_X is removed, we don't add a
+ >    Config.in.legacy option for it, since it would cause a legacy
+ >    warning for virtually *all* users as most people are currently
+ >    using 1.22.x.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
+I wonder if time also hasn't come to get rid of
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
 
 -- 
 Bye, Peter Korsgaard
