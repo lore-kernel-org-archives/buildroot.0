@@ -1,960 +1,1352 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 16:20:39 +0200
-Subject: [Buildroot] [git commit] gcc: remove versions 4.3.x and 4.6.x
-Message-ID: <20140710150057.DD7539C46A@busybox.osuosl.org>
+Date: Thu, 10 Jul 2014 16:12:40 +0200
+Subject: [Buildroot] [git commit] uclibc: remove version 0.9.32.1
+Message-ID: <20140710150057.A4E2B9C46A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d10e0805ea3b6f887da6d99ad5047af1d12f33a0
+commit: http://git.buildroot.net/buildroot/commit/?id=506b964df95e578aa682ddd2e98993a91355930a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Those gcc series are old and are not used as the default versions for
-any of the architectures we support, so this commit gets rid of them.
-
-The gcc 4.3.x series technically remains used by the LPC32xx
-defconfigs we have:
-
-configs/ea3250_defconfig:BR2_GCC_VERSION_4_3_X=y
-configs/fdi3250_defconfig:BR2_GCC_VERSION_4_3_X=y
-configs/phy3250_defconfig:BR2_GCC_VERSION_4_3_X=y
-
-Back when those defconfigs were introduced, gcc 4.3 was chosen because
-it was the only one capable of building a fully working kernel for
-those ARM-based platforms. However, the original submitter, Alexandre
-Belloni, no longer has access to the hardware platforms, so he is
-unable to test if newer gcc versions have fixed the problem. It
-certainly doesn't make sense to keep gcc 4.3.x just for those three
-boards, so we'll wait for someone actually using those defconfigs to
-complain.
+This commit removes the 0.9.32.1 version of uClibc, which is very old,
+and does not bring any specific advantage over 0.9.33, which has been
+around for more than two years now.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                   |   14 ++
- package/gcc/4.3.6/100-uclibc-conf.patch            |   13 --
- package/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch    |   13 --
- package/gcc/4.3.6/301-missing-execinfo_h.patch     |   11 --
- package/gcc/4.3.6/302-c99-snprintf.patch           |   13 --
- .../gcc/4.3.6/305-libmudflap-susv3-legacy.patch    |   49 --------
- package/gcc/4.3.6/810-arm-softfloat-libgcc.patch   |   29 -----
- .../4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch |   41 -------
- .../gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch    |   15 ---
- .../gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch  |   18 ---
- .../4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch    |   86 --------------
- ...gcc-4.3.0-cris-pragma-pack-warning-remove.patch |   13 --
- package/gcc/4.3.6/gcc-43-pr39429.patch             |   24 ----
- .../powerpc-link-with-math-lib.patch.conditional   |  125 --------------------
- package/gcc/4.6.4/100-uclibc-conf.patch            |   13 --
- package/gcc/4.6.4/301-missing-execinfo_h.patch     |   11 --
- package/gcc/4.6.4/302-c99-snprintf.patch           |   13 --
- .../gcc/4.6.4/305-libmudflap-susv3-legacy.patch    |   49 --------
- package/gcc/4.6.4/810-arm-softfloat-libgcc.patch   |   38 ------
- package/gcc/4.6.4/820-arm-unbreak-armv4t.patch     |   14 --
- .../powerpc-link-with-math-lib.patch.conditional   |  125 --------------------
- package/gcc/Config.in.host                         |   16 ---
- 22 files changed, 14 insertions(+), 729 deletions(-)
+ Config.in.legacy                                   |    7 +
+ ...x-e500-__fe_nomask_env-use-of-__set_errno.patch |   34 --
+ ...__libc_epoll_pwait-compile-failure-on-x86.patch |   43 ---
+ ...deps-add-__kernel_long-and-__kernel_ulong.patch |  392 --------------------
+ .../0.9.32.1/uclibc-0004-sparc-errno-fix.patch     |   11 -
+ package/uclibc/0.9.32.1/uclibc-0005-unshare.patch  |   82 ----
+ .../uclibc-0006-linuxthreads-errno-fix.patch       |   68 ----
+ ...07-libc-add-non-standard-execvpe-function.patch |  163 --------
+ ...ibc-0008-libc-stdlib-add-mkostemp-helpers.patch |  155 --------
+ package/uclibc/Config.in                           |    6 -
+ package/uclibc/uClibc-0.9.32.config                |  268 -------------
+ 11 files changed, 7 insertions(+), 1222 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 125ca61..54d1f4e 100644
+index d0a9e59..125ca61 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -156,6 +156,20 @@ config BR2_UCLIBC_VERSION_0_9_32
- 	  The 0.9.32 version of uClibc has been removed. Use a newer
+@@ -149,6 +149,13 @@ config BR2_BINUTILS_VERSION_2_23_1
+ 	  The 2.23.1 version of binutils has been removed. Use a newer
  	  version instead.
  
-+config BR2_GCC_VERSION_4_3_X
-+	bool "gcc 4.3.x has been removed"
++config BR2_UCLIBC_VERSION_0_9_32
++	bool "uclibc 0.9.32 has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The 4.3.x version of gcc has been removed. Use a newer
-+	  version instead.
-+
-+config BR2_GCC_VERSION_4_6_X
-+	bool "gcc 4.6.x has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The 4.6.x version of gcc has been removed. Use a newer
++	  The 0.9.32 version of uClibc has been removed. Use a newer
 +	  version instead.
 +
  config BR2_PACKAGE_LIBV4L_DECODE_TM6000
  	bool "decode_tm6000"
  	select BR2_PACKAGE_LIBV4L_UTILS
-diff --git a/package/gcc/4.3.6/100-uclibc-conf.patch b/package/gcc/4.3.6/100-uclibc-conf.patch
+diff --git a/package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch b/package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
 deleted file mode 100644
-index 6bad179..0000000
---- a/package/gcc/4.3.6/100-uclibc-conf.patch
+index 1908925..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0001-Fix-e500-__fe_nomask_env-use-of-__set_errno.patch
 +++ /dev/null
-@@ -1,13 +0,0 @@
----- gcc/gcc/config/--- gcc/contrib/regression/objs-gcc.sh
--+++ gcc/contrib/regression/objs-gcc.sh
--@@ -105,6 +105,10 @@
--  then
--   make all-gdb all-dejagnu all-ld || exit 1
--   make install-gdb install-dejagnu install-ld || exit 1
--+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
--+ then
--+  make all-gdb all-dejagnu all-ld || exit 1
--+  make install-gdb install-dejagnu install-ld || exit 1
-- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
--   make bootstrap || exit 1
--   make install || exit 1
-diff --git a/package/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch b/package/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch
+@@ -1,34 +0,0 @@
+->From 49f58308779cb0b798f5e7bc902bbc515c1ec394 Mon Sep 17 00:00:00 2001
+-From: Jason Woodward <jason.woodward@timesys.com>
+-Date: Sat, 11 Jun 2011 22:00:59 -0400
+-Subject: [PATCH] Fix e500 __fe_nomask_env use of __set_errno w/o CFLAGS-libm
+-
+-Since the new _LIBC guard in 96c9a8f7d00cdf6bb7968a2390b9d87da8a45e2d we need
+-to use CFLAGS-libm (-DNOT_IN_libc -DIS_IN_libm) or we end up with linker
+-errors like:
+-
+-  lib/libm.a(fe_nomask.os): In function `__fe_nomask_env':
+-  fe_nomask.c:(.text+0x26): undefined reference to `__libc_errno'
+-  collect2: ld returned 1 exit status
+-
+-Signed-off-by: Jason Woodward <jason.woodward@timesys.com>
+----
+- libm/powerpc/e500/fpu/Makefile.arch |    2 ++
+- 1 files changed, 2 insertions(+), 0 deletions(-)
+-
+-diff --git a/libm/powerpc/e500/fpu/Makefile.arch b/libm/powerpc/e500/fpu/Makefile.arch
+-index 904561e..a64843f 100644
+---- a/libm/powerpc/e500/fpu/Makefile.arch
+-+++ b/libm/powerpc/e500/fpu/Makefile.arch
+-@@ -11,6 +11,8 @@ libm_ARCH_SRC:=$(wildcard $(libm_ARCH_fpu_DIR)/*.c)
+- libm_ARCH_OBJ:=$(patsubst $(libm_ARCH_fpu_DIR)/%.c,$(libm_ARCH_fpu_OUT)/%.o,$(libm_ARCH_SRC))
+- endif
+- 
+-+CFLAGS-fe_nomask.c := $(CFLAGS-libm)
+-+
+- libm_ARCH_OBJS:=$(libm_ARCH_OBJ)
+- 
+- ifeq ($(DOPIC),y)
+--- 
+-1.7.0.4
+-
+diff --git a/package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch b/package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
 deleted file mode 100644
-index c04dd9f..0000000
---- a/package/gcc/4.3.6/104-gnuhurd-uclibc-conf.patch
+index 8cda4f9..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0002-Fix-__libc_epoll_pwait-compile-failure-on-x86.patch
 +++ /dev/null
-@@ -1,13 +0,0 @@
--diff -rdup gcc-4.2.1.oorig/gcc/config.gcc gcc-4.2.1/gcc/config.gcc
----- gcc-4.2.1.oorig/gcc/config.gcc	2007-10-01 11:52:52.000000000 +0200
--+++ gcc-4.2.1/gcc/config.gcc	2007-10-01 13:22:12.000000000 +0200
--@@ -494,6 +494,9 @@ case ${target} in
--     alpha*)
--       tm_file="${cpu_type}/${cpu_type}.h alpha/elf.h alpha/linux.h alpha/linux-elf.h gnu.h ${tm_file}"
--       ;;
--+    i[34567]86-*hurd*-*)
--+      tm_file="${cpu_type}/${cpu_type}.h i386/unix.h i386/att.h dbxelf.h elfos.h svr4.h i386/gnu.h gnu.h ${tm_file}"
--+      ;;
--     i[34567]86-*-*)
--       tm_file="${cpu_type}/${cpu_type}.h i386/unix.h i386/att.h dbxelf.h elfos.h svr4.h linux.h i386/linux.h gnu.h ${tm_file}"
--       ;;
-diff --git a/package/gcc/4.3.6/301-missing-execinfo_h.patch b/package/gcc/4.3.6/301-missing-execinfo_h.patch
+@@ -1,43 +0,0 @@
+-From 8245f3b4638fdff2011c2657af1bb211def704bc Mon Sep 17 00:00:00 2001
+-From: Phil Blundell <pb@pbcl.net>
+-Date: Sat, 11 Jun 2011 01:10:46 -0400
+-Subject: [PATCH] Fix __libc_epoll_pwait compile failure on x86
+-
+-This prevents "memory input 7 is not directly addressable" errors.
+-
+-| libc/sysdeps/linux/common/epoll.c: In function '__libc_epoll_pwait':
+-| libc/sysdeps/linux/common/epoll.c:71:80: error: memory input 7 is not directly addressable
+-| libc/sysdeps/linux/common/epoll.c:75:86: error: memory input 7 is not directly addressable
+-| make: *** [libc/sysdeps/linux/common/epoll.o] Error 1
+-| make: *** Waiting for unfinished jobs....
+-
+-Signed-off-by: Phil Blundell <pb@pbcl.net>
+-Signed-off-by: Jason Woodward <jason.woodward@timesys.com>
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+----
+- libc/sysdeps/linux/common/epoll.c |    5 +++--
+- 1 files changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/libc/sysdeps/linux/common/epoll.c b/libc/sysdeps/linux/common/epoll.c
+-index 85b0cfd..ab3e73b 100644
+---- a/libc/sysdeps/linux/common/epoll.c
+-+++ b/libc/sysdeps/linux/common/epoll.c
+-@@ -67,12 +67,13 @@ extern __typeof(epoll_pwait) __libc_epoll_pwait;
+- int __libc_epoll_pwait(int epfd, struct epoll_event *events, int maxevents,
+- 						int timeout, const sigset_t *set)
+- {
+-+    int nsig = _NSIG / 8;
+- 	if (SINGLE_THREAD_P)
+--		return INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, _NSIG / 8);
+-+		return INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, nsig);
+- # ifdef __UCLIBC_HAS_THREADS_NATIVE__
+- 	else {
+- 		int oldtype = LIBC_CANCEL_ASYNC ();
+--		int result = INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, _NSIG / 8);
+-+		int result = INLINE_SYSCALL(epoll_pwait, 6, epfd, events, maxevents, timeout, set, nsig);
+- 		LIBC_CANCEL_RESET (oldtype);
+- 		return result;
+- 	}
+--- 
+-1.7.5.4
+-
+diff --git a/package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch b/package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
 deleted file mode 100644
-index 0e2092f..0000000
---- a/package/gcc/4.3.6/301-missing-execinfo_h.patch
+index 4ba60e9..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0003-libc-sysdeps-add-__kernel_long-and-__kernel_ulong.patch
++++ /dev/null
+@@ -1,392 +0,0 @@
+-From 6a76edddaa62ff06f178143b582167734cb55c18 Mon Sep 17 00:00:00 2001
+-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+-Date: Mon, 1 Oct 2012 18:12:54 +1300
+-Subject: [PATCH] libc/sysdeps: add __kernel_long and __kernel_ulong
+-
+-Linux 3.4 added __kernel_long_t and __kernel_ulong_t and various
+-exported header files were updated to use these new types. Add the
+-definitions for __kernel_long_t and __kernel_ulong_t to the relevant
+-kernel_types.h headers.
+-
+-This change was automated with the following scriptlet
+-
+-  git grep --name-only 'typedef.*__kernel_old_dev_t' \
+-    | xargs sed -i '/typedef.*__kernel_old_dev_t/ a\
+-  typedef long\t\t__kernel_long_t;\
+-  typedef unsigned long\t__kernel_ulong_t;'
+-
+-Whitespace in arm, avr32, hppa, sparc was then manually fixed up.
+-
+-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+---
+-Here's a cleaned up patch which should get the whitespace right. I'm a
+-bit iffy about the sparc changes they make sense to me but it's not a
+-platform I have access to.
+-
+-I can break this up per arch or per maintainer if requested.
+-
+- libc/sysdeps/linux/alpha/bits/kernel_types.h      |    2 ++
+- libc/sysdeps/linux/arm/bits/kernel_types.h        |    2 ++
+- libc/sysdeps/linux/avr32/bits/kernel_types.h      |    2 ++
+- libc/sysdeps/linux/bfin/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/c6x/bits/kernel_types.h        |    2 ++
+- libc/sysdeps/linux/cris/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/e1/bits/kernel_types.h         |    2 ++
+- libc/sysdeps/linux/h8300/bits/kernel_types.h      |    2 ++
+- libc/sysdeps/linux/hppa/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/i386/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/ia64/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/m68k/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/microblaze/bits/kernel_types.h |    2 ++
+- libc/sysdeps/linux/mips/bits/kernel_types.h       |    4 ++++
+- libc/sysdeps/linux/nios2/bits/kernel_types.h      |    2 ++
+- libc/sysdeps/linux/powerpc/bits/kernel_types.h    |    4 ++++
+- libc/sysdeps/linux/sh/bits/kernel_types.h         |    2 ++
+- libc/sysdeps/linux/sh64/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/sparc/bits/kernel_types.h      |    4 ++++
+- libc/sysdeps/linux/v850/bits/kernel_types.h       |    2 ++
+- libc/sysdeps/linux/x86_64/bits/kernel_types.h     |    2 ++
+- libc/sysdeps/linux/xtensa/bits/kernel_types.h     |    2 ++
+- 22 files changed, 50 insertions(+)
+-Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- libc/sysdeps/linux/alpha/bits/kernel_types.h      | 2 ++
+- libc/sysdeps/linux/arm/bits/kernel_types.h        | 2 ++
+- libc/sysdeps/linux/avr32/bits/kernel_types.h      | 2 ++
+- libc/sysdeps/linux/bfin/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/c6x/bits/kernel_types.h        | 2 ++
+- libc/sysdeps/linux/cris/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/e1/bits/kernel_types.h         | 2 ++
+- libc/sysdeps/linux/h8300/bits/kernel_types.h      | 2 ++
+- libc/sysdeps/linux/hppa/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/i386/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/ia64/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/m68k/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/microblaze/bits/kernel_types.h | 2 ++
+- libc/sysdeps/linux/mips/bits/kernel_types.h       | 4 ++++
+- libc/sysdeps/linux/nios2/bits/kernel_types.h      | 2 ++
+- libc/sysdeps/linux/powerpc/bits/kernel_types.h    | 4 ++++
+- libc/sysdeps/linux/sh/bits/kernel_types.h         | 2 ++
+- libc/sysdeps/linux/sh64/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/sparc/bits/kernel_types.h      | 4 ++++
+- libc/sysdeps/linux/v850/bits/kernel_types.h       | 2 ++
+- libc/sysdeps/linux/x86_64/bits/kernel_types.h     | 2 ++
+- libc/sysdeps/linux/xtensa/bits/kernel_types.h     | 2 ++
+- 22 files changed, 50 insertions(+)
+-
+-diff --git a/libc/sysdeps/linux/alpha/bits/kernel_types.h b/libc/sysdeps/linux/alpha/bits/kernel_types.h
+-index d5574c9..cd59b9d 100644
+---- a/libc/sysdeps/linux/alpha/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/alpha/bits/kernel_types.h
+-@@ -33,6 +33,8 @@ typedef __kernel_gid_t __kernel_old_gid_t;
+- typedef __kernel_uid_t __kernel_uid32_t;
+- typedef __kernel_gid_t __kernel_gid32_t;
+- typedef __kernel_dev_t __kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- typedef struct {
+- 	int val[2];
+-diff --git a/libc/sysdeps/linux/arm/bits/kernel_types.h b/libc/sysdeps/linux/arm/bits/kernel_types.h
+-index 766a306..6b36f32 100644
+---- a/libc/sysdeps/linux/arm/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/arm/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef unsigned short		__kernel_old_uid_t;
+- typedef unsigned short		__kernel_old_gid_t;
+- typedef long long		__kernel_loff_t;
+- typedef __kernel_dev_t		__kernel_old_dev_t;
+-+typedef long			__kernel_long_t;
+-+typedef unsigned long		__kernel_ulong_t;
+- 
+- typedef struct {
+- #ifdef __USE_ALL
+-diff --git a/libc/sysdeps/linux/avr32/bits/kernel_types.h b/libc/sysdeps/linux/avr32/bits/kernel_types.h
+-index f7d8b52..c551d57 100644
+---- a/libc/sysdeps/linux/avr32/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/avr32/bits/kernel_types.h
+-@@ -39,6 +39,8 @@ typedef unsigned int		__kernel_gid32_t;
+- typedef unsigned short		__kernel_old_uid_t;
+- typedef unsigned short		__kernel_old_gid_t;
+- typedef unsigned short		__kernel_old_dev_t;
+-+typedef long			__kernel_long_t;
+-+typedef unsigned long		__kernel_ulong_t;
+- 
+- #ifdef __GNUC__
+- typedef long long		__kernel_loff_t;
+-diff --git a/libc/sysdeps/linux/bfin/bits/kernel_types.h b/libc/sysdeps/linux/bfin/bits/kernel_types.h
+-index d69a875..9fec595 100644
+---- a/libc/sysdeps/linux/bfin/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/bfin/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef long long	__kernel_loff_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- typedef struct {
+- #ifdef __USE_ALL
+-diff --git a/libc/sysdeps/linux/c6x/bits/kernel_types.h b/libc/sysdeps/linux/c6x/bits/kernel_types.h
+-index 7557309..2c363a8 100644
+---- a/libc/sysdeps/linux/c6x/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/c6x/bits/kernel_types.h
+-@@ -22,6 +22,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned int	__kernel_old_uid_t;
+- typedef unsigned int	__kernel_old_gid_t;
+- typedef unsigned int	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef unsigned int	__kernel_size_t;
+- typedef int		__kernel_ssize_t;
+- typedef int		__kernel_ptrdiff_t;
+-diff --git a/libc/sysdeps/linux/cris/bits/kernel_types.h b/libc/sysdeps/linux/cris/bits/kernel_types.h
+-index f122c7f..5d31f7b 100644
+---- a/libc/sysdeps/linux/cris/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/cris/bits/kernel_types.h
+-@@ -28,6 +28,8 @@ typedef unsigned int    __kernel_gid32_t;
+- typedef unsigned short  __kernel_old_uid_t;
+- typedef unsigned short  __kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- #ifdef __GNUC__
+- typedef long long	__kernel_loff_t;
+-diff --git a/libc/sysdeps/linux/e1/bits/kernel_types.h b/libc/sysdeps/linux/e1/bits/kernel_types.h
+-index 8017d85..f55a129 100644
+---- a/libc/sysdeps/linux/e1/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/e1/bits/kernel_types.h
+-@@ -31,6 +31,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- 
+- /*
+-diff --git a/libc/sysdeps/linux/h8300/bits/kernel_types.h b/libc/sysdeps/linux/h8300/bits/kernel_types.h
+-index 0570675..4cfd1bf 100644
+---- a/libc/sysdeps/linux/h8300/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/h8300/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef long long	__kernel_loff_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- typedef struct {
+- #ifdef __USE_ALL
+-diff --git a/libc/sysdeps/linux/hppa/bits/kernel_types.h b/libc/sysdeps/linux/hppa/bits/kernel_types.h
+-index 4441f9b..6b2e794 100644
+---- a/libc/sysdeps/linux/hppa/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/hppa/bits/kernel_types.h
+-@@ -45,6 +45,8 @@ typedef long long		__kernel_off64_t;
+- typedef unsigned long long	__kernel_ino64_t;
+- 
+- typedef unsigned int		__kernel_old_dev_t;
+-+typedef long			__kernel_long_t;
+-+typedef unsigned long		__kernel_ulong_t;
+- 
+- typedef struct {
+- #ifdef __USE_ALL
+-diff --git a/libc/sysdeps/linux/i386/bits/kernel_types.h b/libc/sysdeps/linux/i386/bits/kernel_types.h
+-index 9c07c72..59044b8 100644
+---- a/libc/sysdeps/linux/i386/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/i386/bits/kernel_types.h
+-@@ -40,6 +40,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- 
+- typedef struct {
+-diff --git a/libc/sysdeps/linux/ia64/bits/kernel_types.h b/libc/sysdeps/linux/ia64/bits/kernel_types.h
+-index c8ef86d..e31dc65 100644
+---- a/libc/sysdeps/linux/ia64/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/ia64/bits/kernel_types.h
+-@@ -52,5 +52,7 @@ typedef __kernel_gid_t __kernel_gid32_t;
+- 
+- typedef unsigned int	__kernel_dev_t;
+- typedef unsigned int	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- #endif /* _ASM_IA64_POSIX_TYPES_H */
+-diff --git a/libc/sysdeps/linux/m68k/bits/kernel_types.h b/libc/sysdeps/linux/m68k/bits/kernel_types.h
+-index 0a77a8f..176b968 100644
+---- a/libc/sysdeps/linux/m68k/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/m68k/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef long long	__kernel_loff_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- typedef struct {
+- #ifdef __USE_ALL
+-diff --git a/libc/sysdeps/linux/microblaze/bits/kernel_types.h b/libc/sysdeps/linux/microblaze/bits/kernel_types.h
+-index 2a70575..a9f736b 100644
+---- a/libc/sysdeps/linux/microblaze/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/microblaze/bits/kernel_types.h
+-@@ -44,6 +44,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned int	__kernel_old_uid_t;
+- typedef unsigned int	__kernel_old_gid_t;
+- typedef unsigned int	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- #ifdef __GNUC__
+- typedef long long	__kernel_loff_t;
+-diff --git a/libc/sysdeps/linux/mips/bits/kernel_types.h b/libc/sysdeps/linux/mips/bits/kernel_types.h
+-index 9fc3b96..97faeac 100644
+---- a/libc/sysdeps/linux/mips/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/mips/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef int		__kernel_gid32_t;
+- typedef __kernel_uid_t	__kernel_old_uid_t;
+- typedef __kernel_gid_t	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long      __kernel_loff_t;
+- #else
+- typedef unsigned int	__kernel_dev_t;
+-@@ -68,6 +70,8 @@ typedef int		__kernel_gid32_t;
+- typedef __kernel_uid_t	__kernel_old_uid_t;
+- typedef __kernel_gid_t	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long      __kernel_loff_t;
+- #endif
+- 
+-diff --git a/libc/sysdeps/linux/nios2/bits/kernel_types.h b/libc/sysdeps/linux/nios2/bits/kernel_types.h
+-index 8b86d79..3c030e7 100644
+---- a/libc/sysdeps/linux/nios2/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/nios2/bits/kernel_types.h
+-@@ -31,6 +31,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef unsigned short	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- 
+- typedef struct {
+-diff --git a/libc/sysdeps/linux/powerpc/bits/kernel_types.h b/libc/sysdeps/linux/powerpc/bits/kernel_types.h
+-index 3f3b933..1167de2 100644
+---- a/libc/sysdeps/linux/powerpc/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/powerpc/bits/kernel_types.h
+-@@ -36,6 +36,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned int	__kernel_old_uid_t;
+- typedef unsigned int	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- #else
+- typedef unsigned int	__kernel_dev_t;
+- typedef unsigned int	__kernel_ino_t;
+-@@ -61,6 +63,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned int	__kernel_old_uid_t;
+- typedef unsigned int	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- #endif
+- 
+-diff --git a/libc/sysdeps/linux/sh/bits/kernel_types.h b/libc/sysdeps/linux/sh/bits/kernel_types.h
+-index f96e9fa..ac97261 100644
+---- a/libc/sysdeps/linux/sh/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/sh/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- 
+- typedef struct {
+-diff --git a/libc/sysdeps/linux/sh64/bits/kernel_types.h b/libc/sysdeps/linux/sh64/bits/kernel_types.h
+-index 671cc83..8cc6c61 100644
+---- a/libc/sysdeps/linux/sh64/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/sh64/bits/kernel_types.h
+-@@ -43,6 +43,8 @@ typedef unsigned int    __kernel_gid32_t;
+- typedef unsigned short  __kernel_old_uid_t;
+- typedef unsigned short  __kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long       __kernel_loff_t;
+- 
+- typedef struct {
+-diff --git a/libc/sysdeps/linux/sparc/bits/kernel_types.h b/libc/sysdeps/linux/sparc/bits/kernel_types.h
+-index 0cc4bc2..a10e075 100644
+---- a/libc/sysdeps/linux/sparc/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/sparc/bits/kernel_types.h
+-@@ -32,6 +32,8 @@ typedef unsigned short	       __kernel_gid16_t;
+- typedef __kernel_uid_t 	       __kernel_old_uid_t;
+- typedef __kernel_gid_t         __kernel_old_gid_t;
+- typedef __kernel_dev_t         __kernel_old_dev_t;
+-+typedef long                   __kernel_long_t;
+-+typedef unsigned long          __kernel_ulong_t;
+- typedef __kernel_uid_t	       __kernel_uid32_t;
+- typedef __kernel_gid_t	       __kernel_gid32_t;
+- typedef int		       __kernel_suseconds_t;
+-@@ -62,6 +64,8 @@ typedef unsigned int	       __kernel_gid32_t;
+- typedef unsigned short	       __kernel_old_uid_t;
+- typedef unsigned short	       __kernel_old_gid_t;
+- typedef __kernel_dev_t         __kernel_old_dev_t;
+-+typedef long                   __kernel_long_t;
+-+typedef unsigned long          __kernel_ulong_t;
+- typedef long long              __kernel_loff_t;
+- #endif
+- 
+-diff --git a/libc/sysdeps/linux/v850/bits/kernel_types.h b/libc/sysdeps/linux/v850/bits/kernel_types.h
+-index 3e851ab..780aa8a 100644
+---- a/libc/sysdeps/linux/v850/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/v850/bits/kernel_types.h
+-@@ -41,6 +41,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- 
+- typedef struct {
+- #ifdef __USE_ALL
+-diff --git a/libc/sysdeps/linux/x86_64/bits/kernel_types.h b/libc/sysdeps/linux/x86_64/bits/kernel_types.h
+-index de800d7..0cae08c 100644
+---- a/libc/sysdeps/linux/x86_64/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/x86_64/bits/kernel_types.h
+-@@ -40,6 +40,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef __kernel_dev_t	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- 
+- typedef struct {
+-diff --git a/libc/sysdeps/linux/xtensa/bits/kernel_types.h b/libc/sysdeps/linux/xtensa/bits/kernel_types.h
+-index 44f1075..ed38f2e 100644
+---- a/libc/sysdeps/linux/xtensa/bits/kernel_types.h
+-+++ b/libc/sysdeps/linux/xtensa/bits/kernel_types.h
+-@@ -33,6 +33,8 @@ typedef unsigned int	__kernel_gid32_t;
+- typedef unsigned short	__kernel_old_uid_t;
+- typedef unsigned short	__kernel_old_gid_t;
+- typedef unsigned short	__kernel_old_dev_t;
+-+typedef long		__kernel_long_t;
+-+typedef unsigned long	__kernel_ulong_t;
+- typedef long long	__kernel_loff_t;
+- 
+- /* Beginning in 2.6 kernels, which is the first version that includes the
+--- 
+-1.8.1.5
+-
+diff --git a/package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch
+deleted file mode 100644
+index 44d06cb..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0004-sparc-errno-fix.patch
 +++ /dev/null
 @@ -1,11 +0,0 @@
----- gcc-4.0.0/boehm-gc/include/gc.h-orig	2005-04-28 22:28:57.000000000 -0500
--+++ gcc-4.0.0/boehm-gc/include/gc.h	2005-04-28 22:30:38.000000000 -0500
--@@ -500,7 +500,7 @@
-- #ifdef __linux__
-- # include <features.h>
-- # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
---     && !defined(__ia64__)
--+     && !defined(__ia64__) && !defined(__UCLIBC__)
-- #   ifndef GC_HAVE_BUILTIN_BACKTRACE
-- #     define GC_HAVE_BUILTIN_BACKTRACE
-- #   endif
-diff --git a/package/gcc/4.3.6/302-c99-snprintf.patch b/package/gcc/4.3.6/302-c99-snprintf.patch
+---- uClibc-0.9.32.ori/libc/sysdeps/linux/sparc/pipe.S	2011-06-08 21:35:20.000000000 +0200
+-+++ uClibc-0.9.32/libc/sysdeps/linux/sparc/pipe.S	2011-11-11 15:57:25.000000000 +0100
+-@@ -52,7 +52,7 @@
+- 	 restore %g0,%g0,%o0
+- 
+- .Lerror:
+--	call	HIDDEN_JUMPTARGET(__errno_location)
+-+	call	__errno_location
+- 	 or	%g0,EINVAL,%i0
+- 	st	%i0,[%o0]
+- 	ret
+diff --git a/package/uclibc/0.9.32.1/uclibc-0005-unshare.patch b/package/uclibc/0.9.32.1/uclibc-0005-unshare.patch
 deleted file mode 100644
-index ba51a0e..0000000
---- a/package/gcc/4.3.6/302-c99-snprintf.patch
+index 5820e15..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0005-unshare.patch
 +++ /dev/null
-@@ -1,13 +0,0 @@
--Index: gcc-4.3.0/libstdc++-v3/include/c_global/cstdio
--===================================================================
----- gcc-4.3.0/libstdc++-v3/include/c_global/cstdio	(revision 129202)
--+++ gcc-4.3.0/libstdc++-v3/include/c_global/cstdio	(working copy)
--@@ -144,7 +144,7 @@
-- 
-- _GLIBCXX_END_NAMESPACE
-- 
---#if _GLIBCXX_USE_C99
--+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
-- 
-- #undef snprintf
-- #undef vfscanf
-diff --git a/package/gcc/4.3.6/305-libmudflap-susv3-legacy.patch b/package/gcc/4.3.6/305-libmudflap-susv3-legacy.patch
-deleted file mode 100644
-index 374b1f8..0000000
---- a/package/gcc/4.3.6/305-libmudflap-susv3-legacy.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Index: gcc-4.2/libmudflap/mf-hooks2.c
--===================================================================
----- gcc-4.2/libmudflap/mf-hooks2.c	(revision 119834)
--+++ gcc-4.2/libmudflap/mf-hooks2.c	(working copy)
--@@ -427,7 +427,7 @@
-- {
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
---  bzero (s, n);
--+  memset (s, 0, n);
-- }
-- 
-- 
--@@ -437,7 +437,7 @@
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
--   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
---  bcopy (src, dest, n);
--+  memmove (dest, src, n);
-- }
-- 
-- 
--@@ -447,7 +447,7 @@
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
--   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
---  return bcmp (s1, s2, n);
--+  return n == 0 ? 0 : memcmp (s1, s2, n);
-- }
-- 
-- 
--@@ -456,7 +456,7 @@
--   size_t n = strlen (s);
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
---  return index (s, c);
--+  return strchr (s, c);
-- }
-- 
-- 
--@@ -465,7 +465,7 @@
--   size_t n = strlen (s);
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
---  return rindex (s, c);
--+  return strrchr (s, c);
-- }
-- 
-- /* XXX:  stpcpy, memccpy */
-diff --git a/package/gcc/4.3.6/810-arm-softfloat-libgcc.patch b/package/gcc/4.3.6/810-arm-softfloat-libgcc.patch
-deleted file mode 100644
-index 1639c39..0000000
---- a/package/gcc/4.3.6/810-arm-softfloat-libgcc.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Index: gcc-4.3.0/gcc/config/arm/t-linux
--===================================================================
----- gcc-4.3.0/gcc/config/arm/t-linux	(revision 129896)
--+++ gcc-4.3.0/gcc/config/arm/t-linux	(working copy)
--@@ -3,7 +3,10 @@
-- TARGET_LIBGCC2_CFLAGS = -fomit-frame-pointer -fPIC
-- 
-- LIB1ASMSRC = arm/lib1funcs.asm
---LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx
--+LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx \
--+      _negdf2 _addsubdf3 _muldivdf3 _cmpdf2 _unorddf2 _fixdfsi _fixunsdfsi \
--+      _truncdfsf2 _negsf2 _addsubsf3 _muldivsf3 _cmpsf2 _unordsf2 \
--+      _fixsfsi _fixunssfsi _floatdidf _floatundidf _floatdisf _floatundisf
-- 
-- # MULTILIB_OPTIONS = mhard-float/msoft-float
-- # MULTILIB_DIRNAMES = hard-float soft-float
--Index: gcc-4.3.0/gcc/config/arm/linux-elf.h
--===================================================================
----- gcc-4.3.0/gcc/config/arm/linux-elf.h	(revision 129896)
--+++ gcc-4.3.0/gcc/config/arm/linux-elf.h	(working copy)
--@@ -48,7 +62,7 @@
--    %{shared:-lc} \
--    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
-- 
---#define LIBGCC_SPEC "%{msoft-float:-lfloat} %{mfloat-abi=soft*:-lfloat} -lgcc"
--+#define LIBGCC_SPEC "-lgcc"
-- 
-- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-- 
-diff --git a/package/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch b/package/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch
-deleted file mode 100644
-index 69f0c37..0000000
---- a/package/gcc/4.3.6/993-arm_insn-opinit-RTX_CODE-fixup.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--gcc/ChangeLog
--2007-11-27  Bernhard Fischer  <>
+@@ -1,82 +0,0 @@
+-Backport of unshare() syscall.
+-From uClibc git 19dd090a0f68765db87990ef8eda9bf77bb29581
 -
--	* config/arm/arm-protos.h (arm_vector_mode_supported_p,
--	arm_hard_regno_mode_ok, const_ok_for_arm): Do not hide non-rtx related
--	function prototypes in RTX_CODE.
--	* genopinit.c: Include tm_p.h.
--
--Index: gcc-4.3.0/gcc/config/arm/arm-protos.h
--===================================================================
----- gcc-4.3.0/gcc/config/arm/arm-protos.h	(revision 130463)
--+++ gcc-4.3.0/gcc/config/arm/arm-protos.h	(working copy)
--@@ -40,15 +40,14 @@
-- 							       unsigned int);
-- extern unsigned int arm_dbx_register_number (unsigned int);
-- extern void arm_output_fn_unwind (FILE *, bool);
---  
-- 
-- #ifdef TREE_CODE
-- extern int arm_return_in_memory (const_tree);
-- #endif
---#ifdef RTX_CODE
-- extern bool arm_vector_mode_supported_p (enum machine_mode);
-- extern int arm_hard_regno_mode_ok (unsigned int, enum machine_mode);
-- extern int const_ok_for_arm (HOST_WIDE_INT);
--+#ifdef RTX_CODE
-- extern int arm_split_constant (RTX_CODE, enum machine_mode, rtx,
-- 			       HOST_WIDE_INT, rtx, rtx, int);
-- extern RTX_CODE arm_canonicalize_comparison (RTX_CODE, enum machine_mode,
--Index: gcc-4.3.0/gcc/genopinit.c
--===================================================================
----- gcc-4.3.0/gcc/genopinit.c	(revision 130463)
--+++ gcc-4.3.0/gcc/genopinit.c	(working copy)
--@@ -486,6 +486,7 @@
--   printf ("#include \"expr.h\"\n");
--   printf ("#include \"optabs.h\"\n");
--   printf ("#include \"reload.h\"\n\n");
--+  printf ("#include \"tm_p.h\"\n\n");
-- 
--   printf ("void\ninit_all_optabs (void)\n{\n");
-- 
-diff --git a/package/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch b/package/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch
-deleted file mode 100644
-index 7fe59d2..0000000
---- a/package/gcc/4.3.6/998-gcc-4.3.0-fix-header.00.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--\\\\
--\\ gcc PR33200
--Index: gcc-4.3.0/gcc/config.gcc
--===================================================================
----- gcc-4.3.0/gcc/config.gcc	(revision 131628)
--+++ gcc-4.3.0/gcc/config.gcc	(working copy)
--@@ -2302,7 +2305,7 @@ sh-*-symbianelf* | sh[12346l]*-*-symbian
-- 	if test x${enable_incomplete_targets} = xyes ; then
-- 		tm_defines="$tm_defines SUPPORT_SH1=1 SUPPORT_SH2E=1 SUPPORT_SH4=1 SUPPORT_SH4_SINGLE=1 SUPPORT_SH2A=1 SUPPORT_SH2A_SINGLE=1 SUPPORT_SH5_32MEDIA=1 SUPPORT_SH5_32MEDIA_NOFPU=1 SUPPORT_SH5_64MEDIA=1 SUPPORT_SH5_64MEDIA_NOFPU=1"
-- 	fi
---	use_fixproto=yes
--+	# XXX: why? use_fixproto=yes
-- 	;;
-- sh-*-rtemscoff*)
-- 	tmake_file="sh/t-sh t-rtems sh/t-rtems"
-diff --git a/package/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch b/package/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch
-deleted file mode 100644
-index f4b1c9c..0000000
---- a/package/gcc/4.3.6/999-4.3.2-armeabi-aapcs-linux.patch
-+++ /dev/null
-@@ -1,18 +0,0 @@
--\\\\ followup of PR34205; trying to use aapcs-linux
--\\ gcc/ChangeLog
--\\
--\\ 2008-09-18  Bernhard Reutner-Fischer  <aldot@>
--\\
--\\ * config.gcc (arm*-*-*): Add aapcs-linux to supported ABIs.
--\\
----- gcc-4.3.2.orig/gcc/config.gcc	2008-09-18 20:33:55.000000000 +0200
--+++ gcc-4.3.2/gcc/config.gcc	2008-09-18 21:38:52.000000000 +0200
--@@ -2921,7 +2921,7 @@
-- 
-- 		case "$with_abi" in
-- 		"" \
---		| apcs-gnu | atpcs | aapcs | iwmmxt )
--+		| apcs-gnu | atpcs | aapcs | iwmmxt | aapcs-linux )
-- 			#OK
-- 			;;
-- 		*)
-diff --git a/package/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch b/package/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch
-deleted file mode 100644
-index 99a016f..0000000
---- a/package/gcc/4.3.6/999-4.3.3-arm-fix-for-bug-37436.patch
-+++ /dev/null
-@@ -1,86 +0,0 @@
--gcc svn 142778:
--
--PR target/37436
--* arm.c (arm_legitimate_index): Only accept addresses that are in
--canonical form.
--* predicates.md (arm_reg_or_extendqisi_mem_op): New predicate.
--* arm.md (extendqihi2): Use arm_reg_or_extendqisi_mem_op predicate
--for operand1.
--(extendqisi2): Likewise.
--(arm_extendqisi, arm_extendqisi_v6): Use arm_extendqisi_mem_op
--predicate for operand1.
--
--diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.c gcc-4.3.3/gcc/config/arm/arm.c
----- gcc-4.3.3.orig/gcc/config/arm/arm.c	2008-06-11 07:52:55.000000000 -0300
--+++ gcc-4.3.3/gcc/config/arm/arm.c	2009-05-21 16:06:45.000000000 -0300
--@@ -3769,6 +3769,7 @@
--       rtx xop1 = XEXP (x, 1);
-- 
--       return ((arm_address_register_rtx_p (xop0, strict_p)
--+	       && GET_CODE(xop1) == CONST_INT
-- 	       && arm_legitimate_index_p (mode, xop1, outer, strict_p))
-- 	      || (arm_address_register_rtx_p (xop1, strict_p)
-- 		  && arm_legitimate_index_p (mode, xop0, outer, strict_p)));
--diff -Nura gcc-4.3.3.orig/gcc/config/arm/arm.md gcc-4.3.3/gcc/config/arm/arm.md
----- gcc-4.3.3.orig/gcc/config/arm/arm.md	2007-09-04 01:44:47.000000000 -0300
--+++ gcc-4.3.3/gcc/config/arm/arm.md	2009-05-21 16:06:45.000000000 -0300
--@@ -4199,7 +4199,7 @@
-- 
-- (define_expand "extendqihi2"
--   [(set (match_dup 2)
---	(ashift:SI (match_operand:QI 1 "general_operand" "")
--+	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
-- 		   (const_int 24)))
--    (set (match_operand:HI 0 "s_register_operand" "")
-- 	(ashiftrt:SI (match_dup 2)
--@@ -4224,7 +4224,7 @@
-- 
-- (define_insn "*arm_extendqihi_insn"
--   [(set (match_operand:HI 0 "s_register_operand" "=r")
---	(sign_extend:HI (match_operand:QI 1 "memory_operand" "Uq")))]
--+	(sign_extend:HI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
--   "TARGET_ARM && arm_arch4"
--   "ldr%(sb%)\\t%0, %1"
--   [(set_attr "type" "load_byte")
--@@ -4235,7 +4235,7 @@
-- 
-- (define_expand "extendqisi2"
--   [(set (match_dup 2)
---	(ashift:SI (match_operand:QI 1 "general_operand" "")
--+	(ashift:SI (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "")
-- 		   (const_int 24)))
--    (set (match_operand:SI 0 "s_register_operand" "")
-- 	(ashiftrt:SI (match_dup 2)
--@@ -4267,7 +4267,7 @@
-- 
-- (define_insn "*arm_extendqisi"
--   [(set (match_operand:SI 0 "s_register_operand" "=r")
---	(sign_extend:SI (match_operand:QI 1 "memory_operand" "Uq")))]
--+	(sign_extend:SI (match_operand:QI 1 "arm_extendqisi_mem_op" "Uq")))]
--   "TARGET_ARM && arm_arch4 && !arm_arch6"
--   "ldr%(sb%)\\t%0, %1"
--   [(set_attr "type" "load_byte")
--@@ -4278,7 +4278,8 @@
-- 
-- (define_insn "*arm_extendqisi_v6"
--   [(set (match_operand:SI 0 "s_register_operand" "=r,r")
---	(sign_extend:SI (match_operand:QI 1 "nonimmediate_operand" "r,Uq")))]
--+	(sign_extend:SI
--+	 (match_operand:QI 1 "arm_reg_or_extendqisi_mem_op" "r,Uq")))]
--   "TARGET_ARM && arm_arch6"
--   "@
--    sxtb%?\\t%0, %1
--diff -Nura gcc-4.3.3.orig/gcc/config/arm/predicates.md gcc-4.3.3/gcc/config/arm/predicates.md
----- gcc-4.3.3.orig/gcc/config/arm/predicates.md	2007-08-02 07:49:31.000000000 -0300
--+++ gcc-4.3.3/gcc/config/arm/predicates.md	2009-05-21 16:06:45.000000000 -0300
--@@ -234,6 +234,10 @@
--        (match_test "arm_legitimate_address_p (mode, XEXP (op, 0), SIGN_EXTEND,
-- 					      0)")))
-- 
--+(define_special_predicate "arm_reg_or_extendqisi_mem_op"
--+  (ior (match_operand 0 "arm_extendqisi_mem_op")
--+       (match_operand 0 "s_register_operand")))
--+
-- (define_predicate "power_of_two_operand"
--   (match_code "const_int")
-- {
-diff --git a/package/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch b/package/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
-deleted file mode 100644
-index dcf01f2..0000000
---- a/package/gcc/4.3.6/999-gcc-4.3.0-cris-pragma-pack-warning-remove.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--diff -urN gcc-4.3.1.orig/gcc/config/cris/cris.h gcc-4.3.1/gcc/config/cris/cris.h
----- gcc-4.3.1.orig/gcc/config/cris/cris.h	2008-02-22 12:11:01.000000000 +0100
--+++ gcc-4.3.1/gcc/config/cris/cris.h	2008-07-02 10:42:42.000000000 +0200
--@@ -1529,9 +1529,6 @@
-- 
-- #define NO_IMPLICIT_EXTERN_C
-- 
---/* No specific purpose other than warningless compatibility.  */
---#define HANDLE_PRAGMA_PACK_PUSH_POP 1
---
-- /*
--  * Local variables:
--  * eval: (c-set-style "gnu")
-diff --git a/package/gcc/4.3.6/gcc-43-pr39429.patch b/package/gcc/4.3.6/gcc-43-pr39429.patch
-deleted file mode 100644
-index 4e1dc9e..0000000
---- a/package/gcc/4.3.6/gcc-43-pr39429.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--From: Michael Olbrich <m.olbrich@pengutronix.de>
--Subject: Fix: compiler create bad asm codes.
--
--See http://gcc.gnu.org/bugzilla/show_bug.cgi?id=39429 for details.
--
--Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
 ----
-- gcc/config/arm/arm.c |    2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-diff -Nura uClibc-0.9.32.orig/libc/sysdeps/linux/common/bits/sched.h uClibc-0.9.32/libc/sysdeps/linux/common/bits/sched.h
+---- uClibc-0.9.32.orig/libc/sysdeps/linux/common/bits/sched.h	2011-12-02 23:54:30.571841170 -0300
+-+++ uClibc-0.9.32/libc/sysdeps/linux/common/bits/sched.h	2011-12-02 23:57:45.874205079 -0300
+-@@ -58,7 +58,13 @@
+- 				      force CLONE_PTRACE on this clone.  */
+- # define CLONE_CHILD_SETTID 0x01000000 /* Store TID in userlevel buffer in
+- 					  the child.  */
+--# define CLONE_STOPPED	0x02000000 /* Start in stopped state.  */
+-+# define CLONE_STOPPED 0x02000000 /* Start in stopped state.  */
+-+# define CLONE_NEWUTS  0x04000000      /* New utsname group.  */
+-+# define CLONE_NEWIPC  0x08000000      /* New ipcs.  */
+-+# define CLONE_NEWUSER 0x10000000      /* New user namespace.  */
+-+# define CLONE_NEWPID  0x20000000      /* New pid namespace.  */
+-+# define CLONE_NEWNET  0x40000000      /* New network namespace.  */
+-+# define CLONE_IO      0x80000000      /* Clone I/O context.  */
+- #endif
+- 
+- /* The official definition.  */
+-@@ -74,11 +80,9 @@
+- extern int clone (int (*__fn) (void *__arg), void *__child_stack,
+- 		  int __flags, void *__arg, ...) __THROW;
+- 
+--#if 0
+- /* Unshare the specified resources.  */
+- extern int unshare (int __flags) __THROW;
+- #endif
+--#endif
+- 
+- __END_DECLS
+- 
+-diff -Nura uClibc-0.9.32.orig/libc/sysdeps/linux/common/Makefile.in uClibc-0.9.32/libc/sysdeps/linux/common/Makefile.in
+---- uClibc-0.9.32.orig/libc/sysdeps/linux/common/Makefile.in	2011-12-02 23:54:30.577841215 -0300
+-+++ uClibc-0.9.32/libc/sysdeps/linux/common/Makefile.in	2011-12-02 23:56:08.801527166 -0300
+-@@ -24,7 +24,8 @@
+- 	remap_file_pages.c sched_getaffinity.c sched_setaffinity.c \
+- 	sendfile64.c sendfile.c setfsgid.c setfsuid.c setresuid.c \
+- 	splice.c vmsplice.c tee.c signalfd.c swapoff.c swapon.c \
+--	sync_file_range.c sysctl.c sysinfo.c timerfd.c uselib.c vhangup.c
+-+	sync_file_range.c sysctl.c sysinfo.c timerfd.c unshare.c uselib.c \
+-+	vhangup.c
+- # NPTL needs these internally: madvise.c
+- CSRC-$(findstring y,$(UCLIBC_LINUX_SPECIFIC)$(UCLIBC_HAS_THREADS_NATIVE)) += madvise.c
+- ifeq ($(UCLIBC_HAS_THREADS_NATIVE),y)
+-diff -Nura uClibc-0.9.32.orig/libc/sysdeps/linux/common/stubs.c uClibc-0.9.32/libc/sysdeps/linux/common/stubs.c
+---- uClibc-0.9.32.orig/libc/sysdeps/linux/common/stubs.c	2011-12-02 23:54:30.577841215 -0300
+-+++ uClibc-0.9.32/libc/sysdeps/linux/common/stubs.c	2011-12-02 23:58:18.803435042 -0300
+-@@ -278,6 +278,10 @@
+- make_stub(umount2)
+- #endif
+- 
+-+#if !defined __NR_unshare && defined __UCLIBC_LINUX_SPECIFIC__
+-+make_stub(unshare)
+-+#endif
+-+
+- #ifndef __NR_utimensat
+- make_stub(futimens)
+- make_stub(utimensat)
+-diff -Nura uClibc-0.9.32.orig/libc/sysdeps/linux/common/unshare.c uClibc-0.9.32/libc/sysdeps/linux/common/unshare.c
+---- uClibc-0.9.32.orig/libc/sysdeps/linux/common/unshare.c	1969-12-31 21:00:00.000000000 -0300
+-+++ uClibc-0.9.32/libc/sysdeps/linux/common/unshare.c	2011-12-02 23:58:42.693601880 -0300
+-@@ -0,0 +1,15 @@
+-+/* vi: set sw=4 ts=4: */
+-+/*
+-+ * unshare() for uClibc
+-+ *
+-+ * Copyright (C) 2011 Henning Heinold <heinold@inf.fu-berlin.de>
+-+ *
+-+ * Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+-+ */
+-+
+-+#include <sys/syscall.h>
+-+#include <sched.h>
+-+
+-+#if defined __NR_unshare
+-+_syscall1(int, unshare, int, flags)
+-+#endif
+diff --git a/package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch b/package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch
+deleted file mode 100644
+index c4d0d00..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0006-linuxthreads-errno-fix.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From af8b2d71ce37b9d4d24ddbc755cdea68de02949a Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <jacmet@sunsite.dk>
+-Date: Mon, 5 Jul 2010 14:08:17 +0200
+-Subject: [PATCH] don't make __errno_location / __h_errno_location hidden
 -
--Index: b/gcc/config/arm/arm.c
--===================================================================
----- a/gcc/config/arm/arm.c
--+++ b/gcc/config/arm/arm.c
--@@ -6838,7 +6838,7 @@ adjacent_mem_locations (rtx a, rtx b)
--       /* Don't accept any offset that will require multiple
-- 	 instructions to handle, since this would cause the
-- 	 arith_adjacentmem pattern to output an overlong sequence.  */
---      if (!const_ok_for_op (PLUS, val0) || !const_ok_for_op (PLUS, val1))
--+      if (!const_ok_for_op (val0, PLUS) || !const_ok_for_op (val1, PLUS))
-- 	return 0;
-- 
--       /* Don't allow an eliminable register: register elimination can make
-diff --git a/package/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional
-deleted file mode 100644
-index 9d01eba..0000000
---- a/package/gcc/4.3.6/powerpc-link-with-math-lib.patch.conditional
-+++ /dev/null
-@@ -1,125 +0,0 @@
--See: http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00237.html
--Patch by: Bernhard Reutner-Fischer
+-Closes #2089 (https://bugs.busybox.net/show_bug.cgi?id=2089)
 -
----- gcc-4.3.3/gcc/config/t-slibgcc-elf-ver	2005-02-20 00:44:10.000000000 +1300
--+++ gcc-4.3.3-p/gcc/config/t-slibgcc-elf-ver	2009-05-06 07:05:50.000000000 +1200
--@@ -9,7 +9,7 @@
-- SHLIB_OBJS = @shlib_objs@
-- SHLIB_DIR = @multilib_dir@
-- SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
---SHLIB_LC = -lc
--+SHLIB_LC = @libgcc_libm@ -lc
-- 
-- SHLIB_LINK = $(GCC_FOR_TARGET) $(LIBGCC2_CFLAGS) -shared -nodefaultlibs \
-- 	-Wl,--soname=$(SHLIB_SONAME) \
----- gcc-4.3.3/libgcc/configure	2008-11-21 06:09:53.000000000 +1300
--+++ gcc-4.3.3-p/libgcc/configure	2009-05-06 07:05:50.000000000 +1200
--@@ -272,7 +272,7 @@
-- PACKAGE_BUGREPORT=''
-- 
-- ac_unique_file="static-object.mk"
---ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
--+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS libgcc_topdir enable_shared slibdir INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA AWK build build_cpu build_vendor build_os host host_cpu host_vendor host_os host_noncanonical build_libsubdir build_subdir host_subdir target_subdir AR ac_ct_AR LIPO ac_ct_LIPO NM ac_ct_NM RANLIB ac_ct_RANLIB STRIP ac_ct_STRIP LN_S CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP decimal_float enable_decimal_float fixed_point vis_hide set_have_cc_tls LIBGCC_LIBM tmake_file extra_parts asm_hidden_op LIBOBJS LTLIBOBJS'
-- ac_subst_files=''
-- 
-- # Initialize some variables set by options.
--@@ -3505,6 +3505,39 @@
-- fi
-- 
-- 
--+# On powerpc libgcc_s references copysignl which is a libm function but
--+# glibc apparently also provides it via libc as opposed to uClibc where
--+# it lives in libm.
--+echo "$as_me:$LINENO: checking for library containing copysignl" >&5
--+echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
--+if test "${libgcc_cv_copysignl_lib+set}" = set; then
--+  echo $ECHO_N "(cached) $ECHO_C" >&6
--+else
--+
--+    echo '#include <features.h>' > conftest.c
--+    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
--+    libgcc_cv_copysignl_lib="-lc"
--+    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
--+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--+  (eval $ac_try) 2>&5
--+  ac_status=$?
--+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--+  (exit $ac_status); }; }
--+    then
--+	libgcc_cv_copysignl_lib="-lm"
--+    fi
--+    rm -f conftest.*
--+
--+fi
--+echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
--+echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
--+
--+case /${libgcc_cv_copysignl_lib}/ in
--+  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
--+  *) LIBGCC_LIBM= ;;
--+esac
--+
--+
-- # Conditionalize the makefile for this target machine.
-- tmake_file_=
-- for f in ${tmake_file}
--@@ -4225,6 +4258,7 @@
-- s, at fixed_point@,$fixed_point,;t t
-- s, at vis_hide@,$vis_hide,;t t
-- s, at set_have_cc_tls@,$set_have_cc_tls,;t t
--+s, at LIBGCC_LIBM@,$LIBGCC_LIBM,;t t
-- s, at tmake_file@,$tmake_file,;t t
-- s, at extra_parts@,$extra_parts,;t t
-- s, at asm_hidden_op@,$asm_hidden_op,;t t
----- gcc-4.3.3/libgcc/configure.ac	2008-11-21 06:09:53.000000000 +1300
--+++ gcc-4.3.3-p/libgcc/configure.ac	2009-05-06 07:05:50.000000000 +1200
--@@ -207,6 +207,27 @@
-- fi
-- AC_SUBST(set_have_cc_tls)
-- 
--+# On powerpc libgcc_s references copysignl which is a libm function but
--+# glibc apparently also provides it via libc as opposed to uClibc where
--+# it lives in libm.
--+AC_CACHE_CHECK([for library containing copysignl],
--+  libgcc_cv_copysignl_lib, [
--+    echo '#include <features.h>' > conftest.c
--+    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
--+    libgcc_cv_copysignl_lib="-lc"
--+    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
--+    then
--+	libgcc_cv_copysignl_lib="-lm"
--+    fi
--+    rm -f conftest.*
--+  ])
--+
--+case /${libgcc_cv_copysignl_lib}/ in
--+  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
--+  *) LIBGCC_LIBM= ;;
--+esac
--+AC_SUBST(LIBGCC_LIBM)
--+
-- # Conditionalize the makefile for this target machine.
-- tmake_file_=
-- for f in ${tmake_file}
----- gcc-4.3.3/libgcc/Makefile.in	2008-06-17 21:32:34.000000000 +1200
--+++ gcc-4.3.3-p/libgcc/Makefile.in	2009-05-06 07:05:50.000000000 +1200
--@@ -40,6 +40,7 @@
-- decimal_float = @decimal_float@
-- enable_decimal_float = @enable_decimal_float@
-- fixed_point = @fixed_point@
--+LIBGCC_LIBM = @LIBGCC_LIBM@
-- 
-- host_noncanonical = @host_noncanonical@
-- 
--@@ -738,9 +739,10 @@
-- 		@multilib_dir@,$(MULTIDIR),$(subst \
-- 		@shlib_objs@,$(objects),$(subst \
-- 		@shlib_base_name@,libgcc_s,$(subst \
--+		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
-- 		@shlib_map_file@,$(mapfile),$(subst \
-- 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
---		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
--+		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
-- 
-- libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
-- 	# @multilib_flags@ is still needed because this may use
-diff --git a/package/gcc/4.6.4/100-uclibc-conf.patch b/package/gcc/4.6.4/100-uclibc-conf.patch
-deleted file mode 100644
-index 6bad179..0000000
---- a/package/gcc/4.6.4/100-uclibc-conf.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
----- gcc/gcc/config/--- gcc/contrib/regression/objs-gcc.sh
--+++ gcc/contrib/regression/objs-gcc.sh
--@@ -105,6 +105,10 @@
--  then
--   make all-gdb all-dejagnu all-ld || exit 1
--   make install-gdb install-dejagnu install-ld || exit 1
--+elif [ $H_REAL_TARGET = $H_REAL_HOST -a $H_REAL_TARGET = i686-pc-linux-uclibc ]
--+ then
--+  make all-gdb all-dejagnu all-ld || exit 1
--+  make install-gdb install-dejagnu install-ld || exit 1
-- elif [ $H_REAL_TARGET = $H_REAL_HOST ] ; then
--   make bootstrap || exit 1
--   make install || exit 1
-diff --git a/package/gcc/4.6.4/301-missing-execinfo_h.patch b/package/gcc/4.6.4/301-missing-execinfo_h.patch
-deleted file mode 100644
-index 0e2092f..0000000
---- a/package/gcc/4.6.4/301-missing-execinfo_h.patch
-+++ /dev/null
-@@ -1,11 +0,0 @@
----- gcc-4.0.0/boehm-gc/include/gc.h-orig	2005-04-28 22:28:57.000000000 -0500
--+++ gcc-4.0.0/boehm-gc/include/gc.h	2005-04-28 22:30:38.000000000 -0500
--@@ -500,7 +500,7 @@
-- #ifdef __linux__
-- # include <features.h>
-- # if (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 1 || __GLIBC__ > 2) \
---     && !defined(__ia64__)
--+     && !defined(__ia64__) && !defined(__UCLIBC__)
-- #   ifndef GC_HAVE_BUILTIN_BACKTRACE
-- #     define GC_HAVE_BUILTIN_BACKTRACE
-- #   endif
-diff --git a/package/gcc/4.6.4/302-c99-snprintf.patch b/package/gcc/4.6.4/302-c99-snprintf.patch
-deleted file mode 100644
-index ba51a0e..0000000
---- a/package/gcc/4.6.4/302-c99-snprintf.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--Index: gcc-4.3.0/libstdc++-v3/include/c_global/cstdio
--===================================================================
----- gcc-4.3.0/libstdc++-v3/include/c_global/cstdio	(revision 129202)
--+++ gcc-4.3.0/libstdc++-v3/include/c_global/cstdio	(working copy)
--@@ -144,7 +144,7 @@
-- 
-- _GLIBCXX_END_NAMESPACE
-- 
---#if _GLIBCXX_USE_C99
--+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
-- 
-- #undef snprintf
-- #undef vfscanf
-diff --git a/package/gcc/4.6.4/305-libmudflap-susv3-legacy.patch b/package/gcc/4.6.4/305-libmudflap-susv3-legacy.patch
-deleted file mode 100644
-index 374b1f8..0000000
---- a/package/gcc/4.6.4/305-libmudflap-susv3-legacy.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--Index: gcc-4.2/libmudflap/mf-hooks2.c
--===================================================================
----- gcc-4.2/libmudflap/mf-hooks2.c	(revision 119834)
--+++ gcc-4.2/libmudflap/mf-hooks2.c	(working copy)
--@@ -427,7 +427,7 @@
-- {
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, n, __MF_CHECK_WRITE, "bzero region");
---  bzero (s, n);
--+  memset (s, 0, n);
-- }
-- 
-- 
--@@ -437,7 +437,7 @@
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(src, n, __MF_CHECK_READ, "bcopy src");
--   MF_VALIDATE_EXTENT(dest, n, __MF_CHECK_WRITE, "bcopy dest");
---  bcopy (src, dest, n);
--+  memmove (dest, src, n);
-- }
-- 
-- 
--@@ -447,7 +447,7 @@
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s1, n, __MF_CHECK_READ, "bcmp 1st arg");
--   MF_VALIDATE_EXTENT(s2, n, __MF_CHECK_READ, "bcmp 2nd arg");
---  return bcmp (s1, s2, n);
--+  return n == 0 ? 0 : memcmp (s1, s2, n);
-- }
-- 
-- 
--@@ -456,7 +456,7 @@
--   size_t n = strlen (s);
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "index region");
---  return index (s, c);
--+  return strchr (s, c);
-- }
-- 
-- 
--@@ -465,7 +465,7 @@
--   size_t n = strlen (s);
--   TRACE ("%s\n", __PRETTY_FUNCTION__);
--   MF_VALIDATE_EXTENT(s, CLAMPADD(n, 1), __MF_CHECK_READ, "rindex region");
---  return rindex (s, c);
--+  return strrchr (s, c);
-- }
-- 
-- /* XXX:  stpcpy, memccpy */
-diff --git a/package/gcc/4.6.4/810-arm-softfloat-libgcc.patch b/package/gcc/4.6.4/810-arm-softfloat-libgcc.patch
-deleted file mode 100644
-index e6a30a3..0000000
---- a/package/gcc/4.6.4/810-arm-softfloat-libgcc.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--[PATCH] add the correct symbols to libgcc for uclibc arm softfloat
+-__errno_location / __h_errno_location access has to go through the PLT
+-like malloc/free, so the linuxthread variants gets used instead when
+-compiling with -pthread.
+-
+-Based on http://github.com/mat-c/uClibc/commit/328d392c54aa5dc2b8e7f398a419087de497de2b
 -
 -Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
 ----
-- gcc/config/arm/linux-elf.h |    2 +-
-- gcc/config/arm/t-linux     |    6 +++++-
-- 2 files changed, 6 insertions(+), 2 deletions(-)
+- include/netdb.h                               |    1 -
+- libc/misc/internals/__errno_location.c        |    3 ---
+- libc/misc/internals/__h_errno_location.c      |    1 -
+- libc/sysdeps/linux/common/bits/errno.h        |    1 -
+- 6 files changed, 0 insertions(+), 11 deletions(-)
 -
--Index: gcc-4.4.0/gcc/config/arm/t-linux
--===================================================================
----- gcc-4.4.0.orig/gcc/config/arm/t-linux
--+++ gcc-4.4.0/gcc/config/arm/t-linux
--@@ -4,7 +4,11 @@
+-diff --git a/include/netdb.h b/include/netdb.h
+-index 9d3807d..ac411ab 100644
+---- a/include/netdb.h
+-+++ b/include/netdb.h
+-@@ -59,7 +59,6 @@ __BEGIN_DECLS
 - 
-- LIB1ASMSRC = arm/lib1funcs.asm
-- LIB1ASMFUNCS = _udivsi3 _divsi3 _umodsi3 _modsi3 _dvmd_lnx _clzsi2 _clzdi2 \
---	_arm_addsubdf3 _arm_addsubsf3
--+	_arm_addsubdf3 _arm_addsubsf3 \
--+	_arm_negdf2 _arm_muldivdf3 _arm_cmpdf2 _arm_unorddf2 \
--+	_arm_fixdfsi _arm_fixunsdfsi _arm_truncdfsf2 \
--+	_arm_negsf2 _arm_muldivsf3 _arm_cmpsf2 _arm_unordsf2 \
--+	_arm_fixsfsi _arm_fixunssfsi
+- /* Function to get address of global `h_errno' variable.  */
+- extern int *__h_errno_location (void) __THROW __attribute__ ((__const__));
+--libc_hidden_proto(__h_errno_location)
 - 
-- # MULTILIB_OPTIONS = mhard-float/msoft-float
-- # MULTILIB_DIRNAMES = hard-float soft-float
--Index: gcc-4.4.0/gcc/config/arm/linux-elf.h
--===================================================================
----- gcc-4.4.0.orig/gcc/config/arm/linux-elf.h
--+++ gcc-4.4.0/gcc/config/arm/linux-elf.h
--@@ -60,7 +60,7 @@
--    %{shared:-lc} \
--    %{!shared:%{profile:-lc_p}%{!profile:-lc}}"
+- /* Macros for accessing h_errno from inside libc.  */
+- #ifdef _LIBC
+-diff --git a/libc/misc/internals/__errno_location.c b/libc/misc/internals/__errno_location.c
+-index 487a9c2..0620860 100644
+---- a/libc/misc/internals/__errno_location.c
+-+++ b/libc/misc/internals/__errno_location.c
+-@@ -15,6 +15,3 @@ int * weak_const_function __errno_location (void)
+- {
+-     return &errno;
+- }
+--#ifdef IS_IN_libc /* not really need, only to keep in sync w/ libc_hidden_proto */
+--libc_hidden_weak(__errno_location)
+--#endif
+-diff --git a/libc/misc/internals/__h_errno_location.c b/libc/misc/internals/__h_errno_location.c
+-index 213d398..235df4e 100644
+---- a/libc/misc/internals/__h_errno_location.c
+-+++ b/libc/misc/internals/__h_errno_location.c
+-@@ -10,4 +10,3 @@ int * weak_const_function __h_errno_location (void)
+- {
+-     return &h_errno;
+- }
+--libc_hidden_weak(__h_errno_location)
+-diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
+-index 6e520fa..f4a9ebb 100644
+---- a/libc/sysdeps/linux/common/bits/errno.h
+-+++ b/libc/sysdeps/linux/common/bits/errno.h
+-@@ -43,7 +43,6 @@
+- # ifndef __ASSEMBLER__
+- /* Function to get address of global `errno' variable.  */
+- extern int *__errno_location (void) __THROW __attribute__ ((__const__));
+--libc_hidden_proto(__errno_location)
 - 
---#define LIBGCC_SPEC "%{msoft-float:-lfloat} %{mfloat-abi=soft*:-lfloat} -lgcc"
--+#define LIBGCC_SPEC "-lgcc"
-- 
-- #define GLIBC_DYNAMIC_LINKER "/lib/ld-linux.so.2"
-- 
-diff --git a/package/gcc/4.6.4/820-arm-unbreak-armv4t.patch b/package/gcc/4.6.4/820-arm-unbreak-armv4t.patch
+- #  ifdef __UCLIBC_HAS_THREADS__
+- /* When using threads, errno is a per-thread value.  */
+--- 
+-1.7.1
+-
+diff --git a/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch b/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
 deleted file mode 100644
-index 8651afc..0000000
---- a/package/gcc/4.6.4/820-arm-unbreak-armv4t.patch
+index 8141333..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0007-libc-add-non-standard-execvpe-function.patch
 +++ /dev/null
-@@ -1,14 +0,0 @@
--http://sourceware.org/ml/crossgcc/2008-05/msg00009.html
+@@ -1,163 +0,0 @@
+-From 0eb30761a26c46aaf555464114851202ae9c27bd Mon Sep 17 00:00:00 2001
+-From: Henning Heinold <heinold@inf.fu-berlin.de>
+-Date: Sat, 4 Jun 2011 21:23:15 +0200
+-Subject: [PATCH] libc: add non standard execvpe function
 -
--diff -Nura gcc-4.5.1.orig/gcc/config/arm/linux-eabi.h gcc-4.5.1/gcc/config/arm/linux-eabi.h
----- gcc-4.5.1.orig/gcc/config/arm/linux-eabi.h	2009-10-30 17:03:09.000000000 -0300
--+++ gcc-4.5.1/gcc/config/arm/linux-eabi.h	2010-11-02 15:38:25.792208500 -0300
--@@ -44,7 +44,7 @@
--    The ARM10TDMI core is the default for armv5t, so set
--    SUBTARGET_CPU_DEFAULT to achieve this.  */
-- #undef  SUBTARGET_CPU_DEFAULT
---#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm10tdmi
--+#define SUBTARGET_CPU_DEFAULT TARGET_CPU_arm9tdmi
+-[Gustavo]: Drop TODO modification to make it compatible
+-Signed-off-by: Henning Heinold <heinold@inf.fu-berlin.de>
+-Signed-off-by: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+----
+- include/unistd.h      |  8 ++++++++
+- libc/unistd/exec.c    | 38 +++++++++++++++++++++++++++++++++-----
+- libc/unistd/execvpe.c |  7 +++++++
+- 4 files changed, 52 insertions(+), 5 deletions(-)
+- create mode 100644 libc/unistd/execvpe.c
+-
+-diff --git a/include/unistd.h b/include/unistd.h
+-index feadf93..9479554 100644
+---- a/include/unistd.h
+-+++ b/include/unistd.h
+-@@ -619,6 +619,14 @@ extern int execlp (const char *__file, const char *__arg, ...)
+-      __THROW __nonnull ((1));
+- libc_hidden_proto(execlp)
 - 
-- /* TARGET_BIG_ENDIAN_DEFAULT is set in
--    config.gcc for big endian configurations.  */
-diff --git a/package/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional b/package/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional
+-+#ifdef __USE_GNU
+-+/* Execute FILE, searching in the `PATH' environment variable if it contains
+-+   no slashes, with arguments ARGV and environment from a pointer */
+-+extern int execvpe (__const char *__file, char *__const __argv[], char *__const __envp[])
+-+     __THROW __nonnull ((1));
+-+libc_hidden_proto(execvpe)
+-+#endif
+-+
+- 
+- #if defined __USE_MISC || defined __USE_XOPEN
+- /* Add INC to priority of the current process.  */
+-diff --git a/libc/unistd/exec.c b/libc/unistd/exec.c
+-index ba92989..8fa42e5 100644
+---- a/libc/unistd/exec.c
+-+++ b/libc/unistd/exec.c
+-@@ -32,6 +32,8 @@
+- /**********************************************************************/
+- #define EXEC_FUNC_COMMON 0
+- #define EXEC_FUNC_EXECVP 1
+-+#define EXEC_FUNC_EXECVPE 2
+-+
+- #if defined(__ARCH_USE_MMU__)
+- 
+- /* We have an MMU, so use alloca() to grab space for buffers and arg lists. */
+-@@ -58,6 +60,7 @@
+-  *  execle(a) -> execve(-)
+-  *  execv(-)  -> execve(-)
+-  *  execvp(a) -> execve(-)
+-+ *  execvpe(a) -> execve(-)
+-  */
+- 
+- # define EXEC_ALLOC_SIZE(VAR)      /* nothing to do */
+-@@ -219,15 +222,18 @@ libc_hidden_def(execlp)
+- 
+- #endif
+- /**********************************************************************/
+--#ifdef L_execvp
+-+#if defined (L_execvp) || defined(L_execvpe)
+- 
+- 
+- /* Use a default path that matches glibc behavior, since SUSv3 says
+-  * this is implementation-defined.  The default is current working dir,
+-  * /bin, and then /usr/bin. */
+- static const char default_path[] = ":/bin:/usr/bin";
+--
+-+#if defined (L_execvp)
+- int execvp(const char *path, char *const argv[])
+-+#elif defined (L_execvpe)
+-+int execvpe(const char *path, char *const argv[], char *const envp[])
+-+#endif
+- {
+- 	char *buf = NULL;
+- 	char *p;
+-@@ -245,7 +251,11 @@ int execvp(const char *path, char *const argv[])
+- 	}
+- 
+- 	if (strchr(path, '/')) {
+-+#if defined (L_execvp)
+- 		execve(path, argv, __environ);
+-+#elif defined (L_execvpe)
+-+		execve(path, argv, envp);
+-+#endif
+- 		if (errno == ENOEXEC) {
+- 			char **nargv;
+- 			EXEC_ALLOC_SIZE(size2) /* Do NOT add a semicolon! */
+-@@ -254,11 +264,19 @@ int execvp(const char *path, char *const argv[])
+- 			/* Need the dimension - 1.  We omit counting the trailing
+- 			 * NULL but we actually omit the first entry. */
+- 			for (n=0 ; argv[n] ; n++) {}
+-+#if defined (L_execvp)
+- 			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVP);
+-+#elif defined (L_execvpe)
+-+			nargv = (char **) EXEC_ALLOC((n+2) * sizeof(char *), size2, EXEC_FUNC_EXECVPE);
+-+#endif
+- 			nargv[0] = argv[0];
+- 			nargv[1] = (char *)path;
+- 			memcpy(nargv+2, argv+1, n*sizeof(char *));
+-+#if defined (L_execvp)
+- 			execve("/bin/sh", nargv, __environ);
+-+#elif defined (L_execvpe)
+-+			execve("/bin/sh", nargv, envp);
+-+#endif
+- 			EXEC_FREE(nargv, size2);
+- 		}
+- 	} else {
+-@@ -277,8 +295,11 @@ int execvp(const char *path, char *const argv[])
+- 			return -1;
+- 		}
+- 		len = (FILENAME_MAX - 1) - plen;
+--
+-+#if defined (L_execvp)
+- 		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVP);
+-+#elif defined (L_execvpe)
+-+		buf = EXEC_ALLOC(FILENAME_MAX, size, EXEC_FUNC_EXECVPE);
+-+#endif
+- 		{
+- 			int seen_small = 0;
+- 			s0 = buf + len;
+-@@ -300,8 +321,11 @@ int execvp(const char *path, char *const argv[])
+- 					s[plen-1] = '/';
+- 				}
+- 
+-+#if defined (L_execvp)
+- 				execve(s, argv, __environ);
+--
+-+#elif defined (L_execvpe)
+-+				execve(s, argv, envp);
+-+#endif
+- 				seen_small = 1;
+- 
+- 				if (errno == ENOEXEC) {
+-@@ -325,7 +349,11 @@ int execvp(const char *path, char *const argv[])
+- 
+- 	return -1;
+- }
+-+#if defined (L_execvp)
+- libc_hidden_def(execvp)
+--
+-+#elif defined (L_execvpe)
+-+libc_hidden_def(execvpe)
+- #endif
+-+
+-+#endif /* #if defined (L_execvp) || defined(L_execvpe) */
+- /**********************************************************************/
+-diff --git a/libc/unistd/execvpe.c b/libc/unistd/execvpe.c
+-new file mode 100644
+-index 0000000..c3c1e43
+---- /dev/null
+-+++ b/libc/unistd/execvpe.c
+-@@ -0,0 +1,7 @@
+-+/* Copyright (C) 2011-2013 Hennning Heinold <heinold@inf.fu-berlin.de>
+-+ *
+-+ * Licensed under the LGPL v2.1 or later, see the file COPYING.LIB in this tarball.
+-+ */
+-+
+-+#define L_execvpe
+-+#include "exec.c"
+--- 
+-1.8.1.5
+-
+diff --git a/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch b/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
 deleted file mode 100644
-index 7e75e87..0000000
---- a/package/gcc/4.6.4/powerpc-link-with-math-lib.patch.conditional
+index 8002240..0000000
+--- a/package/uclibc/0.9.32.1/uclibc-0008-libc-stdlib-add-mkostemp-helpers.patch
 +++ /dev/null
-@@ -1,125 +0,0 @@
--http://gcc.gnu.org/ml/gcc-patches/2008-10/msg00269.html
+@@ -1,155 +0,0 @@
+-From 42d1b23fc0f3748b8bf474e456d6c44aa7e563fd Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Wed, 14 Nov 2012 00:30:54 -0500
+-Subject: [PATCH] libc/stdlib: add mkostemp helpers
 -
--On glibc the libc.so carries a copy of the math function copysignl() but
--on uClibc math functions like copysignl() live in libm. Since libgcc_s
--contains unresolved symbols, any attempt to link against libgcc_s
--without explicitely specifying -lm fails, resulting in a broken
--bootstrap of the compiler.
+-Some projects (like udev) are starting to use this.
 -
--Forward port to gcc 4.5.1 by Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Imported from glibc.
 -
--diff -Nura gcc-4.5.1.orig/gcc/config/t-slibgcc-elf-ver gcc-4.5.1/gcc/config/t-slibgcc-elf-ver
----- gcc-4.5.1.orig/gcc/config/t-slibgcc-elf-ver	2010-11-03 14:35:08.644904042 -0300
--+++ gcc-4.5.1/gcc/config/t-slibgcc-elf-ver	2010-11-03 14:35:56.332904024 -0300
--@@ -27,7 +27,7 @@
-- SHLIB_OBJS = @shlib_objs@
-- SHLIB_DIR = @multilib_dir@
-- SHLIB_SLIBDIR_QUAL = @shlib_slibdir_qual@
---SHLIB_LC = -lc
--+SHLIB_LC = @libgcc_libm@ -lc
-- SHLIB_MAKE_SOLINK = $(LN_S) $(SHLIB_SONAME) $(SHLIB_DIR)/$(SHLIB_SOLINK)
-- SHLIB_INSTALL_SOLINK = $(LN_S) $(SHLIB_SONAME) \
-- 	$$(DESTDIR)$$(slibdir)$(SHLIB_SLIBDIR_QUAL)/$(SHLIB_SOLINK)
--diff -Nura gcc-4.5.1.orig/libgcc/Makefile.in gcc-4.5.1/libgcc/Makefile.in
----- gcc-4.5.1.orig/libgcc/Makefile.in	2010-11-03 14:32:44.272904042 -0300
--+++ gcc-4.5.1/libgcc/Makefile.in	2010-11-03 14:37:03.893904042 -0300
--@@ -39,6 +39,7 @@
-- decimal_float = @decimal_float@
-- enable_decimal_float = @enable_decimal_float@
-- fixed_point = @fixed_point@
--+LIBGCC_LIBM = @LIBGCC_LIBM@
+-Signed-off-by: Mike Frysinger <vapier@gentoo.org>
+----
+- include/stdlib.h         | 23 +++++++++++++++++++++++
+- libc/stdlib/Makefile.in  |  4 ++--
+- libc/stdlib/mkostemp.c   | 32 ++++++++++++++++++++++++++++++++
+- libc/stdlib/mkostemp64.c | 33 +++++++++++++++++++++++++++++++++
+- 4 files changed, 90 insertions(+), 2 deletions(-)
+- create mode 100644 libc/stdlib/mkostemp.c
+- create mode 100644 libc/stdlib/mkostemp64.c
+-
+-diff --git a/include/stdlib.h b/include/stdlib.h
+-index 354fc66..79ccc55 100644
+---- a/include/stdlib.h
+-+++ b/include/stdlib.h
+-@@ -652,6 +652,29 @@ extern int mkstemp64 (char *__template) __nonnull ((1)) __wur;
+- extern char *mkdtemp (char *__template) __THROW __nonnull ((1)) __wur;
+- #endif
 - 
-- host_noncanonical = @host_noncanonical@
-- 
--@@ -798,9 +799,10 @@
-- 		@multilib_dir@,$(MULTIDIR),$(subst \
-- 		@shlib_objs@,$(objects),$(subst \
-- 		@shlib_base_name@,libgcc_s,$(subst \
--+		@libgcc_libm@,$(LIBGCC_LIBM),$(subst \
-- 		@shlib_map_file@,$(mapfile),$(subst \
-- 		@shlib_slibdir_qual@,$(MULTIOSSUBDIR),$(subst \
---		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK))))))))
--+		@shlib_slibdir@,$(shlib_slibdir),$(SHLIB_LINK)))))))))
-- 
-- libunwind$(SHLIB_EXT): $(libunwind-s-objects) $(extra-parts)
-- 	# @multilib_flags@ is still needed because this may use
--diff -Nura gcc-4.5.1.orig/libgcc/configure gcc-4.5.1/libgcc/configure
----- gcc-4.5.1.orig/libgcc/configure	2010-11-03 14:32:44.283904042 -0300
--+++ gcc-4.5.1/libgcc/configure	2010-11-03 14:39:48.685904042 -0300
--@@ -557,6 +557,7 @@
-- extra_parts
-- tmake_file
-- set_use_emutls
--+LIBGCC_LIBM
-- set_have_cc_tls
-- vis_hide
-- fixed_point
--@@ -3847,6 +3848,37 @@
--   set_use_emutls="-DUSE_EMUTLS"
-- fi
-- 
--+# On powerpc libgcc_s references copysignl which is a libm function but
--+# glibc apparently also provides it via libc as opposed to uClibc where
--+# it lives in libm.
--+echo "$as_me:$LINENO: checking for library containing copysignl" >&5
--+echo $ECHO_N "checking for library containing copysignl... $ECHO_C" >&6
--+if test "${libgcc_cv_copysignl_lib+set}" = set; then
--+  echo $ECHO_N "(cached) $ECHO_C" >&6
--+else
+-+#ifdef __USE_GNU
+-+/* Generate a unique temporary file name from TEMPLATE similar to
+-+   mkstemp.  But allow the caller to pass additional flags which are
+-+   used in the open call to create the file..
 -+
--+    echo '#include <features.h>' > conftest.c
--+    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
--+    libgcc_cv_copysignl_lib="-lc"
--+    if { ac_try='${CC-cc} -S conftest.c -o conftest.s 1>&5'
--+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
--+  (eval $ac_try) 2>&5
--+  ac_status=$?
--+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
--+  (exit $ac_status); }; }
--+    then
--+       libgcc_cv_copysignl_lib="-lm"
--+    fi
--+    rm -f conftest.*
+-+   This function is a possible cancellation point and therefore not
+-+   marked with __THROW.  */
+-+# ifndef __USE_FILE_OFFSET64
+-+extern int mkostemp (char *__template, int __flags) __nonnull ((1)) __wur;
+-+# else
+-+#  ifdef __REDIRECT
+-+extern int __REDIRECT (mkostemp, (char *__template, int __flags), mkostemp64)
+-+     __nonnull ((1)) __wur;
+-+#  else
+-+#   define mkostemp mkostemp64
+-+#  endif
+-+# endif
+-+# ifdef __USE_LARGEFILE64
+-+extern int mkostemp64 (char *__template, int __flags) __nonnull ((1)) __wur;
+-+# endif
 -+
--+fi
--+echo "$as_me:$LINENO: result: $libgcc_cv_copysignl_lib" >&5
--+echo "${ECHO_T}$libgcc_cv_copysignl_lib" >&6
+-+#endif
 -+
--+case /${libgcc_cv_copysignl_lib}/ in
--+  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
--+  *) LIBGCC_LIBM= ;;
--+esac
 - 
-- # Conditionalize the makefile for this target machine.
-- tmake_file_=
--diff -Nura gcc-4.5.1.orig/libgcc/configure.ac gcc-4.5.1/libgcc/configure.ac
----- gcc-4.5.1.orig/libgcc/configure.ac	2010-11-03 14:32:44.735904042 -0300
--+++ gcc-4.5.1/libgcc/configure.ac	2010-11-03 14:42:11.278904045 -0300
--@@ -238,6 +238,27 @@
-- fi
-- AC_SUBST(set_have_cc_tls)
+- __BEGIN_NAMESPACE_STD
+- /* Execute the given line as a shell command.
+-diff --git a/libc/stdlib/Makefile.in b/libc/stdlib/Makefile.in
+-index 3166b8e..b92f7ce 100644
+---- a/libc/stdlib/Makefile.in
+-+++ b/libc/stdlib/Makefile.in
+-@@ -12,7 +12,7 @@ include $(top_srcdir)libc/stdlib/malloc-simple/Makefile.in
+- include $(top_srcdir)libc/stdlib/malloc-standard/Makefile.in
 - 
--+# On powerpc libgcc_s references copysignl which is a libm function but
--+# glibc apparently also provides it via libc as opposed to uClibc where
--+# it lives in libm.
--+AC_CACHE_CHECK
--+  libgcc_cv_copysignl_lib,
--+    echo '#include <features.h>' > conftest.c
--+    echo 'int the_libc = __UCLIBC__ + __powerpc__;' >> conftest.c
--+    libgcc_cv_copysignl_lib="-lc"
--+    if AC_TRY_COMMAND(${CC-cc} -S conftest.c -o conftest.s 1>&AS_MESSAGE_LOG_FD)
--+    then
--+       libgcc_cv_copysignl_lib="-lm"
--+    fi
--+    rm -f conftest.*
--+  ])
+- CSRC-y := \
+--	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c \
+-+	abort.c getenv.c mkdtemp.c realpath.c canonicalize.c mkstemp.c mkostemp.c \
+- 	rand.c random.c random_r.c setenv.c div.c ldiv.c lldiv.c \
+- 	getpt.c drand48-iter.c jrand48.c \
+- 	jrand48_r.c lcong48.c lrand48.c lrand48_r.c mrand48.c mrand48_r.c nrand48.c \
+-@@ -21,7 +21,7 @@ CSRC-y := \
+- CSRC-$(UCLIBC_HAS_ADVANCED_REALTIME) += posix_memalign.c
+- CSRC-$(UCLIBC_HAS_PTY) += grantpt.c unlockpt.c ptsname.c
+- CSRC-$(UCLIBC_HAS_ARC4RANDOM) += arc4random.c
+--CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c
+-+CSRC-$(UCLIBC_HAS_LFS) += mkstemp64.c mkostemp64.c
+- CSRC-$(UCLIBC_HAS_FLOATS) += drand48.c drand48_r.c erand48.c erand48_r.c
+- CSRC-$(if $(findstring yy,$(UCLIBC_HAS_FLOATS)$(UCLIBC_SUSV3_LEGACY)),y) += \
+- 	gcvt.c
+-diff --git a/libc/stdlib/mkostemp.c b/libc/stdlib/mkostemp.c
+-new file mode 100644
+-index 0000000..93b50fc
+---- /dev/null
+-+++ b/libc/stdlib/mkostemp.c
+-@@ -0,0 +1,32 @@
+-+/* Copyright (C) 1998-2012 Free Software Foundation, Inc.
+-+   This file is part of the GNU C Library.
 -+
--+case /${libgcc_cv_copysignl_lib}/ in
--+  /-lm/) LIBGCC_LIBM="$LIBGCC_LIBM -lm" ;;
--+  *) LIBGCC_LIBM= ;;
--+esac
--+AC_SUBST(LIBGCC_LIBM)
+-+   The GNU C Library is free software; you can redistribute it and/or
+-+   modify it under the terms of the GNU Lesser General Public
+-+   License as published by the Free Software Foundation; either
+-+   version 2.1 of the License, or (at your option) any later version.
 -+
-- # See if we have emulated thread-local storage.
-- GCC_CHECK_EMUTLS
-- set_use_emutls=
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index fde1b90..8ec587c 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -22,13 +22,6 @@ choice
+-+   The GNU C Library is distributed in the hope that it will be useful,
+-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-+   Lesser General Public License for more details.
+-+
+-+   You should have received a copy of the GNU Lesser General Public
+-+   License along with the GNU C Library; if not, see
+-+   <http://www.gnu.org/licenses/>.  */
+-+
+-+#include <stdio.h>
+-+#include <stdlib.h>
+-+#include "../misc/internals/tempname.h"
+-+
+-+/* Generate a unique temporary file name from TEMPLATE.
+-+   The last six characters of TEMPLATE must be "XXXXXX";
+-+   they are replaced with a string that makes the filename unique.
+-+   Then open the file and return a fd. */
+-+int
+-+mkostemp (template, flags)
+-+     char *template;
+-+     int flags;
+-+{
+-+  return __gen_tempname (template, __GT_FILE, flags);
+-+}
+-diff --git a/libc/stdlib/mkostemp64.c b/libc/stdlib/mkostemp64.c
+-new file mode 100644
+-index 0000000..5509d8c
+---- /dev/null
+-+++ b/libc/stdlib/mkostemp64.c
+-@@ -0,0 +1,33 @@
+-+/* Copyright (C) 2000-2012 Free Software Foundation, Inc.
+-+   This file is part of the GNU C Library.
+-+
+-+   The GNU C Library is free software; you can redistribute it and/or
+-+   modify it under the terms of the GNU Lesser General Public
+-+   License as published by the Free Software Foundation; either
+-+   version 2.1 of the License, or (at your option) any later version.
+-+
+-+   The GNU C Library is distributed in the hope that it will be useful,
+-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-+   Lesser General Public License for more details.
+-+
+-+   You should have received a copy of the GNU Lesser General Public
+-+   License along with the GNU C Library; if not, see
+-+   <http://www.gnu.org/licenses/>.  */
+-+
+-+#include <fcntl.h>
+-+#include <stdio.h>
+-+#include <stdlib.h>
+-+#include "../misc/internals/tempname.h"
+-+
+-+/* Generate a unique temporary file name from TEMPLATE.
+-+   The last six characters of TEMPLATE must be "XXXXXX";
+-+   they are replaced with a string that makes the filename unique.
+-+   Then open the file and return a fd. */
+-+int
+-+mkostemp64 (template, flags)
+-+     char *template;
+-+     int flags;
+-+{
+-+  return __gen_tempname (template, __GT_BIGFILE, flags | O_LARGEFILE);
+-+}
+--- 
+-1.8.1.5
+-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 84c2f14..0b72050 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -12,10 +12,6 @@ choice
+ 		bool "uClibc 0.9.31.x"
  		depends on BR2_avr32
- 		bool "gcc 4.2.2-avr32-2.1.5"
  
--	config BR2_GCC_VERSION_4_3_X
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a8 && !BR2_cortex_a9 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_e300c2 && !BR2_powerpc_e300c3 && !BR2_powerpc_e500mc && !BR2_powerpc_464 && !BR2_powerpc_464fp && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
--		depends on !BR2_ARM_EABIHF
--		bool "gcc 4.3.x"
--		# musl patches only for gcc 4.7+
--		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
+-	config BR2_UCLIBC_VERSION_0_9_32
+-		bool "uClibc 0.9.32.x"
+-		depends on !(BR2_arc || BR2_avr32 || BR2_sh || BR2_xtensa)
 -
- 	config BR2_GCC_VERSION_4_4_X
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_cortex_a5 && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_cortex_a15 && !BR2_x86_corei7 && !BR2_x86_atom && !BR2_x86_jaguar && !BR2_powerpc_476 && !BR2_powerpc_476fp && !BR2_fa526 && !BR2_pj4 && !BR2_powerpc64le
- 		bool "gcc 4.4.x"
-@@ -48,13 +41,6 @@ choice
- 		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
- 		bool "gcc 4.5.x"
- 
--	config BR2_GCC_VERSION_4_6_X
--		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a7 && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4 && !BR2_powerpc64le
--		select BR2_GCC_NEEDS_MPC
--		# musl patches only for gcc 4.7+
--		depends on !BR2_TOOLCHAIN_BUILDROOT_MUSL
--		bool "gcc 4.6.x"
--
- 	config BR2_GCC_VERSION_4_7_X
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_cortex_a12 && !BR2_x86_jaguar && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_pj4 && !BR2_powerpc64le
- 		select BR2_GCC_NEEDS_MPC
-@@ -107,10 +93,8 @@ config BR2_GCC_SNAP_DATE
- config BR2_GCC_VERSION
+ 	config BR2_UCLIBC_VERSION_0_9_33
+ 		bool "uClibc 0.9.33.x"
+ 		depends on !(BR2_arc || BR2_avr32 || BR2_xtensa)
+@@ -40,7 +36,6 @@ config BR2_USE_UCLIBC_SNAPSHOT
+ config BR2_UCLIBC_VERSION_STRING
  	string
- 	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
--	default "4.3.6"     if BR2_GCC_VERSION_4_3_X
- 	default "4.4.7"     if BR2_GCC_VERSION_4_4_X
- 	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
--	default "4.6.4"     if BR2_GCC_VERSION_4_6_X
- 	default "4.7.4"     if BR2_GCC_VERSION_4_7_X
- 	default "4.8.3"     if BR2_GCC_VERSION_4_8_X
- 	default "4.9.0"     if BR2_GCC_VERSION_4_9_X
+ 	default 0.9.31.1	if BR2_UCLIBC_VERSION_0_9_31
+-	default 0.9.32.1	if BR2_UCLIBC_VERSION_0_9_32
+ 	default 0.9.33.2	if BR2_UCLIBC_VERSION_0_9_33
+ 	default "8af9dc8f714d20a68df034f6ed1ededc2d752f5b" if BR2_arc
+ 	default "7bf35c8b7d4a1f97174eb49f47f33946b282114c" if BR2_UCLIBC_VERSION_XTENSA_GIT
+@@ -49,7 +44,6 @@ config BR2_UCLIBC_VERSION_STRING
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+ 	default "package/uclibc/uClibc-0.9.31.config" if BR2_UCLIBC_VERSION_0_9_31
+-	default "package/uclibc/uClibc-0.9.32.config" if BR2_UCLIBC_VERSION_0_9_32
+ 	default "package/uclibc/uClibc-0.9.33.config" if BR2_UCLIBC_VERSION_0_9_33
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_arc
+ 	default "package/uclibc/uClibc-snapshot.config" if BR2_UCLIBC_VERSION_SNAPSHOT
+diff --git a/package/uclibc/uClibc-0.9.32.config b/package/uclibc/uClibc-0.9.32.config
+deleted file mode 100644
+index 68efac9..0000000
+--- a/package/uclibc/uClibc-0.9.32.config
++++ /dev/null
+@@ -1,268 +0,0 @@
+-#
+-# Automatically generated make config: don't edit
+-# Version: 0.9.32-git
+-# Fri Jul  9 22:31:59 2010
+-#
+-# TARGET_alpha is not set
+-# TARGET_arm is not set
+-# TARGET_avr32 is not set
+-# TARGET_bfin is not set
+-# TARGET_cris is not set
+-# TARGET_e1 is not set
+-# TARGET_frv is not set
+-# TARGET_h8300 is not set
+-# TARGET_hppa is not set
+-# TARGET_i386 is not set
+-# TARGET_i960 is not set
+-# TARGET_ia64 is not set
+-# TARGET_m68k is not set
+-# TARGET_microblaze is not set
+-# TARGET_mips is not set
+-# TARGET_nios is not set
+-# TARGET_nios2 is not set
+-# TARGET_powerpc is not set
+-# TARGET_sh is not set
+-# TARGET_sh64 is not set
+-# TARGET_sparc is not set
+-# TARGET_v850 is not set
+-# TARGET_vax is not set
+-# TARGET_x86_64 is not set
+-# TARGET_xtensa is not set
+-# TARGET_c6x is not set
+-
+-# CONFIG_GENERIC_ARM is not set
+-# CONFIG_ARM610 is not set
+-# CONFIG_ARM710 is not set
+-# CONFIG_ARM7TDMI is not set
+-# CONFIG_ARM720T is not set
+-# CONFIG_ARM920T is not set
+-# CONFIG_ARM922T is not set
+-# CONFIG_ARM926T is not set
+-# CONFIG_ARM10T is not set
+-# CONFIG_ARM1136JF_S is not set
+-# CONFIG_ARM1176JZ_S is not set
+-# CONFIG_ARM1176JZF_S is not set
+-# CONFIG_ARM_CORTEX_M3 is not set
+-# CONFIG_ARM_CORTEX_M1 is not set
+-# CONFIG_ARM_SA110 is not set
+-# CONFIG_ARM_SA1100 is not set
+-# CONFIG_ARM_XSCALE is not set
+-# CONFIG_ARM_IWMMXT is not set
+-
+-USE_BX=y
+-
+-TARGET_SUBARCH=""
+-#
+-# Target Architecture Features and Options
+-#
+-TARGET_ARCH="none"
+-FORCE_OPTIONS_FOR_ARCH=y
+-#
+-# Using ELF file format
+-#
+-# ARCH_LITTLE_ENDIAN is not set
+-# ARCH_BIG_ENDIAN is not set
+-# ARCH_WANTS_LITTLE_ENDIAN is not set
+-# ARCH_WANTS_BIG_ENDIAN is not set
+-ARCH_HAS_MMU=y
+-ARCH_USE_MMU=y
+-UCLIBC_HAS_FLOATS=y
+-UCLIBC_HAS_FPU=y
+-DO_C99_MATH=y
+-# DO_XSI_MATH is not set
+-# UCLIBC_HAS_FENV is not set
+-UCLIBC_HAS_LONG_DOUBLE_MATH=y
+-KERNEL_HEADERS="/usr/src/linux/include"
+-HAVE_DOT_CONFIG=y
+-
+-#
+-# General Library Settings
+-#
+-# HAVE_NO_PIC is not set
+-DOPIC=y
+-# ARCH_HAS_NO_SHARED is not set
+-# ARCH_HAS_NO_LDSO is not set
+-HAVE_SHARED=y
+-# FORCE_SHAREABLE_TEXT_SEGMENTS is not set
+-LDSO_LDD_SUPPORT=y
+-# LDSO_CACHE_SUPPORT is not set
+-LDSO_PRELOAD_ENV_SUPPORT=y
+-# LDSO_PRELOAD_FILE_SUPPORT is not set
+-# UCLIBC_STATIC_LDCONFIG is not set
+-LDSO_RUNPATH=y
+-LDSO_SEARCH_INTERP_PATH=y
+-UCLIBC_CTOR_DTOR=y
+-# LDSO_GNU_HASH_SUPPORT is not set
+-# HAS_NO_THREADS is not set
+-LINUXTHREADS_OLD=y
+-# LINUXTHREADS_NEW is not set
+-# UCLIBC_HAS_THREADS_NATIVE is not set
+-UCLIBC_HAS_THREADS=y
+-# PTHREADS_DEBUG_SUPPORT is not set
+-UCLIBC_HAS_SYSLOG=y
+-UCLIBC_HAS_LFS=y
+-# MALLOC is not set
+-# MALLOC_SIMPLE is not set
+-MALLOC_STANDARD=y
+-MALLOC_GLIBC_COMPAT=y
+-UCLIBC_DYNAMIC_ATEXIT=y
+-# COMPAT_ATEXIT is not set
+-UCLIBC_SUSV3_LEGACY=y
+-# UCLIBC_SUSV3_LEGACY_MACROS is not set
+-UCLIBC_SUSV4_LEGACY=y
+-# UCLIBC_STRICT_HEADERS is not set
+-# UCLIBC_HAS_STUBS is not set
+-UCLIBC_HAS_SHADOW=y
+-UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+-UCLIBC_HAS___PROGNAME=y
+-UCLIBC_HAS_PTY=y
+-ASSUME_DEVPTS=y
+-UNIX98PTY_ONLY=y
+-UCLIBC_HAS_GETPT=y
+-UCLIBC_HAS_LIBUTIL=y
+-UCLIBC_HAS_TM_EXTENSIONS=y
+-UCLIBC_HAS_TZ_CACHING=y
+-UCLIBC_HAS_TZ_FILE=y
+-UCLIBC_HAS_TZ_FILE_READ_MANY=y
+-UCLIBC_TZ_FILE_PATH="/etc/TZ"
+-UCLIBC_FALLBACK_TO_ETC_LOCALTIME=y
+-
+-#
+-# Advanced Library Settings
+-#
+-UCLIBC_PWD_BUFFER_SIZE=256
+-UCLIBC_GRP_BUFFER_SIZE=256
+-
+-#
+-# Support various families of functions
+-#
+-UCLIBC_LINUX_MODULE_24=y
+-UCLIBC_LINUX_SPECIFIC=y
+-UCLIBC_HAS_GNU_ERROR=y
+-UCLIBC_BSD_SPECIFIC=y
+-UCLIBC_HAS_BSD_ERR=y
+-# UCLIBC_HAS_OBSOLETE_BSD_SIGNAL is not set
+-# UCLIBC_HAS_OBSOLETE_SYSV_SIGNAL is not set
+-# UCLIBC_NTP_LEGACY is not set
+-# UCLIBC_SV4_DEPRECATED is not set
+-UCLIBC_HAS_REALTIME=y
+-UCLIBC_HAS_ADVANCED_REALTIME=y
+-UCLIBC_HAS_EPOLL=y
+-UCLIBC_HAS_XATTR=y
+-UCLIBC_HAS_PROFILING=y
+-UCLIBC_HAS_CRYPT_IMPL=y
+-UCLIBC_HAS_CRYPT=y
+-UCLIBC_HAS_NETWORK_SUPPORT=y
+-UCLIBC_HAS_SOCKET=y
+-UCLIBC_HAS_IPV4=y
+-# UCLIBC_HAS_IPV6 is not set
+-# UCLIBC_HAS_RPC is not set
+-# UCLIBC_HAS_FULL_RPC is not set
+-# UCLIBC_HAS_REENTRANT_RPC is not set
+-UCLIBC_USE_NETLINK=y
+-UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+-# UCLIBC_HAS_BSD_RES_CLOSE is not set
+-UCLIBC_HAS_COMPAT_RES_STATE=y
+-# UCLIBC_HAS_EXTRA_COMPAT_RES_STATE is not set
+-UCLIBC_HAS_LIBRESOLV_STUB=y
+-UCLIBC_HAS_LIBNSL_STUB=y
+-
+-#
+-# String and Stdio Support
+-#
+-# UCLIBC_HAS_STRING_GENERIC_OPT is not set
+-UCLIBC_HAS_STRING_ARCH_OPT=y
+-UCLIBC_HAS_CTYPE_TABLES=y
+-UCLIBC_HAS_CTYPE_SIGNED=y
+-# UCLIBC_HAS_CTYPE_UNSAFE is not set
+-UCLIBC_HAS_CTYPE_CHECKED=y
+-# UCLIBC_HAS_CTYPE_ENFORCED is not set
+-# UCLIBC_HAS_WCHAR is not set
+-# UCLIBC_HAS_LOCALE is not set
+-UCLIBC_HAS_HEXADECIMAL_FLOATS=y
+-# UCLIBC_HAS_GLIBC_DIGIT_GROUPING is not set
+-UCLIBC_HAS_GLIBC_CUSTOM_PRINTF=y
+-# USE_OLD_VFPRINTF is not set
+-UCLIBC_PRINTF_SCANF_POSITIONAL_ARGS=9
+-UCLIBC_HAS_SCANF_GLIBC_A_FLAG=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_NONE is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_256 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_512 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_1024 is not set
+-# UCLIBC_HAS_STDIO_BUFSIZ_2048 is not set
+-UCLIBC_HAS_STDIO_BUFSIZ_4096=y
+-# UCLIBC_HAS_STDIO_BUFSIZ_8192 is not set
+-UCLIBC_HAS_STDIO_BUILTIN_BUFFER_NONE=y
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_4 is not set
+-# UCLIBC_HAS_STDIO_BUILTIN_BUFFER_8 is not set
+-# UCLIBC_HAS_STDIO_SHUTDOWN_ON_ABORT is not set
+-# UCLIBC_HAS_STDIO_GETC_MACRO is not set
+-# UCLIBC_HAS_STDIO_PUTC_MACRO is not set
+-UCLIBC_HAS_STDIO_AUTO_RW_TRANSITION=y
+-# UCLIBC_HAS_FOPEN_LARGEFILE_MODE is not set
+-UCLIBC_HAS_FOPEN_EXCLUSIVE_MODE=y
+-UCLIBC_HAS_GLIBC_CUSTOM_STREAMS=y
+-UCLIBC_HAS_PRINTF_M_SPEC=y
+-UCLIBC_HAS_ERRNO_MESSAGES=y
+-# UCLIBC_HAS_SYS_ERRLIST is not set
+-UCLIBC_HAS_SIGNUM_MESSAGES=y
+-# UCLIBC_HAS_SYS_SIGLIST is not set
+-UCLIBC_HAS_GNU_GETOPT=y
+-# UCLIBC_HAS_GNU_GETSUBOPT is not set
+-
+-#
+-# Big and Tall
+-#
+-UCLIBC_HAS_REGEX=y
+-# UCLIBC_HAS_REGEX_OLD is not set
+-UCLIBC_HAS_FNMATCH=y
+-# UCLIBC_HAS_FNMATCH_OLD is not set
+-# UCLIBC_HAS_WORDEXP is not set
+-UCLIBC_HAS_NFTW=y
+-UCLIBC_HAS_FTW=y
+-UCLIBC_HAS_FTS=y
+-UCLIBC_HAS_GLOB=y
+-UCLIBC_HAS_GNU_GLOB=y
+-UCLIBC_HAS_UTMPX=y
+-
+-#
+-# Library Installation Options
+-#
+-RUNTIME_PREFIX="/"
+-DEVEL_PREFIX="/usr/"
+-MULTILIB_DIR="lib"
+-HARDWIRED_ABSPATH=y
+-
+-#
+-# Security options
+-#
+-# UCLIBC_BUILD_PIE is not set
+-# UCLIBC_HAS_ARC4RANDOM is not set
+-# HAVE_NO_SSP is not set
+-UCLIBC_HAS_SSP=y
+-# UCLIBC_HAS_SSP_COMPAT is not set
+-# SSP_QUICK_CANARY is not set
+-PROPOLICE_BLOCK_ABRT=y
+-# PROPOLICE_BLOCK_SEGV is not set
+-# UCLIBC_BUILD_SSP is not set
+-UCLIBC_BUILD_RELRO=y
+-UCLIBC_BUILD_NOW=y
+-UCLIBC_BUILD_NOEXECSTACK=y
+-
+-#
+-# uClibc development/debugging options
+-#
+-CROSS_COMPILER_PREFIX=""
+-UCLIBC_EXTRA_CFLAGS=""
+-# DODEBUG is not set
+-# DODEBUG_PT is not set
+-DOSTRIP=y
+-# DOASSERTS is not set
+-# SUPPORT_LD_DEBUG is not set
+-# SUPPORT_LD_DEBUG_EARLY is not set
+-# UCLIBC_MALLOC_DEBUGGING is not set
+-# UCLIBC_HAS_BACKTRACE is not set
+-WARNINGS="-Wall"
+-# EXTRA_WARNINGS is not set
+-# DOMULTI is not set
+-# UCLIBC_MJN3_ONLY is not set
