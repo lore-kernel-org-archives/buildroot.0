@@ -1,27 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Jul 2014 21:29:33 +0200
-Subject: [Buildroot] fakeroot patch
-In-Reply-To: <CAMai9+osi=SQp74yhL3qfdsJWawVzZy517aZdw6V67q9sytEOw@mail.gmail.com>
- (Jeff Bailey's message of "Thu, 10 Jul 2014 19:21:39 +0000")
-References: <CAMai9+qVrXKNEoC-7=aR+s09ytt-MEQaXQiAEpsE_g1voWHA3A@mail.gmail.com>
- <877g3lni3o.fsf@dell.be.48ers.dk>
- <CAMai9+osi=SQp74yhL3qfdsJWawVzZy517aZdw6V67q9sytEOw@mail.gmail.com>
-Message-ID: <8738e9nhb6.fsf@dell.be.48ers.dk>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Thu, 10 Jul 2014 21:33:47 +0200
+Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
+In-Reply-To: <20140710155650.GA28300@free.fr> (Yann E. MORIN's message of
+ "Thu, 10 Jul 2014 17:56:50 +0200")
+References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87oawxntvt.fsf@dell.be.48ers.dk>
+ <20140710171848.75381ecb@free-electrons.com>
+ <20140710155650.GA28300@free.fr>
+Message-ID: <87y4w1m2jo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jeff" == Jeff Bailey <jeffbailey@google.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Correct. ?While most of our builds happen on x86 targeting ppc64le, when doing
- > development I use the ppc64le system natively to speed up build/test
- > iterations.
+Hi,
 
-Ok, and you still use Buildroot for that? Buildroot is really a system for cross
-compilation. Do you do ppc64le->ppc64le cross compilation? How does that
-speed up development?
+ >> > I wonder if time also hasn't come to get rid of
+ >> > BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
+ >> 
+ >> I don't know. We've been discussing multiple times the SHOW_OTHERS
+ >> thing, and I believe each time our conclusion was that it's nice for
+ >> beginners to have Buildroot hide the applications for which Busybox
+ >> already provides a good alternative. I'm sure if we remove
+ >> SHOW_OTHERS, we'll have gazillions of newcomers enabling bash,
+ >> util-linux and millions of other things that aren't needed when you
+ >> have Busybox. So I still believe that SHOW_OTHERS is a good thing to
+ >> have.
+
+ > Agreed.
+
+Ok.
+
+
+ >> I however wonder why the SHOW_OTHERS dependency is not pushed to the
+ >> individual Config.in of each package instead of cluttering
+ >> package/Config.in.
+
+ > Agreed.
+
+ >> I'm sure there was a reason behind this choice, but I can't remember.
+
+ > Neither do I.
+
+ > If that is accepted, I'll work on this.
+
+Fine by me. I think we should also be more careful about when we
+consider the Busybox variant equivalent - E.G. we used to hide all web
+servers (but not anymore), and we still hide the ISC dhcp package even
+though busybox's udhcpd/c are very different in configuration that it.
 
 -- 
-Bye, Peter Korsgaard 
+Bye, Peter Korsgaard
