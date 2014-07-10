@@ -1,62 +1,127 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Jul 2014 23:41:38 +0200
-Subject: [Buildroot] [PATCH 3/3] lm-sensors: sensors-detect requires perl
-In-Reply-To: <1404939033-32578-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1404939033-32578-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404939033-32578-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140709214138.GE3652@free.fr>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Thu, 10 Jul 2014 09:17:50 +0300
+Subject: [Buildroot] [PATCH 1/1] New package: qt5webkit-examples
+In-Reply-To: <1404915318.71876.YahooMailNeo@web172306.mail.ir2.yahoo.com>
+References: <1404915318.71876.YahooMailNeo@web172306.mail.ir2.yahoo.com>
+Message-ID: <201407100917.50185.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hi Massimo,
 
-On 2014-07-09 22:50 +0200, Thomas Petazzoni spake thusly:
-> The sensors-detect program is in fact a Perl script, so it won't run
-> on the target unless Perl is enabled in the configuration.
+On Wednesday 09 July 2014 17:15:18 Massimo Callegari wrote:
+> Amend the previous. There were minor things missing
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+You should include a changelog in the new revisions of your patches as 
+described in here:
 
-Regards,
-Yann E. MORIN.
+  http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
 
 > ---
->  package/lm-sensors/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/qt5/Config.in                              |  1 +
+>  package/qt5/qt5webkit-examples/Config.in           | 10 +++++
+>  .../qt5webkit-examples-0001-build.patch            | 21 ++++++++++
+>  .../qt5/qt5webkit-examples/qt5webkit-examples.mk   | 46
+> ++++++++++++++++++++++ 4 files changed, 78 insertions(+)
+>  create mode 100644 package/qt5/qt5webkit-examples/Config.in
+>  create mode 100644
+> package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch create
+> mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
 > 
-> diff --git a/package/lm-sensors/Config.in b/package/lm-sensors/Config.in
-> index 33c59fd..7065c4c 100644
-> --- a/package/lm-sensors/Config.in
-> +++ b/package/lm-sensors/Config.in
-> @@ -44,8 +44,12 @@ config BR2_PACKAGE_LM_SENSORS_PWMCONFIG
->  
->  config BR2_PACKAGE_LM_SENSORS_SENSORS_DETECT
->  	bool "sensors-detect"
-> +	depends on BR2_PACKAGE_PERL
->  	help
->  	  Sensors-detect is an interactive program for detecting
->  	  available hardware monitoring chips.
->  
-> +comment "sensors-detect needs perl"
-> +	depends on !BR2_PACKAGE_PERL
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index efdd9d4..1f6920a 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -40,6 +40,7 @@ source "package/qt5/qt5sensors/Config.in"
+>  source "package/qt5/qt5serialport/Config.in"
+>  source "package/qt5/qt5svg/Config.in"
+>  source "package/qt5/qt5webkit/Config.in"
+> +source "package/qt5/qt5webkit-examples/Config.in"
+>  source "package/qt5/qt5websockets/Config.in"
+>  source "package/qt5/qt5x11extras/Config.in"
+>  source "package/qt5/qt5xmlpatterns/Config.in"
+> diff --git a/package/qt5/qt5webkit-examples/Config.in
+> b/package/qt5/qt5webkit-examples/Config.in new file mode 100644
+> index 0000000..2840733
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit-examples/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
+> +bool "qt5webkit examples"
+> +depends on BR2_PACKAGE_QT5WEBKIT
+> +help
+> +  Qt is a cross-platform application and UI framework for
+> +  developers using C++.
 > +
->  endif
-> -- 
-> 2.0.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +  This package corresponds to the qt5webkit examples module.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+What about this:
+
+  This package contains examples for the qt5webkit module.
+
+> +
+> +  http://qt-project.org
+> diff --git
+> a/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
+> b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch new
+
+Each patch must include a "Signed-off-by" line:
+
+  http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+
+
+> file mode 100644
+> index 0000000..505f40c
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
+> @@ -0,0 +1,21 @@
+> +diff -Naur a/examples/webkitwidgets/webkitwidgets.pro
+> b/examples/webkitwidgets/webkitwidgets.pro +---
+> a/examples/webkitwidgets/webkitwidgets.pro2014-06-19 12:08:33.000000000
+> +0200 ++++ b/examples/webkitwidgets/webkitwidgets.pro2014-07-09
+> 14:14:20.247975538 +0200 +@@ -8,5 +8,6 @@
+> +             framecapture \
+> +             browser \
+> +             embedded \
+> +-            scroller \
+> +-            xmlpatterns
+> ++            scroller
+> ++            
+> ++qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
+> +diff -Naur a/qtwebkit-examples.pro b/qtwebkit-examples.pro
+> +--- a/qtwebkit-examples.pro2014-06-19 12:08:33.000000000 +0200
+> ++++ b/qtwebkit-examples.pro2014-07-09 14:14:09.095975663 +0200
+> +@@ -3,3 +3,4 @@
+> + load(qt_parts)
+> + 
+> + SUBDIRS += doc
+> ++SUBDIRS += examples
+> +
+> diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+> b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk new file mode
+> 100644
+> index 0000000..fd66941
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
+> @@ -0,0 +1,46 @@
+> +##########################################################################
+> ###### +#
+> +# qt5webkitexamples
+
+Nit pick: s/qt5webkitexamples/qt5webkit-examples/
+
+> +#
+> +##########################################################################
+> ###### +
+> +QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
+> +QT5WEBKIT_EXAMPLES_SITE = $(QT5_SITE)
+> +QT5WEBKIT_EXAMPLES_SOURCE =
+> qtwebkit-examples-opensource-src-$(QT5WEBKIT_EXAMPLES_VERSION).tar.xz
+> +QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5webkit
+
+If qt5xmlpatterns package is selected, you must add it to _DEPENDENCIES.
