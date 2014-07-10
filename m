@@ -1,127 +1,62 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Thu, 10 Jul 2014 09:17:50 +0300
-Subject: [Buildroot] [PATCH 1/1] New package: qt5webkit-examples
-In-Reply-To: <1404915318.71876.YahooMailNeo@web172306.mail.ir2.yahoo.com>
-References: <1404915318.71876.YahooMailNeo@web172306.mail.ir2.yahoo.com>
-Message-ID: <201407100917.50185.fatih.asici@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Jul 2014 08:30:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-09
+Message-ID: <20140710063011.128EE100F3B@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Massimo,
+Build statistics for 2014-07-09
+===============================
 
-On Wednesday 09 July 2014 17:15:18 Massimo Callegari wrote:
-> Amend the previous. There were minor things missing
-> 
-> Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
+        success : 105
+       failures : 19 
+       timeouts : 0  
+          TOTAL : 124
 
-You should include a changelog in the new revisions of your patches as 
-described in here:
+Classification of failures by reason
+====================================
 
-  http://buildroot.org/downloads/manual/manual.html#_patch_revision_changelog
+          perl-net-ssleay-1.64 | 4 
+                  zeromq-4.0.4 | 3 
+               libcuefile-r475 | 1 
+          google-breakpad-1320 | 1 
+                libmpeg2-0.5.1 | 1 
+                busybox-1.22.1 | 1 
+            host-python3-3.4.1 | 1 
+           heirloom-mailx-12.5 | 1 
+              lm-sensors-3.3.5 | 1 
+                 webkit-1.11.5 | 1 
+                 libssh2-1.4.3 | 1 
+                    ncmpc-0.21 | 1 
+                 openvpn-2.3.4 | 1 
+                 dmalloc-5.4.3 | 1 
 
-> ---
->  package/qt5/Config.in                              |  1 +
->  package/qt5/qt5webkit-examples/Config.in           | 10 +++++
->  .../qt5webkit-examples-0001-build.patch            | 21 ++++++++++
->  .../qt5/qt5webkit-examples/qt5webkit-examples.mk   | 46
-> ++++++++++++++++++++++ 4 files changed, 78 insertions(+)
->  create mode 100644 package/qt5/qt5webkit-examples/Config.in
->  create mode 100644
-> package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch create
-> mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-> 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index efdd9d4..1f6920a 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -40,6 +40,7 @@ source "package/qt5/qt5sensors/Config.in"
->  source "package/qt5/qt5serialport/Config.in"
->  source "package/qt5/qt5svg/Config.in"
->  source "package/qt5/qt5webkit/Config.in"
-> +source "package/qt5/qt5webkit-examples/Config.in"
->  source "package/qt5/qt5websockets/Config.in"
->  source "package/qt5/qt5x11extras/Config.in"
->  source "package/qt5/qt5xmlpatterns/Config.in"
-> diff --git a/package/qt5/qt5webkit-examples/Config.in
-> b/package/qt5/qt5webkit-examples/Config.in new file mode 100644
-> index 0000000..2840733
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit-examples/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
-> +bool "qt5webkit examples"
-> +depends on BR2_PACKAGE_QT5WEBKIT
-> +help
-> +  Qt is a cross-platform application and UI framework for
-> +  developers using C++.
-> +
-> +  This package corresponds to the qt5webkit examples module.
+Detail of failures
+===================
 
-What about this:
-
-  This package contains examples for the qt5webkit module.
-
-> +
-> +  http://qt-project.org
-> diff --git
-> a/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
-> b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch new
-
-Each patch must include a "Signed-off-by" line:
-
-  http://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+       arc |                 busybox-1.22.1 | NOK | http://autobuild.buildroot.net/results/f5d372794db78803e78dc23a631bbcd26986d1f8/
+      bfin |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/e00d1552c2b3517b33b45a691b982e7b21342766/
+  mips64el |           google-breakpad-1320 | NOK | http://autobuild.buildroot.net/results/5a6e0fd643c5b036535d6287778d050d525fa850/
+       arm |            heirloom-mailx-12.5 | NOK | http://autobuild.buildroot.net/results/bd2ace877f5fc296b6c086ff64a2755a117e0a39/
+      sh4a |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/788163cfae3513e8dede0a53019a8df31ef862db/
+      bfin |                libcuefile-r475 | NOK | http://autobuild.buildroot.net/results/1a4e04ee904ce82fb0dd18129aae3eee76840b8d/
+   powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/a1906348062ab0725ee6696a765f54c78640e1c4/
+     nios2 |                  libssh2-1.4.3 | NOK | http://autobuild.buildroot.net/results/a135e5139c181a940393ffb287a4f8d2b27ef0c6/
+       arm |               lm-sensors-3.3.5 | NOK | http://autobuild.buildroot.net/results/06c197263e4939d6adc4877e152f602a69df751d/
+       arm |                     ncmpc-0.21 | NOK | http://autobuild.buildroot.net/results/d8bb2da1079b8062430599976b0a236a4dafbd2d/
+       arm |                  openvpn-2.3.4 | NOK | http://autobuild.buildroot.net/results/08295cdcb3d14198bc7fbddec89d6fead946afba/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/6686a01cf4ac68f405e71ef9519f963e339f008a/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/123a6eac9ac83fca7bba8a0d5624ca37573beab8/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/44ac9994b6df4d3d352ae3686191429656f41c6a/
+       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/f33ca89e3df379457239858c9af18c29ed0b3d32/
+       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/c2f2fd935058800b79a027bba7abe09fe4ced5fd/
+      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/36931cd5062b9bc64e6e27f70c85ce8c630815e9/
+      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/2a9d9c332a206fdb46bc8ba022c74d23082a6312/
+      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/27eeea6794c7ef9bd6bbd28375e2af5d42fd93d2/
 
 
-> file mode 100644
-> index 0000000..505f40c
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit-examples/qt5webkit-examples-0001-build.patch
-> @@ -0,0 +1,21 @@
-> +diff -Naur a/examples/webkitwidgets/webkitwidgets.pro
-> b/examples/webkitwidgets/webkitwidgets.pro +---
-> a/examples/webkitwidgets/webkitwidgets.pro2014-06-19 12:08:33.000000000
-> +0200 ++++ b/examples/webkitwidgets/webkitwidgets.pro2014-07-09
-> 14:14:20.247975538 +0200 +@@ -8,5 +8,6 @@
-> +             framecapture \
-> +             browser \
-> +             embedded \
-> +-            scroller \
-> +-            xmlpatterns
-> ++            scroller
-> ++            
-> ++qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
-> +diff -Naur a/qtwebkit-examples.pro b/qtwebkit-examples.pro
-> +--- a/qtwebkit-examples.pro2014-06-19 12:08:33.000000000 +0200
-> ++++ b/qtwebkit-examples.pro2014-07-09 14:14:09.095975663 +0200
-> +@@ -3,3 +3,4 @@
-> + load(qt_parts)
-> + 
-> + SUBDIRS += doc
-> ++SUBDIRS += examples
-> +
-> diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-> b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk new file mode
-> 100644
-> index 0000000..fd66941
-> --- /dev/null
-> +++ b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
-> @@ -0,0 +1,46 @@
-> +##########################################################################
-> ###### +#
-> +# qt5webkitexamples
-
-Nit pick: s/qt5webkitexamples/qt5webkit-examples/
-
-> +#
-> +##########################################################################
-> ###### +
-> +QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
-> +QT5WEBKIT_EXAMPLES_SITE = $(QT5_SITE)
-> +QT5WEBKIT_EXAMPLES_SOURCE =
-> qtwebkit-examples-opensource-src-$(QT5WEBKIT_EXAMPLES_VERSION).tar.xz
-> +QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5webkit
-
-If qt5xmlpatterns package is selected, you must add it to _DEPENDENCIES.
+-- 
+http://autobuild.buildroot.net
