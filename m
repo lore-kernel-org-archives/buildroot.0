@@ -1,12 +1,13 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Jul 2014 17:56:50 +0200
-Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
-In-Reply-To: <20140710171848.75381ecb@free-electrons.com>
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <87oawxntvt.fsf@dell.be.48ers.dk>
- <20140710171848.75381ecb@free-electrons.com>
-Message-ID: <20140710155650.GA28300@free.fr>
+Date: Thu, 10 Jul 2014 17:59:47 +0200
+Subject: [Buildroot] [PATCH 2/5] support/download: properly use temp
+	files
+In-Reply-To: <20140709094510.50159656@free-electrons.com>
+References: <cover.1404681878.git.yann.morin.1998@free.fr>
+ <3c2e529b6f9c542dba662b08b54f844f275e23ee.1404681878.git.yann.morin.1998@free.fr>
+ <53BA3A1A.1000307@mind.be> <20140707213802.GC3806@free.fr>
+ <20140709094510.50159656@free-electrons.com>
+Message-ID: <20140710155947.GB28300@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,33 +16,45 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2014-07-10 17:18 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 10 Jul 2014 16:57:58 +0200, Peter Korsgaard wrote:
-> > I wonder if time also hasn't come to get rid of
-> > BR2_PACKAGE_BUSYBOX_SHOW_OTHERS?
+On 2014-07-09 09:45 +0200, Thomas Petazzoni spake thusly:
+> On Mon, 7 Jul 2014 23:38:02 +0200, Yann E. MORIN wrote:
 > 
-> I don't know. We've been discussing multiple times the SHOW_OTHERS
-> thing, and I believe each time our conclusion was that it's nice for
-> beginners to have Buildroot hide the applications for which Busybox
-> already provides a good alternative. I'm sure if we remove
-> SHOW_OTHERS, we'll have gazillions of newcomers enabling bash,
-> util-linux and millions of other things that aren't needed when you
-> have Busybox. So I still believe that SHOW_OTHERS is a good thing to
-> have.
+> > >  Not really related to this patch, but why do we need this ${tmp_dl} to begin
+> > > with? Especially since we're already "occupying" a tempfile in DL_DIR anyway.
+> > 
+> > The idea was not to pollute BR2_DL_DIR, in case the download fails.
+> > Hence this dance:
+> >   - download to a disposable area (BUILD_DIR);
+> >   - move to a temp file in BR2_DL_DIR;
+> >   - atomically rename to the final file.
+> 
+> And also because $(DL_DIR) and $(BUILD_DIR) might be on different
+> filesystems, so the rename/move of the file from $(BUILD_DIR) (where it
+> was downloaded) to $(DL_DIR) may not be atomic. Hence the idea is to:
+> 
+>  - Download in $(BUILD_DIR)
+> 
+>  - Move to a temporary file in $(DL_DIR). This operation may not be
+>    atomic if $(DL_DIR) is not on the same filesystem as $(BUILD_DIR)
+> 
+>  - Finally rename the temporary file to the expected file name in
+>    $(DL_DIR). Since we're in the same directory, it's guaranteed to be
+>    atomic.
+> 
+> This allows to ensure that when the final file appears in $(DL_DIR),
+> we're sure the download is finished, and that therefore concurrently
+> executing Buildroot instances will either not see the downloaded file,
+> or see a fully completed downloaded file.
+> 
+> Or am I missing the point of the discussion here?
 
-Agreed.
+Not as far as I'm concerned.
 
-> I however wonder why the SHOW_OTHERS dependency is not pushed to the
-> individual Config.in of each package instead of cluttering
-> package/Config.in.
+Except that Arnout's (and Peter's) concerns where that the way I
+implemented that was not optimal, and I used convoluted constructs to
+achieve this non-cluttering and atomicity.
 
-Agreed.
-
-> I'm sure there was a reason behind this choice, but I can't remember.
-
-Neither do I.
-
-If that is accepted, I'll work on this.
+I have to re-write my copy! ;-)
 
 Regards,
 Yann E. MORIN.
