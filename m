@@ -1,130 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Jul 2014 22:22:08 +0200
-Subject: [Buildroot] [PATCHv3 1/2] linux target name might be not equal
- linux file name
-In-Reply-To: <20140710200054.GA29977@waldemar-brodkorb.de>
-References: <20140710200054.GA29977@waldemar-brodkorb.de>
-Message-ID: <20140710202208.GH28300@free.fr>
+Date: Thu, 10 Jul 2014 23:18:05 +0200
+Subject: [Buildroot] ping not working in a glibc based buildroot
+In-Reply-To: <53BEA249.3020808@scalemp.com>
+References: <20140710142322.188e88ed@free-electrons.com>
+ <53BE887E.7070606@scalemp.com>
+ <20140710145619.5925fa1b@free-electrons.com>
+ <53BE8EF2.9000306@scalemp.com>
+ <20140710153435.6b2ab536@free-electrons.com>
+ <53BE97D3.5090009@scalemp.com>
+ <20140710160659.18c3af57@free-electrons.com>
+ <53BE9FA5.9070002@scalemp.com>
+ <20140710161645.1ad0e468@free-electrons.com>
+ <53BEA249.3020808@scalemp.com>
+Message-ID: <20140710211805.GI28300@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar, All,
+Eial, All,
 
-On 2014-07-10 22:00 +0200, Waldemar Brodkorb spake thusly:
-> For example the upcoming qemu-xtensa patch is using this feature,
-> where the target is called "zImage", but the resulting kernel name
-> is "Image.elf".
-> 
-> ---
-> Changes v2 -> v3:
->   - no change
-> Changes v1 -> v2:
->   - add comment about default value (suggested by Arnout)
->   - reorder default value for LINUX_TARGET_NAME (suggested by Arnout)
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  linux/Config.in |    7 +++++++
->  linux/linux.mk  |   10 +++++++---
->  2 files changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 0a13b13..1c316ae 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -244,6 +244,13 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
->  	  Specify the kernel make target to build the kernel that you
->  	  need.
->  
-> +config BR2_LINUX_KERNEL_IMAGE_NAME
-> +	string "Kernel image name"
-> +	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-> +	help
-> +	  Specify the kernel filename. Defaults to BR2_LINUX_KERNEL_TARGET_NAME
-> +	  if not set.
+On 2014-07-10 17:25 +0300, Eial Czerwacki spake thusly:
+> On 07/10/2014 05:16 PM, Thomas Petazzoni wrote:
+> > Dear Eial Czerwacki,
+> >
+> > On Thu, 10 Jul 2014 17:13:57 +0300, Eial Czerwacki wrote:
+> >
+> >> I've added libnss_dns-2.18.so to the img and libresolv.so and it seems
+> >> to be working.
+> >> the files are missing because I work in a kinda limited size.
+> > So you removed them manually? I'd like to understand what happened, to
+> > fix Buildroot if needed.
+> >
+> >> do I need the other libnss_*.so files?
+> > By default, we only copy libnss_dns (to do DNS resolution) and
+> > libnss_files (to do /etc/hosts based resolution), and we don't copy the
+> > other libnss_* libraries, which are used for more advanced name
+> > resolution that are generally not used on most embedded systems.
+> >
+> > See 'man nsswitch.conf' for more details.
+> >
+> > Best regards,
+> >
+> > Thomas
+> I see, as I don't use /etc/hosts, I think I don't need libnss_files.
 
-I would rephrase this to:
+The NSS libraries are not used only to provide DNS resolving.
 
-    The filename of the kernel image, if it is different from the
-    make target (above). Only Xtensa uses a filename different from
-    the make target.
-
-    If unsure, leave it empty.
-
->  config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
->  	string "load address (for 3.7+ multi-platform image)"
->  	depends on BR2_arm || BR2_armeb
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index bd3f2ac..1ba3953 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -80,7 +80,8 @@ endif
->  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
->  
->  ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
-> -LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-> +LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
-> +LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
->  else
->  ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
->  LINUX_IMAGE_NAME = uImage
-> @@ -106,6 +107,9 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
->  LINUX_IMAGE_NAME = vmlinuz
->  endif
->  endif
-> +ifeq ($(LINUX_TARGET_NAME),)
-> +LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
-> +endif
-
-I'm confused. Above, you state that if BR2_LINUX_KERNEL_IMAGE_NAME is
-empty, it defaults to BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM.
-
-But here, you are doing exactly the opposite, that is set
-LINUX_TARGET_NAME (derived from BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM)
-with the value of LINUX_IMAGE_NAME, which is derived from the new option
-you added above, BR2_LINUX_KERNEL_IMAGE_NAME.
-
-Should that not be:
-
-    ifeq ($(LINUX_IMAGE_NAME),)
-    LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
-    endif
-
-But I may have missed something... ;-)
+They are used to do any kind of name lookups:
+  - IP <-> hostname mapping (as already mentioned),
+  - UID <-> username mapping,
+  - gid <-> group name mapping,
+  - and a bunch more. See the complete list:  man nsswitch.conf
 
 Regards,
 Yann E. MORIN.
-
->  LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
->  ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
-> @@ -259,7 +263,7 @@ endif
->  define LINUX_BUILD_CMDS
->  	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
->  		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
->  	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
->  		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
->  	fi
-> @@ -332,7 +336,7 @@ endif
->  $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
->  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
->  	# Build the kernel.
-> -	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
->  	$(LINUX_APPEND_DTB)
->  	# Copy the kernel image to its final destination
->  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
