@@ -1,48 +1,280 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jul 2014 09:30:04 +0200
-Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
-In-Reply-To: <87y4w1m2jo.fsf@dell.be.48ers.dk>
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <87oawxntvt.fsf@dell.be.48ers.dk>
- <20140710171848.75381ecb@free-electrons.com>
- <20140710155650.GA28300@free.fr> <87y4w1m2jo.fsf@dell.be.48ers.dk>
-Message-ID: <20140711093004.2c1f891c@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 11 Jul 2014 09:40:21 +0200
+Subject: [Buildroot] [PATCHv4] qemu/sh4-r2d: update default configuration to
+	Linux 3.15.x
+Message-ID: <20140711074020.GA18097@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Result tested with Qemu 2.0.0 without issues.
+Old SCI problems are fixed in Qemu.
 
-On Thu, 10 Jul 2014 21:33:47 +0200, Peter Korsgaard wrote:
+---
+Changes v3 -> v4:
+  - add context to subject (suggested by Baruch S.)
+Changes v2 -> v3:
+  - fix headers to 3.15 (suggested by Thomas P.)
+Changes v1 -> v2:
+  - split from binutils patch (suggested via #buildroot)
+  - comment about SCI issues in older Qemu (suggested via #buildroot)
 
->  > If that is accepted, I'll work on this.
-> 
-> Fine by me. I think we should also be more careful about when we
-> consider the Busybox variant equivalent - E.G. we used to hide all web
-> servers (but not anymore), and we still hide the ISC dhcp package even
-> though busybox's udhcpd/c are very different in configuration that it.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ board/qemu/sh4-r2d/linux-3.15.config |   96 ++++++++++++++++++++++++++++++++++
+ board/qemu/sh4-r2d/linux-3.2.config  |   96 ----------------------------------
+ board/qemu/sh4-r2d/readme.txt        |    2 +-
+ configs/qemu_sh4_r2d_defconfig       |   14 ++---
+ 4 files changed, 104 insertions(+), 104 deletions(-)
+ create mode 100644 board/qemu/sh4-r2d/linux-3.15.config
+ delete mode 100644 board/qemu/sh4-r2d/linux-3.2.config
 
-That being said, the "full-blown" versions are never equivalent to the
-Busybox ones. Take "bash" for example. One can hardly say that Busybox
-ash is equivalent to bash. Though for most practical purposes, having
-the Busybox ash is sufficient in embedded systems.
-
-On one hand, hiding packages is good for newcomers so they are
-encouraged to use Busybox by default for most things (which also
-happens to be the configuration that most of us are using/testing I
-guess). On the other hand, hiding packages may make those newcomers not
-notice the entire scope of packages we have in Buildroot.
-
-We could also switch to use some Config.in comment to say that "bash
-could be available if Busybox show others was enabled" or something
-like that. But that would add a lot of comment and clutter menuconfig
-quite a bit.
-
-Thomas
+diff --git a/board/qemu/sh4-r2d/linux-3.15.config b/board/qemu/sh4-r2d/linux-3.15.config
+new file mode 100644
+index 0000000..5fc878c
+--- /dev/null
++++ b/board/qemu/sh4-r2d/linux-3.15.config
+@@ -0,0 +1,96 @@
++CONFIG_EXPERIMENTAL=y
++CONFIG_SYSVIPC=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=14
++CONFIG_SLAB=y
++CONFIG_PROFILING=y
++CONFIG_OPROFILE=y
++CONFIG_MODULES=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_CPU_SUBTYPE_SH7751R=y
++CONFIG_MEMORY_START=0x0c000000
++CONFIG_FLATMEM_MANUAL=y
++CONFIG_SH_RTS7751R2D=y
++CONFIG_RTS7751R2D_PLUS=y
++CONFIG_HEARTBEAT=y
++CONFIG_PCI=y
++CONFIG_HOTPLUG_PCI=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++CONFIG_IP_PNP_DHCP=y
++# CONFIG_INET_LRO is not set
++# CONFIG_IPV6 is not set
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_FW_LOADER=m
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_ATA=y
++CONFIG_PATA_PLATFORM=y
++CONFIG_NETDEVICES=y
++CONFIG_8139CP=y
++# CONFIG_WLAN is not set
++CONFIG_INPUT_FF_MEMLESS=m
++# CONFIG_INPUT_MOUSEDEV is not set
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_SH_SCI=y
++CONFIG_SERIAL_SH_SCI_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_SPI=y
++CONFIG_SPI_SH_SCI=y
++CONFIG_MFD_SM501=y
++CONFIG_VIDEO_OUTPUT_CONTROL=m
++CONFIG_FB=y
++CONFIG_FB_SH_MOBILE_LCDC=m
++CONFIG_FB_SH_MOBILE_HDMI=m
++CONFIG_FB_SM501=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
++CONFIG_LOGO=y
++# CONFIG_LOGO_LINUX_MONO is not set
++# CONFIG_LOGO_LINUX_VGA16 is not set
++# CONFIG_LOGO_LINUX_CLUT224 is not set
++# CONFIG_LOGO_SUPERH_MONO is not set
++# CONFIG_LOGO_SUPERH_VGA16 is not set
++CONFIG_SOUND=y
++CONFIG_SND_YMFPCI=m
++CONFIG_SOUND_PRIME=m
++CONFIG_HID_A4TECH=y
++CONFIG_HID_APPLE=y
++CONFIG_HID_BELKIN=y
++CONFIG_HID_CHERRY=y
++CONFIG_HID_CHICONY=y
++CONFIG_HID_CYPRESS=y
++CONFIG_HID_EZKEY=y
++CONFIG_HID_GYRATION=y
++CONFIG_HID_LOGITECH=y
++CONFIG_HID_MICROSOFT=y
++CONFIG_HID_MONTEREY=y
++CONFIG_HID_PANTHERLORD=y
++CONFIG_HID_PETALYNX=y
++CONFIG_HID_SAMSUNG=y
++CONFIG_HID_SONY=y
++CONFIG_HID_SUNPLUS=y
++CONFIG_USB=y
++CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
++CONFIG_USB_OHCI_HCD=y
++CONFIG_USB_STORAGE=y
++CONFIG_USB_LIBUSUAL=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_R9701=y
++CONFIG_EXT2_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_MINIX_FS=y
++CONFIG_NLS_CODEPAGE_932=y
++CONFIG_DEBUG_FS=y
++# CONFIG_CRYPTO_ANSI_CPRNG is not set
++CONFIG_CRC_T10DIF=y
+diff --git a/board/qemu/sh4-r2d/linux-3.2.config b/board/qemu/sh4-r2d/linux-3.2.config
+deleted file mode 100644
+index 5fc878c..0000000
+--- a/board/qemu/sh4-r2d/linux-3.2.config
++++ /dev/null
+@@ -1,96 +0,0 @@
+-CONFIG_EXPERIMENTAL=y
+-CONFIG_SYSVIPC=y
+-CONFIG_IKCONFIG=y
+-CONFIG_IKCONFIG_PROC=y
+-CONFIG_LOG_BUF_SHIFT=14
+-CONFIG_SLAB=y
+-CONFIG_PROFILING=y
+-CONFIG_OPROFILE=y
+-CONFIG_MODULES=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_CPU_SUBTYPE_SH7751R=y
+-CONFIG_MEMORY_START=0x0c000000
+-CONFIG_FLATMEM_MANUAL=y
+-CONFIG_SH_RTS7751R2D=y
+-CONFIG_RTS7751R2D_PLUS=y
+-CONFIG_HEARTBEAT=y
+-CONFIG_PCI=y
+-CONFIG_HOTPLUG_PCI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-CONFIG_IP_PNP_DHCP=y
+-# CONFIG_INET_LRO is not set
+-# CONFIG_IPV6 is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_FW_LOADER=m
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_SD=y
+-CONFIG_ATA=y
+-CONFIG_PATA_PLATFORM=y
+-CONFIG_NETDEVICES=y
+-CONFIG_8139CP=y
+-# CONFIG_WLAN is not set
+-CONFIG_INPUT_FF_MEMLESS=m
+-# CONFIG_INPUT_MOUSEDEV is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_SH_SCI=y
+-CONFIG_SERIAL_SH_SCI_CONSOLE=y
+-CONFIG_HW_RANDOM=y
+-CONFIG_SPI=y
+-CONFIG_SPI_SH_SCI=y
+-CONFIG_MFD_SM501=y
+-CONFIG_VIDEO_OUTPUT_CONTROL=m
+-CONFIG_FB=y
+-CONFIG_FB_SH_MOBILE_LCDC=m
+-CONFIG_FB_SH_MOBILE_HDMI=m
+-CONFIG_FB_SM501=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_LOGO=y
+-# CONFIG_LOGO_LINUX_MONO is not set
+-# CONFIG_LOGO_LINUX_VGA16 is not set
+-# CONFIG_LOGO_LINUX_CLUT224 is not set
+-# CONFIG_LOGO_SUPERH_MONO is not set
+-# CONFIG_LOGO_SUPERH_VGA16 is not set
+-CONFIG_SOUND=y
+-CONFIG_SND_YMFPCI=m
+-CONFIG_SOUND_PRIME=m
+-CONFIG_HID_A4TECH=y
+-CONFIG_HID_APPLE=y
+-CONFIG_HID_BELKIN=y
+-CONFIG_HID_CHERRY=y
+-CONFIG_HID_CHICONY=y
+-CONFIG_HID_CYPRESS=y
+-CONFIG_HID_EZKEY=y
+-CONFIG_HID_GYRATION=y
+-CONFIG_HID_LOGITECH=y
+-CONFIG_HID_MICROSOFT=y
+-CONFIG_HID_MONTEREY=y
+-CONFIG_HID_PANTHERLORD=y
+-CONFIG_HID_PETALYNX=y
+-CONFIG_HID_SAMSUNG=y
+-CONFIG_HID_SONY=y
+-CONFIG_HID_SUNPLUS=y
+-CONFIG_USB=y
+-CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+-CONFIG_USB_OHCI_HCD=y
+-CONFIG_USB_STORAGE=y
+-CONFIG_USB_LIBUSUAL=y
+-CONFIG_RTC_CLASS=y
+-CONFIG_RTC_DRV_R9701=y
+-CONFIG_EXT2_FS=y
+-CONFIG_MSDOS_FS=y
+-CONFIG_VFAT_FS=y
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_MINIX_FS=y
+-CONFIG_NLS_CODEPAGE_932=y
+-CONFIG_DEBUG_FS=y
+-# CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRC_T10DIF=y
+diff --git a/board/qemu/sh4-r2d/readme.txt b/board/qemu/sh4-r2d/readme.txt
+index 73dce14..5d770b4 100644
+--- a/board/qemu/sh4-r2d/readme.txt
++++ b/board/qemu/sh4-r2d/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu.
+ The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+index b27d9ec..f777417 100644
+--- a/configs/qemu_sh4_r2d_defconfig
++++ b/configs/qemu_sh4_r2d_defconfig
+@@ -10,19 +10,19 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.2 headers to avoid breaking with newer kernels
+-BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.2.55"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_2=y
+-
+ # The kernel wants to use the -m4-nofpu option to make sure that it
+ # doesn't use floating point operations.
+ BR2_EXTRA_GCC_CONFIG_OPTIONS="--with-multilib-list=m4,m4-nofpu"
+ 
++# Lock to 3.15 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.5"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
++
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.2.55"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.5"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.2.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux-3.15.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
