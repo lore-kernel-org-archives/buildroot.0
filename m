@@ -1,40 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jul 2014 20:12:40 +0200
-Subject: [Buildroot] autobuild-run update
-In-Reply-To: <CAHkwnC9qytLwyvxAJ5Bkfc--1Cmh_Y9PY7Vq20OYYG1ErpRLDw@mail.gmail.com>
-References: <20140708232244.39817a4c@free-electrons.com>
- <CAHkwnC9qytLwyvxAJ5Bkfc--1Cmh_Y9PY7Vq20OYYG1ErpRLDw@mail.gmail.com>
-Message-ID: <20140711201240.34a2c6c3@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Jul 2014 15:19:51 -0300
+Subject: [Buildroot] [PATCHv2] e2fsprogs: bump to version 1.42.11
+In-Reply-To: <20140711200547.7bcb014d@free-electrons.com>
+References: <1405096592-15847-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140711200547.7bcb014d@free-electrons.com>
+Message-ID: <53C02AC7.9050500@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+On 07/11/2014 03:05 PM, Thomas Petazzoni wrote:
 
-On Fri, 11 Jul 2014 18:36:36 +0200, Fabio Porcedda wrote:
+> Applied, thanks. Next time, could you include in the commit log a
+> description of why certain patches are kept and others are removed?
 
-> I'm trying to use it on a Ubuntu 14.04 but it fails in few seconds
-> with this error:
-> 
->  ./autobuild-run --ninstances 2 --njobs 3
-
-[...]
-
-> HTTPError: HTTP Error 404: Not Found
-
-Aah, yes, my bad. I removed the AVR32 toolchain configuration file
-yesterday, but forgot to remove this toolchain from the csv file that
-describes all the available toolchain configurations.
-
-This is now fixed, so the script should work again (and the Free
-Electrons build server should start again doing some builds).
-
-Thanks for the report!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Sure, "they're upstream" ;)
+The remaining patch is quite old from
+44b5637ab28306dcd6f7a46aae56bdcf6284b3e7 (2009).
+It might be worth checking if that's still required.
+Regards.
