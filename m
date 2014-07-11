@@ -1,71 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Jul 2014 08:14:25 +0200
-Subject: [Buildroot] [PATCH 01/14] freescale-imx: bump to version
-	3.10.17-1.0.0
-In-Reply-To: <7139dda2c668a5cae3ee54d8319a99529c7deec9.1404164261.git.yann.morin.1998@free.fr>
-References: <cover.1404164261.git.yann.morin.1998@free.fr>
- <7139dda2c668a5cae3ee54d8319a99529c7deec9.1404164261.git.yann.morin.1998@free.fr>
-Message-ID: <53BF80C1.8080605@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Jul 2014 09:30:04 +0200
+Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
+In-Reply-To: <87y4w1m2jo.fsf@dell.be.48ers.dk>
+References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87oawxntvt.fsf@dell.be.48ers.dk>
+ <20140710171848.75381ecb@free-electrons.com>
+ <20140710155650.GA28300@free.fr> <87y4w1m2jo.fsf@dell.be.48ers.dk>
+Message-ID: <20140711093004.2c1f891c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/06/14 23:52, Yann E. MORIN wrote:
-> From: Gary Bisson <bisson.gary@gmail.com>
+Dear Peter Korsgaard,
+
+On Thu, 10 Jul 2014 21:33:47 +0200, Peter Korsgaard wrote:
+
+>  > If that is accepted, I'll work on this.
 > 
-> Bumping the version requires some heavy changes in the different
-> i.MX related packages. Instead of having a single huge patch, those
-> changes are split in smaller patches, one per affected package.
-> 
-> This has the inconvenient side-effect of breaking the build right
-> now with the bump; but it is better since the patches are easier to
-> understand.
+> Fine by me. I think we should also be more careful about when we
+> consider the Busybox variant equivalent - E.G. we used to hide all web
+> servers (but not anymore), and we still hide the ISC dhcp package even
+> though busybox's udhcpd/c are very different in configuration that it.
 
- Of course, in the end all of these should be squashed into a single bisectable
-commit.
+That being said, the "full-blown" versions are never equivalent to the
+Busybox ones. Take "bash" for example. One can hardly say that Busybox
+ash is equivalent to bash. Though for most practical purposes, having
+the Busybox ash is sufficient in embedded systems.
 
- So I think this first patch (which is the one that will be kept when you do a
-fixup) should have the complete commit message, and below the --- it should
-mention which patches should be squashed into it.
+On one hand, hiding packages is good for newcomers so they are
+encouraged to use Busybox by default for most things (which also
+happens to be the configuration that most of us are using/testing I
+guess). On the other hand, hiding packages may make those newcomers not
+notice the entire scope of packages we have in Buildroot.
 
- The commit messages of the subsequent packages are less important since they'll
-be squashed away.
+We could also switch to use some Config.in comment to say that "bash
+could be available if Busybox show others was enabled" or something
+like that. But that would add a lot of comment and clutter menuconfig
+quite a bit.
 
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [yann.morin.1998 at free.fr: expand commit log]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-> ---
->  package/freescale-imx/freescale-imx.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
-> index 39ffa8a..843ba61 100644
-> --- a/package/freescale-imx/freescale-imx.mk
-> +++ b/package/freescale-imx/freescale-imx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FREESCALE_IMX_VERSION = 3.5.7-1.0.0
-> +FREESCALE_IMX_VERSION = 3.10.17-1.0.0
->  FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
->  
->  include $(sort $(wildcard package/freescale-imx/*/*.mk))
-> 
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
