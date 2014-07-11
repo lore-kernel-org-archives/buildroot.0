@@ -1,79 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jul 2014 10:00:21 +0200
-Subject: [Buildroot] i.MX 3.10.17 updates
-In-Reply-To: <3890233.PnazMluvBb@sagittea>
-References: <53BEDF43.9020401@boundarydevices.com>
- <3890233.PnazMluvBb@sagittea>
-Message-ID: <20140711100021.18d21b69@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 11 Jul 2014 10:24:11 +0200
+Subject: [Buildroot] [PATCHv3 1/2] linux target name might be not equal
+ linux file name
+In-Reply-To: <20140710202208.GH28300@free.fr>
+References: <20140710200054.GA29977@waldemar-brodkorb.de>
+ <20140710202208.GH28300@free.fr>
+Message-ID: <20140711082410.GA22779@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+Hi Yann,
+Yann E. MORIN wrote,
 
-Could you please stop posting to both buildroot at busybox.org *and*
-buildroot at buildroot.org ? It makes your messages appear twice on the
-mailing list. Both addresses are the same, so it doesn't make sense to
-post to both. You're pretty much the only one doing this, so it'd be
-great to stop doing it :-)
-
-Thanks a lot!
-
-Thomas
-
-On Thu, 10 Jul 2014 23:20:09 +0200, J?r?me Pouiller wrote:
-> Hello Eric,
+> Waldemar, All,
 > 
-> On Thursday 10 July 2014 11:45:23 Eric Nelson wrote:
-> > Hi all,
+> On 2014-07-10 22:00 +0200, Waldemar Brodkorb spake thusly:
+> > For example the upcoming qemu-xtensa patch is using this feature,
+> > where the target is called "zImage", but the resulting kernel name
+> > is "Image.elf".
 > > 
-> > Thanks for all of your work on this.
+> > ---
+> > Changes v2 -> v3:
+> >   - no change
+> > Changes v1 -> v2:
+> >   - add comment about default value (suggested by Arnout)
+> >   - reorder default value for LINUX_TARGET_NAME (suggested by Arnout)
 > > 
-> > I've been able to validate the GPU portions of this, but
-> > I'm struggling a bit with the VPU and gstreamer.
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> > ---
+> >  linux/Config.in |    7 +++++++
+> >  linux/linux.mk  |   10 +++++++---
+> >  2 files changed, 14 insertions(+), 3 deletions(-)
 > > 
-> > Using roughly Gary's configuration, I had trouble using
-> > playbin2 or gplay loading the Freescale software codecs:
-> > 
-> > (gst-plugin-scanner:157): GStreamer-WARNING **: Failed to load plugin
-> > '/usr/lib/gstreamer-0.10/libmfw_gst_mpeg4aspdec.so':
-> > lib_MPEG4ASP_dec_arm11_elinux.so.1: cannot open shared object file: No
-> > such file or directory
-> This error is produced only during first launch, when gstreamer build its 
-> plugin cache. Problem may continue to exist even if this error does not 
-> appear. You have to remove ~/.gstreamer-0.10 to force cache rebuild. Can you 
-> check this error does no more appear event after removing ~/.gstreamer-0.10?
+> > diff --git a/linux/Config.in b/linux/Config.in
+> > index 0a13b13..1c316ae 100644
+> > --- a/linux/Config.in
+> > +++ b/linux/Config.in
+> > @@ -244,6 +244,13 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+> >  	  Specify the kernel make target to build the kernel that you
+> >  	  need.
+> >  
+> > +config BR2_LINUX_KERNEL_IMAGE_NAME
+> > +	string "Kernel image name"
+> > +	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
+> > +	help
+> > +	  Specify the kernel filename. Defaults to BR2_LINUX_KERNEL_TARGET_NAME
+> > +	  if not set.
 > 
-> If error appears, you may add this to /etc/ld.so.conf:
->  /usr/lib/imx-mm/audio-codec
->  /usr/lib/imx-mm/video-codec
->  /usr/lib/imx-mm/parser
+> I would rephrase this to:
 > 
-> and retry. 
+>     The filename of the kernel image, if it is different from the
+>     make target (above). Only Xtensa uses a filename different from
+>     the make target.
 > 
-> > After messing around with the toolchain, I found that listing
-> > directories (usr/lib/imx-mm/audio-codec and video-codec) allowed
-> > the plugins to load.
-> > 
-> > After that, I'm still having trouble getting playback to work:
-> > 
-> > 	# gplay tears_of_steel_1080p.webm
-> > 	playbin2 is employed!
-> > 	fsl_player_init(): Successfully initialize!
-> > 	fsl_player_set_media_location(): filename=tears_of_steel_1080p.webm
-> > 	[Stopped  ][Vol=01][00:00:00/00:00:00][fps:0]state change failed from 2
-> > to 4
-> > 	get GST_MESSAGE_ELEMENT missing-plugin, type=(string)decoder,
-> > detail=(GstCaps)video/webm, name=(string)"WebM\ demuxer";
-> > try to play failed
+>     If unsure, leave it empty.
 > 
+> >  config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+> >  	string "load address (for 3.7+ multi-platform image)"
+> >  	depends on BR2_arm || BR2_armeb
+> > diff --git a/linux/linux.mk b/linux/linux.mk
+> > index bd3f2ac..1ba3953 100644
+> > --- a/linux/linux.mk
+> > +++ b/linux/linux.mk
+> > @@ -80,7 +80,8 @@ endif
+> >  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+> >  
+> >  ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+> > -LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+> > +LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
+> > +LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+> >  else
+> >  ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+> >  LINUX_IMAGE_NAME = uImage
+> > @@ -106,6 +107,9 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+> >  LINUX_IMAGE_NAME = vmlinuz
+> >  endif
+> >  endif
+> > +ifeq ($(LINUX_TARGET_NAME),)
+> > +LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
+> > +endif
 > 
+> I'm confused. Above, you state that if BR2_LINUX_KERNEL_IMAGE_NAME is
+> empty, it defaults to BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM.
+> 
+> But here, you are doing exactly the opposite, that is set
+> LINUX_TARGET_NAME (derived from BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM)
+> with the value of LINUX_IMAGE_NAME, which is derived from the new option
+> you added above, BR2_LINUX_KERNEL_IMAGE_NAME.
+> 
+> Should that not be:
+> 
+>     ifeq ($(LINUX_IMAGE_NAME),)
+>     LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
+>     endif
+> 
+> But I may have missed something... ;-)
 
+I'm confused too now ;)
+Indeed I have put in Arnout suggestion for my first patch version
+without modifying the help text and only done runtime testing
+without actually thinking if this is the correct thing.
 
+So the new variable BR2_LINUX_KERNEL_IMAGE_NAME should be default
+LINUX_TARGET_NAME, if not set.
 
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+best regards
+ Waldemar
