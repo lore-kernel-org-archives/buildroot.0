@@ -1,55 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 11 Jul 2014 07:39:20 +0200
-Subject: [Buildroot] [PATCH] dependencies.sh message: fix Debian renamed
- packages
-In-Reply-To: <1404988617-10992-1-git-send-email-kaszak@gmail.com>
-References: <1404988617-10992-1-git-send-email-kaszak@gmail.com>
-Message-ID: <53BF7888.2010803@mind.be>
+Date: Fri, 11 Jul 2014 08:10:49 +0200
+Subject: [Buildroot] Boundary U-Boot files (was [PATCH] nitrogen6x:
+ include .dtb files...)
+In-Reply-To: <53BEDD03.9030103@boundarydevices.com>
+References: <a913d991bd0534d192982537a25388705c80c728.1404164261.git.yann.morin.1998@free.fr>	<1405012684-30163-1-git-send-email-eric.nelson@boundarydevices.com>	<20140710172818.GE28300@free.fr>
+ <CADCpmyOL9bGFzjKe-4NRZ2Fwm7o-q8jzJ+u0McyfQeWqbPZyQA@mail.gmail.com>
+ <53BEDD03.9030103@boundarydevices.com>
+Message-ID: <53BF7FE9.90106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10/07/14 12:36, Karoly Kasza wrote:
-> Debian renamed the 32bit compatibility packages.
+On 10/07/14 20:35, Eric Nelson wrote:
+> Thanks for the ping, Gary.
 > 
-> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-> ---
->  support/dependencies/dependencies.sh |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> On 07/10/2014 11:22 AM, Gary Bisson wrote:
+>> Eric, All,
+>>
+>> What about the bootloader configuration? I know the same bootloader will
+>> work the same for sabrelite and nitrogen6q. However for the max and dl
+>> versions I guess need another config as the DCD table will be different.
+>> Do we want to create other defconfigs?
+>>
 > 
-> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-> index 255a07b..399bc06 100755
-> --- a/support/dependencies/dependencies.sh
-> +++ b/support/dependencies/dependencies.sh
-> @@ -205,8 +205,8 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
->  		echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
->  		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
->  		echo "library."
-> -		echo "If you're running a Debian/Ubuntu distribution, install the libc6:i386,"
-> -		echo "libstdc++6:i386, and zlib1g:i386 packages."
-> +		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
-> +		echo "lib32stdc++6, and lib32z1 packages."
+> As our boards don't require U-Boot to be built in order to
+> craft a filesystem (U-Boot runs from SPI NOR), we could simply
+> remove the build target.
+> 
+> At the very least, we should probably find a way to rename the U-Boot
+> binary (u-boot.imx) to make it clear that the one built is for
+> the Quad-Core/1GiB variant.
 
- Are you sure? With e.g. a sourcery toolchain, I get (on a Debian sid):
+ I think it's best to still build the bootloader for one variant, and mention in
+the readme.txt the different variants and how to build their bootloaders.
 
-bash 98826$ ldd host/opt/ext-toolchain/bin/i686-pc-linux-gnu-gcc
-        linux-gate.so.1 (0xf776e000)
-        libm.so.6 => /lib/i386-linux-gnu/i686/cmov/libm.so.6 (0xf76eb000)
-        libc.so.6 => /lib/i386-linux-gnu/i686/cmov/libc.so.6 (0xf7540000)
-        /lib/ld-linux.so.2 (0xf776f000)
-
- /lib/i386-linux-gnu/* is part of the libc6:i386 package.
-
+ That readme anyway needs to be extended a bit since it doesn't mention how to
+install the kernel or the bootloader.
 
  Regards,
  Arnout
-
->  		echo "For other distributions, refer to the documentation on how to install the 32 bits"
->  		echo "compatibility libraries."
->  		exit 1
-> 
 
 
 -- 
