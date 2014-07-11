@@ -1,51 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jul 2014 08:30:10 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-10
-Message-ID: <20140711063011.301BF1012A1@stock.ovh.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 11 Jul 2014 07:39:20 +0200
+Subject: [Buildroot] [PATCH] dependencies.sh message: fix Debian renamed
+ packages
+In-Reply-To: <1404988617-10992-1-git-send-email-kaszak@gmail.com>
+References: <1404988617-10992-1-git-send-email-kaszak@gmail.com>
+Message-ID: <53BF7888.2010803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-07-10
-===============================
+On 10/07/14 12:36, Karoly Kasza wrote:
+> Debian renamed the 32bit compatibility packages.
+> 
+> Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> ---
+>  support/dependencies/dependencies.sh |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index 255a07b..399bc06 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -205,8 +205,8 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+>  		echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
+>  		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
+>  		echo "library."
+> -		echo "If you're running a Debian/Ubuntu distribution, install the libc6:i386,"
+> -		echo "libstdc++6:i386, and zlib1g:i386 packages."
+> +		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
+> +		echo "lib32stdc++6, and lib32z1 packages."
 
-        success : 83 
-       failures : 14 
-       timeouts : 0  
-          TOTAL : 97 
+ Are you sure? With e.g. a sourcery toolchain, I get (on a Debian sid):
 
-Classification of failures by reason
-====================================
+bash 98826$ ldd host/opt/ext-toolchain/bin/i686-pc-linux-gnu-gcc
+        linux-gate.so.1 (0xf776e000)
+        libm.so.6 => /lib/i386-linux-gnu/i686/cmov/libm.so.6 (0xf76eb000)
+        libc.so.6 => /lib/i386-linux-gnu/i686/cmov/libc.so.6 (0xf7540000)
+        /lib/ld-linux.so.2 (0xf776f000)
 
-            host-python3-3.4.1 | 5 
-                  zeromq-4.0.4 | 2 
-          perl-net-ssleay-1.64 | 2 
-                     popt-1.16 | 1 
-                   atftp-0.7.1 | 1 
-                 inadyn-1.99.9 | 1 
-host-gdb-6be65fb56ea6694a92... | 1 
-                      icu-51.2 | 1 
+ /lib/i386-linux-gnu/* is part of the libc6:i386 package.
 
-Detail of failures
-===================
 
-       arm |                    atftp-0.7.1 | NOK | http://autobuild.buildroot.net/results/2592612be38a2c1dde21b44be2ecf25d1cc5211a/
-microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/ec355091e3b9ecc2ba547d605c4f4db92a8e99c7/
-   powerpc |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/39687e32f424f873d65b9b6117ee86ee99045a16/
-   powerpc |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/95a63146ec8c1bc2120a802c2983a87e2301f790/
-       arm |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/3ce385476730a8a5cfa0c42b04ce36866bb1c0e3/
-  mips64el |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/8d1d9554e6210c7451e44442c0192ac3ec7b3112/
-    xtensa |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/320c41c06666b6d43934d3ac23334d716aa44f76/
-      bfin |                       icu-51.2 | NOK | http://autobuild.buildroot.net/results/6a77a4b1d6713029b7798ee8da92e9650e207268/
-       arm |                  inadyn-1.99.9 | NOK | http://autobuild.buildroot.net/results/1a1a184e8248e5c51fa730d0c9721fe67a9c84a4/
-   powerpc |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/d27475db2cc21ff4f098b63b0e7da43cb934e937/
-       arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/68b01c58f30da28ce0cea4598bd354df2d34485b/
-      bfin |                      popt-1.16 | NOK | http://autobuild.buildroot.net/results/55fccb0ddf20497fb4587984d25015aaf2e435ac/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/954026291fbdc3a1998dcbfce84ad486bf39ac5e/
-       arm |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/7a0392412ea0519fd75798d75002bae98e613c57/
+ Regards,
+ Arnout
+
+>  		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+>  		echo "compatibility libraries."
+>  		exit 1
+> 
 
 
 -- 
-http://autobuild.buildroot.net
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
