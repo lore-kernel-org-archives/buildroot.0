@@ -1,252 +1,153 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jul 2014 20:04:18 +0200
-Subject: [Buildroot] [PATCH] busybox: fix interaction with version selection
-	removal and lzo fix
-Message-ID: <1405101858-15879-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Jul 2014 20:04:55 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.42.11
+Message-ID: <20140711180507.AFC289D206@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fix for the LZO issue in Busybox was merged between the moment the
-patch removing the Busybox version selection was posted and
-merged. This patch adjusts the Busybox patches to take into account
-this issue: it removes the LZO patches for the no-longer existing
-Busybox versions, and moves the LZO fix for the 1.22.1 Busybox version
-as appropriate.
+commit: http://git.buildroot.net/buildroot/commit/?id=d0c4261bd1b7eae75782667d237b2ae216bc6828
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0006-lzop-add-overflow-check.patch             |  0
- .../1.19.4/0001-lzop-add-overflow-check.patch      | 66 ----------------------
- .../1.20.2/0001-lzop-add-overflow-check.patch      | 66 ----------------------
- .../1.21.1/0004-lzop-add-overflow-check.patch      | 66 ----------------------
- 4 files changed, 198 deletions(-)
- rename package/busybox/{1.22.1 => }/0006-lzop-add-overflow-check.patch (100%)
- delete mode 100644 package/busybox/1.19.4/0001-lzop-add-overflow-check.patch
- delete mode 100644 package/busybox/1.20.2/0001-lzop-add-overflow-check.patch
- delete mode 100644 package/busybox/1.21.1/0004-lzop-add-overflow-check.patch
+ ..._CFLAGS-add-includes-when-cross-compiling.patch |   29 -----------------
+ ...2fsck-fix-Makefile-dependency-for-quota.o.patch |   32 ------------------
+ ...n-fix-external-libblkid-test-for-static-l.patch |   34 --------------------
+ package/e2fsprogs/e2fsprogs.mk                     |    4 +--
+ 4 files changed, 1 insertions(+), 98 deletions(-)
 
-diff --git a/package/busybox/1.22.1/0006-lzop-add-overflow-check.patch b/package/busybox/0006-lzop-add-overflow-check.patch
-similarity index 100%
-rename from package/busybox/1.22.1/0006-lzop-add-overflow-check.patch
-rename to package/busybox/0006-lzop-add-overflow-check.patch
-diff --git a/package/busybox/1.19.4/0001-lzop-add-overflow-check.patch b/package/busybox/1.19.4/0001-lzop-add-overflow-check.patch
+diff --git a/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch b/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
 deleted file mode 100644
-index d3f6c67..0000000
---- a/package/busybox/1.19.4/0001-lzop-add-overflow-check.patch
+index 2aa86aa..0000000
+--- a/package/e2fsprogs/e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
 +++ /dev/null
-@@ -1,66 +0,0 @@
--From a9dc7c2f59dc5e92870d2d46316ea5c1f14740e3 Mon Sep 17 00:00:00 2001
--From: Denys Vlasenko <vda.linux@googlemail.com>
--Date: Mon, 30 Jun 2014 10:14:34 +0200
--Subject: [PATCH] lzop: add overflow check
+@@ -1,29 +0,0 @@
+-From 2d9bfcc82b986f9da203270fd4059041bb7f1983 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Tue, 3 Jun 2014 18:51:07 -0300
+-Subject: [PATCH] e2fsprogs: Add INCLUDES to BUILD_CFLAGS when cross-compiling
 -
--See CVE-2014-4607
--http://www.openwall.com/lists/oss-security/2014/06/26/20
+-We need $INCLUDES in BUILD_CFLAGS otherwise cross-compilation is broken
+-now that util/subst.c uses config.h (from commit 2873927d15).
 -
--function                                             old     new   delta
--lzo1x_decompress_safe                               1010    1031     +21
--
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ----
-- archival/libarchive/liblzo.h  | 2 ++
-- archival/libarchive/lzo1x_d.c | 3 +++
-- 2 files changed, 5 insertions(+)
+- configure.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/archival/libarchive/liblzo.h b/archival/libarchive/liblzo.h
--index 843997c..4596620 100644
----- a/archival/libarchive/liblzo.h
--+++ b/archival/libarchive/liblzo.h
--@@ -76,11 +76,13 @@
-- #    define TEST_IP             (ip < ip_end)
-- #    define NEED_IP(x) \
--             if ((unsigned)(ip_end - ip) < (unsigned)(x))  goto input_overrun
--+#    define TEST_IV(x)          if ((x) > (unsigned)0 - (511)) goto input_overrun
-- 
-- #    undef TEST_OP              /* don't need both of the tests here */
-- #    define TEST_OP             1
-- #    define NEED_OP(x) \
--             if ((unsigned)(op_end - op) < (unsigned)(x))  goto output_overrun
--+#    define TEST_OV(x)          if ((x) > (unsigned)0 - (511)) goto output_overrun
-- 
-- #define HAVE_ANY_OP 1
-- 
--diff --git a/archival/libarchive/lzo1x_d.c b/archival/libarchive/lzo1x_d.c
--index 9bc1270..40b167e 100644
----- a/archival/libarchive/lzo1x_d.c
--+++ b/archival/libarchive/lzo1x_d.c
--@@ -92,6 +92,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 				ip++;
-- 				NEED_IP(1);
-- 			}
--+			TEST_IV(t);
-- 			t += 15 + *ip++;
-- 		}
-- 		/* copy literals */
--@@ -224,6 +225,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 						ip++;
-- 						NEED_IP(1);
-- 					}
--+					TEST_IV(t);
-- 					t += 31 + *ip++;
-- 				}
-- #if defined(COPY_DICT)
--@@ -265,6 +267,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 						ip++;
-- 						NEED_IP(1);
-- 					}
--+					TEST_IV(t);
-- 					t += 7 + *ip++;
-- 				}
-- #if defined(COPY_DICT)
+-diff --git a/configure.in b/configure.in
+-index 448a292..8bac870 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -1382,7 +1382,7 @@ if test $cross_compiling = no; then
+-    BUILD_CFLAGS="$CFLAGS $CPPFLAGS $INCLUDES -DHAVE_CONFIG_H"
+-    BUILD_LDFLAGS="$LDFLAGS"
+- else
+--   BUILD_CFLAGS=
+-+   BUILD_CFLAGS="$INCLUDES -DHAVE_CONFIG_H"
+-    BUILD_LDFLAGS=
+- fi
+- AC_SUBST(BUILD_CFLAGS)
+---
+-1.8.5.5
+-
+diff --git a/package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch b/package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch
+deleted file mode 100644
+index 1e3f20d..0000000
+--- a/package/e2fsprogs/e2fsprogs-0003-e2fsck-fix-Makefile-dependency-for-quota.o.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 5c15bf5f978bae01f1ca3cbe6414ab1d355a6adf Mon Sep 17 00:00:00 2001
+-From: Theodore Ts'o <tytso@mit.edu>
+-Date: Thu, 22 May 2014 18:52:27 -0400
+-Subject: [PATCH] e2fsck: fix Makefile dependency for quota.o
+-
+-Signed-off-by: "Theodore Ts'o" <tytso@mit.edu>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+- e2fsck/Makefile.in | 10 ++++++++++
+- 1 file changed, 10 insertions(+)
+-
+-diff --git a/e2fsck/Makefile.in b/e2fsck/Makefile.in
+-index 4b10f6f..f773fea 100644
+---- a/e2fsck/Makefile.in
+-+++ b/e2fsck/Makefile.in
+-@@ -552,3 +552,13 @@ logfile.o: $(srcdir)/logfile.c $(top_builddir)/lib/config.h \
+-  $(top_srcdir)/lib/quota/dqblk_v2.h $(top_srcdir)/lib/quota/quotaio_tree.h \
+-  $(top_srcdir)/lib/../e2fsck/dict.h
+- prof_err.o: prof_err.c
+-+quota.o: $(srcdir)/quota.c $(top_builddir)/lib/config.h \
+-+ $(top_builddir)/lib/dirpaths.h $(srcdir)/e2fsck.h \
+-+ $(top_srcdir)/lib/ext2fs/ext2_fs.h $(top_builddir)/lib/ext2fs/ext2_types.h \
+-+ $(top_srcdir)/lib/ext2fs/ext2fs.h $(top_srcdir)/lib/ext2fs/ext3_extents.h \
+-+ $(top_srcdir)/lib/et/com_err.h $(top_srcdir)/lib/ext2fs/ext2_io.h \
+-+ $(top_builddir)/lib/ext2fs/ext2_err.h \
+-+ $(top_srcdir)/lib/ext2fs/ext2_ext_attr.h $(top_srcdir)/lib/ext2fs/bitops.h \
+-+ $(srcdir)/profile.h prof_err.h $(top_srcdir)/lib/quota/quotaio.h \
+-+ $(top_srcdir)/lib/quota/dqblk_v2.h $(top_srcdir)/lib/quota/quotaio_tree.h \
+-+ $(top_srcdir)/lib/../e2fsck/dict.h $(srcdir)/problem.h
 --- 
 -1.8.5.5
 -
-diff --git a/package/busybox/1.20.2/0001-lzop-add-overflow-check.patch b/package/busybox/1.20.2/0001-lzop-add-overflow-check.patch
+diff --git a/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch b/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
 deleted file mode 100644
-index d3f6c67..0000000
---- a/package/busybox/1.20.2/0001-lzop-add-overflow-check.patch
+index 65d6c4c..0000000
+--- a/package/e2fsprogs/e2fsprogs-0004-configure.in-fix-external-libblkid-test-for-static-l.patch
 +++ /dev/null
-@@ -1,66 +0,0 @@
--From a9dc7c2f59dc5e92870d2d46316ea5c1f14740e3 Mon Sep 17 00:00:00 2001
--From: Denys Vlasenko <vda.linux@googlemail.com>
--Date: Mon, 30 Jun 2014 10:14:34 +0200
--Subject: [PATCH] lzop: add overflow check
+@@ -1,34 +0,0 @@
+-From b52e76432fe23490b891884f3a66504101c2a5bd Mon Sep 17 00:00:00 2001
+-Message-Id: <b52e76432fe23490b891884f3a66504101c2a5bd.1402480818.git.baruch@tkos.co.il>
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Wed, 11 Jun 2014 12:56:15 +0300
+-Subject: [PATCH] configure.in: fix external libblkid test for static link
 -
--See CVE-2014-4607
--http://www.openwall.com/lists/oss-security/2014/06/26/20
+-External libblkid needs -luuid when linking statically. Use pkg-config to
+-determine it correctly. Adding --static doesn't hurt even for dynamic
+-linking.
 -
--function                                             old     new   delta
--lzo1x_decompress_safe                               1010    1031     +21
--
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- archival/libarchive/liblzo.h  | 2 ++
-- archival/libarchive/lzo1x_d.c | 3 +++
-- 2 files changed, 5 insertions(+)
 -
--diff --git a/archival/libarchive/liblzo.h b/archival/libarchive/liblzo.h
--index 843997c..4596620 100644
----- a/archival/libarchive/liblzo.h
--+++ b/archival/libarchive/liblzo.h
--@@ -76,11 +76,13 @@
-- #    define TEST_IP             (ip < ip_end)
-- #    define NEED_IP(x) \
--             if ((unsigned)(ip_end - ip) < (unsigned)(x))  goto input_overrun
--+#    define TEST_IV(x)          if ((x) > (unsigned)0 - (511)) goto input_overrun
-- 
-- #    undef TEST_OP              /* don't need both of the tests here */
-- #    define TEST_OP             1
-- #    define NEED_OP(x) \
--             if ((unsigned)(op_end - op) < (unsigned)(x))  goto output_overrun
--+#    define TEST_OV(x)          if ((x) > (unsigned)0 - (511)) goto output_overrun
-- 
-- #define HAVE_ANY_OP 1
-- 
--diff --git a/archival/libarchive/lzo1x_d.c b/archival/libarchive/lzo1x_d.c
--index 9bc1270..40b167e 100644
----- a/archival/libarchive/lzo1x_d.c
--+++ b/archival/libarchive/lzo1x_d.c
--@@ -92,6 +92,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 				ip++;
-- 				NEED_IP(1);
-- 			}
--+			TEST_IV(t);
-- 			t += 15 + *ip++;
-- 		}
-- 		/* copy literals */
--@@ -224,6 +225,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 						ip++;
-- 						NEED_IP(1);
-- 					}
--+					TEST_IV(t);
-- 					t += 31 + *ip++;
-- 				}
-- #if defined(COPY_DICT)
--@@ -265,6 +267,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 						ip++;
-- 						NEED_IP(1);
-- 					}
--+					TEST_IV(t);
-- 					t += 7 + *ip++;
-- 				}
-- #if defined(COPY_DICT)
+-Patch status: sent upstream: http://patchwork.ozlabs.org/patch/358584/
+-
+- configure.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.in b/configure.in
+-index 448a2926776a..ec6068320878 100644
+---- a/configure.in
+-+++ b/configure.in
+-@@ -551,7 +551,7 @@ then
+- 		[LIBBLKID=`$PKG_CONFIG --libs blkid`;
+- 		 STATIC_LIBBLKID=`$PKG_CONFIG --static --libs blkid`],
+- 		[AC_MSG_ERROR([external blkid library not found])],
+--		[$LIBBLKID])
+-+		[`$PKG_CONFIG --static --libs blkid`])
+- 	BLKID_CMT=#
+- 	AC_MSG_RESULT([Disabling private blkid library])
+- else
 --- 
--1.8.5.5
+-2.0.0
 -
-diff --git a/package/busybox/1.21.1/0004-lzop-add-overflow-check.patch b/package/busybox/1.21.1/0004-lzop-add-overflow-check.patch
-deleted file mode 100644
-index d3f6c67..0000000
---- a/package/busybox/1.21.1/0004-lzop-add-overflow-check.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
--From a9dc7c2f59dc5e92870d2d46316ea5c1f14740e3 Mon Sep 17 00:00:00 2001
--From: Denys Vlasenko <vda.linux@googlemail.com>
--Date: Mon, 30 Jun 2014 10:14:34 +0200
--Subject: [PATCH] lzop: add overflow check
--
--See CVE-2014-4607
--http://www.openwall.com/lists/oss-security/2014/06/26/20
--
--function                                             old     new   delta
--lzo1x_decompress_safe                               1010    1031     +21
--
--Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-----
-- archival/libarchive/liblzo.h  | 2 ++
-- archival/libarchive/lzo1x_d.c | 3 +++
-- 2 files changed, 5 insertions(+)
--
--diff --git a/archival/libarchive/liblzo.h b/archival/libarchive/liblzo.h
--index 843997c..4596620 100644
----- a/archival/libarchive/liblzo.h
--+++ b/archival/libarchive/liblzo.h
--@@ -76,11 +76,13 @@
-- #    define TEST_IP             (ip < ip_end)
-- #    define NEED_IP(x) \
--             if ((unsigned)(ip_end - ip) < (unsigned)(x))  goto input_overrun
--+#    define TEST_IV(x)          if ((x) > (unsigned)0 - (511)) goto input_overrun
-- 
-- #    undef TEST_OP              /* don't need both of the tests here */
-- #    define TEST_OP             1
-- #    define NEED_OP(x) \
--             if ((unsigned)(op_end - op) < (unsigned)(x))  goto output_overrun
--+#    define TEST_OV(x)          if ((x) > (unsigned)0 - (511)) goto output_overrun
-- 
-- #define HAVE_ANY_OP 1
-- 
--diff --git a/archival/libarchive/lzo1x_d.c b/archival/libarchive/lzo1x_d.c
--index 9bc1270..40b167e 100644
----- a/archival/libarchive/lzo1x_d.c
--+++ b/archival/libarchive/lzo1x_d.c
--@@ -92,6 +92,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 				ip++;
-- 				NEED_IP(1);
-- 			}
--+			TEST_IV(t);
-- 			t += 15 + *ip++;
-- 		}
-- 		/* copy literals */
--@@ -224,6 +225,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 						ip++;
-- 						NEED_IP(1);
-- 					}
--+					TEST_IV(t);
-- 					t += 31 + *ip++;
-- 				}
-- #if defined(COPY_DICT)
--@@ -265,6 +267,7 @@ int lzo1x_decompress_safe(const uint8_t* in, unsigned in_len,
-- 						ip++;
-- 						NEED_IP(1);
-- 					}
--+					TEST_IV(t);
-- 					t += 7 + *ip++;
-- 				}
-- #if defined(COPY_DICT)
---- 
--1.8.5.5
--
--- 
-2.0.0
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index fa0191f..fdd2e4e 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-E2FSPROGS_VERSION = 1.42.10
++E2FSPROGS_VERSION = 1.42.11
+ E2FSPROGS_SITE = http://downloads.sourceforge.net/project/e2fsprogs/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPLv2, libuuid BSD-3c, libss and libet MIT-like with advertising clause
+ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h lib/et/internal.h
+-# For e2fsprogs-0002-BUILD_CFLAGS-add-includes-when-cross-compiling.patch
+-E2FSPROGS_AUTORECONF = YES
+ E2FSPROGS_INSTALL_STAGING = YES
+ E2FSPROGS_INSTALL_STAGING_OPT = DESTDIR=$(STAGING_DIR) install-libs
+ 
