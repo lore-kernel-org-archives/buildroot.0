@@ -1,111 +1,230 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 11 Jul 2014 10:24:11 +0200
-Subject: [Buildroot] [PATCHv3 1/2] linux target name might be not equal
- linux file name
-In-Reply-To: <20140710202208.GH28300@free.fr>
-References: <20140710200054.GA29977@waldemar-brodkorb.de>
- <20140710202208.GH28300@free.fr>
-Message-ID: <20140711082410.GA22779@waldemar-brodkorb.de>
+From: Luigi Tarenga <luigi.tarenga@gmail.com>
+Date: Fri, 11 Jul 2014 10:44:54 +0200
+Subject: [Buildroot] bug in dash compile with buildroot
+In-Reply-To: <53BBFECB.6070003@gmail.com>
+References: <53BBFECB.6070003@gmail.com>
+Message-ID: <53BFA406.7080408@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
-Yann E. MORIN wrote,
+Hi lists,
+for the buildroot mailing list: I tried to post this bug report but I 
+wasn't subscribed.
+Below you can see my original bug report.
 
-> Waldemar, All,
-> 
-> On 2014-07-10 22:00 +0200, Waldemar Brodkorb spake thusly:
-> > For example the upcoming qemu-xtensa patch is using this feature,
-> > where the target is called "zImage", but the resulting kernel name
-> > is "Image.elf".
-> > 
-> > ---
-> > Changes v2 -> v3:
-> >   - no change
-> > Changes v1 -> v2:
-> >   - add comment about default value (suggested by Arnout)
-> >   - reorder default value for LINUX_TARGET_NAME (suggested by Arnout)
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> >  linux/Config.in |    7 +++++++
-> >  linux/linux.mk  |   10 +++++++---
-> >  2 files changed, 14 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/linux/Config.in b/linux/Config.in
-> > index 0a13b13..1c316ae 100644
-> > --- a/linux/Config.in
-> > +++ b/linux/Config.in
-> > @@ -244,6 +244,13 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
-> >  	  Specify the kernel make target to build the kernel that you
-> >  	  need.
-> >  
-> > +config BR2_LINUX_KERNEL_IMAGE_NAME
-> > +	string "Kernel image name"
-> > +	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
-> > +	help
-> > +	  Specify the kernel filename. Defaults to BR2_LINUX_KERNEL_TARGET_NAME
-> > +	  if not set.
-> 
-> I would rephrase this to:
-> 
->     The filename of the kernel image, if it is different from the
->     make target (above). Only Xtensa uses a filename different from
->     the make target.
-> 
->     If unsure, leave it empty.
-> 
-> >  config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
-> >  	string "load address (for 3.7+ multi-platform image)"
-> >  	depends on BR2_arm || BR2_armeb
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index bd3f2ac..1ba3953 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -80,7 +80,8 @@ endif
-> >  KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
-> >  
-> >  ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
-> > -LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-> > +LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
-> > +LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
-> >  else
-> >  ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
-> >  LINUX_IMAGE_NAME = uImage
-> > @@ -106,6 +107,9 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
-> >  LINUX_IMAGE_NAME = vmlinuz
-> >  endif
-> >  endif
-> > +ifeq ($(LINUX_TARGET_NAME),)
-> > +LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
-> > +endif
-> 
-> I'm confused. Above, you state that if BR2_LINUX_KERNEL_IMAGE_NAME is
-> empty, it defaults to BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM.
-> 
-> But here, you are doing exactly the opposite, that is set
-> LINUX_TARGET_NAME (derived from BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM)
-> with the value of LINUX_IMAGE_NAME, which is derived from the new option
-> you added above, BR2_LINUX_KERNEL_IMAGE_NAME.
-> 
-> Should that not be:
-> 
->     ifeq ($(LINUX_IMAGE_NAME),)
->     LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
->     endif
-> 
-> But I may have missed something... ;-)
+I did some more test and the dash source looks good, the longjmp 
+destination is
+correct (actually it jump to main()). The problem seems the longjmp 
+implementation.
+In the case of command like dash -c "(echo ciao; /bin/true)&" a longjmp 
+is not
+performed and so no segfault is triggered.
 
-I'm confused too now ;)
-Indeed I have put in Arnout suggestion for my first patch version
-without modifying the help text and only done runtime testing
-without actually thinking if this is the correct thing.
+as a POC I tried this little c code:
+[vortex at lizard ~]$ cat longjmptest.c
+#include <stdio.h>
+#include <setjmp.h>
 
-So the new variable BR2_LINUX_KERNEL_IMAGE_NAME should be default
-LINUX_TARGET_NAME, if not set.
+static jmp_buf env1;
 
-best regards
- Waldemar
+long int func2 () {
+    long int b;
+    b=1000;
+    longjmp(env1,1);
+    return b;
+}
+
+long int func1 () {
+    long int a;
+    a = func2 () ;
+    return a;
+}
+
+int main() {
+     long int num;
+     num=0;
+
+     printf("\nstart jump test\n");
+
+     if (setjmp(env1)) {
+        printf("jumped to env1\n");
+     } else {
+         num = func1 ();
+     }
+
+     printf("check 1 num=%ld\n",num);
+     printf("finish\n");
+     return 0;
+}
+
+
+If I compile with my stock gcc on centos 6.5 (64bit):
+[vortex at lizard ~]$ gcc -Wall -static longjmptest.c
+[vortex at lizard ~]$ ./a.out
+
+start jump test
+jumped to env1
+check 1 num=0
+finish
+
+while if I compile with the crosscompile in buildroot (32bit):
+[vortex at lizard ~]$ 
+/data/misc/buildroot-2014.05/output/host/usr/bin/i686-buildroot-linux-uclibc-gcc 
+-Wall -static longjmptest.c
+[vortex at lizard ~]$ ./a.out
+
+start jump test
+Segmentation fault
+
+
+looks like some stack problem... I never learned to use gdb (my bad!) so 
+I cannot check the stack
+status... Is there any known problem with the longjmp in uclibc?
+
+thank you in advance
+Luigi
+
+
+On 07/08/2014 04:23 PM, Luigi Tarenga wrote:
+> hi,
+> I send this bug report to both list because I'm not sure who will find 
+> this relevant.
+>
+> I compiled a buildroot image for a laptop with atom so the build is 
+> for x86_64
+> architecture. In the build configuration I flagged to include dash and 
+> this get
+> compiled as static (this let me test the bug even on the host system).
+>
+> While writing some test script (actually a init process written in 
+> dash) I hit this
+> strange bug:
+>
+> # dash -c "( echo ciao) &)"
+> ciao
+> Segmentation fault
+>
+> # dash -c "(echo ciao; /bin/true)&"
+> ciao
+>
+> # dash -c "(echo ciao; /bin/true; echo ciao)&"
+> ciao
+> ciao
+> Segmentation fault
+>
+>
+> As you see if I put a subshell in background it dump. If in the same 
+> subshell I execute
+> an external command as last command it works.
+> I write this bug even to the buildroot team because if I rebuild dash 
+> from the same source
+> without using the crosscompile the same bug do not happen.
+>
+> I enable DEBUG in the dash source and tried to narrow it a little , 
+> this is what I found:
+>
+> this is the trace with some little more messages inserted by me:
+> Tracing started.
+> token "("
+> pipeline: entered
+> reread token "("
+> reread token "("
+> pipeline: entered
+> token word echo
+> reread token word echo
+> reread token word echo
+> token word ciao
+> token ")"
+> reread token ")"
+> reread token ")"
+> reread token ")"
+> reread token ")"
+> token "&"
+> reread token "&"
+> reread token "&"
+> reread token "&"
+> token end of file
+> reread token end of file
+> evaltree called
+> pid 1006, evaltree(0x806b438: 3, 1) called
+> evalsubshell called
+> check 2
+> evaltree called
+> pid 1006, evaltree(0x806b3e0: 4, 1) called
+> evalsubshell called
+> check nofork
+> check 2
+> evaltree called
+> pid 1006, evaltree(0x806b420: 0, 1) called
+> evalcommand(0x806b420, 1) called
+> evalcommand arg: echo
+> evalcommand arg: ciao
+> redirectsafe after setjmp
+> check 4
+> check 6
+>
+>
+> I modified exraise with 2 check:
+>
+> void
+> exraise(int e)
+> {
+> #ifdef DEBUG
+>         if (handler == NULL)
+>                 abort();
+> #endif
+>         INTOFF;
+>
+>         exception = e;
+>         TRACE(("check 6\n"));
+>         longjmp(handler->loc, 1);
+>         TRACE(("check 7\n"));
+> }
+>
+> as you can see check 7 is never reached (ok it's obvious), but I 
+> cannot find
+> if the longjmp land correctly somewhere or it's the function that 
+> trigger the
+> segfault (I suspect the handler->loc point to nowhere...).
+> I tried to put a TRACE after every setjmp but didn't find the one that 
+> is the
+> target of that longjmp...
+>
+> maybe the correct one is the one in exitshell() ???
+>
+> here some info on my setup:
+>
+> host:
+> centos 6.5
+>
+> buildroot version 2014.05
+>
+> buildroot configuration:
+> BR2_x86_atom=y
+> BR2_UCLIBC_CONFIG="board/pinky/uclibc.config"
+> BR2_TARGET_GENERIC_HOSTNAME="pinky"
+> BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+> BR2_TARGET_GENERIC_GETTY_TERM="linux"
+> BR2_ROOTFS_OVERLAY="board/pinky/overlay"
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pinky/linux.config"
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> BR2_PACKAGE_HOSTAPD=y
+> BR2_PACKAGE_HOSTAPD_EAP=y
+> BR2_PACKAGE_IW=y
+> BR2_PACKAGE_OPKG=y
+> BR2_PACKAGE_OPKG_GPG_SIGN=y
+> BR2_PACKAGE_DASH=y
+> BR2_PACKAGE_JOE=y
+> BR2_TARGET_GRUB=y
+>
+> (dash version 0.5.7, downloaded from buildroot, some patches from debian,
+> it seems version 0.5.7-3)
+> I hope you can reproduce this bug on your system with those info.
+>
+> regards
+> Luigi
