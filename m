@@ -1,28 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Jul 2014 06:59:18 -0300
-Subject: [Buildroot] [PATCH 10/10] busybox: support only one version
-In-Reply-To: <20140711093004.2c1f891c@free-electrons.com>
-References: <1404237789-15563-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1404237789-15563-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <87oawxntvt.fsf@dell.be.48ers.dk>
- <20140710171848.75381ecb@free-electrons.com> <20140710155650.GA28300@free.fr>
- <87y4w1m2jo.fsf@dell.be.48ers.dk>
- <20140711093004.2c1f891c@free-electrons.com>
-Message-ID: <53BFB576.3020001@zacarias.com.ar>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Fri, 11 Jul 2014 13:41:34 +0200
+Subject: [Buildroot] PACKAGE_USERS does not work
+In-Reply-To: <i5np0ra770dn4ujwdmsweh48.1405067942517@email.android.com>
+References: <i5np0ra770dn4ujwdmsweh48.1405067942517@email.android.com>
+Message-ID: <CAJtjsKbLN1-yEkBq=cCsoaOx_n+LUYof1P51T3wzOupaxR75JQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/2014 04:30 AM, Thomas Petazzoni wrote:
+Hi J?rg,
 
-> We could also switch to use some Config.in comment to say that "bash
-> could be available if Busybox show others was enabled" or something
-> like that. But that would add a lot of comment and clutter menuconfig
-> quite a bit.
+On Fri, Jul 11, 2014 at 10:57 AM, J?rg Krause <jkrause@posteo.de> wrote:
+> I added a custom package (upmpdcli) to buildroot which I can cleanly build,
+> except of adding a user with UPMPDCLI_USERS.
+>
+> I am using the same syntax as the package avahi for the definition,  where
+> the user avahi is in fact added to the users table.
+>
+> define UPMPDCLI_USERS
+> upmdpcli -1 upmpdcli -1 * - - -
+> endef
 
-bool "bash - more complete version that busybox ash!"
-But it's ugly!
-Colored entries would be great for this.
-Regards.
+Your definition of a new user looks correct to me. Could you share the
+error message?
+
+Best,
+-- 
+Johan
