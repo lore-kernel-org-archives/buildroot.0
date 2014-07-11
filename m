@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Jul 2014 20:11:13 +0200
+Date: Fri, 11 Jul 2014 20:12:40 +0200
 Subject: [Buildroot] autobuild-run update
 In-Reply-To: <CAHkwnC9qytLwyvxAJ5Bkfc--1Cmh_Y9PY7Vq20OYYG1ErpRLDw@mail.gmail.com>
 References: <20140708232244.39817a4c@free-electrons.com>
  <CAHkwnC9qytLwyvxAJ5Bkfc--1Cmh_Y9PY7Vq20OYYG1ErpRLDw@mail.gmail.com>
-Message-ID: <20140711201113.3dc019a6@free-electrons.com>
+Message-ID: <20140711201240.34a2c6c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
