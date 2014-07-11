@@ -1,87 +1,178 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Jul 2014 22:37:33 +0200
-Subject: [Buildroot] PACKAGE_USERS does not work
-In-Reply-To: <53BFE547.70600@posteo.de>
-References: <i5np0ra770dn4ujwdmsweh48.1405067942517@email.android.com>
- <CAJtjsKbLN1-yEkBq=cCsoaOx_n+LUYof1P51T3wzOupaxR75JQ@mail.gmail.com>
- <53BFE547.70600@posteo.de>
-Message-ID: <20140711203733.GE3739@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Jul 2014 18:06:28 -0300
+Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.11
+Message-ID: <1405112788-18133-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Fixes CVE-2014-4911 and a few other issues that don't have a CVE assigned
+(backports from 1.3.x branch).
+The no programs & shared/static patches are now upstream albeit in a
+slightly different form.
 
-You said in another mail that you'd be sending a patch to add this
-package. Thanks!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...suite.patch => polarssl-01-no-test-suite.patch} | 17 +++----
+ package/polarssl/polarssl-no-programs.patch        | 26 ----------
+ .../polarssl-shared-and-static-library.patch       | 55 ----------------------
+ package/polarssl/polarssl.mk                       |  4 +-
+ 4 files changed, 11 insertions(+), 91 deletions(-)
+ rename package/polarssl/{polarssl-no-test-suite.patch => polarssl-01-no-test-suite.patch} (58%)
+ delete mode 100644 package/polarssl/polarssl-no-programs.patch
+ delete mode 100644 package/polarssl/polarssl-shared-and-static-library.patch
 
-So, here is my preliminary review of the .mk file:
-
-On 2014-07-11 15:23 +0200, J?rg Krause spake thusly:
->   ################################################################################
->   #
->   # upmpdcli
->   #
->   ################################################################################
-> 
->   UPMPDCLI_VERSION = 0.7.1
->   UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
->   UPMPDCLI_LICENSE = GPLv2
->   UPMPDCLI_LICENSE_FILES = LICENSE
->   UPMPDCLI_INSTALL_STAGING = YES
-
-Wh yinstall in staging? As far as I can see, this installs a program,
-not a library, right? We install in staging only when the package
-installs one (or more) libraries.
-
->   UPMPDCLI_INSTALL_TARGET = YES
-
-Not needed, that's the default.
-
->   UPMPDCLI_AUTORECONF = YES
-
-Why do you autoreconf? It is not normally needed. If it is needed, add a
-comment stating why. See the existing packages for hints. ;-)
-
->   UPMPDCLI_CONF_OPT = --prefix=/usr
-
-Nope, that's already taken care of by the autotools-package
-infrastructure.
-
->   UPMPDCLI_DEPENDENCIES = host-pkgconf
->   UPMPDCLI_DEPENDENCIES += libupnp
->   UPMPDCLI_DEPENDENCIES += libmpdclient
-
-Please, put the dependencies on a single. If it does not fit in 80-char,
-then use continuation lines, like:
-
-    UPMPDCLI_DEPENDENCIES = host-pkgconf libupnp libmpdclient tooloong \
-        more-depndencies on-this-line
-
-BTW, it also depends on expat.
-
->   define UPMPDCLI_USERS
->       upmpdcli -1 upmpdcli -1 * - - -
->   endef
-
-Do you really need a specific user for running upmpdcli?
-
-Also, would it need to belong to the audio group (as an additional
-group)? (even though it does not directly render audio)
-
->   define UPMPDCLI_INSTALL_INIT_SYSV
->       $(INSTALL) -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/
->   endef
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/polarssl/polarssl-no-test-suite.patch b/package/polarssl/polarssl-01-no-test-suite.patch
+similarity index 58%
+rename from package/polarssl/polarssl-no-test-suite.patch
+rename to package/polarssl/polarssl-01-no-test-suite.patch
+index 7e07441..4c8552a 100644
+--- a/package/polarssl/polarssl-no-test-suite.patch
++++ b/package/polarssl/polarssl-01-no-test-suite.patch
+@@ -4,13 +4,14 @@ By default, PolarSSL builds a fairly extensive test suite to validate
+ the library. In the context of Buildroot, building this test suite is
+ not really useful, so we add a BUILD_TESTS to disable its build.
+ 
++[Gustavo: update for 1.2.11]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+-Index: polarssl-1.1.1/CMakeLists.txt
+-===================================================================
+---- polarssl-1.1.1.orig/CMakeLists.txt
+-+++ polarssl-1.1.1/CMakeLists.txt
+-@@ -27,9 +27,11 @@
++diff -Nura polarssl-1.2.11.orig/CMakeLists.txt polarssl-1.2.11/CMakeLists.txt
++--- polarssl-1.2.11.orig/CMakeLists.txt	2014-07-11 17:14:43.414651327 -0300
+++++ polarssl-1.2.11/CMakeLists.txt	2014-07-11 17:23:00.573498626 -0300
++@@ -49,9 +49,11 @@
+  add_subdirectory(library)
+  add_subdirectory(include)
+  
+@@ -21,6 +22,6 @@ Index: polarssl-1.1.1/CMakeLists.txt
+    add_subdirectory(tests)
+ -endif(CMAKE_COMPILER_IS_GNUCC)
+ +endif(CMAKE_COMPILER_IS_GNUCC AND BUILD_TESTS)
+- 
+- add_subdirectory(programs)
+- 
++ if(CMAKE_COMPILER_IS_CLANG)
++   add_subdirectory(tests)
++ endif(CMAKE_COMPILER_IS_CLANG)
+diff --git a/package/polarssl/polarssl-no-programs.patch b/package/polarssl/polarssl-no-programs.patch
+deleted file mode 100644
+index f118871..0000000
+--- a/package/polarssl/polarssl-no-programs.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Add the BUILD_PROGRAMS option to disable programs build
+-
+-By default, PolarSSL builds and installs a large set of companions
+-programs, which in some cases are not useful. This patch adds the
+-BUILD_PROGRAMS option which allows to disable the build and
+-installation of such programs when not needed.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: polarssl-1.1.1/CMakeLists.txt
+-===================================================================
+---- polarssl-1.1.1.orig/CMakeLists.txt
+-+++ polarssl-1.1.1/CMakeLists.txt
+-@@ -33,7 +33,11 @@
+-   add_subdirectory(tests)
+- endif(CMAKE_COMPILER_IS_GNUCC AND BUILD_TESTS)
+- 
+--add_subdirectory(programs)
+-+option(BUILD_PROGRAMS "Build programs." ON)
+-+
+-+if(BUILD_PROGRAMS)
+-+  add_subdirectory(programs)
+-+endif(BUILD_PROGRAMS)
+- 
+- ADD_CUSTOM_TARGET(apidoc
+-                   COMMAND doxygen doxygen/polarssl.doxyfile
+diff --git a/package/polarssl/polarssl-shared-and-static-library.patch b/package/polarssl/polarssl-shared-and-static-library.patch
+deleted file mode 100644
+index 7e41745..0000000
+--- a/package/polarssl/polarssl-shared-and-static-library.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-Allow both shared and static PolarSSL library
+-
+-By default, PolarSSL is built as a static library. If the option
+-USE_SHARED_POLARSSL_LIBRARY is set, then it is build as a shared
+-library. But there is no way of building both the shared and static
+-versions.
+-
+-This patch adds the USE_STATIC_POLARSSL_LIBRARY (which defaults to ON)
+-in addition to the existing USE_SHARED_POLARSSL_LIBRARY (which
+-defaults to OFF). Both options can be manipulated independently.
+-
+-[Gustavo: update for polarssl 1.2.10]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-diff -Nura polarssl-1.2.3.orig/library/CMakeLists.txt polarssl-1.2.3/library/CMakeLists.txt
+---- polarssl-1.2.3.orig/library/CMakeLists.txt	2012-11-27 17:16:20.735678722 -0300
+-+++ polarssl-1.2.3/library/CMakeLists.txt	2012-11-27 17:18:09.760457733 -0300
+-@@ -1,4 +1,5 @@
+- option(USE_SHARED_POLARSSL_LIBRARY "Build PolarSSL as a shared library." OFF)
+-+option(USE_STATIC_POLARSSL_LIBRARY "Build PolarSSL as a static library." ON)
+- 
+- set(src
+-      aes.c
+-@@ -50,19 +51,23 @@
+- set(libs ws2_32)
+- endif(WIN32)
+- 
+--if(NOT USE_SHARED_POLARSSL_LIBRARY)
+--
+--add_library(polarssl STATIC ${src})
+--
+--else(NOT USE_SHARED_POLARSSL_LIBRARY)
+-+if(USE_SHARED_POLARSSL_LIBRARY)
+- 
+- add_library(polarssl SHARED ${src})
+- set_target_properties(polarssl PROPERTIES VERSION 1.2.10 SOVERSION 3)
+-+set_target_properties(polarssl PROPERTIES OUTPUT_NAME polarssl)
+-+
+-+endif(USE_SHARED_POLARSSL_LIBRARY)
+-+
+-+if(USE_STATIC_POLARSSL_LIBRARY)
+-+
+-+add_library(polarssl-static STATIC ${src})
+-+set_target_properties(polarssl-static PROPERTIES OUTPUT_NAME polarssl)
+- 
+--endif(NOT USE_SHARED_POLARSSL_LIBRARY)
+-+endif(USE_STATIC_POLARSSL_LIBRARY)
+- 
+- target_link_libraries(polarssl ${libs})
+- 
+--install(TARGETS polarssl
+-+install(TARGETS polarssl polarssl-static
+-         DESTINATION ${LIB_INSTALL_DIR}
+-         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+diff --git a/package/polarssl/polarssl.mk b/package/polarssl/polarssl.mk
+index 20486e3..24f09ed 100644
+--- a/package/polarssl/polarssl.mk
++++ b/package/polarssl/polarssl.mk
+@@ -5,13 +5,13 @@
+ ################################################################################
+ 
+ POLARSSL_SITE = https://polarssl.org/code/releases
+-POLARSSL_VERSION = 1.2.10
++POLARSSL_VERSION = 1.2.11
+ POLARSSL_SOURCE = polarssl-$(POLARSSL_VERSION)-gpl.tgz
+ POLARSSL_CONF_OPT = \
+ 	-DUSE_SHARED_POLARSSL_LIBRARY=ON \
+ 	-DUSE_STATIC_POLARSSL_LIBRARY=ON \
+ 	-DBUILD_TESTS=OFF \
+-	-DBUILD_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
++	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_POLARSSL_PROGRAMS),ON,OFF)
+ 
+ POLARSSL_INSTALL_STAGING = YES
+ POLARSSL_LICENSE = GPLv2
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.5
