@@ -1,26 +1,179 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Jul 2014 10:59:46 -0300
-Subject: [Buildroot] [PATCH 0/1] License issue about dbus-python
-In-Reply-To: <1405086960-14881-1-git-send-email-david.bachelart@bbright.com>
-References: <1405086960-14881-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <53BFEDD2.2080700@zacarias.com.ar>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Fri, 11 Jul 2014 16:43:46 +0200
+Subject: [Buildroot] [PATCH 1/1] ejabberd: new package
+Message-ID: <1405089826-31432-1-git-send-email-johan.oudinet@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/11/2014 10:55 AM, David Bachelart wrote:
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+---
+ package/Config.in                 |  1 +
+ package/ejabberd/Config.in        | 13 ++++++++
+ package/ejabberd/check-erlang-lib | 48 +++++++++++++++++++++++++++++
+ package/ejabberd/ejabberd.mk      | 65 +++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 127 insertions(+)
+ create mode 100644 package/ejabberd/Config.in
+ create mode 100755 package/ejabberd/check-erlang-lib
+ create mode 100644 package/ejabberd/ejabberd.mk
 
-> Hi,
-> 
-> I would like to add dbus-python package to buildroot. I'm no license 
-> expert, and I do not know how I can fill the license field in the 
-> makefile. The COPYING file does not clearly give a license name.
-> 
-> Regards,
-
-Hi.
-That package has been in buildroot releases for some time now... as
-dbus-python (the proper upstream name) :)
-Regards.
+diff --git a/package/Config.in b/package/Config.in
+index c626968..8b57be1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -937,6 +937,7 @@ endif
+ 	source "package/dnsmasq/Config.in"
+ 	source "package/dropbear/Config.in"
+ 	source "package/ebtables/Config.in"
++	source "package/ejabberd/Config.in"
+ 	source "package/ethtool/Config.in"
+ 	source "package/faifa/Config.in"
+ 	source "package/fmc/Config.in"
+diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
+new file mode 100644
+index 0000000..3a2336d
+--- /dev/null
++++ b/package/ejabberd/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_EJABBERD
++       bool "ejabberd"
++       select BR2_PACKAGE_OPENSSL
++       select BR2_PACKAGE_ERLANG
++       select BR2_PACKAGE_LIBYAML
++       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++       select BR2_PACKAGE_EXPAT
++       help
++	 Ejabberd is a Jabber/XMPP instant messaging server, written
++	 in Erlang/OTP. Among other features, ejabberd is
++	 cross-platform, fault-tolerant, clusterable and modular.
++
++	 http://www.ejabberd.im
+diff --git a/package/ejabberd/check-erlang-lib b/package/ejabberd/check-erlang-lib
+new file mode 100755
+index 0000000..1a942bb
+--- /dev/null
++++ b/package/ejabberd/check-erlang-lib
+@@ -0,0 +1,48 @@
++#!/bin/sh -e
++# Helper to bypass AC_ERLANG_CHECK_LIB
++
++usage() {
++    cat <<EOF
++Usage:
++	$0 library
++Look for Erlang's library in TARGET_DIR/usr/lib/erlang/lib.
++
++If the library is found, it returns the path to the latest version,
++relative to TARGET_DIR. Otherwise, it returns "not found".
++
++If there are several versions, it returns an error because it does not
++know which one Erlang uses.
++
++EOF
++}
++
++die () {
++    echo "$@" >&2
++    exit 1
++}
++
++if [ $# -ne 1 ]; then
++    usage
++    exit 0
++else
++    library="$1"
++fi
++
++target_dir="${TARGET_DIR:-../../output/target}"
++
++[ -d "$target_dir" ] || die "TARGET_DIR is not a directory. Please \
++specify the TARGET_DIR environment variable."
++
++case "$(ls -1d -- "$target_dir/usr/lib/erlang/lib/$library-"* | wc -l)" in
++    0)
++	echo "not found"
++	;;
++    1)
++	echo "$target_dir/usr/lib/erlang/lib/$library-"* \
++	    | sed -e "s,^$target_dir,,"
++	;;
++    *)
++	die "Several versions of $library have been found. Please \
++	remove the unused ones."
++	;;
++esac
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+new file mode 100644
+index 0000000..7573d63
+--- /dev/null
++++ b/package/ejabberd/ejabberd.mk
+@@ -0,0 +1,65 @@
++################################################################################
++#
++# ejabberd
++#
++################################################################################
++
++EJABBERD_VERSION = 14.05
++EJABBERD_SITE = $(call github,processone,ejabberd,$(EJABBERD_VERSION))
++EJABBERD_LICENSE = GPLv2+
++EJABBERD_LICENSE_FILES = COPYING
++EJABBERD_DEPENDENCIES =	libyaml expat openssl erlang
++
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++	EJABBERD_DEPENDENCIES += libiconv
++endif
++
++EJABBERD_ERLANG_LIBS := sasl crypto public_key ssl mnesia inets compiler
++
++# Do AC_ERLANG_CHECK_LIB job without erlang.
++define EJABBERD_SET_LIBS_DIR
++	for lib in $(EJABBERD_ERLANG_LIBS); do					\
++	  export								\
++	    erlang_lib_dir_$$lib="`package/ejabberd/check-erlang-lib $$lib`";	\
++	done
++endef
++
++# Set cross-compilation options to the configure called by rebar.
++define EJABBERD_FIX_REBAR_CONFIG_SCRIPT
++	sed -e "s,./configure,./configure \\	\
++	--target=$(GNU_TARGET_NAME) \\		\
++	--host=$(GNU_TARGET_NAME) \\		\
++	--build=$(GNU_HOST_NAME),"		\
++	  -i "$(@D)"/rebar.config.script
++endef
++
++EJABBERD_PRE_CONFIGURE_HOOKS +=			\
++	EJABBERD_SET_LIBS_DIR			\
++	EJABBERD_FIX_REBAR_CONFIG_SCRIPT
++
++# Guess answers for these tests, configure will bail out otherwise
++# saying error: cannot run test program while cross compiling.
++EJABBERD_CONF_ENV =						\
++  ac_cv_erlang_root_dir='$(HOST_DIR)/usr/lib/erlang'		\
++  $(foreach lib, $(EJABBERD_ERLANG_LIBS),			\
++    ac_cv_erlang_lib_dir_$(lib)="$$erlang_lib_dir_$(lib)")
++
++# Set environment variables so the rebar compile command does
++# cross-compile ejabberd dependencies.
++EJABBERD_MAKE_ENV =								\
++  $(TARGET_CONFIGURE_OPTS)							\
++  $(TARGET_CONFIGURE_ARGS)							\
++  LDFLAGS="-L$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot/usr/lib/erlang/usr/lib"
++
++# Delete HOST_DIR prefix from ERL path in ejabberctl script.
++define EJABBERD_FIX_EJABBERDCTL
++	sed -e "s,ERL=$(HOST_DIR),ERL=," -i "$(TARGET_DIR)"/usr/sbin/ejabberdctl
++endef
++
++EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
++
++define EJABBERD_USERS
++ejabberd -1 ejabberd -1 * - - - ejabberd daemon
++endef
++
++$(eval $(autotools-package))
+-- 
+1.9.1
