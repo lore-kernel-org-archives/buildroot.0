@@ -1,34 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Jul 2014 13:37:06 -0300
-Subject: [Buildroot] [PATCH] cifs-utils: bump to version 6.4
-Message-ID: <1405096626-25067-1-git-send-email-gustavo@zacarias.com.ar>
+From: Henry Margies <henry.margies@gmail.com>
+Date: Fri, 11 Jul 2014 17:47:07 +0100
+Subject: [Buildroot] [PATCH v2 1/1] Build Python with tzset support
+In-Reply-To: <1404902339-25481-1-git-send-email-henry.margies@gmail.com>
+References: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
+ <1404902339-25481-1-git-send-email-henry.margies@gmail.com>
+Message-ID: <5DE00547-AF5F-4299-9F28-1E772BB74624@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/cifs-utils/cifs-utils.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hi all,
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 3f4c71a..b672b56 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 6.3
--CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
--CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
-+CIFS_UTILS_VERSION = 6.4
-+CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
-+CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPLv3+
- CIFS_UTILS_LICENSE_FILES = COPYING
- 
--- 
-1.8.5.5
+any comments on my patch? Please let me know if there is something wrong with it or whether I sent it the wrong way?
+
+
+Best regards & a nice weekend,
+
+Henry
+
+
+On 9 Jul 2014, at 11:38, Henry Margies <henry.margies@gmail.com> wrote:
+
+> This patch adds support for time.tzset() in Python2.7 and Python3.
+> 
+> The Python configure script sets ac_cv_working_tzset to 'no' when
+> cross compiling, although it should be available and work with all 
+> toolchains supported by Buildroot (?).
+> The patch below pre-sets the variable so that time.tzset() works.
+> 
+> 
+> Signed-off-by: Henry Margies <henry.margies@gmail.com>
+> ---
+> Changes v1 -> v2:
+> - added similar patch for Python3
+> 
+> package/python/python.mk   |    3 ++-
+> package/python3/python3.mk |    1 +
+> 2 files changed, 3 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index cb54e3e..b237848 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -121,7 +121,8 @@ endif
+> PYTHON_CONF_ENV += \
+> 	ac_cv_have_long_long_format=yes \
+> 	ac_cv_file__dev_ptmx=yes \
+> -	ac_cv_file__dev_ptc=yes
+> +	ac_cv_file__dev_ptc=yes \
+> +	ac_cv_working_tzset=yes
+> 
+> PYTHON_CONF_OPT += \
+> 	--without-cxx-main 	\
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 98fc31b..1591ac9 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -96,6 +96,7 @@ PYTHON3_CONF_ENV += \
+> 	ac_cv_have_long_long_format=yes \
+> 	ac_cv_file__dev_ptmx=yes \
+> 	ac_cv_file__dev_ptc=yes \
+> +	ac_cv_working_tzset=yes
+> 
+> PYTHON3_CONF_OPT += \
+> 	--without-ensurepip	\
+> -- 
+> 1.7.2.5
+> 
