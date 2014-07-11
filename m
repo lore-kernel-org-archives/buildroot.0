@@ -1,30 +1,30 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Jul 2014 10:37:18 -0300
-Subject: [Buildroot] [PATCH] flashrom: bump to version 0.9.7
-Message-ID: <1405085838-12585-1-git-send-email-gustavo@zacarias.com.ar>
+From: David Bachelart <david.bachelart@bbright.com>
+Date: Fri, 11 Jul 2014 15:55:59 +0200
+Subject: [Buildroot] [PATCH 0/1] License issue about dbus-python
+Message-ID: <1405086960-14881-1-git-send-email-david.bachelart@bbright.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/flashrom/flashrom.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index df648f8..70bbe30 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FLASHROM_VERSION = 0.9.6.1
-+FLASHROM_VERSION = 0.9.7
- FLASHROM_SOURCE = flashrom-$(FLASHROM_VERSION).tar.bz2
- FLASHROM_SITE = http://download.flashrom.org/releases
- FLASHROM_DEPENDENCIES = pciutils
+I would like to add dbus-python package to buildroot. I'm no license 
+expert, and I do not know how I can fill the license field in the 
+makefile. The COPYING file does not clearly give a license name.
+
+Regards,
+
+David Bachelart (1):
+  python-dbus: new package
+
+ package/Config.in                  |    1 +
+ package/python-dbus/Config.in      |   17 +++++++++++++++++
+ package/python-dbus/python-dbus.mk |   16 ++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 package/python-dbus/Config.in
+ create mode 100644 package/python-dbus/python-dbus.mk
+
 -- 
-1.8.5.5
+1.7.10.4
