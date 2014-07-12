@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jul 2014 11:54:45 +0200
-Subject: [Buildroot] [git commit] libgcrypt: bump to version 1.6.1
-Message-ID: <20140712110213.CE2889D214@busybox.osuosl.org>
+Date: Sat, 12 Jul 2014 11:55:00 +0200
+Subject: [Buildroot] [git commit] libgpgme: bump to version 1.5.0
+Message-ID: <20140712110213.D93D49D1EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c4ed176c83af637f571c14f284058d3d12c280a3
+commit: http://git.buildroot.net/buildroot/commit/?id=b982cea2fb77107e980ee11d64e45e18ff3a130a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgcrypt/libgcrypt.mk |    2 +-
+ package/libgpgme/libgpgme.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 82a824f..068d464 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 9995d91..c06d713 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.5.3
-+LIBGCRYPT_VERSION = 1.6.1
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-LIBGPGME_VERSION = 1.4.2
++LIBGPGME_VERSION = 1.5.0
+ LIBGPGME_SITE = ftp://ftp.gnupg.org/gcrypt/gpgme/
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPLv2.1+
