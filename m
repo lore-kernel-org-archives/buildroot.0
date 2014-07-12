@@ -1,35 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jul 2014 14:34:28 +0200
-Subject: [Buildroot] [PATCH] binutils: fix xtensa ld segfault on linking
- linux modules
-In-Reply-To: <1405009513-23772-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1405009513-23772-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20140712143428.37228213@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 12 Jul 2014 10:08:01 -0300
+Subject: [Buildroot] [PATCH] libgpgme: disable all tests
+Message-ID: <1405170481-18028-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Max Filippov,
+Disable all of the tests, including runtime that needs gnupg.
+There's no longer --without configure options for them, it's now
+--disable. Fixes:
+http://autobuild.buildroot.net/results/eb1/eb1e06b1d99c441b6086c07ee04b084a61041dc7/
 
-On Thu, 10 Jul 2014 20:25:13 +0400, Max Filippov wrote:
-> This fixes the following build error reproducible with any linux kernel
-> module built with a recent buildroot toolchain:
-> 
->   LD [M]  fs/jbd2/jbd2.ko
->   /bin/sh: line 1: 12069 Segmentation fault
->   buildroot/host/usr/bin/xtensa-buildroot-linux-uclibc-ld -r --no-relax
->   -T linux/scripts/module-common.lds --build-id
->   -o fs/jbd2/jbd2.ko fs/jbd2/jbd2.o fs/jbd2/jbd2.mod.o
-> 
-> Backported from: e7d17e71cdc10a2e81e454ce3b9637f1b2a587f2
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libgpgme/libgpgme.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index c06d713..43d7484 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -16,9 +16,10 @@ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_CONF_OPT = --with-gpg=/usr/bin/gpg \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr \
+ 	--with-libassuan-prefix=$(STAGING_DIR)/usr \
+-	--without-gpgsm \
+-	--without-gpgconf \
+-	--without-g13
++	--disable-gpgsm-test \
++	--disable-gpgconf-test \
++	--disable-g13-test \
++	--disable-gpg-test
+ 
+ # Handle argp-standalone or it errors out during build
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE)$(BR2_TOOLCHAIN_USES_UCLIBC),yy)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
