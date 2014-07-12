@@ -1,43 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jul 2014 00:02:14 +0200
-Subject: [Buildroot] [PATCH trivial] busybox: fix typo 'overwritting'
-In-Reply-To: <197abaf75c205828d953.1405192876@localhost>
-References: <197abaf75c205828d953.1405192876@localhost>
-Message-ID: <20140712220214.GE3582@free.fr>
+Date: Sun, 13 Jul 2014 00:21:20 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2014-07-11
+In-Reply-To: <20140712063006.DDD28100E08@stock.ovh.net>
+References: <20140712063006.DDD28100E08@stock.ovh.net>
+Message-ID: <20140712222120.GF3582@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2014-07-12 21:21 +0200, Thomas De Schampheleire spake thusly:
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Thomas, All,
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 2014-07-12 08:30 +0200, Thomas Petazzoni spake thusly:
+>        arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/c7787542651e047631213e7be781008c60d48e0f/
+
+Brain-damage.
+
+The build system for perl-net-ssleay is completely f*ked-up for
+cross-compilation. It tries to execute the openssl binary, and *runs* it
+to verify a few things about openssl: availability, version...
+
+Then it looks for openssl/ssl.h in host-system locations:
+    $prefix/include  $prefix/inc32  /usr/kerberos/include
+
+Of course $prefix is /usr, so it picks the host system openssl.
+
+Ditto for the -L paths.
+
+Totally brain-damaged.
+
+And it is happy to just state:
+    *** Found OpenSSL-1.0.1f installed in /usr
+
+Yeah, we're packaging openssl-1.0.1h in Buildroot. 1.0.1f is on my host
+system's openssl...
+
+Grrr...
+
+/me reaches for his chainsaw...
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/busybox/busybox.mk |  2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff -r dbc59780479b -r 197abaf75c20 package/busybox/busybox.mk
-> --- a/package/busybox/busybox.mk	Thu Jul 10 20:25:13 2014 +0400
-> +++ b/package/busybox/busybox.mk	Sat Jul 12 21:19:46 2014 +0200
-> @@ -184,7 +184,7 @@
->  endef
->  endif
->  
-> -# Enable "noclobber" in install.sh, to prevent BusyBox from overwritting any
-> +# Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
->  # full-blown versions of apps installed by other packages with sym/hard links.
->  define BUSYBOX_NOCLOBBER_INSTALL
->  	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
