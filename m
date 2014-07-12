@@ -1,30 +1,79 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 12 Jul 2014 08:40:48 -0300
-Subject: [Buildroot] [PATCH] gettext: bump to version 0.19.1
-Message-ID: <1405165248-25427-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 12 Jul 2014 14:11:52 +0200
+Subject: [Buildroot] [PATCH] package/python: fix sqlite3 extension without
+	threads
+Message-ID: <1405167112-9063-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gettext/gettext.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fix a compiler error when building the sqlite3 extension, when the
+toolchain does not have threads.
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index cc461f7..9d5d9f3 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GETTEXT_VERSION = 0.18.3.2
-+GETTEXT_VERSION = 0.19.1
- GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
- GETTEXT_INSTALL_STAGING = YES
- GETTEXT_LICENSE = GPLv2+
+Fixes:
+        http://autobuild.buildroot.net/results/10f/10f268cd55f16ee53f4c5e17e1248b0a1820f6ea/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../python-015-fix-sqlite-without-threads.patch    | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/python/python-015-fix-sqlite-without-threads.patch
+
+diff --git a/package/python/python-015-fix-sqlite-without-threads.patch b/package/python/python-015-fix-sqlite-without-threads.patch
+new file mode 100644
+index 0000000..805edff
+--- /dev/null
++++ b/package/python/python-015-fix-sqlite-without-threads.patch
+@@ -0,0 +1,48 @@
++sqlite3: fix build when threads are not used/available
++
++When threads are not used/available, a function in the sqlite3 extension
++ends up with a label at the end:
++
++    void _pysqlite_final_callback(sqlite3_context* context)
++    {
++        PyObject* function_result;
++        PyObject** aggregate_instance;
++        int ok;
++
++    #ifdef WITH_THREAD
++        PyGILState_STATE threadstate;
++
++        threadstate = PyGILState_Ensure();
++    #endif
++
++        aggregate_instance = (PyObject**)sqlite3_aggregate_context(context, sizeof(PyObject*));
++        if (!*aggregate_instance) {
++            goto error;
++        }
++
++        [......]
++
++    error:
++    #ifdef WITH_THREAD
++        PyGILState_Release(threadstate);
++    #endif
++    }
++
++This is not valid, and gcc complains.
++
++Fix that by adding a dummy statement after the label, so that the label
++is never the last statement of the function.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff -durN python-2.7.8.orig/Modules/_sqlite/connection.c python-2.7.8/Modules/_sqlite/connection.c
++--- python-2.7.8.orig/Modules/_sqlite/connection.c	2014-06-30 04:05:42.000000000 +0200
+++++ python-2.7.8/Modules/_sqlite/connection.c	2014-07-12 13:53:32.258041224 +0200
++@@ -786,6 +786,7 @@
++ #ifdef WITH_THREAD
++     PyGILState_Release(threadstate);
++ #endif
+++    ;   /* Make gcc happy: a label can't be at the end of a function */
++ }
++ 
++ static void _pysqlite_drop_unused_statement_references(pysqlite_Connection* self)
 -- 
-1.8.5.5
+1.9.1
