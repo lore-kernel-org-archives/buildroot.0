@@ -1,27 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jul 2014 13:03:41 +0200
-Subject: [Buildroot] [PATCH] flashrom: bump to version 0.9.7
-In-Reply-To: <1405085838-12585-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405085838-12585-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140712130341.1943e70b@free-electrons.com>
+Date: Sat, 12 Jul 2014 13:04:11 +0200
+Subject: [Buildroot] [git commit] cifs-utils: bump to version 6.4
+Message-ID: <20140712110431.8AAFC9D214@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=3b5e06c15889945de069b4edaef6619407eff8e6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Jul 2014 10:37:18 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/flashrom/flashrom.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cifs-utils/cifs-utils.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 3f4c71a..b672b56 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.3
+-CIFS_UTILS_SOURCE  = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+-CIFS_UTILS_SITE    = http://ftp.samba.org/pub/linux-cifs/cifs-utils
++CIFS_UTILS_VERSION = 6.4
++CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
++CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3+
+ CIFS_UTILS_LICENSE_FILES = COPYING
+ 
