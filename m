@@ -1,53 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jul 2014 00:21:20 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-07-11
-In-Reply-To: <20140712063006.DDD28100E08@stock.ovh.net>
-References: <20140712063006.DDD28100E08@stock.ovh.net>
-Message-ID: <20140712222120.GF3582@free.fr>
+Date: Sun, 13 Jul 2014 01:02:43 +0200
+Subject: [Buildroot] [PATCH 1/2] infra/pkg-perl: add possibility to pass
+	extra env at configure time
+Message-ID: <1405206164-10189-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Some perl package may use environment variables as a hint to how to be
+configured.
 
-On 2014-07-12 08:30 +0200, Thomas Petazzoni spake thusly:
->        arm |           perl-net-ssleay-1.64 | NOK | http://autobuild.buildroot.net/results/c7787542651e047631213e7be781008c60d48e0f/
+That's for example the case for perl-net-ssleay that uses
+OPENSSL_PREFIX, if it is set in the environment, as the prefix to
+openssl.
 
-Brain-damage.
+Add a new variable that packages can set if they need extra environment
+variables. Update the manual accordingly.
 
-The build system for perl-net-ssleay is completely f*ked-up for
-cross-compilation. It tries to execute the openssl binary, and *runs* it
-to verify a few things about openssl: availability, version...
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Francois Perrad <fperrad@gmail.com>
+---
+ docs/manual/adding-packages-perl.txt | 4 ++++
+ package/pkg-perl.mk                  | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-Then it looks for openssl/ssl.h in host-system locations:
-    $prefix/include  $prefix/inc32  /usr/kerberos/include
-
-Of course $prefix is /usr, so it picks the host system openssl.
-
-Ditto for the -L paths.
-
-Totally brain-damaged.
-
-And it is happy to just state:
-    *** Found OpenSSL-1.0.1f installed in /usr
-
-Yeah, we're packaging openssl-1.0.1h in Buildroot. 1.0.1f is on my host
-system's openssl...
-
-Grrr...
-
-/me reaches for his chainsaw...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+index 4062646..52c18b9 100644
+--- a/docs/manual/adding-packages-perl.txt
++++ b/docs/manual/adding-packages-perl.txt
+@@ -104,6 +104,10 @@ cases, typical packages will therefore only use a few of them.
+   configure options to pass to the +perl Makefile.PL+ or +perl Build.PL+.
+   By default, empty.
+ 
++* +PERL_FOO_CONF_ENV+/+HOST_PERL_FOO_CONF_ENV+, to specify additional
++  environment variables to pass to the +perl Makefile.PL+ or
++  +perl Build.PL+. By default, empty.
++
+ * +PERL_FOO_BUILD_OPT+/+HOST_PERL_FOO_BUILD_OPT+, to specify additional
+   options to pass to +make pure_all+ or +perl Build build+ in the build step.
+   By default, empty.
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 5cfdc77..5867ccd 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -50,6 +50,7 @@ ifeq ($(4),target)
+ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ 		PERL_MM_USE_DEFAULT=1 \
++		$$($(2)_CONF_ENV) \
+ 		perl Build.PL \
+ 			--config ar="$$(TARGET_AR)" \
+ 			--config full_ar="$$(TARGET_AR)" \
+@@ -71,6 +72,7 @@ define $(2)_CONFIGURE_CMDS
+ 	else \
+ 		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
++		$$($(2)_CONF_ENV) \
+ 		perl Makefile.PL \
+ 			AR="$$(TARGET_AR)" \
+ 			FULL_AR="$$(TARGET_AR)" \
+@@ -96,6 +98,7 @@ else
+ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] ; then \
+ 		PERL_MM_USE_DEFAULT=1 \
++		$$($(2)_CONF_ENV) \
+ 		perl Build.PL \
+ 			--install_base $$(HOST_DIR)/usr \
+ 			--installdirs vendor \
+@@ -103,6 +106,7 @@ define $(2)_CONFIGURE_CMDS
+ 	else \
+ 		PERL_MM_USE_DEFAULT=1 \
+ 		PERL_AUTOINSTALL=--skipdeps \
++		$$($(2)_CONF_ENV) \
+ 		perl Makefile.PL \
+ 			INSTALL_BASE=$$(HOST_DIR)/usr \
+ 			INSTALLDIRS=vendor \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
