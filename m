@@ -1,85 +1,96 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jul 2014 16:42:59 +0200
-Subject: [Buildroot] [PATCH 2/2] package/patchelf: new host package
-In-Reply-To: <cover.1405262399.git.yann.morin.1998@free.fr>
-References: <cover.1405262399.git.yann.morin.1998@free.fr>
-Message-ID: <a8d871e1d1bf5eb507d24eac6f5dd51cda98a326.1405262399.git.yann.morin.1998@free.fr>
+Date: Sun, 13 Jul 2014 16:56:23 +0200
+Subject: [Buildroot] Open bug overview: help wanted!
+In-Reply-To: <20140713082927.328541e9@core2quad.morethan.org>
+References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
+ <20140712215353.GD3582@free.fr>
+ <20140712205430.1abdf0bf@core2quad.morethan.org>
+ <20140713090535.GC3588@free.fr>
+ <20140713082927.328541e9@core2quad.morethan.org>
+Message-ID: <20140713145623.GE3588@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some situations, users may want to tweak the dynamic section of the
-binaries (for example to add/set the RPATH to $ORIGIN/../lib).
+Mike, All,
 
-Because it is not trivial to do it properly from the Buildroot
-infrastructure, allow those users to use patchelf (e.g. from a
-post-build script) to tweak binaries.
+On 2014-07-13 08:29 -0500, Mike Zick spake thusly:
+> On Sun, 13 Jul 2014 11:05:35 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > On 2014-07-12 20:54 -0500, Mike Zick spake thusly:
+> > > Some members here in the past have expressed interest in supporting
+> > > after-market firmware creation for consumer devices.
+> > 
+> > And I am completely OK with that. What I'm arguing about is whether we
+> > want to support running a Buildroot system out-side of / , ie. when
+> > the root of the generated filesystem is not the root at runtime.
+> > 
+> > What I'm saying is that, if one wants to run the Buildroot generated
+> > system as a complement to an existing system, that should be done by
+> > chrooting into the Buildroot system, so that / is seen as / .
+> >
+> 
+> Well, in this application of after-market support (the Amazon Kindle)
+> that is how we run Debian on the grayscale e-books.
+> In fact, have been doing that for about 4 years now. ;)
+> http://www.mobileread.com/forums/showthread.php?t=96048
 
-patchelf is able to:
-  - modify an existing DT_RUNPATH tags
-  - add a DT_RUNPATH tag is not already present
-  - do the above to the DT_RPATH tag, too
-  - set the path to the interpreter
-  - remove DT_NEEDED tags
-  - query a inary for the DT_RUNPATH/DT_RPATH tag, or for the
-    interpreter path
+Everything I could see in that post actually uses a chroot, and is not
+running the Debian stuff from outside the chroot.
 
-Does not really fix #7172, but this is workaround.
+> But a chroot (by design) does place significant limits on what parts
+> of the existing system outside of the chroot can be used/accessed.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Mike Zick <minimod@morethan.org>
----
- package/Config.in.host          |  1 +
- package/patchelf/Config.in.host |  7 +++++++
- package/patchelf/patchelf.mk    | 12 ++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/patchelf/Config.in.host
- create mode 100644 package/patchelf/patchelf.mk
+Well, the post you pointed to has explicit explanations on how to do
+that for the kindle. It points to:
+    http://wiki.mobileread.com/wiki/Debi...n_Kindle_Touch
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 062c6c9..e05bbfa 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -13,6 +13,7 @@ menu "Host utilities"
- 	source "package/omap-u-boot-utils/Config.in.host"
- 	source "package/openocd/Config.in.host"
- 	source "package/parted/Config.in.host"
-+	source "package/patchelf/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
-diff --git a/package/patchelf/Config.in.host b/package/patchelf/Config.in.host
-new file mode 100644
-index 0000000..d1c8375
---- /dev/null
-+++ b/package/patchelf/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_PATCHELF
-+	bool "host patchelf"
-+	help
-+	  PatchELF is a small utility to modify the dynamic linker
-+	  and RPATH of ELF executables.
-+
-+	  http://nixos.org/patchelf.html
-diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
-new file mode 100644
-index 0000000..1a8e48d
---- /dev/null
-+++ b/package/patchelf/patchelf.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# patchelf
-+#
-+################################################################################
-+
-+PATCHELF_VERSION = 0.8
-+PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.8/
-+PATCHELF_LICENSE = GPLv3
-+PATCHELF_LICENSE_FILES = COPYING
-+
-+$(eval $(host-autotools-package))
+which contains:
+    In case you want to have access to userstore from debian execute
+    before chrooting:
+    mount -o bind /mnt/us /mnt/debian/mnt/us
+
+[--SNIP--]
+> And, in fact, I found that I don't need to use it.
+> Going down that usage path lead to too many complications.  ;)
+
+Yes, I can imagine that. Programs that expects things (e.g.) in /etc
+will be very unpleased when that stuff is in fact in /somewhere-else/etc.
+
+So, what about the bug report? Should we close it?
+
+[--SNIP--]
+> > But OK, either we make it work (without adding too much complexity),
+> > or we document it as a limitation.
+> 
+> I don't think it is a major limitation to the Buildroot user community.
+
+I tried to add the script approach, but I bailed out after I banged my
+head for two hours.
+
+> A mention in the options help text, a mention in the manual and an
+> addition to the known bugs list should be enough until someone really 
+> needs it fixed.
+
+Yep, that's the way I've gone with. If the maintainers don;t agree, then
+someone will need to do the job. I tried, I failed. :-(
+
+> I would be all right with just mentioning that the ld.so token "$ORIGIN"
+> can not be included in the custom link options field.
+
+I have been a bit more conservative in my change, in that I document
+that as soon as there is a $ sign, expansion of the variable is
+unpredictable, so it is not supported.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
