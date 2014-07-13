@@ -1,43 +1,52 @@
 From: Romain Naour <romain.naour@openwide.fr>
-Date: Sun, 13 Jul 2014 20:45:59 +0200
-Subject: [Buildroot] [PATCH 2/3] toolchain-external: handle a special case
-	where glibc check needs TOOLCHAIN_EXTERNAL_CFLAGS
-In-Reply-To: <1405277160-4686-1-git-send-email-romain.naour@openwide.fr>
-References: <1405277160-4686-1-git-send-email-romain.naour@openwide.fr>
-Message-ID: <1405277160-4686-3-git-send-email-romain.naour@openwide.fr>
+Date: Sun, 13 Jul 2014 20:45:57 +0200
+Subject: [Buildroot] [PATCH 0/3] toolchain: Add support for Sourcery
+	Codebench Standard
+Message-ID: <1405277160-4686-1-git-send-email-romain.naour@openwide.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the Sourcery Codebench standard edition, the sysroot returned
-point to a non existant directory if no CFLAGS are specified.
+The purpose of this series is to provide support for Sourcery Codebench
+Standard (licenced) edition in Buildroot.
 
-Add a test to use ARCH_SYSROOT_DIR for glibc check if SYSROOT_DIR is not a
-directory.
+Since these toolchain can't be downloaded, we need to use the custom toolchain
+backend to import them into Buildroot.
 
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- toolchain/toolchain-external/toolchain-external.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+In Toolchain menu, select:
+  Toolchain type (External toolchain)
+  Toolchain (Custom toolchain)
+  Toolchain origin (Pre-installed toolchain)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 8280b84..f6e51a1 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -477,7 +477,11 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
- 		$(call check_musl,$${SYSROOT_DIR}) ; \
- 	else \
--		$(call check_glibc,$${SYSROOT_DIR}) ; \
-+		if test -d "$${SYSROOT_DIR}"  ; then \
-+			$(call check_glibc,$${SYSROOT_DIR}) ; \
-+		else \
-+			$(call check_glibc,$${ARCH_SYSROOT_DIR}) ; \
-+		fi \
- 	fi
- endef
- 
+Then set all toolchain settings (kernel headers, libc, rpc, c++ etc...)
+
+I'm using the Sourcery Codebench 2014.05 for IA32 GNU/Linux, here is the
+settings:
+
+(i686-pc-linux-gnu) Toolchain prefix
+  External toolchain kernel headers series (3.13.x)
+  External toolchain C library (glibc/eglibc)
+[*] Toolchain has RPC support
+[*] Toolchain has C++ support?
+(-pipe -msgxx-glibc) Target Optimizations
+
+The "-msgxx-glibc" flag in "Target Optimizations" is mandatory otherwise the
+toolchain won't work.
+
+The toolchain-external infra need to be modified to handle a special case where
+all the libraries and headers are in the arch sysroot (sgxx-glibc).
+
+Romain Naour (3):
+  toolchain-external: handle a special case where kernel headers check
+    needs TOOLCHAIN_EXTERNAL_CFLAGS
+  toolchain-external: handle a special case where glibc check needs
+    TOOLCHAIN_EXTERNAL_CFLAGS
+  toolchain-external: fix Sourcery Codebench symlink
+
+ toolchain/toolchain-external/toolchain-external.mk | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
+
 -- 
 1.9.3
