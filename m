@@ -1,86 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jul 2014 01:02:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/perl-net-ssleay: fix buildsystem
-	for cross-compilation
-In-Reply-To: <1405206164-10189-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405206164-10189-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <1405206164-10189-2-git-send-email-yann.morin.1998@free.fr>
+From: Mike Zick <minimod@morethan.org>
+Date: Sat, 12 Jul 2014 20:54:30 -0500
+Subject: [Buildroot] Open bug overview: help wanted!
+In-Reply-To: <20140712215353.GD3582@free.fr>
+References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
+ <20140712215353.GD3582@free.fr>
+Message-ID: <20140712205430.1abdf0bf@core2quad.morethan.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The buildsystem for perl-net-ssleay is totally brain-damaged: it tries
-to execute the openssl program. It uses that to check the openssl
-version, detect the prefix to openssl, and set the include and library
-search paths.
+On Sat, 12 Jul 2014 23:53:53 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Of course, it does not handle the destdir idiom, so it ends up finding
-the host system's openssl (not even ours!), so it sets search paths to
-/usr/inlcude and /usr/lib and /lib.
+> > https://bugs.busybox.net/show_bug.cgi?id=7172 major
+> > unassigned at buildroot.uclibc.org Name collision of rpath token
+> > expansion and internal variables
+> > The puzzle pieces for a solution are present in this bug report. All
+> > it needs is someone caring enough to create a proper patch for this.
+> > Any candidates?  
+> 
+> I'm not a fan of all this rpath trickery.
+> 
+> Basically, the submitter (probably) wants this to run his
+> buildroot-built system from somewhere else than / and does not want to
+> chroot into it.
+> 
+> Should we add complexity to Buildroot for this use-case?
+>
 
-Well, guess what? It does not work.
+Some members here in the past have expressed interest in supporting
+after-market firmware creation for consumer devices.
 
-Fix that by:
-  - passing the prefix to openssl in the environment, so it does not go
-    hunting for the host-system openssl;
-  - not checking the version string, since we can't run, and Buildroot
-    has the correct version anyway;
-  - not setting any -I or -L paths since our compiler/linker already
-    know where to look for for includes and libs.
+Most have remained non-committal.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <fperrad@gmail.com>
----
- .../perl-net-ssleay-001-fix-build-system.patch     | 25 ++++++++++++++++++++++
- package/perl-net-ssleay/perl-net-ssleay.mk         |  4 ++++
- 2 files changed, 29 insertions(+)
- create mode 100644 package/perl-net-ssleay/perl-net-ssleay-001-fix-build-system.patch
+Buildroot does provide the string field for the end-user to pass
+custom link-time options.
 
-diff --git a/package/perl-net-ssleay/perl-net-ssleay-001-fix-build-system.patch b/package/perl-net-ssleay/perl-net-ssleay-001-fix-build-system.patch
-new file mode 100644
-index 0000000..a5ee961
---- /dev/null
-+++ b/package/perl-net-ssleay/perl-net-ssleay-001-fix-build-system.patch
-@@ -0,0 +1,25 @@
-+diff -durN perl-net-ssleay-1.64.orig/inc/Module/Install/PRIVATE/Net/SSLeay.pm perl-net-ssleay-1.64/inc/Module/Install/PRIVATE/Net/SSLeay.pm
-+--- perl-net-ssleay-1.64.orig/inc/Module/Install/PRIVATE/Net/SSLeay.pm	2014-04-01 08:08:37.000000000 +0200
-++++ perl-net-ssleay-1.64/inc/Module/Install/PRIVATE/Net/SSLeay.pm	2014-07-13 00:38:46.281380282 +0200
-+@@ -37,14 +37,18 @@
-+         exit 0; # according http://wiki.cpantesters.org/wiki/CPANAuthorNotes this is best-practice when "missing library"
-+     }
-+ 
-+-    $self->check_openssl_version($prefix, $exec);
-++# Does not work for cross-compilation.
-++# In Buildroot, we do have a supported version.
-++#    $self->check_openssl_version($prefix, $exec);
-+     my $opts = $self->ssleay_get_build_opts($prefix, $exec);
-+ 
-+     $self->makemaker_args(
-+         CCCDLFLAGS => $opts->{cccdlflags},
-+         OPTIMIZE => $opts->{optimize},
-+-        INC => join(' ', map {"-I$_"} @{$opts->{inc_paths}}),
-+-        LIBS => join(' ', (map {"-L$_"} @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
-++# Buildroot already has the correct include and library search paths.
-++#        INC => join(' ', map {"-I$_"} @{$opts->{inc_paths}}),
-++#        LIBS => join(' ', (map {"-L$_"} @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
-++        LIBS => join(' ', (map {"-l$_"} @{$opts->{lib_links}})),
-+     );
-+ 
-+     if ( $self->prompt(
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 413fdf0..4a362fb 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -11,4 +11,8 @@ PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
- PERL_NET_SSLEAY_LICENSE = OpenSSL
- PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
- 
-+# Try as hard as possible to remedy to the brain-damage their build-system
-+# suffers from: don't search for openssl, they pick the host-system one.
-+PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
-+
- $(eval $(perl-package))
--- 
-1.9.1
+The point is, it should either work or be documented as to its
+limitations.
+That meets any definition of a "bug" in Buildroot.
+Not a "unsupported use case", a "bug", as in "broke" by implementation".
+
+I would be glad to fix it for you if I could.
+
+Mike
