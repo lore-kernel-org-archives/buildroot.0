@@ -1,76 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Jul 2014 11:05:35 +0200
-Subject: [Buildroot] Open bug overview: help wanted!
-In-Reply-To: <20140712205430.1abdf0bf@core2quad.morethan.org>
-References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
- <20140712215353.GD3582@free.fr>
- <20140712205430.1abdf0bf@core2quad.morethan.org>
-Message-ID: <20140713090535.GC3588@free.fr>
+Date: Sun, 13 Jul 2014 15:03:20 +0200
+Subject: [Buildroot] [PATCH 0/4 v3] perl-infra enhancements (branch
+	yem/autobuild-perl)
+Message-ID: <cover.1405256442.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike, All,
+Hello All!
 
-On 2014-07-12 20:54 -0500, Mike Zick spake thusly:
-> On Sat, 12 Jul 2014 23:53:53 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > > https://bugs.busybox.net/show_bug.cgi?id=7172 major
-> > > unassigned at buildroot.uclibc.org Name collision of rpath token
-> > > expansion and internal variables
-> > > The puzzle pieces for a solution are present in this bug report. All
-> > > it needs is someone caring enough to create a proper patch for this.
-> > > Any candidates?  
-> > 
-> > I'm not a fan of all this rpath trickery.
-> > 
-> > Basically, the submitter (probably) wants this to run his
-> > buildroot-built system from somewhere else than / and does not want to
-> > chroot into it.
-> > 
-> > Should we add complexity to Buildroot for this use-case?
-> >
-> 
-> Some members here in the past have expressed interest in supporting
-> after-market firmware creation for consumer devices.
+This series enhances the pkg-erl infrastructure:
+  - add possibility for packages to pass extra environment variables
+    at configure time
+  - fix perl-net-ssleay
+  - hide perl extensions written in C when doing static build
 
-And I am completely OK with that. What I'm arguing about is whether we
-want to support running a Buildroot system out-side of / , ie. when the
-root of the generated filesystem is not the root at runtime.
+Changes v2 -> v3:
+  - aggregate Fran?ois' previous patches with mines
 
-What I'm saying is that, if one wants to run the Buildroot generated
-system as a complement to an existing system, that should be done by
-chrooting into the Buildroot system, so that / is seen as / .
-
-> Buildroot does provide the string field for the end-user to pass
-> custom link-time options.
-> 
-> The point is, it should either work or be documented as to its
-> limitations.
-
-OK, I agree.
-
-> That meets any definition of a "bug" in Buildroot.
-> Not a "unsupported use case", a "bug", as in "broke" by implementation".
-
-Well, this is a bit borderline, IMHO. ;-)
-
-But OK, either we make it work (without adding too much complexity), or
-we document it as a limitation.
-
-> I would be glad to fix it for you if I could.
-
-Oh, but you already provided quite a good analysis of the problem, and
-even hinted to a possible solution. That's already good! :-)
-
-Of course, the above is just my own feelings on the issue. I'd like to
-get ThomasP's feelings on the issue, and your proposed solution.
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 30252ae893298bf3f190b57d33c545e0e46c40db:
+
+  libgpgme: disable all tests (2014-07-12 20:47:38 +0200)
+
+are available in the git repository at:
+
+  git://ymorin.is-a-geek.org/buildroot yem/autobuild-perl
+
+for you to fetch changes up to fbe14dfcaa71d2c2ada7dc463b80d9898191f14c:
+
+  package/perl-xml-libxml: not available for static link (2014-07-13 14:56:09 +0200)
+
+----------------------------------------------------------------
+Francois Perrad (2):
+      infra/pkg-perl: add possibility to pass extra env at configure time
+      package/perl-net-ssleay: fix buildsystem for cross-compilation
+
+Yann E. MORIN (2):
+      package/perl-net-ssleay: not available for static link
+      package/perl-xml-libxml: not available for static link
+
+ docs/manual/adding-packages-perl.txt               |  4 +++
+ package/perl-net-ssleay/Config.in                  |  4 +++
+ .../perl-net-ssleay-0000-fix-build-system.patch    | 36 ++++++++++++++++++++++
+ package/perl-net-ssleay/perl-net-ssleay.mk         |  4 +++
+ package/perl-xml-libxml/Config.in                  |  4 +++
+ package/pkg-perl.mk                                |  4 +++
+ 6 files changed, 56 insertions(+)
+ create mode 100644 package/perl-net-ssleay/perl-net-ssleay-0000-fix-build-system.patch
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
