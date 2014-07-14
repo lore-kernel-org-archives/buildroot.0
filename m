@@ -1,36 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jul 2014 16:39:31 +0200
-Subject: [Buildroot] [PATCH 4 of 6] uclibc: rename SETUP_DOT_CONFIG to
- FIXUP_DOT_CONFIG
-In-Reply-To: <20140714163325.231613e5@free-electrons.com>
+Date: Mon, 14 Jul 2014 16:40:56 +0200
+Subject: [Buildroot] [PATCH 3 of 6] uclibc: replace custom kconfig
+ helpers with those provided by pkg-utils
+In-Reply-To: <CAAXf6LUrfRoSRiyZt_wm7xwrj82UhL7eX6a=jmu33KRF=Z1Z9w@mail.gmail.com>
 References: <patchbomb.1405338624@localhost>
- <1f15cd84996d1bb6fb3a.1405338628@localhost>
- <20140714163325.231613e5@free-electrons.com>
-Message-ID: <20140714143931.GK3684@free.fr>
+ <0b5a6fcf97ef3323869c.1405338627@localhost>
+ <20140714143643.GJ3684@free.fr>
+ <CAAXf6LUrfRoSRiyZt_wm7xwrj82UhL7eX6a=jmu33KRF=Z1Z9w@mail.gmail.com>
+Message-ID: <20140714144056.GL3684@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas?, All,
+Thomas, All,
 
-On 2014-07-14 16:33 +0200, Thomas Petazzoni spake thusly:
-> On Mon, 14 Jul 2014 13:50:28 +0200, Thomas De Schampheleire wrote:
+On 2014-07-14 16:39 +0200, Thomas De Schampheleire spake thusly:
+> Hi Yann,
 > 
-> > -define UCLIBC_SETUP_DOT_CONFIG
-> > +define UCLIBC_FIXUP_DOT_CONFIG
-> >  	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+> On Mon, Jul 14, 2014 at 4:36 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > Thomas, All,
+> >
+> > On 2014-07-14 13:50 +0200, Thomas De Schampheleire spake thusly:
+> >> This patch removes the custom kconfig helpers UCLIBC_OPT_SET and
+> >> UCLIBC_OPT_UNSET with the common KCONFIG_SET_OPT, KCONFIG_ENABLE_OPT and
+> >> KCONFIG_DISABLE_OPT.
+> >>
+> >> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> >
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >
+> > But see below:
+> >
+> >>       $(SED) '/CONFIG_ARM_.ABI/d' $(@D)/.config
+> >>       $(SED) '/CONFIG_MIPS_[NO].._ABI/d' $(@D)/.config
+> >>       $(SED) '/CONFIG_MIPS_ISA_.*/d' $(@D)/.config
+> >>       $(SED) '/CONFIG_SH[234A]*/d' $(@D)/.config
+> >>       $(SED) 's/^\(CONFIG_[^_]*[_]*SPARC[^=]*\)=.*/# \1 is not set/g' \
+> >>                $(@D)/.config
+> >
+> > Ideally, we should have KCONFIG helpers for those, too.
+> >
 > 
-> This this variable is actually copying the configuration file, I
-> believe the current name of the variable is more correct than the one
-> you propose to use, no?
+> Yes, but it has to be a new helper I think, because of the pattern matching.
 
-Thomas did the change, because in patch 5/6 it no longer does the copy,
-it only does the fixup.
-
-This should probably have been explained in the commit log that the
-change was needed by a future patch.
+Absolutely, yes. And it can come in a later patch.
 
 Regards,
 Yann E. MORIN.
