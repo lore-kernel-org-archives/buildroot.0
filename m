@@ -1,21 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Jul 2014 08:04:08 -0300
-Subject: [Buildroot] [PATCH 2/3] infra: add gettextize run in AUTORECONF
-In-Reply-To: <20140714130104.480ab4cf@free-electrons.com>
-References: <1405186024-8170-1-git-send-email-gustavo@zacarias.com.ar>	<1405186024-8170-2-git-send-email-gustavo@zacarias.com.ar>
- <20140714130104.480ab4cf@free-electrons.com>
-Message-ID: <53C3B928.3000807@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Jul 2014 13:06:09 +0200
+Subject: [Buildroot] [PATCH trivial] busybox: fix typo 'overwritting'
+In-Reply-To: <197abaf75c205828d953.1405192876@localhost>
+References: <197abaf75c205828d953.1405192876@localhost>
+Message-ID: <20140714130609.5fe1de75@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/14/2014 08:01 AM, Thomas Petazzoni wrote:
+Dear Thomas De Schampheleire,
 
-> I believe I would actually prefer a separate GETTEXTIZE option, I'm a
-> little bit worried about the extra build time. What do others think?
+On Sat, 12 Jul 2014 21:21:16 +0200, Thomas De Schampheleire wrote:
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+>  package/busybox/busybox.mk |  2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
 
-That's fine with me as well, however we'll be hunting a little until the
-autobuilders look greener :)
-Regards.
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
