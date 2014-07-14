@@ -1,39 +1,81 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 14 Jul 2014 16:43:20 +0200
-Subject: [Buildroot] [PATCH 4 of 6] uclibc: rename SETUP_DOT_CONFIG to
-	FIXUP_DOT_CONFIG
-In-Reply-To: <20140714143931.GK3684@free.fr>
-References: <patchbomb.1405338624@localhost>
- <1f15cd84996d1bb6fb3a.1405338628@localhost>
- <20140714163325.231613e5@free-electrons.com> <20140714143931.GK3684@free.fr>
-Message-ID: <CAAXf6LWobeHbQB+d8MvtMF3x3=W1FPPdfSr-4yU_bi+ZKF3cGg@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 14 Jul 2014 19:29:46 +0400
+Subject: [Buildroot] [PATCH] gcc: explicitly use CFLAGS_FOR_TARGET instead
+	of --enable-target-optspace
+Message-ID: <1405351786-4445-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 14, 2014 at 4:39 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas?, All,
->
-> On 2014-07-14 16:33 +0200, Thomas Petazzoni spake thusly:
->> On Mon, 14 Jul 2014 13:50:28 +0200, Thomas De Schampheleire wrote:
->>
->> > -define UCLIBC_SETUP_DOT_CONFIG
->> > +define UCLIBC_FIXUP_DOT_CONFIG
->> >     $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
->>
->> This this variable is actually copying the configuration file, I
->> believe the current name of the variable is more correct than the one
->> you propose to use, no?
->
-> Thomas did the change, because in patch 5/6 it no longer does the copy,
-> it only does the fixup.
->
-> This should probably have been explained in the commit log that the
-> change was needed by a future patch.
+Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=2222 it's impossible
+to specify custom CFLAGS_FOR_TARGET, it is alway gets overriden with values
+from "config/mt-ospace":
+===========
+ CFLAGS_FOR_TARGET = -g -Os
+ CXXFLAGS_FOR_TARGET = -g -Os
+===========
 
-Ok, I see. I split off the change to a separate patch for clarity, but
-indeed at this moment it is not yet fully accurate. I can fold this
-patch with the 5th patch, or otherwise update the commit msg as Yann
-proposed, what do you prefer?
+But in some situations it's required to pass custom flags on buildong of libgcc:
+ * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
+(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
+ * Particular CPU requires specific instructions for HW support
+ * Deep optimizations
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gcc/gcc-intermediate/gcc-intermediate.mk | 13 +++++++++++++
+ package/gcc/gcc.mk                               | 10 ----------
+ 2 files changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+index db84d18..0543574 100644
+--- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
++++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
+@@ -46,4 +46,17 @@ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
+ HOST_GCC_INTERMEDIATE_INSTALL_OPT += install-target-libgcc
+ endif
+ 
++ifeq ($(ARCH),powerpc)
++ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
++	# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
++	# Workaround until it's fixed in 4.5.4 or later
++	HOST_GCC_INTERMEDIATE_CONF_ENV += CFLAGS_FOR_TARGET="-g -O2"
++	HOST_GCC_INTERMEDIATE_CONF_ENV += CXXFLAGS_FOR_TARGET="-g -O2"
++endif
++else
++	# Defaults are "-g -Os" from "config/mt-ospace"
++	HOST_GCC_INTERMEDIATE_CONF_ENV += CFLAGS_FOR_TARGET="-g -Os"
++	HOST_GCC_INTERMEDIATE_CONF_ENV += CXXFLAGS_FOR_TARGET="-g -Os"
++endif
++
+ $(eval $(host-autotools-package))
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5b60bc3..c6f6e41 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -107,16 +107,6 @@ HOST_GCC_COMMON_CONF_OPT = \
+ HOST_GCC_COMMON_CONF_ENV = \
+ 	MAKEINFO=missing
+ 
+-# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+-# Workaround until it's fixed in 4.5.4 or later
+-ifeq ($(ARCH),powerpc)
+-ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-HOST_GCC_COMMON_CONF_OPT += --disable-target-optspace
+-endif
+-else
+-HOST_GCC_COMMON_CONF_OPT += --enable-target-optspace
+-endif
+-
+ # gcc 4.6.x quadmath requires wchar
+ ifneq ($(BR2_TOOLCHAIN_BUILDROOT_WCHAR),y)
+ HOST_GCC_COMMON_CONF_OPT += --disable-libquadmath
+-- 
+1.9.3
