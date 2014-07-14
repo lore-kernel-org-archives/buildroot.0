@@ -1,103 +1,53 @@
-From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
-Date: Mon, 14 Jul 2014 12:09:35 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Jul 2014 12:16:48 +0200
 Subject: [Buildroot] PACKAGE_USERS does not work
-In-Reply-To: <20140711203733.GE3739@free.fr>
+In-Reply-To: <53C3AC5F.9090404@posteo.de>
 References: <i5np0ra770dn4ujwdmsweh48.1405067942517@email.android.com>
  <CAJtjsKbLN1-yEkBq=cCsoaOx_n+LUYof1P51T3wzOupaxR75JQ@mail.gmail.com>
  <53BFE547.70600@posteo.de> <20140711203733.GE3739@free.fr>
-Message-ID: <53C3AC5F.9090404@posteo.de>
+ <53C3AC5F.9090404@posteo.de>
+Message-ID: <20140714101648.GA3684@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+J?rg, All,
 
-many thanks for your review! Any advice is very welcome!
+On 2014-07-14 12:09 +0200, J?rg Krause spake thusly:
+> On 07/11/2014 10:37 PM, Yann E. MORIN wrote:
+> >On 2014-07-11 15:23 +0200, J?rg Krause spake thusly:
+> >BTW, it also depends on expat.
+> 
+> I am unsure of the necessary dependencies. The author of the package stated
+> that it only depends on libupnp and libmpdclient.
+> 
+> I added host-pkgconf because I saw it on other package makefiles. Do I need
+> it here?
 
-On 07/11/2014 10:37 PM, Yann E. MORIN wrote:
-> J?rg, All,
->
-> You said in another mail that you'd be sending a patch to add this
-> package. Thanks!
->
-> So, here is my preliminary review of the .mk file:
->
-> On 2014-07-11 15:23 +0200, J?rg Krause spake thusly:
->>    ################################################################################
->>    #
->>    # upmpdcli
->>    #
->>    ################################################################################
->>
->>    UPMPDCLI_VERSION = 0.7.1
->>    UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
->>    UPMPDCLI_LICENSE = GPLv2
->>    UPMPDCLI_LICENSE_FILES = LICENSE
->>    UPMPDCLI_INSTALL_STAGING = YES
-> Wh yinstall in staging? As far as I can see, this installs a program,
-> not a library, right? We install in staging only when the package
-> installs one (or more) libraries.
->
+It is easy to check if a package requires host-pkgconf:
+    grep PKG_CHECK_MODULES configure.ac
 
-Removed.
+If it returns something, then you need host-pkgconf; otherwise, you
+don't.
 
->>    UPMPDCLI_INSTALL_TARGET = YES
-> Not needed, that's the default.
+> Why do you suggest expat?
 
+Because I tried to build upmpdcli, and it barfed because expat was not
+available. ;-)
 
-Removed.
+That being said, expat is not the only library providing XML parsing,
+maybe it can use libxml2, too, but I did not check. The last message for
+the failed configure was about missing expat, so I just added that.
 
->>    UPMPDCLI_AUTORECONF = YES
-> Why do you autoreconf? It is not normally needed. If it is needed, add a
-> comment stating why. See the existing packages for hints. ;-)
+Regards,
+Yann E. MORIN.
 
-Removed, too. Source is not taken from the git repo.
-
->
->>    UPMPDCLI_CONF_OPT = --prefix=/usr
-> Nope, that's already taken care of by the autotools-package
-> infrastructure.
-
-Removed.
-
->>    UPMPDCLI_DEPENDENCIES = host-pkgconf
->>    UPMPDCLI_DEPENDENCIES += libupnp
->>    UPMPDCLI_DEPENDENCIES += libmpdclient
-> Please, put the dependencies on a single. If it does not fit in 80-char,
-> then use continuation lines, like:
->
->      UPMPDCLI_DEPENDENCIES = host-pkgconf libupnp libmpdclient tooloong \
->          more-depndencies on-this-line
-
-Done.
-
->
-> BTW, it also depends on expat.
-
-I am unsure of the necessary dependencies. The author of the package 
-stated that it only depends on libupnp and libmpdclient.
-
-I added host-pkgconf because I saw it on other package makefiles. Do I 
-need it here?
-
-Why do you suggest expat?
-
->>    define UPMPDCLI_USERS
->>        upmpdcli -1 upmpdcli -1 * - - -
->>    endef
-> Do you really need a specific user for running upmpdcli?
->
-> Also, would it need to belong to the audio group (as an additional
-> group)? (even though it does not directly render audio)
->
->>    define UPMPDCLI_INSTALL_INIT_SYSV
->>        $(INSTALL) -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/
->>    endef
-> Regards,
-> Yann E. MORIN.
->
-
-Best regards
-J?rg Krause
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
