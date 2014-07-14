@@ -1,67 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 14 Jul 2014 13:50:29 +0200
-Subject: [Buildroot] [PATCH 5 of 6] uclibc: menuconfig: take into account
- initial settings from config file
-In-Reply-To: <patchbomb.1405338624@localhost>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 14 Jul 2014 16:02:47 +0200
+Subject: [Buildroot] [PATCH 1 of 6] pkg-utils: kconfig helpers: add
+ basic usage documentation
+In-Reply-To: <4a53bf323d8a1808dd1b.1405338625@localhost>
 References: <patchbomb.1405338624@localhost>
-Message-ID: <34f3d55304ad13b63b26.1405338629@localhost>
+ <4a53bf323d8a1808dd1b.1405338625@localhost>
+Message-ID: <20140714140247.GG3684@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When executing the sequence 'make clean uclibc-menuconfig', the configured
-config file is not taken into account and one starts from the default
-settings.
+Thomas, All,
 
-This patch adds an explicit target for the config file and lets the
-configure and menuconfig steps depend on it, fixing the problem.
+On 2014-07-14 13:50 +0200, Thomas De Schampheleire spake thusly:
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
----
-rfc->patch:
-- add target for .config to avoid menuconfig copying the config file
-  every time (ThomasP, Arnout)
-- move dependency on patch step from menuconfig to the .config target
+Regards,
+Yann E. MORIN.
 
- package/uclibc/uclibc.mk |  12 ++++++++----
- 1 files changed, 8 insertions(+), 4 deletions(-)
+> ---
+>  package/pkg-utils.mk |  6 +++---
+>  1 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff -r 7c17407eb26e -r 4a53bf323d8a package/pkg-utils.mk
+> --- a/package/pkg-utils.mk	Sat Jul 12 14:41:41 2014 -0300
+> +++ b/package/pkg-utils.mk	Wed Jul 09 20:27:38 2014 +0200
+> @@ -33,17 +33,17 @@
+>  # package, and more.
+>  #
+>  
+> -define KCONFIG_ENABLE_OPT
+> +define KCONFIG_ENABLE_OPT # (option, file)
+>  	$(SED) "/\\<$(1)\\>/d" $(2)
+>  	echo "$(1)=y" >> $(2)
+>  endef
+>  
+> -define KCONFIG_SET_OPT
+> +define KCONFIG_SET_OPT # (option, value, file)
+>  	$(SED) "/\\<$(1)\\>/d" $(3)
+>  	echo "$(1)=$(2)" >> $(3)
+>  endef
+>  
+> -define KCONFIG_DISABLE_OPT
+> +define KCONFIG_DISABLE_OPT # (option, file)
+>  	$(SED) "/\\<$(1)\\>/d" $(2)
+>  	echo "# $(1) is not set" >> $(2)
+>  endef
 
-diff -r 1f15cd84996d -r 34f3d55304ad package/uclibc/uclibc.mk
---- a/package/uclibc/uclibc.mk	Wed Jul 02 21:31:07 2014 +0200
-+++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
-@@ -394,7 +394,6 @@
- 	HOSTCC="$(HOSTCC)"
- 
- define UCLIBC_FIXUP_DOT_CONFIG
--	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
- 	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
- 	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
- 	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
-@@ -533,7 +532,14 @@
- 	$(UCLIBC_INSTALL_UTILS_STAGING)
- endef
- 
--uclibc-menuconfig: uclibc-patch
-+$(eval $(generic-package))
-+
-+$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
-+	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
-+
-+$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.config
-+
-+uclibc-menuconfig: $(UCLIBC_DIR)/.config
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX=$(STAGING_DIR) \
-@@ -542,8 +548,6 @@
- 		menuconfig
- 	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
- 
--$(eval $(generic-package))
--
- uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
