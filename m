@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jul 2014 13:11:40 +0200
-Subject: [Buildroot] [git commit] nasm: remove unused target package
-Message-ID: <20140714111212.C08129CE78@busybox.osuosl.org>
+Date: Mon, 14 Jul 2014 13:09:27 +0200
+Subject: [Buildroot] [git commit] package/perl-net-ssleay: not available for
+	static link
+Message-ID: <20140714111212.B0A269D1EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=86cfc0bf9c7aef15a71ca1b2d4ea3f1f0676906a
+commit: http://git.buildroot.net/buildroot/commit/?id=3f89df21b89111dae7f5700d3a853d13ec779a48
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When nasm was added in da8d09b716, it got both the host and the target
-variants even though it doesn't have a Config.in and the target variant isn't
-used anywhere. Therefore, this patch removes the unused target variant.
+Perl extensions are loaded at runtime with dlopen(), so it does not
+make sense to even build extensions that are written in C.
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+perl-net-ssleay is (partly) written in C, so it is not available when
+doing a static build.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nasm/nasm.mk |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ package/perl-net-ssleay/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index b9077eb..b87d6ef 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -10,5 +10,4 @@ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2c
- NASM_LICENSE_FILES = LICENSE
+diff --git a/package/perl-net-ssleay/Config.in b/package/perl-net-ssleay/Config.in
+index bc219b0..7cc5157 100644
+--- a/package/perl-net-ssleay/Config.in
++++ b/package/perl-net-ssleay/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_PERL_NET_SSLEAY
+ 	bool "perl-net-ssleay"
++	depends on !BR2_PREFER_STATIC_LIB
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Perl extension for using OpenSSL
  
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ 	  https://metacpan.org/release/Net-SSLeay
++
++comment "perl-net-ssleay needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
