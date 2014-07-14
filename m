@@ -1,101 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jul 2014 13:08:40 +0200
-Subject: [Buildroot] [git commit] package/perl-net-ssleay: fix buildsystem
-	for cross-compilation
-Message-ID: <20140714111212.A9EA09CE78@busybox.osuosl.org>
+Date: Mon, 14 Jul 2014 13:05:26 +0200
+Subject: [Buildroot] [git commit] busybox: fix typo 'overwritting'
+Message-ID: <20140714111212.92A299CE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=200ac4862a882cfd3e4edfd1868652c2985215e7
+commit: http://git.buildroot.net/buildroot/commit/?id=6a67ad5a3d72ef040b6a8e5b6a97dfad8741a646
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The buildsystem for perl-net-ssleay is totally brain-damaged: it tries
-to execute the openssl program. It uses that to check the openssl
-version, detect the prefix to openssl, and set the include and library
-search paths.
-
-Of course, it does not handle the destdir idiom, so it ends up finding
-the host system's openssl (not even ours!), so it sets search paths to
-/usr/inlcude and /usr/lib and /lib.
-
-Well, guess what? It does not work.
-
-Fix that by:
-  - passing the prefix to openssl in the environment, so it does not go
-    hunting for the host-system openssl;
-  - not checking the version string, since we can't run, and Buildroot
-    has the correct version anyway;
-  - not setting any -I or -L paths since our compiler/linker already
-    know where to look for for includes and libs.
-
-Fixes:
-    http://autobuild.buildroot.net/results/135/135867ef85535863e3647cc5fb82accb6f77612c/
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[me: enhance commit log, add patch to avoid running openssl and setting
- wrong include and library search paths]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../perl-net-ssleay-0000-fix-build-system.patch    |   36 ++++++++++++++++++++
- package/perl-net-ssleay/perl-net-ssleay.mk         |    4 ++
- 2 files changed, 40 insertions(+), 0 deletions(-)
+ package/busybox/busybox.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/perl-net-ssleay/perl-net-ssleay-0000-fix-build-system.patch b/package/perl-net-ssleay/perl-net-ssleay-0000-fix-build-system.patch
-new file mode 100644
-index 0000000..a6cd0f9
---- /dev/null
-+++ b/package/perl-net-ssleay/perl-net-ssleay-0000-fix-build-system.patch
-@@ -0,0 +1,36 @@
-+buildsystem: fix for cross-compilation
-+
-+Avoid running the openssl binary, since it would break for
-+cross-compilation. Buildroot has a supported version, anyway.
-+
-+Also, avoid adding hard-coded includes and libraries search
-+paths, since they are missing the destdir; Buildroot compilers
-+and linkers already know where to search, anyway.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+diff -durN perl-net-ssleay-1.64.orig/inc/Module/Install/PRIVATE/Net/SSLeay.pm perl-net-ssleay-1.64/inc/Module/Install/PRIVATE/Net/SSLeay.pm
-+--- perl-net-ssleay-1.64.orig/inc/Module/Install/PRIVATE/Net/SSLeay.pm	2014-04-01 08:08:37.000000000 +0200
-++++ perl-net-ssleay-1.64/inc/Module/Install/PRIVATE/Net/SSLeay.pm	2014-07-13 00:38:46.281380282 +0200
-+@@ -37,14 +37,18 @@
-+         exit 0; # according http://wiki.cpantesters.org/wiki/CPANAuthorNotes this is best-practice when "missing library"
-+     }
-+ 
-+-    $self->check_openssl_version($prefix, $exec);
-++# Does not work for cross-compilation.
-++# In Buildroot, we do have a supported version.
-++#    $self->check_openssl_version($prefix, $exec);
-+     my $opts = $self->ssleay_get_build_opts($prefix, $exec);
-+ 
-+     $self->makemaker_args(
-+         CCCDLFLAGS => $opts->{cccdlflags},
-+         OPTIMIZE => $opts->{optimize},
-+-        INC => join(' ', map {"-I$_"} @{$opts->{inc_paths}}),
-+-        LIBS => join(' ', (map {"-L$_"} @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
-++# Buildroot already has the correct include and library search paths.
-++#        INC => join(' ', map {"-I$_"} @{$opts->{inc_paths}}),
-++#        LIBS => join(' ', (map {"-L$_"} @{$opts->{lib_paths}}), (map {"-l$_"} @{$opts->{lib_links}})),
-++        LIBS => join(' ', (map {"-l$_"} @{$opts->{lib_links}})),
-+     );
-+ 
-+     if ( $self->prompt(
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 413fdf0..4a362fb 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -11,4 +11,8 @@ PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
- PERL_NET_SSLEAY_LICENSE = OpenSSL
- PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index d7bfd0e..f7d28a7 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -184,7 +184,7 @@ define BUSYBOX_INSTALL_WATCHDOG_SCRIPT
+ endef
+ endif
  
-+# Try as hard as possible to remedy to the brain-damage their build-system
-+# suffers from: don't search for openssl, they pick the host-system one.
-+PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
-+
- $(eval $(perl-package))
+-# Enable "noclobber" in install.sh, to prevent BusyBox from overwritting any
++# Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+ # full-blown versions of apps installed by other packages with sym/hard links.
+ define BUSYBOX_NOCLOBBER_INSTALL
+ 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
