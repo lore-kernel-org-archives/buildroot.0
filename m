@@ -1,49 +1,85 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Jul 2014 18:44:01 +0200
-Subject: [Buildroot] [PATCH 4 of 6] uclibc: rename SETUP_DOT_CONFIG to
-	FIXUP_DOT_CONFIG
-In-Reply-To: <CAAXf6LWobeHbQB+d8MvtMF3x3=W1FPPdfSr-4yU_bi+ZKF3cGg@mail.gmail.com>
+Date: Mon, 14 Jul 2014 18:55:02 +0200
+Subject: [Buildroot] [PATCH 5 of 6] uclibc: menuconfig: take into
+ account initial settings from config file
+In-Reply-To: <34f3d55304ad13b63b26.1405338629@localhost>
 References: <patchbomb.1405338624@localhost>
- <1f15cd84996d1bb6fb3a.1405338628@localhost>
- <20140714163325.231613e5@free-electrons.com> <20140714143931.GK3684@free.fr>
- <CAAXf6LWobeHbQB+d8MvtMF3x3=W1FPPdfSr-4yU_bi+ZKF3cGg@mail.gmail.com>
-Message-ID: <53C408D1.8070709@mind.be>
+ <34f3d55304ad13b63b26.1405338629@localhost>
+Message-ID: <53C40B66.7020204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/07/14 16:43, Thomas De Schampheleire wrote:
-> On Mon, Jul 14, 2014 at 4:39 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->> Thomas?, All,
->>
->> On 2014-07-14 16:33 +0200, Thomas Petazzoni spake thusly:
->>> On Mon, 14 Jul 2014 13:50:28 +0200, Thomas De Schampheleire wrote:
->>>
->>>> -define UCLIBC_SETUP_DOT_CONFIG
->>>> +define UCLIBC_FIXUP_DOT_CONFIG
->>>>     $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
->>>
->>> This this variable is actually copying the configuration file, I
->>> believe the current name of the variable is more correct than the one
->>> you propose to use, no?
->>
->> Thomas did the change, because in patch 5/6 it no longer does the copy,
->> it only does the fixup.
->>
->> This should probably have been explained in the commit log that the
->> change was needed by a future patch.
+On 14/07/14 13:50, Thomas De Schampheleire wrote:
+> When executing the sequence 'make clean uclibc-menuconfig', the configured
+> config file is not taken into account and one starts from the default
+> settings.
 > 
-> Ok, I see. I split off the change to a separate patch for clarity, but
-> indeed at this moment it is not yet fully accurate. I can fold this
-> patch with the 5th patch, or otherwise update the commit msg as Yann
-> proposed, what do you prefer?
+> This patch adds an explicit target for the config file and lets the
+> configure and menuconfig steps depend on it, fixing the problem.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+> rfc->patch:
+> - add target for .config to avoid menuconfig copying the config file
+>   every time (ThomasP, Arnout)
+> - move dependency on patch step from menuconfig to the .config target
+> 
+>  package/uclibc/uclibc.mk |  12 ++++++++----
+>  1 files changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff -r 1f15cd84996d -r 34f3d55304ad package/uclibc/uclibc.mk
+> --- a/package/uclibc/uclibc.mk	Wed Jul 02 21:31:07 2014 +0200
+> +++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
+> @@ -394,7 +394,6 @@
+>  	HOSTCC="$(HOSTCC)"
+>  
+>  define UCLIBC_FIXUP_DOT_CONFIG
+> -	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+>  	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
+>  	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
+>  	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
+> @@ -533,7 +532,14 @@
+>  	$(UCLIBC_INSTALL_UTILS_STAGING)
+>  endef
+>  
+> -uclibc-menuconfig: uclibc-patch
+> +$(eval $(generic-package))
+> +
+> +$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
+> +	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+> +
+> +$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.config
 
- I'd fold it.
+ This should be $(UCLIBC_TARGET_CONFIGURE) instead of
+$(UCLIBC_DIR)/.stamp_configured.
+
+ Actually, I'd prefer the FOO_TARGET_* variables to be removed completely.
+However, as long as they exist, I guess they should be used.
+
+ Other than that, looks good to me.
 
  Regards,
  Arnout
+
+> +
+> +uclibc-menuconfig: $(UCLIBC_DIR)/.config
+>  	$(MAKE1) -C $(UCLIBC_DIR) \
+>  		$(UCLIBC_MAKE_FLAGS) \
+>  		PREFIX=$(STAGING_DIR) \
+> @@ -542,8 +548,6 @@
+>  		menuconfig
+>  	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
+>  
+> -$(eval $(generic-package))
+> -
+>  uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
+>  	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
+>  
+> 
 
 
 -- 
