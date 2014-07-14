@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Jul 2014 20:48:39 +0200
-Subject: [Buildroot] [git commit] ncmpc: bump to version 0.23
-Message-ID: <20140714111212.8DC739D235@busybox.osuosl.org>
+Date: Mon, 14 Jul 2014 13:11:40 +0200
+Subject: [Buildroot] [git commit] nasm: remove unused target package
+Message-ID: <20140714111212.C08129CE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8957080d6d9626e2a27a9950d209d2cad9a2f1f8
+commit: http://git.buildroot.net/buildroot/commit/?id=86cfc0bf9c7aef15a71ca1b2d4ea3f1f0676906a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+When nasm was added in da8d09b716, it got both the host and the target
+variants even though it doesn't have a Config.in and the target variant isn't
+used anywhere. Therefore, this patch removes the unused target variant.
+
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ncmpc/ncmpc.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/nasm/nasm.mk |    1 -
+ 1 files changed, 0 insertions(+), 1 deletions(-)
 
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index 21ac0ae..c006af2 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index b9077eb..b87d6ef 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -10,5 +10,4 @@ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2c
+ NASM_LICENSE_FILES = LICENSE
  
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).21
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).23
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.gz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+-$(eval $(autotools-package))
+ $(eval $(host-autotools-package))
