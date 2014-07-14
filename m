@@ -1,32 +1,91 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 14 Jul 2014 08:41:02 +0200
-Subject: [Buildroot] [PATCH] nasm: remove unused target package
-Message-ID: <1405320062-21455-1-git-send-email-arnout@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 14 Jul 2014 10:16:06 +0200
+Subject: [Buildroot] [PATCH 1/2] toolchain: linker options with a $ sign
+ are not supported
+In-Reply-To: <93c59ed55db40a4c4a4e9ae8c2d5295b751f1787.1405262399.git.yann.morin.1998@free.fr>
+References: <cover.1405262399.git.yann.morin.1998@free.fr>
+ <93c59ed55db40a4c4a4e9ae8c2d5295b751f1787.1405262399.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LUvwDB8sfG7MrMvuLJy-Fsgr9BhG1U8rMWYmG27a1bh=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When nasm was added in da8d09b716, it got both the host and the target
-variants even though it doesn't have a Config.in and the target variant isn't
-used anywhere. Therefore, this patch removes the unused target variant.
+Hi Yann,
 
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/nasm/nasm.mk | 1 -
- 1 file changed, 1 deletion(-)
+On Sun, Jul 13, 2014 at 4:42 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> As reported in bug #7172 [0], setting BR2_TARGET_LDFLAGS to a value
+> containing a $ sign can lead to unexpected results.
+>
+> This is because it is very hard to know when the $ sign gets evaluated:
+>   - in the Buildroot-level make
+>   - in the shell called by the Buildroot-level make
+>   - in the package's own build-system, either at configure time, in the
+>     Makefile, in a shell in the Makefile...
+>
+> So, it is very difficult to know how much escaping that would need.
+>
+> A proposal is to use a shell variable to pass such values in-molested.
 
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index b9077eb..b87d6ef 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -10,5 +10,4 @@ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2c
- NASM_LICENSE_FILES = LICENSE
- 
--$(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.0.1
+'in-molested' sounds very odd to me. If you want to keep the
+expressive value ;-) you could maybe write non-molested, or unmolested
+(I don't really know the right prefix here, but I'm pretty sure that
+'in' is not the one), or otherwise maybe 'untouched' ?
+
+> But it is not that simple either, since it still contains a $ sign, and
+> there no much certainty to when it would be evaluated.
+
+s/no/not/
+
+
+>
+> Instead, just document this limitation, both in the help text for
+> BR2_TARGET_LDFLAGS, and in the known-issues section in the manual.
+>
+> Does not really fix #7172, but at least the limitation is documented.
+>
+> [0] https://bugs.buildroot.org/show_bug.cgi?id=7172
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Mike Zick <minimod@morethan.org>
+> ---
+>  docs/manual/known-issues.txt  | 4 ++++
+>  toolchain/toolchain-common.in | 3 +++
+>  2 files changed, 7 insertions(+)
+>
+> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+> index 08469e9..5eaded9 100644
+> --- a/docs/manual/known-issues.txt
+> +++ b/docs/manual/known-issues.txt
+> @@ -3,6 +3,10 @@
+>
+>  = Known issues
+>
+> +* It is not possible to pass extra linker options via +BR2_TARGET_LDFLAGS+
+> +  if such options contain a +$+ sign. For example, the following is known
+> +  to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
+> +
+>  * The +ltp-testsuite+ package does not build with the default uClibc
+>    configuration used by the Buildroot toolchain backend. The LTP
+>    testsuite uses several functions that are considered obsolete, such
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index a91d247..e278a7f 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -110,6 +110,9 @@ config BR2_TARGET_LDFLAGS
+>         help
+>           Extra options to pass to the linker when building for the target.
+>
+> +         Note that options with a '$' sign (eg. -Wl,-rpath='$ORIGIN/../lib')
+> +         are not supported.
+> +
+>  config BR2_ECLIPSE_REGISTER
+>         bool "Register toolchain within Eclipse Buildroot plug-in"
+>         help
+
+
+
+Thanks for working on this!
+Best regards,
+Thomas
