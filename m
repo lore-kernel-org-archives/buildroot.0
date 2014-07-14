@@ -1,31 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jul 2014 13:11:23 +0200
-Subject: [Buildroot] [PATCH 0/4 v3] perl-infra enhancements (branch
- yem/autobuild-perl)
-In-Reply-To: <cover.1405256442.git.yann.morin.1998@free.fr>
-References: <cover.1405256442.git.yann.morin.1998@free.fr>
-Message-ID: <20140714131123.5837d7fa@free-electrons.com>
+Date: Mon, 14 Jul 2014 13:12:03 +0200
+Subject: [Buildroot] [PATCH] nasm: remove unused target package
+In-Reply-To: <1405320062-21455-1-git-send-email-arnout@mind.be>
+References: <1405320062-21455-1-git-send-email-arnout@mind.be>
+Message-ID: <20140714131203.28663a38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Sun, 13 Jul 2014 15:03:20 +0200, Yann E. MORIN wrote:
+On Mon, 14 Jul 2014 08:41:02 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> When nasm was added in da8d09b716, it got both the host and the target
+> variants even though it doesn't have a Config.in and the target variant isn't
+> used anywhere. Therefore, this patch removes the unused target variant.
+> 
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/nasm/nasm.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-> This series enhances the pkg-erl infrastructure:
->   - add possibility for packages to pass extra environment variables
->     at configure time
->   - fix perl-net-ssleay
->   - hide perl extensions written in C when doing static build
-
-Thanks, series applied. Indeed, the thing that was preventing Fran?ois
-patches from being applied is the fact that the commit logs were way
-too terse, despite me asking for better commit logs.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
