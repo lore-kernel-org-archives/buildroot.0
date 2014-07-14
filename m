@@ -1,51 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Jul 2014 18:15:10 +0200
-Subject: [Buildroot] [PATCH] dependencies.sh message: fix Debian renamed
- packages
-In-Reply-To: <CABbD_XDXsfHT0OJ1vkp0bpHmZ6cxO5pGwkOC-HJoySXfgpWfvA@mail.gmail.com>
-References: <1404988617-10992-1-git-send-email-kaszak@gmail.com>	<53BF7888.2010803@mind.be>
- <CABbD_XDXsfHT0OJ1vkp0bpHmZ6cxO5pGwkOC-HJoySXfgpWfvA@mail.gmail.com>
-Message-ID: <53C4020E.10205@mind.be>
+Date: Mon, 14 Jul 2014 18:30:27 +0200
+Subject: [Buildroot] [PATCH 2/3] infra: add gettextize run in AUTORECONF
+In-Reply-To: <20140714130104.480ab4cf@free-electrons.com>
+References: <1405186024-8170-1-git-send-email-gustavo@zacarias.com.ar>
+ <1405186024-8170-2-git-send-email-gustavo@zacarias.com.ar>
+ <20140714130104.480ab4cf@free-electrons.com>
+Message-ID: <53C405A3.3080301@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Karoly,
-
- [Please don't top-post, but reply in-line.]
-
-On 14/07/14 12:21, K?roly Kasza wrote:
-> Hi,
+On 14/07/14 13:01, Thomas Petazzoni wrote:
+> Dear Gustavo Zacarias,
 > 
-> Yes, I'm pretty sure. You can still use a multiarch apt after some setup, but
-> normally it's easier to just install the 32bit things from the 64bit repos.
+> On Sat, 12 Jul 2014 14:27:03 -0300, Gustavo Zacarias wrote:
+> 
+>> It adds some extra build time when doing autoreconf passes but the alternative
+>> would require a new GETTEXTIZE option and package audit which could take some
+>> time to get resolved.
+> 
+> I believe I would actually prefer a separate GETTEXTIZE option, I'm a
+> little bit worried about the extra build time. What do others think?
 
- OK, now I see. So I guess the multiarch version takes precedence when you have
-both.
+ I agree with Gustavo that the extra 2 seconds of gettextize are anyway dwarfed
+by the 15 seconds for autoreconf (on my I/O-bound laptop). So I wouldn't bother
+with an extra option.
 
- We should probably mention both options the, i.e.:
-
-[snip]
-> >               echo "Your Buildroot configuration uses pre-built tools for the x86 architecture,"
-> >               echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
-> >               echo "library."
-> > -             echo "If you're running a Debian/Ubuntu distribution, install the libc6:i386,"
-> > -             echo "libstdc++6:i386, and zlib1g:i386 packages."
-> > +             echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
-> > +             echo "lib32stdc++6, and lib32z1 packages."
-
-echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
-echo "lib32stcd++6, and lib32z1 packages (or alternatively libc6:i386,"
-echo "libstdc++6:i386, and zlib1g:i386)."
-
+ My worry is more that gettextize could fail, like autoreconf sometimes does.
+Though I think the risk is lower for gettextize.
 
  Regards,
  Arnout
 
-
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
