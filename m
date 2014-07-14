@@ -1,53 +1,105 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 14 Jul 2014 12:16:48 +0200
-Subject: [Buildroot] PACKAGE_USERS does not work
-In-Reply-To: <53C3AC5F.9090404@posteo.de>
-References: <i5np0ra770dn4ujwdmsweh48.1405067942517@email.android.com>
- <CAJtjsKbLN1-yEkBq=cCsoaOx_n+LUYof1P51T3wzOupaxR75JQ@mail.gmail.com>
- <53BFE547.70600@posteo.de> <20140711203733.GE3739@free.fr>
- <53C3AC5F.9090404@posteo.de>
-Message-ID: <20140714101648.GA3684@free.fr>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Mon, 14 Jul 2014 12:21:51 +0200
+Subject: [Buildroot] [PATCH] dependencies.sh message: fix Debian renamed
+	packages
+In-Reply-To: <53BF7888.2010803@mind.be>
+References: <1404988617-10992-1-git-send-email-kaszak@gmail.com>
+ <53BF7888.2010803@mind.be>
+Message-ID: <CABbD_XDXsfHT0OJ1vkp0bpHmZ6cxO5pGwkOC-HJoySXfgpWfvA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?rg, All,
+Hi,
 
-On 2014-07-14 12:09 +0200, J?rg Krause spake thusly:
-> On 07/11/2014 10:37 PM, Yann E. MORIN wrote:
-> >On 2014-07-11 15:23 +0200, J?rg Krause spake thusly:
-> >BTW, it also depends on expat.
-> 
-> I am unsure of the necessary dependencies. The author of the package stated
-> that it only depends on libupnp and libmpdclient.
-> 
-> I added host-pkgconf because I saw it on other package makefiles. Do I need
-> it here?
+Yes, I'm pretty sure. You can still use a multiarch apt after some setup,
+but normally it's easier to just install the 32bit things from the 64bit
+repos.
 
-It is easy to check if a package requires host-pkgconf:
-    grep PKG_CHECK_MODULES configure.ac
+root at debian:~# cat /etc/debian_version
+7.6
+root at debian:~# uname -a
+Linux debian 3.2.0-4-amd64 #1 SMP Debian 3.2.60-1+deb7u1 x86_64 GNU/Linux
+root at debian:~# apt-cache search libc6:i386
+root at debian:~# apt-cache search libc6-i386
+libc6-i386 - Embedded GNU C Library: 32-bit shared libraries for AMD64
+root at debian:~# apt-get install libc6:i386
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+E: Unable to locate package libc6
+root at debian:~# apt-get install libc6-i386
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+libc6-i386 is already the newest version.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 
-If it returns something, then you need host-pkgconf; otherwise, you
-don't.
+BR
+Karoly
 
-> Why do you suggest expat?
 
-Because I tried to build upmpdcli, and it barfed because expat was not
-available. ;-)
+On Fri, Jul 11, 2014 at 7:39 AM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
 
-That being said, expat is not the only library providing XML parsing,
-maybe it can use libxml2, too, but I did not check. The last message for
-the failed configure was about missing expat, so I just added that.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> On 10/07/14 12:36, Karoly Kasza wrote:
+> > Debian renamed the 32bit compatibility packages.
+> >
+> > Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+> > ---
+> >  support/dependencies/dependencies.sh |    4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/support/dependencies/dependencies.sh
+> b/support/dependencies/dependencies.sh
+> > index 255a07b..399bc06 100755
+> > --- a/support/dependencies/dependencies.sh
+> > +++ b/support/dependencies/dependencies.sh
+> > @@ -205,8 +205,8 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y
+> $BR2_CONFIG ; then
+> >               echo "Your Buildroot configuration uses pre-built tools
+> for the x86 architecture,"
+> >               echo "but your build machine uses the x86-64 architecture
+> without the 32 bits compatibility"
+> >               echo "library."
+> > -             echo "If you're running a Debian/Ubuntu distribution,
+> install the libc6:i386,"
+> > -             echo "libstdc++6:i386, and zlib1g:i386 packages."
+> > +             echo "If you're running a Debian/Ubuntu distribution,
+> install the libc6-i386,"
+> > +             echo "lib32stdc++6, and lib32z1 packages."
+>
+>  Are you sure? With e.g. a sourcery toolchain, I get (on a Debian sid):
+>
+> bash 98826$ ldd host/opt/ext-toolchain/bin/i686-pc-linux-gnu-gcc
+>         linux-gate.so.1 (0xf776e000)
+>         libm.so.6 => /lib/i386-linux-gnu/i686/cmov/libm.so.6 (0xf76eb000)
+>         libc.so.6 => /lib/i386-linux-gnu/i686/cmov/libc.so.6 (0xf7540000)
+>         /lib/ld-linux.so.2 (0xf776f000)
+>
+>  /lib/i386-linux-gnu/* is part of the libc6:i386 package.
+>
+>
+>  Regards,
+>  Arnout
+>
+> >               echo "For other distributions, refer to the documentation
+> on how to install the 32 bits"
+> >               echo "compatibility libraries."
+> >               exit 1
+> >
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140714/8d5bd563/attachment.html>
