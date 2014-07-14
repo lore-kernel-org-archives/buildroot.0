@@ -1,66 +1,120 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 14 Jul 2014 21:54:04 +0200
-Subject: [Buildroot] [PATCH 5 of 6] uclibc: menuconfig: take into
-	account initial settings from config file
-In-Reply-To: <53C40B66.7020204@mind.be>
-References: <patchbomb.1405338624@localhost>
- <34f3d55304ad13b63b26.1405338629@localhost> <53C40B66.7020204@mind.be>
-Message-ID: <b29a6534-251e-40cf-89a6-f5b4e07a1441@email.android.com>
+From: Joerg Krause <jkrause@posteo.de>
+Date: Mon, 14 Jul 2014 22:52:47 +0200
+Subject: [Buildroot] [PATCH 1/1] upmpdcli: new package
+Message-ID: <1405371167-25884-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> schreef:
->On 14/07/14 13:50, Thomas De Schampheleire wrote:
->> When executing the sequence 'make clean uclibc-menuconfig', the configured
->> config file is not taken into account and one starts from the default
->> settings.
->> 
->> This patch adds an explicit target for the config file and lets the
->> configure and menuconfig steps depend on it, fixing the problem.
->> 
->> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->> 
->> ---
->> rfc->patch:
->> - add target for .config to avoid menuconfig copying the config file
->>   every time (ThomasP, Arnout)
->> - move dependency on patch step from menuconfig to the .config target
->> 
->>  package/uclibc/uclibc.mk |  12 ++++++++----
->>  1 files changed, 8 insertions(+), 4 deletions(-)
->> 
->> diff -r 1f15cd84996d -r 34f3d55304ad package/uclibc/uclibc.mk
->> --- a/package/uclibc/uclibc.mk	Wed Jul 02 21:31:07 2014 +0200
->> +++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
->> @@ -394,7 +394,6 @@
->>  	HOSTCC="$(HOSTCC)"
->>  
->>  define UCLIBC_FIXUP_DOT_CONFIG
->> -	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
->>  	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
->>  	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
->>  	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
->> @@ -533,7 +532,14 @@
->>  	$(UCLIBC_INSTALL_UTILS_STAGING)
->>  endef
->>  
->> -uclibc-menuconfig: uclibc-patch
->> +$(eval $(generic-package))
->> +
->> +$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
->> +	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
->> +
->> +$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.config
->
-> This should be $(UCLIBC_TARGET_CONFIGURE) instead of
->$(UCLIBC_DIR)/.stamp_configured.
+This patch adds support for the package upmpdcli. 
 
-Indeed, will fix.
+Signed-off-by: Joerg Krause <jkrause@posteo.de>
+---
+ package/upmpdcli/Config.in   | 16 ++++++++++++++++
+ package/upmpdcli/S99upmpdcli | 40 ++++++++++++++++++++++++++++++++++++++++
+ package/upmpdcli/upmpdcli.mk | 22 ++++++++++++++++++++++
+ 3 files changed, 78 insertions(+)
+ create mode 100644 package/upmpdcli/Config.in
+ create mode 100644 package/upmpdcli/S99upmpdcli
+ create mode 100644 package/upmpdcli/upmpdcli.mk
 
->
-> Actually, I'd prefer the FOO_TARGET_* variables to be removed completely.
-
-I guess Thomas P can provide his input here?
+diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+new file mode 100644
+index 0000000..d878bfc
+--- /dev/null
++++ b/package/upmpdcli/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_UPMPDCLI
++	bool "upmpdcli"
++	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBMPDCLIENT
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++
++	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
++	  Player Daemon. It supports UPnP gapless track transitions and
++	  the OpenHome ohMedia services.
++
++	  http://www.lesbonscomptes.com/upmpdcli/
++
++comment "upmpdcli needs a toolchain w/ C++ support"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/upmpdcli/S99upmpdcli b/package/upmpdcli/S99upmpdcli
+new file mode 100644
+index 0000000..314ea32
+--- /dev/null
++++ b/package/upmpdcli/S99upmpdcli
+@@ -0,0 +1,40 @@
++#!/bin/sh
++
++NAME=upmpdcli
++DAEMON=/usr/bin/$NAME
++CONFFILE=/etc/$NAME.conf
++PIDFILE=/var/run/$NAME.pid
++DAEMON_ARGS="-D -c $CONFFILE"
++
++# Sanity checks
++test -f $DAEMON || exit 0
++
++do_start() {
++        echo -n "Starting $NAME: "
++        start-stop-daemon --start --quiet --background --exec $DAEMON \
++                -- $DAEMON_ARGS \
++                && echo "OK" || echo "FAIL"
++}
++
++do_stop() {
++        echo -n "Stopping $NAME: "
++        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
++                && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++        start)
++                do_start
++                ;;
++        stop)
++                do_stop
++                ;;
++        restart)
++                do_stop
++                sleep 1
++                do_start
++                ;;
++        *)
++                echo "Usage: $0 {start|stop|restart}"
++                exit 1
++esac
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+new file mode 100644
+index 0000000..fa03fd4
+--- /dev/null
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# upmpdcli
++#
++################################################################################
++
++UPMPDCLI_VERSION = 0.7.1
++UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
++UPMPDCLI_LICENSE = GPLv2
++UPMPDCLI_LICENSE_FILES = COPYING
++UPMPDCLI_DEPENDENCIES = expat libupnp libmpdclient
++
++# Upmpdcli only runs if user upmpdcli exists
++define UPMPDCLI_USERS
++	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli: MPD UPnP Renderer Front-End
++endef
++
++define UPMPDCLI_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/
++endef
++
++$(eval $(autotools-package))
+-- 
+2.0.1
