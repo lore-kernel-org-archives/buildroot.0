@@ -1,38 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Jul 2014 21:23:46 +0200
-Subject: [Buildroot] [PATCH 2/3] infra: add gettextize run in AUTORECONF
-In-Reply-To: <53C405A3.3080301@mind.be>
-References: <1405186024-8170-1-git-send-email-gustavo@zacarias.com.ar>
- <1405186024-8170-2-git-send-email-gustavo@zacarias.com.ar>
- <20140714130104.480ab4cf@free-electrons.com>
- <53C405A3.3080301@mind.be>
-Message-ID: <20140714212346.5ef7bfad@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 14 Jul 2014 21:51:13 +0200
+Subject: [Buildroot] [PATCH 4 of 6] uclibc: rename SETUP_DOT_CONFIG to
+	FIXUP_DOT_CONFIG
+In-Reply-To: <53C408D1.8070709@mind.be>
+References: <patchbomb.1405338624@localhost>
+ <1f15cd84996d1bb6fb3a.1405338628@localhost>
+ <20140714163325.231613e5@free-electrons.com> <20140714143931.GK3684@free.fr>
+ <CAAXf6LWobeHbQB+d8MvtMF3x3=W1FPPdfSr-4yU_bi+ZKF3cGg@mail.gmail.com>
+ <53C408D1.8070709@mind.be>
+Message-ID: <e5099545-f607-4bc8-a1fe-b43a9f2fb825@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Arnout Vandecappelle <arnout@mind.be> schreef:
+>On 14/07/14 16:43, Thomas De Schampheleire wrote:
+>> On Mon, Jul 14, 2014 at 4:39 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>>> Thomas?, All,
+>>>
+>>> On 2014-07-14 16:33 +0200, Thomas Petazzoni spake thusly:
+>>>> On Mon, 14 Jul 2014 13:50:28 +0200, Thomas De Schampheleire wrote:
+>>>>
+>>>>> -define UCLIBC_SETUP_DOT_CONFIG
+>>>>> +define UCLIBC_FIXUP_DOT_CONFIG
+>>>>>     $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+>>>>
+>>>> This this variable is actually copying the configuration file, I
+>>>> believe the current name of the variable is more correct than the one
+>>>> you propose to use, no?
+>>>
+>>> Thomas did the change, because in patch 5/6 it no longer does the copy,
+>>> it only does the fixup.
+>>>
+>>> This should probably have been explained in the commit log that the
+>>> change was needed by a future patch.
+>> 
+>> Ok, I see. I split off the change to a separate patch for clarity, but
+>> indeed at this moment it is not yet fully accurate. I can fold this
+>> patch with the 5th patch, or otherwise update the commit msg as Yann
+>> proposed, what do you prefer?
+>
+> I'd fold it.
 
-On Mon, 14 Jul 2014 18:30:27 +0200, Arnout Vandecappelle wrote:
-
-> > I believe I would actually prefer a separate GETTEXTIZE option, I'm a
-> > little bit worried about the extra build time. What do others think?
-> 
->  I agree with Gustavo that the extra 2 seconds of gettextize are anyway dwarfed
-> by the 15 seconds for autoreconf (on my I/O-bound laptop). So I wouldn't bother
-> with an extra option.
-
-Actually, I am not worried about the duration of the gettextize step
-itself, but worried about the fact that host-gettext now gets
-unconditionally added to all packages that have <pkg>_AUTORECONF = YES,
-while this gettextize is probably not needed for the majority of them.
-So we pull-in a fairly heavy dependency (host-gettext) for no reason
-for such packages.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Since Yann says split it, I need a third opinion...
