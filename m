@@ -1,78 +1,66 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 14 Jul 2014 21:52:36 +0200
-Subject: [Buildroot] [v2 3/3] perl-net-ssleay: fix build
-In-Reply-To: <20140713133552.GD3588@free.fr>
-References: <1404406406-9209-1-git-send-email-francois.perrad@gadz.org>
- <1404406406-9209-3-git-send-email-francois.perrad@gadz.org>
- <20140713133552.GD3588@free.fr>
-Message-ID: <CAB0FRsuVFTVYA9D7MqSjm7VdzDeDFXGGM9moziB86U0wFY8CCg@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 14 Jul 2014 21:54:04 +0200
+Subject: [Buildroot] [PATCH 5 of 6] uclibc: menuconfig: take into
+	account initial settings from config file
+In-Reply-To: <53C40B66.7020204@mind.be>
+References: <patchbomb.1405338624@localhost>
+ <34f3d55304ad13b63b26.1405338629@localhost> <53C40B66.7020204@mind.be>
+Message-ID: <b29a6534-251e-40cf-89a6-f5b4e07a1441@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-07-13 15:35 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Fran?ois, All,
->
-> On 2014-07-03 18:53 +0200, Francois Perrad spake thusly:
->> the following error occurs after the previous patch
->>     arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-shared '
->>
->> so, force LDDLFLAGS without quote
->>
->> note: previously LDDLFLAGS was correct
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->
-> I've dropped this patch from my resend [0], and marked it Rejected in
-> the patchwork, because I submitted an alternative patch, and C extensions
-> to Perl can not be built static anyway.
->
-> [0] http://lists.busybox.net/pipermail/buildroot/2014-July/101699.html
->
-
-On my box, with all patches already applied in the trunk, I still need
-this patch.
-
-Fran?ois
-
-> Regards,
-> Yann E. MORIN.
->
+Arnout Vandecappelle <arnout@mind.be> schreef:
+>On 14/07/14 13:50, Thomas De Schampheleire wrote:
+>> When executing the sequence 'make clean uclibc-menuconfig', the configured
+>> config file is not taken into account and one starts from the default
+>> settings.
+>> 
+>> This patch adds an explicit target for the config file and lets the
+>> configure and menuconfig steps depend on it, fixing the problem.
+>> 
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>> 
 >> ---
->>  package/perl-net-ssleay/perl-net-ssleay.mk | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
->> index 7e4c194..48ff715 100644
->> --- a/package/perl-net-ssleay/perl-net-ssleay.mk
->> +++ b/package/perl-net-ssleay/perl-net-ssleay.mk
->> @@ -13,4 +13,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
->>
->>  PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
->>
->> +define PERL_NET_SSLEAY_FIX_MAKEFILE
->> +     $(SED) 's/^LDDLFLAGS =.*/LDDLFLAGS = -shared/' $(@D)/Makefile
->> +endef
->> +PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
+>> rfc->patch:
+>> - add target for .config to avoid menuconfig copying the config file
+>>   every time (ThomasP, Arnout)
+>> - move dependency on patch step from menuconfig to the .config target
+>> 
+>>  package/uclibc/uclibc.mk |  12 ++++++++----
+>>  1 files changed, 8 insertions(+), 4 deletions(-)
+>> 
+>> diff -r 1f15cd84996d -r 34f3d55304ad package/uclibc/uclibc.mk
+>> --- a/package/uclibc/uclibc.mk	Wed Jul 02 21:31:07 2014 +0200
+>> +++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
+>> @@ -394,7 +394,6 @@
+>>  	HOSTCC="$(HOSTCC)"
+>>  
+>>  define UCLIBC_FIXUP_DOT_CONFIG
+>> -	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+>>  	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
+>>  	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
+>>  	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
+>> @@ -533,7 +532,14 @@
+>>  	$(UCLIBC_INSTALL_UTILS_STAGING)
+>>  endef
+>>  
+>> -uclibc-menuconfig: uclibc-patch
+>> +$(eval $(generic-package))
 >> +
->>  $(eval $(perl-package))
->> --
->> 1.9.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+>> +$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
+>> +	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+>> +
+>> +$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.config
 >
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> This should be $(UCLIBC_TARGET_CONFIGURE) instead of
+>$(UCLIBC_DIR)/.stamp_configured.
+
+Indeed, will fix.
+
+>
+> Actually, I'd prefer the FOO_TARGET_* variables to be removed completely.
+
+I guess Thomas P can provide his input here?
