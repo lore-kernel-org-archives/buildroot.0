@@ -1,87 +1,67 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 14 Jul 2014 13:50:30 +0200
-Subject: [Buildroot] [PATCH 6 of 6] uclibc: update-config: preserve freshly
- configured settings
+Date: Mon, 14 Jul 2014 13:50:29 +0200
+Subject: [Buildroot] [PATCH 5 of 6] uclibc: menuconfig: take into account
+ initial settings from config file
 In-Reply-To: <patchbomb.1405338624@localhost>
 References: <patchbomb.1405338624@localhost>
-Message-ID: <82c951fdcf4851185bcc.1405338630@localhost>
+Message-ID: <34f3d55304ad13b63b26.1405338629@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the sequence:
+When executing the sequence 'make clean uclibc-menuconfig', the configured
+config file is not taken into account and one starts from the default
+settings.
 
-make uclibc-menuconfig
-make uclibc-update-config
-
-the freshly configured settings from the menuconfig are lost during the
-update-config step. This is because update-config depends on the configure
-step, which starts by copying the config file to the build directory.
-
-Instead, stop depending on the configure step from update-config, and
-introduce a new stamp file .stamp_config_fixup_done, which applies any
-fixups on the .config file.
-
-This has the added bonus that 'uclibc-update-config' no longer needs the
-toolchain to be available, which makes:
-    make clean uclibc-menuconfig uclibc-update-config
-much faster and user-friendly.
-
-Additionally, make sure that 'make clean uclibc-update-config' works
-properly, by depending on .stamp_config_fixup_done so that the config file
-is present and fixed.
-
-Fixes bug #7154 https://bugs.busybox.net/show_bug.cgi?id=7154
+This patch adds an explicit target for the config file and lets the
+configure and menuconfig steps depend on it, fixing the problem.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
 rfc->patch:
-- rebase
-- rename .stamp_config_file_fixed into .stamp_config_fixup_done
-- add dependency on .config from .stamp_config_file_fixed (Arnout)
-- remove explicit call to UCLIBC_FIXUP_DOT_CONFIG from configure commands,
-  and instead depend on .stamp_config_fixup_done.
+- add target for .config to avoid menuconfig copying the config file
+  every time (ThomasP, Arnout)
+- move dependency on patch step from menuconfig to the .config target
 
  package/uclibc/uclibc.mk |  12 ++++++++----
  1 files changed, 8 insertions(+), 4 deletions(-)
 
-diff -r 34f3d55304ad -r 82c951fdcf48 package/uclibc/uclibc.mk
---- a/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
-+++ b/package/uclibc/uclibc.mk	Mon Jun 16 20:18:23 2014 +0200
-@@ -432,7 +432,6 @@
+diff -r 1f15cd84996d -r 34f3d55304ad package/uclibc/uclibc.mk
+--- a/package/uclibc/uclibc.mk	Wed Jul 02 21:31:07 2014 +0200
++++ b/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
+@@ -394,7 +394,6 @@
+ 	HOSTCC="$(HOSTCC)"
+ 
+ define UCLIBC_FIXUP_DOT_CONFIG
+-	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
+ 	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
+ 	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
+ 	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
+@@ -533,7 +532,14 @@
+ 	$(UCLIBC_INSTALL_UTILS_STAGING)
  endef
  
- define UCLIBC_CONFIGURE_CMDS
--	$(UCLIBC_FIXUP_DOT_CONFIG)
+-uclibc-menuconfig: uclibc-patch
++$(eval $(generic-package))
++
++$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
++	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
++
++$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.config
++
++uclibc-menuconfig: $(UCLIBC_DIR)/.config
  	$(MAKE1) -C $(UCLIBC_DIR) \
  		$(UCLIBC_MAKE_FLAGS) \
  		PREFIX=$(STAGING_DIR) \
-@@ -537,7 +536,11 @@
- $(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
- 	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
- 
--$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.config
-+$(UCLIBC_DIR)/.stamp_config_fixup_done: $(UCLIBC_DIR)/.config
-+	$(UCLIBC_FIXUP_DOT_CONFIG)
-+	touch $@
-+
-+$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.stamp_config_fixup_done
- 
- uclibc-menuconfig: $(UCLIBC_DIR)/.config
- 	$(MAKE1) -C $(UCLIBC_DIR) \
-@@ -546,9 +549,10 @@
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=$(STAGING_DIR)/ \
+@@ -542,8 +548,6 @@
  		menuconfig
--	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
-+	rm -f $(UCLIBC_DIR)/.stamp_{config_fixup_done,configured,built}
-+	rm -f $(UCLIBC_DIR)/.stamp_{target,staging}_installed
+ 	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
  
--uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
-+uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_fixup_done
+-$(eval $(generic-package))
+-
+ uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
  	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
  
- # Before uClibc is built, we must have the second stage cross-compiler
