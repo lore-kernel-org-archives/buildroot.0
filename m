@@ -1,38 +1,70 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 14 Jul 2014 18:30:27 +0200
-Subject: [Buildroot] [PATCH 2/3] infra: add gettextize run in AUTORECONF
-In-Reply-To: <20140714130104.480ab4cf@free-electrons.com>
-References: <1405186024-8170-1-git-send-email-gustavo@zacarias.com.ar>
- <1405186024-8170-2-git-send-email-gustavo@zacarias.com.ar>
- <20140714130104.480ab4cf@free-electrons.com>
-Message-ID: <53C405A3.3080301@mind.be>
+Date: Mon, 14 Jul 2014 18:34:09 +0200
+Subject: [Buildroot] [PATCH 0 of 6] uclibc: fix handling of
+	configuration file
+In-Reply-To: <patchbomb.1405338624@localhost>
+References: <patchbomb.1405338624@localhost>
+Message-ID: <53C40681.6040907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 14/07/14 13:01, Thomas Petazzoni wrote:
-> Dear Gustavo Zacarias,
+On 14/07/14 13:50, Thomas De Schampheleire wrote:
 > 
-> On Sat, 12 Jul 2014 14:27:03 -0300, Gustavo Zacarias wrote:
+> This patch series (part of it poster earlier as RFC) has as main goal to
+> fix the uclibc kconfig handling with following requirements in mind:
 > 
->> It adds some extra build time when doing autoreconf passes but the alternative
->> would require a new GETTEXTIZE option and package audit which could take some
->> time to get resolved.
+> - neither foo-menuconfig nor foo-update-config should have a dependency
+>   on the toolchain (which means we cannot depend on foo-configure)
 > 
-> I believe I would actually prefer a separate GETTEXTIZE option, I'm a
-> little bit worried about the extra build time. What do others think?
+> - 'clean foo-menuconfig' should start from the specified (custom) config
+>   file
+> 
+> - 'foo-menuconfig foo-update-config' should preserve the changes made in
+>   the menuconfig step (this problem is reported for uclibc with bug #7154
+>   (https://bugs.busybox.net/show_bug.cgi?id=7154).
+> 
+> - 'make foo-menuconfig; make foo-menuconfig' should preserve the changes
+>   made in the menuconfig step.
+> 
+> - 'make clean foo-update-config' should copy the initial file, do any
+>   fixups, and then save the config
+> 
+> 
+> In the process, some smaller changes are done too.
+> 
+> Once this series is accepted, the plan is:
+> - to extract the kconfig-related bits to a kconfig-package infrastructure.
+> - to convert busybox, linux and barebox to this kconfig-package infra too.
 
- I agree with Gustavo that the extra 2 seconds of gettextize are anyway dwarfed
-by the 15 seconds for autoreconf (on my I/O-bound laptop). So I wouldn't bother
-with an extra option.
+ For the record: I agree with this plan.
 
- My worry is more that gettextize could fail, like autoreconf sometimes does.
-Though I think the risk is lower for gettextize.
+ I also agree with the plan to land this in 2014.08.
+
 
  Regards,
  Arnout
+
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+> Thomas De Schampheleire (6):
+>     pkg-utils: kconfig helpers: add basic usage documentation
+>     pkg-utils: kconfig helpers: use single iso double quoting
+>     uclibc: replace custom kconfig helpers with those provided by pkg-utils
+>     uclibc: rename SETUP_DOT_CONFIG to FIXUP_DOT_CONFIG
+>     uclibc: menuconfig: take into account initial settings from config file
+>     uclibc: update-config: preserve freshly configured settings
+> 
+> 
+>  linux/linux.mk           |    2 +-
+>  package/pkg-utils.mk     |   12 +-
+>  package/uclibc/uclibc.mk |  230 ++++++++++++++++++--------------------
+>  3 files changed, 119 insertions(+), 125 deletions(-)
+> 
 
 
 -- 
