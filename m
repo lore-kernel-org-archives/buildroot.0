@@ -1,120 +1,85 @@
-From: Jordi Llonch <jordi.llonch@rochsystems.com>
-Date: Tue, 15 Jul 2014 08:58:42 +1000
-Subject: [Buildroot] [PATCH 1/1] PHP-FPM support
-In-Reply-To: <53C4598E.90000@zacarias.com.ar>
-References: <1405365326-2414-1-git-send-email-jordi.llonch@rochsystems.com>
- <53C4598E.90000@zacarias.com.ar>
-Message-ID: <FEA3AD43-7908-460F-B390-077CBD689B37@rochsystems.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Jul 2014 01:22:07 +0200
+Subject: [Buildroot] [v2 3/3] perl-net-ssleay: fix build
+In-Reply-To: <20140714224346.GP3684@free.fr>
+References: <1404406406-9209-1-git-send-email-francois.perrad@gadz.org>
+ <1404406406-9209-3-git-send-email-francois.perrad@gadz.org>
+ <20140713133552.GD3588@free.fr>
+ <CAB0FRsuVFTVYA9D7MqSjm7VdzDeDFXGGM9moziB86U0wFY8CCg@mail.gmail.com>
+ <20140714224346.GP3684@free.fr>
+Message-ID: <20140714232207.GQ3684@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Gustavo, 
-This is my first contribution to the project and I appreciate your guidance.
+Fran?ois, All,
 
-Will those changes suit better?
-
-
-Signed-off-by: Jordi Llonch <jordi.llonch@rochsystems.com>
----
- package/php/Config.in | 18 ++++++++++++++++++
- package/php/php.mk    |  1 +
- 2 files changed, 19 insertions(+)
-
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 46444a5..4ee14c3 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -17,6 +17,9 @@ config BR2_PACKAGE_PHP_CLI
- config BR2_PACKAGE_PHP_CGI
- 	bool
-
-+config BR2_PACKAGE_PHP_FPM
-+        bool
-+
- choice
- 	prompt "Interface"
- 	default BR2_PACKAGE_PHP_SAPI_CGI
-@@ -37,6 +40,13 @@ config BR2_PACKAGE_PHP_SAPI_CLI
- 	help
- 	  Command Line Interface
-
-+config BR2_PACKAGE_PHP_SAPI_FPM
-+	bool "FPM"
-+	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_PHP_FPM
-+	help
-+	  PHP-FPM (FastCGI Process Manager)
-+
- config BR2_PACKAGE_PHP_SAPI_CLI_CGI
- 	bool "CGI and CLI"
- 	# CGI uses fork()
-@@ -46,6 +56,14 @@ config BR2_PACKAGE_PHP_SAPI_CLI_CGI
- 	help
- 	  Command line and Common gateway interfaces
-
-+config BR2_PACKAGE_PHP_SAPI_CLI_FPM
-+	bool "FPM and CLI"
-+	depends on BR2_USE_MMU
-+	select BR2_PACKAGE_PHP_CLI
-+	select BR2_PACKAGE_PHP_FPM
-+	help
-+	  Command line and PHP-FPM (FastCGI Process Manager)
-+
- endchoice
-
- endif
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 4d3aa7d..5a91f9c 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -47,6 +47,7 @@ endif
-
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CLI),,--disable-cli)
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
-+PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable--fpm)
-
- ### Extensions
- PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_EXT_SOCKETS),--enable-sockets) \
---
-1.9.1
-
-
-El 15/07/2014, a las 08:28, Gustavo Zacarias <gustavo@zacarias.com.ar> escribi?:
-
-> On 07/14/2014 04:15 PM, Jordi Llonch wrote:
+On 2014-07-15 00:43 +0200, Yann E. MORIN spake thusly:
+> On 2014-07-14 21:52 +0200, Fran?ois Perrad spake thusly:
+> > 2014-07-13 15:35 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> > > On 2014-07-03 18:53 +0200, Francois Perrad spake thusly:
+> > >> the following error occurs after the previous patch
+> > >>     arm-none-linux-gnueabi-gcc: error: unrecognized command line option '-shared '
+> > >>
+> > >> so, force LDDLFLAGS without quote
+> > >>
+> > >> note: previously LDDLFLAGS was correct
+> > >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> > >
+> > > I've dropped this patch from my resend [0], and marked it Rejected in
+> > > the patchwork, because I submitted an alternative patch, and C extensions
+> > > to Perl can not be built static anyway.
+> > 
+> > On my box, with all patches already applied in the trunk, I still need
+> > this patch.
 > 
-> Hi, let's look at this.
+> Ah, I see. I re-tested here, and indeed, it does perl-net-ssleay does
+> not build anymore.
 > 
->> +config BR2_PACKAGE_PHP_SAPI_FPM
->> +	bool "FPM"
->> +	select BR2_PACKAGE_PHP_FPM
->> +	help
->> +	  PHP-FPM (FastCGI Process Manager)
->> +
+> I swear I was able to build it before I removed that patch... :-(
+
+OK, that's probably because I had removed -shared fron pkg-perl.mk and
+forgot about it.
+
+> However, I have investigated a bit, and here are my findings:
 > 
-> Pretty sure it depends on MMU just like CGI does.
-> 
->> +config BR2_PACKAGE_PHP_SAPI_CLI_FPM
->> +	bool "FPM and CLI"
->> +	select BR2_PACKAGE_PHP_CLI
->> +	select BR2_PACKAGE_PHP_FPM
->> +	help
->> +	  Command line and PHP-FPM (FastCGI Process Manager)
->> +
-> 
-> Another option for FPM alone would be good too, not everyone needs CLI
-> and php binaries are somewhat big.
-> 
->> +PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm --disable-cgi,--disable--fpm)
-> 
-> This should focus on just enable/disabling it's own option, cgi disables
-> itself via:
-> 
-> PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_CGI),,--disable-cgi)
-> 
-> So no need to re-state that.
-> Regards.
-> 
+>   - our pkg-perl simply calls 'perl' to run the configure steps
+>   - this calls to the host system's perl
+>   - it also passes (among many other flags)::
+>         --config lddlflags="-shared $$(TARGET_LDFLAGS)"
+
+I tried to set TARGET_LDFLAGS="-g" since -g is simply ignored by ld, and
+I left the -shared in lddlflags on the configure line, but then, here's
+what I got:
+    arm-linux-gnueabihf-gcc: error: unrecognized command line option ?-shared -g?
+
+Bummer! So, if we pass more than one option to --lddlflags, the perl
+infra completely derails, and sets LDDLFLAGS in the Makefile, to:
+    LDDLFLAGS = '-shared -g'
+
+Bad, real bad... :-(
+
+OK, let's see what happens to other extensions. What about
+perl-mojolicious? Here's what LDDLFLAGS looks like with -shared on the
+configure line, and TARGET_LDFLAGS=-g:
+    LDDLFLAGS = -shared -g
+
+Oooookay... And other extensions are OK, too.
+
+So, that's not the perl infra that is brain-dead, that's really
+perl-net-ssleay which is completely f*cked up... :-(
+
+OK, I'll revive your patch, with a few quirks...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
