@@ -1,10 +1,11 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 14 Jul 2014 10:18:55 +0200
-Subject: [Buildroot] [PATCH 2/2] package/patchelf: new host package
-In-Reply-To: <a8d871e1d1bf5eb507d24eac6f5dd51cda98a326.1405262399.git.yann.morin.1998@free.fr>
-References: <cover.1405262399.git.yann.morin.1998@free.fr>
- <a8d871e1d1bf5eb507d24eac6f5dd51cda98a326.1405262399.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LWUcp6HkaN4PYN9WPwFHgQi5KATLggJQ3remkr+pEhhww@mail.gmail.com>
+From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
+Date: Mon, 14 Jul 2014 12:09:35 +0200
+Subject: [Buildroot] PACKAGE_USERS does not work
+In-Reply-To: <20140711203733.GE3739@free.fr>
+References: <i5np0ra770dn4ujwdmsweh48.1405067942517@email.android.com>
+ <CAJtjsKbLN1-yEkBq=cCsoaOx_n+LUYof1P51T3wzOupaxR75JQ@mail.gmail.com>
+ <53BFE547.70600@posteo.de> <20140711203733.GE3739@free.fr>
+Message-ID: <53C3AC5F.9090404@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,85 +14,90 @@ To: buildroot@busybox.net
 
 Hi Yann,
 
-On Sun, Jul 13, 2014 at 4:42 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> In some situations, users may want to tweak the dynamic section of the
-> binaries (for example to add/set the RPATH to $ORIGIN/../lib).
->
-> Because it is not trivial to do it properly from the Buildroot
-> infrastructure, allow those users to use patchelf (e.g. from a
-> post-build script) to tweak binaries.
->
-> patchelf is able to:
->   - modify an existing DT_RUNPATH tags
->   - add a DT_RUNPATH tag is not already present
+many thanks for your review! Any advice is very welcome!
 
-s/is/if/
-
->   - do the above to the DT_RPATH tag, too
->   - set the path to the interpreter
->   - remove DT_NEEDED tags
->   - query a inary for the DT_RUNPATH/DT_RPATH tag, or for the
-
-s/inary/binary/
-
->     interpreter path
+On 07/11/2014 10:37 PM, Yann E. MORIN wrote:
+> J?rg, All,
 >
-> Does not really fix #7172, but this is workaround.
+> You said in another mail that you'd be sending a patch to add this
+> package. Thanks!
 >
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Mike Zick <minimod@morethan.org>
-> ---
->  package/Config.in.host          |  1 +
->  package/patchelf/Config.in.host |  7 +++++++
->  package/patchelf/patchelf.mk    | 12 ++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/patchelf/Config.in.host
->  create mode 100644 package/patchelf/patchelf.mk
+> So, here is my preliminary review of the .mk file:
 >
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 062c6c9..e05bbfa 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -13,6 +13,7 @@ menu "Host utilities"
->         source "package/omap-u-boot-utils/Config.in.host"
->         source "package/openocd/Config.in.host"
->         source "package/parted/Config.in.host"
-> +       source "package/patchelf/Config.in.host"
->         source "package/pwgen/Config.in.host"
->         source "package/sam-ba/Config.in.host"
->         source "package/squashfs/Config.in.host"
-> diff --git a/package/patchelf/Config.in.host b/package/patchelf/Config.in.host
-> new file mode 100644
-> index 0000000..d1c8375
-> --- /dev/null
-> +++ b/package/patchelf/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_PATCHELF
-> +       bool "host patchelf"
-> +       help
-> +         PatchELF is a small utility to modify the dynamic linker
-> +         and RPATH of ELF executables.
-> +
-> +         http://nixos.org/patchelf.html
-> diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
-> new file mode 100644
-> index 0000000..1a8e48d
-> --- /dev/null
-> +++ b/package/patchelf/patchelf.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# patchelf
-> +#
-> +################################################################################
-> +
-> +PATCHELF_VERSION = 0.8
-> +PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.8/
-> +PATCHELF_LICENSE = GPLv3
-> +PATCHELF_LICENSE_FILES = COPYING
-> +
-> +$(eval $(host-autotools-package))
-> --
+> On 2014-07-11 15:23 +0200, J?rg Krause spake thusly:
+>>    ################################################################################
+>>    #
+>>    # upmpdcli
+>>    #
+>>    ################################################################################
+>>
+>>    UPMPDCLI_VERSION = 0.7.1
+>>    UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+>>    UPMPDCLI_LICENSE = GPLv2
+>>    UPMPDCLI_LICENSE_FILES = LICENSE
+>>    UPMPDCLI_INSTALL_STAGING = YES
+> Wh yinstall in staging? As far as I can see, this installs a program,
+> not a library, right? We install in staging only when the package
+> installs one (or more) libraries.
+>
 
-Best regards,
-Thomas
+Removed.
+
+>>    UPMPDCLI_INSTALL_TARGET = YES
+> Not needed, that's the default.
+
+
+Removed.
+
+>>    UPMPDCLI_AUTORECONF = YES
+> Why do you autoreconf? It is not normally needed. If it is needed, add a
+> comment stating why. See the existing packages for hints. ;-)
+
+Removed, too. Source is not taken from the git repo.
+
+>
+>>    UPMPDCLI_CONF_OPT = --prefix=/usr
+> Nope, that's already taken care of by the autotools-package
+> infrastructure.
+
+Removed.
+
+>>    UPMPDCLI_DEPENDENCIES = host-pkgconf
+>>    UPMPDCLI_DEPENDENCIES += libupnp
+>>    UPMPDCLI_DEPENDENCIES += libmpdclient
+> Please, put the dependencies on a single. If it does not fit in 80-char,
+> then use continuation lines, like:
+>
+>      UPMPDCLI_DEPENDENCIES = host-pkgconf libupnp libmpdclient tooloong \
+>          more-depndencies on-this-line
+
+Done.
+
+>
+> BTW, it also depends on expat.
+
+I am unsure of the necessary dependencies. The author of the package 
+stated that it only depends on libupnp and libmpdclient.
+
+I added host-pkgconf because I saw it on other package makefiles. Do I 
+need it here?
+
+Why do you suggest expat?
+
+>>    define UPMPDCLI_USERS
+>>        upmpdcli -1 upmpdcli -1 * - - -
+>>    endef
+> Do you really need a specific user for running upmpdcli?
+>
+> Also, would it need to belong to the audio group (as an additional
+> group)? (even though it does not directly render audio)
+>
+>>    define UPMPDCLI_INSTALL_INIT_SYSV
+>>        $(INSTALL) -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/
+>>    endef
+> Regards,
+> Yann E. MORIN.
+>
+
+Best regards
+J?rg Krause
