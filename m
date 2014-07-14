@@ -1,64 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Jul 2014 01:48:04 +0200
-Subject: [Buildroot] [PATCH] perl-net-ssleay: fix configure
-Message-ID: <1405381684-3844-1-git-send-email-yann.morin.1998@free.fr>
+Date: Tue, 15 Jul 2014 01:49:45 +0200
+Subject: [Buildroot] [v2 3/3] perl-net-ssleay: fix build
+In-Reply-To: <20140714232207.GQ3684@free.fr>
+References: <1404406406-9209-1-git-send-email-francois.perrad@gadz.org>
+ <1404406406-9209-3-git-send-email-francois.perrad@gadz.org>
+ <20140713133552.GD3588@free.fr>
+ <CAB0FRsuVFTVYA9D7MqSjm7VdzDeDFXGGM9moziB86U0wFY8CCg@mail.gmail.com>
+ <20140714224346.GP3684@free.fr> <20140714232207.GQ3684@free.fr>
+Message-ID: <20140714234945.GR3684@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Francois Perrad <fperrad@gmail.com>
+Fran?ois, All,
 
-When TARGET_LDFLAGS contains more than one option, the generated
-Makefile contains this definition of LDDLFLAGS:
-        LDDLFLAGS = '--option-1 --option-2'
+On 2014-07-15 01:22 +0200, Yann E. MORIN spake thusly:
+> On 2014-07-15 00:43 +0200, Yann E. MORIN spake thusly:
+> > On 2014-07-14 21:52 +0200, Fran?ois Perrad spake thusly:
+> > > 2014-07-13 15:35 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> > > > I've dropped this patch from my resend [0], and marked it Rejected in
+> > > > the patchwork, because I submitted an alternative patch, and C extensions
+> > > > to Perl can not be built static anyway.
+> > > On my box, with all patches already applied in the trunk, I still need
+> > > this patch.
+> OK, I'll revive your patch, with a few quirks...
 
-Which when passed to gcc is interpreted as a single option, and gcc
-(rightfully) barfs on it, like with:
-        arm-linux-gnueabihf-gcc: error: unrecognized command line
-        option ?-shared -g?
+And the new patch has been posted, now:
+    http://patchwork.ozlabs.org/patch/369784/
 
-This is because perl-net-ssleay's buildsystem is really completely
-brain-damaged. Other perl extensions do not behave like that, and
-instead are doing the only same thing to do: not add single quotes
-around the definition, and just use what they were provided for
-lddlflags.
+Regards,
+Yann E. MORIN.
 
-So, just do the same for perl-net-ssleay. Since tweaking (yet once
-more) their buildsystem is too complex, we just use a post-configure
-hook to fix up the mess, by removing single quotes around the definition
-of LDDLFLAGS.
-
-Note: if only one option is specified, no single quotes are added,
-but out hook is a no-op in this case.
-
-See also:
-    http://lists.busybox.net/pipermail/buildroot/2014-July/101782.html
-and the previous message for even more entertainment. ;-)
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[me: find the real cause of the issue, tweak the sed expression to not
- force -shared and instead just trim the single quotes, enhance commit
- log]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/perl-net-ssleay/perl-net-ssleay.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 4a362fb..6b21eb2 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -15,4 +15,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
- # suffers from: don't search for openssl, they pick the host-system one.
- PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
- 
-+define PERL_NET_SSLEAY_FIX_MAKEFILE
-+	$(SED) "s/^LDDLFLAGS = '\(.*\)'/LDDLFLAGS = \1/" $(@D)/Makefile
-+endef
-+PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
-+
- $(eval $(perl-package))
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
