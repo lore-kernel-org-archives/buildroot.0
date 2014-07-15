@@ -1,44 +1,43 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Tue, 15 Jul 2014 17:03:27 +0300
-Subject: [Buildroot] [PATCH 1/2] qt5declarative: Reduce dependencies to
-	GLes2 only
-In-Reply-To: <53C4E59E.4030103@gmail.com>
-References: <533A8F6C.1010606@gmail.com> <20140420111843.340cb627@skate>
- <53C4E59E.4030103@gmail.com>
-Message-ID: <201407151703.27792.fatih.asici@gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue, 15 Jul 2014 10:45:32 -0400
+Subject: [Buildroot] [PATCH 1/1] Add a filesystem option so a device can
+ be booted over NFS.
+In-Reply-To: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
+References: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <CANxTyt6fmkYhRkES85MXWGEPwFc99r_Dioup8_Wds9hbh+WJNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 15 July 2014 11:26:06 Hadrien Boutteville wrote:
-> Hello Fatih,
+On Tue, Jul 15, 2014 at 9:21 AM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
+> +define ROOTFS_NFS_CMD
+> +       rm -rf $(TARGET_ROOTFS_NFS_PATH) ;\
+> +       mkdir -p  $(TARGET_ROOTFS_NFS_PATH) ;\
+> +       cp -r $(TARGET_DIR)/* $(TARGET_ROOTFS_NFS_PATH)
+> +endef
+> +
+> +$(eval $(call ROOTFS_TARGET,nfs))
 
-Hi,
+As Baruch suggested, using "cp" for this purpose is no good.  Refer to
+the buildroot manual and the warning file installed to the target dir:
 
-> I'm mainlining some pending patches for the Google Summer of Code, and
-> for this one I'm not really able to say if it is correct or not. It
-> seems coherent for me but I'm not a Qt5 expert.
-> 
-> As Thomas said, since you are our Qt5 expert have you some comments on
-> this patch?
+http://buildroot.uclibc.org/downloads/manual/manual.html#_nfs_boot
+http://git.buildroot.net/buildroot/tree/support/misc/target-dir-warning.txt
 
-Sorry for the late reply. Totally forgot this mail.
+Instead, consider simply making a post-build script that does the
+un-tar for you. Maybe something like this:
 
-Desktop opengl and opengles2 implementations can be available at the same 
-time. For -opengl option, we should allow the user to select the api. Each 
-implementation option must depend on only the related library (_HAS_LIBGL for 
-desktop and _HAS_LIBGLES for es2).
+    #!/bin/sh
 
-_QT5BASE_EGLFS must only depend on _HAS_LIBEGL. If selected, "-eglfs" must be 
-passed.
+    NFSROOT=${NFS_SHARE:-/srv/my_nfsroot}
 
-At this time, Qt5OpenGL library is installed if _QT5BASE_EGLFS is selected. 
-This must be changed, too. It should be installed to target, if (_HAS_LIBGL || 
-_HAS_LIBGLES).
+    mkdir -p $NFS_SHARE
+    sudo tar -xavf ${BASE_DIR}/images.rootfs.tar -C $NFSROOT
 
-I will prepare a patch to fix all these issues.
+(Not actually tested.)
 
-Regards,
-Fatih
+Then no patch is needed.
+
+Danomi -
