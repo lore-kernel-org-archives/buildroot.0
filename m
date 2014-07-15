@@ -1,165 +1,56 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 15 Jul 2014 21:19:13 +0200
-Subject: [Buildroot] [PATCH v14 18/20] xbmc: Add X.org/OpenGL support
+Date: Tue, 15 Jul 2014 21:19:08 +0200
+Subject: [Buildroot] [PATCH v14 13/20] xbmc: Add missing egl-related cflags
 In-Reply-To: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405451955-10204-19-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405451955-10204-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- on ARM xbmc only supports EGL/GLES
-  https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L695
-- rsxs depends on OpenGL
-  https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1469
-  so include a compile fix, courtesy of
-  https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/xbmc/package.mk#L109
+A similar patch is used in package/qt/qt.mk.
+
+Fixes compilation error:
+
+In file included from /home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/egl.h:36:0,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/egl/WinSystemEGL.h:28,
+                 from /home/br/br/output/build/xbmc-13.0-Gotham/xbmc/windowing/WindowingFactory.h:39,
+                 from DVDPlayerVideo.cpp:23:
+/home/br/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include/EGL/eglplatform.h:118:22: fatal error: X11/Xlib.h: No such file or directory
+
+using this defconfig
+
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_XBMC=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in |   31 ++++++++++++++++++++++++++++---
- package/xbmc/xbmc.mk   |   32 ++++++++++++++++++++++++++------
- 2 files changed, 54 insertions(+), 9 deletions(-)
+ package/xbmc/xbmc.mk |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 19d3043..991695f 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -2,9 +2,26 @@ comment "xbmc needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
- 	depends on BR2_arm || BR2_i386 || BR2_x86_64
- 	depends on !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
-+config BR2_PACKAGE_XBMC_EGL_GLES
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on !BR2_PACKAGE_XBMC_GL # prefer GL if available
-+
-+config BR2_PACKAGE_XBMC_GL
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on !BR2_arm # xbmc needs egl/gles on arm
-+
-+comment "xbmc needs an OpenGL or an openGL ES and EGL backend"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_PACKAGE_XBMC_GL && !BR2_PACKAGE_XBMC_EGL_GLES
-+
- comment "xbmc requires an OpenGL ES and EGL backend"
--	depends on BR2_arm || BR2_i386 || BR2_x86_64
--	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_arm
-+	depends on !BR2_PACKAGE_XBMC_EGL_GLES
- 
- menuconfig BR2_PACKAGE_XBMC
- 	bool "xbmc"
-@@ -22,6 +39,8 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_LIBCDIO
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBFRIBIDI
-+	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XBMC_GL
-+	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_XBMC_GL
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBID3TAG
- 	select BR2_PACKAGE_LIBMAD
-@@ -51,17 +70,23 @@ menuconfig BR2_PACKAGE_XBMC
- 	select BR2_PACKAGE_PYTHON_UNICODEDATA
- 	select BR2_PACKAGE_PYTHON_ZLIB
- 	select BR2_PACKAGE_READLINE
-+	select BR2_PACKAGE_SDL if BR2_PACKAGE_XBMC_GL
-+	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_XBMC_GL
-+	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_XBMC_GL
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_TAGLIB
- 	select BR2_PACKAGE_TIFF
- 	select BR2_PACKAGE_TINYXML
-+	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
-+	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_XBMC_GL
-+	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_INET_IPV6
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_XBMC_EGL_GLES || BR2_PACKAGE_XBMC_GL
- 	depends on BR2_USE_MMU # python
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_arm || BR2_i386 || BR2_x86_64
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 6973bf3..a002a4c 100644
+index 45be990..f67f8e4 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
- # http://wiki.xbmc.org/index.php?title=TexturePacker
- XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
- XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
--	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
-+	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
- 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
- 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
- 
-@@ -44,7 +44,6 @@ XBMC_CONF_OPT +=  \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
--	--disable-gl \
- 	--disable-hal \
- 	--disable-joystick \
- 	--disable-mysql \
-@@ -52,14 +51,10 @@ XBMC_CONF_OPT +=  \
- 	--disable-optical-drive \
- 	--disable-projectm \
- 	--disable-pulse \
--	--disable-sdl \
- 	--disable-ssh \
- 	--disable-vaapi \
- 	--disable-vdpau \
- 	--disable-vtbdecoder \
--	--disable-x11 \
--	--disable-xrandr \
--	--enable-gles \
- 	--enable-optimizations
- 
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-@@ -88,9 +83,34 @@ else
- XBMC_CONF_OPT += --disable-libmp3lame
+@@ -73,6 +73,10 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
+ XBMC_DEPENDENCIES += dbus
  endif
  
-+# quote from xbmc/configure.in: "GLES overwrites GL if both set to yes."
-+# we choose the opposite because opengl offers more features, like libva support
-+ifeq ($(BR2_PACKAGE_XBMC_GL),y)
-+XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
-+	xlib_libXmu xlib_libXrandr xlib_libXt
-+XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr--disable-gles
-+# fix rsxs compile
-+# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
 +XBMC_CONF_ENV += \
-+	jm_cv_func_gettimeofday_clobber=no \
-+	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
-+	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
-+	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
-+	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
-+	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
-+XBMC_CONF_OPT += --enable-rsxs
-+else
-+XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
-+ifeq ($(BR2_PACKAGE_XBMC_EGL_GLES),y)
-+XBMC_DEPENDENCIES += libegl libgles
-+XBMC_CONF_OPT += --enable-gles
- XBMC_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
-+else
-+XBMC_CONF_OPT += --disable-gles
-+endif
-+endif
- 
++	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++
  ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
  XBMC_DEPENDENCIES += libusb-compat
+ XBMC_CONF_OPT += --enable-libusb
 -- 
 1.7.10.4
