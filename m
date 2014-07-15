@@ -1,52 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 23:39:24 +0200
-Subject: [Buildroot] [PATCH 0/6] systemd improvements
-In-Reply-To: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <20140715233924.4588153a@free-electrons.com>
+Date: Tue, 15 Jul 2014 23:40:07 +0200
+Subject: [Buildroot] [git commit] give a hint about git rebase
+Message-ID: <20140715214023.85F119D24C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Eric Le Bihan,
+commit: http://git.buildroot.net/buildroot/commit/?id=b41ec531c2be1b57712cf1c7402842348cd5b5b5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  3 Jul 2014 18:57:33 +0200, Eric Le Bihan wrote:
+It seems common knowledge to use git rebase in interactive mode
+to fixup issues while respinning patch series, but I found it hard
+to find any hint about it. Add a note for git beginners like me.
 
-> Eric Le Bihan (6):
->   dbus: enable systemd support
+[Thomas: take into account Arnout's comment.]
 
-This one applied.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/contribute.txt |    3 +++
+ 1 files changed, 3 insertions(+), 0 deletions(-)
 
->   systemd: revert getty service installation
-
-This one waiting for your feedback on Yann's comment.
-
->   systemd: fix path for kmod in service files
-
-This one applied.
-
->   systemd: bump to version 214
-
-This one no longer applies, probably due to "systemd: revert getty
-service installation" not being applied.
-
->   systemd: add hook to fix /run, /var
-
-Still unresolved issues during the discussion with Arnout. I believe
-the only good way moving forward is to improve the skeleton strategy.
-
->   systemd: install timesync service if selected
-
-One remaining suggestion/question from Arnout.
-
-Could you respin with the appropriate changes?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 54da102..12e7f98 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -222,6 +222,9 @@ should include a changelog of the modifications between each
+ submission. Note that when your patch series is introduced by a cover
+ letter, an overall changelog may be added to the cover letter in
+ addition to the changelog in the individual commits.
++The best thing to rework a patch series is by interactive rebasing:
+++git rebase -i origin/master+. Consult the git manual for more
++information.
+ 
+ When added to the individual commits, this changelog is added when
+ editing the commit message.  Below the +Signed-off-by+ section, add
