@@ -1,44 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Jul 2014 22:31:53 +0200
-Subject: [Buildroot] [PATCH v2] qt5: Add an option to select default
- platform
-In-Reply-To: <1404490279-9272-1-git-send-email-jezz@sysmic.org>
-References: <1404490279-9272-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20140715203153.GG3351@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jul 2014 22:35:52 +0200
+Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
+In-Reply-To: <20140715201336.GE3351@free.fr>
+References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20140715205341.77237719@free-electrons.com>
+ <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
+ <20140715201336.GE3351@free.fr>
+Message-ID: <20140715223552.04987eb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+Dear Yann E. MORIN,
 
-On 2014-07-04 18:11 +0200, J?r?me Pouiller spake thusly:
-> Whithout this path, default platform is automaticaly set (generally
-> set to "eglfs" as defined in
-> qt5base/mkspecs/devices/common/linux_device_pre.conf:1). This choice
-> is not always what the user would like. Thus, user have to manually
-> appends "-platform <BACKEND>" to command line when running any qt5
-> application.
+On Tue, 15 Jul 2014 22:13:36 +0200, Yann E. MORIN wrote:
+
+> The more I think about it, the more I find our policy to require
+> PKG-prefixed patches to be really cumbersome, since the patches already
+> are in a subdir named PKG/
+
+Actually, me too. It prevents the output of "git format-patch" from
+being directly used as patches.
+
+> Of course, we're enforcing this naming scheme in BR2_GLOBAL_PATCH_DIR to
+> be in sync with what we do for our bundled patches.
 > 
-> This patch allows user to choose default platform explicitly.
+> But still, if patches were just named NNNN-title.patch, that would be as
+> efficient at sorting the patches. The PKG- prefix is not really
+> required, and indeed can cause some troubles with some use-cases, such
+> as yours.
 > 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> Thomas, was there a specific reason we wanted the patches to be
+> PKG-prefixed? If not, would it make sense to just accept patches without
+> a PKG-prefix?
 
-As discussed in your previous iteration, it was stated that a free-form
-string would be just better than a choice.
+I honestly don't remember what was the reasoning behind that. Arnout
+maybe?
 
-So I'm marking this patchs "Changes REquested" in the Patchwork.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
