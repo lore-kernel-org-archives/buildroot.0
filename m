@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 19:03:37 +0200
-Subject: [Buildroot] [PATCH 1/2] qt5declarative: Reduce dependencies to
- GLes2 only
-In-Reply-To: <2694981.viQ6KxKrnD@desktop-057>
-References: <533A8F6C.1010606@gmail.com> <53C4E59E.4030103@gmail.com>
- <201407151703.27792.fatih.asici@gmail.com>
- <2694981.viQ6KxKrnD@desktop-057>
-Message-ID: <20140715190337.2a159546@free-electrons.com>
+Date: Tue, 15 Jul 2014 19:06:47 +0200
+Subject: [Buildroot] [git commit] polarssl: programs need MMU
+Message-ID: <20140715170654.877BA9D248@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?r?me Pouiller,
+commit: http://git.buildroot.net/buildroot/commit/?id=e111e0eb8c0bb85e42ed1192505ecec6893d2ada
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Jul 2014 18:24:47 +0200, J?r?me Pouiller wrote:
+Fixes:
+http://autobuild.buildroot.net/results/b53/b535dfda85c8a25c5192c4be7540c4e852fce717/
 
-> I initially sent it to Marco Trapanese in order to help him (may be I should 
-> have send it privately in order to not appear in Patchwork?).
-> 
-> Some work (as Fatih describe below) is necessary before it could be mainlined.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/polarssl/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-In this case, you're definitely welcome to send the patch to the
-mailing list, but then mention in the commit log that the patch is not
-ready for mainline, so that we now what's the status of the patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/polarssl/Config.in b/package/polarssl/Config.in
+index 70cde57..90788d8 100644
+--- a/package/polarssl/Config.in
++++ b/package/polarssl/Config.in
+@@ -17,6 +17,7 @@ if BR2_PACKAGE_POLARSSL
+ 
+ config BR2_PACKAGE_POLARSSL_PROGRAMS
+ 	bool "polarssl programs"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  This option enables the installation and the build of
+ 	  PolarSSL companion programs: aescrypt2, benchmark, cert_app,
