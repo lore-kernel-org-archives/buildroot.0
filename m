@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 19:36:44 +0200
-Subject: [Buildroot] [PATCH 0 of 6] uclibc: fix handling of
- configuration file
-In-Reply-To: <patchbomb.1405338624@localhost>
-References: <patchbomb.1405338624@localhost>
-Message-ID: <20140715193644.35ed9ab3@free-electrons.com>
+Date: Tue, 15 Jul 2014 19:37:18 +0200
+Subject: [Buildroot] [git commit] binutils: remove leftover version
+	definitions
+Message-ID: <20140715173737.65B679D248@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=853660b19fc33c20d25d797f3bbfea8beb67f13b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 14 Jul 2014 13:50:24 +0200, Thomas De Schampheleire wrote:
+Following d4839ffcab70f2496673e5b376f4c0d492260396 ("binutils: remove
+2.20.1, 2.21 and 2.23.1"), Config.in.host contains unneeded
+definitions of BR2_BINUTILS_VERSION for no longer existing
+versions. This patch fixes that.
 
-> Thomas De Schampheleire (6):
->     pkg-utils: kconfig helpers: add basic usage documentation
->     pkg-utils: kconfig helpers: use single iso double quoting
->     uclibc: replace custom kconfig helpers with those provided by pkg-utils
->     uclibc: rename SETUP_DOT_CONFIG to FIXUP_DOT_CONFIG
->     uclibc: menuconfig: take into account initial settings from config file
->     uclibc: update-config: preserve freshly configured settings
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/Config.in.host |    3 ---
+ 1 files changed, 0 insertions(+), 3 deletions(-)
 
-Patches 1 to 3 applied. The others are still in discussion.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 8369785..de45b43 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -35,11 +35,8 @@ config BR2_BINUTILS_VERSION
+ 	string
+ 	default "2.18-avr32-1.0.1" if BR2_BINUTILS_VERSION_2_18_AVR32_1_0_1
+ 	default "arc-4.8-R3"	if BR2_arc
+-	default "2.20.1"	if BR2_BINUTILS_VERSION_2_20_1
+-	default "2.21"		if BR2_BINUTILS_VERSION_2_21
+ 	default "2.21.1"	if BR2_BINUTILS_VERSION_2_21_1
+ 	default "2.22"		if BR2_BINUTILS_VERSION_2_22
+-	default "2.23.1"	if BR2_BINUTILS_VERSION_2_23_1
+ 	default "2.23.2"	if BR2_BINUTILS_VERSION_2_23_2
+ 	default "2.24"		if BR2_BINUTILS_VERSION_2_24
+ 
