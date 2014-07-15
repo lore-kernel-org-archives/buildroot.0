@@ -1,66 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 19:12:03 +0200
-Subject: [Buildroot] [git commit] perl-net-ssleay: fix configure
-Message-ID: <20140715171225.4C37D9CF57@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 19:13:15 +0200
+Subject: [Buildroot] [PATCH] perl-net-ssleay: fix configure
+In-Reply-To: <1405381684-3844-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405381684-3844-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140715191315.374226d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=95074ee8d2d8a901d7e5a3043659b4011a069c8e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-When TARGET_LDFLAGS contains more than one option, the generated
-Makefile contains this definition of LDDLFLAGS:
-        LDDLFLAGS = '--option-1 --option-2'
+On Tue, 15 Jul 2014 01:48:04 +0200, Yann E. MORIN wrote:
 
-Which when passed to gcc is interpreted as a single option, and gcc
-(rightfully) barfs on it, like with:
-        arm-linux-gnueabihf-gcc: error: unrecognized command line
-        option ???-shared -g???
+> This is because perl-net-ssleay's buildsystem is really completely
+> brain-damaged. Other perl extensions do not behave like that, and
+> instead are doing the only same thing to do: not add single quotes
 
-This is because perl-net-ssleay's buildsystem is really completely
-brain-damaged. Other perl extensions do not behave like that, and
-instead are doing the only sane thing to do: not add single quotes
-around the definition, and just use what they were provided for
-LDDLFLAGS.
+same -> sane
 
-So, just do the same for perl-net-ssleay. Since tweaking (yet once
-more) their buildsystem is too complex, we just use a post-configure
-hook to fix up the mess, by removing single quotes around the definition
-of LDDLFLAGS.
+> around the definition, and just use what they were provided for
+> lddlflags.
 
-Note: if only one option is specified, no single quotes are added,
-but our hook is a no-op in this case.
+lddflags -> LDDLFLAGS.
 
-See also:
-    http://lists.busybox.net/pipermail/buildroot/2014-July/101782.html
-and the previous message for even more entertainment. ;-)
+> So, just do the same for perl-net-ssleay. Since tweaking (yet once
+> more) their buildsystem is too complex, we just use a post-configure
+> hook to fix up the mess, by removing single quotes around the definition
+> of LDDLFLAGS.
+> 
+> Note: if only one option is specified, no single quotes are added,
+> but out hook is a no-op in this case.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[me: find the real cause of the issue, tweak the sed expression to not
- force -shared and instead just trim the single quotes, enhance commit
- log]
-[Thomas: fix minor typos in the commit log, add comment above hook
- definition]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perl-net-ssleay/perl-net-ssleay.mk |    5 +++++
- 1 files changed, 5 insertions(+), 0 deletions(-)
+out -> our.
 
-diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
-index 4a362fb..6b21eb2 100644
---- a/package/perl-net-ssleay/perl-net-ssleay.mk
-+++ b/package/perl-net-ssleay/perl-net-ssleay.mk
-@@ -15,4 +15,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
- # suffers from: don't search for openssl, they pick the host-system one.
- PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
- 
-+define PERL_NET_SSLEAY_FIX_MAKEFILE
-+	$(SED) "s/^LDDLFLAGS = '\(.*\)'/LDDLFLAGS = \1/" $(@D)/Makefile
-+endef
-+PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
-+
- $(eval $(perl-package))
+> +define PERL_NET_SSLEAY_FIX_MAKEFILE
+> +	$(SED) "s/^LDDLFLAGS = '\(.*\)'/LDDLFLAGS = \1/" $(@D)/Makefile
+> +endef
+> +PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
+
+I've fixed these and added a short comment above the hook definition to
+explain what it is doing. Committed!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
