@@ -1,63 +1,48 @@
-From: =?UTF-8?Q?Ezequiel_Garc=C3=ADa?= <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 15 Jul 2014 16:49:04 -0300
-Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
-In-Reply-To: <20140715205341.77237719@free-electrons.com>
-References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20140715205341.77237719@free-electrons.com>
-Message-ID: <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jul 2014 22:12:34 +0200
+Subject: [Buildroot] Open bug overview: help wanted!
+In-Reply-To: <CABbD_XDNK_=CK3A6xQECHr_6-YyccqEcggWg-Mux_sWyv4_uLQ@mail.gmail.com>
+References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
+ <CABbD_XDNK_=CK3A6xQECHr_6-YyccqEcggWg-Mux_sWyv4_uLQ@mail.gmail.com>
+Message-ID: <20140715221234.25222f2b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 July 2014 15:53, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Ezequiel Garcia,
->
-> On Tue, 15 Jul 2014 15:26:34 -0300, Ezequiel Garcia wrote:
->> It's often desirable to specify a list of patches, in addition to the current
->> support to pass a directory full of uboot-*.patch files. This matches the
->> option currently available for specifying Linux patches, except this commit
->> doesn't add the URL option. Relying on URLs is fragile and makes a build hard
->> to reproduce.
->>
->> U-Boot is as special as Linux, in the sense that it needs to be customized more
->> often than not, so having a flexible mechanism is useful.
->>
->> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->> ---
->>  Config.in.legacy     | 14 ++++++++++++++
->>  boot/uboot/Config.in | 11 ++++++-----
->>  boot/uboot/uboot.mk  | 12 ++++++++----
->>  3 files changed, 28 insertions(+), 9 deletions(-)
->
-> We now have BR2_GLOBAL_PATCH_DIR, so I believe that what we would
-> recommend to use from now on. We have even been talking about removing
-> the Linux-specific and U-Boot specific patching config options.
->
+Dear K?roly Kasza,
 
-Yeah, Yann already said that on IRC when I asked him about this patch.
-You guys are really in sync! :)
+On Tue, 15 Jul 2014 21:27:51 +0200, K?roly Kasza wrote:
 
-The thing is that Linux and U-Boot are not the regular package, since
-almost every BR user using it for a custom product will need to
-customize the kernel and the bootloader to some extent.
+> > 3427 enhancement s.martin49 at gmail.com New package: nginx
+> 
+> nginx is not using a "normal" autoconfigure/automake system, so
+> cross-compiling it is nearly impossible. I've some experimental patch,
+> which still needs a lot of work. I'm not sure if it can be integrated
+> without completely rewriting the nginx build infrastructure.
 
-At least from my perspective, it's nice to have the patches (instead
-of pointing to some git branch) and be forced to see what
-modifications I'm using.
+Looking at the Yocto/OpenEmbedded recipe might be useful:
+http://cgit.openembedded.org/meta-openembedded/commit/?id=c6e1be52b71c9c234de6aebd036a0e7898a89338.
 
-And to produce the patches, I use git-format-patch (aren't we all?),
-which doesn't allow to specify a prefix for the patches. This has been
-discussed and rejected, so don't think the feature will ever be added.
+> > 3991 enhancement unassigned at buildroot.uclibc.org New Package:
+> > open-vm-tools (Vmware Tools)
+> >
+> 
+> I've sent 2 patches to make this work,
+> http://patchwork.ozlabs.org/patch/338483/ is the second one based on the
+> comments of Thomas.
+> It's broken now, because of the procps -> procps-ng change, and also a new
+> version of openvmtools is out since. I'll send a new updated patch in the
+> near future. Any feedback is appreciated.
 
-Sure, I can use a script, but these options seemed natural enough and
-it allows for a simple "git-format-patch" run and dump the files to a
-directory.
+Make sure to also include <pkg>_LICENSE and <pkg>_LICENSE_FILES when
+you send a new version of the open-vm-tools package.
 
-Anyway... this is just my use case. I understand your desire to remove
-strange options and reduce the churn.
+Thanks!
+
+Thomas
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
