@@ -1,55 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 17:34:40 +0200
-Subject: [Buildroot] Kernel oops on imx53 / ARM - Unhandled fault:
- alignment exception (0x801)
-In-Reply-To: <8CF2946A95E16D4A92067339B0D48BE59AD1126633@EMV66-UKRD.domain1.systemhost.net>
-References: <8CF2946A95E16D4A92067339B0D48BE59AD1126633@EMV66-UKRD.domain1.systemhost.net>
-Message-ID: <20140715173440.65fa4f2d@free-electrons.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Tue, 15 Jul 2014 17:54:15 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-gfx: add patch to fix build failure with
+	es5.x
+Message-ID: <1405439655-5843-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since commit a73fdc647417699833f22d0f239affe22e062827 in the kernel,
+omap_dss_device's 'output' is renamed 'src'.
 
-On Tue, 15 Jul 2014 16:12:06 +0100, amit.chaudhuri at bt.com wrote:
+Build kernel module with es5.x fails because ti-gfx still uses 'output'.
 
-> I am using buildroot to create a toolchain for Freescale's imx53qsb board.  
-> Part of the target we're looking for is Qt5 with support for their eglfs 
-> platform.
-> 
-> If I only build part of Qt5 and don't satisfy dependencies for eglfs I get
-> a bootable system. When I add all of the dependencies I appear to need, I
-> get the relevant Qt5 modules compiled & linked but my kernel dies with 
-> "Unhandled fault: alignment exception (0x801) at 0xdf039e16". I've added the
-> console error message and disassembly of the crash site below.
-> 
-> In narrowing down the things that tip me over the edge I've settled on the
-> addition of udev and evdev as being likely factors.
+Fix build with at least es5.x selected (AM35xx).
 
-Enabling udev/evdev will force the activation of devtmpfs in the
-kernel, and therefore the call of the devtmpfs_init() function in the
-kernel, which triggers the unaligned access.
+Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ .../ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch   | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
 
-> I *think* I need to add -mno-unaligned-access to the compilation flags for
-> everything. But I've not worked out how to do that. If alignment is my issue
-> how does one add custom compilation flags to all packages?
-> 
-> If I'm mis-diagnosing the problem, I'd be keen to have that pointed out.
-> All help much appreciated..
-
-Basically: run a newer kernel.
-
-My understanding is that this issue has been fixed in newer kernel
-versions by allowing unaligned accesses on ARMv6 and ARMv7. The kernel
-you're using was at a time where ARMv7 toolchains were not generating
-unaligned accesses.
-
-Best regards,
-
-Thomas
+diff --git a/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch b/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
+new file mode 100644
+index 0000000..98a7632
+--- /dev/null
++++ b/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
+@@ -0,0 +1,18 @@
++Since commit a73fdc647417699833f22d0f239affe22e062827 in the kernel,
++omap_dss_device's 'output' is renamed 'src'.
++
++Fix build with at least es5.x selected (AM35xx).
++
++Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
++
++--- a/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
+++++ b/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
++@@ -177,7 +177,7 @@
++ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
++ #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->manager : NULL
++ #else
++-#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->output->manager : NULL
+++#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->src->manager : NULL
++ #endif
++ 
++ #define	WAIT_FOR_VSYNC(man)	((man)->wait_for_vsync)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.1
