@@ -1,32 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Jul 2014 12:52:39 -0300
-Subject: [Buildroot] [PATCH] polarssl: programs need MMU
-Message-ID: <1405439559-26870-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jul 2014 17:34:40 +0200
+Subject: [Buildroot] Kernel oops on imx53 / ARM - Unhandled fault:
+ alignment exception (0x801)
+In-Reply-To: <8CF2946A95E16D4A92067339B0D48BE59AD1126633@EMV66-UKRD.domain1.systemhost.net>
+References: <8CF2946A95E16D4A92067339B0D48BE59AD1126633@EMV66-UKRD.domain1.systemhost.net>
+Message-ID: <20140715173440.65fa4f2d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/b53/b535dfda85c8a25c5192c4be7540c4e852fce717/
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/polarssl/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+On Tue, 15 Jul 2014 16:12:06 +0100, amit.chaudhuri at bt.com wrote:
 
-diff --git a/package/polarssl/Config.in b/package/polarssl/Config.in
-index 70cde57..90788d8 100644
---- a/package/polarssl/Config.in
-+++ b/package/polarssl/Config.in
-@@ -17,6 +17,7 @@ if BR2_PACKAGE_POLARSSL
- 
- config BR2_PACKAGE_POLARSSL_PROGRAMS
- 	bool "polarssl programs"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  This option enables the installation and the build of
- 	  PolarSSL companion programs: aescrypt2, benchmark, cert_app,
+> I am using buildroot to create a toolchain for Freescale's imx53qsb board.  
+> Part of the target we're looking for is Qt5 with support for their eglfs 
+> platform.
+> 
+> If I only build part of Qt5 and don't satisfy dependencies for eglfs I get
+> a bootable system. When I add all of the dependencies I appear to need, I
+> get the relevant Qt5 modules compiled & linked but my kernel dies with 
+> "Unhandled fault: alignment exception (0x801) at 0xdf039e16". I've added the
+> console error message and disassembly of the crash site below.
+> 
+> In narrowing down the things that tip me over the edge I've settled on the
+> addition of udev and evdev as being likely factors.
+
+Enabling udev/evdev will force the activation of devtmpfs in the
+kernel, and therefore the call of the devtmpfs_init() function in the
+kernel, which triggers the unaligned access.
+
+> I *think* I need to add -mno-unaligned-access to the compilation flags for
+> everything. But I've not worked out how to do that. If alignment is my issue
+> how does one add custom compilation flags to all packages?
+> 
+> If I'm mis-diagnosing the problem, I'd be keen to have that pointed out.
+> All help much appreciated..
+
+Basically: run a newer kernel.
+
+My understanding is that this issue has been fixed in newer kernel
+versions by allowing unaligned accesses on ARMv6 and ARMv7. The kernel
+you're using was at a time where ARMv7 toolchains were not generating
+unaligned accesses.
+
+Best regards,
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
