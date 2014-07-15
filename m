@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 23:09:56 +0200
-Subject: [Buildroot] [git commit] libfslcodec: bump to version 3.0.11
-Message-ID: <20140715211144.DF4B19CE7A@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 23:09:23 +0200
+Subject: [Buildroot] [git commit] freescale-imx: bump to version
+	3.10.17-1.0.0
+Message-ID: <20140715211144.AF2979D248@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ac2985f2f7bd137b6bae3749e24b6470e9a1a0dd
+commit: http://git.buildroot.net/buildroot/commit/?id=e783d8a51988a089d2ee799ebfe59695c27ee328
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package version is now independent from freescale-imx package.
+Bumping the version requires some heavy changes in the different
+i.MX related packages. Instead of having a single huge patch, those
+changes are split in smaller patches, one per affected package.
+
+This has the inconvenient side-effect of breaking the build right
+now with the bump; but it is better since the patches are easier to
+understand.
 
 Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: expand commit log]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslcodec/libfslcodec.mk |    2 +-
+ package/freescale-imx/freescale-imx.mk |    2 +-
  1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index d52158c..1a364bb 100644
---- a/package/libfslcodec/libfslcodec.mk
-+++ b/package/libfslcodec/libfslcodec.mk
+diff --git a/package/freescale-imx/freescale-imx.mk b/package/freescale-imx/freescale-imx.mk
+index 39ffa8a..843ba61 100644
+--- a/package/freescale-imx/freescale-imx.mk
++++ b/package/freescale-imx/freescale-imx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFSLCODEC_VERSION = $(FREESCALE_IMX_VERSION)
-+LIBFSLCODEC_VERSION = 3.0.11
- LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
- LIBFSLCODEC_LICENSE = Freescale Semiconductor Software License Agreement, BSD-3c (flac, ogg headers)
+-FREESCALE_IMX_VERSION = 3.5.7-1.0.0
++FREESCALE_IMX_VERSION = 3.10.17-1.0.0
+ FREESCALE_IMX_SITE    = http://www.freescale.com/lgfiles/NMG/MAD/YOCTO/
+ 
+ include $(sort $(wildcard package/freescale-imx/*/*.mk))
