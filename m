@@ -1,30 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 19:07:21 +0200
-Subject: [Buildroot] [PATCH] polarssl: programs need MMU
-In-Reply-To: <1405439559-26870-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405439559-26870-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140715190721.5c6f443b@free-electrons.com>
+Date: Tue, 15 Jul 2014 19:12:03 +0200
+Subject: [Buildroot] [git commit] perl-net-ssleay: fix configure
+Message-ID: <20140715171225.4C37D9CF57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=95074ee8d2d8a901d7e5a3043659b4011a069c8e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 15 Jul 2014 12:52:39 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/b53/b535dfda85c8a25c5192c4be7540c4e852fce717/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/polarssl/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+When TARGET_LDFLAGS contains more than one option, the generated
+Makefile contains this definition of LDDLFLAGS:
+        LDDLFLAGS = '--option-1 --option-2'
 
-Applied, thanks.
+Which when passed to gcc is interpreted as a single option, and gcc
+(rightfully) barfs on it, like with:
+        arm-linux-gnueabihf-gcc: error: unrecognized command line
+        option ???-shared -g???
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+This is because perl-net-ssleay's buildsystem is really completely
+brain-damaged. Other perl extensions do not behave like that, and
+instead are doing the only sane thing to do: not add single quotes
+around the definition, and just use what they were provided for
+LDDLFLAGS.
+
+So, just do the same for perl-net-ssleay. Since tweaking (yet once
+more) their buildsystem is too complex, we just use a post-configure
+hook to fix up the mess, by removing single quotes around the definition
+of LDDLFLAGS.
+
+Note: if only one option is specified, no single quotes are added,
+but our hook is a no-op in this case.
+
+See also:
+    http://lists.busybox.net/pipermail/buildroot/2014-July/101782.html
+and the previous message for even more entertainment. ;-)
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[me: find the real cause of the issue, tweak the sed expression to not
+ force -shared and instead just trim the single quotes, enhance commit
+ log]
+[Thomas: fix minor typos in the commit log, add comment above hook
+ definition]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perl-net-ssleay/perl-net-ssleay.mk |    5 +++++
+ 1 files changed, 5 insertions(+), 0 deletions(-)
+
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index 4a362fb..6b21eb2 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
+@@ -15,4 +15,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
+ # suffers from: don't search for openssl, they pick the host-system one.
+ PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
+ 
++define PERL_NET_SSLEAY_FIX_MAKEFILE
++	$(SED) "s/^LDDLFLAGS = '\(.*\)'/LDDLFLAGS = \1/" $(@D)/Makefile
++endef
++PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
++
+ $(eval $(perl-package))
