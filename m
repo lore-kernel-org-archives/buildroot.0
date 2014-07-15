@@ -1,11 +1,11 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Jul 2014 20:48:07 -0300
-Subject: [Buildroot] [PATCH 4/5 v2] package/coreutils: gettextize to
- match the new gettext version
-In-Reply-To: <61bc2021d4233fd18c1a083f04f0b5a1ee31a82e.1405463657.git.yann.morin.1998@free.fr>
+Date: Tue, 15 Jul 2014 20:48:28 -0300
+Subject: [Buildroot] [PATCH 5/5 v2] package/parted: gettextize to match
+ the new gettext version
+In-Reply-To: <2cf9afdee12730d0d550b2847f620e8011b6852e.1405463657.git.yann.morin.1998@free.fr>
 References: <cover.1405463657.git.yann.morin.1998@free.fr>
- <61bc2021d4233fd18c1a083f04f0b5a1ee31a82e.1405463657.git.yann.morin.1998@free.fr>
-Message-ID: <53C5BDB7.8080500@zacarias.com.ar>
+ <2cf9afdee12730d0d550b2847f620e8011b6852e.1405463657.git.yann.morin.1998@free.fr>
+Message-ID: <53C5BDCC.9090002@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,9 +20,9 @@ On 07/15/2014 07:37 PM, Yann E. MORIN wrote:
 > Run gettextize prior to running autoreconf, like we do in wget.
 > 
 > Fixes:
->     http://autobuild.buildroot.net/results/228/228224668be4376844fe924d0a5b346af0414460/
->     http://autobuild.buildroot.net/results/ac4/ac4dbb1342e9c9f1de5412e0b71fe4422ef744ef/
->     http://autobuild.buildroot.net/results/a0c/a0c25faf149de9d51768eed8ff5a2274282cd797/
+>     http://autobuild.buildroot.net/results/ee2/ee20455ead785200847f50e463c32c55821f8925/
+>     http://autobuild.buildroot.net/results/3fe/3fe46e1a6ef10645e46a2e9efdf651f60f05dea8/
+>     http://autobuild.buildroot.net/results/ecd/ecdacafb3245afa1cce4f587eff9bdfe5c162f81/
 >     ...
 > 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
