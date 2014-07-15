@@ -1,44 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 20:40:29 +0200
-Subject: [Buildroot] [PATCH v2 1/1] Build Python with tzset support
-In-Reply-To: <1404902339-25481-1-git-send-email-henry.margies@gmail.com>
-References: <1404825833-1075-1-git-send-email-henry.margies@gmail.com>
- <1404902339-25481-1-git-send-email-henry.margies@gmail.com>
-Message-ID: <20140715204029.00290aaf@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 15 Jul 2014 20:43:34 +0200
+Subject: [Buildroot] [PATCH 0 of 3 v2] uclibc: fix handling of configuration
+	file
+Message-ID: <patchbomb.1405449814@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Henry Margies,
+This patch series (part of it poster earlier as RFC) has as main goal to
+fix the uclibc kconfig handling with following requirements in mind:
 
-On Wed,  9 Jul 2014 11:38:59 +0100, Henry Margies wrote:
-> This patch adds support for time.tzset() in Python2.7 and Python3.
-> 
-> The Python configure script sets ac_cv_working_tzset to 'no' when
-> cross compiling, although it should be available and work with all 
-> toolchains supported by Buildroot (?).
-> The patch below pre-sets the variable so that time.tzset() works.
-> 
-> 
-> Signed-off-by: Henry Margies <henry.margies@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - added similar patch for Python3
+- neither foo-menuconfig nor foo-update-config should have a dependency
+  on the toolchain (which means we cannot depend on foo-configure)
 
-Applied, thanks. I've adjusted a bit the commit title, as the normal
-format is:
+- 'clean foo-menuconfig' should start from the specified (custom) config
+  file
 
-	<package>: <what's happening>
+- 'foo-menuconfig foo-update-config' should preserve the changes made in
+  the menuconfig step (this problem is reported for uclibc with bug #7154
+  (https://bugs.busybox.net/show_bug.cgi?id=7154).
 
-Ideally, two separate patches, one for Python 2 and one for Python 3
-would have been better, but ok for this time.
+- 'make foo-menuconfig; make foo-menuconfig' should preserve the changes
+  made in the menuconfig step.
 
-Thanks for your contribution!
+- 'make clean foo-update-config' should copy the initial file, do any
+  fixups, and then save the config
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+Once this series is accepted, the plan is:
+- to extract the kconfig-related bits to a kconfig-package infrastructure.
+- to convert busybox, linux and barebox to this kconfig-package infra too.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
+---
+ package/uclibc/uclibc.mk |  24 ++++++++++++++++--------
+ 1 files changed, 16 insertions(+), 8 deletions(-)
