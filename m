@@ -1,45 +1,24 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jul 2014 00:37:24 +0200
-Subject: [Buildroot] [PATCH 5/5 v2] package/parted: gettextize to match the
-	new gettext version
-In-Reply-To: <cover.1405463657.git.yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Jul 2014 20:46:13 -0300
+Subject: [Buildroot] [PATCH 2/5 v2] manual: add gettextize explanations
+	in the manual
+In-Reply-To: <0b0f1ac538105f5651c12a14348f6955d124a41b.1405463657.git.yann.morin.1998@free.fr>
 References: <cover.1405463657.git.yann.morin.1998@free.fr>
-Message-ID: <2cf9afdee12730d0d550b2847f620e8011b6852e.1405463657.git.yann.morin.1998@free.fr>
+ <0b0f1ac538105f5651c12a14348f6955d124a41b.1405463657.git.yann.morin.1998@free.fr>
+Message-ID: <53C5BD45.10806@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gettext macros in the package are from a gettext version older than
-the one we have in Buildroot, so autoreconf fails.
+On 07/15/2014 07:37 PM, Yann E. MORIN wrote:
 
-Run gettextize prior to running autoreconf, like we do in wget.
+Minor nitpicking here...
 
-Fixes:
-    http://autobuild.buildroot.net/results/ee2/ee20455ead785200847f50e463c32c55821f8925/
-    http://autobuild.buildroot.net/results/3fe/3fe46e1a6ef10645e46a2e9efdf651f60f05dea8/
-    http://autobuild.buildroot.net/results/ecd/ecdacafb3245afa1cce4f587eff9bdfe5c162f81/
-    ...
+> +* +LIBFOO_GETTEXTIZE+, tells whether the package should be
+> +  gettextized or not (i.e. if the pacakge uses an different gettext
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/parted/parted.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/parted/parted.mk b/package/parted/parted.mk
-index fd82684..75537a7 100644
---- a/package/parted/parted.mk
-+++ b/package/parted/parted.mk
-@@ -11,6 +11,7 @@ PARTED_DEPENDENCIES = util-linux
- PARTED_INSTALL_STAGING = YES
- # For uclinux patch
- PARTED_AUTORECONF = YES
-+PARTED_GETTEXTIZE = YES
- PARTED_LICENSE = GPLv3+
- PARTED_LICENSE_FILES = COPYING
- 
--- 
-1.9.1
+s/ an / a /
+Otherwise great, thanks.
+Regards.
