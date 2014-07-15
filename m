@@ -1,86 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Jul 2014 22:13:36 +0200
-Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
-In-Reply-To: <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
-References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20140715205341.77237719@free-electrons.com>
- <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
-Message-ID: <20140715201336.GE3351@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jul 2014 22:18:45 +0200
+Subject: [Buildroot] [git commit] linux: add option to explicitly specify
+	the kernel image name
+Message-ID: <20140715201907.D58FD9D232@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ezequiel, Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=c78d57637cd57a383e44713eb27e654b3071340e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-07-15 16:49 -0300, Ezequiel Garc?a spake thusly:
-> On 15 July 2014 15:53, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > Dear Ezequiel Garcia,
-> >
-> > On Tue, 15 Jul 2014 15:26:34 -0300, Ezequiel Garcia wrote:
-> >> It's often desirable to specify a list of patches, in addition to the current
-> >> support to pass a directory full of uboot-*.patch files. This matches the
-> >> option currently available for specifying Linux patches, except this commit
-> >> doesn't add the URL option. Relying on URLs is fragile and makes a build hard
-> >> to reproduce.
-> >>
-> >> U-Boot is as special as Linux, in the sense that it needs to be customized more
-> >> often than not, so having a flexible mechanism is useful.
-> >>
-> >> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-> >> ---
-> >>  Config.in.legacy     | 14 ++++++++++++++
-> >>  boot/uboot/Config.in | 11 ++++++-----
-> >>  boot/uboot/uboot.mk  | 12 ++++++++----
-> >>  3 files changed, 28 insertions(+), 9 deletions(-)
-> >
-> > We now have BR2_GLOBAL_PATCH_DIR, so I believe that what we would
-> > recommend to use from now on. We have even been talking about removing
-> > the Linux-specific and U-Boot specific patching config options.
-> >
-> 
-> Yeah, Yann already said that on IRC when I asked him about this patch.
-> You guys are really in sync! :)
-> 
-> The thing is that Linux and U-Boot are not the regular package, since
-> almost every BR user using it for a custom product will need to
-> customize the kernel and the bootloader to some extent.
-> 
-> At least from my perspective, it's nice to have the patches (instead
-> of pointing to some git branch) and be forced to see what
-> modifications I'm using.
-> 
-> And to produce the patches, I use git-format-patch (aren't we all?),
-> which doesn't allow to specify a prefix for the patches. This has been
-> discussed and rejected, so don't think the feature will ever be added.
+For example the upcoming qemu-xtensa patch is using this feature,
+where the target is called "zImage", but the resulting kernel name
+is "Image.elf".
 
-Now I remember that we talked about this on IRC the other day.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/Config.in |   10 ++++++++++
+ linux/linux.mk  |   10 +++++++---
+ 2 files changed, 17 insertions(+), 3 deletions(-)
 
-The more I think about it, the more I find our policy to require
-PKG-prefixed patches to be really cumbersome, since the patches already
-are in a subdir named PKG/
-
-Of course, we're enforcing this naming scheme in BR2_GLOBAL_PATCH_DIR to
-be in sync with what we do for our bundled patches.
-
-But still, if patches were just named NNNN-title.patch, that would be as
-efficient at sorting the patches. The PKG- prefix is not really
-required, and indeed can cause some troubles with some use-cases, such
-as yours.
-
-Thomas, was there a specific reason we wanted the patches to be
-PKG-prefixed? If not, would it make sense to just accept patches without
-a PKG-prefix?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/Config.in b/linux/Config.in
+index 0a13b13..c13b929 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -244,6 +244,16 @@ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ 	  Specify the kernel make target to build the kernel that you
+ 	  need.
+ 
++config BR2_LINUX_KERNEL_IMAGE_NAME
++	string "Kernel image name"
++	depends on BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM
++	help
++	  The filename of the kernel image, if it is different from the
++	  make target (above). Only Xtensa uses a filename different from
++	  the make target. Defaults to BR2_LINUX_KERNEL_IMAGE_TARGET_NAME.
++
++	  If unsure, leave it empty.
++
+ config BR2_LINUX_KERNEL_UIMAGE_LOADADDR
+ 	string "load address (for 3.7+ multi-platform image)"
+ 	depends on BR2_arm || BR2_armeb
+diff --git a/linux/linux.mk b/linux/linux.mk
+index bcd9dc1..928d93d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -80,7 +80,8 @@ endif
+ KERNEL_DTBS = $(addsuffix .dtb,$(KERNEL_DTS_NAME))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+-LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
++LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
++LINUX_TARGET_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_TARGET_NAME))
+ else
+ ifeq ($(BR2_LINUX_KERNEL_UIMAGE),y)
+ LINUX_IMAGE_NAME = uImage
+@@ -106,6 +107,9 @@ else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
+ LINUX_IMAGE_NAME = vmlinuz
+ endif
+ endif
++ifeq ($(LINUX_IMAGE_NAME),)
++LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
++endif
+ 
+ LINUX_KERNEL_UIMAGE_LOADADDR=$(call qstrip,$(BR2_LINUX_KERNEL_UIMAGE_LOADADDR))
+ ifneq ($(LINUX_KERNEL_UIMAGE_LOADADDR),)
+@@ -259,7 +263,7 @@ endif
+ define LINUX_BUILD_CMDS
+ 	$(if $(BR2_LINUX_KERNEL_USE_CUSTOM_DTS),
+ 		cp $(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) $(KERNEL_ARCH_PATH)/boot/dts/)
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then 	\
+ 		$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ;	\
+ 	fi
+@@ -332,7 +336,7 @@ endif
+ $(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
+ 	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+ 	# Build the kernel.
+-	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_IMAGE_NAME)
++	$(TARGET_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_APPEND_DTB)
+ 	# Copy the kernel image to its final destination
+ 	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
