@@ -1,44 +1,34 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 15 Jul 2014 20:33:47 +0200
-Subject: [Buildroot] [PATCH 6 of 6] uclibc: update-config: preserve
-	freshly configured settings
-In-Reply-To: <53C40DC8.8000607@mind.be>
+Date: Tue, 15 Jul 2014 20:38:46 +0200
+Subject: [Buildroot] [PATCH 0 of 6] uclibc: fix handling of
+	configuration file
+In-Reply-To: <20140715193644.35ed9ab3@free-electrons.com>
 References: <patchbomb.1405338624@localhost>
- <82c951fdcf4851185bcc.1405338630@localhost>
- <53C40DC8.8000607@mind.be>
-Message-ID: <CAAXf6LXaJFF+N6tGAcgY7mpYmBJg=cE0F7eOxvh+eba_83xY4w@mail.gmail.com>
+ <20140715193644.35ed9ab3@free-electrons.com>
+Message-ID: <CAAXf6LXULkHDwBRszTYBN4VF4EwPJ2_8zDZiqi6RW64u_poVqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Thomas,
 
-On Mon, Jul 14, 2014 at 7:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 14/07/14 13:50, Thomas De Schampheleire wrote:
->> In the sequence:
->>
->> make uclibc-menuconfig
->> make uclibc-update-config
->>
->> the freshly configured settings from the menuconfig are lost during the
->> update-config step. This is because update-config depends on the configure
->> step, which starts by copying the config file to the build directory.
->>
->> Instead, stop depending on the configure step from update-config, and
->> introduce a new stamp file .stamp_config_fixup_done, which applies any
->> fixups on the .config file.
+On Tue, Jul 15, 2014 at 7:36 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
 >
->  I think the commit message should explain why this stamp file is preferred over
-> repeating the fixup in each target.
+> On Mon, 14 Jul 2014 13:50:24 +0200, Thomas De Schampheleire wrote:
+>
+>> Thomas De Schampheleire (6):
+>>     pkg-utils: kconfig helpers: add basic usage documentation
+>>     pkg-utils: kconfig helpers: use single iso double quoting
+>>     uclibc: replace custom kconfig helpers with those provided by pkg-utils
+>>     uclibc: rename SETUP_DOT_CONFIG to FIXUP_DOT_CONFIG
+>>     uclibc: menuconfig: take into account initial settings from config file
+>>     uclibc: update-config: preserve freshly configured settings
+>
+> Patches 1 to 3 applied. The others are still in discussion.
 >
 
-I'm trying to come up with good reasons here, but the only real one I
-can find is to avoid duplicating code and avoid redoing the fixup
-unnecessarily.
-
-Did you have anything else in mind?
-
-Best regards,
-Thomas
+Thanks, updated patches 4-6 coming up...
