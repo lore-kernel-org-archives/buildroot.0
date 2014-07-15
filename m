@@ -1,45 +1,55 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 15 Jul 2014 21:19:10 +0200
-Subject: [Buildroot] [PATCH v14 15/20] xbmc: Add alsa support
+Date: Tue, 15 Jul 2014 21:19:12 +0200
+Subject: [Buildroot] [PATCH v14 17/20] xbmc: Fix TexturePacker compile
 In-Reply-To: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405451955-10204-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405451955-10204-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Patch description:
+
+use_texturepacker_native=yes
+
+is needed because we obviously need a native-compiled binary, but the xbmc
+build system does enable this variable only for darwin, android and
+raspberry-pi targets.
+
+USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
+
+is also needed because
+USE_TEXTUREPACKER_NATIVE_ROOT="$TEXTUREPACKER_NATIVE_ROOT"
+is only executed for raspberry-pi by xbmc/configure and only
+USE_TEXTUREPACKER_NATIVE_ROOT is used by tools/TexturePacker/Makefile.in.
+
+To sum up, building for raspberry-pi and other archs works out-of-the-box,
+compiling for an Intel target, for example, fails:
+
+In file included from SDL_anigif.cpp:23:0:
+SDL_anigif.h:24:21: fatal error: SDL/SDL.h: No such file or directory
+compilation terminated.
+XBMCTex.cpp:34:21: fatal error: SDL/SDL.h: No such file or directory
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/xbmc.mk |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/xbmc/xbmc.mk |    2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index f67f8e4..0c45d7d 100644
+index e7c9381..6973bf3 100644
 --- a/package/xbmc/xbmc.mk
 +++ b/package/xbmc/xbmc.mk
-@@ -39,7 +39,6 @@ XBMC_CONF_ENV = \
+@@ -35,6 +35,8 @@ XBMC_CONF_ENV = \
+ 	PYTHON_CPPFLAGS="-I$(STAGING_DIR)/usr/include/python$(PYTHON_VERSION_MAJOR)" \
+ 	PYTHON_SITE_PKG="$(STAGING_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages" \
+ 	PYTHON_NOVERSIONCHECK="no-check" \
++	use_texturepacker_native=yes \
++	USE_TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr" \
+ 	TEXTUREPACKER_NATIVE_ROOT="$(HOST_DIR)/usr"
  
  XBMC_CONF_OPT +=  \
- 	--with-arch=$(BR2_ARCH) \
--	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
-@@ -73,6 +72,13 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- XBMC_DEPENDENCIES += dbus
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+XBMC_DEPENDENCIES += alsa-lib
-+XBMC_CONF_OPT += --enable-alsa
-+else
-+XBMC_CONF_OPT += --disable-alsa
-+endif
-+
- XBMC_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
- 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
 -- 
 1.7.10.4
