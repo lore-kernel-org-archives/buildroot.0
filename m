@@ -1,39 +1,31 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Tue, 15 Jul 2014 12:02:35 +0200
-Subject: [Buildroot] New package/ejabberd
-In-Reply-To: <20140703172307.GA3947@free.fr>
-References: <CAJtjsKZeXB2CoZNGCVeBXbuhkKF-q=nA_7GuGy1Xo4+NTMX_ng@mail.gmail.com>
- <20140703172307.GA3947@free.fr>
-Message-ID: <CAJtjsKZfaes6EdcnTyQyxLmHWGGG330T9rPPTdc18D=sB=bN1w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Jul 2014 09:43:27 -0300
+Subject: [Buildroot] [PATCH 1/1] PHP-FPM support
+In-Reply-To: <FEA3AD43-7908-460F-B390-077CBD689B37@rochsystems.com>
+References: <1405365326-2414-1-git-send-email-jordi.llonch@rochsystems.com>
+ <53C4598E.90000@zacarias.com.ar>
+ <FEA3AD43-7908-460F-B390-077CBD689B37@rochsystems.com>
+Message-ID: <53C521EF.8020008@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann (Eric?), All,
+On 07/14/2014 07:58 PM, Jordi Llonch wrote:
 
-On Thu, Jul 3, 2014 at 7:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> I'm not aware of any effort in packaging ejabberd, so if you want to
-> work on it, then please go ahead.
->
-> Thank you for your future contribution! :-)
+> Thanks Gustavo, 
+> This is my first contribution to the project and I appreciate your guidance.
+> 
+> Will those changes suit better?
 
-I've submitted my patch on Friday, using git-send-email. This is the
-first time I use this tool, so I may have done something wrong.
-For example, it does not contain the [buildroot] tag (I thought the
-mailing list would add it automatically).
-Should I wait for a reviewer or do I need to take any further action
-in the meantime?
+Yes, contributions are always welcome, i never added fpm because i don't
+use it for my embedded cases.
+There's a small typo...
 
-> The official Buildroot mailing list is buildroot at buildroot.org indeed,
-> although the one you sent to is just an alias.
+> +PHP_CONF_OPT += $(if $(BR2_PACKAGE_PHP_FPM),--enable-fpm,--disable--fpm)
 
-Ok, you may want to update the welcome message from the mailing list,
-which asks to send emails to buildroot at busybox.net
-
-Best,
--- 
-Johan
-World Eric Watchers Organization
+...an extra - in --disable-fpm :)
+Otherwise looks good, care to resend with that tiny fix?
+Thanks.
+Regards.
