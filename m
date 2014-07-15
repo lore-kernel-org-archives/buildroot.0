@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 23:21:13 +0200
-Subject: [Buildroot] [RFC 0/9] Add libgtk3 and bump webkit to version
- 2.4.3
-In-Reply-To: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20140715232113.148f8c94@free-electrons.com>
+Date: Tue, 15 Jul 2014 23:24:00 +0200
+Subject: [Buildroot] [git commit] systemd: fix path for kmod in service files
+Message-ID: <20140715212406.415379D248@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hadrien Boutteville,
+commit: http://git.buildroot.net/buildroot/commit/?id=64b38f03a705fdbb40f0cf0186bbe38d611d1e10
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  8 Jul 2014 15:57:03 +0200, Hadrien Boutteville wrote:
+The path for kmod used in kmod-static-nodes.service is the one found by
+the ./configure script, which ends up being the path to the host kmod
+program.
 
-> This series mainly does two things: add libgtk3 and bump webkit.
-> 
->  - 1..5: requirements and dependencies for libgtk3
->  - 6: add libgtk3
->  - 7: bump webkit
->  - 8: is required by Midori
->  - 9: bump Midori to test WebKit 2.4.3
+This patch forces the path to the target kmod program.
 
-I've applied patches 1, 2 and 3 of your series. For the rest of the
-series, I'm waiting for some more review. But at least having the
-libglib and pango bumps applied will give them some testing in the
-autobuilders. Get ready to fix issues if some appears.
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/systemd.mk |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 95e7214..f7fbf79 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -50,6 +50,10 @@ SYSTEMD_CONF_OPT += \
+ 	--disable-dbus \
+ 	--without-python
+ 
++# Override path to kmod, used in kmod-static-nodes.service
++SYSTEMD_CONF_ENV = \
++	ac_cv_path_KMOD=/usr/bin/kmod
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+ SYSTEMD_CONF_OPT += --enable-compat-libs
+ else
