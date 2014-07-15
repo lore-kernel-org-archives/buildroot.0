@@ -1,121 +1,93 @@
-From: Alvaro G. M. <alvaro.gamez@hazent.com>
-Date: Tue, 15 Jul 2014 21:10:36 +0200
-Subject: [Buildroot] [PATCH v3 1/1] dcron: new package
-In-Reply-To: <20140715205633.4730fa1e@free-electrons.com>
-References: <1404814892-28531-1-git-send-email-alvaro.gamez@hazent.com>
- <20140715205633.4730fa1e@free-electrons.com>
-Message-ID: <1405451436.8571.5.camel@Nokia-N900>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 15 Jul 2014 21:18:57 +0200
+Subject: [Buildroot] [PATCH v14 02/20] package/mesa3d: Depend on xorg meta
+	package instead of xserver_xorg-server
+In-Reply-To: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405451955-10204-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+mesa3d does not depend on the xorg server as such, only on X libraries.
 
-Thank you for all your additional fixes. I'll try to make it easier for everyone next time, It seems clear there were too many errors on this small contribution.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in |   22 +++++++++++-----------
+ package/mesa3d/mesa3d.mk |    4 ++--
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
-I'll take a look at the init script. I hadn't thought about it because I tipically run it directly on inittab.
-
-Regards
-
-On Tue Jul 15 20:56:33 2014 Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> Dear Alvaro G. M,
-> 
-> On Tue,?  8 Jul 2014 12:21:32 +0200, Alvaro G. M wrote:
-> > Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
-> 
-> I've applied your patch, but had to make a few changes. Moreover, your
-> package does not install any init script to start crond. Maybe you
-> should cook a followup patch that adds an init script, no?
-> 
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 95c0c8b..3f4384f 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1124,6 +1124,7 @@ menu "System tools"
-> > if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> > ??? source "package/bootutils/Config.in"
-> > ??? source "package/coreutils/Config.in"
-> > +??? source "package/dcron/Config.in"
-> > endif
-> > ??? source "package/cpuload/Config.in"
-> 
-> Alphabetic ordering not respected here.
-> 
-> > ??? source "package/dsp-tools/Config.in"
-> > diff --git a/package/dcron/Config.in b/package/dcron/Config.in
-> > new file mode 100644
-> > index 0000000..37182de
-> > --- /dev/null
-> > +++ b/package/dcron/Config.in
-> > @@ -0,0 +1,19 @@
-> > +config BR2_PACKAGE_DCRON
-> > +??? bool "dcron"
-> 
-> Missing dependency on BR2_USE_MMU, since the package uses the fork()
-> system call.
-> 
-> > +??? help
-> > +??? ?  dcron is a time-based job scheduler with anacron-like features.
-> > +??? ?  It works as a background daemon that parses individual crontab
-> > +??? ?  files and executes commands on behalf of the users in question.
-> > +
-> > +??? ?  Upon installation, this package will enable a system level cron
-> > +??? ?  daemon with hourly, daily, weekly and monthly crontabs.
-> > +
-> > +??? ?  However, it doesn't allow non root users to create their own
-> > +??? ?  crontab file. This is because /var/spool/cron/crontabs is non
-> > +??? ?  user writable.
-> > +
-> > +??? ?  Typically, a crontab group is created on the system and users
-> > +??? ?  allowed to create crontab entries are added into this group, while
-> > +??? ?  crontab executable is owned by root:crontab with sgid bit enabled.
-> 
-> Lines too long, I had to rewrap them.
-> 
-> > diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
-> > new file mode 100644
-> > index 0000000..20dcf23
-> > --- /dev/null
-> > +++ b/package/dcron/dcron.mk
-> > @@ -0,0 +1,31 @@
-> > +################################################################################
-> > +#
-> > +# dcron
-> > +#
-> > +################################################################################
-> > +
-> > +DCRON_VERSION = 4.5
-> > +DCRON_SITE = http://www.jimpryor.net/linux/releases/
-> > +# The source code does not specify the version of the GPL that is
-> > used. +DCRON_LICENSE = GPL
-> > +
-> > +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> 
-> I added a short comment above this to explain why we're doing this.
-> 
-> > +DCRON_DEPENDENCIES = busybox
-> > +endif
-> > +
-> > +define DCRON_BUILD_CMDS
-> > +??? $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> > +endef
-> > +
-> > +define DCRON_INSTALL_TARGET_CMDS
-> > +??? $(INSTALL) -D -m0700 $(@D)/crond $(TARGET_DIR)/usr/sbin
-> > +??? $(INSTALL) -D -m4755 $(@D)/crontab $(TARGET_DIR)/usr/bin
-> 
-> On both of those lines, it should have been a full path for the targets.
-> 
-> Thanks,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140715/cafba3b2/attachment.html>
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 87fd846..87ff76d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -3,13 +3,13 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
+-	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
++	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
+ 	depends on BR2_PACKAGE_HAS_LIBUDEV
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_LARGEFILE
+@@ -62,10 +62,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
+-comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
+-	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
++comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
+ 
+-if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
++if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+ 
+ comment "DRI drivers"
+ 
+@@ -92,7 +92,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
+-endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
++endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
+ 
+ if BR2_PACKAGE_MESA3D_DRIVER
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 49bc849..d35a124 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -25,7 +25,7 @@ MESA3D_DEPENDENCIES = \
+ 	host-xutil_makedepend \
+ 	libdrm
+ 
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+ 	xproto_dri2proto \
+@@ -100,7 +100,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
+ MESA3D_DEPENDENCIES += wayland
+ MESA3D_EGL_PLATFORMS += wayland
+ endif
+-ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_EGL_PLATFORMS += x11
+ endif
+ MESA3D_CONF_OPT += \
+-- 
+1.7.10.4
