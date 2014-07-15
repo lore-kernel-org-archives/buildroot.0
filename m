@@ -1,53 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 21:31:25 +0200
-Subject: [Buildroot] [PATCH 0/3] Make exim more configurable
-In-Reply-To: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
-References: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20140715213125.1b848b48@free-electrons.com>
+Date: Tue, 15 Jul 2014 21:33:41 +0200
+Subject: [Buildroot] [PATCH 1/1] Add a filesystem option so a device can
+ be booted over NFS.
+In-Reply-To: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
+References: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20140715213341.51a462ee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear Sagaert Johan,
 
-On Fri,  4 Jul 2014 17:56:23 +0200, Luca Ceresoli wrote:
-> Hi,
+On Tue, 15 Jul 2014 15:21:16 +0200, Sagaert Johan wrote:
 > 
-> this small patch series makes the exim mail transfer agent more configurable
-> at build time.
+> This options allows specifying a directory where the target rootfs is
+> copied to so it can be used to boot a device over NFS.
 > 
-> Exim does not use a framework such as the autotools or CMake for its
-> build-time configuration. Instead it requires to provide a Makefile
-> (./Local/Makefile) with variables set appropriately. This Makefile is then
-> included by the main Makefile.
-> 
-> These patches allow to use a custom configuration Makefile provided by the
-> user and to tweak (in the Buildroot config) the user that will run the exim
-> processes.
-> 
-> Luca
-> 
-> Luca Ceresoli (3):
->   exim: allow using a custom configuration file
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
 
-Thanks, I've applied this patch.
+How to boot from NFS is explained at
+http://buildroot.org/downloads/manual/manual.html#_nfs_boot, and the
+solution you propose requires root privileges to extract the tarball
+image, which is not acceptable as Buildroot doesn't run as root.
 
->   exim: make EXIM_USER configurable
->   exim: generate the user with automatic uid
+Therefore, I'll have to mark your patch as Rejected in our patch
+tracking system. Do not hesitate to let us know if you disagree and see
+a better way of doing things.
 
-However, I've for now rejected those two patches. The reason is that I
-don't think we should add an option to customize the user with which
-each and every daemon is started. Buildroot should use a sane default
-option, and for additional configuration, leave it to the Buildroot
-user to use BR2_ROOTFS_USERS_TABLES to create any additional/custom
-user that may be needed.
-
-If you don't agree with this decision, let us know and resubmit patches
-with more details on why an exim specific mechanism is needed here.
-
-Thanks a lot!
+Thanks,
 
 Thomas
 -- 
