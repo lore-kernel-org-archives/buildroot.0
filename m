@@ -1,32 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 22:56:46 +0200
-Subject: [Buildroot] [PATCH] Makefile: do not purge locale-archive from
- target
-In-Reply-To: <1403083410-4278-1-git-send-email-neumann@teufel.de>
-References: <1403083410-4278-1-git-send-email-neumann@teufel.de>
-Message-ID: <20140715225646.6e2dcc8c@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Jul 2014 22:57:00 +0200
+Subject: [Buildroot] [PATCH 1/1] google-breakpad: Integration into
+ Makefile and Config.in
+In-Reply-To: <1405418443-29638-2-git-send-email-pascal.huerst@gmail.com>
+References: <1405418443-29638-1-git-send-email-pascal.huerst@gmail.com>
+ <1405418443-29638-2-git-send-email-pascal.huerst@gmail.com>
+Message-ID: <20140715205659.GH3351@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sven Neumann,
+Pascal, All,
 
-On Wed, 18 Jun 2014 11:23:30 +0200, Sven Neumann wrote:
-> The rules to purge unwanted locales from the target also removed
-> the locale-archive file from /usr/lib/locale which contains the
-> locale definitions explicitly generated for the target.
-> 
-> Signed-off-by: Sven Neumann <neumann@teufel.de>
+On 2014-07-15 12:00 +0200, Pascal Huerst spake thusly:
+> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
 > ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Config.in                                  | 28 ++++++++++++++++++++++++++++
+>  package/google-breakpad/gen-syms.sh        | 25 +++++++++++++++++++++++++
+>  package/google-breakpad/google-breakpad.mk |  8 ++++++++
+>  3 files changed, 61 insertions(+)
+>  create mode 100755 package/google-breakpad/gen-syms.sh
+> 
+[--SNIP--]
+> diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
+> new file mode 100755
+> index 0000000..f29c8fe
+> --- /dev/null
+> +++ b/package/google-breakpad/gen-syms.sh
+> @@ -0,0 +1,25 @@
+> +#!/bin/sh
+> +STAGING_DIR="${1}"
+> +TARGET_DIR="${2}"
+> +shift 2
+> +
+> +SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
+> +rm -rf "${SYMBOLS_DIR}"
+> +mkdir -p "${SYMBOLS_DIR}"
+> +
+> +for FILE in $(eval ls "${TARGET_DIR}/${@}"); do
 
-Applied, thanks.
+Why do you use eval here?
 
-Thomas
+> +	if [ -d "${FILE}" ]; then
+> +		printf "Error: '%s' is a directory\n" "${FILE}" >&2
+> +		exit 1
+> +	fi
+> +	if dump_syms "${FILE}" > "${SYMBOLS_DIR}/tmp.sym" 2>/dev/null; then
+> +		HASH=$(head -n1 "${SYMBOLS_DIR}/tmp.sym" | cut -d ' ' -f 4);
+> +		FILENAME=$(basename "$FILE");
+> +		mkdir -p "${SYMBOLS_DIR}/${FILENAME}/${HASH}"
+> +		mv "${SYMBOLS_DIR}/tmp.sym" "${SYMBOLS_DIR}/${FILENAME}/${HASH}/${FILENAME}.sym";
+> +	else
+> +		printf "Error dumping symbols for: '%s'\n" "${FILE}" >&2
+> +		exit 1
+> +	fi
+> +done
+> +rm -rf "${SYMBOLS_DIR}/tmp"
+> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+> index bf857ba..622f7a6 100644
+> --- a/package/google-breakpad/google-breakpad.mk
+> +++ b/package/google-breakpad/google-breakpad.mk
+> @@ -14,5 +14,13 @@ GOOGLE_BREAKPAD_INSTALL_STAGING = YES
+>  GOOGLE_BREAKPAD_LICENSE = BSD-3c
+>  GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+>  
+> +#ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+
+Did you forget to un-comment this line?
+
+> +define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+> +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+> +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
+> +endef
+> +TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+> +#endif
+
+Ditto.
+
+Regards,
+Yann E. MORIN.
+
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> -- 
+> 1.9.3
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
