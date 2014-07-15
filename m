@@ -1,93 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 15 Jul 2014 21:18:57 +0200
-Subject: [Buildroot] [PATCH v14 02/20] package/mesa3d: Depend on xorg meta
-	package instead of xserver_xorg-server
+Date: Tue, 15 Jul 2014 21:19:03 +0200
+Subject: [Buildroot] [PATCH v14 08/20] ffmpeg: Add libva support
 In-Reply-To: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405451955-10204-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405451955-10204-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mesa3d does not depend on the xorg server as such, only on X libraries.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in |   22 +++++++++++-----------
- package/mesa3d/mesa3d.mk |    4 ++--
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 87fd846..87ff76d 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -3,13 +3,13 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
--	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XSERVER_XORG_SERVER
--	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XSERVER_XORG_SERVER
-+	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBXFIXES if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB if BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE
-@@ -62,10 +62,10 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
--comment "DRI drivers needs an X.Org server and a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XSERVER_XORG_SERVER
-+comment "DRI drivers needs X.Org and a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_XORG7
- 
--if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
-+if !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
- 
- comment "DRI drivers"
- 
-@@ -92,7 +92,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	help
- 	  Legacy Radeon driver for R100 series GPUs.
- 
--endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XSERVER_XORG_SERVER
-+endif # !BR2_PREFER_STATIC_LIB && BR2_PACKAGE_XORG7
- 
- if BR2_PACKAGE_MESA3D_DRIVER
- 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 49bc849..d35a124 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -25,7 +25,7 @@ MESA3D_DEPENDENCIES = \
- 	host-xutil_makedepend \
- 	libdrm
- 
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_DEPENDENCIES += \
- 	xproto_xf86driproto \
- 	xproto_dri2proto \
-@@ -100,7 +100,7 @@ ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEPENDENCIES += wayland
- MESA3D_EGL_PLATFORMS += wayland
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 478c66a..2b73fbc 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
  endif
--ifeq ($(BR2_PACKAGE_XSERVER_XORG_SERVER),y)
-+ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_EGL_PLATFORMS += x11
- endif
- MESA3D_CONF_OPT += \
+ 
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
++else
++FFMPEG_CONF_OPT += --disable-vaapi
++endif
++
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
 -- 
 1.7.10.4
