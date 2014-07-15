@@ -1,34 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 15 Jul 2014 21:19:05 +0200
-Subject: [Buildroot] [PATCH v14 10/20] sdl: Add new dependency libglu for
-	opengl support
+Date: Tue, 15 Jul 2014 21:18:58 +0200
+Subject: [Buildroot] [PATCH v14 03/20] package/mesa3d: add dependency
+	xproto_presentproto
 In-Reply-To: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405451955-10204-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405451955-10204-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sdl/sdl.mk |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in |    1 +
+ package/mesa3d/mesa3d.mk |    1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index 8d0e5bd..8adc66b 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -62,7 +62,8 @@ SDL_DEPENDENCIES += alsa-lib
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D),y)
--SDL_DEPENDENCIES += mesa3d
-+SDL_DEPENDENCIES += libglu mesa3d
-+SDL_CONF_OPT += --enable-video-opengl
- endif
- 
- SDL_CONF_OPT += --enable-pulseaudio=no \
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 87ff76d..813e120 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index d35a124..f6bc5a9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -30,6 +30,7 @@ MESA3D_DEPENDENCIES += \
+ 	xproto_xf86driproto \
+ 	xproto_dri2proto \
+ 	xproto_glproto \
++	xproto_presentproto \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+ 	xlib_libXdamage \
 -- 
 1.7.10.4
