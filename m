@@ -1,35 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 19:18:11 +0200
-Subject: [Buildroot] [PATCH] package/python: fix sqlite3 extension
- without threads
-In-Reply-To: <1405167112-9063-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405167112-9063-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140715191811.487b84ac@free-electrons.com>
+Date: Tue, 15 Jul 2014 19:18:25 +0200
+Subject: [Buildroot] [git commit] pkg-utils: kconfig helpers: add basic
+	usage documentation
+Message-ID: <20140715171925.B03109D20C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=358bf954452c095e5f782187ad7579e42d903df3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 12 Jul 2014 14:11:52 +0200, Yann E. MORIN wrote:
-> Fix a compiler error when building the sqlite3 extension, when the
-> toolchain does not have threads.
-> 
-> Fixes:
->         http://autobuild.buildroot.net/results/10f/10f268cd55f16ee53f4c5e17e1248b0a1820f6ea/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  .../python-015-fix-sqlite-without-threads.patch    | 48 ++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/python/python-015-fix-sqlite-without-threads.patch
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-utils.mk |    6 +++---
+ 1 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied, thanks. Do you know if Python 3 is affected as well?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 59a5ab2..e802864 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -33,17 +33,17 @@ $(eval $(call caseconvert-helper,LOWERCASE,$(join $(addsuffix :,$([TO])),$([FROM
+ # package, and more.
+ #
+ 
+-define KCONFIG_ENABLE_OPT
++define KCONFIG_ENABLE_OPT # (option, file)
+ 	$(SED) "/\\<$(1)\\>/d" $(2)
+ 	echo "$(1)=y" >> $(2)
+ endef
+ 
+-define KCONFIG_SET_OPT
++define KCONFIG_SET_OPT # (option, value, file)
+ 	$(SED) "/\\<$(1)\\>/d" $(3)
+ 	echo "$(1)=$(2)" >> $(3)
+ endef
+ 
+-define KCONFIG_DISABLE_OPT
++define KCONFIG_DISABLE_OPT # (option, file)
+ 	$(SED) "/\\<$(1)\\>/d" $(2)
+ 	echo "# $(1) is not set" >> $(2)
+ endef
