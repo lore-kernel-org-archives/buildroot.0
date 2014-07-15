@@ -1,96 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 15 Jul 2014 20:43:37 +0200
-Subject: [Buildroot] [PATCH 3 of 3 v2] uclibc: update-config: preserve
- freshly configured settings
-In-Reply-To: <patchbomb.1405449814@localhost>
-References: <patchbomb.1405449814@localhost>
-Message-ID: <f2da132c93ad6ceefbe7.1405449817@localhost>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jul 2014 20:51:23 +0200
+Subject: [Buildroot] [git commit] statserial: don't link against legacy
+	curses
+Message-ID: <20140715185128.64F849D246@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the sequence:
+commit: http://git.buildroot.net/buildroot/commit/?id=a95b9cc1244e3de5de294c14d8bf7f6fc9916493
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-make uclibc-menuconfig
-make uclibc-update-config
+Link against libncurses instead of the legacy libcurses.
 
-the freshly configured settings from the menuconfig are lost during the
-update-config step. This is because update-config depends on the configure
-step, which starts by copying the config file to the build directory.
-
-Instead, stop depending on the configure step from update-config, and
-introduce a new stamp file .stamp_config_fixup_done, which applies any
-fixups on the .config file.
-An alternative solution would be to add a call to UCLIBC_FIXUP_DOT_CONFIG to
-the relevant targets instead of depending on a new stamp file, but this
-would unnecessarily repeat the fixups on subsequent invocations of
-update-config, for example.
-
-No longer depending on the configure step has the added bonus that
-'uclibc-update-config' no longer needs the toolchain to be available, which
-makes:
-    make clean uclibc-menuconfig uclibc-update-config
-much faster and user-friendly.
-
-Additionally, make sure that 'make clean uclibc-update-config' works
-properly, by depending on .stamp_config_fixup_done so that the config file
-is present and fixed.
-
-Fixes bug #7154 https://bugs.busybox.net/show_bug.cgi?id=7154
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2:
-- use $(Q)touch iso touch (Arnout)
-- update commit message to clarify stamp file choice (Arnout)
+ .../statserial/statserial-01-ncurses-link.patch    |   16 ++++++++++++++++
+ 1 files changed, 16 insertions(+), 0 deletions(-)
 
-rfc->patch:
-- rebase
-- rename .stamp_config_file_fixed into .stamp_config_fixup_done
-- add dependency on .config from .stamp_config_file_fixed (Arnout)
-- remove explicit call to UCLIBC_FIXUP_DOT_CONFIG from configure commands,
-  and instead depend on .stamp_config_fixup_done.
-
- package/uclibc/uclibc.mk |  12 ++++++++----
- 1 files changed, 8 insertions(+), 4 deletions(-)
-
-diff -r a22b18c9a90d -r f2da132c93ad package/uclibc/uclibc.mk
---- a/package/uclibc/uclibc.mk	Sun Jun 22 10:37:22 2014 +0200
-+++ b/package/uclibc/uclibc.mk	Mon Jun 16 20:18:23 2014 +0200
-@@ -432,7 +432,6 @@
- endef
- 
- define UCLIBC_CONFIGURE_CMDS
--	$(UCLIBC_FIXUP_DOT_CONFIG)
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX=$(STAGING_DIR) \
-@@ -537,7 +536,11 @@
- $(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
- 	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
- 
--$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.config
-+$(UCLIBC_DIR)/.stamp_config_fixup_done: $(UCLIBC_DIR)/.config
-+	$(UCLIBC_FIXUP_DOT_CONFIG)
-+	$(Q)touch $@
+diff --git a/package/statserial/statserial-01-ncurses-link.patch b/package/statserial/statserial-01-ncurses-link.patch
+new file mode 100644
+index 0000000..b1c41e6
+--- /dev/null
++++ b/package/statserial/statserial-01-ncurses-link.patch
+@@ -0,0 +1,16 @@
++Link to libncurses instead of the legacy libcurses.
 +
-+$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.stamp_config_fixup_done
- 
- uclibc-menuconfig: $(UCLIBC_DIR)/.config
- 	$(MAKE1) -C $(UCLIBC_DIR) \
-@@ -546,9 +549,10 @@
- 		DEVEL_PREFIX=/usr/ \
- 		RUNTIME_PREFIX=$(STAGING_DIR)/ \
- 		menuconfig
--	rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
-+	rm -f $(UCLIBC_DIR)/.stamp_{config_fixup_done,configured,built}
-+	rm -f $(UCLIBC_DIR)/.stamp_{target,staging}_installed
- 
--uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
-+uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_fixup_done
- 	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
- 
- # Before uClibc is built, we must have the second stage cross-compiler
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura statserial-1.1.orig/Makefile statserial-1.1/Makefile
++--- statserial-1.1.orig/Makefile	2014-07-04 12:47:41.279440415 -0300
+++++ statserial-1.1/Makefile	2014-07-04 12:47:47.948665740 -0300
++@@ -10,7 +10,7 @@
++ LDFLAGS = -s -N
++ 
++ statserial:	statserial.o
++-	$(LD) $(LDFLAGS) -o statserial statserial.o -lcurses
+++	$(LD) $(LDFLAGS) -o statserial statserial.o -lncurses
++ 
++ statserial.o: statserial.c
++ 	$(CC) $(CFLAGS) -c statserial.c
