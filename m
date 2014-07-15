@@ -1,46 +1,36 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Tue, 15 Jul 2014 21:27:51 +0200
-Subject: [Buildroot] Open bug overview: help wanted!
-In-Reply-To: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
-References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
-Message-ID: <CABbD_XDNK_=CK3A6xQECHr_6-YyccqEcggWg-Mux_sWyv4_uLQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 15 Jul 2014 21:28:14 +0200
+Subject: [Buildroot] [PATCH 1/2] apply-patches.sh: don't print anything
+ when "-s" option is used
+In-Reply-To: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <20140715212814.1dfcce43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Fabio Porcedda,
 
+On Wed,  9 Jul 2014 13:46:53 +0200, Fabio Porcedda wrote:
+> The make "-s" option is used to enable the "Silent operation" so if
+> that option is used don't print anything as far as there isn't any
+> error.
+> Add the "-s" option to "apply-patches.sh" to enable silent operation.
+> Because "apply-patches.sh" is called in many places add a
+> "APPLY_PATCHES" variable to permit adding the "-s" easily.
+> 
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-> Then there are a number of bug reports that I currently care less about.
-> Several of them are related to new packages (no bugs), some of them
-> are there to indicate that certain packages are disabled on a given
-> configuration, and some are real problems.
-> Takers for these bugs?
->
-> 3427 enhancement s.martin49 at gmail.com New package: nginx
->
+Hum, yes, but why? The entire build process is anyway very noisy, so is
+there really a point in silencing specifically this part? What is the
+ultimate goal you're trying to achieve here?
 
-nginx is not using a "normal" autoconfigure/automake system, so
-cross-compiling it is nearly impossible. I've some experimental patch,
-which still needs a lot of work. I'm not sure if it can be integrated
-without completely rewriting the nginx build infrastructure.
+Thanks!
 
-
-> 3991 enhancement unassigned at buildroot.uclibc.org New Package:
-> open-vm-tools (Vmware Tools)
->
-
-I've sent 2 patches to make this work,
-http://patchwork.ozlabs.org/patch/338483/ is the second one based on the
-comments of Thomas.
-It's broken now, because of the procps -> procps-ng change, and also a new
-version of openvmtools is out since. I'll send a new updated patch in the
-near future. Any feedback is appreciated.
-
-BR
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140715/6b6799fc/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
