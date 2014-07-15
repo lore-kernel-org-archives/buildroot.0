@@ -1,65 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 23:09:49 +0200
-Subject: [Buildroot] [git commit] libfslvpuwrap: bump to version 1.0.46
-Message-ID: <20140715211144.D7ACD9CE7A@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 23:10:14 +0200
+Subject: [Buildroot] [git commit] imx6sabresd: bump kernel version to 3.10.17
+Message-ID: <20140715211145.0A9269CE7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=206b7abd98645cf73154147986388667ff7f8dd9
+commit: http://git.buildroot.net/buildroot/commit/?id=7e9e3049cff1956b2c4ceaa750f3164576753ef5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The libfslvpuwrapp versionning no longer follows the same version scheme
-as the other Freescale components.
-
-As VPU code is no longer in imx-lib, this package now depends on imx-vpu
-package.
-
 Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: expand commit log]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslvpuwrap/Config.in        |    2 +-
- package/libfslvpuwrap/libfslvpuwrap.mk |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/freescale_imx6sabresd_defconfig |   12 ++++++++----
+ 1 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfslvpuwrap/Config.in b/package/libfslvpuwrap/Config.in
-index 9cf7633..fa85ce5 100644
---- a/package/libfslvpuwrap/Config.in
-+++ b/package/libfslvpuwrap/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBFSLVPUWRAP
- 	bool "libfslvpuwrap"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
--	select BR2_PACKAGE_IMX_LIB
-+	select BR2_PACKAGE_IMX_VPU
- 	help
- 	  Wrapper library for the vpu library, giving it a different API.
+diff --git a/configs/freescale_imx6sabresd_defconfig b/configs/freescale_imx6sabresd_defconfig
+index 368e00b..16e4d0b 100644
+--- a/configs/freescale_imx6sabresd_defconfig
++++ b/configs/freescale_imx6sabresd_defconfig
+@@ -9,15 +9,19 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx6"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd"
  
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index 75c9887..c3a5c1c 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
  
--LIBFSLVPUWRAP_VERSION = $(FREESCALE_IMX_VERSION)
-+LIBFSLVPUWRAP_VERSION = 1.0.46
- LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
- LIBFSLVPUWRAP_LICENSE = Freescale Semiconductor Software License Agreement
-@@ -14,7 +14,7 @@ LIBFSLVPUWRAP_REDISTRIBUTE = NO
- 
- LIBFSLVPUWRAP_INSTALL_STAGING = YES
- 
--LIBFSLVPUWRAP_DEPENDENCIES += imx-lib
-+LIBFSLVPUWRAP_DEPENDENCIES += imx-vpu
- 
- # The archive is a shell-self-extractor of a bzipped tar. It happens
- # to extract in the correct directory (libfslvpuwrap-x.y.z)
+ # bootloader
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="mx6q_sabresd"
++BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
