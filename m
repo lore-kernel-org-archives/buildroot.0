@@ -1,63 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 21:19:37 +0200
-Subject: [Buildroot] [git commit] lm-sensors: don't use host ldconfig
-Message-ID: <20140715192013.AB6409D1C7@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 21:22:20 +0200
+Subject: [Buildroot] [PATCH v14 03/20] package/mesa3d: add dependency
+ xproto_presentproto
+In-Reply-To: <1405451955-10204-4-git-send-email-bernd.kuhls@t-online.de>
+References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
+ <1405451955-10204-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140715212220.5244b728@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6c70c45004b87f134af96adf11178a8e1d1c4625
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-To know whether the libiconv library is available, lm-sensors is using
-the host ldconfig, which is obviously wrong in cross-compilation.
+On Tue, 15 Jul 2014 21:18:58 +0200, Bernd Kuhls wrote:
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/Config.in |    1 +
+>  package/mesa3d/mesa3d.mk |    1 +
+>  2 files changed, 2 insertions(+)
 
-Moreover, the lm-sensors program making use of the iconv_*() API
-already does it when __UCLIBC__ is *not* defined. In this case, the
-iconv_*() functions are already part of the C library, so there is no
-need to link against a separate library. Therefore, this patch simply
-removes the libiconv handling.
+Please add a justification about this change in the commit log. Is it
+needed following the mesa3d bump? In this case, it should be part of
+the patch bumping mesa3d.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- .../lm-sensors-0002-no-host-ldconfig.patch         |   29 ++++++++++++++++++++
- 1 files changed, 29 insertions(+), 0 deletions(-)
+Bernd, a good rule of thumb is *all* patches should have a commit log.
+So whenever you're about to send a series, please review the commit log
+of your patches, and make sure all of them have a non-empty commit log.
 
-diff --git a/package/lm-sensors/lm-sensors-0002-no-host-ldconfig.patch b/package/lm-sensors/lm-sensors-0002-no-host-ldconfig.patch
-new file mode 100644
-index 0000000..51f7f6a
---- /dev/null
-+++ b/package/lm-sensors/lm-sensors-0002-no-host-ldconfig.patch
-@@ -0,0 +1,29 @@
-+Remove usage of host ldconfig
-+
-+To know whether the libiconv library is available, lm-sensors is using
-+the host ldconfig, which is obviously wrong in cross-compilation.
-+
-+Moreover, the lm-sensors program making use of the iconv_*() API
-+already does it when __UCLIBC__ is *not* defined. In this case, the
-+iconv_*() functions are already part of the C library, so there is no
-+need to link against a separate library. Therefore, this patch simply
-+removes the libiconv handling.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/prog/sensors/Module.mk
-+===================================================================
-+--- a/prog/sensors/Module.mk
-++++ b/prog/sensors/Module.mk
-+@@ -37,10 +37,8 @@
-+ REMOVESENSORSBIN := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(BINDIR)/%,$(PROGSENSORSTARGETS))
-+ REMOVESENSORSMAN := $(patsubst $(MODULE_DIR)/%,$(DESTDIR)$(PROGSENSORSMAN1DIR)/%,$(PROGSENSORSMAN1FILES))
-+ 
-+-LIBICONV := $(shell if /sbin/ldconfig -p | grep -q '/libiconv\.so$$' ; then echo \-liconv; else echo; fi)
-+-
-+ $(PROGSENSORSTARGETS): $(PROGSENSORSSOURCES:.c=.ro) lib/$(LIBDEP_FOR_PROGS)
-+-	$(CC) $(EXLDFLAGS) -o $@ $(PROGSENSORSSOURCES:.c=.ro) $(LIBICONV) -Llib -lsensors -lm
-++	$(CC) $(EXLDFLAGS) -o $@ $(PROGSENSORSSOURCES:.c=.ro) -Llib -lsensors -lm
-+ 
-+ all-prog-sensors: $(PROGSENSORSTARGETS)
-+ user :: all-prog-sensors
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
