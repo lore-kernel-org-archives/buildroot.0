@@ -1,30 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 20:28:57 +0200
-Subject: [Buildroot] [PATCH 1/1] bzip2: install shared library for the
- host
-In-Reply-To: <1404993626-32112-1-git-send-email-david.bachelart@bbright.com>
-References: <1404993626-32112-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20140715202857.20dbe624@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Jul 2014 15:31:44 -0300
+Subject: [Buildroot] [PATCH 1/1] PHP-FPM support
+In-Reply-To: <1405447663-2109-1-git-send-email-jordi.llonch@rochsystems.com>
+References: <1405447663-2109-1-git-send-email-jordi.llonch@rochsystems.com>
+Message-ID: <53C57390.3010809@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Bachelart,
+On 07/15/2014 03:07 PM, Jordi Llonch wrote:
 
-On Thu, 10 Jul 2014 14:00:26 +0200, David Bachelart wrote:
-> libbz2.so was explicitly built for the host, but was not installed. Install it.
-> 
-> Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-> ---
->  package/bzip2/bzip2.mk |    2 ++
->  1 file changed, 2 insertions(+)
+> Signed-off-by: Jordi Llonch <jordi.llonch@rochsystems.com>
 
-Applied, thanks!
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Next time use a friendlier subject for the patch like "php: add FPM
+support" :)
+Thanks.
+Regards.
