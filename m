@@ -1,39 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 20:53:41 +0200
-Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
-In-Reply-To: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20140715205341.77237719@free-electrons.com>
+Date: Tue, 15 Jul 2014 20:54:19 +0200
+Subject: [Buildroot] [PATCH 2/2] statserial: don't link against legacy
+ curses
+In-Reply-To: <1404493381-24414-3-git-send-email-gustavo@zacarias.com.ar>
+References: <1404493381-24414-1-git-send-email-gustavo@zacarias.com.ar>
+ <1404493381-24414-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140715205419.018fa7ca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+Dear Gustavo Zacarias,
 
-On Tue, 15 Jul 2014 15:26:34 -0300, Ezequiel Garcia wrote:
-> It's often desirable to specify a list of patches, in addition to the current
-> support to pass a directory full of uboot-*.patch files. This matches the
-> option currently available for specifying Linux patches, except this commit
-> doesn't add the URL option. Relying on URLs is fragile and makes a build hard
-> to reproduce.
+On Fri,  4 Jul 2014 14:03:01 -0300, Gustavo Zacarias wrote:
+> Link against libncurses instead of the legacy libcurses.
 > 
-> U-Boot is as special as Linux, in the sense that it needs to be customized more
-> often than not, so having a flexible mechanism is useful.
-> 
-> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  Config.in.legacy     | 14 ++++++++++++++
->  boot/uboot/Config.in | 11 ++++++-----
->  boot/uboot/uboot.mk  | 12 ++++++++----
->  3 files changed, 28 insertions(+), 9 deletions(-)
+>  package/statserial/statserial-01-ncurses-link.patch | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+>  create mode 100644 package/statserial/statserial-01-ncurses-link.patch
 
-We now have BR2_GLOBAL_PATCH_DIR, so I believe that what we would
-recommend to use from now on. We have even been talking about removing
-the Linux-specific and U-Boot specific patching config options.
-
-Best regards,
+Applied, thanks. I was going to say "and please send upstream", but
+then I realized that there is pretty no upstream for statserial...
 
 Thomas
 -- 
