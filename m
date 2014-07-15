@@ -1,50 +1,60 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Tue, 15 Jul 2014 18:24:47 +0200
-Subject: [Buildroot] [PATCH 1/2] qt5declarative: Reduce dependencies to
-	GLes2 only
-In-Reply-To: <201407151703.27792.fatih.asici@gmail.com>
-References: <533A8F6C.1010606@gmail.com> <53C4E59E.4030103@gmail.com>
- <201407151703.27792.fatih.asici@gmail.com>
-Message-ID: <2694981.viQ6KxKrnD@desktop-057>
+From: Sagaert Johan <sagaert.johan@skynet.be>
+Date: Tue, 15 Jul 2014 18:29:00 +0200
+Subject: [Buildroot] [PATCH 1/1] Add a filesystem option so a device can
+	be booted over NFS.
+In-Reply-To: <CANxTyt6fmkYhRkES85MXWGEPwFc99r_Dioup8_Wds9hbh+WJNQ@mail.gmail.com>
+References: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
+ <CANxTyt6fmkYhRkES85MXWGEPwFc99r_Dioup8_Wds9hbh+WJNQ@mail.gmail.com>
+Message-ID: <BA017C088C5B444E90DF48EFA816C418@JohanW7>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tuesday 15 July 2014 17:03:27 Fatih A??c? wrote:
-> On Tuesday 15 July 2014 11:26:06 Hadrien Boutteville wrote:
-> > Hello Fatih,
-> 
-> Hi,
-> 
-> > I'm mainlining some pending patches for the Google Summer of Code, and
-> > for this one I'm not really able to say if it is correct or not. It
-> > seems coherent for me but I'm not a Qt5 expert.
-> > 
-> > As Thomas said, since you are our Qt5 expert have you some comments on
-> > this patch?
-> 
-> Sorry for the late reply. Totally forgot this mail.
-... and I totally forgot I sent it. 
+ 
 
-I initially sent it to Marco Trapanese in order to help him (may be I should 
-have send it privately in order to not appear in Patchwork?).
+-----Oorspronkelijk bericht-----
+Van: Danomi Manchego [mailto:danomimanchego123 at gmail.com] 
+Verzonden: dinsdag 15 juli 2014 16:46
+Aan: Sagaert Johan
+CC: buildroot
+Onderwerp: Re: [Buildroot] [PATCH 1/1] Add a filesystem option so a device can be booted over NFS.
 
-Some work (as Fatih describe below) is necessary before it could be mainlined.
+On Tue, Jul 15, 2014 at 9:21 AM, Sagaert Johan <sagaert.johan@skynet.be> wrote:
+> +define ROOTFS_NFS_CMD
+> +       rm -rf $(TARGET_ROOTFS_NFS_PATH) ;\
+> +       mkdir -p  $(TARGET_ROOTFS_NFS_PATH) ;\
+> +       cp -r $(TARGET_DIR)/* $(TARGET_ROOTFS_NFS_PATH) endef
+> +
+> +$(eval $(call ROOTFS_TARGET,nfs))
 
-> Desktop opengl and opengles2 implementations can be available at the same
-> time. For -opengl option, we should allow the user to select the api. Each
-> implementation option must depend on only the related library (_HAS_LIBGL
-> for desktop and _HAS_LIBGLES for es2).
-> 
-> _QT5BASE_EGLFS must only depend on _HAS_LIBEGL. If selected, "-eglfs" must
-> be passed.
-> 
-> At this time, Qt5OpenGL library is installed if _QT5BASE_EGLFS is selected.
-> This must be changed, too. It should be installed to target, if (_HAS_LIBGL
-> || _HAS_LIBGLES).
+As Baruch suggested, using "cp" for this purpose is no good.  Refer to the buildroot manual and the warning file installed to the
+target dir:
 
+http://buildroot.uclibc.org/downloads/manual/manual.html#_nfs_boot
+http://git.buildroot.net/buildroot/tree/support/misc/target-dir-warning.txt
 
---
-J?r?me Pouiller
+>Instead, consider simply making a post-build script that does the un-tar for you. Maybe something like this:
+>
+>    #!/bin/sh
+>
+>    NFSROOT=${NFS_SHARE:-/srv/my_nfsroot}
+>
+>    mkdir -p $NFS_SHARE
+>    sudo tar -xavf ${BASE_DIR}/images.rootfs.tar -C $NFSROOT
+
+>(Not actually tested.)
+
+>Then no patch is needed.
+>Danomi -
+
+Hi all
+
+Right, until now I always used a post script that extracted the rootfs.tar.
+So I tought I could integrate this into br.
+
+And yes, I run linux in a vm and am to lazy to create a user and use sudo,
+so on my virtual linux machine, I am always logged in as root.
+
+Regards, Johan
