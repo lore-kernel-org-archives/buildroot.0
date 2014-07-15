@@ -1,49 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 23:10:20 +0200
-Subject: [Buildroot] [git commit] imx6sololiteevk: bump kernel version to
-	3.10.17
-Message-ID: <20140715211145.11DD69CE7A@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 23:11:15 +0200
+Subject: [Buildroot] [git commit] nitrogen6x: include .dtb files for
+	compatible variants
+Message-ID: <20140715211145.1FC0C9D24C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4c516e21ff94d86b3b11394d182c236a44789e35
+commit: http://git.buildroot.net/buildroot/commit/?id=9ba15d96244656163198c3a215bd44a68b3cd62f
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-Cc: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+The Boundary Devices Nitrogen6X comes in a number of variants
+with different processors, and the kernel and userspace is
+compatible with the SABRE Lite (BD-SL-i.MX6), Nitrogen6_Lite,
+and Nitrogen6_Max boards.
+
+This patch adds support for these boards through the
+corresponding .dtb files.
+
+Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/freescale_imx6sololiteevk_defconfig |   12 ++++++++----
- 1 files changed, 8 insertions(+), 4 deletions(-)
+ configs/nitrogen6x_defconfig |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 997d44f..f8ecc7b 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -9,15 +9,19 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
--BR2_LINUX_KERNEL_DEFCONFIG="imx6s"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sl-evk"
- 
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="mx6sl_evk"
-+BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.0.35_4.1.0"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.17_1.0.0_ga"
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index da2a7e8..082b1f5 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -26,4 +26,4 @@ BR2_LINUX_KERNEL_DEFCONFIG="nitrogen6x"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-nitrogen6x"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_max imx6dl-nitrogen6x imx6q-nitrogen6_max imx6q-nitrogen6x imx6q-sabrelite"
