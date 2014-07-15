@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 23:09:38 +0200
-Subject: [Buildroot] [git commit] package/gpu-viv-bin-mx6q: only available
-	for i.MX6Q
-Message-ID: <20140715211144.C64579CE7A@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 23:10:00 +0200
+Subject: [Buildroot] [git commit] libfslparser: bump to version 3.0.11
+Message-ID: <20140715211144.E71EB9CE7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=0a14b3bee8f1384e9775c5095ac9416926b640e7
+commit: http://git.buildroot.net/buildroot/commit/?id=5cfdce3ca0094a6dd8dcabfd4f1948485501d314
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This package version is now independent from freescale-imx package.
+
 Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-[yann.morin.1998 at free.fr: split from the previous patch]
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Hadrien Boutteville <hadrien.boutteville@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freescale-imx/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libfslparser/libfslparser.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index f87efcb..0626a74 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -44,6 +44,8 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
+index 0d92e02..d52b151 100644
+--- a/package/libfslparser/libfslparser.mk
++++ b/package/libfslparser/libfslparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- source "package/freescale-imx/imx-lib/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
-+if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- source "package/freescale-imx/gpu-viv-bin-mx6q/Config.in"
-+endif
- 
- endif
+-LIBFSLPARSER_VERSION = $(FREESCALE_IMX_VERSION)
++LIBFSLPARSER_VERSION = 3.0.11
+ LIBFSLPARSER_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLPARSER_SOURCE = libfslparser-$(LIBFSLPARSER_VERSION).bin
+ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
