@@ -1,114 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 15 Jul 2014 16:52:13 +0300
-Subject: [Buildroot] [PATCH 1/1] Add a filesystem option so a device can
- be booted over NFS.
-In-Reply-To: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
-References: <1405430476-29925-1-git-send-email-sagaert.johan@skynet.be>
-Message-ID: <20140715135213.GG2138@tarshish>
+From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Tue, 15 Jul 2014 17:03:27 +0300
+Subject: [Buildroot] [PATCH 1/2] qt5declarative: Reduce dependencies to
+	GLes2 only
+In-Reply-To: <53C4E59E.4030103@gmail.com>
+References: <533A8F6C.1010606@gmail.com> <20140420111843.340cb627@skate>
+ <53C4E59E.4030103@gmail.com>
+Message-ID: <201407151703.27792.fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Sagaert,
+On Tuesday 15 July 2014 11:26:06 Hadrien Boutteville wrote:
+> Hello Fatih,
 
-On Tue, Jul 15, 2014 at 03:21:16PM +0200, Sagaert Johan wrote:
-> This options allows specifying a directory where the target rootfs is
-> copied to so it can be used to boot a device over NFS.
+Hi,
+
+> I'm mainlining some pending patches for the Google Summer of Code, and
+> for this one I'm not really able to say if it is correct or not. It
+> seems coherent for me but I'm not a Qt5 expert.
 > 
-> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
-> ---
->  Makefile         |  5 +++++
->  fs/Config.in     |  1 +
->  fs/nfs/Config.in | 13 +++++++++++++
->  fs/nfs/nfs.mk    | 16 ++++++++++++++++
->  4 files changed, 35 insertions(+)
->  create mode 100644 fs/nfs/Config.in
->  create mode 100644 fs/nfs/nfs.mk
-> 
-> diff --git a/Makefile b/Makefile
-> index dcbf2b3..4c7a707 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -833,6 +833,11 @@ clean:
->  	rm -rf $(TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) \
->  		$(BUILD_DIR) $(BASE_DIR)/staging \
->  		$(LEGAL_INFO_DIR)
-> +ifeq ($(BR2_TARGET_ROOTFS_NFS),y)
-> +		if [ -d $(TARGET_ROOTFS_NFS_PATH) ]; then \
-> +			rm -rf $(TARGET_ROOTFS_NFS_PATH) ;\
-> +		fi
+> As Thomas said, since you are our Qt5 expert have you some comments on
+> this patch?
 
-Too many indentation tabs here.
+Sorry for the late reply. Totally forgot this mail.
 
-> +endif
->  
->  distclean: clean
->  ifeq ($(DL_DIR),$(TOPDIR)/dl)
-> diff --git a/fs/Config.in b/fs/Config.in
-> index 5853113..aa1460b 100644
-> --- a/fs/Config.in
-> +++ b/fs/Config.in
-> @@ -7,6 +7,7 @@ source "fs/ext2/Config.in"
->  source "fs/initramfs/Config.in"
->  source "fs/iso9660/Config.in"
->  source "fs/jffs2/Config.in"
-> +source "fs/nfs/Config.in"
->  source "fs/romfs/Config.in"
->  source "fs/squashfs/Config.in"
->  source "fs/tar/Config.in"
-> diff --git a/fs/nfs/Config.in b/fs/nfs/Config.in
-> new file mode 100644
-> index 0000000..cf32619
-> --- /dev/null
-> +++ b/fs/nfs/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_TARGET_ROOTFS_NFS
-> +	bool "create NFS boot directory"
-> +	help
-> +	  Creates a directory that contains the rootfs for booting over NFS.
-> +
-> +if BR2_TARGET_ROOTFS_NFS
-> +config BR2_TARGET_ROOTFS_NFS_PATH
-> +	string "path to the directory used for booting over NFS"
-> +	default "~/nfsrootfs"
-> +	help
-> +	  Path to the directory used for booting over NFS.
-> +	  (This should also be added to your /etc/exports file.)
-> +endif
-> diff --git a/fs/nfs/nfs.mk b/fs/nfs/nfs.mk
-> new file mode 100644
-> index 0000000..003ce71
-> --- /dev/null
-> +++ b/fs/nfs/nfs.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# create a directory for booting the device from an NFS.
-> +#
-> +################################################################################
-> +
-> +TARGET_ROOTFS_NFS_PATH := $(call qstrip,$(BR2_TARGET_ROOTFS_NFS_PATH))
-> +
-> +define ROOTFS_NFS_CMD
-> +	rm -rf $(TARGET_ROOTFS_NFS_PATH) ;\
-> +	mkdir -p  $(TARGET_ROOTFS_NFS_PATH) ;\
-> +	cp -r $(TARGET_DIR)/* $(TARGET_ROOTFS_NFS_PATH)
+Desktop opengl and opengles2 implementations can be available at the same 
+time. For -opengl option, we should allow the user to select the api. Each 
+implementation option must depend on only the related library (_HAS_LIBGL for 
+desktop and _HAS_LIBGLES for es2).
 
-This doesn't look right. What about creating device nodes and SUID binaries? 
-You must be root for that, $(TARGET_DIR) doesn't carry this information 
-(fakeroot does that), and even if it did cp doesn't preserve these attributes. 
-A better approach would be to extract a generated tar image, but you still 
-must be root for that.
+_QT5BASE_EGLFS must only depend on _HAS_LIBEGL. If selected, "-eglfs" must be 
+passed.
 
-baruch
+At this time, Qt5OpenGL library is installed if _QT5BASE_EGLFS is selected. 
+This must be changed, too. It should be installed to target, if (_HAS_LIBGL || 
+_HAS_LIBGLES).
 
-> +endef
-> +
-> +$(eval $(call ROOTFS_TARGET,nfs))
+I will prepare a patch to fix all these issues.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards,
+Fatih
