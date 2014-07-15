@@ -1,67 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 22:54:15 +0200
-Subject: [Buildroot] [PATCH] Add target-clean makefile target
-In-Reply-To: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20140715225415.08f5a5a6@free-electrons.com>
+Date: Tue, 15 Jul 2014 22:56:23 +0200
+Subject: [Buildroot] [git commit] Makefile: do not purge locale-archive from
+	target
+Message-ID: <20140715205632.7875C9D244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+commit: http://git.buildroot.net/buildroot/commit/?id=201adefb6e17e30d8e66b3d673c58cfd17ac1b5a
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Jun 2014 12:29:11 +0200, Angelo Compagnucci wrote:
-> This makefile target wipes the target folder and forces buildroot into rebuild it.
-> It's useful when you have changed the list of packages and the target
-> tree remains out of sync keeping old installed packages no longer needed.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index 14fca2b..83dceb7 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -835,6 +835,11 @@ clean:
->  		$(BUILD_DIR) $(BASE_DIR)/staging \
->  		$(LEGAL_INFO_DIR)
->  
-> +target-clean:
-> +	rm -rf $(TARGET_DIR)
-> +	find $(BUILD_DIR) -name ".stamp_target_installed" -exec rm {} \;
-> +	rm $(BUILD_DIR)/.root
-> +
->  distclean: clean
->  ifeq ($(DL_DIR),$(TOPDIR)/dl)
->  	rm -rf $(DL_DIR)
-> @@ -848,6 +853,7 @@ help:
->  	@echo 'Cleaning:'
->  	@echo '  clean                  - delete all files created by build'
->  	@echo '  distclean              - delete all non-source files (including .config)'
-> +	@echo '  target-clean           - delete all target files and forces reinstall'
->  	@echo
->  	@echo 'Build:'
->  	@echo '  all                    - make world'
+The rules to purge unwanted locales from the target also removed
+the locale-archive file from /usr/lib/locale which contains the
+locale definitions explicitly generated for the target.
 
-Thanks for this patch. However, until now, we've always rejected
-similar patches, because they are potentially dangerous for users.
-Users might be lead to think that they can do some changes in
-"menuconfig", then do "make target-clean all" and get the updated
-rootfs without rebuilding everything. This is obviously completely
-wrong if the configuration of some packages is changed, if some
-libraries are added/removed from the build, etc.
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Therefore, I'm tempted to also reject this patch, but I'll wait for
-other Buildroot developers to give their opinion.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Makefile b/Makefile
+index b3bd91e..1af51de 100644
+--- a/Makefile
++++ b/Makefile
+@@ -538,7 +538,7 @@ LOCALE_NOPURGE = $(call qstrip,$(BR2_ENABLE_LOCALE_WHITELIST))
+ 
+ define PURGE_LOCALES
+ 	rm -f $(LOCALE_WHITELIST)
+-	for i in $(LOCALE_NOPURGE); do echo $$i >> $(LOCALE_WHITELIST); done
++	for i in $(LOCALE_NOPURGE) locale-archive; do echo $$i >> $(LOCALE_WHITELIST); done
+ 
+ 	for dir in $(wildcard $(addprefix $(TARGET_DIR),/usr/share/locale /usr/share/X11/locale /usr/man /usr/share/man /usr/lib/locale)); \
+ 	do \
