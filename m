@@ -1,34 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 18:04:19 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-gfx: add patch to fix build failure
-	with es5.x
-In-Reply-To: <1405439655-5843-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1405439655-5843-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20140715180419.0ad269fd@free-electrons.com>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Tue, 15 Jul 2014 18:24:47 +0200
+Subject: [Buildroot] [PATCH 1/2] qt5declarative: Reduce dependencies to
+	GLes2 only
+In-Reply-To: <201407151703.27792.fatih.asici@gmail.com>
+References: <533A8F6C.1010606@gmail.com> <53C4E59E.4030103@gmail.com>
+ <201407151703.27792.fatih.asici@gmail.com>
+Message-ID: <2694981.viQ6KxKrnD@desktop-057>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Hadrien Boutteville,
+On Tuesday 15 July 2014 17:03:27 Fatih A??c? wrote:
+> On Tuesday 15 July 2014 11:26:06 Hadrien Boutteville wrote:
+> > Hello Fatih,
+> 
+> Hi,
+> 
+> > I'm mainlining some pending patches for the Google Summer of Code, and
+> > for this one I'm not really able to say if it is correct or not. It
+> > seems coherent for me but I'm not a Qt5 expert.
+> > 
+> > As Thomas said, since you are our Qt5 expert have you some comments on
+> > this patch?
+> 
+> Sorry for the late reply. Totally forgot this mail.
+... and I totally forgot I sent it. 
 
-On Tue, 15 Jul 2014 17:54:15 +0200, Hadrien Boutteville wrote:
+I initially sent it to Marco Trapanese in order to help him (may be I should 
+have send it privately in order to not appear in Patchwork?).
 
-> +--- a/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
-> ++++ b/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
-> +@@ -177,7 +177,7 @@
-> + #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
-> + #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->manager : NULL
-> + #else
-> +-#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->output->manager : NULL
-> ++#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->src->manager : NULL
+Some work (as Fatih describe below) is necessary before it could be mainlined.
 
-Isn't this going to break with some kernel versions? I believe an
-additional condition on LINUX_VERSION_CODE might be needed, no?
+> Desktop opengl and opengles2 implementations can be available at the same
+> time. For -opengl option, we should allow the user to select the api. Each
+> implementation option must depend on only the related library (_HAS_LIBGL
+> for desktop and _HAS_LIBGLES for es2).
+> 
+> _QT5BASE_EGLFS must only depend on _HAS_LIBEGL. If selected, "-eglfs" must
+> be passed.
+> 
+> At this time, Qt5OpenGL library is installed if _QT5BASE_EGLFS is selected.
+> This must be changed, too. It should be installed to target, if (_HAS_LIBGL
+> || _HAS_LIBGLES).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+
+--
+J?r?me Pouiller
