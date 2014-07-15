@@ -1,32 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Jul 2014 22:13:03 +0200
-Subject: [Buildroot] [git commit] at: add license information
-Message-ID: <20140715201907.CCB289D244@busybox.osuosl.org>
+Date: Tue, 15 Jul 2014 22:20:29 +0200
+Subject: [Buildroot] [PATCHv3 1/2] linux: add option to explicitly
+ specify the kernel image name
+In-Reply-To: <20140711124922.GA25220@waldemar-brodkorb.de>
+References: <20140711124922.GA25220@waldemar-brodkorb.de>
+Message-ID: <20140715222029.32f336dd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=58b748dc480f79f49a341ba81defc7fe7425adc9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Waldemar Brodkorb,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/at/at.mk |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+On Fri, 11 Jul 2014 14:49:22 +0200, Waldemar Brodkorb wrote:
+> For example the upcoming qemu-xtensa patch is using this feature,
+> where the target is called "zImage", but the resulting kernel name
+> is "Image.elf".
+> 
+> ---
+> Changes v2 -> v3:
+>   - improve subject (suggested by Thomas P.)
+>   - LINUX_IMAGE_NAME defaults to LINUX_TARGET_NAME (suggested by Yann)
+>   - improve help text (suggested by Yann)
+> Changes v1 -> v2:
+>   - add comment about default value (suggested by Arnout)
+>   - reorder default value for LINUX_TARGET_NAME (suggested by Arnout)
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  linux/Config.in |   10 ++++++++++
+>  linux/linux.mk  |   10 +++++++---
+>  2 files changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/package/at/at.mk b/package/at/at.mk
-index 0fe5b9a..f4d899c 100644
---- a/package/at/at.mk
-+++ b/package/at/at.mk
-@@ -11,6 +11,8 @@ AT_SITE = $(BR2_DEBIAN_MIRROR)/debian/pool/main/a/at
- AT_MAKE = $(MAKE1)
- AT_AUTORECONF = YES
- AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex) host-bison host-flex
-+AT_LICENSE = GPLv2+, GPLv3+, ISC
-+AT_LICENSE_FILES = Copyright COPYING
- 
- AT_CONF_OPT = \
-         --with-jobdir=/var/spool/cron/atjobs \
+Thanks, I've applied this patch and the one adding the qemu
+xtensa defconfig. However, regarding this second one, I'd really like
+to see a followup patch adding a way of downloading the toolchain
+overlay file, instead of having it inside Buildroot.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
