@@ -1,110 +1,85 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 16 Jul 2014 19:42:11 +0200
-Subject: [Buildroot] [PATCH] perl-net-ssleay: fix configure
-In-Reply-To: <53C61864.4080003@mind.be>
-References: <1405381684-3844-1-git-send-email-yann.morin.1998@free.fr>
- <53C61864.4080003@mind.be>
-Message-ID: <CAB0FRss71Yq479qyc02bZXx+fvtVCXkFwAC0k0JLkeQxFuK7iQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Jul 2014 19:47:56 +0200
+Subject: [Buildroot] [git commit] exim: get rid of the convert the custom
+	config file boolean knob
+Message-ID: <20140716174813.AEA159D255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-07-16 8:15 GMT+02:00 Arnout Vandecappelle <arnout@mind.be>:
->  Hi Yann, Francois,
->
-> On 15/07/14 01:48, Yann E. MORIN wrote:
->> From: Francois Perrad <fperrad@gmail.com>
->>
->> When TARGET_LDFLAGS contains more than one option, the generated
->> Makefile contains this definition of LDDLFLAGS:
->>         LDDLFLAGS = '--option-1 --option-2'
->>
->> Which when passed to gcc is interpreted as a single option, and gcc
->> (rightfully) barfs on it, like with:
->>         arm-linux-gnueabihf-gcc: error: unrecognized command line
->>         option ?-shared -g?
->>
->> This is because perl-net-ssleay's buildsystem is really completely
->> brain-damaged. Other perl extensions do not behave like that, and
->> instead are doing the only same thing to do: not add single quotes
->> around the definition, and just use what they were provided for
->> lddlflags.
->>
->> So, just do the same for perl-net-ssleay. Since tweaking (yet once
->> more) their buildsystem is too complex, we just use a post-configure
->> hook to fix up the mess, by removing single quotes around the definition
->> of LDDLFLAGS.
->
->  Are you sure that it is only perl-net-ssleay that is broken in this way, and
-> not perl-xml-libxml?
->
->  I tried to run (without this patch)
->
-> make perl-net-ssleay BR2_TARGET_LDFLAGS=-g
->
-> and that worked just fine. So I suspect the problem is in the system's MakeMaker
-> package, and not in perl-net-ssleay itself. If that is the case, you should see
-> the same problem for perl-xml-libxml (because it also uses the LDDLFLAGS, while
-> other packages don't because they don't build any C code).
->
->  I'm not sure what the real solution would be. Perhaps add a host-perl-makemaker
-> package and depend on that?
->
+commit: http://git.buildroot.net/buildroot/commit/?id=50f8fbbf057d63647db5bc99d63810bf17a84353
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Net-SSLeay has a Makefile.PL, but it doesn't use to run the classic
-ExtUtils-MakeMaker,
-it runs a local copy of Module-Install, see in inc/
+The current implementation causes troubles with the autobuilders when they
+set BR2_PACKAGE_EXIM_CUSTOM_CONFIG=y, because in these cases
+BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE is empty, and this is a configuration
+error.
 
-Fran?ois
+Solve the problem by entirely reomving the BR2_PACKAGE_EXIM_CUSTOM_CONFIG
+boolean knob. Activation of the custon configuration file is now detected by
+the fact that BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE is non-empty.
 
->  Regards,
->  Arnout
->
->
->>
->> Note: if only one option is specified, no single quotes are added,
->> but out hook is a no-op in this case.
->>
->> See also:
->>     http://lists.busybox.net/pipermail/buildroot/2014-July/101782.html
->> and the previous message for even more entertainment. ;-)
->>
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> [me: find the real cause of the issue, tweak the sed expression to not
->>  force -shared and instead just trim the single quotes, enhance commit
->>  log]
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> ---
->>  package/perl-net-ssleay/perl-net-ssleay.mk | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->> diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
->> index 4a362fb..6b21eb2 100644
->> --- a/package/perl-net-ssleay/perl-net-ssleay.mk
->> +++ b/package/perl-net-ssleay/perl-net-ssleay.mk
->> @@ -15,4 +15,9 @@ PERL_NET_SSLEAY_LICENSE_FILES = LICENSE
->>  # suffers from: don't search for openssl, they pick the host-system one.
->>  PERL_NET_SSLEAY_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
->>
->> +define PERL_NET_SSLEAY_FIX_MAKEFILE
->> +     $(SED) "s/^LDDLFLAGS = '\(.*\)'/LDDLFLAGS = \1/" $(@D)/Makefile
->> +endef
->> +PERL_NET_SSLEAY_POST_CONFIGURE_HOOKS += PERL_NET_SSLEAY_FIX_MAKEFILE
->> +
->>  $(eval $(perl-package))
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+  http://autobuild.buildroot.org/results/0db/0db54c555f6c7e635ebf99f86b3f91dc31e441f0/
+
+[Thomas: slightly improve commit log.]
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: bernd.kuhls at t-online.de
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/exim/Config.in |   18 +++++++-----------
+ package/exim/exim.mk   |    5 +----
+ 2 files changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/package/exim/Config.in b/package/exim/Config.in
+index af54acb..bd4ef1f 100644
+--- a/package/exim/Config.in
++++ b/package/exim/Config.in
+@@ -11,20 +11,16 @@ config BR2_PACKAGE_EXIM
+ 
+ if BR2_PACKAGE_EXIM
+ 
+-config BR2_PACKAGE_EXIM_CUSTOM_CONFIG
+-	bool "Use a custom configuration file"
+-	help
+-	  By default Buildroot generates configuration file for exim with
+-	  reasonable settings.
+-	  Enable this option if you want to override the configuration file
+-	  generated by Buildroot with a customized file. Then set the path
+-	  to your configuration file in BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE.
+-
+ config BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE
+ 	string "Custom configuration file"
+-	depends on BR2_PACKAGE_EXIM_CUSTOM_CONFIG
+ 	help
+-	  Specify a file to use as the exim configuration file.
++	  By default, when this option is left empty, Buildroot
++	  generates a configuration file for exim with reasonable
++	  settings.
++
++	  If you want to override the configuration file generated by
++	  Buildroot with a customized file, set here the path to your
++	  configuration file with this option.
+ 
+ 	  This file shall comply with the syntax defined in the exim
+ 	  documentation (http://www.exim.org/docs.html).
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 2e51a0d..8be8e75 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -57,10 +57,7 @@ define EXIM_CONFIGURE_TOOLCHAIN
+ 	$(call exim-config-add,HOSTCFLAGS,$(HOSTCFLAGS))
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_EXIM_CUSTOM_CONFIG),y)
+-ifeq ($(call qstrip,$(BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE)),)
+-$(error No exim configuration file specified, check your BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE setting)
+-endif
++ifneq ($(call qstrip,$(BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE)),)
+ define EXIM_CONFIGURE_CMDS
+ 	$(EXIM_USE_CUSTOM_CONFIG_FILE)
+ 	$(EXIM_CONFIGURE_TOOLCHAIN)
