@@ -1,37 +1,42 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Wed, 16 Jul 2014 14:25:08 +0200
-Subject: [Buildroot] [RFC 0/9] Add libgtk3 and bump webkit to version
- 2.4.3
-In-Reply-To: <20140715232113.148f8c94@free-electrons.com>
-References: <1404827832-1101-1-git-send-email-hadrien.boutteville@gmail.com>
- <20140715232113.148f8c94@free-electrons.com>
-Message-ID: <53C66F24.4070409@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Jul 2014 15:25:04 +0200
+Subject: [Buildroot] git binary diffs are not supported
+In-Reply-To: <53C665B1.6050609@posteo.de>
+References: <53C665B1.6050609@posteo.de>
+Message-ID: <20140716152504.4bd10dbb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear J?rg Krause,
 
-On Tue, 15 Jul 2014 23:21:13 +0200, Thomas Petazzoni wrote:
-> Dear Hadrien Boutteville,
-> 
-> On Tue,  8 Jul 2014 15:57:03 +0200, Hadrien Boutteville wrote:
-> 
->> This series mainly does two things: add libgtk3 and bump webkit.
->>
->>  - 1..5: requirements and dependencies for libgtk3
->>  - 6: add libgtk3
->>  - 7: bump webkit
->>  - 8: is required by Midori
->>  - 9: bump Midori to test WebKit 2.4.3
-> 
-> I've applied patches 1, 2 and 3 of your series. For the rest of the
-> series, I'm waiting for some more review. But at least having the
-> libglib and pango bumps applied will give them some testing in the
-> autobuilders. Get ready to fix issues if some appears.
+On Wed, 16 Jul 2014 13:44:49 +0200, J?rg Krause wrote:
 
-Sure, thanks!
+> I am trying to apply a git binary patch to add a firmware binary blob to 
+> the linux kernel firmware directory. I am using git format-patch 
+> --binary -M -n -s to create the patch and copy it to the global patch 
+> directory. Trying to build linux fails while patching with the following 
+> error message:
+> 
+>     git binary diffs are not supported.
+> 
+> Do I missed something? I would be glad for any advice!
 
-Hadrien
+We don't use git to apply patches when building packages in Buildroot,
+we use the plain old patch, which indeed doesn't support binary diffs.
+Not sure how to solve this situation. Does your firmware really needs
+to be part of the kernel build process? Can't it be loaded from the
+filesystem at boot time, as is done for all the firmwares in the
+linux-firmware package? If that was possible, then you would simply
+have to create a simple Buildroot package that installs your firmware
+into /lib/firmware/.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
