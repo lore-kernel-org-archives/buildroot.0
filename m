@@ -1,37 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 00:34:47 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 Jul 2014 00:40:33 +0200
 Subject: [Buildroot] [PATCH] package/libconfuse: switch to the new
 	upstream
 In-Reply-To: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
 References: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140716223447.GK9252@free.fr>
+Message-ID: <53C6FF61.2070100@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
-
-On 2014-07-17 00:32 +0200, Yann E. MORIN spake thusly:
+On 17/07/14 00:32, Yann E. MORIN wrote:
 > From: Alvaro Gamez <alvaro.gamez@hazent.com>
 > 
 > libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
 > So, just follow suite.
+
+ suit (pronounced [set]), not suite (pronounced [swi.t]).
+
 > 
 > Needs a bit of a hack so gettextize + autoreconf does not step on each
 > other's toes. See comment in the patch.
-
-I forgot to say that this patch should go in after the gettextize series
-I posted earlier, since it relies on the nes GETTEXTIZ variable.
-
-Regards,
-Yann E. MORIN.
-
+> 
 > Based on a patch by: Alvaro Gamez <alvaro.gamez@hazent.com>
+
+ Kind of unnecessary since you kept him as author.
+
 > 
 > [me: fix gettextizing, write commit log]
+
+ Once it's committed, it won't be clear anymore who the 'me' is.
+
+
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ You should keep Alvaro's SoB. Well, except that he didn't sign it off :-)
+Alvaro, can you provide your SoB?
+
+
+ But it basically looks good to me :-)
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
 >  .../libconfuse-0000-fix-configure-ac.patch         | 27 ++++++++++++++++++++++
@@ -96,14 +110,13 @@ Yann E. MORIN.
 > +
 >  $(eval $(autotools-package))
 >  $(eval $(host-autotools-package))
-> -- 
-> 1.9.1
 > 
 
+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
