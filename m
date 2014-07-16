@@ -1,228 +1,114 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 00:05:15 +0200
-Subject: [Buildroot] [PATCH v2] ejabberd: new package
-In-Reply-To: <1405526227-4277-1-git-send-email-johan.oudinet@gmail.com>
-References: <1405526227-4277-1-git-send-email-johan.oudinet@gmail.com>
-Message-ID: <20140716220515.GI9252@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 17 Jul 2014 00:08:54 +0200
+Subject: [Buildroot] Migrating libconfuse package from .tar.gz to github
+In-Reply-To: <CAM+bi4vVkn-TivZymaXuKswCLfFewXnAd1L-c-O9o=h7L3VXqg@mail.gmail.com>
+References: <CAM+bi4vVkn-TivZymaXuKswCLfFewXnAd1L-c-O9o=h7L3VXqg@mail.gmail.com>
+Message-ID: <53C6F7F6.40702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
-
-On 2014-07-16 17:57 +0200, Johan Oudinet spake thusly:
-> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-
-Thanks for this follow-up!
-
-I planned on reviewing it tonight, but I had a lot of connection
-issues at home, so I got side-tracked with those issues...
-
-Anyway, I'm interested in this patch, so I've queued it for review.
-Don't worry, it's not forgotten. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v1 -> v2:
->   - Run ejabberd as ejabberd user instead of root.
-> ---
->  package/Config.in                 |  1 +
->  package/ejabberd/Config.in        | 13 +++++++
->  package/ejabberd/check-erlang-lib | 48 +++++++++++++++++++++++
->  package/ejabberd/ejabberd.mk      | 81 +++++++++++++++++++++++++++++++++++++++
->  4 files changed, 143 insertions(+)
->  create mode 100644 package/ejabberd/Config.in
->  create mode 100755 package/ejabberd/check-erlang-lib
->  create mode 100644 package/ejabberd/ejabberd.mk
+On 10/07/14 09:55, Alvaro Gamez wrote:
+> Hi there!
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index b363a7c..a50416e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -937,6 +937,7 @@ endif
->  	source "package/dnsmasq/Config.in"
->  	source "package/dropbear/Config.in"
->  	source "package/ebtables/Config.in"
-> +	source "package/ejabberd/Config.in"
->  	source "package/ethtool/Config.in"
->  	source "package/faifa/Config.in"
->  	source "package/fmc/Config.in"
-> diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
-> new file mode 100644
-> index 0000000..3a2336d
-> --- /dev/null
-> +++ b/package/ejabberd/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_EJABBERD
-> +       bool "ejabberd"
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_ERLANG
-> +       select BR2_PACKAGE_LIBYAML
-> +       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-> +       select BR2_PACKAGE_EXPAT
-> +       help
-> +	 Ejabberd is a Jabber/XMPP instant messaging server, written
-> +	 in Erlang/OTP. Among other features, ejabberd is
-> +	 cross-platform, fault-tolerant, clusterable and modular.
-> +
-> +	 http://www.ejabberd.im
-> diff --git a/package/ejabberd/check-erlang-lib b/package/ejabberd/check-erlang-lib
-> new file mode 100755
-> index 0000000..1a942bb
-> --- /dev/null
-> +++ b/package/ejabberd/check-erlang-lib
-> @@ -0,0 +1,48 @@
-> +#!/bin/sh -e
-> +# Helper to bypass AC_ERLANG_CHECK_LIB
-> +
-> +usage() {
-> +    cat <<EOF
-> +Usage:
-> +	$0 library
-> +Look for Erlang's library in TARGET_DIR/usr/lib/erlang/lib.
-> +
-> +If the library is found, it returns the path to the latest version,
-> +relative to TARGET_DIR. Otherwise, it returns "not found".
-> +
-> +If there are several versions, it returns an error because it does not
-> +know which one Erlang uses.
-> +
-> +EOF
-> +}
-> +
-> +die () {
-> +    echo "$@" >&2
-> +    exit 1
-> +}
-> +
-> +if [ $# -ne 1 ]; then
-> +    usage
-> +    exit 0
-> +else
-> +    library="$1"
-> +fi
-> +
-> +target_dir="${TARGET_DIR:-../../output/target}"
-> +
-> +[ -d "$target_dir" ] || die "TARGET_DIR is not a directory. Please \
-> +specify the TARGET_DIR environment variable."
-> +
-> +case "$(ls -1d -- "$target_dir/usr/lib/erlang/lib/$library-"* | wc -l)" in
-> +    0)
-> +	echo "not found"
-> +	;;
-> +    1)
-> +	echo "$target_dir/usr/lib/erlang/lib/$library-"* \
-> +	    | sed -e "s,^$target_dir,,"
-> +	;;
-> +    *)
-> +	die "Several versions of $library have been found. Please \
-> +	remove the unused ones."
-> +	;;
-> +esac
-> diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-> new file mode 100644
-> index 0000000..ca54e4e
-> --- /dev/null
-> +++ b/package/ejabberd/ejabberd.mk
-> @@ -0,0 +1,81 @@
-> +################################################################################
-> +#
-> +# ejabberd
-> +#
-> +################################################################################
-> +
-> +EJABBERD_VERSION = 14.05
-> +EJABBERD_SITE = $(call github,processone,ejabberd,$(EJABBERD_VERSION))
-> +EJABBERD_LICENSE = GPLv2+
-> +EJABBERD_LICENSE_FILES = COPYING
-> +EJABBERD_DEPENDENCIES =	libyaml expat openssl erlang
-> +
-> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
-> +	EJABBERD_DEPENDENCIES += libiconv
-> +endif
-> +
-> +EJABBERD_ERLANG_LIBS := sasl crypto public_key ssl mnesia inets compiler
-> +
-> +# Do AC_ERLANG_CHECK_LIB job without erlang.
-> +define EJABBERD_SET_LIBS_DIR
-> +	for lib in $(EJABBERD_ERLANG_LIBS); do					\
-> +	  export								\
-> +	    erlang_lib_dir_$$lib="`package/ejabberd/check-erlang-lib $$lib`";	\
-> +	done
-> +endef
-> +
-> +# Set cross-compilation options to the configure called by rebar.
-> +define EJABBERD_FIX_REBAR_CONFIG_SCRIPT
-> +	sed -e "s,./configure,./configure \\	\
-> +	--target=$(GNU_TARGET_NAME) \\		\
-> +	--host=$(GNU_TARGET_NAME) \\		\
-> +	--build=$(GNU_HOST_NAME),"		\
-> +	  -i "$(@D)"/rebar.config.script
-> +endef
-> +
-> +EJABBERD_PRE_CONFIGURE_HOOKS +=			\
-> +	EJABBERD_SET_LIBS_DIR			\
-> +	EJABBERD_FIX_REBAR_CONFIG_SCRIPT
-> +
-> +# Guess answers for these tests, configure will bail out otherwise
-> +# saying error: cannot run test program while cross compiling.
-> +EJABBERD_CONF_ENV =						\
-> +  ac_cv_erlang_root_dir='$(HOST_DIR)/usr/lib/erlang'		\
-> +  $(foreach lib, $(EJABBERD_ERLANG_LIBS),			\
-> +    ac_cv_erlang_lib_dir_$(lib)="$$erlang_lib_dir_$(lib)")
-> +
-> +# Set environment variables so the rebar compile command does
-> +# cross-compile ejabberd dependencies.
-> +EJABBERD_MAKE_ENV =								\
-> +  $(TARGET_CONFIGURE_OPTS)							\
-> +  $(TARGET_CONFIGURE_ARGS)							\
-> +  LDFLAGS="-L$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot/usr/lib/erlang/usr/lib"
-> +
-> +# Delete HOST_DIR prefix from ERL path in ejabberctl script.
-> +define EJABBERD_FIX_EJABBERDCTL
-> +	sed -e "s,ERL=$(HOST_DIR),ERL=,"		\
-> +	  -e "s,INSTALLUSER=,INSTALLUSER=ejabberd,"	\
-> +	  -i "$(TARGET_DIR)"/usr/sbin/ejabberdctl
-> +endef
-> +
-> +EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
-> +
-> +define EJABBERD_PERMISSIONS
-> +/etc/ejabberd d 750 0 128 - - - - -
-> +/etc/ejabberd/ejabberd.yml-new f 640 0 128 - - - - -
-> +/etc/ejabberd/ejabberd.yml f 640 0 128 - - - - -
-> +/etc/ejabberd/ejabberdctl.cfg-new f 640 0 128 - - - - -
-> +/etc/ejabberd/ejabberdctl.cfg f 640 0 128 - - - - -
-> +/etc/ejabberd/inetrc f 644 0 128 - - - - -
-> +/usr/sbin/ejabberdctl f 550 0 128 - - - - -
-> +/usr/lib/ejabberd/priv/bin/captcha.sh f 750 119 0 - - - - -
-> +/usr/var/lib/ejabberd d 750 119 0 - - - - -
-> +/usr/var/lock/ejabberdctl d 750 119 0 - - - - -
-> +/usr/var/log/ejabberd d 750 119 0 - - - - -
-> +endef
-> +
-> +define EJABBERD_USERS
-> +ejabberd 119 ejabberd 128 * /var/run/ejabberd - - ejabberd daemon
-> +endef
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 1.9.1
+> libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> I'm trying to migrate buildroot's package definition too, but I'm
+> facing a problem I don't know how to resolve.
+> 
+> I've applied this small patch to get libconfuse source code from github.
+> 
+> Since code inside github doesn't contain autoconf files, autoreconf
+> must be run, and that's the reason for the new LIBCONFUSE_AUTORECONF =
+> YES. However, when trying to build it, the following happens:
+> 
+>>>> libconfuse V2_7 Configuring
+>>>> libconfuse V2_7 Autoreconfiguring
+> libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, `support'.
+> libtoolize: copying file `support/ltmain.sh'
+> libtoolize: putting macros in `m4'.
+> libtoolize: copying file `m4/libtool.m4'
+> libtoolize: copying file `m4/ltoptions.m4'
+> libtoolize: copying file `m4/ltsugar.m4'
+> libtoolize: copying file `m4/ltversion.m4'
+> libtoolize: copying file `m4/lt~obsolete.m4'
+> libtoolize: Consider adding `AC_CONFIG_MACRO_DIR([m4])' to configure.ac and
+> libtoolize: rerunning libtoolize, to keep the correct libtool macros in-tree.
+> configure.ac:33: error: required file 'support/config.rpath' not found
+
+ That comes from gettext, so it means you need Yann's gettextize patches.
+
+ Unfortunately, it still doesn't work, but for a different reason:
+
+configure.ac:49: error: `po/Makefile.in' is already registered with AC_CONFIG_FILES.
+../../lib/autoconf/status.m4:288: AC_CONFIG_FILES is expanded from...
+configure.ac:49: the top level
+
+ po/Makefile.in is mentioned twice in configure.ac, because gettextize adds it
+as well. Yann, any ideas how to solve this? The easiest solution is probably
+patch libconfuse.
+
+ Regards,
+ Arnout
+
+
+> doc/Makefile.am:8: warning: 'INCLUDES' is the old name for
+> 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> examples/Makefile.am:3: warning: 'INCLUDES' is the old name for
+> 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> autoreconf: /home/sslayer/Proyectos/RADAR/ART3500/buildroot-pi/output/host/usr/bin/automake
+> failed with exit status: 1
+> package/pkg-generic.mk:167: recipe for target
+> '/home/sslayer/Proyectos/RADAR/ART3500/buildroot-pi/output/build/libconfuse-V2_7/.stamp_configured'
+> failed
+> make: *** [/home/sslayer/Proyectos/RADAR/ART3500/buildroot-pi/output/build/libconfuse-V2_7/.stamp_configured]
+> Error 1
+> 
+> 
+> I've also tried to run a post extract hook, for an autogen.sh file is
+> provided. However, this results on host autotools being run, linking
+> to files outside buildroot hierarchy (such as
+> /usr/share/gettext/config.rpath, etc) that can't be overwritten, so
+> this also fails.
+> 
+> Does anybody have any idea on how to solve this?
+> 
+> Regards,
+> 
+> 
+> diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+> index 8a0d80f..b24a560 100644
+> --- a/package/libconfuse/libconfuse.mk
+> +++ b/package/libconfuse/libconfuse.mk
+> @@ -4,13 +4,15 @@
+>  #
+>  ################################################################################
+> 
+> -LIBCONFUSE_VERSION = 2.7
+> -LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
+> -LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
+> +LIBCONFUSE_VERSION = V2_7
+> +LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
+>  LIBCONFUSE_INSTALL_STAGING = YES
+>  LIBCONFUSE_CONF_OPT = --disable-rpath
+>  LIBCONFUSE_LICENSE = ISC
+>  LIBCONFUSE_LICENSE_FILES = src/confuse.c
+> 
+> +LIBCONFUSE_AUTORECONF = YES
+> +LIBCONFUSE_DEPENDENCIES += host-gettext
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> 
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
