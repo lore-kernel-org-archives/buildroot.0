@@ -1,70 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 20:46:48 +0200
-Subject: [Buildroot] [PATCH v14 05/20] mesa3d: Add dri3 support
-In-Reply-To: <1405451955-10204-6-git-send-email-bernd.kuhls@t-online.de>
-References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
- <1405451955-10204-6-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140716204648.066145c2@free-electrons.com>
+Date: Wed, 16 Jul 2014 21:07:48 +0200
+Subject: [Buildroot] [PATCH] Create /dev/null device node when building
+ a cpio rootfs
+In-Reply-To: <535FF178.2090507@mind.be>
+References: <1398784378-20251-1-git-send-email-dan.moulding@rackwareinc.com>
+ <1398784378-20251-2-git-send-email-dan.moulding@rackwareinc.com>
+ <535FF178.2090507@mind.be>
+Message-ID: <20140716210748.1a0cc066@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Arnout Vandecappelle,
 
-On Tue, 15 Jul 2014 21:19:00 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mesa3d/mesa3d.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
+On Tue, 29 Apr 2014 20:37:44 +0200, Arnout Vandecappelle wrote:
+
+> > diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> > index 771306c..8648ed9 100644
+> > --- a/fs/cpio/cpio.mk
+> > +++ b/fs/cpio/cpio.mk
+> > @@ -22,6 +22,7 @@ define ROOTFS_CPIO_ADD_INIT
+> >  endef
+> >  
+> >  PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
+> > +PACKAGES_PERMISSIONS_TABLE += /dev/null c 666 0 0 1 3 - - -$(sep)
 > 
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index 6282503..9fdb7bc 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -24,6 +24,13 @@ MESA3D_DEPENDENCIES = \
->  	host-xutil_makedepend \
->  	libdrm
->  
-> +ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
-> +MESA3D_DEPENDENCIES += xproto_dri3proto
-> +MESA3D_CONF_OPT += --enable-dri3
-> +else
-> +MESA3D_CONF_OPT += --disable-dri3
-> +endif
+>  How is this issue limited to the cpio rootfs? You'll have the same issue
+> with any rootfs, right?
 
-Why is this outside of the X.org condition? I believe DRI 3 support
-only makes sense when DRI is enabled, so I believe your condition here
-is misplaced.
+Yes. The mdev support makes the assumption that devtmpfs support is
+available in the kernel.
 
-Moreover, this fix is needed even for the current Mesa3D version, I've
-run into the following build issue:
+>  So perhaps a better solution is to move /dev/console and /dev/null from
+> device_table_dev.txt to device_table.txt.
 
-======================================================================
-configure: error: Package requirements (dri3proto >= 1.0) were not met:
+Not really:
 
-Package dri3proto was not found in the pkg-config search path.
-Perhaps you should add the directory containing `dri3proto.pc'
-to the PKG_CONFIG_PATH environment variable
-No package 'dri3proto' found
+ * In the initramfs case, /dev/console is needed. For static /dev, it's
+   already there. For non-static /dev, we have to have a
+   static /dev/console until our init script mounts devtmpfs. So it's
+   really an initramfs specific issue.
 
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
+ * For the non-initramfs case. For static /dev, it's already there. For
+   non-static /dev, devtmpfs is mounted *before* init is started,
+   so /dev/console is also already there.
 
-Alternatively, you may set the environment variables DRI3PROTO_CFLAGS
-and DRI3PROTO_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-make[1]: *** [/home/test/outputs/va-x86/build/mesa3d-10.2.1/.stamp_configured] Error 1
-======================================================================
+>  Note that if we do that, we can revert e1ebae70 and perhaps even
+> 10a130f9. Actually, 10a130f9 can probably already be reverted, since
+> e1ebae70 should have the same effect.
 
-Could you send an updated patch series that has just the mesa3d updates, the
-libglu, libglew, sdl and intel driver update (i.e not with the XBMC
-patches) ? And in this series, please make sure each patch has a commit
-log, that the reason for the changes are properly explained, and that
-the changes are ordered properly.
+I agree. Would you mind sending a patch reverting 10a130f9 ?
 
-Thanks!
+Also, since we seem to agree that the patch proposed by Dan was not
+needed, I've marked http://patchwork.ozlabs.org/patch/343880/ as
+Rejected in our patch tracking system.
+
+Best regards,
 
 Thomas
 -- 
