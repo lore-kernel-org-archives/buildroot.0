@@ -1,66 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 21:07:48 +0200
-Subject: [Buildroot] [PATCH] Create /dev/null device node when building
- a cpio rootfs
-In-Reply-To: <535FF178.2090507@mind.be>
-References: <1398784378-20251-1-git-send-email-dan.moulding@rackwareinc.com>
- <1398784378-20251-2-git-send-email-dan.moulding@rackwareinc.com>
- <535FF178.2090507@mind.be>
-Message-ID: <20140716210748.1a0cc066@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 16 Jul 2014 19:38:02 +0000 (UTC)
+Subject: [Buildroot] [Bug 5900] config flags to the Xenomai build system ...
+In-Reply-To: <bug-5900-163@https.bugs.busybox.net/>
+References: <bug-5900-163@https.bugs.busybox.net/>
+Message-ID: <20140716193802.9BD869D25A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+https://bugs.busybox.net/show_bug.cgi?id=5900
 
-On Tue, 29 Apr 2014 20:37:44 +0200, Arnout Vandecappelle wrote:
+--- Comment #5 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-07-16 19:38:01 UTC ---
+I tried reproducing this issue. Since I don't have a target board to test with,
+I have to resort to checking the parameters passed to the compilation.
 
-> > diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-> > index 771306c..8648ed9 100644
-> > --- a/fs/cpio/cpio.mk
-> > +++ b/fs/cpio/cpio.mk
-> > @@ -22,6 +22,7 @@ define ROOTFS_CPIO_ADD_INIT
-> >  endef
-> >  
-> >  PACKAGES_PERMISSIONS_TABLE += /dev/console c 622 0 0 5 1 - - -$(sep)
-> > +PACKAGES_PERMISSIONS_TABLE += /dev/null c 666 0 0 1 3 - - -$(sep)
-> 
->  How is this issue limited to the cpio rootfs? You'll have the same issue
-> with any rootfs, right?
+Since I believe that the FPU support check you are referring to in the
+testsuite originates from the 'switchtest', I checked with strace which
+parameters are passed to the real compiler (by the compiler wrapper):
 
-Yes. The mdev support makes the assumption that devtmpfs support is
-available in the kernel.
+execve("/home/tdescham/repo/contrib/buildroot-reproduce/output/host/opt/ext-toolchain/bin/arm-none-linux-gnueabi-gcc",
+["/home/tdescham/repo/contrib/buildroot-reproduce/output/host/opt/ext-toolchain/bin/arm-none-linux-gnueabi-gcc",
+"--sysroot",
+"/home/tdescham/repo/contrib/buildroot-reproduce/output/host/usr/arm-buildroot-linux-gnueabi/sysroot",
+"-mabi=aapcs-linux", "-msoft-float", "-marm", "-pipe", "-mfloat-abi=soft",
+"-march=armv4t", "-mcpu=arm920t", "-DHAVE_CONFIG_H", "-I.",
+"-I../../../src/include", "-I../../../include/posix", "-O2", "-D_GNU_SOURCE",
+"-D_REENTRANT", "-Wall", "-Werror-implicit-function-declaration", "-pipe",
+"-D__XENO__", "-D__IN_XENO__", "-Wstrict-prototypes", "-g",
+"-I../../../include", "-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE",
+"-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE", "-D_LARGEFILE64_SOURCE",
+"-D_FILE_OFFSET_BITS=64", "-pipe", "-Os", "-MT", "switchtest-switchtest.o",
+"-MD", "-MP", "-MF", ".deps/switchtest-switchtest.Tpo", "-c", "-o",
+"switchtest-switchtest.o", "switchtest.c"], [/* 54 vars */]) = 0
 
->  So perhaps a better solution is to move /dev/console and /dev/null from
-> device_table_dev.txt to device_table.txt.
 
-Not really:
 
- * In the initramfs case, /dev/console is needed. For static /dev, it's
-   already there. For non-static /dev, we have to have a
-   static /dev/console until our init script mounts devtmpfs. So it's
-   really an initramfs specific issue.
+This shows that the requested flags are effectively passed to the compilation,
+so I don't expect issues. 
 
- * For the non-initramfs case. For static /dev, it's already there. For
-   non-static /dev, devtmpfs is mounted *before* init is started,
-   so /dev/console is also already there.
+This was checked with an external sourcery toolchain. The defconfig (buildroot
+2014.05-git) is:
 
->  Note that if we do that, we can revert e1ebae70 and perhaps even
-> 10a130f9. Actually, 10a130f9 can probably already be reverted, since
-> e1ebae70 should have the same effect.
+BR2_arm=y
+BR2_arm920t=y
+BR2_DL_DIR="~/repo/contrib/dl"
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_DEFCONFIG="mx1"
+BR2_LINUX_KERNEL_EXT_XENOMAI=y
 
-I agree. Would you mind sending a patch reverting 10a130f9 ?
+(don't mind the kernel defconfig, it is bogus).
 
-Also, since we seem to agree that the patch proposed by Dan was not
-needed, I've marked http://patchwork.ozlabs.org/patch/343880/ as
-Rejected in our patch tracking system.
+So at this point, we believe that there is no issue.
 
-Best regards,
+If you do believe there is an issue, then please:
+- provide a .config for us to reproduce
+- provide more details / confirmation about the test that fails (switchtest?)
+- verify the output of strace as I did above
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
