@@ -1,88 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 00:32:45 +0200
-Subject: [Buildroot] [PATCH] package/libconfuse: switch to the new upstream
-Message-ID: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+Date: Thu, 17 Jul 2014 00:34:47 +0200
+Subject: [Buildroot] [PATCH] package/libconfuse: switch to the new
+	upstream
+In-Reply-To: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140716223447.GK9252@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alvaro Gamez <alvaro.gamez@hazent.com>
+All,
 
-libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
-So, just follow suite.
+On 2014-07-17 00:32 +0200, Yann E. MORIN spake thusly:
+> From: Alvaro Gamez <alvaro.gamez@hazent.com>
+> 
+> libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
+> So, just follow suite.
+> 
+> Needs a bit of a hack so gettextize + autoreconf does not step on each
+> other's toes. See comment in the patch.
 
-Needs a bit of a hack so gettextize + autoreconf does not step on each
-other's toes. See comment in the patch.
+I forgot to say that this patch should go in after the gettextize series
+I posted earlier, since it relies on the nes GETTEXTIZ variable.
 
-Based on a patch by: Alvaro Gamez <alvaro.gamez@hazent.com>
+Regards,
+Yann E. MORIN.
 
-[me: fix gettextizing, write commit log]
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- .../libconfuse-0000-fix-configure-ac.patch         | 27 ++++++++++++++++++++++
- package/libconfuse/libconfuse.mk                   |  9 +++++---
- 2 files changed, 33 insertions(+), 3 deletions(-)
- create mode 100644 package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+> Based on a patch by: Alvaro Gamez <alvaro.gamez@hazent.com>
+> 
+> [me: fix gettextizing, write commit log]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  .../libconfuse-0000-fix-configure-ac.patch         | 27 ++++++++++++++++++++++
+>  package/libconfuse/libconfuse.mk                   |  9 +++++---
+>  2 files changed, 33 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+> 
+> diff --git a/package/libconfuse/libconfuse-0000-fix-configure-ac.patch b/package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+> new file mode 100644
+> index 0000000..6d61b48
+> --- /dev/null
+> +++ b/package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+> @@ -0,0 +1,27 @@
+> +configure: remove po/Makefile.in from AC_CONFIG_FILES
+> +
+> +Since we are gettextizing the package, gettextize updates configure.ac
+> +to add po/Makefile.in to AC_CONFIG_FILES>
+> +
+> +Unfortunately, it's already present, and gettextize does not detect it,
+> +and insists on adding its own. Later on, autoreconf barfs on the double
+> +occurences.
+> +
+> +As suggested by Arnout, just patch configure.ac to remove the
+> +po/Makefile.in occurence, so gettextize can safely add its own
+> +
+> +Reported-by: Arnout Vandecappelle <arnout@mind.be>
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
+> +
+> +diff -durN libconfuse-V2_7.orig/configure.ac libconfuse-V2_7/configure.ac
+> +--- libconfuse-V2_7.orig/configure.ac	2010-02-20 10:14:10.000000000 +0100
+> ++++ libconfuse-V2_7/configure.ac	2014-07-17 00:19:18.816785340 +0200
+> +@@ -49,7 +49,6 @@
+> + AC_CONFIG_FILES([Makefile \
+> + 		 src/Makefile \
+> + 		 examples/Makefile \
+> +-                 po/Makefile.in \
+> + 		 m4/Makefile \
+> + 		 tests/Makefile \
+> + 		 doc/Makefile \
+> diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+> index 8a0d80f..e9a1114 100644
+> --- a/package/libconfuse/libconfuse.mk
+> +++ b/package/libconfuse/libconfuse.mk
+> @@ -4,13 +4,16 @@
+>  #
+>  ################################################################################
+>  
+> -LIBCONFUSE_VERSION = 2.7
+> -LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
+> -LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
+> +LIBCONFUSE_VERSION = V2_7
+> +LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
+>  LIBCONFUSE_INSTALL_STAGING = YES
+>  LIBCONFUSE_CONF_OPT = --disable-rpath
+>  LIBCONFUSE_LICENSE = ISC
+>  LIBCONFUSE_LICENSE_FILES = src/confuse.c
+>  
+> +# Fresh from the repository, no configure et al.
+> +LIBCONFUSE_AUTORECONF = YES
+> +LIBCONFUSE_GETTEXTIZE = YES
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> -- 
+> 1.9.1
+> 
 
-diff --git a/package/libconfuse/libconfuse-0000-fix-configure-ac.patch b/package/libconfuse/libconfuse-0000-fix-configure-ac.patch
-new file mode 100644
-index 0000000..6d61b48
---- /dev/null
-+++ b/package/libconfuse/libconfuse-0000-fix-configure-ac.patch
-@@ -0,0 +1,27 @@
-+configure: remove po/Makefile.in from AC_CONFIG_FILES
-+
-+Since we are gettextizing the package, gettextize updates configure.ac
-+to add po/Makefile.in to AC_CONFIG_FILES>
-+
-+Unfortunately, it's already present, and gettextize does not detect it,
-+and insists on adding its own. Later on, autoreconf barfs on the double
-+occurences.
-+
-+As suggested by Arnout, just patch configure.ac to remove the
-+po/Makefile.in occurence, so gettextize can safely add its own
-+
-+Reported-by: Arnout Vandecappelle <arnout@mind.be>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
-+
-+diff -durN libconfuse-V2_7.orig/configure.ac libconfuse-V2_7/configure.ac
-+--- libconfuse-V2_7.orig/configure.ac	2010-02-20 10:14:10.000000000 +0100
-++++ libconfuse-V2_7/configure.ac	2014-07-17 00:19:18.816785340 +0200
-+@@ -49,7 +49,6 @@
-+ AC_CONFIG_FILES([Makefile \
-+ 		 src/Makefile \
-+ 		 examples/Makefile \
-+-                 po/Makefile.in \
-+ 		 m4/Makefile \
-+ 		 tests/Makefile \
-+ 		 doc/Makefile \
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 8a0d80f..e9a1114 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -4,13 +4,16 @@
- #
- ################################################################################
- 
--LIBCONFUSE_VERSION = 2.7
--LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
--LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
-+LIBCONFUSE_VERSION = V2_7
-+LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
- LIBCONFUSE_INSTALL_STAGING = YES
- LIBCONFUSE_CONF_OPT = --disable-rpath
- LIBCONFUSE_LICENSE = ISC
- LIBCONFUSE_LICENSE_FILES = src/confuse.c
- 
-+# Fresh from the repository, no configure et al.
-+LIBCONFUSE_AUTORECONF = YES
-+LIBCONFUSE_GETTEXTIZE = YES
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
