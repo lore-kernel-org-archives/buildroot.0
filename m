@@ -1,40 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 22:42:47 +0200
-Subject: [Buildroot] [PATCH] defconfig for Phytec Cosmic-AM335x Board
-In-Reply-To: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
-References: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
-Message-ID: <20140716224247.1352816f@free-electrons.com>
+Date: Wed, 16 Jul 2014 22:46:31 +0200
+Subject: [Buildroot] [git commit] python-numpy: add optional blas/lapack
+	support
+Message-ID: <20140716204732.2680F9D25C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Praveen kumar Vattipalli,
+commit: http://git.buildroot.net/buildroot/commit/?id=fa6a965c5eca38332d3434071e325c15368b0420
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Jan 2014 17:01:38 +0530, Praveen kumar Vattipalli wrote:
-> Signed-off-by: Praveen Kumar Vattipalli <praveen.v@phytec.in>
-> ---
->  board/cosmic-am335x/readme.txt         |   54 ++++++++++++++++++++++++++++++
->  configs/phytec_cosmic_am335x_defconfig |   57 ++++++++++++++++++++++++++++++++
->  2 files changed, 111 insertions(+)
->  create mode 100644 board/cosmic-am335x/readme.txt
->  create mode 100644 configs/phytec_cosmic_am335x_defconfig
+python-numpy can be linked with libblas and liblapack, so
+automatically do it when clapack is enabled.
 
-Thanks for your patch, but despite the feedback provided by Peter
-Korsgaard and Arnout Vandecappelle just a few days after you posted
-your patch, you never came back to us with an updated version of the
-patch. Since it's been 6 months now, I'll mark your patch as "Changes
-Requested" in our patch tracking system.
+[Thomas:
+ - Fix issues in the original submission and reformat according to
+   Yann E. Morin suggestions.
+ - Properly format the "libraries" entry in site.cfg as outlined in
+   the example site.cfg file: the list of libraries should be
+   space-separated.]
 
-Since we are definitely interested in seeing some defconfigs added for
-Phytec boards, do not hesitate to update your patch, take into account
-the comments made by Peter and Arnout, and resubmit it.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-numpy/python-numpy.mk |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
 
-Thanks a lot for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index e309ef6..3d3a6c5 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -11,6 +11,11 @@ PYTHON_NUMPY_LICENSE = BSD-3c
+ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
+ PYTHON_NUMPY_SETUP_TYPE = distutils
+ 
++ifeq ($(BR2_PACKAGE_CLAPACK),y)
++PYTHON_NUMPY_DEPENDENCIES += clapack
++PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
++endif
++
+ PYTHON_NUMPY_BUILD_OPT = --fcompiler=None
+ 
+ define PYTHON_NUMPY_CONFIGURE_CMDS
+@@ -18,7 +23,7 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+ 	echo "[DEFAULT]" >> $(@D)/site.cfg
+ 	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
+ 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+-	echo "libraries =" >> $(@D)/site.cfg
++	echo "libraries =" $(subst $(space),$(comma),$(PYTHON_NUMPY_SITE_CFG_LIBS)) >> $(@D)/site.cfg
+ endef
+ 
+ # Some package may include few headers from NumPy, so let's install it
