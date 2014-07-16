@@ -1,50 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 10:24:39 +0200
+Date: Wed, 16 Jul 2014 10:29:57 +0200
 Subject: [Buildroot] [PATCH 0/3] Make exim more configurable
-In-Reply-To: <20140715213125.1b848b48@free-electrons.com>
+In-Reply-To: <53C63546.4040204@lucaceresoli.net>
 References: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
  <20140715213125.1b848b48@free-electrons.com>
-Message-ID: <20140716102439.2bcff4ce@free-electrons.com>
+ <53C63546.4040204@lucaceresoli.net>
+Message-ID: <20140716102957.76a63a7a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca,
+Dear Luca Ceresoli,
 
-On Tue, 15 Jul 2014 21:31:25 +0200, Thomas Petazzoni wrote:
+On Wed, 16 Jul 2014 10:18:14 +0200, Luca Ceresoli wrote:
 
-> > Luca Ceresoli (3):
-> >   exim: allow using a custom configuration file
+> > However, I've for now rejected those two patches. The reason is that I
+> > don't think we should add an option to customize the user with which
+> > each and every daemon is started. Buildroot should use a sane default
+> > option, and for additional configuration, leave it to the Buildroot
+> > user to use BR2_ROOTFS_USERS_TABLES to create any additional/custom
+> > user that may be needed.
 > 
-> Thanks, I've applied this patch.
+> I generally agree with you.
+> 
+> The problem with exim is that it does not allow to configure its user
+> from a runtime configuration file, because it's hard-coded in the
+> binary. The only way to select a user is to change the build-time
+> configuration.
+> 
+> So, it's true that one can easily create a new user for exim using
+> BR2_ROOTFS_USERS_TABLES. But currently the only way to tell exim to use
+> that user is to supply an entire config file (which is possible thanks
+> to patch 1 that you've just applied). This would bring out of sync from
+> changes in the config file coming from upstream (exim as well as
+> Buildroot).
+> 
+> Patch 2 allows one to keep the Buildroot-provided configuration file,
+> and Buildroot would take care of tweaking the one line needed to
+> actually use the new username.
 
-This patch is causing build issues:
-http://autobuild.buildroot.org/results/0db/0db54c555f6c7e635ebf99f86b3f91dc31e441f0/build-end.log.
-This happens when randpackageconfig decides to:
+Well, I think we generally support two cases in Buildroot:
 
-  BR2_PACKAGE_EXIM_CUSTOM_CONFIG=y
+ 1) A basic, default, sane configuration. This is what already existed
+    prior to your patch series, where exim uses a dedicated user
+    created by the exim package.
 
-But of course:
+ 2) A way of providing a custom configuration, which is possible thanks
+    to the BR2_ROOTFS_USERS_TABLES plus the possibility of providing a
+    custom Exim configuration file.
 
-  BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE=""
+Of course, it means than if all you want is to change the user with
+which Exim is running, you have to go with option (2), even if for all
+other options you need to keep the exact same options as the ones
+normally used with option (1).
 
-Options:
+But it's exactly the same as with the kernel: if you can use a
+defconfig, it's easy and simple. If you need to use a defconfig + one
+more option, then you have no other choice than switching to using your
+own kernel configuration file. We won't add Config.in options for each
+and every kernel options.
 
- 1/ Have a default value for BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE that
-    actually works.
+And therefore I don't think we should add Config.in options for each
+and every exim configuration option. You might be interested by
+changing the user, but the next user will be interested in changing
+this other knob, and so on and so on. We clearly don't want to go down
+that road, and instead we want to go for option (2) by providing a
+general customization solution, which allows to solve the problem, even
+if it requires a little bit of effort if your customization is only
+related to one or two differences compared to the basic Buildroot
+configuration.
 
- 2/ Let me know a proper value for BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE
-    that the autobuilder scripts would inject into the configuration
-    when BR2_PACKAGE_EXIM_CUSTOM_CONFIG=y. This requires changing the
-    autobuilder scripts, and I've no control over the autobuilder
-    executed by Peter.
-
- 3/ Exclude configuration that have BR2_PACKAGE_EXIM_CUSTOM_CONFIG=y in
-    the autobuilder script. This also requires changing the autobuilder
-    scripts, with the same drawback as above: there's nothing I can do
-    for Peter's autobuilder machines.
+Of course, others are very welcome to enter this discussion and give
+their opinion.
 
 Best regards,
 
