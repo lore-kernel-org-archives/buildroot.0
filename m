@@ -1,84 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 10:29:57 +0200
-Subject: [Buildroot] [PATCH 0/3] Make exim more configurable
-In-Reply-To: <53C63546.4040204@lucaceresoli.net>
-References: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
- <20140715213125.1b848b48@free-electrons.com>
- <53C63546.4040204@lucaceresoli.net>
-Message-ID: <20140716102957.76a63a7a@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 16 Jul 2014 10:29:50 +0200
+Subject: [Buildroot] [PATCH] Add target-clean makefile target
+In-Reply-To: <20140716100919.3f8101c3@free-electrons.com>
+References: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20140715225415.08f5a5a6@free-electrons.com>
+ <CA+TH9Vmp+-+Dgqh-BVR6-aUB3w5w_ccy0=3Mw_KMKciyRyD1rA@mail.gmail.com>
+ <20140715233320.46a95f1a@free-electrons.com>
+ <CA+TH9V=f4o7--R1T+o3o7aGJiJJ=6M2tSpsk1KGC=5Y=B5AHNQ@mail.gmail.com>
+ <20140716100919.3f8101c3@free-electrons.com>
+Message-ID: <CA+TH9VnL390p2Pd61H087An6tSGJL_wQsZ=dsJXS5Q+vgLxKfw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+Dear Thomas,
 
-On Wed, 16 Jul 2014 10:18:14 +0200, Luca Ceresoli wrote:
+2014-07-16 10:09 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Dear Angelo Compagnucci,
+>
+> On Wed, 16 Jul 2014 09:47:01 +0200, Angelo Compagnucci wrote:
+>
+>> > (7) is due to the fact that Git was not rebuilt, so it still believes
+>> > that OpenSSL support is available. The scenario above is fairly simple,
+>> > but there are many, many more similar but more subtle scenarios to
+>> > screw things up.
+>>
+>> Good catch, but this could be documented somewhere.
+>
+> Right, but then a patch adding "make target-clean" should also be
+> responsible for adding the appropriate documentation :-)
 
-> > However, I've for now rejected those two patches. The reason is that I
-> > don't think we should add an option to customize the user with which
-> > each and every daemon is started. Buildroot should use a sane default
-> > option, and for additional configuration, leave it to the Buildroot
-> > user to use BR2_ROOTFS_USERS_TABLES to create any additional/custom
-> > user that may be needed.
-> 
-> I generally agree with you.
-> 
-> The problem with exim is that it does not allow to configure its user
-> from a runtime configuration file, because it's hard-coded in the
-> binary. The only way to select a user is to change the build-time
-> configuration.
-> 
-> So, it's true that one can easily create a new user for exim using
-> BR2_ROOTFS_USERS_TABLES. But currently the only way to tell exim to use
-> that user is to supply an entire config file (which is possible thanks
-> to patch 1 that you've just applied). This would bring out of sync from
-> changes in the config file coming from upstream (exim as well as
-> Buildroot).
-> 
-> Patch 2 allows one to keep the Buildroot-provided configuration file,
-> and Buildroot would take care of tweaking the one line needed to
-> actually use the new username.
+If there is hope to have target-clean accepted, then I'll be working
+on the documentation as soon as possible!
 
-Well, I think we generally support two cases in Buildroot:
+>> I think that is better to explain buildroot's users that they have to
+>> rebuild a package when they mess it's dependencies instead of all the
+>> whole rootfs! Compilation of a rootfs can take hours ...
+>> Yes, I know, probably removing Openssl screws up a hundred of packages
+>> and it's not practical to rebuild one by one, but I think this is a
+>> corner case more than the rule.
+>
+> Not that much: any optional dependency in Buildroot will exhibit
+> exactly the same behavior, and there are hundreds if not thousands of
+> places were we rely on optional dependencies.
 
- 1) A basic, default, sane configuration. This is what already existed
-    prior to your patch series, where exim uses a dedicated user
-    created by the exim package.
+Yes, I can understand the implications. Honestly, using buildroot
+naively, I never encountered such behaviors, but I was not going
+deeply into dependencies, only selecting and deselecting packages here
+and there.
+Buildroot served me well!
 
- 2) A way of providing a custom configuration, which is possible thanks
-    to the BR2_ROOTFS_USERS_TABLES plus the possibility of providing a
-    custom Exim configuration file.
+> By I tend to agree that we could provide the tool, provided that there
+> is sufficient documentation to explain how to use it correctly.
 
-Of course, it means than if all you want is to change the user with
-which Exim is running, you have to go with option (2), even if for all
-other options you need to keep the exact same options as the ones
-normally used with option (1).
+Yes, it's exactly what I'm looking for.
 
-But it's exactly the same as with the kernel: if you can use a
-defconfig, it's easy and simple. If you need to use a defconfig + one
-more option, then you have no other choice than switching to using your
-own kernel configuration file. We won't add Config.in options for each
-and every kernel options.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 
-And therefore I don't think we should add Config.in options for each
-and every exim configuration option. You might be interested by
-changing the user, but the next user will be interested in changing
-this other knob, and so on and so on. We clearly don't want to go down
-that road, and instead we want to go for option (2) by providing a
-general customization solution, which allows to solve the problem, even
-if it requires a little bit of effort if your customization is only
-related to one or two differences compared to the basic Buildroot
-configuration.
 
-Of course, others are very welcome to enter this discussion and give
-their opinion.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Profile: http://it.linkedin.com/in/compagnucciangelo
