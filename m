@@ -1,87 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 22:51:19 +0200
-Subject: [Buildroot] [git commit] opencv: bump to version 2.4.8
-Message-ID: <20140716210452.638659D25F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Jul 2014 00:00:29 +0200
+Subject: [Buildroot] [PATCH 0/6 v3] pkg-autotools: introduce infra to
+	gettextize packages (branch yem/gettext)
+Message-ID: <cover.1405547907.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d16c4669592d7be35076bd6925914ac524bb721c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello All!
 
-This patch bumps OpenCV version and address the minimal set of change to
-get the new version building correctly:
-- update the download location;
-- force Qt version to Qt 4 when support is enabled;
-- naively fix the v4l support.
+This small series introduces the gettextize of a package as an optional
+sequence in the autotools package infra.
 
-However, it does not address a couple improvements, among these:
-- jasper support;
-- python/numpy support;
-- Qt4 and Qt5 support (since the 2.4.6 release), so only Qt4 support is
-  supported in this patch;
-- optional libv4l dependency (since 2.4.7 release);
-- etc.
-These will be addressed in followup patches.
+It has been only slightly tested, so is still in RFC stage.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/opencv/Config.in |    2 +-
- package/opencv/opencv.mk |   11 +++++------
- 2 files changed, 6 insertions(+), 7 deletions(-)
+Three packages have been converted: wget (the historical offender),
+coreutils and parted. Others may need gettextizing, too, but the
+autobuilders (or users) will catch them eventually.
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index f9ee416..7644d64 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -8,7 +8,7 @@ menuconfig BR2_PACKAGE_OPENCV
- 	  OpenCV (Open Source Computer Vision) is a library of programming
- 	  functions for real time computer vision.
- 
--	  http://opencv.willowgarage.com/wiki/
-+	  http://opencv.org/
- 
- if BR2_PACKAGE_OPENCV
- 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 464a95a..d56b5e4 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--OPENCV_VERSION = 2.4.2
--OPENCV_SITE = http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/$(OPENCV_VERSION)
--OPENCV_SOURCE = OpenCV-$(OPENCV_VERSION).tar.bz2
-+OPENCV_VERSION = 2.4.8
-+OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
- OPENCV_INSTALL_STAGING = YES
- OPENCV_LICENSE = BSD-3c
- OPENCV_LICENSE_FILES = doc/license.txt
-@@ -141,7 +140,7 @@ OPENCV_CONF_OPT += -DWITH_PNG=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_QT),y)
--OPENCV_CONF_OPT += -DWITH_QT=ON
-+OPENCV_CONF_OPT += -DWITH_QT=4
- OPENCV_DEPENDENCIES += qt
- else
- OPENCV_CONF_OPT += -DWITH_QT=OFF
-@@ -155,10 +154,10 @@ OPENCV_CONF_OPT += -DWITH_TIFF=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_V4L),y)
--OPENCV_CONF_OPT += -DWITH_V4L=ON
-+OPENCV_CONF_OPT += -DWITH_V4L=ON -DWITH_LIBV4L=ON
- OPENCV_DEPENDENCIES += libv4l
- else
--OPENCV_CONF_OPT += -DWITH_V4L=OFF
-+OPENCV_CONF_OPT += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
- endif
- 
- # Installation hooks:
+
+Changes v2 -> v3:
+  - fix double-dollars  (Gustavo)
+  - fix hook name  (Gustavo)
+  - reword commit log for wget package  (Gustavo)
+  - gettextize gst1-plugins-bad  (Gustavo)
+  - typoes  (Gustavo)
+
+Changes RFCv1 -> RFCv2:
+  - only getttextize with autoreconf  (Gustavo)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit cff18c2f347a46fb996808b6ac439e2a222aa189:
+
+  opencv: add jasper support (2014-07-16 22:59:03 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/gettext
+
+for you to fetch changes up to f200992ff52ec38350cf0fcd1d79c5b459da175f:
+
+  package/gst1-plugins-bad: gettextize to match the new gettext version (2014-07-16 23:57:48 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (6):
+      pkg-autotools: add support to gettextize a package
+      manual: add gettextize explanations in the manual
+      package/wget: use the new gettextize infra
+      package/coreutils: gettextize to match the new gettext version
+      package/parted: gettextize to match the new gettext version
+      package/gst1-plugins-bad: gettextize to match the new gettext version
+
+ docs/manual/adding-packages-autotools.txt          | 12 ++++++++
+ package/coreutils/coreutils.mk                     |  1 +
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |  1 +
+ package/parted/parted.mk                           |  1 +
+ package/pkg-autotools.mk                           | 33 ++++++++++++++++++++--
+ package/wget/wget.mk                               |  9 +-----
+ 6 files changed, 47 insertions(+), 10 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
