@@ -1,25 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 00:00:35 +0200
-Subject: [Buildroot] [PATCH 1/6 v3] pkg-autotools: add support to gettextize
-	a package
+Date: Thu, 17 Jul 2014 00:00:36 +0200
+Subject: [Buildroot] [PATCH 2/6 v3] manual: add gettextize explanations in
+	the manual
 In-Reply-To: <cover.1405547907.git.yann.morin.1998@free.fr>
 References: <cover.1405547907.git.yann.morin.1998@free.fr>
-Message-ID: <0f1d2d46a3367ff77b524caefd4c507d6b829011.1405547907.git.yann.morin.1998@free.fr>
+Message-ID: <b15cc7db006e129bbc4ea0ca2cef0ca971bb4ae9.1405547907.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-In case a package comes with a gettext infra which is different from
-the one Buildroot provides, we'd get autoreconf errors, like:
-    http://autobuild.buildroot.net/results/c0f/c0f7c801f61fdc310cde64342060b00a70155431/
-
-To avoid that, we need to gettextize the package prior to running
-autoreconf.
-
-Provide the necessary infrastructure in the autotools infrastructure,
-so we can do it consistently across packages.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
@@ -28,79 +18,36 @@ Cc: Baruch Siach <baruch@tkos.co.il>
 
 ---
 Changes v2 -> v3:
-  - fix double-dollars  (Gustavo)
-  - fix hook name  (Gustavo)
+  - fix typoes  (Gustavo)
 
 Changes v1 -> v2:
-  - only gettextize with autoreconf  (Gustavo)
-  - add host-gettext to the filter-out  (Gustavo)
+  - gettextize is only valid if autoreconf=yes  (Gustavo)
 ---
- package/pkg-autotools.mk | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-autotools.txt | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index ddff9bf..50876cb 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -87,6 +87,22 @@ ifndef $(2)_AUTORECONF
-  endif
- endif
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index c7e797f..3f40503 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -125,6 +125,18 @@ cases, typical packages will therefore only use a few of them.
+   passed to the 'autoreconf' program if
+   +LIBFOO_AUTORECONF=YES+. By default, empty.
  
-+ifndef $(2)_GETTEXTIZE
-+ ifdef $(3)_GETTEXTIZE
-+  $(2)_GETTEXTIZE = $$($(3)_GETTEXTIZE)
-+ else
-+  $(2)_GETTEXTIZE ?= NO
-+ endif
-+endif
++* +LIBFOO_GETTEXTIZE+, tells whether the package should be
++  gettextized or not (i.e. if the package uses a different gettext
++  version than Buildroot provides, and it is needed to run
++  'gettextize'.) Only valid when +LIBFOO_AUTORECONF=YES+. Valid
++  values are +YES+ and +NO+. The default is +NO+.
 +
-+ifndef $(2)_GETTEXTIZE_OPT
-+ ifdef $(3)_GETTEXTIZE_OPT
-+  $(2)_GETTEXTIZE_OPT = $$($(3)_GETTEXTIZE)
-+ else
-+  $(2)_GETTEXTIZE_OPT ?= -f
-+ endif
-+endif
++* +LIBFOO_GETTEXTIZE_OPT+, to specify additional options passed to
++  the 'gettextize' program, if +LIBFOO_GETTEXTIZE=YES+. You may
++  use that if, for example, the +.po+ files are not located in the
++  standard place (i.e. in +po/+ at the root of the package.) By
++  default, '-f'.
 +
- ifeq ($(4),host)
-  $(2)_AUTORECONF_OPT ?= $$($(3)_AUTORECONF_OPT)
- endif
-@@ -200,6 +216,14 @@ $(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
- endif
- 
- #
-+# Hook to gettextize the package if needed
-+#
-+define GETTEXTIZE_HOOK
-+	@$$(call MESSAGE,"Gettextizing")
-+	$(Q)cd $$($$(PKG)_SRCDIR) && $(HOST_DIR)/usr/bin/gettextize $$($$(PKG)_GETTEXTIZE_OPT)
-+endef
-+
-+#
- # Hook to autoreconf the package if needed
- #
- define AUTORECONF_HOOK
-@@ -222,14 +246,19 @@ endef
- 
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
--# away from the non-host rule
-+# and _GETTEXTIZE away from the non-host rule
- ifeq ($(4),host)
- $(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
--				host-toolchain $(1),\
-+				host-gettext host-toolchain $(1),\
-     $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
- endif
- 
- ifeq ($$($(2)_AUTORECONF),YES)
-+# This has to come before autoreconf
-+ifeq ($$($(2)_GETTEXTIZE),YES)
-+$(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
-+$(2)_DEPENDENCIES += host-gettext
-+endif
- $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
- endif
+ * +LIBFOO_LIBTOOL_PATCH+ tells whether the Buildroot
+   patch to fix libtool cross-compilation issues should be applied or
+   not. Valid values are +YES+ and +NO+. By
 -- 
 1.9.1
