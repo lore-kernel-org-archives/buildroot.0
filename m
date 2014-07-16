@@ -1,198 +1,68 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Wed, 16 Jul 2014 17:57:07 +0200
-Subject: [Buildroot] [PATCH v2] ejabberd: new package
-Message-ID: <1405526227-4277-1-git-send-email-johan.oudinet@gmail.com>
+From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Wed, 16 Jul 2014 17:58:51 +0200
+Subject: [Buildroot] [PATCH v2] qt5: Add an option to select default platform
+Message-ID: <1405526331-31440-1-git-send-email-jezz@sysmic.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
-Changes v1 -> v2:
-  - Run ejabberd as ejabberd user instead of root.
----
- package/Config.in                 |  1 +
- package/ejabberd/Config.in        | 13 +++++++
- package/ejabberd/check-erlang-lib | 48 +++++++++++++++++++++++
- package/ejabberd/ejabberd.mk      | 81 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 143 insertions(+)
- create mode 100644 package/ejabberd/Config.in
- create mode 100755 package/ejabberd/check-erlang-lib
- create mode 100644 package/ejabberd/ejabberd.mk
+Whithout this path, default platform is automaticaly set (generally
+set to "eglfs" as defined in
+qt5base/mkspecs/devices/common/linux_device_pre.conf:1). This choice
+is not always what the user would like. Thus, user have to manually
+appends "-platform <BACKEND>" to command line when running any qt5
+application.
 
-diff --git a/package/Config.in b/package/Config.in
-index b363a7c..a50416e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -937,6 +937,7 @@ endif
- 	source "package/dnsmasq/Config.in"
- 	source "package/dropbear/Config.in"
- 	source "package/ebtables/Config.in"
-+	source "package/ejabberd/Config.in"
- 	source "package/ethtool/Config.in"
- 	source "package/faifa/Config.in"
- 	source "package/fmc/Config.in"
-diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
-new file mode 100644
-index 0000000..3a2336d
---- /dev/null
-+++ b/package/ejabberd/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_EJABBERD
-+       bool "ejabberd"
-+       select BR2_PACKAGE_OPENSSL
-+       select BR2_PACKAGE_ERLANG
-+       select BR2_PACKAGE_LIBYAML
-+       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+       select BR2_PACKAGE_EXPAT
-+       help
-+	 Ejabberd is a Jabber/XMPP instant messaging server, written
-+	 in Erlang/OTP. Among other features, ejabberd is
-+	 cross-platform, fault-tolerant, clusterable and modular.
+This patch allows user to choose default platform explicitly.
+
+Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+---
+v2:
+  * Use a string instead of a choice
+  * Improve help message
+
+
+ package/qt5/qt5base/Config.in  | 11 +++++++++++
+ package/qt5/qt5base/qt5base.mk |  3 +++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 24e5902..632711c 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -144,6 +144,17 @@ config BR2_PACKAGE_QT5BASE_EGLFS
+ comment "eglfs backend available if OpenGLES and EGL are enabled"
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
+ 
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA
++	string "Default graphical platform"
++	help
++	  Choose the default platform abstraction to use for graphical
++	  application (e.g xcb, linuxfb, eglfs, ...). If this is empty, the
++	  default for your architecture will be used (usually this is eglfs).
 +
-+	 http://www.ejabberd.im
-diff --git a/package/ejabberd/check-erlang-lib b/package/ejabberd/check-erlang-lib
-new file mode 100755
-index 0000000..1a942bb
---- /dev/null
-+++ b/package/ejabberd/check-erlang-lib
-@@ -0,0 +1,48 @@
-+#!/bin/sh -e
-+# Helper to bypass AC_ERLANG_CHECK_LIB
++	  You can get a list of supported platform by running a Qt application
++	  with the option "-platform help" on your target. You can choose a
++	  different platform at runtime with the -platform option.
 +
-+usage() {
-+    cat <<EOF
-+Usage:
-+	$0 library
-+Look for Erlang's library in TARGET_DIR/usr/lib/erlang/lib.
+ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+ 	bool "print support module"
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 618251e..fecde13 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -96,6 +96,9 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-xcb
+ endif
+ 
++QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
++QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
 +
-+If the library is found, it returns the path to the latest version,
-+relative to TARGET_DIR. Otherwise, it returns "not found".
-+
-+If there are several versions, it returns an error because it does not
-+know which one Erlang uses.
-+
-+EOF
-+}
-+
-+die () {
-+    echo "$@" >&2
-+    exit 1
-+}
-+
-+if [ $# -ne 1 ]; then
-+    usage
-+    exit 0
-+else
-+    library="$1"
-+fi
-+
-+target_dir="${TARGET_DIR:-../../output/target}"
-+
-+[ -d "$target_dir" ] || die "TARGET_DIR is not a directory. Please \
-+specify the TARGET_DIR environment variable."
-+
-+case "$(ls -1d -- "$target_dir/usr/lib/erlang/lib/$library-"* | wc -l)" in
-+    0)
-+	echo "not found"
-+	;;
-+    1)
-+	echo "$target_dir/usr/lib/erlang/lib/$library-"* \
-+	    | sed -e "s,^$target_dir,,"
-+	;;
-+    *)
-+	die "Several versions of $library have been found. Please \
-+	remove the unused ones."
-+	;;
-+esac
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-new file mode 100644
-index 0000000..ca54e4e
---- /dev/null
-+++ b/package/ejabberd/ejabberd.mk
-@@ -0,0 +1,81 @@
-+################################################################################
-+#
-+# ejabberd
-+#
-+################################################################################
-+
-+EJABBERD_VERSION = 14.05
-+EJABBERD_SITE = $(call github,processone,ejabberd,$(EJABBERD_VERSION))
-+EJABBERD_LICENSE = GPLv2+
-+EJABBERD_LICENSE_FILES = COPYING
-+EJABBERD_DEPENDENCIES =	libyaml expat openssl erlang
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+	EJABBERD_DEPENDENCIES += libiconv
-+endif
-+
-+EJABBERD_ERLANG_LIBS := sasl crypto public_key ssl mnesia inets compiler
-+
-+# Do AC_ERLANG_CHECK_LIB job without erlang.
-+define EJABBERD_SET_LIBS_DIR
-+	for lib in $(EJABBERD_ERLANG_LIBS); do					\
-+	  export								\
-+	    erlang_lib_dir_$$lib="`package/ejabberd/check-erlang-lib $$lib`";	\
-+	done
-+endef
-+
-+# Set cross-compilation options to the configure called by rebar.
-+define EJABBERD_FIX_REBAR_CONFIG_SCRIPT
-+	sed -e "s,./configure,./configure \\	\
-+	--target=$(GNU_TARGET_NAME) \\		\
-+	--host=$(GNU_TARGET_NAME) \\		\
-+	--build=$(GNU_HOST_NAME),"		\
-+	  -i "$(@D)"/rebar.config.script
-+endef
-+
-+EJABBERD_PRE_CONFIGURE_HOOKS +=			\
-+	EJABBERD_SET_LIBS_DIR			\
-+	EJABBERD_FIX_REBAR_CONFIG_SCRIPT
-+
-+# Guess answers for these tests, configure will bail out otherwise
-+# saying error: cannot run test program while cross compiling.
-+EJABBERD_CONF_ENV =						\
-+  ac_cv_erlang_root_dir='$(HOST_DIR)/usr/lib/erlang'		\
-+  $(foreach lib, $(EJABBERD_ERLANG_LIBS),			\
-+    ac_cv_erlang_lib_dir_$(lib)="$$erlang_lib_dir_$(lib)")
-+
-+# Set environment variables so the rebar compile command does
-+# cross-compile ejabberd dependencies.
-+EJABBERD_MAKE_ENV =								\
-+  $(TARGET_CONFIGURE_OPTS)							\
-+  $(TARGET_CONFIGURE_ARGS)							\
-+  LDFLAGS="-L$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot/usr/lib/erlang/usr/lib"
-+
-+# Delete HOST_DIR prefix from ERL path in ejabberctl script.
-+define EJABBERD_FIX_EJABBERDCTL
-+	sed -e "s,ERL=$(HOST_DIR),ERL=,"		\
-+	  -e "s,INSTALLUSER=,INSTALLUSER=ejabberd,"	\
-+	  -i "$(TARGET_DIR)"/usr/sbin/ejabberdctl
-+endef
-+
-+EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
-+
-+define EJABBERD_PERMISSIONS
-+/etc/ejabberd d 750 0 128 - - - - -
-+/etc/ejabberd/ejabberd.yml-new f 640 0 128 - - - - -
-+/etc/ejabberd/ejabberd.yml f 640 0 128 - - - - -
-+/etc/ejabberd/ejabberdctl.cfg-new f 640 0 128 - - - - -
-+/etc/ejabberd/ejabberdctl.cfg f 640 0 128 - - - - -
-+/etc/ejabberd/inetrc f 644 0 128 - - - - -
-+/usr/sbin/ejabberdctl f 550 0 128 - - - - -
-+/usr/lib/ejabberd/priv/bin/captcha.sh f 750 119 0 - - - - -
-+/usr/var/lib/ejabberd d 750 119 0 - - - - -
-+/usr/var/lock/ejabberdctl d 750 119 0 - - - - -
-+/usr/var/log/ejabberd d 750 119 0 - - - - -
-+endef
-+
-+define EJABBERD_USERS
-+ejabberd 119 ejabberd 128 * /var/run/ejabberd - - ejabberd daemon
-+endef
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+ QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
+ QT5BASE_DEPENDENCIES   += libgles libegl
 -- 
-1.9.1
+2.0.1
