@@ -1,43 +1,77 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 16 Jul 2014 07:21:44 +0200
-Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
-In-Reply-To: <20140715223552.04987eb6@free-electrons.com>
-References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20140715205341.77237719@free-electrons.com>
- <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
- <20140715201336.GE3351@free.fr> <20140715223552.04987eb6@free-electrons.com>
-Message-ID: <5948a65e-1f6d-4443-8eaa-318d766af407@email.android.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Jul 2014 07:43:38 +0200
+Subject: [Buildroot] [PATCH 6 of 6] uclibc: update-config: preserve
+ freshly configured settings
+In-Reply-To: <CAAXf6LXaJFF+N6tGAcgY7mpYmBJg=cE0F7eOxvh+eba_83xY4w@mail.gmail.com>
+References: <patchbomb.1405338624@localhost>
+ <82c951fdcf4851185bcc.1405338630@localhost> <53C40DC8.8000607@mind.be>
+ <CAAXf6LXaJFF+N6tGAcgY7mpYmBJg=cE0F7eOxvh+eba_83xY4w@mail.gmail.com>
+Message-ID: <53C6110A.2040403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Dear Yann E. MORIN,
->
->On Tue, 15 Jul 2014 22:13:36 +0200, Yann E. MORIN wrote:
->
->> The more I think about it, the more I find our policy to require
->> PKG-prefixed patches to be really cumbersome, since the patches already
->> are in a subdir named PKG/
->
->Actually, me too. It prevents the output of "git format-patch" from
->being directly used as patches.
->
->> Of course, we're enforcing this naming scheme in BR2_GLOBAL_PATCH_DIR to
->> be in sync with what we do for our bundled patches.
->> 
->> But still, if patches were just named NNNN-title.patch, that would be as
->> efficient at sorting the patches. The PKG- prefix is not really
->> required, and indeed can cause some troubles with some use-cases, such
->> as yours.
->> 
->> Thomas, was there a specific reason we wanted the patches to be
->> PKG-prefixed? If not, would it make sense to just accept patches without
->> a PKG-prefix?
->
->I honestly don't remember what was the reasoning behind that. Arnout
->maybe?
+On 15/07/14 20:33, Thomas De Schampheleire wrote:
+> Hi Arnout,
+> 
+> On Mon, Jul 14, 2014 at 7:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 14/07/14 13:50, Thomas De Schampheleire wrote:
+>>> In the sequence:
+>>>
+>>> make uclibc-menuconfig
+>>> make uclibc-update-config
+>>>
+>>> the freshly configured settings from the menuconfig are lost during the
+>>> update-config step. This is because update-config depends on the configure
+>>> step, which starts by copying the config file to the build directory.
+>>>
+>>> Instead, stop depending on the configure step from update-config, and
+>>> introduce a new stamp file .stamp_config_fixup_done, which applies any
+>>> fixups on the .config file.
+>>
+>>  I think the commit message should explain why this stamp file is preferred over
+>> repeating the fixup in each target.
+>>
+> 
+> I'm trying to come up with good reasons here, but the only real one I
+> can find is to avoid duplicating code and avoid redoing the fixup
+> unnecessarily.
+> 
+> Did you have anything else in mind?
 
-Not sure either...
+ Well, I never proposed to introduce an extra stamp file, did I? :-)
+
+ The reasons you put forward are OK, they should just be mentioned in the commit
+message because it's a change from how things are currently done, and this
+should be motivated. That way, if someone later on finds a reason to revert to
+repeating the fixup, they can see why it was done this way to begin with.
+
+ BTW, it doesn't really avoid duplication of code. Now we have repetitions of
+
+$(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.stamp_config_fixup_done
+
+and otherwise we'd have repetitions of
+
+define UCLIBC_CONFIGURE_CMDS
+	$(UCLIBC_FIXUP_DOT_CONFIG)
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Best regards,
+> Thomas
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
