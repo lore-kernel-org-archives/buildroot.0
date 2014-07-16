@@ -1,73 +1,105 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 16 Jul 2014 10:29:50 +0200
-Subject: [Buildroot] [PATCH] Add target-clean makefile target
-In-Reply-To: <20140716100919.3f8101c3@free-electrons.com>
-References: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
- <20140715225415.08f5a5a6@free-electrons.com>
- <CA+TH9Vmp+-+Dgqh-BVR6-aUB3w5w_ccy0=3Mw_KMKciyRyD1rA@mail.gmail.com>
- <20140715233320.46a95f1a@free-electrons.com>
- <CA+TH9V=f4o7--R1T+o3o7aGJiJJ=6M2tSpsk1KGC=5Y=B5AHNQ@mail.gmail.com>
- <20140716100919.3f8101c3@free-electrons.com>
-Message-ID: <CA+TH9VnL390p2Pd61H087An6tSGJL_wQsZ=dsJXS5Q+vgLxKfw@mail.gmail.com>
+From: Pascal Huerst <pascal.huerst@gmail.com>
+Date: Wed, 16 Jul 2014 10:49:05 +0200
+Subject: [Buildroot] [PATCH 1/1] google-breakpad: Integration into
+ Makefile and Config.in
+In-Reply-To: <20140715205659.GH3351@free.fr>
+References: <1405418443-29638-1-git-send-email-pascal.huerst@gmail.com>
+ <1405418443-29638-2-git-send-email-pascal.huerst@gmail.com>
+ <20140715205659.GH3351@free.fr>
+Message-ID: <53C63C81.7000305@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hey Yann, all,
 
-2014-07-16 10:09 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Wed, 16 Jul 2014 09:47:01 +0200, Angelo Compagnucci wrote:
->
->> > (7) is due to the fact that Git was not rebuilt, so it still believes
->> > that OpenSSL support is available. The scenario above is fairly simple,
->> > but there are many, many more similar but more subtle scenarios to
->> > screw things up.
+On 15.07.2014 22:57, Yann E. MORIN wrote:
+> Pascal, All,
+> 
+> On 2014-07-15 12:00 +0200, Pascal Huerst spake thusly:
+>> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
+>> ---
+>>  Config.in                                  | 28 ++++++++++++++++++++++++++++
+>>  package/google-breakpad/gen-syms.sh        | 25 +++++++++++++++++++++++++
+>>  package/google-breakpad/google-breakpad.mk |  8 ++++++++
+>>  3 files changed, 61 insertions(+)
+>>  create mode 100755 package/google-breakpad/gen-syms.sh
 >>
->> Good catch, but this could be documented somewhere.
->
-> Right, but then a patch adding "make target-clean" should also be
-> responsible for adding the appropriate documentation :-)
+> [--SNIP--]
+>> diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
+>> new file mode 100755
+>> index 0000000..f29c8fe
+>> --- /dev/null
+>> +++ b/package/google-breakpad/gen-syms.sh
+>> @@ -0,0 +1,25 @@
+>> +#!/bin/sh
+>> +STAGING_DIR="${1}"
+>> +TARGET_DIR="${2}"
+>> +shift 2
+>> +
+>> +SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
+>> +rm -rf "${SYMBOLS_DIR}"
+>> +mkdir -p "${SYMBOLS_DIR}"
+>> +
+>> +for FILE in $(eval ls "${TARGET_DIR}/${@}"); do
+> 
+> Why do you use eval here?
 
-If there is hope to have target-clean accepted, then I'll be working
-on the documentation as soon as possible!
+If I remove eval it does not work, but I don't know why?
 
->> I think that is better to explain buildroot's users that they have to
->> rebuild a package when they mess it's dependencies instead of all the
->> whole rootfs! Compilation of a rootfs can take hours ...
->> Yes, I know, probably removing Openssl screws up a hundred of packages
->> and it's not practical to rebuild one by one, but I think this is a
->> corner case more than the rule.
->
-> Not that much: any optional dependency in Buildroot will exhibit
-> exactly the same behavior, and there are hundreds if not thousands of
-> places were we rely on optional dependencies.
+>> +	if [ -d "${FILE}" ]; then
+>> +		printf "Error: '%s' is a directory\n" "${FILE}" >&2
+>> +		exit 1
+>> +	fi
+>> +	if dump_syms "${FILE}" > "${SYMBOLS_DIR}/tmp.sym" 2>/dev/null; then
+>> +		HASH=$(head -n1 "${SYMBOLS_DIR}/tmp.sym" | cut -d ' ' -f 4);
+>> +		FILENAME=$(basename "$FILE");
+>> +		mkdir -p "${SYMBOLS_DIR}/${FILENAME}/${HASH}"
+>> +		mv "${SYMBOLS_DIR}/tmp.sym" "${SYMBOLS_DIR}/${FILENAME}/${HASH}/${FILENAME}.sym";
+>> +	else
+>> +		printf "Error dumping symbols for: '%s'\n" "${FILE}" >&2
+>> +		exit 1
+>> +	fi
+>> +done
+>> +rm -rf "${SYMBOLS_DIR}/tmp"
+>> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+>> index bf857ba..622f7a6 100644
+>> --- a/package/google-breakpad/google-breakpad.mk
+>> +++ b/package/google-breakpad/google-breakpad.mk
+>> @@ -14,5 +14,13 @@ GOOGLE_BREAKPAD_INSTALL_STAGING = YES
+>>  GOOGLE_BREAKPAD_LICENSE = BSD-3c
+>>  GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+>>  
+>> +#ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+> 
+> Did you forget to un-comment this line?
 
-Yes, I can understand the implications. Honestly, using buildroot
-naively, I never encountered such behaviors, but I was not going
-deeply into dependencies, only selecting and deselecting packages here
-and there.
-Buildroot served me well!
+Oh... you're right, fixed that.
 
-> By I tend to agree that we could provide the tool, provided that there
-> is sufficient documentation to explain how to use it correctly.
+>> +define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+>> +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
+>> +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
+>> +endef
+>> +TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
+>> +#endif
+> 
+> Ditto.
 
-Yes, it's exactly what I'm looking for.
+yes, again!
 
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+> Regards,
+> Yann E. MORIN.
+> 
+>> +
+>>  $(eval $(autotools-package))
+>>  $(eval $(host-autotools-package))
+>> -- 
+>> 1.9.3
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
