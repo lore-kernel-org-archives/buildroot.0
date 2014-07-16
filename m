@@ -1,94 +1,70 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 16 Jul 2014 09:47:01 +0200
-Subject: [Buildroot] [PATCH] Add target-clean makefile target
-In-Reply-To: <20140715233320.46a95f1a@free-electrons.com>
-References: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
- <20140715225415.08f5a5a6@free-electrons.com>
- <CA+TH9Vmp+-+Dgqh-BVR6-aUB3w5w_ccy0=3Mw_KMKciyRyD1rA@mail.gmail.com>
- <20140715233320.46a95f1a@free-electrons.com>
-Message-ID: <CA+TH9V=f4o7--R1T+o3o7aGJiJJ=6M2tSpsk1KGC=5Y=B5AHNQ@mail.gmail.com>
+From: amit.chaudhuri at bt.com <amit.chaudhuri@bt.com>
+Date: Wed, 16 Jul 2014 08:52:30 +0100
+Subject: [Buildroot] Kernel oops on imx53 / ARM - Unhandled fault:
+ alignment exception (0x801)
+In-Reply-To: <20140715173440.65fa4f2d@free-electrons.com>
+References: <8CF2946A95E16D4A92067339B0D48BE59AD1126633@EMV66-UKRD.domain1.systemhost.net>,
+ <20140715173440.65fa4f2d@free-electrons.com>
+Message-ID: <8CF2946A95E16D4A92067339B0D48BE59AEB5AF502@EMV66-UKRD.domain1.systemhost.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thomas - thanks for the suggestion. (Newer kernel version).  Unfortunately, I'm tied to 2.6.35 by something on the graphics side.
 
-2014-07-15 23:33 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Angelo Compagnucci,
->
-> On Tue, 15 Jul 2014 23:07:30 +0200, Angelo Compagnucci wrote:
->
->> > Thanks for this patch. However, until now, we've always rejected
->> > similar patches, because they are potentially dangerous for users.
->> > Users might be lead to think that they can do some changes in
->> > "menuconfig", then do "make target-clean all" and get the updated
->> > rootfs without rebuilding everything. This is obviously completely
->> > wrong if the configuration of some packages is changed, if some
->> > libraries are added/removed from the build, etc.
->>
->> I think it hurts so much to buildroot not having a clean way to
->> rebuild the rootfs after a changing.
->
-> There is a clean way:
->
->         make clean all
->
-> That's the only way that is 100% guaranteed to give the correct result.
-> Any other solution requires the user to have some deep understanding of
-> what (s)he is doing.
->
->> If this patch it's  naive, probably a corrected procedure should be
->> documented somewhere.
->>
->> Instead I think this patch is very useful (I use it everyday!), the
->> caveats should be documented in a proper place in the manual. Honestly
->> I haven't found a case in which cleaning and rebuilding rootfs this
->> way crashed my rootfs, but I admit that I'm not so confident with
->> buildroot internals.
->
-> Scenario:
->
->   1/ make menuconfig
->   2/ Enable BR2_PACKAGE_GIT and BR2_PACKAGE_OPENSSL
->   3/ Run make, use your rootfs, you're happy
->   4/ make menuconfig
->   5/ Disable BR2_PACKAGE_OPENSSL
->   6/ Since you don't want to rebuild everything, you just run your new
->      "make target-clean" thing.
->   7/ Run your rootfs, and now Git fails to work, because it is linked
->      against OpenSSL, but OpenSSL isn't installed in the rootfs.
->
-> (7) is due to the fact that Git was not rebuilt, so it still believes
-> that OpenSSL support is available. The scenario above is fairly simple,
-> but there are many, many more similar but more subtle scenarios to
-> screw things up.
+Any other options?
 
-Good catch, but this could be documented somewhere. I think that is
-better to explain buildroot's users that they have to rebuild a
-package when they mess it's dependencies instead of all the whole
-rootfs! Compilation of a rootfs can take hours ...
-Yes, I know, probably removing Openssl screws up a hundred of packages
-and it's not practical to rebuild one by one, but I think this is a
-corner case more than the rule.
+Regards,
 
-And in the end, if their rootfs is not working, they can obviously
-rely on the good old cleaning way.
+Amit
+________________________________________
+From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
+Sent: 15 July 2014 16:34
+To: Chaudhuri,A,Amit,JRM13 R
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] Kernel oops on imx53 / ARM - Unhandled fault: alignment exception (0x801)
 
-Sincerly, Angelo.
+Hello,
 
+On Tue, 15 Jul 2014 16:12:06 +0100, amit.chaudhuri at bt.com wrote:
+
+> I am using buildroot to create a toolchain for Freescale's imx53qsb board.
+> Part of the target we're looking for is Qt5 with support for their eglfs
+> platform.
 >
-> Best regards,
+> If I only build part of Qt5 and don't satisfy dependencies for eglfs I get
+> a bootable system. When I add all of the dependencies I appear to need, I
+> get the relevant Qt5 modules compiled & linked but my kernel dies with
+> "Unhandled fault: alignment exception (0x801) at 0xdf039e16". I've added the
+> console error message and disassembly of the crash site below.
 >
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> In narrowing down the things that tip me over the edge I've settled on the
+> addition of udev and evdev as being likely factors.
 
+Enabling udev/evdev will force the activation of devtmpfs in the
+kernel, and therefore the call of the devtmpfs_init() function in the
+kernel, which triggers the unaligned access.
 
+> I *think* I need to add -mno-unaligned-access to the compilation flags for
+> everything. But I've not worked out how to do that. If alignment is my issue
+> how does one add custom compilation flags to all packages?
+>
+> If I'm mis-diagnosing the problem, I'd be keen to have that pointed out.
+> All help much appreciated..
 
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Basically: run a newer kernel.
+
+My understanding is that this issue has been fixed in newer kernel
+versions by allowing unaligned accesses on ARMv6 and ARMv7. The kernel
+you're using was at a time where ARMv7 toolchains were not generating
+unaligned accesses.
+
+Best regards,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
