@@ -1,45 +1,228 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 00:00:40 +0200
-Subject: [Buildroot] [PATCH 6/6 v3] package/gst1-plugins-bad: gettextize to
-	match the new gettext version
-In-Reply-To: <cover.1405547907.git.yann.morin.1998@free.fr>
-References: <cover.1405547907.git.yann.morin.1998@free.fr>
-Message-ID: <f200992ff52ec38350cf0fcd1d79c5b459da175f.1405547907.git.yann.morin.1998@free.fr>
+Date: Thu, 17 Jul 2014 00:05:15 +0200
+Subject: [Buildroot] [PATCH v2] ejabberd: new package
+In-Reply-To: <1405526227-4277-1-git-send-email-johan.oudinet@gmail.com>
+References: <1405526227-4277-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20140716220515.GI9252@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gettext macros in the package are from a gettext version older than
-the ones we have in Buildroot, so autoreconf fails.
+Johan, All,
 
-Run gettextize prior to running autoreconf, like we do in wget.
+On 2014-07-16 17:57 +0200, Johan Oudinet spake thusly:
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 
-Fixes:
-    http://autobuild.buildroot.org/results/ea6/ea6797f9595c34734229c78b4e25bf624925144b/
-    http://autobuild.buildroot.org/results/578/5781774ae1b7ba85efee4bc933235304169b9196/
-    http://autobuild.buildroot.org/results/188/18888e06058dff0249d7c5e10a2c4f46e059878a/
-    ...
+Thanks for this follow-up!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 1 +
- 1 file changed, 1 insertion(+)
+I planned on reviewing it tonight, but I had a lot of connection
+issues at home, so I got side-tracked with those issues...
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 25289d2..e7d265f 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -14,6 +14,7 @@ GST1_PLUGINS_BAD_LICENSE = LGPLv2+ LGPLv2.1+
- 
- GST1_PLUGINS_BAD_AUTORECONF = YES
- GST1_PLUGINS_BAD_AUTORECONF_OPT = -I $(@D)/common/m4
-+GST1_PLUGINS_BAD_GETTEXTIZE = YES
- 
- GST1_PLUGINS_BAD_CONF_OPT = \
- 	--disable-examples \
+Anyway, I'm interested in this patch, so I've queued it for review.
+Don't worry, it's not forgotten. ;-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> Changes v1 -> v2:
+>   - Run ejabberd as ejabberd user instead of root.
+> ---
+>  package/Config.in                 |  1 +
+>  package/ejabberd/Config.in        | 13 +++++++
+>  package/ejabberd/check-erlang-lib | 48 +++++++++++++++++++++++
+>  package/ejabberd/ejabberd.mk      | 81 +++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 143 insertions(+)
+>  create mode 100644 package/ejabberd/Config.in
+>  create mode 100755 package/ejabberd/check-erlang-lib
+>  create mode 100644 package/ejabberd/ejabberd.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index b363a7c..a50416e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -937,6 +937,7 @@ endif
+>  	source "package/dnsmasq/Config.in"
+>  	source "package/dropbear/Config.in"
+>  	source "package/ebtables/Config.in"
+> +	source "package/ejabberd/Config.in"
+>  	source "package/ethtool/Config.in"
+>  	source "package/faifa/Config.in"
+>  	source "package/fmc/Config.in"
+> diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
+> new file mode 100644
+> index 0000000..3a2336d
+> --- /dev/null
+> +++ b/package/ejabberd/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_EJABBERD
+> +       bool "ejabberd"
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_ERLANG
+> +       select BR2_PACKAGE_LIBYAML
+> +       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> +       select BR2_PACKAGE_EXPAT
+> +       help
+> +	 Ejabberd is a Jabber/XMPP instant messaging server, written
+> +	 in Erlang/OTP. Among other features, ejabberd is
+> +	 cross-platform, fault-tolerant, clusterable and modular.
+> +
+> +	 http://www.ejabberd.im
+> diff --git a/package/ejabberd/check-erlang-lib b/package/ejabberd/check-erlang-lib
+> new file mode 100755
+> index 0000000..1a942bb
+> --- /dev/null
+> +++ b/package/ejabberd/check-erlang-lib
+> @@ -0,0 +1,48 @@
+> +#!/bin/sh -e
+> +# Helper to bypass AC_ERLANG_CHECK_LIB
+> +
+> +usage() {
+> +    cat <<EOF
+> +Usage:
+> +	$0 library
+> +Look for Erlang's library in TARGET_DIR/usr/lib/erlang/lib.
+> +
+> +If the library is found, it returns the path to the latest version,
+> +relative to TARGET_DIR. Otherwise, it returns "not found".
+> +
+> +If there are several versions, it returns an error because it does not
+> +know which one Erlang uses.
+> +
+> +EOF
+> +}
+> +
+> +die () {
+> +    echo "$@" >&2
+> +    exit 1
+> +}
+> +
+> +if [ $# -ne 1 ]; then
+> +    usage
+> +    exit 0
+> +else
+> +    library="$1"
+> +fi
+> +
+> +target_dir="${TARGET_DIR:-../../output/target}"
+> +
+> +[ -d "$target_dir" ] || die "TARGET_DIR is not a directory. Please \
+> +specify the TARGET_DIR environment variable."
+> +
+> +case "$(ls -1d -- "$target_dir/usr/lib/erlang/lib/$library-"* | wc -l)" in
+> +    0)
+> +	echo "not found"
+> +	;;
+> +    1)
+> +	echo "$target_dir/usr/lib/erlang/lib/$library-"* \
+> +	    | sed -e "s,^$target_dir,,"
+> +	;;
+> +    *)
+> +	die "Several versions of $library have been found. Please \
+> +	remove the unused ones."
+> +	;;
+> +esac
+> diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+> new file mode 100644
+> index 0000000..ca54e4e
+> --- /dev/null
+> +++ b/package/ejabberd/ejabberd.mk
+> @@ -0,0 +1,81 @@
+> +################################################################################
+> +#
+> +# ejabberd
+> +#
+> +################################################################################
+> +
+> +EJABBERD_VERSION = 14.05
+> +EJABBERD_SITE = $(call github,processone,ejabberd,$(EJABBERD_VERSION))
+> +EJABBERD_LICENSE = GPLv2+
+> +EJABBERD_LICENSE_FILES = COPYING
+> +EJABBERD_DEPENDENCIES =	libyaml expat openssl erlang
+> +
+> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> +	EJABBERD_DEPENDENCIES += libiconv
+> +endif
+> +
+> +EJABBERD_ERLANG_LIBS := sasl crypto public_key ssl mnesia inets compiler
+> +
+> +# Do AC_ERLANG_CHECK_LIB job without erlang.
+> +define EJABBERD_SET_LIBS_DIR
+> +	for lib in $(EJABBERD_ERLANG_LIBS); do					\
+> +	  export								\
+> +	    erlang_lib_dir_$$lib="`package/ejabberd/check-erlang-lib $$lib`";	\
+> +	done
+> +endef
+> +
+> +# Set cross-compilation options to the configure called by rebar.
+> +define EJABBERD_FIX_REBAR_CONFIG_SCRIPT
+> +	sed -e "s,./configure,./configure \\	\
+> +	--target=$(GNU_TARGET_NAME) \\		\
+> +	--host=$(GNU_TARGET_NAME) \\		\
+> +	--build=$(GNU_HOST_NAME),"		\
+> +	  -i "$(@D)"/rebar.config.script
+> +endef
+> +
+> +EJABBERD_PRE_CONFIGURE_HOOKS +=			\
+> +	EJABBERD_SET_LIBS_DIR			\
+> +	EJABBERD_FIX_REBAR_CONFIG_SCRIPT
+> +
+> +# Guess answers for these tests, configure will bail out otherwise
+> +# saying error: cannot run test program while cross compiling.
+> +EJABBERD_CONF_ENV =						\
+> +  ac_cv_erlang_root_dir='$(HOST_DIR)/usr/lib/erlang'		\
+> +  $(foreach lib, $(EJABBERD_ERLANG_LIBS),			\
+> +    ac_cv_erlang_lib_dir_$(lib)="$$erlang_lib_dir_$(lib)")
+> +
+> +# Set environment variables so the rebar compile command does
+> +# cross-compile ejabberd dependencies.
+> +EJABBERD_MAKE_ENV =								\
+> +  $(TARGET_CONFIGURE_OPTS)							\
+> +  $(TARGET_CONFIGURE_ARGS)							\
+> +  LDFLAGS="-L$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot/usr/lib/erlang/usr/lib"
+> +
+> +# Delete HOST_DIR prefix from ERL path in ejabberctl script.
+> +define EJABBERD_FIX_EJABBERDCTL
+> +	sed -e "s,ERL=$(HOST_DIR),ERL=,"		\
+> +	  -e "s,INSTALLUSER=,INSTALLUSER=ejabberd,"	\
+> +	  -i "$(TARGET_DIR)"/usr/sbin/ejabberdctl
+> +endef
+> +
+> +EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
+> +
+> +define EJABBERD_PERMISSIONS
+> +/etc/ejabberd d 750 0 128 - - - - -
+> +/etc/ejabberd/ejabberd.yml-new f 640 0 128 - - - - -
+> +/etc/ejabberd/ejabberd.yml f 640 0 128 - - - - -
+> +/etc/ejabberd/ejabberdctl.cfg-new f 640 0 128 - - - - -
+> +/etc/ejabberd/ejabberdctl.cfg f 640 0 128 - - - - -
+> +/etc/ejabberd/inetrc f 644 0 128 - - - - -
+> +/usr/sbin/ejabberdctl f 550 0 128 - - - - -
+> +/usr/lib/ejabberd/priv/bin/captcha.sh f 750 119 0 - - - - -
+> +/usr/var/lib/ejabberd d 750 119 0 - - - - -
+> +/usr/var/lock/ejabberdctl d 750 119 0 - - - - -
+> +/usr/var/log/ejabberd d 750 119 0 - - - - -
+> +endef
+> +
+> +define EJABBERD_USERS
+> +ejabberd 119 ejabberd 128 * /var/run/ejabberd - - ejabberd daemon
+> +endef
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
