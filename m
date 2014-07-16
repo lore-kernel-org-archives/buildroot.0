@@ -1,55 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 22:46:31 +0200
-Subject: [Buildroot] [git commit] python-numpy: add optional blas/lapack
-	support
-Message-ID: <20140716204732.2680F9D25C@busybox.osuosl.org>
+Date: Wed, 16 Jul 2014 22:50:07 +0200
+Subject: [Buildroot] [PATCH v2 06/24] python-numpy: add optional
+ blas/lapack support
+In-Reply-To: <1398208556-4195-7-git-send-email-s.martin49@gmail.com>
+References: <1398208556-4195-1-git-send-email-s.martin49@gmail.com>
+ <1398208556-4195-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <20140716225007.43763adf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fa6a965c5eca38332d3434071e325c15368b0420
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Samuel Martin,
 
-python-numpy can be linked with libblas and liblapack, so
-automatically do it when clapack is enabled.
+On Wed, 23 Apr 2014 01:15:38 +0200, Samuel Martin wrote:
 
-[Thomas:
- - Fix issues in the original submission and reformat according to
-   Yann E. Morin suggestions.
- - Properly format the "libraries" entry in site.cfg as outlined in
-   the example site.cfg file: the list of libraries should be
-   space-separated.]
+> +PYTHON_NUMPY_DEPENDENCIES = \
+> +	$(if BR2_PACKAGE_CLAPACK,clapack)
+> +
+> +PYTHON_NUMPY_SITE_CFG_LIBS = \
+> +	$(if $(BR2_PACKAGE_CLAPACK),blas lapack)
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/python-numpy/python-numpy.mk |    7 ++++++-
- 1 files changed, 6 insertions(+), 1 deletions(-)
+I've changed this as suggested by Yann E. Morin.
 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index e309ef6..3d3a6c5 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -11,6 +11,11 @@ PYTHON_NUMPY_LICENSE = BSD-3c
- PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
- PYTHON_NUMPY_SETUP_TYPE = distutils
- 
-+ifeq ($(BR2_PACKAGE_CLAPACK),y)
-+PYTHON_NUMPY_DEPENDENCIES += clapack
-+PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
-+endif
-+
- PYTHON_NUMPY_BUILD_OPT = --fcompiler=None
- 
- define PYTHON_NUMPY_CONFIGURE_CMDS
-@@ -18,7 +23,7 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
- 	echo "[DEFAULT]" >> $(@D)/site.cfg
- 	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
- 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
--	echo "libraries =" >> $(@D)/site.cfg
-+	echo "libraries =" $(subst $(space),$(comma),$(PYTHON_NUMPY_SITE_CFG_LIBS)) >> $(@D)/site.cfg
- endef
- 
- # Some package may include few headers from NumPy, so let's install it
+> @@ -19,6 +24,8 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
+>  	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
+>  	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
+>  	echo "libraries =" >> $(@D)/site.cfg
+> +	$(foreach lib,$(PYTHON_NUMPY_SITE_CFG_LIBS),\
+> +		echo "    $(lib)" >> $(@D)/site.cfg ;)
+
+In the example site.cfg file, the syntax is
+
+	libraries = library1,library2
+
+so I've changed this logic to use this syntax, and I've applied your
+patch.
+
+Can you check that things are working properly by testing the latest
+master? I've checked that things build properly, but I'm not sure how
+to test that python-numpy and the blas/lapack support work properly.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
