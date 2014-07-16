@@ -1,48 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 16 Jul 2014 19:14:19 +0200
-Subject: [Buildroot] [PATCH 0/3] Make exim more configurable
-In-Reply-To: <53C63FE1.1010308@lucaceresoli.net>
-References: <1404489386-7523-1-git-send-email-luca@lucaceresoli.net>
- <20140715213125.1b848b48@free-electrons.com>
- <53C63546.4040204@lucaceresoli.net>
- <20140716102957.76a63a7a@free-electrons.com>
- <53C63FE1.1010308@lucaceresoli.net>
-Message-ID: <20140716171419.GB9252@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 Jul 2014 14:18:44 -0300
+Subject: [Buildroot] Open bug overview: help wanted!
+In-Reply-To: <CAAXf6LXxPunhd=VU2jXqRvE5rFmiApZM1FxaTvLWgHCTqC2e5A@mail.gmail.com>
+References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
+ <53C196B1.6080104@zacarias.com.ar>
+ <CAAXf6LXxPunhd=VU2jXqRvE5rFmiApZM1FxaTvLWgHCTqC2e5A@mail.gmail.com>
+Message-ID: <53C6B3F4.6060101@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+On 07/16/2014 02:08 PM, Thomas De Schampheleire wrote:
 
-On 2014-07-16 11:03 +0200, Luca Ceresoli spake thusly:
-[--SNIP--]
-> Well, yes, that's true... I'm probably biased by the fact that
-> configuring exim is so uncomfortable, but that's no excuse I guess. :)
+> Thanks a lot for working on this.
+> If Jeremy or you could respin the main patch, that'd be great. But I
+> assume it can only be applied once all the package fixes are in?
+> Are nano and statserial the only ones needing fixing?
 
-Why do you even need to _customise_ the exim username in the first place?
-
-Can't we just call that user 'exim' once and for all?
-We alredy have a 'mail' user. Can't we just use that?
-
-I fail to see how the _name_ of the user has any impact. If the exim's
-default username is not what we use, then we should either use exim's
-default or, if we do not like the default username and prefer the one we
-have inBuildroot, change exim's username to match what we use.
-
-So, what is the point of customising the _username_. All that matters
-when dealing with file access are the UID and GID. The username is just
-a convenience string, which sole purpose is to be nice to us mere
-humans... ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+statserial is a generic fix so it was applied yesterday by Thomas P.
+nano depends on the ncursesw config knob - it can be applied but
+technically it's a no-op until ncursesw is in so should be part of the
+series or at least applied immediately after ncursesw.
+allyespackageconfig was my test run and yes, there shouldn't be any
+unpleasant surprises with the patches applied, just maybe a couple of
+sneaked new/bumped packages since my test tree run and now but unlikely
+given that only 2 packages "complained".
+Of course i couldn't finish a similar run on static because that would
+require to fix all static build failures :)
+Regarding the respin we can wait for Jeremy, modify his patch or just do
+an extra patch with the static fix - we still need the nano fix anyway.
+I'd go with the 3rd option since it's pretty straightforward.
+Regards.
