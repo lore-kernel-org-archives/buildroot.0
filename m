@@ -1,233 +1,165 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 20:31:27 +0200
-Subject: [Buildroot] [git commit] upmpdcli: new package
-Message-ID: <20140716183158.838179D25E@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 16 Jul 2014 20:32:47 +0200
+Subject: [Buildroot] Open bug overview: help wanted!
+In-Reply-To: <20140712215353.GD3582@free.fr>
+References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
+ <20140712215353.GD3582@free.fr>
+Message-ID: <CAAXf6LWPZma2kB5FXt2M+civpC6SoZ7DVhkfqoJFrQHmiwrRGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=603814465271213ecb1885232ec8e8d9cbd666f2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann,
 
-[Thomas:
- - add package to package/Config.in
- - add missing dependencies on thread and largefile, inherited from
-   libupnp. Noticed by Yann E. Morin.
- - add installation of default configuration file. Noticed by Yann
-   E. Morin.
- - fix the license, it's not GPLv2, but GPLv2+.
- - remove the colon in the user description, noticed by Yann E. Morin.
- - added a patch to fix build with uClibc.
- - fix the init script installation to use a full path as the target.]
+On Sat, Jul 12, 2014 at 11:53 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
+>
+> On 2014-07-12 20:50 +0200, Thomas De Schampheleire spake thusly:
+>> Here is a brief overview of the currently open bugs. Ideally we can
+>> close many of them in the context of buildroot-2014.08.
+>> Contributions in this area are more than welcome!
+>
+> Thanks for this summary! :-)
 
-Signed-off-by: Joerg Krause <jkrause@posteo.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                 |    1 +
- package/upmpdcli/Config.in                        |   18 +++++
- package/upmpdcli/S99upmpdcli                      |   40 +++++++++++
- package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch |   77 +++++++++++++++++++++
- package/upmpdcli/upmpdcli.mk                      |   28 ++++++++
- 5 files changed, 164 insertions(+), 0 deletions(-)
+And thanks to all who provided feedback!
 
-diff --git a/package/Config.in b/package/Config.in
-index b363a7c..3f9bc7d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -28,6 +28,7 @@ menu "Audio and video applications"
- 	source "package/tidsp-binaries/Config.in"
- 	source "package/tstools/Config.in"
- 	source "package/twolame/Config.in"
-+	source "package/upmpdcli/Config.in"
- 	source "package/vlc/Config.in"
- 	source "package/vorbis-tools/Config.in"
- 	source "package/wavpack/Config.in"
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-new file mode 100644
-index 0000000..d89928f
---- /dev/null
-+++ b/package/upmpdcli/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_UPMPDCLI
-+	bool "upmpdcli"
-+	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBMPDCLIENT
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE # libupnp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
-+	help
-+	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
-+	  Player Daemon. It supports UPnP gapless track transitions and
-+	  the OpenHome ohMedia services.
-+
-+	  http://www.lesbonscomptes.com/upmpdcli/
-+
-+comment "upmpdcli needs a toolchain w/ C++, largefile, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/upmpdcli/S99upmpdcli b/package/upmpdcli/S99upmpdcli
-new file mode 100644
-index 0000000..314ea32
---- /dev/null
-+++ b/package/upmpdcli/S99upmpdcli
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+
-+NAME=upmpdcli
-+DAEMON=/usr/bin/$NAME
-+CONFFILE=/etc/$NAME.conf
-+PIDFILE=/var/run/$NAME.pid
-+DAEMON_ARGS="-D -c $CONFFILE"
-+
-+# Sanity checks
-+test -f $DAEMON || exit 0
-+
-+do_start() {
-+        echo -n "Starting $NAME: "
-+        start-stop-daemon --start --quiet --background --exec $DAEMON \
-+                -- $DAEMON_ARGS \
-+                && echo "OK" || echo "FAIL"
-+}
-+
-+do_stop() {
-+        echo -n "Stopping $NAME: "
-+        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
-+                && echo "OK" || echo "FAIL"
-+}
-+
-+case "$1" in
-+        start)
-+                do_start
-+                ;;
-+        stop)
-+                do_stop
-+                ;;
-+        restart)
-+                do_stop
-+                sleep 1
-+                do_start
-+                ;;
-+        *)
-+                echo "Usage: $0 {start|stop|restart}"
-+                exit 1
-+esac
-diff --git a/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch b/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-new file mode 100644
-index 0000000..4935efd
---- /dev/null
-+++ b/package/upmpdcli/upmpdcli-0001-uclibc-fixes.patch
-@@ -0,0 +1,77 @@
-+Add necessary fixes to build with uClibc
-+
-+ - Missing #include of C library headers
-+ - exp10 is not available in uClibc
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/libupnpp/device.cxx
-+===================================================================
-+--- a/libupnpp/device.cxx
-++++ b/libupnpp/device.cxx
-+@@ -17,6 +17,7 @@
-+ #include "config.h"
-+ 
-+ #include <time.h>
-++#include <errno.h>
-+ #include <sys/time.h>
-+ 
-+ #include <iostream>
-+Index: b/libupnpp/soaphelp.cxx
-+===================================================================
-+--- a/libupnpp/soaphelp.cxx
-++++ b/libupnpp/soaphelp.cxx
-+@@ -16,6 +16,10 @@
-+  */
-+ #include "config.h"
-+ 
-++#include <string.h>
-++#include <stdlib.h>
-++#include <stdio.h>
-++
-+ #include <iostream>
-+ using namespace std;
-+ 
-+Index: b/upmpd/upmpd.cxx
-+===================================================================
-+--- a/upmpd/upmpd.cxx
-++++ b/upmpd/upmpd.cxx
-+@@ -20,6 +20,7 @@
-+ #include <unistd.h>
-+ #include <sys/types.h>
-+ #include <pwd.h>
-++#include <errno.h>
-+ 
-+ #include <string>
-+ #include <iostream>
-+Index: b/upmpd/upmpdutils.cxx
-+===================================================================
-+--- a/upmpd/upmpdutils.cxx
-++++ b/upmpd/upmpdutils.cxx
-+@@ -21,11 +21,14 @@
-+ // not linking to Qt or glib just to get path-concatenating
-+ // functions...
-+ 
-++#define _GNU_SOURCE
-++
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ #include <sys/file.h>
-++#include <stdlib.h>
-+ #include <math.h>
-+ #include <pwd.h>
-+ #include <regex.h>
-+@@ -35,6 +38,11 @@
-+ #define O_STREAMING 0
-+ #endif
-+ 
-++#ifdef __UCLIBC__
-++/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
-++#define exp10(x) (exp((x) * log(10)))
-++#endif /* __UCLIBC__ */
-++
-+ #include <iostream>
-+ #include <sstream>
-+ #include <fstream>
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-new file mode 100644
-index 0000000..3942d12
---- /dev/null
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# upmpdcli
-+#
-+################################################################################
-+
-+UPMPDCLI_VERSION = 0.7.1
-+UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
-+UPMPDCLI_LICENSE = GPLv2+
-+UPMPDCLI_LICENSE_FILES = COPYING
-+UPMPDCLI_DEPENDENCIES = expat libupnp libmpdclient
-+
-+# Upmpdcli only runs if user upmpdcli exists
-+define UPMPDCLI_USERS
-+	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli MPD UPnP Renderer Front-End
-+endef
-+
-+define UPMPDCLI_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/S99upmpdcli
-+endef
-+
-+define UPMPDCLI_INSTALL_CONF_FILE
-+	$(INSTALL) -D -m 0755 $(@D)/upmpd/upmpdcli.conf $(TARGET_DIR)/etc/upmpdcli.conf
-+endef
-+
-+UPMPDCLI_POST_INSTALL_TARGET_HOOKS += UPMPDCLI_INSTALL_CONF_FILE
-+
-+$(eval $(autotools-package))
+>
+>> https://bugs.busybox.net/show_bug.cgi?id=7010 enhancement
+>> unassigned at buildroot.uclibc.org jamvm builds and runs fine under mips
+>> (be)
+>> This problem will be solved once jamvm 1.6.0 is released. The
+>> maintainer of Jamvm has promised this already for some time, but so
+>> far the release hasn't been made yet.
+>
+> No release, no mipseb support. The submitter should press the jamvm
+> maintainer to do a release.
+>
+
+I have been doing this a few times, and the release was to happen Real
+Soon Now... :)
+Looking at the commit log, it seems he is now fixing warnings and
+such, I'll wait a while and then bug him again.
+
+>> https://bugs.busybox.net/show_bug.cgi?id=7172 major
+>> unassigned at buildroot.uclibc.org Name collision of rpath token
+>> expansion and internal variables
+>> The puzzle pieces for a solution are present in this bug report. All
+>> it needs is someone caring enough to create a proper patch for this.
+>> Any candidates?
+>
+> I'm not a fan of all this rpath trickery.
+>
+> Basically, the submitter (probably) wants this to run his
+> buildroot-built system from somewhere else than / and does not want to
+> chroot into it.
+>
+> Should we add complexity to Buildroot for this use-case?
+
+I agree with the patches you sent to the list: one documentation patch
+and a patch adding patchelf.
+
+>
+>> https://bugs.busybox.net/show_bug.cgi?id=5900 normal
+>> unassigned at buildroot.uclibc.org config flags to the Xenomai build
+>> system ...
+>> This problem should be investigated a little to see if there is
+>> actually a problem or not, and if so where the problem is: in
+>> buildroot or in Xenomai. Any takers?
+>
+> This one is indeed a bit tricky. I looked at what the Xenomai guys said:
+>
+> ---8<---
+> Xenomai does not do anything special, it uses the autotools default
+> which is:
+> - if you pass CFLAGS and LDFLAGS on the right hand of the configure
+> command line, the generated makefiles are hardcoded with these flags
+> values, and you need not do anything special later on to get these flags
+> used for all the compilations. This has been the recommended way of
+> passing CFLAGS and LDFLAGS when building autotools-based projects for
+> many years.
+>
+> - if you want to pass them as environment variables (so, on the left
+> hand of the configure command line), the makefiles are not generated
+> with these flags, so, you have to pass them in the environment of the
+> "make" command.
+> ---8<---
+>
+> Which indeed makes sense. And we do pass them as environment variables
+> in package/pkg-autotools:
+>
+>     [...]
+>     $$(TARGET_CONFIGURE_OPTS) \
+>     $$(TARGET_CONFIGURE_ARGS) \
+>     $$($$(PKG)_CONF_ENV) \
+>     ./configure \
+>     [...]
+>
+> So we should probably pass them after ./configure, i.e. on the right-hand
+> side of ./configure.
+
+I think we should reproduce the issue here. The xenomai guys are right
+in the sense that we have to pass the same flags to the make command,
+but we are normally doing that... If not then the xenomai.mk build
+rules may need updating.
+
+>
+>> https://bugs.busybox.net/show_bug.cgi?id=7262 normal
+>> unassigned at buildroot.uclibc.org Generating locale en_US.UTF-8 fails on
+>> 64bit fedora linux host
+>> Anyone willing to investigate this?
+>
+> I can have a look...
+
+Thanks!
+
+>
+>> 6230 minor unassigned at buildroot.uclibc.org Cannot compile gcc without
+>> threads (uClibc-based)
+>
+> ARM noMMU is basically broken, as Gustavo said in a comment.
+
+Done.
+
+>
+>> 7118 enhancement abrodkin at synopsys.com Package "thrift" requires
+>> atomic operations
+>
+> Should be closed, the patch has been applied:
+>     http://git.buildroot.org/buildroot/commit/package/thrift?id=1aaa14d84f1c920423ed0286b78f64a2b4b2b575
+
+Done.
+
+>
+>> 3427 enhancement s.martin49 at gmail.com New package: nginx
+>> 261 enhancement unassigned at buildroot.uclibc.org New package: wxWidgets
+>> 325 enhancement unassigned at buildroot.uclibc.org New package: ratpoison
+>> 405 enhancement unassigned at buildroot.uclibc.org New package: OpenVZ tools
+>> 1309 enhancement unassigned at buildroot.uclibc.org New package: rdiff-backup
+>> 3655 enhancement unassigned at buildroot.uclibc.org New package: libav
+>> 3991 enhancement unassigned at buildroot.uclibc.org New Package:
+>> open-vm-tools (Vmware Tools)
+>
+> New packages should be posted to the list.
+
+Yes that is true, but do you suggest to simply close the bugs and
+reject the patches?
+A nicer solution would be that someone / several people adopt these
+patches and resubmit them.
+
+>
+>> 7136 normal thomas.petazzoni at free-electrons.com ecryptfs-utils needs
+>> gettext to run when glibc/eglibc is used
+>
+> Patches on the list.
+>
+>> 7142 normal thomas.petazzoni at free-electrons.com ecryptfs needs getent to run
+>
+> I can have a look.
+>
+
+Thanks!
+
+Best regards,
+Thomas
