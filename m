@@ -1,9 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Jul 2014 15:07:04 -0300
-Subject: [Buildroot] [PATCH 2/2] uboot: bump to version 2014.07
-In-Reply-To: <1405534024-1923-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405534024-1923-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1405534024-1923-2-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 16 Jul 2014 15:20:59 -0300
+Subject: [Buildroot] [PATCH] barebox: bump to version 2014.07.0
+Message-ID: <1405534859-21186-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- boot/uboot/Config.in | 4 ++--
+ boot/barebox/Config.in | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 0f98d7f..46d1109 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the specific U-Boot version you want to use
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 3fb7600..e35b45e 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
  
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2014.04"
-+	bool "2014.07"
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2014.06.0"
++	bool "2014.07.0"
  
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
  	bool "Custom version"
-@@ -63,7 +63,7 @@ endif
+@@ -40,7 +40,7 @@ endif
  
- config BR2_TARGET_UBOOT_VERSION
+ config BR2_TARGET_BAREBOX_VERSION
  	string
--	default "2014.04"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2014.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+-	default "2014.06.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2014.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
 -- 
 1.8.5.5
