@@ -1,27 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 20:40:55 +0200
-Subject: [Buildroot] [PATCH] barebox: bump to version 2014.07.0
-In-Reply-To: <1405534859-21186-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405534859-21186-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140716204055.143787e2@free-electrons.com>
+Date: Wed, 16 Jul 2014 20:42:20 +0200
+Subject: [Buildroot] [git commit] ffmpeg: Add libva support
+Message-ID: <20140716184354.7780C9D244@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=17240db1432fd97f2d619cdec7e84e20c2ace7fa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Jul 2014 15:20:59 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  boot/barebox/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ffmpeg/ffmpeg.mk |    8 +++++++-
+ 1 files changed, 7 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 478c66a..2b73fbc 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -41,7 +41,6 @@ FFMPEG_CONF_OPT = \
+ 	--enable-mdct \
+ 	--enable-rdft \
+ 	--disable-crystalhd \
+-	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-dxva2 \
+ 	--enable-runtime-cpudetect \
+@@ -209,6 +208,13 @@ FFMPEG_CONF_OPT += \
+ 	--enable-encoder=libvorbis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++FFMPEG_CONF_OPT += --enable-vaapi
++FFMPEG_DEPENDENCIES += libva
++else
++FFMPEG_CONF_OPT += --disable-vaapi
++endif
++
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPT += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
