@@ -1,42 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 15:25:04 +0200
-Subject: [Buildroot] git binary diffs are not supported
-In-Reply-To: <53C665B1.6050609@posteo.de>
-References: <53C665B1.6050609@posteo.de>
-Message-ID: <20140716152504.4bd10dbb@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 16 Jul 2014 17:00:51 +0200
+Subject: [Buildroot] Open bug overview: help wanted!
+In-Reply-To: <CABbD_XDNK_=CK3A6xQECHr_6-YyccqEcggWg-Mux_sWyv4_uLQ@mail.gmail.com>
+References: <CAAXf6LU8ZkC4uk5qkq8HGN-zfL=MwAKJP4E=1sDNRDMSJwUutw@mail.gmail.com>
+ <CABbD_XDNK_=CK3A6xQECHr_6-YyccqEcggWg-Mux_sWyv4_uLQ@mail.gmail.com>
+Message-ID: <CAJtjsKYTGndyH3wJtHTrqGLcAyuQk8C=MWug2aZ5WqeVviiOvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear K?roly,
 
-On Wed, 16 Jul 2014 13:44:49 +0200, J?rg Krause wrote:
+On Tue, Jul 15, 2014 at 9:27 PM, K?roly Kasza <kaszak@gmail.com> wrote:
+>> 3427 enhancement s.martin49 at gmail.com New package: nginx
+>
+> nginx is not using a "normal" autoconfigure/automake system, so
+> cross-compiling it is nearly impossible. I've some experimental patch, which
+> still needs a lot of work. I'm not sure if it can be integrated without
+> completely rewriting the nginx build infrastructure.
 
-> I am trying to apply a git binary patch to add a firmware binary blob to 
-> the linux kernel firmware directory. I am using git format-patch 
-> --binary -M -n -s to create the patch and copy it to the global patch 
-> directory. Trying to build linux fails while patching with the following 
-> error message:
-> 
->     git binary diffs are not supported.
-> 
-> Do I missed something? I would be glad for any advice!
+I do use a working nginx patch for my buildroot. It comes from tSed
+github, which claims to fix #3427:
+https://github.com/tSed/buildroot/commit/9d319a3333b76532e68fb94238feb3cbc2e55d5f
 
-We don't use git to apply patches when building packages in Buildroot,
-we use the plain old patch, which indeed doesn't support binary diffs.
-Not sure how to solve this situation. Does your firmware really needs
-to be part of the kernel build process? Can't it be loaded from the
-filesystem at boot time, as is done for all the firmwares in the
-linux-firmware package? If that was possible, then you would simply
-have to create a simple Buildroot package that installs your firmware
-into /lib/firmware/.
+I think he's planning to submit it to this mailing list soon.
 
-Best regards,
+Best,
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Johan
