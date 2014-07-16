@@ -1,35 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 19:48:42 +0200
-Subject: [Buildroot] [PATCH] exim: get rid of the convert the custom
- config file boolean knob
-In-Reply-To: <1405527115-16260-1-git-send-email-luca@lucaceresoli.net>
-References: <1405527115-16260-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20140716194842.5cf1aaf3@free-electrons.com>
+Date: Wed, 16 Jul 2014 19:49:37 +0200
+Subject: [Buildroot] [git commit] qt5: Add an option to select default
+	platform
+Message-ID: <20140716175006.51ED79D255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Luca Ceresoli,
+commit: http://git.buildroot.net/buildroot/commit/?id=3a0229c3c381b6b1aef120c9c77d9fdbb28ea253
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Jul 2014 18:11:55 +0200, Luca Ceresoli wrote:
-> The current implementation causes troubles with the autobuilders when they
-> set BR2_PACKAGE_EXIM_CUSTOM_CONFIG=y, because in these cases
-> BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE is empty, and this is a configuration
-> error.
-> 
-> Solve the problem by entirely reomving the BR2_PACKAGE_EXIM_CUSTOM_CONFIG
-> boolean knob. Activation of the custon configuration file is now detected by
-> the fact that BR2_PACKAGE_EXIM_CUSTOM_CONFIG_FILE is non-empty.
-> 
-> Fixes:
->   http://autobuild.buildroot.org/results/0db/0db54c555f6c7e635ebf99f86b3f91dc31e441f0/
+Whithout this path, default platform is automaticaly set (generally
+set to "eglfs" as defined in
+qt5base/mkspecs/devices/common/linux_device_pre.conf:1). This choice
+is not always what the user would like. Thus, user have to manually
+appends "-platform <BACKEND>" to command line when running any qt5
+application.
 
-Thanks, applied with minor fixes to the Config.in option description.
+This patch allows user to choose default platform explicitly.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[Thomas: slightly improve Config.in help text, from the suggestions
+given by Yann E. Morin.]
+
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5base/Config.in  |   11 +++++++++++
+ package/qt5/qt5base/qt5base.mk |    3 +++
+ 2 files changed, 14 insertions(+), 0 deletions(-)
+
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 24e5902..490ee3e 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -144,6 +144,17 @@ config BR2_PACKAGE_QT5BASE_EGLFS
+ comment "eglfs backend available if OpenGLES and EGL are enabled"
+ 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
+ 
++config BR2_PACKAGE_QT5BASE_DEFAULT_QPA
++	string "Default graphical platform"
++	help
++	  Choose the default platform abstraction to use for graphical
++	  applications (e.g xcb, linuxfb, eglfs, ...). If this is empty, the
++	  default for your architecture will be used (usually this is eglfs).
++
++	  You can get a list of supported platforms by running a Qt application
++	  with the option "-platform help" on your target. You can choose a
++	  different platform at runtime with the -platform option.
++
+ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
+ 	bool "print support module"
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 618251e..fecde13 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -96,6 +96,9 @@ else
+ QT5BASE_CONFIGURE_OPTS += -no-xcb
+ endif
+ 
++QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
++QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_EGLFS),y)
+ QT5BASE_CONFIGURE_OPTS += -opengl es2 -eglfs
+ QT5BASE_DEPENDENCIES   += libgles libegl
