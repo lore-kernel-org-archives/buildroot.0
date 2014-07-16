@@ -1,38 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Jul 2014 22:31:22 +0200
-Subject: [Buildroot] [PATCH] configs: add Freescale SABRE Auto board
- support
-In-Reply-To: <1396629422-24577-1-git-send-email-vincent.stehle@freescale.com>
-References: <1396629422-24577-1-git-send-email-vincent.stehle@freescale.com>
-Message-ID: <20140716223122.36854547@free-electrons.com>
+Date: Wed, 16 Jul 2014 22:42:47 +0200
+Subject: [Buildroot] [PATCH] defconfig for Phytec Cosmic-AM335x Board
+In-Reply-To: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
+References: <1390908698-7256-1-git-send-email-praveen.v@phytec.in>
+Message-ID: <20140716224247.1352816f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent Stehl?,
+Dear Praveen kumar Vattipalli,
 
-On Fri, 4 Apr 2014 18:37:02 +0200, Vincent Stehl? wrote:
-> SABRE Board for Automotive Infotainment (SABRE Auto, a.k.a. SABRE-AI) is
-> Freescale's evaluation board based on the i.MX 6 ARM Cortex-A9 applications
-> processor.
-> 
-> This defconfig is an adaptation of freescale_imx6sabresd_defconfig for SABRE
-> Auto, and is based on Freescale "official" git repo on git.freescale.com and SW
-> release 3.0.35_4.1.0.
+On Tue, 28 Jan 2014 17:01:38 +0530, Praveen kumar Vattipalli wrote:
+> Signed-off-by: Praveen Kumar Vattipalli <praveen.v@phytec.in>
+> ---
+>  board/cosmic-am335x/readme.txt         |   54 ++++++++++++++++++++++++++++++
+>  configs/phytec_cosmic_am335x_defconfig |   57 ++++++++++++++++++++++++++++++++
+>  2 files changed, 111 insertions(+)
+>  create mode 100644 board/cosmic-am335x/readme.txt
+>  create mode 100644 configs/phytec_cosmic_am335x_defconfig
 
-Thanks. However, we have migrated all i.MX6 platforms to use the 3.10
-kernel from Freescale, to be in sync with the GPU and VPU packages.
-Could you update your defconfig to use 3.10 as well, and resend?
+Thanks for your patch, but despite the feedback provided by Peter
+Korsgaard and Arnout Vandecappelle just a few days after you posted
+your patch, you never came back to us with an updated version of the
+patch. Since it's been 6 months now, I'll mark your patch as "Changes
+Requested" in our patch tracking system.
 
-In the mean time, I'll mark your patch
-http://patchwork.ozlabs.org/patch/337045/ as "Changes Requested" in
-patchwork.
+Since we are definitely interested in seeing some defconfigs added for
+Phytec boards, do not hesitate to update your patch, take into account
+the comments made by Peter and Arnout, and resubmit it.
 
-Thanks,
+Thanks a lot for your contribution!
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
