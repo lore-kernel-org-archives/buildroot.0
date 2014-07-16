@@ -1,30 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Jul 2014 14:52:48 -0300
-Subject: [Buildroot] [PATCH] ncmpc: bump to version 0.24
-Message-ID: <1405533168-12945-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Jul 2014 20:00:35 +0200
+Subject: [Buildroot] [PATCH v14 02/20] package/mesa3d: Depend on xorg
+ meta package instead of xserver_xorg-server
+In-Reply-To: <1405451955-10204-3-git-send-email-bernd.kuhls@t-online.de>
+References: <1405451955-10204-1-git-send-email-bernd.kuhls@t-online.de>
+ <1405451955-10204-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140716200035.52215259@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/ncmpc/ncmpc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dear Bernd Kuhls,
 
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index c006af2..0b81faf 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).23
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).24
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.gz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = host-pkgconf libglib2 libmpdclient ncurses
+On Tue, 15 Jul 2014 21:18:57 +0200, Bernd Kuhls wrote:
+> mesa3d does not depend on the xorg server as such, only on X libraries.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/Config.in |   22 +++++++++++-----------
+>  package/mesa3d/mesa3d.mk |    4 ++--
+>  2 files changed, 13 insertions(+), 13 deletions(-)
+
+This patch does not apply on the current Buildroot, git complains that
+there are some missing blobs. It generally indicates that your branch
+wasn't based on master, but on master + several commits that are not
+part of this patch series. Could you check this?
+
+Thanks,
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
