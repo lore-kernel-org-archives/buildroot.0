@@ -1,46 +1,47 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 17 Jul 2014 19:40:46 +0200
-Subject: [Buildroot] [PATCH 1/2] apply-patches.sh: don't print anything
- when "-s" option is used
-In-Reply-To: <20140715212814.1dfcce43@free-electrons.com>
-References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
- <20140715212814.1dfcce43@free-electrons.com>
-Message-ID: <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 17 Jul 2014 19:50:52 +0200
+Subject: [Buildroot] [PATCH 2/2] Update documentation of AUTORECONF_ENV
+In-Reply-To: <38A5475DE83986499AEACD2CFAFC3F9801148D7162@tss-server1.home.tropicalstormsoftware.com>
+References: <38A5475DE83986499AEACD2CFAFC3F9801148D7162@tss-server1.home.tropicalstormsoftware.com>
+Message-ID: <CAAXf6LWH4MQKfDhtj5u9fSK+C4zTLMAs04xN6KzOtUBQfKoe3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 15, 2014 at 9:28 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Fabio Porcedda,
+Hi Rick,
+
+On Thu, Jul 17, 2014 at 2:28 PM, Rick Taylor
+<rick@tropicalstormsoftware.com> wrote:
+> From e7e05bc231fe8d3f7855761ce533fd53829a48c3 Mon Sep 17 00:00:00 2001
+> From: Rick Taylor <rick.taylor@cassidian.com>
+> Date: Thu, 17 Jul 2014 13:25:35 +0100
+> Subject: [PATCH 2/2] Update documentation of AUTORECONF_ENV
 >
-> On Wed,  9 Jul 2014 13:46:53 +0200, Fabio Porcedda wrote:
->> The make "-s" option is used to enable the "Silent operation" so if
->> that option is used don't print anything as far as there isn't any
->> error.
->> Add the "-s" option to "apply-patches.sh" to enable silent operation.
->> Because "apply-patches.sh" is called in many places add a
->> "APPLY_PATCHES" variable to permit adding the "-s" easily.
->>
->> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Signed-off-by: Rick Taylor <rick.taylor@cassidian.com>
+> ---
+>  docs/manual/adding-packages-autotools.txt | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> Hum, yes, but why? The entire build process is anyway very noisy, so is
-> there really a point in silencing specifically this part? What is the
-> ultimate goal you're trying to achieve here?
+> diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+> index 3f40503..a1a4b90 100644
+> --- a/docs/manual/adding-packages-autotools.txt
+> +++ b/docs/manual/adding-packages-autotools.txt
+> @@ -121,6 +121,11 @@ cases, typical packages will therefore only use a few of them.
+>    automake, libtool, etc.). Valid values are +YES+ and
+>    +NO+. By default, the value is +NO+
+>
+> +* +LIBFOO_AUTORECONF_ENV+, to specify additional environment
+> +  variables to pass the 'autoreconf' program if
 
-My ultimate goal is to be able using the "-s" flags to silence all
-parts, because sometimes i just want to build and view only ">>> *"
-messages, errors, warning without anything else.
+to pass to
 
-As example the "toolchain-external" target already do that when the
-"-s" option is used.
+> +  +LIBFOO_AUTORECONF=YES+. These are passed before
+> +  the 'autoreconf' command. By default, empty.
 
-I've silenced only this part because it was easy and it's anyway an improvement.
+I find 'before' odd here. I would rather say:
+These are passed in the environment of the ...
 
-Maybe i can work on silencing other parts too if the feature is desired.
-
-Best regards
--- 
-Fabio Porcedda
+Best regards,
+Thomas
