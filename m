@@ -1,37 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 17 Jul 2014 16:55:08 -0300
-Subject: [Buildroot] [PATCH] linux: fix fallout from
-	c78d57637cd57a383e44713eb27e654b3071340e
-Message-ID: <1405626908-11988-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 17 Jul 2014 17:18:00 -0300
+Subject: [Buildroot] [PATCH] libconfuse: needs host-flex
+Message-ID: <1405628280-21661-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The new variable LINUX_TARGET_NAME is unconditionally used but it may be
-unset leading to a default kernel build (which might not be uImage or
-other requested format).
-See http://lists.busybox.net/pipermail/buildroot/2014-July/102069.html
+Fixes:
+http://autobuild.buildroot.net/results/63f/63f6f6204058932b02f79eaaa44eb4555c5bbb1f/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libconfuse/libconfuse.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 928d93d..2a9bf3e 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -106,7 +106,9 @@ LINUX_IMAGE_NAME = vmlinux
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUZ),y)
- LINUX_IMAGE_NAME = vmlinuz
- endif
-+LINUX_TARGET_NAME = $(LINUX_IMAGE_NAME)
- endif
-+
- ifeq ($(LINUX_IMAGE_NAME),)
- LINUX_IMAGE_NAME = $(LINUX_TARGET_NAME)
- endif
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index e9a1114..6450270 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -8,6 +8,7 @@ LIBCONFUSE_VERSION = V2_7
+ LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
+ LIBCONFUSE_INSTALL_STAGING = YES
+ LIBCONFUSE_CONF_OPT = --disable-rpath
++LIBCONFUSE_DEPENDENCIES = host-flex
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = src/confuse.c
+ 
 -- 
 1.8.5.5
