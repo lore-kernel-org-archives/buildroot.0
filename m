@@ -1,32 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 22:58:34 +0200
-Subject: [Buildroot] [PATCHv3 1/2] linux: add option to
- explicitlyspecify the kernel image name : breaks kernel build !
-In-Reply-To: <D5A9AA060AA94EDA827C2219FEFFDD4D@JohanW7>
-References: <20140711124922.GA25220@waldemar-brodkorb.de>
- <8464FBE548EF40ECA03DD045E23F1D39@JohanW7>
- <D5A9AA060AA94EDA827C2219FEFFDD4D@JohanW7>
-Message-ID: <20140717225834.30434820@free-electrons.com>
+Date: Thu, 17 Jul 2014 23:06:13 +0200
+Subject: [Buildroot] [git commit] package/powerpc-utils: Add powerpc
+	hardware utilities
+Message-ID: <20140717210652.AAE169D268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sagaert Johan,
+commit: http://git.buildroot.net/buildroot/commit/?id=4ef1fb88faa3839f2209a251894abee37dd53c71
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Jul 2014 17:29:23 +0200, Sagaert Johan wrote:
+This change adds a package definition for the powerpc-utils project,
+containing a set of powerpc-specific hardware management utilities.
 
-> If BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
-> then LINUX_TARGET_NAME is undefined.
-> 
-> LINUX_TARGET_NAME is used on lines 266 (linux/linux.mk) and 341 to build the kernel.
+We're using a git tag from upstream, which contains a few build-system
+fixes.
 
-Thanks for reporting this problem! It has been fixed in commit
-http://git.buildroot.net/buildroot/commit/?id=f8f3073b18895bbf6938a5c310f6e6134f8bd6cb.
+[Thomas:
+ - Add dependency on PowerPC architecture in Config.in.
+ - Add homepage in Config.in help text.]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |    1 +
+ package/powerpc-utils/Config.in        |    8 ++++++++
+ package/powerpc-utils/powerpc-utils.mk |   16 ++++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index bc010fc..22ddea8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1144,6 +1144,7 @@ endif
+ 	source "package/ncdu/Config.in"
+ 	source "package/numactl/Config.in"
+ 	source "package/nut/Config.in"
++	source "package/powerpc-utils/Config.in"
+ 	source "package/polkit/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/procps-ng/Config.in"
+diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
+new file mode 100644
+index 0000000..eded41e
+--- /dev/null
++++ b/package/powerpc-utils/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_POWERPC_UTILS
++	bool "powerpc-utils"
++	depends on BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	select BR2_PACKAGE_ZLIB
++	help
++	  System utilities for PowerPC machines.
++
++	  http://sourceforge.net/projects/powerpc-utils/
+diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+new file mode 100644
+index 0000000..c9cc096
+--- /dev/null
++++ b/package/powerpc-utils/powerpc-utils.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# powerpc-utils
++#
++################################################################################
++
++POWERPC_UTILS_VERSION = v1.4
++POWERPC_UTILS_SITE = git://git.code.sf.net/p/powerpc-utils/powerpc-utils
++POWERPC_UTILS_AUTORECONF = YES
++POWERPC_UTILS_DEPENDENCIES = zlib
++POWERPC_UTILS_LICENSE = Common Public License Version 1.0
++POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
++
++POWERPC_UTILS_CONF_OPT = --without-librtas
++
++$(eval $(autotools-package))
