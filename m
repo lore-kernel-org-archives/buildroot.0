@@ -1,46 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 09:49:49 +0200
-Subject: [Buildroot] [git commit] package/wget: use the new gettextize infra
-Message-ID: <20140717075142.2E72B9D26A@busybox.osuosl.org>
+Date: Thu, 17 Jul 2014 09:50:14 +0200
+Subject: [Buildroot] [git commit] package/gst1-plugins-bad: gettextize to
+	match the new gettext version
+Message-ID: <20140717075142.54C319D26A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=70c2514b8ab4365fbedeffb5466ae0b21c7fdae5
+commit: http://git.buildroot.net/buildroot/commit/?id=368eab183331ae02fd99f909d16f601a8f1b8221
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of using a custom hook to gettextize wget, use the new
-gettextize infra we just added in the previous patch.
+The gettext macros in the package are from a gettext version older than
+the ones we have in Buildroot, so autoreconf fails.
+
+Run gettextize prior to running autoreconf, like we do in wget.
+
+Fixes:
+    http://autobuild.buildroot.org/results/ea6/ea6797f9595c34734229c78b4e25bf624925144b/
+    http://autobuild.buildroot.org/results/578/5781774ae1b7ba85efee4bc933235304169b9196/
+    http://autobuild.buildroot.org/results/188/18888e06058dff0249d7c5e10a2c4f46e059878a/
+    ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/wget/wget.mk |    9 +--------
- 1 files changed, 1 insertions(+), 8 deletions(-)
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 56ccfb5..8046a61 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -12,14 +12,7 @@ WGET_LICENSE_FILES = COPYING
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 25289d2..e7d265f 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -14,6 +14,7 @@ GST1_PLUGINS_BAD_LICENSE = LGPLv2+ LGPLv2.1+
  
- # patching gnulib .m4 file
- WGET_AUTORECONF = YES
--
--# Ugly kludge to fix autoreconf with old gettext infra
--# We need to gettextize before autoreconf to upgrade
--WGET_DEPENDENCIES += host-gettext
--define WGET_GETTEXTIZE
--	cd $(@D) ; $(HOST_DIR)/usr/bin/gettextize -f
--endef
--WGET_PRE_CONFIGURE_HOOKS += WGET_GETTEXTIZE
-+WGET_GETTEXTIZE = YES
+ GST1_PLUGINS_BAD_AUTORECONF = YES
+ GST1_PLUGINS_BAD_AUTORECONF_OPT = -I $(@D)/common/m4
++GST1_PLUGINS_BAD_GETTEXTIZE = YES
  
- # Prefer full-blown wget over busybox
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ GST1_PLUGINS_BAD_CONF_OPT = \
+ 	--disable-examples \
