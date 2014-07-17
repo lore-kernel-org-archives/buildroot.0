@@ -1,52 +1,25 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 17 Jul 2014 19:57:48 +0200
-Subject: [Buildroot] [PATCH 0 of 3 v2] uclibc: fix handling of
-	configuration file
-In-Reply-To: <patchbomb.1405449814@localhost>
-References: <patchbomb.1405449814@localhost>
-Message-ID: <CAAXf6LWhD4DvH2UfDWhBxTQ3-+tBtjeAkoT9EU=+Xe5BOO3VUw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 17 Jul 2014 18:00:37 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140717180037.D7C539D26B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-On Tue, Jul 15, 2014 at 8:43 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> This patch series (part of it poster earlier as RFC) has as main goal to
-> fix the uclibc kconfig handling with following requirements in mind:
->
-> - neither foo-menuconfig nor foo-update-config should have a dependency
->   on the toolchain (which means we cannot depend on foo-configure)
->
-> - 'clean foo-menuconfig' should start from the specified (custom) config
->   file
->
-> - 'foo-menuconfig foo-update-config' should preserve the changes made in
->   the menuconfig step (this problem is reported for uclibc with bug #7154
->   (https://bugs.busybox.net/show_bug.cgi?id=7154).
->
-> - 'make foo-menuconfig; make foo-menuconfig' should preserve the changes
->   made in the menuconfig step.
->
-> - 'make clean foo-update-config' should copy the initial file, do any
->   fixups, and then save the config
->
->
-> Once this series is accepted, the plan is:
-> - to extract the kconfig-related bits to a kconfig-package infrastructure.
-> - to convert busybox, linux and barebox to this kconfig-package infra too.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> ---
->  package/uclibc/uclibc.mk |  24 ++++++++++++++++--------
->  1 files changed, 16 insertions(+), 8 deletions(-)
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Target Milestone|---                         |2014.08
 
-Any further comments on v2 of this patch?
-
-Thanks,
-Thomas
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
