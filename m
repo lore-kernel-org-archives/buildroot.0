@@ -1,32 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 17:31:04 +0200
-Subject: [Buildroot] [PATCH] pkg-autotools: fix bad GETTEXTIZE_OPT
- assignment
-In-Reply-To: <1405601776-20042-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405601776-20042-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140717173104.7f3ea7cf@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 17 Jul 2014 18:32:59 +0200
+Subject: [Buildroot] [PATCH 2/5] perl-io-socket-ssl: new package
+In-Reply-To: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
+References: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1405614782-3667-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                                |  1 +
+ package/perl-io-socket-ssl/Config.in             | 11 +++++++++++
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk | 13 +++++++++++++
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/perl-io-socket-ssl/Config.in
+ create mode 100644 package/perl-io-socket-ssl/perl-io-socket-ssl.mk
 
-On Thu, 17 Jul 2014 09:56:16 -0300, Gustavo Zacarias wrote:
-> HOST_PKG_GETTEXTIZE_OPT should get assigned PKG_GETTEXTIZE_OPT and not
-> PKG_GETTEXTIZE. Fixes:
-> http://autobuild.buildroot.net/results/087/087e860173069f58fa9ceb2460d7455d31b2dff8/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/pkg-autotools.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index c626968..e65d8ab 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -428,6 +428,7 @@ endif
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
++	source "package/perl-io-socket-ssl/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+diff --git a/package/perl-io-socket-ssl/Config.in b/package/perl-io-socket-ssl/Config.in
+new file mode 100644
+index 0000000..c8d038a
+--- /dev/null
++++ b/package/perl-io-socket-ssl/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_IO_SOCKET_SSL
++	bool "perl-io-socket-ssl"
++	depends on !BR2_PREFER_STATIC_LIB
++	select BR2_PACKAGE_PERL_NET_SSLEAY
++	help
++	  Nearly transparent SSL encapsulation for IO::Socket::INET.
++
++	  https://github.com/noxxi/p5-io-socket-ssl
++
++comment "perl-io-socket-ssl needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+new file mode 100644
+index 0000000..103a160
+--- /dev/null
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-io-socket-ssl
++#
++################################################################################
++
++PERL_IO_SOCKET_SSL_VERSION = 1.997
++PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
++PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR/
++PERL_IO_SOCKET_SSL_DEPENDENCIES = perl perl-net-ssleay
++PERL_IO_SOCKET_SSL_LICENSE = Artistic or GPLv1+
++
++$(eval $(perl-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
