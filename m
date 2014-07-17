@@ -1,48 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 20:57:24 +0200
-Subject: [Buildroot] [git commit] musl: work around gcc 4.9.x bug
-Message-ID: <20140717185826.53B2F9D26A@busybox.osuosl.org>
+Date: Thu, 17 Jul 2014 20:58:48 +0200
+Subject: [Buildroot] [PATCH] gcc: bump 4.9.x series to version 4.9.1
+In-Reply-To: <1405596856-19446-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1405596856-19446-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140717205848.0490f49b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e3d5da651b7ceef1d7929dc7a72050f7207e0587
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-MUSL doesn't build happily with gcc 4.9.0/1 so work around the bug when
-appropiate as suggested by upstream.
+On Thu, 17 Jul 2014 08:34:16 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/gcc/{4.9.0 => 4.9.1}/100-uclibc-conf.patch       |  0
+>  .../gcc/{4.9.0 => 4.9.1}/301-missing-execinfo_h.patch    |  0
+>  package/gcc/{4.9.0 => 4.9.1}/302-c99-snprintf.patch      |  0
+>  .../gcc/{4.9.0 => 4.9.1}/810-arm-softfloat-libgcc.patch  |  0
+>  .../gcc/{4.9.0 => 4.9.1}/830-arm_unbreak_armv4t.patch    |  0
+>  .../840-microblaze-enable-dwarf-eh-support.patch         |  0
+>  package/gcc/{4.9.0 => 4.9.1}/900-musl-support.patch      | 16 +---------------
+>  .../powerpc-link-with-math-lib.patch.conditional         |  0
+>  package/gcc/Config.in.host                               |  2 +-
+>  9 files changed, 2 insertions(+), 16 deletions(-)
+>  rename package/gcc/{4.9.0 => 4.9.1}/100-uclibc-conf.patch (100%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/301-missing-execinfo_h.patch (100%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/302-c99-snprintf.patch (100%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/810-arm-softfloat-libgcc.patch (100%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/830-arm_unbreak_armv4t.patch (100%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/840-microblaze-enable-dwarf-eh-support.patch (100%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/900-musl-support.patch (98%)
+>  rename package/gcc/{4.9.0 => 4.9.1}/powerpc-link-with-math-lib.patch.conditional (100%)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/musl/musl.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 2278799..f15e797 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -18,6 +18,12 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- MUSL_INSTALL_STAGING = YES
- 
-+# gcc constant folding bug with weak aliases workaround
-+# See http://www.openwall.com/lists/musl/2014/05/15/1
-+ifeq ($(BR2_GCC_VERSION_4_9_X),y)
-+MUSL_EXTRA_CFLAGS += -fno-toplevel-reorder
-+endif
-+
- # We need to run the musl configure script prior to building the
- # gcc-intermediate, so that we can call the install-headers step and
- # get the crt<X>.o built. However, we need to call it again after
-@@ -29,7 +35,7 @@ MUSL_INSTALL_STAGING = YES
- define MUSL_CONFIGURE_CALL
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
--		CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS))" \
-+		CFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CFLAGS)) $(MUSL_EXTRA_CFLAGS)" \
- 		CPPFLAGS="$(filter-out -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64,$(TARGET_CPPFLAGS))" \
- 		./configure \
- 			--target=$(GNU_TARGET_NAME) \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
