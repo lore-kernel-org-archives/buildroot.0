@@ -1,64 +1,60 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 17 Jul 2014 07:42:54 +0200
-Subject: [Buildroot] [PATCH 2/8] package/mesa3d: Fix optional DRI3 support
-In-Reply-To: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405575780-26496-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Thu, 17 Jul 2014 07:42:52 +0200
+Subject: [Buildroot] [PATCH 0/8] Various OpenGL-related updates
+Message-ID: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DRI3 support is optional in mesa3d, but mesa3d expects it by default,
-so add configure options to disable it when necessary and add the
-needed dependencies for DRI3 support. Fixes:
+Hi,
 
-===============================
-checking for DRI3PROTO... no
-configure: error: Package requirements (dri3proto >= 1.0) were not met:
+this series was split off my xbmc series, as requested by Thomas:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/89549
 
-checking for PRESENTPROTO... no
-configure: error: Package requirements (presentproto >= 1.0) were not met:
+It fixes a DRI3-related build error in mesa3d by adding the needed dependencies,
+eases mesa3d dependencies, bumps mesa3d and xdriver_xf86-video-intel and adds
+libglu/libglew, which are needed to enable OpenGl support in xbmc.
 
-configure: error: Package requirements (x11 xext xdamage xfixes x11-xcb xcb-glx >= 1.8.1
- xcb-dri2 >= 1.8 xcb-dri3 xcb-present xcb-sync xshmfence >= 1.1) were not met:
+Regards, Bernd
 
-Package xshmfence was not found in the pkg-config search path.
-===============================
 
-This defconfig was broken and fixed by this patch:
+Bernd Kuhls (8):
+  xlib_libxshmfence: New package
+  package/mesa3d: Fix optional DRI3 support
+  package/mesa3d: Depend on xorg meta package instead of
+    xserver_xorg-server
+  package/mesa3d: Remove dependency for the libxml2 module of
+    host-python
+  package/mesa3d: Bump to version 10.2.3
+  libglu: New package
+  libglew: New package
+  xdriver_xf86-video-intel: Bump version to 2.99.911
 
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XPROTO_DRI3PROTO=y
+ package/Config.in                                  |    2 ++
+ package/libglew/Config.in                          |   19 +++++++++++
+ package/libglew/libglew.mk                         |   36 ++++++++++++++++++++
+ package/libglu/Config.in                           |   10 ++++++
+ package/libglu/libglu.mk                           |   17 +++++++++
+ package/libxml2/Config.in                          |    3 --
+ package/libxml2/libxml2-python2.patch              |   27 ---------------
+ package/libxml2/libxml2.mk                         |   16 +--------
+ package/mesa3d/Config.in                           |   23 ++++++-------
+ package/mesa3d/mesa3d.mk                           |   13 ++++---
+ package/x11r7/Config.in                            |    1 +
+ package/x11r7/xdriver_xf86-video-intel/Config.in   |    5 +--
+ .../xdriver_xf86-video-intel.mk                    |   27 +++++++++++----
+ package/x11r7/xlib_libxshmfence/Config.in          |    5 +++
+ .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |   15 ++++++++
+ 15 files changed, 150 insertions(+), 69 deletions(-)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew.mk
+ create mode 100644 package/libglu/Config.in
+ create mode 100644 package/libglu/libglu.mk
+ delete mode 100644 package/libxml2/libxml2-python2.patch
+ create mode 100644 package/x11r7/xlib_libxshmfence/Config.in
+ create mode 100644 package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/mesa3d.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1a61af8..667e744 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -77,6 +77,12 @@ ifeq ($(MESA3D_DRI_DRIVERS-y),)
- MESA3D_CONF_OPT += \
- 	--without-dri-drivers
- else
-+ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
-+MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
-+MESA3D_CONF_OPT += --enable-dri3
-+else
-+MESA3D_CONF_OPT += --disable-dri3
-+endif
- MESA3D_PROVIDES += libgl
- MESA3D_CONF_OPT += \
- 	--enable-dri \
 -- 
 1.7.10.4
