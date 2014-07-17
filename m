@@ -1,44 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 09:58:21 +0200
-Subject: [Buildroot] [PATCH] package/libconfuse: switch to the new
- upstream
-In-Reply-To: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140717095821.505530ab@free-electrons.com>
+Date: Thu, 17 Jul 2014 09:54:34 +0200
+Subject: [Buildroot] [git commit] transmission: security bump to version 2.84
+Message-ID: <20140717075920.AF72B9D26A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=74d217d3db527c94a171d533a85c20dde7d7e588
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Jul 2014 00:32:45 +0200, Yann E. MORIN wrote:
-> From: Alvaro Gamez <alvaro.gamez@hazent.com>
-> 
-> libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
-> So, just follow suite.
-> 
-> Needs a bit of a hack so gettextize + autoreconf does not step on each
-> other's toes. See comment in the patch.
-> 
-> Based on a patch by: Alvaro Gamez <alvaro.gamez@hazent.com>
-> 
-> [me: fix gettextizing, write commit log]
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  .../libconfuse-0000-fix-configure-ac.patch         | 27 ++++++++++++++++++++++
->  package/libconfuse/libconfuse.mk                   |  9 +++++---
->  2 files changed, 33 insertions(+), 3 deletions(-)
->  create mode 100644 package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+Fixes CVE-2014-4909 (peer communication vulnerability).
 
-Applied, with Arnout fixes made in the commit log.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/transmission/transmission.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 07a76ab..10a11d4 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRANSMISSION_VERSION = 2.83
++TRANSMISSION_VERSION = 2.84
+ TRANSMISSION_SITE = http://download.transmissionbt.com/files/
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
