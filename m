@@ -1,43 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 20:58:48 +0200
-Subject: [Buildroot] [PATCH] gcc: bump 4.9.x series to version 4.9.1
-In-Reply-To: <1405596856-19446-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405596856-19446-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140717205848.0490f49b@free-electrons.com>
+Date: Thu, 17 Jul 2014 20:59:46 +0200
+Subject: [Buildroot] [git commit] dcron: provide init script
+Message-ID: <20140717190005.BF7EF9D26B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=994e9fa72e80f8d618393619fefd68f65821144f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Jul 2014 08:34:16 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gcc/{4.9.0 => 4.9.1}/100-uclibc-conf.patch       |  0
->  .../gcc/{4.9.0 => 4.9.1}/301-missing-execinfo_h.patch    |  0
->  package/gcc/{4.9.0 => 4.9.1}/302-c99-snprintf.patch      |  0
->  .../gcc/{4.9.0 => 4.9.1}/810-arm-softfloat-libgcc.patch  |  0
->  .../gcc/{4.9.0 => 4.9.1}/830-arm_unbreak_armv4t.patch    |  0
->  .../840-microblaze-enable-dwarf-eh-support.patch         |  0
->  package/gcc/{4.9.0 => 4.9.1}/900-musl-support.patch      | 16 +---------------
->  .../powerpc-link-with-math-lib.patch.conditional         |  0
->  package/gcc/Config.in.host                               |  2 +-
->  9 files changed, 2 insertions(+), 16 deletions(-)
->  rename package/gcc/{4.9.0 => 4.9.1}/100-uclibc-conf.patch (100%)
->  rename package/gcc/{4.9.0 => 4.9.1}/301-missing-execinfo_h.patch (100%)
->  rename package/gcc/{4.9.0 => 4.9.1}/302-c99-snprintf.patch (100%)
->  rename package/gcc/{4.9.0 => 4.9.1}/810-arm-softfloat-libgcc.patch (100%)
->  rename package/gcc/{4.9.0 => 4.9.1}/830-arm_unbreak_armv4t.patch (100%)
->  rename package/gcc/{4.9.0 => 4.9.1}/840-microblaze-enable-dwarf-eh-support.patch (100%)
->  rename package/gcc/{4.9.0 => 4.9.1}/900-musl-support.patch (98%)
->  rename package/gcc/{4.9.0 => 4.9.1}/powerpc-link-with-math-lib.patch.conditional (100%)
+dcron doesn't create a pid file, so we run it in foreground but make
+start-stop-daemon create the pidfile and move the daemon to background.
 
-Applied, thanks.
+Give it a number greater than exim's init script, so job output email
+can be sent.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[Thomas: as suggested by Yann E. Morin, use DCRON_INSTALL_INIT_SYSV.]
+
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dcron/S90dcron |   22 ++++++++++++++++++++++
+ package/dcron/dcron.mk |    4 ++++
+ 2 files changed, 26 insertions(+), 0 deletions(-)
+
+diff --git a/package/dcron/S90dcron b/package/dcron/S90dcron
+new file mode 100644
+index 0000000..c2925fd
+--- /dev/null
++++ b/package/dcron/S90dcron
+@@ -0,0 +1,22 @@
++#!/bin/sh
++
++case "$1" in
++	start)
++		echo -n "Starting cron ... "
++		start-stop-daemon -S -q -m -b -p /var/run/dcron.pid --exec /usr/sbin/crond -- -f
++		echo "done."
++		;;
++	stop)
++		echo -n "Stopping cron ..."
++		start-stop-daemon -K -q -p /var/run/dcron.pid
++		echo "done."
++		;;
++	restart)
++		$0 stop
++		sleep 1
++		$0 start
++		;;
++	*)
++		echo "usage: $0 {start|stop|restart}"
++		;;
++esac
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+index 5174e38..8892b96 100644
+--- a/package/dcron/dcron.mk
++++ b/package/dcron/dcron.mk
+@@ -29,4 +29,8 @@ define DCRON_INSTALL_TARGET_CMDS
+ 	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
+ endef
+ 
++define DCRON_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/dcron/S90dcron $(TARGET_DIR)/etc/init.d/S90dcron
++endef
++
+ $(eval $(generic-package))
