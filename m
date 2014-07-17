@@ -1,34 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 09:59:39 +0200
-Subject: [Buildroot] [PATCH] ntp: properly select/filter netsnmp for
- ntpsnmpd
-In-Reply-To: <1405558069-7023-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405558069-7023-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140717095939.2ce10fcc@free-electrons.com>
+Date: Thu, 17 Jul 2014 10:00:21 +0200
+Subject: [Buildroot] [git commit] xlib_libxshmfence: New package
+Message-ID: <20140717080455.B55B09D26B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=2b1bbc16bc4596f869d4259bd6e4848f7fef845b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Jul 2014 21:47:49 -0300, Gustavo Zacarias wrote:
-> BR2_PACKAGE_NTP_SNMPD was pushing netsnmp into dependencies but was
-> never selected, and since netsnmp requires fork it wasn't filtered out
-> for nommu. Fixes:
-> 
-> http://autobuild.buildroot.net/results/776/7769afe0da09e3f4f96d9a0f4c0febb0c72cc34f/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/ntp/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+Needed for DRI3 support in mesa3d:
 
-Applied, thanks.
+configure: error: Package requirements (x11 xext xdamage xfixes x11-xcb xcb-glx >= 1.8.1
+ xcb-dri2 >= 1.8 xcb-dri3 xcb-present xcb-sync xshmfence >= 1.1) were not met:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Package xshmfence was not found in the pkg-config search path.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/Config.in                            |    1 +
+ package/x11r7/xlib_libxshmfence/Config.in          |    5 +++++
+ .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |   15 +++++++++++++++
+ 3 files changed, 21 insertions(+), 0 deletions(-)
+
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index 087b816..1979a13 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -50,6 +50,7 @@ if BR2_PACKAGE_XORG7
+ 		source package/x11r7/xlib_libdmx/Config.in
+ 		source package/x11r7/xlib_libfontenc/Config.in
+ 		source package/x11r7/xlib_libxkbfile/Config.in
++		source package/x11r7/xlib_libxshmfence/Config.in
+ 		source package/x11r7/xlib_xtrans/Config.in
+ 		source package/x11r7/xlib_libpciaccess/Config.in
+ 	endmenu
+diff --git a/package/x11r7/xlib_libxshmfence/Config.in b/package/x11r7/xlib_libxshmfence/Config.in
+new file mode 100644
+index 0000000..d0595f6
+--- /dev/null
++++ b/package/x11r7/xlib_libxshmfence/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_XLIB_LIBXSHMFENCE
++	bool "libxshmfence"
++	select BR2_PACKAGE_XPROTO_XPROTO
++	help
++	  X.Org shmfence library
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+new file mode 100644
+index 0000000..f0fb90f
+--- /dev/null
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# xlib_libxshmfence
++#
++################################################################################
++
++XLIB_LIBXSHMFENCE_VERSION = 1.1
++XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.bz2
++XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXSHMFENCE_LICENSE = MIT
++XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
++XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
++XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xproto_xproto
++
++$(eval $(autotools-package))
