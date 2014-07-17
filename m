@@ -1,64 +1,125 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 10:02:39 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: Fix optional DRI3 support
-Message-ID: <20140717080455.BE9EE9D265@busybox.osuosl.org>
+Date: Thu, 17 Jul 2014 10:04:33 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: Remove dependency for the
+	libxml2 module of host-python
+Message-ID: <20140717080455.D46949D265@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1fcc621f0344c11ebaf7903545cd99d2f5b8ec9b
+commit: http://git.buildroot.net/buildroot/commit/?id=7150edb8e2ff1074aeeab97cc32af3522f13f979
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-DRI3 support is optional in mesa3d, but mesa3d expects it by default,
-so add configure options to disable it when necessary and add the
-needed dependencies for DRI3 support. Fixes:
+Remove the ugly BR2_PACKAGE_HOST_LIBXML2_PYTHON hack as well as
+mesa3d was the only package needing it, this is not the case
+anymore since:
 
-===============================
-checking for DRI3PROTO... no
-configure: error: Package requirements (dri3proto >= 1.0) were not met:
-
-checking for PRESENTPROTO... no
-configure: error: Package requirements (presentproto >= 1.0) were not met:
-
-configure: error: Package requirements (x11 xext xdamage xfixes x11-xcb xcb-glx >= 1.8.1
- xcb-dri2 >= 1.8 xcb-dri3 xcb-present xcb-sync xshmfence >= 1.1) were not met:
-
-Package xshmfence was not found in the pkg-config search path.
-===============================
-
-This defconfig was broken and fixed by this patch:
-
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
-BR2_PACKAGE_XPROTO_DRI3PROTO=y
+http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=2de70fe23f320ce4f559e37057fe07b7af99cf5a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/mesa3d.mk |    6 ++++++
- 1 files changed, 6 insertions(+), 0 deletions(-)
+ package/libxml2/Config.in             |    3 ---
+ package/libxml2/libxml2-python2.patch |   27 ---------------------------
+ package/libxml2/libxml2.mk            |   16 +---------------
+ package/mesa3d/Config.in              |    1 -
+ package/mesa3d/mesa3d.mk              |    1 -
+ 5 files changed, 1 insertions(+), 47 deletions(-)
 
+diff --git a/package/libxml2/Config.in b/package/libxml2/Config.in
+index 85694f9..ebd63fe 100644
+--- a/package/libxml2/Config.in
++++ b/package/libxml2/Config.in
+@@ -4,6 +4,3 @@ config BR2_PACKAGE_LIBXML2
+ 	  XML C Parser
+ 
+ 	  http://xmlsoft.org/
+-
+-config BR2_PACKAGE_HOST_LIBXML2_PYTHON
+-	bool
+diff --git a/package/libxml2/libxml2-python2.patch b/package/libxml2/libxml2-python2.patch
+deleted file mode 100644
+index 19195a6..0000000
+--- a/package/libxml2/libxml2-python2.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Prefer python2 binary in case python points to python3
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr libxml2-2.9.1.org/configure.in libxml2-2.9.1/configure.in
+---- libxml2-2.9.1.org/configure.in	2013-04-19 09:25:20.000000000 +0200
+-+++ libxml2-2.9.1/configure.in	2014-04-12 14:16:26.579361068 +0200
+-@@ -748,6 +748,11 @@
+- PYTHON_TESTS=
+- pythondir=
+- if test "$with_python" != "no" ; then
+-+    if test -x "$with_python/bin/python2"
+-+    then
+-+        echo Found python2 in $with_python/bin/python2
+-+        PYTHON="$with_python/bin/python2"
+-+    else
+-     if test -x "$with_python/bin/python"
+-     then
+-         echo Found python in $with_python/bin/python
+-@@ -773,6 +778,7 @@
+- 	    fi
+- 	fi
+-     fi
+-+    fi
+-     if test "$PYTHON" != ""
+-     then
+-         PYTHON_VERSION=`$PYTHON -c "from distutils import sysconfig; print(sysconfig.get_python_version())"`
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index 62f3e27..9bf4c28 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -20,21 +20,7 @@ LIBXML2_CONF_OPT = --with-gnu-ld --without-python --without-debug --without-lzma
+ 
+ HOST_LIBXML2_DEPENDENCIES = host-pkgconf
+ 
+-HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma
+-
+-# mesa3d uses functions that are only available with debug
+-ifeq ($(BR2_PACKAGE_MESA3D),y)
+-HOST_LIBXML2_CONF_OPT += --with-debug
+-else
+-HOST_LIBXML2_CONF_OPT += --without-debug
+-endif
+-
+-ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
+-HOST_LIBXML2_DEPENDENCIES += host-python
+-HOST_LIBXML2_CONF_OPT += --with-python=$(HOST_DIR)/usr
+-else
+-HOST_LIBXML2_CONF_OPT += --without-python
+-endif
++HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma --without-python
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBXML2_DEPENDENCIES += zlib
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 852d6d0..c1be9e3 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -2,7 +2,6 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	bool "mesa3d"
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
+ 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1a61af8..667e744 100644
+index 4a00dac..6b9383b 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -77,6 +77,12 @@ ifeq ($(MESA3D_DRI_DRIVERS-y),)
- MESA3D_CONF_OPT += \
- 	--without-dri-drivers
- else
-+ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
-+MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
-+MESA3D_CONF_OPT += --enable-dri3
-+else
-+MESA3D_CONF_OPT += --disable-dri3
-+endif
- MESA3D_PROVIDES += libgl
- MESA3D_CONF_OPT += \
- 	--enable-dri \
+@@ -20,7 +20,6 @@ MESA3D_DEPENDENCIES = \
+ 	host-bison \
+ 	host-flex \
+ 	host-gettext \
+-	host-libxml2 \
+ 	host-python \
+ 	host-xutil_makedepend \
+ 	libdrm
