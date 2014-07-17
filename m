@@ -1,126 +1,105 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 17 Jul 2014 07:42:56 +0200
-Subject: [Buildroot] [PATCH 4/8] package/mesa3d: Remove dependency for the
-	libxml2 module of host-python
+Date: Thu, 17 Jul 2014 07:42:59 +0200
+Subject: [Buildroot] [PATCH 7/8] libglew: New package
 In-Reply-To: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405575780-26496-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405575780-26496-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the ugly BR2_PACKAGE_HOST_LIBXML2_PYTHON hack as well as
-mesa3d was the only package needing it, this is not the case
-anymore since:
-
-http://cgit.freedesktop.org/mesa/mesa/commit/configure.ac?id=2de70fe23f320ce4f559e37057fe07b7af99cf5a
+This package is needed for OpenGL support in xbmc:
+https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1069
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libxml2/Config.in             |    3 ---
- package/libxml2/libxml2-python2.patch |   27 ---------------------------
- package/libxml2/libxml2.mk            |   16 +---------------
- package/mesa3d/Config.in              |    1 -
- package/mesa3d/mesa3d.mk              |    1 -
- 5 files changed, 1 insertion(+), 47 deletions(-)
- delete mode 100644 package/libxml2/libxml2-python2.patch
+ package/Config.in          |    1 +
+ package/libglew/Config.in  |   19 +++++++++++++++++++
+ package/libglew/libglew.mk |   36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 56 insertions(+)
+ create mode 100644 package/libglew/Config.in
+ create mode 100644 package/libglew/libglew.mk
 
-diff --git a/package/libxml2/Config.in b/package/libxml2/Config.in
-index 85694f9..ebd63fe 100644
---- a/package/libxml2/Config.in
-+++ b/package/libxml2/Config.in
-@@ -4,6 +4,3 @@ config BR2_PACKAGE_LIBXML2
- 	  XML C Parser
- 
- 	  http://xmlsoft.org/
--
--config BR2_PACKAGE_HOST_LIBXML2_PYTHON
--	bool
-diff --git a/package/libxml2/libxml2-python2.patch b/package/libxml2/libxml2-python2.patch
-deleted file mode 100644
-index 19195a6..0000000
---- a/package/libxml2/libxml2-python2.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--Prefer python2 binary in case python points to python3
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr libxml2-2.9.1.org/configure.in libxml2-2.9.1/configure.in
----- libxml2-2.9.1.org/configure.in	2013-04-19 09:25:20.000000000 +0200
--+++ libxml2-2.9.1/configure.in	2014-04-12 14:16:26.579361068 +0200
--@@ -748,6 +748,11 @@
-- PYTHON_TESTS=
-- pythondir=
-- if test "$with_python" != "no" ; then
--+    if test -x "$with_python/bin/python2"
--+    then
--+        echo Found python2 in $with_python/bin/python2
--+        PYTHON="$with_python/bin/python2"
--+    else
--     if test -x "$with_python/bin/python"
--     then
--         echo Found python in $with_python/bin/python
--@@ -773,6 +778,7 @@
-- 	    fi
-- 	fi
--     fi
--+    fi
--     if test "$PYTHON" != ""
--     then
--         PYTHON_VERSION=`$PYTHON -c "from distutils import sysconfig; print(sysconfig.get_python_version())"`
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 62f3e27..9bf4c28 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -20,21 +20,7 @@ LIBXML2_CONF_OPT = --with-gnu-ld --without-python --without-debug --without-lzma
- 
- HOST_LIBXML2_DEPENDENCIES = host-pkgconf
- 
--HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma
--
--# mesa3d uses functions that are only available with debug
--ifeq ($(BR2_PACKAGE_MESA3D),y)
--HOST_LIBXML2_CONF_OPT += --with-debug
--else
--HOST_LIBXML2_CONF_OPT += --without-debug
--endif
--
--ifeq ($(BR2_PACKAGE_HOST_LIBXML2_PYTHON),y)
--HOST_LIBXML2_DEPENDENCIES += host-python
--HOST_LIBXML2_CONF_OPT += --with-python=$(HOST_DIR)/usr
--else
--HOST_LIBXML2_CONF_OPT += --without-python
--endif
-+HOST_LIBXML2_CONF_OPT = --without-zlib --without-lzma --without-python
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBXML2_DEPENDENCIES += zlib
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 852d6d0..c1be9e3 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -2,7 +2,6 @@ menuconfig BR2_PACKAGE_MESA3D
- 	bool "mesa3d"
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_HOST_LIBXML2_PYTHON
- 	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 4a00dac..6b9383b 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -20,7 +20,6 @@ MESA3D_DEPENDENCIES = \
- 	host-bison \
- 	host-flex \
- 	host-gettext \
--	host-libxml2 \
- 	host-python \
- 	host-xutil_makedepend \
- 	libdrm
+diff --git a/package/Config.in b/package/Config.in
+index 277cbb4..753c8d3 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -611,6 +611,7 @@ menu "Graphics"
+ 	source "package/libgail/Config.in"
+ 	source "package/libgeotiff/Config.in"
+ 	source "package/libglade/Config.in"
++	source "package/libglew/Config.in"
+ 	source "package/libglu/Config.in"
+ 	source "package/libgtk2/Config.in"
+ 	source "package/libpng/Config.in"
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+new file mode 100644
+index 0000000..67c49d4
+--- /dev/null
++++ b/package/libglew/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_LIBGLEW
++	bool "libglew"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XLIB_LIBXMU
++	help
++	  The OpenGL Extension Wrangler Library (GLEW) is a cross-platform C/C++
++	  extension loading library. GLEW provides efficient run-time mechanisms
++	  for determining which OpenGL extensions are supported on the target
++	  platform. OpenGL core and extension functionality is exposed in a
++	  single header file.
++
++	  http://glew.sourceforge.net
++
++comment "libglew depends on X.org and needs an OpenGL backend"
++	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+new file mode 100644
+index 0000000..48ecf97
+--- /dev/null
++++ b/package/libglew/libglew.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# libglew
++#
++################################################################################
++
++LIBGLEW_VERSION = 1.10.0
++LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
++LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_LICENSE = MIT
++LIBGLEW_LICENSE_FILES = LICENSE.txt
++LIBGLEW_INSTALL_STAGING = YES
++LIBGLEW_DEPENDENCIES = libgl xlib_libX11 xlib_libXext xlib_libXi xlib_libXmu
++
++# using $TARGET_CONFIGURE_OPTS breaks compilation
++define LIBGLEW_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="/usr" LIBDIR="/usr/lib" \
++		AR="$(TARGET_AR)" CC="$(TARGET_CC)" \
++		LD="$(TARGET_CC)" STRIP="$(TARGET_STRIP)" \
++		POPT="$(TARGET_CFLAGS)" LDFLAGS.EXTRA="$(TARGET_LDFLAGS)"
++endef
++
++define LIBGLEW_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(STAGING_DIR)/usr" LIBDIR="$(STAGING_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++define LIBGLEW_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++		GLEW_DEST="$(TARGET_DIR)/usr" LIBDIR="$(TARGET_DIR)/usr/lib" \
++		$(TARGET_CONFIGURE_OPTS) install
++endef
++
++$(eval $(generic-package))
 -- 
 1.7.10.4
