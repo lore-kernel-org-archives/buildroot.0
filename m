@@ -1,55 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Jul 2014 09:48:24 +0200
-Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
-In-Reply-To: <29128166-5526-4da5-804d-72225bc05bc1@email.android.com>
-References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20140715205341.77237719@free-electrons.com>
- <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
- <20140715201336.GE3351@free.fr> <53C6FB6D.2040903@mind.be>
- <29128166-5526-4da5-804d-72225bc05bc1@email.android.com>
-Message-ID: <53C77FC8.6060303@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Jul 2014 09:50:02 +0200
+Subject: [Buildroot] [git commit] package/coreutils: gettextize to match the
+	new gettext version
+Message-ID: <20140717075142.3DAD89D26A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/07/14 06:52, Thomas De Schampheleire wrote:
-> Arnout Vandecappelle <arnout@mind.be> schreef:
->> On 15/07/14 22:13, Yann E. MORIN wrote:
->>> The more I think about it, the more I find our policy to require
->>> PKG-prefixed patches to be really cumbersome, since the patches already
->>> are in a subdir named PKG/
->>>
->>> Of course, we're enforcing this naming scheme in BR2_GLOBAL_PATCH_DIR to
->>> be in sync with what we do for our bundled patches.
->>>
->>> But still, if patches were just named NNNN-title.patch, that would be as
->>> efficient at sorting the patches. The PKG- prefix is not really
->>> required, and indeed can cause some troubles with some use-cases, such
->>> as yours.
->>>
->>> Thomas, was there a specific reason we wanted the patches to be
->>> PKG-prefixed? If not, would it make sense to just accept patches without
->>> a PKG-prefix?
->>
->> Er, we don't... We require this specific naming scheme for contributed
->> packages, but the code itself just takes *.patch.
-> 
-> Yes sure, it's a convention only, but the question is: why did we include the package name in the convention?
+commit: http://git.buildroot.net/buildroot/commit/?id=e0c5e75bc66185256add4bd4e669dc81075f8730
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I think it's purely historical. And I think it never was required for patches
-in a <pkgname> subdir.
+The gettext macros in the package are from a gettext version older than
+the one we have in Buildroot, so autoreconf fails.
 
+Run gettextize prior to running autoreconf, like we do in wget.
 
- Regards,
- Arnout
+Fixes:
+    http://autobuild.buildroot.net/results/228/228224668be4376844fe924d0a5b346af0414460/
+    http://autobuild.buildroot.net/results/ac4/ac4dbb1342e9c9f1de5412e0b71fe4422ef744ef/
+    http://autobuild.buildroot.net/results/a0c/a0c25faf149de9d51768eed8ff5a2274282cd797/
+    ...
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/coreutils/coreutils.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index c90396d..af202b4 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -12,6 +12,7 @@ COREUTILS_LICENSE_FILES = COPYING
+ 
+ # patching gnulib .m4 file
+ COREUTILS_AUTORECONF = YES
++COREUTILS_GETTEXTIZE = YES
+ 
+ # If both coreutils and busybox are selected, make certain coreutils
+ # wins the fight over who gets to have their utils actually installed.
