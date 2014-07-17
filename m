@@ -1,26 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 09:58:06 +0200
-Subject: [Buildroot] [PATCH] transmission: security bump to version 2.84
-In-Reply-To: <1405552537-4307-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405552537-4307-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140717095806.5c0e4fc8@free-electrons.com>
+Date: Thu, 17 Jul 2014 09:58:21 +0200
+Subject: [Buildroot] [PATCH] package/libconfuse: switch to the new
+ upstream
+In-Reply-To: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140717095821.505530ab@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Yann E. MORIN,
 
-On Wed, 16 Jul 2014 20:15:37 -0300, Gustavo Zacarias wrote:
-> Fixes CVE-2014-4909 (peer communication vulnerability).
+On Thu, 17 Jul 2014 00:32:45 +0200, Yann E. MORIN wrote:
+> From: Alvaro Gamez <alvaro.gamez@hazent.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
+> So, just follow suite.
+> 
+> Needs a bit of a hack so gettextize + autoreconf does not step on each
+> other's toes. See comment in the patch.
+> 
+> Based on a patch by: Alvaro Gamez <alvaro.gamez@hazent.com>
+> 
+> [me: fix gettextizing, write commit log]
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  package/transmission/transmission.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../libconfuse-0000-fix-configure-ac.patch         | 27 ++++++++++++++++++++++
+>  package/libconfuse/libconfuse.mk                   |  9 +++++---
+>  2 files changed, 33 insertions(+), 3 deletions(-)
+>  create mode 100644 package/libconfuse/libconfuse-0000-fix-configure-ac.patch
 
-Applied, thanks.
+Applied, with Arnout fixes made in the commit log.
+
+Thanks,
 
 Thomas
 -- 
