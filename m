@@ -1,95 +1,103 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 17 Jul 2014 07:43:00 +0200
-Subject: [Buildroot] [PATCH 8/8] xdriver_xf86-video-intel: Bump version to
-	2.99.911
-In-Reply-To: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405575780-26496-9-git-send-email-bernd.kuhls@t-online.de>
+From: =?ISO-8859-1?Q?J=F6rg_Krause?= <jkrause@posteo.de>
+Date: Thu, 17 Jul 2014 08:20:28 +0200
+Subject: [Buildroot] [PATCH 1/1] upmpdcli: new package
+In-Reply-To: <20140716203751.5ccab1c6@free-electrons.com>
+References: <1405371167-25884-1-git-send-email-jkrause@posteo.de>
+ <20140716203751.5ccab1c6@free-electrons.com>
+Message-ID: <53C76B2C.6040609@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add necessary dependencies
-- add -D_GNU_SOURCE to avoid getline compilation error
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xdriver_xf86-video-intel/Config.in   |    5 ++--
- .../xdriver_xf86-video-intel.mk                    |   27 +++++++++++++++-----
- 2 files changed, 24 insertions(+), 8 deletions(-)
+On 07/16/2014 08:37 PM, Thomas Petazzoni wrote:
+> Dear Joerg Krause,
+>
+> On Mon, 14 Jul 2014 22:52:47 +0200, Joerg Krause wrote:
+>> This patch adds support for the package upmpdcli.
+>>
+>> Signed-off-by: Joerg Krause <jkrause@posteo.de>
+> Thanks, I've applied your patch, but there were a number of issues.
+>
+>> ---
+>>   package/upmpdcli/Config.in   | 16 ++++++++++++++++
+> This file was never included in package/Config.in, so there was no way
+> to enable the package.
+>
+>>   package/upmpdcli/S99upmpdcli | 40 ++++++++++++++++++++++++++++++++++++++++
+>>   package/upmpdcli/upmpdcli.mk | 22 ++++++++++++++++++++++
+>>   3 files changed, 78 insertions(+)
+>>   create mode 100644 package/upmpdcli/Config.in
+>>   create mode 100644 package/upmpdcli/S99upmpdcli
+>>   create mode 100644 package/upmpdcli/upmpdcli.mk
+>>
+>> diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
+>> new file mode 100644
+>> index 0000000..d878bfc
+>> --- /dev/null
+>> +++ b/package/upmpdcli/Config.in
+>> @@ -0,0 +1,16 @@
+>> +config BR2_PACKAGE_UPMPDCLI
+>> +	bool "upmpdcli"
+>> +	select BR2_PACKAGE_EXPAT
+>> +	select BR2_PACKAGE_LIBUPNP
+>> +	select BR2_PACKAGE_LIBMPDCLIENT
+>> +	depends on BR2_INSTALL_LIBSTDCPP
+> As Yann pointed out, missing dependencies inherited from libupnp.
+>
+>
+>> diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+>> new file mode 100644
+>> index 0000000..fa03fd4
+>> --- /dev/null
+>> +++ b/package/upmpdcli/upmpdcli.mk
+>> @@ -0,0 +1,22 @@
+>> +################################################################################
+>> +#
+>> +# upmpdcli
+>> +#
+>> +################################################################################
+>> +
+>> +UPMPDCLI_VERSION = 0.7.1
+>> +UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+>> +UPMPDCLI_LICENSE = GPLv2
+> License was GPLv2+.
+>
+>> +UPMPDCLI_LICENSE_FILES = COPYING
+>> +UPMPDCLI_DEPENDENCIES = expat libupnp libmpdclient
+>> +
+>> +# Upmpdcli only runs if user upmpdcli exists
+>> +define UPMPDCLI_USERS
+>> +	upmpdcli -1 upmpdcli -1 * - - - Upmpdcli: MPD UPnP Renderer Front-End
+> I removed the colon from the description, as suggested by Yann.
+>
+>> +endef
+>> +
+>> +define UPMPDCLI_INSTALL_INIT_SYSV
+>> +	$(INSTALL) -m 0755 package/upmpdcli/S99upmpdcli $(TARGET_DIR)/etc/init.d/
+> We normally use the -D option of $(INSTALL) and use a complete path as
+> the destination.
+>
+>> +endef
+> I've also added the installation of a default configuration file (from
+> the upmpdcli sources). And the most annoying thing is that you
+> apparently never tested building upmpdcli with uClibc, and there were a
+> number of build failures that I had to fix.
+>
+> Anyway, thanks a lot for your contribution! Looking forward to see more
+> patches from you, maybe to update or improve the upmpdcli package!
+>
+> Best regards,
+>
+> Thomas
 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index 69a9e78..bba7cd1 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -3,12 +3,13 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	depends on (BR2_i386 || BR2_x86_64)
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_XLIB_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XLIB_LIBXTST
- 	help
- 	  Intel video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..52b493f 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -4,18 +4,18 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
-+XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.911
- XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
- XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_INTEL_AUTORECONF = YES
-+
-+# this fixes a getline-related compilation in src/sna/kgem.c
-+XDRIVER_XF86_VIDEO_INTEL_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
--	--enable-dri \
--	--enable-kms-only \
- 	--disable-xvmc \
--	--disable-ums-only \
- 	--enable-sna \
- 	--disable-uxa \
- 	--disable-glamor \
-@@ -23,6 +23,21 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--disable-dga \
- 	--disable-async-swap
- 
--XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xlib_libXrandr \
-+	xlib_libXtst \
-+	xlib_libpciaccess \
-+	xproto_fontsproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965),y)
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --enable-dri
-+XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES += mesa3d xproto_xf86driproto
-+else
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += --disable-dri
-+endif
- 
- $(eval $(autotools-package))
--- 
-1.7.10.4
+Thanks a lot for the comments, for fixing the remaining issues and for 
+applying the patch! You are all doing a really good work with buildroot!
+
+I will take care of the package. And sorry for not testing against 
+uClibc. Still learning :-)
+
+Best regards
+J?rg Krause
