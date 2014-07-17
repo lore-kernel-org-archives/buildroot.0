@@ -1,89 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 18:58:14 +0200
-Subject: [Buildroot] [PATCH 1/1] dcron: provide init script
-In-Reply-To: <1405589648-26777-1-git-send-email-alvaro.gamez@hazent.com>
-References: <20140715211719.0ea2e053@free-electrons.com>
- <1405589648-26777-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20140717165814.GB3737@free.fr>
+Date: Thu, 17 Jul 2014 19:23:31 +0200
+Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
+In-Reply-To: <53C77FC8.6060303@mind.be>
+References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <20140715205341.77237719@free-electrons.com>
+ <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
+ <20140715201336.GE3351@free.fr> <53C6FB6D.2040903@mind.be>
+ <29128166-5526-4da5-804d-72225bc05bc1@email.android.com>
+ <53C77FC8.6060303@mind.be>
+Message-ID: <20140717172331.GD3737@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alvaro, All,
+Arnout, All,
 
-On 2014-07-17 11:34 +0200, Alvaro G. M spake thusly:
-> dcron doesn't create a pid file, so we run it in foreground but make
-> start-stop-daemon create the pidfile and move the daemon to background.
+On 2014-07-17 09:48 +0200, Arnout Vandecappelle spake thusly:
+> On 17/07/14 06:52, Thomas De Schampheleire wrote:
+> > Arnout Vandecappelle <arnout@mind.be> schreef:
+> >> On 15/07/14 22:13, Yann E. MORIN wrote:
+> >>> The more I think about it, the more I find our policy to require
+> >>> PKG-prefixed patches to be really cumbersome, since the patches already
+> >>> are in a subdir named PKG/
+> >>>
+> >>> Of course, we're enforcing this naming scheme in BR2_GLOBAL_PATCH_DIR to
+> >>> be in sync with what we do for our bundled patches.
+> >>>
+> >>> But still, if patches were just named NNNN-title.patch, that would be as
+> >>> efficient at sorting the patches. The PKG- prefix is not really
+> >>> required, and indeed can cause some troubles with some use-cases, such
+> >>> as yours.
+> >>>
+> >>> Thomas, was there a specific reason we wanted the patches to be
+> >>> PKG-prefixed? If not, would it make sense to just accept patches without
+> >>> a PKG-prefix?
+> >>
+> >> Er, we don't... We require this specific naming scheme for contributed
+> >> packages, but the code itself just takes *.patch.
+> > 
+> > Yes sure, it's a convention only, but the question is: why did we include the package name in the convention?
 > 
-> Give it a number greater than exim's init script, so job output email
-> can be sent.
-> 
-> Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
-> ---
->  package/dcron/S90dcron | 22 ++++++++++++++++++++++
->  package/dcron/dcron.mk |  1 +
->  2 files changed, 23 insertions(+)
->  create mode 100644 package/dcron/S90dcron
-> 
-> diff --git a/package/dcron/S90dcron b/package/dcron/S90dcron
-> new file mode 100644
-> index 0000000..c2925fd
-> --- /dev/null
-> +++ b/package/dcron/S90dcron
-> @@ -0,0 +1,22 @@
-> +#!/bin/sh
-> +
-> +case "$1" in
-> +	start)
-> +		echo -n "Starting cron ... "
-> +		start-stop-daemon -S -q -m -b -p /var/run/dcron.pid --exec /usr/sbin/crond -- -f
-> +		echo "done."
-> +		;;
-> +	stop)
-> +		echo -n "Stopping cron ..."
-> +		start-stop-daemon -K -q -p /var/run/dcron.pid
-> +		echo "done."
-> +		;;
-> +	restart)
-> +		$0 stop
-> +		sleep 1
-> +		$0 start
-> +		;;
-> +	*)
-> +		echo "usage: $0 {start|stop|restart}"
-> +		;;
-> +esac
-> diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
-> index 5174e38..e5a28f2 100644
-> --- a/package/dcron/dcron.mk
-> +++ b/package/dcron/dcron.mk
-> @@ -27,6 +27,7 @@ define DCRON_INSTALL_TARGET_CMDS
->  	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
->  	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
->  	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
-> +	$(INSTALL) -m 0755 -D package/dcron/S90dcron $(TARGET_DIR)/etc/init.d/S90dcron
+>  I think it's purely historical. And I think it never was required for patches
+> in a <pkgname> subdir.
 
-This should be in a DCRON_INSTALL_INIT_SYSV macro, see:
-    http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems
+So we could change the manual to not require patches to be PKG-prefixed?
 
-Also provide the systemd unit file (if it is available in the package!)
-with the DCRON_INSTALL_INIT_SYSTEMD macro.
+As long as they are number-prefixed, that's all we need, right?
+
+So, Ezequiel's patch is really no longer needed, and his use-case to use
+git-formatted patches is already covered, right?
 
 Regards,
 Yann E. MORIN.
-
->  endef
->  
->  $(eval $(generic-package))
-> -- 
-> 2.0.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
