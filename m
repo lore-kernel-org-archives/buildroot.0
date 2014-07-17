@@ -1,28 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 20:44:39 +0200
-Subject: [Buildroot] Integrating MariaDB and Galera
-In-Reply-To: <53C7AB01.9060704@green-communications.fr>
-References: <53C7AB01.9060704@green-communications.fr>
-Message-ID: <20140717204439.702946f2@free-electrons.com>
+Date: Thu, 17 Jul 2014 20:47:56 +0200
+Subject: [Buildroot] [PATCH 1/1] jquery-mobile : bump to version 1.4.3
+In-Reply-To: <1405589636-5949-1-git-send-email-sagaert.johan@skynet.be>
+References: <1405589636-5949-1-git-send-email-sagaert.johan@skynet.be>
+Message-ID: <20140717204756.107c3863@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sylvain Raybaud,
+Dear Sagaert Johan,
 
-On Thu, 17 Jul 2014 12:52:49 +0200, Sylvain Raybaud wrote:
+On Thu, 17 Jul 2014 11:33:56 +0200, Sagaert Johan wrote:
+> 
+> Signed-off-by: Sagaert Johan <sagaert.johan@skynet.be>
+> ---
+>  package/jquery-mobile/jquery-mobile.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
->   I need to use MariaDB cluster on a buildroot system. Therefore I'm
-> considering creating packages for MariaDB cluster and Galera. I don't
-> think someone is already working on it as a web search gave no result
-> but I wanted to check with you first.
-
-I've never heard of anyone starting an effort to package these
-components. So feel free to start the work on them.
-
-Thanks for your contribution!
+Applied, thanks.
 
 Thomas
 -- 
