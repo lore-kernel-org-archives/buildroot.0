@@ -1,34 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 23:07:40 +0200
-Subject: [Buildroot] [PATCH 4/7 v3] package/powerpc-utils: Add powerpc
- hardware utilities
-In-Reply-To: <1402982507.185290.70487867379.4.gpush@pablo>
-References: <1402982507.183937.570365596242.0.gpush@pablo>
- <1402982507.185290.70487867379.4.gpush@pablo>
-Message-ID: <20140717230740.4a4c5123@free-electrons.com>
+Date: Thu, 17 Jul 2014 23:08:21 +0200
+Subject: [Buildroot] [PATCH 2/5] perl-io-socket-ssl: new package
+In-Reply-To: <1405614782-3667-2-git-send-email-francois.perrad@gadz.org>
+References: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
+ <1405614782-3667-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140717230821.6e188178@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Kerr,
+Dear Francois Perrad,
 
-On Tue, 17 Jun 2014 13:21:47 +0800, Jeremy Kerr wrote:
-> This change adds a package definition for the powerpc-utils project,
-> containing a set of powerpc-specific hardware management utilities.
-> 
-> We're using a git tag from upstream, which contains a few build-system
-> fixes.
-> 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+On Thu, 17 Jul 2014 18:32:59 +0200, Francois Perrad wrote:
 
-Thanks, applied with minor changes, as outlined in the commit log:
+> +PERL_IO_SOCKET_SSL_VERSION = 1.997
+> +PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+> +PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR/
 
-    [Thomas:
-     - Add dependency on PowerPC architecture in Config.in.
-     - Add homepage in Config.in help text.]
-    
+Yet another issue with the CPAN mirror:
+http://autobuild.buildroot.org/results/5f1/5f15763397244d6f89918a8eebc6952a2895bad0/build-end.log.
+
+Any fix?
+
 Thanks,
 
 Thomas
