@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 09:50:02 +0200
-Subject: [Buildroot] [git commit] package/coreutils: gettextize to match the
-	new gettext version
-Message-ID: <20140717075142.3DAD89D26A@busybox.osuosl.org>
+Date: Thu, 17 Jul 2014 09:49:37 +0200
+Subject: [Buildroot] [git commit] manual: add gettextize explanations in the
+	manual
+Message-ID: <20140717075142.236C19D26A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e0c5e75bc66185256add4bd4e669dc81075f8730
+commit: http://git.buildroot.net/buildroot/commit/?id=1bdd6ca02033237e6cc5a82701a1d40a0501b193
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The gettext macros in the package are from a gettext version older than
-the one we have in Buildroot, so autoreconf fails.
-
-Run gettextize prior to running autoreconf, like we do in wget.
-
-Fixes:
-    http://autobuild.buildroot.net/results/228/228224668be4376844fe924d0a5b346af0414460/
-    http://autobuild.buildroot.net/results/ac4/ac4dbb1342e9c9f1de5412e0b71fe4422ef744ef/
-    http://autobuild.buildroot.net/results/a0c/a0c25faf149de9d51768eed8ff5a2274282cd797/
-    ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/coreutils/coreutils.mk |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ docs/manual/adding-packages-autotools.txt |   12 ++++++++++++
+ 1 files changed, 12 insertions(+), 0 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index c90396d..af202b4 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -12,6 +12,7 @@ COREUTILS_LICENSE_FILES = COPYING
+diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+index c7e797f..3f40503 100644
+--- a/docs/manual/adding-packages-autotools.txt
++++ b/docs/manual/adding-packages-autotools.txt
+@@ -125,6 +125,18 @@ cases, typical packages will therefore only use a few of them.
+   passed to the 'autoreconf' program if
+   +LIBFOO_AUTORECONF=YES+. By default, empty.
  
- # patching gnulib .m4 file
- COREUTILS_AUTORECONF = YES
-+COREUTILS_GETTEXTIZE = YES
- 
- # If both coreutils and busybox are selected, make certain coreutils
- # wins the fight over who gets to have their utils actually installed.
++* +LIBFOO_GETTEXTIZE+, tells whether the package should be
++  gettextized or not (i.e. if the package uses a different gettext
++  version than Buildroot provides, and it is needed to run
++  'gettextize'.) Only valid when +LIBFOO_AUTORECONF=YES+. Valid
++  values are +YES+ and +NO+. The default is +NO+.
++
++* +LIBFOO_GETTEXTIZE_OPT+, to specify additional options passed to
++  the 'gettextize' program, if +LIBFOO_GETTEXTIZE=YES+. You may
++  use that if, for example, the +.po+ files are not located in the
++  standard place (i.e. in +po/+ at the root of the package.) By
++  default, '-f'.
++
+ * +LIBFOO_LIBTOOL_PATCH+ tells whether the Buildroot
+   patch to fix libtool cross-compilation issues should be applied or
+   not. Valid values are +YES+ and +NO+. By
