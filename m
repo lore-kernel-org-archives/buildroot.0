@@ -1,61 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Jul 2014 22:29:41 +0200
-Subject: [Buildroot] Silencing the build
-In-Reply-To: <20140717203152.2e18fb9b@free-electrons.com>
-References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
- <20140715212814.1dfcce43@free-electrons.com>
- <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
- <20140717203152.2e18fb9b@free-electrons.com>
-Message-ID: <20140717202941.GE3737@free.fr>
+Date: Thu, 17 Jul 2014 22:30:52 +0200
+Subject: [Buildroot] [PATCH] libconfuse: needs host-flex
+In-Reply-To: <1405628280-21661-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1405628280-21661-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140717203052.GF3737@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Gustavo, All,
 
-On 2014-07-17 20:31 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 17 Jul 2014 19:40:46 +0200, Fabio Porcedda wrote:
+On 2014-07-17 17:18 -0300, Gustavo Zacarias spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/63f/63f6f6204058932b02f79eaaa44eb4555c5bbb1f/
 > 
-> > > Hum, yes, but why? The entire build process is anyway very noisy, so is
-> > > there really a point in silencing specifically this part? What is the
-> > > ultimate goal you're trying to achieve here?
-> > 
-> > My ultimate goal is to be able using the "-s" flags to silence all
-> > parts, because sometimes i just want to build and view only ">>> *"
-> > messages, errors, warning without anything else.
-> > 
-> > As example the "toolchain-external" target already do that when the
-> > "-s" option is used.
-> > 
-> > I've silenced only this part because it was easy and it's anyway an improvement.
-> > 
-> > Maybe i can work on silencing other parts too if the feature is desired.
-> 
-> Ok, thanks for the explanation.
-> 
-> I guess we need to decide whether having a fully silent build in "make
-> -s" is a goal we should aim at. It seems like a good idea to me, but I
-> don't have a really strong opinion about this.
-> 
-> What do others think about this?
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Here's what I use for a silent build:
-
-    brmake() {
-        make "${@}" \
-        |sed -r -e '/^.{4}>>>[[:space:]]+(.*).{5}$/!d; s//\1/;'
-    }
-
-Then calling 'brmake' instead of 'make', will get you only the >>> lines.
-
-Of course, does not work if you invoke a CLI configurator, either
-directly, or as a consequence of a missing .config. I basically
-always call it with no argument, otherwise, I use plain 'make'.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/libconfuse/libconfuse.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+> index e9a1114..6450270 100644
+> --- a/package/libconfuse/libconfuse.mk
+> +++ b/package/libconfuse/libconfuse.mk
+> @@ -8,6 +8,7 @@ LIBCONFUSE_VERSION = V2_7
+>  LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
+>  LIBCONFUSE_INSTALL_STAGING = YES
+>  LIBCONFUSE_CONF_OPT = --disable-rpath
+> +LIBCONFUSE_DEPENDENCIES = host-flex
+>  LIBCONFUSE_LICENSE = ISC
+>  LIBCONFUSE_LICENSE_FILES = src/confuse.c
+>  
+> -- 
+> 1.8.5.5
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
