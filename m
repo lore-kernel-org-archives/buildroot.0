@@ -1,97 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 09:49:25 +0200
-Subject: [Buildroot] [git commit] pkg-autotools: add support to gettextize a
-	package
-Message-ID: <20140717075142.196119D26A@busybox.osuosl.org>
+Date: Thu, 17 Jul 2014 09:52:32 +0200
+Subject: [Buildroot] [git commit] package/libconfuse: switch to the new
+	upstream
+Message-ID: <20140717075335.5460F9D26A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=899258344f8df564cfb74f78741192aa26d1f102
+commit: http://git.buildroot.net/buildroot/commit/?id=351680c1a094beae47d27437fabca1eb1cf12929
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In case a package comes with a gettext infra which is different from
-the one Buildroot provides, we'd get autoreconf errors, like:
-    http://autobuild.buildroot.net/results/c0f/c0f7c801f61fdc310cde64342060b00a70155431/
+libconfuse is being migrated to github (see
+http://www.nongnu.org/confuse/) So, just follow suit.
 
-To avoid that, we need to gettextize the package prior to running
-autoreconf.
+Needs a bit of a hack so gettextize + autoreconf does not step on each
+other's toes. See comment in the patch.
 
-Provide the necessary infrastructure in the autotools infrastructure,
-so we can do it consistently across packages.
-
+[Yann: fix gettextizing, write commit log]
+Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-autotools.mk |   33 +++++++++++++++++++++++++++++++--
- 1 files changed, 31 insertions(+), 2 deletions(-)
+ .../libconfuse-0000-fix-configure-ac.patch         |   27 ++++++++++++++++++++
+ package/libconfuse/libconfuse.mk                   |    9 ++++--
+ 2 files changed, 33 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index ddff9bf..50876cb 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -87,6 +87,22 @@ ifndef $(2)_AUTORECONF
-  endif
- endif
- 
-+ifndef $(2)_GETTEXTIZE
-+ ifdef $(3)_GETTEXTIZE
-+  $(2)_GETTEXTIZE = $$($(3)_GETTEXTIZE)
-+ else
-+  $(2)_GETTEXTIZE ?= NO
-+ endif
-+endif
+diff --git a/package/libconfuse/libconfuse-0000-fix-configure-ac.patch b/package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+new file mode 100644
+index 0000000..6d61b48
+--- /dev/null
++++ b/package/libconfuse/libconfuse-0000-fix-configure-ac.patch
+@@ -0,0 +1,27 @@
++configure: remove po/Makefile.in from AC_CONFIG_FILES
 +
-+ifndef $(2)_GETTEXTIZE_OPT
-+ ifdef $(3)_GETTEXTIZE_OPT
-+  $(2)_GETTEXTIZE_OPT = $$($(3)_GETTEXTIZE)
-+ else
-+  $(2)_GETTEXTIZE_OPT ?= -f
-+ endif
-+endif
++Since we are gettextizing the package, gettextize updates configure.ac
++to add po/Makefile.in to AC_CONFIG_FILES>
 +
- ifeq ($(4),host)
-  $(2)_AUTORECONF_OPT ?= $$($(3)_AUTORECONF_OPT)
- endif
-@@ -200,6 +216,14 @@ $(2)_POST_PATCH_HOOKS += LIBTOOL_PATCH_HOOK
- endif
- 
++Unfortunately, it's already present, and gettextize does not detect it,
++and insists on adding its own. Later on, autoreconf barfs on the double
++occurences.
++
++As suggested by Arnout, just patch configure.ac to remove the
++po/Makefile.in occurence, so gettextize can safely add its own
++
++Reported-by: Arnout Vandecappelle <arnout@mind.be>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Cc: Alvaro Gamez <alvaro.gamez@hazent.com>
++
++diff -durN libconfuse-V2_7.orig/configure.ac libconfuse-V2_7/configure.ac
++--- libconfuse-V2_7.orig/configure.ac	2010-02-20 10:14:10.000000000 +0100
+++++ libconfuse-V2_7/configure.ac	2014-07-17 00:19:18.816785340 +0200
++@@ -49,7 +49,6 @@
++ AC_CONFIG_FILES([Makefile \
++ 		 src/Makefile \
++ 		 examples/Makefile \
++-                 po/Makefile.in \
++ 		 m4/Makefile \
++ 		 tests/Makefile \
++ 		 doc/Makefile \
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 8a0d80f..e9a1114 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,13 +4,16 @@
  #
-+# Hook to gettextize the package if needed
-+#
-+define GETTEXTIZE_HOOK
-+	@$$(call MESSAGE,"Gettextizing")
-+	$(Q)cd $$($$(PKG)_SRCDIR) && $(HOST_DIR)/usr/bin/gettextize $$($$(PKG)_GETTEXTIZE_OPT)
-+endef
+ ################################################################################
+ 
+-LIBCONFUSE_VERSION = 2.7
+-LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.gz
+-LIBCONFUSE_SITE = http://savannah.nongnu.org/download/confuse/
++LIBCONFUSE_VERSION = V2_7
++LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
+ LIBCONFUSE_INSTALL_STAGING = YES
+ LIBCONFUSE_CONF_OPT = --disable-rpath
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = src/confuse.c
+ 
++# Fresh from the repository, no configure et al.
++LIBCONFUSE_AUTORECONF = YES
++LIBCONFUSE_GETTEXTIZE = YES
 +
-+#
- # Hook to autoreconf the package if needed
- #
- define AUTORECONF_HOOK
-@@ -222,14 +246,19 @@ endef
- 
- # This must be repeated from inner-generic-package, otherwise we get an empty
- # _DEPENDENCIES if _AUTORECONF is YES.  Also filter the result of _AUTORECONF
--# away from the non-host rule
-+# and _GETTEXTIZE away from the non-host rule
- ifeq ($(4),host)
- $(2)_DEPENDENCIES ?= $$(filter-out host-automake host-autoconf host-libtool \
--				host-toolchain $(1),\
-+				host-gettext host-toolchain $(1),\
-     $$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
- endif
- 
- ifeq ($$($(2)_AUTORECONF),YES)
-+# This has to come before autoreconf
-+ifeq ($$($(2)_GETTEXTIZE),YES)
-+$(2)_PRE_CONFIGURE_HOOKS += GETTEXTIZE_HOOK
-+$(2)_DEPENDENCIES += host-gettext
-+endif
- $(2)_PRE_CONFIGURE_HOOKS += AUTORECONF_HOOK
- $(2)_DEPENDENCIES += host-automake host-autoconf host-libtool
- endif
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
