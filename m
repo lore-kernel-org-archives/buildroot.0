@@ -1,30 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 23:56:28 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/eudev: Bump version to 1.9
-In-Reply-To: <1405633246-17081-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1405633246-17081-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140717235628.5da14742@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Jul 2014 00:46:15 +0200
+Subject: [Buildroot] [PATCH] package/libconfuse: switch to the new
+	upstream
+In-Reply-To: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405549965-22539-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140717224615.GG3737@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Thomas, All,
 
-On Thu, 17 Jul 2014 23:40:46 +0200, Bernd Kuhls wrote:
-> - Switch EUDEV_SITE to official upstream:
->   http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-fs/eudev/eudev-1.9-r1.ebuild?view=markup
->   Github does not carry this current eudev version.
+On 2014-07-17 00:32 +0200, Yann E. MORIN spake thusly:
+> libconfuse is being migrated to github (see http://www.nongnu.org/confuse/)
+> So, just follow suite.
 > 
-> - Remove EUDEV_AUTORECONF = yes, tarball contains ./configure
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Needs a bit of a hack so gettextize + autoreconf does not step on each
+> other's toes. See comment in the patch.
+[--SNIP--]
 
-Applied, thanks.
+OK, so this bump is causing a bunch of autobuild failures:
+    http://autobuild.buildroot.org/?reason=libconfuse-V2_7
 
-Thomas
+Some of them are due to a problem while either gettextizing or
+autoreconfiguring the package.
+
+Thomas was able to reproduce this build failure:
+    http://autobuild.buildroot.org/results/f60/f6089c90d4f0ba579725ac834d8ac43b839bbc3b/
+
+However, I was not able to reproduce it; it builds fine for me, in a
+Debian Squeeze 32-bit chroot.
+
+I'm lost.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
