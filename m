@@ -1,39 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 22:54:06 +0200
-Subject: [Buildroot] [PATCH 5/7 v3] package/kexec-lite: Add a package
- for the kexec-lite tools
-In-Reply-To: <1402982507.185598.547200888365.5.gpush@pablo>
-References: <1402982507.183937.570365596242.0.gpush@pablo>
- <1402982507.185598.547200888365.5.gpush@pablo>
-Message-ID: <20140717225406.71d5ac4e@free-electrons.com>
+Date: Thu, 17 Jul 2014 22:54:27 +0200
+Subject: [Buildroot] [git commit] libconfuse: needs host-flex
+Message-ID: <20140717205432.425939D25E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jeremy Kerr,
+commit: http://git.buildroot.net/buildroot/commit/?id=5ae4e49ed454c981693ba3bfcf23fb4bc7f5c6bf
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Jun 2014 13:21:47 +0800, Jeremy Kerr wrote:
-> Kexec-lite is a tiny impementation of kexec for devicetree-based
-> platforms.
-> 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+Fixes:
+http://autobuild.buildroot.net/results/63f/63f6f6204058932b02f79eaaa44eb4555c5bbb1f/
 
-Thanks, applied, with a bunch of minor changes. From the commit log:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libconfuse/libconfuse.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-    [Thomas:
-    - Add !BR2_PREFER_STATIC_LIB dependency, inherited from the dtc
-      package
-    - Fix license to be GPLv2+, and not just GPL.
-    - Use $(TARGET_CONFIGURE_OPTS) instead of manually passing CC, LD,
-      CFLAGS.
-    - Use a full path as the target of $(INSTALL)]
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index e9a1114..6450270 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -8,6 +8,7 @@ LIBCONFUSE_VERSION = V2_7
+ LIBCONFUSE_SITE = $(call github,martinh,libconfuse,$(LIBCONFUSE_VERSION))
+ LIBCONFUSE_INSTALL_STAGING = YES
+ LIBCONFUSE_CONF_OPT = --disable-rpath
++LIBCONFUSE_DEPENDENCIES = host-flex
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = src/confuse.c
+ 
