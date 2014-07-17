@@ -1,30 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 22:57:53 +0200
-Subject: [Buildroot] [PATCH] linux: fix fallout from
- c78d57637cd57a383e44713eb27e654b3071340e
-In-Reply-To: <1405626908-11988-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405626908-11988-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140717225753.4b76b58f@free-electrons.com>
+Date: Thu, 17 Jul 2014 22:58:34 +0200
+Subject: [Buildroot] [PATCHv3 1/2] linux: add option to
+ explicitlyspecify the kernel image name : breaks kernel build !
+In-Reply-To: <D5A9AA060AA94EDA827C2219FEFFDD4D@JohanW7>
+References: <20140711124922.GA25220@waldemar-brodkorb.de>
+ <8464FBE548EF40ECA03DD045E23F1D39@JohanW7>
+ <D5A9AA060AA94EDA827C2219FEFFDD4D@JohanW7>
+Message-ID: <20140717225834.30434820@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Sagaert Johan,
 
-On Thu, 17 Jul 2014 16:55:08 -0300, Gustavo Zacarias wrote:
-> The new variable LINUX_TARGET_NAME is unconditionally used but it may be
-> unset leading to a default kernel build (which might not be uImage or
-> other requested format).
-> See http://lists.busybox.net/pipermail/buildroot/2014-July/102069.html
+On Thu, 17 Jul 2014 17:29:23 +0200, Sagaert Johan wrote:
+
+> If BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM is not set
+> then LINUX_TARGET_NAME is undefined.
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  linux/linux.mk | 2 ++
->  1 file changed, 2 insertions(+)
+> LINUX_TARGET_NAME is used on lines 266 (linux/linux.mk) and 341 to build the kernel.
 
-Applied, thanks.
+Thanks for reporting this problem! It has been fixed in commit
+http://git.buildroot.net/buildroot/commit/?id=f8f3073b18895bbf6938a5c310f6e6134f8bd6cb.
 
 Thomas
 -- 
