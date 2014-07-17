@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 20:31:52 +0200
-Subject: [Buildroot] Silencing the build
-In-Reply-To: <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
-References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
- <20140715212814.1dfcce43@free-electrons.com>
- <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
-Message-ID: <20140717203152.2e18fb9b@free-electrons.com>
+Date: Thu, 17 Jul 2014 20:35:46 +0200
+Subject: [Buildroot] [PATCH 1/1] dcron: provide init script
+In-Reply-To: <20140717165814.GB3737@free.fr>
+References: <20140715211719.0ea2e053@free-electrons.com>
+ <1405589648-26777-1-git-send-email-alvaro.gamez@hazent.com>
+ <20140717165814.GB3737@free.fr>
+Message-ID: <20140717203546.23fdf26e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabio Porcedda,
+Dear Yann E. MORIN,
 
-On Thu, 17 Jul 2014 19:40:46 +0200, Fabio Porcedda wrote:
+On Thu, 17 Jul 2014 18:58:14 +0200, Yann E. MORIN wrote:
 
-> > Hum, yes, but why? The entire build process is anyway very noisy, so is
-> > there really a point in silencing specifically this part? What is the
-> > ultimate goal you're trying to achieve here?
-> 
-> My ultimate goal is to be able using the "-s" flags to silence all
-> parts, because sometimes i just want to build and view only ">>> *"
-> messages, errors, warning without anything else.
-> 
-> As example the "toolchain-external" target already do that when the
-> "-s" option is used.
-> 
-> I've silenced only this part because it was easy and it's anyway an improvement.
-> 
-> Maybe i can work on silencing other parts too if the feature is desired.
+> This should be in a DCRON_INSTALL_INIT_SYSV macro, see:
+>     http://buildroot.org/downloads/manual/manual.html#_infrastructure_for_packages_with_specific_build_systems
 
-Ok, thanks for the explanation.
+I'll fix this when applying.
 
-I guess we need to decide whether having a fully silent build in "make
--s" is a goal we should aim at. It seems like a good idea to me, but I
-don't have a really strong opinion about this.
+> Also provide the systemd unit file (if it is available in the package!)
+> with the DCRON_INSTALL_INIT_SYSTEMD macro.
 
-What do others think about this?
+I don't think there's a systemd unit file for dcron.
+
+However, I remember there was one in the recently added upmpdcli
+package, but since I don't know much about systemd, I didn't had
+support for it. If anyone feel like adding support for upmpdcli systemd
+unit file, don't hesitate to do it :-)
+
+Cheers,
 
 Thomas
 -- 
