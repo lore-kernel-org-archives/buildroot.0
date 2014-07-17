@@ -1,39 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Jul 2014 11:44:26 +0200
-Subject: [Buildroot] [PATCH 1/1] Add $$(PKG)_AUTORECONF_ENV argument to
- autotools package
-In-Reply-To: <38A5475DE83986499AEACD2CFAFC3F9801148D3335@tss-server1.home.tropicalstormsoftware.com>
-References: <38A5475DE83986499AEACD2CFAFC3F9801148D3335@tss-server1.home.tropicalstormsoftware.com>
-Message-ID: <20140717114426.751de13d@free-electrons.com>
+From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
+Date: Thu, 17 Jul 2014 12:52:49 +0200
+Subject: [Buildroot] Integrating MariaDB and Galera
+Message-ID: <53C7AB01.9060704@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rick Taylor,
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-On Thu, 17 Jul 2014 09:36:16 +0000, Rick Taylor wrote:
-> From 017be6459b46388f9377d00c2f48e838ec3ff98b Mon Sep 17 00:00:00 2001
-> From: Rick Taylor <rick.taylor@cassidian.com>
-> Date: Thu, 17 Jul 2014 10:04:10 +0100
-> Subject: [PATCH 1/1] Add $$(PKG)_AUTORECONF_ENV argument to autotools package
-> 
-> Signed-off-by: Rick Taylor <rick.taylor@cassidian.com>
-> ---
->  package/pkg-autotools.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Dear buildroot community,
 
-Thanks for the patch. Could you detail a bit the use case you have for
-$$($$(PKG)_AUTORECONF_ENV) ?
+  I need to use MariaDB cluster on a buildroot system. Therefore I'm
+considering creating packages for MariaDB cluster and Galera. I don't
+think someone is already working on it as a web search gave no result
+but I wanted to check with you first.
 
-Also, an update to docs/manual/adding-packages-autotools.txt is needed
-to take into account this new variable in the documentation.
+Best regards,
 
-Thanks,
+- -- 
+Sylvain Raybaud
+www.green-communications.fr
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+iQIcBAEBAgAGBQJTx6sBAAoJEEkkwl4JtJ9yLmwQAIpWYZ6cR9/9V8OpH3hmlLWt
+4x9fGEB5ZPzWWFcdkiaY/f9iUqMASsCY/yRWOq4GG2yaqIf8XnOqrj4R3RZSge8Z
+KXYx9uxeieyqzIflD1ipPTDaal4WCi2mM9YeafcSsh6gjv4HumAgVwIlggAar1ka
+XLmqiOHeZw9Gno/6Ykkw7l10SwRvLn60GKn/zrHTguPB5mcic4A4q9tl9UeiihcX
+Qq655LOnzJsEhemRVcl7/OLDSBe7o5ZQW5R1UgxoPNQH86tBDLNJtBqU4Zt8wpBp
+br/XctG+rlWCLDbm5Ju4bc+MAhPJIdfuGMptbemjwQT7G7H5rAqKRjYgiMDu/Cnk
+T+nZwDII9fZEbyW4l/SSkTLfqnFdVC38zLHtHCu7thKIIOuT/JbLgwcL1eAsDLLO
+emcFhg9z3dJBEyav5oITwbX5RuzgxKW0wQKT4oRT4GwUuluNrdSieMIupIcvouK+
+HZVshVOh5TjIeF08sls0KHWU98bHPlPo7p+QibRQLHKk0l9/TdbHsdnNh6ix4F3k
+0Tzm1dlPtmgspAQkBz+BuZ1y3QbIgUAKhZVAjvnP5G+qB7+UuolVUP07yqjQTFGa
+dx7nWNphHpR0OCbPBaGoKI7QMtKbF3l2Y948Qxu95/r4vZS/8aXZRIACWLEJA+Sr
+awLNJtzXg2ZtHJm3eU+m
+=UP2n
+-----END PGP SIGNATURE-----
