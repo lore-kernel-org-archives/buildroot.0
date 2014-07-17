@@ -1,37 +1,64 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 17 Jul 2014 06:52:46 +0200
-Subject: [Buildroot] [PATCH] u-boot: Allow to specify a list of patches
-In-Reply-To: <53C6FB6D.2040903@mind.be>
-References: <1405448794-10517-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <20140715205341.77237719@free-electrons.com>
- <CAAEAJfB7bjvsdGCOc+5Rzt39ERfvfC=sSYKtKUtGwDLXiBDLdA@mail.gmail.com>
- <20140715201336.GE3351@free.fr> <53C6FB6D.2040903@mind.be>
-Message-ID: <29128166-5526-4da5-804d-72225bc05bc1@email.android.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 17 Jul 2014 07:42:54 +0200
+Subject: [Buildroot] [PATCH 2/8] package/mesa3d: Fix optional DRI3 support
+In-Reply-To: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1405575780-26496-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1405575780-26496-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> schreef:
->On 15/07/14 22:13, Yann E. MORIN wrote:
->> The more I think about it, the more I find our policy to require
->> PKG-prefixed patches to be really cumbersome, since the patches already
->> are in a subdir named PKG/
->> 
->> Of course, we're enforcing this naming scheme in BR2_GLOBAL_PATCH_DIR to
->> be in sync with what we do for our bundled patches.
->> 
->> But still, if patches were just named NNNN-title.patch, that would be as
->> efficient at sorting the patches. The PKG- prefix is not really
->> required, and indeed can cause some troubles with some use-cases, such
->> as yours.
->> 
->> Thomas, was there a specific reason we wanted the patches to be
->> PKG-prefixed? If not, would it make sense to just accept patches without
->> a PKG-prefix?
->
-> Er, we don't... We require this specific naming scheme for contributed
->packages, but the code itself just takes *.patch.
+DRI3 support is optional in mesa3d, but mesa3d expects it by default,
+so add configure options to disable it when necessary and add the
+needed dependencies for DRI3 support. Fixes:
 
-Yes sure, it's a convention only, but the question is: why did we include the package name in the convention?
+===============================
+checking for DRI3PROTO... no
+configure: error: Package requirements (dri3proto >= 1.0) were not met:
+
+checking for PRESENTPROTO... no
+configure: error: Package requirements (presentproto >= 1.0) were not met:
+
+configure: error: Package requirements (x11 xext xdamage xfixes x11-xcb xcb-glx >= 1.8.1
+ xcb-dri2 >= 1.8 xcb-dri3 xcb-present xcb-sync xshmfence >= 1.1) were not met:
+
+Package xshmfence was not found in the pkg-config search path.
+===============================
+
+This defconfig was broken and fixed by this patch:
+
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XSERVER_XORG_SERVER=y
+BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+BR2_PACKAGE_XPROTO_DRI3PROTO=y
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 1a61af8..667e744 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -77,6 +77,12 @@ ifeq ($(MESA3D_DRI_DRIVERS-y),)
+ MESA3D_CONF_OPT += \
+ 	--without-dri-drivers
+ else
++ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
++MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
++MESA3D_CONF_OPT += --enable-dri3
++else
++MESA3D_CONF_OPT += --disable-dri3
++endif
+ MESA3D_PROVIDES += libgl
+ MESA3D_CONF_OPT += \
+ 	--enable-dri \
+-- 
+1.7.10.4
