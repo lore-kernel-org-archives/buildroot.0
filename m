@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Thu, 17 Jul 2014 18:33:00 +0200
-Subject: [Buildroot] [PATCH 3/5] perl-gd: new package
+Date: Thu, 17 Jul 2014 18:33:02 +0200
+Subject: [Buildroot] [PATCH 5/5] perl-gdgraph: new package
 In-Reply-To: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
 References: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1405614782-3667-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1405614782-3667-5-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,186 +12,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                           |  1 +
- package/perl-gd/Config.in                   | 14 +++++++++++
- package/perl-gd/perl-gd-01-getoptions.patch | 39 +++++++++++++++++++++++++++++
- package/perl-gd/perl-gd-02-lgd.patch        | 25 ++++++++++++++++++
- package/perl-gd/perl-gd-03-force.patch      | 29 +++++++++++++++++++++
- package/perl-gd/perl-gd.mk                  | 20 +++++++++++++++
- 6 files changed, 128 insertions(+)
- create mode 100644 package/perl-gd/Config.in
- create mode 100644 package/perl-gd/perl-gd-01-getoptions.patch
- create mode 100644 package/perl-gd/perl-gd-02-lgd.patch
- create mode 100644 package/perl-gd/perl-gd-03-force.patch
- create mode 100644 package/perl-gd/perl-gd.mk
+ package/Config.in                    |  1 +
+ package/perl-gdgraph/Config.in       | 12 ++++++++++++
+ package/perl-gdgraph/perl-gdgraph.mk | 13 +++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/perl-gdgraph/Config.in
+ create mode 100644 package/perl-gdgraph/perl-gdgraph.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index e65d8ab..98dd316 100644
+index 8a7801a..87d62ba 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -428,6 +428,7 @@ endif
- 	source "package/perl/Config.in"
+@@ -429,6 +429,7 @@ endif
  if BR2_PACKAGE_PERL
  menu "Perl libraries/modules"
-+	source "package/perl-gd/Config.in"
+ 	source "package/perl-gd/Config.in"
++	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
  	source "package/perl-io-socket-ssl/Config.in"
  	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
+diff --git a/package/perl-gdgraph/Config.in b/package/perl-gdgraph/Config.in
 new file mode 100644
-index 0000000..7c85cfc
+index 0000000..e722c06
 --- /dev/null
-+++ b/package/perl-gd/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PERL_GD
-+	bool "perl-gd"
++++ b/package/perl-gdgraph/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PERL_GDGRAPH
++	bool "perl-gdgraph"
 +	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_GD
++	select BR2_PACKAGE_PERL_GD
++	select BR2_PACKAGE_PERL_GDTEXTUTIL
 +	help
-+	  Interface to Gd Graphics Library
++	  Produces charts with GD
 +
-+	  https://metacpan.org/release/GD
++	  https://metacpan.org/release/GDGraph
 +
-+comment "perl-gd needs a toolchain w/ dynamic library"
++comment "perl-gdgraph needs a toolchain w/ dynamic library"
 +	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/perl-gd/perl-gd-01-getoptions.patch b/package/perl-gd/perl-gd-01-getoptions.patch
+diff --git a/package/perl-gdgraph/perl-gdgraph.mk b/package/perl-gdgraph/perl-gdgraph.mk
 new file mode 100644
-index 0000000..a65e40d
+index 0000000..d71be3d
 --- /dev/null
-+++ b/package/perl-gd/perl-gd-01-getoptions.patch
-@@ -0,0 +1,39 @@
-+fix option handling in Makefile.PL
-+the call to GetOptions() must be unique.
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -24,7 +24,15 @@
-+ my ($options,$lib_gd_path,$lib_ft_path,$lib_png_path,$lib_jpeg_path,$lib_xpm_path,$lib_zlib_path,$force);
-+ 
-+ use Getopt::Long;
-+-GetOptions("ignore_missing_gd" => \$force);
-++my $result = GetOptions("options=s"         => \$options,
-++			"lib_gd_path=s"     => \$lib_gd_path,
-++			"lib_ft_path=s"     => \$lib_ft_path,
-++			"lib_png_path=s"    => \$lib_png_path,
-++			"lib_jpeg_path=s"   => \$lib_jpeg_path,
-++			"lib_xpm_path=s"    => \$lib_xpm_path,
-++			"lib_zlib_path=s"   => \$lib_zlib_path,
-++			"ignore_missing_gd" => \$force,
-++		       );
-+ 
-+ unless (try_to_autoconfigure(\$options,\$lib_gd_path,\@INC,\@LIBPATH,\@LIBS) || $force) {
-+     die <<END;
-+@@ -47,14 +55,6 @@
-+ #############################################################################################
-+ # Build options passed in to script to support reproducible builds via Makefiles
-+ #############################################################################################
-+-my $result = GetOptions("options=s"       => \$options,
-+-			"lib_gd_path=s"   => \$lib_gd_path,
-+-			"lib_ft_path=s"   => \$lib_ft_path,
-+-			"lib_png_path=s"  => \$lib_png_path,
-+-			"lib_jpeg_path=s" => \$lib_jpeg_path,
-+-			"lib_xpm_path=s"  => \$lib_xpm_path,
-+-			"lib_zlib_path=s" => \$lib_zlib_path,
-+-		       );
-+ unless ($result) {
-+   print STDERR <<END;
-+ Usage: perl Makefile.PL [options]
-diff --git a/package/perl-gd/perl-gd-02-lgd.patch b/package/perl-gd/perl-gd-02-lgd.patch
-new file mode 100644
-index 0000000..1c8fe7b
---- /dev/null
-+++ b/package/perl-gd/perl-gd-02-lgd.patch
-@@ -0,0 +1,25 @@
-+refactor -lgd in @LIBS
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -34,9 +34,9 @@
-+ END
-+ }
-+ 
-++push @LIBS, "-lgd";
-+ @INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
-+ @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
-+- at LIBS    = qw(-lgd) unless @LIBS;
-+ 
-+ # support for AMD64 libraries
-+ if (-d '/usr/lib64') {
-+@@ -291,7 +291,6 @@
-+   @$LIBPATH      = map {s/^-L// && "-L$_"} split /\s+/,$ldflags;
-+   @$LIBS         = split /\s+/,$libs;
-+ 
-+-  push @$LIBS,"-lgd";
-+   push @$LIBPATH,"-L$libdir";
-+   ($$lib_gd_path = $libdir) =~ s!/[^/]+$!!;
-+   $$options      = $features;
-diff --git a/package/perl-gd/perl-gd-03-force.patch b/package/perl-gd/perl-gd-03-force.patch
-new file mode 100644
-index 0000000..908226b
---- /dev/null
-+++ b/package/perl-gd/perl-gd-03-force.patch
-@@ -0,0 +1,29 @@
-+let @INC and @LIBPATH empty when ignore_missing_gd
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -35,13 +35,15 @@
-+ }
-+ 
-+ push @LIBS, "-lgd";
-+- at INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
-+- at LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
-+-
-+-# support for AMD64 libraries
-+-if (-d '/usr/lib64') {
-+-  my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
-+-  @LIBPATH = (@LIBPATH, at libs64);
-++unless ($force) {
-++  @INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
-++  @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
-++
-++  # support for AMD64 libraries
-++  if (-d '/usr/lib64') {
-++    my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
-++    @LIBPATH = (@LIBPATH,@libs64);
-++  }
-+ }
-+ 
-+ #############################################################################################
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-new file mode 100644
-index 0000000..abca8c9
---- /dev/null
-+++ b/package/perl-gd/perl-gd.mk
-@@ -0,0 +1,20 @@
++++ b/package/perl-gdgraph/perl-gdgraph.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-gd
++# perl-gdgraph
 +#
 +################################################################################
 +
-+PERL_GD_VERSION = 2.53
-+PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
-+PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS/
-+PERL_GD_DEPENDENCIES = perl zlib libpng freetype gd
-+
-+PERL_GD_CONF_OPT = \
-+	-options=FT,PNG \
-+	-lib_gd_path=$(STAGING_DIR)/usr \
-+	-lib_ft_path=$(STAGING_DIR)/usr \
-+	-lib_png_path=$(STAGING_DIR)/usr \
-+	-lib_zlib_path=$(STAGING_DIR)/usr \
-+	-ignore_missing_gd
++PERL_GDGRAPH_VERSION = 1.48
++PERL_GDGRAPH_SOURCE = GDGraph-$(PERL_GDGRAPH_VERSION).tar.gz
++PERL_GDGRAPH_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RUZ/
++PERL_GDGRAPH_DEPENDENCIES = perl perl-gd perl-gdtextutil
++PERL_GDGRAPH_LICENSE = Artistic or GPLv1+
 +
 +$(eval $(perl-package))
 -- 
