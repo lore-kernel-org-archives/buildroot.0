@@ -1,73 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 10:07:26 +0200
-Subject: [Buildroot] [git commit] opencv: since 2.4.8 bump, requires NPTL
-Message-ID: <20140718080841.B92DE9D27D@busybox.osuosl.org>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 18 Jul 2014 10:18:26 +0200
+Subject: [Buildroot] Silencing the build
+In-Reply-To: <20140717202941.GE3737@free.fr>
+References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140715212814.1dfcce43@free-electrons.com>
+ <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
+ <20140717203152.2e18fb9b@free-electrons.com> <20140717202941.GE3737@free.fr>
+Message-ID: <CAHkwnC_eQxDKH=V+2U+pOMZj50y4oE2B_p_G+CAk8ZFG3jSsOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=26043fdbf0779ada46efa44a009933180c21cf29
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, Jul 17, 2014 at 10:29 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Thomas, All,
+>
+> On 2014-07-17 20:31 +0200, Thomas Petazzoni spake thusly:
+>> On Thu, 17 Jul 2014 19:40:46 +0200, Fabio Porcedda wrote:
+>>
+>> > > Hum, yes, but why? The entire build process is anyway very noisy, so is
+>> > > there really a point in silencing specifically this part? What is the
+>> > > ultimate goal you're trying to achieve here?
+>> >
+>> > My ultimate goal is to be able using the "-s" flags to silence all
+>> > parts, because sometimes i just want to build and view only ">>> *"
+>> > messages, errors, warning without anything else.
+>> >
+>> > As example the "toolchain-external" target already do that when the
+>> > "-s" option is used.
+>> >
+>> > I've silenced only this part because it was easy and it's anyway an improvement.
+>> >
+>> > Maybe i can work on silencing other parts too if the feature is desired.
+>>
+>> Ok, thanks for the explanation.
+>>
+>> I guess we need to decide whether having a fully silent build in "make
+>> -s" is a goal we should aim at. It seems like a good idea to me, but I
+>> don't have a really strong opinion about this.
+>>
+>> What do others think about this?
+>
+> Here's what I use for a silent build:
+>
+>     brmake() {
+>         make "${@}" \
+>         |sed -r -e '/^.{4}>>>[[:space:]]+(.*).{5}$/!d; s//\1/;'
+>     }
+>
+> Then calling 'brmake' instead of 'make', will get you only the >>> lines.
 
-The core module of OpenCV is now using the pthread_spin_*() API, which
-is only available in the 'linuxthreads' and 'NPTL' thread
-implementations, but not in the 'linuxthreads.old'
-implementation. Therefore, this commit adds a dependency on OpenCV to
-NPTL threads.
+Nice, so i'm not the only one who likes a silent build ;-)
 
-Fixes:
+I think that a downside of this method is that even the stderr is
+filtered as well so messages like warning or errors are filtered as
+well.
 
-  http://autobuild.buildroot.org/results/75d/75db3827ec4be8a3805508a22b8b6a4d1a3b9ce3/
+> Of course, does not work if you invoke a CLI configurator, either
+> directly, or as a consequence of a missing .config. I basically
+> always call it with no argument, otherwise, I use plain 'make'.
+>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in |    5 +++--
- package/opencv/Config.in                      |    6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 02fa18c..054ed87 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -425,6 +425,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NEON
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	bool "opencv"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	select BR2_PACKAGE_OPENCV
- 	# Remove the following opencv modules when gstreamer fixes the
- 	# problem of including the old "cv.h" header
-@@ -441,8 +442,8 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
- 	help
- 	  GStreamer OpenCV Plugins
- 
--comment "opencv plugin needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "opencv plugin needs a toolchain w/ C++, NPTL"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS
- 	bool "opus"
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index bec9b9e..6e938d2 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -1,7 +1,7 @@
- menuconfig BR2_PACKAGE_OPENCV
- 	bool "opencv"
- 	select BR2_PACKAGE_ZLIB
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -228,5 +228,5 @@ config BR2_PACKAGE_OPENCV_INSTALL_DATA
- 
- endif # BR2_PACKAGE_OPENCV
- 
--comment "opencv needs a toolchain w/ C++, threads, wchar"
--	depends on !(BR2_INSTALL_LIBSTDCPP  && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
-+comment "opencv needs a toolchain w/ C++, NPTL, wchar"
-+	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+Regards
+-- 
+Fabio Porcedda
