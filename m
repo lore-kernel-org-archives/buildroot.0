@@ -1,81 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 21:40:09 +0200
-Subject: [Buildroot] [git commit] memcached: new package
-Message-ID: <20140718223552.6A8549D270@busybox.osuosl.org>
+Date: Sat, 19 Jul 2014 00:32:44 +0200
+Subject: [Buildroot] [git commit] php-memcached: new package
+Message-ID: <20140718223552.7DE2F9C769@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a274396df047102408998ed0f889251e0883e2c2
+commit: http://git.buildroot.net/buildroot/commit/?id=e30868be1f2ff19b8d64bf94efa4271d353e33fc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |    1 +
- package/memcached/Config.in    |   15 +++++++++++++++
- package/memcached/memcached.mk |   21 +++++++++++++++++++++
- 3 files changed, 37 insertions(+), 0 deletions(-)
+ package/Config.in                      |    1 +
+ package/php-memcached/Config.in        |   17 +++++++++++++++++
+ package/php-memcached/php-memcached.mk |   27 +++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 0 deletions(-)
 
 diff --git a/package/Config.in b/package/Config.in
-index 15911c9..ef191b3 100644
+index 017d050..db2d114 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -982,6 +982,7 @@ endif
- 	source "package/linux-zigbee/Config.in"
- 	source "package/lrzsz/Config.in"
- 	source "package/macchanger/Config.in"
-+	source "package/memcached/Config.in"
- 	source "package/mii-diag/Config.in"
- 	source "package/minidlna/Config.in"
- 	source "package/modem-manager/Config.in"
-diff --git a/package/memcached/Config.in b/package/memcached/Config.in
+@@ -449,6 +449,7 @@ menu "External php extensions"
+ 	source "package/php-geoip/Config.in"
+ 	source "package/php-gnupg/Config.in"
+ 	source "package/php-imagick/Config.in"
++	source "package/php-memcached/Config.in"
+ 	source "package/php-ssh2/Config.in"
+ 	source "package/php-yaml/Config.in"
+ 	source "package/php-zmq/Config.in"
+diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
 new file mode 100644
-index 0000000..e011d08
+index 0000000..c9f4b7d
 --- /dev/null
-+++ b/package/memcached/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_MEMCACHED
-+	bool "memcached"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBEVENT
++++ b/package/php-memcached/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_PHP_MEMCACHED
++	bool "php-memcached"
++	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
++	depends on BR2_TOOLCHAIN_USES_GLIBC # libmemcached
++	select BR2_PACKAGE_PHP_EXT_SESSION
++	select BR2_PACKAGE_LIBMEMCACHED
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  Memcached is an in-memory key-value store for small chunks
-+	  of arbitrary data (strings, objects) from results of database calls,
-+	  API calls, or page rendering.
++	  PHP extension for interfacing with memcached via
++	  libmemcached library.
 +
-+	  http://www.memcached.org/
++	  http://pecl.php.net/package/memcached
 +
-+comment "memcached needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
++comment "php-memcached needs a (e)glibc toolchain w/ C++, threads"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC \
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
 new file mode 100644
-index 0000000..17edcb6
+index 0000000..866e18c
 --- /dev/null
-+++ b/package/memcached/memcached.mk
-@@ -0,0 +1,21 @@
++++ b/package/php-memcached/php-memcached.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# memcached
++# php-memcached
 +#
 +################################################################################
 +
-+MEMCACHED_VERSION = 1.4.20
-+MEMCACHED_SITE = http://www.memcached.org/files
-+MEMCACHED_DEPENDENCIES = libevent
-+MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+MEMCACHED_CONF_OPT = --disable-coverage --disable-docs
-+MEMCACHED_LICENSE = BSD-3c
-+MEMCACHED_LICENSE_FILES = COPYING
++PHP_MEMCACHED_VERSION = 2.2.0
++PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
++PHP_MEMCACHED_SITE = http://pecl.php.net/get
++PHP_MEMCACHED_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--disable-memcached-sasl \
++	--with-libmemcached-dir=$(STAGING_DIR)/usr
++# phpize does the autoconf magic
++PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
++PHP_MEMCACHED_LICENSE = MIT
++PHP_MEMCACHED_LICENSE_FILES = LICENSE
 +
-+ifeq ($(BR2_ENDIAN),"BIG")
-+MEMCACHED_CONF_ENV += ac_cv_c_endian=big
-+else
-+MEMCACHED_CONF_ENV += ac_cv_c_endian=little
-+endif
++define PHP_MEMCACHED_PHPIZE
++	(cd $(@D); \
++		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
++		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
++		$(STAGING_DIR)/usr/bin/phpize)
++endef
++
++PHP_MEMCACHED_PRE_CONFIGURE_HOOKS += PHP_MEMCACHED_PHPIZE
 +
 +$(eval $(autotools-package))
