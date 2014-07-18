@@ -1,72 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Jul 2014 22:48:46 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ti-gfx: add patch to fix build
-	failure with es5.x
-In-Reply-To: <1405701996-25351-1-git-send-email-hadrien.boutteville@gmail.com>
-References: <1405701996-25351-1-git-send-email-hadrien.boutteville@gmail.com>
-Message-ID: <20140718204846.GE3630@free.fr>
+Date: Fri, 18 Jul 2014 22:57:10 +0200
+Subject: [Buildroot] [PATCH v2] infra/pkg-autotools: cleanup the
+	gettextize step
+In-Reply-To: <1405705969-26342-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405705969-26342-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140718205710.GF3630@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hadrien, All,
+All,
 
-On 2014-07-18 18:46 +0200, Hadrien Boutteville spake thusly:
-> Since commit a73fdc647417699833f22d0f239affe22e062827 in the kernel,
-> omap_dss_device's 'output' is renamed 'src'.
+On 2014-07-18 19:52 +0200, Yann E. MORIN spake thusly:
+> Align the way we call gettextize to the way we call autoreconf:
+>   - provide the $(GETTEXTIZE) variable
+>   - pass $(HOST_CONFIGURE_OPTS) in the environment
+>   - pass the fully-qualified path to autom4te
+>   - use of -f even if the package provides its own options
 > 
-> Build with es5.x fails because ti-gfx still uses 'output'.
+> Some eye-candy in the output of gettextize.
 > 
-> Fix build with at least es5.x selected (AM35xx).
+> Thanks to Gustavo for pointing out the discrepancy between the way we
+> call gettextize and the way we call autoreconf, and to Thomas for the
+> live debug session. ;-)
 > 
-> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/gettext/gettext.mk |  8 ++++++++
+>  package/pkg-autotools.mk   | 10 +++-------
+>  2 files changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+> index c8ef765..924f541 100644
+> --- a/package/gettext/gettext.mk
+> +++ b/package/gettext/gettext.mk
+> @@ -57,6 +57,12 @@ endef
+>  
+>  GETTEXT_POST_INSTALL_TARGET_HOOKS += GETTEXT_REMOVE_UNNEEDED
+>  
+> +define GETTEXT_GETTEXTIZE_EYE_CANDY
+> +	$(SED) '/Press Return\|read dummy/d' $(HOST_DIR)/usr/bin/gettextize
+> +endef
+> +
+> +HOST_GETTEXT_POST_INSTALL_HOOKS += GETTEXT_GETTEXTIZE_EYE_CANDY
+> +
+>  # Force build with NLS support, otherwise libintl is not built
+>  # This is needed because some packages (eg. libglib2) requires
+>  # locales, but do not properly depend on BR2_ENABLE_LOCALE, and
+> @@ -72,5 +78,7 @@ define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
+>  endef
+>  HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
+>  
+> +GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/usr/bin/autm4te $(HOST_DIR)/usr/bin/gettextize -f
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Sigh, I forgot to commit the typo s/autm4te/autom4te/ :-(
+
+Will repsin shortly...
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Changes v1 -> v2:
->   - add a condition on LINUX_VERSION_CODE (Thomas)
-> ---
->  .../ti-gfx-0001-fix-build-omaplfb-linux.patch       | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->  create mode 100644 package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
-> 
-> diff --git a/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch b/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
-> new file mode 100644
-> index 0000000..002d01c
-> --- /dev/null
-> +++ b/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
-> @@ -0,0 +1,21 @@
-> +Since commit a73fdc647417699833f22d0f239affe22e062827 in the kernel,
-> +omap_dss_device's 'output' is renamed 'src'.
-> +
-> +Fix build with at least es5.x selected (AM35xx).
-> +
-> +Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-> +
-> +--- a/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
-> ++++ b/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
-> +@@ -176,8 +176,10 @@
-> + #define OMAP_DSS_DRIVER(drv, dev) struct omap_dss_driver *drv = (dev) != NULL ? (dev)->driver : NULL
-> + #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
-> + #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->manager : NULL
-> +-#else
-> ++#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,12,0))
-> + #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->output->manager : NULL
-> ++#else
-> ++#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->src->manager : NULL
-> + #endif
-> + 
-> + #define	WAIT_FOR_VSYNC(man)	((man)->wait_for_vsync)
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+> index 557413d..53bca30 100644
+> --- a/package/pkg-autotools.mk
+> +++ b/package/pkg-autotools.mk
+> @@ -95,12 +95,8 @@ ifndef $(2)_GETTEXTIZE
+>   endif
+>  endif
+>  
+> -ifndef $(2)_GETTEXTIZE_OPT
+> - ifdef $(3)_GETTEXTIZE_OPT
+> -  $(2)_GETTEXTIZE_OPT = $$($(3)_GETTEXTIZE_OPT)
+> - else
+> -  $(2)_GETTEXTIZE_OPT ?= -f
+> - endif
+> +ifeq ($(4),host)
+> + $(2)_GETTEXTIZE_OPT ?= $$($(3)_GETTEXTIZE_OPT)
+>  endif
+>  
+>  ifeq ($(4),host)
+> @@ -220,7 +216,7 @@ endif
+>  #
+>  define GETTEXTIZE_HOOK
+>  	@$$(call MESSAGE,"Gettextizing")
+> -	$(Q)cd $$($$(PKG)_SRCDIR) && $(HOST_DIR)/usr/bin/gettextize $$($$(PKG)_GETTEXTIZE_OPT)
+> +	$(Q)cd $$($$(PKG)_SRCDIR) && $$(GETTEXTIZE) $$($$(PKG)_GETTEXTIZE_OPT)
+>  endef
+>  
+>  #
 > -- 
-> 2.0.1
+> 1.9.1
 > 
 
 -- 
