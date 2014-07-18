@@ -1,55 +1,36 @@
 From: Ben Widawsky <ben@bwidawsk.net>
-Date: Thu, 17 Jul 2014 22:27:28 -0700
-Subject: [Buildroot] [PATCH 1/2] xf86-video-intel: Disable SNA without
-	composite
-Message-ID: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+Date: Thu, 17 Jul 2014 22:27:29 -0700
+Subject: [Buildroot] [PATCH 2/2] xf86-video-intel: Bump version to 2.99.912
+In-Reply-To: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+Message-ID: <1405661249-6506-2-git-send-email-ben@bwidawsk.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-SNA requires the composite extension. Fallback to UXA is the user has
-decided not to add this. Ideally we could fall back to glamor, but that
-was more work.
+Warning: I've only built this. Not run it.
 
 Cc: Bernd Kuhls <berndkuhls@hotmail.com>
 Cc: Chris Wilson <chris@chris-wilson.co.uk>
 Signed-off-by: Ben Widawsky <ben@bwidawsk.net>
 ---
- .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index 332de54..787b8fa 100644
+index 787b8fa..82e6965 100644
 --- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 +++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -16,13 +16,23 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
- 	--enable-kms-only \
- 	--disable-xvmc \
- 	--disable-ums-only \
--	--enable-sna \
--	--disable-uxa \
--	--disable-glamor \
- 	--disable-xaa \
- 	--disable-dga \
- 	--disable-async-swap
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
-+	XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+		--enable-sna \
-+		--disable-uxa \
-+		--disable-glamor
-+else
-+	XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
-+		--disable-sna \
-+		--enable-uxa \
-+		--disable-glamor
-+endif
-+
-+
- XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
- 
- $(eval $(autotools-package))
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.907
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 2.99.912
+ XDRIVER_XF86_VIDEO_INTEL_SOURCE = xf86-video-intel-$(XDRIVER_XF86_VIDEO_INTEL_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_INTEL_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
 -- 
 2.0.1
