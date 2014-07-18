@@ -1,16 +1,30 @@
-From: Nimai Mahajan <nimaim@gmail.com>
-Date: Fri, 18 Jul 2014 08:48:50 -0400
-Subject: [Buildroot] Replace libev with libuv
-Message-ID: <CALoSW641XSGs6H4i_q07ZfxUtRYoUMgdxBaUtus5J5C7+K=0Fw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 18 Jul 2014 09:59:16 -0300
+Subject: [Buildroot] [PATCH] libnl: bump to version 3.2.25
+Message-ID: <1405688356-26600-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libuv supercedes libev in many ways, adds more features, and is
-regularly updated. libev has not been updated for more than a year
-now. libuv uses autogen.sh which is tricky to get working properly in
-Buildroot so I request the higher authorities to add this as it is
-perhaps the most useful asynchronous I/O library in C. Current
-unstable version is 0.11.26 and stable is 0.10.27. Thank you.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnl/libnl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libnl/libnl.mk b/package/libnl/libnl.mk
+index c6d9b3e..ea0db2b 100644
+--- a/package/libnl/libnl.mk
++++ b/package/libnl/libnl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNL_VERSION = 3.2.24
++LIBNL_VERSION = 3.2.25
+ LIBNL_SITE = http://www.infradead.org/~tgr/libnl/files
+ LIBNL_LICENSE = LGPLv2.1+
+ LIBNL_LICENSE_FILES = COPYING
+-- 
+1.8.5.5
