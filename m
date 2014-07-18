@@ -1,38 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 19:56:06 +0200
-Subject: [Buildroot] [git commit] gcc 4.9.x: Exclude for PPC SPE because of
-	PR60102
-Message-ID: <20140718180154.CF04E9D27F@busybox.osuosl.org>
+Date: Fri, 18 Jul 2014 19:51:27 +0200
+Subject: [Buildroot] [git commit] libcurl: bump to version 7.37.1
+Message-ID: <20140718180154.AE9179D27D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=275d5115dbb5afb3eaff185aa12315eb5deac8e3
+commit: http://git.buildroot.net/buildroot/commit/?id=57c303f624fcb2b2d1c4118239a7ab9532485a8b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Exclude gcc 4.9.x for PowerPC SPE toolchains because of an ICE
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
-There's a patch available but it's somewhat intrusive with PPC in
-general and hasn't been well tested yet.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+ package/libcurl/libcurl.mk |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index eaff929..afed26b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -59,6 +59,8 @@ choice
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 00cff09..dd693cd 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	config BR2_GCC_VERSION_4_9_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
-+		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
-+		depends on !BR2_powerpc_SPE
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9.x"
+-LIBCURL_VERSION = 7.37.0
++LIBCURL_VERSION = 7.37.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
+ LIBCURL_SITE = http://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -41,6 +41,7 @@ LIBCURL_CONF_OPT += --with-nss=$(STAGING_DIR)/usr
+ LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
+ LIBCURL_DEPENDENCIES += libnss
+ else
++# polarssl support needs 1.3.x
+ LIBCURL_CONF_OPT += --without-ssl --without-gnutls \
+ 	--without-polarssl --without-nss
+ endif
