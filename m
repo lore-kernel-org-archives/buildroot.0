@@ -1,67 +1,65 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Fri, 18 Jul 2014 10:18:26 +0200
-Subject: [Buildroot] Silencing the build
-In-Reply-To: <20140717202941.GE3737@free.fr>
-References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
- <20140715212814.1dfcce43@free-electrons.com>
- <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
- <20140717203152.2e18fb9b@free-electrons.com> <20140717202941.GE3737@free.fr>
-Message-ID: <CAHkwnC_eQxDKH=V+2U+pOMZj50y4oE2B_p_G+CAk8ZFG3jSsOw@mail.gmail.com>
+From: Rick Taylor <rick@tropicalstormsoftware.com>
+Date: Fri, 18 Jul 2014 08:21:34 +0000
+Subject: [Buildroot] [PATCH 1/1] Add $$(PKG)_AUTORECONF_ENV argument to
+ autotools package
+In-Reply-To: <20140717204350.6cedbf85@free-electrons.com>
+References: <38A5475DE83986499AEACD2CFAFC3F9801148D7154@tss-server1.home.tropicalstormsoftware.com>,
+ <20140717204350.6cedbf85@free-electrons.com>
+Message-ID: <38A5475DE83986499AEACD2CFAFC3F9801148D7428@tss-server1.home.tropicalstormsoftware.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 17, 2014 at 10:29 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2014-07-17 20:31 +0200, Thomas Petazzoni spake thusly:
->> On Thu, 17 Jul 2014 19:40:46 +0200, Fabio Porcedda wrote:
->>
->> > > Hum, yes, but why? The entire build process is anyway very noisy, so is
->> > > there really a point in silencing specifically this part? What is the
->> > > ultimate goal you're trying to achieve here?
->> >
->> > My ultimate goal is to be able using the "-s" flags to silence all
->> > parts, because sometimes i just want to build and view only ">>> *"
->> > messages, errors, warning without anything else.
->> >
->> > As example the "toolchain-external" target already do that when the
->> > "-s" option is used.
->> >
->> > I've silenced only this part because it was easy and it's anyway an improvement.
->> >
->> > Maybe i can work on silencing other parts too if the feature is desired.
->>
->> Ok, thanks for the explanation.
->>
->> I guess we need to decide whether having a fully silent build in "make
->> -s" is a goal we should aim at. It seems like a good idea to me, but I
->> don't have a really strong opinion about this.
->>
->> What do others think about this?
->
-> Here's what I use for a silent build:
->
->     brmake() {
->         make "${@}" \
->         |sed -r -e '/^.{4}>>>[[:space:]]+(.*).{5}$/!d; s//\1/;'
->     }
->
-> Then calling 'brmake' instead of 'make', will get you only the >>> lines.
+Hi Thomas,
 
-Nice, so i'm not the only one who likes a silent build ;-)
+Unfortunately I am stuck on a machine with no outgoing SMTP server on the network.  I have the git patches, but I as I'm using a webmail client I have to work out exactly what is needed in the body of the email.
 
-I think that a downside of this method is that even the stderr is
-filtered as well so messages like warning or errors are filtered as
-well.
+Do you want content of both patch files as plain text in the body of the email?  If so, what do you want the subject line to be?
 
-> Of course, does not work if you invoke a CLI configurator, either
-> directly, or as a consequence of a missing .config. I basically
-> always call it with no argument, otherwise, I use plain 'make'.
+I'll update the documentation text to be a little clearer, I just cut'n'pasted from the LIBFOO_MAKE_ENV text in the same file.
+
+Sorry to be a pain,
+
+Rick Taylor
+________________________________________
+From: Thomas Petazzoni [thomas.petazzoni at free-electrons.com]
+Sent: 17 July 2014 19:43
+To: Rick Taylor
+Cc: buildroot at busybox.net
+Subject: Re: [Buildroot] [PATCH 1/1] Add $$(PKG)_AUTORECONF_ENV argument to autotools package
+
+Dear Rick Taylor,
+
+On Thu, 17 Jul 2014 12:21:54 +0000, Rick Taylor wrote:
+
+> I haven't aggressively tested it against buildroot master I'm afraid
+> as we have a load of extra infrastructure around buildroot so we
+> stick to full releases, and we are just evaluating 2014.05.
 >
+> I shall update the docs/manual/adding-packages-autotools.txt and
+> resubmit the patches.
 
-Regards
--- 
-Fabio Porcedda
+Thanks for the explanation. However, we have received this e-mail with
+a "PATCH 1/1" title even though it doesn't contain a patch, and then
+the documentation update as PATCH 2/2.
+
+In a nutshell, assuming you have a branch named "autoreconf-env" with
+two patches on top of the "master" branch, what you should do to send
+your patches is:
+
+        git format-patch master
+
+Then review the 0001-<foo>.patch and 0002-<bar>.patch to make sure
+everything is in order. And then:
+
+        git send-email --to buildroot at uclibc.org *.patch
+
+Thanks,
+
+Thomas
+--
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
