@@ -1,41 +1,42 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Fri, 18 Jul 2014 09:12:09 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: Fix DOWNLOAD_LOCALFILES
-In-Reply-To: <1405609578-28052-1-git-send-email-anaumann@ultratronik.de>
-References: <1405609578-28052-1-git-send-email-anaumann@ultratronik.de>
-Message-ID: <53C8C8C9.1000004@andin.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Jul 2014 10:00:41 +0200
+Subject: [Buildroot] [git commit] python-numpy: disable on non-supported
+	architectures
+Message-ID: <20140718080136.0BB869D27D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- From 40ba2efd131a4fd70e44a0f9f96c4637da279df8 Mon Sep 17 00:00:00 2001
-From: Andreas Naumann <anaumann@ultratronik.de>
-Date: Thu, 17 Jul 2014 16:47:02 +0200
-Subject: [PATCH 1/6] pkg-infra: Fix DOWNLOAD_LOCALFILES
+commit: http://git.buildroot.net/buildroot/commit/?id=153990dfd89a2ae3d453520ef54a0b4c2bfe44ab
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The cp helperscript expects a filename as target, but just the folder 
-name was given.
+The numpy/core/include/numpy/npy_cpu.h file has some
+architecture-specific definitions, and not all architectures are
+supported. This commit makes sure python-numpy cannot be selected on
+the architectures that are not supported.
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Fixes:
+
+  http://autobuild.buildroot.org/results/327/327c85f5b1849d390fcf0727cf48e621b946571f/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-  package/pkg-download.mk | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-numpy/Config.in |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7f208d5..118591c 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -206,7 +206,7 @@ endef
-  define DOWNLOAD_LOCALFILES
-  	test -e $(DL_DIR)/$(2) || \
-  	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call 
-qstrip,$(1))) \
--					 $(DL_DIR) && \
-+					 $(DL_DIR)/$(2) && \
-  	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
-  endef
-
--- 
-1.8.3.2
+diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+index 169b91f..3145350 100644
+--- a/package/python-numpy/Config.in
++++ b/package/python-numpy/Config.in
+@@ -1,5 +1,9 @@
+ config BR2_PACKAGE_PYTHON_NUMPY
+ 	bool "python-numpy"
++	# Numpy has some CPU specific code
++	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
++		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
++		|| BR2_sh || BR2_sh || BR2_x86_64
+ 	# numpy needs fenv.h. Available for all architectures in
+ 	# glibc, but only for x86 and x86-64 in uClibc.
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
