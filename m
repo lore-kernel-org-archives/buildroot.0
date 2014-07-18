@@ -1,38 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 21:26:58 +0200
-Subject: [Buildroot] [PATCH 2/2] ntp: prevent keyword-gen failure during
- ntp_keyword.h check
-In-Reply-To: <1405655815-2025-2-git-send-email-danomimanchego123@gmail.com>
-References: <1405655815-2025-1-git-send-email-danomimanchego123@gmail.com>
- <1405655815-2025-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140718212658.06acda90@free-electrons.com>
+Date: Fri, 18 Jul 2014 21:28:11 +0200
+Subject: [Buildroot] [git commit] systemd: install timesync service if
+	selected
+Message-ID: <20140718193604.3DEDA9D25A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+commit: http://git.buildroot.net/buildroot/commit/?id=e1433ad992d8bb99c2b0e44818f271db6794ccf6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 17 Jul 2014 23:56:54 -0400, Danomi Manchego wrote:
-> During the first compile, the keyword-gen check is not run.  However,
-> it gets run on the first rebuild.  Because we are cross-compiling, the
-> keyword-gen can't run on the host.  Since this is only used to check if
-> ntp_keyword.h is up to date, we simply drop the check altogether.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+If support for systemd-timesyncd is selected, install the associated
+service.
 
-I haven't applied this one, because I'm not entirely satisfied by the
-explanation here. Why isn't the keyword-gen check executed on the first
-run? I did some testing, and I indeed don't see the rule about
-ntp_keyword.h being evaluated on the first build. Do you have more
-details about what makes the difference between the first and
-subsequent builds?
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/systemd.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 2564d78..e781b30 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -112,6 +112,11 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+ SYSTEMD_CONF_OPT += --enable-timesyncd
++define SYSTEMD_INSTALL_SERVICE_TIMESYNC
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
++	ln -sf ../../../../lib/systemd/system/systemd-timesyncd.service \
++		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service
++endef
+ else
+ SYSTEMD_CONF_OPT += --disable-timesyncd
+ endif
+@@ -167,6 +172,7 @@ endef
+ define SYSTEMD_INSTALL_INIT_SYSTEMD
+ 	$(SYSTEMD_INSTALL_SERVICE_TTY)
+ 	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
++	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
+ endef
+ 
+ $(eval $(autotools-package))
