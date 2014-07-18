@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 00:38:37 +0200
-Subject: [Buildroot] [PATCH 2/5] perl-io-socket-ssl: new package
-In-Reply-To: <CAB0FRsufdYwK19vZwrQn32hnSfyGH=4xK1c1itsVbPqhK3xQ2Q@mail.gmail.com>
-References: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
- <1405614782-3667-2-git-send-email-francois.perrad@gadz.org>
- <20140717230821.6e188178@free-electrons.com>
- <CAB0FRsufdYwK19vZwrQn32hnSfyGH=4xK1c1itsVbPqhK3xQ2Q@mail.gmail.com>
-Message-ID: <20140719003837.252c0234@free-electrons.com>
+Date: Sat, 19 Jul 2014 00:40:23 +0200
+Subject: [Buildroot] glib 2.40 on xtensa
+Message-ID: <20140719004023.4a71d4b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+Baruch, Max,
 
-On Fri, 18 Jul 2014 15:00:53 +0200, Fran?ois Perrad wrote:
+We have recently update glib to version 2.40, and this is causing
+issues on Xtensa:
 
-> > Yet another issue with the CPAN mirror:
-> > http://autobuild.buildroot.org/results/5f1/5f15763397244d6f89918a8eebc6952a2895bad0/build-end.log.
-> >
-> > Any fix?
-> 
-> Seems not a permanent failure.
->    $ wget http://search.cpan.org/CPAN/authors/id/S/SU/SULLR/IO-Socket-SSL-1.997.tar.gz
-> works fine at this time for me.
+  http://autobuild.buildroot.org/results/a1a/a1a1f97a2c54ba4f7f7e44cc094a55bd23ca0aa0/build-end.log
 
-But again, with the new perl packages just merged:
+  CC       gspawn.lo
+gthread-posix.c: In function 'g_cond_impl_new':
+gthread-posix.c:648:2: error: #error Cannot support GCond on your platform.
+ #error Cannot support GCond on your platform.
+  ^
+gthread-posix.c: In function 'g_cond_wait_until':
+gthread-posix.c:896:2: error: #error Cannot support GCond on your platform.
+ #error Cannot support GCond on your platform.
+  ^
+gthread-posix.c:859:19: warning: unused variable 'ts' [-Wunused-variable]
+   struct timespec ts;
+                   ^
 
- http://autobuild.buildroot.org/results/6a8/6a89ac18c44490fd25792c39286acbf6c4830e60/build-end.log
- http://autobuild.buildroot.org/results/c80/c80d549e38bfa15e19bec7ef226c0120d4adb6ab/build-end.log
- http://autobuild.buildroot.org/results/bee/bee5add7dad08a573cad2aa1f438625b135551dd/build-end.log
+Could you have a look and see what can be done to fix this problem?
 
-Wouldn't it be possible to find a more reliable CPAN mirror to use as
-the default?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
