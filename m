@@ -1,35 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 19:51:51 +0200
-Subject: [Buildroot] [PATCH 2/4] perl-gd: new package
-In-Reply-To: <1405691019-10397-2-git-send-email-francois.perrad@gadz.org>
-References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
- <1405691019-10397-2-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140718195151.540ce6ee@free-electrons.com>
+Date: Fri, 18 Jul 2014 19:52:10 +0200
+Subject: [Buildroot] [PATCH] libcurl: bump to version 7.37.1
+In-Reply-To: <1405688827-13618-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1405688827-13618-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140718195210.784158e3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Gustavo Zacarias,
 
-On Fri, 18 Jul 2014 15:43:37 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Fri, 18 Jul 2014 10:07:07 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/Config.in                           |  1 +
->  package/perl-gd/Config.in                   | 14 ++++++++++
->  package/perl-gd/perl-gd-01-getoptions.patch | 40 +++++++++++++++++++++++++++++
->  package/perl-gd/perl-gd-02-lgd.patch        | 25 ++++++++++++++++++
->  package/perl-gd/perl-gd-03-force.patch      | 29 +++++++++++++++++++++
->  package/perl-gd/perl-gd.mk                  | 22 ++++++++++++++++
->  6 files changed, 131 insertions(+)
->  create mode 100644 package/perl-gd/Config.in
->  create mode 100644 package/perl-gd/perl-gd-01-getoptions.patch
->  create mode 100644 package/perl-gd/perl-gd-02-lgd.patch
->  create mode 100644 package/perl-gd/perl-gd-03-force.patch
->  create mode 100644 package/perl-gd/perl-gd.mk
+>  package/libcurl/libcurl.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks, applied, as well as patches 3 and 4.
+Applied, thanks.
 
 Thomas
 -- 
