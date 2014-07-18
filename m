@@ -1,41 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 20:54:26 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 3.15.6
-Message-ID: <20140718185453.0CB509D27E@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 18 Jul 2014 20:54:53 +0200
+Subject: [Buildroot] [PATCH 0 of 3 v3] uclibc: fix handling of configuration
+	file
+Message-ID: <patchbomb.1405709693@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=7c79190bd1753e13dc66e59938e21fe660285ca6
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This patch series (part of it poster earlier as RFC) has as main goal to
+fix the uclibc kconfig handling with following requirements in mind:
+
+- neither foo-menuconfig nor foo-update-config should have a dependency
+  on the toolchain (which means we cannot depend on foo-configure)
+
+- 'clean foo-menuconfig' should start from the specified (custom) config
+  file
+
+- 'foo-menuconfig foo-update-config' should preserve the changes made in
+  the menuconfig step (this problem is reported for uclibc with bug #7154
+  (https://bugs.busybox.net/show_bug.cgi?id=7154).
+
+- 'make foo-menuconfig; make foo-menuconfig' should preserve the changes
+  made in the menuconfig step.
+
+- 'make clean foo-update-config' should copy the initial file, do any
+  fixups, and then save the config
+
+
+Once this series is accepted, the plan is:
+- to extract the kconfig-related bits to a kconfig-package infrastructure.
+- to convert busybox, linux and barebox to this kconfig-package infra too.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+v3: only update commit message of third patch
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c13b929..441301f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.15.5"
-+	bool "3.15.6"
- 
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.15.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.15.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ package/uclibc/uclibc.mk |  24 ++++++++++++++++--------
+ 1 files changed, 16 insertions(+), 8 deletions(-)
