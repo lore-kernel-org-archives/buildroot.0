@@ -1,40 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 19:51:27 +0200
-Subject: [Buildroot] [git commit] libcurl: bump to version 7.37.1
-Message-ID: <20140718180154.AE9179D27D@busybox.osuosl.org>
+Date: Fri, 18 Jul 2014 20:02:44 +0200
+Subject: [Buildroot] [PATCH] pkg-infra: Fix DOWNLOAD_LOCALFILES
+In-Reply-To: <53C8C8C9.1000004@andin.de>
+References: <1405609578-28052-1-git-send-email-anaumann@ultratronik.de>
+ <53C8C8C9.1000004@andin.de>
+Message-ID: <20140718200244.6aad2d2c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=57c303f624fcb2b2d1c4118239a7ab9532485a8b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Andreas Naumann,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libcurl/libcurl.mk |    3 ++-
- 1 files changed, 2 insertions(+), 1 deletions(-)
+On Fri, 18 Jul 2014 09:12:09 +0200, Andreas Naumann wrote:
+>  From 40ba2efd131a4fd70e44a0f9f96c4637da279df8 Mon Sep 17 00:00:00 2001
+> From: Andreas Naumann <anaumann@ultratronik.de>
+> Date: Thu, 17 Jul 2014 16:47:02 +0200
+> Subject: [PATCH 1/6] pkg-infra: Fix DOWNLOAD_LOCALFILES
+> 
+> The cp helperscript expects a filename as target, but just the folder 
+> name was given.
+> 
+> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> ---
+>   package/pkg-download.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 00cff09..dd693cd 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.37.0
-+LIBCURL_VERSION = 7.37.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -41,6 +41,7 @@ LIBCURL_CONF_OPT += --with-nss=$(STAGING_DIR)/usr
- LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
- LIBCURL_DEPENDENCIES += libnss
- else
-+# polarssl support needs 1.3.x
- LIBCURL_CONF_OPT += --without-ssl --without-gnutls \
- 	--without-polarssl --without-nss
- endif
+Applied, thanks. But next time, could you use "git send-email" to send
+your patch? Your patch was incorrectly line-wrapped, and the formatting
+of the commit log a bit weird.
+
+Thanks a lot,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
