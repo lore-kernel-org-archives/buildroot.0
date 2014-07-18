@@ -1,40 +1,71 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 18 Jul 2014 15:42:43 +0400
-Subject: [Buildroot] [PATCH] python: fix termios build for xtensa
-In-Reply-To: <768f113a0cb394fde79b38ef52056ff8e335df0a.1405654360.git.baruch@tkos.co.il>
-References: <768f113a0cb394fde79b38ef52056ff8e335df0a.1405654360.git.baruch@tkos.co.il>
-Message-ID: <CAMo8BfKRNBdfHreAzjT+4N6Fi81SKbSsCFZxpp3GCRgz9XhGYg@mail.gmail.com>
+From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Date: Fri, 18 Jul 2014 17:27:43 +0530
+Subject: [Buildroot] [PATCH] quagga: Do not use fork on noMMU platforms
+Message-ID: <1405684663-3100-1-git-send-email-yuvaraj.patil@wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 18, 2014 at 7:32 AM, Baruch Siach <baruch@tkos.co.il> wrote:
-> The xtensa ioctls.h header references struct serial_multiport_struct that is
-> not defined in this header or included headers. ioctls.h also references
-> tty_struct that is not exported to userspace at all. Add a patch fixing these
-> issues.
->
-> This is only a workaround as the real problem should be fixed in the kernel
-> (by removing all struct references like all other archs). But since we support
-> older kernel versions we'll have to carry this patch for some time.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/12b/12b5612828d7f1fc7d1f69fc01341d5a6e628db5/
->
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../python-015-serial-ioctl-workaround.patch       | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/python/python-015-serial-ioctl-workaround.patch
+fork() is not available in noMMU platforms, hence use vfork instead
 
-Thank you, Baruch.
-I'll send corresponding linux patches. I definitely saw this issue
-some time ago,
-but I couldn't find any trace of that ):
+fixes:
+http://autobuild.buildroot.net/results/1c5/1c5fdfe3a0248b65efdea0594d8367ff907015d4//
 
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+---
+ arch/Config.in              |    2 +-
+ package/quagga/quagga.patch |   28 ++++++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+ create mode 100644 package/quagga/quagga.patch
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 77fae7a..9cd85a5 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -60,7 +60,7 @@ config BR2_avr32
+ 	# do the lack of upstream support in the major toolchain
+ 	# components. If you're interested by AVR32, contact the
+ 	# Buildroot community. Otherwise, its support will be removed
+-	# in 2014.11.
++	# by the 2015.02 release.
+ 	depends on BR2_DEPRECATED_SINCE_2014_08
+ 	help
+ 	  The AVR32 is a 32-bit RISC microprocessor architecture designed by
+diff --git a/package/quagga/quagga.patch b/package/quagga/quagga.patch
+new file mode 100644
+index 0000000..2949b2c
+--- /dev/null
++++ b/package/quagga/quagga.patch
+@@ -0,0 +1,28 @@
++diff -Nurp quagga-0.99.23_orig/babeld/util.c quagga-0.99.23/babeld/util.c
++--- quagga-0.99.23_orig/babeld/util.c	2014-07-18 15:31:02.078625470 +0530
+++++ quagga-0.99.23/babeld/util.c	2014-07-18 15:33:45.838618612 +0530
++@@ -430,7 +430,11 @@ daemonise()
++     fflush(stdout);
++     fflush(stderr);
++ 
+++#ifdef HAVE_FORK
++     rc = fork();
+++#else
+++    rc = vfork();
+++#endif
++     if(rc < 0)
++         return -1;
++ 
++diff -Nurp quagga-0.99.23_orig/configure.ac quagga-0.99.23/configure.ac
++--- quagga-0.99.23_orig/configure.ac	2014-07-18 15:31:02.098625470 +0530
+++++ quagga-0.99.23/configure.ac	2014-07-18 15:32:41.710621299 +0530
++@@ -724,6 +724,9 @@ AC_CHECK_LIB(pam, pam_start,
++ fi
++ AC_SUBST(LIBPAM)
++ 
+++dnl checks for library functions
+++AC_CHECK_FUNC([fork])
+++
++ dnl -------------------------------
++ dnl Endian-ness check
++ dnl -------------------------------
 -- 
-Thanks.
--- Max
+1.7.9.5
