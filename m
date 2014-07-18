@@ -1,107 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 18 Jul 2014 07:29:45 +0200
-Subject: [Buildroot] [PATCH 6 of 6] uclibc: update-config: preserve
-	freshly configured settings
-In-Reply-To: <53C85C33.1020902@mind.be>
-References: <patchbomb.1405338624@localhost>
- <82c951fdcf4851185bcc.1405338630@localhost>
- <53C40DC8.8000607@mind.be>
- <CAAXf6LXaJFF+N6tGAcgY7mpYmBJg=cE0F7eOxvh+eba_83xY4w@mail.gmail.com>
- <53C6110A.2040403@mind.be>
- <CAAXf6LXqAoJGSL21x0+v6n0UT4+FrMkMd2xL5sWQq+moUWPWeA@mail.gmail.com>
- <53C85C33.1020902@mind.be>
-Message-ID: <CAAXf6LVHogz9Sfmcop+6GRjUwv+_fCzdHo12crM6reHtnS5dyg@mail.gmail.com>
+From: Ben Widawsky <ben@bwidawsk.net>
+Date: Thu, 17 Jul 2014 22:27:28 -0700
+Subject: [Buildroot] [PATCH 1/2] xf86-video-intel: Disable SNA without
+	composite
+Message-ID: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, all,
+SNA requires the composite extension. Fallback to UXA is the user has
+decided not to add this. Ideally we could fall back to glamor, but that
+was more work.
 
-On Fri, Jul 18, 2014 at 1:28 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 17/07/14 19:57, Thomas De Schampheleire wrote:
->> Hi Arnout,
->>
->> On Wed, Jul 16, 2014 at 7:43 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>> On 15/07/14 20:33, Thomas De Schampheleire wrote:
->>>> Hi Arnout,
->>>>
->>>> On Mon, Jul 14, 2014 at 7:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>>> On 14/07/14 13:50, Thomas De Schampheleire wrote:
->>>>>> In the sequence:
->>>>>>
->>>>>> make uclibc-menuconfig
->>>>>> make uclibc-update-config
->>>>>>
->>>>>> the freshly configured settings from the menuconfig are lost during the
->>>>>> update-config step. This is because update-config depends on the configure
->>>>>> step, which starts by copying the config file to the build directory.
->>>>>>
->>>>>> Instead, stop depending on the configure step from update-config, and
->>>>>> introduce a new stamp file .stamp_config_fixup_done, which applies any
->>>>>> fixups on the .config file.
->>>>>
->>>>>  I think the commit message should explain why this stamp file is preferred over
->>>>> repeating the fixup in each target.
->>>>>
->>>>
->>>> I'm trying to come up with good reasons here, but the only real one I
->>>> can find is to avoid duplicating code and avoid redoing the fixup
->>>> unnecessarily.
->>>>
->>>> Did you have anything else in mind?
->>>
->>>  Well, I never proposed to introduce an extra stamp file, did I? :-)
->>>
->>>  The reasons you put forward are OK, they should just be mentioned in the commit
->>> message because it's a change from how things are currently done, and this
->>> should be motivated. That way, if someone later on finds a reason to revert to
->>> repeating the fixup, they can see why it was done this way to begin with.
->>
->> Is the commit message of v2 sufficient for you or should I add something?
->
->  How about: "With the extra stamp file, we avoid redoing the fixup unnecessarily."
->
->  (I don't have time now to look at v2 in detail.)
->
->>
->>>
->>>  BTW, it doesn't really avoid duplication of code. Now we have repetitions of
->>>
->>> $(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.stamp_config_fixup_done
->>>
->>> and otherwise we'd have repetitions of
->>>
->>> define UCLIBC_CONFIGURE_CMDS
->>>         $(UCLIBC_FIXUP_DOT_CONFIG)
->>
->> Yes true.
->> If others also prefer the repeating of FIXUP_DOT_CONFIG over the stamp
->> file solution I can change that, of course.
->
->  I'm OK with either way.
->
->  I'm not really a big fan of adding an extra stamp file. However, I can imagine
-> that we'll evolve towards a new generic step between patch and configure (also
-> for e.g. autoreconf); then this approach will match nicely with the generic
-> infrastructure.
->
->  Actually, this is probably one for Peter to rule upon.
->
+Cc: Bernd Kuhls <berndkuhls@hotmail.com>
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Signed-off-by: Ben Widawsky <ben@bwidawsk.net>
+---
+ .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-I now found a pretty good reason why the stamp file is better: when
-extracting the kconfig logic to a common kconfig-package
-infrastructure, the stamp file rules and the dependency expressions
-can entirely be placed
-in that infrastructure. The package itself only has to provide a
-FIXUP_DOT_CONFIG define.
-If we do not use stamp files and let the CONFIGURE_CMDS actually
-contain FIXUP_DOT_CONFIG, then it's the responsibility of the package
-to actually add this, it is not under control of the kconfig-package,
-so more fragile.
-
-I will also add this to the commit message.
-
-Best regards,
-Thomas
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 332de54..787b8fa 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+@@ -16,13 +16,23 @@ XDRIVER_XF86_VIDEO_INTEL_CONF_OPT = \
+ 	--enable-kms-only \
+ 	--disable-xvmc \
+ 	--disable-ums-only \
+-	--enable-sna \
+-	--disable-uxa \
+-	--disable-glamor \
+ 	--disable-xaa \
+ 	--disable-dga \
+ 	--disable-async-swap
+ 
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
++	XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
++		--enable-sna \
++		--disable-uxa \
++		--disable-glamor
++else
++	XDRIVER_XF86_VIDEO_INTEL_CONF_OPT += \
++		--disable-sna \
++		--enable-uxa \
++		--disable-glamor
++endif
++
++
+ XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xproto libdrm xlib_libpciaccess
+ 
+ $(eval $(autotools-package))
+-- 
+2.0.1
