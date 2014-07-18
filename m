@@ -1,76 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Jul 2014 22:47:29 +0200
-Subject: [Buildroot] [PATCH] libuv: new package
-In-Reply-To: <1405715058-4629-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405715058-4629-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140718204729.GD3630@free.fr>
+Date: Fri, 18 Jul 2014 22:48:46 +0200
+Subject: [Buildroot] [PATCH v2 1/1] ti-gfx: add patch to fix build
+	failure with es5.x
+In-Reply-To: <1405701996-25351-1-git-send-email-hadrien.boutteville@gmail.com>
+References: <1405701996-25351-1-git-send-email-hadrien.boutteville@gmail.com>
+Message-ID: <20140718204846.GE3630@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo, All,
+Hadrien, All,
 
-On 2014-07-18 17:24 -0300, Gustavo Zacarias spake thusly:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 2014-07-18 18:46 +0200, Hadrien Boutteville spake thusly:
+> Since commit a73fdc647417699833f22d0f239affe22e062827 in the kernel,
+> omap_dss_device's 'output' is renamed 'src'.
+> 
+> Build with es5.x fails because ti-gfx still uses 'output'.
+> 
+> Fix build with at least es5.x selected (AM35xx).
+> 
+> Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-However, I have a small comment...
-
-[--SNIP--]
-> diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-> new file mode 100644
-> index 0000000..6074e9c
-> --- /dev/null
-> +++ b/package/libuv/libuv.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# libuv
-> +#
-> +################################################################################
-> +
-> +LIBUV_VERSION = v0.11.26
-> +LIBUV_SITE = $(call github,joyent,libuv,$(LIBUV_VERSION))
-> +LIBUV_DEPENDENCIES = host-pkgconf
-> +LIBUV_INSTALL_STAGING = YES
-> +LIBUV_AUTORECONF = YES
-> +LIBUV_LICENSE = BSD-2c, BSD-3c, ISC, MIT
-> +LIBUV_LICENSE_FILES = LICENSE
-> +
-> +# Tweaked autogen.sh
-
-This is pretty terse, and slightly recondite. What about:
-
-    # Upstream needs tests to be run sequentially. This is the default
-    # in automake 1.11 and before, but not starting in 1.12. To maintain
-    # sequentiality in 1.12 and later, the automake option 'serial-tests'
-    # must be used, Unfortunately, it is not recognised by 1.11 and
-    # before. So upstream only adds it conditionally. We use automake
-    # 1.14, so we need it.
-
-Alternatively, I'm OK with adding that in the commit log instead of in a
-comment.
 
 Regards,
 Yann E. MORIN.
 
-> +define LIBUV_FIXUP_AUTOGEN
-> +	echo "m4_define([UV_EXTRA_AUTOMAKE_FLAGS], [serial-tests])" \
-> +	        >$(@D)/m4/libuv-extra-automake-flags.m4
-> +endef
-> +LIBUV_POST_PATCH_HOOKS += LIBUV_FIXUP_AUTOGEN
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 1.8.5.5
+> ---
+> Changes v1 -> v2:
+>   - add a condition on LINUX_VERSION_CODE (Thomas)
+> ---
+>  .../ti-gfx-0001-fix-build-omaplfb-linux.patch       | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>  create mode 100644 package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff --git a/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch b/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
+> new file mode 100644
+> index 0000000..002d01c
+> --- /dev/null
+> +++ b/package/ti-gfx/ti-gfx-0001-fix-build-omaplfb-linux.patch
+> @@ -0,0 +1,21 @@
+> +Since commit a73fdc647417699833f22d0f239affe22e062827 in the kernel,
+> +omap_dss_device's 'output' is renamed 'src'.
+> +
+> +Fix build with at least es5.x selected (AM35xx).
+> +
+> +Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+> +
+> +--- a/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
+> ++++ b/GFX_Linux_KM/services4/3rdparty/dc_omapfb3_linux/omaplfb_linux.c
+> +@@ -176,8 +176,10 @@
+> + #define OMAP_DSS_DRIVER(drv, dev) struct omap_dss_driver *drv = (dev) != NULL ? (dev)->driver : NULL
+> + #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
+> + #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->manager : NULL
+> +-#else
+> ++#elif (LINUX_VERSION_CODE < KERNEL_VERSION(3,12,0))
+> + #define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->output->manager : NULL
+> ++#else
+> ++#define OMAP_DSS_MANAGER(man, dev) struct omap_overlay_manager *man = (dev) != NULL ? (dev)->src->manager : NULL
+> + #endif
+> + 
+> + #define	WAIT_FOR_VSYNC(man)	((man)->wait_for_vsync)
+> -- 
+> 2.0.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
