@@ -1,59 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Jul 2014 18:46:02 +0200
-Subject: [Buildroot] [PATCH] pkg-infra: Fix DOWNLOAD_LOCALFILES
-In-Reply-To: <53C8C8C9.1000004@andin.de>
-References: <1405609578-28052-1-git-send-email-anaumann@ultratronik.de>
- <53C8C8C9.1000004@andin.de>
-Message-ID: <20140718164602.GA3630@free.fr>
+Date: Fri, 18 Jul 2014 19:25:10 +0200
+Subject: [Buildroot] [PATCH] infar/pkg-autotools: cleanup the gettextize step
+Message-ID: <1405704310-7013-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+Align the way to call gettextize to the way we call autoreconf.
+Use of -f even if the package provides its own options.
+Soem eye-candy in the output of gettextize.
 
-On 2014-07-18 09:12 +0200, Andreas Naumann spake thusly:
-> From 40ba2efd131a4fd70e44a0f9f96c4637da279df8 Mon Sep 17 00:00:00 2001
-> From: Andreas Naumann <anaumann@ultratronik.de>
-> Date: Thu, 17 Jul 2014 16:47:02 +0200
-> Subject: [PATCH 1/6] pkg-infra: Fix DOWNLOAD_LOCALFILES
-> 
-> The cp helperscript expects a filename as target, but just the folder name
-> was given.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ package/gettext/gettext.mk |  8 ++++++++
+ package/pkg-autotools.mk   | 10 +++-------
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-download.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 7f208d5..118591c 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -206,7 +206,7 @@ endef
->  define DOWNLOAD_LOCALFILES
->  	test -e $(DL_DIR)/$(2) || \
->  	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call
-> qstrip,$(1))) \
-> -					 $(DL_DIR) && \
-> +					 $(DL_DIR)/$(2) && \
->  	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
->  endef
-> 
-> -- 
-> 1.8.3.2
-
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index c8ef765..86fcda3 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -57,6 +57,12 @@ endef
+ 
+ GETTEXT_POST_INSTALL_TARGET_HOOKS += GETTEXT_REMOVE_UNNEEDED
+ 
++define GETTEXT_GETTEXTIZE_EYE_CANDY
++	$(SED) '/Press Return\|read dummy/d' $(HOST_DIR)/usr/bin/gettextize
++endef
++
++HOST_GETTEXT_POST_INSTALL_HOOKS += GETTEXT_GETTEXTIZE_EYE_CANDY
++
+ # Force build with NLS support, otherwise libintl is not built
+ # This is needed because some packages (eg. libglib2) requires
+ # locales, but do not properly depend on BR2_ENABLE_LOCALE, and
+@@ -72,5 +78,7 @@ define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
+ endef
+ HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
+ 
++GETTEXTIZE = $(HOST_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/gettextize -f
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 557413d..53bca30 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -95,12 +95,8 @@ ifndef $(2)_GETTEXTIZE
+  endif
+ endif
+ 
+-ifndef $(2)_GETTEXTIZE_OPT
+- ifdef $(3)_GETTEXTIZE_OPT
+-  $(2)_GETTEXTIZE_OPT = $$($(3)_GETTEXTIZE_OPT)
+- else
+-  $(2)_GETTEXTIZE_OPT ?= -f
+- endif
++ifeq ($(4),host)
++ $(2)_GETTEXTIZE_OPT ?= $$($(3)_GETTEXTIZE_OPT)
+ endif
+ 
+ ifeq ($(4),host)
+@@ -220,7 +216,7 @@ endif
+ #
+ define GETTEXTIZE_HOOK
+ 	@$$(call MESSAGE,"Gettextizing")
+-	$(Q)cd $$($$(PKG)_SRCDIR) && $(HOST_DIR)/usr/bin/gettextize $$($$(PKG)_GETTEXTIZE_OPT)
++	$(Q)cd $$($$(PKG)_SRCDIR) && $$(GETTEXTIZE) $$($$(PKG)_GETTEXTIZE_OPT)
+ endef
+ 
+ #
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
