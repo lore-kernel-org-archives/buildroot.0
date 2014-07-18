@@ -1,81 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 00:32:01 +0200
-Subject: [Buildroot] [git commit] libmemcached: new package
-Message-ID: <20140718223552.7496F9C769@busybox.osuosl.org>
+Date: Sat, 19 Jul 2014 00:38:37 +0200
+Subject: [Buildroot] [PATCH 2/5] perl-io-socket-ssl: new package
+In-Reply-To: <CAB0FRsufdYwK19vZwrQn32hnSfyGH=4xK1c1itsVbPqhK3xQ2Q@mail.gmail.com>
+References: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
+ <1405614782-3667-2-git-send-email-francois.perrad@gadz.org>
+ <20140717230821.6e188178@free-electrons.com>
+ <CAB0FRsufdYwK19vZwrQn32hnSfyGH=4xK1c1itsVbPqhK3xQ2Q@mail.gmail.com>
+Message-ID: <20140719003837.252c0234@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=35c386682020880fc5306439afa508a57e57a321
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Fran?ois Perrad,
 
-For varying reasons it doesn't play well with uClibc or musl based
-toolchains so they're excluded for now.
+On Fri, 18 Jul 2014 15:00:53 +0200, Fran?ois Perrad wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                    |    1 +
- package/libmemcached/Config.in       |   16 ++++++++++++++++
- package/libmemcached/libmemcached.mk |   17 +++++++++++++++++
- 3 files changed, 34 insertions(+), 0 deletions(-)
+> > Yet another issue with the CPAN mirror:
+> > http://autobuild.buildroot.org/results/5f1/5f15763397244d6f89918a8eebc6952a2895bad0/build-end.log.
+> >
+> > Any fix?
+> 
+> Seems not a permanent failure.
+>    $ wget http://search.cpan.org/CPAN/authors/id/S/SU/SULLR/IO-Socket-SSL-1.997.tar.gz
+> works fine at this time for me.
 
-diff --git a/package/Config.in b/package/Config.in
-index ef191b3..017d050 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -755,6 +755,7 @@ menu "Networking"
- 	source "package/libidn/Config.in"
- 	source "package/libiscsi/Config.in"
- 	source "package/libmbus/Config.in"
-+	source "package/libmemcached/Config.in"
- 	source "package/libmicrohttpd/Config.in"
- 	source "package/libmnl/Config.in"
- 	source "package/libmodbus/Config.in"
-diff --git a/package/libmemcached/Config.in b/package/libmemcached/Config.in
-new file mode 100644
-index 0000000..e9dd2c4
---- /dev/null
-+++ b/package/libmemcached/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_LIBMEMCACHED
-+	bool "libmemcached"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # posix spawn, va_list breakage
-+	help
-+	  libMemcached is an open source C/C++ client library and tools
-+	  for the memcached server.
-+	  It has been designed to be light on memory usage, thread safe,
-+	  and provide full access to server side methods.
-+
-+	  http://libmemcached.org/libMemcached.html
-+
-+comment "libmemcached needs a (e)glibc toolchain w/ C++, threads"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-new file mode 100644
-index 0000000..d901e70
---- /dev/null
-+++ b/package/libmemcached/libmemcached.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# libmemcached
-+#
-+################################################################################
-+
-+LIBMEMCACHED_MAJOR_VERSION = 1.0
-+LIBMEMCACHED_VERSION = $(LIBMEMCACHED_MAJOR_VERSION).18
-+LIBMEMCACHED_SITE = http://launchpad.net/libmemcached/$(LIBMEMCACHED_MAJOR_VERSION)/$(LIBMEMCACHED_VERSION)/+download
-+LIBMEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+LIBMEMCACHED_CONF_OPT = --disable-dtrace
-+LIBMEMCACHED_INSTALL_STAGING = YES
-+LIBMEMCACHED_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBEVENT),libevent)
-+LIBMEMCACHED_LICENSE = BSD-3c
-+LIBMEMCACHED_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+But again, with the new perl packages just merged:
+
+ http://autobuild.buildroot.org/results/6a8/6a89ac18c44490fd25792c39286acbf6c4830e60/build-end.log
+ http://autobuild.buildroot.org/results/c80/c80d549e38bfa15e19bec7ef226c0120d4adb6ab/build-end.log
+ http://autobuild.buildroot.org/results/bee/bee5add7dad08a573cad2aa1f438625b135551dd/build-end.log
+
+Wouldn't it be possible to find a more reliable CPAN mirror to use as
+the default?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
