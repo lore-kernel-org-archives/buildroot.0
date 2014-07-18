@@ -1,92 +1,107 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Thu, 17 Jul 2014 23:56:54 -0400
-Subject: [Buildroot] [PATCH 2/2] ntp: prevent keyword-gen failure during
-	ntp_keyword.h check
-In-Reply-To: <1405655815-2025-1-git-send-email-danomimanchego123@gmail.com>
-References: <1405655815-2025-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1405655815-2025-2-git-send-email-danomimanchego123@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 18 Jul 2014 07:29:45 +0200
+Subject: [Buildroot] [PATCH 6 of 6] uclibc: update-config: preserve
+	freshly configured settings
+In-Reply-To: <53C85C33.1020902@mind.be>
+References: <patchbomb.1405338624@localhost>
+ <82c951fdcf4851185bcc.1405338630@localhost>
+ <53C40DC8.8000607@mind.be>
+ <CAAXf6LXaJFF+N6tGAcgY7mpYmBJg=cE0F7eOxvh+eba_83xY4w@mail.gmail.com>
+ <53C6110A.2040403@mind.be>
+ <CAAXf6LXqAoJGSL21x0+v6n0UT4+FrMkMd2xL5sWQq+moUWPWeA@mail.gmail.com>
+ <53C85C33.1020902@mind.be>
+Message-ID: <CAAXf6LVHogz9Sfmcop+6GRjUwv+_fCzdHo12crM6reHtnS5dyg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During the first compile, the keyword-gen check is not run.  However,
-it gets run on the first rebuild.  Because we are cross-compiling, the
-keyword-gen can't run on the host.  Since this is only used to check if
-ntp_keyword.h is up to date, we simply drop the check altogether.
+Hi Arnout, all,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+On Fri, Jul 18, 2014 at 1:28 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 17/07/14 19:57, Thomas De Schampheleire wrote:
+>> Hi Arnout,
+>>
+>> On Wed, Jul 16, 2014 at 7:43 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>> On 15/07/14 20:33, Thomas De Schampheleire wrote:
+>>>> Hi Arnout,
+>>>>
+>>>> On Mon, Jul 14, 2014 at 7:05 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>> On 14/07/14 13:50, Thomas De Schampheleire wrote:
+>>>>>> In the sequence:
+>>>>>>
+>>>>>> make uclibc-menuconfig
+>>>>>> make uclibc-update-config
+>>>>>>
+>>>>>> the freshly configured settings from the menuconfig are lost during the
+>>>>>> update-config step. This is because update-config depends on the configure
+>>>>>> step, which starts by copying the config file to the build directory.
+>>>>>>
+>>>>>> Instead, stop depending on the configure step from update-config, and
+>>>>>> introduce a new stamp file .stamp_config_fixup_done, which applies any
+>>>>>> fixups on the .config file.
+>>>>>
+>>>>>  I think the commit message should explain why this stamp file is preferred over
+>>>>> repeating the fixup in each target.
+>>>>>
+>>>>
+>>>> I'm trying to come up with good reasons here, but the only real one I
+>>>> can find is to avoid duplicating code and avoid redoing the fixup
+>>>> unnecessarily.
+>>>>
+>>>> Did you have anything else in mind?
+>>>
+>>>  Well, I never proposed to introduce an extra stamp file, did I? :-)
+>>>
+>>>  The reasons you put forward are OK, they should just be mentioned in the commit
+>>> message because it's a change from how things are currently done, and this
+>>> should be motivated. That way, if someone later on finds a reason to revert to
+>>> repeating the fixup, they can see why it was done this way to begin with.
+>>
+>> Is the commit message of v2 sufficient for you or should I add something?
+>
+>  How about: "With the extra stamp file, we avoid redoing the fixup unnecessarily."
+>
+>  (I don't have time now to look at v2 in detail.)
+>
+>>
+>>>
+>>>  BTW, it doesn't really avoid duplication of code. Now we have repetitions of
+>>>
+>>> $(UCLIBC_DIR)/.stamp_configured: $(UCLIBC_DIR)/.stamp_config_fixup_done
+>>>
+>>> and otherwise we'd have repetitions of
+>>>
+>>> define UCLIBC_CONFIGURE_CMDS
+>>>         $(UCLIBC_FIXUP_DOT_CONFIG)
+>>
+>> Yes true.
+>> If others also prefer the repeating of FIXUP_DOT_CONFIG over the stamp
+>> file solution I can change that, of course.
+>
+>  I'm OK with either way.
+>
+>  I'm not really a big fan of adding an extra stamp file. However, I can imagine
+> that we'll evolve towards a new generic step between patch and configure (also
+> for e.g. autoreconf); then this approach will match nicely with the generic
+> infrastructure.
+>
+>  Actually, this is probably one for Peter to rule upon.
+>
 
----
+I now found a pretty good reason why the stamp file is better: when
+extracting the kconfig logic to a common kconfig-package
+infrastructure, the stamp file rules and the dependency expressions
+can entirely be placed
+in that infrastructure. The package itself only has to provide a
+FIXUP_DOT_CONFIG define.
+If we do not use stamp files and let the CONFIGURE_CMDS actually
+contain FIXUP_DOT_CONFIG, then it's the responsibility of the package
+to actually add this, it is not under control of the kconfig-package,
+so more fragile.
 
-Note: "the first rebuild" means "the first 'make ntp-rebuild'"
----
- package/ntp/ntp-003-skip-keyword-check.patch |   56 ++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/ntp/ntp-003-skip-keyword-check.patch
+I will also add this to the commit message.
 
-diff --git a/package/ntp/ntp-003-skip-keyword-check.patch b/package/ntp/ntp-003-skip-keyword-check.patch
-new file mode 100644
-index 0000000..dc09fbc
---- /dev/null
-+++ b/package/ntp/ntp-003-skip-keyword-check.patch
-@@ -0,0 +1,56 @@
-+ntp: prevent keyword-gen failure during ntp_keyword.h check
-+
-+During the first compile, the keyword-gen check is not run.  However,
-+it gets run on the first rebuild.  Because we are cross-compiling, the
-+keyword-gen can't run on the host.  Since this is only used to check if
-+ntp_keyword.h is up to date, we simply drop the check altogether.
-+
-+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-+
-+
-+diff -purN a/ntpd/Makefile.am b/ntpd/Makefile.am
-+--- a/ntpd/Makefile.am	2014-07-16 15:16:30.650280205 -0400
-++++ b/ntpd/Makefile.am	2014-07-16 15:24:57.256527446 -0400
-+@@ -213,17 +213,8 @@ libntpd_a_SOURCES =		\
-+ 	refclock_zyfer.c	\
-+ 	$(NULL)
-+ 
-+-k-g-u-submake: keyword-gen
-+-	./keyword-gen $(srcdir)/ntp_parser.h > k-g.out
-+-	@grep -v diff_ignore_line < k-g.out > cmp1
-+-	@grep -v diff_ignore_line < $(srcdir)/ntp_keyword.h > cmp2
-+-	@cmp cmp1 cmp2 > /dev/null || \
-+-		{ mv -f k-g.out $(srcdir)/ntp_keyword.h && \
-+-		  echo 'Generated changed ntp_keyword.h.' ;}
-+-	@[ ! -f k-g.out ] || \
-+-		{ rm k-g.out && echo 'ntp_keyword.h is up to date.' ;}
-+-	@rm cmp1 cmp2
-+-	@echo 'keyword-gen and ntp_keyword.h are up to date.' > $@
-++k-g-u-submake:
-++	# Skip keyword-gen check due to cross-compile
-+ 
-+ $(srcdir)/keyword-gen-utd: $(srcdir)/keyword-gen.c $(srcdir)/ntp_parser.h
-+ 	$(MAKE) k-g-u-submake	# avoid explicit dependency
-+diff -purN a/ntpd/Makefile.in b/ntpd/Makefile.in
-+--- a/ntpd/Makefile.in	2014-07-16 15:16:30.650280205 -0400
-++++ b/ntpd/Makefile.in	2014-07-16 15:25:08.764962071 -0400
-+@@ -1182,17 +1182,8 @@ vphack_after:
-+ check-local: @MAKE_CHECK_Y2K@ $(CHECK_SAVECONFIG)
-+ 	test -z "@MAKE_CHECK_Y2K@" || ./@MAKE_CHECK_Y2K@
-+ 
-+-k-g-u-submake: keyword-gen
-+-	./keyword-gen $(srcdir)/ntp_parser.h > k-g.out
-+-	@grep -v diff_ignore_line < k-g.out > cmp1
-+-	@grep -v diff_ignore_line < $(srcdir)/ntp_keyword.h > cmp2
-+-	@cmp cmp1 cmp2 > /dev/null || \
-+-		{ mv -f k-g.out $(srcdir)/ntp_keyword.h && \
-+-		  echo 'Generated changed ntp_keyword.h.' ;}
-+-	@[ ! -f k-g.out ] || \
-+-		{ rm k-g.out && echo 'ntp_keyword.h is up to date.' ;}
-+-	@rm cmp1 cmp2
-+-	@echo 'keyword-gen and ntp_keyword.h are up to date.' > $@
-++k-g-u-submake:
-++	# Skip keyword-gen check due to cross-compile
-+ 
-+ $(srcdir)/keyword-gen-utd: $(srcdir)/keyword-gen.c $(srcdir)/ntp_parser.h
-+ 	$(MAKE) k-g-u-submake	# avoid explicit dependency
--- 
-1.7.9.5
+Best regards,
+Thomas
