@@ -1,39 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 10:29:22 +0200
-Subject: [Buildroot] [PATCH 1/1] Add $$(PKG)_AUTORECONF_ENV argument to
- autotools package
-In-Reply-To: <38A5475DE83986499AEACD2CFAFC3F9801148D7428@tss-server1.home.tropicalstormsoftware.com>
-References: <38A5475DE83986499AEACD2CFAFC3F9801148D7154@tss-server1.home.tropicalstormsoftware.com>
- <20140717204350.6cedbf85@free-electrons.com>
- <38A5475DE83986499AEACD2CFAFC3F9801148D7428@tss-server1.home.tropicalstormsoftware.com>
-Message-ID: <20140718102922.31712654@free-electrons.com>
+From: Rick Taylor <tropicalstormuk@gmail.com>
+Date: Fri, 18 Jul 2014 09:42:41 +0100
+Subject: [Buildroot] [PATCH 1/3] Add $$(PKG)_AUTORECONF_ENV argument to
+	autotools package autoreconf command to allow environment
+	variables to be used.
+Message-ID: <1405672963-16069-1-git-send-email-rick.taylor@cassidian.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rick Taylor,
+Signed-off-by: Rick Taylor <rick.taylor@cassidian.com>
+---
+ package/pkg-autotools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, 18 Jul 2014 08:21:34 +0000, Rick Taylor wrote:
-
-> Unfortunately I am stuck on a machine with no outgoing SMTP server on
-> the network.
-
-Not even GMail's one? That's usually how most people workaround stupid
-company restrictions.
-
-> I have the git patches, but I as I'm using a webmail client I have to
-> work out exactly what is needed in the body of the email.
-
-Most likely, your webmail client will screw up the patch if you paste
-it in the body of the e-mail. That's why we really suggest people to
-use git send-email.
-
-Best regards,
-
-Thomas
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index 557413d..255c42d 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -228,7 +228,7 @@ endef
+ #
+ define AUTORECONF_HOOK
+ 	@$$(call MESSAGE,"Autoreconfiguring")
+-	$$(Q)cd $$($$(PKG)_SRCDIR) && $$(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
++	$$(Q)cd $$($$(PKG)_SRCDIR) && $$($$(PKG)_AUTORECONF_ENV) $$(AUTORECONF) $$($$(PKG)_AUTORECONF_OPT)
+ 	$$(Q)if test "$$($$(PKG)_LIBTOOL_PATCH)" = "YES"; then \
+ 		for i in `find $$($$(PKG)_SRCDIR) -name ltmain.sh`; do \
+ 			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
