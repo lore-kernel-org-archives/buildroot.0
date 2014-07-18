@@ -1,36 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Jul 2014 08:10:41 -0300
-Subject: [Buildroot] [PATCH] gcc 4.9.x: Exclude for PPC SPE because of
-	PR60102
-Message-ID: <1405681841-2943-1-git-send-email-gustavo@zacarias.com.ar>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 18 Jul 2014 15:42:43 +0400
+Subject: [Buildroot] [PATCH] python: fix termios build for xtensa
+In-Reply-To: <768f113a0cb394fde79b38ef52056ff8e335df0a.1405654360.git.baruch@tkos.co.il>
+References: <768f113a0cb394fde79b38ef52056ff8e335df0a.1405654360.git.baruch@tkos.co.il>
+Message-ID: <CAMo8BfKRNBdfHreAzjT+4N6Fi81SKbSsCFZxpp3GCRgz9XhGYg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Exclude gcc 4.9.x for PowerPC SPE toolchains because of an ICE
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
-There's a patch available but it's somewhat intrusive with PPC in
-general and hasn't been well tested yet.
+On Fri, Jul 18, 2014 at 7:32 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> The xtensa ioctls.h header references struct serial_multiport_struct that is
+> not defined in this header or included headers. ioctls.h also references
+> tty_struct that is not exported to userspace at all. Add a patch fixing these
+> issues.
+>
+> This is only a workaround as the real problem should be fixed in the kernel
+> (by removing all struct references like all other archs). But since we support
+> older kernel versions we'll have to carry this patch for some time.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/12b/12b5612828d7f1fc7d1f69fc01341d5a6e628db5/
+>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  .../python-015-serial-ioctl-workaround.patch       | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>  create mode 100644 package/python/python-015-serial-ioctl-workaround.patch
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcc/Config.in.host | 2 ++
- 1 file changed, 2 insertions(+)
+Thank you, Baruch.
+I'll send corresponding linux patches. I definitely saw this issue
+some time ago,
+but I couldn't find any trace of that ):
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index eaff929..afed26b 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -59,6 +59,8 @@ choice
- 
- 	config BR2_GCC_VERSION_4_9_X
- 		depends on !BR2_arc && !BR2_avr32 && !BR2_bfin && !BR2_sparc_sparchfleon && !BR2_sparc_sparchfleonv8 && !BR2_sparc_sparcsfleon && !BR2_sparc_sparcsfleonv8 && !BR2_sparc
-+		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
-+		depends on !BR2_powerpc_SPE
- 		select BR2_GCC_NEEDS_MPC
- 		select BR2_GCC_SUPPORTS_GRAPHITE
- 		bool "gcc 4.9.x"
 -- 
-1.8.5.5
+Thanks.
+-- Max
