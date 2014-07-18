@@ -1,210 +1,104 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 18 Jul 2014 15:43:37 +0200
-Subject: [Buildroot] [PATCH 2/4] perl-gd: new package
-In-Reply-To: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
-References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1405691019-10397-2-git-send-email-francois.perrad@gadz.org>
+Date: Fri, 18 Jul 2014 15:43:36 +0200
+Subject: [Buildroot] [PATCH 1/4] support/scripts/scancpan: automatically
+	populates LICENSE_FILES
+Message-ID: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+from the MANIFEST
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                           |  1 +
- package/perl-gd/Config.in                   | 14 ++++++++++
- package/perl-gd/perl-gd-01-getoptions.patch | 40 +++++++++++++++++++++++++++++
- package/perl-gd/perl-gd-02-lgd.patch        | 25 ++++++++++++++++++
- package/perl-gd/perl-gd-03-force.patch      | 29 +++++++++++++++++++++
- package/perl-gd/perl-gd.mk                  | 22 ++++++++++++++++
- 6 files changed, 131 insertions(+)
- create mode 100644 package/perl-gd/Config.in
- create mode 100644 package/perl-gd/perl-gd-01-getoptions.patch
- create mode 100644 package/perl-gd/perl-gd-02-lgd.patch
- create mode 100644 package/perl-gd/perl-gd-03-force.patch
- create mode 100644 package/perl-gd/perl-gd.mk
+ docs/manual/adding-packages-perl.txt |  3 ---
+ support/scripts/scancpan             | 30 +++++++++++++++++++++++++-----
+ 2 files changed, 25 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 22ddea8..09f5cdb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -430,6 +430,7 @@ endif
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
-+	source "package/perl-gd/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
-diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
-new file mode 100644
-index 0000000..7c85cfc
---- /dev/null
-+++ b/package/perl-gd/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_PERL_GD
-+	bool "perl-gd"
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_GD
-+	help
-+	  Interface to Gd Graphics Library
+diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+index d1a1616..9a3df4d 100644
+--- a/docs/manual/adding-packages-perl.txt
++++ b/docs/manual/adding-packages-perl.txt
+@@ -53,9 +53,6 @@ requested package, and also recursively for all dependencies specified by
+ CPAN. You should still manually edit the result. In particular, the
+ following things should be checked.
+ 
+-* The +PERL_FOO_BAR_LICENSE_FILES+ variable is not set, because metacpan
+-  doesn't have this information. Also, the name of the license file(s)
+-  varies between packages, and some don't even have a license file.
+ * If the perl module links with a shared library that is provided by
+   another (non-perl) package, this dependency is not added automatically.
+   It has to be added manually to +PERL_FOO_BAR_DEPENDENCIES+.
+diff --git a/support/scripts/scancpan b/support/scripts/scancpan
+index d683f88..1280e75 100755
+--- a/support/scripts/scancpan
++++ b/support/scripts/scancpan
+@@ -503,17 +503,33 @@ my %need_host;          # name -> 1 if host package is needed
+ my %need_dlopen;        # name -> 1 if requires dynamic library
+ my %deps_build;         # name -> list of host dependencies
+ my %deps_runtime;       # name -> list of target dependencies
++my %license_files;      # neam -> list of license files
+ my $mcpan = MetaCPAN::API::Tiny->new();
+ my $ua = HTTP::Tiny->new();
+ 
+-sub is_xs {
++sub get_manifest {
+     my ($author, $distname, $version) = @_;
++    my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
++    my $response = $ua->get($url);
++    return $response->{content};
++}
 +
-+	  https://metacpan.org/release/GD
++sub is_xs {
++    my ($manifest) = @_;
+     # This heuristic determines if a module is a native extension, by searching
+     # some file extension types in the MANIFEST of the distribution.
+     # It was inspired by http://deps.cpantesters.org/static/purity.html
+-    my $url = qq{http://api.metacpan.org/source/${author}/${distname}-${version}/MANIFEST};
+-    my $response = $ua->get($url);
+-    return $response->{content} =~ m/\.(swg|xs|c|h|i)\n/;
++    return $manifest =~ m/\.(swg|xs|c|h|i)\n/;
++}
 +
-+comment "perl-gd needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
-diff --git a/package/perl-gd/perl-gd-01-getoptions.patch b/package/perl-gd/perl-gd-01-getoptions.patch
-new file mode 100644
-index 0000000..b9f39bd
---- /dev/null
-+++ b/package/perl-gd/perl-gd-01-getoptions.patch
-@@ -0,0 +1,40 @@
-+fix option handling in Makefile.PL
-+
-+the call to GetOptions() must be unique.
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+see https://github.com/lstein/Perl-GD/pull/6
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -24,7 +24,15 @@
-+ my ($options,$lib_gd_path,$lib_ft_path,$lib_png_path,$lib_jpeg_path,$lib_xpm_path,$lib_zlib_path,$force);
-+ 
-+ use Getopt::Long;
-+-GetOptions("ignore_missing_gd" => \$force);
-++my $result = GetOptions("options=s"         => \$options,
-++			"lib_gd_path=s"     => \$lib_gd_path,
-++			"lib_ft_path=s"     => \$lib_ft_path,
-++			"lib_png_path=s"    => \$lib_png_path,
-++			"lib_jpeg_path=s"   => \$lib_jpeg_path,
-++			"lib_xpm_path=s"    => \$lib_xpm_path,
-++			"lib_zlib_path=s"   => \$lib_zlib_path,
-++			"ignore_missing_gd" => \$force,
-++		       );
-+ 
-+ unless (try_to_autoconfigure(\$options,\$lib_gd_path,\@INC,\@LIBPATH,\@LIBS) || $force) {
-+     die <<END;
-+@@ -47,14 +55,6 @@
-+ #############################################################################################
-+ # Build options passed in to script to support reproducible builds via Makefiles
-+ #############################################################################################
-+-my $result = GetOptions("options=s"       => \$options,
-+-			"lib_gd_path=s"   => \$lib_gd_path,
-+-			"lib_ft_path=s"   => \$lib_ft_path,
-+-			"lib_png_path=s"  => \$lib_png_path,
-+-			"lib_jpeg_path=s" => \$lib_jpeg_path,
-+-			"lib_xpm_path=s"  => \$lib_xpm_path,
-+-			"lib_zlib_path=s" => \$lib_zlib_path,
-+-		       );
-+ unless ($result) {
-+   print STDERR <<END;
-+ Usage: perl Makefile.PL [options]
-diff --git a/package/perl-gd/perl-gd-02-lgd.patch b/package/perl-gd/perl-gd-02-lgd.patch
-new file mode 100644
-index 0000000..1c8fe7b
---- /dev/null
-+++ b/package/perl-gd/perl-gd-02-lgd.patch
-@@ -0,0 +1,25 @@
-+refactor -lgd in @LIBS
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+see https://github.com/lstein/Perl-GD/pull/7
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -34,9 +34,9 @@
-+ END
-+ }
-+ 
-++push @LIBS, "-lgd";
-+ @INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
-+ @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
-+- at LIBS    = qw(-lgd) unless @LIBS;
-+ 
-+ # support for AMD64 libraries
-+ if (-d '/usr/lib64') {
-+@@ -291,7 +291,6 @@
-+   @$LIBPATH      = map {s/^-L// && "-L$_"} split /\s+/,$ldflags;
-+   @$LIBS         = split /\s+/,$libs;
-+ 
-+-  push @$LIBS,"-lgd";
-+   push @$LIBPATH,"-L$libdir";
-+   ($$lib_gd_path = $libdir) =~ s!/[^/]+$!!;
-+   $$options      = $features;
-diff --git a/package/perl-gd/perl-gd-03-force.patch b/package/perl-gd/perl-gd-03-force.patch
-new file mode 100644
-index 0000000..908226b
---- /dev/null
-+++ b/package/perl-gd/perl-gd-03-force.patch
-@@ -0,0 +1,29 @@
-+let @INC and @LIBPATH empty when ignore_missing_gd
-+
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-+see https://github.com/lstein/Perl-GD/pull/7
-+
-+Index: b/Makefile.PL
-+===================================================================
-+--- a/Makefile.PL
-++++ b/Makefile.PL
-+@@ -35,13 +35,15 @@
-+ }
-+ 
-+ push @LIBS, "-lgd";
-+- at INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
-+- at LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
-+-
-+-# support for AMD64 libraries
-+-if (-d '/usr/lib64') {
-+-  my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
-+-  @LIBPATH = (@LIBPATH, at libs64);
-++unless ($force) {
-++  @INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
-++  @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
-++
-++  # support for AMD64 libraries
-++  if (-d '/usr/lib64') {
-++    my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
-++    @LIBPATH = (@LIBPATH, at libs64);
-++  }
-+ }
-+ 
-+ #############################################################################################
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-new file mode 100644
-index 0000000..8bb6778
---- /dev/null
-+++ b/package/perl-gd/perl-gd.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# perl-gd
-+#
-+################################################################################
-+
-+PERL_GD_VERSION = 2.53
-+PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
-+PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS/
-+PERL_GD_DEPENDENCIES = perl zlib libpng freetype gd
-+PERL_GD_LICENSE = Artistic-2.0 or GPLv1+
-+PERL_GD_LICENSE_FILES = LICENSE
-+
-+PERL_GD_CONF_OPT = \
-+	-options=FT,PNG \
-+	-lib_gd_path=$(STAGING_DIR)/usr \
-+	-lib_ft_path=$(STAGING_DIR)/usr \
-+	-lib_png_path=$(STAGING_DIR)/usr \
-+	-lib_zlib_path=$(STAGING_DIR)/usr \
-+	-ignore_missing_gd
-+
-+$(eval $(perl-package))
++sub find_license_files {
++    my ($manifest) = @_;
++    my @license_files;
++    foreach (split /\n/, $manifest) {
++        next if m|/|;
++        push @license_files, $_ if m/(ARTISTIC|COPYING|COPYRIGHT|LICENSE)/i;
++    }
++    return \@license_files;
+ }
+ 
+ sub fetch {
+@@ -524,7 +540,9 @@ sub fetch {
+         say qq{fetch ${name}} unless $quiet;
+         my $result = $mcpan->release( distribution => $name );
+         $dist{$name} = $result;
+-        $need_dlopen{$name} = is_xs( $result->{author}, $name, $result->{version} );
++        my $manifest = get_manifest( $result->{author}, $name, $result->{version} );
++        $need_dlopen{$name} = is_xs( $manifest );
++        $license_files{$name} = find_license_files( $manifest );
+         my @deps_build = ();
+         my @deps_runtime = ();
+         my $mb;
+@@ -629,6 +647,7 @@ while (my ($distname, $dist) = each %dist) {
+         $license =~ s|artistic_2|Artistic-2.0|;
+         $license =~ s|openssl|OpenSSL|;
+         $license =~ s|perl_5|Artistic or GPLv1+|;
++        my $license_files = join q{ }, @{$license_files{$distname}};
+         say qq{write ${mkname}} unless $quiet;
+         open my $fh, q{>}, $mkname;
+         say {$fh} qq{################################################################################};
+@@ -643,6 +662,7 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname};
+         say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname};
+         say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
++        say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
+         say {$fh} qq{};
+         say {$fh} qq{\$(eval \$(perl-package))} if $need_target{$distname};
+         say {$fh} qq{\$(eval \$(host-perl-package))} if $need_host{$distname};
 -- 
 1.9.1
