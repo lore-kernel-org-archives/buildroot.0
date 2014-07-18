@@ -1,95 +1,261 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Jul 2014 23:02:31 +0200
-Subject: [Buildroot] [PATCH v3] infra/pkg-autotools: cleanup the gettextize
-	step
-Message-ID: <1405717351-3820-1-git-send-email-yann.morin.1998@free.fr>
+Date: Fri, 18 Jul 2014 23:35:50 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+Message-ID: <20140718213550.GG3630@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Align the way we call gettextize to the way we call autoreconf:
-  - provide the $(GETTEXTIZE) variable
-  - pass $(HOST_CONFIGURE_OPTS) in the environment
-  - pass the fully-qualified path to autom4te
-  - use of -f even if the package provides its own options
+Johan, All,
 
-Some eye-candy in the output of gettextize.
+Thanks for this respin! :-)
 
-Thanks to Gustavo for pointing out the discrepancy between the way we
-call gettextize and the way we call autoreconf, and to Thomas for the
-live debug session. ;-)
+On 2014-07-18 14:33 +0200, Johan Oudinet spake thusly:
+> Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+[--SNIP--]
+> diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
+> new file mode 100644
+> index 0000000..3a2336d
+> --- /dev/null
+> +++ b/package/ejabberd/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_EJABBERD
+> +       bool "ejabberd"
+> +       select BR2_PACKAGE_OPENSSL
+> +       select BR2_PACKAGE_ERLANG
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+erlang depends on BR2_USE_MMU, so you need to duplicate the dependency
+here, too:
 
----
-Changes v2 -> v3;
-  - fix typo s/autm4te/autom4te/
+    depends on BR2_USE_MMU  # erlang
 
-Changes v1 -> v2:
-  - fix typoes  (Thomas DS)
-  - pass AUTOM4TE in the environment
----
- package/gettext/gettext.mk |  8 ++++++++
- package/pkg-autotools.mk   | 10 +++-------
- 2 files changed, 11 insertions(+), 7 deletions(-)
+> +       select BR2_PACKAGE_LIBYAML
+> +       select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> +       select BR2_PACKAGE_EXPAT
+> +       help
 
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index c8ef765..121d25d 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -57,6 +57,12 @@ endef
- 
- GETTEXT_POST_INSTALL_TARGET_HOOKS += GETTEXT_REMOVE_UNNEEDED
- 
-+define GETTEXT_GETTEXTIZE_EYE_CANDY
-+	$(SED) '/Press Return\|read dummy/d' $(HOST_DIR)/usr/bin/gettextize
-+endef
-+
-+HOST_GETTEXT_POST_INSTALL_HOOKS += GETTEXT_GETTEXTIZE_EYE_CANDY
-+
- # Force build with NLS support, otherwise libintl is not built
- # This is needed because some packages (eg. libglib2) requires
- # locales, but do not properly depend on BR2_ENABLE_LOCALE, and
-@@ -72,5 +78,7 @@ define HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
- endef
- HOST_GETTEXT_POST_INSTALL_HOOKS += HOST_GETTEXT_GETTEXTIZE_CONFIRMATION
- 
-+GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/usr/bin/autom4te $(HOST_DIR)/usr/bin/gettextize -f
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 557413d..53bca30 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -95,12 +95,8 @@ ifndef $(2)_GETTEXTIZE
-  endif
- endif
- 
--ifndef $(2)_GETTEXTIZE_OPT
-- ifdef $(3)_GETTEXTIZE_OPT
--  $(2)_GETTEXTIZE_OPT = $$($(3)_GETTEXTIZE_OPT)
-- else
--  $(2)_GETTEXTIZE_OPT ?= -f
-- endif
-+ifeq ($(4),host)
-+ $(2)_GETTEXTIZE_OPT ?= $$($(3)_GETTEXTIZE_OPT)
- endif
- 
- ifeq ($(4),host)
-@@ -220,7 +216,7 @@ endif
- #
- define GETTEXTIZE_HOOK
- 	@$$(call MESSAGE,"Gettextizing")
--	$(Q)cd $$($$(PKG)_SRCDIR) && $(HOST_DIR)/usr/bin/gettextize $$($$(PKG)_GETTEXTIZE_OPT)
-+	$(Q)cd $$($$(PKG)_SRCDIR) && $$(GETTEXTIZE) $$($$(PKG)_GETTEXTIZE_OPT)
- endef
- 
- #
+All the above entries should be indented using a single TAB, not spaces.
+
+> +	 Ejabberd is a Jabber/XMPP instant messaging server, written
+> +	 in Erlang/OTP. Among other features, ejabberd is
+> +	 cross-platform, fault-tolerant, clusterable and modular.
+> +
+> +	 http://www.ejabberd.im
+
+Indentation of the help text is OK (one TAB + two spaces.)
+
+> diff --git a/package/ejabberd/S50ejabberd b/package/ejabberd/S50ejabberd
+> new file mode 100644
+> index 0000000..a156bc2
+> --- /dev/null
+> +++ b/package/ejabberd/S50ejabberd
+
+Indentatiopn in this script is inconsistent: sometimes, TABs are used,
+sometime spaces. Please be consistent. I prefer spaces, but I won't mind
+TABs, as long as it is consistent. ;-)
+
+> +#!/bin/sh
+> +#
+> +# Start/stop ejabberd
+> +#
+> +
+> +case "$1" in
+> +    start)
+> +	echo "Starting ejabberd..."
+> +	ejabberdctl start
+> +	;;
+> +    stop)
+> +	echo -n "Stopping ejabberd... "
+> +	ejabberdctl stop > /dev/null
+> +	if [ $? -eq 3 ] || ejabberdctl stopped; then
+> +	    echo "OK"
+> +	else
+> +	    echo "failed"
+> +	fi
+> +	;;
+> +    restart|reload)
+> +	"$0" stop
+> +	"$0" start
+> +	;;
+> +    *)
+> +	echo "Usage: $0 {start|stop|restart}"
+> +	exit 1
+> +esac
+> +
+> +exit $?
+
+This last exit is not needed. That's anyway the default behaviour of a
+shell script, to exit with the exit-code of the last command executed.
+
+> diff --git a/package/ejabberd/check-erlang-lib b/package/ejabberd/check-erlang-lib
+> new file mode 100755
+> index 0000000..1a942bb
+> --- /dev/null
+> +++ b/package/ejabberd/check-erlang-lib
+> @@ -0,0 +1,48 @@
+> +#!/bin/sh -e
+> +# Helper to bypass AC_ERLANG_CHECK_LIB
+
+I guess you should provide some explanations for this script. I'm not an
+erlang guy, so it looks strange to me.
+
+Either you provide the explanations in the commit log, or directly as a
+comment in this script (I'd prefer the latter.)
+
+[--SNIP--]
+> diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+> new file mode 100644
+> index 0000000..64f93aa
+> --- /dev/null
+> +++ b/package/ejabberd/ejabberd.mk
+> @@ -0,0 +1,86 @@
+> +################################################################################
+> +#
+> +# ejabberd
+> +#
+> +################################################################################
+> +
+> +EJABBERD_VERSION = 14.05
+> +EJABBERD_SITE = $(call github,processone,ejabberd,$(EJABBERD_VERSION))
+> +EJABBERD_LICENSE = GPLv2+
+> +EJABBERD_LICENSE_FILES = COPYING
+> +EJABBERD_DEPENDENCIES =	libyaml expat openssl erlang
+> +
+> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> +	EJABBERD_DEPENDENCIES += libiconv
+
+We normally do not indent the DEPENDENCIES line inside conditionals.
+
+> +endif
+
+Since it also optionally depends on PAM, you should add linux-pam as a
+conditional dependency, so we ensure linux-pam, if selected, is built
+before ejabberd:
+
+    ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+    EJABBERD_DEPENDENCIES += linux-pam
+    endif
+
+> +EJABBERD_ERLANG_LIBS := sasl crypto public_key ssl mnesia inets compiler
+> +
+> +# Do AC_ERLANG_CHECK_LIB job without erlang.
+> +define EJABBERD_SET_LIBS_DIR
+> +	for lib in $(EJABBERD_ERLANG_LIBS); do					\
+> +	  export								\
+> +	    erlang_lib_dir_$$lib="`package/ejabberd/check-erlang-lib $$lib`";	\
+> +	done
+
+Unles I'm missing something (which tends to happen quite often these
+days, blame the high temperatures we are experiencing), these exports
+will get lost right after the for loop, due to how make calls the rules:
+it spawns a shell for each line to be executed, so the environment set
+on one line is lost on the subsequent lines, even in the same rule.
+
+However, due to our trickery with the hooks, I'd have to verify this
+asumption, when applied to hooks.
+
+You might get something with:
+
+    EJABBERD_CONF_ENV = $(foreach lib,$(EJABBERD_ERLANG_LIBS),erlang_lib_dir_$(lib)=$(shell package/ejabberd/check-erlang-lib $(lib)))
+
+Yes, this line is long, and I doubt we'd be able to split it properly
+into working conditions... :-/
+
+Might need some tweaking, mond you! ;-)
+
+> +endef
+> +
+> +# Set cross-compilation options to the configure called by rebar.
+> +define EJABBERD_FIX_REBAR_CONFIG_SCRIPT
+> +	sed -e "s,./configure,./configure \\	\
+> +	--target=$(GNU_TARGET_NAME) \\		\
+> +	--host=$(GNU_TARGET_NAME) \\		\
+> +	--build=$(GNU_HOST_NAME),"		\
+> +	  -i "$(@D)"/rebar.config.script
+> +endef
+> +
+> +EJABBERD_PRE_CONFIGURE_HOOKS +=			\
+> +	EJABBERD_SET_LIBS_DIR			\
+> +	EJABBERD_FIX_REBAR_CONFIG_SCRIPT
+> +
+> +# Guess answers for these tests, configure will bail out otherwise
+> +# saying error: cannot run test program while cross compiling.
+> +EJABBERD_CONF_ENV =						\
+> +  ac_cv_erlang_root_dir='$(HOST_DIR)/usr/lib/erlang'		\
+> +  $(foreach lib, $(EJABBERD_ERLANG_LIBS),			\
+> +    ac_cv_erlang_lib_dir_$(lib)="$$erlang_lib_dir_$(lib)")
+
+Uneeded, with the trick above.
+
+> +# Set environment variables so the rebar compile command does
+> +# cross-compile ejabberd dependencies.
+> +EJABBERD_MAKE_ENV =								\
+> +  $(TARGET_CONFIGURE_OPTS)							\
+> +  $(TARGET_CONFIGURE_ARGS)							\
+> +  LDFLAGS="-L$(HOST_DIR)/usr/$(GNU_TARGET_NAME)/sysroot/usr/lib/erlang/usr/lib"
+> +
+> +# Delete HOST_DIR prefix from ERL path in ejabberctl script.
+> +define EJABBERD_FIX_EJABBERDCTL
+> +	sed -e "s,ERL=$(HOST_DIR),ERL=,"		\
+> +	  -e "s,INSTALLUSER=,INSTALLUSER=ejabberd,"	\
+> +	  -i "$(TARGET_DIR)"/usr/sbin/ejabberdctl
+
+Use $(SED) ;
+
+    $(SED) 's,ERL=$(HOST_DIR),ERL=,; s,INSTALLUSER=,INSTALLUSER=ejabberd,' \
+           $(TARGET_DIR)/usr/sbin/ejabberdctl
+
+> +endef
+> +
+> +EJABBERD_POST_INSTALL_TARGET_HOOKS += EJABBERD_FIX_EJABBERDCTL
+> +
+> +define EJABBERD_PERMISSIONS
+> +/etc/ejabberd d 750 0 128 - - - - -
+> +/etc/ejabberd/ejabberd.yml-new f 640 0 128 - - - - -
+> +/etc/ejabberd/ejabberd.yml f 640 0 128 - - - - -
+> +/etc/ejabberd/ejabberdctl.cfg-new f 640 0 128 - - - - -
+> +/etc/ejabberd/ejabberdctl.cfg f 640 0 128 - - - - -
+> +/etc/ejabberd/inetrc f 644 0 128 - - - - -
+> +/usr/sbin/ejabberdctl f 550 0 128 - - - - -
+> +/usr/lib/ejabberd/priv/bin/captcha.sh f 750 119 0 - - - - -
+> +/usr/var/lib/ejabberd d 750 119 0 - - - - -
+> +/usr/var/lock/ejabberdctl d 750 119 0 - - - - -
+> +/usr/var/log/ejabberd d 750 119 0 - - - - -
+> +endef
+> +
+> +define EJABBERD_USERS
+> +ejabberd 119 ejabberd 128 * /var/run/ejabberd - - ejabberd daemon
+
+Do you really need those exact uid and gid? I'd prefer we let the user
+infra find free uid/gid, to avoid collisions.
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+> +define EJABBERD_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 0755 package/ejabberd/S50ejabberd \
+> +		$(TARGET_DIR)/etc/init.d/S50ejabberd
+> +endef
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
