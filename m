@@ -1,34 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Jul 2014 10:54:18 +0200
-Subject: [Buildroot] [git commit] python-numpy: disable on non-supported
- architectures
-In-Reply-To: <20140718084558.GA4914@tarshish>
-References: <20140718080136.0BB869D27D@busybox.osuosl.org>
- <20140718084558.GA4914@tarshish>
-Message-ID: <20140718105418.5582c7dd@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 18 Jul 2014 10:54:49 +0200
+Subject: [Buildroot] [PATCH 2/3] Update documentation of AUTORECONF_ENV
+In-Reply-To: <1405672963-16069-2-git-send-email-rick.taylor@cassidian.com>
+References: <1405672963-16069-1-git-send-email-rick.taylor@cassidian.com>
+ <1405672963-16069-2-git-send-email-rick.taylor@cassidian.com>
+Message-ID: <CAAXf6LU8To3=uAde7xyhpeW7v1_YPA3VW8pUbdRo_FGdr8H9DA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Hi Rick,
 
-On Fri, 18 Jul 2014 11:45:58 +0300, Baruch Siach wrote:
+On Fri, Jul 18, 2014 at 10:42 AM, Rick Taylor <tropicalstormuk@gmail.com> wrote:
+> Signed-off-by: Rick Taylor <rick.taylor@cassidian.com>
+> ---
+>  docs/manual/adding-packages-autotools.txt | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
+> index 3f40503..a1a4b90 100644
+> --- a/docs/manual/adding-packages-autotools.txt
+> +++ b/docs/manual/adding-packages-autotools.txt
+> @@ -121,6 +121,11 @@ cases, typical packages will therefore only use a few of them.
+>    automake, libtool, etc.). Valid values are +YES+ and
+>    +NO+. By default, the value is +NO+
+>
+> +* +LIBFOO_AUTORECONF_ENV+, to specify additional environment
+> +  variables to pass the 'autoreconf' program if
 
-> >  config BR2_PACKAGE_PYTHON_NUMPY
-> >  	bool "python-numpy"
-> > +	# Numpy has some CPU specific code
-> > +	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
-> > +		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
-> > +		|| BR2_sh || BR2_sh || BR2_x86_64
-> 
-> Duplicate BR2_sh.
+Did you see my comment on the previous version of this patch? I think
+there is a 'to' missing here:
 
-Argh, yes. Thanks for spotting. Fixed.
+to pass _to_ the autoreconf program
 
+
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
