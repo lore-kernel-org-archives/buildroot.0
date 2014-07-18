@@ -1,32 +1,57 @@
-From: Rick Taylor <tropicalstormuk@gmail.com>
-Date: Fri, 18 Jul 2014 09:42:43 +0100
-Subject: [Buildroot] [PATCH 3/3] Update documentation to clarify usage
-In-Reply-To: <1405672963-16069-1-git-send-email-rick.taylor@cassidian.com>
-References: <1405672963-16069-1-git-send-email-rick.taylor@cassidian.com>
-Message-ID: <1405672963-16069-3-git-send-email-rick.taylor@cassidian.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 18 Jul 2014 11:45:58 +0300
+Subject: [Buildroot] [git commit] python-numpy: disable on non-supported
+ architectures
+In-Reply-To: <20140718080136.0BB869D27D@busybox.osuosl.org>
+References: <20140718080136.0BB869D27D@busybox.osuosl.org>
+Message-ID: <20140718084558.GA4914@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rick Taylor <rick.taylor@cassidian.com>
----
- docs/manual/adding-packages-autotools.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Thomas,
 
-diff --git a/docs/manual/adding-packages-autotools.txt b/docs/manual/adding-packages-autotools.txt
-index a1a4b90..dd76ed3 100644
---- a/docs/manual/adding-packages-autotools.txt
-+++ b/docs/manual/adding-packages-autotools.txt
-@@ -123,7 +123,7 @@ cases, typical packages will therefore only use a few of them.
- 
- * +LIBFOO_AUTORECONF_ENV+, to specify additional environment
-   variables to pass the 'autoreconf' program if
--  +LIBFOO_AUTORECONF=YES+. These are passed before
-+  +LIBFOO_AUTORECONF=YES+. These are passed in the environment of
-   the 'autoreconf' command. By default, empty.
-   
- * +LIBFOO_AUTORECONF_OPT+ to specify additional options
+On Fri, Jul 18, 2014 at 10:00:41AM +0200, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=153990dfd89a2ae3d453520ef54a0b4c2bfe44ab
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> The numpy/core/include/numpy/npy_cpu.h file has some
+> architecture-specific definitions, and not all architectures are
+> supported. This commit makes sure python-numpy cannot be selected on
+> the architectures that are not supported.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/327/327c85f5b1849d390fcf0727cf48e621b946571f/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/python-numpy/Config.in |    4 ++++
+>  1 files changed, 4 insertions(+), 0 deletions(-)
+> 
+> diff --git a/package/python-numpy/Config.in b/package/python-numpy/Config.in
+> index 169b91f..3145350 100644
+> --- a/package/python-numpy/Config.in
+> +++ b/package/python-numpy/Config.in
+> @@ -1,5 +1,9 @@
+>  config BR2_PACKAGE_PYTHON_NUMPY
+>  	bool "python-numpy"
+> +	# Numpy has some CPU specific code
+> +	depends on BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 \
+> +		|| BR2_mips || BR2_mipsel || BR2_powerpc || BR2_powerpc64 \
+> +		|| BR2_sh || BR2_sh || BR2_x86_64
+
+Duplicate BR2_sh.
+
+baruch
+
+>  	# numpy needs fenv.h. Available for all architectures in
+>  	# glibc, but only for x86 and x86-64 in uClibc.
+>  	depends on !BR2_TOOLCHAIN_USES_UCLIBC || BR2_i386 || BR2_x86_64
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
