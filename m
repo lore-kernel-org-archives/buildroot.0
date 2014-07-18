@@ -1,35 +1,81 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Jul 2014 17:26:00 -0300
-Subject: [Buildroot] Replace libev with libuv
-In-Reply-To: <CALoSW6550gT0qvqgo2tbaz+_VKXy0mwAQxjmsjPV66-XaUC1VA@mail.gmail.com>
-References: <CALoSW641XSGs6H4i_q07ZfxUtRYoUMgdxBaUtus5J5C7+K=0Fw@mail.gmail.com>
- <53C91D3F.4060500@zacarias.com.ar>
- <CALoSW64Uisj3oLvPVKZ1nQXgCTEnt1yLMqV+Gy7aK4U=Q9FcUA@mail.gmail.com>
- <53C9220B.9060809@zacarias.com.ar>
- <CALoSW6550gT0qvqgo2tbaz+_VKXy0mwAQxjmsjPV66-XaUC1VA@mail.gmail.com>
-Message-ID: <53C982D8.7070006@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Jul 2014 22:47:29 +0200
+Subject: [Buildroot] [PATCH] libuv: new package
+In-Reply-To: <1405715058-4629-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1405715058-4629-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140718204729.GD3630@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/18/2014 11:02 AM, Nimai Mahajan wrote:
+Gustavo, All,
 
->>>> libuv v0.11.25 Autoreconfiguring
-> aclocal: error: configure.ac:18: file
-> 'm4/libuv-extra-automake-flags.m4' does not exist
-> autoreconf: /home/user/Desktop/buildroot-2014.02/output/host/usr/bin/aclocal
-> failed with exit status: 1
-> make: *** [/home/user/Desktop/buildroot-2014.02/output/build/libuv-v0.11.25/.stamp_configured]
-> Error 1
+On 2014-07-18 17:24 -0300, Gustavo Zacarias spake thusly:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+However, I have a small comment...
+
+[--SNIP--]
+> diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+> new file mode 100644
+> index 0000000..6074e9c
+> --- /dev/null
+> +++ b/package/libuv/libuv.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# libuv
+> +#
+> +################################################################################
+> +
+> +LIBUV_VERSION = v0.11.26
+> +LIBUV_SITE = $(call github,joyent,libuv,$(LIBUV_VERSION))
+> +LIBUV_DEPENDENCIES = host-pkgconf
+> +LIBUV_INSTALL_STAGING = YES
+> +LIBUV_AUTORECONF = YES
+> +LIBUV_LICENSE = BSD-2c, BSD-3c, ISC, MIT
+> +LIBUV_LICENSE_FILES = LICENSE
+> +
+> +# Tweaked autogen.sh
+
+This is pretty terse, and slightly recondite. What about:
+
+    # Upstream needs tests to be run sequentially. This is the default
+    # in automake 1.11 and before, but not starting in 1.12. To maintain
+    # sequentiality in 1.12 and later, the automake option 'serial-tests'
+    # must be used, Unfortunately, it is not recognised by 1.11 and
+    # before. So upstream only adds it conditionally. We use automake
+    # 1.14, so we need it.
+
+Alternatively, I'm OK with adding that in the commit log instead of in a
+comment.
+
+Regards,
+Yann E. MORIN.
+
+> +define LIBUV_FIXUP_AUTOGEN
+> +	echo "m4_define([UV_EXTRA_AUTOMAKE_FLAGS], [serial-tests])" \
+> +	        >$(@D)/m4/libuv-extra-automake-flags.m4
+> +endef
+> +LIBUV_POST_PATCH_HOOKS += LIBUV_FIXUP_AUTOGEN
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 1.8.5.5
 > 
-> The problem is its not running the autogen.sh. How do I force this to
-> run? Is the only way still through <PKG_NAME>_POST_EXTRACT_HOOKS or
-> <PKG_NAME>_POST_PATCH_HOOKS?
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-I've just sent a patch to the list to add libuv.
-Basically autogen.sh is doing a dirty deed, so i've added that in a
-POST_PATCH_HOOK instead of running autogen.sh - we really want to avoid
-doing so as much as possible.
-Regards.
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
