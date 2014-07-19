@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 14:20:28 +0200
-Subject: [Buildroot] [PATCH] libmemcached: disable tests
-In-Reply-To: <1405771553-23073-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405771553-23073-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140719142028.31672160@free-electrons.com>
+Date: Sat, 19 Jul 2014 14:20:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: Bump version to 1.2.4
+In-Reply-To: <1405768684-15049-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1405768684-15049-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140719142043.511ea1e7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Bernd Kuhls,
 
-On Sat, 19 Jul 2014 09:05:53 -0300, Gustavo Zacarias wrote:
-> Disable test libraries and programs, even though it needs to autoreconf
-> it's a good tradeoff since it cuts the build time by half, and avoids
-> build issues with extra dependencies that aren't properly checked for.
-> Fixes:
-> http://autobuild.buildroot.net/results/739/739ae9b2f28486dec8900aa584145d2d38f44331/
+On Sat, 19 Jul 2014 13:18:04 +0200, Bernd Kuhls wrote:
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/mesa3d/mesa3d.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
+Applied, after fixing the commit title.
+
+Thanks,
 
 Thomas
 -- 
