@@ -1,61 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 14:21:02 +0200
-Subject: [Buildroot] [git commit] infra/perl: switch to using a reliable
-	mirror
-Message-ID: <20140719122300.5BA919D25F@busybox.osuosl.org>
+From: Sylvain LG <forum@sylvainlegourr.com>
+Date: Sat, 19 Jul 2014 14:30:34 +0200
+Subject: [Buildroot] Raspberry + Usb to TTL Serial Cable issue
+Message-ID: <CAK9TtU2hWsQ7J5yJMjLG9rOX9V+ga817bZbvAj0pj5ZHE92Beg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=32567d1249ca2a4b5520fba03846d81090c18202
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The mirror we currently use is not a mirror, it's the main archive.
+I try to use a  Usb to TTL Serial Cable with a Raspberry Pi running the
+default system built by Buildroot.
+This cable fully works with a Raspbian system, but on the Buidroot one, it
+only displays The first line and nothing else:
 
-It has a few shortcomings:
-  - it might not contain all the versions of the modules we use,
-  - it can be unavailable at times (like now, for example)
+Uncompressing Linux... done, booting the kernel.
 
-Switch to using a realmirror, that:
-  - does a round-robin on the actual mirror, so availability is better
-  - contains all versions of all modules (yes, mojolicious is there!)
+Kernel is configured with thoses options:
 
-As a consequence, switch mojolicious to use our standard mirror,
+>  --- USB Serial Converter support
+> [*]   USB Serial Console device support
+> [*]   USB Generic Serial Driver
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Fran??ois Perrad <francois.perrad@gadz.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Config.in                                    |    2 +-
- package/perl-mojolicious/perl-mojolicious.mk |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 50968fb..b169678 100644
---- a/Config.in
-+++ b/Config.in
-@@ -242,7 +242,7 @@ config BR2_LUAROCKS_MIRROR
- 
- config BR2_CPAN_MIRROR
- 	string "CPAN mirror (Perl packages)"
--	default "http://search.cpan.org/CPAN"
-+	default "http://cpan.metacpan.org"
- 	help
- 	  CPAN (Comprehensive Perl Archive Network) is a repository
- 	  of Perl packages. It has multiple software mirrors scattered
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 4d0de5e..7d3d6c0 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -6,7 +6,7 @@
- 
- PERL_MOJOLICIOUS_VERSION = 5.08
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
--PERL_MOJOLICIOUS_SITE = http://backpan.perl.org/authors/id/S/SR/SRI/
-+PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI/
- PERL_MOJOLICIOUS_DEPENDENCIES = perl
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
- PERL_MOJOLICIOUS_LICENSE_FILES = LICENSE
+What is still missing?
+
+
+Thank you,
+
+Sylvain
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140719/438bea75/attachment.html>
