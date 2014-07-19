@@ -1,49 +1,31 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 20 Jul 2014 00:41:11 +0200
-Subject: [Buildroot] [PATCH 2/2] xapp_xfs: Fix compile errors after libXfont
-	1.5.0 update
-In-Reply-To: <1405809671-4609-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1405809671-4609-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405809671-4609-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 20 Jul 2014 00:44:00 +0200
+Subject: [Buildroot] [PATCH 4/4] perl-gdgraph: new package
+References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
+ <1405691019-10397-4-git-send-email-francois.perrad@gadz.org>
+ <20140719191051.358726f9@free-electrons.com>
+ <CAB0FRssX48i-XJ6GuZFObfWZQwTGXEOyQhWFgtsswn9RoEuVqA@mail.gmail.com>
+ <20140719223515.GL3593@free.fr>
+Message-ID: <XnsA370775EEAB9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/385/385cffbab4261337afa449998aa7457a8142db92/
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+news:20140719223515.GL3593 at free.fr:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xapp_xfs/xapp_xfs.mk |   13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+> This might be a big endeavour, but even if we only build our own
+> host-perl, that's still a big improvement, and needs only little changes
+> to our current perl infra, i.e. just calling our own perl.
+> We can later enhance the situation by gradually tweaking our host-perl.
+> What do you guys think of this?
 
-diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
-index 0907fc3..bd5ac55 100644
---- a/package/x11r7/xapp_xfs/xapp_xfs.mk
-+++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
-@@ -4,11 +4,18 @@
- #
- ################################################################################
- 
--XAPP_XFS_VERSION = 1.1.3
--XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
--XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
-+#XAPP_XFS_VERSION = 1.1.3
-+#XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
-+#XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XFS_LICENSE = MIT
- XAPP_XFS_LICENSE_FILES = COPYING
- XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
- 
-+# this section is needed to fix compile errors after libXfont 1.5.0 update
-+# it can be removed after the release of the next version of xapp_xfs
-+XAPP_XFS_VERSION = 1c8459eafc04997751ae3d200d0ec91e43e19b5b
-+XAPP_XFS_SITE = git://anongit.freedesktop.org/xorg/app/xfs
-+XAPP_XFS_AUTORECONF = YES
-+XAPP_XFS_DEPENDENCIES += xfont_font-util
-+
- $(eval $(autotools-package))
--- 
-1.7.10.4
+Hi,
+
+sounds good, +1. I am thinking about building spamassassin using buildroot 
+some day. My last spamassassin build was done long time ago using a gcc build 
+made for my target machine when buildroot still supported that.
+
+Regards, Bernd
