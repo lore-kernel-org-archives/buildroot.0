@@ -1,37 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 17:13:58 +0200
-Subject: [Buildroot] [PATCH] pckage/upmpdcli: disable for powerpc CS
- toolchains
-In-Reply-To: <1405780833-10266-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405780833-10266-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140719171358.52359c2e@free-electrons.com>
+Date: Sat, 19 Jul 2014 17:14:10 +0200
+Subject: [Buildroot] [git commit] libmemcached: disable libtest
+Message-ID: <20140719151414.245CE9D22E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=0be26ad401a6e869c8b456d0935737c8dc2ea8d0
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Jul 2014 16:40:33 +0200, Yann E. MORIN wrote:
-> Those toolchains use gcc <= 4.5, which is too old as they are missing
-> range-based for-loops, only introduced with gcc-4.6.
-> 
-> Fixes:
->     http://autobuild.buildroot.net/results/f00/f00fa9b83718abaffd1f52dcd50e582434b3c5e2/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Ezequiel Garcia <elezegarcia@gmail.com>
-> ---
->  package/upmpdcli/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+This allows libmemcached to be enabled for musl and uClibc as well.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmemcached/Config.in                     |    6 +--
+ .../libmemcached-01-disable-tests.patch            |   32 ++++++++++++++++++--
+ package/php-memcached/Config.in                    |    6 +--
+ 3 files changed, 33 insertions(+), 11 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libmemcached/Config.in b/package/libmemcached/Config.in
+index e9dd2c4..4af2b3b 100644
+--- a/package/libmemcached/Config.in
++++ b/package/libmemcached/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBMEMCACHED
+ 	bool "libmemcached"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # posix spawn, va_list breakage
+ 	help
+ 	  libMemcached is an open source C/C++ client library and tools
+ 	  for the memcached server.
+@@ -11,6 +10,5 @@ config BR2_PACKAGE_LIBMEMCACHED
+ 
+ 	  http://libmemcached.org/libMemcached.html
+ 
+-comment "libmemcached needs a (e)glibc toolchain w/ C++, threads"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "libmemcached needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libmemcached/libmemcached-01-disable-tests.patch b/package/libmemcached/libmemcached-01-disable-tests.patch
+index d7da101..6128306 100644
+--- a/package/libmemcached/libmemcached-01-disable-tests.patch
++++ b/package/libmemcached/libmemcached-01-disable-tests.patch
+@@ -4,9 +4,26 @@ with extra dependencies.
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ 
+ diff -Nura libmemcached-1.0.18.orig/Makefile.am libmemcached-1.0.18/Makefile.am
+---- libmemcached-1.0.18.orig/Makefile.am	2014-07-19 08:43:15.127031040 -0300
+-+++ libmemcached-1.0.18/Makefile.am	2014-07-19 08:48:11.327068987 -0300
+-@@ -76,7 +76,6 @@
++--- libmemcached-1.0.18.orig/Makefile.am	2014-07-19 09:24:45.246418899 -0300
+++++ libmemcached-1.0.18/Makefile.am	2014-07-19 09:25:12.701349345 -0300
++@@ -1,6 +1,6 @@
++ # vim:ft=automake
++ 
++-ACLOCAL_AMFLAGS= -I m4 -I libtest/m4
+++ACLOCAL_AMFLAGS= -I m4
++ AM_YFLAGS= -d
++ 
++ # includes append to these:
++@@ -45,8 +45,6 @@
++ include libmemcached-1.0/include.am
++ else
++ 
++-include libtest/include.am
++-
++ include libhashkit-1.0/include.am
++ include libmemcached-1.0/include.am
++ 
++@@ -76,7 +74,6 @@
+  include libmemcachedinternal/util/include.am
+  include rpm/include.mk
+  include support/include.am
+@@ -14,3 +31,12 @@ diff -Nura libmemcached-1.0.18.orig/Makefile.am libmemcached-1.0.18/Makefile.am
+  include util/include.am
+  include win32/include.am
+  
++@@ -103,7 +100,7 @@
++ 	@echo "Files that need to be either removed or checked in:"
++ 	@bzr unknowns
++ 
++-clean-local: clean-libtest-check clean-docs-check clean-rpm
+++clean-local: clean-docs-check clean-rpm
++ 
++ 
++ lcov: lcov-clean check
+diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
+index c9f4b7d..cd97c15 100644
+--- a/package/php-memcached/Config.in
++++ b/package/php-memcached/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_PHP_MEMCACHED
+ 	bool "php-memcached"
+ 	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # libmemcached
+ 	select BR2_PACKAGE_PHP_EXT_SESSION
+ 	select BR2_PACKAGE_LIBMEMCACHED
+ 	select BR2_PACKAGE_ZLIB
+@@ -12,6 +11,5 @@ config BR2_PACKAGE_PHP_MEMCACHED
+ 
+ 	  http://pecl.php.net/package/memcached
+ 
+-comment "php-memcached needs a (e)glibc toolchain w/ C++, threads"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++comment "php-memcached needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
