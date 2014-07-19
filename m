@@ -1,39 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Jul 2014 15:56:08 +0200
-Subject: [Buildroot] [PATCH 01/20 v3] package/xbmc: remove spurious
-	build-dependency on udev
+Date: Sat, 19 Jul 2014 15:56:09 +0200
+Subject: [Buildroot] [PATCH 02/20 v3] support/gen-manual-lists.py: remove
+	unneeded arg in private function
 In-Reply-To: <cover.1405777634.git.yann.morin.1998@free.fr>
 References: <cover.1405777634.git.yann.morin.1998@free.fr>
-Message-ID: <9f0233c669c85c57e45bb3575a3c44702eafeada.1405777634.git.yann.morin.1998@free.fr>
+Message-ID: <cdac12bc4b9c07f2d0d910d5c17f225438dd1bae.1405777634.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CEC support with libcec needs udev, but it is the responsibility
-of libcec to have proper build-dependencies, not XBMC.
-
-So, just remove the spurious dependency on udev in XBMC.
+No need to pass as argument to a function, members of the class it's in.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Acked-by: Samuel Martin <s.martin49@gmail.com>
 ---
- package/xbmc/xbmc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/gen-manual-lists.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 1d458d4..45be990 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -130,7 +130,7 @@ XBMC_CONF_OPT += --disable-avahi
- endif
+diff --git a/support/scripts/gen-manual-lists.py b/support/scripts/gen-manual-lists.py
+index 69f4c7e..483b384 100644
+--- a/support/scripts/gen-manual-lists.py
++++ b/support/scripts/gen-manual-lists.py
+@@ -384,7 +384,7 @@ class Buildroot:
+                     return s
+             return None
  
- ifeq ($(BR2_PACKAGE_XBMC_LIBCEC),y)
--XBMC_DEPENDENCIES += libcec udev
-+XBMC_DEPENDENCIES += libcec
- XBMC_CONF_OPT += --enable-libcec
- else
- XBMC_CONF_OPT += --disable-libcec
+-        def _get_providers(config, symbol):
++        def _get_providers(symbol):
+             providers = list()
+             for sym in self.config:
+                 if not sym.is_symbol():
+@@ -404,7 +404,7 @@ class Buildroot:
+                                   + " (w/ " + l + ")"
+                             providers.append(l)
+                         else:
+-                            providers.extend(_get_providers(config,sym))
++                            providers.extend(_get_providers(sym))
+             return providers
+ 
+         if what == "layout":
+@@ -415,7 +415,7 @@ class Buildroot:
+ 
+         if what == "symbol":
+             pkg = re.sub(r"^BR2_PACKAGE_HAS_(.+)$", r"\1", symbol.get_name())
+-            providers = _get_providers(self.config, symbol)
++            providers = _get_providers(symbol)
+ 
+             return "| {0:<20} <| {1:<32} <| {2}\n".format(pkg.lower(),
+                                                           '+' + symbol.get_name() + '+',
 -- 
 1.9.1
