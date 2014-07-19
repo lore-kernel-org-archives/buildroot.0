@@ -1,28 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 18:05:24 +0200
-Subject: [Buildroot] [PATCH 0/20 v3] Introduce libudev (branch
- yem/libudev)
-In-Reply-To: <cover.1405777634.git.yann.morin.1998@free.fr>
-References: <cover.1405777634.git.yann.morin.1998@free.fr>
-Message-ID: <20140719180524.1366a9f6@free-electrons.com>
+Date: Sat, 19 Jul 2014 18:05:36 +0200
+Subject: [Buildroot] [PATCH] dependencies.sh: fix typo
+In-Reply-To: <1405782916-1500-1-git-send-email-vincent.stehle@laposte.net>
+References: <1405782916-1500-1-git-send-email-vincent.stehle@laposte.net>
+Message-ID: <20140719180536.0127bc3f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Vincent Stehl?,
 
-On Sat, 19 Jul 2014 15:56:22 +0200, Yann E. MORIN wrote:
+On Sat, 19 Jul 2014 17:15:16 +0200, Vincent Stehl? wrote:
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+> ---
+>  support/dependencies/dependencies.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
->       package/xbmc: remove spurious build-dependency on udev
->       support/gen-manual-lists.py: remove unneeded arg in private function
->       support/gen-manual-lists.py: bail out early for legacy symbols
-
-I've applied those first three patches. For the rest, I need to have a
-deeper look.
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
