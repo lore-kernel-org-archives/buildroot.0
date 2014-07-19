@@ -1,40 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Jul 2014 16:40:33 +0200
-Subject: [Buildroot] [PATCH] pckage/upmpdcli: disable for powerpc CS
-	toolchains
-Message-ID: <1405780833-10266-1-git-send-email-yann.morin.1998@free.fr>
+From: Sylvain LG <forum@sylvainlegourr.com>
+Date: Sat, 19 Jul 2014 16:42:55 +0200
+Subject: [Buildroot] Raspberry + Usb to TTL Serial Cable issue
+In-Reply-To: <20140719160709.2b2bcfae@free-electrons.com>
+References: <CAK9TtU2hWsQ7J5yJMjLG9rOX9V+ga817bZbvAj0pj5ZHE92Beg@mail.gmail.com>
+ <20140719160709.2b2bcfae@free-electrons.com>
+Message-ID: <CAK9TtU06LT6oep-7sYZTVjpVqRbc-DN0pCMrK28f230dTirupA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those toolchains use gcc <= 4.5, which is too old as they are missing
-range-based for-loops, only introduced with gcc-4.6.
+Indeed, your are right.
 
-Fixes:
-    http://autobuild.buildroot.net/results/f00/f00fa9b83718abaffd1f52dcd50e582434b3c5e2/
+I've just edited cmdline.txt: now I can see all kernel messages in a screen
+session.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Ezequiel Garcia <elezegarcia@gmail.com>
----
- package/upmpdcli/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+But there is still no console (I mean I can't log in).
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index d89928f..3fa638b 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_UPMPDCLI
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # libupnp
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Too old gcc
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
- 	help
- 	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
- 	  Player Daemon. It supports UPnP gapless track transitions and
--- 
-1.9.1
+1 - What should I add to my conf?
+
+2 - I edited directly cmdline.txt on the sdcard since I didn't manage to
+make Buildroot rebuild the system with the new cmdline.txt. How can I do
+that?
+
+Thank you,
+
+Sylvain
+
+
+
+
+
+
+
+
+2014-07-19 16:07 GMT+02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+
+> Dear Sylvain LG,
+>
+> On Sat, 19 Jul 2014 14:30:34 +0200, Sylvain LG wrote:
+>
+> > I try to use a  Usb to TTL Serial Cable with a Raspberry Pi running the
+> > default system built by Buildroot.
+> > This cable fully works with a Raspbian system, but on the Buidroot one,
+> it
+> > only displays The first line and nothing else:
+> >
+> > Uncompressing Linux... done, booting the kernel.
+> >
+> > Kernel is configured with thoses options:
+> >
+> > >  --- USB Serial Converter support
+> > > [*]   USB Serial Console device support
+> > > [*]   USB Generic Serial Driver
+> >
+> > What is still missing?
+>
+> Using a USB to TTL serial cable has *nothing* to do with USB support on
+> the RasberryPi side. Look at your cable:
+>
+>  *) On the PC side, it's connected over USB. So for sure your PC should
+>     have the appropriate USB drivers, but that's usually built into any
+>     normal Linux distribution.
+>
+>  *) On the RasberryPi side, it's connected directly to an UART. There
+>     is no USB involved at all.
+>
+> If you can see the bootloader and "Uncompressing Linux... done, booting
+> the kernel" then it means that your cable is working.
+>
+> As Vincent suggested, it might be that you didn't pass the appropriate
+> console= value.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140719/8d722663/attachment.html>
