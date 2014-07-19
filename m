@@ -1,54 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 16:07:09 +0200
-Subject: [Buildroot] Raspberry + Usb to TTL Serial Cable issue
-In-Reply-To: <CAK9TtU2hWsQ7J5yJMjLG9rOX9V+ga817bZbvAj0pj5ZHE92Beg@mail.gmail.com>
-References: <CAK9TtU2hWsQ7J5yJMjLG9rOX9V+ga817bZbvAj0pj5ZHE92Beg@mail.gmail.com>
-Message-ID: <20140719160709.2b2bcfae@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 19 Jul 2014 16:16:48 +0200
+Subject: [Buildroot] [PATCH] perl-gd: fix broken patches
+Message-ID: <1405779408-29494-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sylvain LG,
+in each patch, the 3 trailing lines are lost
 
-On Sat, 19 Jul 2014 14:30:34 +0200, Sylvain LG wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-gd/perl-gd-01-getoptions.patch | 3 +++
+ package/perl-gd/perl-gd-02-lgd.patch        | 3 +++
+ package/perl-gd/perl-gd-03-force.patch      | 3 +++
+ 3 files changed, 9 insertions(+)
 
-> I try to use a  Usb to TTL Serial Cable with a Raspberry Pi running the
-> default system built by Buildroot.
-> This cable fully works with a Raspbian system, but on the Buidroot one, it
-> only displays The first line and nothing else:
-> 
-> Uncompressing Linux... done, booting the kernel.
-> 
-> Kernel is configured with thoses options:
-> 
-> >  --- USB Serial Converter support
-> > [*]   USB Serial Console device support
-> > [*]   USB Generic Serial Driver
-> 
-> What is still missing?
-
-Using a USB to TTL serial cable has *nothing* to do with USB support on
-the RasberryPi side. Look at your cable:
-
- *) On the PC side, it's connected over USB. So for sure your PC should
-    have the appropriate USB drivers, but that's usually built into any
-    normal Linux distribution.
-
- *) On the RasberryPi side, it's connected directly to an UART. There
-    is no USB involved at all.
-
-If you can see the bootloader and "Uncompressing Linux... done, booting
-the kernel" then it means that your cable is working.
-
-As Vincent suggested, it might be that you didn't pass the appropriate
-console= value.
-
-Best regards,
-
-Thomas
+diff --git a/package/perl-gd/perl-gd-01-getoptions.patch b/package/perl-gd/perl-gd-01-getoptions.patch
+index 7bd7f4f..74f055b 100644
+--- a/package/perl-gd/perl-gd-01-getoptions.patch
++++ b/package/perl-gd/perl-gd-01-getoptions.patch
+@@ -38,3 +38,6 @@
+ -			"lib_xpm_path=s"  => \$lib_xpm_path,
+ -			"lib_zlib_path=s" => \$lib_zlib_path,
+ -		       );
++ unless ($result) {
++   print STDERR <<END;
++ Usage: perl Makefile.PL [options]
+diff --git a/package/perl-gd/perl-gd-02-lgd.patch b/package/perl-gd/perl-gd-02-lgd.patch
+index bc6cdfc..4a69c2a 100644
+--- a/package/perl-gd/perl-gd-02-lgd.patch
++++ b/package/perl-gd/perl-gd-02-lgd.patch
+@@ -23,3 +23,6 @@
+    @$LIBS         = split /\s+/,$libs;
+  
+ -  push @$LIBS,"-lgd";
++   push @$LIBPATH,"-L$libdir";
++   ($$lib_gd_path = $libdir) =~ s!/[^/]+$!!;
++   $$options      = $features;
+diff --git a/package/perl-gd/perl-gd-03-force.patch b/package/perl-gd/perl-gd-03-force.patch
+index 3524865..0a121a9 100644
+--- a/package/perl-gd/perl-gd-03-force.patch
++++ b/package/perl-gd/perl-gd-03-force.patch
+@@ -27,3 +27,6 @@
+ +    my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
+ +    @LIBPATH = (@LIBPATH,@libs64);
+ +  }
++ }
++ 
++ #############################################################################################
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
