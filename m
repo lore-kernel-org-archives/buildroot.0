@@ -1,282 +1,136 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Jul 2014 15:53:23 +0200
-Subject: [Buildroot] [PATCH 7/7] xserver_xorg-server: Bump version to 1.16.0
-In-Reply-To: <1405778003-2712-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1405778003-2712-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1405778003-2712-7-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Jul 2014 15:56:22 +0200
+Subject: [Buildroot] [PATCH 0/20 v3] Introduce libudev (branch yem/libudev)
+Message-ID: <cover.1405777634.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version bump includes bumping version
+Hello All!
 
-xlib_libXfont to 1.4.99.901 & xproto_fontsproto to 2.1.3.
+This series introduces the possibility to just build and install libudev,
+without requiring that the /dev management be handled by eudev or systemd.
 
-xserver_xorg-server 1.16.0 depends on them, but they are incompatible
-with older versions of xserver_xorg-server, for details and libXfont-related
-CVE?s see http://lists.x.org/archives/xorg-announce/2014-July/002453.html
+A lot of packages that have a dependency on udev, in fact only require a
+libudev, not anudev daemon. That's the case for e.g. libinput, libcec,
+mesa3d...
 
-Also remove patches applied upstream.
+The series contains:
 
-Since a different patch than xserver_xorg-server-100-mips.patch
-was committed upstream:
-http://cgit.freedesktop.org/xorg/xserver/commit/?id=19e5a13970ad9d440c0789395e94931429ef4fbb
-I also compile tested using this defconfig:
+  - a patch to remove a spurious dependency on udev for XBMC
 
-BR2_mips64=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR=y
+  - three patches to fix generating the list of virtual packages for
+    the manual
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xlib_libXfont/xlib_libXfont.mk       |    2 +-
- .../x11r7/xproto_fontsproto/xproto_fontsproto.mk   |    2 +-
- .../xserver_xorg-server-100-mips.patch             |   17 ----
- ...erver_xorg-server-200-add-support-for-arc.patch |   81 --------------------
- ...tensa-add-support-for-xtensa-architecture.patch |   74 ------------------
- .../xserver_xorg-server/xserver_xorg-server.mk     |    2 +-
- 6 files changed, 3 insertions(+), 175 deletions(-)
- delete mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-100-mips.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-200-add-support-for-arc.patch
- delete mode 100644 package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
+  - two patches to remove the prompts of eudev and systemd, since
+    they are never user-selectable; a bit of cleanup is done in the
+    dependencies as well
 
-diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-index 5f2b1e1..17cd557 100644
---- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-+++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXFONT_VERSION = 1.4.8
-+XLIB_LIBXFONT_VERSION = 1.4.99.901
- XLIB_LIBXFONT_SOURCE = libXfont-$(XLIB_LIBXFONT_VERSION).tar.bz2
- XLIB_LIBXFONT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXFONT_LICENSE = MIT
-diff --git a/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk b/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
-index 64d7bea..b4e6d6a 100644
---- a/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
-+++ b/package/x11r7/xproto_fontsproto/xproto_fontsproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XPROTO_FONTSPROTO_VERSION = 2.1.2
-+XPROTO_FONTSPROTO_VERSION = 2.1.3
- XPROTO_FONTSPROTO_SOURCE = fontsproto-$(XPROTO_FONTSPROTO_VERSION).tar.bz2
- XPROTO_FONTSPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_FONTSPROTO_LICENSE = MIT
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-100-mips.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-100-mips.patch
-deleted file mode 100644
-index ac01e7c..0000000
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-100-mips.patch
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Taken from upstream bug tracker:
--https://bugs.freedesktop.org/show_bug.cgi?id=72126
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -up xorg-server-1.14.4/hw/xfree86/common/compiler.h xorg-server-1.14.4-fix/hw/xfree86/common/compiler.h
----- xorg-server-1.14.4/hw/xfree86/common/compiler.h	2013-07-26 01:14:32.000000000 -0400
--+++ xorg-server-1.14.4-fix/hw/xfree86/common/compiler.h	2013-11-27 23:16:46.000000000 -0500
--@@ -727,7 +727,7 @@ xf86WriteMmio32LeNB(__volatile__ void *b
-- #define PORT_SIZE short
-- #endif
-- 
---_X_EXPORT unsigned int IOPortBase;      /* Memory mapped I/O port area */
--+_X_EXPORT uintptr_t IOPortBase;      /* Memory mapped I/O port area */
-- 
-- static __inline__ void
-- outb(unsigned PORT_SIZE port, unsigned char val)
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-200-add-support-for-arc.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-200-add-support-for-arc.patch
-deleted file mode 100644
-index 4bf2018..0000000
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-200-add-support-for-arc.patch
-+++ /dev/null
-@@ -1,81 +0,0 @@
--Upstream-Status: Backport (should be a part of 1.15.2 - remove then)
--
--http://cgit.freedesktop.org/xorg/xserver/commit/?id=c08d2b8ccb0158dbf1f529f80cc3236e66236cce
--
--From c08d2b8ccb0158dbf1f529f80cc3236e66236cce Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
--Date: Thu, 01 May 2014 12:39:29 +0000
--Subject: ARC: Add support for ARC architecture
--
--Xorg server could be built for and run on Synopsys DesignWare ARC cores.
--These changes are required for successful building and execution of the server.
--
--Both little-endian and big-endian flavors of ARC cores are supported.
--
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
--Acked-by: Adam Jackson <ajax@redhat.com>
--Reviewed-by: Egbert Eich <eich@freedesktop.org>
--Signed-off-by: Keith Packard <keithp@keithp.com>
-----
--diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
--index fb95f58..0319de0 100644
----- a/hw/xfree86/common/compiler.h
--+++ b/hw/xfree86/common/compiler.h
--@@ -1352,7 +1352,7 @@ stl_u(unsigned long val, unsigned int *p)
-- #else                           /* ix86 */
-- 
-- #if !defined(__SUNPRO_C)
---#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__)
--+#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__)
-- #ifdef GCCUSESGAS
-- 
-- /*
--@@ -1454,7 +1454,7 @@ inl(unsigned short port)
-- 
-- #endif                          /* GCCUSESGAS */
-- 
---#else                           /* !defined(FAKEIT) && !defined(__mc68000__)  && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__m32r__) */
--+#else                           /* !defined(FAKEIT) && !defined(__mc68000__)  && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__m32r__) && !defined(__arc__) */
-- 
-- static __inline__ void
-- outb(unsigned short port, unsigned char val)
--diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
--index 47f5abc..40765fc 100644
----- a/hw/xfree86/os-support/linux/lnx_video.c
--+++ b/hw/xfree86/os-support/linux/lnx_video.c
--@@ -59,7 +59,8 @@ static Bool ExtendedEnabled = FALSE;
--       !defined(__mips__) && \
--       !defined(__nds32__) && \
--       !defined(__arm__) && \
---      !defined(__aarch64__)
--+      !defined(__aarch64__) && \
--+      !defined(__arc__)
-- 
-- /*
--  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
--diff --git a/include/servermd.h b/include/servermd.h
--index 11f6c10..2d1ccb1 100644
----- a/include/servermd.h
--+++ b/include/servermd.h
--@@ -300,6 +300,19 @@ SOFTWARE.
-- 
-- #endif                          /* __aarch64__ */
-- 
--+#if defined(__arc__)
--+
--+#if defined(__BIG_ENDIAN__)
--+#define IMAGE_BYTE_ORDER	MSBFirst
--+#define BITMAP_BIT_ORDER	MSBFirst
--+#else
--+#define IMAGE_BYTE_ORDER	LSBFirst
--+#define BITMAP_BIT_ORDER	LSBFirst
--+#endif
--+#define GLYPHPADBYTES		4
--+
--+#endif                          /* ARC */
--+
-- /* size of buffer to use with GetImage, measured in bytes. There's obviously
--  * a trade-off between the amount of heap used and the number of times the
--  * ddx routine has to be called.
----
--cgit v0.9.0.2-2-gbebe
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch b/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
-deleted file mode 100644
-index 67bce1c..0000000
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server-300-xtensa-add-support-for-xtensa-architecture.patch
-+++ /dev/null
-@@ -1,74 +0,0 @@
--From dc8d0688471695ec5a8db5fef93fbcfc064891d5 Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Mon, 2 Jun 2014 01:17:31 +0400
--Subject: [PATCH] xtensa: add support for xtensa architecture
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
--Reviewed-by: Adam Jackson <ajax@redhat.com>
--Signed-off-by: Keith Packard <keithp@keithp.com>
-----
--Backported from: dc8d0688471695ec5a8db5fef93fbcfc064891d5
--
-- hw/xfree86/common/compiler.h            |    5 ++++-
-- hw/xfree86/os-support/linux/lnx_video.c |    3 ++-
-- include/servermd.h                      |   14 ++++++++++++++
-- 3 files changed, 20 insertions(+), 2 deletions(-)
--
--diff --git a/hw/xfree86/common/compiler.h b/hw/xfree86/common/compiler.h
--index 0319de0..1bd8def 100644
----- a/hw/xfree86/common/compiler.h
--+++ b/hw/xfree86/common/compiler.h
--@@ -1352,7 +1352,10 @@ stl_u(unsigned long val, unsigned int *p)
-- #else                           /* ix86 */
-- 
-- #if !defined(__SUNPRO_C)
---#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__)
--+#if !defined(FAKEIT) && !defined(__mc68000__) && !defined(__arm__) && \
--+    !defined(__sh__) && !defined(__hppa__) && !defined(__s390__) && \
--+    !defined(__m32r__) && !defined(__aarch64__) && !defined(__arc__) && \
--+    !defined(__xtensa__)
-- #ifdef GCCUSESGAS
-- 
-- /*
--diff --git a/hw/xfree86/os-support/linux/lnx_video.c b/hw/xfree86/os-support/linux/lnx_video.c
--index 40765fc..652f963 100644
----- a/hw/xfree86/os-support/linux/lnx_video.c
--+++ b/hw/xfree86/os-support/linux/lnx_video.c
--@@ -60,7 +60,8 @@ static Bool ExtendedEnabled = FALSE;
--       !defined(__nds32__) && \
--       !defined(__arm__) && \
--       !defined(__aarch64__) && \
---      !defined(__arc__)
--+      !defined(__arc__) && \
--+      !defined(__xtensa__)
-- 
-- /*
--  * Due to conflicts with "compiler.h", don't rely on <sys/io.h> to declare
--diff --git a/include/servermd.h b/include/servermd.h
--index 2d1ccb1..081123b 100644
----- a/include/servermd.h
--+++ b/include/servermd.h
--@@ -313,6 +313,20 @@ SOFTWARE.
-- 
-- #endif                          /* ARC */
-- 
--+#ifdef __xtensa__
--+
--+#ifdef __XTENSA_EL__
--+#define IMAGE_BYTE_ORDER        LSBFirst
--+#define BITMAP_BIT_ORDER        LSBFirst
--+#endif
--+#ifdef __XTENSA_EB__
--+#define IMAGE_BYTE_ORDER        MSBFirst
--+#define BITMAP_BIT_ORDER        MSBFirst
--+#endif
--+#define GLYPHPADBYTES           4
--+
--+#endif                          /* __xtensa__ */
--+
-- /* size of buffer to use with GetImage, measured in bytes. There's obviously
--  * a trade-off between the amount of heap used and the number of times the
--  * ddx routine has to be called.
---- 
--1.7.7.6
--
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 779c46d..9188411 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 1.15.2
-+XSERVER_XORG_SERVER_VERSION = 1.16.0
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.bz2
- XSERVER_XORG_SERVER_SITE = http://xorg.freedesktop.org/releases/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+  - a patch to intrduce the libudev virtual package
+
+  - two patches to add libudev providers: eudev and systemd
+
+  - a patch to make eudev only build libudev if /dev management is
+    handled by neither eudev nor systemd
+
+  - ten patches to convert packages to depend on libusb instead of a
+    udev daemon
+
+Not all packages that reference udev have been switched over to depend
+on libudev, though, since it is unclear to me whether they require a
+udev daemon, or would be happy with just libudev.
+
+Also, the converted packages have not been tested, not even build-tested;
+this is just an RFC to validate the overal solution for now.
+
+On your keyboards, get set, ready... Comment! :-)
+
+Changes RFCv2 -> v3:
+  - some typoes  (Samul)
+  - misc fixes in gen-manual-lists.py  (Samuel)
+
+Changes RFCv1 -> RFCv2:
+  - have eudev and systemd be providers for libudev, instead of having
+    udev be the provider  (Thomas, on IRC)
+  - fix the manual lists after bugs were uncovered with the removal of
+    the eudev and systemd prompts
+  - convert some packages
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 1aa42ad4aed013c03d1e17f4cfe2ace2194f423d:
+
+  make: bump to version 4.0 (2014-07-19 14:47:27 +0200)
+
+are available in the git repository at:
+
+  git://ymorin.is-a-geek.org/buildroot 
+
+for you to fetch changes up to 7964be0c75358121baa69301d23eb93d72a64db9:
+
+  package/xserver_xorg-server: needs libudev, not a udev daemon (2014-07-19 15:46:02 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (20):
+      package/xbmc: remove spurious build-dependency on udev
+      support/gen-manual-lists.py: remove unneeded arg in private function
+      support/gen-manual-lists.py: bail out early for legacy symbols
+      support/gen-manual-lists.py: rework generating the virtual package list
+      package/eudev: remove the prompt
+      package/systemd: remove prompt
+      package/libudev: new virtual package
+      package/eudev: is a provider for libudev
+      package/systemd: is a provider for libudev
+      package/eudev: split udev/libudev
+      package/libatasmart: needs libudev, not a udev daemon
+      package/libcec: needs libudev, not a udev daemon
+      package/libdrm: can also use only libudev
+      package/libinput: needs libudev, not a udev daemon
+      package/libusb: needs libudev, not a udev daemon
+      package/mesa3d: depends on libudev, not udev
+      package/vlc: needs libudev, not a udev daemon
+      package/weston: needs libudev, not a udev daemon
+      package/xdriver_xf86-input-evdev: needs libudev, not a udev daemon
+      package/xserver_xorg-server: needs libudev, not a udev daemon
+
+ package/Config.in                                  |  3 +-
+ package/eudev/Config.in                            | 68 +++++++++++-----
+ package/eudev/eudev.mk                             | 51 ++++++++++--
+ package/libatasmart/Config.in                      |  5 +-
+ package/libcec/libcec.mk                           |  4 +-
+ package/libdrm/libdrm.mk                           |  4 +-
+ package/libinput/Config.in                         |  5 +-
+ package/libinput/libinput.mk                       |  2 +-
+ package/libudev/Config.in                          |  6 ++
+ package/libudev/libudev.mk                         |  7 ++
+ package/libusb/libusb.mk                           |  5 +-
+ package/mesa3d/Config.in                           |  6 +-
+ package/mesa3d/mesa3d.mk                           |  4 +-
+ package/systemd/Config.in                          | 55 +++++--------
+ package/systemd/systemd.mk                         |  2 +-
+ package/vlc/vlc.mk                                 |  4 +-
+ package/weston/Config.in                           |  6 +-
+ package/weston/weston.mk                           |  2 +-
+ package/x11r7/xdriver_xf86-input-evdev/Config.in   |  5 +-
+ .../xdriver_xf86-input-evdev.mk                    |  3 +-
+ .../xserver_xorg-server/xserver_xorg-server.mk     |  4 +-
+ package/xbmc/Config.in                             |  6 +-
+ package/xbmc/xbmc.mk                               |  2 +-
+ support/scripts/gen-manual-lists.py                | 95 ++++++++++++++++++----
+ system/Config.in                                   | 76 +++++++++++++----
+ 25 files changed, 301 insertions(+), 129 deletions(-)
+ create mode 100644 package/libudev/Config.in
+ create mode 100644 package/libudev/libudev.mk
+
 -- 
-1.7.10.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
