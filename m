@@ -1,54 +1,42 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 19 Jul 2014 04:06:30 +0400
-Subject: [Buildroot] [PATCH] python: fix termios build for xtensa
-In-Reply-To: <20140718133049.GC4914@tarshish>
-References: <768f113a0cb394fde79b38ef52056ff8e335df0a.1405654360.git.baruch@tkos.co.il>
- <CAMo8BfKRNBdfHreAzjT+4N6Fi81SKbSsCFZxpp3GCRgz9XhGYg@mail.gmail.com>
- <20140718133049.GC4914@tarshish>
-Message-ID: <CAMo8BfLT1+LX64sDdbXnrT=m92UwasuyrQEf8hA1prrs4tdFxg@mail.gmail.com>
+Date: Sat, 19 Jul 2014 04:28:11 +0400
+Subject: [Buildroot] glib 2.40 on xtensa
+In-Reply-To: <20140719004023.4a71d4b8@free-electrons.com>
+References: <20140719004023.4a71d4b8@free-electrons.com>
+Message-ID: <CAMo8BfKDFvct4=wDsFVObRMab9P-73LcMvJU2JaNozR=swbT2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 18, 2014 at 5:30 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-> Hi Max,
+On Sat, Jul 19, 2014 at 2:40 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Baruch, Max,
 >
-> On Fri, Jul 18, 2014 at 03:42:43PM +0400, Max Filippov wrote:
->> On Fri, Jul 18, 2014 at 7:32 AM, Baruch Siach <baruch@tkos.co.il> wrote:
->> > The xtensa ioctls.h header references struct serial_multiport_struct that is
->> > not defined in this header or included headers. ioctls.h also references
->> > tty_struct that is not exported to userspace at all. Add a patch fixing these
->> > issues.
->> >
->> > This is only a workaround as the real problem should be fixed in the kernel
->> > (by removing all struct references like all other archs). But since we support
->> > older kernel versions we'll have to carry this patch for some time.
->> >
->> > Fixes:
->> > http://autobuild.buildroot.net/results/12b/12b5612828d7f1fc7d1f69fc01341d5a6e628db5/
->> >
->> > Cc: Max Filippov <jcmvbkbc@gmail.com>
->> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> > ---
->> >  .../python-015-serial-ioctl-workaround.patch       | 23 ++++++++++++++++++++++
->> >  1 file changed, 23 insertions(+)
->> >  create mode 100644 package/python/python-015-serial-ioctl-workaround.patch
->>
->> Thank you, Baruch.
->> I'll send corresponding linux patches. I definitely saw this issue
->> some time ago,
->> but I couldn't find any trace of that ):
+> We have recently update glib to version 2.40, and this is causing
+> issues on Xtensa:
 >
-> You mean commit b973b4c91be8f (xtensa: fix TIOCGSERIAL and TIOCSSERIAL
-> definitions)? It solved part of the problem.
+>   http://autobuild.buildroot.org/results/a1a/a1a1f97a2c54ba4f7f7e44cc094a55bd23ca0aa0/build-end.log
+>
+>   CC       gspawn.lo
+> gthread-posix.c: In function 'g_cond_impl_new':
+> gthread-posix.c:648:2: error: #error Cannot support GCond on your platform.
+>  #error Cannot support GCond on your platform.
+>   ^
+> gthread-posix.c: In function 'g_cond_wait_until':
+> gthread-posix.c:896:2: error: #error Cannot support GCond on your platform.
+>  #error Cannot support GCond on your platform.
+>   ^
+> gthread-posix.c:859:19: warning: unused variable 'ts' [-Wunused-variable]
+>    struct timespec ts;
+>                    ^
+>
+> Could you have a look and see what can be done to fix this problem?
 
-Oh, right, other similar symbols.
-
-> It seems most other architectures migrated to asm-generic/ioctls.h.
-
-This would change existing IOCTL codes, so I don't think we can do it.
+It requires pthread_cond_timedwait_relative_np (not available on uclibc)
+or pthread_condattr_setclock (only available with NPTL). Looks like we
+need NPTL to support this glib version.
 
 -- 
 Thanks.
