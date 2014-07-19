@@ -1,58 +1,48 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 19 Jul 2014 09:22:23 +0200
-Subject: [Buildroot] [PATCH] support/script/scanpcan: small fix
-Message-ID: <1405754543-17066-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Jul 2014 10:38:58 +0200
+Subject: [Buildroot] [PATCH 2/2] ntp: prevent keyword-gen failure during
+ ntp_keyword.h check
+In-Reply-To: <CANxTyt41syqHG2BGF9mHMd9C_f8ztmNwtADFmDE9N7ZBiNF_OA@mail.gmail.com>
+References: <1405655815-2025-1-git-send-email-danomimanchego123@gmail.com>
+ <1405655815-2025-2-git-send-email-danomimanchego123@gmail.com>
+ <20140718212658.06acda90@free-electrons.com>
+ <CANxTyt41syqHG2BGF9mHMd9C_f8ztmNwtADFmDE9N7ZBiNF_OA@mail.gmail.com>
+Message-ID: <20140719103858.43d6540d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- typo in comment
-- remove trailing space in _HOST_DEPENCENCIES when no dependency
+Dear Danomi Manchego,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- support/scripts/scancpan | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+On Fri, 18 Jul 2014 20:52:18 -0400, Danomi Manchego wrote:
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 1280e75..de11ef1 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -503,7 +503,7 @@ my %need_host;          # name -> 1 if host package is needed
- my %need_dlopen;        # name -> 1 if requires dynamic library
- my %deps_build;         # name -> list of host dependencies
- my %deps_runtime;       # name -> list of target dependencies
--my %license_files;      # neam -> list of license files
-+my %license_files;      # name -> list of license files
- my $mcpan = MetaCPAN::API::Tiny->new();
- my $ua = HTTP::Tiny->new();
- 
-@@ -636,10 +636,11 @@ while (my ($distname, $dist) = each %dist) {
-         # the scheme is not used, because the job is done by the BR download infrastructure
-         # the auth part is not used, because we use $(BR2_CPAN_MIRROR)
-         my($filename, $directories, $suffix) = fileparse( $path, q{tar.gz}, q{tgz} );
--        my $dependencies = join q{ }, qw( perl ),
-+        my $dependencies = join q{ }, qw( = perl ),
-                                       map( { q{host-} . fsname( $_ ); } sort @{$deps_build{$distname}} ),
-                                       map( { fsname( $_ ); } sort @{$deps_runtime{$distname}} );
--        my $host_dependencies = join q{ }, map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
-+        my $host_dependencies = join q{ }, qw( = ),
-+                                           map { q{host-} . fsname( $_ ); } sort( @{$deps_build{$distname}},
-                                                                                   @{$deps_runtime{$distname}} );
-         my $license = ref $dist->{license} eq 'ARRAY'
-                     ? join q{ or }, @{$dist->{license}}
-@@ -659,8 +660,8 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{${brname}_VERSION = ${version}};
-         say {$fh} qq{${brname}_SOURCE = ${distname}-\$(${brname}_VERSION).${suffix}};
-         say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
--        say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname};
--        say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname};
-+        say {$fh} qq{${brname}_DEPENDENCIES ${dependencies}} if $need_target{$distname};
-+        say {$fh} qq{HOST_${brname}_DEPENDENCIES ${host_dependencies}} if $need_host{$distname};
-         say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
-         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
-         say {$fh} qq{};
+> > I haven't applied this one, because I'm not entirely satisfied by the
+> > explanation here. Why isn't the keyword-gen check executed on the first
+> > run? I did some testing, and I indeed don't see the rule about
+> > ntp_keyword.h being evaluated on the first build. Do you have more
+> > details about what makes the difference between the first and
+> > subsequent builds?
+> 
+> No.  Stranger yet, when the patch is applied, I found that the
+> keyword-gen check is only run on the *first* ntp-rebuild.  Further
+> ntp-rebuilds do not cause the check to re-occur.
+> 
+> But anyway, I didn't notice any indication that the keyword-gen would
+> be compiled with a HOSTCC, so I reasoned that if it's cross-compiled,
+> then it shouldn't be run on the build machine in any circumstance.  So
+> I didn't investigate further.
+
+Right, but the ntp source code comes with a pre-generated result of
+this keyword-gen program, which allows the first build to work
+properly. So it'd be good to understand why this logic used for the
+first build doesn't work for the subsequent builds.
+
+Thanks,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
