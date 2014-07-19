@@ -1,40 +1,64 @@
-From: yuvaraj.patil at wipro.com <yuvaraj.patil@wipro.com>
-Date: Sat, 19 Jul 2014 17:44:11 +0000
-Subject: [Buildroot] Help : Blackfin - Target Binary Format (FDPIC/FLAT) and
- BR2_PREFER_STATIC_LIB option dependency
-Message-ID: <C89D20716E201D428CB114157FC1F4E380F18E6A@BLR-SJP-MBX-1.wipro.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Jul 2014 20:35:42 +0200
+Subject: [Buildroot] [PATCH] package/opencv: fix dependencies for the Qt and
+	GTK backends
+Message-ID: <1405794942-32087-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas and All,
+Only the highgui module can use Qt or GTK (as noticed by Thomas.)
 
-For below packages (and few more packages) building failure is reported on Blackfin.
+However, it is currently possible to select the Qt or the GTK backends
+support independently of highgui, thus breaking the configuration step
+of opencv.
 
-1.       Prboom-2.5.0 (http://autobuild.buildroot.net/results/c3ea501d2ba5e17ccb3f88c0588ddf00fd0a4649/<http://autobuild.buildroot.net/results/c3ea501d2ba5e17ccb3f88c0588ddf00fd0a4649>)
+Just hide the Qt and GTK backends when highgui is not selected.
 
-2.       Gnuplot-4.6.2 (http://autobuild.buildroot.net/results/14846b8d1a054409d1cee9f3ce1413f08b4c3634/<http://autobuild.buildroot.net/results/14846b8d1a054409d1cee9f3ce1413f08b4c3634>)
+Fixes:
+    http://autobuild.buildroot.org/results/efc/efc9590a193235701fee535f4a1da7b39c426665/
+    http://autobuild.buildroot.org/results/b6a/b6acd983b8c78005feef6864af469bd348ab742a/
 
-In the config files provided at the above autobuild log links, "FLAT" binary format is selected and BR2_PREFER_STATIC_LIB option gets selected by default.
-I tried to build these packages with few combinations for target binary format on Blackfin and my observation is as below.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 
+---
+Note: tested with the config from efc9590, except an external toolchain
+was used: BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM201311=y
 
-a.       If "FLAT" binary format is selected, BR2_PREFER_STATIC_LIB option gets selected by default and the package fails to build.
+Tested without highgui, then with highgui but no backend, then with
+highgui and the Qt backend. The GTK backend was not tested.
+---
+ package/opencv/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-b.      If "FDPIC" is selected and BR2_PREFER_STATIC_LIB  option is selected, the package fails to build
-
-c.       If "FDPIC" is selected and BR2_PREFER_STATIC_LIB  is NOT selected, the package builds successfully.
-
-So looks like static linking is not supported on Blackfin for these packages.
-
-I need your help to understand how we can add dependency on BR2_PREFER_STATIC_LIB  option (disable this option) while building the packages. Can you please suggest?
-
-Thank you in advance.
-
-Thanks
-Yuvaraj Patil
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140719/3388418a/attachment.html>
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 6e938d2..1a026a9 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -159,6 +159,7 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # libgtk2 -> glib2
++	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	select BR2_PACKAGE_LIBGTK2
+ 
+ config BR2_PACKAGE_OPENCV_WITH_JASPER
+@@ -188,11 +189,11 @@ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_avr32 # qt
+ 	depends on BR2_USE_MMU # qt
++	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_STL
+ 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	select BR2_PACKAGE_QT_TEST       if BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+-	default y
+ 	help
+ 	  Use Qt with QtTest module and STL support
+ 
+-- 
+1.9.1
