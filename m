@@ -1,37 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 11:37:48 +0200
-Subject: [Buildroot] [PATCH v3] infra/pkg-autotools: cleanup the
- gettextize step
-In-Reply-To: <1405717351-3820-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405717351-3820-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140719113748.5630b549@free-electrons.com>
+Date: Sat, 19 Jul 2014 11:38:56 +0200
+Subject: [Buildroot] [PATCH] support/script/scanpcan: small fix
+In-Reply-To: <1405754543-17066-1-git-send-email-francois.perrad@gadz.org>
+References: <1405754543-17066-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140719113856.3b21a0b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Francois Perrad,
 
-On Fri, 18 Jul 2014 23:02:31 +0200, Yann E. MORIN wrote:
-> Align the way we call gettextize to the way we call autoreconf:
->   - provide the $(GETTEXTIZE) variable
->   - pass $(HOST_CONFIGURE_OPTS) in the environment
->   - pass the fully-qualified path to autom4te
->   - use of -f even if the package provides its own options
+On Sat, 19 Jul 2014 09:22:23 +0200, Francois Perrad wrote:
+> - typo in comment
+> - remove trailing space in _HOST_DEPENCENCIES when no dependency
 > 
-> Some eye-candy in the output of gettextize.
-> 
-> Thanks to Gustavo for pointing out the discrepancy between the way we
-> call gettextize and the way we call autoreconf, and to Thomas for the
-> live debug session. ;-)
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  support/scripts/scancpan | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 
-Applied, thanks!
+Applied, thanks.
 
 Thomas
 -- 
