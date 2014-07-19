@@ -1,40 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Jul 2014 15:56:18 +0200
-Subject: [Buildroot] [PATCH 11/20 v3] package/libatasmart: needs libudev,
+Date: Sat, 19 Jul 2014 15:56:19 +0200
+Subject: [Buildroot] [PATCH 12/20 v3] package/libcec: needs libudev,
 	not a udev daemon
 In-Reply-To: <cover.1405777634.git.yann.morin.1998@free.fr>
 References: <cover.1405777634.git.yann.morin.1998@free.fr>
-Message-ID: <ae8586b4ee9368f340c1ad6bd25577364428f249.1405777634.git.yann.morin.1998@free.fr>
+Message-ID: <9dbd5620aeca08452827905c084d5f47b6f11ea1.1405777634.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do as the comment says: it's only libudev that is required.
+libcec is happy enough with just a libudev, which it uses to
+enumerate CEC devices, and does not require a udev daemon.
+
+Propagate the new dependency to XBMC.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libatasmart/Config.in | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/libcec/libcec.mk | 4 ++--
+ package/xbmc/Config.in   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libatasmart/Config.in b/package/libatasmart/Config.in
-index 9db3b09..e218c6d 100644
---- a/package/libatasmart/Config.in
-+++ b/package/libatasmart/Config.in
-@@ -1,11 +1,8 @@
- config BR2_PACKAGE_LIBATASMART
- 	bool "libatasmart"
--	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
-+	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	help
- 	  The libatasmart package is a disk reporting library.
- 	  It only supports a subset of the ATA S.M.A.R.T. functionality.
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index ad919fc..49e4dbd 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -18,8 +18,8 @@ ifeq ($(BR2_PACKAGE_LOCKDEV),y)
+ LIBCEC_DEPENDENCIES += lockdev
+ endif
  
- 	  http://0pointer.de/blog/projects/being-smart.html
--
--comment "libatasmart requires udev to be enabled"
--	depends on !BR2_PACKAGE_HAS_UDEV
+-ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-LIBCEC_DEPENDENCIES += udev
++ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
++LIBCEC_DEPENDENCIES += libudev
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+index 592fdc1..db888ac 100644
+--- a/package/xbmc/Config.in
++++ b/package/xbmc/Config.in
+@@ -99,14 +99,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
+ config BR2_PACKAGE_XBMC_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_PREFER_STATIC_LIB # libcec
+-	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_PACKAGE_HAS_LIBUDEV # libcec
+ 	select BR2_PACKAGE_LIBCEC
+ 	help
+ 	  Enable CEC (Consumer Electronics Control) support.
+ 	  Select this if you want XBMC to support HDMI CEC.
+ 
+-comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
+-	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
++comment "hdmi cec support needs a toolchain w/ dynamic library"
++	depends on BR2_PREFER_STATIC_LIB
+ 
+ config BR2_PACKAGE_XBMC_LIBMICROHTTPD
+ 	bool "web server"
 -- 
 1.9.1
