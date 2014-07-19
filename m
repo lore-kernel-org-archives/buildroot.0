@@ -1,43 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 10:58:56 +0200
-Subject: [Buildroot] [PATCH 2/5] perl-io-socket-ssl: new package
-In-Reply-To: <CAB0FRsuBn+GbC1qW-kke6UCcNkzZCyppa9P1F94vnpLYe_dwag@mail.gmail.com>
-References: <1405614782-3667-1-git-send-email-francois.perrad@gadz.org>
- <1405614782-3667-2-git-send-email-francois.perrad@gadz.org>
- <20140717230821.6e188178@free-electrons.com>
- <CAB0FRsufdYwK19vZwrQn32hnSfyGH=4xK1c1itsVbPqhK3xQ2Q@mail.gmail.com>
- <20140719003837.252c0234@free-electrons.com>
- <CAB0FRsuBn+GbC1qW-kke6UCcNkzZCyppa9P1F94vnpLYe_dwag@mail.gmail.com>
-Message-ID: <20140719105856.7e125fda@free-electrons.com>
+Date: Sat, 19 Jul 2014 11:00:19 +0200
+Subject: [Buildroot] [git commit] lcdapi: bump version to fix static-only
+	build
+Message-ID: <20140719090138.272F99D28A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fran?ois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=4638e2b97f783346c2c9e18f233a35755e49e7dc
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Jul 2014 09:15:58 +0200, Fran?ois Perrad wrote:
+The upstream lcdapi has moved over from a basic Makefile to the
+autotools build system, which has the advantage of fixing static-only
+build. Therefore, this commit bumps the lcdapi version. Unfortunately,
+one patch is needed to fix an upstream issue.
 
-> > But again, with the new perl packages just merged:
-> >
-> >  http://autobuild.buildroot.org/results/6a8/6a89ac18c44490fd25792c39286acbf6c4830e60/build-end.log
-> >  http://autobuild.buildroot.org/results/c80/c80d549e38bfa15e19bec7ef226c0120d4adb6ab/build-end.log
-> >  http://autobuild.buildroot.org/results/bee/bee5add7dad08a573cad2aa1f438625b135551dd/build-end.log
-> >
-> > Wouldn't it be possible to find a more reliable CPAN mirror to use as
-> > the default?
-> 
-> There are 258 mirrors, see http://www.cpan.org/SITES.html
-> and their status are tracked by http://mirrors.cpan.org/
+Fixes:
 
-Could you select one that apparently works well, and propose a patch to
-use it as the default?
+  http://autobuild.buildroot.org/results/6fd/6fd65b3fd7d6f439ed14dc38fb28ad3e8e6678b1/
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0001-Remove-installation-of-docs-examples.patch |   39 ++++++++++++++++++++
+ package/lcdapi/lcdapi.mk                           |   20 +++-------
+ 2 files changed, 45 insertions(+), 14 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lcdapi/lcdapi-0001-Remove-installation-of-docs-examples.patch b/package/lcdapi/lcdapi-0001-Remove-installation-of-docs-examples.patch
+new file mode 100644
+index 0000000..dcadcf4
+--- /dev/null
++++ b/package/lcdapi/lcdapi-0001-Remove-installation-of-docs-examples.patch
+@@ -0,0 +1,39 @@
++From ede0fa7d410be407164b68570a1540378bf0bd09 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sat, 19 Jul 2014 10:40:59 +0200
++Subject: [PATCH] Remove installation of docs/examples
++
++They get installed in the wrong directory, i.e if DESTDIR is
++/path/to/output/target, they will be installed in
++/path/to/output/target./examples and /path/to/output/target./docs.
++
++Since we don't need docs and examples in Buildroot anyway, simply get
++rid of them.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile.am | 11 -----------
++ 1 file changed, 11 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index c56860a..6b1267b 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -69,14 +69,3 @@ liblcdapi_la_CXXFLAGS = \
++ 	-g0 -DNODEBUG -Os
++ 
++ ACLOCAL_AMFLAGS = -I m4
++-
++-docsdir = $(top_srcdir)/docs
++-exampledir = $(top_srcdir)/example
++-dist_docs_DATA = \
++-	docs/Makefile.am \
++-	docs/Makefile.in \
++-	docs/Doxyfile.in
++-dist_example_DATA = \
++-	example/client.cpp \
++-	example/Makefile.am \
++-	example/Makefile.in
++-- 
++2.0.0
++
+diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
+index d90511d..bcf5c47 100644
+--- a/package/lcdapi/lcdapi.mk
++++ b/package/lcdapi/lcdapi.mk
+@@ -4,25 +4,17 @@
+ #
+ ################################################################################
+ 
+-LCDAPI_VERSION = v0.4
++LCDAPI_VERSION = dbbdca06f271b8cf81b4817a9da3d558cfe59905
+ LCDAPI_SITE = $(call github,spdawson,lcdapi,$(LCDAPI_VERSION))
+ LCDAPI_LICENSE = LGPLv2.1+
+ LCDAPI_LICENSE_FILES = COPYING
+-
++LCDAPI_AUTORECONF = YES
+ LCDAPI_INSTALL_STAGING = YES
+ 
+-define LCDAPI_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define LCDAPI_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		DESTDIR="$(STAGING_DIR)" install
++define LCDAPI_CREATE_M4_DIR
++	mkdir -p $(@D)/m4
+ endef
+ 
+-define LCDAPI_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		DESTDIR="$(TARGET_DIR)" install
+-endef
++LCDAPI_POST_PATCH_HOOKS += LCDAPI_CREATE_M4_DIR
+ 
+-$(eval $(generic-package))
++$(eval $(autotools-package))
