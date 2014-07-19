@@ -1,58 +1,50 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 19 Jul 2014 22:28:12 +0200
-Subject: [Buildroot] [PATCH 4/4] perl-gdgraph: new package
-In-Reply-To: <20140719191051.358726f9@free-electrons.com>
-References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
- <1405691019-10397-4-git-send-email-francois.perrad@gadz.org>
- <20140719191051.358726f9@free-electrons.com>
-Message-ID: <CAB0FRssX48i-XJ6GuZFObfWZQwTGXEOyQhWFgtsswn9RoEuVqA@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 19 Jul 2014 22:54:04 +0200
+Subject: [Buildroot] [PATCH] perl-gdgraph: fix configure
+Message-ID: <1405803244-31600-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-07-19 19:10 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Dear Francois Perrad,
->
-> On Fri, 18 Jul 2014 15:43:39 +0200, Francois Perrad wrote:
->> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
->> ---
->>  package/Config.in                    |  1 +
->>  package/perl-gdgraph/Config.in       | 12 ++++++++++++
->>  package/perl-gdgraph/perl-gdgraph.mk | 14 ++++++++++++++
->>  3 files changed, 27 insertions(+)
->>  create mode 100644 package/perl-gdgraph/Config.in
->>  create mode 100644 package/perl-gdgraph/perl-gdgraph.mk
->
-> This package does not build:
->
->   http://autobuild.buildroot.org/results/3e1/3e1698b0523dfa46f5b3ee03a22af820f7342c39/build-end.log
->
-> The error is:
->
-> Warning: prerequisite GD 1.18 not found.
-> Warning: prerequisite GD::Text 0.80 not found.
->
+see http://autobuild.buildroot.org/results/3e1/3e1698b0523dfa46f5b3ee03a22af820f7342c39/build-end.log
 
-No, the error is :
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ .../perl-gdgraph-01-fix-Makefile-PL.patch          | 24 ++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch
 
-   only nested arrays of non-refs are supported at
-/usr/share/perl/5.10/ExtUtils/MakeMaker.pm line 664
-
-And I could reproduce it on my box, with a host perl 5.10.1
-
-Fran?ois
-
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch b/package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch
+new file mode 100644
+index 0000000..e95a64e
+--- /dev/null
++++ b/package/perl-gdgraph/perl-gdgraph-01-fix-Makefile-PL.patch
+@@ -0,0 +1,24 @@
++partial revert to 1.47 in order to work with an old perl 5.10.1
++
++With old ExtUtils::MakeMaker, AUTHOR takes a string/number not a ARRAY reference.
++See http://api.metacpan.org/source/RUZ/GDGraph-1.48/CHANGES
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++Index: b/Makefile.PL
++===================================================================
++--- a/Makefile.PL
+++++ b/Makefile.PL
++@@ -19,11 +19,7 @@
++ 
++         ($] >= 5.005 ?
++             ('ABSTRACT'	    => 'Produces charts with GD',
++-             'AUTHOR'       => [
++-                 'Martien Verbruggen <mgjv@tradingpost.com.au>',
++-                 'Benjamin Warfield <bwarfield@cpan.org>',
++-                 'Ruslan Zakirov <Ruslan.Zakirov@gmail.com>',
++-            ]
+++             'AUTHOR'	    => 'Martien Verbruggen <mgjv@tradingpost.com.au>',
++             ):()
++         ),
++ 
+-- 
+1.9.1
