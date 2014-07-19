@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Jul 2014 00:47:20 +0200
-Subject: [Buildroot] [PATCH 1/2] xlib_libFS: Add missing host-pkgconf
- dependency
-In-Reply-To: <1405809671-4609-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 20 Jul 2014 00:49:40 +0200
+Subject: [Buildroot] [PATCH 2/2] xapp_xfs: Fix compile errors after
+ libXfont 1.5.0 update
+In-Reply-To: <1405809671-4609-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1405809671-4609-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140719224720.GM3593@free.fr>
+ <1405809671-4609-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140719224940.GN3593@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +15,49 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2014-07-20 00:41 +0200, Bernd Kuhls spake thusly:
-> Fixes compile error:
-> 
-> checking for FS... configure: error: in `/home/br/br/output/build/xlib_libFS-1.0.6':
-> configure: error: The pkg-config script could not be found or is too old.  Make sure it
-> is in your PATH or set the PKG_CONFIG environment variable to the full
-> path to pkg-config.
-> 
-> Alternatively, you may set the environment variables FS_CFLAGS
-> and FS_LIBS to avoid the need to call pkg-config.
-> See the pkg-config man page for more details.
-> 
-> To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-> See `config.log' for more details
-> 
-> using this minimal defconfig
-> 
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_XORG7=y
-> BR2_PACKAGE_XAPP_XFS=y
+> Fixes
+> http://autobuild.buildroot.net/results/385/385cffbab4261337afa449998aa7457a8142db92/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xapp_xfs/xapp_xfs.mk |   13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+> index 0907fc3..bd5ac55 100644
+> --- a/package/x11r7/xapp_xfs/xapp_xfs.mk
+> +++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+> @@ -4,11 +4,18 @@
+>  #
+>  ################################################################################
+>  
+> -XAPP_XFS_VERSION = 1.1.3
+> -XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+> -XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+> +#XAPP_XFS_VERSION = 1.1.3
+> +#XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+> +#XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+>  XAPP_XFS_LICENSE = MIT
+>  XAPP_XFS_LICENSE_FILES = COPYING
+>  XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
+>  
+> +# this section is needed to fix compile errors after libXfont 1.5.0 update
+> +# it can be removed after the release of the next version of xapp_xfs
+> +XAPP_XFS_VERSION = 1c8459eafc04997751ae3d200d0ec91e43e19b5b
+> +XAPP_XFS_SITE = git://anongit.freedesktop.org/xorg/app/xfs
+> +XAPP_XFS_AUTORECONF = YES
+> +XAPP_XFS_DEPENDENCIES += xfont_font-util
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Do not comment removed lines, just replace them with the new values.
+
+When we want to revert to using a release, it is still easy enough.
+
+Otherwise, looks good.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/x11r7/xlib_libFS/xlib_libFS.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-> index 19d2800..d7dcb74 100644
-> --- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-> +++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
-> @@ -10,7 +10,7 @@ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
->  XLIB_LIBFS_LICENSE = MIT
->  XLIB_LIBFS_LICENSE_FILES = COPYING
->  XLIB_LIBFS_INSTALL_STAGING = YES
-> -XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xproto_xproto xproto_fontsproto
-> +XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xproto_xproto xproto_fontsproto host-pkgconf
->  XLIB_LIBFS_CONF_OPT = --disable-malloc0returnsnull
->  
+> +
 >  $(eval $(autotools-package))
 > -- 
 > 1.7.10.4
