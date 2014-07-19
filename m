@@ -1,40 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 17:16:27 +0200
-Subject: [Buildroot] [PATCH] package/libfcgi: do not build examples
-In-Reply-To: <1405782180-28054-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405782180-28054-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140719171627.088b7660@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Jul 2014 17:21:12 +0200
+Subject: [Buildroot] [PATCH] dependencies.sh: fix typo
+In-Reply-To: <1405782916-1500-1-git-send-email-vincent.stehle@laposte.net>
+References: <1405782916-1500-1-git-send-email-vincent.stehle@laposte.net>
+Message-ID: <20140719152112.GJ3593@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Vincent, All,
 
-On Sat, 19 Jul 2014 17:03:00 +0200, Yann E. MORIN wrote:
-> Examples do not compile for a static build, because libtool forcibly
-> wants to link against the shared version of libstdc++.so, instead of the
-> static version.
+On 2014-07-19 17:15 +0200, Vincent Stehl? spake thusly:
+> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/dependencies/dependencies.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Since we do not really need the examples on the target, just disable
-> them, it is easier than fixing libtool.
+> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+> index fa50666..88e5ad2 100755
+> --- a/support/dependencies/dependencies.sh
+> +++ b/support/dependencies/dependencies.sh
+> @@ -206,7 +206,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+>  		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
+>  		echo "library."
+>  		echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
+> -		echo "lib32stcd++6, and lib32z1 packages (or alternatively libc6:i386,"
+> +		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
+>  		echo "libstdc++6:i386, and zlib1g:i386)."
+>  		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+>  		echo "compatibility libraries."
+> -- 
+> 2.0.1
 > 
-> Fixes:
->     http://autobuild.buildroot.org/results/66e/66e19cfd5a6048d2aaa46365518ea875e0abcb4d/
->     http://autobuild.buildroot.org/results/71d/71d9ba50b41efa05a3aff06c24412d5e8b81d8f1/
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied, thanks, even though I believe it's the usual libstdc++.so
-problem rather than a libfcgi specific problem. But since we don't care
-about examples in general, I think it's good to disable them anyway.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
