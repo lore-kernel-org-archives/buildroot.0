@@ -1,75 +1,108 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 14:47:27 +0200
-Subject: [Buildroot] [git commit] make: bump to version 4.0
-Message-ID: <20140719124734.5508B9D288@busybox.osuosl.org>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Sat, 19 Jul 2014 08:51:18 -0400
+Subject: [Buildroot] Replace libev with libuv
+In-Reply-To: <CALoSW65dFkMpRnW0h88xAh-Tq6TAnOWz9CGExo1UWzLyMjtRLA@mail.gmail.com>
+References: <CALoSW641XSGs6H4i_q07ZfxUtRYoUMgdxBaUtus5J5C7+K=0Fw@mail.gmail.com>
+ <53C91D3F.4060500@zacarias.com.ar>
+ <CALoSW64Uisj3oLvPVKZ1nQXgCTEnt1yLMqV+Gy7aK4U=Q9FcUA@mail.gmail.com>
+ <53C9220B.9060809@zacarias.com.ar>
+ <CALoSW6550gT0qvqgo2tbaz+_VKXy0mwAQxjmsjPV66-XaUC1VA@mail.gmail.com>
+ <CALoSW65dFkMpRnW0h88xAh-Tq6TAnOWz9CGExo1UWzLyMjtRLA@mail.gmail.com>
+Message-ID: <CALoSW67tsLPqBHrX+K+fUXWz=F2+xjLpKhYHY2pdfcoOCFEv0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1aa42ad4aed013c03d1e17f4cfe2ace2194f423d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+I got it. Gustavo, took a slightly different approach but this works
+(idea taken from sdl.mk, which also has a broken build process):
 
-This commit bumps make to version 4.0. This version now uses fork(),
-so it is no longer available on non-MMU platforms, which consequently
-works around:
+LIBUV_VERSION = v0.11.26
+LIBUV_SITE = $(call github,joyent,libuv,$(LIBUV_VERSION))
+LIBUV_DEPENDENCIES = host-pkgconf
+LIBUV_INSTALL_STAGING = YES
+LIBUV_AUTORECONF = YES
+LIBUV_LICENSE = BSD-2c, BSD-3c, ISC, MIT
+LIBUV_LICENSE_FILES = LICENSE
 
-  http://autobuild.buildroot.org/results/2e1/2e1b11ccb501f1ab431c04435be52a6538d035cb/
+# Tweaked autogen.sh
+#define LIBUV_FIXUP_AUTOGEN
+#    echo "m4_define([UV_EXTRA_AUTOMAKE_FLAGS], [serial-tests])" >$(
+<at> D) m4/libuv-extra-automake-flags.m4
+#endef
 
-The glob special options seem to no longer be needed, at least make
-4.0 builds fine with both an ARM uClibc toolchain and an ARM glibc
-toolchain.
+define LIBUV_RUN_AUTOGEN
+    cd $(@D) && PATH=$(HOST_PATH) ./autogen.sh
+endef
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/make/Config.in   |    1 +
- package/make/make.mk     |    6 +-----
- package/uclibc/Config.in |    1 +
- 3 files changed, 3 insertions(+), 5 deletions(-)
+LIBUV_POST_PATCH_HOOKS += LIBUV_RUN_AUTOGEN
 
-diff --git a/package/make/Config.in b/package/make/Config.in
-index aea72e3..f576b7b 100644
---- a/package/make/Config.in
-+++ b/package/make/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_MAKE
- 	bool "make"
-+	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	help
- 	  A tool which controls the generation of executables and other
-diff --git a/package/make/make.mk b/package/make/make.mk
-index 74726e2..803595f 100644
---- a/package/make/make.mk
-+++ b/package/make/make.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MAKE_VERSION = 3.82
-+MAKE_VERSION = 4.0
- MAKE_SOURCE = make-$(MAKE_VERSION).tar.bz2
- MAKE_SITE = $(BR2_GNU_MIRROR)/make
- MAKE_LICENSE = GPLv3+
-@@ -12,8 +12,4 @@ MAKE_LICENSE_FILES = COPYING
- 
- MAKE_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- 
--MAKE_CONF_ENV = make_cv_sys_gnu_glob=no \
--		GLOBINC='-I$(@D)/glob' \
--		GLOBLIB=glob/libglob.a
--
- $(eval $(autotools-package))
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index cda6e0b..0838b6c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -157,6 +157,7 @@ config BR2_UCLIBC_INSTALL_UTILS
- config BR2_UCLIBC_INSTALL_TEST_SUITE
- 	bool "Compile and install uClibc tests"
- 	select BR2_PACKAGE_MAKE
-+	depends on BR2_USE_MMU # make
- 	help
- 	  Enabling this option will compile and install the uClibc test suite.
- 	  This is useful if you want to check if the uClibc library is working
+$(eval $(autotools-package))
+
+Hope this helps others out.
+
+On Fri, Jul 18, 2014 at 7:36 PM, Nimai Mahajan <nimaim@gmail.com> wrote:
+> Sending to whole group this time (sorry for any dupes, gmail is acting
+> up)... Much appreciated Gustavo. This will help us out a lot. My biggest
+> problem with any package in any distribution is cross compiling them is a
+> pain because there is simply no standard and half of them are hacks and then
+> its impossible to figure out. So thank you for the direct help.
+>
+> On Jul 18, 2014 10:02 AM, "Nimai Mahajan" <nimaim@gmail.com> wrote:
+>>
+>> Package works fine if on my Mint host I run ./autogen.sh, then
+>> ./configure and then make which will properly generate static (.a) and
+>> shared libraries (.so).
+>>
+>> If I use this kind of libuv.mk, I get errors in Buildroot:
+>>
+>> LIBUV_VERSION = v0.11.25
+>> LIBUV_SITE = http://libuv.org/dist/$(LIBUV_VERSION)/
+>> LIBUV_INSTALL_STAGING = YES
+>> LIBUV_AUTORECONF = YES
+>>
+>> $(eval $(autotools-package))
+>>
+>> When trying to "make libuv":
+>>
+>> >>> libuv v0.11.25 Autoreconfiguring
+>> aclocal: error: configure.ac:18: file
+>> 'm4/libuv-extra-automake-flags.m4' does not exist
+>> autoreconf:
+>> /home/user/Desktop/buildroot-2014.02/output/host/usr/bin/aclocal
+>> failed with exit status: 1
+>> make: ***
+>> [/home/user/Desktop/buildroot-2014.02/output/build/libuv-v0.11.25/.stamp_configured]
+>> Error 1
+>>
+>> The problem is its not running the autogen.sh. How do I force this to
+>> run? Is the only way still through <PKG_NAME>_POST_EXTRACT_HOOKS or
+>> <PKG_NAME>_POST_PATCH_HOOKS?
+>>
+>>
+>>
+>> On Fri, Jul 18, 2014 at 9:32 AM, Gustavo Zacarias
+>> <gustavo@zacarias.com.ar> wrote:
+>> > On 07/18/2014 10:30 AM, Nimai Mahajan wrote:
+>> >
+>> >> Already tried that and it fails to build. I will give you the exact
+>> >> error when I am by my PC again. And you are right both libraries are
+>> >> for
+>> >> different purposes, I guess it would have been more accurate to say
+>> >> many
+>> >> projects can make better use of libuv than libev. I just like that
+>> >> libuv
+>> >> is significantly better documented which in itself makes it more
+>> >> usable.
+>> >> I am using other autogen.sh packages as a template but they all seem to
+>> >> have their own custom hooks which is what is confusing me. Thanks for
+>> >> the help BTW.
+>> >
+>> > Hi.
+>> > Keep the list cc'ed, you've got a better chance of getting help with
+>> > everyone rather than just me, and also other people might be interested.
+>> > Yes please do, normally AUTORECONF is enough but there are a couple of
+>> > difficult packages that need some extra help.
+>> > Regards.
+>> >
