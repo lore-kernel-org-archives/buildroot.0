@@ -1,110 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 11:00:19 +0200
-Subject: [Buildroot] [git commit] lcdapi: bump version to fix static-only
-	build
-Message-ID: <20140719090138.272F99D28A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Jul 2014 11:17:42 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <CAJtjsKbkwub=5WV6Uq7D=byqTpjrR=HP5dQW5P82=rsNdf4p7g@mail.gmail.com>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140718213550.GG3630@free.fr>
+ <CAJtjsKbkwub=5WV6Uq7D=byqTpjrR=HP5dQW5P82=rsNdf4p7g@mail.gmail.com>
+Message-ID: <20140719091741.GA3593@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4638e2b97f783346c2c9e18f233a35755e49e7dc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Johan, All,
 
-The upstream lcdapi has moved over from a basic Makefile to the
-autotools build system, which has the advantage of fixing static-only
-build. Therefore, this commit bumps the lcdapi version. Unfortunately,
-one patch is needed to fix an upstream issue.
+On 2014-07-19 01:58 +0200, Johan Oudinet spake thusly:
+> Thanks Yann for the comments.
+> I'm on holidays for the next 2 weeks, but I will take care of them as
+> soon as I'm back.
 
-Fixes:
+Enjoy your holidays! :-)
 
-  http://autobuild.buildroot.org/results/6fd/6fd65b3fd7d6f439ed14dc38fb28ad3e8e6678b1/
+> In the meantime, I'm interested in how to set file permissions without
+> knowing which uid/gid ejabberd user has?
+> Can I use user/group names instead of IDs in EJABBERD_PERMISSIONS syntax?
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...0001-Remove-installation-of-docs-examples.patch |   39 ++++++++++++++++++++
- package/lcdapi/lcdapi.mk                           |   20 +++-------
- 2 files changed, 45 insertions(+), 14 deletions(-)
+Just -1 as uid or gid. See:
+    http://buildroot.net/downloads/manual/manual.html#makeuser-syntax
 
-diff --git a/package/lcdapi/lcdapi-0001-Remove-installation-of-docs-examples.patch b/package/lcdapi/lcdapi-0001-Remove-installation-of-docs-examples.patch
-new file mode 100644
-index 0000000..dcadcf4
---- /dev/null
-+++ b/package/lcdapi/lcdapi-0001-Remove-installation-of-docs-examples.patch
-@@ -0,0 +1,39 @@
-+From ede0fa7d410be407164b68570a1540378bf0bd09 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sat, 19 Jul 2014 10:40:59 +0200
-+Subject: [PATCH] Remove installation of docs/examples
-+
-+They get installed in the wrong directory, i.e if DESTDIR is
-+/path/to/output/target, they will be installed in
-+/path/to/output/target./examples and /path/to/output/target./docs.
-+
-+Since we don't need docs and examples in Buildroot anyway, simply get
-+rid of them.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile.am | 11 -----------
-+ 1 file changed, 11 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index c56860a..6b1267b 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -69,14 +69,3 @@ liblcdapi_la_CXXFLAGS = \
-+ 	-g0 -DNODEBUG -Os
-+ 
-+ ACLOCAL_AMFLAGS = -I m4
-+-
-+-docsdir = $(top_srcdir)/docs
-+-exampledir = $(top_srcdir)/example
-+-dist_docs_DATA = \
-+-	docs/Makefile.am \
-+-	docs/Makefile.in \
-+-	docs/Doxyfile.in
-+-dist_example_DATA = \
-+-	example/client.cpp \
-+-	example/Makefile.am \
-+-	example/Makefile.in
-+-- 
-+2.0.0
-+
-diff --git a/package/lcdapi/lcdapi.mk b/package/lcdapi/lcdapi.mk
-index d90511d..bcf5c47 100644
---- a/package/lcdapi/lcdapi.mk
-+++ b/package/lcdapi/lcdapi.mk
-@@ -4,25 +4,17 @@
- #
- ################################################################################
- 
--LCDAPI_VERSION = v0.4
-+LCDAPI_VERSION = dbbdca06f271b8cf81b4817a9da3d558cfe59905
- LCDAPI_SITE = $(call github,spdawson,lcdapi,$(LCDAPI_VERSION))
- LCDAPI_LICENSE = LGPLv2.1+
- LCDAPI_LICENSE_FILES = COPYING
--
-+LCDAPI_AUTORECONF = YES
- LCDAPI_INSTALL_STAGING = YES
- 
--define LCDAPI_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
--endef
--
--define LCDAPI_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		DESTDIR="$(STAGING_DIR)" install
-+define LCDAPI_CREATE_M4_DIR
-+	mkdir -p $(@D)/m4
- endef
- 
--define LCDAPI_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
--		DESTDIR="$(TARGET_DIR)" install
--endef
-+LCDAPI_POST_PATCH_HOOKS += LCDAPI_CREATE_M4_DIR
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
