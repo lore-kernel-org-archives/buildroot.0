@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 16:46:07 +0200
-Subject: [Buildroot] [git commit] pckage/upmpdcli: disable for powerpc CS
-	toolchains
-Message-ID: <20140719151205.2409E9D22E@busybox.osuosl.org>
+Date: Sat, 19 Jul 2014 17:13:33 +0200
+Subject: [Buildroot] Raspberry + Usb to TTL Serial Cable issue
+In-Reply-To: <CAK9TtU06LT6oep-7sYZTVjpVqRbc-DN0pCMrK28f230dTirupA@mail.gmail.com>
+References: <CAK9TtU2hWsQ7J5yJMjLG9rOX9V+ga817bZbvAj0pj5ZHE92Beg@mail.gmail.com>
+ <20140719160709.2b2bcfae@free-electrons.com>
+ <CAK9TtU06LT6oep-7sYZTVjpVqRbc-DN0pCMrK28f230dTirupA@mail.gmail.com>
+Message-ID: <20140719171333.2a67eb5d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=448337063496e66bf6892902157caab5476b878d
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Sylvain LG,
 
-Those toolchains use gcc <= 4.5, which is too old as they are missing
-range-based for-loops, only introduced with gcc-4.6.
+On Sat, 19 Jul 2014 16:42:55 +0200, Sylvain LG wrote:
 
-Fixes:
-    http://autobuild.buildroot.net/results/f00/f00fa9b83718abaffd1f52dcd50e582434b3c5e2/
+> I've just edited cmdline.txt: now I can see all kernel messages in a screen
+> session.
+> 
+> But there is still no console (I mean I can't log in).
+> 
+> 1 - What should I add to my conf?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Ezequiel Garcia <elezegarcia@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/upmpdcli/Config.in |    2 ++
- 1 files changed, 2 insertions(+), 0 deletions(-)
+Change the getty configuration in "System configuration".
 
-diff --git a/package/upmpdcli/Config.in b/package/upmpdcli/Config.in
-index d89928f..3fa638b 100644
---- a/package/upmpdcli/Config.in
-+++ b/package/upmpdcli/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_UPMPDCLI
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_LARGEFILE # libupnp
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201103 # Too old gcc
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC201009 # Ditto
- 	help
- 	  upmpdcli is a UPnP Media Renderer front-end for MPD, the Music
- 	  Player Daemon. It supports UPnP gapless track transitions and
+> 2 - I edited directly cmdline.txt on the sdcard since I didn't manage to
+> make Buildroot rebuild the system with the new cmdline.txt. How can I do
+> that?
+
+No idea, that's a RasberryPi specific stuff, and I haven't done enough
+RasberryPi to remember.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
