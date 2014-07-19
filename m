@@ -1,15 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 16:42:54 +0200
-Subject: [Buildroot] [git commit] configs: remove lpc32xx defconfigs
-Message-ID: <20140719144505.5CE589D22E@busybox.osuosl.org>
+Date: Sat, 19 Jul 2014 16:44:51 +0200
+Subject: [Buildroot] [PATCH] configs: remove lpc32xx defconfigs
+Message-ID: <1405781091-32170-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-commit: http://git.buildroot.net/buildroot/commit/?id=c6a410964bee6b4c57801c363384778f6908e6a2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Those defconfigs rely on gcc 4.3.x, which was said to be the only gcc
 version that was producing a working kernel. Since we have removed gcc
@@ -27,10 +24,13 @@ Therefore, we simply remove those defconfigs.
 Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/ea3250_defconfig  |   49 ---------------------------------------------
- configs/fdi3250_defconfig |   49 ---------------------------------------------
- configs/phy3250_defconfig |   49 ---------------------------------------------
- 3 files changed, 0 insertions(+), 147 deletions(-)
+ configs/ea3250_defconfig  | 49 -----------------------------------------------
+ configs/fdi3250_defconfig | 49 -----------------------------------------------
+ configs/phy3250_defconfig | 49 -----------------------------------------------
+ 3 files changed, 147 deletions(-)
+ delete mode 100644 configs/ea3250_defconfig
+ delete mode 100644 configs/fdi3250_defconfig
+ delete mode 100644 configs/phy3250_defconfig
 
 diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
 deleted file mode 100644
@@ -197,3 +197,5 @@ index fe49653..0000000
 -BR2_LINUX_KERNEL_DEFCONFIG="phy3250"
 -BR2_LINUX_KERNEL_UIMAGE=y
 -
+-- 
+2.0.0
