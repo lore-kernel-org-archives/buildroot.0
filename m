@@ -1,39 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 19 Jul 2014 12:16:11 -0300
-Subject: [Buildroot] [PATCH] openssl: drop libdl from pc file
-Message-ID: <1405782971-8345-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Jul 2014 17:16:27 +0200
+Subject: [Buildroot] [PATCH] package/libfcgi: do not build examples
+In-Reply-To: <1405782180-28054-1-git-send-email-yann.morin.1998@free.fr>
+References: <1405782180-28054-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20140719171627.088b7660@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/2a2/2a274e2dbffd268a391b0e8a15dae5a759b870a1/
+Dear Yann E. MORIN,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Sat, 19 Jul 2014 17:03:00 +0200, Yann E. MORIN wrote:
+> Examples do not compile for a static build, because libtool forcibly
+> wants to link against the shared version of libstdc++.so, instead of the
+> static version.
+> 
+> Since we do not really need the examples on the target, just disable
+> them, it is easier than fixing libtool.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/66e/66e19cfd5a6048d2aaa46365518ea875e0abcb4d/
+>     http://autobuild.buildroot.org/results/71d/71d9ba50b41efa05a3aff06c24412d5e8b81d8f1/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 743ca52..30e1748 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -115,6 +115,14 @@ define OPENSSL_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
- 
-+# libdl has no business in a static build
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+define OPENSSL_FIXUP_STATIC_PKGCONFIG
-+	$(SED) 's/-ldl//' $(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
-+endef
-+endif
-+OPENSSL_POST_INSTALL_STAGING_HOOKS += OPENSSL_FIXUP_STATIC_PKGCONFIG
-+
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
- # libraries gets installed read only, so strip fails
- define OPENSSL_INSTALL_FIXUPS_SHARED
+Applied, thanks, even though I believe it's the usual libstdc++.so
+problem rather than a libfcgi specific problem. But since we don't care
+about examples in general, I think it's good to disable them anyway.
+
+Thanks,
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
