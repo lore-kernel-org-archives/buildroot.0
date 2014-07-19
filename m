@@ -1,54 +1,72 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 19 Jul 2014 16:16:48 +0200
-Subject: [Buildroot] [PATCH] perl-gd: fix broken patches
-Message-ID: <1405779408-29494-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Jul 2014 16:29:57 +0200
+Subject: [Buildroot] [git commit] collectd: disallow for static-only builds
+Message-ID: <20140719143139.542809D22E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-in each patch, the 3 trailing lines are lost
+commit: http://git.buildroot.net/buildroot/commit/?id=9960b957a63e8fdd197d9cef6ea55b1b05c40ec3
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+collectd doesn't really support static-only builds: each plugin
+defines a module_register() function, and plugins are supposed to be
+dynamically loaded.
+
+Also, passing -lm in LIBS makes more sense than LDFLAGS, as it is
+passed at the end of the build command line.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/047/047dc20aba46885679b6d21cdd2d77fc252374b6/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/perl-gd/perl-gd-01-getoptions.patch | 3 +++
- package/perl-gd/perl-gd-02-lgd.patch        | 3 +++
- package/perl-gd/perl-gd-03-force.patch      | 3 +++
- 3 files changed, 9 insertions(+)
+ package/collectd/Config.in   |    5 +++--
+ package/collectd/collectd.mk |   10 +---------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/perl-gd/perl-gd-01-getoptions.patch b/package/perl-gd/perl-gd-01-getoptions.patch
-index 7bd7f4f..74f055b 100644
---- a/package/perl-gd/perl-gd-01-getoptions.patch
-+++ b/package/perl-gd/perl-gd-01-getoptions.patch
-@@ -38,3 +38,6 @@
- -			"lib_xpm_path=s"  => \$lib_xpm_path,
- -			"lib_zlib_path=s" => \$lib_zlib_path,
- -		       );
-+ unless ($result) {
-+   print STDERR <<END;
-+ Usage: perl Makefile.PL [options]
-diff --git a/package/perl-gd/perl-gd-02-lgd.patch b/package/perl-gd/perl-gd-02-lgd.patch
-index bc6cdfc..4a69c2a 100644
---- a/package/perl-gd/perl-gd-02-lgd.patch
-+++ b/package/perl-gd/perl-gd-02-lgd.patch
-@@ -23,3 +23,6 @@
-    @$LIBS         = split /\s+/,$libs;
-  
- -  push @$LIBS,"-lgd";
-+   push @$LIBPATH,"-L$libdir";
-+   ($$lib_gd_path = $libdir) =~ s!/[^/]+$!!;
-+   $$options      = $features;
-diff --git a/package/perl-gd/perl-gd-03-force.patch b/package/perl-gd/perl-gd-03-force.patch
-index 3524865..0a121a9 100644
---- a/package/perl-gd/perl-gd-03-force.patch
-+++ b/package/perl-gd/perl-gd-03-force.patch
-@@ -27,3 +27,6 @@
- +    my @libs64 = map {my $a = $_; $a=~ s/lib$/lib64/; $a} @LIBPATH;
- +    @LIBPATH = (@LIBPATH,@libs64);
- +  }
-+ }
-+ 
-+ #############################################################################################
--- 
-1.9.1
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index a2e7877..fbb4282 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_COLLECTD
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INET_IPV6
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_PREFER_STATIC_LIB
+ 	help
+ 	  collectd is a daemon which collects system performance
+ 	  statistics periodically and provides mechanisms to store
+@@ -442,6 +443,6 @@ endmenu
+ 
+ endif
+ 
+-comment "collectd needs a toolchain w/ IPv6, threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6
++comment "collectd needs a toolchain w/ IPv6, threads, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INET_IPV6 || BR2_PREFER_STATIC_LIB
+ 	depends on BR2_USE_MMU
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 84e17cd..9040406 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -21,15 +21,7 @@ COLLECTD_PLUGINS_DISABLE = amqp apple_sensors aquaero ascent dbi email \
+ 		tokyotyrant uuid varnish vserver write_mongodb write_redis \
+ 		xmms zfs_arc
+ 
+-COLLECTD_LDFLAGS = $(TARGET_LDFLAGS) -lm
+-
+-ifeq ($(BR2_PREFER_STATIC_LIB),y)
+-# collectd-tg indirectly needs pthread but doesn't link with -pthread,
+-# causing static linker errors
+-COLLECTD_LDFLAGS += -lpthread
+-endif
+-
+-COLLECTD_CONF_ENV += LDFLAGS="$(COLLECTD_LDFLAGS)"
++COLLECTD_CONF_ENV += LIBS="-lm"
+ 
+ COLLECTD_CONF_OPT += --with-nan-emulation --with-fp-layout=nothing \
+ 	--localstatedir=/var --with-perl-bindings=no \
