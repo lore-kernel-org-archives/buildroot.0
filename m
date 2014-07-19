@@ -1,12 +1,15 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 19 Jul 2014 09:05:53 -0300
-Subject: [Buildroot] [PATCH] libmemcached: disable tests
-Message-ID: <1405771553-23073-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Jul 2014 14:19:44 +0200
+Subject: [Buildroot] [git commit] libmemcached: disable tests
+Message-ID: <20140719122019.B17AB9D257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: http://git.buildroot.net/buildroot/commit/?id=d0556a1b7d62c4093d1c0ed64336e98f907497ba
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Disable test libraries and programs, even though it needs to autoreconf
 it's a good tradeoff since it cuts the build time by half, and avoids
@@ -15,11 +18,11 @@ Fixes:
 http://autobuild.buildroot.net/results/739/739ae9b2f28486dec8900aa584145d2d38f44331/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libmemcached/libmemcached-01-disable-tests.patch | 16 ++++++++++++++++
- package/libmemcached/libmemcached.mk                     |  2 ++
- 2 files changed, 18 insertions(+)
- create mode 100644 package/libmemcached/libmemcached-01-disable-tests.patch
+ .../libmemcached-01-disable-tests.patch            |   16 ++++++++++++++++
+ package/libmemcached/libmemcached.mk               |    2 ++
+ 2 files changed, 18 insertions(+), 0 deletions(-)
 
 diff --git a/package/libmemcached/libmemcached-01-disable-tests.patch b/package/libmemcached/libmemcached-01-disable-tests.patch
 new file mode 100644
@@ -56,5 +59,3 @@ index d901e70..fd5b418 100644
  LIBMEMCACHED_LICENSE = BSD-3c
  LIBMEMCACHED_LICENSE_FILES = COPYING
  
--- 
-1.8.5.5
