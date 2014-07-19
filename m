@@ -1,59 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Jul 2014 15:56:25 +0200
-Subject: [Buildroot] [PATCH 18/20 v3] package/weston: needs libudev,
-	not a udev daemon
+Date: Sat, 19 Jul 2014 15:56:26 +0200
+Subject: [Buildroot] [PATCH 19/20 v3] package/xdriver_xf86-input-evdev:
+	needs libudev, not a udev daemon
 In-Reply-To: <cover.1405777634.git.yann.morin.1998@free.fr>
 References: <cover.1405777634.git.yann.morin.1998@free.fr>
-Message-ID: <c6149a32819a5007070cc040fa88af7808617669.1405777634.git.yann.morin.1998@free.fr>
+Message-ID: <d1ad17451b73acdffb79bf48889346b290559347.1405777634.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-weston is happy enough with just a libudev, and does
-not require a udev daemon.
+Do as the comment says: it's only libudev that is required.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/weston/Config.in | 6 +++---
- package/weston/weston.mk | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xdriver_xf86-input-evdev/Config.in                   | 5 +----
+ package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index aaef405..8e387ca 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -1,6 +1,6 @@
--comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
-+comment "weston needs a toolchain w/ threads, headers >= 3.0"
- 	depends on !BR2_avr32
--	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 
- config BR2_PACKAGE_WESTON
- 	bool "weston"
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_MTDEV
--	depends on BR2_PACKAGE_HAS_UDEV
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+index 6ec14bf..92f0324 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
++++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+@@ -1,11 +1,8 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	bool "xf86-input-evdev"
+-	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
 +	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	depends on !BR2_avr32 # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index ed0707b..c1d023a 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -11,7 +11,7 @@ WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
+ 	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	help
+ 	  Generic Linux input driver
+-
+-comment "xf86-input-evdev requires udev to be enabled"
+-	depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 46e62c7..f2d5aad 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -9,6 +9,7 @@ XDRIVER_XF86_INPUT_EVDEV_SOURCE = xf86-input-evdev-$(XDRIVER_XF86_INPUT_EVDEV_VE
+ XDRIVER_XF86_INPUT_EVDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE = MIT
+ XDRIVER_XF86_INPUT_EVDEV_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server xproto_randrproto xproto_xproto udev
++XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = xproto_inputproto xserver_xorg-server \
++					xproto_randrproto xproto_xproto libudev
  
- WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
--	jpeg mtdev udev cairo
-+	jpeg mtdev libudev cairo
- 
- WESTON_CONF_OPT = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+ $(eval $(autotools-package))
 -- 
 1.9.1
