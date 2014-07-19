@@ -1,73 +1,69 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 19 Jul 2014 16:38:57 +0200
-Subject: [Buildroot] [lua V4 3/4] luarocks: allow to work with
-	host-luainterpreter
+Date: Sat, 19 Jul 2014 16:38:58 +0200
+Subject: [Buildroot] [lua V4 4/4] lua-iconv: new package
 In-Reply-To: <1405780738-31323-1-git-send-email-francois.perrad@gadz.org>
 References: <1405780738-31323-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1405780738-31323-4-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1405780738-31323-5-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-when we embed luajit on target,
-we use luarocks with host-luajit instead of host-lua,
-in order to use the same interpreter on the both side.
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/luainterpreter/luainterpreter.mk |  2 ++
- package/luarocks/luarocks.mk             | 18 ++++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ package/Config.in              |  1 +
+ package/lua-iconv/Config.in    |  8 ++++++++
+ package/lua-iconv/lua-iconv.mk | 14 ++++++++++++++
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/lua-iconv/Config.in
+ create mode 100644 package/lua-iconv/lua-iconv.mk
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index 4ef0a45..a6c98ab 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -8,3 +8,5 @@ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
- 
- $(eval $(virtual-package))
- $(eval $(host-virtual-package))
+diff --git a/package/Config.in b/package/Config.in
+index db2d114..55265f1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -404,6 +404,7 @@ menu "Lua libraries/modules"
+ 	source "package/lua-coatpersistent/Config.in"
+ 	source "package/lua-csnappy/Config.in"
+ 	source "package/lua-ev/Config.in"
++	source "package/lua-iconv/Config.in"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
+ 	source "package/lua-testmore/Config.in"
+diff --git a/package/lua-iconv/Config.in b/package/lua-iconv/Config.in
+new file mode 100644
+index 0000000..cad7c7c
+--- /dev/null
++++ b/package/lua-iconv/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LUA_ICONV
++	bool "lua-iconv"
++	select BR2_PACKAGE_LIBICONV
++	depends on !BR2_ENABLE_LOCALE
++	help
++	  Lua binding to the POSIX 'iconv' library
 +
-+LUA_RUN = $(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER))
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 926fd04..5680ab4 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -9,16 +9,22 @@ LUAROCKS_SITE = http://luarocks.org/releases/
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
- 
--HOST_LUAROCKS_DEPENDENCIES = host-lua
-+HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
- 
- LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
- 
-+HOST_LUAROCKS_CONF_OPT = \
-+	--prefix=$(HOST_DIR)/usr \
-+	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
-+	--with-lua=$(HOST_DIR)/usr
++	  http://ittner.github.io/lua-iconv/
+diff --git a/package/lua-iconv/lua-iconv.mk b/package/lua-iconv/lua-iconv.mk
+new file mode 100644
+index 0000000..22f66de
+--- /dev/null
++++ b/package/lua-iconv/lua-iconv.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# lua-iconv
++#
++################################################################################
 +
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+HOST_LUAROCKS_CONF_OPT += --lua-suffix=jit
-+endif
++LUA_ICONV_VERSION_UPSTREAM = 7
++LUA_ICONV_VERSION = $(LUA_ICONV_VERSION_UPSTREAM)-1
++LUA_ICONV_SUBDIR  = lua-iconv-$(LUA_ICONV_VERSION_UPSTREAM)
++LUA_ICONV_DEPENDENCIES = luainterpreter libiconv
++LUA_ICONV_LICENSE = MIT
++LUA_ICONV_LICENSE_FILES = $(LUA_ICONV_SUBDIR)/COPYING
 +
- define HOST_LUAROCKS_CONFIGURE_CMDS
--	cd $(@D) && ./configure \
--		--prefix=$(HOST_DIR)/usr \
--		--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
--		--with-lua=$(HOST_DIR)/usr
-+	cd $(@D) && ./configure $(HOST_LUAROCKS_CONF_OPT)
- endef
- 
- define HOST_LUAROCKS_INSTALL_CMDS
-@@ -43,4 +49,4 @@ endef
- $(eval $(host-generic-package))
- 
- LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
--	$(HOST_DIR)/usr/bin/lua $(HOST_DIR)/usr/bin/luarocks
-+	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
++$(eval $(luarocks-package))
 -- 
 1.9.1
