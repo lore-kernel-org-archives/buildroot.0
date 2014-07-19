@@ -1,31 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 17:14:27 +0200
-Subject: [Buildroot] [PATCH 1/2] libmemcached: disable libtest
-In-Reply-To: <1405780534-691-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1405780534-691-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140719171427.4f37d317@free-electrons.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Date: Sat, 19 Jul 2014 17:15:16 +0200
+Subject: [Buildroot] [PATCH] dependencies.sh: fix typo
+Message-ID: <1405782916-1500-1-git-send-email-vincent.stehle@laposte.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+---
+ support/dependencies/dependencies.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Sat, 19 Jul 2014 11:35:33 -0300, Gustavo Zacarias wrote:
-> This allows libmemcached to be enabled for musl and uClibc as well.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/libmemcached/Config.in                     |  6 ++--
->  .../libmemcached-01-disable-tests.patch            | 32 ++++++++++++++++++++--
->  package/php-memcached/Config.in                    |  6 ++--
->  3 files changed, 33 insertions(+), 11 deletions(-)
-
-Both applied, thanks.
-
-Thomas
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index fa50666..88e5ad2 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -206,7 +206,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 		echo "but your build machine uses the x86-64 architecture without the 32 bits compatibility"
+ 		echo "library."
+ 		echo "If you're running a Debian/Ubuntu distribution, install the libc6-386,"
+-		echo "lib32stcd++6, and lib32z1 packages (or alternatively libc6:i386,"
++		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
+ 		echo "libstdc++6:i386, and zlib1g:i386)."
+ 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+ 		echo "compatibility libraries."
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.1
