@@ -1,201 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Jul 2014 16:44:51 +0200
-Subject: [Buildroot] [PATCH] configs: remove lpc32xx defconfigs
-Message-ID: <1405781091-32170-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Jul 2014 17:03:00 +0200
+Subject: [Buildroot] [PATCH] package/libfcgi: do not build examples
+Message-ID: <1405782180-28054-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Those defconfigs rely on gcc 4.3.x, which was said to be the only gcc
-version that was producing a working kernel. Since we have removed gcc
-4.3.x, those defconfigs no longer build. Also, the kernel being used
-in these defconfigs was 2.6.32, but there is a "new" 2.6.39 kernel
-available from the lpclinux.com git repository, which maybe works fine
-with more recent compilers.
+Examples do not compile for a static build, because libtool forcibly
+wants to link against the shared version of libstdc++.so, instead of the
+static version.
 
-However, those defconfigs were contributed by Alexandre Belloni, who
-no longer has access to the hardware, so we have no way to verify that
-a compiler update + kernel update actually works.
+Since we do not really need the examples on the target, just disable
+them, it is easier than fixing libtool.
 
-Therefore, we simply remove those defconfigs.
+Fixes:
+    http://autobuild.buildroot.org/results/66e/66e19cfd5a6048d2aaa46365518ea875e0abcb4d/
+    http://autobuild.buildroot.org/results/71d/71d9ba50b41efa05a3aff06c24412d5e8b81d8f1/
 
-Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/ea3250_defconfig  | 49 -----------------------------------------------
- configs/fdi3250_defconfig | 49 -----------------------------------------------
- configs/phy3250_defconfig | 49 -----------------------------------------------
- 3 files changed, 147 deletions(-)
- delete mode 100644 configs/ea3250_defconfig
- delete mode 100644 configs/fdi3250_defconfig
- delete mode 100644 configs/phy3250_defconfig
+ .../{libfcgi-eof.patch => libfcgi-0000-eof.patch}   |  0
+ ...h => libfcgi-0001-link-against-libfcgi-la.patch} |  0
+ ...h.patch => libfcgi-0002-link-against-math.patch} |  0
+ ...patch => libfcgi-0003-make-autoreconfable.patch} |  0
+ package/libfcgi/libfcgi-0004-disable-examples.patch | 21 +++++++++++++++++++++
+ 5 files changed, 21 insertions(+)
+ rename package/libfcgi/{libfcgi-eof.patch => libfcgi-0000-eof.patch} (100%)
+ rename package/libfcgi/{libfcgi-link-against-libfcgi-la.patch => libfcgi-0001-link-against-libfcgi-la.patch} (100%)
+ rename package/libfcgi/{libfcgi-link-against-math.patch => libfcgi-0002-link-against-math.patch} (100%)
+ rename package/libfcgi/{libfcgi-make-autoreconfable.patch => libfcgi-0003-make-autoreconfable.patch} (100%)
+ create mode 100644 package/libfcgi/libfcgi-0004-disable-examples.patch
 
-diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
-deleted file mode 100644
-index b7ce18b..0000000
---- a/configs/ea3250_defconfig
-+++ /dev/null
-@@ -1,49 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm926t=y
--
--BR2_ARM_TYPE="ARM926T"
--BR2_ARM_EABI=y
--
--#
--# GCC Options
--# We need to force GCC 4.3.x because it is the last version
--# that will compile a kernel with ethernet working correctly
--BR2_GCC_VERSION_4_3_X=y
--
--# Lock down headers to avoid breaking with new defaults
--BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
--BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
--
--#
--# Host utilities
--#
--BR2_PACKAGE_HOST_LPC3250LOADER=y
--
--
--# Bootloaders
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="ea3250"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_VERSION="master"
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
--BR2_TARGET_UBOOT_FORMAT_BIN=y
--BR2_TARGET_LPC32XXCDL=y
--BR2_TARGET_LPC32XXCDL_BOARDNAME="ea3250"
--
--
--#
--# Kernel
--#
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
--BR2_LINUX_KERNEL_VERSION="master"
--BR2_LINUX_KERNEL_PATCH=""
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="ea3250"
--BR2_LINUX_KERNEL_UIMAGE=y
--
-diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
-deleted file mode 100644
-index b7f6ad7..0000000
---- a/configs/fdi3250_defconfig
-+++ /dev/null
-@@ -1,49 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm926t=y
--
--BR2_ARM_TYPE="ARM926T"
--BR2_ARM_EABI=y
--
--#
--# GCC Options
--# We need to force GCC 4.3.x because it is the last version
--# that will compile a kernel with ethernet working correctly
--BR2_GCC_VERSION_4_3_X=y
--
--# Lock down headers to avoid breaking with new defaults
--BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
--BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
--
--#
--# Host utilities
--#
--BR2_PACKAGE_HOST_LPC3250LOADER=y
--
--
--# Bootloaders
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_VERSION="master"
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
--BR2_TARGET_UBOOT_FORMAT_BIN=y
--BR2_TARGET_LPC32XXCDL=y
--BR2_TARGET_LPC32XXCDL_BOARDNAME="fdi3250"
--
--
--#
--# Kernel
--#
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
--BR2_LINUX_KERNEL_VERSION="master"
--BR2_LINUX_KERNEL_PATCH=""
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="fdi3250"
--BR2_LINUX_KERNEL_UIMAGE=y
--
-diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
-deleted file mode 100644
-index fe49653..0000000
---- a/configs/phy3250_defconfig
-+++ /dev/null
-@@ -1,49 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_arm926t=y
--
--BR2_ARM_TYPE="ARM926T"
--BR2_ARM_EABI=y
--
--#
--# GCC Options
--# We need to force GCC 4.3.x because it is the last version
--# that will compile a kernel with ethernet working correctly
--BR2_GCC_VERSION_4_3_X=y
--
--# Lock down headers to avoid breaking with new defaults
--BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
--BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
--
--#
--# Host utilities
--#
--BR2_PACKAGE_HOST_LPC3250LOADER=y
--
--
--# Bootloaders
--BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="phy3250"
--BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_VERSION="master"
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
--BR2_TARGET_UBOOT_FORMAT_BIN=y
--BR2_TARGET_LPC32XXCDL=y
--BR2_TARGET_LPC32XXCDL_BOARDNAME="phy3250"
--
--
--#
--# Kernel
--#
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
--BR2_LINUX_KERNEL_VERSION="master"
--BR2_LINUX_KERNEL_PATCH=""
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
--BR2_LINUX_KERNEL_DEFCONFIG="phy3250"
--BR2_LINUX_KERNEL_UIMAGE=y
--
+diff --git a/package/libfcgi/libfcgi-eof.patch b/package/libfcgi/libfcgi-0000-eof.patch
+similarity index 100%
+rename from package/libfcgi/libfcgi-eof.patch
+rename to package/libfcgi/libfcgi-0000-eof.patch
+diff --git a/package/libfcgi/libfcgi-link-against-libfcgi-la.patch b/package/libfcgi/libfcgi-0001-link-against-libfcgi-la.patch
+similarity index 100%
+rename from package/libfcgi/libfcgi-link-against-libfcgi-la.patch
+rename to package/libfcgi/libfcgi-0001-link-against-libfcgi-la.patch
+diff --git a/package/libfcgi/libfcgi-link-against-math.patch b/package/libfcgi/libfcgi-0002-link-against-math.patch
+similarity index 100%
+rename from package/libfcgi/libfcgi-link-against-math.patch
+rename to package/libfcgi/libfcgi-0002-link-against-math.patch
+diff --git a/package/libfcgi/libfcgi-make-autoreconfable.patch b/package/libfcgi/libfcgi-0003-make-autoreconfable.patch
+similarity index 100%
+rename from package/libfcgi/libfcgi-make-autoreconfable.patch
+rename to package/libfcgi/libfcgi-0003-make-autoreconfable.patch
+diff --git a/package/libfcgi/libfcgi-0004-disable-examples.patch b/package/libfcgi/libfcgi-0004-disable-examples.patch
+new file mode 100644
+index 0000000..4a9916f
+--- /dev/null
++++ b/package/libfcgi/libfcgi-0004-disable-examples.patch
+@@ -0,0 +1,21 @@
++Common subdirectories: libfcgi-2.4.0.orig/cgi-fcgi and libfcgi-2.4.0/cgi-fcgi
++Common subdirectories: libfcgi-2.4.0.orig/doc and libfcgi-2.4.0/doc
++Common subdirectories: libfcgi-2.4.0.orig/examples and libfcgi-2.4.0/examples
++Common subdirectories: libfcgi-2.4.0.orig/images and libfcgi-2.4.0/images
++Common subdirectories: libfcgi-2.4.0.orig/include and libfcgi-2.4.0/include
++Common subdirectories: libfcgi-2.4.0.orig/java and libfcgi-2.4.0/java
++Common subdirectories: libfcgi-2.4.0.orig/libfcgi and libfcgi-2.4.0/libfcgi
++diff -du libfcgi-2.4.0.orig/Makefile.am libfcgi-2.4.0/Makefile.am
++--- libfcgi-2.4.0.orig/Makefile.am	2001-12-22 14:05:39.000000000 +0100
+++++ libfcgi-2.4.0/Makefile.am	2014-07-19 16:56:21.935216540 +0200
++@@ -4,7 +4,7 @@
++ #  $Id: Makefile.am,v 1.7 2001/12/22 13:05:39 robs Exp $
++ #
++ 
++-SUBDIRS = libfcgi cgi-fcgi examples include
+++SUBDIRS = libfcgi cgi-fcgi include
++ 
++ include_HEADERS = fcgi_config.h
++ 
++Common subdirectories: libfcgi-2.4.0.orig/perl and libfcgi-2.4.0/perl
++Common subdirectories: libfcgi-2.4.0.orig/Win32 and libfcgi-2.4.0/Win32
 -- 
-2.0.0
+1.9.1
