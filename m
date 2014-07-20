@@ -1,58 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jul 2014 12:04:31 +0200
-Subject: [Buildroot] [PATCH 3/6] qt5declarative: add an option for quick
- module
-In-Reply-To: <1405791208-30356-4-git-send-email-fatih.asici@gmail.com>
-References: <1405791208-30356-1-git-send-email-fatih.asici@gmail.com>
- <1405791208-30356-4-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20140720120431.45cede42@free-electrons.com>
+Date: Sun, 20 Jul 2014 12:10:22 +0200
+Subject: [Buildroot] [PATCH] quagga: Do not use fork on noMMU platforms
+In-Reply-To: <C89D20716E201D428CB114157FC1F4E380F18DF0@BLR-SJP-MBX-1.wipro.com>
+References: <1405684663-3100-1-git-send-email-yuvaraj.patil@wipro.com>
+ <20140718140358.2ff1bf5b@free-electrons.com>
+ <C89D20716E201D428CB114157FC1F4E380F18DF0@BLR-SJP-MBX-1.wipro.com>
+Message-ID: <20140720121022.65c59a81@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fatih A??c?,
+Hello,
 
-On Sat, 19 Jul 2014 20:33:25 +0300, Fatih A??c? wrote:
+On Sat, 19 Jul 2014 17:12:19 +0000, yuvaraj.patil at wipro.com wrote:
 
-> diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
-> index 472d092..34dd14a 100644
-> --- a/package/qt5/qt5declarative/qt5declarative.mk
-> +++ b/package/qt5/qt5declarative/qt5declarative.mk
-> @@ -35,12 +35,20 @@ define QT5DECLARATIVE_INSTALL_STAGING_CMDS
->  endef
->  
->  ifeq ($(BR2_PREFER_STATIC_LIB),)
-> -define QT5DECLARATIVE_INSTALL_TARGET_LIBS
-> -	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Qml*.so.* $(TARGET_DIR)/usr/lib
-> +
-> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-> +define QT5DECLARATIVE_INSTALL_TARGET_QUICK_LIBS
->  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Quick*.so.* $(TARGET_DIR)/usr/lib
->  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/accessible $(TARGET_DIR)/usr/lib/qt/plugins
-> +endef
-> +endif
-> +
-> +define QT5DECLARATIVE_INSTALL_TARGET_LIBS
-> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Qml*.so.* $(TARGET_DIR)/usr/lib
->  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/qml* $(TARGET_DIR)/usr/lib/qt/plugins
-> +	$(QT5DECLARATIVE_INSTALL_TARGET_QUICK_LIBS)
->  endef
+> > Patches must have a description + Signed-off-by line.
+> 
+> I could see, Signed-off line is added in patch.
 
-I am still unsure to understand what's the difference between
-qt5declarative and qt5quick exactly. But here, you're installing
-libQt5Qml and the qml plugins as soon as the qt5declarative package is
-enabled, even if the quick module is disabled.
+You're being confused because you're doing a patch that adds a patch,
+and we do require a Signed-off-by line on both.
 
-But then, in PATCH 4/6, you only install QML files if the quick module
-is enabled. So I'm a bit confused as to what is needed to actually use
-qml files.
+We need a Signed-off-by in the commit log of the git commit that
+describes the Buildroot change, but we also require a Signed-off-by
+*inside* the patch you're adding, i.e inside the file that was named
+package/quagga/quagga.patch in your commit. We also require a
+description to be added in this file.
 
-Could you explain a bit more the interaction/difference between
-qt5declarative and the quick module?
+> I used below command sequence (blue colour) to generate a patch.
+> 
+> #Diff to make a code patch
+> 
+> diff -Nurp <package_orig> <package> > <patch_name>.patch
+> 
+> 
+> 
+> #Move the diff generated patch to buildroot package directory
 
-Thanks,
+And here, you should edit this file, add a description and a
+Signed-off-by line.
+
+> git add <patch name>.patch
+> 
+>                 git commit -a -s
+> 
+>                 #add the comment
+> 
+> 
+> 
+> git format-patch -1
+> 
+>                 #edit the patch to add comments
+
+Not necessarily needed. You can add whatever comments are needed while
+doing "git commit -a -s", as long as you format the commit log as
+follows:
+
+======================================================================
+<topic>: <description>
+
+Blabla blabla description of the change.
+
+Some more description of the change
+
+Signed-off-by: Some One <some.one@gmail.com>
+---
+And here some comments you want to send, but not have them included in
+the commit log.
+======================================================================
+
+Notice how "---" separates what git will include forever in its commit
+history (what's before the "---" sign) and what is only used to convey
+additional comments to the patch that should not be added to the commit
+permanently (what's after the "---" sign).
+
+> >We have already received numerous patches like this from ADI, and
+> >each time our answer was the same: please include in the patch
+> >description a justification of why the fork() call can be replaced
+> >by vfork(). I'm sure >you know that vfork() is not equivalent to
+> >fork() and that we cannot simply replace one by the other without
+> >checking carefully how
+> 
+> >fork() is used. With vfork(), the parent process is blocked until
+> >the child exits or calls exec(), and all changes made by the child
+> >will be visible by the parent. There are therefore many situations
+> >in which
+> 
+> >vfork() cannot be used as a replacement for fork().
+> 
+> Can you please provide us a reference example (or a sample patch)
+> from other architectures, how the fork() issue is fixed?
+
+Usually, we simply make the package not available on non-MMU
+architectures. So far, I don't think anybody submitted a patch turning
+fork() into vfork() with sufficient explanations for us to include the
+change.
+
+Best regards,
 
 Thomas
 -- 
