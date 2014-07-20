@@ -1,212 +1,44 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Sun, 20 Jul 2014 09:57:50 +0200
-Subject: [Buildroot] [PATCH] configs: remove lpc32xx defconfigs
-In-Reply-To: <1405781091-32170-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1405781091-32170-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140720075749.GA22969@piout.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Jul 2014 10:26:11 +0200
+Subject: [Buildroot] glib 2.40 on xtensa
+In-Reply-To: <CAMo8Bf+SfLYex0+040254AgNVfRM542-hoHfY355oxaw7ZWcww@mail.gmail.com>
+References: <20140719004023.4a71d4b8@free-electrons.com>
+ <CAMo8BfKDFvct4=wDsFVObRMab9P-73LcMvJU2JaNozR=swbT2A@mail.gmail.com>
+ <20140719113327.5393bf25@free-electrons.com>
+ <CAMo8Bf+SfLYex0+040254AgNVfRM542-hoHfY355oxaw7ZWcww@mail.gmail.com>
+Message-ID: <20140720102611.69817922@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 19/07/2014 at 16:44:51 +0200, Thomas Petazzoni wrote :
-> Those defconfigs rely on gcc 4.3.x, which was said to be the only gcc
-> version that was producing a working kernel. Since we have removed gcc
-> 4.3.x, those defconfigs no longer build. Also, the kernel being used
-> in these defconfigs was 2.6.32, but there is a "new" 2.6.39 kernel
-> available from the lpclinux.com git repository, which maybe works fine
-> with more recent compilers.
-> 
-> However, those defconfigs were contributed by Alexandre Belloni, who
-> no longer has access to the hardware, so we have no way to verify that
-> a compiler update + kernel update actually works.
-> 
-> Therefore, we simply remove those defconfigs.
-> 
-> Cc: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Dear Max Filippov,
 
-> ---
->  configs/ea3250_defconfig  | 49 -----------------------------------------------
->  configs/fdi3250_defconfig | 49 -----------------------------------------------
->  configs/phy3250_defconfig | 49 -----------------------------------------------
->  3 files changed, 147 deletions(-)
->  delete mode 100644 configs/ea3250_defconfig
->  delete mode 100644 configs/fdi3250_defconfig
->  delete mode 100644 configs/phy3250_defconfig
-> 
-> diff --git a/configs/ea3250_defconfig b/configs/ea3250_defconfig
-> deleted file mode 100644
-> index b7ce18b..0000000
-> --- a/configs/ea3250_defconfig
-> +++ /dev/null
-> @@ -1,49 +0,0 @@
-> -# Architecture
-> -BR2_arm=y
-> -BR2_arm926t=y
-> -
-> -BR2_ARM_TYPE="ARM926T"
-> -BR2_ARM_EABI=y
-> -
-> -#
-> -# GCC Options
-> -# We need to force GCC 4.3.x because it is the last version
-> -# that will compile a kernel with ethernet working correctly
-> -BR2_GCC_VERSION_4_3_X=y
-> -
-> -# Lock down headers to avoid breaking with new defaults
-> -BR2_KERNEL_HEADERS_VERSION=y
-> -BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
-> -BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
-> -
-> -#
-> -# Host utilities
-> -#
-> -BR2_PACKAGE_HOST_LPC3250LOADER=y
-> -
-> -
-> -# Bootloaders
-> -BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BOARDNAME="ea3250"
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_VERSION="master"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
-> -BR2_TARGET_UBOOT_FORMAT_BIN=y
-> -BR2_TARGET_LPC32XXCDL=y
-> -BR2_TARGET_LPC32XXCDL_BOARDNAME="ea3250"
-> -
-> -
-> -#
-> -# Kernel
-> -#
-> -BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
-> -BR2_LINUX_KERNEL_VERSION="master"
-> -BR2_LINUX_KERNEL_PATCH=""
-> -BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-> -BR2_LINUX_KERNEL_DEFCONFIG="ea3250"
-> -BR2_LINUX_KERNEL_UIMAGE=y
-> -
-> diff --git a/configs/fdi3250_defconfig b/configs/fdi3250_defconfig
-> deleted file mode 100644
-> index b7f6ad7..0000000
-> --- a/configs/fdi3250_defconfig
-> +++ /dev/null
-> @@ -1,49 +0,0 @@
-> -# Architecture
-> -BR2_arm=y
-> -BR2_arm926t=y
-> -
-> -BR2_ARM_TYPE="ARM926T"
-> -BR2_ARM_EABI=y
-> -
-> -#
-> -# GCC Options
-> -# We need to force GCC 4.3.x because it is the last version
-> -# that will compile a kernel with ethernet working correctly
-> -BR2_GCC_VERSION_4_3_X=y
-> -
-> -# Lock down headers to avoid breaking with new defaults
-> -BR2_KERNEL_HEADERS_VERSION=y
-> -BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
-> -BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
-> -
-> -#
-> -# Host utilities
-> -#
-> -BR2_PACKAGE_HOST_LPC3250LOADER=y
-> -
-> -
-> -# Bootloaders
-> -BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BOARDNAME="fdi3250"
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_VERSION="master"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
-> -BR2_TARGET_UBOOT_FORMAT_BIN=y
-> -BR2_TARGET_LPC32XXCDL=y
-> -BR2_TARGET_LPC32XXCDL_BOARDNAME="fdi3250"
-> -
-> -
-> -#
-> -# Kernel
-> -#
-> -BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
-> -BR2_LINUX_KERNEL_VERSION="master"
-> -BR2_LINUX_KERNEL_PATCH=""
-> -BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-> -BR2_LINUX_KERNEL_DEFCONFIG="fdi3250"
-> -BR2_LINUX_KERNEL_UIMAGE=y
-> -
-> diff --git a/configs/phy3250_defconfig b/configs/phy3250_defconfig
-> deleted file mode 100644
-> index fe49653..0000000
-> --- a/configs/phy3250_defconfig
-> +++ /dev/null
-> @@ -1,49 +0,0 @@
-> -# Architecture
-> -BR2_arm=y
-> -BR2_arm926t=y
-> -
-> -BR2_ARM_TYPE="ARM926T"
-> -BR2_ARM_EABI=y
-> -
-> -#
-> -# GCC Options
-> -# We need to force GCC 4.3.x because it is the last version
-> -# that will compile a kernel with ethernet working correctly
-> -BR2_GCC_VERSION_4_3_X=y
-> -
-> -# Lock down headers to avoid breaking with new defaults
-> -BR2_KERNEL_HEADERS_VERSION=y
-> -BR2_DEFAULT_KERNEL_VERSION="2.6.34.7"
-> -BR2_DEFAULT_KERNEL_HEADERS="2.6.34.7"
-> -
-> -#
-> -# Host utilities
-> -#
-> -BR2_PACKAGE_HOST_LPC3250LOADER=y
-> -
-> -
-> -# Bootloaders
-> -BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BOARDNAME="phy3250"
-> -BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> -BR2_TARGET_UBOOT_VERSION="master"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.lpclinux.com/uboot-2009.03-lpc32xx"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="master"
-> -BR2_TARGET_UBOOT_FORMAT_BIN=y
-> -BR2_TARGET_LPC32XXCDL=y
-> -BR2_TARGET_LPC32XXCDL_BOARDNAME="phy3250"
-> -
-> -
-> -#
-> -# Kernel
-> -#
-> -BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.lpclinux.com/linux-2.6.34-lpc32xx"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="master"
-> -BR2_LINUX_KERNEL_VERSION="master"
-> -BR2_LINUX_KERNEL_PATCH=""
-> -BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-> -BR2_LINUX_KERNEL_DEFCONFIG="phy3250"
-> -BR2_LINUX_KERNEL_UIMAGE=y
-> -
-> -- 
-> 2.0.0
-> 
+On Sun, 20 Jul 2014 04:17:53 +0400, Max Filippov wrote:
 
+> > Argh. There's no NPTL support for:
+> >
+> >  - ARC (but I believe it's coming)
+> >  - AVR32 (but we're deprecating this architecture, so we don't care)
+> >  - Blackfin (and I don't think there's much hope to have NPTL one day,
+> >    but glib is anyway disabled on !MMU platforms, so we don't care)
+> >  - Xtensa (don't know)
+> >  - i386 (because NPTL requires at least i486)
+> >
+> > Should we patch glib to make the support of the GCond stuff optional,
+> > and hope not too many programs will use it? Or simply add the NPTL
+> > dependency to glib, but that would mean a huge number of packages
+> > suddenly become unavailable for some architectures.
+> 
+> There's a patch in glib mainline that implements GMutex natively on linux.
+> It applies cleanly to glib-2.40 and with it xtensa builds successfully.
+> I can post a buildroot patch with it.
+
+Ah, thanks, sounds good!
+
+Thomas
 -- 
-Alexandre Belloni, Free Electrons
+Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
