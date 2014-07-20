@@ -1,61 +1,119 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 20 Jul 2014 06:47:19 +0300
-Subject: [Buildroot] [git commit] google-breakpad: disable on mips64
-In-Reply-To: <20140719163640.2B0A99D281@busybox.osuosl.org>
-References: <20140719163640.2B0A99D281@busybox.osuosl.org>
-Message-ID: <20140720034718.GA2478@tarshish>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 20 Jul 2014 08:00:34 +0200
+Subject: [Buildroot] [PATCH 2/4] perl-gd: new package
+In-Reply-To: <20140719231604.GP3593@free.fr>
+References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
+ <1405691019-10397-2-git-send-email-francois.perrad@gadz.org>
+ <20140719195816.GK3593@free.fr> <20140719231604.GP3593@free.fr>
+Message-ID: <CAB0FRstWykAbTZmuyocyYgaSB8q5RtyNYsVy9E2OOqPw=nLzAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+2014-07-20 1:16 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Fran?ois, All,
+>
+> On 2014-07-19 21:58 +0200, Yann E. MORIN spake thusly:
+>> On 2014-07-18 15:43 +0200, Francois Perrad spake thusly:
+>> [--SNIP--]
+>> > diff --git a/package/perl-gd/Config.in b/package/perl-gd/Config.in
+>> > new file mode 100644
+>> > index 0000000..7c85cfc
+>> > --- /dev/null
+>> > +++ b/package/perl-gd/Config.in
+>> > @@ -0,0 +1,14 @@
+>> > +config BR2_PACKAGE_PERL_GD
+>> > +   bool "perl-gd"
+>> > +   depends on !BR2_PREFER_STATIC_LIB
+>> > +   select BR2_PACKAGE_ZLIB
+>> > +   select BR2_PACKAGE_LIBPNG
+>> > +   select BR2_PACKAGE_FREETYPE
+>> > +   select BR2_PACKAGE_GD
+>>
+>> It looks like there are still issues with search paths, which include
+>> path to the host system libraries:
+>>     http://autobuild.buildroot.org/results/336/33633a683227ebce620cb4b4561cfe7d7cbf4ba8/build-end.log
+>>
+>> Extract of a failed build log:
+>>
+>>     LD_RUN_PATH="/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib"
+>>     /scratch/peko/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc
+>>     -shared  GD.o  -o blib/arch/auto/GD/GD.so       \
+>>     -L/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
+>>     -L/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
+>>     -L/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
+>>     -L/usr/lib -L/usr/lib -lXpm -lX11 -ljpeg -lfontconfig -lfreetype -lpng12
+>>     -lz -lm -lgd
+>>
+>>     /usr/lib/libXpm.so: file not recognized: File format not recognized
+>>
+>> Notice how it is looking for libs in -L/usr/lib -L/usr/lib.
+>
+> I was not able to reproduce this buildfailure. The only occurences are
+> on Peter's machine, so maybe there is a peculirity with his setup.
+>
+> Which only reinforces my stance on having our own host-perl.
+>
+> Anyway, care to have a look at this issue, please? If not for a fix, at
+> least for an explanation. Thanks! :-)
+>
 
-On Sat, Jul 19, 2014 at 06:34:39PM +0200, Thomas Petazzoni wrote:
-> commit: http://git.buildroot.net/buildroot/commit/?id=7ef750f4a408322e23fc2aaa822e7afa14bcbbe7
-> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> Due to some mmap() related issue, google-breakpad fails to build on
-> mips64, so let's disable it for the moment. The mips/mips64 folks
-> might be interested in fixing that later.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/2b0/2b03937693ea400ddcc7e8364ff7dc22ce651669/
-> 
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: Markos Chandras <Markos.Chandras@imgtec.com>
+here, my analysis
 
-Interesting. As this patch never appeared on the list before, does the git 
-commits mail sending script actually Cc these addresses?
+perl-gd.mk contains :
+    PERL_GD_CONF_OPT = \
+    -options=FT,PNG \
+    -lib_gd_path=$(STAGING_DIR)/usr \
+    -lib_ft_path=$(STAGING_DIR)/usr \
+    -lib_png_path=$(STAGING_DIR)/usr \
+    -lib_zlib_path=$(STAGING_DIR)/usr \
+    -ignore_missing_gd
 
-baruch
+when all these options are honored, the output of the configure step
+looks like :
 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/google-breakpad/Config.in |    2 +-
->  1 files changed, 1 insertions(+), 1 deletions(-)
-> 
-> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
-> index 0ef10c5..146db36 100644
-> --- a/package/google-breakpad/Config.in
-> +++ b/package/google-breakpad/Config.in
-> @@ -1,7 +1,7 @@
->  config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
->  	bool
->  	default y if BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64 || \
-> -		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> +		BR2_mips || BR2_mipsel
->  
->  config BR2_PACKAGE_GOOGLE_BREAKPAD
->  	bool "google-breakpad"
+    Included Features:          FT,PNG
+    GD library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+    FreeType library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+    PNG library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+    Zlib library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+
+here, we have
+
+    Included Features:          GD_XPM GD_JPEG GD_FONTCONFIG
+GD_FREETYPE GD_PNG GD_GIF GD_GIFANIM GD_OPENPOLYGON GD_UNCLOSEDPOLY
+GD_ANIMGIF GD_FTCIRCLE VERSION_33
+    GD library used from:       /usr
+    FreeType library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+    PNG library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+    Zlib library used from:
+/scratch/peko/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr
+
+so, at link time, we have problem with native libraries for GD, Gif,
+Jpeg and Xpm.
+
+Fran?ois
+
+
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
