@@ -1,101 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Jul 2014 00:42:26 +0200
-Subject: [Buildroot] [PATCH 8/9 v3] support/download: convert svn to use the
-	wrapper
+Date: Mon, 21 Jul 2014 00:42:27 +0200
+Subject: [Buildroot] [PATCH 9/9 v3] support/download: convert wget to use
+	the wrapper
 In-Reply-To: <cover.1405895896.git.yann.morin.1998@free.fr>
 References: <cover.1405895896.git.yann.morin.1998@free.fr>
-Message-ID: <df40bd4bdc0f6f586f8cf30747e37f8241a0cf63.1405895896.git.yann.morin.1998@free.fr>
+Message-ID: <28d4112e90481daf555b3c3703166f9e47887c12.1405895896.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This drastically simplifies the svn helper, as it no longer has to deal
+This drastically simplifies the wget helper, as it no longer has to deal
 with atomically saving the downloaded archive.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk |  6 ++++--
- support/download/svn    | 44 +++++++++++---------------------------------
- 2 files changed, 15 insertions(+), 35 deletions(-)
+ package/pkg-download.mk |  4 +++-
+ support/download/wget   | 31 ++++++-------------------------
+ 2 files changed, 9 insertions(+), 26 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 434eeaf..b18864e 100644
+index b18864e..6f5b080 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -147,8 +147,10 @@ endef
+@@ -203,7 +203,9 @@ endef
  
- define DOWNLOAD_SVN
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(EXTRA_ENV) support/download/svn $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
--					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
-+	$(EXTRA_ENV) support/download/wrapper svn \
-+		$(DL_DIR)/$($(PKG)_SOURCE) \
-+		$($(PKG)_SITE) $($(PKG)_DL_VERSION) \
-+		$($(PKG)_BASE_NAME)
+ define DOWNLOAD_WGET
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
++	$(EXTRA_ENV) support/download/wrapper wget \
++		$(DL_DIR)/$(2) \
++		'$(call qstrip,$(1))' && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
  endef
  
- define SOURCE_CHECK_SVN
-diff --git a/support/download/svn b/support/download/svn
-index 39cbbcb..36ba520 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -1,44 +1,22 @@
+diff --git a/support/download/wget b/support/download/wget
+index cbeca3b..84f0c53 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -1,35 +1,16 @@
  #!/bin/bash
  
 -# We want to catch any command failure, and exit immediately
 +# We want to catch any unexpected failure, and exit immediately
  set -e
  
- # Download helper for svn
+ # Download helper for wget
  # Call it with:
--#   $1: svn repo
--#   $2: svn revision
--#   $3: package's basename (eg. foobar-1.2.3)
--#   $4: output file
+-#   $1: URL
+-#   $2: output file
 +#   $1: output file
-+#   $2: svn repo
-+#   $3: svn revision
-+#   $4: package's basename (eg. foobar-1.2.3)
++#   $2: URL
  # And this environment:
- #   SVN      : the svn command to call
+ #   WGET     : the wget command to call
 -#   BUILD_DIR: path to Buildroot's build dir
  
--repo="${1}"
--rev="${2}"
--basename="${3}"
--output="${4}"
+-url="${1}"
+-output="${2}"
 +output="${1}"
-+repo="${2}"
-+rev="${3}"
-+basename="${4}"
++url="${2}"
  
--repodir="${basename}.tmp-svn-checkout"
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
 -tmp_output="$( mktemp "${output}.XXXXXX" )"
-+${SVN} export "${repo}@${rev}" "${basename}"
- 
--cd "${BUILD_DIR}"
--# Remove leftovers from a previous failed run
--rm -rf "${repodir}"
 -
 -# Play tic-tac-toe with temp files
 -# - first, we download to a trashable location (the build-dir)
--# - then we create a temporary tarball in the final location, so it is
+-# - then we copy to a temporary tarball in the final location, so it is
 -#   on the same filesystem as the final file
 -# - finally, we atomically rename to the final file
 -
 -ret=1
--if ${SVN} export "${repo}@${rev}" "${repodir}"; then
--    if tar czf "${tmp_output}" "${repodir}"; then
+-if ${WGET} -O "${tmp_dl}" "${url}"; then
+-    if mv "${tmp_dl}" "${tmp_output}"; then
 -        mv "${tmp_output}" "${output}"
 -        ret=0
 -    fi
 -fi
 -
--# Cleanup
--rm -rf "${repodir}" "${tmp_output}"
+-rm -f "${tmp_dl}" "${tmp_output}"
 -exit ${ret}
-+tar czf "${output}" "${basename}"
++${WGET} -O "${output}" "${url}"
 -- 
 1.9.1
