@@ -1,88 +1,137 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Jul 2014 00:42:20 +0200
-Subject: [Buildroot] [PATCH 2/9 v3] support/download: convert bzr to use the
-	wrapper
+Date: Mon, 21 Jul 2014 00:42:19 +0200
+Subject: [Buildroot] [PATCH 1/9 v3] support/download: add download wrapper
 In-Reply-To: <cover.1405895896.git.yann.morin.1998@free.fr>
 References: <cover.1405895896.git.yann.morin.1998@free.fr>
-Message-ID: <ce8ca130016f8932d332539f40f909fad0fdad4c.1405895896.git.yann.morin.1998@free.fr>
+Message-ID: <dc7cb9f1441183b56518a81a1ea45974cae07635.1405895896.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This drastically simplifies the bzr helper, as it no longer has to
-deal with atomically saving the downloaded archive.
+The download wrapper is responsible for ensuring the atomicity
+of saving into $(BR2_DL_DIR).
+
+It calls the appropriate download helper, telling it to save the
+downloaded content to a temporary file in $(BUILD_DIR) (so it does
+not clutter $(BR2_DL_DIR) with partial, failed downloads.
+
+Then, only it the download helper was successful, does the wrapper
+saves the downloaded content to the final location, yet still in a
+teporary file, and finally atomically renames it to the final output
+file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/pkg-download.mk |  2 +-
- support/download/bzr    | 36 ++++++++----------------------------
- 2 files changed, 9 insertions(+), 29 deletions(-)
+ support/download/wrapper | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 99 insertions(+)
+ create mode 100755 support/download/wrapper
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 118591c..6320338 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -112,7 +112,7 @@ endef
- 
- define DOWNLOAD_BZR
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(EXTRA_ENV) support/download/bzr $($(PKG)_SITE) $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE)
-+	$(EXTRA_ENV) support/download/wrapper bzr $(DL_DIR)/$($(PKG)_SOURCE) $($(PKG)_SITE) $($(PKG)_DL_VERSION)
- endef
- 
- define SOURCE_CHECK_BZR
-diff --git a/support/download/bzr b/support/download/bzr
-index 19d837d..24bb1d0 100755
---- a/support/download/bzr
-+++ b/support/download/bzr
-@@ -1,38 +1,18 @@
- #!/bin/bash
- 
--# We want to catch any command failure, and exit immediately
-+# We want to catch any unexpected failure, and exit immediately
- set -e
- 
- # Download helper for bzr
- # Call it with:
--#   $1: bzr repo
--#   $2: bzr revision
--#   $3: output file
-+#   $1: output file
-+#   $2: bzr repo
-+#   $3: bzr revision
- # And this environment:
- #   BZR      : the bzr command to call
--#   BUILD_DIR: path to Buildroot's build dir
- 
--repo="${1}"
--rev="${2}"
--output="${3}"
-+output="${1}"
-+repo="${2}"
-+rev="${3}"
- 
--tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
--tmp_output="$( mktemp "${output}.XXXXXX" )"
--
--# Play tic-tac-toe with temp files
--# - first, we download to a trashable location (the build-dir)
--# - the we move to a temp file in the final location, so it is
--#   on the same filesystem as the final file
--# - finally, we atomically rename to the final file
--
--ret=1
--if ${BZR} export --format=tgz "${tmp_dl}" "${repo}" -r "${rev}"; then
--    if mv "${tmp_dl}" "${tmp_output}"; then
--        mv "${tmp_output}" "${output}"
--        ret=0
--    fi
--fi
--
--# Cleanup
--rm -f "${tmp_dl}" "${tmp_output}"
--exit ${ret}
-+${BZR} export --format=tgz "${output}" "${repo}" -r "${rev}"
+diff --git a/support/download/wrapper b/support/download/wrapper
+new file mode 100755
+index 0000000..bc0d486
+--- /dev/null
++++ b/support/download/wrapper
+@@ -0,0 +1,99 @@
++#!/bin/bash
++
++# This script is a wrapper to the other download helpers.
++# Its role is to ensure atomicity when saving downloaded files
++# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
++# failed downloads.
++#
++# Call it with:
++#   $1: name of the helper (eg. cvs, git, cp...)
++#   $2: full path to the file in which to save the download
++#   $*: additional arguments to the helper in $1
++# Environment:
++#   BUILD_DIR: the path to Buildroot's build dir
++
++# To avoid cluttering BR2_DL_DIR, we download to a trashable
++# location, namely in $(BUILD_DIR).
++# Then, we move the downloaed file to a temporary file in the
++# same directory as the final output file.
++# This allows us to finally atomically rename it to its final
++# name.
++# If anything goes wrong, we just remove all the temporaries
++# created so far.
++
++# We want to catch any unexpected failure, and exit immediately.
++set -e
++
++helper="${1}"
++output="${2}"
++shift 2
++
++# tmpd is a temporary directory in which helpers may store intermediate
++# by-products of the download.
++# tmpf is the file in which the helpers should put the downloaded content.
++# tmpd located in $(BUILD_DIR), so as not to cluter the (precious)
++# $(BR2_DL_DIR)
++# We let the helpers create tmpf, so they are able to set whatever
++# permission bits they want (although we're only really interested in
++# the executable bit.)
++tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
++tmpf="${tmpd}/output"
++
++# Helpers expect to run in a directory that is *really* trashable, so
++# they are free to create whatever files and/or sub-dirs they might need.
++# Doing the 'cd' here rather than in all helpers is easier.
++cd "${tmpd}"
++
++# If the helper fails, we can just remove the temporary directory to
++# remove all the cruft it may have left behind. Then we just exit in
++# error too.
++if ! "${OLDPWD}/support/download/${helper}" "${tmpf}" "${@}"; then
++    rm -rf "${tmpd}"
++    exit 1
++fi
++
++# cd back to free the temp-dir, so we can remove it later
++cd "${OLDPWD}"
++
++# tmp_output is in the same directory as the final output, so we can
++# later move it atomically.
++tmp_output="$( mktemp "${output}.XXXXXX" )"
++
++# 'mktemp' creates files with 'go=-rwx', so the files are not accessible
++# to users other than the one doing the download (and root, of course).
++# This can be problematic when a shared BR2_DL_DIR is used by different
++# users (e.g. on a build server), where all users may write to the shared
++# location, since other users would not be allowed to read the files
++# another user downloaded.
++# So, we restore the 'go' access rights to a more sensible value, while
++# still abiding by the current user's umask. We must do that before the
++# final 'mv', so just do it now.
++# Some helpers (cp and scp) may create executable files, so we need to
++# carry the executable bit if needed.
++[ -x "${tmpf}" ] && new_mode=755 || new_mode=644
++new_mode=$( printf "%04o" $((0${new_mode} & ~0$(umask))) )
++chmod ${new_mode} "${tmp_output}"
++
++# We must *not* unlink tmp_output, otherwise there is a small window
++# during which another download process may create the same tmp_output
++# name (very, very unlikely; but not impossible.)
++# Using 'cp' is not reliable, since 'cp' may unlink the destination file
++# if it is unable to open it with O_WRONLY|O_TRUNC; see:
++#   http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cp.html
++# Since the destination filesystem can be anything, it might not support
++# O_TRUNC, so 'cp' would unlink it first.
++# Use 'cat' and append-redirection '>>' to save to the final location,
++# since that is the only way we can be 100% sure of the behaviour.
++if ! cat "${tmpf}" >>"${tmp_output}"; then
++    rm -rf "${tmpd}" "${tmp_output}"
++    exit 1
++fi
++rm -rf "${tmpd}"
++# tmp_output and output are on the same filesystem, so POSIX guarantees
++# that 'mv' is atomic, because it then uses rename() that POSIX mandates
++# to be atomic, see:
++#   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
++if ! mv "${tmp_output}" "${output}"; then
++    rm -f "${tmp_output}"
++    exit 1
++fi
 -- 
 1.9.1
