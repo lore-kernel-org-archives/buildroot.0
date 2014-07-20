@@ -1,310 +1,61 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 20 Jul 2014 04:45:17 +0400
-Subject: [Buildroot] [PATCH] libglib2: backport native linux GMutex
-	implementation
-Message-ID: <1405817117-5722-1-git-send-email-jcmvbkbc@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 20 Jul 2014 06:47:19 +0300
+Subject: [Buildroot] [git commit] google-breakpad: disable on mips64
+In-Reply-To: <20140719163640.2B0A99D281@busybox.osuosl.org>
+References: <20140719163640.2B0A99D281@busybox.osuosl.org>
+Message-ID: <20140720034718.GA2478@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes libglib2 build on architectures that don't support NPTL.
+Hi Thomas,
 
-Fixes:
-  http://autobuild.buildroot.org/results/a1a/a1a1f97a2c54ba4f7f7e44cc094a55bd23ca0aa0/
+On Sat, Jul 19, 2014 at 06:34:39PM +0200, Thomas Petazzoni wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=7ef750f4a408322e23fc2aaa822e7afa14bcbbe7
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Due to some mmap() related issue, google-breakpad fails to build on
+> mips64, so let's disable it for the moment. The mips/mips64 folks
+> might be interested in fixing that later.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/2b0/2b03937693ea400ddcc7e8364ff7dc22ce651669/
+> 
+> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> Cc: Markos Chandras <Markos.Chandras@imgtec.com>
 
-Backported from: 49b59e5ac4428a6a99a85d699c3662f96efc4e9d
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- ...2-0003-implement-GMutex-natively-on-Linux.patch |  279 ++++++++++++++++++++
- 1 files changed, 279 insertions(+), 0 deletions(-)
- create mode 100644 package/libglib2/libglib2-0003-implement-GMutex-natively-on-Linux.patch
+Interesting. As this patch never appeared on the list before, does the git 
+commits mail sending script actually Cc these addresses?
 
-diff --git a/package/libglib2/libglib2-0003-implement-GMutex-natively-on-Linux.patch b/package/libglib2/libglib2-0003-implement-GMutex-natively-on-Linux.patch
-new file mode 100644
-index 0000000..acfebad
---- /dev/null
-+++ b/package/libglib2/libglib2-0003-implement-GMutex-natively-on-Linux.patch
-@@ -0,0 +1,279 @@
-+From 49b59e5ac4428a6a99a85d699c3662f96efc4e9d Mon Sep 17 00:00:00 2001
-+From: Ryan Lortie <desrt@desrt.ca>
-+Date: Tue, 10 Jun 2014 08:28:32 -0400
-+Subject: [PATCH] GLib: implement GMutex natively on Linux
-+
-+If we have futex(2) then we can implement GMutex natively and gain a
-+substantial performance increase (vs. using pthreads).
-+
-+This also avoids the need to allocate an extra structure in memory when
-+using GMutex or GCond: we can use the structure directly.
-+
-+The main reason for the increase in performance is that our
-+implementation can be made more simple: we don't need to support the
-+array of options on pthread_mutex_t (which includes the possibility, for
-+example, of being recursive).
-+
-+The result is a ~30% improvement in uncontended cases and a much larger
-+increase (3 to 4 times) in contended cases for a simple testcase.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=731986
-+---
-+ glib/gthread-posix.c | 208 ++++++++++++++++++++++++++++++++++++++++++++++++++-
-+ 1 file changed, 207 insertions(+), 1 deletion(-)
-+
-+diff --git a/glib/gthread-posix.c b/glib/gthread-posix.c
-+index 6f5a606..f7d5d8a 100644
-+--- a/glib/gthread-posix.c
-++++ b/glib/gthread-posix.c
-+@@ -66,6 +66,11 @@
-+ #include <windows.h>
-+ #endif
-+ 
-++/* clang defines __ATOMIC_SEQ_CST but doesn't support the GCC extension */
-++#if defined(HAVE_FUTEX) && defined(__ATOMIC_SEQ_CST) && !defined(__clang__)
-++#define USE_NATIVE_MUTEX
-++#endif
-++
-+ static void
-+ g_thread_abort (gint         status,
-+                 const gchar *function)
-+@@ -77,6 +82,8 @@ g_thread_abort (gint         status,
-+ 
-+ /* {{{1 GMutex */
-+ 
-++#if !defined(USE_NATIVE_MUTEX)
-++
-+ static pthread_mutex_t *
-+ g_mutex_impl_new (void)
-+ {
-+@@ -258,6 +265,8 @@ g_mutex_trylock (GMutex *mutex)
-+   return FALSE;
-+ }
-+ 
-++#endif /* !defined(USE_NATIVE_MUTEX) */
-++
-+ /* {{{1 GRecMutex */
-+ 
-+ static pthread_mutex_t *
-+@@ -631,6 +640,8 @@ g_rw_lock_reader_unlock (GRWLock *rw_lock)
-+ 
-+ /* {{{1 GCond */
-+ 
-++#if !defined(USE_NATIVE_MUTEX)
-++
-+ static pthread_cond_t *
-+ g_cond_impl_new (void)
-+ {
-+@@ -902,6 +913,8 @@ g_cond_wait_until (GCond  *cond,
-+   return FALSE;
-+ }
-+ 
-++#endif /* defined(USE_NATIVE_MUTEX) */
-++
-+ /* {{{1 GPrivate */
-+ 
-+ /**
-+@@ -1219,5 +1232,198 @@ g_system_thread_set_name (const gchar *name)
-+ #endif
-+ }
-+ 
-+-/* {{{1 Epilogue */
-++/* {{{1 GMutex and GCond futex implementation */
-++
-++#if defined(USE_NATIVE_MUTEX)
-++
-++#include <linux/futex.h>
-++#include <sys/syscall.h>
-++
-++/* We should expand the set of operations available in gatomic once we
-++ * have better C11 support in GCC in common distributions (ie: 4.9).
-++ *
-++ * Before then, let's define a couple of useful things for our own
-++ * purposes...
-++ */
-++
-++#define exchange_acquire(ptr, new) \
-++  __atomic_exchange_4((ptr), (new), __ATOMIC_ACQUIRE)
-++#define compare_exchange_acquire(ptr, old, new) \
-++  __atomic_compare_exchange_4((ptr), (old), (new), 0, __ATOMIC_ACQUIRE, __ATOMIC_RELAXED)
-++
-++#define exchange_release(ptr, new) \
-++  __atomic_exchange_4((ptr), (new), __ATOMIC_RELEASE)
-++#define store_release(ptr, new) \
-++  __atomic_store_4((ptr), (new), __ATOMIC_RELEASE)
-++
-++/* Our strategy for the mutex is pretty simple:
-++ *
-++ *  0: not in use
-++ *
-++ *  1: acquired by one thread only, no contention
-++ *
-++ *  > 1: contended
-++ *
-++ *
-++ * As such, attempting to acquire the lock should involve an increment.
-++ * If we find that the previous value was 0 then we can return
-++ * immediately.
-++ *
-++ * On unlock, we always store 0 to indicate that the lock is available.
-++ * If the value there was 1 before then we didn't have contention and
-++ * can return immediately.  If the value was something other than 1 then
-++ * we have the contended case and need to wake a waiter.
-++ *
-++ * If it was not 0 then there is another thread holding it and we must
-++ * wait.  We must always ensure that we mark a value >1 while we are
-++ * waiting in order to instruct the holder to do a wake operation on
-++ * unlock.
-++ */
-++
-++void
-++g_mutex_init (GMutex *mutex)
-++{
-++  mutex->i[0] = 0;
-++}
-++
-++void
-++g_mutex_clear (GMutex *mutex)
-++{
-++}
-++
-++static void __attribute__((noinline))
-++g_mutex_lock_slowpath (GMutex *mutex)
-++{
-++  /* Set to 2 to indicate contention.  If it was zero before then we
-++   * just acquired the lock.
-++   *
-++   * Otherwise, sleep for as long as the 2 remains...
-++   */
-++  while (exchange_acquire (&mutex->i[0], 2) != 0)
-++    syscall (__NR_futex, &mutex->i[0], (gsize) FUTEX_WAIT, (gsize) 2, NULL);
-++}
-++
-++static void __attribute__((noinline))
-++g_mutex_unlock_slowpath (GMutex *mutex)
-++{
-++  /* We seem to get better code for the uncontended case by splitting
-++   * out this call...
-++   */
-++  syscall (__NR_futex, &mutex->i[0], (gsize) FUTEX_WAKE, (gsize) 1, NULL);
-++}
-++
-++void
-++g_mutex_lock (GMutex *mutex)
-++{
-++  /* 0 -> 1 and we're done.  Anything else, and we need to wait... */
-++  if G_UNLIKELY (g_atomic_int_add (&mutex->i[0], 1) != 0)
-++    g_mutex_lock_slowpath (mutex);
-++}
-++
-++void
-++g_mutex_unlock (GMutex *mutex)
-++{
-++  /* 1-> 0 and we're done.  Anything else and we need to signal... */
-++  if G_UNLIKELY (exchange_release (&mutex->i[0], 0) != 1)
-++    g_mutex_unlock_slowpath (mutex);
-++}
-++
-++gboolean
-++g_mutex_trylock (GMutex *mutex)
-++{
-++  guint zero = 0;
-++
-++  /* We don't want to touch the value at all unless we can move it from
-++   * exactly 0 to 1.
-++   */
-++  return compare_exchange_acquire (&mutex->i[0], &zero, 1);
-++}
-++
-++/* Condition variables are implemented in a rather simple way as well.
-++ * In many ways, futex() as an abstraction is even more ideally suited
-++ * to condition variables than it is to mutexes.
-++ *
-++ * We store a generation counter.  We sample it with the lock held and
-++ * unlock before sleeping on the futex.
-++ *
-++ * Signalling simply involves increasing the counter and making the
-++ * appropriate futex call.
-++ *
-++ * The only thing that is the slightest bit complicated is timed waits
-++ * because we must convert our absolute time to relative.
-++ */
-++
-++void
-++g_cond_init (GCond *cond)
-++{
-++  cond->i[0] = 0;
-++}
-++
-++void
-++g_cond_clear (GCond *cond)
-++{
-++}
-++
-++void
-++g_cond_wait (GCond  *cond,
-++             GMutex *mutex)
-++{
-++  guint sampled = g_atomic_int_get (&cond->i[0]);
-++
-++  g_mutex_unlock (mutex);
-++  syscall (__NR_futex, &cond->i[0], (gsize) FUTEX_WAIT, (gsize) sampled, NULL);
-++  g_mutex_lock (mutex);
-++}
-++
-++void
-++g_cond_signal (GCond *cond)
-++{
-++  g_atomic_int_inc (&cond->i[0]);
-++
-++  syscall (__NR_futex, &cond->i[0], (gsize) FUTEX_WAKE, (gsize) 1, NULL);
-++}
-++
-++void
-++g_cond_broadcast (GCond *cond)
-++{
-++  g_atomic_int_inc (&cond->i[0]);
-++
-++  syscall (__NR_futex, &cond->i[0], (gsize) FUTEX_WAKE, (gsize) INT_MAX, NULL);
-++}
-++
-++gboolean
-++g_cond_wait_until (GCond  *cond,
-++                   GMutex *mutex,
-++                   gint64  end_time)
-++{
-++  struct timespec now;
-++  struct timespec span;
-++  guint sampled;
-++
-++  if (end_time < 0)
-++    return FALSE;
-++
-++  clock_gettime (CLOCK_MONOTONIC, &now);
-++  span.tv_sec = (end_time / 1000000) - now.tv_sec;
-++  span.tv_nsec = ((end_time % 1000000) * 1000) - now.tv_nsec;
-++  if (span.tv_nsec < 0)
-++    {
-++      span.tv_nsec += 1000000000;
-++      span.tv_sec--;
-++    }
-++
-++  if (span.tv_sec < 0)
-++    return FALSE;
-++
-++  sampled = cond->i[0];
-++  g_mutex_unlock (mutex);
-++  syscall (__NR_futex, &cond->i[0], (gsize) FUTEX_WAIT, (gsize) sampled, &span);
-++  g_mutex_lock (mutex);
-++
-++  return TRUE;
-++}
-++
-++#endif
-++
-++  /* {{{1 Epilogue */
-+ /* vim:set foldmethod=marker: */
-+-- 
-+1.8.1.4
-+
+baruch
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/google-breakpad/Config.in |    2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
+> 
+> diff --git a/package/google-breakpad/Config.in b/package/google-breakpad/Config.in
+> index 0ef10c5..146db36 100644
+> --- a/package/google-breakpad/Config.in
+> +++ b/package/google-breakpad/Config.in
+> @@ -1,7 +1,7 @@
+>  config BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
+>  	bool
+>  	default y if BR2_i386 || BR2_x86_64 || BR2_arm || BR2_aarch64 || \
+> -		BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+> +		BR2_mips || BR2_mipsel
+>  
+>  config BR2_PACKAGE_GOOGLE_BREAKPAD
+>  	bool "google-breakpad"
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-1.7.7.6
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
