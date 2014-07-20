@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jul 2014 12:02:34 +0200
-Subject: [Buildroot] [PATCH 1/6] qt5multimedia: make qt5declarative
- dependency optional
-In-Reply-To: <1405791208-30356-2-git-send-email-fatih.asici@gmail.com>
+Date: Sun, 20 Jul 2014 12:02:45 +0200
+Subject: [Buildroot] [PATCH 2/6] qt5base: allow selection of OpenGL API
+In-Reply-To: <1405791208-30356-3-git-send-email-fatih.asici@gmail.com>
 References: <1405791208-30356-1-git-send-email-fatih.asici@gmail.com>
- <1405791208-30356-2-git-send-email-fatih.asici@gmail.com>
-Message-ID: <20140720120234.14bfc9fe@free-electrons.com>
+ <1405791208-30356-3-git-send-email-fatih.asici@gmail.com>
+Message-ID: <20140720120245.65732bc1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,15 @@ To: buildroot@busybox.net
 
 Dear Fatih A??c?,
 
-On Sat, 19 Jul 2014 20:33:23 +0300, Fatih A??c? wrote:
-> Also add missing dependencies on gui and network modules.
-> 
+On Sat, 19 Jul 2014 20:33:24 +0300, Fatih A??c? wrote:
 > Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
 > ---
->  package/qt5/qt5multimedia/Config.in        | 10 ++--------
->  package/qt5/qt5multimedia/qt5multimedia.mk |  6 +++++-
->  2 files changed, 7 insertions(+), 9 deletions(-)
+>  package/qt5/Config.in          |  5 +++++
+>  package/qt5/qt5base/Config.in  | 46 +++++++++++++++++++++++++++++++++++++++---
+>  package/qt5/qt5base/qt5base.mk | 18 +++++++++++++----
+>  3 files changed, 62 insertions(+), 7 deletions(-)
 
-Applied, thanks. However, please do not send your patches to both
-buildroot at uclibc.org and buildroot at buildroot.org: they are the same
-mailing list, so your patches appear twice on the list.
+Applied, thanks.
 
 Thomas
 -- 
