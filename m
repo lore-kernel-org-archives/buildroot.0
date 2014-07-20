@@ -1,77 +1,43 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 20 Jul 2014 09:52:16 +0200
-Subject: [Buildroot] [PATCH 4/4] perl-gdgraph: new package
-In-Reply-To: <20140719223515.GL3593@free.fr>
-References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
- <1405691019-10397-4-git-send-email-francois.perrad@gadz.org>
- <20140719191051.358726f9@free-electrons.com>
- <CAB0FRssX48i-XJ6GuZFObfWZQwTGXEOyQhWFgtsswn9RoEuVqA@mail.gmail.com>
- <20140719223515.GL3593@free.fr>
-Message-ID: <CAB0FRsvtYWoTNAUUMG=BH9jNz6xy_cLcPxCHj5cA5kg27Pqa2Q@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 20 Jul 2014 09:52:13 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xapp_xfs: Fix compile errors after
+	libXfont 1.5.0 update
+Message-ID: <1405842733-27018-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-07-20 0:35 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Fran?ois, All,
->
-> On 2014-07-19 22:28 +0200, Fran?ois Perrad spake thusly:
->> 2014-07-19 19:10 GMT+02:00 Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com>:
->> > This package does not build:
->> >   http://autobuild.buildroot.org/results/3e1/3e1698b0523dfa46f5b3ee03a22af820f7342c39/build-end.log
->> No, the error is :
->>
->>    only nested arrays of non-refs are supported at
->> /usr/share/perl/5.10/ExtUtils/MakeMaker.pm line 664
->>
->> And I could reproduce it on my box, with a host perl 5.10.1
->
-> Does that mean we should have our own host-perl, then?
->
-> It would guarantee that we have a known situation, where we control the
-> version of perl and we can reproduce builds across machines with
-> different versions of perl and a known list of installed modules and
-> their versions.
->
-> It would also allow tweaking the search paths to no longer include the
-> host system includes and libraries search paths (although it won't
-> protect us from badly written packages, such as perl-net-ssleay.)
->
+Fixes
+http://autobuild.buildroot.net/results/385/385cffbab4261337afa449998aa7457a8142db92/
 
-Sadly, our own host-perl doesn't help for module like Net-SSleay.
-All Perl modules which wraps a C library, are definitely not written
-with cross-compilation in mind.
-There always use ugly hacks in configure step.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Cleanup patch (Yann)
 
-But, having our own host-perl could a goal for the BR 2014.11 release.
+ package/x11r7/xapp_xfs/xapp_xfs.mk |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-perl-gdgraph could be fixed with this patch
-http://patchwork.ozlabs.org/patch/371863/
-or just by downgrading to version 1.47.
-
-Fran?ois
-
-> But we can ensure that dependencies on other perl modules won't
-> accidentally find host system perl's modules.
->
-> This might be a big endeavour, but even if we only build our own
-> host-perl, that's still a big improvement, and needs only little changes
-> to our current perl infra, i.e. just calling our own perl.
->
-> We can later enhance the situation by gradually tweaking our host-perl.
->
-> What do you guys think of this?
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+index 0907fc3..6322662 100644
+--- a/package/x11r7/xapp_xfs/xapp_xfs.mk
++++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-XAPP_XFS_VERSION = 1.1.3
+-XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+-XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XFS_VERSION = 1c8459eafc04997751ae3d200d0ec91e43e19b5b
++XAPP_XFS_SITE = git://anongit.freedesktop.org/xorg/app/xfs
+ XAPP_XFS_LICENSE = MIT
+ XAPP_XFS_LICENSE_FILES = COPYING
+-XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
++XAPP_XFS_AUTORECONF = YES
++XAPP_XFS_DEPENDENCIES = xfont_font-util xlib_libFS xlib_libXfont xproto_fontsproto
+ 
+ $(eval $(autotools-package))
+-- 
+1.7.10.4
