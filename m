@@ -1,54 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Jul 2014 11:42:31 +0200
-Subject: [Buildroot] [git commit] xlib_libFS: Add missing host-pkgconf
-	dependency
-Message-ID: <20140720094257.4129A9D08B@busybox.osuosl.org>
+Date: Sun, 20 Jul 2014 11:43:23 +0200
+Subject: [Buildroot] [PATCH v2 1/1] xapp_xfs: Fix compile errors after
+ libXfont 1.5.0 update
+In-Reply-To: <1405842733-27018-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1405842733-27018-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140720114323.59448cd1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=15d225b2feb79eadf0fc10545b8a617b23642fea
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Fixes compile error:
+On Sun, 20 Jul 2014 09:52:13 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/385/385cffbab4261337afa449998aa7457a8142db92/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Cleanup patch (Yann)
+> 
+>  package/x11r7/xapp_xfs/xapp_xfs.mk |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+> index 0907fc3..6322662 100644
+> --- a/package/x11r7/xapp_xfs/xapp_xfs.mk
+> +++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -XAPP_XFS_VERSION = 1.1.3
+> -XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+> -XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+> +XAPP_XFS_VERSION = 1c8459eafc04997751ae3d200d0ec91e43e19b5b
+> +XAPP_XFS_SITE = git://anongit.freedesktop.org/xorg/app/xfs
+>  XAPP_XFS_LICENSE = MIT
+>  XAPP_XFS_LICENSE_FILES = COPYING
+> -XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont xproto_fontsproto
+> +XAPP_XFS_AUTORECONF = YES
+> +XAPP_XFS_DEPENDENCIES = xfont_font-util xlib_libFS xlib_libXfont xproto_fontsproto
+>  
+>  $(eval $(autotools-package))
 
-checking for FS... configure: error: in `/home/br/br/output/build/xlib_libFS-1.0.6':
-configure: error: The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
+Applied, thanks. Since my understanding is that the new dependency
+xfont_font-util was only needed because of the autoreconf, I added a
+comment to indicate that.
 
-Alternatively, you may set the environment variables FS_CFLAGS
-and FS_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
+Thanks,
 
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See `config.log' for more details
-
-using this minimal defconfig
-
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XAPP_XFS=y
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/x11r7/xlib_libFS/xlib_libFS.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
-index 19d2800..d7dcb74 100644
---- a/package/x11r7/xlib_libFS/xlib_libFS.mk
-+++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
-@@ -10,7 +10,7 @@ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBFS_LICENSE = MIT
- XLIB_LIBFS_LICENSE_FILES = COPYING
- XLIB_LIBFS_INSTALL_STAGING = YES
--XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xproto_xproto xproto_fontsproto
-+XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xproto_xproto xproto_fontsproto host-pkgconf
- XLIB_LIBFS_CONF_OPT = --disable-malloc0returnsnull
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
