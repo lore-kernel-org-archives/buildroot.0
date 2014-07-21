@@ -1,73 +1,60 @@
-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-Date: Mon, 21 Jul 2014 21:23:49 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Jul 2014 21:27:00 +0200
 Subject: [Buildroot] [OpenWrt-Devel] uClibc-ng
-In-Reply-To: <CAGVrzcZxcgP+yerqW=1ZDrmgiFmOz9eTwFB2KvZ6Xt2MJpbpDA@mail.gmail.com>
+In-Reply-To: <CAGVrzcZja2DTrJGA2QWsMH=2GgUBuouSetK+-cUdXY7XbyA8SA@mail.gmail.com>
 References: <20140720191326.GD4431@waldemar-brodkorb.de>
  <CAGVrzcZxcgP+yerqW=1ZDrmgiFmOz9eTwFB2KvZ6Xt2MJpbpDA@mail.gmail.com>
-Message-ID: <20140721192348.GJ4431@waldemar-brodkorb.de>
+ <20140721204239.61b225fe@free-electrons.com>
+ <CAGVrzcZja2DTrJGA2QWsMH=2GgUBuouSetK+-cUdXY7XbyA8SA@mail.gmail.com>
+Message-ID: <20140721212700.41e29653@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Florian,
-Florian Fainelli wrote,
+Dear Florian Fainelli,
 
-> Hello,
+On Mon, 21 Jul 2014 11:55:21 -0700, Florian Fainelli wrote:
+
+> > On my side, I fully support Waldemar's fork. The last uClibc release is
+> > more than 2 years old, and Bernhard has never been answering to *any*
+> > of the e-mails asking to do a release, sent since September 2013 or so.
+> > At this point, I think there is absolutely no hope to see any action
+> > being done by the existing uClibc community in terms of doing stable
+> > releases, and this case, the lever that open-source licenses provide is
+> > simple: fork. That's what Waldemar has done, and it's good.
 > 
-> (adding uclibc and Bernhard)
+> To speak my mind, I think uClibc has no future in the next 2 or 3
+> years, musl is a much more active project, with multiple embedded
+> projects starting to use it, on the other end, (e)glibc has remedied
+> its own problems and its useful again.
 > 
-> 2014-07-20 12:13 GMT-07:00 Waldemar Brodkorb <wbx@uclibc-ng.org>:
-> > Hello Embedded Linux Hackers,
-> >
-> > it seems there is no plan to release a new uClibc version.
-> > The current maintainer does not response on any public or private mails
-> > about a plan to do a needed release. Therefore most of you carrying a lot
-> > of patches against uClibc 0.9.33.2 to make it work in your project.
-> > A really ugly situation.
-> 
-> Although I do welcome your action, and stepping in to offer a solution
-> to this, I feel like forking might have the potential of making this
-> situation worse, including, but not limited to:
-> 
-> - creating confusion between uclibc and uclibc-ng
+> No MMU architectures are becoming less and less popular, and the cost
+> for larger flash storage mediums keeps decreasing, so all these key
+> selling features (noMMU support and reduced memory footprint) that
+> uClibc has will soon no longer be any useful to it.
 
-What kind of confusion. uClibc-ng frontpage clearly states it is a
-spin-off of uClibc.
+I don't really think noMMU architectures are becoming less and less
+popular. There is actually a whole new generation of
+Cortex-M3/Cortex-M4 based processors that are capable of running Linux
+and that offer really nice power management capabilities.
 
-> - pissing off Bernhard
+> Bottom line is, I believe uClibc is a (relatively speaking) dead
+> project already, forking it might be useful to keep the existing user
+> base alive, but I expect all of them to transition to something active
+> and maintained, whether that's glibc or musl.
 
-May be I am already pissed off by him? In the past I send a patch
-for mips64 n64 with no answer. After a ping a month later it got
-applied. A bug report about broken sparc support never got a
-response. Public mails of the buildroot project missing a release
-got ignored. A private mail from me to Eric and Bernhard, response
-from Eric that he is no longer involved, no answer from Bernhard.
-So the selective answers of Bernhard are a problem, at least for me.
+I also agree that probably not that much is going to appear in uClibc,
+especially with the currently slow release cycle. However, a C library
+is something that needs to be maintained (as the significant number of
+uClibc patches that we all carry around indicates), and therefore
+having a central upstream that is alive remains useful.
 
-> - duplicating existing infrastructure instead of gaining access to it
+Best regards,
 
-I asked Bernhard if he wants to give up maintainership.
-
-> - what if you end up in the same situation as uClibc, we all have busy lives?
-
-So what is the situation of uClibc? The problem is lack of
-communication. I would be fine if Bernhard would answer any mails
-regarding non-technical issues with uClibc. A short mail "I am busy,
-no release this year." would be at least a fair statement.
-Or "I am very busy, having a new job, can someone make a release?"
- 
-> Thomas and I talked to Khem Raj about this uClibc situation during ELC
-> back in June, and Khem offered some help to see if we could:
-> 
-> - make Bernhard aware of the lack of release situation
-> - use his uclibc.org access to facilitate a 0.9.34? release
-
-Nothing happened. Should I whine another year on the mailinglist
-about a new release?
-As an old OpenBSD user I am following:
-Shutup and hack!
- 
-best regards
- Waldemar
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
