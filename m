@@ -1,42 +1,67 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Jul 2014 09:21:26 -0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-07-20
-In-Reply-To: <20140721121553.10be890c@free-electrons.com>
-References: <20140721063011.48A3410123E@stock.ovh.net>
- <20140721121553.10be890c@free-electrons.com>
-Message-ID: <53CD05C6.3050909@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 21 Jul 2014 15:10:56 +0200
+Subject: [Buildroot] [PATCH 1/1 v2] package/eudev: Bump version to 1.9
+In-Reply-To: <1405633246-17081-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1405633246-17081-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <53CD1160.3080501@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/21/2014 07:15 AM, Thomas Petazzoni wrote:
-
-> Hello all,
-
-Hi.
-
->>       bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/8c891d0b8ad6413a44ecd33e952063308ff08a42/
+On 17/07/14 23:40, Bernd Kuhls wrote:
+> - Switch EUDEV_SITE to official upstream:
+>   http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-fs/eudev/eudev-1.9-r1.ebuild?view=markup
+>   Github does not carry this current eudev version.
 > 
-> warning: cannot find entry symbol __start; defaulting to 00000000
+> - Remove EUDEV_AUTORECONF = yes, tarball contains ./configure
 > 
-> I guess it's a problem related to shared libraries, on a platform that
-> doesn't support them. Gustavo?
-
-Actually it's not, it builds just fine for say mips static.
-I think elf2flt is at fault here, maybe exclude it for flat?
-
->>        arm |                openswan-2.6.41 | NOK | http://autobuild.buildroot.net/results/e5970eae28d01503d89a5d4e593711d7a27da8b5/
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > 
-> /scratch/peko/build/openswan-2.6.41/lib/libipsecconf/keywords.c:501:40: error: unknown type name ???YYSTYPE???
->  int parser_find_keyword(const char *s, YYSTYPE *lval)
+> ---
+> v2: Removed EUDEV_AUTORECONF (Thomas)
 > 
-> Gustavo, maybe?
+>  package/eudev/eudev.mk |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+> index 5f1525c..c6d020f 100644
+> --- a/package/eudev/eudev.mk
+> +++ b/package/eudev/eudev.mk
+> @@ -4,12 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -EUDEV_VERSION = v1.7
+> -EUDEV_SITE = $(call github,gentoo,eudev,$(EUDEV_VERSION))
+> +EUDEV_VERSION = 1.9
+> +EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
+> +EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
 
-Patch sent, looks like it likes to regen parser.l from parser.y when
-flex is around and on that machine it's too old. I was unable to
-reproduce and the failure is uncommon because of it.
+ Hi Bernd,
 
-Regards.
+ The help text in Config.in still points to github. Care to fix? Or is that site
+still correct?
+
+
+ Regards,
+ Arnout
+
+>  EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+>  EUDEV_LICENSE_FILES = COPYING
+>  EUDEV_INSTALL_STAGING = YES
+> -EUDEV_AUTORECONF = YES
+>  
+>  # mq_getattr is in librt
+>  EUDEV_CONF_ENV += LIBS=-lrt
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7CB5 E4CC 6C2E EFD4 6E3D A754 F963 ECAB 2450 2F1F
