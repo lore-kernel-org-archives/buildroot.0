@@ -1,26 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Jul 2014 19:12:22 -0300
-Subject: [Buildroot] [PATCH] qemu/mips64-malta: update defconfig to
- Linux 3.15.x
-In-Reply-To: <20140722000826.05422f03@free-electrons.com>
-References: <20140721201340.GA31551@waldemar-brodkorb.de>	<20140721223512.2207d08c@free-electrons.com>	<53CD7A09.5040608@zacarias.com.ar>
- <20140722000826.05422f03@free-electrons.com>
-Message-ID: <53CD9046.80806@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Jul 2014 00:17:11 +0200
+Subject: [Buildroot] [PATCH] system/skeleton: remove spurious group 'nobody'
+Message-ID: <1405981031-27565-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/21/2014 07:08 PM, Thomas Petazzoni wrote:
+We defien the two groups 'nobody' and 'nogroup' in our skeleton, but
+they have the same gid, which is not valid.
 
-> So maybe, Waldemar, could you respin with CONFIG_EXT4 +
-> CONFIG_EXT4_USE_FOR_EXT23 ?
-> 
-> Thanks a lot!
+This breaks the mkuser script, as noticed by Thomas.
 
-CONFIG_EXT4_USE_FOR_EXT23 is default y when there's EXT4, which is the
-case right now, i did the config after all.
-On the BR side i kept ext2 output because it was the standard norm for
-disk-backed samples, but we can always change that.
-Regards.
+Anyway, the user 'nobody' belongs to the group 'nogroup' in any sane
+distribution.
+
+So, just remove the spurious 'nobody' group.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ system/skeleton/etc/group | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
+index 11d58ac..41c396b 100644
+--- a/system/skeleton/etc/group
++++ b/system/skeleton/etc/group
+@@ -24,6 +24,5 @@ haldaemon:x:68:
+ dbus:x:81:
+ netdev:x:82:
+ ftp:x:83
+-nobody:x:99:
+ nogroup:x:99:
+ users:x:100:
+-- 
+1.9.1
