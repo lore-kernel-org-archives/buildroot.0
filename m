@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jul 2014 00:09:22 +0200
-Subject: [Buildroot] [PATCH 1/4] mysql: fix missing directory
-In-Reply-To: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
+Date: Tue, 22 Jul 2014 00:10:04 +0200
+Subject: [Buildroot] [PATCH 2/4] mysql: add mysql user
+In-Reply-To: <1393944603-3104-2-git-send-email-kuyurix@gmail.com>
 References: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
-Message-ID: <20140722000922.4a3240b8@free-electrons.com>
+ <1393944603-3104-2-git-send-email-kuyurix@gmail.com>
+Message-ID: <20140722001004.52e9c342@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,17 @@ To: buildroot@busybox.net
 
 Dear Marcelo Guti?rrez,
 
-On Tue,  4 Mar 2014 14:50:00 +0000, Marcelo Guti?rrez wrote:
-> 
-> Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
-> ---
->  package/mysql/mysql.mk |    7 +++++++
->  1 file changed, 7 insertions(+)
+On Tue,  4 Mar 2014 14:50:01 +0000, Marcelo Guti?rrez wrote:
 
-Applied, thanks.
+> +define MYSQL_USERS
+> +	mysql -1 nogroup -1 = /var/mysql /bin/sh -
+> +endef
+
+I've changed = to * to generate an user that cannot log in. I've
+changed /bin/sh to - because there's no point in having a shell
+defined. And I've added a description of the user.
+
+Applied with those changes, thanks.
 
 Thomas
 -- 
