@@ -1,34 +1,57 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 21 Jul 2014 18:02:12 +0400
-Subject: [Buildroot] [PATCH V2] perf: Add support for Linux 3.13
-Message-ID: <1405951332-8607-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon, 21 Jul 2014 16:12:14 +0200
+Subject: [Buildroot] [RFC 0/3] Rename of mpc, gmp, mpfr to libmpc, libgmp,
+	libmpfr
+Message-ID: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Makefile has been renamed to Makefile.perf; so now we check both
-Makefile and Makefile.perf to support 3.7 - 3.12 and 3.13 - beyond.
+Adding the package mpc - a client for mpd - conflicts with mpc - the GNU 
+C library.
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- package/perf/perf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In most common distros the packages mpc, gmp, and mpfr and prefixed with lib,
+namely libmpc, libgmp, and libmpfr. So renaiming results in being more 
+consistent and adds clarification that these packages are libraries.
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index 7610f3d..ffeec02 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -35,7 +35,7 @@ define PERF_BUILD_CMDS
- 		exit 1 ; \
- 	fi
- 	$(Q)if test "$(BR2_PACKAGE_ELFUTILS)" = "" ; then \
--		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile ; then \
-+		if ! grep -q NO_LIBELF $(LINUX_DIR)/tools/perf/Makefile* ; then \
- 			if ! test -r $(LINUX_DIR)/tools/perf/config/Makefile ; then \
- 				echo "The perf tool in your kernel cannot be built without libelf." ; \
- 				echo "Either upgrade your kernel to >= 3.7, or enable the elfutils package." ; \
+J?rg Krause (3):
+  Rename package mpc to libmpc
+  Rename package gmp to libgmp
+  Rename package mpfr to libmpfr
+
+ package/Config.in                                       |  6 +++---
+ package/dnsmasq/Config.in                               |  2 +-
+ package/gmp/gmp.mk                                      | 16 ----------------
+ package/{gmp => libgmp}/Config.in                       |  4 ++--
+ .../libgmp-01-arm-asm-conditional-on-no-thumb-1.patch}  |  0
+ .../libgmp-02-arm-asm-conditional-on-no-thumb-2.patch}  |  0
+ ...werpc-provide-default-bmod-to-mod-threshold-1.patch} |  0
+ package/libgmp/libgmp.mk                                | 16 ++++++++++++++++
+ package/{mpc => libmpc}/Config.in                       |  6 +++---
+ package/{mpc/mpc.mk => libmpc/libmpc.mk}                | 14 +++++++-------
+ package/{mpfr => libmpfr}/Config.in                     |  6 +++---
+ package/libmpfr/libmpfr.mk                              | 17 +++++++++++++++++
+ package/mpfr/mpfr.mk                                    | 17 -----------------
+ package/nettle/Config.in                                |  2 +-
+ package/nftables/Config.in                              |  2 +-
+ package/openswan/Config.in                              |  2 +-
+ package/python-pycrypto/Config.in                       |  2 +-
+ package/sconeserver/Config.in                           |  2 +-
+ package/strongswan/Config.in                            |  2 +-
+ 19 files changed, 58 insertions(+), 58 deletions(-)
+ delete mode 100644 package/gmp/gmp.mk
+ rename package/{gmp => libgmp}/Config.in (64%)
+ rename package/{gmp/gmp-01-arm-asm-conditional-on-no-thumb-1.patch => libgmp/libgmp-01-arm-asm-conditional-on-no-thumb-1.patch} (100%)
+ rename package/{gmp/gmp-02-arm-asm-conditional-on-no-thumb-2.patch => libgmp/libgmp-02-arm-asm-conditional-on-no-thumb-2.patch} (100%)
+ rename package/{gmp/gmp-03-powerpc-provide-default-bmod-to-mod-threshold-1.patch => libgmp/libgmp-03-powerpc-provide-default-bmod-to-mod-threshold-1.patch} (100%)
+ create mode 100644 package/libgmp/libgmp.mk
+ rename package/{mpc => libmpc}/Config.in (79%)
+ rename package/{mpc/mpc.mk => libmpc/libmpc.mk} (53%)
+ rename package/{mpfr => libmpfr}/Config.in (68%)
+ create mode 100644 package/libmpfr/libmpfr.mk
+ delete mode 100644 package/mpfr/mpfr.mk
+
 -- 
-1.8.4.1
+2.0.2
