@@ -1,43 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 22:53:29 +0200
-Subject: [Buildroot] [git commit] perf: Don't build backtrace for ARC
-Message-ID: <20140721205401.E8CE39D2A7@busybox.osuosl.org>
+Date: Mon, 21 Jul 2014 22:55:20 +0200
+Subject: [Buildroot] [PATCH 2/2] perf: Don't build backtrace for ARC
+In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356CF6175@de02wembxa.internal.synopsys.com>
+References: <1390914658-18198-1-git-send-email-mjonker@synopsys.com>
+ <CAAXf6LWJqKV-FFUXycBMNvOFZ+CyosFMPb9khmr9x9=Ug6q7xQ@mail.gmail.com>
+ <CAAXf6LWKMo_fM0C7f0XL41L=5OiKjsfN1mXt0h68QM0UC2Nk3g@mail.gmail.com>
+ <39A54937CC95F24AA2F794E2D2B66B1356CF6175@de02wembxa.internal.synopsys.com>
+Message-ID: <20140721225520.4a9ef088@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=fc093d61ce24c0adb0dda3940940664c182626e9
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Anton Kolesov,
 
-[Thomas: add more details as a comment in the code, provided by Anton
-Kolesov.
+Please fix your e-mail client to wrap lines at a reasonable length.
+Thanks!
 
-Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/perf/perf.mk |   10 ++++++++++
- 1 files changed, 10 insertions(+), 0 deletions(-)
+On Mon, 21 Jul 2014 09:39:05 +0000, Anton Kolesov wrote:
 
-diff --git a/package/perf/perf.mk b/package/perf/perf.mk
-index ffeec02..1fcc258 100644
---- a/package/perf/perf.mk
-+++ b/package/perf/perf.mk
-@@ -22,6 +22,16 @@ PERF_MAKE_FLAGS = \
- 	WERROR=0 \
- 	ASCIIDOC=
- 
-+# The call to backtrace() function fails for ARC, because for some
-+# reason the unwinder from libgcc returns early. Thus the usage of
-+# backtrace() should be disabled in perf explicitly: at build time
-+# backtrace() appears to be available, but it fails at runtime: the
-+# backtrace will contain only several functions from the top of stack,
-+# instead of the complete backtrace.
-+ifeq ($(BR2_arc),y)
-+	PERF_MAKE_FLAGS += NO_BACKTRACE=1
-+endif
-+
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- 	PERF_DEPENDENCIES += elfutils
- else
+> Call to backtrace() function fails for ARC, because for some reason
+> unwinder from libgcc returns early. Thus usage of backtrace() should
+> be disabled in perf explicitly, because build system only checks for
+> existence of this call and since it is there it tries to use. However
+> at runtime the output will not be the one expected: it will contain
+> only several functions from the top of stack, instead of the complete
+> backtrace.
+
+Thanks for this explanation. I've committed the patch after adding this
+explanation right above the code that disables backtrace for perf on
+ARC.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
