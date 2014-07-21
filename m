@@ -1,31 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jul 2014 00:11:45 +0200
-Subject: [Buildroot] [PATCH 4/4] mysql: host-mysql depends on host-zlib
-In-Reply-To: <1393944603-3104-4-git-send-email-kuyurix@gmail.com>
-References: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
- <1393944603-3104-4-git-send-email-kuyurix@gmail.com>
-Message-ID: <20140722001145.2debbe63@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Jul 2014 19:12:22 -0300
+Subject: [Buildroot] [PATCH] qemu/mips64-malta: update defconfig to
+ Linux 3.15.x
+In-Reply-To: <20140722000826.05422f03@free-electrons.com>
+References: <20140721201340.GA31551@waldemar-brodkorb.de>	<20140721223512.2207d08c@free-electrons.com>	<53CD7A09.5040608@zacarias.com.ar>
+ <20140722000826.05422f03@free-electrons.com>
+Message-ID: <53CD9046.80806@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marcelo Guti?rrez,
+On 07/21/2014 07:08 PM, Thomas Petazzoni wrote:
 
-On Tue,  4 Mar 2014 14:50:03 +0000, Marcelo Guti?rrez wrote:
+> So maybe, Waldemar, could you respin with CONFIG_EXT4 +
+> CONFIG_EXT4_USE_FOR_EXT23 ?
 > 
-> Signed-off-by: Marcelo Guti?rrez <kuyurix@gmail.com>
-> ---
->  package/mysql/mysql.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thanks a lot!
 
-Applied, thanks. I've added a reference to the autobuilder issue being
-fixed by this commit. Next time, make sure to include such a reference.
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+CONFIG_EXT4_USE_FOR_EXT23 is default y when there's EXT4, which is the
+case right now, i did the config after all.
+On the BR side i kept ext2 output because it was the standard norm for
+disk-backed samples, but we can always change that.
+Regards.
