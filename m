@@ -1,103 +1,83 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Mon, 21 Jul 2014 17:37:22 +0200
-Subject: [Buildroot] [RFC v2 1/3] Rename package mpc to libmpc
-In-Reply-To: <1405957044-11649-1-git-send-email-jkrause@posteo.de>
-References: <1405957044-11649-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1405957044-11649-2-git-send-email-jkrause@posteo.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Mon, 21 Jul 2014 18:25:18 +0200
+Subject: [Buildroot] Silencing the build
+In-Reply-To: <20140718201537.GC3630@free.fr>
+References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140715212814.1dfcce43@free-electrons.com>
+ <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
+ <20140717203152.2e18fb9b@free-electrons.com> <20140717202941.GE3737@free.fr>
+ <CAHkwnC_eQxDKH=V+2U+pOMZj50y4oE2B_p_G+CAk8ZFG3jSsOw@mail.gmail.com>
+ <20140718201537.GC3630@free.fr>
+Message-ID: <CAHkwnC-vKfLhiFF2cYcwrLHFJA0ojCL+X2okeSqODsg_gQw3fQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <jkrause@posteo.de>
----
- package/Config.in                 |  2 +-
- package/{mpc => libmpc}/Config.in |  4 ++--
- package/libmpc/libmpc.mk          | 16 ++++++++++++++++
- package/mpc/mpc.mk                | 15 ---------------
- 4 files changed, 19 insertions(+), 18 deletions(-)
- rename package/{mpc => libmpc}/Config.in (87%)
- create mode 100644 package/libmpc/libmpc.mk
- delete mode 100644 package/mpc/mpc.mk
+On Fri, Jul 18, 2014 at 10:15 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Fabio, All,
+>
+> On 2014-07-18 10:18 +0200, Fabio Porcedda spake thusly:
+>> On Thu, Jul 17, 2014 at 10:29 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> > Thomas, All,
+>> >
+>> > On 2014-07-17 20:31 +0200, Thomas Petazzoni spake thusly:
+>> >> On Thu, 17 Jul 2014 19:40:46 +0200, Fabio Porcedda wrote:
+>> >>
 
-diff --git a/package/Config.in b/package/Config.in
-index 703fd3d..9370d7c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -838,6 +838,7 @@ menu "Other"
- 	source "package/libgc/Config.in"
- 	source "package/libglib2/Config.in"
- 	source "package/libical/Config.in"
-+	source "package/libmpc/Config.in"
- 	source "package/libnspr/Config.in"
- 	source "package/libpfm4/Config.in"
- 	source "package/libplist/Config.in"
-@@ -855,7 +856,6 @@ menu "Other"
- 	source "package/libuv/Config.in"
- 	source "package/linux-pam/Config.in"
- 	source "package/lttng-libust/Config.in"
--	source "package/mpc/Config.in"
- 	source "package/mpfr/Config.in"
- 	source "package/msgpack/Config.in"
- 	source "package/mtdev2tuio/Config.in"
-diff --git a/package/mpc/Config.in b/package/libmpc/Config.in
-similarity index 87%
-rename from package/mpc/Config.in
-rename to package/libmpc/Config.in
-index 8377013..e4b5e01 100644
---- a/package/mpc/Config.in
-+++ b/package/libmpc/Config.in
-@@ -1,5 +1,5 @@
--config BR2_PACKAGE_MPC
--	bool "mpc"
-+config BR2_PACKAGE_LIBMPC
-+	bool "libmpc"
- 	select BR2_PACKAGE_MPFR
- 	select BR2_PACKAGE_GMP
- 	help
-diff --git a/package/libmpc/libmpc.mk b/package/libmpc/libmpc.mk
-new file mode 100644
-index 0000000..1d0395d
---- /dev/null
-+++ b/package/libmpc/libmpc.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libmpc
-+#
-+################################################################################
-+
-+LIBMPC_VERSION = 1.0.2
-+LIBMPC_SITE = $(BR2_GNU_MIRROR)/mpc
-+LIBMPC_SOURCE = mpc-$(LIBMPC_VERSION).tar.gz
-+LIBMPC_LICENSE = LGPLv3+
-+LIBMPC_LICENSE_FILES = COPYING.LESSER
-+LIBMPC_INSTALL_STAGING = YES
-+LIBMPC_DEPENDENCIES = libgmp libmpfr
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/mpc/mpc.mk b/package/mpc/mpc.mk
-deleted file mode 100644
-index 81ee5f0..0000000
---- a/package/mpc/mpc.mk
-+++ /dev/null
-@@ -1,15 +0,0 @@
--################################################################################
--#
--# mpc
--#
--################################################################################
--
--MPC_VERSION = 1.0.2
--MPC_SITE = $(BR2_GNU_MIRROR)/mpc
--MPC_LICENSE = LGPLv3+
--MPC_LICENSE_FILES = COPYING.LESSER
--MPC_INSTALL_STAGING = YES
--MPC_DEPENDENCIES = gmp mpfr
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
+<snip>
+
+>> >> I guess we need to decide whether having a fully silent build in "make
+>> >> -s" is a goal we should aim at. It seems like a good idea to me, but I
+>> >> don't have a really strong opinion about this.
+>> >>
+>> >> What do others think about this?
+>> >
+>> > Here's what I use for a silent build:
+>> >
+>> >     brmake() {
+>> >         make "${@}" \
+>> >         |sed -r -e '/^.{4}>>>[[:space:]]+(.*).{5}$/!d; s//\1/;'
+>> >     }
+>> >
+>> > Then calling 'brmake' instead of 'make', will get you only the >>> lines.
+>>
+>> Nice, so i'm not the only one who likes a silent build ;-)
+>
+> Well, I still believe the build should be verbose by default, otherwise
+> we would miss a lot of important information on bug reports. The problem
+> is where to store the build.log in case of a silent build, so the user
+> can provide it.
+
+I don't know a way to store the full log (stdout & stderr) and view a
+filtered version of stdout & the unfiltered stderr, maybe you have an
+idea?
+
+> I think the best we can do is document a simple solution (like my little
+> function above, for example).
+
+Yes, i think it's a good idea.
+
+I personally prefer using a line like this:
+ make | grep --color=never ">>> "
+to be able to distinguish more easily stdoud messages from stderr messages.
+
+Nevertheless, I still would like that this patch will be applied because:
+- using "make -s" is still simpler that using some "make | sed
+........", many tools have a quiet flag for this reason.
+- is a work already done.
+- does not change the usual behavior.
+- it's just adds 12 line of code .
+
+>> I think that a downside of this method is that even the stderr is
+>> filtered as well so messages like warning or errors are filtered as
+>> well.
+>
+> No, because only stdout is filtered, there's no redirection of stderr.
+
+Good point, you are right.
+
+Regards
 -- 
-2.0.2
+Fabio Porcedda
