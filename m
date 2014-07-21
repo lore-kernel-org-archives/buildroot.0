@@ -1,49 +1,53 @@
-From: Waldemar Brodkorb <wbx@uclibc-ng.org>
-Date: Mon, 21 Jul 2014 18:55:51 +0200
-Subject: [Buildroot] uClibc-ng
-In-Reply-To: <148124bb-7b66-4363-b171-f0164dab3ced@email.android.com>
-References: <20140720191326.GD4431@waldemar-brodkorb.de>
- <148124bb-7b66-4363-b171-f0164dab3ced@email.android.com>
-Message-ID: <20140721165551.GH4431@waldemar-brodkorb.de>
+From: Giovanni Balestrieri <balestrieri.gepp@gmail.com>
+Date: Mon, 21 Jul 2014 19:03:04 +0200
+Subject: [Buildroot]  Raspberry Pi Compilation Error
+Message-ID: <CALRX=SHNnea4sVXWa7W_4yYNa47n9HUKs9xBJwEce_=xpBXRqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas De Schampheleire wrote,
+Hello,
 
-> Hi Waldemar,
-> 
-> Waldemar Brodkorb <wbx@uclibc-ng.org> schreef:
-> >Hello Embedded Linux Hackers,
-> >
-> Interesting development!  One question: how do you see musl vs
-> uclibc-ng in the future? At this moment uclibc supports more
-> architectures, but this may change. Do you think both should/can
-> coexist? What are the distinctive features of uclibc over musl,
-> according to you?
+<http://unix.stackexchange.com/questions/145737/busybox-compilation-fails-networking-nslookup-c-error#>
 
-I think both can coexist for a while. uClibc is more compatible to
-glibc, so most of the software packages used on embedded systems are
-working fine without patching. Musl is relatively new and there are
-patches required to make some stuff work. Alpine Linux, Sabotage and
-OpenADK have a lot of patches, fixing musl issues.
+I'm trying to compile Busybox with Buildroot Cross-Compiler.
 
-uClibc has support for non-MMU systems. uClibc can be configured at 
-build time and can be made smaller than musl. Musl can be used to
-have a complete static linked system, uClibc still requires
-libgcc_so.so for some threading functions. uClibc is widely used
-in the embedded Linux world, musl is a newcomer.
+Here are the steps:
 
-For musl you need to patch gcc. 4.9.x does not include support for
-it.
+   -
 
-It is just good to have a choice.
-At the time all software packages working fine with musl and support
-for it is added to gcc and all architectures and MMU-less systems
-are supported, uClibc might be obsolete.
+   Download Busybox and untar it
 
-best regards
- Waldemar
+   *wget http://www.busybox.net/downloads/busybox-1.22.1.tar.bz2
+   <http://www.busybox.net/downloads/busybox-1.22.1.tar.bz2> && tar xjf
+   busybox-1.22.1.tar.bz2*
+   -
+
+   Configure BusyBox and compile
+
+   *make menuconfig*
+
+   *make CROSS_COMPILE=/usr/local/cross-rpi/usr/bin/arm-linux-*
+
+(The path to the Cross-Compiler is correct)
+
+The compilation returns the following error:
+
+CC      networking/nslookup.o
+networking/nslookup.c: In function ?server_print?:
+networking/nslookup.c:123:37: error: ?struct <anonymous>? has no
+member named ?nsaddrs?
+networking/nslookup.c: In function ?set_default_dns?:
+networking/nslookup.c:163:15: error: ?struct <anonymous>? has no
+member named ?nsaddrs?
+make[1]: *** [networking/nslookup.o] Error 1
+make: *** [networking] Error 2
+
+If I don't use the Cross-Compiler everything builds fine.
+
+Do you have any advice?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140721/f2c1d2c6/attachment.html>
