@@ -1,44 +1,34 @@
-From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 21 Jul 2014 14:16:50 +0300
-Subject: [Buildroot] [PATCH] qt5multimedia: fix installation when quick is
-	disabled
-Message-ID: <1405941410-9837-1-git-send-email-fatih.asici@gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Jul 2014 08:39:33 -0300
+Subject: [Buildroot] [PATCH] php-memcached: make zlib directory explicit
+Message-ID: <1405942773-26816-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+Otherwise it fails to find in some cases. Fixes:
+http://autobuild.buildroot.net/results/993/99342e74d0866a7acddbf9da66aafbfa4f3c12f1/
 
-  http://autobuild.buildroot.net/results/b97/b975c4bb8aebad2d0b8eaefc98c42c0460ace5be/
-  http://autobuild.buildroot.net/results/b1c/b1ca9c845f1cf3a396cbd7ad81bfc4411974c709/
-
-Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/qt5/qt5multimedia/qt5multimedia.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/php-memcached/php-memcached.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index e89e31c..da26c03 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -53,9 +53,15 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
-+endef
-+endif
-+
- define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
--	cp -dpfr $(STAGING_DIR)/usr/qml/* $(TARGET_DIR)/usr/qml
- 	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
-+	$(QT5MULTIMEDIA_INSTALL_TARGET_QMLS)
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
+index 866e18c..b9cc115 100644
+--- a/package/php-memcached/php-memcached.mk
++++ b/package/php-memcached/php-memcached.mk
+@@ -9,7 +9,8 @@ PHP_MEMCACHED_SOURCE = memcached-$(PHP_MEMCACHED_VERSION).tgz
+ PHP_MEMCACHED_SITE = http://pecl.php.net/get
+ PHP_MEMCACHED_CONF_OPT = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ 	--disable-memcached-sasl \
+-	--with-libmemcached-dir=$(STAGING_DIR)/usr
++	--with-libmemcached-dir=$(STAGING_DIR)/usr \
++	--with-zlib-dir=$(STAGING_DIR)/usr
+ # phpize does the autoconf magic
+ PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
+ PHP_MEMCACHED_LICENSE = MIT
 -- 
-1.9.1
+1.8.5.5
