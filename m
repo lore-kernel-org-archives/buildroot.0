@@ -1,76 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Jul 2014 19:26:57 +0200
-Subject: [Buildroot] [PATCH 1/2] apply-patches.sh: don't print anything
- when "-s" option is used
-In-Reply-To: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
-References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <20140721172657.GC3874@free.fr>
+From: Waldemar Brodkorb <wbx@uclibc-ng.org>
+Date: Mon, 21 Jul 2014 19:51:27 +0200
+Subject: [Buildroot] uClibc-ng
+In-Reply-To: <CA+icZUWU7ApasykCEU=2O_+wNF7=QKP3LBEXLMjHcguwQbOS_g@mail.gmail.com>
+References: <20140720191326.GD4431@waldemar-brodkorb.de>
+ <CA+icZUWU7ApasykCEU=2O_+wNF7=QKP3LBEXLMjHcguwQbOS_g@mail.gmail.com>
+Message-ID: <20140721175127.GI4431@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Hi Sedat,
+Sedat Dilek wrote,
 
-On 2014-07-09 13:46 +0200, Fabio Porcedda spake thusly:
-> The make "-s" option is used to enable the "Silent operation" so if
-> that option is used don't print anything as far as there isn't any
-> error.
-> Add the "-s" option to "apply-patches.sh" to enable silent operation.
-> Because "apply-patches.sh" is called in many places add a
-> "APPLY_PATCHES" variable to permit adding the "-s" easily.
+> On Sun, Jul 20, 2014 at 9:13 PM, Waldemar Brodkorb <wbx@uclibc-ng.org> wrote:
+> > Hello Embedded Linux Hackers,
+> >
+> > it seems there is no plan to release a new uClibc version.
+> > The current maintainer does not response on any public or private mails
+> > about a plan to do a needed release. Therefore most of you carrying a lot
+> > of patches against uClibc 0.9.33.2 to make it work in your project.
+> > A really ugly situation.
+> >
 > 
-> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> I have seen some patches got in uClibc upstream some weeks ago (-> inactivity).
 
-OK, this patch does two things:
-  - introduce the APPLY_PATCHES variable, to be used instead of
-    duplicating support/scripts/apply-patches.sh everywhere,
-  - add the -s option to apply-patches
+I didn't go so far to say uClibc is dead, it is just totally unclear
+when the next release is planned.
 
-So, it should be split in two.
+> But anyway, a 1st try...
+> Look at OpenSSL and LibreSSL... Might be we see some competition or
+> rebirth starting here, too?
 
-I did not initially notice that appy-patches was not always made silent,
-but that it was conditional to the user using 'make -s' in the first
-place.
+Dunno, time will show.
+ 
+> My POV (from my experiences) is most embedded projects are not really
+> interested in upstream work or keep their own patches (this seems to
+> be easier).
+> An example:
+> Recently, I pointed to [0], but the maintainer of the project did not
+> give any feedback to Bernd (requested a simple S-o-b).
+> What I want to say it is not only a problem of the uClibc maintainer :-).
 
-So, I would not oppose that patch. After all, if the user uses make -s,
-and it is not really complicated to propagate that to our sub-tools,
-that's pretty OK.
+I think most embedded projects try to push their local patches to
+upstream. At least buildroot does it a lot and I try to do it if
+time permits. In your example the uClibc maintainer could also just
+add the patch and mention where he has got it from. Or should the
+known bug should just be ignored, because of a missing S-o-b?
+ 
+> From my experiences successful projects do regular releases (6 months
+> or a year).
+> What are your plans?
 
-However, see below...
+A good mantra: Release early, release often.
+I have no plans doing regular releases every static time period.
+Just if it make sense.
+ 
+> > To get out of this situation I started a spin-off called uClibc-ng.
+> > The website for the project is here: http://www.uclibc-ng.org
+> > Beta 3 is tagged and downloadable via
+> > http://downloads.uclibc-ng.org/uClibc-ng-1.0.0beta3.tar.xz
+> >
+> 
+> Do you plan a browsable Git website, where someone can look at the
+> source via webbrowser?
 
-[--SNIP--]
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 97053ba..e1fdb4d 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -218,6 +218,12 @@ FLEX:=$(shell which flex || type -p flex)
->  BISON:=$(shell which bison || type -p bison)
->  SED:=$(shell which sed || type -p sed) -i -e
->  
-> +ifeq (,$(findstring s,$(MAKEFLAGS)))
-> +APPLY_PATCHES = support/scripts/apply-patches.sh
-> +else
-> +APPLY_PATCHES = support/scripts/apply-patches.sh -s
-> +endif
+Trac has it included:
+http://www.uclibc-ng.org/browser/uClibc-ng
+Or:
+http://www.openadk.org/cgi-bin/gitweb.cgi?p=uClibc-ng.git;a=summary
+ 
+> OK, you have now an infrastructure...
+> Do you have people (developers, users) behind you :-)?
 
-I would do:
+No. Just me. I am using it for my OpenADK project. I published the
+stuff so others might benefit from it. Some buildroot and OpenWrt
+devs were interested.
+ 
+> > If you want a 1.0 in the near future please test and report back any
+> > issues. You can use the bug tracker, the mailing list or dicussion forum
+> > to report back. To prevent spam you need to be subscribed or registered.
+> >
+> > I have added most of the patches from your projects on top of uClibc
+> > master.
+> >
+> 
+> Did you look also at the patches [1] from the Freetz project?
 
-    BR_SILENT = $(if $(findstring s,$(MAKEFLAGS)),YES)
+Yes. I wanted to inform the freetz project, but I didn't find a
+mailinglist or the mail adresses of the main contributors.
+Most of the patches are either backports from git master or from
+OpenWrt. I hope the rest might get contributed by the freetz people
+with some meta-information, what kind of problem is fixed by a
+patch.
 
-    APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT),-s)
-
-That way, we can re-use $(BR_SILENT) for other tools (I'm thinking of
-graph-depends and our other custom tools in support/scripts/ .)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+best regards
+ Waldemar
+ 
