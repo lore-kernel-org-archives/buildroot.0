@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 22:51:55 +0200
-Subject: [Buildroot] [Patch v2 1/4] evemu: disable tests via evemu
- configure option
-In-Reply-To: <1398723199-10978-1-git-send-email-ps.report@gmx.net>
-References: <1398723199-10978-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140721225155.6cdc585e@free-electrons.com>
+Date: Mon, 21 Jul 2014 22:53:29 +0200
+Subject: [Buildroot] [git commit] perf: Don't build backtrace for ARC
+Message-ID: <20140721205401.E8CE39D2A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: http://git.buildroot.net/buildroot/commit/?id=fc093d61ce24c0adb0dda3940940664c182626e9
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Apr 2014 00:13:16 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - remove patch numbering from patch subject (Arnout Vandecappelle)
->   - move new patch from evemu-0005-... to evemu-0002-...
->     (Arnout Vandecappelle)
+[Thomas: add more details as a comment in the code, provided by Anton
+Kolesov.
 
-Thanks, I've applied your 4 evemu related patches. It would be good to
-submit the various evemu patches upstream. And also I see upstream has
-released a 2.0 version.
+Signed-off-by: Mischa Jonker <mjonker@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/perf/perf.mk |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
 
-Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/perf/perf.mk b/package/perf/perf.mk
+index ffeec02..1fcc258 100644
+--- a/package/perf/perf.mk
++++ b/package/perf/perf.mk
+@@ -22,6 +22,16 @@ PERF_MAKE_FLAGS = \
+ 	WERROR=0 \
+ 	ASCIIDOC=
+ 
++# The call to backtrace() function fails for ARC, because for some
++# reason the unwinder from libgcc returns early. Thus the usage of
++# backtrace() should be disabled in perf explicitly: at build time
++# backtrace() appears to be available, but it fails at runtime: the
++# backtrace will contain only several functions from the top of stack,
++# instead of the complete backtrace.
++ifeq ($(BR2_arc),y)
++	PERF_MAKE_FLAGS += NO_BACKTRACE=1
++endif
++
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ 	PERF_DEPENDENCIES += elfutils
+ else
