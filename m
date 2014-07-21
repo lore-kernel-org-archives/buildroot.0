@@ -1,60 +1,120 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 16:25:58 +0200
-Subject: [Buildroot] [RFC 1/3] Rename package mpc to libmpc
-In-Reply-To: <1405951937-21226-2-git-send-email-jkrause@posteo.de>
-References: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
- <1405951937-21226-2-git-send-email-jkrause@posteo.de>
-Message-ID: <20140721162558.749a1393@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
+Date: Mon, 21 Jul 2014 17:37:24 +0200
+Subject: [Buildroot] [RFC v2 3/3] Rename package mpfr to libmpfr
+In-Reply-To: <1405957044-11649-1-git-send-email-jkrause@posteo.de>
+References: <1405957044-11649-1-git-send-email-jkrause@posteo.de>
+Message-ID: <1405957044-11649-4-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Signed-off-by: J?rg Krause <jkrause@posteo.de>
+---
+ package/Config.in                   |  2 +-
+ package/{mpfr => libmpfr}/Config.in |  4 ++--
+ package/libmpfr/libmpfr.mk          | 17 +++++++++++++++++
+ package/mpfr/mpfr.mk                | 17 -----------------
+ package/sconeserver/Config.in       |  2 +-
+ 5 files changed, 21 insertions(+), 21 deletions(-)
+ rename package/{mpfr => libmpfr}/Config.in (80%)
+ create mode 100644 package/libmpfr/libmpfr.mk
+ delete mode 100644 package/mpfr/mpfr.mk
 
-On Mon, 21 Jul 2014 16:12:15 +0200, J?rg Krause wrote:
-
-> diff --git a/package/mpc/mpc.mk b/package/libmpc/libmpc.mk
-> similarity index 53%
-> rename from package/mpc/mpc.mk
-> rename to package/libmpc/libmpc.mk
-> index 81ee5f0..766e113 100644
-> --- a/package/mpc/mpc.mk
-> +++ b/package/libmpc/libmpc.mk
-> @@ -1,15 +1,15 @@
->  ################################################################################
->  #
-> -# mpc
-> +# libmpc
->  #
->  ################################################################################
->  
-> -MPC_VERSION = 1.0.2
-> -MPC_SITE = $(BR2_GNU_MIRROR)/mpc
-> -MPC_LICENSE = LGPLv3+
-> -MPC_LICENSE_FILES = COPYING.LESSER
-> -MPC_INSTALL_STAGING = YES
-> -MPC_DEPENDENCIES = gmp mpfr
-> +LIBMPC_VERSION = 1.0.2
-> +LIBMPC_SITE = $(BR2_GNU_MIRROR)/mpc
-> +LIBMPC_LICENSE = LGPLv3+
-> +LIBMPC_LICENSE_FILES = COPYING.LESSER
-> +LIBMPC_INSTALL_STAGING = YES
-> +LIBMPC_DEPENDENCIES = libgmp libmpfr
-
-Did you actually test this? With the package named "mpc", we didn't had
-to define MPC_SOURCE, as it is inferred from the package name. If the
-package is named "libmpc", then surely, there needs to be a
-LIBMPC_SOURCE specification.
-
-That being said, I would prefer to find a different name for the mpc
-package (mpd client) rather than renaming existing packages.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index d0feeee..b81c481 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -839,6 +839,7 @@ menu "Other"
+ 	source "package/libgmp/Config.in"
+ 	source "package/libical/Config.in"
+ 	source "package/libmpc/Config.in"
++	source "package/libmpfr/Config.in"
+ 	source "package/libnspr/Config.in"
+ 	source "package/libpfm4/Config.in"
+ 	source "package/libplist/Config.in"
+@@ -856,7 +857,6 @@ menu "Other"
+ 	source "package/libuv/Config.in"
+ 	source "package/linux-pam/Config.in"
+ 	source "package/lttng-libust/Config.in"
+-	source "package/mpfr/Config.in"
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+ 	source "package/orc/Config.in"
+diff --git a/package/mpfr/Config.in b/package/libmpfr/Config.in
+similarity index 80%
+rename from package/mpfr/Config.in
+rename to package/libmpfr/Config.in
+index e2f19cc8..56b19da 100644
+--- a/package/mpfr/Config.in
++++ b/package/libmpfr/Config.in
+@@ -1,5 +1,5 @@
+-config BR2_PACKAGE_MPFR
+-	bool "mpfr"
++config BR2_PACKAGE_LIBMPFR
++	bool "libmpfr"
+ 	default y if BR2_INSTALL_FORTRAN
+ 	select BR2_PACKAGE_LIBGMP
+ 	help
+diff --git a/package/libmpfr/libmpfr.mk b/package/libmpfr/libmpfr.mk
+new file mode 100644
+index 0000000..ce390a9
+--- /dev/null
++++ b/package/libmpfr/libmpfr.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# libmpfr
++#
++################################################################################
++
++LIBMPFR_VERSION = 3.1.2
++LIBMPFR_SITE = http://www.mpfr.org/mpfr-$(LIBMPFR_VERSION)
++LIBMPFR_SOURCE = mpfr-$(LIBMPFR_VERSION).tar.xz
++LIBMPFR_LICENSE = LGPLv3+
++LIBMPFR_LICENSE_FILES = COPYING.LESSER
++LIBMPFR_INSTALL_STAGING = YES
++LIBMPFR_DEPENDENCIES = libgmp
++LIBMPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+deleted file mode 100644
+index 52d88fe..0000000
+--- a/package/mpfr/mpfr.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# mpfr
+-#
+-################################################################################
+-
+-MPFR_VERSION = 3.1.2
+-MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+-MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
+-MPFR_LICENSE = LGPLv3+
+-MPFR_LICENSE_FILES = COPYING.LESSER
+-MPFR_INSTALL_STAGING = YES
+-MPFR_DEPENDENCIES = gmp
+-MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 6999535..2f435b9 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -79,7 +79,7 @@ config BR2_PACKAGE_SCONESERVER_LETTUCE
+ 
+ config BR2_PACKAGE_SCONESERVER_MATHS
+ 	bool "maths"
+-	select BR2_PACKAGE_MPFR
++	select BR2_PACKAGE_LIBMPFR
+ 	help
+ 	  Mathematics module for Sconeserver
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.2
