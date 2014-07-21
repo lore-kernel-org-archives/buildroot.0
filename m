@@ -1,9 +1,9 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <jkrause@posteo.de>
-Date: Mon, 21 Jul 2014 16:12:15 +0200
-Subject: [Buildroot] [RFC 1/3] Rename package mpc to libmpc
+Date: Mon, 21 Jul 2014 16:12:17 +0200
+Subject: [Buildroot] [RFC 3/3] Rename package mpfr to libmpfr
 In-Reply-To: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
 References: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
-Message-ID: <1405951937-21226-2-git-send-email-jkrause@posteo.de>
+Message-ID: <1405951937-21226-4-git-send-email-jkrause@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,77 +12,109 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <jkrause@posteo.de>
 ---
- package/Config.in                        |  2 +-
- package/{mpc => libmpc}/Config.in        |  4 ++--
- package/{mpc/mpc.mk => libmpc/libmpc.mk} | 14 +++++++-------
- 3 files changed, 10 insertions(+), 10 deletions(-)
- rename package/{mpc => libmpc}/Config.in (87%)
- rename package/{mpc/mpc.mk => libmpc/libmpc.mk} (53%)
+ package/Config.in                   |  2 +-
+ package/{mpfr => libmpfr}/Config.in |  4 ++--
+ package/libmpfr/libmpfr.mk          | 17 +++++++++++++++++
+ package/mpfr/mpfr.mk                | 17 -----------------
+ package/sconeserver/Config.in       |  2 +-
+ 5 files changed, 21 insertions(+), 21 deletions(-)
+ rename package/{mpfr => libmpfr}/Config.in (80%)
+ create mode 100644 package/libmpfr/libmpfr.mk
+ delete mode 100644 package/mpfr/mpfr.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 703fd3d..9370d7c 100644
+index d0feeee..b81c481 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -838,6 +838,7 @@ menu "Other"
- 	source "package/libgc/Config.in"
- 	source "package/libglib2/Config.in"
+@@ -839,6 +839,7 @@ menu "Other"
+ 	source "package/libgmp/Config.in"
  	source "package/libical/Config.in"
-+	source "package/libmpc/Config.in"
+ 	source "package/libmpc/Config.in"
++	source "package/libmpfr/Config.in"
  	source "package/libnspr/Config.in"
  	source "package/libpfm4/Config.in"
  	source "package/libplist/Config.in"
-@@ -855,7 +856,6 @@ menu "Other"
+@@ -856,7 +857,6 @@ menu "Other"
  	source "package/libuv/Config.in"
  	source "package/linux-pam/Config.in"
  	source "package/lttng-libust/Config.in"
--	source "package/mpc/Config.in"
- 	source "package/mpfr/Config.in"
+-	source "package/mpfr/Config.in"
  	source "package/msgpack/Config.in"
  	source "package/mtdev2tuio/Config.in"
-diff --git a/package/mpc/Config.in b/package/libmpc/Config.in
-similarity index 87%
-rename from package/mpc/Config.in
-rename to package/libmpc/Config.in
-index 8377013..e4b5e01 100644
---- a/package/mpc/Config.in
-+++ b/package/libmpc/Config.in
+ 	source "package/orc/Config.in"
+diff --git a/package/mpfr/Config.in b/package/libmpfr/Config.in
+similarity index 80%
+rename from package/mpfr/Config.in
+rename to package/libmpfr/Config.in
+index e2f19cc8..56b19da 100644
+--- a/package/mpfr/Config.in
++++ b/package/libmpfr/Config.in
 @@ -1,5 +1,5 @@
--config BR2_PACKAGE_MPC
--	bool "mpc"
-+config BR2_PACKAGE_LIBMPC
-+	bool "libmpc"
- 	select BR2_PACKAGE_MPFR
- 	select BR2_PACKAGE_GMP
+-config BR2_PACKAGE_MPFR
+-	bool "mpfr"
++config BR2_PACKAGE_LIBMPFR
++	bool "libmpfr"
+ 	default y if BR2_INSTALL_FORTRAN
+ 	select BR2_PACKAGE_LIBGMP
  	help
-diff --git a/package/mpc/mpc.mk b/package/libmpc/libmpc.mk
-similarity index 53%
-rename from package/mpc/mpc.mk
-rename to package/libmpc/libmpc.mk
-index 81ee5f0..766e113 100644
---- a/package/mpc/mpc.mk
-+++ b/package/libmpc/libmpc.mk
-@@ -1,15 +1,15 @@
- ################################################################################
- #
--# mpc
-+# libmpc
- #
- ################################################################################
+diff --git a/package/libmpfr/libmpfr.mk b/package/libmpfr/libmpfr.mk
+new file mode 100644
+index 0000000..da65875
+--- /dev/null
++++ b/package/libmpfr/libmpfr.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# libmpfr
++#
++################################################################################
++
++LIBMPFR_VERSION = 3.1.2
++LIBMPFR_SITE = http://www.mpfr.org/mpfr-$(LIBMPFR_VERSION)
++LIBMPFR_SOURCE = mpfr-$(LIBMPFR_VERSION).tar.xz
++LIBMPFR_LICENSE = LGPLv3+
++LIBMPFR_LICENSE_FILES = COPYING.LESSER
++LIBMPFR_INSTALL_STAGING = YES
++LIBMPFR_DEPENDENCIES = gmp
++LIBMPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
+diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
+deleted file mode 100644
+index 52d88fe..0000000
+--- a/package/mpfr/mpfr.mk
++++ /dev/null
+@@ -1,17 +0,0 @@
+-################################################################################
+-#
+-# mpfr
+-#
+-################################################################################
+-
+-MPFR_VERSION = 3.1.2
+-MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
+-MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
+-MPFR_LICENSE = LGPLv3+
+-MPFR_LICENSE_FILES = COPYING.LESSER
+-MPFR_INSTALL_STAGING = YES
+-MPFR_DEPENDENCIES = gmp
+-MPFR_MAKE_OPT = RANLIB=$(TARGET_RANLIB)
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 6999535..2f435b9 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -79,7 +79,7 @@ config BR2_PACKAGE_SCONESERVER_LETTUCE
  
--MPC_VERSION = 1.0.2
--MPC_SITE = $(BR2_GNU_MIRROR)/mpc
--MPC_LICENSE = LGPLv3+
--MPC_LICENSE_FILES = COPYING.LESSER
--MPC_INSTALL_STAGING = YES
--MPC_DEPENDENCIES = gmp mpfr
-+LIBMPC_VERSION = 1.0.2
-+LIBMPC_SITE = $(BR2_GNU_MIRROR)/mpc
-+LIBMPC_LICENSE = LGPLv3+
-+LIBMPC_LICENSE_FILES = COPYING.LESSER
-+LIBMPC_INSTALL_STAGING = YES
-+LIBMPC_DEPENDENCIES = libgmp libmpfr
+ config BR2_PACKAGE_SCONESERVER_MATHS
+ 	bool "maths"
+-	select BR2_PACKAGE_MPFR
++	select BR2_PACKAGE_LIBMPFR
+ 	help
+ 	  Mathematics module for Sconeserver
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
 2.0.2
