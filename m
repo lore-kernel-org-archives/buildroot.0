@@ -1,98 +1,26 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 21 Jul 2014 18:25:40 +0200
-Subject: [Buildroot] [PATCH 2/2] lua-posix: bump to version 32
-In-Reply-To: <1405959940-18410-1-git-send-email-francois.perrad@gadz.org>
-References: <1405959940-18410-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1405959940-18410-2-git-send-email-francois.perrad@gadz.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Jul 2014 13:30:03 -0300
+Subject: [Buildroot] [RFC 1/3] Rename package mpc to libmpc
+In-Reply-To: <20140721162558.749a1393@free-electrons.com>
+References: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
+ <1405951937-21226-2-git-send-email-jkrause@posteo.de>
+ <20140721162558.749a1393@free-electrons.com>
+Message-ID: <53CD400B.1070106@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the patch was merged upstream,
-see https://github.com/luaposix/luaposix/pull/117
+On 07/21/2014 11:25 AM, Thomas Petazzoni wrote:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luaposix/luaposix-without-IPv6.patch | 55 ----------------------------
- package/luaposix/luaposix.mk                 |  2 +-
- 2 files changed, 1 insertion(+), 56 deletions(-)
- delete mode 100644 package/luaposix/luaposix-without-IPv6.patch
+> That being said, I would prefer to find a different name for the mpc
+> package (mpd client) rather than renaming existing packages.
 
-diff --git a/package/luaposix/luaposix-without-IPv6.patch b/package/luaposix/luaposix-without-IPv6.patch
-deleted file mode 100644
-index f187882..0000000
---- a/package/luaposix/luaposix-without-IPv6.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--fix without IPv6
--
--see https://github.com/luaposix/luaposix/pull/117
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
--
--Index: b/ext/posix/posix.c
--===================================================================
----- a/ext/posix/posix.c
--+++ b/ext/posix/posix.c
--@@ -3637,6 +3637,7 @@
-- 					break;
-- 			}
-- 			break;
--+#if defined(IPV6_JOIN_GROUP) && defined(IPV6_LEAVE_GROUP)
-- 		case IPPROTO_IPV6:
-- 			switch(optname) {
-- 				case IPV6_JOIN_GROUP:
--@@ -3650,6 +3651,7 @@
-- 					break;
-- 			}
-- 			break;
--+#endif
-- 		case IPPROTO_TCP:
-- 			switch(optname) {
-- 				default:
--@@ -4697,13 +4699,27 @@
-- 	MENTRY( AI_V4MAPPED	);
-- 	MENTRY( AI_ALL		);
-- 	MENTRY( AI_ADDRCONFIG	);
--+#endif
-- 
--+#ifdef IPV6_JOIN_GROUP
-- 	MENTRY( IPV6_JOIN_GROUP		);
--+#endif
--+#ifdef IPV6_LEAVE_GROUP
-- 	MENTRY( IPV6_LEAVE_GROUP	);
--+#endif
--+#ifdef IPV6_MULTICAST_HOPS
-- 	MENTRY( IPV6_MULTICAST_HOPS	);
--+#endif
--+#ifdef IPV6_MULTICAST_IF
-- 	MENTRY( IPV6_MULTICAST_IF	);
--+#endif
--+#ifdef IPV6_MULTICAST_LOOP
-- 	MENTRY( IPV6_MULTICAST_LOOP	);
--+#endif
--+#ifdef IPV6_UNICAST_HOPS
-- 	MENTRY( IPV6_UNICAST_HOPS	);
--+#endif
--+#ifdef IPV6_V6ONLY
-- 	MENTRY( IPV6_V6ONLY		);
-- #endif
-- #undef MENTRY
--
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index 77f5e62..8fb63a3 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAPOSIX_VERSION = 31
-+LUAPOSIX_VERSION = 32
- LUAPOSIX_SITE = https://github.com/luaposix/luaposix/archive
- LUAPOSIX_SOURCE = release-v$(LUAPOSIX_VERSION).tar.gz
- LUAPOSIX_LICENSE = MIT
--- 
-1.9.1
++1
+Renaming it is potentially very problematic for people that use mpc
+(multiprecision library) for their own projects, mpc would be a
+completely different thing now and we can't make it legacy either since
+there would be a new mpc.
+Just call it mpclient and use a different bool IMHO.
+Regards.
