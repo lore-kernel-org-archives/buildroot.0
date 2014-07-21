@@ -1,37 +1,44 @@
-From: Fatih =?utf-8?q?A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
-Date: Mon, 21 Jul 2014 14:16:00 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-07-20
-In-Reply-To: <20140721121553.10be890c@free-electrons.com>
-References: <20140721063011.48A3410123E@stock.ovh.net>
- <20140721121553.10be890c@free-electrons.com>
-Message-ID: <201407211416.00389.fatih.asici@gmail.com>
+From: =?UTF-8?q?Fatih=20A=C5=9F=C4=B1c=C4=B1?= <fatih.asici@gmail.com>
+Date: Mon, 21 Jul 2014 14:16:50 +0300
+Subject: [Buildroot] [PATCH] qt5multimedia: fix installation when quick is
+	disabled
+Message-ID: <1405941410-9837-1-git-send-email-fatih.asici@gmail.com>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Monday 21 July 2014 13:15:53 Thomas Petazzoni wrote:
-> >        arm |            qt5multimedia-5.3.1 | NOK |
-> >http://autobuild.buildroot.net/results/b975c4bb8aebad2d0b8eaefc98c42c0460
-> >ace5be/ mips64el |            qt5multimedia-5.3.1 | NOK |
-> >http://autobuild.buildroot.net/results/b1ca9c845f1cf3a396cbd7ad81bfc44119
-> >74c709/
-> 
-> [7m>>> qt5multimedia 5.3.1 Installing to target[27m
-> cp -dpfr
-> /home/test/autobuild/instance-3/output/host/usr/arm-buildroot-linux-gnueab
-> ihf/sysroot/usr/qml/* /home/test/autobuild/instance-3/output/target/usr/qml
-> cp: cannot stat
-> `/home/test/autobuild/instance-3/output/host/usr/arm-buildroot-linux-gnuea
-> bihf/sysroot/usr/qml/*': No such file or directory
-> 
-> Fatih?
-> 
-> It might be related to the fact that I haven't applied your entire
-> patch series.. but it would mean that your series was not
-> bisectable! :-)
+Fixes:
 
-Sorry, the first patch in my series introduced this issue. I will send another 
-patch which is based on my series.
+  http://autobuild.buildroot.net/results/b97/b975c4bb8aebad2d0b8eaefc98c42c0460ace5be/
+  http://autobuild.buildroot.net/results/b1c/b1ca9c845f1cf3a396cbd7ad81bfc4411974c709/
 
-Sometimes I forget removing output directory before testing a different config 
-(building qt5multimedia w/o qt5declarative in this case).
+Signed-off-by: Fatih A??c? <fatih.asici@gmail.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index e89e31c..da26c03 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -53,9 +53,15 @@ define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++define QT5MULTIMEDIA_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtMultimedia $(TARGET_DIR)/usr/qml/
++endef
++endif
++
+ define QT5MULTIMEDIA_INSTALL_TARGET_CMDS
+-	cp -dpfr $(STAGING_DIR)/usr/qml/* $(TARGET_DIR)/usr/qml
+ 	$(QT5MULTIMEDIA_INSTALL_TARGET_LIBS)
++	$(QT5MULTIMEDIA_INSTALL_TARGET_QMLS)
+ endef
+ 
+ $(eval $(generic-package))
+-- 
+1.9.1
