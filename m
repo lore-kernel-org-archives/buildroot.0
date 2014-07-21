@@ -1,16 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 21 Jul 2014 19:16:27 +0200
-Subject: [Buildroot] Silencing the build
-In-Reply-To: <CAHkwnC-vKfLhiFF2cYcwrLHFJA0ojCL+X2okeSqODsg_gQw3fQ@mail.gmail.com>
+Date: Mon, 21 Jul 2014 19:26:57 +0200
+Subject: [Buildroot] [PATCH 1/2] apply-patches.sh: don't print anything
+ when "-s" option is used
+In-Reply-To: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
 References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
- <20140715212814.1dfcce43@free-electrons.com>
- <CAHkwnC_1+=SR88eS3hHDOFMvzFFF_dE5LuRdKhKfi9pFm1RL4Q@mail.gmail.com>
- <20140717203152.2e18fb9b@free-electrons.com>
- <20140717202941.GE3737@free.fr>
- <CAHkwnC_eQxDKH=V+2U+pOMZj50y4oE2B_p_G+CAk8ZFG3jSsOw@mail.gmail.com>
- <20140718201537.GC3630@free.fr>
- <CAHkwnC-vKfLhiFF2cYcwrLHFJA0ojCL+X2okeSqODsg_gQw3fQ@mail.gmail.com>
-Message-ID: <20140721171627.GB3874@free.fr>
+Message-ID: <20140721172657.GC3874@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,45 +13,56 @@ To: buildroot@busybox.net
 
 Fabio, All,
 
-On 2014-07-21 18:25 +0200, Fabio Porcedda spake thusly:
-> On Fri, Jul 18, 2014 at 10:15 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Well, I still believe the build should be verbose by default, otherwise
-> > we would miss a lot of important information on bug reports. The problem
-> > is where to store the build.log in case of a silent build, so the user
-> > can provide it.
+On 2014-07-09 13:46 +0200, Fabio Porcedda spake thusly:
+> The make "-s" option is used to enable the "Silent operation" so if
+> that option is used don't print anything as far as there isn't any
+> error.
+> Add the "-s" option to "apply-patches.sh" to enable silent operation.
+> Because "apply-patches.sh" is called in many places add a
+> "APPLY_PATCHES" variable to permit adding the "-s" easily.
 > 
-> I don't know a way to store the full log (stdout & stderr) and view a
-> filtered version of stdout & the unfiltered stderr, maybe you have an
-> idea?
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
 
-    brmake() {
-        # This is a bash function, pipefail is not POSIX
-        set -o pipefail
-        make "${@}" 2>&1 \
-        |tee build.log   \
-        |sed -r -e '/^.{4}>>>[[:space:]]+(.*).{5}$/!d; s//\1/;'
-    }
+OK, this patch does two things:
+  - introduce the APPLY_PATCHES variable, to be used instead of
+    duplicating support/scripts/apply-patches.sh everywhere,
+  - add the -s option to apply-patches
 
-> > I think the best we can do is document a simple solution (like my little
-> > function above, for example).
-> 
-> Yes, i think it's a good idea.
-> 
-> I personally prefer using a line like this:
->  make | grep --color=never ">>> "
-> to be able to distinguish more easily stdoud messages from stderr messages.
+So, it should be split in two.
 
-Yes, why not. That's a bit trickier to handle, but no undoable. It would
-need playing tricks with redirection and duplicating filedescriptors...
+I did not initially notice that appy-patches was not always made silent,
+but that it was conditional to the user using 'make -s' in the first
+place.
 
-> Nevertheless, I still would like that this patch will be applied because:
-> - using "make -s" is still simpler that using some "make | sed
-> ........", many tools have a quiet flag for this reason.
-> - is a work already done.
-> - does not change the usual behavior.
-> - it's just adds 12 line of code .
+So, I would not oppose that patch. After all, if the user uses make -s,
+and it is not really complicated to propagate that to our sub-tools,
+that's pretty OK.
 
-I'll have another look at it...
+However, see below...
+
+[--SNIP--]
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 97053ba..e1fdb4d 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -218,6 +218,12 @@ FLEX:=$(shell which flex || type -p flex)
+>  BISON:=$(shell which bison || type -p bison)
+>  SED:=$(shell which sed || type -p sed) -i -e
+>  
+> +ifeq (,$(findstring s,$(MAKEFLAGS)))
+> +APPLY_PATCHES = support/scripts/apply-patches.sh
+> +else
+> +APPLY_PATCHES = support/scripts/apply-patches.sh -s
+> +endif
+
+I would do:
+
+    BR_SILENT = $(if $(findstring s,$(MAKEFLAGS)),YES)
+
+    APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT),-s)
+
+That way, we can re-use $(BR_SILENT) for other tools (I'm thinking of
+graph-depends and our other custom tools in support/scripts/ .)
 
 Regards,
 Yann E. MORIN.
