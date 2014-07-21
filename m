@@ -1,61 +1,80 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 21 Jul 2014 15:10:56 +0200
-Subject: [Buildroot] [PATCH 1/1 v2] package/eudev: Bump version to 1.9
-In-Reply-To: <1405633246-17081-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1405633246-17081-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <53CD1160.3080501@mind.be>
+Date: Mon, 21 Jul 2014 15:20:23 +0200
+Subject: [Buildroot] [PATCH 6/6] systemd: install timesync service if
+ selected
+In-Reply-To: <20140717124629.GB20114@rmm-p1267483>
+References: <1404406659-31109-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <1404406659-31109-7-git-send-email-eric.le.bihan.dev@free.fr>
+ <53BACED4.3000706@mind.be> <20140717124629.GB20114@rmm-p1267483>
+Message-ID: <53CD1397.1020202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17/07/14 23:40, Bernd Kuhls wrote:
-> - Switch EUDEV_SITE to official upstream:
->   http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-fs/eudev/eudev-1.9-r1.ebuild?view=markup
->   Github does not carry this current eudev version.
+On 17/07/14 14:46, Eric Le Bihan wrote:
+> On Mon, Jul 07, 2014 at 06:46:12PM +0200, Arnout Vandecappelle wrote:
+>> On 03/07/14 18:57, Eric Le Bihan wrote:
+>>> If support for systemd-timesyncd is selected, install the associated
+>>> service.
+>>>
+>>> Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>>
+>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>>
+>>> ---
+>>>  package/systemd/systemd.mk |    6 ++++++
+>>>  1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+>>> index 2da65e6..3454e43 100644
+>>> --- a/package/systemd/systemd.mk
+>>> +++ b/package/systemd/systemd.mk
+>>> @@ -112,6 +112,11 @@ endif
+>>>
+>>>  ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
+>>>  SYSTEMD_CONF_OPT += --enable-timesyncd
+>>> +define SYSTEMD_INSTALL_SERVICE_TIMESYNC
+>>> +	mkdir -p $(TARGET_DIR)/etc/systemd/system/sysinit.target.wants
+>>> +	ln -sf ../../../../lib/systemd/system/systemd-timesyncd.service \
+>>> +		$(TARGET_DIR)/etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service
+>>> +endef
+>>
+>>  Not for this patch, but perhaps a cleaner way to do this would be to add
+>>
+>> SYSTEMD_INSTALL_INIT_SYSTEMD += $(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
+>>
+>> instead having the list explicit below? Or wouldn't that work because there is
+>> no separator between networkd and timesync?
 > 
-> - Remove EUDEV_AUTORECONF = yes, tarball contains ./configure
+> Exactly! I tried the proposed solution and it does not work because of the
+> missing separator.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> In order to have such a way of installing systemd unit files, we should do the
+> same as for the pre/post installation hooks.
 > 
-> ---
-> v2: Removed EUDEV_AUTORECONF (Thomas)
+> The following change should be done in package/pkg-generic.mk:
 > 
->  package/eudev/eudev.mk |    6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>    	$(if $(BR2_INIT_SYSTEMD),\
+>   -		$($(PKG)_INSTALL_INIT_SYSTEMD))
+>   +		$(foreach hook,$($(PKG)_INIT_SYSTEMD_HOOKS),$(call $(hook))$(sep)))
 > 
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> index 5f1525c..c6d020f 100644
-> --- a/package/eudev/eudev.mk
-> +++ b/package/eudev/eudev.mk
-> @@ -4,12 +4,12 @@
->  #
->  ################################################################################
->  
-> -EUDEV_VERSION = v1.7
-> -EUDEV_SITE = $(call github,gentoo,eudev,$(EUDEV_VERSION))
-> +EUDEV_VERSION = 1.9
-> +EUDEV_SOURCE = eudev-$(EUDEV_VERSION).tar.gz
-> +EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+> Then, we could use:
+> 
+>   SYSTEMD_INIT_SYSTEMD_HOOKS += SYSTEMD_INSTALL_SERVICE_TIMESYNC
+> 
+> This would require updating all the Makefiles of the packages installing
+> systemd unit files (and maybe do the same for SysV/Busybox to be coherent).
 
- Hi Bernd,
+ No, it's not worth it. There won't be more than one or two packages that need
+to do more than one thing for the INSTALL_INIT things, so complicating all
+packages in order for this to work is a bit too much.
 
- The help text in Config.in still points to github. Care to fix? Or is that site
-still correct?
-
+ So your original patch (which you reposted) is fine.
 
  Regards,
  Arnout
-
->  EUDEV_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
->  EUDEV_LICENSE_FILES = COPYING
->  EUDEV_INSTALL_STAGING = YES
-> -EUDEV_AUTORECONF = YES
->  
->  # mq_getattr is in librt
->  EUDEV_CONF_ENV += LIBS=-lrt
-> 
 
 
 -- 
