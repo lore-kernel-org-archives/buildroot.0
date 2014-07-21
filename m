@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Jul 2014 00:10:04 +0200
-Subject: [Buildroot] [PATCH 2/4] mysql: add mysql user
-In-Reply-To: <1393944603-3104-2-git-send-email-kuyurix@gmail.com>
+Date: Tue, 22 Jul 2014 00:11:19 +0200
+Subject: [Buildroot] [PATCH 3/4] mysql: add mysql init script
+In-Reply-To: <1393944603-3104-3-git-send-email-kuyurix@gmail.com>
 References: <1393944603-3104-1-git-send-email-kuyurix@gmail.com>
- <1393944603-3104-2-git-send-email-kuyurix@gmail.com>
-Message-ID: <20140722001004.52e9c342@free-electrons.com>
+ <1393944603-3104-3-git-send-email-kuyurix@gmail.com>
+Message-ID: <20140722001119.14837d38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,25 @@ To: buildroot@busybox.net
 
 Dear Marcelo Guti?rrez,
 
-On Tue,  4 Mar 2014 14:50:01 +0000, Marcelo Guti?rrez wrote:
+On Tue,  4 Mar 2014 14:50:02 +0000, Marcelo Guti?rrez wrote:
 
-> +define MYSQL_USERS
-> +	mysql -1 nogroup -1 = /var/mysql /bin/sh -
-> +endef
+> +case "$1" in
+> +	start)
+> +		/usr/bin/mysqld_safe &
 
-I've changed = to * to generate an user that cannot log in. I've
-changed /bin/sh to - because there's no point in having a shell
-defined. And I've added a description of the user.
+I've added a call to mysql_install_db on the first boot, to generate
+the MySQL system tables, otherwise the server refuses to start. I've
+also used --pid-file when calling mysqld_safe to explicitly specify
+where the pid file should be stored, because...
 
-Applied with those changes, thanks.
+> +		;;
+> +	stop)
+> +		if test -f /var/lib/mysql/mysqld.pid ; then
+> +			PID=`cat /var/lib/mysql/mysqld.pid`
+
+... it wasn't stored there, so I fixed that up as well.
+
+Committed with those changes, thanks!
 
 Thomas
 -- 
