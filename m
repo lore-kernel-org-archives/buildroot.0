@@ -1,27 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 21:53:25 +0200
-Subject: [Buildroot] [PATCH 1/2] lua-messagepack: bump to version 0.3.1
-In-Reply-To: <1405959940-18410-1-git-send-email-francois.perrad@gadz.org>
-References: <1405959940-18410-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140721215325.3dd842bf@free-electrons.com>
+Date: Mon, 21 Jul 2014 21:52:50 +0200
+Subject: [Buildroot] [git commit] lua-messagepack: bump to version 0.3.1
+Message-ID: <20140721195331.622CA9D2A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: http://git.buildroot.net/buildroot/commit/?id=96694771f8eefea8006000ec2f59956e952ff695
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 21 Jul 2014 18:25:39 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/lua-messagepack/lua-messagepack.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lua-messagepack/lua-messagepack.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks, this patch, and the lua-posix bump patch have been applied.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lua-messagepack/lua-messagepack.mk b/package/lua-messagepack/lua-messagepack.mk
+index 9a680ee..d314429 100644
+--- a/package/lua-messagepack/lua-messagepack.mk
++++ b/package/lua-messagepack/lua-messagepack.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.0
++LUA_MESSAGEPACK_VERSION_UPSTREAM = 0.3.1
+ LUA_MESSAGEPACK_VERSION = $(LUA_MESSAGEPACK_VERSION_UPSTREAM)-1
+ LUA_MESSAGEPACK_SUBDIR  = lua-MessagePack-$(LUA_MESSAGEPACK_VERSION_UPSTREAM)
+ LUA_MESSAGEPACK_LICENSE = MIT
