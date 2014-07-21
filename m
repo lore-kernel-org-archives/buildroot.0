@@ -1,120 +1,111 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 22:37:19 +0200
-Subject: [Buildroot] [git commit] evemu: enable python3 bindings
-Message-ID: <20140721204953.F18939B999@busybox.osuosl.org>
+Date: Mon, 21 Jul 2014 22:18:42 +0200
+Subject: [Buildroot] [git commit] evemu: disable tests via evemu configure
+	option
+Message-ID: <20140721204953.DC9C79D2A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3d08f3f03f0352f354b8b61443c79addaf9f827a
+commit: http://git.buildroot.net/buildroot/commit/?id=4d96a061649181437055ce3545c02c524e47c3fe
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add evemu/python3 related patches:
-- fix python/evemu/base.py for python3 (add patch from [1])
-- fix python3 binding runtime failure
-
-[1] http://ftp.de.debian.org/debian/pool/main/e/evemu/evemu_1.2.0-2.debian.tar.xz
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...-fixes-the-syntax-for-raising-exceptions-.patch |   27 +++++++++++++++
- ...u-0007-python-fix-device-open-for-python3.patch |   35 ++++++++++++++++++++
- package/evemu/evemu.mk                             |    7 ++--
- 3 files changed, 65 insertions(+), 4 deletions(-)
+ ...002-configure.ac-add-disable-tests-option.patch |   44 ++++++++++++++++++++
+ package/evemu/evemu-0002-disable-tests.patch       |   19 --------
+ package/evemu/evemu.mk                             |    3 +
+ 3 files changed, 47 insertions(+), 19 deletions(-)
 
-diff --git a/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch b/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
+diff --git a/package/evemu/evemu-0002-configure.ac-add-disable-tests-option.patch b/package/evemu/evemu-0002-configure.ac-add-disable-tests-option.patch
 new file mode 100644
-index 0000000..cf3da8b
+index 0000000..cbc025d
 --- /dev/null
-+++ b/package/evemu/evemu-0006-Description-fixes-the-syntax-for-raising-exceptions-.patch
-@@ -0,0 +1,27 @@
-+Description: fixes the syntax for raising exceptions to be Python2 and Python3
-+ acceptable.
-+Author: Stephen M. Webb
-+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=706155
-+
-+--- a/python/evemu/base.py
-++++ b/python/evemu/base.py
-+@@ -19,15 +19,15 @@
-+     def _call0(self, api_call, *parameters):
-+         result = api_call(*parameters)
-+         if result == 0 and self.get_c_errno() != 0:
-+-            raise exception.ExecutionError, "%s: %s" % (
-+-                api_call.__name__, self.get_c_error())
-++            raise exception.ExecutionError("%s: %s" % (
-++                api_call.__name__, self.get_c_error()))
-+         return result
-+ 
-+     def _call(self, api_call, *parameters):
-+         result = api_call(*parameters)
-+         if result < 0 and self.get_c_errno() != 0:
-+-            raise exception.ExecutionError, "%s: %s" % (
-+-                api_call.__name__, self.get_c_error())
-++            raise exception.ExecutionError("%s: %s" % (
-++                api_call.__name__, self.get_c_error()))
-+         return result
-+ 
-+     def get_c_errno(self):
-diff --git a/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch b/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
-new file mode 100644
-index 0000000..ec989d2
---- /dev/null
-+++ b/package/evemu/evemu-0007-python-fix-device-open-for-python3.patch
-@@ -0,0 +1,35 @@
-+From f192db7848962a1616e243bb60e705da6c6f3412 Mon Sep 17 00:00:00 2001
++++ b/package/evemu/evemu-0002-configure.ac-add-disable-tests-option.patch
+@@ -0,0 +1,44 @@
++From 077722193e4e59e76591abbaddac9d22068be4e6 Mon Sep 17 00:00:00 2001
 +From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 27 Apr 2014 01:16:16 +0200
-+Subject: [PATCH] python: fix device open for python3
-+
-+- use 'rb' instead of 'r+b', fixes:
-+
-+>>> import evemu
-+>>> evemu.Device('/dev/input/event0')
-+Traceback (most recent call last):
-+  File "<stdin>", line 1, in <module>
-+  File "/usr/lib/python3.4/site-packages/evemu/__init__.py", line 50, in __init__
-+io.UnsupportedOperation: File or stream is not seekable.
++Date: Sun, 27 Apr 2014 13:14:51 +0200
++Subject: [PATCH] configure.ac: add '--disable-tests' option
 +
 +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ python/evemu/__init__.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ Makefile.am  | 2 +-
++ configure.ac | 9 +++++++++
++ 2 files changed, 10 insertions(+), 1 deletion(-)
 +
-+diff --git a/python/evemu/__init__.py b/python/evemu/__init__.py
-+index abdbf7e..aa73871 100644
-+--- a/python/evemu/__init__.py
-++++ b/python/evemu/__init__.py
-+@@ -47,7 +47,7 @@ class Device(object):
-+         """
++diff --git a/Makefile.am b/Makefile.am
++index 7b68f3d..a83b35f 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,4 +1,4 @@
++-SUBDIRS = src tools python test
+++SUBDIRS = src tools python $(SUBDIR_TESTS)
 + 
-+         if type(f).__name__ == 'str':
-+-            self._file = open(f, 'r+b')
-++            self._file = open(f, 'rb')
-+         elif type(f).__name__ == 'file':
-+             self._file = f
-+         else:
++ pkgconfigdir = $(libdir)/pkgconfig
++ pkgconfig_DATA = evemu.pc
++diff --git a/configure.ac b/configure.ac
++index ec21a6e..4e0c3b8 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -43,6 +43,15 @@ if test "x$XMLTO" = "x" || test "x$ASCIIDOC" = "x"; then
++ 	AC_MSG_WARN([xmlto or asciidoc not found - cannot create man pages without it])
++ fi
++ 
+++AC_ARG_ENABLE([tests],
+++	AS_HELP_STRING([--disable-tests], [Disable running tests]))
+++
+++AS_IF([test "x$enable_tests" != "xno"], [
+++	SUBDIR_TESTS=test
+++])
+++
+++AC_SUBST([SUBDIR_TESTS])
+++
++ AC_SUBST(AM_CFLAGS,
++          "-Wall -Wextra -pedantic")
++ 
 +-- 
 +1.8.1.4
 +
+diff --git a/package/evemu/evemu-0002-disable-tests.patch b/package/evemu/evemu-0002-disable-tests.patch
+deleted file mode 100644
+index e545c91..0000000
+--- a/package/evemu/evemu-0002-disable-tests.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-[PATCH] disable tests
+-
+-The tests need C++ support and add to build time, so disable them for BR.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- Makefile.am |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-Index: evemu-1.2.0/Makefile.am
+-===================================================================
+---- evemu-1.2.0.orig/Makefile.am
+-+++ evemu-1.2.0/Makefile.am
+-@@ -1,4 +1,4 @@
+--SUBDIRS = src tools python test
+-+SUBDIRS = src tools python
+- 
+- pkgconfigdir = $(libdir)/pkgconfig
+- pkgconfig_DATA = evemu.pc
 diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 9ff9922..9f7f4af 100644
+index 0f25f62..385a982 100644
 --- a/package/evemu/evemu.mk
 +++ b/package/evemu/evemu.mk
-@@ -27,11 +27,10 @@ EVEMU_DEPENDENCIES = host-pkgconf libevdev
- # Needs Python for header file generation
- EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+@@ -18,6 +18,9 @@ EVEMU_CONF_ENV = ac_cv_path_ASCIIDOC=""
+ # of host system version)
+ EVEMU_MAKE_ENV = SYSROOT=$(STAGING_DIR)
  
--# Check for target python (python3 bindings disabled because
--# of build/byte-compile problems)
--ifeq ($(BR2_PACKAGE_PYTHON),y)
-+# Check for target python
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
- EVEMU_CONF_OPT += --enable-python-bindings
--EVEMU_DEPENDENCIES += python
-+EVEMU_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),python3,python)
- else
- EVEMU_CONF_OPT += --disable-python-bindings
- endif
++# disable tests generation because of C++ dependency
++EVEMU_CONF_OPT += --disable-tests
++
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ EVEMU_DEPENDENCIES = host-pkgconf libevdev
+ 
