@@ -1,39 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 23:52:27 +0200
-Subject: [Buildroot] [git commit] mysql: add mysql user
-Message-ID: <20140721220624.4F6399C4CF@busybox.osuosl.org>
+Date: Tue, 22 Jul 2014 00:08:26 +0200
+Subject: [Buildroot] [PATCH] qemu/mips64-malta: update defconfig to
+ Linux 3.15.x
+In-Reply-To: <53CD7A09.5040608@zacarias.com.ar>
+References: <20140721201340.GA31551@waldemar-brodkorb.de>
+ <20140721223512.2207d08c@free-electrons.com>
+ <53CD7A09.5040608@zacarias.com.ar>
+Message-ID: <20140722000826.05422f03@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=83cb67dde2daa1b51e84bb2473f5bda77282842b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gustavo, Waldemar,
 
-[Thomas: do not define a password nor a shell, add a description for
-the user.]
+On Mon, 21 Jul 2014 17:37:29 -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Marcelo Guti??rrez <kuyurix@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Well, actually, Buildroot can generate ext3 and ext4 filesystems:
+> > http://git.buildroot.net/buildroot/tree/fs/ext2/Config.in#n13.
+> 
+> And there's also CONFIG_EXT4_USE_FOR_EXT23 for the kernel side, which
+> makes the EXT4 option in the kernel cover all use cases.
 
-merge user def
----
- package/mysql/mysql.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+So maybe, Waldemar, could you respin with CONFIG_EXT4 +
+CONFIG_EXT4_USE_FOR_EXT23 ?
 
-diff --git a/package/mysql/mysql.mk b/package/mysql/mysql.mk
-index 21435f5..44dcb7e 100644
---- a/package/mysql/mysql.mk
-+++ b/package/mysql/mysql.mk
-@@ -89,6 +89,10 @@ define HOST_MYSQL_INSTALL_CMDS
- 	$(INSTALL) -m 0755  $(@D)/sql/gen_lex_hash  $(HOST_DIR)/usr/bin/
- endef
- 
-+define MYSQL_USERS
-+	mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
-+endef
-+
- define MYSQL_ADD_FOLDER
- 	$(INSTALL) -d $(TARGET_DIR)/var/mysql
- endef
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
