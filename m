@@ -1,60 +1,196 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 21 Jul 2014 22:15:55 +0200
-Subject: [Buildroot] issues without busybox
-In-Reply-To: <98386AE2-7424-4E70-8839-6B642B9938F4@whospot.com>
-References: <98386AE2-7424-4E70-8839-6B642B9938F4@whospot.com>
-Message-ID: <20140721221555.72df12ca@free-electrons.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 21 Jul 2014 22:17:09 +0200
+Subject: [Buildroot] [PATCH] qemu/mips64el-malta: update defconfig to Linux
+	3.15.x
+Message-ID: <20140721201708.GA31587@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gilles,
+Update to 3.15.x, use Ext2 instead of Ext4.
+Genext2fs generates ext2 filesystem, so better use ext2
+as used for qemu/mips-malta and qemu/mipsel-malta.
 
-On Mon, 21 Jul 2014 12:57:50 -0700, Gilles wrote:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ board/qemu/mips64el-malta/linux-3.13.config |   60 ---------------------------
+ board/qemu/mips64el-malta/linux-3.15.config |   60 +++++++++++++++++++++++++++
+ board/qemu/mips64el-malta/readme.txt        |    2 +-
+ configs/qemu_mips64el_malta_defconfig       |   10 ++---
+ 4 files changed, 66 insertions(+), 66 deletions(-)
+ delete mode 100644 board/qemu/mips64el-malta/linux-3.13.config
+ create mode 100644 board/qemu/mips64el-malta/linux-3.15.config
 
-> Buildroot is a fantastic effort for small footprint devices. However,
-> in my case - where I'd rather have something a bit more SystemV like
-> with MMU, no busybox, a lot of things are broken.
-> 
-> Just naming a few I recently fixed to get past some issues:
-> 
-> - init network script S40network which tries to use ifup/ifdown only
-> provided in ifupdown package not included.
-> - S45connman sript (if used) which relies on start-stop-daemon only
-> provided with dpkg.
-> 
-> I understand that dependencies quickly add up to a nightmare and I
-> for one would agree that it should be left up to the user of
-> buildroot to figure them out.
-> 
-> What is the buildroot community feeling about this subject? I
-> understand that the main focus is on busybox, is there a group of
-> people interested in the non-busybox approach? I would be willing to
-> contribute, after all, I have to do this work right now to get me up
-> and going. This might benefit other people.
-
-Thanks a lot for reporting those issues. Patches are definitely welcome
-to fix this.
-
-I believe one direction we should potentially investigate is to have
-one common skeleton for the base stuff, and then separate additional
-skeletons for busybox init, sysv init and systemd init.
-
-Regarding the specific issues you're raising here, I'm not exactly sure
-how to solve them:
-
- * For the network, we could make sysvinit depend on ifupdown, but this
-   sounds a bit strong. Then it would mean that we should make the init
-   script installation conditional. Or maybe installed just by ifupdown
-   on one side, and busybox on the other side?
-
- * Regarding start-stop-daemon, I believe all (most?) our init scripts
-   rely on start-stop-daemon. So I'm not sure how to handle that...
-
-Thomas
+diff --git a/board/qemu/mips64el-malta/linux-3.13.config b/board/qemu/mips64el-malta/linux-3.13.config
+deleted file mode 100644
+index e980476..0000000
+--- a/board/qemu/mips64el-malta/linux-3.13.config
++++ /dev/null
+@@ -1,60 +0,0 @@
+-CONFIG_MIPS_MALTA=y
+-CONFIG_CPU_LITTLE_ENDIAN=y
+-CONFIG_CPU_MIPS64_R1=y
+-CONFIG_64BIT=y
+-CONFIG_MIPS_MT_SMP=y
+-CONFIG_NR_CPUS=2
+-CONFIG_HZ_100=y
+-CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=15
+-CONFIG_NAMESPACES=y
+-CONFIG_RELAY=y
+-CONFIG_EMBEDDED=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-CONFIG_MODULE_SRCVERSION_ALL=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PCI=y
+-CONFIG_MIPS32_COMPAT=y
+-CONFIG_MIPS32_O32=y
+-CONFIG_MIPS32_N32=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_INET_DIAG is not set
+-# CONFIG_IPV6 is not set
+-# CONFIG_WIRELESS is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_IDE=y
+-CONFIG_BLK_DEV_IDECD=y
+-CONFIG_IDE_GENERIC=y
+-CONFIG_BLK_DEV_GENERIC=y
+-CONFIG_BLK_DEV_PIIX=y
+-CONFIG_NETDEVICES=y
+-CONFIG_PCNET32=y
+-# CONFIG_WLAN is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-# CONFIG_HWMON is not set
+-CONFIG_FB=y
+-CONFIG_FB_CIRRUS=y
+-# CONFIG_VGA_CONSOLE is not set
+-# CONFIG_USB_SUPPORT is not set
+-CONFIG_EXT4_FS=y
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_NFS_FS=y
+-CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mips64el-malta/linux-3.15.config b/board/qemu/mips64el-malta/linux-3.15.config
+new file mode 100644
+index 0000000..38e3162
+--- /dev/null
++++ b/board/qemu/mips64el-malta/linux-3.15.config
+@@ -0,0 +1,60 @@
++CONFIG_MIPS_MALTA=y
++CONFIG_CPU_LITTLE_ENDIAN=y
++CONFIG_CPU_MIPS64_R1=y
++CONFIG_64BIT=y
++CONFIG_MIPS_MT_SMP=y
++CONFIG_NR_CPUS=2
++CONFIG_HZ_100=y
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_LOG_BUF_SHIFT=15
++CONFIG_NAMESPACES=y
++CONFIG_RELAY=y
++CONFIG_EMBEDDED=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_PCI=y
++CONFIG_MIPS32_COMPAT=y
++CONFIG_MIPS32_O32=y
++CONFIG_MIPS32_N32=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_IDE=y
++CONFIG_BLK_DEV_IDECD=y
++CONFIG_IDE_GENERIC=y
++CONFIG_BLK_DEV_GENERIC=y
++CONFIG_BLK_DEV_PIIX=y
++CONFIG_NETDEVICES=y
++CONFIG_PCNET32=y
++# CONFIG_WLAN is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++CONFIG_FB=y
++CONFIG_FB_CIRRUS=y
++# CONFIG_VGA_CONSOLE is not set
++# CONFIG_USB_SUPPORT is not set
++CONFIG_EXT2_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
+index 48bae37..3c75bed 100644
+--- a/board/qemu/mips64el-malta/readme.txt
++++ b/board/qemu/mips64el-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+index 4adf204..6b7a885 100644
+--- a/configs/qemu_mips64el_malta_defconfig
++++ b/configs/qemu_mips64el_malta_defconfig
+@@ -9,17 +9,17 @@ BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.13 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.15.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
