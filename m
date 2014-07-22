@@ -1,78 +1,69 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 22 Jul 2014 18:27:58 +0400
-Subject: [Buildroot] [PATCH] uclibc: build tests after uClibc libs are
-	installed to staging location
-Message-ID: <1406039278-19117-1-git-send-email-abrodkin@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 22 Jul 2014 19:02:47 +0200
+Subject: [Buildroot] [RFC 1/3] Rename package mpc to libmpc
+In-Reply-To: <53CE3AF3.50606@zacarias.com.ar>
+References: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
+ <1405951937-21226-2-git-send-email-jkrause@posteo.de>
+ <20140721162558.749a1393@free-electrons.com>
+ <53CD400B.1070106@zacarias.com.ar>
+ <20140721201921.35334933@free-electrons.com>
+ <53CE1F97.1020300@posteo.de> <53CE3AF3.50606@zacarias.com.ar>
+Message-ID: <20140722170246.GA3667@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If libuClibc is not installed to staging on attempt to build tests following
-errors happen:
-============
-  TEST_LINK termios/ termios
-.../host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/crt1.o: In function `__start':
-.../build/uclibc/libc/sysdeps/linux/arc/crt1.S:53: undefined reference to `__uClibc_main'
-termios.o: In function `main':
-.../build/uclibc/test/termios/termios.c:13: undefined reference to `printf'
-.../build/uclibc/test/termios/termios.c:14: undefined reference to `printf'
-.../build/uclibc/test/termios/termios.c:16: undefined reference to `stdout'
-.../build/uclibc/test/termios/termios.c:16: undefined reference to `fileno'
-.../build/uclibc/test/termios/termios.c:16: undefined reference to `ioctl'
-.../build/uclibc/test/termios/termios.c:19: undefined reference to `perror'
-.../build/uclibc/test/termios/termios.c:21: undefined reference to `printf'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `memcpy'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `malloc'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `abort'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `calloc'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `dl_iterate_phdr'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `realloc'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `memset'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `strlen'
-.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `free'
-collect2: error: ld returned 1 exit status
-make[3]: *** [termios] Error 1
-============
+Gustavo, J?rg, All,
 
-And the simplest solution is to build tests right before installation in
-UCLIBC_INSTALL_TARGET_CMDS which follows UCLIBC_INSTALL_STAGING_CMDS so
-all required libs are in place.
+On 2014-07-22 07:20 -0300, Gustavo Zacarias spake thusly:
+> On 07/22/2014 05:23 AM, J?rg Krause wrote:
+> > okay, I understand that renaming is potentially problematic. But the
+> > package mpc is not a dependency for any package. gmp is a dependency for
+> > eight packages, and mpfr for one.
+> > 
+> > Looking at Debian, Arch, and Fedora, these packages are all named
+> > libmpc, libgmp, and libmpfr. I liked the idea of having consistent
+> > package names. And if I am searching for mpc in the menuconfig I find
+> > the multiprecision library as libmpc and the mpd client as mpc. So it's
+> > not to difficult to find the right package.
+> 
+> Well in gentoo mpfr is mpfr and so no, not prepended by lib since there
+> are categories which allows for duplicate naming.
+> The problem is if someone uses mpc in their custom packages, there's no
+> easy way of warning about the rename.
 
-Interesting note - if one enables uClibc tests after initial full buildroot
-build mentioned errors don't happen. This is because uClibc libc libs are
-already installed to staging. That's why I didn't noticed this problem before.
+Not only that, but users re-using a .config from a previous Buildroot
+version would also be a problem.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+We can not have a legacy symbol for mpc as our previous "libmpc" and a
+new symbol for mpc as the new package "mpd client", since that would be
+the same symbol.
 
-Cc: Anton Kolesov <akolesov@synopsys.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/uclibc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So, I agree with Thomas here: we should not rename the current mpc, and
+find an alternate name for the new mpc.
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index b7c5051..d5be938 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -506,7 +506,6 @@ define UCLIBC_BUILD_CMDS
- 	$(MAKE) -C $(@D)/utils \
- 		PREFIX=$(HOST_DIR) \
- 		HOSTCC="$(HOSTCC)" hostutils
--	$(UCLIBC_BUILD_TEST_SUITE)
- endef
- 
- ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
-@@ -536,6 +535,7 @@ define UCLIBC_INSTALL_TARGET_CMDS
- 		RUNTIME_PREFIX=/ \
- 		install_runtime
- 	$(UCLIBC_INSTALL_UTILS_TARGET)
-+	$(UCLIBC_BUILD_TEST_SUITE)
- 	$(UCLIBC_INSTALL_TEST_SUITE)
- endef
- 
+> > There are dozen of clients for mpd. At least calling the package
+> > "mpclient" will show my the package when searching for "mpc" in the
+> > menuconfig.
+> Yes that was the idea, mpclient doesn't sound right, but search works,
+> we could as well use mpcclient for example.
+
+Or mpd-mpc.
+
+> > Btw, is there any rule for duplicate names?
+> There's no rule for duplicates, best effort comes to mind.
+
+Untold policy is: first come, first served. ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.9.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
