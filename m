@@ -1,82 +1,80 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 22 Jul 2014 21:22:40 +0000 (UTC)
-Subject: [Buildroot] [Bug 5900] config flags to the Xenomai build system ...
-In-Reply-To: <bug-5900-163@https.bugs.busybox.net/>
-References: <bug-5900-163@https.bugs.busybox.net/>
-Message-ID: <20140722212240.8C7449D2B2@busybox.osuosl.org>
+From: Neil Fincham <neil@mineforeman.com>
+Date: Wed, 23 Jul 2014 09:05:46 +1200
+Subject: [Buildroot] Issue with BeagleBone Black Rev C - 4GB Flash -
+	Pre-installed Debian
+Message-ID: <CAH+ZByEiUTxrcFNPoP1qOYcay69a1r9Tzzreza9KuQ7A0oSQRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=5900
+Hi All,
 
---- Comment #6 from romain.naour at openwide.fr 2014-07-22 21:22:39 UTC ---
-Hello,
+I am new to buildroot and just feeling my way around.
 
-I was working with xenomai in 2012 with the mini2440, and I still have it :)
+Has anyone tried the new BeagleBone Black Rev C ?  I am having an issue
+where it will not boot any of my (working on the Rev B) images.  It look
+like to my untrained eye that the new debian uEnv.txt scans the SD for a
+valid uEnv.txt (with uenvcmd declared in it) and when it does not find it,
+it boots from mmc.
 
-I don't think the bug report is relevant with this board.
+The boot from the serial looks like this;-
 
-I tried to add this line in xenomai.mk:
-XENOMAI_CONF_OPT += CFLAGS="-march=armv4t -msoft-float" LDFLAGS="-march=armv4t
--msoft-float"
+U-Boot 2014.04-00015-gb4422bd (Apr 22 2014 - 13:24:29)
 
-I always get the following message:
-# switchtest
-== Testing FPU check routines...
-== FPU check routines: unimplemented, skipping FPU switches tests.
-[...]
+I2C:   ready
+DRAM:  512 MiB
+NAND:  0 MiB
+MMC:   OMAP SD/MMC: 0, OMAP SD/MMC: 1
+*** Warning - readenv() failed, using default environment
 
-That's because the VFP support (CONFIG_VFP) is not enabled in the linux kernel.
+Net:   <ethaddr> not set. Validating first E-fuse MAC
+cpsw, usb_ether
+Hit any key to stop autoboot:  0
+gpio: pin 53 (gpio 53) value is 1
+mmc0 is current device
+gpio: pin 54 (gpio 54) value is 1
+SD/MMC found on device 0
+reading uEnv.txt
+Checking if uenvcmd is set ...
 
-config VFP
-    bool "VFP-format floating point maths"
-    depends on CPU_V6 || CPU_V6K || CPU_ARM926T || CPU_V7 || CPU_FEROCEON
+uenvcmd was not defined in uEnv.txt ...
+gpio: pin 56 (gpio 56) value is 0
+gpio: pin 55 (gpio 55) value is 0
+gpio: pin 54 (gpio 54) value is 0
+mmc1(part 0) is current device
+gpio: pin 54 (gpio 54) value is 1
+SD/MMC found on device 1
+reading uEnv.txt
+1430 bytes read in 7 ms (199.2 KiB/s)
+gpio: pin 55 (gpio 55) value is 1
+Loaded environment from uEnv.txt
+Importing environment from mmc ...
+Checking if uenvcmd is set ...
+gpio: pin 56 (gpio 56) value is 1
+Running uenvcmd ...
+reading zImage
+3717760 bytes read in 209 ms (17 MiB/s)
+reading initrd.img
+2870030 bytes read in 178 ms (15.4 MiB/s)
+reading /dtbs/am335x-boneblack.dtb
+25080 bytes read in 12 ms (2 MiB/s)
+Kernel image @ 0x82000000 [ 0x000000 - 0x38ba80 ]
+## Flattened Device Tree blob at 88000000
+   Booting using the fdt blob at 0x88000000
+   Using Device Tree in place at 88000000, end 880091f7
 
-None of these requirements are met with the s3c2440.
+Starting kernel ...
 
-So, in the check_fpu_thread() the check (check != 1) is always false.
+It seems obvious to me I should include a uEnv.txt on my images but I have
+no experience of how to write one (current buildroot has spoiled me, I
+know).
 
-xenomai-2.6/src/testsuite/switchtest/switchtest.c:
-from check_fpu_thread():
+Am I correct in my assumptions?  Does anyone have a minimal uEnv.txt that
+works from me to start from?
 
-check = fp_regs_check(2);
-if (check != 1) {
-    fprintf(stderr,
-        "== FPU check routines: unimplemented, "
-        "skipping FPU switches tests.\n");
-    return NULL;
-}
-
-fp_regs_check() is defined in xenomai-2.6/include/asm-arm/fptest.h:
-
-static inline unsigned fp_regs_check(unsigned val)
-{
-    unsigned result = val;
-
-    if (have_vfp) {
-    [snip]
-    }
-
-    return result;
-}
-
-And have_vfp depends on CONFIG_VFP
-
-#ifdef CONFIG_VFP
-#define have_vfp (elf_hwcap & HWCAP_VFP)
-#else /* !CONFIG_VFP */
-#define have_vfp (0)
-#endif /* !CONFIG_VFP */
-
-So, I'm agree with ThomasDS, this is not a buildroot issue.
-
-Note: I'm using Buildroot 2014.05-git, xenomai-2.6.3 and linux kernel 3.5.7 and
-3.8.13.
-
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Neil
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140723/171f47fd/attachment.html>
