@@ -1,42 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Jul 2014 07:20:35 -0300
-Subject: [Buildroot] [RFC 1/3] Rename package mpc to libmpc
-In-Reply-To: <53CE1F97.1020300@posteo.de>
-References: <1405951937-21226-1-git-send-email-jkrause@posteo.de>	<1405951937-21226-2-git-send-email-jkrause@posteo.de>	<20140721162558.749a1393@free-electrons.com>	<53CD400B.1070106@zacarias.com.ar>
- <20140721201921.35334933@free-electrons.com> <53CE1F97.1020300@posteo.de>
-Message-ID: <53CE3AF3.50606@zacarias.com.ar>
+Date: Tue, 22 Jul 2014 07:31:41 -0300
+Subject: [Buildroot] issues without busybox
+In-Reply-To: <3BB80F5F-275A-4495-8E75-40827CA53A50@whospot.com>
+References: <98386AE2-7424-4E70-8839-6B642B9938F4@whospot.com>
+ <20140721221555.72df12ca@free-electrons.com>
+ <53CD77E8.7050208@zacarias.com.ar>
+ <3BB80F5F-275A-4495-8E75-40827CA53A50@whospot.com>
+Message-ID: <53CE3D8D.3080704@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/22/2014 05:23 AM, J?rg Krause wrote:
+On 07/21/2014 06:35 PM, Gilles wrote:
+> I don't know, there are already SO MANY alternatives to SystemV init with
+> event driven init like boot scripts, initNG, launchd (my favorite), SMF, runit, syscan, upstart, einit...
+> It's almost a full time job to stay on top of it all as it is.
 
-Hello.
+Hi.
+I'm not proposing making an init system itself, just bridging the
+available options in buildroot in a consistent way.
+These things could be done in separate steps:
 
-> okay, I understand that renaming is potentially problematic. But the
-> package mpc is not a dependency for any package. gmp is a dependency for
-> eight packages, and mpfr for one.
-> 
-> Looking at Debian, Arch, and Fedora, these packages are all named
-> libmpc, libgmp, and libmpfr. I liked the idea of having consistent
-> package names. And if I am searching for mpc in the menuconfig I find
-> the multiprecision library as libmpc and the mpd client as mpc. So it's
-> not to difficult to find the right package.
+1) Make initscript consistent.
+I've been tweaking some a bit so as to use the return value and say if
+it indeed started correctly instead of a blind echo.
 
-Well in gentoo mpfr is mpfr and so no, not prepended by lib since there
-are categories which allows for duplicate naming.
-The problem is if someone uses mpc in their custom packages, there's no
-easy way of warning about the rename.
+2) Make them configurable.
+Use a simple method such as sourcing /etc/default/$NAME for the default
+variable assignments and /etc/config/$NAME to override for example.
+Buildroot can ship /etc/default/$NAME which can be in a RO partition and
+the user can (or not) have a RW partition mounted in /etc/config where
+he can customize the initscript behaviour.
+Easy to handle without any unification filesystem and easy to do a
+factory reset.
 
-> There are dozen of clients for mpd. At least calling the package
-> "mpclient" will show my the package when searching for "mpc" in the
-> menuconfig.
-> 
-> Btw, is there any rule for duplicate names?
+3) Work around missing utilities like start-stop-daemon and such by
+wrapping up such things in helper scripts that will call the appropiate
+utility.
 
-Yes that was the idea, mpclient doesn't sound right, but search works,
-we could as well use mpcclient for example.
-There's no rule for duplicates, best effort comes to mind.
+Something like that :)
+
 Regards.
