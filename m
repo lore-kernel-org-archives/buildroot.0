@@ -1,135 +1,105 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Jul 2014 09:34:17 -0300
-Subject: [Buildroot] issues without busybox
-In-Reply-To: <20140722121707.GA29579@rmm-p1267483>
-References: <98386AE2-7424-4E70-8839-6B642B9938F4@whospot.com>
- <20140721221555.72df12ca@free-electrons.com>
- <53CD77E8.7050208@zacarias.com.ar> <20140722121707.GA29579@rmm-p1267483>
-Message-ID: <53CE5A49.8040109@zacarias.com.ar>
+Date: Tue, 22 Jul 2014 10:26:52 -0300
+Subject: [Buildroot] [PATCH] radvd: bump to version 2.1
+Message-ID: <1406035612-16130-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/22/2014 09:17 AM, Eric Le Bihan wrote:
+It doesn't need libdaemon any longer, so drop that dependency.
 
->> Hi.
->> I think i've already mentioned i'm planning on a proposal to revamp the
->> init system/initscript options.
->> The idea would be to make them consistent and document how a proper
->> initscript should be made, and get them all in line with this.
->> Also interesting would be to make them configurable, in many cases
->> daemons have options and don't use a configuration file, so let's make
->> one i say. Actually let's make two :) A default file for read-only
->> filesystem, and some another that overrides the default, good for RO
->> filesystems which have a separate partition for that.
-> 
-> Would this look like what is done in package/dropbear/S50dropbear?
-> 
->   test -r /etc/default/dropbear && . /etc/default/dropbear
-> 
-> The file /etc/default/dropbear defines $DROPBEAR_ARGS, which is used on the
-> command line of the program.
-> 
-> Would the location of this alternative configuration file be configurable from
-> "menuconfig"?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/radvd/Config.in                           |  6 ++----
+ package/radvd/radvd-01-drop-check.patch           | 15 +++++++++++++++
+ package/radvd/radvd-02-drop-stack-protector.patch | 15 +++++++++++++++
+ package/radvd/radvd.mk                            |  7 +++++--
+ 4 files changed, 37 insertions(+), 6 deletions(-)
+ create mode 100644 package/radvd/radvd-01-drop-check.patch
+ create mode 100644 package/radvd/radvd-02-drop-stack-protector.patch
 
-Yes, that's the spirit of it.
-In it's simplest form:
-
-NAME=dropbear
-[ -f /etc/default/$NAME ] && source /etc/default/$NAME
-[ -f /etc/config/$NAME ] && source /etc/config/$NAME
-
-If default config exists parse it, then if override config exists also
-parse it.
-If some config is required we can either check for set minimum values or
-not be so smart and just check that one was parsed:
-
-[ -f /etc/default/$NAME ] && source /etc/default/$NAME && configured=1
-
-And then check for the value of configured before attempting to start
-anything to avoid unnecessary noise.
-
->> We could make the start/stop order configurable too via a file similar
->> to the device table, if this file lives in the target filesystem it
->> could be nicer too - but well that depends on how far we'd like to go.
->> The idea would be to use as much pure shell as possible for this to keep
->> necessary dependencies to a minimum.
->> Haven't thought out much of the systemd option yet, i need to dig
->> somewhat deeper into it, or it could be handled separately since it's
->> quite different from the usual inits.
-> 
-> Currently, only 8 packages install systemd unit files. The pattern is always
-> the same:
-> 
->   define <pkg>_INSTALL_INIT_SYSTEMD
->   	$(INSTALL) -D -m 644 package/<pkg>/<pkg>.service $(TARGET_DIR)/etc/systemd/system/<pkg>.service
->   	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
->   	ln -fs ../<pkg>.service $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/<pkg>.service
->   endef
-> 
-> I think about simplifying this by adding a script, also in the tradition of
-> makedevs and mkusers, which would be executed when generating the rootfs. This
-> script would install all the unit files declared like this:
-> 
->   define <pkg>_SYSTEMD_UNITS
->   	<unit file> <target unit>
->   endef
-> 
-> For example, if <pkg> installs a service which is to be triggered when the
-> system reaches multi-user.target:
-> 
->   define <pkg>_SYSTEMD_UNITS
->   	package/<pkg>/<pkg>.service multi-user.target.wants
->   endef
-
-That's great.
-
-> Could the same be done for SysV/Busybox init scripts?
-> 
->   define <pkg>_SYSV_INIT_SCRIPTS
->   	<init script> <default start/stop order>
->   endef
-> 
-> For example, to install a SysV init script for Dropbear, we would declare:
-> 
->   define DROPBEAR_SYSV_INIT_SCRIPTS
->   	package/dropbear/dropbear 50
->   endef
-> 
-> A script would install all init scripts and create the associated symbolic
-> links. The default start/stop order could be overriden by a custom
-> configuration file.
-
-For SysV-style i think start and stop should be separate fields.
-Most of the time you use reversed order for start vs stop, but for some
-services you might not want to stop at all, for example some firewall
-rules script.
-Also using something similar to system/device_table.txt for initscripts
-allows for some neat customization for users, they just need to point to
-their own customized version to enable/disable services and change
-order, a file that would live in board/ customizations easily.
-I think the same could be done for systemd.
-Alternatively we could just make it part of the config files and tweak
-the rcK/rcS scripts to deal with this, something like:
-
-/etc/default/dropbear:
-DROPBEAR_START=YES
-DROPBEAR_START_ORDER=20
-DROPBEAR_STOP_ORDER=50
-
-And then just override via /etc/config/dropbear if you don't want it:
-DROPBEAR_START=NO
-
-The user could even overstep on it from a post-build script, or from the
-package file:
-
-DROPBEAR_DEFAULT_CONFIG_FILES = dropbear
-
-And just conditionally check if it exists in the skeleton to avoid
-overwriting it, if not copy it.
-
-Voila.
-Regards.
+diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+index 71f2f34..e74777c 100644
+--- a/package/radvd/Config.in
++++ b/package/radvd/Config.in
+@@ -1,12 +1,10 @@
+ config BR2_PACKAGE_RADVD
+ 	bool "radvd"
+-	# libdaemon uses fork()
+-	depends on BR2_USE_MMU
+-	select BR2_PACKAGE_FLEX
+-	select BR2_PACKAGE_LIBDAEMON
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_INET_IPV6
+ 	# uClibc too old, does not define ARPHRD_IEEE802154
+ 	depends on !BR2_avr32
++	select BR2_PACKAGE_FLEX
+ 	help
+ 	  IPv6 Router Advertisement Daemon.
+ 
+diff --git a/package/radvd/radvd-01-drop-check.patch b/package/radvd/radvd-01-drop-check.patch
+new file mode 100644
+index 0000000..2b5d008
+--- /dev/null
++++ b/package/radvd/radvd-01-drop-check.patch
+@@ -0,0 +1,15 @@
++Drop check requirement, we don't do unit tests.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura radvd-2.1.orig/configure.ac radvd-2.1/configure.ac
++--- radvd-2.1.orig/configure.ac	2014-07-22 08:23:12.642260069 -0300
+++++ radvd-2.1/configure.ac	2014-07-22 08:23:21.270552628 -0300
++@@ -49,7 +49,6 @@
++ dnl Determine CC and preset CFLAGS
++ AC_PROG_CC_C99
++ AC_PROG_RANLIB
++-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
++ 
++ dnl Determine of netlink is available
++ AC_MSG_CHECKING(netlink)
+diff --git a/package/radvd/radvd-02-drop-stack-protector.patch b/package/radvd/radvd-02-drop-stack-protector.patch
+new file mode 100644
+index 0000000..532c1b6
+--- /dev/null
++++ b/package/radvd/radvd-02-drop-stack-protector.patch
+@@ -0,0 +1,15 @@
++Don't force -fstack-protector, the toolchain might lack support for it.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura radvd-2.1.orig/Makefile.am radvd-2.1/Makefile.am
++--- radvd-2.1.orig/Makefile.am	2014-07-22 08:23:12.642260069 -0300
+++++ radvd-2.1/Makefile.am	2014-07-22 08:26:42.651380759 -0300
++@@ -43,7 +43,6 @@
++ 
++ AM_CFLAGS = \
++ 	-fno-strict-aliasing \
++-	-fstack-protector \
++ 	$(ENABLE_WARNINGS) \
++ 	$(DISABLE_WARNINGS)
++ 
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index ecca879..ace6529 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,10 +4,13 @@
+ #
+ ################################################################################
+ 
+-RADVD_VERSION = 1.14
++RADVD_VERSION = 2.1
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+-RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
++RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
++RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++# For radvd-01-drop-check.patch & radvd-02-drop-stack-protector.patch
++RADVD_AUTORECONF = YES
+ 
+ define RADVD_INSTALL_INITSCRIPT
+ 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
+-- 
+1.8.5.5
