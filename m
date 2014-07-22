@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 22 Jul 2014 20:17:53 +0200
-Subject: [Buildroot] [PATCH 1/4] perl-datetime-tiny: new package
-Message-ID: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+Date: Tue, 22 Jul 2014 20:17:56 +0200
+Subject: [Buildroot] [PATCH 4/4] perl-try-tiny: new package
+In-Reply-To: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+References: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1406053076-25453-4-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,55 +12,55 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                                |  1 +
- package/perl-datetime-tiny/Config.in             |  6 ++++++
- package/perl-datetime-tiny/perl-datetime-tiny.mk | 14 ++++++++++++++
+ package/Config.in                      |  1 +
+ package/perl-try-tiny/Config.in        |  6 ++++++
+ package/perl-try-tiny/perl-try-tiny.mk | 14 ++++++++++++++
  3 files changed, 21 insertions(+)
- create mode 100644 package/perl-datetime-tiny/Config.in
- create mode 100644 package/perl-datetime-tiny/perl-datetime-tiny.mk
+ create mode 100644 package/perl-try-tiny/Config.in
+ create mode 100644 package/perl-try-tiny/perl-try-tiny.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 703fd3d..aa2f783 100644
+index 40d8ba9..7c9f3ad 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -431,6 +431,7 @@ endif
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
-+	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
- 	source "package/perl-gdtextutil/Config.in"
-diff --git a/package/perl-datetime-tiny/Config.in b/package/perl-datetime-tiny/Config.in
+@@ -440,6 +440,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
++	source "package/perl-try-tiny/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+ 	source "package/perl-xml-namespacesupport/Config.in"
+ 	source "package/perl-xml-sax-base/Config.in"
+diff --git a/package/perl-try-tiny/Config.in b/package/perl-try-tiny/Config.in
 new file mode 100644
-index 0000000..e84db8b
+index 0000000..7bd5396
 --- /dev/null
-+++ b/package/perl-datetime-tiny/Config.in
++++ b/package/perl-try-tiny/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_DATETIME_TINY
-+	bool "perl-datetime-tiny"
++config BR2_PACKAGE_PERL_TRY_TINY
++	bool "perl-try-tiny"
 +	help
-+	  A datetime object with as little code as possible
++	  minimal try/catch with proper preservation of $@
 +
-+	  https://metacpan.org/release/DateTime-Tiny
-diff --git a/package/perl-datetime-tiny/perl-datetime-tiny.mk b/package/perl-datetime-tiny/perl-datetime-tiny.mk
++	  http://metacpan.org/release/Try-Tiny
+diff --git a/package/perl-try-tiny/perl-try-tiny.mk b/package/perl-try-tiny/perl-try-tiny.mk
 new file mode 100644
-index 0000000..8e691a8
+index 0000000..2446cbd
 --- /dev/null
-+++ b/package/perl-datetime-tiny/perl-datetime-tiny.mk
++++ b/package/perl-try-tiny/perl-try-tiny.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-datetime-tiny
++# perl-try-tiny
 +#
 +################################################################################
 +
-+PERL_DATETIME_TINY_VERSION = 1.04
-+PERL_DATETIME_TINY_SOURCE = DateTime-Tiny-$(PERL_DATETIME_TINY_VERSION).tar.gz
-+PERL_DATETIME_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AD/ADAMK/
-+PERL_DATETIME_TINY_DEPENDENCIES = perl
-+PERL_DATETIME_TINY_LICENSE = Artistic or GPLv1+
-+PERL_DATETIME_TINY_LICENSE_FILES = LICENSE
++PERL_TRY_TINY_VERSION = 0.22
++PERL_TRY_TINY_SOURCE = Try-Tiny-$(PERL_TRY_TINY_VERSION).tar.gz
++PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY/
++PERL_TRY_TINY_DEPENDENCIES = perl
++PERL_TRY_TINY_LICENSE = mit
++PERL_TRY_TINY_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
