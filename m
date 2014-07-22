@@ -1,105 +1,78 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Jul 2014 10:26:52 -0300
-Subject: [Buildroot] [PATCH] radvd: bump to version 2.1
-Message-ID: <1406035612-16130-1-git-send-email-gustavo@zacarias.com.ar>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 22 Jul 2014 18:27:58 +0400
+Subject: [Buildroot] [PATCH] uclibc: build tests after uClibc libs are
+	installed to staging location
+Message-ID: <1406039278-19117-1-git-send-email-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It doesn't need libdaemon any longer, so drop that dependency.
+If libuClibc is not installed to staging on attempt to build tests following
+errors happen:
+============
+  TEST_LINK termios/ termios
+.../host/usr/arc-buildroot-linux-uclibc/sysroot/usr/lib/crt1.o: In function `__start':
+.../build/uclibc/libc/sysdeps/linux/arc/crt1.S:53: undefined reference to `__uClibc_main'
+termios.o: In function `main':
+.../build/uclibc/test/termios/termios.c:13: undefined reference to `printf'
+.../build/uclibc/test/termios/termios.c:14: undefined reference to `printf'
+.../build/uclibc/test/termios/termios.c:16: undefined reference to `stdout'
+.../build/uclibc/test/termios/termios.c:16: undefined reference to `fileno'
+.../build/uclibc/test/termios/termios.c:16: undefined reference to `ioctl'
+.../build/uclibc/test/termios/termios.c:19: undefined reference to `perror'
+.../build/uclibc/test/termios/termios.c:21: undefined reference to `printf'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `memcpy'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `malloc'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `abort'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `calloc'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `dl_iterate_phdr'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `realloc'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `memset'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `strlen'
+.../host/usr/lib/gcc/arc-buildroot-linux-uclibc/4.8.0/../../../../arc-buildroot-linux-uclibc/lib/libgcc_s.so.1: undefined reference to `free'
+collect2: error: ld returned 1 exit status
+make[3]: *** [termios] Error 1
+============
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+And the simplest solution is to build tests right before installation in
+UCLIBC_INSTALL_TARGET_CMDS which follows UCLIBC_INSTALL_STAGING_CMDS so
+all required libs are in place.
+
+Interesting note - if one enables uClibc tests after initial full buildroot
+build mentioned errors don't happen. This is because uClibc libc libs are
+already installed to staging. That's why I didn't noticed this problem before.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Cc: Anton Kolesov <akolesov@synopsys.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/radvd/Config.in                           |  6 ++----
- package/radvd/radvd-01-drop-check.patch           | 15 +++++++++++++++
- package/radvd/radvd-02-drop-stack-protector.patch | 15 +++++++++++++++
- package/radvd/radvd.mk                            |  7 +++++--
- 4 files changed, 37 insertions(+), 6 deletions(-)
- create mode 100644 package/radvd/radvd-01-drop-check.patch
- create mode 100644 package/radvd/radvd-02-drop-stack-protector.patch
+ package/uclibc/uclibc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-index 71f2f34..e74777c 100644
---- a/package/radvd/Config.in
-+++ b/package/radvd/Config.in
-@@ -1,12 +1,10 @@
- config BR2_PACKAGE_RADVD
- 	bool "radvd"
--	# libdaemon uses fork()
--	depends on BR2_USE_MMU
--	select BR2_PACKAGE_FLEX
--	select BR2_PACKAGE_LIBDAEMON
-+	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INET_IPV6
- 	# uClibc too old, does not define ARPHRD_IEEE802154
- 	depends on !BR2_avr32
-+	select BR2_PACKAGE_FLEX
- 	help
- 	  IPv6 Router Advertisement Daemon.
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index b7c5051..d5be938 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -506,7 +506,6 @@ define UCLIBC_BUILD_CMDS
+ 	$(MAKE) -C $(@D)/utils \
+ 		PREFIX=$(HOST_DIR) \
+ 		HOSTCC="$(HOSTCC)" hostutils
+-	$(UCLIBC_BUILD_TEST_SUITE)
+ endef
  
-diff --git a/package/radvd/radvd-01-drop-check.patch b/package/radvd/radvd-01-drop-check.patch
-new file mode 100644
-index 0000000..2b5d008
---- /dev/null
-+++ b/package/radvd/radvd-01-drop-check.patch
-@@ -0,0 +1,15 @@
-+Drop check requirement, we don't do unit tests.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura radvd-2.1.orig/configure.ac radvd-2.1/configure.ac
-+--- radvd-2.1.orig/configure.ac	2014-07-22 08:23:12.642260069 -0300
-++++ radvd-2.1/configure.ac	2014-07-22 08:23:21.270552628 -0300
-+@@ -49,7 +49,6 @@
-+ dnl Determine CC and preset CFLAGS
-+ AC_PROG_CC_C99
-+ AC_PROG_RANLIB
-+-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
-+ 
-+ dnl Determine of netlink is available
-+ AC_MSG_CHECKING(netlink)
-diff --git a/package/radvd/radvd-02-drop-stack-protector.patch b/package/radvd/radvd-02-drop-stack-protector.patch
-new file mode 100644
-index 0000000..532c1b6
---- /dev/null
-+++ b/package/radvd/radvd-02-drop-stack-protector.patch
-@@ -0,0 +1,15 @@
-+Don't force -fstack-protector, the toolchain might lack support for it.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura radvd-2.1.orig/Makefile.am radvd-2.1/Makefile.am
-+--- radvd-2.1.orig/Makefile.am	2014-07-22 08:23:12.642260069 -0300
-++++ radvd-2.1/Makefile.am	2014-07-22 08:26:42.651380759 -0300
-+@@ -43,7 +43,6 @@
-+ 
-+ AM_CFLAGS = \
-+ 	-fno-strict-aliasing \
-+-	-fstack-protector \
-+ 	$(ENABLE_WARNINGS) \
-+ 	$(DISABLE_WARNINGS)
-+ 
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index ecca879..ace6529 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,10 +4,13 @@
- #
- ################################################################################
+ ifeq ($(BR2_UCLIBC_INSTALL_TEST_SUITE),y)
+@@ -536,6 +535,7 @@ define UCLIBC_INSTALL_TARGET_CMDS
+ 		RUNTIME_PREFIX=/ \
+ 		install_runtime
+ 	$(UCLIBC_INSTALL_UTILS_TARGET)
++	$(UCLIBC_BUILD_TEST_SUITE)
+ 	$(UCLIBC_INSTALL_TEST_SUITE)
+ endef
  
--RADVD_VERSION = 1.14
-+RADVD_VERSION = 2.1
- RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
- RADVD_SITE = http://www.litech.org/radvd/dist
--RADVD_DEPENDENCIES = host-bison flex libdaemon host-flex host-pkgconf
-+RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
-+RADVD_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
-+# For radvd-01-drop-check.patch & radvd-02-drop-stack-protector.patch
-+RADVD_AUTORECONF = YES
- 
- define RADVD_INSTALL_INITSCRIPT
- 	$(INSTALL) -m 0755 package/radvd/S50radvd $(TARGET_DIR)/etc/init.d
 -- 
-1.8.5.5
+1.9.3
