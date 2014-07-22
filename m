@@ -1,71 +1,67 @@
-From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
-Date: Tue, 22 Jul 2014 20:11:25 +0200
-Subject: [Buildroot] [RFC 1/3] Rename package mpc to libmpc
-In-Reply-To: <20140722170246.GA3667@free.fr>
-References: <1405951937-21226-1-git-send-email-jkrause@posteo.de>
- <1405951937-21226-2-git-send-email-jkrause@posteo.de>
- <20140721162558.749a1393@free-electrons.com>
- <53CD400B.1070106@zacarias.com.ar>
- <20140721201921.35334933@free-electrons.com> <53CE1F97.1020300@posteo.de>
- <53CE3AF3.50606@zacarias.com.ar> <20140722170246.GA3667@free.fr>
-Message-ID: <53CEA94D.9050403@posteo.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 22 Jul 2014 20:17:54 +0200
+Subject: [Buildroot] [PATCH 2/4] perl-json-tiny: new package
+In-Reply-To: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+References: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1406053076-25453-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                        |  1 +
+ package/perl-json-tiny/Config.in         |  6 ++++++
+ package/perl-json-tiny/perl-json-tiny.mk | 14 ++++++++++++++
+ 3 files changed, 21 insertions(+)
+ create mode 100644 package/perl-json-tiny/Config.in
+ create mode 100644 package/perl-json-tiny/perl-json-tiny.mk
 
-Dear all,
-
-On 07/22/2014 07:02 PM, Yann E. MORIN wrote:
-> Gustavo, J?rg, All,
->
-> On 2014-07-22 07:20 -0300, Gustavo Zacarias spake thusly:
->> On 07/22/2014 05:23 AM, J?rg Krause wrote:
->>> okay, I understand that renaming is potentially problematic. But the
->>> package mpc is not a dependency for any package. gmp is a dependency for
->>> eight packages, and mpfr for one.
->>>
->>> Looking at Debian, Arch, and Fedora, these packages are all named
->>> libmpc, libgmp, and libmpfr. I liked the idea of having consistent
->>> package names. And if I am searching for mpc in the menuconfig I find
->>> the multiprecision library as libmpc and the mpd client as mpc. So it's
->>> not to difficult to find the right package.
->> Well in gentoo mpfr is mpfr and so no, not prepended by lib since there
->> are categories which allows for duplicate naming.
->> The problem is if someone uses mpc in their custom packages, there's no
->> easy way of warning about the rename.
-> Not only that, but users re-using a .config from a previous Buildroot
-> version would also be a problem.
->
-> We can not have a legacy symbol for mpc as our previous "libmpc" and a
-> new symbol for mpc as the new package "mpd client", since that would be
-> the same symbol.
->
-> So, I agree with Thomas here: we should not rename the current mpc, and
-> find an alternate name for the new mpc.
-
-Okay, you all convinced me :-) We leave it as it is.
-
->
->>> There are dozen of clients for mpd. At least calling the package
->>> "mpclient" will show my the package when searching for "mpc" in the
->>> menuconfig.
->> Yes that was the idea, mpclient doesn't sound right, but search works,
->> we could as well use mpcclient for example.
-> Or mpd-mpc.
-
-This was my idea, too. I think I will choose this name.
-
->
->>> Btw, is there any rule for duplicate names?
->> There's no rule for duplicates, best effort comes to mind.
-> Untold policy is: first come, first served. ;-)
-
-Damn, so I am much to late ;-)
-
-Thanky you all for the discussion! So I think we can close this topic now.
-
-Best regards
-J?rg
+diff --git a/package/Config.in b/package/Config.in
+index aa2f783..b89a98e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -436,6 +436,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-gdgraph/Config.in"
+ 	source "package/perl-gdtextutil/Config.in"
+ 	source "package/perl-io-socket-ssl/Config.in"
++	source "package/perl-json-tiny/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-xml-libxml/Config.in"
+diff --git a/package/perl-json-tiny/Config.in b/package/perl-json-tiny/Config.in
+new file mode 100644
+index 0000000..ce943ca
+--- /dev/null
++++ b/package/perl-json-tiny/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_JSON_TINY
++	bool "perl-json-tiny"
++	help
++	  Minimalistic JSON. No dependencies.
++
++	  https://metacpan.org/release/JSON-Tiny
+diff --git a/package/perl-json-tiny/perl-json-tiny.mk b/package/perl-json-tiny/perl-json-tiny.mk
+new file mode 100644
+index 0000000..fd99ee7
+--- /dev/null
++++ b/package/perl-json-tiny/perl-json-tiny.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-json-tiny
++#
++################################################################################
++
++PERL_JSON_TINY_VERSION = 0.49
++PERL_JSON_TINY_SOURCE = JSON-Tiny-$(PERL_JSON_TINY_VERSION).tar.gz
++PERL_JSON_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAVIDO/
++PERL_JSON_TINY_DEPENDENCIES = perl
++PERL_JSON_TINY_LICENSE = Artistic-2.0
++PERL_JSON_TINY_LICENSE_FILES = LICENSE
++
++$(eval $(perl-package))
+-- 
+1.9.1
