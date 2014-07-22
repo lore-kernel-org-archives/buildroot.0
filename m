@@ -1,45 +1,92 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 22 Jul 2014 07:31:41 -0300
-Subject: [Buildroot] issues without busybox
-In-Reply-To: <3BB80F5F-275A-4495-8E75-40827CA53A50@whospot.com>
-References: <98386AE2-7424-4E70-8839-6B642B9938F4@whospot.com>
- <20140721221555.72df12ca@free-electrons.com>
- <53CD77E8.7050208@zacarias.com.ar>
- <3BB80F5F-275A-4495-8E75-40827CA53A50@whospot.com>
-Message-ID: <53CE3D8D.3080704@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 22 Jul 2014 13:11:57 +0200
+Subject: [Buildroot] [PATCH 3 of 3 v3] uclibc: update-config: preserve
+ freshly configured settings
+In-Reply-To: <20140721221755.4e0346f5@free-electrons.com>
+References: <patchbomb.1405709693@localhost>
+ <f8c110cf3b83a4e29146.1405709696@localhost>
+ <20140721221755.4e0346f5@free-electrons.com>
+Message-ID: <CAAXf6LWEzDfrHsvJpgsFhpgJOydhtDmjFWb6nWXXTJiM_OixoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/21/2014 06:35 PM, Gilles wrote:
-> I don't know, there are already SO MANY alternatives to SystemV init with
-> event driven init like boot scripts, initNG, launchd (my favorite), SMF, runit, syscan, upstart, einit...
-> It's almost a full time job to stay on top of it all as it is.
+Hi Thomas,
 
-Hi.
-I'm not proposing making an init system itself, just bridging the
-available options in buildroot in a consistent way.
-These things could be done in separate steps:
+On Mon, Jul 21, 2014 at 10:17 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Thomas De Schampheleire,
+>
+> On Fri, 18 Jul 2014 20:54:56 +0200, Thomas De Schampheleire wrote:
+>
+>> diff -r 29ba03b43b12 -r f8c110cf3b83 package/uclibc/uclibc.mk
+>> --- a/package/uclibc/uclibc.mk        Sun Jun 22 10:37:22 2014 +0200
+>> +++ b/package/uclibc/uclibc.mk        Mon Jun 16 20:18:23 2014 +0200
+>> @@ -432,7 +432,6 @@
+>>  endef
+>>
+>>  define UCLIBC_CONFIGURE_CMDS
+>> -     $(UCLIBC_FIXUP_DOT_CONFIG)
+>>       $(MAKE1) -C $(UCLIBC_DIR) \
+>>               $(UCLIBC_MAKE_FLAGS) \
+>>               PREFIX=$(STAGING_DIR) \
+>> @@ -537,7 +536,11 @@
+>>  $(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
+>>       $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+>>
+>> -$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.config
+>> +$(UCLIBC_DIR)/.stamp_config_fixup_done: $(UCLIBC_DIR)/.config
+>> +     $(UCLIBC_FIXUP_DOT_CONFIG)
+>> +     $(Q)touch $@
+>> +
+>> +$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.stamp_config_fixup_done
+>>
+>>  uclibc-menuconfig: $(UCLIBC_DIR)/.config
+>>       $(MAKE1) -C $(UCLIBC_DIR) \
+>> @@ -546,9 +549,10 @@
+>>               DEVEL_PREFIX=/usr/ \
+>>               RUNTIME_PREFIX=$(STAGING_DIR)/ \
+>>               menuconfig
+>> -     rm -f $(UCLIBC_DIR)/.stamp_{configured,built,target_installed,staging_installed}
+>> +     rm -f $(UCLIBC_DIR)/.stamp_{config_fixup_done,configured,built}
+>> +     rm -f $(UCLIBC_DIR)/.stamp_{target,staging}_installed
+>>
+>> -uclibc-update-config: $(UCLIBC_DIR)/.stamp_configured
+>> +uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_fixup_done
+>>       cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
+>
+> Is a separate stamp file actually needed here? This patch changes all
+> references to $(UCLIBC_DIR)/.config as dependencies to references to
+> $(UCLIBC_DIR)/.stamp_config_fixup_done as a dependency, and
+> $(UCLIBC_DIR)/.stamp_config_fixup_done is the only target left having a
+> dependency on $(UCLIBC_DIR)/.config. So what prevents from doing:
+>
+> $(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
+>         $(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+>         $(UCLIBC_FIXUP_DOT_CONFIG)
+>
+>  ?
+>
+> I'm probably missing one use case, but I find
+> this .stamp_config_fixup_done stamp file not so nice, so I'd like to
+> really understand why it's needed.
 
-1) Make initscript consistent.
-I've been tweaking some a bit so as to use the return value and say if
-it indeed started correctly instead of a blind echo.
+Suppose you go with your suggestion above, then if the user uses
+menuconfig to change the configuration, the .config file is updated by
+the menuconfig rule, but the fixup itself does no longer happen. This
+means that the user could enter a corrupted configuration without it
+being fixed. Same holds when the user manually changes .config.
+I think the fixup should run after menuconfig, to ensure a valid configuration.
 
-2) Make them configurable.
-Use a simple method such as sourcing /etc/default/$NAME for the default
-variable assignments and /etc/config/$NAME to override for example.
-Buildroot can ship /etc/default/$NAME which can be in a RO partition and
-the user can (or not) have a RW partition mounted in /etc/config where
-he can customize the initscript behaviour.
-Easy to handle without any unification filesystem and easy to do a
-factory reset.
+Note that you can avoid the extra stamp file by repeating the fixup
+call in several places, but this is not easily extractable in a
+kconfig-package infrastructure.
+The rules as they are can almost be moved verbatim to a pkg-kconfig.mk
+with almost no changes in the uclibc.mk file itself.
 
-3) Work around missing utilities like start-stop-daemon and such by
-wrapping up such things in helper scripts that will call the appropiate
-utility.
+Is this convincing to you? Do you see a better way?
 
-Something like that :)
-
-Regards.
+Thanks,
+Thomas
