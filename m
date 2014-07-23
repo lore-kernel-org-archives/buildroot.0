@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 21:49:38 +0200
-Subject: [Buildroot] [git commit] libpcap: bump to version 1.6.1
-Message-ID: <20140723194953.1DE709D2CF@busybox.osuosl.org>
+Date: Wed, 23 Jul 2014 21:50:04 +0200
+Subject: [Buildroot] [PATCH 1/2] libpcap: bump to version 1.6.1
+In-Reply-To: <46a58b09ff51a083dd3e81a338bbfc3bda11eb7e.1406013158.git.baruch@tkos.co.il>
+References: <46a58b09ff51a083dd3e81a338bbfc3bda11eb7e.1406013158.git.baruch@tkos.co.il>
+Message-ID: <20140723215004.5e997134@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=6cf75b9c0fc91455b21f48a40b9d83ac9abb6f96
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Baruch Siach,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libpcap/libpcap.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+On Tue, 22 Jul 2014 10:12:37 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/libpcap/libpcap.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index 10b6cea..a8c056e 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPCAP_VERSION = 1.5.3
-+LIBPCAP_VERSION = 1.6.1
- LIBPCAP_SITE = http://www.tcpdump.org/release
- LIBPCAP_LICENSE = BSD-3c
- LIBPCAP_LICENSE_FILES = LICENSE
+Both patches applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
