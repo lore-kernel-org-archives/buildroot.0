@@ -1,81 +1,104 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Jul 2014 23:58:29 +0200
-Subject: [Buildroot] [PATCH 1/7 v3] package/busybox: Add facility for
- DHCP hooks
-In-Reply-To: <1402982507.184367.599670173206.1.gpush@pablo>
-References: <1402982507.183937.570365596242.0.gpush@pablo>
- <1402982507.184367.599670173206.1.gpush@pablo>
-Message-ID: <20140723215829.GC17249@free.fr>
+Date: Thu, 24 Jul 2014 00:04:40 +0200
+Subject: [Buildroot] [PATCH] toolchain: include C libraries in legal-info
+Message-ID: <1406153080-29619-1-git-send-email-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy, All,
+So far, the legal-info infrastructure was not exporting the legal
+info for the C libraries. This is because the legal-info only acts
+on packages defined in $(TARGETS).
 
-On 2014-06-17 13:21 +0800, Jeremy Kerr spake thusly:
-> The (u)dhcpc hook installed by the busybox package configures the
-> network and exits. If we want to do anything further with a DHCP lease,
-> we'd have to replace the script entirely.
-> 
-> This change introduces a .d directory for hooks (based on the script
-> filename), which are executed after the interface configuration. This
-> allows packages to drop a script file in the .d directory to perform
-> actions on DHCP events.
-> 
-> We'll use this in a later change to notify petitboot of DHCP boot
-> information.
-> 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+But the C libraries are never added to $(TARGETS), since there is no
+corresponding BR2_PACKAGE_<C-LIBRARY>.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This patch adds such symbols for the 4 C libraries we support in our
+internal backend: uClibc, glibc, eglibc and musl.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
 
-> ---
->  package/busybox/busybox.mk    |    2 ++
->  package/busybox/udhcpc.script |    6 ++++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index c368b80..bddeb63 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -222,6 +222,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
->  	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
->  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
->  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
-> +		$(INSTALL) -m 755 -d \
-> +			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
->  	fi
->  	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
->  	$(BUSYBOX_INSTALL_MDEV_CONF)
-> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-> index e23d1f1..50c52e6 100755
-> --- a/package/busybox/udhcpc.script
-> +++ b/package/busybox/udhcpc.script
-> @@ -64,4 +64,10 @@ case "$1" in
->  		;;
->  esac
->  
-> +HOOK_DIR="$0.d"
-> +for hook in "${HOOK_DIR}/"*; do
-> +    [ -f "${hook}" -a -x "${hook}" ] || continue
-> +    "${hook}" "${@}"
-> +done
-> +
->  exit 0
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+---
+Tested by building the toolchain of the defconfig, which is
+uClibc-based. Tests not replicated to other C libraries.
+---
+ Makefile                 |  4 ++++
+ package/glibc/Config.in  | 10 ++++++++++
+ package/musl/Config.in   |  4 ++++
+ package/uclibc/Config.in |  5 +++++
+ 4 files changed, 23 insertions(+)
+ create mode 100644 package/musl/Config.in
 
+diff --git a/Makefile b/Makefile
+index 1af51de..17a11f7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -419,6 +419,10 @@ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
+ $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
+ 	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
+ 
++.PHONY: DEBUG-ME
++DEBUG-ME:
++	@echo $(TARGETS)
++
+ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ 
+ world: target-post-image
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index c2d6231..df1e273 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -1,5 +1,10 @@
+ if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
+ 
++# For legal-info
++config BR2_PACKAGE_EGLIBC
++	bool
++	default y
++
+ choice
+ 	prompt "eglibc version"
+ 	default BR2_EGLIBC_VERSION_2_18
+@@ -18,6 +23,11 @@ endif
+ 
+ if BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 
++# For legal-info
++config BR2_PACKAGE_GLIBC
++	bool
++	default y
++
+ choice
+ 	prompt "glibc version"
+ 	default BR2_GLIBC_VERSION_2_18
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+new file mode 100644
+index 0000000..f5c1b57
+--- /dev/null
++++ b/package/musl/Config.in
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_MUSL
++	bool
++	depends on BR2_TOOLCHAIN_USES_MUSL
++	default y
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 0838b6c..851ad1e 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -1,5 +1,10 @@
+ if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 
++# For legal-info
++config BR2_PACKAGE_UCLIBC
++	bool
++	default y
++
+ comment "uClibc Options"
+ 
+ choice
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
