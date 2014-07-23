@@ -1,280 +1,165 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 23 Jul 2014 06:40:19 +0200
-Subject: [Buildroot] [PATCH v15 3/9] xbmc: Allow compilation with uClibc
+Date: Wed, 23 Jul 2014 06:40:23 +0200
+Subject: [Buildroot] [PATCH v15 7/9] xbmc: Add X.org/OpenGL support
 In-Reply-To: <1406090425-5925-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1406090425-5925-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1406090425-5925-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1406090425-5925-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add dependencies needed by xbmc on BR2_LARGEFILE, BR2_INET_IPV6 &
-  BR2_USE_WCHAR after the removal of BR2_TOOLCHAIN_USES_GLIBC
-- Add xbmc-0002-mathutil.patch to fix ARM compilation
+- on ARM xbmc only supports EGL/GLES
+  https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L695
+- rsxs depends on OpenGL
+  https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1469
+  so include a compile fix, courtesy of
+  https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/xbmc/package.mk#L109
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xbmc/Config.in                |   15 ++-
- package/xbmc/xbmc-0002-mathutil.patch |  213 +++++++++++++++++++++++++++++++++
- 2 files changed, 222 insertions(+), 6 deletions(-)
- create mode 100644 package/xbmc/xbmc-0002-mathutil.patch
+ package/xbmc/Config.in |   31 ++++++++++++++++++++++++++++---
+ package/xbmc/xbmc.mk   |   32 ++++++++++++++++++++++++++------
+ 2 files changed, 54 insertions(+), 9 deletions(-)
 
 diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 592fdc1..d71a15e 100644
+index d71a15e..08b0a0f 100644
 --- a/package/xbmc/Config.in
 +++ b/package/xbmc/Config.in
-@@ -1,11 +1,10 @@
--comment "xbmc needs an (e)glibc toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "xbmc needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64
-+	depends on !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+@@ -2,9 +2,26 @@ comment "xbmc needs a toolchain w/ C++, IPv6, largefile, threads, wchar"
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+ 	depends on !BR2_INET_IPV6 || !BR2_INSTALL_LIBSTDCPP || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
  
++config BR2_PACKAGE_XBMC_EGL_GLES
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on !BR2_PACKAGE_XBMC_GL # prefer GL if available
++
++config BR2_PACKAGE_XBMC_GL
++	bool
++	default y
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on !BR2_arm # xbmc needs egl/gles on arm
++
++comment "xbmc needs an OpenGL or an openGL ES and EGL backend"
++	depends on BR2_i386 || BR2_x86_64
++	depends on !BR2_PACKAGE_XBMC_GL && !BR2_PACKAGE_XBMC_EGL_GLES
++
  comment "xbmc requires an OpenGL ES and EGL backend"
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_arm || BR2_i386 || BR2_x86_64
+-	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_arm
++	depends on !BR2_PACKAGE_XBMC_EGL_GLES
  
  menuconfig BR2_PACKAGE_XBMC
  	bool "xbmc"
-@@ -58,10 +57,14 @@ menuconfig BR2_PACKAGE_XBMC
+@@ -22,6 +39,8 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_LIBCDIO
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBFRIBIDI
++	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_XBMC_GL
++	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_XBMC_GL
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBID3TAG
+ 	select BR2_PACKAGE_LIBMAD
+@@ -51,17 +70,23 @@ menuconfig BR2_PACKAGE_XBMC
+ 	select BR2_PACKAGE_PYTHON_UNICODEDATA
+ 	select BR2_PACKAGE_PYTHON_ZLIB
+ 	select BR2_PACKAGE_READLINE
++	select BR2_PACKAGE_SDL if BR2_PACKAGE_XBMC_GL
++	select BR2_PACKAGE_SDL_X11 if BR2_PACKAGE_XBMC_GL
++	select BR2_PACKAGE_SDL_IMAGE if BR2_PACKAGE_XBMC_GL
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_TAGLIB
+ 	select BR2_PACKAGE_TIFF
  	select BR2_PACKAGE_TINYXML
++	select BR2_PACKAGE_XLIB_XMU if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
++	select BR2_PACKAGE_XLIB_XRANDR if BR2_PACKAGE_XBMC_GL
++	select BR2_PACKAGE_XLIB_XT if BR2_PACKAGE_XBMC_GL # needed by rsxs screensaver
  	select BR2_PACKAGE_YAJL
  	select BR2_PACKAGE_ZLIB
--	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_INET_IPV6
+ 	depends on BR2_INET_IPV6
  	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_LARGEFILE
+ 	depends on BR2_LARGEFILE
  	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_USE_MMU # python
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_arm || BR2_i386 || BR2_x86_64
- 	help
- 	  XBMC is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
-diff --git a/package/xbmc/xbmc-0002-mathutil.patch b/package/xbmc/xbmc-0002-mathutil.patch
-new file mode 100644
-index 0000000..33f91eb
---- /dev/null
-+++ b/package/xbmc/xbmc-0002-mathutil.patch
-@@ -0,0 +1,213 @@
-+Taken from upstream PR: https://github.com/xbmc/xbmc/pull/3760
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 7388e8be7cd5e78100532ebf0dba15dccb7b03f8 Mon Sep 17 00:00:00 2001
-+From: Ben Avison <bavison@riscosopen.org>
-+Date: Tue, 3 Dec 2013 15:51:39 +0000
-+Subject: [PATCH] Faster and simpler portable implementation of
-+ MathUtils::round_int().
-+
-+Much as I like a bit of inline assembler, I have also removed the ARM versions
-+of MathUtils::truncate_int() and MathUtils::round_int(). The former was just
-+how any sane compiler should have assembled a cast from double to signed int
-+anyway. The latter was a much too complicated way to achieve the desired
-+effect, and was switched out in most ARM builds anyway in favour of the old
-+portable implementation that used floor().
-+
-+Verified that MathUtils::test() still passes, and that GCC is now able to
-+inline MathUtils::round_int(), where it didn't previously.
-+
-+I tested on a Raspberry Pi with the default theme, displaying the front page
-+with the RSS ticker enabled. This saturates the CPU, so I'm measuring the
-+improvement using the debug window's FPS figure. This patch improves this from
-+~50.8 FPS to ~52.6 FPS.
-+---
-+ xbmc/utils/MathUtils.h | 129 +++++++++++++++++++++++--------------------------
-+ 1 file changed, 61 insertions(+), 68 deletions(-)
-+
-+diff --git a/xbmc/utils/MathUtils.h b/xbmc/utils/MathUtils.h
-+index 96af9f4..0dae77d 100644
-+--- a/xbmc/utils/MathUtils.h
-++++ b/xbmc/utils/MathUtils.h
-+@@ -34,17 +34,13 @@
-+ 
-+ #if defined(__ppc__) || \
-+     defined(__powerpc__) || \
-+-   (defined(TARGET_DARWIN_IOS) && defined(__llvm__)) || \
-+-   (defined(TARGET_ANDROID) && defined(__arm__)) || \
-+-    defined(TARGET_RASPBERRY_PI)
-++    defined(__arm__)
-+   #define DISABLE_MATHUTILS_ASM_ROUND_INT
-+ #endif
-+ 
-+ #if defined(__ppc__) || \
-+     defined(__powerpc__) || \
-+-   (defined(TARGET_DARWIN) && defined(__llvm__)) || \
-+-   (defined(TARGET_ANDROID) && defined(__arm__)) || \
-+-    defined(TARGET_RASPBERRY_PI)
-++    defined(__arm__)
-+   #define DISABLE_MATHUTILS_ASM_TRUNCATE_INT
-+ #endif
-+ 
-+@@ -73,60 +69,63 @@
-+   {
-+     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
-+     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
-+-    const float round_to_nearest = 0.5f;
-+-    int i;
-+ 
-+ #if defined(DISABLE_MATHUTILS_ASM_ROUND_INT)
-+-    i = floor(x + round_to_nearest);
-+-
-+-#elif defined(__arm__)
-+-    // From 'ARM-v7-M Architecture Reference Manual' page A7-569:
-+-    //  "The floating-point to integer operation (vcvt) [normally] uses the Round towards Zero rounding mode"
-+-    // Because of this...we must use some less-than-straightforward logic to perform this operation without
-+-    //  changing the rounding mode flags
-+-
-+-    /* The assembly below implements the following logic:
-+-     if (x < 0)
-+-       inc = -0.5f
-+-     else
-+-       inc = 0.5f
-+-     int_val = trunc(x+inc);
-+-     err = x - int_val;
-+-     if (err == 0.5f)
-+-       int_val++;
-+-     return int_val;
-+-    */
-++    /* This implementation warrants some further explanation.
-++     *
-++     * First, a couple of notes on rounding:
-++     * 1) C casts from float/double to integer round towards zero.
-++     * 2) Float/double additions are rounded according to the normal rules,
-++     *    in other words: on some architectures, it's fixed at compile-time,
-++     *    and on others it can be set using fesetround()). The following
-++     *    analysis assumes round-to-nearest with ties rounding to even. This
-++     *    is a fairly sensible choice, and is the default with ARM VFP.
-++     *
-++     * What this function wants is round-to-nearest with ties rounding to
-++     * +infinity. This isn't an IEEE rounding mode, even if we could guarantee
-++     * that all architectures supported fesetround(), which they don't. Instead,
-++     * this adds an offset of 2147483648.5 (= 0x80000000.8p0), then casts to
-++     * an unsigned int (crucially, all possible inputs are now in a range where
-++     * round to zero acts the same as round to -infinity) and then subtracts
-++     * 0x80000000 in the integer domain. The 0.5 component of the offset
-++     * converts what is effectively a round down into a round to nearest, with
-++     * ties rounding up, as desired.
-++     *
-++     * There is a catch, that because there is a double rounding, there is a
-++     * small region where the input falls just *below* a tie, where the addition
-++     * of the offset causes a round *up* to an exact integer, due to the finite
-++     * level of precision available in floating point. You need to be aware of
-++     * this when calling this function, although@present it is not believed
-++     * that XBMC ever attempts to round numbers in this window.
-++     *
-++     * It is worth proving the size of the affected window. Recall that double
-++     * precision employs a mantissa of 52 bits.
-++     * 1) For all inputs -0.5 <= x <= INT_MAX
-++     *    Once the offset is applied, the most significant binary digit in the
-++     *    floating-point representation is +2^31.
-++     *    At this magnitude, the smallest step representable in double precision
-++     *    is 2^31 / 2^52 = 0.000000476837158203125
-++     *    So the size of the range which is rounded up due to the addition is
-++     *    half the size of this step, or 0.0000002384185791015625
-++     *
-++     * 2) For all inputs INT_MIN/2 < x < -0.5
-++     *    Once the offset is applied, the most significant binary digit in the
-++     *    floating-point representation is +2^30.
-++     *    At this magnitude, the smallest step representable in double precision
-++     *    is 2^30 / 2^52 = 0.0000002384185791015625
-++     *    So the size of the range which is rounded up due to the addition is
-++     *    half the size of this step, or 0.00000011920928955078125
-++     *
-++     * 3) For all inputs INT_MIN <= x <= INT_MIN/2
-++     *    The representation once the offset is applied has equal or greater
-++     *    precision than the input, so the addition does not cause rounding.
-++     */
-++    return ((unsigned int) (x + 0x80000000.8p0)) - 0x80000000;
-+ 
-+-    __asm__ __volatile__ (
-+-#if defined(__ARM_PCS_VFP)
-+-      "fconstd d1,#%G[rnd_val]     \n\t" // Copy round_to_nearest into a working register (d1 = 0.5)
-+ #else
-+-      "vmov.F64 d1,%[rnd_val]      \n\t"
-+-#endif
-+-      "fcmpezd %P[value]           \n\t" // Check value against zero (value == 0?)
-+-      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
-+-      "it mi                       \n\t"
-+-      "vnegmi.F64 d1, d1           \n\t" // if N-flag is set, negate round_to_nearest (if (value < 0) d1 = -1 * d1)
-+-      "vadd.F64 d1,%P[value],d1    \n\t" // Add round_to_nearest to value, store result in working register (d1 += value)
-+-      "vcvt.S32.F64 s3,d1          \n\t" // Truncate(round towards zero) (s3 = (int)d1)
-+-      "vmov %[result],s3           \n\t" // Store the integer result in a general-purpose register (result = s3)
-+-      "vcvt.F64.S32 d1,s3          \n\t" // Convert back to floating-point (d1 = (double)s3)
-+-      "vsub.F64 d1,%P[value],d1    \n\t" // Calculate the error (d1 = value - d1)
-+-#if defined(__ARM_PCS_VFP)
-+-      "fconstd d2,#%G[rnd_val]     \n\t" // d2 = 0.5;
-+-#else
-+-      "vmov.F64 d2,%[rnd_val]      \n\t"
-+-#endif
-+-      "fcmped d1, d2               \n\t" // (d1 == 0.5?)
-+-      "fmstat                      \n\t" // Copy the floating-point status flags into the general-purpose status flags
-+-      "it eq                       \n\t"
-+-      "addeq %[result],#1          \n\t" // (if (d1 == d2) result++;)
-+-      : [result] "=r"(i)                                  // Outputs
-+-      : [rnd_val] "Dv" (round_to_nearest), [value] "w"(x) // Inputs
-+-      : "d1", "d2", "s3"                                  // Clobbers
-+-    );
-+-
-+-#elif defined(__SSE2__)
-++    const float round_to_nearest = 0.5f;
-++    int i;
-++#if defined(__SSE2__)
-+     const float round_dn_to_nearest = 0.4999999f;
-+     i = (x > 0) ? _mm_cvttsd_si32(_mm_set_sd(x + round_to_nearest)) : _mm_cvttsd_si32(_mm_set_sd(x - round_dn_to_nearest));
-+ 
-+@@ -150,8 +149,8 @@
-+     );
-+ 
-+ #endif
-+-
-+     return i;
-++#endif
-+   }
-+ 
-+   /*! \brief Truncate to nearest integer.
-+@@ -165,20 +164,13 @@
-+   {
-+     assert(x > static_cast<double>(INT_MIN / 2) - 1.0);
-+     assert(x < static_cast<double>(INT_MAX / 2) + 1.0);
-+-    int i;
-+ 
-+ #if defined(DISABLE_MATHUTILS_ASM_TRUNCATE_INT)
-+-    return i = (int)x;
-+-
-+-#elif defined(__arm__)
-+-    __asm__ __volatile__ (
-+-      "vcvt.S32.F64 %[result],%P[value]   \n\t" // Truncate(round towards zero) and store the result
-+-      : [result] "=w"(i)                        // Outputs
-+-      : [value] "w"(x)                          // Inputs
-+-    );
-+-    return i;
-++    return x;
-+ 
-+-#elif defined(TARGET_WINDOWS)
-++#else
-++    int i;
-++#if defined(TARGET_WINDOWS)
-+     const float round_towards_m_i = -0.5f;
-+     __asm
-+     {
-+@@ -204,6 +196,7 @@
-+     if (x < 0)
-+       i = -i;
-+     return (i);
-++#endif
-+   }
-+ 
-+   inline int64_t abs(int64_t a)
-+-- 
-+1.9.1
-+
+-	depends on BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_XBMC_EGL_GLES || BR2_PACKAGE_XBMC_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_arm || BR2_i386 || BR2_x86_64
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 7cba29a..82158ae 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -15,7 +15,7 @@ XBMC_LICENSE_FILES = LICENSE.GPL
+ # http://wiki.xbmc.org/index.php?title=TexturePacker
+ XBMC_DEPENDENCIES = host-gawk host-gettext host-gperf host-infozip host-lzo host-sdl_image host-swig
+ XBMC_DEPENDENCIES += boost bzip2 expat flac fontconfig freetype jasper jpeg \
+-	libass libcdio libcurl libegl libfribidi libgcrypt libgles libmad libmodplug libmpeg2 \
++	libass libcdio libcurl libfribidi libgcrypt libmad libmodplug libmpeg2 \
+ 	libogg libplist libpng libsamplerate libungif libvorbis libxml2 libxslt lzo ncurses \
+ 	openssl pcre python readline sqlite taglib tiff tinyxml yajl zlib
+ 
+@@ -44,7 +44,6 @@ XBMC_CONF_OPT +=  \
+ 	--disable-crystalhd \
+ 	--disable-debug \
+ 	--disable-dvdcss \
+-	--disable-gl \
+ 	--disable-hal \
+ 	--disable-joystick \
+ 	--disable-mysql \
+@@ -52,14 +51,10 @@ XBMC_CONF_OPT +=  \
+ 	--disable-optical-drive \
+ 	--disable-projectm \
+ 	--disable-pulse \
+-	--disable-sdl \
+ 	--disable-ssh \
+ 	--disable-vaapi \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+-	--disable-x11 \
+-	--disable-xrandr \
+-	--enable-gles \
+ 	--enable-optimizations
+ 
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+@@ -88,9 +83,34 @@ else
+ XBMC_CONF_OPT += --disable-libmp3lame
+ endif
+ 
++# quote from xbmc/configure.in: "GLES overwrites GL if both set to yes."
++# we choose the opposite because opengl offers more features, like libva support
++ifeq ($(BR2_PACKAGE_XBMC_GL),y)
++XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
++	xlib_libXmu xlib_libXrandr xlib_libXt
++XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr--disable-gles
++# fix rsxs compile
++# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
++XBMC_CONF_ENV += \
++	jm_cv_func_gettimeofday_clobber=no \
++	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
++	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
++	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
++	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
++	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
++XBMC_CONF_OPT += --enable-rsxs
++else
++XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
++ifeq ($(BR2_PACKAGE_XBMC_EGL_GLES),y)
++XBMC_DEPENDENCIES += libegl libgles
++XBMC_CONF_OPT += --enable-gles
+ XBMC_CONF_ENV += \
+ 	CFLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
+ 	CXXFLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
++else
++XBMC_CONF_OPT += --disable-gles
++endif
++endif
+ 
+ ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+ XBMC_DEPENDENCIES += libusb-compat
 -- 
 1.7.10.4
