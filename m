@@ -1,47 +1,55 @@
 From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-Date: Wed, 23 Jul 2014 11:58:23 +0530
-Subject: [Buildroot] [PATCH] gnuplot: link libgd against libpthread when gd
-	enabled
-Message-ID: <1406096903-2666-1-git-send-email-yuvaraj.patil@wipro.com>
+Date: Wed, 23 Jul 2014 17:17:22 +0530
+Subject: [Buildroot] [PATCH] httping: fix math library linking
+Message-ID: <1406116042-3054-1-git-send-email-yuvaraj.patil@wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When gnuplot is linked, pass -lpthread agrument to link
-libgd against libpthread when the support for gd is enabled.
+Add the math library directive '-lm' to linker options at the end.
+The order of the math library directive '-lm' matters.
 
 fixes:
-http://autobuild.buildroot.net/results/148/14846b8d1a054409d1cee9f3ce1413f08b4c3634//
+http://autobuild.buildroot.net/results/843/84382290696e72c23995f5ed020ad5c157817012//
 
 Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 ---
- ...uplot-4.6.2-link-libgd-against-libpthread.patch |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
- create mode 100644 package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch
+ .../httping-2.3.4-fix-math-library-linking.patch   |   25 ++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/httping/httping-2.3.4-fix-math-library-linking.patch
 
-diff --git a/package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch b/package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch
+diff --git a/package/httping/httping-2.3.4-fix-math-library-linking.patch b/package/httping/httping-2.3.4-fix-math-library-linking.patch
 new file mode 100644
-index 0000000..c704dc4
+index 0000000..0078f41
 --- /dev/null
-+++ b/package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch
-@@ -0,0 +1,16 @@
-+Link libgd against libpthread.
-+When gnuplot is linked, pass the -lpthread argument.
++++ b/package/httping/httping-2.3.4-fix-math-library-linking.patch
+@@ -0,0 +1,25 @@
++Move LDFLAGS+=-lm option to the end.
++The order of the math library directive '-lm' matters.
 +
 +Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 +---
-+diff -Nurp gnuplot-4.6.2_orig/configure.in gnuplot-4.6.2/configure.in
-+--- gnuplot-4.6.2_orig/configure.in	2014-07-22 18:53:14.226771000 +0530
-++++ gnuplot-4.6.2/configure.in	2014-07-23 10:42:13.944386474 +0530
-+@@ -590,6 +590,7 @@ if test "$with_gd" != no; then
-+        [AC_DEFINE(HAVE_GD_PNG,1,[ Define if libgd supports png. ])
-+         libgd_LIBS="$libgd_LIBS -lpng"])
-+      LIBS="$_libs"
-++     LIBS="-lpthread $LIBS"
++diff -Nurp httping-2.3.4_orig/Makefile httping-2.3.4/Makefile
++--- httping-2.3.4_orig/Makefile	2014-07-23 16:16:36.495546288 +0530
+++++ httping-2.3.4/Makefile	2014-07-23 16:18:42.547541002 +0530
++@@ -37,7 +37,6 @@ DEBUG=yes
++ WFLAGS=-Wall -W
++ OFLAGS=
++ CFLAGS+=$(WFLAGS) $(OFLAGS) -DVERSION=\"$(VERSION)\" -DLOCALEDIR=\"$(LOCALEDIR)\"
++-LDFLAGS+=-lm
 + 
-+     ],[dnl gd library not found
-+        AC_MSG_WARN([libgd not found or too old, version >= 2.0 is required])
++ PACKAGE=$(TARGET)-$(VERSION)
++ PREFIX?=/usr
++@@ -97,6 +96,8 @@ ifeq ($(ARM),yes)
++ CC=arm-linux-gcc
++ endif
++ 
+++LDFLAGS+=-lm
+++
++ all: $(TARGET) $(TRANSLATIONS)
++ 
++ $(TARGET): $(OBJS)
 -- 
 1.7.9.5
