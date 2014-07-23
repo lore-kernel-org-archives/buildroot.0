@@ -1,45 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 08:30:09 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-22
-Message-ID: <20140723063009.62CFA100F9A@stock.ovh.net>
+From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Date: Wed, 23 Jul 2014 11:58:23 +0530
+Subject: [Buildroot] [PATCH] gnuplot: link libgd against libpthread when gd
+	enabled
+Message-ID: <1406096903-2666-1-git-send-email-yuvaraj.patil@wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-07-22
-===============================
+When gnuplot is linked, pass -lpthread agrument to link
+libgd against libpthread when the support for gd is enabled.
 
-        success : 86 
-       failures : 7  
-       timeouts : 1  
-          TOTAL : 94 
+fixes:
+http://autobuild.buildroot.net/results/148/14846b8d1a054409d1cee9f3ce1413f08b4c3634//
 
-Classification of failures by reason
-====================================
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+---
+ ...uplot-4.6.2-link-libgd-against-libpthread.patch |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch
 
-make: *** wait: No child pr... | 1 
-                  zeromq-4.0.4 | 1 
-                  thrift-0.9.1 | 1 
-                oprofile-0.9.9 | 1 
-               ruby-1.9.3-p545 | 1 
-                     tmux-1.9a | 1 
-                upmpdcli-0.7.1 | 1 
-                libmpeg2-0.5.1 | 1 
-
-Detail of failures
-===================
-
-   powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/9019b553abd093714b0f0ff1ddb2278c92b0b75f/
-  mips64el | make: *** wait: No child pr... | TIM | http://autobuild.buildroot.net/results/467dd1be96d8217b872010ba9aa874cf60e5a552/
-       arm |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/14580eda4bb5d8d469e9c590e2dc539327d1badd/
-      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/cf8153e8abe856e89f4947dfc41dcb35bdf6f392/
-       arm |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/56d9feeedb03dd840e94e7329704e0372a24a354/
-      i686 |                      tmux-1.9a | NOK | http://autobuild.buildroot.net/results/0b1a158d98df51145c986c9ead79778c52ba9a36/
-      bfin |                 upmpdcli-0.7.1 | NOK | http://autobuild.buildroot.net/results/d8fb4adc1e028e938bf7eff0307d1cb53f9be007/
-      i686 |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/e726d759752ab2569360a9e0222a0b240637f634/
-
-
+diff --git a/package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch b/package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch
+new file mode 100644
+index 0000000..c704dc4
+--- /dev/null
++++ b/package/gnuplot/gnuplot-4.6.2-link-libgd-against-libpthread.patch
+@@ -0,0 +1,16 @@
++Link libgd against libpthread.
++When gnuplot is linked, pass the -lpthread argument.
++
++Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
++---
++diff -Nurp gnuplot-4.6.2_orig/configure.in gnuplot-4.6.2/configure.in
++--- gnuplot-4.6.2_orig/configure.in	2014-07-22 18:53:14.226771000 +0530
+++++ gnuplot-4.6.2/configure.in	2014-07-23 10:42:13.944386474 +0530
++@@ -590,6 +590,7 @@ if test "$with_gd" != no; then
++        [AC_DEFINE(HAVE_GD_PNG,1,[ Define if libgd supports png. ])
++         libgd_LIBS="$libgd_LIBS -lpng"])
++      LIBS="$_libs"
+++     LIBS="-lpthread $LIBS"
++ 
++     ],[dnl gd library not found
++        AC_MSG_WARN([libgd not found or too old, version >= 2.0 is required])
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
