@@ -1,126 +1,139 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 24 Jul 2014 00:13:50 +0200
-Subject: [Buildroot] [PATCH] toolchain: include C libraries in legal-info
-In-Reply-To: <1406153080-29619-1-git-send-email-yann.morin.1998@free.fr>
-References: <1406153080-29619-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140723221350.GD17249@free.fr>
+From: Ben Widawsky <ben@bwidawsk.net>
+Date: Wed, 23 Jul 2014 15:36:27 -0700
+Subject: [Buildroot] [PATCH] sna/dri2: Protect compsiteext.h include
+ with build check
+In-Reply-To: <20140723234458.7399f7b6@free-electrons.com>
+References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+ <1405665634-3299-1-git-send-email-chris@chris-wilson.co.uk>
+ <20140718232336.GA5940@bwidawsk.net>
+ <20140723234458.7399f7b6@free-electrons.com>
+Message-ID: <20140723223626.GA759@bwidawsk.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
-
-On 2014-07-24 00:04 +0200, Yann E. MORIN spake thusly:
-> So far, the legal-info infrastructure was not exporting the legal
-> info for the C libraries. This is because the legal-info only acts
-> on packages defined in $(TARGETS).
+On Wed, Jul 23, 2014 at 11:44:58PM +0200, Thomas Petazzoni wrote:
+> Dear Ben Widawsky,
 > 
-> But the C libraries are never added to $(TARGETS), since there is no
-> corresponding BR2_PACKAGE_<C-LIBRARY>.
+> On Fri, 18 Jul 2014 16:23:37 -0700, Ben Widawsky wrote:
+> > On Fri, Jul 18, 2014 at 07:40:34AM +0100, Chris Wilson wrote:
+> > > We shouldn't include calls to the composite extension if it has not been
+> > > built.
+> > > 
+> > > Reported-by: Ben Widawsky <ben@bwidawsk.net>
+> > > Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+> > 
+> > This patch does not apply cleanly to .912. The wiggled patch does build.
+> > With my earlier patch reverted.
+> > 
+> > If this patch will be in .913, and .913 is coming relatively soon, we
+> > can ignore this entirely for buildroot and simply do a version bump to
+> > .913 when its available.
 > 
-> This patch adds such symbols for the 4 C libraries we support in our
-> internal backend: uClibc, glibc, eglibc and musl.
+> I'm sorry, but I don't understand your comment. Your patch was against
+> Buildroot, but you say it doesn't apply against .912, which is a
+> version of the intel driver. Could you explain a bit more if your
+> patches http://patchwork.ozlabs.org/patch/371342/ and
+> http://patchwork.ozlabs.org/patch/371343/ are still applicable?
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Thanks,
 > 
-> ---
-> Tested by building the toolchain of the defconfig, which is
-> uClibc-based. Tests not replicated to other C libraries.
-> ---
->  Makefile                 |  4 ++++
->  package/glibc/Config.in  | 10 ++++++++++
->  package/musl/Config.in   |  4 ++++
->  package/uclibc/Config.in |  5 +++++
->  4 files changed, 23 insertions(+)
->  create mode 100644 package/musl/Config.in
-> 
-> diff --git a/Makefile b/Makefile
-> index 1af51de..17a11f7 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -419,6 +419,10 @@ dirs: $(BUILD_DIR) $(STAGING_DIR) $(TARGET_DIR) \
->  $(BUILD_DIR)/buildroot-config/auto.conf: $(BR2_CONFIG)
->  	$(MAKE1) $(EXTRAMAKEARGS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTCXX="$(HOSTCXX_NOCCACHE)" silentoldconfig
->  
-> +.PHONY: DEBUG-ME
-> +DEBUG-ME:
-> +	@echo $(TARGETS)
-> +
+> Thomas
 
-As Thomas astutely noticed, this should probably not be here... :-)
+Hi. The second patch, .912 bump has been nak'd already by Bernd (I
+missed this before my ping). Coincidentally, Bernd also fixed the
+composite extension compilation error in buildroot (differently than I
+did). Chris Wilson, the Intel DDX maintainer has fixed the issue
+meanwhile.
 
-I will respin later, waiting for more reviews...
+I would recommend backporting the xf86-video-intel patch instead of the
+patch Bernd submitted. Wiggle handled all the conflicts. I am not sure
+if it will apply to .907 (the current version). The other option is to
+take Bernd's patch, and revert it when you finally get to the fixed
+upstream version.
 
-Regards,
-Yann E. MORIN.
+In the most ideal case, we could just bump to the recently released .913 and
+have everything /just/ work. Chris has fixed 2 bugs that Bernd's series also
+attempted to fix. Of course that runs the risk of invoking the wrath that
+caused the original .912 revert.
 
->  prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  
->  world: target-post-image
-> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-> index c2d6231..df1e273 100644
-> --- a/package/glibc/Config.in
-> +++ b/package/glibc/Config.in
-> @@ -1,5 +1,10 @@
->  if BR2_TOOLCHAIN_BUILDROOT_EGLIBC
->  
-> +# For legal-info
-> +config BR2_PACKAGE_EGLIBC
-> +	bool
-> +	default y
-> +
->  choice
->  	prompt "eglibc version"
->  	default BR2_EGLIBC_VERSION_2_18
-> @@ -18,6 +23,11 @@ endif
->  
->  if BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  
-> +# For legal-info
-> +config BR2_PACKAGE_GLIBC
-> +	bool
-> +	default y
-> +
->  choice
->  	prompt "glibc version"
->  	default BR2_GLIBC_VERSION_2_18
-> diff --git a/package/musl/Config.in b/package/musl/Config.in
-> new file mode 100644
-> index 0000000..f5c1b57
-> --- /dev/null
-> +++ b/package/musl/Config.in
-> @@ -0,0 +1,4 @@
-> +config BR2_PACKAGE_MUSL
-> +	bool
-> +	depends on BR2_TOOLCHAIN_USES_MUSL
-> +	default y
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index 0838b6c..851ad1e 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -1,5 +1,10 @@
->  if BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  
-> +# For legal-info
-> +config BR2_PACKAGE_UCLIBC
-> +	bool
-> +	default y
-> +
->  comment "uClibc Options"
->  
->  choice
-> -- 
-> 1.9.1
-> 
+That all came out more complicated than it should have. I apologize. I am
+pasting the patch I wiggled as an example. Hopefully that helps make sense.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+---
+
+
+commit 6cf66fc273e6d6348f605e7dcce915e53198e23b
+Author: Ben Widawsky <ben@bwidawsk.net>
+Date:   Fri Jul 18 16:24:07 2014 -0700
+
+    xdriver_xf86-video-intel: Take the upstream composite patch
+    
+    "
+    We shouldn't include calls to the composite extension if it has not been
+    built.
+    
+    Reported-by: Ben Widawsky <ben@bwidawsk.net>
+    Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
+    "
+    
+    Signed-off-by: Ben Widawsky <ben@bwidawsk.net>
+
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-0001-sna-dri2-Protect-compsiteext.h-include-with-build-ch.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-0001-sna-dri2-Protect-compsiteext.h-include-with-build-ch.patch
+new file mode 100644
+index 0000000..a82c482
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-0001-sna-dri2-Protect-compsiteext.h-include-with-build-ch.patch
+@@ -0,0 +1,50 @@
++From f17f0808ab3de6f65a3eedf5548e7b314b7a182f Mon Sep 17 00:00:00 2001
++From: Chris Wilson <chris@chris-wilson.co.uk>
++Date: Fri, 18 Jul 2014 07:40:34 +0100
++Subject: [PATCH] sna/dri2: Protect compsiteext.h include with build check
++
++We shouldn't include calls to the composite extension if it has not been
++built.
++
++Reported-by: Ben Widawsky <ben@bwidawsk.net>
++Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
++---
++ src/sna/sna_dri2.c | 7 ++++---
++ 1 file changed, 4 insertions(+), 3 deletions(-)
++
++diff --git a/src/sna/sna_dri2.c b/src/sna/sna_dri2.c
++index 1baaf2b..1edf98e 100644
++--- a/src/sna/sna_dri2.c
+++++ b/src/sna/sna_dri2.c
++@@ -48,8 +48,9 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
++ #include <xf86drm.h>
++ #include <i915_drm.h>
++ #include <dri2.h>
++-#if XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0)
+++#if XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0) && defined(COMPOSITE)
++ #include <compositeext.h>
+++#define CHECK_FOR_COMPOSITOR
++ #endif
++ 
++ #if DRI2INFOREC_VERSION < 2
++@@ -2164,7 +2165,7 @@ get_current_msc(struct sna *sna, DrawablePtr draw, xf86CrtcPtr crtc)
++       return draw_current_msc(draw, crtc, ret);
++ }
++ 
++-#if !XORG_CAN_TRIPLE_BUFFER && XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0)
+++#if !XORG_CAN_TRIPLE_BUFFER && defined(CHECK_FOR_COMPOSITOR)
++ static Bool find(pointer value, XID id, pointer cdata)
++ {
++       return TRUE;
++@@ -2187,7 +2188,7 @@ static int use_triple_buffer(struct sna *sna, ClientPtr client, bool async)
++ #if XORG_CAN_TRIPLE_BUFFER
++       DBG(("%s: triple buffer enabled, using FLIP_THROTTLE\n", __FUNCTION__));
++       return FLIP_THROTTLE;
++-#elif XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0)
+++#elif defined(CHECK_FOR_COMPOSITOR)
++       /* Hack: Disable triple buffering for compositors */
++       {
++               struct sna_client *priv = sna_client(client);
++-- 
++2.0.2
++
