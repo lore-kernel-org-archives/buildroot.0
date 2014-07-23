@@ -1,65 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 21:47:40 +0200
-Subject: [Buildroot] [git commit] perl-try-tiny: new package
-Message-ID: <20140723194747.D07B09D2CF@busybox.osuosl.org>
+Date: Wed, 23 Jul 2014 21:49:27 +0200
+Subject: [Buildroot] [PATCH 1/4] perl-datetime-tiny: new package
+In-Reply-To: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+References: <1406053076-25453-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20140723214927.46bbe33e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d53d8e385ec9051267c9e8961e47c3df58f16408
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Francois Perrad,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                      |    1 +
- package/perl-try-tiny/Config.in        |    6 ++++++
- package/perl-try-tiny/perl-try-tiny.mk |   14 ++++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
+On Tue, 22 Jul 2014 20:17:53 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in                                |  1 +
+>  package/perl-datetime-tiny/Config.in             |  6 ++++++
+>  package/perl-datetime-tiny/perl-datetime-tiny.mk | 14 ++++++++++++++
+>  3 files changed, 21 insertions(+)
+>  create mode 100644 package/perl-datetime-tiny/Config.in
+>  create mode 100644 package/perl-datetime-tiny/perl-datetime-tiny.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 40d8ba9..7c9f3ad 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -440,6 +440,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
- 	source "package/perl-path-tiny/Config.in"
-+	source "package/perl-try-tiny/Config.in"
- 	source "package/perl-xml-libxml/Config.in"
- 	source "package/perl-xml-namespacesupport/Config.in"
- 	source "package/perl-xml-sax-base/Config.in"
-diff --git a/package/perl-try-tiny/Config.in b/package/perl-try-tiny/Config.in
-new file mode 100644
-index 0000000..7bd5396
---- /dev/null
-+++ b/package/perl-try-tiny/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_TRY_TINY
-+	bool "perl-try-tiny"
-+	help
-+	  minimal try/catch with proper preservation of $@
-+
-+	  http://metacpan.org/release/Try-Tiny
-diff --git a/package/perl-try-tiny/perl-try-tiny.mk b/package/perl-try-tiny/perl-try-tiny.mk
-new file mode 100644
-index 0000000..0bb3d00
---- /dev/null
-+++ b/package/perl-try-tiny/perl-try-tiny.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-try-tiny
-+#
-+################################################################################
-+
-+PERL_TRY_TINY_VERSION = 0.22
-+PERL_TRY_TINY_SOURCE = Try-Tiny-$(PERL_TRY_TINY_VERSION).tar.gz
-+PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY/
-+PERL_TRY_TINY_DEPENDENCIES = perl
-+PERL_TRY_TINY_LICENSE = MIT
-+PERL_TRY_TINY_LICENSE_FILES = LICENSE
-+
-+$(eval $(perl-package))
+Thanks, I've applied your four patches. However, on patches 3 and 4, I
+had to change the license:
+
+ apache_2_0 -> Apache-2.0
+ mit -> MIT
+
+See http://spdx.org/licenses/ for the list of license codes. You might
+want to update you scancpan script to take this into account.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
