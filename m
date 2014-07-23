@@ -1,42 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 23:54:53 +0200
-Subject: [Buildroot] [PATCH 1/2] package/webkit: Fix detection of egl
- headers provided by rpi-userland
-In-Reply-To: <1401366393-5815-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
- <1401366393-5815-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140723235453.5ebea556@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 23 Jul 2014 23:58:29 +0200
+Subject: [Buildroot] [PATCH 1/7 v3] package/busybox: Add facility for
+ DHCP hooks
+In-Reply-To: <1402982507.184367.599670173206.1.gpush@pablo>
+References: <1402982507.183937.570365596242.0.gpush@pablo>
+ <1402982507.184367.599670173206.1.gpush@pablo>
+Message-ID: <20140723215829.GC17249@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Jeremy, All,
 
-On Thu, 29 May 2014 14:26:32 +0200, Bernd Kuhls wrote:
-> quote from webkit/config.log:
-> /home/br2/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/interface/vcos/vcos_types.h:38:33:
-> fatal error: vcos_platform_types.h: No such file or directory
+On 2014-06-17 13:21 +0800, Jeremy Kerr spake thusly:
+> The (u)dhcpc hook installed by the busybox package configures the
+> network and exits. If we want to do anything further with a DHCP lease,
+> we'd have to replace the script entirely.
 > 
-> Package rpi-userland provides this header file, but in a non-default directory,
-> therefore use pkg-config to add the appropriate flags.
+> This change introduces a .d directory for hooks (based on the script
+> filename), which are executed after the interface configuration. This
+> allows packages to drop a script file in the .d directory to perform
+> actions on DHCP events.
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/bc0/bc0f9114f9dacf68a510f1e01f2dc3661c34f536/
+> We'll use this in a later change to notify petitboot of DHCP boot
+> information.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  package/webkit/webkit.mk |    6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/busybox/busybox.mk    |    2 ++
+>  package/busybox/udhcpc.script |    6 ++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index c368b80..bddeb63 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -222,6 +222,8 @@ define BUSYBOX_INSTALL_TARGET_CMDS
+>  	if [ ! -f $(TARGET_DIR)/usr/share/udhcpc/default.script ]; then \
+>  		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+>  			$(TARGET_DIR)/usr/share/udhcpc/default.script; \
+> +		$(INSTALL) -m 755 -d \
+> +			$(TARGET_DIR)/usr/share/udhcpc/default.script.d; \
+>  	fi
+>  	$(BUSYBOX_INSTALL_MDEV_SCRIPT)
+>  	$(BUSYBOX_INSTALL_MDEV_CONF)
+> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> index e23d1f1..50c52e6 100755
+> --- a/package/busybox/udhcpc.script
+> +++ b/package/busybox/udhcpc.script
+> @@ -64,4 +64,10 @@ case "$1" in
+>  		;;
+>  esac
+>  
+> +HOOK_DIR="$0.d"
+> +for hook in "${HOOK_DIR}/"*; do
+> +    [ -f "${hook}" -a -x "${hook}" ] || continue
+> +    "${hook}" "${@}"
+> +done
+> +
+>  exit 0
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Could you update on whether this patch and patch 2/2 in this series are
-still needed? There were also unanswered questions in your patch 2/2.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
