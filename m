@@ -1,45 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 22:07:42 +0200
-Subject: [Buildroot] [git commit] xbmc: Add alsa support
-Message-ID: <20140723200905.340769D2CF@busybox.osuosl.org>
+Date: Wed, 23 Jul 2014 22:10:57 +0200
+Subject: [Buildroot] [PATCH v15 0/9] xbmc: Add support for uClibc, OpenGL,
+ libva & optional packages
+In-Reply-To: <1406090425-5925-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1406090425-5925-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140723221057.2f437a0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=42f38063a80139ff033bed37d5f22f3e071f099b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/xbmc/xbmc.mk |    8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+On Wed, 23 Jul 2014 06:40:16 +0200, Bernd Kuhls wrote:
 
-diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-index 2a38114..32507fb 100644
---- a/package/xbmc/xbmc.mk
-+++ b/package/xbmc/xbmc.mk
-@@ -39,7 +39,6 @@ XBMC_CONF_ENV = \
- 
- XBMC_CONF_OPT +=  \
- 	--with-arch=$(BR2_ARCH) \
--	--disable-alsa \
- 	--disable-crystalhd \
- 	--disable-debug \
- 	--disable-dvdcss \
-@@ -73,6 +72,13 @@ ifeq ($(BR2_PACKAGE_DBUS),y)
- XBMC_DEPENDENCIES += dbus
- endif
- 
-+ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
-+XBMC_DEPENDENCIES += alsa-lib
-+XBMC_CONF_OPT += --enable-alsa
-+else
-+XBMC_CONF_OPT += --disable-alsa
-+endif
-+
- ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
- XBMC_DEPENDENCIES += libusb-compat
- XBMC_CONF_OPT += --enable-libusb
+> Bernd Kuhls (9):
+>   xbmc: Bump version to 13.2b2
+
+Applied.
+
+>   xbmc: Add missing egl-related cflags
+
+For this one, I'm not sure. Shouldn't XBMC itself be capable of calling
+pkg-config on egl to get the appropriate flags? On the other hand, it's
+true that xbmc.mk already has specific hacks for the RPi.
+
+>   xbmc: Allow compilation with uClibc
+
+Applied, but with the architecture dependency factorized into a
+BR2_PACKAGE_XBMC_ARCH_SUPPORTS.
+
+>   xbmc: Add alsa support
+
+Applied.
+
+>   xbmc: Add lame support
+
+Applied.
+
+>   xbmc: Fix TexturePacker compile
+
+Applied.
+
+>   xbmc: Add X.org/OpenGL support
+>   xbmc: Add option for Goom screensaver
+>   xbmc: Add VA-API support
+
+I haven't applied those ones yet. The last two depend on the
+X.org/OpenGL support, and this patch is a bit larger. I'll try to get
+to it a bit later.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
