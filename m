@@ -1,28 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 23:49:49 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-autotools: add support for
- <pkg>_AUTORECONF_ENV
-In-Reply-To: <1405674739-17167-1-git-send-email-rick.taylor@cassidian.com>
-References: <1405674739-17167-1-git-send-email-rick.taylor@cassidian.com>
-Message-ID: <20140723234949.1fbd0a9c@free-electrons.com>
+Date: Wed, 23 Jul 2014 23:50:45 +0200
+Subject: [Buildroot] [PATCH 2/7 v3] package/dropbear: Add separate
+ configuration option for dropbear server
+In-Reply-To: <53C827A5.6030609@zacarias.com.ar>
+References: <1402982507.184682.35787456543.2.gpush@pablo>
+ <53C827A5.6030609@zacarias.com.ar>
+Message-ID: <20140723235045.083d25f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rick Taylor,
+Dear Gustavo Zacarias,
 
-On Fri, 18 Jul 2014 10:12:19 +0100, Rick Taylor wrote:
-> This commit improves the autotools-package infrastructure to support a <pkg>_AUTORECONF_ENV variable, which allows a package maintainer to pass additional variables in the environment of the autoreconf execution. This is useful in the situation where configure.ac contains shell commands using environment variables that are only executed when autoreconf is run.
-> 
-> Signed-off-by: Rick Taylor <rick.taylor@cassidian.com>
-> ---
->  docs/manual/adding-packages-autotools.txt | 5 +++++
->  package/pkg-autotools.mk                  | 2 +-
->  2 files changed, 6 insertions(+), 1 deletion(-)
+On Thu, 17 Jul 2014 16:44:37 -0300, Gustavo Zacarias wrote:
 
-Thanks, applied, after wrapping the commit log text.
+> This can be disabled in a post build script by removing the initscript
+> directly.
+> If it were a build option that saves space in the target i'd say yay,
+> but it's not.
+> And it's a slippery rope since the same could be said/done to countless
+> other packages that have client-server functionality like openssh,
+> netsnmp, openvpn and so on.
+> Others might disagree with me of course.
+
+Agreed. Therefore, I've marked the patch as rejected in patchwork.
 
 Thanks,
 
