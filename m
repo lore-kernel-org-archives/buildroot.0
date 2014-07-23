@@ -1,42 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Jul 2014 23:39:02 +0200
-Subject: [Buildroot] [git commit] system/skeleton: remove spurious group
-	'nobody'
-Message-ID: <20140723213923.145729D2CC@busybox.osuosl.org>
+Date: Wed, 23 Jul 2014 23:42:28 +0200
+Subject: [Buildroot] [git commit] grub2: add a tip to create disk image w/o
+	root permission
+Message-ID: <20140723214249.6615E9D2D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=908198e756b4a75c19a31be493eeec66c7bb19d3
+commit: http://git.buildroot.net/buildroot/commit/?id=0fe134f08280f0019403c41ac9573a233c94e3b5
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We define the two groups 'nobody' and 'nogroup' in our skeleton, but
-they have the same gid, which is not valid.
+[Thomas: minor fixes/improvements.]
 
-This breaks the mkuser script, as noticed by Thomas.
-
-Anyway, the user 'nobody' belongs to the group 'nogroup' in any sane
-distribution.
-
-So, just remove the spurious 'nobody' group.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/skeleton/etc/group |    1 -
- 1 files changed, 0 insertions(+), 1 deletions(-)
+ boot/grub2/Config.in |   28 ++++++++++++++++++++++++++--
+ 1 files changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/system/skeleton/etc/group b/system/skeleton/etc/group
-index 11d58ac..41c396b 100644
---- a/system/skeleton/etc/group
-+++ b/system/skeleton/etc/group
-@@ -24,6 +24,5 @@ haldaemon:x:68:
- dbus:x:81:
- netdev:x:82:
- ftp:x:83
--nobody:x:99:
- nogroup:x:99:
- users:x:100:
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index a27c07a..4e0d1d6 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -39,7 +39,30 @@ config BR2_TARGET_GRUB2
+ 	     sudo losetup -d /dev/loop0
+ 	  7. Your disk.img is ready!
+ 
+-	  To test your BIOS image in Qemu:
++	  Using genimage
++	  --------------
++
++	  If you use genimage to generate your complete image,
++	  installing Grub can be tricky. Here is how to achieve Grub's
++	  installation with genimage:
++
++	  partition boot {
++	      in-partition-table = "no"
++	      image = "path_to_boot.img"
++	      offset = 0
++	      size = 512
++	  }
++	  partition grub {
++	      in-partition-table = "no"
++	      image = "path_to_grub.img"
++	      offset = 512
++	  }
++
++	  The result is not byte to byte identical to what
++	  grub-bios-setup does but it works anyway.
++
++	  To test your BIOS image in Qemu
++	  -------------------------------
+ 
+ 	  qemu-system-{i386,x86-64} -hda disk.img
+ 
+@@ -73,7 +96,8 @@ config BR2_TARGET_GRUB2
+ 	     sudo losetup -d /dev/loop0
+ 	  7. Your disk.img is ready!
+ 
+-	  To test your EFI image in Qemu:
++	  To test your EFI image in Qemu
++	  ------------------------------
+ 
+ 	  1. Download the EFI BIOS for Qemu
+ 	     Version IA32 or X64 depending on the chosen Grub2
