@@ -1,27 +1,34 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Jul 2014 21:01:49 +0200
-Subject: [Buildroot] [PATCH] trivial: fix typo 'informations'
-In-Reply-To: <20140724181257.GA4065@free.fr>
-References: <37734712403055c8a791.1406225222@localhost>
- <20140724181257.GA4065@free.fr>
-Message-ID: <CAAXf6LUzf3pkF1WxW2UhL-C87CTp-zNpp9nqWDp7=6ncrCPRhA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 24 Jul 2014 19:04:59 +0000 (UTC)
+Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
+	`__GI___errno_location'
+In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
+References: <bug-4021-163@https.bugs.busybox.net/>
+Message-ID: <20140724190459.1DACA9D2E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 24, 2014 at 8:12 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas, All,
->
-> On 2014-07-24 20:07 +0200, Thomas De Schampheleire spake thusly:
->> In English, unlike in French, almost all usages of the word 'information'
->> are uncountable, meaning that 'informations' is invalid.
->
-> Indeed.
->
-> But I really wonder why you would even mention French? :-]
-> /me hides... ;-)
+https://bugs.busybox.net/show_bug.cgi?id=4021
 
-Yes, indeed, a nasty reference to the near-domination of the French
-nation in the Buildroot development team... ;-)
+Bernhard Reutner-Fischer <aldot@uclibc.org> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|REOPENED                    |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #8 from Bernhard Reutner-Fischer <aldot@uclibc.org> 2014-07-24 19:04:58 UTC ---
+hidden weak handling is unfortunately pretty broken in recent gcc. Since (IIRC)
+c++ and/or TLS handling elsewhere started to rely on this broken behaviour
+chances are low that it will be fixed (as in behaviour of previous gcc
+reinstated). An alternative was applied as
+00f425b39b9258a78df47cebdd0d2c779753392f and the earlier
+acfc107a50344b100b9ea492678928acc047c6ae
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
