@@ -1,73 +1,93 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Jul 2014 19:49:32 +0200
-Subject: [Buildroot] [PATCH 5 of 7] busybox: convert to kconfig-package
-	infrastructure
+Date: Thu, 24 Jul 2014 19:49:34 +0200
+Subject: [Buildroot] [PATCH 7 of 7] linux: remove support of linux26-*
+	targets
 In-Reply-To: <patchbomb.1406224167@localhost>
 References: <patchbomb.1406224167@localhost>
-Message-ID: <a850aa264c3d0ae5c61f.1406224172@localhost>
+Message-ID: <4dc6eccbfc4126669605.1406224174@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the busybox package to the new kconfig-package
-infrastructure, thus removing code duplication and ensuring a consistent
-behavior of kconfig packages.
+The linux-* mirror targets of linux26-* have been added a very long time ago
+(2010) and linux 2.6 is now considered 'old' anyway. It no longer makes
+sense to support these linux26-* targets, so this patch removes them.
+
+This is a simplification introduced in preparation of the kconfig-package
+infrastructure.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- package/busybox/busybox.mk |  21 ++++++++-------------
- 1 files changed, 8 insertions(+), 13 deletions(-)
+ fs/initramfs/initramfs.mk |   2 +-
+ linux/linux.mk            |  20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff -r 80c907c0dfca -r a850aa264c3d package/busybox/busybox.mk
---- a/package/busybox/busybox.mk	Wed Jul 23 20:12:32 2014 +0200
-+++ b/package/busybox/busybox.mk	Tue Jul 22 20:43:10 2014 +0200
-@@ -136,10 +136,6 @@
- endef
- endif
+diff -r 01c5523b5777 -r 4dc6eccbfc41 fs/initramfs/initramfs.mk
+--- a/fs/initramfs/initramfs.mk	Wed Jul 23 20:13:38 2014 +0200
++++ b/fs/initramfs/initramfs.mk	Wed Jul 23 20:19:19 2014 +0200
+@@ -7,7 +7,7 @@
  
--define BUSYBOX_COPY_CONFIG
--	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
--endef
--
- # Disable shadow passwords support if unsupported by the C library
- ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
- define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
-@@ -190,8 +186,7 @@
- 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
- endef
+ ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
  
--define BUSYBOX_CONFIGURE_CMDS
--	$(BUSYBOX_COPY_CONFIG)
-+define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_SET_LARGEFILE)
- 	$(BUSYBOX_SET_IPV6)
-@@ -203,6 +198,9 @@
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+endef
-+
-+define BUSYBOX_CONFIGURE_CMDS
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- 	$(BUSYBOX_NOCLOBBER_INSTALL)
-@@ -226,11 +224,8 @@
+-ROOTFS_INITRAMFS_POST_TARGETS += linux26-rebuild-with-initramfs
++ROOTFS_INITRAMFS_POST_TARGETS += linux-rebuild-with-initramfs
  
+ 
+ # The generic fs infrastructure isn't very useful here.
+diff -r 01c5523b5777 -r 4dc6eccbfc41 linux/linux.mk
+--- a/linux/linux.mk	Wed Jul 23 20:13:38 2014 +0200
++++ b/linux/linux.mk	Wed Jul 23 20:19:19 2014 +0200
+@@ -183,7 +183,7 @@
+ 	# As the kernel gets compiled before root filesystems are
+ 	# built, we create a fake cpio file. It'll be
+ 	# replaced later by the real cpio archive, and the kernel will be
+-	# rebuilt using the linux26-rebuild-with-initramfs target.
++	# rebuilt using the linux-rebuild-with-initramfs target.
+ 	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+ 		touch $(BINARIES_DIR)/rootfs.cpio
+ 		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$(BINARIES_DIR)/rootfs.cpio",$(@D)/.config)
+@@ -312,24 +312,24 @@
  $(eval $(generic-package))
  
--busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
--	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
--		$(subst busybox-,,$@)
--	rm -f $(BUSYBOX_DIR)/.stamp_built
--	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
-+BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-+BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+BUSYBOX_KCONFIG_OPT = $(BUSYBOX_MAKE_OPTS)
+ ifeq ($(BR2_LINUX_KERNEL),y)
+-linux-menuconfig linux-xconfig linux-gconfig linux-nconfig linux26-menuconfig linux26-xconfig linux26-gconfig linux26-nconfig: linux-configure
++linux-menuconfig linux-xconfig linux-gconfig linux-nconfig: linux-configure
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+-		$(subst linux-,,$(subst linux26-,,$@))
++		$(subst linux-,,$@)
+ 	rm -f $(LINUX_DIR)/.stamp_{built,target_installed,images_installed}
  
--busybox-update-config: busybox-configure
--	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
-+$(eval $(kconfig-package))
+-linux-savedefconfig linux26-savedefconfig: linux-configure
++linux-savedefconfig: linux-configure
+ 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) \
+-		$(subst linux-,,$(subst linux26-,,$@))
++		$(subst linux-,,$@)
+ 
+ ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+-linux-update-config linux26-update-config: linux-configure $(LINUX_DIR)/.config
++linux-update-config: linux-configure $(LINUX_DIR)/.config
+ 	cp -f $(LINUX_DIR)/.config $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+ 
+-linux-update-defconfig linux26-update-defconfig: linux-savedefconfig
++linux-update-defconfig: linux-savedefconfig
+ 	cp -f $(LINUX_DIR)/defconfig $(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE)
+ else
+-linux-update-config linux26-update-config: ;
+-linux-update-defconfig linux26-update-defconfig: ;
++linux-update-config: ;
++linux-update-defconfig: ;
+ endif
+ endif
+ 
+@@ -348,7 +348,7 @@
+ 
+ # The initramfs building code must make sure this target gets called
+ # after it generated the initramfs list of files.
+-linux-rebuild-with-initramfs linux26-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
++linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+ 
+ # Checks to give errors that the user can understand
+ ifeq ($(filter source,$(MAKECMDGOALS)),)
