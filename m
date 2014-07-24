@@ -1,139 +1,147 @@
-From: Ben Widawsky <ben@bwidawsk.net>
-Date: Wed, 23 Jul 2014 15:36:27 -0700
-Subject: [Buildroot] [PATCH] sna/dri2: Protect compsiteext.h include
- with build check
-In-Reply-To: <20140723234458.7399f7b6@free-electrons.com>
-References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
- <1405665634-3299-1-git-send-email-chris@chris-wilson.co.uk>
- <20140718232336.GA5940@bwidawsk.net>
- <20140723234458.7399f7b6@free-electrons.com>
-Message-ID: <20140723223626.GA759@bwidawsk.net>
+From: Nimai Mahajan <nimaim@gmail.com>
+Date: Wed, 23 Jul 2014 20:21:35 -0400
+Subject: [Buildroot] Linux patch failing
+Message-ID: <CALoSW67atWSVLwRy9F2Uy0bV6oQG==TZHZeSgpdYsakOn=Bbzg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 23, 2014 at 11:44:58PM +0200, Thomas Petazzoni wrote:
-> Dear Ben Widawsky,
-> 
-> On Fri, 18 Jul 2014 16:23:37 -0700, Ben Widawsky wrote:
-> > On Fri, Jul 18, 2014 at 07:40:34AM +0100, Chris Wilson wrote:
-> > > We shouldn't include calls to the composite extension if it has not been
-> > > built.
-> > > 
-> > > Reported-by: Ben Widawsky <ben@bwidawsk.net>
-> > > Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-> > 
-> > This patch does not apply cleanly to .912. The wiggled patch does build.
-> > With my earlier patch reverted.
-> > 
-> > If this patch will be in .913, and .913 is coming relatively soon, we
-> > can ignore this entirely for buildroot and simply do a version bump to
-> > .913 when its available.
-> 
-> I'm sorry, but I don't understand your comment. Your patch was against
-> Buildroot, but you say it doesn't apply against .912, which is a
-> version of the intel driver. Could you explain a bit more if your
-> patches http://patchwork.ozlabs.org/patch/371342/ and
-> http://patchwork.ozlabs.org/patch/371343/ are still applicable?
-> 
-> Thanks,
-> 
-> Thomas
+I am trying to patch drivers/tty/serial/8250/8250_pci.c and
+include/linux/pci_ids.h to add a custom 16 port UART chip to the
+3.12.* kernel series. Here is a copy/paste of the patch:
 
-Hi. The second patch, .912 bump has been nak'd already by Bernd (I
-missed this before my ping). Coincidentally, Bernd also fixed the
-composite extension compilation error in buildroot (differently than I
-did). Chris Wilson, the Intel DDX maintainer has fixed the issue
-meanwhile.
+diff -purN linux-3.12.25.orig/drivers/tty/serial/8250/8250_pci.c
+linux-3.12.25/drivers/tty/serial/8250/8250_pci.c
+--- linux-3.12.25.orig/drivers/tty/serial/8250/8250_pci.c 2014-07-23
+14:03:03.354322421 -0400
++++ linux-3.12.25/drivers/tty/serial/8250/8250_pci.c 2014-07-23
+14:24:14.286374550 -0400
+@@ -1435,6 +1435,8 @@ pci_xr17v35x_setup(struct serial_private
+  return -ENOMEM;
 
-I would recommend backporting the xf86-video-intel patch instead of the
-patch Bernd submitted. Wiggle handled all the conflicts. I am not sure
-if it will apply to .907 (the current version). The other option is to
-take Bernd's patch, and revert it when you finally get to the fixed
-upstream version.
+  port->port.flags |= UPF_EXAR_EFR;
++ port->port.flags |= UPF_FIXED_TYPE;
++ port->port.type = PORT_16550A;
 
-In the most ideal case, we could just bump to the recently released .913 and
-have everything /just/ work. Chris has fixed 2 bugs that Bernd's series also
-attempted to fix. Of course that runs the risk of invoking the wrath that
-caused the original .912 revert.
-
-That all came out more complicated than it should have. I apologize. I am
-pasting the patch I wiggled as an example. Hopefully that helps make sense.
-
----
-
-
-commit 6cf66fc273e6d6348f605e7dcce915e53198e23b
-Author: Ben Widawsky <ben@bwidawsk.net>
-Date:   Fri Jul 18 16:24:07 2014 -0700
-
-    xdriver_xf86-video-intel: Take the upstream composite patch
-    
-    "
-    We shouldn't include calls to the composite extension if it has not been
-    built.
-    
-    Reported-by: Ben Widawsky <ben@bwidawsk.net>
-    Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-    "
-    
-    Signed-off-by: Ben Widawsky <ben@bwidawsk.net>
-
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-0001-sna-dri2-Protect-compsiteext.h-include-with-build-ch.patch b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-0001-sna-dri2-Protect-compsiteext.h-include-with-build-ch.patch
-new file mode 100644
-index 0000000..a82c482
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel-0001-sna-dri2-Protect-compsiteext.h-include-with-build-ch.patch
-@@ -0,0 +1,50 @@
-+From f17f0808ab3de6f65a3eedf5548e7b314b7a182f Mon Sep 17 00:00:00 2001
-+From: Chris Wilson <chris@chris-wilson.co.uk>
-+Date: Fri, 18 Jul 2014 07:40:34 +0100
-+Subject: [PATCH] sna/dri2: Protect compsiteext.h include with build check
+  /*
+  * Setup Multipurpose Input/Output pins.
+@@ -1458,6 +1460,10 @@ pci_xr17v35x_setup(struct serial_private
+  writeb(128, p + UART_EXAR_TXTRG);
+  writeb(128, p + UART_EXAR_RXTRG);
+  iounmap(p);
 +
-+We shouldn't include calls to the composite extension if it has not been
-+built.
-+
-+Reported-by: Ben Widawsky <ben@bwidawsk.net>
-+Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-+---
-+ src/sna/sna_dri2.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/sna/sna_dri2.c b/src/sna/sna_dri2.c
-+index 1baaf2b..1edf98e 100644
-+--- a/src/sna/sna_dri2.c
-++++ b/src/sna/sna_dri2.c
-+@@ -48,8 +48,9 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
-+ #include <xf86drm.h>
-+ #include <i915_drm.h>
-+ #include <dri2.h>
-+-#if XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0)
-++#if XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0) && defined(COMPOSITE)
-+ #include <compositeext.h>
-++#define CHECK_FOR_COMPOSITOR
-+ #endif
-+ 
-+ #if DRI2INFOREC_VERSION < 2
-+@@ -2164,7 +2165,7 @@ get_current_msc(struct sna *sna, DrawablePtr draw, xf86CrtcPtr crtc)
-+       return draw_current_msc(draw, crtc, ret);
++ if(priv->dev->device == 0x8358 && idx >= 8){
++ port->port.uartclk = 62500000;
 + }
-+ 
-+-#if !XORG_CAN_TRIPLE_BUFFER && XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0)
-++#if !XORG_CAN_TRIPLE_BUFFER && defined(CHECK_FOR_COMPOSITOR)
-+ static Bool find(pointer value, XID id, pointer cdata)
+
+  return pci_default_setup(priv, board, port, idx);
+ }
+@@ -2020,6 +2026,13 @@ static struct pci_serial_quirk pci_seria
+  .subdevice = PCI_ANY_ID,
+  .setup = pci_xr17v35x_setup,
+  },
 + {
-+       return TRUE;
-+@@ -2187,7 +2188,7 @@ static int use_triple_buffer(struct sna *sna, ClientPtr client, bool async)
-+ #if XORG_CAN_TRIPLE_BUFFER
-+       DBG(("%s: triple buffer enabled, using FLIP_THROTTLE\n", __FUNCTION__));
-+       return FLIP_THROTTLE;
-+-#elif XORG_VERSION_CURRENT >= XORG_VERSION_NUMERIC(1,12,99,901,0)
-++#elif defined(CHECK_FOR_COMPOSITOR)
-+       /* Hack: Disable triple buffering for compositors */
-+       {
-+               struct sna_client *priv = sna_client(client);
-+-- 
-+2.0.2
-+
++ .vendor = PCI_VENDOR_ID_EXAR,
++ .device = PCI_DEVICE_ID_EXAR_XR17V358_16,
++ .subvendor = PCI_ANY_ID,
++ .subdevice = PCI_ANY_ID,
++ .setup = pci_xr17v35x_setup,
++ },
+  /*
+  * Xircom cards
+  */
+@@ -2439,6 +2452,7 @@ enum pci_board_num_t {
+  pbn_exar_XR17V352,
+  pbn_exar_XR17V354,
+  pbn_exar_XR17V358,
++ pbn_exar_XR17V358_16,
+  pbn_exar_ibm_saturn,
+  pbn_pasemi_1682M,
+  pbn_ni8430_2,
+@@ -3103,6 +3117,14 @@ static struct pciserial_board pci_boards
+  .reg_shift = 0,
+  .first_offset = 0,
+  },
++ [pbn_exar_XR17V358_16] = {
++ .flags = FL_BASE0,
++ .num_ports = 16,
++ .base_baud = 7812500,
++ .uart_offset = 0x400,
++ .reg_shift = 0,
++ .first_offset = 0,
++ },
+  [pbn_exar_ibm_saturn] = {
+  .flags = FL_BASE0,
+  .num_ports = 1,
+@@ -4443,6 +4465,10 @@ static struct pci_device_id serial_pci_t
+  PCI_ANY_ID, PCI_ANY_ID,
+  0,
+  0, pbn_exar_XR17V358 },
++ { PCI_VENDOR_ID_EXAR, PCI_DEVICE_ID_EXAR_XR17V358_16,
++ PCI_ANY_ID, PCI_ANY_ID,
++ 0,
++ 0, pbn_exar_XR17V358_16 },
+
+  /*
+  * Topic TP560 Data/Fax/Voice 56k modem (reported by Evan Clarke)
+
+diff -purN linux-3.12.25.orig/include/linux/pci_ids.h
+linux-3.12.25/include/linux/pci_ids.h
+--- linux-3.12.25.orig/include/linux/pci_ids.h 2014-07-23
+14:13:58.162349279 -0400
++++ linux-3.12.25/include/linux/pci_ids.h 2014-07-23 14:18:40.914360877 -0400
+@@ -2014,6 +2014,7 @@
+ #define PCI_DEVICE_ID_EXAR_XR17V352 0x0352
+ #define PCI_DEVICE_ID_EXAR_XR17V354 0x0354
+ #define PCI_DEVICE_ID_EXAR_XR17V358 0x0358
++#define PCI_DEVICE_ID_EXAR_XR17V358_16 0x8358
+
+ #define PCI_VENDOR_ID_MICROGATE 0x13c0
+ #define PCI_DEVICE_ID_MICROGATE_USC 0x0010
+
+I am keeping all customizations outside of Buildroot so the
+buildroot-2014.05 folder remains untouched (all customizations are in
+a folder named setup). I am also building out-of-tree so I have an
+output folder where I call make as such: make BR2_EXTERNAL=../setup/
+pal-pdfcs-r_defconfig O=$PWD -C ../buildroot-2014.05/ followed by a
+make. I cannot figure out why the patch keeps failing but here is the
+result:
+
+>>> linux 3.12.25 Patching
+
+Applying linux-0001-addcustomexarserialchip.patch using patch:
+patching file drivers/tty/serial/8250/8250_pci.c
+patching file include/linux/pci_ids.h
+for p in /home/user/Desktop/br/setup/board/pal-pdfcs-r/patches/linux ;
+do if echo $p | grep -q -E "^ftp://|^http://" ; then
+support/scripts/apply-patches.sh
+/home/user/Desktop/br/output/build/linux-3.12.25
+/home/user/Desktop/br/dl `basename $p` ; elif test -d $p ; then
+support/scripts/apply-patches.sh
+/home/user/Desktop/br/output/build/linux-3.12.25 $p linux-\*.patch ;
+else support/scripts/apply-patches.sh
+/home/user/Desktop/br/output/build/linux-3.12.25 `dirname $p`
+`basename $p` ; fi done
+
+Applying linux-0001-addcustomexarserialchip.patch using patch:
+patching file drivers/tty/serial/8250/8250_pci.c
+Hunk #1 succeeded at 1485 (offset 50 lines).
+Hunk #2 succeeded at 1515 with fuzz 2 (offset 55 lines).
+Hunk #3 succeeded at 2039 (offset 13 lines).
+Hunk #4 FAILED at 2452.
+Hunk #5 succeeded at 3138 (offset 22 lines).
+Hunk #6 succeeded at 4968 with fuzz 1 (offset 504 lines).
+1 out of 6 hunks FAILED -- saving rejects to file
+drivers/tty/serial/8250/8250_pci.c.rej
+patching file include/linux/pci_ids.h
+Reversed (or previously applied) patch detected!  Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file include/linux/pci_ids.h.rej
+Patch failed!  Please fix linux-0001-addcustomexarserialchip.patch!
+
+Why does hunk 4 fail? It is simply adding a line in the file. What's
+wrong with the pci_ids.h addition? I'm pretty sure if I patch this
+manually, it will work just fine. Is apply-patches.sh doing something
+odd? What am I doing wrong so I know how to apply patches in the
+future? Thanks.
