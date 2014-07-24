@@ -1,105 +1,53 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 24 Jul 2014 19:49:28 +0200
-Subject: [Buildroot] [PATCH 1 of 7] infra: introduce a kconfig-package
+Date: Thu, 24 Jul 2014 19:49:27 +0200
+Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
 	infrastructure
-In-Reply-To: <patchbomb.1406224167@localhost>
-References: <patchbomb.1406224167@localhost>
-Message-ID: <c9dcec875ddbc3fa2ef6.1406224168@localhost>
+Message-ID: <patchbomb.1406224167@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are several packages that have a configuration file managed by
-kconfig: uclibc, busybox, linux and barebox. All these packages need some
-make targets to handle the kconfig specificities: creating a configuration
-(menuconfig, ...) and saving it back (update-config, ...)
 
-These targets should be the same for each of these packages, but
-unfortunately they are not. Especially with respect to saving back the
-configuration to the original config file, there are many differences.
+This patch series introduces a kconfig-package infrastructure and already
+converts the uclibc and busybox packages.
+The series is based on the to-be-applied uclibc patch series that improves the
+behavior of the kconfig parts.
 
-A previous set of patches fixed these targets for the uclibc package.
-This patch extracts these targets into a common kconfig-package
-infrastructure, with the goals of:
-- aligning the behavior of all kconfig-based packages
-- removing code duplication
+The final patch in this series is a bit an outlier: it is a preparation for the
+conversion of the linux package to the kconfig-package infrastructure, and I
+already included it to see if it's controversial or not.
 
-In order to use this infrastructure, a package should at a minimum specify
-FOO_KCONFIG_FILE and eval the kconfig-package macro. The supported
-configuration editors can be set with FOO_KCONFIG_EDITORS and defaults to
-menuconfig only.
-Additionally, a package can specify FOO_KCONFIG_OPT for extra options to
-pass to the invocation of the kconfig editors, and FOO_KCONFIG_FIXUP_CMDS
-for a list of shell commands used to fixup the .config file after a
-configuration has been created/edited.
+I believe this series is complete in the sense that it could be applied as one
+whole, not yet including the conversion of linux and barebox.
+Two sets of changes are still needed:
+- any changes based on your comments
+- documentation and comments still missing in kconfig-package. I'm awaiting your
+  feedback first. I can either add this as part of the series or use a followup
+  patch to fix this.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+I'm shooting for 2014.08 still, if you can provide feedback in time.
+
+In a subsequent series, linux and barebox can be converted to kconfig-package
+too, but there will need to be some changes to kconfig-package to support them.
+One particular difference with uclibc/busybox is that linux/barebox use a
+different method to copy the original config file: instead of simply copying it
+to build_dir/.config, it is first copied to arch/.../buildroot_defconfig and
+then 'make ... buildroot_defconfig' is called. I'm considering in adding a
+FOO_KCONFIG_INSTALL_CONFIG_CMDS variable to support this, which defaults to the
+simple copy used by busybox/uclibc, but can be overwritten appropriately by
+linux and barebox.
+Anyway, this part is not yet ready, and is likely not ready in time for 2014.08.
+
+Thanks for your feedback,
+Thomas
 
 ---
-Notes:
-
-- the issue with MAKE_OPT vs MAKE_OPTS has been worked around currently
-by not relying on any MAKE_OPT(S) but instead requiring the package to add
-the necessary variable to FOO_KCONFIG_OPT.
-However, I still believe we should create a consistent set here, either
-MAKE_OPT or MAKE_OPTS, and the same for CONFIGURE_OPT(S), but this is now no
-longer related to the introduction of kconfig-package.
-
-- the targets in this patch are sufficient to handle uclibc and busybox.
-For linux and barebox, some changes will be needed, but for clarity this
-will be added later.
-
-- documentation and comments for this package should be added still, but I
-  would like to await your feedback first.
-
- package/Makefile.in    |   1 +
- package/pkg-kconfig.mk |  33 +++++++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+), 0 deletions(-)
-
-diff -r 5916a58248be -r c9dcec875ddb package/Makefile.in
---- a/package/Makefile.in	Mon Jun 16 20:18:23 2014 +0200
-+++ b/package/Makefile.in	Mon Jun 30 21:08:13 2014 +0200
-@@ -388,3 +388,4 @@
- include package/pkg-python.mk
- include package/pkg-virtual.mk
- include package/pkg-generic.mk
-+include package/pkg-kconfig.mk
-diff -r 5916a58248be -r c9dcec875ddb package/pkg-kconfig.mk
---- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/package/pkg-kconfig.mk	Mon Jun 30 21:08:13 2014 +0200
-@@ -0,0 +1,33 @@
-+
-+define inner-kconfig-package
-+
-+$(2)_KCONFIG_EDITORS ?= menuconfig
-+$(2)_KCONFIG_OPT ?=
-+$(2)_KCONFIG_FIXUP_CMDS ?=
-+
-+ifndef $(2)_KCONFIG_FILE
-+$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
-+endif
-+
-+$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) | $(1)-patch
-+	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
-+
-+$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
-+	$$($(2)_KCONFIG_FIXUP_CMDS)
-+	$$(Q)touch $$@
-+
-+$$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+
-+# configuration editors (menuconfig, ...)
-+$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.config
-+	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+		$$($(2)_KCONFIG_OPT) $$(subst $(1)-,,$$@)
-+	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
-+	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
-+
-+$(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+
-+endef # inner-kconfig-package
-+
-+kconfig-package = $(call inner-kconfig-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)))
+ fs/initramfs/initramfs.mk  |   2 +-
+ linux/linux.mk             |  20 ++++++++++----------
+ package/Makefile.in        |   1 +
+ package/busybox/busybox.mk |  25 ++++++++++++-------------
+ package/pkg-kconfig.mk     |  33 +++++++++++++++++++++++++++++++++
+ package/uclibc/uclibc.mk   |  23 +++++++----------------
+ 6 files changed, 64 insertions(+), 40 deletions(-)
