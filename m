@@ -1,37 +1,33 @@
-From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed, 23 Jul 2014 21:45:30 -0400
-Subject: [Buildroot] [PATCH] python-pyzmq: bump to version 14.3.1
-Message-ID: <1406166330-18095-1-git-send-email-eeppeliteloop@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 24 Jul 2014 07:28:02 +0200
+Subject: [Buildroot] [PATCH] sna/dri2: Protect compsiteext.h include
+	with build check
+References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+ <1405665634-3299-1-git-send-email-chris@chris-wilson.co.uk>
+ <20140718232336.GA5940@bwidawsk.net>
+ <20140723234458.7399f7b6@free-electrons.com>
+ <20140723223626.GA759@bwidawsk.net>
+Message-ID: <XnsA3744BF59EAA9berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From PyZMQ's changelog:
+Ben Widawsky <ben@bwidawsk.net> wrote in
+news:20140723223626.GA759 at bwidawsk.net: 
 
-> Warning: Users of Python 3.4 should not use pyzmq < 14.3,
-> due to changes in garbage collection.
+> In the most ideal case, we could just bump to the recently released .913
+> and have everything /just/ work. Chris has fixed 2 bugs that Bernd's
+> series also attempted to fix. Of course that runs the risk of invoking
+> the wrath that caused the original .912 revert.
 
-Plus, there's some interesting stuff in 14.x.
+Hi,
 
-Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
----
- package/python-pyzmq/python-pyzmq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+yesterday I tried .914, without success:
+http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/90194 
 
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index b792ee9..2889241 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYZMQ_VERSION = 13.1.0
-+PYTHON_PYZMQ_VERSION = 14.3.1
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
- PYTHON_PYZMQ_SITE = http://pypi.python.org/packages/source/p/pyzmq/
- PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache-2.0
--- 
-2.0.2
+Then I reverted back to .911, which works again without problems.
+Are you able to do run-time tests on your machine with .914?
+
+Regards, Bernd
