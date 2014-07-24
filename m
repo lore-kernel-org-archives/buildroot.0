@@ -1,26 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Jul 2014 22:31:08 +0200
-Subject: [Buildroot] [PATCH] perl-net-ssleay: fix configure
-In-Reply-To: <1406225756-29824-1-git-send-email-francois.perrad@gadz.org>
-References: <1406225756-29824-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140724223108.62b38bd9@free-electrons.com>
+Date: Thu, 24 Jul 2014 22:31:31 +0200
+Subject: [Buildroot] [PATCH] trivial: fix typo 'informations'
+In-Reply-To: <37734712403055c8a791.1406225222@localhost>
+References: <37734712403055c8a791.1406225222@localhost>
+Message-ID: <20140724223131.726263ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Thomas De Schampheleire,
 
-On Thu, 24 Jul 2014 20:15:56 +0200, Francois Perrad wrote:
-> CCFLAGS needs the same replacement as LDDLFAGS
+On Thu, 24 Jul 2014 20:07:02 +0200, Thomas De Schampheleire wrote:
+> In English, unlike in French, almost all usages of the word 'information'
+> are uncountable, meaning that 'informations' is invalid.
+> This patch fixes this typo throughout the tree, except in CHANGES and
+> docs/news.html (historic text).
 > 
-> see http://autobuild.buildroot.net/results/299/299d6fa6b2ccf97987ffd9c99130c25dd55ca9b4/
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-net-ssleay/perl-net-ssleay.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 Applied, thanks.
 
