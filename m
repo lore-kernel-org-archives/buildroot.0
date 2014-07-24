@@ -1,53 +1,37 @@
 From: Philippe Proulx <eeppeliteloop@gmail.com>
-Date: Wed, 23 Jul 2014 20:57:26 -0400
-Subject: [Buildroot] [PATCH] Makefile: fix Python 3 site packages when using
-	PYC_ONLY
-Message-ID: <1406163446-14581-1-git-send-email-eeppeliteloop@gmail.com>
+Date: Wed, 23 Jul 2014 21:45:30 -0400
+Subject: [Buildroot] [PATCH] python-pyzmq: bump to version 14.3.1
+Message-ID: <1406166330-18095-1-git-send-email-eeppeliteloop@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Python 3 standard lib is compiled into PYC bytecode using a
-pre-PEP-3147 mode (.pyc files beside .py files; no __pycache__)
-when BR2_PACKAGE_PYTHON3_PYC_ONLY is enabled. However, site packages
-installed with setuptools/distutils are compiled following PEP-3147.
-When BR2_PACKAGE_PYTHON3_PYC_ONLY is on, .py source files are removed
-and Python 3 (target) will not look into __pycache__ directories
-without associated .py files.
+From PyZMQ's changelog:
 
-Python 2 does not suffer from this since PEP-3147 seems to be
-implemented in Python 3 only.
+> Warning: Users of Python 3.4 should not use pyzmq < 14.3,
+> due to changes in garbage collection.
 
-This commit fixes this by compiling Python 3 site packages using a
-pre-PEP-3147 mode after they are installed and then removing
-__pycache__ directories.
+Plus, there's some interesting stuff in 14.x.
 
 Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
 ---
- Makefile | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/python-pyzmq/python-pyzmq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 6bd18e3..b38ccd9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -574,7 +574,15 @@ ifeq ($(BR2_PACKAGE_PYTHON_PY_ONLY)$(BR2_PACKAGE_PYTHON3_PY_ONLY),y)
- 	find $(TARGET_DIR)/usr/lib/ -name '*.pyc' -print0 | xargs -0 rm -f
- endif
- ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY)$(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+	for sp in $(TARGET_DIR)/usr/lib/python3*/site-packages; do \
-+		$(HOST_DIR)/usr/bin/python -m compileall -b $$sp; \
-+	done
-+endif
- 	find $(TARGET_DIR)/usr/lib/ -name '*.py' -print0 | xargs -0 rm -f
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+	find $(TARGET_DIR)/usr/lib/python3* -name __pycache__ -type d -print0 | xargs -0 rm -rf
-+endif
- endif
- 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
- 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
+index b792ee9..2889241 100644
+--- a/package/python-pyzmq/python-pyzmq.mk
++++ b/package/python-pyzmq/python-pyzmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYZMQ_VERSION = 13.1.0
++PYTHON_PYZMQ_VERSION = 14.3.1
+ PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
+ PYTHON_PYZMQ_SITE = http://pypi.python.org/packages/source/p/pyzmq/
+ PYTHON_PYZMQ_LICENSE = LGPLv3+ BSD-3c Apache-2.0
 -- 
 2.0.2
