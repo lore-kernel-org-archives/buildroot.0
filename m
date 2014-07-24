@@ -1,60 +1,105 @@
-From: Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
-Date: Thu, 24 Jul 2014 22:48:14 +0200
-Subject: [Buildroot] [OpenWrt-Devel] uClibc-ng
-In-Reply-To: <14764ab3680.2772.7d831ebe34b31eacf7a4325c447c5923@gmail.com>
-References: <20140720191326.GD4431@waldemar-brodkorb.de>
- <CAGVrzcZxcgP+yerqW=1ZDrmgiFmOz9eTwFB2KvZ6Xt2MJpbpDA@mail.gmail.com>
- <20140721204239.61b225fe@free-electrons.com>
- <CAGVrzcZja2DTrJGA2QWsMH=2GgUBuouSetK+-cUdXY7XbyA8SA@mail.gmail.com>
- <20140721212700.41e29653@free-electrons.com>
- <A7BE1426-88C8-457E-8FE5-0427CC5B1D72@workware.net.au>
- <53CF9F9D.60903@jodybruchon.com>
- <14764ab3680.2772.7d831ebe34b31eacf7a4325c447c5923@gmail.com>
-Message-ID: <20140724204814.GE13324@nbbrfq.cc.univie.ac.at>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Thu, 24 Jul 2014 23:59:21 +0200
+Subject: [Buildroot] [PATCH] ltrace: use current master
+Message-ID: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 23, 2014 at 09:20:51PM +0200, Carmelo Amoroso wrote:
-> 
-> 
-> Il 23 luglio 2014 13:42:38 Jody Bruchon <jody@jodybruchon.com> ha scritto:
-> 
-> >On 7/22/2014 11:30 PM, Steve Bennett wrote:> I would like to add my
-> >support to Thomas' position.
-> > > Regardless of what happens with glibc and/or musl, an active community
-> > > supporting regular releases of uClibc is a good thing.
-> > > Time has spoken that we can't expect this to happen unless something
-> >changes.
-> >
-> >I agree. It is better to have a responsive maintainer releasing periodic
-> >"stable" versions than to have what is essentially no maintainer and
-> >sustained long-term fragmentation of what "uClibc" really is. If the
-> >uClibc maintainer wakes up in the future and begins releasing again, the
-> >new project's changes can always be merged back to the parent, as they
-> >did with eglibc and glibc. For now we need to focus on making a stable
-> >release, something which is grossly overdue and harms all projects
-> >currently using uClibc.
-> >
-> >I also agree that musl is an interesting project with a bright future
-> >(and a bright present for that matter), but it does not cover all of
-> >what uClibc covers and the number of projects that already require
-> >uClibc is too large to simply drop uClibc and move to musl.
-> >
-> >-Jody Bruchon
-> 
-> Gents,
-> Are we considering anyway that Bernard has recently restarted with patches
-> review and commit without no contribution from the other co-maintainers
-> (myself the first) ?
-> Likely Bernard is already preparing a release !
+ltrace 0.7.3 is the latest release but it is actually broken on ARM
+since PTRACE_SINGLESTEP emulation has been removed, see:
 
-Yea, but very very slowly, i know.
-I just started preparing a meta-changelog for the release notes and
-then we'll call it an official tarball.
+http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=425fc47adb5bb69f76285be77a09a3341a30799e
 
-Lots of changes, about 10% done, approx. 1h left before bedtime.
+It fails with:
+PTRACE_SINGLESTEP: Input/output error
 
-Any prominent changes we should make absolutely sure to mention?
+Using master solves that until a new release is made.
+
+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+---
+ package/ltrace/Config.in               |  1 +
+ package/ltrace/ltrace-02-arm-plt.patch | 30 ++++++++++++++++++++++++++++++
+ package/ltrace/ltrace.mk               | 13 +++++++++----
+ 3 files changed, 40 insertions(+), 4 deletions(-)
+ create mode 100644 package/ltrace/ltrace-02-arm-plt.patch
+
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 3448342619af..aee14bd001bc 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LTRACE
+ 	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
+ 		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
+ 	select BR2_PACKAGE_LIBELF
++	select BR2_PACKAGE_ELFUTILS
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+ 	  While the command is executing, ltrace intercepts and records
+diff --git a/package/ltrace/ltrace-02-arm-plt.patch b/package/ltrace/ltrace-02-arm-plt.patch
+new file mode 100644
+index 000000000000..f130ce8426e7
+--- /dev/null
++++ b/package/ltrace/ltrace-02-arm-plt.patch
+@@ -0,0 +1,30 @@
++From 04377d28135e351c8d096c4392a493e937416815 Mon Sep 17 00:00:00 2001
++From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
++Date: Thu, 24 Jul 2014 23:15:20 +0200
++Subject: [PATCH] Allow building with uclibc toolchains
++
++Unfortunately, uclicbc doesn't define SHT_ARM_ATTRIBUTES in elf.h
++
++Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
++---
++ sysdeps/linux-gnu/arm/plt.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/sysdeps/linux-gnu/arm/plt.c b/sysdeps/linux-gnu/arm/plt.c
++index 9e9e37f0c5b0..a0a5795eb9cb 100644
++--- a/sysdeps/linux-gnu/arm/plt.c
+++++ b/sysdeps/linux-gnu/arm/plt.c
++@@ -28,6 +28,10 @@
++ #include "library.h"
++ #include "ltrace-elf.h"
++ 
+++#ifndef SHT_ARM_ATTRIBUTES
+++#define SHT_ARM_ATTRIBUTES     0x70000003
+++#endif
+++
++ static int
++ get_hardfp(uint64_t abi_vfp_args)
++ {
++-- 
++1.9.1
++
+diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
+index 99c1af64b678..0a3a90c344c1 100644
+--- a/package/ltrace/ltrace.mk
++++ b/package/ltrace/ltrace.mk
+@@ -4,13 +4,18 @@
+ #
+ ################################################################################
+ 
+-LTRACE_VERSION = 0.7.3
+-LTRACE_SITE = http://sources.buildroot.net/
+-LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
+-LTRACE_DEPENDENCIES = libelf
++LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
++LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
++LTRACE_DEPENDENCIES = libelf elfutils
+ LTRACE_CONF_OPT = --disable-werror
+ LTRACE_LICENSE = GPLv2
+ LTRACE_LICENSE_FILES = COPYING
++LTRACE_AUTORECONF = YES
++
++define LTRACE_CREATE_CONFIG_M4
++	mkdir -p $(@D)/config/m4
++endef
++LTRACE_POST_PATCH_HOOKS += LTRACE_CREATE_CONFIG_M4
+ 
+ # ltrace can use libunwind only if libc has backtrace() support
+ # We don't normally do so for uClibc and we can't know if it's external
+-- 
+1.9.1
