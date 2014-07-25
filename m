@@ -1,200 +1,33 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 25 Jul 2014 14:40:37 +0200
-Subject: [Buildroot] [PATCH 4/4] qemu/mipsel-malta: update defconfig to
-	Linux 3.15.x
-Message-ID: <20140725124036.GA29971@waldemar-brodkorb.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 25 Jul 2014 09:51:05 -0300
+Subject: [Buildroot] [PATCH] php: security bump to version 5.5.15
+Message-ID: <1406292665-21082-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update to 3.15.x, remove ext3 support, use ext4 as
-default.
+Fixes:
+CVE-2014-4670 (SPL Iterators use-after-free)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-Changes v1 -> v2:
-  - use ext4 as default (suggested on mailinglist)
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
- board/qemu/mipsel-malta/linux-3.13.config |   61 -----------------------------
- board/qemu/mipsel-malta/linux-3.15.config |   60 ++++++++++++++++++++++++++++
- board/qemu/mipsel-malta/readme.txt        |    2 +-
- configs/qemu_mipsel_malta_defconfig       |   10 ++---
- 4 files changed, 66 insertions(+), 67 deletions(-)
- delete mode 100644 board/qemu/mipsel-malta/linux-3.13.config
- create mode 100644 board/qemu/mipsel-malta/linux-3.15.config
-
-diff --git a/board/qemu/mipsel-malta/linux-3.13.config b/board/qemu/mipsel-malta/linux-3.13.config
-deleted file mode 100644
-index 23c76ec..0000000
---- a/board/qemu/mipsel-malta/linux-3.13.config
-+++ /dev/null
-@@ -1,61 +0,0 @@
--CONFIG_MIPS_MALTA=y
--CONFIG_CPU_LITTLE_ENDIAN=y
--CONFIG_CPU_MIPS32_R2=y
--CONFIG_MIPS_MT_SMP=y
--CONFIG_NR_CPUS=2
--CONFIG_HZ_100=y
--CONFIG_SYSVIPC=y
--CONFIG_NO_HZ=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_LOG_BUF_SHIFT=15
--CONFIG_NAMESPACES=y
--CONFIG_RELAY=y
--CONFIG_EMBEDDED=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_SLAB=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODVERSIONS=y
--CONFIG_MODULE_SRCVERSION_ALL=y
--# CONFIG_BLK_DEV_BSG is not set
--CONFIG_PCI=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_PNP=y
--# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
--# CONFIG_INET_XFRM_MODE_TUNNEL is not set
--# CONFIG_INET_XFRM_MODE_BEET is not set
--# CONFIG_INET_LRO is not set
--# CONFIG_INET_DIAG is not set
--# CONFIG_IPV6 is not set
--# CONFIG_WIRELESS is not set
--CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
--CONFIG_IDE=y
--CONFIG_BLK_DEV_IDECD=y
--CONFIG_IDE_GENERIC=y
--CONFIG_BLK_DEV_GENERIC=y
--CONFIG_BLK_DEV_PIIX=y
--CONFIG_NETDEVICES=y
--CONFIG_PCNET32=y
--# CONFIG_WLAN is not set
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO_I8042 is not set
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_HW_RANDOM is not set
--# CONFIG_HWMON is not set
--CONFIG_FB=y
--CONFIG_FB_CIRRUS=y
--# CONFIG_VGA_CONSOLE is not set
--# CONFIG_USB_SUPPORT is not set
--CONFIG_EXT2_FS=y
--CONFIG_EXT3_FS=y
--CONFIG_QUOTA=y
--CONFIG_PROC_KCORE=y
--CONFIG_TMPFS=y
--CONFIG_NFS_FS=y
--CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mipsel-malta/linux-3.15.config b/board/qemu/mipsel-malta/linux-3.15.config
-new file mode 100644
-index 0000000..b0372ae
---- /dev/null
-+++ b/board/qemu/mipsel-malta/linux-3.15.config
-@@ -0,0 +1,60 @@
-+CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_CPU_MIPS32_R2=y
-+CONFIG_MIPS_MT_SMP=y
-+CONFIG_NR_CPUS=2
-+CONFIG_HZ_100=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_LOG_BUF_SHIFT=15
-+CONFIG_NAMESPACES=y
-+CONFIG_RELAY=y
-+CONFIG_EMBEDDED=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_SLAB=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+CONFIG_MODULE_SRCVERSION_ALL=y
-+# CONFIG_BLK_DEV_BSG is not set
-+CONFIG_PCI=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
-+# CONFIG_INET_XFRM_MODE_TUNNEL is not set
-+# CONFIG_INET_XFRM_MODE_BEET is not set
-+# CONFIG_INET_LRO is not set
-+# CONFIG_INET_DIAG is not set
-+# CONFIG_IPV6 is not set
-+# CONFIG_WIRELESS is not set
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_IDE=y
-+CONFIG_BLK_DEV_IDECD=y
-+CONFIG_IDE_GENERIC=y
-+CONFIG_BLK_DEV_GENERIC=y
-+CONFIG_BLK_DEV_PIIX=y
-+CONFIG_NETDEVICES=y
-+CONFIG_PCNET32=y
-+# CONFIG_WLAN is not set
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_SERIO_I8042 is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_FB=y
-+CONFIG_FB_CIRRUS=y
-+# CONFIG_VGA_CONSOLE is not set
-+# CONFIG_USB_SUPPORT is not set
-+CONFIG_EXT4_FS=y
-+CONFIG_QUOTA=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_TMPFS=y
-+CONFIG_NFS_FS=y
-+CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mipsel-malta/readme.txt b/board/qemu/mipsel-malta/readme.txt
-index dd290c4..fce8780 100644
---- a/board/qemu/mipsel-malta/readme.txt
-+++ b/board/qemu/mipsel-malta/readme.txt
-@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer. No keyboard support has been
- enabled.
+diff --git a/package/php/php.mk b/package/php/php.mk
+index fea03eb..de7d668 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--Tested with QEMU 1.7.0
-+Tested with QEMU 2.0.0
-diff --git a/configs/qemu_mipsel_malta_defconfig b/configs/qemu_mipsel_malta_defconfig
-index b673f0b..0330dbc 100644
---- a/configs/qemu_mipsel_malta_defconfig
-+++ b/configs/qemu_mipsel_malta_defconfig
-@@ -6,17 +6,17 @@ BR2_mips_32r2=y
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- 
--# Lock to 3.13 headers to avoid breaking with newer kernels
-+# Lock to 3.15 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.5"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.15.6"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mipsel-malta/linux-3.15.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- 
- # Serial port config
+-PHP_VERSION = 5.5.14
++PHP_VERSION = 5.5.15
+ PHP_SITE = http://www.php.net/distributions
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
 -- 
-1.7.10.4
+1.8.5.5
