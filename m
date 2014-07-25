@@ -1,15 +1,15 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 25 Jul 2014 14:38:52 +0200
-Subject: [Buildroot] [PATCHv2 2/4] qemu/mips64el-malta: update defconfig to
-	Linux 3.15.x
-Message-ID: <20140725123850.GA20192@waldemar-brodkorb.de>
+Date: Fri, 25 Jul 2014 14:39:42 +0200
+Subject: [Buildroot] [PATCH 3/4] qemu/mips-malta: update defconfig to Linux
+	3.15.x
+Message-ID: <20140725123942.GA23844@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update defconfig to 3.15.x.
+Update to 3.15.x, disable ext3, use ext4 as default.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
@@ -17,24 +17,22 @@ Changes v1 -> v2:
   - use ext4 as default (suggested on mailinglist)
 
 ---
- board/qemu/mips64el-malta/linux-3.13.config |   60 ---------------------------
- board/qemu/mips64el-malta/linux-3.15.config |   60 +++++++++++++++++++++++++++
- board/qemu/mips64el-malta/readme.txt        |    2 +-
- configs/qemu_mips64el_malta_defconfig       |   10 ++---
- 4 files changed, 66 insertions(+), 66 deletions(-)
- delete mode 100644 board/qemu/mips64el-malta/linux-3.13.config
- create mode 100644 board/qemu/mips64el-malta/linux-3.15.config
+ board/qemu/mips-malta/linux-3.13.config |   60 -------------------------------
+ board/qemu/mips-malta/linux-3.15.config |   59 ++++++++++++++++++++++++++++++
+ board/qemu/mips-malta/readme.txt        |    2 +-
+ configs/qemu_mips_malta_defconfig       |   10 +++---
+ 4 files changed, 65 insertions(+), 66 deletions(-)
+ delete mode 100644 board/qemu/mips-malta/linux-3.13.config
+ create mode 100644 board/qemu/mips-malta/linux-3.15.config
 
-diff --git a/board/qemu/mips64el-malta/linux-3.13.config b/board/qemu/mips64el-malta/linux-3.13.config
+diff --git a/board/qemu/mips-malta/linux-3.13.config b/board/qemu/mips-malta/linux-3.13.config
 deleted file mode 100644
-index e980476..0000000
---- a/board/qemu/mips64el-malta/linux-3.13.config
+index df0fd1c..0000000
+--- a/board/qemu/mips-malta/linux-3.13.config
 +++ /dev/null
 @@ -1,60 +0,0 @@
 -CONFIG_MIPS_MALTA=y
--CONFIG_CPU_LITTLE_ENDIAN=y
--CONFIG_CPU_MIPS64_R1=y
--CONFIG_64BIT=y
+-CONFIG_CPU_MIPS32_R2=y
 -CONFIG_MIPS_MT_SMP=y
 -CONFIG_NR_CPUS=2
 -CONFIG_HZ_100=y
@@ -53,9 +51,6 @@ index e980476..0000000
 -CONFIG_MODULE_SRCVERSION_ALL=y
 -# CONFIG_BLK_DEV_BSG is not set
 -CONFIG_PCI=y
--CONFIG_MIPS32_COMPAT=y
--CONFIG_MIPS32_O32=y
--CONFIG_MIPS32_N32=y
 -CONFIG_NET=y
 -CONFIG_PACKET=y
 -CONFIG_UNIX=y
@@ -77,6 +72,9 @@ index e980476..0000000
 -CONFIG_NETDEVICES=y
 -CONFIG_PCNET32=y
 -# CONFIG_WLAN is not set
+-# CONFIG_INPUT_KEYBOARD is not set
+-# CONFIG_INPUT_MOUSE is not set
+-# CONFIG_SERIO_I8042 is not set
 -CONFIG_VT_HW_CONSOLE_BINDING=y
 -CONFIG_SERIAL_8250=y
 -CONFIG_SERIAL_8250_CONSOLE=y
@@ -86,21 +84,21 @@ index e980476..0000000
 -CONFIG_FB_CIRRUS=y
 -# CONFIG_VGA_CONSOLE is not set
 -# CONFIG_USB_SUPPORT is not set
--CONFIG_EXT4_FS=y
+-CONFIG_EXT2_FS=y
+-CONFIG_EXT3_FS=y
+-CONFIG_QUOTA=y
 -CONFIG_PROC_KCORE=y
 -CONFIG_TMPFS=y
 -CONFIG_NFS_FS=y
 -CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mips64el-malta/linux-3.15.config b/board/qemu/mips64el-malta/linux-3.15.config
+diff --git a/board/qemu/mips-malta/linux-3.15.config b/board/qemu/mips-malta/linux-3.15.config
 new file mode 100644
-index 0000000..e980476
+index 0000000..2b65c93
 --- /dev/null
-+++ b/board/qemu/mips64el-malta/linux-3.15.config
-@@ -0,0 +1,60 @@
++++ b/board/qemu/mips-malta/linux-3.15.config
+@@ -0,0 +1,59 @@
 +CONFIG_MIPS_MALTA=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_CPU_MIPS64_R1=y
-+CONFIG_64BIT=y
++CONFIG_CPU_MIPS32_R2=y
 +CONFIG_MIPS_MT_SMP=y
 +CONFIG_NR_CPUS=2
 +CONFIG_HZ_100=y
@@ -119,9 +117,6 @@ index 0000000..e980476
 +CONFIG_MODULE_SRCVERSION_ALL=y
 +# CONFIG_BLK_DEV_BSG is not set
 +CONFIG_PCI=y
-+CONFIG_MIPS32_COMPAT=y
-+CONFIG_MIPS32_O32=y
-+CONFIG_MIPS32_N32=y
 +CONFIG_NET=y
 +CONFIG_PACKET=y
 +CONFIG_UNIX=y
@@ -143,6 +138,9 @@ index 0000000..e980476
 +CONFIG_NETDEVICES=y
 +CONFIG_PCNET32=y
 +# CONFIG_WLAN is not set
++# CONFIG_INPUT_KEYBOARD is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO_I8042 is not set
 +CONFIG_VT_HW_CONSOLE_BINDING=y
 +CONFIG_SERIAL_8250=y
 +CONFIG_SERIAL_8250_CONSOLE=y
@@ -153,25 +151,26 @@ index 0000000..e980476
 +# CONFIG_VGA_CONSOLE is not set
 +# CONFIG_USB_SUPPORT is not set
 +CONFIG_EXT4_FS=y
++CONFIG_QUOTA=y
 +CONFIG_PROC_KCORE=y
 +CONFIG_TMPFS=y
 +CONFIG_NFS_FS=y
 +CONFIG_ROOT_NFS=y
-diff --git a/board/qemu/mips64el-malta/readme.txt b/board/qemu/mips64el-malta/readme.txt
-index 48bae37..3c75bed 100644
---- a/board/qemu/mips64el-malta/readme.txt
-+++ b/board/qemu/mips64el-malta/readme.txt
-@@ -5,4 +5,4 @@ Run the emulation with:
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
+diff --git a/board/qemu/mips-malta/readme.txt b/board/qemu/mips-malta/readme.txt
+index 719a624..da20770 100644
+--- a/board/qemu/mips-malta/readme.txt
++++ b/board/qemu/mips-malta/readme.txt
+@@ -6,4 +6,4 @@ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer. No keyboard support has been
+ enabled.
  
 -Tested with QEMU 1.7.0
 +Tested with QEMU 2.0.0
-diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
-index 4adf204..6b7a885 100644
---- a/configs/qemu_mips64el_malta_defconfig
-+++ b/configs/qemu_mips64el_malta_defconfig
-@@ -9,17 +9,17 @@ BR2_TOOLCHAIN_BUILDROOT_EGLIBC=y
+diff --git a/configs/qemu_mips_malta_defconfig b/configs/qemu_mips_malta_defconfig
+index 3c1532c..be647eb 100644
+--- a/configs/qemu_mips_malta_defconfig
++++ b/configs/qemu_mips_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_mips_32r2=y
  BR2_TARGET_ROOTFS_EXT2=y
  # BR2_TARGET_ROOTFS_TAR is not set
  
@@ -189,8 +188,8 @@ index 4adf204..6b7a885 100644
 -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux-3.15.config"
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips-malta/linux-3.15.config"
  BR2_LINUX_KERNEL_VMLINUX=y
  
  # Serial port config
