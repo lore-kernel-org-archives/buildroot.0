@@ -1,105 +1,59 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 24 Jul 2014 23:59:21 +0200
-Subject: [Buildroot] [PATCH] ltrace: use current master
-Message-ID: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
+From: Rohit Kumar <rkthebest@gmail.com>
+Date: Fri, 25 Jul 2014 11:41:00 +0900
+Subject: [Buildroot] busybox error while building
+Message-ID: <CABzetm2oeqkBFvXSAGLwzqxYUn3ENxZDmEsow4ZpbyQCN=OoKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ltrace 0.7.3 is the latest release but it is actually broken on ARM
-since PTRACE_SINGLESTEP emulation has been removed, see:
+Hello Thomas,
+i copied .config file from previous buildroot to newest buildroot source
+and when i tried to "make "
+i got following error:
 
-http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=425fc47adb5bb69f76285be77a09a3341a30799e
+/bin/sed -i -e 's, at STATIC@,,'
+/home/rohit/Desktop/buildroot/output/host/usr/bin/pkg-config
+>>> busybox 1.22.1 Extracting
+bzcat /home/rohit/Desktop/buildroot/dl/busybox-1.22.1.tar.bz2 | tar
+--strip-components=1 -C
+/home/rohit/Desktop/buildroot/output/build/busybox-1.22.1  -xf -
+>>> busybox 1.22.1 Patching
 
-It fails with:
-PTRACE_SINGLESTEP: Input/output error
+Applying 0006-lzop-add-overflow-check.patch using patch:
+patching file archival/libarchive/liblzo.h
+patching file archival/libarchive/lzo1x_d.c
 
-Using master solves that until a new release is made.
+Applying
+busybox-0001-networking-libiproute-use-linux-if_packet.h-instead-.patch
+using patch:
+patching file networking/libiproute/iplink.c
 
-Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
----
- package/ltrace/Config.in               |  1 +
- package/ltrace/ltrace-02-arm-plt.patch | 30 ++++++++++++++++++++++++++++++
- package/ltrace/ltrace.mk               | 13 +++++++++----
- 3 files changed, 40 insertions(+), 4 deletions(-)
- create mode 100644 package/ltrace/ltrace-02-arm-plt.patch
+Applying busybox-0002-busybox-1.22.1-ash.patch using patch:
+patching file shell/ash.c
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 3448342619af..aee14bd001bc 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LTRACE
- 	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
- 		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
- 	select BR2_PACKAGE_LIBELF
-+	select BR2_PACKAGE_ELFUTILS
- 	help
- 	  Debugging program which runs a specified command until it exits.
- 	  While the command is executing, ltrace intercepts and records
-diff --git a/package/ltrace/ltrace-02-arm-plt.patch b/package/ltrace/ltrace-02-arm-plt.patch
-new file mode 100644
-index 000000000000..f130ce8426e7
---- /dev/null
-+++ b/package/ltrace/ltrace-02-arm-plt.patch
-@@ -0,0 +1,30 @@
-+From 04377d28135e351c8d096c4392a493e937416815 Mon Sep 17 00:00:00 2001
-+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-+Date: Thu, 24 Jul 2014 23:15:20 +0200
-+Subject: [PATCH] Allow building with uclibc toolchains
-+
-+Unfortunately, uclicbc doesn't define SHT_ARM_ATTRIBUTES in elf.h
-+
-+Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-+---
-+ sysdeps/linux-gnu/arm/plt.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/sysdeps/linux-gnu/arm/plt.c b/sysdeps/linux-gnu/arm/plt.c
-+index 9e9e37f0c5b0..a0a5795eb9cb 100644
-+--- a/sysdeps/linux-gnu/arm/plt.c
-++++ b/sysdeps/linux-gnu/arm/plt.c
-+@@ -28,6 +28,10 @@
-+ #include "library.h"
-+ #include "ltrace-elf.h"
-+ 
-++#ifndef SHT_ARM_ATTRIBUTES
-++#define SHT_ARM_ATTRIBUTES     0x70000003
-++#endif
-++
-+ static int
-+ get_hardfp(uint64_t abi_vfp_args)
-+ {
-+-- 
-+1.9.1
-+
-diff --git a/package/ltrace/ltrace.mk b/package/ltrace/ltrace.mk
-index 99c1af64b678..0a3a90c344c1 100644
---- a/package/ltrace/ltrace.mk
-+++ b/package/ltrace/ltrace.mk
-@@ -4,13 +4,18 @@
- #
- ################################################################################
- 
--LTRACE_VERSION = 0.7.3
--LTRACE_SITE = http://sources.buildroot.net/
--LTRACE_SOURCE = ltrace-$(LTRACE_VERSION).tar.bz2
--LTRACE_DEPENDENCIES = libelf
-+LTRACE_VERSION = 0896ce554f80afdcba81d9754f6104f863dea803
-+LTRACE_SITE = git://anonscm.debian.org/collab-maint/ltrace.git
-+LTRACE_DEPENDENCIES = libelf elfutils
- LTRACE_CONF_OPT = --disable-werror
- LTRACE_LICENSE = GPLv2
- LTRACE_LICENSE_FILES = COPYING
-+LTRACE_AUTORECONF = YES
-+
-+define LTRACE_CREATE_CONFIG_M4
-+	mkdir -p $(@D)/config/m4
-+endef
-+LTRACE_POST_PATCH_HOOKS += LTRACE_CREATE_CONFIG_M4
- 
- # ltrace can use libunwind only if libc has backtrace() support
- # We don't normally do so for uClibc and we can't know if it's external
--- 
-1.9.1
+Applying busybox-0003-busybox-1.22.1-date.patch using patch:
+patching file libbb/time.c
+
+Applying busybox-0004-busybox-1.22.1-iplink.patch using patch:
+patching file networking/libiproute/iplink.c
+
+Applying busybox-0005-busybox-1.22.1-nc.patch using patch:
+patching file networking/nc_bloaty.c
+>>> busybox 1.22.1 Configuring
+/usr/bin/install -D -m 0644 package/busybox/busybox-1.22.x.config
+/home/rohit/Desktop/buildroot/output/build/busybox-1.22.1/.config
+/usr/bin/install: cannot stat ?package/busybox/busybox-1.22.x.config?: No
+such file or directory
+make: ***
+[/home/rohit/Desktop/buildroot/output/build/busybox-1.22.1/.stamp_configured]
+Error 1
+
+With Regards,
+
+Rohit Kumar
++82 1073149173
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140725/c81a5ba7/attachment.html>
