@@ -1,51 +1,47 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Fri, 25 Jul 2014 17:31:41 +0200
-Subject: [Buildroot] [PATCH 2/2] systemd: add hook to disable
-	ldconfig.service
-In-Reply-To: <1406302301-9382-1-git-send-email-eric.le.bihan.dev@free.fr>
-References: <1406302301-9382-1-git-send-email-eric.le.bihan.dev@free.fr>
-Message-ID: <1406302301-9382-3-git-send-email-eric.le.bihan.dev@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 25 Jul 2014 18:38:36 +0200
+Subject: [Buildroot] [PATCH v2 0/3] apply-patches.sh: be quiet when "make
+	-s" is used
+Message-ID: <1406306319-11972-1-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 215, systemd installs a service to execute /sbin/ldconfig
-when the sysinit target is reached.
+To reduce further the noise when "make -s" is used silence the
+"apply-patches.sh" script.
 
-Unfortunately, /sbin/ldconfig is not installed on a target built using a
-glibc-based toolchain.
+v2:
+ - move the second patch as first to easy up merging
+ - split the first patch in two (Yann)
+ - add BR_SILENT variable (Yann)
 
-As this service is not mandatory, it is now disabled, thus avoiding a
-warning in the journal.
+Fabio Porcedda (3):
+  package/Makefile.in: fix coding style regarding the '=' sign
+  apply-patches.sh: Use the "APPLY_PATCHES" variable to call the script
+  apply-patches.sh: don't print anything when "make -s" is used
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- package/systemd/systemd.mk |    7 +++++++
- 1 file changed, 7 insertions(+)
+ Makefile                              |   2 +
+ boot/at91bootstrap/at91bootstrap.mk   |   2 +-
+ boot/at91bootstrap3/at91bootstrap3.mk |   2 +-
+ boot/barebox/barebox.mk               |   2 +-
+ boot/uboot/uboot.mk                   |   2 +-
+ linux/linux-ext-rtai.mk               |   4 +-
+ linux/linux.mk                        |   6 +-
+ package/Makefile.in                   | 150 +++++++++++++++++-----------------
+ package/cvs/cvs.mk                    |   2 +-
+ package/gcc/gcc.mk                    |   4 +-
+ package/input-tools/input-tools.mk    |   2 +-
+ package/mii-diag/mii-diag.mk          |   2 +-
+ package/pkg-autotools.mk              |  12 +--
+ package/pkg-generic.mk                |   6 +-
+ package/setserial/setserial.mk        |   2 +-
+ package/sysklogd/sysklogd.mk          |   2 +-
+ package/sysvinit/sysvinit.mk          |   2 +-
+ package/thttpd/thttpd.mk              |   2 +-
+ support/scripts/apply-patches.sh      |  17 +++-
+ 19 files changed, 119 insertions(+), 104 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index a5e1bd4..125b2fd 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -149,10 +149,17 @@ define SYSTEMD_SANITIZE_PATH_IN_UNITS
- 		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
- endef
- 
-+# Disable ldconfig.service, as /sbin/ldconfig is not available when the
-+# target is built with a glibc-based toolchain.
-+define SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK
-+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/ldconfig.service
-+endef
-+
- SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
- 	SYSTEMD_INSTALL_INIT_HOOK \
- 	SYSTEMD_INSTALL_MACHINEID_HOOK \
- 	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-+	SYSTEMD_DISABLE_LDCONFIG_SERVICE_HOOK \
- 	SYSTEMD_SANITIZE_PATH_IN_UNITS
- 
- define SYSTEMD_USERS
 -- 
-1.7.10.4
+2.0.2
