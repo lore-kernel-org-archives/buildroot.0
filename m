@@ -1,46 +1,75 @@
 From: Gary Bisson <bisson.gary@gmail.com>
-Date: Thu, 24 Jul 2014 23:42:16 -0700
-Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix includes for recent
-	toolchains
-Message-ID: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
+Date: Thu, 24 Jul 2014 23:43:13 -0700
+Subject: [Buildroot] [PATCH] libfslvpuwrap: fix tests of return value from
+	IOGetVirtMem
+Message-ID: <1406270593-17193-1-git-send-email-bisson.gary@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build was failing starting with CodeSourcery 2013.11 due to
-new v4l kernel headers.
+Same as similar patches for imx-vpu, the returned value from
+IOGetVirtMem was not properly checked.
 
 Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
 
 ---
-Yann, all,
-I know this patch will look bad as we already discussed the use of -I instead of -idirafter.
-However it has been reported and verified that this package doesn't build using recent toolchain such as CodeSourcery 2013.11.
-It seems to come from the fact that the kernel headers in the toolchain have been updated which brings some incompatibility.
-Using -idirafter, the v4l header picked up is from the toolchain which is missing some older structures like v4l2_dbg_chip_ident.
-The CPPFLAGS setup is now exactly the same as what is done in Yocto.
-Let me know your thoughts.
+Yann, Eric, all,
+This patch is just a copy of what Eric pushed for this package in Yocto.
 Thanks,
 Gary
 ---
- package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...-fix-tests-of-return-value-from-IOGetVirt.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch
 
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-index 1ae6596..b441233 100644
---- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-@@ -24,7 +24,8 @@ GST_FSL_PLUGINS_CONF_ENV = \
- 
- # needs access to imx-specific kernel headers
- GST_FSL_PLUGINS_DEPENDENCIES += linux
--GST_FSL_PLUGINS_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -idirafter $(LINUX_DIR)/include/uapi"
-+GST_FSL_PLUGINS_CONF_ENV += \
-+	CPPFLAGS="-I$(LINUX_DIR)/include/uapi -I$(LINUX_DIR)/include"
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
- GST_FSL_PLUGINS_DEPENDENCIES += xlib_libX11
+diff --git a/package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch b/package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch
+new file mode 100644
+index 0000000..ccd2d9e
+--- /dev/null
++++ b/package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch
+@@ -0,0 +1,41 @@
++From 7ca66c10c05168c7d342df7c7a70d4a1ae0629f7 Mon Sep 17 00:00:00 2001
++From: Eric Nelson <eric.nelson@boundarydevices.com>
++Date: Sat, 28 Jun 2014 09:45:09 -0700
++Subject: [PATCH] vpu_wrapper: fix tests of return value from IOGetVirtMem
++
++IOGetVirtMem() returns a pointer or specifically -1 (MAP_FAILED)
++in the case of failure.
++
++Upstream-Status: Pending
++
++Signed-off-by: Laci Tele <laci@boundarydevices.com>
++Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
++---
++ vpu_wrapper.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/vpu_wrapper.c b/vpu_wrapper.c
++index 9249174..148c5df 100755
++--- a/vpu_wrapper.c
+++++ b/vpu_wrapper.c
++@@ -6653,7 +6653,7 @@ VpuDecRetCode VPU_DecGetMem(VpuMemDesc* pInOutMem)
++ 		return VPU_DEC_RET_FAILURE;
++ 	}
++ 	ret=IOGetVirtMem(&buff);
++-	if(ret==0) //if(ret!=RETCODE_SUCCESS)
+++	if(ret == -1) //if(ret==MAP_FAILED)
++ 	{
++ 		VPU_ERROR("%s: get virtual memory failure: size=%d, ret=%d \r\n",__FUNCTION__,buff.size,ret);
++ 		return VPU_DEC_RET_FAILURE;
++@@ -8277,7 +8277,7 @@ VpuEncRetCode VPU_EncGetMem(VpuMemDesc* pInOutMem)
++ 		return VPU_ENC_RET_FAILURE;
++ 	}
++ 	ret=IOGetVirtMem(&buff);
++-	if(ret==0) //if(ret!=RETCODE_SUCCESS)
+++	if(ret == -1) //if(ret==MAP_FAILED)
++ 	{
++ 		VPU_ENC_ERROR("%s: get virtual memory failure: size=%d, ret=%d \r\n",__FUNCTION__,buff.size,(UINT32)ret);
++ 		return VPU_ENC_RET_FAILURE;
++-- 
++1.9.1
++
 -- 
 2.0.1
