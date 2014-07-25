@@ -1,33 +1,196 @@
-From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-Date: Fri, 25 Jul 2014 17:28:50 +0530
-Subject: [Buildroot] [PATCH] x11vnc: needs MMU
-Message-ID: <1406289530-2622-1-git-send-email-yuvaraj.patil@wipro.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 25 Jul 2014 14:38:16 +0200
+Subject: [Buildroot] [PATCHv2 1/4] qemu/mips64-malta: update defconfig to
+	Linux 3.15.x
+Message-ID: <20140725123815.GA18189@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package needs MMU. Hence added dependency on BR2_USE_MMU
+Update default to 3.15.x.
 
-Fixes:
-http://autobuild.buildroot.net/results/b9d/b9d27977a231d186fe5289232f5d3995ec756266//
-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/x11vnc/Config.in |    1 +
- 1 file changed, 1 insertion(+)
+ Changes v1 -> v2:
+  - use ext4 as default (suggested on mailinglist)
 
-diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
-index 5693754..f27cc8a 100644
---- a/package/x11vnc/Config.in
-+++ b/package/x11vnc/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_X11VNC
- 	bool "x11vnc"
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU #fork()
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_XLIB_LIBXEXT
- 	select BR2_PACKAGE_XLIB_LIBXTST
+---
+ board/qemu/mips64-malta/linux-3.13.config |   59 -----------------------------
+ board/qemu/mips64-malta/linux-3.15.config |   59 +++++++++++++++++++++++++++++
+ board/qemu/mips64-malta/readme.txt        |    2 +-
+ configs/qemu_mips64_malta_defconfig       |   10 ++---
+ 4 files changed, 65 insertions(+), 65 deletions(-)
+ delete mode 100644 board/qemu/mips64-malta/linux-3.13.config
+ create mode 100644 board/qemu/mips64-malta/linux-3.15.config
+
+diff --git a/board/qemu/mips64-malta/linux-3.13.config b/board/qemu/mips64-malta/linux-3.13.config
+deleted file mode 100644
+index c112793..0000000
+--- a/board/qemu/mips64-malta/linux-3.13.config
++++ /dev/null
+@@ -1,59 +0,0 @@
+-CONFIG_MIPS_MALTA=y
+-CONFIG_CPU_MIPS64_R1=y
+-CONFIG_64BIT=y
+-CONFIG_MIPS_MT_SMP=y
+-CONFIG_NR_CPUS=2
+-CONFIG_HZ_100=y
+-CONFIG_SYSVIPC=y
+-CONFIG_NO_HZ=y
+-CONFIG_HIGH_RES_TIMERS=y
+-CONFIG_LOG_BUF_SHIFT=15
+-CONFIG_NAMESPACES=y
+-CONFIG_RELAY=y
+-CONFIG_EMBEDDED=y
+-# CONFIG_COMPAT_BRK is not set
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODVERSIONS=y
+-CONFIG_MODULE_SRCVERSION_ALL=y
+-# CONFIG_BLK_DEV_BSG is not set
+-CONFIG_PCI=y
+-CONFIG_MIPS32_COMPAT=y
+-CONFIG_MIPS32_O32=y
+-CONFIG_MIPS32_N32=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_IP_PNP=y
+-# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
+-# CONFIG_INET_XFRM_MODE_TUNNEL is not set
+-# CONFIG_INET_XFRM_MODE_BEET is not set
+-# CONFIG_INET_LRO is not set
+-# CONFIG_INET_DIAG is not set
+-# CONFIG_IPV6 is not set
+-# CONFIG_WIRELESS is not set
+-CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
+-CONFIG_IDE=y
+-CONFIG_BLK_DEV_IDECD=y
+-CONFIG_IDE_GENERIC=y
+-CONFIG_BLK_DEV_GENERIC=y
+-CONFIG_BLK_DEV_PIIX=y
+-CONFIG_NETDEVICES=y
+-CONFIG_PCNET32=y
+-# CONFIG_WLAN is not set
+-CONFIG_VT_HW_CONSOLE_BINDING=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-# CONFIG_HW_RANDOM is not set
+-# CONFIG_HWMON is not set
+-CONFIG_FB=y
+-CONFIG_FB_CIRRUS=y
+-# CONFIG_VGA_CONSOLE is not set
+-# CONFIG_USB_SUPPORT is not set
+-CONFIG_EXT4_FS=y
+-CONFIG_PROC_KCORE=y
+-CONFIG_TMPFS=y
+-CONFIG_NFS_FS=y
+-CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mips64-malta/linux-3.15.config b/board/qemu/mips64-malta/linux-3.15.config
+new file mode 100644
+index 0000000..c112793
+--- /dev/null
++++ b/board/qemu/mips64-malta/linux-3.15.config
+@@ -0,0 +1,59 @@
++CONFIG_MIPS_MALTA=y
++CONFIG_CPU_MIPS64_R1=y
++CONFIG_64BIT=y
++CONFIG_MIPS_MT_SMP=y
++CONFIG_NR_CPUS=2
++CONFIG_HZ_100=y
++CONFIG_SYSVIPC=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_LOG_BUF_SHIFT=15
++CONFIG_NAMESPACES=y
++CONFIG_RELAY=y
++CONFIG_EMBEDDED=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_SLAB=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODVERSIONS=y
++CONFIG_MODULE_SRCVERSION_ALL=y
++# CONFIG_BLK_DEV_BSG is not set
++CONFIG_PCI=y
++CONFIG_MIPS32_COMPAT=y
++CONFIG_MIPS32_O32=y
++CONFIG_MIPS32_N32=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
++CONFIG_IDE=y
++CONFIG_BLK_DEV_IDECD=y
++CONFIG_IDE_GENERIC=y
++CONFIG_BLK_DEV_GENERIC=y
++CONFIG_BLK_DEV_PIIX=y
++CONFIG_NETDEVICES=y
++CONFIG_PCNET32=y
++# CONFIG_WLAN is not set
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++CONFIG_FB=y
++CONFIG_FB_CIRRUS=y
++# CONFIG_VGA_CONSOLE is not set
++# CONFIG_USB_SUPPORT is not set
++CONFIG_EXT4_FS=y
++CONFIG_PROC_KCORE=y
++CONFIG_TMPFS=y
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
+diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+index 3ce3c62..967ea76 100644
+--- a/board/qemu/mips64-malta/readme.txt
++++ b/board/qemu/mips64-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 97937d1..5929bc5 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_MIPS_NABI64=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.13 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.15.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
 -- 
-1.7.9.5
+1.7.10.4
