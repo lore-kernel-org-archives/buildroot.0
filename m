@@ -1,83 +1,80 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Jul 2014 18:40:56 +0200
-Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix includes for recent
-	toolchains
-In-Reply-To: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
-References: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <20140725164056.GA3955@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 25 Jul 2014 18:42:24 +0200
+Subject: [Buildroot] [PATCH 1/2] apply-patches.sh: don't print anything
+ when "-s" option is used
+In-Reply-To: <20140721172657.GC3874@free.fr>
+References: <1404906414-15197-1-git-send-email-fabio.porcedda@gmail.com>
+ <20140721172657.GC3874@free.fr>
+Message-ID: <CAHkwnC8q1Vp0SCjh1JbQLFLu9iSzeLm3_HZnTRr_=BH0gM=AWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+On Mon, Jul 21, 2014 at 7:26 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Fabio, All,
+>
+> On 2014-07-09 13:46 +0200, Fabio Porcedda spake thusly:
+>> The make "-s" option is used to enable the "Silent operation" so if
+>> that option is used don't print anything as far as there isn't any
+>> error.
+>> Add the "-s" option to "apply-patches.sh" to enable silent operation.
+>> Because "apply-patches.sh" is called in many places add a
+>> "APPLY_PATCHES" variable to permit adding the "-s" easily.
+>>
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>
+> OK, this patch does two things:
+>   - introduce the APPLY_PATCHES variable, to be used instead of
+>     duplicating support/scripts/apply-patches.sh everywhere,
+>   - add the -s option to apply-patches
+>
+> So, it should be split in two.
 
-On 2014-07-24 23:42 -0700, Gary Bisson spake thusly:
-> Build was failing starting with CodeSourcery 2013.11 due to
-> new v4l kernel headers.
-> 
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> 
-> ---
-> Yann, all,
-> I know this patch will look bad as we already discussed the use of -I instead of -idirafter.
+Ok, done.
 
-[can you wrap lines at < ~80 chars, please?]
+> I did not initially notice that appy-patches was not always made silent,
+> but that it was conditional to the user using 'make -s' in the first
+> place.
+>
+> So, I would not oppose that patch. After all, if the user uses make -s,
+> and it is not really complicated to propagate that to our sub-tools,
+> that's pretty OK.
 
-Indeed. WQe should be very (extremely!) carefull with this. Playing with
-non-sanitised kernel headers is really dangerous, and can come bite you
-at the most eunexpected moment.
+Great!
 
-> However it has been reported and verified that this package doesn't build using recent toolchain such as CodeSourcery 2013.11.
+> However, see below...
+>
+> [--SNIP--]
+>> diff --git a/package/Makefile.in b/package/Makefile.in
+>> index 97053ba..e1fdb4d 100644
+>> --- a/package/Makefile.in
+>> +++ b/package/Makefile.in
+>> @@ -218,6 +218,12 @@ FLEX:=$(shell which flex || type -p flex)
+>>  BISON:=$(shell which bison || type -p bison)
+>>  SED:=$(shell which sed || type -p sed) -i -e
+>>
+>> +ifeq (,$(findstring s,$(MAKEFLAGS)))
+>> +APPLY_PATCHES = support/scripts/apply-patches.sh
+>> +else
+>> +APPLY_PATCHES = support/scripts/apply-patches.sh -s
+>> +endif
+>
+> I would do:
+>
+>     BR_SILENT = $(if $(findstring s,$(MAKEFLAGS)),YES)
+>
+>     APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT),-s)
 
-Care to share a defconfig with which I can reproduce the issue, please?
-I would like to see if there is not another solution to using -I and
-keep -idirafter if possible.
+Ok, done.
 
-> It seems to come from the fact that the kernel headers in the toolchain have been updated which brings some incompatibility.
+> That way, we can re-use $(BR_SILENT) for other tools (I'm thinking of
+> graph-depends and our other custom tools in support/scripts/ .)
 
-Hmmmm.. I seem to recall with had another such issue reported about CS
-toolchains a while ago... Can't find it again, however... :-/
+I've sent a new revision:
+http://lists.busybox.net/pipermail/buildroot/2014-July/102796.html
 
-> Using -idirafter, the v4l header picked up is from the toolchain which is missing some older structures like v4l2_dbg_chip_ident.
-
-This was removed between 3.10 and 3.11, indeed.
-
-I think the best fix would be something like:
-
-    diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
-    index 309e745..e0d961a 100644
-    --- a/package/gstreamer/gst-fsl-plugins/Config.in
-    +++ b/package/gstreamer/gst-fsl-plugins/Config.in
-    @@ -1,7 +1,7 @@
-     comment "gst-fsl-plugins needs an imx-specific Linux kernel to be built"
-            depends on BR2_arm && !BR2_LINUX_KERNEL
-
-    -comment "gst-fsl-plugins needs an (e)glibc toolchain"
-    +comment "gst-fsl-plugins needs an (e)glibc toolchain w/ headers < 3.11"
-            depends on BR2_arm
-            depends on !BR2_TOOLCHAIN_USES_GLIBC
-
-    @@ -10,6 +10,7 @@ config BR2_PACKAGE_GST_FSL_PLUGINS
-            depends on BR2_LINUX_KERNEL
-            depends on BR2_arm # Only relevant for i.MX
-            depends on BR2_TOOLCHAIN_USES_GLIBC # libfslcodec
-    +       depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # Old v4l2 API
-            select BR2_PACKAGE_GST_PLUGINS_BASE
-            select BR2_PACKAGE_LIBFSLVPUWRAP
-            select BR2_PACKAGE_IMX_LIB
-
-After all, the minimum kernel headers version can be used backward, too.
-That would need confirmation by others, though...
-
-Regards,
-Yann E. MORIN,
-
+Thanks and best regards
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fabio Porcedda
