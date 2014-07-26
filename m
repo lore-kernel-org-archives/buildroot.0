@@ -1,105 +1,48 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Fri, 25 Jul 2014 22:34:30 -0700
-Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix build for kernel headers
-	>= 3.10
-Message-ID: <1406352870-9607-1-git-send-email-bisson.gary@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Jul 2014 08:30:10 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-25
+Message-ID: <20140726063011.018FE101569@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package couldn't build using a toolchain with kernel headers >=
-3.10 because of the use of VIDIOC_DBG_G_CHIP_IDENT. As stated in
-videodev2.h, this ioctl should never be used.
+Build statistics for 2014-07-25
+===============================
 
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
----
-Yann, Thomas, all,
-After looking at the source code it appears that nothing justifies the use of
-that obsolete ioctl. Its only purpose is to get the video device name so this
-patch actually removes those unnecessary calls.
-Thanks,
-Gary
----
- ...e-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0005-Remove-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch
+        success : 88 
+       failures : 10 
+       timeouts : 0  
+          TOTAL : 98 
 
-diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0005-Remove-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0005-Remove-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch
-new file mode 100644
-index 0000000..5635275
---- /dev/null
-+++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins-0005-Remove-use-of-obsolete-VIDIOC_DBG_G_CHIP_IDENT.patch
-@@ -0,0 +1,69 @@
-+From ce90794a3458af0aed43b8570cf44cd87900185d Mon Sep 17 00:00:00 2001
-+From: Gary Bisson <bisson.gary@gmail.com>
-+Date: Fri, 25 Jul 2014 16:44:53 -0700
-+Subject: [PATCH] Remove use of obsolete VIDIOC_DBG_G_CHIP_IDENT
-+
-+This ioctl should never be used in application as
-+stated in videodev2.h header.
-+Moreover, its use in this plugin was very limited.
-+
-+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-+---
-+ src/misc/tvsrc/src/mfw_gst_tvsrc.c       | 8 --------
-+ src/misc/v4l_source/src/mfw_gst_v4lsrc.c | 7 -------
-+ 2 files changed, 15 deletions(-)
-+
-+diff --git a/src/misc/tvsrc/src/mfw_gst_tvsrc.c b/src/misc/tvsrc/src/mfw_gst_tvsrc.c
-+index 67e0cd2..f495b6f 100755
-+--- a/src/misc/tvsrc/src/mfw_gst_tvsrc.c
-++++ b/src/misc/tvsrc/src/mfw_gst_tvsrc.c
-+@@ -450,7 +450,6 @@ mfw_gst_tvsrc_capture_setup (MFWGstTVSRC * v4l_src)
-+   struct v4l2_format fmt;
-+   struct v4l2_control ctrl;
-+   struct v4l2_streamparm parm;
-+-  struct v4l2_dbg_chip_ident chip;
-+   gint fd_v4l = 0;
-+   struct v4l2_mxc_offset off;
-+   gint in_width = 0, in_height = 0;
-+@@ -461,13 +460,6 @@ mfw_gst_tvsrc_capture_setup (MFWGstTVSRC * v4l_src)
-+     return 0;
-+   }
-+ 
-+-  if (ioctl (fd_v4l, VIDIOC_DBG_G_CHIP_IDENT, &chip)) {
-+-    g_print ("VIDIOC_DBG_G_CHIP_IDENT failed.\n");
-+-  } else
-+-    g_print ("sensor chip is %s\n", chip.match.name);
-+-
-+-
-+-
-+   if (ioctl (fd_v4l, VIDIOC_G_STD, &id) < 0) {
-+     g_print ("VIDIOC_G_STD failed\n");
-+     close (fd_v4l);
-+diff --git a/src/misc/v4l_source/src/mfw_gst_v4lsrc.c b/src/misc/v4l_source/src/mfw_gst_v4lsrc.c
-+index 2c2e838..85e7ff0 100755
-+--- a/src/misc/v4l_source/src/mfw_gst_v4lsrc.c
-++++ b/src/misc/v4l_source/src/mfw_gst_v4lsrc.c
-+@@ -464,7 +464,6 @@ mfw_gst_v4lsrc_capture_setup (MFWGstV4LSrc * v4l_src)
-+   struct v4l2_format fmt = {0};
-+   struct v4l2_control ctrl = {0};
-+   struct v4l2_streamparm parm = {0};
-+-  struct v4l2_dbg_chip_ident chip = {0};
-+   struct v4l2_frmsizeenum fszenum = {0};
-+   gint input;
-+   gint fd_v4l = 0;
-+@@ -476,12 +475,6 @@ mfw_gst_v4lsrc_capture_setup (MFWGstV4LSrc * v4l_src)
-+     return 0;
-+   }
-+ 
-+-  if (ioctl (fd_v4l, VIDIOC_DBG_G_CHIP_IDENT, &chip)) {
-+-    GST_ERROR ("VIDIOC_DBG_G_CHIP_IDENT failed.");
-+-  } else
-+-    GST_INFO ("sensor chip is %s", chip.match.name);
-+-
-+-
-+   if (v4l_src->crop_pixel) {
-+     in_width = v4l_src->capture_width - (2 * v4l_src->crop_pixel);
-+     in_height = v4l_src->capture_height - (2 * v4l_src->crop_pixel);
-+-- 
-+2.0.1
-+
+Classification of failures by reason
+====================================
+
+                 libpcap-1.6.1 | 2 
+                  thrift-0.9.1 | 1 
+rtmpdump-79459a2b43f41ac44a... | 1 
+zmqpp-36413487f05b165dfc82a... | 1 
+                  zeromq-4.0.4 | 1 
+                 libraw-0.13.4 | 1 
+               ruby-1.9.3-p545 | 1 
+            ecryptfs-utils-104 | 1 
+                 gnupg2-2.0.23 | 1 
+
+Detail of failures
+===================
+
+       arm |             ecryptfs-utils-104 | NOK | http://autobuild.buildroot.net/results/070c90e9629dfdf3d4fa2382bbeff6f0ecc8df21/
+   powerpc |                  gnupg2-2.0.23 | NOK | http://autobuild.buildroot.net/results/7de0adc49d3774b2b7e459f1f6361de183f9217f/
+      bfin |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/3af796bc0eaa8563f0fd1dfce090083482fa57b9/
+    xtensa |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/f6c1564881039c812e5c49ef38e3f1af27188fca/
+      bfin |                  libraw-0.13.4 | NOK | http://autobuild.buildroot.net/results/c147866de0b95f9a4551f7e56ecc212a88d5eb87/
+      bfin | rtmpdump-79459a2b43f41ac44a... | NOK | http://autobuild.buildroot.net/results/ed81cb59b4200bbb0319945f1ac34153ed417c47/
+      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/146823b74a4c1f0bd39e4a1b922f9f664f31d184/
+       arm |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/f9747142b1e65f6eebf5fbc6e755c6aa6647854d/
+      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/b569407164c799d2cb61542e102da2749dd178b8/
+      bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/eccaaabcf50facdee921df757d1e22c6d3b12519/
+
+
 -- 
-2.0.1
+http://autobuild.buildroot.net
