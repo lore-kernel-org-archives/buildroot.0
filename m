@@ -1,47 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 09:22:06 +0200
-Subject: [Buildroot] [PATCH] x11vnc: needs MMU
-In-Reply-To: <1406289530-2622-1-git-send-email-yuvaraj.patil@wipro.com>
-References: <1406289530-2622-1-git-send-email-yuvaraj.patil@wipro.com>
-Message-ID: <20140726092206.1f78c0a4@free-electrons.com>
+Date: Sat, 26 Jul 2014 09:23:14 +0200
+Subject: [Buildroot] [git commit] qemu/mips64-malta: update defconfig to
+	Linux 3.15.x
+Message-ID: <20140726072423.0BC5E9D301@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yuvaraj Patil,
+commit: http://git.buildroot.net/buildroot/commit/?id=88dbd3a41e061bdd1bce95552c19a710429e2d88
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 25 Jul 2014 17:28:50 +0530, Yuvaraj Patil wrote:
-> This package needs MMU. Hence added dependency on BR2_USE_MMU
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/b9d/b9d27977a231d186fe5289232f5d3995ec756266//
-> Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Update default to 3.15.x.
 
-There should have been one empty new line before the Signed-off-by line.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../{linux-3.13.config => linux-3.15.config}       |    0
+ board/qemu/mips64-malta/readme.txt                 |    2 +-
+ configs/qemu_mips64_malta_defconfig                |   10 +++++-----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
->  package/x11vnc/Config.in |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/x11vnc/Config.in b/package/x11vnc/Config.in
-> index 5693754..f27cc8a 100644
-> --- a/package/x11vnc/Config.in
-> +++ b/package/x11vnc/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_X11VNC
->  	bool "x11vnc"
->  	depends on BR2_PACKAGE_XORG7
-> +	depends on BR2_USE_MMU #fork()
-
-Nit: space between # and fork().
-
-I've fixed both of those minor issues, and applied your patch.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/mips64-malta/linux-3.13.config b/board/qemu/mips64-malta/linux-3.15.config
+similarity index 100%
+rename from board/qemu/mips64-malta/linux-3.13.config
+rename to board/qemu/mips64-malta/linux-3.15.config
+diff --git a/board/qemu/mips64-malta/readme.txt b/board/qemu/mips64-malta/readme.txt
+index 3ce3c62..967ea76 100644
+--- a/board/qemu/mips64-malta/readme.txt
++++ b/board/qemu/mips64-malta/readme.txt
+@@ -5,4 +5,4 @@ Run the emulation with:
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+index 97937d1..5929bc5 100644
+--- a/configs/qemu_mips64_malta_defconfig
++++ b/configs/qemu_mips64_malta_defconfig
+@@ -6,17 +6,17 @@ BR2_MIPS_NABI64=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.13 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux-3.15.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ 
+ # Serial port config
