@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 09:33:02 +0200
-Subject: [Buildroot] [PATCH] libfslvpuwrap: fix tests of return value
- from IOGetVirtMem
-In-Reply-To: <1406270593-17193-1-git-send-email-bisson.gary@gmail.com>
-References: <1406270593-17193-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <20140726093302.0446eefe@free-electrons.com>
+Date: Sat, 26 Jul 2014 09:34:00 +0200
+Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix includes for recent
+ toolchains
+In-Reply-To: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
+References: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
+Message-ID: <20140726093400.52ac81c2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,27 @@ To: buildroot@busybox.net
 
 Dear Gary Bisson,
 
-On Thu, 24 Jul 2014 23:43:13 -0700, Gary Bisson wrote:
-> Same as similar patches for imx-vpu, the returned value from
-> IOGetVirtMem was not properly checked.
+On Thu, 24 Jul 2014 23:42:16 -0700, Gary Bisson wrote:
+> Build was failing starting with CodeSourcery 2013.11 due to
+> new v4l kernel headers.
 > 
 > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+> 
+> ---
+> Yann, all,
+> I know this patch will look bad as we already discussed the use of -I instead of -idirafter.
+> However it has been reported and verified that this package doesn't build using recent toolchain such as CodeSourcery 2013.11.
+> It seems to come from the fact that the kernel headers in the toolchain have been updated which brings some incompatibility.
+> Using -idirafter, the v4l header picked up is from the toolchain which is missing some older structures like v4l2_dbg_chip_ident.
+> The CPPFLAGS setup is now exactly the same as what is done in Yocto.
+> Let me know your thoughts.
+> Thanks,
+> Gary
 
-Thanks, patch applied, after adding the reference to the upstream
-discussion, as suggested by Yann.
+Am I correct saying that this patch is superseded by your new
+http://patchwork.ozlabs.org/patch/373918/ patch ?
+
+Thanks,
 
 Thomas
 -- 
