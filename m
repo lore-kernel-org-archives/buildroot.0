@@ -1,42 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 09:34:00 +0200
-Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix includes for recent
- toolchains
-In-Reply-To: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
-References: <1406270536-17145-1-git-send-email-bisson.gary@gmail.com>
-Message-ID: <20140726093400.52ac81c2@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 26 Jul 2014 08:51:43 +0000 (UTC)
+Subject: [Buildroot] [Bug 4021] uClibc: undefined reference to
+	`__GI___errno_location'
+In-Reply-To: <bug-4021-163@https.bugs.busybox.net/>
+References: <bug-4021-163@https.bugs.busybox.net/>
+Message-ID: <20140726085143.EBDCF9D304@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+https://bugs.busybox.net/show_bug.cgi?id=4021
 
-On Thu, 24 Jul 2014 23:42:16 -0700, Gary Bisson wrote:
-> Build was failing starting with CodeSourcery 2013.11 due to
-> new v4l kernel headers.
-> 
-> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> 
-> ---
-> Yann, all,
-> I know this patch will look bad as we already discussed the use of -I instead of -idirafter.
-> However it has been reported and verified that this package doesn't build using recent toolchain such as CodeSourcery 2013.11.
-> It seems to come from the fact that the kernel headers in the toolchain have been updated which brings some incompatibility.
-> Using -idirafter, the v4l header picked up is from the toolchain which is missing some older structures like v4l2_dbg_chip_ident.
-> The CPPFLAGS setup is now exactly the same as what is done in Yocto.
-> Let me know your thoughts.
-> Thanks,
-> Gary
+mail at waldemar-brodkorb.de changed:
 
-Am I correct saying that this patch is superseded by your new
-http://patchwork.ozlabs.org/patch/373918/ patch ?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|FIXED                       |
 
-Thanks,
+--- Comment #9 from mail at waldemar-brodkorb.de 2014-07-26 08:51:42 UTC ---
+Hi,
 
-Thomas
+tried with current master and the problem still exist.
+Can you share your working environment data? (build system, gcc version,
+binutils version)
+Removing HIDDEN_JUMPTARGET still make it work.
+
+best regards
+ Waldemar
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
