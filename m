@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 09:16:21 +0200
-Subject: [Buildroot] [git commit] php: security bump to version 5.5.15
-Message-ID: <20140726071718.DCFEB9D301@busybox.osuosl.org>
+Date: Sat, 26 Jul 2014 09:17:35 +0200
+Subject: [Buildroot] [PATCH] busybox: enable fdisk in default config
+In-Reply-To: <1406295779-2323-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1406295779-2323-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140726091735.6ce5a550@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b54b2d4f13ae60a53d765b25002e5590adb2d14b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Gustavo Zacarias,
 
-Fixes:
-CVE-2014-4670 (SPL Iterators use-after-free)
+On Fri, 25 Jul 2014 10:42:59 -0300, Gustavo Zacarias wrote:
+> As noted by mnemoc on IRC the default busybox config doesn't enable
+> fdisk and util-linux is hidden by !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS.
+> On modern systems fdisk usage is becoming more common so enable it, it
+> just adds up ~25 KiB to total binary size.
+> People who are on the edge for space savings will normally customize
+> their busybox config.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/busybox/busybox.config | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/php/php.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+Applied, thanks.
 
-diff --git a/package/php/php.mk b/package/php/php.mk
-index fea03eb..de7d668 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 5.5.14
-+PHP_VERSION = 5.5.15
- PHP_SITE = http://www.php.net/distributions
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPT = INSTALL_ROOT=$(STAGING_DIR) install
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
