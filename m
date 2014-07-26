@@ -1,33 +1,32 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 26 Jul 2014 23:49:31 +0200
-Subject: [Buildroot] [PATCH 0/2] systemd: bump to version 215
-In-Reply-To: <20140726091600.6dc09661@free-electrons.com> (Thomas Petazzoni's
- message of "Sat, 26 Jul 2014 09:16:00 +0200")
-References: <1406302301-9382-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140726091600.6dc09661@free-electrons.com>
-Message-ID: <87vbqjaiz8.fsf@dell.be.48ers.dk>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 27 Jul 2014 02:49:46 +0400
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-07-24
+In-Reply-To: <20140725063012.8107D1015AE@stock.ovh.net>
+References: <20140725063012.8107D1015AE@stock.ovh.net>
+Message-ID: <CAMo8BfJ96eqY5hHU-Y8=MPAP48DbC6=tYZ90c0r7FgtoVGYjGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Fri, Jul 25, 2014 at 10:30 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Build statistics for 2014-07-24
+>     xtensa |       network-manager-0.9.10.0 | NOK | http://autobuild.buildroot.net/results/d33ed1c3bf1be7c8f8ea02590a770b0d29c7d9fa/
 
- > Dear Eric Le Bihan,
- > On Fri, 25 Jul 2014 17:31:39 +0200, Eric Le Bihan wrote:
+It fails with
 
- >> - a bump of the systemd package to version 215.
- >> - a patch to disable the ldconfig.service unit, installed by v215 (this unit
- >> would fail, as /sbin/ldconfig is not installed in a target generated using
- >> a glibc-based toolchain).
+NetworkManagerUtils.c:1020:23: error: 'CLOCK_BOOTTIME' undeclared
+(first use in this function)
+  err = clock_gettime (CLOCK_BOOTTIME, tp);
 
- > Thanks, I've applied both patches. However, for the second one, I
- > consider it as a temporary solution. We should really fix the ldconfig
- > handling in Buildroot.
-
-What exactly needs fixing? Runtime ldconfig doesn't make much sense if
-E.G. the rootfs is read only.
+because there's no CLOCK_BOOTTIME in uClibc.
+Not sure what's the proper fix for that, adding support for
+CLOCK_BOOTTIME into uClibc?
+(looks fairly easy). Or just disabling network manager on uClibc?
 
 -- 
-Bye, Peter Korsgaard
+Thanks.
+-- Max
