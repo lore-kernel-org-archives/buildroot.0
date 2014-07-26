@@ -1,47 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Jul 2014 12:01:55 +0200
-Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix build for kernel
- headers >= 3.10
-In-Reply-To: <20140726090257.0feb0d7f@free-electrons.com>
-References: <1406352870-9607-1-git-send-email-bisson.gary@gmail.com>
- <20140726090257.0feb0d7f@free-electrons.com>
-Message-ID: <20140726100155.GB3939@free.fr>
+Date: Sat, 26 Jul 2014 12:23:45 +0200
+Subject: [Buildroot] tzdata when using a custom seleton
+In-Reply-To: <CANxTyt6Kew54xGwwRxQnHaeZ-CH4-SbKoMgkwSMKytRX9Z-mmA@mail.gmail.com>
+References: <CANxTyt6Kew54xGwwRxQnHaeZ-CH4-SbKoMgkwSMKytRX9Z-mmA@mail.gmail.com>
+Message-ID: <20140726102345.GC3939@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Danomi, All,
 
-On 2014-07-26 09:02 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 25 Jul 2014 22:34:30 -0700, Gary Bisson wrote:
-> > This package couldn't build using a toolchain with kernel headers >=
-> > 3.10 because of the use of VIDIOC_DBG_G_CHIP_IDENT. As stated in
-> > videodev2.h, this ioctl should never be used.
-> > 
-> > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> > ---
-> > Yann, Thomas, all,
-> > After looking at the source code it appears that nothing justifies the use of
-> > that obsolete ioctl. Its only purpose is to get the video device name so this
-> > patch actually removes those unnecessary calls.
-> > Thanks,
-> > Gary
+On 2014-07-25 18:34 -0400, Danomi Manchego spake thusly:
+> I recently started to update our buildroot at work from 2013.02 to
+> 2014.05, and ran into a tzdata issue - still present with the latest
+> today.  I am using a custom skeleton.  Previously, I was able to use
+> the tzdata package to get time zone files into my rootfs.  It seems
+> like I can't do that anymore because those options are shown only when
+> using the default skeleton.
 > 
-> So, if I'm correct, this supersedes the patches from Yann
-> (http://patchwork.ozlabs.org/patch/373813/ and
-> http://patchwork.ozlabs.org/patch/373814/), right ?
+> I think that this comes from commit
+> d6a37917dde1293f6e25d87801283e098c22d580, "system: make the zoneinfo
+> list a system option", when the timezone list moved from
+> tzdata/Config.in to system/Config.in, changing names along the way.
+> 
+> Is it intentional that configurations using custom skeletons can no
+> longer install time zone files?  Or is it just a side effect of where
+> the moved settings are in system/Config.in?
 
-Well, 373813 is still valid: it is a clarification in the manual that
-_AT_LEAST_X_Y symbols can be used to require either lowest or highest
-headers version.
+When I did that, yes, that was intentional. My reasoning was that, if
+the user provides his own skeleton, he's responsible for setting it up,
+like the root password, getty config et al.
 
-So, even if we end up noy needing this for this issue, it is still
-valid, no?
+But what I overlooked at that time was the fact that the tz-providing
+packages are ptrompt-less, and are enabled whenever the tz config needs
+them.
 
-But indeed, 373814 is supersedded by this patch from Gary (and I'm happy
-of the outcome!) I'll mark the affected patches supserdded in Patchwork.
+So, when using a custom skeleton, the user has no way to enable those
+packages, indeed.
+
+I'll tackle this later today, unles you beat me to it. ;-)
 
 Regards,
 Yann E. MORIN.
