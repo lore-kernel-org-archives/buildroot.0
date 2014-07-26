@@ -1,72 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 09:26:07 +0200
-Subject: [Buildroot] [git commit] libpcap: fix build for uclinux target
-Message-ID: <20140726073240.84D639D302@busybox.osuosl.org>
+Date: Sat, 26 Jul 2014 09:32:15 +0200
+Subject: [Buildroot] [git commit] libfslvpuwrap: fix tests of return value
+	from IOGetVirtMem
+Message-ID: <20140726073240.B8BCD9D2FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=79d03a865dbaa388c94d438f445001bcc2a719a6
+commit: http://git.buildroot.net/buildroot/commit/?id=9b29dfc70a727846148642940a883b63959cced8
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As usual, uclinux is also linux. Also, -lpthread is needed to link the canusb
-test.
+Same as similar patches for imx-vpu, the returned value from
+IOGetVirtMem was not properly checked.
 
-Fixes:
-http://autobuild.buildroot.net/results/3af/3af796bc0eaa8563f0fd1dfce090083482fa57b9/
+[Thomas: add upstream reference to the patch, suggested by Yann
+E. Morin.]
 
-[Thomas: fix typo in SoB line inside the newly added patch.]
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...p-0002-configure.in-uclinux-is-also-linux.patch |   39 ++++++++++++++++++++
- 1 files changed, 39 insertions(+), 0 deletions(-)
+ ...-fix-tests-of-return-value-from-IOGetVirt.patch |   44 ++++++++++++++++++++
+ 1 files changed, 44 insertions(+), 0 deletions(-)
 
-diff --git a/package/libpcap/libpcap-0002-configure.in-uclinux-is-also-linux.patch b/package/libpcap/libpcap-0002-configure.in-uclinux-is-also-linux.patch
+diff --git a/package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch b/package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch
 new file mode 100644
-index 0000000..55be25e
+index 0000000..3927430
 --- /dev/null
-+++ b/package/libpcap/libpcap-0002-configure.in-uclinux-is-also-linux.patch
-@@ -0,0 +1,39 @@
-+From a904d1e35be72d0821a6680a75060815bce86642 Mon Sep 17 00:00:00 2001
-+Message-Id: <a904d1e35be72d0821a6680a75060815bce86642.1406266983.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 25 Jul 2014 07:28:47 +0300
-+Subject: [PATCH] configure.in: uclinux is also linux
++++ b/package/libfslvpuwrap/libfslvpuwrap-0001-vpu_wrapper-fix-tests-of-return-value-from-IOGetVirt.patch
+@@ -0,0 +1,44 @@
++From 7ca66c10c05168c7d342df7c7a70d4a1ae0629f7 Mon Sep 17 00:00:00 2001
++From: Eric Nelson <eric.nelson@boundarydevices.com>
++Date: Sat, 28 Jun 2014 09:45:09 -0700
++Subject: [PATCH] vpu_wrapper: fix tests of return value from IOGetVirtMem
 +
-+Also we need -lpthread for the test to build for noMMU targets.
++IOGetVirtMem() returns a pointer or specifically -1 (MAP_FAILED)
++in the case of failure.
 +
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++This problem is being discussed upstream at
++https://lists.yoctoproject.org/pipermail/meta-freescale/2014-June/008993.html.
++
++Upstream-Status: Pending
++
++Signed-off-by: Laci Tele <laci@boundarydevices.com>
++Signed-off-by: Eric Nelson <eric.nelson@boundarydevices.com>
 +---
-+ configure.in | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
++ vpu_wrapper.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/configure.in b/configure.in
-+index 4530aed3a7d0..63f708b9b855 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -1539,7 +1539,7 @@ AC_ARG_ENABLE([canusb],
-+ if test "x$enable_canusb" != "xno" ; then
-+ 	dnl check for canusb support
-+ 	case "$host_os" in
-+-	linux*)
-++	linux*|uclinux*)
-+ 		AC_CHECK_HEADER(libusb-1.0/libusb.h,
-+ 		[
-+ 		    AC_CHECK_LIB(usb-1.0, libusb_init,
-+@@ -1549,7 +1549,8 @@ if test "x$enable_canusb" != "xno" ; then
-+ 			LIBS="-lusb-1.0 -lpthread $LIBS"
-+ 			ac_lbl_has_libusb=yes
-+ 		    ],
-+-		    ac_lbl_has_libusb=no
-++		    ac_lbl_has_libusb=no,
-++		    -lpthread
-+ 		    )
-+ 		],
-+ 		ac_lbl_has_libusb=no
++diff --git a/vpu_wrapper.c b/vpu_wrapper.c
++index 9249174..148c5df 100755
++--- a/vpu_wrapper.c
+++++ b/vpu_wrapper.c
++@@ -6653,7 +6653,7 @@ VpuDecRetCode VPU_DecGetMem(VpuMemDesc* pInOutMem)
++ 		return VPU_DEC_RET_FAILURE;
++ 	}
++ 	ret=IOGetVirtMem(&buff);
++-	if(ret==0) //if(ret!=RETCODE_SUCCESS)
+++	if(ret == -1) //if(ret==MAP_FAILED)
++ 	{
++ 		VPU_ERROR("%s: get virtual memory failure: size=%d, ret=%d \r\n",__FUNCTION__,buff.size,ret);
++ 		return VPU_DEC_RET_FAILURE;
++@@ -8277,7 +8277,7 @@ VpuEncRetCode VPU_EncGetMem(VpuMemDesc* pInOutMem)
++ 		return VPU_ENC_RET_FAILURE;
++ 	}
++ 	ret=IOGetVirtMem(&buff);
++-	if(ret==0) //if(ret!=RETCODE_SUCCESS)
+++	if(ret == -1) //if(ret==MAP_FAILED)
++ 	{
++ 		VPU_ENC_ERROR("%s: get virtual memory failure: size=%d, ret=%d \r\n",__FUNCTION__,buff.size,(UINT32)ret);
++ 		return VPU_ENC_RET_FAILURE;
 +-- 
-+2.0.1
++1.9.1
 +
