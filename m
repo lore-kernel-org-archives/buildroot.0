@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 09:02:00 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: include C libraries in
- legal-info
-In-Reply-To: <1406318787-3993-1-git-send-email-yann.morin.1998@free.fr>
-References: <1406318787-3993-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20140726090200.1295a526@free-electrons.com>
+Date: Sat, 26 Jul 2014 09:02:57 +0200
+Subject: [Buildroot] [PATCH] gst-fsl-plugins: fix build for kernel
+ headers >= 3.10
+In-Reply-To: <1406352870-9607-1-git-send-email-bisson.gary@gmail.com>
+References: <1406352870-9607-1-git-send-email-bisson.gary@gmail.com>
+Message-ID: <20140726090257.0feb0d7f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Dear Gary Bisson,
 
-On Fri, 25 Jul 2014 22:06:27 +0200, Yann E. MORIN wrote:
-> So far, the legal-info infrastructure was not exporting the legal
-> info for the C libraries. This is because the legal-info only acts
-> on packages defined in $(TARGETS).
+On Fri, 25 Jul 2014 22:34:30 -0700, Gary Bisson wrote:
+> This package couldn't build using a toolchain with kernel headers >=
+> 3.10 because of the use of VIDIOC_DBG_G_CHIP_IDENT. As stated in
+> videodev2.h, this ioctl should never be used.
 > 
-> But the C libraries are never added to $(TARGETS), since there is no
-> corresponding BR2_PACKAGE_<C-LIBRARY>.
-> 
-> This patch adds such symbols for the 4 C libraries we support in our
-> internal backend: uClibc, glibc, eglibc and musl.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
+> ---
+> Yann, Thomas, all,
+> After looking at the source code it appears that nothing justifies the use of
+> that obsolete ioctl. Its only purpose is to get the video device name so this
+> patch actually removes those unnecessary calls.
+> Thanks,
+> Gary
 
-Applied, thanks.
+So, if I'm correct, this supersedes the patches from Yann
+(http://patchwork.ozlabs.org/patch/373813/ and
+http://patchwork.ozlabs.org/patch/373814/), right ?
+
+Thanks,
 
 Thomas
 -- 
