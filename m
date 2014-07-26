@@ -1,48 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Jul 2014 08:30:10 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-25
-Message-ID: <20140726063011.018FE101569@stock.ovh.net>
+Date: Sat, 26 Jul 2014 08:52:33 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: Bump version to current
+	git master
+Message-ID: <20140726065738.951B59D2A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-07-25
-===============================
+commit: http://git.buildroot.net/buildroot/commit/?id=2d93a7bfd61d6fe02adca7d72f07dc735d2a22d6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-        success : 88 
-       failures : 10 
-       timeouts : 0  
-          TOTAL : 98 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../tvheadend/tvheadend-003-remove-werror.patch    |    8 ++++----
+ package/tvheadend/tvheadend.mk                     |    2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Classification of failures by reason
-====================================
-
-                 libpcap-1.6.1 | 2 
-                  thrift-0.9.1 | 1 
-rtmpdump-79459a2b43f41ac44a... | 1 
-zmqpp-36413487f05b165dfc82a... | 1 
-                  zeromq-4.0.4 | 1 
-                 libraw-0.13.4 | 1 
-               ruby-1.9.3-p545 | 1 
-            ecryptfs-utils-104 | 1 
-                 gnupg2-2.0.23 | 1 
-
-Detail of failures
-===================
-
-       arm |             ecryptfs-utils-104 | NOK | http://autobuild.buildroot.net/results/070c90e9629dfdf3d4fa2382bbeff6f0ecc8df21/
-   powerpc |                  gnupg2-2.0.23 | NOK | http://autobuild.buildroot.net/results/7de0adc49d3774b2b7e459f1f6361de183f9217f/
-      bfin |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/3af796bc0eaa8563f0fd1dfce090083482fa57b9/
-    xtensa |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/f6c1564881039c812e5c49ef38e3f1af27188fca/
-      bfin |                  libraw-0.13.4 | NOK | http://autobuild.buildroot.net/results/c147866de0b95f9a4551f7e56ecc212a88d5eb87/
-      bfin | rtmpdump-79459a2b43f41ac44a... | NOK | http://autobuild.buildroot.net/results/ed81cb59b4200bbb0319945f1ac34153ed417c47/
-      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/146823b74a4c1f0bd39e4a1b922f9f664f31d184/
-       arm |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/f9747142b1e65f6eebf5fbc6e755c6aa6647854d/
-      bfin |                   zeromq-4.0.4 | NOK | http://autobuild.buildroot.net/results/b569407164c799d2cb61542e102da2749dd178b8/
-      bfin | zmqpp-36413487f05b165dfc82a... | NOK | http://autobuild.buildroot.net/results/eccaaabcf50facdee921df757d1e22c6d3b12519/
-
-
--- 
-http://autobuild.buildroot.net
+diff --git a/package/tvheadend/tvheadend-003-remove-werror.patch b/package/tvheadend/tvheadend-003-remove-werror.patch
+index cc97a18..039e0e0 100644
+--- a/package/tvheadend/tvheadend-003-remove-werror.patch
++++ b/package/tvheadend/tvheadend-003-remove-werror.patch
+@@ -5,12 +5,12 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
+ --- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:50:48.437688482 +0100
+ +++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:54:00.411418749 +0100
+-@@ -27,7 +27,7 @@
+- # Common compiler flags
++@@ -28,7 +28,7 @@
+  #
+  
++ CFLAGS  += -g -O2
+ -CFLAGS  += -Wall -Werror -Wwrite-strings -Wno-deprecated-declarations
+ +CFLAGS  += -Wall -Wwrite-strings -Wno-deprecated-declarations
+- CFLAGS  += -Wmissing-prototypes -fms-extensions
+- CFLAGS  += -g -funsigned-char -O2
++ CFLAGS  += -Wmissing-prototypes
++ CFLAGS  += -fms-extensions -funsigned-char -fno-strict-aliasing
+  CFLAGS  += -D_FILE_OFFSET_BITS=64
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 4d0a16d..bd52ecd 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = fd24558503967375d0b9058ac2a4c594de971cd2
++TVHEADEND_VERSION = f72733ff08be069620e7247e191d4f0899a2638a
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
