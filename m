@@ -1,108 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 14:37:12 +0200
-Subject: [Buildroot] [git commit] python-numpy: add patch to fix build on
-	uClibc
-Message-ID: <20140727123734.E95789D2E7@busybox.osuosl.org>
+Date: Sun, 27 Jul 2014 14:34:42 +0200
+Subject: [Buildroot] [git commit] mpdecimal: new package
+Message-ID: <20140727123734.9454F9D2CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b0f025386f6861fdc21e38e3a33b65669276f2c2
+commit: http://git.buildroot.net/buildroot/commit/?id=6bebd7f2715abad87f5d9f30738567458b4b9692
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/01d/01da44bc4b644a46326d8fbd87708b7a98971487/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../python-numpy-0001-no-fenv-on-uclibc.patch      |   79 ++++++++++++++++++++
- 1 files changed, 79 insertions(+), 0 deletions(-)
+ package/Config.in              |    1 +
+ package/mpdecimal/Config.in    |   10 ++++++++++
+ package/mpdecimal/mpdecimal.mk |   24 ++++++++++++++++++++++++
+ 3 files changed, 35 insertions(+), 0 deletions(-)
 
-diff --git a/package/python-numpy/python-numpy-0001-no-fenv-on-uclibc.patch b/package/python-numpy/python-numpy-0001-no-fenv-on-uclibc.patch
+diff --git a/package/Config.in b/package/Config.in
+index b232284..8de06e2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -860,6 +860,7 @@ menu "Other"
+ 	source "package/linux-pam/Config.in"
+ 	source "package/lttng-libust/Config.in"
+ 	source "package/mpc/Config.in"
++	source "package/mpdecimal/Config.in"
+ 	source "package/mpfr/Config.in"
+ 	source "package/msgpack/Config.in"
+ 	source "package/mtdev2tuio/Config.in"
+diff --git a/package/mpdecimal/Config.in b/package/mpdecimal/Config.in
 new file mode 100644
-index 0000000..633dbcd
+index 0000000..929d415
 --- /dev/null
-+++ b/package/python-numpy/python-numpy-0001-no-fenv-on-uclibc.patch
-@@ -0,0 +1,79 @@
-+Don't use <fenv.h> on uClibc
++++ b/package/mpdecimal/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_MPDECIMAL
++	bool "mpdecimal"
++	help
++	  mpdecimal is a package for correctly-rounded arbitrary
++	  precision decimal floating point arithmetic. Starting from
++	  version 2.4, mpdecimal includes only the libmpdec
++	  library. Further mpdecimal development will focus
++	  exclusively on libmpdec.
 +
-+The python-numpy code already has provisions to not use <fenv.h> when
-+not available. However, it uses __GLIBC__ to know whether fenv.h is
-+available or not, but uClibc defines __GLIBC__, so python-numpy thinks
-+fenv.h is available.
++	  http://www.bytereef.org/mpdecimal/
+diff --git a/package/mpdecimal/mpdecimal.mk b/package/mpdecimal/mpdecimal.mk
+new file mode 100644
+index 0000000..cb028a5
+--- /dev/null
++++ b/package/mpdecimal/mpdecimal.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# mpdecimal
++#
++################################################################################
 +
-+This patch fixes that by changing all defined(__GLIBC__) occurences by
-+(defined(__GLIBC__) && !defined(__UCLIBC__)).
++MPDECIMAL_SITE = http://www.bytereef.org/software/mpdecimal/releases/
++MPDECIMAL_VERSION = 2.4.0
++MPDECIMAL_INSTALL_STAGING = YES
++MPDECIMAL_LICENSE = BSD-2c
++MPDECIMAL_LICENSE_FILES = LICENSE.txt
++MPDECIMAL_CONF_OPT = LD="$(TARGET_CC)"
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++# On i386, by default, mpdecimal tries to uses <fenv.h> which is not
++# available in musl/glibc. So in this case, we tell mpdecimal to use
++# the generic 32 bits code, which is anyway the one used on ARM,
++# PowerPC, etc.
++ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
++ifeq ($(BR2_i386),y)
++MPDECIMAL_CONF_ENV += MACHINE=ansi32
++endif
++endif
 +
-+Index: b/numpy/core/include/numpy/ufuncobject.h
-+===================================================================
-+--- a/numpy/core/include/numpy/ufuncobject.h
-++++ b/numpy/core/include/numpy/ufuncobject.h
-+@@ -413,11 +413,11 @@
-+         (void) fpsetsticky(0); \
-+         }
-+ 
-+-#elif defined(__GLIBC__) || defined(__APPLE__) || \
-++#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
-+       defined(__CYGWIN__) || defined(__MINGW32__) || \
-+       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-+ 
-+-#if defined(__GLIBC__) || defined(__APPLE__) || \
-++#if (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
-+     defined(__MINGW32__) || defined(__FreeBSD__)
-+ #include <fenv.h>
-+ #elif defined(__CYGWIN__)
-+Index: b/numpy/core/src/npymath/ieee754.c.src
-+===================================================================
-+--- a/numpy/core/src/npymath/ieee754.c.src
-++++ b/numpy/core/src/npymath/ieee754.c.src
-+@@ -586,11 +586,11 @@
-+ }
-+ 
-+ 
-+-#elif defined(__GLIBC__) || defined(__APPLE__) || \
-++#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
-+       defined(__CYGWIN__) || defined(__MINGW32__) || \
-+       (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-+ 
-+-# if defined(__GLIBC__) || defined(__APPLE__) || \
-++# if (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || \
-+      defined(__MINGW32__) || defined(__FreeBSD__)
-+ #  include <fenv.h>
-+ # elif defined(__CYGWIN__)
-+Index: b/numpy/numarray/_capi.c
-+===================================================================
-+--- a/numpy/numarray/_capi.c
-++++ b/numpy/numarray/_capi.c
-+@@ -10,7 +10,7 @@
-+ #include <sys/param.h>
-+ #endif
-+ 
-+-#if defined(__GLIBC__) || defined(__APPLE__) || defined(__MINGW32__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-++#if (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || defined(__MINGW32__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-+ #include <fenv.h>
-+ #elif defined(__CYGWIN__)
-+ #include "numpy/fenv/fenv.h"
-+@@ -258,7 +258,7 @@
-+ }
-+ 
-+ /* Likewise for Integer overflows */
-+-#if defined(__GLIBC__) || defined(__APPLE__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-++#if (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-+ static int int_overflow_error(Float64 value) { /* For x86_64 */
-+     feraiseexcept(FE_OVERFLOW);
-+     return (int) value;
-+@@ -3007,7 +3007,7 @@
-+     return retstatus;
-+ }
-+ 
-+-#elif defined(__GLIBC__) || defined(__APPLE__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-++#elif (defined(__GLIBC__) && !defined(__UCLIBC__)) || defined(__APPLE__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__FreeBSD__) && (__FreeBSD_version >= 502114))
-+ 
-+ static int
-+ NA_checkFPErrors(void)
++$(eval $(autotools-package))
