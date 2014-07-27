@@ -1,35 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 16:04:06 +0200
-Subject: [Buildroot] [PATCH 1/1] python-daemon: new package
-In-Reply-To: <1406216603-965-1-git-send-email-david.bachelart@bbright.com>
-References: <1406216603-965-1-git-send-email-david.bachelart@bbright.com>
-Message-ID: <20140727160406.24d9b861@free-electrons.com>
+Date: Sun, 27 Jul 2014 16:08:43 +0200
+Subject: [Buildroot] [PATCH] ltrace: use current master
+In-Reply-To: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
+References: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
+Message-ID: <20140727160843.2a728bb4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Bachelart,
+Dear Alexandre Belloni,
 
-On Thu, 24 Jul 2014 17:43:23 +0200, David Bachelart wrote:
+On Thu, 24 Jul 2014 23:59:21 +0200, Alexandre Belloni wrote:
+> ltrace 0.7.3 is the latest release but it is actually broken on ARM
+> since PTRACE_SINGLESTEP emulation has been removed, see:
+> 
+> http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=425fc47adb5bb69f76285be77a09a3341a30799e
+> 
+> It fails with:
+> PTRACE_SINGLESTEP: Input/output error
+> 
+> Using master solves that until a new release is made.
+> 
+> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> ---
+>  package/ltrace/Config.in               |  1 +
+>  package/ltrace/ltrace-02-arm-plt.patch | 30 ++++++++++++++++++++++++++++++
+>  package/ltrace/ltrace.mk               | 13 +++++++++----
+>  3 files changed, 40 insertions(+), 4 deletions(-)
+>  create mode 100644 package/ltrace/ltrace-02-arm-plt.patch
 
-> +PYTHON_DAEMON_VERSION = 1.5.5
-> +PYTHON_DAEMON_SITE    = https://pypi.python.org/packages/source/p/python-daemon/
-
-We typically don't align = signs anymore.
-
-> +PYTHON_DAEMON_LICENSE = PSF-2+
-
-The SPDX code for this license is Python-2.0, and I don't think the '+'
-sign was correct. I've also added GPLv2+, which is used for the tests.
-
-> +PYTHON_DAEMON_LICENSE_FILES = COPYING
-
-This was incorrect, there was no COPYING file in the tarball. The
-correct files where LICENSE.PSF-2 and LICENSE.GPL-2.
-
-Applied with those changes, thanks!
+Applied, thanks!
 
 Thomas
 -- 
