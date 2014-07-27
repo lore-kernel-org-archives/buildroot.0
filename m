@@ -1,44 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Jul 2014 13:38:54 +0200
-Subject: [Buildroot] [PATCH 20/20 v3] package/xserver_xorg-server: needs
-	libudev, not a udev daemon
-References: <cover.1405777634.git.yann.morin.1998@free.fr>
- <7964be0c75358121baa69301d23eb93d72a64db9.1405777634.git.yann.morin.1998@free.fr>
- <XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <XnsA3778AD689B30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Jul 2014 10:34:16 +0200
+Subject: [Buildroot] [git commit] luajit: add host variant
+Message-ID: <20140727122850.EC4369D2E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA at bernd-kuhls.de:
+commit: http://git.buildroot.net/buildroot/commit/?id=f3f0dcc909cd4ff3a34e356d2dae80d3df203ad1
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Luckily enough xserver_xorg-server does not depend on udev/hal, configure 
-> just prints:
-> 
-> configure: WARNING:
->              ***********************************************
->              Neither HAL nor udev backend will be enabled.
->              Input device hotplugging will not be available!
->              ***********************************************
-> 
-> which is fine for me, everything works good without udev/hal ;)
+the goal is to use host-luajit with pkg-luarocks
+when luajit is on the selected luainterpreter for the target
 
-Hi,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luajit/luajit.mk |    9 +++++++++
+ 1 files changed, 9 insertions(+), 0 deletions(-)
 
-a small, but important addition: To avoid xserver_xorg-server picking up 
-libudev when the udev daemon is disabled this patch is needed for 
-xserver_xorg-server.mk:
-
-@@ -134,6 +134,7 @@
- XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev-kms
- endif
- else
-+XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev
- ifeq ($(BR2_PACKAGE_DBUS),y)
- XSERVER_XORG_SERVER_DEPENDENCIES += dbus
- XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
-
-Regards, Bernd
+diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
+index 72240b2..42d6a72 100644
+--- a/package/luajit/luajit.mk
++++ b/package/luajit/luajit.mk
+@@ -64,4 +64,13 @@ define LUAJIT_INSTALL_TARGET_CMDS
+ 	$(MAKE) PREFIX="/usr" DESTDIR="$(TARGET_DIR)" LDCONFIG=true -C $(@D) install
+ endef
+ 
++define HOST_LUAJIT_BUILD_CMDS
++	$(MAKE) PREFIX="/usr" BUILDMODE=static -C $(@D) amalg
++endef
++
++define HOST_LUAJIT_INSTALL_CMDS
++	$(MAKE) PREFIX="/usr" DESTDIR="$(HOST_DIR)" -C $(@D) install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
