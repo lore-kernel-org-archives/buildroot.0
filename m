@@ -1,73 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 10:44:50 +0200
-Subject: [Buildroot] [git commit] luarocks: allow to work with
-	host-luainterpreter
-Message-ID: <20140727122851.0B62F9D05C@busybox.osuosl.org>
+Date: Sun, 27 Jul 2014 14:31:11 +0200
+Subject: [Buildroot] [PATCH 20/20 v3] package/xserver_xorg-server: needs
+ libudev, not a udev daemon
+In-Reply-To: <XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <cover.1405777634.git.yann.morin.1998@free.fr>
+ <7964be0c75358121baa69301d23eb93d72a64db9.1405777634.git.yann.morin.1998@free.fr>
+ <XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140727143111.7f5091a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=513b1b9b7525a4444637210148fd58350a223cc2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-when we embed luajit on target,
-we use luarocks with host-luajit instead of host-lua,
-in order to use the same interpreter on the both side.
+On Sun, 27 Jul 2014 12:12:29 +0200, Bernd Kuhls wrote:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+> news:7964be0c75358121baa69301d23eb93d72a64db9.1405777634.git.yann.morin.199
+> 8 at free.fr:
+> 
+> > xserver_xorg-server is happy enough with just a libudev, and does
+> > not require a udev daemon.
+> 
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/luainterpreter/luainterpreter.mk |    2 ++
- package/luarocks/luarocks.mk             |   18 ++++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+> although it is true that xserver_xorg-server compiles with libudev alone it 
+> segfaults at runtime when checking for video hardware without udev daemon:
 
-diff --git a/package/luainterpreter/luainterpreter.mk b/package/luainterpreter/luainterpreter.mk
-index 4ef0a45..a6c98ab 100644
---- a/package/luainterpreter/luainterpreter.mk
-+++ b/package/luainterpreter/luainterpreter.mk
-@@ -8,3 +8,5 @@ LUAINTERPRETER_ABIVER = $(call qstrip,$(BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION))
- 
- $(eval $(virtual-package))
- $(eval $(host-virtual-package))
-+
-+LUA_RUN = $(HOST_DIR)/usr/bin/$(call qstrip,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER))
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 5f7f395..80b9e9f 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -9,16 +9,22 @@ LUAROCKS_SITE = http://luarocks.org/releases/
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
- 
--HOST_LUAROCKS_DEPENDENCIES = host-lua
-+HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
- 
- LUAROCKS_CONFIG_DIR  = $(HOST_DIR)/usr/etc/luarocks
- LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
- 
-+HOST_LUAROCKS_CONF_OPT = \
-+	--prefix=$(HOST_DIR)/usr \
-+	--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
-+	--with-lua=$(HOST_DIR)/usr
-+
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+HOST_LUAROCKS_CONF_OPT += --lua-suffix=jit
-+endif
-+
- define HOST_LUAROCKS_CONFIGURE_CMDS
--	cd $(@D) && ./configure \
--		--prefix=$(HOST_DIR)/usr \
--		--sysconfdir=$(LUAROCKS_CONFIG_DIR) \
--		--with-lua=$(HOST_DIR)/usr
-+	cd $(@D) && ./configure $(HOST_LUAROCKS_CONF_OPT)
- endef
- 
- define HOST_LUAROCKS_INSTALL_CMDS
-@@ -44,4 +50,4 @@ endef
- $(eval $(host-generic-package))
- 
- LUAROCKS_RUN = LUA_PATH="$(HOST_DIR)/usr/share/lua/$(LUAINTERPRETER_ABIVER)/?.lua" \
--	$(HOST_DIR)/usr/bin/lua $(HOST_DIR)/usr/bin/luarocks
-+	$(LUA_RUN) $(HOST_DIR)/usr/bin/luarocks
+That's the kind of thing that worries me about the idea of allowing
+only libudev to be installed without the udev daemon running. I believe
+libudev and the udev daemon are meant to be used together, and we're
+likely to fall into various issues by allowing libudev to be installed
+separately from the udev daemon.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
