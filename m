@@ -1,64 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Jul 2014 15:29:08 +0200
-Subject: [Buildroot] [PATCH 20/20 v3] package/xserver_xorg-server: needs
- libudev, not a udev daemon
-In-Reply-To: <XnsA37794FEB18FDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <cover.1405777634.git.yann.morin.1998@free.fr>
- <7964be0c75358121baa69301d23eb93d72a64db9.1405777634.git.yann.morin.1998@free.fr>
- <XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20140727143111.7f5091a0@free-electrons.com>
- <XnsA37794FEB18FDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20140727132908.GD3895@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Jul 2014 15:31:04 +0200
+Subject: [Buildroot] [git commit] python-flup: new package
+Message-ID: <20140727133515.AB4479D2E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=1030ea5a5b327b2235766f70f5d86ff2d8e63818
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-07-27 14:38 +0200, Bernd Kuhls spake thusly:
-> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-> @public.gmane.org> wrote in news:20140727143111.7f5091a0 at free-electrons.com:
-> 
-> > That's the kind of thing that worries me about the idea of allowing
-> > only libudev to be installed without the udev daemon running. I believe
-> > libudev and the udev daemon are meant to be used together, and we're
-> > likely to fall into various issues by allowing libudev to be installed
-> > separately from the udev daemon.
-> 
-> and thats exactly the reason why I suggest to switch only those packages over 
-> to libudev which are proven to work without the udev daemon. This is true for 
-> mesa3d/libcec/xbmc/libdrm/xdriver_xf86-video-intel, the packages I am using 
-> on my non-udev-daemon system.
+This module is useful to implement a fastCGI webserver
+Tested with ARM and Python 2.7.6
 
-I can see the reasonning. But if we do not convert those packages, they
-will never be. If we do convert them. we can be sure to get complains by
-angry users! Adn we can then revert broken packages.
+[Thomas: fix license informations.]
 
-What I would suggest is the following plan:
+Signed-off-by: oli vogt <oli.vogt.pub01@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                  |    1 +
+ package/python-flup/Config.in      |    9 +++++++++
+ package/python-flup/python-flup.mk |   15 +++++++++++++++
+ 3 files changed, 25 insertions(+), 0 deletions(-)
 
-  - for the next release (-rc1 due shortly), only convert packages known
-    to work with only libudev, that is the list provided by Bernd:
-        mesa3d  libcec  xbmc  libdrm  xdriver_xf86-video-intel
-    so we have a sane situation for the release, and not too much burden
-    during the stabilisation phase.
-
-  - when -rc1 is out, or early after -next is merged back in master,
-    convert the remaining packages in -next, after _testing_ the
-    packages are still working. Unfortunately, I won't be able to test
-    all such packages (e.g. xserver_xorg-server) as I do not use Xorg;
-    but Bernd uses it, so he may be able to give a hand at it, correct?
-
-How do you feel with this plan?
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index 8de06e2..ce47984 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -473,6 +473,7 @@ menu "external python modules"
+ 	source "package/python-crc16/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-dpkt/Config.in"
++	source "package/python-flup/Config.in"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-json-schema-validator/Config.in"
+diff --git a/package/python-flup/Config.in b/package/python-flup/Config.in
+new file mode 100644
+index 0000000..2c21323
+--- /dev/null
++++ b/package/python-flup/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_FLUP
++	bool "python-flup"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  flup provides of a collection of WSGI modules for Python.
++	  It allows a webserver to use scgi-mod and fastcgi-mod
++	  with python.
++
++	  https://pypi.python.org/pypi/flup
+diff --git a/package/python-flup/python-flup.mk b/package/python-flup/python-flup.mk
+new file mode 100644
+index 0000000..39c6658
+--- /dev/null
++++ b/package/python-flup/python-flup.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-flup
++#
++################################################################################
++
++PYTHON_FLUP_VERSION = 1.0.3.dev-20110405
++PYTHON_FLUP_SOURCE = flup-$(PYTHON_FLUP_VERSION).tar.gz
++PYTHON_FLUP_SITE = http://pypi.python.org/packages/source/f/flup
++
++PYTHON_FLUP_LICENSE = BSD-2c
++
++PYTHON_FLUP_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
