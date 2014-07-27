@@ -1,68 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 22:37:16 +0200
-Subject: [Buildroot] [git commit] system: move tz setup outside of default
-	skeleton clause
-Message-ID: <20140727205438.124719D2E0@busybox.osuosl.org>
+Date: Sun, 27 Jul 2014 22:54:32 +0200
+Subject: [Buildroot] [git commit] qt5: Need pcre with UTF support
+Message-ID: <20140727205438.18AFF9D2BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=4952dddbf987ec587766047646b026662c76165e
+commit: http://git.buildroot.net/buildroot/commit/?id=24a9da81dfa9563be87abd5667389f42c3c950e4
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Allow time zone setup and installation for configurations
-using custom skeletons as well as default skeletons.
+Enabling PCRE16 is not enough for Qt5. PCREUTF is also necessary, else
+Qt5 may complain with this kind of (non fatal) message:
+  QRegularExpressionPrivate::doMatch(): called on an invalid QRegularExpression object
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- system/Config.in |   26 +++++++++++++-------------
- 1 files changed, 13 insertions(+), 13 deletions(-)
+ package/qt5/qt5base/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/system/Config.in b/system/Config.in
-index 1be7e5d..e7e146a 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -267,6 +267,19 @@ config BR2_TARGET_GENERIC_GETTY_OPTIONS
- endmenu
- endif
- 
-+config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-+	bool "remount root filesystem read-write during boot"
-+	default y
-+	help
-+	  The root filesystem is typically mounted read-only at boot.
-+	  By default, buildroot remounts it in read-write mode early during the
-+	  boot process.
-+	  Say no here if you would rather like your root filesystem to remain
-+	  read-only.
-+	  If unsure, say Y.
-+
-+endif # BR2_ROOTFS_SKELETON_DEFAULT
-+
- config BR2_TARGET_TZ_INFO
- 	bool "Install timezone info"
- 	# No timezone for musl; only for uClibc or (e)glibc.
-@@ -306,19 +319,6 @@ config BR2_TARGET_LOCALTIME
- 
- endif # BR2_TARGET_TZ_INFO
- 
--config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
--	bool "remount root filesystem read-write during boot"
--	default y
--	help
--	  The root filesystem is typically mounted read-only at boot.
--	  By default, buildroot remounts it in read-write mode early during the
--	  boot process.
--	  Say no here if you would rather like your root filesystem to remain
--	  read-only.
--	  If unsure, say Y.
--
--endif # BR2_ROOTFS_SKELETON_DEFAULT
--
- config BR2_ROOTFS_USERS_TABLES
- 	string "Path to the users tables"
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index fe742f3..b95a74a 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_PCRE_16
++	select BR2_PACKAGE_PCRE_UTF
  	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
