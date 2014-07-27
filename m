@@ -1,30 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 15:15:25 +0200
-Subject: [Buildroot] [PATCH 0/4] Misc Python fixes and updates
-In-Reply-To: <1406140401-16997-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1406140401-16997-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20140727151525.33a429d2@free-electrons.com>
+Date: Sun, 27 Jul 2014 15:22:23 +0200
+Subject: [Buildroot] [PATCH 2 of 2] generic packages: rename
+ FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT
+In-Reply-To: <5b961fc80eb2d23373a6.1406056892@localhost>
+References: <9d1a7e2626ad1d2e4b42.1406056891@localhost>
+ <5b961fc80eb2d23373a6.1406056892@localhost>
+Message-ID: <20140727152223.38c38d68@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas De Schampheleire,
 
-On Wed, 23 Jul 2014 20:33:17 +0200, Thomas Petazzoni wrote:
+On Tue, 22 Jul 2014 21:21:32 +0200, Thomas De Schampheleire wrote:
+> As FOO_MAKE_OPTS has been renamed to FOO_MAKE_OPT, this patch renames
+> FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT for symmetry reasons.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> ---
+> Note: TARGET_CONFIGURE_OPTS has not been changed since the impact is very
+> large. It would make sense to change it too, though, so let me know what you
+> think.
 
-> Thomas Petazzoni (4):
->   mpdecimal: new package
->   python3: optional decimal module support
->   python3: define license and license files
->   python-numpy: add patch to fix build on uClibc
+Yeah, I'm a bit worried with the discrepancy between
+TARGET_CONFIGURE_OPTS, TARGET_CONFIGURE_ARGS, HOST_CONFIGURE_OPTS and
+HOST_CONFIGURE_ARGS that use the plural form, vs those per-package
+<foobar>_OPT options.
 
-Since there was no review, and those patches are fixing build issues,
-I applied them. Don't hesitate to let me know if there's anything you
-don't agree with in those patches.
+My feeling is that the plural form looks more logical, so instead of
+moving from _OPTS to _OPT, I'd rather like to see a move from _OPT to
+_OPTS. But that indeed involves changing a *lot* of packages.
 
-Thanks,
+What do others think?
 
 Thomas
 -- 
