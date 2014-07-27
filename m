@@ -1,43 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Jul 2014 14:49:00 +0200
-Subject: [Buildroot] [PATCH 1/2] docs/manual: enhance doc for
- BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y
-In-Reply-To: <20140727143418.727a55e3@free-electrons.com>
-References: <cover.1406323367.git.yann.morin.1998@free.fr>
- <f8aa686b6618867afc2725a276beb75a63e8ca12.1406323367.git.yann.morin.1998@free.fr>
- <20140727143418.727a55e3@free-electrons.com>
-Message-ID: <20140727124900.GA3895@free.fr>
+Date: Sun, 27 Jul 2014 15:03:26 +0200
+Subject: [Buildroot] [PATCH 20/20 v3] package/xserver_xorg-server: needs
+ libudev, not a udev daemon
+In-Reply-To: <XnsA3778AD689B30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <cover.1405777634.git.yann.morin.1998@free.fr>
+ <7964be0c75358121baa69301d23eb93d72a64db9.1405777634.git.yann.morin.1998@free.fr>
+ <XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <XnsA3778AD689B30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140727130326.GB3895@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Bernd, All,
 
-On 2014-07-27 14:34 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 25 Jul 2014 23:28:14 +0200, Yann E. MORIN wrote:
-> > The BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y symbols can be used to denote the
-> > lowest required kernel headers version, but also the highest supported
-> > version. Document that.
+On 2014-07-27 13:38 +0200, Bernd Kuhls spake thusly:
+> Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
+> news:XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA at bernd-kuhls.de:
 > 
-> I'm honestly really unsure about this. Kernel headers expose the kernel
-> to userspace API, and this API is supposed to be backward compatible.
-> Therefore, I don't see why we should document the idea of expressing on
-> dependency on a highest kernel header version.
+> > Luckily enough xserver_xorg-server does not depend on udev/hal, configure 
+> > just prints:
+> > 
+> > configure: WARNING:
+> >              ***********************************************
+> >              Neither HAL nor udev backend will be enabled.
+> >              Input device hotplugging will not be available!
+> >              ***********************************************
+> > 
+> > which is fine for me, everything works good without udev/hal ;)
 > 
-> The v4l2 example we had on freescale seems like an API that shouldn't
-> have been part of the kernel to userspace API, and therefore shouldn't
-> be used by userspace libraries/applications.
+> Hi,
 > 
-> Therefore, I'm tempted to say no to this patch, but I'm interested to
-> be convince otherwise :)
+> a small, but important addition: To avoid xserver_xorg-server picking up 
+> libudev when the udev daemon is disabled this patch is needed for 
+> xserver_xorg-server.mk:
+> 
+> @@ -134,6 +134,7 @@
+>  XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev-kms
+>  endif
+>  else
+> +XSERVER_XORG_SERVER_CONF_OPT += --disable-config-udev
+>  ifeq ($(BR2_PACKAGE_DBUS),y)
+>  XSERVER_XORG_SERVER_DEPENDENCIES += dbus
+>  XSERVER_XORG_SERVER_CONF_OPT += --enable-config-dbus
 
-Well, APIs can get deprecated over time, and eventually removed. For
-example, the status of interfaces is described in Documentation/ABI in
-your favourite kernel source tree.
+So, we can make this package work in the three cases:
+  - _HAS_UDEV (implies _HAS_LIBUDEV)
+  - _HAS_LIBUDEV && !_HAS_UDEV
+  - !_HAS_LIBUDEV
 
-So, yes, I still think this patch is valid.
+Correct?
 
 Regards,
 Yann E. MORIN.
