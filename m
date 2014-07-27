@@ -1,61 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Jul 2014 09:57:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtmpdump: Fix static build
-Message-ID: <1406447840-8331-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 27 Jul 2014 10:10:37 +0200
+Subject: [Buildroot] [PATCH 0/2] systemd: bump to version 215
+In-Reply-To: <87vbqjaiz8.fsf@dell.be.48ers.dk>
+References: <1406302301-9382-1-git-send-email-eric.le.bihan.dev@free.fr>
+ <20140726091600.6dc09661@free-electrons.com>
+ <87vbqjaiz8.fsf@dell.be.48ers.dk>
+Message-ID: <20140727101037.694c5808@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/04c/04cc4f4878466715d980442bd7114fecbeb51c0b/
+Dear Peter Korsgaard,
 
-Quote from README:
+On Sat, 26 Jul 2014 23:49:31 +0200, Peter Korsgaard wrote:
 
-A shared library is now built by default, in addition to the static
-library. You can also turn it off if desired
+>  >> - a bump of the systemd package to version 215.
+>  >> - a patch to disable the ldconfig.service unit, installed by v215 (this unit
+>  >> would fail, as /sbin/ldconfig is not installed in a target generated using
+>  >> a glibc-based toolchain).
+> 
+>  > Thanks, I've applied both patches. However, for the second one, I
+>  > consider it as a temporary solution. We should really fix the ldconfig
+>  > handling in Buildroot.
+> 
+> What exactly needs fixing? Runtime ldconfig doesn't make much sense if
+> E.G. the rootfs is read only.
 
-  $ make SHARED=
+Right. But at least we might want to have a mechanism to generate at
+build time, the ld.so.cache, no? But indeed, having it at runtime would
+be kind of useless.
 
-The rtmpdump programs still link to the static library, regardless.
+The other thing that needs fixing is the code in the main Makefile that
+runs the host ldconfig for the target.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/rtmpdump/rtmpdump.mk |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Best regards,
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 4a8a1b0..684e0cf 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -31,6 +31,8 @@ RTMPDUMP_CFLAGS = $(TARGET_CFLAGS)
- 
- ifneq ($(BR2_PREFER_STATIC_LIB),y)
-     RTMPDUMP_CFLAGS += -fPIC
-+else
-+    RTMPDUMP_SHARED = "SHARED="
- endif
- 
- define RTMPDUMP_BUILD_CMDS
-@@ -39,15 +41,16 @@ define RTMPDUMP_BUILD_CMDS
- 		XCFLAGS="$(RTMPDUMP_CFLAGS)" \
- 		XLDFLAGS="$(TARGET_CFLAGS)" \
- 		CROSS_COMPILE="$(TARGET_CROSS)" \
-+		$(RTMPDUMP_SHARED) \
- 		-C $(@D)/librtmp
- endef
- 
- define RTMPDUMP_INSTALL_STAGING_CMDS
--	$(MAKE) prefix=/usr -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR)
-+	$(MAKE) prefix=/usr -C $(@D)/librtmp install DESTDIR=$(STAGING_DIR) $(RTMPDUMP_SHARED)
- endef
- 
- define RTMPDUMP_INSTALL_TARGET_CMDS
--	$(MAKE) prefix=/usr -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR)
-+	$(MAKE) prefix=/usr -C $(@D)/librtmp install DESTDIR=$(TARGET_DIR) $(RTMPDUMP_SHARED)
- endef
- 
- $(eval $(generic-package))
+Thomas
 -- 
-1.7.10.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
