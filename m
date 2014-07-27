@@ -1,43 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 15:22:23 +0200
-Subject: [Buildroot] [PATCH 2 of 2] generic packages: rename
- FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT
-In-Reply-To: <5b961fc80eb2d23373a6.1406056892@localhost>
-References: <9d1a7e2626ad1d2e4b42.1406056891@localhost>
- <5b961fc80eb2d23373a6.1406056892@localhost>
-Message-ID: <20140727152223.38c38d68@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 Jul 2014 15:29:08 +0200
+Subject: [Buildroot] [PATCH 20/20 v3] package/xserver_xorg-server: needs
+ libudev, not a udev daemon
+In-Reply-To: <XnsA37794FEB18FDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <cover.1405777634.git.yann.morin.1998@free.fr>
+ <7964be0c75358121baa69301d23eb93d72a64db9.1405777634.git.yann.morin.1998@free.fr>
+ <XnsA3777C2F4BB23berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20140727143111.7f5091a0@free-electrons.com>
+ <XnsA37794FEB18FDberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140727132908.GD3895@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Bernd, All,
 
-On Tue, 22 Jul 2014 21:21:32 +0200, Thomas De Schampheleire wrote:
-> As FOO_MAKE_OPTS has been renamed to FOO_MAKE_OPT, this patch renames
-> FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT for symmetry reasons.
+On 2014-07-27 14:38 +0200, Bernd Kuhls spake thusly:
+> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+> @public.gmane.org> wrote in news:20140727143111.7f5091a0 at free-electrons.com:
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> > That's the kind of thing that worries me about the idea of allowing
+> > only libudev to be installed without the udev daemon running. I believe
+> > libudev and the udev daemon are meant to be used together, and we're
+> > likely to fall into various issues by allowing libudev to be installed
+> > separately from the udev daemon.
 > 
-> ---
-> Note: TARGET_CONFIGURE_OPTS has not been changed since the impact is very
-> large. It would make sense to change it too, though, so let me know what you
-> think.
+> and thats exactly the reason why I suggest to switch only those packages over 
+> to libudev which are proven to work without the udev daemon. This is true for 
+> mesa3d/libcec/xbmc/libdrm/xdriver_xf86-video-intel, the packages I am using 
+> on my non-udev-daemon system.
 
-Yeah, I'm a bit worried with the discrepancy between
-TARGET_CONFIGURE_OPTS, TARGET_CONFIGURE_ARGS, HOST_CONFIGURE_OPTS and
-HOST_CONFIGURE_ARGS that use the plural form, vs those per-package
-<foobar>_OPT options.
+I can see the reasonning. But if we do not convert those packages, they
+will never be. If we do convert them. we can be sure to get complains by
+angry users! Adn we can then revert broken packages.
 
-My feeling is that the plural form looks more logical, so instead of
-moving from _OPTS to _OPT, I'd rather like to see a move from _OPT to
-_OPTS. But that indeed involves changing a *lot* of packages.
+What I would suggest is the following plan:
 
-What do others think?
+  - for the next release (-rc1 due shortly), only convert packages known
+    to work with only libudev, that is the list provided by Bernd:
+        mesa3d  libcec  xbmc  libdrm  xdriver_xf86-video-intel
+    so we have a sane situation for the release, and not too much burden
+    during the stabilisation phase.
 
-Thomas
+  - when -rc1 is out, or early after -next is merged back in master,
+    convert the remaining packages in -next, after _testing_ the
+    packages are still working. Unfortunately, I won't be able to test
+    all such packages (e.g. xserver_xorg-server) as I do not use Xorg;
+    but Bernd uses it, so he may be able to give a hand at it, correct?
+
+How do you feel with this plan?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
