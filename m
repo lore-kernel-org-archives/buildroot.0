@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 22:54:32 +0200
-Subject: [Buildroot] [git commit] qt5: Need pcre with UTF support
-Message-ID: <20140727205438.18AFF9D2BC@busybox.osuosl.org>
+Date: Sun, 27 Jul 2014 22:55:29 +0200
+Subject: [Buildroot] [PATCH 2 of 2] generic packages: rename
+ FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT
+In-Reply-To: <20140727202710.GI3895@free.fr>
+References: <9d1a7e2626ad1d2e4b42.1406056891@localhost>
+ <5b961fc80eb2d23373a6.1406056892@localhost>
+ <20140727152223.38c38d68@free-electrons.com>
+ <8527bc5f-ee03-47f0-9e7c-e44db77ba2c5@email.android.com>
+ <20140727202710.GI3895@free.fr>
+Message-ID: <20140727225529.518feb68@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=24a9da81dfa9563be87abd5667389f42c3c950e4
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-Enabling PCRE16 is not enough for Qt5. PCREUTF is also necessary, else
-Qt5 may complain with this kind of (non fatal) message:
-  QRegularExpressionPrivate::doMatch(): called on an invalid QRegularExpression object
+On Sun, 27 Jul 2014 22:27:10 +0200, Yann E. MORIN wrote:
 
-Signed-off-by: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt5base/Config.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+> > We could add a simple check to warn users of _OPT, but not more than that.
+> 
+> OK, I'm siding with you guys. OK for the renaming.
+> 
+> But then we should add a check that the old variable gets used, and
+> _error out_ in such case. If we just warn, the warning will be lost
+> amongst all the other messages, nad will bbe missed; and suddenly,
+> br2-external packages fails to build, or build in an unexpected
+> configuration.
+> 
+> I agree with you that we should just check if the old variable is set,
+> but we should not try to correct the situation.
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index fe742f3..b95a74a 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_PCRE_16
-+	select BR2_PACKAGE_PCRE_UTF
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
+I fully agree with this: we should error out if the old variable is
+used, so that things are clearly noticed by users.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
