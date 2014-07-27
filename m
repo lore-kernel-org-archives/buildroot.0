@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 16:08:43 +0200
-Subject: [Buildroot] [PATCH] ltrace: use current master
-In-Reply-To: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20140727160843.2a728bb4@free-electrons.com>
+Date: Sun, 27 Jul 2014 16:13:09 +0200
+Subject: [Buildroot] [PATCH 0/9 v3] Cleanups in download helpers (branch
+ yem/check-downloads)
+In-Reply-To: <cover.1405895896.git.yann.morin.1998@free.fr>
+References: <cover.1405895896.git.yann.morin.1998@free.fr>
+Message-ID: <20140727161309.5ed9ad32@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+Hello,
 
-On Thu, 24 Jul 2014 23:59:21 +0200, Alexandre Belloni wrote:
-> ltrace 0.7.3 is the latest release but it is actually broken on ARM
-> since PTRACE_SINGLESTEP emulation has been removed, see:
-> 
-> http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=425fc47adb5bb69f76285be77a09a3341a30799e
-> 
-> It fails with:
-> PTRACE_SINGLESTEP: Input/output error
-> 
-> Using master solves that until a new release is made.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-> ---
->  package/ltrace/Config.in               |  1 +
->  package/ltrace/ltrace-02-arm-plt.patch | 30 ++++++++++++++++++++++++++++++
->  package/ltrace/ltrace.mk               | 13 +++++++++----
->  3 files changed, 40 insertions(+), 4 deletions(-)
->  create mode 100644 package/ltrace/ltrace-02-arm-plt.patch
+On Mon, 21 Jul 2014 00:42:22 +0200, Yann E. MORIN wrote:
 
-Applied, thanks!
+> This series is a follow-up to the previous download series. Following
+> the advice from Arnout, I introduced a wrapper script that is responsible
+> for the saving atomically in BR2_DL_DIR. If also manages all the temporary
+> files, and properly cleans up.
+> 
+> Consequently, the helpers are now nuch more simple, and no longer need to
+> duplicate the complex handling of atomicity in BR2_DL_DIR, nor do they
+> need to manage temporary files.
+
+In principle, it certainly looks good. I'm just wondering if we really
+need the separate scripts for each of the download methods, since they
+do just one command basically. What about a single
+support/scripts/download-helper script, which does the common stuff +
+contains a switch to call the appropriate sub-functions for each
+download method?
+
+What do others think? Could some others test the patch series and give
+their feedback?
+
+Thanks,
 
 Thomas
 -- 
