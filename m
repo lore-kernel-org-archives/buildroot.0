@@ -1,69 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 16:01:31 +0200
-Subject: [Buildroot] [git commit] python-daemon: new package
-Message-ID: <20140727140248.3C1D99D2EE@busybox.osuosl.org>
+Date: Sun, 27 Jul 2014 16:04:06 +0200
+Subject: [Buildroot] [PATCH 1/1] python-daemon: new package
+In-Reply-To: <1406216603-965-1-git-send-email-david.bachelart@bbright.com>
+References: <1406216603-965-1-git-send-email-david.bachelart@bbright.com>
+Message-ID: <20140727160406.24d9b861@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=e5d4b2515d0599bb6342130f04218dc6ca2cd6c1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear David Bachelart,
 
-[Thomas: adjust license information to use SPDX code for Python
-license, add GPLv2+ which is used for the tests, and fix the license
-file variable.]
+On Thu, 24 Jul 2014 17:43:23 +0200, David Bachelart wrote:
 
-Signed-off-by: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                      |    1 +
- package/python-daemon/Config.in        |    7 +++++++
- package/python-daemon/python-daemon.mk |   13 +++++++++++++
- 3 files changed, 21 insertions(+), 0 deletions(-)
+> +PYTHON_DAEMON_VERSION = 1.5.5
+> +PYTHON_DAEMON_SITE    = https://pypi.python.org/packages/source/p/python-daemon/
 
-diff --git a/package/Config.in b/package/Config.in
-index 6b80ee2..559b895 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -471,6 +471,7 @@ menu "external python modules"
- 	source "package/python-bottle/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-flup/Config.in"
-diff --git a/package/python-daemon/Config.in b/package/python-daemon/Config.in
-new file mode 100644
-index 0000000..b3cc8a2
---- /dev/null
-+++ b/package/python-daemon/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_DAEMON
-+	bool "python-daemon"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Library to implement a well-behaved Unix daemon process.
-+
-+	  https://pypi.python.org/pypi/python-daemon/
-diff --git a/package/python-daemon/python-daemon.mk b/package/python-daemon/python-daemon.mk
-new file mode 100644
-index 0000000..d66842c
---- /dev/null
-+++ b/package/python-daemon/python-daemon.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# python-daemon
-+#
-+################################################################################
-+
-+PYTHON_DAEMON_VERSION = 1.5.5
-+PYTHON_DAEMON_SITE = https://pypi.python.org/packages/source/p/python-daemon/
-+PYTHON_DAEMON_LICENSE = Python-2.0 (library), GPLv2+ (test)
-+PYTHON_DAEMON_LICENSE_FILES = LICENSE.PSF-2 LICENSE.GPL-2
-+PYTHON_DAEMON_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+We typically don't align = signs anymore.
+
+> +PYTHON_DAEMON_LICENSE = PSF-2+
+
+The SPDX code for this license is Python-2.0, and I don't think the '+'
+sign was correct. I've also added GPLv2+, which is used for the tests.
+
+> +PYTHON_DAEMON_LICENSE_FILES = COPYING
+
+This was incorrect, there was no COPYING file in the tarball. The
+correct files where LICENSE.PSF-2 and LICENSE.GPL-2.
+
+Applied with those changes, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
