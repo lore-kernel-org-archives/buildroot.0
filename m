@@ -1,32 +1,31 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 27 Jul 2014 02:49:46 +0400
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-07-24
-In-Reply-To: <20140725063012.8107D1015AE@stock.ovh.net>
-References: <20140725063012.8107D1015AE@stock.ovh.net>
-Message-ID: <CAMo8BfJ96eqY5hHU-Y8=MPAP48DbC6=tYZ90c0r7FgtoVGYjGQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 27 Jul 2014 00:58:54 -0300
+Subject: [Buildroot] [PATCH] rdesktop: needs mmu
+Message-ID: <1406433534-25974-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 25, 2014 at 10:30 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Build statistics for 2014-07-24
->     xtensa |       network-manager-0.9.10.0 | NOK | http://autobuild.buildroot.net/results/d33ed1c3bf1be7c8f8ea02590a770b0d29c7d9fa/
+Fixes:
+http://autobuild.buildroot.net/results/8f2/8f24a81516383feaffed485c85958e7a1c68176c/
 
-It fails with
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/rdesktop/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-NetworkManagerUtils.c:1020:23: error: 'CLOCK_BOOTTIME' undeclared
-(first use in this function)
-  err = clock_gettime (CLOCK_BOOTTIME, tp);
-
-because there's no CLOCK_BOOTTIME in uClibc.
-Not sure what's the proper fix for that, adding support for
-CLOCK_BOOTTIME into uClibc?
-(looks fairly easy). Or just disabling network manager on uClibc?
-
+diff --git a/package/rdesktop/Config.in b/package/rdesktop/Config.in
+index c0abe27..f683ed3 100644
+--- a/package/rdesktop/Config.in
++++ b/package/rdesktop/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_RDESKTOP
+ 	bool "rdesktop"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXT
 -- 
-Thanks.
--- Max
+1.8.5.5
