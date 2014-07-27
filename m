@@ -1,33 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 14:31:54 +0200
-Subject: [Buildroot] [lua V4 0/4] lua
-In-Reply-To: <1405780738-31323-1-git-send-email-francois.perrad@gadz.org>
-References: <1405780738-31323-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20140727143154.780d7399@free-electrons.com>
+Date: Sun, 27 Jul 2014 14:34:18 +0200
+Subject: [Buildroot] [PATCH 1/2] docs/manual: enhance doc for
+ BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y
+In-Reply-To: <f8aa686b6618867afc2725a276beb75a63e8ca12.1406323367.git.yann.morin.1998@free.fr>
+References: <cover.1406323367.git.yann.morin.1998@free.fr>
+ <f8aa686b6618867afc2725a276beb75a63e8ca12.1406323367.git.yann.morin.1998@free.fr>
+Message-ID: <20140727143418.727a55e3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+Dear Yann E. MORIN,
 
-On Sat, 19 Jul 2014 16:38:54 +0200, Francois Perrad wrote:
-> delta V4 vs V3 (remaining)
->  - refactor with the host-virtual-package infrastructure
-> 
-> Francois Perrad (4):
->   luajit: add host variant
->   luainterpreter: add host variant
->   luarocks: allow to work with host-luainterpreter
+On Fri, 25 Jul 2014 23:28:14 +0200, Yann E. MORIN wrote:
+> The BR2_TOOLCHAIN_HEADERS_AT_LEAST_X_Y symbols can be used to denote the
+> lowest required kernel headers version, but also the highest supported
+> version. Document that.
 
-Those three patches have been applied, thanks!
+I'm honestly really unsure about this. Kernel headers expose the kernel
+to userspace API, and this API is supposed to be backward compatible.
+Therefore, I don't see why we should document the idea of expressing on
+dependency on a highest kernel header version.
 
->   lua-iconv: new package
+The v4l2 example we had on freescale seems like an API that shouldn't
+have been part of the kernel to userspace API, and therefore shouldn't
+be used by userspace libraries/applications.
 
-This one remains in the queue for now.
-
-Thanks,
+Therefore, I'm tempted to say no to this patch, but I'm interested to
+be convince otherwise :)
 
 Thomas
 -- 
