@@ -1,36 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 27 Jul 2014 18:21:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: gettextize to match
- the new gettext version
-In-Reply-To: <1406475877-9817-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1406475877-9817-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140727182129.6eabf856@free-electrons.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 27 Jul 2014 18:34:37 +0200
+Subject: [Buildroot] [PATCH] perl: handles BR2_PREFER_STATIC_LIB
+Message-ID: <1406478877-9705-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ Makefile             | 1 +
+ package/perl/perl.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-On Sun, 27 Jul 2014 17:44:37 +0200, Bernd Kuhls wrote:
-> The gettext macros in the package are from a gettext version older than
-> the one we have in Buildroot, so autoreconf fails.
-> 
-> Run gettextize prior to running autoreconf, like we do in wget.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/8dd/8dd6651ce99c0b81497fd285909b2b614009e273/
-> http://autobuild.buildroot.net/results/0bb/0bbfddda94ac7f75f74a54157c27de5b4fb3e559/
-> http://autobuild.buildroot.net/results/92b/92bcb493619ce4508bc4571cbfc3d5c3bdf49ff4/
-> http://autobuild.buildroot.net/results/768/768efd71745c72cec159edaa92e266167629ec5d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Applied, thanks.
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 6bd18e3..a0f37db 100644
+--- a/Makefile
++++ b/Makefile
+@@ -579,6 +579,7 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/lib/luarocks
+ 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+ 	rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/$(PERL_ARCHNAME)/CORE
++	find $(TARGET_DIR)/usr/lib/perl5/ -name 'extralibs.ld' -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
+ 	$(STRIP_FIND_CMD) | xargs $(STRIPCMD) 2>/dev/null || true
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 8321570..7acd76d 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -69,6 +69,11 @@ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+     PERL_CONF_OPT += -Dusedevel
+ endif
+ 
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++    PERL_CONF_OPT += --all-static
++    PERL_CONF_OPT += --no-dynaloader
++endif
++
+ ifneq ($(BR2_LARGEFILE),y)
+     PERL_CONF_OPT += -Uuselargefiles
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
