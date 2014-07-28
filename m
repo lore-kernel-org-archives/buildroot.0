@@ -1,32 +1,41 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 28 Jul 2014 18:50:20 +0200
-Subject: [Buildroot] [PATCH 3/3] perl-module-build: bump to version 0.4206
-In-Reply-To: <1406566220-13271-1-git-send-email-francois.perrad@gadz.org>
-References: <1406566220-13271-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1406566220-13271-3-git-send-email-francois.perrad@gadz.org>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Mon, 28 Jul 2014 18:56:13 +0200
+Subject: [Buildroot] [PATCH v3 1/3] libgtk3: new package
+In-Reply-To: <498367e8-7989-442b-91e1-89b6d2c2cb62@email.android.com>
+References: <1406565218-12653-1-git-send-email-hadrien.boutteville@gmail.com>
+ <1406565218-12653-2-git-send-email-hadrien.boutteville@gmail.com>
+ <498367e8-7989-442b-91e1-89b6d2c2cb62@email.android.com>
+Message-ID: <53D680AD.1080308@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/perl-module-build/perl-module-build.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello Thomas,
 
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index a95278d..b147eb8 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MODULE_BUILD_VERSION = 0.4204
-+PERL_MODULE_BUILD_VERSION = 0.4206
- PERL_MODULE_BUILD_SOURCE = Module-Build-$(PERL_MODULE_BUILD_VERSION).tar.gz
- PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT/
- PERL_MODULE_BUILD_LICENSE = Artistic or GPLv1+
--- 
-1.9.1
+On Mon, 28 Jul 2014 18:41:08 +0200, Thomas De Schampheleire wrote:
+[...]
+>> +config BR2_PACKAGE_LIBGTK3_DEMO
+>> +	bool "Install libgtk3 demo program"
+>> +	help
+>> +	  The GTK+ source base contains demo programs. This
+>> +	  option allows to install this program to the target.
+> 
+> 'programs' in the first sentence conflicts with 'this program' in the second. 'them' as below sounds better...
+
+Indeed, modified copy-paste from libgtk2 not carefully reviewed on my
+side...
+
+>> +
+>> +config BR2_PACKAGE_LIBGTK3_TESTS
+>> +	bool "Install libgtk3 tests"
+>> +	help
+>> +	  The GTK+ source base contains tests. This option
+>> +	  allows to install them to the target.
+>> +
+>> +endif
+
+Regards,
+
+Hadrien
