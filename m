@@ -1,106 +1,183 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 28 Jul 2014 11:38:15 +0200
-Subject: [Buildroot] [PATCH v2 2/3] apply-patches.sh: Use the
- "APPLY_PATCHES" variable to call the script
-In-Reply-To: <20140725174043.GD3955@free.fr>
-References: <1406306319-11972-1-git-send-email-fabio.porcedda@gmail.com>
- <1406306319-11972-3-git-send-email-fabio.porcedda@gmail.com>
- <20140725174043.GD3955@free.fr>
-Message-ID: <CAHkwnC9ufrka94XZCzQREb2M6KkEg_jTmBDs1LaNRrmxt_CUUA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Jul 2014 12:56:57 +0200
+Subject: [Buildroot] [PATCH] flickcurl: new package
+Message-ID: <1406545017-29163-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 25, 2014 at 7:40 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Fabio, All,
->
-> On 2014-07-25 18:38 +0200, Fabio Porcedda spake thusly:
->> To easy up adding optional parameters when calling the
->> "apply-patches.sh" add and use the "APPLY_PATCHES" variable to execute
->> the script.
-> [--SNIP--]
->> diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
->> index bcc648d..0daf012 100644
->> --- a/package/pkg-autotools.mk
->> +++ b/package/pkg-autotools.mk
->> @@ -196,11 +196,11 @@ define LIBTOOL_PATCH_HOOK
->>                       ltmain_version=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$$$i | \
->>                       sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
->>                       if test $$$${ltmain_version} = '1.5'; then \
->> -                             support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
->> +                             $(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
->
-> Variables in hooks should be double-escaped:
->     $$(APPLY_PATCHES)
+We need two patches from upstream git as flickr now requires https access.
+It hardcodes openssl for https support in libcurl as Kconfig complains about
+circular dependencies if we use logic like:
 
-Ok, done.
+select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_LIBNSS)
 
-> See: http://git.buildroot.org/buildroot/tree/package/pkg-generic.mk#n277
-> (for pkg-generic, but valid for all pkg-* infras.)
+I'm not sure what we can do about that though.
 
-I didn't know about that, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/Config.in                                  |  1 +
+ package/flickcurl/Config.in                        | 21 ++++++++++++
+ ...ttps-for-all-service-endpoints.-HTTP-EOL-.patch | 40 ++++++++++++++++++++++
+ ...auth-services-are-on-https-www.flickr.com.patch | 30 ++++++++++++++++
+ package/flickcurl/flickcurl.mk                     | 23 +++++++++++++
+ 5 files changed, 115 insertions(+)
+ create mode 100644 package/flickcurl/Config.in
+ create mode 100644 package/flickcurl/flickcurl-0001-Switch-to-https-for-all-service-endpoints.-HTTP-EOL-.patch
+ create mode 100644 package/flickcurl/flickcurl-0002-Oauth-services-are-on-https-www.flickr.com.patch
+ create mode 100644 package/flickcurl/flickcurl.mk
 
-> Ditto for the five following occurences, of course.
-
-Ok, done.
-
->>                       elif test $$$${ltmain_version} = "2.2"; then\
->> -                             support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
->> +                             $(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
->>                       elif test $$$${ltmain_version} = "2.4"; then\
->> -                             support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
->> +                             $(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
->>                       fi \
->>               done \
->>       fi
->> @@ -230,11 +230,11 @@ define AUTORECONF_HOOK
->>                       ltmain_version=`sed -n '/^[     ]*VERSION=/{s/^[        ]*VERSION=//;p;q;}' $$$$i | \
->>                       sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
->>                       if test $$$${ltmain_version} = "1.5"; then \
->> -                             support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
->> +                             $(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
->>                       elif test $$$${ltmain_version} = "2.2"; then\
->> -                             support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
->> +                             $(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
->>                       elif test $$$${ltmain_version} = "2.4"; then\
->> -                             support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
->> +                             $(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
->>                       fi \
->>               done \
->>       fi
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index fb4b849..95a95b7 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -146,14 +146,14 @@ $(BUILD_DIR)/%/.stamp_patched:
->
-> Note: the fololowing is not in a define-block, so needs no
-> double-escaping, so it is good as is:
->
->>       @$(call step_start,patch)
->>       @$(call MESSAGE,"Patching")
->>       $(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
->> -     $(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
->> +     $(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
->>       $(Q)( \
->>       for D in $(PATCH_BASE_DIRS); do \
->>         if test -d $${D}; then \
->>           if test -d $${D}/$($(PKG)_VERSION); then \
->> -           support/scripts/apply-patches.sh $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
->> +           $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
->>           else \
->> -           support/scripts/apply-patches.sh $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
->> +           $(APPLY_PATCHES) $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
->>           fi; \
->>         fi; \
->>       done; \
->
-> Otherwise, looks good. Thanks! :-)
-
-Great!
-
-Thanks
+diff --git a/package/Config.in b/package/Config.in
+index 559b895..11087da 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -753,6 +753,7 @@ menu "Networking"
+ 	source "package/cppzmq/Config.in"
+ 	source "package/czmq/Config.in"
+ 	source "package/filemq/Config.in"
++	source "package/flickcurl/Config.in"
+ 	source "package/fmlib/Config.in"
+ 	source "package/geoip/Config.in"
+ 	source "package/glib-networking/Config.in"
+diff --git a/package/flickcurl/Config.in b/package/flickcurl/Config.in
+new file mode 100644
+index 0000000..54fecc0
+--- /dev/null
++++ b/package/flickcurl/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_FLICKCURL
++	bool "flickcurl"
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBXML2
++	# For https support in libcurl. Gnutls/libnss could also work,
++	# but kconfig gets confused if we try to be clever here
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_CA_CERTIFICATES # runtime
++	help
++	  Flickcurl is a C library for the Flickr API, handling
++	  creating the requests, signing, token management, calling
++	  the API, marshalling request parameters and decoding
++	  responses.
++
++	  http://librdf.org/flickcurl/
++
++config BR2_PACKAGE_FLICKCURL_UTILS
++	bool "flickcurl utilities"
++	depends on BR2_PACKAGE_FLICKCURL
++	help
++	  Install flickcurl utilites (flickcurl + flickrdf) to target.
+diff --git a/package/flickcurl/flickcurl-0001-Switch-to-https-for-all-service-endpoints.-HTTP-EOL-.patch b/package/flickcurl/flickcurl-0001-Switch-to-https-for-all-service-endpoints.-HTTP-EOL-.patch
+new file mode 100644
+index 0000000..576b611
+--- /dev/null
++++ b/package/flickcurl/flickcurl-0001-Switch-to-https-for-all-service-endpoints.-HTTP-EOL-.patch
+@@ -0,0 +1,40 @@
++From 1f5e208a4709a3030258024ea63834aab41bca3c Mon Sep 17 00:00:00 2001
++From: Dave Beckett <dave@dajobe.org>
++Date: Sat, 31 May 2014 12:10:35 -0700
++Subject: [PATCH] Switch to https for all service endpoints. HTTP EOL
++ 2014-06-27
++
++2014-04-30 Flickr announced that it would be HTTPS only from 2014-06-27
++http://code.flickr.net/2014/04/30/flickr-api-going-ssl-only-on-june-27th-2014/
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/common.c | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/src/common.c b/src/common.c
++index ef05e08..245db18 100644
++--- a/src/common.c
+++++ b/src/common.c
++@@ -73,12 +73,12 @@ const char* const flickcurl_home_url_string = "http://librdf.org/flickcurl/";
++ const char* const flickcurl_version_string = VERSION;
++ 
++ 
++-const char* const flickcurl_flickr_service_uri =  "http://www.flickr.com/services/rest/";
++-const char* const flickcurl_flickr_upload_service_uri =  "http://api.flickr.com/services/upload/";
++-const char* const flickcurl_flickr_replace_service_uri =  "http://api.flickr.com/services/replace/";
++-const char* const flickcurl_flickr_oauth_request_token_uri =  "http://www.flickr.com/services/oauth/request_token";
++-const char* const flickcurl_flickr_oauth_authorize_uri =  "http://www.flickr.com/services/oauth/authorize";
++-const char* const flickcurl_flickr_oauth_access_token_uri =  "http://www.flickr.com/services/oauth/access_token";
+++const char* const flickcurl_flickr_service_uri =  "https://api.flickr.com/services/rest/";
+++const char* const flickcurl_flickr_upload_service_uri =  "https://up.flickr.com/services/upload/";
+++const char* const flickcurl_flickr_replace_service_uri =  "https://up.flickr.com/services/replace/";
+++const char* const flickcurl_flickr_oauth_request_token_uri =  "https://api.flickr.com/services/oauth/request_token";
+++const char* const flickcurl_flickr_oauth_authorize_uri =  "https://api.flickr.com/services/oauth/authorize";
+++const char* const flickcurl_flickr_oauth_access_token_uri =  "https://api.flickr.com/services/oauth/access_token";
++ 
++ 
++ static void
++-- 
++2.0.0
++
+diff --git a/package/flickcurl/flickcurl-0002-Oauth-services-are-on-https-www.flickr.com.patch b/package/flickcurl/flickcurl-0002-Oauth-services-are-on-https-www.flickr.com.patch
+new file mode 100644
+index 0000000..1ed9af2
+--- /dev/null
++++ b/package/flickcurl/flickcurl-0002-Oauth-services-are-on-https-www.flickr.com.patch
+@@ -0,0 +1,30 @@
++From 3e65bbfc1c556ac8bd1d30db66d6e63957066b75 Mon Sep 17 00:00:00 2001
++From: Dave Beckett <dave@dajobe.org>
++Date: Sat, 31 May 2014 12:56:22 -0700
++Subject: [PATCH] Oauth services are on https www.flickr.com
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/common.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/common.c b/src/common.c
++index 245db18..c697a7d 100644
++--- a/src/common.c
+++++ b/src/common.c
++@@ -76,9 +76,9 @@ const char* const flickcurl_version_string = VERSION;
++ const char* const flickcurl_flickr_service_uri =  "https://api.flickr.com/services/rest/";
++ const char* const flickcurl_flickr_upload_service_uri =  "https://up.flickr.com/services/upload/";
++ const char* const flickcurl_flickr_replace_service_uri =  "https://up.flickr.com/services/replace/";
++-const char* const flickcurl_flickr_oauth_request_token_uri =  "https://api.flickr.com/services/oauth/request_token";
++-const char* const flickcurl_flickr_oauth_authorize_uri =  "https://api.flickr.com/services/oauth/authorize";
++-const char* const flickcurl_flickr_oauth_access_token_uri =  "https://api.flickr.com/services/oauth/access_token";
+++const char* const flickcurl_flickr_oauth_request_token_uri =  "https://www.flickr.com/services/oauth/request_token";
+++const char* const flickcurl_flickr_oauth_authorize_uri =  "https://www.flickr.com/services/oauth/authorize";
+++const char* const flickcurl_flickr_oauth_access_token_uri =  "https://www.flickr.com/services/oauth/access_token";
++ 
++ 
++ static void
++-- 
++2.0.0
++
+diff --git a/package/flickcurl/flickcurl.mk b/package/flickcurl/flickcurl.mk
+new file mode 100644
+index 0000000..7fb212f
+--- /dev/null
++++ b/package/flickcurl/flickcurl.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# flickcurl
++#
++################################################################################
++
++FLICKCURL_VERSION = 1.25
++FLICKCURL_SITE = http://download.dajobe.org/flickcurl/
++FLICKCURL_LICENSE = LGPLv2.1+ or GPLv2+ or Apache 2.0+
++FLICKCURL_LICENSE_FILES = COPYING COPYING.LIB LICENSE-2.0.txt LICENSE.html
++FLICKCURL_INSTALL_STAGING = YES
++FLICKCURL_CONFIG_SCRIPTS = flickcurl-config
++FLICKCURL_CONF_OPT = --without-curl-config --without-xml2-config --without-raptor
++FLICKCURL_DEPENDENCIES = libcurl libxml2 openssl ca-certificates host-pkgconf
++
++ifeq ($(BR2_PACKAGE_FLICKCURL_UTILS),)
++define FLICKCURL_REMOVE_UTILS
++	rm -f $(TARGET_DIR)/usr/bin/flickcurl $(TARGET_DIR)/usr/bin/flickrdf
++endef
++FLICKCURL_POST_INSTALL_TARGET_HOOKS += FLICKCURL_REMOVE_UTILS
++endif
++
++$(eval $(autotools-package))
 -- 
-Fabio Porcedda
+2.0.0
