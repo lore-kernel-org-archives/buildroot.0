@@ -1,69 +1,148 @@
 From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 28 Jul 2014 22:02:05 +0400
-Subject: [Buildroot] [PATCH 6/9] msgpack: arc: Disable if ARC atomics are
+Date: Mon, 28 Jul 2014 22:02:06 +0400
+Subject: [Buildroot] [PATCH 7/9] icu: arc: Disable if ARC atomics are
 	disabled
 In-Reply-To: <1406570528-31516-1-git-send-email-Anton.Kolesov@synopsys.com>
 References: <1406570528-31516-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1406570528-31516-6-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <1406570528-31516-7-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Msgpack requires GCC built-in atomic functions which are optional in ARC
+ICU requires GCC built-in atomic functions which are optional in ARC
 toolchain.
-
-This fixes:
-http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
 
 Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- package/msgpack/Config.in        | 6 ++++--
- package/python-msgpack/Config.in | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/beecrypt/Config.in    | 6 ++++--
+ package/cppcms/Config.in      | 6 ++++--
+ package/icu/Config.in         | 6 ++++--
+ package/php/Config.ext        | 6 ++++--
+ package/qt5/qt5base/Config.in | 5 ++++-
+ 5 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index b380c58..66e525f 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
+diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
+index 462c8a6..2c17685 100644
+--- a/package/beecrypt/Config.in
++++ b/package/beecrypt/Config.in
+@@ -15,15 +15,17 @@ config BR2_PACKAGE_BEECRYPT_CPP
+ 	bool "C++ support"
  	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # icu
+-	depends on !BR2_arc # icu
++	depends on !BR2_arc || BR2_ARC_ATOMIC_EXT
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	select BR2_PACKAGE_ICU
+ 	help
+ 	  Enable C++ support. This pulls in the (large) icu package.
+ 
+ comment "C++ support needs a toolchain w/ wchar"
+-	depends on !BR2_arc
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
+ 
++comment "C++ support needs an ARC CPU w/ atomic extension"
++	depends on BR2_arc && !BR2_ARC_ATOMIC_EXT
++
+ endif # BR2_PACKAGE_BEECRYPT
+diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+index 614abeb..467025a 100644
+--- a/package/cppcms/Config.in
++++ b/package/cppcms/Config.in
+@@ -24,7 +24,7 @@ if BR2_PACKAGE_CPPCMS
+ 
+ config BR2_PACKAGE_CPPCMS_ICU
+ 	bool "enable icu support"
+-	depends on !BR2_arc # icu -> atomic builtins
++	depends on !BR2_arc || BR2_ARC_ATOMIC_EXT
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_USE_WCHAR # icu
+ 	select BR2_PACKAGE_ICU
+@@ -33,10 +33,12 @@ config BR2_PACKAGE_CPPCMS_ICU
+ 	  in another hand ICU is heavier than iconv.
+ 
+ comment "icu support needs a toolchain w/ wchar"
+-	depends on !BR2_arc
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_USE_WCHAR
+ 
++comment "icu support needs an ARC CPU w/ atomic extension"
++	depends on BR2_arc && !BR2_ARC_ATOMIC_EXT
++
+ endif
+ 
+ comment "cppcms needs a toolchain w/ C++, NPTL, dynamic library"
+diff --git a/package/icu/Config.in b/package/icu/Config.in
+index 9a27894..33a2724 100644
+--- a/package/icu/Config.in
++++ b/package/icu/Config.in
+@@ -7,14 +7,16 @@ config BR2_PACKAGE_ICU
+ 	# file, and it cannot easily be changed to generate FLAT
+ 	# format.
+ 	depends on !BR2_BINFMT_FLAT
 -	depends on !BR2_arc # atomic builtins
 +	depends on !BR2_arc || BR2_ARC_ATOMIC_EXT
  	help
- 	  MessagePack is an efficient binary serialization format.
+ 	  International Components for Unicode.
  
-@@ -12,4 +12,6 @@ config BR2_PACKAGE_MSGPACK
+ 	  http://site.icu-project.org/
  
- comment "msgpack needs a toolchain w/ C++"
- 	depends on !BR2_INSTALL_LIBSTDCPP
+ comment "icu needs a toolchain w/ C++, wchar, threads"
 -	depends on !BR2_arc
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
 +
-+comment "msgpack needs an ARC CPU w/ atomic extension"
++comment "icu needs an ARC CPU w/ atomic extension"
 +	depends on BR2_arc && !BR2_ARC_ATOMIC_EXT
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index c4b68a3..365b60c 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
--	depends on !BR2_arc # msgpack - atomic builtins
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index ff9a6ad..90cb6af 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -166,17 +166,19 @@ config BR2_PACKAGE_PHP_EXT_INTL
+ 	select BR2_PACKAGE_ICU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+-	depends on !BR2_arc # icu -> atomic builtins
 +	depends on !BR2_arc || BR2_ARC_ATOMIC_EXT
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
  	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -15,4 +15,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- comment "python-msgpack needs a toolchain w/ C++"
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on !BR2_INSTALL_LIBSTDCPP
+ 	  Internationalization support
+ 
+ comment "intl support needs a toolchain w/ C++, wchar, threads"
 -	depends on !BR2_arc
-+
-+comment "python-msgpack needs an ARC CPU w/ atomic extension"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
++comment "intl supports needs an ARC CPU w/ atomic extension"
 +	depends on BR2_arc && !BR2_ARC_ATOMIC_EXT
++
+ comment "Image processing"
+ 
+ config BR2_PACKAGE_PHP_EXT_EXIF
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index b95a74a..5789eb9 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -241,12 +241,15 @@ config BR2_PACKAGE_QT5BASE_DBUS
+ config BR2_PACKAGE_QT5BASE_ICU
+ 	bool "Enable ICU support"
+ 	select BR2_PACKAGE_ICU
+-	depends on !BR2_arc # icu -> atomic builtins
++	depends on !BR2_arc || BR2_ARC_ATOMIC_EXT
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	help
+ 	  This option enables ICU support in Qt5. This is for example
+ 	  needed for Qt5Webkit.
+ 
++comment "icu needs an ARC CPU w/ atomic extension"
++	depends on BR2_arc && !BR2_ARC_ATOMIC_EXT
++
+ config BR2_PACKAGE_QT5BASE_TSLIB
+ 	bool "Enable Tslib support"
+ 	depends on !BR2_PREFER_STATIC_LIB # dlopen
 -- 
 1.8.4.1
