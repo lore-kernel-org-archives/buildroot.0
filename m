@@ -1,61 +1,113 @@
 From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Mon, 28 Jul 2014 18:20:35 +0200
-Subject: [Buildroot] [PATCH 1/2] package/webkit: Fix detection of egl
- headers provided by rpi-userland
-In-Reply-To: <XnsA375DB67EA6D7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
- <1401366393-5815-2-git-send-email-bernd.kuhls@t-online.de>
- <20140723235453.5ebea556@free-electrons.com>
- <XnsA375DB67EA6D7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <53D67853.7070007@gmail.com>
+Date: Mon, 28 Jul 2014 18:33:35 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Add libgtk3 and bump webkit to version
+	2.4.3
+Message-ID: <1406565218-12653-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Hello all,
 
-On Fri, 25 Jul 2014 21:34:07 +0200, Bernd Kuhls wrote:
-> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-> @public.gmane.org> wrote in news:20140723235453.5ebea556 at free-electrons.com:
-> 
->> Could you update on whether this patch and patch 2/2 in this series are
->> still needed? There were also unanswered questions in your patch 2/2.
-> 
-> Hi Thomas,
-> 
-> the autobuild error I was trying to fix occured on May 29th:
-> http://autobuild.buildroot.net/results/bc0/bc0f9114f9dacf68a510f1e01f2dc3661c
-> 34f536/
-> 
-> The same error was still present on July, 21th:
-> http://autobuild.buildroot.net/results/1e8/1e8cab75025316b22205be7fb08a93148a
-> 256b9c/
-> 
-> As I wrote in my cover letter[1] for this patch series
-> 
->> the rpi experts should have a closer look whether webkit could work on rpi
->> despite the current problem
-> 
-> I asked for this help because I have basically no knowledge about the rpi-
-> specific binary blobs provided by rpi-userland.
-> 
-> Maybe Hadrien?s patch series[2] to bump webkit to 2.4.3 will solve the 
-> problem in a better way than with my patches.
-> 
-> @Hadrien: Could you please test your patch using the defconfig used by the 
-> autobuilder where webkit-1 failed to compile for rpi?
+This series mainly does two things: add libgtk3 and bump webkit.
 
-Actually, I had forgotten this problem but yes, when I initially tested
-the bump of WebKit with rpi-userland the EGL check failed too. So it's
-not solved in my series or with version 2.4.3 and this seems to be
-related to rpi-userland (no problem with ti-gfx and imx-lib, with which
-I test now).
+ - 1: add libgtk3
+ - 2: bump webkit
+ - 3: bump Midori to test WebKit 2.4.3
 
-I will test my patch with the defconfig used by the autobuilder and test
-your patch if the problem occurs again.
+For now, only X11 support is done and tested for both libgtk3 and
+webkit. Wayland support will be done later.
 
-Regards,
+Tests:
+
+* All is compiled-tested (with GTK+2 and GTK+3 for WebKit and Midori).
+* Running tests were done for libgtk3 (with gtk3-demo) and Midori GTK+2
+  with WebKit GTK+2 and webkit1 (on Qemu and BeagleBone Black).
+
+For testing you will need GCC 4.8 because WebKit needs at least version
+4.8 (see commit message) and X.org needs a version lesser than 4.9 (see
+this issue:
+http://lists.busybox.net/pipermail/buildroot/2014-June/098679.html).
+
+There is still a weird problem with WebKit: parallel make with Make
+3.81 results in a make hang on:
+  CXXLD libWebCoreSVG.la
+This is reproducible.
+
+Does anyone has already encountered this?
+
+You can find a defconfig for Qemu here:
+http://bpaste.net/show/fR3jDhQPmtUHPYpGoiUn/
+
+Changes v1 -> v2:
+
+ - libgtk3: remove atk-bridge support, so we no longer need
+   at-spi2-core and at-spi2-atk.
+ - libgtk3: change the way we check for introspection to fix autoreconf
+   error.
+ - libgtk3: remove unnecessary extra definitions 
+
+Changes v2 -> v3:
+
+ - midori: fix the need of librsvg for the host
+
+Best regards,
 
 Hadrien
+
+---
+
+Hadrien Boutteville (3):
+  libgtk3: new package
+  webkit: bump to version 2.4.3
+  midori: bump to version 0.5.8
+
+ package/Config.in                                  |    1 +
+ package/libgtk3/Config.in                          |   46 +
+ package/libgtk3/libgtk3-0001-no-gtk-doc.patch      |   11 +
+ .../libgtk3-0002-fix-introspection-check.patch     |   28 +
+ .../libgtk3/libgtk3-0003-disable-atk-bridge.patch  |   45 +
+ package/libgtk3/libgtk3.mk                         |  135 ++
+ package/midori/Config.in                           |   15 +-
+ package/midori/blocked.png                         |  Bin 0 -> 522 bytes
+ package/midori/disabled.png                        |  Bin 0 -> 510 bytes
+ package/midori/enabled.png                         |  Bin 0 -> 639 bytes
+ package/midori/logo-shade.png                      |  Bin 0 -> 23862 bytes
+ .../midori-0001-remove-libnotify-dependency.patch  |   27 +
+ .../midori-0002-do-not-use-rsvg-convert.patch      |   39 +
+ package/midori/midori.mk                           |   66 +-
+ package/webkit/Config.in                           |   16 +-
+ ...ebkit-0001-build-fix-for-32-bit-autotools.patch |   34 -
+ .../webkit-0002-build-fix-for-gtklauncher.patch    |   51 -
+ .../webkit/webkit-0003-detect-harfbuzz-icu.patch   |   28 -
+ package/webkit/webkit-0004-disable-docrebase.patch |   27 -
+ package/webkit/webkit-0005-disable-tests.patch     |   80 --
+ package/webkit/webkit-0006-execinfo_h.patch        |   20 -
+ package/webkit/webkit-0007-mips-dfg.patch          | 1490 --------------------
+ package/webkit/webkit-0008-support-bison-3.0.patch |   22 -
+ package/webkit/webkit.mk                           |   67 +-
+ 24 files changed, 418 insertions(+), 1830 deletions(-)
+ create mode 100644 package/libgtk3/Config.in
+ create mode 100644 package/libgtk3/libgtk3-0001-no-gtk-doc.patch
+ create mode 100644 package/libgtk3/libgtk3-0002-fix-introspection-check.patch
+ create mode 100644 package/libgtk3/libgtk3-0003-disable-atk-bridge.patch
+ create mode 100644 package/libgtk3/libgtk3.mk
+ create mode 100644 package/midori/blocked.png
+ create mode 100644 package/midori/disabled.png
+ create mode 100644 package/midori/enabled.png
+ create mode 100644 package/midori/logo-shade.png
+ create mode 100644 package/midori/midori-0001-remove-libnotify-dependency.patch
+ create mode 100644 package/midori/midori-0002-do-not-use-rsvg-convert.patch
+ delete mode 100644 package/webkit/webkit-0001-build-fix-for-32-bit-autotools.patch
+ delete mode 100644 package/webkit/webkit-0002-build-fix-for-gtklauncher.patch
+ delete mode 100644 package/webkit/webkit-0003-detect-harfbuzz-icu.patch
+ delete mode 100644 package/webkit/webkit-0004-disable-docrebase.patch
+ delete mode 100644 package/webkit/webkit-0005-disable-tests.patch
+ delete mode 100644 package/webkit/webkit-0006-execinfo_h.patch
+ delete mode 100644 package/webkit/webkit-0007-mips-dfg.patch
+ delete mode 100644 package/webkit/webkit-0008-support-bison-3.0.patch
+
+-- 
+2.0.1
