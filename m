@@ -1,76 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Jul 2014 22:45:30 +0200
-Subject: [Buildroot] [PATCH 1/1] icu: add an option to add a custom data
- library file
-In-Reply-To: <1399997418-27131-1-git-send-email-johan.derycke@barco.com>
-References: <1399997418-27131-1-git-send-email-johan.derycke@barco.com>
-Message-ID: <20140728224530.3a54d6b9@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Jul 2014 22:58:02 +0200
+Subject: [Buildroot] [PATCH 0/2] flickcurl: new package (branch yem/misc)
+Message-ID: <cover.1406581025.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Johan Derycke,
+Hello All!
 
-I've applied your patch, after making some changes, see below.
+Update to the flickcurl package from Peter, with the kconfig recursive
+dependency issue fixed byt tweaking the "offender": lftp.
 
-On Tue, 13 May 2014 18:10:18 +0200, Johan Derycke wrote:
-
-> +if BR2_PACKAGE_ICU
-> +
-> +config BR2_PACKAGE_ICU_CUSTOM_DATA
-> +	bool "Custom data library"
-> +	  help
-> +	    Use a custom data library generated with:
-> +	    http://apps.icu-project.org/datacustom/ICUData51.html
-> +
-> +if BR2_PACKAGE_ICU_CUSTOM_DATA
-> +
-> +config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
-> +	string "Data library file to use?"
-> +	default "/path/to/data/library"
-> +	help
-> +	  This option allows to set the path of such a data library file
-> +
-> +endif
-> +
-> +endif
-
-Doing it this way causes problems in the autobuilders: with a random
-generated configuration, BR2_PACKAGE_ICU_CUSTOM_DATA might be enabled,
-but BR2_PACKAGE_ICU_CUSTOM_DATA_PATH will have an invalid value. This
-would cause build failures in our autobuilders. Therefore, I changed
-that to simply a single string option, empty by default. When empty,
-nothing is done. When non-empty, the custom data library file is copied.
+Regards,
+Yann E. MORIN.
 
 
-> +
->  comment "icu needs a toolchain w/ C++, wchar, threads"
->  	depends on !BR2_arc
->  	depends on !BR2_BINFMT_FLAT
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
->  		!BR2_TOOLCHAIN_HAS_THREADS
-> +
+The following changes since commit abded6bfead49d61c24a45d811a83ca082adf677:
 
-No need to add a new empty line here.
+  icu: add an option to add a custom data library file (2014-07-28 22:43:04 +0200)
 
-> +define ICU_COPY_CUSTOM_DATA
-> +	cp $(BR2_PACKAGE_ICU_CUSTOM_DATA_PATH) $(@D)/source/data/in/
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_ICU_CUSTOM_DATA),y)
-> +ICU_POST_EXTRACT_HOOKS += ICU_COPY_CUSTOM_DATA
-> +endif
+are available in the git repository at:
 
-I've changed the condition to match the change described above. Also,
-I've moved the definition of the ICU_COPY_CUSTOM_DATA macro inside the
-condition.
+  git://ymorin.is-a-geek.org/buildroot yem/misc
 
-Thanks,
+for you to fetch changes up to c00ebca71aec2bc2434dc90f3b249c2519158323:
 
-Thomas
+  flickcurl: new package (2014-07-28 22:55:23 +0200)
+
+----------------------------------------------------------------
+Peter Korsgaard (1):
+      flickcurl: new package
+
+Yann E. MORIN (1):
+      package/lftp: inverse the openssl/gnutls selection
+
+ package/Config.in                                  |  1 +
+ package/flickcurl/Config.in                        | 19 ++++++++++
+ ...ttps-for-all-service-endpoints.-HTTP-EOL-.patch | 40 ++++++++++++++++++++++
+ ...auth-services-are-on-https-www.flickr.com.patch | 30 ++++++++++++++++
+ package/flickcurl/flickcurl.mk                     | 23 +++++++++++++
+ package/lftp/Config.in                             |  2 +-
+ 6 files changed, 114 insertions(+), 1 deletion(-)
+ create mode 100644 package/flickcurl/Config.in
+ create mode 100644 package/flickcurl/flickcurl-0001-Switch-to-https-for-all-service-endpoints.-HTTP-EOL-.patch
+ create mode 100644 package/flickcurl/flickcurl-0002-Oauth-services-are-on-https-www.flickr.com.patch
+ create mode 100644 package/flickcurl/flickcurl.mk
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
