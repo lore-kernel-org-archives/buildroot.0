@@ -1,44 +1,75 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 28 Jul 2014 22:02:08 +0400
-Subject: [Buildroot] [PATCH 9/9] thrift: arc: Disable if ARC atomics are
-	disabled
-In-Reply-To: <1406570528-31516-1-git-send-email-Anton.Kolesov@synopsys.com>
-References: <1406570528-31516-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1406570528-31516-9-git-send-email-Anton.Kolesov@synopsys.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 28 Jul 2014 20:05:13 +0200
+Subject: [Buildroot] [PATCH] binutils: gdb: Support unified binutils-gdb
+	git repository
+In-Reply-To: <39A54937CC95F24AA2F794E2D2B66B1356D00223@de02wembxa.internal.synopsys.com>
+References: <1406559424-15244-1-git-send-email-Anton.Kolesov@synopsys.com>
+ <20140728185856.42222efe@free-electrons.com>
+ <39A54937CC95F24AA2F794E2D2B66B1356D00223@de02wembxa.internal.synopsys.com>
+Message-ID: <da75c405-7171-4d8a-883c-19b2b24863ee@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thrift requires GCC built-in atomic functions which are optional in ARC
-toolchain.
+Anton Kolesov <Anton.Kolesov@synopsys.com> schreef:
+>Hi Thomas,
+>
+>> -----Original Message-----
+>> From: Thomas Petazzoni [mailto:thomas.petazzoni at free-electrons.com]
+>> Sent: 28 July 2014 20:59
+>> To: Anton Kolesov
+>> Cc: buildroot at uclibc.org; Alexey Brodkin
+>> Subject: Re: [Buildroot] [PATCH] binutils: gdb: Support unified binutils-gdb git
+>> repository
+>> 
+>> Dear Anton Kolesov,
+>> 
+>> On Mon, 28 Jul 2014 18:57:04 +0400, Anton Kolesov wrote:
+>> 
+>> > ARC GNU Toolchain will use a unified binutils-gdb repository starting
+>> > from the August release. I'm sending this patch in advance to ensure
+>> > that it will be sorted out before our release.
+>> 
+>> Is this a general movement? What is the motivation behind such a change?
+>> 
+>
+>Binutils and GDB migrated to a common Git repository in the October 2013. [1]
+>Previous Git repositories were incomplete copies of CVS repository which copied
+>only the relevant files (no binutils files in GDB, and vice versa). In the new
+>binutils-gdb repository there is no such separation and a result all files
+>exist in directory after checkout. So if "configure" and "make" are used
+>without explicit targets, all projects will be built: binutils, ld, gas, bfd,
+>opcodes, gdb, etc. In case of Buildroot this would mean that selecting Binutils
+>only, still will build both Binutils and GDB. And if GDB is selected as well,
+>then both packages will be built two times, and Binutils from GDB directory
+>will overwrite initial build of Binutils (or vice versa if Binutils will be
+>built after the GDB).  Not only this is a waste of build time, but also binutils
+>and GDB use separate branches in this common repository: GDB is in master and
+>gdb-7.* branches, while binutils is in binutils_master and binutils_2_*
+>branches). I hope that will be merged later on. So in case of Buildroot this means
+>that separate Git commits (or tags) should be used when downloading source
+>from Git.
+>
+>So obviously ARC GNU tools team wants to be in sync with upstream work, thus we
+>moved to the unified binutils-gdb repository and rebased our patches on top of
+>it.
+>
+>As far as I understand this affects only Git repositories, because GNU release
+>tarballs still contain only relevant packages, but when we download file from
+>Git over HTTP there is no way to specify custom filter of what
+>files/directories should be in the tarball, or at least I'm not aware of such
+>feature.
+>
+>This change is backward compatible, because if "normal" tarball is used
+>(without extra directories), than those --disable-* options are just ignored by
+>configure.
+>
+>[1] https://sourceware.org/ml/gdb/2013-10/msg00071.html
+>
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
----
- package/thrift/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I think it would be good to add some of this info to the commit message.
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index ac99801..6ea5751 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_THRIFT
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_arc # atomic builtins
-+	depends on !BR2_arc || BR2_ARC_ATOMIC_EXT
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_OPENSSL
-@@ -22,4 +22,6 @@ config BR2_PACKAGE_THRIFT
- comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc
-+
-+comment "thrift needs an ARC CPU w/ atomic extension"
-+        depends on BR2_arc && !BR2_ARC_ATOMIC_EXT
--- 
-1.8.4.1
+Best regards,
+Thomas
