@@ -1,24 +1,37 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 28 Jul 2014 21:49:52 +0200
-Subject: [Buildroot] [PATCH 2/2] aufs: initial release (selects
-	aufs-utils)
-In-Reply-To: <1406575604-19545-2-git-send-email-mail@steffenhoenig.com>
-References: <1406575604-19545-1-git-send-email-mail@steffenhoenig.com>
- <1406575604-19545-2-git-send-email-mail@steffenhoenig.com>
-Message-ID: <ee972c88-db0d-438d-afd0-b35d6f6e8152@email.android.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Jul 2014 20:53:05 +0200
+Subject: [Buildroot] [git commit] postgresql: enable staging installation
+Message-ID: <20140728202918.1DDF99D28A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Steffen,
+commit: http://git.buildroot.net/buildroot/commit/?id=0d7236bd3068da8a527e1b9f1da434790cf09c20
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-steffenhoenig <s.hoenig@openthinclient.com> schreef:
->Signed-off-by: steffenhoenig <mail@steffenhoenig.com>
+Certain packages need the headers/libraries from Postgresql to build
+properly.
 
-Thanks for your contribution.
-May I ask to write your name as Steffen Hoenig, both in your email From line as in your Signed-off-by?
+[Thomas: slightly reword the commit message.]
 
-Thanks,
-Thomas
+Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/postgresql/postgresql.mk |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index b331737..0fecbc7 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -10,6 +10,8 @@ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ 
++POSTGRESQL_INSTALL_STAGING = YES
++
+ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	POSTGRESQL_CONF_OPT += --disable-thread-safety
+ endif
