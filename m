@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Mon, 28 Jul 2014 18:50:18 +0200
-Subject: [Buildroot] [PATCH 1/3] perl-mojolicious: bump to version 5.21
-Message-ID: <1406566220-13271-1-git-send-email-francois.perrad@gadz.org>
+Date: Mon, 28 Jul 2014 18:50:19 +0200
+Subject: [Buildroot] [PATCH 2/3] perl-net-ssleay: bump to version 1.65
+In-Reply-To: <1406566220-13271-1-git-send-email-francois.perrad@gadz.org>
+References: <1406566220-13271-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1406566220-13271-2-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,21 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mojolicious/perl-mojolicious.mk | 2 +-
+ package/perl-net-ssleay/perl-net-ssleay.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 7d3d6c0..2aaee07 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index fb9b385..de8e369 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 5.08
-+PERL_MOJOLICIOUS_VERSION = 5.21
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI/
- PERL_MOJOLICIOUS_DEPENDENCIES = perl
+-PERL_NET_SSLEAY_VERSION = 1.64
++PERL_NET_SSLEAY_VERSION = 1.65
+ PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+ PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM/
+ PERL_NET_SSLEAY_DEPENDENCIES = perl openssl
 -- 
 1.9.1
