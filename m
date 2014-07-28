@@ -1,41 +1,42 @@
-From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Mon, 28 Jul 2014 18:56:13 +0200
-Subject: [Buildroot] [PATCH v3 1/3] libgtk3: new package
-In-Reply-To: <498367e8-7989-442b-91e1-89b6d2c2cb62@email.android.com>
-References: <1406565218-12653-1-git-send-email-hadrien.boutteville@gmail.com>
- <1406565218-12653-2-git-send-email-hadrien.boutteville@gmail.com>
- <498367e8-7989-442b-91e1-89b6d2c2cb62@email.android.com>
-Message-ID: <53D680AD.1080308@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Jul 2014 18:57:53 +0200
+Subject: [Buildroot] [PATCH] qemu/sparc-ss10: update defconfig to Linux
+ 3.15.x
+In-Reply-To: <20140728133556.GA5135@waldemar-brodkorb.de>
+References: <20140728133556.GA5135@waldemar-brodkorb.de>
+Message-ID: <20140728185753.4d476e26@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Waldemar Brodkorb,
 
-On Mon, 28 Jul 2014 18:41:08 +0200, Thomas De Schampheleire wrote:
-[...]
->> +config BR2_PACKAGE_LIBGTK3_DEMO
->> +	bool "Install libgtk3 demo program"
->> +	help
->> +	  The GTK+ source base contains demo programs. This
->> +	  option allows to install this program to the target.
-> 
-> 'programs' in the first sentence conflicts with 'this program' in the second. 'them' as below sounds better...
+On Mon, 28 Jul 2014 15:35:56 +0200, Waldemar Brodkorb wrote:
+> Update defconfig to 3.15, tested with Qemu 2.0.0.
+> While updating the default config I recognized that
+> networking is broken. The reason is a uClibc backport patch
+> from master. Adding a fix on top of it.
 
-Indeed, modified copy-paste from libgtk2 not carefully reviewed on my
-side...
+The uClibc change should be separate from the defconfig update.
 
->> +
->> +config BR2_PACKAGE_LIBGTK3_TESTS
->> +	bool "Install libgtk3 tests"
->> +	help
->> +	  The GTK+ source base contains tests. This option
->> +	  allows to install them to the target.
->> +
->> +endif
+> diff --git a/package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch b/package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch
+> new file mode 100644
+> index 0000000..0ec1c00
+> --- /dev/null
+> +++ b/package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch
+> @@ -0,0 +1,38 @@
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> +
+> +Bug introduced by uclibc-0035-socket.h-pull-socket_type.h-from-eglibc.patch
 
-Regards,
+What is the upstream status of this fix? Was it reported/fixed upstream?
 
-Hadrien
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
