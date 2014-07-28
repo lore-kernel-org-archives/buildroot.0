@@ -1,73 +1,61 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon, 28 Jul 2014 18:57:04 +0400
-Subject: [Buildroot] [PATCH] binutils: gdb: Support unified binutils-gdb git
-	repository
-Message-ID: <1406559424-15244-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+Date: Mon, 28 Jul 2014 18:20:35 +0200
+Subject: [Buildroot] [PATCH 1/2] package/webkit: Fix detection of egl
+ headers provided by rpi-userland
+In-Reply-To: <XnsA375DB67EA6D7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1401366393-5815-1-git-send-email-bernd.kuhls@t-online.de>
+ <1401366393-5815-2-git-send-email-bernd.kuhls@t-online.de>
+ <20140723235453.5ebea556@free-electrons.com>
+ <XnsA375DB67EA6D7berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <53D67853.7070007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-If Binutils and/or GDB are fetched from the unified bintuils-gdb repository,
-then tarball will contain both Binutils and GDB sources, unlike the "normal"
-tarballs that contain only the titular package. To keep packages separated
-in Buildroot we need to disable undesired components when configuring.
+Hi Bernd,
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
----
- package/binutils/binutils.mk | 2 ++
- package/gdb/gdb.mk           | 6 ++++++
- 2 files changed, 8 insertions(+)
+On Fri, 25 Jul 2014 21:34:07 +0200, Bernd Kuhls wrote:
+> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+> @public.gmane.org> wrote in news:20140723235453.5ebea556 at free-electrons.com:
+> 
+>> Could you update on whether this patch and patch 2/2 in this series are
+>> still needed? There were also unanswered questions in your patch 2/2.
+> 
+> Hi Thomas,
+> 
+> the autobuild error I was trying to fix occured on May 29th:
+> http://autobuild.buildroot.net/results/bc0/bc0f9114f9dacf68a510f1e01f2dc3661c
+> 34f536/
+> 
+> The same error was still present on July, 21th:
+> http://autobuild.buildroot.net/results/1e8/1e8cab75025316b22205be7fb08a93148a
+> 256b9c/
+> 
+> As I wrote in my cover letter[1] for this patch series
+> 
+>> the rpi experts should have a closer look whether webkit could work on rpi
+>> despite the current problem
+> 
+> I asked for this help because I have basically no knowledge about the rpi-
+> specific binary blobs provided by rpi-userland.
+> 
+> Maybe Hadrien?s patch series[2] to bump webkit to 2.4.3 will solve the 
+> problem in a better way than with my patches.
+> 
+> @Hadrien: Could you please test your patch using the defconfig used by the 
+> autobuilder where webkit-1 failed to compile for rpi?
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 77d0751..2beb5e0 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -47,6 +47,7 @@ BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 		--host=$(GNU_TARGET_NAME) \
- 		--target=$(GNU_TARGET_NAME) \
- 		--enable-install-libiberty \
-+		--disable-sim --disable-gdb \
- 		$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
- # Don't build documentation. It takes up extra space / build time,
-@@ -65,6 +66,7 @@ HOST_BINUTILS_CONF_OPT = --disable-multilib --disable-werror \
- 			--target=$(GNU_TARGET_NAME) \
- 			--disable-shared --enable-static \
- 			--with-sysroot=$(STAGING_DIR) \
-+			--disable-sim --disable-gdb \
- 			$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
- # We just want libbfd and libiberty, not the full-blown binutils in staging
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 6640d2c..c58ad21 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -67,6 +67,9 @@ GDB_CONF_OPT = \
- 	--disable-gdbtk \
- 	--without-x \
- 	--disable-sim \
-+	--disable-binutils \
-+	--disable-ld \
-+	--disable-gas \
- 	$(if $(BR2_PACKAGE_GDB_SERVER),--enable-gdbserver) \
- 	--with-curses \
- 	--without-included-gettext \
-@@ -111,6 +114,9 @@ HOST_GDB_CONF_OPT = \
- 	--enable-threads \
- 	--disable-werror \
- 	--without-included-gettext \
-+	--disable-binutils \
-+	--disable-ld \
-+	--disable-gas \
- 	--disable-sim
- 
- ifeq ($(GDB_FROM_GIT),y)
--- 
-1.8.4.1
+Actually, I had forgotten this problem but yes, when I initially tested
+the bump of WebKit with rpi-userland the EGL check failed too. So it's
+not solved in my series or with version 2.4.3 and this seems to be
+related to rpi-userland (no problem with ti-gfx and imx-lib, with which
+I test now).
 
-ARC GNU Toolchain will use a unified binutils-gdb repository starting from the
-August release. I'm sending this patch in advance to ensure that it will be
-sorted out before our release.
+I will test my patch with the defconfig used by the autobuilder and test
+your patch if the problem occurs again.
+
+Regards,
+
+Hadrien
