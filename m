@@ -1,9 +1,9 @@
 From: steffenhoenig <s.hoenig@openthinclient.com>
-Date: Mon, 28 Jul 2014 21:26:43 +0200
+Date: Mon, 28 Jul 2014 21:34:25 +0200
 Subject: [Buildroot] [PATCH 2/2] aufs: initial release (selects aufs-utils)
-In-Reply-To: <1406575604-19545-1-git-send-email-mail@steffenhoenig.com>
-References: <1406575604-19545-1-git-send-email-mail@steffenhoenig.com>
-Message-ID: <1406575604-19545-2-git-send-email-mail@steffenhoenig.com>
+In-Reply-To: <1406576065-20263-1-git-send-email-mail@steffenhoenig.com>
+References: <1406576065-20263-1-git-send-email-mail@steffenhoenig.com>
+Message-ID: <1406576065-20263-2-git-send-email-mail@steffenhoenig.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
