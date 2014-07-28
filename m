@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Jul 2014 23:13:44 +0200
-Subject: [Buildroot] [PATCH] flickcurl: new package
-In-Reply-To: <20140728204105.GB4224@free.fr> (Yann E. MORIN's message of "Mon, 
- 28 Jul 2014 22:41:05 +0200")
-References: <1406545017-29163-1-git-send-email-peter@korsgaard.com>
- <20140728204105.GB4224@free.fr>
-Message-ID: <87d2cp9ofr.fsf@dell.be.48ers.dk>
+Date: Mon, 28 Jul 2014 23:15:54 +0200
+Subject: [Buildroot] [PATCH 2/2] flickcurl: new package
+In-Reply-To: <c00ebca71aec2bc2434dc90f3b249c2519158323.1406581025.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 28 Jul 2014 22:58:08 +0200")
+References: <cover.1406581025.git.yann.morin.1998@free.fr>
+ <c00ebca71aec2bc2434dc90f3b249c2519158323.1406581025.git.yann.morin.1998@free.fr>
+Message-ID: <878und9oc5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,39 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Peter, All,
- > On 2014-07-28 12:56 +0200, Peter Korsgaard spake thusly:
- >> We need two patches from upstream git as flickr now requires https access.
- >> It hardcodes openssl for https support in libcurl as Kconfig complains about
- >> circular dependencies if we use logic like:
- >> 
- >> select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_LIBNSS)
+ > From: Peter Korsgaard <peter@korsgaard.com>
+ > We need two patches from upstream git as flickr now requires https access.
 
- > That's becasue lftp does the opposite select:
- >     package/lftp/Config.in: select BR2_PACKAGE_GNUTLS if !BR2_PACKAGE_OPENSSL
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > [yann.morin.1998 at free.fr: fix the kconfig recursive loop when selecting
+ >  a SSL implementation]
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > We must do the select always in the same direction.
+Thanks! One minor issue:
 
-Ahh, thanks!
+ > +++ b/package/flickcurl/flickcurl.mk
+ > @@ -0,0 +1,23 @@
+ > +################################################################################
+ > +#
+ > +# flickcurl
+ > +#
+ > +################################################################################
+ > +
+ > +FLICKCURL_VERSION = 1.25
+ > +FLICKCURL_SITE = http://download.dajobe.org/flickcurl/
+ > +FLICKCURL_LICENSE = LGPLv2.1+ or GPLv2+ or Apache 2.0+
+ > +FLICKCURL_LICENSE_FILES = COPYING COPYING.LIB LICENSE-2.0.txt LICENSE.html
+ > +FLICKCURL_INSTALL_STAGING = YES
+ > +FLICKCURL_CONFIG_SCRIPTS = flickcurl-config
+ > +FLICKCURL_CONF_OPT = --without-curl-config --without-xml2-config --without-raptor
+ > +FLICKCURL_DEPENDENCIES = libcurl libxml2 openssl ca-certificates host-pkgconf
 
-As discussed on IRC, with openssl being the "standard" SSL library, I
-think it makes sense to select openssl by default as people are more
-likely to need it for other stuff.
+You should no longer unconditionally add openssl to the dependencies. As
+the ordering is taken care of by libcurl we can simply remove any of the
+ssl libraries here.
+
+Looking at it again, we can actually also remove ca-certificates as it
+is only a runtime dependency.
 
 -- 
 Bye, Peter Korsgaard 
