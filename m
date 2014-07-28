@@ -1,87 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Jul 2014 23:12:27 +0200
-Subject: [Buildroot] [PATCH] gcc: explicitly use CFLAGS_FOR_TARGET
- instead of --enable-target-optspace
-In-Reply-To: <1405351786-4445-1-git-send-email-abrodkin@synopsys.com>
-References: <1405351786-4445-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <20140728231227.298a3882@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Jul 2014 23:13:44 +0200
+Subject: [Buildroot] [PATCH] flickcurl: new package
+In-Reply-To: <20140728204105.GB4224@free.fr> (Yann E. MORIN's message of "Mon, 
+ 28 Jul 2014 22:41:05 +0200")
+References: <1406545017-29163-1-git-send-email-peter@korsgaard.com>
+ <20140728204105.GB4224@free.fr>
+Message-ID: <87d2cp9ofr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey Brodkin,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Mon, 14 Jul 2014 19:29:46 +0400, Alexey Brodkin wrote:
-> Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=2222 it's impossible
-> to specify custom CFLAGS_FOR_TARGET, it is alway gets overriden with values
-> from "config/mt-ospace":
-> ===========
->  CFLAGS_FOR_TARGET = -g -Os
->  CXXFLAGS_FOR_TARGET = -g -Os
-> ===========
-> 
-> But in some situations it's required to pass custom flags on buildong of libgcc:
->  * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
-> (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
->  * Particular CPU requires specific instructions for HW support
->  * Deep optimizations
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Peter, All,
+ > On 2014-07-28 12:56 +0200, Peter Korsgaard spake thusly:
+ >> We need two patches from upstream git as flickr now requires https access.
+ >> It hardcodes openssl for https support in libcurl as Kconfig complains about
+ >> circular dependencies if we use logic like:
+ >> 
+ >> select BR2_PACKAGE_OPENSSL if !(BR2_PACKAGE_GNUTLS || BR2_PACKAGE_LIBNSS)
 
-I found the commit log quite difficult to understand actually. It
-lacked a bit of context like:
+ > That's becasue lftp does the opposite select:
+ >     package/lftp/Config.in: select BR2_PACKAGE_GNUTLS if !BR2_PACKAGE_OPENSSL
 
-"""
-The gcc.mk file is passing --enable-target-optspace to gcc configure
-script, to ask for space-optimized (-Os) target libraries. However,
-passing this option has the effect of overriding any custom
-CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
-"""
+ > We must do the select always in the same direction.
 
-And then go on with your explanation. Also, apparently, using "======="
-in the middle of a commit log confuses patchwork a bit:
-http://patchwork.ozlabs.org/patch/369672/.
+Ahh, thanks!
 
-> diff --git a/package/gcc/gcc-intermediate/gcc-intermediate.mk b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-> index db84d18..0543574 100644
-> --- a/package/gcc/gcc-intermediate/gcc-intermediate.mk
-> +++ b/package/gcc/gcc-intermediate/gcc-intermediate.mk
-> @@ -46,4 +46,17 @@ ifeq ($(BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE),y)
->  HOST_GCC_INTERMEDIATE_INSTALL_OPT += install-target-libgcc
->  endif
->  
-> +ifeq ($(ARCH),powerpc)
-> +ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
-> +	# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
-> +	# Workaround until it's fixed in 4.5.4 or later
-> +	HOST_GCC_INTERMEDIATE_CONF_ENV += CFLAGS_FOR_TARGET="-g -O2"
-> +	HOST_GCC_INTERMEDIATE_CONF_ENV += CXXFLAGS_FOR_TARGET="-g -O2"
-> +endif
-> +else
-> +	# Defaults are "-g -Os" from "config/mt-ospace"
-> +	HOST_GCC_INTERMEDIATE_CONF_ENV += CFLAGS_FOR_TARGET="-g -Os"
-> +	HOST_GCC_INTERMEDIATE_CONF_ENV += CXXFLAGS_FOR_TARGET="-g -Os"
-> +endif
+As discussed on IRC, with openssl being the "standard" SSL library, I
+think it makes sense to select openssl by default as people are more
+likely to need it for other stuff.
 
-The original --enable-target-optspace is passed at *all* gcc steps, but
-now you're passing CFLAGS_FOR_TARGET and CXXFLAGS_FOR_TARGET only at
-the gcc intermediate step. This looks weird.
-
-Also, since we can actually customize this option, what about using the
-ones from Buildroot, i.e something such as:
-
-	HOST_GCC_CONF_ENV += CFLAGS_FOR_TARGET="$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)"
-	HOST_GCC_CONF_ENV += CXXFLAGS_FOR_TARGET="$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)"
-
-Maybe we could even just use $(TARGET_CFLAGS) and $(TARGET_CXXFLAGS),
-though I'm a bit less sure about all the possible consequences.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard 
