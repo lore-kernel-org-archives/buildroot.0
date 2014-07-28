@@ -1,111 +1,106 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Mon, 28 Jul 2014 19:57:29 +0800
-Subject: [Buildroot] [PATCH 2/2] bandwidthd: new package
-In-Reply-To: <1406548649-4649-1-git-send-email-nroach44@gmail.com>
-References: <1406548649-4649-1-git-send-email-nroach44@gmail.com>
-Message-ID: <1406548649-4649-2-git-send-email-nroach44@gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 28 Jul 2014 15:35:56 +0200
+Subject: [Buildroot] [PATCH] qemu/sparc-ss10: update defconfig to Linux
+	3.15.x
+Message-ID: <20140728133556.GA5135@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
----
- package/Config.in                |  1 +
- package/bandwidthd/Config.in     | 39 +++++++++++++++++++++++++++++++++++++++
- package/bandwidthd/bandwidthd.mk | 25 +++++++++++++++++++++++++
- 3 files changed, 65 insertions(+)
- create mode 100644 package/bandwidthd/Config.in
- create mode 100644 package/bandwidthd/bandwidthd.mk
+Update defconfig to 3.15, tested with Qemu 2.0.0.
+While updating the default config I recognized that
+networking is broken. The reason is a uClibc backport patch
+from master. Adding a fix on top of it.
+Removed hint about framebuffer, as -display none is used.
 
-diff --git a/package/Config.in b/package/Config.in
-index 559b895..04d666e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -937,6 +937,7 @@ menu "Networking applications"
- 	source "package/autossh/Config.in"
- 	source "package/avahi/Config.in"
- 	source "package/axel/Config.in"
-+	source "package/bandwidthd/Config.in"
- 	source "package/bcusdk/Config.in"
- 	source "package/bind/Config.in"
- 	source "package/bluez_utils/Config.in"
-diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ board/qemu/sparc-ss10/readme.txt                   |  3 +-
+ configs/qemu_sparc_ss10_defconfig                  |  8 ++---
+ .../uclibc-0061-fix-sparc-networking.patch         | 38 ++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 6 deletions(-)
+ create mode 100644 package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch
+
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index a126a55..b18bb40 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -3,6 +3,5 @@ Run the emulation with:
+   qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user -display none
+ 
+ The login prompt will appear in the terminal that started Qemu.
+-The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 3b56d98..afc0789 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -6,14 +6,14 @@ BR2_sparc_v8=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.12 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch b/package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch
 new file mode 100644
-index 0000000..7305060
+index 0000000..0ec1c00
 --- /dev/null
-+++ b/package/bandwidthd/Config.in
-@@ -0,0 +1,39 @@
-+config BR2_PACKAGE_BANDWIDTHD
-+	bool "bandwidthd"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_GD
-+	help
-+	  BandwidthD - Bandwidth monitoring
++++ b/package/uclibc/0.9.33.2/uclibc-0061-fix-sparc-networking.patch
+@@ -0,0 +1,38 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +
-+	  Provides a method to measure the bandwidth that travels through the
-+	  machine, grouped by subnet and IP. This information can be stored
-+	  locally in /var/lib/bandwidthd and can be configured to generate
-+	  static HTML pages which can be hosted by a web server.
++Bug introduced by uclibc-0035-socket.h-pull-socket_type.h-from-eglibc.patch
 +
-+	  It is highly recommended that the target has some way of retaining the
-+	  time between reboots. (e.g. NTP on boot or an RTC)
-+	  
-+	  It is suggested to install sqlite for logfile storage but works fine
-+	  without, and can be completely ignored if the postgresql portion
-+	  is used. 
-+
-+	  As upstream is no longer actively maintained, a fork is available
-+	  on github that works on making BandwidthD's build process more
-+	  compatible with buildroot's.
-+
-+	  Upstream: http://bandwidthd.sourceforge.net/
-+	  Github fork: http://github.com/nroach44/bandwidthd
-+
-+if BR2_PACKAGE_BANDWIDTHD
-+config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
-+	bool "enable postgresql log target support"
-+	select BR2_PACKAGE_POSTGRESQL
-+	help
-+	  Enable logging the bandwidthd data to a remote (or local) postgresql
-+	  server. This can then be accessed through a php site. See 
-+	  README in the source code (github.com/nroach44/bandwidthd) for more
-+	  information.
-+
-+endif
-diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-new file mode 100644
-index 0000000..e294af3
---- /dev/null
-+++ b/package/bandwidthd/bandwidthd.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# bandwidthd
-+################################################################################
-+
-+BANDWIDTHD_VERSION = v2.0.1-auto-r03
-+BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
-+BANDWIDTHD_CONF_OPT = 
-+BANDWIDTHD_CONF_ENV =
-+BANDWIDTHD_LICENSE = GPL+
-+
-+BANDWIDTHD_DEPENDENCIES += gd
-+BANDWIDTHD_DEPENDENCIES += libpng
-+BANDWIDTHD_DEPENDENCIES += libpcap
-+
-+BANDWIDTHD_AUTORECONF = YES
-+
-+ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
-+BANDWIDTHD_DEPENDENCIES += postgresql
-+BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
-+else
-+BANDWIDTHD_CONF_OPT += --with-postgresql-logging=false
-+endif
-+
-+$(eval $(autotools-package))
++diff -Nur uClibc-0.9.33.2.orig/libc/inet/socketcalls.c uClibc-0.9.33.2/libc/inet/socketcalls.c
++--- uClibc-0.9.33.2.orig/libc/inet/socketcalls.c	2012-05-15 09:20:09.000000000 +0200
+++++ uClibc-0.9.33.2/libc/inet/socketcalls.c	2014-07-28 14:50:52.477479493 +0200
++@@ -34,6 +34,30 @@
++ #define SYS_ACCEPT4     18
++ #endif
++ 
+++/* for sparc: __NR_socket and others are defined, but syscalls are not implemen
+++/* see http://lists.busybox.net/pipermail/uclibc/2004-March/029424.html */
+++#ifdef __sparc__
+++#undef __NR_accept
+++#undef __NR_accept4
+++#undef __NR_bind
+++#undef __NR_connect
+++#undef __NR_getpeername
+++#undef __NR_getsockname
+++#undef __NR_getsockopt
+++#undef __NR_listen
+++#undef __NR_recv
+++#undef __NR_recvfrom
+++#undef __NR_recvmsg
+++#undef __NR_send
+++#undef __NR_sendmsg
+++#undef __NR_sendto
+++#undef __NR_setsockopt
+++#undef __NR_shutdown
+++#undef __NR_socket
+++#undef __NR_socketpair
+++#endif
+++
+++
++ #ifdef __UCLIBC_HAS_THREADS_NATIVE__
++ #include <sysdep-cancel.h>
++ #include <pthreadP.h>
 -- 
-2.0.1
+2.0.0
