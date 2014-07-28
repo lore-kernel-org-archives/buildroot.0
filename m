@@ -1,39 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 28 Jul 2014 08:34:47 +0200
-Subject: [Buildroot] [PATCH] ltrace: use current master
-In-Reply-To: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
-References: <1406239161-23777-1-git-send-email-alexandre.belloni@free-electrons.com>
-Message-ID: <20140728083447.03b596b8@free-electrons.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 28 Jul 2014 07:05:28 +0000
+Subject: [Buildroot] [PATCH] gcc: explicitly use CFLAGS_FOR_TARGET
+ instead of --enable-target-optspace
+In-Reply-To: <1405351786-4445-1-git-send-email-abrodkin@synopsys.com>
+References: <1405351786-4445-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <1406531128.3364.1.camel@abrodkin-8560l.internal.synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+Hi Thomas, Peter,
 
-On Thu, 24 Jul 2014 23:59:21 +0200, Alexandre Belloni wrote:
-> ltrace 0.7.3 is the latest release but it is actually broken on ARM
-> since PTRACE_SINGLESTEP emulation has been removed, see:
+On Mon, 2014-07-14 at 19:29 +0400, Alexey Brodkin wrote:
+> Due to https://gcc.gnu.org/bugzilla/show_bug.cgi?id=2222 it's impossible
+> to specify custom CFLAGS_FOR_TARGET, it is alway gets overriden with values
+> from "config/mt-ospace":
+> ===========
+>  CFLAGS_FOR_TARGET = -g -Os
+>  CXXFLAGS_FOR_TARGET = -g -Os
+> ===========
 > 
-> http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=425fc47adb5bb69f76285be77a09a3341a30799e
-> 
-> It fails with:
-> PTRACE_SINGLESTEP: Input/output error
-> 
-> Using master solves that until a new release is made.
-> 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+> But in some situations it's required to pass custom flags on buildong of libgcc:
+>  * Default flags "-g -Os" lead to build isses as with PowerPC on gcc 4.5
+> (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810)
+>  * Particular CPU requires specific instructions for HW support
+>  * Deep optimizations
 
-This commit is causing some build issues on PowerPC:
-http://autobuild.buildroot.net/results/b4b/b4b1a7b5ebee4063e87e08c06024526db54bc77f/build-end.log.
+Any chance for this one to be commented/applied?
 
-Could you have a look?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Alexey
