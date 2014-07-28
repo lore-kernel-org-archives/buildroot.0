@@ -1,43 +1,39 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 28 Jul 2014 23:28:50 +0200
-Subject: [Buildroot] [git commit] flickcurl: remove ca-certificates as a
-	build dependency
-In-Reply-To: <20140728212604.140519D2EE@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Mon, 28 Jul 2014 23:25:20 +0200")
-References: <20140728212604.140519D2EE@busybox.osuosl.org>
-Message-ID: <87zjft8965.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Jul 2014 19:43:24 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{3, 10, 14,
+	15}.x series
+Message-ID: <1406587405-21787-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > commit: http://git.buildroot.net/buildroot/commit/?id=58441cfd482813a7d7610d2c87dd94bc385795a0
- > branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
- > ca-certificates is a runtime dependency only, so selecting it in the
- > Config.in file is sufficient, adding it to FLICKCURL_DEPENDENCIES is
- > not useful.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > ---
- >  package/flickcurl/flickcurl.mk |    2 +-
- >  1 files changed, 1 insertions(+), 1 deletions(-)
-
- > diff --git a/package/flickcurl/flickcurl.mk b/package/flickcurl/flickcurl.mk
- > index 7fb212f..67e8851 100644
- > --- a/package/flickcurl/flickcurl.mk
- > +++ b/package/flickcurl/flickcurl.mk
- > @@ -11,7 +11,7 @@ FLICKCURL_LICENSE_FILES = COPYING COPYING.LIB LICENSE-2.0.txt LICENSE.html
- >  FLICKCURL_INSTALL_STAGING = YES
- >  FLICKCURL_CONFIG_SCRIPTS = flickcurl-config
- >  FLICKCURL_CONF_OPT = --without-curl-config --without-xml2-config --without-raptor
- > -FLICKCURL_DEPENDENCIES = libcurl libxml2 openssl ca-certificates host-pkgconf
- > +FLICKCURL_DEPENDENCIES = libcurl libxml2 openssl host-pkgconf
-
-Please also drop openssl.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index edc1453..c4ec358 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.61"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.99"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.100"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.49"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.50"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+ 	default "3.12.25"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.13"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.6"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.14"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.7"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+1.8.5.5
