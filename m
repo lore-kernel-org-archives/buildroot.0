@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 09:10:35 +0200
-Subject: [Buildroot] [PATCH] linux: support multiple custom DTS files
-In-Reply-To: <CAB4xu_2KTG7_JYQJPZ6GqPbLN1bjGf+s=A=qe8A_tCBaOQvn-g@mail.gmail.com>
-References: <1406323532-18764-1-git-send-email-eeppeliteloop@gmail.com>
- <20140728223621.7ca59a2d@free-electrons.com>
- <CAB4xu_2KTG7_JYQJPZ6GqPbLN1bjGf+s=A=qe8A_tCBaOQvn-g@mail.gmail.com>
-Message-ID: <20140729091035.3cc09911@free-electrons.com>
+Date: Tue, 29 Jul 2014 09:17:05 +0200
+Subject: [Buildroot] [git commit] python-flup: re-add MIT license
+Message-ID: <20140729071811.884289D2BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Philippe Proulx,
+commit: http://git.buildroot.net/buildroot/commit/?id=1d001e322460fa47786f5790fd15ab367d47ab0e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 28 Jul 2014 19:52:43 -0400, Philippe Proulx wrote:
+The MIT license was in the original submission, but I had removed it
+since I couldn't find where it was used. It is indeed used in
+flup/server/paste_factory.py as noted by the original
+submitter. Therefore, this commit adds the MIT license as one of the
+licenses of python-flup.
 
-> Well then you should also apply this to the help text of
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME because I just
-> copied this as is to keep it consistent:
-> 
-> config BR2_LINUX_KERNEL_INTREE_DTS_NAME
->   string "Device Tree Source file names"
->   depends on BR2_LINUX_KERNEL_USE_INTREE_DTS
->   help
->     Name of the device tree source file, without
->     the trailing .dts. You can provide a list of
->     dts files to build, separated by spaces.
+Reported-by: Oli Vogt <oli.vogt.pub01@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-flup/python-flup.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Sure, but that should be part of a separate patch. Maybe you just
-volunteered to send such a patch? :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-flup/python-flup.mk b/package/python-flup/python-flup.mk
+index 39c6658..5e612bb 100644
+--- a/package/python-flup/python-flup.mk
++++ b/package/python-flup/python-flup.mk
+@@ -8,7 +8,7 @@ PYTHON_FLUP_VERSION = 1.0.3.dev-20110405
+ PYTHON_FLUP_SOURCE = flup-$(PYTHON_FLUP_VERSION).tar.gz
+ PYTHON_FLUP_SITE = http://pypi.python.org/packages/source/f/flup
+ 
+-PYTHON_FLUP_LICENSE = BSD-2c
++PYTHON_FLUP_LICENSE = BSD-2c, MIT
+ 
+ PYTHON_FLUP_SETUP_TYPE = setuptools
+ 
