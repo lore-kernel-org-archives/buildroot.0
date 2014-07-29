@@ -1,33 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Jul 2014 18:03:26 -0300
-Subject: [Buildroot] [PATCH] popt: now needs gettextize
-Message-ID: <1406667806-25878-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 29 Jul 2014 23:12:28 +0200
+Subject: [Buildroot] [PATCH 01 of 20] pkg-generic: introduce helper function
+ to check for a deprecated variable
+In-Reply-To: <patchbomb.1406668347@localhost>
+References: <patchbomb.1406668347@localhost>
+Message-ID: <677354152366d6f52f1b.1406668348@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Because of df9244ff3738face50605eacf4d4f15d963de915 we now need to
-gettextize popt. Fixes:
-http://autobuild.buildroot.net/results/6e2/6e27c98407f114df07eb5cd16a843420fdb72bf4/
+This patch introduces a helper check-deprecated-variable, that throws an
+error when a package defines a deprecated variable. This helps in detecting
+transition errors when changing the buildroot infrastructures, and also
+helps users that have created packages not part of mainline buildroot.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/popt/popt.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk |  15 +++++++++++++++
+ 1 files changed, 15 insertions(+), 0 deletions(-)
 
-diff --git a/package/popt/popt.mk b/package/popt/popt.mk
-index 0413c5a..54e7c88 100644
---- a/package/popt/popt.mk
-+++ b/package/popt/popt.mk
-@@ -11,6 +11,7 @@ POPT_INSTALL_STAGING = YES
- POPT_LICENSE = MIT
- POPT_LICENSE_FILES = COPYING
- POPT_AUTORECONF = YES
-+POPT_GETTEXTIZE = YES
+diff -r 6ff0cfa8a802 -r 677354152366 package/pkg-generic.mk
+--- a/package/pkg-generic.mk	Tue May 20 13:53:00 2014 +1200
++++ b/package/pkg-generic.mk	Mon Jul 28 21:39:53 2014 +0200
+@@ -264,6 +264,21 @@
+ endef
  
- POPT_CONF_ENV = ac_cv_va_copy=yes
- 
--- 
-1.8.5.5
+ ################################################################################
++# check-deprecated-variable -- throw an error on deprecated variables
++#
++# argument 1 is the deprecated variable
++# argument 2 is the new variable to use
++#
++# example:
++#   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
++################################################################################
++define check-deprecated-variable
++ifneq ($$(origin $(1)),undefined)
++$$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
++endif
++endef
++
++################################################################################
+ # inner-generic-package -- generates the make targets needed to build a
+ # generic package
+ #
