@@ -1,79 +1,41 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 29 Jul 2014 10:39:09 +0200
-Subject: [Buildroot] [PATCH] Add local directory support for uboot
-In-Reply-To: <1406505484-19123-1-git-send-email-cdhmanning@gmail.com>
-References: <1406505484-19123-1-git-send-email-cdhmanning@gmail.com>
-Message-ID: <CAAXf6LUJJrSFq40GjbFipM0NBzrV=RgOOdEVxb0jw7zYC-wrBQ@mail.gmail.com>
+Date: Tue, 29 Jul 2014 10:40:26 +0200
+Subject: [Buildroot] [PATCH 2 of 2] generic packages: rename
+ FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT
+In-Reply-To: <20140727225529.518feb68@free-electrons.com>
+References: <9d1a7e2626ad1d2e4b42.1406056891@localhost>
+ <5b961fc80eb2d23373a6.1406056892@localhost>
+ <20140727152223.38c38d68@free-electrons.com>
+ <8527bc5f-ee03-47f0-9e7c-e44db77ba2c5@email.android.com>
+ <20140727202710.GI3895@free.fr> <20140727225529.518feb68@free-electrons.com>
+Message-ID: <CAAXf6LXB2Pnmn1xX94OQ0yooy46qP5gegH8vVYcqq35R4c7yTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
-
-On Mon, Jul 28, 2014 at 1:58 AM, Charles Manning <cdhmanning@gmail.com> wrote:
-> Signed-off-by: Charles Manning <cdhmanning@gmail.com>
-> ---
->  boot/uboot/Config.in |   12 ++++++++++++
->  boot/uboot/uboot.mk  |    3 +++
->  2 files changed, 15 insertions(+)
+On Sun, Jul 27, 2014 at 10:55 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Yann E. MORIN,
 >
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 46d1109..b489fae 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -34,6 +34,12 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT
->  config BR2_TARGET_UBOOT_CUSTOM_HG
->         bool "Custom Mercurial repository"
+> On Sun, 27 Jul 2014 22:27:10 +0200, Yann E. MORIN wrote:
 >
-> +config BR2_TARGET_UBOOT_CUSTOM_LOCAL
-> +       bool "Local directory"
-> +       help
-> +         This option allows Buildroot to get the u-boot source
-> +         code from a local directory.
-> +
->  endchoice
+>> > We could add a simple check to warn users of _OPT, but not more than that.
+>>
+>> OK, I'm siding with you guys. OK for the renaming.
+>>
+>> But then we should add a check that the old variable gets used, and
+>> _error out_ in such case. If we just warn, the warning will be lost
+>> amongst all the other messages, nad will bbe missed; and suddenly,
+>> br2-external packages fails to build, or build in an unexpected
+>> configuration.
+>>
+>> I agree with you that we should just check if the old variable is set,
+>> but we should not try to correct the situation.
 >
->  config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
-> @@ -70,6 +76,12 @@ config BR2_TARGET_UBOOT_VERSION
->         default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
->                 if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
->
-> +config BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH
-> +       string "Path to the local directory"
-> +       depends on BR2_TARGET_UBOOT_CUSTOM_LOCAL
-> +       help
-> +         Path to the local directory with the u-boot source code.
-> +
->  config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
->         string "custom patch dir"
->         help
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 532ac8b..2ae7d87 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -23,6 +23,9 @@ UBOOT_SITE_METHOD = git
->  else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
->  UBOOT_SITE        = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
->  UBOOT_SITE_METHOD = hg
-> +else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_LOCAL),y)
-> +LINUX_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_LOCAL_PATH))
-> +LINUX_SITE_METHOD = local
+> I fully agree with this: we should error out if the old variable is
+> used, so that things are clearly noticed by users.
 
-This cannot be write: you're overwriting LINUX variables from uboot.mk.
-
-Note that there already exist mechanisms to achieve this.
-For development work, we have the _OVERRIDE_SRCDIR mechanism. See
-http://buildroot.uclibc.org/downloads/manual/manual.html#_using_buildroot_during_development
-
-If this is for a real project, you typically have buildroot under
-version control, and the local.mk file used for the _OVERRIDE_SRCDIR
-mechanism is not really intended to be placed under version control.
-However, using arbitrary contents of a directory is not a good idea
-anyway, so in this case you are better to placing the u-boot sources
-in a git or mercurial repository, and specify this repository with a
-given revision in the buildroot configuration.
-
-Best regards,
-Thomas
+Ok, great.
+I'm working on this...
