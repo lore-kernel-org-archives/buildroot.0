@@ -1,43 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 23:39:59 +0200
-Subject: [Buildroot] [PATCH 0/2] xdriver_xf86-video-intel: Bump version
- to 2.99.914, add DRI3 support
-In-Reply-To: <1406669656-15300-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1406669656-15300-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140729233959.35c8c511@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 29 Jul 2014 23:38:38 +0200
+Subject: [Buildroot] Clarify the Intel driver related patches in
+	patchwork
+References: <20140729092214.539f130e@free-electrons.com>
+ <20140729172109.GA1263@bwidawsk.net>
+Message-ID: <XnsA379F084CD782berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+[posted and mailed]
 
-Adding Ben in Cc.
+Ben Widawsky <ben@bwidawsk.net> wrote in 
+news:20140729172109.GA1263 at bwidawsk.net:
 
-On Tue, 29 Jul 2014 23:34:14 +0200, Bernd Kuhls wrote:
+> A patch (not in that list) to bump to .913 would solve all problems for
+> me. It seems like Bernd would be okay with this as well, though he sent
+> that mail only to me, "So updating buildroot to 2.99.914 is ok for me
+> now." I presume he meant .913.
 
-> this small series bumps xdriver_xf86-video-intel to the latest version.
-> While being at it, add DRI3 support to X.org server so the intel driver
-> can pick it up. The patch for xdriver_xf86-video-intel should be one
-> commit, although addressing various topics, because it would otherwise
-> fail at configure stage because of newly introduced DRI checks.
+Hi,
 
-[...]
+no, I meant .914, which was released only several hours after .913 ;)
+I just sent a new series for review which also cleans up the DRI mess now 
+present in the intel driver configure.ac. I hope I did not miss a combination 
+of options, please test my new patch.
 
-> Bernd Kuhls (2):
->   xserver_xorg-server: Add support for DRI3
->   xdriver_xf86-video-intel: Bump version to 2.99.914
-
-Thanks, both patches applied.
-
-Ben, can you test the latest Buildroot master, and see if it works for
-you?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
