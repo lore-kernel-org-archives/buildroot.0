@@ -1,61 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 23:52:08 +0200
-Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
- infrastructure
-In-Reply-To: <patchbomb.1406224167@localhost>
-References: <patchbomb.1406224167@localhost>
-Message-ID: <20140729235208.674744cc@free-electrons.com>
+Date: Tue, 29 Jul 2014 23:54:22 +0200
+Subject: [Buildroot] [git commit] flex: delete broken flex++ symlink from
+	target
+Message-ID: <20140729215747.81E649D333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+commit: http://git.buildroot.net/buildroot/commit/?id=dd70b3b7531ca8cabb5aadcd52606172bf187e50
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 24 Jul 2014 19:49:27 +0200, Thomas De Schampheleire wrote:
+When flex is built for the target without installing the
+flex binary, a flex++ symlink installed by flex's Makefile
+points to the missing flex executable.  This mod adds
+a post target install hook to remove the broken symlink.
 
-> This patch series introduces a kconfig-package infrastructure and already
-> converts the uclibc and busybox packages.
-> The series is based on the to-be-applied uclibc patch series that improves the
-> behavior of the kconfig parts.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/flex/flex.mk |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
 
-Weird, you don't have the summary of patches in the cover letter. Don't
-you use 'git --cover format-patch' to generate the cover letter?
-
-Anyway:
-
- * I've applied two preparation patches of this series:
-   uclibc: use $(MAKE) iso $(MAKE1) for menuconfig target
-   linux: remove support of linux26-* targets
-
-   This way, you don't have to carry them anymore.
-
- * Regarding the kconfig-package infra stuff, I'm mostly fine with it,
-   except for one detail: it pretends to be a package infrastructure,
-   but it is not. It is only a kind of "library" / "helper" to use next
-   to a real package infrastructure. And I think this is pretty
-   confusing considering the name that was chosen, and the way it works.
-
-   My proposal would therefore be to turn it into a real package
-   infrastructure by simply making it inherit from generic-package,
-   much like autotools-package, cmake-package and al. All kconfig-based
-   packages are otherwise generic-package. I don't see the logic behind
-   using Kconfig for an autotools-based or cmake-based package, since
-   autotools and cmake are precisely here to provide configuration
-   capabilities that overlap with what kconfig provides. And as of
-   today, we have linux, barebox, uclibc and busybox, and all of these
-   use the generic-package infra.
-
-   I think it's really a minor change in the patches, and with this
-   change, I'm willing to merge this package infra.
-
-Of course, comments/reviews from others are more than welcome!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/flex/flex.mk b/package/flex/flex.mk
+index 17f651b..cd92dd7 100644
+--- a/package/flex/flex.mk
++++ b/package/flex/flex.mk
+@@ -29,6 +29,12 @@ define FLEX_DISABLE_PROGRAM
+ endef
+ FLEX_POST_PATCH_HOOKS += FLEX_DISABLE_PROGRAM
+ 
++# flex++ symlink is broken when flex binary is not installed
++define FLEX_REMOVE_BROKEN_SYMLINK
++	rm -f $(TARGET_DIR)/usr/bin/flex++
++endef
++FLEX_POST_INSTALL_TARGET_HOOKS += FLEX_REMOVE_BROKEN_SYMLINK
++
+ endif
+ 
+ $(eval $(autotools-package))
