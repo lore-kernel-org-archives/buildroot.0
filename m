@@ -1,78 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Jul 2014 15:15:24 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.10
-Message-ID: <1406657724-21261-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Jul 2014 20:15:57 +0200
+Subject: [Buildroot] [git commit] qemu/sparc-ss10: update defconfig to Linux
+	3.15.x
+Message-ID: <20140729181712.242349D297@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lots of bugfixes, enhancements to provisioning and printing support via cups.
+commit: http://git.buildroot.net/buildroot/commit/?id=087f6ddc52a13e9b62d1bb0acf4ee3fec55d798d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Update defconfig to 3.15, tested with Qemu 2.0.0.
+Removed hint about framebuffer, as -display none is used.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/samba4/Config.in |  3 +++
- package/samba4/samba4.mk | 12 ++++++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ board/qemu/sparc-ss10/readme.txt  |    3 +--
+ configs/qemu_sparc_ss10_defconfig |    8 ++++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 7008ba2..184185a 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -19,6 +19,9 @@ config BR2_PACKAGE_SAMBA4
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index a126a55..b18bb40 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -3,6 +3,5 @@ Run the emulation with:
+   qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user -display none
  
- 	  http://www.samba.org/
+ The login prompt will appear in the terminal that started Qemu.
+-The graphical window is the framebuffer.
  
-+comment "Some samba4 CLI tools require the python package to keep .py files"
-+	depends on BR2_PACKAGE_SAMBA4 && BR2_PACKAGE_PYTHON_PYC_ONLY
-+
- comment "samba4 needs a toolchain w/ IPv6, wchar, largfile, threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
- 		!BR2_USE_WCHAR || !BR2_INET_IPV6
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index e2336e7..7d8500f 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-Tested with QEMU 1.6.1
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 3b56d98..afc0789 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -6,14 +6,14 @@ BR2_sparc_v8=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
  
--SAMBA4_VERSION = 4.1.9
-+SAMBA4_VERSION = 4.1.10
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_LICENSE = GPLv3+
-@@ -20,6 +20,14 @@ else
- 	SAMBA4_CONF_OPT += --without-acl-support
- endif
+-# Lock to 3.12 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
  
-+ifeq ($(BR2_PACKAGE_CUPS),y)
-+	SAMBA4_CONF_ENV += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
-+	SAMBA4_CONF_OPT += --enable-cups
-+	SAMBA4_DEPENDENCIES += cups
-+else
-+	SAMBA4_CONF_OPT += --disable-cups
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBAIO),y)
- 	SAMBA4_CONF_OPT += --with-aio-support
- 	SAMBA4_DEPENDENCIES += libaio
-@@ -69,6 +77,7 @@ define SAMBA4_CONFIGURE_CMDS
- 		python_LDFLAGS="" \
- 		python_LIBDIR="" \
- 		$(TARGET_CONFIGURE_OPTS) \
-+		$(SAMBA4_CONF_ENV) \
- 		./buildtools/bin/waf configure \
- 			--prefix=/usr \
- 			--sysconfdir=/etc \
-@@ -80,7 +89,6 @@ define SAMBA4_CONFIGURE_CMDS
- 			--hostcc=gcc \
- 			--disable-rpath \
- 			--disable-rpath-install \
--			--disable-cups \
- 			--disable-iprint \
- 			--without-pam \
- 			--without-dmapi \
--- 
-1.8.5.5
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
