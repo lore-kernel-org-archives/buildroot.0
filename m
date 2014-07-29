@@ -1,74 +1,90 @@
-From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
-Date: Wed, 30 Jul 2014 00:49:08 +0200
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Jul 2014 00:51:32 +0200
 Subject: [Buildroot] [PATCH v4 1/1] New package: openvmtools
-In-Reply-To: <20140729234546.3c466ac6@free-electrons.com>
+In-Reply-To: <CABbD_XBsgVB7KQPwKoEJDz3JOJ61_2AJO=JtNOWy+yiRqgrTQQ@mail.gmail.com>
 References: <1406635032-34970-1-git-send-email-kaszak@gmail.com>
- <20140729234546.3c466ac6@free-electrons.com>
-Message-ID: <CABbD_XDweGbROt=VU4HUt-i4Z6a17bo-HmTQtmJQRipXVb6dSg@mail.gmail.com>
+ <20140729211549.GA5846@free.fr>
+ <CABbD_XBsgVB7KQPwKoEJDz3JOJ61_2AJO=JtNOWy+yiRqgrTQQ@mail.gmail.com>
+Message-ID: <20140729225132.GC5846@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Karoly, All,
 
-On Tue, Jul 29, 2014 at 11:45 PM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+On 2014-07-30 00:41 +0200, K?roly Kasza spake thusly:
+> Thanks for reviewing my patch!
 
-> Karoly, Yann, All,
->
-> On Tue, 29 Jul 2014 13:57:12 +0200, Karoly Kasza wrote:
->
-> > +# When libfuse is available, openvmtools can build vmblock-fuse, so
-> > +# make sure that libfuse gets built first.
-> > +ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-> > +OPENVMTOOLS_DEPENDENCIES += libfuse
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
-> > +OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
-> LDFLAGS="-L$(TARGET_DIR)/usr/lib"
-> > +OPENVMTOOLS_CONF_OPT += --with-procps
-> > +OPENVMTOOLS_DEPENDENCIES += procps-ng
-> > +else
-> > +OPENVMTOOLS_CONF_OPT += --without-procps
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_DNET),y)
-> > +OPENVMTOOLS_CONF_ENV +=
-> CUSTOM_DNET_CPPFLAGS="-I$(STAGING_DIR)/usr/include"
-> > +OPENVMTOOLS_CONF_OPT += --with-dnet
-> > +OPENVMTOOLS_DEPENDENCIES += libdnet
-> > +else
-> > +OPENVMTOOLS_CONF_OPT += --without-dnet
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
-> > +OPENVMTOOLS_CONF_OPT += --with-pam
-> > +OPENVMTOOLS_MAKE_OPT += CFLAGS+="-Wno-unused-local-typedefs"
-> > +OPENVMTOOLS_DEPENDENCIES += linux-pam
-> > +else
-> > +OPENVMTOOLS_CONF_OPT += --without-pam
-> > +endif
->
-> Here I have a question not necessarily directly for you Karoly, but for
-> other Buildroot developers. We have a good example here of some
-> dependencies being automatic (libfuse), some dependencies having their
-> own package sub-options (procps, dnet, pam). Do we want to have this
-> separation of treatment ? What is the rationale to do one or the other
-> in this specific case ?
->
+Cheers! ;-)
 
-Some explanation:
-In this special case, I can not turn off building vmblock-fuse with a
-configure parameter. If it finds libfuse, it builds vmblock-fuse. I think
-it's a minor defect in the configure script, it doesn't have a
---without-fuse or similar switch.
-It's not pretty I know.
+[--SNIP--]
+> > This scripts uses a mix of tabs and spaces to do the indentation; for
+> > example, the cases lines ("start)", "stop)"...) are indented with
+> > spaces, while the rest is indented with tabs. Please be consistent.
+> 
+> I used dropbear's startup script as a template, and the indentation is
+> exactly the same. Also with openssh, exim or ptpd (and possibly some
+> others). I think I should not differ from those too much?
 
-BR
-Karoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140730/fa2ae8de/attachment.html>
+OK, I undersand. But those scripts were intially written a loooong time
+ago. We prefer that new submissions be a bit more coherent. Eventually,
+someone will clean up those old scripts. One day. Maybe... ;-)
+
+> > > +
+> > > +exit $?
+> >
+> > No need to exit epxlicitly, it's implicit from POSIX, that a shell
+> > script exits with the error code from the last command. Besides, we do
+> > not care at all about the exit status of a startup script.
+> 
+> Although you are right, it's on the end of the dropbear startup script and
+> 26 other initscripts in the package/ subdir. I think I should leave this to
+> stay consistent with the others as above.
+
+I prefer we introduce sane new scripts. As said above, the others are
+really old, and no longer up to nowadays standards...
+
+> > > +OPENVMTOOLS_CONF_OPT = \
+> > > +        --without-icu \
+> > > +        --without-x \
+> > > +        --without-gtk2 \
+> > > +        --without-gtkmm \
+> > > +        --without-kernel-modules
+> >
+> > On a single line. If it is too long, just split it, like:
+> >
+> >     OPENVMTOOLS_CONF_OPT = --without-icu --without-x \
+> >             --without-gtk2 --without-gtkmm --without-kernel-modules
+> 
+> OK. I though it is more visible.
+
+I agree, but that's not the coding rules. ;-)
+
+> > No --enable-fuse/--disable-fuse options (or the likes)?
+> 
+> Unfortunately not. If the "configure" script finds libfuse, it builds
+> vmblock-fuse, else it won't. I experimented with it a bit, and found this
+> the most logical solution.
+
+OK, then.
+
+> Thanks again, I'll send a v5 patch soon. Regarding the init script, I can
+> use only spaces/tabs, but then this script will differ from the others.
+> Should I?
+
+Yes, new scripts should be cleaner and saner than the old ones.
+
+Thanks for your persistence with this patch! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
