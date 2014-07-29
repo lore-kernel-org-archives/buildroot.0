@@ -1,144 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Jul 2014 00:45:13 +0200
-Subject: [Buildroot] [RFC,
- PATCH] toolchain: separate c++ compiler from libstdc++ presence
-In-Reply-To: <1404359847.56223.159017096333.1.gpush@pablo>
-References: <1404359847.56223.159017096333.1.gpush@pablo>
-Message-ID: <20140729224513.GB5846@free.fr>
+From: =?UTF-8?Q?K=C3=A1roly_Kasza?= <kaszak@gmail.com>
+Date: Wed, 30 Jul 2014 00:49:08 +0200
+Subject: [Buildroot] [PATCH v4 1/1] New package: openvmtools
+In-Reply-To: <20140729234546.3c466ac6@free-electrons.com>
+References: <1406635032-34970-1-git-send-email-kaszak@gmail.com>
+ <20140729234546.3c466ac6@free-electrons.com>
+Message-ID: <CABbD_XDweGbROt=VU4HUt-i4Z6a17bo-HmTQtmJQRipXVb6dSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeremy,All,
+Hi Thomas,
 
-On 2014-07-03 11:57 +0800, Jeremy Kerr spake thusly:
-> We may want a c++ compiler, but no libstdc++ on the system. For example,
-> firmware that isn't linked with the system libstdc++. These packages can
-> depend on BR2_CPP instead of BR2_INSTALL_LIBSTDCPP.
+On Tue, Jul 29, 2014 at 11:45 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-We've discussed this at length with Thoms P., and we came to the
-following conclusions.
+> Karoly, Yann, All,
+>
+> On Tue, 29 Jul 2014 13:57:12 +0200, Karoly Kasza wrote:
+>
+> > +# When libfuse is available, openvmtools can build vmblock-fuse, so
+> > +# make sure that libfuse gets built first.
+> > +ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+> > +OPENVMTOOLS_DEPENDENCIES += libfuse
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+> > +OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps
+> LDFLAGS="-L$(TARGET_DIR)/usr/lib"
+> > +OPENVMTOOLS_CONF_OPT += --with-procps
+> > +OPENVMTOOLS_DEPENDENCIES += procps-ng
+> > +else
+> > +OPENVMTOOLS_CONF_OPT += --without-procps
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_DNET),y)
+> > +OPENVMTOOLS_CONF_ENV +=
+> CUSTOM_DNET_CPPFLAGS="-I$(STAGING_DIR)/usr/include"
+> > +OPENVMTOOLS_CONF_OPT += --with-dnet
+> > +OPENVMTOOLS_DEPENDENCIES += libdnet
+> > +else
+> > +OPENVMTOOLS_CONF_OPT += --without-dnet
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
+> > +OPENVMTOOLS_CONF_OPT += --with-pam
+> > +OPENVMTOOLS_MAKE_OPT += CFLAGS+="-Wno-unused-local-typedefs"
+> > +OPENVMTOOLS_DEPENDENCIES += linux-pam
+> > +else
+> > +OPENVMTOOLS_CONF_OPT += --without-pam
+> > +endif
+>
+> Here I have a question not necessarily directly for you Karoly, but for
+> other Buildroot developers. We have a good example here of some
+> dependencies being automatic (libfuse), some dependencies having their
+> own package sub-options (procps, dnet, pam). Do we want to have this
+> separation of treatment ? What is the rationale to do one or the other
+> in this specific case ?
+>
 
-First, there are two cases: internal toolchains, and external toolchains.
-Your patch only addresses the case for internal toolchains.
+Some explanation:
+In this special case, I can not turn off building vmblock-fuse with a
+configure parameter. If it finds libfuse, it builds vmblock-fuse. I think
+it's a minor defect in the configure script, it doesn't have a
+--without-fuse or similar switch.
+It's not pretty I know.
 
-For internal toolchains, we consider this is better served by using a
-post-build script that will remove the unneeded libs. It's much easier
-to write than this non-trivial patch.
-
-For external toolchains, the same script can be used in the state, too.
-
-However, this has prompted the case for how we handle C++ detection in
-the external toolchains. Currently, the selection in the menuconfig must
-match exactly whether the toolchain has or does not have C++.
-
-We pondered whether to change the check to require g++ if the user
-answered 'Y' to "toolchain has c++", but do no check if the user
-answered "N" to that question (currently the check is to test for g++ to
-be missing.)
-
-This does not solve your issue at hand, but we do believe the easiest
-way is to just use a post-build script to remove the libstdc++.
-
-Therefore, I've marked your patch as Rejected in the Patchwork. Should
-you have a strong case for this patch, please do not hesitate to discuss
-this resolution, we can always re-open the patch later.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-> 
-> ---
->  package/Makefile.in                |    2 +-
->  package/gcc/Config.in.host         |   14 +++++++++++---
->  package/gcc/gcc-final/gcc-final.mk |    2 +-
->  toolchain/toolchain-common.in      |    4 ++++
->  4 files changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 0233506..e8de29f 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -361,7 +361,7 @@ else
->  DISABLE_IPV6= --disable-ipv6
->  endif
->  
-> -ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-> +ifneq ($(BR2_CPP),y)
->  TARGET_CONFIGURE_OPTS+=CXX=false
->  endif
->  
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index fde1b90..693ff5f 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -126,13 +126,21 @@ config BR2_EXTRA_GCC_CONFIG_OPTIONS
->  	  initial, gcc intermediate and gcc final passes.
->  
->  config BR2_TOOLCHAIN_BUILDROOT_CXX
-> -	bool "Enable C++ support"
-> -	select BR2_INSTALL_LIBSTDCPP
-> +	bool "Enable C++ compiler support"
-> +	select BR2_CPP
->  	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && \
->  		     BR2_TOOLCHAIN_BUILDROOT_LOCALE)
->  	help
->  	  Enable this option if you want your toolchain to support the
-> -	  C++ language and you want C++ libraries to be installed on
-> +	  C++ language.
-> +
-> +config BR2_TOOLCHAIN_BUILDROOT_LIBSTDCPP
-> +	bool "Install C++ libraries"
-> +	default y
-> +	select BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_BUILDROOT_CXX
-> +	help
-> +	  Enable this option if you want C++ libraries to be installed on
->  	  your target system.
->  
->  comment "C++ support broken in uClibc with locale enabled with gcc 4.2"
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 622dcf2..d277064 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -43,7 +43,7 @@ endef
->  
->  # Languages supported by the cross-compiler
->  GCC_FINAL_CROSS_LANGUAGES-y = c
-> -GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
-> +GCC_FINAL_CROSS_LANGUAGES-$(BR2_CPP) += c++
->  GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_FORTRAN) += fortran
->  GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_OBJC)    += objc
->  GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index a91d247..24edce3 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -26,8 +26,12 @@ config BR2_USE_WCHAR
->  config BR2_ENABLE_LOCALE
->  	bool
->  
-> +config BR2_CPP
-> +	bool
-> +
->  config BR2_INSTALL_LIBSTDCPP
->  	bool
-> +	select BR2_CPP
->  
->  config BR2_TOOLCHAIN_HAS_THREADS
->  	bool
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+BR
+Karoly
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140730/fa2ae8de/attachment.html>
