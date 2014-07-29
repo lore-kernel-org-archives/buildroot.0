@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 23:40:33 +0200
-Subject: [Buildroot] [PATCH] popt: now needs gettextize
-In-Reply-To: <1406667806-25878-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1406667806-25878-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140729234033.72611bb9@free-electrons.com>
+Date: Tue, 29 Jul 2014 23:42:35 +0200
+Subject: [Buildroot] [PATCH] uclibc: build tests after uClibc libs are
+ installed to staging location
+In-Reply-To: <1406039278-19117-1-git-send-email-abrodkin@synopsys.com>
+References: <1406039278-19117-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <20140729234235.74119719@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Alexey Brodkin,
 
-On Tue, 29 Jul 2014 18:03:26 -0300, Gustavo Zacarias wrote:
-> Because of df9244ff3738face50605eacf4d4f15d963de915 we now need to
-> gettextize popt. Fixes:
-> http://autobuild.buildroot.net/results/6e2/6e27c98407f114df07eb5cd16a843420fdb72bf4/
+On Tue, 22 Jul 2014 18:27:58 +0400, Alexey Brodkin wrote:
+
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Anton Kolesov <akolesov@synopsys.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->  package/popt/popt.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/uclibc/uclibc.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks!
+After some discussion with Yann, we didn't see any other solution that
+doesn't involve complex change to solve just that one specific case.
+Therefore: patch applied.
+
+Thanks!
 
 Thomas
 -- 
