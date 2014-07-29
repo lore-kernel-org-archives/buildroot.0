@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 20:23:58 +0200
-Subject: [Buildroot] [git commit] docs/manual: add sob line for patch series
-Message-ID: <20140729182445.D16789D321@busybox.osuosl.org>
+Date: Tue, 29 Jul 2014 20:25:30 +0200
+Subject: [Buildroot] [PATCH] add sob line for patch series
+In-Reply-To: <20140729165051.GC32743@waldemar-brodkorb.de>
+References: <20140729150130.GA25263@waldemar-brodkorb.de>
+ <20140729184532.40a961ab@free-electrons.com>
+ <20140729165051.GC32743@waldemar-brodkorb.de>
+Message-ID: <20140729202530.3b999263@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ffc9e4680c1634fd7f2e088889c9ffbd43f4968c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Waldemar Brodkorb,
 
-The -s is missing in the documentation when teaching how to use 'git
-format-patch' to automatically add the sob line.
+On Tue, 29 Jul 2014 18:50:52 +0200, Waldemar Brodkorb wrote:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/contribute.txt |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+> > I think the best practice should rather be to SoB when committing (i.e
+> > 'git commit -s') rather than when formatting patches, no?
+> 
+> The example above in the manual is using -s for format-patch.
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 12e7f98..b7e8944 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -272,7 +272,7 @@ This can be easily handled with +git format-patch+ by using the option
- 
- ---------------------
- $ git format-patch --subject-prefix "PATCH v4" \
--    -M -o outgoing origin/master
-+    -M -s -o outgoing origin/master
- ---------------------
- 
- [[reporting-bugs]]
+Ok, so I've applied your patch, but I had once again to fixup the
+commit log. There was no prefix, and the commit log was a bit too
+terse. If you could try to do slightly better commit logs, it'd be nice.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
