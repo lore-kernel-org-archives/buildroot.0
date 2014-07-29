@@ -1,43 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 20:44:25 +0200
-Subject: [Buildroot] [PATCH] httping: fix math library linking
-In-Reply-To: <1406116042-3054-1-git-send-email-yuvaraj.patil@wipro.com>
-References: <1406116042-3054-1-git-send-email-yuvaraj.patil@wipro.com>
-Message-ID: <20140729204425.1f4dacb9@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Jul 2014 15:54:05 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.10
+In-Reply-To: <20140729202202.6ca3c3f3@free-electrons.com>
+References: <1406657724-21261-1-git-send-email-gustavo@zacarias.com.ar>
+ <20140729202202.6ca3c3f3@free-electrons.com>
+Message-ID: <53D7EDCD.8040402@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yuvaraj Patil,
+On 07/29/2014 03:22 PM, Thomas Petazzoni wrote:
 
-On Wed, 23 Jul 2014 17:17:22 +0530, Yuvaraj Patil wrote:
-> Add the math library directive '-lm' to linker options at the end.
-> The order of the math library directive '-lm' matters.
+> Dear Gustavo Zacarias,
 > 
-> fixes:
-> http://autobuild.buildroot.net/results/843/84382290696e72c23995f5ed020ad5c157817012//
+> On Tue, 29 Jul 2014 15:15:24 -0300, Gustavo Zacarias wrote:
+>> Lots of bugfixes, enhancements to provisioning and printing support via cups.
 > 
-> Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-> ---
->  .../httping-2.3.4-fix-math-library-linking.patch   |   25 ++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/httping/httping-2.3.4-fix-math-library-linking.patch
+> None of the patches we have in package/samba4/ have been merged
+> upstream? Some of them are marked "Upstream", so I would have expected
+> them to be removed by this bump, no? Or maybe they've been applied to a
+> development branch that hasn't been released yet?
+
+Hi.
+They've been merged to master which will be the 4.2 series, but not
+backported to the 4.1 series, except for...
+samba4-0001-build-don-t-execute-tests-summary.c.patch
+samba4-0002-Minor-typo-fix-in-source3-wscript.patch
+...which were included in the 4.1.8 release because they were considered
+simple enough to do so.
+
+>> +comment "Some samba4 CLI tools require the python package to keep .py files"
+>> +	depends on BR2_PACKAGE_SAMBA4 && BR2_PACKAGE_PYTHON_PYC_ONLY
 > 
-> diff --git a/package/httping/httping-2.3.4-fix-math-library-linking.patch b/package/httping/httping-2.3.4-fix-math-library-linking.patch
+> That seems weird, could you elaborate a bit on that?
 
-The name of the patch is wrong, it does not follow the Buildroot naming
-convention for package patches. It should have been
-<packagename>-<sequencenumber>-<description>.patch, and therefore not
-include the version of the package.
+The python package purges all *.py files, even the ones it doesn't own,
+and samba4 installs only .py and .so files (for python-related
+functionality) hence having this problem - this also happens when
+building samba natively, it's not an artifact of cross-compilation.
+This mostly affects the advanced tools like pidl, samba_dnsupdate,
+samba_kcc, samba_spnupdate, samba_upgradedns and samba-tool which are
+useful for domain masters and simple provisioning/upgrades.
+For many scenarios this isn't an issue since they're mostly interactive
+tools, but it's worth mentioning i think.
+It might also be problematic for people relying on samba's python
+bindings for their own tools.
 
-Committed with this fixed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards.
