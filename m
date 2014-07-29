@@ -1,41 +1,48 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 29 Jul 2014 10:40:26 +0200
-Subject: [Buildroot] [PATCH 2 of 2] generic packages: rename
- FOO_CONFIGURE_OPTS into FOO_CONFIGURE_OPT
-In-Reply-To: <20140727225529.518feb68@free-electrons.com>
-References: <9d1a7e2626ad1d2e4b42.1406056891@localhost>
- <5b961fc80eb2d23373a6.1406056892@localhost>
- <20140727152223.38c38d68@free-electrons.com>
- <8527bc5f-ee03-47f0-9e7c-e44db77ba2c5@email.android.com>
- <20140727202710.GI3895@free.fr> <20140727225529.518feb68@free-electrons.com>
-Message-ID: <CAAXf6LXB2Pnmn1xX94OQ0yooy46qP5gegH8vVYcqq35R4c7yTA@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 Jul 2014 13:26:08 +0300
+Subject: [Buildroot] [PATCH] libpcap: fix build for uclinux target
+In-Reply-To: <20140726092752.150736ed@free-electrons.com>
+References: <15676708c0726cb3fbed1dfaafae5e85c918ff3f.1406267235.git.baruch@tkos.co.il>
+ <20140726092752.150736ed@free-electrons.com>
+Message-ID: <20140729102608.GE2480@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 27, 2014 at 10:55 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Yann E. MORIN,
->
-> On Sun, 27 Jul 2014 22:27:10 +0200, Yann E. MORIN wrote:
->
->> > We could add a simple check to warn users of _OPT, but not more than that.
->>
->> OK, I'm siding with you guys. OK for the renaming.
->>
->> But then we should add a check that the old variable gets used, and
->> _error out_ in such case. If we just warn, the warning will be lost
->> amongst all the other messages, nad will bbe missed; and suddenly,
->> br2-external packages fails to build, or build in an unexpected
->> configuration.
->>
->> I agree with you that we should just check if the old variable is set,
->> but we should not try to correct the situation.
->
-> I fully agree with this: we should error out if the old variable is
-> used, so that things are clearly noticed by users.
+Hi Thomas,
 
-Ok, great.
-I'm working on this...
+On Sat, Jul 26, 2014 at 09:27:52AM +0200, Thomas Petazzoni wrote:
+> On Fri, 25 Jul 2014 08:47:15 +0300, Baruch Siach wrote:
+> > As usual, uclinux is also linux. Also, -lpthread is needed to link the canusb
+> > test.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/3af/3af796bc0eaa8563f0fd1dfce090083482fa57b9/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> I've applied your patch, after making one minor change:
+> 
+> > +Also we need -lpthread for the test to build for noMMU targets.
+> > +
+> > +Signend-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> Typo: Signend -> Signed.
+
+Thanks for fixing and applying.
+
+> Also, do you think you could send your new patch, as well as the
+> existing 0001 patch on libpcap to the upstream project? It'd be great
+> to be able to drop them at some point, and remove LIBPCAP_AUTORECONF =
+> YES.
+
+Done: https://github.com/the-tcpdump-group/libpcap/pull/372.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
