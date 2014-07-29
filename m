@@ -1,51 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Jul 2014 15:54:05 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.10
-In-Reply-To: <20140729202202.6ca3c3f3@free-electrons.com>
-References: <1406657724-21261-1-git-send-email-gustavo@zacarias.com.ar>
- <20140729202202.6ca3c3f3@free-electrons.com>
-Message-ID: <53D7EDCD.8040402@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 29 Jul 2014 21:21:28 +0200
+Subject: [Buildroot] [PATCH 1/2] xf86-video-intel: Disable SNA without
+	composite
+References: <1405661249-6506-1-git-send-email-ben@bwidawsk.net>
+Message-ID: <XnsA379D943425CCberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/29/2014 03:22 PM, Thomas Petazzoni wrote:
+Ben Widawsky <ben@bwidawsk.net> wrote in 
+news:1405661249-6506-1-git-send-email-ben at bwidawsk.net:
 
-> Dear Gustavo Zacarias,
-> 
-> On Tue, 29 Jul 2014 15:15:24 -0300, Gustavo Zacarias wrote:
->> Lots of bugfixes, enhancements to provisioning and printing support via cups.
-> 
-> None of the patches we have in package/samba4/ have been merged
-> upstream? Some of them are marked "Upstream", so I would have expected
-> them to be removed by this bump, no? Or maybe they've been applied to a
-> development branch that hasn't been released yet?
+> SNA requires the composite extension.
 
-Hi.
-They've been merged to master which will be the 4.2 series, but not
-backported to the 4.1 series, except for...
-samba4-0001-build-don-t-execute-tests-summary.c.patch
-samba4-0002-Minor-typo-fix-in-source3-wscript.patch
-...which were included in the 4.1.8 release because they were considered
-simple enough to do so.
+Hi,
 
->> +comment "Some samba4 CLI tools require the python package to keep .py files"
->> +	depends on BR2_PACKAGE_SAMBA4 && BR2_PACKAGE_PYTHON_PYC_ONLY
-> 
-> That seems weird, could you elaborate a bit on that?
+I could compile the sna module of 2.99.914 using
 
-The python package purges all *.py files, even the ones it doesn't own,
-and samba4 installs only .py and .so files (for python-related
-functionality) hence having this problem - this also happens when
-building samba natively, it's not an artifact of cross-compilation.
-This mostly affects the advanced tools like pidl, samba_dnsupdate,
-samba_kcc, samba_spnupdate, samba_upgradedns and samba-tool which are
-useful for domain masters and simple provisioning/upgrades.
-For many scenarios this isn't an issue since they're mostly interactive
-tools, but it's worth mentioning i think.
-It might also be problematic for people relying on samba's python
-bindings for their own tools.
+# BR2_PACKAGE_XLIB_LIBXCOMPOSITE is not set
 
-Regards.
+snippet from configure:
+
+xf86-video-intel 2.99.914 will be compiled with:
+  Xorg Video ABI version: 18.0
+  Acceleration backends: *sna
+
+2.99.913 included a patch to address this:
+
+* Fix build without Composite extension.
+
+Regards, Bernd
