@@ -1,46 +1,60 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Tue, 29 Jul 2014 16:14:03 +0200
-Subject: [Buildroot] [PATCH] systemd: needs kernel headers >= 3.7.
-In-Reply-To: <20140329093208.GA3227@free.fr> (Yann E. MORIN's message of "Sat, 
- 29 Mar 2014 10:32:08 +0100")
-References: <1396024266-6662-1-git-send-email-eric.le.bihan.dev@free.fr>
- <20140329093520.5318ada7@skate> <20140329093208.GA3227@free.fr>
-Message-ID: <87lhrc8d78.fsf@dell.be.48ers.dk>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 29 Jul 2014 16:57:33 +0200
+Subject: [Buildroot] [PATCH v2 1/2] qemu/sparc-ss10: update defconfig to
+	Linux 3.15.x
+Message-ID: <20140729145732.GA25017@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Update defconfig to 3.15, tested with Qemu 2.0.0.
+Removed hint about framebuffer, as -display none is used.
 
-Hi,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+Changes v1 -> v2:
+  - split patch (suggested by Thomas P.)
+---
+ board/qemu/sparc-ss10/readme.txt  | 3 +--
+ configs/qemu_sparc_ss10_defconfig | 8 ++++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
- >> Are you sure Linux headers >= 3.7 are sufficient? I'm looking at the
- >> build failure at
- >> http://autobuild.buildroot.org/results/ad3/ad3b4003dc50582a493f1156234d83652104a6bf/build-end.log,
- >> and it looks like missing kernel definitions, even though the toolchain
- >> apparently uses 3.7 kernel headers, as far as I can see.
-
- > No, they were introduced in 3.8.
-
- > What's confusing is that the changesets were done on a v3.7-rc* tree,
- > so when one git-blames the affected file, checkouts the changeset with
- > the chagnes, and looks at Makefile, one will see 3.7-rc1. But they
- > eventually landed in 3.8.
-
-Old mail, but I only got to read it now.
-
-You need to use git describe --contains <hash> to see the first git tag
-containing that change, E.G.:
-
-git describe --match v3.\*  --contains  0974658da47cb399b76794057823bf3cd22acf3
-v3.8-rc1~139^2~384
-
-(I have a linux-next remote here, so it would match on the next
-tag instead unless I use --match).
-
-E.G. this was merged 139 commits before 3.8-rc1 was tagged.
-
+diff --git a/board/qemu/sparc-ss10/readme.txt b/board/qemu/sparc-ss10/readme.txt
+index a126a55..b18bb40 100644
+--- a/board/qemu/sparc-ss10/readme.txt
++++ b/board/qemu/sparc-ss10/readme.txt
+@@ -3,6 +3,5 @@ Run the emulation with:
+   qemu-system-sparc -M SS-10 -kernel output/images/zImage -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyS0,115200" -serial stdio -net nic,model=lance -net user -display none
+ 
+ The login prompt will appear in the terminal that started Qemu.
+-The graphical window is the framebuffer.
+ 
+-Tested with QEMU 1.6.1
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+index 3b56d98..afc0789 100644
+--- a/configs/qemu_sparc_ss10_defconfig
++++ b/configs/qemu_sparc_ss10_defconfig
+@@ -6,14 +6,14 @@ BR2_sparc_v8=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.12 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.6"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="sparc32"
+ BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
-Bye, Peter Korsgaard
+2.0.0
