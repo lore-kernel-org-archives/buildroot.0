@@ -1,135 +1,58 @@
-From: Nathaniel Roach <nroach44@gmail.com>
-Date: Tue, 29 Jul 2014 11:49:58 +0800
-Subject: [Buildroot] [PATCH v2] bandwidthd: new package
-In-Reply-To: <1406604825-1048-1-git-send-email-nroach44@gmail.com>
-References: <1406604825-1048-1-git-send-email-nroach44@gmail.com>
-Message-ID: <53D719E6.8040801@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Jul 2014 08:30:10 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-07-28
+Message-ID: <20140729063010.283E4100F2E@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/07/14 11:33, Nathaniel Roach wrote:
-> ---
->  package/Config.in                |  1 +
->  package/bandwidthd/Config.in     | 48 ++++++++++++++++++++++++++++++++++++++++
->  package/bandwidthd/bandwidthd.mk | 32 +++++++++++++++++++++++++++
->  3 files changed, 81 insertions(+)
->  create mode 100644 package/bandwidthd/Config.in
->  create mode 100644 package/bandwidthd/bandwidthd.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 11087da..0d7e1e8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -938,6 +938,7 @@ menu "Networking applications"
->  	source "package/autossh/Config.in"
->  	source "package/avahi/Config.in"
->  	source "package/axel/Config.in"
-> +	source "package/bandwidthd/Config.in"
->  	source "package/bcusdk/Config.in"
->  	source "package/bind/Config.in"
->  	source "package/bluez_utils/Config.in"
-> diff --git a/package/bandwidthd/Config.in b/package/bandwidthd/Config.in
-> new file mode 100644
-> index 0000000..a536c5d
-> --- /dev/null
-> +++ b/package/bandwidthd/Config.in
-> @@ -0,0 +1,48 @@
-> +config BR2_PACKAGE_BANDWIDTHD
-> +	bool "bandwidthd"
-> +	depends on BR2_USE_MMU # fork()
-> +	select BR2_PACKAGE_LIBPNG
-> +	select BR2_PACKAGE_LIBPCAP
-> +	select BR2_PACKAGE_GD
-> +	help
-> +	  BandwidthD - Bandwidth monitoring
-> +
-> +	  Provides a method to measure the bandwidth that travels through the
-> +	  machine, grouped by subnet and IP. This information can be stored
-> +	  locally in /var/lib/bandwidthd and can be configured to generate
-> +	  static HTML pages which can be hosted by a web server.
-> +
-> +	  It is highly recommended that the target has some way of retaining the
-> +	  time between reboots. (e.g. NTP on boot or an RTC)
-> +	  
-> +	  It is suggested to use sqlite for logfile storage but works fine
-> +	  without, and can be completely ignored if the postgresql portion
-> +	  is used. 
-> +
-> +	  As upstream is no longer actively maintained, a fork is available
-> +	  on github that works on making BandwidthD's build process more
-> +	  compatible with buildroot's.
-> +
-> +	  Upstream: http://bandwidthd.sourceforge.net/
-> +	  Github fork: http://github.com/nroach44/bandwidthd
-> +
-> +if BR2_PACKAGE_BANDWIDTHD
-> +
-> +config BR2_PACKAGE_BANDWIDTHD_POSTGRESQL
-> +	bool "enable postgresql log target support"
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # postgresql
-> +	select BR2_PACKAGE_POSTGRESQL
-> +	help
-> +	  Enable support for logging the bandwidthd data to a remote (or local)
-> +	  postgresql server. This data can then be viewed through a php site. See 
-> +	  README in the source code (github.com/nroach44/bandwidthd) for more
-> +	  information.
-> +
-> +config BR2_PACKAGE_BANDWIDTHD_SQLITE3
-> +	bool "enable sqlite3 log storage"
-> +	select BR2_PACKAGE_SQLITE
-> +	help
-> +	  Enable support for storing the aggregated data in an sqlite db instead
-> +	  of a plain text file.
-> +
-> +endif
-> diff --git a/package/bandwidthd/bandwidthd.mk b/package/bandwidthd/bandwidthd.mk
-> new file mode 100644
-> index 0000000..8ad634e
-> --- /dev/null
-> +++ b/package/bandwidthd/bandwidthd.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# bandwidthd
-> +#
-> +################################################################################
-> +
-> +BANDWIDTHD_VERSION = v2.0.1-auto-r06
-> +BANDWIDTHD_SITE = $(call github,nroach44,bandwidthd,$(BANDWIDTHD_VERSION))
-> +
-> +#Specified as "any version of the GPL that is current as of your download."
-> +# by upstream.
-> +BANDWIDTHD_LICENSE = GPL
-> +
-> +BANDWIDTHD_DEPENDENCIES += gd libpng libpcap
-> +
-> +BANDWIDTHD_AUTORECONF = YES
-> +
-> +ifeq ($(BR2_PACKAGE_BANDWIDTHD_POSTGRESQL),y)
-> +BANDWIDTHD_DEPENDENCIES += postgresql 
-> +BANDWIDTHD_CONF_OPT += --with-postgresql-logging=true
-> +else
-> +BANDWIDTHD_CONF_OPT += --with-postgresql-logging=false
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_BANDWIDTHD_SQLITE3),y)
-> +BANDWIDTHD_DEPENDENCIES += sqlite
-> +BANDWIDTHD_CONF_OPT += --with-sqlite-storage=true
-> +else
-> +BANDWIDTHD_CONF_OPT += --with-sqlite-storage=false
-> +endif
-> +
-> +$(eval $(autotools-package))
-> 
+Build statistics for 2014-07-28
+===============================
 
-Whelp, forgot to add the changelog in, I can resubmit if needed, but
-otherwise, here it is:
+        success : 77 
+       failures : 17 
+       timeouts : 1  
+          TOTAL : 95 
 
-Changes v1 to v2
+Classification of failures by reason
+====================================
 
-     - Fixed writing style (as recommended by Thomas Petazzoni)
-     - Added sqlite toggle
-     - Bump version
+ltrace-0896ce554f80afdcba81... | 6 
+                  cppcms-1.0.4 | 2 
+                     popt-1.16 | 2 
+        gst1-plugins-bad-1.2.4 | 1 
+          qt5xmlpatterns-5.3.1 | 1 
+                 dmalloc-5.4.3 | 1 
+            xbmc-13.2b2-Gotham | 1 
+               polarssl-1.2.11 | 1 
+               ruby-1.9.3-p545 | 1 
+           xapp_xconsole-1.0.6 | 1 
+                  perl-gd-2.53 | 1 
+
+Detail of failures
+===================
+
+   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/ee8aff06e244e432d8bef3a93b05b76608c6d4c1/
+   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/d54d7d83a52fffd66bebba2435d70f541ebbec1e/
+  mips64el |                  dmalloc-5.4.3 | NOK | http://autobuild.buildroot.net/results/6a2445a95f98d46d12498e501b519fecb483ea8c/
+       arm |         gst1-plugins-bad-1.2.4 | NOK | http://autobuild.buildroot.net/results/8970d2bf72907aeddf982b5fe2700d1e0ca718e9/
+   powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/bc5c4887238feeb3d917b6c6df1263e383cca346/
+   powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/6ab21704c7edddce896b8aa0e4498188002fec37/
+   powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/351d19d95b2e941e1d4d604fbb31ee5c4ee69dc5/
+   powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/4bd898aa211d0a70ab8a15b41f37ce6a6f683fbc/
+   powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/c17a64b78c62b917004e16bb193094e0146efc2d/
+   powerpc | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/4339d4edd2b3ae64e745c566715d3e7b2dafce59/
+       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/1d7cd994e7f90e71a14cf17fd9133a77c524683f/
+microblazeel |                polarssl-1.2.11 | NOK | http://autobuild.buildroot.net/results/5f295e1199a9dc5d9f16a32cc89aff46a28c21f3/
+      bfin |                      popt-1.16 | NOK | http://autobuild.buildroot.net/results/d66d3eb78fce74e0f5e2c2c3681882f41624e687/
+      bfin |                      popt-1.16 | NOK | http://autobuild.buildroot.net/results/aa655d53c39ebd893028ec1b2582af20d7ca74ff/
+       arm |           qt5xmlpatterns-5.3.1 | TIM | http://autobuild.buildroot.net/results/0f86921ddfb2ef75dd1d1ea85a18954a99237758/
+      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/837de51a410b450266b5dc678ef42e59477b8581/
+      bfin |            xapp_xconsole-1.0.6 | NOK | http://autobuild.buildroot.net/results/be89847832a2588dbda8dd921edb09b2af130e03/
+       arm |             xbmc-13.2b2-Gotham | NOK | http://autobuild.buildroot.net/results/213d7454a1dc68cfb8f4c8d9508f52ebf8e58e33/
+
+
+-- 
+http://autobuild.buildroot.net
