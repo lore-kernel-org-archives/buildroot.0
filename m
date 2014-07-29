@@ -1,81 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Jul 2014 18:29:29 -0300
-Subject: [Buildroot] [PATCH 4/4] perl-gdgraph: new package
-In-Reply-To: <20140719223515.GL3593@free.fr>
-References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
- <1405691019-10397-4-git-send-email-francois.perrad@gadz.org>
- <20140719191051.358726f9@free-electrons.com>
- <CAB0FRssX48i-XJ6GuZFObfWZQwTGXEOyQhWFgtsswn9RoEuVqA@mail.gmail.com>
- <20140719223515.GL3593@free.fr>
-Message-ID: <53D81239.2070001@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Jul 2014 23:32:41 +0200
+Subject: [Buildroot] [git commit] popt: now needs gettextize
+Message-ID: <20140729213256.2E9AF9D321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/19/2014 07:35 PM, Yann E. MORIN wrote:
+commit: http://git.buildroot.net/buildroot/commit/?id=7eb4a73cee049339527e2df504afaeb478292c56
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi All.
-Reviving this...
+Because of df9244ff3738face50605eacf4d4f15d963de915 we now need to
+gettextize popt. Fixes:
+http://autobuild.buildroot.net/results/6e2/6e27c98407f114df07eb5cd16a843420fdb72bf4/
 
-> Does that mean we should have our own host-perl, then?
-> 
-> It would guarantee that we have a known situation, where we control the
-> version of perl and we can reproduce builds across machines with
-> different versions of perl and a known list of installed modules and
-> their versions.
-> 
-> It would also allow tweaking the search paths to no longer include the
-> host system includes and libraries search paths (although it won't
-> protect us from badly written packages, such as perl-net-ssleay.)
-> 
-> But we can ensure that dependencies on other perl modules won't
-> accidentally find host system perl's modules.
-> 
-> This might be a big endeavour, but even if we only build our own
-> host-perl, that's still a big improvement, and needs only little changes
-> to our current perl infra, i.e. just calling our own perl.
-> 
-> We can later enhance the situation by gradually tweaking our host-perl.
-> 
-> What do you guys think of this?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/popt/popt.mk |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-Well according to my failur(es) on gentoo:
-
->>> perl-gd 2.53 Building
-cd /home/gustavoz/b/perl/output/build/perl-gd-2.53/ && if [ -f Build.PL
-] ; then perl Build  build; else /usr/bin/make -j1
-PERL_INC=/home/gustavoz/b/perl/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/perl5/5.18.2/arm-linux/CORE
- pure_all; fi
-make[1]: Entering directory
-`/home/gustavoz/b/perl/output/build/perl-gd-2.53'
-/usr/bin/perl5.18.2 GD/Image.pm.PLS GD/Image.pm
-Extracting Image.pm (with variable substitutions)
-cp GD/Image.pm blib/lib/GD/Image.pm
-cp GD/Simple.pm blib/lib/GD/Simple.pm
-cp GD.pm blib/lib/GD.pm
-AutoSplitting blib/lib/GD.pm (blib/lib/auto/GD)
-cp GD/Group.pm blib/lib/GD/Group.pm
-cp GD/Polygon.pm blib/lib/GD/Polygon.pm
-cp GD/Polyline.pm blib/lib/GD/Polyline.pm
-cp qd.pl blib/lib/qd.pl
-/usr/bin/perl5.18.2 /usr/lib64/perl5/5.18.2/ExtUtils/xsubpp  -typemap
-/usr/lib64/perl5/5.18.2/ExtUtils/typemap -typemap typemap  GD.xs >
-GD.xsc && mv GD.xsc GD.c
-make[1]: *** No rule to make target
-`/home/gustavoz/b/perl/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/perl5/5.18.2/arm-linux/CORE/patchlevel-gentoo.h',
-needed by `GD.o'.  Stop.
-make[1]: Leaving directory `/home/gustavoz/b/perl/output/build/perl-gd-2.53'
-make: *** [/home/gustavoz/b/perl/output/build/perl-gd-2.53/.stamp_built]
-Error 2
-
-Stumbled upon this when looking at the perl-gd xpm failure.
-And surprise, it fails for a bunch of other perl packages as well.
-We may be able to work around that, but really it would be a volatile
-hack. I'm all for saving build time but fishing in the ocean with lake
-kit... please no.
-
-+1 for host-perl.
-
-Regards.
+diff --git a/package/popt/popt.mk b/package/popt/popt.mk
+index 0413c5a..54e7c88 100644
+--- a/package/popt/popt.mk
++++ b/package/popt/popt.mk
+@@ -11,6 +11,7 @@ POPT_INSTALL_STAGING = YES
+ POPT_LICENSE = MIT
+ POPT_LICENSE_FILES = COPYING
+ POPT_AUTORECONF = YES
++POPT_GETTEXTIZE = YES
+ 
+ POPT_CONF_ENV = ac_cv_va_copy=yes
+ 
