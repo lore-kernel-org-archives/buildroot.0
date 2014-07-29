@@ -1,40 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 23:57:36 +0200
-Subject: [Buildroot] [PATCH 1/1] flex: delete broken flex++ symlink from
- target
-In-Reply-To: <1406597734-1902-1-git-send-email-danomimanchego123@gmail.com>
-References: <1406597734-1902-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140729235736.1c91a388@free-electrons.com>
+Date: Wed, 30 Jul 2014 00:04:22 +0200
+Subject: [Buildroot] [PATCH] Add target-clean makefile target
+In-Reply-To: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1403778551-31435-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20140730000422.682eaaee@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+Dear Angelo Compagnucci,
 
-On Mon, 28 Jul 2014 21:35:34 -0400, Danomi Manchego wrote:
-> When flex is built for the target without installing the
-> flex binary, a flex++ symlink installed by flex's Makefile
-> points to the missing flex executable.  This mod adds
-> a post target install hook to remove the broken symlink.
+On Thu, 26 Jun 2014 12:29:11 +0200, Angelo Compagnucci wrote:
+> This makefile target wipes the target folder and forces buildroot into rebuild it.
+> It's useful when you have changed the list of packages and the target
+> tree remains out of sync keeping old installed packages no longer needed.
 > 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > ---
->  package/flex/flex.mk |    6 ++++++
+>  Makefile | 6 ++++++
 >  1 file changed, 6 insertions(+)
 
-Thanks, applied. However, I'd really like if someone could take the
-time to do a proper patch upstream to add a new ./configure option to
-enable/disable the program compilation/installation. It would allow us
-to simplify the package a bit.
+Following the discussion, you received several suggestions to improve
+the patch in order to make it acceptable. Therefore, I'll mark your
+patch as "Changes Requested" in our patch tracking system, and we'll
+wait for you to submit a new iteration that takes into account the
+comments that were made during the discussion.
 
-Danomi, would you be willing to work on this? The upstream seems to be
-active, and there is a git repository at
-http://sourceforge.net/p/flex/flex/ci/master/tree/, so no need to work
-with horrible outdated version control systems.
-
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
