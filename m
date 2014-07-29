@@ -1,49 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Jul 2014 23:42:52 +0200
-Subject: [Buildroot] [git commit] uclibc: rename SETUP_DOT_CONFIG to
-	FIXUP_DOT_CONFIG
-Message-ID: <20140729214349.B16B59D333@busybox.osuosl.org>
+Date: Tue, 29 Jul 2014 23:45:46 +0200
+Subject: [Buildroot] [PATCH v4 1/1] New package: openvmtools
+In-Reply-To: <1406635032-34970-1-git-send-email-kaszak@gmail.com>
+References: <y>
+	<1406635032-34970-1-git-send-email-kaszak@gmail.com>
+Message-ID: <20140729234546.3c466ac6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8f3c642413416e2761baf68489af5e8bed1d423e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Karoly, Yann, All,
 
-In a subsequent patch, the behavior of UCLIBC_SETUP_DOT_CONFIG will change
-so that it only applies fixups to the (already copied) configuration file.
-This patch renames this function to UCLIBC_FIXUP_DOT_CONFIG to better match
-the future behavior.
+On Tue, 29 Jul 2014 13:57:12 +0200, Karoly Kasza wrote:
 
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uclibc/uclibc.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+> +# When libfuse is available, openvmtools can build vmblock-fuse, so
+> +# make sure that libfuse gets built first.
+> +ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+> +OPENVMTOOLS_DEPENDENCIES += libfuse
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
+> +OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps LDFLAGS="-L$(TARGET_DIR)/usr/lib"
+> +OPENVMTOOLS_CONF_OPT += --with-procps
+> +OPENVMTOOLS_DEPENDENCIES += procps-ng
+> +else
+> +OPENVMTOOLS_CONF_OPT += --without-procps
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_DNET),y)
+> +OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS="-I$(STAGING_DIR)/usr/include"
+> +OPENVMTOOLS_CONF_OPT += --with-dnet
+> +OPENVMTOOLS_DEPENDENCIES += libdnet
+> +else
+> +OPENVMTOOLS_CONF_OPT += --without-dnet
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
+> +OPENVMTOOLS_CONF_OPT += --with-pam
+> +OPENVMTOOLS_MAKE_OPT += CFLAGS+="-Wno-unused-local-typedefs"
+> +OPENVMTOOLS_DEPENDENCIES += linux-pam
+> +else
+> +OPENVMTOOLS_CONF_OPT += --without-pam
+> +endif
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 2620a33..ab2e57c 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -393,7 +393,7 @@ UCLIBC_MAKE_FLAGS = \
- 	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
- 	HOSTCC="$(HOSTCC)"
- 
--define UCLIBC_SETUP_DOT_CONFIG
-+define UCLIBC_FIXUP_DOT_CONFIG
- 	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(@D)/.config
- 	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
- 	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
-@@ -433,7 +433,7 @@ define UCLIBC_SETUP_DOT_CONFIG
- endef
- 
- define UCLIBC_CONFIGURE_CMDS
--	$(UCLIBC_SETUP_DOT_CONFIG)
-+	$(UCLIBC_FIXUP_DOT_CONFIG)
- 	$(MAKE1) -C $(UCLIBC_DIR) \
- 		$(UCLIBC_MAKE_FLAGS) \
- 		PREFIX=$(STAGING_DIR) \
+Here I have a question not necessarily directly for you Karoly, but for
+other Buildroot developers. We have a good example here of some
+dependencies being automatic (libfuse), some dependencies having their
+own package sub-options (procps, dnet, pam). Do we want to have this
+separation of treatment ? What is the rationale to do one or the other
+in this specific case ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
