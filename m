@@ -1,10 +1,11 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Tue, 29 Jul 2014 18:50:52 +0200
-Subject: [Buildroot] [PATCH] add sob line for patch series
-In-Reply-To: <20140729184532.40a961ab@free-electrons.com>
-References: <20140729150130.GA25263@waldemar-brodkorb.de>
- <20140729184532.40a961ab@free-electrons.com>
-Message-ID: <20140729165051.GC32743@waldemar-brodkorb.de>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 29 Jul 2014 16:53:54 +0000
+Subject: [Buildroot] [PATCH] gcc: explicitly use CFLAGS_FOR_TARGET
+ instead of --enable-target-optspace
+In-Reply-To: <20140728231227.298a3882@free-electrons.com>
+References: <1405351786-4445-1-git-send-email-abrodkin@synopsys.com>
+ <20140728231227.298a3882@free-electrons.com>
+Message-ID: <1406652833.17998.24.camel@abrodkin-8560l>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Hi Thomas,
-Thomas Petazzoni wrote,
 
-> Dear Waldemar Brodkorb,
+On Mon, 2014-07-28 at 23:12 +0200, Thomas Petazzoni wrote:
+> I found the commit log quite difficult to understand actually. It
+> lacked a bit of context like:
 > 
-> On Tue, 29 Jul 2014 17:01:30 +0200, Waldemar Brodkorb wrote:
-> > I think -s is missing here to automatically add
-> > the sob line, when using this example.
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> >  docs/manual/contribute.txt |    2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-> > index 12e7f98..b7e8944 100644
-> > --- a/docs/manual/contribute.txt
-> > +++ b/docs/manual/contribute.txt
-> > @@ -272,7 +272,7 @@ This can be easily handled with +git format-patch+ by using the option
-> >  
-> >  ---------------------
-> >  $ git format-patch --subject-prefix "PATCH v4" \
-> > -    -M -o outgoing origin/master
-> > +    -M -s -o outgoing origin/master
-> >  ---------------------
+> """
+> The gcc.mk file is passing --enable-target-optspace to gcc configure
+> script, to ask for space-optimized (-Os) target libraries. However,
+> passing this option has the effect of overriding any custom
+> CFLAGS_FOR_TARGET or CXXFLAGS_FOR_TARGET values that may be passed.
+> """
 > 
-> I think the best practice should rather be to SoB when committing (i.e
-> 'git commit -s') rather than when formatting patches, no?
+> And then go on with your explanation. Also, apparently, using "======="
+> in the middle of a commit log confuses patchwork a bit:
+> http://patchwork.ozlabs.org/patch/369672/.
 
-The example above in the manual is using -s for format-patch.
-I didn't even know that I can use -s while doing commit ;)
+Thanks for this comment. Makes perfect sense.
 
-best regards
- Waldemar
+> The original --enable-target-optspace is passed at *all* gcc steps, but
+> now you're passing CFLAGS_FOR_TARGET and CXXFLAGS_FOR_TARGET only at
+> the gcc intermediate step. This looks weird.
+
+Well I was under impression that target binaries are only built on
+"gcc-intermediate" stage, that's why I moved changes there exclusively.
+
+I noticed that "libgcc" (in all its incarnations: libgcc_s.so, libgcc.a,
+libgcc_eh.a etc) was built on "intermediate" stage and considered that
+there's no sense to build it once again on "final" stage.
+
+I checked now and do see that on "gcc-final" stage libgcc and friends
+was built as well. I'm wondering why?
+
+Anyway it looks like we need to pass "custom" flags at least on
+"gcc-intermediate" and "gcc-final" stages and in this case it makes
+sense to leave everything in "gcc.mk" (even though "gcc-initial" doesn't
+build anything for target).
+
+> Also, since we can actually customize this option, what about using the
+> ones from Buildroot, i.e something such as:
+> 
+> 	HOST_GCC_CONF_ENV += CFLAGS_FOR_TARGET="$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)"
+> 	HOST_GCC_CONF_ENV += CXXFLAGS_FOR_TARGET="$(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)"
+
+My intention was to keep output results as they are now but add an
+ability to modify flags if it is actually required. That way I might be
+sure this change doesn't brake things for people. "libgcc" is a thing
+that everybody builds and than uses on their target so if I break it
+people will go for me.
+
+Your proposal looks very sane for me and if you believe we may try this
+move I'll happily implement it.
+
+Actually I was pretty surprised myself when I found that
+BR2_TARGET_OPTIMIZATION has no impact on libgcc built for target. And
+maybe it's time to fix it.
+
+> Maybe we could even just use $(TARGET_CFLAGS) and $(TARGET_CXXFLAGS),
+> though I'm a bit less sure about all the possible consequences.
+
+As for me I'd vote for TARGET_CFLAGS/CXXFLAGS because then we have
+exactly the same options for all target binaries.
+
+Would be good to get some more feedback to make a good choice.
+
+Regards,
+Alexey
