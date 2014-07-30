@@ -1,40 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 00:31:18 +0200
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.10
-In-Reply-To: <53D96C6E.5060203@zacarias.com.ar>
-References: <1406657724-21261-1-git-send-email-gustavo@zacarias.com.ar>
- <20140729202202.6ca3c3f3@free-electrons.com>
- <53D7EDCD.8040402@zacarias.com.ar>
- <20140730235820.3f3275d2@free-electrons.com>
- <53D96C6E.5060203@zacarias.com.ar>
-Message-ID: <20140731003118.322103fe@free-electrons.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 30 Jul 2014 18:34:40 -0400
+Subject: [Buildroot] lua interpreter choice?
+In-Reply-To: <20140730234037.19f851da@free-electrons.com>
+References: <CANxTyt6-4j70z297t4VsaqKGosnTdWarc5fBVa3vVORmXnWMFQ@mail.gmail.com>
+ <CAB0FRst5RNAYTMa_jVxGoRYS-GjO3jdc05CNkuK9kAdLXgKM2Q@mail.gmail.com>
+ <CANxTyt6mPjEmSdOtNAxqQ=eyfC74qBiFNmFmyhju0aUtqsrHNQ@mail.gmail.com>
+ <20140730234037.19f851da@free-electrons.com>
+Message-ID: <CANxTyt6GCC6K1NPyCGf9rHrO6T0o+y7K+PAioWKdRPZysDbhcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On Wed, Jul 30, 2014 at 5:40 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Danomi Manchego,
+>
+> On Wed, 30 Jul 2014 14:51:49 -0400, Danomi Manchego wrote:
+>
+>> > this change in the virtual-package behavior was introduced by
+>> > http://git.buildroot.net/buildroot/commit/?id=91169d3346e543be18139e18bdcc52a2345e0d16
+>> > (infra/pkg-virtual: validate only one provider provides an implementation)
+>> >
+>> > Fran?ois
+>>
+>> But the menuconfig still lets you select both packages, instead of
+>> providing a choice of one or the other (like "jpeg support").  Is this
+>> not undesirable?
+>
+> We discussed this before doing the commit pointed by Fran?ois.
+> Unfortunately, there's no good solution to solve this problem at the
+> kconfig level. The only solution would be to have each package being a
+> provider of a certain virtual package, have the knowledge of *all*
+> providers of that virtual packages to do a "depends
+> on !BR2_PACKAGE_<foo>". While for lua vs. luajit this seems more or
+> less reasonable, as we probably don't expect to have more providers
+> than just lua and luajit, but in the general case, we have things like
+> libgles or egl (for OpenGL support) which have multiple providers, and
+> we don't want to have to edit all of them whenever we add a new
+> provider.
+>
+> Not speaking about packages in BR2_EXTERNAL, which we cannot control.
+>
+> So our decision was to use a build-time check rather than a
+> kconfig-time check.
+>
+> Hope this clarifies the situation,
 
-On Wed, 30 Jul 2014 19:06:38 -0300, Gustavo Zacarias wrote:
+Let me apologize in advance if I'm still missing something obvious but
+- what distinguishes the lua/luajit case from the libjpeg/jpeg-turbo
+case, or the systemd/eudev case?  Is the virtual-package
+infrastructure + kconfig choice not suitable here?
 
-> The binaries are installed in /usr/bin & /usr/sbin, but they are python
-> scripts that import from the usual /usr/lib/python2.7/site-packages/* (a
-> couple in the toplevel, most in samba/).
-> Alternatively we can remove the tools if .pyc files aren't kept or hide
-> samba4.
-> But since that doesn't inhibit samba4 working and most people would
-> probably make up their config from some template or separate web ui i
-> went for the warning.
-> It would probably be problematic for advanced uses like clustering or
-> ADS support which aren't part of the feature set of the package at the
-> moment (and stumbled upon it when testing what that would entail).
-
-Then wouldn't it be simpler/saner to simply remove those tools and
-Python modules from the target completely?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Danomi -
