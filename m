@@ -1,74 +1,90 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Jul 2014 19:58:48 +0200
-Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
-	infrastructure
-In-Reply-To: <20140729235208.674744cc@free-electrons.com>
-References: <patchbomb.1406224167@localhost>
- <20140729235208.674744cc@free-electrons.com>
-Message-ID: <CAAXf6LV3P+qJGK11q9eGYtT+tJOMt4HGC3mou+86ch-PpVD64g@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 30 Jul 2014 20:27:53 +0200
+Subject: [Buildroot] [UNSURE]Re:  [PATCH 4/4] perl-gdgraph: new package
+In-Reply-To: <53D81239.2070001@zacarias.com.ar>
+References: <1405691019-10397-1-git-send-email-francois.perrad@gadz.org>
+ <1405691019-10397-4-git-send-email-francois.perrad@gadz.org>
+ <20140719191051.358726f9@free-electrons.com>
+ <CAB0FRssX48i-XJ6GuZFObfWZQwTGXEOyQhWFgtsswn9RoEuVqA@mail.gmail.com>
+ <20140719223515.GL3593@free.fr> <53D81239.2070001@zacarias.com.ar>
+Message-ID: <CAB0FRssPkzyF6=WY7y5-Gy=FO2sA6G9EtO4rCMnUU-RT0sor6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-
-On Tue, Jul 29, 2014 at 11:52 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Thomas De Schampheleire,
+2014-07-29 23:29 GMT+02:00 Gustavo Zacarias <gustavo@zacarias.com.ar>:
+> On 07/19/2014 07:35 PM, Yann E. MORIN wrote:
 >
-> On Thu, 24 Jul 2014 19:49:27 +0200, Thomas De Schampheleire wrote:
+> Hi All.
+> Reviving this...
 >
->> This patch series introduces a kconfig-package infrastructure and already
->> converts the uclibc and busybox packages.
->> The series is based on the to-be-applied uclibc patch series that improves the
->> behavior of the kconfig parts.
+>> Does that mean we should have our own host-perl, then?
+>>
+>> It would guarantee that we have a known situation, where we control the
+>> version of perl and we can reproduce builds across machines with
+>> different versions of perl and a known list of installed modules and
+>> their versions.
+>>
+>> It would also allow tweaking the search paths to no longer include the
+>> host system includes and libraries search paths (although it won't
+>> protect us from badly written packages, such as perl-net-ssleay.)
+>>
+>> But we can ensure that dependencies on other perl modules won't
+>> accidentally find host system perl's modules.
+>>
+>> This might be a big endeavour, but even if we only build our own
+>> host-perl, that's still a big improvement, and needs only little changes
+>> to our current perl infra, i.e. just calling our own perl.
+>>
+>> We can later enhance the situation by gradually tweaking our host-perl.
+>>
+>> What do you guys think of this?
 >
-> Weird, you don't have the summary of patches in the cover letter. Don't
-> you use 'git --cover format-patch' to generate the cover letter?
-
-Is this a trick question? ;-)
-I'm using mercurial to send out patches, unfortunately it does not
-have a ready-made option to get this summary of patches. I have wanted
-to do that in the past too, so I'll write a little script to mimic the
-output of git here.
-
+> Well according to my failur(es) on gentoo:
 >
-> Anyway:
+>>>> perl-gd 2.53 Building
+> cd /home/gustavoz/b/perl/output/build/perl-gd-2.53/ && if [ -f Build.PL
+> ] ; then perl Build  build; else /usr/bin/make -j1
+> PERL_INC=/home/gustavoz/b/perl/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/perl5/5.18.2/arm-linux/CORE
+>  pure_all; fi
+> make[1]: Entering directory
+> `/home/gustavoz/b/perl/output/build/perl-gd-2.53'
+> /usr/bin/perl5.18.2 GD/Image.pm.PLS GD/Image.pm
+> Extracting Image.pm (with variable substitutions)
+> cp GD/Image.pm blib/lib/GD/Image.pm
+> cp GD/Simple.pm blib/lib/GD/Simple.pm
+> cp GD.pm blib/lib/GD.pm
+> AutoSplitting blib/lib/GD.pm (blib/lib/auto/GD)
+> cp GD/Group.pm blib/lib/GD/Group.pm
+> cp GD/Polygon.pm blib/lib/GD/Polygon.pm
+> cp GD/Polyline.pm blib/lib/GD/Polyline.pm
+> cp qd.pl blib/lib/qd.pl
+> /usr/bin/perl5.18.2 /usr/lib64/perl5/5.18.2/ExtUtils/xsubpp  -typemap
+> /usr/lib64/perl5/5.18.2/ExtUtils/typemap -typemap typemap  GD.xs >
+> GD.xsc && mv GD.xsc GD.c
+> make[1]: *** No rule to make target
+> `/home/gustavoz/b/perl/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/perl5/5.18.2/arm-linux/CORE/patchlevel-gentoo.h',
+
+This problem is not specific to perl-gd, but it concerns all Perl XS
+packages (ie. with C compilation).
+The fix is easy, another `touch` for patchlevel-gentoo.h this time.
+See http://git.buildroot.net/buildroot/commit/package/perl/perl.mk?id=e037db345e09241a6a88d22886aa45a165f39dc8
+
+Fran?ois
+
+> needed by `GD.o'.  Stop.
+> make[1]: Leaving directory `/home/gustavoz/b/perl/output/build/perl-gd-2.53'
+> make: *** [/home/gustavoz/b/perl/output/build/perl-gd-2.53/.stamp_built]
+> Error 2
 >
->  * I've applied two preparation patches of this series:
->    uclibc: use $(MAKE) iso $(MAKE1) for menuconfig target
->    linux: remove support of linux26-* targets
+> Stumbled upon this when looking at the perl-gd xpm failure.
+> And surprise, it fails for a bunch of other perl packages as well.
+> We may be able to work around that, but really it would be a volatile
+> hack. I'm all for saving build time but fishing in the ocean with lake
+> kit... please no.
 >
->    This way, you don't have to carry them anymore.
-
-Thanks!
-
+> +1 for host-perl.
 >
->  * Regarding the kconfig-package infra stuff, I'm mostly fine with it,
->    except for one detail: it pretends to be a package infrastructure,
->    but it is not. It is only a kind of "library" / "helper" to use next
->    to a real package infrastructure. And I think this is pretty
->    confusing considering the name that was chosen, and the way it works.
->
->    My proposal would therefore be to turn it into a real package
->    infrastructure by simply making it inherit from generic-package,
->    much like autotools-package, cmake-package and al. All kconfig-based
->    packages are otherwise generic-package. I don't see the logic behind
->    using Kconfig for an autotools-based or cmake-based package, since
->    autotools and cmake are precisely here to provide configuration
->    capabilities that overlap with what kconfig provides. And as of
->    today, we have linux, barebox, uclibc and busybox, and all of these
->    use the generic-package infra.
-
-I never thought of it this way, but what you say makes perfect sense to me.
-
->
->    I think it's really a minor change in the patches, and with this
->    change, I'm willing to merge this package infra.
-
-Great! I'm on it, hope to send out the adapted series soon...
-
-Best regards,
-Thomas
+> Regards.
