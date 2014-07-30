@@ -1,101 +1,84 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Jul 2014 21:58:03 +0200
-Subject: [Buildroot] [PATCH 2 of 6 v2] manual: add documentation for
-	kconfig-package
+Date: Wed, 30 Jul 2014 21:58:04 +0200
+Subject: [Buildroot] [PATCH 3 of 6 v2] uclibc: convert to kconfig-package
+	infrastructure
 In-Reply-To: <patchbomb.1406750281@localhost>
 References: <patchbomb.1406750281@localhost>
-Message-ID: <7e76c27202ece126eb36.1406750283@localhost>
+Message-ID: <083076145a2b191e2b6a.1406750284@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds documentation for the new kconfig-package infrastructure to
-the manual.
-
-Note that due to the simplicity of the infrastructure, the documentation
-is not split in a 'tutorial' and a 'reference', like for the other
-infrastructures. Instead, the usage is described in one section.
+This patch converts the uclibc package to the new kconfig-package
+infrastructure, thus removing code duplication and ensuring a consistent
+behavior of kconfig packages.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v2: update after move to a real infrastructure
+v2: kconfig-package is now a real package infrastructure, so remove call
+    to generic-package
 
- docs/manual/adding-packages-kconfig.txt |  56 +++++++++++++++++++++++++++++
- docs/manual/adding-packages.txt         |   2 +
- 2 files changed, 58 insertions(+), 0 deletions(-)
+ package/uclibc/uclibc.mk |  34 ++++++++++------------------------
+ 1 files changed, 10 insertions(+), 24 deletions(-)
 
-diff -r 83a2e5f2641a -r 7e76c27202ec docs/manual/adding-packages-kconfig.txt
---- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/docs/manual/adding-packages-kconfig.txt	Thu Jul 24 20:54:50 2014 +0200
-@@ -0,0 +1,56 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
+diff -r 7e76c27202ec -r 083076145a2b package/uclibc/uclibc.mk
+--- a/package/uclibc/uclibc.mk	Thu Jul 24 20:54:50 2014 +0200
++++ b/package/uclibc/uclibc.mk	Tue Jul 22 20:35:36 2014 +0200
+@@ -37,6 +37,14 @@
+ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
+ endif
+ 
++UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
 +
-+=== Infrastructure for packages using kconfig for configuration files
++UCLIBC_KCONFIG_OPT = \
++		$(UCLIBC_MAKE_FLAGS) \
++		PREFIX=$(STAGING_DIR) \
++		DEVEL_PREFIX=/usr/ \
++		RUNTIME_PREFIX=$(STAGING_DIR)/ \
 +
-+A popular way for a software package to handle user-specified
-+configuration is +kconfig+. Among others, it is used by the Linux
-+kernel, Busybox, and Buildroot itself. The presence of a .config file
-+and a +menuconfig+ target are two well-known symptoms of kconfig being
-+used.
-+
-+Buildroot features an infrastructure for packages that use kconfig for
-+configuration. This infrastructure provides the necessary make logic to
-+expose the package +menuconfig+ target as +foo-menuconfig+ in Buildroot,
-+and to handle the copying and copy-back of the configuration file in a
-+correct way.
-+
-+The +kconfig-package+ infrastructure is based on the +generic-package+
-+infrastructure. All variables supported by +generic-package+ are
-+available in +kconfig-package+ as well. See
-+xref:generic-package-reference[] for more details.
-+
-+In order to use the +kconfig-package+ infrastructure for a Buildroot
-+package, the minimally required lines in the .mk file in addition to
-+the variables required by the +generic-package+ infrastructure, are:
-+
-+------------------------------
-+FOO_KCONFIG_FILE = reference-to-source-configuration-file
-+
+ UCLIBC_TARGET_ARCH = $(call qstrip,$(BR2_UCLIBC_TARGET_ARCH))
+ 
+ ifeq ($(GENERATE_LOCALE),)
+@@ -393,7 +401,7 @@
+ 	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
+ 	HOSTCC="$(HOSTCC)"
+ 
+-define UCLIBC_FIXUP_DOT_CONFIG
++define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
+ 	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
+ 	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
+@@ -531,29 +539,7 @@
+ 	$(UCLIBC_INSTALL_UTILS_STAGING)
+ endef
+ 
+-$(eval $(generic-package))
+-
+-$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
+-	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
+-
+-$(UCLIBC_DIR)/.stamp_config_fixup_done: $(UCLIBC_DIR)/.config
+-	$(UCLIBC_FIXUP_DOT_CONFIG)
+-	$(Q)touch $@
+-
+-$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.stamp_config_fixup_done
+-
+-uclibc-menuconfig: $(UCLIBC_DIR)/.config
+-	$(MAKE) -C $(UCLIBC_DIR) \
+-		$(UCLIBC_MAKE_FLAGS) \
+-		PREFIX=$(STAGING_DIR) \
+-		DEVEL_PREFIX=/usr/ \
+-		RUNTIME_PREFIX=$(STAGING_DIR)/ \
+-		menuconfig
+-	rm -f $(UCLIBC_DIR)/.stamp_{config_fixup_done,configured,built}
+-	rm -f $(UCLIBC_DIR)/.stamp_{target,staging}_installed
+-
+-uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_fixup_done
+-	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
 +$(eval $(kconfig-package))
-+------------------------------
-+
-+This snippet will create following make targets:
-+
-+* +foo-menuconfig+, which calls the package's +menuconfig+ target
-+
-+* +foo-update-config+, which copies back the configuration to the source
-+  configuration file.
-+
-+and will ensure that the source configuration file is copied to the build
-+directory at the right moment.
-+
-+In addition to these minimally required lines, several optional variables can
-+be set to suit the needs of the package under consideration:
-+
-+* +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
-+  support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
-+
-+* +FOO_KCONFIG_OPT+: extra options to pass when calling the kconfig
-+  ediftors. This may need to include '$(FOO_MAKE_OPT)', for example. By
-+  default, empty.
-+
-+* +FOO_KCONFIG_FIXUP_CMDS+: a list of shell commands needed to fixup the
-+  configuration file after copying it or running a kconfig editor. Such
-+  commands may be needed to ensure a configuration consistent with other
-+  configuration of Buildroot, for example. By default, empty.
-diff -r 83a2e5f2641a -r 7e76c27202ec docs/manual/adding-packages.txt
---- a/docs/manual/adding-packages.txt	Mon Jun 30 21:08:13 2014 +0200
-+++ b/docs/manual/adding-packages.txt	Thu Jul 24 20:54:50 2014 +0200
-@@ -25,6 +25,8 @@
  
- include::adding-packages-virtual.txt[]
- 
-+include::adding-packages-kconfig.txt[]
-+
- include::adding-packages-hooks.txt[]
- 
- include::adding-packages-gettext.txt[]
+ # Before uClibc is built, we must have the second stage cross-compiler
+ $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
