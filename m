@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Jul 2014 18:55:02 +0200
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.18.12
-In-Reply-To: <1406721516-15733-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1406721516-15733-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140730185502.1400d04b@free-electrons.com>
+Date: Wed, 30 Jul 2014 18:55:13 +0200
+Subject: [Buildroot] [git commit] package/libdrm: Bump version to 2.4.56
+Message-ID: <20140730165518.3BAE09D34A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=e2e5a4229ff17891660c46386ef1e4ef782d260d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Jul 2014 08:58:36 -0300, Gustavo Zacarias wrote:
-> Small bugfixes and improvements, and patches upstreamed.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ...fileDecoderPlugin-fix-build-failure-due-t.patch | 26 ----------------------
->  ...ecoderPlugin-fix-build-failure-due-to-mis.patch | 26 ----------------------
->  ...lient-fix-build-failure-due-to-missing-st.patch | 26 ----------------------
->  ...laylistPlugin-fix-build-failure-due-to-mi.patch | 26 ----------------------
->  package/mpd/mpd.mk                                 |  2 +-
->  5 files changed, 1 insertion(+), 105 deletions(-)
->  delete mode 100644 package/mpd/mpd-0001-decoder-AudiofileDecoderPlugin-fix-build-failure-due-t.patch
->  delete mode 100644 package/mpd/mpd-0002-decoder-OpusDecoderPlugin-fix-build-failure-due-to-mis.patch
->  delete mode 100644 package/mpd/mpd-0003-output-HttpdClient-fix-build-failure-due-to-missing-st.patch
->  delete mode 100644 package/mpd/mpd-0004-playlist-PlsPlaylistPlugin-fix-build-failure-due-to-mi.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdrm/libdrm.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 031c692..1c6ae78 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.55
++LIBDRM_VERSION = 2.4.56
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
