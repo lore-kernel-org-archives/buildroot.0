@@ -1,31 +1,20 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 01:04:17 +0200
-Subject: [Buildroot] Build failed for package avahi
-In-Reply-To: <53D9739C.7040301@posteo.de>
-References: <53D9739C.7040301@posteo.de>
-Message-ID: <20140731010417.77c5d67c@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Jul 2014 20:07:09 -0300
+Subject: [Buildroot] [PATCH v2 1/1] Remove unsupported libcue from
+ package mpd
+In-Reply-To: <1406760343-31270-1-git-send-email-jkrause@posteo.de>
+References: <1406760343-31270-1-git-send-email-jkrause@posteo.de>
+Message-ID: <53D97A9D.8060502@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+On 07/30/2014 07:45 PM, J?rg Krause wrote:
 
-On Thu, 31 Jul 2014 00:37:16 +0200, J?rg Krause wrote:
+> Support for libcue has been removed for mpd since version 0.17.
+> 
+> Signed-off-by: J?rg Krause <jkrause@posteo.de>
 
-> checking how to run the C++ preprocessor... /lib/cpp
-> configure: error: in 
-> `/home/joerg/Freescale/buildroot/output/build/avahi-0.6.31':
-> configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-> See `config.log' for more details
-
-Can you post the contents of output/build/avahi-0.6.31/config.log ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
