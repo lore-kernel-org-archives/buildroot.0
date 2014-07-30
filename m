@@ -1,30 +1,31 @@
-From: Oli Vogt <oli.vogt.pub01@gmail.com>
-Date: Wed, 30 Jul 2014 11:40:04 +1200
-Subject: [Buildroot] 'motion', a software motion detector
-Message-ID: <CAAwwcmT0EVzL8xZo91gr4GjsFGomY1OBiYxrSC2uwVzfRmtz5w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Jul 2014 07:09:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: Bump version to 2.4.56
+Message-ID: <1406696958-30962-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear buildroot.
 
- I made a new package for 'motion'.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdrm/libdrm.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- It compiles and basically works (caught the cat) on my ARM iMX233 system
-with an USB camera. I use 'master'-buildroot a couple of weeks old.
- I will not have time to do further testing in the next 3 or more weeks and
-will therefore not sign off a patch right now unless there is interest in
-the community.
- There are many options to be tested specially related to SQL and also with
-'jpeg-turbo'.
-
-<http://www.lavrsen.dk/foswiki/bin/view/Motion/WebHome>
-
-If anyone is interested at this early stage pleas write me.
-
-Cheers, oli
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140730/f79eb95b/attachment.html>
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 031c692..1c6ae78 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDRM_VERSION = 2.4.55
++LIBDRM_VERSION = 2.4.56
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm/
+ LIBDRM_LICENSE = MIT
+-- 
+1.7.10.4
