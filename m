@@ -1,85 +1,45 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 30 Jul 2014 21:58:06 +0200
-Subject: [Buildroot] [PATCH 5 of 6 v2] busybox: convert to kconfig-package
+Date: Wed, 30 Jul 2014 22:01:29 +0200
+Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
 	infrastructure
-In-Reply-To: <patchbomb.1406750281@localhost>
-References: <patchbomb.1406750281@localhost>
-Message-ID: <f995a8adfa241295acee.1406750286@localhost>
+In-Reply-To: <20140730212321.137e216b@free-electrons.com>
+References: <patchbomb.1406224167@localhost>
+ <20140729235208.674744cc@free-electrons.com>
+ <CAAXf6LV3P+qJGK11q9eGYtT+tJOMt4HGC3mou+86ch-PpVD64g@mail.gmail.com>
+ <20140730212321.137e216b@free-electrons.com>
+Message-ID: <CAAXf6LW5pj7fer_8AwHB8dUBa5h95aGYsNn8reK5GsGbG-1VCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the busybox package to the new kconfig-package
-infrastructure, thus removing code duplication and ensuring a consistent
-behavior of kconfig packages.
+On Wed, Jul 30, 2014 at 9:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Thomas,
+>
+> On Wed, 30 Jul 2014 19:58:48 +0200, Thomas De Schampheleire wrote:
+>
+>> > Weird, you don't have the summary of patches in the cover letter. Don't
+>> > you use 'git --cover format-patch' to generate the cover letter?
+>>
+>> Is this a trick question? ;-)
+>
+> Might be :-)
+>
+>> I'm using mercurial to send out patches, unfortunately it does not
+>> have a ready-made option to get this summary of patches. I have wanted
+>> to do that in the past too, so I'll write a little script to mimic the
+>> output of git here.
+>
+> You know, git is not *that* dangerous!
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+I know :)
+I actually followed some documentation online, and am forcing myself
+to use it for some smaller tasks, but for actual development in
+buildroot I'm still much faster with Mercurial. I also doubt I will
+ever favor git over Mercurial, but it's always better to have an
+informed judgement.
 
----
-v2: rebase after making kconfig-package a full infra
-
- package/busybox/busybox.mk |  25 +++++++++----------------
- 1 files changed, 9 insertions(+), 16 deletions(-)
-
-diff -r 540167f28c2d -r f995a8adfa24 package/busybox/busybox.mk
---- a/package/busybox/busybox.mk	Wed Jul 23 20:12:32 2014 +0200
-+++ b/package/busybox/busybox.mk	Tue Jul 22 20:43:10 2014 +0200
-@@ -45,6 +45,10 @@
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
- 
-+BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-+BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+BUSYBOX_KCONFIG_OPT = $(BUSYBOX_MAKE_OPTS)
-+
- define BUSYBOX_PERMISSIONS
- /bin/busybox			 f 4755	0 0 - - - - -
- /usr/share/udhcpc/default.script f 755  0 0 - - - - -
-@@ -136,10 +140,6 @@
- endef
- endif
- 
--define BUSYBOX_COPY_CONFIG
--	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
--endef
--
- # Disable shadow passwords support if unsupported by the C library
- ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
- define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
-@@ -190,8 +190,7 @@
- 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
- endef
- 
--define BUSYBOX_CONFIGURE_CMDS
--	$(BUSYBOX_COPY_CONFIG)
-+define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_SET_LARGEFILE)
- 	$(BUSYBOX_SET_IPV6)
-@@ -203,6 +202,9 @@
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+endef
-+
-+define BUSYBOX_CONFIGURE_CMDS
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- 	$(BUSYBOX_NOCLOBBER_INSTALL)
-@@ -224,13 +226,4 @@
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- endef
- 
--$(eval $(generic-package))
--
--busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
--	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
--		$(subst busybox-,,$@)
--	rm -f $(BUSYBOX_DIR)/.stamp_built
--	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
--
--busybox-update-config: busybox-configure
--	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
-+$(eval $(kconfig-package))
+Best regards,
+Thomas
