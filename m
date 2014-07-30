@@ -1,32 +1,31 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 31 Jul 2014 00:05:33 +0200
-Subject: [Buildroot] [PATCH 2/2] libqmi: bump to 1.10.2
-In-Reply-To: <1406757933-4362-1-git-send-email-yegorslists@googlemail.com>
-References: <1406757933-4362-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1406757933-4362-2-git-send-email-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Jul 2014 19:06:38 -0300
+Subject: [Buildroot] [PATCH] samba4: bump to version 4.1.10
+In-Reply-To: <20140730235820.3f3275d2@free-electrons.com>
+References: <1406657724-21261-1-git-send-email-gustavo@zacarias.com.ar>	<20140729202202.6ca3c3f3@free-electrons.com>	<53D7EDCD.8040402@zacarias.com.ar>
+ <20140730235820.3f3275d2@free-electrons.com>
+Message-ID: <53D96C6E.5060203@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libqmi/libqmi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 07/30/2014 06:58 PM, Thomas Petazzoni wrote:
 
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index f63fd49..69981ba 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.10.0
-+LIBQMI_VERSION = 1.10.2
- LIBQMI_SITE    = http://www.freedesktop.org/software/libqmi/
- LIBQMI_SOURCE  = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
--- 
-1.8.3.2
+> But those tools are installed in /usr/lib ? The target-finalize logic
+> to remove .py files only applies to /usr/lib, not to the entire root
+> filesystem.
+
+The binaries are installed in /usr/bin & /usr/sbin, but they are python
+scripts that import from the usual /usr/lib/python2.7/site-packages/* (a
+couple in the toplevel, most in samba/).
+Alternatively we can remove the tools if .pyc files aren't kept or hide
+samba4.
+But since that doesn't inhibit samba4 working and most people would
+probably make up their config from some template or separate web ui i
+went for the warning.
+It would probably be problematic for advanced uses like clustering or
+ADS support which aren't part of the feature set of the package at the
+moment (and stumbled upon it when testing what that would entail).
+Regards.
