@@ -1,44 +1,74 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Jul 2014 09:50:53 -0300
-Subject: [Buildroot] [PATCH] openssh: disable PIE when building for ARC
-In-Reply-To: <1406723541-28499-1-git-send-email-abrodkin@synopsys.com>
-References: <1406723541-28499-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <53D8EA2D.50704@zacarias.com.ar>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 30 Jul 2014 15:43:17 +0200
+Subject: [Buildroot] [PATCH 1/2] qemu/x86: update defconfig to Linux 3.15.x
+Message-ID: <20140730134316.GA7179@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/30/2014 09:32 AM, Alexey Brodkin wrote:
+Update the default configuration to use Linux 3.15.x.
+Enable ext4, so that ext2/ext3/ext4 can be used.
+Tested with Qemu 2.0.0.
 
-> Fixes build failure reported here:
-> http://autobuild.buildroot.net/results/262/26218e028f3d2c77c5192b45154627f08384b688/
-> 
-> uClibc toolchain for ARC doesn't support PIE
-> 
-> Attempt to build anything with "-pie" option lead to linker failure:
-> 
-> arc-buildroot-linux-uclibc-gcc -pie test.c
-> ld: ../4.8-r3/bin/../arc-buildroot-linux-uclibc/sysroot/usr/lib/crt1.o: warning: unresolvable relocation against symbol `__uClibc_main' from .text section
-> ld: ../4.8-r3/bin/../lib/gcc/arc-buildroot-linux-uclibc/4.8.0/crtbegin.o: warning: unresolvable relocation against symbol `__deregister_frame_info@@GCC_3.0' from .text section
-> ld: ../4.8-r3/bin/../lib/gcc/arc-buildroot-linux-uclibc/4.8.0/crtbegin.o: warning: unresolvable relocation against symbol `__deregister_frame_info@@GCC_3.0' from .text section
-> ld: ../4.8-r3/bin/../lib/gcc/arc-buildroot-linux-uclibc/4.8.0/crtbegin.o: warning: unresolvable relocation against symbol `__register_frame_info@@GCC_3.0' from .text section
-> ld: ../4.8-r3/bin/../lib/gcc/arc-buildroot-linux-uclibc/4.8.0/crtbegin.o: warning: unresolvable relocation against symbol `__register_frame_info@@GCC_3.0' from .text section
-> 
-> In its turn this behavior confuses configure script of openssh so some options
-> get set improperly. In particular "strnvis" gets determined as existing which
-> causes failure during compilation:
-> 
-> log.c:67:25: error: 'VIS_SAFE' undeclared (first use in this function)
->  #define LOG_STDERR_VIS (VIS_SAFE|VIS_OCTAL)
-> 
-> With disabled PIE ("--without-pie") openssh gets built without issues.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> 
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Anton Kolesov <akolesov@synopsys.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ board/qemu/x86/{linux-3.13.config => linux-3.15.config} |  2 +-
+ board/qemu/x86/readme.txt                               |  2 +-
+ configs/qemu_x86_defconfig                              | 10 +++++-----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+ rename board/qemu/x86/{linux-3.13.config => linux-3.15.config} (99%)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/board/qemu/x86/linux-3.13.config b/board/qemu/x86/linux-3.15.config
+similarity index 99%
+rename from board/qemu/x86/linux-3.13.config
+rename to board/qemu/x86/linux-3.15.config
+index d738e4d..920a0a6 100644
+--- a/board/qemu/x86/linux-3.13.config
++++ b/board/qemu/x86/linux-3.15.config
+@@ -47,7 +47,7 @@ CONFIG_SND_HDA_INTEL=y
+ # CONFIG_USB_SUPPORT is not set
+ # CONFIG_X86_PLATFORM_DEVICES is not set
+ # CONFIG_DMIID is not set
+-CONFIG_EXT2_FS=y
++CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ # CONFIG_INOTIFY_USER is not set
+ # CONFIG_MISC_FILESYSTEMS is not set
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index c821255..9ee2e37 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index a5040c8..591dc2b 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.13 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.7"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.15.config"
+-- 
+2.0.1
