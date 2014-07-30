@@ -1,45 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Jul 2014 15:56:14 -0300
-Subject: [Buildroot] [PATCH] polarssl: disable microblaze inline assembly
-Message-ID: <1406746574-15628-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Jul 2014 21:23:21 +0200
+Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
+ infrastructure
+In-Reply-To: <CAAXf6LV3P+qJGK11q9eGYtT+tJOMt4HGC3mou+86ch-PpVD64g@mail.gmail.com>
+References: <patchbomb.1406224167@localhost>
+ <20140729235208.674744cc@free-electrons.com>
+ <CAAXf6LV3P+qJGK11q9eGYtT+tJOMt4HGC3mou+86ch-PpVD64g@mail.gmail.com>
+Message-ID: <20140730212321.137e216b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/4d5/4d54958ded61a0d929d992e4ca0bb31c996953cb/
+Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../polarssl/polarssl-02-disable-microblaze-asm.patch  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100644 package/polarssl/polarssl-02-disable-microblaze-asm.patch
+On Wed, 30 Jul 2014 19:58:48 +0200, Thomas De Schampheleire wrote:
 
-diff --git a/package/polarssl/polarssl-02-disable-microblaze-asm.patch b/package/polarssl/polarssl-02-disable-microblaze-asm.patch
-new file mode 100644
-index 0000000..e90e12d
---- /dev/null
-+++ b/package/polarssl/polarssl-02-disable-microblaze-asm.patch
-@@ -0,0 +1,18 @@
-+Microblaze assembly seems to be broken, fixes:
-+
-+http://autobuild.buildroot.net/results/4d5/4d54958ded61a0d929d992e4ca0bb31c996953cb/
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura polarssl-1.2.11.orig/include/polarssl/bn_mul.h polarssl-1.2.11/include/polarssl/bn_mul.h
-+--- polarssl-1.2.11.orig/include/polarssl/bn_mul.h	2014-07-30 15:47:27.381658434 -0300
-++++ polarssl-1.2.11/include/polarssl/bn_mul.h	2014-07-30 15:48:52.616543074 -0300
-+@@ -480,7 +480,7 @@
-+ 
-+ #endif /* SPARCv8 */
-+ 
-+-#if defined(__microblaze__) || defined(microblaze)
-++#if 0 && defined(__microblaze__) || defined(microblaze)
-+ 
-+ #define MULADDC_INIT                    \
-+     asm(                                \
+> > Weird, you don't have the summary of patches in the cover letter. Don't
+> > you use 'git --cover format-patch' to generate the cover letter?
+> 
+> Is this a trick question? ;-)
+
+Might be :-)
+
+> I'm using mercurial to send out patches, unfortunately it does not
+> have a ready-made option to get this summary of patches. I have wanted
+> to do that in the past too, so I'll write a little script to mimic the
+> output of git here.
+
+You know, git is not *that* dangerous!
+
+> >  * Regarding the kconfig-package infra stuff, I'm mostly fine with it,
+> >    except for one detail: it pretends to be a package infrastructure,
+> >    but it is not. It is only a kind of "library" / "helper" to use next
+> >    to a real package infrastructure. And I think this is pretty
+> >    confusing considering the name that was chosen, and the way it works.
+> >
+> >    My proposal would therefore be to turn it into a real package
+> >    infrastructure by simply making it inherit from generic-package,
+> >    much like autotools-package, cmake-package and al. All kconfig-based
+> >    packages are otherwise generic-package. I don't see the logic behind
+> >    using Kconfig for an autotools-based or cmake-based package, since
+> >    autotools and cmake are precisely here to provide configuration
+> >    capabilities that overlap with what kconfig provides. And as of
+> >    today, we have linux, barebox, uclibc and busybox, and all of these
+> >    use the generic-package infra.
+> 
+> I never thought of it this way, but what you say makes perfect sense to me.
+> 
+> >
+> >    I think it's really a minor change in the patches, and with this
+> >    change, I'm willing to merge this package infra.
+> 
+> Great! I'm on it, hope to send out the adapted series soon...
+
+Cool!
+
+Thanks,
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
