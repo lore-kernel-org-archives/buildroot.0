@@ -1,35 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Jul 2014 17:10:26 -0300
-Subject: [Buildroot] [PATCH] bind: fix static openssl linking
-Message-ID: <1406751026-28740-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Jul 2014 20:15:24 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140730201524.589A49D33F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apparently LIBS (environment) isn't pushed to LIBS (autoconf) for the
-tests, hence when static linking openssl it misses libz and assumes some
-basic digests required for ecdsa support are missing, which is false. Fixes:
-http://autobuild.buildroot.net/results/204/20411901d1bc6811e1ef8fa39457257d6bf1a146/
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/bind/bind.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d6707d2..e0784e6 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -41,6 +41,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- 	BIND_DEPENDENCIES += openssl
-+	BIND_CONF_ENV += ac_cv_func_EVP_sha256=yes \
-+		ac_cv_func_EVP_sha384=yes ac_cv_func_EVP_sha512=yes
- 	BIND_CONF_OPT += --with-openssl=$(STAGING_DIR)/usr LIBS="-lz" \
- 		--with-ecdsa=yes
- # GOST cipher support requires openssl extra engines
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #15 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-07-30 20:15:23 UTC ---
+Yann,
+You submitted a patch to update the documentation and add patchelf, but
+currently these patches are marked as Changes Requested.
+Any chance they could still be submitted for 2014.08?
+
 -- 
-1.8.5.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
