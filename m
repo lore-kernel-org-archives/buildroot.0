@@ -1,66 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Jul 2014 21:23:21 +0200
-Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
- infrastructure
-In-Reply-To: <CAAXf6LV3P+qJGK11q9eGYtT+tJOMt4HGC3mou+86ch-PpVD64g@mail.gmail.com>
-References: <patchbomb.1406224167@localhost>
- <20140729235208.674744cc@free-electrons.com>
- <CAAXf6LV3P+qJGK11q9eGYtT+tJOMt4HGC3mou+86ch-PpVD64g@mail.gmail.com>
-Message-ID: <20140730212321.137e216b@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 30 Jul 2014 21:58:01 +0200
+Subject: [Buildroot] [PATCH 0 of 6 v2] Introduction of kconfig-package
+Message-ID: <patchbomb.1406750281@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
 
-On Wed, 30 Jul 2014 19:58:48 +0200, Thomas De Schampheleire wrote:
+This patch series introduces a kconfig-package infrastructure and already
+converts the uclibc and busybox packages.
 
-> > Weird, you don't have the summary of patches in the cover letter. Don't
-> > you use 'git --cover format-patch' to generate the cover letter?
-> 
-> Is this a trick question? ;-)
+I believe this series is complete in the sense that it could be applied as
+one whole, not yet including the conversion of linux and barebox.
 
-Might be :-)
+In a subsequent series, linux and barebox can be converted to
+kconfig-package too, but there will need to be some changes to
+kconfig-package to support them.
+One particular difference with uclibc/busybox is that linux/barebox use a
+different method to copy the original config file: instead of simply copying
+it to build_dir/.config, it is first copied to arch/.../buildroot_defconfig
+and then 'make ... buildroot_defconfig' is called. I'm considering in adding
+a FOO_KCONFIG_INSTALL_CONFIG_CMDS variable to support this, which defaults
+to the simple copy used by busybox/uclibc, but can be overwritten
+appropriately by linux and barebox.
+Anyway, this part is not yet ready and will only be available for 2014.11.
 
-> I'm using mercurial to send out patches, unfortunately it does not
-> have a ready-made option to get this summary of patches. I have wanted
-> to do that in the past too, so I'll write a little script to mimic the
-> output of git here.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-You know, git is not *that* dangerous!
+---
+Thomas De Schampheleire (6):
+  infra: introduce a kconfig-package infrastructure
+  manual: add documentation for kconfig-package
+  uclibc: convert to kconfig-package infrastructure
+  uclibc: only add targets if uclibc is enabled
+  busybox: convert to kconfig-package infrastructure
+  busybox: only add kconfig targets if uclibc is enabled
 
-> >  * Regarding the kconfig-package infra stuff, I'm mostly fine with it,
-> >    except for one detail: it pretends to be a package infrastructure,
-> >    but it is not. It is only a kind of "library" / "helper" to use next
-> >    to a real package infrastructure. And I think this is pretty
-> >    confusing considering the name that was chosen, and the way it works.
-> >
-> >    My proposal would therefore be to turn it into a real package
-> >    infrastructure by simply making it inherit from generic-package,
-> >    much like autotools-package, cmake-package and al. All kconfig-based
-> >    packages are otherwise generic-package. I don't see the logic behind
-> >    using Kconfig for an autotools-based or cmake-based package, since
-> >    autotools and cmake are precisely here to provide configuration
-> >    capabilities that overlap with what kconfig provides. And as of
-> >    today, we have linux, barebox, uclibc and busybox, and all of these
-> >    use the generic-package infra.
-> 
-> I never thought of it this way, but what you say makes perfect sense to me.
-> 
-> >
-> >    I think it's really a minor change in the patches, and with this
-> >    change, I'm willing to merge this package infra.
-> 
-> Great! I'm on it, hope to send out the adapted series soon...
 
-Cool!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ docs/manual/adding-packages-kconfig.txt |  56 +++++++++++++++++
+ docs/manual/adding-packages.txt         |   2 +
+ package/Makefile.in                     |   1 +
+ package/busybox/busybox.config          |  18 ++--
+ package/busybox/busybox.mk              |  27 +++----
+ package/pkg-kconfig.mk                  |  82 +++++++++++++++++++++++++
+ package/uclibc/uclibc.mk                |  36 +++-------
+ 7 files changed, 173 insertions(+), 49 deletions(-)
