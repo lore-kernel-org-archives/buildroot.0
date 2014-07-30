@@ -1,119 +1,84 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Jul 2014 20:14:51 -0300
-Subject: [Buildroot] [PATCH] linux-pam: unavailable for static builds
-Message-ID: <1406762091-11590-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 31 Jul 2014 01:19:35 +0200
+Subject: [Buildroot] lua interpreter choice?
+In-Reply-To: <CANxTyt6GCC6K1NPyCGf9rHrO6T0o+y7K+PAioWKdRPZysDbhcA@mail.gmail.com>
+References: <CANxTyt6-4j70z297t4VsaqKGosnTdWarc5fBVa3vVORmXnWMFQ@mail.gmail.com>
+ <CAB0FRst5RNAYTMa_jVxGoRYS-GjO3jdc05CNkuK9kAdLXgKM2Q@mail.gmail.com>
+ <CANxTyt6mPjEmSdOtNAxqQ=eyfC74qBiFNmFmyhju0aUtqsrHNQ@mail.gmail.com>
+ <20140730234037.19f851da@free-electrons.com>
+ <CANxTyt6GCC6K1NPyCGf9rHrO6T0o+y7K+PAioWKdRPZysDbhcA@mail.gmail.com>
+Message-ID: <20140730231935.GD3961@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/3bb/3bb8d4662995a11e8e6cc5fdaaba9e25d4c0e0ec/
+Danomi, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-pam/Config.in  |  6 ++++--
- package/rsh-redone/Config.in | 16 ++++++++++------
- package/util-linux/Config.in | 16 ++++++++++------
- 3 files changed, 24 insertions(+), 14 deletions(-)
+On 2014-07-30 18:34 -0400, Danomi Manchego spake thusly:
+> On Wed, Jul 30, 2014 at 5:40 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Dear Danomi Manchego,
+> >
+> > On Wed, 30 Jul 2014 14:51:49 -0400, Danomi Manchego wrote:
+> >
+> >> > this change in the virtual-package behavior was introduced by
+> >> > http://git.buildroot.net/buildroot/commit/?id=91169d3346e543be18139e18bdcc52a2345e0d16
+> >> > (infra/pkg-virtual: validate only one provider provides an implementation)
+> >> >
+> >> > Fran?ois
+> >>
+> >> But the menuconfig still lets you select both packages, instead of
+> >> providing a choice of one or the other (like "jpeg support").  Is this
+> >> not undesirable?
+> >
+> > We discussed this before doing the commit pointed by Fran?ois.
+> > Unfortunately, there's no good solution to solve this problem at the
+> > kconfig level. The only solution would be to have each package being a
+> > provider of a certain virtual package, have the knowledge of *all*
+> > providers of that virtual packages to do a "depends
+> > on !BR2_PACKAGE_<foo>". While for lua vs. luajit this seems more or
+> > less reasonable, as we probably don't expect to have more providers
+> > than just lua and luajit, but in the general case, we have things like
+> > libgles or egl (for OpenGL support) which have multiple providers, and
+> > we don't want to have to edit all of them whenever we add a new
+> > provider.
+> >
+> > Not speaking about packages in BR2_EXTERNAL, which we cannot control.
+> >
+> > So our decision was to use a build-time check rather than a
+> > kconfig-time check.
+> >
+> > Hope this clarifies the situation,
+> 
+> Let me apologize in advance if I'm still missing something obvious but
+> - what distinguishes the lua/luajit case from the libjpeg/jpeg-turbo
+> case, or the systemd/eudev case?  Is the virtual-package
+> infrastructure + kconfig choice not suitable here?
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index 88bdd4f..72ef376 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -3,10 +3,12 @@ config BR2_PACKAGE_LINUX_PAM
- 	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT_IF_LOCALE
- 	select BR2_PACKAGE_FLEX
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-+	depends on !BR2_PREFER_STATIC_LIB
- 	help
- 	  A Security Framework that Provides Authentication for Applications
- 
- 	  http://linux-pam.org
- 
--comment "linux-pam needs a toolchain w/ wchar, locale"
--	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-+comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
-+		|| BR2_PREFER_STATIC_LIB
-diff --git a/package/rsh-redone/Config.in b/package/rsh-redone/Config.in
-index f636e2f..c8f2f51 100644
---- a/package/rsh-redone/Config.in
-+++ b/package/rsh-redone/Config.in
-@@ -14,21 +14,25 @@ config BR2_PACKAGE_RSH_REDONE_RLOGIN
- 
- config BR2_PACKAGE_RSH_REDONE_RLOGIND
- 	bool "rlogind"
--	select BR2_PACKAGE_LINUX_PAM
-+	depends on !BR2_PREFER_STATIC_LIB
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
-+	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rlogind needs a toolchain w/ wchar, locale"
--	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-+comment "rlogind needs a toolchain w/ wchar, locale, dynamic library"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
-+		|| BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_RSH_REDONE_RSH
- 	bool "rsh"
- 
- config BR2_PACKAGE_RSH_REDONE_RSHD
- 	bool "rshd"
--	select BR2_PACKAGE_LINUX_PAM
- 	depends on BR2_ENABLE_LOCALE && BR2_USE_WCHAR
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_LINUX_PAM
- 
--comment "rshd needs a toolchain w/ wchar, locale"
--	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-+comment "rshd needs a toolchain w/ wchar, locale, dynamic library"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
-+		|| BR2_PREFER_STATIC_LIB
- 
- endif
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 28bda11..934021a 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -58,13 +58,15 @@ config BR2_PACKAGE_UTIL_LINUX_ARCH
- 
- config BR2_PACKAGE_UTIL_LINUX_CHFN_CHSH
- 	bool "chfn/chsh"
--	select BR2_PACKAGE_LINUX_PAM
- 	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
-+	depends on !BR2_PREFER_STATIC_LIB
-+	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Change login shell, real user name and information
- 
--comment "chfn/chsh needs a toolchain w/ wchar, locale"
--	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR)
-+comment "chfn/chsh needs a toolchain w/ wchar, locale, dynamic library"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
-+		|| BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_UTIL_LINUX_CRAMFS
- 	bool "cramfs utilities"
-@@ -100,13 +102,15 @@ config BR2_PACKAGE_UTIL_LINUX_KILL
- 
- config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
- 	bool "login utilities"
--	depends on BR2_ENABLE_LOCALE # linux-pam
-+	depends on (BR2_ENABLE_LOCALE && BR2_USE_WCHAR) # linux-pam
-+	depends on !BR2_PREFER_STATIC_LIB
- 	select BR2_PACKAGE_LINUX_PAM
- 	help
- 	  Build login utilities (last, login, su, sulogin)
- 
--comment "login utilities needs a toolchain w/ locale"
--	depends on !BR2_ENABLE_LOCALE
-+comment "login utilities needs a toolchain w/ wchar, locale, dynamic library"
-+	depends on !(BR2_ENABLE_LOCALE && BR2_USE_WCHAR) \
-+		|| BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_UTIL_LINUX_LOSETUP
- 	bool "losetup"
+It just occured to me that I only replied to half your questions.
+
+As for libjpeg/jpeg-turbo: the choice was pre-existing before the
+virtual package infra was added. It was decide to keep them as-is,
+rather than to fully convert them.
+
+As for eudev vs. systemd: they are not really a choice og one _or_ tghe
+other, since you can still have none. Besides, they are not the same
+thing: systemd is an init system, daemon; eudev is a /dev management
+system. So we do really need choices here, because what we're selecting
+is not a provider of a virtual package, but an init system or a /dev
+management system. It happens that both are also providers of udev.
+
+Hopefully this further clarifies the situation.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-1.8.5.5
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
