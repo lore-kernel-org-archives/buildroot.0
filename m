@@ -1,111 +1,29 @@
-From: Pascal Huerst <pascal.huerst@gmail.com>
-Date: Wed, 30 Jul 2014 17:27:20 +0200
-Subject: [Buildroot] [PATCH v8 1/1] google-breakpad: Integration into
-	Makefile and Config.in
-In-Reply-To: <1406734040-31558-1-git-send-email-pascal.huerst@gmail.com>
-References: <1406734040-31558-1-git-send-email-pascal.huerst@gmail.com>
-Message-ID: <1406734040-31558-2-git-send-email-pascal.huerst@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Jul 2014 17:47:50 +0200
+Subject: [Buildroot] [PATCH 2/2] qemu/x86: add defconfig for serial
+ console usage
+In-Reply-To: <20140730134403.GA11974@waldemar-brodkorb.de>
+References: <20140730134403.GA11974@waldemar-brodkorb.de>
+Message-ID: <20140730174750.34c1d272@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
----
- Config.in                                  | 28 ++++++++++++++++++++++++++++
- package/google-breakpad/gen-syms.sh        | 25 +++++++++++++++++++++++++
- package/google-breakpad/google-breakpad.mk |  8 ++++++++
- 3 files changed, 61 insertions(+)
- create mode 100755 package/google-breakpad/gen-syms.sh
+Dear Waldemar Brodkorb,
 
-diff --git a/Config.in b/Config.in
-index dd8073d..0d18ffd 100644
---- a/Config.in
-+++ b/Config.in
-@@ -484,6 +484,34 @@ config BR2_OPTIMIZE_S
- 
- endchoice
- 
-+config BR2_GOOGLE_BREAKPAD_ENABLE
-+	bool "Enable google-breakpad support"
-+	select BR2_PACKAGE_GOOGLE_BREAKPAD
-+	help
-+	  This option will enable the use of google breakpad, a library and tool
-+	  suite that allows you to distribute an application to users with
-+	  compiler-provided debugging information removed, record crashes in
-+	  compact "minidump" files, send them back to your server and produce
-+	  C and C++ stack traces from these minidumps.  Breakpad can also write
-+	  minidumps on request for programs that have not crashed.
-+
-+if BR2_GOOGLE_BREAKPAD_ENABLE
-+
-+config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
-+	string "List of executables and libraries to extract symbols from"
-+	default ""
-+	help
-+	  You may specify a space-separated list of binaries and libraries
-+	  with full paths relative to $(TARGET_DIR) of which debug symbols 
-+	  will be dumped for further use with google breakpad.
-+
-+	  A directory structure that can be used by minidump-stackwalk will
-+	  be created at:
-+
-+	  $(STAGING_DIR)/usr/share/google-breakpad-symbols
-+
-+endif
-+
- config BR2_ENABLE_SSP
- 	bool "build code with Stack Smashing Protection"
- 	depends on BR2_TOOLCHAIN_HAS_SSP
-diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
-new file mode 100755
-index 0000000..284d210
---- /dev/null
-+++ b/package/google-breakpad/gen-syms.sh
-@@ -0,0 +1,25 @@
-+#!/bin/sh
-+STAGING_DIR="${1}"
-+TARGET_DIR="${2}"
-+shift 2
-+
-+SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
-+rm -rf "${SYMBOLS_DIR}"
-+mkdir -p "${SYMBOLS_DIR}"
-+
-+for FILE in $(ls ${TARGET_DIR}/${@}); do
-+	if [ -d "${FILE}" ]; then
-+		printf "Error: '%s' is a directory\n" "${FILE}" >&2
-+		exit 1
-+	fi
-+	if dump_syms "${FILE}" > "${SYMBOLS_DIR}/tmp.sym" 2>/dev/null; then
-+		HASH=$(head -n1 "${SYMBOLS_DIR}/tmp.sym" | cut -d ' ' -f 4);
-+		FILENAME=$(basename "$FILE");
-+		mkdir -p "${SYMBOLS_DIR}/${FILENAME}/${HASH}"
-+		mv "${SYMBOLS_DIR}/tmp.sym" "${SYMBOLS_DIR}/${FILENAME}/${HASH}/${FILENAME}.sym";
-+	else
-+		printf "Error dumping symbols for: '%s'\n" "${FILE}" >&2
-+		exit 1
-+	fi
-+done
-+rm -rf "${SYMBOLS_DIR}/tmp"
-diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
-index bf857ba..8dea916 100644
---- a/package/google-breakpad/google-breakpad.mk
-+++ b/package/google-breakpad/google-breakpad.mk
-@@ -14,5 +14,13 @@ GOOGLE_BREAKPAD_INSTALL_STAGING = YES
- GOOGLE_BREAKPAD_LICENSE = BSD-3c
- GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
- 
-+ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
-+define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
-+	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
-+		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
-+endef
-+TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+On Wed, 30 Jul 2014 15:44:11 +0200, Waldemar Brodkorb wrote:
+
+> A config which can be used for both cases might be used instead,
+> but I see no option to add more gettys via the existing buildroot
+> variables.
+
+A rootfs overlay that overrides inittab, or a post-build script that
+tunes the inittab.
+
+Thomas
 -- 
-1.9.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
