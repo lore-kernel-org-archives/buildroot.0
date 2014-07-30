@@ -1,72 +1,85 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Wed, 30 Jul 2014 15:44:11 +0200
-Subject: [Buildroot] [PATCH 2/2] qemu/x86: add defconfig for serial console
-	usage
-Message-ID: <20140730134403.GA11974@waldemar-brodkorb.de>
+From: Pascal Huerst <pascal.huerst@gmail.com>
+Date: Wed, 30 Jul 2014 17:27:19 +0200
+Subject: [Buildroot] [PATCH v8 0/1] google-breakpad: Integration into
+	Makefile and Config.in
+Message-ID: <1406734040-31558-1-git-send-email-pascal.huerst@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Developers sometimes work remotely and want to test stuff in Qemu
-without having X11 running. For this case an extra defconfig is
-useful and does not break existing defconfig.
+Changes v7 -> v8
+	Removed use of eval in $(eval ls "${TARGET_DIR}/${@}"); do
+	  as expected by Yann E. MORIN
 
-A config which can be used for both cases might be used instead,
-but I see no option to add more gettys via the existing buildroot
-variables.
+Changes v6 -> v7
+	Removed comments I forgot to remove in v6 in gen-symy.sh for:
+	  ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
+	  as suggested by Yann E. MORIN
+	Still using eval, however for:
+	  for FILE in $(eval ls "${TARGET_DIR}/${@}"); do
+	  could not make it work without eval
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- board/qemu/x86/readme.txt         |  6 ++++++
- configs/qemu_x86_serial_defconfig | 23 +++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
- create mode 100644 configs/qemu_x86_serial_defconfig
+Changes v5 -> v6
+	google-breakpad: new package has been accepted.
+	Moved parts from makefile into google-breakpad.mk and defined 
+	  the call to gen-symy.sh as a new variable in google-breakpas.mk.
+	  This seems to be more compatible with fabios series, as
+	  suggested by Arnout and Thomas.
+	Changed integration in Config.in, by adding an enable google breakpad 
+	  option which expands to a list to insert filenames as suggested by
+	  Arnout and Thomas.
+	Removed creation of tmp directory in gen-symy.sh as sugested
+	  by Arnout, since this is not necessary.
 
-diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
-index 9ee2e37..f907770 100644
---- a/board/qemu/x86/readme.txt
-+++ b/board/qemu/x86/readme.txt
-@@ -4,4 +4,10 @@ Run the emulation with:
- 
- The login prompt will appear in the graphical window.
- 
-+Or for serial config:
-+
-+  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append "root=/dev/sda console=ttyS0" -net nic,model=rtl8139 -net user -nographic 
-+
-+The login prompt will appear in the console window.
-+
- Tested with QEMU 2.0.0
-diff --git a/configs/qemu_x86_serial_defconfig b/configs/qemu_x86_serial_defconfig
-new file mode 100644
-index 0000000..2b58dec
---- /dev/null
-+++ b/configs/qemu_x86_serial_defconfig
-@@ -0,0 +1,23 @@
-+# Architecture
-+BR2_i386=y
-+BR2_x86_pentiumpro=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Lock to 3.15 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.15.7"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.7"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.15.config"
+Changes v4 -> v5 (All suggested by Yann E. MORIN)
+	Fixed some typo
+	Reorganized patch structure
+	  which parts belong to 'new package' and which parts belong to
+	  'intergration into Makefile and Config.in'
+	Changed and Rewrote gen-symy.sh - script
+	  Passing $(EXTRA_ENV)
+	  Adapted a proposed solution from Yann E. MORIN, which
+	  uses ls instead of find commands
+	Made better descriptions for users in:
+	  Config.in
+	  package/google-breakpad/Config.in
+
+Changes v3 -> v4
+	Fixed minor issue in google-breakpad_gen-syms.sh
+	  Had to remove -print from find command
+
+Changes v2 -> v3 (All suggested by thomas.petazzoni at free-electrons.com)
+        Removed dependency of BR2_ENABLE_DEBUG, but added comment,
+          that this flag might have to be set in order to use breakpad
+          properly.
+        Removed "find -name ..." for libs and binaries by generic patterns,
+          such as "*.so" and so forth. This will never work properly. Instead
+          I added a list to insert libs and binaries, that will be symbol-
+          dumped and prepared for breakpad (see Config.in patch v3 2/2)
+        Changed storage path for dumps from: $(TARGET_DIR).. to
+          $(STAGING_DIR)/usr/share/google-breakpad-symbols/
+        Removed most logic from Makefile. Added script instead, which is
+          called by Makefile
+        Added dependency for compatible targets: ARM, i386, MIPS...
+        Set fixed version for checkout (instead of head)
+        Fixed typos, and some minor mistakes
+
+Changes v1 -> v2 (All suggested by maxime.hadjinlian at gmail.com)
+        Added dependency from BR2_ENABLE_DEBUG
+        Removed symbolstore.py -> Its all done in Makefile now
+        Removed new Target -> It in target-finalize before stripping now
+        Added LICENSE and LICENSE_FILE to *.mk
+
+Pascal Huerst (1):
+  google-breakpad: Integration into Makefile and Config.in
+
+ Config.in                                  | 28 ++++++++++++++++++++++++++++
+ package/google-breakpad/gen-syms.sh        | 25 +++++++++++++++++++++++++
+ package/google-breakpad/google-breakpad.mk |  8 ++++++++
+ 3 files changed, 61 insertions(+)
+ create mode 100755 package/google-breakpad/gen-syms.sh
+
 -- 
-2.0.1
+1.9.3
