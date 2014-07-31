@@ -1,51 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 19:54:08 +0200
-Subject: [Buildroot] [PATCH 3/3] aufs: added 'fs' dir to $(LINUX_DIR)
-In-Reply-To: <1406827250-11821-1-git-send-email-s.hoenig@openthinclient.com>
-References: <1406827250-11821-1-git-send-email-s.hoenig@openthinclient.com>
-Message-ID: <20140731195408.29cdee0b@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 31 Jul 2014 19:55:21 +0200
+Subject: [Buildroot] [PATCH v2] Add option to copy config file to rootfs
+In-Reply-To: <20140731171632.GC3960@free.fr>
+References: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
+ <20140731171632.GC3960@free.fr>
+Message-ID: <14321197-e8a0-43d3-9bcf-2f3d53e60753@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Steffen Hoenig,
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>Nathaniel, All,
+>
+>On 2014-07-31 23:26 +0800, Nathaniel Roach spake thusly:
+>> BR2_CONFIG_COPY copies the config file to /etc/buildroot.config
+>> as 0600 during target-finalize after overlay copy, but before
+>> post-build script install.
+>
+>I wonder what would be the use-case for this?
 
-On Thu, 31 Jul 2014 19:20:50 +0200, Steffen Hoenig wrote:
-> For later calls of linux-menuconfig, you need the Kconfig of aufs
-> 
-> Signed-off-by: Steffen Hoenig <s.hoenig@openthinclient.com>
-> ---
->  package/aufs/aufs.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-> index c1b21c4..5d072bb 100644
-> --- a/package/aufs/aufs.mk
-> +++ b/package/aufs/aufs.mk
-> @@ -27,6 +27,7 @@ define AUFS_INSTALL_STAGING_CMDS
->  	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) usr/include/linux/aufs_type.h
->  	$(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h \
->  		$(STAGING_DIR)/usr/include/linux
-> +	tar cf - -C $(@D) fs | (cd $(LINUX_DIR) && tar xf -)
->  endef
->  
->  define AUFS_INSTALL_TARGET_CMDS
+What is the use case in crosstool-NG to save the
+ configuration and log alongside the toolchain? Or
+ what about the /proc/config.gz feature of the Linux
+ kernel?
+It allows people that receive the generated images to
+ easily inspect and reproduce the configuration.
 
-Your original patches have not been applied (yet). So if you have
-changes to do, please resend a new version of your original patches
-with whatever fixes are needed. When you do so, please include a
-changelog that describes the changes between the previous version.
+One doesn't even need to think about legal counter-
+arguments here: even within the same company it
+ can be useful to be able to inspect the configuration
+ of a running system...
 
-See
-http://buildroot.org/downloads/manual/manual.html#submitting-patches
-for more details.
+>
+>I think the case where one would want this file in the generated
+>filesystem is a corner case, and that it would be better served with
+>a post-build script.
 
-Thanks,
+I think this is a feature that deserves to be in Buildroot 
+directly.  Just like rootfs-overlay used to be
+ something that people had to do manually from their
+post build script, but later became a supported
+ feature because many people found it useful, or the
+ feature to set the root password, this is something that is generally useful by many users, even those
+that don't fully know how to use the post build script
+ to it's full ability, or did not yet realize the usefulness
+of the saving of the configuration.
 
+Best regards,
 Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
