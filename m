@@ -1,31 +1,48 @@
-From: Steffen Hoenig <s.hoenig@openthinclient.com>
-Date: Thu, 31 Jul 2014 19:20:50 +0200
-Subject: [Buildroot] [PATCH 3/3] aufs: added 'fs' dir to $(LINUX_DIR)
-Message-ID: <1406827250-11821-1-git-send-email-s.hoenig@openthinclient.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 31 Jul 2014 12:19:25 -0500
+Subject: [Buildroot] [PATCH v2] Add option to copy config file to rootfs
+In-Reply-To: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
+References: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
+Message-ID: <CANQCQpbgRPf+Bk4yhM6Fs-Vc9yNWK+4UsGY4nV8Qn5xhkPxyag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For later calls of linux-menuconfig, you need the Kconfig of aufs
+Hi Nathaniel,
 
-Signed-off-by: Steffen Hoenig <s.hoenig@openthinclient.com>
----
- package/aufs/aufs.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, Jul 31, 2014 at 10:26 AM, Nathaniel Roach <nroach44@gmail.com> wrote:
+> BR2_CONFIG_COPY copies the config file to /etc/buildroot.config
+> as 0600 during target-finalize after overlay copy, but before
+> post-build script install.
+>
+> ---
+> Changes v1 to v2
+>  - Corrected wording of config helper message (Thomas De Schampheleire)
+>  - Moved order in menu to reflect actual order of the operation
+> ---
+>  Makefile         |  4 ++++
+>  system/Config.in | 11 +++++++++++
+>  2 files changed, 15 insertions(+)
+>
+> diff --git a/Makefile b/Makefile
+> index 022beea..cc49291 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -614,6 +614,10 @@ endif
+>                         --chmod=Du+w --exclude .empty --exclude '*~' \
+>                         $(d)/ $(TARGET_DIR)$(sep))
+>
+> +ifeq ($(BR2_CONFIG_COPY),y)
+> +       $(INSTALL) -m 0600 .config $(TARGET_DIR)/etc/buildroot.config
 
-diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
-index c1b21c4..5d072bb 100644
---- a/package/aufs/aufs.mk
-+++ b/package/aufs/aufs.mk
-@@ -27,6 +27,7 @@ define AUFS_INSTALL_STAGING_CMDS
- 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) usr/include/linux/aufs_type.h
- 	$(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h \
- 		$(STAGING_DIR)/usr/include/linux
-+	tar cf - -C $(@D) fs | (cd $(LINUX_DIR) && tar xf -)
- endef
- 
- define AUFS_INSTALL_TARGET_CMDS
+Before you do the copy, would it be worth doing a savedefconfig (or like)
+activity to cleanup the .config file?  Then the file on target would be much
+easier to read if you manually had to view it.
+
+Thanks!
 -- 
-1.9.1
+Matthew L Weber / Sr Software Engineer / Platform Software
+matthew.weber at rockwellcollins.com
+www.rockwellcollins.com
