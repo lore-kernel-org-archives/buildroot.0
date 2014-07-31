@@ -1,156 +1,134 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 31 Jul 2014 11:19:46 -0300
-Subject: [Buildroot] [PATCH 2/2] Revert "packages: autoreconf non-vanilla
-	libtool packages"
-In-Reply-To: <1406816386-6840-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1406816386-6840-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1406816386-6840-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jul 2014 16:35:49 +0200
+Subject: [Buildroot] [git commit] support/libtool: improve version 1.5
+	static patching
+Message-ID: <20140731143611.209A59D357@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we've got a cleaner/fuzzier libtool 1.5 static patch we can
-discard the temporary workaround.
+commit: http://git.buildroot.net/buildroot/commit/?id=8b691cec63b74b921c7e62a33039469177997484
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit e573f5d3267e5916c580e499ecd127c60107b8e1.
+Alter the libtool 1.5.x support patch to accomodate for wildly different
+versions of ltmain.sh
+Just make it alter incoming args from -static to -all-static which seems
+to apply to all the different variants out there since argument parsing
+is unlikely to change much.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/faad2/faad2.mk           | 2 --
- package/ipkg/ipkg.mk             | 2 --
- package/jasper/jasper.mk         | 2 --
- package/jpeg-turbo/jpeg-turbo.mk | 2 --
- package/libmhash/libmhash.mk     | 8 --------
- package/librsync/librsync.mk     | 2 --
- package/libsysfs/libsysfs.mk     | 3 ---
- package/libungif/libungif.mk     | 2 --
- package/speex/speex.mk           | 2 --
- 9 files changed, 25 deletions(-)
+ support/libtool/buildroot-libtool-v1.5.patch |   64 +++++++++-----------------
+ 1 files changed, 22 insertions(+), 42 deletions(-)
 
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 76dd9e9..8c4fc1a 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -11,7 +11,5 @@ FAAD2_LICENSE_FILES = COPYING
- # frontend/faad calls frexp()
- FAAD2_CONF_ENV = LIBS=-lm
- FAAD2_INSTALL_STAGING = YES
--# libtool 1.5 patch failure
--FAAD2_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/ipkg/ipkg.mk b/package/ipkg/ipkg.mk
-index 097e15e..10ef207 100644
---- a/package/ipkg/ipkg.mk
-+++ b/package/ipkg/ipkg.mk
-@@ -9,7 +9,5 @@ IPKG_SITE = http://www.handhelds.org/download/packages/ipkg
- IPKG_INSTALL_STAGING = YES
- IPKG_LICENSE = GPLv2+
- IPKG_LICENSE_FILES = COPYING
--# libtool 1.5 patch failure
--IPKG_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 53da53f..7917c6a 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -8,8 +8,6 @@ JASPER_VERSION = 1.900.1
- JASPER_SITE = http://sources.openelec.tv/devel
- JASPER_SOURCE = jasper-$(JASPER_VERSION).tar.bz2
- JASPER_INSTALL_STAGING = YES
--# libtool 1.5 patch failure
--JASPER_AUTORECONF = YES
- JASPER_DEPENDENCIES = jpeg
- JASPER_LICENSE = MIT
- JASPER_LICENSE_FILES = LICENSE
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 3e09c19..d35c365 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -11,8 +11,6 @@ JPEG_TURBO_LICENSE = jpeg-license (BSD-3c-like)
- JPEG_TURBO_LICENSE_FILES = README README-turbo.txt
- JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_CONF_OPT = --with-jpeg8
--# libtool 1.5 patch failure
--JPEG_TURBO_AUTORECONF = YES
- 
- ifeq ($(BR2_X86_CPU_HAS_MMX)$(BR2_ARM_CPU_HAS_NEON),y)
- JPEG_TURBO_CONF_OPT += --with-simd
-diff --git a/package/libmhash/libmhash.mk b/package/libmhash/libmhash.mk
-index 00da7c1..f7b8e72 100644
---- a/package/libmhash/libmhash.mk
-+++ b/package/libmhash/libmhash.mk
-@@ -8,15 +8,7 @@ LIBMHASH_VERSION = 0.9.9.9
- LIBMHASH_SITE = http://downloads.sourceforge.net/project/mhash/mhash/$(LIBMHASH_VERSION)
- LIBMHASH_SOURCE = mhash-$(LIBMHASH_VERSION).tar.bz2
- LIBMHASH_INSTALL_STAGING = YES
--# libtool 1.5 patch failure
--LIBMHASH_AUTORECONF = YES
- LIBMHASH_LICENSE = LGPLv2
- LIBMHASH_LICENSE_FILES = COPYING
- 
--# Two trees in the tarball cause autoreconf problems
--define LIBMHASH_REMOVE_DUPLICATE
--	$(RM) -rf $(@D)/mhash-0.9.9
--endef
--LIBMHASH_POST_EXTRACT_HOOKS += LIBMHASH_REMOVE_DUPLICATE
--
- $(eval $(autotools-package))
-diff --git a/package/librsync/librsync.mk b/package/librsync/librsync.mk
-index 986c23e..d475c73 100644
---- a/package/librsync/librsync.mk
-+++ b/package/librsync/librsync.mk
-@@ -6,8 +6,6 @@
- 
- LIBRSYNC_VERSION = 0.9.7
- LIBRSYNC_SITE = http://downloads.sourceforge.net/project/librsync/librsync/$(LIBRSYNC_VERSION)
--# libtool 1.5 patch failure
--LIBRSYNC_AUTORECONF = YES
- LIBRSYNC_LICENSE = LGPLv2.1+
- LIBRSYNC_LICENSE_FILES = COPYING
- LIBRSYNC_INSTALL_STAGING = YES
-diff --git a/package/libsysfs/libsysfs.mk b/package/libsysfs/libsysfs.mk
-index accfec5..fb0310f 100644
---- a/package/libsysfs/libsysfs.mk
-+++ b/package/libsysfs/libsysfs.mk
-@@ -8,9 +8,6 @@ LIBSYSFS_VERSION = 2.1.0
- LIBSYSFS_SITE = http://downloads.sourceforge.net/project/linux-diag/sysfsutils/$(LIBSYSFS_VERSION)
- LIBSYSFS_SOURCE = sysfsutils-$(LIBSYSFS_VERSION).tar.gz
- LIBSYSFS_INSTALL_STAGING = YES
--# libtool 1.5 patch failure
--LIBSYSFS_AUTORECONF = YES
--LIBSYSFS_AUTORECONF_OPT = -Im4/
- LIBSYSFS_LICENSE = GPLv2 (utilities), LGPLv2.1+ (library)
- LIBSYSFS_LICENSE_FILES = cmd/GPL lib/LGPL
- 
-diff --git a/package/libungif/libungif.mk b/package/libungif/libungif.mk
-index 1f2cc85..019a489 100644
---- a/package/libungif/libungif.mk
-+++ b/package/libungif/libungif.mk
-@@ -9,8 +9,6 @@ LIBUNGIF_SOURCE = libungif-$(LIBUNGIF_VERSION).tar.bz2
- LIBUNGIF_SITE = http://downloads.sourceforge.net/project/giflib/libungif-4.x/libungif-$(LIBUNGIF_VERSION)
- LIBUNGIF_INSTALL_STAGING = YES
- LIBUNGIF_CONF_OPT = --without-x
--# libtool 1.5 patch failure
--LIBUNGIF_AUTORECONF = YES
- LIBUNGIF_LICENSE = MIT
- LIBUNGIF_LICENSE_FILES = COPYING
- 
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index beb8290..6eb7e90 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -11,8 +11,6 @@ SPEEX_LICENSE_FILES = COPYING
- 
- SPEEX_INSTALL_STAGING = YES
- SPEEX_DEPENDENCIES = libogg
--# libtool 1.5 patch failure
--SPEEX_AUTORECONF = YES
- SPEEX_CONF_OPT = --with-ogg-libraries=$(STAGING_DIR)/usr/lib \
- 		 --with-ogg-includes=$(STAGING_DIR)/usr/include \
- 		 --enable-fixed-point
--- 
-1.8.5.5
+diff --git a/support/libtool/buildroot-libtool-v1.5.patch b/support/libtool/buildroot-libtool-v1.5.patch
+index 73a61b0..cdd9c5a 100644
+--- a/support/libtool/buildroot-libtool-v1.5.patch
++++ b/support/libtool/buildroot-libtool-v1.5.patch
+@@ -1,6 +1,6 @@
+---- a/ltmain.sh	2008-02-01 17:39:51.000000000 +0100
+-+++ b/ltmain.sh	2014-07-30 22:36:00.544715335 +0200
+-@@ -297,8 +297,9 @@
++--- a/ltmain.sh	2014-07-31 10:43:01.634568799 -0300
+++++ b/ltmain.sh	2014-07-31 10:44:14.032018999 -0300
++@@ -226,8 +226,9 @@
+  	# line option must be used.
+  	if test -z "$tagname"; then
+  	  $echo "$modename: unable to infer tagged configuration"
+@@ -12,30 +12,19 @@
+  #        else
+  #          $echo "$modename: using $tagname tagged configuration"
+  	fi
+-@@ -1178,7 +1179,8 @@
+-       case $arg in
+-       -all-static | -static | -static-libtool-libs)
+- 	case $arg in
+--	-all-static)
+-+	# Make -static behave like -all-static
+-+	-all-static | -static)
+- 	  if test "$build_libtool_libs" = yes && test -z "$link_static_flag"; then
+- 	    $echo "$modename: warning: complete static linking is impossible in this configuration" 1>&2
+- 	  fi
+-@@ -1187,12 +1189,6 @@
+- 	  fi
+- 	  prefer_static_libs=yes
+- 	  ;;
+--	-static)
+--	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
+--	    dlopen_self=$dlopen_self_static
+--	  fi
+--	  prefer_static_libs=built
+--	  ;;
+- 	-static-libtool-libs)
+- 	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
+- 	    dlopen_self=$dlopen_self_static
+-@@ -1482,7 +1478,8 @@
++@@ -247,6 +248,11 @@
++   arg="$1"
++   shift
++ 
+++  # Make -static behave as -all-static
+++  case $arg in
+++  -static) arg="-all-static" ;;
+++  esac
+++
++   case $arg in
++   -*=*) optarg=`$echo "X$arg" | $Xsed -e 's/[-_a-zA-Z0-9]*=//'` ;;
++   *) optarg= ;;
++@@ -1238,7 +1244,8 @@
+        prevarg="$arg"
+  
+        case $arg in
+@@ -45,16 +34,7 @@
+  	if test -n "$link_static_flag"; then
+  	  compile_command="$compile_command $link_static_flag"
+  	  finalize_command="$finalize_command $link_static_flag"
+-@@ -1765,7 +1762,7 @@
+- 	continue
+- 	;;
+- 
+--      -static | -static-libtool-libs)
+-+      -static-libtool-libs)
+- 	# The effects of -static are defined in a previous loop.
+- 	# We used to do the same as -all-static on platforms that
+- 	# didn't have a PIC flag, but the assumption that the effects
+-@@ -2462,8 +2459,14 @@
++@@ -2146,8 +2153,14 @@
+  	    absdir="$abs_ladir"
+  	    libdir="$abs_ladir"
+  	  else
+@@ -69,10 +49,10 @@
+ +	    #dir="$libdir"
+ +	    #absdir="$libdir"
+  	  fi
+- 	  test "X$hardcode_automatic" = Xyes && avoidtemprpath=yes
+  	else
+-@@ -2602,7 +2605,7 @@
+- 	   { test "$use_static_libs" = no || test -z "$old_library"; }; then
++ 	  dir="$ladir/$objdir"
++@@ -2272,7 +2285,7 @@
++ 	   { test "$prefer_static_libs" = no || test -z "$old_library"; }; then
+  	  if test "$installed" = no; then
+  	    notinst_deplibs="$notinst_deplibs $lib"
+ -	    need_relink=yes
+@@ -80,7 +60,7 @@
+  	  fi
+  	  # This is a shared library
+  
+-@@ -5687,6 +5690,10 @@
++@@ -5169,6 +5182,10 @@
+  	    # Replace all uninstalled libtool libraries with the installed ones
+  	    newdependency_libs=
+  	    for deplib in $dependency_libs; do
+@@ -91,7 +71,7 @@
+  	      case $deplib in
+  	      *.la)
+  		name=`$echo "X$deplib" | $Xsed -e 's%^.*/%%'`
+-@@ -6008,10 +6015,13 @@
++@@ -5487,10 +5504,13 @@
+  	  # At present, this check doesn't affect windows .dll's that
+  	  # are installed into $libdir/../bin (currently, that works fine)
+  	  # but it's something to keep an eye on.
