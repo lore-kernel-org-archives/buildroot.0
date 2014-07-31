@@ -1,66 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 02:16:42 +0200
-Subject: [Buildroot] [PATCH 07/14 v4] package/libcec: needs libudev,
-	not a udev daemon
+Date: Thu, 31 Jul 2014 02:16:43 +0200
+Subject: [Buildroot] [PATCH 08/14 v4] package/libdrm: can also use only
+	libudev
 In-Reply-To: <cover.1406765723.git.yann.morin.1998@free.fr>
 References: <cover.1406765723.git.yann.morin.1998@free.fr>
-Message-ID: <e9dbb8a80f665101d5329a9ca157a416764e46a6.1406765723.git.yann.morin.1998@free.fr>
+Message-ID: <6e4323e0d76daa3612e9e4f8b7794f19b9d1ca43.1406765723.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libcec is happy enough with just a libudev, which it uses to
-enumerate CEC devices, and does not require a udev daemon.
+Even if a udev daemon is missing, libdrm can still use just libudev to
+enumerate devices.
 
-Propagate the new dependency to XBMC.
+In case both udev and libudev are enabled, depending on just udev would
+be enough to also get libudev (since any udev provider is also a libudev
+provider). But it is more logical to have separate conditions for udev
+and libudev.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.mk | 4 ++--
- package/xbmc/Config.in   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libdrm/libdrm.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index ad919fc..49e4dbd 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -18,8 +18,8 @@ ifeq ($(BR2_PACKAGE_LOCKDEV),y)
- LIBCEC_DEPENDENCIES += lockdev
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 1c6ae78..3b3957b 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -62,9 +62,9 @@ else
+ LIBDRM_CONF_OPT += --disable-freedreno-experimental-api
  endif
  
 -ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
--LIBCEC_DEPENDENCIES += udev
 +ifeq ($(BR2_PACKAGE_HAS_LIBUDEV),y)
-+LIBCEC_DEPENDENCIES += libudev
+ LIBDRM_CONF_OPT += --enable-udev
+-LIBDRM_DEPENDENCIES += udev
++LIBDRM_DEPENDENCIES += libudev
+ else
+ LIBDRM_CONF_OPT += --disable-udev
  endif
- 
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-index 05d28ee..6aa9937 100644
---- a/package/xbmc/Config.in
-+++ b/package/xbmc/Config.in
-@@ -106,14 +106,14 @@ comment "libbluray support needs a toolchain w/ dynamic library"
- config BR2_PACKAGE_XBMC_LIBCEC
- 	bool "hdmi cec"
- 	depends on !BR2_PREFER_STATIC_LIB # libcec
--	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_PACKAGE_HAS_LIBUDEV # libcec
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want XBMC to support HDMI CEC.
- 
--comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
--	depends on BR2_PREFER_STATIC_LIB || !BR2_PACKAGE_HAS_UDEV
-+comment "hdmi cec support needs a toolchain w/ dynamic library"
-+	depends on BR2_PREFER_STATIC_LIB
- 
- config BR2_PACKAGE_XBMC_LIBMICROHTTPD
- 	bool "web server"
 -- 
 1.9.1
