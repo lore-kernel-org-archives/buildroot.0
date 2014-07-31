@@ -1,38 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 23:41:08 +0200
-Subject: [Buildroot] [PATCH v9] google-breakpad: integration into
- Makefile and Config.in
-In-Reply-To: <20140731231521.3242d944@free-electrons.com>
-References: <1406837335-9696-1-git-send-email-yann.morin.1998@free.fr>
- <20140731231521.3242d944@free-electrons.com>
-Message-ID: <20140731214108.GP3960@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:47:27 +0200
+Subject: [Buildroot] [PATCH v3] bandwidthd: new package
+In-Reply-To: <1406784419-1479-1-git-send-email-nroach44@gmail.com>
+References: <1406784419-1479-1-git-send-email-nroach44@gmail.com>
+Message-ID: <20140731234727.0fb76a90@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Pascal, All,
+Dear Nathaniel Roach,
 
-On 2014-07-31 23:15 +0200, Thomas Petazzoni spake thusly:
-> (Adding Pascal in Cc.)
+On Thu, 31 Jul 2014 13:26:59 +0800, Nathaniel Roach wrote:
+> ---
+> Changes v2 to v3
+>  - Bump version (solved issues with the db stuff)
+> 
+> Changes v1 to v2
+> 
+>  - Misc tweaks as recommended by Thomas Petazzoni
+>  - Added sqlite toggle
+>  - Bump version
+> ---
+>  package/Config.in                |  1 +
+>  package/bandwidthd/Config.in     | 48 ++++++++++++++++++++++++++++++++++++++++
+>  package/bandwidthd/bandwidthd.mk | 32 +++++++++++++++++++++++++++
+>  3 files changed, 81 insertions(+)
+>  create mode 100644 package/bandwidthd/Config.in
+>  create mode 100644 package/bandwidthd/bandwidthd.mk
 
-He was in the list of recipients when I sent the mail. It's just the
-list dropping recipients once again... :-/
+Thanks, I've applied the patch after doing some minor formatting fixes
+(removing trailing whitespace, rewrapping too long help text, etc.).
 
-> A special thanks to Pascal for his persistence
-> to get this feature merged, despite our numerous requests to adjust the
-> implementation.
+Make sure to monitor http://autobuild.buildroot.org in the coming days
+to see if your package appears in red. In which case, you're invited to
+investigate the build failures caused by your new package, and provide
+patches to fix them! :-)
 
-Yep! Thanks! :-)
+Thanks,
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
