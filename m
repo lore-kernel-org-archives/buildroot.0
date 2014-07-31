@@ -1,48 +1,106 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 31 Jul 2014 12:19:25 -0500
-Subject: [Buildroot] [PATCH v2] Add option to copy config file to rootfs
-In-Reply-To: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
-References: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
-Message-ID: <CANQCQpbgRPf+Bk4yhM6Fs-Vc9yNWK+4UsGY4nV8Qn5xhkPxyag@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 31 Jul 2014 19:25:20 +0200
+Subject: [Buildroot] [PATCH v2 1/9] toolchain: Add config option for
+ atomic intrinsics
+In-Reply-To: <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
+References: <20140730084548.05bd6dec@free-electrons.com>
+ <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <20140731172520.GD3960@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nathaniel,
+Anton, All,
 
-On Thu, Jul 31, 2014 at 10:26 AM, Nathaniel Roach <nroach44@gmail.com> wrote:
-> BR2_CONFIG_COPY copies the config file to /etc/buildroot.config
-> as 0600 during target-finalize after overlay copy, but before
-> post-build script install.
->
+On 2014-07-31 17:24 +0400, Anton Kolesov spake thusly:
+> GCC has several builtin functions that implement atomic operations. Those
+> functions are architecture specific and may not be implemented by the
+> specific toolchain. In case of GCC for ARC those functions rely on
+> LLOCK/SCOND instructions which are optional in ARC CPU's. If ARC CPU doesn't
+> support those instructions but software tries to use them, then application
+> will be aborted with Illegal instruction exception. To avoid confusion user
+> should first specify that their CPU supports atomic extension, which will
+> allow selection of packages that use builtin atomic functions.
+
+I think what Thomas and I discussed, was to have a patch series that
+does the following changes:
+
+   1- introduce BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS;
+   2- have all current architectures, that have atomics, select that new
+      symbol (note: i386 does not, i486 and above have, for example);
+   3- convert packages (one patch par package) to depend on it;
+   4- introduce BR2_ARC_ATOMIC_EXT that selects it, too.
+
+This is more logical: you first add a new option, and then you gradually
+start using it, until finally you airrive to what you eventually wanted.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 > ---
-> Changes v1 to v2
->  - Corrected wording of config helper message (Thomas De Schampheleire)
->  - Moved order in menu to reflect actual order of the operation
-> ---
->  Makefile         |  4 ++++
->  system/Config.in | 11 +++++++++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index 022beea..cc49291 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -614,6 +614,10 @@ endif
->                         --chmod=Du+w --exclude .empty --exclude '*~' \
->                         $(d)/ $(TARGET_DIR)$(sep))
->
-> +ifeq ($(BR2_CONFIG_COPY),y)
-> +       $(INSTALL) -m 0600 .config $(TARGET_DIR)/etc/buildroot.config
+>  arch/Config.in.arc            | 5 +++++
+>  package/Makefile.in           | 4 ++++
+>  toolchain/toolchain-common.in | 4 ++++
+>  3 files changed, 13 insertions(+)
+> 
+> diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+> index 60b59f0..836cfef 100644
+> --- a/arch/Config.in.arc
+> +++ b/arch/Config.in.arc
+> @@ -1,3 +1,8 @@
+> +# Choise of atomic instructions presence
+> +config BR2_ARC_ATOMIC_EXT
+> +	bool "Atomic extension (LLOCK/SCOND instructions)"
+> +	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> +
+>  config BR2_ARCH
+>  	default "arc"	if BR2_arcle
+>  	default "arceb"	if BR2_arceb
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index 02f6e3d..106a04c 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -102,6 +102,10 @@ ifeq ($(BR2_xtensa),y)
+>  TARGET_ABI += -mlongcalls -mtext-section-literals
+>  endif
+>  
+> +ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
+> +TARGET_ABI += -matomic
+> +endif
+> +
+>  STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+>  STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
+>  
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index 13de9e5..f9cb7cf 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -44,6 +44,10 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+>  config BR2_TOOLCHAIN_HAS_SSP
+>  	bool
+>  
+> +config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> +	bool
+> +	default y if !BR2_arc
+> +
+>  config BR2_ENABLE_LOCALE_PURGE
+>  	bool "Purge unwanted locales"
+>  	help
+> -- 
+> 1.8.4.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Before you do the copy, would it be worth doing a savedefconfig (or like)
-activity to cleanup the .config file?  Then the file on target would be much
-easier to read if you manually had to view it.
-
-Thanks!
 -- 
-Matthew L Weber / Sr Software Engineer / Platform Software
-matthew.weber at rockwellcollins.com
-www.rockwellcollins.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
