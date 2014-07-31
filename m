@@ -1,63 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 08:33:00 +0200
-Subject: [Buildroot] Notice: significant changes for static linking
- configurations
-In-Reply-To: <20140730235026.771f855f@free-electrons.com>
-References: <20140730235026.771f855f@free-electrons.com>
-Message-ID: <20140731083300.5efdcf7d@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 31 Jul 2014 08:38:37 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] toolchain: linker options with a $
+ sign are not supported
+In-Reply-To: <4340ac304e166f70044180b7d49eb6e43828eace.1406760999.git.yann.morin.1998@free.fr>
+References: <cover.1406760999.git.yann.morin.1998@free.fr>
+ <4340ac304e166f70044180b7d49eb6e43828eace.1406760999.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LWgB+vXCN-yaDgd6DxMDdkZtDO98FVe3EFCjqyPveAAPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+On Thu, Jul 31, 2014 at 12:57 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> As reported in bug #7172 [0], setting BR2_TARGET_LDFLAGS to a value
+> containing a $ sign can lead to unexpected results.
+>
+> This is because it is very hard to know when the $ sign gets evaluated:
+>   - in the Buildroot-level make
+>   - in the shell called by the Buildroot-level make
+>   - in the package's own build-system, either at configure time, in the
+>     Makefile, in a shell in the Makefile...
+>
+> So, it is very difficult to know how much escaping that would need.
+>
+> A proposal is to use a shell variable to pass such values unmolested.
+> But it is not that simple either, since it still contains a $ sign, and
+> there is not much certainty as to when it would be evaluated.
+>
+> Instead, just document this limitation, both in the help text for
+> BR2_TARGET_LDFLAGS, and in the known-issues section in the manual.
+>
+> Does not really fix #7172, but at least the limitation is documented.
+>
+> [0] https://bugs.buildroot.org/show_bug.cgi?id=7172
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Mike Zick <minimod@morethan.org>
+> ---
+>  docs/manual/known-issues.txt  | 4 ++++
+>  toolchain/toolchain-common.in | 3 +++
+>  2 files changed, 7 insertions(+)
+>
+> diff --git a/docs/manual/known-issues.txt b/docs/manual/known-issues.txt
+> index 08469e9..5eaded9 100644
+> --- a/docs/manual/known-issues.txt
+> +++ b/docs/manual/known-issues.txt
+> @@ -3,6 +3,10 @@
+>
+>  = Known issues
+>
+> +* It is not possible to pass extra linker options via +BR2_TARGET_LDFLAGS+
+> +  if such options contain a +$+ sign. For example, the following is known
+> +  to break: +BR2_TARGET_LDFLAGS="-Wl,-rpath=\'$ORIGIN/../lib'"+
+> +
+>  * The +ltp-testsuite+ package does not build with the default uClibc
+>    configuration used by the Buildroot toolchain backend. The LTP
+>    testsuite uses several functions that are considered obsolete, such
+> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+> index 13de9e5..2df8ddb 100644
+> --- a/toolchain/toolchain-common.in
+> +++ b/toolchain/toolchain-common.in
+> @@ -132,6 +132,9 @@ config BR2_TARGET_LDFLAGS
+>         help
+>           Extra options to pass to the linker when building for the target.
+>
+> +         Note that options with a '$' sign (eg. -Wl,-rpath='$ORIGIN/../lib')
+> +         are not supported.
+> +
+>  config BR2_ECLIPSE_REGISTER
+>         bool "Register toolchain within Eclipse Buildroot plug-in"
+>         help
 
-On Wed, 30 Jul 2014 23:50:26 +0200, Thomas Petazzoni wrote:
 
-> We'll see in the next few days what is the result of those changes in
-> the autobuilders. If it turns out to be too nasty, we might revert
-> back. But the static linking issue with libstdc++ has been around for
-> too long, it's time to get something done.
-
-So, the first major issue that is currently visible in the autobuilders
-is related to packages using libtool 1.5 ltmain.sh. It turns out that
-by chance and thanks to fuzziness our existing patch for libtool 1.5
-was applying fine on a wide range of libtool 1.5.x ltmain.sh scripts,
-even though those scripts are quite different depending on the specific
-version you're using.
-
-The issue is that for the -all-static / -static change, it's not
-possible to do a patch that will apply on all 1.5.x libtool versions.
-Options are:
-
- 1) Further refine the libtool version check, and instead of just
-    checking for major versions (1.5, 2.2, 2.4), check for the minor
-    version as well, so that we can provide different patches for each
-    specific libtool version. Notice that it *may* be necessary down
-    the road, because with Hadrien we have seen cases of recent
-    packages using a specific libtool 2.4.x version on which our
-    libtool 2.4 patch was not applying.
-
- 2) Mark AUTORECONF = YES the problematic packages (i.e the ones using
-    libtool 1.5) so that their ltmain.sh gets regenerated with libtool
-    2.4 and our patch applies. That's the solution we discussed
-    yesterday evening with Gustavo, and for which I applied a patch
-    this morning. We will see how far this brings us, and whether or
-    not we need to get back to (1) for a more long-term solution.
-
-Ideas, suggestions, comments are welcome.
-
-Note that I know we're breaking stuff badly, and we're making
-autobuilders all red, but this libstdc++ static linking stuff has been
-around for a long time, and we need to fix it at some point. And
-without the help of the autobuilders to tell us what breaks, it's
-really hard to make progress.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
