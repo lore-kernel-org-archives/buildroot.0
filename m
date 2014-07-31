@@ -1,75 +1,81 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Jul 2014 17:05:56 +0200
-Subject: [Buildroot] [PATCH 2/2] Add option to copy config file to rootfs
-In-Reply-To: <1406814414-27217-1-git-send-email-nroach44@gmail.com>
-References: <1406814414-27217-1-git-send-email-nroach44@gmail.com>
-Message-ID: <CAAXf6LVC6j281Bh4t=Kwh8S7VZHyYOY-0n07UR91-0L6wNbo-g@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 31 Jul 2014 12:21:18 -0300
+Subject: [Buildroot] [PATCHv2] samba4: bump to version 4.1.10
+Message-ID: <1406820078-29391-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nathaniel,
+Lots of bugfixes, enhancements to provisioning and printing support via
+cups.
 
-On Thu, Jul 31, 2014 at 3:46 PM, Nathaniel Roach <nroach44@gmail.com> wrote:
-> BR2_CONFIG_COPY copies the config file to /etc/buildroot.config
-> as 0600 during target-finalize after overlay copy, but before
-> post-build script install.
->
-> Signed-off-by: Nathaniel Roach <nroach44@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba4/samba4.mk | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-Your subject says 2/2 but I only see 1 patch?
-
-> ---
->  Makefile         |  4 ++++
->  system/Config.in | 11 +++++++++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index 022beea..cc49291 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -614,6 +614,10 @@ endif
->                         --chmod=Du+w --exclude .empty --exclude '*~' \
->                         $(d)/ $(TARGET_DIR)$(sep))
->
-> +ifeq ($(BR2_CONFIG_COPY),y)
-> +       $(INSTALL) -m 0600 .config $(TARGET_DIR)/etc/buildroot.config
-> +endif
-> +
->         @$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_BUILD_SCRIPT)), \
->                 $(call MESSAGE,"Executing post-build script $(s)"); \
->                 $(EXTRA_ENV) $(s) $(TARGET_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-> diff --git a/system/Config.in b/system/Config.in
-> index e7e146a..94fb744 100644
-> --- a/system/Config.in
-> +++ b/system/Config.in
-> @@ -328,6 +328,17 @@ config BR2_ROOTFS_USERS_TABLES
->
->           See manual for details on the usage and syntax of these files.
->
-> +config BR2_CONFIG_COPY
-> +       bool "Copy buildroot .config file to rootfs"
-> +       help
-> +         Copies the .config file used to build the rootfs into the
-
-'to build the rootfs' is not fully accurate as it was also used to
-build the kernel, bootloader and what not.
-So maybe 'to build the system' or simply 'Copies the buildroot .config
-file into ...'
-
-> +         rootfs. This may be useful for debugging.
-> +
-> +         It will be put in /etc/buildroot.config with a mode of 0600
-> +
-> +         However, be wary that it will contain the root password
-> +         (if set) and other possibly sensitive data.
-> +
->  config BR2_ROOTFS_OVERLAY
->         string "Root filesystem overlay directories"
->         default ""
-
-
-Best regards,
-Thomas
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index e2336e7..9e3178a 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.1.9
++SAMBA4_VERSION = 4.1.10
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_LICENSE = GPLv3+
+@@ -20,6 +20,14 @@ else
+ 	SAMBA4_CONF_OPT += --without-acl-support
+ endif
+ 
++ifeq ($(BR2_PACKAGE_CUPS),y)
++	SAMBA4_CONF_ENV += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
++	SAMBA4_CONF_OPT += --enable-cups
++	SAMBA4_DEPENDENCIES += cups
++else
++	SAMBA4_CONF_OPT += --disable-cups
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBAIO),y)
+ 	SAMBA4_CONF_OPT += --with-aio-support
+ 	SAMBA4_DEPENDENCIES += libaio
+@@ -69,6 +77,7 @@ define SAMBA4_CONFIGURE_CMDS
+ 		python_LDFLAGS="" \
+ 		python_LIBDIR="" \
+ 		$(TARGET_CONFIGURE_OPTS) \
++		$(SAMBA4_CONF_ENV) \
+ 		./buildtools/bin/waf configure \
+ 			--prefix=/usr \
+ 			--sysconfdir=/etc \
+@@ -80,7 +89,6 @@ define SAMBA4_CONFIGURE_CMDS
+ 			--hostcc=gcc \
+ 			--disable-rpath \
+ 			--disable-rpath-install \
+-			--disable-cups \
+ 			--disable-iprint \
+ 			--without-pam \
+ 			--without-dmapi \
+@@ -101,6 +109,16 @@ define SAMBA4_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
++# Samba just installs .py files so the purge causes problems with some tools
++ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
++define SAMBA4_BUILD_PYC_FILES
++	PYTHONPATH="$(PYTHON_PATH)" \
++		$(HOST_DIR)/usr/bin/python -c "import compileall; \
++		compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages/samba')"
++endef
++SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_BUILD_PYC_FILES
++endif
++
+ define SAMBA4_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/samba4/S91smb \
+ 		$(TARGET_DIR)/etc/init.d/S91smb
+-- 
+1.8.5.5
