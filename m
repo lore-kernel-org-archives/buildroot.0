@@ -1,32 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 20:22:02 +0200
-Subject: [Buildroot] [git commit] libndp: bump to 1.4
-Message-ID: <20140731182239.A70A79D32D@busybox.osuosl.org>
+Date: Thu, 31 Jul 2014 20:20:51 +0200
+Subject: [Buildroot] [git commit] Remove unsupported libcue from package mpd
+Message-ID: <20140731182239.9CFB79D32D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1437558020f5598de4e0ef4daf0f2a09e76bbd76
+commit: http://git.buildroot.net/buildroot/commit/?id=3bff0fa1beb09afec489758cacc886043c515914
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Support for libcue has been removed for mpd since version 0.17.
+
+Signed-off-by: J??rg Krause <jkrause@posteo.de>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libndp/libndp.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/mpd/Config.in |    6 ------
+ package/mpd/mpd.mk    |    6 ------
+ 2 files changed, 0 insertions(+), 12 deletions(-)
 
-diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-index 2f11a07..613aee8 100644
---- a/package/libndp/libndp.mk
-+++ b/package/libndp/libndp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index e09be0b..f5f5b34 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -96,12 +96,6 @@ config BR2_PACKAGE_MPD_LAME
+ 	help
+ 	  Enable lame (mp3) encoding support.
  
--LIBNDP_VERSION = v1.3
-+LIBNDP_VERSION = v1.4
- LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
- LIBNDP_LICENSE = LGPLv2.1+
- LIBNDP_LICENSE_FILES = COPYING
+-config BR2_PACKAGE_MPD_LIBCUE
+-	bool "libcue"
+-	select BR2_PACKAGE_LIBCUE
+-	help
+-	  Enable cue file support.
+-
+ config BR2_PACKAGE_MPD_LIBSAMPLERATE
+ 	bool "libsamplerate"
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7cad806..e2ee760 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -69,12 +69,6 @@ else
+ MPD_CONF_OPT += --disable-lame-encoder
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MPD_LIBCUE),y)
+-MPD_DEPENDENCIES += libcue
+-else
+-MPD_CONF_OPT += --disable-cue
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MPD_LIBSAMPLERATE),y)
+ MPD_DEPENDENCIES += libsamplerate
+ else
