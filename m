@@ -1,319 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 23:17:46 +0200
-Subject: [Buildroot] [git commit] package: remove the trailing slash sign
-	from <PKG>_SITE variable
-Message-ID: <20140731211907.3B96A9D357@busybox.osuosl.org>
+Date: Thu, 31 Jul 2014 23:21:27 +0200
+Subject: [Buildroot] [PATCH 1/1] manual/adding-packages-perl.txt: remove
+ the trailing slash sign from description of PERL_SITE variable
+In-Reply-To: <1406796418-27918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1406796418-27918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140731232127.68bdd635@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c7f4b964718bc5a3329bb730f59e24091ecbc7a2
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Jerzy Grzegorek,
 
-Since the trailing slash is stripped from $($(PKG)_SITE) by pkg-generic.mk:
+On Thu, 31 Jul 2014 10:46:57 +0200, Jerzy Grzegorek wrote:
+> Since the trailing slash is stripped from $($(PKG)_SITE) by pkg-generic.mk:
+> 
+> $(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
+> 
+> so it is redundant.
+> 
+> 
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  docs/manual/adding-packages-perl.txt |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
+Thanks, applied.
 
-so it is redundant.
-This patch removes it from $(PKG)_SITE variable for BR consistency.
-
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- boot/at91bootstrap/at91bootstrap.mk                |    2 +-
- boot/at91dataflashboot/at91dataflashboot.mk        |    2 +-
- boot/barebox/barebox.mk                            |    2 +-
- boot/grub/grub.mk                                  |    2 +-
- boot/grub2/grub2.mk                                |    2 +-
- boot/mxs-bootlets/mxs-bootlets.mk                  |    2 +-
- boot/syslinux/syslinux.mk                          |    2 +-
- linux/linux.mk                                     |    4 ++--
- package/aespipe/aespipe.mk                         |    2 +-
- package/aiccu/aiccu.mk                             |    2 +-
- package/alsamixergui/alsamixergui.mk               |    2 +-
- package/armadillo/armadillo.mk                     |    2 +-
- package/atftp/atftp.mk                             |    2 +-
- package/atk/atk.mk                                 |    2 +-
- package/avahi/avahi.mk                             |    2 +-
- package/axel/axel.mk                               |    2 +-
- package/b43-firmware/b43-firmware.mk               |    4 ++--
- package/b43-fwcutter/b43-fwcutter.mk               |    2 +-
- package/bc/bc.mk                                   |    2 +-
- package/bcusdk/bcusdk.mk                           |    2 +-
- package/boa/boa.mk                                 |    2 +-
- package/bonnie/bonnie.mk                           |    2 +-
- package/bustle/bustle.mk                           |    2 +-
- package/bwm-ng/bwm-ng.mk                           |    2 +-
- package/ca-certificates/ca-certificates.mk         |    2 +-
- package/ccrypt/ccrypt.mk                           |    2 +-
- package/chrony/chrony.mk                           |    2 +-
- package/cloog/cloog.mk                             |    2 +-
- package/cmake/cmake.mk                             |    2 +-
- package/connman/connman.mk                         |    2 +-
- package/ctorrent/ctorrent.mk                       |    2 +-
- package/cvs/cvs.mk                                 |    2 +-
- package/dbus-python/dbus-python.mk                 |    2 +-
- package/dcron/dcron.mk                             |    2 +-
- package/dfu-util/dfu-util.mk                       |    2 +-
- package/dhcpdump/dhcpdump.mk                       |    2 +-
- package/dhrystone/dhrystone.mk                     |    2 +-
- package/distcc/distcc.mk                           |    2 +-
- package/dmidecode/dmidecode.mk                     |    2 +-
- package/doom-wad/doom-wad.mk                       |    2 +-
- package/dropwatch/dropwatch.mk                     |    2 +-
- package/dsp-tools/dsp-tools.mk                     |    2 +-
- package/efl/expedite/expedite.mk                   |    2 +-
- package/efl/libecore/libecore.mk                   |    2 +-
- package/efl/libedbus/libedbus.mk                   |    2 +-
- package/efl/libedje/libedje.mk                     |    2 +-
- package/efl/libeet/libeet.mk                       |    2 +-
- package/efl/libefreet/libefreet.mk                 |    2 +-
- package/efl/libeina/libeina.mk                     |    2 +-
- package/efl/libeio/libeio.mk                       |    2 +-
- package/efl/libelementary/libelementary.mk         |    2 +-
- package/efl/libembryo/libembryo.mk                 |    2 +-
- package/efl/libethumb/libethumb.mk                 |    2 +-
- .../libevas-generic-loaders.mk                     |    2 +-
- package/efl/libevas/libevas.mk                     |    2 +-
- package/eigen/eigen.mk                             |    2 +-
- package/enlightenment/enlightenment.mk             |    2 +-
- package/enscript/enscript.mk                       |    2 +-
- package/explorercanvas/explorercanvas.mk           |    2 +-
- package/fakeroot/fakeroot.mk                       |    2 +-
- package/fan-ctrl/fan-ctrl.mk                       |    2 +-
- package/fconfig/fconfig.mk                         |    2 +-
- package/feh/feh.mk                                 |    2 +-
- package/fetchmail/fetchmail.mk                     |    2 +-
- package/flickcurl/flickcurl.mk                     |    2 +-
- package/freescale-imx/freescale-imx.mk             |    2 +-
- package/fswebcam/fswebcam.mk                       |    2 +-
- package/ftop/ftop.mk                               |    2 +-
- package/gadgetfs-test/gadgetfs-test.mk             |    2 +-
- package/gcc/gcc.mk                                 |    4 ++--
- package/gd/gd.mk                                   |    2 +-
- package/gdb/gdb.mk                                 |    2 +-
- package/genimage/genimage.mk                       |    2 +-
- package/genpart/genpart.mk                         |    2 +-
- package/gesftpserver/gesftpserver.mk               |    2 +-
- package/giblib/giblib.mk                           |    2 +-
- package/git/git.mk                                 |    2 +-
- package/glibc/glibc.mk                             |    2 +-
- package/gnu-efi/gnu-efi.mk                         |    2 +-
- package/gpm/gpm.mk                                 |    2 +-
- package/gstreamer/gst-dsp/gst-dsp.mk               |    2 +-
- package/gstreamer/gst-omapfb/gst-omapfb.mk         |    2 +-
- .../gstreamer/gst-plugin-x170/gst-plugin-x170.mk   |    2 +-
- package/gstreamer1/gst-omx/gst-omx.mk              |    2 +-
- package/gtest/gtest.mk                             |    2 +-
- .../gtk2-theme-hicolor/gtk2-theme-hicolor.mk       |    2 +-
- package/harfbuzz/harfbuzz.mk                       |    2 +-
- package/heirloom-mailx/heirloom-mailx.mk           |    2 +-
- package/hwdata/hwdata.mk                           |    2 +-
- package/iftop/iftop.mk                             |    2 +-
- package/igh-ethercat/igh-ethercat.mk               |    2 +-
- package/imagemagick/imagemagick.mk                 |    2 +-
- package/imlib2/imlib2.mk                           |    2 +-
- package/inotify-tools/inotify-tools.mk             |    2 +-
- package/input-tools/input-tools.mk                 |    2 +-
- package/intltool/intltool.mk                       |    2 +-
- package/ipsec-tools/ipsec-tools.mk                 |    2 +-
- package/iptraf-ng/iptraf-ng.mk                     |    2 +-
- package/iputils/iputils.mk                         |    2 +-
- package/isl/isl.mk                                 |    2 +-
- package/json-c/json-c.mk                           |    2 +-
- package/kmod/kmod.mk                               |    2 +-
- package/kobs-ng/kobs-ng.mk                         |    2 +-
- package/latencytop/latencytop.mk                   |    2 +-
- package/lbreakout2/lbreakout2.mk                   |    2 +-
- package/libaio/libaio.mk                           |    2 +-
- package/libart/libart.mk                           |    2 +-
- package/libassuan/libassuan.mk                     |    2 +-
- package/libcdaudio/libcdaudio.mk                   |    2 +-
- package/libconfig/libconfig.mk                     |    2 +-
- package/libdrm/libdrm.mk                           |    2 +-
- package/libeXosip2/libeXosip2.mk                   |    2 +-
- package/libebml/libebml.mk                         |    2 +-
- package/libedit/libedit.mk                         |    2 +-
- package/libee/libee.mk                             |    2 +-
- package/libelf/libelf.mk                           |    2 +-
- package/libestr/libestr.mk                         |    2 +-
- package/libev/libev.mk                             |    2 +-
- package/libffi/libffi.mk                           |    2 +-
- package/libfribidi/libfribidi.mk                   |    2 +-
- package/libftdi/libftdi.mk                         |    2 +-
- package/libgc/libgc.mk                             |    2 +-
- package/libglade/libglade.mk                       |    2 +-
- package/libgpgme/libgpgme.mk                       |    2 +-
- package/libhid/libhid.mk                           |    2 +-
- package/libjpeg/libjpeg.mk                         |    2 +-
- package/libllcp/libllcp.mk                         |    2 +-
- package/liblockfile/liblockfile.mk                 |    2 +-
- package/libmatroska/libmatroska.mk                 |    2 +-
- package/libmbim/libmbim.mk                         |    2 +-
- package/libmbus/libmbus.mk                         |    2 +-
- package/libmodbus/libmodbus.mk                     |    2 +-
- package/libnfc/libnfc.mk                           |    2 +-
- package/libnspr/libnspr.mk                         |    2 +-
- package/libplayer/libplayer.mk                     |    2 +-
- package/libpthread-stubs/libpthread-stubs.mk       |    2 +-
- package/libpthsem/libpthsem.mk                     |    2 +-
- package/libqmi/libqmi.mk                           |    2 +-
- package/libraw/libraw.mk                           |    2 +-
- package/libroxml/libroxml.mk                       |    2 +-
- package/librsvg/librsvg.mk                         |    2 +-
- package/libsepol/libsepol.mk                       |    2 +-
- package/libsexy/libsexy.mk                         |    2 +-
- package/libsocketcan/libsocketcan.mk               |    2 +-
- package/libssh2/libssh2.mk                         |    2 +-
- package/libsvg-cairo/libsvg-cairo.mk               |    2 +-
- package/libsvg/libsvg.mk                           |    2 +-
- package/liburcu/liburcu.mk                         |    2 +-
- package/libv4l/libv4l.mk                           |    2 +-
- package/libvorbis/libvorbis.mk                     |    2 +-
- package/libxkbcommon/libxkbcommon.mk               |    2 +-
- package/libyaml/libyaml.mk                         |    2 +-
- package/linux-headers/linux-headers.mk             |    4 ++--
- package/linux-pam/linux-pam.mk                     |    2 +-
- package/live555/live555.mk                         |    2 +-
- package/lmbench/lmbench.mk                         |    2 +-
- package/localedef/localedef.mk                     |    2 +-
- package/lockdev/lockdev.mk                         |    2 +-
- package/lockfile-progs/lockfile-progs.mk           |    2 +-
- package/logrotate/logrotate.mk                     |    2 +-
- package/lsof/lsof.mk                               |    2 +-
- package/ltris/ltris.mk                             |    2 +-
- package/lttng-babeltrace/lttng-babeltrace.mk       |    2 +-
- package/lttng-libust/lttng-libust.mk               |    2 +-
- package/lttng-modules/lttng-modules.mk             |    2 +-
- package/lttng-tools/lttng-tools.mk                 |    2 +-
- package/luarocks/luarocks.mk                       |    2 +-
- package/lzip/lzip.mk                               |    2 +-
- package/lzma/lzma.mk                               |    2 +-
- package/lzop/lzop.mk                               |    2 +-
- package/memtester/memtester.mk                     |    2 +-
- package/midori/midori.mk                           |    2 +-
- package/minicom/minicom.mk                         |    2 +-
- package/modem-manager/modem-manager.mk             |    2 +-
- package/mongrel2/mongrel2.mk                       |    2 +-
- package/monit/monit.mk                             |    2 +-
- package/mpdecimal/mpdecimal.mk                     |    2 +-
- package/msgpack/msgpack.mk                         |    2 +-
- package/mtdev/mtdev.mk                             |    2 +-
- package/mtools/mtools.mk                           |    2 +-
- package/musl/musl.mk                               |    2 +-
- package/ncdu/ncdu.mk                               |    2 +-
- package/ndisc6/ndisc6.mk                           |    2 +-
- package/neon/neon.mk                               |    2 +-
- package/newt/newt.mk                               |    2 +-
- package/ngircd/ngircd.mk                           |    2 +-
- package/numactl/numactl.mk                         |    2 +-
- package/nut/nut.mk                                 |    2 +-
- package/nuttcp/nuttcp.mk                           |    2 +-
- package/on2-8170-libs/on2-8170-libs.mk             |    2 +-
- package/open2300/open2300.mk                       |    2 +-
- package/openpgm/openpgm.mk                         |    2 +-
- package/opentyrian-data/opentyrian-data.mk         |    2 +-
- package/opentyrian/opentyrian.mk                   |    2 +-
- package/orc/orc.mk                                 |    2 +-
- package/perl-datetime-tiny/perl-datetime-tiny.mk   |    2 +-
- package/perl-gd/perl-gd.mk                         |    2 +-
- package/perl-gdgraph/perl-gdgraph.mk               |    2 +-
- package/perl-gdtextutil/perl-gdtextutil.mk         |    2 +-
- package/perl-io-socket-ssl/perl-io-socket-ssl.mk   |    2 +-
- package/perl-json-tiny/perl-json-tiny.mk           |    2 +-
- package/perl-module-build/perl-module-build.mk     |    2 +-
- package/perl-mojolicious/perl-mojolicious.mk       |    2 +-
- package/perl-net-ssleay/perl-net-ssleay.mk         |    2 +-
- package/perl-path-tiny/perl-path-tiny.mk           |    2 +-
- package/perl-try-tiny/perl-try-tiny.mk             |    2 +-
- package/perl-xml-libxml/perl-xml-libxml.mk         |    2 +-
- .../perl-xml-namespacesupport.mk                   |    2 +-
- package/perl-xml-parser/perl-xml-parser.mk         |    2 +-
- package/perl-xml-sax-base/perl-xml-sax-base.mk     |    2 +-
- package/perl-xml-sax/perl-xml-sax.mk               |    2 +-
- package/picocom/picocom.mk                         |    2 +-
- package/pkgconf/pkgconf.mk                         |    2 +-
- package/polkit/polkit.mk                           |    2 +-
- package/popt/popt.mk                               |    2 +-
- package/proftpd/proftpd.mk                         |    2 +-
- package/protobuf/protobuf.mk                       |    2 +-
- package/pulseaudio/pulseaudio.mk                   |    2 +-
- package/python-cffi/python-cffi.mk                 |    2 +-
- package/python-crc16/python-crc16.mk               |    2 +-
- package/python-daemon/python-daemon.mk             |    2 +-
- package/python-ipython/python-ipython.mk           |    2 +-
- .../python-json-schema-validator.mk                |    2 +-
- package/python-keyring/python-keyring.mk           |    2 +-
- package/python-mad/python-mad.mk                   |    2 +-
- package/python-meld3/python-meld3.mk               |    2 +-
- package/python-msgpack/python-msgpack.mk           |    2 +-
- package/python-posix-ipc/python-posix-ipc.mk       |    2 +-
- package/python-pyasn/python-pyasn.mk               |    2 +-
- package/python-pyrex/python-pyrex.mk               |    2 +-
- package/python-pyro/python-pyro.mk                 |    2 +-
- package/python-pyzmq/python-pyzmq.mk               |    2 +-
- package/python-simplejson/python-simplejson.mk     |    2 +-
- package/python-versiontools/python-versiontools.mk |    2 +-
- package/qextserialport/qextserialport.mk           |    2 +-
- package/qt5/qt5.mk                                 |    2 +-
- package/read-edid/read-edid.mk                     |    2 +-
- package/rpm/rpm.mk                                 |    2 +-
- package/rsyslog/rsyslog.mk                         |    2 +-
- package/rt-tests/rt-tests.mk                       |    2 +-
- package/rtai/rtai.mk                               |    2 +-
- package/rtptools/rtptools.mk                       |    2 +-
- package/sam-ba/sam-ba.mk                           |    2 +-
- package/sane-backends/sane-backends.mk             |    2 +-
- package/sdl_gfx/sdl_gfx.mk                         |    2 +-
- package/sdl_mixer/sdl_mixer.mk                     |    2 +-
- package/sdl_sound/sdl_sound.mk                     |    2 +-
- package/sdl_ttf/sdl_ttf.mk                         |    2 +-
- package/setserial/setserial.mk                     |    2 +-
- package/sg3_utils/sg3_utils.mk                     |    2 +-
- package/simicsfs/simicsfs.mk                       |    2 +-
- package/slang/slang.mk                             |    2 +-
- package/smstools3/smstools3.mk                     |    2 +-
- package/socat/socat.mk                             |    2 +-
- package/spice-protocol/spice-protocol.mk           |    2 +-
- package/spice/spice.mk                             |    2 +-
- package/statserial/statserial.mk                   |    2 +-
- package/stunnel/stunnel.mk                         |    2 +-
- package/supervisor/supervisor.mk                   |    2 +-
- package/systemd/systemd.mk                         |    2 +-
- package/thttpd/thttpd.mk                           |    2 +-
- package/ti-gfx/ti-gfx.mk                           |    2 +-
- package/tidsp-binaries/tidsp-binaries.mk           |    2 +-
- package/transmission/transmission.mk               |    2 +-
- package/tree/tree.mk                               |    2 +-
- package/tremor/tremor.mk                           |    2 +-
- package/tstools/tstools.mk                         |    2 +-
- package/ucl/ucl.mk                                 |    2 +-
- package/udisks/udisks.mk                           |    2 +-
- package/uemacs/uemacs.mk                           |    2 +-
- package/upx/upx.mk                                 |    2 +-
- package/urg/urg.mk                                 |    2 +-
- package/ux500-firmware/ux500-firmware.mk           |    2 +-
- package/valgrind/valgrind.mk                       |    2 +-
- package/wayland/wayland.mk                         |    2 +-
- .../webrtc-audio-processing.mk                     |    2 +-
- package/weston/weston.mk                           |    2 +-
- package/whetstone/whetstone.mk                     |    2 +-
- package/x11r7/libxcb/libxcb.mk                     |    2 +-
- package/x11r7/xcb-proto/xcb-proto.mk               |    2 +-
- package/x11r7/xcb-util-image/xcb-util-image.mk     |    2 +-
- package/x11r7/xcb-util-keysyms/xcb-util-keysyms.mk |    2 +-
- package/x11r7/xcb-util-wm/xcb-util-wm.mk           |    2 +-
- package/x11r7/xcb-util/xcb-util.mk                 |    2 +-
- .../xcursor-transparent-theme.mk                   |    2 +-
- package/x11r7/xkeyboard-config/xkeyboard-config.mk |    2 +-
- package/xenomai/xenomai.mk                         |    2 +-
- package/xerces/xerces.mk                           |    2 +-
- package/xz/xz.mk                                   |    2 +-
- package/yaffs2utils/yaffs2utils.mk                 |    2 +-
- package/yasm/yasm.mk                               |    2 +-
- package/zeromq/zeromq.mk                           |    2 +-
- 292 files changed, 296 insertions(+), 296 deletions(-)
-
-Patch is too large, so refusing to show it
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
