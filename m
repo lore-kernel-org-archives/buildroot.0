@@ -1,32 +1,41 @@
-From: prafulla_kota <prafulla.kota@broadcom.com>
-Date: Thu, 31 Jul 2014 00:47:34 -0700 (PDT)
-Subject: [Buildroot] backtrace() not working on ARMv7a
-In-Reply-To: <20140731083943.49d4b0db@free-electrons.com>
-References: <1406788255956-76350.post@n4.nabble.com>
- <20140731083943.49d4b0db@free-electrons.com>
-Message-ID: <1406792854426-76360.post@n4.nabble.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 31 Jul 2014 10:00:09 +0200
+Subject: [Buildroot] Remaining patch series for 2014.08 ?
+In-Reply-To: <20140731092301.67665977@free-electrons.com>
+References: <20140731092301.67665977@free-electrons.com>
+Message-ID: <CAAXf6LVnp7updkR4Z8zmOsSFuumWL4vJKOHiBq47CZ-6KzPJGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, 
+On Thu, Jul 31, 2014 at 9:23 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> 2014.08-rc1 will be released by Peter around August 4th-5th, which
+> gives us a few more days to merge some additional patches. I'm
+> interested in hearing opinions/reviews about:
+>
+>  - The kconfig-package infra from Thomas DS
+>    http://lists.busybox.net/pipermail/buildroot/2014-July/103172.html
+>
+>  - The OPT -> OPTS series from Thomas DS
+>    http://lists.busybox.net/pipermail/buildroot/2014-July/103082.html
+>
 
-Thanks for quick reply and i have attached the .config file. 
+I won't promote my own series, of course :-)
 
-We have applied below patch in ulibc and it worked fine for below
-requirement and we do have requirement on GLIBC as well and requesting the
-same here. 
+>
+>  - The download wrapper series from Yann
+>    http://lists.busybox.net/pipermail/buildroot/2014-July/102526.html
 
-Thanks, 
-Prafulla kota
+I think this is definitely a candidate to apply still. I'm hoping I
+can test at least the wget / hg part and give feedback.
+In any case I think the risk is low: during the next month the
+autobuilders will definitely catch any issue that may still be present
+in this series, as we have all types of methods in use.
 
-buildroot_dot_config.buildroot_dot_config
-<http://buildroot-busybox.2317881.n4.nabble.com/file/n76360/buildroot_dot_config.buildroot_dot_config>  
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/backtrace-not-working-on-ARMv7a-tp76350p76360.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Best regards,
+Thomas
