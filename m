@@ -1,95 +1,101 @@
-From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Thu, 31 Jul 2014 20:00:52 +0200
-Subject: [Buildroot] [PATCH] bcache-tools: Adding package.
-Message-ID: <1406829652-31280-1-git-send-email-jcd@tribudubois.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 31 Jul 2014 15:10:32 -0300
+Subject: [Buildroot] [PATCH] libarchive: bump to version 3.1.2
+Message-ID: <1406830232-27101-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the bcache-tools package to buildroot.
+Switch to proper upstream source.
+And account for many auto dependencies that were missing.
+Also fixes link issues:
+http://autobuild.buildroot.net/results/774/7747a043123e958952a16e0c0db823296c4e0594/
 
-This is the bcache tools, required to setup the linux bcache
-feature of the Linux kernel.
-
-Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                    |  1 +
- package/bcache-tools/Config.in       | 11 +++++++++++
- package/bcache-tools/bcache-tools.mk | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
- create mode 100644 package/bcache-tools/Config.in
- create mode 100644 package/bcache-tools/bcache-tools.mk
+ package/libarchive/libarchive.mk | 59 +++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 52 insertions(+), 7 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 29b8e6b..7468b28 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -279,6 +279,7 @@ endmenu
- 	source "package/a10disp/Config.in"
- 	source "package/acpid/Config.in"
- 	source "package/avrdude/Config.in"
-+	source "package/bcache-tools/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
-diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
-new file mode 100644
-index 0000000..51b6477
---- /dev/null
-+++ b/package/bcache-tools/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_BCACHE_TOOLS
-+	bool "bcache tools"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	help
-+	  This is the bcache tools, required to setup the linux bcache
-+	  feature of the Linux kernel.
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 44d9cd2..8c6951d 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -4,17 +4,38 @@
+ #
+ ################################################################################
+ 
+-LIBARCHIVE_VERSION = 3.0.4
+-LIBARCHIVE_SITE = http://github.com/downloads/libarchive/libarchive
++LIBARCHIVE_VERSION = 3.1.2
++LIBARCHIVE_SITE = http://www.libarchive.org/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
++LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
++LIBARCHIVE_LICENSE_FILES = COPYING
++LIBARCHIVE_CONF_OPT = --without-lzma \
++	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
++	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-LIBARCHIVE_DEPENDENCIES = zlib
++ifeq ($(BR2_PACKAGE_ACL),y)
++LIBARCHIVE_DEPENDENCIES += acl
++else
++LIBARCHIVE_CONF_OPT += --disable-acl
+ endif
+ 
+-LIBARCHIVE_CONF_OPT = \
+-	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
+-	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
++ifeq ($(BR2_PACKAGE_ATTR),y)
++LIBARCHIVE_DEPENDENCIES += attr
++else
++LIBARCHIVE_CONF_OPT += --disable-xattr
++endif
 +
-+comment "bcache-tools support needs udev /dev management"
-+        depends on !BR2_PACKAGE_HAS_UDEV
-diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
-new file mode 100644
-index 0000000..e5ae9f3
---- /dev/null
-+++ b/package/bcache-tools/bcache-tools.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# bcache-tools
-+#
-+################################################################################
++ifeq ($(BR2_PACKAGE_EXPAT),y)
++LIBARCHIVE_DEPENDENCIES += expat
++else
++LIBARCHIVE_CONF_OPT += --without-expat
++endif
 +
-+BCACHE_TOOLS_VERSION = 1.0.7
-+BCACHE_TOOLS_SITE = https://github.com/g2p/bcache-tools/archive
-+BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
-+BCACHE_TOOLS_LICENSE = GPLv2
-+BCACHE_TOOLS_LICENSE_FILES = COPYING
-+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
-+BCACHE_TOOLS_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++LIBARCHIVE_DEPENDENCIES += libiconv
++else
++LIBARCHIVE_CONF_OPT += --without-libiconv-prefix
++endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ LIBARCHIVE_DEPENDENCIES += libxml2
+@@ -23,4 +44,28 @@ else
+ LIBARCHIVE_CONF_OPT += --without-xml2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LZO),y)
++LIBARCHIVE_DEPENDENCIES += lzo
++else
++LIBARCHIVE_CONF_OPT += --without-lzo2
++endif
 +
-+define BCACHE_TOOLS_EXTRACT_CMDS
-+	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
-+endef
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++LIBARCHIVE_DEPENDENCIES += nettle
++else
++LIBARCHIVE_CONF_OPT += --without-nettle
++endif
 +
-+define BCACHE_TOOLS_FIX_PKGCONFIG
-+	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
-+		$(BCACHE_TOOLS_DIR)/Makefile
-+endef
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBARCHIVE_DEPENDENCIES += openssl
++else
++LIBARCHIVE_CONF_OPT += --without-openssl
++endif
 +
-+define BCACHE_TOOLS_BUILD_CMDS
-+	$(BCACHE_TOOLS_FIX_PKGCONFIG)
-+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBARCHIVE_DEPENDENCIES += zlib
++else
++LIBARCHIVE_CONF_OPT += --without-zlib
++endif
 +
-+define BCACHE_TOOLS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
-+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
+ $(eval $(autotools-package))
 -- 
-1.9.1
+1.8.5.5
