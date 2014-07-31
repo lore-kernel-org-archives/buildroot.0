@@ -1,292 +1,77 @@
-From: Karoly Kasza <kaszak@gmail.com>
-Date: Thu, 31 Jul 2014 14:37:55 +0200
-Subject: [Buildroot] [PATCH v5 1/1] New package: openvmtools
-Message-ID: <1406810275-17327-1-git-send-email-kaszak@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 31 Jul 2014 07:54:51 -0500
+Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
+	infrastructure
+In-Reply-To: <1141785278.21136820.1406794808628.JavaMail.root@openwide.fr>
+References: <CAAXf6LWQWWkXt-MaUwQkhYORMOxXCEgWy14epVieZBcBteCEBg@mail.gmail.com>
+ <1141785278.21136820.1406794808628.JavaMail.root@openwide.fr>
+Message-ID: <CANQCQpZKBkLMpC8RXiqkzdF83CS6FK+VLx5nJWq0Wv+quv1SoQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New package: openvmtools
+Hi Jeremy,
 
-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
----
+On Thu, Jul 31, 2014 at 3:20 AM, Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
+>
+> ----- Mail original -----
+>> Hi Jeremy,
+>>
+>> On Thu, Jul 31, 2014 at 8:57 AM, Jeremy Rosen
+>> <jeremy.rosen@openwide.fr> wrote:
+>> >
+>> > Quick question... is it possible to relocate the .config file
+>> > elsewhere using env variables ? I am still on my quest to move
+>> > all project specific files (i.e configuration files) out of the
+>> > buildroot directory to be able to build a buildroot project
+>> > without touching the main buildroot directory...
+>>
+>> Do you really mean the .config file (the destination file) or do you
+>> mean the file that contains the starting configuration, and that may
+>> be updated with foo-update-config ?
+>>
+>
+> I don't like the way you have to separately save your kernel configuration
+> after editing it (update after menuconfig) i'd rather not have to do
+> that, but that's the general buildroot philosophy, so i'll follow it
+>
+> so yes, what I want is the config file that will eventually be used
+> by buildroot.
+>
+>
+>> For the latter, individual packages provide config options for this,
+>> for example uclibc and busybox do. You can specify UCLIBC_CONFIG_FILE
+>> on the command line to overwrite it, similarly for
+>> BUSYBOX_CONFIG_FILE.
+>>
+>
+> If these are overloadable from the command line, I should be good, thx
 
-Changes v4 -> v5:
-  - Removed submenu
-  - BR2_PACKAGE_BUSYBOX_SHOW_OTHERS for procps is now depended on instead of selected
-  - Startup script indenting changed, and start-stop-daemon used now
-  - OPENVMTOOLS_CONF_OPT & OPENVMTOOLS_CONF_ENV changed
-  - Comments, whitespacing, etc.
+Another option might be to use the BR2_EXTERNAL concept to
+config manage your customization(s) outside of the main buildroot directory.
 
- package/Config.in                                  |    1 +
- package/openvmtools/Config.in                      |   55 ++++++++++++++
- package/openvmtools/S10vmtoolsd                    |   33 +++++++++
- .../openvmtools-01-has_bsd_printf.patch            |   26 +++++++
- package/openvmtools/openvmtools.mk                 |   76 ++++++++++++++++++++
- package/openvmtools/shutdown                       |    7 ++
- package/openvmtools/vmtoolsd.service               |    8 +++
- 7 files changed, 206 insertions(+)
- create mode 100644 package/openvmtools/Config.in
- create mode 100644 package/openvmtools/S10vmtoolsd
- create mode 100644 package/openvmtools/openvmtools-01-has_bsd_printf.patch
- create mode 100644 package/openvmtools/openvmtools.mk
- create mode 100644 package/openvmtools/shutdown
- create mode 100644 package/openvmtools/vmtoolsd.service
+http://buildroot.uclibc.org/downloads/manual/manual.html#outside-br-custom
 
-diff --git a/package/Config.in b/package/Config.in
-index 29b8e6b..be42002 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1165,6 +1165,7 @@ endif
- 	source "package/ncdu/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-+	source "package/openvmtools/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/polkit/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-new file mode 100644
-index 0000000..65220f9
---- /dev/null
-+++ b/package/openvmtools/Config.in
-@@ -0,0 +1,55 @@
-+config BR2_PACKAGE_OPENVMTOOLS
-+	bool "openvmtools"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	depends on BR2_LARGEFILE
-+	depends on BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Open Virtual Machine Tools for VMware guest OS
-+
-+	  http://open-vm-tools.sourceforge.net/
-+
-+	  ICU locales and X11 tools are currently not supported.
-+
-+	  NOTE: Support for vmblock-fuse will be enabled in openvmtools if the
-+	        libfuse package is selected.
-+
-+if BR2_PACKAGE_OPENVMTOOLS
-+
-+config BR2_PACKAGE_OPENVMTOOLS_PROCPS
-+	bool "procps support"
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_PROCPS_NG
-+	help
-+	  Enable support for procps / meminfo
-+
-+comment "procps support needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
-+	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+
-+config BR2_PACKAGE_OPENVMTOOLS_DNET
-+	bool "dnet support"
-+	depends on BR2_INET_IPV6
-+	select BR2_PACKAGE_LIBDNET
-+	help
-+	  Enable support for libdnet / nicinfo
-+
-+comment "openvmtools dnet support needs a toolchain w/ IPv6"
-+	depends on !BR2_INET_IPV6
-+
-+config BR2_PACKAGE_OPENVMTOOLS_PAM
-+	bool "PAM support"
-+	select BR2_PACKAGE_LINUX_PAM
-+	help
-+	  Support for PAM in openvmtools
-+
-+endif
-+
-+comment "openvmtools needs a toolchain w/ wchar, threads, RPC, largefile, locale"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR ||!BR2_TOOLCHAIN_HAS_THREADS || \
-+	!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_LARGEFILE || !BR2_ENABLE_LOCALE
-diff --git a/package/openvmtools/S10vmtoolsd b/package/openvmtools/S10vmtoolsd
-new file mode 100644
-index 0000000..969ba93
---- /dev/null
-+++ b/package/openvmtools/S10vmtoolsd
-@@ -0,0 +1,33 @@
-+#!/bin/sh
-+#
-+# Starts vmtoolsd for openvmtools
-+#
-+
-+EXEC="/usr/bin/vmtoolsd"
-+ARGS="-b"
-+PID="/var/run/vmtoolsd.pid"
-+
-+case "$1" in
-+  start)
-+    echo -n "Starting vmtoolsd: "
-+    start-stop-daemon -S -q -x $EXEC -- $ARGS $PID
-+    if [ $? != 0 ]; then
-+      echo "FAILED"
-+      exit 1
-+    else
-+      echo "OK"
-+    fi
-+  ;;
-+  stop)
-+    echo -n "Stopping vmtoolsd: "
-+    start-stop-daemon -K -q -p $PID
-+    echo "OK"
-+  ;;
-+  restart|reload)
-+    $0 stop
-+    $0 start
-+  ;;
-+  *)
-+    echo "Usage: $0 {start|stop|restart}"
-+    exit 1
-+esac
-diff --git a/package/openvmtools/openvmtools-01-has_bsd_printf.patch b/package/openvmtools/openvmtools-01-has_bsd_printf.patch
-new file mode 100644
-index 0000000..889f7d1
---- /dev/null
-+++ b/package/openvmtools/openvmtools-01-has_bsd_printf.patch
-@@ -0,0 +1,26 @@
-+lib/misc/msgList.c: missing #ifdef
-+
-+This macro checks for BSD style printf(), which is not present
-+when compiling for uClibc. The linked functions are unnecessary in
-+this case, and they break compilation.
-+
-+Signed-off-by: Karoly Kasza <kaszak@gmail.com>
-+
-+--- open-vm-tools-9.4.6-1770165.orig/lib/misc/msgList.c	2014-07-02 00:21:14.000000000 +0200
-++++ open-vm-tools-9.4.6-1770165/lib/misc/msgList.c	2014-07-29 13:40:40.000000000 +0200
-+@@ -487,6 +487,7 @@
-+    return messages->id;
-+ }
-+ 
-++#ifdef HAS_BSD_PRINTF
-+ 
-+ /*
-+  *----------------------------------------------------------------------
-+@@ -566,6 +567,7 @@
-+    }
-+ }
-+ 
-++#endif
-+ 
-+ /*
-+  *----------------------------------------------------------------------
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-new file mode 100644
-index 0000000..4b6e0bb
---- /dev/null
-+++ b/package/openvmtools/openvmtools.mk
-@@ -0,0 +1,76 @@
-+################################################################################
-+#
-+# openvmtools
-+#
-+################################################################################
-+
-+OPENVMTOOLS_VERSION = 9.4.6-1770165
-+OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
-+OPENVMTOOLS_SITE = http://downloads.sourceforge.net/project/open-vm-tools/open-vm-tools/stable-9.4.x
-+OPENVMTOOLS_LICENSE = LGPLv2.1
-+OPENVMTOOLS_LICENSE_FILES = COPYING
-+OPENVMTOOLS_AUTORECONF = YES
-+OPENVMTOOLS_CONF_OPT = --without-icu --without-x --without-gtk2 --without-gtkmm --without-kernel-modules
-+
-+# -Wno-deprecated-declarations is a workaround for a bug in open-vm-tools
-+# See http://sourceforge.net/p/open-vm-tools/mailman/message/31473171/
-+OPENVMTOOLS_CONF_ENV = CFLAGS="$(TARGET_CFLAGS) -Wno-deprecated-declarations"
-+
-+OPENVMTOOLS_DEPENDENCIES = libglib2
-+
-+# When libfuse is available, openvmtools can build vmblock-fuse, so
-+# make sure that libfuse gets built first.
-+ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-+OPENVMTOOLS_DEPENDENCIES += libfuse
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PROCPS),y)
-+OPENVMTOOLS_CONF_ENV += CUSTOM_PROCPS_NAME=procps LDFLAGS="-L$(TARGET_DIR)/usr/lib"
-+OPENVMTOOLS_CONF_OPT += --with-procps
-+OPENVMTOOLS_DEPENDENCIES += procps-ng
-+else
-+OPENVMTOOLS_CONF_OPT += --without-procps
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENVMTOOLS_DNET),y)
-+OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS="-I$(STAGING_DIR)/usr/include"
-+OPENVMTOOLS_CONF_OPT += --with-dnet
-+OPENVMTOOLS_DEPENDENCIES += libdnet
-+else
-+OPENVMTOOLS_CONF_OPT += --without-dnet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENVMTOOLS_PAM),y)
-+OPENVMTOOLS_CONF_OPT += --with-pam
-+OPENVMTOOLS_MAKE_OPT += CFLAGS+="-Wno-unused-local-typedefs"
-+OPENVMTOOLS_DEPENDENCIES += linux-pam
-+else
-+OPENVMTOOLS_CONF_OPT += --without-pam
-+endif
-+
-+# symlink needed by lib/system/systemLinux.c (or will cry in /var/log/messages)
-+# /sbin/shutdown needed for Guest OS restart/shutdown from hypervisor
-+define OPENVMTOOLS_POST_INSTALL_TARGET_THINGIES
-+	ln -fs os-release $(TARGET_DIR)/etc/lfs-release
-+	if [ ! -e $(TARGET_DIR)/sbin/shutdown ]; then \
-+		$(INSTALL) -D -m 755 package/openvmtools/shutdown \
-+			$(TARGET_DIR)/sbin/shutdown; \
-+	fi
-+endef
-+
-+OPENVMTOOLS_POST_INSTALL_TARGET_HOOKS += OPENVMTOOLS_POST_INSTALL_TARGET_THINGIES
-+
-+define OPENVMTOOLS_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/openvmtools/S10vmtoolsd \
-+		$(TARGET_DIR)/etc/init.d/S10vmtoolsd
-+endef
-+
-+define OPENVMTOOLS_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/openvmtools/vmtoolsd.service \
-+		$(TARGET_DIR)/etc/systemd/system/vmtoolsd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../vmtoolsd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/vmtoolsd.service
-+endef
-+
-+$(eval $(autotools-package))
-diff --git a/package/openvmtools/shutdown b/package/openvmtools/shutdown
-new file mode 100644
-index 0000000..bca9765
---- /dev/null
-+++ b/package/openvmtools/shutdown
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+#compatibility script for openvmtools
-+if [ "$1" == "-r" ]; then
-+/sbin/reboot
-+else
-+/sbin/poweroff
-+fi
-diff --git a/package/openvmtools/vmtoolsd.service b/package/openvmtools/vmtoolsd.service
-new file mode 100644
-index 0000000..b099ba3
---- /dev/null
-+++ b/package/openvmtools/vmtoolsd.service
-@@ -0,0 +1,8 @@
-+[Unit]
-+Description=vmtoolsd for openvmtools
-+
-+[Service]
-+ExecStart=/usr/bin/vmtoolsd -b /var/run/vmtoolsd.pid
-+
-+[Install]
-+WantedBy=multi-user.target
+>
+>> Best regards,
+>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
 -- 
-1.7.10.4
+Matthew L Weber / Sr Software Engineer / Platform Software
+MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
+Phone: 319-295-7349
+matthew.weber at rockwellcollins.com
+www.rockwellcollins.com
+
+Note: Any Export License Required Information and License Restricted
+Third Party Intellectual Property (TPIP) content must be encrypted and
+sent to matthew.weber at corp.rockwellcollins.com.
