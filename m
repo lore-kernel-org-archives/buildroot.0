@@ -1,41 +1,35 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Jul 2014 10:00:09 +0200
-Subject: [Buildroot] Remaining patch series for 2014.08 ?
-In-Reply-To: <20140731092301.67665977@free-electrons.com>
-References: <20140731092301.67665977@free-electrons.com>
-Message-ID: <CAAXf6LVnp7updkR4Z8zmOsSFuumWL4vJKOHiBq47CZ-6KzPJGw@mail.gmail.com>
+Date: Thu, 31 Jul 2014 10:03:03 +0200
+Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
+	infrastructure
+In-Reply-To: <1639508646.21112604.1406789875618.JavaMail.root@openwide.fr>
+References: <patchbomb.1406224167@localhost>
+ <1639508646.21112604.1406789875618.JavaMail.root@openwide.fr>
+Message-ID: <CAAXf6LWQWWkXt-MaUwQkhYORMOxXCEgWy14epVieZBcBteCEBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jul 31, 2014 at 9:23 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> 2014.08-rc1 will be released by Peter around August 4th-5th, which
-> gives us a few more days to merge some additional patches. I'm
-> interested in hearing opinions/reviews about:
->
->  - The kconfig-package infra from Thomas DS
->    http://lists.busybox.net/pipermail/buildroot/2014-July/103172.html
->
->  - The OPT -> OPTS series from Thomas DS
->    http://lists.busybox.net/pipermail/buildroot/2014-July/103082.html
->
+Hi Jeremy,
 
-I won't promote my own series, of course :-)
-
+On Thu, Jul 31, 2014 at 8:57 AM, Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
 >
->  - The download wrapper series from Yann
->    http://lists.busybox.net/pipermail/buildroot/2014-July/102526.html
+> Quick question... is it possible to relocate the .config file
+> elsewhere using env variables ? I am still on my quest to move
+> all project specific files (i.e configuration files) out of the
+> buildroot directory to be able to build a buildroot project
+> without touching the main buildroot directory...
 
-I think this is definitely a candidate to apply still. I'm hoping I
-can test at least the wget / hg part and give feedback.
-In any case I think the risk is low: during the next month the
-autobuilders will definitely catch any issue that may still be present
-in this series, as we have all types of methods in use.
+Do you really mean the .config file (the destination file) or do you
+mean the file that contains the starting configuration, and that may
+be updated with foo-update-config ?
+
+For the latter, individual packages provide config options for this,
+for example uclibc and busybox do. You can specify UCLIBC_CONFIG_FILE
+on the command line to overwrite it, similarly for
+BUSYBOX_CONFIG_FILE.
 
 Best regards,
 Thomas
