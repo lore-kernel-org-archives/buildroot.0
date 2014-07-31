@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 23:21:42 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package: remove the trailing slash
- sign from <PKG>_SITE variable
-In-Reply-To: <1406796418-27918-2-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1406796418-27918-1-git-send-email-jerzy.grzegorek@trzebnica.net>
- <1406796418-27918-2-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20140731232142.0ba145ac@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:22:10 +0200
+Subject: [Buildroot] [git commit] package/dnsmasq: Fix link error with
+	gettext
+Message-ID: <20140731212214.B55D79D358@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+commit: http://git.buildroot.net/buildroot/commit/?id=90b7d53cd18668729da49b097128fa4dcc7d9581
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 31 Jul 2014 10:46:58 +0200, Jerzy Grzegorek wrote:
-> Since the trailing slash is stripped from $($(PKG)_SITE) by pkg-generic.mk:
-> 
-> $(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
-> 
-> so it is redundant.
-> This patch removes it from $(PKG)_SITE variable for BR consistency.
-> 
-> 
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-> ---
-> Changes v2 -> v3
->   - rebase on top of the master
-> Changes v1 -> v2
->   - change title
->     from: "package: remove the trailing slash sign from the URL address"
->     to:   "package: remove the trailing slash sign from $(PKG)_SITE variable"
->   - add description (Arnout Vandecappelle)
+-lintl needs to be added at the end of the link command, Makefile
+has variable LIBS for this purpose, so use it instead of LDFLAGS.
 
-Thanks, applied.
+Fixes
+http://autobuild.buildroot.net/results/276/276581f6dbbe330799c3a7eaa26b453e38a22907/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dnsmasq/dnsmasq.mk |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 71d2f30..6e97c68 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -37,7 +37,7 @@ endif
+ # NLS requires IDN so only enable it (i18n) when IDN is true
+ ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
+ 	DNSMASQ_DEPENDENCIES += libidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext
+-	DNSMASQ_MAKE_OPT += LDFLAGS+="-lidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
++	DNSMASQ_MAKE_OPT += LIBS+="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+ 	DNSMASQ_COPTS += -DHAVE_IDN
+ 	DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
+ endif
+@@ -58,7 +58,7 @@ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+ 
+ # liblua uses dlopen when dynamically linked
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+-	DNSMASQ_MAKE_OPT += LIBS="-ldl"
++	DNSMASQ_MAKE_OPT += LIBS+="-ldl"
+ endif
+ 
+ define DNSMASQ_ENABLE_LUA
