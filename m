@@ -1,53 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 23:15:50 +0200
-Subject: [Buildroot] [git commit] libevdev: remove host python dependency
-Message-ID: <20140731211613.189889CE21@busybox.osuosl.org>
+Date: Thu, 31 Jul 2014 23:17:07 +0200
+Subject: [Buildroot] [git commit] manual/adding-packages-perl.txt: remove
+	the trailing slash sign from description of PERL_SITE variable
+Message-ID: <20140731211907.1AE849D357@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=65c7a07bba198fbb2b6b57f539165f3395a51551
+commit: http://git.buildroot.net/buildroot/commit/?id=17902f5b1601ab2036b6e89d91c2042755545cec
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 79c31e3297da7f0aec4d4675c154736e4cffe3ed ("package/libevdev:
-add dependency on host-python"), Yann added a dependency of libevdev
-on host-python, because the Python script in evdev was using argparse
-which is only available since Python 2.6. At the time, this was
-causing failures on machines that were using Python versions older
-than 2.6.
+Since the trailing slash is stripped from $($(PKG)_SITE) by pkg-generic.mk:
 
-However, since Yann's patch, the libevdev version has been bumped. And
-one of the upstream commit,
-http://cgit.freedesktop.org/libevdev/commit/libevdev/?id=cea8f0b8cc86332b0643acd62f24f9fef2ecc153,
-was precisely made to remove the argparse dependency to avoid the
-need to have a >= 2.6 Python version.
+$(call DOWNLOAD,$($(PKG)_SITE:/=)/$($(PKG)_SOURCE))
 
-Thanks to this, we can avoid the host-python dependency and rely on
-the system-installed Python version instead.
+so it is redundant.
 
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libevdev/libevdev.mk |    7 -------
- 1 files changed, 0 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-perl.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index 738af92..a9a1d41 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -12,13 +12,6 @@ LIBEVDEV_LICENSE_FILES = COPYING
- # Uses PKG_CHECK_MODULES() in configure.ac
- LIBEVDEV_DEPENDENCIES = host-pkgconf
- 
--# Needs Python to generate a header file
--# We can't rely on the system Python, since it may be too old
--# (missing argparse in python 2.6)
--# libevdev build scripts support both python2 and python3, so avoid unneeded
--# dependency on host-python.
--LIBEVDEV_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
--
- # package source code coming from git, so it doesn't have generated
- # configure and Makefile.in
- LIBEVDEV_AUTORECONF = YES
+diff --git a/docs/manual/adding-packages-perl.txt b/docs/manual/adding-packages-perl.txt
+index 9a3df4d..b6cec21 100644
+--- a/docs/manual/adding-packages-perl.txt
++++ b/docs/manual/adding-packages-perl.txt
+@@ -19,7 +19,7 @@ with an example :
+ 06:
+ 07: PERL_FOO_BAR_VERSION = 0.02
+ 08: PERL_FOO_BAR_SOURCE = Foo-Bar-$(PERL_FOO_BAR_VERSION).tar.gz
+-09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER/
++09: PERL_FOO_BAR_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MO/MONGER
+ 10: PERL_FOO_BAR_DEPENDENCIES = perl-strictures
+ 11: PERL_FOO_BAR_LICENSE = Artistic or GPLv1+
+ 12: PERL_FOO_BAR_LICENSE_FILES = LICENSE
