@@ -1,104 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 23:55:01 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/patchelf: new host package
-In-Reply-To: <fc8f5090621f94da255a6191eec78125047eb318.1406760999.git.yann.morin.1998@free.fr>
-References: <cover.1406760999.git.yann.morin.1998@free.fr>
- <fc8f5090621f94da255a6191eec78125047eb318.1406760999.git.yann.morin.1998@free.fr>
-Message-ID: <20140731235501.333bc892@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:55:30 +0200
+Subject: [Buildroot] [git commit] qemu/x86: update defconfig to Linux 3.15.x
+Message-ID: <20140731215548.178809D359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=67a74e6a6dffb1cf16fa86f2303a45d468a1189f
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 31 Jul 2014 00:57:16 +0200, Yann E. MORIN wrote:
-> In some situations, users may want to tweak the dynamic section of the
-> binaries (for example to add/set the RPATH to $ORIGIN/../lib).
-> 
-> Because it is not trivial to do it properly from the Buildroot
-> infrastructure, allow those users to use patchelf (e.g. from a
-> post-build script) to tweak binaries.
-> 
-> patchelf is able to:
->   - modify an existing DT_RUNPATH tags
->   - add a DT_RUNPATH tag if not already present
->   - do the above to the DT_RPATH tag, too
->   - set the path to the interpreter
->   - remove DT_NEEDED tags
->   - query a binary for the DT_RUNPATH/DT_RPATH tag, or for the
->     interpreter path
-> 
-> Does not really fix #7172, but this is an appropriate workaround.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Mike Zick <minimod@morethan.org>
-> ---
->  package/Config.in.host          |  1 +
->  package/patchelf/Config.in.host |  7 +++++++
->  package/patchelf/patchelf.mk    | 12 ++++++++++++
->  3 files changed, 20 insertions(+)
->  create mode 100644 package/patchelf/Config.in.host
->  create mode 100644 package/patchelf/patchelf.mk
-> 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 062c6c9..e05bbfa 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -13,6 +13,7 @@ menu "Host utilities"
->  	source "package/omap-u-boot-utils/Config.in.host"
->  	source "package/openocd/Config.in.host"
->  	source "package/parted/Config.in.host"
-> +	source "package/patchelf/Config.in.host"
->  	source "package/pwgen/Config.in.host"
->  	source "package/sam-ba/Config.in.host"
->  	source "package/squashfs/Config.in.host"
-> diff --git a/package/patchelf/Config.in.host b/package/patchelf/Config.in.host
-> new file mode 100644
-> index 0000000..d1c8375
-> --- /dev/null
-> +++ b/package/patchelf/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_PATCHELF
-> +	bool "host patchelf"
-> +	help
-> +	  PatchELF is a small utility to modify the dynamic linker
-> +	  and RPATH of ELF executables.
-> +
-> +	  http://nixos.org/patchelf.html
-> diff --git a/package/patchelf/patchelf.mk b/package/patchelf/patchelf.mk
-> new file mode 100644
-> index 0000000..1a8e48d
-> --- /dev/null
-> +++ b/package/patchelf/patchelf.mk
-> @@ -0,0 +1,12 @@
-> +################################################################################
-> +#
-> +# patchelf
-> +#
-> +################################################################################
-> +
-> +PATCHELF_VERSION = 0.8
-> +PATCHELF_SITE = http://releases.nixos.org/patchelf/patchelf-0.8/
-> +PATCHELF_LICENSE = GPLv3
+Update the default configuration to use Linux 3.15.x.
+Enable ext4, so that ext2/ext3/ext4 can be used.
+Tested with Qemu 2.0.0.
 
-The license is actually GPLv3+, see the README file of the project.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../x86/{linux-3.13.config => linux-3.15.config}   |    2 +-
+ board/qemu/x86/readme.txt                          |    2 +-
+ configs/qemu_x86_defconfig                         |   10 +++++-----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-> +PATCHELF_LICENSE_FILES = COPYING
-> +
-> +$(eval $(host-autotools-package))
-
-Other than that, applied, thanks!
-
-I think it would be good to use that to make the toolchain relocatable,
-instead of something like http://patchwork.ozlabs.org/patch/359841/.
-What do you think?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/x86/linux-3.13.config b/board/qemu/x86/linux-3.15.config
+similarity index 99%
+rename from board/qemu/x86/linux-3.13.config
+rename to board/qemu/x86/linux-3.15.config
+index d738e4d..920a0a6 100644
+--- a/board/qemu/x86/linux-3.13.config
++++ b/board/qemu/x86/linux-3.15.config
+@@ -47,7 +47,7 @@ CONFIG_SND_HDA_INTEL=y
+ # CONFIG_USB_SUPPORT is not set
+ # CONFIG_X86_PLATFORM_DEVICES is not set
+ # CONFIG_DMIID is not set
+-CONFIG_EXT2_FS=y
++CONFIG_EXT4_FS=y
+ # CONFIG_DNOTIFY is not set
+ # CONFIG_INOTIFY_USER is not set
+ # CONFIG_MISC_FILESYSTEMS is not set
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index c821255..9ee2e37 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -4,4 +4,4 @@ Run the emulation with:
+ 
+ The login prompt will appear in the graphical window.
+ 
+-Tested with QEMU 1.7.0
++Tested with QEMU 2.0.0
+diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+index a5040c8..591dc2b 100644
+--- a/configs/qemu_x86_defconfig
++++ b/configs/qemu_x86_defconfig
+@@ -10,14 +10,14 @@ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Lock to 3.13 headers to avoid breaking with newer kernels
++# Lock to 3.15 headers to avoid breaking with newer kernels
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.5"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.15.7"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.15.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-3.15.config"
