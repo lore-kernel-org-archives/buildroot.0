@@ -1,43 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 22:49:28 +0200
-Subject: [Buildroot] [PATCH] libevdev: use tarball instead of git repository
-Message-ID: <1406839768-7896-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 31 Jul 2014 22:53:08 +0200
+Subject: [Buildroot] [PATCH 1/2] libevdev: bump to 1.2.2
+In-Reply-To: <1406839593-32462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1406839593-32462-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20140731205308.GH3960@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tarballs are now provided for libevdev, so use that instead of the Git
-repository, as it allows to avoid autoreconf for the package.
+Thomas, All,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libevdev/libevdev.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On 2014-07-31 22:46 +0200, Thomas Petazzoni spake thusly:
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index a9a1d41..fde7d3c 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -5,16 +5,14 @@
- ################################################################################
- 
- LIBEVDEV_VERSION = 1.2.2
--LIBEVDEV_SITE = http://cgit.freedesktop.org/libevdev/snapshot
-+LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
-+LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
- LIBEVDEV_LICENSE_FILES = COPYING
- 
- # Uses PKG_CHECK_MODULES() in configure.ac
- LIBEVDEV_DEPENDENCIES = host-pkgconf
- 
--# package source code coming from git, so it doesn't have generated
--# configure and Makefile.in
--LIBEVDEV_AUTORECONF = YES
- LIBEVDEV_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libevdev/libevdev.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+> index f4570bc..738af92 100644
+> --- a/package/libevdev/libevdev.mk
+> +++ b/package/libevdev/libevdev.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBEVDEV_VERSION = 1.2.1
+> +LIBEVDEV_VERSION = 1.2.2
+>  LIBEVDEV_SITE = http://cgit.freedesktop.org/libevdev/snapshot
+>  LIBEVDEV_LICENSE = X11
+>  LIBEVDEV_LICENSE_FILES = COPYING
+> -- 
+> 2.0.0
+> 
+
 -- 
-2.0.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
