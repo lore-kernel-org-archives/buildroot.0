@@ -1,172 +1,106 @@
-From: Pascal Huerst <pascal.huerst@gmail.com>
-Date: Thu, 31 Jul 2014 11:12:47 +0200
-Subject: [Buildroot] [PATCH V7 1/1] google-breakpad: Integration into
- Makefile and Config.in
-In-Reply-To: <20140729230335.GD5846@free.fr>
-References: <1406124545-17915-1-git-send-email-pascal.huerst@gmail.com>
- <1406124545-17915-2-git-send-email-pascal.huerst@gmail.com>
- <20140729230335.GD5846@free.fr>
-Message-ID: <53DA088F.3020608@gmail.com>
+From: cedric.chedaleux at orange.com <cedric.chedaleux@orange.com>
+Date: Thu, 31 Jul 2014 09:13:40 +0000
+Subject: [Buildroot] [PATCH 02/14 v4] package/libudev: new virtual
+ package
+Message-ID: <25285_1406798022_53DA08C6_25285_352_1_D1B3145249B37145BFF7A03F8FC244500F67A78C@PEXCVZYM11.corporate.adroot.infra.ftgroup>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Yann, all,
+[ Compiled for x86 target with glibc 2.18 and Kernel headers 3.15.x ]
+Tested-by: Cedric Chedaleux <cedric.chedaleux@orange.com>
 
-On 30.07.2014 01:03, Yann E. MORIN wrote:
-> On 2014-07-23 16:09 +0200, Pascal Huerst spake thusly:
-> I'll be shepherding this patch, since it still needs a bit of work.
+Regards,
+C?dric CHEDALEUX
 
-Thanks a lot, people seem to have quite different opinions and sometimes
-I don't understand why one solution is so much better than an other one...
+-----Message d'origine-----
+De?: buildroot-bounces at busybox.net [mailto:buildroot-bounces at busybox.net] De la part de Yann E. MORIN
+Envoy??: jeudi 31 juillet 2014 02:17
+??: buildroot at buildroot.org
+Cc?: Bernd Kuhls; Yann E. MORIN
+Objet?: [Buildroot] [PATCH 02/14 v4] package/libudev: new virtual package
 
-> For example, there is no host package for google breakpad, so it does
-> not work for me as I do not have googlebreakpad install on my host.
+Not all packages that currently depend on udev really need an udev
+daemon; most may only require a libudev.so to be available. For
+example, libcec, mesa3d...
 
-I thought it has, since in google-breakpad.mk it says:
+Currently, we conflate udev and libudev into a single virtual package.
 
-26 $(eval $(host-autotools-package))
+Introduce a new virtual package 'libudev' that packages can select if
+they provide libudev.so (obviously, systemd and eudev are such packages)
+and which packages can depend on if they just need libudev.so and not an
+udev daemon.
 
-and in my current version I have at least:
+Note: only the virtual package is added for now, providers and users
+will be converted in followup patches.
 
-output/host/usr/bin/minidump-2-core
-output/host/usr/bin/minidump_dump
-output/host/usr/bin/minidump_stackwalk
-output/host/usr/bin/minidump_upload
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in          | 1 +
+ package/libudev/Config.in  | 6 ++++++
+ package/libudev/libudev.mk | 7 +++++++
+ 3 files changed, 14 insertions(+)
+ create mode 100644 package/libudev/Config.in
+ create mode 100644 package/libudev/libudev.mk
 
-I only need minidump_stackwalk, to process minidumps. So that looked ok
-to me.
+diff --git a/package/Config.in b/package/Config.in
+index 29b8e6b..230bcf4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -673,6 +673,7 @@ menu "Hardware handling"
+ 	source "package/librtlsdr/Config.in"
+ 	source "package/libserial/Config.in"
+ 	source "package/libsoc/Config.in"
++	source "package/libudev/Config.in"
+ 	source "package/libusb/Config.in"
+ 	source "package/libusb-compat/Config.in"
+ 	source "package/libv4l/Config.in"
+diff --git a/package/libudev/Config.in b/package/libudev/Config.in
+new file mode 100644
+index 0000000..2745fcc
+--- /dev/null
++++ b/package/libudev/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_LIBUDEV
++	bool
++
++config BR2_PACKAGE_PROVIDES_LIBUDEV
++	depends on BR2_PACKAGE_HAS_LIBUDEV
++	string
+diff --git a/package/libudev/libudev.mk b/package/libudev/libudev.mk
+new file mode 100644
+index 0000000..af1b3dd
+--- /dev/null
++++ b/package/libudev/libudev.mk
+@@ -0,0 +1,7 @@
++################################################################################
++#
++# libudev
++#
++################################################################################
++
++$(eval $(virtual-package))
+-- 
+1.9.1
 
-> Also, I now know why you need this eval in the script. I do not like it,
-> so I'll try to come up with an alternative solution. Still, I have one
-> question: do you expect that one would enter shell wildcards in the list
-> of files to "breakpadize"?
+_______________________________________________
+buildroot mailing list
+buildroot at busybox.net
+http://lists.busybox.net/mailman/listinfo/buildroot
 
-Originally I wanted to be able to use wildcards and took the stripping
-mechanism (BR2_STRIP_EXCLUDE_FILES) as an example, but people didn't
-like it, so I adapted it. But actually I would say it's better to be
-able to use wildcards.
+_________________________________________________________________________________________________________________________
 
-We are not using breakpad in production yet, but are integrating and
-maybe we'll find out later, that wildcards are useless, but for now, I
-would say, why not...
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
 
-I also found out that `make install` does not install the headers and
-*.pc files. I'm in contact with the folks from breakpad to get this
-fixed. But this means that a version boost will also be needed as soon
-as that patch is upstream.
-
-regards
-pascal
-
-
-> It's a bit late here, now, so I'll continue tomorrow evening (GMT+2).
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> ---
->>  Config.in                                  | 28 ++++++++++++++++++++++++++++
->>  package/google-breakpad/gen-syms.sh        | 25 +++++++++++++++++++++++++
->>  package/google-breakpad/google-breakpad.mk |  8 ++++++++
->>  3 files changed, 61 insertions(+)
->>  create mode 100755 package/google-breakpad/gen-syms.sh
->>
->> diff --git a/Config.in b/Config.in
->> index b169678..432ec28 100644
->> --- a/Config.in
->> +++ b/Config.in
->> @@ -484,6 +484,34 @@ config BR2_OPTIMIZE_S
->>  
->>  endchoice
->>  
->> +config BR2_GOOGLE_BREAKPAD_ENABLE
->> +	bool "Enable google-breakpad support"
->> +	select BR2_PACKAGE_GOOGLE_BREAKPAD
->> +	help
->> +	  This option will enable the use of google breakpad, a library and tool
->> +	  suite that allows you to distribute an application to users with
->> +	  compiler-provided debugging information removed, record crashes in
->> +	  compact "minidump" files, send them back to your server and produce
->> +	  C and C++ stack traces from these minidumps.  Breakpad can also write
->> +	  minidumps on request for programs that have not crashed.
->> +
->> +if BR2_GOOGLE_BREAKPAD_ENABLE
->> +
->> +config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
->> +	string "List of executables and libraries to extract symbols from"
->> +	default ""
->> +	help
->> +	  You may specify a space-separated list of binaries and libraries
->> +	  with full paths relative to $(TARGET_DIR) of which debug symbols 
->> +	  will be dumped for further use with google breakpad.
->> +
->> +	  A directory structure that can be used by minidump-stackwalk will
->> +	  be created at:
->> +
->> +	  $(STAGING_DIR)/usr/share/google-breakpad-symbols
->> +
->> +endif
->> +
->>  config BR2_ENABLE_SSP
->>  	bool "build code with Stack Smashing Protection"
->>  	depends on BR2_TOOLCHAIN_HAS_SSP
->> diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
->> new file mode 100755
->> index 0000000..f29c8fe
->> --- /dev/null
->> +++ b/package/google-breakpad/gen-syms.sh
->> @@ -0,0 +1,25 @@
->> +#!/bin/sh
->> +STAGING_DIR="${1}"
->> +TARGET_DIR="${2}"
->> +shift 2
->> +
->> +SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
->> +rm -rf "${SYMBOLS_DIR}"
->> +mkdir -p "${SYMBOLS_DIR}"
->> +
->> +for FILE in $(eval ls "${TARGET_DIR}/${@}"); do
->> +	if [ -d "${FILE}" ]; then
->> +		printf "Error: '%s' is a directory\n" "${FILE}" >&2
->> +		exit 1
->> +	fi
->> +	if dump_syms "${FILE}" > "${SYMBOLS_DIR}/tmp.sym" 2>/dev/null; then
->> +		HASH=$(head -n1 "${SYMBOLS_DIR}/tmp.sym" | cut -d ' ' -f 4);
->> +		FILENAME=$(basename "$FILE");
->> +		mkdir -p "${SYMBOLS_DIR}/${FILENAME}/${HASH}"
->> +		mv "${SYMBOLS_DIR}/tmp.sym" "${SYMBOLS_DIR}/${FILENAME}/${HASH}/${FILENAME}.sym";
->> +	else
->> +		printf "Error dumping symbols for: '%s'\n" "${FILE}" >&2
->> +		exit 1
->> +	fi
->> +done
->> +rm -rf "${SYMBOLS_DIR}/tmp"
->> diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
->> index bf857ba..8dea916 100644
->> --- a/package/google-breakpad/google-breakpad.mk
->> +++ b/package/google-breakpad/google-breakpad.mk
->> @@ -14,5 +14,13 @@ GOOGLE_BREAKPAD_INSTALL_STAGING = YES
->>  GOOGLE_BREAKPAD_LICENSE = BSD-3c
->>  GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
->>  
->> +ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
->> +define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
->> +	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
->> +		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
->> +endef
->> +TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
->> +endif
->> +
->>  $(eval $(autotools-package))
->>  $(eval $(host-autotools-package))
->> -- 
->> 1.9.3
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
