@@ -1,107 +1,45 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Jul 2014 20:52:32 +0200
-Subject: [Buildroot] [PATCH] bcache-tools: Adding package.
-In-Reply-To: <1406829652-31280-1-git-send-email-jcd@tribudubois.net>
-References: <1406829652-31280-1-git-send-email-jcd@tribudubois.net>
-Message-ID: <ae9715d4-249e-4974-81da-b426c64038c7@email.android.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 31 Jul 2014 21:49:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: Fix link error with gettext
+Message-ID: <1406836160-13823-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jean-Christophe,
+-lintl needs to be added at the end of the link command, Makefile
+has variable LIBS for this purpose, so use it instead of LDFLAGS.
 
-Jean-Christophe DUBOIS <jcd@tribudubois.net> schreef:
->This patch adds the bcache-tools package to buildroot.
->
->This is the bcache tools, required to setup the linux bcache
->feature of the Linux kernel.
->
->Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
->---
-> package/Config.in                    |  1 +
-> package/bcache-tools/Config.in       | 11 +++++++++++
-> package/bcache-tools/bcache-tools.mk | 34 ++++++++++++++++++++++++++++++++++
-> 3 files changed, 46 insertions(+)
-> create mode 100644 package/bcache-tools/Config.in
-> create mode 100644 package/bcache-tools/bcache-tools.mk
->
->diff --git a/package/Config.in b/package/Config.in
->index 29b8e6b..7468b28 100644
->--- a/package/Config.in
->+++ b/package/Config.in
->@@ -279,6 +279,7 @@ endmenu
-> 	source "package/a10disp/Config.in"
-> 	source "package/acpid/Config.in"
-> 	source "package/avrdude/Config.in"
->+	source "package/bcache-tools/Config.in"
-> 	source "package/cdrkit/Config.in"
-> 	source "package/cryptsetup/Config.in"
-> 	source "package/cwiid/Config.in"
->diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
->new file mode 100644
->index 0000000..51b6477
->--- /dev/null
->+++ b/package/bcache-tools/Config.in
->@@ -0,0 +1,11 @@
->+config BR2_PACKAGE_BCACHE_TOOLS
->+	bool "bcache tools"
->+	depends on BR2_PACKAGE_HAS_UDEV
->+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
->+	help
->+	  This is the bcache tools, required to setup the linux bcache
->+	  feature of the Linux kernel.
->+
->+comment "bcache-tools support needs udev /dev management"
+Fixes
+http://autobuild.buildroot.net/results/276/276581f6dbbe330799c3a7eaa26b453e38a22907/
 
-The word 'support' here should be removed.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dnsmasq/dnsmasq.mk |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->+        depends on !BR2_PACKAGE_HAS_UDEV
->diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
->new file mode 100644
->index 0000000..e5ae9f3
->--- /dev/null
->+++ b/package/bcache-tools/bcache-tools.mk
->@@ -0,0 +1,34 @@
->+################################################################################
->+#
->+# bcache-tools
->+#
->+################################################################################
->+
->+BCACHE_TOOLS_VERSION = 1.0.7
->+BCACHE_TOOLS_SITE = https://github.com/g2p/bcache-tools/archive
-
-This should be using the github helper, see the manual.
-
->+BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
->+BCACHE_TOOLS_LICENSE = GPLv2
->+BCACHE_TOOLS_LICENSE_FILES = COPYING
->+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
->+BCACHE_TOOLS_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
->+
->+define BCACHE_TOOLS_EXTRACT_CMDS
->+	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
->+endef
->+
->+define BCACHE_TOOLS_FIX_PKGCONFIG
->+	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
->+		$(BCACHE_TOOLS_DIR)/Makefile
->+endef
->+
->+define BCACHE_TOOLS_BUILD_CMDS
->+	$(BCACHE_TOOLS_FIX_PKGCONFIG)
->+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
->+endef
->+
->+define BCACHE_TOOLS_INSTALL_TARGET_CMDS
->+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
->+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
->+endef
->+
->+$(eval $(generic-package))
-
-Best regards,
-Thomas
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 71d2f30..6e97c68 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -37,7 +37,7 @@ endif
+ # NLS requires IDN so only enable it (i18n) when IDN is true
+ ifeq ($(BR2_PACKAGE_DNSMASQ_IDN),y)
+ 	DNSMASQ_DEPENDENCIES += libidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext) host-gettext
+-	DNSMASQ_MAKE_OPT += LDFLAGS+="-lidn $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
++	DNSMASQ_MAKE_OPT += LIBS+="$(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),-lintl)"
+ 	DNSMASQ_COPTS += -DHAVE_IDN
+ 	DNSMASQ_I18N = $(if $(BR2_ENABLE_LOCALE),-i18n)
+ endif
+@@ -58,7 +58,7 @@ ifeq ($(BR2_PACKAGE_DNSMASQ_LUA),y)
+ 
+ # liblua uses dlopen when dynamically linked
+ ifneq ($(BR2_PREFER_STATIC_LIB),y)
+-	DNSMASQ_MAKE_OPT += LIBS="-ldl"
++	DNSMASQ_MAKE_OPT += LIBS+="-ldl"
+ endif
+ 
+ define DNSMASQ_ENABLE_LUA
+-- 
+1.7.10.4
