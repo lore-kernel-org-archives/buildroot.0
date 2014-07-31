@@ -1,64 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 31 Jul 2014 17:38:30 +0000 (UTC)
-Subject: [Buildroot] [Bug 7286] systemd 215 doesn't build
-In-Reply-To: <bug-7286-163@https.bugs.busybox.net/>
-References: <bug-7286-163@https.bugs.busybox.net/>
-Message-ID: <20140731173830.23B469D342@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jul 2014 19:54:08 +0200
+Subject: [Buildroot] [PATCH 3/3] aufs: added 'fs' dir to $(LINUX_DIR)
+In-Reply-To: <1406827250-11821-1-git-send-email-s.hoenig@openthinclient.com>
+References: <1406827250-11821-1-git-send-email-s.hoenig@openthinclient.com>
+Message-ID: <20140731195408.29cdee0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7286
+Dear Steffen Hoenig,
 
---- Comment #5 from Eric Le Bihan <eric.le.bihan.dev@free.fr> 2014-07-31 17:38:29 UTC ---
-The build fails because systemd is configured with the --enable-compat-libs
-option.
-This option has been added because since systemd 209, some libraries have been
-merged into libsystemd.so:
+On Thu, 31 Jul 2014 19:20:50 +0200, Steffen Hoenig wrote:
+> For later calls of linux-menuconfig, you need the Kconfig of aufs
+> 
+> Signed-off-by: Steffen Hoenig <s.hoenig@openthinclient.com>
+> ---
+>  package/aufs/aufs.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+> index c1b21c4..5d072bb 100644
+> --- a/package/aufs/aufs.mk
+> +++ b/package/aufs/aufs.mk
+> @@ -27,6 +27,7 @@ define AUFS_INSTALL_STAGING_CMDS
+>  	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) usr/include/linux/aufs_type.h
+>  	$(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h \
+>  		$(STAGING_DIR)/usr/include/linux
+> +	tar cf - -C $(@D) fs | (cd $(LINUX_DIR) && tar xf -)
+>  endef
+>  
+>  define AUFS_INSTALL_TARGET_CMDS
 
- - libsystemd-daemon.so
- - libsystemd-id128.so
- - libsystemd-journal.so
- - libsystemd-login.so
+Your original patches have not been applied (yet). So if you have
+changes to do, please resend a new version of your original patches
+with whatever fixes are needed. When you do so, please include a
+changelog that describes the changes between the previous version.
 
-When this option is enabled, the deprecated libraries will be built, so
-external programs, which depend on them and have not yet migrated to
-libsystemd, can still compile. But these libs will refer to the parts used to
-build libsystemd.
+See
+http://buildroot.org/downloads/manual/manual.html#submitting-patches
+for more details.
 
-For example, if we look at libsystemd-journal.so, we can see that is built from
-libsystemd-journal.c. This file is generated from:
+Thanks,
 
-- src/compat-libs/linkwarning.h
-- src/compat-libs/libsystemd-journal.sym
-
-Via some macros in linkwarning.h the symbols will be compiled as an unallocated
-section and linking to them will cause a warning to be printed.
-
-From the build log, we can see that GCC complains the symbol is being defined
-twice:
-
-{{
-/tmp/ccEK7EwW.ltrans13.ltrans.o: In function `sd_journal_reliable_fd':
-ccEK7EwW.ltrans13.o:(.text+0x784): multiple definition of
-`sd_journal_reliable_fd'
-libsystemd_journal_internal_la-sd-journal.o (symbol from plugin):(.text+0x0):
-first defined here
-}}
-
-In the attached Buildroot config file, we have "BR2_OPTIMIZE_2=y", which adds
-"-Wp,-D_FORTIFY_SOURCE=2" to CPPFLAGS and "-flto -ffat-lto-objects" to CFLAGS.
-
-I tried the attached configuration with ccache disabled and "BR2_OPTIMIZE_S=y",
-which cause the aforementioned options to be dropped, and the build is
-successful.
-
-In the configure script, there is a check for these options, but it seems to
-only print a warning message...
-
+Thomas
 -- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
