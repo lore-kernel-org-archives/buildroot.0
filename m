@@ -1,34 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 23:49:58 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-07-30
-In-Reply-To: <XnsA37BCBAC6964BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <20140731063010.27D091019B7@stock.ovh.net>
- <XnsA37BCBAC6964BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20140731234958.60905813@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:50:47 +0200
+Subject: [Buildroot] [PATCH v2] Add option to copy config file to rootfs
+In-Reply-To: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
+References: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
+Message-ID: <20140731235047.5b95e826@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Nathaniel Roach,
 
-On Thu, 31 Jul 2014 20:01:21 +0200, Bernd Kuhls wrote:
-> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-> @public.gmane.org> wrote in news:20140731063010.27D091019B7 at stock.ovh.net:
+On Thu, 31 Jul 2014 23:26:38 +0800, Nathaniel Roach wrote:
+> BR2_CONFIG_COPY copies the config file to /etc/buildroot.config
+> as 0600 during target-finalize after overlay copy, but before
+> post-build script install.
 > 
-> >        arm |             xbmc-13.2b2-Gotham | NOK | 
-> http://autobuild.buildroot.net/results/639cda872cf36c122cbd6139dd76f6b51ac186
-> 4e/
-> 
-> Hi,
-> 
-> @Peter: Which java version do you have installed on your autobuilder?
+> ---
+> Changes v1 to v2
+>  - Corrected wording of config helper message (Thomas De Schampheleire)
+>  - Moved order in menu to reflect actual order of the operation
+> ---
+>  Makefile         |  4 ++++
+>  system/Config.in | 11 +++++++++++
+>  2 files changed, 15 insertions(+)
 
-thomas at gcc10:~$ java -version
-java version "1.5.0"
-gij (GNU libgcj) version 4.3.2
+Thanks for the proposal, but apparently there's no really a consensus
+around it and there's a very simple way to do the same using a
+post-build script, so I've marked the patch as Rejected in patchwork.
 
 Best regards,
 
