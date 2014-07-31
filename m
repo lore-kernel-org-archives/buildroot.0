@@ -1,48 +1,49 @@
 From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Thu, 31 Jul 2014 17:24:43 +0400
-Subject: [Buildroot] [PATCH v2 2/9] cairo: Add dependency on atomic
+Date: Thu, 31 Jul 2014 17:24:45 +0400
+Subject: [Buildroot] [PATCH v2 4/9] pulseaudio: Add dependency on atomic
 	intrinsics
 In-Reply-To: <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
 References: <20140730084548.05bd6dec@free-electrons.com>
  <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1406813090-32472-2-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <1406813090-32472-4-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cairo requires GCC built-in atomic functions which are architecture specific
+Pulseaudio requires GCC built-in atomic functions which are architecture specific
 and may not be implemented.
 
 This fixes:
-http://autobuild.buildroot.net/results/fadfaa9916724d310d0dda555a1db31bee1601d0/
+http://autobuild.buildroot.net/results/d463f3bf730a600a07ed6cd33695bf45e9fd3540/
 
 Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- package/cairo/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pulseaudio/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 0c87a29..2aeaa2a 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CAIRO
- 	bool "cairo"
+diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
+index ac6222c..de99fc8 100644
+--- a/package/pulseaudio/Config.in
++++ b/package/pulseaudio/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_PULSEAUDIO
+ 	select BR2_PACKAGE_SPEEX
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_USE_MMU # fork()
 +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-@@ -13,6 +14,9 @@ config BR2_PACKAGE_CAIRO
+ 	help
+ 	  PulseAudio is a sound system for POSIX OSes, meaning that it
+ 	  is a proxy for your sound applications. It allows you to do
+@@ -30,6 +31,7 @@ config BR2_PACKAGE_PULSEAUDIO_DAEMON
  
- 	  http://cairographics.org/
+ endif
  
-+comment "cairo needs a toolchain with atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- if BR2_PACKAGE_CAIRO
- 
- config BR2_PACKAGE_CAIRO_PS
+-comment "pulseaudio needs a toolchain w/ wchar, largefile, threads"
++comment "pulseaudio needs a toolchain w/ wchar, largefile, threads, atomic intrinsics"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 -- 
 1.8.4.1
