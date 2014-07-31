@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 20:19:09 +0200
-Subject: [Buildroot] [git commit] ptpd2: fix static linking
-Message-ID: <20140731182001.D34689CFE3@busybox.osuosl.org>
+Date: Thu, 31 Jul 2014 20:20:31 +0200
+Subject: [Buildroot] [PATCH 1/1] udev: remove left-over S10udev script
+ from udev virtual package
+In-Reply-To: <1406773944-2022-1-git-send-email-danomimanchego123@gmail.com>
+References: <1406773944-2022-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <20140731202031.76ab7108@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=97b9fb299fe4362f2cdd15b95a7f3c8a397cfd12
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Danomi Manchego,
 
-Do the same as in commit b64a06d7b70bd7b160826bf9b97e60e18171913d
-to avoid missing libraries needed by libpcap. Fixes:
-http://autobuild.buildroot.net/results/1a1/1a1dadfa2b22074d401b013606f0cede66efe826/
+On Wed, 30 Jul 2014 22:32:24 -0400, Danomi Manchego wrote:
+> The S10udev script is not installed or referenced, and eudev has its own
+> S10udev.  So we can simply remove it.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+>  package/udev/S10udev |   48 ------------------------------------------------
+>  1 file changed, 48 deletions(-)
+>  delete mode 100755 package/udev/S10udev
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ptpd2/ptpd2.mk |    4 ++++
- 1 files changed, 4 insertions(+), 0 deletions(-)
+Applied, thanks.
 
-diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
-index 3133726..6a6ae60 100644
---- a/package/ptpd2/ptpd2.mk
-+++ b/package/ptpd2/ptpd2.mk
-@@ -13,6 +13,10 @@ PTPD2_AUTORECONF = YES
- PTPD2_LICENSE = BSD-2c
- PTPD2_LICENSE_FILES = COPYRIGHT
- 
-+ifeq ($(BR2_PREFER_STATIC_LIB),y)
-+	PTPD2_CONF_OPT += LIBS="$(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)"
-+endif
-+
- ifeq ($(BR2_PACKAGE_NETSNMP),y)
- 	PTPD2_CONF_ENV += ac_cv_path_PATH_NET_SNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
- 	PTPD2_DEPENDENCIES += netsnmp
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
