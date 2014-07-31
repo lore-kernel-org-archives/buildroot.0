@@ -1,143 +1,63 @@
-From: prafullakota <prafulla.fin@gmail.com>
-Date: Wed, 30 Jul 2014 23:30:55 -0700 (PDT)
-Subject: [Buildroot] backtrace() not working on ARMv7a
-Message-ID: <1406788255956-76350.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jul 2014 08:33:00 +0200
+Subject: [Buildroot] Notice: significant changes for static linking
+ configurations
+In-Reply-To: <20140730235026.771f855f@free-electrons.com>
+References: <20140730235026.771f855f@free-electrons.com>
+Message-ID: <20140731083300.5efdcf7d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello all,
 
-I am trying to generate a call stack trace using backtrace() API which is
-part of libbacktrace. The idea is to catch a SIGSEGV signal and call
-backtrace() to print all the address values and compare the obtained
-addresses from objdump -D of executable. Following is the output seen on
-ARMv7a platform with buildroot cross-toolchain (gcc- 4.8.2, binutis-2.18.1).
+On Wed, 30 Jul 2014 23:50:26 +0200, Thomas Petazzoni wrote:
 
-To compile the application:
-${CROSS_COMPILE}gcc -o crash_test -O0 -funwind-tables -rdynamic crash_test.c
+> We'll see in the next few days what is the result of those changes in
+> the autobuilders. If it turns out to be too nasty, we might revert
+> back. But the static linking issue with libstdc++ has been around for
+> too long, it's time to get something done.
 
-ARMv7a# ./crash_test
-Trying to access NULL pointer!
-SIGSEGV Handler!
-Got Backtrace Size=2
-0x00008724
-0x000087c4
-ARMv7a#
+So, the first major issue that is currently visible in the autobuilders
+is related to packages using libtool 1.5 ltmain.sh. It turns out that
+by chance and thanks to fuzziness our existing patch for libtool 1.5
+was applying fine on a wide range of libtool 1.5.x ltmain.sh scripts,
+even though those scripts are quite different depending on the specific
+version you're using.
 
-The above function call trace is only that of the signal hander
-(print_back_trace, sigsegv_handler) and does not show the entire call stack
-for the function where program crashed (print_back_trace, sigsegv_handler,
-func2, main).
+The issue is that for the -all-static / -static change, it's not
+possible to do a patch that will apply on all 1.5.x libtool versions.
+Options are:
 
-On x86 host same program shows a deeper function call trace right up to the
-main function and even beyond:
-x86-RHEL5-host$./crash_test
-Trying to access NULL pointer!
-SIGSEGV Handler!
-Got Backtrace Size=7
-0x00400939
-0x004009ab
-0x30930302f0
-0x004009d3
-0x00400a7b
-0x309301d994
-0x00400889
-x86-RHEL5-host$
+ 1) Further refine the libtool version check, and instead of just
+    checking for major versions (1.5, 2.2, 2.4), check for the minor
+    version as well, so that we can provide different patches for each
+    specific libtool version. Notice that it *may* be necessary down
+    the road, because with Hadrien we have seen cases of recent
+    packages using a specific libtool 2.4.x version on which our
+    libtool 2.4 patch was not applying.
 
-Can someone please comment on what is going wrong. Any special flags that
-need to be used while compiling/linking the program.
+ 2) Mark AUTORECONF = YES the problematic packages (i.e the ones using
+    libtool 1.5) so that their ltmain.sh gets regenerated with libtool
+    2.4 and our patch applies. That's the solution we discussed
+    yesterday evening with Gustavo, and for which I applied a patch
+    this morning. We will see how far this brings us, and whether or
+    not we need to get back to (1) for a more long-term solution.
 
-For other issues like NULL pointer access or invalid memory access,
-backtrace is working fine in glibc but not for below type of issues.
+Ideas, suggestions, comments are welcome.
 
-void func1() {
-  int    val;
-  char buf[256];
-  val = 100;
-  printf("\nTrying to construct invalid buffer!\n");
-  snprintf(buf, sizeof (buf), "%s", val);
-  printf("The content of buf: %s\n", buf);
+Note that I know we're breaking stuff badly, and we're making
+autobuilders all red, but this libstdc++ static linking stuff has been
+around for a long time, and we need to fix it at some point. And
+without the help of the autobuilders to tell us what breaks, it's
+really hard to make progress.
 
-}
+Thanks,
 
-For above issue uclibc forum has given fix in below link
-http://lists.uclibc.org/pipermail/uclibc/2013-September/047932.html
-
-Similar issue in uclibc was solved by creating a patch to uclibc files, can
-some one let me know if there is any existing patch is available for glibc
-similar to this?, if not can anyone help me in providing the similar patch
-for glibc.
-
-Please let me know if i can provide any info.
-
-/Thanks
-Prafulla
-
--------------code------------------------------
-#include <termios.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <signal.h>
-#include <stdio.h>
-#include <string.h>
-
-void print_back_trace() {
-  void *array[32];
-  int index, size;
-
-  size = backtrace (array, 32);
-  printf("Got Backtrace Size=%d\n", size);
-  for (index = 0; index < size; index++)
-  {
-    printf ("0x%08lx\n", (unsigned long) array[index]);
-  }
-}
-
-static void sigsegv_handler (int sig, siginfo_t * info, void *v)
-{
-  printf("SIGSEGV Handler!\n");
-  print_back_trace();
-  exit (0);
-}
-
-void func2() {
-   int val;
-   unsigned int *ptr;
-   ptr = 0;
-   printf("Trying to access NULL pointer!\n");
-   val = *ptr;
-   printf ("Read 0x%x from %p\n", val, ptr);
-}
-
-void func1() {
-  int    val;
-  char buf[256];
-  val = 100;
-  printf("\nTrying to construct invalid buffer!\n");
-  snprintf(buf, sizeof (buf), "%s", val);
-  printf("The content of buf: %s\n", buf);
-
-}
-
-int main()
-{
-  struct sigaction sig_act;
-  int    rc;
-
-  sig_act.sa_sigaction = sigsegv_handler;
-  rc = sigaction (SIGSEGV, &sig_act, 0);
-
-  func1(); 
-  return 0;
-}
-
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/backtrace-not-working-on-ARMv7a-tp76350.html
-Sent from the Buildroot (busybox) mailing list archive@Nabble.com.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
