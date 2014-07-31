@@ -1,60 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 23:12:23 +0200
-Subject: [Buildroot] [PATCH 6 of 6 v2] busybox: only add kconfig targets
- if uclibc is enabled
-In-Reply-To: <469e4493e128111baaf2.1406750287@localhost>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:13:38 +0200
+Subject: [Buildroot] [PATCH 4 of 6 v2] uclibc: only add targets if
+ uclibc is enabled
+In-Reply-To: <540167f28c2d41530ceb.1406750285@localhost>
 References: <patchbomb.1406750281@localhost>
- <469e4493e128111baaf2.1406750287@localhost>
-Message-ID: <20140731211223.GN3960@free.fr>
+ <540167f28c2d41530ceb.1406750285@localhost>
+Message-ID: <20140731231338.205114b3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Thomas De Schampheleire,
 
-On 2014-07-30 21:58 +0200, Thomas De Schampheleire spake thusly:
-> In analogy of linux.mk, only enable its targets, in particular the kconfig
-> targets (menuconfig, update-config, ...) when the busybox package is
-> actually enabled.
+On Wed, 30 Jul 2014 21:58:05 +0200, Thomas De Schampheleire wrote:
+
+> In analogy of linux.mk, only enable its targets (in particular the kconfig
+> targets (menuconfig, update-config, ...) when the uclibc package is actually
+> enabled.
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-
-Typo in subject:
-    busybox: only add kconfig targets if uclibc is enabled
-
-s/uclibc/busybox/
-
-Otherwise:
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+> 
 > ---
->  package/busybox/busybox.mk |  2 ++
+> v2: rebase after making kconfig-package a full infra
+> 
+> Note: now that kconfig-package is a full package infra (inheriting from
+> generic-package) this may seem a bit odd, as other packages do not do this.
+> Nevertheless, it does not hurt and will slightly improve the parsing of the
+> Makefiles when the package is not selected.
+> 
+>  package/uclibc/uclibc.mk |  2 ++
 >  1 files changed, 2 insertions(+), 0 deletions(-)
 > 
-> diff -r f995a8adfa24 -r 469e4493e128 package/busybox/busybox.mk
-> --- a/package/busybox/busybox.mk	Tue Jul 22 20:43:10 2014 +0200
-> +++ b/package/busybox/busybox.mk	Wed Jul 23 20:13:38 2014 +0200
-> @@ -226,4 +226,6 @@
->  	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+> diff -r 083076145a2b -r 540167f28c2d package/uclibc/uclibc.mk
+> --- a/package/uclibc/uclibc.mk	Tue Jul 22 20:35:36 2014 +0200
+> +++ b/package/uclibc/uclibc.mk	Wed Jul 23 20:12:32 2014 +0200
+> @@ -539,7 +539,9 @@
+>  	$(UCLIBC_INSTALL_UTILS_STAGING)
 >  endef
 >  
-> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC),y)
 >  $(eval $(kconfig-package))
 > +endif
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
+I actually don't like this that much, because I like a lot the fact
+that I can do "make <foo>-source" "make <foo>-extract", "make
+<foo>-patch" or even "make <foo>" (though this last case, for the
+specific situation of uClibc doesn't seem really possible).
+
+Though it's true it can be considered a bit strange to allow "make
+<foo>-patch" but not "make <foo>-menuconfig".
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
