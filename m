@@ -1,34 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 20:18:06 +0200
-Subject: [Buildroot] [PATCH] libarchive: bump to version 3.1.2
-In-Reply-To: <1406830232-27101-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1406830232-27101-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140731201806.50aaaaf9@free-electrons.com>
+Date: Thu, 31 Jul 2014 20:18:33 +0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump to version 6.8.9-6
+In-Reply-To: <1406796530-28070-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1406796530-28070-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20140731201833.567d912a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Jerzy Grzegorek,
 
-On Thu, 31 Jul 2014 15:10:32 -0300, Gustavo Zacarias wrote:
+On Thu, 31 Jul 2014 10:48:50 +0200, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/imagemagick/imagemagick.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +ifeq ($(BR2_PACKAGE_ACL),y)
-> +LIBARCHIVE_DEPENDENCIES += acl
-
-No --enable-acl ?
-
-> +else
-> +LIBARCHIVE_CONF_OPT += --disable-acl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_ATTR),y)
-> +LIBARCHIVE_DEPENDENCIES += attr
-
-Same here and for all other options?
-
-Thanks,
+Applied, thanks.
 
 Thomas
 -- 
