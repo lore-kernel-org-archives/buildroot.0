@@ -1,53 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Aug 2014 00:05:21 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/patchelf: new host package
-In-Reply-To: <20140731235501.333bc892@free-electrons.com>
-References: <cover.1406760999.git.yann.morin.1998@free.fr>
- <fc8f5090621f94da255a6191eec78125047eb318.1406760999.git.yann.morin.1998@free.fr>
- <20140731235501.333bc892@free-electrons.com>
-Message-ID: <20140731220521.GR3960@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Aug 2014 00:11:17 +0200
+Subject: [Buildroot] [git commit] libdrm/intel: Explain dependency on xorg
+	in Kconfig only for BR2_i386/BR2_x86_64
+Message-ID: <20140731221130.11DE79D333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Samuel, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=2526d2f0d12bc77c67853a48ec6c381a3827d9c6
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-07-31 23:55 +0200, Thomas Petazzoni spake thusly:
-> On Thu, 31 Jul 2014 00:57:16 +0200, Yann E. MORIN wrote:
-> > In some situations, users may want to tweak the dynamic section of the
-> > binaries (for example to add/set the RPATH to $ORIGIN/../lib).
-> > 
-> > Because it is not trivial to do it properly from the Buildroot
-> > infrastructure, allow those users to use patchelf (e.g. from a
-> > post-build script) to tweak binaries.
-[--SNIP--]
-> > +PATCHELF_LICENSE = GPLv3
-> The license is actually GPLv3+, see the README file of the project.
-[--SNIP--]
-> Other than that, applied, thanks!
+Suggested by Yann: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/82731
 
-Thanks! :-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdrm/Config.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-> I think it would be good to use that to make the toolchain relocatable,
-> instead of something like http://patchwork.ozlabs.org/patch/359841/.
-> What do you think?
-
-I think that Samuel already has a WIP branch on making a relocatable
-SDK: https://github.com/tSed/buildroot/tree/sma/reloc-sdk/wip
-
-So, Samuel, what do you think of it? ;-)
-
-(Note how fast I was able to elude and reassign the question?)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 9acc908..a9c9171 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -27,6 +27,7 @@ config BR2_PACKAGE_LIBDRM_INTEL
+ 	  installs intel graphics driver
+ 
+ comment "libdrm intel driver depends on X.org"
++	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+ config BR2_PACKAGE_LIBDRM_RADEON
