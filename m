@@ -1,101 +1,314 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 19:07:50 +0200
-Subject: [Buildroot] [PATCH V7 1/1] google-breakpad: Integration into
- Makefile and Config.in
-In-Reply-To: <53DA088F.3020608@gmail.com>
-References: <1406124545-17915-1-git-send-email-pascal.huerst@gmail.com>
- <1406124545-17915-2-git-send-email-pascal.huerst@gmail.com>
- <20140729230335.GD5846@free.fr> <53DA088F.3020608@gmail.com>
-Message-ID: <20140731170750.GA3960@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Thu, 31 Jul 2014 19:08:35 +0200
+Subject: [Buildroot] [PATCH v3 1/3] apply-patches.sh: Use the
+	"APPLY_PATCHES" variable to call the script
+In-Reply-To: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1406826517-6106-2-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pascal, All,
+To easy up adding optional parameters when calling the
+"apply-patches.sh" add and use the "APPLY_PATCHES" variable to execute
+the script.
 
-On 2014-07-31 11:12 +0200, Pascal Huerst spake thusly:
-> On 30.07.2014 01:03, Yann E. MORIN wrote:
-> > On 2014-07-23 16:09 +0200, Pascal Huerst spake thusly:
-> > For example, there is no host package for google breakpad, so it does
-> > not work for me as I do not have googlebreakpad install on my host.
-> 
-> I thought it has, since in google-breakpad.mk it says:
-> 
-> 26 $(eval $(host-autotools-package))
-> 
-> and in my current version I have at least:
-> 
-> output/host/usr/bin/minidump-2-core
-> output/host/usr/bin/minidump_dump
-> output/host/usr/bin/minidump_stackwalk
-> output/host/usr/bin/minidump_upload
-> 
-> I only need minidump_stackwalk, to process minidumps. So that looked ok
-> to me.
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ boot/at91bootstrap/at91bootstrap.mk   |  2 +-
+ boot/at91bootstrap3/at91bootstrap3.mk |  2 +-
+ boot/barebox/barebox.mk               |  2 +-
+ boot/uboot/uboot.mk                   |  2 +-
+ linux/linux-ext-rtai.mk               |  4 ++--
+ linux/linux.mk                        |  6 +++---
+ package/Makefile.in                   |  2 ++
+ package/cvs/cvs.mk                    |  2 +-
+ package/gcc/gcc.mk                    |  4 ++--
+ package/input-tools/input-tools.mk    |  2 +-
+ package/mii-diag/mii-diag.mk          |  2 +-
+ package/pkg-autotools.mk              | 12 ++++++------
+ package/pkg-generic.mk                |  6 +++---
+ package/setserial/setserial.mk        |  2 +-
+ package/sysklogd/sysklogd.mk          |  2 +-
+ package/sysvinit/sysvinit.mk          |  2 +-
+ package/thttpd/thttpd.mk              |  2 +-
+ 17 files changed, 29 insertions(+), 27 deletions(-)
 
-I do not have those files. Here's what I did:
-
-    make defconfig
-    make menuconfig
-        -> use an external toolchain, to avoid the build time
-        -> enable google-breakpad in Build options
-        -> add /bin/busybox to be 'breakpadised'
-        -> save and exit
-    make
-    [--SNIP--]
-    >>>   Finalizing target directory
-    PATH="/home/ymorin/dev/buildroot/O/host/bin:/home/ymorin/dev/buildroot/
-    O/host/sbin:/home/ymorin/dev/buildroot/O/host/usr/bin:/home/ymorin/dev/
-    buildroot/O/host/usr/sbin:/home/ymorin/bin:/home/ymorin/bin:/opt/mutt-s
-    idebar/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-    :/usr/games:/usr/local/games" BR2_DL_DIR=/home/ymorin/src BUILD_DIR=/ho
-    me/ymorin/dev/buildroot/O/build package/google-breakpad/gen-syms.sh /ho
-    me/ymorin/dev/buildroot/O/host/usr/i686-buildroot-linux-gnu/sysroot /ho
-    me/ymorin/dev/buildroot/O/target /bin/busybox
-    Error dumping symbols for: '/home/ymorin/dev/buildroot/O/target//bin/bu
-    sybox'
-    make[1]: *** [target-finalize] Error 1
-
-Looking in host/usr/bin, I do not have the minidump executables.
-
-That's because nothing depends on host-google-breakpad, so it is not
-built.
-
-I'll fix that before I respin a fixed patch.
-
-> > Also, I now know why you need this eval in the script. I do not like it,
-> > so I'll try to come up with an alternative solution. Still, I have one
-> > question: do you expect that one would enter shell wildcards in the list
-> > of files to "breakpadize"?
-> 
-> Originally I wanted to be able to use wildcards and took the stripping
-> mechanism (BR2_STRIP_EXCLUDE_FILES) as an example, but people didn't
-> like it, so I adapted it. But actually I would say it's better to be
-> able to use wildcards.
-
-I (still) have some comments on your script. I'll see what I can come up
-with to fix that. I'll respin a new version later tonight.
-
-> We are not using breakpad in production yet, but are integrating and
-> maybe we'll find out later, that wildcards are useless, but for now, I
-> would say, why not...
-> 
-> I also found out that `make install` does not install the headers and
-> *.pc files. I'm in contact with the folks from breakpad to get this
-> fixed. But this means that a version boost will also be needed as soon
-> as that patch is upstream.
-
-Bumping a package is not a problem! ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index c5fd099..896804e 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -24,7 +24,7 @@ endef
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR)),)
+ define AT91BOOTSTRAP_APPLY_CUSTOM_PATCHES
+-	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \
++	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_AT91BOOTSTRAP_CUSTOM_PATCH_DIR) \
+ 		at91bootstrap-$(AT91BOOTSTRAP_VERSION)-\*.patch
+ endef
+ 
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 07df75d..be63252 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -21,7 +21,7 @@ AT91BOOTSTRAP3_MAKE_OPT = CROSS_COMPILE=$(TARGET_CROSS) DESTDIR=$(BINARIES_DIR)
+ 
+ ifneq ($(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR),)
+ define AT91BOOTSTRAP3_APPLY_CUSTOM_PATCHES
+-	support/scripts/apply-patches.sh $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \
++	$(APPLY_PATCHES) $(@D) $(AT91BOOTSTRAP3_CUSTOM_PATCH_DIR) \
+ 		at91bootstrap3-\*.patch
+ endef
+ 
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index f57d297..d970fbc 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -26,7 +26,7 @@ BAREBOX_LICENSE_FILES = COPYING
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
+ define BAREBOX_APPLY_CUSTOM_PATCHES
+-	support/scripts/apply-patches.sh $(@D) \
++	$(APPLY_PATCHES) $(@D) \
+ 		$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \
+ 		barebox-$(BAREBOX_VERSION)-\*.patch
+ endef
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 532ac8b..522b531 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -87,7 +87,7 @@ UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
+ define UBOOT_APPLY_CUSTOM_PATCHES
+-	support/scripts/apply-patches.sh $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
++	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \
+ 		uboot-\*.patch
+ endef
+ 
+diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
+index dcfab49..bf998d5 100644
+--- a/linux/linux-ext-rtai.mk
++++ b/linux/linux-ext-rtai.mk
+@@ -25,7 +25,7 @@ ifeq ($(RTAI_PATCH),)
+ define RTAI_PREPARE_KERNEL
+ 	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
+ 	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
+-		support/scripts/apply-patches.sh $(LINUX_DIR) 		\
++		$(APPLY_PATCHES) $(LINUX_DIR)		 		\
+ 			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ 	\
+ 			hal-linux-$${kver}-*patch ; \
+ 	else \
+@@ -35,7 +35,7 @@ define RTAI_PREPARE_KERNEL
+ endef
+ else
+ define RTAI_PREPARE_KERNEL
+-	support/scripts/apply-patches.sh 	\
++	$(APPLY_PATCHES) 			\
+ 		$(LINUX_DIR)			\
+ 		$(dir $(RTAI_PATCH))		\
+ 		$(notdir $(RTAI_PATCH))
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6c0b272..bf0c52b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -154,11 +154,11 @@ LINUX_POST_DOWNLOAD_HOOKS += LINUX_DOWNLOAD_PATCHES
+ define LINUX_APPLY_PATCHES
+ 	for p in $(LINUX_PATCHES) ; do \
+ 		if echo $$p | grep -q -E "^ftp://|^http://" ; then \
+-			support/scripts/apply-patches.sh $(@D) $(DL_DIR) `basename $$p` ; \
++			$(APPLY_PATCHES) $(@D) $(DL_DIR) `basename $$p` ; \
+ 		elif test -d $$p ; then \
+-			support/scripts/apply-patches.sh $(@D) $$p linux-\*.patch ; \
++			$(APPLY_PATCHES) $(@D) $$p linux-\*.patch ; \
+ 		else \
+-			support/scripts/apply-patches.sh $(@D) `dirname $$p` `basename $$p` ; \
++			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` ; \
+ 		fi \
+ 	done
+ endef
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 02f6e3d..d17115b 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -218,6 +218,8 @@ FLEX := $(shell which flex || type -p flex)
+ BISON := $(shell which bison || type -p bison)
+ SED := $(shell which sed || type -p sed) -i -e
+ 
++APPLY_PATCHES = support/scripts/apply-patches.sh
++
+ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+ HOST_CFLAGS   ?= -O2
+ HOST_CFLAGS   += $(HOST_CPPFLAGS)
+diff --git a/package/cvs/cvs.mk b/package/cvs/cvs.mk
+index 596eabf..3229e83 100644
+--- a/package/cvs/cvs.mk
++++ b/package/cvs/cvs.mk
+@@ -38,7 +38,7 @@ define CVS_DEBIAN_PATCHES
+ 		 do $(SED) 's,^\+\+\+ .*cvs-$(CVS_VERSION)/,+++ cvs-$(CVS_VERSION)/,' $$i; \
+ 		 done; \
+ 		); \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*; \
+ 	fi
+ endef
+ endif
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5b60bc3..8be0233 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -44,14 +44,14 @@ endef
+ ifeq ($(ARCH),powerpc)
+ ifneq ($(BR2_SOFT_FLOAT),)
+ define HOST_GCC_APPLY_POWERPC_PATCH
+-	support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
++	$(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) powerpc-link-with-math-lib.patch.conditional
+ endef
+ endif
+ endif
+ 
+ define HOST_GCC_APPLY_PATCHES
+ 	if test -d package/gcc/$(GCC_VERSION); then \
+-	  support/scripts/apply-patches.sh $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
++	  $(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
+ 	fi;
+ 	$(HOST_GCC_APPLY_POWERPC_PATCH)
+ endef
+diff --git a/package/input-tools/input-tools.mk b/package/input-tools/input-tools.mk
+index ae3f7d2..b1d0149 100644
+--- a/package/input-tools/input-tools.mk
++++ b/package/input-tools/input-tools.mk
+@@ -17,7 +17,7 @@ INPUT_TOOLS_TARGETS_$(BR2_PACKAGE_INPUT_TOOLS_JSTEST)      += jstest
+ 
+ define INPUT_TOOLS_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+ 	fi
+ endef
+ 
+diff --git a/package/mii-diag/mii-diag.mk b/package/mii-diag/mii-diag.mk
+index 7a7bc7f..d2b3b9f 100644
+--- a/package/mii-diag/mii-diag.mk
++++ b/package/mii-diag/mii-diag.mk
+@@ -15,7 +15,7 @@ MII_DIAG_MAKE_OPT = $(TARGET_CONFIGURE_OPTS)
+ 
+ define MII_DIAG_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+ 	fi
+ endef
+ 
+diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
+index bcc648d..94d3008 100644
+--- a/package/pkg-autotools.mk
++++ b/package/pkg-autotools.mk
+@@ -196,11 +196,11 @@ define LIBTOOL_PATCH_HOOK
+ 			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
+ 			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+ 			if test $$$${ltmain_version} = '1.5'; then \
+-				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+ 			elif test $$$${ltmain_version} = "2.2"; then\
+-				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+ 			elif test $$$${ltmain_version} = "2.4"; then\
+-				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+ 			fi \
+ 		done \
+ 	fi
+@@ -230,11 +230,11 @@ define AUTORECONF_HOOK
+ 			ltmain_version=`sed -n '/^[ 	]*VERSION=/{s/^[ 	]*VERSION=//;p;q;}' $$$$i | \
+ 			sed -e 's/\([0-9].[0-9]*\).*/\1/' -e 's/\"//'`; \
+ 			if test $$$${ltmain_version} = "1.5"; then \
+-				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
++				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v1.5.patch; \
+ 			elif test $$$${ltmain_version} = "2.2"; then\
+-				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
++				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.2.patch; \
+ 			elif test $$$${ltmain_version} = "2.4"; then\
+-				support/scripts/apply-patches.sh $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
++				$$(APPLY_PATCHES) $$$${i%/*} support/libtool buildroot-libtool-v2.4.patch; \
+ 			fi \
+ 		done \
+ 	fi
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index fb4b849..95a95b7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -146,14 +146,14 @@ $(BUILD_DIR)/%/.stamp_patched:
+ 	@$(call step_start,patch)
+ 	@$(call MESSAGE,"Patching")
+ 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
+-	$(foreach p,$($(PKG)_PATCH),support/scripts/apply-patches.sh $(@D) $(DL_DIR) $(notdir $(p))$(sep))
++	$(foreach p,$($(PKG)_PATCH),$(APPLY_PATCHES) $(@D) $(DL_DIR) $(notdir $(p))$(sep))
+ 	$(Q)( \
+ 	for D in $(PATCH_BASE_DIRS); do \
+ 	  if test -d $${D}; then \
+ 	    if test -d $${D}/$($(PKG)_VERSION); then \
+-	      support/scripts/apply-patches.sh $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
++	      $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION) \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    else \
+-	      support/scripts/apply-patches.sh $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
++	      $(APPLY_PATCHES) $(@D) $${D} \*.patch \*.patch.$(ARCH) || exit 1; \
+ 	    fi; \
+ 	  fi; \
+ 	done; \
+diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
+index 9f28216..6900197 100644
+--- a/package/setserial/setserial.mk
++++ b/package/setserial/setserial.mk
+@@ -16,7 +16,7 @@ define SETSERIAL_APPLY_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		touch $(@D)/gorhack.h; \
+ 		rm $(@D)/debian/patches/01_makefile.dpatch; \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches *.dpatch; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.dpatch; \
+ 	fi
+ endef
+ 
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 37293da..9c4895d 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -18,7 +18,7 @@ endif
+ 
+ define SYSKLOGD_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+ 	fi
+ endef
+ 
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index 3a7eac2..ff1ba24 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -18,7 +18,7 @@ endif
+ 
+ define SYSVINIT_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+ 	fi
+ endef
+ 
+diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
+index 7be264a..7d663b9 100644
+--- a/package/thttpd/thttpd.mk
++++ b/package/thttpd/thttpd.mk
+@@ -14,7 +14,7 @@ THTTPD_LICENSE_FILES = thttpd.c
+ ifneq ($(THTTPD_PATCH),)
+ define THTTPD_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+-		support/scripts/apply-patches.sh $(@D) $(@D)/debian/patches \*.patch; \
++		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches \*.patch; \
+ 	fi
+ endef
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.0.3
