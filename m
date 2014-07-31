@@ -1,44 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 09:38:21 +0200
-Subject: [Buildroot] Build failed for package avahi
-In-Reply-To: <53D9EF25.8040803@posteo.de>
-References: <53D9739C.7040301@posteo.de>
- <20140731010417.77c5d67c@free-electrons.com>
- <53D9EF25.8040803@posteo.de>
-Message-ID: <20140731093821.2c5d8ac3@free-electrons.com>
+From: prafulla_kota <prafulla.kota@broadcom.com>
+Date: Thu, 31 Jul 2014 00:47:34 -0700 (PDT)
+Subject: [Buildroot] backtrace() not working on ARMv7a
+In-Reply-To: <20140731083943.49d4b0db@free-electrons.com>
+References: <1406788255956-76350.post@n4.nabble.com>
+ <20140731083943.49d4b0db@free-electrons.com>
+Message-ID: <1406792854426-76360.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Hi Thomas, 
 
-On Thu, 31 Jul 2014 09:24:21 +0200, J?rg Krause wrote:
+Thanks for quick reply and i have attached the .config file. 
 
-> >> checking how to run the C++ preprocessor... /lib/cpp
-> >> configure: error: in
-> >> `/home/joerg/Freescale/buildroot/output/build/avahi-0.6.31':
-> >> configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-> >> See `config.log' for more details
-> > Can you post the contents of output/build/avahi-0.6.31/config.log ?
-> 
-> I attached the config.log.
+We have applied below patch in ulibc and it worked fine for below
+requirement and we do have requirement on GLIBC as well and requesting the
+same here. 
 
-Problem is:
+Thanks, 
+Prafulla kota
 
-configure:13407: /lib/cpp  conftest.cpp
-./configure: line 2321: /lib/cpp: No such file or directory
+buildroot_dot_config.buildroot_dot_config
+<http://buildroot-busybox.2317881.n4.nabble.com/file/n76360/buildroot_dot_config.buildroot_dot_config>  
 
-Autotools (or parts of it) expect /lib/cpp to be a symbolic link to the
-C preprocessor. However, certain distributions (I think Archlinux) are
-no longer installing this symbolic link.
 
-I'm not sure what is to blame here: the distro not creating
-the /lib/cpp symbolic link, or the autotools using this symbolic link?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+--
+View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/backtrace-not-working-on-ARMv7a-tp76350p76360.html
+Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
