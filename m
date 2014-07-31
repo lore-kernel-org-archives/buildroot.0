@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 23:56:02 +0200
-Subject: [Buildroot] [PATCH 1/2] qemu/x86: update defconfig to Linux
- 3.15.x
-In-Reply-To: <20140730134316.GA7179@waldemar-brodkorb.de>
-References: <20140730134316.GA7179@waldemar-brodkorb.de>
-Message-ID: <20140731235602.64ae2f2b@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:56:43 +0200
+Subject: [Buildroot] [PATCH 2/2] qemu/x86: add defconfig for serial
+ console usage
+In-Reply-To: <20140730134403.GA11974@waldemar-brodkorb.de>
+References: <20140730134403.GA11974@waldemar-brodkorb.de>
+Message-ID: <20140731235643.36e406c5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,27 @@ To: buildroot@busybox.net
 
 Dear Waldemar Brodkorb,
 
-On Wed, 30 Jul 2014 15:43:17 +0200, Waldemar Brodkorb wrote:
-> Update the default configuration to use Linux 3.15.x.
-> Enable ext4, so that ext2/ext3/ext4 can be used.
-> Tested with Qemu 2.0.0.
+On Wed, 30 Jul 2014 15:44:11 +0200, Waldemar Brodkorb wrote:
+> Developers sometimes work remotely and want to test stuff in Qemu
+> without having X11 running. For this case an extra defconfig is
+> useful and does not break existing defconfig.
+> 
+> A config which can be used for both cases might be used instead,
+> but I see no option to add more gettys via the existing buildroot
+> variables.
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  board/qemu/x86/{linux-3.13.config => linux-3.15.config} |  2 +-
->  board/qemu/x86/readme.txt                               |  2 +-
->  configs/qemu_x86_defconfig                              | 10 +++++-----
->  3 files changed, 7 insertions(+), 7 deletions(-)
->  rename board/qemu/x86/{linux-3.13.config => linux-3.15.config} (99%)
+>  board/qemu/x86/readme.txt         |  6 ++++++
+>  configs/qemu_x86_serial_defconfig | 23 +++++++++++++++++++++++
+>  2 files changed, 29 insertions(+)
+>  create mode 100644 configs/qemu_x86_serial_defconfig
 
-Applied, thanks.
+Since there are still comments about this approach, and a suggestion to
+do it differently, I've marked this patch as "Changes Requested" in our
+patch tracking system.
+
+Thanks!
 
 Thomas
 -- 
