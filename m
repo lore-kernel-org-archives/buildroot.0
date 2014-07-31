@@ -1,55 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 20:05:37 +0200
-Subject: [Buildroot] [PATCH v2 1/9] toolchain: Add config option for
- atomic intrinsics
-In-Reply-To: <20140731172520.GD3960@free.fr>
-References: <20140730084548.05bd6dec@free-electrons.com>
- <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
- <20140731172520.GD3960@free.fr>
-Message-ID: <20140731200537.0b27eea7@free-electrons.com>
+From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+Date: Thu, 31 Jul 2014 20:00:52 +0200
+Subject: [Buildroot] [PATCH] bcache-tools: Adding package.
+Message-ID: <1406829652-31280-1-git-send-email-jcd@tribudubois.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+This patch adds the bcache-tools package to buildroot.
 
-On Thu, 31 Jul 2014 19:25:20 +0200, Yann E. MORIN wrote:
+This is the bcache tools, required to setup the linux bcache
+feature of the Linux kernel.
 
-> On 2014-07-31 17:24 +0400, Anton Kolesov spake thusly:
-> > GCC has several builtin functions that implement atomic operations. Those
-> > functions are architecture specific and may not be implemented by the
-> > specific toolchain. In case of GCC for ARC those functions rely on
-> > LLOCK/SCOND instructions which are optional in ARC CPU's. If ARC CPU doesn't
-> > support those instructions but software tries to use them, then application
-> > will be aborted with Illegal instruction exception. To avoid confusion user
-> > should first specify that their CPU supports atomic extension, which will
-> > allow selection of packages that use builtin atomic functions.
-> 
-> I think what Thomas and I discussed, was to have a patch series that
-> does the following changes:
-> 
->    1- introduce BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS;
->    2- have all current architectures, that have atomics, select that new
->       symbol (note: i386 does not, i486 and above have, for example);
->    3- convert packages (one patch par package) to depend on it;
->    4- introduce BR2_ARC_ATOMIC_EXT that selects it, too.
-> 
-> This is more logical: you first add a new option, and then you gradually
-> start using it, until finally you airrive to what you eventually wanted.
+Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+---
+ package/Config.in                    |  1 +
+ package/bcache-tools/Config.in       | 11 +++++++++++
+ package/bcache-tools/bcache-tools.mk | 34 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+)
+ create mode 100644 package/bcache-tools/Config.in
+ create mode 100644 package/bcache-tools/bcache-tools.mk
 
-Well, that's pretty much what Anton did actually: his patch 1 covers
-your items (1), (2) and (4), and his other patches cover your item (3).
-And there's actually no problem in having (4) being done before (3).
-
-So far the only difference between what you expose and what he has done
-is the fact that his patch series have
-BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS selected even for i386. But the
-current Buildroot already assumes that i386 has atomic intrinsics.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 29b8e6b..7468b28 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -279,6 +279,7 @@ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
+ 	source "package/avrdude/Config.in"
++	source "package/bcache-tools/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+new file mode 100644
+index 0000000..51b6477
+--- /dev/null
++++ b/package/bcache-tools/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_BCACHE_TOOLS
++	bool "bcache tools"
++	depends on BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	help
++	  This is the bcache tools, required to setup the linux bcache
++	  feature of the Linux kernel.
++
++comment "bcache-tools support needs udev /dev management"
++        depends on !BR2_PACKAGE_HAS_UDEV
+diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+new file mode 100644
+index 0000000..e5ae9f3
+--- /dev/null
++++ b/package/bcache-tools/bcache-tools.mk
+@@ -0,0 +1,34 @@
++################################################################################
++#
++# bcache-tools
++#
++################################################################################
++
++BCACHE_TOOLS_VERSION = 1.0.7
++BCACHE_TOOLS_SITE = https://github.com/g2p/bcache-tools/archive
++BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
++BCACHE_TOOLS_LICENSE = GPLv2
++BCACHE_TOOLS_LICENSE_FILES = COPYING
++BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
++BCACHE_TOOLS_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
++
++define BCACHE_TOOLS_EXTRACT_CMDS
++	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
++endef
++
++define BCACHE_TOOLS_FIX_PKGCONFIG
++	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
++		$(BCACHE_TOOLS_DIR)/Makefile
++endef
++
++define BCACHE_TOOLS_BUILD_CMDS
++	$(BCACHE_TOOLS_FIX_PKGCONFIG)
++	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define BCACHE_TOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
++	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
