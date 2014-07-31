@@ -1,47 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 09:23:01 +0200
-Subject: [Buildroot] Remaining patch series for 2014.08 ?
-Message-ID: <20140731092301.67665977@free-electrons.com>
+From: =?UTF-8?B?SsO2cmcgS3JhdXNl?= <jkrause@posteo.de>
+Date: Thu, 31 Jul 2014 09:24:21 +0200
+Subject: [Buildroot] Build failed for package avahi
+In-Reply-To: <20140731010417.77c5d67c@free-electrons.com>
+References: <53D9739C.7040301@posteo.de>
+ <20140731010417.77c5d67c@free-electrons.com>
+Message-ID: <53D9EF25.8040803@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Thomas,
 
-2014.08-rc1 will be released by Peter around August 4th-5th, which
-gives us a few more days to merge some additional patches. I'm
-interested in hearing opinions/reviews about:
+On 07/31/2014 01:04 AM, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
+>
+> On Thu, 31 Jul 2014 00:37:16 +0200, J?rg Krause wrote:
+>
+>> checking how to run the C++ preprocessor... /lib/cpp
+>> configure: error: in
+>> `/home/joerg/Freescale/buildroot/output/build/avahi-0.6.31':
+>> configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+>> See `config.log' for more details
+> Can you post the contents of output/build/avahi-0.6.31/config.log ?
 
- - The kconfig-package infra from Thomas DS
-   http://lists.busybox.net/pipermail/buildroot/2014-July/103172.html
+I attached the config.log.
 
- - The libudev series from Yann
-   http://lists.busybox.net/pipermail/buildroot/2014-July/103216.html
-
- - The OPT -> OPTS series from Thomas DS
-   http://lists.busybox.net/pipermail/buildroot/2014-July/103082.html
-
- - The download wrapper series from Yann
-   http://lists.busybox.net/pipermail/buildroot/2014-July/102526.html
-
- - The remaining XBMC patches from Bern
-   http://lists.busybox.net/pipermail/buildroot/2014-July/102665.html
-   (only patches 2, 7, 8 and 9) remain to be applied.
-
-On those "big" series, I really would like to get the feeling of other
-developers.
-
-Also, if you have other patches that you think should be applied for
-2014.08, please speak up. Note that you have higher chances of seeing
-your patches merged if your review/test patches from other
-developers! :-)
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards
+J?rg Krause
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: config.log
+Type: text/x-log
+Size: 81016 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140731/85f30456/attachment.bin>
