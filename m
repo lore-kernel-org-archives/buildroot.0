@@ -1,51 +1,103 @@
 From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 31 Jul 2014 19:08:34 +0200
-Subject: [Buildroot] [PATCH v3 0/3] apply-patches.sh: be quiet when "make
-	-s" is used
-Message-ID: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
+Date: Thu, 31 Jul 2014 19:08:37 +0200
+Subject: [Buildroot] [PATCH v3 3/3] apply-patches.sh: don't print anything
+	when "make -s" is used
+In-Reply-To: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
+References: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <1406826517-6106-4-git-send-email-fabio.porcedda@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To reduce further the noise when "make -s" is used silence the
-"apply-patches.sh" script.
+The make "-s" option is used to enable the "Silent operation" so if that
+option is used don't print anything as far as there isn't any error.
 
-v3:
- - Remove the already merged patch
- - Use double $$ inside hooks (Yann)
- - Add patch to use [[ ]] construct
-v2:
- - move the second patch as first to easy up merging
- - split the first patch in two (Yann)
- - add BR_SILENT variable (Yann)
+Add the "-s" option to "apply-patches.sh" to enable silent operation.
 
-Fabio Porcedda (3):
-  apply-patches.sh: Use the "APPLY_PATCHES" variable to call the script
-  apply-patches.sh: Use [[...]] construct instead of [...] construct
-  apply-patches.sh: don't print anything when "make -s" is used
+Also add the "BR_SILENT" variable the contain "YES" when "make -s" is
+used so others parts can use it to silence the build as well.
 
- Makefile                              |  2 ++
- boot/at91bootstrap/at91bootstrap.mk   |  2 +-
- boot/at91bootstrap3/at91bootstrap3.mk |  2 +-
- boot/barebox/barebox.mk               |  2 +-
- boot/uboot/uboot.mk                   |  2 +-
- linux/linux-ext-rtai.mk               |  4 ++--
- linux/linux.mk                        |  6 +++---
- package/Makefile.in                   |  2 ++
- package/cvs/cvs.mk                    |  2 +-
- package/gcc/gcc.mk                    |  4 ++--
- package/input-tools/input-tools.mk    |  2 +-
- package/mii-diag/mii-diag.mk          |  2 +-
- package/pkg-autotools.mk              | 12 ++++++------
- package/pkg-generic.mk                |  6 +++---
- package/setserial/setserial.mk        |  2 +-
- package/sysklogd/sysklogd.mk          |  2 +-
- package/sysvinit/sysvinit.mk          |  2 +-
- package/thttpd/thttpd.mk              |  2 +-
- support/scripts/apply-patches.sh      | 31 +++++++++++++++++++++----------
- 19 files changed, 52 insertions(+), 37 deletions(-)
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+---
+ Makefile                         |  2 ++
+ package/Makefile.in              |  2 +-
+ support/scripts/apply-patches.sh | 17 ++++++++++++++---
+ 3 files changed, 17 insertions(+), 4 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index c82b07f..73eb033 100644
+--- a/Makefile
++++ b/Makefile
+@@ -198,6 +198,8 @@ else
+   Q = @
+ endif
+ 
++BR_SILENT = $(if $(findstring s,$(MAKEFLAGS)),YES)
++
+ # we want bash as shell
+ SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
+ 	 else if [ -x /bin/bash ]; then echo /bin/bash; \
+diff --git a/package/Makefile.in b/package/Makefile.in
+index d17115b..c00c4f3 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -218,7 +218,7 @@ FLEX := $(shell which flex || type -p flex)
+ BISON := $(shell which bison || type -p bison)
+ SED := $(shell which sed || type -p sed) -i -e
+ 
+-APPLY_PATCHES = support/scripts/apply-patches.sh
++APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(BR_SILENT),-s)
+ 
+ HOST_CPPFLAGS  = -I$(HOST_DIR)/usr/include
+ HOST_CFLAGS   ?= -O2
+diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+index a157398..a4cbf3e 100755
+--- a/support/scripts/apply-patches.sh
++++ b/support/scripts/apply-patches.sh
+@@ -6,6 +6,8 @@
+ # (c) 2002 Erik Andersen <andersen@codepoet.org>
+ #
+ # Parameters:
++# - "-s",optional. Silent operation, don't print anything if there
++# isn't any error.
+ # - the build directory, optional, default value is '.'. The place where are
+ # the package sources.
+ # - the patch directory, optional, default '../kernel-patches'. The place
+@@ -28,6 +30,13 @@
+ # applied. The list of the patches applied is stored in '.applied_patches_list'
+ # file in the build directory.
+ 
++silent=
++if [[ $1 = "-s" ]] ; then
++    # add option to be used by the patch tool
++    silent=-s
++    shift
++fi
++
+ # Set directories from arguments, or use defaults.
+ builddir=${1-.}
+ patchdir=${2-../kernel-patches}
+@@ -77,14 +86,16 @@ function apply_patch {
+ 	return 0
+ 	;;
+     esac
+-    echo ""
+-    echo "Applying $patch using ${type}: "
++    if [[ ! $silent ]] ; then
++	echo ""
++	echo "Applying $patch using ${type}: "
++    fi
+     if [[ ! -e ${path}/$patch ]] ; then
+ 	echo "Error: missing patch file ${path}/$patch"
+ 	exit 1
+     fi
+     echo $patch >> ${builddir}/.applied_patches_list
+-    ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N
++    ${uncomp} "${path}/$patch" | patch $silent -g0 -p1 -E -d "${builddir}" -t -N
+     if [[ $? != 0 ]] ; then
+         echo "Patch failed!  Please fix ${patch}!"
+ 	exit 1
 -- 
 2.0.3
