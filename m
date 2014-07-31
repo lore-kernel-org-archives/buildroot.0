@@ -1,103 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Jul 2014 22:41:31 +0200
-Subject: [Buildroot] [git commit] libarchive: bump to version 3.1.2
-Message-ID: <20140731204647.70E259D348@busybox.osuosl.org>
+Date: Thu, 31 Jul 2014 22:49:28 +0200
+Subject: [Buildroot] [PATCH] libevdev: use tarball instead of git repository
+Message-ID: <1406839768-7896-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=dc6576e7baaca3c3ea47d5091eb29862c0de4c5e
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Tarballs are now provided for libevdev, so use that instead of the Git
+repository, as it allows to avoid autoreconf for the package.
 
-Switch to proper upstream source.
-And account for many auto dependencies that were missing.
-Also fixes link issues:
-http://autobuild.buildroot.net/results/774/7747a043123e958952a16e0c0db823296c4e0594/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libarchive/libarchive.mk |   59 +++++++++++++++++++++++++++++++++----
- 1 files changed, 52 insertions(+), 7 deletions(-)
+ package/libevdev/libevdev.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 44d9cd2..8c6951d 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,17 +4,38 @@
- #
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index a9a1d41..fde7d3c 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -5,16 +5,14 @@
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.0.4
--LIBARCHIVE_SITE = http://github.com/downloads/libarchive/libarchive
-+LIBARCHIVE_VERSION = 3.1.2
-+LIBARCHIVE_SITE = http://www.libarchive.org/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
-+LIBARCHIVE_LICENSE = BSD-2c, BSD-3c
-+LIBARCHIVE_LICENSE_FILES = COPYING
-+LIBARCHIVE_CONF_OPT = --without-lzma \
-+	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
-+	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
+ LIBEVDEV_VERSION = 1.2.2
+-LIBEVDEV_SITE = http://cgit.freedesktop.org/libevdev/snapshot
++LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev/
++LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
+ LIBEVDEV_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--LIBARCHIVE_DEPENDENCIES = zlib
-+ifeq ($(BR2_PACKAGE_ACL),y)
-+LIBARCHIVE_DEPENDENCIES += acl
-+else
-+LIBARCHIVE_CONF_OPT += --disable-acl
- endif
+ # Uses PKG_CHECK_MODULES() in configure.ac
+ LIBEVDEV_DEPENDENCIES = host-pkgconf
  
--LIBARCHIVE_CONF_OPT = \
--	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDTAR),--enable-bsdtar,--disable-bsdtar) \
--	$(if $(BR2_PACKAGE_LIBARCHIVE_BSDCPIO),--enable-bsdcpio,--disable-bsdcpio)
-+ifeq ($(BR2_PACKAGE_ATTR),y)
-+LIBARCHIVE_DEPENDENCIES += attr
-+else
-+LIBARCHIVE_CONF_OPT += --disable-xattr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_EXPAT),y)
-+LIBARCHIVE_DEPENDENCIES += expat
-+else
-+LIBARCHIVE_CONF_OPT += --without-expat
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBICONV),y)
-+LIBARCHIVE_DEPENDENCIES += libiconv
-+else
-+LIBARCHIVE_CONF_OPT += --without-libiconv-prefix
-+endif
+-# package source code coming from git, so it doesn't have generated
+-# configure and Makefile.in
+-LIBEVDEV_AUTORECONF = YES
+ LIBEVDEV_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
- LIBARCHIVE_DEPENDENCIES += libxml2
-@@ -23,4 +44,28 @@ else
- LIBARCHIVE_CONF_OPT += --without-xml2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LZO),y)
-+LIBARCHIVE_DEPENDENCIES += lzo
-+else
-+LIBARCHIVE_CONF_OPT += --without-lzo2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NETTLE),y)
-+LIBARCHIVE_DEPENDENCIES += nettle
-+else
-+LIBARCHIVE_CONF_OPT += --without-nettle
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBARCHIVE_DEPENDENCIES += openssl
-+else
-+LIBARCHIVE_CONF_OPT += --without-openssl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBARCHIVE_DEPENDENCIES += zlib
-+else
-+LIBARCHIVE_CONF_OPT += --without-zlib
-+endif
-+
  $(eval $(autotools-package))
+-- 
+2.0.0
