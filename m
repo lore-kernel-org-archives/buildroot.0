@@ -1,34 +1,31 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Jul 2014 19:19:34 +0200
-Subject: [Buildroot] [PATCH v3 2/3] apply-patches.sh: Use [[...]]
-	construct instead of [...] construct
-In-Reply-To: <1406826517-6106-3-git-send-email-fabio.porcedda@gmail.com>
-References: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
- <1406826517-6106-3-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <00392aed-ce27-4eea-985b-75f06f79e0d7@email.android.com>
+From: Steffen Hoenig <s.hoenig@openthinclient.com>
+Date: Thu, 31 Jul 2014 19:20:50 +0200
+Subject: [Buildroot] [PATCH 3/3] aufs: added 'fs' dir to $(LINUX_DIR)
+Message-ID: <1406827250-11821-1-git-send-email-s.hoenig@openthinclient.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio Porcedda <fabio.porcedda@gmail.com> schreef:
->The [[...]] construct it's an improved and safer construct than the
->[...] construct. It's safer because it doesn't do "word splitting" so
->we don't need to enclose variable expansion with double quotes, e.g:
->
->   [ -e "$file" ] -> [[ -e $file ]]
->---
+For later calls of linux-menuconfig, you need the Kconfig of aufs
 
+Signed-off-by: Steffen Hoenig <s.hoenig@openthinclient.com>
+---
+ package/aufs/aufs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'm not so convinced by this patch. [[]] is a bashism, it is not
- supported in all shells. 
-Yes, using single brackets means that you need to take care, 
-but anyway shell programming has many pitfalls.
-
-In the past people have sent patches to make Buildroot 
-more compatible with non-bash shells, so moving in the opposite
- direction is not a good idea IMO.
-
-Best regards,
-Thomas
+diff --git a/package/aufs/aufs.mk b/package/aufs/aufs.mk
+index c1b21c4..5d072bb 100644
+--- a/package/aufs/aufs.mk
++++ b/package/aufs/aufs.mk
+@@ -27,6 +27,7 @@ define AUFS_INSTALL_STAGING_CMDS
+ 	$(MAKE) -C $(@D) $(LINUX_MAKE_FLAGS) KDIR=$(LINUX_DIR) usr/include/linux/aufs_type.h
+ 	$(INSTALL) -p -m 0644 $(@D)/usr/include/linux/aufs_type.h \
+ 		$(STAGING_DIR)/usr/include/linux
++	tar cf - -C $(@D) fs | (cd $(LINUX_DIR) && tar xf -)
+ endef
+ 
+ define AUFS_INSTALL_TARGET_CMDS
+-- 
+1.9.1
