@@ -1,49 +1,107 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 31 Jul 2014 20:40:13 +0200
-Subject: [Buildroot] [PATCH v2] Add option to copy config file to rootfs
-In-Reply-To: <20140731201741.7873aee9@free-electrons.com>
-References: <1406820398-2105-1-git-send-email-nroach44@gmail.com>
- <20140731171632.GC3960@free.fr>
- <14321197-e8a0-43d3-9bcf-2f3d53e60753@email.android.com>
- <20140731201741.7873aee9@free-electrons.com>
-Message-ID: <f9f901d7-df20-4a8e-9ef2-d0e7a7b0edcd@email.android.com>
+Date: Thu, 31 Jul 2014 20:52:32 +0200
+Subject: [Buildroot] [PATCH] bcache-tools: Adding package.
+In-Reply-To: <1406829652-31280-1-git-send-email-jcd@tribudubois.net>
+References: <1406829652-31280-1-git-send-email-jcd@tribudubois.net>
+Message-ID: <ae9715d4-249e-4974-81da-b426c64038c7@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->Dear Thomas De Schampheleire,
->
->On Thu, 31 Jul 2014 19:55:21 +0200, Thomas De Schampheleire wrote:
->
->> >I think the case where one would want this file in the generated
->> >filesystem is a corner case, and that it would be better served with
->> >a post-build script.
->> 
->> I think this is a feature that deserves to be in Buildroot 
->> directly.  Just like rootfs-overlay used to be
->>  something that people had to do manually from their
->> post build script, but later became a supported
->>  feature because many people found it useful, or the
->>  feature to set the root password, this is something that is
->> generally useful by many users, even those that don't fully know how
->> to use the post build script to it's full ability, or did not yet
->> realize the usefulness of the saving of the configuration.
->
->I don't really have a strong opinion on whether we should have this
->feature or not, but what bothers me is adding yet another global config
->option just for a small thing like that.
->
->If we were to include the .config file in the rootfs, could we do it
->unconditionally? Or would the .config file size be problematic?
+Hello Jean-Christophe,
 
-Not do much the size, but as specified in the help text
- the potential root password will be readable too. So if
- you get a hand on the rootfs image, you can
- determine the password very easily, which is
- probably not acceptable by all.
+Jean-Christophe DUBOIS <jcd@tribudubois.net> schreef:
+>This patch adds the bcache-tools package to buildroot.
+>
+>This is the bcache tools, required to setup the linux bcache
+>feature of the Linux kernel.
+>
+>Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+>---
+> package/Config.in                    |  1 +
+> package/bcache-tools/Config.in       | 11 +++++++++++
+> package/bcache-tools/bcache-tools.mk | 34 ++++++++++++++++++++++++++++++++++
+> 3 files changed, 46 insertions(+)
+> create mode 100644 package/bcache-tools/Config.in
+> create mode 100644 package/bcache-tools/bcache-tools.mk
+>
+>diff --git a/package/Config.in b/package/Config.in
+>index 29b8e6b..7468b28 100644
+>--- a/package/Config.in
+>+++ b/package/Config.in
+>@@ -279,6 +279,7 @@ endmenu
+> 	source "package/a10disp/Config.in"
+> 	source "package/acpid/Config.in"
+> 	source "package/avrdude/Config.in"
+>+	source "package/bcache-tools/Config.in"
+> 	source "package/cdrkit/Config.in"
+> 	source "package/cryptsetup/Config.in"
+> 	source "package/cwiid/Config.in"
+>diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+>new file mode 100644
+>index 0000000..51b6477
+>--- /dev/null
+>+++ b/package/bcache-tools/Config.in
+>@@ -0,0 +1,11 @@
+>+config BR2_PACKAGE_BCACHE_TOOLS
+>+	bool "bcache tools"
+>+	depends on BR2_PACKAGE_HAS_UDEV
+>+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+>+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+>+	help
+>+	  This is the bcache tools, required to setup the linux bcache
+>+	  feature of the Linux kernel.
+>+
+>+comment "bcache-tools support needs udev /dev management"
+
+The word 'support' here should be removed.
+
+>+        depends on !BR2_PACKAGE_HAS_UDEV
+>diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+>new file mode 100644
+>index 0000000..e5ae9f3
+>--- /dev/null
+>+++ b/package/bcache-tools/bcache-tools.mk
+>@@ -0,0 +1,34 @@
+>+################################################################################
+>+#
+>+# bcache-tools
+>+#
+>+################################################################################
+>+
+>+BCACHE_TOOLS_VERSION = 1.0.7
+>+BCACHE_TOOLS_SITE = https://github.com/g2p/bcache-tools/archive
+
+This should be using the github helper, see the manual.
+
+>+BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
+>+BCACHE_TOOLS_LICENSE = GPLv2
+>+BCACHE_TOOLS_LICENSE_FILES = COPYING
+>+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
+>+BCACHE_TOOLS_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+>+
+>+define BCACHE_TOOLS_EXTRACT_CMDS
+>+	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
+>+endef
+>+
+>+define BCACHE_TOOLS_FIX_PKGCONFIG
+>+	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
+>+		$(BCACHE_TOOLS_DIR)/Makefile
+>+endef
+>+
+>+define BCACHE_TOOLS_BUILD_CMDS
+>+	$(BCACHE_TOOLS_FIX_PKGCONFIG)
+>+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
+>+endef
+>+
+>+define BCACHE_TOOLS_INSTALL_TARGET_CMDS
+>+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
+>+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>+endef
+>+
+>+$(eval $(generic-package))
 
 Best regards,
 Thomas
