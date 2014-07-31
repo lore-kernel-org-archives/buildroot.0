@@ -1,64 +1,136 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 23:08:00 +0200
-Subject: [Buildroot] [PATCH 4 of 6 v2] uclibc: only add targets if
- uclibc is enabled
-In-Reply-To: <540167f28c2d41530ceb.1406750285@localhost>
-References: <patchbomb.1406750281@localhost>
- <540167f28c2d41530ceb.1406750285@localhost>
-Message-ID: <20140731210800.GM3960@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Jul 2014 23:10:19 +0200
+Subject: [Buildroot] [git commit] google-breakpad: integration into Makefile
+	and Config.in
+Message-ID: <20140731211104.97C1B9D321@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=09a1a10f4828be8a76cf2b9c6aa6a401a6dbcfc5
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2014-07-30 21:58 +0200, Thomas De Schampheleire spake thusly:
-> In analogy of linux.mk, only enable its targets (in particular the kconfig
-> targets (menuconfig, update-config, ...) when the uclibc package is actually
-> enabled.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Add a new config option that allows to specify a list of files
+to dump symbols from, and generate a database of symbols, in
+stagins/usr/share/google-breakpad/.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
+[yann.morin.1998 at free.fr: add dependency on the host variant; fix
+ script; add commit log]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Thomas: remove leftover debugging, rewrap Config.in help text,
+propagate dependencies correctly.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in                                  |   33 +++++++++++++++++++++++++++
+ package/google-breakpad/gen-syms.sh        |   34 ++++++++++++++++++++++++++++
+ package/google-breakpad/google-breakpad.mk |    9 +++++++
+ 3 files changed, 76 insertions(+), 0 deletions(-)
 
-> ---
-> v2: rebase after making kconfig-package a full infra
-> 
-> Note: now that kconfig-package is a full package infra (inheriting from
-> generic-package) this may seem a bit odd, as other packages do not do this.
-> Nevertheless, it does not hurt and will slightly improve the parsing of the
-> Makefiles when the package is not selected.
-> 
->  package/uclibc/uclibc.mk |  2 ++
->  1 files changed, 2 insertions(+), 0 deletions(-)
-> 
-> diff -r 083076145a2b -r 540167f28c2d package/uclibc/uclibc.mk
-> --- a/package/uclibc/uclibc.mk	Tue Jul 22 20:35:36 2014 +0200
-> +++ b/package/uclibc/uclibc.mk	Wed Jul 23 20:12:32 2014 +0200
-> @@ -539,7 +539,9 @@
->  	$(UCLIBC_INSTALL_UTILS_STAGING)
->  endef
->  
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_UCLIBC),y)
->  $(eval $(kconfig-package))
-> +endif
->  
->  # Before uClibc is built, we must have the second stage cross-compiler
->  $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/Config.in b/Config.in
+index dd8073d..14ff55b 100644
+--- a/Config.in
++++ b/Config.in
+@@ -484,6 +484,39 @@ config BR2_OPTIMIZE_S
+ 
+ endchoice
+ 
++config BR2_GOOGLE_BREAKPAD_ENABLE
++	bool "Enable google-breakpad support"
++	select BR2_PACKAGE_GOOGLE_BREAKPAD
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_PACKAGE_GOOGLE_BREAKPAD_ARCH_SUPPORTS
++	help
++	  This option will enable the use of google breakpad, a
++	  library and tool suite that allows you to distribute an
++	  application to users with compiler-provided debugging
++	  information removed, record crashes in compact "minidump"
++	  files, send them back to your server and produce C and C++
++	  stack traces from these minidumps.  Breakpad can also write
++	  minidumps on request for programs that have not crashed.
++
++if BR2_GOOGLE_BREAKPAD_ENABLE
++
++config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
++	string "List of executables and libraries to extract symbols from"
++	default ""
++	help
++	  You may specify a space-separated list of binaries and
++	  libraries with full paths relative to $(TARGET_DIR) of which
++	  debug symbols will be dumped for further use with google
++	  breakpad.
++
++	  A directory structure that can be used by minidump-stackwalk
++	  will be created at:
++
++	  $(STAGING_DIR)/usr/share/google-breakpad-symbols
++
++endif
++
+ config BR2_ENABLE_SSP
+ 	bool "build code with Stack Smashing Protection"
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
+new file mode 100755
+index 0000000..2bc0afa
+--- /dev/null
++++ b/package/google-breakpad/gen-syms.sh
+@@ -0,0 +1,34 @@
++#!/bin/sh
++NAME="${0##*/}"
++STAGING_DIR="${1}"
++TARGET_DIR="${2}"
++shift 2
++
++SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
++rm -rf "${SYMBOLS_DIR}"
++mkdir -p "${SYMBOLS_DIR}"
++
++error() {
++    fmt="${1}"; shift
++    printf "%s: ${fmt}" "${NAME}" "${@}" >&2
++    exit 1
++}
++
++for FILE in ${@}; do
++    f="${TARGET_DIR}${FILE}"
++    if [ ! -e "${f}" ]; then
++        error "%s: No such file or directory\n" "${FILE}"
++    fi
++	if [ -d "${f}" ]; then
++		error "%s: Is a directory\n" "${FILE}"
++	fi
++	if dump_syms "${f}" > "${SYMBOLS_DIR}/tmp.sym" 2>/dev/null; then
++		hash=$(head -n1 "${SYMBOLS_DIR}/tmp.sym" | cut -d ' ' -f 4);
++		filename=$(basename "${FILE}");
++		mkdir -p "${SYMBOLS_DIR}/${filename}/${hash}"
++		mv "${SYMBOLS_DIR}/tmp.sym" "${SYMBOLS_DIR}/${filename}/${hash}/${filename}.sym";
++	else
++		error "Error dumping symbols for: '%s'\n" "${FILE}"
++	fi
++done
++rm -rf "${SYMBOLS_DIR}/tmp"
+diff --git a/package/google-breakpad/google-breakpad.mk b/package/google-breakpad/google-breakpad.mk
+index bf857ba..add5d7a 100644
+--- a/package/google-breakpad/google-breakpad.mk
++++ b/package/google-breakpad/google-breakpad.mk
+@@ -14,5 +14,14 @@ GOOGLE_BREAKPAD_INSTALL_STAGING = YES
+ GOOGLE_BREAKPAD_LICENSE = BSD-3c
+ GOOGLE_BREAKPAD_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BR2_PACKAGE_GOOGLE_BREAKPAD),y)
++GOOGLE_BREAKPAD_DEPENDENCIES = host-google-breakpad
++define GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
++	$(EXTRA_ENV) package/google-breakpad/gen-syms.sh $(STAGING_DIR) \
++		$(TARGET_DIR) $(call qstrip,$(BR2_GOOGLE_BREAKPAD_INCLUDE_FILES))
++endef
++TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
