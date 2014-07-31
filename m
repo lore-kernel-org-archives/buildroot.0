@@ -1,54 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 19:28:42 +0200
-Subject: [Buildroot] [PATCH v3 2/3] apply-patches.sh: Use [[...]]
- construct instead of [...] construct
-In-Reply-To: <00392aed-ce27-4eea-985b-75f06f79e0d7@email.android.com>
-References: <1406826517-6106-1-git-send-email-fabio.porcedda@gmail.com>
- <1406826517-6106-3-git-send-email-fabio.porcedda@gmail.com>
- <00392aed-ce27-4eea-985b-75f06f79e0d7@email.android.com>
-Message-ID: <20140731172842.GE3960@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 31 Jul 2014 17:38:30 +0000 (UTC)
+Subject: [Buildroot] [Bug 7286] systemd 215 doesn't build
+In-Reply-To: <bug-7286-163@https.bugs.busybox.net/>
+References: <bug-7286-163@https.bugs.busybox.net/>
+Message-ID: <20140731173830.23B469D342@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+https://bugs.busybox.net/show_bug.cgi?id=7286
 
-On 2014-07-31 19:19 +0200, Thomas De Schampheleire spake thusly:
-> Fabio Porcedda <fabio.porcedda@gmail.com> schreef:
-> >The [[...]] construct it's an improved and safer construct than the
-> >[...] construct. It's safer because it doesn't do "word splitting" so
-> >we don't need to enclose variable expansion with double quotes, e.g:
-> >
-> >   [ -e "$file" ] -> [[ -e $file ]]
-> >---
-> 
-> 
-> I'm not so convinced by this patch. [[]] is a bashism, it is not
->  supported in all shells. 
+--- Comment #5 from Eric Le Bihan <eric.le.bihan.dev@free.fr> 2014-07-31 17:38:29 UTC ---
+The build fails because systemd is configured with the --enable-compat-libs
+option.
+This option has been added because since systemd 209, some libraries have been
+merged into libsystemd.so:
 
-Well, apply-patches is  bash script (it has the correct sha-bang.)
-But it is almost POSIX. The only bashism currently used is the
-'function' keyword to declare functions. REmove this, and we have a
-POSIX script.
+ - libsystemd-daemon.so
+ - libsystemd-id128.so
+ - libsystemd-journal.so
+ - libsystemd-login.so
 
-> Yes, using single brackets means that you need to take care, 
-> but anyway shell programming has many pitfalls.
-> 
-> In the past people have sent patches to make Buildroot 
-> more compatible with non-bash shells, so moving in the opposite
->  direction is not a good idea IMO.
+When this option is enabled, the deprecated libraries will be built, so
+external programs, which depend on them and have not yet migrated to
+libsystemd, can still compile. But these libs will refer to the parts used to
+build libsystemd.
 
-Agreed. Besides, the gains from that change are not worth it, IMHO.
+For example, if we look at libsystemd-journal.so, we can see that is built from
+libsystemd-journal.c. This file is generated from:
 
-Regards,
-Yann E. MORIN.
+- src/compat-libs/linkwarning.h
+- src/compat-libs/libsystemd-journal.sym
+
+Via some macros in linkwarning.h the symbols will be compiled as an unallocated
+section and linking to them will cause a warning to be printed.
+
+From the build log, we can see that GCC complains the symbol is being defined
+twice:
+
+{{
+/tmp/ccEK7EwW.ltrans13.ltrans.o: In function `sd_journal_reliable_fd':
+ccEK7EwW.ltrans13.o:(.text+0x784): multiple definition of
+`sd_journal_reliable_fd'
+libsystemd_journal_internal_la-sd-journal.o (symbol from plugin):(.text+0x0):
+first defined here
+}}
+
+In the attached Buildroot config file, we have "BR2_OPTIMIZE_2=y", which adds
+"-Wp,-D_FORTIFY_SOURCE=2" to CPPFLAGS and "-flto -ffat-lto-objects" to CFLAGS.
+
+I tried the attached configuration with ccache disabled and "BR2_OPTIMIZE_S=y",
+which cause the aforementioned options to be dropped, and the build is
+successful.
+
+In the configure script, there is a check for these options, but it seems to
+only print a warning message...
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
