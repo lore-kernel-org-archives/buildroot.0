@@ -1,77 +1,74 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 31 Jul 2014 07:54:51 -0500
-Subject: [Buildroot] [PATCH 0 of 7] Introduction of kconfig-package
-	infrastructure
-In-Reply-To: <1141785278.21136820.1406794808628.JavaMail.root@openwide.fr>
-References: <CAAXf6LWQWWkXt-MaUwQkhYORMOxXCEgWy14epVieZBcBteCEBg@mail.gmail.com>
- <1141785278.21136820.1406794808628.JavaMail.root@openwide.fr>
-Message-ID: <CANQCQpZKBkLMpC8RXiqkzdF83CS6FK+VLx5nJWq0Wv+quv1SoQ@mail.gmail.com>
+From: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Date: Thu, 31 Jul 2014 17:24:42 +0400
+Subject: [Buildroot] [PATCH v2 1/9] toolchain: Add config option for atomic
+	intrinsics
+In-Reply-To: <20140730084548.05bd6dec@free-electrons.com>
+References: <20140730084548.05bd6dec@free-electrons.com>
+Message-ID: <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jeremy,
+GCC has several builtin functions that implement atomic operations. Those
+functions are architecture specific and may not be implemented by the
+specific toolchain. In case of GCC for ARC those functions rely on
+LLOCK/SCOND instructions which are optional in ARC CPU's. If ARC CPU doesn't
+support those instructions but software tries to use them, then application
+will be aborted with Illegal instruction exception. To avoid confusion user
+should first specify that their CPU supports atomic extension, which will
+allow selection of packages that use builtin atomic functions.
 
-On Thu, Jul 31, 2014 at 3:20 AM, Jeremy Rosen <jeremy.rosen@openwide.fr> wrote:
->
-> ----- Mail original -----
->> Hi Jeremy,
->>
->> On Thu, Jul 31, 2014 at 8:57 AM, Jeremy Rosen
->> <jeremy.rosen@openwide.fr> wrote:
->> >
->> > Quick question... is it possible to relocate the .config file
->> > elsewhere using env variables ? I am still on my quest to move
->> > all project specific files (i.e configuration files) out of the
->> > buildroot directory to be able to build a buildroot project
->> > without touching the main buildroot directory...
->>
->> Do you really mean the .config file (the destination file) or do you
->> mean the file that contains the starting configuration, and that may
->> be updated with foo-update-config ?
->>
->
-> I don't like the way you have to separately save your kernel configuration
-> after editing it (update after menuconfig) i'd rather not have to do
-> that, but that's the general buildroot philosophy, so i'll follow it
->
-> so yes, what I want is the config file that will eventually be used
-> by buildroot.
->
->
->> For the latter, individual packages provide config options for this,
->> for example uclibc and busybox do. You can specify UCLIBC_CONFIG_FILE
->> on the command line to overwrite it, similarly for
->> BUSYBOX_CONFIG_FILE.
->>
->
-> If these are overloadable from the command line, I should be good, thx
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+---
+ arch/Config.in.arc            | 5 +++++
+ package/Makefile.in           | 4 ++++
+ toolchain/toolchain-common.in | 4 ++++
+ 3 files changed, 13 insertions(+)
 
-Another option might be to use the BR2_EXTERNAL concept to
-config manage your customization(s) outside of the main buildroot directory.
-
-http://buildroot.uclibc.org/downloads/manual/manual.html#outside-br-custom
-
->
->> Best regards,
->> Thomas
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 60b59f0..836cfef 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,3 +1,8 @@
++# Choise of atomic instructions presence
++config BR2_ARC_ATOMIC_EXT
++	bool "Atomic extension (LLOCK/SCOND instructions)"
++	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+ 	default "arceb"	if BR2_arceb
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 02f6e3d..106a04c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -102,6 +102,10 @@ ifeq ($(BR2_xtensa),y)
+ TARGET_ABI += -mlongcalls -mtext-section-literals
+ endif
+ 
++ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
++TARGET_ABI += -matomic
++endif
++
+ STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+ STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
+ 
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 13de9e5..f9cb7cf 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -44,6 +44,10 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
+ 
++config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++	bool
++	default y if !BR2_arc
++
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
 -- 
-Matthew L Weber / Sr Software Engineer / Platform Software
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-Phone: 319-295-7349
-matthew.weber at rockwellcollins.com
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+1.8.4.1
