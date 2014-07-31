@@ -1,57 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Jul 2014 02:16:46 +0200
-Subject: [Buildroot] [PATCH 11/14 v4] [RFC] package/libinput: needs libudev,
+Date: Thu, 31 Jul 2014 02:16:49 +0200
+Subject: [Buildroot] [PATCH 14/14 v4] [RFC] package/weston: needs libudev,
 	not a udev daemon
 In-Reply-To: <cover.1406765723.git.yann.morin.1998@free.fr>
 References: <cover.1406765723.git.yann.morin.1998@free.fr>
-Message-ID: <273410357b70e8cb7ec690b8b47fddc6799f3ea8.1406765723.git.yann.morin.1998@free.fr>
+Message-ID: <7c0186b47197d4a84da80e789a03c70e0cf5b3c1.1406765723.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libinput is happy enough with just a libudev, and does
+weston is happy enough with just a libudev, and does
 not require a udev daemon.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/libinput/Config.in   | 6 +++---
- package/libinput/libinput.mk | 2 +-
+ package/weston/Config.in | 6 +++---
+ package/weston/weston.mk | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libinput/Config.in b/package/libinput/Config.in
-index 14e4e70..a958e37 100644
---- a/package/libinput/Config.in
-+++ b/package/libinput/Config.in
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index aaef405..8e387ca 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
 @@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBINPUT
- 	bool "libinput"
+-comment "weston needs udev and a toolchain w/ threads, headers >= 3.0"
++comment "weston needs a toolchain w/ threads, headers >= 3.0"
+ 	depends on !BR2_avr32
+-	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_WESTON
+ 	select BR2_PACKAGE_LIBPNG
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_MTDEV
 -	depends on BR2_PACKAGE_HAS_UDEV
 +	depends on BR2_PACKAGE_HAS_LIBUDEV
- 	select BR2_PACKAGE_LIBEVDEV
- 	select BR2_PACKAGE_MTDEV
- 	help
-@@ -13,5 +13,5 @@ config BR2_PACKAGE_LIBINPUT
+ 	depends on !BR2_avr32 # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index ed0707b..c1d023a 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -11,7 +11,7 @@ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
  
- 	  http://freedesktop.org/wiki/Software/libinput/
+ WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
+-	jpeg mtdev udev cairo
++	jpeg mtdev libudev cairo
  
--comment "libinput needs udev /dev management"
--	depends on !BR2_PACKAGE_HAS_UDEV
-+comment "libinput needs a libudev provider to be selected"
-+	depends on !BR2_PACKAGE_HAS_LIBUDEV
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index b52101a..3f225cc 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -10,7 +10,7 @@ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_LICENSE = MIT
- LIBINPUT_LICENSE_FILES = COPYING
- 
--LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-+LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev libudev
- LIBINPUT_INSTALL_STAGING = YES
- 
- # Tests need fork, so just disable them everywhere.
+ WESTON_CONF_OPT = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
 -- 
 1.9.1
