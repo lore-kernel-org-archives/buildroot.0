@@ -1,159 +1,102 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 01 Aug 2014 21:53:44 +0200
-Subject: [Buildroot] [PATCH 2 of 5 v3] infra: introduce a kconfig-package
-	infrastructure
+Date: Fri, 01 Aug 2014 21:53:45 +0200
+Subject: [Buildroot] [PATCH 3 of 5 v3] manual: add documentation for
+	kconfig-package
 In-Reply-To: <patchbomb.1406922822@localhost>
 References: <patchbomb.1406922822@localhost>
-Message-ID: <e56a7788b2d0501d2503.1406922824@localhost>
+Message-ID: <fa937f090303aa695ae6.1406922825@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are several packages that have a configuration file managed by
-kconfig: uclibc, busybox, linux and barebox. All these packages need some
-make targets to handle the kconfig specificities: creating a configuration
-(menuconfig, ...) and saving it back (update-config, ...)
+This patch adds documentation for the new kconfig-package infrastructure to
+the manual.
 
-These targets should be the same for each of these packages, but
-unfortunately they are not. Especially with respect to saving back the
-configuration to the original config file, there are many differences.
-
-A previous set of patches fixed these targets for the uclibc package.
-This patch extracts these targets into a common kconfig-package
-infrastructure, with the goals of:
-- aligning the behavior of all kconfig-based packages
-- removing code duplication
-
-In order to use this infrastructure, a package should at a minimum specify
-FOO_KCONFIG_FILE and eval the kconfig-package macro. The supported
-configuration editors can be set with FOO_KCONFIG_EDITORS and defaults to
-menuconfig only.
-Additionally, a package can specify FOO_KCONFIG_OPT for extra options to
-pass to the invocation of the kconfig editors, and FOO_KCONFIG_FIXUP_CMDS
-for a list of shell commands used to fixup the .config file after a
-configuration has been created/edited.
+Note that due to the simplicity of the infrastructure, the documentation
+is not split in a 'tutorial' and a 'reference', like for the other
+infrastructures. Instead, the usage is described in one section.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-v3:
-- let menuconfig depend on the fixup rule, rather than on .config only
-  (Yann)
-v2:
-- fold comments into this patch
-- inherit from generic-package instead of sitting alongside of it (ThomasP)
+v3: update based on Yann's comments
+v2: update after move to a real infrastructure
 
-Notes:
+ docs/manual/adding-packages-kconfig.txt |  56 +++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt         |   2 +
+ 2 files changed, 58 insertions(+), 0 deletions(-)
 
-- the issue with MAKE_OPT vs MAKE_OPTS has been worked around currently
-by not relying on any MAKE_OPT(S) but instead requiring the package to add
-the necessary variable to FOO_KCONFIG_OPT.
-However, I still believe we should create a consistent set here, either
-MAKE_OPT or MAKE_OPTS, and the same for CONFIGURE_OPT(S), but this is now no
-longer related to the introduction of kconfig-package.
-
-- the targets in this patch are sufficient to handle uclibc and busybox.
-For linux and barebox, some changes will be needed, but for clarity this
-will be added later.
-
-
- package/Makefile.in    |   1 +
- package/pkg-kconfig.mk |  80 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 81 insertions(+), 0 deletions(-)
-
-diff -r 8fc7b26a4914 -r e56a7788b2d0 package/Makefile.in
---- a/package/Makefile.in	Fri Aug 01 21:22:29 2014 +0200
-+++ b/package/Makefile.in	Mon Jun 30 21:08:13 2014 +0200
-@@ -390,3 +390,4 @@
- include package/pkg-python.mk
- include package/pkg-virtual.mk
- include package/pkg-generic.mk
-+include package/pkg-kconfig.mk
-diff -r 8fc7b26a4914 -r e56a7788b2d0 package/pkg-kconfig.mk
+diff -r e56a7788b2d0 -r fa937f090303 docs/manual/adding-packages-kconfig.txt
 --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-+++ b/package/pkg-kconfig.mk	Mon Jun 30 21:08:13 2014 +0200
-@@ -0,0 +1,82 @@
-+################################################################################
-+# Kconfig package infrastructure
-+#
-+# This file implements an infrastructure that eases development of
-+# package .mk files for packages that use kconfig for configuration files.
-+# It is based on the generic-package infrastructure, and inherits all of its
-+# features.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure.
-+#
-+################################################################################
++++ b/docs/manual/adding-packages-kconfig.txt	Thu Jul 24 20:54:50 2014 +0200
+@@ -0,0 +1,56 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+################################################################################
-+# inner-kconfig-package -- generates the make targets needed to support a
-+# kconfig package
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
++=== Infrastructure for packages using kconfig for configuration files
 +
-+define inner-kconfig-package
++A popular way for a software package to handle user-specified
++configuration is +kconfig+. Among others, it is used by the Linux
++kernel, Busybox, and Buildroot itself. The presence of a .config file
++and a +menuconfig+ target are two well-known symptoms of kconfig being
++used.
 +
-+# Call the generic package infrastructure to generate the necessary
-+# make targets.
-+# Note: this must be done _before_ attempting to use $$($(2)_DIR) in a
-+# dependency expression
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
++Buildroot features an infrastructure for packages that use kconfig for
++their configuration. This infrastructure provides the necessary logic to
++expose the package's +menuconfig+ target as +foo-menuconfig+ in
++Buildroot, and to handle the copying back and forth of the configuration
++file in a correct way.
 +
-+# Default values
++The +kconfig-package+ infrastructure is based on the +generic-package+
++infrastructure. All variables supported by +generic-package+ are
++available in +kconfig-package+ as well. See
++xref:generic-package-reference[] for more details.
 +
-+$(2)_KCONFIG_EDITORS ?= menuconfig
-+$(2)_KCONFIG_OPT ?=
-+$(2)_KCONFIG_FIXUP_CMDS ?=
++In order to use the +kconfig-package+ infrastructure for a Buildroot
++package, the minimally required lines in the +.mk+ file, in addition to
++the variables required by the +generic-package+ infrastructure, are:
 +
-+# FOO_KCONFIG_FILE is required
++------------------------------
++FOO_KCONFIG_FILE = reference-to-source-configuration-file
 +
-+ifndef $(2)_KCONFIG_FILE
-+$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
-+endif
++$(eval $(kconfig-package))
++------------------------------
 +
-+# The .config file is obtained by copying it from the specified source
-+# configuration file, after the package has been patched.
++This snippet creates the following make targets:
 +
-+$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) | $(1)-patch
-+	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
++* +foo-menuconfig+, which calls the package's +menuconfig+ target
 +
-+# In order to get a usable, consistent configuration, some fixup may be needed.
-+# The exact rules are specified by the package .mk file.
++* +foo-update-config+, which copies back the configuration to the source
++  configuration file.
 +
-+$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
-+	$$($(2)_KCONFIG_FIXUP_CMDS)
-+	$$(Q)touch $$@
++and ensures that the source configuration file is copied to the build
++directory at the right moment.
 +
-+# Before running configure, the configuration file should be present and fixed
++In addition to these minimally required lines, several optional variables can
++be set to suit the needs of the package under consideration:
 +
-+$$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
++* +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
++  support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
 +
-+# Configuration editors (menuconfig, ...)
++* +FOO_KCONFIG_OPT+: extra options to pass when calling the kconfig
++  ediftors. This may need to include '$(FOO_MAKE_OPT)', for example. By
++  default, empty.
 +
-+$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-+		$$($(2)_KCONFIG_OPT) $$(subst $(1)-,,$$@)
-+	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
-+	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
++* +FOO_KCONFIG_FIXUP_CMDS+: a list of shell commands needed to fixup the
++  configuration file after copying it or running a kconfig editor. Such
++  commands may be needed to ensure a configuration consistent with other
++  configuration of Buildroot, for example. By default, empty.
+diff -r e56a7788b2d0 -r fa937f090303 docs/manual/adding-packages.txt
+--- a/docs/manual/adding-packages.txt	Mon Jun 30 21:08:13 2014 +0200
++++ b/docs/manual/adding-packages.txt	Thu Jul 24 20:54:50 2014 +0200
+@@ -25,6 +25,8 @@
+ 
+ include::adding-packages-virtual.txt[]
+ 
++include::adding-packages-kconfig.txt[]
 +
-+# Target to copy back the configuration to the source configuration file
-+
-+$(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
-+	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
-+
-+endef # inner-kconfig-package
-+
-+################################################################################
-+# kconfig-package -- the target generator macro for kconfig packages
-+################################################################################
-+
-+kconfig-package = $(call inner-kconfig-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)))
+ include::adding-packages-hooks.txt[]
+ 
+ include::adding-packages-gettext.txt[]
