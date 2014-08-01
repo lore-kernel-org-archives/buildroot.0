@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Aug 2014 23:30:36 +0200
-Subject: [Buildroot] [PATCH v16 1/3] xbmc: Add X.org/OpenGL support
-In-Reply-To: <1406914359-31106-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 1 Aug 2014 23:31:14 +0200
+Subject: [Buildroot] [PATCH v16 2/3] xbmc: Add option for Goom
+	screensaver
+In-Reply-To: <1406914359-31106-3-git-send-email-bernd.kuhls@t-online.de>
 References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
- <1406914359-31106-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140801213036.GE3778@free.fr>
+ <1406914359-31106-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140801213114.GF3778@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,54 +15,62 @@ To: buildroot@busybox.net
 Bernd, All,
 
 On 2014-08-01 19:32 +0200, Bernd Kuhls spake thusly:
-> - on ARM xbmc only supports EGL/GLES
->   https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L695
-> - rsxs depends on OpenGL
->   https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1469
->   so include a compile fix, courtesy of
->   https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/xbmc/package.mk#L109
-> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-I however have one comment, see below...
-
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index c3b0d71..c868b59 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-[--SNIP--]
-> @@ -88,6 +83,32 @@ else
->  XBMC_CONF_OPT += --disable-libmp3lame
->  endif
->  
-> +# quote from xbmc/configure.in: "GLES overwrites GL if both set to yes."
-> +# we choose the opposite because opengl offers more features, like libva support
-> +ifeq ($(BR2_PACKAGE_XBMC_GL),y)
-> +XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
-> +	xlib_libXmu xlib_libXrandr xlib_libXt
-> +XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
-> +# fix rsxs compile
-> +# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
-> +XBMC_CONF_ENV += \
-> +	jm_cv_func_gettimeofday_clobber=no \
-> +	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
-> +	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
-> +	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
-> +	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
-> +	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
-> +XBMC_CONF_OPT += --enable-rsxs
-> +else
-> +XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
-
-We currently do not disable rsxs, and XBMC builds just fine on the RPi.
-However, we remove it from the rootfs as a post-install hook.
-
-What's the problem with rsxs on EGL/GLES?
-
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/xbmc/Config.in |    9 +++++++++
+>  package/xbmc/xbmc.mk   |    6 ++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
+> index 04bc86f..6a00531 100644
+> --- a/package/xbmc/Config.in
+> +++ b/package/xbmc/Config.in
+> @@ -128,6 +128,15 @@ config BR2_PACKAGE_XBMC_LIBBLURAY
+>  comment "libbluray support needs a toolchain w/ dynamic library"
+>  	depends on BR2_PREFER_STATIC_LIB
+>  
+> +config BR2_PACKAGE_XBMC_GOOM
+> +	bool "goom screensaver"
+> +	depends on BR2_PACKAGE_XBMC_GL
+> +	help
+> +	  Enable goom screensaver
+> +
+> +comment "goom needs an OpenGL backend"
+> +	depends on !BR2_PACKAGE_XBMC_GL
+> +
+>  config BR2_PACKAGE_XBMC_LIBCEC
+>  	bool "hdmi cec"
+>  	depends on !BR2_PREFER_STATIC_LIB # libcec
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index c868b59..920d731 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+> @@ -109,6 +109,12 @@ XBMC_CONF_OPT += --disable-gles
+>  endif
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
+> +XBMC_CONF_OPT += --enable-goom
+> +else
+> +XBMC_CONF_OPT += --disable-goom
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
+>  XBMC_DEPENDENCIES += libusb-compat
+>  XBMC_CONF_OPT += --enable-libusb
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
