@@ -1,114 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Aug 2014 22:50:50 +0200
-Subject: [Buildroot] [PATCH 3 of 5 v3] manual: add documentation for
-	kconfig-package
-In-Reply-To: <fa937f090303aa695ae6.1406922825@localhost>
-References: <patchbomb.1406922822@localhost>
- <fa937f090303aa695ae6.1406922825@localhost>
-Message-ID: <20140801205050.GD3778@free.fr>
+Date: Fri, 1 Aug 2014 23:30:36 +0200
+Subject: [Buildroot] [PATCH v16 1/3] xbmc: Add X.org/OpenGL support
+In-Reply-To: <1406914359-31106-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
+ <1406914359-31106-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140801213036.GE3778@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Bernd, All,
 
-On 2014-08-01 21:53 +0200, Thomas De Schampheleire spake thusly:
-> This patch adds documentation for the new kconfig-package infrastructure to
-> the manual.
+On 2014-08-01 19:32 +0200, Bernd Kuhls spake thusly:
+> - on ARM xbmc only supports EGL/GLES
+>   https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L695
+> - rsxs depends on OpenGL
+>   https://github.com/xbmc/xbmc/blob/Gotham/configure.in#L1469
+>   so include a compile fix, courtesy of
+>   https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/mediacenter/xbmc/package.mk#L109
 > 
-> Note that due to the simplicity of the infrastructure, the documentation
-> is not split in a 'tutorial' and a 'reference', like for the other
-> infrastructures. Instead, the usage is described in one section.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+I however have one comment, see below...
+
+> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+> index c3b0d71..c868b59 100644
+> --- a/package/xbmc/xbmc.mk
+> +++ b/package/xbmc/xbmc.mk
+[--SNIP--]
+> @@ -88,6 +83,32 @@ else
+>  XBMC_CONF_OPT += --disable-libmp3lame
+>  endif
+>  
+> +# quote from xbmc/configure.in: "GLES overwrites GL if both set to yes."
+> +# we choose the opposite because opengl offers more features, like libva support
+> +ifeq ($(BR2_PACKAGE_XBMC_GL),y)
+> +XBMC_DEPENDENCIES += libglew libglu libgl sdl_image xlib_libX11 xlib_libXext \
+> +	xlib_libXmu xlib_libXrandr xlib_libXt
+> +XBMC_CONF_OPT += --enable-gl --enable-sdl --enable-x11 --enable-xrandr --disable-gles
+> +# fix rsxs compile
+> +# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
+> +XBMC_CONF_ENV += \
+> +	jm_cv_func_gettimeofday_clobber=no \
+> +	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
+> +	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
+> +	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
+> +	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
+> +	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
+> +XBMC_CONF_OPT += --enable-rsxs
+> +else
+> +XBMC_CONF_OPT += --disable-gl --disable-rsxs --disable-sdl --disable-x11 --disable-xrandr
+
+We currently do not disable rsxs, and XBMC builds just fine on the RPi.
+However, we remove it from the rootfs as a post-install hook.
+
+What's the problem with rsxs on EGL/GLES?
+
 Regards,
 Yann E. MORIN.
-
-> ---
-> v3: update based on Yann's comments
-> v2: update after move to a real infrastructure
-> 
->  docs/manual/adding-packages-kconfig.txt |  56 +++++++++++++++++++++++++++++
->  docs/manual/adding-packages.txt         |   2 +
->  2 files changed, 58 insertions(+), 0 deletions(-)
-> 
-> diff -r e56a7788b2d0 -r fa937f090303 docs/manual/adding-packages-kconfig.txt
-> --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
-> +++ b/docs/manual/adding-packages-kconfig.txt	Thu Jul 24 20:54:50 2014 +0200
-> @@ -0,0 +1,56 @@
-> +// -*- mode:doc; -*-
-> +// vim: set syntax=asciidoc:
-> +
-> +=== Infrastructure for packages using kconfig for configuration files
-> +
-> +A popular way for a software package to handle user-specified
-> +configuration is +kconfig+. Among others, it is used by the Linux
-> +kernel, Busybox, and Buildroot itself. The presence of a .config file
-> +and a +menuconfig+ target are two well-known symptoms of kconfig being
-> +used.
-> +
-> +Buildroot features an infrastructure for packages that use kconfig for
-> +their configuration. This infrastructure provides the necessary logic to
-> +expose the package's +menuconfig+ target as +foo-menuconfig+ in
-> +Buildroot, and to handle the copying back and forth of the configuration
-> +file in a correct way.
-> +
-> +The +kconfig-package+ infrastructure is based on the +generic-package+
-> +infrastructure. All variables supported by +generic-package+ are
-> +available in +kconfig-package+ as well. See
-> +xref:generic-package-reference[] for more details.
-> +
-> +In order to use the +kconfig-package+ infrastructure for a Buildroot
-> +package, the minimally required lines in the +.mk+ file, in addition to
-> +the variables required by the +generic-package+ infrastructure, are:
-> +
-> +------------------------------
-> +FOO_KCONFIG_FILE = reference-to-source-configuration-file
-> +
-> +$(eval $(kconfig-package))
-> +------------------------------
-> +
-> +This snippet creates the following make targets:
-> +
-> +* +foo-menuconfig+, which calls the package's +menuconfig+ target
-> +
-> +* +foo-update-config+, which copies back the configuration to the source
-> +  configuration file.
-> +
-> +and ensures that the source configuration file is copied to the build
-> +directory at the right moment.
-> +
-> +In addition to these minimally required lines, several optional variables can
-> +be set to suit the needs of the package under consideration:
-> +
-> +* +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
-> +  support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
-> +
-> +* +FOO_KCONFIG_OPT+: extra options to pass when calling the kconfig
-> +  ediftors. This may need to include '$(FOO_MAKE_OPT)', for example. By
-> +  default, empty.
-> +
-> +* +FOO_KCONFIG_FIXUP_CMDS+: a list of shell commands needed to fixup the
-> +  configuration file after copying it or running a kconfig editor. Such
-> +  commands may be needed to ensure a configuration consistent with other
-> +  configuration of Buildroot, for example. By default, empty.
-> diff -r e56a7788b2d0 -r fa937f090303 docs/manual/adding-packages.txt
-> --- a/docs/manual/adding-packages.txt	Mon Jun 30 21:08:13 2014 +0200
-> +++ b/docs/manual/adding-packages.txt	Thu Jul 24 20:54:50 2014 +0200
-> @@ -25,6 +25,8 @@
->  
->  include::adding-packages-virtual.txt[]
->  
-> +include::adding-packages-kconfig.txt[]
-> +
->  include::adding-packages-hooks.txt[]
->  
->  include::adding-packages-gettext.txt[]
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
