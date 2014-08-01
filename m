@@ -1,38 +1,35 @@
-From: Pascal Huerst <pascal.huerst@gmail.com>
-Date: Fri, 01 Aug 2014 11:19:06 +0200
-Subject: [Buildroot] [PATCH v9] google-breakpad: integration into
- Makefile and Config.in
-In-Reply-To: <20140731214108.GP3960@free.fr>
-References: <1406837335-9696-1-git-send-email-yann.morin.1998@free.fr>
- <20140731231521.3242d944@free-electrons.com> <20140731214108.GP3960@free.fr>
-Message-ID: <53DB5B8A.8030901@gmail.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Fri,  1 Aug 2014 11:27:23 +0200
+Subject: [Buildroot] [PATCH 1/1] libmemcached: unification of name
+	<PKG>_VERSION_MAJOR variable
+Message-ID: <1406885243-21453-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Yann, Thomas, all
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+---
+ package/libmemcached/libmemcached.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On 31.07.2014 23:41, Yann E. MORIN wrote:
-> Thomas, Pascal, All,
-> 
-> On 2014-07-31 23:15 +0200, Thomas Petazzoni spake thusly:
->> (Adding Pascal in Cc.)
-> 
-> He was in the list of recipients when I sent the mail. It's just the
-> list dropping recipients once again... :-/
-> 
->> A special thanks to Pascal for his persistence
->> to get this feature merged, despite our numerous requests to adjust the
->> implementation.
-> 
-> Yep! Thanks! :-)
-
-Thanks you guys, for the support and the patience. I'm happy it's done
-for now. I'll send in a patch with a version bump, as soon as the fix
-for make install  (https://breakpad.appspot.com/1114002/) is upstream
-
-> Regards,
-> Yann E. MORIN.
-> 
+diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
+index fd5b418..070951a 100644
+--- a/package/libmemcached/libmemcached.mk
++++ b/package/libmemcached/libmemcached.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBMEMCACHED_MAJOR_VERSION = 1.0
+-LIBMEMCACHED_VERSION = $(LIBMEMCACHED_MAJOR_VERSION).18
+-LIBMEMCACHED_SITE = http://launchpad.net/libmemcached/$(LIBMEMCACHED_MAJOR_VERSION)/$(LIBMEMCACHED_VERSION)/+download
++LIBMEMCACHED_VERSION_MAJOR = 1.0
++LIBMEMCACHED_VERSION = $(LIBMEMCACHED_VERSION_MAJOR).18
++LIBMEMCACHED_SITE = http://launchpad.net/libmemcached/$(LIBMEMCACHED_VERSION_MAJOR)/$(LIBMEMCACHED_VERSION)/+download
+ LIBMEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ LIBMEMCACHED_CONF_OPT = --disable-dtrace
+ LIBMEMCACHED_INSTALL_STAGING = YES
+-- 
+1.7.9.5
