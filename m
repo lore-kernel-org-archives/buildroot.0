@@ -1,30 +1,46 @@
-From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri,  1 Aug 2014 11:27:51 +0200
-Subject: [Buildroot] [PATCH 1/1] atk: bump to version 2.12.0
-Message-ID: <1406885271-21533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+Date: Fri, 1 Aug 2014 15:53:18 +0530
+Subject: [Buildroot] [PATCH] gnuplot: libgd linking against libpthread
+Message-ID: <1406888598-2546-1-git-send-email-yuvaraj.patil@wipro.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
----
- package/atk/atk.mk |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+When gnuplot is linked, pass -lpthread agrument to link
+libgd against libpthread when the support for gd is enabled.
 
-diff --git a/package/atk/atk.mk b/package/atk/atk.mk
-index 9ccdd22..46a097d 100644
---- a/package/atk/atk.mk
-+++ b/package/atk/atk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATK_VERSION_MAJOR = 2.10
-+ATK_VERSION_MAJOR = 2.12
- ATK_VERSION = $(ATK_VERSION_MAJOR).0
- ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
- ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+fixes:
+http://autobuild.buildroot.net/results/f62/f62f29619d4dbf3264a4243ef6cd89f9a8d73140//
+
+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
+---
+ ...nuplot-0003-link-libgd-against-libpthread.patch |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+ create mode 100644 package/gnuplot/gnuplot-0003-link-libgd-against-libpthread.patch
+
+diff --git a/package/gnuplot/gnuplot-0003-link-libgd-against-libpthread.patch b/package/gnuplot/gnuplot-0003-link-libgd-against-libpthread.patch
+new file mode 100644
+index 0000000..6447f48
+--- /dev/null
++++ b/package/gnuplot/gnuplot-0003-link-libgd-against-libpthread.patch
+@@ -0,0 +1,16 @@
++Link libgd against libpthread.
++When gnuplot is linked, pass the -lpthread argument.
++
++Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
++---
++diff -Nurp gnuplot-4.6.2_orig/configure.in gnuplot-4.6.2/configure.in
++--- gnuplot-4.6.2_orig/configure.in	2014-08-01 14:20:01.891274820 +0530
+++++ gnuplot-4.6.2/configure.in	2014-08-01 14:23:12.603266835 +0530
++@@ -590,6 +590,7 @@ if test "$with_gd" != no; then
++        [AC_DEFINE(HAVE_GD_PNG,1,[ Define if libgd supports png. ])
++         libgd_LIBS="$libgd_LIBS -lpng"])
++      LIBS="$_libs"
+++     LIBS="-lpthread $LIBS"
++ 
++     ],[dnl gd library not found
++        AC_MSG_WARN([libgd not found or too old, version >= 2.0 is required])
 -- 
 1.7.9.5
