@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Aug 2014 23:31:14 +0200
-Subject: [Buildroot] [PATCH v16 2/3] xbmc: Add option for Goom
-	screensaver
-In-Reply-To: <1406914359-31106-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 1 Aug 2014 23:32:28 +0200
+Subject: [Buildroot] [PATCH v16 3/3] xbmc: Add VA-API support
+In-Reply-To: <1406914359-31106-4-git-send-email-bernd.kuhls@t-online.de>
 References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
- <1406914359-31106-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140801213114.GF3778@free.fr>
+ <1406914359-31106-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140801213228.GG3778@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,47 +22,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/xbmc/Config.in |    9 +++++++++
->  package/xbmc/xbmc.mk   |    6 ++++++
->  2 files changed, 15 insertions(+)
+>  package/xbmc/xbmc.mk |    9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/xbmc/Config.in b/package/xbmc/Config.in
-> index 04bc86f..6a00531 100644
-> --- a/package/xbmc/Config.in
-> +++ b/package/xbmc/Config.in
-> @@ -128,6 +128,15 @@ config BR2_PACKAGE_XBMC_LIBBLURAY
->  comment "libbluray support needs a toolchain w/ dynamic library"
->  	depends on BR2_PREFER_STATIC_LIB
->  
-> +config BR2_PACKAGE_XBMC_GOOM
-> +	bool "goom screensaver"
-> +	depends on BR2_PACKAGE_XBMC_GL
-> +	help
-> +	  Enable goom screensaver
-> +
-> +comment "goom needs an OpenGL backend"
-> +	depends on !BR2_PACKAGE_XBMC_GL
-> +
->  config BR2_PACKAGE_XBMC_LIBCEC
->  	bool "hdmi cec"
->  	depends on !BR2_PREFER_STATIC_LIB # libcec
 > diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index c868b59..920d731 100644
+> index 920d731..880b3d4 100644
 > --- a/package/xbmc/xbmc.mk
 > +++ b/package/xbmc/xbmc.mk
-> @@ -109,6 +109,12 @@ XBMC_CONF_OPT += --disable-gles
->  endif
+> @@ -52,7 +52,6 @@ XBMC_CONF_OPT +=  \
+>  	--disable-projectm \
+>  	--disable-pulse \
+>  	--disable-ssh \
+> -	--disable-vaapi \
+>  	--disable-vdpau \
+>  	--disable-vtbdecoder \
+>  	--enable-optimizations
+> @@ -186,6 +185,14 @@ ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
+>  XBMC_DEPENDENCIES += libtheora
 >  endif
 >  
-> +ifeq ($(BR2_PACKAGE_XBMC_GOOM),y)
-> +XBMC_CONF_OPT += --enable-goom
+> +# xbmc needs libva & libva-glx
+> +ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
+> +XBMC_DEPENDENCIES += mesa3d libva
+> +XBMC_CONF_OPT += --enable-vaapi
 > +else
-> +XBMC_CONF_OPT += --disable-goom
+> +XBMC_CONF_OPT += --disable-vaapi
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_XBMC_LIBUSB),y)
->  XBMC_DEPENDENCIES += libusb-compat
->  XBMC_CONF_OPT += --enable-libusb
+>  # Add HOST_DIR to PATH for codegenerator.mk to find swig
+>  define XBMC_BOOTSTRAP
+>  	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
 > -- 
 > 1.7.10.4
 > 
