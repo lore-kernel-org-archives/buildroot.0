@@ -1,69 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Aug 2014 23:32:28 +0200
-Subject: [Buildroot] [PATCH v16 3/3] xbmc: Add VA-API support
-In-Reply-To: <1406914359-31106-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
- <1406914359-31106-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140801213228.GG3778@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  1 Aug 2014 18:35:16 -0300
+Subject: [Buildroot] [PATCH v2 1/2] linux-headers: bump 3.{4, 10, 12, 14,
+	15}.x series
+Message-ID: <1406928917-7068-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-On 2014-08-01 19:32 +0200, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/xbmc/xbmc.mk |    9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index 920d731..880b3d4 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -52,7 +52,6 @@ XBMC_CONF_OPT +=  \
->  	--disable-projectm \
->  	--disable-pulse \
->  	--disable-ssh \
-> -	--disable-vaapi \
->  	--disable-vdpau \
->  	--disable-vtbdecoder \
->  	--enable-optimizations
-> @@ -186,6 +185,14 @@ ifeq ($(BR2_PACKAGE_XBMC_LIBTHEORA),y)
->  XBMC_DEPENDENCIES += libtheora
->  endif
->  
-> +# xbmc needs libva & libva-glx
-> +ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MESA3D_DRI_DRIVER),yy)
-> +XBMC_DEPENDENCIES += mesa3d libva
-> +XBMC_CONF_OPT += --enable-vaapi
-> +else
-> +XBMC_CONF_OPT += --disable-vaapi
-> +endif
-> +
->  # Add HOST_DIR to PATH for codegenerator.mk to find swig
->  define XBMC_BOOTSTRAP
->  	cd $(@D) && PATH=$(BR_PATH) ./bootstrap
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c4ec358..7b55fdf 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -149,12 +149,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+ 	default "3.2.61"	if BR2_KERNEL_HEADERS_3_2
+-	default "3.4.100"	if BR2_KERNEL_HEADERS_3_4
++	default "3.4.101"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+-	default "3.10.50"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.51"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
+-	default "3.12.25"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.26"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
+-	default "3.14.14"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.15.7"	if BR2_KERNEL_HEADERS_3_15
++	default "3.14.15"	if BR2_KERNEL_HEADERS_3_14
++	default "3.15.8"	if BR2_KERNEL_HEADERS_3_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.8.5.5
