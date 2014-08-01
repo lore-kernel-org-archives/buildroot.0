@@ -1,32 +1,32 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  1 Aug 2014 12:08:43 -0300
-Subject: [Buildroot] [PATCH] samba4: security update to 4.1.11
-Message-ID: <1406905723-11546-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri,  1 Aug 2014 17:22:44 +0000 (UTC)
+Subject: [Buildroot] [Bug 7172] Name collision of rpath token expansion and
+ internal variables
+In-Reply-To: <bug-7172-163@https.bugs.busybox.net/>
+References: <bug-7172-163@https.bugs.busybox.net/>
+Message-ID: <20140801172244.D92819D372@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-3560 (Remote code execution in nmbd).
+https://bugs.busybox.net/show_bug.cgi?id=7172
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/samba4/samba4.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9e3178a..541efe0 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.1.10
-+SAMBA4_VERSION = 4.1.11
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_LICENSE = GPLv3+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |FIXED
+
+--- Comment #17 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-01 17:22:43 UTC ---
+Bug closed after documentation and workaround commits:
+
+http://git.buildroot.org/buildroot/commit/?id=a930d9cef6bdcf8de7d086ea66d977530200b8e0
+http://git.buildroot.org/buildroot/commit/?id=8f570cd765d52da56b4cebd4e5149ab8ebceec7f
+
 -- 
-1.8.5.5
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
