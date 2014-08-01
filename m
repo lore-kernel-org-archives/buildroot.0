@@ -1,27 +1,26 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 1 Aug 2014 14:07:15 +0200
-Subject: [Buildroot] github download helper question
-Message-ID: <20140801120714.GH32743@waldemar-brodkorb.de>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Fri, 1 Aug 2014 14:12:13 +0200
+Subject: [Buildroot] [PATCH 1/1] atk: bump to version 2.12.0
+In-Reply-To: <1406885271-21533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1406885271-21533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <CAHkwnC-EUA-oc6AZ0nTSrBSm=BNeL3oHtj0hT97=1kpxeKd8tA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Developers,                                                                  
-                                                                                
-for ARC C library testing I would like to use                                   
-a special branch of                                                             
-https://github.com/foss-for-synopsys-dwc-arc-processors/gcc.                    
-How I can do this with buildroot?                                               
-I need the arc-4.8-tls branch to test the uClibc NPTL port                      
-for ARC.                                                                        
-                                                                                
-The manual is empty:                                                            
-http://nightly.buildroot.org/manual.html#download-infra                         
-                                                                                
-Unfortunately I do not understand the involved make                             
-magic to download stuff from github.                                            
-                                                                                
-Thanks for any hints,                                                           
- Waldemar 
+On Fri, Aug 1, 2014 at 11:27 AM, Jerzy Grzegorek
+<jerzy.grzegorek@trzebnica.net> wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+>  package/atk/atk.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+[Tested building of these configurations: defconfig + external
+toolchain + atk, defconfig + external toolchain + allyesconfig + atk]
+
+Thanks & BR
+-- 
+Fabio Porcedda
