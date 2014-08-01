@@ -1,45 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  1 Aug 2014 11:04:50 -0300
-Subject: [Buildroot] [PATCH] musl: bump to version 1.1.4
-Message-ID: <1406901890-22799-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 1 Aug 2014 15:20:56 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-07-31
+In-Reply-To: <20140801063013.6BF72101443@stock.ovh.net>
+References: <20140801063013.6BF72101443@stock.ovh.net>
+Message-ID: <53DBA248.7050407@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The gcc 4.9.x breakage is now handled by musl itself.
+On 08/01/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-07-31
+> ===============================
+>    mips64el |             libvncserver-0.9.9 | NOK | http://autobuild.buildroot.net/results/3bf952fe2e3ebd8308e8ac5001896474790249d9/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/musl/musl.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+I can't reproduce this failure. It should be a problem of the 
+autobuilder or maybe someone already fixed this bug.
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 53c97d5..63607f9 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.3
-+MUSL_VERSION = 1.1.4
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
-@@ -18,12 +18,6 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- MUSL_INSTALL_STAGING = YES
- 
--# gcc constant folding bug with weak aliases workaround
--# See http://www.openwall.com/lists/musl/2014/05/15/1
--ifeq ($(BR2_GCC_VERSION_4_9_X),y)
--MUSL_EXTRA_CFLAGS += -fno-toplevel-reorder
--endif
--
- # We need to run the musl configure script prior to building the
- # gcc-intermediate, so that we can call the install-headers step and
- # get the crt<X>.o built. However, we need to call it again after
+>        mips | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/081b58cae5ce05c32811a1d1d442e66828d9e73e/
+
+Reported upstream:
+   https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764
+
 -- 
-1.8.5.5
+Vincent
