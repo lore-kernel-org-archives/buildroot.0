@@ -1,73 +1,38 @@
 From: Pascal Huerst <pascal.huerst@gmail.com>
-Date: Fri, 01 Aug 2014 11:12:34 +0200
-Subject: [Buildroot] [PATCH v8 1/1] google-breakpad: Integration into
+Date: Fri, 01 Aug 2014 11:19:06 +0200
+Subject: [Buildroot] [PATCH v9] google-breakpad: integration into
  Makefile and Config.in
-In-Reply-To: <20140731201548.GF3960@free.fr>
-References: <1406734040-31558-1-git-send-email-pascal.huerst@gmail.com>
- <1406734040-31558-2-git-send-email-pascal.huerst@gmail.com>
- <20140731201548.GF3960@free.fr>
-Message-ID: <53DB5A02.3050804@gmail.com>
+In-Reply-To: <20140731214108.GP3960@free.fr>
+References: <1406837335-9696-1-git-send-email-yann.morin.1998@free.fr>
+ <20140731231521.3242d944@free-electrons.com> <20140731214108.GP3960@free.fr>
+Message-ID: <53DB5B8A.8030901@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Yann, all,
+Hey Yann, Thomas, all
 
-On 31.07.2014 22:15, Yann E. MORIN wrote:
-> Pascal, All,
+On 31.07.2014 23:41, Yann E. MORIN wrote:
+> Thomas, Pascal, All,
 > 
-> On 2014-07-30 17:27 +0200, Pascal Huerst spake thusly:
->> Signed-off-by: Pascal Huerst <pascal.huerst@gmail.com>
->> ---
-> [--SNIP--]
->> diff --git a/package/google-breakpad/gen-syms.sh b/package/google-breakpad/gen-syms.sh
->> new file mode 100755
->> index 0000000..284d210
->> --- /dev/null
->> +++ b/package/google-breakpad/gen-syms.sh
->> @@ -0,0 +1,25 @@
->> +#!/bin/sh
->> +STAGING_DIR="${1}"
->> +TARGET_DIR="${2}"
->> +shift 2
->> +
->> +SYMBOLS_DIR="${STAGING_DIR}/usr/share/google-breakpad-symbols"
->> +rm -rf "${SYMBOLS_DIR}"
->> +mkdir -p "${SYMBOLS_DIR}"
->> +
->> +for FILE in $(ls ${TARGET_DIR}/${@}); do
+> On 2014-07-31 23:15 +0200, Thomas Petazzoni spake thusly:
+>> (Adding Pascal in Cc.)
 > 
-> This is broken, since it would pick binaries from the host system.
+> He was in the list of recipients when I sent the mail. It's just the
+> list dropping recipients once again... :-/
 > 
-> For example, I set the list to:    /bin/busybox /bin/bzip2
+>> A special thanks to Pascal for his persistence
+>> to get this feature merged, despite our numerous requests to adjust the
+>> implementation.
 > 
-> And it does not fail, even though we install bzip2 in /usr/bin/bzip2.
-> That's because it picks my host's bzip2 which is /bin/bzip2.
-> 
-> I've reworked this script in my recent respin:
->     http://patchwork.ozlabs.org/patch/375417/
-> 
->> +	if [ -d "${FILE}" ]; then
->> +		printf "Error: '%s' is a directory\n" "${FILE}" >&2
->> +		exit 1
->> +	fi
->> +	if dump_syms "${FILE}" > "${SYMBOLS_DIR}/tmp.sym" 2>/dev/null; then
+> Yep! Thanks! :-)
 
+Thanks you guys, for the support and the patience. I'm happy it's done
+for now. I'll send in a patch with a version bump, as soon as the fix
+for make install  (https://breakpad.appspot.com/1114002/) is upstream
 
-I see, makes sense to me, Thanks!
-
-> We need to install host-google-breakpad, which so far nothing depends
-> on, so it does not get installed unless you manually do it (either in
-> the host system, or manually run 'make host-google-breakpad), which
-> defeats the initial purpose of having an entry in the menuconfig.
-> 
-> I've fixed that in my respin, too.
-
-You're right! I did a 'make host-google-breakpad' in my tree a while
-ago, that's why the tool where there. Forgot about that.
-
- > Regards,
+> Regards,
 > Yann E. MORIN.
 > 
