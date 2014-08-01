@@ -1,48 +1,32 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 1 Aug 2014 16:59:38 +0200
-Subject: [Buildroot] github download helper question
-In-Reply-To: <20140801120714.GH32743@waldemar-brodkorb.de>
-References: <20140801120714.GH32743@waldemar-brodkorb.de>
-Message-ID: <CAHXCMMLE8qpVZoUkUtRXL=+xOTnhsSa-y8CTnJXBMhZaH_q6GQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  1 Aug 2014 12:08:43 -0300
+Subject: [Buildroot] [PATCH] samba4: security update to 4.1.11
+Message-ID: <1406905723-11546-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Waldemar,
+Fixes CVE-2014-3560 (Remote code execution in nmbd).
 
-On Fri, Aug 1, 2014 at 2:07 PM, Waldemar Brodkorb <wbx@openadk.org> wrote:
-> Hi Developers,
->
-> for ARC C library testing I would like to use
-> a special branch of
-> https://github.com/foss-for-synopsys-dwc-arc-processors/gcc.
-> How I can do this with buildroot?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba4/samba4.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Just set the right sha1 as version, further details at [1].
-
-> I need the arc-4.8-tls branch to test the uClibc NPTL port
-> for ARC.
->
-> The manual is empty:
-> http://nightly.buildroot.org/manual.html#download-infra
->
-> Unfortunately I do not understand the involved make
-> magic to download stuff from github.
->
-> Thanks for any hints,
->  Waldemar
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-Regards,
-
-[1] http://nightly.buildroot.org/manual.html#github-download-url
-
-
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9e3178a..541efe0 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.1.10
++SAMBA4_VERSION = 4.1.11
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_LICENSE = GPLv3+
 -- 
-Samuel
+1.8.5.5
