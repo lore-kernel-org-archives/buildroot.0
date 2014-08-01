@@ -1,8 +1,7 @@
 From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
-Date: Fri,  1 Aug 2014 11:27:23 +0200
-Subject: [Buildroot] [PATCH 1/1] libmemcached: unification of name
-	<PKG>_VERSION_MAJOR variable
-Message-ID: <1406885243-21453-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Date: Fri,  1 Aug 2014 11:27:51 +0200
+Subject: [Buildroot] [PATCH 1/1] atk: bump to version 2.12.0
+Message-ID: <1406885271-21533-1-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
- package/libmemcached/libmemcached.mk |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/atk/atk.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmemcached/libmemcached.mk b/package/libmemcached/libmemcached.mk
-index fd5b418..070951a 100644
---- a/package/libmemcached/libmemcached.mk
-+++ b/package/libmemcached/libmemcached.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 9ccdd22..46a097d 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMEMCACHED_MAJOR_VERSION = 1.0
--LIBMEMCACHED_VERSION = $(LIBMEMCACHED_MAJOR_VERSION).18
--LIBMEMCACHED_SITE = http://launchpad.net/libmemcached/$(LIBMEMCACHED_MAJOR_VERSION)/$(LIBMEMCACHED_VERSION)/+download
-+LIBMEMCACHED_VERSION_MAJOR = 1.0
-+LIBMEMCACHED_VERSION = $(LIBMEMCACHED_VERSION_MAJOR).18
-+LIBMEMCACHED_SITE = http://launchpad.net/libmemcached/$(LIBMEMCACHED_VERSION_MAJOR)/$(LIBMEMCACHED_VERSION)/+download
- LIBMEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- LIBMEMCACHED_CONF_OPT = --disable-dtrace
- LIBMEMCACHED_INSTALL_STAGING = YES
+-ATK_VERSION_MAJOR = 2.10
++ATK_VERSION_MAJOR = 2.12
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
 -- 
 1.7.9.5
