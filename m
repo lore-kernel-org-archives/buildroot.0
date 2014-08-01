@@ -1,17 +1,17 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 01 Aug 2014 21:53:47 +0200
-Subject: [Buildroot] [PATCH 5 of 5 v3] busybox: convert to kconfig-package
+Date: Fri, 01 Aug 2014 21:53:46 +0200
+Subject: [Buildroot] [PATCH 4 of 5 v3] uclibc: convert to kconfig-package
 	infrastructure
 In-Reply-To: <patchbomb.1406922822@localhost>
 References: <patchbomb.1406922822@localhost>
-Message-ID: <bf4a3c7c74fc9e9fe408.1406922827@localhost>
+Message-ID: <431289c9a7bcae14267c.1406922826@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch converts the busybox package to the new kconfig-package
+This patch converts the uclibc package to the new kconfig-package
 infrastructure, thus removing code duplication and ensuring a consistent
 behavior of kconfig packages.
 
@@ -19,69 +19,68 @@ Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 ---
-v3: no changes
-v2: rebase after making kconfig-package a full infra
+v3: rebase after new initial patch
+v2: kconfig-package is now a real package infrastructure, so remove call
+    to generic-package
 
- package/busybox/busybox.mk |  25 +++++++++----------------
- 1 files changed, 9 insertions(+), 16 deletions(-)
+ package/uclibc/uclibc.mk |  34 ++++++++++------------------------
+ 1 files changed, 10 insertions(+), 24 deletions(-)
 
-diff -r 431289c9a7bc -r bf4a3c7c74fc package/busybox/busybox.mk
---- a/package/busybox/busybox.mk	Tue Jul 22 20:35:36 2014 +0200
-+++ b/package/busybox/busybox.mk	Tue Jul 22 20:43:10 2014 +0200
-@@ -45,6 +45,10 @@
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
+diff -r fa937f090303 -r 431289c9a7bc package/uclibc/uclibc.mk
+--- a/package/uclibc/uclibc.mk	Thu Jul 24 20:54:50 2014 +0200
++++ b/package/uclibc/uclibc.mk	Tue Jul 22 20:35:36 2014 +0200
+@@ -37,6 +37,14 @@
+ UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
  endif
  
-+BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-+BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+BUSYBOX_KCONFIG_OPT = $(BUSYBOX_MAKE_OPTS)
++UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
 +
- define BUSYBOX_PERMISSIONS
- /bin/busybox			 f 4755	0 0 - - - - -
- /usr/share/udhcpc/default.script f 755  0 0 - - - - -
-@@ -136,10 +140,6 @@
- endef
- endif
- 
--define BUSYBOX_COPY_CONFIG
--	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
--endef
--
- # Disable shadow passwords support if unsupported by the C library
- ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
- define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
-@@ -190,8 +190,7 @@
- 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
- endef
- 
--define BUSYBOX_CONFIGURE_CMDS
--	$(BUSYBOX_COPY_CONFIG)
-+define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_SET_LARGEFILE)
- 	$(BUSYBOX_SET_IPV6)
-@@ -203,6 +202,9 @@
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+endef
++UCLIBC_KCONFIG_OPT = \
++		$(UCLIBC_MAKE_FLAGS) \
++		PREFIX=$(STAGING_DIR) \
++		DEVEL_PREFIX=/usr/ \
++		RUNTIME_PREFIX=$(STAGING_DIR)/ \
 +
-+define BUSYBOX_CONFIGURE_CMDS
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- 	$(BUSYBOX_NOCLOBBER_INSTALL)
-@@ -224,13 +226,4 @@
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ UCLIBC_TARGET_ARCH = $(call qstrip,$(BR2_UCLIBC_TARGET_ARCH))
+ 
+ ifeq ($(GENERATE_LOCALE),)
+@@ -393,7 +401,7 @@
+ 	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
+ 	HOSTCC="$(HOSTCC)"
+ 
+-define UCLIBC_FIXUP_DOT_CONFIG
++define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
+ 	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
+ 	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
+@@ -531,29 +539,7 @@
+ 	$(UCLIBC_INSTALL_UTILS_STAGING)
  endef
  
 -$(eval $(generic-package))
 -
--busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
--	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
--		$(subst busybox-,,$@)
--	rm -f $(BUSYBOX_DIR)/.stamp_built
--	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
+-$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
+-	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
 -
--busybox-update-config: busybox-configure
--	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
+-$(UCLIBC_DIR)/.stamp_config_fixup_done: $(UCLIBC_DIR)/.config
+-	$(UCLIBC_FIXUP_DOT_CONFIG)
+-	$(Q)touch $@
+-
+-$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.stamp_config_fixup_done
+-
+-uclibc-menuconfig: $(UCLIBC_DIR)/.stamp_config_fixup_done
+-	$(MAKE) -C $(UCLIBC_DIR) \
+-		$(UCLIBC_MAKE_FLAGS) \
+-		PREFIX=$(STAGING_DIR) \
+-		DEVEL_PREFIX=/usr/ \
+-		RUNTIME_PREFIX=$(STAGING_DIR)/ \
+-		menuconfig
+-	rm -f $(UCLIBC_DIR)/.stamp_{config_fixup_done,configured,built}
+-	rm -f $(UCLIBC_DIR)/.stamp_{target,staging}_installed
+-
+-uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_fixup_done
+-	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
 +$(eval $(kconfig-package))
+ 
+ # Before uClibc is built, we must have the second stage cross-compiler
+ $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
