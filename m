@@ -1,248 +1,117 @@
 From: Hadrien Boutteville <hadrien.boutteville@gmail.com>
-Date: Fri, 01 Aug 2014 03:32:30 +0200
-Subject: [Buildroot] [PATCH v3 1/3] libgtk3: new package
-In-Reply-To: <20140728202729.0c16d3fe@free-electrons.com>
-References: <1406565218-12653-1-git-send-email-hadrien.boutteville@gmail.com>	<1406565218-12653-2-git-send-email-hadrien.boutteville@gmail.com>
- <20140728202729.0c16d3fe@free-electrons.com>
-Message-ID: <53DAEE2E.9060907@gmail.com>
+Date: Fri,  1 Aug 2014 03:33:45 +0200
+Subject: [Buildroot] [PATCH v4 0/3] Add libgtk3 and bump webkit to version
+	2.4.3
+Message-ID: <1406856828-17350-1-git-send-email-hadrien.boutteville@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello all,
 
-On Mon, 28 Jul 2014 20:27:29 +0200, Thomas Petazzoni wrote:
-> On Mon, 28 Jul 2014 18:33:36 +0200, Hadrien Boutteville wrote:
-> 
->> diff --git a/package/libgtk3/libgtk3-0001-no-gtk-doc.patch b/package/libgtk3/libgtk3-0001-no-gtk-doc.patch
->> new file mode 100644
->> index 0000000..0c12ee4
->> --- /dev/null
->> +++ b/package/libgtk3/libgtk3-0001-no-gtk-doc.patch
->> @@ -0,0 +1,11 @@
-> 
-> Missing description + SoB on this patch. You could re-use the
-> description from Eric's patch on systemd.
+This series mainly does two things: add libgtk3 and bump webkit.
 
-I will fix it. I will re-use the one I wrote for libglib2 (based on
-Eric's patch): it's the same patch, I just forgot to update this one.
+ - 1: add libgtk3
+ - 2: bump webkit
+ - 3: bump Midori to test WebKit 2.4.3
 
->> diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
->> new file mode 100644
->> index 0000000..d3f5e9b
->> --- /dev/null
->> +++ b/package/libgtk3/libgtk3.mk
->> @@ -0,0 +1,135 @@
->> +################################################################################
->> +#
->> +# libgtk3
->> +#
->> +################################################################################
->> +
->> +LIBGTK3_VERSION_MAJOR = 3.12
->> +LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).2
->> +
-> 
-> Unneeded empty line.
+For now, only X11 support is done and tested for both libgtk3 and
+webkit. Wayland support will be done later.
 
-I will fix it.
+Tests:
 
->> +LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
->> +LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
->> +LIBGTK3_LICENSE = LGPLv2+
->> +LIBGTK3_LICENSE_FILES = COPYING
->> +LIBGTK3_INSTALL_STAGING = YES
->> +LIBGTK3_INSTALL_TARGET = YES
-> 
-> This last line is not needed.
+* All is compiled-tested (with GTK+2 and GTK+3 for WebKit and Midori).
+* Running tests were done for libgtk3 (with gtk3-demo) and Midori GTK+2
+  with WebKit GTK+2 and webkit1 (on Qemu and BeagleBone Black).
 
-Ditto.
+For testing you will need GCC 4.8 because WebKit needs at least version
+4.8 (see commit message) and X.org needs a version lesser than 4.9 (see
+this issue:
+http://lists.busybox.net/pipermail/buildroot/2014-June/098679.html).
 
->> +
->> +LIBGTK3_AUTORECONF = YES
->> +
->> +LIBGTK3_CONF_ENV = \
->> +		ac_cv_path_GTK_UPDATE_ICON_CACHE=$(HOST_DIR)/usr/bin/gtk-update-icon-cache \
->> +		ac_cv_path_GDK_PIXBUF_CSOURCE=$(HOST_DIR)/usr/bin/gdk-pixbuf-csource
-> 
-> One tab only for the indentation here.
+There is still a weird problem with WebKit: parallel make with Make
+3.81 results in a make hang on:
+  CXXLD libWebCoreSVG.la
+This is reproducible.
 
-Actually, I re-used the coding style from libgtk2 package but I totally
-agree with one tab only. I will fix it.
+Does anyone has already encountered this?
 
->> +
->> +LIBGTK3_CONF_OPT = --disable-glibtest \
->> +		--enable-explicit-deps=no \
->> +		--enable-gtk2-dependency \
->> +		--disable-debug \
->> +		--disable-introspection
-> 
-> Same here.
+You can find a defconfig for Qemu here:
+http://bpaste.net/show/fR3jDhQPmtUHPYpGoiUn/
 
-Ditto.
+Changes v1 -> v2:
 
->> +
->> +LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 libglib2 cairo pango atk \
->> +		gdk-pixbuf
-> 
-> And here.
+ - libgtk3: remove atk-bridge support, so we no longer need
+   at-spi2-core and at-spi2-atk.
+ - libgtk3: change the way we check for introspection to fix autoreconf
+   error.
+ - libgtk3: remove unnecessary extra definitions 
 
-Ditto.
+Changes v2 -> v3:
 
->> +
->> +# Xorg dependencies
->> +LIBGTK3_CONF_OPT += --with-x \
->> +	--enable-x11-backend \
->> +	--x-includes=$(STAGING_DIR)/usr/include/X11 \
->> +	--x-libraries=$(STAGING_DIR)/usr/lib
->> +LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender \
->> +		xlib_libXi
-> 
-> And here.
+ - midori: fix the need of librsvg for the host
 
-Ditto.
+Changes v3 -> v4:
 
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
->> +LIBGTK3_CONF_OPT += --enable-xinerama
->> +LIBGTK3_DEPENDENCIES += xlib_libXinerama
->> +else
->> +LIBGTK3_CONF_OPT += --disable-xinerama
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
->> +LIBGTK3_CONF_OPT += --enable-xrandr
->> +LIBGTK3_DEPENDENCIES += xlib_libXrandr
->> +else
->> +LIBGTK3_CONF_OPT += --disable-xrandr
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
->> +LIBGTK3_DEPENDENCIES += xlib_libXcursor
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
->> +LIBGTK3_CONF_OPT += --enable-xfixes
->> +LIBGTK3_DEPENDENCIES += xlib_libXfixes
->> +else
->> +LIBGTK3_CONF_OPT += --disable-xfixes
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXCOMPOSITE),y)
->> +LIBGTK3_CONF_OPT += --enable-xcomposite
->> +LIBGTK3_DEPENDENCIES += xlib_libXcomposite
->> +else
->> +LIBGTK3_CONF_OPT += --disable-xcomposite
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXDAMAGE),y)
->> +LIBGTK3_CONF_OPT += --enable-xdamage
->> +LIBGTK3_DEPENDENCIES += xlib_libXdamage
->> +else
->> +LIBGTK3_CONF_OPT += --disable-xdamage
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XLIB_LIBXKBFILE),y)
->> +LIBGTK3_CONF_OPT += --enable-xkb
->> +LIBGTK3_DEPENDENCIES += xlib_libxkbfile
->> +endif
-> 
-> No --disable-xkb ?
+ - libgtk3: fix typo and formatting and improve .mk
 
-I will fix it.
-
->> +
->> +ifeq ($(BR2_PACKAGE_CUPS),y)
->> +LIBGTK3_CONF_OPT += --enable-cups
->> +LIBGTK3_DEPENDENCIES += cups
->> +else
->> +LIBGTK3_CONF_OPT += --disable-cups
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_LIBGTK3_DEMO),)
->> +define LIBGTK3_POST_INSTALL_TWEAKS
->> +	rm -rf $(TARGET_DIR)/usr/bin/gtk3-demo \
->> +		$(TARGET_DIR)/usr/bin/gtk3-demo-application
->> +endef
->> +
->> +LIBGTK3_POST_INSTALL_TARGET_HOOKS += LIBGTK3_POST_INSTALL_TWEAKS
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_LIBGTK3_TESTS),y)
->> +LIBGTK3_DEPENDENCIES += --enable-installed-tests
-> 
-> Really, _DEPENDENCIES ?
-
-Erf, I never tested this option and actually I wonder if it's really useful.
-For now, I will fix this typo.
-
->> +else
->> +LIBGTK3_CONF_OPT += --disable-installed-tests
->> +endif
->> +
->> +# We do not build a full version of libgtk3 for the host, because that
->> +# requires compiling Cairo, Pango, ATK and X.org for the host.
->> +# Therefore, we hack the build to only build gdk-pixbuf-from-source and
->> +# gtk-update-icon-cache, which are the host tools needed to build Gtk
->> +# for the target.
->> +
->> +HOST_LIBGTK3_DEPENDENCIES = host-libglib2 host-libpng host-gdk-pixbuf
->> +
->> +HOST_LIBGTK3_CFLAGS = $(shell $(HOST_DIR)/usr/bin/pkg-config \
->> +	--cflags --libs gdk-pixbuf-2.0)
-> 
-> This doesn't work, because it uses pkg-config in a configuration where
-> it returns libraries/headers for the target. It causes build failures
-> in some configuration:
-> 
->>>> host-libgtk3 3.12.2 Building
-> /usr/bin/gcc -O2 -I/home/test/outputs/gtk3/host/usr/include -L/home/test/outputs/gtk3/host/lib -L/home/test/outputs/gtk3/host/usr/lib -Wl,-rpath,/home/test/outputs/gtk3/host/usr/lib /home/test/outputs/gtk3/build/host-libgtk3-3.12.2/gtk/updateiconcache.c -I/home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/gdk-pixbuf-2.0 -pthread -I/home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/glib-2.0 -I/home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/glib-2.0/include -I/home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/libpng16 -lgdk_pixbuf-2.0 -lgobject-2.0 -L/home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lglib-2.0 -lintl   -o /home/test/outputs/gtk3/build/host-libgtk3-3.12.2/gtk/gtk-update-icon-cache
-> /home/test/outputs/gtk3/build/host-libgtk3-3.12.2/gtk/updateiconcache.c: In function 'find_string':
-> /home/test/outputs/gtk3/build/host-libgtk3-3.12.2/gtk/updateiconcache.c:763: warning: cast from pointer to integer of different size
-> /home/test/outputs/gtk3/build/host-libgtk3-3.12.2/gtk/updateiconcache.c: In function 'add_string':
-> /home/test/outputs/gtk3/build/host-libgtk3-3.12.2/gtk/updateiconcache.c:769: warning: cast to pointer from integer of different size
-> /usr/bin/ld: skipping incompatible /home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so when searching for -lintl
-> /usr/bin/ld: skipping incompatible /home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.a when searching for -lintl
-> /usr/bin/ld: cannot find -lintl
-> collect2: ld returned 1 exit status
-> 
-> So, you should replace that with:
-> 
-> HOST_LIBGTK3_FLAGS = \
-> 	$(shell $(HOST_CONFIGURE_OPTS) $(PKG_CONFIG_HOST_BINARY) --cflags --libs gdk-pixbuf-2.0)
-> 
-> Note the rename from CFLAGS to just FLAGS, because it will contain both
-> the --cflags and --libs flags.
-
-OK, I fixed this with your solution but I still need to use CFLAGS
-instead of FLAGS otherwise I have this error:
-
- updateiconcache.c:38:18: fatal error: glib.h: No such file or directory
-
->> +define HOST_LIBGTK3_CONFIGURE_CMDS
->> +	echo "#define GETTEXT_PACKAGE \"gtk30\"" >> $(@D)/gtk/config.h
->> +	echo "#define HAVE_UNISTD_H 1" >> $(@D)/gtk/config.h
->> +	echo "#define HAVE_FTW_H 1" >> $(@D)/gtk/config.h
->> +endef
->> +
->> +define HOST_LIBGTK3_BUILD_CMDS
->> +	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
->> +		$(@D)/gtk/updateiconcache.c \
->> +		$(HOST_LIBGTK3_CFLAGS) \
->> +		-o $(@D)/gtk/gtk-update-icon-cache
->> +endef
->> +
->> +define HOST_LIBGTK3_INSTALL_CMDS
->> +	cp $(@D)/gtk/gtk-update-icon-cache $(HOST_DIR)/usr/bin
-> 
-> 	$(INSTALL) -D -m 0755 $(@D)/gtk/gtk-update-icon-cache $(HOST_DIR)/usr/bin/gtk-update-icon-cache
-> 
-> Could you repost an updated version of this patch quickly, so that I
-> can apply it in time for 2014.08 ?
-
-I'm sending the updated version.
-
-Thanks,
+Best regards,
 
 Hadrien
+
+---
+
+Hadrien Boutteville (3):
+  libgtk3: new package
+  webkit: bump to version 2.4.3
+  midori: bump to version 0.5.8
+
+ package/Config.in                                  |    1 +
+ package/libgtk3/Config.in                          |   46 +
+ package/libgtk3/libgtk3-0001-no-gtk-doc.patch      |   25 +
+ .../libgtk3-0002-fix-introspection-check.patch     |   28 +
+ .../libgtk3/libgtk3-0003-disable-atk-bridge.patch  |   45 +
+ package/libgtk3/libgtk3.mk                         |  136 ++
+ package/midori/Config.in                           |   15 +-
+ package/midori/blocked.png                         |  Bin 0 -> 522 bytes
+ package/midori/disabled.png                        |  Bin 0 -> 510 bytes
+ package/midori/enabled.png                         |  Bin 0 -> 639 bytes
+ package/midori/logo-shade.png                      |  Bin 0 -> 23862 bytes
+ .../midori-0001-remove-libnotify-dependency.patch  |   27 +
+ .../midori-0002-do-not-use-rsvg-convert.patch      |   39 +
+ package/midori/midori.mk                           |   66 +-
+ package/webkit/Config.in                           |   16 +-
+ ...ebkit-0001-build-fix-for-32-bit-autotools.patch |   34 -
+ .../webkit-0002-build-fix-for-gtklauncher.patch    |   51 -
+ .../webkit/webkit-0003-detect-harfbuzz-icu.patch   |   28 -
+ package/webkit/webkit-0004-disable-docrebase.patch |   27 -
+ package/webkit/webkit-0005-disable-tests.patch     |   80 --
+ package/webkit/webkit-0006-execinfo_h.patch        |   20 -
+ package/webkit/webkit-0007-mips-dfg.patch          | 1490 --------------------
+ package/webkit/webkit-0008-support-bison-3.0.patch |   22 -
+ package/webkit/webkit.mk                           |   67 +-
+ 24 files changed, 433 insertions(+), 1830 deletions(-)
+ create mode 100644 package/libgtk3/Config.in
+ create mode 100644 package/libgtk3/libgtk3-0001-no-gtk-doc.patch
+ create mode 100644 package/libgtk3/libgtk3-0002-fix-introspection-check.patch
+ create mode 100644 package/libgtk3/libgtk3-0003-disable-atk-bridge.patch
+ create mode 100644 package/libgtk3/libgtk3.mk
+ create mode 100644 package/midori/blocked.png
+ create mode 100644 package/midori/disabled.png
+ create mode 100644 package/midori/enabled.png
+ create mode 100644 package/midori/logo-shade.png
+ create mode 100644 package/midori/midori-0001-remove-libnotify-dependency.patch
+ create mode 100644 package/midori/midori-0002-do-not-use-rsvg-convert.patch
+ delete mode 100644 package/webkit/webkit-0001-build-fix-for-32-bit-autotools.patch
+ delete mode 100644 package/webkit/webkit-0002-build-fix-for-gtklauncher.patch
+ delete mode 100644 package/webkit/webkit-0003-detect-harfbuzz-icu.patch
+ delete mode 100644 package/webkit/webkit-0004-disable-docrebase.patch
+ delete mode 100644 package/webkit/webkit-0005-disable-tests.patch
+ delete mode 100644 package/webkit/webkit-0006-execinfo_h.patch
+ delete mode 100644 package/webkit/webkit-0007-mips-dfg.patch
+ delete mode 100644 package/webkit/webkit-0008-support-bison-3.0.patch
+
+-- 
+2.0.1
