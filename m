@@ -1,53 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Aug 2014 13:08:02 +0200
-Subject: [Buildroot] [PATCH v5] bluez5_utils: new package
-In-Reply-To: <1396256280-23284-1-git-send-email-marcin@bis.org.pl>
-References: <532F69C8.5060202@trzebnica.net>
- <1396256280-23284-1-git-send-email-marcin@bis.org.pl>
-Message-ID: <20140802130802.26bd0121@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 02 Aug 2014 13:19:16 +0200
+Subject: [Buildroot] [PATCH v16 1/3] xbmc: Add X.org/OpenGL support
+References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
+ <1406914359-31106-2-git-send-email-bernd.kuhls@t-online.de>
+ <20140801213036.GE3778@free.fr>
+ <XnsA37D62E96EAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20140801221848.GH3778@free.fr>
+Message-ID: <XnsA37D87825DB30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Marcin Bis,
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
+news:20140801221848.GH3778 at free.fr: 
 
-On Mon, 31 Mar 2014 10:58:00 +0200, Marcin Bis wrote:
-> This patch adds Bluez 5.x.
-> API is not backwards compatible with BlueZ 4.x
-> 
-> BlueZ utils will use systemd and/or udev if enabled.
-> Contains a hook for installing GATT support tool, wchich is always
-> build but not installed by default.
-> 
-> Signed-off-by: Marcin Bis <marcin@bis.org.pl>
-> ---
->  package/Config.in                    |    1 +
->  package/bluez5_utils/Config.in       |   54 ++++++++++++++++++++++++++++++++++
->  package/bluez5_utils/bluez5_utils.mk |   54 ++++++++++++++++++++++++++++++++++
->  3 files changed, 109 insertions(+)
->  create mode 100644 package/bluez5_utils/Config.in
->  create mode 100644 package/bluez5_utils/bluez5_utils.mk
+> Well, I said "XBMC builds just fine" and "we remove [rsxs] from the
+> rootfs". 
 
-I've applied your patch, after making a number of changes:
+Hi,
 
-    [Thomas:
-     - Add dependency on 3.4 kernel headers
-     - Add options for OBEX support and client support, to make the
-       libical and readline dependencies optional.
-     - Rewrap Config.in help text.
-     - Adapt indentation in .mk file.
-     - Bump to version 5.21.
-     - Use BR2_PACKAGE_HAS_UDEV instead of BR2_PACKAGE_UDEV.]
+ah, I see what you mean:
 
-It would be great if you could test the latest master and confirm that
-it works for you.
+define XBMC_CLEAN_UNUSED_ADDONS
+	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/screensaver.rsxs.plasma
 
-Thanks a lot for this contribution!
+Since I am using rsxs screensaver I did not notice the line above when
+answering your question. 
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+There are three different rsxs screensavers however:
+https://github.com/xbmc/xbmc/tree/Gotham/addons/screensaver.rsxs.euphoria
+https://github.com/xbmc/xbmc/tree/Gotham/addons/screensaver.rsxs.plasma
+https://github.com/xbmc/xbmc/tree/Gotham/addons/screensaver.rsxs.solarwinds
+
+I am using the remaining two and they work fine.
+
+Regards, Bernd
