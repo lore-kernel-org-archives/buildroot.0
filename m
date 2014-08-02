@@ -1,39 +1,31 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 02 Aug 2014 13:19:16 +0200
-Subject: [Buildroot] [PATCH v16 1/3] xbmc: Add X.org/OpenGL support
-References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
- <1406914359-31106-2-git-send-email-bernd.kuhls@t-online.de>
- <20140801213036.GE3778@free.fr>
- <XnsA37D62E96EAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <20140801221848.GH3778@free.fr>
-Message-ID: <XnsA37D87825DB30berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Date: Sat,  2 Aug 2014 18:26:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: Bump version to 2.1.5
+Message-ID: <1406996762-6980-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in
-news:20140801221848.GH3778 at free.fr: 
 
-> Well, I said "XBMC builds just fine" and "we remove [rsxs] from the
-> rootfs". 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/vlc.mk |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi,
-
-ah, I see what you mean:
-
-define XBMC_CLEAN_UNUSED_ADDONS
-	rm -Rf $(TARGET_DIR)/usr/share/xbmc/addons/screensaver.rsxs.plasma
-
-Since I am using rsxs screensaver I did not notice the line above when
-answering your question. 
-
-There are three different rsxs screensavers however:
-https://github.com/xbmc/xbmc/tree/Gotham/addons/screensaver.rsxs.euphoria
-https://github.com/xbmc/xbmc/tree/Gotham/addons/screensaver.rsxs.plasma
-https://github.com/xbmc/xbmc/tree/Gotham/addons/screensaver.rsxs.solarwinds
-
-I am using the remaining two and they work fine.
-
-Regards, Bernd
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 6c4677a..ad9f485 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VLC_VERSION = 2.1.4
++VLC_VERSION = 2.1.5
+ VLC_SITE = http://download.videolan.org/pub/videolan/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPLv2+ LGPLv2.1+
+-- 
+1.7.10.4
