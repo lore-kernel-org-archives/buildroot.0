@@ -1,72 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 12:15:47 +0200
-Subject: [Buildroot] [PATCH v4 1/3] libgtk3: new package
-In-Reply-To: <20140803113535.00c160c3@free-electrons.com>
-References: <1406856828-17350-1-git-send-email-hadrien.boutteville@gmail.com>
- <1406856828-17350-2-git-send-email-hadrien.boutteville@gmail.com>
- <20140803113535.00c160c3@free-electrons.com>
-Message-ID: <20140803121547.0afe9f78@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 03 Aug 2014 13:25:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Bump to version 2.3.1
+References: <1407017477-8540-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140803102404.7d7fa4b6@free-electrons.com>
+Message-ID: <XnsA37E88A2EAAF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+[posted and mailed]
 
-On Sun, 3 Aug 2014 11:35:35 +0200, Thomas Petazzoni wrote:
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140803102404.7d7fa4b6 at free-electrons.com:
 
-> Making all in gtk
->   CCLD     extract-strings
->   GEN      stamp-gtktypebuiltins.h
->   GEN      stamp-gtkprivatetypebuiltins.h
->   GEN      stamp-gtkmarshalers.h
->   GEN      stamp-icons
->   GEN      gtkdbusgenerated.c
->   GEN      gtkdbusgenerated.h
-> /usr/bin/ld: skipping incompatible /home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.so when searching for -lintl
-> /usr/bin/ld: skipping incompatible /home/test/outputs/gtk3/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libintl.a when searching for -lintl
-> /usr/bin/ld: cannot find -lintl
-> collect2: ld returned 1 exit status
-> make[4]: *** [extract-strings] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> /home/test/outputs/gtk3/host/usr/bin/glib-mkenums: gtktextview.h:59: Failed to parse `  /*< private >*/ '
-> /home/test/outputs/gtk3/host/usr/bin/glib-mkenums: gtktextview.h:61: Failed to parse `  /*< public >*/ '
-> make[3]: *** [all-recursive] Error 1
-> make[2]: *** [all] Error 2
-> make[1]: *** [/home/test/outputs/gtk3/build/libgtk3-3.12.2/.stamp_built] Error 2
-> make: *** [_all] Error 2
+> This looks weird: if fminf() is already defined in uClibc, then
+> HAVE_FMINF should have been true and this code should not have been
+> included into the build.
+> 
+> What happened with the HAVE_FMINF test? Maybe it would be worth having
+> a look to do a upstream acceptable fix for this issue?
 
-I've done a little bit more investigation. The problem comes from the
-fact that the extract-strings program is built for the host, but using
-target cflags/ldflags. The gtk3 configure.ac script has provisions to
-specify a PKG_CONFIG_FOR_BUILD, but in the case of Buildroot, our
-PKG_CONFIG_FOR_BUILD is just $(HOST_DIR)/usr/bin/pkg-config, but with
-several environment variables to adjust its behavior (because by
-default, $(HOST_DIR)/usr/bin/pkg-config is cross and returns values for
-target libraries).
+Hi,
 
-So, I tried something like:
+output/build/ffmpeg-2.3.1/config.log contains
+ffconf.Vyn5TU6p.c:(.text+0x1f): undefined reference to `fminf'
 
-LIBGTK3_CONF_ENV += \
-	ac_cv_path_PKG_CONFIG_FOR_BUILD='$(HOST_CONFIGURE_OPTS) $(HOST_PKG_CONFIG_BINARY)'
+which leads to 
 
-but it didn't work as the autoconf code does not expect the command to
-have multiple, space-separated, tokens.
+#define HAVE_FMINF 0
 
-I've already tried to override GLIB_CFLAGS_FOR_BUILD and
-GLIB_LIBS_FOR_BUILD with no luck.
+in output/build/ffmpeg-2.3.1/config.h which seems true when looking at
+http://git.uclibc.org/uClibc/tree/libm/float_wrappers.c#n48
 
-So, right now, I am wondering if we should provide a
-$(HOST_DIR)/usr/bin/host-pkg-config that has built-in all the necessary
-environment variables to return values appropriate for host libraries.
+Tested with
 
-Any other suggestion?
+BR2_UCLIBC_VERSION_0_9_33=y
+# BR2_UCLIBC_VERSION_SNAPSHOT is not set
+BR2_UCLIBC_VERSION_STRING="0.9.33.2"
 
-Best regards,
+and
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+BR2_UCLIBC_VERSION_SNAPSHOT=y
+BR2_USE_UCLIBC_SNAPSHOT="snapshot"
+
+Regards, Bernd
