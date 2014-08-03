@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 3 Aug 2014 19:40:10 +0200
-Subject: [Buildroot] [PATCH 4/9 v3] support/download: convert cvs to use
+Date: Sun, 3 Aug 2014 19:41:05 +0200
+Subject: [Buildroot] [PATCH 5/9 v3] support/download: convert git to use
  the wrapper
-In-Reply-To: <0e6a49a6da7926e3ef51f3e63cddcb2c9cff172d.1405895896.git.yann.morin.1998@free.fr>
+In-Reply-To: <7cc8bbdb9b1d15e060efb134edd6d3cce62e69a6.1405895896.git.yann.morin.1998@free.fr>
 References: <cover.1405895896.git.yann.morin.1998@free.fr>
- <0e6a49a6da7926e3ef51f3e63cddcb2c9cff172d.1405895896.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LVCF+CpV15b+rWGH6iGsMfOzPgZXTMBFmqWdnX8emip+w@mail.gmail.com>
+ <7cc8bbdb9b1d15e060efb134edd6d3cce62e69a6.1405895896.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXqsZpEXhTNEFJHoZ=shUb5s1Jvq=C1oN3+jvybkRwrog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,102 +13,119 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Mon, Jul 21, 2014 at 12:42 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> This drastically simplifies the cvs helper, as it no longer has to deal
+> This drastically simplifies the git helper, as it no longer has to deal
 > with atomically saving the downloaded archive.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/pkg-download.mk |  9 ++++++---
->  support/download/cvs    | 50 ++++++++++++++-----------------------------------
->  2 files changed, 20 insertions(+), 39 deletions(-)
+>  package/pkg-download.mk |  7 ++++--
+>  support/download/git    | 58 +++++++++++++++----------------------------------
+>  2 files changed, 23 insertions(+), 42 deletions(-)
 >
 > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 94febab..235adcb 100644
+> index 235adcb..696ff3e 100644
 > --- a/package/pkg-download.mk
 > +++ b/package/pkg-download.mk
-> @@ -125,9 +125,12 @@ endef
->
->  define DOWNLOAD_CVS
+> @@ -95,8 +95,11 @@ endef
+>  # problems
+>  define DOWNLOAD_GIT
 >         test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
-> -       $(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
-> -                                         $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
+> -       $(EXTRA_ENV) support/download/git $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
 > -                                         $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
-> +       $(EXTRA_ENV) support/download/wrapper cvs \
+> +       $(EXTRA_ENV) support/download/wrapper git \
 > +               $(DL_DIR)/$($(PKG)_SOURCE) \
-> +               $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+> +               $($(PKG)_SITE) \
 > +               $($(PKG)_DL_VERSION) \
-> +               $($(PKG)_RAWNAME) \
 > +               $($(PKG)_BASE_NAME)
 >  endef
 >
->  # Not all CVS servers support ls/rls, use login to see if we can connect
-> diff --git a/support/download/cvs b/support/download/cvs
-> index 9aeed79..b4b0acc 100755
-> --- a/support/download/cvs
-> +++ b/support/download/cvs
-> @@ -1,47 +1,25 @@
+>  # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+> diff --git a/support/download/git b/support/download/git
+> index 116e5a9..8d9505d 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -1,60 +1,38 @@
 >  #!/bin/bash
 >
 > -# We want to catch any command failure, and exit immediately
 > +# We want to catch any unexpected failure, and exit immediately
 >  set -e
 >
->  # Download helper for cvs
+>  # Download helper for git
 >  # Call it with:
-> -#   $1: cvs repo
-> -#   $2: cvs revision
-> -#   $3: package's name (eg. foobar)
-> -#   $4: package's basename (eg. foobar-1.2.3)
-> -#   $5: output file
+> -#   $1: git repo
+> -#   $2: git cset
+> -#   $3: package's basename (eg. foobar-1.2.3)
+> -#   $4: output file
 > +#   $1: output file
-> +#   $2: cvs repo
-> +#   $3: cvs revision
-> +#   $4: package's name (eg. foobar)
-> +#   $5: package's basename (eg. foobar-1.2.3)
+> +#   $2: git repo
+> +#   $3: git cset
+> +#   $4: package's basename (eg. foobar-1.2.3)
 >  # And this environment:
->  #   CVS      : the cvs command to call
+>  #   GIT      : the git command to call
 > -#   BUILD_DIR: path to Buildroot's build dir
 >
 > -repo="${1}"
-> -rev="${2}"
-> -rawname="${3}"
-> -basename="${4}"
-> -output="${5}"
+> -cset="${2}"
+> -basename="${3}"
+> -output="${4}"
 > +output="${1}"
 > +repo="${2}"
-> +rev="${3}"
-> +rawname="${4}"
-> +basename="${5}"
+> +cset="${3}"
+> +basename="${4}"
 >
-> -repodir="${basename}.tmp-cvs-checkout"
+> -repodir="${basename}.tmp-git-checkout"
+> -tmp_tar="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
 > -tmp_output="$( mktemp "${output}.XXXXXX" )"
-> +${CVS} -z3 -d":pserver:anonymous@${repo}" \
-> +       co -d "${basename}" -r ":${rev}" -P "${rawname}"
->
+> -
+> -# Play tic-tac-toe with temp files
+> -# - first, we download to a trashable location (the build-dir)
+> -# - then we create the uncomporessed tarball in tht same trashable location
+> -# - then we create a temporary compressed tarball in the final location, so
+> -#   it is on the same filesystem as the final file
+> -# - finally, we atomically rename to the final file
+> -
 > -cd "${BUILD_DIR}"
 > -# Remove leftovers from a previous failed run
 > -rm -rf "${repodir}"
 > -
-> -# Play tic-tac-toe with temp files
-> -# - first, we download to a trashable location (the build-dir)
-> -# - then we create a temporary tarball in the final location, so it is
-> -#   on the same filesystem as the final file
-> -# - finally, we atomically rename to the final file
-> -
+> -git_done=0
+> +# Try to see if we can do a shallow clone, since it is faster
+> +# than a full clone.
+>  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+>      printf "Doing shallow clone\n"
+> -    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${repodir}"; then
+> +    if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
+>          git_done=1
+> +    else
+> +        printf "Shallow clone failed, falling back to doing a full clone\n"
+>      fi
+>  fi
+>  if [ ${git_done} -eq 0 ]; then
+>      printf "Doing full clone\n"
+> -    ${GIT} clone --bare "${repo}" "${repodir}"
+> +    ${GIT} clone --bare "${repo}" "${basename}"
+>  fi
+>
 > -ret=1
-> -if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
-> -           co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
-> -    if tar czf "${tmp_output}" "${repodir}"; then
+> -pushd "${repodir}" >/dev/null
+> -if ${GIT} archive --prefix="${basename}/" -o "${tmp_tar}" \
+> -                  --format=tar "${cset}"; then
+> -    if gzip -c "${tmp_tar}" >"${tmp_output}"; then
 > -        mv "${tmp_output}" "${output}"
 > -        ret=0
 > -    fi
 > -fi
-> -
-> -# Cleanup
-> -rm -rf "${repodir}" "${tmp_output}"
+> -popd >/dev/null
+> +GIT_DIR="${basename}" \
+> +${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar "${cset}"
+>
+> -rm -rf "${repodir}" "${tmp_tar}" "${tmp_output}"
 > -exit ${ret}
-> +tar czf "${output}" "${basename}"
+> +gzip "${output}"
 > --
+> 1.9.1
+>
 
-
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(Tested by running 'make fmc-fsl-sdk-source')
