@@ -1,79 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Aug 2014 19:53:38 +0200
-Subject: [Buildroot] [PATCH 0/9 v4] Cleanups in download helpers (branch
-	yem/check-downloads)
-Message-ID: <cover.1407088287.git.yann.morin.1998@free.fr>
+Date: Sun,  3 Aug 2014 19:53:35 +0200
+Subject: [Buildroot] [PATCH 2/9 v4] support/download: convert bzr to use the
+	wrapper
+In-Reply-To: <cover.1407088287.git.yann.morin.1998@free.fr>
+References: <cover.1407088287.git.yann.morin.1998@free.fr>
+Message-ID: <f1358431181b269847770affc428a1401f48b184.1407088287.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+This drastically simplifies the bzr helper, as it no longer has to
+deal with atomically saving the downloaded archive.
 
-This series is a follow-up to the previous download series. Following
-the advice from Arnout, I introduced a wrapper script that is responsible
-for the saving atomically in BR2_DL_DIR. If also manages all the temporary
-files, and properly cleans up.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Consequently, the helpers are now nuch more simple, and no longer need to
-duplicate the complex handling of atomicity in BR2_DL_DIR, nor do they
-need to manage temporary files.
-
+---
 Changes v3 -> v4:
-  - fix root-dir in bzr-generated archives  (Thomas DS)
-  - enhance the usage comment in every hepers  (Thomas DS)
-  - typoes  (Thomas DS)
+  - fix root dir of the archive  (Thomas DS)
+  - tweak the usage comment  (Thomas DS)
+---
+ package/pkg-download.mk |  6 +++++-
+ support/download/bzr    | 42 ++++++++++++------------------------------
+ 2 files changed, 17 insertions(+), 31 deletions(-)
 
-Changes v2 -> v3:
-  - complete rewrite of the series
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 01370132c10cb2d194042e08fefbc9cec8392c66:
-
-  gst-fsl-plugins, libfslvpuwrap: add missing select (2014-08-03 14:47:03 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/check-downloads
-
-for you to fetch changes up to d43ab6ef106a7a55948b533b22ad7215fc580c51:
-
-  support/download: convert wget to use the wrapper (2014-08-03 19:49:55 +0200)
-
-----------------------------------------------------------------
-Yann E. MORIN (9):
-      support/download: add download wrapper
-      support/download: convert bzr to use the wrapper
-      support/download: convert localfiles to use the wrapper
-      support/download: convert cvs to use the wrapper
-      support/download: convert git to use the wrapper
-      support/download: convert Hg to use the wrapper
-      support/download: convert scp to use the wrapper
-      support/download: convert svn to use the wrapper
-      support/download: convert wget to use the wrapper
-
- package/pkg-download.mk  | 50 ++++++++++++++++--------
- support/download/bzr     | 42 ++++++--------------
- support/download/cp      | 26 ++++---------
- support/download/cvs     | 54 ++++++++------------------
- support/download/git     | 62 ++++++++++--------------------
- support/download/hg      | 52 ++++++++-----------------
- support/download/scp     | 28 ++++----------
- support/download/svn     | 48 +++++++----------------
- support/download/wget    | 35 ++++-------------
- support/download/wrapper | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
- 10 files changed, 234 insertions(+), 262 deletions(-)
- create mode 100755 support/download/wrapper
-
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 118591c..0c9397a 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -112,7 +112,11 @@ endef
+ 
+ define DOWNLOAD_BZR
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/bzr $($(PKG)_SITE) $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE)
++	$(EXTRA_ENV) support/download/wrapper bzr \
++		$(DL_DIR)/$($(PKG)_SOURCE) \
++		$($(PKG)_SITE) \
++		$($(PKG)_DL_VERSION) \
++		$($(PKG)_BASE_NAME)
+ endef
+ 
+ define SOURCE_CHECK_BZR
+diff --git a/support/download/bzr b/support/download/bzr
+index 19d837d..b545cb1 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -1,38 +1,20 @@
+ #!/bin/bash
+ 
+-# We want to catch any command failure, and exit immediately
++# We want to catch any unexpected failure, and exit immediately
+ set -e
+ 
+-# Download helper for bzr
+-# Call it with:
+-#   $1: bzr repo
+-#   $2: bzr revision
+-#   $3: output file
++# Download helper for bzr, to be called from the download wrapper script
++# Expected arguments:
++#   $1: output file
++#   $2: bzr repo
++#   $3: bzr revision
++#   $4: basename
+ # And this environment:
+ #   BZR      : the bzr command to call
+-#   BUILD_DIR: path to Buildroot's build dir
+ 
+-repo="${1}"
+-rev="${2}"
+-output="${3}"
++output="${1}"
++repo="${2}"
++rev="${3}"
++basename="${4}"
+ 
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+-
+-# Play tic-tac-toe with temp files
+-# - first, we download to a trashable location (the build-dir)
+-# - the we move to a temp file in the final location, so it is
+-#   on the same filesystem as the final file
+-# - finally, we atomically rename to the final file
+-
+-ret=1
+-if ${BZR} export --format=tgz "${tmp_dl}" "${repo}" -r "${rev}"; then
+-    if mv "${tmp_dl}" "${tmp_output}"; then
+-        mv "${tmp_output}" "${output}"
+-        ret=0
+-    fi
+-fi
+-
+-# Cleanup
+-rm -f "${tmp_dl}" "${tmp_output}"
+-exit ${ret}
++${BZR} export --root="${basename}/" --format=tgz "${output}" "${repo}" -r "${rev}"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
