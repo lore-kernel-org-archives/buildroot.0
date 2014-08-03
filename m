@@ -1,112 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Aug 2014 09:37:26 +0200
-Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
- calls with a single call
-In-Reply-To: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
-References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140803073726.GB4052@free.fr>
+Date: Sun, 3 Aug 2014 09:50:59 +0200
+Subject: [Buildroot] [PATCH 1 of 5 v3] uclibc: fixup config before
+	calling menuconfig
+In-Reply-To: <8fc7b26a491414b96420.1406922823@localhost>
+References: <patchbomb.1406922822@localhost>
+ <8fc7b26a491414b96420.1406922823@localhost>
+Message-ID: <20140803075058.GC4052@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Danomi, All,
+Thomas, All,
 
-On 2014-08-02 21:21 -0400, Danomi Manchego spake thusly:
-> Since openssh-6.0, the ssh-keygen app has supported a -A option,
-> which creates any missing keys.  This frees us of having to add
-> new ssh-keygen invocations as new key types are introduced.  This
-> also frees us of having to know the default key names and locations.
-> So this patch replaces all the the init.d script invocations with
-> a single "ssh-keygen -A" call.
+On 2014-08-01 21:53 +0200, Thomas De Schampheleire spake thusly:
+> The uclibc-menuconfig command is currently run based on the user-specified
+> config file, while the fixup of the config file is done afterwards.
+> However, it makes more sense to do an initial fixup _before_ running
+> menuconfig, so that the options presented to the user are consistent with
+> the final configuration.
 > 
-> Note: the systemd service script *already* uses this option.
+> This patch changes the dependency of the menuconfig target from .config to
+> .stamp_config_fixup_done to achieve this.
 > 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-However, I have a comment about this key generation: it does not work
-when the filesystem is read-only. That was already the case before your
-patch, hence my Ack. But we should probably find a way to fix that one
-way or the other.
-
-One option would be to pre-generate the host keys at build-time. There
-are pros abd cons with this, though:
-
-  - pros: we can save the public keys and store them in the known_hosts
-    file of the user. No confirmation at first connection, usefull
-    during development;
-
-  - cons: the image can't be realisticaly deployed to many targets,
-    otherwise they would all have the same keys. Bad.
-
-I don't have a better solution for now... :-/
-
-Of course, we can also delegate to the user the reponsibility to ensure
-that /etc *is* writable when openssh is installed (which we implicitly
-do right now.)
+I tested that the menuconfig does indeed display our specific options,
+and that the intermediate stamp file is indeed removed after exiting the
+menuconfig. Further calls also properly restore our options.
 
 Regards,
 Yann E. MORIN.
 
+> 
 > ---
->  package/openssh/S50sshd |   34 ++--------------------------------
->  1 file changed, 2 insertions(+), 32 deletions(-)
+> v3: new patch
 > 
-> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-> index d3abf7c..65bdb90 100644
-> --- a/package/openssh/S50sshd
-> +++ b/package/openssh/S50sshd
-> @@ -6,38 +6,8 @@
->  # Make sure the ssh-keygen progam exists
->  [ -f /usr/bin/ssh-keygen ] || exit 0
->  
-> -# Check for the SSH1 RSA key
-> -if [ ! -f /etc/ssh_host_key ] ; then
-> -	echo Generating RSA Key...
-> -	/usr/bin/ssh-keygen -t rsa1 -f /etc/ssh_host_key -C '' -N ''
-> -fi
-> -
-> -# Check for the SSH2 RSA key
-> -if [ ! -f /etc/ssh_host_rsa_key ] ; then
-> -	echo Generating RSA Key...
-> -	/usr/bin/ssh-keygen -t rsa -f /etc/ssh_host_rsa_key -C '' -N ''
-> -fi
-> -
-> -# Check for the SSH2 DSA key
-> -if [ ! -f /etc/ssh_host_dsa_key ] ; then
-> -	echo Generating DSA Key...
-> -	echo
-> -	/usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
-> -fi
-> -
-> -# Check for the SSH2 ECDSA key
-> -if [ ! -f /etc/ssh_host_ecdsa_key ]; then
-> -	echo Generating ECDSA Key...
-> -	echo
-> -	/usr/bin/ssh-keygen -t ecdsa -f /etc/ssh_host_ecdsa_key -C '' -N ''
-> -fi
-> -
-> -# Check for the ed25519 key
-> -if [ ! -f /etc/ssh_host_ed25519_key ]; then
-> -	echo Generating ed25519 Key...
-> -	echo
-> -	/usr/bin/ssh-keygen -t ed25519 -f /etc/ssh_host_ed25519_key -C '' -N ''
-> -fi
-> +# Create any missing keys
-> +/usr/bin/ssh-keygen -A
->  
->  umask 077
->  
-> -- 
-> 1.7.9.5
+>  package/uclibc/uclibc.mk |  2 +-
+>  1 files changed, 1 insertions(+), 1 deletions(-)
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> diff -r 892938e37055 -r 8fc7b26a4914 package/uclibc/uclibc.mk
+> --- a/package/uclibc/uclibc.mk	Mon Apr 28 06:58:48 2014 +0200
+> +++ b/package/uclibc/uclibc.mk	Fri Aug 01 21:22:29 2014 +0200
+> @@ -542,7 +542,7 @@
+>  
+>  $(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.stamp_config_fixup_done
+>  
+> -uclibc-menuconfig: $(UCLIBC_DIR)/.config
+> +uclibc-menuconfig: $(UCLIBC_DIR)/.stamp_config_fixup_done
+>  	$(MAKE) -C $(UCLIBC_DIR) \
+>  		$(UCLIBC_MAKE_FLAGS) \
+>  		PREFIX=$(STAGING_DIR) \
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
