@@ -1,53 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:24:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Bump to version 2.3.1
-In-Reply-To: <1407017477-8540-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1407017477-8540-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140803102404.7d7fa4b6@free-electrons.com>
+Date: Sun, 3 Aug 2014 10:20:35 +0200
+Subject: [Buildroot] [git commit] package/rpi-userland: Bump version
+Message-ID: <20140803083010.1F1959D37D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=5ffc0392d2ed08501837116fa16c4b835bf27927
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  3 Aug 2014 00:11:17 +0200, Bernd Kuhls wrote:
-> - remove obsolete option --disable-vis
-> - add patch to fix compile error with uClibc
-> - add patch to fix compile error in freerdp
+This version bump introduces OMX_ImageFilterDeInterlaceFast,
+which is needed by the upcoming xbmc/kodi version bump.
 
-I've applied the patch. However, I have one comment, below.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rpi-userland/rpi-userland.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-
-> +diff -uNr ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c.org/libavutil/libm.h ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c/libavutil/libm.h
-> +--- ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c.org/libavutil/libm.h	2014-07-16 20:37:20.000000000 +0200
-> ++++ ffmpeg-d028c907004e8a3c0f5161ce595331e4cc57c86c/libavutil/libm.h	2014-07-17 22:58:01.781316442 +0200
-> +@@ -82,16 +82,6 @@
-> + #define exp2f(x) ((float)exp2(x))
-> + #endif /* HAVE_EXP2F */
-> + 
-> +-#if !HAVE_FMINF
-> +-#undef fminf
-> +-static av_always_inline av_const float fminf(float x, float y)
-> +-{
-> +-    //Note, the NaN special case is needed for C spec compliance, it should be
-> +-    //optimized away if the users compiler is configured to assume no NaN
-> +-    return x > y ? y : (x == x ? x : y);
-> +-}
-> +-#endif
-
-This looks weird: if fminf() is already defined in uClibc, then
-HAVE_FMINF should have been true and this code should not have been
-included into the build.
-
-What happened with the HAVE_FMINF test? Maybe it would be worth having
-a look to do a upstream acceptable fix for this issue?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 2de6b92..717eab1 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_USERLAND_VERSION = 4855a45b118cb7b97b83e5160551db9813487c91
++RPI_USERLAND_VERSION = b555474b19310762255252d085e57599ea573889
+ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+ RPI_USERLAND_LICENSE = BSD-3c
+ RPI_USERLAND_LICENSE_FILES = LICENCE
