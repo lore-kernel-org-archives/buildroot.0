@@ -1,79 +1,162 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  3 Aug 2014 08:30:10 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-02
-Message-ID: <20140803063011.3E44B1016A2@stock.ovh.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 03 Aug 2014 09:18:03 +0200
+Subject: [Buildroot] [PATCH 1/9 v3] support/download: add download
+	wrapper
+In-Reply-To: <dc7cb9f1441183b56518a81a1ea45974cae07635.1405895896.git.yann.morin.1998@free.fr>
+References: <cover.1405895896.git.yann.morin.1998@free.fr>
+ <dc7cb9f1441183b56518a81a1ea45974cae07635.1405895896.git.yann.morin.1998@free.fr>
+Message-ID: <1c1d8ef4-5cbe-4710-aee2-4bbae33ebd48@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-08-02
-===============================
+Hi Yann,
 
-        success : 71 
-       failures : 32 
-       timeouts : 0  
-          TOTAL : 103
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>The download wrapper is responsible for ensuring the atomicity
+>of saving into $(BR2_DL_DIR).
+>
+>It calls the appropriate download helper, telling it to save the
+>downloaded content to a temporary file in $(BUILD_DIR) (so it does
+>not clutter $(BR2_DL_DIR) with partial, failed downloads.
+>
+>Then, only it the download helper was successful, does the wrapper
 
-Classification of failures by reason
-====================================
+only if
 
-                 libpcap-1.6.1 | 6 
-                     vlc-2.1.4 | 5 
-                elfutils-0.155 | 4 
-                  perl-gd-2.53 | 2 
-               ruby-1.9.3-p545 | 2 
-                    ngrep-1.45 | 1 
-                  autossh-1.4c | 1 
-                     nut-2.7.2 | 1 
-    bandwidthd-v2.0.1-auto-r07 | 1 
-                    fftw-3.3.4 | 1 
-                libmpeg2-0.5.1 | 1 
-                    yajl-2.0.4 | 1 
-                  cppcms-1.0.4 | 1 
-                oprofile-0.9.9 | 1 
-                 iftop-1.0pre4 | 1 
-                 empty-0.6.19b | 1 
-               alsa-lib-1.0.28 | 1 
-                      qt-4.8.6 | 1 
+>saves the downloaded content to the final location, yet still in a
 
-Detail of failures
-===================
+does ... save
 
-    x86_64 |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/a1dc523527c35521454a8d2a62a0a85f8f48e75c/
-     nios2 |                   autossh-1.4c | NOK | http://autobuild.buildroot.net/results/92e70a7aa296b29b856d25461520ff46477bd69a/
-       arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/96662d417e42f9b25bbffea38259a8d52ddfdec4/
-   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/1d3bf27451fdd9516d5a93fcdcd8ecb1bbbb1b6e/
-      i486 |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/8814a8cea9f9affd7b600a9a1819975c2e84f36b/
-   powerpc |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/6edd687ffb5d334fb97c15163cf5dc0f110831fc/
-   powerpc |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/9f10de926f1187e220eeb7d641516253b4f38b7c/
-       arm |                 elfutils-0.155 | NOK | http://autobuild.buildroot.net/results/ffc32fd32f9d1b890deef41560d815d95f33eed0/
-      i486 |                  empty-0.6.19b | NOK | http://autobuild.buildroot.net/results/9fce0825772e99de3c6808b729641147385413aa/
-       arm |                     fftw-3.3.4 | NOK | http://autobuild.buildroot.net/results/9b22da0beb69b04ecdc8d3913c9ed42b70fb6ff5/
-      bfin |                  iftop-1.0pre4 | NOK | http://autobuild.buildroot.net/results/60f82bedae255f6b69c9a5ac22686c76c6276301/
-   powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/6325bcf9d99cac6c4b6f5f273e1d12a3b8333f09/
-       arm |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/bb3e68423e00105643506afee50548f90fd1e09e/
-       arm |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/541d12463a09b104e8714698f055b8c89a247152/
-   powerpc |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/728440a3cbedaf02eef222cb4d3589f939faf4c0/
-   aarch64 |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/56aec09cfbebd9d31545f6694ae8c27359ec7b59/
-microblazeel |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/7e5be5a461a290feaf35ae9bc80bf98cf082ac11/
-   aarch64 |                  libpcap-1.6.1 | NOK | http://autobuild.buildroot.net/results/9f194ea7ede8b75db4a85652ad93118f35117497/
-      bfin |                     ngrep-1.45 | NOK | http://autobuild.buildroot.net/results/93842b54767cca51c68ad33ddc93ec58d70602c8/
-       arm |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/718beeae1c5eb0e1fef2723cdc6fd237f3c2d3b9/
-       arm |                 oprofile-0.9.9 | NOK | http://autobuild.buildroot.net/results/1319b9159abf58df8c28aa1c8abd92c04cf37015/
-       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/9162836f4b693a0667bac46c9fae1d3d86f6e4a9/
-       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/40ce43b472f4ab6855c1a9ae49666278bb75b44a/
-       arm |                       qt-4.8.6 | NOK | http://autobuild.buildroot.net/results/d70e8832f319fb7a50e88a3546b100f98db499bd/
-      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/8f1dc4fc5798366c3b1f37df6efa22f3c1f4785d/
-      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/04f8cd383406b049c5f51321d0e9e4f212e0863c/
-      i686 |                      vlc-2.1.4 | NOK | http://autobuild.buildroot.net/results/cb8402fc994697f157348d88f848357ca21156a4/
-      sh4a |                      vlc-2.1.4 | NOK | http://autobuild.buildroot.net/results/022252176c051ff3365b2cb820f32aafc802803a/
-       arm |                      vlc-2.1.4 | NOK | http://autobuild.buildroot.net/results/6660453c78d1557b645e8fd5b3ed2076e64fc91a/
-      mips |                      vlc-2.1.4 | NOK | http://autobuild.buildroot.net/results/0d4199c3271bbd7cf8a04403c5dafa1178f75fb1/
-       arm |                      vlc-2.1.4 | NOK | http://autobuild.buildroot.net/results/2dbaa3603b3dab9e06a37993fb235d009bd22df9/
-       arm |                     yajl-2.0.4 | NOK | http://autobuild.buildroot.net/results/7d15eb9273da4f5c16f180ff15e2d0ea08d98b6f/
+>teporary file, and finally atomically renames it to the final output
+
+temporary
+
+>file.
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>---
+> support/download/wrapper | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
+> 1 file changed, 99 insertions(+)
+> create mode 100755 support/download/wrapper
+>
+>diff --git a/support/download/wrapper b/support/download/wrapper
+>new file mode 100755
+>index 0000000..bc0d486
+>--- /dev/null
+>+++ b/support/download/wrapper
+>@@ -0,0 +1,99 @@
+>+#!/bin/bash
+>+
+>+# This script is a wrapper to the other download helpers.
+>+# Its role is to ensure atomicity when saving downloaded files
+>+# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
+>+# failed downloads.
+>+#
+>+# Call it with:
+>+#   $1: name of the helper (eg. cvs, git, cp...)
+>+#   $2: full path to the file in which to save the download
+>+#   $*: additional arguments to the helper in $1
+>+# Environment:
+>+#   BUILD_DIR: the path to Buildroot's build dir
+>+
+>+# To avoid cluttering BR2_DL_DIR, we download to a trashable
+>+# location, namely in $(BUILD_DIR).
+>+# Then, we move the downloaed file to a temporary file in the
+
+downloaded
+
+>+# same directory as the final output file.
+>+# This allows us to finally atomically rename it to its final
+>+# name.
+>+# If anything goes wrong, we just remove all the temporaries
+>+# created so far.
+>+
+>+# We want to catch any unexpected failure, and exit immediately.
+>+set -e
+>+
+>+helper="${1}"
+>+output="${2}"
+>+shift 2
+>+
+>+# tmpd is a temporary directory in which helpers may store intermediate
+>+# by-products of the download.
+>+# tmpf is the file in which the helpers should put the downloaded content.
+>+# tmpd located in $(BUILD_DIR), so as not to cluter the (precious)
+
+tmpd is located
+clutter
+
+>+# $(BR2_DL_DIR)
+>+# We let the helpers create tmpf, so they are able to set whatever
+>+# permission bits they want (although we're only really interested in
+>+# the executable bit.)
+>+tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+>+tmpf="${tmpd}/output"
+>+
+>+# Helpers expect to run in a directory that is *really* trashable, so
+>+# they are free to create whatever files and/or sub-dirs they might need.
+>+# Doing the 'cd' here rather than in all helpers is easier.
+>+cd "${tmpd}"
+>+
+>+# If the helper fails, we can just remove the temporary directory to
+>+# remove all the cruft it may have left behind. Then we just exit in
+>+# error too.
+>+if ! "${OLDPWD}/support/download/${helper}" "${tmpf}" "${@}"; then
+>+    rm -rf "${tmpd}"
+>+    exit 1
+>+fi
+>+
+>+# cd back to free the temp-dir, so we can remove it later
+>+cd "${OLDPWD}"
+>+
+>+# tmp_output is in the same directory as the final output, so we can
+>+# later move it atomically.
+>+tmp_output="$( mktemp "${output}.XXXXXX" )"
+>+
+>+# 'mktemp' creates files with 'go=-rwx', so the files are not accessible
+>+# to users other than the one doing the download (and root, of course).
+>+# This can be problematic when a shared BR2_DL_DIR is used by different
+>+# users (e.g. on a build server), where all users may write to the shared
+>+# location, since other users would not be allowed to read the files
+>+# another user downloaded.
+>+# So, we restore the 'go' access rights to a more sensible value, while
+>+# still abiding by the current user's umask. We must do that before the
+>+# final 'mv', so just do it now.
+>+# Some helpers (cp and scp) may create executable files, so we need to
+>+# carry the executable bit if needed.
+>+[ -x "${tmpf}" ] && new_mode=755 || new_mode=644
+>+new_mode=$( printf "%04o" $((0${new_mode} & ~0$(umask))) )
+>+chmod ${new_mode} "${tmp_output}"
+>+
+>+# We must *not* unlink tmp_output, otherwise there is a small window
+>+# during which another download process may create the same tmp_output
+>+# name (very, very unlikely; but not impossible.)
+>+# Using 'cp' is not reliable, since 'cp' may unlink the destination file
+>+# if it is unable to open it with O_WRONLY|O_TRUNC; see:
+>+#   http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cp.html
+>+# Since the destination filesystem can be anything, it might not support
+>+# O_TRUNC, so 'cp' would unlink it first.
+>+# Use 'cat' and append-redirection '>>' to save to the final location,
+>+# since that is the only way we can be 100% sure of the behaviour.
+>+if ! cat "${tmpf}" >>"${tmp_output}"; then
+>+    rm -rf "${tmpd}" "${tmp_output}"
+>+    exit 1
+>+fi
+>+rm -rf "${tmpd}"
+>+# tmp_output and output are on the same filesystem, so POSIX guarantees
+>+# that 'mv' is atomic, because it then uses rename() that POSIX mandates
+>+# to be atomic, see:
+>+#   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
+>+if ! mv "${tmp_output}" "${output}"; then
+>+    rm -f "${tmp_output}"
+>+    exit 1
+>+fi
 
 
--- 
-http://autobuild.buildroot.net
+Note that I hope we can apply this series in the current release still...
+
+Best regards,
+Thomas
