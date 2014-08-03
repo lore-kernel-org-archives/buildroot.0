@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:18:35 +0200
-Subject: [Buildroot] [PATCH] samba4: security update to 4.1.11
-In-Reply-To: <1406905723-11546-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1406905723-11546-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140803101835.48dc364f@free-electrons.com>
+Date: Sun, 3 Aug 2014 10:20:07 +0200
+Subject: [Buildroot] [PATCH 1/1] xapp_xrandr: Bump version to 1.4.3
+In-Reply-To: <1406971112-28226-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1406971112-28226-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140803102007.5d10dc41@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Bernd Kuhls,
 
-On Fri,  1 Aug 2014 12:08:43 -0300, Gustavo Zacarias wrote:
-> Fixes CVE-2014-3560 (Remote code execution in nmbd).
+On Sat,  2 Aug 2014 11:18:30 +0200, Bernd Kuhls wrote:
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/samba4/samba4.mk | 2 +-
+>  package/x11r7/xapp_xrandr/xapp_xrandr.mk |    2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks.
+Applied, as well as the xcb-proto and libxcb bumps you have sent.
+
+Thanks,
 
 Thomas
 -- 
