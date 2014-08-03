@@ -1,43 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:21:16 +0200
-Subject: [Buildroot] [git commit] configs: bump kernel used for the RPi
-Message-ID: <20140803083010.306219D37B@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 10:27:06 +0200
+Subject: [Buildroot] [git commit] qt: make installation of translation files
+	optional
+Message-ID: <20140803083010.3DB049D37B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=72b32d5197d4227ce80339388849fe39a996e441
+commit: http://git.buildroot.net/buildroot/commit/?id=2ff329412f490dc916bab3377073ef5950a46298
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rpi-3.12.y branch has now been merged with the 3.12.25 upstream.
+Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e introduced the
+installation of the binary .qm translation files, unconditionally.
+This patch introduces an option to disable this behavior, saving
+almost 8MB of space.
 
-Bump kernel headers used for the toolchain at the same time.
+[Thomas: rename option to BR2_PACKAGE_QT_TRANSLATION_FILES instead of
+BR2_PACKAGE_QT_INSTALL_TRANSLATION_FILES, and move its definition
+around the installation of examples/demos rather than in the middle of
+the options for the different modules.]
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/raspberrypi_defconfig |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/qt/Config.in |    7 +++++++
+ package/qt/qt.mk     |    2 ++
+ 2 files changed, 9 insertions(+), 0 deletions(-)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 7727533..c12d473 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index 0a21e93..93751cd 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -28,6 +28,13 @@ config BR2_PACKAGE_QT_DEMOS
+ 	help
+ 	  If unsure, say N.
  
- # Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.20"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.25"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
++config BR2_PACKAGE_QT_TRANSLATION_FILES
++	bool "Install translation files"
++	default y
++	help
++	  Install binary .qm translation files.
++	  If unsure, say y.
++
+ config BR2_PACKAGE_QT_EXAMPLES
+ 	bool "Compile and install Qt examples (with code)"
+ 	select BR2_PACKAGE_QT_GUI_MODULE
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 82a5509..880e835 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -670,12 +670,14 @@ define QT_INSTALL_TARGET_POWERVR
+ endef
+ endif
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a25152fdfbfd3b4330da16fc3aeb6b1ef8843805"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
++ifeq ($(BR2_PACKAGE_QT_TRANSLATION_FILES),y)
+ define QT_INSTALL_TARGET_TRANSLATIONS
+ 	if [ -d $(STAGING_DIR)/usr/share/qt/translations/ ] ; then \
+ 		mkdir -p $(TARGET_DIR)/usr/share/qt/translations ; \
+ 		cp -dpfr $(STAGING_DIR)/usr/share/qt/translations/* $(TARGET_DIR)/usr/share/qt/translations ; \
+ 	fi
+ endef
++endif
+ 
+ define QT_INSTALL_TARGET_CMDS
+ 	$(QT_INSTALL_TARGET_LIBS)
