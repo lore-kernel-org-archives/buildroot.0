@@ -1,35 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 14:32:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Bump to version 2.3.1
-In-Reply-To: <XnsA37E88A2EAAF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1407017477-8540-1-git-send-email-bernd.kuhls@t-online.de>
- <20140803102404.7d7fa4b6@free-electrons.com>
- <XnsA37E88A2EAAF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20140803143250.362afa9e@free-electrons.com>
+Date: Sun, 3 Aug 2014 14:37:04 +0200
+Subject: [Buildroot] [git commit] package/ltrace: Fix "unmet direct
+	dependencies"
+Message-ID: <20140803123718.3A7429D365@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=9a68777b66f0d883f9c498d52a34734de654051e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 03 Aug 2014 13:25:55 +0200, Bernd Kuhls wrote:
+Fixes build error in elfutils
+http://autobuild.buildroot.net/results/37f/37f87ad7ba087d42d0001f55305f7468c2a172b6/
 
-> output/build/ffmpeg-2.3.1/config.log contains
-> ffconf.Vyn5TU6p.c:(.text+0x1f): undefined reference to `fminf'
-> 
-> which leads to 
-> 
-> #define HAVE_FMINF 0
-> 
-> in output/build/ffmpeg-2.3.1/config.h which seems true when looking at
-> http://git.uclibc.org/uClibc/tree/libm/float_wrappers.c#n48
+eblwstrtab.c:(.text+0x43): undefined reference to `wmempcpy'
+eblwstrtab.c:(.text+0x1ba): undefined reference to `wcslen'
+eblwstrtab.c:(.text+0x2df): undefined reference to `wmemcmp'
 
-So, this should work without the need for your patch, right?
+because ltrace did not take into account that elfutils depends on
+BR2_LARGEFILE & BR2_USE_WCHAR. This is also visible here:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+wget http://autobuild.buildroot.net/results/37f/37f87ad7ba087d42d0001f55305f7468c2a172b6/defconfig
+make defconfig BR2_DEFCONFIG=defconfig
+
+warning: (BR2_PACKAGE_LTRACE) selects BR2_PACKAGE_ELFUTILS which has unmet direct
+dependencies (BR2_LARGEFILE && BR2_USE_WCHAR && !BR2_avr32 && !BR2_bfin)
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ltrace/Config.in |    2 ++
+ 1 files changed, 2 insertions(+), 0 deletions(-)
+
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index aee14bd..4389210 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_LTRACE
+ 		|| BR2_powerpc || BR2_sparc || BR2_x86_64)
+ 	select BR2_PACKAGE_LIBELF
+ 	select BR2_PACKAGE_ELFUTILS
++	depends on BR2_LARGEFILE # elfutils
++	depends on BR2_USE_WCHAR # elfutils
+ 	help
+ 	  Debugging program which runs a specified command until it exits.
+ 	  While the command is executing, ltrace intercepts and records
