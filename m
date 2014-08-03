@@ -1,153 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 11:24:33 +0200
-Subject: [Buildroot] [git commit] icu: Add dependency on atomic intrinsics
-Message-ID: <20140803093227.853E59D226@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 11:22:24 +0200
+Subject: [Buildroot] [git commit] jack2: Add dependency on atomic intrinsics
+Message-ID: <20140803093227.751549D226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b7a791a103d21835d0e3fb8accfb58346330560f
+commit: http://git.buildroot.net/buildroot/commit/?id=b35d1582346625a7076de0a44958d5c5133103d2
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ICU requires GCC built-in atomic functions which are architecture specific
+Jack requires GCC built-in atomic functions which are architecture specific
 and may not be implemented.
+
+This fixes:
+http://autobuild.buildroot.net/results/c218be876d3abf7a8e212b6d526595bfd835e1c5/
 
 Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/beecrypt/Config.in    |   12 ++++++------
- package/cppcms/Config.in      |    7 +++----
- package/icu/Config.in         |    7 +++----
- package/php/Config.ext        |    8 ++++----
- package/qt5/qt5base/Config.in |    5 ++++-
- 5 files changed, 20 insertions(+), 19 deletions(-)
+ package/jack2/Config.in |    7 +++----
+ 1 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/beecrypt/Config.in b/package/beecrypt/Config.in
-index 462c8a6..e0f9181 100644
---- a/package/beecrypt/Config.in
-+++ b/package/beecrypt/Config.in
-@@ -1,5 +1,5 @@
--comment "beecrypt needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "beecrypt needs a toolchain w/ threads, atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 
- config BR2_PACKAGE_BEECRYPT
- 	bool "beecrypt"
-@@ -15,15 +15,15 @@ config BR2_PACKAGE_BEECRYPT_CPP
- 	bool "C++ support"
+diff --git a/package/jack2/Config.in b/package/jack2/Config.in
+index a443f58..82143c7 100644
+--- a/package/jack2/Config.in
++++ b/package/jack2/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_JACK2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+ 	depends on BR2_USE_MMU # fork()
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # icu
--	depends on !BR2_arc # icu
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
- 	depends on !BR2_BINFMT_FLAT # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Enable C++ support. This pulls in the (large) icu package.
- 
--comment "C++ support needs a toolchain w/ wchar"
--	depends on !BR2_arc
-+comment "C++ support needs a toolchain w/ wchar, atomic intrinsics"
- 	depends on !BR2_BINFMT_FLAT
--	depends on BR2_INSTALL_LIBSTDCPP && !BR2_USE_WCHAR
-+	depends on BR2_INSTALL_LIBSTDCPP && (!BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS)
- 
- endif # BR2_PACKAGE_BEECRYPT
-diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-index 614abeb..297c514 100644
---- a/package/cppcms/Config.in
-+++ b/package/cppcms/Config.in
-@@ -24,17 +24,16 @@ if BR2_PACKAGE_CPPCMS
- 
- config BR2_PACKAGE_CPPCMS_ICU
- 	bool "enable icu support"
--	depends on !BR2_arc # icu -> atomic builtins
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_USE_WCHAR # icu
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
- 	select BR2_PACKAGE_ICU
- 	help
- 	  Using ICU allows advanced localization features into CppCMS,
- 	  in another hand ICU is heavier than iconv.
- 
--comment "icu support needs a toolchain w/ wchar"
--	depends on !BR2_arc
--	depends on !BR2_BINFMT_FLAT
-+comment "icu support needs a toolchain w/ wchar, atomic intrinsics"
-+	depends on !BR2_BINFMT_FLAT || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	depends on !BR2_USE_WCHAR
- 
- endif
-diff --git a/package/icu/Config.in b/package/icu/Config.in
-index d14f8d8..d4521ac 100644
---- a/package/icu/Config.in
-+++ b/package/icu/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_ICU
- 	# file, and it cannot easily be changed to generate FLAT
- 	# format.
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_arc # atomic builtins
+-	depends on !BR2_arc # missing compiler intrinsics
 +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	help
- 	  International Components for Unicode.
+ 	select BR2_PACKAGE_LIBSAMPLERATE
+ 	select BR2_PACKAGE_LIBSNDFILE
+ 	select BR2_PACKAGE_ALSA_LIB
+@@ -21,8 +21,7 @@ config BR2_PACKAGE_JACK2
  
-@@ -25,8 +25,7 @@ config BR2_PACKAGE_ICU_CUSTOM_DATA_PATH
+ 	  http://jackaudio.org/
  
- endif
- 
--comment "icu needs a toolchain w/ C++, wchar, threads"
+-comment "jack2 needs a toolchain w/ largefile, threads, C++"
++comment "jack2 needs a toolchain w/ largefile, threads, C++, atomic intrinsics"
+ 	depends on BR2_USE_MMU
 -	depends on !BR2_arc
-+comment "icu needs a toolchain w/ C++, wchar, threads, atomic intrinsics"
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index ff9a6ad..078be8d 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -166,16 +166,16 @@ config BR2_PACKAGE_PHP_EXT_INTL
- 	select BR2_PACKAGE_ICU
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
--	depends on !BR2_arc # icu -> atomic builtins
- 	depends on !BR2_BINFMT_FLAT # icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
- 	help
- 	  Internationalization support
- 
--comment "intl support needs a toolchain w/ C++, wchar, threads"
--	depends on !BR2_arc
-+comment "intl support needs a toolchain w/ C++, wchar, threads, atomic intrinsics"
- 	depends on !BR2_BINFMT_FLAT
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 
- comment "Image processing"
- 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index b95a74a..67f211c 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -241,12 +241,15 @@ config BR2_PACKAGE_QT5BASE_DBUS
- config BR2_PACKAGE_QT5BASE_ICU
- 	bool "Enable ICU support"
- 	select BR2_PACKAGE_ICU
--	depends on !BR2_arc # icu -> atomic builtins
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # icu
- 	depends on !BR2_BINFMT_FLAT # icu
- 	help
- 	  This option enables ICU support in Qt5. This is for example
- 	  needed for Qt5Webkit.
- 
-+comment "icu needs a toolchain w/ atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- config BR2_PACKAGE_QT5BASE_TSLIB
- 	bool "Enable Tslib support"
- 	depends on !BR2_PREFER_STATIC_LIB # dlopen
+ 	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_INSTALL_LIBSTDCPP
++		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
