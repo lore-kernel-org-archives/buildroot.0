@@ -1,137 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Aug 2014 19:53:34 +0200
-Subject: [Buildroot] [PATCH 1/9 v4] support/download: add download wrapper
+Date: Sun,  3 Aug 2014 19:53:36 +0200
+Subject: [Buildroot] [PATCH 3/9 v4] support/download: convert localfiles to
+	use the wrapper
 In-Reply-To: <cover.1407088287.git.yann.morin.1998@free.fr>
 References: <cover.1407088287.git.yann.morin.1998@free.fr>
-Message-ID: <b08c0f9ddf17c277aec99746f4258ca3cc077270.1407088287.git.yann.morin.1998@free.fr>
+Message-ID: <d2e34e4bfbd35d3bc4bf16c3ee82745680e3f7b9.1407088287.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The download wrapper is responsible for ensuring the atomicity
-of saving into $(BR2_DL_DIR).
-
-It calls the appropriate download helper, telling it to save the
-downloaded content to a temporary file in $(BUILD_DIR) (so it does
-not clutter $(BR2_DL_DIR) with partial, failed downloads.
-
-Then, only if the download helper was successful, does the wrapper
-save the downloaded content to the final location, yet still in a
-temporary file, and finally atomically renames it to the final output
-file.
+This drastically simplifies the localfiles helper, as it no longer has
+to deal with atomically saving the downloaded archive.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- support/download/wrapper | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 99 insertions(+)
- create mode 100755 support/download/wrapper
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(Tested by setting BUSYBOX_SITE = file:///tmp and running 'make busybox-source')
 
-diff --git a/support/download/wrapper b/support/download/wrapper
-new file mode 100755
-index 0000000..8ae2797
---- /dev/null
-+++ b/support/download/wrapper
-@@ -0,0 +1,99 @@
-+#!/bin/bash
-+
-+# This script is a wrapper to the other download helpers.
-+# Its role is to ensure atomicity when saving downloaded files
-+# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
-+# failed downloads.
-+#
-+# Call it with:
-+#   $1: name of the helper (eg. cvs, git, cp...)
-+#   $2: full path to the file in which to save the download
-+#   $*: additional arguments to the helper in $1
-+# Environment:
-+#   BUILD_DIR: the path to Buildroot's build dir
-+
-+# To avoid cluttering BR2_DL_DIR, we download to a trashable
-+# location, namely in $(BUILD_DIR).
-+# Then, we move the downloaded file to a temporary file in the
-+# same directory as the final output file.
-+# This allows us to finally atomically rename it to its final
-+# name.
-+# If anything goes wrong, we just remove all the temporaries
-+# created so far.
-+
-+# We want to catch any unexpected failure, and exit immediately.
-+set -e
-+
-+helper="${1}"
-+output="${2}"
-+shift 2
-+
-+# tmpd is a temporary directory in which helpers may store intermediate
-+# by-products of the download.
-+# tmpf is the file in which the helpers should put the downloaded content.
-+# tmpd is located in $(BUILD_DIR), so as not to clutter the (precious)
-+# $(BR2_DL_DIR)
-+# We let the helpers create tmpf, so they are able to set whatever
-+# permission bits they want (although we're only really interested in
-+# the executable bit.)
-+tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
-+tmpf="${tmpd}/output"
-+
-+# Helpers expect to run in a directory that is *really* trashable, so
-+# they are free to create whatever files and/or sub-dirs they might need.
-+# Doing the 'cd' here rather than in all helpers is easier.
-+cd "${tmpd}"
-+
-+# If the helper fails, we can just remove the temporary directory to
-+# remove all the cruft it may have left behind. Then we just exit in
-+# error too.
-+if ! "${OLDPWD}/support/download/${helper}" "${tmpf}" "${@}"; then
-+    rm -rf "${tmpd}"
-+    exit 1
-+fi
-+
-+# cd back to free the temp-dir, so we can remove it later
-+cd "${OLDPWD}"
-+
-+# tmp_output is in the same directory as the final output, so we can
-+# later move it atomically.
-+tmp_output="$( mktemp "${output}.XXXXXX" )"
-+
-+# 'mktemp' creates files with 'go=-rwx', so the files are not accessible
-+# to users other than the one doing the download (and root, of course).
-+# This can be problematic when a shared BR2_DL_DIR is used by different
-+# users (e.g. on a build server), where all users may write to the shared
-+# location, since other users would not be allowed to read the files
-+# another user downloaded.
-+# So, we restore the 'go' access rights to a more sensible value, while
-+# still abiding by the current user's umask. We must do that before the
-+# final 'mv', so just do it now.
-+# Some helpers (cp and scp) may create executable files, so we need to
-+# carry the executable bit if needed.
-+[ -x "${tmpf}" ] && new_mode=755 || new_mode=644
-+new_mode=$( printf "%04o" $((0${new_mode} & ~0$(umask))) )
-+chmod ${new_mode} "${tmp_output}"
-+
-+# We must *not* unlink tmp_output, otherwise there is a small window
-+# during which another download process may create the same tmp_output
-+# name (very, very unlikely; but not impossible.)
-+# Using 'cp' is not reliable, since 'cp' may unlink the destination file
-+# if it is unable to open it with O_WRONLY|O_TRUNC; see:
-+#   http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cp.html
-+# Since the destination filesystem can be anything, it might not support
-+# O_TRUNC, so 'cp' would unlink it first.
-+# Use 'cat' and append-redirection '>>' to save to the final location,
-+# since that is the only way we can be 100% sure of the behaviour.
-+if ! cat "${tmpf}" >>"${tmp_output}"; then
-+    rm -rf "${tmpd}" "${tmp_output}"
-+    exit 1
-+fi
-+rm -rf "${tmpd}"
-+# tmp_output and output are on the same filesystem, so POSIX guarantees
-+# that 'mv' is atomic, because it then uses rename() that POSIX mandates
-+# to be atomic, see:
-+#   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
-+if ! mv "${tmp_output}" "${output}"; then
-+    rm -f "${tmp_output}"
-+    exit 1
-+fi
+--
+Changes v3 -> v4:
+  - tweak the usage comment  (Thomas DS)
+---
+ package/pkg-download.mk |  5 +++--
+ support/download/cp     | 26 ++++++++------------------
+ 2 files changed, 11 insertions(+), 20 deletions(-)
+
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 0c9397a..f10aad8 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -209,8 +209,9 @@ endef
+ 
+ define DOWNLOAD_LOCALFILES
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
+-					 $(DL_DIR)/$(2) && \
++	$(EXTRA_ENV) support/download/wrapper cp \
++		$(DL_DIR)/$(2) \
++		$(call stripurischeme,$(call qstrip,$(1))) && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ endef
+ 
+diff --git a/support/download/cp b/support/download/cp
+index 8f6bc06..264f5dc 100755
+--- a/support/download/cp
++++ b/support/download/cp
+@@ -1,26 +1,16 @@
+ #!/bin/bash
+ 
+-# We want to catch any command failure, and exit immediately
++# We want to catch any unexpected failure, and exit immediately
+ set -e
+ 
+-# Download helper for cp
+-# Call it with:
+-#   $1: source file
+-#   $2: output file
++# Download helper for cp, to be called from the download wrapper script
++# Expected arguments:
++#   $1: output file
++#   $2: source file
+ # And this environment:
+ #   LOCALFILES: the cp command to call
+ 
+-source="${1}"
+-output="${2}"
++output="${1}"
++source="${2}"
+ 
+-tmp_output="$( mktemp "${output}.XXXXXX" )"
+-
+-ret=1
+-if ${LOCALFILES} "${source}" "${tmp_output}"; then
+-    mv "${tmp_output}" "${output}"
+-    ret=0
+-fi
+-
+-# Cleanup
+-rm -f "${tmp_output}"
+-exit ${ret}
++${LOCALFILES} "${source}" "${output}"
 -- 
 1.9.1
