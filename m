@@ -1,117 +1,88 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Aug 2014 19:53:37 +0200
-Subject: [Buildroot] [PATCH 4/9 v4] support/download: convert cvs to use the
+Date: Sun,  3 Aug 2014 19:53:40 +0200
+Subject: [Buildroot] [PATCH 7/9 v4] support/download: convert scp to use the
 	wrapper
 In-Reply-To: <cover.1407088287.git.yann.morin.1998@free.fr>
 References: <cover.1407088287.git.yann.morin.1998@free.fr>
-Message-ID: <8554ee41c849c9f9a7880a67310170dab492be62.1407088287.git.yann.morin.1998@free.fr>
+Message-ID: <039f6289faa777f5e9d7065d253964099ef829b9.1407088287.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This drastically simplifies the cvs helper, as it no longer has to deal
+This drastically simplifies the scp helper, as it no longer has to deal
 with atomically saving the downloaded archive.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+(Tested by setting a primary site to 'scp://localhost:/tmp' and
+running 'make vim-source')
 
 ---
 Changes v3 -> v4:
   - tweak the usage comment  (Thomas DS)
 ---
- package/pkg-download.mk |  9 ++++++---
- support/download/cvs    | 54 +++++++++++++++----------------------------------
- 2 files changed, 22 insertions(+), 41 deletions(-)
+ package/pkg-download.mk |  5 +++--
+ support/download/scp    | 28 ++++++++--------------------
+ 2 files changed, 11 insertions(+), 22 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index f10aad8..66ce02c 100644
+index 7878c66..d749b54 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -129,9 +129,12 @@ endef
- 
- define DOWNLOAD_CVS
- 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
--					  $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
--					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
-+	$(EXTRA_ENV) support/download/wrapper cvs \
-+		$(DL_DIR)/$($(PKG)_SOURCE) \
-+		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
-+		$($(PKG)_DL_VERSION) \
-+		$($(PKG)_RAWNAME) \
-+		$($(PKG)_BASE_NAME)
+@@ -168,8 +168,9 @@ endef
+ # to prepend the path with a slash: scp://[user@]host:/absolutepath
+ define DOWNLOAD_SCP
+ 	test -e $(DL_DIR)/$(2) || \
+-	$(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
+-					  $(DL_DIR)/$(2) && \
++	$(EXTRA_ENV) support/download/wrapper scp \
++		$(DL_DIR)/$(2) \
++		'$(call stripurischeme,$(call qstrip,$(1)))' && \
+ 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
  endef
  
- # Not all CVS servers support ls/rls, use login to see if we can connect
-diff --git a/support/download/cvs b/support/download/cvs
-index 9aeed79..c92d491 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -1,47 +1,25 @@
+diff --git a/support/download/scp b/support/download/scp
+index d3aad43..1676929 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -1,28 +1,16 @@
  #!/bin/bash
  
 -# We want to catch any command failure, and exit immediately
 +# We want to catch any unexpected failure, and exit immediately
  set -e
  
--# Download helper for cvs
+-# Download helper for scp
 -# Call it with:
--#   $1: cvs repo
--#   $2: cvs revision
--#   $3: package's name (eg. foobar)
--#   $4: package's basename (eg. foobar-1.2.3)
--#   $5: output file
-+# Download helper for cvs, to be called from the download wrapper script
+-#   $1: URL
+-#   $2: output file
++# Download helper for scp, to be called from the download wrapper script
 +# Expected arguments:
 +#   $1: output file
-+#   $2: cvs repo
-+#   $3: cvs revision
-+#   $4: package's name (eg. foobar)
-+#   $5: package's basename (eg. foobar-1.2.3)
++#   $2: URL
  # And this environment:
- #   CVS      : the cvs command to call
--#   BUILD_DIR: path to Buildroot's build dir
+ #   SCP       : the scp command to call
  
--repo="${1}"
--rev="${2}"
--rawname="${3}"
--basename="${4}"
--output="${5}"
-+output="${1}"
-+repo="${2}"
-+rev="${3}"
-+rawname="${4}"
-+basename="${5}"
- 
--repodir="${basename}.tmp-cvs-checkout"
+-url="${1}"
+-output="${2}"
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
 -tmp_output="$( mktemp "${output}.XXXXXX" )"
-+${CVS} -z3 -d":pserver:anonymous@${repo}" \
-+       co -d "${basename}" -r ":${rev}" -P "${rawname}"
++output="${1}"
++url="${2}"
  
--cd "${BUILD_DIR}"
--# Remove leftovers from a previous failed run
--rm -rf "${repodir}"
--
--# Play tic-tac-toe with temp files
--# - first, we download to a trashable location (the build-dir)
--# - then we create a temporary tarball in the final location, so it is
--#   on the same filesystem as the final file
--# - finally, we atomically rename to the final file
--
 -ret=1
--if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
--           co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
--    if tar czf "${tmp_output}" "${repodir}"; then
+-if ${SCP} "${url}" "${tmp_dl}"; then
+-    if mv "${tmp_dl}" "${tmp_output}"; then
 -        mv "${tmp_output}" "${output}"
 -        ret=0
 -    fi
 -fi
 -
 -# Cleanup
--rm -rf "${repodir}" "${tmp_output}"
+-rm -f "${tmp_dl}" "${tmp_output}"
 -exit ${ret}
-+tar czf "${output}" "${basename}"
++${SCP} "${url}" "${output}"
 -- 
 1.9.1
