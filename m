@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 14:47:03 +0200
-Subject: [Buildroot] [git commit] gst-fsl-plugins,
-	libfslvpuwrap: add missing select
-Message-ID: <20140803124929.DED899D365@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 14:58:37 +0200
+Subject: [Buildroot] [PATCH v2] agg: new package
+In-Reply-To: <1398351989-24238-1-git-send-email-julien.boibessot@free.fr>
+References: <1398351989-24238-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <20140803145837.21252e16@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=01370132c10cb2d194042e08fefbc9cec8392c66
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Julien,
 
-In order to select imx-vpu, packages must also select the
-freescale-imx package, otherwise, kconfig prints some warnings.
+On Thu, 24 Apr 2014 17:06:29 +0200, julien.boibessot at free.fr wrote:
+> From: Julien Boibessot <julien.boibessot@armadeus.com>
+> 
+> 
+> Signed-off-by: Julien Boibessot <julien.boibessot@armadeus.com>
+> ---
+>  This library will be needed by gnash (soon coming Flash player).
+> 
+>  Changes since v1:
+>  * Took Arnout/Thomas/Yann remarks into account:
+>    - add comments for AGG_AUTORECONF usage and sdl-prefix redefinition,
+>    - fixes license (comments welcome),
+>    - add a patch to fixes autoreconf problems previously hacked directly in agg.mk
+>    - changed commit Subject
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer/gst-fsl-plugins/Config.in |    1 +
- package/libfslvpuwrap/Config.in             |    1 +
- 2 files changed, 2 insertions(+), 0 deletions(-)
+Numerous comments were made on this package when you submitted this v2,
+but you haven't submitted a new, updated version of this package, even
+though the comments date back from early May. I'll therefore mark this
+patch as "Changes Requested" in our patch tracking system. Could you
+resubmit an updated version, preferably with the 'gnash' package as
+well, so that it's clear what agg will be useful for?
 
-diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
-index 309e745..a4a2606 100644
---- a/package/gstreamer/gst-fsl-plugins/Config.in
-+++ b/package/gstreamer/gst-fsl-plugins/Config.in
-@@ -16,6 +16,7 @@ config BR2_PACKAGE_GST_FSL_PLUGINS
- 	select BR2_PACKAGE_IMX_VPU
- 	select BR2_PACKAGE_LIBFSLPARSER
- 	select BR2_PACKAGE_LIBFSLCODEC
-+	select BR2_PACKAGE_FREESCALE_IMX
- 	help
- 	  GStreamer plugins for hardware-accelerated audio and video
- 	  parsers and codecs on i.MX platforms. It requires a kernel that
-diff --git a/package/libfslvpuwrap/Config.in b/package/libfslvpuwrap/Config.in
-index fa85ce5..9cc15d5 100644
---- a/package/libfslvpuwrap/Config.in
-+++ b/package/libfslvpuwrap/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBFSLVPUWRAP
- 	bool "libfslvpuwrap"
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
-+	select BR2_PACKAGE_FREESCALE_IMX
- 	select BR2_PACKAGE_IMX_VPU
- 	help
- 	  Wrapper library for the vpu library, giving it a different API.
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
