@@ -1,358 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:55:43 +0200
-Subject: [Buildroot] [PATCH] nginx: new package
-In-Reply-To: <1406938853-17967-1-git-send-email-s.martin49@gmail.com>
-References: <1406938853-17967-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <20140803105543.0b33b435@free-electrons.com>
+Date: Sun, 3 Aug 2014 11:20:47 +0200
+Subject: [Buildroot] [git commit] toolchain: Add config option for atomic
+	intrinsics
+Message-ID: <20140803093227.6D18B9D367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+commit: http://git.buildroot.net/buildroot/commit/?id=cbffd50561f7ce595296bddaf108031e501b2063
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 Aug 2014 02:20:53 +0200, Samuel Martin wrote:
-> nginx module selection is, by default, the same as the one sets by
-> the upstream configure script.
-> 
-> Patches improving the cross-compilation support have already been sent
-> upstream for integration [1-5].
-> 
-> Fixes bug: #3427 [6]
+GCC has several builtin functions that implement atomic operations. Those
+functions are architecture specific and may not be implemented by the
+specific toolchain. In case of GCC for ARC those functions rely on
+LLOCK/SCOND instructions which are optional in ARC CPU's. If ARC CPU doesn't
+support those instructions but software tries to use them, then application
+will be aborted with Illegal instruction exception. To avoid confusion user
+should first specify that their CPU supports atomic extension, which will
+allow selection of packages that use builtin atomic functions.
 
-Nice! Some comments below.
+Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arc            |    5 +++++
+ package/Makefile.in           |    4 ++++
+ toolchain/toolchain-common.in |    4 ++++
+ 3 files changed, 13 insertions(+), 0 deletions(-)
 
-> diff --git a/package/nginx/Config.in b/package/nginx/Config.in
-> new file mode 100644
-> index 0000000..d7c3414
-> --- /dev/null
-> +++ b/package/nginx/Config.in
-> @@ -0,0 +1,319 @@
-> +comment "nginx needs a toolchain w/ largefile"
-> +	depends on !BR2_LARGEFILE
-> +
-> +menuconfig BR2_PACKAGE_NGINX
-> +	bool "nginx"
-> +	depends on BR2_LARGEFILE
-> +	help
-> +	  nginx is an HTTP and reverse proxy server, as well as a mail proxy
-> +	  server.
-> +
-> +	  http://nginx.org/
-> +
-> +if BR2_PACKAGE_NGINX
-> +
-> +config BR2_PACKAGE_NGINX_FILE_AIO
-> +	bool "file AIO support"
-> +
-> +config BR2_PACKAGE_NGINX_HTTP
-> +	bool "http server"
-> +	default y
-
-I'm a bit confused here with the hierachy of options. Nginx can be a
-web server, but then it has some other modules useful in situations
-where nginx is not used as a web server?
-
-> +config BR2_PACKAGE_NGINX_http_cache
-
-I think we want upper case options everywhere.
-
-> diff --git a/package/nginx/S50nginx b/package/nginx/S50nginx
-> new file mode 100644
-> index 0000000..12f0c95
-> --- /dev/null
-> +++ b/package/nginx/S50nginx
-> @@ -0,0 +1,26 @@
-> +#!/bin/sh
-> +#
-> +# Start/stop nginx
-> +#
-> +
-> +PIDFILE=/var/run/nginx.pid
-> +
-> +case "$1" in
-> +  start)
-> +	echo "Starting nginx..."
-> +	start-stop-daemon -S -x nginx
-> +	;;
-> +  stop)
-> +	echo -n "Stopping nginx..."
-> +	start-stop-daemon -K -o -p $PIDFILE
-
-The pidfile gets created by nginx itself? You don't use option -p when
-starting the daemon, so I'm wondering.
-
-> +	;;
-> +  restart|reload)
-> +	"$0" stop
-> +	"$0" start
-> +	;;
-> +  *)
-> +	echo "Usage: $0 {start|stop|restart}"
-> +	exit 1
-> +esac
-> +
-> +exit $?
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> new file mode 100644
-> index 0000000..2800592
-> --- /dev/null
-> +++ b/package/nginx/nginx.mk
-> @@ -0,0 +1,228 @@
-> +################################################################################
-> +#
-> +# nginx
-> +#
-> +################################################################################
-> +
-> +NGINX_VERSION = 1.7.3
-> +NGINX_SITE = http://nginx.org/download
-> +NGINX_LICENSE = BSD-2c
-> +NGINX_LICENSE_FILES = LICENSE
-> +
-> +NGINX_CONF_OPT = \
-> +	--crossbuild=Linux::$(BR2_ARCH) \
-> +	--with-cc="$(TARGET_CC)" \
-> +	--with-cpp="$(TARGET_CC)" \
-> +	--with-cc-opt="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-> +	--with-ld-opt="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib"
-
-Weird that these -I and -L are necessary: the compiler automatically
-looks into these directories when looking for libraries and headers.
-
-> +NGINX_CONF_OPT += \
-> +	--prefix=/etc/nginx \
-
-As prefix? This looks weird. But maybe it's because it doesn't use the
-autotools, so the prefix doesn't have the same meaning;
-
-> +	--conf-path=/etc/nginx/nginx.conf \
-> +	--sbin-path=/usr/bin/nginx \
-> +	--pid-path=/var/run/nginx.pid \
-
-Ah, here comes the path of the PID file!
-
-> +	--lock-path=/var/lock/nginx.lock \
-> +	--user=www-data \
-> +	--group=www-data \
-> +	--error-log-path=stderr \
-> +	--http-log-path=/var/log/nginx/access.log \
-> +	--http-client-body-temp-path=/var/lib/nginx/client-body \
-> +	--http-proxy-temp-path=/var/lib/nginx/proxy \
-> +	--http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
-> +	--http-scgi-temp-path=/var/lib/nginx/scgi \
-> +	--http-uwsgi-temp-path=/var/lib/nginx/uwsgi
-> +
-> +NGINX_CONF_OPT += \
-> +	$(if $(BR2_PACKAGE_NGINX_FILE_AIO),--with-file-aio) \
-> +	$(if $(BR2_INET_IPV6),--with-ipv6)
-> +
-> +ifeq ($(BR2_PACKAGE_PCRE),y)
-> +NGINX_DEPENDENCIES += pcre
-> +NGINX_CONF_OPT += --with-pcre
-> +else
-> +NGINX_CONF_OPT += --without-pcre
-> +endif
-> +
-> +# modules disabled or not activated because of missing dependencies:
-> +# - google_perftools  (googleperftools)
-> +# - http_geoip_module (geoip)
-> +# - http_perl_module  (host-perl)
-> +# - pcre-jit          (want to rebuild pcre)
-> +
-> +# misc. modules
-> +NGINX_CONF_OPT += \
-> +	$(if $(BR2_PACKAGE_NGINX_rtsig_module),--with-rtsig_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_select_module),--with-select_module,--without-select_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_poll_module),--with-poll_module,--without-poll_module)
-> +
-> +ifneq ($(BR2_PACKAGE_NGINX_add_modules),)
-> +NGINX_CONF_OPT += \
-> +	$(addprefix --add-module=,$(call qstrip,$(BR2_PACKAGE_NGINX_add_modules)))
-> +endif
-> +
-> +# http server modules
-> +ifeq ($(BR2_PACKAGE_NGINX_HTTP),y)
-> +ifeq ($BR2_PACKAGE_NGINX_http_cache),y)
-> +NGINX_DEPENDENCIES += openssl
-
-No --with-http-cache ?
-
-> +else
-> +NGINX_CONF_OPT += --without-http-cache
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +NGINX_DEPENDENCIES += openssl
-> +NGINX_CONF_OPT += --with-http_ssl_module
-> +endif
-
-So this module is enabled depending on whether OpenSSL is present and
-does not have a Config.in option, but some other modules do have a
-Config.in option that selects OpenSSL. This looks a bit inconsistent,
-no?
-
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX_http_xslt_module),y)
-> +NGINX_DEPENDENCIES += libxml2 libxslt
-> +NGINX_CONF_OPT += --with-http_xslt_module
-> +NGINX_CONF_ENV += \
-> +	ngx_feature_path_libxslt=$(STAGING_DIR)/usr/include/libxml2
-
-else
---without-foo ?
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX_http_image_filter_module),y)
-> +NGINX_DEPENDENCIES += gd jpeg libpng
-> +NGINX_CONF_OPT += --with-http_image_filter_module
-> +endif
-
-Ditto.
-
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX_http_gunzip_module),y)
-> +NGINX_DEPENDENCIES += zlib
-> +NGINX_CONF_OPT += --with-http_gunzip_module
-> +endif
-
-Ditto.
-
-> +ifeq ($(BR2_PACKAGE_NGINX_http_gzip_static_module),y)
-> +NGINX_DEPENDENCIES += zlib
-> +NGINX_CONF_OPT += --with-http_gzip_static_module
-> +endif
-
-Ditto.
-
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX_http_secure_link_module),y)
-> +NGINX_DEPENDENCIES += openssl
-> +NGINX_CONF_OPT += --with-http_secure_link_module
-> +endif
-
-Same.
-
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX_http_gzip_module),y)
-> +NGINX_DEPENDENCIES += zlib
-
---with-foo
-
-> +else
-> +NGINX_CONF_OPT += --without-http_gzip_module
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_NGINX_http_rewrite_module),y)
-> +NGINX_DEPENDENCIES += pcre
-
---with-foo
-
-> +else
-> +NGINX_CONF_OPT += --without-http_rewrite_module
-> +endif
-
-How does this interact with the --with-pcre/--without-pcre above?
-
-> +
-> +NGINX_CONF_OPT += \
-> +	$(if $(BR2_PACKAGE_NGINX_http_spdy_module),--with-http_spdy_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_realip_module),--with-http_realip_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_addition_module),--with-http_addition_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_sub_module),--with-http_sub_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_dav_module),--with-http_dav_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_flv_module),--with-http_flv_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_mp4_module),--with-http_mp4_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_auth_request_module),--with-http_auth_request_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_random_index_module),--with-http_random_index_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_degradation_module),--with-http_degradation_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_stub_status_module),--with-http_stub_status_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_charset_module),,--without-http_charset_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_ssi_module),,--without-http_ssi_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_userid_module),,--without-http_userid_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_access_module),,--without-http_access_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_auth_basic_module),,--without-http_auth_basic_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_autoindex_module),,--without-http_autoindex_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_geo_module),,--without-http_geo_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_map_module),,--without-http_map_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_split_clients_module),,--without-http_split_clients_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_referer_module),,--without-http_referer_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_proxy_module),,--without-http_proxy_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_fastcgi_module),,--without-http_fastcgi_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_uwsgi_module),,--without-http_uwsgi_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_scgi_module),,--without-http_scgi_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_memcached_module),,--without-http_memcached_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_limit_conn_module),,--without-http_limit_conn_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_limit_req_module),,--without-http_limit_req_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_empty_gif_module),,--without-http_empty_gif_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_browser_module),,--without-http_browser_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_upstream_hash_module),,--without-http_upstream_hash_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_upstream_ip_hash_module),,--without-http_upstream_ip_hash_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_upstream_least_conn_module),,--without-http_upstream_least_conn_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_http_upstream_keepalive_module),,--without-http_upstream_keepalive_module)
-
-Why half of them use --with and the other half --without? I guess
-because some are default enabled and some others are default disabled.
-But I think we should rather make this explicit, in case the default of
-enabled/disabled changes when bumping the upstream version.
-
-> +else # !BR2_PACKAGE_NGINX_HTTP
-> +NGINX_CONF_OPT += --without-http
-> +endif # BR2_PACKAGE_NGINX_HTTP
-> +
-> +# mail modules
-> +ifeq ($BR2_PACKAGE_NGINX_MAIL),y)
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +NGINX_DEPENDENCIES += openssl
-> +NGINX_CONF_OPT += --with-mail_ssl_module
-> +endif
-> +
-> +NGINX_CONF_OPT += \
-> +	$(if $(BR2_PACKAGE_NGINX_mail_pop3_module),,--without-mail_pop3_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_mail_imap_module),,--without-mail_imap_module) \
-> +	$(if $(BR2_PACKAGE_NGINX_mail_smtp_module),,--without-mail_smtp_module)
-> +
-> +endif # BR2_PACKAGE_NGINX_MAIL
-> +define NGINX_DISABLE_WERROR
-> +	$(SED) 's/-Werror//g' -i $(@D)/auto/cc/*
-> +endef
-> +
-> +NGINX_PRE_CONFIGURE_HOOKS += NGINX_DISABLE_WERROR
-> +
-> +define NGINX_CONFIGURE_CMDS
-> +	cd $(@D) ; $(NGINX_CONF_ENV) ./configure $(NGINX_CONF_OPT)
-> +endef
-> +
-> +define NGINX_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +endef
-> +
-> +define NGINX_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +	-$(RM) $(TARGET_DIR)/usr/bin/nginx.old
-> +	$(INSTALL) -D -m 0664 package/nginx/nginx.logrotate \
-> +		$(TARGET_DIR)/etc/logrotate.d/nginx
-> +endef
-> +
-> +define NGINX_INSTALL_INIT_SYSTEMD
-> +	$(INSTALL) -D -m 0644 package/nginx/nginx.service \
-> +		$(TARGET_DIR)/usr/lib/systemd/system/nginx.service
-> +endef
-> +
-> +define NGINX_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/nginx/S50nginx \
-> +		$(TARGET_DIR)/etc/init.d/S50nginx
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Other than that, looks good. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 60b59f0..836cfef 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -1,3 +1,8 @@
++# Choise of atomic instructions presence
++config BR2_ARC_ATOMIC_EXT
++	bool "Atomic extension (LLOCK/SCOND instructions)"
++	select BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+ 	default "arceb"	if BR2_arceb
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 02f6e3d..106a04c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -102,6 +102,10 @@ ifeq ($(BR2_xtensa),y)
+ TARGET_ABI += -mlongcalls -mtext-section-literals
+ endif
+ 
++ifeq ($(BR2_arc)$(BR2_ARC_ATOMIC_EXT),yy)
++TARGET_ABI += -matomic
++endif
++
+ STAGING_SUBDIR = usr/$(GNU_TARGET_NAME)/sysroot
+ STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
+ 
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 2df8ddb..48ba840 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -44,6 +44,10 @@ config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
+ 
++config BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++	bool
++	default y if !BR2_arc
++
+ config BR2_ENABLE_LOCALE_PURGE
+ 	bool "Purge unwanted locales"
+ 	help
