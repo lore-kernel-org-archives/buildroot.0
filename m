@@ -1,29 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 03 Aug 2014 13:39:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltrace: Fix "unmet direct
-	dependencies"
-References: <1407065792-19859-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <XnsA37E8AF88AB9DberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Aug 2014 14:32:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Bump to version 2.3.1
+In-Reply-To: <XnsA37E88A2EAAF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1407017477-8540-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140803102404.7d7fa4b6@free-electrons.com>
+ <XnsA37E88A2EAAF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140803143250.362afa9e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:1407065792-19859-1-git-send-email-bernd.kuhls at t-online.de:
+Dear Bernd Kuhls,
 
-> Fixes build error in elfutils
-> http://autobuild.buildroot.net/results/37f/37f87ad7ba087d42d0001f55305f7468
-c2a172b6/
+On Sun, 03 Aug 2014 13:25:55 +0200, Bernd Kuhls wrote:
 
-Hi,
+> output/build/ffmpeg-2.3.1/config.log contains
+> ffconf.Vyn5TU6p.c:(.text+0x1f): undefined reference to `fminf'
+> 
+> which leads to 
+> 
+> #define HAVE_FMINF 0
+> 
+> in output/build/ffmpeg-2.3.1/config.h which seems true when looking at
+> http://git.uclibc.org/uClibc/tree/libm/float_wrappers.c#n48
 
-forgot two more occurrences:
+So, this should work without the need for your patch, right?
 
-http://autobuild.buildroot.net/results/881/8814a8cea9f9affd7b600a9a1819975c2e
-84f36b/
-http://autobuild.buildroot.net/results/9d9/9d974abdc3e46dd37e7ede7c4d82f87506
-560650/
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
