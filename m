@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:30:48 +0200
-Subject: [Buildroot] [PATCH 1/1] qt: make installation of translation
- files optional
-In-Reply-To: <1406948936-1962-1-git-send-email-danomimanchego123@gmail.com>
-References: <1406948936-1962-1-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <20140803103048.53f2b086@free-electrons.com>
+Date: Sun, 3 Aug 2014 10:33:41 +0200
+Subject: [Buildroot] [git commit] atk: bump to version 2.12.0
+Message-ID: <20140803083349.D03FC9D379@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+commit: http://git.buildroot.net/buildroot/commit/?id=b83aa532c1f1d0b0a548a29d7c3b460b42114a0e
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  1 Aug 2014 23:08:56 -0400, Danomi Manchego wrote:
-> Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e introduced the
-> installation of the binary .qm translation files, unconditionally.
-> This patch introduces an option to disable this behavior, saving
-> almost 8MB of space.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/atk/atk.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks, I've applied your patch, after renaming the option and moving
-it a bit in Config.in, so that it doesn't appear in the middle of the
-Qt modules options.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 9ccdd22..46a097d 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ATK_VERSION_MAJOR = 2.10
++ATK_VERSION_MAJOR = 2.12
+ ATK_VERSION = $(ATK_VERSION_MAJOR).0
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
