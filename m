@@ -1,56 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Aug 2014 10:22:07 +0200
-Subject: [Buildroot] [PATCH 4 of 5 v3] uclibc: convert to
- kconfig-package infrastructure
-In-Reply-To: <431289c9a7bcae14267c.1406922826@localhost>
-References: <patchbomb.1406922822@localhost>
- <431289c9a7bcae14267c.1406922826@localhost>
-Message-ID: <20140803082207.GE4052@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 3 Aug 2014 10:21:59 +0200
+Subject: [Buildroot] [PATCH 1/3] package/rpi-userland: Bump version
+In-Reply-To: <1407014545-25541-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1407014545-25541-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140803102159.0ccf8b47@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Bernd Kuhls,
 
-On 2014-08-01 21:53 +0200, Thomas De Schampheleire spake thusly:
-> This patch converts the uclibc package to the new kconfig-package
-> infrastructure, thus removing code duplication and ensuring a consistent
-> behavior of kconfig packages.
+On Sat,  2 Aug 2014 23:22:23 +0200, Bernd Kuhls wrote:
+> This version bump introduces OMX_ImageFilterDeInterlaceFast,
+> which is needed by the upcoming xbmc/kodi version bump.
 > 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/rpi-userland/rpi-userland.mk |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Not removing my reviewed-by, but see below...
+I've applied your three patches, thanks.
 
-> diff -r fa937f090303 -r 431289c9a7bc package/uclibc/uclibc.mk
-> --- a/package/uclibc/uclibc.mk	Thu Jul 24 20:54:50 2014 +0200
-> +++ b/package/uclibc/uclibc.mk	Tue Jul 22 20:35:36 2014 +0200
-[--SNIP--]
-> +$(eval $(kconfig-package))
->  
->  # Before uClibc is built, we must have the second stage cross-compiler
->  $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
-
-Maybe we should add a comment saying why this should be after the
-$(eval...) line. Something like:
-
-    # Before uClibc is built, we must have the second stage cross-compiler.
-    # This *must* be after the eval-line, because UCLIBC_TARGET_BUILD is
-    # defined in there.
-    $(eval .....)
-
-With the above fixed, keep my:
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
