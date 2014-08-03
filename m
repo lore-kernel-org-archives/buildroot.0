@@ -1,48 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 11:25:40 +0200
-Subject: [Buildroot] [git commit] thrift: Add dependency on atomic intrinsics
-Message-ID: <20140803093227.9AE2A9D226@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 11:32:16 +0200
+Subject: [Buildroot] [PATCH v2 1/9] toolchain: Add config option for
+ atomic intrinsics
+In-Reply-To: <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
+References: <20140730084548.05bd6dec@free-electrons.com>
+ <1406813090-32472-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <20140803113216.03e0fb94@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=3ebdc64dcc687a95dd4fed7eda8ff811d2db0eaf
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Anton Kolesov,
 
-Thrift requires GCC built-in atomic functions which are architecture specific
-and may not be implemented.
+On Thu, 31 Jul 2014 17:24:42 +0400, Anton Kolesov wrote:
+> GCC has several builtin functions that implement atomic operations. Those
+> functions are architecture specific and may not be implemented by the
+> specific toolchain. In case of GCC for ARC those functions rely on
+> LLOCK/SCOND instructions which are optional in ARC CPU's. If ARC CPU doesn't
+> support those instructions but software tries to use them, then application
+> will be aborted with Illegal instruction exception. To avoid confusion user
+> should first specify that their CPU supports atomic extension, which will
+> allow selection of packages that use builtin atomic functions.
+> 
+> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 
-[Thomas: remove incorrect empty newline at end of Config.in.]
+I have applied the following patches from your series:
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/thrift/Config.in |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+3ebdc64dcc687a95dd4fed7eda8ff811d2db0eaf thrift: Add dependency on atomic intrinsics
+b6f9dd2a389c1f4da858c928bf48f8baec461082 libtorrent: Add dependency on atomic intrinsics
+b7a791a103d21835d0e3fb8accfb58346330560f icu: Add dependency on atomic intrinsics
+b35d1582346625a7076de0a44958d5c5133103d2 jack2: Add dependency on atomic intrinsics
+cbffd50561f7ce595296bddaf108031e501b2063 toolchain: Add config option for atomic intrinsics
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index ac99801..23b99e5 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_THRIFT
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_arc # atomic builtins
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_OPENSSL
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_THRIFT
- 
- 	  http://thrift.apache.org/
- 
--comment "thrift needs a toolchain w/ C++, largefile, wchar, threads"
-+comment "thrift needs a toolchain w/ C++, largefile, wchar, threads, atomic intrinsics"
- 	depends on !BR2_LARGEFILE || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+I did not apply the other patches, because they were missing the
+propagation of the atomic intrinsics dependency to the reverse
+depencies of the package needing atomic intrinsics. For example, in
+PATCH 2/9, you add the dependency on atomic intrinsics to Cairo, but
+nowhere you propagate that to the reverse dependencies of Cairo. Could
+you send an updated version of those patches, taking into account this
+need?
+
+Also, could you send a patch against the Buildroot manual that
+documents the atomic intrinsics dependency, like we document
+dependencies like wchar, largefile, ipv6 and so on.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
