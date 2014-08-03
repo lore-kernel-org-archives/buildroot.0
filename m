@@ -1,68 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:27:06 +0200
-Subject: [Buildroot] [git commit] qt: make installation of translation files
-	optional
-Message-ID: <20140803083010.3DB049D37B@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 10:20:52 +0200
+Subject: [Buildroot] [git commit] package/rpi-firmware: Bump version to
+	kernel 3.12.25
+Message-ID: <20140803083010.283AE9D37B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2ff329412f490dc916bab3377073ef5950a46298
+commit: http://git.buildroot.net/buildroot/commit/?id=16c453f41392de78ccae013ac8c382db830c97ba
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e introduced the
-installation of the binary .qm translation files, unconditionally.
-This patch introduces an option to disable this behavior, saving
-almost 8MB of space.
+This version bump, amongst other things, introduces
+OMX_ImageFilterDeInterlaceFast, which is needed by
+the upcoming xbmc/kodi version bump.
 
-[Thomas: rename option to BR2_PACKAGE_QT_TRANSLATION_FILES instead of
-BR2_PACKAGE_QT_INSTALL_TRANSLATION_FILES, and move its definition
-around the installation of examples/demos rather than in the middle of
-the options for the different modules.]
-
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt/Config.in |    7 +++++++
- package/qt/qt.mk     |    2 ++
- 2 files changed, 9 insertions(+), 0 deletions(-)
+ package/rpi-firmware/rpi-firmware.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/qt/Config.in b/package/qt/Config.in
-index 0a21e93..93751cd 100644
---- a/package/qt/Config.in
-+++ b/package/qt/Config.in
-@@ -28,6 +28,13 @@ config BR2_PACKAGE_QT_DEMOS
- 	help
- 	  If unsure, say N.
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index ca9b5eb..49b4661 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_QT_TRANSLATION_FILES
-+	bool "Install translation files"
-+	default y
-+	help
-+	  Install binary .qm translation files.
-+	  If unsure, say y.
-+
- config BR2_PACKAGE_QT_EXAMPLES
- 	bool "Compile and install Qt examples (with code)"
- 	select BR2_PACKAGE_QT_GUI_MODULE
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 82a5509..880e835 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -670,12 +670,14 @@ define QT_INSTALL_TARGET_POWERVR
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT_TRANSLATION_FILES),y)
- define QT_INSTALL_TARGET_TRANSLATIONS
- 	if [ -d $(STAGING_DIR)/usr/share/qt/translations/ ] ; then \
- 		mkdir -p $(TARGET_DIR)/usr/share/qt/translations ; \
- 		cp -dpfr $(STAGING_DIR)/usr/share/qt/translations/* $(TARGET_DIR)/usr/share/qt/translations ; \
- 	fi
- endef
-+endif
- 
- define QT_INSTALL_TARGET_CMDS
- 	$(QT_INSTALL_TARGET_LIBS)
+-RPI_FIRMWARE_VERSION = f15c3b5e4018b974de30d95d3173b1e936f66bd7
++RPI_FIRMWARE_VERSION = 16ebc76904699b036f709beb65ee5ff70f83190b
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
