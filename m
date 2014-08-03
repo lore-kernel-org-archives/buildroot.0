@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Aug 2014 17:32:43 +0200
-Subject: [Buildroot] [PATCH 5/5 v4] busybox: convert to kconfig-package
-	infrastructure
+Date: Sun,  3 Aug 2014 17:32:41 +0200
+Subject: [Buildroot] [PATCH 3/5 v4] manual: add documentation for
+	kconfig-package
 In-Reply-To: <cover.1407079864.git.yann.morin.1998@free.fr>
 References: <cover.1407079864.git.yann.morin.1998@free.fr>
-Message-ID: <437a2f63b7dd1357bf859133053f4b877bc2a0e9.1407079864.git.yann.morin.1998@free.fr>
+Message-ID: <e4a15308d908cfd6de4cd779a13d9bc515c53a53.1407079864.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,77 +13,100 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 
-This patch converts the busybox package to the new kconfig-package
-infrastructure, thus removing code duplication and ensuring a consistent
-behavior of kconfig packages.
+This patch adds documentation for the new kconfig-package infrastructure to
+the manual.
+
+Note that due to the simplicity of the infrastructure, the documentation
+is not split in a 'tutorial' and a 'reference', like for the other
+infrastructures. Instead, the usage is described in one section.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/busybox/busybox.mk | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+[me: slight grammar fix 'copy -back- the configuration +back+ to...']
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f7d28a7..db29636 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -45,6 +45,10 @@ ifndef BUSYBOX_CONFIG_FILE
- 	BUSYBOX_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG))
- endif
- 
-+BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-+BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
-+BUSYBOX_KCONFIG_OPT = $(BUSYBOX_MAKE_OPTS)
+---
+Since I was involved with that patch, I did not carry my initial
+reviewed-by tag.
+---
+ docs/manual/adding-packages-kconfig.txt | 56 +++++++++++++++++++++++++++++++++
+ docs/manual/adding-packages.txt         |  2 ++
+ 2 files changed, 58 insertions(+)
+ create mode 100644 docs/manual/adding-packages-kconfig.txt
+
+diff --git a/docs/manual/adding-packages-kconfig.txt b/docs/manual/adding-packages-kconfig.txt
+new file mode 100644
+index 0000000..f14b87b
+--- /dev/null
++++ b/docs/manual/adding-packages-kconfig.txt
+@@ -0,0 +1,56 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
- define BUSYBOX_PERMISSIONS
- /bin/busybox			 f 4755	0 0 - - - - -
- /usr/share/udhcpc/default.script f 755  0 0 - - - - -
-@@ -136,10 +140,6 @@ define BUSYBOX_NETKITTELNET
- endef
- endif
- 
--define BUSYBOX_COPY_CONFIG
--	$(INSTALL) -D -m 0644 $(BUSYBOX_CONFIG_FILE) $(BUSYBOX_BUILD_CONFIG)
--endef
--
- # Disable shadow passwords support if unsupported by the C library
- ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
- define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
-@@ -190,8 +190,7 @@ define BUSYBOX_NOCLOBBER_INSTALL
- 	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
- endef
- 
--define BUSYBOX_CONFIGURE_CMDS
--	$(BUSYBOX_COPY_CONFIG)
-+define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_MMU)
- 	$(BUSYBOX_SET_LARGEFILE)
- 	$(BUSYBOX_SET_IPV6)
-@@ -203,6 +202,9 @@ define BUSYBOX_CONFIGURE_CMDS
- 	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
-+endef
++=== Infrastructure for packages using kconfig for configuration files
 +
-+define BUSYBOX_CONFIGURE_CMDS
- 	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
- 		-C $(@D) oldconfig
- 	$(BUSYBOX_NOCLOBBER_INSTALL)
-@@ -224,13 +226,4 @@ define BUSYBOX_INSTALL_TARGET_CMDS
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- endef
- 
--$(eval $(generic-package))
--
--busybox-menuconfig busybox-xconfig busybox-gconfig: busybox-patch
--	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(BUSYBOX_DIR) \
--		$(subst busybox-,,$@)
--	rm -f $(BUSYBOX_DIR)/.stamp_built
--	rm -f $(BUSYBOX_DIR)/.stamp_target_installed
--
--busybox-update-config: busybox-configure
--	cp -f $(BUSYBOX_BUILD_CONFIG) $(BUSYBOX_CONFIG_FILE)
++A popular way for a software package to handle user-specified
++configuration is +kconfig+. Among others, it is used by the Linux
++kernel, Busybox, and Buildroot itself. The presence of a .config file
++and a +menuconfig+ target are two well-known symptoms of kconfig being
++used.
++
++Buildroot features an infrastructure for packages that use kconfig for
++their configuration. This infrastructure provides the necessary logic to
++expose the package's +menuconfig+ target as +foo-menuconfig+ in
++Buildroot, and to handle the copying back and forth of the configuration
++file in a correct way.
++
++The +kconfig-package+ infrastructure is based on the +generic-package+
++infrastructure. All variables supported by +generic-package+ are
++available in +kconfig-package+ as well. See
++xref:generic-package-reference[] for more details.
++
++In order to use the +kconfig-package+ infrastructure for a Buildroot
++package, the minimally required lines in the +.mk+ file, in addition to
++the variables required by the +generic-package+ infrastructure, are:
++
++------------------------------
++FOO_KCONFIG_FILE = reference-to-source-configuration-file
++
 +$(eval $(kconfig-package))
++------------------------------
++
++This snippet creates the following make targets:
++
++* +foo-menuconfig+, which calls the package's +menuconfig+ target
++
++* +foo-update-config+, which copies the configuration back to the source
++  configuration file.
++
++and ensures that the source configuration file is copied to the build
++directory at the right moment.
++
++In addition to these minimally required lines, several optional variables can
++be set to suit the needs of the package under consideration:
++
++* +FOO_KCONFIG_EDITORS+: a space-separated list of kconfig editors to
++  support, for example 'menuconfig xconfig'. By default, 'menuconfig'.
++
++* +FOO_KCONFIG_OPT+: extra options to pass when calling the kconfig
++  ediftors. This may need to include '$(FOO_MAKE_OPT)', for example. By
++  default, empty.
++
++* +FOO_KCONFIG_FIXUP_CMDS+: a list of shell commands needed to fixup the
++  configuration file after copying it or running a kconfig editor. Such
++  commands may be needed to ensure a configuration consistent with other
++  configuration of Buildroot, for example. By default, empty.
+diff --git a/docs/manual/adding-packages.txt b/docs/manual/adding-packages.txt
+index 31f92f4..9c97128 100644
+--- a/docs/manual/adding-packages.txt
++++ b/docs/manual/adding-packages.txt
+@@ -25,6 +25,8 @@ include::adding-packages-perl.txt[]
+ 
+ include::adding-packages-virtual.txt[]
+ 
++include::adding-packages-kconfig.txt[]
++
+ include::adding-packages-hooks.txt[]
+ 
+ include::adding-packages-gettext.txt[]
 -- 
 1.9.1
