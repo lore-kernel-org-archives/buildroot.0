@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:16:51 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 3.15.8
-Message-ID: <20140803081736.F2EBD9D31B@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 10:17:18 +0200
+Subject: [Buildroot] [git commit] musl: bump to version 1.1.4
+Message-ID: <20140803081737.0A23D9D380@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b9d86d7cf05a836b9ab2c94a618a155959349528
+commit: http://git.buildroot.net/buildroot/commit/?id=4846cf487d5b825778a51148481ccfcf717fcc1d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The gcc 4.9.x breakage is now handled by musl itself.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- linux/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/musl/musl.mk |    8 +-------
+ 1 files changed, 1 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index ea90260..da8a774 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -21,7 +21,7 @@ choice
- 	prompt "Kernel version"
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 53c97d5..63607f9 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "3.15.7"
-+	bool "3.15.8"
+-MUSL_VERSION = 1.1.3
++MUSL_VERSION = 1.1.4
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
+@@ -18,12 +18,6 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
  
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "Same as toolchain kernel headers"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ MUSL_INSTALL_STAGING = YES
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "3.15.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "3.15.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-# gcc constant folding bug with weak aliases workaround
+-# See http://www.openwall.com/lists/musl/2014/05/15/1
+-ifeq ($(BR2_GCC_VERSION_4_9_X),y)
+-MUSL_EXTRA_CFLAGS += -fno-toplevel-reorder
+-endif
+-
+ # We need to run the musl configure script prior to building the
+ # gcc-intermediate, so that we can call the install-headers step and
+ # get the crt<X>.o built. However, we need to call it again after
