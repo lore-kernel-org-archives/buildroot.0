@@ -1,44 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 14:38:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ltrace: Fix "unmet direct
- dependencies"
-In-Reply-To: <1407065792-19859-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1407065792-19859-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140803143830.5c5d3417@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 03 Aug 2014 14:40:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Bump to version 2.3.1
+References: <1407017477-8540-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140803102404.7d7fa4b6@free-electrons.com>
+ <XnsA37E88A2EAAF0berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20140803143250.362afa9e@free-electrons.com>
+Message-ID: <XnsA37E953C3F7DEberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140803143250.362afa9e at free-electrons.com:
 
-On Sun,  3 Aug 2014 13:36:32 +0200, Bernd Kuhls wrote:
-> Fixes build error in elfutils
-> http://autobuild.buildroot.net/results/37f/37f87ad7ba087d42d0001f55305f7468c2a172b6/
+> Dear Bernd Kuhls,
 > 
-> eblwstrtab.c:(.text+0x43): undefined reference to `wmempcpy'
-> eblwstrtab.c:(.text+0x1ba): undefined reference to `wcslen'
-> eblwstrtab.c:(.text+0x2df): undefined reference to `wmemcmp'
+> On Sun, 03 Aug 2014 13:25:55 +0200, Bernd Kuhls wrote:
 > 
-> because ltrace did not take into account that elfutils depends on
-> BR2_LARGEFILE & BR2_USE_WCHAR. This is also visible here:
+>> output/build/ffmpeg-2.3.1/config.log contains
+>> ffconf.Vyn5TU6p.c:(.text+0x1f): undefined reference to `fminf'
+>> 
+>> which leads to 
+>> 
+>> #define HAVE_FMINF 0
+>> 
+>> in output/build/ffmpeg-2.3.1/config.h which seems true when looking at
+>> http://git.uclibc.org/uClibc/tree/libm/float_wrappers.c#n48
 > 
-> wget http://autobuild.buildroot.net/results/37f/37f87ad7ba087d42d0001f55305f7468c2a172b6/defconfig
-> make defconfig BR2_DEFCONFIG=defconfig
-> 
-> warning: (BR2_PACKAGE_LTRACE) selects BR2_PACKAGE_ELFUTILS which has unmet direct
-> dependencies (BR2_LARGEFILE && BR2_USE_WCHAR && !BR2_avr32 && !BR2_bfin)
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> So, this should work without the need for your patch, right?
 
-Applied, thanks! However, you forgot to add the comment for the
-new dependencies, so I've added it.
+Hi,
 
-Thanks!
+I do not know why the code is broken, but without my patch ffmpeg did not 
+compile. Because uClibc does not provide fminf ffmpeg?s own implementation of 
+fminf in libavutil/libm.h is compiled, but this breaks.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Removing the whole fminf function works because fminf is used nowhere in 
+ffmpeg.
+
+Having a look at
+http://git.videolan.org/?p=ffmpeg.git;a=history;f=libavutil/libm.h;h=
+28d5df871b39a1a8f99bc9540d7f9a8ccd840d59;hb=HEAD
+
+we can see that there were already five commits to implement fminf.
+I will open a bug report.
+
+Regards, Bernd
