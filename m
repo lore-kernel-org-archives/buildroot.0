@@ -1,93 +1,114 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Aug 2014 19:53:42 +0200
-Subject: [Buildroot] [PATCH 9/9 v4] support/download: convert wget to use
-	the wrapper
+Date: Sun,  3 Aug 2014 19:53:39 +0200
+Subject: [Buildroot] [PATCH 6/9 v4] support/download: convert Hg to use the
+	wrapper
 In-Reply-To: <cover.1407088287.git.yann.morin.1998@free.fr>
 References: <cover.1407088287.git.yann.morin.1998@free.fr>
-Message-ID: <d43ab6ef106a7a55948b533b22ad7215fc580c51.1407088287.git.yann.morin.1998@free.fr>
+Message-ID: <0ff18dfb028d5181c9b2db1a48b5e8ee916f9656.1407088287.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This drastically simplifies the wget helper, as it no longer has to deal
+This drastically simplifies the hg helper, as it no longer has to deal
 with atomically saving the downloaded archive.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-(Tested by running 'make busybox-source')
+(Tested by running 'make vim-source')
 
 ---
 Changes v3 -> v4:
   - tweak the usage comment  (Thomas DS)
 ---
- package/pkg-download.mk |  4 +++-
- support/download/wget   | 35 ++++++++---------------------------
- 2 files changed, 11 insertions(+), 28 deletions(-)
+ package/pkg-download.mk |  7 +++++--
+ support/download/hg     | 52 ++++++++++++++-----------------------------------
+ 2 files changed, 20 insertions(+), 39 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index c23dcfa..0761736 100644
+index 1649c83..7878c66 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -208,7 +208,9 @@ endef
+@@ -184,8 +184,11 @@ endef
  
- define DOWNLOAD_WGET
- 	test -e $(DL_DIR)/$(2) || \
--	$(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
-+	$(EXTRA_ENV) support/download/wrapper wget \
-+		$(DL_DIR)/$(2) \
-+		'$(call qstrip,$(1))' && \
- 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ define DOWNLOAD_HG
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/hg $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
+-					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
++	$(EXTRA_ENV) support/download/wrapper hg \
++		$(DL_DIR)/$($(PKG)_SOURCE) \
++		$($(PKG)_SITE) \
++		$($(PKG)_DL_VERSION) \
++		$($(PKG)_BASE_NAME)
  endef
  
-diff --git a/support/download/wget b/support/download/wget
-index cbeca3b..2cea100 100755
---- a/support/download/wget
-+++ b/support/download/wget
-@@ -1,35 +1,16 @@
+ # TODO: improve to check that the given PKG_DL_VERSION exists on the remote
+diff --git a/support/download/hg b/support/download/hg
+index 6e9e26b..747dd34 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -1,46 +1,24 @@
  #!/bin/bash
  
 -# We want to catch any command failure, and exit immediately
 +# We want to catch any unexpected failure, and exit immediately
  set -e
  
--# Download helper for wget
+-# Download helper for hg
 -# Call it with:
--#   $1: URL
--#   $2: output file
-+# Download helper for wget, to be called from the download wrapper script
+-#   $1: hg repo
+-#   $2: hg cset
+-#   $3: package's basename (eg. foobar-1.2.3)
+-#   $4: output file
++# Download helper for hg, to be called from the download wrapper script
 +# Expected arguments:
 +#   $1: output file
-+#   $2: URL
++#   $2: hg repo
++#   $3: hg cset
++#   $4: package's basename (eg. foobar-1.2.3)
  # And this environment:
- #   WGET     : the wget command to call
+ #   HG       : the hg command to call
 -#   BUILD_DIR: path to Buildroot's build dir
  
--url="${1}"
--output="${2}"
+-repo="${1}"
+-cset="${2}"
+-basename="${3}"
+-output="${4}"
 +output="${1}"
-+url="${2}"
++repo="${2}"
++cset="${3}"
++basename="${4}"
  
--tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
+-repodir="${basename}.tmp-hg-checkout"
 -tmp_output="$( mktemp "${output}.XXXXXX" )"
++${HG} clone --noupdate --rev "${cset}" "${repo}" "${basename}"
+ 
+-cd "${BUILD_DIR}"
+-# Remove leftovers from a previous failed run
+-rm -rf "${repodir}"
 -
 -# Play tic-tac-toe with temp files
 -# - first, we download to a trashable location (the build-dir)
--# - then we copy to a temporary tarball in the final location, so it is
+-# - then we create a temporary tarball in the final location, so it is
 -#   on the same filesystem as the final file
 -# - finally, we atomically rename to the final file
 -
 -ret=1
--if ${WGET} -O "${tmp_dl}" "${url}"; then
--    if mv "${tmp_dl}" "${tmp_output}"; then
+-if ${HG} clone --noupdate --rev "${cset}" "${repo}" "${repodir}"; then
+-    if ${HG} archive --repository "${repodir}" --type tgz \
+-                     --prefix "${basename}" --rev "${cset}" \
+-                     "${tmp_output}"; then
 -        mv "${tmp_output}" "${output}"
 -        ret=0
 -    fi
 -fi
 -
--rm -f "${tmp_dl}" "${tmp_output}"
+-# Cleanup
+-rm -rf "${repodir}" "${tmp_output}"
 -exit ${ret}
-+${WGET} -O "${output}" "${url}"
++${HG} archive --repository "${basename}" --type tgz \
++              --prefix "${basename}" --rev "${cset}" \
++              "${output}"
 -- 
 1.9.1
