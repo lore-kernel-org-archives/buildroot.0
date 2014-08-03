@@ -1,184 +1,135 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Aug 2014 15:23:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mediastreamer: Fix linphone compile
-	with newer ffmpeg versions
-Message-ID: <1407072191-12540-1-git-send-email-bernd.kuhls@t-online.de>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Sun, 3 Aug 2014 09:25:13 -0400
+Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
+ calls with a single call
+In-Reply-To: <20140803073726.GB4052@free.fr>
+References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
+ <20140803073726.GB4052@free.fr>
+Message-ID: <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/b72/b72b1f6287986af3d686cc3c8b9c1b3fd9419d29/
+Yann,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mediastreamer/mediastreamer-0001.patch |  156 ++++++++++++++++++++++++
- 1 file changed, 156 insertions(+)
- create mode 100644 package/mediastreamer/mediastreamer-0001.patch
+On Sun, Aug 3, 2014 at 3:37 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Danomi, All,
+>
+> On 2014-08-02 21:21 -0400, Danomi Manchego spake thusly:
+>> Since openssh-6.0, the ssh-keygen app has supported a -A option,
+>> which creates any missing keys.  This frees us of having to add
+>> new ssh-keygen invocations as new key types are introduced.  This
+>> also frees us of having to know the default key names and locations.
+>> So this patch replaces all the the init.d script invocations with
+>> a single "ssh-keygen -A" call.
+>>
+>> Note: the systemd service script *already* uses this option.
+>>
+>> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> However, I have a comment about this key generation: it does not work
+> when the filesystem is read-only. That was already the case before your
+> patch, hence my Ack. But we should probably find a way to fix that one
+> way or the other.
+>
+> One option would be to pre-generate the host keys at build-time. There
+> are pros abd cons with this, though:
+>
+>   - pros: we can save the public keys and store them in the known_hosts
+>     file of the user. No confirmation at first connection, usefull
+>     during development;
+>
+>   - cons: the image can't be realisticaly deployed to many targets,
+>     otherwise they would all have the same keys. Bad.
+>
+> I don't have a better solution for now... :-/
+>
+> Of course, we can also delegate to the user the reponsibility to ensure
+> that /etc *is* writable when openssh is installed (which we implicitly
+> do right now.)
 
-diff --git a/package/mediastreamer/mediastreamer-0001.patch b/package/mediastreamer/mediastreamer-0001.patch
-new file mode 100644
-index 0000000..84c9948
---- /dev/null
-+++ b/package/mediastreamer/mediastreamer-0001.patch
-@@ -0,0 +1,156 @@
-+Fix linphone compile with newer ffmpeg versions, downloaded from
-+https://github.com/dankamongmen/mediastreamer2/commit/4f438eb8e132a3119284be771e0daad143597ebd
-+
-+Fixes
-+http://autobuild.buildroot.net/results/b72/b72b1f6287986af3d686cc3c8b9c1b3fd9419d29/
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 4f438eb8e132a3119284be771e0daad143597ebd Mon Sep 17 00:00:00 2001
-+From: nick black <nick.black@sprezzatech.com>
-+Date: Mon, 28 Jan 2013 23:54:17 -0500
-+Subject: [PATCH] adapt to new libav API
-+
-+---
-+ src/utils/ffmpeg-priv.h       | 1 +
-+ src/videofilters/h264dec.c    | 6 +++---
-+ src/videofilters/jpegwriter.c | 6 +++---
-+ src/videofilters/nowebcam.c   | 6 +++---
-+ src/videofilters/videodec.c   | 8 ++++----
-+ src/videofilters/videoenc.c   | 6 +++---
-+ 6 files changed, 17 insertions(+), 16 deletions(-)
-+
-+diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
-+index 0eab098..a405c05 100644
-+--- a/src/utils/ffmpeg-priv.h
-++++ b/src/utils/ffmpeg-priv.h
-+@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ /* new layout */
-+ # include <libavcodec/avcodec.h>
-+ # include <libavutil/avutil.h>
-++# include <libavutil/mem.h>
-+ #else
-+ /* old layout */
-+ # include <ffmpeg/avcodec.h>
-+diff --git a/src/videofilters/h264dec.c b/src/videofilters/h264dec.c
-+index 5229b5e..7059634 100644
-+--- a/src/videofilters/h264dec.c
-++++ b/src/videofilters/h264dec.c
-+@@ -58,10 +58,10 @@ static void dec_open(DecData *d){
-+ 	int error;
-+ 	codec=avcodec_find_decoder(CODEC_ID_H264);
-+ 	if (codec==NULL) ms_fatal("Could not find H264 decoder in ffmpeg.");
-+-	avcodec_get_context_defaults(&d->av_context);
-+-	error=avcodec_open(&d->av_context,codec);
-++	avcodec_get_context_defaults3(&d->av_context, codec);
-++	error=avcodec_open2(&d->av_context,codec, NULL);
-+ 	if (error!=0){
-+-		ms_fatal("avcodec_open() failed.");
-++		ms_fatal("avcodec_open2() failed.");
-+ 	}
-+ }
-+ 
-+diff --git a/src/videofilters/jpegwriter.c b/src/videofilters/jpegwriter.c
-+index cca79c5..daf3cdb 100644
-+--- a/src/videofilters/jpegwriter.c
-++++ b/src/videofilters/jpegwriter.c
-+@@ -90,7 +90,7 @@ static void jpg_process(MSFilter *f){
-+ 			mblk_t *jpegm;
-+ 			struct SwsContext *sws_ctx;
-+ 			
-+-			AVCodecContext *avctx=avcodec_alloc_context();
-++			AVCodecContext *avctx=avcodec_alloc_context3(NULL);
-+ 			
-+ 			avctx->width=yuvbuf.w;
-+ 			avctx->height=yuvbuf.h;
-+@@ -98,9 +98,9 @@ static void jpg_process(MSFilter *f){
-+ 			avctx->time_base.den =1;
-+ 			avctx->pix_fmt=PIX_FMT_YUVJ420P;
-+ 
-+-			error=avcodec_open(avctx,s->codec);
-++			error=avcodec_open2(avctx,s->codec,NULL);
-+ 			if (error!=0) {
-+-				ms_error("avcodec_open() failed: %i",error);
-++				ms_error("avcodec_open2() failed: %i",error);
-+ 				cleanup(s,NULL);
-+ 				av_free(avctx);
-+ 				return;
-+diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
-+index f1c10de..b45f89f 100644
-+--- a/src/videofilters/nowebcam.c
-++++ b/src/videofilters/nowebcam.c
-+@@ -68,9 +68,9 @@ static mblk_t *jpeg2yuv(uint8_t *jpgbuf, int bufsize, MSVideoSize *reqsize){
-+ 		return NULL;
-+ 	}
-+ 
-+-	avcodec_get_context_defaults(&av_context);
-+-	if (avcodec_open(&av_context,codec)<0){
-+-		ms_error("jpeg2yuv: avcodec_open failed");
-++	avcodec_get_context_defaults3(&av_context,NULL);
-++	if (avcodec_open2(&av_context,codec,NULL)<0){
-++		ms_error("jpeg2yuv: avcodec_open2 failed");
-+ 		return NULL;
-+ 	}
-+ 	av_init_packet(&pkt);
-+diff --git a/src/videofilters/videodec.c b/src/videofilters/videodec.c
-+index 9807214..2f1b452 100644
-+--- a/src/videofilters/videodec.c
-++++ b/src/videofilters/videodec.c
-+@@ -53,7 +53,7 @@ static void dec_init(MSFilter *f, enum CodecID cid){
-+ 	DecState *s=(DecState *)ms_new0(DecState,1);
-+ 	ms_ffmpeg_check_init();
-+ 	
-+-	avcodec_get_context_defaults(&s->av_context);
-++	avcodec_get_context_defaults3(&s->av_context,NULL);
-+ 	s->av_codec=NULL;
-+ 	s->codec=cid;
-+ 	s->input=NULL;
-+@@ -135,7 +135,7 @@ static void dec_preprocess(MSFilter *f){
-+ 	if (s->av_context.codec==NULL){
-+ 		/* we must know picture size before initializing snow decoder*/
-+ 		if (s->codec!=CODEC_ID_SNOW){
-+-			error=avcodec_open(&s->av_context, s->av_codec);
-++			error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-+ 			if (error!=0) ms_error("avcodec_open() failed: %i",error);
-+ 			if (s->codec==CODEC_ID_MPEG4 && s->dci_size>0){
-+ 				s->av_context.extradata=s->dci;
-+@@ -225,8 +225,8 @@ static mblk_t * parse_snow_header(DecState *s,mblk_t *inm){
-+ 			int error;
-+ 			s->av_context.width=h>>16;
-+ 			s->av_context.height=h&0xffff;
-+-			error=avcodec_open(&s->av_context, s->av_codec);
-+-			if (error!=0) ms_error("avcodec_open() failed for snow: %i",error);
-++			error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-++			if (error!=0) ms_error("avcodec_open2() failed for snow: %i",error);
-+ 			else {
-+ 				s->snow_initialized=TRUE;
-+ 				ms_message("Snow decoder initialized,size=%ix%i",
-+diff --git a/src/videofilters/videoenc.c b/src/videofilters/videoenc.c
-+index da35592..4101772 100644
-+--- a/src/videofilters/videoenc.c
-++++ b/src/videofilters/videoenc.c
-+@@ -242,7 +242,7 @@ static void prepare(EncState *s){
-+ 	AVCodecContext *c=&s->av_context;
-+ 	const int max_br_vbv=128000;
-+ 
-+-	avcodec_get_context_defaults(c);
-++	avcodec_get_context_defaults3(c,NULL);
-+ 	if (s->codec==CODEC_ID_MJPEG)
-+ 	{
-+ 		ms_message("Codec bitrate set to %i",c->bit_rate);
-+@@ -348,9 +348,9 @@ static void enc_preprocess(MSFilter *f){
-+ 		ms_error("could not find encoder for codec id %i",s->codec);
-+ 		return;
-+ 	}
-+-	error=avcodec_open(&s->av_context, s->av_codec);
-++	error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-+ 	if (error!=0) {
-+-		ms_error("avcodec_open() failed: %i",error);
-++		ms_error("avcodec_open2() failed: %i",error);
-+ 		return;
-+ 	}
-+ 	video_starter_init(&s->starter);
-+-- 
-+2.0.3
-+
--- 
-1.7.10.4
+I think this issue is not limited to openssh - there's other things
+that want to occasionally save stuff to /etc, /var, even /root (e.g.
+gstreamer plugins cache).  I suppose that efforts could be made to try
+to patch/configure these locations to all be in one place (/var ?),
+but that still assumes a writable directory.  So, unless we direct all
+attempts to save state to a tmpfs, I think it always come back to
+being the user's responsibility.
+
+So for now I'm content to keep openssh as it is, rather than hunt down
+all the places that might try to write to etc (, var, $HOME, ...).
+
+Danomi -
+
+
+> Regards,
+> Yann E. MORIN.
+>
+>> ---
+>>  package/openssh/S50sshd |   34 ++--------------------------------
+>>  1 file changed, 2 insertions(+), 32 deletions(-)
+>>
+>> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+>> index d3abf7c..65bdb90 100644
+>> --- a/package/openssh/S50sshd
+>> +++ b/package/openssh/S50sshd
+>> @@ -6,38 +6,8 @@
+>>  # Make sure the ssh-keygen progam exists
+>>  [ -f /usr/bin/ssh-keygen ] || exit 0
+>>
+>> -# Check for the SSH1 RSA key
+>> -if [ ! -f /etc/ssh_host_key ] ; then
+>> -     echo Generating RSA Key...
+>> -     /usr/bin/ssh-keygen -t rsa1 -f /etc/ssh_host_key -C '' -N ''
+>> -fi
+>> -
+>> -# Check for the SSH2 RSA key
+>> -if [ ! -f /etc/ssh_host_rsa_key ] ; then
+>> -     echo Generating RSA Key...
+>> -     /usr/bin/ssh-keygen -t rsa -f /etc/ssh_host_rsa_key -C '' -N ''
+>> -fi
+>> -
+>> -# Check for the SSH2 DSA key
+>> -if [ ! -f /etc/ssh_host_dsa_key ] ; then
+>> -     echo Generating DSA Key...
+>> -     echo
+>> -     /usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
+>> -fi
+>> -
+>> -# Check for the SSH2 ECDSA key
+>> -if [ ! -f /etc/ssh_host_ecdsa_key ]; then
+>> -     echo Generating ECDSA Key...
+>> -     echo
+>> -     /usr/bin/ssh-keygen -t ecdsa -f /etc/ssh_host_ecdsa_key -C '' -N ''
+>> -fi
+>> -
+>> -# Check for the ed25519 key
+>> -if [ ! -f /etc/ssh_host_ed25519_key ]; then
+>> -     echo Generating ed25519 Key...
+>> -     echo
+>> -     /usr/bin/ssh-keygen -t ed25519 -f /etc/ssh_host_ed25519_key -C '' -N ''
+>> -fi
+>> +# Create any missing keys
+>> +/usr/bin/ssh-keygen -A
+>>
+>>  umask 077
+>>
+>> --
+>> 1.7.9.5
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
