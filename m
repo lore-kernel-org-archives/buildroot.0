@@ -1,35 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 3 Aug 2014 10:20:35 +0200
-Subject: [Buildroot] [git commit] package/rpi-userland: Bump version
-Message-ID: <20140803083010.1F1959D37D@busybox.osuosl.org>
+Date: Sun, 3 Aug 2014 10:21:16 +0200
+Subject: [Buildroot] [git commit] configs: bump kernel used for the RPi
+Message-ID: <20140803083010.306219D37B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=5ffc0392d2ed08501837116fa16c4b835bf27927
+commit: http://git.buildroot.net/buildroot/commit/?id=72b32d5197d4227ce80339388849fe39a996e441
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version bump introduces OMX_ImageFilterDeInterlaceFast,
-which is needed by the upcoming xbmc/kodi version bump.
+The rpi-3.12.y branch has now been merged with the 3.12.25 upstream.
+
+Bump kernel headers used for the toolchain at the same time.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/rpi-userland/rpi-userland.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ configs/raspberrypi_defconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 2de6b92..717eab1 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 7727533..c12d473 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
  
--RPI_USERLAND_VERSION = 4855a45b118cb7b97b83e5160551db9813487c91
-+RPI_USERLAND_VERSION = b555474b19310762255252d085e57599ea573889
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+ # Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.12.20"
++BR2_DEFAULT_KERNEL_VERSION="3.12.25"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a25152fdfbfd3b4330da16fc3aeb6b1ef8843805"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+ BR2_LINUX_KERNEL_ZIMAGE=y
