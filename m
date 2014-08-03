@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 3 Aug 2014 19:42:16 +0200
-Subject: [Buildroot] [PATCH 7/9 v3] support/download: convert scp to use
+Date: Sun, 3 Aug 2014 19:42:53 +0200
+Subject: [Buildroot] [PATCH 8/9 v3] support/download: convert svn to use
  the wrapper
-In-Reply-To: <526b9b79924e75121605fd3d446b119768d04362.1405895896.git.yann.morin.1998@free.fr>
+In-Reply-To: <df40bd4bdc0f6f586f8cf30747e37f8241a0cf63.1405895896.git.yann.morin.1998@free.fr>
 References: <cover.1405895896.git.yann.morin.1998@free.fr>
- <526b9b79924e75121605fd3d446b119768d04362.1405895896.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LV5hgQF9Nw+U0LetmDkdDNKxQq=Usg8AB+bxFRB9m8RWw@mail.gmail.com>
+ <df40bd4bdc0f6f586f8cf30747e37f8241a0cf63.1405895896.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXZBS5DWLwLym1OftG9RVi41CmWoy=SNt_4i-_wUPPUJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +13,96 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Mon, Jul 21, 2014 at 12:42 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> This drastically simplifies the scp helper, as it no longer has to deal
+> This drastically simplifies the svn helper, as it no longer has to deal
 > with atomically saving the downloaded archive.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > ---
->  package/pkg-download.mk |  5 +++--
->  support/download/scp    | 24 ++++++------------------
->  2 files changed, 9 insertions(+), 20 deletions(-)
+>  package/pkg-download.mk |  6 ++++--
+>  support/download/svn    | 44 +++++++++++---------------------------------
+>  2 files changed, 15 insertions(+), 35 deletions(-)
 >
 > diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 454179c..434eeaf 100644
+> index 434eeaf..b18864e 100644
 > --- a/package/pkg-download.mk
 > +++ b/package/pkg-download.mk
-> @@ -164,8 +164,9 @@ endef
->  # to prepend the path with a slash: scp://[user@]host:/absolutepath
->  define DOWNLOAD_SCP
->         test -e $(DL_DIR)/$(2) || \
-> -       $(EXTRA_ENV) support/download/scp '$(call stripurischeme,$(call qstrip,$(1)))' \
-> -                                         $(DL_DIR)/$(2) && \
-> +       $(EXTRA_ENV) support/download/wrapper scp \
-> +               $(DL_DIR)/$(2) \
-> +               '$(call stripurischeme,$(call qstrip,$(1)))' && \
->         $(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+> @@ -147,8 +147,10 @@ endef
+>
+>  define DOWNLOAD_SVN
+>         test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+> -       $(EXTRA_ENV) support/download/svn $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
+> -                                         $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
+> +       $(EXTRA_ENV) support/download/wrapper svn \
+> +               $(DL_DIR)/$($(PKG)_SOURCE) \
+> +               $($(PKG)_SITE) $($(PKG)_DL_VERSION) \
+> +               $($(PKG)_BASE_NAME)
 >  endef
 >
-> diff --git a/support/download/scp b/support/download/scp
-> index d3aad43..6ae545c 100755
-> --- a/support/download/scp
-> +++ b/support/download/scp
-> @@ -1,28 +1,16 @@
+>  define SOURCE_CHECK_SVN
+> diff --git a/support/download/svn b/support/download/svn
+> index 39cbbcb..36ba520 100755
+> --- a/support/download/svn
+> +++ b/support/download/svn
+> @@ -1,44 +1,22 @@
 >  #!/bin/bash
 >
 > -# We want to catch any command failure, and exit immediately
 > +# We want to catch any unexpected failure, and exit immediately
 >  set -e
 >
->  # Download helper for scp
+>  # Download helper for svn
 >  # Call it with:
-> -#   $1: URL
-> -#   $2: output file
+> -#   $1: svn repo
+> -#   $2: svn revision
+> -#   $3: package's basename (eg. foobar-1.2.3)
+> -#   $4: output file
 > +#   $1: output file
-> +#   $2: URL
+> +#   $2: svn repo
+> +#   $3: svn revision
+> +#   $4: package's basename (eg. foobar-1.2.3)
 >  # And this environment:
->  #   SCP       : the scp command to call
+>  #   SVN      : the svn command to call
+> -#   BUILD_DIR: path to Buildroot's build dir
 >
-> -url="${1}"
-> -output="${2}"
-> -tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-> -tmp_output="$( mktemp "${output}.XXXXXX" )"
+> -repo="${1}"
+> -rev="${2}"
+> -basename="${3}"
+> -output="${4}"
 > +output="${1}"
-> +url="${2}"
+> +repo="${2}"
+> +rev="${3}"
+> +basename="${4}"
 >
+> -repodir="${basename}.tmp-svn-checkout"
+> -tmp_output="$( mktemp "${output}.XXXXXX" )"
+> +${SVN} export "${repo}@${rev}" "${basename}"
+>
+> -cd "${BUILD_DIR}"
+> -# Remove leftovers from a previous failed run
+> -rm -rf "${repodir}"
+> -
+> -# Play tic-tac-toe with temp files
+> -# - first, we download to a trashable location (the build-dir)
+> -# - then we create a temporary tarball in the final location, so it is
+> -#   on the same filesystem as the final file
+> -# - finally, we atomically rename to the final file
+> -
 > -ret=1
-> -if ${SCP} "${url}" "${tmp_dl}"; then
-> -    if mv "${tmp_dl}" "${tmp_output}"; then
+> -if ${SVN} export "${repo}@${rev}" "${repodir}"; then
+> -    if tar czf "${tmp_output}" "${repodir}"; then
 > -        mv "${tmp_output}" "${output}"
 > -        ret=0
 > -    fi
 > -fi
 > -
 > -# Cleanup
-> -rm -f "${tmp_dl}" "${tmp_output}"
+> -rm -rf "${repodir}" "${tmp_output}"
 > -exit ${ret}
-> +${SCP} "${url}" "${output}"
+> +tar czf "${output}" "${basename}"
+> --
+> 1.9.1
+
 
 
 Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-(Tested by setting a primary site to 'scp://localhost:/tmp' and
-running 'make vim-source')
+(Tested by running 'make open2300-source')
