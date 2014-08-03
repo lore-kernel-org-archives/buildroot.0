@@ -1,93 +1,79 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 3 Aug 2014 19:43:14 +0200
-Subject: [Buildroot] [PATCH 9/9 v3] support/download: convert wget to
- use the wrapper
-In-Reply-To: <28d4112e90481daf555b3c3703166f9e47887c12.1405895896.git.yann.morin.1998@free.fr>
-References: <cover.1405895896.git.yann.morin.1998@free.fr>
- <28d4112e90481daf555b3c3703166f9e47887c12.1405895896.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LU8eO=XtCoNBTaa-fkt2Zswcjt6KjdQxXm55S76w9bXOg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  3 Aug 2014 19:53:38 +0200
+Subject: [Buildroot] [PATCH 0/9 v4] Cleanups in download helpers (branch
+	yem/check-downloads)
+Message-ID: <cover.1407088287.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 21, 2014 at 12:42 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> This drastically simplifies the wget helper, as it no longer has to deal
-> with atomically saving the downloaded archive.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/pkg-download.mk |  4 +++-
->  support/download/wget   | 31 ++++++-------------------------
->  2 files changed, 9 insertions(+), 26 deletions(-)
->
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index b18864e..6f5b080 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -203,7 +203,9 @@ endef
->
->  define DOWNLOAD_WGET
->         test -e $(DL_DIR)/$(2) || \
-> -       $(EXTRA_ENV) support/download/wget '$(call qstrip,$(1))' $(DL_DIR)/$(2) && \
-> +       $(EXTRA_ENV) support/download/wrapper wget \
-> +               $(DL_DIR)/$(2) \
-> +               '$(call qstrip,$(1))' && \
->         $(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
->  endef
->
-> diff --git a/support/download/wget b/support/download/wget
-> index cbeca3b..84f0c53 100755
-> --- a/support/download/wget
-> +++ b/support/download/wget
-> @@ -1,35 +1,16 @@
->  #!/bin/bash
->
-> -# We want to catch any command failure, and exit immediately
-> +# We want to catch any unexpected failure, and exit immediately
->  set -e
->
->  # Download helper for wget
->  # Call it with:
-> -#   $1: URL
-> -#   $2: output file
-> +#   $1: output file
-> +#   $2: URL
->  # And this environment:
->  #   WGET     : the wget command to call
-> -#   BUILD_DIR: path to Buildroot's build dir
->
-> -url="${1}"
-> -output="${2}"
-> +output="${1}"
-> +url="${2}"
->
-> -tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
-> -tmp_output="$( mktemp "${output}.XXXXXX" )"
-> -
-> -# Play tic-tac-toe with temp files
-> -# - first, we download to a trashable location (the build-dir)
-> -# - then we copy to a temporary tarball in the final location, so it is
-> -#   on the same filesystem as the final file
-> -# - finally, we atomically rename to the final file
-> -
-> -ret=1
-> -if ${WGET} -O "${tmp_dl}" "${url}"; then
-> -    if mv "${tmp_dl}" "${tmp_output}"; then
-> -        mv "${tmp_output}" "${output}"
-> -        ret=0
-> -    fi
-> -fi
-> -
-> -rm -f "${tmp_dl}" "${tmp_output}"
-> -exit ${ret}
-> +${WGET} -O "${output}" "${url}"
-> --
-> 1.9.1
+Hello All!
+
+This series is a follow-up to the previous download series. Following
+the advice from Arnout, I introduced a wrapper script that is responsible
+for the saving atomically in BR2_DL_DIR. If also manages all the temporary
+files, and properly cleans up.
+
+Consequently, the helpers are now nuch more simple, and no longer need to
+duplicate the complex handling of atomicity in BR2_DL_DIR, nor do they
+need to manage temporary files.
+
+Changes v3 -> v4:
+  - fix root-dir in bzr-generated archives  (Thomas DS)
+  - enhance the usage comment in every hepers  (Thomas DS)
+  - typoes  (Thomas DS)
+
+Changes v2 -> v3:
+  - complete rewrite of the series
 
 
+Regards,
+Yann E. MORIN.
 
 
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-(Tested by running 'make busybox-source')
+The following changes since commit 01370132c10cb2d194042e08fefbc9cec8392c66:
+
+  gst-fsl-plugins, libfslvpuwrap: add missing select (2014-08-03 14:47:03 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/check-downloads
+
+for you to fetch changes up to d43ab6ef106a7a55948b533b22ad7215fc580c51:
+
+  support/download: convert wget to use the wrapper (2014-08-03 19:49:55 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (9):
+      support/download: add download wrapper
+      support/download: convert bzr to use the wrapper
+      support/download: convert localfiles to use the wrapper
+      support/download: convert cvs to use the wrapper
+      support/download: convert git to use the wrapper
+      support/download: convert Hg to use the wrapper
+      support/download: convert scp to use the wrapper
+      support/download: convert svn to use the wrapper
+      support/download: convert wget to use the wrapper
+
+ package/pkg-download.mk  | 50 ++++++++++++++++--------
+ support/download/bzr     | 42 ++++++--------------
+ support/download/cp      | 26 ++++---------
+ support/download/cvs     | 54 ++++++++------------------
+ support/download/git     | 62 ++++++++++--------------------
+ support/download/hg      | 52 ++++++++-----------------
+ support/download/scp     | 28 ++++----------
+ support/download/svn     | 48 +++++++----------------
+ support/download/wget    | 35 ++++-------------
+ support/download/wrapper | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 10 files changed, 234 insertions(+), 262 deletions(-)
+ create mode 100755 support/download/wrapper
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
