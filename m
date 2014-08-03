@@ -1,133 +1,140 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Aug 2014 20:53:40 +0200
-Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
-In-Reply-To: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
-References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
-Message-ID: <20140803185340.GI4052@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 03 Aug 2014 21:50:35 +0200
+Subject: [Buildroot] [PATCH 1/9 v4] support/download: add download
+	wrapper
+In-Reply-To: <b08c0f9ddf17c277aec99746f4258ca3cc077270.1407088287.git.yann.morin.1998@free.fr>
+References: <cover.1407088287.git.yann.morin.1998@free.fr>
+ <b08c0f9ddf17c277aec99746f4258ca3cc077270.1407088287.git.yann.morin.1998@free.fr>
+Message-ID: <114f194e-f2d6-4c0e-a8bc-7a4e4315d717@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jean-Christophe, All,
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>The download wrapper is responsible for ensuring the atomicity
+>of saving into $(BR2_DL_DIR).
+>
+>It calls the appropriate download helper, telling it to save the
+>downloaded content to a temporary file in $(BUILD_DIR) (so it does
+>not clutter $(BR2_DL_DIR) with partial, failed downloads.
+>
+>Then, only if the download helper was successful, does the wrapper
+>save the downloaded content to the final location, yet still in a
+>temporary file, and finally atomically renames it to the final output
+>file.
+>
+>Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>---
+> support/download/wrapper | 99 ++++++++++++++++++++++++++++++++++++++++++++++++
+> 1 file changed, 99 insertions(+)
+> create mode 100755 support/download/wrapper
+>
+>diff --git a/support/download/wrapper b/support/download/wrapper
+>new file mode 100755
+>index 0000000..8ae2797
+>--- /dev/null
+>+++ b/support/download/wrapper
+>@@ -0,0 +1,99 @@
+>+#!/bin/bash
+>+
+>+# This script is a wrapper to the other download helpers.
+>+# Its role is to ensure atomicity when saving downloaded files
+>+# back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
+>+# failed downloads.
+>+#
+>+# Call it with:
+>+#   $1: name of the helper (eg. cvs, git, cp...)
+>+#   $2: full path to the file in which to save the download
+>+#   $*: additional arguments to the helper in $1
+>+# Environment:
+>+#   BUILD_DIR: the path to Buildroot's build dir
+>+
+>+# To avoid cluttering BR2_DL_DIR, we download to a trashable
+>+# location, namely in $(BUILD_DIR).
+>+# Then, we move the downloaded file to a temporary file in the
+>+# same directory as the final output file.
+>+# This allows us to finally atomically rename it to its final
+>+# name.
+>+# If anything goes wrong, we just remove all the temporaries
+>+# created so far.
+>+
+>+# We want to catch any unexpected failure, and exit immediately.
+>+set -e
+>+
+>+helper="${1}"
+>+output="${2}"
+>+shift 2
+>+
+>+# tmpd is a temporary directory in which helpers may store intermediate
+>+# by-products of the download.
+>+# tmpf is the file in which the helpers should put the downloaded content.
+>+# tmpd is located in $(BUILD_DIR), so as not to clutter the (precious)
+>+# $(BR2_DL_DIR)
+>+# We let the helpers create tmpf, so they are able to set whatever
+>+# permission bits they want (although we're only really interested in
+>+# the executable bit.)
+>+tmpd="$( mktemp -d "${BUILD_DIR}/.${output##*/}.XXXXXX" )"
+>+tmpf="${tmpd}/output"
+>+
+>+# Helpers expect to run in a directory that is *really* trashable, so
+>+# they are free to create whatever files and/or sub-dirs they might need.
+>+# Doing the 'cd' here rather than in all helpers is easier.
+>+cd "${tmpd}"
+>+
+>+# If the helper fails, we can just remove the temporary directory to
+>+# remove all the cruft it may have left behind. Then we just exit in
+>+# error too.
+>+if ! "${OLDPWD}/support/download/${helper}" "${tmpf}" "${@}"; then
+>+    rm -rf "${tmpd}"
+>+    exit 1
+>+fi
+>+
+>+# cd back to free the temp-dir, so we can remove it later
+>+cd "${OLDPWD}"
+>+
+>+# tmp_output is in the same directory as the final output, so we can
+>+# later move it atomically.
+>+tmp_output="$( mktemp "${output}.XXXXXX" )"
+>+
+>+# 'mktemp' creates files with 'go=-rwx', so the files are not accessible
+>+# to users other than the one doing the download (and root, of course).
+>+# This can be problematic when a shared BR2_DL_DIR is used by different
+>+# users (e.g. on a build server), where all users may write to the shared
+>+# location, since other users would not be allowed to read the files
+>+# another user downloaded.
+>+# So, we restore the 'go' access rights to a more sensible value, while
+>+# still abiding by the current user's umask. We must do that before the
+>+# final 'mv', so just do it now.
+>+# Some helpers (cp and scp) may create executable files, so we need to
+>+# carry the executable bit if needed.
+>+[ -x "${tmpf}" ] && new_mode=755 || new_mode=644
+>+new_mode=$( printf "%04o" $((0${new_mode} & ~0$(umask))) )
+>+chmod ${new_mode} "${tmp_output}"
+>+
+>+# We must *not* unlink tmp_output, otherwise there is a small window
+>+# during which another download process may create the same tmp_output
+>+# name (very, very unlikely; but not impossible.)
+>+# Using 'cp' is not reliable, since 'cp' may unlink the destination file
+>+# if it is unable to open it with O_WRONLY|O_TRUNC; see:
+>+#   http://pubs.opengroup.org/onlinepubs/9699919799/utilities/cp.html
+>+# Since the destination filesystem can be anything, it might not support
+>+# O_TRUNC, so 'cp' would unlink it first.
+>+# Use 'cat' and append-redirection '>>' to save to the final location,
+>+# since that is the only way we can be 100% sure of the behaviour.
+>+if ! cat "${tmpf}" >>"${tmp_output}"; then
+>+    rm -rf "${tmpd}" "${tmp_output}"
+>+    exit 1
+>+fi
+>+rm -rf "${tmpd}"
+>+# tmp_output and output are on the same filesystem, so POSIX guarantees
+>+# that 'mv' is atomic, because it then uses rename() that POSIX mandates
+>+# to be atomic, see:
+>+#   http://pubs.opengroup.org/onlinepubs/9699919799/functions/rename.html
+>+if ! mv "${tmp_output}" "${output}"; then
+>+    rm -f "${tmp_output}"
+>+    exit 1
+>+fi
 
-On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
-> This patch adds the bcache-tools package to buildroot.
-
-This line above is not needed: it is obvious this is adding the package
-to Buildroot! ;-)
-
-> This is the bcache tools, required to setup the linux bcache
-> feature of the Linux kernel.
-> 
-> Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-> ---
-> diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
-> new file mode 100644
-> index 0000000..fbe4158
-> --- /dev/null
-> +++ b/package/bcache-tools/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_BCACHE_TOOLS
-> +	bool "bcache tools"
-> +	depends on BR2_PACKAGE_HAS_UDEV
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-
-Since you select sub-options of util-linux, you must also select the
-package itself:
-    select BR2_PACKAGE_UTIL_LINUX
-
-But you must also inherit its dependencies:
-    depends on BR2_LARGEFILE # util-linux
-    depends on BR2_USE_WCHAR # util-linux
-
-But you must also inherit from the sub-options' dependencies, too:
-    depends on BR2_USE_MMU # util-linux (libblkid)
-
-> +	help
-> +	  This is the bcache tools, required to setup the linux bcache
-> +	  feature of the Linux kernel.
-> +
-> +comment "bcache-tools needs udev /dev management"
-> +        depends on !BR2_PACKAGE_HAS_UDEV
-
-And you must adapt the comment to the dependencies above, like:
-    bcache needs udev /dev management and a toolchain w/ largefile, wchar
-
-> diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
-> new file mode 100644
-> index 0000000..8b0b061
-> --- /dev/null
-> +++ b/package/bcache-tools/bcache-tools.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# bcache-tools
-> +#
-> +################################################################################
-> +
-> +BCACHE_TOOLS_VERSION = 1.0.7
-> +BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,v$(BCACHE_TOOLS_VERSION))
-> +BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
-> +BCACHE_TOOLS_LICENSE = GPLv2
-> +BCACHE_TOOLS_LICENSE_FILES = COPYING
-> +BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
-> +BCACHE_TOOLS_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
-> +
-> +define BCACHE_TOOLS_EXTRACT_CMDS
-> +	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
-> +endef
-> +
-> +define BCACHE_TOOLS_FIX_PKGCONFIG
-> +	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
-> +		$(BCACHE_TOOLS_DIR)/Makefile
-> +endef
-
-This should probably be a post-extract hook. See:
-    http://buildroot.net/downloads/manual/manual.html#hooks
-
-> +define BCACHE_TOOLS_BUILD_CMDS
-> +	$(BCACHE_TOOLS_FIX_PKGCONFIG)
-> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
-
-This should probably be:
-    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-
-TARGET_CONFIGURE_OPTS contains the CC= assignment.
-
-Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
-it.
-
-> +endef
-> +
-> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
-> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-
-Ditto:
-    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
-        DESTDIR=$(TARGET_DIR) install
-
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +
-> +$(eval $(generic-package))
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
