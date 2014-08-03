@@ -1,135 +1,108 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Sun, 3 Aug 2014 09:25:13 -0400
-Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
- calls with a single call
-In-Reply-To: <20140803073726.GB4052@free.fr>
-References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
- <20140803073726.GB4052@free.fr>
-Message-ID: <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  3 Aug 2014 15:44:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: Disable broken linking of
+	vlc-static
+Message-ID: <1407073444-31854-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+- vlc-0001-vlc-static.patch disables linking of bin/vlc-static
+- remove vlc-0001-fix-link-error.patch as it should have fixed
+  vlc-static, this patch is not needed anymore
 
-On Sun, Aug 3, 2014 at 3:37 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Danomi, All,
->
-> On 2014-08-02 21:21 -0400, Danomi Manchego spake thusly:
->> Since openssh-6.0, the ssh-keygen app has supported a -A option,
->> which creates any missing keys.  This frees us of having to add
->> new ssh-keygen invocations as new key types are introduced.  This
->> also frees us of having to know the default key names and locations.
->> So this patch replaces all the the init.d script invocations with
->> a single "ssh-keygen -A" call.
->>
->> Note: the systemd service script *already* uses this option.
->>
->> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
->
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
-> However, I have a comment about this key generation: it does not work
-> when the filesystem is read-only. That was already the case before your
-> patch, hence my Ack. But we should probably find a way to fix that one
-> way or the other.
->
-> One option would be to pre-generate the host keys at build-time. There
-> are pros abd cons with this, though:
->
->   - pros: we can save the public keys and store them in the known_hosts
->     file of the user. No confirmation at first connection, usefull
->     during development;
->
->   - cons: the image can't be realisticaly deployed to many targets,
->     otherwise they would all have the same keys. Bad.
->
-> I don't have a better solution for now... :-/
->
-> Of course, we can also delegate to the user the reponsibility to ensure
-> that /etc *is* writable when openssh is installed (which we implicitly
-> do right now.)
+Fixes
+http://autobuild.buildroot.net/results/acc/acc212dc70abbf86be5d764895ee50b1eb64668f/
+http://autobuild.buildroot.net/results/830/83025b9072221f9edaa4638687950f8086e1c19d/
+http://autobuild.buildroot.net/results/0b5/0b59e2d0b17501d10c005292a2e1916f23a12a0e/
+http://autobuild.buildroot.net/results/473/473e601b009d8b045cd6041f3725e9dc81e31f03/
+http://autobuild.buildroot.net/results/3b2/3b2815d27a2252a2d677eed5c479a88bbb04d655/
+http://autobuild.buildroot.net/results/022/022252176c051ff3365b2cb820f32aafc802803a/
+http://autobuild.buildroot.net/results/2db/2dbaa3603b3dab9e06a37993fb235d009bd22df9/
+http://autobuild.buildroot.net/results/0d4/0d4199c3271bbd7cf8a04403c5dafa1178f75fb1/
+http://autobuild.buildroot.net/results/cb8/cb8402fc994697f157348d88f848357ca21156a4/
+http://autobuild.buildroot.net/results/666/6660453c78d1557b645e8fd5b3ed2076e64fc91a/
+http://autobuild.buildroot.net/results/2b9/2b9bbeea4a4b2953b445f54b5ce1b2d8f520451d/
+http://autobuild.buildroot.net/results/7ff/7ff072f9b7487fb27070c58053dbcf96b7dd7a56/
+http://autobuild.buildroot.net/results/ab1/ab1feef329c9da6cd3a4df46b6724030159a4003/
+http://autobuild.buildroot.net/results/bd3/bd3a1bc0c6f333836c1888d8404832de948df739/
+http://autobuild.buildroot.net/results/f70/f708306808953a48f8cc870d13be0e62ed2ece2e/
+http://autobuild.buildroot.net/results/3c5/3c53f6e0f3c0367b760bbf2140acdb06b2b50223/
+http://autobuild.buildroot.net/results/080/080fab04cd252f765dd197c9941470bfdf6ba629/
 
-I think this issue is not limited to openssh - there's other things
-that want to occasionally save stuff to /etc, /var, even /root (e.g.
-gstreamer plugins cache).  I suppose that efforts could be made to try
-to patch/configure these locations to all be in one place (/var ?),
-but that still assumes a writable directory.  So, unless we direct all
-attempts to save state to a tmpfs, I think it always come back to
-being the user's responsibility.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/vlc-0001-fix-link-error.patch |   28 ----------------------------
+ package/vlc/vlc-0001-vlc-static.patch     |   24 ++++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 28 deletions(-)
+ delete mode 100644 package/vlc/vlc-0001-fix-link-error.patch
+ create mode 100644 package/vlc/vlc-0001-vlc-static.patch
 
-So for now I'm content to keep openssh as it is, rather than hunt down
-all the places that might try to write to etc (, var, $HOME, ...).
-
-Danomi -
-
-
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>  package/openssh/S50sshd |   34 ++--------------------------------
->>  1 file changed, 2 insertions(+), 32 deletions(-)
->>
->> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
->> index d3abf7c..65bdb90 100644
->> --- a/package/openssh/S50sshd
->> +++ b/package/openssh/S50sshd
->> @@ -6,38 +6,8 @@
->>  # Make sure the ssh-keygen progam exists
->>  [ -f /usr/bin/ssh-keygen ] || exit 0
->>
->> -# Check for the SSH1 RSA key
->> -if [ ! -f /etc/ssh_host_key ] ; then
->> -     echo Generating RSA Key...
->> -     /usr/bin/ssh-keygen -t rsa1 -f /etc/ssh_host_key -C '' -N ''
->> -fi
->> -
->> -# Check for the SSH2 RSA key
->> -if [ ! -f /etc/ssh_host_rsa_key ] ; then
->> -     echo Generating RSA Key...
->> -     /usr/bin/ssh-keygen -t rsa -f /etc/ssh_host_rsa_key -C '' -N ''
->> -fi
->> -
->> -# Check for the SSH2 DSA key
->> -if [ ! -f /etc/ssh_host_dsa_key ] ; then
->> -     echo Generating DSA Key...
->> -     echo
->> -     /usr/bin/ssh-keygen -t dsa -f /etc/ssh_host_dsa_key -C '' -N ''
->> -fi
->> -
->> -# Check for the SSH2 ECDSA key
->> -if [ ! -f /etc/ssh_host_ecdsa_key ]; then
->> -     echo Generating ECDSA Key...
->> -     echo
->> -     /usr/bin/ssh-keygen -t ecdsa -f /etc/ssh_host_ecdsa_key -C '' -N ''
->> -fi
->> -
->> -# Check for the ed25519 key
->> -if [ ! -f /etc/ssh_host_ed25519_key ]; then
->> -     echo Generating ed25519 Key...
->> -     echo
->> -     /usr/bin/ssh-keygen -t ed25519 -f /etc/ssh_host_ed25519_key -C '' -N ''
->> -fi
->> +# Create any missing keys
->> +/usr/bin/ssh-keygen -A
->>
->>  umask 077
->>
->> --
->> 1.7.9.5
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/vlc/vlc-0001-fix-link-error.patch b/package/vlc/vlc-0001-fix-link-error.patch
+deleted file mode 100644
+index 0acae8f..0000000
+--- a/package/vlc/vlc-0001-fix-link-error.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Fix a link error.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/bin/Makefile.am b/bin/Makefile.am
+---- a/bin/Makefile.am	2013-12-03 09:12:34.000000000 +0000
+-+++ b/bin/Makefile.am	2014-01-06 22:03:34.888581851 +0000
+-@@ -44,7 +44,7 @@ vlc_static_CFLAGS = $(AM_CFLAGS) \
+- 	-DTOP_SRCDIR=\"$$(cd "$(top_srcdir)"; pwd)\" \
+- 	$(NULL)
+- vlc_static_DEPENDENCIES = $(vlc_DEPENDENCIES)
+--vlc_static_LDADD = $(vlc_LDADD)
+-+vlc_static_LDADD = $(vlc_LDADD) ../compat/libcompat.la
+- vlc_static_LDFLAGS = $(vlc_LDFLAGS)
+- 
+- if HAVE_WIN32
+-diff -Nurp a/bin/Makefile.in b/bin/Makefile.in
+---- a/bin/Makefile.in	2013-12-07 16:17:01.000000000 +0000
+-+++ b/bin/Makefile.in	2014-01-06 22:04:10.888444978 +0000
+-@@ -1049,7 +1049,7 @@ vlc_static_CFLAGS = $(AM_CFLAGS) \
+- 	$(NULL)
+- 
+- vlc_static_DEPENDENCIES = $(vlc_DEPENDENCIES)
+--vlc_static_LDADD = $(vlc_LDADD)
+-+vlc_static_LDADD = $(vlc_LDADD) ../compat/libcompat.la
+- vlc_static_LDFLAGS = $(vlc_LDFLAGS) $(am__append_7)
+- @HAVE_WIN32_TRUE at vlc_DEPENDENCIES = vlc_win32_rc.$(OBJEXT)
+- vlc_cache_gen_SOURCES = cachegen.c
+diff --git a/package/vlc/vlc-0001-vlc-static.patch b/package/vlc/vlc-0001-vlc-static.patch
+new file mode 100644
+index 0000000..faf7e80
+--- /dev/null
++++ b/package/vlc/vlc-0001-vlc-static.patch
+@@ -0,0 +1,24 @@
++diff -uNr vlc-2.1.5.org/bin/Makefile.am vlc-2.1.5/bin/Makefile.am
++--- vlc-2.1.5.org/bin/Makefile.am	2013-12-03 10:12:34.000000000 +0100
+++++ vlc-2.1.5/bin/Makefile.am	2014-08-03 12:30:06.722154518 +0200
++@@ -1,7 +1,7 @@
++ # Building vlc
++ #
++ bin_PROGRAMS = vlc
++-noinst_PROGRAMS = vlc-static
+++noinst_PROGRAMS =
++ noinst_DATA =
++ vlclib_PROGRAMS = vlc-cache-gen
++ EXTRA_PROGRAMS = vlc-wrapper
++diff -uNr vlc-2.1.5.org/Makefile.am vlc-2.1.5/Makefile.am
++--- vlc-2.1.5.org/Makefile.am	2014-02-14 18:40:50.000000000 +0100
+++++ vlc-2.1.5/Makefile.am	2014-08-03 12:29:52.059010766 +0200
++@@ -607,7 +607,7 @@
++ 	cd lib && $(MAKE) $(AM_MAKEFLAGS) libvlc.la
++ 
++ core: libvlc vlc$(EXEEXT)
++-	cd bin && $(MAKE) $(AM_MAKEFLAGS) vlc$(EXEEXT) vlc-static$(EXEEXT)
+++	cd bin && $(MAKE) $(AM_MAKEFLAGS) vlc$(EXEEXT)
++ 
++ doc:
++ 	cd doc && $(MAKE) $(AM_MAKEFLAGS) doc
+-- 
+1.7.10.4
