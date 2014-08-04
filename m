@@ -1,94 +1,157 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 22:32:02 +0200
-Subject: [Buildroot] [PATCH 3/3] alsaequal: new package
-In-Reply-To: <1398374384-8814-3-git-send-email-martin@barkynet.com>
-References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
- <1398374384-8814-3-git-send-email-martin@barkynet.com>
-Message-ID: <20140804223202.62f5c129@free-electrons.com>
+Date: Mon, 4 Aug 2014 22:40:45 +0200
+Subject: [Buildroot] [git commit] espeak: new package
+Message-ID: <20140804204104.191B79D3A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+commit: http://git.buildroot.net/buildroot/commit/?id=10b6d10009c70262cfb492b2abaa3a091a8fb4aa
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 24 Apr 2014 22:19:44 +0100, Martin Bark wrote:
+[Thomas: minor formatting tweaks to the Config.in and .mk file.]
 
-> diff --git a/package/alsaequal/alsaequal-01-cross-compile-fix.patch b/package/alsaequal/alsaequal-01-cross-compile-fix.patch
-> new file mode 100644
-> index 0000000..6133106
-> --- /dev/null
-> +++ b/package/alsaequal/alsaequal-01-cross-compile-fix.patch
-> @@ -0,0 +1,17 @@
+Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+Tested-by: Marcelo Gutierrez <kuyurix@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |    1 +
+ package/espeak/Config.in                           |   44 ++++++++++++++++++++
+ .../espeak-01-do-not-compil-when-install.patch     |   15 +++++++
+ package/espeak/espeak.mk                           |   43 +++++++++++++++++++
+ 4 files changed, 103 insertions(+), 0 deletions(-)
 
-Description + Signed-off-by.
-
-> +--- alsaequal-0.6.original/Makefile	2010-03-05 17:30:39.000000000 +0000
-> ++++ alsaequal-0.6/Makefile	2014-04-24 16:25:59.468030181 +0100
-> +@@ -4,10 +4,10 @@
-> + #Q	?=
-> + 
-> + # Build Tools
-> +-CC 	:= gcc
-> +-CFLAGS := -I. -O2 -Wall -funroll-loops -ffast-math -fPIC -DPIC
-> +-LD := gcc
-> +-LDFLAGS := -O2 -Wall -shared -lasound
-> ++CC 	?= gcc
-> ++CFLAGS += -I. -Wall -ffast-math -fPIC -DPIC
-> ++LD := $(CC)
-> ++LDFLAGS := -shared -lasound
-> + 
-> + SND_PCM_OBJECTS = pcm_equal.o ladspa_utils.o
-> + SND_PCM_LIBS =
-> diff --git a/package/alsaequal/alsaequal-05_fix-eq-name.patch b/package/alsaequal/alsaequal-05_fix-eq-name.patch
-
-Should be alsaequal-02-fix-eq-name.patch (notice the sequence number
-and the difference between - and _).
-
-Also description + Signed-off-by.
-
-
-> diff --git a/package/alsaequal/alsaequal.mk b/package/alsaequal/alsaequal.mk
-> new file mode 100644
-> index 0000000..5669b55
-> --- /dev/null
-> +++ b/package/alsaequal/alsaequal.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# alsaequal
-> +#
-> +################################################################################
-> +
-> +ALSAEQUAL_VERSION = 0.6
-> +ALSAEQUAL_SOURCE = alsaequal-$(ALSAEQUAL_VERSION).tar.bz2
-> +ALSAEQUAL_SITE = http://www.thedigitalmachine.net/tools/
-> +ALSAEQUAL_LICENSE = LGPLv2.1
-> +ALSAEQUAL_LICENSE_FILES = COPYING
-> +ALSAEQUAL_DEPENDENCIES = alsa-lib
-> +
-> +define ALSAEQUAL_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-> +endef
-> +
-> +define ALSAEQUAL_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
-> +endef
-
-Same comments here for $(TARGET_MAKE_ENV) and $(TARGET_CONFIGURE_OPTS)
-as the ones made on the 'caps' package.
-
-So there's really no build dependency on ladspa or caps in alsaequal ?
-
-Like the ladspa-sdk and caps patches, I've marked this one as
-"Changes requested" in our patch tracking system. Could you resubmit an
-updated version of those patches?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 2f92c19..4520ba6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -6,6 +6,7 @@ menu "Audio and video applications"
+ 	source "package/alsa-utils/Config.in"
+ 	source "package/aumix/Config.in"
+ 	source "package/bellagio/Config.in"
++	source "package/espeak/Config.in"
+ 	source "package/faad2/Config.in"
+ 	source "package/ffmpeg/Config.in"
+ 	source "package/flac/Config.in"
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+new file mode 100644
+index 0000000..3e052d9
+--- /dev/null
++++ b/package/espeak/Config.in
+@@ -0,0 +1,44 @@
++comment "espeak needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++
++config BR2_PACKAGE_ESPEAK
++	bool "espeak"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR
++	help
++	  espeak is a speech synthesizer software for English and
++	  other languages.
++
++	  http://espeak.sourceforge.net/
++
++if BR2_PACKAGE_ESPEAK
++
++choice
++	prompt "choose audio backend"
++	default BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
++
++config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
++       bool "No sound backend, only produce wav files"
++
++comment "alsa backend needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
++	bool "alsa via portaudio"
++	select BR2_PACKAGE_PORTAUDIO
++	select BR2_PACKAGE_PORTAUDIO_CXX
++	depends on BR2_TOOLCHAIN_HAS_THREADS # portaudio
++
++comment "pulseaudio backend needs a toolchain w/ wchar, largefile, threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_LARGEFILE
++
++config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
++	bool "pulseaudio"
++	select BR2_PACKAGE_PULSEAUDIO
++	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
++	depends on BR2_USE_WCHAR # pulseaudio
++	depends on BR2_LARGEFILE # pulseaudio
++
++endchoice
++
++endif # BR2_PACKAGE_ESPEAK
+diff --git a/package/espeak/espeak-01-do-not-compil-when-install.patch b/package/espeak/espeak-01-do-not-compil-when-install.patch
+new file mode 100644
+index 0000000..983cd1c
+--- /dev/null
++++ b/package/espeak/espeak-01-do-not-compil-when-install.patch
+@@ -0,0 +1,15 @@
++Makefile: do not execute the rule "all" when executing "install"
++
++signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
++===================================================================
++--- espeak-1.47.11-source.orig/src/Makefile
+++++ espeak-1.47.11-source/src/Makefile
++@@ -131,7 +131,7 @@
++ 	rm -f $(BIN2_NAME)
++ 	rm -f $(LIB_NAME)*
++ 
++-install: all
+++install:
++ 	# Create directories
++ 	rm -rf $(DESTDIR)$(DATADIR)
++ 	$(MKDIR) $(DESTDIR)$(BINDIR)
+diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
+new file mode 100644
+index 0000000..571b730
+--- /dev/null
++++ b/package/espeak/espeak.mk
+@@ -0,0 +1,43 @@
++###############################################################################
++#
++# espeak
++#
++###############################################################################
++
++ESPEAK_VERSION_MAJOR = 1.47
++ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).11
++ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
++ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/espeak-$(ESPEAK_VERSION_MAJOR)
++ESPEAK_LICENSE = GPLv3+
++ESPEAK_LICENSE_FILES = Licence.txt
++
++ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA),y)
++ESPEAK_AUDIO_BACKEND = portaudio
++ESPEAK_DEPENDENCIES = portaudio
++endif
++ifeq ($(BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO),y)
++ESPEAK_AUDIO_BACKEND = pulseaudio
++ESPEAK_DEPENDENCIES = pulseaudio
++endif
++
++define ESPEAK_EXTRACT_CMDS
++	unzip -d $(@D) $(DL_DIR)/$(ESPEAK_SOURCE)
++	mv $(@D)/espeak-$(ESPEAK_VERSION)-source/* $(@D)
++	$(RM) -r $(@D)/espeak-$(ESPEAK_VERSION)-source
++endef
++
++define ESPEAK_CONFIGURE_CMDS
++	# Buildroot provides portaudio V19, see ReadMe file for more details.
++	cp $(@D)/src/portaudio19.h $(@D)/src/portaudio.h
++endef
++
++define ESPEAK_BUILD_CMDS
++	$(MAKE) -C $(@D)/src  $(TARGET_CONFIGURE_OPTS) \
++		AUDIO="$(ESPEAK_AUDIO_BACKEND)" all
++endef
++
++define ESPEAK_INSTALL_TARGET_CMDS
++	$(MAKE) -C $(@D)/src DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(generic-package))
