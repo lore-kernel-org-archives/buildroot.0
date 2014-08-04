@@ -1,84 +1,145 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 09:54:22 +0200
-Subject: [Buildroot] [git commit] uclibc: convert to kconfig-package
+Date: Mon, 4 Aug 2014 09:53:30 +0200
+Subject: [Buildroot] [git commit] infra: introduce a kconfig-package
 	infrastructure
-Message-ID: <20140804075840.42AB59D11C@busybox.osuosl.org>
+Message-ID: <20140804075840.114A19D11C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=c8d8e8a53699b3863956568c3423110cc855aba7
+commit: http://git.buildroot.net/buildroot/commit/?id=abb8a8dae49cdf1f35861985e4a51128889dcdb0
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch converts the uclibc package to the new kconfig-package
-infrastructure, thus removing code duplication and ensuring a consistent
-behavior of kconfig packages.
+There are several packages that have a configuration file managed by
+kconfig: uclibc, busybox, linux and barebox. All these packages need some
+make targets to handle the kconfig specificities: creating a configuration
+(menuconfig, ...) and saving it back (update-config, ...)
+
+These targets should be the same for each of these packages, but
+unfortunately they are not. Especially with respect to saving back the
+configuration to the original config file, there are many differences.
+
+A previous set of patches fixed these targets for the uclibc package.
+This patch extracts these targets into a common kconfig-package
+infrastructure, with the goals of:
+- aligning the behavior of all kconfig-based packages
+- removing code duplication
+
+In order to use this infrastructure, a package should at a minimum specify
+FOO_KCONFIG_FILE and eval the kconfig-package macro. The supported
+configuration editors can be set with FOO_KCONFIG_EDITORS and defaults to
+menuconfig only.
+Additionally, a package can specify FOO_KCONFIG_OPT for extra options to
+pass to the invocation of the kconfig editors, and FOO_KCONFIG_FIXUP_CMDS
+for a list of shell commands used to fixup the .config file after a
+configuration has been created/edited.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: add missing 4th argument when calling to
+ inner-kconfig-package (namely, 'target']
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/uclibc.mk |   34 ++++++++++------------------------
- 1 files changed, 10 insertions(+), 24 deletions(-)
+ package/Makefile.in    |    1 +
+ package/pkg-kconfig.mk |   82 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 83 insertions(+), 0 deletions(-)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 80a88a4..c7203cc 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -37,6 +37,14 @@ ifndef UCLIBC_CONFIG_FILE
- UCLIBC_CONFIG_FILE = $(call qstrip,$(BR2_UCLIBC_CONFIG))
- endif
- 
-+UCLIBC_KCONFIG_FILE = $(UCLIBC_CONFIG_FILE)
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 106a04c..60816b4 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -394,3 +394,4 @@ include package/pkg-perl.mk
+ include package/pkg-python.mk
+ include package/pkg-virtual.mk
+ include package/pkg-generic.mk
++include package/pkg-kconfig.mk
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+new file mode 100644
+index 0000000..5220fdf
+--- /dev/null
++++ b/package/pkg-kconfig.mk
+@@ -0,0 +1,82 @@
++################################################################################
++# Kconfig package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for packages that use kconfig for configuration files.
++# It is based on the generic-package infrastructure, and inherits all of its
++# features.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure.
++#
++################################################################################
 +
-+UCLIBC_KCONFIG_OPT = \
-+		$(UCLIBC_MAKE_FLAGS) \
-+		PREFIX=$(STAGING_DIR) \
-+		DEVEL_PREFIX=/usr/ \
-+		RUNTIME_PREFIX=$(STAGING_DIR)/ \
++################################################################################
++# inner-kconfig-package -- generates the make targets needed to support a
++# kconfig package
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
 +
- UCLIBC_TARGET_ARCH = $(call qstrip,$(BR2_UCLIBC_TARGET_ARCH))
- 
- ifeq ($(GENERATE_LOCALE),)
-@@ -393,7 +401,7 @@ UCLIBC_MAKE_FLAGS = \
- 	UCLIBC_EXTRA_CFLAGS="$(UCLIBC_EXTRA_CFLAGS) $(TARGET_ABI)" \
- 	HOSTCC="$(HOSTCC)"
- 
--define UCLIBC_FIXUP_DOT_CONFIG
-+define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(call KCONFIG_SET_OPT,CROSS_COMPILER_PREFIX,"$(TARGET_CROSS)",$(@D)/.config)
- 	$(call KCONFIG_ENABLE_OPT,TARGET_$(UCLIBC_TARGET_ARCH),$(@D)/.config)
- 	$(call KCONFIG_SET_OPT,TARGET_ARCH,"$(UCLIBC_TARGET_ARCH)",$(@D)/.config)
-@@ -531,29 +539,7 @@ define UCLIBC_INSTALL_STAGING_CMDS
- 	$(UCLIBC_INSTALL_UTILS_STAGING)
- endef
- 
--$(eval $(generic-package))
--
--$(UCLIBC_DIR)/.config: $(UCLIBC_CONFIG_FILE) | uclibc-patch
--	$(INSTALL) -m 0644 $(UCLIBC_CONFIG_FILE) $(UCLIBC_DIR)/.config
--
--$(UCLIBC_DIR)/.stamp_config_fixup_done: $(UCLIBC_DIR)/.config
--	$(UCLIBC_FIXUP_DOT_CONFIG)
--	$(Q)touch $@
--
--$(UCLIBC_TARGET_CONFIGURE): $(UCLIBC_DIR)/.stamp_config_fixup_done
--
--uclibc-menuconfig: $(UCLIBC_DIR)/.stamp_config_fixup_done
--	$(MAKE) -C $(UCLIBC_DIR) \
--		$(UCLIBC_MAKE_FLAGS) \
--		PREFIX=$(STAGING_DIR) \
--		DEVEL_PREFIX=/usr/ \
--		RUNTIME_PREFIX=$(STAGING_DIR)/ \
--		menuconfig
--	rm -f $(UCLIBC_DIR)/.stamp_{config_fixup_done,configured,built}
--	rm -f $(UCLIBC_DIR)/.stamp_{target,staging}_installed
--
--uclibc-update-config: $(UCLIBC_DIR)/.stamp_config_fixup_done
--	cp -f $(UCLIBC_DIR)/.config $(UCLIBC_CONFIG_FILE)
-+$(eval $(kconfig-package))
- 
- # Before uClibc is built, we must have the second stage cross-compiler
- $(UCLIBC_TARGET_BUILD): | host-gcc-intermediate
++define inner-kconfig-package
++
++# Call the generic package infrastructure to generate the necessary
++# make targets.
++# Note: this must be done _before_ attempting to use $$($(2)_DIR) in a
++# dependency expression
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++# Default values
++
++$(2)_KCONFIG_EDITORS ?= menuconfig
++$(2)_KCONFIG_OPT ?=
++$(2)_KCONFIG_FIXUP_CMDS ?=
++
++# FOO_KCONFIG_FILE is required
++
++ifndef $(2)_KCONFIG_FILE
++$$(error Internal error: no value specified for $(2)_KCONFIG_FILE)
++endif
++
++# The .config file is obtained by copying it from the specified source
++# configuration file, after the package has been patched.
++
++$$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) | $(1)-patch
++	$$(INSTALL) -m 0644 $$($(2)_KCONFIG_FILE) $$($(2)_DIR)/.config
++
++# In order to get a usable, consistent configuration, some fixup may be needed.
++# The exact rules are specified by the package .mk file.
++
++$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
++	$$($(2)_KCONFIG_FIXUP_CMDS)
++	$$(Q)touch $$@
++
++# Before running configure, the configuration file should be present and fixed
++
++$$($(2)_TARGET_CONFIGURE): $$($(2)_DIR)/.stamp_kconfig_fixup_done
++
++# Configuration editors (menuconfig, ...)
++
++$$(addprefix $(1)-,$$($(2)_KCONFIG_EDITORS)): $$($(2)_DIR)/.stamp_kconfig_fixup_done
++	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++		$$($(2)_KCONFIG_OPT) $$(subst $(1)-,,$$@)
++	rm -f $$($(2)_DIR)/.stamp_{kconfig_fixup_done,configured,built}
++	rm -f $$($(2)_DIR)/.stamp_{target,staging}_installed
++
++# Target to copy back the configuration to the source configuration file
++
++$(1)-update-config: $$($(2)_DIR)/.stamp_kconfig_fixup_done
++	cp -f $$($(2)_DIR)/.config $$($(2)_KCONFIG_FILE)
++
++endef # inner-kconfig-package
++
++################################################################################
++# kconfig-package -- the target generator macro for kconfig packages
++################################################################################
++
++kconfig-package = $(call inner-kconfig-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
