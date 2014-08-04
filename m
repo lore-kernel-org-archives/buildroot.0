@@ -1,185 +1,108 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 09:46:25 +0200
-Subject: [Buildroot] [git commit] package/mediastreamer: Fix linphone
-	compile with newer ffmpeg versions
-Message-ID: <20140804074718.63EF99D3A2@busybox.osuosl.org>
+Date: Mon, 4 Aug 2014 09:46:06 +0200
+Subject: [Buildroot] [git commit] package/vlc: Disable broken linking of
+	vlc-static
+Message-ID: <20140804074718.53DC29D1A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=ef7905783dc5eb47b689e63ee451f38cec0a2610
+commit: http://git.buildroot.net/buildroot/commit/?id=7f4075f7de9b40576db8aa76d5214eeb0d43a86e
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+- vlc-0001-vlc-static.patch disables linking of bin/vlc-static
+- remove vlc-0001-fix-link-error.patch as it should have fixed
+  vlc-static, this patch is not needed anymore
+
 Fixes
-http://autobuild.buildroot.net/results/b72/b72b1f6287986af3d686cc3c8b9c1b3fd9419d29/
+http://autobuild.buildroot.net/results/acc/acc212dc70abbf86be5d764895ee50b1eb64668f/
+http://autobuild.buildroot.net/results/830/83025b9072221f9edaa4638687950f8086e1c19d/
+http://autobuild.buildroot.net/results/0b5/0b59e2d0b17501d10c005292a2e1916f23a12a0e/
+http://autobuild.buildroot.net/results/473/473e601b009d8b045cd6041f3725e9dc81e31f03/
+http://autobuild.buildroot.net/results/3b2/3b2815d27a2252a2d677eed5c479a88bbb04d655/
+http://autobuild.buildroot.net/results/022/022252176c051ff3365b2cb820f32aafc802803a/
+http://autobuild.buildroot.net/results/2db/2dbaa3603b3dab9e06a37993fb235d009bd22df9/
+http://autobuild.buildroot.net/results/0d4/0d4199c3271bbd7cf8a04403c5dafa1178f75fb1/
+http://autobuild.buildroot.net/results/cb8/cb8402fc994697f157348d88f848357ca21156a4/
+http://autobuild.buildroot.net/results/666/6660453c78d1557b645e8fd5b3ed2076e64fc91a/
+http://autobuild.buildroot.net/results/2b9/2b9bbeea4a4b2953b445f54b5ce1b2d8f520451d/
+http://autobuild.buildroot.net/results/7ff/7ff072f9b7487fb27070c58053dbcf96b7dd7a56/
+http://autobuild.buildroot.net/results/ab1/ab1feef329c9da6cd3a4df46b6724030159a4003/
+http://autobuild.buildroot.net/results/bd3/bd3a1bc0c6f333836c1888d8404832de948df739/
+http://autobuild.buildroot.net/results/f70/f708306808953a48f8cc870d13be0e62ed2ece2e/
+http://autobuild.buildroot.net/results/3c5/3c53f6e0f3c0367b760bbf2140acdb06b2b50223/
+http://autobuild.buildroot.net/results/080/080fab04cd252f765dd197c9941470bfdf6ba629/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mediastreamer/mediastreamer-0001.patch |  156 ++++++++++++++++++++++++
- 1 files changed, 156 insertions(+), 0 deletions(-)
+ package/vlc/vlc-0001-fix-link-error.patch |   28 ----------------------------
+ package/vlc/vlc-0001-vlc-static.patch     |   24 ++++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 28 deletions(-)
 
-diff --git a/package/mediastreamer/mediastreamer-0001.patch b/package/mediastreamer/mediastreamer-0001.patch
+diff --git a/package/vlc/vlc-0001-fix-link-error.patch b/package/vlc/vlc-0001-fix-link-error.patch
+deleted file mode 100644
+index 0acae8f..0000000
+--- a/package/vlc/vlc-0001-fix-link-error.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Fix a link error.
+-
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-
+-diff -Nurp a/bin/Makefile.am b/bin/Makefile.am
+---- a/bin/Makefile.am	2013-12-03 09:12:34.000000000 +0000
+-+++ b/bin/Makefile.am	2014-01-06 22:03:34.888581851 +0000
+-@@ -44,7 +44,7 @@ vlc_static_CFLAGS = $(AM_CFLAGS) \
+- 	-DTOP_SRCDIR=\"$$(cd "$(top_srcdir)"; pwd)\" \
+- 	$(NULL)
+- vlc_static_DEPENDENCIES = $(vlc_DEPENDENCIES)
+--vlc_static_LDADD = $(vlc_LDADD)
+-+vlc_static_LDADD = $(vlc_LDADD) ../compat/libcompat.la
+- vlc_static_LDFLAGS = $(vlc_LDFLAGS)
+- 
+- if HAVE_WIN32
+-diff -Nurp a/bin/Makefile.in b/bin/Makefile.in
+---- a/bin/Makefile.in	2013-12-07 16:17:01.000000000 +0000
+-+++ b/bin/Makefile.in	2014-01-06 22:04:10.888444978 +0000
+-@@ -1049,7 +1049,7 @@ vlc_static_CFLAGS = $(AM_CFLAGS) \
+- 	$(NULL)
+- 
+- vlc_static_DEPENDENCIES = $(vlc_DEPENDENCIES)
+--vlc_static_LDADD = $(vlc_LDADD)
+-+vlc_static_LDADD = $(vlc_LDADD) ../compat/libcompat.la
+- vlc_static_LDFLAGS = $(vlc_LDFLAGS) $(am__append_7)
+- @HAVE_WIN32_TRUE at vlc_DEPENDENCIES = vlc_win32_rc.$(OBJEXT)
+- vlc_cache_gen_SOURCES = cachegen.c
+diff --git a/package/vlc/vlc-0001-vlc-static.patch b/package/vlc/vlc-0001-vlc-static.patch
 new file mode 100644
-index 0000000..84c9948
+index 0000000..faf7e80
 --- /dev/null
-+++ b/package/mediastreamer/mediastreamer-0001.patch
-@@ -0,0 +1,156 @@
-+Fix linphone compile with newer ffmpeg versions, downloaded from
-+https://github.com/dankamongmen/mediastreamer2/commit/4f438eb8e132a3119284be771e0daad143597ebd
-+
-+Fixes
-+http://autobuild.buildroot.net/results/b72/b72b1f6287986af3d686cc3c8b9c1b3fd9419d29/
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 4f438eb8e132a3119284be771e0daad143597ebd Mon Sep 17 00:00:00 2001
-+From: nick black <nick.black@sprezzatech.com>
-+Date: Mon, 28 Jan 2013 23:54:17 -0500
-+Subject: [PATCH] adapt to new libav API
-+
-+---
-+ src/utils/ffmpeg-priv.h       | 1 +
-+ src/videofilters/h264dec.c    | 6 +++---
-+ src/videofilters/jpegwriter.c | 6 +++---
-+ src/videofilters/nowebcam.c   | 6 +++---
-+ src/videofilters/videodec.c   | 8 ++++----
-+ src/videofilters/videoenc.c   | 6 +++---
-+ 6 files changed, 17 insertions(+), 16 deletions(-)
-+
-+diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
-+index 0eab098..a405c05 100644
-+--- a/src/utils/ffmpeg-priv.h
-++++ b/src/utils/ffmpeg-priv.h
-+@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ /* new layout */
-+ # include <libavcodec/avcodec.h>
-+ # include <libavutil/avutil.h>
-++# include <libavutil/mem.h>
-+ #else
-+ /* old layout */
-+ # include <ffmpeg/avcodec.h>
-+diff --git a/src/videofilters/h264dec.c b/src/videofilters/h264dec.c
-+index 5229b5e..7059634 100644
-+--- a/src/videofilters/h264dec.c
-++++ b/src/videofilters/h264dec.c
-+@@ -58,10 +58,10 @@ static void dec_open(DecData *d){
-+ 	int error;
-+ 	codec=avcodec_find_decoder(CODEC_ID_H264);
-+ 	if (codec==NULL) ms_fatal("Could not find H264 decoder in ffmpeg.");
-+-	avcodec_get_context_defaults(&d->av_context);
-+-	error=avcodec_open(&d->av_context,codec);
-++	avcodec_get_context_defaults3(&d->av_context, codec);
-++	error=avcodec_open2(&d->av_context,codec, NULL);
-+ 	if (error!=0){
-+-		ms_fatal("avcodec_open() failed.");
-++		ms_fatal("avcodec_open2() failed.");
-+ 	}
-+ }
++++ b/package/vlc/vlc-0001-vlc-static.patch
+@@ -0,0 +1,24 @@
++diff -uNr vlc-2.1.5.org/bin/Makefile.am vlc-2.1.5/bin/Makefile.am
++--- vlc-2.1.5.org/bin/Makefile.am	2013-12-03 10:12:34.000000000 +0100
+++++ vlc-2.1.5/bin/Makefile.am	2014-08-03 12:30:06.722154518 +0200
++@@ -1,7 +1,7 @@
++ # Building vlc
++ #
++ bin_PROGRAMS = vlc
++-noinst_PROGRAMS = vlc-static
+++noinst_PROGRAMS =
++ noinst_DATA =
++ vlclib_PROGRAMS = vlc-cache-gen
++ EXTRA_PROGRAMS = vlc-wrapper
++diff -uNr vlc-2.1.5.org/Makefile.am vlc-2.1.5/Makefile.am
++--- vlc-2.1.5.org/Makefile.am	2014-02-14 18:40:50.000000000 +0100
+++++ vlc-2.1.5/Makefile.am	2014-08-03 12:29:52.059010766 +0200
++@@ -607,7 +607,7 @@
++ 	cd lib && $(MAKE) $(AM_MAKEFLAGS) libvlc.la
 + 
-+diff --git a/src/videofilters/jpegwriter.c b/src/videofilters/jpegwriter.c
-+index cca79c5..daf3cdb 100644
-+--- a/src/videofilters/jpegwriter.c
-++++ b/src/videofilters/jpegwriter.c
-+@@ -90,7 +90,7 @@ static void jpg_process(MSFilter *f){
-+ 			mblk_t *jpegm;
-+ 			struct SwsContext *sws_ctx;
-+ 			
-+-			AVCodecContext *avctx=avcodec_alloc_context();
-++			AVCodecContext *avctx=avcodec_alloc_context3(NULL);
-+ 			
-+ 			avctx->width=yuvbuf.w;
-+ 			avctx->height=yuvbuf.h;
-+@@ -98,9 +98,9 @@ static void jpg_process(MSFilter *f){
-+ 			avctx->time_base.den =1;
-+ 			avctx->pix_fmt=PIX_FMT_YUVJ420P;
++ core: libvlc vlc$(EXEEXT)
++-	cd bin && $(MAKE) $(AM_MAKEFLAGS) vlc$(EXEEXT) vlc-static$(EXEEXT)
+++	cd bin && $(MAKE) $(AM_MAKEFLAGS) vlc$(EXEEXT)
 + 
-+-			error=avcodec_open(avctx,s->codec);
-++			error=avcodec_open2(avctx,s->codec,NULL);
-+ 			if (error!=0) {
-+-				ms_error("avcodec_open() failed: %i",error);
-++				ms_error("avcodec_open2() failed: %i",error);
-+ 				cleanup(s,NULL);
-+ 				av_free(avctx);
-+ 				return;
-+diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
-+index f1c10de..b45f89f 100644
-+--- a/src/videofilters/nowebcam.c
-++++ b/src/videofilters/nowebcam.c
-+@@ -68,9 +68,9 @@ static mblk_t *jpeg2yuv(uint8_t *jpgbuf, int bufsize, MSVideoSize *reqsize){
-+ 		return NULL;
-+ 	}
-+ 
-+-	avcodec_get_context_defaults(&av_context);
-+-	if (avcodec_open(&av_context,codec)<0){
-+-		ms_error("jpeg2yuv: avcodec_open failed");
-++	avcodec_get_context_defaults3(&av_context,NULL);
-++	if (avcodec_open2(&av_context,codec,NULL)<0){
-++		ms_error("jpeg2yuv: avcodec_open2 failed");
-+ 		return NULL;
-+ 	}
-+ 	av_init_packet(&pkt);
-+diff --git a/src/videofilters/videodec.c b/src/videofilters/videodec.c
-+index 9807214..2f1b452 100644
-+--- a/src/videofilters/videodec.c
-++++ b/src/videofilters/videodec.c
-+@@ -53,7 +53,7 @@ static void dec_init(MSFilter *f, enum CodecID cid){
-+ 	DecState *s=(DecState *)ms_new0(DecState,1);
-+ 	ms_ffmpeg_check_init();
-+ 	
-+-	avcodec_get_context_defaults(&s->av_context);
-++	avcodec_get_context_defaults3(&s->av_context,NULL);
-+ 	s->av_codec=NULL;
-+ 	s->codec=cid;
-+ 	s->input=NULL;
-+@@ -135,7 +135,7 @@ static void dec_preprocess(MSFilter *f){
-+ 	if (s->av_context.codec==NULL){
-+ 		/* we must know picture size before initializing snow decoder*/
-+ 		if (s->codec!=CODEC_ID_SNOW){
-+-			error=avcodec_open(&s->av_context, s->av_codec);
-++			error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-+ 			if (error!=0) ms_error("avcodec_open() failed: %i",error);
-+ 			if (s->codec==CODEC_ID_MPEG4 && s->dci_size>0){
-+ 				s->av_context.extradata=s->dci;
-+@@ -225,8 +225,8 @@ static mblk_t * parse_snow_header(DecState *s,mblk_t *inm){
-+ 			int error;
-+ 			s->av_context.width=h>>16;
-+ 			s->av_context.height=h&0xffff;
-+-			error=avcodec_open(&s->av_context, s->av_codec);
-+-			if (error!=0) ms_error("avcodec_open() failed for snow: %i",error);
-++			error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-++			if (error!=0) ms_error("avcodec_open2() failed for snow: %i",error);
-+ 			else {
-+ 				s->snow_initialized=TRUE;
-+ 				ms_message("Snow decoder initialized,size=%ix%i",
-+diff --git a/src/videofilters/videoenc.c b/src/videofilters/videoenc.c
-+index da35592..4101772 100644
-+--- a/src/videofilters/videoenc.c
-++++ b/src/videofilters/videoenc.c
-+@@ -242,7 +242,7 @@ static void prepare(EncState *s){
-+ 	AVCodecContext *c=&s->av_context;
-+ 	const int max_br_vbv=128000;
-+ 
-+-	avcodec_get_context_defaults(c);
-++	avcodec_get_context_defaults3(c,NULL);
-+ 	if (s->codec==CODEC_ID_MJPEG)
-+ 	{
-+ 		ms_message("Codec bitrate set to %i",c->bit_rate);
-+@@ -348,9 +348,9 @@ static void enc_preprocess(MSFilter *f){
-+ 		ms_error("could not find encoder for codec id %i",s->codec);
-+ 		return;
-+ 	}
-+-	error=avcodec_open(&s->av_context, s->av_codec);
-++	error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-+ 	if (error!=0) {
-+-		ms_error("avcodec_open() failed: %i",error);
-++		ms_error("avcodec_open2() failed: %i",error);
-+ 		return;
-+ 	}
-+ 	video_starter_init(&s->starter);
-+-- 
-+2.0.3
-+
++ doc:
++ 	cd doc && $(MAKE) $(AM_MAKEFLAGS) doc
