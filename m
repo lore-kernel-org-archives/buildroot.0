@@ -1,37 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 21:34:35 +0200
-Subject: [Buildroot] [PATCH 1/2] dhcp: Fix config files paths
-In-Reply-To: <1407176344-13291-1-git-send-email-benoit.thebaudeau@advansee.com>
-References: <1407176344-13291-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <20140804213435.632989bf@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Aug 2014 16:34:55 -0300
+Subject: [Buildroot] [PATCH] exim: security bump to version 4.83
+Message-ID: <1407180895-25908-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+Fixes CVE-2014-2972 - prevent double expansion in math comparison
+functions (can expand unsanitized data).
+Also rename patches according to patch naming policy.
 
-On Mon,  4 Aug 2014 20:19:03 +0200, Beno?t Th?baudeau wrote:
-> The built dhcp binaries and the installed startup scripts used configuration
-> files under /etc/, but the configuration files were installed under /etc/dhcp/.
-> Fix everything to have configuration files under /etc/dhcp/.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
-> ---
->  package/dhcp/S80dhcp-server | 2 +-
->  package/dhcp/dhcp.mk        | 5 ++++-
->  2 files changed, 5 insertions(+), 2 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...or-the-host.patch => exim-0001-Build-buildconfig-for-the-host.patch} | 0
+ ...atch => exim-0002-Don-t-make-backup-copies-of-installed-files.patch} | 0
+ ...atch => exim-0003-Skip-version-check-and-symlink-installation.patch} | 0
+ package/exim/exim.mk                                                    | 2 +-
+ 4 files changed, 1 insertion(+), 1 deletion(-)
+ rename package/exim/{exim-Build-buildconfig-for-the-host.patch => exim-0001-Build-buildconfig-for-the-host.patch} (100%)
+ rename package/exim/{exim-Don-t-make-backup-copies-of-installed-files.patch => exim-0002-Don-t-make-backup-copies-of-installed-files.patch} (100%)
+ rename package/exim/{exim-Skip-version-check-and-symlink-installation.patch => exim-0003-Skip-version-check-and-symlink-installation.patch} (100%)
 
-Both patches applied, thanks.
-
-As Gustavo rightfully pointed out, it would be nice to be able to
-define the value of INTERFACES without modifying the init script
-itself, for example using a /etc/default/dhcpd file. But this needs to
-be part of a more global work on our initscripts and skeleton.
-
-Thomas
+diff --git a/package/exim/exim-Build-buildconfig-for-the-host.patch b/package/exim/exim-0001-Build-buildconfig-for-the-host.patch
+similarity index 100%
+rename from package/exim/exim-Build-buildconfig-for-the-host.patch
+rename to package/exim/exim-0001-Build-buildconfig-for-the-host.patch
+diff --git a/package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch b/package/exim/exim-0002-Don-t-make-backup-copies-of-installed-files.patch
+similarity index 100%
+rename from package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch
+rename to package/exim/exim-0002-Don-t-make-backup-copies-of-installed-files.patch
+diff --git a/package/exim/exim-Skip-version-check-and-symlink-installation.patch b/package/exim/exim-0003-Skip-version-check-and-symlink-installation.patch
+similarity index 100%
+rename from package/exim/exim-Skip-version-check-and-symlink-installation.patch
+rename to package/exim/exim-0003-Skip-version-check-and-symlink-installation.patch
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 8be8e75..845c5f8 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.82.1
++EXIM_VERSION = 4.83
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
+ EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPLv2+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
