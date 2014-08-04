@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 10:01:15 +0200
-Subject: [Buildroot] [PATCH 5/5 v4] busybox: convert to kconfig-package
- infrastructure
-In-Reply-To: <437a2f63b7dd1357bf859133053f4b877bc2a0e9.1407079864.git.yann.morin.1998@free.fr>
-References: <cover.1407079864.git.yann.morin.1998@free.fr>
- <437a2f63b7dd1357bf859133053f4b877bc2a0e9.1407079864.git.yann.morin.1998@free.fr>
-Message-ID: <20140804100115.6739393e@free-electrons.com>
+Date: Mon, 4 Aug 2014 10:24:56 +0200
+Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
+ calls with a single call
+In-Reply-To: <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
+References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
+ <20140803073726.GB4052@free.fr>
+ <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
+Message-ID: <20140804102456.774bcea3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, Thomas,
+Dear Danomi Manchego,
 
-On Sun,  3 Aug 2014 17:32:43 +0200, Yann E. MORIN wrote:
+On Sun, 3 Aug 2014 09:25:13 -0400, Danomi Manchego wrote:
 
-> +BUSYBOX_KCONFIG_FILE = $(BUSYBOX_CONFIG_FILE)
-> +BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
-> +BUSYBOX_KCONFIG_OPT = $(BUSYBOX_MAKE_OPTS)
+> I think this issue is not limited to openssh - there's other things
+> that want to occasionally save stuff to /etc, /var, even /root (e.g.
+> gstreamer plugins cache).  I suppose that efforts could be made to try
+> to patch/configure these locations to all be in one place (/var ?),
+> but that still assumes a writable directory.  So, unless we direct all
+> attempts to save state to a tmpfs, I think it always come back to
+> being the user's responsibility.
+> 
+> So for now I'm content to keep openssh as it is, rather than hunt down
+> all the places that might try to write to etc (, var, $HOME, ...).
 
-At some point, maybe we'll want to refactor this a bit. It seems silly
-to define BUSYBOX_CONFIG_FILE and BUSYBOX_MAKE_OPTS to then have to
-"rename" them just for the sake of the kconfig-package infra usage. Why
-not giving them the right name for the beginning?
+Buildroot is normally supposed to support a read-only root filesystem,
+and there are already several things being done to make this possible:
+
+ * /etc/resolv.conf is a symbolic link to /tmp/resolv.conf
+ * Most of the /var/<foo> directories are symbolic links to /tmp.
+   Only /var/lib is not.
+ * /tmp is mounted as tmpfs, so that it's read/write even if the rootfs
+   is read only.
 
 Thomas
 -- 
