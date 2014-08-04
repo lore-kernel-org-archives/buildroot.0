@@ -1,73 +1,68 @@
 From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon,  4 Aug 2014 16:16:31 +0400
-Subject: [Buildroot] [PATCH v3 4/4] msgpack: Add dependency on atomic
+Date: Mon,  4 Aug 2014 16:16:30 +0400
+Subject: [Buildroot] [PATCH v3 3/4] libftdi: Add dependency on atomic
 	intrinsics
 In-Reply-To: <1407154591-12753-1-git-send-email-Anton.Kolesov@synopsys.com>
 References: <20140803113216.03e0fb94@free-electrons.com>
  <1407154591-12753-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1407154591-12753-4-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <1407154591-12753-3-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Msgpack requires GCC built-in atomic functions which are architecture specific
+Libftdi requires GCC built-in atomic functions which are architecture specific
 and may not be implemented.
 
 This fixes:
-http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
+http://autobuild.buildroot.net/results/6cb25ed954840109c9d0e582e922b0ba9d07e174/
 
 Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- package/msgpack/Config.in        | 7 +++----
- package/python-msgpack/Config.in | 7 +++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
+ package/libftdi/Config.in | 5 +++--
+ package/openocd/Config.in | 4 ++++
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index b380c58..7d6277f 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc # atomic builtins
+diff --git a/package/libftdi/Config.in b/package/libftdi/Config.in
+index dc81514..ce65158 100644
+--- a/package/libftdi/Config.in
++++ b/package/libftdi/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBFTDI
+ 	bool "libftdi"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
 +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
  	help
- 	  MessagePack is an efficient binary serialization format.
+@@ -18,5 +19,5 @@ config BR2_PACKAGE_LIBTFDI_CPP
  
-@@ -10,6 +10,5 @@ config BR2_PACKAGE_MSGPACK
+ endif # BR2_PACKAGE_LIBFTDI
  
- 	  http://msgpack.org/
+-comment "libftdi needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "libftdi needs a toolchain w/ threads, atomic intrinsics"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+diff --git a/package/openocd/Config.in b/package/openocd/Config.in
+index 7f96ef8..e692d2d 100644
+--- a/package/openocd/Config.in
++++ b/package/openocd/Config.in
+@@ -14,11 +14,15 @@ comment "Adapters"
  
--comment "msgpack needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc
-+comment "msgpack needs a toolchain w/ C++, atomic intrinsics"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index c4b68a3..3b825a1 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
--	depends on !BR2_arc # msgpack - atomic builtins
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # msgpack
+ config BR2_PACKAGE_OPENOCD_FT2XXX
+ 	bool "FT2xxx/FT4xxx Based JTAG Programmer"
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # libftdi
+ 	select BR2_PACKAGE_LIBFTDI
  	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -12,7 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	  Enable building support for FT2232 based devices
+ 	  using the libftdi driver, opensource alternate of FTD2XX
  
- 	  https://pypi.python.org/pypi/msgpack-python/
- 
--comment "python-msgpack needs a toolchain w/ C++"
-+comment "python-msgpack needs a toolchain w/ C++, atomic intrinsics"
- 	depends on BR2_PACKAGE_PYTHON
--	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++comment "FT2232 support needs a toolchain w/ atomic intrinsics"
++        depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
++
+ config BR2_PACKAGE_OPENOCD_JLINK
+ 	bool "Segger J-Link JTAG Programmer"
+ 	help
 -- 
 1.8.4.1
