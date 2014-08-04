@@ -1,30 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 20:10:22 +0200
-Subject: [Buildroot] manipulating raw disk images as non-root user
-In-Reply-To: <CAE9DZUSKbr3gzUW=Oh=f7P9q_Fs=nh7S0OpxyL_tbYV3NfxhAQ@mail.gmail.com>
-References: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
- <20140804070558.GK32743@waldemar-brodkorb.de>
- <CAE9DZUSKbr3gzUW=Oh=f7P9q_Fs=nh7S0OpxyL_tbYV3NfxhAQ@mail.gmail.com>
-Message-ID: <20140804201022.5499bf8d@free-electrons.com>
+Date: Mon, 4 Aug 2014 20:10:34 +0200
+Subject: [Buildroot] [PATCH 1/3] libgpgme: security bump to version 1.5.1
+In-Reply-To: <1407174482-16108-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1407174482-16108-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140804201034.0c7bd60f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Dallas Clement,
+Dear Gustavo Zacarias,
 
-On Mon, 4 Aug 2014 12:56:40 -0500, Dallas Clement wrote:
+On Mon,  4 Aug 2014 14:48:00 -0300, Gustavo Zacarias wrote:
+> Fixes CVE-2014-3564 - heap-based buffer overflow in gpgsm status handler.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libgpgme/libgpgme.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Wow!  This is perfect.  I searched all over for a tool like this.  Couldn't
-> find anything.  Thanks Waldemar!  Do you know of a similar tool to make /
-> populate fat partitions.  I need to work with both fat and ext2.
-
-Huh? genext2fs has been part of Buildroot since years, and is directly
-usable by asking Buildroot to generate an ext2/3/4 image in "Filesystem
-images".
-
-Regarding FAT partition, I guess most people use the mtools?
+All three patches applied, thanks.
 
 Thomas
 -- 
