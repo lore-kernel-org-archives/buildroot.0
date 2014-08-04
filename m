@@ -1,44 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 10:24:56 +0200
-Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
- calls with a single call
-In-Reply-To: <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
-References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
- <20140803073726.GB4052@free.fr>
- <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
-Message-ID: <20140804102456.774bcea3@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon,  4 Aug 2014 08:25:22 +0000 (UTC)
+Subject: [Buildroot] [Bug 7286] systemd 215 doesn't build
+In-Reply-To: <bug-7286-163@https.bugs.busybox.net/>
+References: <bug-7286-163@https.bugs.busybox.net/>
+Message-ID: <20140804082522.6675F9D28A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Danomi Manchego,
+https://bugs.busybox.net/show_bug.cgi?id=7286
 
-On Sun, 3 Aug 2014 09:25:13 -0400, Danomi Manchego wrote:
+--- Comment #7 from Eric Le Bihan <eric.le.bihan.dev@free.fr> 2014-08-04 08:25:22 UTC ---
+Created attachment 5552
+  --> https://bugs.busybox.net/attachment.cgi?id=5552
+Workaround by disabling link time optimization
 
-> I think this issue is not limited to openssh - there's other things
-> that want to occasionally save stuff to /etc, /var, even /root (e.g.
-> gstreamer plugins cache).  I suppose that efforts could be made to try
-> to patch/configure these locations to all be in one place (/var ?),
-> but that still assumes a writable directory.  So, unless we direct all
-> attempts to save state to a tmpfs, I think it always come back to
-> being the user's responsibility.
-> 
-> So for now I'm content to keep openssh as it is, rather than hunt down
-> all the places that might try to write to etc (, var, $HOME, ...).
+Here is a workaround which disable link time optimization for systemd.
 
-Buildroot is normally supposed to support a read-only root filesystem,
-and there are already several things being done to make this possible:
-
- * /etc/resolv.conf is a symbolic link to /tmp/resolv.conf
- * Most of the /var/<foo> directories are symbolic links to /tmp.
-   Only /var/lib is not.
- * /tmp is mounted as tmpfs, so that it's read/write even if the rootfs
-   is read only.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
