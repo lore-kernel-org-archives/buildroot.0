@@ -1,37 +1,32 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon,  4 Aug 2014 16:17:08 +0400
-Subject: [Buildroot] [PATCH] manual: Add atomic intrinsics to the
-	dependencies section
-In-Reply-To: <20140803113216.03e0fb94@free-electrons.com>
-References: <20140803113216.03e0fb94@free-electrons.com>
-Message-ID: <1407154628-12791-1-git-send-email-Anton.Kolesov@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Aug 2014 09:45:54 -0300
+Subject: [Buildroot] [PATCH] startup-notification: needs mmu
+Message-ID: <1407156354-22736-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add atomic intrinsics to the examples of dependencies comments.
+Fixes:
+http://autobuild.buildroot.net/results/1fc/1fcb069b790ae5861c5a3ee577689de92005862a/
 
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- docs/manual/adding-packages-directory.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/startup-notification/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index 93e6a3e..4b4d056 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -265,6 +265,10 @@ use in the comment.
- ** Dependency symbol: +!BR2_PREFER_STATIC_LIB+
- ** Comment string: +dynamic library+
+diff --git a/package/startup-notification/Config.in b/package/startup-notification/Config.in
+index 277d300..1fc6dad 100644
+--- a/package/startup-notification/Config.in
++++ b/package/startup-notification/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_STARTUP_NOTIFICATION
+ 	bool "startup-notification"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	depends on BR2_PACKAGE_XORG7
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Startup-notification is a library used to monitor application startup.
  
-+* Atomic intrinsics
-+** Dependency symbol: +!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS+
-+** Comment string: +atomic intrinsics+
-+
- ==== Dependencies on a Linux kernel built by buildroot
- 
- Some packages need a Linux kernel to be built by buildroot. These are
 -- 
-1.8.4.1
+1.8.5.5
