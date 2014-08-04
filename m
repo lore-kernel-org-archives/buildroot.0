@@ -1,32 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Aug 2014 15:28:59 -0300
-Subject: [Buildroot] [PATCH 2/2] smartmontools: bump to version 6.3
-In-Reply-To: <1407176939-25645-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407176939-25645-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1407176939-25645-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Aug 2014 20:29:31 +0200
+Subject: [Buildroot] [PATCH 0/9 v4] Cleanups in download helpers (branch
+ yem/check-downloads)
+In-Reply-To: <cover.1407088287.git.yann.morin.1998@free.fr>
+References: <cover.1407088287.git.yann.morin.1998@free.fr>
+Message-ID: <20140804202931.7e3f165b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/smartmontools/smartmontools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/package/smartmontools/smartmontools.mk b/package/smartmontools/smartmontools.mk
-index 903ed47..7c97a21 100644
---- a/package/smartmontools/smartmontools.mk
-+++ b/package/smartmontools/smartmontools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SMARTMONTOOLS_VERSION = 6.2
-+SMARTMONTOOLS_VERSION = 6.3
- SMARTMONTOOLS_SITE = http://downloads.sourceforge.net/project/smartmontools/smartmontools/$(SMARTMONTOOLS_VERSION)
- SMARTMONTOOLS_LICENSE = GPLv2+
- SMARTMONTOOLS_LICENSE_FILES = COPYING
+On Sun,  3 Aug 2014 19:53:38 +0200, Yann E. MORIN wrote:
+
+> Yann E. MORIN (9):
+>       support/download: add download wrapper
+>       support/download: convert bzr to use the wrapper
+>       support/download: convert localfiles to use the wrapper
+>       support/download: convert cvs to use the wrapper
+>       support/download: convert git to use the wrapper
+>       support/download: convert Hg to use the wrapper
+>       support/download: convert scp to use the wrapper
+>       support/download: convert svn to use the wrapper
+>       support/download: convert wget to use the wrapper
+
+Series applied. Thanks for your work, and thanks a lot to Thomas DS for
+the testing.
+
+I've also tested it here locally with a few packages (using wget, git,
+bzr and svn) while pointing to an empty BR2_DL_DIR, and it worked fine.
+Let's see if it survives the autobuilder testing :)
+
+Thanks,
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
