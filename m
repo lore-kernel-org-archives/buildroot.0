@@ -1,25 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 09:47:26 +0200
-Subject: [Buildroot] [PATCH 1/3] toolchain: add 3.16 choice for headers
-In-Reply-To: <1407119364-17135-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407119364-17135-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140804094726.41d7fe61@free-electrons.com>
+Date: Mon, 4 Aug 2014 09:47:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mediastreamer: Fix linphone
+ compile with newer ffmpeg versions
+In-Reply-To: <1407072191-12540-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1407072191-12540-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20140804094739.426a9f38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Bernd Kuhls,
 
-On Sun,  3 Aug 2014 23:29:22 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Sun,  3 Aug 2014 15:23:11 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/b72/b72b1f6287986af3d686cc3c8b9c1b3fd9419d29/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  toolchain/toolchain-common.in          | 5 +++++
->  toolchain/toolchain-external/Config.in | 4 ++++
->  2 files changed, 9 insertions(+)
+>  package/mediastreamer/mediastreamer-0001.patch |  156 ++++++++++++++++++++++++
+>  1 file changed, 156 insertions(+)
+>  create mode 100644 package/mediastreamer/mediastreamer-0001.patch
 
-I've applied your three patches, thanks!
+Applied, thanks.
 
 Thomas
 -- 
