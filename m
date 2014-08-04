@@ -1,39 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 20:29:31 +0200
-Subject: [Buildroot] [PATCH 0/9 v4] Cleanups in download helpers (branch
- yem/check-downloads)
-In-Reply-To: <cover.1407088287.git.yann.morin.1998@free.fr>
-References: <cover.1407088287.git.yann.morin.1998@free.fr>
-Message-ID: <20140804202931.7e3f165b@free-electrons.com>
+Date: Mon, 4 Aug 2014 20:33:52 +0200
+Subject: [Buildroot] [PATCH 1/1] rpi-userland: Fix vcfiled startup
+In-Reply-To: <1407176456-13473-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1407176456-13473-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <20140804203352.310380a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Beno?t Th?baudeau,
 
-On Sun,  3 Aug 2014 19:53:38 +0200, Yann E. MORIN wrote:
+On Mon,  4 Aug 2014 20:20:56 +0200, Beno?t Th?baudeau wrote:
+> The VideoCore file server daemon SysV startup script installed from this package
+> is not compatible with BuildRoot (because of its naming and other Debian
+> dependencies), which prevented vcfiled from starting. Hence, prevent this
+> package from installing its vcfiled startup script, and install a vcfiled SysV
+> startup script suitable for BuildRoot.
+> 
+> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
 
-> Yann E. MORIN (9):
->       support/download: add download wrapper
->       support/download: convert bzr to use the wrapper
->       support/download: convert localfiles to use the wrapper
->       support/download: convert cvs to use the wrapper
->       support/download: convert git to use the wrapper
->       support/download: convert Hg to use the wrapper
->       support/download: convert scp to use the wrapper
->       support/download: convert svn to use the wrapper
->       support/download: convert wget to use the wrapper
+Thanks for this patch. Experts in rpi stuff will comment, but I have
+one question below:
 
-Series applied. Thanks for your work, and thanks a lot to Thomas DS for
-the testing.
 
-I've also tested it here locally with a few packages (using wget, git,
-bzr and svn) while pointing to an empty BR2_DL_DIR, and it worked fine.
-Let's see if it survives the autobuilder testing :)
+> diff --git a/package/rpi-userland/S97vcfiled b/package/rpi-userland/S97vcfiled
+> new file mode 100755
+> index 0000000..87c4e76
+> --- /dev/null
+> +++ b/package/rpi-userland/S97vcfiled
+> @@ -0,0 +1,100 @@
+> +#! /bin/sh
+> +### BEGIN INIT INFO
+> +# Provides:          vcfiled
+> +# Required-Start:    udev
+> +# Required-Stop:     udev
+> +# Short-Description: VideoCore file server daemon
+> +### END INIT INFO
 
-Thanks,
+I don't think we need this header in Buildroot, since neither the
+Busybox init nor the sysvinit are making any use of it.
+
+However, it indicates a dependency on udev, while the rpi-userland
+package certainly does not depend on udev.
+
+Also, this daemon was until not running on any rpi configuration
+according to what you said. So what it is useful for? Should it be
+mandatory for all rpi-userland installations, or optional?
+
+Thanks!
 
 Thomas
 -- 
