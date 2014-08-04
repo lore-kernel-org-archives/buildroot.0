@@ -1,39 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Aug 2014 19:28:20 +0200
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-kconfig: join comments to the
- related code-block
-In-Reply-To: <a9b31082-626e-4bf6-9e20-e59d489755f9@email.android.com>
-References: <cover.1407172590.git.yann.morin.1998@free.fr>
- <8707d68b95f8b6792e5aac8870307f2fa99036fd.1407172590.git.yann.morin.1998@free.fr>
- <a9b31082-626e-4bf6-9e20-e59d489755f9@email.android.com>
-Message-ID: <20140804172820.GA3875@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 04 Aug 2014 19:32:59 +0200
+Subject: [Buildroot] [PATCH 2/2] infra/pkg-kconfig: do not rebuild
+	kconfig packages again and again
+In-Reply-To: <fb48537ba04cc50d1f8043e5e347dedcdd5ba671.1407172590.git.yann.morin.1998@free.fr>
+References: <cover.1407172590.git.yann.morin.1998@free.fr><cover.1407172590.git.yann.morin.1998@free.fr>
+ <fb48537ba04cc50d1f8043e5e347dedcdd5ba671.1407172590.git.yann.morin.1998@free.fr>
+Message-ID: <9846dd33-c6e6-4753-b275-e10d957f0e23@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
+>When a kconfig-based package executes its confiigure step, it may
 
-On 2014-08-04 19:24 +0200, Thomas De Schampheleire spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
-> >Some one-line comment apply to equally-onel-line code blocks, and thus
-> 
-> comments
-> 'equally-onel-line'? Not sure what you mean here.
+configure
 
-Right, I will rephrase that (and try not to make other typoes).
+>overwrite it .config file. Thus, the .config file is more recent than
 
-> Content-wise:
-> Acked-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+its
 
-Regards,
-Yann E. MORIN.
+>our stamp file .stamp_kconfig_fixup_done. On a subsequent build, out
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+our
+
+>dependency rules would kick in, and run the config fixup again, thus
+>kikcing in the package's configure, build and isntall steps yet once
+
+kicking
+install
+
+>more, that, ad libitum.
+
+You mean 'ad infinitum' ?
+
+>
+>Fix that by introducing a post-configure hook that re-touches our stamp
+>file, so it is always more recent than the .config.
+
+Could you share an example of which package does what type of change to the .config?
+
+Thanks!
+Thomas
