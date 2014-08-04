@@ -1,75 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Aug 2014 23:00:15 +0200
-Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
-In-Reply-To: <53DFE4BC.5020401@tribudubois.net>
-References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
- <20140803185340.GI4052@free.fr> <53DFE4BC.5020401@tribudubois.net>
-Message-ID: <20140804210014.GF3875@free.fr>
+Date: Mon, 4 Aug 2014 23:04:03 +0200
+Subject: [Buildroot] manipulating raw disk images as non-root user
+In-Reply-To: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
+References: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
+Message-ID: <20140804210403.GG3875@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jean-Christophe, All,
+Dallas, All,
 
-On 2014-08-04 21:53 +0200, Jean-Christophe DUBOIS spake thusly:
-> Le 08/03/2014 08:53 PM, Yann E. MORIN a ?crit :
-> >Jean-Christophe, All,
-> >
-> >On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
-> >>+define BCACHE_TOOLS_BUILD_CMDS
-> >>+	$(BCACHE_TOOLS_FIX_PKGCONFIG)
-> >>+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
-> >This should probably be:
-> >     $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> >
-> >TARGET_CONFIGURE_OPTS contains the CC= assignment.
-> >
-> >Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
-> >it.
+On 2014-08-02 11:45 -0500, Dallas Clement spake thusly:
+> I am trying to figure out a way to produce a uSD card image file during my
+> build process and do it as a non-root user.  I am hoping to do this from a
+> post image script.
 > 
-> When I do as you propose then various compilation variables
-> $(TARGET_CONFIGURE_OPTS) are passed as $(MAKE) arguments.
+> I can create the image file with dd and partition it with parted as a
+> non-root user.  However, I have not figured out how to format, and populate
+> the image file.  Tools such as kpartx and losetup seem ideal for this
+> purpose except that they must be run as root.
 > 
-> Therefore these variables cannot be overridden/changed in the Makefile
-> (which might the the desired behavior) unless explicitly allowed with the
-> "override" directive.
-> 
-> Unfortunately the bcache-tools Makefile needs (for now) to be able to
-> override the CFLAGS variable.
-> 
-> So I can certainly "patch" the bcache-tools Makefile (in the post extract
-> hook for example) to allow "overriding" on the CFLAGS variable.
-> 
-> Another solution is to pass $(TARGET_CONFIGURE_OPTS) as environment
-> variables to $(MAKE) in which case the various variables can still be
-> modified by the Makefile.
-> 
-> Which of these 2 solutions is the preferred solution?
+> Does anyone know of a way to do this using qemu or fuse or related tools?
 
-Hmmm. I'd say to pass them in the env (your second solution.) But I
-can't vouch for the other developpers. Thomas P.?
+Well, as already pointed out, we do have a few host tools just for that
+kind of usage, in the "Host utilities" sub-menu.
 
-Oh, BTW, I forgot one more point in my earlier review: please add the
-URL to the homepage for the package:
-    http://bcache.evilpiepirate.org/
+Also, if you want to have a look, I make use of those tools in my
+Buildroot.config project:
+    http://ymorin.is-a-geek.org/git/buildroot.config/
 
-And as requested by Thomas DS, change the help text to just replicate
-the headlines of the homepage:
+You may want to have a look at:
+    http://ymorin.is-a-geek.org/git/buildroot.config/tree/scripts/genimages.d
+and the subfolders for how to use those tools.
 
-    help 
-      Bcache is a Linux kernel block layer cache. It allows one or more
-      fast disk drives such as flash-based solid state drives (SSDs) to
-      act as a cache for one or more slower hard disk drives.
+Note that all the scripts there in are part of a bigger infra. Feel free
+to poke around the project tree.
 
-      http://bcache.evilpiepirate.org/
-
-> Is there another (more correct?) solution that would allow to change the
-> CFLAGS variable contained in $(TARGET_CONFIGURE_OPTS)?
-
-Make it a proper autotools package and submit it upstream?
-Just kidding ;-)
+(Warning: no doc, bleeding edge, unstable, no support... ;-) )
 
 Regards,
 Yann E. MORIN.
