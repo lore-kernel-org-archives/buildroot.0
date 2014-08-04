@@ -1,43 +1,51 @@
 From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Mon,  4 Aug 2014 20:19:04 +0200
-Subject: [Buildroot] [PATCH 2/2] dhcp: Fix IPv6 files paths
-In-Reply-To: <1407176344-13291-1-git-send-email-benoit.thebaudeau@advansee.com>
-References: <1407176344-13291-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <1407176344-13291-2-git-send-email-benoit.thebaudeau@advansee.com>
+Date: Mon,  4 Aug 2014 20:19:03 +0200
+Subject: [Buildroot] [PATCH 1/2] dhcp: Fix config files paths
+Message-ID: <1407176344-13291-1-git-send-email-benoit.thebaudeau@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use IPv6 file locations consistent with those set for IPv4 instead of keeping
-the defaults, which use different locations.
+The built dhcp binaries and the installed startup scripts used configuration
+files under /etc/, but the configuration files were installed under /etc/dhcp/.
+Fix everything to have configuration files under /etc/dhcp/.
 
 Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
 ---
- package/dhcp/dhcp.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/dhcp/S80dhcp-server | 2 +-
+ package/dhcp/dhcp.mk        | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index 98bd3cc..5280c31 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -9,7 +9,7 @@ INTERFACES=""
+ 
+ # Sanity checks
+ test -f /usr/sbin/dhcpd || exit 0
+-test -f /etc/dhcpd.conf || exit 0
++test -f /etc/dhcp/dhcpd.conf || exit 0
+ test -n "$INTERFACES" || exit 0
+ 
+ case "$1" in
 diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 32dbea0..464ed56 100644
+index 1044f89..32dbea0 100644
 --- a/package/dhcp/dhcp.mk
 +++ b/package/dhcp/dhcp.mk
-@@ -16,10 +16,15 @@ DHCP_CONF_ENV = \
+@@ -9,7 +9,10 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = ISC
+ DHCP_LICENSE_FILES = LICENSE
+-DHCP_CONF_ENV = ac_cv_file__dev_random=yes
++DHCP_CONF_ENV = \
++	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
++		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
++	ac_cv_file__dev_random=yes
  DHCP_CONF_OPT = \
  	--localstatedir=/var/lib/dhcp \
  	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
-+	--with-srv6-lease-file=/var/lib/dhcp/dhcpd6.leases \
- 	--with-cli-lease-file=/var/lib/dhcp/dhclient.leases \
-+	--with-cli6-lease-file=/var/lib/dhcp/dhclient6.leases \
- 	--with-srv-pid-file=/var/run/dhcpd.pid \
-+	--with-srv6-pid-file=/var/run/dhcpd6.pid \
- 	--with-cli-pid-file=/var/run/dhclient.pid \
--	--with-relay-pid-file=/var/run/dhcrelay.pid
-+	--with-cli6-pid-file=/var/run/dhclient6.pid \
-+	--with-relay-pid-file=/var/run/dhcrelay.pid \
-+	--with-relay6-pid-file=/var/run/dhcrelay6.pid
- 
- ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
-         DHCP_CONF_OPT += --enable-delayed-ack
 -- 
 1.9.1
