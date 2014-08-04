@@ -1,44 +1,79 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Aug 2014 21:46:38 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: bump kernel used for the RPi
-Message-ID: <1407181598-15423-1-git-send-email-bernd.kuhls@t-online.de>
+From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+Date: Mon, 04 Aug 2014 21:53:32 +0200
+Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
+In-Reply-To: <20140803185340.GI4052@free.fr>
+References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
+ <20140803185340.GI4052@free.fr>
+Message-ID: <53DFE4BC.5020401@tribudubois.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The rpi-3.12.y branch has now been merged with the 3.12.26 upstream.
+A little question:
 
-Bump kernel headers used for the toolchain at the same time.
+Le 08/03/2014 08:53 PM, Yann E. MORIN a ?crit :
+> Jean-Christophe, All,
+>
+> On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
+>> +define BCACHE_TOOLS_BUILD_CMDS
+>> +	$(BCACHE_TOOLS_FIX_PKGCONFIG)
+>> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
+> This should probably be:
+>      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
+>
+> TARGET_CONFIGURE_OPTS contains the CC= assignment.
+>
+> Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
+> it.
 
-Fixes
-http://jenkins.free-electrons.com/job/buildroot/config=raspberrypi_defconfig/320/console
+When I do as you propose then various compilation variables 
+$(TARGET_CONFIGURE_OPTS) are passed as $(MAKE) arguments.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- configs/raspberrypi_defconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Therefore these variables cannot be overridden/changed in the Makefile 
+(which might the the desired behavior) unless explicitly allowed with 
+the "override" directive.
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index c12d473..0a32fd3 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -10,13 +10,13 @@ BR2_PACKAGE_RPI_FIRMWARE=y
- 
- # Lock to 3.12 headers as the RPi kernel is based off the 3.12 branch
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.12.25"
-+BR2_DEFAULT_KERNEL_VERSION="3.12.26"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="353043394c99ed37a4075da228af64468fdf6c06"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
- BR2_LINUX_KERNEL_ZIMAGE=y
--- 
-1.7.10.4
+Unfortunately the bcache-tools Makefile needs (for now) to be able to 
+override the CFLAGS variable.
+
+So I can certainly "patch" the bcache-tools Makefile (in the post 
+extract hook for example) to allow "overriding" on the CFLAGS variable.
+
+Another solution is to pass $(TARGET_CONFIGURE_OPTS) as environment 
+variables to $(MAKE) in which case the various variables can still be 
+modified by the Makefile.
+
+Which of these 2 solutions is the preferred solution?
+
+Is there another (more correct?) solution that would allow to change the 
+CFLAGS variable contained in $(TARGET_CONFIGURE_OPTS)?
+
+Thanks for your help.
+
+JC
+
+>
+>> +endef
+>> +
+>> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
+>> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
+>> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> Ditto:
+>      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
+>          DESTDIR=$(TARGET_DIR) install
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>> -- 
+>> 1.9.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
