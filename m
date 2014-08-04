@@ -1,58 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 20:33:52 +0200
-Subject: [Buildroot] [PATCH 1/1] rpi-userland: Fix vcfiled startup
-In-Reply-To: <1407176456-13473-1-git-send-email-benoit.thebaudeau@advansee.com>
-References: <1407176456-13473-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <20140804203352.310380a2@free-electrons.com>
+Date: Mon, 4 Aug 2014 20:34:04 +0200
+Subject: [Buildroot] [git commit] radvd: bump to version 2.5
+Message-ID: <20140804183420.8C0549D3A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+commit: http://git.buildroot.net/buildroot/commit/?id=1085fd8964ec80eac5a6fb7967f54ea36f9ec548
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Aug 2014 20:20:56 +0200, Beno?t Th?baudeau wrote:
-> The VideoCore file server daemon SysV startup script installed from this package
-> is not compatible with BuildRoot (because of its naming and other Debian
-> dependencies), which prevented vcfiled from starting. Hence, prevent this
-> package from installing its vcfiled startup script, and install a vcfiled SysV
-> startup script suitable for BuildRoot.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/radvd/radvd.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thanks for this patch. Experts in rpi stuff will comment, but I have
-one question below:
-
-
-> diff --git a/package/rpi-userland/S97vcfiled b/package/rpi-userland/S97vcfiled
-> new file mode 100755
-> index 0000000..87c4e76
-> --- /dev/null
-> +++ b/package/rpi-userland/S97vcfiled
-> @@ -0,0 +1,100 @@
-> +#! /bin/sh
-> +### BEGIN INIT INFO
-> +# Provides:          vcfiled
-> +# Required-Start:    udev
-> +# Required-Stop:     udev
-> +# Short-Description: VideoCore file server daemon
-> +### END INIT INFO
-
-I don't think we need this header in Buildroot, since neither the
-Busybox init nor the sysvinit are making any use of it.
-
-However, it indicates a dependency on udev, while the rpi-userland
-package certainly does not depend on udev.
-
-Also, this daemon was until not running on any rpi configuration
-according to what you said. So what it is useful for? Should it be
-mandatory for all rpi-userland installations, or optional?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
+index ace6529..6f83aff 100644
+--- a/package/radvd/radvd.mk
++++ b/package/radvd/radvd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RADVD_VERSION = 2.1
++RADVD_VERSION = 2.5
+ RADVD_SOURCE = radvd-$(RADVD_VERSION).tar.xz
+ RADVD_SITE = http://www.litech.org/radvd/dist
+ RADVD_DEPENDENCIES = host-bison flex host-flex host-pkgconf
