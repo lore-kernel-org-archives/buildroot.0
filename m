@@ -1,44 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Aug 2014 23:04:03 +0200
-Subject: [Buildroot] manipulating raw disk images as non-root user
-In-Reply-To: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
-References: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
-Message-ID: <20140804210403.GG3875@free.fr>
+Date: Mon, 4 Aug 2014 23:08:50 +0200
+Subject: [Buildroot]
+ =?utf-8?q?Fw=3A_Build_failed_in_Jenkins=3A_buildroot_?=
+ =?utf-8?q?=C2=BB_raspberrypi=5Fdefconfig_=23320?=
+In-Reply-To: <XnsA37FDED614C14berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <20140804084458.60f38d5d@free-electrons.com>
+ <XnsA37FDED614C14berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140804210850.GH3875@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dallas, All,
+Bernd, All,
 
-On 2014-08-02 11:45 -0500, Dallas Clement spake thusly:
-> I am trying to figure out a way to produce a uSD card image file during my
-> build process and do it as a non-root user.  I am hoping to do this from a
-> post image script.
+On 2014-08-04 21:54 +0200, Bernd Kuhls spake thusly:
+> Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote
+> in news:20140804084458.60f38d5d at free-electrons.com: 
 > 
-> I can create the image file with dd and partition it with parted as a
-> non-root user.  However, I have not figured out how to format, and populate
-> the image file.  Tools such as kpartx and losetup seem ideal for this
-> purpose except that they must be run as root.
+> > cannot stat
+> > '<http://jenkins.free-electrons.com/job/buildroot/./config=raspberrypi_de
+> > fconfig/ws/output/build/linux-0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b/ar
+> > ch/arm/configs/bcmrpi_quick_defconfig'>: No such file or directory make:
 > 
-> Does anyone know of a way to do this using qemu or fuse or related tools?
+> sent a patch to bump kernel again:
+> http://patchwork.ozlabs.org/patch/376429/
+> 
+> There is a, imho, weird thing about the git repo for raspberry linux:
+> 
+> Looking at the two last commits in
+> https://github.com/raspberrypi/linux/commits/rpi-3.12.y
+> 
+> - Linux 3.12.26
+> d83a3234d2e1e2a55e7f2430fc9ca29a9bd315e7
+> 
+> and
+> 
+> - Merge remote-tracking branch 'stable/linux-3.12.y' into rpi-3.12.y
+> 353043394c99ed37a4075da228af64468fdf6c06
+> 
+> The former does not contain bcmrpi_quick_defconfig
+> https://github.com/raspberrypi/linux/tree/d83a3234d2e1e2a55e7f2430fc9ca29a9
+> bd315e7/arch/arm/configs
+> 
+> The later one contains bcmrpi_quick_defconfig however
+> https://github.com/raspberrypi/linux/tree/353043394c99ed37a4075da228af64468
+> fdf6c06/arch/arm/configs
+> 
+> although the commit 
+> https://github.com/raspberrypi/linux/commit/7b45dd4ca24cd47b5cfa887934ed7d2
+> fa420e6d4 introducing the file contains the tag rpi-3.12.y, according to 
+> the github web interface.
+> 
+> Maybe I have yet to learn something about github, but now the kernel 
+> compiles again, still does Kodi 14.0a2-Helix.
 
-Well, as already pointed out, we do have a few host tools just for that
-kind of usage, in the "Host utilities" sub-menu.
+That's becasue you mixed the tags from the stable branch with the cset
+from the "rpi-stable" branch.
 
-Also, if you want to have a look, I make use of those tools in my
-Buildroot.config project:
-    http://ymorin.is-a-geek.org/git/buildroot.config/
+Your previous sha1, 0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b, is the
+v3.12.25 tag, that is, not on the rpi branch, but in the stable kernel
+tree.
 
-You may want to have a look at:
-    http://ymorin.is-a-geek.org/git/buildroot.config/tree/scripts/genimages.d
-and the subfolders for how to use those tools.
+That tag was merged into the rpi tree as of cset
+09f2fa2f3fb1f9df126c03c160f9457e2fb14489
 
-Note that all the scripts there in are part of a bigger infra. Feel free
-to poke around the project tree.
-
-(Warning: no doc, bleeding edge, unstable, no support... ;-) )
+For you new patch, you correctly use the sha1 from the merge tag.
 
 Regards,
 Yann E. MORIN.
