@@ -1,57 +1,44 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 4 Aug 2014 11:17:56 +0200
-Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
- calls with a single call
-In-Reply-To: <20140804102456.774bcea3@free-electrons.com>
-References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
- <20140803073726.GB4052@free.fr>
- <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
- <20140804102456.774bcea3@free-electrons.com>
-Message-ID: <20140804091755.GL32743@waldemar-brodkorb.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  4 Aug 2014 07:19:54 -0300
+Subject: [Buildroot] [PATCH] bluez5_utils: needs ipv6
+Message-ID: <1407147594-31811-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Thomas Petazzoni wrote,
+Fixes:
+http://autobuild.buildroot.net/results/bd2/bd262b626358563110609dde411e96dc980ebf6a/
 
-> Dear Danomi Manchego,
-> 
-> On Sun, 3 Aug 2014 09:25:13 -0400, Danomi Manchego wrote:
-> 
-> > I think this issue is not limited to openssh - there's other things
-> > that want to occasionally save stuff to /etc, /var, even /root (e.g.
-> > gstreamer plugins cache).  I suppose that efforts could be made to try
-> > to patch/configure these locations to all be in one place (/var ?),
-> > but that still assumes a writable directory.  So, unless we direct all
-> > attempts to save state to a tmpfs, I think it always come back to
-> > being the user's responsibility.
-> > 
-> > So for now I'm content to keep openssh as it is, rather than hunt down
-> > all the places that might try to write to etc (, var, $HOME, ...).
-> 
-> Buildroot is normally supposed to support a read-only root filesystem,
-> and there are already several things being done to make this possible:
-> 
->  * /etc/resolv.conf is a symbolic link to /tmp/resolv.conf
->  * Most of the /var/<foo> directories are symbolic links to /tmp.
->    Only /var/lib is not.
->  * /tmp is mounted as tmpfs, so that it's read/write even if the rootfs
->    is read only.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bluez5_utils/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-In OpenADK is use cfgfs - configuration filesystem. It maintains
-a tmpfs based /etc and let the user commit any changes via a
-commandline tool to a partition on a block/mtd device.
-
-Only changes are compressed via LZO and written to the maximum
-16 MB cfgfs partition.
-http://www.openadk.org/docs/html/manual.html#_cfgfs_configuration_file_system
-
-It allows smooth updates without loosing device configuration data.
-
-Any interest in porting it to buildroot?
-
-best regards
- Waldemar
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 62bac5d..9152093 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
++	depends on BR2_INET_IPV6
+ 	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_DBUS
+@@ -60,8 +61,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 
+ endif
+ 
+-comment "bluez5-utils needs a toolchain w/ wchar, threads, headers >= 3.4"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++comment "bluez5-utils needs a toolchain w/ wchar, threads, IPv6, headers >= 3.4"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INET_IPV6 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+ comment "bluez5-utils conflicts with older bluez-utils version"
+ 	depends on BR2_PACKAGE_BLUEZ_UTILS
+-- 
+1.8.5.5
