@@ -1,79 +1,57 @@
-From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Mon, 04 Aug 2014 21:53:32 +0200
-Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
-In-Reply-To: <20140803185340.GI4052@free.fr>
-References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
- <20140803185340.GI4052@free.fr>
-Message-ID: <53DFE4BC.5020401@tribudubois.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 04 Aug 2014 21:54:21 +0200
+Subject: [Buildroot]
+	=?utf-8?q?Fw=3A_Build_failed_in_Jenkins=3A_buildroot_?=
+	=?utf-8?q?=C2=BB__raspberrypi=5Fdefconfig_=23320?=
+References: <20140804084458.60f38d5d@free-electrons.com>
+Message-ID: <XnsA37FDED614C14berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A little question:
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20140804084458.60f38d5d at free-electrons.com: 
 
-Le 08/03/2014 08:53 PM, Yann E. MORIN a ?crit :
-> Jean-Christophe, All,
->
-> On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
->> +define BCACHE_TOOLS_BUILD_CMDS
->> +	$(BCACHE_TOOLS_FIX_PKGCONFIG)
->> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
-> This should probably be:
->      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
->
-> TARGET_CONFIGURE_OPTS contains the CC= assignment.
->
-> Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
-> it.
+> cannot stat
+> '<http://jenkins.free-electrons.com/job/buildroot/./config=raspberrypi_de
+> fconfig/ws/output/build/linux-0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b/ar
+> ch/arm/configs/bcmrpi_quick_defconfig'>: No such file or directory make:
 
-When I do as you propose then various compilation variables 
-$(TARGET_CONFIGURE_OPTS) are passed as $(MAKE) arguments.
+Hi,
 
-Therefore these variables cannot be overridden/changed in the Makefile 
-(which might the the desired behavior) unless explicitly allowed with 
-the "override" directive.
+sent a patch to bump kernel again:
+http://patchwork.ozlabs.org/patch/376429/
 
-Unfortunately the bcache-tools Makefile needs (for now) to be able to 
-override the CFLAGS variable.
+There is a, imho, weird thing about the git repo for raspberry linux:
 
-So I can certainly "patch" the bcache-tools Makefile (in the post 
-extract hook for example) to allow "overriding" on the CFLAGS variable.
+Looking at the two last commits in
+https://github.com/raspberrypi/linux/commits/rpi-3.12.y
 
-Another solution is to pass $(TARGET_CONFIGURE_OPTS) as environment 
-variables to $(MAKE) in which case the various variables can still be 
-modified by the Makefile.
+- Linux 3.12.26
+d83a3234d2e1e2a55e7f2430fc9ca29a9bd315e7
 
-Which of these 2 solutions is the preferred solution?
+and
 
-Is there another (more correct?) solution that would allow to change the 
-CFLAGS variable contained in $(TARGET_CONFIGURE_OPTS)?
+- Merge remote-tracking branch 'stable/linux-3.12.y' into rpi-3.12.y
+353043394c99ed37a4075da228af64468fdf6c06
 
-Thanks for your help.
+The former does not contain bcmrpi_quick_defconfig
+https://github.com/raspberrypi/linux/tree/d83a3234d2e1e2a55e7f2430fc9ca29a9
+bd315e7/arch/arm/configs
 
-JC
+The later one contains bcmrpi_quick_defconfig however
+https://github.com/raspberrypi/linux/tree/353043394c99ed37a4075da228af64468
+fdf6c06/arch/arm/configs
 
->
->> +endef
->> +
->> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
->> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> Ditto:
->      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
->          DESTDIR=$(TARGET_DIR) install
->
-> Regards,
-> Yann E. MORIN.
->
->> +endef
->> +
->> +$(eval $(generic-package))
->> -- 
->> 1.9.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+although the commit 
+https://github.com/raspberrypi/linux/commit/7b45dd4ca24cd47b5cfa887934ed7d2
+fa420e6d4 introducing the file contains the tag rpi-3.12.y, according to 
+the github web interface.
+
+Maybe I have yet to learn something about github, but now the kernel 
+compiles again, still does Kodi 14.0a2-Helix.
+
+Regards, Bernd
