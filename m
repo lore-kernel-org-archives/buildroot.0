@@ -1,54 +1,82 @@
-From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Mon, 4 Aug 2014 20:37:24 +0200 (CEST)
-Subject: [Buildroot] [PATCH 2/2] samba: Add support for libnss_win*.so*
- installation
-In-Reply-To: <20140804202814.0fb3a553@free-electrons.com>
-References: <1407176057-13180-1-git-send-email-benoit.thebaudeau@advansee.com>
- <1407176057-13180-2-git-send-email-benoit.thebaudeau@advansee.com>
- <20140804202814.0fb3a553@free-electrons.com>
-Message-ID: <516153963.1672761.1407177444671.JavaMail.zimbra@advansee.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  4 Aug 2014 21:14:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix bfin compile error
+Message-ID: <1407179693-2477-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+Fixes
+http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
 
-On Monday, August 4, 2014 8:28:14 PM, Thomas Petazzoni wrote:
-> Dear Beno?t Th?baudeau,
-> 
-> On Mon,  4 Aug 2014 20:14:17 +0200, Beno?t Th?baudeau wrote:
-> 
-> > +config BR2_PACKAGE_SAMBA_LIBNSS_WINS
-> > +	bool "libnss_wins"
-> > +	default y if BR2_TOOLCHAIN_USES_GLIBC
-> > +	help
-> > +	  libnss_wins is a library that permits the Name Service Switch
-> > +	  to resolve NetBIOS names.
-> > +
-> > +config BR2_PACKAGE_SAMBA_LIBNSS_WINBIND
-> > +	bool "libnss_winbind"
-> > +	default y if BR2_TOOLCHAIN_USES_GLIBC
-> > +	help
-> > +	  libnss_winbind is a library that permits the Name Service
-> > +	  Switch to resolve user and group information from a Windows
-> > +	  NT server.
-> 
-> Since libnss loadable modules only work with glibc, shouldn't those
-> options simply be "depends on BR2_TOOLCHAIN_USES_GLIBC" ?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg-0002-bfin.patch |   55 +++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/ffmpeg/ffmpeg-0002-bfin.patch
 
-This is explained in the commit message. The libnss modules are indeed designed
-for glibc, but there is nothing preventing from using them directly without
-glibc (for testing or whatever), just as a normal library. This is probably not
-very useful, but there is no reason to prohibit this usage.
-
-> Also, do we really want two separate options here?
-
-I don't know. They are independent, so keeping them separate allows to save some
-space (1066244 bytes for libnss_wins.so and 38676 bytes for libnss_winbind.so on
-Raspberry Pi), but this is not a strong requirement if people prefer to see them
-merged.
-
-Best regards,
-Beno?t
+diff --git a/package/ffmpeg/ffmpeg-0002-bfin.patch b/package/ffmpeg/ffmpeg-0002-bfin.patch
+new file mode 100644
+index 0000000..c6c84f2
+--- /dev/null
++++ b/package/ffmpeg/ffmpeg-0002-bfin.patch
+@@ -0,0 +1,55 @@
++Fix compile error on bfin.
++
++After the removal of all Blackfin architecture optimizations in
++http://git.videolan.org/gitweb.cgi/ffmpeg.git/?a=commit;h=b55d3bbeed375f7b74442c4dd274d116a3e3d2e1
++some includes were left behind leading to a compilation error
++
++http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
++
++CC      libavformat/adtsenc.o
++In file included from ./libavcodec/get_bits.h:35,
++                 from ./libavcodec/ac3_parser.h:27,
++                 from libavformat/ac3dec.c:23:
++./libavcodec/mathops.h:43:29: error: bfin/mathops.h: No such file or directory
++
++Patch sent upstream:
++https://ffmpeg.org/pipermail/ffmpeg-devel/2014-August/160694.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr ffmpeg-2.3.1.org/libavcodec/mathops.h ffmpeg-2.3.1/libavcodec/mathops.h
++--- ffmpeg-2.3.1.org/libavcodec/mathops.h	2014-07-31 03:18:40.000000000 +0200
+++++ ffmpeg-2.3.1/libavcodec/mathops.h	2014-08-04 20:49:00.340763801 +0200
++@@ -39,8 +39,6 @@
++ #   include "arm/mathops.h"
++ #elif ARCH_AVR32
++ #   include "avr32/mathops.h"
++-#elif ARCH_BFIN
++-#   include "bfin/mathops.h"
++ #elif ARCH_MIPS
++ #   include "mips/mathops.h"
++ #elif ARCH_PPC
++diff -uNr ffmpeg-2.3.1.org/libavutil/bswap.h ffmpeg-2.3.1/libavutil/bswap.h
++--- ffmpeg-2.3.1.org/libavutil/bswap.h	2014-07-31 03:18:47.000000000 +0200
+++++ ffmpeg-2.3.1/libavutil/bswap.h	2014-08-04 20:48:56.028818009 +0200
++@@ -40,8 +40,6 @@
++ #   include "arm/bswap.h"
++ #elif ARCH_AVR32
++ #   include "avr32/bswap.h"
++-#elif ARCH_BFIN
++-#   include "bfin/bswap.h"
++ #elif ARCH_SH4
++ #   include "sh4/bswap.h"
++ #elif ARCH_X86
++diff -uNr ffmpeg-2.3.1.org/libavutil/timer.h ffmpeg-2.3.1/libavutil/timer.h
++--- ffmpeg-2.3.1.org/libavutil/timer.h	2014-07-31 03:18:47.000000000 +0200
+++++ ffmpeg-2.3.1/libavutil/timer.h	2014-08-04 20:48:48.832908474 +0200
++@@ -40,8 +40,6 @@
++ 
++ #if   ARCH_ARM
++ #   include "arm/timer.h"
++-#elif ARCH_BFIN
++-#   include "bfin/timer.h"
++ #elif ARCH_PPC
++ #   include "ppc/timer.h"
++ #elif ARCH_X86
+-- 
+1.7.10.4
