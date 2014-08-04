@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 18:27:18 +0200
-Subject: [Buildroot] [PATCH] bluez5_utils: needs ipv6
-In-Reply-To: <1407147594-31811-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407147594-31811-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140804182718.3c3b896e@free-electrons.com>
+Date: Mon, 4 Aug 2014 18:27:27 +0200
+Subject: [Buildroot] [PATCH] startup-notification: needs mmu
+In-Reply-To: <1407156354-22736-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1407156354-22736-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140804182727.1bbec0bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,14 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Mon,  4 Aug 2014 07:19:54 -0300, Gustavo Zacarias wrote:
+On Mon,  4 Aug 2014 09:45:54 -0300, Gustavo Zacarias wrote:
 > Fixes:
-> http://autobuild.buildroot.net/results/bd2/bd262b626358563110609dde411e96dc980ebf6a/
+> http://autobuild.buildroot.net/results/1fc/1fcb069b790ae5861c5a3ee577689de92005862a/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/bluez5_utils/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  package/startup-notification/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied, thanks.
 
