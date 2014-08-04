@@ -1,136 +1,46 @@
-From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Mon, 04 Aug 2014 17:28:26 +0200
-Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
-In-Reply-To: <20140803185340.GI4052@free.fr>
-References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
- <20140803185340.GI4052@free.fr>
-Message-ID: <53DFA69A.5020709@tribudubois.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Aug 2014 18:26:27 +0200
+Subject: [Buildroot] [git commit] bluez5_utils: needs ipv6
+Message-ID: <20140804162640.170529D3A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+commit: http://git.buildroot.net/buildroot/commit/?id=9c37eaabd6d62ae02ff5e5a8b15135e3b62f71ce
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the feedback/review.
+Fixes:
+http://autobuild.buildroot.net/results/bd2/bd262b626358563110609dde411e96dc980ebf6a/
 
-Few questions below.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/bluez5_utils/Config.in |    6 ++++--
+ 1 files changed, 4 insertions(+), 2 deletions(-)
 
-JC
-
-Le 08/03/2014 08:53 PM, Yann E. MORIN a ?crit :
-> Jean-Christophe, All,
->
-> On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
->> This patch adds the bcache-tools package to buildroot.
-> This line above is not needed: it is obvious this is adding the package
-> to Buildroot! ;-)
-OK
->> This is the bcache tools, required to setup the linux bcache
->> feature of the Linux kernel.
->>
->> Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
->> ---
->> diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
->> new file mode 100644
->> index 0000000..fbe4158
->> --- /dev/null
->> +++ b/package/bcache-tools/Config.in
->> @@ -0,0 +1,11 @@
->> +config BR2_PACKAGE_BCACHE_TOOLS
->> +	bool "bcache tools"
->> +	depends on BR2_PACKAGE_HAS_UDEV
->> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->> +	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> Since you select sub-options of util-linux, you must also select the
-> package itself:
->      select BR2_PACKAGE_UTIL_LINUX
->
-> But you must also inherit its dependencies:
->      depends on BR2_LARGEFILE # util-linux
->      depends on BR2_USE_WCHAR # util-linux
->
-> But you must also inherit from the sub-options' dependencies, too:
->      depends on BR2_USE_MMU # util-linux (libblkid)
-Sorry I am new to buildroot, but wouldn't be expected that selecting 
-LIBUUID and LIBBLKID would automatically select the LIBUUID and LIBBLKID 
-dependencies and therefore it does not have to be explicitly selected by 
-all packages depending on these features ?
-
-If one day the util-linux dependency is changing, will it be expected to 
-change the dependency of all package using linux-util?
->> +	help
->> +	  This is the bcache tools, required to setup the linux bcache
->> +	  feature of the Linux kernel.
->> +
->> +comment "bcache-tools needs udev /dev management"
->> +        depends on !BR2_PACKAGE_HAS_UDEV
-> And you must adapt the comment to the dependencies above, like:
->      bcache needs udev /dev management and a toolchain w/ largefile, wchar
->
->> diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
->> new file mode 100644
->> index 0000000..8b0b061
->> --- /dev/null
->> +++ b/package/bcache-tools/bcache-tools.mk
->> @@ -0,0 +1,34 @@
->> +################################################################################
->> +#
->> +# bcache-tools
->> +#
->> +################################################################################
->> +
->> +BCACHE_TOOLS_VERSION = 1.0.7
->> +BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,v$(BCACHE_TOOLS_VERSION))
->> +BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
->> +BCACHE_TOOLS_LICENSE = GPLv2
->> +BCACHE_TOOLS_LICENSE_FILES = COPYING
->> +BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
->> +BCACHE_TOOLS_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
->> +
->> +define BCACHE_TOOLS_EXTRACT_CMDS
->> +	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
->> +endef
->> +
->> +define BCACHE_TOOLS_FIX_PKGCONFIG
->> +	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
->> +		$(BCACHE_TOOLS_DIR)/Makefile
->> +endef
-> This should probably be a post-extract hook. See:
->      http://buildroot.net/downloads/manual/manual.html#hooks
-I'll look into this. I copied this from the dnsmasq package.
->> +define BCACHE_TOOLS_BUILD_CMDS
->> +	$(BCACHE_TOOLS_FIX_PKGCONFIG)
->> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
-> This should probably be:
->      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
->
-> TARGET_CONFIGURE_OPTS contains the CC= assignment.
->
-> Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
-> it.
-OK, this is also coming from dnsmasq package.
->
->> +endef
->> +
->> +define BCACHE_TOOLS_INSTALL_TARGET_CMDS
->> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
->> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> Ditto:
->      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
->          DESTDIR=$(TARGET_DIR) install
->
-> Regards,
-> Yann E. MORIN.
->
->> +endef
->> +
->> +$(eval $(generic-package))
->> -- 
->> 1.9.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 62bac5d..9152093 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
++	depends on BR2_INET_IPV6
+ 	depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	select BR2_PACKAGE_DBUS
+@@ -60,8 +61,9 @@ config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+ 
+ endif
+ 
+-comment "bluez5-utils needs a toolchain w/ wchar, threads, headers >= 3.4"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++comment "bluez5-utils needs a toolchain w/ wchar, threads, IPv6, headers >= 3.4"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_INET_IPV6 || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+ comment "bluez5-utils conflicts with older bluez-utils version"
+ 	depends on BR2_PACKAGE_BLUEZ_UTILS
