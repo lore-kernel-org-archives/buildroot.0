@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 22:28:55 +0200
-Subject: [Buildroot] [PATCH 2/3] caps: new package
-In-Reply-To: <1398374384-8814-2-git-send-email-martin@barkynet.com>
+Date: Mon, 4 Aug 2014 22:32:02 +0200
+Subject: [Buildroot] [PATCH 3/3] alsaequal: new package
+In-Reply-To: <1398374384-8814-3-git-send-email-martin@barkynet.com>
 References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
- <1398374384-8814-2-git-send-email-martin@barkynet.com>
-Message-ID: <20140804222855.6cb14837@free-electrons.com>
+ <1398374384-8814-3-git-send-email-martin@barkynet.com>
+Message-ID: <20140804223202.62f5c129@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,81 +13,79 @@ To: buildroot@busybox.net
 
 Dear Martin Bark,
 
-Thanks for your contribution, and sorry for the slow feedback. Some
-comments below.
+On Thu, 24 Apr 2014 22:19:44 +0100, Martin Bark wrote:
 
-On Thu, 24 Apr 2014 22:19:43 +0100, Martin Bark wrote:
-
-> diff --git a/package/Config.in b/package/Config.in
-> index 5956154..33d16ac 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -491,6 +491,7 @@ menu "Libraries"
->  menu "Audio/Sound"
->  source "package/alsa-lib/Config.in"
->  source "package/audiofile/Config.in"
-> +source "package/caps/Config.in"
-
-This will have to be rebased on top of the latest master.
-
+> diff --git a/package/alsaequal/alsaequal-01-cross-compile-fix.patch b/package/alsaequal/alsaequal-01-cross-compile-fix.patch
 > new file mode 100644
-> index 0000000..28ff332
+> index 0000000..6133106
 > --- /dev/null
-> +++ b/package/caps/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_CAPS
-> +	bool "caps"
+> +++ b/package/alsaequal/alsaequal-01-cross-compile-fix.patch
+> @@ -0,0 +1,17 @@
 
-Missing dependency on C++ in toolchain. Also, this package uses
-ladspa.h, so surely it should select BR2_PACKAGE_LADSPA_SDK, no?
+Description + Signed-off-by.
 
-> diff --git a/package/caps/caps-01-cross-compile-fix.patch b/package/caps/caps-01-cross-compile-fix.patch
+> +--- alsaequal-0.6.original/Makefile	2010-03-05 17:30:39.000000000 +0000
+> ++++ alsaequal-0.6/Makefile	2014-04-24 16:25:59.468030181 +0100
+> +@@ -4,10 +4,10 @@
+> + #Q	?=
+> + 
+> + # Build Tools
+> +-CC 	:= gcc
+> +-CFLAGS := -I. -O2 -Wall -funroll-loops -ffast-math -fPIC -DPIC
+> +-LD := gcc
+> +-LDFLAGS := -O2 -Wall -shared -lasound
+> ++CC 	?= gcc
+> ++CFLAGS += -I. -Wall -ffast-math -fPIC -DPIC
+> ++LD := $(CC)
+> ++LDFLAGS := -shared -lasound
+> + 
+> + SND_PCM_OBJECTS = pcm_equal.o ladspa_utils.o
+> + SND_PCM_LIBS =
+> diff --git a/package/alsaequal/alsaequal-05_fix-eq-name.patch b/package/alsaequal/alsaequal-05_fix-eq-name.patch
+
+Should be alsaequal-02-fix-eq-name.patch (notice the sequence number
+and the difference between - and _).
+
+Also description + Signed-off-by.
+
+
+> diff --git a/package/alsaequal/alsaequal.mk b/package/alsaequal/alsaequal.mk
 > new file mode 100644
-> index 0000000..4667191
+> index 0000000..5669b55
 > --- /dev/null
-> +++ b/package/caps/caps-01-cross-compile-fix.patch
-
-Missing description + Signed-off-by line.
-
-> diff --git a/package/caps/caps.mk b/package/caps/caps.mk
-> new file mode 100644
-> index 0000000..d642bc8
-> --- /dev/null
-> +++ b/package/caps/caps.mk
-> @@ -0,0 +1,21 @@
+> +++ b/package/alsaequal/alsaequal.mk
+> @@ -0,0 +1,22 @@
 > +################################################################################
 > +#
-> +# caps
+> +# alsaequal
 > +#
 > +################################################################################
 > +
-> +CAPS_VERSION = 0.9.23
-> +CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
-> +CAPS_SITE = http://quitte.de/dsp/
-> +CAPS_LICENSE = GPLv3
-> +CAPS_LICENSE_FILES = COPYING
-
-CAPS_DEPENDENCIES = ladspa-sdk
-
-maybe ?
-
+> +ALSAEQUAL_VERSION = 0.6
+> +ALSAEQUAL_SOURCE = alsaequal-$(ALSAEQUAL_VERSION).tar.bz2
+> +ALSAEQUAL_SITE = http://www.thedigitalmachine.net/tools/
+> +ALSAEQUAL_LICENSE = LGPLv2.1
+> +ALSAEQUAL_LICENSE_FILES = COPYING
+> +ALSAEQUAL_DEPENDENCIES = alsa-lib
 > +
-> +define CAPS_BUILD_CMDS
+> +define ALSAEQUAL_BUILD_CMDS
 > +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
-
-We normally try to pass $(TARGET_CONFIGURE_OPTS) on the right hand side
-of $(MAKE), and we pass $(TARGET_MAKE_ENV) on the left hand side of
-make.
-
-> +define CAPS_INSTALL_TARGET_CMDS
+> +endef
+> +
+> +define ALSAEQUAL_INSTALL_TARGET_CMDS
 > +	$(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+> +endef
 
-$(TARGET_MAKE_ENV) on the left hand side, and DESTDIR passed before
-'install' would be preferred here.
+Same comments here for $(TARGET_MAKE_ENV) and $(TARGET_CONFIGURE_OPTS)
+as the ones made on the 'caps' package.
 
-Otherwise, looks good.
+So there's really no build dependency on ladspa or caps in alsaequal ?
 
-Thanks,
+Like the ladspa-sdk and caps patches, I've marked this one as
+"Changes requested" in our patch tracking system. Could you resubmit an
+updated version of those patches?
+
+Thanks a lot!
 
 Thomas
 -- 
