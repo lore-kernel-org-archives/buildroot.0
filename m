@@ -1,113 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 4 Aug 2014 20:12:24 +0200
-Subject: [Buildroot] [git commit] support/download: convert cvs to use the
+Subject: [Buildroot] [git commit] support/download: convert bzr to use the
 	wrapper
-Message-ID: <20140804182554.AC10B9D367@busybox.osuosl.org>
+Message-ID: <20140804182554.98CCC9D367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=389f50dfb68b5e87413b348b34e87d69ff875e82
+commit: http://git.buildroot.net/buildroot/commit/?id=c48d45e3424e8ad7a1f320a66a4bebc7c056e052
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This drastically simplifies the cvs helper, as it no longer has to deal
-with atomically saving the downloaded archive.
+This drastically simplifies the bzr helper, as it no longer has to
+deal with atomically saving the downloaded archive.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-download.mk |    9 +++++--
- support/download/cvs    |   54 ++++++++++++++---------------------------------
- 2 files changed, 22 insertions(+), 41 deletions(-)
+ package/pkg-download.mk |    6 +++++-
+ support/download/bzr    |   42 ++++++++++++------------------------------
+ 2 files changed, 17 insertions(+), 31 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index f10aad8..66ce02c 100644
+index 118591c..0c9397a 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -129,9 +129,12 @@ endef
+@@ -112,7 +112,11 @@ endef
  
- define DOWNLOAD_CVS
+ define DOWNLOAD_BZR
  	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
--	$(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
--					  $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
--					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
-+	$(EXTRA_ENV) support/download/wrapper cvs \
+-	$(EXTRA_ENV) support/download/bzr $($(PKG)_SITE) $($(PKG)_DL_VERSION) $(DL_DIR)/$($(PKG)_SOURCE)
++	$(EXTRA_ENV) support/download/wrapper bzr \
 +		$(DL_DIR)/$($(PKG)_SOURCE) \
-+		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
++		$($(PKG)_SITE) \
 +		$($(PKG)_DL_VERSION) \
-+		$($(PKG)_RAWNAME) \
 +		$($(PKG)_BASE_NAME)
  endef
  
- # Not all CVS servers support ls/rls, use login to see if we can connect
-diff --git a/support/download/cvs b/support/download/cvs
-index 9aeed79..c92d491 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -1,47 +1,25 @@
+ define SOURCE_CHECK_BZR
+diff --git a/support/download/bzr b/support/download/bzr
+index 19d837d..b545cb1 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -1,38 +1,20 @@
  #!/bin/bash
  
 -# We want to catch any command failure, and exit immediately
 +# We want to catch any unexpected failure, and exit immediately
  set -e
  
--# Download helper for cvs
+-# Download helper for bzr
 -# Call it with:
--#   $1: cvs repo
--#   $2: cvs revision
--#   $3: package's name (eg. foobar)
--#   $4: package's basename (eg. foobar-1.2.3)
--#   $5: output file
-+# Download helper for cvs, to be called from the download wrapper script
+-#   $1: bzr repo
+-#   $2: bzr revision
+-#   $3: output file
++# Download helper for bzr, to be called from the download wrapper script
 +# Expected arguments:
 +#   $1: output file
-+#   $2: cvs repo
-+#   $3: cvs revision
-+#   $4: package's name (eg. foobar)
-+#   $5: package's basename (eg. foobar-1.2.3)
++#   $2: bzr repo
++#   $3: bzr revision
++#   $4: basename
  # And this environment:
- #   CVS      : the cvs command to call
+ #   BZR      : the bzr command to call
 -#   BUILD_DIR: path to Buildroot's build dir
  
 -repo="${1}"
 -rev="${2}"
--rawname="${3}"
--basename="${4}"
--output="${5}"
+-output="${3}"
 +output="${1}"
 +repo="${2}"
 +rev="${3}"
-+rawname="${4}"
-+basename="${5}"
++basename="${4}"
  
--repodir="${basename}.tmp-cvs-checkout"
+-tmp_dl="$( mktemp "${BUILD_DIR}/.XXXXXX" )"
 -tmp_output="$( mktemp "${output}.XXXXXX" )"
-+${CVS} -z3 -d":pserver:anonymous@${repo}" \
-+       co -d "${basename}" -r ":${rev}" -P "${rawname}"
- 
--cd "${BUILD_DIR}"
--# Remove leftovers from a previous failed run
--rm -rf "${repodir}"
 -
 -# Play tic-tac-toe with temp files
 -# - first, we download to a trashable location (the build-dir)
--# - then we create a temporary tarball in the final location, so it is
+-# - the we move to a temp file in the final location, so it is
 -#   on the same filesystem as the final file
 -# - finally, we atomically rename to the final file
 -
 -ret=1
--if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
--           co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
--    if tar czf "${tmp_output}" "${repodir}"; then
+-if ${BZR} export --format=tgz "${tmp_dl}" "${repo}" -r "${rev}"; then
+-    if mv "${tmp_dl}" "${tmp_output}"; then
 -        mv "${tmp_output}" "${output}"
 -        ret=0
 -    fi
 -fi
 -
 -# Cleanup
--rm -rf "${repodir}" "${tmp_output}"
+-rm -f "${tmp_dl}" "${tmp_output}"
 -exit ${ret}
-+tar czf "${output}" "${basename}"
++${BZR} export --root="${basename}/" --format=tgz "${output}" "${repo}" -r "${rev}"
