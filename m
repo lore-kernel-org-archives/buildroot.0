@@ -1,82 +1,76 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Aug 2014 21:14:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: Fix bfin compile error
-Message-ID: <1407179693-2477-1-git-send-email-bernd.kuhls@t-online.de>
+From: Dallas Clement <dallas.a.clement@gmail.com>
+Date: Mon, 4 Aug 2014 14:22:25 -0500
+Subject: [Buildroot] manipulating raw disk images as non-root user
+In-Reply-To: <53DFCCAF.2080108@gmail.com>
+References: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
+ <20140804070558.GK32743@waldemar-brodkorb.de>
+ <CAE9DZUSKbr3gzUW=Oh=f7P9q_Fs=nh7S0OpxyL_tbYV3NfxhAQ@mail.gmail.com>
+ <53DFCCAF.2080108@gmail.com>
+Message-ID: <CAE9DZUS7r+M0_e5KXNhvhkiEs8b6byLj=OvkPvFqfFnv7V48Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
+On Mon, Aug 4, 2014 at 1:10 PM, Austin S Hemmelgarn <ahferroin7@gmail.com>
+wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg-0002-bfin.patch |   55 +++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/ffmpeg/ffmpeg-0002-bfin.patch
+> On 2014-08-04 13:56, Dallas Clement wrote:
+> >
+> > On Mon, Aug 4, 2014 at 2:05 AM, Waldemar Brodkorb <wbx@openadk.org
+> > <mailto:wbx@openadk.org>> wrote:
+> >
+> >     Hi Dallas,
+> >     Dallas Clement wrote,
+> >
+> >     > Hi All,
+> >     >
+> >     > I am trying to figure out a way to produce a uSD card image file
+> >     during my
+> >     > build process and do it as a non-root user.  I am hoping to do
+> >     this from a post
+> >     > image script.
+> >     >
+> >     > I can create the image file with dd and partition it with parted
+> >     as a non-root
+> >     > user.  However, I have not figured out how to format, and populate
+> >     the image
+> >     > file.  Tools such as kpartx and losetup seem ideal for this
+> >     purpose except that
+> >     > they must be run as root.
+> >     >
+> >     > Does anyone know of a way to do this using qemu or fuse or related
+> >     tools?
+> >
+> >     You could use genext2fs to generate a filesystem as non-root.
+> >
+> >     Installing a bootloader as non-root would be tricky, but is
+> >     possible, too.
+> >
+> >     best regards
+> >      Waldemar
+> >
+> >
+> > Wow!  This is perfect.  I searched all over for a tool like this.
+> > Couldn't find anything.  Thanks Waldemar!  Do you know of a similar tool
+> > to make / populate fat partitions.  I need to work with both fat and
+> ext2.
+>
+> you can use any mkfs command as a non-root user, and for FAT you should
+> be able to find a fuse driver for manipulating it (or there is always
+> mtools).
+>
+>
+>
+> Huh? genext2fs has been part of Buildroot since years, and is directly
+> usable by asking Buildroot to generate an ext2/3/4 image in "Filesystem
+> images".
 
-diff --git a/package/ffmpeg/ffmpeg-0002-bfin.patch b/package/ffmpeg/ffmpeg-0002-bfin.patch
-new file mode 100644
-index 0000000..c6c84f2
---- /dev/null
-+++ b/package/ffmpeg/ffmpeg-0002-bfin.patch
-@@ -0,0 +1,55 @@
-+Fix compile error on bfin.
-+
-+After the removal of all Blackfin architecture optimizations in
-+http://git.videolan.org/gitweb.cgi/ffmpeg.git/?a=commit;h=b55d3bbeed375f7b74442c4dd274d116a3e3d2e1
-+some includes were left behind leading to a compilation error
-+
-+http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
-+
-+CC      libavformat/adtsenc.o
-+In file included from ./libavcodec/get_bits.h:35,
-+                 from ./libavcodec/ac3_parser.h:27,
-+                 from libavformat/ac3dec.c:23:
-+./libavcodec/mathops.h:43:29: error: bfin/mathops.h: No such file or directory
-+
-+Patch sent upstream:
-+https://ffmpeg.org/pipermail/ffmpeg-devel/2014-August/160694.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr ffmpeg-2.3.1.org/libavcodec/mathops.h ffmpeg-2.3.1/libavcodec/mathops.h
-+--- ffmpeg-2.3.1.org/libavcodec/mathops.h	2014-07-31 03:18:40.000000000 +0200
-++++ ffmpeg-2.3.1/libavcodec/mathops.h	2014-08-04 20:49:00.340763801 +0200
-+@@ -39,8 +39,6 @@
-+ #   include "arm/mathops.h"
-+ #elif ARCH_AVR32
-+ #   include "avr32/mathops.h"
-+-#elif ARCH_BFIN
-+-#   include "bfin/mathops.h"
-+ #elif ARCH_MIPS
-+ #   include "mips/mathops.h"
-+ #elif ARCH_PPC
-+diff -uNr ffmpeg-2.3.1.org/libavutil/bswap.h ffmpeg-2.3.1/libavutil/bswap.h
-+--- ffmpeg-2.3.1.org/libavutil/bswap.h	2014-07-31 03:18:47.000000000 +0200
-++++ ffmpeg-2.3.1/libavutil/bswap.h	2014-08-04 20:48:56.028818009 +0200
-+@@ -40,8 +40,6 @@
-+ #   include "arm/bswap.h"
-+ #elif ARCH_AVR32
-+ #   include "avr32/bswap.h"
-+-#elif ARCH_BFIN
-+-#   include "bfin/bswap.h"
-+ #elif ARCH_SH4
-+ #   include "sh4/bswap.h"
-+ #elif ARCH_X86
-+diff -uNr ffmpeg-2.3.1.org/libavutil/timer.h ffmpeg-2.3.1/libavutil/timer.h
-+--- ffmpeg-2.3.1.org/libavutil/timer.h	2014-07-31 03:18:47.000000000 +0200
-++++ ffmpeg-2.3.1/libavutil/timer.h	2014-08-04 20:48:48.832908474 +0200
-+@@ -40,8 +40,6 @@
-+ 
-+ #if   ARCH_ARM
-+ #   include "arm/timer.h"
-+-#elif ARCH_BFIN
-+-#   include "bfin/timer.h"
-+ #elif ARCH_PPC
-+ #   include "ppc/timer.h"
-+ #elif ARCH_X86
--- 
-1.7.10.4
+Ay yi yi.  I guess it never caught my eye.  How shameful.  :/
+
+Regarding mtools, will it allow me to partition an image file, format a
+partition as FAT, and copy files to it as non-root?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140804/517fbef5/attachment.html>
