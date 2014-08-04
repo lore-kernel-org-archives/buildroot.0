@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Aug 2014 22:49:08 +0200
+Date: Mon, 4 Aug 2014 23:00:15 +0200
 Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
-In-Reply-To: <53DFA69A.5020709@tribudubois.net>
+In-Reply-To: <53DFE4BC.5020401@tribudubois.net>
 References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
- <20140803185340.GI4052@free.fr> <53DFA69A.5020709@tribudubois.net>
-Message-ID: <20140804204908.GE3875@free.fr>
+ <20140803185340.GI4052@free.fr> <53DFE4BC.5020401@tribudubois.net>
+Message-ID: <20140804210014.GF3875@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +13,11 @@ To: buildroot@busybox.net
 
 Jean-Christophe, All,
 
-On 2014-08-04 17:28 +0200, Jean-Christophe DUBOIS spake thusly:
+On 2014-08-04 21:53 +0200, Jean-Christophe DUBOIS spake thusly:
 > Le 08/03/2014 08:53 PM, Yann E. MORIN a ?crit :
+> >Jean-Christophe, All,
+> >
 > >On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
-> >>diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
-> >>new file mode 100644
-> >>index 0000000..fbe4158
-> >>--- /dev/null
-> >>+++ b/package/bcache-tools/Config.in
-> >>@@ -0,0 +1,11 @@
-> >>+config BR2_PACKAGE_BCACHE_TOOLS
-> >>+	bool "bcache tools"
-> >>+	depends on BR2_PACKAGE_HAS_UDEV
-> >>+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> >>+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> >Since you select sub-options of util-linux, you must also select the
-> >package itself:
-> >     select BR2_PACKAGE_UTIL_LINUX
-> >
-> >But you must also inherit its dependencies:
-> >     depends on BR2_LARGEFILE # util-linux
-> >     depends on BR2_USE_WCHAR # util-linux
-> >
-> >But you must also inherit from the sub-options' dependencies, too:
-> >     depends on BR2_USE_MMU # util-linux (libblkid)
-
-> Sorry I am new to buildroot, but wouldn't be expected that selecting LIBUUID
-> and LIBBLKID would automatically select the LIBUUID and LIBBLKID
-> dependencies and therefore it does not have to be explicitly selected by all
-> packages depending on these features ?
-
-No. That's a limitation of the kconfig language. 'select' does not
-propagate the 'depends on'. See:
-    http://buildroot.net/downloads/manual/manual.html#_literal_config_in_literal_file
-
-    ---8<---
-    Note. The current problem with the kconfig language is that these
-    two dependency semantics are not internally linked. Therefore, it
-    may be possible to select a package, whom one of its dependencies/
-    requirement is not met.
-    ---8<---
-
-> If one day the util-linux dependency is changing, will it be expected to
-> change the dependency of all package using linux-util?
-
-Yes, but that would be the responsibility to the user bumping util-linux
-to propagate the new dependencies or remove the old ones.
-
-> >>+define BCACHE_TOOLS_FIX_PKGCONFIG
-> >>+	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
-> >>+		$(BCACHE_TOOLS_DIR)/Makefile
-> >>+endef
-> >This should probably be a post-extract hook. See:
-> >     http://buildroot.net/downloads/manual/manual.html#hooks
-
-> I'll look into this. I copied this from the dnsmasq package.
-
-Hmmm... Indeed. But that part was added 2.5 years ago, and we have
-better infrastructure now. dnsmasq would be in need of a bit of love, it
-looks like! ;-)
-
 > >>+define BCACHE_TOOLS_BUILD_CMDS
 > >>+	$(BCACHE_TOOLS_FIX_PKGCONFIG)
 > >>+	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
@@ -83,10 +28,48 @@ looks like! ;-)
 > >
 > >Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
 > >it.
-> OK, this is also coming from dnsmasq package.
+> 
+> When I do as you propose then various compilation variables
+> $(TARGET_CONFIGURE_OPTS) are passed as $(MAKE) arguments.
+> 
+> Therefore these variables cannot be overridden/changed in the Makefile
+> (which might the the desired behavior) unless explicitly allowed with the
+> "override" directive.
+> 
+> Unfortunately the bcache-tools Makefile needs (for now) to be able to
+> override the CFLAGS variable.
+> 
+> So I can certainly "patch" the bcache-tools Makefile (in the post extract
+> hook for example) to allow "overriding" on the CFLAGS variable.
+> 
+> Another solution is to pass $(TARGET_CONFIGURE_OPTS) as environment
+> variables to $(MAKE) in which case the various variables can still be
+> modified by the Makefile.
+> 
+> Which of these 2 solutions is the preferred solution?
 
-OK, I saw you further replied on this matter. I'll read your other mail
-and reply there.
+Hmmm. I'd say to pass them in the env (your second solution.) But I
+can't vouch for the other developpers. Thomas P.?
+
+Oh, BTW, I forgot one more point in my earlier review: please add the
+URL to the homepage for the package:
+    http://bcache.evilpiepirate.org/
+
+And as requested by Thomas DS, change the help text to just replicate
+the headlines of the homepage:
+
+    help 
+      Bcache is a Linux kernel block layer cache. It allows one or more
+      fast disk drives such as flash-based solid state drives (SSDs) to
+      act as a cache for one or more slower hard disk drives.
+
+      http://bcache.evilpiepirate.org/
+
+> Is there another (more correct?) solution that would allow to change the
+> CFLAGS variable contained in $(TARGET_CONFIGURE_OPTS)?
+
+Make it a proper autotools package and submit it upstream?
+Just kidding ;-)
 
 Regards,
 Yann E. MORIN.
