@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 22:23:45 +0200
-Subject: [Buildroot] [PATCH 1/3] ladspa-sdk: new package
-In-Reply-To: <1398374384-8814-1-git-send-email-martin@barkynet.com>
+Date: Mon, 4 Aug 2014 22:28:55 +0200
+Subject: [Buildroot] [PATCH 2/3] caps: new package
+In-Reply-To: <1398374384-8814-2-git-send-email-martin@barkynet.com>
 References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
-Message-ID: <20140804222345.65aacf17@free-electrons.com>
+ <1398374384-8814-2-git-send-email-martin@barkynet.com>
+Message-ID: <20140804222855.6cb14837@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,133 +13,81 @@ To: buildroot@busybox.net
 
 Dear Martin Bark,
 
-Sorry for the lack of feedback until now on these patches. See below
-for a number of comments.
+Thanks for your contribution, and sorry for the slow feedback. Some
+comments below.
 
-On Thu, 24 Apr 2014 22:19:42 +0100, Martin Bark wrote:
-> LADSPA is a standard that allows software audio processors and
-> effects to be plugged into a wide range of audio synthesis and
-> recording packages.
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-
-First, looking at LADSPA, it seems like there has been no releases
-since 2007 or so. Is this still actively developed and used? Googling
-around, I've seen mentions of a new thing called LV2 which would be a
-LADSPA replacement.
+On Thu, 24 Apr 2014 22:19:43 +0100, Martin Bark wrote:
 
 > diff --git a/package/Config.in b/package/Config.in
-> index 07fd166..5956154 100644
+> index 5956154..33d16ac 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -493,6 +493,7 @@ source "package/alsa-lib/Config.in"
+> @@ -491,6 +491,7 @@ menu "Libraries"
+>  menu "Audio/Sound"
+>  source "package/alsa-lib/Config.in"
 >  source "package/audiofile/Config.in"
->  source "package/celt051/Config.in"
->  source "package/fdk-aac/Config.in"
-> +source "package/ladspa-sdk/Config.in"
+> +source "package/caps/Config.in"
 
 This will have to be rebased on top of the latest master.
 
->  source "package/libao/Config.in"
->  source "package/libcdaudio/Config.in"
->  source "package/libcdio/Config.in"
-> diff --git a/package/ladspa-sdk/Config.in b/package/ladspa-sdk/Config.in
 > new file mode 100644
-> index 0000000..ec3d568
+> index 0000000..28ff332
 > --- /dev/null
-> +++ b/package/ladspa-sdk/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_LADSPA_SDK
-> +	bool "ladspa-sdk"
+> +++ b/package/caps/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_CAPS
+> +	bool "caps"
 
-I've at least seen that one of the plugins is developed in C++, so a
-dependency on BR2_INSTALL_LIBSDTCPP is needed here. Look at the manual
-and other examples on how to add this dependency properly (including
-the relevant Config.in comment).
+Missing dependency on C++ in toolchain. Also, this package uses
+ladspa.h, so surely it should select BR2_PACKAGE_LADSPA_SDK, no?
 
-> diff --git a/package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch b/package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch
+> diff --git a/package/caps/caps-01-cross-compile-fix.patch b/package/caps/caps-01-cross-compile-fix.patch
 > new file mode 100644
-> index 0000000..d424594
+> index 0000000..4667191
 > --- /dev/null
-> +++ b/package/ladspa-sdk/ladspa-sdk-01-no-mkdirhier.patch
-> @@ -0,0 +1,18 @@
-> +Use mkdir -p instead of mkdirhier to avoid build-dep on xutils-dev
+> +++ b/package/caps/caps-01-cross-compile-fix.patch
 
-There should be a Signed-off-by line in all patches, separated with a
-newline from the patch description and patch contents.
+Missing description + Signed-off-by line.
 
-> diff --git a/package/ladspa-sdk/ladspa-sdk-04-fix-linkage-C-plugins.diff b/package/ladspa-sdk/ladspa-sdk-04-fix-linkage-C-plugins.diff
-
-This one does not get applied, as it is named ".diff". And is it really
-needed?
-
-Also, the sequence number is not consecutive with 02 of the previous
-patch.
-
-
-> diff --git a/package/ladspa-sdk/ladspa-sdk-05-linking-order.patch b/package/ladspa-sdk/ladspa-sdk-05-linking-order.patch
+> diff --git a/package/caps/caps.mk b/package/caps/caps.mk
 > new file mode 100644
-> index 0000000..a66def7
+> index 0000000..d642bc8
 > --- /dev/null
-> +++ b/package/ladspa-sdk/ladspa-sdk-05-linking-order.patch
-> @@ -0,0 +1,37 @@
-> +Description: Correct linking order to prevent FTBFS with GCC4.5 + binutils-gold.
-> +Author: Alessio Treglia <quadrispro@ubuntu.com>
-
-Please add your Signed-off-by here as well, in addition to the Author:
-information.
-
-That's typically the kind of patch that worries me: gcc 4.5 has been
-released years and years ago, and still issues with this compiler have
-not been solved upstream.
-
-> diff --git a/package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch b/package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch
-> new file mode 100644
-> index 0000000..549b6eb
-> --- /dev/null
-> +++ b/package/ladspa-sdk/ladspa-sdk-06-cross-compile-fix.patch
-
-Missing description + Signed-off-by.
-
-
+> +++ b/package/caps/caps.mk
+> @@ -0,0 +1,21 @@
 > +################################################################################
 > +#
-> +# ladspa-sdk
+> +# caps
 > +#
 > +################################################################################
 > +
-> +LADSPA_SDK_VERSION = 1.13
-> +LADSPA_SDK_SOURCE = ladspa_sdk_$(LADSPA_SDK_VERSION).tgz
-> +LADSPA_SDK_SITE = http://www.ladspa.org/download/
-> +LADSPA_SDK_LICENSE = LGPLv2.1+
-> +LADSPA_SDK_LICENSE_FILES = doc/COPYING
-> +LADSPA_SDK_INSTALL_STAGING = YES
+> +CAPS_VERSION = 0.9.23
+> +CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
+> +CAPS_SITE = http://quitte.de/dsp/
+> +CAPS_LICENSE = GPLv3
+> +CAPS_LICENSE_FILES = COPYING
+
+CAPS_DEPENDENCIES = ladspa-sdk
+
+maybe ?
+
 > +
-> +define LADSPA_SDK_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/src targets
-> +endef
-> +
-> +define LADSPA_SDK_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/plugins/*.so $(TARGET_DIR)/usr/lib/ladspa/.
+> +define CAPS_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
 
-The "." at the end is making the installation fail.
+We normally try to pass $(TARGET_CONFIGURE_OPTS) on the right hand side
+of $(MAKE), and we pass $(TARGET_MAKE_ENV) on the left hand side of
+make.
 
-> +	$(INSTALL) -D -m 0755 $(@D)/bin/* $(TARGET_DIR)/usr/bin/.
-> +endef
-> +
-> +define LADSPA_SDK_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 0644 $(@D)/src/ladspa.h $(STAGING_DIR)/usr/include/.
+> +define CAPS_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
 
-Same here.
+$(TARGET_MAKE_ENV) on the left hand side, and DESTDIR passed before
+'install' would be preferred here.
 
-Also, what about using "make install" instead? Either by patching the
-makefile to add $(DESTDIR) support, or by passing explicitly values for
-INSTALL_PLUGINS_DIR, INSTALL_INCLUDE_DIR and INSTALL_BINARY_DIR ?
+Otherwise, looks good.
 
-While waiting for your new version of this patch, I'll mark this patch
-as "Changes Requested" in our patch tracking system.
-
-Thanks for your contribution!
+Thanks,
 
 Thomas
 -- 
