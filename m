@@ -1,112 +1,73 @@
 From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Mon,  4 Aug 2014 16:16:29 +0400
-Subject: [Buildroot] [PATCH v3 2/4] pulseaudio: Add dependency on atomic
+Date: Mon,  4 Aug 2014 16:16:31 +0400
+Subject: [Buildroot] [PATCH v3 4/4] msgpack: Add dependency on atomic
 	intrinsics
 In-Reply-To: <1407154591-12753-1-git-send-email-Anton.Kolesov@synopsys.com>
 References: <20140803113216.03e0fb94@free-electrons.com>
  <1407154591-12753-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1407154591-12753-2-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <1407154591-12753-4-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pulseaudio requires GCC built-in atomic functions which are architecture specific
+Msgpack requires GCC built-in atomic functions which are architecture specific
 and may not be implemented.
 
 This fixes:
-http://autobuild.buildroot.net/results/d463f3bf730a600a07ed6cd33695bf45e9fd3540/
+http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
 
 Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- package/gstreamer/gst-plugins-good/Config.in   | 5 +++++
- package/gstreamer1/gst1-plugins-good/Config.in | 5 +++++
- package/mpd/Config.in                          | 5 +++--
- package/pulseaudio/Config.in                   | 6 ++++--
- 4 files changed, 17 insertions(+), 4 deletions(-)
+ package/msgpack/Config.in        | 7 +++----
+ package/python-msgpack/Config.in | 7 +++----
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index 8bc79a2..7b577c7 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -212,9 +212,14 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
- 	depends on BR2_USE_MMU # pulseaudio
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 
-+comment "pulseaudio support needs a toolchain w/ largefile, threads, atomic intrinsics"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
- 	depends on BR2_USE_WCHAR # libsoup -> glib2
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 60ee17d..46bf553 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -308,11 +308,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
- 	depends on BR2_USE_MMU # pulseaudio
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	bool "pulseaudio"
- 	help
- 	  PulseAudio plugin library
- 
-+comment "pulseaudio support needs a toolchain w/ largefile, threads, atomic intrinsics"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
- 	depends on BR2_USE_WCHAR # libsoup -> glib2
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index f5f5b34..8382a5d 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -45,12 +45,13 @@ config BR2_PACKAGE_MPD_AUDIOFILE
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
- 	depends on BR2_LARGEFILE # pulseaudio -> libsndfile
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  Enable pulseaudio output support.
- 
--comment "pulseaudio support needs a toolchain w/ largefile"
--	depends on !BR2_LARGEFILE
-+comment "pulseaudio support needs a toolchain w/ largefile, atomic intrinsics"
-+	depends on !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 
- config BR2_PACKAGE_MPD_BZIP2
- 	bool "bzip2"
-diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
-index ac6222c..de99fc8 100644
---- a/package/pulseaudio/Config.in
-+++ b/package/pulseaudio/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_SPEEX
- 	depends on BR2_LARGEFILE
- 	depends on BR2_USE_MMU # fork()
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index b380c58..7d6277f 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc # atomic builtins
 +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
  	help
- 	  PulseAudio is a sound system for POSIX OSes, meaning that it
- 	  is a proxy for your sound applications. It allows you to do
-@@ -30,6 +31,7 @@ config BR2_PACKAGE_PULSEAUDIO_DAEMON
+ 	  MessagePack is an efficient binary serialization format.
  
- endif
+@@ -10,6 +10,5 @@ config BR2_PACKAGE_MSGPACK
  
--comment "pulseaudio needs a toolchain w/ wchar, largefile, threads"
-+comment "pulseaudio needs a toolchain w/ wchar, largefile, threads, atomic intrinsics"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_LARGEFILE || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+ 	  http://msgpack.org/
+ 
+-comment "msgpack needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
++comment "msgpack needs a toolchain w/ C++, atomic intrinsics"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index c4b68a3..3b825a1 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on !BR2_arc # msgpack - atomic builtins
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # msgpack
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -12,7 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 
+ 	  https://pypi.python.org/pypi/msgpack-python/
+ 
+-comment "python-msgpack needs a toolchain w/ C++"
++comment "python-msgpack needs a toolchain w/ C++, atomic intrinsics"
+ 	depends on BR2_PACKAGE_PYTHON
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 -- 
 1.8.4.1
