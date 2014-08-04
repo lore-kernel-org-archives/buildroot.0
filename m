@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Aug 2014 10:20:34 -0300
-Subject: [Buildroot] [PATCH 11/17] samba4: add comment mmu depends
+Date: Mon,  4 Aug 2014 10:20:35 -0300
+Subject: [Buildroot] [PATCH 12/17] sispmctl: add comment mmu depends
 In-Reply-To: <1407158440-26783-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1407158440-26783-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1407158440-26783-11-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1407158440-26783-12-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,17 @@ and then vanishes when they are fulfilled.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/samba4/Config.in | 1 +
+ package/sispmctl/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 7008ba2..60e0f55 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -22,3 +22,4 @@ config BR2_PACKAGE_SAMBA4
- comment "samba4 needs a toolchain w/ IPv6, wchar, largfile, threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LARGEFILE || \
- 		!BR2_USE_WCHAR || !BR2_INET_IPV6
+diff --git a/package/sispmctl/Config.in b/package/sispmctl/Config.in
+index 8070802..3b8f60e 100644
+--- a/package/sispmctl/Config.in
++++ b/package/sispmctl/Config.in
+@@ -15,3 +15,4 @@ config BR2_PACKAGE_SISPMCTL
+ 
+ comment "sispmctl needs a toolchain w/ threads, wchar"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 +	depends on BR2_USE_MMU
 -- 
 1.8.5.5
