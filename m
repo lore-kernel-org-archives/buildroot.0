@@ -1,34 +1,33 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 04 Aug 2014 20:13:25 +0200
-Subject: [Buildroot] [PATCH 0/2] Fix pkg-kconfig infra (branch
-	yem/kconfig)
-In-Reply-To: <cover.1407172590.git.yann.morin.1998@free.fr>
-References: <cover.1407172590.git.yann.morin.1998@free.fr>
-Message-ID: <e6001c6d-be6d-4d79-8136-88979fc1ea29@email.android.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Mon,  4 Aug 2014 20:14:16 +0200
+Subject: [Buildroot] [PATCH 1/2] samba: Remove execution rights from smb.conf
+Message-ID: <1407176057-13180-1-git-send-email-benoit.thebaudeau@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->Hello All!
->
->This series fixes a nasty regression introduced with the pkg-kconfig
->infrastructure recently applied, whereby kconfig packages are always
->rebuilt on each 'make'.
->
->The proposed fix consists in a post-configure hook, and I believe this
->is enough to get us rolling for the next release.
->
->A better fix would be to move the call to 'oldocnifg' out of the
->packages, and into the kconfig infra itself, but this is a bit more
->involved. This could be done in -next (or maybe in master shortly after
->-rc1 if possible).
+/etc/samba/smb.conf should be installed without execution rights since it is a
+simple text configuration file.
 
-For uclibc, the oldconfig call is actually part of the fixup commands, so no problem there, right?
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+---
+ package/samba/samba.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What if we do the same for busybox?
-
-Best regards,
-Thomas
+diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+index 6d379b5..84e525f 100644
+--- a/package/samba/samba.mk
++++ b/package/samba/samba.mk
+@@ -167,7 +167,7 @@ define SAMBA_INSTALL_INITSCRIPTS_CONFIG
+ 	fi
+ 	# install config
+ 	@if [ ! -f $(TARGET_DIR)/etc/samba/smb.conf ]; then \
+-		$(INSTALL) -m 0755 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
++		$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf; \
+ 	fi
+ endef
+ 
+-- 
+1.9.1
