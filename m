@@ -1,81 +1,113 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Mon, 4 Aug 2014 20:12:24 +0200
-Subject: [Buildroot] [git commit] support/download: convert localfiles to
-	use the wrapper
-Message-ID: <20140804182554.A4E489D367@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/download: convert cvs to use the
+	wrapper
+Message-ID: <20140804182554.AC10B9D367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=84469226c1d4e6b7bf7052ef9039b26991041311
+commit: http://git.buildroot.net/buildroot/commit/?id=389f50dfb68b5e87413b348b34e87d69ff875e82
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This drastically simplifies the localfiles helper, as it no longer has
-to deal with atomically saving the downloaded archive.
+This drastically simplifies the cvs helper, as it no longer has to deal
+with atomically saving the downloaded archive.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-(Tested by setting BUSYBOX_SITE = file:///tmp and running 'make busybox-source')
+Reviewed-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pkg-download.mk |    5 +++--
- support/download/cp     |   26 ++++++++------------------
- 2 files changed, 11 insertions(+), 20 deletions(-)
+ package/pkg-download.mk |    9 +++++--
+ support/download/cvs    |   54 ++++++++++++++---------------------------------
+ 2 files changed, 22 insertions(+), 41 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 0c9397a..f10aad8 100644
+index f10aad8..66ce02c 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -209,8 +209,9 @@ endef
+@@ -129,9 +129,12 @@ endef
  
- define DOWNLOAD_LOCALFILES
- 	test -e $(DL_DIR)/$(2) || \
--	$(EXTRA_ENV) support/download/cp $(call stripurischeme,$(call qstrip,$(1))) \
--					 $(DL_DIR)/$(2) && \
-+	$(EXTRA_ENV) support/download/wrapper cp \
-+		$(DL_DIR)/$(2) \
-+		$(call stripurischeme,$(call qstrip,$(1))) && \
- 	$(call VERIFY_HASH,$(PKGDIR)/$($(PKG)_NAME).hash,$(DL_DIR)/$(2))
+ define DOWNLOAD_CVS
+ 	test -e $(DL_DIR)/$($(PKG)_SOURCE) || \
+-	$(EXTRA_ENV) support/download/cvs $(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
+-					  $($(PKG)_DL_VERSION) $($(PKG)_RAWNAME) \
+-					  $($(PKG)_BASE_NAME) $(DL_DIR)/$($(PKG)_SOURCE)
++	$(EXTRA_ENV) support/download/wrapper cvs \
++		$(DL_DIR)/$($(PKG)_SOURCE) \
++		$(call stripurischeme,$(call qstrip,$($(PKG)_SITE))) \
++		$($(PKG)_DL_VERSION) \
++		$($(PKG)_RAWNAME) \
++		$($(PKG)_BASE_NAME)
  endef
  
-diff --git a/support/download/cp b/support/download/cp
-index 8f6bc06..264f5dc 100755
---- a/support/download/cp
-+++ b/support/download/cp
-@@ -1,26 +1,16 @@
+ # Not all CVS servers support ls/rls, use login to see if we can connect
+diff --git a/support/download/cvs b/support/download/cvs
+index 9aeed79..c92d491 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -1,47 +1,25 @@
  #!/bin/bash
  
 -# We want to catch any command failure, and exit immediately
 +# We want to catch any unexpected failure, and exit immediately
  set -e
  
--# Download helper for cp
+-# Download helper for cvs
 -# Call it with:
--#   $1: source file
--#   $2: output file
-+# Download helper for cp, to be called from the download wrapper script
+-#   $1: cvs repo
+-#   $2: cvs revision
+-#   $3: package's name (eg. foobar)
+-#   $4: package's basename (eg. foobar-1.2.3)
+-#   $5: output file
++# Download helper for cvs, to be called from the download wrapper script
 +# Expected arguments:
 +#   $1: output file
-+#   $2: source file
++#   $2: cvs repo
++#   $3: cvs revision
++#   $4: package's name (eg. foobar)
++#   $5: package's basename (eg. foobar-1.2.3)
  # And this environment:
- #   LOCALFILES: the cp command to call
+ #   CVS      : the cvs command to call
+-#   BUILD_DIR: path to Buildroot's build dir
  
--source="${1}"
--output="${2}"
+-repo="${1}"
+-rev="${2}"
+-rawname="${3}"
+-basename="${4}"
+-output="${5}"
 +output="${1}"
-+source="${2}"
++repo="${2}"
++rev="${3}"
++rawname="${4}"
++basename="${5}"
  
+-repodir="${basename}.tmp-cvs-checkout"
 -tmp_output="$( mktemp "${output}.XXXXXX" )"
++${CVS} -z3 -d":pserver:anonymous@${repo}" \
++       co -d "${basename}" -r ":${rev}" -P "${rawname}"
+ 
+-cd "${BUILD_DIR}"
+-# Remove leftovers from a previous failed run
+-rm -rf "${repodir}"
+-
+-# Play tic-tac-toe with temp files
+-# - first, we download to a trashable location (the build-dir)
+-# - then we create a temporary tarball in the final location, so it is
+-#   on the same filesystem as the final file
+-# - finally, we atomically rename to the final file
 -
 -ret=1
--if ${LOCALFILES} "${source}" "${tmp_output}"; then
--    mv "${tmp_output}" "${output}"
--    ret=0
+-if ${CVS} -z3 -d":pserver:anonymous@${repo}" \
+-           co -d "${repodir}" -r ":${rev}" -P "${rawname}"; then
+-    if tar czf "${tmp_output}" "${repodir}"; then
+-        mv "${tmp_output}" "${output}"
+-        ret=0
+-    fi
 -fi
 -
 -# Cleanup
--rm -f "${tmp_output}"
+-rm -rf "${repodir}" "${tmp_output}"
 -exit ${ret}
-+${LOCALFILES} "${source}" "${output}"
++tar czf "${output}" "${basename}"
