@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 20:27:22 +0200
-Subject: [Buildroot] [PATCH 1/2] samba: Remove execution rights from
- smb.conf
-In-Reply-To: <1407176057-13180-1-git-send-email-benoit.thebaudeau@advansee.com>
+Date: Mon, 4 Aug 2014 20:28:14 +0200
+Subject: [Buildroot] [PATCH 2/2] samba: Add support for libnss_win*.so*
+ installation
+In-Reply-To: <1407176057-13180-2-git-send-email-benoit.thebaudeau@advansee.com>
 References: <1407176057-13180-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <20140804202722.32d3e10f@free-electrons.com>
+ <1407176057-13180-2-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <20140804202814.0fb3a553@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +14,29 @@ To: buildroot@busybox.net
 
 Dear Beno?t Th?baudeau,
 
-On Mon,  4 Aug 2014 20:14:16 +0200, Beno?t Th?baudeau wrote:
-> /etc/samba/smb.conf should be installed without execution rights since it is a
-> simple text configuration file.
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
-> ---
->  package/samba/samba.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon,  4 Aug 2014 20:14:17 +0200, Beno?t Th?baudeau wrote:
 
-Applied, thanks!
+> +config BR2_PACKAGE_SAMBA_LIBNSS_WINS
+> +	bool "libnss_wins"
+> +	default y if BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  libnss_wins is a library that permits the Name Service Switch
+> +	  to resolve NetBIOS names.
+> +
+> +config BR2_PACKAGE_SAMBA_LIBNSS_WINBIND
+> +	bool "libnss_winbind"
+> +	default y if BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  libnss_winbind is a library that permits the Name Service
+> +	  Switch to resolve user and group information from a Windows
+> +	  NT server.
+
+Since libnss loadable modules only work with glibc, shouldn't those
+options simply be "depends on BR2_TOOLCHAIN_USES_GLIBC" ?
+
+Also, do we really want two separate options here?
+
+Thanks!
 
 Thomas
 -- 
