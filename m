@@ -1,83 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 4 Aug 2014 21:29:28 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: Fix bfin compile error
-Message-ID: <20140804193327.D9EFE9D3A4@busybox.osuosl.org>
+Date: Mon, 4 Aug 2014 21:31:30 +0200
+Subject: [Buildroot] [git commit] dhcp: Fix config files paths
+Message-ID: <20140804193327.EBE5F9D3A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=02012d337323da261654bc6fbb1a8bd8b8da2543
+commit: http://git.buildroot.net/buildroot/commit/?id=4449da18d45ea96423914507b996b22f1a23118d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
+The built dhcp binaries and the installed startup scripts used configuration
+files under /etc/, but the configuration files were installed under /etc/dhcp/.
+Fix everything to have configuration files under /etc/dhcp/.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Beno??t Th??baudeau <benoit.thebaudeau@advansee.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ffmpeg/ffmpeg-0002-bfin.patch |   55 +++++++++++++++++++++++++++++++++
- 1 files changed, 55 insertions(+), 0 deletions(-)
+ package/dhcp/S80dhcp-server |    2 +-
+ package/dhcp/dhcp.mk        |    5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg-0002-bfin.patch b/package/ffmpeg/ffmpeg-0002-bfin.patch
-new file mode 100644
-index 0000000..c6c84f2
---- /dev/null
-+++ b/package/ffmpeg/ffmpeg-0002-bfin.patch
-@@ -0,0 +1,55 @@
-+Fix compile error on bfin.
-+
-+After the removal of all Blackfin architecture optimizations in
-+http://git.videolan.org/gitweb.cgi/ffmpeg.git/?a=commit;h=b55d3bbeed375f7b74442c4dd274d116a3e3d2e1
-+some includes were left behind leading to a compilation error
-+
-+http://autobuild.buildroot.net/results/ae0/ae056f267e907091d09d2a1546d6f1ae02fa23b9/
-+
-+CC      libavformat/adtsenc.o
-+In file included from ./libavcodec/get_bits.h:35,
-+                 from ./libavcodec/ac3_parser.h:27,
-+                 from libavformat/ac3dec.c:23:
-+./libavcodec/mathops.h:43:29: error: bfin/mathops.h: No such file or directory
-+
-+Patch sent upstream:
-+https://ffmpeg.org/pipermail/ffmpeg-devel/2014-August/160694.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr ffmpeg-2.3.1.org/libavcodec/mathops.h ffmpeg-2.3.1/libavcodec/mathops.h
-+--- ffmpeg-2.3.1.org/libavcodec/mathops.h	2014-07-31 03:18:40.000000000 +0200
-++++ ffmpeg-2.3.1/libavcodec/mathops.h	2014-08-04 20:49:00.340763801 +0200
-+@@ -39,8 +39,6 @@
-+ #   include "arm/mathops.h"
-+ #elif ARCH_AVR32
-+ #   include "avr32/mathops.h"
-+-#elif ARCH_BFIN
-+-#   include "bfin/mathops.h"
-+ #elif ARCH_MIPS
-+ #   include "mips/mathops.h"
-+ #elif ARCH_PPC
-+diff -uNr ffmpeg-2.3.1.org/libavutil/bswap.h ffmpeg-2.3.1/libavutil/bswap.h
-+--- ffmpeg-2.3.1.org/libavutil/bswap.h	2014-07-31 03:18:47.000000000 +0200
-++++ ffmpeg-2.3.1/libavutil/bswap.h	2014-08-04 20:48:56.028818009 +0200
-+@@ -40,8 +40,6 @@
-+ #   include "arm/bswap.h"
-+ #elif ARCH_AVR32
-+ #   include "avr32/bswap.h"
-+-#elif ARCH_BFIN
-+-#   include "bfin/bswap.h"
-+ #elif ARCH_SH4
-+ #   include "sh4/bswap.h"
-+ #elif ARCH_X86
-+diff -uNr ffmpeg-2.3.1.org/libavutil/timer.h ffmpeg-2.3.1/libavutil/timer.h
-+--- ffmpeg-2.3.1.org/libavutil/timer.h	2014-07-31 03:18:47.000000000 +0200
-++++ ffmpeg-2.3.1/libavutil/timer.h	2014-08-04 20:48:48.832908474 +0200
-+@@ -40,8 +40,6 @@
-+ 
-+ #if   ARCH_ARM
-+ #   include "arm/timer.h"
-+-#elif ARCH_BFIN
-+-#   include "bfin/timer.h"
-+ #elif ARCH_PPC
-+ #   include "ppc/timer.h"
-+ #elif ARCH_X86
+diff --git a/package/dhcp/S80dhcp-server b/package/dhcp/S80dhcp-server
+index 98bd3cc..5280c31 100755
+--- a/package/dhcp/S80dhcp-server
++++ b/package/dhcp/S80dhcp-server
+@@ -9,7 +9,7 @@ INTERFACES=""
+ 
+ # Sanity checks
+ test -f /usr/sbin/dhcpd || exit 0
+-test -f /etc/dhcpd.conf || exit 0
++test -f /etc/dhcp/dhcpd.conf || exit 0
+ test -n "$INTERFACES" || exit 0
+ 
+ case "$1" in
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 1044f89..32dbea0 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -9,7 +9,10 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
+ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = ISC
+ DHCP_LICENSE_FILES = LICENSE
+-DHCP_CONF_ENV = ac_cv_file__dev_random=yes
++DHCP_CONF_ENV = \
++	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
++		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
++	ac_cv_file__dev_random=yes
+ DHCP_CONF_OPT = \
+ 	--localstatedir=/var/lib/dhcp \
+ 	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
