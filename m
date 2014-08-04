@@ -1,52 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Aug 2014 16:34:55 -0300
-Subject: [Buildroot] [PATCH] exim: security bump to version 4.83
-Message-ID: <1407180895-25908-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Aug 2014 21:36:31 +0200
+Subject: [Buildroot] [PATCH 1/1] dhcpdump: Fix strsep() feature test
+In-Reply-To: <1407176414-13376-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1407176414-13376-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <20140804213631.4f4b5d2a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-2972 - prevent double expansion in math comparison
-functions (can expand unsanitized data).
-Also rename patches according to patch naming policy.
+Dear Beno?t Th?baudeau,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...or-the-host.patch => exim-0001-Build-buildconfig-for-the-host.patch} | 0
- ...atch => exim-0002-Don-t-make-backup-copies-of-installed-files.patch} | 0
- ...atch => exim-0003-Skip-version-check-and-symlink-installation.patch} | 0
- package/exim/exim.mk                                                    | 2 +-
- 4 files changed, 1 insertion(+), 1 deletion(-)
- rename package/exim/{exim-Build-buildconfig-for-the-host.patch => exim-0001-Build-buildconfig-for-the-host.patch} (100%)
- rename package/exim/{exim-Don-t-make-backup-copies-of-installed-files.patch => exim-0002-Don-t-make-backup-copies-of-installed-files.patch} (100%)
- rename package/exim/{exim-Skip-version-check-and-symlink-installation.patch => exim-0003-Skip-version-check-and-symlink-installation.patch} (100%)
+On Mon,  4 Aug 2014 20:20:14 +0200, Beno?t Th?baudeau wrote:
 
-diff --git a/package/exim/exim-Build-buildconfig-for-the-host.patch b/package/exim/exim-0001-Build-buildconfig-for-the-host.patch
-similarity index 100%
-rename from package/exim/exim-Build-buildconfig-for-the-host.patch
-rename to package/exim/exim-0001-Build-buildconfig-for-the-host.patch
-diff --git a/package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch b/package/exim/exim-0002-Don-t-make-backup-copies-of-installed-files.patch
-similarity index 100%
-rename from package/exim/exim-Don-t-make-backup-copies-of-installed-files.patch
-rename to package/exim/exim-0002-Don-t-make-backup-copies-of-installed-files.patch
-diff --git a/package/exim/exim-Skip-version-check-and-symlink-installation.patch b/package/exim/exim-0003-Skip-version-check-and-symlink-installation.patch
-similarity index 100%
-rename from package/exim/exim-Skip-version-check-and-symlink-installation.patch
-rename to package/exim/exim-0003-Skip-version-check-and-symlink-installation.patch
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 8be8e75..845c5f8 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.82.1
-+EXIM_VERSION = 4.83
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+> diff --git a/package/dhcpdump/dhcpdump-1.8-fix-strsep-feature-test.patch b/package/dhcpdump/dhcpdump-1.8-fix-strsep-feature-test.patch
+> new file mode 100644
+> index 0000000..10b826c
+> --- /dev/null
+> +++ b/package/dhcpdump/dhcpdump-1.8-fix-strsep-feature-test.patch
+
+All patches should have a description + Signed-off-by. Also, you should
+use the proper naming convention for patches:
+
+	<package>-<sequencenumber>-<description>.patch
+
+I know there's already a patch for dhcpdump that doesn't follow this
+convention, but you're invited to rename it as well :-)
+
+> @@ -0,0 +1,12 @@
+> +diff -Nrdup dhcpdump-1.8.orig/dhcpdump.c dhcpdump-1.8/dhcpdump.c
+> +--- dhcpdump-1.8.orig/dhcpdump.c	2008-06-24 05:26:52.000000000 +0200
+> ++++ dhcpdump-1.8/dhcpdump.c	2011-05-31 19:22:15.987388498 +0200
+> +@@ -26,7 +26,7 @@
+> + #include <regex.h>
+> + #include "dhcp_options.h"
+> + 
+> +-#ifndef HAVE_STRSEP
+> ++#ifndef _BSD_SOURCE
+
+Is _BSD_SOURCE really meant to be tested within source code? I thought
+it was more the application or library that would #define _BSD_SOURCE
+or #define _GNU_SOURCE to tell the C library which functions should be
+made visible. But well, if strsep() depends on _BSD_SOURCE being
+defined, I agree that testing _BSD_SOURCE is a way of knowing whether
+it's available or not.
+
+Are there some other opinions about this?
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
