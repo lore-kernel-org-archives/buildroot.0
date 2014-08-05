@@ -1,36 +1,65 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 5 Aug 2014 14:03:12 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2014-08-04
-In-Reply-To: <20140805063010.EAA98100F1D@stock.ovh.net>
-References: <20140805063010.EAA98100F1D@stock.ovh.net>
-Message-ID: <53E0D610.3070603@imgtec.com>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue, 05 Aug 2014 15:14:44 +0200
+Subject: [Buildroot] [PATCH v3] bcache-tools: Adding package.
+In-Reply-To: <53E09448.7050409@tribudubois.net>
+References: <1407221585-30867-1-git-send-email-jcd@tribudubois.net>
+ <53E088D5.2080505@trzebnica.net> <53E09448.7050409@tribudubois.net>
+Message-ID: <53E0D8C4.3030506@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/05/2014 07:30 AM, Thomas Petazzoni wrote:
-> Build statistics for 2014-08-04
-> ===============================
 
->    mips64el |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/31a9cf4152aca7ba7d5ab798eea3161a9e47e68d/
+Hi Jean-Christophe,
 
-That build failure is caused because in that toolchain...
+> Le 08/05/2014 09:33 AM, Jerzy Grzegorek a ?crit :
+>>
+>> Hi Jean-Christophe,
+>>
+>>>
+>>> index 0000000..36f0b22
+>>> --- /dev/null
+>>> +++ b/package/bcache-tools/bcache-tools.mk
+>>> @@ -0,0 +1,44 @@
+>>> +################################################################################ 
+>>>
+>>> +#
+>>> +# bcache-tools
+>>> +#
+>>> +################################################################################ 
+>>>
+>>> +
+>>> +BCACHE_TOOLS_VERSION = 1.0.7
+>>> +BCACHE_TOOLS_SITE = $(call 
+>>> github,g2p,bcache-tools,v$(BCACHE_TOOLS_VERSION))
+>>> +BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
+>>
+>> This should be:
+>>
+>> BCACHE_TOOLS_VERSION = v1.0.7
+>> BCACHE_TOOLS_SITE = $(call 
+>> github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
+>>
+>> Regards,
+>> Jerzy
+>
+> I tried this before but this is not working because when unzipped the 
+> bcache-tools directory is named bcache-tools-1.0.7 and not 
+> bcache-tools-v1.0.7.
+>
+> JC
 
- 
-http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.x
+Did you remove:
+define BCACHE_TOOLS_EXTRACT_CMDS
+     unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
+endef
+?
 
-...SYS_getdents64 is only defined for MIPS32 and MIPS64 n32, and NOT for 
-MIPS64 n64.
+Regards,
+Jerzy
 
-That has been fixed on newer versions of eglibc (which is the C library 
-that toolchain is using). For instance, in the Buildroot's default 
-eglibc version (2.18-svnr23787) it's already fixed.
-
-So, please, could be possible to upgrade that toolchain.
-
-Thanks.
--- 
-Vincent
+>
+>
+>
