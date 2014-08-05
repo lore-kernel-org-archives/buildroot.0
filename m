@@ -1,55 +1,118 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Tue, 05 Aug 2014 21:50:28 +0100
-Subject: [Buildroot] [PATCH 1/3] ladspa-sdk: new package
-In-Reply-To: <20140804222345.65aacf17@free-electrons.com>
-References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
- <20140804222345.65aacf17@free-electrons.com>
-Message-ID: <53E14394.2030309@barkynet.com>
+Date: Tue, 05 Aug 2014 21:51:10 +0100
+Subject: [Buildroot] [PATCH 2/3] caps: new package
+In-Reply-To: <20140804222855.6cb14837@free-electrons.com>
+References: <1398374384-8814-1-git-send-email-martin@barkynet.com>	<1398374384-8814-2-git-send-email-martin@barkynet.com>
+ <20140804222855.6cb14837@free-electrons.com>
+Message-ID: <53E143BE.3050401@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
 Thomas,
 
-On 04/08/14 21:23, Thomas Petazzoni wrote:
+Thanks for the feedback
+
+
+On 04/08/14 21:28, Thomas Petazzoni wrote:
 > Dear Martin Bark,
 >
-> Sorry for the lack of feedback until now on these patches. See below
-> for a number of comments.
+> Thanks for your contribution, and sorry for the slow feedback. Some
+> comments below.
+>
+> On Thu, 24 Apr 2014 22:19:43 +0100, Martin Bark wrote:
+>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 5956154..33d16ac 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -491,6 +491,7 @@ menu "Libraries"
+>>   menu "Audio/Sound"
+>>   source "package/alsa-lib/Config.in"
+>>   source "package/audiofile/Config.in"
+>> +source "package/caps/Config.in"
+>
+> This will have to be rebased on top of the latest master.
 
-That's fine, to be honest I forgot I submitted these patches :)
+will do
 
 >
-> On Thu, 24 Apr 2014 22:19:42 +0100, Martin Bark wrote:
->> LADSPA is a standard that allows software audio processors and
->> effects to be plugged into a wide range of audio synthesis and
->> recording packages.
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
+>> new file mode 100644
+>> index 0000000..28ff332
+>> --- /dev/null
+>> +++ b/package/caps/Config.in
+>> @@ -0,0 +1,12 @@
+>> +config BR2_PACKAGE_CAPS
+>> +	bool "caps"
 >
-> First, looking at LADSPA, it seems like there has been no releases
-> since 2007 or so. Is this still actively developed and used? Googling
-> around, I've seen mentions of a new thing called LV2 which would be a
-> LADSPA replacement.
+> Missing dependency on C++ in toolchain. Also, this package uses
+> ladspa.h, so surely it should select BR2_PACKAGE_LADSPA_SDK, no?
 
-Originally I started this because I wanted an equaliser for some work i 
-was doing with acoustic echo cancellation. alsaeqaul was a quick easy 
-way to add a equaliser i could change real time.  alsaequal needs caps 
-which is an ladsp module hence the 3 patches.
+I'll fix the c++ dependency issue.  As per my other email caps includes 
+a copy of the ladsp-sdk header hence it's not a dependency.
 
-I don't know if ladsp is under active development.  Really it's just the 
-definition of an API in a C header file so I think it's not meant to 
-change.  It's the packages like caps which implement the interface which 
-i expect to be active.
+>
+>> diff --git a/package/caps/caps-01-cross-compile-fix.patch b/package/caps/caps-01-cross-compile-fix.patch
+>> new file mode 100644
+>> index 0000000..4667191
+>> --- /dev/null
+>> +++ b/package/caps/caps-01-cross-compile-fix.patch
+>
+> Missing description + Signed-off-by line.
+>
+>> diff --git a/package/caps/caps.mk b/package/caps/caps.mk
+>> new file mode 100644
+>> index 0000000..d642bc8
+>> --- /dev/null
+>> +++ b/package/caps/caps.mk
+>> @@ -0,0 +1,21 @@
+>> +################################################################################
+>> +#
+>> +# caps
+>> +#
+>> +################################################################################
+>> +
+>> +CAPS_VERSION = 0.9.23
+>> +CAPS_SOURCE = caps_$(CAPS_VERSION).tar.bz2
+>> +CAPS_SITE = http://quitte.de/dsp/
+>> +CAPS_LICENSE = GPLv3
+>> +CAPS_LICENSE_FILES = COPYING
+>
+> CAPS_DEPENDENCIES = ladspa-sdk
+>
+> maybe ?
 
-caps is self contained (it includes a copy of ladsp.h) and does not need 
-this ladsp-sdk package, i added it for completeness.
+As above
 
-Is the lack of development activity an issue?  I could drop ladsp-sdk if 
-you like.  Please let me know your thoughts.
+>
+>> +
+>> +define CAPS_BUILD_CMDS
+>> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) all
+>
+> We normally try to pass $(TARGET_CONFIGURE_OPTS) on the right hand side
+> of $(MAKE), and we pass $(TARGET_MAKE_ENV) on the left hand side of
+> make.
+
+I'll fix that
+
+>
+>> +define CAPS_INSTALL_TARGET_CMDS
+>> +	$(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+>
+> $(TARGET_MAKE_ENV) on the left hand side, and DESTDIR passed before
+> 'install' would be preferred here.
+
+I'll fix that too
+
+>
+> Otherwise, looks good.
+>
+> Thanks,
+>
+> Thomas
+>
 
 Thanks
 
