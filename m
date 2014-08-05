@@ -1,10 +1,10 @@
-From: Davide Viti <zinosat@tiscali.it>
-Date: Tue,  5 Aug 2014 22:47:08 +0200
-Subject: [Buildroot] [PATCH v2 2/2] mongoose: patch to avoid
-	_LARGEFILE_SOURCE redefinition warning
-In-Reply-To: <1407271628-5996-1-git-send-email-zinosat@tiscali.it>
-References: <1407271628-5996-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <1407271628-5996-2-git-send-email-zinosat@tiscali.it>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 05 Aug 2014 21:50:28 +0100
+Subject: [Buildroot] [PATCH 1/3] ladspa-sdk: new package
+In-Reply-To: <20140804222345.65aacf17@free-electrons.com>
+References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
+ <20140804222345.65aacf17@free-electrons.com>
+Message-ID: <53E14394.2030309@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +12,45 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-Signed-off-by: Davide Viti <zinosat@tiscali.it>
----
-Changes v1 -> v2:
- - Rename patch following Buildroot convention (Thomas)
- - Add "Signed-off-by" line (Thomas)
+Thomas,
 
- ...ongoose-0001-largefile-conditional-define.patch |   22 ++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 package/mongoose/mongoose-0001-largefile-conditional-define.patch
+On 04/08/14 21:23, Thomas Petazzoni wrote:
+> Dear Martin Bark,
+>
+> Sorry for the lack of feedback until now on these patches. See below
+> for a number of comments.
 
-diff --git a/package/mongoose/mongoose-0001-largefile-conditional-define.patch b/package/mongoose/mongoose-0001-largefile-conditional-define.patch
-new file mode 100644
-index 0000000..b1d759a
---- /dev/null
-+++ b/package/mongoose/mongoose-0001-largefile-conditional-define.patch
-@@ -0,0 +1,22 @@
-+Avoid the following warning, due to duplicate definition of
-+"_LARGEFILE_SOURCE"
-+
-+mongoose.c:52:0: warning: "_LARGEFILE_SOURCE" redefined [enabled by default]
-+ #define _LARGEFILE_SOURCE       // Enable fseeko() and ftello() functions
-+ ^
-+<command-line>:0:0: note: this is the location of the previous definition
-+
-+Signed-off-by: Davide Viti <zinosat@tiscali.it>
-+
-+--- mongoose-5.4/mongoose.c~	2014-07-28 13:19:00.000000000 +0200
-++++ mongoose-5.4/mongoose.c	2014-08-04 23:10:59.164092500 +0200
-+@@ -49,7 +49,9 @@
-+ #define _XOPEN_SOURCE 600       // For flockfile() on Linux
-+ #define __STDC_FORMAT_MACROS    // <inttypes.h> wants this for C++
-+ #define __STDC_LIMIT_MACROS     // C++ wants that for INT64_MAX
-++#ifndef _LARGEFILE_SOURCE
-+ #define _LARGEFILE_SOURCE       // Enable fseeko() and ftello() functions
-++#endif
-+ #define _FILE_OFFSET_BITS 64    // Enable 64-bit file offsets
-+ 
-+ #ifdef _MSC_VER
--- 
-1.7.10.4
+That's fine, to be honest I forgot I submitted these patches :)
+
+>
+> On Thu, 24 Apr 2014 22:19:42 +0100, Martin Bark wrote:
+>> LADSPA is a standard that allows software audio processors and
+>> effects to be plugged into a wide range of audio synthesis and
+>> recording packages.
+>>
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>
+> First, looking at LADSPA, it seems like there has been no releases
+> since 2007 or so. Is this still actively developed and used? Googling
+> around, I've seen mentions of a new thing called LV2 which would be a
+> LADSPA replacement.
+
+Originally I started this because I wanted an equaliser for some work i 
+was doing with acoustic echo cancellation. alsaeqaul was a quick easy 
+way to add a equaliser i could change real time.  alsaequal needs caps 
+which is an ladsp module hence the 3 patches.
+
+I don't know if ladsp is under active development.  Really it's just the 
+definition of an API in a C header file so I think it's not meant to 
+change.  It's the packages like caps which implement the interface which 
+i expect to be active.
+
+caps is self contained (it includes a copy of ladsp.h) and does not need 
+this ladsp-sdk package, i added it for completeness.
+
+Is the lack of development activity an issue?  I could drop ladsp-sdk if 
+you like.  Please let me know your thoughts.
+
+Thanks
+
+Martin
