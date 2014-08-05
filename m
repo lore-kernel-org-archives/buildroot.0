@@ -1,128 +1,79 @@
-From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Tue,  5 Aug 2014 19:29:42 +0200
-Subject: [Buildroot] [PATCH v5] bcache-tools: Adding package.
-Message-ID: <1407259782-6012-1-git-send-email-jcd@tribudubois.net>
+From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Tue, 5 Aug 2014 20:48:36 +0200 (CEST)
+Subject: [Buildroot] [PATCH 1/1] rpi-userland: Fix vcfiled startup
+In-Reply-To: <20140804203352.310380a2@free-electrons.com>
+References: <1407176456-13473-1-git-send-email-benoit.thebaudeau@advansee.com>
+ <20140804203352.310380a2@free-electrons.com>
+Message-ID: <1996668400.1722731.1407264516425.JavaMail.zimbra@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the bcache tools, required to setup the linux bcache
-feature of the Linux kernel.
+Dear Thomas Petazzoni,
 
-Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
----
-Changes v1 to v2
- * remove 'support' word from comment statement in Config.in.
- * use github helper to get the project site instead of hardcoded URL.
-Changes v2 to v3
- * Added bcache-tools description in Config help
- * Added bcache-tools URL in Config help
- * Added BR2_LARGEFILE BR2_USE_WCHAR and BR2_USE_MMU dependencies in Config.
- * Added BR2_PACKAGE_UTIL_LINUX selection in Config
- * Added new requirements in Config comment.
- * use POST_EXTRACT_HOOKS to modify Makefile
- * pass $(TARGET_CONFIGURE_OPTS) in env variables to $(MAKE)
- * create man8 dir as part of PRE_INSTALL_TARGET_HOOKS
-Changes v3 to v4
- * move from .zip file to .tar.gz as download file in .mk file
- * use complete git tag as version in .mk file.
- * remove explicit extract rule from .mk file (use implicite rule).
-Changes v4 to v5
- * remove explicit package name in .mk (rely on default behavior).
----
- package/Config.in                    |  1 +
- package/bcache-tools/Config.in       | 22 ++++++++++++++++++++
- package/bcache-tools/bcache-tools.mk | 39 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 62 insertions(+)
- create mode 100644 package/bcache-tools/Config.in
- create mode 100644 package/bcache-tools/bcache-tools.mk
+On Monday, August 4, 2014 8:33:52 PM, Thomas Petazzoni wrote:
+> Dear Beno?t Th?baudeau,
+> 
+> On Mon,  4 Aug 2014 20:20:56 +0200, Beno?t Th?baudeau wrote:
+> > The VideoCore file server daemon SysV startup script installed from this
+> > package
+> > is not compatible with BuildRoot (because of its naming and other Debian
+> > dependencies), which prevented vcfiled from starting. Hence, prevent this
+> > package from installing its vcfiled startup script, and install a vcfiled
+> > SysV
+> > startup script suitable for BuildRoot.
+> > 
+> > Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+> 
+> Thanks for this patch. Experts in rpi stuff will comment, but I have
+> one question below:
+> 
+> 
+> > diff --git a/package/rpi-userland/S97vcfiled
+> > b/package/rpi-userland/S97vcfiled
+> > new file mode 100755
+> > index 0000000..87c4e76
+> > --- /dev/null
+> > +++ b/package/rpi-userland/S97vcfiled
+> > @@ -0,0 +1,100 @@
+> > +#! /bin/sh
+> > +### BEGIN INIT INFO
+> > +# Provides:          vcfiled
+> > +# Required-Start:    udev
+> > +# Required-Stop:     udev
+> > +# Short-Description: VideoCore file server daemon
+> > +### END INIT INFO
+> 
+> I don't think we need this header in Buildroot, since neither the
+> Busybox init nor the sysvinit are making any use of it.
 
-diff --git a/package/Config.in b/package/Config.in
-index 4520ba6..dc2f418 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -280,6 +280,7 @@ endmenu
- 	source "package/a10disp/Config.in"
- 	source "package/acpid/Config.in"
- 	source "package/avrdude/Config.in"
-+	source "package/bcache-tools/Config.in"
- 	source "package/cdrkit/Config.in"
- 	source "package/cryptsetup/Config.in"
- 	source "package/cwiid/Config.in"
-diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
-new file mode 100644
-index 0000000..383ba1f
---- /dev/null
-+++ b/package/bcache-tools/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_BCACHE_TOOLS
-+	bool "bcache tools"
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_LARGEFILE # util-linux
-+	depends on BR2_USE_WCHAR # util-linux
-+	depends on BR2_USE_MMU # util-linux (libblkid)
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	help
-+	  Bcache is a Linux kernel block layer cache. It allows one or
-+	  more fast disk drives such as flash-based solid state drives (SSDs)
-+	  to act as a cache for one or more slower hard disk drives.
-+
-+	  http://bcache.evilpiepirate.org/
-+
-+	  This is the user space bcache tools, required to setup the linux
-+	  bcache feature of the Linux kernel.
-+
-+comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
-+	depends on BR2_USE_MMU
-+        depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
-diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
-new file mode 100644
-index 0000000..5e451cf
---- /dev/null
-+++ b/package/bcache-tools/bcache-tools.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# bcache-tools
-+#
-+################################################################################
-+
-+BCACHE_TOOLS_VERSION = v1.0.7
-+BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
-+BCACHE_TOOLS_LICENSE = GPLv2
-+BCACHE_TOOLS_LICENSE_FILES = COPYING
-+BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
-+
-+# We need to use the BR2 host pkg-config binary in the Makefile
-+define BCACHE_TOOLS_FIX_PKGCONFIG
-+	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
-+		$(BCACHE_TOOLS_DIR)/Makefile
-+endef
-+
-+BCACHE_TOOLS_POST_EXTRACT_HOOKS += BCACHE_TOOLS_FIX_PKGCONFIG
-+
-+# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
-+# the bcache-tools Makefile to alter CFLAGS
-+define BCACHE_TOOLS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-+endef
-+
-+# The bcache-tools Makefile expects the man8 directory to exist.
-+define BCACHE_TOOLS_INSTALL_MAN8
-+	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
-+endef
-+
-+BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
-+
-+define BCACHE_TOOLS_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+Right. I had kept this script as close as possible to the original script from
+the package, but this is indeed not needed. I will drop that and simplify this
+script as per Yann's comments.
+
+> However, it indicates a dependency on udev, while the rpi-userland
+> package certainly does not depend on udev.
+
+Nothing in rpi-userland needs udev at build time, but vcfiled needs to access
+/dev/vchiq at runtime, so something has to bring up this node. Whether it is a
+static /dev, devtmpfs, udev or something else does not matter, so I don't think
+that a dependency to udev should be added here.
+
+> Also, this daemon was until not running on any rpi configuration
+> according to what you said. So what it is useful for? Should it be
+> mandatory for all rpi-userland installations, or optional?
+
+I'm not certain here. This daemon sets up an interface giving the GPU access to
+the file systems, but I don't know what applications use that if any. On some
+forums, omxplayer or the hello_pi examples from rpi-userland are said to require
+vcfiled, but I've tested them, and I couldn't make them fail without vcfiled.
+
+I would need an RPi expert to answer this. Perhaps there was such a requirement
+in the past that is less used nowadays. Anyway, this daemon is still installed
+and started on Raspbian, so BuildRoot should probably do the same, all the more
+this is part of the rpi-userland installation rules.
+
+Best regards,
+Beno?t
