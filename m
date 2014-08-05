@@ -1,60 +1,30 @@
-From: arnaud at intelibre.fr <arnaud@intelibre.fr>
-Date: Tue,  5 Aug 2014 13:16:41 +0200
-Subject: [Buildroot] [PATCH 1/1] espeak: bump to version 1.48.04
-Message-ID: <1407237401-22711-1-git-send-email-arnaud@intelibre.fr>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Tue,  5 Aug 2014 14:12:28 +0200
+Subject: [Buildroot] [PATCH v2 1/2] dhcpdump: Fix patch file name
+Message-ID: <1407240749-17574-1-git-send-email-benoit.thebaudeau@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Arnaud Aujon <arnaud@intelibre.fr>
+Use the naming convention for patches, which is:
 
-* Bump to latest upstream version 1.48.04
-* Remove patch as applied upstream
+	<packagename>-<number>-<description>.patch
 
-Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+
 ---
- package/espeak/espeak-01-do-not-compil-when-install.patch | 15 ---------------
- package/espeak/espeak.mk                                  |  4 ++--
- 2 files changed, 2 insertions(+), 17 deletions(-)
- delete mode 100644 package/espeak/espeak-01-do-not-compil-when-install.patch
 
-diff --git a/package/espeak/espeak-01-do-not-compil-when-install.patch b/package/espeak/espeak-01-do-not-compil-when-install.patch
-deleted file mode 100644
-index 983cd1c..0000000
---- a/package/espeak/espeak-01-do-not-compil-when-install.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Makefile: do not execute the rule "all" when executing "install"
--
--signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
--===================================================================
----- espeak-1.47.11-source.orig/src/Makefile
--+++ espeak-1.47.11-source/src/Makefile
--@@ -131,7 +131,7 @@
-- 	rm -f $(BIN2_NAME)
-- 	rm -f $(LIB_NAME)*
-- 
---install: all
--+install:
-- 	# Create directories
-- 	rm -rf $(DESTDIR)$(DATADIR)
-- 	$(MKDIR) $(DESTDIR)$(BINDIR)
-diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
-index 571b730..9c32752 100644
---- a/package/espeak/espeak.mk
-+++ b/package/espeak/espeak.mk
-@@ -4,8 +4,8 @@
- #
- ###############################################################################
- 
--ESPEAK_VERSION_MAJOR = 1.47
--ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).11
-+ESPEAK_VERSION_MAJOR = 1.48
-+ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).04
- ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
- ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/espeak-$(ESPEAK_VERSION_MAJOR)
- ESPEAK_LICENSE = GPLv3+
+Changes in v2: New patch
+---
+ ...on-bsd-structures.patch => dhcpdump-0001-use-non-bsd-structures.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/dhcpdump/{dhcpdump-1.8-use-non-bsd-structures.patch => dhcpdump-0001-use-non-bsd-structures.patch} (100%)
+
+diff --git a/package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch b/package/dhcpdump/dhcpdump-0001-use-non-bsd-structures.patch
+similarity index 100%
+rename from package/dhcpdump/dhcpdump-1.8-use-non-bsd-structures.patch
+rename to package/dhcpdump/dhcpdump-0001-use-non-bsd-structures.patch
 -- 
-1.9.3
+1.9.1
