@@ -1,82 +1,127 @@
 From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
-Date: Tue, 05 Aug 2014 08:40:20 +0200
-Subject: [Buildroot] [PATCH v2] bcache-tools: Adding package.
-In-Reply-To: <20140804210014.GF3875@free.fr>
-References: <1406839219-10929-1-git-send-email-jcd@tribudubois.net>
- <20140803185340.GI4052@free.fr> <53DFE4BC.5020401@tribudubois.net>
- <20140804210014.GF3875@free.fr>
-Message-ID: <53E07C54.9030505@tribudubois.net>
+Date: Tue,  5 Aug 2014 08:53:05 +0200
+Subject: [Buildroot] [PATCH v3] bcache-tools: Adding package.
+Message-ID: <1407221585-30867-1-git-send-email-jcd@tribudubois.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 08/04/2014 11:00 PM, Yann E. MORIN a ?crit :
-> Jean-Christophe, All,
->
-> On 2014-08-04 21:53 +0200, Jean-Christophe DUBOIS spake thusly:
->> Le 08/03/2014 08:53 PM, Yann E. MORIN a ?crit :
->>> Jean-Christophe, All,
->>>
->>> On 2014-07-31 22:40 +0200, Jean-Christophe DUBOIS spake thusly:
->>>> +define BCACHE_TOOLS_BUILD_CMDS
->>>> +	$(BCACHE_TOOLS_FIX_PKGCONFIG)
->>>> +	$(BCACHE_TOOLS_MAKE_ENV) $(MAKE) -C $(@D)
->>> This should probably be:
->>>      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
->>>
->>> TARGET_CONFIGURE_OPTS contains the CC= assignment.
->>>
->>> Thus, the BCACHE_TOOLS_MAKE_ENV no longer makes sense, so you can remove
->>> it.
->> When I do as you propose then various compilation variables
->> $(TARGET_CONFIGURE_OPTS) are passed as $(MAKE) arguments.
->>
->> Therefore these variables cannot be overridden/changed in the Makefile
->> (which might the the desired behavior) unless explicitly allowed with the
->> "override" directive.
->>
->> Unfortunately the bcache-tools Makefile needs (for now) to be able to
->> override the CFLAGS variable.
->>
->> So I can certainly "patch" the bcache-tools Makefile (in the post extract
->> hook for example) to allow "overriding" on the CFLAGS variable.
->>
->> Another solution is to pass $(TARGET_CONFIGURE_OPTS) as environment
->> variables to $(MAKE) in which case the various variables can still be
->> modified by the Makefile.
->>
->> Which of these 2 solutions is the preferred solution?
-> Hmmm. I'd say to pass them in the env (your second solution.) But I
-> can't vouch for the other developpers. Thomas P.?
-OK, I'll use env variables.
->
-> Oh, BTW, I forgot one more point in my earlier review: please add the
-> URL to the homepage for the package:
->      http://bcache.evilpiepirate.org/
-OK, I'll do.
->
-> And as requested by Thomas DS, change the help text to just replicate
-> the headlines of the homepage:
->
->      help
->        Bcache is a Linux kernel block layer cache. It allows one or more
->        fast disk drives such as flash-based solid state drives (SSDs) to
->        act as a cache for one or more slower hard disk drives.
->
->        http://bcache.evilpiepirate.org/
-OK, I'll do.
->
->> Is there another (more correct?) solution that would allow to change the
->> CFLAGS variable contained in $(TARGET_CONFIGURE_OPTS)?
-> Make it a proper autotools package and submit it upstream?
-> Just kidding ;-)
-I was expecting there was a way to alter the CFLAGS variable in 
-$(TARGET_CONFIGURE_OPTS) on a package base.
+This is the bcache tools, required to setup the linux bcache
+feature of the Linux kernel.
 
-For now, I'll go with the env variable solution.
->
-> Regards,
-> Yann E. MORIN.
->
+Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+---
+Changes v1 to v2
+ * remove 'support' word from comment statement in Config.in.
+ * use github helper to get the project site instead of hardcoded URL.
+Changes v2 to v3
+ * Added bcache-tools description in Config help
+ * Added bcache-tools URL in Config help
+ * Added BR2_LARGEFILE BR2_USE_WCHAR and BR2_USE_MMU dependencies in Config.
+ * Added BR2_PACKAGE_UTIL_LINUX selection in Config
+ * Added new requirements in Config comment.
+ * use POST_EXTRACT_HOOKS to modify Makefile
+ * pass $(TARGET_CONFIGURE_OPTS) in env variables to $(MAKE)
+ * create man8 dir as part of PRE_INSTALL_TARGET_HOOKS
+---
+ package/Config.in                    |  1 +
+ package/bcache-tools/Config.in       | 22 ++++++++++++++++++
+ package/bcache-tools/bcache-tools.mk | 44 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 package/bcache-tools/Config.in
+ create mode 100644 package/bcache-tools/bcache-tools.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 4520ba6..dc2f418 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -280,6 +280,7 @@ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
+ 	source "package/avrdude/Config.in"
++	source "package/bcache-tools/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+new file mode 100644
+index 0000000..383ba1f
+--- /dev/null
++++ b/package/bcache-tools/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_BCACHE_TOOLS
++	bool "bcache tools"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_USE_MMU # util-linux (libblkid)
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	help
++	  Bcache is a Linux kernel block layer cache. It allows one or
++	  more fast disk drives such as flash-based solid state drives (SSDs)
++	  to act as a cache for one or more slower hard disk drives.
++
++	  http://bcache.evilpiepirate.org/
++
++	  This is the user space bcache tools, required to setup the linux
++	  bcache feature of the Linux kernel.
++
++comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
++	depends on BR2_USE_MMU
++        depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
+diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+new file mode 100644
+index 0000000..36f0b22
+--- /dev/null
++++ b/package/bcache-tools/bcache-tools.mk
+@@ -0,0 +1,44 @@
++################################################################################
++#
++# bcache-tools
++#
++################################################################################
++
++BCACHE_TOOLS_VERSION = 1.0.7
++BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,v$(BCACHE_TOOLS_VERSION))
++BCACHE_TOOLS_SOURCE = v$(BCACHE_TOOLS_VERSION).zip
++BCACHE_TOOLS_LICENSE = GPLv2
++BCACHE_TOOLS_LICENSE_FILES = COPYING
++BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
++
++define BCACHE_TOOLS_EXTRACT_CMDS
++	unzip -d $(BUILD_DIR) $(DL_DIR)/$(BCACHE_TOOLS_SOURCE)
++endef
++
++# We need to use the BR2 host pkg-config binary in the Makefile
++define BCACHE_TOOLS_FIX_PKGCONFIG
++	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
++		$(BCACHE_TOOLS_DIR)/Makefile
++endef
++
++BCACHE_TOOLS_POST_EXTRACT_HOOKS += BCACHE_TOOLS_FIX_PKGCONFIG
++
++# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
++# the bcache-tools Makefile to alter CFLAGS
++define BCACHE_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++# The bcache-tools Makefile expects the man8 directory to exist.
++define BCACHE_TOOLS_INSTALL_MAN8
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
++endef
++
++BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
++
++define BCACHE_TOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.1
