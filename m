@@ -1,49 +1,57 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  6 Aug 2014 00:56:54 +0200
-Subject: [Buildroot] [PATCH v2] support/download: fix the git helper
-Message-ID: <1407279414-26210-1-git-send-email-ps.report@gmx.net>
+From: Paul Cercueil <paul@crapouillou.net>
+Date: Wed,  6 Aug 2014 00:57:22 +0200
+Subject: [Buildroot] [PATCH] nodejs: Add dependency on zlib
+Message-ID: <1407279442-15084-1-git-send-email-paul@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re-add the git_done variable (lost in commit [1])
-and change result file from 'output.gz' to 'output'.
+Prior to this commit, nodejs would build zlib itself and link statically
+to it.
 
-Fixes download problem reported by Rohit Kumar [2].
-
-[1] http://git.buildroot.net/buildroot/commit/?id=7e40a1103a919a8177f00ddca2b46b4439953511
-[2] http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Change v1->v2:
-  - produce file 'output' instead of 'output.gz'
----
- support/download/git | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/nodejs/Config.in | 1 +
+ package/nodejs/nodejs.mk | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/git b/support/download/git
-index 6edaa90..47e1e52 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -19,6 +19,7 @@ basename="${4}"
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 344b7f6..077a043 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_NODEJS
+ 	depends on !(BR2_arm920t || BR2_arm922t || BR2_fa526)
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Event-driven I/O server-side JavaScript environment based on V8.
  
- # Try to see if we can do a shallow clone, since it is faster
- # than a full clone.
-+git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
-     if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-@@ -33,6 +34,4 @@ if [ ${git_done} -eq 0 ]; then
- fi
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index a85384e..ff44e01 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -7,9 +7,9 @@
+ NODEJS_VERSION = 0.10.12
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+-NODEJS_DEPENDENCIES = host-python host-nodejs \
++NODEJS_DEPENDENCIES = host-python host-nodejs zlib \
+     $(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+-HOST_NODEJS_DEPENDENCIES = host-python
++HOST_NODEJS_DEPENDENCIES = host-python host-zlib
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+ NODEJS_LICENSE_FILES = LICENSE
  
- GIT_DIR="${basename}" \
--${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar "${cset}"
--
--gzip "${output}"
-+${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar.gz "${cset}"
+@@ -69,6 +69,7 @@ define NODEJS_CONFIGURE_CMDS
+ 		$(HOST_DIR)/usr/bin/python2 ./configure \
+ 		--prefix=/usr \
+ 		--without-snapshot \
++		--shared-zlib \
+ 		$(if $(BR2_PACKAGE_OPENSSL),--shared-openssl,--without-ssl) \
+ 		$(if $(BR2_PACKAGE_NODEJS_NPM),,--without-npm) \
+ 		--without-dtrace \
 -- 
-1.8.1.4
+2.0.1
