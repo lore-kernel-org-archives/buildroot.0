@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Aug 2014 16:17:31 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2014-08-04
-In-Reply-To: <53E0D610.3070603@imgtec.com>
-References: <20140805063010.EAA98100F1D@stock.ovh.net>
- <53E0D610.3070603@imgtec.com>
-Message-ID: <20140805161731.20ab266a@free-electrons.com>
+Date: Tue, 5 Aug 2014 16:20:59 +0200
+Subject: [Buildroot] [PATCH] gdb: don't block building on AArch64 systems
+In-Reply-To: <1407244453-3082-1-git-send-email-alex.bennee@linaro.org>
+References: <1407244453-3082-1-git-send-email-alex.bennee@linaro.org>
+Message-ID: <20140805162059.26366e25@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+Dear Alex Benn?e,
 
-On Tue, 5 Aug 2014 14:03:12 +0100, Vicente Olivert Riera wrote:
-> On 08/05/2014 07:30 AM, Thomas Petazzoni wrote:
-> > Build statistics for 2014-08-04
-> > ===============================
-> 
-> >    mips64el |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/31a9cf4152aca7ba7d5ab798eea3161a9e47e68d/
-> 
-> That build failure is caused because in that toolchain...
-> 
->  
-> http://autobuild.buildroot.org/toolchains/tarballs/mips64el-ctng_n64-linux-gnu.tar.x
-> 
-> ...SYS_getdents64 is only defined for MIPS32 and MIPS64 n32, and NOT for 
-> MIPS64 n64.
-> 
-> That has been fixed on newer versions of eglibc (which is the C library 
-> that toolchain is using). For instance, in the Buildroot's default 
-> eglibc version (2.18-svnr23787) it's already fixed.
-> 
-> So, please, could be possible to upgrade that toolchain.
+On Tue,  5 Aug 2014 14:14:13 +0100, Alex Benn?e wrote:
+> There is no real reason to disable the building of GDB. I suspect the
+> original patch (be084204) which added the restriction did so not
+> realising that AArch64 has had thread support in it's toolchain for some
+> time.
 
-Thanks for the investigation. In the mean time, I'll blacklist
-configurations using this toolchain and having Python 3 enabled in the
-autobuilder script.
+be084204 did not add the AArch64 exception: it only made sure the
+comments about threads being needed would not be shown on AArch64,
+because gdb is never available on AArch64.
 
-Thanks,
+The real commit who made gdb unavailable on AArch64 is
+0e49733b306b353aad3a29a2c7a6faf25841ef0b. I believe at the time (April
+2013), AArch64 was maybe not supported in the mainline gdb.
+
+Therefore, could you check when AArch64 support was added in mainline
+gdb ? We currently allow selecting either gdb 7.6 and 7.7 in Buildroot.
+
+Thanks!
 
 Thomas
 -- 
