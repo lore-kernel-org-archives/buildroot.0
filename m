@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Aug 2014 09:44:27 +0200
-Subject: [Buildroot] [PATCH v10] espeak: new package
-In-Reply-To: <53E08ABC.9070900@intelibre.fr>
-References: <1398867713-3604-1-git-send-email-arnaud@intelibre.fr>
- <20140804224202.0eb57098@free-electrons.com>
- <53E08ABC.9070900@intelibre.fr>
-Message-ID: <20140805094427.69605590@free-electrons.com>
+Date: Tue, 5 Aug 2014 09:46:14 +0200
+Subject: [Buildroot] [PATCH 2/2] mongoose: patch to avoid
+ _LARGEFILE_SOURCE redefinition warning
+In-Reply-To: <1407187903-10013-2-git-send-email-zinosat@tiscali.it>
+References: <1407187903-10013-1-git-send-email-zinosat@tiscali.it>
+ <1407187903-10013-2-git-send-email-zinosat@tiscali.it>
+Message-ID: <20140805094614.749f8ced@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnaud Aujon,
+Dear Davide Viti,
 
-On Tue, 05 Aug 2014 09:41:48 +0200, Arnaud Aujon wrote:
-
-> Thanks for applying !
+On Mon,  4 Aug 2014 23:31:43 +0200, Davide Viti wrote:
 > 
-> I will have a look at the new upstream version shortly and send a patch 
-> if needed.
+> Signed-off-by: Davide Viti <zinosat@tiscali.it>
+> ---
+>  package/mongoose/largefile-conditional-define.patch |   12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+>  create mode 100644 package/mongoose/largefile-conditional-define.patch
+> 
+> diff --git a/package/mongoose/largefile-conditional-define.patch b/package/mongoose/largefile-conditional-define.patch
+> new file mode 100644
+> index 0000000..4fbaa04
+> --- /dev/null
+> +++ b/package/mongoose/largefile-conditional-define.patch
 
-You could also send a patch to fix
-http://autobuild.buildroot.org/results/f39/f3903d2b4a16226df2d460dcd2e26c7fb87613ab/build-end.log.
-Basically, espeak depends on thread support, so you'll have to change
-the Config.in file to reflect that.
+The file name of the patch does not follow the Buildroot convention
+(see the Buildroot manual for details), and lacks a description +
+Signed-off-by line.
 
 Thanks!
 
