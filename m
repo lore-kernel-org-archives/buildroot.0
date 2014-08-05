@@ -1,26 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Aug 2014 09:46:41 +0200
-Subject: [Buildroot] [PATCH 1/2] mongoose: bump to version 5.4
-In-Reply-To: <1407187903-10013-1-git-send-email-zinosat@tiscali.it>
-References: <1407187903-10013-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <20140805094641.3ab434ce@free-electrons.com>
+From: Arnaud Aujon <arnaud@intelibre.fr>
+Date: Tue, 05 Aug 2014 09:41:48 +0200
+Subject: [Buildroot] [PATCH v10] espeak: new package
+In-Reply-To: <20140804224202.0eb57098@free-electrons.com>
+References: <1398867713-3604-1-git-send-email-arnaud@intelibre.fr>
+ <20140804224202.0eb57098@free-electrons.com>
+Message-ID: <53E08ABC.9070900@intelibre.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Davide Viti,
+Hi Thomas,
 
-On Mon,  4 Aug 2014 23:31:42 +0200, Davide Viti wrote:
-> Avoid compilation of the server via the upstream Makefile which
-> unconditionally uses -lssl
+Thanks for applying !
 
-Ok, but then, don't we want to optionally use the SSL support when
-available (i.e when BR2_PACKAGE_OPENSSL=y) ?
+I will have a look at the new upstream version shortly and send a patch 
+if needed.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+
+Arnaud
+
+On 08/04/2014 10:42 PM, Thomas Petazzoni wrote:
+> Hello Arnaud,
+>
+> On Wed, 30 Apr 2014 16:21:53 +0200, arnaud at intelibre.fr wrote:
+>
+>>   package/Config.in                                  |  1 +
+>>   package/espeak/Config.in                           | 41 ++++++++++++++++++++
+>>   .../espeak-01-do-not-compil-when-install.patch     | 15 ++++++++
+>>   package/espeak/espeak.mk                           | 44 ++++++++++++++++++++++
+>>   4 files changed, 101 insertions(+)
+>>   create mode 100644 package/espeak/Config.in
+>>   create mode 100644 package/espeak/espeak-01-do-not-compil-when-install.patch
+>>   create mode 100644 package/espeak/espeak.mk
+> Thanks a lot, I've applied your patch! I've done some really minor
+> formatting tweaks in Config.in and espeak.mk, but other than that, just
+> applied as is.
+>
+> Could you send a followup patch bumping espeak to the newer upstream
+> version, if that makes sense?
+>
+> Thanks!
+>
+> Thomas
