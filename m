@@ -1,38 +1,81 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 05 Aug 2014 12:36:51 +0200
-Subject: [Buildroot] [PATCH 0 of 2 v3] Fix pkg-kconfig infra
-Message-ID: <patchbomb.1407235011@localhost>
+Date: Tue, 05 Aug 2014 12:36:53 +0200
+Subject: [Buildroot] [PATCH 2 of 2 v3] infra/pkg-kconfig: incorporate
+ oldconfig call to avoid endless rebuilds
+In-Reply-To: <patchbomb.1407235011@localhost>
+References: <patchbomb.1407235011@localhost>
+Message-ID: <707fc324a92e62b98ca1.1407235013@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series fixes a nasty regression introduced with the pkg-kconfig
-infrastructure recently applied, whereby kconfig packages are always
-rebuilt on each 'make', as detected by Yann.
+The configure step of the busybox package performs 'make oldconfig', which
+causes the .config file to be updated. Thus, the .config file is more recent
+than our stamp file .stamp_kconfig_fixup_done. On a subsequent build, our
+dependency rules would kick in, and run the config fixup again, thus
+kicking in the package's configure, build and install steps yet once
+more, that, ad infinitum.
 
-This series incorporates an alternative solution than v2 sent out by Yann.
-Instead of re-touching the stamp file, make sure that such timing problems
-cannot occur by calling 'make oldconfig' from within pkg-kconfig itself,
-instead of from the package. Looking at the to-be-converted linux package,
-oldconfig is also run there, so it makes sense to add this to pkg-kconfig.
+One solution is to modify kconfig-package to introduce an explicit touch of
+the .kconfig_fixup_config_done stamp file, as post-configure hook.
 
-Contrary to Yann's solution, if a package makes another change to .config
-from the configure script, a rebuild will happen still. I consider that an
-error in the package. Any 'fixup' of the config is supposed to be in the
-KCONFIG_FIXUP_CMDS.
+Another solution, implemented by this patch, is to move the oldconfig call
+from the package's .mk file to the kconfig-package infrastructure and make
+sure it is done as part of the fixup commands. This way, the stamp file will
+only be touched once, after the full fixup (including oldconfig) and no
+endless rebuilds will occur.
 
+Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Yann E. Morin (1)
-  infra/pkg-kconfig: join comments to the related code-block
-
-Thomas De Schampheleire (1)
-  infra/pkg-kconfig: incorporate oldconfig call to avoid endless rebuilds
+v3: implement alternative implementation
 
  package/busybox/busybox.mk |  2 --
  package/pkg-kconfig.mk     |  9 ++-------
  package/uclibc/uclibc.mk   |  6 ------
  3 files changed, 2 insertions(+), 15 deletions(-)
+
+diff -r f81734945d5b -r 707fc324a92e package/busybox/busybox.mk
+--- a/package/busybox/busybox.mk	Tue Aug 05 00:06:57 2014 +0200
++++ b/package/busybox/busybox.mk	Tue Aug 05 11:39:06 2014 +0200
+@@ -205,8 +205,6 @@
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
+-	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+-		-C $(@D) oldconfig
+ 	$(BUSYBOX_NOCLOBBER_INSTALL)
+ endef
+ 
+diff -r f81734945d5b -r 707fc324a92e package/pkg-kconfig.mk
+--- a/package/pkg-kconfig.mk	Tue Aug 05 00:06:57 2014 +0200
++++ b/package/pkg-kconfig.mk	Tue Aug 05 11:39:06 2014 +0200
+@@ -50,6 +50,8 @@
+ # The exact rules are specified by the package .mk file.
+ $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
++	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
++		$$($(2)_KCONFIG_OPT) oldconfig
+ 	$$(Q)touch $$@
+ 
+ # Before running configure, the configuration file should be present and fixed
+diff -r f81734945d5b -r 707fc324a92e package/uclibc/uclibc.mk
+--- a/package/uclibc/uclibc.mk	Tue Aug 05 00:06:57 2014 +0200
++++ b/package/uclibc/uclibc.mk	Tue Aug 05 11:39:06 2014 +0200
+@@ -431,12 +431,6 @@
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
+ 	$(UCLIBC_STRIP_CONFIG)
+-	yes "" | $(MAKE1) -C $(@D) \
+-		$(UCLIBC_MAKE_FLAGS) \
+-		PREFIX=$(STAGING_DIR) \
+-		DEVEL_PREFIX=/usr/ \
+-		RUNTIME_PREFIX=$(STAGING_DIR) \
+-		oldconfig
+ endef
+ 
+ define UCLIBC_CONFIGURE_CMDS
