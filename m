@@ -1,62 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Aug 2014 22:21:27 +0200
-Subject: [Buildroot] [PATCH 1/1] support/download: fix the git helper
-In-Reply-To: <1407269590-4384-1-git-send-email-ps.report@gmx.net>
-References: <1407269590-4384-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140805202127.GD4268@free.fr>
+From: Davide Viti <zinosat@tiscali.it>
+Date: Tue,  5 Aug 2014 22:47:07 +0200
+Subject: [Buildroot] [PATCH v2 1/2] mongoose: bump to version 5.4
+Message-ID: <1407271628-5996-1-git-send-email-zinosat@tiscali.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Avoid compilation of the server via the upstream Makefile which
+unconditionally uses -lssl
 
-On 2014-08-05 22:13 +0200, Peter Seiderer spake thusly:
-> Re-add the git_done variable (lost in commit [1]).
-> 
-> Fixes download problem reported by Rohit Kumar [2].
-> 
-> [1] http://git.buildroot.net/buildroot/commit/?id=7e40a1103a919a8177f00ddca2b46b4439953511
-> [2] http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+The -lssl flag is appended to MONGOOSE_CFLAGS whenever 
+BR2_PACKAGE_OPENSSL=y gets set.
 
-Gah.. Yes, of course! Thanks!
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
+---
+Changes v1 -> v2:
+ - Expand commit log
 
-Regards,
-Yann E. MORIN.
+ package/mongoose/mongoose.mk |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->  support/download/git | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 6edaa90..d451530 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -19,6 +19,7 @@ basename="${4}"
->  
->  # Try to see if we can do a shallow clone, since it is faster
->  # than a full clone.
-> +git_done=0
->  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
->      printf "Doing shallow clone\n"
->      if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-> -- 
-> 1.8.1.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index ee93846..4182a30 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGOOSE_VERSION = 5.3
++MONGOOSE_VERSION = 5.4
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPLv2
+ MONGOOSE_LICENSE_FILES = LICENSE
+@@ -19,8 +19,8 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+ endif
+ 
+ define MONGOOSE_BUILD_CMDS
+-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" -C $(@D)/examples \
+-		CFLAGS_EXTRA="$(MONGOOSE_CFLAGS)" server
++	$(TARGET_CC) $(@D)/examples/server.c $(@D)/mongoose.c \
++		-o $(@D)/examples/server $(MONGOOSE_CFLAGS) -pthread -ldl
+ 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
+ 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
+ endef
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
