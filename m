@@ -1,58 +1,101 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 5 Aug 2014 22:22:51 +0300
-Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
- calls with a single call
-In-Reply-To: <CANxTyt65uANp54R7hjpQg07Kf==RNQsJQQ6vX+3NGRTFeJZ9Nw@mail.gmail.com>
-References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
- <20140803073726.GB4052@free.fr>
- <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
- <20140804102456.774bcea3@free-electrons.com>
- <CANxTyt65uANp54R7hjpQg07Kf==RNQsJQQ6vX+3NGRTFeJZ9Nw@mail.gmail.com>
-Message-ID: <20140805192251.GL2322@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 Aug 2014 21:27:15 +0200
+Subject: [Buildroot] [PATCH 2 of 2 v3] infra/pkg-kconfig: incorporate
+ oldconfig call to avoid endless rebuilds
+In-Reply-To: <707fc324a92e62b98ca1.1407235013@localhost>
+References: <patchbomb.1407235011@localhost>
+ <707fc324a92e62b98ca1.1407235013@localhost>
+Message-ID: <20140805192715.GC4268@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Danomi,
+Thomas?, All,
 
-On Mon, Aug 04, 2014 at 10:28:08AM -0400, Danomi Manchego wrote:
-> On Mon, Aug 4, 2014 at 4:24 AM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > On Sun, 3 Aug 2014 09:25:13 -0400, Danomi Manchego wrote:
-> >> I think this issue is not limited to openssh - there's other things
-> >> that want to occasionally save stuff to /etc, /var, even /root (e.g.
-> >> gstreamer plugins cache).  I suppose that efforts could be made to try
-> >> to patch/configure these locations to all be in one place (/var ?),
-> >> but that still assumes a writable directory.  So, unless we direct all
-> >> attempts to save state to a tmpfs, I think it always come back to
-> >> being the user's responsibility.
-> >>
-> >> So for now I'm content to keep openssh as it is, rather than hunt down
-> >> all the places that might try to write to etc (, var, $HOME, ...).
-> >
-> > Buildroot is normally supposed to support a read-only root filesystem,
-> > and there are already several things being done to make this possible:
-> >
-> >  * /etc/resolv.conf is a symbolic link to /tmp/resolv.conf
-> >  * Most of the /var/<foo> directories are symbolic links to /tmp.
-> >    Only /var/lib is not.
-> >  * /tmp is mounted as tmpfs, so that it's read/write even if the rootfs
-> >    is read only.
+On 2014-08-05 12:36 +0200, Thomas De Schampheleire spake thusly:
+> The configure step of the busybox package performs 'make oldconfig', which
+> causes the .config file to be updated. Thus, the .config file is more recent
+> than our stamp file .stamp_kconfig_fixup_done. On a subsequent build, our
+> dependency rules would kick in, and run the config fixup again, thus
+> kicking in the package's configure, build and install steps yet once
+> more, that, ad infinitum.
 > 
-> So - should the openssh.mk be making symlinks of all the key files to
-> /tmp/$FILE?  That re-introduces the maintenance burden, but I'll make
-> a patch along those lines if there's interest.
+> One solution is to modify kconfig-package to introduce an explicit touch of
+> the .kconfig_fixup_config_done stamp file, as post-configure hook.
+> 
+> Another solution, implemented by this patch, is to move the oldconfig call
+> from the package's .mk file to the kconfig-package infrastructure and make
+> sure it is done as part of the fixup commands. This way, the stamp file will
+> only be touched once, after the full fixup (including oldconfig) and no
+> endless rebuilds will occur.
+> 
+> Reported-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Suggested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-I don't think so. SSH keys should be stored in a writeable AND persistent over 
-reboot location. Storing them under /tmp (ephemeral tmpfs by default) would 
-make the keys regenerate on every boot, which would defeat the whole purpose 
-of having host keys in the first place.
+[tested with running multiple 'make' in sequence; tested that
+ busybox-menuconfig still forces a fixup and a rebuild]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-baruch
+Regards,
+Yann E. MORIN.
+
+> ---
+> v3: implement alternative implementation
+> 
+>  package/busybox/busybox.mk |  2 --
+>  package/pkg-kconfig.mk     |  9 ++-------
+>  package/uclibc/uclibc.mk   |  6 ------
+>  3 files changed, 2 insertions(+), 15 deletions(-)
+> 
+> diff -r f81734945d5b -r 707fc324a92e package/busybox/busybox.mk
+> --- a/package/busybox/busybox.mk	Tue Aug 05 00:06:57 2014 +0200
+> +++ b/package/busybox/busybox.mk	Tue Aug 05 11:39:06 2014 +0200
+> @@ -205,8 +205,6 @@
+>  endef
+>  
+>  define BUSYBOX_CONFIGURE_CMDS
+> -	@yes "" | $(MAKE) ARCH=$(KERNEL_ARCH) CROSS_COMPILE="$(TARGET_CROSS)" \
+> -		-C $(@D) oldconfig
+>  	$(BUSYBOX_NOCLOBBER_INSTALL)
+>  endef
+>  
+> diff -r f81734945d5b -r 707fc324a92e package/pkg-kconfig.mk
+> --- a/package/pkg-kconfig.mk	Tue Aug 05 00:06:57 2014 +0200
+> +++ b/package/pkg-kconfig.mk	Tue Aug 05 11:39:06 2014 +0200
+> @@ -50,6 +50,8 @@
+>  # The exact rules are specified by the package .mk file.
+>  $$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/.config
+>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+> +	@yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> +		$$($(2)_KCONFIG_OPT) oldconfig
+>  	$$(Q)touch $$@
+>  
+>  # Before running configure, the configuration file should be present and fixed
+> diff -r f81734945d5b -r 707fc324a92e package/uclibc/uclibc.mk
+> --- a/package/uclibc/uclibc.mk	Tue Aug 05 00:06:57 2014 +0200
+> +++ b/package/uclibc/uclibc.mk	Tue Aug 05 11:39:06 2014 +0200
+> @@ -431,12 +431,6 @@
+>  	$(UCLIBC_LOCALE_CONFIG)
+>  	$(UCLIBC_WCHAR_CONFIG)
+>  	$(UCLIBC_STRIP_CONFIG)
+> -	yes "" | $(MAKE1) -C $(@D) \
+> -		$(UCLIBC_MAKE_FLAGS) \
+> -		PREFIX=$(STAGING_DIR) \
+> -		DEVEL_PREFIX=/usr/ \
+> -		RUNTIME_PREFIX=$(STAGING_DIR) \
+> -		oldconfig
+>  endef
+>  
+>  define UCLIBC_CONFIGURE_CMDS
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
