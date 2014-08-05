@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Aug 2014 16:20:59 +0200
-Subject: [Buildroot] [PATCH] gdb: don't block building on AArch64 systems
-In-Reply-To: <1407244453-3082-1-git-send-email-alex.bennee@linaro.org>
-References: <1407244453-3082-1-git-send-email-alex.bennee@linaro.org>
-Message-ID: <20140805162059.26366e25@free-electrons.com>
+Date: Tue, 5 Aug 2014 16:22:56 +0200
+Subject: [Buildroot] Error u-boot 2014.07
+In-Reply-To: <53E0E024.9070705@mac.com>
+References: <53E0E024.9070705@mac.com>
+Message-ID: <20140805162256.7223e234@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Benn?e,
+Dear gmv,
 
-On Tue,  5 Aug 2014 14:14:13 +0100, Alex Benn?e wrote:
-> There is no real reason to disable the building of GDB. I suspect the
-> original patch (be084204) which added the restriction did so not
-> realising that AArch64 has had thread support in it's toolchain for some
-> time.
+On Tue, 05 Aug 2014 14:46:12 +0100, gmv wrote:
 
-be084204 did not add the AArch64 exception: it only made sure the
-comments about threads being needed would not be shown on AArch64,
-because gdb is never available on AArch64.
+> I'm tring for first time to use buildroot.
+> The target is Microblaze (little indian), my board is Spartan 3E1600 
+> microblaze dev kit.
+> 
+> in
+> Bootloaders i made the choice 'U-Boot' 'U-Boot board name --> generic',
+> binary format u-boot.elf
+> 
+> the process stop with message:
+> make *** no rule to make target 'generic-config'. Stop.
 
-The real commit who made gdb unavailable on AArch64 is
-0e49733b306b353aad3a29a2c7a6faf25841ef0b. I believe at the time (April
-2013), AArch64 was maybe not supported in the mainline gdb.
+Really "generic-config" ? Are you sure it wasn't "generic_config" ?
 
-Therefore, could you check when AArch64 support was added in mainline
-gdb ? We currently allow selecting either gdb 7.6 and 7.7 in Buildroot.
+But well basically, it just means that there is no U-Boot configuration
+named "generic" for this architecture. Probably you were looking for
+the "microblaze-generic" board instead:
 
-Thanks!
+In U-Boot:
+
+$ grep generic boards.cfg | grep microblaze
+Active  microblaze  -              -           xilinx          microblaze-generic  microblaze-generic
+
+Best regards,
 
 Thomas
 -- 
