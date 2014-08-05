@@ -1,71 +1,58 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 5 Aug 2014 21:10:00 +0200
-Subject: [Buildroot] [PATCH RFC] kconfig: allow pre-seending
-	randpackageconfig
-In-Reply-To: <1405812304-7603-1-git-send-email-yann.morin.1998@free.fr>
-References: <1405812304-7603-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LVT6xKNwVf5PSzBin7PDp=OW25dMqO+xaA9T7L_w-x9RQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 5 Aug 2014 22:22:51 +0300
+Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
+ calls with a single call
+In-Reply-To: <CANxTyt65uANp54R7hjpQg07Kf==RNQsJQQ6vX+3NGRTFeJZ9Nw@mail.gmail.com>
+References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
+ <20140803073726.GB4052@free.fr>
+ <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
+ <20140804102456.774bcea3@free-electrons.com>
+ <CANxTyt65uANp54R7hjpQg07Kf==RNQsJQQ6vX+3NGRTFeJZ9Nw@mail.gmail.com>
+Message-ID: <20140805192251.GL2322@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Danomi,
 
-On Sun, Jul 20, 2014 at 1:25 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> NOTE: this is only a proof of concept, for initial feedback.
->
+On Mon, Aug 04, 2014 at 10:28:08AM -0400, Danomi Manchego wrote:
+> On Mon, Aug 4, 2014 at 4:24 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > On Sun, 3 Aug 2014 09:25:13 -0400, Danomi Manchego wrote:
+> >> I think this issue is not limited to openssh - there's other things
+> >> that want to occasionally save stuff to /etc, /var, even /root (e.g.
+> >> gstreamer plugins cache).  I suppose that efforts could be made to try
+> >> to patch/configure these locations to all be in one place (/var ?),
+> >> but that still assumes a writable directory.  So, unless we direct all
+> >> attempts to save state to a tmpfs, I think it always come back to
+> >> being the user's responsibility.
+> >>
+> >> So for now I'm content to keep openssh as it is, rather than hunt down
+> >> all the places that might try to write to etc (, var, $HOME, ...).
+> >
+> > Buildroot is normally supposed to support a read-only root filesystem,
+> > and there are already several things being done to make this possible:
+> >
+> >  * /etc/resolv.conf is a symbolic link to /tmp/resolv.conf
+> >  * Most of the /var/<foo> directories are symbolic links to /tmp.
+> >    Only /var/lib is not.
+> >  * /tmp is mounted as tmpfs, so that it's read/write even if the rootfs
+> >    is read only.
+> 
+> So - should the openssh.mk be making symlinks of all the key files to
+> /tmp/$FILE?  That re-introduces the maintenance burden, but I'll make
+> a patch along those lines if there's interest.
 
-Commit title: s/pre-seending/pre-seeding/
+I don't think so. SSH keys should be stored in a writeable AND persistent over 
+reboot location. Storing them under /tmp (ephemeral tmpfs by default) would 
+make the keys regenerate on every boot, which would defeat the whole purpose 
+of having host keys in the first place.
 
-> kconfig is not able to properly randomise choices when a base .config
-> file is provided.
->
-> Sicne we do have quite a few choices that selects one package or
-> another, and we do want to sometime build them, we need to be able to
+baruch
 
-Since
-sometimes
-
-> preseed those packages.
-
-Note that I don't find the above sentence extremely clear,
-content-wise, so rewriting this may be good for a subsequent revision.
-
->
-> Add a new environment variable that contains the path to a file
-> containing options to be preseeded to randpackageconfig.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-I'm fine with this idea.
-We should add at least a comment in the Makefile to document this
-though, just reading the target recipe is not trivial.
-
->
-> ---
->  Makefile | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index 1af51de..eeaf7d3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -751,6 +751,9 @@ randpackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
->         @grep '^config BR2_PACKAGE_' Config.in.legacy | \
->                 while read config pkg; do \
->                 echo "# $$pkg is not set" >> $(CONFIG_DIR)/.config.nopkg; done
-> +ifneq ($(BR2_RAND_PRESEED_CONFIG),)
-> +       @cat $(BR2_RAND_PRESEED_CONFIG) >> $(CONFIG_DIR)/.config.nopkg
-> +endif
->         @$(COMMON_CONFIG_ENV) \
->                 KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
->                 $< --randconfig $(CONFIG_CONFIG_IN)
-> --
-> 1.9.1
-
-
-Best regards,
-Thomas
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
