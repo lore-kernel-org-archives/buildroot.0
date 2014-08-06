@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 19:51:14 +0200
-Subject: [Buildroot] [PATCH 1/1] espeak: bump to version 1.48.04
-In-Reply-To: <1407237401-22711-1-git-send-email-arnaud@intelibre.fr>
-References: <1407237401-22711-1-git-send-email-arnaud@intelibre.fr>
-Message-ID: <20140806195114.3f95a2d4@free-electrons.com>
+Date: Wed, 6 Aug 2014 19:51:27 +0200
+Subject: [Buildroot] [git commit] manual: fix copy/paste error in python
+	package example
+Message-ID: <20140806175131.5D1C09D3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnaud,
+commit: http://git.buildroot.net/buildroot/commit/?id=dffb833cbc3dc76d91f00d81d00b3e153fb8267b
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Aug 2014 13:16:41 +0200, arnaud at intelibre.fr wrote:
-> From: Arnaud Aujon <arnaud@intelibre.fr>
-> 
-> * Bump to latest upstream version 1.48.04
-> * Remove patch as applied upstream
-> 
-> Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
-> ---
->  package/espeak/espeak-01-do-not-compil-when-install.patch | 15 ---------------
->  package/espeak/espeak.mk                                  |  4 ++--
->  2 files changed, 2 insertions(+), 17 deletions(-)
->  delete mode 100644 package/espeak/espeak-01-do-not-compil-when-install.patch
+The SOURCE references "LIBFOO_VERSION", should be "PYTHON_FOO_VERSION".
 
-Applied, thanks!
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Acked-by: Thomas De Schampheleire < thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-python.txt |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index c4a13e0..46d140d 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -22,7 +22,7 @@ with an example :
+ 05: ################################################################################
+ 06:
+ 07: PYTHON_FOO_VERSION = 1.0
+-08: PYTHON_FOO_SOURCE = python-foo-$(LIBFOO_VERSION).tar.xz
++08: PYTHON_FOO_SOURCE = python-foo-$(PYTHON_FOO_VERSION).tar.xz
+ 09: PYTHON_FOO_SITE = http://www.foosoftware.org/download
+ 10: PYTHON_FOO_LICENSE = BSD-3c
+ 11: PYTHON_FOO_LICENSE_FILES = LICENSE
