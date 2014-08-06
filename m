@@ -1,54 +1,48 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Aug 2014 17:52:33 -0300
-Subject: [Buildroot] [PATCH] configs/qemu-microblaze: lock down kernel
-	headers
-Message-ID: <1407358353-21689-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Aug 2014 22:59:03 +0200
+Subject: [Buildroot] [git commit] mongoose: patch to avoid _LARGEFILE_SOURCE
+	redefinition warning
+Message-ID: <20140806210114.D3DFC9D342@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we use an internal toolchain as default care should be taken to
-avoid breaking things.
+commit: http://git.buildroot.net/buildroot/commit/?id=ef1d365c4153047f21759e1435f3cde7ad196260
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Davide Viti <zinosat@tiscali.it>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/qemu_microblazebe_mmu_defconfig | 5 +++++
- configs/qemu_microblazeel_mmu_defconfig | 5 +++++
- 2 files changed, 10 insertions(+)
+ ...ongoose-0001-largefile-conditional-define.patch |   22 ++++++++++++++++++++
+ 1 files changed, 22 insertions(+), 0 deletions(-)
 
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index b63e817..33e7bba 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -9,6 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
-+# Lock to 3.14 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
+diff --git a/package/mongoose/mongoose-0001-largefile-conditional-define.patch b/package/mongoose/mongoose-0001-largefile-conditional-define.patch
+new file mode 100644
+index 0000000..b1d759a
+--- /dev/null
++++ b/package/mongoose/mongoose-0001-largefile-conditional-define.patch
+@@ -0,0 +1,22 @@
++Avoid the following warning, due to duplicate definition of
++"_LARGEFILE_SOURCE"
 +
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index d527fd3..fdda7a3 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -9,6 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
-+# Lock to 3.14 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++mongoose.c:52:0: warning: "_LARGEFILE_SOURCE" redefined [enabled by default]
++ #define _LARGEFILE_SOURCE       // Enable fseeko() and ftello() functions
++ ^
++<command-line>:0:0: note: this is the location of the previous definition
 +
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--- 
-1.8.5.5
++Signed-off-by: Davide Viti <zinosat@tiscali.it>
++
++--- mongoose-5.4/mongoose.c~	2014-07-28 13:19:00.000000000 +0200
+++++ mongoose-5.4/mongoose.c	2014-08-04 23:10:59.164092500 +0200
++@@ -49,7 +49,9 @@
++ #define _XOPEN_SOURCE 600       // For flockfile() on Linux
++ #define __STDC_FORMAT_MACROS    // <inttypes.h> wants this for C++
++ #define __STDC_LIMIT_MACROS     // C++ wants that for INT64_MAX
+++#ifndef _LARGEFILE_SOURCE
++ #define _LARGEFILE_SOURCE       // Enable fseeko() and ftello() functions
+++#endif
++ #define _FILE_OFFSET_BITS 64    // Enable 64-bit file offsets
++ 
++ #ifdef _MSC_VER
