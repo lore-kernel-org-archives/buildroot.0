@@ -1,108 +1,44 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Wed,  6 Aug 2014 15:39:10 +0200
-Subject: [Buildroot] [PATCH v2 3/3] rpi-userland: Fix vcfiled startup
-In-Reply-To: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
-References: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <1407332350-27220-3-git-send-email-benoit.thebaudeau@advansee.com>
+From: Graham Newton <gnewton@peavey-eu.com>
+Date: Wed, 06 Aug 2014 16:29:48 +0100
+Subject: [Buildroot] support/download/wrapper expects file output in temp
+ directory but support/wrapper/git produces output.gz
+In-Reply-To: <CAAXf6LWBScdsOP=E0wC_CGE63R=dq5g21rqaUsWhtfijmU20Wg@mail.gmail.com>
+References: <20131226222002.C88A59C1E4@busybox.osuosl.org>
+ <CACmBeS0dY9NiAPJCTzSQGSH_zx71HN00MJ6Xk0_jD8DjyDwBRw@mail.gmail.com>
+ <20140123181504.GB3446@free.fr>
+ <CAAXf6LWBScdsOP=E0wC_CGE63R=dq5g21rqaUsWhtfijmU20Wg@mail.gmail.com>
+Message-ID: <53E249EC.9040805@peavey-eu.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The VideoCore file server daemon startup script installed from this package is
-not compatible with BuildRoot (because of its naming and other Debian
-dependencies), which prevented vcfiled from starting. Hence, prevent this
-package from installing its vcfiled startup script, and install a vcfiled SysV
-init script suitable for BuildRoot.
+Running support/download/wrapper git fails because the final instruction 
+of support/download/git gzips the output file creating output.gz which 
+wrapper isn't expecting.
 
-Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+Example:
 
----
+gnewton at ey-debx64-vm01 ~/Working/LinuxBuild $ support/download/wrapper 
+git /home/gnewton/Working/LinuxBuild/dl/linux-ti816x_graham_dev.tar.gz 
+gitolite at ey-ubsx64-svr02:LinuxKernel ti816x_graham_dev 
+linux-ti816x_graham_dev
+Doing shallow clone
+Cloning into bare repository 'linux-ti816x_graham_dev'...
+remote: Counting objects: 48600, done.
+remote: Compressing objects: 100% (46466/46466), done.
+Receiving objects: 100% (48600/48600), 143.16 MiB | 13.99 MiB/s, done.
+remote: Total 48600 (delta 3863), reused 25085 (delta 1546)
+Resolving deltas: 100% (3863/3863), done.
+Checking connectivity... done.
+cat: 
+/home/gnewton/Working/LinuxBuild/output/build/.linux-ti816x_graham_dev.tar.gz.MX7pH9/output: 
+No such file or directory
 
-Changes in v2:
- - Indent .mk rules with tabs.
- - Simplify the new vcfiled startup script.
- - Rename S97vcfiled to S94vcfiled for a better integration with existing init
-   scripts.
----
- package/rpi-userland/S94vcfiled      | 47 ++++++++++++++++++++++++++++++++++++
- package/rpi-userland/rpi-userland.mk |  8 ++++++
- 2 files changed, 55 insertions(+)
- create mode 100755 package/rpi-userland/S94vcfiled
+Build root pulled from git://git.busybox.net/buildroot master today 
+(06/08/2014)
 
-diff --git a/package/rpi-userland/S94vcfiled b/package/rpi-userland/S94vcfiled
-new file mode 100755
-index 0000000..25a0fcd
---- /dev/null
-+++ b/package/rpi-userland/S94vcfiled
-@@ -0,0 +1,47 @@
-+#!/bin/sh
-+
-+NAME=vcfiled
-+DESC="VideoCore file server daemon $NAME"
-+DAEMON="/usr/sbin/$NAME"
-+DAEMON_ARGS=""
-+CFGFILE="/etc/default/$NAME"
-+PIDFILE="/var/run/$NAME/$NAME"
-+
-+# Read configuration variable file if it is present
-+[ -r "$CFGFILE" ] && . "$CFGFILE"
-+
-+do_start()
-+{
-+	echo -n "Starting $DESC: "
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS &&
-+			echo "done" || echo "failed"
-+}
-+
-+do_stop()
-+{
-+	echo -n "Stopping $DESC: "
-+	if start-stop-daemon -K -q -R TERM/30/KILL/5 -p "$PIDFILE" -n "$NAME"; then
-+		# This daemon does not remove its PID file when it exits.
-+		rm -f "$PIDFILE"
-+		echo "done"
-+	else
-+		echo "failed"
-+	fi
-+}
-+
-+case "$1" in
-+	start)
-+		do_start
-+		;;
-+	stop)
-+		do_stop
-+		;;
-+	restart|reload)
-+		do_stop
-+		do_start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}" >&2
-+		exit 1
-+		;;
-+esac
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 81ed95c..0d29f24 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -13,7 +13,15 @@ RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
- 
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
- 
-+define RPI_USERLAND_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/rpi-userland/S94vcfiled \
-+			$(TARGET_DIR)/etc/init.d/S94vcfiled
-+endef
-+
- define RPI_USERLAND_POST_TARGET_CLEANUP
-+	rm -f $(TARGET_DIR)/etc/init.d/vcfiled
-+	rm -f $(TARGET_DIR)/usr/share/install/vcfiled
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/install
- 	rm -Rf $(TARGET_DIR)/usr/src
- endef
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
--- 
-1.9.1
+I assume the fix would be to either
+i) in wrapper cat output.gz in the case of git
+ii) copy output.gz to output after the gzip in support/download/git
