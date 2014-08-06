@@ -1,45 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 10:00:41 +0200
-Subject: [Buildroot] [PATCH 3/3] alsaequal: new package
-In-Reply-To: <53E1442A.9020302@barkynet.com>
-References: <1398374384-8814-1-git-send-email-martin@barkynet.com>
- <1398374384-8814-3-git-send-email-martin@barkynet.com>
- <20140804223202.62f5c129@free-electrons.com>
- <53E1442A.9020302@barkynet.com>
-Message-ID: <20140806100041.107a2524@free-electrons.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 06 Aug 2014 10:04:42 +0200
+Subject: [Buildroot] [PATCH 1/1] jack2: Added staging
+In-Reply-To: <1407311713-30045-1-git-send-email-pieter.degendt@gmail.com>
+References: <1407311713-30045-1-git-send-email-pieter.degendt@gmail.com>
+Message-ID: <fb1133f6-4157-4458-9fb4-ede779eb6dea@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
-
-On Tue, 05 Aug 2014 21:52:58 +0100, Martin Bark wrote:
-
-> > Description + Signed-off-by.
+Pieter De Gendt <pieter.degendt@gmail.com> schreef:
+>
+>Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+>---
+> package/jack2/jack2.mk |    7 +++++++
+> 1 file changed, 7 insertions(+)
+>
+>diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+>index 68f6e42..e1c3197 100644
+>--- a/package/jack2/jack2.mk
+>+++ b/package/jack2/jack2.mk
+>@@ -8,6 +8,7 @@ JACK2_VERSION = ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+> JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
+> JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+> JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+>+JACK2_INSTALL_STAGING = YES
 > 
-> Some of these patches are copies from debian patches hence they lack the 
-> description and Signed-off-by.  I'll fix this and resubmit.
-
-No problem with patches coming from Debian, but please indicate where
-they are coming from.
-
-> > Same comments here for $(TARGET_MAKE_ENV) and $(TARGET_CONFIGURE_OPTS)
-> > as the ones made on the 'caps' package.
-> >
-> > So there's really no build dependency on ladspa or caps in alsaequal ?
+> define JACK2_CONFIGURE_CMDS
+> 	(cd $(@D); \
+>@@ -27,4 +28,10 @@ define JACK2_INSTALL_TARGET_CMDS
+> 		install)
+> endef
 > 
-> alsaequal loads the caps 10 band equaliser at runtime hence caps is not 
-> a build dependency but is a dependency in Config.in.
+>+define JACK2_INSTALL_STAGING_CMDS
+>+	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/jack
+>+	$(INSTALL) -m 0644 $(@D)/common/jack/*.h \
+>+		$(STAGING_DIR)/usr/include/jack
+>+endef
 
-Ok. Maybe put a comment about this somewhere in the Config.in or .mk
-file.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Is there a particular reason why you did manual copies here instead of just running 'make install'?
