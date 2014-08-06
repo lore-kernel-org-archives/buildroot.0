@@ -1,61 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Aug 2014 19:15:00 +0200
-Subject: [Buildroot] manipulating raw disk images as non-root user
-In-Reply-To: <CAE9DZURSe+ZvKkQsnBLP6eHM7fvYhQypLDRa2Rm7rx6YMxthmg@mail.gmail.com>
-References: <CAE9DZUThNrdD2AOHwsJRZG6fJh3=MRGe+Ggnh4ZrRxgXatJvWA@mail.gmail.com>
- <20140804210403.GG3875@free.fr>
- <CAE9DZURSe+ZvKkQsnBLP6eHM7fvYhQypLDRa2Rm7rx6YMxthmg@mail.gmail.com>
-Message-ID: <20140806171500.GC3891@free.fr>
+Date: Wed, 6 Aug 2014 19:25:05 +0200
+Subject: [Buildroot] [PATCH v2 1/3] rpi-userland: Bump version
+In-Reply-To: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <20140806172505.GD3891@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dallas, All,
+Benoit, All,
 
-On 2014-08-05 16:26 -0500, Dallas Clement spake thusly:
-> > Also, if you want to have a look, I make use of those tools in my
-> > Buildroot.config project:
-> >    http://ymorin.is-a-geek.org/git/buildroot.config/
+On 2014-08-06 15:39 +0200, Beno?t Th?baudeau spake thusly:
+> Bump version to f9e6f9f3def8dc18dc0092cd695ccf53b8ba3efe and revert local commit
+> f22830e456833e98e11f09d2aa38017f5aaa557c 'rpi-userland: add patch fix missing
+> libvcilcs install rules' in order to replace the local patch from this commit by
+> the upstream commit 1ecc49c97b7be3d524cb4cfc97401f16b485a4ee 'vmcs_host: Fix
+> missing install of libvcilcs.so'.
 > 
-> > You may want to have a look at:
-> >
-> http://ymorin.is-a-geek.org/git/buildroot.config/tree/scripts/genimages.d
-> > and the subfolders for how to use those tools.
-> 
-> Thanks Yann.  This is good stuff!  The particular challenge I have is that
-> I need to create and populate one vfat partition as well as one ext[2,3,4]
-> partition, both within the same disk image file.
+> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
 
-The easiest is to generate two different images, and then aggregate the
-two to form the final image.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-If you first create the final image, then create the two filesystems in
-it, you have to provide the offsets to each filesystem when you want to
-adress one or the other.
-
-For ext2/3/4, I suggest you use genext2fs, which takes a directory and
-its content (recursively), to create am ext2 filesystem, which you can
-then convert to ext3 or ext4. We already have a script for that in
-Buildroot, in fs/ext2/genext2fs.sh, which you can use as a source of
-inspiration.
-
-For vfat, I'm not aware of a tool similar to genext2fs, so you'd have to
-create an empty file, then format it with nkfs.vfat, then use the mtools
-to copy files into that filesystem image.
-
-Finaly, create a partition table, and append the vfat and ext2
-filesystem, to get the final image.
-
-That's not trivial, mind you. And that's the reason I've been working on
-this in my little buildroot.config project.
-
-I tried to include this into Buildroot itself, but it is far from being
-obvious (to say the least), for a lot of reasons I won't enumerate here.
+I'll try to find some time to test it tonight.
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> 
+> Changes in v2: New patch
+> ---
+>  ...vmcs_host-add-install-rules-for-libvcilcs.patch | 23 ----------------------
+>  package/rpi-userland/rpi-userland.mk               |  2 +-
+>  2 files changed, 1 insertion(+), 24 deletions(-)
+>  delete mode 100644 package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+> 
+> diff --git a/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch b/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+> deleted file mode 100644
+> index 05cf4b3..0000000
+> --- a/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -From b60398837ddf39d4b605600abc167d4366e454a6 Mon Sep 17 00:00:00 2001
+> -From: Samuel Martin <s.martin49@gmail.com>
+> -Date: Thu, 5 Jun 2014 00:06:08 +0200
+> -Subject: [PATCH] interface/vmcs_host: add install rules for libvcilcs
+> -
+> -Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ----
+> - interface/vmcs_host/CMakeLists.txt | 1 +
+> - 1 file changed, 1 insertion(+)
+> -
+> -diff --git a/interface/vmcs_host/CMakeLists.txt b/interface/vmcs_host/CMakeLists.txt
+> -index 64ba2f8..8510f81 100755
+> ---- a/interface/vmcs_host/CMakeLists.txt
+> -+++ b/interface/vmcs_host/CMakeLists.txt
+> -@@ -33,4 +33,5 @@ target_link_libraries(vchostif vchiq_arm vcos vcfiled_check)
+> - 
+> - add_subdirectory(linux/vcfiled)
+> - install(TARGETS vchostif DESTINATION lib)
+> -+install(TARGETS vcilcs DESTINATION lib)
+> - 
+> --- 
+> -2.0.0
+> -
+> diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+> index 717eab1..20f68fa 100644
+> --- a/package/rpi-userland/rpi-userland.mk
+> +++ b/package/rpi-userland/rpi-userland.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -RPI_USERLAND_VERSION = b555474b19310762255252d085e57599ea573889
+> +RPI_USERLAND_VERSION = f9e6f9f3def8dc18dc0092cd695ccf53b8ba3efe
+>  RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
+>  RPI_USERLAND_LICENSE = BSD-3c
+>  RPI_USERLAND_LICENSE_FILES = LICENCE
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
