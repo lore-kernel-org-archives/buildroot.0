@@ -1,63 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Aug 2014 18:29:34 +0200
-Subject: [Buildroot] support/download/wrapper expects file output in
- temp directory but support/wrapper/git produces output.gz
-In-Reply-To: <53E249EC.9040805@peavey-eu.com>
-References: <20131226222002.C88A59C1E4@busybox.osuosl.org>
- <CACmBeS0dY9NiAPJCTzSQGSH_zx71HN00MJ6Xk0_jD8DjyDwBRw@mail.gmail.com>
- <20140123181504.GB3446@free.fr>
- <CAAXf6LWBScdsOP=E0wC_CGE63R=dq5g21rqaUsWhtfijmU20Wg@mail.gmail.com>
- <53E249EC.9040805@peavey-eu.com>
-Message-ID: <20140806162934.GB3891@free.fr>
+Date: Wed,  6 Aug 2014 18:47:48 +0200
+Subject: [Buildroot] [PATCH 0/2 v3] Fix git download helper (branch
+	yem/download-fixes)
+Message-ID: <cover.1407343550.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Graham, All,
+Hello All!
 
-On 2014-08-06 16:29 +0100, Graham Newton spake thusly:
-> Running support/download/wrapper git fails because the final instruction of
-> support/download/git gzips the output file creating output.gz which wrapper
-> isn't expecting.
+This series fixes the git helper after some fall-overs when the wrapper
+was introduced.
 
-Doh... I wonder how I could let this slip through... :-(
+Changes v2 -> v3:
+  - include initial patch from Peter  (Peter, Rohit)
+  - fix the output file name  (Graham)
 
-> Example:
-> 
-> gnewton at ey-debx64-vm01 ~/Working/LinuxBuild $ support/download/wrapper git
-> /home/gnewton/Working/LinuxBuild/dl/linux-ti816x_graham_dev.tar.gz
-> gitolite at ey-ubsx64-svr02:LinuxKernel ti816x_graham_dev
-> linux-ti816x_graham_dev
-> Doing shallow clone
-> Cloning into bare repository 'linux-ti816x_graham_dev'...
-> remote: Counting objects: 48600, done.
-> remote: Compressing objects: 100% (46466/46466), done.
-> Receiving objects: 100% (48600/48600), 143.16 MiB | 13.99 MiB/s, done.
-> remote: Total 48600 (delta 3863), reused 25085 (delta 1546)
-> Resolving deltas: 100% (3863/3863), done.
-> Checking connectivity... done.
-> cat: /home/gnewton/Working/LinuxBuild/output/build/.linux-ti816x_graham_dev.tar.gz.MX7pH9/output:
-> No such file or directory
-> 
-> Build root pulled from git://git.busybox.net/buildroot master today
-> (06/08/2014)
-> 
-> I assume the fix would be to either
-> i) in wrapper cat output.gz in the case of git
-> ii) copy output.gz to output after the gzip in support/download/git
-
-iii)
-    git archive >output.tmp
-    gzip -c -9 <output.tmp >output
-
-That's what I'm gonna implement.
-
-Thanks for the report!
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 10b6d10009c70262cfb492b2abaa3a091a8fb4aa:
+
+  espeak: new package (2014-08-04 22:40:45 +0200)
+
+are available in the git repository at:
+
+  git://gitorious.org/buildroot/buildroot.git yem/download-fixes
+
+for you to fetch changes up to 2205cccc9b1580208e604067224448da94599151:
+
+  support/download: fix the git helper output file format (2014-08-06 18:33:33 +0200)
+
+----------------------------------------------------------------
+Peter Seiderer (1):
+      support/download: fix the git helper
+
+Yann E. MORIN (1):
+      support/download: fix the git helper output file format
+
+ support/download/git | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
