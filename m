@@ -1,65 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 19:50:11 +0200
-Subject: [Buildroot] [git commit] espeak: depends on threads
-Message-ID: <20140806175035.370309D3C8@busybox.osuosl.org>
+Date: Wed, 6 Aug 2014 19:50:28 +0200
+Subject: [Buildroot] [git commit] espeak: bump to version 1.48.04
+Message-ID: <20140806175036.2B2029D31C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=d6ee2869efc977da84c0361ed440511a24746bb2
+commit: http://git.buildroot.net/buildroot/commit/?id=1617f44d60a741b12dbd343cb41c87fae75147bc
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes autobuild failure : http://autobuild.buildroot.org/results/f39/f3903d2b4a16226df2d460dcd2e26c7fb87613ab
+* Bump to latest upstream version 1.48.04
+* Remove patch as applied upstream
 
 Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/espeak/Config.in |   15 +++++----------
- 1 files changed, 5 insertions(+), 10 deletions(-)
+ .../espeak-01-do-not-compil-when-install.patch     |   15 ---------------
+ package/espeak/espeak.mk                           |    4 ++--
+ 2 files changed, 2 insertions(+), 17 deletions(-)
 
-diff --git a/package/espeak/Config.in b/package/espeak/Config.in
-index 3e052d9..ec81893 100644
---- a/package/espeak/Config.in
-+++ b/package/espeak/Config.in
-@@ -1,10 +1,11 @@
--comment "espeak needs a toolchain w/ C++, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-+comment "espeak needs a toolchain w/ C++, wchar, threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_ESPEAK
- 	bool "espeak"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  espeak is a speech synthesizer software for English and
- 	  other languages.
-@@ -20,23 +21,17 @@ choice
- config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_NONE
-        bool "No sound backend, only produce wav files"
- 
--comment "alsa backend needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/espeak/espeak-01-do-not-compil-when-install.patch b/package/espeak/espeak-01-do-not-compil-when-install.patch
+deleted file mode 100644
+index 983cd1c..0000000
+--- a/package/espeak/espeak-01-do-not-compil-when-install.patch
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Makefile: do not execute the rule "all" when executing "install"
 -
- config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
- 	bool "alsa via portaudio"
- 	select BR2_PACKAGE_PORTAUDIO
- 	select BR2_PACKAGE_PORTAUDIO_CXX
--	depends on BR2_TOOLCHAIN_HAS_THREADS # portaudio
+-signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
+-===================================================================
+---- espeak-1.47.11-source.orig/src/Makefile
+-+++ espeak-1.47.11-source/src/Makefile
+-@@ -131,7 +131,7 @@
+- 	rm -f $(BIN2_NAME)
+- 	rm -f $(LIB_NAME)*
+- 
+--install: all
+-+install:
+- 	# Create directories
+- 	rm -rf $(DESTDIR)$(DATADIR)
+- 	$(MKDIR) $(DESTDIR)$(BINDIR)
+diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
+index 571b730..9c32752 100644
+--- a/package/espeak/espeak.mk
++++ b/package/espeak/espeak.mk
+@@ -4,8 +4,8 @@
+ #
+ ###############################################################################
  
--comment "pulseaudio backend needs a toolchain w/ wchar, largefile, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || !BR2_LARGEFILE
-+comment "pulseaudio backend needs a toolchain with largefile"
-+	depends on !BR2_LARGEFILE
- 
- config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
- 	bool "pulseaudio"
- 	select BR2_PACKAGE_PULSEAUDIO
--	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
--	depends on BR2_USE_WCHAR # pulseaudio
- 	depends on BR2_LARGEFILE # pulseaudio
- 
- endchoice
+-ESPEAK_VERSION_MAJOR = 1.47
+-ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).11
++ESPEAK_VERSION_MAJOR = 1.48
++ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).04
+ ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
+ ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/espeak-$(ESPEAK_VERSION_MAJOR)
+ ESPEAK_LICENSE = GPLv3+
