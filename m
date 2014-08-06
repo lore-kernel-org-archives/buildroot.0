@@ -1,48 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 23:01:06 +0200
-Subject: [Buildroot] [PATCH v2 1/2] mongoose: bump to version 5.4
-In-Reply-To: <1407271628-5996-1-git-send-email-zinosat@tiscali.it>
-References: <1407271628-5996-1-git-send-email-zinosat@tiscali.it>
-Message-ID: <20140806230106.1207c04e@free-electrons.com>
+Date: Wed, 6 Aug 2014 23:01:54 +0200
+Subject: [Buildroot] [git commit] configs/qemu-microblaze: lock down kernel
+	headers
+Message-ID: <20140806210200.4DECB9D3C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Davide Viti,
+commit: http://git.buildroot.net/buildroot/commit/?id=50c59a8f8ac038b1d234c483753f4f66d579f3b7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Aug 2014 22:47:07 +0200, Davide Viti wrote:
-> Avoid compilation of the server via the upstream Makefile which
-> unconditionally uses -lssl
-> 
-> The -lssl flag is appended to MONGOOSE_CFLAGS whenever 
-> BR2_PACKAGE_OPENSSL=y gets set.
-> 
-> 
-> Signed-off-by: Davide Viti <zinosat@tiscali.it>
-> ---
-> Changes v1 -> v2:
->  - Expand commit log
+Now that we use an internal toolchain as default care should be taken to
+avoid breaking things.
 
-Thanks, I've applied both patches. However, it would be good to work
-with upstream to get those issues solved in a nicer way, by improving
-upstream's Makefile and submitting your largefile related patch. Notice
-that there are also other warnings when building mongoose:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/qemu_microblazebe_mmu_defconfig |    5 +++++
+ configs/qemu_microblazeel_mmu_defconfig |    5 +++++
+ 2 files changed, 10 insertions(+), 0 deletions(-)
 
-/home/thomas/projets/buildroot/output/build/mongoose-5.4/mongoose.c:2495:0: warning: "R0" redefined [enabled by default]
-In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/signal.h:375:0,
-                 from /home/thomas/projets/buildroot/output/build/mongoose-5.4/mongoose.c:73:
-/home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/sys/ucontext.h:44:0: note: this is the location of the previous definition
-/home/thomas/projets/buildroot/output/build/mongoose-5.4/mongoose.c:2496:0: warning: "R1" redefined [enabled by default]
-In file included from /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include/signal.h:375:0,
-                 from /home/thomas/projets/buildroot/output/build/mongoose-5.4/mongoose.c:73:
-[... and more ...]
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+index b3ec32f..ca18bb9 100644
+--- a/configs/qemu_microblazebe_mmu_defconfig
++++ b/configs/qemu_microblazebe_mmu_defconfig
+@@ -9,6 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
++# Lock to 3.14 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.2"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+index a009893..14feb83 100644
+--- a/configs/qemu_microblazeel_mmu_defconfig
++++ b/configs/qemu_microblazeel_mmu_defconfig
+@@ -9,6 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ 
++# Lock to 3.14 headers to avoid breaking with newer kernels
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.2"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
