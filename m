@@ -1,71 +1,108 @@
 From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Wed,  6 Aug 2014 15:39:08 +0200
-Subject: [Buildroot] [PATCH v2 1/3] rpi-userland: Bump version
-Message-ID: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+Date: Wed,  6 Aug 2014 15:39:10 +0200
+Subject: [Buildroot] [PATCH v2 3/3] rpi-userland: Fix vcfiled startup
+In-Reply-To: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <1407332350-27220-3-git-send-email-benoit.thebaudeau@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to f9e6f9f3def8dc18dc0092cd695ccf53b8ba3efe and revert local commit
-f22830e456833e98e11f09d2aa38017f5aaa557c 'rpi-userland: add patch fix missing
-libvcilcs install rules' in order to replace the local patch from this commit by
-the upstream commit 1ecc49c97b7be3d524cb4cfc97401f16b485a4ee 'vmcs_host: Fix
-missing install of libvcilcs.so'.
+The VideoCore file server daemon startup script installed from this package is
+not compatible with BuildRoot (because of its naming and other Debian
+dependencies), which prevented vcfiled from starting. Hence, prevent this
+package from installing its vcfiled startup script, and install a vcfiled SysV
+init script suitable for BuildRoot.
 
 Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
 
 ---
 
-Changes in v2: New patch
+Changes in v2:
+ - Indent .mk rules with tabs.
+ - Simplify the new vcfiled startup script.
+ - Rename S97vcfiled to S94vcfiled for a better integration with existing init
+   scripts.
 ---
- ...vmcs_host-add-install-rules-for-libvcilcs.patch | 23 ----------------------
- package/rpi-userland/rpi-userland.mk               |  2 +-
- 2 files changed, 1 insertion(+), 24 deletions(-)
- delete mode 100644 package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
+ package/rpi-userland/S94vcfiled      | 47 ++++++++++++++++++++++++++++++++++++
+ package/rpi-userland/rpi-userland.mk |  8 ++++++
+ 2 files changed, 55 insertions(+)
+ create mode 100755 package/rpi-userland/S94vcfiled
 
-diff --git a/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch b/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
-deleted file mode 100644
-index 05cf4b3..0000000
---- a/package/rpi-userland/rpi-userland-003-interface-vmcs_host-add-install-rules-for-libvcilcs.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--From b60398837ddf39d4b605600abc167d4366e454a6 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Thu, 5 Jun 2014 00:06:08 +0200
--Subject: [PATCH] interface/vmcs_host: add install rules for libvcilcs
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-----
-- interface/vmcs_host/CMakeLists.txt | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/interface/vmcs_host/CMakeLists.txt b/interface/vmcs_host/CMakeLists.txt
--index 64ba2f8..8510f81 100755
----- a/interface/vmcs_host/CMakeLists.txt
--+++ b/interface/vmcs_host/CMakeLists.txt
--@@ -33,4 +33,5 @@ target_link_libraries(vchostif vchiq_arm vcos vcfiled_check)
-- 
-- add_subdirectory(linux/vcfiled)
-- install(TARGETS vchostif DESTINATION lib)
--+install(TARGETS vcilcs DESTINATION lib)
-- 
---- 
--2.0.0
--
+diff --git a/package/rpi-userland/S94vcfiled b/package/rpi-userland/S94vcfiled
+new file mode 100755
+index 0000000..25a0fcd
+--- /dev/null
++++ b/package/rpi-userland/S94vcfiled
+@@ -0,0 +1,47 @@
++#!/bin/sh
++
++NAME=vcfiled
++DESC="VideoCore file server daemon $NAME"
++DAEMON="/usr/sbin/$NAME"
++DAEMON_ARGS=""
++CFGFILE="/etc/default/$NAME"
++PIDFILE="/var/run/$NAME/$NAME"
++
++# Read configuration variable file if it is present
++[ -r "$CFGFILE" ] && . "$CFGFILE"
++
++do_start()
++{
++	echo -n "Starting $DESC: "
++	start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS &&
++			echo "done" || echo "failed"
++}
++
++do_stop()
++{
++	echo -n "Stopping $DESC: "
++	if start-stop-daemon -K -q -R TERM/30/KILL/5 -p "$PIDFILE" -n "$NAME"; then
++		# This daemon does not remove its PID file when it exits.
++		rm -f "$PIDFILE"
++		echo "done"
++	else
++		echo "failed"
++	fi
++}
++
++case "$1" in
++	start)
++		do_start
++		;;
++	stop)
++		do_stop
++		;;
++	restart|reload)
++		do_stop
++		do_start
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}" >&2
++		exit 1
++		;;
++esac
 diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 717eab1..20f68fa 100644
+index 81ed95c..0d29f24 100644
 --- a/package/rpi-userland/rpi-userland.mk
 +++ b/package/rpi-userland/rpi-userland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -13,7 +13,15 @@ RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
  
--RPI_USERLAND_VERSION = b555474b19310762255252d085e57599ea573889
-+RPI_USERLAND_VERSION = f9e6f9f3def8dc18dc0092cd695ccf53b8ba3efe
- RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+ 
++define RPI_USERLAND_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/rpi-userland/S94vcfiled \
++			$(TARGET_DIR)/etc/init.d/S94vcfiled
++endef
++
+ define RPI_USERLAND_POST_TARGET_CLEANUP
++	rm -f $(TARGET_DIR)/etc/init.d/vcfiled
++	rm -f $(TARGET_DIR)/usr/share/install/vcfiled
++	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/install
+ 	rm -Rf $(TARGET_DIR)/usr/src
+ endef
+ RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
 -- 
 1.9.1
