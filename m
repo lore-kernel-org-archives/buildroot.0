@@ -1,72 +1,39 @@
-From: =?utf-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Wed, 6 Aug 2014 19:40:48 +0200 (CEST)
-Subject: [Buildroot] [PATCH v2 3/3] rpi-userland: Fix vcfiled startup
-In-Reply-To: <20140806173351.GF3891@free.fr>
-References: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
- <1407332350-27220-3-git-send-email-benoit.thebaudeau@advansee.com>
- <20140806173351.GF3891@free.fr>
-Message-ID: <1234544963.1762589.1407346848783.JavaMail.zimbra@advansee.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Aug 2014 19:40:34 +0200
+Subject: [Buildroot] [git commit] support/download: fix the git helper
+Message-ID: <20140806174117.622C59D3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+commit: http://git.buildroot.net/buildroot/commit/?id=9d1ab4321168fdda714be30c6b53e2ce0027509d
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wednesday, August 6, 2014 7:33:51 PM, Yann E. MORIN wrote:
-> Benoit, All,
-> 
-> On 2014-08-06 15:39 +0200, Beno?t Th?baudeau spake thusly:
-> > The VideoCore file server daemon startup script installed from this package
-> > is
-> > not compatible with BuildRoot (because of its naming and other Debian
-> > dependencies), which prevented vcfiled from starting. Hence, prevent this
-> > package from installing its vcfiled startup script, and install a vcfiled
-> > SysV
-> > init script suitable for BuildRoot.
-> 
-> I'm not sure I would be happy that the GPU is allowed uncontrolled
-> access to the filesystem.
-> 
-> Please, make this an option, defaulting to 'n', so the user can
-> willingly choose to install it or not.
+Re-add the git_done variable (lost in commit [1]).
 
-Will do.
+Fixes download problem reported by Rohit Kumar [2].
 
-> Otherwise, see below...
-> 
-> > Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
-> [--SNIP--]
-> > diff --git a/package/rpi-userland/S94vcfiled
-> > b/package/rpi-userland/S94vcfiled
-> > new file mode 100755
-> > index 0000000..25a0fcd
-> > --- /dev/null
-> > +++ b/package/rpi-userland/S94vcfiled
-> > @@ -0,0 +1,47 @@
-> > +#!/bin/sh
-> > +
-> > +NAME=vcfiled
-> > +DESC="VideoCore file server daemon $NAME"
-> > +DAEMON="/usr/sbin/$NAME"
-> > +DAEMON_ARGS=""
-> > +CFGFILE="/etc/default/$NAME"
-> > +PIDFILE="/var/run/$NAME/$NAME"
-> 
-> Are you sure about the path to the PID file?
-> What about:
->     PIDFILE="/var/run/$NAME.pid"
+[1] http://git.buildroot.net/buildroot/commit/?id=7e40a1103a919a8177f00ddca2b46b4439953511
+[2] http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html
 
-Yes, sure, this is the path used by vcfiled, which creates its PID file itself
-rather than relying on start-stop-daemon -m for that.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ support/download/git |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
 
-> Othwerwise, looks good after a casual look. Ditto your previous patches,
-> I'll try to find some time tonight to test it.
-
-Thanks.
-
-[...]
-
-Regards,
-Beno?t
+diff --git a/support/download/git b/support/download/git
+index 6edaa90..d451530 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -19,6 +19,7 @@ basename="${4}"
+ 
+ # Try to see if we can do a shallow clone, since it is faster
+ # than a full clone.
++git_done=0
+ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+     if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
