@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 19:59:10 +0200
-Subject: [Buildroot] [PATCH 1/1] configs: bump kernel used for the RPi
-In-Reply-To: <1407181598-15423-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1407181598-15423-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140806195910.44ebdcdb@free-electrons.com>
+Date: Wed, 6 Aug 2014 19:59:30 +0200
+Subject: [Buildroot] [git commit] nodejs: updated to 0.10.30
+Message-ID: <20140806175951.1B5189D3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: http://git.buildroot.net/buildroot/commit/?id=ce69cc9172fd2e4a6a91e7133d82d70473b80ad7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Aug 2014 21:46:38 +0200, Bernd Kuhls wrote:
-> The rpi-3.12.y branch has now been merged with the 3.12.26 upstream.
-> 
-> Bump kernel headers used for the toolchain at the same time.
-> 
-> Fixes
-> http://jenkins.free-electrons.com/job/buildroot/config=raspberrypi_defconfig/320/console
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  configs/raspberrypi_defconfig |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Jordi Llonch <jordi.llonch@rochsystems.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nodejs/nodejs.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index a85384e..d59fb57 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 0.10.12
++NODEJS_VERSION = 0.10.30
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs \
