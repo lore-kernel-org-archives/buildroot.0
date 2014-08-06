@@ -1,56 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 23:01:54 +0200
-Subject: [Buildroot] [git commit] configs/qemu-microblaze: lock down kernel
-	headers
-Message-ID: <20140806210200.4DECB9D3C9@busybox.osuosl.org>
+Date: Wed, 6 Aug 2014 23:02:11 +0200
+Subject: [Buildroot] [git commit] package/xbmc: Bump version to 13.2b3
+Message-ID: <20140806210237.9729A9D3C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=50c59a8f8ac038b1d234c483753f4f66d579f3b7
+commit: http://git.buildroot.net/buildroot/commit/?id=c0fef784ab104c0625406ab7c98593a6da130527
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we use an internal toolchain as default care should be taken to
-avoid breaking things.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/qemu_microblazebe_mmu_defconfig |    5 +++++
- configs/qemu_microblazeel_mmu_defconfig |    5 +++++
- 2 files changed, 10 insertions(+), 0 deletions(-)
+ package/xbmc/xbmc.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
-index b3ec32f..ca18bb9 100644
---- a/configs/qemu_microblazebe_mmu_defconfig
-+++ b/configs/qemu_microblazebe_mmu_defconfig
-@@ -9,6 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
+diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
+index 880b3d4..a7c8080 100644
+--- a/package/xbmc/xbmc.mk
++++ b/package/xbmc/xbmc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Lock to 3.14 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
-index a009893..14feb83 100644
---- a/configs/qemu_microblazeel_mmu_defconfig
-+++ b/configs/qemu_microblazeel_mmu_defconfig
-@@ -9,6 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- 
-+# Lock to 3.14 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-XBMC_VERSION = 13.2b2-Gotham
++XBMC_VERSION = 13.2b3-Gotham
+ XBMC_SOURCE = $(XBMC_VERSION).tar.gz
+ XBMC_SITE = https://github.com/xbmc/xbmc/archive
+ XBMC_LICENSE = GPLv2
