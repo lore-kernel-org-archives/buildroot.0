@@ -1,31 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 23:04:59 +0200
-Subject: [Buildroot] [PATCH] toolchain: fix 3.16 selection for custom
- version
-In-Reply-To: <1407356267-3005-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407356267-3005-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140806230459.691e8947@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Aug 2014 18:23:48 -0300
+Subject: [Buildroot] [PATCH] nano: bump to version 2.3.6
+Message-ID: <1407360228-17104-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nano/nano.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed,  6 Aug 2014 17:17:47 -0300, Gustavo Zacarias wrote:
-> Fix d'oh typo from 911516f1b6dec4b2985a1f454949f8d9d10f6ef5 that
-> prevents custom version string 3.16 headers from working properly.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 16767df..038aaa5 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.3
+-NANO_VERSION = $(NANO_VERSION_MAJOR).5
++NANO_VERSION = $(NANO_VERSION_MAJOR).6
+ NANO_SITE = http://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.8.5.5
