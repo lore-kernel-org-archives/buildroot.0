@@ -1,42 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 12:03:20 +0200
-Subject: [Buildroot] [PATCH] gdb: don't block building on AArch64 systems
-In-Reply-To: <87wqamja43.fsf@linaro.org>
-References: <1407244453-3082-1-git-send-email-alex.bennee@linaro.org>
- <20140805162059.26366e25@free-electrons.com>
- <CAFbHwiRnPZhnXVwZbZreJS-DsO2c8xe1S8=72yH0R7y_bHdFug@mail.gmail.com>
- <87wqamja43.fsf@linaro.org>
-Message-ID: <20140806120320.09bf7e3e@free-electrons.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Wed, 6 Aug 2014 12:30:57 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <20140720113334.717cb707@free-electrons.com>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140720113334.717cb707@free-electrons.com>
+Message-ID: <CAJtjsKaom+gGDgZuivy2Qgss2wSaALDHXFLtKtf0eL-h2syrsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alex Benn?e,
+Hi Thomas, Yann, and all,
 
-On Wed, 06 Aug 2014 09:23:58 +0100, Alex Benn?e wrote:
+Thanks for your comments. I took care of all of them but two:
+check-erlang-lib script and <pkg>_PERMISSIONS.
+See below for my comments/questions with regards to these two issues.
 
-> >> The real commit who made gdb unavailable on AArch64 is
-> >> 0e49733b306b353aad3a29a2c7a6faf25841ef0b. I believe at the time (April
-> >> 2013), AArch64 was maybe not supported in the mainline gdb.
-> 
-> My mistake, I got lost in the maze of GDB Config.in changes.
+On Sun, Jul 20, 2014 at 11:33 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Fri, 18 Jul 2014 14:33:57 +0200, Johan Oudinet wrote:
+>
+>> +
+>> +# Do AC_ERLANG_CHECK_LIB job without erlang.
+>> +define EJABBERD_SET_LIBS_DIR
+>> +     for lib in $(EJABBERD_ERLANG_LIBS); do                                  \
+>> +       export                                                                \
+>> +         erlang_lib_dir_$$lib="`package/ejabberd/check-erlang-lib $$lib`";   \
+>> +     done
+>> +endef
+>
+> Do we really need this script? What does it do exactly? Since we
+> control the erlang installation in Buildroot, can't we simply hardcode
+> the values here?
 
-No problem!
+Unfortunately, we can't hardcode these values because ejabberd's
+makefile fetches its dependencies from master branches of git
+repositories. So, we don't know which versions have be fetched.
+In my opinion, this is a bad idea as it forces developers of such
+libraries to make sure their master branch is compatible with every
+ejabberd releases that depends on it.
+This is a known issue : https://github.com/processone/ejabberd/issues/233
+In the meantime, I think we need this script to know which version has
+been downloaded by ejabberd's Makefile.
 
-> >> Therefore, could you check when AArch64 support was added in mainline
-> >> gdb ? We currently allow selecting either gdb 7.6 and 7.7 in Buildroot.
-> >
-> > AArch64 has been supported since gdb 7.6 (although 7.8 is much nicer
-> > to use due to bug fixes).
-> 
-> I'll resubmit with a re-worded commit message.
+>
+>> +
+>> +# Set cross-compilation options to the configure called by rebar.
+>> +define EJABBERD_FIX_REBAR_CONFIG_SCRIPT
+>> +     sed -e "s,./configure,./configure \\    \
+>> +     --target=$(GNU_TARGET_NAME) \\          \
+>> +     --host=$(GNU_TARGET_NAME) \\            \
+>> +     --build=$(GNU_HOST_NAME),"              \
+>> +       -i "$(@D)"/rebar.config.script
+>> +endef
+>
+> I don't really follow what's happening here. Since we're using the
+> autotools-package infrastructure, aren't we already calling
+> the ./configure script with the appropriate options?
 
-Great, thanks a lot!
+The problem comes from ejabberd's makefile. It configures its
+dependencies while we run make, instead of doing it when we run
+./configure.
+So, what happens is the following:
+- ./configure -> configure ejabberd (this one is called with the
+appropriate options thanks to buildroot)
+- make -> download ejabberd's dependencies in sub-folders, run
+./configure inside each of these sub-folders, then make.
+Thus, the configure script of each ejabberd's dependency is not called
+with the appropriate options. Again, the problem is due to ejabberd
+build system that mixes build and configure steps.
 
-Thomas
+>> +define EJABBERD_PERMISSIONS
+>> +/etc/ejabberd d 750 0 128 - - - - -
+>> +/etc/ejabberd/ejabberd.yml-new f 640 0 128 - - - - -
+>> +/etc/ejabberd/ejabberd.yml f 640 0 128 - - - - -
+>> +/etc/ejabberd/ejabberdctl.cfg-new f 640 0 128 - - - - -
+>> +/etc/ejabberd/ejabberdctl.cfg f 640 0 128 - - - - -
+>> +/etc/ejabberd/inetrc f 644 0 128 - - - - -
+>> +/usr/sbin/ejabberdctl f 550 0 128 - - - - -
+>> +/usr/lib/ejabberd/priv/bin/captcha.sh f 750 119 0 - - - - -
+>> +/usr/var/lib/ejabberd d 750 119 0 - - - - -
+>> +/usr/var/lock/ejabberdctl d 750 119 0 - - - - -
+>> +/usr/var/log/ejabberd d 750 119 0 - - - - -
+>> +endef
+>
+> <pkg>_PERMISSIONS should only be used for files that need special
+> permissions, the other files should be left with their default
+> permissions, owned by root (which is done automatically by Buildroot).
+
+ejabberd is run as the ejabberd user. Thus this user needs to own (or
+be in the group of) several files and directories.
+
+>
+> Also, /usr/var/lib, /usr/val/lock and /usr/var/log look incorrect.
+
+I've copied the permissions set by the install rule in ejabberd's
+makefile. Honestly, I don't know why ejabberd needs such permissions,
+but if I let root to be the owner of these files, it does not work.
+Do you know a better way of setting ownership? I don't like to have to
+set a specific UID and GID for the ejabberd user simply because the
+syntax of <pkg>_PERMISSIONS requires an ID instead of a name.
+
+Thanks.
+
+Best,
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Johan
