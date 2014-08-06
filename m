@@ -1,34 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 22:18:11 +0200
-Subject: [Buildroot] [PATCH 1/2] python3: fix termios build for xtensa
-In-Reply-To: <5bbe7610b89e16341ca9456ae5b8aad67652b61b.1407349862.git.baruch@tkos.co.il>
-References: <5bbe7610b89e16341ca9456ae5b8aad67652b61b.1407349862.git.baruch@tkos.co.il>
-Message-ID: <20140806221811.13b2ea64@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 06 Aug 2014 22:16:32 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-07-30
+References: <20140731063010.27D091019B7@stock.ovh.net>
+ <XnsA37BCBAC6964BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <20140731234958.60905813@free-electrons.com>
+Message-ID: <XnsA381E2996F96BberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140731234958.60905813 at free-electrons.com:
 
-On Wed,  6 Aug 2014 21:31:01 +0300, Baruch Siach wrote:
-> Forward port the patch from c821210b1bfa (python: fix termios build for
-> xtensa) to python3.
+> Dear Bernd Kuhls,
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/e7f/e7f71fbcb0796f315052947382fa39d85c5dc8fe/
+> On Thu, 31 Jul 2014 20:01:21 +0200, Bernd Kuhls wrote:
+>> Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+>> @public.gmane.org> wrote in news:20140731063010.27D091019B7-
+kgRh+nxlcD+LZ21kGMrzwg at public.gmane.org:
+>> 
+>> >        arm |             xbmc-13.2b2-Gotham | NOK | 
+>> 
+http://autobuild.buildroot.net/results/639cda872cf36c122cbd6139dd76f6b51ac186
+>> 4e/
+>> 
+>> Hi,
+>> 
+>> @Peter: Which java version do you have installed on your autobuilder?
 > 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../python3-014-serial-ioctl-workaround.patch      | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/python3/python3-014-serial-ioctl-workaround.patch
+> thomas at gcc10:~$ java -version
+> java version "1.5.0"
+> gij (GNU libgcj) version 4.3.2
+> 
+Hi,
 
-Both patches applied, thanks!
+according to http://jira.codehaus.org/browse/GROOVY-3701 (the package used by 
+xbmc) does not work with gcj, it should use another java version instead, 
+like openjdk: http://forum.xbmc.org/showthread.php?tid=199742
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I would like to suggest to extend the check for BR2_NEEDS_HOST_JAVA to reject 
+gcj, I will send a patch.
+
+Regards, Bernd
