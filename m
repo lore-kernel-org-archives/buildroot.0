@@ -1,58 +1,36 @@
-From: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-Date: Wed, 6 Aug 2014 17:53:18 +0530
-Subject: [Buildroot] [PATCH] libiqrf: use lpthread option while linking
-Message-ID: <1407327799-2598-1-git-send-email-yuvaraj.patil@wipro.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
+Date: Wed,  6 Aug 2014 15:39:09 +0200
+Subject: [Buildroot] [PATCH v2 2/3] rpi-userland: .mk: Indent rules with tabs
+In-Reply-To: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+References: <1407332350-27220-1-git-send-email-benoit.thebaudeau@advansee.com>
+Message-ID: <1407332350-27220-2-git-send-email-benoit.thebaudeau@advansee.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link libiqrf against libpthread.
-Use -lpthread argument while linking.
+Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
 
-nostartfiles option is added to remove linking error -
-undefined reference to 'main'
-
-Fixes:
-http://autobuild.buildroot.net/results/9e1/9e1ad254e6d3a223078c99bf731bcc63096f2ca3//
-
-Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
 ---
- .../libiqrf/libiqrf-0001-link-with-pthread.patch   |   25 ++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/libiqrf/libiqrf-0001-link-with-pthread.patch
 
-diff --git a/package/libiqrf/libiqrf-0001-link-with-pthread.patch b/package/libiqrf/libiqrf-0001-link-with-pthread.patch
-new file mode 100644
-index 0000000..b823fd0
---- /dev/null
-+++ b/package/libiqrf/libiqrf-0001-link-with-pthread.patch
-@@ -0,0 +1,25 @@
-+Link libiqrf against libpthread.
-+Use -lpthread argument while linking.
-+
-+nostartfiles option is used to remove linking error -
-+undefined reference to 'main' 
-+
-+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-+---
-+diff -Nurp libiqrf-v0.1.2_orig/src/CMakeLists.txt libiqrf-v0.1.2/src/CMakeLists.txt
-+--- libiqrf-v0.1.2_orig/src/CMakeLists.txt	2014-08-06 17:12:50.552749306 +0530
-++++ libiqrf-v0.1.2/src/CMakeLists.txt	2014-08-06 17:15:36.288742360 +0530
-+@@ -16,10 +16,12 @@ set (iqrf_sources
-+ 	usb.c
-+ )
-+ 
-++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -nostartfiles")
-++
-+ include_directories ("${LIBUSB_1_INCLUDE_DIRS}")
-+ 
-+ add_library(iqrf SHARED ${iqrf_sources} ${iqrf_headers})
-+-target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES})
-++target_link_libraries(iqrf ${LIBUSB_1_LIBRARIES} ${CMAKE_CXX_FLAGS})
-+ 
-+ set_target_properties(iqrf PROPERTIES
-+ 	VERSION "${iqrf_version_major}.${iqrf_version_minor}"
+Changes in v2: New patch
+---
+ package/rpi-userland/rpi-userland.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
+index 20f68fa..81ed95c 100644
+--- a/package/rpi-userland/rpi-userland.mk
++++ b/package/rpi-userland/rpi-userland.mk
+@@ -14,7 +14,7 @@ RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+ 
+ define RPI_USERLAND_POST_TARGET_CLEANUP
+-    rm -Rf $(TARGET_DIR)/usr/src
++	rm -Rf $(TARGET_DIR)/usr/src
+ endef
+ RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
+ 
 -- 
-1.7.9.5
+1.9.1
