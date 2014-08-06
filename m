@@ -1,54 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  6 Aug 2014 18:47:48 +0200
-Subject: [Buildroot] [PATCH 0/2 v3] Fix git download helper (branch
-	yem/download-fixes)
-Message-ID: <cover.1407343550.git.yann.morin.1998@free.fr>
+Date: Wed,  6 Aug 2014 18:47:52 +0200
+Subject: [Buildroot] [PATCH 1/2 v3] support/download: fix the git helper
+In-Reply-To: <cover.1407343550.git.yann.morin.1998@free.fr>
+References: <cover.1407343550.git.yann.morin.1998@free.fr>
+Message-ID: <3fd879ddde189866b89708d5f0c67d52e74cd120.1407343550.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Peter Seiderer <ps.report@gmx.net>
 
-This series fixes the git helper after some fall-overs when the wrapper
-was introduced.
+Re-add the git_done variable (lost in commit [1]).
 
-Changes v2 -> v3:
-  - include initial patch from Peter  (Peter, Rohit)
-  - fix the output file name  (Graham)
+Fixes download problem reported by Rohit Kumar [2].
 
+[1] http://git.buildroot.net/buildroot/commit/?id=7e40a1103a919a8177f00ddca2b46b4439953511
+[2] http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/download/git | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-The following changes since commit 10b6d10009c70262cfb492b2abaa3a091a8fb4aa:
-
-  espeak: new package (2014-08-04 22:40:45 +0200)
-
-are available in the git repository at:
-
-  git://gitorious.org/buildroot/buildroot.git yem/download-fixes
-
-for you to fetch changes up to 2205cccc9b1580208e604067224448da94599151:
-
-  support/download: fix the git helper output file format (2014-08-06 18:33:33 +0200)
-
-----------------------------------------------------------------
-Peter Seiderer (1):
-      support/download: fix the git helper
-
-Yann E. MORIN (1):
-      support/download: fix the git helper output file format
-
- support/download/git | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
+diff --git a/support/download/git b/support/download/git
+index 6edaa90..d451530 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -19,6 +19,7 @@ basename="${4}"
+ 
+ # Try to see if we can do a shallow clone, since it is faster
+ # than a full clone.
++git_done=0
+ if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
+     printf "Doing shallow clone\n"
+     if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
