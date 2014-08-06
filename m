@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 19:53:10 +0200
-Subject: [Buildroot] [PATCH] busybox: enable ash getopts
-In-Reply-To: <1407273736-30467-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407273736-30467-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140806195310.2150a7ac@free-electrons.com>
+Date: Wed, 6 Aug 2014 19:58:51 +0200
+Subject: [Buildroot] [PATCH 0 of 2 v3] Fix pkg-kconfig infra
+In-Reply-To: <patchbomb.1407235011@localhost>
+References: <patchbomb.1407235011@localhost>
+Message-ID: <20140806195851.6f963d61@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas De Schampheleire,
 
-On Tue,  5 Aug 2014 18:22:16 -0300, Gustavo Zacarias wrote:
-> It's increasingly used by scripts like some in the btrfs-progs package.
+On Tue, 05 Aug 2014 12:36:51 +0200, Thomas De Schampheleire wrote:
+
+> Yann E. Morin (1)
+>   infra/pkg-kconfig: join comments to the related code-block
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/busybox/busybox.config | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thomas De Schampheleire (1)
+>   infra/pkg-kconfig: incorporate oldconfig call to avoid endless rebuilds
 
-Applied, thanks.
+Thanks, series applied.
 
 Thomas
 -- 
