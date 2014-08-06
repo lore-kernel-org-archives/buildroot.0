@@ -1,64 +1,78 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  6 Aug 2014 22:26:22 +0200
-Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
-	BR2_NEEDS_HOST_JAVA check
-Message-ID: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Aug 2014 17:43:51 -0300
+Subject: [Buildroot] [PATCH] configs/imx233_olinuxino: bump to kernel 3.16
+Message-ID: <1407357831-20429-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Xbmc uses the Groovy java package to generate API code, for details see
-http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
-
-Groovy itself is broken when used with gcj:
-http://jira.codehaus.org/browse/GROOVY-3701
-
-Xbmc recommends to use another java package instead, like openjdk:
-http://forum.xbmc.org/showthread.php?tid=199742
-
-Until we come up with a host package to provide a java setup and in order to
-make autobuilder happy let?s reject gcj when we check for a java installation
-on the host.
-
-Currently Xbmc is the only package using BR2_NEEDS_HOST_JAVA so changing the
-behaviour of dependencies.sh has no side effects.
-
-Fixes
-http://autobuild.buildroot.net/results/213/213d7454a1dc68cfb8f4c8d9508f52ebf8e58e33/
-http://autobuild.buildroot.net/results/639/639cda872cf36c122cbd6139dd76f6b51ac1864e/
-http://autobuild.buildroot.net/results/c9e/c9eb12c95b2939c64590692a82af8d84bbd90956/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- support/dependencies/dependencies.sh |   14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ .../imx233_olinuxino/{linux-3.13.config => linux-3.16.config}     | 4 +---
+ configs/olimex_imx233_olinuxino_defconfig                         | 8 ++++----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
+ rename board/olimex/imx233_olinuxino/{linux-3.13.config => linux-3.16.config} (98%)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 88e5ad2..b09e376 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -188,7 +188,19 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BR2_CONFIG > /dev/null && \
- fi
+diff --git a/board/olimex/imx233_olinuxino/linux-3.13.config b/board/olimex/imx233_olinuxino/linux-3.16.config
+similarity index 98%
+rename from board/olimex/imx233_olinuxino/linux-3.13.config
+rename to board/olimex/imx233_olinuxino/linux-3.16.config
+index 61e2421..4795023 100644
+--- a/board/olimex/imx233_olinuxino/linux-3.13.config
++++ b/board/olimex/imx233_olinuxino/linux-3.16.config
+@@ -53,7 +53,6 @@ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_DATAFLASH=y
+-CONFIG_MTD_M25P80=y
+ CONFIG_MTD_SST25L=y
+ CONFIG_MTD_NAND=y
+ CONFIG_MTD_NAND_GPMI_NAND=y
+@@ -132,7 +131,6 @@ CONFIG_USB_CHIPIDEA=y
+ CONFIG_USB_CHIPIDEA_HOST=y
+ CONFIG_USB_MXS_PHY=y
+ CONFIG_MMC=y
+-CONFIG_MMC_UNSAFE_RESUME=y
+ CONFIG_MMC_MXS=y
+ CONFIG_LEDS_CLASS=y
+ CONFIG_LEDS_GPIO=y
+@@ -167,7 +165,7 @@ CONFIG_KEYS=y
+ CONFIG_CRYPTO_DEFLATE=y
+ CONFIG_CRYPTO_LZO=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
+-CONFIG_CRYPTO_DEV_DCP=y
++CONFIG_CRYPTO_DEV_MXS_DCP=y
+ CONFIG_CRC_CCITT=y
+ CONFIG_CRC_ITU_T=y
+ CONFIG_CRC7=m
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index 2ee9ce6..d516cb4 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -15,8 +15,8 @@ BR2_TARGET_ROOTFS_EXT2=y
  
- if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
--	check_prog_host "java"
-+	JAVA=$(which java 2> /dev/null)
-+	if [ -z "$JAVA" ] ; then
-+		echo
-+		echo "You must install 'java' on your build machine";
-+		exit 1;
-+	fi;
-+	JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
-+	if [ ! -z "$JAVA_GCJ" ] ; then
-+		echo
-+		echo "$JAVA_GCJ is not sufficient to compile your package selection."
-+		echo "Please install OpenJDK/IcedTea/Oracle Java."
-+		exit 1 ;
-+	fi
- fi
+ # Lock headers version to match and avoid breakage
+ BR2_KERNEL_HEADERS_VERSION=y
+-BR2_DEFAULT_KERNEL_VERSION="3.13.6"
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++BR2_DEFAULT_KERNEL_VERSION="3.16"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
  
- if grep -q ^BR2_NEEDS_HOST_JAVAC=y $BR2_CONFIG ; then
+ # Bootloader
+ BR2_TARGET_MXS_BOOTLETS=y
+@@ -27,9 +27,9 @@ BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME="imx23_olinuxino_dev"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.13.config"
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.16.config"
+ BR2_LINUX_KERNEL_PATCH="http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/101-soc-audio-dts.patch http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/ASoC_driver_for_i.MX233.patch"
+ BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
 -- 
-1.7.10.4
+1.8.5.5
