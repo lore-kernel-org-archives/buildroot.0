@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 19:40:34 +0200
+Date: Wed, 6 Aug 2014 19:41:05 +0200
 Subject: [Buildroot] [git commit] support/download: fix the git helper
-Message-ID: <20140806174117.622C59D3C8@busybox.osuosl.org>
+	output file format
+Message-ID: <20140806174117.6DE059D389@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=9d1ab4321168fdda714be30c6b53e2ce0027509d
+commit: http://git.buildroot.net/buildroot/commit/?id=8f76366c0f14861321bc73c2f18306af45ce9f1a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Re-add the git_done variable (lost in commit [1]).
+The git helper uses gzip to compress the intermediate tarball. But gzip
+removes the source file, and create a new file named by appending .gz to
+the original file name.
 
-Fixes download problem reported by Rohit Kumar [2].
+Thus, we end up with output.gz, while the download wrapper expects jsut
+output, and thus believes the downlaod failed.
 
-[1] http://git.buildroot.net/buildroot/commit/?id=7e40a1103a919a8177f00ddca2b46b4439953511
-[2] http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html
+Fix that by storing the tar from git to a temporary file, then pipe this
+file to gzip's stdin, and redirect gzip's stdout to the output file.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reported-by: Graham Newton <gnewton@peavey-eu.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/download/git |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
+ support/download/git |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/support/download/git b/support/download/git
-index 6edaa90..d451530 100755
+index d451530..ff6b5c3 100755
 --- a/support/download/git
 +++ b/support/download/git
-@@ -19,6 +19,7 @@ basename="${4}"
+@@ -34,6 +34,6 @@ if [ ${git_done} -eq 0 ]; then
+ fi
  
- # Try to see if we can do a shallow clone, since it is faster
- # than a full clone.
-+git_done=0
- if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
-     printf "Doing shallow clone\n"
-     if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
+ GIT_DIR="${basename}" \
+-${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar "${cset}"
++${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
+ 
+-gzip "${output}"
++gzip <"${output}.tmp" >"${output}"
