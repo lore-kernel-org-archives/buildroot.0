@@ -1,59 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 19:50:28 +0200
-Subject: [Buildroot] [git commit] espeak: bump to version 1.48.04
-Message-ID: <20140806175036.2B2029D31C@busybox.osuosl.org>
+Date: Wed, 6 Aug 2014 19:51:03 +0200
+Subject: [Buildroot] [PATCH 1/1] espeak: depends on threads
+In-Reply-To: <1407237387-22664-1-git-send-email-arnaud@intelibre.fr>
+References: <1407237387-22664-1-git-send-email-arnaud@intelibre.fr>
+Message-ID: <20140806195103.077c858a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=1617f44d60a741b12dbd343cb41c87fae75147bc
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnaud,
 
-* Bump to latest upstream version 1.48.04
-* Remove patch as applied upstream
+On Tue,  5 Aug 2014 13:16:27 +0200, arnaud at intelibre.fr wrote:
+> From: Arnaud Aujon <arnaud@intelibre.fr>
+> 
+> Fixes autobuild failure : http://autobuild.buildroot.org/results/f39/f3903d2b4a16226df2d460dcd2e26c7fb87613ab
+> 
+> Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+> ---
+>  package/espeak/Config.in | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
 
-Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../espeak-01-do-not-compil-when-install.patch     |   15 ---------------
- package/espeak/espeak.mk                           |    4 ++--
- 2 files changed, 2 insertions(+), 17 deletions(-)
+Thanks, applied!
 
-diff --git a/package/espeak/espeak-01-do-not-compil-when-install.patch b/package/espeak/espeak-01-do-not-compil-when-install.patch
-deleted file mode 100644
-index 983cd1c..0000000
---- a/package/espeak/espeak-01-do-not-compil-when-install.patch
-+++ /dev/null
-@@ -1,15 +0,0 @@
--Makefile: do not execute the rule "all" when executing "install"
--
--signed-off-by: Arnaud Aujon <arnaud.aujon@gmail.com>
--===================================================================
----- espeak-1.47.11-source.orig/src/Makefile
--+++ espeak-1.47.11-source/src/Makefile
--@@ -131,7 +131,7 @@
-- 	rm -f $(BIN2_NAME)
-- 	rm -f $(LIB_NAME)*
-- 
---install: all
--+install:
-- 	# Create directories
-- 	rm -rf $(DESTDIR)$(DATADIR)
-- 	$(MKDIR) $(DESTDIR)$(BINDIR)
-diff --git a/package/espeak/espeak.mk b/package/espeak/espeak.mk
-index 571b730..9c32752 100644
---- a/package/espeak/espeak.mk
-+++ b/package/espeak/espeak.mk
-@@ -4,8 +4,8 @@
- #
- ###############################################################################
- 
--ESPEAK_VERSION_MAJOR = 1.47
--ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).11
-+ESPEAK_VERSION_MAJOR = 1.48
-+ESPEAK_VERSION = $(ESPEAK_VERSION_MAJOR).04
- ESPEAK_SOURCE = espeak-$(ESPEAK_VERSION)-source.zip
- ESPEAK_SITE = http://downloads.sourceforge.net/project/espeak/espeak/espeak-$(ESPEAK_VERSION_MAJOR)
- ESPEAK_LICENSE = GPLv3+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
