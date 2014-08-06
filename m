@@ -1,45 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  6 Aug 2014 18:47:53 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] support/download: fix the git helper
-	output file format
-In-Reply-To: <cover.1407343550.git.yann.morin.1998@free.fr>
-References: <cover.1407343550.git.yann.morin.1998@free.fr>
-Message-ID: <2205cccc9b1580208e604067224448da94599151.1407343550.git.yann.morin.1998@free.fr>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 6 Aug 2014 18:55:17 +0200
+Subject: [Buildroot] support/download/wrapper expects file output in
+ temp directory but support/wrapper/git produces output.gz
+In-Reply-To: <20140806162934.GB3891@free.fr>
+References: <20131226222002.C88A59C1E4@busybox.osuosl.org>
+ <CACmBeS0dY9NiAPJCTzSQGSH_zx71HN00MJ6Xk0_jD8DjyDwBRw@mail.gmail.com>
+ <20140123181504.GB3446@free.fr>
+ <CAAXf6LWBScdsOP=E0wC_CGE63R=dq5g21rqaUsWhtfijmU20Wg@mail.gmail.com>
+ <53E249EC.9040805@peavey-eu.com> <20140806162934.GB3891@free.fr>
+Message-ID: <CAAXf6LU+mrkLV=mm2ifd+i0Oxn8EQjEhbmg_nirLygGJhRrMjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The git helper uses gzip to compress the intermediate tarball. But gzip
-removes the source file, and create a new file named by appending .gz to
-the original file name.
+On Wed, Aug 6, 2014 at 6:29 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Graham, All,
+>
+> On 2014-08-06 16:29 +0100, Graham Newton spake thusly:
+>> Running support/download/wrapper git fails because the final instruction of
+>> support/download/git gzips the output file creating output.gz which wrapper
+>> isn't expecting.
+>
+> Doh... I wonder how I could let this slip through... :-(
 
-Thus, we end up with output.gz, while the download wrapper expects jsut
-output, and thus believes the downlaod failed.
+I also should have caught this in my testing. I now understand why
+this happened: sources.buildroot.net also contains the tar file of the
+package I tried in my testing, and I did not actually verify the build
+output. Since the package was downloaded and the contents looked ok, I
+assumed the git download wrapper was fine.
+Very bad testing on my part, my apologies!
 
-Fix that by storing the tar from git to a temporary file, then pipe this
-file to gzip's stdin, and redirect gzip's stdout to the output file.
-
-Reported-by: Graham Newton <gnewton@peavey-eu.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
----
- support/download/git | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/support/download/git b/support/download/git
-index d451530..ff6b5c3 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -34,6 +34,6 @@ if [ ${git_done} -eq 0 ]; then
- fi
- 
- GIT_DIR="${basename}" \
--${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar "${cset}"
-+${GIT} archive --prefix="${basename}/" -o "${output}.tmp" --format=tar "${cset}"
- 
--gzip "${output}"
-+gzip <"${output}.tmp" >"${output}"
--- 
-1.9.1
+Best regards,
+Thomas
