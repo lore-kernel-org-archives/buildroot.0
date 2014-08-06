@@ -1,26 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 22:17:50 +0200
-Subject: [Buildroot] [git commit] python: renumber patch
-Message-ID: <20140806201756.2408C9D31C@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  6 Aug 2014 17:17:47 -0300
+Subject: [Buildroot] [PATCH] toolchain: fix 3.16 selection for custom version
+Message-ID: <1407356267-3005-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2d0166e76c63ae767ea91922907aa8a1c1dbb84c
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix d'oh typo from 911516f1b6dec4b2985a1f454949f8d9d10f6ef5 that
+prevents custom version string 3.16 headers from working properly.
 
-Advance the serial number of a patch from 015 to 016 to avoid collision and
-confusion.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...ch => python-016-serial-ioctl-workaround.patch} |    0
- 1 files changed, 0 insertions(+), 0 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python/python-015-serial-ioctl-workaround.patch b/package/python/python-016-serial-ioctl-workaround.patch
-similarity index 100%
-rename from package/python/python-015-serial-ioctl-workaround.patch
-rename to package/python/python-016-serial-ioctl-workaround.patch
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0af5974..4d9378e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -82,7 +82,7 @@ choice
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16
+ 	bool "3.16.x"
+-	select BR2_PACKAGE_HEADERS_AT_LEAST_3_16
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
+ 	bool "3.15.x"
+-- 
+1.8.5.5
