@@ -1,33 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Aug 2014 17:17:47 -0300
-Subject: [Buildroot] [PATCH] toolchain: fix 3.16 selection for custom version
-Message-ID: <1407356267-3005-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 6 Aug 2014 22:18:11 +0200
+Subject: [Buildroot] [PATCH 1/2] python3: fix termios build for xtensa
+In-Reply-To: <5bbe7610b89e16341ca9456ae5b8aad67652b61b.1407349862.git.baruch@tkos.co.il>
+References: <5bbe7610b89e16341ca9456ae5b8aad67652b61b.1407349862.git.baruch@tkos.co.il>
+Message-ID: <20140806221811.13b2ea64@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix d'oh typo from 911516f1b6dec4b2985a1f454949f8d9d10f6ef5 that
-prevents custom version string 3.16 headers from working properly.
+Dear Baruch Siach,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed,  6 Aug 2014 21:31:01 +0300, Baruch Siach wrote:
+> Forward port the patch from c821210b1bfa (python: fix termios build for
+> xtensa) to python3.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/e7f/e7f71fbcb0796f315052947382fa39d85c5dc8fe/
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  .../python3-014-serial-ioctl-workaround.patch      | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>  create mode 100644 package/python3/python3-014-serial-ioctl-workaround.patch
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0af5974..4d9378e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -82,7 +82,7 @@ choice
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16
- 	bool "3.16.x"
--	select BR2_PACKAGE_HEADERS_AT_LEAST_3_16
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
- 	bool "3.15.x"
+Both patches applied, thanks!
+
+Thomas
 -- 
-1.8.5.5
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
