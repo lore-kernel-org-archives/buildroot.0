@@ -1,173 +1,92 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Wed, 06 Aug 2014 22:26:22 +0100
-Subject: [Buildroot] [v2 1/2] caps: new package
-In-Reply-To: <20140806221449.2aff1359@free-electrons.com>
-References: <1407283327-5150-1-git-send-email-martin@barkynet.com>
- <20140806221449.2aff1359@free-electrons.com>
-Message-ID: <53E29D7E.4020906@barkynet.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 6 Aug 2014 23:48:52 +0200
+Subject: [Buildroot] [PATCH v5] bcache-tools: Adding package.
+In-Reply-To: <1407259782-6012-1-git-send-email-jcd@tribudubois.net>
+References: <1407259782-6012-1-git-send-email-jcd@tribudubois.net>
+Message-ID: <20140806214852.GG1587@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Jean-Christophe, All,
 
-On 06/08/14 21:14, Thomas Petazzoni wrote:
-> Dear Martin Bark,
->
-> On Wed,  6 Aug 2014 01:02:06 +0100, Martin Bark wrote:
->> CAPS is a collection of audio plugins comprising virtual guitar
->> amplification and a small range of basic classic effects, signal
->> processors and generators of often elementary and occasionally
->> exotic nature.
->>
->> The plugins aim to satisfy the highest demands in sound quality
->> with maximal computational efficiency and zero latency.
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->> CC: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>
->> ---
->>
->> Changes v1 -> v2:
->>    - Added dependency to BR2_INSTALL_LIBSTDCPP (Thomas Petazzoni)
->>    - Add description and Signed-off-by to patch (Thomas Petazzoni)
->>    - Fixed use of $(TARGET_CONFIGURE_OPTS) and $(TARGET_MAKE_ENV) (Thomas Petazzoni)
->
-> Thanks for this new version. Review-wise, it looks good, but
-> unfortunately, it doesn't build here:
->
-> /home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -pipe -Os  -fPIC -DPIC  -o Eq.o -c Eq.cc
-> In file included from dsp/Oversampler.h:35:0,
->                   from Amp.h:35,
->                   from Amp.cc:30:
-> dsp/windows.h: In function ?void DSP::kaiser(sample_t*, int, double, double)?:
-> dsp/windows.h:165:17: error: there are no arguments to ?finite? that depend on a template parameter, so a declaration of ?finite? must be available [-fpermissive]
-> dsp/windows.h:165:17: note: (if you use ?-fpermissive?, G++ will accept your code, but allowing the use of an undeclared name is deprecated)
-> In file included from Eq.h:36:0,
->                   from Eq.cc:33:
-> dsp/v4f_BiQuad.h: In member function ?void DSP::BiQuad4f::set_eq(v4f_t, v4f_t, v4f_t)?:
-> dsp/v4f_BiQuad.h:145:17: error: ?pow10f? was not declared in this scope
-> dsp/v4f_BiQuad.h:145:27: error: no matching function for call to ?v4f_map(v4f_t&)?
-> dsp/v4f_BiQuad.h:145:27: note: candidate is:
-> In file included from Eq.h:35:0,
->                   from Eq.cc:33:
-> dsp/v4f.h:74:7: note: template<float (* fn)(float)> v4f_t v4f_map(v4f_t)
-> dsp/v4f.h:74:7: note:   template argument deduction/substitution failed:
-> In file included from Eq.h:36:0,
->                   from Eq.cc:33:
-> dsp/v4f_BiQuad.h:145:27: error: template argument 1 is invalid
-> In file included from Compress.h:36:0,
->                   from Compress.cc:28:
-> dsp/windows.h: In function ?void DSP::kaiser(sample_t*, int, double, double)?:
-> dsp/windows.h:165:17: error: there are no arguments to ?finite? that depend on a template parameter, so a declaration of ?finite? must be available [-fpermissive]dsp/v4f_BiQuad.h: In member function ?void DSP::BiQuad4fBank<N>::set_eq(v4f_t*, v4f_t*, v4f_t*)?:
-> dsp/v4f_BiQuad.h:432:18: error: ?pow10f? was not declared in this scope
->
-> dsp/windows.h:165:17: note: (if you use ?-fpermissive?, G++ will accept your code, but allowing the use of an undeclared name is deprecated)
-> dsp/windows.h: In instantiation of ?void DSP::kaiser(sample_t*, int, double, double) [with void (* F)(sample_t&, sample_t) = DSP::apply_window; sample_t = float]?:
-> dsp/Oversampler.h:73:5:   required from ?void DSP::Oversampler<Oversample, FIRSize>::init(float) [with int Oversample = 2; int FIRSize = 32]?
-> dsp/Oversampler.h:65:6:   required from ?DSP::Oversampler<Oversample, FIRSize>::Oversampler() [with int Oversample = 2; int FIRSize = 32]?
-> Amp.h:44:7:   required from ?static void* Descriptor<T>::_instantiate(const _LADSPA_Descriptor*, ulong) [with T = AmpVTS; LADSPA_Handle = void*; _LADSPA_Descriptor = _LADSPA_Descriptor; ulong = long unsigned int]?
-> Descriptor.h:123:5:   required from ?void Descriptor<T>::autogen() [with T = AmpVTS]?
-> Amp.cc:222:2:   required from here
-> dsp/windows.h:165:3: error: ?finite? was not declared in this scope
-> dsp/windows.h: In instantiation of ?void DSP::kaiser(sample_t*, int, double, double) [with void (* F)(sample_t&, sample_t) = DSP::apply_window; sample_t = float]?:
-> Compress.h:53:5:   required from ?void CompSaturate<Over, FIRSize>::init(double) [with int Over = 2; int FIRSize = 32]?
-> Compress.h:123:6:   required from ?void CompressStub<Channels>::init() [with int Channels = 1]?
-> Descriptor.h:150:5:   required from ?static void* Descriptor<T>::_instantiate(const _LADSPA_Descriptor*, ulong) [with T = Compress; LADSPA_Handle = void*; _LADSPA_Descriptor = _LADSPA_Descriptor; ulong = long unsigned int]?
-> Descriptor.h:123:5:   required from ?void Descriptor<T>::autogen() [with T = Compress]?
-> Compress.cc:157:2:   required from here
-> dsp/windows.h:165:3: error: ?finite? was not declared in this scope
-> make[1]: *** [Eq.o] Erreur 1
-> make[1]: *** Attente des t?ches non termin?es....
-> make[1]: *** [Amp.o] Erreur 1
-> In file included from dsp/Oversampler.h:35:0,
->                   from Cabinet.h:42,
->                   from Click.cc:158:
-> dsp/windows.h: In function ?void DSP::kaiser(sample_t*, int, double, double)?:
-> dsp/windows.h:165:17: error: there are no arguments to ?finite? that depend on a template parameter, so a declaration of ?finite? must be available [-fpermissive]
-> dsp/windows.h:165:17: note: (if you use ?-fpermissive?, G++ will accept your code, but allowing the use of an undeclared name is deprecated)
-> In file included from Cabinet.h:45:0,
->                   from Click.cc:158:
-> dsp/v4f_BiQuad.h: In member function ?void DSP::BiQuad4f::set_eq(v4f_t, v4f_t, v4f_t)?:
-> dsp/v4f_BiQuad.h:145:17: error: ?pow10f? was not declared in this scope
-> dsp/v4f_BiQuad.h:145:27: error: no matching function for call to ?v4f_map(v4f_t&)?
-> dsp/v4f_BiQuad.h:145:27: note: candidate is:
-> In file included from Cabinet.h:43:0,
->                   from Click.cc:158:
-> dsp/v4f.h:74:7: note: template<float (* fn)(float)> v4f_t v4f_map(v4f_t)
-> dsp/v4f.h:74:7: note:   template argument deduction/substitution failed:
-> In file included from Cabinet.h:45:0,
->                   from Click.cc:158:
-> dsp/v4f_BiQuad.h:145:27: error: template argument 1 is invalid
-> dsp/v4f_BiQuad.h: In member function ?void DSP::BiQuad4fBank<N>::set_eq(v4f_t*, v4f_t*, v4f_t*)?:
-> dsp/v4f_BiQuad.h:432:18: error: ?pow10f? was not declared in this scope
-> make[1]: *** [Compress.o] Erreur 1
-> In file included from dsp/Oversampler.h:35:0,
->                   from Cabinet.h:42,
->                   from Cabinet.cc:29:
-> dsp/windows.h: In function ?void DSP::kaiser(sample_t*, int, double, double)?:
-> dsp/windows.h:165:17: error: there are no arguments to ?finite? that depend on a template parameter, so a declaration of ?finite? must be available [-fpermissive]
-> dsp/windows.h:165:17: note: (if you use ?-fpermissive?, G++ will accept your code, but allowing the use of an undeclared name is deprecated)
-> In file included from Cabinet.h:45:0,
->                   from Cabinet.cc:29:
-> dsp/v4f_BiQuad.h: In member function ?void DSP::BiQuad4f::set_eq(v4f_t, v4f_t, v4f_t)?:
-> dsp/v4f_BiQuad.h:145:17: error: ?pow10f? was not declared in this scope
-> dsp/v4f_BiQuad.h:145:27: error: no matching function for call to ?v4f_map(v4f_t&)?
-> dsp/v4f_BiQuad.h:145:27: note: candidate is:
-> In file included from Cabinet.h:43:0,
->                   from Cabinet.cc:29:
-> dsp/v4f.h:74:7: note: template<float (* fn)(float)> v4f_t v4f_map(v4f_t)
-> dsp/v4f.h:74:7: note:   template argument deduction/substitution failed:
-> In file included from Cabinet.h:45:0,
->                   from Cabinet.cc:29:
-> dsp/v4f_BiQuad.h:145:27: error: template argument 1 is invalid
-> dsp/v4f_BiQuad.h: In member function ?void DSP::BiQuad4fBank<N>::set_eq(v4f_t*, v4f_t*, v4f_t*)?:
-> dsp/v4f_BiQuad.h:432:18: error: ?pow10f? was not declared in this scope
-> make[1]: *** [Click.o] Erreur 1
-> In file included from dsp/Oversampler.h:35:0,
->                   from Cabinet.h:42,
->                   from Cabinet.cc:29:
-> dsp/windows.h: In instantiation of ?void DSP::kaiser(sample_t*, int, double, double) [with void (* F)(sample_t&, sample_t) = DSP::apply_window; sample_t = float]?:
-> dsp/Oversampler.h:73:5:   required from ?void DSP::Oversampler<Oversample, FIRSize>::init(float) [with int Oversample = 4; int FIRSize = 64]?
-> Cabinet.cc:251:31:   required from here
-> dsp/windows.h:165:3: error: ?finite? was not declared in this scope
-> make[1]: *** [Cabinet.o] Erreur 1
-> make[1]: quittant le r?pertoire ? /home/thomas/projets/buildroot/output/build/caps-0.9.23 ?
-> make: *** [/home/thomas/projets/buildroot/output/build/caps-0.9.23/.stamp_built] Erreur 2
->
-> You can use this defconfig to reproduce the problem:
->
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2014.05-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_14=y
-> BR2_TOOLCHAIN_EXTERNAL_LARGEFILE=y
-> BR2_TOOLCHAIN_EXTERNAL_INET_IPV6=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_CAPS=y
-> # BR2_TARGET_ROOTFS_TAR is not set
->
-> Thanks,
->
-> Thomas
->
+On 2014-08-05 19:29 +0200, Jean-Christophe DUBOIS spake thusly:
+> This is the bcache tools, required to setup the linux bcache
+> feature of the Linux kernel.
 
-Thanks for running the test.  After a quick looks it seems the finite() 
-and pow10f() functions are the issue.  I tried a quick change to use 
-isfinite() and powf(10,x) instead and that builds.
+We're almost there! :-)
 
-I'm off on holiday now for a week so I?ll create an updated patch when i 
-get back.
+> Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+[--SNIP--]
+> diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+> new file mode 100644
+> index 0000000..383ba1f
+> --- /dev/null
+> +++ b/package/bcache-tools/Config.in
+[--SNIP--]
+> +comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
+> +	depends on BR2_USE_MMU
+> +        depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
 
-Thanks
+Leading TAB, please.
 
-Martin
+> diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+> new file mode 100644
+> index 0000000..5e451cf
+> --- /dev/null
+> +++ b/package/bcache-tools/bcache-tools.mk
+> @@ -0,0 +1,39 @@
+> +################################################################################
+> +#
+> +# bcache-tools
+> +#
+> +################################################################################
+> +
+> +BCACHE_TOOLS_VERSION = v1.0.7
+> +BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
+> +BCACHE_TOOLS_LICENSE = GPLv2
+> +BCACHE_TOOLS_LICENSE_FILES = COPYING
+> +BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
+> +
+> +# We need to use the BR2 host pkg-config binary in the Makefile
+> +define BCACHE_TOOLS_FIX_PKGCONFIG
+> +	$(SED) 's^`pkg-config^`$(PKG_CONFIG_HOST_BINARY)^' \
+> +		$(BCACHE_TOOLS_DIR)/Makefile
+> +endef
+
+This is not needed, since the host directory comes early in the PATH, so
+it finds our own pkg-config.
+
+> +BCACHE_TOOLS_POST_EXTRACT_HOOKS += BCACHE_TOOLS_FIX_PKGCONFIG
+> +
+> +# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
+> +# the bcache-tools Makefile to alter CFLAGS
+> +define BCACHE_TOOLS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +# The bcache-tools Makefile expects the man8 directory to exist.
+> +define BCACHE_TOOLS_INSTALL_MAN8
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
+> +endef
+
+In Buildroot, the man pages are simply removed from the target/ dir jsut
+prior to generatign the filesystem images.
+
+Then, why not simply patch the Makefile to not install them in the first
+place? Like, in a post-extract hook.
+
+Thanks for your persistence! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
