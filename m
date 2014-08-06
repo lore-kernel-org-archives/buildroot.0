@@ -1,38 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 13:19:20 +0200
-Subject: [Buildroot] [PATCH 1/1] jack2: Added staging
-In-Reply-To: <CAFfn7UnVM+P0KXgSX3OXSv1fYAFBOR8ikfFZzexFo=-+NvyfOw@mail.gmail.com>
-References: <1407311713-30045-1-git-send-email-pieter.degendt@gmail.com>
- <fb1133f6-4157-4458-9fb4-ede779eb6dea@email.android.com>
- <CAFfn7Uk7k+q1QxhOteqy_NT+4-cPYN8UMRi1wP7ASi4_RVi2Tw@mail.gmail.com>
- <c70f3b3c-8ff0-4237-8633-9d893a935eb9@email.android.com>
- <CAFfn7UnVM+P0KXgSX3OXSv1fYAFBOR8ikfFZzexFo=-+NvyfOw@mail.gmail.com>
-Message-ID: <20140806131920.39351d62@free-electrons.com>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Wed,  6 Aug 2014 13:40:36 +0200
+Subject: [Buildroot] [PATCHv2 1/1] jack2: Added staging
+Message-ID: <1407325236-9823-1-git-send-email-pieter.degendt@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Pieter De Gendt,
 
-On Wed, 6 Aug 2014 10:53:32 +0200, Pieter De Gendt wrote:
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+---
+Use waf build system to copy staging files iso doing it manually.
 
-> Ok but from the waf build system help I don't see the option to copy the
-> header files.. Would this mean that the manual copy is still valid?
+ package/jack2/jack2.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Just do the installation, as done in JACK2_INSTALL_TARGET_CMDS. I.e, do:
-
-define JACK2_INSTALL_STAGING_CMDS
-	(cd $(@D); $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) install)
-endef
-
-Most likely waf is installing the header files. You simply don't seem
-them at the end of the target because Buildroot removes all header
-files from the target directory at the end of the build.
-
-Thomas
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 68f6e42..3f52ff4 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -8,6 +8,7 @@ JACK2_VERSION = ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
+ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
++JACK2_INSTALL_STAGING = YES
+ 
+ define JACK2_CONFIGURE_CMDS
+ 	(cd $(@D); \
+@@ -27,4 +28,9 @@ define JACK2_INSTALL_TARGET_CMDS
+ 		install)
+ endef
+ 
++define JACK2_INSTALL_STAGING_CMDS
++	(cd $(@D); $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) \
++		install)
++endef
++
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.9.5
