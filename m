@@ -1,25 +1,48 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Wed, 6 Aug 2014 10:22:14 +0200
-Subject: [Buildroot] [PATCH] iproute2: bump to version 3.16.0
-In-Reply-To: <1407289694-6017-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407289694-6017-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <CAHkwnC8TfDVcctSKm9g_8tCWtRp-nGCF0NxLuS69kY9gs==u9Q@mail.gmail.com>
+From: Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+Date: Wed, 06 Aug 2014 09:23:58 +0100
+Subject: [Buildroot] [PATCH] gdb: don't block building on AArch64 systems
+In-Reply-To: <CAFbHwiRnPZhnXVwZbZreJS-DsO2c8xe1S8=72yH0R7y_bHdFug@mail.gmail.com>
+References: <1407244453-3082-1-git-send-email-alex.bennee@linaro.org>
+ <20140805162059.26366e25@free-electrons.com>
+ <CAFbHwiRnPZhnXVwZbZreJS-DsO2c8xe1S8=72yH0R7y_bHdFug@mail.gmail.com>
+Message-ID: <87wqamja43.fsf@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 6, 2014 at 3:48 AM, Gustavo Zacarias
-<gustavo@zacarias.com.ar> wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/iproute2/iproute2.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tested-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-[ext toolchain, ext toolchain + allyespackageconfig + revdeps]
+Will Newton writes:
 
-BR
+> On Tue, Aug 5, 2014 at 3:20 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Dear Alex Benn?e,
+>>
+>> On Tue,  5 Aug 2014 14:14:13 +0100, Alex Benn?e wrote:
+>>> There is no real reason to disable the building of GDB. I suspect the
+>>> original patch (be084204) which added the restriction did so not
+>>> realising that AArch64 has had thread support in it's toolchain for some
+>>> time.
+>>
+>> be084204 did not add the AArch64 exception: it only made sure the
+>> comments about threads being needed would not be shown on AArch64,
+>> because gdb is never available on AArch64.
+>>
+>> The real commit who made gdb unavailable on AArch64 is
+>> 0e49733b306b353aad3a29a2c7a6faf25841ef0b. I believe at the time (April
+>> 2013), AArch64 was maybe not supported in the mainline gdb.
+
+My mistake, I got lost in the maze of GDB Config.in changes.
+
+>>
+>> Therefore, could you check when AArch64 support was added in mainline
+>> gdb ? We currently allow selecting either gdb 7.6 and 7.7 in Buildroot.
+>
+> AArch64 has been supported since gdb 7.6 (although 7.8 is much nicer
+> to use due to bug fixes).
+
+I'll resubmit with a re-worded commit message.
+
 -- 
-Fabio Porcedda
+Alex Benn?e
