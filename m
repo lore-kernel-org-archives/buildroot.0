@@ -1,80 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Aug 2014 23:02:33 +0200
-Subject: [Buildroot] [git commit] configs/imx233_olinuxino: bump to kernel
-	3.16
-Message-ID: <20140806210237.9E1CF9D342@busybox.osuosl.org>
+Date: Wed, 6 Aug 2014 23:02:58 +0200
+Subject: [Buildroot] [git commit] toolchain: fix 3.16 selection for custom
+	version
+Message-ID: <20140806210309.3D8EA9D3C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8054d8da307e3b5cf10cdd58c023e25ca203deb4
+commit: http://git.buildroot.net/buildroot/commit/?id=e3d3a49a831fcf45fb850be263c0c5c7abf32c8d
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fix d'oh typo from 911516f1b6dec4b2985a1f454949f8d9d10f6ef5 that
+prevents custom version string 3.16 headers from working properly.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../{linux-3.13.config => linux-3.16.config}       |    4 +---
- configs/olimex_imx233_olinuxino_defconfig          |    8 ++++----
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/linux-headers/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/board/olimex/imx233_olinuxino/linux-3.13.config b/board/olimex/imx233_olinuxino/linux-3.16.config
-similarity index 98%
-rename from board/olimex/imx233_olinuxino/linux-3.13.config
-rename to board/olimex/imx233_olinuxino/linux-3.16.config
-index 61e2421..4795023 100644
---- a/board/olimex/imx233_olinuxino/linux-3.13.config
-+++ b/board/olimex/imx233_olinuxino/linux-3.16.config
-@@ -53,7 +53,6 @@ CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_DATAFLASH=y
--CONFIG_MTD_M25P80=y
- CONFIG_MTD_SST25L=y
- CONFIG_MTD_NAND=y
- CONFIG_MTD_NAND_GPMI_NAND=y
-@@ -132,7 +131,6 @@ CONFIG_USB_CHIPIDEA=y
- CONFIG_USB_CHIPIDEA_HOST=y
- CONFIG_USB_MXS_PHY=y
- CONFIG_MMC=y
--CONFIG_MMC_UNSAFE_RESUME=y
- CONFIG_MMC_MXS=y
- CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_GPIO=y
-@@ -167,7 +165,7 @@ CONFIG_KEYS=y
- CONFIG_CRYPTO_DEFLATE=y
- CONFIG_CRYPTO_LZO=y
- # CONFIG_CRYPTO_ANSI_CPRNG is not set
--CONFIG_CRYPTO_DEV_DCP=y
-+CONFIG_CRYPTO_DEV_MXS_DCP=y
- CONFIG_CRC_CCITT=y
- CONFIG_CRC_ITU_T=y
- CONFIG_CRC7=m
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 2ee9ce6..d516cb4 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -15,8 +15,8 @@ BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0af5974..4d9378e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -82,7 +82,7 @@ choice
  
- # Lock headers version to match and avoid breakage
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="3.13.6"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+BR2_DEFAULT_KERNEL_VERSION="3.16"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16
+ 	bool "3.16.x"
+-	select BR2_PACKAGE_HEADERS_AT_LEAST_3_16
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
  
- # Bootloader
- BR2_TARGET_MXS_BOOTLETS=y
-@@ -27,9 +27,9 @@ BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME="imx23_olinuxino_dev"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
--BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.13.config"
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.16.config"
- BR2_LINUX_KERNEL_PATCH="http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/101-soc-audio-dts.patch http://github.com/koliqi/imx23-olinuxino/raw/3.12-rc2/kernel/ASoC_driver_for_i.MX233.patch"
- BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
+ 	bool "3.15.x"
