@@ -1,58 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 6 Aug 2014 18:24:22 +0200
-Subject: [Buildroot] [PATCH v2] support/download: fix the git helper
-In-Reply-To: <1407279414-26210-1-git-send-email-ps.report@gmx.net>
-References: <1407279414-26210-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20140806162422.GA3891@free.fr>
+Date: Wed, 6 Aug 2014 18:29:34 +0200
+Subject: [Buildroot] support/download/wrapper expects file output in
+ temp directory but support/wrapper/git produces output.gz
+In-Reply-To: <53E249EC.9040805@peavey-eu.com>
+References: <20131226222002.C88A59C1E4@busybox.osuosl.org>
+ <CACmBeS0dY9NiAPJCTzSQGSH_zx71HN00MJ6Xk0_jD8DjyDwBRw@mail.gmail.com>
+ <20140123181504.GB3446@free.fr>
+ <CAAXf6LWBScdsOP=E0wC_CGE63R=dq5g21rqaUsWhtfijmU20Wg@mail.gmail.com>
+ <53E249EC.9040805@peavey-eu.com>
+Message-ID: <20140806162934.GB3891@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Graham, All,
 
-On 2014-08-06 00:56 +0200, Peter Seiderer spake thusly:
-> Re-add the git_done variable (lost in commit [1])
-> and change result file from 'output.gz' to 'output'.
-> 
-> Fixes download problem reported by Rohit Kumar [2].
-> 
-> [1] http://git.buildroot.net/buildroot/commit/?id=7e40a1103a919a8177f00ddca2b46b4439953511
-> [2] http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> ---
-> Change v1->v2:
->   - produce file 'output' instead of 'output.gz'
-> ---
->  support/download/git | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/support/download/git b/support/download/git
-> index 6edaa90..47e1e52 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -19,6 +19,7 @@ basename="${4}"
->  
->  # Try to see if we can do a shallow clone, since it is faster
->  # than a full clone.
-> +git_done=0
->  if [ -n "$(${GIT} ls-remote "${repo}" "${cset}" 2>&1)" ]; then
->      printf "Doing shallow clone\n"
->      if ${GIT} clone --depth 1 -b "${cset}" --bare "${repo}" "${basename}"; then
-> @@ -33,6 +34,4 @@ if [ ${git_done} -eq 0 ]; then
->  fi
->  
->  GIT_DIR="${basename}" \
-> -${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar "${cset}"
-> -
-> -gzip "${output}"
-> +${GIT} archive --prefix="${basename}/" -o "${output}" --format=tar.gz "${cset}"
+On 2014-08-06 16:29 +0100, Graham Newton spake thusly:
+> Running support/download/wrapper git fails because the final instruction of
+> support/download/git gzips the output file creating output.gz which wrapper
+> isn't expecting.
 
-NAK. Versions of git older than 1.7.6 do not support --format=tar.gz,
-hence the reason why we do the archive in two steps.
+Doh... I wonder how I could let this slip through... :-(
+
+> Example:
+> 
+> gnewton at ey-debx64-vm01 ~/Working/LinuxBuild $ support/download/wrapper git
+> /home/gnewton/Working/LinuxBuild/dl/linux-ti816x_graham_dev.tar.gz
+> gitolite at ey-ubsx64-svr02:LinuxKernel ti816x_graham_dev
+> linux-ti816x_graham_dev
+> Doing shallow clone
+> Cloning into bare repository 'linux-ti816x_graham_dev'...
+> remote: Counting objects: 48600, done.
+> remote: Compressing objects: 100% (46466/46466), done.
+> Receiving objects: 100% (48600/48600), 143.16 MiB | 13.99 MiB/s, done.
+> remote: Total 48600 (delta 3863), reused 25085 (delta 1546)
+> Resolving deltas: 100% (3863/3863), done.
+> Checking connectivity... done.
+> cat: /home/gnewton/Working/LinuxBuild/output/build/.linux-ti816x_graham_dev.tar.gz.MX7pH9/output:
+> No such file or directory
+> 
+> Build root pulled from git://git.busybox.net/buildroot master today
+> (06/08/2014)
+> 
+> I assume the fix would be to either
+> i) in wrapper cat output.gz in the case of git
+> ii) copy output.gz to output after the gzip in support/download/git
+
+iii)
+    git archive >output.tmp
+    gzip -c -9 <output.tmp >output
+
+That's what I'm gonna implement.
+
+Thanks for the report!
 
 Regards,
 Yann E. MORIN.
