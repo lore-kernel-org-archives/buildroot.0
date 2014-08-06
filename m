@@ -1,30 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  5 Aug 2014 22:48:14 -0300
-Subject: [Buildroot] [PATCH] iproute2: bump to version 3.16.0
-Message-ID: <1407289694-6017-1-git-send-email-gustavo@zacarias.com.ar>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Tue,  5 Aug 2014 22:41:52 -0400
+Subject: [Buildroot] [PATCH 1/1] manual: fix copy/paste error in python
+	package example
+Message-ID: <1407292912-2003-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The SOURCE references "LIBFOO_VERSION", should be "PYTHON_FOO_VERSION".
+
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- package/iproute2/iproute2.mk | 2 +-
+ docs/manual/adding-packages-python.txt |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index ad7fcf4..17c3c36 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPROUTE2_VERSION = 3.15.0
-+IPROUTE2_VERSION = 3.16.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index c4a13e0..46d140d 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -22,7 +22,7 @@ with an example :
+ 05: ################################################################################
+ 06:
+ 07: PYTHON_FOO_VERSION = 1.0
+-08: PYTHON_FOO_SOURCE = python-foo-$(LIBFOO_VERSION).tar.xz
++08: PYTHON_FOO_SOURCE = python-foo-$(PYTHON_FOO_VERSION).tar.xz
+ 09: PYTHON_FOO_SITE = http://www.foosoftware.org/download
+ 10: PYTHON_FOO_LICENSE = BSD-3c
+ 11: PYTHON_FOO_LICENSE_FILES = LICENSE
 -- 
-1.8.5.5
+1.7.9.5
