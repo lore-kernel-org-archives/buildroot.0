@@ -1,60 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed,  6 Aug 2014 08:30:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-05
-Message-ID: <20140806063012.6115F100F35@stock.ovh.net>
+From: Pieter De Gendt <pieter.degendt@gmail.com>
+Date: Wed,  6 Aug 2014 09:55:13 +0200
+Subject: [Buildroot] [PATCH 1/1] jack2: Added staging
+Message-ID: <1407311713-30045-1-git-send-email-pieter.degendt@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build statistics for 2014-08-05
-===============================
 
-        success : 88 
-       failures : 18 
-       timeouts : 0  
-          TOTAL : 106
+Signed-off-by: Pieter De Gendt <pieter.degendt@gmail.com>
+---
+ package/jack2/jack2.mk |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Classification of failures by reason
-====================================
-
-              libarchive-3.1.2 | 2 
-                espeak-1.47.11 | 2 
-             lttng-tools-2.4.1 | 2 
-                 gnupg2-2.0.25 | 2 
-                libroxml-2.3.0 | 2 
-              gutenprint-5.2.9 | 1 
-                  perl-gd-2.53 | 1 
-             bluez5_utils-5.21 | 1 
-           libmemcached-1.0.18 | 1 
-                  cppcms-1.0.4 | 1 
-                 webkit-1.11.5 | 1 
-                 python3-3.4.1 | 1 
-                upmpdcli-0.7.1 | 1 
-
-Detail of failures
-===================
-
-   powerpc |              bluez5_utils-5.21 | NOK | http://autobuild.buildroot.net/results/6aef2e4acea1cd238586f988e1a843a530661c3f/
-   powerpc |                   cppcms-1.0.4 | NOK | http://autobuild.buildroot.net/results/58da80a65b582187ea875fb3f542bfe53cce06dc/
-       arm |                 espeak-1.47.11 | NOK | http://autobuild.buildroot.net/results/f3903d2b4a16226df2d460dcd2e26c7fb87613ab/
-      bfin |                 espeak-1.47.11 | NOK | http://autobuild.buildroot.net/results/3eecee73e3177566713046c748065c55f519191f/
-       arm |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/d1aa740495b1a0a951feafd54f553ad239d29543/
-       arm |                  gnupg2-2.0.25 | NOK | http://autobuild.buildroot.net/results/cdc352a196fe896252a130cfc0bf9d15325d4473/
-   powerpc |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/aae3ca913dfb1fe975d3702ea6ea99b3db5c5f76/
-    mipsel |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/0fb15f864e1d78abb51ebf67323f00a43b1a5c82/
-microblazeel |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/66f2cc7ef6a5d69040c4c08e683feecd314a0784/
-      bfin |            libmemcached-1.0.18 | NOK | http://autobuild.buildroot.net/results/49571cd87382023f3d2fd28f6e87ff7c0fb43690/
-      bfin |                 libroxml-2.3.0 | NOK | http://autobuild.buildroot.net/results/dbbff605d49666612320f08128e0639e8fa53f3c/
-      bfin |                 libroxml-2.3.0 | NOK | http://autobuild.buildroot.net/results/2b3287a7b7a141ef596c632d725a20d3b9c8fb73/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/6bf91347dd9ede8a0b72f116b0fcc89db07f918e/
-       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/7cf1392e1e67ae6e21d3e0fc2965a096942a31a3/
-       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/d61b06880064bd8595afc020303fbf3ef04020d5/
-    xtensa |                  python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/e7f71fbcb0796f315052947382fa39d85c5dc8fe/
-     nios2 |                 upmpdcli-0.7.1 | NOK | http://autobuild.buildroot.net/results/6bab5574e868a8b59a6c4f1b4994f9c6ca2ee98b/
-       arm |                  webkit-1.11.5 | NOK | http://autobuild.buildroot.net/results/57bd4c5070480f91c33a09a15101eb12967207a0/
-
-
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index 68f6e42..e1c3197 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -8,6 +8,7 @@ JACK2_VERSION = ab409a65df95bc261ff72b52d6b3f4a65cf3266a
+ JACK2_SITE = $(call github,jackaudio,jack2,$(JACK2_VERSION))
+ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
++JACK2_INSTALL_STAGING = YES
+ 
+ define JACK2_CONFIGURE_CMDS
+ 	(cd $(@D); \
+@@ -27,4 +28,10 @@ define JACK2_INSTALL_TARGET_CMDS
+ 		install)
+ endef
+ 
++define JACK2_INSTALL_STAGING_CMDS
++	$(INSTALL) -m 0755 -d $(STAGING_DIR)/usr/include/jack
++	$(INSTALL) -m 0644 $(@D)/common/jack/*.h \
++		$(STAGING_DIR)/usr/include/jack
++endef
++
+ $(eval $(generic-package))
 -- 
-http://autobuild.buildroot.net
+1.7.9.5
