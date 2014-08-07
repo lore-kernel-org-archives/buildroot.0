@@ -1,41 +1,24 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  7 Aug 2014 09:30:43 -0300
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1i
-Message-ID: <1407414643-11152-1-git-send-email-gustavo@zacarias.com.ar>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 7 Aug 2014 13:43:38 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-08-06
+In-Reply-To: <20140807063009.87605101249@stock.ovh.net>
+References: <20140807063009.87605101249@stock.ovh.net>
+Message-ID: <53E3747A.9070407@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2014-3508 - Information leak in pretty printing functions
-CVE-2014-5139 - Crash with SRP ciphersuite in Server Hello message
-CVE-2014-3509 - Race condition in ssl_parse_serverhello_tlsext
-CVE-2014-3505 - Double Free when processing DTLS packets
-CVE-2014-3506 - DTLS memory exhaustion
-CVE-2014-3507 - DTLS memory leak from zero-length fragments
-CVE-2014-3510 - OpenSSL DTLS anonymous EC(DH) denial of service
-CVE-2014-3511 - OpenSSL TLS protocol downgrade attack
-CVE-2014-3512 - SRP buffer overrun
+On 08/07/2014 07:30 AM, Thomas Petazzoni wrote:
+> Build statistics for 2014-08-06
+> ===============================
+>    mips64el |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/0bbf28ef38b03bfe754bf6ac966c4f350afdbc99/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/openssl/openssl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reported upstream. This affects more arches, not only MIPS.
 
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 7e49a65..4911034 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSL_VERSION = 1.0.1h
-+OPENSSL_VERSION = 1.0.1i
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+   https://bugs.freedesktop.org/show_bug.cgi?id=82292
+
 -- 
-1.8.5.5
+Vincent
