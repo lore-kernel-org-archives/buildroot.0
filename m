@@ -1,30 +1,44 @@
-From: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
-Date: Thu, 7 Aug 2014 13:07:23 -0700
-Subject: [Buildroot] [PATCH 1/1] linux: fix LINUX_SITE for release candidates
-Message-ID: <1407442043-11591-1-git-send-email-jtheou@adeneo-embedded.us>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 7 Aug 2014 22:13:14 +0200
+Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.1i
+Message-ID: <20140807201330.2F6F39D3D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
----
- linux/linux.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+commit: http://git.buildroot.net/buildroot/commit/?id=5dd65f26356e0f6ec2a8fd3b9c4f8655ded6effb
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index e433e0d..2fb7437 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -34,7 +34,7 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
- endif
- # release candidates are in testing/ subdir
- ifneq ($(findstring -rc,$(LINUX_VERSION)),)
--LINUX_SITE := $(LINUX_SITE)testing/
-+LINUX_SITE := $(LINUX_SITE)/testing/
- endif # -rc
- endif
+Fixes:
+CVE-2014-3508 - Information leak in pretty printing functions
+CVE-2014-5139 - Crash with SRP ciphersuite in Server Hello message
+CVE-2014-3509 - Race condition in ssl_parse_serverhello_tlsext
+CVE-2014-3505 - Double Free when processing DTLS packets
+CVE-2014-3506 - DTLS memory exhaustion
+CVE-2014-3507 - DTLS memory leak from zero-length fragments
+CVE-2014-3510 - OpenSSL DTLS anonymous EC(DH) denial of service
+CVE-2014-3511 - OpenSSL TLS protocol downgrade attack
+CVE-2014-3512 - SRP buffer overrun
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/openssl/openssl.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 7e49a65..4911034 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--- 
-2.0.3
+-OPENSSL_VERSION = 1.0.1h
++OPENSSL_VERSION = 1.0.1i
+ OPENSSL_SITE = http://www.openssl.org/source
+ OPENSSL_LICENSE = OpenSSL or SSLeay
+ OPENSSL_LICENSE_FILES = LICENSE
