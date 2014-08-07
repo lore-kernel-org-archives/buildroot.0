@@ -1,39 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Aug 2014 22:11:58 +0200
-Subject: [Buildroot] [git commit] mongoose: fix build failure
-Message-ID: <20140807201250.022D99D3D5@busybox.osuosl.org>
+From: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
+Date: Thu, 7 Aug 2014 13:07:23 -0700
+Subject: [Buildroot] [PATCH 1/1] linux: fix LINUX_SITE for release candidates
+Message-ID: <1407442043-11591-1-git-send-email-jtheou@adeneo-embedded.us>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=595300f892b4bd3fdf26ea744fe9ac8b70d938db
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-mongoose.h looks missing because we're not building locally, so add
-the appropriate -I flag. Fixes:
-http://autobuild.buildroot.net/results/701/701711626548bd166cd5bc5669e4761ffed074d1/
-
-[Thomas: change the solution to use -I$(@D) instead of switching to
-the build directory.]
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
 ---
- package/mongoose/mongoose.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 4182a30..e0104b4 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -19,7 +19,7 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e433e0d..2fb7437 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -34,7 +34,7 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
+ endif
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+-LINUX_SITE := $(LINUX_SITE)testing/
++LINUX_SITE := $(LINUX_SITE)/testing/
+ endif # -rc
  endif
  
- define MONGOOSE_BUILD_CMDS
--	$(TARGET_CC) $(@D)/examples/server.c $(@D)/mongoose.c \
-+	$(TARGET_CC) $(@D)/examples/server.c $(@D)/mongoose.c -I$(@D) \
- 		-o $(@D)/examples/server $(MONGOOSE_CFLAGS) -pthread -ldl
- 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
- 	$(TARGET_AR) rcs $(@D)/libmongoose.a $(@D)/mongoose.o
+-- 
+2.0.3
