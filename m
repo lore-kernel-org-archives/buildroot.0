@@ -1,33 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  7 Aug 2014 14:20:16 -0300
-Subject: [Buildroot] [PATCH] mongoose: fix build failure
-Message-ID: <1407432016-17434-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  7 Aug 2014 20:56:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iftop: fix static build
+Message-ID: <1407437800-13027-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mongoose.h looks missing because we're not building locally, so switch
-to the build dir. Fixes:
-http://autobuild.buildroot.net/results/701/701711626548bd166cd5bc5669e4761ffed074d1/
+Use pcap-config to list optional libpcap dependencies that we need to list
+when building statically.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Inspired by Baruch Siach
+http://git.buildroot.net/buildroot/commit/package/dhcpdump/dhcpdump.mk?id=429f4415cd153c6809394a8b3245d4d15bba3ec3
+
+Fixes
+http://autobuild.buildroot.net/results/c7e/c7e3b2897a9cb9ab55dc7b1a2cd1961235d2d1a4/
+http://autobuild.buildroot.net/results/60f/60f82bedae255f6b69c9a5ac22686c76c6276301/
+http://autobuild.buildroot.net/results/1b7/1b771af04a95a78144141a5d555c97bbb5a7e13f/
+http://autobuild.buildroot.net/results/1f4/1f45e2adcc80c4a209aa5895260985460933575c/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mongoose/mongoose.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/iftop/iftop.mk |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 4182a30..5f53721 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -19,6 +19,7 @@ MONGOOSE_CFLAGS += -DNS_ENABLE_SSL -lssl -lcrypto -lz
- endif
+diff --git a/package/iftop/iftop.mk b/package/iftop/iftop.mk
+index 24f8b53..ef162a8 100644
+--- a/package/iftop/iftop.mk
++++ b/package/iftop/iftop.mk
+@@ -10,4 +10,10 @@ IFTOP_DEPENDENCIES = ncurses libpcap
+ IFTOP_LICENSE = GPLv2+
+ IFTOP_LICENSE_FILES = COPYING
  
- define MONGOOSE_BUILD_CMDS
-+	cd $(@D) ; \
- 	$(TARGET_CC) $(@D)/examples/server.c $(@D)/mongoose.c \
- 		-o $(@D)/examples/server $(MONGOOSE_CFLAGS) -pthread -ldl
- 	$(TARGET_CC) -c $(@D)/mongoose.c $(MONGOOSE_CFLAGS) -o $(@D)/mongoose.o
++IFTOP_LIBS = -lpcap
++ifeq ($(BR2_PREFER_STATIC_LIB),y)
++IFTOP_LIBS += $(shell $(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs)
++endif
++IFTOP_CONF_ENV += LIBS+="$(IFTOP_LIBS)"
++
+ $(eval $(autotools-package))
 -- 
-1.8.5.5
+1.7.10.4
