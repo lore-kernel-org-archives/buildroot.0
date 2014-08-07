@@ -1,127 +1,63 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Aug 2014 22:55:03 -0300
-Subject: [Buildroot] [PATCH] qemu/aarch64-virt: add new sample config
-Message-ID: <1407376503-18449-1-git-send-email-gustavo@zacarias.com.ar>
+From: Rohit Kumar <rkthebest@gmail.com>
+Date: Thu, 7 Aug 2014 13:37:28 +0900
+Subject: [Buildroot] Buildroot 2014.08-git-01152-g10b6d10 make error
+Message-ID: <CABzetm2N+k4Vo6xQ7yVaRKf2-sh4ni-D4Btm82qHwy+K0kAw=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- board/qemu/aarch64-virt/linux-3.16.config | 57 +++++++++++++++++++++++++++++++
- board/qemu/aarch64-virt/readme.txt        |  7 ++++
- configs/qemu_aarch64_virt_defconfig       | 23 +++++++++++++
- 3 files changed, 87 insertions(+)
- create mode 100644 board/qemu/aarch64-virt/linux-3.16.config
- create mode 100644 board/qemu/aarch64-virt/readme.txt
- create mode 100644 configs/qemu_aarch64_virt_defconfig
+Hello,
 
-diff --git a/board/qemu/aarch64-virt/linux-3.16.config b/board/qemu/aarch64-virt/linux-3.16.config
-new file mode 100644
-index 0000000..594f424
---- /dev/null
-+++ b/board/qemu/aarch64-virt/linux-3.16.config
-@@ -0,0 +1,57 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_FHANDLE=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_TASKSTATS=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_PROFILING=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_BLK_DEV_BSGLIB=y
-+CONFIG_ARCH_VEXPRESS=y
-+CONFIG_SMP=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_BINFMT_MISC=y
-+CONFIG_COMPAT=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_PACKET_DIAG=y
-+CONFIG_UNIX=y
-+CONFIG_NET_KEY=y
-+CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_BRIDGE=y
-+CONFIG_NET_SCHED=y
-+CONFIG_VSOCKETS=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_CHR_DEV_SG=y
-+CONFIG_SCSI_MULTI_LUN=y
-+CONFIG_SCSI_CONSTANTS=y
-+CONFIG_SCSI_LOGGING=y
-+CONFIG_SCSI_SCAN_ASYNC=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_ATA=y
-+CONFIG_NETDEVICES=y
-+CONFIG_DUMMY=y
-+CONFIG_MACVLAN=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_NLMON=y
-+CONFIG_VT_HW_CONSOLE_BINDING=y
-+CONFIG_SERIAL_AMBA_PL011=y
-+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
-+CONFIG_MAILBOX=y
-+CONFIG_PL320_MBOX=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-diff --git a/board/qemu/aarch64-virt/readme.txt b/board/qemu/aarch64-virt/readme.txt
-new file mode 100644
-index 0000000..f011de1
---- /dev/null
-+++ b/board/qemu/aarch64-virt/readme.txt
-@@ -0,0 +1,7 @@
-+Run the emulation with:
-+
-+  qemu-system-aarch64 -M virt -cpu cortex-a57 -nographic -smp 1 -kernel output/images/Image -append "console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 2.1.0
-diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
-new file mode 100644
-index 0000000..8ce28a8
---- /dev/null
-+++ b/configs/qemu_aarch64_virt_defconfig
-@@ -0,0 +1,23 @@
-+# Architecture
-+BR2_aarch64=y
-+
-+# System
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+
-+# Filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Lock to 3.16 headers to avoid breaking with newer kernels
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.16"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.16"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux-3.16.config"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
--- 
-1.8.5.5
+i tried to build toolchain and file system for ARM cortex-A9 but stuck
+with this error.
+configuration file is also attached.
+--------------------------------------------------
+You will probably need to make your busybox binary
+setuid root to ensure all configured applets will
+work properly.
+--------------------------------------------------
+
+make[1]: Leaving directory
+`/home/rohit/Desktop/buildroot_odroid/output/build/busybox-1.22.1'
+if [ ! -f /home/rohit/Desktop/buildroot_odroid/output/target/usr/share/udhcpc/default.script
+]; then /usr/bin/install -m 0755 -D package/busybox/udhcpc.script
+/home/rohit/Desktop/buildroot_odroid/output/target/usr/share/udhcpc/default.script;
+fi
+[ -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S10mdev
+] || /usr/bin/install -D -m 0755 package/busybox/S10mdev
+/home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S10mdev
+[ -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/mdev.conf
+] || /usr/bin/install -D -m 0644 package/busybox/mdev.conf
+/home/rohit/Desktop/buildroot_odroid/output/target/etc/mdev.conf
+if grep -q CONFIG_SYSLOGD=y
+/home/rohit/Desktop/buildroot_odroid/output/build/busybox-1.22.1/.config;
+then [ -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S01logging
+] || /usr/bin/install -m 0755 -D package/busybox/S01logging
+/home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S01logging;
+else rm -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S01logging;
+fi
+>>> linux 0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b Downloading
+/home/rohit/Desktop/buildroot_odroid/support/download/git: line 30: [:
+-eq: unary operator expected
+fatal: Not a git repository: 'linux-0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b'
+--2014-08-07 13:35:00--
+http://sources.buildroot.net/linux-0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
+Connecting to sources.buildroot.net
+(sources.buildroot.net)|176.9.16.109|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2014-08-07 13:35:01 ERROR 404: Not Found.
+
+With Regards,
+
+Rohit Kumar
++82 1073149173
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: odroid_config
+Type: application/octet-stream
+Size: 43500 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140807/a4ec72da/attachment-0001.obj>
