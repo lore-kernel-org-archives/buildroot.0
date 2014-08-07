@@ -1,140 +1,259 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Th=C3=A9baudeau?= <benoit.thebaudeau@advansee.com>
-Date: Thu,  7 Aug 2014 17:24:28 +0200
-Subject: [Buildroot] [PATCH v4 1/1] rpi-userland: Fix vcfiled startup
-Message-ID: <1407425068-7820-1-git-send-email-benoit.thebaudeau@advansee.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 7 Aug 2014 17:42:46 +0200
+Subject: [Buildroot] [PATCH v3 1/4] cairo: Add dependency on atomic
+	intrinsics
+In-Reply-To: <1407154591-12753-1-git-send-email-Anton.Kolesov@synopsys.com>
+References: <20140803113216.03e0fb94@free-electrons.com>
+ <1407154591-12753-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <CAAXf6LURyGxEfQR+3g6xriwqUeE1E91Oav2X=r_C3YD66JzpEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The VideoCore file server daemon startup script installed from this package is
-not compatible with BuildRoot (because of its naming and other Debian
-dependencies), which prevented vcfiled from starting. Hence, prevent this
-package from installing its vcfiled startup script, and add a configuration
-option to install a vcfiled SysV init script suitable for BuildRoot.
+Hi Anton,
 
-Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
+On Mon, Aug 4, 2014 at 2:16 PM, Anton Kolesov
+<Anton.Kolesov@synopsys.com> wrote:
+> Cairo requires GCC built-in atomic functions which are architecture specific
+> and may not be implemented.
+>
+> This fixes:
+> http://autobuild.buildroot.net/results/fadfaa9916724d310d0dda555a1db31bee1601d0/
+>
+> Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+> ---
+>  package/cairo/Config.in                        | 4 ++++
+>  package/efl/libevas-generic-loaders/Config.in  | 6 ++++--
+>  package/gstreamer/gst-plugins-good/Config.in   | 4 ++++
+>  package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
+>  package/libgtk2/Config.in                      | 5 +++--
+>  package/librsvg/Config.in                      | 6 ++++--
+>  package/libsvg-cairo/Config.in                 | 4 ++++
+>  package/pango/Config.in                        | 5 +++--
+>  package/webkit/Config.in                       | 6 ++++--
+>  package/weston/Config.in                       | 4 ++++
+>  10 files changed, 38 insertions(+), 10 deletions(-)
+>
+> diff --git a/package/cairo/Config.in b/package/cairo/Config.in
+> index 0c87a29..2aeaa2a 100644
+> --- a/package/cairo/Config.in
+> +++ b/package/cairo/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_CAIRO
+>         bool "cairo"
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+>         select BR2_PACKAGE_PIXMAN
+>         select BR2_PACKAGE_FONTCONFIG
+>         select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+> @@ -13,6 +14,9 @@ config BR2_PACKAGE_CAIRO
+>
+>           http://cairographics.org/
+>
+> +comment "cairo needs a toolchain with atomic intrinsics"
+> +       depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 
----
+This should be 'w/' instead of 'with'
 
-Changes in v4:
- - Use /var/run/vcfiled.pid instead of /var/run/vcfiled/vcfiled for vcfiled's
-   PID file path.
+> +
+>  if BR2_PACKAGE_CAIRO
+>
+>  config BR2_PACKAGE_CAIRO_PS
+> diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
+> index 23b9f77..c7145d5 100644
+> --- a/package/efl/libevas-generic-loaders/Config.in
+> +++ b/package/efl/libevas-generic-loaders/Config.in
+> @@ -17,10 +17,12 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+>         depends on BR2_USE_WCHAR # librsvg -> glib2
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+>         depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>         help
+>           This option enables the Evas generic SVG loader
+>
+> -comment "SVG loader needs a toolchain w/ wchar, threads, C++"
+> -       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> +comment "SVG loader needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+> +               || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+>
+>  endif
+> diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
+> index 3ec93cf..8bc79a2 100644
+> --- a/package/gstreamer/gst-plugins-good/Config.in
+> +++ b/package/gstreamer/gst-plugins-good/Config.in
+> @@ -178,9 +178,13 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
+>
+>  config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CAIRO
+>         bool "cairo"
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+>         select BR2_PACKAGE_CAIRO
+>         select BR2_PACKAGE_CAIRO_PNG
+>
+> +comment "cairo needs a toolchain with atomic intrinsics"
+> +       depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 
-Changes in v3:
- - Add a config option to start this daemon.
+Same here
 
-Changes in v2:
- - Indent .mk rules with tabs.
- - Simplify the new vcfiled startup script.
- - Rename S97vcfiled to S94vcfiled for a better integration with existing init
-   scripts.
----
- package/rpi-userland/Config.in       |  7 ++++++
- package/rpi-userland/S94vcfiled      | 47 ++++++++++++++++++++++++++++++++++++
- package/rpi-userland/rpi-userland.mk | 13 +++++++++-
- 3 files changed, 66 insertions(+), 1 deletion(-)
- create mode 100755 package/rpi-userland/S94vcfiled
+> +
+>  config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
+>         bool "flac (libFLAC)"
+>         depends on BR2_USE_WCHAR # flac
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index 7159c5a..60ee17d 100644
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -274,11 +274,15 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
+>         bool "cairo"
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+>         select BR2_PACKAGE_CAIRO
+>         select BR2_PACKAGE_CAIRO_PNG
+>         help
+>           Cairo-based elements
+>
+> +comment "cairo needs a toolchain with atomic intrinsics"
+> +       depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> +
 
-diff --git a/package/rpi-userland/Config.in b/package/rpi-userland/Config.in
-index aeee5e1..89e99e0 100644
---- a/package/rpi-userland/Config.in
-+++ b/package/rpi-userland/Config.in
-@@ -31,6 +31,13 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
- config BR2_PACKAGE_PROVIDES_LIBOPENMAX
- 	default "rpi-userland"
- 
-+config BR2_PACKAGE_RPI_USERLAND_START_VCFILED
-+	bool "Start vcfiled"
-+	depends on BR2_INIT_SYSV || BR2_INIT_BUSYBOX
-+	help
-+	  vcfiled is a daemon serving files to VideoCore from the host filing
-+	  system.
-+
- endif
- 
- comment "rpi-userland needs a toolchain w/ C++, largefile, threads"
-diff --git a/package/rpi-userland/S94vcfiled b/package/rpi-userland/S94vcfiled
-new file mode 100755
-index 0000000..9a3e523
---- /dev/null
-+++ b/package/rpi-userland/S94vcfiled
-@@ -0,0 +1,47 @@
-+#!/bin/sh
-+
-+NAME=vcfiled
-+DESC="VideoCore file server daemon $NAME"
-+DAEMON="/usr/sbin/$NAME"
-+DAEMON_ARGS=""
-+CFGFILE="/etc/default/$NAME"
-+PIDFILE="/var/run/$NAME.pid"
-+
-+# Read configuration variable file if it is present
-+[ -r "$CFGFILE" ] && . "$CFGFILE"
-+
-+do_start()
-+{
-+	echo -n "Starting $DESC: "
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "$DAEMON" -- $DAEMON_ARGS &&
-+			echo "done" || echo "failed"
-+}
-+
-+do_stop()
-+{
-+	echo -n "Stopping $DESC: "
-+	if start-stop-daemon -K -q -R TERM/30/KILL/5 -p "$PIDFILE" -n "$NAME"; then
-+		# This daemon does not remove its PID file when it exits.
-+		rm -f "$PIDFILE"
-+		echo "done"
-+	else
-+		echo "failed"
-+	fi
-+}
-+
-+case "$1" in
-+	start)
-+		do_start
-+		;;
-+	stop)
-+		do_stop
-+		;;
-+	restart|reload)
-+		do_stop
-+		do_start
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}" >&2
-+		exit 1
-+		;;
-+esac
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 81ed95c..74a0056 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -9,11 +9,22 @@ RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
- RPI_USERLAND_LICENSE = BSD-3c
- RPI_USERLAND_LICENSE_FILES = LICENCE
- RPI_USERLAND_INSTALL_STAGING = YES
--RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr
-+RPI_USERLAND_CONF_OPT = -DVMCS_INSTALL_PREFIX=/usr \
-+	-DCMAKE_C_FLAGS="-DVCFILED_LOCKFILE=\\\"/var/run/vcfiled.pid\\\""
- 
- RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
- 
-+ifeq ($(BR2_PACKAGE_RPI_USERLAND_START_VCFILED),y)
-+define RPI_USERLAND_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D package/rpi-userland/S94vcfiled \
-+			$(TARGET_DIR)/etc/init.d/S94vcfiled
-+endef
-+endif
-+
- define RPI_USERLAND_POST_TARGET_CLEANUP
-+	rm -f $(TARGET_DIR)/etc/init.d/vcfiled
-+	rm -f $(TARGET_DIR)/usr/share/install/vcfiled
-+	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/install
- 	rm -Rf $(TARGET_DIR)/usr/src
- endef
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
--- 
-1.9.1
+and here
+
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
+>         bool "flac (libFLAC)"
+>         depends on BR2_USE_WCHAR # flac
+> diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+> index 5239c25..ce70256 100644
+> --- a/package/libgtk2/Config.in
+> +++ b/package/libgtk2/Config.in
+> @@ -17,6 +17,7 @@ config BR2_PACKAGE_LIBGTK2
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>         depends on BR2_USE_MMU # glib2
+>         depends on BR2_INSTALL_LIBSTDCPP # pango
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>         help
+>           The GTK+ version 2 graphical user interface library
+>
+> @@ -32,8 +33,8 @@ config BR2_PACKAGE_LIBGTK2_DEMO
+>
+>  endif
+>
+> -comment "libgtk2 needs a toolchain w/ wchar, threads, C++"
+> +comment "libgtk2 needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
+>         depends on BR2_USE_MMU
+>         depends on BR2_PACKAGE_XORG7
+>         depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+> -               !BR2_TOOLCHAIN_HAS_THREADS
+> +               !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+> index 5dd4c58..e1dbf4f 100644
+> --- a/package/librsvg/Config.in
+> +++ b/package/librsvg/Config.in
+> @@ -10,12 +10,14 @@ config BR2_PACKAGE_LIBRSVG
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>         depends on BR2_USE_MMU # glib2
+>         depends on BR2_INSTALL_LIBSTDCPP # pango
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>         help
+>           The rsvg library is an efficient renderer for Scalable
+>           Vector Graphics (SVG) pictures.
+>
+>           http://librsvg.sourceforge.net/
+>
+> -comment "librsvg needs a toolchain w/ wchar, threads, C++"
+> +comment "librsvg needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
+>         depends on BR2_USE_MMU
+> -       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+> +       depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+> +               || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> diff --git a/package/libsvg-cairo/Config.in b/package/libsvg-cairo/Config.in
+> index 9577c69..48f09f6 100644
+> --- a/package/libsvg-cairo/Config.in
+> +++ b/package/libsvg-cairo/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBSVG_CAIRO
+>         bool "libsvg-cairo"
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+>         select BR2_PACKAGE_CAIRO
+>         select BR2_PACKAGE_CAIRO_SVG
+>         select BR2_PACKAGE_LIBSVG
+> @@ -9,3 +10,6 @@ config BR2_PACKAGE_LIBSVG_CAIRO
+>           rendering library.
+>
+>           http://cairographics.org
+> +
+> +comment "cairo needs a toolchain with atomic intrinsics"
+> +       depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+
+and here
+
+> diff --git a/package/pango/Config.in b/package/pango/Config.in
+> index 70f4fd3..6dee251 100644
+> --- a/package/pango/Config.in
+> +++ b/package/pango/Config.in
+> @@ -4,6 +4,7 @@ config BR2_PACKAGE_PANGO
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>         depends on BR2_USE_MMU # glib2
+>         depends on BR2_INSTALL_LIBSTDCPP # freetype support
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>         select BR2_PACKAGE_LIBGLIB2
+>         select BR2_PACKAGE_EXPAT
+>         select BR2_PACKAGE_CAIRO
+> @@ -21,7 +22,7 @@ config BR2_PACKAGE_PANGO
+>
+>           http://www.pango.org/
+>
+> -comment "pango needs a toolchain w/ wchar, threads, C++"
+> +comment "pango needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
+>         depends on BR2_USE_MMU
+>         depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -               !BR2_INSTALL_LIBSTDCPP
+> +               !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+> index c86eb94..99fe18a 100644
+> --- a/package/webkit/Config.in
+> +++ b/package/webkit/Config.in
+> @@ -17,6 +17,7 @@ config BR2_PACKAGE_WEBKIT
+>         depends on BR2_PACKAGE_LIBGTK2
+>         depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>         depends on !BR2_BINFMT_FLAT # icu
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>         select BR2_PACKAGE_CAIRO_PNG
+>         select BR2_PACKAGE_ENCHANT
+>         select BR2_PACKAGE_HARFBUZZ
+> @@ -41,7 +42,8 @@ config BR2_PACKAGE_WEBKIT
+>
+>           http://webkit.org/
+>
+> -comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads"
+> +comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads, atomic intrinsics"
+>         depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+>         depends on !BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
+> -               !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +               !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +               !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> diff --git a/package/weston/Config.in b/package/weston/Config.in
+> index aaef405..4b3ca74 100644
+> --- a/package/weston/Config.in
+> +++ b/package/weston/Config.in
+> @@ -15,6 +15,7 @@ config BR2_PACKAGE_WESTON
+>         depends on !BR2_avr32 # wayland
+>         depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+>         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+> +       depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
+>         # Runtime dependency
+>         select BR2_PACKAGE_XKEYBOARD_CONFIG
+>         # Make sure at least one compositor is selected.
+> @@ -27,6 +28,9 @@ config BR2_PACKAGE_WESTON
+>
+>           http://wayland.freedesktop.org/
+>
+> +comment "weston needs a toolchain with atomic intrinsics"
+> +       depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+> +
+
+and here
+
+Best regards,
+Thomas
