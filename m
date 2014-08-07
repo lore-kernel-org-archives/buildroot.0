@@ -1,38 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Aug 2014 22:14:51 +0200
-Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1i
-In-Reply-To: <1407414643-11152-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407414643-11152-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140807221451.1cc646e8@free-electrons.com>
+Date: Thu, 7 Aug 2014 22:15:15 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
+Message-ID: <20140807201527.8AC339D3D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=b64ef58e082fd6e691b1bf5dbeeed67413330fc7
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  7 Aug 2014 09:30:43 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2014-3508 - Information leak in pretty printing functions
-> CVE-2014-5139 - Crash with SRP ciphersuite in Server Hello message
-> CVE-2014-3509 - Race condition in ssl_parse_serverhello_tlsext
-> CVE-2014-3505 - Double Free when processing DTLS packets
-> CVE-2014-3506 - DTLS memory exhaustion
-> CVE-2014-3507 - DTLS memory leak from zero-length fragments
-> CVE-2014-3510 - OpenSSL DTLS anonymous EC(DH) denial of service
-> CVE-2014-3511 - OpenSSL TLS protocol downgrade attack
-> CVE-2014-3512 - SRP buffer overrun
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/openssl/openssl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4d9378e..7514b00 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -156,7 +156,7 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
+-	default "3.2.61"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.62"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.101"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
+ 	default "3.10.51"	if BR2_KERNEL_HEADERS_3_10
