@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Aug 2014 22:13:51 +0200
-Subject: [Buildroot] [PATCH] mongoose: fix build failure
-In-Reply-To: <1407432016-17434-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407432016-17434-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140807221351.5ce2cc43@free-electrons.com>
+Date: Thu, 7 Aug 2014 22:14:51 +0200
+Subject: [Buildroot] [PATCH] openssl: security bump to version 1.0.1i
+In-Reply-To: <1407414643-11152-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1407414643-11152-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20140807221451.1cc646e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,24 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Thu,  7 Aug 2014 14:20:16 -0300, Gustavo Zacarias wrote:
-> mongoose.h looks missing because we're not building locally, so switch
-> to the build dir. Fixes:
-> http://autobuild.buildroot.net/results/701/701711626548bd166cd5bc5669e4761ffed074d1/
+On Thu,  7 Aug 2014 09:30:43 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2014-3508 - Information leak in pretty printing functions
+> CVE-2014-5139 - Crash with SRP ciphersuite in Server Hello message
+> CVE-2014-3509 - Race condition in ssl_parse_serverhello_tlsext
+> CVE-2014-3505 - Double Free when processing DTLS packets
+> CVE-2014-3506 - DTLS memory exhaustion
+> CVE-2014-3507 - DTLS memory leak from zero-length fragments
+> CVE-2014-3510 - OpenSSL DTLS anonymous EC(DH) denial of service
+> CVE-2014-3511 - OpenSSL TLS protocol downgrade attack
+> CVE-2014-3512 - SRP buffer overrun
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/mongoose/mongoose.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/openssl/openssl.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied after changing the patch to use -I$(@D) instead.
-
-Thanks,
+Applied, thanks!
 
 Thomas
 -- 
