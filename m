@@ -1,30 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Aug 2014 22:22:28 +0200
-Subject: [Buildroot] [PATCH v2 1/2] dhcpdump: Fix patch file name
-In-Reply-To: <1407240749-17574-1-git-send-email-benoit.thebaudeau@advansee.com>
-References: <1407240749-17574-1-git-send-email-benoit.thebaudeau@advansee.com>
-Message-ID: <20140807222228.5e7cfcd0@free-electrons.com>
+From: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
+Date: Thu, 7 Aug 2014 13:28:28 -0700
+Subject: [Buildroot] [PATCH 1/1] wpa-supplicant: Add NL80211 support option
+Message-ID: <1407443308-20000-1-git-send-email-jtheou@adeneo-embedded.us>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Beno?t Th?baudeau,
+Signed-off-by: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
+---
+ package/wpa_supplicant/Config.in         | 6 ++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-On Tue,  5 Aug 2014 14:12:28 +0200, Beno?t Th?baudeau wrote:
-> Use the naming convention for patches, which is:
-> 
-> 	<packagename>-<number>-<description>.patch
-> 
-> Signed-off-by: Beno?t Th?baudeau <benoit.thebaudeau@advansee.com>
-> 
-> ---
-
-Both patches applied, thanks!
-
-Thomas
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 81c61ac..2fb20ab 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -22,6 +22,12 @@ config BR2_PACKAGE_WPA_SUPPLICANT_EAP
+ 	help
+ 	  Enable support for EAP.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
++	bool "Enable NL80211"
++	depends on BR2_PACKAGE_LIBNL
++	help
++	  Enable support for NL80211.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
+ 	bool "Enable HS20"
+ 	help
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 0ca2ce5..2807151 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -49,6 +49,12 @@ else
+ 	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_NL80211),y)
++	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DRIVER_NL80211
++else
++	WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),y)
+ 	WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_HS20 \
+ 		CONFIG_INTERWORKING
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.3
