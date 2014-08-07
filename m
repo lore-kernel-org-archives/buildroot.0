@@ -1,67 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 7 Aug 2014 07:47:50 +0300
-Subject: [Buildroot] Buildroot 2014.08-git-01152-g10b6d10 make error
-In-Reply-To: <CABzetm2N+k4Vo6xQ7yVaRKf2-sh4ni-D4Btm82qHwy+K0kAw=w@mail.gmail.com>
-References: <CABzetm2N+k4Vo6xQ7yVaRKf2-sh4ni-D4Btm82qHwy+K0kAw=w@mail.gmail.com>
-Message-ID: <20140807044750.GQ2322@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu,  7 Aug 2014 08:30:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-06
+Message-ID: <20140807063009.87605101249@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rohit Kumar,
+Build statistics for 2014-08-06
+===============================
 
-On Thu, Aug 07, 2014 at 01:37:28PM +0900, Rohit Kumar wrote:
-> Hello,
-> 
-> i tried to build toolchain and file system for ARM cortex-A9 but stuck
-> with this error.
-> configuration file is also attached.
-> --------------------------------------------------
-> You will probably need to make your busybox binary
-> setuid root to ensure all configured applets will
-> work properly.
-> --------------------------------------------------
-> 
-> make[1]: Leaving directory
-> `/home/rohit/Desktop/buildroot_odroid/output/build/busybox-1.22.1'
-> if [ ! -f /home/rohit/Desktop/buildroot_odroid/output/target/usr/share/udhcpc/default.script
-> ]; then /usr/bin/install -m 0755 -D package/busybox/udhcpc.script
-> /home/rohit/Desktop/buildroot_odroid/output/target/usr/share/udhcpc/default.script;
-> fi
-> [ -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S10mdev
-> ] || /usr/bin/install -D -m 0755 package/busybox/S10mdev
-> /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S10mdev
-> [ -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/mdev.conf
-> ] || /usr/bin/install -D -m 0644 package/busybox/mdev.conf
-> /home/rohit/Desktop/buildroot_odroid/output/target/etc/mdev.conf
-> if grep -q CONFIG_SYSLOGD=y
-> /home/rohit/Desktop/buildroot_odroid/output/build/busybox-1.22.1/.config;
-> then [ -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S01logging
-> ] || /usr/bin/install -m 0755 -D package/busybox/S01logging
-> /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S01logging;
-> else rm -f /home/rohit/Desktop/buildroot_odroid/output/target/etc/init.d/S01logging;
-> fi
-> >>> linux 0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b Downloading
-> /home/rohit/Desktop/buildroot_odroid/support/download/git: line 30: [:
-> -eq: unary operator expected
-> fatal: Not a git repository: 'linux-0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b'
-> --2014-08-07 13:35:00--
-> http://sources.buildroot.net/linux-0b8e8118dd2c9440bb7a2da1a19e15e324d3c09b.tar.gz
-> Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
-> Connecting to sources.buildroot.net
-> (sources.buildroot.net)|176.9.16.109|:80... connected.
-> HTTP request sent, awaiting response... 404 Not Found
-> 2014-08-07 13:35:01 ERROR 404: Not Found.
+        success : 83 
+       failures : 11 
+       timeouts : 1  
+          TOTAL : 95 
 
-Commit 9d1ab4321168fd should fix your problem following your previous report 
-(http://lists.busybox.net/pipermail/buildroot/2014-August/103733.html). See 
-http://git.buildroot.net/buildroot/commit/?id=9d1ab4321168fdda714be30c6b53e2ce0027509d.
+Classification of failures by reason
+====================================
 
-baruch
+    bandwidthd-v2.0.1-auto-r07 | 3 
+                 iftop-1.0pre4 | 1 
+                libiscsi-1.6.0 | 1 
+                    fltk-1.3.2 | 1 
+              gutenprint-5.2.9 | 1 
+                  perl-gd-2.53 | 1 
+                espeak-1.47.11 | 1 
+             lttng-tools-2.4.1 | 1 
+                libinput-0.3.0 | 1 
+          perl-net-ssleay-1.65 | 1 
+
+Detail of failures
+===================
+
+       arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/878b9c4a25463030c933fcdc17dc2f3bf4bd34e1/
+       arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/85b30f6213198dec19320ad3e2b4e156c6f17a1b/
+       arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/45d3ba4fed768a7a47fcb88ea864f571c48934f2/
+       arm |                 espeak-1.47.11 | NOK | http://autobuild.buildroot.net/results/d9d6e1f626c9786e64bae2c1f710bc92c21d2ec0/
+    x86_64 |                     fltk-1.3.2 | NOK | http://autobuild.buildroot.net/results/11230e6f3838cfd18179f82d8bf50c461d747dad/
+       arm |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/4df837b5e84baaf7578901ff32e38b028d1c6cc8/
+      bfin |                  iftop-1.0pre4 | NOK | http://autobuild.buildroot.net/results/1b771af04a95a78144141a5d555c97bbb5a7e13f/
+  mips64el |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/0bbf28ef38b03bfe754bf6ac966c4f350afdbc99/
+      bfin |                 libiscsi-1.6.0 | NOK | http://autobuild.buildroot.net/results/1841f133fb40b48303a70f773008450b46d60c72/
+       arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/0d6ade15ea0805df3c54b28eb8cbe798dca6fb15/
+       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/bc489884bc66cb1a8ecbecc4997dd2c3c33af410/
+    mipsel |           perl-net-ssleay-1.65 | TIM | http://autobuild.buildroot.net/results/55a74642f48b496fdde42aa41eae823e00c63c9c/
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
