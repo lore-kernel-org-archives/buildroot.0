@@ -1,27 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 7 Aug 2014 22:15:42 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.2.x series
-In-Reply-To: <1407430537-28781-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1407430537-28781-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20140807221542.25af9250@free-electrons.com>
+Date: Thu, 7 Aug 2014 22:16:21 +0200
+Subject: [Buildroot] [git commit] linux: fix LINUX_SITE for release
+	candidates
+Message-ID: <20140807201627.13EEF9D3D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: http://git.buildroot.net/buildroot/commit/?id=a47b633d79ae4b0fd980408a65e9116165fce673
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  7 Aug 2014 13:55:37 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/linux-headers/Config.in.host | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Jean-Baptiste Theou <jtheou@adeneo-embedded.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e433e0d..2fb7437 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -34,7 +34,7 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
+ endif
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_VERSION)),)
+-LINUX_SITE := $(LINUX_SITE)testing/
++LINUX_SITE := $(LINUX_SITE)/testing/
+ endif # -rc
+ endif
+ 
