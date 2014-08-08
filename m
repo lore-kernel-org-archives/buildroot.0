@@ -1,51 +1,43 @@
-From: Pieter De Gendt <pieter.degendt@gmail.com>
-Date: Fri, 8 Aug 2014 15:13:56 +0200
-Subject: [Buildroot] [PATCH 1/1] MPD: Add jack output support option
-In-Reply-To: <53E4C73C.8050605@zacarias.com.ar>
-References: <1407485662-1712-1-git-send-email-pieter.degendt@gmail.com>
- <53E4C73C.8050605@zacarias.com.ar>
-Message-ID: <CAFfn7Umfu6iv2BtUnWmdWRFqd7oPgkK7N-yHRROjLqc_PZBY5w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri,  8 Aug 2014 10:29:54 -0300
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.10.9
+Message-ID: <1407504594-3772-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 8, 2014 at 2:49 PM, Gustavo Zacarias <gustavo@zacarias.com.ar>
-wrote:
+Fixes:
+WNPA-SEC-2014-08 / CVE-2014-5161 / CVE-2014-5162
+The Catapult DCT2000 and IrDA dissectors could underrun a buffer.
 
-> On 08/08/2014 05:14 AM, Pieter De Gendt wrote:
->
-> Hi.
-> A couple of details...
->
-> > +config BR2_PACKAGE_MPD_JACK2
-> > +     bool "jack2"
-> > +     depends on BR2_LARGEFILE # libsndfile
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-> > +     depends on BR2_USE_MMU # fork()
-> > +     depends on BR2_INSTALL_LIBSTDCPP
-> > +     depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-> > +     select BR2_PACKAGE_JACK2
-> > +     help
-> > +       Enable jack output support.
-> > +
->
-> The THREADS, MMU and LIBSTDCPP depends are unnecessary since mpd already
-> requires them, so you can drop them like it's already done for all of
-> the other options for mpd.
-> Also you're missing a comment when LARGEFILE & ATOMIC_INTRINSICS aren't
-> available telling that jack2 isn't available, similar to what's done for
-> pulseaudio for example.
-> Alpha-sorting the menu entry would be good too.
-> Otherwise it looks good.
-> Care to send a v2 patch with these fixes?
-> Thanks.
-> Regards.
->
->
-Done, thanks for comments.
-Regards.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140808/b537bb6d/attachment.html>
+WNPA-SEC-2014-09 / CVE-2014-5163
+The GSM Management dissector could crash.
+
+WNPA-SEC-2014-10 / CVE-2014-5164
+The RLC dissector could crash.
+
+WNPA-SEC-2014-11 / CVE-2014-5165
+The ASN.1 BER dissector could crash.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireshark/wireshark.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 4117d19..da76e37 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 1.10.8
++WIRESHARK_VERSION = 1.10.9
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
+-- 
+1.8.5.5
