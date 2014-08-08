@@ -1,46 +1,34 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Fri, 08 Aug 2014 22:03:31 +0200
-Subject: [Buildroot] [PATCH 1/1] openssh: replace individual ssh-keygen
-	calls with a single call
-In-Reply-To: <20140804091755.GL32743@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Mon, 4 Aug 2014 11:17:56 +0200")
-References: <1407028879-2004-1-git-send-email-danomimanchego123@gmail.com>
- <20140803073726.GB4052@free.fr>
- <CANxTyt70cnBy56QgMjGSMc092fEx9O-yWwegcL6S2kRtR0dSzQ@mail.gmail.com>
- <20140804102456.774bcea3@free-electrons.com>
- <20140804091755.GL32743@waldemar-brodkorb.de>
-Message-ID: <87fvh6agvg.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Aug 2014 22:19:39 +0200
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 1.10.9
+In-Reply-To: <1407504594-3772-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 8 Aug 2014 10:29:54 -0300")
+References: <1407504594-3772-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bnruag4k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Hi,
+ > Fixes:
+ > WNPA-SEC-2014-08 / CVE-2014-5161 / CVE-2014-5162
+ > The Catapult DCT2000 and IrDA dissectors could underrun a buffer.
 
- > In OpenADK is use cfgfs - configuration filesystem. It maintains
- > a tmpfs based /etc and let the user commit any changes via a
- > commandline tool to a partition on a block/mtd device.
+ > WNPA-SEC-2014-09 / CVE-2014-5163
+ > The GSM Management dissector could crash.
 
- > Only changes are compressed via LZO and written to the maximum
- > 16 MB cfgfs partition.
- > http://www.openadk.org/docs/html/manual.html#_cfgfs_configuration_file_system
+ > WNPA-SEC-2014-10 / CVE-2014-5164
+ > The RLC dissector could crash.
 
-Heh, I wrote something similar a few years ago:
+ > WNPA-SEC-2014-11 / CVE-2014-5165
+ > The ASN.1 BER dissector could crash.
 
-http://git.korsgaard.com/cgi-bin/gitweb.cgi?p=cfg.git;a=summary
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-It simply stored .tar.gz's of the changed files.
-
-
- > It allows smooth updates without loosing device configuration data.
-
- > Any interest in porting it to buildroot?
-
-We try hard to not enforce policy, so I wouldn't want to make cfgfs a
-required package, but as an optional one it make sense. Please do.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
