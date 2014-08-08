@@ -1,73 +1,123 @@
-From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Fri,  8 Aug 2014 19:09:32 +0400
-Subject: [Buildroot] [PATCH v4 4/4] msgpack: Add dependency on atomic
-	intrinsics
-In-Reply-To: <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
-References: <In-Reply-To: <CAAXf6LURyGxEfQR+3g6xriwqUeE1E91Oav2X=r_C3YD66JzpEA@mail.gmail.com>
- <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
-Message-ID: <1407510572-20603-4-git-send-email-Anton.Kolesov@synopsys.com>
+From: Jean-Christophe DUBOIS <jcd@tribudubois.net>
+Date: Fri,  8 Aug 2014 18:11:02 +0200
+Subject: [Buildroot] [PATCH v6] bcache-tools: Adding package.
+Message-ID: <1407514262-18602-1-git-send-email-jcd@tribudubois.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Msgpack requires GCC built-in atomic functions which are architecture specific
-and may not be implemented.
+This is the bcache tools, required to setup the linux bcache
+feature of the Linux kernel.
 
-This fixes:
-http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
-
-Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
+Signed-off-by: Jean-Christophe DUBOIS <jcd@tribudubois.net>
 ---
- package/msgpack/Config.in        | 7 +++----
- package/python-msgpack/Config.in | 7 +++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
+Changes v1 to v2
+ * Remove 'support' word from comment statement in Config.in.
+ * Use github helper to get the project site instead of hardcoded URL.
+Changes v2 to v3
+ * Added bcache-tools description in Config help.
+ * Added bcache-tools URL in Config help.
+ * Added BR2_LARGEFILE BR2_USE_WCHAR and BR2_USE_MMU dependencies in Config.
+ * Added BR2_PACKAGE_UTIL_LINUX selection in Config.
+ * Added new requirements in Config comment.
+ * Use POST_EXTRACT_HOOKS to modify Makefile.
+ * Pass $(TARGET_CONFIGURE_OPTS) in env variables to $(MAKE).
+ * Create man8 dir as part of PRE_INSTALL_TARGET_HOOKS.
+Changes v3 to v4
+ * Move from .zip file to .tar.gz as download file in .mk file.
+ * Use complete git tag as version in .mk file.
+ * Remove explicit extract rule from .mk file (use implicite rule).
+Changes v4 to v5
+ * Remove explicit package name in .mk (rely on default behavior).
+Changes v5 to v6
+ * Switch spaces to tabs in Config.in
+ * Don't patch Makefile for pkg-config in .mk file.
+---
+ package/Config.in                    |  1 +
+ package/bcache-tools/Config.in       | 22 ++++++++++++++++++++++
+ package/bcache-tools/bcache-tools.mk | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
+ create mode 100644 package/bcache-tools/Config.in
+ create mode 100644 package/bcache-tools/bcache-tools.mk
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index b380c58..7d6277f 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc # atomic builtins
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	help
- 	  MessagePack is an efficient binary serialization format.
- 
-@@ -10,6 +10,5 @@ config BR2_PACKAGE_MSGPACK
- 
- 	  http://msgpack.org/
- 
--comment "msgpack needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc
-+comment "msgpack needs a toolchain w/ C++, atomic intrinsics"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index c4b68a3..3b825a1 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	depends on BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
--	depends on !BR2_arc # msgpack - atomic builtins
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # msgpack
- 	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -12,7 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 
- 	  https://pypi.python.org/pypi/msgpack-python/
- 
--comment "python-msgpack needs a toolchain w/ C++"
-+comment "python-msgpack needs a toolchain w/ C++, atomic intrinsics"
- 	depends on BR2_PACKAGE_PYTHON
--	depends on !BR2_INSTALL_LIBSTDCPP
--	depends on !BR2_arc
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+diff --git a/package/Config.in b/package/Config.in
+index 4520ba6..dc2f418 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -280,6 +280,7 @@ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
+ 	source "package/avrdude/Config.in"
++	source "package/bcache-tools/Config.in"
+ 	source "package/cdrkit/Config.in"
+ 	source "package/cryptsetup/Config.in"
+ 	source "package/cwiid/Config.in"
+diff --git a/package/bcache-tools/Config.in b/package/bcache-tools/Config.in
+new file mode 100644
+index 0000000..a3f7897
+--- /dev/null
++++ b/package/bcache-tools/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_BCACHE_TOOLS
++	bool "bcache tools"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_LARGEFILE # util-linux
++	depends on BR2_USE_WCHAR # util-linux
++	depends on BR2_USE_MMU # util-linux (libblkid)
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
++	help
++	  Bcache is a Linux kernel block layer cache. It allows one or
++	  more fast disk drives such as flash-based solid state drives (SSDs)
++	  to act as a cache for one or more slower hard disk drives.
++
++	  http://bcache.evilpiepirate.org/
++
++	  This is the user space bcache tools, required to setup the linux
++	  bcache feature of the Linux kernel.
++
++comment "bcache-tools needs udev /dev management and a toolchain w/ largefile, wchar"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_LARGEFILE || !BR2_USE_WCHAR
+diff --git a/package/bcache-tools/bcache-tools.mk b/package/bcache-tools/bcache-tools.mk
+new file mode 100644
+index 0000000..880bf5e
+--- /dev/null
++++ b/package/bcache-tools/bcache-tools.mk
+@@ -0,0 +1,31 @@
++################################################################################
++#
++# bcache-tools
++#
++################################################################################
++
++BCACHE_TOOLS_VERSION = v1.0.7
++BCACHE_TOOLS_SITE = $(call github,g2p,bcache-tools,$(BCACHE_TOOLS_VERSION))
++BCACHE_TOOLS_LICENSE = GPLv2
++BCACHE_TOOLS_LICENSE_FILES = COPYING
++BCACHE_TOOLS_DEPENDENCIES = host-pkgconf util-linux eudev
++
++# We pass $(TARGET_CONFIGURE_OPTS) as environment variable to allow
++# the bcache-tools Makefile to alter CFLAGS
++define BCACHE_TOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++# The bcache-tools Makefile expects the man8 directory to exist.
++define BCACHE_TOOLS_INSTALL_MAN8
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/share/man/man8
++endef
++
++BCACHE_TOOLS_PRE_INSTALL_TARGET_HOOKS += BCACHE_TOOLS_INSTALL_MAN8
++
++define BCACHE_TOOLS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
-1.8.4.1
+1.9.1
