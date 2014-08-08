@@ -1,243 +1,73 @@
 From: Anton Kolesov <Anton.Kolesov@synopsys.com>
-Date: Fri,  8 Aug 2014 19:09:29 +0400
-Subject: [Buildroot] [PATCH v4 1/4] cairo: Add dependency on atomic
+Date: Fri,  8 Aug 2014 19:09:32 +0400
+Subject: [Buildroot] [PATCH v4 4/4] msgpack: Add dependency on atomic
 	intrinsics
-In-Reply-To: <In-Reply-To: <CAAXf6LURyGxEfQR+3g6xriwqUeE1E91Oav2X=r_C3YD66JzpEA@mail.gmail.com>
+In-Reply-To: <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
 References: <In-Reply-To: <CAAXf6LURyGxEfQR+3g6xriwqUeE1E91Oav2X=r_C3YD66JzpEA@mail.gmail.com>
-Message-ID: <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
+ <1407510572-20603-1-git-send-email-Anton.Kolesov@synopsys.com>
+Message-ID: <1407510572-20603-4-git-send-email-Anton.Kolesov@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cairo requires GCC built-in atomic functions which are architecture specific
+Msgpack requires GCC built-in atomic functions which are architecture specific
 and may not be implemented.
 
 This fixes:
-http://autobuild.buildroot.net/results/fadfaa9916724d310d0dda555a1db31bee1601d0/
+http://autobuild.buildroot.net/results/44849a386cefb8899f4560296bfbbd8ea19ee910/
 
 Signed-off-by: Anton Kolesov <Anton.Kolesov@synopsys.com>
 ---
- package/cairo/Config.in                        | 4 ++++
- package/efl/libevas-generic-loaders/Config.in  | 6 ++++--
- package/gstreamer/gst-plugins-good/Config.in   | 4 ++++
- package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
- package/libgtk2/Config.in                      | 5 +++--
- package/librsvg/Config.in                      | 6 ++++--
- package/libsvg-cairo/Config.in                 | 4 ++++
- package/pango/Config.in                        | 5 +++--
- package/webkit/Config.in                       | 6 ++++--
- package/weston/Config.in                       | 4 ++++
- 10 files changed, 38 insertions(+), 10 deletions(-)
+ package/msgpack/Config.in        | 7 +++----
+ package/python-msgpack/Config.in | 7 +++----
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index 0c87a29..103aa0d 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CAIRO
- 	bool "cairo"
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index b380c58..7d6277f 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc # atomic builtins
 +	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-@@ -13,6 +14,9 @@ config BR2_PACKAGE_CAIRO
- 
- 	  http://cairographics.org/
- 
-+comment "cairo needs a toolchain w/ atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- if BR2_PACKAGE_CAIRO
- 
- config BR2_PACKAGE_CAIRO_PS
-diff --git a/package/efl/libevas-generic-loaders/Config.in b/package/efl/libevas-generic-loaders/Config.in
-index 23b9f77..c7145d5 100644
---- a/package/efl/libevas-generic-loaders/Config.in
-+++ b/package/efl/libevas-generic-loaders/Config.in
-@@ -17,10 +17,12 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
- 	depends on BR2_USE_WCHAR # librsvg -> glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
  	help
- 	  This option enables the Evas generic SVG loader
+ 	  MessagePack is an efficient binary serialization format.
  
--comment "SVG loader needs a toolchain w/ wchar, threads, C++"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+comment "SVG loader needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+@@ -10,6 +10,5 @@ config BR2_PACKAGE_MSGPACK
  
- endif
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index 3ec93cf..2e81a6a 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -178,9 +178,13 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
+ 	  http://msgpack.org/
  
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CAIRO
- 	bool "cairo"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 
-+comment "cairo needs a toolchain w/ atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_FLAC
- 	bool "flac (libFLAC)"
- 	depends on BR2_USE_WCHAR # flac
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 7159c5a..aa45ba7 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -274,11 +274,15 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
- 	bool "cairo"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
+-comment "msgpack needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
++comment "msgpack needs a toolchain w/ C++, atomic intrinsics"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index c4b68a3..3b825a1 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on !BR2_arc # msgpack - atomic builtins
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # msgpack
  	help
- 	  Cairo-based elements
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -12,7 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
  
-+comment "cairo needs a toolchain w/ atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
- 	bool "flac (libFLAC)"
- 	depends on BR2_USE_WCHAR # flac
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index 5239c25..ce70256 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	help
- 	  The GTK+ version 2 graphical user interface library
+ 	  https://pypi.python.org/pypi/msgpack-python/
  
-@@ -32,8 +33,8 @@ config BR2_PACKAGE_LIBGTK2_DEMO
- 
- endif
- 
--comment "libgtk2 needs a toolchain w/ wchar, threads, C++"
-+comment "libgtk2 needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index 5dd4c58..e1dbf4f 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -10,12 +10,14 @@ config BR2_PACKAGE_LIBRSVG
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	help
- 	  The rsvg library is an efficient renderer for Scalable
- 	  Vector Graphics (SVG) pictures.
- 
- 	  http://librsvg.sourceforge.net/
- 
--comment "librsvg needs a toolchain w/ wchar, threads, C++"
-+comment "librsvg needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/libsvg-cairo/Config.in b/package/libsvg-cairo/Config.in
-index 9577c69..a1a8401 100644
---- a/package/libsvg-cairo/Config.in
-+++ b/package/libsvg-cairo/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBSVG_CAIRO
- 	bool "libsvg-cairo"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_SVG
- 	select BR2_PACKAGE_LIBSVG
-@@ -9,3 +10,6 @@ config BR2_PACKAGE_LIBSVG_CAIRO
- 	  rendering library.
- 
- 	  http://cairographics.org
-+
-+comment "cairo needs a toolchain w/ atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/pango/Config.in b/package/pango/Config.in
-index 70f4fd3..6dee251 100644
---- a/package/pango/Config.in
-+++ b/package/pango/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_PANGO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_CAIRO
-@@ -21,7 +22,7 @@ config BR2_PACKAGE_PANGO
- 
- 	  http://www.pango.org/
- 
--comment "pango needs a toolchain w/ wchar, threads, C++"
-+comment "pango needs a toolchain w/ wchar, threads, C++, atomic intrinsics"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_INSTALL_LIBSTDCPP
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-diff --git a/package/webkit/Config.in b/package/webkit/Config.in
-index b7f903c..f42a96f 100644
---- a/package/webkit/Config.in
-+++ b/package/webkit/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_WEBKIT
- 	depends on BR2_PACKAGE_LIBGTK2
- 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT # icu
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_ENCHANT
- 	select BR2_PACKAGE_HARFBUZZ
-@@ -41,8 +42,9 @@ config BR2_PACKAGE_WEBKIT
- 
- 	  http://webkit.org/
- 
--comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads"
-+comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads, atomic intrinsics"
- 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
- 	depends on BR2_USE_MMU
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index aaef405..f927c5f 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_WESTON
- 	depends on !BR2_avr32 # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS # cairo
- 	# Runtime dependency
- 	select BR2_PACKAGE_XKEYBOARD_CONFIG
- 	# Make sure at least one compositor is selected.
-@@ -27,6 +28,9 @@ config BR2_PACKAGE_WESTON
- 
- 	  http://wayland.freedesktop.org/
- 
-+comment "weston needs a toolchain w/ atomic intrinsics"
-+	depends on !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
-+
- if BR2_PACKAGE_WESTON
- 
- # Helper to make sure at least one compositor is selected.
+-comment "python-msgpack needs a toolchain w/ C++"
++comment "python-msgpack needs a toolchain w/ C++, atomic intrinsics"
+ 	depends on BR2_PACKAGE_PYTHON
+-	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on !BR2_arc
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_ATOMIC_INTRINSICS
 -- 
 1.8.4.1
