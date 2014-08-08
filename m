@@ -1,34 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Aug 2014 22:19:20 +0200
-Subject: [Buildroot] [git commit] dropbear: bump to version 2014.65
-Message-ID: <20140808202158.1B8739D3A2@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri,  8 Aug 2014 22:27:08 +0200
+Subject: [Buildroot] [PATCH] postgresql: bump to version 9.3.5
+Message-ID: <1407529628-23985-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=b781001179690b037137b883c33dc2ba5ca85df1
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+See [1] for a detailed list of changes/fixes.
 
-Fixes some regressions introduced by 2014.64
+[1] http://www.postgresql.org/docs/current/static/release-9-3-5.html
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/dropbear/dropbear.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ package/postgresql/postgresql.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index afdc3c8..e8fcdf6 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 0fecbc7..6941e55 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPBEAR_VERSION = 2014.64
-+DROPBEAR_VERSION = 2014.65
- DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_TARGET_BINS = dbclient dropbearkey dropbearconvert scp ssh
+-POSTGRESQL_VERSION = 9.3.4
++POSTGRESQL_VERSION = 9.3.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+1.8.1.4
