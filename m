@@ -1,144 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Aug 2014 00:50:52 +0200
-Subject: [Buildroot] [git commit] CHANGES: update with recent changes
-Message-ID: <20140807225118.B442B9D3D4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri,  8 Aug 2014 08:30:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2014-08-07
+Message-ID: <20140808063012.A63E8100D93@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=087e1c8ef0b3c3e88da9a6a0a876ff4ecef1a801
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Build statistics for 2014-08-07
+===============================
 
-The description of important changes still needs to be added.
+        success : 101
+       failures : 42 
+       timeouts : 0  
+          TOTAL : 143
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES |  116 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 files changed, 116 insertions(+), 0 deletions(-)
+Classification of failures by reason
+====================================
 
-diff --git a/CHANGES b/CHANGES
-index 5b77292..c16f126 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,119 @@
-+2014.08, Not yet released
-+
-+	Fixes all over the tree and new features.
-+
-+	Updated/fixed packages: aespipe, aiccu, alsa-lib, alsa-utils,
-+	alsamixergui, argus, armadillo, at, atftp, atk, avahi,
-+	avrdude, axel, b43-firmware, b43-fwcutter, bandwidthd, bc,
-+	bcusdk, beecrypt, bind, binutils, blackbox, bluez5_utils,
-+	bmon, boa, bonnie, bootutils, bsdiff, btrfs-progs, bustle,
-+	busybox, bwm-ng, bzip2, ca-certificates, cairo, can-utils,
-+	ccache, ccrypt, chrony, cifs-utils, classpath, cloog, cmake,
-+	collectd, connman, coreutils, cosmo, cppcms, cramfs, crda,
-+	cryptodev-linux, cryptodev, ctorrent, cvs, dbus-cpp,
-+	dbus-glib, dbus-python, dbus, dcron, dejavu, devmem2,
-+	dfu-util, dhcp, dhcpcd, dhcpdump, dhrystone, dialog, dillo,
-+	distcc, dmidecode, dmraid, dnsmasq, doom-wad, dropbear,
-+	dropwatch, dsp-tools, dtv-scan-tables, dvb-apps, e2fsprogs,
-+	e2tools, eeprog, eigen, elf2flt, elftosb, enlightenment,
-+	enscript, espeak, ethtool, eudev, evemu, exim, expedite,
-+	explorercanvas, ezxml, faifa, fan-ctrl, fconfig, feh,
-+	fetchmail, ffmpeg, fftw, file, fio, fis, flann, flashrom,
-+	flex, flot, fltk, fontconfig, freerdp, freescale-imx,
-+	freetype, ftop, gcc, gd, gdb, genimage, genromfs, gettext,
-+	giblib, glib-networking, glibc, gmp, gnupg, gnutls, gpm, gpsd,
-+	gptfdisk, gpu-viv-bin-imx6q, gqview, grantlee, gst-ffmpeg,
-+	gst-fsl-plugins, gst1-libav, gst1-plugins-bad,
-+	gst1-plugins-ugly, gtk2-engines, gtk2-theme-hicolor, gtkperf,
-+	gvfs, haserl, hdparm, hostapd, httping, i2c-tools, icu,
-+	imagemagick, imx-lib, inadyn, inotify-tools, input-tools,
-+	ipkg, iproute2, iputils, irda-utils, iw, jack2, jpeg, jquery,
-+	jquery-keyboard, jquery-mobile, jquery-validation, jsmin, kbd,
-+	kexec, kmod, knock, latencytop, lcdapi, leafpad, lesstif,
-+	lftp, libaio, libarchive, libargtable2, libart, libatasmart,
-+	libatomic_ops, libbsd, libcap-ng, libcec, libcgicc, libcgroup,
-+	libconfuse, libcurl, libdrm, libdvdnav, libdvdread,
-+	libeXosip2, libedit, liberation, libesmtp, libev, libevas,
-+	libevdev, libevent, libfcgi, libffi, libfreefare, libfslcodec,
-+	libfslparser, libfslvpuwrap, libgail, libgcrypt, libglade,
-+	libglib2, libgpgme, libgtk2, libhid, libical, libiconv,
-+	libiqrf, libjpeg, liblog4c-localtime, libmbus, libmicrohttpd,
-+	libmms, libndp, libnftnl, libnl, libnspr, libnss, liboauth,
-+	libpcap, libpng, libpthsem, libqmi, libraw, libraw1394,
-+	librsvg, libsoc, libsoup, libsvgtiny, libsysfs, libtasn1,
-+	libtirpc, libtorrent, libusb, libv4l, libwebsockets, libxcb,
-+	libxml2, libyaml, links, linux-firmware, linux-fusion,
-+	linux-headers, linux-pam, lite, live555, lm-sensors,
-+	lockfile-progs, lpc3250loader, lshw, lsof, lsuio, ltrace,
-+	ltris, lua-messagepack, luainterpreter, luajit, luaposix,
-+	luarocks, lvm2, lxc, lz4, lzo, make, makedevs, mdadm,
-+	mediastreamer, mesa3d, metacity, minidlna, mkpasswd,
-+	modem-manager, mongoose, mpd, mpg123, msgpack, mtd, mtools,
-+	mtr, musepack, musl, mysql, nano, nasm, nbd, ncurses, ndisc6,
-+	netatalk, netplug, network-manager, nftables, ngircd, nodejs,
-+	nss-mdns, ntp, nut, olsr, open2300, opencv, openntpd, openocd,
-+	openpgm, openpowerlink, openssh, openssl, openswan, openvpn,
-+	opkg, oprofile, opus-tools, orc, p910nd, pango, parted,
-+	pax-utils, pcmanfm, perf, perl, perl-module-build, php,
-+	pixman, pkgconf, poco, polarssl, popt, portmap, postgresql,
-+	prboom, protobuf-c, proxychains-ng, psmisc, psplash, ptpd2,
-+	python,
-+	python-{bottle,dpkt,id3,mad,msgpack,nfc,pygame,pyzmq,simplejson},
-+	python3, qhull, qt, qt5base, qt5connectivity, qt5declarative,
-+	qt5graphicaleffects, qt5multimedia, qt5quickcontrols,
-+	qt5sensors, qt5svg, qt5webkit, quagga, quota, radvd, rdesktop,
-+	read-edid, rpcbind, rpi-firmware, rpi-userland, rpm,
-+	rsh-redone, rsync, rt-tests, rtmpdump, rtorrent, rubix, ruby,
-+	samba, samba4, sane-backends, sawman, sconeserver, setserial,
-+	sg3_utils, shared-mime-info, smartmontools, smcroute, snappy,
-+	socketcand, spawn-fcgi, sqlite, squashfs, squid, sredird,
-+	startup-notification, statserial, strongswan, stunnel,
-+	sunxi-mali, supervisor, synergy, sysklogd, sysprof, sysstat,
-+	systemd, tcpdump, tcpreplay, texinfo, thrift, thttpd, ti-gfx,
-+	ti-utils, tinyhttpd, torsmo, trace-cmd, transmission, tslib,
-+	tstools, tvheadend, tzdata, uboot-tools, uclibc, udev,
-+	udpcast, usb_modeswitch, usbmount, util-linux, valgrind, vim,
-+	vlc, w_scan, wayland, webrtc-audio-processing, weston, wget,
-+	wireless-regdb, wireless_tools, wireshark, wpa_supplicant,
-+	xapp_{twm,xconsole,xcursorgen,xedit,xfs,xinit,xrandr},
-+	xdriver_xf86-video-intel, xlib_lib{FS,ICE,Xext,Xfont,Xft,Xi},
-+	xproto_fontsproto, xproto_inputproto, xserver_xorg-server,
-+	x11vnc, xbmc, xbmc-addon-xvdr, xbmc-pvr-addons, xterm, xvkbd,
-+	xz
-+
-+	New packages: flickcurl, fmc, fmlib, geoip, gnupg2,
-+	google-breakpad, imx-vpu, isl, kexec-lite, libglew, libglu,
-+	libinput, libksba, libmemcached, libmpdclient, librtlsdr,
-+	libuv, libva, libva-intel-driver, linux-zigbee, memcached,
-+	mpdecimal, ncmpc, opencore-amr, patchelf, perl-datetime-tiny,
-+	perl-gd, perl-gdgraph, perl-gdtextutil, perl-io-socket-ssl,
-+	perl-json-tiny, perl-mojolicious, perl-net-ssleay,
-+	perl-path-tiny, perl-try-tiny, perl-xml-libxml,
-+	perl-xml-namespacesupport, perl-xml-sax, perl-xml-sax-base,
-+	php-geoip, php-memcached, pifmrds, pinentry, powerpc-utils,
-+	procps-ng, pwgen, python-cffi, python-daemon, python-flup,
-+	python-ipython, python-numpy, qt5enginio, qt5webkit-examples,
-+	qt5websockets, simicsfs, sispmctl, sox, sshpass, tclap,
-+	twolame, upmpdcli, whois, xlib_libxshmfence, xproto_dri3proto
-+
-+	Removed packages: procps
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#5750: Doing a Buildroot build from /usr doesn't work
-+	#5900: config flags to the Xenomai build system
-+	#6230: Cannot compile gcc without threads (uClibc-based)
-+	#6626: procps Unknown HZ value! (XX) Assume 100
-+	#7118: Package "thrift" requires atomic operations
-+	#7154: Local uClibc config file gets overwritten using ...
-+	#7160: host-xz not built
-+	#7166: hostapd: segfault when using RT5370
-+	#7172: Name collision of rpath token expansion and internal..
-+	#7178: NTPd package cannot sync time without a proper ntp.conf
-+	#7184: supervisord depends on libxml2 implicitly
-+	#7196: Unable to build on UBUNTU13.10
-+	#7268: python 2.7 compilation issue on a Debian/Ubuntu ...
-+
- 2014.05, Released May 31st, 2014
- 
- 	Minor fixes.
+                  mongoose-5.4 | 21
+              gutenprint-5.2.9 | 4 
+               ruby-1.9.3-p545 | 2 
+            eigen-ffa86ffb5570 | 1 
+                host-mpc-1.0.2 | 1 
+                      fbv-1.0b | 1 
+                     nut-2.7.2 | 1 
+                 gnutls-3.2.16 | 1 
+                openssl-1.0.1i | 1 
+                libinput-0.3.0 | 1 
+              libarchive-3.1.2 | 1 
+ltrace-0896ce554f80afdcba81... | 1 
+                 iftop-1.0pre4 | 1 
+                  python-2.7.8 | 1 
+    bandwidthd-v2.0.1-auto-r07 | 1 
+                  perl-gd-2.53 | 1 
+                  prboom-2.5.0 | 1 
+               alsa-lib-1.0.28 | 1 
+
+Detail of failures
+===================
+
+   powerpc |                alsa-lib-1.0.28 | NOK | http://autobuild.buildroot.net/results/af61a1341566595f366ab2b6425e6d09501b10e4/
+       arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/db134dd77d3ada23f8e659592100bd77c87608c1/
+  mips64el |             eigen-ffa86ffb5570 | NOK | http://autobuild.buildroot.net/results/1a3ac71f1fc314492823554d4d69fe7496110262/
+   powerpc |                       fbv-1.0b | NOK | http://autobuild.buildroot.net/results/9cacec257f979745a7d4a43224b243ee4e16f9ac/
+       arm |                  gnutls-3.2.16 | NOK | http://autobuild.buildroot.net/results/894ae45e1d6f575945bca07530e7baa22999b0be/
+       arm |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/76ebd481da4f61ea07f3dcfd80979d6205183d81/
+      i686 |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/9d48a75da86bf6e00332b9d505990cf81b101c62/
+   powerpc |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/1ce1c8ae1228a31732306ffda2c8fbd81d2818f4/
+       sh4 |               gutenprint-5.2.9 | NOK | http://autobuild.buildroot.net/results/f74d4c5e8dda9600e2c070f5a055185a4d04ab0d/
+       arm |                 host-mpc-1.0.2 | NOK | http://autobuild.buildroot.net/results/ebda11bb7810be3983a80b5b0415d583d1af66d2/
+      bfin |                  iftop-1.0pre4 | NOK | http://autobuild.buildroot.net/results/1f45e2adcc80c4a209aa5895260985460933575c/
+    xtensa |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/ebf40260227afed2a43fec9556aa3c28b01e2a86/
+   aarch64 |                 libinput-0.3.0 | NOK | http://autobuild.buildroot.net/results/5cc5b07068b819e07e4ba64c29c216e26cb19e9f/
+      mips | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/6aec8081043357d620b4a23a01f4e56a0fc4db44/
+  mips64el |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/f44a84069266a2fcf5a4332b6e66264a54653cac/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/b3d4c1e76d2b3932a7eafb45c2d187f025776768/
+       arc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/9c8ce4c350e7ac6af3fc73c1599865d3cefb8f25/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/f73ad78db9f0e50d1edadacbfcd91cdc12c43287/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/ee976891e00448e83a7491fe81c2d710ce7b61da/
+      i686 |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/1d80c0fdd7859eaf8af5c36fa194212b23054836/
+       arm |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/fdcb14599005d30821424d48980ff11dd057af6f/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/55fba3e598eb2ebe44a4fc1a569afa656b6933fb/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/7cd2d664d866d685a18134730021844417fe0d46/
+       arm |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/701711626548bd166cd5bc5669e4761ffed074d1/
+      i686 |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/a5991d34055753b762e31bfb41635b3bd7da8e13/
+  mips64el |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/1f832d2a23fdc7e8a2f550cc46377ccf0e8b056d/
+       arm |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/ff7a000fbc99887da1e37fd8f5eb0abf1d6458ae/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/d36313fc33b2e3b1ad08726e90a0ad0217381d3a/
+    x86_64 |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/f58a895e96e8686891a793005a709a3311ce8294/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/d774d0235425bdfa6c9fe93656a690d864a9177d/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/a748839f4ee0327b360a368ffef9c889dc28b14f/
+       arm |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/45ecf334f6c95aae8ab563c6bb56c84a370dc1a7/
+       arc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/2636e1dbe3a2b99b79bb72ded8cf2df74d898611/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/588de260f10aa7eda207f2025bb2b2576a6d6b17/
+   powerpc |                   mongoose-5.4 | NOK | http://autobuild.buildroot.net/results/cb2d9117cfb9b65fbcb7394d69fbff38ff0fef7d/
+       arm |                      nut-2.7.2 | NOK | http://autobuild.buildroot.net/results/5bf75e5a182da884b561256d7db671596d467fae/
+       arm |                 openssl-1.0.1i | NOK | http://autobuild.buildroot.net/results/3c413e8365ba43e44179a191c35ea5f06f6cc3a0/
+       arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/e4f89400766ed7784ae671b5e3b9798b543197e9/
+      bfin |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/9b551a373bff08bbe9684b523c86f5ec1e8a6b1d/
+       arm |                   python-2.7.8 | NOK | http://autobuild.buildroot.net/results/bdaf9ace39db02e5dfefdd9eb200ad0f50fba9dd/
+      bfin |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/d923bfee42f62e04e8aec03905058e1adff2ba43/
+       arc |                ruby-1.9.3-p545 | NOK | http://autobuild.buildroot.net/results/d2610cc6cabae930a108492948789b994c49f6a7/
+
+
+-- 
+http://autobuild.buildroot.net
