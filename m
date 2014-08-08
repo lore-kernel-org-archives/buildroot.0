@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Aug 2014 22:20:05 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{4, 10, 14,
-	15}.x series
-Message-ID: <20140808202158.22F0D9D3A2@busybox.osuosl.org>
+Date: Fri, 8 Aug 2014 22:19:16 +0200
+Subject: [Buildroot] [git commit] wireshark: security bump to version 1.10.9
+Message-ID: <20140808202158.129A29D3E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=400b8d4d95632dba840f3854c07344734b6561dc
+commit: http://git.buildroot.net/buildroot/commit/?id=31b56034e0c1f1c46fdf3e9ac4105845b80b9b7a
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+WNPA-SEC-2014-08 / CVE-2014-5161 / CVE-2014-5162
+The Catapult DCT2000 and IrDA dissectors could underrun a buffer.
+
+WNPA-SEC-2014-09 / CVE-2014-5163
+The GSM Management dissector could crash.
+
+WNPA-SEC-2014-10 / CVE-2014-5164
+The RLC dissector could crash.
+
+WNPA-SEC-2014-11 / CVE-2014-5165
+The ASN.1 BER dissector could crash.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host |    8 ++++----
- 1 files changed, 4 insertions(+), 4 deletions(-)
+ package/wireshark/wireshark.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7514b00..6957a51 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -157,13 +157,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.0.101"	if BR2_KERNEL_HEADERS_3_0
- 	default "3.2.62"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.101"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.102"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.9.11"	if BR2_KERNEL_HEADERS_3_9
--	default "3.10.51"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.52"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.11.10"	if BR2_KERNEL_HEADERS_3_11
- 	default "3.12.26"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.13.11"	if BR2_KERNEL_HEADERS_3_13
--	default "3.14.15"	if BR2_KERNEL_HEADERS_3_14
--	default "3.15.8"	if BR2_KERNEL_HEADERS_3_15
-+	default "3.14.16"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.15.9"	if BR2_KERNEL_HEADERS_3_15
- 	default "3.16"		if BR2_KERNEL_HEADERS_3_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index 4117d19..da76e37 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 1.10.8
++WIRESHARK_VERSION = 1.10.9
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
