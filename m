@@ -1,42 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Aug 2014 10:14:00 +0200
-Subject: [Buildroot] [git commit branch/next] barebox: bump to version
-	2014.08.0
-Message-ID: <20140809081638.F25B69D31C@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat,  9 Aug 2014 09:06:20 +0000 (UTC)
+Subject: [Buildroot] [Bug 6950] Full unicode support in ncurses
+In-Reply-To: <bug-6950-163@https.bugs.busybox.net/>
+References: <bug-6950-163@https.bugs.busybox.net/>
+Message-ID: <20140809090620.8D9DF9D3FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=38edcc9a82c260e5be6ef096fc529ed52e7a6c83
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+https://bugs.busybox.net/show_bug.cgi?id=6950
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/barebox/Config.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+--- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-09 09:06:19 UTC ---
+Gustavo has sent a few patches to the list to implement the shared package
+approach. However, I lost track of the overall status of this.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index e35b45e..2248547 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2014.07.0"
-+	bool "2014.08.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2014.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2014.08.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+Gustavo, could you summarize the status, and make an assessment of whether this
+could still be done for 2014.08 or whether we better go for -next?
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
