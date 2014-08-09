@@ -1,25 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat,  9 Aug 2014 09:06:20 +0000 (UTC)
-Subject: [Buildroot] [Bug 6950] Full unicode support in ncurses
-In-Reply-To: <bug-6950-163@https.bugs.busybox.net/>
-References: <bug-6950-163@https.bugs.busybox.net/>
-Message-ID: <20140809090620.8D9DF9D3FF@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 09 Aug 2014 11:44:31 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2014-08-08
+References: <20140809063011.305C71013F9@stock.ovh.net>
+Message-ID: <XnsA38477720437AberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=6950
+Hi,
 
---- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-09 09:06:19 UTC ---
-Gustavo has sent a few patches to the list to implement the shared package
-approach. However, I lost track of the overall status of this.
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20140809063011.305C71013F9 at stock.ovh.net:
 
-Gustavo, could you summarize the status, and make an assessment of whether this
-could still be done for 2014.08 or whether we better go for -next?
+>      nios2 |                 minidlna-1.1.3 | NOK | 
+http://autobuild.buildroot.net/results/b440ec8c01af717b35436e11ba8d6f694a422b
+97/
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+"fixed" by this rejected patch: http://patchwork.ozlabs.org/patch/312275/
+
+>        arm |             xbmc-13.2b3-Gotham | NOK | 
+http://autobuild.buildroot.net/results/629d84617ab4c2f0e3f720b4709b60729f79e7
+8d/
+
+autobuilder does not provide a xbmc-compatible java host environment, 
+"fixed" by this patch: http://patchwork.ozlabs.org/patch/377405/
+
+Regards, Bernd
