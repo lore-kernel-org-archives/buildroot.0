@@ -1,19 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 09 Aug 2014 10:10:32 +0200
-Subject: [Buildroot] [PATCH] evetst: bump to version 1.32
-In-Reply-To: <1407537134-3459-1-git-send-email-ps.report@gmx.net> (Peter
- Seiderer's message of "Sat, 9 Aug 2014 00:32:14 +0200")
-References: <1407537134-3459-1-git-send-email-ps.report@gmx.net>
-Message-ID: <87egwq84nb.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Aug 2014 10:14:12 +0200
+Subject: [Buildroot] [PATCH] nano: bump to version 2.3.6
+In-Reply-To: <1407360228-17104-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 6 Aug 2014 18:23:48 -0300")
+References: <1407360228-17104-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a97e84h7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed to next, thanks.
 
