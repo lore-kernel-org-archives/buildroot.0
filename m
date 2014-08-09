@@ -1,75 +1,99 @@
 From: Paul Cercueil <paul@crapouillou.net>
-Date: Sat, 09 Aug 2014 15:42:16 +0200
-Subject: [Buildroot] [PATCH] glm: Added package
-In-Reply-To: <20140806221247.414d193e@free-electrons.com>
-References: <1407279557-15416-1-git-send-email-paul@crapouillou.net>
- <20140806221247.414d193e@free-electrons.com>
-Message-ID: <53E62538.5020408@crapouillou.net>
+Date: Sat, 09 Aug 2014 15:45:07 +0200
+Subject: [Buildroot] [PATCH 2/2] lightning: Added package
+In-Reply-To: <20140806031244.GN2322@tarshish>
+References: <1407279610-15589-1-git-send-email-paul@crapouillou.net>
+ <1407279610-15589-2-git-send-email-paul@crapouillou.net>
+ <20140806031244.GN2322@tarshish>
+Message-ID: <53E625E3.7030707@crapouillou.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Baruch,
+Hi Baruch,
 
-Thank you for your comments. I will send a new version of this patch 
-shortly.
+Le 06/08/2014 05:12, Baruch Siach a ?crit :
+> Hi Paul,
+>
+> On Wed, Aug 06, 2014 at 01:00:10AM +0200, Paul Cercueil wrote:
+>> GNU lightning is a library that generates assembly language code
+>> at run-time.
+>>
+>> https://www.gnu.org/software/lightning/
+>>
+>> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>> ---
+>>   package/Config.in              |  1 +
+>>   package/lightning/Config.in    |  8 ++++++++
+>>   package/lightning/lightning.mk | 18 ++++++++++++++++++
+>>   3 files changed, 27 insertions(+)
+>>   create mode 100644 package/lightning/Config.in
+>>   create mode 100644 package/lightning/lightning.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 1e4bc50..6ca10a8 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -864,6 +864,7 @@ menu "Other"
+>>   	source "package/libunwind/Config.in"
+>>   	source "package/liburcu/Config.in"
+>>   	source "package/libuv/Config.in"
+>> +	source "package/lightning/Config.in"
+>>   	source "package/linux-pam/Config.in"
+>>   	source "package/lttng-libust/Config.in"
+>>   	source "package/mpc/Config.in"
+>> diff --git a/package/lightning/Config.in b/package/lightning/Config.in
+>> new file mode 100644
+>> index 0000000..5a7152a
+>> --- /dev/null
+>> +++ b/package/lightning/Config.in
+>> @@ -0,0 +1,8 @@
+>> +config BR2_PACKAGE_LIGHTNING
+>> +	bool "lightning"
+>> +	depends on BR2_sparc || BR2_i386 || BR2_x86_64 || BR2_mips || BR2_mipsel || BR2_arm || BR2_powerpc
+>> +	help
+>> +	  GNU lightning is a library that generates
+>> +	  assembly language code at run-time.
+>> +
+>> +	  https://www.gnu.org/software/lightning/
+>> diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+>> new file mode 100644
+>> index 0000000..ff3ea92
+>> --- /dev/null
+>> +++ b/package/lightning/lightning.mk
+>> @@ -0,0 +1,18 @@
+>> +################################################################################
+>> +#
+>> +# lightning
+>> +#
+>> +################################################################################
+>> +
+>> +LIGHTNING_VERSION = 2.0.4
+>> +LIGHTNING_SITE = http://ftp.gnu.org/gnu/lightning/
+>> +LIGHTNING_LICENSE = GPLv3
+>> +LIGHTNING_LICENSE_FILES = COPYING
+>> +LIGHTNING_INSTALL_STAGING = YES
+>> +
+>> +ifeq ($(BR2_PACKAGE_BINUTILS),y)
+>> +LIGHTNING_DEPENDENCIES += binutils
+>> +LIGHTNING_CONF_OPT += --enable-disassembler
+>> +endif
+>
+> Have you tested external toolchains?
+>
+> baruch
+
+No I did not, as I don't use one. Furthermore, I only tested the package 
+on mipsel, the list of archs specified in this package is taken from 
+lightning's web page and may be incorrect (hopefully not).
+
+Regards,
 
 Paul
 
-Le 06/08/2014 22:12, Thomas Petazzoni a ?crit :
-> Dear Paul Cercueil,
 >
-> On Wed,  6 Aug 2014 00:59:17 +0200, Paul Cercueil wrote:
->
->> diff --git a/package/glm/Config.in b/package/glm/Config.in
->> new file mode 100644
->> index 0000000..2897cf0
->> --- /dev/null
->> +++ b/package/glm/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_GLM
->> +	bool "glm"
->> +	depends on BR2_INSTALL_LIBSTDCPP
->> +	help
->> +	  OpenGL Mathematics (GLM)
 >> +
->> +	  http://glm.g-truc.net
->
-> This lacks a comment explaining that this package depends on C++ when
-> C++ is not available (see the Buildroot manual and many other packages
-> in Buildroot).
->
->> diff --git a/package/glm/glm.mk b/package/glm/glm.mk
->> new file mode 100644
->> index 0000000..1e7e7df
->> --- /dev/null
->> +++ b/package/glm/glm.mk
->> @@ -0,0 +1,13 @@
->> +#############################################################
->> +#
->> +# glm
->> +#
->> +#############################################################
->
-> Header length is not correct (80 # signs are needed), and there should
-> be an empty line between the header and the first variable definition.
->
->> +GLM_VERSION = 0.9.5.4
->> +GLM_SITE = git://github.com/g-truc/glm.git
->
-> github helper, as pointed by Baruch.
->
->> +GLM_LICENSE = MIT
->> +GLM_LICENSE_FILES = copying.txt
->> +GLM_INSTALL_STAGING = YES
->> +GLM_INSTALL_TARGET = NO
->
-> Could you add a small comment above those two lines to explain why no
-> target installation is needed?
->
-> Thanks!
->
-> Thomas
+>> +$(eval $(autotools-package))
 >
