@@ -1,38 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Aug 2014 10:15:51 +0200
-Subject: [Buildroot] [git commit branch/next] nanocom: change version to 1.0
-Message-ID: <20140809081639.05D229D3FD@busybox.osuosl.org>
+Date: Sat, 9 Aug 2014 10:13:51 +0200
+Subject: [Buildroot] [git commit branch/next] nano: bump to version 2.3.6
+Message-ID: <20140809081638.EC7599D3FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=8aafe1dfb9d1d6753f53661afa3c47fdace8417c
+commit: http://git.buildroot.net/buildroot/commit/?id=d30a6416d4a51b30f6fac501902214f2dd0d4a4b
 branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As that is really what it is.
-
-[Peter: slightly reworded description]
-Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nanocom/nanocom.mk |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.mk |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/package/nanocom/nanocom.mk b/package/nanocom/nanocom.mk
-index c2a9291..f723951 100644
---- a/package/nanocom/nanocom.mk
-+++ b/package/nanocom/nanocom.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 3a17e7f..9557a93 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--NANOCOM_VERSION = 2.6.1
-+NANOCOM_VERSION = 1.0
- NANOCOM_SOURCE = nanocom.tar.gz
--NANOCOM_SITE = http://downloads.sourceforge.net/project/nanocom/nanocom/v1.0
-+NANOCOM_SITE = http://downloads.sourceforge.net/project/nanocom/nanocom/v$(NANOCOM_VERSION)
- NANOCOM_LICENSE = GPLv2+
- NANOCOM_LICENSE_FILES = COPYING
- 
+ NANO_VERSION_MAJOR = 2.3
+-NANO_VERSION = $(NANO_VERSION_MAJOR).5
++NANO_VERSION = $(NANO_VERSION_MAJOR).6
+ NANO_SITE = http://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
