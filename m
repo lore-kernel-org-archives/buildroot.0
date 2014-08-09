@@ -1,28 +1,24 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 09 Aug 2014 10:08:08 +0200
-Subject: [Buildroot] [PATCH] openssl: add fix for hash cryptodev
-	offloading
-In-Reply-To: <1407273911-30628-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Tue, 5 Aug 2014 18:25:11 -0300")
-References: <1407273911-30628-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87r40q84rb.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Aug 2014 10:09:36 +0200
+Subject: [Buildroot] [PATCH] postgresql: bump to version 9.3.5
+In-Reply-To: <1407529628-23985-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Fri, 8 Aug 2014 22:27:08 +0200")
+References: <1407529628-23985-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87mwbe84ov.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > See http://rt.openssl.org/Ticket/Display.html?id=2770&user=guest&pass=guest
- > This has been sitting for ages in the openssl tracker and it's verified
- > to cause issues.
- > The patch only touches cryptodev engine offloading so it's pretty safe.
- > Tested on CAAM SEC4 hardware.
+ > See [1] for a detailed list of changes/fixes.
+ > [1] http://www.postgresql.org/docs/current/static/release-9-3-5.html
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Committed, thanks.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
