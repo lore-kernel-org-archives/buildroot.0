@@ -1,19 +1,19 @@
 From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Sat, 09 Aug 2014 10:14:17 +0200
-Subject: [Buildroot] [PATCH] barebox: bump to version 2014.08.0
-In-Reply-To: <1407394794-32404-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Thu, 7 Aug 2014 08:59:54 +0200")
-References: <1407394794-32404-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <8761i284h2.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Aug 2014 10:15:44 +0200
+Subject: [Buildroot] [PATCH 1/1] Change nanocom version to 1.0
+In-Reply-To: <1407488420-31106-1-git-send-email-alyoshin.s@gmail.com> (Sergey
+ Alyoshin's message of "Fri, 8 Aug 2014 13:00:20 +0400")
+References: <1407488420-31106-1-git-send-email-alyoshin.s@gmail.com>
+Message-ID: <871tsq84en.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>>>>> "Sergey" == Sergey Alyoshin <alyoshin.s@gmail.com> writes:
 
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > Signed-off-by: Sergey Alyoshin <alyoshin.s@gmail.com>
 
 Committed to next, thanks.
 
