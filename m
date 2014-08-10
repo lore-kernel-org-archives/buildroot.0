@@ -1,34 +1,67 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 10 Aug 2014 20:17:25 +0200
-Subject: [Buildroot] [PATCH] perl: fix warnings at runtime
-Message-ID: <1407694645-26356-1-git-send-email-francois.perrad@gadz.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 10 Aug 2014 20:35:08 +0200
+Subject: [Buildroot] [PATCH 1 of 4 for 2014.08] gendoc infra: use $(pkgname)
+ instead of explicitly passing 'manual'
+In-Reply-To: <patchbomb.1407695707@localhost>
+References: <patchbomb.1407695707@localhost>
+Message-ID: <6a056a337e1b58954086.1407695708@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-autosplit.ix files are used by AutoLoader.pm
+In the gendoc infrastructure, using an assignment of the form
+    FOO = docs/$(1)/bar
+inside GENDOC_INNER does not work as expected: the $(1) value is empty here
+and the value of FOO becomes 'docs//bar'.
 
-    Can't locate auto/Net/SSLeay/autosplit.ix in @INC (@INC contains: /usr/lib/perl5/site_perl/5.18.2/arm-linux /usr/lib/perl5/site_perl/5.18.2 /usr/lib/perl5/5.18.2/arm-linux /usr/lib/perl5/5.18.2 .) at /usr/lib/perl5/5.18.2/AutoLoader.pm line 181.
-     at /usr/lib/perl5/site_perl/5.18.2/arm-linux/Net/SSLeay.pm line 24.
+Parameters $(2), $(3), etc. do not have this problem. The specific thing
+about $(1) is that it is a parameter to GENDOC itself (indicating the
+document to create) and passed transparently to GENDOC_INNER.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This is different from the package infrastructures, where $(1) is set from
+$(pkgname). In fact, the same strategy could be used by the gendoc
+infrastructure as well, as $(pkgname) resolves to 'manual' for file
+docs/manual/manual.mk. This has the advantage that the described problem
+does not occur.
+
+Note that this means that if we want to use the same GENDOC infrastructure
+for another document, it will have to reside in a separate directory than
+the manual.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+
 ---
- package/perl/perl.mk | 1 -
- 1 file changed, 1 deletion(-)
+ docs/manual/manual.mk |  18 +++++++++---------
+ 1 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index e01570e..01e0166 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -129,7 +129,6 @@ define PERL_FINALIZE_TARGET
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name 'extralibs.ld' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '*.bs' -print0 | xargs -0 rm -f
- 	find $(TARGET_DIR)/usr/lib/perl5/ -name '.packlist' -print0 | xargs -0 rm -f
--	find $(TARGET_DIR)/usr/lib/perl5/ -name 'autosplit.ix' -print0 | xargs -0 rm -f
+diff -r 3bcf63a46bc1 -r 6a056a337e1b docs/manual/manual.mk
+--- a/docs/manual/manual.mk	Tue Aug 05 18:25:11 2014 -0300
++++ b/docs/manual/manual.mk	Sat Aug 09 18:18:58 2014 +0200
+@@ -78,16 +78,16 @@
+ # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
+ ################################################################################
+ define GENDOC
+-$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+-$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
+-$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
+-$(call GENDOC_INNER,$(1),text,text,text,text)
+-$(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
++$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
++$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
++$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
++$(call GENDOC_INNER,$(pkgname),text,text,text,text)
++$(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
+ clean: $(1)-clean
+-$(1)-clean:
+-	$$(Q)$$(RM) -rf $$(O)/docs/$(1)
+-.PHONY: $(1) $(1)-clean manual-update-lists
++$(pkgname)-clean:
++	$$(Q)$$(RM) -rf $$(O)/docs/$(pkgname)
++.PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
  endef
  
- TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
--- 
-1.9.1
+ MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
+-$(eval $(call GENDOC,manual))
++$(eval $(call GENDOC))
