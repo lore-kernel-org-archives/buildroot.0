@@ -1,52 +1,49 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 10 Aug 2014 20:35:09 +0200
-Subject: [Buildroot] [PATCH 2 of 4 for 2014.08] gendoc infra: add support
- for asciidoc configuration files
+Date: Sun, 10 Aug 2014 20:35:10 +0200
+Subject: [Buildroot] [PATCH 3 of 4 for 2014.08] manual-text: make sure URLs
+ are displayed if a link text was provided
 In-Reply-To: <patchbomb.1407695707@localhost>
 References: <patchbomb.1407695707@localhost>
-Message-ID: <6e36b7e6851b39ce6d76.1407695709@localhost>
+Message-ID: <a891fa8b7ca9137dfe16.1407695710@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch introduces support for asciidoc configuration files, specific for
-each output format (html, text, pdf, ...). This is useful to make certain
-tweaks in the document generation.
+When the asciidoc source contain URLs of the form:
+    http://example.com[An example website]
+the text representation of the manual would only contain:
+    An example website
+without displaying the actual URL.
 
-If a file docs/manual/asciidoc-<format>.conf is present, it is passed to
-asciidoc as configuration file. If no file for the current format is
-present, the options passed to asciidoc are empty.
+This patch adds an asciidoc configuration file that sets the inline macros
+for several URL types so that the display becomes:
+    An example website [http://example.com]
+For URLs where no link text was provided, the display becomes:
+    [http://example.com]
+which is the same as before, except for the surrounding brackets.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/manual.mk |  8 +++++++-
- 1 files changed, 7 insertions(+), 1 deletions(-)
+ docs/manual/asciidoc-text.conf |  13 +++++++++++++
+ 1 files changed, 13 insertions(+), 0 deletions(-)
 
-diff -r 6a056a337e1b -r 6e36b7e6851b docs/manual/manual.mk
---- a/docs/manual/manual.mk	Sat Aug 09 18:18:58 2014 +0200
-+++ b/docs/manual/manual.mk	Sat Aug 09 12:20:16 2014 +0200
-@@ -56,6 +56,11 @@
- 
- manual-check-dependencies-$(3):
- 
-+MANUAL_$(2)_ASCIIDOC_CONF = docs/$(1)/asciidoc-$(2).conf
-+ifneq ($$(wildcard $$(MANUAL_$(2)_ASCIIDOC_CONF)),)
-+MANUAL_$(2)_ASCIIDOC_OPTS += -f $$(MANUAL_$(2)_ASCIIDOC_CONF)
-+endif
-+
- $$(O)/docs/$(1)/$(1).$(4): docs/$(1)/$(1).txt \
- 			   $$($$(call UPPERCASE,$(1))_SOURCES) \
- 			   manual-check-dependencies \
-@@ -65,7 +70,8 @@
- 	$$(Q)mkdir -p $$(@D)/.build
- 	$$(Q)rsync -au docs/$(1)/*.txt $$(@D)/.build
- 	$$(Q)a2x $(6) -f $(2) -d book -L -r $$(TOPDIR)/docs/images \
--	        -D $$(@D) $$(@D)/.build/$(1).txt
-+	        -D $$(@D) $$(@D)/.build/$(1).txt \
-+	        --asciidoc-opts="$$(MANUAL_$(2)_ASCIIDOC_OPTS)"
- 	-$$(Q)rm -rf $$(@D)/.build
- endef
- 
+diff -r 6e36b7e6851b -r a891fa8b7ca9 docs/manual/asciidoc-text.conf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/docs/manual/asciidoc-text.conf	Sat Aug 09 19:42:30 2014 +0200
+@@ -0,0 +1,13 @@
++# For hyperlinks, show 'link text [URL]' (if link text provided) or [URL]
++[http-inlinemacro]
++{0=} &#91;{name}:{target}&#93;
++[https-inlinemacro]
++{0=} &#91;{name}:{target}&#93;
++[ftp-inlinemacro]
++{0=} &#91;{name}:{target}&#93;
++[file-inlinemacro]
++{0=} &#91;{name}:{target}&#93;
++[irc-inlinemacro]
++{0=} &#91;{name}:{target}&#93;
++[mailto-inlinemacro]
++{0=} &#91;{name}:{target}&#93;
