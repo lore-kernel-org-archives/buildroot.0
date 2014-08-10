@@ -1,29 +1,43 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Sun, 10 Aug 2014 12:55:43 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql: remove devfiles from target
-In-Reply-To: <b8f2dfad-6831-48d9-a7fa-c4775bbcf0a6@email.android.com>
-References: <1407605679-15342-1-git-send-email-bos@je-eigen-domein.nl>
- <b8f2dfad-6831-48d9-a7fa-c4775bbcf0a6@email.android.com>
-Message-ID: <53E74FAF.6000306@je-eigen-domein.nl>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 10 Aug 2014 14:46:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: prevent stripping the
+	ffmpeg binary
+Message-ID: <1407674806-11614-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/10/2014 09:01 AM, Thomas De Schampheleire wrote:
-> define POSTGRESQL_INSTALL_TARGET_FIXUP
-> 	$(INSTALL) -dm 0700 $(TARGET_DIR)/var/lib/pgsql
-> +	rm -f $(TARGET_DIR)/usr/bin/pg_config
-> +	rm -rf $(TARGET_DIR)/usr/lib/postgresql/pgxs
-> endef
-> Not entirely sure here, but isn't the better approach for pg_config to add it to POSTGRESQL_CONFIG_SCRIPTS? This will ensure the file is fixed up for staging usr, and removed from target automatically.
->
+Packages shouldn't strip executables by themselves, so that Buildroot
+controls whether stripping should occur or not. This also fixes the
+build on Blackfin FLAT where stripping actually doesn't work because
+stripping FLAT binaries is not supported.
 
-Note that pg_config is an ELF executable compiled for the target 
-architecture, and not a text script that can be easily fixed up.
+Inspired by Thomas:
+http://git.buildroot.net/buildroot/commit/package/hdparm/hdparm.mk?id=11dbb615338cd768acc2c3138064ddf557e9b60b
 
+Fixes
+http://autobuild.buildroot.net/results/581/581c43b50c9717e53334eb156ece95fe499ccb04/
+http://autobuild.buildroot.net/results/57a/57a1bdc22b803114c018fa007884385bf8355151/
+http://autobuild.buildroot.net/results/d8a/d8a1aadebd302abc923bc4865e1242ab2479d641/
 
-Yours sincerely,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
-Floris Bos
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5c269ac..e8d4ada 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -329,6 +329,7 @@ define FFMPEG_CONFIGURE_CMDS
+ 		--host-cc="$(HOSTCC)" \
+ 		--arch=$(BR2_ARCH) \
+ 		--target-os="linux" \
++		--disable-stripping \
+ 		$(if $(BR2_GCC_TARGET_TUNE),--cpu=$(BR2_GCC_TARGET_TUNE)) \
+ 		$(SHARED_STATIC_LIBS_OPTS) \
+ 		$(FFMPEG_CONF_OPT) \
+-- 
+1.7.10.4
