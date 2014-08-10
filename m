@@ -1,24 +1,29 @@
-From: Drasko DRASKOVIC <drasko.draskovic@gmail.com>
-Date: Sat, 9 Aug 2014 13:31:14 +0200
-Subject: [Buildroot] Pour Votre Information
-Message-ID: <CAEk6gTCK1LrE9Br1U96cPgMb=QTTm4q+MoRLByN5GJFWZOvZfw@mail.gmail.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Sun, 10 Aug 2014 12:55:43 +0200
+Subject: [Buildroot] [PATCH 1/1] postgresql: remove devfiles from target
+In-Reply-To: <b8f2dfad-6831-48d9-a7fa-c4775bbcf0a6@email.android.com>
+References: <1407605679-15342-1-git-send-email-bos@je-eigen-domein.nl>
+ <b8f2dfad-6831-48d9-a7fa-c4775bbcf0a6@email.android.com>
+Message-ID: <53E74FAF.6000306@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ci-joint un article pour votre information. Il s'agit d'une assez bonne
-lecture et certainement la plus pertinente que j'ai lu sur la gestion de
-fortune.
+On 08/10/2014 09:01 AM, Thomas De Schampheleire wrote:
+> define POSTGRESQL_INSTALL_TARGET_FIXUP
+> 	$(INSTALL) -dm 0700 $(TARGET_DIR)/var/lib/pgsql
+> +	rm -f $(TARGET_DIR)/usr/bin/pg_config
+> +	rm -rf $(TARGET_DIR)/usr/lib/postgresql/pgxs
+> endef
+> Not entirely sure here, but isn't the better approach for pg_config to add it to POSTGRESQL_CONFIG_SCRIPTS? This will ensure the file is fixed up for staging usr, and removed from target automatically.
+>
 
-Click here <http://im-p.com/googledrivedocab/googledrivedocab/> et
-connectez-vous pour lire le document dans Google Docs.
+Note that pg_config is an ELF executable compiled for the target 
+architecture, and not a text script that can be easily fixed up.
 
-Cordialement
 
-Remarque: Ceci est seulement utile ? ceux qui ont de la richesse ? g?rer et
-je le partage uniquement avec ma liste de contact personnel.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140809/80af2299/attachment.html>
+Yours sincerely,
+
+Floris Bos
