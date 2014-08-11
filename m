@@ -1,69 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Aug 2014 12:50:05 +0200
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <20140811103315.GB4364@free.fr>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20140806202322.GE1587@free.fr>
- <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
- <20140811103315.GB4364@free.fr>
-Message-ID: <20140811105005.GC4364@free.fr>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Aug 2014 13:06:09 +0200
+Subject: [Buildroot] [PATCH 1/1] espeak : depends on MMU
+In-Reply-To: <d0d00ba2-2cf5-4f5a-945a-9f215d587e61@email.android.com> (Thomas
+ De Schampheleire's message of "Mon, 11 Aug 2014 10:11:50 +0200")
+References: <1407742731-5300-1-git-send-email-arnaud@intelibre.fr>
+ <d0d00ba2-2cf5-4f5a-945a-9f215d587e61@email.android.com>
+Message-ID: <87wqaf70bi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Johan, All,
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-On 2014-08-11 12:33 +0200, Yann E. MORIN spake thusly:
-> On 2014-08-11 11:36 +0200, Johan Oudinet spake thusly:
-> > On Wed, Aug 6, 2014 at 10:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > > And it fails at build time, with a lengthy error message, that I do not
-> > > completely grasp:
-> > >
-> > >     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar
-> > > get-deps && :> deps/.got
-> > >     ==> rel (get-deps)
-> > >     Uncaught error in rebar_core: {'EXIT',
-> > >                                    {badarg,
-> > 
-> > Very strange. It looks like the rebar script didn't accept the
-> > get-deps argument.
-> > Could you try with the same defconfig as mine to see if the problem
-> > comes from there.
-[--SNIP--]
-> I'll check in a 32-bit chroot to see if the error is the same.
+ > Hi Arnaud,
+ > arnaud at intelibre.fr schreef:
+ >> From: Arnaud Aujon <arnaud@intelibre.fr>
+ >> 
+ >> Fixes autobuild http://autobuild.buildroot.net/results/dae/dae5c59dfa127e1c3f9e3885cdd1b97e54d8fe41/
+ >> and http://autobuild.buildroot.net/results/fa0/fa04a0fe7d7a201c5f733bd798c0da50ffb81271/
+ >> 
+ >> espeak uses fork(), don't work on non-MMU platforms
+ >> 
+ >> Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+ >> ---
+ >> package/espeak/Config.in | 14 ++++++++------
+ >> 1 file changed, 8 insertions(+), 6 deletions(-)
+ >> 
+ >> diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+ >> index ec81893..57c7d18 100644
+ >> --- a/package/espeak/Config.in
+ >> +++ b/package/espeak/Config.in
+ >> @@ -1,17 +1,19 @@
+ >> -comment "espeak needs a toolchain w/ C++, wchar, threads"
+ >> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ >> -
+ >> config BR2_PACKAGE_ESPEAK
+ >> bool "espeak"
+ >> depends on BR2_INSTALL_LIBSTDCPP
+ >> depends on BR2_USE_WCHAR
+ >> depends on BR2_TOOLCHAIN_HAS_THREADS
+ >> +	depends on BR2_USE_MMU # fork()
+ >> help
+ >> espeak is a speech synthesizer software for English and
+ >> other languages.
+ >> 
+ >> http://espeak.sourceforge.net/
+ >> 
+ >> +comment "espeak needs a toolchain w/ C++, wchar, threads"
+ >> +        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+ >> +        depends on BR2_USE_MMU
+ >> +
 
-OK, here's what it has to say when run in a 32-bit sueeze chroot:
+ > While the moving of this comment seems to be the right thing to do, I believe this will break the indentation/nesting of the suboptions of espeak.
 
-    ---8<---
-    /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar get-deps && :> deps/.got
-    Uncaught error in rebar_core: {'EXIT',
-                                   {undef,
-                                    [{crypto,start,[],[]},
-                                     {rebar,run_aux,2,
-                                      [{file,"src/rebar.erl"},{line,143}]},
-                                     {rebar,main,1,
-                                      [{file,"src/rebar.erl"},{line,58}]},
-                                     {escript,run,2,
-                                      [{file,"escript.erl"},{line,752}]},
-                                     {escript,start,1,
-                                      [{file,"escript.erl"},{line,276}]},
-                                     {init,start_it,1,[]},
-                                     {init,start_em,1,[]}]}}
-    make[2]: *** [deps/.got] Error 1
-    ---8<---
-
-So, no better luck... :-(
-
-Regards,
-Yann E. MORIN.
+Indeed. Comments should go at the very top or bottom of the file. Care
+to send a reworked patch that leaves the comment at the top?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
