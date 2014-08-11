@@ -1,33 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Aug 2014 22:53:05 +0200
-Subject: [Buildroot] [git commit branch/next] package/ffmpeg: Bump version
-	to 2.3.2
-Message-ID: <20140811205327.932889D359@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Aug 2014 22:58:14 +0200
+Subject: [Buildroot] [PATCH] postgresql: disable spinlock support for
+	nios2
+In-Reply-To: <1407696358-4451-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Sun, 10 Aug 2014 20:45:58 +0200")
+References: <1407696358-4451-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87bnrq7nh5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=2c881c4b1aa5c96dd14e314ec685356f89f45483
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ffmpeg/ffmpeg.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Fixes:
+ > 	http://autobuild.buildroot.net/results/4d2/4d2f962ae59cfe11fce4d6790dbccfbb527a8f5f/
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 5c269ac..6fb73ce 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.3.1
-+FFMPEG_VERSION = 2.3.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.bz2
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
