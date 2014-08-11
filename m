@@ -1,36 +1,25 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Aug 2014 22:57:56 +0200
-Subject: [Buildroot] [git commit] postgresql: disable spinlock support for
-	nios2
-Message-ID: <20140811205829.6C7009D419@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Aug 2014 23:01:41 +0200
+Subject: [Buildroot] [PATCH] perl: fix warnings at runtime
+In-Reply-To: <1407694645-26356-1-git-send-email-francois.perrad@gadz.org>
+ (Francois Perrad's message of "Sun, 10 Aug 2014 20:17:25 +0200")
+References: <1407694645-26356-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <877g2e7nbe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=bf3d9840d7843cdb49a6baff7090a413c3ac4d6f
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-Fixes:
-	http://autobuild.buildroot.net/results/4d2/4d2f962ae59cfe11fce4d6790dbccfbb527a8f5f/
+ > autosplit.ix files are used by AutoLoader.pm
+ >     Can't locate auto/Net/SSLeay/autosplit.ix in @INC (@INC contains: /usr/lib/perl5/site_perl/5.18.2/arm-linux /usr/lib/perl5/site_perl/5.18.2 /usr/lib/perl5/5.18.2/arm-linux /usr/lib/perl5/5.18.2 .) at /usr/lib/perl5/5.18.2/AutoLoader.pm line 181.
+ >      at /usr/lib/perl5/site_perl/5.18.2/arm-linux/Net/SSLeay.pm line 24.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/postgresql/postgresql.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 0fecbc7..73762e2 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -16,7 +16,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- 	POSTGRESQL_CONF_OPT += --disable-thread-safety
- endif
- 
--ifeq ($(BR2_microblazeel)$(BR2_microblazebe),y)
-+ifeq ($(BR2_microblazeel)$(BR2_microblazebe)$(BR2_nios2),y)
- 	POSTGRESQL_CONF_OPT += --disable-spinlocks
- endif
- 
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
