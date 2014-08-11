@@ -1,32 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Aug 2014 23:02:02 +0200
-Subject: [Buildroot] [git commit] package/fbv: Typo fix
-Message-ID: <20140811213123.A920E9D3E2@busybox.osuosl.org>
+From: Peter Korsgaard <jacmet@uclibc.org>
+Date: Mon, 11 Aug 2014 23:31:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fbv: Fix linking against libpng
+In-Reply-To: <1407683528-2780-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
+ Kuhls's message of "Sun, 10 Aug 2014 17:12:08 +0200")
+References: <1407683528-2780-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87y4uu67dp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: http://git.buildroot.net/buildroot/commit/?id=a21566d317c1f1814f9445bc7a8a6cfb4d7a063b
-branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/fbv/fbv.mk |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
+ > Fixes
+ > http://autobuild.buildroot.net/results/9ca/9cacec257f979745a7d4a43224b243ee4e16f9ac/
+ > http://autobuild.buildroot.net/results/996/996e42396546555e9fcf0c7135aac610ccca4eee/
+ > http://autobuild.buildroot.net/results/c91/c918046900045c34c73e16578026cce3e6bcccf8/
 
-diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-index a702a9b..6f41d9f 100644
---- a/package/fbv/fbv.mk
-+++ b/package/fbv/fbv.mk
-@@ -29,7 +29,7 @@ else
- FBV_CONFIGURE_OPTS += --without-libungif
- endif
- 
--#fbv donesn't support cross-compilation
-+#fbv doesn't support cross-compilation
- define FBV_CONFIGURE_CMDS
- 	(cd $(FBV_DIR); rm -f config.cache; \
- 		$(TARGET_CONFIGURE_OPTS) \
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ >  package/fbv/fbv.mk |    1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
+ > index 6f41d9f..980bb9e 100644
+ > --- a/package/fbv/fbv.mk
+ > +++ b/package/fbv/fbv.mk
+ > @@ -15,6 +15,7 @@ FBV_DEPENDENCIES = # empty
+ >  FBV_CONFIGURE_OPTS = # empty
+ >  ifeq ($(BR2_PACKAGE_FBV_PNG),y)
+ >  FBV_DEPENDENCIES += libpng
+ > +FBV_CONFIGURE_OPTS += "--libs=$(shell $(PKG_CONFIG_HOST_BINARY) --libs libpng)"
+
+Hmm, the issue is specifically about static linking (as libpng uses
+zlib and lm, but fbv doesn't directly use them), so that would be good to
+mention in the commit message.
+
+With that said, your fix doesn't work as pkg-config --libs libpng just
+returns -lpng16. You need to explicitly ask for the static version with
+--static to get -lpng16 -lz.
+
+I've changed it only use pkg-config (with --static) for the static
+linking case and committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
