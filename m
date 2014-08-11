@@ -1,48 +1,47 @@
-From: Peter Korsgaard <jacmet@uclibc.org>
-Date: Mon, 11 Aug 2014 23:31:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fbv: Fix linking against libpng
-In-Reply-To: <1407683528-2780-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sun, 10 Aug 2014 17:12:08 +0200")
-References: <1407683528-2780-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87y4uu67dp.fsf@dell.be.48ers.dk>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 11 Aug 2014 18:03:16 -0400
+Subject: [Buildroot] [git commit] package/fbv: Fix static linking
+	against libpng
+In-Reply-To: <20140811213123.B361B9D41E@busybox.osuosl.org>
+References: <20140811213123.B361B9D41E@busybox.osuosl.org>
+Message-ID: <CANxTyt5JN2JSp23zc=2XvNZastVtnBsG0KM-u-XTfsUi88xgfA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Peter,
 
- > Fixes
- > http://autobuild.buildroot.net/results/9ca/9cacec257f979745a7d4a43224b243ee4e16f9ac/
- > http://autobuild.buildroot.net/results/996/996e42396546555e9fcf0c7135aac610ccca4eee/
- > http://autobuild.buildroot.net/results/c91/c918046900045c34c73e16578026cce3e6bcccf8/
+On Mon, Aug 11, 2014 at 5:30 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> commit: http://git.buildroot.net/buildroot/commit/?id=a3ff0ad550ba1bfd88e66ac8209446577e889849
+> branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Fixes
+> http://autobuild.buildroot.net/results/9ca/9cacec257f979745a7d4a43224b243ee4e16f9ac/
+> http://autobuild.buildroot.net/results/996/996e42396546555e9fcf0c7135aac610ccca4eee/
+> http://autobuild.buildroot.net/results/c91/c918046900045c34c73e16578026cce3e6bcccf8/
+>
+> [Peter: adjust description, pass --static to pkg-config, only use for static linking]
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/fbv/fbv.mk |    6 ++++++
+>  1 files changed, 6 insertions(+), 0 deletions(-)
+>
+> diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
+> index 6f41d9f..cc1dc7b 100644
+> --- a/package/fbv/fbv.mk
+> +++ b/package/fbv/fbv.mk
+> @@ -15,6 +15,12 @@ FBV_DEPENDENCIES = # empty
+>  FBV_CONFIGURE_OPTS = # empty
+>  ifeq ($(BR2_PACKAGE_FBV_PNG),y)
+>  FBV_DEPENDENCIES += libpng
+> +
+> +# libpng in turn depends on other libraries
+> +ifeq ($(BR2_PREFER_STATIC_LIB),y)
+> +FBV_CONFIGURE_OPTS += "--libs=$(shell $(PKGg_CONFIG_HOST_BINARY) --libs libpng --static)"
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- >  package/fbv/fbv.mk |    1 +
- >  1 file changed, 1 insertion(+)
+Er, extra "g" in "PKGg_CONFIG_HOST_BINARY" ?
 
- > diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
- > index 6f41d9f..980bb9e 100644
- > --- a/package/fbv/fbv.mk
- > +++ b/package/fbv/fbv.mk
- > @@ -15,6 +15,7 @@ FBV_DEPENDENCIES = # empty
- >  FBV_CONFIGURE_OPTS = # empty
- >  ifeq ($(BR2_PACKAGE_FBV_PNG),y)
- >  FBV_DEPENDENCIES += libpng
- > +FBV_CONFIGURE_OPTS += "--libs=$(shell $(PKG_CONFIG_HOST_BINARY) --libs libpng)"
-
-Hmm, the issue is specifically about static linking (as libpng uses
-zlib and lm, but fbv doesn't directly use them), so that would be good to
-mention in the commit message.
-
-With that said, your fix doesn't work as pkg-config --libs libpng just
-returns -lpng16. You need to explicitly ask for the static version with
---static to get -lpng16 -lz.
-
-I've changed it only use pkg-config (with --static) for the static
-linking case and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Danomi -
