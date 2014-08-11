@@ -1,30 +1,64 @@
-From: Johan Oudinet <johan.oudinet@gmail.com>
-Date: Mon, 11 Aug 2014 15:13:29 +0200
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <20140811103315.GB4364@free.fr>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20140806202322.GE1587@free.fr>
- <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
- <20140811103315.GB4364@free.fr>
-Message-ID: <CAJtjsKbV8zckWumUAsoV5sAG8wrO4Pqxm5UUdoaqDVPoCYjzSg@mail.gmail.com>
+From: arnaud at intelibre.fr <arnaud@intelibre.fr>
+Date: Mon, 11 Aug 2014 18:03:51 +0200
+Subject: [Buildroot] [PATCH v2] espeak : depends on MMU
+Message-ID: <1407773031-12872-1-git-send-email-arnaud@intelibre.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, all,
+From: Arnaud Aujon <arnaud@intelibre.fr>
 
-On Mon, Aug 11, 2014 at 12:33 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> My build machine is an x86_64, running an up-to-date Ubuntu 14.04.
-> I'll check in a 32-bit chroot to see if the error is the same.
+Fixes http://autobuild.buildroot.net/results/dae/dae5c59dfa127e1c3f9e3885cdd1b97e54d8fe41/
+and http://autobuild.buildroot.net/results/fa0/fa04a0fe7d7a201c5f733bd798c0da50ffb81271/
+espeak uses fork(), don't work on non-MMU platforms
 
-I removed ejabberd and all erlang packages installed on the host, even
-purged them to be sure buildroot does not use their configuration
-files. It is also an up-to-date Ubuntu 14.04 64bits.
-After that, make clean all (with your minimal defconfig) still work :-/
-Is there anything more I can do?
+Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
+---
+Changes v1 -> v2
+  - Move comment to head of file
 
+---
+ package/espeak/Config.in | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+index ec81893..e57f0c7 100644
+--- a/package/espeak/Config.in
++++ b/package/espeak/Config.in
+@@ -1,11 +1,13 @@
+ comment "espeak needs a toolchain w/ C++, wchar, threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++        depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_ESPEAK
+ 	bool "espeak"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  espeak is a speech synthesizer software for English and
+ 	  other languages.
+@@ -26,14 +28,14 @@ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+ 	select BR2_PACKAGE_PORTAUDIO
+ 	select BR2_PACKAGE_PORTAUDIO_CXX
+ 
+-comment "pulseaudio backend needs a toolchain with largefile"
+-	depends on !BR2_LARGEFILE
+-
+ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	depends on BR2_LARGEFILE # pulseaudio
+ 
++comment "pulseaudio backend needs a toolchain with largefile"
++        depends on !BR2_LARGEFILE
++
+ endchoice
+ 
+ endif # BR2_PACKAGE_ESPEAK
 -- 
-Johan
+1.9.3
