@@ -1,56 +1,60 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 11 Aug 2014 10:11:50 +0200
-Subject: [Buildroot] [PATCH 1/1] espeak : depends on MMU
-In-Reply-To: <1407742731-5300-1-git-send-email-arnaud@intelibre.fr>
-References: <1407742731-5300-1-git-send-email-arnaud@intelibre.fr>
-Message-ID: <d0d00ba2-2cf5-4f5a-945a-9f215d587e61@email.android.com>
+From: Johan Oudinet <johan.oudinet@gmail.com>
+Date: Mon, 11 Aug 2014 11:36:52 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <20140806202322.GE1587@free.fr>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140806202322.GE1587@free.fr>
+Message-ID: <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnaud,
+Yann, all,
 
-arnaud at intelibre.fr schreef:
->From: Arnaud Aujon <arnaud@intelibre.fr>
+On Wed, Aug 6, 2014 at 10:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> I tried building ejabberd in a minmal config, with:
 >
->Fixes autobuild http://autobuild.buildroot.net/results/dae/dae5c59dfa127e1c3f9e3885cdd1b97e54d8fe41/
->and http://autobuild.buildroot.net/results/fa0/fa04a0fe7d7a201c5f733bd798c0da50ffb81271/
+>     BR2_x86_i686=y
+>     BR2_TOOLCHAIN_EXTERNAL=y
+>     BR2_INIT_NONE=y
+>     # BR2_PACKAGE_BUSYBOX is not set
+>     BR2_PACKAGE_EJABBERD=y
+>     # BR2_TARGET_ROOTFS_TAR is not set
 >
->espeak uses fork(), don't work on non-MMU platforms
+> And it fails at build time, with a lengthy error message, that I do not
+> completely grasp:
 >
->Signed-off-by: Arnaud Aujon <arnaud@intelibre.fr>
->---
-> package/espeak/Config.in | 14 ++++++++------
-> 1 file changed, 8 insertions(+), 6 deletions(-)
->
->diff --git a/package/espeak/Config.in b/package/espeak/Config.in
->index ec81893..57c7d18 100644
->--- a/package/espeak/Config.in
->+++ b/package/espeak/Config.in
->@@ -1,17 +1,19 @@
->-comment "espeak needs a toolchain w/ C++, wchar, threads"
->-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
->-
-> config BR2_PACKAGE_ESPEAK
-> 	bool "espeak"
-> 	depends on BR2_INSTALL_LIBSTDCPP
-> 	depends on BR2_USE_WCHAR
-> 	depends on BR2_TOOLCHAIN_HAS_THREADS
->+	depends on BR2_USE_MMU # fork()
-> 	help
-> 	  espeak is a speech synthesizer software for English and
-> 	  other languages.
-> 
-> 	  http://espeak.sourceforge.net/
-> 
->+comment "espeak needs a toolchain w/ C++, wchar, threads"
->+        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
->+        depends on BR2_USE_MMU
->+
+>     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar
+> get-deps && :> deps/.got
+>     ==> rel (get-deps)
+>     Uncaught error in rebar_core: {'EXIT',
+>                                    {badarg,
 
-While the moving of this comment seems to be the right thing to do, I believe this will break the indentation/nesting of the suboptions of espeak.
+Very strange. It looks like the rebar script didn't accept the
+get-deps argument.
+Could you try with the same defconfig as mine to see if the problem
+comes from there.
+$ cat defconfig
+BR2_arm=y
+BR2_arm1176jzf_s=y
+BR2_KERNEL_HEADERS_VERSION=y
+BR2_DEFAULT_KERNEL_VERSION="3.12.20"
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+BR2_TOOLCHAIN_BUILDROOT_LARGEFILE=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_GIT=y
+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/raspberrypi/linux.git"
+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a25152fdfbfd3b4330da16fc3aeb6b1ef8843805"
+BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi_quick"
+BR2_LINUX_KERNEL_ZIMAGE=y
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_EJABBERD=y
 
-Best regards,
-Thomas
+In the meantime, I'll try with yours.
+-- 
+Johan
