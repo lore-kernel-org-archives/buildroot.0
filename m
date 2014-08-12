@@ -1,43 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Aug 2014 12:10:15 +0300
-Subject: [Buildroot] [PATCH 2/2] lightning: Added package
-In-Reply-To: <53E625E3.7030707@crapouillou.net>
-References: <1407279610-15589-1-git-send-email-paul@crapouillou.net>
- <1407279610-15589-2-git-send-email-paul@crapouillou.net>
- <20140806031244.GN2322@tarshish> <53E625E3.7030707@crapouillou.net>
-Message-ID: <20140812091015.GB20528@tarshish>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 12 Aug 2014 12:56:02 +0200
+Subject: [Buildroot] [PATCH 3 of 4 for 2014.08] manual-text: make sure
+ URLs are displayed if a link text was provided
+In-Reply-To: <a891fa8b7ca9137dfe16.1407695710@localhost>
+References: <patchbomb.1407695707@localhost>
+ <a891fa8b7ca9137dfe16.1407695710@localhost>
+Message-ID: <CAAXf6LUaBq31SxRnL4tdBhZGux1Jy37o+5dGhiS5eFcC9ePfzA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Paul,
+On Sun, Aug 10, 2014 at 8:35 PM, Thomas De Schampheleire
+<patrickdepinguin@gmail.com> wrote:
+> When the asciidoc source contain URLs of the form:
+>     http://example.com[An example website]
+> the text representation of the manual would only contain:
+>     An example website
+> without displaying the actual URL.
+>
+> This patch adds an asciidoc configuration file that sets the inline macros
+> for several URL types so that the display becomes:
+>     An example website [http://example.com]
+> For URLs where no link text was provided, the display becomes:
+>     [http://example.com]
+> which is the same as before, except for the surrounding brackets.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>
+> ---
+>  docs/manual/asciidoc-text.conf |  13 +++++++++++++
+>  1 files changed, 13 insertions(+), 0 deletions(-)
+>
+> diff -r 6e36b7e6851b -r a891fa8b7ca9 docs/manual/asciidoc-text.conf
+> --- /dev/null   Thu Jan 01 00:00:00 1970 +0000
+> +++ b/docs/manual/asciidoc-text.conf    Sat Aug 09 19:42:30 2014 +0200
+> @@ -0,0 +1,13 @@
+> +# For hyperlinks, show 'link text [URL]' (if link text provided) or [URL]
+> +[http-inlinemacro]
+> +{0=} &#91;{name}:{target}&#93;
+> +[https-inlinemacro]
+> +{0=} &#91;{name}:{target}&#93;
+> +[ftp-inlinemacro]
+> +{0=} &#91;{name}:{target}&#93;
+> +[file-inlinemacro]
+> +{0=} &#91;{name}:{target}&#93;
+> +[irc-inlinemacro]
+> +{0=} &#91;{name}:{target}&#93;
+> +[mailto-inlinemacro]
+> +{0=} &#91;{name}:{target}&#93;
 
-On Sat, Aug 09, 2014 at 03:45:07PM +0200, Paul Cercueil wrote:
-> Le 06/08/2014 05:12, Baruch Siach a ?crit :
-> >On Wed, Aug 06, 2014 at 01:00:10AM +0200, Paul Cercueil wrote:
-> >>+ifeq ($(BR2_PACKAGE_BINUTILS),y)
-> >>+LIGHTNING_DEPENDENCIES += binutils
-> >>+LIGHTNING_CONF_OPT += --enable-disassembler
-> >>+endif
-> >
-> >Have you tested external toolchains?
-> 
-> No I did not, as I don't use one. Furthermore, I only tested the package on
-> mipsel, the list of archs specified in this package is taken from
-> lightning's web page and may be incorrect (hopefully not).
-
-You can easily test external toolchains using the minimal configs at 
-http://autobuild.buildroot.net/toolchains/configs/. You'll also find a few 
-mipsel variants there.
-
-If this package is not compatible with external toolchain (and so I suspect) 
-then it should depend on BR2_TOOLCHAIN_BUILDROOT.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+I'm going to send a refined version of this patch that removes the
+brackets in case no link text was provided...
