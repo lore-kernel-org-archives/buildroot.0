@@ -1,70 +1,46 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Aug 2014 22:20:05 +0200
-Subject: [Buildroot] [PATCH 0 of 8 RFCv2 for 2014.08] manual: restructuring
- and improvements
-Message-ID: <patchbomb.1407874805@localhost>
+Date: Tue, 12 Aug 2014 22:20:07 +0200
+Subject: [Buildroot] [PATCH 2 of 8 RFCv2 for 2014.08] manual: remove
+	'Events' section
+In-Reply-To: <patchbomb.1407874805@localhost>
+References: <patchbomb.1407874805@localhost>
+Message-ID: <384a21645bf29946ce02.1407874807@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch series improves the manual by
-a. reworking the overall structure
-b. improving certain sections wrt clarity and wording
-
-At this point, this is still an RFC as I did not yet go through the entire
-manual. Currently, the overall structure is clear, and the Getting started
-part is finished. During the rest of the month I will cover the User guide
-and Developer guide.
-One of the final patches (not yet included) will reorganize the manual
-source files themselves. Currently, I'm keeping the current names to ease
-reviewing.
-
-It is my goal to make sure this series is in a mergable state before the
-release of 2014.08. If you have any comments or objections against these
-changes, please let me know as soon as possible...
-
-Thanks for your feedback!
-
+The list of buildroot events is outdated, a sign that the manual is not the
+best place to refer to timely things like events. The wiki page is better
+suited for such information.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
-Thomas De Schampheleire (8)
-  manual: high-level restructuring
-  manual: remove 'Events' section
-  manual/getting started: rename and move 'Getting involved' section
-  manual/getting started: rework 'Community resources' section
-  manual/getting started: rework 'System requirements' section
-  website/download: update daily snapshot section
-  manual/getting started: rework 'Getting Buildroot' section
-  manual/getting started: rework 'Using Buildroot' section
+ docs/manual/get-involved.txt |  16 ----------------
+ 1 files changed, 0 insertions(+), 16 deletions(-)
 
- docs/download.html                          |   13 +-
- docs/manual/advanced.txt                    |    2 +-
- docs/manual/appendix.txt                    |    2 -
- docs/manual/beyond-buildroot.txt            |    8 +-
- docs/manual/ccache-support.txt              |    2 +-
- docs/manual/contribute.txt                  |   53 +++++--
- docs/manual/developer-guide.txt             |    2 -
- docs/manual/download-location.txt           |    2 +-
- docs/manual/faq-troubleshooting.txt         |   16 +-
- docs/manual/get-involved.txt                |  146 ++++++-------------
- docs/manual/getting.txt                     |   26 +--
- docs/manual/going-further.txt               |    2 +-
- docs/manual/how-buildroot-works.txt         |    2 +-
- docs/manual/introduction.txt                |    2 +-
- docs/manual/known-issues.txt                |    2 +-
- docs/manual/legal-notice.txt                |    8 +-
- docs/manual/manual.mk                       |    4 +-
- docs/manual/manual.txt                      |   14 +-
- docs/manual/package-make-target.txt         |    2 +-
- docs/manual/prerequisite.txt                |   40 +++--
- docs/manual/starting-up.txt                 |    2 -
- docs/manual/using-buildroot-debugger.txt    |    2 +-
- docs/manual/using-buildroot-development.txt |    2 +-
- docs/manual/using-buildroot-toolchain.txt   |    2 +-
- docs/manual/using.txt                       |   59 ++++---
- docs/manual/working-with.txt                |    2 -
- 26 files changed, 196 insertions(+), 221 deletions(-)
+diff -r 00ad338df278 -r 384a21645bf2 docs/manual/get-involved.txt
+--- a/docs/manual/get-involved.txt	Wed Aug 06 19:48:39 2014 +0200
++++ b/docs/manual/get-involved.txt	Wed Aug 06 20:28:19 2014 +0200
+@@ -103,19 +103,3 @@
+ This page is reachable at http://elinux.org/Buildroot[].
+ 
+ Currently, this page is mainly used as a _todo-list_.
+-
+-[[events]]
+-=== Events
+-
+-==== Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
+-
+-* Event page: http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
+-
+-==== Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
+-
+-* Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
+-
+-==== Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
+-
+-* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
+-* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
