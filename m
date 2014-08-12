@@ -1,250 +1,93 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Aug 2014 22:20:09 +0200
-Subject: [Buildroot] [PATCH 4 of 8 RFCv2 for 2014.08] manual/getting
- started: rework 'Community resources' section
+Date: Tue, 12 Aug 2014 22:20:10 +0200
+Subject: [Buildroot] [PATCH 5 of 8 RFCv2 for 2014.08] manual/getting
+ started: rework 'System requirements' section
 In-Reply-To: <patchbomb.1407874805@localhost>
 References: <patchbomb.1407874805@localhost>
-Message-ID: <2f17e63e3fec21829d26.1407874809@localhost>
+Message-ID: <dd6d42a03816c2c9bcd0.1407874810@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch reworks the section 'Community resources' as follows:
-- use a labeled list instead of subsections, as the content of each section
-  is so small that it does not deserve a real section.
-  Related to this, the anchors for each of these subsections are removed, as
-  referencing such anchors that do not correspond to a section boundary are
-  not displayed nicely.
-- move the part about applying patches from patchwork to the Contributing
-  section in the Developer Guide
-- reword some parts of the text
-- add link texts to some links, instead of showing the URL directly, to make
-  the HTML / PDF display nicer.
+This patch reworks the requirements section of the manual as follows:
+- some general rewording
+- move configuration editor dependencies above the download tools, as this
+  is the first thing people come in contact with.
+- move sentence regarding -dev packages to configuration editor dependencies
+  and restrict to 'libraries'.
+- clarify the download tools part.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/contribute.txt   |   35 +++++++-
- docs/manual/get-involved.txt |  128 +++++++++++++---------------------
- 2 files changed, 77 insertions(+), 86 deletions(-)
+ docs/manual/prerequisite.txt |  40 +++++++++++++++++++----------------
+ 1 files changed, 22 insertions(+), 18 deletions(-)
 
-diff -r c55bf02ff149 -r 2f17e63e3fec docs/manual/contribute.txt
---- a/docs/manual/contribute.txt	Thu Aug 07 18:05:13 2014 +0200
-+++ b/docs/manual/contribute.txt	Thu Aug 07 18:10:10 2014 +0200
-@@ -14,7 +14,7 @@
- should do is to subscribe to the Buildroot mailing list. This list is
- the main way of interacting with other Buildroot developers and to send
- contributions to. If you aren't subscribed yet, then refer to
--xref:mailing-list-subscribe[].
-+xref:community-resources[] for the subscription link.
+diff -r 2f17e63e3fec -r dd6d42a03816 docs/manual/prerequisite.txt
+--- a/docs/manual/prerequisite.txt	Thu Aug 07 18:10:10 2014 +0200
++++ b/docs/manual/prerequisite.txt	Tue Aug 12 20:09:13 2014 +0200
+@@ -6,13 +6,11 @@
  
- If you are going to touch the code, it is highly recommended to use a
- git repository of Buildroot, rather than starting from an extracted
-@@ -142,6 +142,29 @@
- purposes. Please see xref:apply-patches-patchwork[] for more
- information on using Buildroot's Patchwork website to apply patches.
+ Buildroot is designed to run on Linux systems.
  
-+[[apply-patches-patchwork]]
-+==== Applying Patches from Patchwork
+-Buildroot needs some software to be already installed on the host
+-system; here are the lists of the mandatory and optional packages
+-(package names may vary between distributions).
+-
+-Take care to _install both runtime and development data_, especially
+-for the libraries that may be packaged in 2 distinct packages.
+-
++While Buildroot itself will build most host packages it needs for the
++compilation, certain standard Linux utilities are expected to be
++already installed on the host system. Below you will find an overview of
++the mandatory and optional packages (note that package names may vary
++between distributions).
+ 
+ [[requirement-mandatory]]
+ 
+@@ -45,14 +43,25 @@
+ 
+ === Optional packages
+ 
++* Configuration interface dependencies:
+++
++For these libraries, you need to install both runtime and development
++data, which in many distributions are packaged separately. The
++development packages typically have a _-dev_ or _-devel_ suffix.
+++
++** +ncurses5+ to use the 'menuconfig' interface
++** +qt4+ to use the 'xconfig' interface
++** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
 +
-+The main use of Buildroot's Patchwork website for a developer is for
-+pulling in patches into their local git repository for testing
-+purposes.
-+
-+When browsing patches in the patchwork management interface, an +mbox+
-+link is provided at the top of the page. Copy this link address and
-+run the following commands:
-+
-+---------------------
-+$ git checkout -b <test-branch-name>
-+$ wget -O - <mbox-url> | git am
-+---------------------
-+
-+Another option for applying patches is to create a bundle. A bundle is
-+a set of patches that you can group together using the patchwork
-+interface. Once the bundle is created and the bundle is made public,
-+you can copy the +mbox+ link for the bundle and apply the bundle
-+using the above commands.
-+
-+
- === Work on items from the TODO list
+ * Source fetching tools:
+ +
+-In the official tree, most of the package sources are retrieved
+-using +wget+; a few are only available through their +git+, +mercurial+,
+-+svn+ or +cvs+ repository.
+-+
+-All other source fetching methods are implemented and may be used in a
+-development context (further details: refer to xref:download-infra[]).
++In the official tree, most of the package sources are retrieved using
+++wget+ from _ftp_, _http_ or _https_ locations. A few packages are only
++available through a version control system. Moreover, Buildroot is
++capable of downloading sources via other tools, like +rsync+ or +scp+
++(refer to xref:download-infra[] for more details). If you enable
++packages using any of these methods, you will need to install the
++corresponding tool on the host system:
+ +
+ ** +bazaar+
+ ** +cvs+
+@@ -62,11 +71,6 @@
+ ** +scp+
+ ** +subversion+
  
- If you want to contribute to Buildroot but don't know where to start,
-@@ -278,13 +301,13 @@
- [[reporting-bugs]]
- === Reporting issues/bugs or getting help
- 
--Before reporting any issue, please check
--xref:mailing-list-subscribe[the mailing list archive] in case someone has
--already reported and fixed a similar problem.
-+Before reporting any issue, please check in
-+xref:community-resources[the mailing list archive] whether someone has
-+already reported and/or fixed a similar problem.
- 
- However you choose to report bugs or get help, either by
--xref:bugtracker[opening a bug] or by
--xref:mailing-list-subscribe[sending a mail to the mailing list], there are
-+opening a bug in the xref:community-resources[bug tracker] or by
-+xref:community-resources[sending a mail to the mailing list], there are
- a number of details to provide in order to help people reproduce and
- find a solution to the issue.
- 
-diff -r c55bf02ff149 -r 2f17e63e3fec docs/manual/get-involved.txt
---- a/docs/manual/get-involved.txt	Thu Aug 07 18:05:13 2014 +0200
-+++ b/docs/manual/get-involved.txt	Thu Aug 07 18:10:10 2014 +0200
-@@ -1,54 +1,59 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
- 
-+[[community-resources]]
- == Community resources
- 
- Like any open source project, Buildroot has different ways to share
- information in its community and outside.
- 
--One piece of it is the document you are currently reading ;-).
+-* Configuration interface dependencies (requires development libraries):
+-** +ncurses5+ to use the 'menuconfig' interface
+-** +qt4+ to use the 'xconfig' interface
+-** +glib2+, +gtk2+ and +glade2+ to use the 'gconfig' interface
 -
- Each of those ways may interest you if you are looking for some help,
- want to understand Buildroot or contribute to the project.
- 
--=== Mailing List
-+Mailing List::
-++
-+Buildroot has a mailing list for discussion and development. It is the
-+main method of interaction for Buildroot users and developers.
-++
-+Only subscribers to the Buildroot mailing list are allowed to post to
-+this list. You can subscribe via the
-+http://lists.busybox.net/mailman/listinfo/buildroot[mailing list info
-+page].
-++
-+Mails that are sent to the mailing list are also available in the
-+http://lists.busybox.net/pipermail/buildroot[mailing list archives] and
-+via http://gmane.org[Gmane], at
-+http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[+gmane.comp.lib.uclibc.buildroot+].
-+Please search the mailing list archives before asking questions, since
-+there is a good chance someone else has asked the same question before.
- 
--Buildroot has a mailing list
--http://lists.busybox.net/pipermail/buildroot[] for discussion and
--development.
-+IRC::
-++
-+The Buildroot IRC channel irc://freenode.net/#buildroot[#buildroot] is
-+hosted on http://webchat.freenode.net[Freenode]. It is a useful place to
-+ask quick questions or discuss on certain topics.
-++
-+When asking for help on IRC, share relevant logs or pieces of code
-+using a code sharing website, such as http://code.bulix.org.
-++
-+Note that for certain questions, posting to the mailing list may be
-+better as it will reach more people, both developers and users.
- 
--[[mailing-list-subscribe]]
-+Bug tracker::
-++
-+Bugs in Buildroot can be reported via the mailing list or alternatively
-+via the https://bugs.busybox.net/buglist.cgi?product=buildroot[Buildroot
-+bugtracker]. Please refer to xref:reporting-bugs[] before creating a bug
-+report.
- 
--==== Subscribing to the mailing list
-+Wiki::
-++
-+http://elinux.org/Buildroot[The Buildroot wiki page] is hosted on
-+the http://elinux.org[eLinux] wiki. It contains some useful links, an
-+overview of past and upcoming events, and a TODO list.
- 
--You can subscribe by visiting
--http://lists.busybox.net/mailman/listinfo/buildroot[].
--Only subscribers to the Buildroot mailing list are allowed to post to
--this list.
--
--The list is also available through _Gmane_ http://gmane.org[], at
--+gmane.comp.lib.uclibc.buildroot+
--http://dir.gmane.org/gmane.comp.lib.uclibc.buildroot[].
--
--==== Searching the List Archives
--
--Please search the mailing list archives before asking questions on the
--mailing list, since there is a good chance someone else has asked the
--same question before. Checking the archives is a great way to avoid
--annoying everyone on the list with frequently asked questions...
--
--=== IRC
--
--The Buildroot IRC is irc://freenode.net/#buildroot[].
--The channel +#buildroot+ is hosted on Freenode
--http://webchat.freenode.net[].
--
--When asking for help on IRC, share relevant logs or pieces of code
--using a code sharing website.
--
--[[patchwork]]
--=== Patchwork
--
-+Patchwork::
-++
- Patchwork is a web-based patch tracking system designed to facilitate
- the contribution and management of contributions to an open-source
- project. Patches that have been sent to a mailing list are \'caught' by
-@@ -56,50 +61,13 @@
- reference the patch are appended to the patch page too. For more
- information on Patchwork see
- http://jk.ozlabs.org/projects/patchwork[].
--
-++
- Buildroot's Patchwork website is mainly for use by Buildroot's
--maintainer to ensure patches aren't missed. The website however,
--exposes patches and their corresponding review comments in a clean
--and concise web interface.
--
-+maintainer to ensure patches aren't missed. It is also used by Buildroot
-+patch reviewers (see also xref:apply-patches-patchwork[]).
-+However, since the website exposes patches and their corresponding
-+review comments in a clean and concise web interface, it can be useful
-+for all Buildroot developers.
-++
- The Buildroot patch management interface is available at
- http://patchwork.buildroot.org[].
--
--[[apply-patches-patchwork]]
--==== Applying Patches from Patchwork
--
--The main use of Buildroot's Patchwork website for a developer is for
--pulling in patches into their local git repository for testing
--purposes.
--
--When browsing patches in the patchwork management interface, an +mbox+
--link is provided at the top of the page. Copy this link address and
--run the following commands:
--
-----------------------
--$ git checkout -b <test-branch-name>
--$ wget -O - <mbox-url> | git am
-----------------------
--
--Another option for applying patches is to create a bundle. A bundle is
--a set of patches that you can group together using the patchwork
--interface. Once the bundle is created and the bundle is made public,
--you can copy the +mbox+ link for the bundle and apply the bundle
--using the above commands.
--
--[[bugtracker]]
--=== Bugtracker
--
--The Buildroot bugtracker is at https://bugs.busybox.net[].
--
--To open a bug, see xref:reporting-bugs[].
--
--=== Buildroot wikipage
--
--After the Buildroot developer day on February 3, 2012,
--a page dedicated to Buildroot has been created on
--http://elinux.org[elinux.org].
--
--This page is reachable at http://elinux.org/Buildroot[].
--
--Currently, this page is mainly used as a _todo-list_.
+ * Java-related packages, if the Java Classpath needs to be built for
+   the target system:
+ ** The +javac+ compiler
