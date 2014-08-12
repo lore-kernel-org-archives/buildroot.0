@@ -1,62 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Aug 2014 01:05:42 +0200
-Subject: [Buildroot] [PATCH v16 0/3] package/xbmc: Add support for
- OpenGL and libva, add option for Goom
-In-Reply-To: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1406914359-31106-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140812230542.GF4055@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Aug 2014 18:02:46 +0200
+Subject: [Buildroot] [git commit branch/next] chrony: add sysv initscript
+Message-ID: <20140812231338.8AA499D42F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: http://git.buildroot.net/buildroot/commit/?id=d016a6a30dd86f5d6a02663fa4729a75e48ae379
+branch: http://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2014-08-01 19:32 +0200, Bernd Kuhls spake thusly:
-> The series is compiled-tested using
-> 
-> for Intel platform:
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> BR2_PACKAGE_XBMC=y
-> BR2_PACKAGE_XBMC_LIBBLURAY=y
-> BR2_PACKAGE_XBMC_LIBCEC=y
-> BR2_PACKAGE_XBMC_LIBMICROHTTPD=y
-> BR2_PACKAGE_XBMC_LIBNFS=y
-> BR2_PACKAGE_XBMC_RTMPDUMP=y
-> BR2_PACKAGE_XBMC_LIBSHAIRPLAY=y
-> BR2_PACKAGE_XBMC_LIBSMBCLIENT=y
-> BR2_PACKAGE_XBMC_LIBTHEORA=y
-> BR2_PACKAGE_XBMC_LIBUSB=y
-> BR2_PACKAGE_XBMC_WAVPACK=y
-> BR2_PACKAGE_XBMC_GOOM=y
-> BR2_PACKAGE_XBMC_ADDON_XVDR=y
-> BR2_PACKAGE_XBMC_PVR_ADDONS=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_XORG7=y
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/chrony/S49chrony |   26 ++++++++++++++++++++++++++
+ package/chrony/chrony.mk |    4 ++++
+ 2 files changed, 30 insertions(+), 0 deletions(-)
 
-Weird. I had to had an Xorg server to be able to use XBMC...
-
-But now I can run XBMC on my i915-based nettbook! Woot! :-)
-(I just had to tweak mesa3d to build the i915 DRI driver, will push that
-to the list soonish...)
-
-Yeah! :-)
-
-I've lost track of all your XBMC-related series. Is the v16 the last
-one? Do we miss anything in Buildroot for XBMC ?
-
-I guess we'll need more stuff for Kodi, but that can come later.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/chrony/S49chrony b/package/chrony/S49chrony
+new file mode 100755
+index 0000000..66a50d5
+--- /dev/null
++++ b/package/chrony/S49chrony
+@@ -0,0 +1,26 @@
++#!/bin/sh
++#
++# Start chrony
++
++[ -f /etc/chrony.conf ] || exit 0
++
++case "$1" in
++  start)
++	echo "Starting chrony: "
++	chronyd && echo "OK" || echo "FAIL"
++	;;
++  stop)
++	echo -n "Stopping chrony: "
++	killall chronyd && echo "OK" || echo "FAIL"
++	;;
++  restart|reload)
++	"$0" stop
++	sleep 1
++	"$0" start
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
++
++exit $?
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index 09a4a1e..afe0fc8 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -39,4 +39,8 @@ define CHRONY_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+ endef
+ 
++define CHRONY_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/chrony/S49chrony $(TARGET_DIR)/etc/init.d/S49chrony
++endef
++
+ $(eval $(generic-package))
