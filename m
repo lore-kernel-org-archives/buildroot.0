@@ -1,150 +1,42 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Aug 2014 22:20:13 +0200
-Subject: [Buildroot] [PATCH 8 of 8 RFCv2 for 2014.08] manual/getting
- started: rework 'Using Buildroot' section
-In-Reply-To: <patchbomb.1407874805@localhost>
-References: <patchbomb.1407874805@localhost>
-Message-ID: <f7d6a73e756a77a0480e.1407874813@localhost>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 12 Aug 2014 22:28:27 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: disable link time optimization
+Message-ID: <1407875307-12036-1-git-send-email-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch does some general rewording of the 'Using buildroot' section
-of the manual.
+As reported in https://bugs.busybox.net/show_bug.cgi?id=7286,
+systemd fails to build with BR2_OPTIMIZE_2=y. This mode activates the GCC
+options -flto and -ffat-lto-objects, which do not mix well with the GCC
+tricks used in src/compat-libs/linkwarning.h to build the compatibility
+libraries.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+As a temporary workaround, this patch disables link time optimization for
+systemd.
 
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- docs/manual/using.txt |  59 ++++++++++++++++++++++++------------------
- 1 files changed, 33 insertions(+), 26 deletions(-)
+ package/systemd/systemd.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff -r 770cb501d536 -r f7d6a73e756a docs/manual/using.txt
---- a/docs/manual/using.txt	Tue Aug 12 21:11:54 2014 +0200
-+++ b/docs/manual/using.txt	Tue Aug 12 22:14:07 2014 +0200
-@@ -3,67 +3,73 @@
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 9729276..edde998 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -49,8 +49,11 @@ SYSTEMD_CONF_OPT += \
+ 	--disable-dbus \
+ 	--without-python
  
- == Using Buildroot
- 
-+*Important*: you can and should *build everything as a normal user*. There
-+is no need to be root to configure and use Buildroot. By running all
-+commands as a regular user, you protect your system against packages
-+behaving badly during compilation and installation.
++SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
 +
-+The first step when using Buildroot is to create a configuration.
- Buildroot has a nice configuration tool similar to the one you can
- find in the http://www.kernel.org/[Linux kernel] or in
--http://www.busybox.net/[BusyBox]. Note that you can *and should build
--everything as a normal user*. There is no need to be root to configure
--and use Buildroot. The first step is to run the configuration
--assistant:
-+http://www.busybox.net/[BusyBox].
-+
-+From the buildroot directory, run
+ # Override path to kmod, used in kmod-static-nodes.service
+ SYSTEMD_CONF_ENV = \
++	CFLAGS="$(SYSTEMD_CFLAGS)" \
+ 	ac_cv_path_KMOD=/usr/bin/kmod
  
- --------------------
-  $ make menuconfig
- --------------------
- 
--or
-+for the original curses-based configurator, or
- 
- --------------------
-  $ make nconfig
- --------------------
- 
--to run the old or new curses-based configurator, or
-+for the new curses-based configurator, or
- 
- --------------------
-  $ make xconfig
- --------------------
- 
--or
-+for the Qt-based configurator, or
- 
- --------------------
-  $ make gconfig
- --------------------
- 
--to run the Qt or GTK-based configurators.
-+for the GTK-based configurator.
- 
- All of these "make" commands will need to build a configuration
- utility (including the interface), so you may need to install
- "development" packages for relevant libraries used by the
--configuration utilities. Check xref:requirement[] to know what
--Buildroot needs, and specifically the xref:requirement-optional[optional requirements]
-+configuration utilities. Refer to xref:requirement[] for more details,
-+specifically the xref:requirement-optional[optional requirements]
- to get the dependencies of your favorite interface.
- 
- For each menu entry in the configuration tool, you can find associated
- help that describes the purpose of the entry.
- 
- Once everything is configured, the configuration tool generates a
--+.config+ file that contains the description of your
--configuration. It will be used by the Makefiles to do what's needed.
-++.config+ file that contains the entire configuration. This file will be
-+read by the top-level Makefile.
- 
--Let's go:
-+To start the build process, simply run:
- 
- --------------------
-  $ make
- --------------------
- 
--You *should never* use +make -jN+ with Buildroot: it does not support
--'top-level parallel make'. Instead, use the +BR2_JLEVEL+ option to
--tell Buildroot to run each package compilation with +make -jN+.
-+You *should never* use +make -jN+ with Buildroot: top-level parallel
-+make is currently not supported. Instead, use the +BR2_JLEVEL+ option
-+to tell Buildroot to run the compilation of each individual package
-+with +make -jN+.
- 
- The `make` command will generally perform the following steps:
- 
- * download source files (as required);
--* configure, build and install the cross-compiling toolchain using the
--  appropriate toolchain backend, or simply import an external toolchain;
--* build/install selected target packages;
-+* configure, build and install the cross-compilation toolchain, or
-+  simply import an external toolchain;
-+* configure, build and install selected target packages;
- * build a kernel image, if selected;
- * build a bootloader image, if selected;
- * create a root filesystem in selected formats.
-@@ -72,15 +78,16 @@
- This directory contains several subdirectories:
- 
- * +images/+ where all the images (kernel image, bootloader and root
--  filesystem images) are stored.
-+  filesystem images) are stored. These are the files you need to put
-+  on your target system.
- 
--* +build/+ where all the components are built
--  (this includes tools needed to run Buildroot on
--  the host and packages compiled for the target). The +build/+
--  directory contains one subdirectory for each of these components.
-+* +build/+ where all the components are built (this includes tools
-+  needed by Buildroot on the host and packages compiled for the
-+  target). This directory contains one subdirectory for each of these
-+  components.
- 
- * +staging/+ which contains a hierarchy similar to a root filesystem
--  hierarchy. This directory contains the installation of the
-+  hierarchy. This directory contains the headers and libraries of the
-   cross-compilation toolchain and all the userspace packages selected
-   for the target. However, this directory is 'not' intended to be
-   the root filesystem for the target: it contains a lot of development
-@@ -109,7 +116,7 @@
- 
- These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
- basic ones that allow to easily and quickly generate images fitting
--your needs, with all the supports and applications you enabled.
-+your needs, with all the features and applications you enabled.
- 
- More details about the "make" command usage are given in
- xref:make-tips[].
+ ifeq ($(BR2_PACKAGE_SYSTEMD_COMPAT),y)
+-- 
+1.9.3
