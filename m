@@ -1,59 +1,150 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Aug 2014 22:20:12 +0200
-Subject: [Buildroot] [PATCH 7 of 8 RFCv2 for 2014.08] manual/getting
- started: rework 'Getting Buildroot' section
+Date: Tue, 12 Aug 2014 22:20:13 +0200
+Subject: [Buildroot] [PATCH 8 of 8 RFCv2 for 2014.08] manual/getting
+ started: rework 'Using Buildroot' section
 In-Reply-To: <patchbomb.1407874805@localhost>
 References: <patchbomb.1407874805@localhost>
-Message-ID: <770cb501d536d02719c9.1407874812@localhost>
+Message-ID: <f7d6a73e756a77a0480e.1407874813@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch reworks the 'Getting Buildroot' section of the manual as follows:
-- be more specific on the Buildroot release cycle
-- refer to the download page of the website for details on snapshots and
-  git, instead of duplicating the information.
+This patch does some general rewording of the 'Using buildroot' section
+of the manual.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/getting.txt |  26 ++++++++------------------
- 1 files changed, 8 insertions(+), 18 deletions(-)
+ docs/manual/using.txt |  59 ++++++++++++++++++++++++------------------
+ 1 files changed, 33 insertions(+), 26 deletions(-)
 
-diff -r 093e0ba716de -r 770cb501d536 docs/manual/getting.txt
---- a/docs/manual/getting.txt	Tue Aug 12 21:34:32 2014 +0200
-+++ b/docs/manual/getting.txt	Tue Aug 12 21:11:54 2014 +0200
-@@ -4,23 +4,13 @@
- [[getting-buildroot]]
- == Getting Buildroot
+diff -r 770cb501d536 -r f7d6a73e756a docs/manual/using.txt
+--- a/docs/manual/using.txt	Tue Aug 12 21:11:54 2014 +0200
++++ b/docs/manual/using.txt	Tue Aug 12 22:14:07 2014 +0200
+@@ -3,67 +3,73 @@
  
--Buildroot releases are made approximately every 3 months. Direct Git
--access and daily snapshots are also available, if you want more
--bleeding edge.
-+Buildroot releases are made every 3 months, in February, May, August and
-+November. Release numbers are in the format YYYY.MM, so for example
-+2013.02, 2014.08.
+ == Using Buildroot
  
--Releases are available at http://buildroot.net/downloads/[].
-+Release tarballs are available at http://buildroot.org/downloads/[].
++*Important*: you can and should *build everything as a normal user*. There
++is no need to be root to configure and use Buildroot. By running all
++commands as a regular user, you protect your system against packages
++behaving badly during compilation and installation.
++
++The first step when using Buildroot is to create a configuration.
+ Buildroot has a nice configuration tool similar to the one you can
+ find in the http://www.kernel.org/[Linux kernel] or in
+-http://www.busybox.net/[BusyBox]. Note that you can *and should build
+-everything as a normal user*. There is no need to be root to configure
+-and use Buildroot. The first step is to run the configuration
+-assistant:
++http://www.busybox.net/[BusyBox].
++
++From the buildroot directory, run
  
--The latest snapshot is always available at
--http://buildroot.net/downloads/snapshots/buildroot-snapshot.tar.bz2[],
--and previous snapshots are also available at
--http://buildroot.net/downloads/snapshots/[].
--
--To download Buildroot using Git, you can simply follow the rules
--described on the "Accessing Git" page
--(http://buildroot.net/git.html[]) of the Buildroot website
--(http://buildroot.net[]).  For the impatient, here's a quick recipe:
--
-----------------------
-- $ git clone git://git.buildroot.net/buildroot
-----------------------
--
-+If you want to follow development, you can use the daily snapshots or
-+make a clone of the Git repository. Refer to the
-+http://buildroot.org/download[Download page] of the Buildroot website
-+for more details.
+ --------------------
+  $ make menuconfig
+ --------------------
+ 
+-or
++for the original curses-based configurator, or
+ 
+ --------------------
+  $ make nconfig
+ --------------------
+ 
+-to run the old or new curses-based configurator, or
++for the new curses-based configurator, or
+ 
+ --------------------
+  $ make xconfig
+ --------------------
+ 
+-or
++for the Qt-based configurator, or
+ 
+ --------------------
+  $ make gconfig
+ --------------------
+ 
+-to run the Qt or GTK-based configurators.
++for the GTK-based configurator.
+ 
+ All of these "make" commands will need to build a configuration
+ utility (including the interface), so you may need to install
+ "development" packages for relevant libraries used by the
+-configuration utilities. Check xref:requirement[] to know what
+-Buildroot needs, and specifically the xref:requirement-optional[optional requirements]
++configuration utilities. Refer to xref:requirement[] for more details,
++specifically the xref:requirement-optional[optional requirements]
+ to get the dependencies of your favorite interface.
+ 
+ For each menu entry in the configuration tool, you can find associated
+ help that describes the purpose of the entry.
+ 
+ Once everything is configured, the configuration tool generates a
+-+.config+ file that contains the description of your
+-configuration. It will be used by the Makefiles to do what's needed.
+++.config+ file that contains the entire configuration. This file will be
++read by the top-level Makefile.
+ 
+-Let's go:
++To start the build process, simply run:
+ 
+ --------------------
+  $ make
+ --------------------
+ 
+-You *should never* use +make -jN+ with Buildroot: it does not support
+-'top-level parallel make'. Instead, use the +BR2_JLEVEL+ option to
+-tell Buildroot to run each package compilation with +make -jN+.
++You *should never* use +make -jN+ with Buildroot: top-level parallel
++make is currently not supported. Instead, use the +BR2_JLEVEL+ option
++to tell Buildroot to run the compilation of each individual package
++with +make -jN+.
+ 
+ The `make` command will generally perform the following steps:
+ 
+ * download source files (as required);
+-* configure, build and install the cross-compiling toolchain using the
+-  appropriate toolchain backend, or simply import an external toolchain;
+-* build/install selected target packages;
++* configure, build and install the cross-compilation toolchain, or
++  simply import an external toolchain;
++* configure, build and install selected target packages;
+ * build a kernel image, if selected;
+ * build a bootloader image, if selected;
+ * create a root filesystem in selected formats.
+@@ -72,15 +78,16 @@
+ This directory contains several subdirectories:
+ 
+ * +images/+ where all the images (kernel image, bootloader and root
+-  filesystem images) are stored.
++  filesystem images) are stored. These are the files you need to put
++  on your target system.
+ 
+-* +build/+ where all the components are built
+-  (this includes tools needed to run Buildroot on
+-  the host and packages compiled for the target). The +build/+
+-  directory contains one subdirectory for each of these components.
++* +build/+ where all the components are built (this includes tools
++  needed by Buildroot on the host and packages compiled for the
++  target). This directory contains one subdirectory for each of these
++  components.
+ 
+ * +staging/+ which contains a hierarchy similar to a root filesystem
+-  hierarchy. This directory contains the installation of the
++  hierarchy. This directory contains the headers and libraries of the
+   cross-compilation toolchain and all the userspace packages selected
+   for the target. However, this directory is 'not' intended to be
+   the root filesystem for the target: it contains a lot of development
+@@ -109,7 +116,7 @@
+ 
+ These commands, +make menuconfig|nconfig|gconfig|xconfig+ and +make+, are the
+ basic ones that allow to easily and quickly generate images fitting
+-your needs, with all the supports and applications you enabled.
++your needs, with all the features and applications you enabled.
+ 
+ More details about the "make" command usage are given in
+ xref:make-tips[].
