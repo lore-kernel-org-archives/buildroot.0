@@ -1,33 +1,44 @@
-From: Hamza Farooq <hamzahfrq.sub@gmail.com>
-Date: Tue, 12 Aug 2014 15:47:22 +0200
-Subject: [Buildroot] Buildroot for Jetson TK1
-Message-ID: <CAJ--JmzmXV9RF+RAb4w4GUTgW4WU_ozHbKK-p=zFfMJRh+zsPQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 12 Aug 2014 17:13:29 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <CAJtjsKbV8zckWumUAsoV5sAG8wrO4Pqxm5UUdoaqDVPoCYjzSg@mail.gmail.com>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140806202322.GE1587@free.fr>
+ <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
+ <20140811103315.GB4364@free.fr>
+ <CAJtjsKbV8zckWumUAsoV5sAG8wrO4Pqxm5UUdoaqDVPoCYjzSg@mail.gmail.com>
+Message-ID: <20140812151329.GB4055@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear all,
+Johan, All,
 
-I am building rootfs with X windows support for Nvidia Tegra based Jetson
-TK1 board.
+On 2014-08-11 15:13 +0200, Johan Oudinet spake thusly:
+> On Mon, Aug 11, 2014 at 12:33 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > My build machine is an x86_64, running an up-to-date Ubuntu 14.04.
+> > I'll check in a 32-bit chroot to see if the error is the same.
+> 
+> I removed ejabberd and all erlang packages installed on the host, even
+> purged them to be sure buildroot does not use their configuration
+> files. It is also an up-to-date Ubuntu 14.04 64bits.
+> After that, make clean all (with your minimal defconfig) still work :-/
+> Is there anything more I can do?
 
-I am not able to get X server running. The Nvidia rootfs uses nvidia xf86
-video driver which is not available in the drivers list for X server in
-buildroot. I have made several rootfs systems with varying configurations
-and somehow one of them does have nvidia driver in it (I can see it in xorg
--configure) and this system does work. I am, however, not able to reproduce
-it. Is there a configuration option in menuconfig that might have
-disappeared?
+No, sorry. I am clueless now...
 
-I am not sure what I did but I can see in the working system that both the
-nvidia driver and the nvidia libraries (in /usr/lib) are present. I have
-been trying to get the system working with nv, fbdev and vesa drivers but
-have got zero success. If someone has used nvidia board before (with
-nouveau or any other driver) I'll be glad to know how it was made possible
+If I get a bit of time, I'll run some tests tonight...
 
-Any pointers will be highly appreciated
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20140812/f3ab568c/attachment.html>
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
