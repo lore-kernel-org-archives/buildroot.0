@@ -1,44 +1,52 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Tue, 12 Aug 2014 19:39:20 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql: remove devfiles from target
-In-Reply-To: <20140812185019.57322578@free-electrons.com>
-References: <1407605679-15342-1-git-send-email-bos@je-eigen-domein.nl>	<b8f2dfad-6831-48d9-a7fa-c4775bbcf0a6@email.android.com>	<53E74FAF.6000306@je-eigen-domein.nl>	<CAAXf6LW2KLKO3836TUw+7BqFTcYBu=AjSvCHw9ff=jwx=sOCww@mail.gmail.com>
- <20140812185019.57322578@free-electrons.com>
-Message-ID: <53EA5148.1050903@je-eigen-domein.nl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 12 Aug 2014 18:05:12 +0000 (UTC)
+Subject: [Buildroot] [Bug 7262] Generating locale en_US.UTF-8 fails on 64bit
+ fedora linux host
+In-Reply-To: <bug-7262-163@https.bugs.busybox.net/>
+References: <bug-7262-163@https.bugs.busybox.net/>
+Message-ID: <20140812180512.423B69D430@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=7262
 
-On 08/12/2014 06:50 PM, Thomas Petazzoni wrote:
-> On Sun, 10 Aug 2014 14:54:51 +0200, Thomas De Schampheleire wrote:
->
->>>> Not entirely sure here, but isn't the better approach for pg_config to add
->>>> it to POSTGRESQL_CONFIG_SCRIPTS? This will ensure the file is fixed up for
->>>> staging usr, and removed from target automatically.
->>>>
->>> Note that pg_config is an ELF executable compiled for the target
->>> architecture, and not a text script that can be easily fixed up.
->> Ok, in this case adding it to POSTGRESQL_CONFIG_SCRIPTS may not be the
->> best idea.
-> More precisely: it will simply not work. The <pkg>_CONFIG_SCRIPTS
-> mechanism assumes that the <pkg>-config files are shell scripts, in a
-> certain format. With an ELF executable compiled for the target:
->
->   1/ There's no way the <pkg>_CONFIG_SCRIPTS mechanism can work
->
->   2/ There's no real point in keeping this file on the build machine,
->      because it's an executable built for the target.
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-Do wonder if we shouldn't provide a simple replacement script for 
-pg_config, e.g. just implementing "--includedir" and "--libdir"
-Might be less work than patching configure scripts that want to call 
-pg_config.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|                            |WORKSFORME
+
+--- Comment #4 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-12 18:05:11 UTC ---
+I installed Fedora 20 on a 64-bit VirtualBox machine, and built buildroot
+2014.05 with the configuration you provided.
+The build went successful, and thus I am not able to reproduce this issue:
+
+>>> host-localedef 2.14.1-r17443-ptx1 Installing to host directory
+/usr/bin/install -D -m 0755
+/home/tdescham/buildroot-2014.05/output/build/host-localedef-2.14.1-r17443-ptx1/localedef
+/home/tdescham/buildroot-2014.05/output/host/usr/bin/localedef
+Generating locale en_US.UTF-8
+>>>   Finalizing target directory
+rm -f /home/tdescham/buildroot-2014.05/output/build/locales.nopurge
+for i in C en; do echo $i >>
+/home/tdescham/buildroot-2014.05/output/build/locales.nopurge; done
 
 
-Yours sincerely,
+Moreover, as I mentioned in a previous comment, the relation between a lib64
+symlink in output/target and the generation of locales failing due to a
+temporary file, sounds very odd to me.
 
-Floris Bos
+For these reasons, I am closing this bug report. 
+Do reopen this bug if you can prove that the problem is reproducible. In this
+case, please try to provide us with more detail regarding the problem, given
+that I was not able to reproduce with seemingly the same configuration. Do also
+verify with the latest buildroot in this case.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
