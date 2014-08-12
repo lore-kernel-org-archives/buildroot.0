@@ -1,46 +1,60 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 12 Aug 2014 22:20:07 +0200
-Subject: [Buildroot] [PATCH 2 of 8 RFCv2 for 2014.08] manual: remove
-	'Events' section
+Date: Tue, 12 Aug 2014 22:20:08 +0200
+Subject: [Buildroot] [PATCH 3 of 8 RFCv2 for 2014.08] manual/getting
+ started: rename and move 'Getting involved' section
 In-Reply-To: <patchbomb.1407874805@localhost>
 References: <patchbomb.1407874805@localhost>
-Message-ID: <384a21645bf29946ce02.1407874807@localhost>
+Message-ID: <c55bf02ff149d6fc4189.1407874808@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The list of buildroot events is outdated, a sign that the manual is not the
-best place to refer to timely things like events. The wiki page is better
-suited for such information.
+The Getting Involved section is actually an overview of the ways to interact
+with the Buildroot community, which is useful for developers _and_ users.
+Therefore, this patch moves the section from the Developer Guide to the
+Getting Started section, and renames it to 'Community Resources'.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
- docs/manual/get-involved.txt |  16 ----------------
- 1 files changed, 0 insertions(+), 16 deletions(-)
+Note: I'm open to other names than 'Community Resources'
 
-diff -r 00ad338df278 -r 384a21645bf2 docs/manual/get-involved.txt
---- a/docs/manual/get-involved.txt	Wed Aug 06 19:48:39 2014 +0200
-+++ b/docs/manual/get-involved.txt	Wed Aug 06 20:28:19 2014 +0200
-@@ -103,19 +103,3 @@
- This page is reachable at http://elinux.org/Buildroot[].
+ docs/manual/get-involved.txt |  2 +-
+ docs/manual/manual.txt       |  4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff -r 384a21645bf2 -r c55bf02ff149 docs/manual/get-involved.txt
+--- a/docs/manual/get-involved.txt	Wed Aug 06 20:28:19 2014 +0200
++++ b/docs/manual/get-involved.txt	Thu Aug 07 18:05:13 2014 +0200
+@@ -1,7 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
  
- Currently, this page is mainly used as a _todo-list_.
+-== Getting involved
++== Community resources
+ 
+ Like any open source project, Buildroot has different ways to share
+ information in its community and outside.
+diff -r 384a21645bf2 -r c55bf02ff149 docs/manual/manual.txt
+--- a/docs/manual/manual.txt	Wed Aug 06 20:28:19 2014 +0200
++++ b/docs/manual/manual.txt	Thu Aug 07 18:05:13 2014 +0200
+@@ -22,6 +22,8 @@
+ 
+ include::starting-up.txt[]
+ 
++include::get-involved.txt[]
++
+ = User guide
+ 
+ include::working-with.txt[]
+@@ -40,8 +42,6 @@
+ 
+ include::developer-guide.txt[]
+ 
+-include::get-involved.txt[]
 -
--[[events]]
--=== Events
--
--==== Buildroot Developer Days aside ELC-E 2012 (November 3-4, 2012 - Barcelona)
--
--* Event page: http://elinux.org/Buildroot:DeveloperDaysELCE2012[]
--
--==== Buildroot presentation at LSM 2012 (July 12-14, 2012 - Geneva)
--
--* Announcement: http://lists.busybox.net/pipermail/buildroot/2012-May/053845.html[]
--
--==== Buildroot Developer Days aside FOSDEM 2012 (February 3, 2012 - Brussels)
--
--* Announcement & agenda thread: http://lists.busybox.net/pipermail/buildroot/2012-January/049340.html[]
--* Report: http://lists.busybox.net/pipermail/buildroot/2012-February/050371.html[]
+ include::contribute.txt[]
+ 
+ = Appendix
