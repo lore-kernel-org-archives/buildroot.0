@@ -1,58 +1,55 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Wed, 13 Aug 2014 15:57:11 +0200
-Subject: [Buildroot] [PATCH v2 3/3] php: add pdo_pgsql extension
-In-Reply-To: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <1407938231-22544-3-git-send-email-bos@je-eigen-domein.nl>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 13 Aug 2014 15:59:24 +0200
+Subject: [Buildroot] [PATCH 1/1] qt: make installation of translation
+ files optional
+In-Reply-To: <1406948936-1962-1-git-send-email-danomimanchego123@gmail.com>
+References: <1406948936-1962-1-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <53EB6F3C.7060302@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds support for the PDO PostgreSQL extension to the PHP package.
+Dear Danomi, Vivien,
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
----
- package/php/Config.ext | 10 ++++++++++
- package/php/php.mk     |  4 ++++
- 2 files changed, 14 insertions(+)
+[Copying Vivien as the author of commit 93917b6980f7, which originated
+the issue.]
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 078be8d..f0719bb 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -135,6 +135,16 @@ comment "MySQL drivers need a toolchain w/ C++"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP
- 
-+config BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL
-+	bool "PostgreSQL"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_POSTGRESQL
-+	help
-+	  PDO driver for PostgreSQL
-+
-+comment "PostgreSQL needs an (e)glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
- config BR2_PACKAGE_PHP_EXT_PDO_SQLITE
- 	bool "SQLite3"
- 	select BR2_PACKAGE_SQLITE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index de7d668..d0418ad 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -162,6 +162,10 @@ ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_MYSQL),y)
- 	PHP_CONF_OPT += --with-pdo-mysql=$(STAGING_DIR)/usr
- 	PHP_DEPENDENCIES += mysql
- endif
-+ifeq ($(BR2_PACKAGE_PHP_EXT_PDO_POSTGRESQL),y)
-+	PHP_CONF_OPT += --with-pdo-pgsql=$(STAGING_DIR)/usr
-+	PHP_DEPENDENCIES += postgresql
-+endif
- endif
- 
- ### Use external PCRE if it's available
+I have a comment on this patch, even though it has already been
+committed.
+
+Danomi Manchego wrote:
+> Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e introduced the
+> installation of the binary .qm translation files, unconditionally.
+> This patch introduces an option to disable this behavior, saving
+> almost 8MB of space.
+>
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+>
+> ---
+>
+> Note: the new option is defaulted to "y", to match the current qt.mk operation.
+
+I'm not sure this is a good default value.
+Surely it preserves backward compatibility with Buildroot versions since
+2013.11, when the installation got introduced. But for years the
+translation files were never installed, and apparently it was not a
+problem to anybody.
+
+The size is very large for some embedded systems. I have Qt-based
+systems working since years and never needed them. I have one that is
+around 17 MB, becomes 25 MB with translations!
+
+Danomi, Vivien, can you explain exactly what these translations are and
+when they are needed?
+
+Unless there is a good reason to have the translations on most targets
+I would change the default to no in order to preserve new users from an
+unnoticed extra size that might be unneeded.
+
+If you agree, I'd send a patch to change this.
+
+Thanks.
 -- 
-1.8.3.2
+Luca
