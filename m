@@ -1,22 +1,21 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Aug 2014 17:52:06 +0000 (UTC)
-Subject: [Buildroot] [Bug 7250] Cannot build with -std=c++11
-In-Reply-To: <bug-7250-163@https.bugs.busybox.net/>
-References: <bug-7250-163@https.bugs.busybox.net/>
-Message-ID: <20140813175206.57EF19D43F@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 13 Aug 2014 20:12:18 +0200
+Subject: [Buildroot] [PATCH 1/4] gcc/4.7: add patch to enable more
+	C++	features with uClibc
+In-Reply-To: <1407952290-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1407952290-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1407952290-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <63692e38-56f1-4e79-bac3-c573dbedc3ca@email.android.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=7250
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
+>This commit fixes bug #7250, by allowing more libsdtc++ features to be
 
---- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> 2014-08-13 17:52:02 UTC ---
-Patch series sent at
-http://lists.busybox.net/pipermail/buildroot/2014-August/104150.html.
+libstdc++
 
--- 
-Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
-------- You are receiving this mail because: -------
-You are on the CC list for the bug.
+Best regards,
+Thomas
