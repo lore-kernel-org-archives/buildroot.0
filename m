@@ -1,87 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Aug 2014 23:59:57 +0200
-Subject: [Buildroot] [PATCH 1/1] fio: (bugfix) add libaio dependency
- (added description)
-In-Reply-To: <1407956022-62199-1-git-send-email-Matthew.Weber@rockwellcollins.com>
-References: <1407956022-62199-1-git-send-email-Matthew.Weber@rockwellcollins.com>
-Message-ID: <20140813235957.10e71f41@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 14 Aug 2014 00:18:24 +0200
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <20140813214910.GJ3939@free.fr>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140806202322.GE1587@free.fr>
+ <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
+ <20140811103315.GB4364@free.fr> <20140811105005.GC4364@free.fr>
+ <CA+-urNTH1Piz5T+SBkfGzuPHMS_4T=CUwcV8XP3p8vWZfCdDRw@mail.gmail.com>
+ <20140813204443.GH3939@free.fr>
+ <CA+-urNTFkncEkOxKbyBiqLGAHP=94sfbaz-b-27LnkcvJpkh0g@mail.gmail.com>
+ <20140813214910.GJ3939@free.fr>
+Message-ID: <20140813221824.GK3939@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Frank, All,
 
-On Wed, 13 Aug 2014 13:53:42 -0500, Matt Weber wrote:
-> The fio package at runtime (dlopen)links in the libaio library
-> when the ioengine is selected as libaio. I.e. this isn't caught at
-> build time since the link wouldn't occur.
+On 2014-08-13 23:49 +0200, Yann E. MORIN spake thusly:
+> On 2014-08-13 17:23 -0400, Frank Hunleth spake thusly:
+> > > > I think that you can get this error if host erlang is compiled without
+> > > > openssl. Maybe you don't have the openssl headers installed on your
+> > > > system and Johan does?
+[--SNIP--]
+> I re-ran the test with erlang.mk patched to depend on host-openssl and
+> added back the --with-ssl flag when building the host erlang.
 > 
-> Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
+> Indeed, I do not have this directory.
 
-Thanks for the explanation. However, this patch still isn't completely
-correct. The first issue is that you have added a changelog information
-("added description") in the commit title, which is preserved forever
-in the Git history. The changelog information should go...
+OK, now I have it. My host-erlang is compiled with ssl support.
+But...
 
-> ---
-
-... here, so that it doesn't get preserved forever in the Git history.
-
-Also, the (bugfix) part of your commit title is kind of strange. I
-think a proper commit title would be:
-
-	fio: add missing libaio dependency
-
-Also, you say that libaio is needed when the ioengine is selected as
-libaio. Are there other ioengine that could potentially be used, and
-therefore make the libaio dependency optional?
-
->  package/fio/Config.in | 1 +
->  package/fio/fio.mk    | 1 +
->  2 files changed, 2 insertions(+)
+> > Also, does the log from Erlang's ./configure provide any clues?
 > 
-> diff --git a/package/fio/Config.in b/package/fio/Config.in
-> index 8cbbf6c..b907fb9 100644
-> --- a/package/fio/Config.in
-> +++ b/package/fio/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_FIO
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_LARGEFILE
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBAIO #ioengine libaio
+> Aha!
+> 
+>     checking for static ZLib to be used by SSL in standard locations... no
+>     checking for OpenSSL >= 0.9.7 in standard locations... no
+>     configure: WARNING: No (usable) OpenSSL found, skipping ssl, ssh and crypto applications
+> 
+> Dang... It seems we have to tell it where to look for our own openssl.
+> Lemme see... Yes, we can say --with-ssl=PATH . I'll try that, and will
+> report later...
 
-This should be:
+Now, my error is back to this sequence of numbers:
 
-	# Runtime dependency: libaio is dlopen()ed by fio
-	select BR2_PACKAGE_LIBAIO
+Uncaught error in rebar_core: {'EXIT',
+                               {badarg,
+                                [{re,replace,
+                                  [[40,41,32,123,32,32,108,111,99,97,108,32,
+                                    82,69,84,61,34,36,123,63,125,34,59,10,32,
+                                    108,111,99,97,108,32,105,115,95,110,101,
+                                    116,95,109,110,116,112,116,61,48,59,10,32,
+                                    108,111,99,97,108,32,72,71,80,76,65,73,78,
+                                    59,10,32,108,111,99,97,108,32,76,79,65,68,
+...
+                                    66,76,85,125,36,123,80,83,49,125,36,123,
+                                    65,95,78,79,82,125,34,59,10,32,104,105,
+                                    115,116,111,114,121,32,45,97,59,10,32,112,
+                                    114,111,109,112,116,95,102,105,114,115,
+                                    116,61,48,10,125],
+                                   [92,36,40,"doPrompt",40,92,115,124,36,41,
+                                    124,123,"doPrompt",125,41],
+                                   [[],"\\2"],
+                                   [global,{return,list}]],
+                                  [{file,"re.erl"},{line,355}]},
+                                 {rebar_port_compiler,merge_each_var,2,
+                                  [{file,"src/rebar_port_compiler.erl"},
+                                   {line,380}]},
+                                 {rebar_port_compiler,setup_env,2,
+                                  [{file,"src/rebar_port_compiler.erl"},
+                                   {line,167}]},
+                                 {rebar_core,'-setup_envs/2-fun-0-',2,
+                                  [{file,"src/rebar_core.erl"},{line,436}]},
+                                 {lists,foldl,3,
+                                  [{file,"lists.erl"},{line,1261}]},
+                                 {rebar_core,process_dir1,6,
+                                  [{file,"src/rebar_core.erl"},{line,190}]},
+                                 {rebar_core,process_commands,2,
+                                  [{file,"src/rebar_core.erl"},{line,61}]},
+                                 {rebar,main,1,
+                                  [{file,"src/rebar.erl"},{line,58}]}]}}
+make[1]: *** [deps/.got] Error 1
 
-Also, the libaio package is only available for a limited set of
-architectures (see package/libaio/Config.in), and those dependencies
-must be propagated to fio if libaio is indeed a mandatory dependency of
-fio.
+OK, I'm lost... :-(
 
->  	# fio uses posix_madvise(), which is not part of any official
->  	# release of uClibc, but is part of uClibc Git, and backported
->  	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
-> diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-> index f9a690e..e0c79e8 100644
-> --- a/package/fio/fio.mk
-> +++ b/package/fio/fio.mk
-> @@ -8,6 +8,7 @@ FIO_VERSION = fio-2.1.4
->  FIO_SITE = git://git.kernel.dk/fio.git
->  FIO_LICENSE = GPLv2 + special obligations
->  FIO_LICENSE_FILES = LICENSE
-> +FIO_DEPENDENCIES = libaio
+One thing I just noticed, are those two lines (visible above, too):
 
-If libaio is only a runtime dependency of fio (and not a build time
-dependency), then this line is not needed.
+    [92,36,40,"doPrompt",40,92,115,124,36,41,
+     124,123,"doPrompt",125,41],
 
-Thanks,
+doPrompt is the content of my $PROMPT_COMMAND environment variable, in
+case that rings a bell somewhere...
 
-Thomas
+I'll let you guys investigate further. I can run tests if you need to.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
