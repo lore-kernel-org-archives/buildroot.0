@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Aug 2014 09:25:18 +0200
-Subject: [Buildroot] [PATCH] package/xbmc: Bump version to 13.2rc1
-In-Reply-To: <1407906206-7513-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1407906206-7513-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140813092518.4d70cd10@free-electrons.com>
+Date: Wed, 13 Aug 2014 09:26:54 +0200
+Subject: [Buildroot] [PATCH 1/1] postgresql: remove devfiles from target
+In-Reply-To: <53EA5148.1050903@je-eigen-domein.nl>
+References: <1407605679-15342-1-git-send-email-bos@je-eigen-domein.nl>
+ <b8f2dfad-6831-48d9-a7fa-c4775bbcf0a6@email.android.com>
+ <53E74FAF.6000306@je-eigen-domein.nl>
+ <CAAXf6LW2KLKO3836TUw+7BqFTcYBu=AjSvCHw9ff=jwx=sOCww@mail.gmail.com>
+ <20140812185019.57322578@free-electrons.com>
+ <53EA5148.1050903@je-eigen-domein.nl>
+Message-ID: <20140813092654.54197f53@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Dear Floris Bos,
 
-On Wed, 13 Aug 2014 07:03:26 +0200, Bernd Kuhls wrote:
+On Tue, 12 Aug 2014 19:39:20 +0200, Floris Bos wrote:
+
+> > More precisely: it will simply not work. The <pkg>_CONFIG_SCRIPTS
+> > mechanism assumes that the <pkg>-config files are shell scripts, in a
+> > certain format. With an ELF executable compiled for the target:
+> >
+> >   1/ There's no way the <pkg>_CONFIG_SCRIPTS mechanism can work
+> >
+> >   2/ There's no real point in keeping this file on the build machine,
+> >      because it's an executable built for the target.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/xbmc/xbmc.mk |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/xbmc/xbmc.mk b/package/xbmc/xbmc.mk
-> index a7c8080..eaa21c9 100644
-> --- a/package/xbmc/xbmc.mk
-> +++ b/package/xbmc/xbmc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -XBMC_VERSION = 13.2b3-Gotham
-> +XBMC_VERSION = 13.2rc1-Gotham
->  XBMC_SOURCE = $(XBMC_VERSION).tar.gz
->  XBMC_SITE = https://github.com/xbmc/xbmc/archive
->  XBMC_LICENSE = GPLv2
+> Do wonder if we shouldn't provide a simple replacement script for 
+> pg_config, e.g. just implementing "--includedir" and "--libdir"
+> Might be less work than patching configure scripts that want to call 
+> pg_config.
 
-If you commit this, then I suggest it goes to 'master' and not 'next'.
-While we normally merge version bumps in 'next' at this point, this
-version bump is a bump from a "beta" version to a "release candidate"
-version, so it should normally bring more stability/fixes to XBMC.
+Yes, that's certainly an option. If there are many packages relying on
+pg_config, it's going to be easier to provide a fake pg_config rather
+than patching all those packages (such as PHP). Maybe even this
+approach could be submitted for upstream inclusion in Postgresql?
 
-Bernd: it would have been good to have made this explicit in the commit
-log.
-
-Thanks,
+Best regards,
 
 Thomas
 -- 
