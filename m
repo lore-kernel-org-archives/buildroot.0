@@ -1,47 +1,65 @@
-From: Matt Weber <Matthew.Weber@rockwellcollins.com>
-Date: Wed, 13 Aug 2014 13:53:42 -0500
-Subject: [Buildroot] [PATCH 1/1] fio: (bugfix) add libaio dependency (added
-	description)
-Message-ID: <1407956022-62199-1-git-send-email-Matthew.Weber@rockwellcollins.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 13 Aug 2014 14:48:13 -0400
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <20140811105005.GC4364@free.fr>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140806202322.GE1587@free.fr>
+ <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
+ <20140811103315.GB4364@free.fr> <20140811105005.GC4364@free.fr>
+Message-ID: <CA+-urNTH1Piz5T+SBkfGzuPHMS_4T=CUwcV8XP3p8vWZfCdDRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The fio package at runtime (dlopen)links in the libaio library
-when the ioengine is selected as libaio. I.e. this isn't caught at
-build time since the link wouldn't occur.
+Hi Yann and all,
 
-Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
----
- package/fio/Config.in | 1 +
- package/fio/fio.mk    | 1 +
- 2 files changed, 2 insertions(+)
+On Mon, Aug 11, 2014 at 6:50 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Johan, All,
+>
+> On 2014-08-11 12:33 +0200, Yann E. MORIN spake thusly:
+>> On 2014-08-11 11:36 +0200, Johan Oudinet spake thusly:
+>> > On Wed, Aug 6, 2014 at 10:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+>> > > And it fails at build time, with a lengthy error message, that I do not
+>> > > completely grasp:
+>> > >
+>> > >     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar
+>> > > get-deps && :> deps/.got
+>> > >     ==> rel (get-deps)
+>> > >     Uncaught error in rebar_core: {'EXIT',
+>> > >                                    {badarg,
+>> >
+>> > Very strange. It looks like the rebar script didn't accept the
+>> > get-deps argument.
+>> > Could you try with the same defconfig as mine to see if the problem
+>> > comes from there.
+> [--SNIP--]
+>> I'll check in a 32-bit chroot to see if the error is the same.
+>
+> OK, here's what it has to say when run in a 32-bit sueeze chroot:
+>
+>     ---8<---
+>     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar get-deps && :> deps/.got
+>     Uncaught error in rebar_core: {'EXIT',
+>                                    {undef,
+>                                     [{crypto,start,[],[]},
+>                                      {rebar,run_aux,2,
+>                                       [{file,"src/rebar.erl"},{line,143}]},
+>                                      {rebar,main,1,
+>                                       [{file,"src/rebar.erl"},{line,58}]},
+>                                      {escript,run,2,
+>                                       [{file,"escript.erl"},{line,752}]},
+>                                      {escript,start,1,
+>                                       [{file,"escript.erl"},{line,276}]},
+>                                      {init,start_it,1,[]},
+>                                      {init,start_em,1,[]}]}}
+>     make[2]: *** [deps/.got] Error 1
+>     ---8<---
 
-diff --git a/package/fio/Config.in b/package/fio/Config.in
-index 8cbbf6c..b907fb9 100644
---- a/package/fio/Config.in
-+++ b/package/fio/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_FIO
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_LARGEFILE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBAIO #ioengine libaio
- 	# fio uses posix_madvise(), which is not part of any official
- 	# release of uClibc, but is part of uClibc Git, and backported
- 	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index f9a690e..e0c79e8 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -8,6 +8,7 @@ FIO_VERSION = fio-2.1.4
- FIO_SITE = git://git.kernel.dk/fio.git
- FIO_LICENSE = GPLv2 + special obligations
- FIO_LICENSE_FILES = LICENSE
-+FIO_DEPENDENCIES = libaio
- 
- define FIO_CONFIGURE_CMDS
- 	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
--- 
-1.9.1
+I think that you can get this error if host erlang is compiled without
+openssl. Maybe you don't have the openssl headers installed on your
+system and Johan does?
+
+Frank
