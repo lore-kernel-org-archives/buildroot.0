@@ -1,44 +1,74 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 13 Aug 2014 13:00:27 +0100
-Subject: [Buildroot] Some Perl modules fail to cross-compile
-In-Reply-To: <20140813063010.CD21010118A@stock.ovh.net>
-References: <20140813063010.CD21010118A@stock.ovh.net>
-Message-ID: <53EB535B.60301@imgtec.com>
+From: Floris Bos <bos@je-eigen-domein.nl>
+Date: Wed, 13 Aug 2014 15:57:09 +0200
+Subject: [Buildroot] [PATCH v2 1/3] postgresql: add replacement pg_config
+Message-ID: <1407938231-22544-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The affected modules are:
+Normally pg_config is a native application compiled for the
+target architecture. Since we cannot execute those on the
+host system, provide a simple shell script as replacement.
 
-  perl-gd
-  perl-net-ssleay
-  perl-xml-libxml
+Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+---
+ package/postgresql/pg_config     | 19 +++++++++++++++++++
+ package/postgresql/postgresql.mk |  8 ++++++++
+ 2 files changed, 27 insertions(+)
+ create mode 100644 package/postgresql/pg_config
 
-The build system of these modules have a "use Config;" in the 
-Makefile.PL. Given that we are cross-compiling, the Perl program used to 
-run that Makefile.PL is the host's Perl program (because we can't run 
-MIPS Perl in our x86_64 machine, for instance), so the %Config read only 
-variable provided by the Config module contains all the information that 
-the Configure program had during the Perl build time (in our case, the 
-host's Perl). Then, the build system fills the OPTIMIZE variable (only 
-if it's empty) with some flags taken from that %Config variable, so some 
-things like "-mtune=generic" or "-m64" can end into the OPTIMIZE 
-variable and cause a compilation failure for target architectures which 
-don't support those flags.
-
-I have reported this bug upstream. Please read the comments:
-   https://rt.cpan.org/Public/Bug/Display.html?id=97834
-
-My proposal to fix these three packages is to append the OPTIMIZE 
-variable to the configure options and set it to 
--mtune=$(BR2_GCC_TARGET_ARCH) to avoid the OPTIMIZE variable get filled 
-with incompatible flags.
-
-I have the patches ready and they work, so, if you think this is a valid 
-solution, just tell it to me and I will send the patches ASAP.
-
-Thanks.
+diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+new file mode 100644
+index 0000000..85c0e63
+--- /dev/null
++++ b/package/postgresql/pg_config
+@@ -0,0 +1,19 @@
++#!/bin/sh
++
++#
++# Minimal pg_config implementation as replacement for the native pg_config application
++# Only implements --includedir and --libdir
++#
++
++prefix=/usr
++
++case "$1" in
++  --includedir)
++	echo "$prefix/include"
++	;;
++  --libdir)
++	echo "$prefix/lib"
++	;;
++  *)
++	echo "Usage: $0 {--includedir|--libdir}"
++esac
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 6941e55..dd2e678 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -11,6 +11,7 @@ POSTGRESQL_LICENSE = PostgreSQL
+ POSTGRESQL_LICENSE_FILES = COPYRIGHT
+ 
+ POSTGRESQL_INSTALL_STAGING = YES
++POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ 
+ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ 	POSTGRESQL_CONF_OPT += --disable-thread-safety
+@@ -55,6 +56,13 @@ endef
+ 
+ POSTGRESQL_POST_INSTALL_TARGET_HOOKS += POSTGRESQL_INSTALL_TARGET_FIXUP
+ 
++define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
++	$(INSTALL) -m 0755 -D package/postgresql/pg_config \
++		$(STAGING_DIR)/usr/bin/pg_config
++endef
++
++POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
++
+ define POSTGRESQL_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/postgresql/S50postgresql \
+ 		$(TARGET_DIR)/etc/init.d/S50postgresql
 -- 
-Vincent
+1.8.3.2
