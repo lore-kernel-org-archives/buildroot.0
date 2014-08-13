@@ -1,36 +1,30 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 13 Aug 2014 18:53:10 +0200
-Subject: [Buildroot] [UNSURE]Analysis of build failures
-In-Reply-To: <20140813101514.384e1435@free-electrons.com>
-References: <20140813063010.CD21010118A@stock.ovh.net>
- <20140813101514.384e1435@free-electrons.com>
-Message-ID: <CAB0FRsvHq07bEMyQtkFvD343=kDKNyxPfqfFEip6dXeM+3ikag@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 13 Aug 2014 14:01:06 -0300
+Subject: [Buildroot] [PATCH] libidn: bump to version 1.29
+Message-ID: <1407949266-5110-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2014-08-13 10:15 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
->>        arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/e466773fbfce77ac8e89150b96620607e045cf13/
->
-> This has been causing a good number of build issues. Fran?ois, is there
-> something we can do to fix this?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libidn/libidn.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-building a host-perl, but after this release 14.08.
-perl-gd is broken only on the machine gcc10.
-
-Fran?ois
-
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 7d20edf..7d327d1 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIDN_VERSION = 1.28
++LIBIDN_VERSION = 1.29
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no"
+-- 
+1.8.5.5
