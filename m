@@ -1,46 +1,75 @@
-From: Romain Naour <romain.naour@openwide.fr>
-Date: Wed, 13 Aug 2014 23:05:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/localedef: don't use config.site
-	when cross-compiling
-Message-ID: <1407963923-27432-1-git-send-email-romain.naour@openwide.fr>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Wed, 13 Aug 2014 17:07:10 -0400
+Subject: [Buildroot] [PATCH] qt: don't install translation files by
+	default
+In-Reply-To: <1407961570-10684-1-git-send-email-luca@lucaceresoli.net>
+References: <1407961570-10684-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CANxTyt5VK1XKYXe8Y3RbqDAoraWC_heS0p0HoCExfH3pbEbORA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On fedora 20 64bits host, the file /usr/share/config.site contains
-a fix for installing libraries into /lib/lib64 on 64bits systems
-that redefine libdir in the generated Makefile.
+On Wed, Aug 13, 2014 at 4:26 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e (2013.11) introduced
+> the installation of the binary .qm translation files, unconditionally.
+>
+> However, the installed size is very large for some embedded systems
+> (about 8 MB), and they are not needed in many cases.
+>
+> In order to avoid such a waste of storage space, commit
+> 2ff329412f490dc916bab3377073ef5950a46298 (2014.08) made this
+> installation an option that could be disabled. For backward
+> compatibility, the option defaults to yes.
+>
+> Given the relevant size of these files, and that they had never been
 
-This causes the bug 7262 reported Normen Bolling.
+Nitpick: "relevant"?  Do you mean "relative" or "relatively large"?
 
-Set CONFIG_SITE to "no" to not use config.site
 
-fixes: https://bugs.busybox.net/show_bug.cgi?id=7262
+> installed by Buildroot versions before 2013.11, change the default to
+> not installing these files.
+>
+> Interested users can still activate it as needed.
+>
+> Also update and improve a bit the help text.
 
-Reported-by: Normen Bolling <normen.bolling@teufel.de>
-Cc: Normen Bolling <normen.bolling@teufel.de>
-Cc: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
----
- package/localedef/localedef.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+/a bit the help text/the help text/
 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 17ffd14..9a7118a 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -8,6 +8,10 @@ LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
- LOCALEDEF_SOURCE  = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
- LOCALEDEF_SITE    = http://www.pengutronix.de/software/ptxdist/temporary-src
- 
-+# Avoid loading /usr/share/config.site that can redefine libdir when
-+# the host arch is a 64bit system.
-+HOST_LOCALEDEF_CONF_ENV = CONFIG_SITE="no"
-+
- HOST_LOCALEDEF_CONF_OPT += \
- 	--prefix=/usr \
- 	--with-glibc=./eglibc
--- 
-1.9.3
+Otherwise:
+
+Reviewed-by: Danomi Manchego <danomimanchego123@gmail.com>
+
+Danomi -
+
+
+>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Danomi Manchego <danomimanchego123@gmail.com>
+> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  package/qt/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/qt/Config.in b/package/qt/Config.in
+> index 93751cd..da159b4 100644
+> --- a/package/qt/Config.in
+> +++ b/package/qt/Config.in
+> @@ -30,10 +30,10 @@ config BR2_PACKAGE_QT_DEMOS
+>
+>  config BR2_PACKAGE_QT_TRANSLATION_FILES
+>         bool "Install translation files"
+> -       default y
+>         help
+>           Install binary .qm translation files.
+> -         If unsure, say y.
+> +         Say y if you need these files. They will take about 8 MB
+> +         on the target root filesystem.
+>
+>  config BR2_PACKAGE_QT_EXAMPLES
+>         bool "Compile and install Qt examples (with code)"
+> --
+> 1.9.1
+>
