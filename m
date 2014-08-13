@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Aug 2014 19:51:29 +0200
-Subject: [Buildroot] [PATCH 3/4] gcc/4.9: add patch to enable more C++
-	features with uClibc
+Date: Wed, 13 Aug 2014 19:51:30 +0200
+Subject: [Buildroot] [PATCH 4/4] gcc/arc-4.8-R3: add patch to enable more
+	C++ features with uClibc
 In-Reply-To: <1407952290-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1407952290-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1407952290-8021-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1407952290-8021-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,36 +31,15 @@ Reported-by: Richard <tarka.t.otter@gmail.com>
 Cc: Richard <tarka.t.otter@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/4.9.1/302-c99-snprintf.patch         |  13 --
- package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch | 273 +++++++++++++++++++++++
- 2 files changed, 273 insertions(+), 13 deletions(-)
- delete mode 100644 package/gcc/4.9.1/302-c99-snprintf.patch
- create mode 100644 package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
+ .../gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch  | 273 +++++++++++++++++++++
+ 1 file changed, 273 insertions(+)
+ create mode 100644 package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
 
-diff --git a/package/gcc/4.9.1/302-c99-snprintf.patch b/package/gcc/4.9.1/302-c99-snprintf.patch
-deleted file mode 100644
-index cd4d2cc..0000000
---- a/package/gcc/4.9.1/302-c99-snprintf.patch
-+++ /dev/null
-@@ -1,13 +0,0 @@
--Index: gcc-4.8.0/libstdc++-v3/include/c_global/cstdio
--===================================================================
----- gcc-4.8.0.orig/libstdc++-v3/include/c_global/cstdio	2013-02-03 18:54:05.000000000 +0100
--+++ gcc-4.8.0/libstdc++-v3/include/c_global/cstdio	2013-03-23 17:39:32.000000000 +0100
--@@ -138,7 +138,7 @@
--   using ::vsprintf;
-- } // namespace
-- 
---#if _GLIBCXX_USE_C99
--+#if _GLIBCXX_USE_C99 || defined __UCLIBC__
-- 
-- #undef snprintf
-- #undef vfscanf
-diff --git a/package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch b/package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
+diff --git a/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch b/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
 new file mode 100644
-index 0000000..331cdcb
+index 0000000..0d02ef0
 --- /dev/null
-+++ b/package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
++++ b/package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
 @@ -0,0 +1,273 @@
 +Allow C99-depending features of libstdc++ with uClibc
 +
@@ -109,7 +88,7 @@ index 0000000..331cdcb
 +===================================================================
 +--- a/libstdc++-v3/include/bits/basic_string.h
 ++++ b/libstdc++-v3/include/bits/basic_string.h
-+@@ -2828,7 +2828,7 @@
++@@ -2811,7 +2811,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -209,7 +188,7 @@ index 0000000..331cdcb
 +===================================================================
 +--- a/libstdc++-v3/include/c_std/cstdio
 ++++ b/libstdc++-v3/include/c_std/cstdio
-+@@ -144,7 +144,7 @@
++@@ -139,7 +139,7 @@
 +   using ::vsprintf;
 + } // namespace std
 + 
@@ -248,7 +227,7 @@ index 0000000..331cdcb
 +===================================================================
 +--- a/libstdc++-v3/include/ext/vstring.h
 ++++ b/libstdc++-v3/include/ext/vstring.h
-+@@ -2680,7 +2680,7 @@
++@@ -2571,7 +2571,7 @@
 + _GLIBCXX_END_NAMESPACE_VERSION
 + } // namespace
 + 
@@ -313,7 +292,7 @@ index 0000000..331cdcb
 +===================================================================
 +--- a/libstdc++-v3/src/c++11/debug.cc
 ++++ b/libstdc++-v3/src/c++11/debug.cc
-+@@ -788,7 +788,7 @@
++@@ -787,7 +787,7 @@
 + 				     int __n __attribute__ ((__unused__)), 
 + 				     const char* __fmt, _Tp __s) const throw ()
 +     {
@@ -326,7 +305,7 @@ index 0000000..331cdcb
 +===================================================================
 +--- a/libstdc++-v3/include/c_global/cstdio
 ++++ b/libstdc++-v3/include/c_global/cstdio
-+@@ -146,7 +146,7 @@
++@@ -138,7 +138,7 @@
 +   using ::vsprintf;
 + } // namespace
 + 
