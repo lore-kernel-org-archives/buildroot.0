@@ -1,71 +1,91 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 13 Aug 2014 09:43:03 +0200
-Subject: [Buildroot] [PATCH 1 of 4 v2 for 2014.08] gendoc infra: use
-	$(pkgname) instead of explicitly passing 'manual'
-In-Reply-To: <20140812204635.GE4055@free.fr>
-References: <patchbomb.1407867067@localhost>
- <8a3834f24594bf372176.1407867068@localhost> <20140812203233.GD4055@free.fr>
- <20140812204635.GE4055@free.fr>
-Message-ID: <8b1478a6-2de6-4ae8-bf3f-d73e68adee85@email.android.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Aug 2014 10:15:14 +0200
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20140813063010.CD21010118A@stock.ovh.net>
+References: <20140813063010.CD21010118A@stock.ovh.net>
+Message-ID: <20140813101514.384e1435@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> schreef:
->Thomas, All,
->
->On 2014-08-12 22:32 +0200, Yann E. MORIN spake thusly:
->> On 2014-08-12 20:11 +0200, Thomas De Schampheleire spake thusly:
->> > In the gendoc infrastructure, using an assignment of the form
->> >     FOO = docs/$(1)/bar
->> > inside GENDOC_INNER does not work as expected: the $(1) value is empty here
->> > and the value of FOO becomes 'docs//bar'.
->> > 
->> > Parameters $(2), $(3), etc. do not have this problem. The specific thing
->> > about $(1) is that it is a parameter to GENDOC itself (indicating the
->> > document to create) and passed transparently to GENDOC_INNER.
->> > 
->> > This is different from the package infrastructures, where $(1) is set from
->> > $(pkgname). In fact, the same strategy could be used by the gendoc
->> > infrastructure as well, as $(pkgname) resolves to 'manual' for file
->> > docs/manual/manual.mk. This has the advantage that the described problem
->> > does not occur.
->> > 
->> > Note that this means that if we want to use the same GENDOC infrastructure
->> > for another document, it will have to reside in a separate directory than
->> > the manual.
->> 
->> This breaks generating the manual:
->> 
->>     $ make manual-html
->>     make: *** No rule to make target `manual-html'.  Stop.
->>     $ make manual
->>     make: *** No rule to make target `manual'.  Stop.
->
->That's because $(pkgname) returns empty, because $(pkgdir) returns
->empty, because I do not have a .config file.
->
->So, before this patch, it was possible to build the manual from a
->pristine Buildroot tree; now it is no longer possible.
->
->I think that's bad.
+Hello,
 
-Agreed. The problem is that pkg-utils.mk is only
-included when a config file is present.
-Based on this, I see three possibilities:
+On Wed, 13 Aug 2014 08:30:10 +0200 (CEST), Thomas Petazzoni wrote:
 
-1. Include pkg-utils.mk unconditionally from Makefile
- (currently included from package/Makefile.in)
+>        arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/024fadb7a8983c0ed35e8a098cfefccd25b3ecd0/
+>        arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/b84759b4b2b4473386fb209b6b4d4e18e203ec17/
+>        arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/e287acf032330c7b0ef4262e7eb365ca45382221/
+>        arm |     bandwidthd-v2.0.1-auto-r07 | NOK | http://autobuild.buildroot.net/results/4ae2406feb33eb81b45bcf87c74f62290bbe00fe/
 
-2. Move the definition of pkgname and pkgdir to
- Makefile (outside the check on the config file)
+Nathaniel, you're the one who contributed bandwidthd. Can you look at
+the above build issues?
 
-3. Don't use pkgname/pkgdir for the manual
- generation rules, and try to solve the issue with $1 on
- a different way (I feel double dollar signs coming up
- somewhere...)
+>       bfin |                 gptfdisk-0.8.6 | NOK | http://autobuild.buildroot.net/results/d06ebe23cfdd1130e68c8e67c7aafee94dc7361d/
 
-Best regards,
+libiconv issue.
+
+>        arm |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/df6a24a38daca37bf9c39c7433bf9ccdbb1cd59c/
+>        arm |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/e9ea4f1ac8c4cac3373265ffe6d02a70103fa061/
+>        arm |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/991084a6e188acec47b0545475a3010d8a8f6a57/
+>        sh4 |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/6734897dc8a86a770dcbc8bd9e231c4407b2c3a8/
+>    powerpc |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/bb48fe8347a86de9d2d59c44d24dc88c87103c81/
+>        arm |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/08ee72809a4ce2e4b451a299dd24582d05224967/
+> microblazeel |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/252a7858a85555e4e276744128aa015cafd7f252/
+>    powerpc |             host-python3-3.4.1 | NOK | http://autobuild.buildroot.net/results/d112a15d70ba0e253e96fe9e11122fbe57b1e365/
+
+Don't bother look at this one: it's /dev/shm not mounted in the
+autobuilders. I fixed this problem manually some time ago, but the
+autobuilder server was rebooted a few days ago, and therefore /dev/shm
+is not mounted. I need to fix my scripts.
+
+>        arm |                 keyutils-1.5.5 | NOK | http://autobuild.buildroot.net/results/d432983faeec51ac59343714178b84f00b11e705/
+
+Tries to build a shared library in a BR2_PREFER_STATIC_LIB=y build.
+
+>       sh4a |               libarchive-3.1.2 | NOK | http://autobuild.buildroot.net/results/10f5acf7b6aab1d5de6dcd73192ab964b15d7f93/
+
+When linking against libcrypto.a, forgets to pass -ldl.
+
+>       bfin |                  libebml-1.2.2 | NOK | http://autobuild.buildroot.net/results/1c75b276b7ed9683ddf3ec35cc3ccf66f69b00c5/
+
+Tries to build a shared library in a pure static context (bfin-uclinux).
+
+>     mipsel | ltrace-0896ce554f80afdcba81... | NOK | http://autobuild.buildroot.net/results/09f9b2c8a8f21bfd53628d813b62f0195aa686c6/
+
+Problem known and already reported upstream by Vicente.
+
+>        arm |              lttng-tools-2.4.1 | NOK | http://autobuild.buildroot.net/results/94fbaeb1cf72671b50f52cf25e7003ed41d070e6/
+
+Known compiler issue, I need to add an exception to the autobuilders.
+
+>        arm |                   perl-gd-2.53 | NOK | http://autobuild.buildroot.net/results/e466773fbfce77ac8e89150b96620607e045cf13/
+
+This has been causing a good number of build issues. Fran?ois, is there
+something we can do to fix this?
+
+>       bfin |                procps-ng-3.3.9 | NOK | http://autobuild.buildroot.net/results/f24aa16857e91fb6b03f9ac7ab0442fedcab8546/
+
+Patch sent by Yuvaraj Patil <yuvaraj.patil@wipro.com>.
+
+>      nios2 |                 rtorrent-0.9.3 | NOK | http://autobuild.buildroot.net/results/d27ca54295d5757d7c935a2c3d90c64ed81d6d32/
+
+fallocate64() issue. We need to disable rtorrent on NIOS II for now, it
+seems.
+
+>       bfin |                      tftpd-5.2 | NOK | http://autobuild.buildroot.net/results/3e16d8c9ae3b77393e082c3dd9b7b3de9aa040c0/
+
+Patch sent by Yuvaraj Patil <yuvaraj.patil@wipro.com>.
+
+>        arm |                   thrift-0.9.1 | NOK | http://autobuild.buildroot.net/results/4662d63c69d244174b431c2e8615a65e0c7b7828/
+
+Unusual issue, seems really specific to Thrift. Gustavo, maybe?
+
+Thanks,
+
 Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
