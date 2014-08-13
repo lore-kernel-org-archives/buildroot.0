@@ -1,119 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Aug 2014 23:49:10 +0200
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <CA+-urNTFkncEkOxKbyBiqLGAHP=94sfbaz-b-27LnkcvJpkh0g@mail.gmail.com>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20140806202322.GE1587@free.fr>
- <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
- <20140811103315.GB4364@free.fr> <20140811105005.GC4364@free.fr>
- <CA+-urNTH1Piz5T+SBkfGzuPHMS_4T=CUwcV8XP3p8vWZfCdDRw@mail.gmail.com>
- <20140813204443.GH3939@free.fr>
- <CA+-urNTFkncEkOxKbyBiqLGAHP=94sfbaz-b-27LnkcvJpkh0g@mail.gmail.com>
-Message-ID: <20140813214910.GJ3939@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Aug 2014 23:59:57 +0200
+Subject: [Buildroot] [PATCH 1/1] fio: (bugfix) add libaio dependency
+ (added description)
+In-Reply-To: <1407956022-62199-1-git-send-email-Matthew.Weber@rockwellcollins.com>
+References: <1407956022-62199-1-git-send-email-Matthew.Weber@rockwellcollins.com>
+Message-ID: <20140813235957.10e71f41@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank, All,
+Dear Matt Weber,
 
-On 2014-08-13 17:23 -0400, Frank Hunleth spake thusly:
-[--SNIP--]
-> > > >
-> > > > OK, here's what it has to say when run in a 32-bit sueeze chroot:
-> > > >
-> > > >     ---8<---
-> > > >     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar get-deps && :> deps/.got
-> > > >     Uncaught error in rebar_core: {'EXIT',
-> > > >                                    {undef,
-> > > >                                     [{crypto,start,[],[]},
-> > > >                                      {rebar,run_aux,2,
-> > > >                                       [{file,"src/rebar.erl"},{line,143}]},
-> > > >                                      {rebar,main,1,
-> > > >                                       [{file,"src/rebar.erl"},{line,58}]},
-> > > >                                      {escript,run,2,
-> > > >                                       [{file,"escript.erl"},{line,752}]},
-> > > >                                      {escript,start,1,
-> > > >                                       [{file,"escript.erl"},{line,276}]},
-> > > >                                      {init,start_it,1,[]},
-> > > >                                      {init,start_em,1,[]}]}}
-> > > >     make[2]: *** [deps/.got] Error 1
-> > > >     ---8<---
-> > >
-> > > I think that you can get this error if host erlang is compiled without
-> > > openssl. Maybe you don't have the openssl headers installed on your
-> > > system and Johan does?
-> >
-> > Alas, no better luck.
-> >
-> > I did de-install my libssl-dev package, so I only get the runtime from
-> > openssl, and not the development files.
-> >
-> > Then, I did three tests, all starting afresh from a clean tree, with the
-> > ejabberd patch applied on top of master (e3bb4ac: fbv: fix typo in
-> > pkg-config variable):
-> >
-> >   - with just the patch;
-> >   - then with a modified erlang.mk to compile our host erlang without ssl;
-> >   - then with a modified erlang.mk to compile our host erlang with ssl.
-> >
-> > All three build failed in the exact same way.
+On Wed, 13 Aug 2014 13:53:42 -0500, Matt Weber wrote:
+> The fio package at runtime (dlopen)links in the libaio library
+> when the ioengine is selected as libaio. I.e. this isn't caught at
+> build time since the link wouldn't occur.
 > 
-> Do you have an output/host/usr/lib/erlang/lib/crypto-3.3/priv/lib
-> directory with a couple shared libraries in it? I assume not based on
-> the failure, but wanted to check.
+> Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
 
-I re-ran the test with erlang.mk patched to depend on host-openssl and
-added back the --with-ssl flag when building the host erlang.
+Thanks for the explanation. However, this patch still isn't completely
+correct. The first issue is that you have added a changelog information
+("added description") in the commit title, which is preserved forever
+in the Git history. The changelog information should go...
 
-Indeed, I do not have this directory.
+> ---
 
-> Also, does the log from Erlang's ./configure provide any clues?
+... here, so that it doesn't get preserved forever in the Git history.
 
-Aha!
+Also, the (bugfix) part of your commit title is kind of strange. I
+think a proper commit title would be:
 
-    checking for static ZLib to be used by SSL in standard locations... no
-    checking for OpenSSL >= 0.9.7 in standard locations... no
-    configure: WARNING: No (usable) OpenSSL found, skipping ssl, ssh and crypto applications
+	fio: add missing libaio dependency
 
-Dang... It seems we have to tell it where to look for our own openssl.
-Lemme see... Yes, we can say --with-ssl=PATH . I'll try that, and will
-report later...
+Also, you say that libaio is needed when the ioengine is selected as
+libaio. Are there other ioengine that could potentially be used, and
+therefore make the libaio dependency optional?
 
-Thanks for the hint! :-)
-
-Regards,
-Yann E. MORIN.
-
-> FWIW, everything that you're doing sounds good to me. I've only seen
-> the "crypto" undef error on targets when I've forgotten to enable
-> openssl. I've never seen it on the host, but my host has a lot of
-> header files, so it's probably not a good test.
+>  package/fio/Config.in | 1 +
+>  package/fio/fio.mk    | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> >
-> > To disable ssl, I did:
-> >     HOST_ERLANG_CONF_OPT += --without-ssl
-> >
-> > To enable ssl, I did:
-> >     HOST_ERLANG_CONF_OPT += --with-ssl
-> >     HOST_ERLANG_DEPENDENCIES += host-openssl
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
+> diff --git a/package/fio/Config.in b/package/fio/Config.in
+> index 8cbbf6c..b907fb9 100644
+> --- a/package/fio/Config.in
+> +++ b/package/fio/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_FIO
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on BR2_LARGEFILE
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	select BR2_PACKAGE_LIBAIO #ioengine libaio
 
+This should be:
+
+	# Runtime dependency: libaio is dlopen()ed by fio
+	select BR2_PACKAGE_LIBAIO
+
+Also, the libaio package is only available for a limited set of
+architectures (see package/libaio/Config.in), and those dependencies
+must be propagated to fio if libaio is indeed a mandatory dependency of
+fio.
+
+>  	# fio uses posix_madvise(), which is not part of any official
+>  	# release of uClibc, but is part of uClibc Git, and backported
+>  	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
+> diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+> index f9a690e..e0c79e8 100644
+> --- a/package/fio/fio.mk
+> +++ b/package/fio/fio.mk
+> @@ -8,6 +8,7 @@ FIO_VERSION = fio-2.1.4
+>  FIO_SITE = git://git.kernel.dk/fio.git
+>  FIO_LICENSE = GPLv2 + special obligations
+>  FIO_LICENSE_FILES = LICENSE
+> +FIO_DEPENDENCIES = libaio
+
+If libaio is only a runtime dependency of fio (and not a build time
+dependency), then this line is not needed.
+
+Thanks,
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
