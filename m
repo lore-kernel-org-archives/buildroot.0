@@ -1,55 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Aug 2014 19:13:27 +0200
-Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
-	BR2_NEEDS_HOST_JAVA check
-References: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
- <20140813141110.GF3939@free.fr>
-Message-ID: <XnsA388C38E9A3BAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Aug 2014 19:22:31 +0200
+Subject: [Buildroot] [UNSURE]Analysis of build failures
+In-Reply-To: <CAB0FRsvHq07bEMyQtkFvD343=kDKNyxPfqfFEip6dXeM+3ikag@mail.gmail.com>
+References: <20140813063010.CD21010118A@stock.ovh.net>
+ <20140813101514.384e1435@free-electrons.com>
+ <CAB0FRsvHq07bEMyQtkFvD343=kDKNyxPfqfFEip6dXeM+3ikag@mail.gmail.com>
+Message-ID: <20140813192231.0ee2095c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-news:20140813141110.GF3939 at free.fr:
+Dear Fran?ois Perrad,
 
->> +     JAVA=$(which java 2> /dev/null)
->> +     if [ -z "$JAVA" ] ; then
->> +          echo
->> +          echo "You must install 'java' on your build machine";
->> +          exit 1;
->> +     fi;
->> +     JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
-> $ gcj -version
-> gcj: error: unrecognized command line option ???-version???
-> So I guess we should have:
->     JAVA_GCJ="$(java --version 2>/dev/null |grep gcj)"
-> Which would be empty for the JDK's java, but not for gcj. I prefer we
-> rely on that, rather than the error mesage from gcj.
+On Wed, 13 Aug 2014 18:53:10 +0200, Fran?ois Perrad wrote:
 
-Hi,
+> > This has been causing a good number of build issues. Fran?ois, is there
+> > something we can do to fix this?
+> 
+> building a host-perl, but after this release 14.08.
+> perl-gd is broken only on the machine gcc10.
 
-$JAVA contains the result of "which java" which is /usr/bin/java here. This 
-corresponds to xbmc/codegenerator.mk, which also calls
+Then I believe we should mark the perl-gd package as broken for now, so
+that we don't have those repeated autobuilder failures.
 
-JAVA ?= $(shell which java)
-
-Executing /usr/bin/gcj directly is not desired ;)
-
-/usr/bin/java -version resolves to either
-
-$ /usr/bin/java -version
-java version "1.5.0"
-gij (GNU libgcj) version 4.7.2
-
-or
-
-$ /usr/bin/java -version
-java version "1.7.0_65"
-OpenJDK Runtime Environment (IcedTea 2.5.1) (7u65-2.5.1-2~deb7u1)
-OpenJDK 64-Bit Server VM (build 24.65-b04, mixed mode)
-
-on my system (Debian 7.6).
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
