@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Aug 2014 16:06:14 +0200
+Date: Wed, 13 Aug 2014 16:11:10 +0200
 Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
  BR2_NEEDS_HOST_JAVA check
 In-Reply-To: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140813140614.GE3939@free.fr>
+Message-ID: <20140813141110.GF3939@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,6 +12,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Bernd, All,
+
+I forgot some part of my review in my previous reply...
 
 On 2014-08-06 22:26 +0200, Bernd Kuhls spake thusly:
 > Xbmc uses the Groovy java package to generate API code, for details see
@@ -55,14 +57,20 @@ On 2014-08-06 22:26 +0200, Bernd Kuhls spake thusly:
 > +		echo "You must install 'java' on your build machine";
 > +		exit 1;
 > +	fi;
+> +	JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
 
-Well, I'd keep the 'check_prog_host "java"' line, and would just add the
-lines below, replacing $JAVA witrh just 'java'.
+$ gcj -version
+gcj: error: unrecognized command line option ?-version?
+
+So I guess we should have:
+    JAVA_GCJ="$(java --version 2>/dev/null |grep gcj)"
+
+Which would be empty for the JDK's java, but not for gcj. I prefer we
+rely on that, rather than the error mesage from gcj.
 
 Regards,
 Yann E. MORIN.
 
-> +	JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
 > +	if [ ! -z "$JAVA_GCJ" ] ; then
 > +		echo
 > +		echo "$JAVA_GCJ is not sufficient to compile your package selection."
