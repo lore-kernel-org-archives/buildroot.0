@@ -1,80 +1,115 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Aug 2014 23:23:12 +0200
-Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
- BR2_NEEDS_HOST_JAVA check
-In-Reply-To: <XnsA388C38E9A3BAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
- <20140813141110.GF3939@free.fr>
- <XnsA388C38E9A3BAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <20140813212312.GI3939@free.fr>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 13 Aug 2014 17:23:39 -0400
+Subject: [Buildroot] [PATCH v3] ejabberd: new package
+In-Reply-To: <20140813204443.GH3939@free.fr>
+References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
+ <20140806202322.GE1587@free.fr>
+ <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
+ <20140811103315.GB4364@free.fr> <20140811105005.GC4364@free.fr>
+ <CA+-urNTH1Piz5T+SBkfGzuPHMS_4T=CUwcV8XP3p8vWZfCdDRw@mail.gmail.com>
+ <20140813204443.GH3939@free.fr>
+Message-ID: <CA+-urNTFkncEkOxKbyBiqLGAHP=94sfbaz-b-27LnkcvJpkh0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Yann, All,
 
-On 2014-08-13 19:13 +0200, Bernd Kuhls spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
-> news:20140813141110.GF3939 at free.fr:
-> 
-> >> +     JAVA=$(which java 2> /dev/null)
-> >> +     if [ -z "$JAVA" ] ; then
-> >> +          echo
-> >> +          echo "You must install 'java' on your build machine";
-> >> +          exit 1;
-> >> +     fi;
-> >> +     JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
-> > $ gcj -version
-> > gcj: error: unrecognized command line option ???-version???
-> > So I guess we should have:
-> >     JAVA_GCJ="$(java --version 2>/dev/null |grep gcj)"
-> > Which would be empty for the JDK's java, but not for gcj. I prefer we
-> > rely on that, rather than the error mesage from gcj.
-> 
-> Hi,
-> 
-> $JAVA contains the result of "which java" which is /usr/bin/java here. This 
-> corresponds to xbmc/codegenerator.mk, which also calls
-> 
-> JAVA ?= $(shell which java)
-> 
-> Executing /usr/bin/gcj directly is not desired ;)
-> 
-> /usr/bin/java -version resolves to either
-> 
-> $ /usr/bin/java -version
-> java version "1.5.0"
-> gij (GNU libgcj) version 4.7.2
-> 
-> or
-> 
-> $ /usr/bin/java -version
-> java version "1.7.0_65"
-> OpenJDK Runtime Environment (IcedTea 2.5.1) (7u65-2.5.1-2~deb7u1)
-> OpenJDK 64-Bit Server VM (build 24.65-b04, mixed mode)
+On Wed, Aug 13, 2014 at 4:44 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Frank, All,
+>
+> On 2014-08-13 14:48 -0400, Frank Hunleth spake thusly:
+> > On Mon, Aug 11, 2014 at 6:50 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > Johan, All,
+> > >
+> > > On 2014-08-11 12:33 +0200, Yann E. MORIN spake thusly:
+> > >> On 2014-08-11 11:36 +0200, Johan Oudinet spake thusly:
+> > >> > On Wed, Aug 6, 2014 at 10:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > [--SNIP--]
+> > >> > > And it fails at build time, with a lengthy error message, that I do not
+> > >> > > completely grasp:
+> > >> > >
+> > >> > >     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar
+> > >> > > get-deps && :> deps/.got
+> > >> > >     ==> rel (get-deps)
+> > >> > >     Uncaught error in rebar_core: {'EXIT',
+> > >> > >                                    {badarg,
+> > >> >
+> > >> > Very strange. It looks like the rebar script didn't accept the
+> > >> > get-deps argument.
+> > >> > Could you try with the same defconfig as mine to see if the problem
+> > >> > comes from there.
+> > > [--SNIP--]
+> > >> I'll check in a 32-bit chroot to see if the error is the same.
+> > >
+> > > OK, here's what it has to say when run in a 32-bit sueeze chroot:
+> > >
+> > >     ---8<---
+> > >     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar get-deps && :> deps/.got
+> > >     Uncaught error in rebar_core: {'EXIT',
+> > >                                    {undef,
+> > >                                     [{crypto,start,[],[]},
+> > >                                      {rebar,run_aux,2,
+> > >                                       [{file,"src/rebar.erl"},{line,143}]},
+> > >                                      {rebar,main,1,
+> > >                                       [{file,"src/rebar.erl"},{line,58}]},
+> > >                                      {escript,run,2,
+> > >                                       [{file,"escript.erl"},{line,752}]},
+> > >                                      {escript,start,1,
+> > >                                       [{file,"escript.erl"},{line,276}]},
+> > >                                      {init,start_it,1,[]},
+> > >                                      {init,start_em,1,[]}]}}
+> > >     make[2]: *** [deps/.got] Error 1
+> > >     ---8<---
+> >
+> > I think that you can get this error if host erlang is compiled without
+> > openssl. Maybe you don't have the openssl headers installed on your
+> > system and Johan does?
+>
+> Alas, no better luck.
+>
+> I did de-install my libssl-dev package, so I only get the runtime from
+> openssl, and not the development files.
+>
+> Then, I did three tests, all starting afresh from a clean tree, with the
+> ejabberd patch applied on top of master (e3bb4ac: fbv: fix typo in
+> pkg-config variable):
+>
+>   - with just the patch;
+>   - then with a modified erlang.mk to compile our host erlang without ssl;
+>   - then with a modified erlang.mk to compile our host erlang with ssl.
+>
+> All three build failed in the exact same way.
 
-OK, so 'java' from gcj accepts the same args as 'java' from the JDK. OK.
+Do you have an output/host/usr/lib/erlang/lib/crypto-3.3/priv/lib
+directory with a couple shared libraries in it? I assume not based on
+the failure, but wanted to check.
 
-So, I still say we should keep the original check, and then check that
-java is not from gcj :
+Also, does the log from Erlang's ./configure provide any clues?
 
-    check_prog_host "java"
-    if java -version 2>&1 |grep gcj >/dev/null 2>&1; then
-        echo "Failed"
-        exit 1
-    fi
+FWIW, everything that you're doing sounds good to me. I've only seen
+the "crypto" undef error on targets when I've forgotten to enable
+openssl. I've never seen it on the host, but my host has a lot of
+header files, so it's probably not a good test.
 
-check_prog_host already calls 'which $1' so we're sure we can call 'java'.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> To disable ssl, I did:
+>     HOST_ERLANG_CONF_OPT += --without-ssl
+>
+> To enable ssl, I did:
+>     HOST_ERLANG_CONF_OPT += --with-ssl
+>     HOST_ERLANG_DEPENDENCIES += host-openssl
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
