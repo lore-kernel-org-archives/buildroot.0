@@ -1,21 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 13 Aug 2014 20:12:18 +0200
-Subject: [Buildroot] [PATCH 1/4] gcc/4.7: add patch to enable more
-	C++	features with uClibc
-In-Reply-To: <1407952290-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1407952290-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1407952290-8021-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <63692e38-56f1-4e79-bac3-c573dbedc3ca@email.android.com>
+From: Matt Weber <Matthew.Weber@rockwellcollins.com>
+Date: Wed, 13 Aug 2014 13:53:42 -0500
+Subject: [Buildroot] [PATCH 1/1] fio: (bugfix) add libaio dependency (added
+	description)
+Message-ID: <1407956022-62199-1-git-send-email-Matthew.Weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> schreef:
->This commit fixes bug #7250, by allowing more libsdtc++ features to be
+The fio package at runtime (dlopen)links in the libaio library
+when the ioengine is selected as libaio. I.e. this isn't caught at
+build time since the link wouldn't occur.
 
-libstdc++
+Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
+---
+ package/fio/Config.in | 1 +
+ package/fio/fio.mk    | 1 +
+ 2 files changed, 2 insertions(+)
 
-Best regards,
-Thomas
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index 8cbbf6c..b907fb9 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_FIO
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_LARGEFILE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBAIO #ioengine libaio
+ 	# fio uses posix_madvise(), which is not part of any official
+ 	# release of uClibc, but is part of uClibc Git, and backported
+ 	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index f9a690e..e0c79e8 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -8,6 +8,7 @@ FIO_VERSION = fio-2.1.4
+ FIO_SITE = git://git.kernel.dk/fio.git
+ FIO_LICENSE = GPLv2 + special obligations
+ FIO_LICENSE_FILES = LICENSE
++FIO_DEPENDENCIES = libaio
+ 
+ define FIO_CONFIGURE_CMDS
+ 	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
+-- 
+1.9.1
