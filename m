@@ -1,59 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Aug 2014 19:37:46 +0200
-Subject: [Buildroot] [PATCH 1/1] fio: (bugfix) add libaio dependency
-In-Reply-To: <1407940257-5722-1-git-send-email-Matthew.Weber@rockwellcollins.com>
-References: <1407940257-5722-1-git-send-email-Matthew.Weber@rockwellcollins.com>
-Message-ID: <20140813193746.4c14b789@free-electrons.com>
+Date: Wed, 13 Aug 2014 19:51:26 +0200
+Subject: [Buildroot] [PATCH 0/4] Fix C++ 11 support (bug #7250)
+Message-ID: <1407952290-8021-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+Hello,
 
-Could you repost with a more descriptive commit log that explains what
-this patch is actually fixing?
+This set of four patches are identical: they fix bug #7250 by making
+C++ 11 support available even for uClibc toolchains. The four patches
+are related to the four gcc versions: 4.7, 4.8, 4.9 and 4.8-arc.
+
+I consider the older gcc versions as being somewhat deprecated, so I
+didn't bother creating the same patches. If that's needed, let me
+know, and I'll do the work.
 
 Thanks,
 
 Thomas
 
-On Wed, 13 Aug 2014 09:30:57 -0500, Matt Weber wrote:
-> Signed-off-by: Matt Weber <Matthew.Weber@rockwellcollins.com>
-> ---
->  package/fio/Config.in | 1 +
->  package/fio/fio.mk    | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/package/fio/Config.in b/package/fio/Config.in
-> index 8cbbf6c..b907fb9 100644
-> --- a/package/fio/Config.in
-> +++ b/package/fio/Config.in
-> @@ -3,6 +3,7 @@ config BR2_PACKAGE_FIO
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_LARGEFILE
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_PACKAGE_LIBAIO #ioengine libaio
->  	# fio uses posix_madvise(), which is not part of any official
->  	# release of uClibc, but is part of uClibc Git, and backported
->  	# in Buildroot patch set of uClibc 0.9.33. Therefore, we
-> diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-> index f9a690e..e0c79e8 100644
-> --- a/package/fio/fio.mk
-> +++ b/package/fio/fio.mk
-> @@ -8,6 +8,7 @@ FIO_VERSION = fio-2.1.4
->  FIO_SITE = git://git.kernel.dk/fio.git
->  FIO_LICENSE = GPLv2 + special obligations
->  FIO_LICENSE_FILES = LICENSE
-> +FIO_DEPENDENCIES = libaio
->  
->  define FIO_CONFIGURE_CMDS
->  	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
+Thomas Petazzoni (4):
+  gcc/4.7: add patch to enable more C++ features with uClibc
+  gcc/4.8: add patch to enable more C++ features with uClibc
+  gcc/4.9: add patch to enable more C++ features with uClibc
+  gcc/arc-4.8-R3: add patch to enable more C++ features with uClibc
 
-
+ package/gcc/4.7.4/302-c99-snprintf.patch           |  13 -
+ package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch   | 273 +++++++++++++++++++++
+ package/gcc/4.8.3/302-c99-snprintf.patch           |  13 -
+ package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch   | 273 +++++++++++++++++++++
+ package/gcc/4.9.1/302-c99-snprintf.patch           |  13 -
+ package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch   | 273 +++++++++++++++++++++
+ .../gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch  | 273 +++++++++++++++++++++
+ 7 files changed, 1092 insertions(+), 39 deletions(-)
+ delete mode 100644 package/gcc/4.7.4/302-c99-snprintf.patch
+ create mode 100644 package/gcc/4.7.4/850-libstdcxx-uclibc-c99.patch
+ delete mode 100644 package/gcc/4.8.3/302-c99-snprintf.patch
+ create mode 100644 package/gcc/4.8.3/850-libstdcxx-uclibc-c99.patch
+ delete mode 100644 package/gcc/4.9.1/302-c99-snprintf.patch
+ create mode 100644 package/gcc/4.9.1/850-libstdcxx-uclibc-c99.patch
+ create mode 100644 package/gcc/arc-4.8-R3/100-libstdcxx-uclibc-c99.patch
 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.0.0
