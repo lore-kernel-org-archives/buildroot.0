@@ -1,97 +1,26 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Aug 2014 16:11:10 +0200
-Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
- BR2_NEEDS_HOST_JAVA check
-In-Reply-To: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20140813141110.GF3939@free.fr>
+From: Mike Williams <mike@mikebwilliams.com>
+Date: Wed, 13 Aug 2014 10:19:40 -0400
+Subject: [Buildroot] timesyncd cannot start due to /var/tmp symlink
+Message-ID: <CANPyyuP+QkxgxbEvh7k5SdX-a3wegU1KPAo9TbBCiXPs7o+O3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+All,
 
-I forgot some part of my review in my previous reply...
+Reposting because I think I resurrected a dead patch thread last time:
 
-On 2014-08-06 22:26 +0200, Bernd Kuhls spake thusly:
-> Xbmc uses the Groovy java package to generate API code, for details see
-> http://wiki.xbmc.org/index.php?title=Codegeneration#How_it_works
-> 
-> Groovy itself is broken when used with gcj:
-> http://jira.codehaus.org/browse/GROOVY-3701
-> 
-> Xbmc recommends to use another java package instead, like openjdk:
-> http://forum.xbmc.org/showthread.php?tid=199742
-> 
-> Until we come up with a host package to provide a java setup and in order to
-> make autobuilder happy let?s reject gcj when we check for a java installation
-> on the host.
-> 
-> Currently Xbmc is the only package using BR2_NEEDS_HOST_JAVA so changing the
-> behaviour of dependencies.sh has no side effects.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/213/213d7454a1dc68cfb8f4c8d9508f52ebf8e58e33/
-> http://autobuild.buildroot.net/results/639/639cda872cf36c122cbd6139dd76f6b51ac1864e/
-> http://autobuild.buildroot.net/results/c9e/c9eb12c95b2939c64590692a82af8d84bbd90956/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  support/dependencies/dependencies.sh |   14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-> index 88e5ad2..b09e376 100755
-> --- a/support/dependencies/dependencies.sh
-> +++ b/support/dependencies/dependencies.sh
-> @@ -188,7 +188,19 @@ if grep ^BR2_TOOLCHAIN_BUILDROOT=y $BR2_CONFIG > /dev/null && \
->  fi
->  
->  if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
-> -	check_prog_host "java"
-> +	JAVA=$(which java 2> /dev/null)
-> +	if [ -z "$JAVA" ] ; then
-> +		echo
-> +		echo "You must install 'java' on your build machine";
-> +		exit 1;
-> +	fi;
-> +	JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
+Using the latest buildroot from git with systemd 215, timesyncd fails
+to start with status 226/NAMESPACE. It appears to be due to
+PrivateTmp=yes in the service file, and /var/tmp being a symlink. See
+other bug reports for details:
+https://bugzilla.redhat.com/show_bug.cgi?id=835131
 
-$ gcj -version
-gcj: error: unrecognized command line option ?-version?
+Manually applying the steps in this patch to the target tree fixes the
+problem and allows timesyncd to start properly:
+http://lists.busybox.net/pipermail/buildroot/2014-July/101100.html
 
-So I guess we should have:
-    JAVA_GCJ="$(java --version 2>/dev/null |grep gcj)"
-
-Which would be empty for the JDK's java, but not for gcj. I prefer we
-rely on that, rather than the error mesage from gcj.
-
-Regards,
-Yann E. MORIN.
-
-> +	if [ ! -z "$JAVA_GCJ" ] ; then
-> +		echo
-> +		echo "$JAVA_GCJ is not sufficient to compile your package selection."
-> +		echo "Please install OpenJDK/IcedTea/Oracle Java."
-> +		exit 1 ;
-> +	fi
->  fi
->  
->  if grep -q ^BR2_NEEDS_HOST_JAVAC=y $BR2_CONFIG ; then
-> -- 
-> 1.7.10.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thanks,
+Mike
