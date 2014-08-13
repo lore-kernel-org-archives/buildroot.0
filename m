@@ -1,70 +1,59 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 13 Aug 2014 21:25:48 +0200
-Subject: [Buildroot] [PATCH 2 of 5 v3 for 2014.08] gendoc infra: use
- $(pkgname) instead of explicitly passing 'manual'
+Date: Wed, 13 Aug 2014 21:25:50 +0200
+Subject: [Buildroot] [PATCH 4 of 5 v3 for 2014.08] manual-text: make sure
+ URLs are displayed if a link text was provided
 In-Reply-To: <patchbomb.1407957946@localhost>
 References: <patchbomb.1407957946@localhost>
-Message-ID: <f7050051dd5a40307465.1407957948@localhost>
+Message-ID: <72d825eab688116985f2.1407957950@localhost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the gendoc infrastructure, using an assignment of the form
-    FOO = docs/$(1)/bar
-inside GENDOC_INNER does not work as expected: the $(1) value is empty here
-and the value of FOO becomes 'docs//bar'.
+When the asciidoc source contain URLs of the form:
+    http://example.com[An example website]
+the text representation of the manual would only contain:
+    An example website
+without displaying the actual URL.
 
-Parameters $(2), $(3), etc. do not have this problem. The specific thing
-about $(1) is that it is a parameter to GENDOC itself (indicating the
-document to create) and passed transparently to GENDOC_INNER.
-
-This is different from the package infrastructures, where $(1) is set from
-$(pkgname). In fact, the same strategy could be used by the gendoc
-infrastructure as well, as $(pkgname) resolves to 'manual' for file
-docs/manual/manual.mk. This has the advantage that the described problem
-does not occur.
-
-Note that this means that if we want to use the same GENDOC infrastructure
-for another document, it will have to reside in a separate directory than
-the manual.
+This patch adds an asciidoc configuration file that sets the inline macros
+for several URL types so that the display becomes:
+    An example website [http://example.com]
+For URLs where no link text was provided, the display becomes:
+    http://example.com
+which is the same as before.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
 ---
 v3: no changes
-v2: no changes
+v2:
+- link to relevant documentation (which was hard to find)
+- refine so that the display is identical to before when no link text is
+  provided.
 
- docs/manual/manual.mk |  18 +++++++++---------
- 1 files changed, 9 insertions(+), 9 deletions(-)
+ docs/manual/asciidoc-text.conf |  17 +++++++++++++++++
+ 1 files changed, 17 insertions(+), 0 deletions(-)
 
-diff -r 9000c07087a5 -r f7050051dd5a docs/manual/manual.mk
---- a/docs/manual/manual.mk	Wed Aug 13 11:30:25 2014 +0200
-+++ b/docs/manual/manual.mk	Sat Aug 09 18:18:58 2014 +0200
-@@ -78,16 +78,16 @@
- # The variable <DOCUMENT_NAME>_SOURCES defines the dependencies.
- ################################################################################
- define GENDOC
--$(call GENDOC_INNER,$(1),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
--$(call GENDOC_INNER,$(1),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
--$(call GENDOC_INNER,$(1),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
--$(call GENDOC_INNER,$(1),text,text,text,text)
--$(call GENDOC_INNER,$(1),epub,epub,epub,ePUB)
-+$(call GENDOC_INNER,$(pkgname),xhtml,html,html,HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
-+$(call GENDOC_INNER,$(pkgname),chunked,split-html,chunked,split HTML,--xsltproc-opts "--stringparam toc.section.depth 2")
-+$(call GENDOC_INNER,$(pkgname),pdf,pdf,pdf,PDF,--dblatex-opts "-P latex.output.revhistory=0")
-+$(call GENDOC_INNER,$(pkgname),text,text,text,text)
-+$(call GENDOC_INNER,$(pkgname),epub,epub,epub,ePUB)
- clean: $(1)-clean
--$(1)-clean:
--	$$(Q)$$(RM) -rf $$(O)/docs/$(1)
--.PHONY: $(1) $(1)-clean manual-update-lists
-+$(pkgname)-clean:
-+	$$(Q)$$(RM) -rf $$(O)/docs/$(pkgname)
-+.PHONY: $(pkgname) $(pkgname)-clean manual-update-lists
- endef
- 
- MANUAL_SOURCES = $(sort $(wildcard docs/manual/*.txt) $(wildcard docs/images/*))
--$(eval $(call GENDOC,manual))
-+$(eval $(call GENDOC))
+diff -r 7437dd86ef45 -r 72d825eab688 docs/manual/asciidoc-text.conf
+--- /dev/null	Thu Jan 01 00:00:00 1970 +0000
++++ b/docs/manual/asciidoc-text.conf	Sat Aug 09 19:42:30 2014 +0200
+@@ -0,0 +1,17 @@
++# Refer to following asciidoc documentation:
++#     http://www.methods.co.nz/asciidoc/userguide.html
++# In particular sections "Macros" and "Attribute References"
++#
++# For hyperlinks, show 'link text [URL]' (if link text provided) or 'URL'
++[http-inlinemacro]
++{0=}{0? &#91;}{name}:{target}{0?&#93;}
++[https-inlinemacro]
++{0=}{0? &#91;}{name}:{target}{0?&#93;}
++[ftp-inlinemacro]
++{0=}{0? &#91;}{name}:{target}{0?&#93;}
++[file-inlinemacro]
++{0=}{0? &#91;}{name}:{target}{0?&#93;}
++[irc-inlinemacro]
++{0=}{0? &#91;}{name}:{target}{0?&#93;}
++[mailto-inlinemacro]
++{0=}{0? &#91;}{name}:{target}{0?&#93;}
