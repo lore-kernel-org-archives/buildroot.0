@@ -1,75 +1,80 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Wed, 13 Aug 2014 17:07:10 -0400
-Subject: [Buildroot] [PATCH] qt: don't install translation files by
-	default
-In-Reply-To: <1407961570-10684-1-git-send-email-luca@lucaceresoli.net>
-References: <1407961570-10684-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <CANxTyt5VK1XKYXe8Y3RbqDAoraWC_heS0p0HoCExfH3pbEbORA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Aug 2014 23:23:12 +0200
+Subject: [Buildroot] [PATCH 1/1] dependencies: Reject gcj in
+ BR2_NEEDS_HOST_JAVA check
+In-Reply-To: <XnsA388C38E9A3BAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+References: <1407356782-3118-1-git-send-email-bernd.kuhls@t-online.de>
+ <20140813141110.GF3939@free.fr>
+ <XnsA388C38E9A3BAberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+Message-ID: <20140813212312.GI3939@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 13, 2014 at 4:26 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-> Commit 93917b6980f7f2b51302e1a3fa451b07cf7d674e (2013.11) introduced
-> the installation of the binary .qm translation files, unconditionally.
->
-> However, the installed size is very large for some embedded systems
-> (about 8 MB), and they are not needed in many cases.
->
-> In order to avoid such a waste of storage space, commit
-> 2ff329412f490dc916bab3377073ef5950a46298 (2014.08) made this
-> installation an option that could be disabled. For backward
-> compatibility, the option defaults to yes.
->
-> Given the relevant size of these files, and that they had never been
+Bernd, All,
 
-Nitpick: "relevant"?  Do you mean "relative" or "relatively large"?
+On 2014-08-13 19:13 +0200, Bernd Kuhls spake thusly:
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote in 
+> news:20140813141110.GF3939 at free.fr:
+> 
+> >> +     JAVA=$(which java 2> /dev/null)
+> >> +     if [ -z "$JAVA" ] ; then
+> >> +          echo
+> >> +          echo "You must install 'java' on your build machine";
+> >> +          exit 1;
+> >> +     fi;
+> >> +     JAVA_GCJ=$($JAVA -version 2>&1 | grep gcj)
+> > $ gcj -version
+> > gcj: error: unrecognized command line option ???-version???
+> > So I guess we should have:
+> >     JAVA_GCJ="$(java --version 2>/dev/null |grep gcj)"
+> > Which would be empty for the JDK's java, but not for gcj. I prefer we
+> > rely on that, rather than the error mesage from gcj.
+> 
+> Hi,
+> 
+> $JAVA contains the result of "which java" which is /usr/bin/java here. This 
+> corresponds to xbmc/codegenerator.mk, which also calls
+> 
+> JAVA ?= $(shell which java)
+> 
+> Executing /usr/bin/gcj directly is not desired ;)
+> 
+> /usr/bin/java -version resolves to either
+> 
+> $ /usr/bin/java -version
+> java version "1.5.0"
+> gij (GNU libgcj) version 4.7.2
+> 
+> or
+> 
+> $ /usr/bin/java -version
+> java version "1.7.0_65"
+> OpenJDK Runtime Environment (IcedTea 2.5.1) (7u65-2.5.1-2~deb7u1)
+> OpenJDK 64-Bit Server VM (build 24.65-b04, mixed mode)
 
+OK, so 'java' from gcj accepts the same args as 'java' from the JDK. OK.
 
-> installed by Buildroot versions before 2013.11, change the default to
-> not installing these files.
->
-> Interested users can still activate it as needed.
->
-> Also update and improve a bit the help text.
+So, I still say we should keep the original check, and then check that
+java is not from gcj :
 
-/a bit the help text/the help text/
+    check_prog_host "java"
+    if java -version 2>&1 |grep gcj >/dev/null 2>&1; then
+        echo "Failed"
+        exit 1
+    fi
 
-Otherwise:
+check_prog_host already calls 'which $1' so we're sure we can call 'java'.
 
-Reviewed-by: Danomi Manchego <danomimanchego123@gmail.com>
+Regards,
+Yann E. MORIN.
 
-Danomi -
-
-
->
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Danomi Manchego <danomimanchego123@gmail.com>
-> Cc: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/qt/Config.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/qt/Config.in b/package/qt/Config.in
-> index 93751cd..da159b4 100644
-> --- a/package/qt/Config.in
-> +++ b/package/qt/Config.in
-> @@ -30,10 +30,10 @@ config BR2_PACKAGE_QT_DEMOS
->
->  config BR2_PACKAGE_QT_TRANSLATION_FILES
->         bool "Install translation files"
-> -       default y
->         help
->           Install binary .qm translation files.
-> -         If unsure, say y.
-> +         Say y if you need these files. They will take about 8 MB
-> +         on the target root filesystem.
->
->  config BR2_PACKAGE_QT_EXAMPLES
->         bool "Compile and install Qt examples (with code)"
-> --
-> 1.9.1
->
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
