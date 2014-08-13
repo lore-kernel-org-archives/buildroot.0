@@ -1,65 +1,67 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 13 Aug 2014 14:48:13 -0400
-Subject: [Buildroot] [PATCH v3] ejabberd: new package
-In-Reply-To: <20140811105005.GC4364@free.fr>
-References: <1405686837-1418-1-git-send-email-johan.oudinet@gmail.com>
- <20140806202322.GE1587@free.fr>
- <CAJtjsKZan0d6fSg3HuT4gm4+09Cqej3NbFbFZNU+mh5YNPFEdQ@mail.gmail.com>
- <20140811103315.GB4364@free.fr> <20140811105005.GC4364@free.fr>
-Message-ID: <CA+-urNTH1Piz5T+SBkfGzuPHMS_4T=CUwcV8XP3p8vWZfCdDRw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 13 Aug 2014 19:12:53 +0000 (UTC)
+Subject: [Buildroot] [Bug 7262] Generating locale en_US.UTF-8 fails on 64bit
+ fedora linux host
+In-Reply-To: <bug-7262-163@https.bugs.busybox.net/>
+References: <bug-7262-163@https.bugs.busybox.net/>
+Message-ID: <20140813191253.A9BED9D318@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann and all,
+https://bugs.busybox.net/show_bug.cgi?id=7262
 
-On Mon, Aug 11, 2014 at 6:50 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Johan, All,
->
-> On 2014-08-11 12:33 +0200, Yann E. MORIN spake thusly:
->> On 2014-08-11 11:36 +0200, Johan Oudinet spake thusly:
->> > On Wed, Aug 6, 2014 at 10:23 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> [--SNIP--]
->> > > And it fails at build time, with a lengthy error message, that I do not
->> > > completely grasp:
->> > >
->> > >     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar
->> > > get-deps && :> deps/.got
->> > >     ==> rel (get-deps)
->> > >     Uncaught error in rebar_core: {'EXIT',
->> > >                                    {badarg,
->> >
->> > Very strange. It looks like the rebar script didn't accept the
->> > get-deps argument.
->> > Could you try with the same defconfig as mine to see if the problem
->> > comes from there.
-> [--SNIP--]
->> I'll check in a 32-bit chroot to see if the error is the same.
->
-> OK, here's what it has to say when run in a 32-bit sueeze chroot:
->
->     ---8<---
->     /home/ymorin/dev/buildroot/O/host/usr/lib/erlang/bin/escript rebar get-deps && :> deps/.got
->     Uncaught error in rebar_core: {'EXIT',
->                                    {undef,
->                                     [{crypto,start,[],[]},
->                                      {rebar,run_aux,2,
->                                       [{file,"src/rebar.erl"},{line,143}]},
->                                      {rebar,main,1,
->                                       [{file,"src/rebar.erl"},{line,58}]},
->                                      {escript,run,2,
->                                       [{file,"escript.erl"},{line,752}]},
->                                      {escript,start,1,
->                                       [{file,"escript.erl"},{line,276}]},
->                                      {init,start_it,1,[]},
->                                      {init,start_em,1,[]}]}}
->     make[2]: *** [deps/.got] Error 1
->     ---8<---
+Thomas De Schampheleire <patrickdepinguin@gmail.com> changed:
 
-I think that you can get this error if host erlang is compiled without
-openssl. Maybe you don't have the openssl headers installed on your
-system and Johan does?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |REOPENED
+         Resolution|WORKSFORME                  |
 
-Frank
+--- Comment #6 from Thomas De Schampheleire <patrickdepinguin@gmail.com> 2014-08-13 19:12:53 UTC ---
+(Reopen after more feedback from Romain)
+
+Hi Romain, 
+
+Thanks a lot for the strace!
+It's odd though, as I don't see the same here. If I run the same strace in my
+64-bit VirtualBox Fedora 20 installation, I see locale-archive is searched in
+output/target/usr/lib/locale/, not lib64.
+
+Looking in the sources of localedef: (just some snippets)
+
+glibc/locale/programs/locarchive.c:57:
+#define ARCHIVE_NAME LOCALEDIR "/locale-archive"
+
+  if (output_prefix)
+    memcpy (archivefname, output_prefix, prefix_len);
+  strcpy (archivefname + prefix_len, ARCHIVE_NAME);
+  strcpy (stpcpy (fname, archivefname), ".XXXXXX");
+
+Makefile:
+-DLOCALEDIR='"$(localedir)"'
+localedir       = $(libdir)/locale
+prefix          = /usr
+exec_prefix     = ${prefix}
+libdir          = ${exec_prefix}/lib
+
+In the building of localedef, I can see in the build commands that
+-DLOCALEDIR=/usr/lib/locale is passed.
+Could you checked what is passed in your case? Is it lib64 or lib?
+
+In locarchive.c, the filename that is used for the mktemp call is composed from
+the prefix we pass (TARGET_DIR --> output/target) followed by the ARCHIVE_NAME.
+This ARCHIVE_NAME starts with LOCALEDIR, which is thus supposed to be
+/usr/lib/locale.
+
+The only way I can see this failing (currently) is when LOCALEDIR in the build
+commands of host-localedef is already using lib64, which would mean that either
+the configure command does something unexpected, or the 'libdir' variable in
+the localedef Makefile is overruled on the command-line.
+
+-- 
+Configure bugmail: https://bugs.busybox.net/userprefs.cgi?tab=email
+------- You are receiving this mail because: -------
+You are on the CC list for the bug.
