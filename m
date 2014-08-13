@@ -1,32 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 13 Aug 2014 11:41:56 -0300
-Subject: [Buildroot] [PATCH] pppd: security bump to version 2.4.7
-Message-ID: <1407940916-9631-1-git-send-email-gustavo@zacarias.com.ar>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 13 Aug 2014 11:51:45 -0400
+Subject: [Buildroot] [PATCH] erlang: bump to version 17.1
+Message-ID: <1407945105-4700-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2014-3158 - potential security issue in parsing option files.
+Erlang/OTP 17.1 is a service release on the 17 track with mostly bug
+fixes, but it does contain a number of new features and characteristics
+improvements as well.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Some highlights of the release are:
+  - crypto: Add aes_cfb8 cypher to crypto:block_encrypt and block_decrypt.
+  - diameter: Add result code counters for CEA, DWA, and DPA.
+  - erts: The following built in functions in the erlang and binary modules
+    now bump an appropriate amount of reductions and yield when out of
+    reductions:
+    binary_to_list/1, binary_to_list/3, bitstring_to_list/1,
+    list_to_binary/1,
+    iolist_to_binary/1, list_to_bitstring/1, binary:list_to_bin/1
+  - hipe: Handle Maps instructions get_map_elements, put_map_assoc,
+    put_map_exact in the HiPE native code compiler.
+  - mnesia: The time for inserting locks for a transaction with large
+    number of locks is reduced significantly.
+  - ssh: Option max_sessions added to ssh:daemon/{2,3}.
+  - stdlib: Add maps:get/3 to maps module. The function will return the
+    supplied default value if the key does not exist in the map.
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/pppd/pppd.mk | 2 +-
+ package/erlang/erlang.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index 03118ca..46caa36 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 1278682..5474952 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PPPD_VERSION = 2.4.6
-+PPPD_VERSION = 2.4.7
- PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
- PPPD_SITE = ftp://ftp.samba.org/pub/ppp
- PPPD_LICENSE = LGPLv2+ LGPL BSD-4c BSD-3c GPLv2+
+-ERLANG_VERSION = 17.0
++ERLANG_VERSION = 17.1
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
 -- 
-1.8.5.5
+1.9.1
