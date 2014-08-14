@@ -1,194 +1,70 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 14 Aug 2014 10:35:20 +0200
-Subject: [Buildroot] [PATCH 2/2] freescale/imx6-sabresd: document how to
-	create a bootable SD
-In-Reply-To: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
-References: <1408005320-6100-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1408005320-6100-2-git-send-email-luca@lucaceresoli.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Thu, 14 Aug 2014 10:22:42 +0100
+Subject: [Buildroot] Some Perl modules fail to cross-compile
+In-Reply-To: <CAB0FRst4_dcG1GWQXAOBBTc1QqeV9-ZE+La1VPL+XiPr==uwGw@mail.gmail.com>
+References: <20140813063010.CD21010118A@stock.ovh.net>	<53EB535B.60301@imgtec.com>
+ <CAB0FRst4_dcG1GWQXAOBBTc1QqeV9-ZE+La1VPL+XiPr==uwGw@mail.gmail.com>
+Message-ID: <53EC7FE2.40603@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Document how to create a bootable SD card for the two supported SABRESD cards:
-i.MX6Q and i.MX6DL.
+On 08/13/2014 05:50 PM, Fran?ois Perrad wrote:
+> 2014-08-13 14:00 GMT+02:00 Vicente Olivert Riera <Vincent.Riera@imgtec.com>:
+>> The affected modules are:
+>>
+>>   perl-gd
+>>   perl-net-ssleay
+>>   perl-xml-libxml
+>>
+>> The build system of these modules have a "use Config;" in the Makefile.PL.
+>> Given that we are cross-compiling, the Perl program used to run that
+>> Makefile.PL is the host's Perl program (because we can't run MIPS Perl in
+>> our x86_64 machine, for instance), so the %Config read only variable
+>> provided by the Config module contains all the information that the
+>> Configure program had during the Perl build time (in our case, the host's
+>> Perl). Then, the build system fills the OPTIMIZE variable (only if it's
+>> empty) with some flags taken from that %Config variable, so some things like
+>> "-mtune=generic" or "-m64" can end into the OPTIMIZE variable and cause a
+>> compilation failure for target architectures which don't support those
+>> flags.
+>>
+>> I have reported this bug upstream. Please read the comments:
+>>    https://rt.cpan.org/Public/Bug/Display.html?id=97834
+>>
+>> My proposal to fix these three packages is to append the OPTIMIZE variable
+>> to the configure options and set it to -mtune=$(BR2_GCC_TARGET_ARCH) to
+>> avoid the OPTIMIZE variable get filled with incompatible flags.
+>>
+>> I have the patches ready and they work, so, if you think this is a valid
+>> solution, just tell it to me and I will send the patches ASAP.
+>>
+>
+> The host perl must load the host Config.pm.
+> So, in order to cross compiling, we must overload all variables in the
+> command line.
+> Currently, only CCFLAGS/ccflags is set in package/pkg-perl.mk, in the same way,
+> we could also set OPTIMIZE with " ".
 
-The SD card creation relies on an ad-hoc script.
+I don't mind if we fix this by patching the .mk files of the three 
+affected packages, or by patching the BR perl-package build system.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Gilles Talis <gilles.talis@gmail.com>
-Cc: Gary Bisson <bisson.gary@gmail.com>
-Cc: Vincent Stehl? <vincent.stehle@freescale.com>
----
- board/freescale/imx6sabresd/create-boot-sd.sh | 85 +++++++++++++++++++++++++++
- board/freescale/imx6sabresd/readme.txt        | 66 +++++++++++++++++++++
- 2 files changed, 151 insertions(+)
- create mode 100755 board/freescale/imx6sabresd/create-boot-sd.sh
- create mode 100644 board/freescale/imx6sabresd/readme.txt
+In case if we adopt the second solution (yours), don't you think it's 
+better to set the OPTIMIZE variable to "-mtune=$(BR2_GCC_TARGET_ARCH)" 
+instead of just " "?
 
-diff --git a/board/freescale/imx6sabresd/create-boot-sd.sh b/board/freescale/imx6sabresd/create-boot-sd.sh
-new file mode 100755
-index 0000000..ebe3002
---- /dev/null
-+++ b/board/freescale/imx6sabresd/create-boot-sd.sh
-@@ -0,0 +1,85 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+PROGNAME=$(basename $0)
-+
-+usage()
-+{
-+    echo "Create an SD card that boots on an i.MX6DL SABRESD board."
-+    echo "It is supposed to work also for the i.MX6Q SABRESD board, but"
-+    echo "it this is not tested."
-+    echo
-+    echo "Note: all data on the the card will be completely deleted!"
-+    echo "Use with care!"
-+    echo "Superuser permissions may be required to write to the device."
-+    echo
-+    echo "Usage: ${PROGNAME} <sd_block_device>"
-+    echo "Arguments:"
-+    echo "  <sd_block_device>     The device to be written to"
-+    echo
-+    echo "Example: ${PROGNAME} /dev/mmcblk0"
-+    echo
-+}
-+
-+if [ $# -ne 1 ]; then
-+    usage
-+    exit 1
-+fi
-+
-+if [ $(id -u) -ne 0 ]; then
-+    echo "${PROGNAME} must be run as root"
-+    exit 1
-+fi
-+
-+DEV=${1}
-+PART1=${DEV}p1
-+PART2=${DEV}p2
-+
-+# Unmount the partitions if mounted
-+umount ${PART1} || true
-+umount ${PART2} || true
-+
-+# First, clear the card
-+dd if=/dev/zero of=${DEV} bs=1M count=2
-+
-+sync
-+
-+# Partition the card.
-+# SD layout for i.MX6 boot:
-+# - Bootloader at offset 1024
-+# - FAT partition starting at 1MB offset, containing uImage and *.dtb
-+# - ext2/3 partition formatted as ext2 or ext3, containing the root filesystem.
-+sfdisk ${DEV} <<EOF
-+32,480,b
-+512,,L
-+EOF
-+
-+sync
-+
-+# Copy the bootloader@offset 1024
-+dd if=output/images/u-boot.imx of=${DEV} obs=512 seek=2
-+
-+# Prepare a temp dir for mounting partitions
-+TMPDIR=$(mktemp -d)
-+
-+# FAT partition: kernel and DTBs
-+mkfs.vfat ${PART1}
-+mount ${PART1} ${TMPDIR}
-+cp output/images/uImage ${TMPDIR}/
-+cp output/images/*.dtb  ${TMPDIR}/
-+sync
-+umount ${TMPDIR}
-+
-+# ext2 partition: root filesystem
-+mkfs.ext2 ${PART2}
-+mount ${PART2} ${TMPDIR}
-+tar -C ${TMPDIR}/ -xf output/images/rootfs.tar
-+sync
-+umount ${TMPDIR}
-+
-+# Cleanup
-+rmdir ${TMPDIR}
-+sync
-+echo Done
-diff --git a/board/freescale/imx6sabresd/readme.txt b/board/freescale/imx6sabresd/readme.txt
-new file mode 100644
-index 0000000..c93347f
---- /dev/null
-+++ b/board/freescale/imx6sabresd/readme.txt
-@@ -0,0 +1,66 @@
-+*******************************************************
-+Freescale i.MX6Q and i.MX6DL SABRESD development boards
-+*******************************************************
-+
-+This file documents the Buildroot support for the Freescale SABRE Board for
-+Smart Devices Based on the i.MX 6 Series (SABRESD).
-+
-+Read the SABRESD Quick Start Guide for an introduction to the board:
-+http://cache.freescale.com/files/32bit/doc/quick_start_guide/SABRESDB_IMX6_QSG.pdf
-+
-+Build
-+=====
-+
-+First, configure Buildroot for your SABRESD board.
-+For i.MX6Q:
-+
-+  make freescale_imx6sabresd_defconfig
-+
-+For i.MX6DL:
-+
-+  make freescale_imx6dlsabresd_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in ./output/images/ the following files:
-+  - imx6dl-sabresd.dtb or imx6q-sabresd.dtb
-+  - rootfs.ext2
-+  - rootfs.tar
-+  - u-boot.imx
-+  - uImage
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Run the following script as root on your SD card. This will partition the card
-+and copy the bootloader, kernel, DTBs and root filesystem as needed.
-+
-+*** WARNING! The script will destroy all the card content. Use with care! ***
-+
-+  ./board/freescale/imx6sabresd/create-boot-sd.sh <your-sd-device>
-+
-+Boot the SABRESD board
-+======================
-+
-+To boot your newly created system (refer to the SABRESD Quick Start Guide for
-+guidance):
-+- insert the SD card in the SD3 slot of the board;
-+- locate the BOOT dip switches (SW6), set dips 2 and 7 to ON, all others to OFF;
-+- connect a Micro USB cable to Debug Port and connect using a terminal emulator;
-+- power on the board.
-+
-+Enjoy!
-+
-+References
-+==========
-+
-+https://community.freescale.com/docs/DOC-95015
-+https://community.freescale.com/docs/DOC-95017
-+https://community.freescale.com/docs/DOC-99218
+> Fran?ois
+>
+>> Thanks.
+>> --
+>> Vincent
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-1.9.1
+Vincent
